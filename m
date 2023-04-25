@@ -2,271 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834E36EE2A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D056EE2A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbjDYNQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S234135AbjDYNQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbjDYNQ0 (ORCPT
+        with ESMTP id S234117AbjDYNQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:16:26 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F765D315;
-        Tue, 25 Apr 2023 06:16:19 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PDGDJu126715;
-        Tue, 25 Apr 2023 08:16:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682428573;
-        bh=e5tzIGluFg8IDlGbf4Kh6e/mGvBftqmCxrarwHodBHI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jPdqkwTBE5xz9NbMxW1ixAtPbabQYzCxLS1FbquDph3Rht+Uj0uB25rOByaQ5ySm7
-         /uCrTSmWnBk6KDx2qc0b+RbOTIgZRQnn5yCB7Cpa/QI0FVEYR7xGPnyQj6N8YtK94x
-         qaW5DYfQbplpDIrMaS+6qSuzzMTys0tx+dCnvmj0=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PDGDar102792
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 08:16:13 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 08:16:12 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 08:16:12 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PDGCfb012419;
-        Tue, 25 Apr 2023 08:16:12 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <afd@ti.com>, <s-vadapalli@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-choudhary@ti.com>
-Subject: [PATCH v4 3/5] arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY nodes
+        Tue, 25 Apr 2023 09:16:42 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2081.outbound.protection.outlook.com [40.107.241.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3011C14447;
+        Tue, 25 Apr 2023 06:16:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=haW8GZBw/zTC9YRht+rZ4u5xWujsB9/d2HAV2BhN/4PQjEQTzwMSbyWbjrcA/ilPgE016r6s8xwS2ji5g+RKYl169TV+D82fe/YtNg1m9e+7QmiAZ+JQ8sPxxWve8pIykck2LFrZCaLlv2VBwpsQbikDUXVsD6lJbOQlbNOpxh6XoIk+xGIQI29Soe33ke2Ym7iBGW8f0I0FwGEYiz+vX6+cS4aFCZMQHfkoe6dEeyDGMZMwn9tGlg3LbSyCDnw4XJMY7OQoQByrV1XbIOYSkPneR5IIJYz9M6AOHx9uDw5mhEJ5iGeVEumrQukTnwMcHZoGACp8o0p/cnnl6/7fxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lqhGZXrFEE9u/scI3abIICUsC7OHqQmjIZ+GqxgrOk4=;
+ b=cXfcjNAZa7apN4D0FnkAnRth9pR/ym3x6KsSapWEuKgOP65sTrHigEqcqcqoenatDpRF4bc2H/IBsOiyR7mY+hFFtt9yHwzB/fDuvDmLmB1o72XkvWlZDJwC1QdSKAzr2YcEJt96EYXw4BoI002mTtr20hHk4+iHHDuzs9lUyT+l7RepcGEnRT2P51KV+1SF/UCvh9KzlPHz8mY85kGvtulhXnCMEwVJ/pIGteN7UsGDdm9kNk+pujfVNAPx3ZE1LlkCRShIpDKWbAYQiv0CAsSvD9+Yw94UD+BNz0n9XywXIibqwdQuLjIJn+8HNpERj2oOGp1AaV6tFiAX0LQIIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lqhGZXrFEE9u/scI3abIICUsC7OHqQmjIZ+GqxgrOk4=;
+ b=oqrnzIa67p1wPN4OwUXFhBuOLOA0tnC1AdvSNyIHOgWysUYoxXcth489SXxdoUHWKwwH/IprEGYj/RDtP/9gcTCb+a0dj0sykS6MjROqK5RrhMj6q5bc7cQXN9J2JjMbcLGb1wZpV5pyMHDWQ7N0GT6BiAs9Y8nmgiIANmy563c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9648.eurprd04.prod.outlook.com (2603:10a6:10:30c::10)
+ by AM7PR04MB6901.eurprd04.prod.outlook.com (2603:10a6:20b:10b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Tue, 25 Apr
+ 2023 13:16:32 +0000
+Received: from DB9PR04MB9648.eurprd04.prod.outlook.com
+ ([fe80::762c:3b53:2350:dd71]) by DB9PR04MB9648.eurprd04.prod.outlook.com
+ ([fe80::762c:3b53:2350:dd71%5]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
+ 13:16:32 +0000
+From:   Madhu Koriginja <madhu.koriginja@nxp.com>
+To:     davem@davemloft.net, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
+        edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     vani.namala@nxp.com, Madhu Koriginja <madhu.koriginja@nxp.com>
+Subject: [PATCH 4.19] net: netfilter: Keep conntrack reference until IPsecv6 policy checks are done
 Date:   Tue, 25 Apr 2023 18:46:05 +0530
-Message-ID: <20230425131607.290707-4-j-choudhary@ti.com>
+Message-Id: <20230425131605.2576011-1-madhu.koriginja@nxp.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230425131607.290707-1-j-choudhary@ti.com>
-References: <20230425131607.290707-1-j-choudhary@ti.com>
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SI2PR02CA0049.apcprd02.prod.outlook.com
+ (2603:1096:4:196::7) To DB9PR04MB9648.eurprd04.prod.outlook.com
+ (2603:10a6:10:30c::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9648:EE_|AM7PR04MB6901:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa90b2a5-1236-488a-a4d9-08db458f4999
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W0XQeTRmVsZwSyr1GDZbh06HfTln8hGJbhLpYDOFu3Vfwb7ktG8lGYNbUArQJFEUSShxPuEMnEp0uf0sffNlBvV2ZurgXDsgYTQ5BkWSIdgaG3hXjouABFN4zYjcdtaAKsALo045D5i/a860nLnbJPanM3PAONmd3N7NhyAUvHIKomzCKOUUTWTY33eVNZUQbvvYUVroo5QdOYn3Mfz3aXNiHbPWmHiJsEEqtVaEBeVhiEiBrojPBnm6EL+LKEPBNFxwr/gql4tv+RUV7G9pC6TIUaYwVGoCqTXKU37pgkIJwWDHKAW338tuRe5VPODXpouqgHTfpST8AMSy/qaocBUE51AhqwFMDblgjY6C1UtxYviysYj4YPz6Q4U6z9OWpGaqA52Rcpl7CbrByzhwKjfSnZvHVyA17b/PIpHXmQRaxfFlamJV4EzkHYZAOdvctHYZqWEcpTmf2BxB4tJ7h5r4+w2pLbvnlAFGZldQBU28iuwZ5RsswHLoe6fBzhXWaRYqw73PI0Sfr4LMDhOs3rYWHYWxrnGBXQkyPGLL+sdKyFKiEN7NhBcR/n0+nFJJzghloAhw8Rx0udSzpJbeue0A6ulxcLb+fbtbgWG+3Eh3wzMatPdVsSXrv3dUw5v0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9648.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199021)(316002)(44832011)(4326008)(38100700002)(38350700002)(41300700001)(5660300002)(8936002)(8676002)(36756003)(86362001)(2906002)(66476007)(66556008)(6486002)(6666004)(52116002)(6512007)(6506007)(1076003)(26005)(478600001)(2616005)(83380400001)(186003)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5263tvSAFpygdA028+Npciqsuj8K9m6skes+KH3Mba9jD4Yf9tx5kcfoLjxc?=
+ =?us-ascii?Q?WzW2llqMJB7X4QQ6WNA93lNaoYg9aEioB0G4uXheZSocaLzG2zzuNDE63K6n?=
+ =?us-ascii?Q?jY5QDqy3fc3p8uMYfH+VL1AslG0fAmZcf1kk6d/sgK1vSv8fYaTjXJCdXkLu?=
+ =?us-ascii?Q?VlZIwGn/SiLy8CQg1TklBhTNdP84KGd31cGHXJegcDB5nAeJ8WUhJR76Ergd?=
+ =?us-ascii?Q?Xy6sVTrx5ADu/9fqbtqt+l2sxmf7EkhSnB7QMzDP03AesagIWAttgEVn67mE?=
+ =?us-ascii?Q?Z+SnxiPx2WqEzxN4eKTINYFdY0THJ4FU4H0VYRpVZYoTLMzRWFK5KPUYMUpk?=
+ =?us-ascii?Q?BVeQGP4WuMcQkreCvrA8Da5xx50NUwfUjMggTKUHZ0ovz6qk+7Vc6vFnUtcu?=
+ =?us-ascii?Q?wWZCKrc+JST8R2XEOq+vHkJsSYhYVRrMF6hJa17TnruiMaBTAIEbFk1hfggo?=
+ =?us-ascii?Q?SsWqZggeRnZMZCUGTwlECVVAEjoDni/N+/oibTOF1o0zY2RTaeXoYJ4irqde?=
+ =?us-ascii?Q?6nFiRqDyMvj4Cp2MTy0qMqajboeL1uwyVQe2uo9ZSbo9Djr04K9AOj6Y6W4l?=
+ =?us-ascii?Q?Q6iRwKNMlzUj8gO2j9L4CrD/zeu4y86opnyNbXU1DT92EWa4wziTnS+EIrWa?=
+ =?us-ascii?Q?EgbyNLBUBc7A9Dx9C4GhgCzCRY9GAVlINGbTO/5VtzGmVskhcgd/uGXDYOi7?=
+ =?us-ascii?Q?3KqeGPwCKvi0L2otSUSi7uJ/FhkPqZPTGxWFbcu4RsdOBNmmy3eGRgA6XjZf?=
+ =?us-ascii?Q?XZpVTBgAH9QselN10+o/HqUbb6PuK93sDZPgg/6ja1Bdr1SDA2IFB8VLNzua?=
+ =?us-ascii?Q?W2sBtqv5r+vI16JdxStZa25R+Stm76U0KqP2ZqUpe1ZaovshDiG8ktP+Xx41?=
+ =?us-ascii?Q?5K7/ma2Wc+1mmJbhPim/e8BJzf7NQjUz0nwm+CaWQOUK57/HWUDlBwt0AUU5?=
+ =?us-ascii?Q?n3knO8rRSnLgamCHWAuRZsge0AsmZmFDC838+cm8sjHijagP7CyesmH/jbzX?=
+ =?us-ascii?Q?LE/wVC9EXxODQnECzRi/yp4tEmDDXljri3lLMGhmL40xzY6J66+UlEjWdsIp?=
+ =?us-ascii?Q?ZT4i8pOWt3+MOzVeOR8IhsWtRhOgSG0pBUnHvARbe58tDBCT0TFBLGc3jPQY?=
+ =?us-ascii?Q?M7yQxxIp+Kc1tbuDfb0XH92GvcRO6+4L0yBe5RJS5vv+LW6u+6cgSDF83YPK?=
+ =?us-ascii?Q?2SkFMZDV0nVgPtSaQbNFCfpe1I1h+07KmgTSD4WMPTrbW7KMGdkGjE4vVfxK?=
+ =?us-ascii?Q?236/Gc/Q5ZatfZllcLkBGrERJauItidUMc+s+tepTwbl/XZcOrltpWE18+gp?=
+ =?us-ascii?Q?xtdLREr5RUAzxwx5rVuL5KYUvYh1clb0rUS7GjzESfGLwhvSx1XGA3cXGIfp?=
+ =?us-ascii?Q?LJHbh8A2zahVjsYe04iAijLb/cXXG28qikG5Yv/Xg1NKU8UdhlYIUsNZ6Uzz?=
+ =?us-ascii?Q?f25AbOJ8O6Qf2zXJkJqlZ4aXt6/lh6PnL2HleXsVDg76V2K7bKaUzl7XsAsr?=
+ =?us-ascii?Q?7GGVSJSaDIbo6NJZb7x9BQj7yWDEkBHlJM5NqTxCEbGWVjRGrqpFe/gtDTVu?=
+ =?us-ascii?Q?SICsmOUVzZp36RGKL50mAfDWGn3pNIcR6heCVig6L7TJX9BSZO2hJl7aApxW?=
+ =?us-ascii?Q?lA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa90b2a5-1236-488a-a4d9-08db458f4999
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9648.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 13:16:32.1914
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yna3RGUff0Zno2WcNOIwIM+VdkUaY//6kuNiLu0OAxKy7wruac61L83uIdwBzJfexa7Y0SRTapytF95+212mFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6901
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Vadapalli <s-vadapalli@ti.com>
+Keep the conntrack reference until policy checks have been performed for
+IPsec V6 NAT support. The reference needs to be dropped before a packet is
+queued to avoid having the conntrack module unloadable.
 
-J784S4 SoC has 4 Serdes instances along with their respective WIZ
-instances. Add device-tree nodes for them and disable them by default.
-
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-[j-choudhary@ti.com: fix serdes_wiz clock order]
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+Signed-off-by: Madhu Koriginja <madhu.koriginja@nxp.com>
 ---
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 171 +++++++++++++++++++++
- 1 file changed, 171 insertions(+)
+ net/dccp/ipv6.c      |  1 +
+ net/ipv6/ip6_input.c | 14 +++++++-------
+ net/ipv6/raw.c       |  2 +-
+ net/ipv6/tcp_ipv6.c  |  2 ++
+ net/ipv6/udp.c       |  2 ++
+ 5 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-index b5f291eff1a3..9578c92a716a 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-@@ -7,6 +7,15 @@
+diff --git a/net/dccp/ipv6.c b/net/dccp/ipv6.c
+index b2a26e41f932..f953b5b5613d 100644
+--- a/net/dccp/ipv6.c
++++ b/net/dccp/ipv6.c
+@@ -773,6 +773,7 @@ static int dccp_v6_rcv(struct sk_buff *skb)
  
- #include <dt-bindings/mux/mux.h>
- #include <dt-bindings/mux/ti-serdes.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/phy/phy-ti.h>
-+
-+/ {
-+	serdes_refclk: serdes-refclk {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+	};
-+};
+ 	if (!xfrm6_policy_check(sk, XFRM_POLICY_IN, skb))
+ 		goto discard_and_relse;
++	nf_reset(skb);
  
- &cbass_main {
- 	msmc_ram: sram@70000000 {
-@@ -441,6 +450,168 @@ main_sdhci1: mmc@4fb0000 {
- 		status = "disabled";
- 	};
+ 	return __sk_receive_skb(sk, skb, 1, dh->dccph_doff * 4,
+ 				refcounted) ? -1 : 0;
+diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
+index 2bdb03a45baf..6a9a1e637506 100644
+--- a/net/ipv6/ip6_input.c
++++ b/net/ipv6/ip6_input.c
+@@ -371,10 +371,6 @@ static int ip6_input_finish(struct net *net, struct sock *sk, struct sk_buff *sk
+ 			/* Only do this once for first final protocol */
+ 			have_final = true;
  
-+	serdes_wiz0: wiz@5060000 {
-+		compatible = "ti,j784s4-wiz-10g";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		power-domains = <&k3_pds 404 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 404 2>, <&k3_clks 404 6>, <&serdes_refclk>, <&k3_clks 404 5>;
-+		clock-names = "fck", "core_ref_clk", "ext_ref_clk", "core_ref1_clk";
-+		assigned-clocks = <&k3_clks 404 6>;
-+		assigned-clock-parents = <&k3_clks 404 10>;
-+		num-lanes = <4>;
-+		#reset-cells = <1>;
-+		#clock-cells = <1>;
-+		ranges = <0x5060000 0x00 0x5060000 0x10000>;
+-			/* Free reference early: we don't need it any more,
+-			   and it may hold ip_conntrack module loaded
+-			   indefinitely. */
+-			nf_reset(skb);
+ 
+ 			skb_postpull_rcsum(skb, skb_network_header(skb),
+ 					   skb_network_header_len(skb));
+@@ -385,9 +381,13 @@ static int ip6_input_finish(struct net *net, struct sock *sk, struct sk_buff *sk
+ 			    !ipv6_is_mld(skb, nexthdr, skb_network_header_len(skb)))
+ 				goto discard;
+ 		}
+-		if (!(ipprot->flags & INET6_PROTO_NOPOLICY) &&
+-		    !xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
+-			goto discard;
 +
-+		status = "disabled";
++		if (!(ipprot->flags & INET6_PROTO_NOPOLICY)) {
++			if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
++				goto discard;
 +
-+		serdes0: serdes@5060000 {
-+			compatible = "ti,j721e-serdes-10g";
-+			reg = <0x05060000 0x010000>;
-+			reg-names = "torrent_phy";
-+			resets = <&serdes_wiz0 0>;
-+			reset-names = "torrent_reset";
-+			clocks = <&serdes_wiz0 TI_WIZ_PLL0_REFCLK>,
-+				 <&serdes_wiz0 TI_WIZ_PHY_EN_REFCLK>;
-+			clock-names = "refclk", "phy_en_refclk";
-+			assigned-clocks = <&serdes_wiz0 TI_WIZ_PLL0_REFCLK>,
-+					  <&serdes_wiz0 TI_WIZ_PLL1_REFCLK>,
-+					  <&serdes_wiz0 TI_WIZ_REFCLK_DIG>;
-+			assigned-clock-parents = <&k3_clks 404 6>,
-+						 <&k3_clks 404 6>,
-+						 <&k3_clks 404 6>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
++			nf_reset(skb);
++		}
+ 
+ 		ret = ipprot->handler(skb);
+ 		if (ret > 0) {
+diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
+index 44e9a240d607..e7180cd8ac70 100644
+--- a/net/ipv6/raw.c
++++ b/net/ipv6/raw.c
+@@ -220,7 +220,6 @@ static bool ipv6_raw_deliver(struct sk_buff *skb, int nexthdr)
+ 
+ 			/* Not releasing hash table! */
+ 			if (clone) {
+-				nf_reset(clone);
+ 				rawv6_rcv(sk, clone);
+ 			}
+ 		}
+@@ -428,6 +427,7 @@ int rawv6_rcv(struct sock *sk, struct sk_buff *skb)
+ 		kfree_skb(skb);
+ 		return NET_RX_DROP;
+ 	}
++	nf_reset(skb);
+ 
+ 	if (!rp->checksum)
+ 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index f69c1b83403b..2b5b6e208947 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -1568,6 +1568,8 @@ static int tcp_v6_rcv(struct sk_buff *skb)
+ 	if (tcp_v6_inbound_md5_hash(sk, skb))
+ 		goto discard_and_relse;
+ 
++	nf_reset(skb);
 +
-+			status = "disabled";
-+		};
-+	};
-+
-+	serdes_wiz1: wiz@5070000 {
-+		compatible = "ti,j784s4-wiz-10g";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		power-domains = <&k3_pds 405 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 405 2>, <&k3_clks 405 6>, <&serdes_refclk>, <&k3_clks 405 5>;
-+		clock-names = "fck", "core_ref_clk", "ext_ref_clk", "core_ref1_clk";
-+		assigned-clocks = <&k3_clks 405 6>;
-+		assigned-clock-parents = <&k3_clks 405 10>;
-+		num-lanes = <4>;
-+		#reset-cells = <1>;
-+		#clock-cells = <1>;
-+		ranges = <0x05070000 0x00 0x05070000 0x10000>;
-+
-+		status = "disabled";
-+
-+		serdes1: serdes@5070000 {
-+			compatible = "ti,j721e-serdes-10g";
-+			reg = <0x05070000 0x010000>;
-+			reg-names = "torrent_phy";
-+			resets = <&serdes_wiz1 0>;
-+			reset-names = "torrent_reset";
-+			clocks = <&serdes_wiz1 TI_WIZ_PLL0_REFCLK>,
-+				 <&serdes_wiz1 TI_WIZ_PHY_EN_REFCLK>;
-+			clock-names = "refclk", "phy_en_refclk";
-+			assigned-clocks = <&serdes_wiz1 TI_WIZ_PLL0_REFCLK>,
-+					  <&serdes_wiz1 TI_WIZ_PLL1_REFCLK>,
-+					  <&serdes_wiz1 TI_WIZ_REFCLK_DIG>;
-+			assigned-clock-parents = <&k3_clks 405 6>,
-+						 <&k3_clks 405 6>,
-+						 <&k3_clks 405 6>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+
-+			status = "disabled";
-+		};
-+	};
-+
-+	serdes_wiz2: wiz@5020000 {
-+		compatible = "ti,j784s4-wiz-10g";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		power-domains = <&k3_pds 406 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 406 2>, <&k3_clks 406 6>, <&serdes_refclk>, <&k3_clks 406 5>;
-+		clock-names = "fck", "core_ref_clk", "ext_ref_clk", "core_ref1_clk";
-+		assigned-clocks = <&k3_clks 406 6>;
-+		assigned-clock-parents = <&k3_clks 406 10>;
-+		num-lanes = <4>;
-+		#reset-cells = <1>;
-+		#clock-cells = <1>;
-+		ranges = <0x05020000 0x00 0x05020000 0x10000>;
-+
-+		status = "disabled";
-+
-+		serdes2: serdes@5020000 {
-+			compatible = "ti,j721e-serdes-10g";
-+			reg = <0x05020000 0x010000>;
-+			reg-names = "torrent_phy";
-+			resets = <&serdes_wiz2 0>;
-+			reset-names = "torrent_reset";
-+			clocks = <&serdes_wiz2 TI_WIZ_PLL0_REFCLK>,
-+				 <&serdes_wiz2 TI_WIZ_PHY_EN_REFCLK>;
-+			clock-names = "refclk", "phy_en_refclk";
-+			assigned-clocks = <&serdes_wiz2 TI_WIZ_PLL0_REFCLK>,
-+					  <&serdes_wiz2 TI_WIZ_PLL1_REFCLK>,
-+					  <&serdes_wiz2 TI_WIZ_REFCLK_DIG>;
-+			assigned-clock-parents = <&k3_clks 406 6>,
-+						 <&k3_clks 406 6>,
-+						 <&k3_clks 406 6>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+
-+			status = "disabled";
-+		};
-+	};
-+
-+	serdes_wiz4: wiz@5050000 {
-+		compatible = "ti,j784s4-wiz-10g";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		power-domains = <&k3_pds 407 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 407 2>, <&k3_clks 407 6>, <&serdes_refclk>, <&k3_clks 407 5>;
-+		clock-names = "fck", "core_ref_clk", "ext_ref_clk", "core_ref1_clk";
-+		assigned-clocks = <&k3_clks 407 6>;
-+		assigned-clock-parents = <&k3_clks 407 10>;
-+		num-lanes = <4>;
-+		#reset-cells = <1>;
-+		#clock-cells = <1>;
-+		ranges = <0x05050000 0x00 0x05050000 0x10000>,
-+			 <0xa030a00 0x00 0xa030a00 0x40>; /* DPTX PHY */
-+
-+		status = "disabled";
-+
-+		serdes4: serdes@5050000 {
-+			/*
-+			 * Note: we also map DPTX PHY registers as the Torrent
-+			 * needs to manage those.
-+			 */
-+			compatible = "ti,j721e-serdes-10g";
-+			reg = <0x05050000 0x010000>,
-+			      <0x0a030a00 0x40>; /* DPTX PHY */
-+			reg-names = "torrent_phy";
-+			resets = <&serdes_wiz4 0>;
-+			reset-names = "torrent_reset";
-+			clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>,
-+				 <&serdes_wiz4 TI_WIZ_PHY_EN_REFCLK>;
-+			clock-names = "refclk", "phy_en_refclk";
-+			assigned-clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>,
-+					  <&serdes_wiz4 TI_WIZ_PLL1_REFCLK>,
-+					  <&serdes_wiz4 TI_WIZ_REFCLK_DIG>;
-+			assigned-clock-parents = <&k3_clks 407 6>,
-+						 <&k3_clks 407 6>,
-+						 <&k3_clks 407 6>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#clock-cells = <1>;
-+
-+			status = "disabled";
-+		};
-+	};
-+
- 	main_navss: bus@30000000 {
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
+ 	if (tcp_filter(sk, skb))
+ 		goto discard_and_relse;
+ 	th = (const struct tcphdr *)skb->data;
+diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+index 16c98a2a5c36..59c5ee9d9d32 100644
+--- a/net/ipv6/udp.c
++++ b/net/ipv6/udp.c
+@@ -570,6 +570,7 @@ static int udpv6_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
+ 
+ 	if (!xfrm6_policy_check(sk, XFRM_POLICY_IN, skb))
+ 		goto drop;
++	nf_reset(skb);
+ 
+ 	if (static_branch_unlikely(&udpv6_encap_needed_key) && up->encap_type) {
+ 		int (*encap_rcv)(struct sock *sk, struct sk_buff *skb);
+@@ -861,6 +862,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
+ 
+ 	if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
+ 		goto discard;
++	nf_reset(skb);
+ 
+ 	if (udp_lib_checksum_complete(skb))
+ 		goto csum_error;
 -- 
 2.25.1
 
