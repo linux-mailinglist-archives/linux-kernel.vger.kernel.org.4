@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33EF6EE122
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564F66EE128
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbjDYLh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        id S233824AbjDYLjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjDYLhy (ORCPT
+        with ESMTP id S232851AbjDYLjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:37:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A5B46AB;
-        Tue, 25 Apr 2023 04:37:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0635B4B3;
-        Tue, 25 Apr 2023 04:38:37 -0700 (PDT)
-Received: from [10.57.23.191] (unknown [10.57.23.191])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B16B03F5A1;
-        Tue, 25 Apr 2023 04:37:48 -0700 (PDT)
-Message-ID: <1539e760-392f-a33e-436e-bbf043e79bfc@arm.com>
-Date:   Tue, 25 Apr 2023 12:37:40 +0100
+        Tue, 25 Apr 2023 07:39:51 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018A468A;
+        Tue, 25 Apr 2023 04:39:50 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9505214c47fso1051246566b.1;
+        Tue, 25 Apr 2023 04:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682422789; x=1685014789;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uhlme4gt9b2fIoSYooiRDG3nPCx1SJPD3Moq8dts520=;
+        b=fbWcdU0NnREyJWMw07Co+ZsxBZbKAj1Cx9JfSqAwf3b2I48vKE9GJQXbX8wPUe4teX
+         frAT8e9R7SVXOsR2Jw++gkW+IgJZOjxKHBemFCK5GtgfkPhBzm7rTqSHUa2LRj/EmVJH
+         SnkIdWk/hQCSxGdr1Kq5L1/hU0i/kHh/d+Q/h02KMIAwSuZr5GQn2GCvNPLDRhUFdtr8
+         cKywu+/X3WHqyjnPUgNL8UzYy0WEOxe91zBQqCrabLYL2I3qTUNRW7phU8BPcgYNo0qL
+         M4wa9wkN6nA9pK3CKNqzkCQXZuMYHKS2QMCTMCvmRTDBj2GQkr0NYhEkNNFjgc+UsOkO
+         IUgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682422789; x=1685014789;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Uhlme4gt9b2fIoSYooiRDG3nPCx1SJPD3Moq8dts520=;
+        b=V3ypEVbEejzmp/FgSll7IqtBXnYViZQVIyQKQXf4QNHC12NTaPLr357f2cI6r/mQdL
+         UFD3Otq7ND2yNqBdSZrzXBgUcZETMAmLNrmkJjp2gePaFH26cNhmu0ttbAdgxDMlIY+a
+         9JZE820ThBgfA/N5YlU/6vS5AbNtEMHA4TjWsA2a7xQkZi0xGdlVB3G2wJdMCjflGXVQ
+         82xeZm4QFQf4rM+bldx654RApB1YF7PGMhQ/lfPELJWTwiU+nXZaHqdD81MA9ST9WTFe
+         CFJnD0kHbEVgoNDr8yiTFNir2iLqFzlSy95vV+IWz0yZYIVgp7ychkrAYZW4S3MHYXkq
+         IMqw==
+X-Gm-Message-State: AAQBX9f2q9aRCb0lEKnr6slw3rTLsujW6JJ2/c4+4E+V7nfXM2NuNooj
+        sE7CDqQcgSkbhVqlDfXID2RCaKiOo6rp5g==
+X-Google-Smtp-Source: AKy350YEc8MxPrvdXklvc0+f/36x5cuiax3Yc3EXcEg6VE1CFp59poyc100VNtaRzdDsb7fpGfMt9Q==
+X-Received: by 2002:a17:906:b314:b0:94f:3521:396 with SMTP id n20-20020a170906b31400b0094f35210396mr12750769ejz.23.1682422788691;
+        Tue, 25 Apr 2023 04:39:48 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id q27-20020a170906361b00b0094e1026bc66sm6703216ejb.140.2023.04.25.04.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 04:39:47 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: [PATCH] KVM: x86/mmu: Add comment on try_cmpxchg64 usage in tdp_mmu_set_spte_atomic
+Date:   Tue, 25 Apr 2023 13:39:32 +0200
+Message-Id: <20230425113932.3148-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [regression] Bug 217218 - Trying to boot Linux version 6-2.2
- kernel with Marvell SATA controller 88SE9235
-To:     Jason Adriaanse <jason_a69@yahoo.co.uk>, hch@lst.de
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <20230416065503.GB6410@lst.de>
- <fc9f4cef-9426-c9d2-3c2c-3ce12fe5f6c3@yahoo.co.uk>
- <5f37b0b0-6cb5-b210-a894-d1e91976126e@arm.com>
- <2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk>
- <07ee0cf7-a5c2-f87a-d627-8dd8fb082345@arm.com>
- <9648f668-a3bc-3296-71d1-c91cd4c9980e@yahoo.co.uk>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <9648f668-a3bc-3296-71d1-c91cd4c9980e@yahoo.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,78 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-25 05:17, Jason Adriaanse wrote:
-> Ok great,
-> 
-> I take it a change needs to be made in
-> drivers/pci/quirks.c
-> ?
-> I do not mind making the change locally here and letting you know if it 
-> works or not.
+Commit aee98a6838d5 ("KVM: x86/mmu: Use try_cmpxchg64 in
+tdp_mmu_set_spte_atomic") removed the comment that iter->old_spte is
+updated when different logical CPU modifies the page table entry.
+Although this is what try_cmpxchg does implicitly, it won't hurt
+if this fact is explicitly mentioned in a restored comment.
 
-Indeed, something like this (make sure the IDs actually match what your
-device reports, I'm just guessing):
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: David Matlack <dmatlack@google.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ arch/x86/kvm/mmu/tdp_mmu.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 7c25dbf32ecc..5d126b015086 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -655,8 +655,16 @@ static inline int tdp_mmu_set_spte_atomic(struct kvm *kvm,
+ 	 * Note, fast_pf_fix_direct_spte() can also modify TDP MMU SPTEs and
+ 	 * does not hold the mmu_lock.
+ 	 */
+-	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte))
++	if (!try_cmpxchg64(sptep, &iter->old_spte, new_spte)) {
++		/*
++		 * The page table entry was modified by a different logical
++		 * CPU. In this case the above try_cmpxchg updates
++		 * iter->old_spte with the current value, so the caller
++		 * operates on fresh data, e.g. if it retries
++		 * tdp_mmu_set_spte_atomic().
++		 */
+ 		return -EBUSY;
++	}
+ 
+ 	__handle_changed_spte(kvm, iter->as_id, iter->gfn, iter->old_spte,
+ 			      new_spte, iter->level, true);
+-- 
+2.40.0
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 44cab813bf95..a9166e886b75 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4161,6 +4161,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9220,
-  /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c49 */
-  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9230,
-  			 quirk_dma_func1_alias);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9235,
-+			 quirk_dma_func1_alias);
-  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0642,
-  			 quirk_dma_func1_alias);
-  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0645,
-
-
-Marvell themselves seem to lump the 88SE92xx products together as a
-closely-related family, so given that we do have quirks for 3 of the 4
-already, this one does rather seem conspicuous by its absence...
-
-Thanks,
-Robin.
-
-> On 24/04/2023 22:07, Robin Murphy wrote:
->> On 2023-04-24 14:44, Jason Adriaanse wrote:
->>> I took out "iommu=soft" and the server failed to boot, so yes it does 
->>> break.
->>>
->>> The first error was
->>> ata7.00: Failed to IDENTIFY (INIT_DEV_PARAMS failed , err_mask=0x80)
->>
->> OK, great, that confirms the underlying issue existed all along, so 
->> the regression is only a change in who wins a fight between certain 
->> conflicting command-line arguments, which is arguably not so critical.
->>
->> The rest of the evidence points to 88SE9235 wanting the same phantom 
->> function quirk as most other Marvell controllers, since although it's 
->> apparently been half-fixed such that DMA for two of the ports is being 
->> correctly emitted from function 0 - given that you say two of the 
->> disks *are* detected OK - the other two are still claiming to be 
->> function 1 after all.
->>
->> Thanks,
->> Robin.
->>
->>> On 24/04/2023 21:20, Robin Murphy wrote:
->>>> On 2023-04-22 07:25, Jason Adriaanse wrote:
->>>>> Hi Christoph,
->>>>>
->>>>> Sorry for my late reply, I have been on the road.
->>>>>
->>>>> So, if I boot with
->>>>> intel_iommu=off
->>>>> Then the server boots fine..although that is not a solution because 
->>>>> I need Intel iommu for virtualisation.
->>>>>
->>>>> Also, I build all my kernels with CONFIG_INTEL_IOMMU=y
->>>>>
->>>>
->>>> If you boot 5.15 *without* the "iommu=soft" argument, just 
->>>> "intel_iommu=on", does that also break?
->>>>
->>>> Robin.
