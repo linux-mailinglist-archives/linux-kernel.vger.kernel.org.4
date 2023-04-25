@@ -2,119 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFFF6EE243
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8446EE247
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbjDYM4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S234093AbjDYM5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233800AbjDYM4a (ORCPT
+        with ESMTP id S234026AbjDYM5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:56:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A9D30E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:56:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 25 Apr 2023 08:57:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F05D307
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 05:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682427403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YARZYYD8kywX+uZX3azGfX2IIahTfzqdbDAK8+7O+cc=;
+        b=XQYiezNKEkPqxgEUDVHhPPYHpCi1nhyYhdjgFlhR2z4+dnytgEK//WDZ9G+tbYt93x+TMp
+        9cDN066kEMJPoLXXQuwID/MUCA+3yv6TLZFOlaLRfrHZ4R0RmEvcDRI6J3uXPkhxzLe/IZ
+        8XKPtVg0xXpudpo2D93Z1cN/4t7g5XA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-adOwmTlRPaGPOM5R12Qxwg-1; Tue, 25 Apr 2023 08:56:40 -0400
+X-MC-Unique: adOwmTlRPaGPOM5R12Qxwg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7EA5616A0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:56:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64233C433D2;
-        Tue, 25 Apr 2023 12:56:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682427388;
-        bh=WFqdsbjQA1vnRQupRN+CqeKWDQbtJsSTLh4Q8kWeiBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Bz9CkJDJSSNnCzcLYr28xns7faj4QIsO0/JpqjpFPybCvR88QDD5j6cVHVCMduRWE
-         qf6hs8GOuZuERt3CYLMkuFUdYdNSqK1MhsOfD4jekuQ4XpOFnzeGfes4t0WdWDTxOP
-         FcboqPS4mh0pUHGUjxUqTN6MOi+mY9ikW4Fb31W17hqis8fP6sqYmNvyOfsEdCrFq7
-         x26VQQ/oOZP8PcfahKaQfu1VKmWwA7p+DDE2Yr+c6ZjGA4OxfFTXINMQQ3F3ue8rR5
-         udrnVlW4bPrT9l0HssFu7ho6WRq+TjawmRs0ZTRHqANAsWxPDNXloIlxkjHmeeB8Ss
-         B2tCqTyQgERsQ==
-Date:   Tue, 25 Apr 2023 13:56:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
-Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
-Message-ID: <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
-References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
- <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A1C503801F5E;
+        Tue, 25 Apr 2023 12:56:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AD402027043;
+        Tue, 25 Apr 2023 12:56:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+cc:     dhowells@redhat.com,
+        syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net] rxrpc: Fix potential data race in rxrpc_wait_to_be_connected()
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DiFt6ZB+CLaQPege"
-Content-Disposition: inline
-In-Reply-To: <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
-X-Cookie: The meek don't want it.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <508132.1682427395.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 25 Apr 2023 13:56:35 +0100
+Message-ID: <508133.1682427395@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+    =
 
---DiFt6ZB+CLaQPege
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Inside the loop in rxrpc_wait_to_be_connected() it checks call->error to
+see if it should exit the loop without first checking the call state.  Thi=
+s
+is probably safe as if call->error is set, the call is dead anyway, but we
+should probably wait for the call state to have been set to completion
+first, lest it cause surprise on the way out.
 
-On Fri, Apr 21, 2023 at 08:50:30AM -0700, Colin Foster wrote:
-> On Thu, Apr 20, 2023 at 05:06:17PM +0200, Maxime Chevallier wrote:
+Fix this by only accessing call->error if the call is complete.  We don't
+actually need to access the error inside the loop as we'll do that after.
 
-> > On regmap consumers that require address translation through
-> > up/downshifting, the alignment check in the regmap core doesn't take the
-> > translation into account. This doesn't matter when downshifting the
-> > register address, as any address that fits a given alignment requirement
-> > will still meet it when downshifted (a 4-byte aligned address will
-> > always also be 2-bytes aligned for example).
+This caused the following report:
 
-> > However, when upshifting, this check causes spurious errors, as it
-> > occurs before the upshifting.
+    BUG: KCSAN: data-race in rxrpc_send_data / rxrpc_set_call_completion
 
-> I don't follow why upshifting should make a difference to alignment.
-> Assuming it does though, would it make sense to test
+    write to 0xffff888159cf3c50 of 4 bytes by task 25673 on cpu 1:
+     rxrpc_set_call_completion+0x71/0x1c0 net/rxrpc/call_state.c:22
+     rxrpc_send_data_packet+0xba9/0x1650 net/rxrpc/output.c:479
+     rxrpc_transmit_one+0x1e/0x130 net/rxrpc/output.c:714
+     rxrpc_decant_prepared_tx net/rxrpc/call_event.c:326 [inline]
+     rxrpc_transmit_some_data+0x496/0x600 net/rxrpc/call_event.c:350
+     rxrpc_input_call_event+0x564/0x1220 net/rxrpc/call_event.c:464
+     rxrpc_io_thread+0x307/0x1d80 net/rxrpc/io_thread.c:461
+     kthread+0x1ac/0x1e0 kernel/kthread.c:376
+     ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-> map->format.reg_shift > 0
+    read to 0xffff888159cf3c50 of 4 bytes by task 25672 on cpu 0:
+     rxrpc_send_data+0x29e/0x1950 net/rxrpc/sendmsg.c:296
+     rxrpc_do_sendmsg+0xb7a/0xc20 net/rxrpc/sendmsg.c:726
+     rxrpc_sendmsg+0x413/0x520 net/rxrpc/af_rxrpc.c:565
+     sock_sendmsg_nosec net/socket.c:724 [inline]
+     sock_sendmsg net/socket.c:747 [inline]
+     ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
+     ___sys_sendmsg net/socket.c:2555 [inline]
+     __sys_sendmmsg+0x263/0x500 net/socket.c:2641
+     __do_sys_sendmmsg net/socket.c:2670 [inline]
+     __se_sys_sendmmsg net/socket.c:2667 [inline]
+     __x64_sys_sendmmsg+0x57/0x60 net/socket.c:2667
+     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+     entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> instead of just !map->format.reg_shift?
+    value changed: 0x00000000 -> 0xffffffea
 
-Yeah, I think the question is more when we should run the alignment
-check than if we should have one.  I think running the check after any
-shifting makes sense, we'd be better off reorganising the checks if
-needed than removing them.
+Fixes: 9d35d880e0e4 ("rxrpc: Move client call connection to the I/O thread=
+")
+Reported-by: syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/000000000000e7c6d205fa10a3cd@google.com/
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Marc Dionne <marc.dionne@auristor.com>
+cc: Dmitry Vyukov <dvyukov@google.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: linux-afs@lists.infradead.org
+cc: linux-fsdevel@vger.kernel.org
+cc: netdev@vger.kernel.org
+---
+ net/rxrpc/sendmsg.c |   12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
->=20
-> > -	if (!IS_ALIGNED(reg, map->reg_stride))
-> > +	if (!map->format.reg_shift && !IS_ALIGNED(reg, map->reg_stride))
-> >  		return -EINVAL;
->=20
-> In the case of ocelot_spi, we'd want to flag an invalid access to a
-> register like 0x71070003... Before this patch it would return -EINVAL,
-> after this patch it would access 0x71070000.
->=20
-> Colin Foster
+diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
+index da49fcf1c456..6caa47d352ed 100644
+--- a/net/rxrpc/sendmsg.c
++++ b/net/rxrpc/sendmsg.c
+@@ -50,15 +50,11 @@ static int rxrpc_wait_to_be_connected(struct rxrpc_cal=
+l *call, long *timeo)
+ 	_enter("%d", call->debug_id);
+ =
 
---DiFt6ZB+CLaQPege
-Content-Type: application/pgp-signature; name="signature.asc"
+ 	if (rxrpc_call_state(call) !=3D RXRPC_CALL_CLIENT_AWAIT_CONN)
+-		return call->error;
++		goto no_wait;
+ =
 
------BEGIN PGP SIGNATURE-----
+ 	add_wait_queue_exclusive(&call->waitq, &myself);
+ =
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRHzfYACgkQJNaLcl1U
-h9Cpggf/c7E3rKx9CqXXzBlq45k7DnQbPm0a1LBhR2l4e4Tt8fLdhpImflz2foAJ
-rwiYt18SG3Lr8eXqXrPjItqjiHb79lpjJdB1rlze6rkVJohxVlpxTWZPYnCmhcXu
-7NYMzlQpCiPZZzVqmIDF9/IuA/3pinFBVegyzJxdbjbhBGUZDvIL2hez0D2JfAlD
-97OlNQPwEJ46d/AoWZjhHecb+7gWHZZRzvREkiqTYDAqrg5ZSXm3DJ+v6j0EfCV2
-sWYYyjXdN0x5mLy7yZDiBnDP8FdQh5Fk+A/kQ1gR3Rqh69CJFEuv+O6+mkOgnVmf
-VKTVmhsWvZwsYRp1jTkxeUbuv4CKmQ==
-=+cEC
------END PGP SIGNATURE-----
+ 	for (;;) {
+-		ret =3D call->error;
+-		if (ret < 0)
+-			break;
+-
+ 		switch (call->interruptibility) {
+ 		case RXRPC_INTERRUPTIBLE:
+ 		case RXRPC_PREINTERRUPTIBLE:
+@@ -69,10 +65,9 @@ static int rxrpc_wait_to_be_connected(struct rxrpc_call=
+ *call, long *timeo)
+ 			set_current_state(TASK_UNINTERRUPTIBLE);
+ 			break;
+ 		}
+-		if (rxrpc_call_state(call) !=3D RXRPC_CALL_CLIENT_AWAIT_CONN) {
+-			ret =3D call->error;
++
++		if (rxrpc_call_state(call) !=3D RXRPC_CALL_CLIENT_AWAIT_CONN)
+ 			break;
+-		}
+ 		if ((call->interruptibility =3D=3D RXRPC_INTERRUPTIBLE ||
+ 		     call->interruptibility =3D=3D RXRPC_PREINTERRUPTIBLE) &&
+ 		    signal_pending(current)) {
+@@ -85,6 +80,7 @@ static int rxrpc_wait_to_be_connected(struct rxrpc_call =
+*call, long *timeo)
+ 	remove_wait_queue(&call->waitq, &myself);
+ 	__set_current_state(TASK_RUNNING);
+ =
 
---DiFt6ZB+CLaQPege--
++no_wait:
+ 	if (ret =3D=3D 0 && rxrpc_call_is_complete(call))
+ 		ret =3D call->error;
+ =
+
