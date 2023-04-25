@@ -2,153 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA046EE069
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154776EE06C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjDYKe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S233614AbjDYKe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbjDYKe0 (ORCPT
+        with ESMTP id S233315AbjDYKe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:34:26 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CEF10C4;
-        Tue, 25 Apr 2023 03:34:24 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q5JDR0rhQz17VZj;
-        Tue, 25 Apr 2023 18:30:31 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 25 Apr 2023 18:34:21 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v3] perf/core: Fix perf_sample_data not properly initialized for different swevents in perf_tp_event()
-Date:   Tue, 25 Apr 2023 10:32:17 +0000
-Message-ID: <20230425103217.130600-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Tue, 25 Apr 2023 06:34:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DCCA3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682418849;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u7THULRhWgMcFebRgtK1WD8sev+RUBTaeAQwjg1I+VQ=;
+        b=cnxKzhN5OSTfELkUDbpLeGh5ieVdw1fQhVCVqN1q5Sosg/EEbpBPQ/3jgL061XYvi5KNI9
+        N2YGWuUn8XzrH0vcsozkDEtpLnotqrG/VFRMOFfpFO3EyaipZboFX3lldRGfyESr1LYpxs
+        QOQ/JY3hfgfPMF3kAk60gftcrl90540=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-374-KfOidAoYMpqpGIFO0a8jzQ-1; Tue, 25 Apr 2023 06:34:08 -0400
+X-MC-Unique: KfOidAoYMpqpGIFO0a8jzQ-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-505149e1a4eso14666093a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:34:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682418847; x=1685010847;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u7THULRhWgMcFebRgtK1WD8sev+RUBTaeAQwjg1I+VQ=;
+        b=Uf8thTz+3gdiM6BSVYAX29XByTP0VGaPpM/kxhqrveQzoRGRNO9Wvmyas3/QqJ4YPi
+         6/D9YuK7k/dYQsW+CAA8NIH3aYlimfm3wro1BBzpxpAI7s18ocwPfkbYvz0ISFCc7zoF
+         5r0ADFcuSbNSAzyzQTTJVF9AnPWC8KBRrxn3WjuoTyFeBasW6N2c9M2322UWZmPkAWah
+         dwJicS99m8T82Cuou0Wn20Njbu+93C+LWWEVfnziLGMfabFIHGvcRMsUKtOBk5XnFGPQ
+         vQpN/d7ftwqipqvwJ/MxUuHsqieCXB43q4qCKYBGPBzOEeuo0+jlJZIsE4vHn9nwlP5O
+         J1wQ==
+X-Gm-Message-State: AAQBX9coVFqN33XwXGO8glReimYAlhm6pgYjRBmFoLm3Eb5Pp1IZvqT9
+        bGM6eofNxkpzJBmhR8bJi4EzfuD6h838jYHqfCyprqktd/88+UBA9LiB0ISACimB0DS5qtnLAZ1
+        v9jpr1J/JiNTReXiZcYwcg7LX
+X-Received: by 2002:a17:906:a007:b0:933:4d47:55b7 with SMTP id p7-20020a170906a00700b009334d4755b7mr13107371ejy.2.1682418847254;
+        Tue, 25 Apr 2023 03:34:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YAYU/DR0ZaWkz5n4MShN6au3yfTGV9bLtppFGS3UL2Zj1HtySGTfbBLI84UGn9chQQMJ8A3g==
+X-Received: by 2002:a17:906:a007:b0:933:4d47:55b7 with SMTP id p7-20020a170906a00700b009334d4755b7mr13107354ejy.2.1682418846891;
+        Tue, 25 Apr 2023 03:34:06 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id l7-20020a1709060e0700b0094ee21fe943sm6548204eji.116.2023.04.25.03.34.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 03:34:06 -0700 (PDT)
+Message-ID: <6c05cc9e-815d-7a94-8b2d-f17fd5d47354@redhat.com>
+Date:   Tue, 25 Apr 2023 12:34:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 03/14] HP BIOSCFG driver - bioscfg
+Content-Language: en-US, nl
+To:     Armin Wolf <W_Armin@gmx.de>, Jorge Lopez <jorgealtxwork@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas@t-8ch.de
+References: <20230419151321.6167-1-jorge.lopez2@hp.com>
+ <20230419151321.6167-4-jorge.lopez2@hp.com>
+ <38929a45-79de-964b-5d6f-cfa44099b35e@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <38929a45-79de-964b-5d6f-cfa44099b35e@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-data->sample_flags may be modified in perf_prepare_sample(),
-in perf_tp_event(), different swevents use the same on-stack
-perf_sample_data, the previous swevent may change sample_flags in
-perf_prepare_sample(), as a result, some members of perf_sample_data are
-not correctly initialized when next swevent_event preparing sample
-(for example data->id, the value varies according to swevent).
+Hi All,
 
-A simple scenario triggers this problem is as follows:
+On 4/19/23 20:04, Armin Wolf wrote:
+> Am 19.04.23 um 17:13 schrieb Jorge Lopez:
 
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014396 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014662 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209014910 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209015164 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 860
-  -rw------- 1 root root  95694 Apr 12 09:01 perf.data.2023041209014396
-  -rw------- 1 root root 606430 Apr 12 09:01 perf.data.2023041209014662
-  -rw------- 1 root root  82246 Apr 12 09:01 perf.data.2023041209014910
-  -rw------- 1 root root  82342 Apr 12 09:01 perf.data.2023041209015164
-  # perf script -i perf.data.2023041209014396
-  0x11d58 [0x80]: failed to process type: 9 [Bad address]
+<snip>
 
-Solution: Re-initialize perf_sample_data after each event is processed.
-Note that data->raw->frag.data may be accessed in perf_tp_event_match().
-Therefore, need to init sample_data and then go through swevent hlist to prevent
-reference of NULL pointer, reported by [1].
+>> +static int __init bioscfg_init(void)
+>> +{
+>> +    int ret = 0;
+>> +    int bios_capable = wmi_has_guid(HP_WMI_BIOS_GUID);
+>> +
+>> +    if (!bios_capable) {
+>> +        pr_err("Unable to run on non-HP system\n");
+>> +        return -ENODEV;
+>> +    }
+>> +
+> 
+> Currently, this driver will no get automatically loaded on supported hardware,
+> something which would be quite beneficial for users to have.
+> Since the HP_WMI_BIOS_GUID is already handled by the hp-wmi driver, maybe this
+> driver (which also already implements a function similar to hp_wmi_perform_query())
+> could register a platform device which is then used by this driver? This together
+> with MODULE_DEVICE_TABLE() would allow for automatically loading the module on supported hardware.
 
-After fix:
+Both drivers can already co-exist since the old hp-wmi driver uses the old
+wmi kernel functions and is not a "wmi_driver" so there is no need for
+a platform_device for this driver to bind to since the wmi_device is
+still free for it to bind to.
 
-  # perf record -e sched:sched_switch --switch-output-event sched:sched_switch -a sleep 1
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442259 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442514 ]
-  [ perf record: dump data: Woken up 0 times ]
-  [ perf record: Dump perf.data.2023041209442760 ]
-  [ perf record: Woken up 0 times to write data ]
-  [ perf record: Dump perf.data.2023041209443003 ]
-  [ perf record: Captured and wrote 0.069 MB perf.data.<timestamp> ]
-  # ls -l
-  total 864
-  -rw------- 1 root root 100166 Apr 12 09:44 perf.data.2023041209442259
-  -rw------- 1 root root 606438 Apr 12 09:44 perf.data.2023041209442514
-  -rw------- 1 root root  82246 Apr 12 09:44 perf.data.2023041209442760
-  -rw------- 1 root root  82342 Apr 12 09:44 perf.data.2023041209443003
-  # perf script -i perf.data.2023041209442259 | head -n 5
-              perf   232 [000]    66.846217: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=D ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846449: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846546: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
-              perf   234 [000]    66.846606: sched:sched_switch: prev_comm=perf prev_pid=234 prev_prio=120 prev_state=S ==> next_comm=perf next_pid=232 next_prio=120
-              perf   232 [000]    66.846646: sched:sched_switch: prev_comm=perf prev_pid=232 prev_prio=120 prev_state=R ==> next_comm=perf next_pid=234 next_prio=120
+This does indeed need a MODULE_DEVICE_TABLE() statement for
+the bios_attr_pass_interface_id_table[] id-table. Note only for that
+table, because the HP_WMI_BIOS_GUID is present on models which do
+not support this and we don't want the module to auto-load there.
 
-[1] Link: https://lore.kernel.org/oe-lkp/202304250929.efef2caa-yujie.liu@intel.com
+Regards,
 
-Fixes: bb447c27a467 ("perf/core: Set data->sample_flags in perf_prepare_sample()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
+Hans
 
-Changes since v2:
- - Initialize perf_sample_data before go through the swevent hlist.
- - Re-initialize perf_sample_data after each swevent is processed.
 
-Changes since v1:
- - Re-initialize the entire perf_sample_data before processing each swevent.
 
- kernel/events/core.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 435815d3be3f..753d4e9665b6 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -10150,8 +10150,20 @@ void perf_tp_event(u16 event_type, u64 count, void *record, int entry_size,
- 	perf_trace_buf_update(record, event_type);
- 
- 	hlist_for_each_entry_rcu(event, head, hlist_entry) {
--		if (perf_tp_event_match(event, &data, regs))
-+		if (perf_tp_event_match(event, &data, regs)) {
- 			perf_swevent_event(event, count, &data, regs);
-+
-+			/*
-+			 * Here use the same on-stack perf_sample_data,
-+			 * some members in data are event-specific and
-+			 * need to be re-computed for different sweveents.
-+			 * Re-initialize data->sample_flags safely to avoid
-+			 * the problem that next event skips preparing data
-+			 * because data->sample_flags is set.
-+			 */
-+			perf_sample_data_init(&data, 0, 0);
-+			perf_sample_save_raw_data(&data, &raw);
-+		}
- 	}
- 
- 	/*
--- 
-2.30.GIT
+> 
+> Armin Wolf
+> 
+>> +    ret = init_bios_attr_set_interface();
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    ret = init_bios_attr_pass_interface();
+>> +    if (ret)
+>> +        goto err_exit_bios_attr_set_interface;
+>> +
+>> +    if (!bioscfg_drv.bios_attr_wdev || !bioscfg_drv.password_attr_wdev) {
+>> +        pr_debug("Failed to find set or pass interface\n");
+>> +        ret = -ENODEV;
+>> +        goto err_exit_bios_attr_pass_interface;
+>> +    }
+>> +
+>> +    ret = fw_attributes_class_get(&fw_attr_class);
+>> +    if (ret)
+>> +        goto err_exit_bios_attr_pass_interface;
+>> +
+>> +    bioscfg_drv.class_dev = device_create(fw_attr_class, NULL, MKDEV(0, 0),
+>> +                          NULL, "%s", DRIVER_NAME);
+>> +    if (IS_ERR(bioscfg_drv.class_dev)) {
+>> +        ret = PTR_ERR(bioscfg_drv.class_dev);
+>> +        goto err_unregister_class;
+>> +    }
+>> +
+>> +    bioscfg_drv.main_dir_kset = kset_create_and_add("attributes", NULL,
+>> +                            &bioscfg_drv.class_dev->kobj);
+>> +    if (!bioscfg_drv.main_dir_kset) {
+>> +        ret = -ENOMEM;
+>> +        pr_debug("Failed to create and add attributes\n");
+>> +        goto err_destroy_classdev;
+>> +    }
+>> +
+>> +    bioscfg_drv.authentication_dir_kset = kset_create_and_add("authentication", NULL,
+>> +                                  &bioscfg_drv.class_dev->kobj);
+>> +    if (!bioscfg_drv.authentication_dir_kset) {
+>> +        ret = -ENOMEM;
+>> +        pr_debug("Failed to create and add authentication\n");
+>> +        goto err_release_attributes_data;
+>> +    }
+>> +
+>> +    /*
+>> +     * sysfs level attributes.
+>> +     * - pending_reboot
+>> +     */
+>> +    ret = create_attributes_level_sysfs_files();
+>> +    if (ret)
+>> +        pr_debug("Failed to create sysfs level attributes\n");
+>> +
+>> +    ret = hp_init_bios_attributes(HPWMI_STRING_TYPE, HP_WMI_BIOS_STRING_GUID);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate string type attributes\n");
+>> +
+>> +    ret = hp_init_bios_attributes(HPWMI_INTEGER_TYPE, HP_WMI_BIOS_INTEGER_GUID);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate integer type attributes\n");
+>> +
+>> +    ret = hp_init_bios_attributes(HPWMI_ENUMERATION_TYPE, HP_WMI_BIOS_ENUMERATION_GUID);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate enumeration type attributes\n");
+>> +
+>> +    ret = hp_init_bios_attributes(HPWMI_ORDERED_LIST_TYPE, HP_WMI_BIOS_ORDERED_LIST_GUID);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate ordered list object type attributes\n");
+>> +
+>> +    ret = hp_init_bios_attributes(HPWMI_PASSWORD_TYPE, HP_WMI_BIOS_PASSWORD_GUID);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate password object type attributes\n");
+>> +
+>> +    bioscfg_drv.spm_data.attr_name_kobj = NULL;
+>> +    ret = hp_add_other_attributes(HPWMI_SECURE_PLATFORM_TYPE);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate secure platform object type attribute\n");
+>> +
+>> +    bioscfg_drv.sure_start_attr_kobj = NULL;
+>> +    ret = hp_add_other_attributes(HPWMI_SURE_START_TYPE);
+>> +    if (ret)
+>> +        pr_debug("Failed to populate sure start object type attribute\n");
+>> +
+>> +    return 0;
+>> +
+>> +err_release_attributes_data:
+>> +    release_attributes_data();
+>> +
+>> +err_destroy_classdev:
+>> +    device_destroy(fw_attr_class, MKDEV(0, 0));
+>> +
+>> +err_unregister_class:
+>> +    fw_attributes_class_put();
+>> +
+>> +err_exit_bios_attr_pass_interface:
+>> +    exit_bios_attr_pass_interface();
+>> +
+>> +err_exit_bios_attr_set_interface:
+>> +    exit_bios_attr_set_interface();
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static void __exit bioscfg_exit(void)
+>> +{
+>> +    release_attributes_data();
+>> +    device_destroy(fw_attr_class, MKDEV(0, 0));
+>> +
+>> +    fw_attributes_class_put();
+>> +    exit_bios_attr_set_interface();
+>> +    exit_bios_attr_pass_interface();
+>> +}
+>> +
+>> +module_init(bioscfg_init);
+>> +module_exit(bioscfg_exit);
+> 
 
