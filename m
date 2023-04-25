@@ -2,116 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9766EE36C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD606EE36F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjDYNp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S234264AbjDYNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234309AbjDYNpv (ORCPT
+        with ESMTP id S234224AbjDYNq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:45:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B041445C;
-        Tue, 25 Apr 2023 06:45:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B7262A1B;
-        Tue, 25 Apr 2023 13:45:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962E6C4339B;
-        Tue, 25 Apr 2023 13:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682430341;
-        bh=9L0RFEhgc5pVrEurXwJyQS6iOhvUqopnPSSKaj6qHrk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l9rN0yXvw4qGwOHeti8o5qBtfLR1pBuf64qdQ83RRLdFbTYYcutmEc94K4lo9BCQG
-         SyOqoxZBLPNi5/ZS7CZhbGdEXN5wu32UITol5ums0ldYHMT9iFhwUXabdmtZ0tB36w
-         3lPsP2eKjxgOJuAIn1Rw44gVKrSaP8avWcNZ8eGaJ9FzILmvuQFQ0JI+mXxT9SnHQr
-         I0Gxde5M8dlNSIkiH57of5qh8J1S83x4CTijHAx799ZeCABTMLQCZ/Hagk5t5PmXG3
-         V5eR97+IhdE2f9tj9bU6u4TFF+/uneh1nBC14aYWjyftXr8yWYG/fTaxEOwycyL31s
-         tkIajbtM3LHwA==
-Date:   Tue, 25 Apr 2023 15:45:37 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-Cc:     patrick@stwcx.xyz, Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
-Message-ID: <20230425134537.pzsplcpkrog2552r@intel.intel>
-References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+        Tue, 25 Apr 2023 09:46:28 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5800F16182
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94f3cd32799so1078439966b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682430359; x=1685022359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
+        b=IbCqrE+0qE1Vta7QCUFthlILPfO9eniXf6400K6oMk+lpgOsl9KXaDA1uRvGgcqVwh
+         PAGGWi8fUGEkeNspx6ZhnsvdwhU+aStjzOGNzaXq4c7EJhKTH686w69OBcNaxQQBKdID
+         rUjiI1iHNLFRwmrUxEb71IxGS/hVwHwC5Vs/QrPdDI45DojY0g/reV7S8kIKYNG4Z9is
+         y41dzqRhtgn2fatnzf91nHfGrooO8kF2iGw9+cD48LdFOloX9hMmuUKLPketS4Qdv6xK
+         lvY6LO2me1uYUzYF62v05ZWnQuXsz6Puy21MoGLtSX+jgC0DsBeAnM50weEs9mjoT+g0
+         W/Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682430359; x=1685022359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
+        b=ZLFNB45vZdlM3rEm28TSGH6ti0ZNdVZhSZ3sdtAHU2obiW8BtS9DgIFETPc3iNGboL
+         XcVjP8n9PY9WuQ6FeBMsqmqhPjw4CHBrA0tb/ovPQliBMbKTlQ66Qugv3U3Ng22zPqEd
+         mdEdAay8lk0vnszbaBZ2lGrsFWApfOCYGaDj5vD25xJygkfZxmIAWfRVsAPKeNZdqRNU
+         HC8YJhw46SfO8TpXbN7yj0AwBZtuxtVXTELcHx/aXsNfrEUZ7wvIW81bEIaCbFz9GsyS
+         pJ9RFfHs6NEj2FocEPdLv7S/DUcZBDgizXueSx76o51E7XtRwapTYR0TYyVlvJD9lLmc
+         PZpw==
+X-Gm-Message-State: AAQBX9cU4De0XuZm4EpkcesZDKB1JFTGV84HCFCeWwVazzO64CGZGMRa
+        Ara/ObKk1emBfOBdrS7IMS4Fhw==
+X-Google-Smtp-Source: AKy350Y5d56yR3yCA+n72WOYxsRIheFXOTdTuxBeiaMFVX4jeFXOmiuq4zZPQKXKHZXpv/m9cuIXJQ==
+X-Received: by 2002:a17:906:470a:b0:94e:6294:9d23 with SMTP id y10-20020a170906470a00b0094e62949d23mr13534582ejq.26.1682430359582;
+        Tue, 25 Apr 2023 06:45:59 -0700 (PDT)
+Received: from [172.23.2.104] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id my34-20020a1709065a6200b0094f6f45b2c1sm6827559ejc.156.2023.04.25.06.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 06:45:58 -0700 (PDT)
+Message-ID: <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
+Date:   Tue, 25 Apr 2023 14:45:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
+ SPI_TRANS_CFG
+Content-Language: en-US
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
+        swboyd@chromium.org, quic_vtanuku@quicinc.com
+References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Delphine,
 
-On top of Guenter's comments,
+On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
+> The CS_TOGGLE bit when set is supposed to instruct FW to
+> toggle CS line between words. The driver with intent of
+> disabling this behaviour has been unsetting BIT(0). This has
+> not caused any trouble so far because the original BIT(1)
+> is untouched and BIT(0) likely wasn't being used.
+>
+> Correct this to prevent a potential future bug.
+>
+> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+> ---
 
-[...]
+Has this always been the case, or did the switch to BIT(1)
+only occur on some recent platforms?
 
-> +config SENSORS_LTC4286
-> +	bool "Linear Technologies LTC4286"
-> +	help
-> +	  If you say yes here you get hardware monitoring support for Linear
-> +	  Technology LTC4286.
+Konrad
 
-could you add a couple of words more here?
-
-[...]
-
-> +static int ltc4286_probe(struct i2c_client *client,
-> +			 const struct i2c_device_id *id)
-> +{
-> +	int ret;
-> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
-> +	struct device *dev = &client->dev;
-> +	struct pmbus_driver_info *info;
-> +	u32 rsense;
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer id\n");
-
-you can use dev_err_probe() here:
-
-	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
-
-> +		return ret;
-> +	}
-> +
-> +	/* Refer to ltc4286 datasheet page 20
-> +	 * the default manufacturer id is LTC
-> +	 */
-> +	if (ret != LTC4286_MFR_ID_SIZE ||
-> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
-> +		dev_err(&client->dev, "unsupported manufacturer id\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to read manufacturer model\n");
-> +		return ret;
-> +	}
-
-Is this read really needed?
-
-Andi
-
-[...]
+>   drivers/spi/spi-geni-qcom.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
+> index ba7be50..8a7d1c2 100644
+> --- a/drivers/spi/spi-geni-qcom.c
+> +++ b/drivers/spi/spi-geni-qcom.c
+> @@ -35,7 +35,7 @@
+>   #define CS_DEMUX_OUTPUT_SEL	GENMASK(3, 0)
+>   
+>   #define SE_SPI_TRANS_CFG	0x25c
+> -#define CS_TOGGLE		BIT(0)
+> +#define CS_TOGGLE		BIT(1)
+>   
+>   #define SE_SPI_WORD_LEN		0x268
+>   #define WORD_LEN_MSK		GENMASK(9, 0)
