@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1836EDA01
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBA86EDA04
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbjDYBqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 21:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S232940AbjDYBr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbjDYBp7 (ORCPT
+        with ESMTP id S232801AbjDYBr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:45:59 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690103591
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 18:45:58 -0700 (PDT)
-X-UUID: 9f6bb248181d4d54822b9d9891d4fdbf-20230425
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:67799942-4058-436d-8104-f1c19049ea09,IP:5,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-10
-X-CID-INFO: VERSION:1.1.22,REQID:67799942-4058-436d-8104-f1c19049ea09,IP:5,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:-10
-X-CID-META: VersionHash:120426c,CLOUDID:83d603ec-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:230425094553WM112X05,BulkQuantity:0,Recheck:0,SF:38|24|17|19|44|102,
-        TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 9f6bb248181d4d54822b9d9891d4fdbf-20230425
-X-User: zhouzongmin@kylinos.cn
-Received: from thinkpadx13gen2i.. [(116.128.244.169)] by mailgw
-        (envelope-from <zhouzongmin@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 489722498; Tue, 25 Apr 2023 09:45:50 +0800
-From:   Zongmin Zhou <zhouzongmin@kylinos.cn>
-To:     airlied@redhat.com, kraxel@redhat.com, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [RESEND PATCH] drm/qxl: prevent memory leak
-Date:   Tue, 25 Apr 2023 09:45:43 +0800
-Message-Id: <20230425014543.3448839-1-zhouzongmin@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230322085847.3385930-1-zhouzongmin@kylinos.cn>
-References: <20230322085847.3385930-1-zhouzongmin@kylinos.cn>
+        Mon, 24 Apr 2023 21:47:28 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB4449F9;
+        Mon, 24 Apr 2023 18:47:27 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q54XQ2lXlz17KKF;
+        Tue, 25 Apr 2023 09:43:34 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 25 Apr 2023 09:47:23 +0800
+Message-ID: <316b5a9e-5d5f-3bcf-57c1-86fafe6681c3@huawei.com>
+Date:   Tue, 25 Apr 2023 09:47:22 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
+ dump_user_range()
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     "chu, jane" <jane.chu@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>
+References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
+ <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
+ <54d761bb-1bcc-21a2-6b53-9d797a3c076b@huawei.com>
+ <20230419072557.GA2926483@hori.linux.bs1.fc.nec.co.jp>
+ <9fa67780-c48f-4675-731b-4e9a25cd29a0@huawei.com>
+ <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
+ <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
+ <9a9876a2-a2fd-40d9-b215-3e6c8207e711@huawei.com>
+ <20230421031356.GA3048466@hori.linux.bs1.fc.nec.co.jp>
+ <1bd6a635-5a3d-c294-38ce-5c6fcff6494f@huawei.com>
+ <20230424064427.GA3267052@hori.linux.bs1.fc.nec.co.jp>
+ <SJ1PR11MB60833E08F3C3028F7463FE19FC679@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <SJ1PR11MB60833E08F3C3028F7463FE19FC679@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The allocated memory for qdev->dumb_heads should be released
-in qxl_destroy_monitors_object before qxl suspend.
-otherwise,qxl_create_monitors_object will be called to
-reallocate memory for qdev->dumb_heads after qxl resume,
-it will cause memory leak.
 
-Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
----
- drivers/gpu/drm/qxl/qxl_display.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/qxl/qxl_display.c b/drivers/gpu/drm/qxl/qxl_display.c
-index 6492a70e3c39..404b0483bb7c 100644
---- a/drivers/gpu/drm/qxl/qxl_display.c
-+++ b/drivers/gpu/drm/qxl/qxl_display.c
-@@ -1229,6 +1229,9 @@ int qxl_destroy_monitors_object(struct qxl_device *qdev)
- 	if (!qdev->monitors_config_bo)
- 		return 0;
- 
-+	kfree(qdev->dumb_heads);
-+	qdev->dumb_heads = NULL;
-+
- 	qdev->monitors_config = NULL;
- 	qdev->ram_header->monitors_config = 0;
- 
--- 
-2.34.1
+On 2023/4/25 0:17, Luck, Tony wrote:
+>>> This change seems to not related to what you try to fix.
+>>> Could this break some other workloads like copying from user address?
+>>>
+>>
+>> Yes, this move MCE_IN_KERNEL_COPYIN set into next case, both COPY and
+>> MCE_SAFE type will set MCE_IN_KERNEL_COPYIN, for EX_TYPE_COPY, we don't
+>> break it.
+> 
+> Should Linux even try to take a core dump for a SIGBUS generated because
+> the application accessed a poisoned page?
+> 
+> It doesn't seem like it would be useful. Core dumps are for debugging s/w
+> program errors in applications and libraries. That isn't the case when there
+> is a poison consumption. The application did nothing wrong.
+> 
+> This patch is still useful though. There may be an undiscovered poison
+> page in the application. Avoiding a kernel crash when dumping core
+> is still a good thing.
 
+Thanks for your confirm, and what your option about add
+MCE_IN_KERNEL_COPYIN to EX_TYPE_DEFAULT_MCE_SAFE/FAULT_MCE_SAFE type
+to let do_machine_check call queue_task_work(&m, msg, kill_me_never),
+which kill every call memory_failure_queue() after mc safe copy return?
+
+> 
+> -Tony
