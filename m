@@ -2,70 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F54A6EE196
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8996EE198
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbjDYMFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35588 "EHLO
+        id S234005AbjDYMFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbjDYMFM (ORCPT
+        with ESMTP id S232881AbjDYMFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:05:12 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8667C49F8;
-        Tue, 25 Apr 2023 05:05:09 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 889195FD05;
-        Tue, 25 Apr 2023 15:05:06 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682424306;
-        bh=/7k2hmgzdS0RWThtX1QVPv33A+h1jqDTdyLWRVz4PtQ=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=rUHWN1H28wH6iCXoGWFuo0Owuh5UxXgiiUvT9oyGwOMOEYDF9gByjamwqDuIWOuXt
-         PFRpBZGx1+BZ2xn4eMdt0SqXge2rJxNeT0x9tXzGu0XVPV0Hdp2hBsvPqDbNOc4xhL
-         HAQWve0wxkYfvK9MJl6HSqSWQHGuNFMNXHXZqHP3gaumSc62gXiduIh8LvEJsbPIux
-         m4y9fIin/257IMbKn4Hvu5dMU2kd4c71/ejzWTYrHGyBZ4JAtFsfuIR60QKya+AOW9
-         aqnwRYUBFFa92VWgdYHCYhAhxIlI8GFovBlj1F0QArwb+0dIYT9P+H9t15CZr06HK3
-         J1XB8AUGCaTGQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 25 Apr 2023 15:05:05 +0300 (MSK)
-Date:   Tue, 25 Apr 2023 15:05:05 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v13 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Message-ID: <20230425120505.xrgrjrxcxennrzct@CAB-WSD-L081021>
-References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
- <20230405195927.13487-7-ddrokosov@sberdevices.ru>
- <CAFBinCBGWOB2XLb6su=R3W684rKdK3pOgPFsCGx+Oyo_pgdeBg@mail.gmail.com>
+        Tue, 25 Apr 2023 08:05:45 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EECA3AA9;
+        Tue, 25 Apr 2023 05:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=dWhSY0iPXmj4F77ncGHclUHy20l/c0UzrIFeDbV0o7k=; b=TgDHklzckVcxx8myf2QRmnwF4v
+        glNq5YKe501d3GxXDbSuoGfZAJVA4P12LGY1ungN5ONG2y753xV+zQmxldalxA3TTm+8JYrwK56eA
+        Ua024RZu0hhi6zdwK1Cz2zbCPU4kaWKafr8ZRYKh/SINN+yWTQmOUK5ka7Jk3lwMAjXY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1prHQM-00BBNp-T4; Tue, 25 Apr 2023 14:05:34 +0200
+Date:   Tue, 25 Apr 2023 14:05:34 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srk@ti.com
+Subject: Re: [RFC PATCH 1/2] net: phy: dp83867: add w/a for packet errors
+ seen with short cables
+Message-ID: <f29411d2-c596-4a07-8b6a-7d6e203c25e0@lunn.ch>
+References: <20230425054429.3956535-1-s-vadapalli@ti.com>
+ <20230425054429.3956535-2-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCBGWOB2XLb6su=R3W684rKdK3pOgPFsCGx+Oyo_pgdeBg@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <20230425054429.3956535-2-s-vadapalli@ti.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,38 +52,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 11:30:38PM +0200, Martin Blumenstingl wrote:
-> On Wed, Apr 5, 2023 at 9:59 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> [...]
-> > +static const struct of_device_id a1_periphs_clkc_match_table[] = {
-> > +       { .compatible = "amlogic,a1-clkc", },
-> > +       {},
-> nit-pick: please remove the comma after the sentinel
+On Tue, Apr 25, 2023 at 11:14:28AM +0530, Siddharth Vadapalli wrote:
+> From: Grygorii Strashko <grygorii.strashko@ti.com>
 > 
-
-Thank you for bringing up that point! There's no problem with removing
-it in the next version of the product. I'll prepare it.
-
-> > +MODULE_DEVICE_TABLE(of, a1_periphs_clkc_match_table);
-> > +
-> > +static struct platform_driver a1_periphs_clkc_driver = {
-> > +       .probe = meson_a1_periphs_probe,
-> > +       .driver = {
-> > +               .name = "a1-clkc",
-> > +               .of_match_table = of_match_ptr(a1_periphs_clkc_match_table),
-> I wonder if we should drop of_match_ptr() here as no other meson clock
-> driver uses it.
-> Also there's commits like 00cb754ac622 ("clk: imx8mq: drop
-> of_match_ptr from of_device_id table") which explicitly remove it from
-> other drivers.
-
-Exactly, all Meson clock drivers depend on the ARM64 config, which in
-turn selects CONFIG_OF by default. So of_match_ptr can be dropped.
-
+> Introduce the W/A for packet errors seen with short cables (<1m) between
+> two DP83867 PHYs.
 > 
-> Apart form these two this patch looks great to me.
+> The W/A recommended by DM requires FFE Equalizer Configuration tuning by
+> writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
+> and soft resets as follows:
 > 
+> write_reg(0x001F, 0x8000); //hard reset
+> write_reg(DSP_FFE_CFG, 0x0E81);
+> write_reg(0x001F, 0x4000); //soft reset
+> 
+> Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
+> affect Long Cable performance.", enable the W/A by default.
+> 
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
--- 
-Thank you,
-Dmitry
+https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+
+Please set the tree in the Subject line to be net.
+Please also add a Fixes: tag, probably for the patch which added this driver.
+
+
+
+
+> ---
+>  drivers/net/phy/dp83867.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+> index 5821f04c69dc..ba60cf35872e 100644
+> --- a/drivers/net/phy/dp83867.c
+> +++ b/drivers/net/phy/dp83867.c
+> @@ -42,6 +42,7 @@
+>  #define DP83867_STRAP_STS1	0x006E
+>  #define DP83867_STRAP_STS2	0x006f
+>  #define DP83867_RGMIIDCTL	0x0086
+> +#define DP83867_DSP_FFE_CFG	0X012C
+>  #define DP83867_RXFCFG		0x0134
+>  #define DP83867_RXFPMD1	0x0136
+>  #define DP83867_RXFPMD2	0x0137
+> @@ -934,8 +935,20 @@ static int dp83867_phy_reset(struct phy_device *phydev)
+>  
+>  	usleep_range(10, 20);
+>  
+> -	return phy_modify(phydev, MII_DP83867_PHYCTRL,
+> +	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
+>  			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG, 0X0E81);
+
+Maybe check the return code for errors?
+
+      Andrew
