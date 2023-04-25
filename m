@@ -2,95 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2F96EE15C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811A96EE173
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233730AbjDYLwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S234028AbjDYLzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233355AbjDYLwt (ORCPT
+        with ESMTP id S233907AbjDYLzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:52:49 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF5D5592
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:52:20 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-2f7c281a015so3424735f8f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682423535; x=1685015535;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ynfAkeFX9c4haFlIH8rjLILNLDWXZve/Fuy+x2osLE=;
-        b=udOp2foTMQVRgEFYvPui0UXPktfpmgf9DnmHlYw28zFZpUt4aRefOBlXkfsJSNS1Rv
-         m7vNfkWjflKoLxkvDrs2qvRd4hxhXnUu5tOuNjtDFxG/C5hdyExewyNfldOgEe8eGZGz
-         WjTjQKqOTXd9HU3tBla6kSCcCkBkXayQNNOvajSISxhHsQ+PDm+mxipncRwkTL25ZWXW
-         FD6FmNW2LhM8HXyrG3SC7kakHbzutytO1dACL8Q7tOi77/OzHhMLu6X8Fk1Vp+R3w2bA
-         E23sOM0BpsOTRt7EVnrHjFhLU9J690tU9u9GZc72oBCzWUWGUe1UNPLuu2B7EJG4pvmW
-         QhSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682423535; x=1685015535;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ynfAkeFX9c4haFlIH8rjLILNLDWXZve/Fuy+x2osLE=;
-        b=PPVpy0wAshxb8VX4nSdH2EHquvuq3tdR2hi+r926gHOaDUZkF0EU887TZOb4m1CeO7
-         j9oK8Hdbsfd2JSV0CF9VE2pWVcaxqps0j2m0CcpHw940lsZeR7rcHk1IIhnWkbomwzx3
-         s2yWgmM2QTvYk0wQblD/5O3rjn7+ocV+YX5tR/FcN0crLAKLQxVmyOh63tgDBsSI5SPO
-         iOVc2vtPI6JUInOpQGA0dhosTjL63whyJfNEOwTwhwHzZ0j9qph3LNZz1iJqKzY6BEJ7
-         E/NuVb56eIb46CIAlH8FJaclbYHb+jlMobE2wiAoAIpReoxSir3y4iYiDxJjLyR6Dyvw
-         GfFA==
-X-Gm-Message-State: AAQBX9ebYLnrdRvx72bcPrSIJ5hH9MA1bgYphNAvGhmqvgk7B1GSQAc8
-        QH4qKPut2RDAqE6QH4v2imAgvg==
-X-Google-Smtp-Source: AKy350YKmxiieIO+e/m8YrSHDxSa31rJy03V8/Gu3qee+b4TvG7KAopUN9dSLHD5NOyEXf8np1sQbA==
-X-Received: by 2002:a5d:6d4d:0:b0:2ef:c0cf:c72b with SMTP id k13-20020a5d6d4d000000b002efc0cfc72bmr12109033wri.29.1682423534889;
-        Tue, 25 Apr 2023 04:52:14 -0700 (PDT)
-Received: from [10.101.1.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id a18-20020a056000101200b002e61e002943sm12948461wrx.116.2023.04.25.04.52.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 04:52:14 -0700 (PDT)
-Message-ID: <5657cc31-b547-a48f-d090-68ca240a4076@baylibre.com>
-Date:   Tue, 25 Apr 2023 13:52:12 +0200
+        Tue, 25 Apr 2023 07:55:00 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDB212CAB;
+        Tue, 25 Apr 2023 04:54:43 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q5L5W1nqgz4f42YX;
+        Tue, 25 Apr 2023 19:54:39 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbF+v0dkGEZ+IA--.20559S4;
+        Tue, 25 Apr 2023 19:54:40 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     logang@deltatee.com, axboe@kernel.dk, song@kernel.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-raid@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next v7 0/5] md: protect md_thread with rcu
+Date:   Tue, 25 Apr 2023 19:52:51 +0800
+Message-Id: <20230425115256.3663932-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 4/4] arm64: dts: mediatek: cherry: Enable PCI-Express
- ports for WiFi
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com,
-        Chen-Yu Tsai <wenst@chromium.org>
-References: <20230424112523.1436926-1-angelogioacchino.delregno@collabora.com>
- <20230424112523.1436926-5-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230424112523.1436926-5-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgBnHbF+v0dkGEZ+IA--.20559S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw4rXrW3GF15GFWfGr48JFb_yoW8AFy8pr
+        WagFZxZw4UCrsxZFsxZ342ka45G3WrGay7KryxA3yrZa45uFyUJr4UJFykuF9rWFyfJa9F
+        qF15Jr1DCF10yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/04/2023 13:25, AngeloGioacchino Del Regno wrote:
-> On the Cherry platform, a MT7621 WiFi+Bluetooth combo is connected
-> over PCI-Express (for WiFi) and USB (for BT): enable the PCIe ports
-> to enable enumerating this chip.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
-> Tested-by: Chen-Yu Tsai<wenst@chromium.org>
+From: Yu Kuai <yukuai3@huawei.com>
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Changes in v7:
+ - add missing changes for md-cluster
+ - rebase for the latest md-next branch
 
-Regards,
-Alexandre
+Changes in v6:
+ - remove first patch from v5, and use rcu_asign_pointer() directly from
+ caller.
+ - always use rcu_read_lock/unlock to protect mddev_set_timeout().
+
+Changes in v5:
+ - use rcu_dereference_protected() instead of rcu_access_pointer() where
+ rcu_read_lock/unlock is not required.
+ - add patch 4,5 to handle that bitmap timeout is set multiple times.
+
+Changes in v4:
+ - remove patch 2 from v3
+ - fix sparse errors and warnings from v3, in order to do that, all access
+ to md_thread need to be modified, patch 2-4 is splited to avoid a huge
+ patch.
+
+Changes in v3:
+ - remove patch 3 from v2
+ - use rcu instead of a new lock
+
+Changes in v2:
+ - fix a compile error for md-cluster in patch 2
+ - replace spin_lock/unlock with spin_lock/unlock_irq in patch 5
+ - don't wake up inside the new lock in md wakeup_thread in patch 5
+
+Yu Kuai (5):
+  md: factor out a helper to wake up md_thread directly
+  dm-raid: remove useless checking in raid_message()
+  md/bitmap: always wake up md_thread in timeout_store
+  md/bitmap: factor out a helper to set timeout
+  md: protect md_thread with rcu
+
+ block/blk-cgroup.c        |  3 ++
+ drivers/md/dm-raid.c      |  4 +-
+ drivers/md/md-bitmap.c    | 43 +++++++++++--------
+ drivers/md/md-cluster.c   | 17 +++++---
+ drivers/md/md-multipath.c |  4 +-
+ drivers/md/md.c           | 88 +++++++++++++++++++++------------------
+ drivers/md/md.h           |  8 ++--
+ drivers/md/raid1.c        |  7 ++--
+ drivers/md/raid1.h        |  2 +-
+ drivers/md/raid10.c       | 20 +++++----
+ drivers/md/raid10.h       |  2 +-
+ drivers/md/raid5-cache.c  | 22 ++++++----
+ drivers/md/raid5.c        | 15 +++----
+ drivers/md/raid5.h        |  2 +-
+ 14 files changed, 135 insertions(+), 102 deletions(-)
+
+-- 
+2.39.2
 
