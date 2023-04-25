@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69AF6EE89D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD186EE8A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236182AbjDYTuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S236190AbjDYTvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236144AbjDYTum (ORCPT
+        with ESMTP id S235087AbjDYTvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:50:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80505122
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:50:41 -0700 (PDT)
-Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 05A911EC054E;
-        Tue, 25 Apr 2023 21:50:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1682452240;
+        Tue, 25 Apr 2023 15:51:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79BC122;
+        Tue, 25 Apr 2023 12:51:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682452273;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=uQb3cJDbr8NufWinJ2nO95njqU0edu2eFs6NC58m+Y8=;
-        b=dA1ouBW/TU8s1DIdlebqgCPD/gDVsJPkan5ExvgXt33DdXBCLLkp8U6fjOhFTw5kla7fCQ
-        qPj/Pg4p1OQ5TNkV6ipKAW4MWBlA4kpU+15IY4t/Ggkn+4lgUa5MQcOgOETtQgGA4jDEuI
-        odm8IPDuapIZXzDh/QS1IR0CfAZizos=
-From:   Borislav Petkov <bp@alien8.de>
-To:     X86 ML <x86@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/CPU/AMD: Rename the spectral chicken
-Date:   Tue, 25 Apr 2023 21:50:24 +0200
-Message-Id: <20230425195024.17808-1-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
+        b=hcfCyrdfQ/+yHnKF3T+I49mLvnN7Y7S69gBRQL7PhhKJcZIQM6dUY5pvAbw4x5UtKBksj5
+        +gNdAWyqbtppxTS6xk/OOGkQEgCKZ50daZMUpYiSsjHUolnRQ63od8fRIwCIy22iqsL7Jz
+        ptuYgLF2Vyi6TxSoYJlRddHoLRBh0aBb/2ut263viqoCn4L8IM34OuGeUFz0vHjf3uDsn9
+        kzIwMYp79iEd+cDm0M3l/TvJoQ8Ebljb98ttQPEip+uioS6jdgokPZm34PxDLgh8kTLkX7
+        Tk0Brm7tWOMbl31MYKpF+X1fNVmxtHUKna8IUJdeJdt+TiqryaL2tjxt/WxUaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682452273;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=epqrrIP9XVMR1rQYOgUv6OMHFSXsoKyAhdvov9JTG3c=;
+        b=mlbSRhNUu/9kpluKPqwDbDiOM+hdImwLPmR+/CiZOtx2CU7HgipiQ7bg9V2pgBimVEqMmi
+        qqHiWR0zzWYsg/Bg==
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 22/37] arm64: smp: Switch to hotplug core state
+ synchronization
+In-Reply-To: <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232310.569498144@linutronix.de> <ZD1q3TF2ixVD1f2M@FVFF77S0Q05N>
+Date:   Tue, 25 Apr 2023 21:51:12 +0200
+Message-ID: <87ttx3zqof.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Mon, Apr 17 2023 at 16:50, Mark Rutland wrote:
+> On Sat, Apr 15, 2023 at 01:44:49AM +0200, Thomas Gleixner wrote:
+> I gave this a spin on arm64 (in a 64-vCPU VM on an M1 host), and it seems to
+> work fine with a bunch of vCPUs being hotplugged off and on again randomly.
+>
+> FWIW:
+>
+> Tested-by: Mark Rutland <mark.rutland@arm.com>
+>
+> I also hacked the code to have the dying CPU spin forever before the call to
+> cpuhp_ap_report_dead(). In that case I see a warning, and that we don't call
+> arch_cpuhp_cleanup_dead_cpu(), and that the CPU is marked as offline (per
+> /sys/devices/system/cpu/$N/online).
 
-We've had enough fun with the spectral chicken bit - name it what it
-really does: it suppresses non-branch predictions.
+Nice!
 
-Rename defines to make it clear that it is Zen2 only.
+> As a tangent/aside, we might need to improve that for confidential compute
+> architectures, and we might want to generically track cpus which might still be
+> using kernel text/data. On arm64 we ensure that via our cpu_kill() callback
+> (which'll use PSCI CPU_AFFINITY_INFO), but I'm not sure if TDX and/or SEV-SNP
+> have a similar mechanism.
+>
+> Otherwise, a malicious hypervisor can pause a vCPU just before it leaves the
+> kernel (e.g. immediately after the arch_cpuhp_cleanup_dead_cpu() call), wait
+> for a kexec (or resuse of stack memroy), and unpause the vCPU to cause things
+> to blow up.
 
-No functional changes.
+There are a gazillion ways for a malicious hypervisor to blow up a
+'squint enough to be confident' guest.
 
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
----
- arch/x86/include/asm/msr-index.h |  6 ++++--
- arch/x86/kernel/cpu/amd.c        | 22 +++++++++++-----------
- 2 files changed, 15 insertions(+), 13 deletions(-)
+The real question is whether it can utilize such a blow up to extract
+confidential information from the guest.
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index ad35355ee43e..0094e6a1b553 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -625,8 +625,10 @@
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
- 
--#define MSR_ZEN2_SPECTRAL_CHICKEN	0xc00110e3
--#define MSR_ZEN2_SPECTRAL_CHICKEN_BIT	BIT_ULL(1)
-+/* Fam 17h, Zen2 MSRs */
-+#define MSR_ZEN2_DE_CFG2			0xc00110e3
-+#define MSR_ZEN2_DE_CFG2_SUPPRESS_NOBR_PRED_BIT	1
-+#define MSR_ZEN2_DE_CFG2_SUPPRESS_NOBR_PRED	BIT(MSR_ZEN2_DE_CFG2_SUPPRESS_NOBR_PRED_BIT)
- 
- /* Fam 16h MSRs */
- #define MSR_F16H_L2I_PERF_CTL		0xc0010230
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 571abf808ea3..70a41088e900 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -860,23 +860,23 @@ static void init_amd_bd(struct cpuinfo_x86 *c)
- 	clear_rdrand_cpuid_bit(c);
- }
- 
--void init_spectral_chicken(struct cpuinfo_x86 *c)
-+void init_amd_zn2(struct cpuinfo_x86 *c)
- {
- #ifdef CONFIG_CPU_UNRET_ENTRY
- 	u64 value;
- 
- 	/*
--	 * On Zen2 we offer this chicken (bit) on the altar of Speculation.
-+	 * Suppress speculation from the middle of a basic block, i.e.
-+	 * non-branch predictions.
- 	 *
--	 * This suppresses speculation from the middle of a basic block, i.e. it
--	 * suppresses non-branch predictions.
--	 *
--	 * We use STIBP as a heuristic to filter out Zen2 from the rest of F17H
-+	 * STIBP is used as a heuristic to filter out Zen2 from the rest
-+	 * of family 0x17.
- 	 */
--	if (!cpu_has(c, X86_FEATURE_HYPERVISOR) && cpu_has(c, X86_FEATURE_AMD_STIBP)) {
--		if (!rdmsrl_safe(MSR_ZEN2_SPECTRAL_CHICKEN, &value)) {
--			value |= MSR_ZEN2_SPECTRAL_CHICKEN_BIT;
--			wrmsrl_safe(MSR_ZEN2_SPECTRAL_CHICKEN, value);
-+	if (!cpu_has(c, X86_FEATURE_HYPERVISOR) &&
-+	     cpu_has(c, X86_FEATURE_AMD_STIBP)) {
-+		if (!rdmsrl_safe(MSR_ZEN2_DE_CFG2, &value)) {
-+			value |= MSR_ZEN2_DE_CFG2_SUPPRESS_NOBR_PRED;
-+			wrmsrl_safe(MSR_ZEN2_DE_CFG2, value);
- 		}
- 	}
- #endif
-@@ -949,7 +949,7 @@ static void init_amd(struct cpuinfo_x86 *c)
- 	case 0x12: init_amd_ln(c); break;
- 	case 0x15: init_amd_bd(c); break;
- 	case 0x16: init_amd_jg(c); break;
--	case 0x17: init_spectral_chicken(c);
-+	case 0x17: init_amd_zn2(c);
- 		   fallthrough;
- 	case 0x19: init_amd_zn(c); break;
- 	}
--- 
-2.35.1
+If not then it's just yet another way of DoS which is an "acceptable"
+attack as it only affects availability but not confidentiality.
 
+Thanks,
+
+        tglx
