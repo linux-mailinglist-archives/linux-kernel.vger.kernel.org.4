@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405F66EDDE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101DC6EDDE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjDYIYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
+        id S233590AbjDYIZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjDYIYc (ORCPT
+        with ESMTP id S233238AbjDYIZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:24:32 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1178D1A2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:24:31 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-4409786dab8so1784239e0c.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:24:31 -0700 (PDT)
+        Tue, 25 Apr 2023 04:25:38 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675DB4C1E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:25:37 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-4409786dab8so1784688e0c.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682411070; x=1685003070;
+        d=chromium.org; s=google; t=1682411136; x=1685003136;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g87QtYvbyFcpRIEyNYcMCc4cgeNxfkvSk5Vpj0Hyzc8=;
-        b=C5PFkPyWgHmed4xAl9jksbPjuO1O2fl9/NtlZo3jOPuJZ+9YSApk2q8BkcrCmi7hKH
-         dYeKRMBDcgwB8cTSypzr4BghpfSgFTYwL549V6Qa3RCmU8Jcenh/U+SF0HCd9k/cVdy5
-         GSmivlXBqNkYPv9yH3AToHRFh3b4Ol7y1obYk=
+        bh=EagTYKGNK6lO5EWiNmyq6BDWbqfgu0PNzfW6Qz+RZcw=;
+        b=U6OrDrUM1GmENXF8WYe8ocV7bnUwN51NadjwaQUq2YR7VWexpqeK3cEcIzfQh6kaka
+         HxpKew5iLlOP4m3q403RiJWu+3rtiA3VJaW/tPnVWjZ2rP0gOZDdsr6V7O9y0ne3NeZL
+         L7VdvmMBdUiGjFzPp2XVUoWD18wndom4AncqI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682411070; x=1685003070;
+        d=1e100.net; s=20221208; t=1682411136; x=1685003136;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g87QtYvbyFcpRIEyNYcMCc4cgeNxfkvSk5Vpj0Hyzc8=;
-        b=eS5wHisqf15GAbv+yI+RdEdFw4r2s+SSYAiMIjjgiEHtK1VdSgQlvrEZTIA6lsbHRS
-         YxUZULlClW20QCtGhqG6ehaj/lOwsi4Puxfn6E0Yb+TGTvQBebJTD+0Tz08CTOwEZQv/
-         nHxCcacLgt9+/VhCxR1D2/ROFHdLrBvUoLd1QKbgpzEmixeAvA5726vZaRaLklF7Gv8k
-         YpgWOsMtT1ew7Cddnxm6bZ3ygy7554wA6mNirTnC6TEkwOUCcQI6/f0hwL1e206BAxMA
-         E1YuEX7UMZIJhxCWn9tT5pl6UWvbHL+UACYUA6jbi3Hi7cquCt+seSRhrCkD0G8mTfAr
-         svGA==
-X-Gm-Message-State: AAQBX9egtKZHXcv7NyF+4sONqHW1BUCyNBoDQJvDWvAOaSF9QD6Wn178
-        9pdFzcZshRI0sKQPlmKR0VeLIwWD9zSIVileVRJviQ==
-X-Google-Smtp-Source: AKy350Z7WMHqqGuvOh2NxaHyv6xpmzZoT+sqVI0LpFCd9RViLaPMK29XRpHTZFU4r87tkLGoH1ciasV226IsVo/SiYU=
-X-Received: by 2002:a1f:41c1:0:b0:40f:f3e1:53c with SMTP id
- o184-20020a1f41c1000000b0040ff3e1053cmr4535386vka.1.1682411070145; Tue, 25
- Apr 2023 01:24:30 -0700 (PDT)
+        bh=EagTYKGNK6lO5EWiNmyq6BDWbqfgu0PNzfW6Qz+RZcw=;
+        b=L91HLh5fQtMYJvbw5wgUEMUNdHjMM6rIj7J5a+L1ViwaCXRSSdgd+mCKarB+d7Cbg/
+         LUn+IWJrcL4W0DSyVf/Q77fOwC5WBZ1SAjXCAHjXCNNQ5ZpzyE3nUyfxB9ASh9mS8J+P
+         rCTU79x9gtPOIF5p25Bu1qXEMrZpUInR/X+s/3R8LX5HwuWIGQ+SrQxJIAGwzvglZruJ
+         CjFMaOuqEHSLp7bQF+ia5H+jdzJjpBuerviDcB7o5agCqlA/GDSkQC2WYiZbt/iKXZXq
+         O+P7kaCz6ObVmHx1RthI/Ml2gaEYGAUZ9JXibLQlqtzbNm3v0Wbs/w+vTFhua9y2JIIG
+         So3A==
+X-Gm-Message-State: AAQBX9d49Wk8QIbvudw9S7wGSzEKspjSWBkcnSLUXYO51bGRQkvX/aEx
+        e7OH+IUrKYL1XIlKWKzFa+EdyF4uBFOkoDbB73p6ZaQZqjOECb4Nb58=
+X-Google-Smtp-Source: AKy350YhcoGqhVqNt5WXPIhi5+U894y/gxCPIbGqm9Af3HXXxVtXCfd/efWsN5790EYhzuWriECmkqwACsF4uECb0hw=
+X-Received: by 2002:a1f:c142:0:b0:432:2abc:fc2b with SMTP id
+ r63-20020a1fc142000000b004322abcfc2bmr4178714vkf.0.1682411136465; Tue, 25 Apr
+ 2023 01:25:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230424112523.1436926-1-angelogioacchino.delregno@collabora.com> <20230424112523.1436926-4-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230424112523.1436926-4-angelogioacchino.delregno@collabora.com>
+References: <20230424112523.1436926-1-angelogioacchino.delregno@collabora.com> <20230424112523.1436926-5-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230424112523.1436926-5-angelogioacchino.delregno@collabora.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 25 Apr 2023 16:24:19 +0800
-Message-ID: <CAGXv+5EHAGMYE7Z-n6Wtss-sXXa0Rvv=jkse2sqyTOtGYpqR-A@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] arm64: dts: mediatek: cherry: Configure eDP and
- internal display
+Date:   Tue, 25 Apr 2023 16:25:25 +0800
+Message-ID: <CAGXv+5GX1CqH4OEoL7tQ9bherzXOVpJrNGrSYQj4Oh3ecUJh3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] arm64: dts: mediatek: cherry: Enable PCI-Express
+ ports for WiFi
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
@@ -73,73 +73,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, Apr 24, 2023 at 7:25=E2=80=AFPM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> Add the required nodes to enable the DisplayPort interface, connected
-> to the Embedded DisplayPort port, where we have an internal display.
+> On the Cherry platform, a MT7621 WiFi+Bluetooth combo is connected
+> over PCI-Express (for WiFi) and USB (for BT): enable the PCIe ports
+> to enable enumerating this chip.
 >
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
 abora.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 > ---
->  .../boot/dts/mediatek/mt8195-cherry.dtsi      | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
+>  .../boot/dts/mediatek/mt8195-cherry.dtsi      | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 >
 > diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64=
 /boot/dts/mediatek/mt8195-cherry.dtsi
-> index 4229f4f7dc2f..adbda4dccdd5 100644
+> index adbda4dccdd5..eca5df85fe33 100644
 > --- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
 > +++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-> @@ -47,6 +47,18 @@ memory@40000000 {
->                 reg =3D <0 0x40000000 0 0x80000000>;
+> @@ -565,6 +565,13 @@ flash@0 {
+>         };
+>  };
+>
+> +&pcie1 {
+> +       status =3D "okay";
+> +
+> +       pinctrl-names =3D "default";
+> +       pinctrl-0 =3D <&pcie1_pins_default>;
+> +};
+> +
+>  &pio {
+>         mediatek,rsel-resistance-in-si-unit;
+>         pinctrl-names =3D "default";
+> @@ -959,6 +966,24 @@ pins-vreg-en {
+>                 };
 >         };
 >
-> +       pp3300_disp_x: regulator-pp3300-disp-x {
-> +               compatible =3D "regulator-fixed";
-> +               regulator-name =3D "pp3300_disp_x";
-> +               regulator-min-microvolt =3D <3300000>;
-> +               regulator-max-microvolt =3D <3300000>;
-> +               enable-active-high;
-> +               gpio =3D <&pio 55 GPIO_ACTIVE_HIGH>;
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&panel_fixed_pins>;
-> +               regulator-always-on;
-
-I think you missed my comment on v1 about this regulator's supplier and
-enable delay.
-
-ChenYu
-
-> +       };
-> +
->         /* system wide LDO 3.3V power rail */
->         pp3300_z5: regulator-pp3300-ldo-z5 {
->                 compatible =3D "regulator-fixed";
-> @@ -288,6 +300,20 @@ port@1 {
->                         reg =3D <1>;
->                         edp_out: endpoint {
->                                 data-lanes =3D <0 1 2 3>;
-> +                               remote-endpoint =3D <&panel_in>;
-> +                       };
+> +       pcie0_pins_default: pcie0-default-pins {
+> +               pins-bus {
+> +                       pinmux =3D <PINMUX_GPIO19__FUNC_WAKEN>,
+> +                                <PINMUX_GPIO20__FUNC_PERSTN>,
+> +                                <PINMUX_GPIO21__FUNC_CLKREQN>;
+> +                                bias-pull-up;
 > +               };
 > +       };
-> +
-> +       aux-bus {
-> +               panel {
-> +                       compatible =3D "edp-panel";
-> +                       power-supply =3D <&pp3300_disp_x>;
-> +                       backlight =3D <&backlight_lcd0>;
-> +                       port {
-> +                               panel_in: endpoint {
-> +                                       remote-endpoint =3D <&edp_out>;
-> +                               };
->                         };
->                 };
->         };
-> @@ -927,6 +953,12 @@ pins-cs {
->                 };
->         };
->
-> +       panel_fixed_pins: panel-pwr-default-pins {
-> +               pins-vreg-en {
-> +                       pinmux =3D <PINMUX_GPIO55__FUNC_GPIO55>;
+
+I think we should remove this. We can add it later with the actual device
+that has NVMe.
+
+Otherwise,
+
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+
+> +       pcie1_pins_default: pcie1-default-pins {
+> +               pins-bus {
+> +                       pinmux =3D <PINMUX_GPIO22__FUNC_PERSTN_1>,
+> +                                <PINMUX_GPIO23__FUNC_CLKREQN_1>,
+> +                                <PINMUX_GPIO24__FUNC_WAKEN_1>;
+> +                                bias-pull-up;
 > +               };
 > +       };
 > +
@@ -148,5 +137,4 @@ ChenYu
 >                         pinmux =3D <PINMUX_GPIO58__FUNC_GPIO58>;
 > --
 > 2.40.0
->
 >
