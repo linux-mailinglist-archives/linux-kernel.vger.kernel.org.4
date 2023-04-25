@@ -2,112 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578B36EE35F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F236EE363
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234239AbjDYNp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S234270AbjDYNph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjDYNp0 (ORCPT
+        with ESMTP id S234245AbjDYNpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:45:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7FD19BC;
-        Tue, 25 Apr 2023 06:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682430325; x=1713966325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=k/ABWJ2xxNYCYrGZUiTvjqFyFuCe4XdVVI+pcOUNIv8=;
-  b=A4CO2wCD+vygGngqhNi+C+Juzoch3wTbsnSvCRehfyXVtkDiuxwfE3WX
-   /aB2Ei0evzE/1jAnqfhG7gY77tlwg3Wn71bz5v7aat7PAqiEp2Ybl/M2v
-   l3I94t4MXKYonXy3vjfF63iISI6TE8TPiIGiij4p1qY0jCRmxQZk31PaX
-   GPwKH12kCprch3WT0xQ5I0R/+mMKBtAILxNi7DdFeZMyRt76FwsAUhUF7
-   YpVdPmQfxr1ejB7fGKkZo8Twq/os0cO4Fmp8GB6PYxDYwGdJcDYA87tJJ
-   uNb036Bl2REMitKaBq9dnBmCFGaDukrQFTqYtnNFg8fqPSMiuGWqjMtfh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345521094"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="345521094"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 06:45:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="724036501"
-X-IronPort-AV: E=Sophos;i="5.99,225,1677571200"; 
-   d="scan'208";a="724036501"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 25 Apr 2023 06:45:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1prIyt-00505G-0n;
-        Tue, 25 Apr 2023 16:45:19 +0300
-Date:   Tue, 25 Apr 2023 16:45:18 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 25 Apr 2023 09:45:34 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB02146C8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-959a3e2dc72so477828566b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1682430331; x=1685022331;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vvGrNptYZRi7xQ7+JJCpqEOje87cPoMWG8Zptna2m4A=;
+        b=EeB6xq/YH3AkAtURNR67x52RNeUgiCTEZRLPAYRxr+VY0h7Y9U6VLW8HybsEUzDA63
+         4h9ufPDC2R41r0CbWzGx+LZ7zNkFkFitOaXRQ6hRiAxjZLjBbKH2ELP5NNP5LGLDID0+
+         PjyrKifRV/6HStMYUN+ssbswKR8s1+YyFhhb0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682430331; x=1685022331;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vvGrNptYZRi7xQ7+JJCpqEOje87cPoMWG8Zptna2m4A=;
+        b=jRWA0mdYSw+H/fwFC8ff+xmaYHgq5IKxYqr+FpixsYSP11WgFA3JSNnA2Z+vjGjG8Z
+         fDtrtHtIHs9WoV4Z2Nm/24CZurzkV84AUVPUccAsl8qkJTxIHM/2fOiek3pKCbhibSsI
+         klgRLAbgT7+sxi5VBxq5fn/37mB9Zv8Ua5PYncS8KQYSk/fUsi3hf5XVPfHFPDcmM8Uq
+         VMxYa6Cffi3UOhdxC6zvL1Tj22wwBxZL+rCEKDfpZltFrFh45QiUruyexwCHPGupCt5L
+         +w6q2vmWeCyb3OwxmdXs0tIaaQAOeyur0qCG+MutEATC9Q0DvtoOSXkflHYXf4tDbYvs
+         6BuA==
+X-Gm-Message-State: AAQBX9cWdA9Q/RqpobmNfHhKHntGCeWSyub8UuMXxlWf5ynkDJ3SmfGn
+        VlpXALks/hNnowvAssoePPteCw==
+X-Google-Smtp-Source: AKy350Ze96qfhykAyDc+5d3Rn5tKWwOIXWgOW7uoHjWHqUSYwA+lCrAyVmKAB2qo+RdC+u8ZAsE5dQ==
+X-Received: by 2002:a17:906:9bea:b0:94e:e082:15b9 with SMTP id de42-20020a1709069bea00b0094ee08215b9mr12207814ejc.77.1682430331219;
+        Tue, 25 Apr 2023 06:45:31 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 06:45:30 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] iio: light: ROHM BU27008 color sensor
-Message-ID: <ZEfZbmczXmJjiNPP@smile.fi.intel.com>
-References: <cover.1682340947.git.mazziesaccount@gmail.com>
- <d51d5e2b3eff65fd86aeb47840db9cd413d96668.1682340947.git.mazziesaccount@gmail.com>
- <ZEaeoxdWTknLz7lQ@smile.fi.intel.com>
- <47998ed8-5160-69dd-1767-e1746971a9b9@gmail.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
+Date:   Tue, 25 Apr 2023 15:45:24 +0200
+Message-Id: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47998ed8-5160-69dd-1767-e1746971a9b9@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 08:24:01AM +0300, Matti Vaittinen wrote:
-> On 4/24/23 18:22, Andy Shevchenko wrote:
-> > On Mon, Apr 24, 2023 at 04:10:09PM +0300, Matti Vaittinen wrote:
+The current spi-imx driver completely fails when used with more than
+four (gpio) chip-selects, since the chip select number is used
+unconditionally as shift amount when updating the control and
+configuration registers, so the code ends up modifying random bits
+outside the intended fields.
 
-...
+This fixes it by making use of the unused_native_cs variable filled in
+by the spi core, and use that as the "channel number" for all gpiod
+chip selects.
 
-> > This...
-> > 
-> > > +#include <linux/bits.h>
-> > 
-> > ...is guaranteed to be included by this.
-> > 
-> > > +#include <linux/bitops.h>
-> 
-> Out of the curiosity - do we have a rule and rationale for explicitly
-> including headers with 'stuff' we use Vs. trusting some header being
-> included by another one? I've not thought much of this so I don't know if
-> there are any pros/cons?
+In the presumably common case where all chip selects are gpios, this
+means we end up using channel 0 exclusively, so the optimization where
+the config register is left alone if it is unchanged (see
+184434fcd617) might become less effective, if the workload consists of
+different slaves with differing spi modes being accessed one after the
+other. It would be nice if one could make use of the unused native
+chip selects in a round-robin manner, but for that the core would have
+to tell us not just unused_native_cs, but the whole ~native_cs_mask
+from spi_get_gpio_descs(). Maybe a simpler fix, if there is anything
+to fix, is to make the new mx51_ecspi_channel() do
 
-That's what we are starving for actually. Currently this is a tribe knowledge
-which one gets while being involved into Linux kernel development for a long
-time and being capable of keeping an eye on tree wide, library or similar
-changes.
+	if (!spi->cs_gpiod || spi->controller->num_chipselect <= 4)
 
-I would love to see some (preferably generated) list of the header
-dependencies. Yet, the header dependency hell should be solved meanwhile
-(see Ingo's 2k+ patch series).
+
+Rasmus Villemoes (3):
+  spi: spi-imx: use "controller" variable consistently in
+    spi_imx_probe()
+  spi: spi-imx: set max_native_cs for imx51/imx53/imx6 variants
+  spi: spi-imx: fix use of more than four chipselects
+
+ drivers/spi/spi-imx.c | 56 +++++++++++++++++++++++++++----------------
+ 1 file changed, 35 insertions(+), 21 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.37.2
 
