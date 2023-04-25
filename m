@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94016EDB32
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D076EDB35
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 07:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbjDYFbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 01:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
+        id S233276AbjDYFb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 01:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjDYFbS (ORCPT
+        with ESMTP id S233269AbjDYFb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 01:31:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B678F5FF3;
-        Mon, 24 Apr 2023 22:31:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E2862B63;
-        Tue, 25 Apr 2023 05:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D4F6C433EF;
-        Tue, 25 Apr 2023 05:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682400676;
-        bh=kIRAPdXYCFJzfTvzQkwUjDYU35AND/M28n31JpTFWek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JK6WNJWhAh5harM4ffD+b3FewvAo2EQqDTv4VQeeDlSSnwk4eBNZDYB744RH3+lBM
-         CHVKSVUC7JnrLMgMB9dvSmfehoU9w48j8Opio9nl33Jq6ukhU5lIFDnRpCl9U8Or92
-         gV/36/JhkzpByzdZpkinvboYc2XFcmgKAydC9EwA=
-Date:   Tue, 25 Apr 2023 07:31:13 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Peter Enderborg <Peter.Enderborg@sony.com>
-Cc:     Mark Brown <broonie@kernel.org>, Yingsha Xu <ysxu@hust.edu.cn>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: remove return value check of debugfs_create_dir()
-Message-ID: <ZEdlofQJ6cfSOLmD@kroah.com>
-References: <20230423061155.2540-1-ysxu@hust.edu.cn>
- <eb3c6aa6-6820-4e94-8eb0-5abd3b627fcc@sirena.org.uk>
- <368e31ae-31b5-839f-72e3-20a27239cb0b@sony.com>
- <a4706089-399b-4663-9ac8-216f12ebe7ca@sirena.org.uk>
- <2023042421-landowner-magnitude-a38c@gregkh>
- <3164e897-a423-3948-d50a-f2bdd4ad05e9@sony.com>
- <2023042431-crook-stable-5749@gregkh>
- <f58c04d3-df1d-1dad-03fa-50457f39d9dc@sony.com>
+        Tue, 25 Apr 2023 01:31:26 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8699001;
+        Mon, 24 Apr 2023 22:31:24 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4ecb137af7eso5413859e87.2;
+        Mon, 24 Apr 2023 22:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682400682; x=1684992682;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u8Fcm9fo+FycljEkzjAB6zQ+6H48xCf7qyMfx7tBzoI=;
+        b=m5cmVmNVHU66wFR/uFoqmOcJevc+9jk0scTJK9/9dxeko2n0AODrn/3aslU0vnI1an
+         PvCw591choxKe3KuItnn2xmqfyjET24CK4bkyWgdOHuzPbjRA/wQrnfykozo4I4c7H5a
+         207nC17x0KYiMDAmmcOT+xH0dOnJfY1CQd9k9QLvSrYiaePVYumUDyqM+qpiXpNjWRFs
+         SJ9XNd556CwgAI4aA1CbXM+RD3h/mwshFrPa1bUx2Nx3L//2d6Uh4Z6fv1dJhNgCq2Nw
+         C1VoOzXf43Mt1cViueh8dzcBDc+87aF8NwC6rEZOaqKTbw+Pl1rgnURnQx0CdYGDl+dv
+         UoIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682400682; x=1684992682;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u8Fcm9fo+FycljEkzjAB6zQ+6H48xCf7qyMfx7tBzoI=;
+        b=W2HYSK4GFYDIL4Faxfy1rhKLrmO2bSoQt51zHjbdcMphW/2W98s9UoP3J4ngW0IY4h
+         BHDeDE1PQ2k9ylSrVZBYiNCPQSToSgflmNKMAk5ldpvjJl1KhxwA36sNAPgJlngh3TIx
+         DTCTZoxtF4wfqo2uqH7EaLr3WRqYSBIKfuf/725hdIl7K3E7yERYlHlHlckVIQ/rFt3R
+         zwo+HMUvPAE1+q+zzZODfHhhPh4DMzZxIqOhXkfqmEPWPOSOHD6YMAowuYE8GOLT1AFv
+         lR+Xe+b5r8dFRut7H/u9HhP2sxWcA3av/vZoeDciLK8rq5soEwkekNXL2shoybXLg/OI
+         zQDg==
+X-Gm-Message-State: AAQBX9cXvziCVPTBgzdb3rvIWOXLKVpYDuDHxz8nB2ADKEC7OXovycmj
+        0r0HnLcWTHQA8HJ/E9Z8rr44b/WuL9c=
+X-Google-Smtp-Source: AKy350YXX9O0d1f0HRH4SW4gyu88enpLmJLWmPdpRz99lHA9T1TZ7gBnMraeZGZ1lz/Z9lNtGrBFDQ==
+X-Received: by 2002:ac2:4152:0:b0:4db:3927:e2bc with SMTP id c18-20020ac24152000000b004db3927e2bcmr3775209lfi.50.1682400681857;
+        Mon, 24 Apr 2023 22:31:21 -0700 (PDT)
+Received: from [192.168.1.111] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id w15-20020ac254af000000b004ef2d38a319sm1643983lfk.254.2023.04.24.22.31.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Apr 2023 22:31:21 -0700 (PDT)
+Message-ID: <9b95a754-cc73-9d96-049b-35e708cd2e86@gmail.com>
+Date:   Tue, 25 Apr 2023 08:31:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f58c04d3-df1d-1dad-03fa-50457f39d9dc@sony.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 4/7] iio: accel: kionix-kx022a: Add an i2c_device_id
+ table
+Content-Language: en-US, en-GB
+To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
+ <a232fe7a8104f8d1cddfc5950aa48748ea90bffa.1682373451.git.mehdi.djait.k@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <a232fe7a8104f8d1cddfc5950aa48748ea90bffa.1682373451.git.mehdi.djait.k@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,35 +79,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:54:13PM +0200, Peter Enderborg wrote:
-> On 4/24/23 15:22, Greg Kroah-Hartman wrote:
-> > On Mon, Apr 24, 2023 at 03:17:09PM +0200, Peter Enderborg wrote:
-> >> On 4/24/23 14:53, Greg Kroah-Hartman wrote:
-> >>>>> We can do things with the debug information without filesystem enabled.
-> >>> What exactly do you mean by this?
-> >>>
-> >>>
-> >> We can read out data from kernel with a ramdumper and analyse with crash.
-> >>
-> >> See https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/kernel_crash_dump_guide 
-> >>
-> >> If it is useful or not I can not say, but the dws->regset. is lost and can not be read with a post mortem debugger.
-> > What is "dws"?  What is "regset"?
+On 4/25/23 01:22, Mehdi Djait wrote:
+> Add the missing i2c device id
 > 
-> That is from the patch. It is used as an example.
-> 
-> 
-> > What is the root problem here?
-> 
-> That it is a mater of taste.  It should not be a mater of taste.
-> 
->       if (!dws->debugfs)
->                 return -ENOMEM;
+> Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
 
-Right here, you abort the normal operation of the driver if something
-went wrong with debugfs, which is not a good idea.  That's the goal
-here, nothing else.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-thanks,
+Regarding the question (Jonathan asked in previous version) if this 
+really is a fix - I am unsure if this can be of help when dealing with 
+non OF-systems? (I don't have much of recent experience on those).
 
-greg k-h
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
