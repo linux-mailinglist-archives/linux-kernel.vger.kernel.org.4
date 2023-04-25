@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3566EEA45
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A52C6EEA4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbjDYWR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 18:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S236363AbjDYWY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 18:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbjDYWRY (ORCPT
+        with ESMTP id S231978AbjDYWY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 18:17:24 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3405C148;
-        Tue, 25 Apr 2023 15:17:23 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PMHEk4113983;
-        Tue, 25 Apr 2023 17:17:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682461034;
-        bh=u1H0Fqn/80ve1Ka1YxgqDbspP9wyIsN+1RrZm+j2b9w=;
-        h=From:To:CC:Subject:Date;
-        b=wHr+xS7jjgatSHxdMEGJ0MiUCAthx+YEdp70cAwhRf0mh9GoreN52qD7mNZO59BRY
-         VZW8PFZ1DCDBdA4C5WsOJ+guHq0w5B8qMU+KyI1txdUJH2RSqG++iLBIWjys1vkIti
-         nkXZQ/tI0+15G18gYy4zXv+66UxFSxtb/81WQcO0=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PMHEbB115073
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 17:17:14 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 17:17:14 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 17:17:14 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PMHEGx079092;
-        Tue, 25 Apr 2023 17:17:14 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH v3] arm64: dts: ti: k3-am62a7-sk: Describe main_uart1 and wkup_uart
-Date:   Tue, 25 Apr 2023 17:17:08 -0500
-Message-ID: <20230425221708.549675-1-bb@ti.com>
+        Tue, 25 Apr 2023 18:24:57 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58808CC1E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-32b0cc0eb43so53434375ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682461495; x=1685053495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CuJKxfEGJnOY6oqokaUbcqI0hvo9kY/6oilZjxK5wcg=;
+        b=rtE+w3+EToaewzliFYao4Gx1k1pEZ50a7374ouPdyz4c9KyTOyvd0qX4+vebjUT91O
+         1ehLcOt1ZPq7IzncS6xzKdJ79V0s3ZCo3kcZ75G/bvNsoRy14lqGkvTxe68CAylZVZYM
+         qGyvp0tFX/j14geYVbbAFAT5byjRneS86DEmz9rYYvxcmaesNBelbG95489L/VrsFOtQ
+         316WnTF7sBRgxos/V7TCcVznwNurt5hIIeXNeOLZoZx+G6jUUDWN255/qQfiAFtAz3kQ
+         n6YtmMdgn8mX8nKUTx1zhh2ppHt9lHH1qB5AfIyGFFcAXG8avY/NWw6P0HIs7pAoYUPh
+         2Kcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682461495; x=1685053495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CuJKxfEGJnOY6oqokaUbcqI0hvo9kY/6oilZjxK5wcg=;
+        b=J69Uf/BbpNEb+ZgqRtbbaeNS2G/uD+YGqTgZe6Zigy1lWri7/gG63hhcmlpLHuA6JD
+         0pugitixXOoRdusAr9iHGSpA9z1TFZNNcNBwFEDHThL3yaq/d6YymM6m5V9uw2k7rL2U
+         REr/BgsoglmvqRjtiNyYSytzc8TW5M026NlIrVVXkc80TDFp/lI9nuWrcoMrKddZtZ05
+         xd6YAsQZe6zAAKSjicB9ifhl4DoE64e2lYK3eEQy8rfM/P3Q87UYhNJXeSabHJaImHMl
+         yJfA2d6VPXAZm666zVhF+46u+cyk4xcAbTHRa8Y4U3fGzXGapFjOtIFQYL5WZo0Gwhlj
+         59hw==
+X-Gm-Message-State: AAQBX9fit6CfVUDftmbX8a8JTY+saFFKWxjlI6f3VqGvumBoqLIAfOd+
+        WEVcKeThBr5hWtelmvmhz5I=
+X-Google-Smtp-Source: AKy350a8yjGj8+9pDxme1/97N0vQc1KuCnae7bWnGIYBb0cQDqinbFIbGE3MZ3Vhrzx+/3bDXvetmA==
+X-Received: by 2002:a92:d40d:0:b0:317:c80f:b416 with SMTP id q13-20020a92d40d000000b00317c80fb416mr8313209ilm.20.1682461495601;
+        Tue, 25 Apr 2023 15:24:55 -0700 (PDT)
+Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
+        by smtp.googlemail.com with ESMTPSA id 13-20020a92180d000000b003244d7f2292sm3833008ily.32.2023.04.25.15.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 15:24:55 -0700 (PDT)
+From:   Jim Cromie <jim.cromie@gmail.com>
+To:     catalin.marinas@arm.com, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
+Subject: [PATCH 0/3] kmemleak report format changes
+Date:   Tue, 25 Apr 2023 16:24:43 -0600
+Message-Id: <20230425222446.170486-1-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2852; i=bb@ti.com; h=from:subject; bh=q+XzaLEc/0uNV+5CSBhrhUBJplHKivvwB+KJBgr5nE4=; b=owNCWmg5MUFZJlNZSA5eEQAAav///nfdf+v967/39X+13i/y/uu/+e+/e9/d8rjPsPPrjuWwA RswIepoyANAMjIAAaNDQaZGgaNDRoAAaADTQAAMgGmgaGhoaDaj0Rppk9EYJhqHQBpoBoaNMmga ZBiDTCaGRoBoYRoGQGIaNGmjAQBo0AGRk0Bpp6jTIBoAAyAaGg9TRk000A0aYRkaAAAZNAMmJkx BhDQA0NMIAGho0ZGgaDEMmmQYQAAIEWhOQvCjgeJBRADOJ6KcAkLBk7GdpgNa9jQr42ffZPN6Av K4XA57vDCdA/jMOU8HyrJn9syAfDjGolJesIRNR87sx/OqYYBA13Km1ZBxbhKeTzHTl4IwiRk1Y DgFqeGc7vN6RNTuMSBNskeXE3PgopoEZVHAvYDVoK+h87XY55aAso7NlWq53cp2yQZsahjanXQs gzCrD9Rg9aMWU+W0XFE555KJq8FCGGnQIllR1eis3AF7s1hhMTuAnWslfGaUTArymWoKgMc2tx7 v62h8amjyZ1Yz5DiQ4VCrjz8325IUAEiCObozIDU8TFMhkAVT25NEFuuwCdmfSUfCNyOVIcZAs8 BeCvXZq+DeFa0QyNbMVi5q0AMMB7eyPqQN+pZuWVZEF0p0keAHiNAtYy10jJZzYkiLhIpSSbcg4 ES04BZyIJ/JTf+LuSKcKEgkBy8IgA==
-X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,99 +68,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+If format changes are not /sys/** ABI violating, heres 3 minor ones:
 
-wkup_uart and main_uart1 on this platform is used by tifs and DM
-firmwares. Describe them for completeness including the pinmux.
+1st strips "age <increasing>" from output.  This makes the output
+idempotent; unchanging until a new leak is reported.
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
-[bb@ti.com: updated pinmux and commit subject]
-Signed-off-by: Bryan Brattlof <bb@ti.com>
----
+2nd adds the backtrace.checksum to the "backtrace:" line.  This lets a
+user see repeats without actually reading the whole backtrace.  So now
+the backtrace line looks like this:
 
-Changes from v2: [1]
-- Included the patch version to the $subject
+  backtrace (ck 603070071):  # also see below
 
-Changes from v1: [0]
-- Updated $subject to align with previous commits
+Q: should ck be spelled crc ? it feels more communicative.
 
-[1] https://lore.kernel.org/lkml/20230425214311.546191-1-bb@ti.com/
-[0] https://lore.kernel.org/linux-devicetree/20230424183355.68360-1-bb@ti.com/
+NB: with ck exposed, it becomes possible to do a "selective clear",
+something like:
 
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 40 +++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+  echo drop 603070071 > /sys/kernel/debug/kmemleak
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-index f6a67f072dca6..65caa5611d6d5 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-@@ -17,7 +17,9 @@ / {
- 	model = "Texas Instruments AM62A7 SK";
- 
- 	aliases {
-+		serial0 = &wkup_uart0;
- 		serial2 = &main_uart0;
-+		serial3 = &main_uart1;
- 		mmc1 = &sdhci1;
- 	};
- 
-@@ -114,11 +116,38 @@ led-0 {
- 	};
- };
- 
-+&mcu_pmx0 {
-+	wkup_uart0_pins_default: wkup-uart0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_MCU_IOPAD(0x0024, PIN_INPUT, 0) /* (C9) WKUP_UART0_RXD */
-+			AM62AX_MCU_IOPAD(0x0028, PIN_OUTPUT, 0) /* (E9) WKUP_UART0_TXD */
-+			AM62AX_MCU_IOPAD(0x002c, PIN_INPUT, 0) /* (C10) WKUP_UART0_CTSn */
-+			AM62AX_MCU_IOPAD(0x0030, PIN_OUTPUT, 0) /* (C8) WKUP_UART0_RTSn */
-+		>;
-+	};
-+};
-+
-+/* WKUP UART0 is used for DM firmware logs */
-+&wkup_uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_uart0_pins_default>;
-+	status = "reserved";
-+};
-+
- &main_pmx0 {
- 	main_uart0_pins_default: main-uart0-pins-default {
- 		pinctrl-single,pins = <
--			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
--			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
-+			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (E14) UART0_RXD */
-+			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (D15) UART0_TXD */
-+		>;
-+	};
-+
-+	main_uart1_pins_default: main-uart1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x01e8, PIN_INPUT, 1) /* (C17) I2C1_SCL.UART1_RXD */
-+			AM62AX_IOPAD(0x01ec, PIN_OUTPUT, 1) /* (E17) I2C1_SDA.UART1_TXD */
-+			AM62AX_IOPAD(0x0194, PIN_INPUT, 2) /* (C19) MCASP0_AXR3.UART1_CTSn */
-+			AM62AX_IOPAD(0x0198, PIN_OUTPUT, 2) /* (B19) MCASP0_AXR2.UART1_RTSn */
- 		>;
- 	};
- 
-@@ -254,6 +283,13 @@ &main_uart0 {
- 	pinctrl-0 = <&main_uart0_pins_default>;
- };
- 
-+/* Main UART1 is used for TIFS firmware logs */
-+&main_uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart1_pins_default>;
-+	status = "reserved";
-+};
-+
- &usbss1 {
- 	status = "okay";
- };
+The 3rd patch takes __init off of kmemleak_test_init().  This fixes a
+bare-pointer in the 2nd line of the backtrace below, which previously
+looked like:
 
-base-commit: 891db0c48efb48c3af334006f9d7ea6a0aa49cb9
+    [<00000000ef738764>] 0xffffffffc02350a2
+
+NB: this happens still/again, after rmmod kmemleak-test.
+
+unreferenced object 0xffff888005d9ca40 (size 32):
+  comm "modprobe", pid 412, jiffies 4294703300
+  hex dump (first 32 bytes):
+    00 cd d9 05 80 88 ff ff 40 cf d9 05 80 88 ff ff  ........@.......
+    14 a7 c4 f6 7d f9 87 10 00 00 00 00 00 00 00 00  ....}...........
+  backtrace (ck 1354775490):
+    [<000000002c474f61>] kmalloc_trace+0x26/0x90
+    [<00000000b26599c1>] kmemleak_test_init+0x58/0x2d0 [kmemleak_test]
+    [<0000000044d13990>] do_one_initcall+0x43/0x210
+    [<00000000131bc505>] do_init_module+0x4a/0x210
+    [<00000000b2902890>] __do_sys_finit_module+0x93/0xf0
+    [<00000000673fdce2>] do_syscall_64+0x34/0x80
+    [<00000000357a2d80>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+
+Jim Cromie (3):
+  kmemleak: drop (age <increasing>) from leak record
+  kmemleak: add checksum to backtrace report
+  kmemleak-test: drop __init to get better backtrace
+
+ mm/kmemleak.c                    | 8 +++-----
+ samples/kmemleak/kmemleak-test.c | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
 -- 
 2.40.0
 
