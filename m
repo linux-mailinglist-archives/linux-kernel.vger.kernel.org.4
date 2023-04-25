@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D3A6EE753
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678EB6EE758
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235034AbjDYSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S233976AbjDYSIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbjDYSGE (ORCPT
+        with ESMTP id S234494AbjDYSIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:06:04 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB83F1720;
-        Tue, 25 Apr 2023 11:06:03 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-38e5c33305cso4332998b6e.3;
-        Tue, 25 Apr 2023 11:06:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682445963; x=1685037963;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X376wL3T8sy/ZF3e8JDdjXowqGN/pb6h2TwQ05Gxs1U=;
-        b=juin3QSPussTE6xyvu5i7yOz0cbqvSQzoOi17NYKyM1F9+DIqP9+bufT1v02snbnPW
-         0z0QQcP2UUXVu1iCJl3uMbZHRsjcFod1nP+PQJDoTpXTatgoNBfOg+LJV3nTcLuZg7G8
-         t1bhQRneIg6bEWua+4s1hTzncC3G+WuN4aHxzSlC21Oj0NHk3OrlDdMu6UPRlJj0HCOT
-         5bJQOS+F207aL5tqM4GEcmbUL7xp6kuQbfXETR8+FOE/HoPm5BxZ3XeVM+WtqCwnmaQ8
-         aIG/zennnI/F0DDLR9ftrnH8ke3ss9CAKWW3V/DLpRp5huoY2GpTwPXtxRk01mKNbuLZ
-         SSnw==
-X-Gm-Message-State: AAQBX9cbpsJaYkfhAkee8epIBax0se4aD8teGn37H9hF/XSQfdJ/Ac9k
-        KO6/46sNX6FsS0OUYhg4QQ==
-X-Google-Smtp-Source: AKy350ZnwmyDkZuMRppHglz4M32pu2rq/AGDWRh6cTIJ06tg15gqMgSWbRzzsxN4kZf8EtIbVksCgQ==
-X-Received: by 2002:a05:6808:2389:b0:38e:2993:be7f with SMTP id bp9-20020a056808238900b0038e2993be7fmr11625977oib.38.1682445962905;
-        Tue, 25 Apr 2023 11:06:02 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b24-20020a056808011800b0038c0cf168afsm5852298oie.7.2023.04.25.11.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:06:02 -0700 (PDT)
-Received: (nullmailer pid 2025900 invoked by uid 1000);
-        Tue, 25 Apr 2023 18:06:01 -0000
-Date:   Tue, 25 Apr 2023 13:06:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     Lala Lin <lala.lin@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, "Hui.Liu" <hui.liu@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Daniel Golle <daniel@makrotopia.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-mediatek@lists.infradead.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH v1 1/7] dt-bindings: nvmem: mediatek: efuse: add support
- for mt7986
-Message-ID: <168244596061.2025844.2232344223319000455.robh@kernel.org>
-References: <20230421132047.42166-1-linux@fw-web.de>
- <20230421132047.42166-2-linux@fw-web.de>
+        Tue, 25 Apr 2023 14:08:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18F016188;
+        Tue, 25 Apr 2023 11:08:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B0306296A;
+        Tue, 25 Apr 2023 18:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56927C433D2;
+        Tue, 25 Apr 2023 18:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682446085;
+        bh=1c/iySntLL2tAru2rg3HGAKk4foULiGQ+TrL9KwD5+c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDhmFSjovHbtIFKGXov8t1lTW+4dGG0CG3nSxoWC/RQqFp7YSHLi4qWsiE3UnCYuI
+         6488vGTTBaT1U4zrYgXQHHCXu6fxTt15VGomGs86VEcsObxGRkzoGXsfVluvvCaaH8
+         X7N99jhNE+zN3brFB9yaGhQBCKiox17zwXfXVca7jL67goipbcwZypMaaL5izCdEdy
+         u/0qzZxHzsTAE6vk8S4hcri6WmAPBgAlrbsdUq17bsdd52QJCSXtB1V29BNhF5rvX4
+         AQhEvwWvFTYT8oZ+eOvQIYAyygn3zjUMvvkv6NT3S6S41W4gTmsUuSXkFm+wb7wOtL
+         yto/Lc3S+RwkQ==
+Date:   Tue, 25 Apr 2023 11:08:02 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH] kbuild: deb-pkg: specify targets in debian/rules as
+ .PHONY
+Message-ID: <20230425180802.GA2881732@dev-arch.thelio-3990X>
+References: <20230425110859.1757001-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230421132047.42166-2-linux@fw-web.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230425110859.1757001-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,17 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 25, 2023 at 08:08:59PM +0900, Masahiro Yamada wrote:
+> If a file with the same name exists, the target is not run.
+> 
+> For example, the following command fails.
+> 
+>   $ make O=build-arch bindeb-pkg
+>     [ snip ]
+>   sed: can't read modules.order: No such file or directory
+>   make[6]: *** [../Makefile:1577: __modinst_pre] Error 2
+>   make[5]: *** [../scripts/Makefile.package:150: intdeb-pkg] Error 2
+>   make[4]: *** [../Makefile:1657: intdeb-pkg] Error 2
+>   make[3]: *** [debian/rules:14: binary-arch] Error 2
+>   dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
+>   make[2]: *** [../scripts/Makefile.package:139: bindeb-pkg] Error 2
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-On Fri, 21 Apr 2023 15:20:41 +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Add compatible string for mt7986 SoC.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
 > ---
->  Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
->  1 file changed, 1 insertion(+)
 > 
-
-Acked-by: Rob Herring <robh@kernel.org>
-
+>  scripts/package/mkdebian | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> index a4c2c2276223..b6cb95473548 100755
+> --- a/scripts/package/mkdebian
+> +++ b/scripts/package/mkdebian
+> @@ -269,6 +269,8 @@ cat <<EOF > debian/rules
+>  srctree ?= .
+>  KERNELRELEASE = ${KERNELRELEASE}
+>  
+> +.PHONY: clean build build-arch build-indep binary binary-arch binary-indep
+> +
+>  build-indep:
+>  build-arch:
+>  	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} \
+> -- 
+> 2.37.2
+> 
