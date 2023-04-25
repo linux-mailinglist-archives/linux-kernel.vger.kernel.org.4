@@ -2,84 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D8A6EDFAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6CD6EDFD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbjDYJtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S233589AbjDYJ6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbjDYJso (ORCPT
+        with ESMTP id S232615AbjDYJ6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:48:44 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FE012C82
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:48:20 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f0a2f8216fso66951cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682416096; x=1685008096;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CeWRGPx2LawBwBGvr0WFM+GqJWUBACPVQzzjgyj15yw=;
-        b=SiGttW/+6v4IDlVVTRt0v4v3m8Io2FqeltpCVkli46UFyxzA+osamD2MUatPpJKmVJ
-         fgCUX2/EgTDAbGQWKH6jmHmk3S+scJZ/xGkKt1oa0ZNXDn+zcrVGJt3X4W9Xy89l9bDz
-         wJrOK+mLqS3MppcKi3Df23PlAv4tUYVgXoarmyPzHVNuzj16qE0IU0t3cd16YDsOAr+5
-         tOIySf6cXAt1EGwoaeOUDN6dNXx6e8du22cTRXstSVv5u0HArhvkzaviR3i1hsJchfVp
-         SEwbfbzoVz5hhDQDo9q5dd9SO5C5yvLFOdLo4YBWPOSq3MX9FS7oCOLHyoIYG0kN3kU5
-         ZGQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682416096; x=1685008096;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CeWRGPx2LawBwBGvr0WFM+GqJWUBACPVQzzjgyj15yw=;
-        b=WbxgJBow2ImwKB1200zfw9hjq9B0RANCMQTX/XT8YmxZ0i0LYDZSUoTJ3cWf2nHroH
-         29/7GFVX8kdr3lUwtPJGoR4ExKSe48RUR/Oqfhawe8BL1hB6zXjjadBBY2F52BNyyfxW
-         NfeOEQQqO+q0mRc3x8K8atCVeKgctvj5pNDRMEdn5z3n6RmppDU4SFyZS+0Z1bXwoqMC
-         MT7dQP91+AK3PA6+jgiyghWLR5TjLfRJE7hw09w20WgwM9to4M/ZLmBEIR2w06zzLxFP
-         ZPB5DW4Cz5/QLu2XIZL1Hti8WENgBrYMUTP9+hHYWh2alEGfrpx4OjTeM04PFhssg47b
-         o8ZA==
-X-Gm-Message-State: AAQBX9cHk0rPT5LT3W/wvQ0QBsFq3Ey+QmtyiL/bmqNrCoURfkRwJqNH
-        kLOdvoa1A4vTQrnf95qPjSbbaUlf4MoZstgljGPArW61XELMJ5qXIiOT6Q==
-X-Google-Smtp-Source: AKy350Yi/HK5wFCVHtgc0boND65EG4RC2aE2Ukvk6IvxUe2KzVKCjJaiyFXfHQ43mqzqfxrBi8TMa5kMTx6ltmj7w0M=
-X-Received: by 2002:a05:622a:15ce:b0:3ef:3083:a437 with SMTP id
- d14-20020a05622a15ce00b003ef3083a437mr288540qty.18.1682416096501; Tue, 25 Apr
- 2023 02:48:16 -0700 (PDT)
+        Tue, 25 Apr 2023 05:58:35 -0400
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 02:58:18 PDT
+Received: from ms11p00im-hyfv17291101.me.com (ms11p00im-hyfv17291101.me.com [17.58.38.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB0BCC1C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
+        t=1682416361; bh=BOZclCrFL8zwBZy00LVQJcyJUAB/39k6Slgpaa2Yfls=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=EIKOR67wtHzOc2RXSaFO9NM8zbl4/gqZ2ljixm0sHFwhri5Xbx7nfDPGtWbfTfkyg
+         2i3Oyt0eW2nfgmi3ImizkYA+oz5Z6pQJp+YyPj0piLZger0/rko7Vru5pQCiBn3lwd
+         xKb1J23Q8BgrkRsjDwgO6kyFuvS/RmexK+rJ3BFsW7LMK9PvCcezewvf5Q9F683ggl
+         lnY3wIFIST0sLeeDxwMmbpoSpg/prj0rJ0v1xktPR/n56b0Qhd7kcyTYKM7gFeS1GN
+         uRNFUBAHv4BF4dlDNM51HkR0AyQ6srIGO7L2h8c2ScoUMu37g2TSYHOdrTR4myfU43
+         CSpzzLq2hAS9A==
+Received: from localhost.localdomain (ms11p00im-dlb-asmtpmailmevip.me.com [17.57.154.19])
+        by ms11p00im-hyfv17291101.me.com (Postfix) with ESMTPSA id E0A02760171;
+        Tue, 25 Apr 2023 09:52:36 +0000 (UTC)
+From:   Xueming Feng <kuro@kuroa.me>
+To:     quentin@isovalent.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, kuro@kuroa.me,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
+        song@kernel.org, yhs@fb.com, yhs@meta.com
+Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for map_of_maps types
+Date:   Tue, 25 Apr 2023 17:52:21 +0800
+Message-Id: <20230425095221.20805-1-kuro@kuroa.me>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+In-Reply-To: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
+References: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
 MIME-Version: 1.0
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Tue, 25 Apr 2023 11:48:05 +0200
-Message-ID: <CANp29Y5dbsSjd5q2TNJYgO5U1d6wu+XSSWR3PHWTX_efg7VyEA@mail.gmail.com>
-Subject: Resolving the `fixes` tree build errors
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Taras Madan <tarasmadan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
+X-Proofpoint-ORIG-GUID: yvZ7oYU2RTPiIdpNNoooZvCjqegvm5QH
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.425,18.0.572,17.11.62.513.0000000_definitions?=
+ =?UTF-8?Q?=3D2022-01-14=5F01:2022-01-14=5F01,2020-02-14=5F11,2021-12-02?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
+ clxscore=1030 malwarescore=0 mlxlogscore=781 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2304250088
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RISC-V maintainers,
+>2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
+>>> On 4/24/23 9:10 PM, Xueming Feng wrote:
+>>>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
+>>>>>> When using `bpftool map dump` in plain format, it is usually
+>>>>>> more convenient to show the inner map id instead of raw value.
+>>>>>> Changing this behavior would help with quick debugging with
+>>>>>> `bpftool`, without disrupting scripted behavior. Since user
+>>>>>> could dump the inner map with id, and need to convert value.
+>>>>>>
+>>>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
+>>>>>> ---
+>>>>>> Changes in v2:
+>>>>>>     - Fix commit message grammar.
+>>>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
+>>>>>> 	  `n` to `arg_size`.
+>>>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
+>>>>>> 		and print it as unsigned decimal.
+>>>>>>
+>>>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
+>>>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
+>>>>>> but previous review suggested that it should be up to the caller function to
+>>>>>> set `arg_size` correctly. So I didn't add check for that, should I?
+>>>>>>
+>>>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
+>>>>>>    tools/bpf/bpftool/main.h |  1 +
+>>>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
+>>>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+>>>>>> index 08d0ac543c67..810c0dc10ecb 100644
+>>>>>> --- a/tools/bpf/bpftool/main.c
+>>>>>> +++ b/tools/bpf/bpftool/main.c
+>>>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
+>>>>>>    	return 0;
+>>>>>>    }
+>>>>>>    
+>>>>>> +void print_uint(const void *arg, unsigned int arg_size)
+>>>>>> +{
+>>>>>> +	const unsigned char *data = arg;
+>>>>>> +	unsigned long val = 0ul;
+>>>>>> +
+>>>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+>>>>>> +		memcpy(&val, data, arg_size);
+>>>>>> +	#else
+>>>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
+>>>>>> +		       data, arg_size);
+>>>>>> +	#endif
+>>>>>> +
+>>>>>> +	fprintf(stdout, "%lu", val);
+>>>>>> +}
+>>>>>> +
+>>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+>>>>>>    {
+>>>>>>    	unsigned char *data = arg;
+>>>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+>>>>>> index 0ef373cef4c7..0de671423431 100644
+>>>>>> --- a/tools/bpf/bpftool/main.h
+>>>>>> +++ b/tools/bpf/bpftool/main.h
+>>>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+>>>>>>    
+>>>>>>    bool is_prefix(const char *pfx, const char *str);
+>>>>>>    int detect_common_prefix(const char *arg, ...);
+>>>>>> +void print_uint(const void *arg, unsigned int arg_size);
+>>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+>>>>>>    void usage(void) __noreturn;
+>>>>>>    
+>>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+>>>>>> index aaeb8939e137..f5be4c0564cf 100644
+>>>>>> --- a/tools/bpf/bpftool/map.c
+>>>>>> +++ b/tools/bpf/bpftool/map.c
+>>>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+>>>>>>    		}
+>>>>>>    
+>>>>>>    		if (info->value_size) {
+>>>>>> -			printf("value:%c", break_names ? '\n' : ' ');
+>>>>>> -			fprint_hex(stdout, value, info->value_size, " ");
+>>>>>> +			if (map_is_map_of_maps(info->type)) {
+>>>>>> +				printf("id:%c", break_names ? '\n' : ' ');
+>>>>> 1> +				print_uint(value, info->value_size);
+>>>>
+>>>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
+>>>>> For all map_in_map types, the inner map value size is 32bit int which
+>>>>> represents a fd (for map creation) and a id (for map info), e.g., in
+>>>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
+>>>>> 	printf("id: %u", *(unsigned int *)value);
+>>>>
+>>>> That is true, maybe the "id" could also be changed to "map_id" to follow the
+>>>> convention. Do you think that `print_uint` could be useful in the future?
+>>>> If that is the case, should I keep using it here as an example usage, and to
+>>>> avoid dead code? Or should I just remove it?
 
-Could you please consider picking up the following fix to the `fixes`
-branch of your tree?
+On Tue, 25 Apr 2023 09:57:17 +0100, Quentin Monnet wrote:
+> This makes me think we could also have something similar for prog_array
+> maps (but not necessarily as part of your patchset).
 
-https://lore.kernel.org/linux-riscv/20230227072016.14618-1-rdunlap@infradead.org/
+Good idea, will take a look at that after finishing v3 patch, and possibly
+make a separate patch for it. (This is my first time contributing, better keep 
+it simple).
 
-As per https://lore.kernel.org/bpf/871qkh9zj8.fsf@all.your.base.are.belong.to.us/T/,
-this leads to syzbot not being able to build and fuzz Linux kernel on
-its riscv instance for already 74 days.
+>> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
+>>> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
+>>> element value could be 0, implying "inner_map_id 0", but I think it is
+>>> okay, people should know a real inner_map_id (or any map_id) should 
+>>> never be 0.
+>>>
+>>> Function "print_uint" is not needed any more. Please remove it.
+>> 
+>> Will reflect this in v3.
+>> 
+>>>
+>>> Please add the command line to dump map values triggering the above 
+>>> change, also the actual dumps with and without this patch.
+>> 
+>> $ bpftool map dump id 138
+>> Without patch:
+>> ```
+>> key:
+>> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+>> 27 16 06 00
+>> value:
+>> 8b 00 00 00
+>> Found 1 element
+>> ```
+>> With patch:
+>> ```
+>> key:
+>> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+>> 27 16 06 00
+>> inner_map_id:
+>> 139 
+>> Found 1 element
+>> ```
 
---
-Best Regards,
-Aleksandr
+> Thanks! Please add those sample outputs to the commit description for
+> v3. Can you please also add an example with JSON ("-p")?
+
+Sure, will add them in v3! About json output, they are currently not touched
+to avoid breaking scripts. I will add inner_map_id as a new field in v3 like the 
+following patch.
+https://lore.kernel.org/bpf/20230419003651.988865-1-kuifeng@meta.com/
+
+> Quentin
