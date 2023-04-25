@@ -2,177 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06146EE28F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E975C6EE291
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbjDYNO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
+        id S233950AbjDYNPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjDYNO5 (ORCPT
+        with ESMTP id S233976AbjDYNPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:14:57 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254E72D52
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682428495; x=1713964495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EliR2mT5GHfq/CKDHDhaxmjdPcWX1dx8dle38J9zdZo=;
-  b=EANxaqlSntXqP8cG4syR45fRFdYcoAWJLOmc1X+/tMIiNbZqaC9OLuyP
-   VxWbNlTqvc9Xgt5jzzh7pJeVFihQLlKDmC6ZAzVFAtI9ngkfad3hHdRZT
-   gcsnHySN9A5TjcK8CSq1ZbC3DfKDnQdWdj9WjSs/Wznew0oLEWPCZzsEY
-   da1tCLu9D7GJVzkJMmTdANxfZRV7M3c0t+BJOWb6tsxXWZV+772czRZe3
-   mwp3L5QfLAavb4NaHF98ZXaMm7+QWWR2Au2pDyKGsO3NJpYRhT/633brz
-   oXoe769y+TbBCpDWVxmOaOdIE3wcsdhknLK2yqoGve9lwo0RgjyoFkJ6s
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,225,1677567600"; 
-   d="asc'?scan'208";a="222476364"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Apr 2023 06:14:55 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 25 Apr 2023 06:14:54 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 25 Apr 2023 06:14:53 -0700
-Date:   Tue, 25 Apr 2023 14:14:36 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Yangyu Chen <cyy@cyyself.name>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
-        Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH 0/2] Allow case-insensitive RISC-V ISA string
-Message-ID: <20230425-flyable-prompter-5b1e4cebf9db@wendy>
-References: <tencent_1647475C9618C390BEC601BE2CC1206D0C07@qq.com>
+        Tue, 25 Apr 2023 09:15:06 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC3313C1A;
+        Tue, 25 Apr 2023 06:15:04 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-440403d34a4so2070344e0c.0;
+        Tue, 25 Apr 2023 06:15:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682428503; x=1685020503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wqv8r/KFOBnoNWbUFUiDZTpYWxmph2Y+u4MhHtRun0M=;
+        b=ctzWSSvCj4vVhD0Ybx0qlOxNqi9C5x7m7v/8XFMMh9Es8CtzsbZ1zqBQi3LBduNHZg
+         sUusmouGhQJLLIcVoQYK27s1UZWgfu+K7Jrrdn3K6qFA1hIb1vtlpus2ZjCKSzW+r8Nn
+         +pjxutdbxj6cZFtWfE6ILgKqpOUIh0banzxMPqR72qQ1bGSFJ7/0nnATmOA4kwzBMODQ
+         FfPHoVA+jAHaK+TgCZJuLKhxw2C1hlV95n525LxdKY+QC/8EVs42fURaJ6GTK30/Q4Qy
+         y4Pg2DTxOR+BnufXAPk+AD/WcPPcpkqmZWAvdqcrCG+ZfaNM49pIO4UEwKtlLyNYGaz+
+         XnHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682428503; x=1685020503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wqv8r/KFOBnoNWbUFUiDZTpYWxmph2Y+u4MhHtRun0M=;
+        b=YMILMFGQPtqfXTz0JLoNwXmDZCTlLvlv7gJjiTwoOJPnIYHAgYOiAhnNuqytY9iLqp
+         HaHAcYub9tAISAqZoSnGeYSKB7YVjcXdpmxzL+XO5ba0g8aprh/P9OFwkqj6K0cGa+lm
+         7wxPylD0BQqkEmm/eZHMAOVK8BmuwBivdOIhb+pxo56//oNTgdjJeQkZzY3iF5nzk5Qa
+         AgAX3+rBWzY2sujIpi8KuxdCvLnbi+C9zs3EkoQO33hN4LHTP5l4OozwHiPMytaEBmho
+         Ih9YKZGDQ+Ct+cXBamrNLB2weQ3qD4MNSbpu4o7KZ/fvFNK7h4IrXV1yF8CRJewMabUb
+         YLXw==
+X-Gm-Message-State: AAQBX9crboL8EM7cFK+GwJAYhiHvD86cdNy/YXP/EssGv5LmG8MDR2id
+        J5LA6Ns8DgEgTygxAb0K81RI2pVVTJOq79dfQQEo/6nyXOnOIA==
+X-Google-Smtp-Source: AKy350aanME0nMTNiM5fr4DFHHkaaB3EACxyhrJA3uB0MY8jl99vfng8dUxqcDxlYYiue3Q6E7DZYBnfyNJxlG5eh68=
+X-Received: by 2002:a1f:c506:0:b0:43f:9aa5:a15b with SMTP id
+ v6-20020a1fc506000000b0043f9aa5a15bmr4311156vkf.9.1682428503125; Tue, 25 Apr
+ 2023 06:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7A3Ma5DfJIchBKeX"
-Content-Disposition: inline
-In-Reply-To: <tencent_1647475C9618C390BEC601BE2CC1206D0C07@qq.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <80bae984fd5ca49b691bb35f2fd8f345f8bb67f1.1682405206.git.christophe.jaillet@wanadoo.fr>
+ <ZEd8d7W6HnHE_66m@codewreck.org>
+In-Reply-To: <ZEd8d7W6HnHE_66m@codewreck.org>
+From:   Dan Carpenter <error27@gmail.com>
+Date:   Tue, 25 Apr 2023 14:14:52 +0100
+Message-ID: <CA+_b7DK1s87y-_-D3sQxteqJ+78uvKza-vgWGv9SmGm-tqz7DA@mail.gmail.com>
+Subject: Re: [PATCH] fs/9p: Fix a datatype used with V9FS_DIRECT_IO
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        v9fs@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---7A3Ma5DfJIchBKeX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 25, 2023 at 8:12=E2=80=AFAM Dominique Martinet
+<asmadeus@codewreck.org> wrote:
+>
+> Christophe JAILLET wrote on Tue, Apr 25, 2023 at 08:47:27AM +0200:
+> > Fixes: 6deffc8924b5 ("fs/9p: Add new mount modes")
+>
+> (Not a problem per se: but note this commit hasn't been merged yet, so
+> using commit IDs is a bit dangerous. Might want to remark this in the
+> free comment section so Eric pays attention to not break that when applyi=
+ng)
 
-Hey!
+This is fine.
 
-For some reason this cover letter has been detached from the series
-itself. I think that might be a bug with git send-email.
+The hash is constant unless Eric does a rebase.  When a maintainer rebases
+then updating the fixes tags is just part of the process.  Often they end u=
+p
+folding the fix into the original patch at that point so the Fixes tag is n=
+ot
+required.  If a maintainer doesn't update the tags then the linux-next
+maintainers
+will notice and complain.
 
-The rest of the series is:
-<tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
-<tencent_221A82C2DAF38E66B85B313221958DDD7C08@qq.com>
+#GitMagic
 
-On Tue, Apr 25, 2023 at 08:00:14PM +0800, Yangyu Chen wrote:
-> According to RISC-V ISA specification, the ISA naming strings are
-> case insensitive. The kernel docs require the riscv,isa string must
-> be all lowercase to simplify parsing currently. However, this=20
-> limitation is not consistent with RISC-V ISA Spec.
-
-Correct. riscv,isa allows only subset of what the ISA spec does.
-
-> The motivation for this patch series is that some SoC generators
-> will provide ISA strings with uppercase letters in the device tree.
-
-If these generators are emitting devicetrees, why not fix the code in
-these generators so that they produce something that is aligned with the
-dt-binding?
-
-> For example, the rocket-chip will have "Zicsr_Zifencei_Zihpm_Xrocket"
-> in the ISA string.
-
-https://github.com/chipsalliance/rocket-chip/pull/3232
-
-It looks like when this was added to rocket-chip it was not actually
-tested properly? The output would not pass dt-validate. The author is on
-CC I assume, so maybe they can fix rocket-chip? You can CC @conchuod on
-that PR if you like.
-
-Do any other core generators emit capitals here, or have you only
-noticed it with rocket-chip?
-
-> If we did not modify the ISA string manually, the
-> parser in the current kernel will have errors when the pointer meets
-> uppercase letters because it assumes the string only has digits,=20
-> lowercase letters, and underscores. Then, the parser will fail and
-> the pointer of the parser will continue at the next position, which
-> will confuse the parser and cause the kernel to misbehave.
->=20
-> For example, "Zifencei" will be parsed as "ifc" since the parser will
-> fail at 'Z' and then continue at 'i'. Then, if we disable the FPU in
-> the CPU hardware and remove the "fd" from the device tree but leave
-> the CONFIG_FPU=3Dy in the kernel, the kernel will panic at=20
-> `__fstate_restore` function since the "Zifencei" (parsed as "ifc")
-> will confuse the current kernel that the CPU has "f", and the kernel
-> will save and restore the FPU registers during the context switch,
-> leading to illegal instruction exceptions.
-
-Here's an idea, run dtbs_check to validate your devicetree is correct?
-If you mess up your devicetree in other ways, then your system is going
-to have issues, so why would riscv,isa be any different?
-
-> However, it is not necessary to require the ISA string must be all
-> lowercase. The case-insensitive parser can be easily implemented
-> using `strncasecmp` and `tolower` functions. Moreover, the kernel
-> parser implementation should match the ISA specification rather than
-> using a more strict rule.
-
-On the contrary, we actually *cannot* match the ISA specification at
-this point.
-For example, the ISA spec currently says that zicsr and zifencei are
-not part of `i`, but riscv,isa was defined prior to the extraction of
-those extensions from `i` and so `i` in riscv,isa means the same
-`i_zicsr_zifencei` in the RISC-V ISA specification.
-
-> This patch series allows case-insensitive RISC-V ISA string:
-> * Patch 1 modifies the ISA string parser in the kernel to support
->   case-insensitive ISA string parsing. It replaces `strncmp` with
->   `strncasecmp`, replaces `islower` with `isalpha`, and wraps the
->   dereferenced char in the parser with `tolower`.
-> * Patch 2 modifies the docs to no longer require the riscv,isa
->   string to be all lowercase.
-
-So what happens if you boot an old kernel with a devicetree whose
-riscv,isa string has been validated by this modified dt-binding, but
-contains capital letters?
-That kernel + dtb will have issues in the manner you describe above but
-dtbs_check etc will have passed.
-If anything, the kernel should abort parsing the ISA string if it sees
-a capital letter to avoid scenarios like the above.
-
-=46rom me this is a NAK on that basis, sorry. Please try and fix the
-generators to emit devicetrees that pass dt-validate.
-
-Thanks,
-Conor.
-
---7A3Ma5DfJIchBKeX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEfSOwAKCRB4tDGHoIJi
-0l40AQDJ8WcQgKPnZcx88tEI56RsG3jcYPmB1VBc6634Q9JTGgD+P2Y3Te+9OhAW
-Xlsmfixe/JLU2F//Pjh+0MvISv6tpgg=
-=6dOF
------END PGP SIGNATURE-----
-
---7A3Ma5DfJIchBKeX--
+regards,
+dan carpenter
