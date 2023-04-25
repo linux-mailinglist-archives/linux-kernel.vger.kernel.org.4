@@ -2,134 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8211D6EE4E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBDB6EE4E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234538AbjDYPlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S234563AbjDYPkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234307AbjDYPlG (ORCPT
+        with ESMTP id S234557AbjDYPke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:41:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422F14F60
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682437193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KkWeKhTEaXp9JdQmO6LKpuT+4ZnqVRHShCUqBP7ryfw=;
-        b=NX8lWo2NBwZQqayGdNNYAzJGqauuMh7EegeIK7gUwm6HXjAfy1xjjzbAOX+ZClHKXLu+dy
-        AISZ3mutY1cdVhMNDNXHXuJEhrNdT382r3ll+dajMNGpv6zXNTzfup3UNiwtg6C5knnWz9
-        mDI4lsit0bHXFr4s4U3v0vA3rp2cYZw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-Ju-IZLc9OzmhCxSzWQE--w-1; Tue, 25 Apr 2023 11:39:52 -0400
-X-MC-Unique: Ju-IZLc9OzmhCxSzWQE--w-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A81FD1C041B5;
-        Tue, 25 Apr 2023 15:39:51 +0000 (UTC)
-Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 701A9492B0F;
-        Tue, 25 Apr 2023 15:39:51 +0000 (UTC)
-Date:   Tue, 25 Apr 2023 10:39:51 -0500
-From:   David Teigland <teigland@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
-Subject: [GIT PULL] dlm updates for 6.4
-Message-ID: <20230425153951.GB28392@redhat.com>
+        Tue, 25 Apr 2023 11:40:34 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB7BD333
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:40:28 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-5ef6b757a60so24798616d6.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682437227; x=1685029227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sz41xh9WX8qoOdIKJmQdrlGwHLiYgLl85XIU3W+xHVw=;
+        b=2qVMPflrw0T2LPyFNNegzJLB7Ix+X+y/YwEnVHEFh68utKtzCPTrxVkh+KGE1XsP7p
+         423MfaUjxVUhxljQdhfCN7b/6jyUl8aszB9beZFyPkhWwe0lfNN+MEl9zMAGbG35/N78
+         97KF8xEr0oha4QiyEkxzcqXkayiVjDbtLubf8GPSdjPeLpvNyJFgP8gz16yrOIAURHfM
+         VB58Eg8hAc73o/MEDV5uoSF9TCkzgSLVbYuDZyVMHsnDoDvDrDZWh4dvWLInKfTbfZBl
+         b/1GR+dzzWtsU51sZ7MlhPDXZxCJGFs2rntlOKwNLysXWkj72t53CensQdT3boyhoKoX
+         eBMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682437227; x=1685029227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sz41xh9WX8qoOdIKJmQdrlGwHLiYgLl85XIU3W+xHVw=;
+        b=SPrC2c3LoJ4w5AbM4PpcEud4AXgD+IF3EvhrlZXEArBXC7uq6XInI8NrB7qphKzlDT
+         sba9ZQrobr8V3ysXqfin7+mA7XVE/q8LZbRUEzOmrZY+sl+NG0WrnuBCySxxN+veyO2X
+         O8J+LyDdyM7eO0rHwm83UDXHf8ALYV17+WKzaFqVo8NbQexjgg95fuV9IAv63ZySqWXS
+         FunX2/uurX6c1CYxnL2kBwaXiqrKH9pPQ3RKvDSqzQPlUCJCesP+4JTRjs6KJVlcBmjO
+         xoCC7REVYi2QlLnRktx89885SW2KaBAImw0t6LfyPBllnYkp+eY0vREfx5QazGmBygdr
+         QgXw==
+X-Gm-Message-State: AAQBX9ceYYlP9ntAFGgwY+S+T6hA7F08wXkkTTzpIy6alaC0qPbAJyl6
+        ioOU8QC1svbr0HcjM8mgty972w==
+X-Google-Smtp-Source: AKy350ZuTU2+gfPuqlAYRQHG0DYc6Hd46OaxYvfknDpwSYIfN8LpMy3/mSs14uvFnKehLaoG5YSxZQ==
+X-Received: by 2002:a05:6214:242e:b0:5f1:6bee:f58e with SMTP id gy14-20020a056214242e00b005f16beef58emr32598066qvb.35.1682437227122;
+        Tue, 25 Apr 2023 08:40:27 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:9fc5])
+        by smtp.gmail.com with ESMTPSA id k14-20020a0cf58e000000b005eac706d223sm4173628qvm.124.2023.04.25.08.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 08:40:26 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 11:40:26 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 10/26] mm: page_alloc: allow compaction capturing
+ from larger blocks
+Message-ID: <20230425154026.GC17132@cmpxchg.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-11-hannes@cmpxchg.org>
+ <20230421141447.2cw5cfwibb7jxf6n@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230421141447.2cw5cfwibb7jxf6n@techsingularity.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Apr 21, 2023 at 03:14:47PM +0100, Mel Gorman wrote:
+> On Tue, Apr 18, 2023 at 03:12:57PM -0400, Johannes Weiner wrote:
+> > Currently, capturing only works on matching orders and matching
+> > migratetypes. However, if capturing is initially skipped on the
+> > migratetype, it's possible that merging continues up to a full
+> > pageblock, in which case the migratetype is up for grabs again.
+> > 
+> > Allow capturing to grab smaller chunks from claimed pageblocks, and
+> > expand the remainder of the block back onto the freelists.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> 
+> No objections other than we're still in the preparation phase and the
+> series needs to be split. Out of curiousity, how often does this actually
+> trigger in practice? I ask because superficially, I would expect capture to
+> happen while pages are being merged and I'm not sure how much this actually
+> helps. If anything the anomaly would be merging !MOVABLE types, capturing
+> one pageblock and leaving the adjacent block eligible for splitting as
+> UNMOVABLE/RECLAIMABLE which is not necessarily desirable.
 
-Please pull dlm updates from tag:
+Looking at this patch independently, once merging continues to the
+full block, a fallback would be allowed to claim it anyway
+(can_steal_fallback() returns true). I don't quite see a downside
+letting capture apply in this case. The plus is of course avoiding the
+indirection through the freelist which risks an opportunist request of
+a smaller order fragmenting the block and wasting the contiguity work.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-6.4
+In the context of the full series, this becomes even more
+important. Once watermarks are required to be met in MIGRATE_FREE
+blocks, and reclaim/compaction recycle full blocks, merging up to
+pageblock_order happens all the time - and needs to happen for
+allocations to succeed. This applies to all types of direct reclaim:
+unmovable request freeing reclaimable/movable blocks, reclaimable
+freeing movable blocks, movable freeing reclaimable blocks.
 
-Change summary:
+I see your point about smaller orders now always ending the merge at
+the pageblock, even when there could be additional merging
+opportunities beyond. However, I'm not sure these accidental larger
+merges beyond what's needed to fulfill the request at hand are a
+preferable aspect over reclaimer fairness, and thus ultimately the
+reliability of orders up to the pageblock size.
 
-Remove some unused features (related to lock timeouts) that have been
-previously scheduled for removal.
+I'll try to get some numbers for this patch independently, though.
+This should manifest in p99 allocation latencies and near-OOM
+behavior. Is there anything else you'd want me to look for?
 
-Fix a bug where the pending callback flag would be incorrectly cleared,
-which could potentially result in missing a completion callback.
-
-Use an unbound workqueue for dlm socket handling so that socket
-operations can be processed with less delay.
-
-Fix possible lockspace join connection errors with large clusters (e.g.
-over 16 nodes) caused by a small socket backlog setting.
-
-Use atomic bit ops for internal flags to help avoid mistakes copying
-flag values from messages.
-
-Fix recently introduced bug where memory for lvb data could be
-unnecessarily allocated for a lock.
-
-Thanks,
-Dave
-
-
-Alexander Aring (11):
-      fs: dlm: fix DLM_IFL_CB_PENDING gets overwritten
-      fs: dlm: add unbound flag to dlm_io workqueue
-      fs: dlm: remove deprecated code parts
-      fs: dlm: rename stub to local message flag
-      fs: dlm: remove DLM_IFL_LOCAL_MS flag
-      fs: dlm: store lkb distributed flags into own value
-      fs: dlm: change dflags to use atomic bits
-      fs: dlm: move internal flags to atomic ops
-      fs: dlm: rsb hash table flag value to atomic ops
-      fs: dlm: switch lkb_sbflags to atomic ops
-      fs: dlm: stop unnecessarily filling zero ms_extra bytes
-
-Edwin Török (1):
-      DLM: increase socket backlog to avoid hangs with 16 nodes
-
-
- fs/dlm/Kconfig                    |   9 -
- fs/dlm/Makefile                   |   1 -
- fs/dlm/ast.c                      |  11 +-
- fs/dlm/config.c                   |  21 --
- fs/dlm/config.h                   |   3 -
- fs/dlm/debug_fs.c                 |   8 +-
- fs/dlm/dlm_internal.h             | 154 +++++++----
- fs/dlm/lock.c                     | 533 ++++++++++++--------------------------
- fs/dlm/lock.h                     |  17 --
- fs/dlm/lockspace.c                |  29 +--
- fs/dlm/lowcomms.c                 |   6 +-
- fs/dlm/main.c                     |   9 +-
- fs/dlm/memory.c                   |   2 +-
- fs/dlm/netlink.c                  | 139 ----------
- fs/dlm/rcom.c                     |   2 +-
- fs/dlm/recover.c                  |   2 +-
- fs/dlm/recoverd.c                 |   2 -
- fs/dlm/user.c                     |  34 +--
- include/linux/dlm.h               |   3 -
- include/trace/events/dlm.h        |  12 +-
- include/uapi/linux/dlm.h          |   1 +
- include/uapi/linux/dlm_netlink.h  |  60 -----
- include/uapi/linux/dlmconstants.h |   5 +-
- 23 files changed, 299 insertions(+), 764 deletions(-)
- delete mode 100644 fs/dlm/netlink.c
- delete mode 100644 include/uapi/linux/dlm_netlink.h
-
+Thanks!
