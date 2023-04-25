@@ -2,202 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A616EDCAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CDA6EDCB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbjDYHdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
+        id S233671AbjDYHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbjDYHc1 (ORCPT
+        with ESMTP id S233381AbjDYHct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:32:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD7EC15E;
-        Tue, 25 Apr 2023 00:31:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682407897; x=1713943897;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=y/RZvHBERPsLIxfsgLVfCS8XF5HdzYTULcEBpzqy1jo=;
-  b=Huy4ajQ3vFQLXlr6JVVjjqFFSoOZfxWFpz4uqAMJr4BWR3p3JQuOpVPx
-   VtEXB7FKobYY51kwqUYK3XAiYLL7DILqwC8G9Btl7OOtdryjZH9h1qEML
-   lE8qIeb0EKjpwTSKir4A1CaUMxke32JzyoralpN8qA9BhT6nuq4T8BT4X
-   O8rAlkGnG3uNSifP5SASexWYP9zxZhHArGmL1PGNgh1n7CxKBfn/+o+Dd
-   Hr4a2PY3m2iC2cUoJxurWsNDh5at6CUrYIW7K8z+H4USseIlWUK3px6Lf
-   yE1Q49JNuXgMciJGx/RrkNbqDbaWIYdcREULTYou+tsLUzZKTrP7yuFH0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="432951773"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="432951773"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 00:31:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="670784623"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="670784623"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.238.0.183]) ([10.238.0.183])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 00:31:34 -0700
-Message-ID: <1a66053c-8ece-8ffd-1e33-c301c53c4d45@intel.com>
-Date:   Tue, 25 Apr 2023 15:31:28 +0800
+        Tue, 25 Apr 2023 03:32:49 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5409213C2A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:31:56 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-32addcf3a73so201686805ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:31:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682407915; x=1684999915;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xq/1X6dim9yVpm4WmSrDKdpjZQ76TBH7JXRh02wzjPs=;
+        b=Wfo39xoc88w/A0tjfulZ3Ct3nNT0/xDiwYjOFu/IsBKTOYpV75SVe7BWOvJVAkm0k+
+         238I3a49AWZ/tt1Q6aCcLS2GyqUSWDW01nlq5eQv9K0PcOFPwmCWby+7JFNguCYH/PeG
+         VWW5gAnyEfWhAaK+q2j3AmVxcmu2WGDMBqmP8eTw1729fJv8+ExL3SUFG45g8QwzOIc4
+         T2gDTOmBYwjQpHhvzcdzKRlKo794U4YxbMB6O2GjYu/MG2n9j/3RjaKpTtaglmaSziDC
+         TGJ4/4ALtTwIaZD3A2wxS/OuwMyABr745b6Ry1PcxlHux0mBSme5y+Qu5kmP5VzXvPTE
+         Geyw==
+X-Gm-Message-State: AAQBX9coa9pAcuxLGexjAyyBnIZEaeID9iaZwZDHNpXHvjULK6VE3gGq
+        skVGC5ncau3FqXFL884u7INO7BzMLsqOQ2TE5jekph7mpB9Z
+X-Google-Smtp-Source: AKy350bVP4a0j5Jjfd1rDnCB8SnbLt2iwfQAy1MD+D79iTTFbvKVrfLH8oyOFXmTksC/rLXk/Uam81B+LvOeBsCtDQA/Z2npr3Tj
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-Content-Language: en-US
-To:     "Gao, Chao" <chao.gao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230420133724.11398-1-guang.zeng@intel.com>
- <20230420133724.11398-3-guang.zeng@intel.com> <ZEdEmHFgHut2tDwf@chao-email>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <ZEdEmHFgHut2tDwf@chao-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:12c6:b0:40f:9f56:2bfc with SMTP id
+ v6-20020a05663812c600b0040f9f562bfcmr11295818jas.3.1682407915588; Tue, 25 Apr
+ 2023 00:31:55 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 00:31:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002d14f305fa241e67@google.com>
+Subject: [syzbot] [bpf?] KCSAN: data-race in __bpf_lru_list_rotate /
+ __htab_lru_percpu_map_update_elem (5)
+From:   syzbot <syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, sdf@google.com, song@kernel.org,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 4/25/2023 11:10 AM, Gao, Chao wrote:
-> On Thu, Apr 20, 2023 at 09:37:20PM +0800, Zeng Guang wrote:
->> +/*
->> + * Determine whether an access to the linear address causes a LASS violation.
->> + * LASS protection is only effective in long mode. As a prerequisite, caller
->> + * should make sure VM running in long mode and invoke this api to do LASS
->> + * violation check.
-> Could you place the comment above vmx_check_lass()?
->
-> And for __vmx_check_lass(), just add:
->
-> A variant of vmx_check_lass() without the check for long mode.
->
->> + */
->> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
->> +{
->> +	bool user_mode, user_as, rflags_ac;
->> +
->> +	if (!!(flags & KVM_X86_EMULFLAG_SKIP_LASS) ||
->> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
->> +		return false;
->> +
->> +	WARN_ON_ONCE(!is_long_mode(vcpu));
->> +
->> +	user_as = !(la >> 63);
->> +
->
->> +	/*
->> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
->> +	 * accesses a system data structure. For implicit accesses to system
->> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
->> +	 */
->> +	if (access & PFERR_IMPLICIT_ACCESS) {
->> +		user_mode = false;
->> +		rflags_ac = false;
->> +	} else {
->> +		user_mode = vmx_get_cpl(vcpu) == 3;
->> +		if (!user_mode)
->> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
->> +	}
->> +
->> +	if (user_mode != user_as) {
-> to reduce one level of indentation, how about:
->
-> 	if (user_mode == user_as)
-> 		return false;
->
-> 	/*
-> 	 * Supervisor-mode _data_ accesses to user address space
-> 	 * cause LASS violations only if SMAP is enabled.
-> 	 */
-> 	if (!user_mode && !(access & PFERR_FETCH_MASK)) {
-> 		return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) && !rflags_ac;
->
-> 	return true;
->
-Looks better.
+syzbot found the following issue on:
+
+HEAD commit:    6a66fdd29ea1 Merge tag 'rust-fixes-6.3' of https://github...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=160d8948280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fa4baf7c6b35b5d5
+dashboard link: https://syzkaller.appspot.com/bug?extid=ebe648a84e8784763f82
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/78937867b23a/disk-6a66fdd2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/dfd6c176adff/vmlinux-6a66fdd2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/51509bf47166/bzImage-6a66fdd2.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ebe648a84e8784763f82@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KCSAN: data-race in __bpf_lru_list_rotate / __htab_lru_percpu_map_update_elem
+
+write to 0xffff888137038deb of 1 bytes by task 11240 on cpu 1:
+ __bpf_lru_node_move kernel/bpf/bpf_lru_list.c:113 [inline]
+ __bpf_lru_list_rotate_active kernel/bpf/bpf_lru_list.c:149 [inline]
+ __bpf_lru_list_rotate+0x1bf/0x750 kernel/bpf/bpf_lru_list.c:240
+ bpf_lru_list_pop_free_to_local kernel/bpf/bpf_lru_list.c:329 [inline]
+ bpf_common_lru_pop_free kernel/bpf/bpf_lru_list.c:447 [inline]
+ bpf_lru_pop_free+0x638/0xe20 kernel/bpf/bpf_lru_list.c:499
+ prealloc_lru_pop kernel/bpf/hashtab.c:290 [inline]
+ __htab_lru_percpu_map_update_elem+0xe7/0x820 kernel/bpf/hashtab.c:1316
+ bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
+ bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
+ generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
+ bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
+ __sys_bpf+0x338/0x810
+ __do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
+ __x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+read to 0xffff888137038deb of 1 bytes by task 11241 on cpu 0:
+ bpf_lru_node_set_ref kernel/bpf/bpf_lru_list.h:70 [inline]
+ __htab_lru_percpu_map_update_elem+0x2f1/0x820 kernel/bpf/hashtab.c:1332
+ bpf_percpu_hash_update+0x5e/0x90 kernel/bpf/hashtab.c:2313
+ bpf_map_update_value+0x2a9/0x370 kernel/bpf/syscall.c:200
+ generic_map_update_batch+0x3ae/0x4f0 kernel/bpf/syscall.c:1687
+ bpf_map_do_batch+0x2d9/0x3d0 kernel/bpf/syscall.c:4534
+ __sys_bpf+0x338/0x810
+ __do_sys_bpf kernel/bpf/syscall.c:5096 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5094 [inline]
+ __x64_sys_bpf+0x43/0x50 kernel/bpf/syscall.c:5094
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+value changed: 0x01 -> 0x00
+
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 11241 Comm: syz-executor.3 Not tainted 6.3.0-rc7-syzkaller-00136-g6a66fdd29ea1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+==================================================================
 
 
->> +		/*
->> +		 * Supervisor-mode _data_ accesses to user address space
->> +		 * cause LASS violations only if SMAP is enabled.
->> +		 */
->> +		if (!user_mode && !(access & PFERR_FETCH_MASK)) {
->> +			return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) &&
->> +			       !rflags_ac;
->> +		} else {
->> +			return true;
->> +		}
->> +	}
->> +
->> +	return false;
->> +}
->> +
->> +static bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags)
->> +{
->> +	return is_long_mode(vcpu) && __vmx_check_lass(vcpu, access, la, flags);
-> Why not request all callers to check if vcpu is in long mode?
->
-> e.g.,
-> 	return is_long_mode(vcpu) && static_call(kvm_x86_check_lass)(...);
->
-> then you can rename __vmx_check_lass() to vmx_check_lass() and drop the
-> original one.
-By design, __vmx_check_lass() is standalone to be used for checking LASS
-violation only. In some cases, cpu mode is already identified prior to 
-performing
-LASS protection. please refer to patch 4. So we provide two interfaces,
-vmx_check_lass() with cpu mode check wrapped for other modules usage, e.g.
-kvm emulator and __vmx_check_lass() dedicated for VMX.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I would check the feasibility to re-organize code to be more optimal.
-
-Thanks.
->> +}
->> +
->> static struct kvm_x86_ops vmx_x86_ops __initdata = {
->> 	.name = "kvm_intel",
->>
->> @@ -8207,6 +8260,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->> 	.complete_emulated_msr = kvm_complete_insn_gp,
->>
->> 	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
->> +
->> +	.check_lass = vmx_check_lass,
->> };
->>
->> static unsigned int vmx_handle_intel_pt_intr(void)
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index a3da84f4ea45..6569385a5978 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type);
->> u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
->> u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
->>
->> +bool __vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u64 flags);
->> +
-> no one uses this function. You can defer exporting it to when the first
-> external caller is added.
->
->> static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr,
->> 					     int type, bool value)
->> {
->> -- 
->> 2.27.0
->>
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
