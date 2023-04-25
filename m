@@ -2,150 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1976EE54D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC936EE54B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234715AbjDYQKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S234695AbjDYQKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234692AbjDYQKr (ORCPT
+        with ESMTP id S234477AbjDYQKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:10:47 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E7815469
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:10:35 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4efefbd2c5eso3191268e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1682439033; x=1685031033;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gzBCWhkUry18zVOWXW5QyNYiFJMq+EJv8KjCsvLzxVI=;
-        b=QMkIWwlSa1dFqjZNAvY1XABYARSvvJqstr6B3FBYxnYeEZbMDFWIcbcX289rr+ND5z
-         ZQJCn1lqGn87wlPR/gIR1F+JWxMSOcLRF2PDHJ6MJTwRrd7AutqRm+TTOaEeBT3sRMYQ
-         yzPmvWLbEoY0UXf2J2QHnMJHIPXTROKg9jOH8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682439033; x=1685031033;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gzBCWhkUry18zVOWXW5QyNYiFJMq+EJv8KjCsvLzxVI=;
-        b=Ju3p2a2ISg4X5RV3/ViTvY/GtRy3HaNBdBBtQ3+YGUWt3FWwfIGjTL028FZKOIN/Dp
-         pk7Kg6NIWS+160O/NPO84nRcWrxKUjCJHS2CZFHPYlhqBILvvXES9AKvasGDvuRf05gw
-         evhmWYXwZDEPaK20YEUeMhGmBLI0Nj3JUc86+xUM6PFkUXGZ5D9+6vOuxw+pnrIRxs3d
-         w6Q8hPZc4i23+zSTaxBVY8Z+Agdbbj8l82uLxkD8JZJIF+BinPyOmer2MwscGy5Y6zGu
-         x2B4xfeN8QBtjIYu0xrMl7A6UDO4CX/uAHA0IY1MF1qbVRShCP317mpgs7JMxXi9V3xv
-         kTJg==
-X-Gm-Message-State: AC+VfDwWj4pFBoV3YgWoRTN4stYPk0oNnWgzx3my1FGk2TasxZ5Sd+LA
-        2Y1oSOn+3ysoCRRrUjSWUbpQYnchICQY1r+pK7Y1cmcN
-X-Google-Smtp-Source: ACHHUZ4hNXvh1LmzIqos5XWZmj8J/kLWu15X3Vy8YDEF0XBrr9JXfhU+9c7fy1wtRx/umSS/ftH7kQ==
-X-Received: by 2002:ac2:43d5:0:b0:4ef:f630:5c1e with SMTP id u21-20020ac243d5000000b004eff6305c1emr1307662lfl.51.1682439033567;
-        Tue, 25 Apr 2023 09:10:33 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id g2-20020a19ac02000000b004ec87cf6b69sm2143165lfc.169.2023.04.25.09.10.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 09:10:33 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2a8a600bd05so56849931fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:10:32 -0700 (PDT)
-X-Received: by 2002:a05:6512:145:b0:4d7:44c9:9f4c with SMTP id
- m5-20020a056512014500b004d744c99f4cmr4233943lfo.4.1682439010843; Tue, 25 Apr
- 2023 09:10:10 -0700 (PDT)
+        Tue, 25 Apr 2023 12:10:43 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F86015470
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:10:33 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 60AF42B066F2;
+        Tue, 25 Apr 2023 12:10:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 25 Apr 2023 12:10:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682439030; x=1682446230; bh=Ua
+        ojCscwxi86AjVuIh2qCHuKpN/ZbtkSzMZy6PZ+dq0=; b=rs9Bvn6pjM1EZQb5/e
+        0ew6BcvE534Wwf7Fzg9YF9G5XCPwkxWv/hHowRoqwoln8M3w6BS3FVaflLkpC/iw
+        UnjfQZBhve3krhuivKbT0UBqx0TAkj7+4OQlO2irX93g5wn+D1JnfH8y1k7TjmIS
+        bOPHVnyJC/TE/TE6+LwTclIrPAbVmxJg780W82bFwxtf2ZeS7VJT+Kg4wDQD3Hbs
+        IqZ7qG30WK3dclE1EGXiMdmvSes9Mg4JZuBnoXpD+4gZClHEOU2eCYRAivfWwZWS
+        DFvo8v7297lyTAvTFcoIBF8nk1vXy7STAQaI+M+sgHeRFGcShMbcOnwP0BTfNzRM
+        2K5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682439030; x=1682446230; bh=UaojCscwxi86A
+        jVuIh2qCHuKpN/ZbtkSzMZy6PZ+dq0=; b=iRfpC/KUuKid9v5Vzv+Nd4uFvSOmv
+        9Htvapj5EI3Et4MTXTMqhfAgGar2TOfcXCAp92v7w59J8Af/HjgMB+SpLoD2whu1
+        +6B+zOXJOLpRbFCiES54J7AnESgWNWfBR9XMLAqA8cm+pasBqqjDZYEy2O3tRrxV
+        05HeNsYYy5RxjMLSYZpwn+6IFLNEjwVITNM6+ALzGLZbBLh/cKlWliuznrRqh78d
+        MP2LJZoFh/JdSBWc4M2412zL6CDbTBilhZlINlBlW4Msy2a0cfz88HNpDUa7KIRH
+        3Y06ShqOzp3/tIrhGYbHW21lnTsnSkVPkJ0PuWBdhPwNaNfFS+Zp9pDcA==
+X-ME-Sender: <xms:dvtHZERRfaU0QMkLYwj01ATOOt1tV4CZNOano-vE55h_mvXjxTHEHg>
+    <xme:dvtHZBzOBDgCqomITd47pDyJdRVEREhLYAkO_FxLKOtryFKk8x9bsYTJQtANZ2oq1
+    t3Zmikt5MqjVQ6hFgs>
+X-ME-Received: <xmr:dvtHZB1CaWxHfHYGDX3jCUtQ8ud-eQfrwBcpiDn2orGEav4ztX6qByJkBR8y_e0flDDCL7J5FITU4tdehpawrRO4A-jk_1U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduvddgleekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:dvtHZICg1hf_RrP49Zi1_AhugxGpaAgGWgcjeBGcexA4DETOmd6lMw>
+    <xmx:dvtHZNga2Sx_rdmPqqyjyeq6RiP-XAK0SsBbrCFFZO16e-q_Sf_EOg>
+    <xmx:dvtHZEoalbbm5lyqLNg6HKNezs9dr-IHd2gDEd1zkhj8KX8oSwBnAQ>
+    <xmx:dvtHZMR29DgSlFWknbJFm84tT23VE-RXf5EPdHnaidpBhWQf0ZCd5NDsb6k>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 25 Apr 2023 12:10:29 -0400 (EDT)
+Date:   Tue, 25 Apr 2023 18:10:28 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Roman Beranek <me@crly.cz>
+Cc:     Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Frank Oltmanns <frank@oltmanns.dev>,
+        Icenowy Zheng <icenowy@aosp.io>, Ondrej Jirman <megi@xff.cz>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] arm64: dts: allwinner: a64: assign PLL_MIPI to
+ CLK_TCON0
+Message-ID: <loz3kx53jl56klgwpiwcmwub4flilgts6nxvdbxashed25c5m4@jqmgtcdw5z7a>
+References: <20230418074008.69752-1-me@crly.cz>
+ <20230418074008.69752-5-me@crly.cz>
 MIME-Version: 1.0
-References: <20230325060828.2662773-1-rppt@kernel.org> <20230325060828.2662773-3-rppt@kernel.org>
- <CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com>
- <ZCvQGJzdED+An8an@kernel.org> <CAFbkSA38eTA_iJ3ttBvQ8G4Rjj8qB12GxY7Z=qmZ8wm+0tZieA@mail.gmail.com>
- <ZDbp7LAHES3YFo30@arm.com> <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
-In-Reply-To: <20230418150557.ea8c87c96ec64c899c88ab08@linux-foundation.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Tue, 25 Apr 2023 11:09:58 -0500
-X-Gmail-Original-Message-ID: <CAFbkSA2hU+2V0i5OG0BBD-s3yNOAZwBmyGmxMLkbzoWZK6cxOQ@mail.gmail.com>
-Message-ID: <CAFbkSA2hU+2V0i5OG0BBD-s3yNOAZwBmyGmxMLkbzoWZK6cxOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 02/14] arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mike Rapoport <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Rich Felker <dalias@libc.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Zi Yan <ziy@nvidia.com>, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mm@kvack.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wfstf36tsrjcb6td"
+Content-Disposition: inline
+In-Reply-To: <20230418074008.69752-5-me@crly.cz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 5:22=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Wed, 12 Apr 2023 18:27:08 +0100 Catalin Marinas <catalin.marinas@arm.c=
-om> wrote:
->
-> > > It sounds nice in theory. In practice. EXPERT hides too much. When yo=
-u
-> > > flip expert, you expose over a 175ish new config options which are
-> > > hidden behind EXPERT.  You don't have to know what you are doing just
-> > > with the MAX_ORDER, but a whole bunch more as well.  If everyone were
-> > > already running 10, this might be less of a problem. At least Fedora
-> > > and RHEL are running 13 for 4K pages on aarch64. This was not some
-> > > accidental choice, we had to carry a patch to even allow it for a
-> > > while.  If this does go in as is, we will likely just carry a patch t=
-o
-> > > remove the "if EXPERT", but that is a bit of a disservice to users wh=
-o
-> > > might be trying to debug something else upstream, bisecting upstream
-> > > kernels or testing a patch.  In those cases, people tend to use
-> > > pristine upstream sources without distro patches to verify, and they
-> > > tend to use their existing configs. With this change, their MAX_ORDER
-> > > will drop to 10 from 13 silently.   That can look like a different
-> > > issue enough to ruin a bisect or have them give bad feedback on a
-> > > patch because it introduces a "regression" which is not a regression
-> > > at all, but a config change they couldn't see.
-> >
-> > If we remove EXPERT (as prior to this patch), I'd rather keep the range=
-s
-> > and avoid having to explain to people why some random MAX_ORDER doesn't
-> > build (keeping the range would also make sense for randconfig, not sure
-> > we got to any conclusion there).
->
-> Well this doesn't seem to have got anywhere.  I think I'll send the
-> patchset into Linus for the next merge window as-is.  Please let's take
-> a look at this Kconfig presentation issue during the following -rc
-> cycle.
 
-Well, I am very sorry to see this going in as is.  It will silently
-change people building with oldconfig, and anyone not paying attention
-will not notice until an issue is hit where "it worked before, and my
-config hasn't changed".  If EXPERT is unset, there is no notification,
-just a changed behavior.  While it would be easy for me to carry a
-patch dropping the if EXPERT, it will not help any users building on
-upstream with our configs, whether for their own regular use, or while
-trying to debug other issues,  I expect it will result in a reasonable
-amount of frustration from users trying to do the right thing and
-bisect or test patches upstream.
+--wfstf36tsrjcb6td
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Justin
+On Tue, Apr 18, 2023 at 09:40:05AM +0200, Roman Beranek wrote:
+> Assign pll-mipi parent to tcon0's source clock via 'assigned-clocks'.
+>=20
+> Signed-off-by: Roman Beranek <me@crly.cz>
+> ---
+>  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/b=
+oot/dts/allwinner/sun50i-a64.dtsi
+> index 62f45f71ec65..e6a194db420d 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+> @@ -411,6 +411,8 @@ tcon0: lcd-controller@1c0c000 {
+>  			#clock-cells =3D <0>;
+>  			resets =3D <&ccu RST_BUS_TCON0>, <&ccu RST_BUS_LVDS>;
+>  			reset-names =3D "lcd", "lvds";
+> +			assigned-clocks =3D <&ccu CLK_TCON0>;
+> +			assigned-clock-parents =3D <&ccu CLK_PLL_MIPI>;
+
+assigned-clock-parents is fairly fragile, and it's essentially an OS
+decision, so that doesn't have much to do with the platform.
+
+Just force the parent in the clock driver, and prevent it from being
+reparented. It will be more robust, and we will be able to change it in
+the future easily.
+
+Maxime
+
+--wfstf36tsrjcb6td
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZEf7dAAKCRDj7w1vZxhR
+xSYEAP9ufal853zPBswPlSP34CsO6Dbt8fsbiPRYUozvKqvluQD/Xizu/MNXPNTL
+5be4XrGm/g+J+J6/+WtdZT9oLQQhwgI=
+=CC4z
+-----END PGP SIGNATURE-----
+
+--wfstf36tsrjcb6td--
