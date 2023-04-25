@@ -2,140 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175A36EE82C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF956EE82E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbjDYTYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42770 "EHLO
+        id S235832AbjDYTZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235711AbjDYTYZ (ORCPT
+        with ESMTP id S235227AbjDYTZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:24:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F7818EB6;
-        Tue, 25 Apr 2023 12:24:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C65E76313E;
-        Tue, 25 Apr 2023 19:24:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE25C4339B;
-        Tue, 25 Apr 2023 19:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682450655;
-        bh=WqHhwYZkfR8EDEKqGRF5aPIvBjQ7WTC1wmxO9XyL0/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NiWg8PviVhTTSVXubSeYdzZPc99PeYtbJmMhd6bDcJWaRIgsrSnlYdKM72vPY5WBy
-         Ayla3GJ+jFu0sFz1SMPV0zsjZG1yJ0cqkBqGPRdz3BmkB6KCFQLmXnd4te/xd56zQ0
-         bsJCttYYbBjK463RqxMdFd4DDieOftDM8LfS8OiOwrHmSFthKE383mvnosXCRhFoS7
-         4N8cxpF2ypBdau5K5NjFG6Wj43zQyuCVsj9MdUwlFCnPwly9j9HlZrZNEC/gc/WFpl
-         r0+tsXZiwSAKa5GlkWofX/vwDhajhhUOrwcXhZUaCl7VLSe4cuGzhcZJylprc8B5/X
-         0LM3tm5//3RQQ==
-Date:   Tue, 25 Apr 2023 21:24:11 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v11 1/7] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZEgo2+0cA+tD2k7u@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230421101833.345984-1-tomi.valkeinen@ideasonboard.com>
- <20230421101833.345984-2-tomi.valkeinen@ideasonboard.com>
- <20230425171347.GB1957523-robh@kernel.org>
+        Tue, 25 Apr 2023 15:25:17 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2098.outbound.protection.outlook.com [40.107.215.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B7B18BAA
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:25:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RE/Nmdv8d6/BW+3A3NtWIs1BllLynZ2kUbJm64zkSKMVT5Hsg+qFYpx8+4Gi70bwk6/A5OiZytS44fT31QiPEEuBhFHMcIOuFRAPbN573Tz/YeAmKTDJY4t2HmcHuvMwcF6np+1j68ngf4+89P4IT2DsassPdNI5aGnRHe8bEmvK6dQRx9jLxDt8Mn2Ch/7FYRgXrcLmw0QX97LBtC8oJHZci7LBbHQB6TJz7HquNRNz64xHkjlB8ywVNgeTI6IN1fMW6KqA4/l4P0ummYgyrjOJXkVGKTa468hgr869IgmC1VzenMCsyvnN2l8Cm4PlUYxx1k5YDYLD/O2q0ZGLfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0tFjCdDMpDFTQ/GKv3N1dIyCZwdtsJDHja/J46tCzrU=;
+ b=D+t8AEefEsHuT1bO4S1ncz5Yfiawtqn3aE+ShLkdT7LN4J32rZ/ZrA8GPD4EVwZ2rOmsz84TfoBnm2OiSwXy5UbcdWmA0FcArHCcD2n7tx7E35g4dEzudTNWumG73T+B1vQwu954iXxKu+o/SpMPePM46ansXadTqLIzvT+645j1bZMua3bb2+5fKcboQnDC99kCayeEJ4rzmxIRy8zNKv2vg2yG6lFBnSAQyAFKK2amLAkAMn6JMjJ3ppG7G7UDR40vx98lwEvno3FrbMY2un+waC5ea3YQdXMwlJjJTKloCVi1v3w6MZS5VTw1PEw1XCLkRqhSQcx1DaNTfMDcWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0tFjCdDMpDFTQ/GKv3N1dIyCZwdtsJDHja/J46tCzrU=;
+ b=YSyGii+OJzjxVcb1s/KJyV+g2ERVXyzl/78vP8xAAi7+f0deGXk+sTSV6+F0vP0cZg5HDBhHGe7y2JT+Qo04evuB6oMfs0o6imVqrLY1ndENZsZUArEewpaYj1kRCfaqxEvhP1BDPcPq+Szhv8hYdfhhmcNWKHcsNnq0o9xcnCjgTmWpDyytBeY6IeZmcMpw19NMw9YBhRQRZ1oAmv8LTb2DrsbRUzvAGELzajk+3MDZlMwmWwQqpd2o6uQHUSvsv67ati9TaHXqWAJ3iE6jnEFIMyUMYlNbHK/xm5jnzN726QHek7uVCHn42LvQpNN/o0lwFtZ/xRtsQP8OU32/2A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB4048.apcprd06.prod.outlook.com (2603:1096:400:22::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Tue, 25 Apr
+ 2023 19:25:00 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%7]) with mapi id 15.20.6319.033; Tue, 25 Apr 2023
+ 19:24:59 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: simplify the processing logic of retry_cnt
+Date:   Wed, 26 Apr 2023 03:24:48 +0800
+Message-Id: <20230425192448.35767-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0026.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::16) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BXyp5TPXXYIx2AXH"
-Content-Disposition: inline
-In-Reply-To: <20230425171347.GB1957523-robh@kernel.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB4048:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1bf3b41-dcd1-4f87-59f1-08db45c2c21c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mDmv/zH1wmxPwF2TFCxjwbtb+va8R2El/PCzN7Qwy0jPdCxB41+qJBxabNchu9jJZfFavirQVW6Kjmi0RTvPc5lXQARGVrJEi3w1JH/UwNT9S3xg9fDGhHKqU7LXo0BFK/cZZSlCfPih2NgwDja8Fu9gWQ4b+amLEN62Kgek3QeNQTDMtpz+lV8K92I4F9XIh23NrIwVLkVLiRjMg4acOipHMDexIQuPnGhE6xD9prQMNV4YG71TXJQmAPeDO85rTesTnat3OmmsN709y6ETkzOg7IX8TFkuPzSJHMmgQUlH13zlj0tiLzHhqNLLjWcmTKptyhzFVJ/F5zEbmXB9xUO97IyHICq7YmrgdiCn04w98hrZHSctKy5WAwIA5PbMPCM1fUkRZkqO5ImC3CY3N5PkronVJp71zBzZgMYsZ5ocEAMAgyXDynZ8JcBnWggzMsShTHcNqDfmGdO9Hm5VOdFWxEBffq+JgIzSzCyw9U6iiN0WouVkzcayk0y+v65OVjn9OzM2HKoNUAnXrPo8/CtumnMEXUVxyZcxpDCQFNr+NpPzYjA+PXgWATZQyNxv79cRXw524FjsCbVvCNs5jZ72u3r14y5Ki8E2lRynkli517kTIGOF4zOgn6P8YVRI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(366004)(39860400002)(451199021)(478600001)(38350700002)(38100700002)(52116002)(6666004)(6486002)(6512007)(26005)(186003)(1076003)(110136005)(83380400001)(6506007)(2616005)(5660300002)(8936002)(8676002)(41300700001)(4744005)(2906002)(316002)(4326008)(66556008)(66476007)(66946007)(86362001)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/N38AohhIiZgfryyl5Jfh1c5wO4/5R6G91tQyIZHnuk94tK4W4UZNCyvTKKM?=
+ =?us-ascii?Q?61jXibpIijT1m2KBLeV7ZuAJegFCqVyorI/Tbv3ELfF7hP2LCn/t94a63jta?=
+ =?us-ascii?Q?3BlZb1z8O5ApOJAuXhHHGBe+hT/o4TePKMTLpZ5NltJC9V1gkWv/yHjk1Xa+?=
+ =?us-ascii?Q?0P+5TL7gY7D+Lu5vS8+QcAFRUSzBKzhZFNEZexVm1viXL21ZUsQDUl10iEhq?=
+ =?us-ascii?Q?cpzmirbvNfvm3ukQeJ4rx55KrA6Bs7eg4n0u96Nr/g1ZxAJZJmNp4t2P6Xnm?=
+ =?us-ascii?Q?tEBZEPlIS5VyMm1rumeIk3z72Vdx+zGYL0AmXzXjVkT79Zfgx+Vq579CpAri?=
+ =?us-ascii?Q?+MBVpeAjVgzq4HsQA7m7VanUSa12szw+11uxFmt3pxQj3bMUc3UMZha1Dgs0?=
+ =?us-ascii?Q?kiAy7Yt/XlUoFVISfKN8TRmDAlazCbvlp2izxUdKwJjbOj7GjVPCGgSIOq10?=
+ =?us-ascii?Q?D6/1HAMNBNc9JtZ83awTqDSAGgcBwiMjUhGQvXqkRpe+MBX0asUaQTe2zDhm?=
+ =?us-ascii?Q?cNfHiPd7tLvbO4JJ9sr4xCYxKawlEYh7p+hWwi6kTbe28+5TpO3GGRifsd5U?=
+ =?us-ascii?Q?I07jhioFe8o21ccaWYVNDcydUiJC6hnFPlz/XXD+C4/y15CtPvx0w3b2n4s8?=
+ =?us-ascii?Q?rHShtulZjn6h6swUfZAnNOUbpxWlCEoks+dsyGSnC7LxY3HiIb/T+1Z4gdSB?=
+ =?us-ascii?Q?EIlumML7QqZohcNUMUK3ExOhjTm92/2HFH7vydDfxQ1LiAxZMy/xO3TfbX+W?=
+ =?us-ascii?Q?iX45GxhCg+zpdvPsm98uN543oPLll2p70x5xUBSEmfVBC7tYT5FDz4QCpLFP?=
+ =?us-ascii?Q?mf5RllAgvvtiW8nDyyeOj7BvURdPsCOAmJ0KB+lIPlURWYMxk9JrehKl4i7F?=
+ =?us-ascii?Q?7bNeYMugZ68jQs2AQ/7Z4r55dy5AC6ePU7Hypw7DO3t5cn7lToKpuVvAvL2F?=
+ =?us-ascii?Q?6EWt+yVWf9sHxEEccTvgxaAbLt31KnRhV7Q67Fz7r2QWXIVFtFyUWACGsDgi?=
+ =?us-ascii?Q?1ePiv/WHZSKbXtR/TVgCgz6BkHmE/aBQ84gOu4C5PLTDAO5zFTZQvmeAjq0S?=
+ =?us-ascii?Q?lLOJOhrGTBCj7m58O0gNWWwra5YLkgjdi029LqOI1ewI+qU6t8LlC2SBerMv?=
+ =?us-ascii?Q?aCL7WQASHfq/fiC1y/sZmYL8EutO+NzMFHxddNKs3xRkicyVZOUY0oSZlFiL?=
+ =?us-ascii?Q?N3iUNNC+7QRyx1tP/+9nDz3EhjLskRHwLt0+drjBmZ7FDebtm6kUbeMF2XPP?=
+ =?us-ascii?Q?0V5Ms7IIKYWBuVbJ5Xb8vyFMskEcgpDQMd2pomKQtJcdB7Pgnvi2tPnI0d4l?=
+ =?us-ascii?Q?zvq9v0oI79uM+Kis+gZ3TSh12ioTrABg3GBr3hRwf5KV9pVSphTpsX8d67Bx?=
+ =?us-ascii?Q?ns8bNgPrsnyQfcO1sAyy6lDhsnG+N1USMA3hb38Qm3HecowmLP3rjGxJFFmv?=
+ =?us-ascii?Q?D3OXBaEspnT0vD/mJSx/GIYItVNlVg1xy3AnxhqeBsubywSZGIilgplgaBZe?=
+ =?us-ascii?Q?Y+TtvzdoLFXtV+cSP3wWpqxWf15luYocawMc+r62wKjfrBplZjP0hsmSF260?=
+ =?us-ascii?Q?TsAU0huj+KGdGQljT062ZNi3FFJOAuar64+YFPC5?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1bf3b41-dcd1-4f87-59f1-08db45c2c21c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 19:24:58.8179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KwJvUT7gNFWkq7dfVDENyvN6OHRH1mTnh9CX/K3RVnvLPGgxFMmhwaZjmrbAsB2Wd+Z56aTlhRpk0FeXoSSfbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4048
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Replace
 
---BXyp5TPXXYIx2AXH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+    if (a > 0) {
+        a--;
+    }
 
+with:
 
-> We do support some flags in the upper 16-bits of I2C addresses. Any of=20
-> those possibly needed here?
+    if (a-- > 0) {
 
-I2C_OWN_SLAVE_ADDRESS definately not. ATR is only for addresses on the
-remote bus while our own address is on the local bus.
+    }
 
-I2C_TEN_BIT_ADDRESS, only in theory. I have never seen a 10-bit address
-in the wild, so extremely unlikely that ATR hardware does support it.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/super.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-But then again, there is a slight chance that we add more flags in the
-future which might be relevant for ATR? So, u32 is probably a good
-thing to use nonetheless.
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 107585797ffa..cbab0cc2c82e 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -4769,8 +4769,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+ 	kfree(sbi);
+ 
+ 	/* give only one another chance */
+-	if (retry_cnt > 0 && skip_recovery) {
+-		retry_cnt--;
++	if (skip_recovery && retry_cnt-- > 0) {
+ 		shrink_dcache_sb(sb);
+ 		goto try_onemore;
+ 	}
+-- 
+2.39.0
 
-
---BXyp5TPXXYIx2AXH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmRIKNcACgkQFA3kzBSg
-Kba9kBAAoXLpnt2btqw4dEDjJLtIAQyuM4KlutOsE46L+ZiOwPM9DOBHhbLVyilG
-qFQqvT+96nHTFpUnQ/MC/mpFFZ9TPG86QGirha1pplDS0hocYsvbFN7OxxLAnoDy
-xDxRFoHA0fFLV4tzL97s/Jl6Ka6L1ubDHcg3drun38HzFkNJEd8hqG3tJNeSfo0u
-3F3LLPowCScp+oYlBw/SRXh9L8wmUkqegiDYVXf6TUfwevbBMCdhxVNEF06FA/MY
-f4wcZaGAgTuSJjSbUaCKuKT/mLIoI93z5YczpFHrcj4Pr8LZKggb0V5hqMAEhk4W
-WQUd9UxED5WMTcTK+/Jf7xSBM2qzTrpgwsOhv7bRlbSARimHjECU9uQUmYlFSFas
-QEs4MITjUxOmcS10hB/OJN5HBWfAC+fmCkXUMDDLMZT/DN+nosTUGwWYqMv7aouB
-HmfOagM83z5RkWnE7meR4qTx1UygnCNHJemm6MdaurVlsOeuk9LpFOP3EtEmUqWH
-KTTDJvaRFiMZxKZz3Y7/Dz/cGM5deKnMiY5goTyyK8eTqNhfqBGxlygmX6YV80yL
-LA/7tt4eZAW/qtO6SAssIuT13nuWNR5aRS9q3G0ZzaC42eHy1KoPr+EsStpR17Fm
-KELYexy53yT45oza3vXSj4M6oRbF+FRxl2Jwtj+rZhtEgKxjlj4=
-=Ao+h
------END PGP SIGNATURE-----
-
---BXyp5TPXXYIx2AXH--
