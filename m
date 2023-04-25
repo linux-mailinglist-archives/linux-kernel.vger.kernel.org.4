@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BE06EE7EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A0C6EE7EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbjDYS7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S235069AbjDYS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234488AbjDYS7T (ORCPT
+        with ESMTP id S235085AbjDYS7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:59:19 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D290C16F3D;
-        Tue, 25 Apr 2023 11:59:15 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6a5f7341850so4951527a34.2;
-        Tue, 25 Apr 2023 11:59:15 -0700 (PDT)
+        Tue, 25 Apr 2023 14:59:30 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FFFCC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:59:30 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a686260adcso66133605ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682449169; x=1685041169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mIzFM7fMr8+jO5+B9CBJwYQH3vH9wMHrtgZK9/UkDvw=;
+        b=kVHStCnBcskCRFxJY9masCCD2ayUCGleBryGjSCHfYJulnoYo0QRUp82qE9mxFhFue
+         BDHL8Cqwerbf55aySmm2IsQP8HQj/oo8f25mHbR09Yq6Zb+QKm3RPryMab3fhucViJS4
+         2Omu5EXPaI61nirjvGSy3p3avIzoVIuCLnVo+Wgsb38Rm+IbpzBhwbYOnj/8u4NtiluP
+         Fx5pIT9nx9gG3zY7JVLYKfarUua9yFRmtD/MM35FR9rKcVazKTt5N/m2QxL+WlJ30Fhx
+         fVbBN+9PnnpJ04b6Mnr2GSTYkunoxeSVTicEzCjGovVYL+Cy9jWUkQ079j1t40tE9Q4T
+         7Ecg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682449155; x=1685041155;
+        d=1e100.net; s=20221208; t=1682449169; x=1685041169;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LaaEFcFebGPV3hach/dJKlwiRfFDPwrlFKEHi8nlBFk=;
-        b=eJtGFWs53L0pcNTmzQNGLzm869nhyHETyBZoNgbFR5TGWESjYbpIBZ6fL7//8TTf3J
-         r2hsO3S4J0kP4wV1EduYDh4FXvEEWElQtR6iXAGi0RMioTlogK77fJ+sJQISchqCM/+W
-         Km2aUl+PJaaeQHjT2izFmHerUGPY9Y+QKTKO8ZGv3nxVOMebrT1c4trrrJd156DKyTtp
-         7kOGwkgH1af7vKbg1da2duYGAgVgeb6axFicg0S6M3kDPR76ZFYBR6Tu4G/rsg1ly2zY
-         l8Hd7DaxKgd7GP1Rc9Hwo4CGdLrVnuZnJ4/pj/viG0WzRWAUpSOVWd80U8WEm8v/FTOT
-         qI+w==
-X-Gm-Message-State: AAQBX9cV8aTkSjqkeqM9CPXQDAh9QQu6ohc7cRXS3/vRufHOTU73ZA0S
-        KRNUTKN6nLU1bWB1aO/SQQ==
-X-Google-Smtp-Source: AKy350btMvEteniArc68zN6tLE59uuQYNqbU/qiTh2s58asn9CBEj6Vnmv2nzWBlTvvoTxI11bNeVQ==
-X-Received: by 2002:a05:6830:1bc9:b0:6a6:1a39:2631 with SMTP id v9-20020a0568301bc900b006a61a392631mr9138512ota.15.1682449155017;
-        Tue, 25 Apr 2023 11:59:15 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d5-20020a9d4f05000000b006a5db4474c8sm6034648otl.33.2023.04.25.11.59.13
+        bh=mIzFM7fMr8+jO5+B9CBJwYQH3vH9wMHrtgZK9/UkDvw=;
+        b=h3F92SDohjbpdLyP1C0Rl+CNZaibVM8ACi1oqk1rNNJpwp203uD87pwCznac6KoZM6
+         Ce0cxFChmfO4SpKyF930+jGwNqeUOyOVdvgjP23Jg8Ry+GN9LIQWyJiddb6qvVm5+VGZ
+         1Ex5MIcS8ZaR3qVhJJX1+M3ShnrdzVCFBEJpaO1ewQoY6g51/ktVNN326xgjOM3q4Y2m
+         ilmzu2iqrll7TeOypay/n4GY9w3NILVVmftyrFYLKVBSkG1XZ9MuZwOutdzZ0g4iVFiP
+         XB+5/6uIdrz3/nS6ulCK4JLM/cYDVRUNhlhUajCJKK6nN+zBkMAXHlsFeFKkWLdrwJLW
+         gZ0w==
+X-Gm-Message-State: AAQBX9dYwzdv0ViMX8CeG4jDSNe6RM7Jn35jGgeCQksKrYZtYB8veNfJ
+        ebnkPSc+hi3QwAHfpH7W0n5nyw==
+X-Google-Smtp-Source: AKy350Yp8ecYf4ZdqfAdlkJ1ToX3HHhIMzVARbG0mLO6vDnifGVSvtr4Qg+vFOxUUCYMWR6bIgWgHA==
+X-Received: by 2002:a17:902:e403:b0:1a6:91f0:f7fd with SMTP id m3-20020a170902e40300b001a691f0f7fdmr14797237ple.60.1682449169230;
+        Tue, 25 Apr 2023 11:59:29 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id jf2-20020a170903268200b001a207906418sm8626042plb.23.2023.04.25.11.59.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:59:14 -0700 (PDT)
-Received: (nullmailer pid 2084720 invoked by uid 1000);
-        Tue, 25 Apr 2023 18:59:13 -0000
-Date:   Tue, 25 Apr 2023 13:59:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>
-Subject: Re: [PATCH v12 1/8] dt-bindings: i2c: Add I2C Address Translator
- (ATR)
-Message-ID: <20230425185913.GA2084119-robh@kernel.org>
-References: <20230425072601.51031-1-tomi.valkeinen@ideasonboard.com>
- <20230425072601.51031-2-tomi.valkeinen@ideasonboard.com>
+        Tue, 25 Apr 2023 11:59:28 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 18:59:25 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Chuang Zhang <zhangchuang3@xiaomi.corp-partner.google.com>
+Cc:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        surenb@google.com, linux-kernel@vger.kernel.org,
+        Chuang Zhang <zhangchuang3@xiaomi.com>
+Subject: Re: [PATCH v2 1/2] Binder: Add timestamp to transaction record
+Message-ID: <ZEgjDfUHQ0/rPhhP@google.com>
+References: <cover.1682333709.git.zhangchuang3@xiaomi.com>
+ <5ac8c0d09392290be789423f0dd78a520b830fab.1682333709.git.zhangchuang3@xiaomi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425072601.51031-2-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <5ac8c0d09392290be789423f0dd78a520b830fab.1682333709.git.zhangchuang3@xiaomi.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,16 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 10:25:54AM +0300, Tomi Valkeinen wrote:
-> Add bindings for I2C Address Translator. Only one property is added,
-> 'i2c-alias-pool', which can be used in the bindings for the device that
-> supports ATR.
+On Mon, Apr 24, 2023 at 07:05:14PM +0800, Chuang Zhang wrote:
+> From: Chuang Zhang <zhangchuang3@xiaomi.com>
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> Acked-by: Wolfram Sang <wsa@kernel.org>
-> ---
->  .../devicetree/bindings/i2c/i2c-atr.yaml      | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-atr.yaml
+> This patch adds a timestamp field to the binder_transaction
+> structure to track the time consumed during transmission
+> when reading binder_transaction records.
+> 
+> Signed-off-by: Chuang Zhang <zhangchuang3@xiaomi.com>
 
-I commented on v11.
+Acked-by: Carlos Llamas <cmllamas@google.com>
+
+Thanks
