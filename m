@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263736EE19C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A365E6EE1A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 14:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234018AbjDYMG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 08:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S233721AbjDYMJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 08:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbjDYMG1 (ORCPT
+        with ESMTP id S234018AbjDYMJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 08:06:27 -0400
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80573AA9;
-        Tue, 25 Apr 2023 05:06:21 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 568171AFC;
-        Tue, 25 Apr 2023 14:06:19 +0200 (CEST)
-Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        message-id:references:in-reply-to:subject:subject:from:from:date
-        :date:content-transfer-encoding:content-type:content-type
-        :mime-version:received:received:received; s=dkim20160331; t=
-        1682424376; x=1684238777; bh=1quTiAqVzsZGhgLkkRVbglXHFhLg3FUJ99F
-        n/BliYRU=; b=nJKedt0dV1ma7iwyLMYLzlGN8s0LqMGVyCbFURjHRpprhBVxQrI
-        IJtd44HC/MXPkQVbgm/owXS38tIHBDeip9KB0Hubj9gF2oqghW3yAz/ES6dn8sTj
-        TeI76x6ukdb5oDHv2CRHP2iuBq6cSKNom9MW0XKvT10RYil2po2RxYulcFxqxfac
-        KxL0Ensq43asxcEO8be4Xrja/7I47AqUb7h1S6+n4RXiJwC+9FkcHPxgqWK5n4Rr
-        Xcn8qc+038smmL/arnFcLKGPnapshoziaAP84LUneMGxQynEegDoapQnqk/o7t5r
-        j1F4AZ0LHImwCtOzbZX7NGMvaiGzdDky7OZKvnmNq7NZWzOi+1s1uJIXAbE7qatB
-        XQdzk2VgtphEloCz9sVoaGSQYkSnWfcK39rgDXhOrMUuZrUjnTFjkCv14GF1FT6/
-        nf7YtZuItQQ2Vqg8PW2yi4CUKR/i6g/LXHczxE/rm+jsmVf1PCZiTHrTyJJsNJTG
-        IVdOFx3jPz0VBoUJoChdc7oiBMvoHRewwmF7+gyD35ZJX1h6PB1QUelw6Uz1quJK
-        D1ALsgXpDlRISAbCAjgRYIMPxGs/fgWBPBxA6VcY7o6Okyodt8J2cqYPL9rfaMBr
-        CMlPK3TE2/EQKot914La3FDRsUVX6XrzKGPi2kGmXLAExOxSyl8ZhEeA=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Q0RLDHaGpSLY; Tue, 25 Apr 2023 14:06:16 +0200 (CEST)
-Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 5D45116A7;
-        Tue, 25 Apr 2023 14:06:15 +0200 (CEST)
-Received: from int-subm001.mykolab.com (unknown [10.9.37.1])
-        by int-mx001.mykolab.com (Postfix) with ESMTPS id 83128DD5;
-        Tue, 25 Apr 2023 14:06:14 +0200 (CEST)
+        Tue, 25 Apr 2023 08:09:10 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4B64EDF;
+        Tue, 25 Apr 2023 05:09:06 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PC2gNr025509;
+        Tue, 25 Apr 2023 12:08:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=TH94o3uLfhAefH5ZY8TRLk3tW/kGGXdx62MKv6/Gpis=;
+ b=I6xxO31xwN/GRdY14ZoWJQO36QBjG9hDG+ZFJizpeOeUUxueI/hDDitm3xTOs+HbCPSw
+ gMHwwW/nRJySZ5boTwujuaISdBOg7Gg7RxyehSmMCt1UdrxIUo1YZRv6YloNyAdYUDF/
+ JCGj0OaoxpUeiLT58KxiTSFifszPrMfF84KCIFgyBPo0MGkbMlAsSPrForSkKrySrA7c
+ ML1hlDgwnZ6ogAJnsrNE98kbxSS/0/Yb4kY8b0Cmt7jSlkltmBBEvH/TkASvRPCCz6yB
+ BjKMgAIAjjG1z/5T8fW47ypADJjJDz/VUkDB27dzw8fjDY0bofcRfb26Xv7srHqtEQe9 bA== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q6ede0m3d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 12:08:49 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33P96IlJ015923;
+        Tue, 25 Apr 2023 12:08:43 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3q477844sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 12:08:43 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33PC8f3W10945198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Apr 2023 12:08:41 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4ABB58054;
+        Tue, 25 Apr 2023 12:08:41 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C0365803F;
+        Tue, 25 Apr 2023 12:08:40 +0000 (GMT)
+Received: from [9.160.16.18] (unknown [9.160.16.18])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 12:08:40 +0000 (GMT)
+Message-ID: <582c9237-2b7d-27cb-f143-59a7f92e2ca6@linux.ibm.com>
+Date:   Tue, 25 Apr 2023 07:08:39 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 1/5] An optimized Chacha20 implementation with 8-way
+ unrolling for ppc64le.
+Content-Language: en-US
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
+Cc:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "leitao@debian.org" <leitao@debian.org>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "appro@cryptogams.org" <appro@cryptogams.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "ltcgcw@linux.vnet.ibm.com" <ltcgcw@linux.vnet.ibm.com>,
+        "dtsen@us.ibm.com" <dtsen@us.ibm.com>
+References: <20230424184726.2091-1-dtsen@linux.ibm.com>
+ <20230424184726.2091-2-dtsen@linux.ibm.com>
+ <MW5PR84MB1842E9D9F596D3928B415DBAAB679@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <a8239d13-a3ee-d6c6-13c5-7f668991489d@linux.ibm.com>
+ <87a5ywyxtj.fsf@mail.concordia>
+From:   Danny Tsen <dtsen@linux.ibm.com>
+In-Reply-To: <87a5ywyxtj.fsf@mail.concordia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 25 Apr 2023 14:06:13 +0200
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Fabio Fantoni <fantonifabio@tiscali.it>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] doc:it_IT: fix some typos
-In-Reply-To: <20230425110158.9755-1-fantonifabio@tiscali.it>
-References: <20230425110158.9755-1-fantonifabio@tiscali.it>
-Message-ID: <91b1a96e1bfcdbe0ea47bcd2aa268989@vaga.pv.it>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I_w08SRmnoyOe4rxhGpJRTAggnTwzQjm
+X-Proofpoint-ORIG-GUID: I_w08SRmnoyOe4rxhGpJRTAggnTwzQjm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_04,2023-04-25_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=700
+ suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0 impostorscore=0
+ adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304250103
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-25 13:01, Fabio Fantoni wrote:
-> Fix of some typos spotted reading documentation in italian and latest
-> changes for 6.4
-> 
-> Signed-off-by: Fabio Fantoni <fantonifabio@tiscali.it>
+Hi Michael,
 
-Reviewed-by: Federico Vaga <federico.vaga@vaga.pv.it>
+It's in IBM repo.
 
-Thanks Fabio for the fixes.
+Thanks.
 
-> ---
->  Documentation/translations/it_IT/kernel-hacking/locking.rst | 2 +-
->  Documentation/translations/it_IT/process/deprecated.rst     | 2 +-
->  .../translations/it_IT/process/submitting-patches.rst       | 6 +++---
->  3 files changed, 5 insertions(+), 5 deletions(-)
+-Danny
+
+On 4/25/23 7:02 AM, Michael Ellerman wrote:
+> Danny Tsen <dtsen@linux.ibm.com> writes:
+>> This is recommended template to use for IBM copyright.
+> According to who?
+>
+> The documentation I've seen specifies "IBM Corp." or "IBM Corporation".
+>
+> cheers
