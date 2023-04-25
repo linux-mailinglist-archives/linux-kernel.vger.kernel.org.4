@@ -2,172 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9726ED971
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 02:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B73096ED97E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231814AbjDYA56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 20:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S232615AbjDYBEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjDYA5z (ORCPT
+        with ESMTP id S232473AbjDYBEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 20:57:55 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E5AAD19
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 17:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682384275; x=1713920275;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=2jOX8zM/BhFh+OOJY9lMykjg+FyxEAxRob4zzveLMug=;
-  b=Q5YWOab80g69Y9jLNZDn6LEQ8TlIAV8EefjiTbXvzntakDN9X60suh65
-   zXjoIcqX4kF8MCORfKR8U8v96uUc2MUd/19ZTMloSnfXXa3sZkljrw7X7
-   MXsiw3fCNV2zb8wodzB0XGx2N8iRIg/EYRIwD4CJ8HIyWrgcK/hofdMtu
-   /vhhO8Sg+mXhyhYP1A84433ot1wgavFrcABsWG4njvRlyx7V4/OHwYPFs
-   8moM1WVln0eOsNpTMbHKiMkVS9XfDa/T68WhCO6RTDyEU5AkE7lcHc4tN
-   hn34mhT+89oGZJf/ZsOOusJVKqmu9uodCFkG0M5CUGxktj9CVh2Jzgo3s
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="349415235"
-X-IronPort-AV: E=Sophos;i="5.99,224,1677571200"; 
-   d="scan'208";a="349415235"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 17:57:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10690"; a="804839266"
-X-IronPort-AV: E=Sophos;i="5.99,223,1677571200"; 
-   d="scan'208";a="804839266"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2023 17:57:52 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 14/26] mm: compaction: simplify should_compact_retry()
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
-        <20230418191313.268131-15-hannes@cmpxchg.org>
-Date:   Tue, 25 Apr 2023 08:56:47 +0800
-In-Reply-To: <20230418191313.268131-15-hannes@cmpxchg.org> (Johannes Weiner's
-        message of "Tue, 18 Apr 2023 15:13:01 -0400")
-Message-ID: <87v8hkkcds.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 24 Apr 2023 21:04:38 -0400
+Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647A993E6;
+        Mon, 24 Apr 2023 18:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1682384659; i=@fujitsu.com;
+        bh=FMaqm65I6znwkEfqLF7qaD9JB/kh1YaaVo2inzzcgVI=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=jCtkZBr/Sl8Hte/EqYxAoeO9QvVeYsG3FvJpNoQZ+XeSYfHmnmlVARPeH7bTguEor
+         2//KgsgkAwn94SYRfZFcu5e9VpQFd1co9vvFhT8uonZ2pAVgr3if0Fd09qx+krAjWf
+         UqORIktTG2K9foiD98gMMezO+pp07Y5KIoXKaw9EYeTGovNgCNWbGA6zZgwP3SrNee
+         OydFmDo2ivy1kHbV9FjLX0AGrYmfPhYxb+1STqxa2Ed5IM52K/LcBBhCXhaKEjdS1e
+         xzTLdwDHUWV1N+aGHArfDVuse5Ib/UP6DXKcrZNxKvMpe3gp+iDke7DdwvK6gVvsgY
+         +Ql+QEZ84unyw==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAIsWRWlGSWpSXmKPExsViZ8ORqCuk7p5
+  i8OUOq8WNaXIW205vYLeYOeMEo8XbTVNYLKb8WspscXnXHDaLZ4d6WRzYPU6/ucPksWlVJ5vH
+  woapzB6fN8l5bP18myWANYo1My8pvyKBNWNj9zHmgrWcFUfvzWZvYDzD3sXIxSEksIVRYm7bD
+  ShnBZPEhr3vmCCcg4wSm2f/Zuti5ORgE9CQuNdykxHEFhEIkli65jVYEbNAK6PEkaZJzCAJYQ
+  F7iYX3bzCB2CwCqhJblp8Fa+AVcJQ4M/McK4gtIaAgMeXhe2aIuKDEyZlPWEBsZgEJiYMvXjB
+  D1ChJXPx6B6q+UqL1wy8WCFtN4uq5TcwTGPlnIWmfhaR9ASPTKkaz4tSistQiXQu9pKLM9IyS
+  3MTMHL3EKt1EvdRS3bz8opIMXUO9xPJivdTiYr3iytzknBS9vNSSTYzAgE8pTj62g3Hyrr96h
+  xglOZiURHm5wtxShPiS8lMqMxKLM+KLSnNSiw8xynBwKEnwxiq7pwgJFqWmp1akZeYAow8mLc
+  HBoyTCu1QJKM1bXJCYW5yZDpE6xagoJc4rqwqUEABJZJTmwbXBIv4So6yUMC8jAwODEE9BalF
+  uZgmq/CtGcQ5GJWFeBgWgKTyZeSVw018BLWYCWryL2wVkcUkiQkqqgUmkfs8Ji2MHxRtv8v+y
+  fjDD8NNPPTfWZwvvLJvWEbXcJqdaeJsXO8d+j18fhPUPemkc3ijbHVE581GJ25zYNQ/E/p2a2
+  7myhsdeX7fZZlWt1vUbobMey1q2xWe+Kf0+8bhPjovER9F0oRS5M4yX/D3WrlqwaD7fxSfb7i
+  /5eHHzUd28NI4j2xX2nC09vGQ+z8Stb+9IGl2aMDeu+gUTw43dq27W/rg9sbEnvOd3gfT2+4q
+  2r51r2acVJuvq35/1pWFnxkfbm4k71m7b9L41ZF91bJkX59vJjuJPZ3wxbNl2YlakKcel3jnu
+  CSu/f3OSlcpsC1/N8v6H1sr0j3fZd8sE3ROyPfbleZGVWuS2K2salViKMxINtZiLihMBOPyzd
+  HMDAAA=
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-12.tower-728.messagelabs.com!1682384657!373578!1
+X-Originating-IP: [62.60.8.97]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.104.2; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 15694 invoked from network); 25 Apr 2023 01:04:18 -0000
+Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
+  by server-12.tower-728.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 25 Apr 2023 01:04:18 -0000
+Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 7EEA810019D;
+        Tue, 25 Apr 2023 02:04:17 +0100 (BST)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id 723BC10019C;
+        Tue, 25 Apr 2023 02:04:17 +0100 (BST)
+Received: from 0819309620d6.localdomain (10.167.234.230) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.42; Tue, 25 Apr 2023 02:04:14 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <haris.iqbal@ionos.com>, <jinpu.wang@ionos.com>,
+        <linux-rdma@vger.kernel.org>
+CC:     <jgg@ziepe.ca>, <leon@kernel.org>, <guoqing.jiang@linux.dev>,
+        <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
+Subject: [PATCH for-next v3 0/3] RDMA/rtrs: bugfix and cleanups
+Date:   Tue, 25 Apr 2023 01:02:40 +0000
+Message-ID: <1682384563-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.234.230]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Johannes Weiner <hannes@cmpxchg.org> writes:
+V3:
+ - minor comments fixes and add tags
 
-> The different branches for retry are unnecessarily complicated. There
-> is really only three outcomes: progress, skipped, failed. Also, the
-> retry counter only applies to loops that made progress, move it there.
->
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
->  mm/page_alloc.c | 60 +++++++++++++++++--------------------------------
->  1 file changed, 20 insertions(+), 40 deletions(-)
->
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index c3b7dc479936..18fa2bbba44b 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -4608,7 +4608,6 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
->  		     enum compact_priority *compact_priority,
->  		     int *compaction_retries)
->  {
-> -	int max_retries = MAX_COMPACT_RETRIES;
->  	int min_priority;
->  	bool ret = false;
->  	int retries = *compaction_retries;
-> @@ -4621,19 +4620,27 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
->  		return false;
->  
->  	/*
-> -	 * Compaction managed to coalesce some page blocks, but the
-> -	 * allocation failed presumably due to a race. Retry some.
-> +	 * Compaction coalesced some page blocks, but the allocation
-> +	 * failed, presumably due to a race. Retry a few times.
->  	 */
-> -	if (compact_result == COMPACT_SUCCESS)
-> -		(*compaction_retries)++;
-> +	if (compact_result == COMPACT_SUCCESS) {
-> +		int max_retries = MAX_COMPACT_RETRIES;
->  
-> -	/*
-> -	 * All zones were scanned completely and still no result. It
-> -	 * doesn't really make much sense to retry except when the
-> -	 * failure could be caused by insufficient priority
-> -	 */
-> -	if (compact_result == COMPACT_COMPLETE)
-> -		goto check_priority;
-> +		/*
-> +		 * !costly requests are much more important than
-> +		 * __GFP_RETRY_MAYFAIL costly ones because they are de
-> +		 * facto nofail and invoke OOM killer to move on while
-> +		 * costly can fail and users are ready to cope with
-> +		 * that. 1/4 retries is rather arbitrary but we would
-> +		 * need much more detailed feedback from compaction to
-> +		 * make a better decision.
-> +		 */
-> +		if (order > PAGE_ALLOC_COSTLY_ORDER)
-> +			max_retries /= 4;
-> +
-> +		ret = ++(*compaction_retries) <= MAX_COMPACT_RETRIES;
-                                                 ~~~~~~~~~~~~~~~~~~~
+V2:
+- Add new patch2 to fix a memory leak
+- rewrite original patch2 to patch3 by refactoring the cleanup path instead of
+  introducing a new flag
+- Drop original patch3: RDMA/rtrs: Fix use-after-free in rtrs_clt_rdma_cm_handler
+  The problem it tried to addressing doesn't appear after the new patch3
+  where it adjust the cleanup order
 
-Should be max_retries?
+It's trying to fix 1 issue triggered by the following script which
+connect/disconnect rnbd frequently.
 
-Best Regards,
-Huang, Ying
+# cat rnbd-self.sh 
+#!/bin/bash
 
-> +		goto out;
-> +	}
->  
->  	/*
->  	 * Compaction was skipped due to a lack of free order-0
-> @@ -4645,35 +4652,8 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
->  	}
->  
->  	/*
-> -	 * If compaction backed due to being deferred, due to
-> -	 * contended locks in async mode, or due to scanners meeting
-> -	 * after a partial scan, retry with increased priority.
-> -	 */
-> -	if (compact_result == COMPACT_DEFERRED ||
-> -	    compact_result == COMPACT_CONTENDED ||
-> -	    compact_result == COMPACT_PARTIAL_SKIPPED)
-> -		goto check_priority;
-> -
-> -	/*
-> -	 * !costly requests are much more important than __GFP_RETRY_MAYFAIL
-> -	 * costly ones because they are de facto nofail and invoke OOM
-> -	 * killer to move on while costly can fail and users are ready
-> -	 * to cope with that. 1/4 retries is rather arbitrary but we
-> -	 * would need much more detailed feedback from compaction to
-> -	 * make a better decision.
-> -	 */
-> -	if (order > PAGE_ALLOC_COSTLY_ORDER)
-> -		max_retries /= 4;
-> -	if (*compaction_retries <= max_retries) {
-> -		ret = true;
-> -		goto out;
-> -	}
-> -
-> -	/*
-> -	 * Make sure there are attempts at the highest priority if we exhausted
-> -	 * all retries or failed at the lower priorities.
-> +	 * Compaction failed. Retry with increasing priority.
->  	 */
-> -check_priority:
->  	min_priority = (order > PAGE_ALLOC_COSTLY_ORDER) ?
->  			MIN_COMPACT_COSTLY_PRIORITY : MIN_COMPACT_PRIORITY;
+/root/rpma/tools/config_softroce.sh eth0
+modprobe rnbd_server
+modprobe rnbd_client
+
+while true;
+do
+        echo "sessname=xyz path=ip:<server-ip> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
+        for i in /sys/block/rnbd*/rnbd/unmap_device
+        do
+                echo "normal" > $i
+        done
+done
+
+Li Zhijian (3):
+  RDMA/rtrs: remove duplicate cq_num assignment
+  RDMA/rtrs: Fix the last iu->buf leak in err path
+  RDMA/rtrs: Fix rxe_dealloc_pd warning
+
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 56 +++++++++++---------------
+ drivers/infiniband/ulp/rtrs/rtrs.c     |  4 +-
+ 2 files changed, 26 insertions(+), 34 deletions(-)
+
+-- 
+2.29.2
+
