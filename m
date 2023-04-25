@@ -2,140 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70D06EDD42
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303246EDD46
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 09:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbjDYHym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 03:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S233381AbjDYHy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 03:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231137AbjDYHyk (ORCPT
+        with ESMTP id S233439AbjDYHyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 03:54:40 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC44A93;
-        Tue, 25 Apr 2023 00:54:38 -0700 (PDT)
-Received: from fpc (unknown [10.10.165.13])
-        by mail.ispras.ru (Postfix) with ESMTPSA id B178F4076B3E;
-        Tue, 25 Apr 2023 07:54:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru B178F4076B3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1682409273;
-        bh=x/dcm2H+pi6gUOqFCVOxGTCuLDZsjOAvdeX9hDCiq50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ha5x9mUs3UEtB19J1XCR4MRHoL6FR6LT2yNTo2JYsvcMVjPHA/bq8OmLTktyraXoP
-         4/NlJ+NtnRg2/Kn+PNV3/5ADOUAnJwDLm9OT+nhQsXJColKxExzaplOSPtM7HygpfJ
-         +ysErXCQ/eOuCMgonfLq9PWYyVCbcoQv3zfUOLYU=
-Date:   Tue, 25 Apr 2023 10:54:26 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
-        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com,
-        syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] wifi: ath9k: fix races between ath9k_wmi_cmd and
- ath9k_wmi_ctrl_rx
-Message-ID: <20230425075426.ubfnohsqe3c2cjdq@fpc>
-References: <20230424191826.117354-1-pchelkin@ispras.ru>
- <20230425033832.2041-1-hdanton@sina.com>
+        Tue, 25 Apr 2023 03:54:53 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B72F26A8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:54:50 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f1957e80a2so103644435e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 00:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682409289; x=1685001289;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VQwbma0iSI5QAy6oY/g8yyHDTalLHVN442ZQ8tvUH24=;
+        b=fbLhHVt+lFYR4yIQa+10NhRc6dkhInNnA8+K7HTASmn+mKX4Hfm7yq7LFxEthff06H
+         M4/EtuuBL/h9BmwBsZC9J0ZqOb0HxbtVYVFuYKt1IEROEUctGiRzrIj+yO2UiNVyViSx
+         j2AfmUyyKbUXV9N6ztoCdIzNm2fegmQTUptqhsWigMLzZMU6W2cGH6fYIr/oaPhbADmB
+         ijLSNIVrrESS6BQmopEXhUGaJ53opq2rmslJPPnZZaym3x8q2x89fgx2ULchAXDxzhhZ
+         sGKhHZWJRc27SMAPllO9LRB/zd+a902zQgjUeSfRH647+AJnQFlFEKM3zqO95PU9RsuS
+         KsHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682409289; x=1685001289;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQwbma0iSI5QAy6oY/g8yyHDTalLHVN442ZQ8tvUH24=;
+        b=A+ZLovkk5RSZ5PbXa3dr39orRuAga6p/CRJeJv1vm/rUv8GTxSjE5PJ7qc3poYPWDc
+         c+s1LiDZSmWFPOxhYpwY6JLWPEG/4aHRfsYNjV6gDDiFY3zWugD4CF7e7kSNg6j+9tct
+         VDhGJZfSTX1P3y4jSuj59bV1NqKIoCjLzVE4w4S4muBJSbdiIGRZsF7L/3s75t41eFBz
+         sNC6Iv1Gon4gYD+V67sx6kraLfP9qY/TpmTM9t0Sg4ozt0yDjr26f35KL6nZwLaojIZu
+         hfizrS97O7Lo0g/mmYxm9qJYJj5M1PM/m0ehQ3X/yBybBCI1jycD1wecu5oCtcKoPLbJ
+         GzuA==
+X-Gm-Message-State: AAQBX9f84VZ2NCmSvW9xo3KvdSe+L5GQf5Ge9K03viWSkYnbnhoATnVS
+        WLno75kST5xaMbrfPIb7z9CIpA==
+X-Google-Smtp-Source: AKy350bxj+aLsLRHeyMoP4qkYz3CwXQQYHpY+KUVzCxjAPI+daPQkuA/5bLUrLZ68T16RxCKRXIXAg==
+X-Received: by 2002:a5d:414c:0:b0:2fa:d00d:cab8 with SMTP id c12-20020a5d414c000000b002fad00dcab8mr11412934wrq.18.1682409288661;
+        Tue, 25 Apr 2023 00:54:48 -0700 (PDT)
+Received: from [172.23.2.5] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id v7-20020a5d4a47000000b002fe065da369sm12333449wrs.69.2023.04.25.00.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 00:54:48 -0700 (PDT)
+Message-ID: <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
+Date:   Tue, 25 Apr 2023 10:54:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425033832.2041-1-hdanton@sina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
+ RM instead of IDs
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
+ <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
+ <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
+ <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
+ <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
+ <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com>
+ <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 11:38:32AM +0800, Hillf Danton wrote:
-> On 24 Apr 2023 22:18:26 +0300 Fedor Pchelkin <pchelkin@ispras.ru>
-> > Currently, the synchronization between ath9k_wmi_cmd() and
-> > ath9k_wmi_ctrl_rx() is exposed to a race condition which, although being
-> > rather unlikely, can lead to invalid behaviour of ath9k_wmi_cmd().
-> > 
-> > Consider the following scenario:
-> > 
-> > CPU0					CPU1
-> > 
-> > ath9k_wmi_cmd(...)
-> >   mutex_lock(&wmi->op_mutex)
-> >   ath9k_wmi_cmd_issue(...)
-> >   wait_for_completion_timeout(...)
-> >   ---
-> >   timeout
-> >   ---
-> > 					/* the callback is being processed
-> > 					 * before last_seq_id became zero
-> > 					 */
-> > 					ath9k_wmi_ctrl_rx(...)
-> > 					  spin_lock_irqsave(...)
-> > 					  /* wmi->last_seq_id check here
-> > 					   * doesn't detect timeout yet
-> > 					   */
-> > 					  spin_unlock_irqrestore(...)
-> >   /* last_seq_id is zeroed to
-> >    * indicate there was a timeout
-> >    */
-> >   wmi->last_seq_id = 0
+On 25/04/2023 10:16, Marijn Suijten wrote:
+> On 2023-04-24 16:23:17, Abhinav Kumar wrote:
+>>
+>>
+>> On 4/24/2023 3:54 PM, Dmitry Baryshkov wrote:
+>>> On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
+>>> <marijn.suijten@somainline.org> wrote:
+>>>>
+>>>> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
+>>>>>
+>>>>>
+>>>>> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
+>>>>>> The Resource Manager already iterates over all available blocks from the
+>>>>>> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
+>>>>>> uses an _xxx_offset() helper to search for and find the exact same
+>>>>>> catalog pointer again to initialize the block with, fallible error
+>>>>>> handling and all.
+>>>>>>
+>>>>>> Instead, pass const pointers to the catalog entries directly to these
+>>>>>> _init functions and drop the for loops entirely, saving on both
+>>>>>> readability complexity and unnecessary cycles at boot.
+>>>>>>
+>>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>>>
+>>>>> Overall, a nice cleanup!
+>>>>>
+>>>>> One comment below.
+>>>>>
+>>>>>> ---
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
+>>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
+>>>>>>     23 files changed, 139 insertions(+), 375 deletions(-)
+>>>>>>
+>>>>>
+>>>>> <snipped>
+>>>>>
+>>>>>> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
+>>>>>> -           void __iomem *addr,
+>>>>>> -           const struct dpu_mdss_cfg *m)
+>>>>>> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+>>>>>> +           void __iomem *addr)
+>>>>>>     {
+>>>>>>       struct dpu_hw_intf *c;
+>>>>>> -   const struct dpu_intf_cfg *cfg;
+>>>>>> +
+>>>>>> +   if (cfg->type == INTF_NONE) {
+>>>>>> +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
+>>>>>> +           return ERR_PTR(-EINVAL);
+>>>>>> +   }
+>>>>>
+>>>>> The caller of dpu_hw_intf_init which is the RM already has protection
+>>>>> for INTF_NONE, see below
+>>>>>
+>>>>>            for (i = 0; i < cat->intf_count; i++) {
+>>>>>                    struct dpu_hw_intf *hw;
+>>>>>                    const struct dpu_intf_cfg *intf = &cat->intf[i];
+>>>>>
+>>>>>                    if (intf->type == INTF_NONE) {
+>>>>>                            DPU_DEBUG("skip intf %d with type none\n", i);
+>>>>>                            continue;
+>>>>>                    }
+>>>>>                    if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
+>>>>>                            DPU_ERROR("skip intf %d with invalid id\n",
+>>>>> intf->id);
+>>>>>                            continue;
+>>>>>                    }
+>>>>>                    hw = dpu_hw_intf_init(intf->id, mmio, cat);
+>>>>>
+>>>>> So this part can be dropped.
+>>>>
+>>>> I mainly intended to keep original validation where _intf_offset would
+>>>> skip INTF_NONE, and error out.  RM init is hence expected to filter out
+>>>> INTF_NONE instead of running into that `-EINVAL`, which I maintained
+>>>> here.
+>>>>
+>>>> If you think there won't be another caller of dpu_hw_intf_init, and that
+>>>> such validation is hence excessive, I can remove it in a followup v3.
+>>>
+>>> I'd prefer to see the checks at dpu_rm to be dropped.
+>>> dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
+>>> self-contained. If they can not init HW block (e.g. because the index
+>>> is out of the boundaries), they should return an error.
+>>>
+>>
+>> They already do that today because even without this it will call into
+>> _intf_offset() and that will bail out for INTF_NONE.
+>>
+>> I feel this is a duplicated check because the caller with the loop needs
+>> to validate the index before passing it to dpu_hw_intf_init() otherwise
+>> the loop will get broken at the first return of the error and rest of
+>> the blocks will also not be initialized.
 > 
-> Without	wmi->wmi_lock held, updating last_seq_id on the waiter side
-> means it is random on the waker side, so the fix below is incorrect.
+> To both: keep in mind that the range-checks we want to remove from
+> dpu_rm_init validate the ID (index?) of a block.  This check is for the
+> *TYPE* of an INTF block, to skip it gracefully if no hardware is mapped
+> there.  As per the first patch of this series SM6115/QCM2290 only have a
+> DSI interface which always sits at ID 1, and ID 0 has its TYPE set to
+> INTF_NONE and is skipped.
 > 
+> Hence we _should_ keep the graceful TYPE check in dpu_rm_init() to skip
+> calling this function _and assigning it to the rm->hw_intf array_.  But
+> I can remove the second TYPE check here in dpu_hw_intf_init() if you
+> prefer.
 
-Thank you for noticing! Of course that should be done.
+We can return NULL from dpu_hw_foo_init(), which would mean that the 
+block was skipped or is not present.
 
-> >   mutex_unlock(&wmi->op_mutex)
-> >   return -ETIMEDOUT
-> > 
-> > ath9k_wmi_cmd(...)
-> >   mutex_lock(&wmi->op_mutex)
-> >   /* the buffer is replaced with
-> >    * another one
-> >    */
-> >   wmi->cmd_rsp_buf = rsp_buf
-> >   wmi->cmd_rsp_len = rsp_len
-> >   ath9k_wmi_cmd_issue(...)
-> >     spin_lock_irqsave(...)
-> >     spin_unlock_irqrestore(...)
-> >   wait_for_completion_timeout(...)
-> > 					/* the continuation of the
-> > 					 * callback left after the first
-> > 					 * ath9k_wmi_cmd call
-> > 					 */
-> > 					  ath9k_wmi_rsp_callback(...)
-> > 					    /* copying data designated
-> > 					     * to already timeouted
-> > 					     * WMI command into an
-> > 					     * inappropriate wmi_cmd_buf
-> > 					     */
-> > 					    memcpy(...)
-> > 					    complete(&wmi->cmd_wait)
-> >   /* awakened by the bogus callback
-> >    * => invalid return result
-> >    */
-> >   mutex_unlock(&wmi->op_mutex)
-> >   return 0
-> > 
-> > To fix this, move ath9k_wmi_rsp_callback() under wmi_lock inside
-> > ath9k_wmi_ctrl_rx() so that the wmi->cmd_wait can be completed only for
-> > initially designated wmi_cmd call, otherwise the path would be rejected
-> > with last_seq_id check.
-> > 
-> > Also move recording the rsp buffer and length into ath9k_wmi_cmd_issue()
-> > under the same wmi_lock with last_seq_id update to avoid their racy
-> > changes.
 > 
-> Better in a seperate one.
+> - Marijn
 
-Well, they are parts of the same problem but now it seems more relevant
-to divide the patch in two: the first one for incorrect last_seq_id
-synchronization and the second one for recording rsp buffer under the
-lock. Thanks!
+-- 
+With best wishes
+Dmitry
+
