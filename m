@@ -2,46 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F44D6EE48A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F156EE491
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbjDYPOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S234474AbjDYPPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbjDYPOo (ORCPT
+        with ESMTP id S234070AbjDYPPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 11:14:44 -0400
-Received: from tretyak2.mcst.ru (tretyak2.mcst.ru [212.5.119.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC7D49CD
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 08:14:39 -0700 (PDT)
-Received: from tretyak2.mcst.ru (localhost [127.0.0.1])
-        by tretyak2.mcst.ru (Postfix) with ESMTP id 940E810239C;
-        Tue, 25 Apr 2023 18:14:34 +0300 (MSK)
-Received: from frog.lab.sun.mcst.ru (frog.lab.sun.mcst.ru [172.16.4.50])
-        by tretyak2.mcst.ru (Postfix) with ESMTP id 8EDEC10239E;
-        Tue, 25 Apr 2023 18:13:49 +0300 (MSK)
-Received: from artemiev-i.lab.sun.mcst.ru (avior-1 [192.168.53.223])
-        by frog.lab.sun.mcst.ru (8.13.4/8.12.11) with ESMTP id 33PFDm1r001729;
-        Tue, 25 Apr 2023 18:13:48 +0300
-From:   Igor Artemiev <Igor.A.Artemiev@mcst.ru>
-To:     David Airlie <airlied@gmail.com>
-Cc:     Igor Artemiev <Igor.A.Artemiev@mcst.ru>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [lvc-project] [PATCH] drm/radeon:  remove useless conditions
-Date:   Tue, 25 Apr 2023 18:13:18 +0300
-Message-Id: <20230425151318.561432-1-Igor.A.Artemiev@mcst.ru>
-X-Mailer: git-send-email 2.39.0.152.ga5737674b6
+        Tue, 25 Apr 2023 11:15:48 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0A87ED9;
+        Tue, 25 Apr 2023 08:15:46 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1prKO6-0004ZF-0X;
+        Tue, 25 Apr 2023 17:15:26 +0200
+Date:   Tue, 25 Apr 2023 16:13:36 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 10/24] net: dsa: mt7530: empty default case on
+ mt7530_setup_port5()
+Message-ID: <ZEfuIHET4Nva0hj4@makrotopia.org>
+References: <20230425082933.84654-1-arinc.unal@arinc9.com>
+ <20230425082933.84654-11-arinc.unal@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
-         bases: 20111107 #2745587, check: 20230425 notchecked
-X-AV-Checked: ClamAV using ClamSMTP
+In-Reply-To: <20230425082933.84654-11-arinc.unal@arinc9.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -51,120 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comparisons of 'table' and 'vddc_sclk_table' with NULL are useless
-since 'table' and 'vddc_sclk_table' are initialized by an addresses
-and cannot be NULL.
+On Tue, Apr 25, 2023 at 11:29:19AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> There're two code paths for setting up port 5:
+> 
+> mt7530_setup()
+> -> mt7530_setup_port5()
+> 
+> mt753x_phylink_mac_config()
+> -> mt753x_mac_config()
+>    -> mt7530_mac_config()
+>       -> mt7530_setup_port5()
+> 
+> On the first code path, priv->p5_intf_sel is either set to
+> P5_INTF_SEL_PHY_P0 or P5_INTF_SEL_PHY_P4 when mt7530_setup_port5() is run.
+> 
+> On the second code path, priv->p5_intf_sel is set to P5_INTF_SEL_GMAC5 when
+> mt7530_setup_port5() is run.
+> 
+> Empty the default case which will never run but is needed nonetheless to
+> handle all the remaining enumeration values.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+If the default: case is really just unreachable code because of the
+sound reasoning you presented above, then you should just remove it.
 
-Signed-off-by: Igor Artemiev <Igor.A.Artemiev@mcst.ru>
----
- drivers/gpu/drm/radeon/kv_dpm.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  drivers/net/dsa/mt7530.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index aab9ebb54d7d..b3db68d6939a 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -933,9 +933,7 @@ static void mt7530_setup_port5(struct dsa_switch *ds, phy_interface_t interface)
+>  		val &= ~MHWTRAP_P5_DIS;
+>  		break;
+>  	default:
+> -		dev_err(ds->dev, "Unsupported p5_intf_sel %d\n",
+> -			priv->p5_intf_sel);
+> -		goto unlock_exit;
+> +		break;
 
-diff --git a/drivers/gpu/drm/radeon/kv_dpm.c b/drivers/gpu/drm/radeon/kv_dpm.c
-index f7735da07feb..17d312ceb6ec 100644
---- a/drivers/gpu/drm/radeon/kv_dpm.c
-+++ b/drivers/gpu/drm/radeon/kv_dpm.c
-@@ -399,7 +399,7 @@ static u32 kv_convert_vid2_to_vid7(struct radeon_device *rdev,
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 	u32 i;
- 
--	if (vddc_sclk_table && vddc_sclk_table->count) {
-+	if (vddc_sclk_table->count) {
- 		if (vid_2bit < vddc_sclk_table->count)
- 			return vddc_sclk_table->entries[vid_2bit].v;
- 		else
-@@ -421,7 +421,7 @@ static u32 kv_convert_vid7_to_vid2(struct radeon_device *rdev,
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 	u32 i;
- 
--	if (vddc_sclk_table && vddc_sclk_table->count) {
-+	if (vddc_sclk_table->count) {
- 		for (i = 0; i < vddc_sclk_table->count; i++) {
- 			if (vddc_sclk_table->entries[i].v == vid_7bit)
- 				return i;
-@@ -561,7 +561,7 @@ static int kv_program_bootup_state(struct radeon_device *rdev)
- 	struct radeon_clock_voltage_dependency_table *table =
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 
--	if (table && table->count) {
-+	if (table->count) {
- 		for (i = pi->graphics_dpm_level_count - 1; i > 0; i--) {
- 			if (table->entries[i].clk == pi->boot_pl.sclk)
- 				break;
-@@ -666,7 +666,7 @@ static int kv_populate_uvd_table(struct radeon_device *rdev)
- 	int ret;
- 	u32 i;
- 
--	if (table == NULL || table->count == 0)
-+	if (table->count == 0)
- 		return 0;
- 
- 	pi->uvd_level_count = 0;
-@@ -737,7 +737,7 @@ static int kv_populate_vce_table(struct radeon_device *rdev)
- 		&rdev->pm.dpm.dyn_state.vce_clock_voltage_dependency_table;
- 	struct atom_clock_dividers dividers;
- 
--	if (table == NULL || table->count == 0)
-+	if (table->count == 0)
- 		return 0;
- 
- 	pi->vce_level_count = 0;
-@@ -800,7 +800,7 @@ static int kv_populate_samu_table(struct radeon_device *rdev)
- 	int ret;
- 	u32 i;
- 
--	if (table == NULL || table->count == 0)
-+	if (table->count == 0)
- 		return 0;
- 
- 	pi->samu_level_count = 0;
-@@ -866,7 +866,7 @@ static int kv_populate_acp_table(struct radeon_device *rdev)
- 	int ret;
- 	u32 i;
- 
--	if (table == NULL || table->count == 0)
-+	if (table->count == 0)
- 		return 0;
- 
- 	pi->acp_level_count = 0;
-@@ -922,7 +922,7 @@ static void kv_calculate_dfs_bypass_settings(struct radeon_device *rdev)
- 	struct radeon_clock_voltage_dependency_table *table =
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 
--	if (table && table->count) {
-+	if (table->count) {
- 		for (i = 0; i < pi->graphics_dpm_level_count; i++) {
- 			if (pi->caps_enable_dfs_bypass) {
- 				if (kv_get_clock_difference(table->entries[i].clk, 40000) < 200)
-@@ -1532,7 +1532,7 @@ static void kv_set_valid_clock_range(struct radeon_device *rdev,
- 	struct radeon_clock_voltage_dependency_table *table =
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 
--	if (table && table->count) {
-+	if (table->count) {
- 		for (i = 0; i < pi->graphics_dpm_level_count; i++) {
- 			if ((table->entries[i].clk >= new_ps->levels[0].sclk) ||
- 			    (i == (pi->graphics_dpm_level_count - 1))) {
-@@ -1905,7 +1905,7 @@ static int kv_get_high_voltage_limit(struct radeon_device *rdev, int *limit)
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 	int i;
- 
--	if (table && table->count) {
-+	if (table->count) {
- 		for (i = table->count - 1; i >= 0; i--) {
- 			if (pi->high_voltage_t &&
- 			    (kv_convert_8bit_index_to_voltage(rdev, table->entries[i].v) <=
-@@ -2149,7 +2149,7 @@ static void kv_init_graphics_levels(struct radeon_device *rdev)
- 	struct radeon_clock_voltage_dependency_table *table =
- 		&rdev->pm.dpm.dyn_state.vddc_dependency_on_sclk;
- 
--	if (table && table->count) {
-+	if (table->count) {
- 		u32 vid_2bit;
- 
- 		pi->graphics_dpm_level_count = 0;
--- 
-2.30.2
+I suppose you can also rather just remove the default: case alltogether
+instead of keeping it and making it a no-op.
 
+>  	}
+>  
+>  	/* Setup RGMII settings */
+> @@ -965,7 +963,6 @@ static void mt7530_setup_port5(struct dsa_switch *ds, phy_interface_t interface)
+>  	dev_dbg(ds->dev, "Setup P5, HWTRAP=0x%x, intf_sel=%s, phy-mode=%s\n",
+>  		val, p5_intf_modes(priv->p5_intf_sel), phy_modes(interface));
+>  
+> -unlock_exit:
+>  	mutex_unlock(&priv->reg_mutex);
+>  }
+>  
+> -- 
+> 2.37.2
+> 
