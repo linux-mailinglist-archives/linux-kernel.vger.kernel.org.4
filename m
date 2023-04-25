@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C706EE44A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8372C6EE44C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234388AbjDYOws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S234401AbjDYOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbjDYOwo (ORCPT
+        with ESMTP id S231907AbjDYOyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:52:44 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE263A92
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:52:43 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3ef31924c64so121901cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:52:43 -0700 (PDT)
+        Tue, 25 Apr 2023 10:54:01 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A71185
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:53:59 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3ef36d814a5so123971cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682434363; x=1685026363;
+        d=google.com; s=20221208; t=1682434439; x=1685026439;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qFkADC61Ruy0YiM9Q7ZuLeqnPlgtrzBobMvcjsyYsxk=;
-        b=SH22TsHZsxrHWA4Mt9nlzmpr5qi2uSUwjRQ4uOISknbWrSlr8BFHkPe/aR7eJPHGum
-         cppRaxIDzzT2xXBArK0N+bAh7auJyizCpA3imu/QTB5qBF+YeePce879aChDQ4WcQ1Ea
-         X2YVhFfUjwjkRg8i1SWEdQcLEExtMAJyG1537RABtFoLWpkDhGufwHrxM5dEj4NXYcRk
-         fuTWmk/oIyN5mXPNVYN39kI2ZNKoLyidNgI9h1saP78ZoJjt6J/oUJTdTwPFPc1wZqur
-         kMXrqe+R7RncpyKIUOAyjn4Kdwy0YClL2QRuzgPcjcRVmYt0ZJSSqRdFnw8sAkmDNUiK
-         hFKA==
+        bh=DuHDHNbt3YJMpWIFNXP+FapXExBGYAbfn2VNS6xxy2g=;
+        b=3wdXyXUdCfEJ1PKKPxXw1hnxrcgJoof23Fft2xwDNj16EUlR6sBu/ux+lOoQdX9mTZ
+         e2BRSjTCs9l7X9oUi+fPAAuXsSwHcteEToRQPn7b9KTC/4cwubgpyzQK0721XQAMiz7H
+         sxVlSZLOiYKZ/6Qya9jf6FexCVkIecEMjK/cVqebQ5CeVm7M4KGSpY5ZppIrW/HUXbtO
+         /niMKgmmS7uMW4FkEjNt/z6cU33zr8l9ehgomcU1aobyBycDCOCUbbS3hSgRFfBWIu3t
+         bNxOgW0NXMRybcy+TIP3DNAdi/oFukH7ClGp5zSv5HwtFYk7vvUTA+UTYl4wKz2qXc+1
+         a6kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682434363; x=1685026363;
+        d=1e100.net; s=20221208; t=1682434439; x=1685026439;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qFkADC61Ruy0YiM9Q7ZuLeqnPlgtrzBobMvcjsyYsxk=;
-        b=NANvWj6MhYMjQJVOQU4T2XOAocM2eIlT4iBRs5TANlZ473uIvPK/DMn9wRo5e854mR
-         u2zhHt+A0IaMvLQclyAYcWT/yp6p0axpRW8GKxKDxlLl1gAVUWrUxUsdbpV5aSj9siGO
-         idlXQMCdlJ3d1hY1ZOrn0p23emqfaUh9OsV9//H4aLHBfqeJbUS7Atq4n9+GGipJ45rR
-         sf1Ddn0SbIotq4F5Y/dUAKSQUBYc8mf27usCc0XAiKd9dkRo5JxlNd+I/d6XLbUH3yWp
-         P4j4BvX4KL6Su18CwM8ea3CuB7HTI8jDdn6IbpipwvHyHxBHYkMrV3w5DPjdhTGTN0gJ
-         OArA==
-X-Gm-Message-State: AAQBX9ckB7Oi4tXzvQ7eIEU4sQBMPsL6ardiPnBAtLzAEjFsXefCZTWR
-        Qp5z304Zeug8Bkx/O7Mh7hOtZyaVc25z2coLCt2M
-X-Google-Smtp-Source: AKy350ZMSSAQJJnpOj6JCQZqJN1PLCG6jXd5jxZhoAA5QImlOhfg0YjgFPTbT+0TuINYiITWcT+PDNneu4M72RYUNpM=
-X-Received: by 2002:ac8:5f4e:0:b0:3de:b0b0:557c with SMTP id
- y14-20020ac85f4e000000b003deb0b0557cmr358349qta.18.1682434362935; Tue, 25 Apr
- 2023 07:52:42 -0700 (PDT)
+        bh=DuHDHNbt3YJMpWIFNXP+FapXExBGYAbfn2VNS6xxy2g=;
+        b=Mr8VNf/FweVAy3K7+XlUnwvYI2gQH3MQA77p8fQvMQKVlxlW3MXeGeWbl0eKcBIyW1
+         rUq/LB19NNknVQE/jr8Q3TRN0sLnusqGdSBqD8IW/xKUPZzCHk5K+AwhDU+sj/Mvw9cK
+         RZP2htji9qRt02Is5nsfRasPgfa95kjPjOIZfOdXJVFyBQSaJM04InYdgpCCdRoj0KE9
+         F+6jiZM+oJUvwFbSi5Hm0pMjE/pt5CxtoTncnJUk/w/TVa47eY+Pspp/UeLIv1Z0YmRh
+         fsvC5z9a4dKFIGE7ob3szxohdTMYsceCudnxiGkOA9SA6oSWiw/9mdunRH5p7ZVp3VjV
+         El2g==
+X-Gm-Message-State: AAQBX9fSBo02vM1tK24wWWB41yzXdFzzGKQxg8lJQzbwuWJoL9xqpban
+        xSMlSKtwjnPK6dkkDmzMjJqeXKRr8/prVArWnE+N
+X-Google-Smtp-Source: AKy350YPcxVGafDPRLbb4ctabGlwgtvcZ/5g0hxjb/Hn+qc+0StApEbZnTUOtMhy6gYrQv+TPf/tBeu6gQ7OkzrmF2I=
+X-Received: by 2002:a05:622a:1801:b0:3ef:5008:336f with SMTP id
+ t1-20020a05622a180100b003ef5008336fmr354227qtc.1.1682434438727; Tue, 25 Apr
+ 2023 07:53:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230411042511.1606592-1-jstultz@google.com> <20230411042511.1606592-10-jstultz@google.com>
- <20230422101427.GD1214746@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230422101427.GD1214746@hirez.programming.kicks-ass.net>
+References: <20230411042511.1606592-1-jstultz@google.com> <20230411042511.1606592-7-jstultz@google.com>
+ <20230422103618.GE1214746@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230422103618.GE1214746@hirez.programming.kicks-ass.net>
 From:   John Stultz <jstultz@google.com>
-Date:   Tue, 25 Apr 2023 15:52:31 +0100
-Message-ID: <CANDhNCr3acrEpBYd2LVkY3At=HCDZxGWqbMMwzVJ-Mn--dv3DA@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] sched: Split scheduler execution context
+Date:   Tue, 25 Apr 2023 15:53:47 +0100
+Message-ID: <CANDhNCqL5GRm0m+pON0n7KD-n=zj1bidZ+m2cHsgDP5D8jZF8Q@mail.gmail.com>
+Subject: Re: [PATCH v3 06/14] locking/mutex: Expose mutex_owner()
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
         Joel Fernandes <joelaf@google.com>,
         Qais Yousef <qyousef@google.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Valentin Schneider <vschneid@redhat.com>,
@@ -73,6 +73,7 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
         "Connor O'Brien" <connoro@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -87,35 +88,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 11:14=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
+On Sat, Apr 22, 2023 at 11:36=E2=80=AFAM Peter Zijlstra <peterz@infradead.o=
 rg> wrote:
 >
-> On Tue, Apr 11, 2023 at 04:25:06AM +0000, John Stultz wrote:
-> > From: Peter Zijlstra <peterz@infradead.org>
-> >
-> > Lets define the scheduling context as all the scheduler state in
-> > task_struct and the execution context as all state required to run the
-> > task.
-> >
-> > Currently both are intertwined in task_struct. We want to logically
-> > split these such that we can run the execution context of one task
-> > with the scheduling context of another.
-> >
-> > To this purpose introduce rq_selected() to point to the task_struct
-> > used for scheduler state and preserve rq_curr() to denote the execution
-> > context.
+> On Tue, Apr 11, 2023 at 04:25:03AM +0000, John Stultz wrote:
 >
-> I can't say I like the rq_selected() naming :/
+> >  include/linux/mutex.h  | 2 ++
+> >  kernel/locking/mutex.c | 5 +++++
+> >  2 files changed, 7 insertions(+)
+> >
+> > diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+> > index 8f226d460f51..ebdc59cb0bf6 100644
+> > --- a/include/linux/mutex.h
+> > +++ b/include/linux/mutex.h
+> > @@ -118,6 +118,8 @@ do {                                               =
+                       \
+> >  extern void __mutex_init(struct mutex *lock, const char *name,
+> >                        struct lock_class_key *key);
+> >
+> > +extern struct task_struct *mutex_owner(struct mutex *lock);
+> > +
+> >  /**
+> >   * mutex_is_locked - is the mutex locked
+> >   * @lock: the mutex to be queried
+> > diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> > index 45f1b7519f63..cbc34d5f4486 100644
+> > --- a/kernel/locking/mutex.c
+> > +++ b/kernel/locking/mutex.c
+> > @@ -81,6 +81,11 @@ static inline struct task_struct *__mutex_owner(stru=
+ct mutex *lock)
+> >       return (struct task_struct *)(atomic_long_read(&lock->owner) & ~M=
+UTEX_FLAGS);
+> >  }
+> >
+> > +struct task_struct *mutex_owner(struct mutex *lock)
+> > +{
+> > +     return __mutex_owner(lock);
+> > +}
+> > +
+> >  static inline struct task_struct *__owner_task(unsigned long owner)
+> >  {
+> >       return (struct task_struct *)(owner & ~MUTEX_FLAGS);
+>
+>
+> Urgh, no.
+>
+> It exposes mutex_owner() far wider than it should be, and also it turns
+> what should be a simple load into a function call :/
+>
+> Looking at the lastest patches I have here this used to be an inline in
+> kernel/locking/mutex.h and kernel/sched/core.c got to #include
+> "../locking/mutex.h".
 
-So, I'm not married to any particular naming, but the earlier use of
-"rq->proxy" in the earlier patches really made very little sense, at
-least from my perspective of the word (especially as it had logical
-knots  where it would set rq->proxy to what pick_next_task() returned,
-and then go and set curr to the results of proxy()).  So it seemed
-cleanest to separate it out and use a different term.
+Sure. I'll rework it this way.
 
-We could do "rq_picked()", or "rq_next", or ...  suggestions are welcome.
-
-Thanks again for taking a look here and providing feedback! I really
-appreciate it!
+Thanks again for the feedback, and apologies for any frustration caused.
 -john
