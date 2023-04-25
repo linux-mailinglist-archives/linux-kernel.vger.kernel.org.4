@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A260D6EE11E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33EF6EE122
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233658AbjDYLfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S233708AbjDYLh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbjDYLfu (ORCPT
+        with ESMTP id S232851AbjDYLhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:35:50 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64833C0A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:35:48 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1950f5676so45329325e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682422547; x=1685014547;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VwmJNsQVa3Vng8gKvvvDPoERcEJfaY5DKNCyYTI03Sc=;
-        b=VX3fhbquFA6+uaUkxCbdF8qhQPGlJ3GsF8c9PdpI+h0WOsnjXM1RCXEf4tonNaw+D3
-         NsWHe+JKhcv9o6BPzOGB9v/5MbzbG9WdTwpTki6gon8SzMH2vIc+K/zIH00jL3Xs82M1
-         CqLj9oIl+wbJtPwnLB8XwDdCR3O7Pk28Cxyt5JdB6/11mqcld+V0rRJyeOScTPy/7i2A
-         suB5tHBIi2HqGQP0tY/aG05fpcsfCg3MH3dwayJEhazdhahcPB7lx82j0tu7AOKoxOZ4
-         1IXtdVKzR3QaB50SzMWtaEEw/T6/cGGHtOzhrM2f7J429vodm3n1O2W8CNPBLA3FNobU
-         fi/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682422547; x=1685014547;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VwmJNsQVa3Vng8gKvvvDPoERcEJfaY5DKNCyYTI03Sc=;
-        b=OIaiDczmflRZJX9dpDOGVDG2b5InQ33I4ZFpbS6NZJTGN9sLEGil0trsugIA0l+05H
-         iOM35VAa5WzCRqRU2F8NXe/AUd298K0tQaMkwAgDWF6j4T3RgSSOLelOlpEhi3pa75bZ
-         xKJgJlLAajPAPSE5m5hviPfSUy4JoheFYOUIjQraVrz8Wo4EGR0ifIaXV5r0nXqBIKs0
-         pR1xk8taXLR2IpA1caQ0+Oi3Rd2M0SEyVfuFn/r89duUDo/VtWWYv819E6S5v2Hg7iwY
-         Sg8zo0smbASxgTEx07zIBWr9La09+hmioxR7GzFS4rVnu4tnbG6OByds5P9BKqOy29E4
-         W0sA==
-X-Gm-Message-State: AAQBX9e8UyCsDetQaNO37TBDNGPcGCoAfsRHy8LxNPmZ0FirIeszUli4
-        /OlLHEmGtvhzw5s+ummJSdyU2ebJRX3y8djrzpc=
-X-Google-Smtp-Source: AKy350YYSFveOR4ot4iXXTyDs7vO3lTymAmSY5PrZlIY90fzb4Alo+fO49znGJgXFo2VctM6yQ5kbg==
-X-Received: by 2002:adf:ef51:0:b0:2f8:6c01:3bfc with SMTP id c17-20020adfef51000000b002f86c013bfcmr11572765wrp.30.1682422547195;
-        Tue, 25 Apr 2023 04:35:47 -0700 (PDT)
-Received: from [10.101.1.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id z17-20020adfdf91000000b002d97529b3bbsm12825907wrl.96.2023.04.25.04.35.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 04:35:46 -0700 (PDT)
-Message-ID: <5100ca4e-f3c4-b3a9-2379-aab6177d37cb@baylibre.com>
-Date:   Tue, 25 Apr 2023 13:35:43 +0200
+        Tue, 25 Apr 2023 07:37:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73A5B46AB;
+        Tue, 25 Apr 2023 04:37:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0635B4B3;
+        Tue, 25 Apr 2023 04:38:37 -0700 (PDT)
+Received: from [10.57.23.191] (unknown [10.57.23.191])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B16B03F5A1;
+        Tue, 25 Apr 2023 04:37:48 -0700 (PDT)
+Message-ID: <1539e760-392f-a33e-436e-bbf043e79bfc@arm.com>
+Date:   Tue, 25 Apr 2023 12:37:40 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] clk: mediatek: Enable all MT8192 clocks by default
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-References: <20230421111125.2397368-1-wenst@chromium.org>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230421111125.2397368-1-wenst@chromium.org>
+Subject: Re: [regression] Bug 217218 - Trying to boot Linux version 6-2.2
+ kernel with Marvell SATA controller 88SE9235
+To:     Jason Adriaanse <jason_a69@yahoo.co.uk>, hch@lst.de
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        regressions@lists.linux.dev
+References: <20230416065503.GB6410@lst.de>
+ <fc9f4cef-9426-c9d2-3c2c-3ce12fe5f6c3@yahoo.co.uk>
+ <5f37b0b0-6cb5-b210-a894-d1e91976126e@arm.com>
+ <2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk>
+ <07ee0cf7-a5c2-f87a-d627-8dd8fb082345@arm.com>
+ <9648f668-a3bc-3296-71d1-c91cd4c9980e@yahoo.co.uk>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <9648f668-a3bc-3296-71d1-c91cd4c9980e@yahoo.co.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/04/2023 13:11, Chen-Yu Tsai wrote:
-> Currently the base MT8192 clock drivers are enabled by default, but all
-> the other clock drivers need to be enabled by hand. This is extremely
-> confusing and inconvenient for end users. For the MT8192 platform to be
-> useful, most if not all the clock drivers driving the hardware blocks
-> need to be enabled.
+On 2023-04-25 05:17, Jason Adriaanse wrote:
+> Ok great,
 > 
-> Enable them by default whenever MT8192 base clock driver is enabled.
-> 
-> Signed-off-by: Chen-Yu Tsai<wenst@chromium.org>
+> I take it a change needs to be made in
+> drivers/pci/quirks.c
+> ?
+> I do not mind making the change locally here and letting you know if it 
+> works or not.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Indeed, something like this (make sure the IDs actually match what your
+device reports, I'm just guessing):
 
-Regards,
-Alexandre
 
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 44cab813bf95..a9166e886b75 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -4161,6 +4161,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9220,
+  /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c49 */
+  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9230,
+  			 quirk_dma_func1_alias);
++DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9235,
++			 quirk_dma_func1_alias);
+  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0642,
+  			 quirk_dma_func1_alias);
+  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0645,
+
+
+Marvell themselves seem to lump the 88SE92xx products together as a
+closely-related family, so given that we do have quirks for 3 of the 4
+already, this one does rather seem conspicuous by its absence...
+
+Thanks,
+Robin.
+
+> On 24/04/2023 22:07, Robin Murphy wrote:
+>> On 2023-04-24 14:44, Jason Adriaanse wrote:
+>>> I took out "iommu=soft" and the server failed to boot, so yes it does 
+>>> break.
+>>>
+>>> The first error was
+>>> ata7.00: Failed to IDENTIFY (INIT_DEV_PARAMS failed , err_mask=0x80)
+>>
+>> OK, great, that confirms the underlying issue existed all along, so 
+>> the regression is only a change in who wins a fight between certain 
+>> conflicting command-line arguments, which is arguably not so critical.
+>>
+>> The rest of the evidence points to 88SE9235 wanting the same phantom 
+>> function quirk as most other Marvell controllers, since although it's 
+>> apparently been half-fixed such that DMA for two of the ports is being 
+>> correctly emitted from function 0 - given that you say two of the 
+>> disks *are* detected OK - the other two are still claiming to be 
+>> function 1 after all.
+>>
+>> Thanks,
+>> Robin.
+>>
+>>> On 24/04/2023 21:20, Robin Murphy wrote:
+>>>> On 2023-04-22 07:25, Jason Adriaanse wrote:
+>>>>> Hi Christoph,
+>>>>>
+>>>>> Sorry for my late reply, I have been on the road.
+>>>>>
+>>>>> So, if I boot with
+>>>>> intel_iommu=off
+>>>>> Then the server boots fine..although that is not a solution because 
+>>>>> I need Intel iommu for virtualisation.
+>>>>>
+>>>>> Also, I build all my kernels with CONFIG_INTEL_IOMMU=y
+>>>>>
+>>>>
+>>>> If you boot 5.15 *without* the "iommu=soft" argument, just 
+>>>> "intel_iommu=on", does that also break?
+>>>>
+>>>> Robin.
