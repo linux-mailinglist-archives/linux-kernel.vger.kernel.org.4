@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576686EEA32
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1B56EEA37
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 00:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbjDYWND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 18:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        id S236251AbjDYWPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 18:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjDYWNB (ORCPT
+        with ESMTP id S235325AbjDYWPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 18:13:01 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D73A5FF1;
-        Tue, 25 Apr 2023 15:12:59 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PMCqFQ113049;
-        Tue, 25 Apr 2023 17:12:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682460772;
-        bh=mAyv3P4pN1RJoKlk8mb7umms+2iuH053Y2jyyfn6fk4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=lhPkURzGE7tBFxlHenuRX2THH/miM0Wff3cpimRoc6JxmPg3C9PBlo/1bF66NEuav
-         rEmhktjpGYDVqJfQsmqB3gFADsn9XXvanR/FANPN7yl8JXTD0shydSI8AsxQjwIEbm
-         AHvBgP/S6qJcWbLCTcQ73g//rl8vk/sbW5pIqAbo=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PMCqmx073699
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 17:12:52 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 25
- Apr 2023 17:12:52 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 25 Apr 2023 17:12:52 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PMCqaH065645;
-        Tue, 25 Apr 2023 17:12:52 -0500
-Date:   Tue, 25 Apr 2023 17:12:52 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62a7-sk: Describe main_uart1 and
- wkup_uart
-Message-ID: <20230425221252.payd2dwzvi3tiexj@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20230425214311.546191-1-bb@ti.com>
+        Tue, 25 Apr 2023 18:15:40 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647E17687
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 15:15:39 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 68D273F4E7;
+        Wed, 26 Apr 2023 00:15:36 +0200 (CEST)
+Date:   Wed, 26 Apr 2023 00:15:34 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Chandan Uddaraju <chandanu@codeaurora.org>,
+        Archit Taneja <architt@codeaurora.org>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Rajesh Yadav <ryadav@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jeykumar Sankaran <jsanka@codeaurora.org>,
+        Sean Paul <sean@poorly.run>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org,
+        Sravanthi Kollukuduru <skolluku@codeaurora.org>
+Subject: Re: [Freedreno] [PATCH v2 04/17] drm/msm/dpu: Fix PP_BLK_DIPHER ->
+ DITHER typo
+Message-ID: <ztgyg2uplm7fbju7hfxvc6547zvttnslotwook2wmejiytlq7u@clq6zzwgvc5c>
+References: <bhatfkgdkjt2bih4lcwa5cxcp3w2tkjrqmbdhqhzqa2cizrmxs@py3gr5vifsoc>
+ <65bb4d8a-c607-4152-0ae3-bf3134955925@quicinc.com>
+ <5td7ikd76obc5bn5sndnt7fbzjuwmyxtu35ma3lykzmmbyfffk@b24jh6imaocy>
+ <7541b780-482e-ea92-f788-18c8fbf45d77@quicinc.com>
+ <o536qdkbrqob5wux7jvmo7expwn4bdlj7vy7egjfsyydxp5myb@xjhmolci5jzl>
+ <cc537736-a555-dc3e-2e53-f1d4479eab21@quicinc.com>
+ <6crk3acgxcdfdokpgcfjkojs2wdjoxalkmctqfgtc725wsgoep@kdj4zbavbe62>
+ <a8f33707-b9ea-5595-e458-4f56c24c1167@quicinc.com>
+ <klrcz6zw4syxllhtbuclo65lo73kdunl5syuuoiv6zzkf3fadl@rgjc7rlgaoxq>
+ <5661d20d-81e9-61ba-b556-d90b5b8fdb4d@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425214311.546191-1-bb@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5661d20d-81e9-61ba-b556-d90b5b8fdb4d@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 25, 2023 thus sayeth Bryan Brattlof:
-> From: Nishanth Menon <nm@ti.com>
+On 2023-04-25 14:55:56, Abhinav Kumar wrote:
+<snip>
+> > I'll see whether I can include these fixes before sending v3 (got all
+> > the other changes in and am all-ready to send it): is there any other
+> > SoC you're seeing this issue on?
+> > 
 > 
-> wkup_uart and main_uart1 on this platform is used by tifs and DM
-> firmwares. Describe them for completeness including the pinmux.
+> Thats alright, you can have it in a separate series not v3 of this one.
 > 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> [bb@ti.com: updated pinmux and commit subject]
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> ---
+> I am picking up the fixes from this one now.
 > 
-> Changes from v1: [0]
-> - Updated $subject to align with previous commits
-> 
-> [0] https://lore.kernel.org/linux-devicetree/20230424183355.68360-1-bb@ti.com/
-> 
-> 
->  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 40 +++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
-> 
+> I will update the other SOCs on IRC or even better i will take up this 
+> cleanup.
 
-*sigh* let me try again, this time hopefully I'll add the visioning info 
-to the patch :)
+I already have the fix patch in my tree that is compatible with the
+other patches, and will send those in a minute.  All DPU >= 7.0.0 seems
+to be affected, both SM8350 and SM8450 need to use the SC7280 sblk with
+DITHER V2 at 0xe0 (SM8250 is still V1).  I believe SC8280XP should also
+be updated but do not have access to DTS: where can I find that (what is
+its codename again?) or can you otherwise confirm this for me?
 
-~Bryan
+- Marijn
