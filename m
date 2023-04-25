@@ -2,147 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBB96EDFDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C4A6EDFE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbjDYJ74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
+        id S233349AbjDYKAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDYJ7y (ORCPT
+        with ESMTP id S233479AbjDYKAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:59:54 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF0F059D2;
-        Tue, 25 Apr 2023 02:59:52 -0700 (PDT)
-Received: from m202171703$hust.edu.cn ( [172.16.0.254] ) by
- ajax-webmail-app1 (Coremail) ; Tue, 25 Apr 2023 17:58:53 +0800 (GMT+08:00)
-X-Originating-IP: [172.16.0.254]
-Date:   Tue, 25 Apr 2023 17:58:53 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5byg572R?= <m202171703@hust.edu.cn>
-To:     "Peter Korsgaard" <peter@korsgaard.com>,
-        "Andrew Lunn" <andrew@lunn.ch>
-Cc:     hust-os-kernel-patches@googlegroups.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] i2c: ocores: use devm_ managed clks
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230422123253.137368-1-silver_code@hust.edu.cn>
-References: <fc8ed989-68e6-4fd4-a818-ae077bf5e6aa@lunn.ch>
- <20230422123253.137368-1-silver_code@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 25 Apr 2023 06:00:09 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A6BCC3C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:00:06 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-42e6ac0cd5aso1196185137.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682416805; x=1685008805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U9xmfBHDsyYLJBu4ZPKPVrdek0zQAAxRnmR1aPAecu8=;
+        b=QM45xtlfA30Qv+jhT+5wfAhCZ0DlI6NMjjFtywDiocqqbhmjSnALrxYO1+HD09LTxh
+         ghmFdMfXOE5XAf1RD76xiY+3li/Zw7UPFpNIbMymFlpJd7Yo3qr8rwQ9Tf16N0pHbtlN
+         /EtMhdr4cIITH1IR/kg7yJyukNsfVztBx751Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682416805; x=1685008805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U9xmfBHDsyYLJBu4ZPKPVrdek0zQAAxRnmR1aPAecu8=;
+        b=ZNbPbtB6j6NVxTEEvMTVMqVyo1FBCHfgRT+6D9hb3SiCU9DqOC2h3HNyv63MNtRH+T
+         SjXk9nfkvvOFSC8S1mNvQob+DDS3T1zWCL2DKJjiyxiSDS22IpoR5RtYvGc2hmYnPF8E
+         s9uG9PAxneKr2eTQM/7WD+tfETIuo1wxgNxXp6WxoXEHJ2xWOnV8LkiWaZ4uAG+TfwE0
+         fjA+NMIK5CFkkQ656epKR+8ucTeXkrsMvgrLnkUvwwc/JVNYYT5SKCZz4kc2Slu4g6l7
+         aSYZmthhiZ2n2SZOzAfauJE4PfUB9i6MjOhKldug3lep2HFbTYj5ITe9EslTKao3nujx
+         GIXw==
+X-Gm-Message-State: AAQBX9cehKYUFSYMA3gs8PlEpHpwjGE9zB0kN4L6GGNd1QX7m0YHnX91
+        1opX+yrE7v5uB5tgH6n8cTdzg+b5ux24uXkLRvDx9g==
+X-Google-Smtp-Source: AKy350ZIrxbuOVfg1D290EFt3hdIL/m5W7tSw54IyZTFKXYrYG44B1Dl4VD9Ls0ZfUe1vaHU5vafRdgoqBYlvDfzC7w=
+X-Received: by 2002:a67:fe41:0:b0:42e:676c:bab8 with SMTP id
+ m1-20020a67fe41000000b0042e676cbab8mr7413428vsr.16.1682416805303; Tue, 25 Apr
+ 2023 03:00:05 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <66a2c261.43970.187b7da0d97.Coremail.m202171703@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: FgEQrAAHVwhdpEdkYt_iAw--.51573W
-X-CM-SenderInfo: rpsqjiqxrxijo6kx23oohg3hdfq/1tbiAQoMAF7Em5QCbwABs+
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW3Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230307163413.143334-1-bchihi@baylibre.com> <CAGXv+5E0wUJYUVD3wx3-=uES612ARQmUE0rxgAruFHxpZCBjzA@mail.gmail.com>
+ <CAGuA+ooi7Kx05gagLzXAN3upDiSqDUNOM_djYdGftw6ogVx5gw@mail.gmail.com>
+ <CAGuA+oqDPPYFJef_8=YrOpHQNVJ3xgm_zXS6fq_HG2Jy_6t-Zg@mail.gmail.com>
+ <CAGXv+5EZPWohGN5CaEiqVrM4MyAar3cPEUhHtGY_9wTJSJNVFQ@mail.gmail.com>
+ <CAGuA+oqF4jFMyEo09VDmCf-_7g0ua3XDKDAJ+t3Gat14pDM9NA@mail.gmail.com> <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano>
+In-Reply-To: <fab67eef-4dc9-420d-b127-aedc6f54cad0@notapiano>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 25 Apr 2023 17:59:54 +0800
+Message-ID: <CAGXv+5E0rzByZBn91d60MQ7P0=GbAQUH=PK9EYDu3Upr33td6A@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add LVTS support for mt8192
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Balsam CHIHI <bchihi@baylibre.com>, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cGluZz8KCiJXYW5nIFpoYW5nIiA8c2lsdmVyX2NvZGVAaHVzdC5lZHUuY24+5YaZ6YGT77yaCj4g
-SWYgYW55IHdyb25nIG9jY3VycyBpbiBvY29yZXNfaTJjX29mX3Byb2JlLCB0aGUgaTJjLT5jbGsg
-bmVlZHMgdG8gYmUNCj4gcmVsZWFzZWQuIEJ1dCB0aGUgZnVuY3Rpb24gcmV0dXJucyBkaXJlY3Rs
-eSBpbiBsaW5lIDcwMSB3aXRob3V0IGZyZWVpbmcNCj4gdGhlIGNsb2NrLiBFdmVuIHRob3VnaCB3
-ZSBjYW4gZml4IGl0IGJ5IGZyZWVpbmcgdGhlIGNsb2NrIG1hbnVhbGx5IGlmDQo+IHBsYXRmb3Jt
-X2dldF9pcnFfb3B0aW9uYWwgZmFpbHMsIGl0IG1heSBub3QgYmUgZm9sbG93aW5nIHRoZSBiZXN0
-IHByYWN0aWNlLg0KPiBUaGUgb3JpZ2luYWwgY29kZSBmb3IgdGhpcyBkcml2ZXIgY29udGFpbnMg
-aWYgKElTX0VSUigpKSBjaGVja3MNCj4gdGhyb3VnaG91dCwgZXhwbGljaXRseSBhbGxvd2luZyB0
-aGUgZHJpdmVyIHRvIGNvbnRpbnVlIGxvYWRpbmcgZXZlbiBpZg0KPiBkZXZtX2Nsa19nZXQoKSBm
-YWlscy4NCj4gDQo+IFdoaWxlIGl0IGlzIG5vdCBlbnRpcmVseSBjbGVhciB3aHkgdGhlIG9yaWdp
-bmFsIGF1dGhvciBpbXBsZW1lbnRlZCB0aGlzDQo+IGJlaGF2aW9yLCB0aGVyZSBtYXkgaGF2ZSBi
-ZWVuIGNlcnRhaW4gY2lyY3Vtc3RhbmNlcyBvciBpc3N1ZXMgdGhhdCB3ZXJlIG5vdA0KPiBhcHBh
-cmVudCB0byB1cy4gSXQncyBwb3NzaWJsZSB0aGF0IHRoZXkgd2VyZSB0cnlpbmcgdG8gd29yayBh
-cm91bmQgYSBidWcgYnkNCj4gZW1wbG95aW5nIGFuIHVuY29udmVudGlvbmFsIHNvbHV0aW9uLlVz
-aW5nIGBkZXZtX2Nsa19nZXRfZW5hYmxlZCgpYCByYXRoZXINCj4gdGhhbiBkZXZtX2Nsa19nZXQo
-KSBjYW4gYXV0b21hdGljYWxseSB0cmFjayB0aGUgdXNhZ2Ugb2YgY2xvY2tzIGFuZCBmcmVlDQo+
-IHRoZW0gd2hlbiB0aGV5IGFyZSBubyBsb25nZXIgbmVlZGVkIG9yIGFuIGVycm9yIG9jY3Vycy4N
-Cj4gDQo+IGZpeGluZyBpdCBieSBjaGFuZ2luZyBgb2NvcmVzX2kyY19vZl9wcm9iZWAgdG8gdXNl
-DQo+IGBkZXZtX2Nsa19nZXRfb3B0aW9uYWxfZW5hYmxlZCgpYCByYXRoZXIgdGhhbiBgZGV2bV9j
-bGtfZ2V0KClgLCBjaGFuZ2luZw0KPiBgZ290byBlcnJfY2xrJyB0byBkaXJlY3QgcmV0dXJuIGFu
-ZCByZW1vdmluZyBgZXJyX2Nsa2AuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBXYW5nIFpoYW5nIDxz
-aWx2ZXJfY29kZUBodXN0LmVkdS5jbj4NCj4gLS0tDQo+IHYyLT52MzogdXNlIGBkZXZtX2Nsa19n
-ZXRfb3B0aW9uYWxfZW5hYmxlZCgpYCB0byBtYW5hZ2UgY2xrcw0KPiB2MS0+djI6IGNoYW5nZSBg
-b2NvcmVzX2kyY19vZl9wcm9iZWAgdG8gdXNlIGBkZXZtX2Nsa19nZXRfZW5hYmxlZCgpYA0KPiAt
-LS0NCj4gIGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtb2NvcmVzLmMgfCA1NiArKysrKysrKysrKysr
-LS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyMiBpbnNlcnRpb25zKCsp
-LCAzNCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMv
-aTJjLW9jb3Jlcy5jIGIvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1vY29yZXMuYw0KPiBpbmRleCAy
-ZTU3NTg1NmM1Y2QuLjBiMjI1MTc3ZmRkMSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9pMmMvYnVz
-c2VzL2kyYy1vY29yZXMuYw0KPiArKysgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW9jb3Jlcy5j
-DQo+IEBAIC01NTIsMTYgKzU1MiwxNSBAQCBzdGF0aWMgaW50IG9jb3Jlc19pMmNfb2ZfcHJvYmUo
-c3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwNCj4gIAkJCQkJCQkmY2xvY2tfZnJlcXVlbmN5
-KTsNCj4gIAlpMmMtPmJ1c19jbG9ja19raHogPSAxMDA7DQo+ICANCj4gLQlpMmMtPmNsayA9IGRl
-dm1fY2xrX2dldCgmcGRldi0+ZGV2LCBOVUxMKTsNCj4gKwlpMmMtPmNsayA9IGRldm1fY2xrX2dl
-dF9vcHRpb25hbF9lbmFibGVkKCZwZGV2LT5kZXYsIE5VTEwpOw0KPiAgDQo+IC0JaWYgKCFJU19F
-UlIoaTJjLT5jbGspKSB7DQo+IC0JCWludCByZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUoaTJjLT5j
-bGspOw0KPiArCWlmIChJU19FUlIoaTJjLT5jbGspKSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRl
-diwNCj4gKwkJCSJkZXZtX2Nsa19nZXRfb3B0aW9uYWxfZW5hYmxlZCBmYWlsZWRcbiIpOw0KPiAr
-CQlyZXR1cm4gUFRSX0VSUihpMmMtPmNsayk7DQo+ICsJfQ0KPiAgDQo+IC0JCWlmIChyZXQpIHsN
-Cj4gLQkJCWRldl9lcnIoJnBkZXYtPmRldiwNCj4gLQkJCQkiY2xrX3ByZXBhcmVfZW5hYmxlIGZh
-aWxlZDogJWRcbiIsIHJldCk7DQo+IC0JCQlyZXR1cm4gcmV0Ow0KPiAtCQl9DQo+ICsJaWYgKGky
-Yy0+Y2xrKSB7DQo+ICAJCWkyYy0+aXBfY2xvY2tfa2h6ID0gY2xrX2dldF9yYXRlKGkyYy0+Y2xr
-KSAvIDEwMDA7DQo+ICAJCWlmIChjbG9ja19mcmVxdWVuY3lfcHJlc2VudCkNCj4gIAkJCWkyYy0+
-YnVzX2Nsb2NrX2toeiA9IGNsb2NrX2ZyZXF1ZW5jeSAvIDEwMDA7DQo+IEBAIC01NzMsNyArNTcy
-LDYgQEAgc3RhdGljIGludCBvY29yZXNfaTJjX29mX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKnBkZXYsDQo+ICAJCQlpZiAoIWNsb2NrX2ZyZXF1ZW5jeV9wcmVzZW50KSB7DQo+ICAJCQkJ
-ZGV2X2VycigmcGRldi0+ZGV2LA0KPiAgCQkJCQkiTWlzc2luZyByZXF1aXJlZCBwYXJhbWV0ZXIg
-J29wZW5jb3JlcyxpcC1jbG9jay1mcmVxdWVuY3knXG4iKTsNCj4gLQkJCQljbGtfZGlzYWJsZV91
-bnByZXBhcmUoaTJjLT5jbGspOw0KPiAgCQkJCXJldHVybiAtRU5PREVWOw0KPiAgCQkJfQ0KPiAg
-CQkJaTJjLT5pcF9jbG9ja19raHogPSBjbG9ja19mcmVxdWVuY3kgLyAxMDAwOw0KPiBAQCAtNjc4
-LDggKzY3Niw3IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1f
-ZGV2aWNlICpwZGV2KQ0KPiAgCQlkZWZhdWx0Og0KPiAgCQkJZGV2X2VycigmcGRldi0+ZGV2LCAi
-VW5zdXBwb3J0ZWQgSS9PIHdpZHRoICglZClcbiIsDQo+ICAJCQkJaTJjLT5yZWdfaW9fd2lkdGgp
-Ow0KPiAtCQkJcmV0ID0gLUVJTlZBTDsNCj4gLQkJCWdvdG8gZXJyX2NsazsNCj4gKwkJCXJldHVy
-biAtRUlOVkFMOw0KPiAgCQl9DQo+ICAJfQ0KPiAgDQo+IEBAIC03MTAsMTMgKzcwNywxMyBAQCBz
-dGF0aWMgaW50IG9jb3Jlc19pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikN
-Cj4gIAkJCQkJCSAgIHBkZXYtPm5hbWUsIGkyYyk7DQo+ICAJCWlmIChyZXQpIHsNCj4gIAkJCWRl
-dl9lcnIoJnBkZXYtPmRldiwgIkNhbm5vdCBjbGFpbSBJUlFcbiIpOw0KPiAtCQkJZ290byBlcnJf
-Y2xrOw0KPiArCQkJcmV0dXJuIHJldDsNCj4gIAkJfQ0KPiAgCX0NCj4gIA0KPiAgCXJldCA9IG9j
-b3Jlc19pbml0KCZwZGV2LT5kZXYsIGkyYyk7DQo+ICAJaWYgKHJldCkNCj4gLQkJZ290byBlcnJf
-Y2xrOw0KPiArCQlyZXR1cm4gcmV0Ow0KPiAgDQo+ICAJLyogaG9vayB1cCBkcml2ZXIgdG8gdHJl
-ZSAqLw0KPiAgCXBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIGkyYyk7DQo+IEBAIC03MjgsNyAr
-NzI1LDcgQEAgc3RhdGljIGludCBvY29yZXNfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZp
-Y2UgKnBkZXYpDQo+ICAJLyogYWRkIGkyYyBhZGFwdGVyIHRvIGkyYyB0cmVlICovDQo+ICAJcmV0
-ID0gaTJjX2FkZF9hZGFwdGVyKCZpMmMtPmFkYXApOw0KPiAgCWlmIChyZXQpDQo+IC0JCWdvdG8g
-ZXJyX2NsazsNCj4gKwkJcmV0dXJuIHJldDsNCj4gIA0KPiAgCS8qIGFkZCBpbiBrbm93biBkZXZp
-Y2VzIHRvIHRoZSBidXMgKi8NCj4gIAlpZiAocGRhdGEpIHsNCj4gQEAgLTczNywxMCArNzM0LDYg
-QEAgc3RhdGljIGludCBvY29yZXNfaTJjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBk
-ZXYpDQo+ICAJfQ0KPiAgDQo+ICAJcmV0dXJuIDA7DQo+IC0NCj4gLWVycl9jbGs6DQo+IC0JY2xr
-X2Rpc2FibGVfdW5wcmVwYXJlKGkyYy0+Y2xrKTsNCj4gLQlyZXR1cm4gcmV0Ow0KPiAgfQ0KPiAg
-DQo+ICBzdGF0aWMgaW50IG9jb3Jlc19pMmNfcmVtb3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2Ug
-KnBkZXYpDQo+IEBAIC03NTUsOSArNzQ4LDYgQEAgc3RhdGljIGludCBvY29yZXNfaTJjX3JlbW92
-ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgCS8qIHJlbW92ZSBhZGFwdGVyICYg
-ZGF0YSAqLw0KPiAgCWkyY19kZWxfYWRhcHRlcigmaTJjLT5hZGFwKTsNCj4gIA0KPiAtCWlmICgh
-SVNfRVJSKGkyYy0+Y2xrKSkNCj4gLQkJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGkyYy0+Y2xrKTsN
-Cj4gLQ0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAgDQo+IEBAIC03NzEsOCArNzYxLDcgQEAgc3Rh
-dGljIGludCBvY29yZXNfaTJjX3N1c3BlbmQoc3RydWN0IGRldmljZSAqZGV2KQ0KPiAgCWN0cmwg
-Jj0gfihPQ0kyQ19DVFJMX0VOIHwgT0NJMkNfQ1RSTF9JRU4pOw0KPiAgCW9jX3NldHJlZyhpMmMs
-IE9DSTJDX0NPTlRST0wsIGN0cmwpOw0KPiAgDQo+IC0JaWYgKCFJU19FUlIoaTJjLT5jbGspKQ0K
-PiAtCQljbGtfZGlzYWJsZV91bnByZXBhcmUoaTJjLT5jbGspOw0KPiArCWNsa19kaXNhYmxlX3Vu
-cHJlcGFyZShpMmMtPmNsayk7DQo+ICAJcmV0dXJuIDA7DQo+ICB9DQo+ICANCj4gQEAgLTc4MCwx
-OSArNzY5LDE4IEBAIHN0YXRpYyBpbnQgb2NvcmVzX2kyY19yZXN1bWUoc3RydWN0IGRldmljZSAq
-ZGV2KQ0KPiAgew0KPiAgCXN0cnVjdCBvY29yZXNfaTJjICppMmMgPSBkZXZfZ2V0X2RydmRhdGEo
-ZGV2KTsNCj4gIA0KPiAtCWlmICghSVNfRVJSKGkyYy0+Y2xrKSkgew0KPiAtCQl1bnNpZ25lZCBs
-b25nIHJhdGU7DQo+IC0JCWludCByZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUoaTJjLT5jbGspOw0K
-PiArCXVuc2lnbmVkIGxvbmcgcmF0ZTsNCj4gKwlpbnQgcmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxl
-KGkyYy0+Y2xrKTsNCj4gIA0KPiAtCQlpZiAocmV0KSB7DQo+IC0JCQlkZXZfZXJyKGRldiwNCj4g
-LQkJCQkiY2xrX3ByZXBhcmVfZW5hYmxlIGZhaWxlZDogJWRcbiIsIHJldCk7DQo+IC0JCQlyZXR1
-cm4gcmV0Ow0KPiAtCQl9DQo+IC0JCXJhdGUgPSBjbGtfZ2V0X3JhdGUoaTJjLT5jbGspIC8gMTAw
-MDsNCj4gLQkJaWYgKHJhdGUpDQo+IC0JCQlpMmMtPmlwX2Nsb2NrX2toeiA9IHJhdGU7DQo+ICsJ
-aWYgKHJldCkgew0KPiArCQlkZXZfZXJyKGRldiwNCj4gKwkJCSJjbGtfcHJlcGFyZV9lbmFibGUg
-ZmFpbGVkOiAlZFxuIiwgcmV0KTsNCj4gKwkJcmV0dXJuIHJldDsNCj4gIAl9DQo+ICsJcmF0ZSA9
-IGNsa19nZXRfcmF0ZShpMmMtPmNsaykgLyAxMDAwOw0KPiArCWlmIChyYXRlKQ0KPiArCQlpMmMt
-PmlwX2Nsb2NrX2toeiA9IHJhdGU7DQo+ICsNCj4gIAlyZXR1cm4gb2NvcmVzX2luaXQoZGV2LCBp
-MmMpOw0KPiAgfQ0KPiAgDQo+IC0tIA0KPiAyLjM0LjENCg==
+On Tue, Apr 25, 2023 at 6:21=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> On Tue, Mar 28, 2023 at 02:20:24AM +0200, Balsam CHIHI wrote:
+> > On Sat, Mar 25, 2023 at 5:33=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.or=
+g> wrote:
+> > >
+> > > On Wed, Mar 22, 2023 at 8:48=E2=80=AFPM Balsam CHIHI <bchihi@baylibre=
+.com> wrote:
+> > > >
+> > > > Hi Chen-Yu,
+> > > >
+> > > > I suspect the bug comes from incorrect calibration data offsets for=
+ AP
+> > > > Domain because you confirm that MCU Domain probe runs without issue=
+s.
+> > > > Is it possible to test something for us to confirm this theory (i
+> > > > don't have an mt8192 board on hand now), when you have the time of
+> > > > course?
+> > > > We would like to test AP Domain's calibration data offsets with a
+> > > > working one, for example :
+> > > >
+> > > >  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D =
+{
+> > > >                 {
+> > > > -               .cal_offset =3D { 0x25, 0x28 },
+> > > > +               .cal_offset =3D { 0x04, 0x04 },
+> > > >                 .lvts_sensor =3D {
+> > > >                         { .dt_id =3D MT8192_AP_VPU0 },
+> > > >                         { .dt_id =3D MT8192_AP_VPU1 }
+> > > > @@ -1336,7 +1336,7 @@ static const struct lvts_ctrl_data
+> [..]
+> > > >
+> > > > This example is tested and works for mt8195,
+> > > > (all sensors use the same calibration data offset for testing purpo=
+ses).
+> > > >
+> > > > Thank you in advance for your help.
+> > >
+> > > The MCU ones are still tripping though. If I change all of them to 0x=
+04,
+> > > then nothing trips. There's also a bug in the interrupt handling code
+> > > that needs to be dealt with.
+> > >
+> > > AFAICT the calibration data is stored differently. If you look at Chr=
+omeOS's
+> > > downstream v5.10 driver, you'll see mt6873_efuse_to_cal_data() for MT=
+8192,
+> > > and mt8195_efuse_to_cal_data() for MT8195. The difference sums up to:
+> > > MT8195 has all data sequentially stored, while MT8192 has most data s=
+tored
+> > > in lower 24 bits of each 32-bit word, and the highest 8 bits are then=
+ used
+> > > to pack data for the remaining sensors.
+> > >
+> > > Regards
+> > > ChenYu
+> >
+> > Hi Chen-Yu Tsai,
+> >
+> > Thank you very much for helping me testing this suggestion.
+> >
+> > Indeed, calibration data is stored differently in the mt8192 compared t=
+o mt8195.
+> > So, the mt8192's support will be delayed for now, to allow further debu=
+gging.
+> >
+> > In the mean time, we will only continue to upstream the remaining
+> > mt8195's source code, so it will get full LVTS support.
+> > A new series will be submitted soon.
+>
+> Hi Balsam,
+>
+> like Chen-Yu mentioned, the calibration data is stored with 4 byte alignm=
+ent for
+> MT8192, but the data that is split between non-contiguous bytes is for th=
+e
+> thermal controllers (called Resistor-Capacitor Calibration downstream) no=
+t the
+> sensors. The controller calibration isn't currently handled in this drive=
+r (and
+> downstream it also isn't used, since a current value is read from the con=
+troller
+> instead), so we can just ignore those.
+>
+> The patch below adjusts the addresseses for the sensors and gives me reas=
+onable
+> reads, so the machine no longer reboots. Can you integrate it into your s=
+eries?
+
+Not sure what I got wrong, but on my machine the VPU0 and VPU1 zone interru=
+pts
+are still tripping excessively. The readings seem normal though. Specifical=
+ly,
+it's bits 16 and 17 that are tripping.
+
+> Thanks,
+> N=C3=ADcolas
+>
+> From 4506f03b806f3eeb89887bac2c1c86d61da97281 Mon Sep 17 00:00:00 2001
+> From: =3D?UTF-8?q?N=3DC3=3DADcolas=3D20F=3D2E=3D20R=3D2E=3D20A=3D2E=3D20P=
+rado?=3D
+>  <nfraprado@collabora.com>
+> Date: Mon, 24 Apr 2023 17:42:42 -0400
+> Subject: [PATCH] thermal/drivers/mediatek/lvts_thermal: Fix calibration
+>  offsets for MT8192
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=3DUTF-8
+> Content-Transfer-Encoding: 8bit
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  drivers/thermal/mediatek/lvts_thermal.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/me=
+diatek/lvts_thermal.c
+> index b6956c89d557..f8afbc2ac190 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -1261,7 +1261,7 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_d=
+ata_ctrl[] =3D {
+>
+>  static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] =3D {
+>         {
+> -               .cal_offset =3D { 0x04, 0x07 },
+> +               .cal_offset =3D { 0x04, 0x08 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_MCU_BIG_CPU0 },
+>                         { .dt_id =3D MT8192_MCU_BIG_CPU1 }
+> @@ -1271,7 +1271,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
+data_ctrl[] =3D {
+>                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+>         },
+>         {
+> -               .cal_offset =3D { 0x0d, 0x10 },
+> +               .cal_offset =3D { 0x0c, 0x10 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_MCU_BIG_CPU2 },
+>                         { .dt_id =3D MT8192_MCU_BIG_CPU3 }
+> @@ -1281,7 +1281,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
+data_ctrl[] =3D {
+>                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+>         },
+>         {
+> -               .cal_offset =3D { 0x16, 0x19, 0x1c, 0x1f },
+> +               .cal_offset =3D { 0x14, 0x18, 0x1c, 0x20 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_MCU_LITTLE_CPU0 },
+>                         { .dt_id =3D MT8192_MCU_LITTLE_CPU1 },
+> @@ -1296,7 +1296,7 @@ static const struct lvts_ctrl_data mt8192_lvts_mcu_=
+data_ctrl[] =3D {
+>
+>  static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] =3D {
+>                 {
+> -               .cal_offset =3D { 0x25, 0x28 },
+> +               .cal_offset =3D { 0x24, 0x28 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_AP_VPU0 },
+>                         { .dt_id =3D MT8192_AP_VPU1 }
+> @@ -1306,7 +1306,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
+ata_ctrl[] =3D {
+>                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+>         },
+>         {
+> -               .cal_offset =3D { 0x2e, 0x31 },
+> +               .cal_offset =3D { 0x2c, 0x30 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_AP_GPU0 },
+>                         { .dt_id =3D MT8192_AP_GPU1 }
+> @@ -1316,7 +1316,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
+ata_ctrl[] =3D {
+>                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+>         },
+>         {
+> -               .cal_offset =3D { 0x37, 0x3a },
+> +               .cal_offset =3D { 0x34, 0x38 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_AP_INFRA },
+>                         { .dt_id =3D MT8192_AP_CAM },
+> @@ -1326,7 +1326,7 @@ static const struct lvts_ctrl_data mt8192_lvts_ap_d=
+ata_ctrl[] =3D {
+>                 .hw_tshut_temp =3D LVTS_HW_SHUTDOWN_MT8192,
+>         },
+>         {
+> -               .cal_offset =3D { 0x40, 0x43, 0x46 },
+> +               .cal_offset =3D { 0x3c, 0x40, 0x44 },
+>                 .lvts_sensor =3D {
+>                         { .dt_id =3D MT8192_AP_MD0 },
+>                         { .dt_id =3D MT8192_AP_MD1 },
+> --
+> 2.40.0
