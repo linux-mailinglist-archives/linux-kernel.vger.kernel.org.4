@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9096ED9A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69FB6ED9AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbjDYBKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 21:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S232839AbjDYBOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233135AbjDYBKW (ORCPT
+        with ESMTP id S229872AbjDYBOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5823D3C0D;
-        Mon, 24 Apr 2023 18:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD04A62AAC;
-        Tue, 25 Apr 2023 01:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3506DC4339E;
-        Tue, 25 Apr 2023 01:10:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682385020;
-        bh=e9aBgEbjRyxsLbexVjWZJWbxZ+OxkG7/jN+cF6riUFo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=d15PA143KHrMMxnrBUvjeBpfSf8U3UYCADLW2gYhU5kR91zx0ZuCrxHgzjSizqvqt
-         IEwlycNqIbmrXsCt183nUfOmAkBa4bngudQRqD1CliLliUwHHRn8e+sWAeCED26hmd
-         dY7HXjzFf3AJJnPSOagS8qzU72YgN+YB3Hropy7y0bsS6mJhENTgOjyzb26k8Lx8uv
-         enX/9VJgSScDmQx+MO3BYd0wvhdXHTowMTJvTIJ9hptd8grdoh65oOrPTXgIJphhjm
-         tuRt5bCb5SxTmwsl2rpJpTeB2V+DvVxHfm+k0eZF0hbZGP+Qm+okGs+ruAxsd0T9WY
-         e/zNyBdaTzc4w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 132C9C395D8;
-        Tue, 25 Apr 2023 01:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Apr 2023 21:14:41 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC85269;
+        Mon, 24 Apr 2023 18:14:40 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63d4595d60fso32121387b3a.0;
+        Mon, 24 Apr 2023 18:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682385280; x=1684977280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n2bQyMry/9kSseFNQy1cBpWwH7AVeOJi3gZtdTMmTCg=;
+        b=nCNcHQo5PbPYzh7MjyO2ZOQb3SP77sL8VfN+AoaNosvUCSJJmXhKydJfvdR1hjmKcp
+         z+2S2WYpNgkOMyhOgxcpBR8jTi3gghJ+CRhQx1lpg+BGKR73PI4RGdCGCZ6muFcif0ZC
+         juSlzE6U9LRzVkTGYdT3R0JimTiPQaYJoGIRu/fw8Y6c1z89JjoTARmbyYWblc39qeLf
+         FMxUGRbC+zv3F2hLueEXhTas6OGI/PX/kbe206ubDGaJKea4sGgaQsfqssxevQeXURWF
+         wmWHMHUBkzBwy/c3M2KOO4evUrjPtqYpm1w0FSPbESnbe2hHBami//Wqgb5prec8rvf/
+         JIwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682385280; x=1684977280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n2bQyMry/9kSseFNQy1cBpWwH7AVeOJi3gZtdTMmTCg=;
+        b=LBuh9mVMNus/On/F92t4VtXPb3c5508ROTw9r1URxjDedS4VjCKNQSNjJeWsuRsgGG
+         H8M4jP/S90KbKeEDszTZPwsvyAszp7D79YCQQvvSvCO99rWnt8HYijb1x+Gpl/KSHH9l
+         SN1vGDiMFgnVnEdqbWlBKcvEjZ4D9HvuLDEejwITAbFMaxfeyvyZEhVNvhUeHwSYQl/9
+         z8heRvSySJ+QczUe+BftZqC++2KCD1wXf85QXrV94UFj74kqC7ErD7v44vbeKEPYejeX
+         JFvbRDjAjGWM8PMXzDYeQwOz3l9uTixmFxvk+6Omkagk8tk0K9pup35sy8vBKjv3djY1
+         S20A==
+X-Gm-Message-State: AAQBX9cxQ9HIw9PnRcwwKvQnots39VhIHf3KMrHRXbAZOKSUY/Ubxzu7
+        1ZRIxuMSe/M8HPioCBdj5xo=
+X-Google-Smtp-Source: AKy350ZasDNSaksLDrr3nAEgu2HhY1yXh3Dlz2qR4UYh0a0ya6SiQ47yY9iOtvM7KfHiM4bGmrMJBA==
+X-Received: by 2002:a17:902:da82:b0:1a0:76e8:a4d with SMTP id j2-20020a170902da8200b001a076e80a4dmr23434574plx.14.1682385280267;
+        Mon, 24 Apr 2023 18:14:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b001a24e2eec75sm7062491pln.193.2023.04.24.18.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 18:14:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 24 Apr 2023 18:14:38 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 00/73] 5.15.109-rc1 review
+Message-ID: <0f1a684a-0d4d-4dc0-b99d-339f6559b87f@roeck-us.net>
+References: <20230424131129.040707961@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next, 0/2] Update coding style and check alloc_frag
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168238502007.6495.17788733347454101690.git-patchwork-notify@kernel.org>
-Date:   Tue, 25 Apr 2023 01:10:20 +0000
-References: <1682096818-30056-1-git-send-email-haiyangz@microsoft.com>
-In-Reply-To: <1682096818-30056-1-git-send-email-haiyangz@microsoft.com>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, leon@kernel.org, longli@microsoft.com,
-        ssengar@linux.microsoft.com, linux-rdma@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, ast@kernel.org, sharmaajay@microsoft.com,
-        hawk@kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424131129.040707961@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 21 Apr 2023 10:06:56 -0700 you wrote:
-> Follow up patches for the jumbo frame support.
+On Mon, Apr 24, 2023 at 03:16:14PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.109 release.
+> There are 73 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> As suggested by Jakub Kicinski, update coding style, and check napi_alloc_frag
-> for possible fallback to single pages.
+> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+> Anything received after that time might be too late.
 > 
-> Haiyang Zhang (2):
->   net: mana: Rename mana_refill_rxoob and remove some empty lines
->   net: mana: Check if netdev/napi_alloc_frag returns single page
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next,1/2] net: mana: Rename mana_refill_rxoob and remove some empty lines
-    https://git.kernel.org/netdev/net-next/c/5c74064f43c2
-  - [net-next,2/2] net: mana: Check if netdev/napi_alloc_frag returns single page
-    https://git.kernel.org/netdev/net-next/c/df18f2da302f
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 499 pass: 499 fail: 0
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-
+Guenter
