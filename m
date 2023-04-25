@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3CE6EE4E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF18F6EE4E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 17:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234548AbjDYPje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 11:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
+        id S234516AbjDYPjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 11:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbjDYPjc (ORCPT
+        with ESMTP id S234372AbjDYPjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Apr 2023 11:39:32 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2084.outbound.protection.outlook.com [40.107.247.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076DDB454;
-        Tue, 25 Apr 2023 08:39:26 -0700 (PDT)
+Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2082.outbound.protection.outlook.com [40.107.249.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AFCC39;
+        Tue, 25 Apr 2023 08:39:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VEugvU9dnHI7Qf0Uq6mjYTudDKpXqs0OhAQGMaKUXTeF6PrnlU509X+J3SwhYr22uyv77gslAuSrBORDYeS8dKN3FCz6Tb146YrKKDajpYOBGFS3UWtmeBnnPdw+iZaqj/PGUV+tOxOL5bAydnMfubBzN6ubyD0gTPtbmTOpwhB8teiqL30ewO+wC8ElVJcUP1kIPIemMr+heF8MYgtqAEiZ42j3VcHnkQp8HZH+wUt30gPJH9ViK/IchPdxQf0v/5lrNqdeCBRxqXzpF8nVIG55vST3wsgKgn3lnaNPZYGr10ZfX5puNw2J8Bdaku19uaB95fyaPWitzwudUwn9Mw==
+ b=bszDpDRG6VPdRGLg4Ou0yP+QupOgEQHcjpoS1vOPdePNM7VSQrCsggK+rrQOTZ8xpIkxHZ+ZWebXVm6gFhuzGNbdVU4PbPBahrBnmLfvbP/tHIIQ0OagJ8FZiX5GjmSlUs159xl0BfIdT56DJhoHOuURiBlze3B6e2hVlCt3FZVH7FrhpKjlDhWevRWENv1ezXWROQi7oXF7yL7DhlwjAlpA+PlvmEYjeuw1PxPWPC63etdOLhEovpgeKasTUamqpIBWzUx64zNcSeLgAk621TMlgMCQcj97ryLX70MDYqZajQBqghU60N5RlSJKazHAuRXk9P1CwudSCV1mNh1+dQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mcf0cniObv6/OcoZCucuTUoxfzFjwZYnkII49hbyYsM=;
- b=XTFmBNsByI2ijwik6PyemJvoAQoEOKV3uEmZs/kGK1sG+HxUlIzvzYTcQQt4PNvlgLhECEl24ohQX1NDWctJ0FMQQMxkisx8m9aDUwkDmBrAY+Yu/UBuhL5RFyrTeG4Lls3rjvD9i8fOySO/8rvxhWD/np/y+w2/iCujmWKoIUMsgFoDzlwrroV1zfOwsEKO3Ven8z6cbVmF4lJyWcCbmVGsJY22c9bgM62t4+aqLdzfQvOcvqe6CE+aPMFtOyF14xobx49Z8yTxZZSYedaNOrXZeRAtsexqYMh88xRk0Ms6aqtSr6BWZukAb7AZ1ccOzqHG4EhbaqeKRbPb7iVzeA==
+ bh=2ZT+Blzf0GUo2dZxVV2YgwlGm5DWaCPm9mxoJDDNa0g=;
+ b=FA1wm+b4/0HK5G4ZCDLLkrPVr0ozTfI0EgSguupEtcIpKYuoNbt8afblTrZ3NIqREfQqQ0ZWAShQjC1HL12/7agSuw7fTmR39jBiIq684RDAqhUNjypVSONE0XijYpQDnK03GicygA6mSdiwBTJaQ/zeZ8XUqSvSOa67J9Oi40FNFcfajdVCifmzxv/OISBEdJCvcz3j+z6LXnaevPmH4Y5GAxZKo11sA5/53a/K6biWR4G4BGosNJFTqzCVqyPXS63sVgxBHFSd48GijMqmpoyWJuXfP/IkLSD7OS4lvF//JLLlx1sPWRQgCr7MgqxgRwiFyZmAhvDFsTZXu5JH8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.76) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
+ 194.138.21.75) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mcf0cniObv6/OcoZCucuTUoxfzFjwZYnkII49hbyYsM=;
- b=er7xnhPOOo0tqTJSUVpHK+BPZb4PYthxdBjPQEJGWz8WIoxrO03+Uv/idIfLWZJmviwh3aivVjhmiuE3v0A+sd1CpQ+4WR8ZplnrDR+7wCIMEW/hHB+3I6JzDGnQWB4QOEp79OMzVVvnazqhSJJMa0z2HErEKpz8FvsEdYThDtGrGl0e5FOJ6QuCbp34Vy1WGCvsWK1uDcvhGilczZcTg5OCjUA608fpR38rWTzb0bTmKDeXmZeIX5stxDCIAe3+sjJguibYchuyyBGR517lNnyWIwwiYlH4G4A2ecLOvAlCq1HsOgRvC25VnmC6dLq+IctcuH5Cjud7NB79oBOMHg==
-Received: from FR3P281CA0033.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1c::12)
- by VI1PR10MB3229.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:132::17) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=2ZT+Blzf0GUo2dZxVV2YgwlGm5DWaCPm9mxoJDDNa0g=;
+ b=FT4lvPkTukhyuQ8xtkhgTdl7I0IlOBgki8QPSeQKw39BWS1uVACXMBNdEeHrBGUPSM6HxtRSE/lPy2CjQfhkWTri42WRCJ/ztSRsDIV4wFtvmKtAm1sVmdD26E643SYSO1Iy6AveYhn7Jt52vjUe2tiY8UuYCQA/GvffdZMrO01qZuv6ut+fPYQW9ebZjFsBVKy/zvZprsNMGE3gcFM9/W6OJB3G4SCtc/+GEFSLCdQUcgK0O23q6nqUdXtQsfGQp+/rHoVHv6ccMu0D4XLReXwl0AHNdK/cibMJ+lzMsp3vgfUQtRJnm+Z9Vfjj6AktyFQ+E8Uu7k2UC81MS/e8SA==
+Received: from GV2PEPF000000FA.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:144:1:0:1:0:17) by AS2PR10MB7131.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:60d::7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.19; Tue, 25 Apr
  2023 15:39:23 +0000
-Received: from VE1EUR01FT014.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:d10:1c:cafe::f3) by FR3P281CA0033.outlook.office365.com
- (2603:10a6:d10:1c::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20 via Frontend
+Received: from HE1EUR01FT021.eop-EUR01.prod.protection.outlook.com
+ (2a01:111:f400:7e1f::206) by GV2PEPF000000FA.outlook.office365.com
+ (2603:1026:900::3) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33 via Frontend
  Transport; Tue, 25 Apr 2023 15:39:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
  smtp.mailfrom=siemens.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=siemens.com;
 Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.76) by
- VE1EUR01FT014.mail.protection.outlook.com (10.152.2.219) with Microsoft SMTP
+ 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.75) by
+ HE1EUR01FT021.mail.protection.outlook.com (10.152.0.167) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.20.6340.20 via Frontend Transport; Tue, 25 Apr 2023 15:39:23 +0000
 Received: from DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) by
- DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.25; Tue, 25 Apr 2023 17:39:23 +0200
 Received: from md1za8fc.ad001.siemens.net (139.25.69.115) by
@@ -66,11 +66,14 @@ To:     Linus Walleij <linus.walleij@linaro.org>,
 CC:     Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Simon Guinot <simon.guinot@sequanux.org>,
-        Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH 0/1] fix pin count in gpio bank
-Date:   Tue, 25 Apr 2023 17:39:10 +0200
-Message-ID: <20230425153911.32135-1-henning.schild@siemens.com>
+        Henning Schild <henning.schild@siemens.com>,
+        Xing Tong Wu <xingtong.wu@siemens.com>
+Subject: [PATCH 1/1] gpio-f7188x: fix pin count on nct6116d bank 7
+Date:   Tue, 25 Apr 2023 17:39:11 +0200
+Message-ID: <20230425153911.32135-2-henning.schild@siemens.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230425153911.32135-1-henning.schild@siemens.com>
+References: <20230425153911.32135-1-henning.schild@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -79,23 +82,23 @@ X-ClientProxiedBy: DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) To
  DEMCHDC8WBA.ad011.siemens.net (139.25.226.105)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1EUR01FT014:EE_|VI1PR10MB3229:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6fefdad9-a5bd-4193-b196-08db45a33e64
+X-MS-TrafficTypeDiagnostic: HE1EUR01FT021:EE_|AS2PR10MB7131:EE_
+X-MS-Office365-Filtering-Correlation-Id: a73a2279-cee5-4203-33ba-08db45a33eaf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0t3ZhM4fT5YbequITGepAYX4rqp9OZqjojK5ZPJDxAqje9ApLJOi36OIiS6raNjFDGQ/YAETJw10uFbDfhzi5CXu/NnTxxN9tX4SQrZ5YOP1FufyfYM8JDkJhK2r/+CmN+983PAICOFKP7oMo/jnjW3OeFoEyzaZzKOcHQ3UsHHkNVWbYUhTn1Ngpw+r3FHainKRbaBZMMmChWZw0DzuZVqvx6THioZW6eBf22j+mlQ4+7zzGmwxUZ/inM/Ri5AEPyHXsP2qVttBfs/rcJSJyp+71BvNG1f47SPscqd+zchHHNoUkxM2klX7MWfJvMklqIjS4ymDZaZ9vTIu3SgPjtjJTtfLmScS53TMfoPI41dYt1wisUUEaiRDSx1JOn6LaRYZuW8vHt9wo/m1/FKBDYbfkdsaFVmYDX5ykXf+mSac5JDfRZJlCKt/CQTtq0VDUqi1ZatGTKdNNyRKaGzuh43IeuZ6ftLxTyPiC7U003Ej6JcZKx1R0IhLzXIsjzVNSs1q9kss1osX4ykc/I5dlKAqHXEOhZJCkNW7mxA9PO72g9Qi/5XCxzhYl7m0nlLTPqLRVR04Ilck0sq5TBxxpmZrXaJJ+KvzF2MIhDVRKAjdzxDe77jcCZ9doiDgWX0kGCD5vxffw/tdXwU/Xk64V5FSwsqJK/hoencyJOFyqY96kYtnT4lSXLBKv4z9rkr4eVlxow7UkGgHLDpEn567Jrejsgzz+cpeiibihSDi/qQ=
-X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199021)(36840700001)(40470700004)(46966006)(107886003)(1076003)(26005)(40480700001)(336012)(2616005)(956004)(36756003)(83380400001)(36860700001)(47076005)(186003)(16526019)(40460700003)(82740400003)(82960400001)(356005)(81166007)(70206006)(86362001)(70586007)(478600001)(15650500001)(8676002)(8936002)(54906003)(44832011)(110136005)(5660300002)(41300700001)(2906002)(4744005)(82310400005)(4326008)(6666004)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: vnwn1Za8tLO4ISq4HTtiOXEtic3tIG5hYl++g1ctfQmji6OTrnG62sSC6mO3ekbBpumQcmKlEZzHJGmGAAb2gdoYwxYv8hEcs0S9OnG6fLPBvszE3XuU86ig6N24QRo98A39En6gn2qqsan+yTcLB9CMo8wqBLyVVfBxBJB3S2ySlygeXQcIjLbc55IJ3wiEyvga/GD4BYXL5JRQB+OBkODfdqNvA50KMN94pBAyMGgO0jKwEKE0euf0p0ssZK9wLtfYWi8xyFkBqvJpaWCMxBRjRWbL9eizDOUm0xIpAt2e0UAQ3sRJL6X9GV+quI0TAKuGb2vB6GwtUtPis+BvHf1sBuGIKREUpYfkaOzZ4+jWXjdTuUuoGLieaYNPcARs4mlrX21PTwyxFLdi2a4Qz3SmM5WNF8UZRwqWK9DtcbR3pxxtINZRFwfiBMIjrO8+PRf9FhWh3JpoRCr8M5a3OzFVQt4/N+yBvrYsZK+58h1oCHDnLpHvNs7GN/imV3mXiH6vouDE61n8Aaamp3bXzgro/U6Cr2HdnAATsiKyJKuHKEdmw88b/ey+TctCz/geyn3OfiSNUgQFAZCwQfgpnoZpL1vad5bXIJi9x3XVRstcqGjBBV6OUs/AXE/81oFnxsIpiLthfw9dBNnYVDbCMY3AtGt0B7IeYtKr5whuIJeeRh5AO6QuW7XuEWeZTSdrXT/bLc4OosYTUa1hmuoSdt7X/Q3dBWxoBz4U4T7dR9o=
+X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(36840700001)(40470700004)(46966006)(2906002)(70206006)(70586007)(4326008)(316002)(44832011)(5660300002)(8936002)(8676002)(41300700001)(82310400005)(36756003)(86362001)(40460700003)(40480700001)(356005)(186003)(26005)(16526019)(1076003)(107886003)(81166007)(478600001)(36860700001)(6666004)(83380400001)(2616005)(47076005)(336012)(956004)(82960400001)(110136005)(54906003)(82740400003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 15:39:23.1204
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 15:39:23.5618
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6fefdad9-a5bd-4193-b196-08db45a33e64
+X-MS-Exchange-CrossTenant-Network-Message-Id: a73a2279-cee5-4203-33ba-08db45a33eaf
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT014.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT021.eop-EUR01.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3229
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB7131
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -107,17 +110,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a rather trivial fix of a problem that happened because i looked
-at the wrong spec file when implementing the code.
+The count was wrong because i looked at the wrong spec for the chip in
+question. I now got access to the spec for that very chip and group7 has
+all 8 pins, just like the other groups.
 
-I added a "Fixes" in the hope that this can be backported as a bugfix.
-
-Henning Schild (1):
-  gpio-f7188x: fix pin count on nct6116d bank 7
-
+Fixes: d0918a84aff0 ("gpio-f7188x: Add GPIO support for Nuvoton NCT6116")
+Reported-by: Xing Tong Wu <xingtong.wu@siemens.com>
+Signed-off-by: Henning Schild <henning.schild@siemens.com>
+---
  drivers/gpio/gpio-f7188x.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
+index 9effa7769bef..05c0edc4778f 100644
+--- a/drivers/gpio/gpio-f7188x.c
++++ b/drivers/gpio/gpio-f7188x.c
+@@ -282,7 +282,7 @@ static struct f7188x_gpio_bank nct6116d_gpio_bank[] = {
+ 	F7188X_GPIO_BANK(40, 8, 0xF0, DRVNAME "-4"),
+ 	F7188X_GPIO_BANK(50, 8, 0xF4, DRVNAME "-5"),
+ 	F7188X_GPIO_BANK(60, 8, 0xF8, DRVNAME "-6"),
+-	F7188X_GPIO_BANK(70, 1, 0xFC, DRVNAME "-7"),
++	F7188X_GPIO_BANK(70, 8, 0xFC, DRVNAME "-7"),
+ };
+ 
+ static int f7188x_gpio_get_direction(struct gpio_chip *chip, unsigned offset)
 -- 
 2.39.2
 
