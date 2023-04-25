@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1CD6EE81B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5696EE821
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 21:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbjDYTQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 15:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S234609AbjDYTUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 15:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233992AbjDYTQ1 (ORCPT
+        with ESMTP id S233992AbjDYTUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:16:27 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3103C35
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:16:25 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94eee951c70so980012766b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 12:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682450184; x=1685042184;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QnKFL26C96VIgV6J+JP4Ljyq4pSmVr5ajTDLJ4C8iVQ=;
-        b=AqwZ7OSMZLog3qGGpsBlXBUOiczpKZvSHve+rhm++l/798NXu2n0/2gufjv6jKoygI
-         /zqG/eo1p9/Y+p38YQpEFzpWZW1iooCak7LQJlSv2O+F2N2UjDX1gatwDtUjwlBhfefE
-         g2Fg/CjDjjgcsetvCM48P6k0xLyiQ8DZ0nB83GzcvsAFRY3VIWH2/rFkopWUKJfy7Iha
-         xViIUEGSTeCs3mNd7497EihLNZsx94gkFmb6vIlI83aeoRbLO1Wc5Z8sbVmSgBRvqujV
-         FnKeBmv0mtRnHlpsCpR24p0SEUTloEGz8EDymoEGhHUkJ8C2my/6629OkE/EJi+TBMQh
-         cIOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682450184; x=1685042184;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QnKFL26C96VIgV6J+JP4Ljyq4pSmVr5ajTDLJ4C8iVQ=;
-        b=PDKaQaxX8b5fRDwC4PZHbaRFBX46yrLhzQE/Ppc9xF5ImzHh/IeNcp7Ljzyns/tR8e
-         1mkCgm2eQCDqR4EIxUq5Wn5kqg2LwIE28283ct4eT67bdzt5ibGZIy03JfvFvu9dN6AK
-         JWID7kxU8LcE7obbBqEMw0abuPaoje/hpb6W2mI489ONcau/KsVHdEzNK1/+Bn25zka5
-         NNK98yCYCzf5tXcC6vX/rocSPQ542LB+Macjwbwrc4y+5ElV1fCKKl6opdNqkoZWKljG
-         8PoFRKczYiQEUWKlRNbEF4dYNHYJmpmcmGH1rRcDQ2iUpjt6AOanjDeD7h/gFmqmXkmp
-         V3bw==
-X-Gm-Message-State: AAQBX9eK5VbvUsAY6ijjkDwDH2AG64vg7JdEbxKxiJqv+QWc13CKMTSp
-        GeHKQ2PSH1179t2VCnmeDolmeonQWb7Jsdeujl0=
-X-Google-Smtp-Source: AKy350Y5V5U+kqSEmeE4/wcbrt9LiSgJFXXGjEwbpiOzCLlizN+d4W6KaK9f7qD65Me7MKA9+Vc67cPGONiCs0B4byI=
-X-Received: by 2002:a17:906:34c8:b0:94f:2249:61d4 with SMTP id
- h8-20020a17090634c800b0094f224961d4mr14704304ejb.34.1682450183864; Tue, 25
- Apr 2023 12:16:23 -0700 (PDT)
+        Tue, 25 Apr 2023 15:20:52 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A111C14F48;
+        Tue, 25 Apr 2023 12:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6+cHucglDJdNHAF2oPzTY4GeYjK4vKDbP9nofsw5r1w=; b=zYzE0wJwOBZQ0uR2Q2Ig4wZR9t
+        sRfBiUeZfil+xYPZ3G0pEd3se38f9AfkdXx02cSaB4hJkUPrluVtaVsnbfzyWFXokeme+e2Log3I3
+        pWnpYLydgPWr2/hN6rHIAki4qdVJBfg6GMAudf99V7OUWTeN44bi7SsqUVvKK7OzzIo/K5GkOSb9M
+        /5UzokINIMce5YNg5JmQfH/QjuWn37sSMVJIaPFoTZ6CguLFE1AI0ST8DAO4Myub2ZyfQFSCgq4jS
+        yH5w5nmJ6BtmdHLv+lq1SbRoUuxVuZ49pYdYQ7Pb0nLWoeDfSjus7bgNxORyHrNiwa5JiEF9diYMT
+        kTTNzFzg==;
+Received: from p200300ccff17ff001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff17:ff00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1prODR-0005ZR-KJ; Tue, 25 Apr 2023 21:20:41 +0200
+Date:   Tue, 25 Apr 2023 21:20:40 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc:     linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Tony Lindgren <tony@atomide.com>, linux-kernel@vger.kernel.org
+Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
+Message-ID: <20230425212040.5a4d5b09@aktux>
+In-Reply-To: <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
+References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
+        <20230425201117.457f224c@aktux>
+        <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Sender: munniralhassanmunniralhassan@gmail.com
-Received: by 2002:a05:7208:c04f:b0:68:3a3f:3968 with HTTP; Tue, 25 Apr 2023
- 12:16:23 -0700 (PDT)
-From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher001@gmail.com>
-Date:   Tue, 25 Apr 2023 13:16:23 -0600
-X-Google-Sender-Auth: cG4zKUgZzxjjHbGgrZF6EKMT0p4
-Message-ID: <CALefQgPp1drfWu-ELiojkJJGwRbtbtaMj8W+r4s23KLFk1nOtw@mail.gmail.com>
-Subject: Humanitarian Project For Less Privileged.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_NAME_FM_MR_MRS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear
+On Tue, 25 Apr 2023 21:38:57 +0300
+Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
 
-  Am a dying woman here in the hospital, i was diagnose as a
-Coronavirus patient over 2 months ago. I am A business woman who is
-dealing with Gold Exportation, I Am 59 year old from USA California i
-have a charitable and unfufilling  project that am about to handover
-to you, if you are interested to know more about this project please reply me.
+> Hi,
+> 
+> On Tue, Apr 25, 2023 at 08:11:17PM +0200, Andreas Kemnade wrote:
+> > On Tue, 25 Apr 2023 20:32:41 +0300
+> > Aaro Koskinen <aaro.koskinen@iki.fi> wrote:  
+> > > It seems GPIOs on OMAP1 boards are somewhat broken after:
+> > > 
+> > > commit 92bf78b33b0b463b00c6b0203b49aea845daecc8
+> > > Author: Andreas Kemnade <andreas@kemnade.info>
+> > > Date:   Fri Jan 13 21:59:22 2023 +0100
+> > > 
+> > >     gpio: omap: use dynamic allocation of base
+> > > 
+> > > E.g. on OSK1 the ethernet IRQ cannot (omap_gpio.0) no longer be requested:
+> > > 
+> > > [    0.277252] Error requesting gpio 0 for smc91x irq
+> > > 
+> > > Also the tps65010 (still using static allocation) will now conflict:
+> > > 
+> > > [    0.400726] gpio gpiochip5: Static allocation of GPIO base is deprecated, use dynamic allocation.
+> > > [    0.400848] gpio gpiochip5: (tps65010): GPIO integer space overlap, cannot add chip
+> > > [    0.400970] gpiochip_add_data_with_key: GPIOs 208..214 (tps65010) failed to register, -16
+> > > [    0.401092] tps65010 i2c-tps65010: can't add gpiochip, err -16
+> > > 
+> > > I think this change should be reverted until the board files and other
+> > > gpiochips are fixed accordingly.
+> > >   
+> > well, then just fix that tps65010 thing. 
+> > 
+> > that change is itself a regression fix for exactly the same kind of error.  
+> 
+> Which commit introduced that regression? Also, the changelog mentions
+> it happens only with "unusual" probe order. Now, all the ordinary cases
+> for OMAP1 are broken.
+> 
+did not bisect that to an exact commit.
+Unusual probe order: on the device where I tested it,
+I did not see a completely successful probe.
 
- Hope to hear from you
+> And it's not just that tps65010 thing. E.g. 770 fails to boot as well
+> and it doesn't use it; and reverting 92bf78b33b0b fixes that one as
+> well. AFAIK it's because all the gpio_request()s in OMAP1 board files
+> stopped now working.
+> 
+so we break every non-devicetree user of omap-gpio? 
 
-Regard
+Regards,
+Andreas
