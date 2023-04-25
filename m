@@ -2,100 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57CE6EE8D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9E06EE8D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbjDYUKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S236273AbjDYUK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbjDYUKL (ORCPT
+        with ESMTP id S236250AbjDYUKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:10:11 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467FC16F37
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:10:08 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a69e101070so12312085ad.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:10:08 -0700 (PDT)
+        Tue, 25 Apr 2023 16:10:19 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BCF16F0C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:10:18 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fe0146b01so74403447b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:10:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682453408; x=1685045408;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IXFWJn4u7/1+bAgDkIx/wTD3na4tL+1Z4g1Kyfnv5LQ=;
-        b=yvB1KScn+EFF8c78qeutzszgVXxd6YG0QO26KxbVI80WlwrLAfzfYyjviLmxqavaF7
-         tLxmQa2kEchUP6INuyDzoRdBSyEIZXRjmSSclOySCSSj/FYphlxXA6euTmS1zvLgtIiu
-         r72mNDYv419i8DPPDjese1gvHyTOu72Te0gBVBVPcZ6tK2Si5Nbs/5iG9a9ZP480kU4t
-         xGs5bcriLw0A02/+WVtEXriAGSK2Mfpm1KD6/AHXfTUKYenmHM57oRHNO+lzpuFRV8/D
-         x7JIjAVkraEfaQJ16lqCmrpCtQ74h2eeANFSdEO1dDTZAe0ffAW7vtiYwdEBTaIXSz6A
-         XZmQ==
+        d=amarulasolutions.com; s=google; t=1682453417; x=1685045417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ajM0LwQkx5V/I2/UibvsrZZndqIviz/M9DBiru/mXQg=;
+        b=dTvvZyFpBT/vP4cJvDwecqbyU3C1xxDniswbOHTFkvd0pEIf0axd4MmboZLWTzEgH9
+         muG1HEnAOXQVlKjiu6CWR/NK5EL8p/F4SqMJPUKKJbRxmitYmgvkaCysoxwKpcvlAU7n
+         UPXVEZFigyrCV9ZpEjJDoinTLybvaQr+AdOmQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682453408; x=1685045408;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IXFWJn4u7/1+bAgDkIx/wTD3na4tL+1Z4g1Kyfnv5LQ=;
-        b=PJut0+7GoZQWRxJi/3KaRML8VRN6O/RmBP1RVIG8WoRpFlu7skY4Nh8qqRzMnqRfBN
-         JlUcNRxh5vmHByZ/Xr7djctDP6/sEAZhGHNDYY877AqAh/q6r4Rj2hDCmgvVA4vsgbZo
-         wXhZqcBiS5LkNHStD+CKgFd4jj1L+pMeFXT2ZLd1D3KwA+tk1wn09pdN1tOWuOhxm+la
-         zEXgWrAEnMZO+y9FdKn2sLlba+HGcc4E+LY46udTgfRZbhUI9G9hla2EkS7EL0JKMeCr
-         RqVN89Vgu2+8oayAcNIdKUvbGDQL69dFBoxG0P8CujE9oS5ak07eYrKkSNxxobqqd40b
-         ugVQ==
-X-Gm-Message-State: AC+VfDz/I1DKCCazMHlM1MHXVYqVRx7YZlpaXIdZpx71Ycpkj0diO1JQ
-        VhNZg6HKRW2tMTb0Yrf38A8hjQ==
-X-Google-Smtp-Source: ACHHUZ6pl6b8LVWccx5YX5vT+zZHCTLXlMFV7OlxUx9iWVhtRFcnHiYL24Vmcxw0wXZLnrg4m7VBZQ==
-X-Received: by 2002:a17:903:41d1:b0:1a9:8769:3697 with SMTP id u17-20020a17090341d100b001a987693697mr5495214ple.4.1682453407581;
-        Tue, 25 Apr 2023 13:10:07 -0700 (PDT)
-Received: from ?IPV6:2600:380:4b3d:7b0d:41df:c9d:a913:76eb? ([2600:380:4b3d:7b0d:41df:c9d:a913:76eb])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902bc4500b001a68d613ad9sm8659523plz.132.2023.04.25.13.10.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 13:10:07 -0700 (PDT)
-Message-ID: <bdb6a832-a239-1ce4-d520-d024e0e710e7@kernel.dk>
-Date:   Tue, 25 Apr 2023 14:10:04 -0600
+        d=1e100.net; s=20221208; t=1682453417; x=1685045417;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ajM0LwQkx5V/I2/UibvsrZZndqIviz/M9DBiru/mXQg=;
+        b=DVt8Bxbob8H19JxUfSFnF1OIy3H5xWl8qHR5neIx+WF7RHyU35opUiJhHF7gnYemmi
+         szyD54hezQdorsrC/SUzrL2Q/5kyiuBVxV3bokAKfWRMkgAW2FL5kLU7vc+UVQD6r5rd
+         c0OyNsfFg8qMsW7eDPOGGErpnxtfp0YrEdKmEDazKCjMFTcpBdjhuPGvgtn8tGBY90/V
+         NA+jerzPCI6tv0XqXgdbPOPgikqv1S6Vtdmz4kB6nwrNB1m7C1OZKAwPsIHuC9WuX6dr
+         fN0sZ6nf0jK35CKCVvzq7zuzR8+AtHFSwiF5b59sspu3sJOUbt5L+jvzhtlDMmBz/VVB
+         n7WA==
+X-Gm-Message-State: AAQBX9f6wUDnWj5DJ03LKlC6IixHBnQ1YqRkxMaMnjb5wdYzwPwZo8rW
+        NGd7+aqEM3hmQmm21LHkWrzvy07Wm65LrXxs9xthKg==
+X-Google-Smtp-Source: AKy350aQ40+4HpZ6RTwx6wGwaL/ZQkmDudx4fSWnKEsjw/eI3Ll2kkGSGGDzzDshudDy4AnnqGlIXyWsPZ8R7tXg9+w=
+X-Received: by 2002:a81:6742:0:b0:54c:b26:b0e with SMTP id b63-20020a816742000000b0054c0b260b0emr11871415ywc.25.1682453416722;
+ Tue, 25 Apr 2023 13:10:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
- <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
- <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
- <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
- <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
- <CAHk-=wjSuGTLrmygUSNh==u81iWUtVzJ5GNSz0A-jbr4WGoZyw@mail.gmail.com>
- <20230425194910.GA1350354@hirez.programming.kicks-ass.net>
- <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjNfkT1oVLGbe2=Vymp66Ht=tk+YKa9gUL4T=_hA_JLjg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230423172528.1398158-1-dario.binacchi@amarulasolutions.com>
+ <20230423172528.1398158-5-dario.binacchi@amarulasolutions.com>
+ <20230423-surplus-spoon-4e8194434663-mkl@pengutronix.de> <CABGWkvqA2hwgfGvVWS08Qu-2ZUbwc82ynhvq8-FqFuhHoV-vhw@mail.gmail.com>
+ <20230424-fracture-going-5dcaf06a9e6c-mkl@pengutronix.de>
+In-Reply-To: <20230424-fracture-going-5dcaf06a9e6c-mkl@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 25 Apr 2023 22:10:05 +0200
+Message-ID: <CABGWkvp+ffrHgOVF48Zug+b4MfTbsQeCkiKDUAMm+M3NHwutJg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] can: bxcan: add support for single peripheral configuration
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        michael@amarulasolutions.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 1:58?PM, Linus Torvalds wrote:
-> Jens - I don't think this actually matters for the f_mode value issue,
-> since the only thing that might change is that FMODE_NOWAIT bit, but I
-> was clearly wrong on READ_ONCE(). So that loop should have it, just to
-> have the right pattern after all.
+Hi Marc,
 
-Noted, I'll update it so it's consistent with the other use cases.
-Thanks!
+On Mon, Apr 24, 2023 at 12:06=E2=80=AFPM Marc Kleine-Budde <mkl@pengutronix=
+.de> wrote:
+>
+> On 24.04.2023 08:56:03, Dario Binacchi wrote:
+> > > This probably works. Can we do better, i.e. without this additional c=
+ode?
+> > >
+> > > If you add a syscon node for the single instance CAN, too, you don't
+> > > need a code change here, right?
+> >
+> > I think so.
+> >
+> > I have only one doubt about it. This implementation allows,
+> > implicitly, to distinguish if the peripheral is in single
+> > configuration (without handle to the gcan node) or in double
+> > configuration (with handle to the gcan node). For example, in single
+> > configuration the peripheral has 14 filter banks, while in double
+> > configuration there are 26 shared banks. Without code changes, this
+> > kind of information is lost. Is it better then, for future
+> > developments, to add a new boolean property to the can node of the dts
+> > (e.g. single-conf)?
+>
+> The DT ist not yet mainline, so we can still change it. Another option
+> is to have "st,can-primary" and "st,can-secondary" for the shared
+> peripherals and nothing for the single instance.
 
--- 
-Jens Axboe
+I did some tests following your suggestion. It is however necessary to
+make some small changes to the driver.
+I will send v2 as soon as possible.
 
+Thanks and regards,
+Dario
+
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+
+
+--=20
+
+Dario Binacchi
+
+Senior Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com
