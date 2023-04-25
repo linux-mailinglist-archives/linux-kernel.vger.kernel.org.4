@@ -2,204 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410F46EE368
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9766EE36C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbjDYNpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S234277AbjDYNp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbjDYNpk (ORCPT
+        with ESMTP id S234309AbjDYNpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:45:40 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53BF14469
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:37 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-959a3e2dd27so463193266b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682430336; x=1685022336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Al0zqUJCRs8AI5Sc47A1KMBnQC63vKqupk6DIofDhiM=;
-        b=ITM1rBhaC1OkA8L7qspcDJ8xbkZrOsaT0dCfP5BjuAZtPW6BBgMTvTknoRUzcp9oGq
-         tRqmd/cXl4V2QIGzwRFD4JMcMxoOdclL3ggk62TG+Qpvg2hU/UqbKiEhRvzwvrY82/G/
-         ekhBg3pKTFerlph1uFfJZDo9PptMNJ6QMRbtQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430336; x=1685022336;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Al0zqUJCRs8AI5Sc47A1KMBnQC63vKqupk6DIofDhiM=;
-        b=Gu+5k8j9LKHdOF5KDXfJmjTXEjH2TEdTXS6nDca4tC6GDQPgE7Iam9nAAzqpamtVtO
-         veXcsZsqYutRjuKDaBpY+Zt2iIb1ySMoGCAlUaKbJwSQQ1CCOnCOtX0pVBlDQHzLLUN/
-         80xzeaO72d1iuagSs2AbKgTFNgUGtkxk6FIKh6FqYgVC2B8siadcEaI5bqGmqJsi7JDe
-         zYfIgA845VfBrhN0+Xt0c/6eJNsgKEmZBsuP3Xd4dW+KCJZxTwQdG64W/Wz2aPO2x1qP
-         Yy0aWA4McUBmFD1pFC2UOJ/M0VJ1zz+uzHt4Y5aD6ReRFAcUI6s0fNP9zcjCoE0eNQLO
-         iyLA==
-X-Gm-Message-State: AAQBX9f5uems7L55NtN47xqL7Dxe26e/UjSEVG0faKHdhZP5boRHii5n
-        5U65CDVCBQvxKKh+5V/23Br87Q==
-X-Google-Smtp-Source: AKy350aKN7c3TBlSHw8bGq2LBpYoNswxL+Q4j51QbggX6/tE0dIImeRVxwOgA/3I0vsBbihspOdvSg==
-X-Received: by 2002:a17:906:8a44:b0:94f:553:6fd6 with SMTP id gx4-20020a1709068a4400b0094f05536fd6mr13433197ejc.24.1682430335987;
-        Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906048a00b0094eeea5c649sm6806822eja.114.2023.04.25.06.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 06:45:35 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] spi: spi-imx: fix use of more than four chipselects
-Date:   Tue, 25 Apr 2023 15:45:27 +0200
-Message-Id: <20230425134527.483607-4-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
+        Tue, 25 Apr 2023 09:45:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B041445C;
+        Tue, 25 Apr 2023 06:45:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4B7262A1B;
+        Tue, 25 Apr 2023 13:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962E6C4339B;
+        Tue, 25 Apr 2023 13:45:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682430341;
+        bh=9L0RFEhgc5pVrEurXwJyQS6iOhvUqopnPSSKaj6qHrk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l9rN0yXvw4qGwOHeti8o5qBtfLR1pBuf64qdQ83RRLdFbTYYcutmEc94K4lo9BCQG
+         SyOqoxZBLPNi5/ZS7CZhbGdEXN5wu32UITol5ums0ldYHMT9iFhwUXabdmtZ0tB36w
+         3lPsP2eKjxgOJuAIn1Rw44gVKrSaP8avWcNZ8eGaJ9FzILmvuQFQ0JI+mXxT9SnHQr
+         I0Gxde5M8dlNSIkiH57of5qh8J1S83x4CTijHAx799ZeCABTMLQCZ/Hagk5t5PmXG3
+         V5eR97+IhdE2f9tj9bU6u4TFF+/uneh1nBC14aYWjyftXr8yWYG/fTaxEOwycyL31s
+         tkIajbtM3LHwA==
+Date:   Tue, 25 Apr 2023 15:45:37 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
+Cc:     patrick@stwcx.xyz, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-i2c@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] hwmon: pmbus: Add ltc4286 driver
+Message-ID: <20230425134537.pzsplcpkrog2552r@intel.intel>
+References: <20230424101352.28117-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424101352.28117-3-Delphine_CC_Chiu@Wiwynn.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the spi->chip_select is used unconditionally in code such as
+Hi Delphine,
 
-	/* set chip select to use */
-	ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
+On top of Guenter's comments,
 
-and
+[...]
 
-	if (spi->mode & SPI_CPHA)
-		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-	else
-		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
+> +config SENSORS_LTC4286
+> +	bool "Linear Technologies LTC4286"
+> +	help
+> +	  If you say yes here you get hardware monitoring support for Linear
+> +	  Technology LTC4286.
 
-with these macros being
+could you add a couple of words more here?
 
-	#define MX51_ECSPI_CTRL_CS(cs)          ((cs) << 18)
-	#define MX51_ECSPI_CONFIG_SCLKPHA(cs)   (1 << ((cs) +  0))
+[...]
 
-However, the CHANNEL_SELECT field in the control register is only two
-bits wide, so when spi->chip_select >= 4, we end up writing garbage
-into the BURST_LENGTH field. Similarly, there are only four bits in
-the SCLK_PHA field, so the code above ends up actually modifying bits
-in the SCLK_POL (or higher) field.
+> +static int ltc4286_probe(struct i2c_client *client,
+> +			 const struct i2c_device_id *id)
+> +{
+> +	int ret;
+> +	u8 block_buffer[I2C_SMBUS_BLOCK_MAX + 1];
+> +	struct device *dev = &client->dev;
+> +	struct pmbus_driver_info *info;
+> +	u32 rsense;
+> +
+> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_ID, block_buffer);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "failed to read manufacturer id\n");
 
-The scrambling of the BURST_LENGTH field itself is probably benign,
-since that is explicitly completely initialized later, in
-->prepare_transfer.
+you can use dev_err_probe() here:
 
-But, since we effectively write (spi->chip_select & 3) into the
-CHANNEL_SELECT field, that value is what the IP block then uses to
-determine which bits of the configuration register control phase,
-polarity etc., and those bits are not properly initialized, so
-communication with the spi device completely fails.
+	return dev_err_probe(&client->dev, err, "failed to read manufacturer id\n");
 
-Fix this by using the ->unused_native_cs value as channel number for
-any spi device which uses a gpio as chip select.
+> +		return ret;
+> +	}
+> +
+> +	/* Refer to ltc4286 datasheet page 20
+> +	 * the default manufacturer id is LTC
+> +	 */
+> +	if (ret != LTC4286_MFR_ID_SIZE ||
+> +	    strncmp(block_buffer, "LTC", LTC4286_MFR_ID_SIZE)) {
+> +		dev_err(&client->dev, "unsupported manufacturer id\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, block_buffer);
+> +	if (ret < 0) {
+> +		dev_err(&client->dev, "failed to read manufacturer model\n");
+> +		return ret;
+> +	}
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/spi/spi-imx.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+Is this read really needed?
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index e8f7afbd9847..569a5132f324 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -504,6 +504,13 @@ static void mx51_ecspi_disable(struct spi_imx_data *spi_imx)
- 	writel(ctrl, spi_imx->base + MX51_ECSPI_CTRL);
- }
- 
-+static int mx51_ecspi_channel(const struct spi_device *spi)
-+{
-+	if (!spi->cs_gpiod)
-+		return spi->chip_select;
-+	return spi->controller->unused_native_cs;
-+}
-+
- static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 				      struct spi_message *msg)
- {
-@@ -514,6 +521,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	u32 testreg, delay;
- 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
- 	u32 current_cfg = cfg;
-+	int channel = mx51_ecspi_channel(spi);
- 
- 	/* set Master or Slave mode */
- 	if (spi_imx->slave_mode)
-@@ -528,7 +536,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 		ctrl |= MX51_ECSPI_CTRL_DRCTL(spi_imx->spi_drctl);
- 
- 	/* set chip select to use */
--	ctrl |= MX51_ECSPI_CTRL_CS(spi->chip_select);
-+	ctrl |= MX51_ECSPI_CTRL_CS(channel);
- 
- 	/*
- 	 * The ctrl register must be written first, with the EN bit set other
-@@ -549,22 +557,22 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 	 * BURST_LENGTH + 1 bits are received
- 	 */
- 	if (spi_imx->slave_mode && is_imx53_ecspi(spi_imx))
--		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
- 	else
--		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
- 
- 	if (spi->mode & SPI_CPOL) {
--		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPOL(channel);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKCTL(channel);
- 	} else {
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(spi->chip_select);
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPOL(channel);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(channel);
- 	}
- 
- 	if (spi->mode & SPI_CS_HIGH)
--		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SSBPOL(channel);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SSBPOL(channel);
- 
- 	if (cfg == current_cfg)
- 		return 0;
-@@ -609,14 +617,15 @@ static void mx51_configure_cpha(struct spi_imx_data *spi_imx,
- 	bool cpha = (spi->mode & SPI_CPHA);
- 	bool flip_cpha = (spi->mode & SPI_RX_CPHA_FLIP) && spi_imx->rx_only;
- 	u32 cfg = readl(spi_imx->base + MX51_ECSPI_CONFIG);
-+	int channel = mx51_ecspi_channel(spi);
- 
- 	/* Flip cpha logical value iff flip_cpha */
- 	cpha ^= flip_cpha;
- 
- 	if (cpha)
--		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg |= MX51_ECSPI_CONFIG_SCLKPHA(channel);
- 	else
--		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(spi->chip_select);
-+		cfg &= ~MX51_ECSPI_CONFIG_SCLKPHA(channel);
- 
- 	writel(cfg, spi_imx->base + MX51_ECSPI_CONFIG);
- }
--- 
-2.37.2
+Andi
 
+[...]
