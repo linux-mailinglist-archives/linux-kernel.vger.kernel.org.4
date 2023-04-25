@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842566EE294
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2476EE29D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbjDYNPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S234058AbjDYNQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbjDYNPS (ORCPT
+        with ESMTP id S233577AbjDYNQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:15:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F412913FB6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:15:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f109b1808so1079251666b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682428510; x=1685020510;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=S3BikuggXhWs1OPUQPTsPuMkYRDNlCEeDeec0U2qCGU=;
-        b=npeWsqFvrxdDEjHJ40Ljy4HgJG2I6Qag8a8pP//WROOGC4bMMXJXG3NUbeC2rI+Agm
-         zM9WBSRzLcIEKfcvxacDUawYlNSrP0XYjoBLYQGI6uUElAthC5524feJDJUWQ+PehVdc
-         22poIpMVGBO5EQJrClH4W5BuJtjELXcdAgYPtFQAD9z5BOd9XCCXF+MvEBJ3A6ef5SXB
-         4pHezttks4lY4jLY79TrMulHjKlLvwIpKISxTo7x1l5cUonXCI4y1LUOAyfSiS0LeiIT
-         jQ83HGi1AWY3Utj5K0L0cnNQlqX/oqhs2cOYsjyRCbRG/N4b7Tw9S7bca+7qjcYjynjM
-         fDlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682428510; x=1685020510;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S3BikuggXhWs1OPUQPTsPuMkYRDNlCEeDeec0U2qCGU=;
-        b=heKJ+XhO0iRZuXj/vmqfDWUYLqX1qxloA4G8ks5XHrE/eaFmW+RhpebhO4dRtkdk5T
-         1XGXnBmyx3iabNrH88n2teBLAwxnHfDnhj47Cyn8+WuMH5c0uoteJtgm64wkAxBtWGsc
-         5IJXgozlwt2ebBw2eb68mDVj+qPO+bGt9cB6W5B1lVc4PwgZMYfudzqCjIx+M28SOYEE
-         J3vHKTLkvLhJoWbFrd/IOjf+TtiSf2ESod2rPvf511vqhezbGAdM7miQAknCw3ZEDRUY
-         +gW5hc45LYBNDOb+UrBVAM/V+vvBsEN15wY9RDjLuTw30/1EYNqoElp/PeBNXp+s6owa
-         /whg==
-X-Gm-Message-State: AAQBX9eZNK+Vo/NtoVZupa9Kh5ohfWXH01NuaChsId0G8/l2erIw1bgT
-        TkcjtSTLcprgfOWFeF272XJNdw==
-X-Google-Smtp-Source: AKy350Ykr4gtdZ1ZSW54CjRQJltXgFAHvYw5B1VZUVrxe/v1FVbbmrQbyexNMdoBYd1tjbR3rUIt/w==
-X-Received: by 2002:a17:906:40f:b0:94f:a8fd:b69f with SMTP id d15-20020a170906040f00b0094fa8fdb69fmr14098617eja.18.1682428510422;
-        Tue, 25 Apr 2023 06:15:10 -0700 (PDT)
-Received: from [192.168.9.102] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id ox6-20020a170907100600b008f89953b761sm6753105ejb.3.2023.04.25.06.15.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 06:15:09 -0700 (PDT)
-Message-ID: <7ee3eec8-b5b4-2591-adcd-1831bf7de02b@linaro.org>
-Date:   Tue, 25 Apr 2023 15:15:08 +0200
+        Tue, 25 Apr 2023 09:16:26 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D313C0D;
+        Tue, 25 Apr 2023 06:16:17 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PDG8eA076648;
+        Tue, 25 Apr 2023 08:16:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682428569;
+        bh=1+e+O5D6Nppd9aEFDdQWCaNX19g51E0LmsZFvfCdXKs=;
+        h=From:To:CC:Subject:Date;
+        b=H9lfbiKF+aHn5oDk83X+MoC96gDMGLHYraHZLXqmf7RaweOYflg4Dg6zGtEXjB93F
+         11qW5InM+g0Y74BEWN75vr6tWWQSPsNGbGu4B0SVCNzyR25DSRzqRvueyMOVFL+MlP
+         jTA0Cgbc9MoY6upv5dfkisVE2jHLG2qRKL0kTXMU=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PDG8xH031621
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Apr 2023 08:16:08 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
+ Apr 2023 08:16:08 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 25 Apr 2023 08:16:08 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PDG7pU025396;
+        Tue, 25 Apr 2023 08:16:08 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <afd@ti.com>, <s-vadapalli@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <j-choudhary@ti.com>
+Subject: [PATCH v4 0/5] Add peripherals for J784S4
+Date:   Tue, 25 Apr 2023 18:46:02 +0530
+Message-ID: <20230425131607.290707-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/4] ARM: dts: aspeed: mtmitchell: Add I2C Fan
-To:     Chanh Nguyen <chanh@os.amperecomputing.com>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230425065715.21871-1-chanh@os.amperecomputing.com>
- <20230425065715.21871-3-chanh@os.amperecomputing.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230425065715.21871-3-chanh@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,35 +64,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2023 08:57, Chanh Nguyen wrote:
-> Add the MAX31790 node as a Fan I2C controller. It controls the
-> TACH and PWM for Fan Mt.Mitchell system.
-> 
-> Signed-off-by: Chanh Nguyen <chanh@os.amperecomputing.com>
-> ---
->  arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> index e79f56208b89..6455cf80da0e 100644
-> --- a/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> +++ b/arch/arm/boot/dts/aspeed-bmc-ampere-mtmitchell.dts
-> @@ -477,6 +477,18 @@
->  			line-name = "bmc-ocp0-en-n";
->  		};
->  	};
-> +
-> +	max31790@20 {
+This series adds support for:
+- SERDES, WIZ DT nodes, Serdes lane control mux
+- MAIN CPSW2G nodes
+- DSS and DisplayPort-0 nodes
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+This series depends on DMA support patches for J784S4[1] which are
+applied to linux-next.
 
-> +		compatible = "maxim,max31790";
+DisplayPort has been tested on local J784S4 EVM. Test log:
+<https://gist.github.com/Jayesh2000/49b11c0b62d5aecd14de1f7fd2bdca1f>
 
-Unfortunately the compatible is undocumented.
+Changelog v3->v4:
+- add reg property to serdes_ln_ctrl and fix the node name again to
+  get rid of dtbs_check error.
+- reorder reg, reg-names and ranges property for main_cpsw1.
+- correct the order for clocks in serdes_wiz nodes to fix dtbs_check
+  warnings.
+- fix indentation in reg, reg-names and clock property for dss node.
+- add comments for the reg type in dss registers.
 
-Please run scripts/checkpatch.pl and fix reported warnings.
+Changelog v3->v2:
+- fix dtc warnings for 'scm_conf' and 'serdes_ln_ctrl' nodes
+  (Checked all the changes of the series with W=12 option during build)
+- added clock-frequency for serdes_refclk along with other EVM changes
+  This refclk is being used by all the instances of serdes_wiz which
+  are disabled by default. So configuring refclk when the serdes nodes
+  are used for the first time is okay.
 
-Best regards,
-Krzysztof
+Changelog v1->v2:
+- Moved J784S4 EVM changes together to the last patch
+  (Suggested by Andrew)
+
+v3 patch link:
+<https://lore.kernel.org/all/20230419061710.290068-1-j-choudhary@ti.com/>
+
+[1]:
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=00e34c94987e4fe866f12ad8eac17268c936880c>
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=82e6051a48957a89066d15b17bb85d2f662f2bad>
+<https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=436b288687176bf4d2c1cd25b86173e5a1649a60>
+
+Rahul T R (2):
+  arm64: dts: ti: k3-j784s4-main: Add DSS and DP-bridge node
+  arm64: dts: ti: k3-j784s4-evm: Enable DisplayPort-0
+
+Siddharth Vadapalli (3):
+  arm64: dts: ti: k3-j784s4-main: Add system controller and SERDES lane
+    mux
+  arm64: dts: ti: k3-j784s4: Add Main CPSW2G node
+  arm64: dts: ti: k3-j784s4: Add WIZ and SERDES PHY nodes
+
+ arch/arm64/boot/dts/ti/k3-j784s4-evm.dts   | 164 ++++++++++
+ arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 335 +++++++++++++++++++++
+ 2 files changed, 499 insertions(+)
+
+-- 
+2.25.1
 
