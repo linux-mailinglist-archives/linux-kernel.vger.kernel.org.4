@@ -2,184 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004ED6EE7AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57826EE7B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 20:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234601AbjDYSrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 14:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S234525AbjDYSrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 14:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjDYSq6 (ORCPT
+        with ESMTP id S234620AbjDYSru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 14:46:58 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6966965A9;
-        Tue, 25 Apr 2023 11:46:57 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-187b70ab997so32750024fac.0;
-        Tue, 25 Apr 2023 11:46:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682448416; x=1685040416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Tue, 25 Apr 2023 14:47:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0C319AB;
+        Tue, 25 Apr 2023 11:47:49 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4edcc885d8fso6786023e87.1;
+        Tue, 25 Apr 2023 11:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682448467; x=1685040467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KUQiQ/cycrAa4n9iZRt3Zgr4LfG6yW1fRE0hcsRmUfQ=;
-        b=WoQcwEWCWwJYkurfoN5o3Hr75SbTZikgSbisRbGrm70/l/sIK4lGpbj9xrdw2DUTft
-         rFsLrHMiFNH2/nkwj2EDvF17aLNO6Hq9d9x29YSgR73onUKmD8QuyBn4FbjMkdLGPHvV
-         oLsywOWk7tOB5VidrGR+C0KVzDQemLrQY4RkkFQejrUb6EIdML+t1tVcMIWjXmvGtfH+
-         8VdoJpWzdjy1AmU7Mf6ZvcFh80/b4wUEsglAEeLvNtiHa0VsNePUyb79ukjwiWU1gBkj
-         lNacryLIGFRgw7WcHPp0jX3uNcJ+Sfcee/FIzu/8wP5hRS4EC52iMXWkhIrODzfZ82ZL
-         3A1Q==
-X-Gm-Message-State: AAQBX9eLADV8c+aw1Twg35kXb6OUbKnirkxX4N9ll2zsxN3Gvwhv0wdG
-        Rhbj7CWzE5S7sMHqVUvtcA==
-X-Google-Smtp-Source: AKy350a9gR40wr81MPVCWEPH2D/7sm+9b9p11s31OwD5EHu62Pt7kbhb85SbKjjVrnX0z5MDz6Fg4A==
-X-Received: by 2002:a05:6830:130e:b0:6a1:2c80:5a3f with SMTP id p14-20020a056830130e00b006a12c805a3fmr9233595otq.19.1682448416562;
-        Tue, 25 Apr 2023 11:46:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p26-20020a9d695a000000b006a13dd5c8a2sm5991901oto.5.2023.04.25.11.46.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 11:46:56 -0700 (PDT)
-Received: (nullmailer pid 2070614 invoked by uid 1000);
-        Tue, 25 Apr 2023 18:46:54 -0000
-Date:   Tue, 25 Apr 2023 13:46:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hao Zhang <quic_hazha@quicinc.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: arm: Add Coresight Dummy Trace
-Message-ID: <20230425184654.GA2063541-robh@kernel.org>
-References: <20230422073714.38844-1-quic_hazha@quicinc.com>
- <20230422073714.38844-3-quic_hazha@quicinc.com>
+        bh=VmQcifGaNqWREsm6+3IKR1nGGFi3wZLObSgYonuw3U0=;
+        b=pzyuBJEK0Qe+TSnjm+6vir05cngf+kduk0vEqeZs0zM9S2JxF3a9uqIlr+RuupOc+a
+         XwpaIbzim3lrMxOUw+UyjhPA3pEJ9AHrrYYVRUPY5WMLZZ1MxU4JVjm16A5Jq0ZXG6li
+         YKZMr2+tlSJ2ihht90MmyHZKwPOkUlVcnQ9PtOf/F9FcJYwyDbOS+Jk4EUOPEFuw3DHh
+         JxQdAZNyux/pbvWjoedPLAN9/V1R1J8iVftDg9f5F/a7f+wnpG7UZbCidsSnrHP1jyqD
+         66H8yKUZm14D2Qrv6MCE1XZK1QWcx4iWEsTi9S725XaO9f7jUs2Hwuho8x6Mak7oQGQo
+         zNuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682448467; x=1685040467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VmQcifGaNqWREsm6+3IKR1nGGFi3wZLObSgYonuw3U0=;
+        b=E/eutNiFGPERtQNLyjzZzBJHmTcfI0kUtPSlaSGwjw32KIl6oZJHyx5bl30mJfYdhz
+         9WBi0yIJs7fTPkxBbg7ETQNCxMx5NQSaYupS1OR+xOVquLFbrqbfk9GS0WfRUNXExBqO
+         Z8JXexdMWAz5gnanh9EhDdj07vkVZD6AM7IaYJW6tUNPQyFDMnIzllfTSofVEbNjWwXj
+         E9uWyuWOWsaySVKelnEkkUiO+zGySYgCtxQobRAG1922cknXgd/QvJHqDsMc3kGK/n3v
+         AtmexGMH2PIobI2hPLbwd3JGmy8ubvTbZ7aRJJVDbcElPs6zTaX/kKR1hoVcYVV56HMU
+         tiRA==
+X-Gm-Message-State: AAQBX9dbtVJkMGsv9S7CBxSeVvQp433w91tkXB+ID3BmXHpHEW1UKr+C
+        ywiJCsmIhtiepntoZFXEybv/TSw2LZEUVNJfYfI=
+X-Google-Smtp-Source: AKy350Z4GHSyyIt4uc9mvfsVOvXPR2DMIDPWN21NHb/tcDjB5sG5OgrnQlMLkelyALEjxTIX2BJB4Y2rvLaEj4AnnCY=
+X-Received: by 2002:a19:a40d:0:b0:4ed:cb37:7d95 with SMTP id
+ q13-20020a19a40d000000b004edcb377d95mr4820301lfc.44.1682448467464; Tue, 25
+ Apr 2023 11:47:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230422073714.38844-3-quic_hazha@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230419151321.6167-1-jorge.lopez2@hp.com> <20230419151321.6167-4-jorge.lopez2@hp.com>
+ <38929a45-79de-964b-5d6f-cfa44099b35e@gmx.de> <6c05cc9e-815d-7a94-8b2d-f17fd5d47354@redhat.com>
+ <CAOOmCE_W7_pgQT=8bQBi8_0pD74O6uen6-8p0Orvi1qjEcaHng@mail.gmail.com> <9216dfe9-eea0-b0c0-3630-339a2b60aa2d@redhat.com>
+In-Reply-To: <9216dfe9-eea0-b0c0-3630-339a2b60aa2d@redhat.com>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Tue, 25 Apr 2023 13:47:22 -0500
+Message-ID: <CAOOmCE_bp8yvDagQZFE+a4nSEnW1LnU0j+8JH18Enh3A=Naekg@mail.gmail.com>
+Subject: Re: [PATCH v10 03/14] HP BIOSCFG driver - bioscfg
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Armin Wolf <W_Armin@gmx.de>, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@t-8ch.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 03:37:13PM +0800, Hao Zhang wrote:
-> Add new coresight-dummy.yaml file describing the bindings required
-> to define coresight dummy trace in the device trees.
-> 
-> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
-> ---
->  .../bindings/arm/arm,coresight-dummy.yaml     | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> new file mode 100644
-> index 000000000000..48d864aefaaa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> @@ -0,0 +1,101 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/arm,coresight-dummy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ARM Coresight Dummy component
-> +
-> +description: |
-> +  Coresight Dummy Trace Module is for the specific devices that kernel
-> +  don't have permission to access or configure, e.g., CoreSight TPDMs
-> +  on Qualcomm platforms. So there need driver to register dummy devices
-> +  as Coresight devices. It may also be used to define components that
-> +  may not have any programming interfaces (e.g, static links), so that
-> +  paths can be established in the driver. Provide Coresight API for
-> +  dummy device operations, such as enabling and disabling dummy devices.
-> +  Build the Coresight path for dummy sink or dummy source for debugging.
-> +
-> +  The primary use case of the coresight dummy is to build path in kernel
-> +  side for dummy sink and dummy source.
+On Tue, Apr 25, 2023 at 9:59=E2=80=AFAM Hans de Goede <hdegoede@redhat.com>=
+ wrote:
+>
+> Hi,
+>
+> On 4/25/23 16:32, Jorge Lopez wrote:
+> > On Tue, Apr 25, 2023 at 5:34=E2=80=AFAM Hans de Goede <hdegoede@redhat.=
+com> wrote:
+> >>
+> >> Hi All,
+> >>
+> >> On 4/19/23 20:04, Armin Wolf wrote:
+> >>> Am 19.04.23 um 17:13 schrieb Jorge Lopez:
+> >>
+> >> <snip>
+> >>
+> >>>> +static int __init bioscfg_init(void)
+> >>>> +{
+> >>>> +    int ret =3D 0;
+> >>>> +    int bios_capable =3D wmi_has_guid(HP_WMI_BIOS_GUID);
+> >>>> +
+> >>>> +    if (!bios_capable) {
+> >>>> +        pr_err("Unable to run on non-HP system\n");
+> >>>> +        return -ENODEV;
+> >>>> +    }
+> >>>> +
+> >>>
+> >>> Currently, this driver will no get automatically loaded on supported =
+hardware,
+> >>> something which would be quite beneficial for users to have.
+> >>> Since the HP_WMI_BIOS_GUID is already handled by the hp-wmi driver, m=
+aybe this
+> >>> driver (which also already implements a function similar to hp_wmi_pe=
+rform_query())
+> >>> could register a platform device which is then used by this driver? T=
+his together
+> >>> with MODULE_DEVICE_TABLE() would allow for automatically loading the =
+module on supported hardware.
+> >>
+> >> Both drivers can already co-exist since the old hp-wmi driver uses the=
+ old
+> >> wmi kernel functions and is not a "wmi_driver" so there is no need for
+> >> a platform_device for this driver to bind to since the wmi_device is
+> >> still free for it to bind to.
+> >>
+> >> This does indeed need a MODULE_DEVICE_TABLE() statement for
+> >> the bios_attr_pass_interface_id_table[] id-table. Note only for that
+> >> table, because the HP_WMI_BIOS_GUID is present on models which do
+> >> not support this and we don't want the module to auto-load there.
+> >>
+> >
+> > I am considering adding a check for the  HP_WMI_SET_BIOS_SETTING_GUID
+> > and HP_WMI_BIOS_GUID during the initialization process.
+> > The driver will report a message If HP_WMI_SET_BIOS_SETTING_GUID is
+> > found or not.
+> > If HP_WMI_SET_BIOS_SETTING_GUID does not exist, the driver cannot
+> > change the BIOS settings.
+>
+> Right, adding a check for  HP_WMI_BIOS_GUID to bioscfg_init()
+> sounds like a good idea.
+>
+> That + add a a MODULE_DEVICE_TABLE() statement to
+> the bios_attr_pass_interface_id_table[] id-table.
+>
 
-I could imagine the OS wanting to know more information than just 
-'dummy'. Is data from an unknown source useful? Likewise, don't you want 
-to know where you are sending data too?
+Will do. Thanks
 
-> +
-> +maintainers:
-> +  - Mao Jinlong <quic_jinlmao@quicinc.com>
-> +  - Tao Zhang <quic_taozha@quicinc.com>
-> +  - Hao Zhang <quic_hazha@quicinc.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-
-Don't need oneOf as there is only one entry.
-
-> +          - arm,coresight-dummy-sink
-> +          - arm,coresight-dummy-source
-> +
-> +  out-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port:
-> +        description: Output connection from the source to Coresight
-> +          Trace bus.
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +  in-ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port:
-> +        description: Input connection from the Coresight Trace bus to
-> +          dummy sink, such as Embedded USB debugger(EUD).
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +
-> +required:
-> +  - compatible
-> +
-> +if:
-> +  # If the compatible contains the below value
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: arm,coresight-dummy-sink
-> +
-> +then:
-> +  required:
-> +    - in-ports
-> +
-> +else:
-> +  required:
-> +    - out-ports
-
-This still allows the nodes when they don't make sense. I think this 
-needs to be 2 schema files. The only common part is 'compatible' and 
-that's not even shared.
-
-Rob
+> Regards,
+>
+> Hans
+>
+>
