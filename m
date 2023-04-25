@@ -2,180 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4AC6EE118
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A260D6EE11E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233886AbjDYLcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
+        id S233658AbjDYLfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233368AbjDYLcM (ORCPT
+        with ESMTP id S232851AbjDYLfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:32:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD63C04;
-        Tue, 25 Apr 2023 04:32:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E899616F8;
-        Tue, 25 Apr 2023 11:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8808C433D2;
-        Tue, 25 Apr 2023 11:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682422330;
-        bh=UuXKbyhIaXCYiDs1culAYOsXSM30LX3eDmpf6+fnnpI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OZd8/xP6EvyFmFDAF0T28LMchJc5xeN2PJZfvG5pRjDomj1xU0oslTXnfr8KiB+so
-         g+5cizRaGYcPpmpn8/pzuztM3UNO7f3eo4bKNbtOIz4eAEfX+3q6aCh6IDk2RSOgOn
-         sL827/P93ASLZ/2FyhbGK/McEw26lR98C6DrLgaNRib8vzfWogNOwLcm4PED9D1Qcp
-         IaSZMWywVNWPaZ7lZGcMh7jIZ1vJ8jG3ScHXWNErkDHvZdpZ0JgjsyipFz8PbOPxsJ
-         Kw1/yLaPzunRaoe33O9uWRc57i/wOkY56E9dW39dG0d6+ZvTylfwJXdqffkPfescmA
-         LESkDPRkcInLw==
-Message-ID: <2b74bc3f-85c7-1d2f-d597-968a914c4e6e@kernel.org>
-Date:   Tue, 25 Apr 2023 14:32:05 +0300
+        Tue, 25 Apr 2023 07:35:50 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64833C0A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:35:48 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1950f5676so45329325e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682422547; x=1685014547;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VwmJNsQVa3Vng8gKvvvDPoERcEJfaY5DKNCyYTI03Sc=;
+        b=VX3fhbquFA6+uaUkxCbdF8qhQPGlJ3GsF8c9PdpI+h0WOsnjXM1RCXEf4tonNaw+D3
+         NsWHe+JKhcv9o6BPzOGB9v/5MbzbG9WdTwpTki6gon8SzMH2vIc+K/zIH00jL3Xs82M1
+         CqLj9oIl+wbJtPwnLB8XwDdCR3O7Pk28Cxyt5JdB6/11mqcld+V0rRJyeOScTPy/7i2A
+         suB5tHBIi2HqGQP0tY/aG05fpcsfCg3MH3dwayJEhazdhahcPB7lx82j0tu7AOKoxOZ4
+         1IXtdVKzR3QaB50SzMWtaEEw/T6/cGGHtOzhrM2f7J429vodm3n1O2W8CNPBLA3FNobU
+         fi/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682422547; x=1685014547;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VwmJNsQVa3Vng8gKvvvDPoERcEJfaY5DKNCyYTI03Sc=;
+        b=OIaiDczmflRZJX9dpDOGVDG2b5InQ33I4ZFpbS6NZJTGN9sLEGil0trsugIA0l+05H
+         iOM35VAa5WzCRqRU2F8NXe/AUd298K0tQaMkwAgDWF6j4T3RgSSOLelOlpEhi3pa75bZ
+         xKJgJlLAajPAPSE5m5hviPfSUy4JoheFYOUIjQraVrz8Wo4EGR0ifIaXV5r0nXqBIKs0
+         pR1xk8taXLR2IpA1caQ0+Oi3Rd2M0SEyVfuFn/r89duUDo/VtWWYv819E6S5v2Hg7iwY
+         Sg8zo0smbASxgTEx07zIBWr9La09+hmioxR7GzFS4rVnu4tnbG6OByds5P9BKqOy29E4
+         W0sA==
+X-Gm-Message-State: AAQBX9e8UyCsDetQaNO37TBDNGPcGCoAfsRHy8LxNPmZ0FirIeszUli4
+        /OlLHEmGtvhzw5s+ummJSdyU2ebJRX3y8djrzpc=
+X-Google-Smtp-Source: AKy350YYSFveOR4ot4iXXTyDs7vO3lTymAmSY5PrZlIY90fzb4Alo+fO49znGJgXFo2VctM6yQ5kbg==
+X-Received: by 2002:adf:ef51:0:b0:2f8:6c01:3bfc with SMTP id c17-20020adfef51000000b002f86c013bfcmr11572765wrp.30.1682422547195;
+        Tue, 25 Apr 2023 04:35:47 -0700 (PDT)
+Received: from [10.101.1.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id z17-20020adfdf91000000b002d97529b3bbsm12825907wrl.96.2023.04.25.04.35.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 04:35:46 -0700 (PDT)
+Message-ID: <5100ca4e-f3c4-b3a9-2379-aab6177d37cb@baylibre.com>
+Date:   Tue, 25 Apr 2023 13:35:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v14 3/8] arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support
- of OSPI
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, nm@ti.com, afd@ti.com,
-        vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-vadapalli@ti.com,
-        vaishnav.a@ti.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230331090028.8373-1-r-gunasekaran@ti.com>
- <20230331090028.8373-4-r-gunasekaran@ti.com>
+Subject: Re: [PATCH] clk: mediatek: Enable all MT8192 clocks by default
 Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230331090028.8373-4-r-gunasekaran@ti.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Chen-Yu Tsai <wenst@chromium.org>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <20230421111125.2397368-1-wenst@chromium.org>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230421111125.2397368-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 21/04/2023 13:11, Chen-Yu Tsai wrote:
+> Currently the base MT8192 clock drivers are enabled by default, but all
+> the other clock drivers need to be enabled by hand. This is extremely
+> confusing and inconvenient for end users. For the MT8192 platform to be
+> useful, most if not all the clock drivers driving the hardware blocks
+> need to be enabled.
+> 
+> Enable them by default whenever MT8192 base clock driver is enabled.
+> 
+> Signed-off-by: Chen-Yu Tsai<wenst@chromium.org>
 
-On 31/03/2023 12:00, Ravi Gunasekaran wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Add support for two instance of OSPI in J721S2 SoC.
-> 
-> Reviewed-by: Vaishnav Achath <vaishnav.a@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> ---
-> Changes from v13:
-> * No changes. Only rebased on top of linux-next
-> 
-> Changes from v12:
-> * Disabled only nodes that need additional info
-> 
-> Changes from v11:
-> * Cleaned up comments
-> 
-> Changes from v10:
-> * Documented the reason for disabling the nodes by default.
-> * Removed Link tag from commmit message
-> 
-> Changes from v9:
-> * Disabled fss, ospi nodes by default in common DT file
-> 
-> Changes from v8:
-> * Updated "ranges" property to fix dtbs warnings
-> 
-> Changes from v7:
-> * Removed "reg" property from syscon node
-> * Renamed the "syscon" node to "bus" to after change in
->   compatible property
-> 
-> Changes from v6:
-> * Fixed the syscon node's compatible property
-> 
-> Changes from v5:
-> * Updated the syscon node's compatible property
-> * Removed Cc tags from commit message
-> 
-> Changes from v4:
-> * No change
-> 
-> Changes from v3:
-> * No change
-> 
-> Changes from v2:
-> * No change
-> 
-> Changes from v1:
-> * No change
-> 
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> index a353705a7463..6e981fe4727e 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-> @@ -379,4 +379,48 @@
->  			compatible = "ti,am3359-adc";
->  		};
->  	};
-> +
-> +	fss: bus@47000000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges = <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
-> +			 <0x05 0x00000000 0x05 0x00000000 0x01 0x00000000>,
-> +			 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>;
-> +
-> +		ospi0: spi@47040000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47040000 0x00 0x100>,
-> +			      <0x05 0x00000000 0x01 0x00000000>;
-> +			interrupts = <GIC_SPI 840 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 109 5>;
-> +			assigned-clocks = <&k3_clks 109 5>;
-> +			assigned-clock-parents = <&k3_clks 109 7>;
-> +			assigned-clock-rates = <166666666>;
-> +			power-domains = <&k3_pds 109 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled"; /* Needs pinmux */
-> +		};
-> +
-> +		ospi1: spi@47050000 {
-> +			compatible = "ti,am654-ospi", "cdns,qspi-nor";
-> +			reg = <0x00 0x47050000 0x00 0x100>,
-> +			      <0x07 0x00000000 0x01 0x00000000>;
-> +			interrupts = <GIC_SPI 841 IRQ_TYPE_LEVEL_HIGH>;
-> +			cdns,fifo-depth = <256>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x0>;
-> +			clocks = <&k3_clks 110 5>;
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-What about clock parent and clock rate assignment like it was done for osip0?
+Regards,
+Alexandre
 
-> +			power-domains = <&k3_pds 110 TI_SCI_PD_EXCLUSIVE>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			status = "disabled"; /* Needs pinmux */
-> +		};
-> +	};
->  };
-
-cheers,
--roger
