@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07E16EE9CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5986EE9CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 23:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbjDYVn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 17:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S236259AbjDYVpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 17:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjDYVn1 (ORCPT
+        with ESMTP id S231629AbjDYVpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 17:43:27 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB14B23B;
-        Tue, 25 Apr 2023 14:43:25 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33PLhF4T016097;
-        Tue, 25 Apr 2023 16:43:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682458996;
-        bh=hcVxdL4FLx0hwez58KXLcmrDbTt3daM5J0GsmRhVUBA=;
-        h=From:To:CC:Subject:Date;
-        b=M/hSWS/cqNnJ/o1OdF7AcgFKtk7hf4VrkISg9ngtj97mNxN8OVXiN39Qz4dgurDQl
-         II3Sq+VR8JdBgU43rzI6zUMrx6Az47YpHvmYbjTbXSsc++7tSYEgDXKuX425irUTug
-         ZGhJm8fQt8e5PscJ0Rwu363Mo07Nxcfnyu9tkccs=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33PLhFNJ051766
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Apr 2023 16:43:15 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 25
- Apr 2023 16:43:14 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 25 Apr 2023 16:43:14 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33PLhEYn035712;
-        Tue, 25 Apr 2023 16:43:14 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-am62a7-sk: Describe main_uart1 and wkup_uart
-Date:   Tue, 25 Apr 2023 16:43:11 -0500
-Message-ID: <20230425214311.546191-1-bb@ti.com>
-X-Mailer: git-send-email 2.40.0
+        Tue, 25 Apr 2023 17:45:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C6FB239
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 14:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682459103; x=1713995103;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QykCodoxCjYPsvFBT9BYYHLb2+QG8EOs85UQFzRc+2E=;
+  b=T4xM1l3LRDBUL/ig5517wP9sPxbH4TMKUp2noR77ntgadcp/ttK5SJh5
+   d9aalHNk+36f9r2GlRu5qtSp8d1pkoJkYFVvdzKV+19YbMmrhkiyPj/sX
+   gxXjnQ3lKXXPvURmEQvrqmouSGgwI+e2vY6H138H15ouYfO4VCW6Fx/5P
+   ip4kUVoO9tm6WLR7mUmiDxEAJ96mooALrJnL9YHS4uo9w0ihIbopDPoLh
+   drbdYGJT1qMEBDubcPSd3ddSKv7JgS7J0dRcgUWfpZd0pUkBElsb01jcr
+   4bGvzP/QQjHZrnfsJ+uUPWgkkmexbgyLRUliiwWdNJ0uZ3vhkZBO4TZaJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="344369486"
+X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
+   d="scan'208";a="344369486"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 14:45:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="696368234"
+X-IronPort-AV: E=Sophos;i="5.99,226,1677571200"; 
+   d="scan'208";a="696368234"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Apr 2023 14:45:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prQT7-000jnc-0N;
+        Tue, 25 Apr 2023 21:45:01 +0000
+Date:   Wed, 26 Apr 2023 05:44:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fsfa3-next-20230425 1/1]
+ kernel/bpf/net_namespace.c:437:27: warning: array subscript [0, 1] is
+ outside array bounds of 'struct bpf_prog *[2]'
+Message-ID: <202304260539.vm2qQLzo-lkp@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2715; i=bb@ti.com; h=from:subject; bh=cGB/F/c+1FRJZb3sIYvgjqiJFwIX3JQVRIqE0qqvbfY=; b=owNCWmg5MUFZJlNZ/BeK8wAAYP///r9f72/5353mfd81vTej32pjUvV/Sv/d2vjv3/p8/06wA Rsa2QBoMjQDEZAAGmEyYTTIaDQyAA0YBGCA0aMEyMgAaaAyGmI0GQBkeUMiaANBoaNNAABo0DQD QaAA00aaGjQ0MgDEyaaPU2iD1NMgDRo0ZMENqDTEehEPUMgZD0QDJo00Mah6QaNAyDIGgNNAADI MhiGQAAMIDRpiZAwgZGQ9T1NBgxHE2lLDJQhsaPBeGiw3yhwR0EVsm4CdX1RXPokw3YGWW+ZFin NHNxb3+gL1FCE0l6LqVnygPQTL1wu0BmKOeGV+Op7L/T0oYkTYoCwjFobQmgh4g8/wLjA4+HAVo 0yXrBA8mFiXTAL+E03UtdYXMVTKsy3bCuq9uVSkPR7KrMP3c7psgixJT9xe9YDuM21ndjaRr9ry uubUbJR27jH5HROl1zyT8wjFuYOy7iLnHCdaLeMJ906UAyN9Re8F/W4RUJCzxERGg7NA51TU3F7 /nTow+8DCmZ0AB33vGJx5BgB0ztUeZLSOqUzgbWKDHAmYEGSaKMZyWOP3zoMfHwGAn4mcoxgSR6 nQjRBj60OLHrreQdIYphBAKgEcmcsX0umsH4dDB5vgIzlZv9ayVSJAVYe0KIEKT9wq5iAOQxP6j BABVf4u5IpwoSH4LxXm
-X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,96 +65,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3-next-20230425
+head:   b82a35ff486df1d6737f532e08e060c466f9e652
+commit: b82a35ff486df1d6737f532e08e060c466f9e652 [1/1] Makefile: Enable -Wstringop-overflow and -Warray-bounds
+config: microblaze-randconfig-r002-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260539.vm2qQLzo-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=b82a35ff486df1d6737f532e08e060c466f9e652
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fsfa3-next-20230425
+        git checkout b82a35ff486df1d6737f532e08e060c466f9e652
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash kernel/bpf/
 
-wkup_uart and main_uart1 on this platform is used by tifs and DM
-firmwares. Describe them for completeness including the pinmux.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260539.vm2qQLzo-lkp@intel.com/
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
-[bb@ti.com: updated pinmux and commit subject]
-Signed-off-by: Bryan Brattlof <bb@ti.com>
----
+All warnings (new ones prefixed by >>):
 
-Changes from v1: [0]
-- Updated $subject to align with previous commits
+   kernel/bpf/net_namespace.c: In function 'netns_bpf_link_attach':
+>> kernel/bpf/net_namespace.c:437:27: warning: array subscript [0, 1] is outside array bounds of 'struct bpf_prog *[2]' [-Warray-bounds]
+     437 |         if (net->bpf.progs[type]) {
+         |             ~~~~~~~~~~~~~~^~~~~~
+   In file included from include/linux/bpf-netns.h:6,
+                    from kernel/bpf/net_namespace.c:4:
+   include/net/netns/bpf.h:24:26: note: while referencing 'progs'
+      24 |         struct bpf_prog *progs[MAX_NETNS_BPF_ATTACH_TYPE];
+         |                          ^~~~~
 
-[0] https://lore.kernel.org/linux-devicetree/20230424183355.68360-1-bb@ti.com/
 
+vim +437 kernel/bpf/net_namespace.c
 
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 40 +++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  420  
+7f045a49fee04b Jakub Sitnicki 2020-05-31  421  static int netns_bpf_link_attach(struct net *net, struct bpf_link *link,
+7f045a49fee04b Jakub Sitnicki 2020-05-31  422  				 enum netns_bpf_attach_type type)
+7f045a49fee04b Jakub Sitnicki 2020-05-31  423  {
+ab53cad90eb10c Jakub Sitnicki 2020-06-25  424  	struct bpf_netns_link *net_link =
+ab53cad90eb10c Jakub Sitnicki 2020-06-25  425  		container_of(link, struct bpf_netns_link, link);
+695c12147a4018 Jakub Sitnicki 2020-06-25  426  	struct bpf_prog_array *run_array;
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  427  	int cnt, err;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  428  
+7f045a49fee04b Jakub Sitnicki 2020-05-31  429  	mutex_lock(&netns_bpf_mutex);
+7f045a49fee04b Jakub Sitnicki 2020-05-31  430  
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  431  	cnt = link_count(net, type);
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  432  	if (cnt >= netns_bpf_max_progs(type)) {
+7f045a49fee04b Jakub Sitnicki 2020-05-31  433  		err = -E2BIG;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  434  		goto out_unlock;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  435  	}
+7f045a49fee04b Jakub Sitnicki 2020-05-31  436  	/* Links are not compatible with attaching prog directly */
+695c12147a4018 Jakub Sitnicki 2020-06-25 @437  	if (net->bpf.progs[type]) {
+7f045a49fee04b Jakub Sitnicki 2020-05-31  438  		err = -EEXIST;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  439  		goto out_unlock;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  440  	}
+7f045a49fee04b Jakub Sitnicki 2020-05-31  441  
+7f045a49fee04b Jakub Sitnicki 2020-05-31  442  	switch (type) {
+7f045a49fee04b Jakub Sitnicki 2020-05-31  443  	case NETNS_BPF_FLOW_DISSECTOR:
+3b7016996c4c44 Jakub Sitnicki 2020-06-25  444  		err = flow_dissector_bpf_prog_attach_check(net, link->prog);
+7f045a49fee04b Jakub Sitnicki 2020-05-31  445  		break;
+e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  446  	case NETNS_BPF_SK_LOOKUP:
+e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  447  		err = 0; /* nothing to check */
+e9ddbb7707ff58 Jakub Sitnicki 2020-07-17  448  		break;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  449  	default:
+7f045a49fee04b Jakub Sitnicki 2020-05-31  450  		err = -EINVAL;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  451  		break;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  452  	}
+7f045a49fee04b Jakub Sitnicki 2020-05-31  453  	if (err)
+7f045a49fee04b Jakub Sitnicki 2020-05-31  454  		goto out_unlock;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  455  
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  456  	run_array = bpf_prog_array_alloc(cnt + 1, GFP_KERNEL);
+695c12147a4018 Jakub Sitnicki 2020-06-25  457  	if (!run_array) {
+695c12147a4018 Jakub Sitnicki 2020-06-25  458  		err = -ENOMEM;
+695c12147a4018 Jakub Sitnicki 2020-06-25  459  		goto out_unlock;
+695c12147a4018 Jakub Sitnicki 2020-06-25  460  	}
+695c12147a4018 Jakub Sitnicki 2020-06-25  461  
+ab53cad90eb10c Jakub Sitnicki 2020-06-25  462  	list_add_tail(&net_link->node, &net->bpf.links[type]);
+7f045a49fee04b Jakub Sitnicki 2020-05-31  463  
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  464  	fill_prog_array(net, type, run_array);
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  465  	run_array = rcu_replace_pointer(net->bpf.run_array[type], run_array,
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  466  					lockdep_is_held(&netns_bpf_mutex));
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  467  	bpf_prog_array_free(run_array);
+ce3aa9cc510936 Jakub Sitnicki 2020-07-17  468  
+1559b4aa1db443 Jakub Sitnicki 2020-07-17  469  	/* Mark attach point as used */
+1559b4aa1db443 Jakub Sitnicki 2020-07-17  470  	netns_bpf_attach_type_need(type);
+1559b4aa1db443 Jakub Sitnicki 2020-07-17  471  
+7f045a49fee04b Jakub Sitnicki 2020-05-31  472  out_unlock:
+7f045a49fee04b Jakub Sitnicki 2020-05-31  473  	mutex_unlock(&netns_bpf_mutex);
+7f045a49fee04b Jakub Sitnicki 2020-05-31  474  	return err;
+7f045a49fee04b Jakub Sitnicki 2020-05-31  475  }
+7f045a49fee04b Jakub Sitnicki 2020-05-31  476  
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-index f6a67f072dca6..65caa5611d6d5 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-@@ -17,7 +17,9 @@ / {
- 	model = "Texas Instruments AM62A7 SK";
- 
- 	aliases {
-+		serial0 = &wkup_uart0;
- 		serial2 = &main_uart0;
-+		serial3 = &main_uart1;
- 		mmc1 = &sdhci1;
- 	};
- 
-@@ -114,11 +116,38 @@ led-0 {
- 	};
- };
- 
-+&mcu_pmx0 {
-+	wkup_uart0_pins_default: wkup-uart0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_MCU_IOPAD(0x0024, PIN_INPUT, 0) /* (C9) WKUP_UART0_RXD */
-+			AM62AX_MCU_IOPAD(0x0028, PIN_OUTPUT, 0) /* (E9) WKUP_UART0_TXD */
-+			AM62AX_MCU_IOPAD(0x002c, PIN_INPUT, 0) /* (C10) WKUP_UART0_CTSn */
-+			AM62AX_MCU_IOPAD(0x0030, PIN_OUTPUT, 0) /* (C8) WKUP_UART0_RTSn */
-+		>;
-+	};
-+};
-+
-+/* WKUP UART0 is used for DM firmware logs */
-+&wkup_uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&wkup_uart0_pins_default>;
-+	status = "reserved";
-+};
-+
- &main_pmx0 {
- 	main_uart0_pins_default: main-uart0-pins-default {
- 		pinctrl-single,pins = <
--			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
--			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
-+			AM62AX_IOPAD(0x1c8, PIN_INPUT, 0) /* (E14) UART0_RXD */
-+			AM62AX_IOPAD(0x1cc, PIN_OUTPUT, 0) /* (D15) UART0_TXD */
-+		>;
-+	};
-+
-+	main_uart1_pins_default: main-uart1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x01e8, PIN_INPUT, 1) /* (C17) I2C1_SCL.UART1_RXD */
-+			AM62AX_IOPAD(0x01ec, PIN_OUTPUT, 1) /* (E17) I2C1_SDA.UART1_TXD */
-+			AM62AX_IOPAD(0x0194, PIN_INPUT, 2) /* (C19) MCASP0_AXR3.UART1_CTSn */
-+			AM62AX_IOPAD(0x0198, PIN_OUTPUT, 2) /* (B19) MCASP0_AXR2.UART1_RTSn */
- 		>;
- 	};
- 
-@@ -254,6 +283,13 @@ &main_uart0 {
- 	pinctrl-0 = <&main_uart0_pins_default>;
- };
- 
-+/* Main UART1 is used for TIFS firmware logs */
-+&main_uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_uart1_pins_default>;
-+	status = "reserved";
-+};
-+
- &usbss1 {
- 	status = "okay";
- };
+:::::: The code at line 437 was first introduced by commit
+:::::: 695c12147a40181fe9221d321c3f2de33c9574ed bpf, netns: Keep attached programs in bpf_prog_array
 
-base-commit: 891db0c48efb48c3af334006f9d7ea6a0aa49cb9
+:::::: TO: Jakub Sitnicki <jakub@cloudflare.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
+
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
