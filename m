@@ -2,148 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569FE6EE5BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB416EE5C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 18:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbjDYQ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 12:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
+        id S234756AbjDYQbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 12:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbjDYQ3Q (ORCPT
+        with ESMTP id S234377AbjDYQbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 12:29:16 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F8DBB97
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:29:14 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94eff00bcdaso1096710766b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682440153; x=1685032153;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VXJ9yzP7r10T1ZjT07mC8uDa4HlfNL4ir5xqCtJ+4tY=;
-        b=YRZuBoR9HymRaxJ/xpYsZre4rPO61gav+O/ySlKfsepC5WElLCw00E41w0VjKzb9IN
-         FmkLX8a43VacQfFDVPsACCwZxiaoqMONlzntdcMQ9INnrhJ9smAX14HX2e5W4sqdswrr
-         YkHsCNuIdEgRwUJHGzEm0w4HWDMQKz0PpLFSU=
+        Tue, 25 Apr 2023 12:31:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F699022
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682440255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KkiBjG/U2iaSLLFqUrRMoqsUKvV+THkYT/zZJXbPjSQ=;
+        b=QBCpzd0qC63ggfQxkt5aUUvfCQ/8bvY6chQZjd/hXm5jZtZMj+RC8Z7iSIrIkGTK5GtjfE
+        fBJaLamE1PA8bFUulq3vQ9V9oQYbYBQ0RzdPn7+DEjsQOatfaiH6URitstWcs4UAe5rK5O
+        mOvmqIrdFfuDANTru2Rfx9VJ2p6N0WU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-QYr1_mVOPg29K3LzFcCLFg-1; Tue, 25 Apr 2023 12:30:54 -0400
+X-MC-Unique: QYr1_mVOPg29K3LzFcCLFg-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94ec76d7a26so551743066b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:30:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682440153; x=1685032153;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VXJ9yzP7r10T1ZjT07mC8uDa4HlfNL4ir5xqCtJ+4tY=;
-        b=ioC8ONpCzaCqu7CryOEwNQHhntU4AS+3FIZXg4pwNldRgqoEMdJfnl8hqgAJFy4cKZ
-         LUjzHIQpn5nYiY5ZoqBZj79h8CgbQbhPkBVRbCMHhLQnIKI5dYxQJ1nmpe4za1cwh5TG
-         y+9yDTZ2wonCpoXehwkzpgNxWJYFCUE52Xyf5LWblJyzhTl6Mm2UKGZY4lwJ1O+3bY3U
-         I3IaNYoI54r7OTnoKdq14nHiL2kks+f9ItShUlI4RYb/GUPuH32zylAN5Llo+/dMlnw6
-         ThuDBq525CWeEntFGFtVsdonW3j8LIklZXDgmSpbH6h3oh5iUcnm8jUP8TinG1Ybwteq
-         IRbQ==
-X-Gm-Message-State: AAQBX9cTcqCI4+4HRj5iFAYlPV+YMv3xIzyLT4wlaRqzhiqXfPOGYz+0
-        ksHVztq+CQhWXTTA9cqJVCuZWQP2L1VYtG08Hn207dyH
-X-Google-Smtp-Source: AKy350ZZM0qp+ITXy12UfG9p64VPoqUoMFwBcOnpHyRm6vh7NUhHArjb36nX67ZGgFL3onhVjeN7vQ==
-X-Received: by 2002:a17:906:7054:b0:94a:6f1d:54df with SMTP id r20-20020a170906705400b0094a6f1d54dfmr15400132ejj.67.1682440152951;
-        Tue, 25 Apr 2023 09:29:12 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id x10-20020a1709064bca00b0095334355a34sm6947062ejv.96.2023.04.25.09.29.12
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1682440253; x=1685032253;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KkiBjG/U2iaSLLFqUrRMoqsUKvV+THkYT/zZJXbPjSQ=;
+        b=ijTdwJ5DqoQGm8uNobv5PXHU43RRPNBza9vLJbC/mQVLkLA6F2BZkjXvVJqgw9XOPT
+         GxtwHnRk4oHa1/XXpL+d6P06ZkrPQJvOniXgPO7KGnYJGK30kQZSeAJ9tYt2a5Bfiopc
+         TGugeS4La0ai1HMFZFb6tRKWXSxT/GtpUXwLDOdGjG5mpWzy22eY8dZ0Po4sey37AlDJ
+         VYXQ6LI9ey4e4yhFFuPhLRojb7WVnfdhWwhLvjlUeXS8V1rOvbb6hixnrp/Wk3uzV8LQ
+         KbFF0wKBtfkDmz0vIl+SvasUC2/zYcI9buS96F/hqvcTpoXr7apBXEVBmq2xcgiaIN1c
+         wNFw==
+X-Gm-Message-State: AAQBX9dYzuMCwvzVjUJDMspMWQ4JdhSSjztlr15T+4yMasqektF7XHrE
+        9YXWaSpPYeE7XW++z+5YjWzHB3zJgPLcltLQ9jieSodIbdWvh71bQlYm3m7pVvyrMjEYBYJQsCm
+        flsZx2QaBhvorTEtydMZCo44m
+X-Received: by 2002:a17:907:80c5:b0:94a:a887:c29f with SMTP id io5-20020a17090780c500b0094aa887c29fmr14393045ejc.68.1682440253105;
+        Tue, 25 Apr 2023 09:30:53 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y5NoM7SoY7Gd84hixRqsCU49QlzpEGdn67Y4Iy5C05ojEIo3rR8k+JHUgIfz1utWhxBib3Yw==
+X-Received: by 2002:a17:907:80c5:b0:94a:a887:c29f with SMTP id io5-20020a17090780c500b0094aa887c29fmr14393026ejc.68.1682440252805;
+        Tue, 25 Apr 2023 09:30:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id s22-20020aa7cb16000000b00509e3053b66sm2169795edt.90.2023.04.25.09.30.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 09:29:12 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-506b2a08877so10348594a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:29:12 -0700 (PDT)
-X-Received: by 2002:a05:6402:327:b0:506:73a7:ce12 with SMTP id
- q7-20020a056402032700b0050673a7ce12mr14926793edw.36.1682440151945; Tue, 25
- Apr 2023 09:29:11 -0700 (PDT)
+        Tue, 25 Apr 2023 09:30:52 -0700 (PDT)
+Message-ID: <1b68caa2-3c4a-1f47-6409-5ebfd34e431f@redhat.com>
+Date:   Tue, 25 Apr 2023 18:30:51 +0200
 MIME-Version: 1.0
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
- <20230425060427.GP3390869@ZenIV> <20230425-sturheit-jungautor-97d92d7861e2@brauner>
-In-Reply-To: <20230425-sturheit-jungautor-97d92d7861e2@brauner>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 25 Apr 2023 09:28:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
-Message-ID: <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
-Subject: Re: [GIT PULL] pidfd updates
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/4] platform/x86: wmi: Add documentation
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, Armin Wolf <W_Armin@gmx.de>,
+        markgross@kernel.org
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230424222939.208137-1-W_Armin@gmx.de>
+ <20230424222939.208137-4-W_Armin@gmx.de>
+ <fd333355-8059-4d7d-7a7e-be67006ad3fc@infradead.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <fd333355-8059-4d7d-7a7e-be67006ad3fc@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 5:34=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> Hell, you could even extend that proposal below to wrap the
-> put_user()...
->
-> struct fd_file {
->         struct file *file;
->         int fd;
->         int __user *fd_user;
-> };
+Hi All,
 
-So I don't like this extended version, but your proposal patch below
-looks good to me.
+Armin thank you very mich for the WMI documentation work,
+this is much appreciated!
 
-Why? Simply because the "two-word struct" is actually a good way to
-return two values. But a three-word one would be passed on the stack.
+On 4/25/23 05:07, Randy Dunlap wrote:
+> Hi--
+> 
+> On 4/24/23 15:29, Armin Wolf wrote:
+>> Add documentation for the WMI subsystem. The documentation describes
+>> both the ACPI WMI interface and the driver API for interacting with
+>> the WMI driver core. The information regarding the ACPI interface
+>> was retrieved from the Ubuntu kernel references and the Windows driver
+>> samples available on GitHub. The documentation is supposed to help
+>> driver developers writing WMI drivers, as many modern machines designed
+>> to run Windows provide an ACPI WMI interface.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>  Documentation/driver-api/index.rst   |  1 +
+>>  Documentation/driver-api/wmi.rst     | 21 ++++++
+>>  Documentation/subsystem-apis.rst     |  1 +
+>>  Documentation/wmi/acpi-interface.rst | 96 ++++++++++++++++++++++++++++
+>>  Documentation/wmi/index.rst          | 18 ++++++
+>>  MAINTAINERS                          |  2 +
+>>  6 files changed, 139 insertions(+)
+>>  create mode 100644 Documentation/driver-api/wmi.rst
+>>  create mode 100644 Documentation/wmi/acpi-interface.rst
+>>  create mode 100644 Documentation/wmi/index.rst
+>>
+> 
+>> diff --git a/Documentation/driver-api/wmi.rst b/Documentation/driver-api/wmi.rst
+>> new file mode 100644
+>> index 000000000000..6ca58c8249e5
+>> --- /dev/null
+>> +++ b/Documentation/driver-api/wmi.rst
+>> @@ -0,0 +1,21 @@
+>> +.. SPDX-License-Identifier: GPL-2.0-or-later
+>> +
+>> +==============
+>> +WMI Driver API
+>> +==============
+>> +
+>> +The WMI driver core supports a more modern bus-based interface for interacting
+>> +with WMI devices, and an older GUID-based interface. The latter interface is
+>> +considered to be deprecated, so new WMI drivers should generally avoid it since
+>> +it has some issues with multiple WMI devices and events sharing the same GUIDs
+>> +and/or notification IDs. The modern bus-based interface instead maps each
+>> +WMI device to a :c:type:`struct wmi_device <wmi_device>`, so it supports
+>> +WMI devices sharing GUIDs and/or notification IDs. Drivers can then register
+>> +a :c:type:`struct wmi_driver <wmi_driver>`, which will be bound to compatible
+>> +WMI devices by the driver core.
+>> +
+>> +.. kernel-doc:: include/linux/wmi.h
+>> +   :internal:
+> 
+> There are no kernel-doc comments in include/linux/wmi.h, so this
+> causes a kernel-doc warning:
+> 
+> ../include/linux/wmi.h:1: warning: no structured comments found
+> 
+> Otherwise this all looks good.
 
-Both gcc and clang return small structs (where "small" is literally
-just two words) in registers, and it's part of most (all?) ABIs and
-we've relied on that before.
+So what is the plan here, is there something we can do to fix this
+new warning and should I expect a v3?  Or shall I merge this as is ?
 
-It's kind of the same thing as returning a "long long" in two
-registers, except it works with structs too.
+Regards,
 
-We've relied on that for ages, with things like 'struct pte' often
-being that kind of two-word struct (going back a *loong* time to the
-bad old days of 32-bit x86 and PAE).
+Hans
 
-And in the vfs layer we actually also do it for 'struct fd', which is
-a very similar construct.
 
-So yes, doing something like this:
 
-> +struct fd_file {
-> +       struct file *file;
-> +       int fd;
-> +};
 
-would make me happy, and still return just "one" value, it's just that
-the value now is both of those things we need.
 
-And then your helpers:
+> 
+> 
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> thanks.
 
-> +static inline void fd_publish(struct fd_file *fdf)
-> +static inline void fd_discard(struct fd_file *fdf)
-
-solves my other issue, except I'd literally make it pass those structs
-by value, exactly like fdget/fdput does.
-
-Now, since they are inline functions, the code generation doesn't
-really change (compilers are smart enough to not actually generate any
-pointer stuff), but I prefer to make things like that expliict, and
-have source code that matches the code generation.
-
-(Which is also why I do *not* endorse passing bigger structs by value,
-because then the compiler will just pass it as a "pointer to a copy"
-instead, again violating the whole concept of "source matches what
-happens in reality")
-
-I think the above helper could be improved further with Al's
-suggestion to make 'fd_publish()' return an error code, and allow the
-file pointer (and maybe even the fd index) to be an error pointer (and
-error number), so that you could often unify the error/success paths.
-
-IOW, I like this, and I think it's superior to my stupid original suggestio=
-n.
-
-                  Linus
