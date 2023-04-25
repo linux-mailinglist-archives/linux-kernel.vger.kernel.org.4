@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C5B6EE0D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5816EE0DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbjDYLHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S233952AbjDYLH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233938AbjDYLG7 (ORCPT
+        with ESMTP id S233929AbjDYLHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:06:59 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B4314445
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:06:25 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b992e28c141so7008207276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:06:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682420779; x=1685012779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yxnh6Hi9HqlHGEwie6ZZICYaa0bP7KY/+WuMwYNYTmY=;
-        b=VdR3wwmAEjxfeujbEcL+VAXT+xd04RRZcqXvF6U5icWhnGsOEohwg7vARx9yoOTROC
-         hbiMXGNFSBxAXxwprIgOE8Xq0QItgGv02in+lMvVZuq8Klm4WI0CUFQ2Hrac/yWECqi4
-         md5KxCiyVN7a9X+oAjBZ3b9rrFEPZpDwnbm2U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682420779; x=1685012779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yxnh6Hi9HqlHGEwie6ZZICYaa0bP7KY/+WuMwYNYTmY=;
-        b=G8cGF5pkTzmdxqtPcTvpvP5HLV6SlW1SGXWywSXebjDOCV23ycElgnLhCKPsh7Np1q
-         DiF8zz7BYHNpanuMrji7wLidLQ/X3O9g/bcWWzfaWvse3FdZRmICRo2zHWXdKS0fGSlN
-         fOsaDWiTzOejWH59ax7fThOSBqcBJqzXw7KRfmZb3nKNLd81gdwPxkf2isxH+eRvtGo2
-         xhkBejcMja0gPP3UNOogXjWCAn6Eu9TQ+0KVzk8R4Nim6xZOT/i7rmwza+I/N7zNgl+2
-         g/JQSGi+jAlMfNNhVjqPn1zYJjxHjCwo4G1Gf/tYzzVsfKuJtPEVcpkJoSe9FMXAgqH5
-         gu1Q==
-X-Gm-Message-State: AAQBX9fidV1jL6SRxuZZoR/4k2Kz88E7y1FvK3WiX4jxBkS49iwF9QuA
-        +8Nw1eNPortatl8DzHt2YMw+ljRRPc/TJviG2ExGsQ==
-X-Google-Smtp-Source: AKy350Z2MMGY9lUYIgZ/RTFuuaAQUwutf3WfAlP93ocKcWEfXzN5niDO7fXLYWQHI48oJKslRzKoaFZSHENDyb2u5I0=
-X-Received: by 2002:a81:5288:0:b0:54f:ba9d:c9c4 with SMTP id
- g130-20020a815288000000b0054fba9dc9c4mr9756341ywb.16.1682420779531; Tue, 25
- Apr 2023 04:06:19 -0700 (PDT)
+        Tue, 25 Apr 2023 07:07:06 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1411E13C2F;
+        Tue, 25 Apr 2023 04:06:37 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 4E56F5FD3E;
+        Tue, 25 Apr 2023 14:06:12 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682420772;
+        bh=jORapi60saGb6s8dqt0Qj/N+jnHOySKoftd9srjwQEs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=rRc5dU1h7elVVrLMdQ68XUElEEtq7bwWwUgtV6+mOM9NJnSZxUU/TIdyE5cVikw02
+         vK6EdxY2XsJi0G+50e30/FWNBX4dJvX2zdD5NT24ll6uDNdCBmrhUFCQBh+ie+U4VI
+         sP15RdoSlG29gtUtuThXm4SWxwId9ahah4GRv5/B+GartSYov43VR8WMd8aIwpGLEi
+         /lzZU2VSNpCJuz9Sk2Hzxfn4FfLudJ6OhkrygOpPcR5nnivQMbkcCs/VnclwXOWEG7
+         OO6qz+mZzjfy4tHqjYueG+s+azXsSKtWSO0egJxufitROVUXABrZoX/zAIU+1zkBJX
+         zi+nTaA/xqwZA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 14:06:10 +0300 (MSK)
+Date:   Tue, 25 Apr 2023 14:06:10 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
+        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
+        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v2 5/5] arm64: dts: meson: a1: support USB controller in
+ OTG mode
+Message-ID: <20230425110610.ezhhz2vauc6o4nu2@CAB-WSD-L081021>
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+ <20230418111612.19479-6-ddrokosov@sberdevices.ru>
+ <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
- <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
- <20230425101324.GD1331236@hirez.programming.kicks-ass.net> <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
-In-Reply-To: <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 25 Apr 2023 07:06:08 -0400
-Message-ID: <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCDvyweC-m=nKw+FZFYvASDE2x3e-Vt=JkSzBifu87cnNw@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,92 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.com> =
-wrote:
->
-> hi
->
-> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infradead.=
-org> wrote:
-> >
-> > On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
-> > > This is amazing debugging Boqun, like a boss! One comment below:
-> > >
-> > > > > > Or something simple I haven't thought of? :)
-> > > > >
-> > > > > At what points can r13 change?  Only when some particular functio=
-ns are
-> > > > > called?
-> > > > >
-> > > >
-> > > > r13 is the local paca:
-> > > >
-> > > >         register struct paca_struct *local_paca asm("r13");
-> > > >
-> > > > , which is a pointer to percpu data.
-> > > >
-> > > > So if a task schedule from one CPU to anotehr CPU, the value gets
-> > > > changed.
-> > >
-> > > It appears the whole issue, per your analysis, is that the stack
-> > > checking code in gcc should not cache or alias r13, and must read its
-> > > most up-to-date value during stack checking, as its value may have
-> > > changed during a migration to a new CPU.
-> > >
-> > > Did I get that right?
-> > >
-> > > IMO, even without a reproducer, gcc on PPC should just not do that,
-> > > that feels terribly broken for the kernel. I wonder what clang does,
-> > > I'll go poke around with compilerexplorer after lunch.
-> > >
-> > > Adding +Peter Zijlstra as well to join the party as I have a feeling
-> > > he'll be interested. ;-)
-> >
-> > I'm a little confused; the way I understand the whole stack protector
-> > thing to work is that we push a canary on the stack at call and on
-> > return check it is still valid. Since in general tasks randomly migrate=
-,
-> > the per-cpu validation canary should be the same on all CPUs.
-> >
-> > Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
-> > raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu,
-> > but no guarantees.
-> >
-> > Both cases use r13 (paca) in a racy manner, and in both cases it should
-> > be safe.
-> New test results today: both gcc build from git (git clone
-> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
-> are immune from the above issue. We can see the assembly code on
-> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
->
-> while
-> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
-> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
+On Sun, Apr 23, 2023 at 07:51:31PM +0200, Martin Blumenstingl wrote:
+> On Tue, Apr 18, 2023 at 1:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +                       usb2_phy1: phy@4000 {
+> > +                               compatible = "amlogic,a1-usb2-phy";
+> > +                               clocks = <&clkc CLKID_USB_PHY_IN>;
+> > +                               clock-names = "xtal";
+> Out of curiosity since there's also a CLKID_USB_PHY clock (which is
+> used for the dwc3 controller below):
+> Do we know that this part of the clock hierarchy is correct? I have no
+> way to check this myself, so I'm curious if you could verify this
+> somehow.
+> 
+> [...]
 
-Do you know what fixes the issue? I would not declare victory yet. My
-feeling is something changes in timing, or compiler codegen which
-hides the issue. So the issue is still there but it is just a matter
-of time before someone else reports it.
+I've developed a clock driver for A1 and verified it against the Amlogic
+custom driver and datasheet. As you pointed out, there are indeed two
+USB phy clocks.
+They are labeled as follows in my clock driver:
+    * CLKID_USB_PHY_IN (xtal -> usb_phy gated clock) - the phy input clock
+    * CLKID_USB_PHY (SYS_CLK_EN based gate) - the synopsys IP gated clock
 
-Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
-canary? Michael, is this an optimization? Adding Christophe as well
-since it came in a few years ago via the following commit:
+The current representation of the USB phy clocks is solely based on
+my technical opinion, as the datasheet does not provide any detailed
+information about them.
 
-commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
-Author: Christophe Leroy <christophe.leroy@c-s.fr>
-Date:   Thu Sep 27 07:05:55 2018 +0000
+Clock driver:
+https://lore.kernel.org/all/20230405195927.13487-1-ddrokosov@sberdevices.ru/
 
-    powerpc/64: add stack protector support
+> > +                       dwc2: usb@ff500000 {
+> > +                               compatible = "amlogic,meson-a1-usb", "snps,dwc2";
+> > +                               reg = <0x0 0xff500000 0x0 0x40000>;
+> > +                               interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+> > +                               phys = <&usb2_phy1>;
+> > +                               phy-names = "usb2_phy";
+> Documentation/devicetree/bindings/usb/dwc2.yaml only allows a
+> "usb2-phy" (dash instead of underscore).
+> 
+> [...]
 
-    On PPC64, as register r13 points to the paca_struct at all time,
-    this patch adds a copy of the canary there, which is copied at
-    task_switch.
-    That new canary is then used by using the following GCC options:
-    -mstack-protector-guard=3Dtls
-    -mstack-protector-guard-reg=3Dr13
-    -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, canary))
+Ah, my fault..
 
-    Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-    Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> > +                       dwc3: usb@ff400000 {
+> > +                               compatible = "snps,dwc3";
+> > +                               reg = <0x0 0xff400000 0x0 0x100000>;
+> Note to self: interesting that Amlogic swapped the register location
+> of the dwc2 and dwc3 controllers since the G12 generation.
 
- - Joel
+Indeed, during the bringup process, I was surprised to discover that
+the dwc2 engine wasn't starting properly. It was quite unexpected, but
+also admittedly intriguing as I delved into the issue and tried to
+understand the root cause.
+
+-- 
+Thank you,
+Dmitry
