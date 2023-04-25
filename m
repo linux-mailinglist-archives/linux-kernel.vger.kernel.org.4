@@ -2,204 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA506EE376
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C026EE37A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234155AbjDYNuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S234290AbjDYNvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjDYNuD (ORCPT
+        with ESMTP id S231258AbjDYNvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:50:03 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EE1708;
-        Tue, 25 Apr 2023 06:50:02 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-518d325b8a2so5844385a12.0;
-        Tue, 25 Apr 2023 06:50:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682430601; x=1685022601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2lAuwknu3oppNAiUSZpnFi04sAphUW8dNNMCjOkBABs=;
-        b=jamzRusOo2NjkX7molZM2aCKuhRTgTL0DhlzMquEyNRxa2MjYgzuDwRNGa0LIxc34N
-         e7mJmtfFgZIs1brtVwmW0LO16YcSGlUfOW0x1kkRsrDlhFOFWXLM8tkC3Lr+Qzi0+gJ5
-         xPnzh3BkhQsDNdVyh3OTN4FijvnyjBZUN7LLcBKSblbnQ3jiyL4Sg283i7vxiR3b1UZE
-         5RsspSs88YBOkut/edo7rBsRVJid5/o1rjaYnm8iPdbIv2VXkLV7iEGB4tRqfLHJSuhP
-         QXkmfm23JUgcXyzpXo6uQNN8HbRcXvJUVlJRHu5MRWeLNyg6tq8TmZvurN6sTuKwdmwa
-         cSZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430601; x=1685022601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2lAuwknu3oppNAiUSZpnFi04sAphUW8dNNMCjOkBABs=;
-        b=FfHH9/w9dtOvPin1lTChwG9nOoy4oyuf96xyL8uh4vKAntzfhEiIbfUNcWnue52Bew
-         /jQfpOLYOHDglbZzFxS4lFKqxeaMo6zuIcGU2/Qh8YQjzDRUuJVYKKheDy5s3VDWYDBx
-         mCJaXcggDO7Y3r9JcAlUI7lLDIQ4n58t/qUYBDmBoKSD538cpq+CTl0VcpJk7+yutTyV
-         VHV7TZSbAvOCuzt60edcL7sDWEQm+zb2JVLo/GizAoB0R5dZZMoKy+oqVqMVpmDhlLnc
-         9P226lzzSFfYCGnCTsbbkVcc8E8VL33L3a+5DE4RtKUU+8a3cZatcfeI9Vw1xjUtCM0J
-         W70A==
-X-Gm-Message-State: AAQBX9eXjR71fCz1sWXQu+3pIsrl+jaRKIcOL0FTKALgjbKMGNCmmAhT
-        7md5j7udqftsy9eEpyaY+aNsY3soPzygbvojW8c=
-X-Google-Smtp-Source: AKy350bSykcNq3VWBNHcmLinwWgOiXbhiBxgTZcPMEi8qD3oJP0OeW7EYXjKHPDrXkcHdS29jHT1he9ARB1EyQCCd1c=
-X-Received: by 2002:a17:90a:6447:b0:23f:a4da:1208 with SMTP id
- y7-20020a17090a644700b0023fa4da1208mr16749390pjm.39.1682430601304; Tue, 25
- Apr 2023 06:50:01 -0700 (PDT)
+        Tue, 25 Apr 2023 09:51:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3F53A9F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:50:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682430649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cuedenV2zpDg+mwEKMh+RMpBblTnjA8zgLowf2hXfJ8=;
+        b=Vq6FQPvTOKVHT12OgWSIrhztDztwa+WppBnVnFH0ImBFl2Ql0kEDmrlEbK2PSSyTlucyhT
+        5fObw8CTl24sO1Re2lGs7vxt7tgFQhG6XwqSpk2Rzwh35ZMrO9xmmCdqXWsDml4lbu9YBW
+        sp7hp4m88m0CEcB+bvtLDZZ/o7T8lqg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-570-cq4TivJ5P3eUi3J6A_jXbA-1; Tue, 25 Apr 2023 09:50:46 -0400
+X-MC-Unique: cq4TivJ5P3eUi3J6A_jXbA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C6FE43C10EC4;
+        Tue, 25 Apr 2023 13:50:45 +0000 (UTC)
+Received: from pasta.redhat.com (unknown [10.45.226.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E616140C6E67;
+        Tue, 25 Apr 2023 13:50:44 +0000 (UTC)
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] gfs2 fixes for 6.4
+Date:   Tue, 25 Apr 2023 15:50:44 +0200
+Message-Id: <20230425135044.1100895-1-agruenba@redhat.com>
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
- <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
- <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
- <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
- <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com> <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
-In-Reply-To: <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Tue, 25 Apr 2023 21:49:50 +0800
-Message-ID: <CAABZP2zW7aTPChjvZMA1bECdOdFUdTd-q+vEJXJnH2zPU+uR8A@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "lance@osuosl.org" <lance@osuosl.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi Linus,
 
-On Tue, Apr 25, 2023 at 9:40=E2=80=AFPM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 25/04/2023 =C3=A0 13:06, Joel Fernandes a =C3=A9crit :
-> > On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.c=
-om> wrote:
-> >>
-> >> hi
-> >>
-> >> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infrade=
-ad.org> wrote:
-> >>>
-> >>> On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
-> >>>> This is amazing debugging Boqun, like a boss! One comment below:
-> >>>>
-> >>>>>>> Or something simple I haven't thought of? :)
-> >>>>>>
-> >>>>>> At what points can r13 change?  Only when some particular function=
-s are
-> >>>>>> called?
-> >>>>>>
-> >>>>>
-> >>>>> r13 is the local paca:
-> >>>>>
-> >>>>>          register struct paca_struct *local_paca asm("r13");
-> >>>>>
-> >>>>> , which is a pointer to percpu data.
-> >>>>>
-> >>>>> So if a task schedule from one CPU to anotehr CPU, the value gets
-> >>>>> changed.
-> >>>>
-> >>>> It appears the whole issue, per your analysis, is that the stack
-> >>>> checking code in gcc should not cache or alias r13, and must read it=
-s
-> >>>> most up-to-date value during stack checking, as its value may have
-> >>>> changed during a migration to a new CPU.
-> >>>>
-> >>>> Did I get that right?
-> >>>>
-> >>>> IMO, even without a reproducer, gcc on PPC should just not do that,
-> >>>> that feels terribly broken for the kernel. I wonder what clang does,
-> >>>> I'll go poke around with compilerexplorer after lunch.
-> >>>>
-> >>>> Adding +Peter Zijlstra as well to join the party as I have a feeling
-> >>>> he'll be interested. ;-)
-> >>>
-> >>> I'm a little confused; the way I understand the whole stack protector
-> >>> thing to work is that we push a canary on the stack at call and on
-> >>> return check it is still valid. Since in general tasks randomly migra=
-te,
-> >>> the per-cpu validation canary should be the same on all CPUs.
-> >>>
-> >>> Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
-> >>> raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu=
-,
-> >>> but no guarantees.
-> >>>
-> >>> Both cases use r13 (paca) in a racy manner, and in both cases it shou=
-ld
-> >>> be safe.
-> >> New test results today: both gcc build from git (git clone
-> >> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
-> >> are immune from the above issue. We can see the assembly code on
-> >> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
-> >>
-> >> while
-> >> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
-> >> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
-> >
-> > Do you know what fixes the issue? I would not declare victory yet. My
-> > feeling is something changes in timing, or compiler codegen which
-> > hides the issue. So the issue is still there but it is just a matter
-> > of time before someone else reports it.
-> >
-> > Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
-> > canary? Michael, is this an optimization? Adding Christophe as well
-> > since it came in a few years ago via the following commit:
->
-> It uses per-task canary. But unlike PPC32, PPC64 doesn't have a fixed
-> register pointing to 'current' at all time so the canary is copied into
-> a per-cpu struct during _switch().
->
-> If GCC keeps an old value of the per-cpu struct pointer, it then gets
-> the canary from the wrong CPU struct so from a different task.
-This is a fruitful learning process for me!
-Christophe:
-Do you think there is still a need to bisect GCC ? If so, I am very
-glad to continue
+please consider pulling the following gfs2 fixes.
 
-Cheers
-Zhouyi
->
-> Christophe
->
-> >
-> > commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
-> > Author: Christophe Leroy <christophe.leroy@c-s.fr>
-> > Date:   Thu Sep 27 07:05:55 2018 +0000
-> >
-> >      powerpc/64: add stack protector support
-> >
-> >      On PPC64, as register r13 points to the paca_struct at all time,
-> >      this patch adds a copy of the canary there, which is copied at
-> >      task_switch.
-> >      That new canary is then used by using the following GCC options:
-> >      -mstack-protector-guard=3Dtls
-> >      -mstack-protector-guard-reg=3Dr13
-> >      -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, cana=
-ry))
-> >
-> >      Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> >
-> >   - Joel
+Thanks a lot,
+Andreas
+
+The following changes since commit 1e760fa3596e8c7f08412712c168288b79670d78:
+
+  Merge tag 'gfs2-v6.3-rc3-fix' of git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2 (2023-03-23 15:25:49 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gfs2/linux-gfs2.git tags/gfs2-v6.3-rc3-fixes
+
+for you to fetch changes up to 644f6bf762fa903f64c59c2ec0f4d0d753527053:
+
+  gfs2: gfs2_ail_empty_gl no log flush on error (2023-04-25 11:07:16 +0200)
+
+----------------------------------------------------------------
+gfs2 fixes
+
+- Fix revoke processing at unmount and on read-only remount.
+
+- Refuse reading in inodes with an impossible indirect block height.
+
+- Various minor cleanups.
+
+----------------------------------------------------------------
+Andreas Gruenbacher (1):
+      gfs2: Fix inode height consistency check
+
+Andrew Price (3):
+      gfs2: Remove duplicate i_nlink check from gfs2_link()
+      gfs2: Remove ghs[] from gfs2_link
+      gfs2: Remove ghs[] from gfs2_unlink
+
+Bob Peterson (6):
+      gfs2: Eliminate gfs2_trim_blocks
+      gfs2: Use gfs2_holder_initialized for jindex
+      gfs2: return errors from gfs2_ail_empty_gl
+      gfs2: Perform second log flush in gfs2_make_fs_ro
+      gfs2: Issue message when revokes cannot be written
+      gfs2: gfs2_ail_empty_gl no log flush on error
+
+Markus Elfring (1):
+      gfs2: Move variable assignment behind a null pointer check in inode_go_dump
+
+ fs/gfs2/bmap.c       |  8 --------
+ fs/gfs2/bmap.h       |  1 -
+ fs/gfs2/glops.c      | 23 +++++++++++++++--------
+ fs/gfs2/inode.c      | 47 ++++++++++++++++++++++-------------------------
+ fs/gfs2/ops_fstype.c |  9 +++------
+ fs/gfs2/super.c      |  9 +++++++++
+ 6 files changed, 49 insertions(+), 48 deletions(-)
+
