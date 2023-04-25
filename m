@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D2F6EE901
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDBA6EE908
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjDYU2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S232178AbjDYU26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjDYU2C (ORCPT
+        with ESMTP id S229960AbjDYU24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:28:02 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460C3D333;
-        Tue, 25 Apr 2023 13:28:01 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-517bb11ca34so4540640a12.0;
-        Tue, 25 Apr 2023 13:28:01 -0700 (PDT)
+        Tue, 25 Apr 2023 16:28:56 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF802D32E;
+        Tue, 25 Apr 2023 13:28:54 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so5650596f8f.1;
+        Tue, 25 Apr 2023 13:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682454481; x=1685046481;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HClbTR8/Md4oIQbDjI1UVYFnEcUHBgTLFPdIBJbwoe4=;
-        b=LOIQu1LM630hAPwxig05wc3kZloLkcP9NWVZs+r9LPTWelh3OQjLDP1WRFsTSgnyXr
-         E4zW4GGcu9zo+r6r5LzezYUb8gsY8ADpXpHw8lf/7M+4z5k94Nz3jx/d/9CV9RkFF3QA
-         ymL2dXnfQkbHjH1ZTfPl5uVkfT8U7yxdhhX+f5m7hPygYTHbwFogFB/2G1i4+YbvVxzi
-         F2sNLQgl0zNxXtI5gOUJLzMQzRGp7Pm3WbMakRtpW+qA17B1zVGobXnKSir8hHoK/cSC
-         lo4Vvw73KXMr4lVTao2q9+iuwC0I6FIU1UlNeka8u6NDYxv0N1yNod8ZLMc1gZck/6GV
-         4ZUA==
+        d=gmail.com; s=20221208; t=1682454533; x=1685046533;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z3DoJzuoAqhNjvSUCYmCLbH+X+jsvgK0x4ldD98bDkU=;
+        b=kYLBOIZlJqw0U+oVS3BBAqthHyzo2Pox3BNqe26Or2d9A0cq/xtk1zz4dpqZ840v/X
+         za/nkpFq40GvgK+ysqYcBSWXAososJPuaGrQiD+APEKvJi3L/WRKQnWmWwr8dPSCUkwr
+         l+kGRF38XY1aczDSom+ydwAYCs3p8YhJpfZlBXdhyJe57jPp/k8E7BwmghnGgkR8npM5
+         KyKD+yk1p3u2Rs1cQpuRe5sJf/KUrshxkx2uXFOT960j7bs6y85QdCOA/I5N0xHmKWUg
+         x/1pcyz0tl9Tkhs0+xkuua67GjY1ABru80Z1V572dC4gSwq7UscM5OEBtFMvXlH3EmIE
+         SxzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682454481; x=1685046481;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HClbTR8/Md4oIQbDjI1UVYFnEcUHBgTLFPdIBJbwoe4=;
-        b=F/R2PZWX77ShHXMNLdvtsgbo7Y+TyQAszhjSrpcsm+WvAthD3pVYvfXpy1mluiiTsT
-         K2cl92ZLzmi7KGkKQMzn4yKY4BJkYRDTIyLajkFnLjO6i9wZ7dIrco9Pz4M45hXVt6xF
-         zcyQZ4R95cLcBbvalBX93NEAwd2uTCUvbk/qq8krsmoYxbbXFMpuHS+10+BQAfnN2L9z
-         dVsPdWThHvzEex+dpQla4Vs3p/gNupUM2+12S1NbFz4tjVCnGxHeVHzzoRKL1Dg7115o
-         jzSZVnavUaMlnPI95APg1xb69zcTWWMeQX3h65VD35RBD7G9i4gqRM6YS4A9Ko1nxqWe
-         ooWw==
-X-Gm-Message-State: AAQBX9cd2Ws0wVnorzBa/7NKjQAz3vsFII1DSRdHOfOxgPvkl10/IVRi
-        8m3KJdmSLNcG2E2BAtY9BTk=
-X-Google-Smtp-Source: AKy350bSkAU2WzqfVixaP2iqAYe1jpSg3QojfZgeHGz8Sdm7hA1BeSc31mEXiipn958UNJLfW1xNNQ==
-X-Received: by 2002:a17:90a:70cc:b0:233:ee67:8eb3 with SMTP id a12-20020a17090a70cc00b00233ee678eb3mr19262344pjm.24.1682454480610;
-        Tue, 25 Apr 2023 13:28:00 -0700 (PDT)
-Received: from localhost ([2605:59c8:148:ba10:12ca:f2ca:4701:f7ae])
-        by smtp.gmail.com with ESMTPSA id iz1-20020a170902ef8100b001a987c4d3b9sm1957776plb.290.2023.04.25.13.27.59
+        d=1e100.net; s=20221208; t=1682454533; x=1685046533;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z3DoJzuoAqhNjvSUCYmCLbH+X+jsvgK0x4ldD98bDkU=;
+        b=TKBlHm7qTI2Wt3WEeP+IHVRstR10IZk7gtJbUyGnfyNgvWNghqQQg3KLWd3vNFfBOt
+         G5Y+MwL2D1wcGohIQ5GTbAdOS6fZibmmjgWxnY8PJfJcQTzUnfQEiJCxAXd+zWGWUyT7
+         tRc9emJQIwn8YqeAmxSJ7bC6pAoBT2EBDxVIFcUXFuY3+31+aVKT9WoDukkXfvun8Vd/
+         lOQPnen3dMs7dAMBMP3VvEQc6Bs7KC/izXDaa/hw8+9moAcosVuXY6ANhga/6LXxOAVG
+         /x7sXXLaS/WMnFxAIvW+VjZARUO+0g5MlFuy4Z19g3shYzcCx+D9OBJZZCsf7neJKCEe
+         /vNw==
+X-Gm-Message-State: AAQBX9dLj23PKG2jNg4i3+tBg3xERBl+rB1j+Pvm/BB1d+9W3hW4OqYu
+        rhNi8rGM+Ktk1LacBVK8YBy8o70FLUrNYA==
+X-Google-Smtp-Source: AKy350avUsK0YErj5DEfepD4jutOZ3V2aIOx3oyFKD7KwQRuKOb4H3ntrx/co0bZ1dbFzIgat+wtbA==
+X-Received: by 2002:adf:e952:0:b0:2cf:e74f:2957 with SMTP id m18-20020adfe952000000b002cfe74f2957mr13495464wrn.33.1682454532774;
+        Tue, 25 Apr 2023 13:28:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:2f0e:c07:300:175c:44ef:f037:8f88])
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d6246000000b002feea065cc9sm13795739wrv.111.2023.04.25.13.28.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 13:27:59 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 13:27:58 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Kal Cutter Conley <kal.conley@dectris.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-ID: <644837cec75d1_8f94b20880@john.notmuch>
-In-Reply-To: <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
-References: <20230423075335.92597-1-kal.conley@dectris.com>
- <6446d34f9568_338f220872@john.notmuch>
- <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
-Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Tue, 25 Apr 2023 13:28:52 -0700 (PDT)
+From:   Ariel Miculas <ariel.miculas@gmail.com>
+X-Google-Original-From: Ariel Miculas <amiculas@cisco.com>
+To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        benno.lossin@proton.me
+Cc:     Ariel Miculas <amiculas@cisco.com>
+Subject: [PATCH] rust: Sort rust/helpers.c's #include directives
+Date:   Tue, 25 Apr 2023 23:28:48 +0300
+Message-Id: <20230425202848.261139-1-amiculas@cisco.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -87,99 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kal Cutter Conley wrote:
-> > > Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
-> > > active DMA mapping. pool->dma_pages needs to be read anyway to access
-> > > the map so this compiles to more efficient code.
-> >
-> > Was it noticable in some sort of performance test?
-> 
-> This patch is part of the patchset found at
-> https://lore.kernel.org/all/20230412162114.19389-3-kal.conley@dectris.com/
-> which is being actively discussed and needs to be resubmitted anyway
-> because of a conflict. While the discussion continues, I am submitting
-> this patch by itself because I think it's an improvement on its own
-> (regardless of what happens with the rest of the linked patchset). On
-> one system, I measured a performance regression of 2-3% with xdpsock
-> and the linked changes without the current patch. With the current
-> patch, the performance regression was no longer observed.
+Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+Link: https://github.com/Rust-for-Linux/linux/issues/1003
+Signed-off-by: Ariel Miculas <amiculas@cisco.com>
+---
+ rust/helpers.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Would be nice to have in commit message so reader has an idea the
-perf numbers are in fact better.
+diff --git a/rust/helpers.c b/rust/helpers.c
+index 81e80261d597..59a23b1647fb 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -18,13 +18,17 @@
+  * accidentally exposed.
+  */
+ 
++/*
++ * Sorted alphabetically.
++ */
++
+ #include <linux/bug.h>
+ #include <linux/build_bug.h>
+ #include <linux/err.h>
+-#include <linux/refcount.h>
+ #include <linux/mutex.h>
+-#include <linux/spinlock.h>
++#include <linux/refcount.h>
+ #include <linux/sched/signal.h>
++#include <linux/spinlock.h>
+ #include <linux/wait.h>
+ 
+ __noreturn void rust_helper_BUG(void)
+-- 
+2.40.0
 
-> 
-> > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> > > index d318c769b445..a8d7b8a3688a 100644
-> > > --- a/include/net/xsk_buff_pool.h
-> > > +++ b/include/net/xsk_buff_pool.h
-> > > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
-> > >       if (likely(!cross_pg))
-> > >               return false;
-> > >
-> > > -     return pool->dma_pages_cnt &&
-> > > +     return pool->dma_pages &&
-> > >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
-> > >  }
-> 
-> I would consider the above code part of the "fast path". It may be
-> executed approximately once per frame in unaligned mode.
-
-In the unlikely case though is my reading. So really shouldn't
-be called for every packet or we have other perf issues by that
-likely() there.
-
-I assume the above is where the perf is being gained because below
-two things are in setup/tear down. But then we are benchmarking
-an unlikely() path?
-
-> 
-> > This seems to be used in the setup/tear-down paths so your optimizing
-> > a control side. Is there a fast path with this code? I walked the
-> > ice driver. If its just setup code we should do whatever is more
-> > readable.
-> 
-> It is not only used in setup/tear-down paths (see above).
-> Additionally, I believe the code is also _more_ readable with this
-> patch applied. In particular, this patch reduces cognitive complexity
-> since people (and compilers) reading the code don't need to
-> additionally think about pool->dma_pages_cnt.
-> 
-> > Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
-> > This is so deep into micro-optimizing I'm curious if you could measure it?
-> 
-> It is saving a load which also reduces code size. This will affect
-> other decisions such as what to inline. Also in the linked patchset,
-> dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
-
-But again buried in an unlikely path. Sure but removing the conditional
-altogether would be even better.
-
-> 
-> >
-> > >               } else {
-> > >                       xskb = &pool->heads[xp_aligned_extract_idx(pool, addr)];
-> >
-> > I'm not actually against optimizing but maybe another idea. Why do we have to
-> > check at all? Seems if the DMA has been disabled/unmapped the driver shouldn't
-> > be trying to call xsk_buff_alloc_batch? Then you can just drop the 'if' check.
-> >
-> > It feels to me the drivers shouldn't even be calling this after unmapping
-> > the dma. WDYT?
-> 
-> Many of these code paths are used both for ZC and copy modes. You
-> might be right that this particular case is only used with DMA.
-
-So my understanding is ZC is preferred and default mode and copy modes
-are primarily fall back modes. So we are punishing the good case here
-for a fallback to copy mode. I think overall refactoring the code to
-avoid burdoning the fast case with a fallback slow case would be ideal
-solution.
-
-However, I agree just on readability the patch is fine and good. No
-objection on my side. But I think if we are making performance
-arguments for 2-3% here the better thing to do is remove the check
-and unlikely() and we would see better benchmarks when using the
-ZC mode which as I understand it is what performance aware folks should
-be doing.
-
-Just $0.02 here.
