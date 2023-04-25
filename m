@@ -2,197 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284036EDD7F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688C06EDD89
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233201AbjDYIAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S233452AbjDYIAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbjDYIAV (ORCPT
+        with ESMTP id S233440AbjDYIAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:00:21 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBC32D52
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:00:19 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4eed6ddcae1so23393598e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682409618; x=1685001618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wJcVKVJA3HgnW7bSvVOddaHKG/ERA+dvV0Lub2llU+Q=;
-        b=EOkcITT5Rq6XWK3ejRIWqvQTkMe0ymO3UjoLJxHU/nMXd+kJfjuDnngRLl0056SRHm
-         ThA9qKaCSDNobvcy6jnV68/ursuWUy1LRvfcOiMnvJd6umM5gBHUqjEii9P0KObi7KGh
-         BAFvn/jnFZdpnznd05oLdmPYj0b3vIN6GQEhpBNTdSfL4z+ZwxB1QMA9d150A+77EI3i
-         plazI1uNEF7MssMeARqn6HbaKObj7K0qUBZHDm45tsXJspZswccglcpyVh33k/az8cYf
-         7sxktCdB7+YpplssXVz1+FDrVlx5NHqwNlTaeiZQzIojqvTIoBPoyIpW8YSps41cN/xv
-         Ujqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682409618; x=1685001618;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wJcVKVJA3HgnW7bSvVOddaHKG/ERA+dvV0Lub2llU+Q=;
-        b=ZP8aq8DuFfQae9D+qG1skpzsiGmAEKTi7A8OKXEpaL1zRNXscNdVlBehHKWb9ikN29
-         lDSRtbzbk6FqhqbvyPcD6pmTsrdsNpMscgNe55Q/tjWmGFtZVi9xorju2wuGOSQjpc0H
-         1s3C/zUpo8tm8N+HlZOiA0C+LUTled9XmgKyTRLf2F2Ua11+uBwZrY0rrU4pznveXrZ/
-         tA2GhXWCirKk0819z3ImrtuS+xeuiohpE37bbwyAjpGrrkCafeazKTO49ooIlClEwpiZ
-         +cQ9teUVG1lIrplz+2fMdKuYT31L8brOKmd4GSGjuBBs76CS4H0S9Sy3A1vW4PYxdSDU
-         sW4g==
-X-Gm-Message-State: AAQBX9eq9gM0uMpNa7u/6FnxN1tonPc2Ya67k9bgP5a4LT+Rh3VDfduv
-        3ew5feY9eXPazMZTpxWhJCFZkGJVP/ikvTGMdjq/lQ==
-X-Google-Smtp-Source: AKy350ZxdfhaQD3I1+8v331wKiSztM8EPfAn2hc331pKYjbFsrskYvBdyUu9x9mXAh7RJVZWCXfYiGyWTG2NjZzD97c=
-X-Received: by 2002:a2e:9b87:0:b0:2aa:4550:9169 with SMTP id
- z7-20020a2e9b87000000b002aa45509169mr3099317lji.20.1682409617717; Tue, 25 Apr
- 2023 01:00:17 -0700 (PDT)
+        Tue, 25 Apr 2023 04:00:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149325586;
+        Tue, 25 Apr 2023 01:00:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A432262C51;
+        Tue, 25 Apr 2023 08:00:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B19AC4339B;
+        Tue, 25 Apr 2023 08:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682409635;
+        bh=cDv3M/1s+tjOQjJbPUGblM4x/VHbLIoWAfEO3RoBZLM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=t8tVDcisi1Ua1xsK0eh4wXd6TRl8zqRR065VHttovC11XtMZF6D/4bba5k+B9QVcD
+         wosEZN7on9/BZBObgZeW4zV919V5Z45lRsX9k7Fm3mqp0kUE89nHF/t0zlqhvF9+dB
+         2h6Dz3k0IgtGd470zSwjfCJivMhODaPf9YsDcjkg014i+ABYaNR22jfQS6VgIFy5WX
+         vVhV9/8kPwppHz662OIcc0AhHtcKwYVCwvnfRzqmvB8PESp/To9CcsNdaTVKSHAQ9+
+         fTB2q5Cbai6xwkIifbnmNyaVCEpLHdO8kzBQU4MtjB0kPYGm2MS/weEHAZC22lIJik
+         7OelZpaQThsmg==
+Message-ID: <7fe274df-6bcd-5993-d6cc-8fbcef435866@kernel.org>
+Date:   Tue, 25 Apr 2023 10:00:26 +0200
 MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-46-atishp@rivosinc.com>
- <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com> <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
- <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
-In-Reply-To: <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com>
-From:   Atish Kumar Patra <atishp@rivosinc.com>
-Date:   Tue, 25 Apr 2023 13:30:06 +0530
-Message-ID: <CAHBxVyHg7vTaQJWKoVSD8budVZEYSo1eDOyZyZK7gcJApR7SbA@mail.gmail.com>
-Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap hooks
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        abrestic@rivosinc.com, Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
+        linux-aspeed@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
+        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
+        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
+        linux-unisoc@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-realtek-soc@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+References: <20220328000915.15041-1-ansuelsmth@gmail.com>
+ <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
+ <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
+ <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 7:18=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
->
-> On 4/21/23 12:24, Atish Kumar Patra wrote:
-> > On Fri, Apr 21, 2023 at 3:46=E2=80=AFAM Dave Hansen <dave.hansen@intel.=
-com> wrote:>> This callback appears to say to the host:
-> >>
-> >>         Hey, I (the guest) am treating this guest physical area as MMI=
-O.
-> >>
-> >> But the host and guest have to agree _somewhere_ what the MMIO is used
-> >> for, not just that it is being used as MMIO.
-> >
-> > Yes. The TSM (TEE Security Manager) which is equivalent to TDX also
-> > needs to be aware of the MMIO regions so that it can forward the
-> > faults accordingly. Most of the MMIO is emulated in the host
-> > (userspace or kernel emulation if present). The host is outside the
-> > trust boundary of the guest. Thus, guest needs to make sure the host
-> > only emulates the designated MMIO region. Otherwise, it opens an
-> > attack surface from a malicious host.
-> How does this mechanism stop the host from emulating something outside
-> the designated region?
->
-> On TDX, for instance, the guest page table have a shared/private bit.
-> Private pages get TDX protections to (among other things) keep the page
-> contents confidential from the host.  Shared pages can be used for MMIO
-> and don't have those protections.
->
-> If the host goes and tries to flip a page from private->shared, TDX
-> protections will kick in and prevent it.
->
-> None of this requires the guest to tell the host where it expects MMIO
-> to be located.
->
-> > All other confidential computing solutions also depend on guest
-> > initiated MMIO as well. AFAIK, the TDX & SEV relies on #VE like
-> > exceptions to invoke that while this patch is similar to what pkvm
-> > does. This approach lets the enlightened guest control which MMIO
-> > regions it wants the host to emulate.
->
-> I'm not _quite_ sure what "guest initiated" means.  But SEV and TDX
-> don't require an ioremap hook like this.  So, even if they *are* "guest
-> initiated", the question still remains how they work without this patch,
-> or what they are missing without it.
->
+On 25/04/2023 00:10, Rob Herring wrote:
+>> I had some problem with gmail and sending mail too much users. I put Rob
+>> and You and all the various list to try to workaround the "gmail spam
+>> protection"
+>>
+>>> I am pretty sure we were discussing such split idea in the past and it
+>>> did not get traction, but I cannot recall the exact discussion.
+>>>
+>>
+>> I think the main issue here is how to handle bot and how problematic is
+>> to merge this. As written in the cover letter the final version of this
+>> should be a big series of 50+ patch with every commit specific to each
+>> oem. In theory we should be able to merge the different oem separately
+>> and try to at least start the categorization.
+>> Another idea I got to at least have a "migration path" is to convert
+>> every dts in the dts/ directory to a symbolic link that target the dts
+>> in the correct oem. But I assume that would fix only part of the problem
+>> and git am will still be problematic.
+> 
+> I have a script[1] that does the conversion written the last time this
+> came up. Just have to agree on directory names. I think the easiest
+> would be for Arnd/Olof to run it at the end of a merge window before
+> rc1.
+> 
+> I'm very much in favor of this happening especially before *any*
+> overlays are added to add to the mess (it's probably already
+> happened).
+> 
+> Rob
+> 
+> [1] https://lore.kernel.org/all/20181204183649.GA5716@bogus/
 
-Maybe I misunderstood your question earlier. Are you concerned about guests
-invoking any MMIO region specific calls in the ioremap path or passing
-that information to the host ?
-Earlier, I assumed the former but it seems you are also concerned
-about the latter as well. Sorry for the confusion in that case.
-The guest initiation is necessary while the host notification can be
-made optional.
-The "guest initiated" means the guest tells the TSM (equivalent of TDX
-module in RISC-V) the MMIO region details.
-The TSM keeps a track of this and any page faults that happen in that
-region are forwarded
-to the host by the TSM after the instruction decoding. Thus TSM can
-make sure that only ioremapped regions are
-considered MMIO regions. Otherwise, all memory outside the guest
-physical region will be considered as the MMIO region.
+This is the thread I was thinking about. Looks good for me (the original
+script with exynos->samsung).
 
-In the current CoVE implementation, that MMIO region information is also
-passed to the host to provide additional flexibility. The host may
-choose to do additional
-sanity check and bail if the fault address does not belong to
-requested MMIO regions without
-going to the userspace. This is purely an optimization and may not be manda=
-tory.
+Best regards,
+Krzysztof
 
-
-> > It can be a subset of the region's host provided the layout. The
-> > guest device filtering solution is based on this idea as well [1].
-> >
-> > [1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyanarayana=
-n.kuppuswamy@linux.intel.com/
->
-> I don't really see the connection.  Even if that series was going
-> forward (I'm not sure it is) there is no ioremap hook there.  There's
-> also no guest->host communication in that series.  The guest doesn't
-> _tell_ the host where the MMIO is, it just declines to run code for
-> devices that it didn't expect to see.
->
-
-This is a recent version of the above series from tdx github. This is
-a WIP as well and has not been posted to
-the mailing list. Thus, it may be going under revisions as well.
-As per my understanding the above ioremap changes for TDX mark the
-ioremapped pages as shared.
-The guest->host communication happen in the #VE exception handler
-where the guest converts this to a hypercall by invoking TDG.VP.VMCALL
-with an EPT violation set. The host would emulate an MMIO address if
-it gets an VMCALL with EPT violation.
-Please correct me if I am wrong.
-
-As I said above, the objective here is to notify the TSM where the
-MMIO is. Notifying the host
-is just an optimization that we choose to add. In fact, in this series
-the KVM code doesn't do anything with that information.
-The commit text probably can be improved to clarify that.
-
-
-> I'm still rather confused here.
