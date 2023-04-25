@@ -2,64 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE45B6EDB8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B3D6EDB91
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 08:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbjDYGQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 02:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S233394AbjDYGSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 02:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjDYGQo (ORCPT
+        with ESMTP id S232430AbjDYGSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 02:16:44 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13EC9001;
-        Mon, 24 Apr 2023 23:16:39 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q5BbR1PBdz4f3l8b;
-        Tue, 25 Apr 2023 14:16:35 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBXwLNCcEdk4b9tIA--.42722S3;
-        Tue, 25 Apr 2023 14:16:36 +0800 (CST)
-Subject: Re: [PATCH -next 1/8] md/raid10: prevent soft lockup while flush
- writes
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     neilb@suse.de, akpm@osdl.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230420112946.2869956-1-yukuai1@huaweicloud.com>
- <20230420112946.2869956-2-yukuai1@huaweicloud.com>
- <CAPhsuW5ifaGc47-vJWwbRyjgJHr3CJy+_zZ1wAL=FNxPOk-0WQ@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b3393e4d-2fdb-41a6-54ba-fb564c484e56@huaweicloud.com>
-Date:   Tue, 25 Apr 2023 14:16:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 25 Apr 2023 02:18:37 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64A59001;
+        Mon, 24 Apr 2023 23:18:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 082993FC2B;
+        Tue, 25 Apr 2023 06:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1682403512;
+        bh=xpybMNqsIkCk472a+6jLgU3wLUPfUx2T87BEmh4vcf0=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Cvi96RZncRDEiCpOutJL541wj6f0hVJrhiEcsz47MUL8NZMYRuwZuxsfbe6xbhil0
+         KvCNVZ9akCc0poyuyzb5IMLy+8vY/A5JLDaN5GLLdoYk9PApGmrszoxnHS3DjDgaYr
+         nU2+mIBYRehdD0VLyunYzhEHPmjBhERcw3BL374aBYzrFOB5SLKcYb1cEBRa841oe1
+         frVx94SHbbno8i2QYvlOEEpRKYNuR/MVCjxOgCOd/0erl65SoLpXqwfTeEgFQ6n6VD
+         fi9RJNDGzXPMcfXEXTj0XU6L1Z/Q7SWo1RhpZ+XJYluRRDAHk9hFU1ZaYhMx7itQO0
+         0OSzqF2CiZolQ==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     bblock@linux.ibm.com, acelan.kao@canonical.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ata: libata: Defer rescan on suspended device
+Date:   Tue, 25 Apr 2023 14:17:45 +0800
+Message-Id: <20230425061746.503145-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW5ifaGc47-vJWwbRyjgJHr3CJy+_zZ1wAL=FNxPOk-0WQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBXwLNCcEdk4b9tIA--.42722S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF1DJw1kXr4kWFyruFyDWrg_yoW5JrWkp3
-        yqgayav3WUC3srAwsFyF18KFyrta98trW7urWkAw17XFW3WF9rKa4DJrWjgryDZryfurW7
-        AFyvkrZ7Ww1rtaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,93 +53,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+During system resume, if an EH is schduled after ATA host is resumed
+(i.e. ATA_PFLAG_PM_PENDING cleared), but before the disk device is
+fully resumed, the device_lock hold by scsi_rescan_device() is never
+released so the dpm_resume() of the disk is blocked forerver.
 
-在 2023/04/25 8:23, Song Liu 写道:
-> On Thu, Apr 20, 2023 at 4:31 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Currently, there is no limit for raid1/raid10 plugged bio. While flushing
->> writes, raid1 has cond_resched() while raid10 doesn't, and too many
->> writes can cause soft lockup.
->>
->> Follow up soft lockup can be triggered easily with writeback test for
->> raid10 with ramdisks:
->>
->> watchdog: BUG: soft lockup - CPU#10 stuck for 27s! [md0_raid10:1293]
->> Call Trace:
->>   <TASK>
->>   call_rcu+0x16/0x20
->>   put_object+0x41/0x80
->>   __delete_object+0x50/0x90
->>   delete_object_full+0x2b/0x40
->>   kmemleak_free+0x46/0xa0
->>   slab_free_freelist_hook.constprop.0+0xed/0x1a0
->>   kmem_cache_free+0xfd/0x300
->>   mempool_free_slab+0x1f/0x30
->>   mempool_free+0x3a/0x100
->>   bio_free+0x59/0x80
->>   bio_put+0xcf/0x2c0
->>   free_r10bio+0xbf/0xf0
->>   raid_end_bio_io+0x78/0xb0
->>   one_write_done+0x8a/0xa0
->>   raid10_end_write_request+0x1b4/0x430
->>   bio_endio+0x175/0x320
->>   brd_submit_bio+0x3b9/0x9b7 [brd]
->>   __submit_bio+0x69/0xe0
->>   submit_bio_noacct_nocheck+0x1e6/0x5a0
->>   submit_bio_noacct+0x38c/0x7e0
->>   flush_pending_writes+0xf0/0x240
->>   raid10d+0xac/0x1ed0
-> 
-> Is it possible to trigger this with a mdadm test?
-> 
+That's because scsi_attach_vpd() is expecting the disk device is in
+operational state, as it doesn't work on suspended device.
 
-The test I mentioned in patch 8 can trigger this problem reliablity, so
-I this add a new test can achieve this.
+To avoid such deadlock, defer rescan if the disk is still suspended so
+the resume process of the disk device can proceed. At the end of the
+resume process, use the complete() callback to schedule the rescan task.
 
-Thanks,
-Kuai
-> Thanks,
-> Song
-> 
->>
->> This patch fix the problem by adding cond_resched() to raid10 like what
->> raid1 did.
->>
->> Note that unlimited plugged bio still need to be optimized because in
->> the case of writeback lots of dirty pages, this will take lots of memory
->> and io latecy is quite bad.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/raid10.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
->> index 6590aa49598c..a116b7c9d9f3 100644
->> --- a/drivers/md/raid10.c
->> +++ b/drivers/md/raid10.c
->> @@ -921,6 +921,7 @@ static void flush_pending_writes(struct r10conf *conf)
->>                          else
->>                                  submit_bio_noacct(bio);
->>                          bio = next;
->> +                       cond_resched();
->>                  }
->>                  blk_finish_plug(&plug);
->>          } else
->> @@ -1140,6 +1141,7 @@ static void raid10_unplug(struct blk_plug_cb *cb, bool from_schedule)
->>                  else
->>                          submit_bio_noacct(bio);
->>                  bio = next;
->> +               cond_resched();
->>          }
->>          kfree(plug);
->>   }
->> --
->> 2.39.2
->>
-> .
-> 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - Schedule rescan task at the end of system resume phase.
+ - Wording.
+
+ drivers/ata/libata-core.c | 11 +++++++++++
+ drivers/ata/libata-eh.c   | 11 +++++++++--
+ include/linux/libata.h    |  1 +
+ 3 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 14c17c3bda4e..564d72bf1ec6 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -5093,6 +5093,16 @@ static int ata_port_pm_poweroff(struct device *dev)
+ 	return 0;
+ }
+ 
++static void ata_port_pm_complete(struct device *dev)
++{
++	struct ata_port *ap = to_ata_port(dev);
++
++	if (ap->pflags & ATA_PFLAG_DEFER_RESCAN)
++		schedule_work(&(ap->scsi_rescan_task));
++
++	ap->pflags &= ~ATA_PFLAG_DEFER_RESCAN;
++}
++
+ static const unsigned int ata_port_resume_ehi = ATA_EHI_NO_AUTOPSY
+ 						| ATA_EHI_QUIET;
+ 
+@@ -5158,6 +5168,7 @@ static const struct dev_pm_ops ata_port_pm_ops = {
+ 	.thaw = ata_port_pm_resume,
+ 	.poweroff = ata_port_pm_poweroff,
+ 	.restore = ata_port_pm_resume,
++	.complete = ata_port_pm_complete,
+ 
+ 	.runtime_suspend = ata_port_runtime_suspend,
+ 	.runtime_resume = ata_port_runtime_resume,
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index a6c901811802..0881b590fb7e 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -15,6 +15,7 @@
+ #include <linux/blkdev.h>
+ #include <linux/export.h>
+ #include <linux/pci.h>
++#include <linux/suspend.h>
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_host.h>
+ #include <scsi/scsi_eh.h>
+@@ -2983,8 +2984,14 @@ static int ata_eh_revalidate_and_attach(struct ata_link *link,
+ 			 */
+ 			ehc->i.flags |= ATA_EHI_SETMODE;
+ 
+-			/* schedule the scsi_rescan_device() here */
+-			schedule_work(&(ap->scsi_rescan_task));
++			/* Schedule the scsi_rescan_device() here.
++			 * Defer the rescan if it's in process of
++			 * suspending or resuming.
++			 */
++			if (pm_suspend_target_state != PM_SUSPEND_ON)
++				ap->pflags |= ATA_PFLAG_DEFER_RESCAN;
++			else
++				schedule_work(&(ap->scsi_rescan_task));
+ 		} else if (dev->class == ATA_DEV_UNKNOWN &&
+ 			   ehc->tries[dev->devno] &&
+ 			   ata_class_enabled(ehc->classes[dev->devno])) {
+diff --git a/include/linux/libata.h b/include/linux/libata.h
+index a759dfbdcc91..aaa549444abc 100644
+--- a/include/linux/libata.h
++++ b/include/linux/libata.h
+@@ -189,6 +189,7 @@ enum {
+ 	ATA_PFLAG_UNLOADING	= (1 << 9), /* driver is being unloaded */
+ 	ATA_PFLAG_UNLOADED	= (1 << 10), /* driver is unloaded */
+ 
++	ATA_PFLAG_DEFER_RESCAN	= (1 << 16), /* peform deferred rescan on system resume */
+ 	ATA_PFLAG_SUSPENDED	= (1 << 17), /* port is suspended (power) */
+ 	ATA_PFLAG_PM_PENDING	= (1 << 18), /* PM operation pending */
+ 	ATA_PFLAG_INIT_GTM_VALID = (1 << 19), /* initial gtm data valid */
+-- 
+2.34.1
 
