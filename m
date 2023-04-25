@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727686EE3D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6046EE3DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233910AbjDYOYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S233637AbjDYO0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbjDYOYK (ORCPT
+        with ESMTP id S229915AbjDYO0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:24:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F998146C0;
-        Tue, 25 Apr 2023 07:24:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D420962137;
-        Tue, 25 Apr 2023 14:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE62C433D2;
-        Tue, 25 Apr 2023 14:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682432646;
-        bh=yliYoqpOgm0dIutKl8oAPe72ftrxSi7X6V4lwrOfkLA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cYe0gfy7XAzZ49rDBexhAmSFOO5duqhrkvX08mLuEdSLlIZuvrEUA0wnABu7Go3Ei
-         pZOaYTqCP4I9mms9GBI+RAhoaNcVT25ExCJwHZF2pSOVsvSsm5BXiupNAfXCUWZaIG
-         N706B/E1DNAwz8eaTZ5/3E8+GGvV6tdTaaabFLCaP4cxnyqlxubcJobnU/2X16Vb5O
-         aE0OULprxkOs3j7ej1xl8ug2/CULqKkDjJvAIQoxw4gP25z2IyIbhpc9ATFUga+6YK
-         qHbnt1NDX7BkackKR5Fy0X2BHtMBT7ypthSvAK75DxIDkaub6mmZGhJqItZGZzumR6
-         UbWnWqwnl3CtQ==
-Date:   Tue, 25 Apr 2023 07:24:04 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>, Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qingfang Deng <dqfext@gmail.com>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2] net: phy: add driver for MediaTek SoC built-in GE
- PHYs
-Message-ID: <20230425072404.28b798e1@kernel.org>
-In-Reply-To: <ZEePDK2oW5xkiEIv@makrotopia.org>
-References: <ZEPU6oahOGwknkSc@makrotopia.org>
-        <20230424183755.3fac65b0@kernel.org>
-        <ZEePDK2oW5xkiEIv@makrotopia.org>
+        Tue, 25 Apr 2023 10:26:45 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57D610EB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:43 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-5ef54bcded4so26081326d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1682432803; x=1685024803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NzQgQguk3FOOn5Q0sl8SuL93RxV/W/XH0B4cmOPUOrU=;
+        b=yOxoxF62ERjNeWj+CJa/Kah64bkFFMllNsu/eOE1VPjy/CtwcA4FxevLn1O/B4+AY+
+         zfVO2T4iq6YWlUNEovI2VhyRBeqpSobmLFeaPBC790F8WxXVf2FT1xl83r3qVq+EGrsV
+         IXaeU2RXZDlKh5LyQpUjFc140qZ447SZe8eQ3SwWZVC9XwDXAaTs7wXKISggALCPIrYo
+         OMRTE2bLujG0i8qn4lvcsLiNYH1xdiBg/ug9sYv9Mn+NoV+jiCYrQMOv85l7AaIUuVoN
+         +sB4aDdp2H9N9Nu7hdKDXR98TnMR707C/ZsscqiU3PpsaA6nhgtN7PAfb8QEsh+CXdwS
+         JDhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682432803; x=1685024803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NzQgQguk3FOOn5Q0sl8SuL93RxV/W/XH0B4cmOPUOrU=;
+        b=B7VFfTVAbGOyePEwg357EH7yzY9U6NO3yo4YF75aXJS53rICEQsN22O3r7+yiHVBq9
+         ylEEle3ybN1V2xwbC3fJijcFEOwfZmML+HVtFY4FlbcsDuhJYWxodC3bv0hbu6y9kCnN
+         Ltw7HOjIqbt4S3L/b2itgZRer38Okzj7lQf2SCpsgTsebyDmssXTp1teLWVyBb4cmB1V
+         UsF7O+BpzKUNbJLqj7fol3GSe+lTLjFDGE2/9Fb7NJIdVhrHoKkFwxIciwVfVuBURFOC
+         RmsmG6yvPGHs7bRanur1RH1kvsGFO2MNLTT1I6iFuWdbihXOk7CLbPSGodwetInt70XE
+         LdbA==
+X-Gm-Message-State: AAQBX9ft7Rd2JMSblkaQk3Z8P5J31CiULK85MNvbOY8n8hSTMQTbkxwG
+        xsALfoXocYKZGOhfFanaoZXBVw==
+X-Google-Smtp-Source: AKy350aVJB8UWDC5ePhBp0/DKlzvTUR/3tZD+AfBmuBDgB9VXbS/x6mF8kc684QsCsAoWpDytYxKqA==
+X-Received: by 2002:a05:6214:1c49:b0:5e6:1723:a7e4 with SMTP id if9-20020a0562141c4900b005e61723a7e4mr31244225qvb.30.1682432802913;
+        Tue, 25 Apr 2023 07:26:42 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:9fc5])
+        by smtp.gmail.com with ESMTPSA id q17-20020a0ce211000000b005f5b71f75f3sm4120360qvl.125.2023.04.25.07.26.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 07:26:42 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 10:26:41 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 20/26] mm: vmscan: use compaction_suitable() check in
+ kswapd
+Message-ID: <20230425142641.GA17132@cmpxchg.org>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-21-hannes@cmpxchg.org>
+ <87a5ywfyeb.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a5ywfyeb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 09:27:56 +0100 Daniel Golle wrote:
-> > Daniel, is it high prio for you to get it into 6.4 or 6.5 is okay?  
+On Tue, Apr 25, 2023 at 11:12:28AM +0800, Huang, Ying wrote:
+> Johannes Weiner <hannes@cmpxchg.org> writes:
 > 
-> No rush, as this is mostly relevant for OpenWrt the thing which matters
-> most to me is having it in the next LTS kernel, so 6.5 should still be
-> fine I suppose.
+> > Kswapd currently bails on higher-order allocations with an open-coded
+> > check for whether it's reclaimed the compaction gap.
+> >
+> > compaction_suitable() is the customary interface to coordinate reclaim
+> > with compaction.
+> >
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> > ---
+> >  mm/vmscan.c | 67 ++++++++++++++++++-----------------------------------
+> >  1 file changed, 23 insertions(+), 44 deletions(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index ee8c8ca2e7b5..723705b9e4d9 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -6872,12 +6872,18 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+> >  		if (!managed_zone(zone))
+> >  			continue;
+> >  
+> > +		/* Allocation can succeed in any zone, done */
+> >  		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
+> >  			mark = wmark_pages(zone, WMARK_PROMO);
+> >  		else
+> >  			mark = high_wmark_pages(zone);
+> >  		if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
+> >  			return true;
+> > +
+> > +		/* Allocation can't succeed, but enough order-0 to compact */
+> > +		if (compaction_suitable(zone, order,
+> > +					highest_zoneidx) == COMPACT_CONTINUE)
+> > +			return true;
 > 
-> > 
-> > I'm trying to get a read on whether we should merge it because it's 
-> > kind of on the goal line for this merge window. 
-> > 
-> > If nobody feels strongly we can do this the traditional way - I'll 
-> > just complain about RCT, hence kicking it back out into the field :)  
+> Should we check the following first?
 > 
-> I understand Andrew's concerns and will resubmit for the next merge
-> window in 2 weeks, and without the LED part for now until PHY LED
-> infrastructure is more ready (ie. able to offload 'netdev' trigger
-> to hardware)
+>         order > 0 && zone_watermark_ok_safe(zone, 0, mark, highest_zoneidx)
 
-Perfect, thanks!
+That's what compaction_suitable() does. It checks whether there are
+enough migration targets for compaction (COMPACT_CONTINUE) or whether
+reclaim needs to do some more work (COMPACT_SKIPPED).
