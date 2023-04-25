@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD606EE36F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 616CD6EE371
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234264AbjDYNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S233834AbjDYNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234224AbjDYNq2 (ORCPT
+        with ESMTP id S233976AbjDYNrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:46:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5800F16182
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-94f3cd32799so1078439966b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:01 -0700 (PDT)
+        Tue, 25 Apr 2023 09:47:19 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06782D76
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:53 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-32ad7e5627bso2564955ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682430359; x=1685022359;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682430412; x=1685022412;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
-        b=IbCqrE+0qE1Vta7QCUFthlILPfO9eniXf6400K6oMk+lpgOsl9KXaDA1uRvGgcqVwh
-         PAGGWi8fUGEkeNspx6ZhnsvdwhU+aStjzOGNzaXq4c7EJhKTH686w69OBcNaxQQBKdID
-         rUjiI1iHNLFRwmrUxEb71IxGS/hVwHwC5Vs/QrPdDI45DojY0g/reV7S8kIKYNG4Z9is
-         y41dzqRhtgn2fatnzf91nHfGrooO8kF2iGw9+cD48LdFOloX9hMmuUKLPketS4Qdv6xK
-         lvY6LO2me1uYUzYF62v05ZWnQuXsz6Puy21MoGLtSX+jgC0DsBeAnM50weEs9mjoT+g0
-         W/Tg==
+        bh=sWT4LDDHDTDTan4b4Z+92OYHL+K27mprNFuaNL6WnjA=;
+        b=1nJIIQwa9wgF4lHDGz+kxbxwTuUJVltwQAbcKRiVUr8nc8hHbWExkW+1fkx5WoI6fm
+         eFzVIleC7/Zrq8d5PBdP9JpT56oymBJ0lFz3jWqiQWsvl5WluanpZI8IxKmAuon7D5eq
+         nPkok3e10A3BuOaxgc+pCrme1NFnkcRWIGILWfKpP+L6efrZNSVd5u5iyXCd5BdBGySc
+         65mNsVocLP1fATCMVpQx3fnZDTqg91MgBpD4zXqrgdiNXTn+9WTAzSz6HhzuU+o3Y3Ww
+         GEBC5J8bcUn5I5dwcnHRuEkLPo4bPVokiBntVfV5N2yK3dbhbQgil5dSx/MvCQ0RmXZ0
+         NmHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430359; x=1685022359;
+        d=1e100.net; s=20221208; t=1682430412; x=1685022412;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xI0Ck3d/S1SQIjv352Lo/cQB4x+mg+ti5BsRpNPACt0=;
-        b=ZLFNB45vZdlM3rEm28TSGH6ti0ZNdVZhSZ3sdtAHU2obiW8BtS9DgIFETPc3iNGboL
-         XcVjP8n9PY9WuQ6FeBMsqmqhPjw4CHBrA0tb/ovPQliBMbKTlQ66Qugv3U3Ng22zPqEd
-         mdEdAay8lk0vnszbaBZ2lGrsFWApfOCYGaDj5vD25xJygkfZxmIAWfRVsAPKeNZdqRNU
-         HC8YJhw46SfO8TpXbN7yj0AwBZtuxtVXTELcHx/aXsNfrEUZ7wvIW81bEIaCbFz9GsyS
-         pJ9RFfHs6NEj2FocEPdLv7S/DUcZBDgizXueSx76o51E7XtRwapTYR0TYyVlvJD9lLmc
-         PZpw==
-X-Gm-Message-State: AAQBX9cU4De0XuZm4EpkcesZDKB1JFTGV84HCFCeWwVazzO64CGZGMRa
-        Ara/ObKk1emBfOBdrS7IMS4Fhw==
-X-Google-Smtp-Source: AKy350Y5d56yR3yCA+n72WOYxsRIheFXOTdTuxBeiaMFVX4jeFXOmiuq4zZPQKXKHZXpv/m9cuIXJQ==
-X-Received: by 2002:a17:906:470a:b0:94e:6294:9d23 with SMTP id y10-20020a170906470a00b0094e62949d23mr13534582ejq.26.1682430359582;
-        Tue, 25 Apr 2023 06:45:59 -0700 (PDT)
-Received: from [172.23.2.104] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id my34-20020a1709065a6200b0094f6f45b2c1sm6827559ejc.156.2023.04.25.06.45.58
+        bh=sWT4LDDHDTDTan4b4Z+92OYHL+K27mprNFuaNL6WnjA=;
+        b=dOAAGt3FY2EaDV08iuSHKL9zSAdDoGNNxtnFCQLwsIyMAEH5d/OuM8XqFDDWY8CWS2
+         P2JIWrYn7Rbctu4dXZIXWgGEUjXsqKW6sNh7f1Z+O+xs86ffVag01+Dt9QnNJvDPHPGn
+         QkSyAQH3/Vyx1UYpwVo27LaB6Dy06DMJyXPZUnN481wtPGe06zr1bbcc2PQjCmrBhzUV
+         g/7spOA4oPqsVwVWundws0EkBFvNcCKfoCM0SNDBawO6HZ8xjXwFnn/z0pMLb9lOmkOV
+         JoI8saGp8NDUKJAEy23s2jA9DPUXenaLhMWm73RuOOdojwZfnabyxLF+YKZfJ0g/K2VM
+         bkyA==
+X-Gm-Message-State: AAQBX9fmFC4O0nJvIG7vuBu0MQcQ/jVj8MjRnlD2YK0ivDIVxn/bT30B
+        K0xzCP8N4CY3z8+WyxHajKqEaRu3hDl1SKUq3ys=
+X-Google-Smtp-Source: AKy350YTrxS1BtUfMNL2LeuIIK7iBfsRU2g2VBE8kugIz3YHrjtnd8goWvVu4EnYemjGQkYrGBOG2g==
+X-Received: by 2002:a05:6e02:17cd:b0:328:2f36:b6bd with SMTP id z13-20020a056e0217cd00b003282f36b6bdmr11283728ilu.1.1682430412341;
+        Tue, 25 Apr 2023 06:46:52 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id w2-20020a927b02000000b003231580e8e2sm3590068ilc.6.2023.04.25.06.46.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 06:45:58 -0700 (PDT)
-Message-ID: <9f28dbff-ca3a-8523-5bfc-37b38bc846c3@linaro.org>
-Date:   Tue, 25 Apr 2023 14:45:57 +0100
+        Tue, 25 Apr 2023 06:46:51 -0700 (PDT)
+Message-ID: <f9616b01-b185-a2a5-dbc9-a45735ed7e1b@kernel.dk>
+Date:   Tue, 25 Apr 2023 07:46:51 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] spi: spi-geni-qcom: Correct CS_TOGGLE bit in
- SPI_TRANS_CFG
+Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
 Content-Language: en-US
-To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_msavaliy@quicinc.com, dianders@chromium.org, mka@chromium.org,
-        swboyd@chromium.org, quic_vtanuku@quicinc.com
-References: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1682412128-1913-1-git-send-email-quic_vnivarth@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
+ <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
+ <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
+ <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
+ <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
+ <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
+ <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
+ <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/24/23 9:16?PM, Linus Torvalds wrote:
+> On Mon, Apr 24, 2023 at 3:45?PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> Something like this. Not tested yet, but wanted to get your feedback
+>> early to avoid issues down the line.
+> 
+> Ok, that try_cmpxchg() loop looks odd, but I guess it's the right thing to do.
+> 
+> That said, you should move the
+> 
+>         old_fmode = READ_ONCE(file->f_mode);
+> 
+> to outside the loop, because try_cmpxchg() will then update
+> 'old_fmode' to the proper value and it should *not* be done again.
+> 
+> I also suspect that the READ_ONCE() itself is entirely superfluous,
+> because that is very much a value that we should let the compiler
+> optimize to *not* have to access more than it needs to.
+> 
+> So if the compiler had an earlier copy of that value, it should just
+> use it, rather than us forcing it to read it again.
+> 
+> But I suspect in this case it makes no real difference to code
+> generation. There's nothing else around it that uses f_mode, afaik,
+> and the try_cmpxchg() will reload it properly to fix any possible
+> races up.
+> 
+> The READ_ONCE() would possibly make more sense if we actually expected
+> that FMODE_NOWAIT bit to change more than once, but then we'd
+> presuably have some ordering rule and it should be a
+> smp_load_acquire() or whatever.
+> 
+> As it is, if we ever see it clear, we don't care any more, and the
+> real value consistency guarantee is in the try_cmpxchg itself. There
+> are no possible races ot mis-readings that could matter.
+> 
+> So I think it could/should just be something like
+> 
+>     void pipe_clear_nowait(struct file *file)
+>     {
+>         fmode_t fmode = file->f_mode;
+>         do {
+>             if (!(fmode & FMODE_NOWAIT))
+>                 break;
+>         } while (!try_cmpxchg(&file->f_mode, &fmode, fmode & ~FMODE_NOWAIT));
+>     }
+> 
+> which sadly generates that big constant just because FMODE_NOWAIT is
+> up in the high bits and with the 'try_cmpxchg()', the compiler has no
+> choice but to get the full 32-bit value anyway.
 
-On 4/25/23 09:42, Vijaya Krishna Nivarthi wrote:
-> The CS_TOGGLE bit when set is supposed to instruct FW to
-> toggle CS line between words. The driver with intent of
-> disabling this behaviour has been unsetting BIT(0). This has
-> not caused any trouble so far because the original BIT(1)
-> is untouched and BIT(0) likely wasn't being used.
->
-> Correct this to prevent a potential future bug.
->
-> Signed-off-by: Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-> ---
+I'll go with this, it's definitely simpler. I suspected the important
+bit was just doing the cmpxchg sanely and that the READ_ONCE() was
+superflous given how it's used, and dropping the old_fmode is cleaner.
 
-Has this always been the case, or did the switch to BIT(1)
-only occur on some recent platforms?
+FWIW, I don't see any difference in code generation here on arm64 or
+x86-64 if FMODE_NOWAIT is in the lower bits, as we could've just moved
+it. We could make it the sign bit which might make the first compare
+faster in general, but honestly don't think we really care that deeply
+about that.
 
-Konrad
+Updated the branch, it's:
 
->   drivers/spi/spi-geni-qcom.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-> index ba7be50..8a7d1c2 100644
-> --- a/drivers/spi/spi-geni-qcom.c
-> +++ b/drivers/spi/spi-geni-qcom.c
-> @@ -35,7 +35,7 @@
->   #define CS_DEMUX_OUTPUT_SEL	GENMASK(3, 0)
->   
->   #define SE_SPI_TRANS_CFG	0x25c
-> -#define CS_TOGGLE		BIT(0)
-> +#define CS_TOGGLE		BIT(1)
->   
->   #define SE_SPI_WORD_LEN		0x268
->   #define WORD_LEN_MSK		GENMASK(9, 0)
+https://git.kernel.dk/cgit/linux/log/?h=pipe-nonblock.2
+
+It's just the cmpxchg patch now and the same "set FMODE_NOWAIT on pipes
+unconditionally" from before.
+
+-- 
+Jens Axboe
+
