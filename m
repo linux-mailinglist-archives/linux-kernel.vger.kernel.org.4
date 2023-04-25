@@ -2,201 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D16EDE94
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE716EDE98
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 10:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbjDYIzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 04:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
+        id S233527AbjDYI5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 04:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjDYIzr (ORCPT
+        with ESMTP id S231428AbjDYI5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 04:55:47 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D4EC3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:55:45 -0700 (PDT)
-Received: from SoMainline.org (82-72-63-87.cable.dynamic.v4.ziggo.nl [82.72.63.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3D0EF1F6C6;
-        Tue, 25 Apr 2023 10:55:43 +0200 (CEST)
-Date:   Tue, 25 Apr 2023 10:55:41 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] drm/msm/dpu: Pass catalog pointers directly from
- RM instead of IDs
-Message-ID: <m5z5mv5hbdgpjbfo3mqo5s3egshnlu77nla4b7txddlsbk5fvi@jitwvapbr7wr>
-References: <20230418-dpu-drop-useless-for-lookup-v2-0-acb08e82ef19@somainline.org>
- <20230418-dpu-drop-useless-for-lookup-v2-3-acb08e82ef19@somainline.org>
- <50d22e0c-84b3-0678-eb06-30fb66fd24cf@quicinc.com>
- <ymq4kstme55dm3j5kr6trevnwdelhjq7e7m4yky6zcbnf7auid@66l7inxz4oq2>
- <CAA8EJprYQUFER6x1+ucHX_Ze2uqWc6xoEaYDdJ1s0jgZjPJ0QQ@mail.gmail.com>
- <c809476f-74bc-0399-08f9-1bf26e7170fa@quicinc.com>
- <r2tndjr5jbjtrwwti6l3ag7562e53nqx2uk6vz6fx43yc7sncl@eypc37r2ey3j>
- <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
+        Tue, 25 Apr 2023 04:57:23 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8142410CE
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f1728c2a57so56997615e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:57:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1682413039; x=1685005039;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
+        b=A4qlge16yFv+9UUBED8DwB3CpwcMvkHy47I9ZPC3tVY2qFmyQkVEAT+Ifre5YvtJt2
+         Xb5SNcrz9qpm4DgOO4DmjrN6dZqkqvbTygoRXDF3YdJHiEDFF0NZd/zySjhHERKg/bWa
+         LNSvaOQvBBl1EOZfh6GywgBChs3CS5MZHtaZ8VS+NeizsM/I/qQFQWkoOpAzI7+qsz7z
+         RmaMhP9x2oqtrrxq3QkmYvqOGyazp0qtrnzpNxQLoRm9e45M2UdYX92KxXIapjz99gHe
+         lPKZxByRISbqo46iqL6ExBUZkjQTJ1RXQQulHAHcW6Hx34ZZoTiMUaeOWhOgncfGlT4h
+         0LQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682413039; x=1685005039;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IatPhWkS7kXHNYw/LMRL8AKSu2Xban6SY9XiEQ0UbuE=;
+        b=ltCOXyhDWxOHdtMAE5viNkg181N2VDbRVcvDZx3L4uKEWUx4PF2NivFS7FQXQdIKdv
+         Cip4e0kJHQwRnUv867X45XFAZKXBZiO1VuKIK7OhNfzMoJaXVAab+MxcF3D2D6hqB2nQ
+         UTJPnNm9kz6dWDq3XJklJ0DF+wzIQAnDLtqIIAieAOc4e9UM+HLYoRD1wB7BPJqdTJ5I
+         6K0++OTTSJyK+7C2h7zQWHRUfSzW8d987y/Yak6EeadSHbbOIX5tPIz8rKH1InL8RGnX
+         65HH8vpAiV7uo0MXMe536Yruww96xmAMQqvpmg57MC8AyFmMwvCXeg6VwEp0JeomXQrR
+         6bIA==
+X-Gm-Message-State: AAQBX9cVYKYWaJrTtz7ImFya8V6Q058EWN5MF+iZD1fN3a1/xP/EyKLy
+        sWBs2Tvib8qjliMh7oVJvLc+9w==
+X-Google-Smtp-Source: AKy350ZfqbGzh3y7nA6BysMdjdjoeKVHTAZG8yejEO8cIxrcwf4n7Z9FsaXanJbDCjOudEBOO/ZeMg==
+X-Received: by 2002:a05:600c:24cd:b0:3f1:79ad:f3a8 with SMTP id 13-20020a05600c24cd00b003f179adf3a8mr9037127wmu.16.1682413038872;
+        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6? ([2a02:8011:e80c:0:fc75:a52a:6ef6:7ac6])
+        by smtp.gmail.com with ESMTPSA id y21-20020a05600c365500b003f182a10106sm14443185wmq.8.2023.04.25.01.57.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 01:57:18 -0700 (PDT)
+Message-ID: <fa14348d-b7ce-2a0e-d0f6-387162621ae8@isovalent.com>
+Date:   Tue, 25 Apr 2023 09:57:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31f116f6-a6b7-1241-83bc-96c31e718f3f@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH bpf-next v2] bpftool: Dump map id instead of value for
+ map_of_maps types
+Content-Language: en-GB
+To:     Xueming Feng <kuro@kuroa.me>, yhs@meta.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
+        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        martin.lau@linux.dev, sdf@google.com, song@kernel.org, yhs@fb.com
+References: <561b0f03-4a3a-89d3-5793-a0d69535ca0f@meta.com>
+ <20230425063750.72642-1-kuro@kuroa.me>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230425063750.72642-1-kuro@kuroa.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-25 10:54:47, Dmitry Baryshkov wrote:
-> On 25/04/2023 10:16, Marijn Suijten wrote:
-> > On 2023-04-24 16:23:17, Abhinav Kumar wrote:
-> >>
-> >>
-> >> On 4/24/2023 3:54 PM, Dmitry Baryshkov wrote:
-> >>> On Tue, 25 Apr 2023 at 01:03, Marijn Suijten
-> >>> <marijn.suijten@somainline.org> wrote:
-> >>>>
-> >>>> On 2023-04-21 16:25:15, Abhinav Kumar wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 4/21/2023 1:53 PM, Marijn Suijten wrote:
-> >>>>>> The Resource Manager already iterates over all available blocks from the
-> >>>>>> catalog, only to pass their ID to a dpu_hw_xxx_init() function which
-> >>>>>> uses an _xxx_offset() helper to search for and find the exact same
-> >>>>>> catalog pointer again to initialize the block with, fallible error
-> >>>>>> handling and all.
-> >>>>>>
-> >>>>>> Instead, pass const pointers to the catalog entries directly to these
-> >>>>>> _init functions and drop the for loops entirely, saving on both
-> >>>>>> readability complexity and unnecessary cycles at boot.
-> >>>>>>
-> >>>>>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> >>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >>>>>
-> >>>>> Overall, a nice cleanup!
-> >>>>>
-> >>>>> One comment below.
-> >>>>>
-> >>>>>> ---
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c        | 37 +++++----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h        | 14 ++++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c        | 32 +++---------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h        | 11 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.c       | 38 ++++-----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dspp.h       | 12 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |  2 +-
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c       | 40 ++++++-----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h       | 12 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.c         | 38 ++++-----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_lm.h         | 10 +++---
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.c    | 33 +++----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_merge3d.h    | 14 ++++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c   | 33 +++----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h   | 14 ++++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.c       | 39 ++++------------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_sspp.h       | 12 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.c       | 33 +++----------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_vbif.h       | 11 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.c         | 33 ++++---------------
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_hw_wb.h         | 11 +++----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 17 +++++-----
-> >>>>>>     drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c            | 18 +++++-----
-> >>>>>>     23 files changed, 139 insertions(+), 375 deletions(-)
-> >>>>>>
-> >>>>>
-> >>>>> <snipped>
-> >>>>>
-> >>>>>> -struct dpu_hw_intf *dpu_hw_intf_init(enum dpu_intf idx,
-> >>>>>> -           void __iomem *addr,
-> >>>>>> -           const struct dpu_mdss_cfg *m)
-> >>>>>> +struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
-> >>>>>> +           void __iomem *addr)
-> >>>>>>     {
-> >>>>>>       struct dpu_hw_intf *c;
-> >>>>>> -   const struct dpu_intf_cfg *cfg;
-> >>>>>> +
-> >>>>>> +   if (cfg->type == INTF_NONE) {
-> >>>>>> +           pr_err("Cannot create interface hw object for INTF_NONE type\n");
-> >>>>>> +           return ERR_PTR(-EINVAL);
-> >>>>>> +   }
-> >>>>>
-> >>>>> The caller of dpu_hw_intf_init which is the RM already has protection
-> >>>>> for INTF_NONE, see below
-> >>>>>
-> >>>>>            for (i = 0; i < cat->intf_count; i++) {
-> >>>>>                    struct dpu_hw_intf *hw;
-> >>>>>                    const struct dpu_intf_cfg *intf = &cat->intf[i];
-> >>>>>
-> >>>>>                    if (intf->type == INTF_NONE) {
-> >>>>>                            DPU_DEBUG("skip intf %d with type none\n", i);
-> >>>>>                            continue;
-> >>>>>                    }
-> >>>>>                    if (intf->id < INTF_0 || intf->id >= INTF_MAX) {
-> >>>>>                            DPU_ERROR("skip intf %d with invalid id\n",
-> >>>>> intf->id);
-> >>>>>                            continue;
-> >>>>>                    }
-> >>>>>                    hw = dpu_hw_intf_init(intf->id, mmio, cat);
-> >>>>>
-> >>>>> So this part can be dropped.
-> >>>>
-> >>>> I mainly intended to keep original validation where _intf_offset would
-> >>>> skip INTF_NONE, and error out.  RM init is hence expected to filter out
-> >>>> INTF_NONE instead of running into that `-EINVAL`, which I maintained
-> >>>> here.
-> >>>>
-> >>>> If you think there won't be another caller of dpu_hw_intf_init, and that
-> >>>> such validation is hence excessive, I can remove it in a followup v3.
-> >>>
-> >>> I'd prefer to see the checks at dpu_rm to be dropped.
-> >>> dpu_hw_intf_init() (and other dpu_hw_foo_init() functions) should be
-> >>> self-contained. If they can not init HW block (e.g. because the index
-> >>> is out of the boundaries), they should return an error.
-> >>>
-> >>
-> >> They already do that today because even without this it will call into
-> >> _intf_offset() and that will bail out for INTF_NONE.
-> >>
-> >> I feel this is a duplicated check because the caller with the loop needs
-> >> to validate the index before passing it to dpu_hw_intf_init() otherwise
-> >> the loop will get broken at the first return of the error and rest of
-> >> the blocks will also not be initialized.
-> > 
-> > To both: keep in mind that the range-checks we want to remove from
-> > dpu_rm_init validate the ID (index?) of a block.  This check is for the
-> > *TYPE* of an INTF block, to skip it gracefully if no hardware is mapped
-> > there.  As per the first patch of this series SM6115/QCM2290 only have a
-> > DSI interface which always sits at ID 1, and ID 0 has its TYPE set to
-> > INTF_NONE and is skipped.
-> > 
-> > Hence we _should_ keep the graceful TYPE check in dpu_rm_init() to skip
-> > calling this function _and assigning it to the rm->hw_intf array_.  But
-> > I can remove the second TYPE check here in dpu_hw_intf_init() if you
-> > prefer.
+2023-04-25 14:37 UTC+0800 ~ Xueming Feng <kuro@kuroa.me>
+>> On 4/24/23 9:10 PM, Xueming Feng wrote:
+>>>> On 4/24/23 2:09 AM, Xueming Feng wrote:
+>>>>> When using `bpftool map dump` in plain format, it is usually
+>>>>> more convenient to show the inner map id instead of raw value.
+>>>>> Changing this behavior would help with quick debugging with
+>>>>> `bpftool`, without disrupting scripted behavior. Since user
+>>>>> could dump the inner map with id, and need to convert value.
+>>>>>
+>>>>> Signed-off-by: Xueming Feng <kuro@kuroa.me>
+>>>>> ---
+>>>>> Changes in v2:
+>>>>>     - Fix commit message grammar.
+>>>>> 	- Change `print_uint` to only print to stdout, make `arg` const, and rename
+>>>>> 	  `n` to `arg_size`.
+>>>>>     - Make `print_uint` able to take any size of argument up to `unsigned long`,
+>>>>> 		and print it as unsigned decimal.
+>>>>>
+>>>>> Thanks for the review and suggestions! I have changed my patch accordingly.
+>>>>> There is a possibility that `arg_size` is larger than `unsigned long`,
+>>>>> but previous review suggested that it should be up to the caller function to
+>>>>> set `arg_size` correctly. So I didn't add check for that, should I?
+>>>>>
+>>>>>    tools/bpf/bpftool/main.c | 15 +++++++++++++++
+>>>>>    tools/bpf/bpftool/main.h |  1 +
+>>>>>    tools/bpf/bpftool/map.c  |  9 +++++++--
+>>>>>    3 files changed, 23 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+>>>>> index 08d0ac543c67..810c0dc10ecb 100644
+>>>>> --- a/tools/bpf/bpftool/main.c
+>>>>> +++ b/tools/bpf/bpftool/main.c
+>>>>> @@ -251,6 +251,21 @@ int detect_common_prefix(const char *arg, ...)
+>>>>>    	return 0;
+>>>>>    }
+>>>>>    
+>>>>> +void print_uint(const void *arg, unsigned int arg_size)
+>>>>> +{
+>>>>> +	const unsigned char *data = arg;
+>>>>> +	unsigned long val = 0ul;
+>>>>> +
+>>>>> +	#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+>>>>> +		memcpy(&val, data, arg_size);
+>>>>> +	#else
+>>>>> +		memcpy((unsigned char *)&val + sizeof(val) - arg_size,
+>>>>> +		       data, arg_size);
+>>>>> +	#endif
+>>>>> +
+>>>>> +	fprintf(stdout, "%lu", val);
+>>>>> +}
+>>>>> +
+>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep)
+>>>>>    {
+>>>>>    	unsigned char *data = arg;
+>>>>> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+>>>>> index 0ef373cef4c7..0de671423431 100644
+>>>>> --- a/tools/bpf/bpftool/main.h
+>>>>> +++ b/tools/bpf/bpftool/main.h
+>>>>> @@ -90,6 +90,7 @@ void __printf(1, 2) p_info(const char *fmt, ...);
+>>>>>    
+>>>>>    bool is_prefix(const char *pfx, const char *str);
+>>>>>    int detect_common_prefix(const char *arg, ...);
+>>>>> +void print_uint(const void *arg, unsigned int arg_size);
+>>>>>    void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+>>>>>    void usage(void) __noreturn;
+>>>>>    
+>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+>>>>> index aaeb8939e137..f5be4c0564cf 100644
+>>>>> --- a/tools/bpf/bpftool/map.c
+>>>>> +++ b/tools/bpf/bpftool/map.c
+>>>>> @@ -259,8 +259,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+>>>>>    		}
+>>>>>    
+>>>>>    		if (info->value_size) {
+>>>>> -			printf("value:%c", break_names ? '\n' : ' ');
+>>>>> -			fprint_hex(stdout, value, info->value_size, " ");
+>>>>> +			if (map_is_map_of_maps(info->type)) {
+>>>>> +				printf("id:%c", break_names ? '\n' : ' ');
+>>>> 1> +				print_uint(value, info->value_size);
+>>>
+>>> On Mon, 24 Apr 2023 18:07:27 -0700, Yonghong Song wrote:
+>>>> For all map_in_map types, the inner map value size is 32bit int which
+>>>> represents a fd (for map creation) and a id (for map info), e.g., in
+>>>> show_prog_maps() in prog.c. So maybe we can simplify the code as below:
+>>>> 	printf("id: %u", *(unsigned int *)value);
+>>>
+>>> That is true, maybe the "id" could also be changed to "map_id" to follow the
+>>> convention. Do you think that `print_uint` could be useful in the future?
+>>> If that is the case, should I keep using it here as an example usage, and to
+>>> avoid dead code? Or should I just remove it?
+
+This makes me think we could also have something similar for prog_array
+maps (but not necessarily as part of your patchset).
+
 > 
-> We can return NULL from dpu_hw_foo_init(), which would mean that the 
-> block was skipped or is not present.
+> On Mon, 24 Apr 2023 22:58:10 -0700, Yonghong Song wrote:
+>> Maybe, "inner_map_id" is a better choice. For array of maps, some array 
+>> element value could be 0, implying "inner_map_id 0", but I think it is
+>> okay, people should know a real inner_map_id (or any map_id) should 
+>> never be 0.
+>>
+>> Function "print_uint" is not needed any more. Please remove it.
+> 
+> Will reflect this in v3.
+> 
+>>
+>> Please add the command line to dump map values triggering the above 
+>> change, also the actual dumps with and without this patch.
+> 
+> $ bpftool map dump id 138
+> Without patch:
+> ```
+> key:
+> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+> 27 16 06 00
+> value:
+> 8b 00 00 00
+> Found 1 element
+> ```
+> With patch:
+> ```
+> key:
+> fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+> 27 16 06 00
+> inner_map_id:
+> 139 
+> Found 1 element
+> ```
 
-An then replace the `if INTF_NONE continue` logic in dpu_rm_init with a
-check for NULL that skips, and a check for IS_ERR` that goes to `fail`?
+Thanks! Please add those sample outputs to the commit description for
+v3. Can you please also add an example with JSON ("-p")?
 
-Should I do that in a new or the same patch for v3?
+Quentin
 
-Note that there's a similar check for the `pingpong` "id" member of
-every Layer Mixer.
-
-- Marijn
