@@ -2,123 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465216EE052
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F276EE057
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbjDYK0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60878 "EHLO
+        id S233442AbjDYK3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233855AbjDYKZg (ORCPT
+        with ESMTP id S233329AbjDYK3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:25:36 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F05712CAE;
-        Tue, 25 Apr 2023 03:25:10 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2474e09fdcfso4770303a91.0;
-        Tue, 25 Apr 2023 03:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682418303; x=1685010303;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wvAqq7vb9DF2nKzu2bS0JuzdS+URG2WEwFTC3+AC1JQ=;
-        b=kglRNpV1I25Xn5ebT5OeWsfxM4qQ5UzRfFRrKN5wKFkS0t1M6gB6f+XRBcthVe3bY2
-         L0JP3jFnaQ3Jbl2Llj4cn2CxqnzieVysR6E656zXut5GlxKMbadaaBsHTaH6aRZD3yue
-         z3l26hk0zpo6Plo7PyITVO724xC3HnHauzLZi+KRojrgjahLtbZ/RaDCtbAmXMUjIptO
-         OZpYTUvOO1zhcSL5oHYKRp0pZdT0uSzIWMcF0fj5Ed6J+n1g8lgGq8KFrVOQihzoTyNM
-         OoWLEonpqpqvvQV7vWjojmEBeG5RkDiebblWBQkVJq2D6XmsTBD2crtPRQWeyHr7+Av+
-         RucQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682418303; x=1685010303;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wvAqq7vb9DF2nKzu2bS0JuzdS+URG2WEwFTC3+AC1JQ=;
-        b=HMve19cNamGibsdMxRh489ctD4RsTburOdPkh8ZHXCvsxZS/NTsbAtO+sAOOJA0deo
-         vs1mqzleKpFY+P0bgw/9iXA048r3AMs49UjRdltzNwu1tcLRZO/z1GOv51t1FxEfjXFD
-         oUbyPS3lRCKKbTTndMyHPWmWoOHho4zZ/F1X+P5NtxFUUdaXc/sT28WxqtG0HKTpVpL3
-         7lqfHnF517GbzkFWnaJ7ydIjjxqg6a3dalJkfo9/GE7sUBOGUbctOnt4Ci8YgLKEBEj2
-         14L80uzqz3C2xrfn7ZqrFLgbxyOA/y0qhrkxeCN7f55P9cOX3rnMSz7C9BxuxJfCV3u8
-         h7Xw==
-X-Gm-Message-State: AAQBX9erW1DeMYvV6cfmWI7LXF3SYhgkAUvHFMhk7KPF/+7nNxWYWSY9
-        uVZNJgeFsm1GJ1m32XbOITE=
-X-Google-Smtp-Source: AKy350b+oYxBE9oqvQYHJzfRSZ4R43nZJjdWkA3mO5rxJ9ObN5ORia4PGTU1/UxZkSxxyhpwGfgS6g==
-X-Received: by 2002:a17:90a:ea07:b0:240:d3b7:e850 with SMTP id w7-20020a17090aea0700b00240d3b7e850mr14583513pjy.49.1682418302794;
-        Tue, 25 Apr 2023 03:25:02 -0700 (PDT)
-Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id 30-20020a63125e000000b0051b70c8d446sm7644715pgs.73.2023.04.25.03.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 03:25:02 -0700 (PDT)
-From:   Jacky Huang <ychuang570808@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v8 11/11] MAINTAINERS: Add entry for NUVOTON MA35
-Date:   Tue, 25 Apr 2023 10:24:18 +0000
-Message-Id: <20230425102418.185783-12-ychuang570808@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230425102418.185783-1-ychuang570808@gmail.com>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
+        Tue, 25 Apr 2023 06:29:00 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F8F12CA7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:28:28 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q5J966X28z9sjC;
+        Tue, 25 Apr 2023 12:27:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1682418458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AzoOwKMdJiLKK3BSiCIwb6001/mIm7hyJsaLnt4CuOY=;
+        b=gcckeR9ypTnpx8tyY5QCL0wq+wig31N845d0UcpgHbiaBysK4rFUe7QTKjgoOtzw1yVQ9q
+        olCCPx4pt5kj2OjdDr++5kP2lbKTA+FYGmlnG2iKIMxCqG35wvvyZpq5phrD6Cxl4yocRY
+        LmCfwgcbto4PAo+Y+Le1GYzh8f/3BiYcoljJjTFHOIw/d5tZ6vpsMPwwSdi1gEJa/Ib3On
+        CPHZY0jOb8D5GDUaneWnMb1ZBU8kDWZ6mMsjAEKHYV6EmaCNAdtDJ4qXGIo0GkrKn0qiiW
+        mdhcfwqZbywi1z+Q6+4ZrmVSsXBerBKQ4d6jj+FwVX+LmTuyvY/gfLCH8tpCbw==
+Message-ID: <784561bb-0937-befc-3774-892d6f6a4318@mailbox.org>
+Date:   Tue, 25 Apr 2023 12:27:37 +0200
 MIME-Version: 1.0
+Subject: Re: [PATCH] drm/amdgpu: Mark contexts guilty for any reset type
+Content-Language: de-CH-frami, en-CA
+To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kernel-dev@igalia.com,
+        "Deucher, Alexander" <alexander.deucher@amd.com>
+References: <20230424014324.218531-1-andrealmeid@igalia.com>
+ <d7264c5a-29b4-0fb3-153b-673a8a73d635@amd.com>
+ <CAAxE2A6Soq28ACV-m1OzG8CA-_VWp+N2wapsABzm2Nda=Qe+yA@mail.gmail.com>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <CAAxE2A6Soq28ACV-m1OzG8CA-_VWp+N2wapsABzm2Nda=Qe+yA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MBO-RS-ID: e4acb3074d567e8fc3c
+X-MBO-RS-META: qakb7pkk8zexswyiqwxbcthy4cfcgjgp
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacky Huang <ychuang3@nuvoton.com>
+On 4/24/23 18:45, Marek Olšák wrote:
+> Soft resets are fatal just as hard resets, but no reset is "always fatal". There are cases when apps keep working depending on which features are being used. It's still unsafe.
 
-Add entry for Nuvoton ma35d1 maintainer and files.
-In addition, update board binding paths of NUVOTON NPCM.
+Agreed, in theory.
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- MAINTAINERS | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+In practice, from a user PoV, right now there's pretty much 0 chance of the user session surviving if the GPU context in certain critical processes (e.g. the Wayland compositor or Xwayland) hits a fatal reset. There's a > 0 chance of it surviving after a soft reset. There's ongoing work towards making user-space components more robust against fatal resets, but it's taking time. Meanwhile, I suspect most users would take the > 0 chance.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 14fadebf42fd..1550a08908cd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2501,6 +2501,18 @@ F:	drivers/rtc/rtc-ab8500.c
- F:	drivers/rtc/rtc-pl031.c
- F:	drivers/soc/ux500/
- 
-+ARM/NUVOTON MA35 ARCHITECTURE
-+M:	Jacky Huang <ychuang3@nuvoton.com>
-+M:	Shan-Chun Hung <schung@nuvoton.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/*/*/*ma35*
-+F:	Documentation/devicetree/bindings/*/*ma35*
-+F:	arch/arm64/boot/dts/nuvoton/*ma35*
-+F:	drivers/*/*/*ma35*
-+F:	drivers/*/*ma35*
-+K:	ma35d1
-+
- ARM/NUVOTON NPCM ARCHITECTURE
- M:	Avi Fishman <avifishman70@gmail.com>
- M:	Tomer Maimon <tmaimon77@gmail.com>
-@@ -2512,7 +2524,6 @@ L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
- S:	Supported
- F:	Documentation/devicetree/bindings/*/*/*npcm*
- F:	Documentation/devicetree/bindings/*/*npcm*
--F:	Documentation/devicetree/bindings/arm/npcm/*
- F:	Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
- F:	arch/arm/boot/dts/nuvoton-npcm*
- F:	arch/arm/mach-npcm/
+
 -- 
-2.34.1
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer
 
