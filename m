@@ -2,150 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F4F6EE0C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C696EE0E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjDYK7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S233917AbjDYLJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbjDYK7m (ORCPT
+        with ESMTP id S233676AbjDYLJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:59:42 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E280CC2E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:59:41 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fae5e9ec7so62981647b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682420380; x=1685012380;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MUg+wNP5+RlGjx++pGYBiKCIld1zQdbRIXNqep4/CZY=;
-        b=xqweQ1xw0DS4HaLefbthJGpFnpdM1a5ar9XrlzaVPB2uYZ3keHM9+iJcpYs5jlGPYw
-         GlojP/aOOysoc7fsoOwDPVYqcusgLhlQ+94hs5NyHKPzvEvtT/OWe6E9WG8WrnuCm6QA
-         rK8TroW1KZrHvDEcrqTxBhiX+vahvoKpHXzX4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682420380; x=1685012380;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MUg+wNP5+RlGjx++pGYBiKCIld1zQdbRIXNqep4/CZY=;
-        b=J5YCvtnkj4r3BtmJIUcRSw4MGL+5ufNMhSHhyC30dQy5Sai4kNKImcVaPmI8Xd6HNK
-         yskf7M5Yx08/WzauT8dvtrbnYWLOkaaTZh3wkfiu90yRTHCmO1b7zUN9kx5Bkekc4NNO
-         z89KqbW64Te7OUPQQKHUlJFMUiCcsHxwg6SkuNa120GN2aRVo9FcCqi2IlBZL+XA2tr1
-         nN1paipw8oi+hgAfaZMRiRcqvTziUthd6SmNOhF6v3fE77XnizUek/BNvsorT7V23N6F
-         SCbCNp3MdF0tJwHY1iaAh6ZQnKYsEUooJ1KHwP6RiaRsfP3be8MFm/I4ammWG6ZM3SV/
-         CqcA==
-X-Gm-Message-State: AAQBX9dRsMJsVe7YhmtA7N4QS1YufDrXKWsOAMi9L5W4HFYFjApJLk8t
-        kARolb90eKOihoYpZTE1W9ORUnzT5d1IeCIe+3pJ6w==
-X-Google-Smtp-Source: AKy350YaQoIpYpar+yrvSSOL9ToYRuxOYpny2c9JespRM7apZgHDEAqlXF+tX74BhnaJumdsvGm5n6jRBV8nLU+7V/w=
-X-Received: by 2002:a81:8303:0:b0:54f:d233:d3b7 with SMTP id
- t3-20020a818303000000b0054fd233d3b7mr8858195ywf.21.1682420380486; Tue, 25 Apr
- 2023 03:59:40 -0700 (PDT)
+        Tue, 25 Apr 2023 07:09:45 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F3A1713
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:09:25 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230425110914euoutp010fd8b5e1b0cdc70049c23a540f53499a~ZKPGoX2952946329463euoutp01P
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 11:09:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230425110914euoutp010fd8b5e1b0cdc70049c23a540f53499a~ZKPGoX2952946329463euoutp01P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682420954;
+        bh=Gc4jFl8KquubYFrW8xZv5Gqj3fqTntNDZhVWlXh2E4U=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=ZpSJzBmgfMItZFL1GydmZGuV7A9DANq+FLr4aQyVdi24VNkp/SuxI81tY4tcnNRaV
+         3TrgU08eOtDduHCeRgPsbbuWnbT/tHv4qBl75aPD8lMuKfp3gUQQybyMeeCLzIy3wC
+         b/oxmLOkUJ6jVhljx5E7e8dQa4fwLiz5ctZJI/P0=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230425110913eucas1p16ebb723297aa94d2766c734d83183e6b~ZKPGNItUH1270512705eucas1p1e;
+        Tue, 25 Apr 2023 11:09:13 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 6E.2B.42423.9D4B7446; Tue, 25
+        Apr 2023 12:09:13 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230425110913eucas1p22cf9d4c7401881999adb12134b985273~ZKPFz5aeZ0812808128eucas1p2k;
+        Tue, 25 Apr 2023 11:09:13 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230425110913eusmtrp2c46b12ef17d135e5deccacac75179df6~ZKPFzHa7Q1014910149eusmtrp2o;
+        Tue, 25 Apr 2023 11:09:13 +0000 (GMT)
+X-AuditID: cbfec7f2-25927a800002a5b7-37-6447b4d905ba
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2C.57.10549.9D4B7446; Tue, 25
+        Apr 2023 12:09:13 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230425110913eusmtip20311b17f49b03fde53a0b57a9dc3c58f~ZKPFnrhol0897708977eusmtip2H;
+        Tue, 25 Apr 2023 11:09:13 +0000 (GMT)
+Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Tue, 25 Apr 2023 12:09:12 +0100
+Date:   Tue, 25 Apr 2023 13:00:25 +0200
+From:   Pankaj Raghav <p.raghav@samsung.com>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     Luis Chamberlain <mcgrof@kernel.org>, <hughd@google.com>,
+        <akpm@linux-foundation.org>, <brauner@kernel.org>,
+        <djwong@kernel.org>, <da.gomez@samsung.com>,
+        <a.manzanares@samsung.com>, <dave@stgolabs.net>,
+        <yosryahmed@google.com>, <keescook@chromium.org>, <hare@suse.de>,
+        <kbusch@kernel.org>, <patches@lists.linux.dev>,
+        <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <p.raghav@samsung.com>
+Subject: Re: [RFC 2/8] shmem: convert to use folio_test_hwpoison()
+Message-ID: <20230425110025.7tq5vdr2jfom2zdh@localhost>
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
- <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com> <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 25 Apr 2023 06:59:29 -0400
-Message-ID: <CAEXW_YRFZ3zDc0gJRHjJPRuNaBtnmUc+9RxSAHH48jkFw_b34g@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZEMRbcHSQqyek8Ov@casper.infradead.org>
+X-Originating-IP: [106.110.32.140]
+X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsWy7djPc7o3t7inGDyfrW4xZ/0aNovXhz8x
+        Wqy+uYbR4vITPos9iyYxWTz91MdiMenQNUaLM925FntvaVvs2XuSxeLyrjlsFvfW/Ge1uDHh
+        KVD5iUuMFr9/AMW274p0EPCY3XCRxWPBplKPzSu0PDat6mTz2PRpErvHiRm/WTxebJ7J6DF1
+        dr3H5tPVHp83yQVwRXHZpKTmZJalFunbJXBl/LhxhbngMG/F+iutbA2M07m7GDk4JARMJKas
+        l+5i5OIQEljBKLHvxHs2COcLo8SrO/9Zuhg5gZzPjBJ778WC2CANp1Z9Y4EoWs4ocWTLT0YI
+        B6jozPSbUO1bGCX+/v3GCtLCIqAq0behjxVkH5uAlkRjJzuIKSKgIfFmixFIObPATWaJi7cn
+        MoOUCws4Sfye38AEYvMKmEs8vH0ayhaUODnzCdhFnEBXvFm5gRHiIiWJhs1nWCDsWom9zQfY
+        QYZKCOzmlHg7YzITRMJF4smTDnYIW1ji1fEtULaMxP+d86FqqiWe3vjNDNHcwijRv3M9GySQ
+        rCX6zuSA1DALZEicWd3FCBF2lHjazQFh8knceCsIUcEnMWnbdGaIMK9ER5sQxHA1idX33rBA
+        hGUkzn3im8CoNAvJX7OQjIewdSQW7P7ENguog1lAWmL5Pw4IU1Ni/S79BYysqxjFU0uLc9NT
+        iw3zUsv1ihNzi0vz0vWS83M3MQLT4el/xz/tYJz76qPeIUYmDsZDjBIczEoivLyV7ilCvCmJ
+        lVWpRfnxRaU5qcWHGKU5WJTEebVtTyYLCaQnlqRmp6YWpBbBZJk4OKUamLqjbhv1RQRvNfxZ
+        Ofdz7pdfIsbRuUz7tuvJBEZITj5/+ljptPIHefFCDoZx5+IX35uxYG2NfFTmI9N7P904ufmX
+        Xmp+VZ16tKtpJUOW3pYXN7jEc/hrODd81vxr4xJaOClXTGhHdPzcGxlflv8V/68cqNKwaJ1O
+        mYeOpI1J71Y1kffntvo/fiH/Ilq6RslVvXJdzNmbqWZd64xN3p73uXVSU87detXKo5WX1eMV
+        Ao9Kfz+k/czg9UcW34PpUyTFOg1lDqzftCfGLnHmkrNi5287vkyXDX4mVCy1PfNa8urn2/0S
+        zdz0/q30Y3udvV5Uaeq6r7Eaa3svZ3XrPWT1/fFvyY6n5ZFFVaoVTpkZSizFGYmGWsxFxYkA
+        lh6Iw/YDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDIsWRmVeSWpSXmKPExsVy+t/xe7o3t7inGByezmsxZ/0aNovXhz8x
+        Wqy+uYbR4vITPos9iyYxWTz91MdiMenQNUaLM925FntvaVvs2XuSxeLyrjlsFvfW/Ge1uDHh
+        KVD5iUuMFr9/AMW274p0EPCY3XCRxWPBplKPzSu0PDat6mTz2PRpErvHiRm/WTxebJ7J6DF1
+        dr3H5tPVHp83yQVwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq6dvZpKTm
+        ZJalFunbJehlzJ4uWNDMXfHo8FnGBsYPHF2MnBwSAiYSp1Z9Y+li5OIQEljKKHFz/2RGiISM
+        xMYvV1khbGGJP9e62CCKPjJKfN/2gx3C2cIocWDTFLAOFgFVib4NfUAdHBxsAloSjZ3sIKaI
+        gIbEmy1GIOXMAjeZJS7ensgMUi4s4CTxe34DE4jNK2Au8fD2aSaImRMZJb7134NKCEqcnPmE
+        BcRmFtCRWLD7ExvIUGYBaYnl/8A+4AT64M3KDVBHK0k0bD7DAmHXSnS+Os02gVF4FpJJs5BM
+        moUwaQEj8ypGkdTS4tz03GJDveLE3OLSvHS95PzcTYzAaN927OfmHYzzXn3UO8TIxMF4iFGC
+        g1lJhJe30j1FiDclsbIqtSg/vqg0J7X4EKMpMCQmMkuJJucD001eSbyhmYGpoYmZpYGppZmx
+        kjivZ0FHopBAemJJanZqakFqEUwfEwenVAPTzoR9s8tC7lw6lCf9LeB75a7fOgn/fGfWSSye
+        7H/ovKLE3nNn+zuXXe9qa5R6qMJxVER3Xf6R1as/rP2zI3JXwpLLN/07w2YcO66fVhVg7is7
+        52dP4/yCG1qTGH3/1KVYyz7xOryn46nV0q5Zk5gu6+1JnxOs7rCri/H620VaXd7J9xbNSAxM
+        3ddWENPxOEpYV3R3J8/PQnstg+fS6cXiE+uyGh9Pb315ifVCoTvnn121bx/VKVy/+uVF0Puc
+        x8el7k9+ma21/Wnhpcs/P4QLV5/4s0XUfaLbTPPtlr+rvu/cUOFnwcJn9bNVf4Z1ZlyRxxw2
+        Qesvm3UN1F6/VHSR7dmfFdrX82umSqrQd8kUJZbijERDLeai4kQAA3U0pX8DAAA=
+X-CMS-MailID: 20230425110913eucas1p22cf9d4c7401881999adb12134b985273
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----t5a.LUSxvZ8UNChTG7xN-7.3lkNPyOm_Ty_DrQaWPiPzU4rz=_ea8fb_"
+X-RootMTR: 20230425110913eucas1p22cf9d4c7401881999adb12134b985273
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230425110913eucas1p22cf9d4c7401881999adb12134b985273
+References: <20230421214400.2836131-1-mcgrof@kernel.org>
+        <20230421214400.2836131-3-mcgrof@kernel.org>
+        <ZEMRbcHSQqyek8Ov@casper.infradead.org>
+        <CGME20230425110913eucas1p22cf9d4c7401881999adb12134b985273@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 6:13=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
-> > This is amazing debugging Boqun, like a boss! One comment below:
-> >
-> > > > > Or something simple I haven't thought of? :)
-> > > >
-> > > > At what points can r13 change?  Only when some particular functions=
- are
-> > > > called?
-> > > >
-> > >
-> > > r13 is the local paca:
-> > >
-> > >         register struct paca_struct *local_paca asm("r13");
-> > >
-> > > , which is a pointer to percpu data.
-> > >
-> > > So if a task schedule from one CPU to anotehr CPU, the value gets
-> > > changed.
-> >
-> > It appears the whole issue, per your analysis, is that the stack
-> > checking code in gcc should not cache or alias r13, and must read its
-> > most up-to-date value during stack checking, as its value may have
-> > changed during a migration to a new CPU.
-> >
-> > Did I get that right?
-> >
-> > IMO, even without a reproducer, gcc on PPC should just not do that,
-> > that feels terribly broken for the kernel. I wonder what clang does,
-> > I'll go poke around with compilerexplorer after lunch.
-> >
-> > Adding +Peter Zijlstra as well to join the party as I have a feeling
-> > he'll be interested. ;-)
->
-> I'm a little confused; the way I understand the whole stack protector
-> thing to work is that we push a canary on the stack at call and on
-> return check it is still valid. Since in general tasks randomly migrate,
-> the per-cpu validation canary should be the same on all CPUs.
->
-> Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
-> raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu,
-> but no guarantees.
->
-> Both cases use r13 (paca) in a racy manner, and in both cases it should
-> be safe.
+------t5a.LUSxvZ8UNChTG7xN-7.3lkNPyOm_Ty_DrQaWPiPzU4rz=_ea8fb_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-AFAICS, the canary is randomly chosen both in the kernel [1]. This
-also appears to be the case in glibc. That makes sense because you
-don't want the canary to be something that the attacker can easily
-predict and store on the stack to bypass buffer overflow attacks:
+On Fri, Apr 21, 2023 at 11:42:53PM +0100, Matthew Wilcox wrote:
+> On Fri, Apr 21, 2023 at 02:43:54PM -0700, Luis Chamberlain wrote:
+> > The PageHWPoison() call can be converted over to the respective folio call
+> > folio_test_hwpoison(). This introduces no functional changes.
+> 
+> Um, no.  Nobody should use folio_test_hwpoison(), it's a nonsense.
+> 
+> Individual pages are hwpoisoned.  You're only testing the head page
+> if you use folio_test_hwpoison().  There's folio_has_hwpoisoned() to
+> test if _any_ page in the folio is poisoned.  But blindly converting
+> PageHWPoison to folio_test_hwpoison() is wrong.
 
-[1] kernel :
-/*
- * Initialize the stackprotector canary value.
- *
- * NOTE: this must only be called from functions that never return,
- * and it must always be inlined.
- */
-static __always_inline void boot_init_stack_canary(void)
-{
-        unsigned long canary =3D get_random_canary();
+I see a pattern in shmem.c where first the head is tested and for large
+folios, any of pages in the folio is tested for poison flag. Should we
+factor it out as a helper in shmem.c and use it here?
 
-        current->stack_canary =3D canary;
-#ifdef CONFIG_PPC64
-        get_paca()->canary =3D canary;
-#endif
-}
+static ssize_t shmem_file_splice_read(struct file *in, loff_t *ppos,
+...
+	if (folio_test_hwpoison(folio) ||
+	    (folio_test_large(folio) &&
+	     folio_test_has_hwpoisoned(folio))) {
+	..
+> 
+> If anyone knows how to poison folio_test_hwpoison() to make it not
+> work, I'd appreciate it.
 
-thanks,
+IMO, I think it will be clear if folio_test_hwpoison checks if any of the
+page in the folio is poisoned and we should have a explicit helper such
+as folio_test_head_hwpoison if the callers want to only test if the head
+page is poisoned (although I am not sure if that is useful).
 
- - Joel
+------t5a.LUSxvZ8UNChTG7xN-7.3lkNPyOm_Ty_DrQaWPiPzU4rz=_ea8fb_
+Content-Type: text/plain; charset="utf-8"
+
+
+------t5a.LUSxvZ8UNChTG7xN-7.3lkNPyOm_Ty_DrQaWPiPzU4rz=_ea8fb_--
