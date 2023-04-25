@@ -2,80 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79F276EE057
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1EE6EE05A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 12:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233442AbjDYK3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 06:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S233428AbjDYK3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 06:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjDYK3A (ORCPT
+        with ESMTP id S233782AbjDYK3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 06:29:00 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F8F12CA7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 03:28:28 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Q5J966X28z9sjC;
-        Tue, 25 Apr 2023 12:27:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1682418458;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AzoOwKMdJiLKK3BSiCIwb6001/mIm7hyJsaLnt4CuOY=;
-        b=gcckeR9ypTnpx8tyY5QCL0wq+wig31N845d0UcpgHbiaBysK4rFUe7QTKjgoOtzw1yVQ9q
-        olCCPx4pt5kj2OjdDr++5kP2lbKTA+FYGmlnG2iKIMxCqG35wvvyZpq5phrD6Cxl4yocRY
-        LmCfwgcbto4PAo+Y+Le1GYzh8f/3BiYcoljJjTFHOIw/d5tZ6vpsMPwwSdi1gEJa/Ib3On
-        CPHZY0jOb8D5GDUaneWnMb1ZBU8kDWZ6mMsjAEKHYV6EmaCNAdtDJ4qXGIo0GkrKn0qiiW
-        mdhcfwqZbywi1z+Q6+4ZrmVSsXBerBKQ4d6jj+FwVX+LmTuyvY/gfLCH8tpCbw==
-Message-ID: <784561bb-0937-befc-3774-892d6f6a4318@mailbox.org>
-Date:   Tue, 25 Apr 2023 12:27:37 +0200
+        Tue, 25 Apr 2023 06:29:51 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02DB5257;
+        Tue, 25 Apr 2023 03:29:24 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C33525FD3A;
+        Tue, 25 Apr 2023 13:29:16 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682418556;
+        bh=7hJUvsqyjWvVw7Khab8QmwY8D6Cfdc1hwURLPhG6nao=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=R8pi8/0owL2UIrCSxT7v/uznrT6w4UND+ouhHulfzffi8K9KU7C0DQcQhAhVmfAUO
+         bHj8WqBB6H3BW1VsgjG3heM0vG131VbHEWGjsGvYd6WiRfhLDQC+BjixfJoQWUJeiz
+         ROjtBRLmM6MkBYX2seBbll/WzJT3znwgbP3HS2VrCZQ5nh/kBIi7sdABi4Fqda4bgR
+         7INi08hXNI89fs09g1mxsJ/25OH3jp7k2WWjMjIm5VGQsmkI1P6sBaNM8CrPG8UyB8
+         lnkB6hSsKBEYNlxyImd8z94Jdf+255FWgkHqsDP4ABG6+1fWhF2DEYPaq3rK9kj7H1
+         e1HLqiXav4S0Q==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 25 Apr 2023 13:29:12 +0300 (MSK)
+Date:   Tue, 25 Apr 2023 13:29:12 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
+        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
+        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v2 1/5] phy: amlogic: enable/disable clkin during Amlogic
+ USB PHY init/exit
+Message-ID: <20230425102912.qhey7fpbuqvwg44j@CAB-WSD-L081021>
+References: <20230418111612.19479-1-ddrokosov@sberdevices.ru>
+ <20230418111612.19479-2-ddrokosov@sberdevices.ru>
+ <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/amdgpu: Mark contexts guilty for any reset type
-Content-Language: de-CH-frami, en-CA
-To:     =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kernel-dev@igalia.com,
-        "Deucher, Alexander" <alexander.deucher@amd.com>
-References: <20230424014324.218531-1-andrealmeid@igalia.com>
- <d7264c5a-29b4-0fb3-153b-673a8a73d635@amd.com>
- <CAAxE2A6Soq28ACV-m1OzG8CA-_VWp+N2wapsABzm2Nda=Qe+yA@mail.gmail.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <CAAxE2A6Soq28ACV-m1OzG8CA-_VWp+N2wapsABzm2Nda=Qe+yA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: e4acb3074d567e8fc3c
-X-MBO-RS-META: qakb7pkk8zexswyiqwxbcthy4cfcgjgp
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAFBinCDyhBQ5Nob38EmXor1PtcO09dRdReDTW+tc5CN4i20HhA@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/25 07:55:00 #21159618
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 18:45, Marek Olšák wrote:
-> Soft resets are fatal just as hard resets, but no reset is "always fatal". There are cases when apps keep working depending on which features are being used. It's still unsafe.
+Hello Martin,
 
-Agreed, in theory.
+Thanks a lot for the review! Appreciate it!
+Please find my comments below.
 
-In practice, from a user PoV, right now there's pretty much 0 chance of the user session surviving if the GPU context in certain critical processes (e.g. the Wayland compositor or Xwayland) hits a fatal reset. There's a > 0 chance of it surviving after a soft reset. There's ongoing work towards making user-space components more robust against fatal resets, but it's taking time. Meanwhile, I suspect most users would take the > 0 chance.
+On Sun, Apr 23, 2023 at 07:42:25PM +0200, Martin Blumenstingl wrote:
+> Hi Dmitry,
+> 
+> On Tue, Apr 18, 2023 at 1:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >
+> > Previously, all Amlogic boards used the XTAL clock as the default board
+> > clock for the USB PHY input, so there was no need to enable it.
+> > However, with the introduction of new Amlogic SoCs like the A1 family,
+> > the USB PHY now uses a gated clock. Hence, it is necessary to enable
+> > this gated clock during the PHY initialization sequence, or disable it
+> > during the PHY exit, as appropriate.
+> >
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 13 +++++++++++--
+> >  1 file changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> > index 9d1efa0d9394..80938751da4f 100644
+> > --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> > +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+> > @@ -172,10 +172,16 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+> >         int ret;
+> >         unsigned int value;
+> >
+> > -       ret = reset_control_reset(priv->reset);
+> > +       ret = clk_prepare_enable(priv->clk);
+> >         if (ret)
+> >                 return ret;
+> >
+> > +       ret = reset_control_reset(priv->reset);
+> > +       if (ret) {
+> > +               clk_disable_unprepare(priv->clk);
+> > +               return ret;
+> > +       }
+> > +
+> This part looks good. You asked why I suggested this approach instead
+> of enabling the clock at probe time and only now I have time to reply
+> to it.
+> Consider the following scenario:
+> - modprobe phy-meson-g12a-usb2
+> - modprobe dwc3-meson-g12a (this will call phy_init)
+> - rmmod dwc3-meson-g12a (this will call phy_exit)
+> 
+> If the clock was enabled at probe time then it would only be disabled
+> when using rmmod phy-meson-g12a-usb2.
+> By manually calling clk_prepare_enable/clk_disable_unprepare we ensure
+> that the clock gets disabled when we don't need the PHY anymore.
+> Whether this makes any difference in terms of power draw: I can't say.
+> 
 
+It makes sense. I fully agree with your approach, which looks better
+compared to using the automatic devm_clk API.
+
+> >         udelay(RESET_COMPLETE_TIME);
+> >
+> >         /* usb2_otg_aca_en == 0 */
+> > @@ -277,8 +283,11 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+> >  static int phy_meson_g12a_usb2_exit(struct phy *phy)
+> >  {
+> >         struct phy_meson_g12a_usb2_priv *priv = phy_get_drvdata(phy);
+> > +       int ret = reset_control_reset(priv->reset);
+> > +
+> > +       clk_disable_unprepare(priv->clk);
+> >
+> > -       return reset_control_reset(priv->reset);
+> > +       return ret;
+> I think this can cause issues in case when reset_control_reset returns
+> an error: If I understand the code in phy-core.c correctly it will
+> only decrease the init ref-count if exit returns 0.
+> Whenever phy_exit is called for the second time
+> clk_disable_unprepare() will be called with a clock ref-count of 0, so
+> it'll likely print some warning.
+> 
+> My suggestion is to return early if reset_control_reset() fails and
+> not call clk_disable_unprepare() in that case.
+> What do you think?
+
+After taking a closer look at the phy_exit core code, it appears that
+your idea is spot on. Exiting immediately when reset fails seems like
+the better choice.
+I will work on a new version of the code accordingly.
 
 -- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
-
+Thank you,
+Dmitry
