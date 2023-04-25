@@ -2,121 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86D56EDF1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EDA6EDF24
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 11:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbjDYJXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 05:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
+        id S233530AbjDYJZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 05:25:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbjDYJXd (ORCPT
+        with ESMTP id S233403AbjDYJZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 05:23:33 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FC73AAD
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:23:32 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 631DF8028680
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:23:32 +0000 (UTC)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 105281004829A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 09:23:32 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id rEtYpFDwnIYZarEtYpzxal; Tue, 25 Apr 2023 09:23:32 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Q68XX66a c=1 sm=1 tr=0 ts=64479c14
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=rFkmwY6uSYR8HWHNRn13pMEFGkE7KOyC12GBmOo7yX8=; b=DjbzAJ0rjPmCiOTaVCGXh9rymM
-        AQ5OnqAgr8VLhQihCXY9CgTTsROV3SIMnNaS6KGceNUXZPyNGuqpMHqu+Mk/jezHMVxE0+OM2V0r2
-        CToVOFcLSKCfCnvqp6aA6ot6fcur20tkrrbUs0gPUoXE1Jng7W+vYnRX3G9Xls4xDy5Lxcb7UHCWD
-        oNLYsYAcxXPRsfzrmR02e6ZBE3um4RT0xnp0j1mdn6UuW3FRLR8Iln84UyVVV6YNiCPE2801QoGLp
-        W/OH7lgif07YkQKDRxbfIWS5yr/vVp9oOGT4sO8J3By59l/+HPBNpsaSystObpkA73EwFgq9ZB4GW
-        +zXPaP3g==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36068 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1prEtX-003CoZ-E4;
-        Tue, 25 Apr 2023 03:23:31 -0600
-Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230424131133.829259077@linuxfoundation.org>
-In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8aaba2c4-2147-9010-16e1-b0e42b5a879a@w6rz.net>
-Date:   Tue, 25 Apr 2023 02:23:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 25 Apr 2023 05:25:03 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0991210C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:25:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso9782162a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 02:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682414700; x=1685006700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VTQTqCCZGjzymhITgf5Q3xyA6Zyj8CaqqpMT/1f1B9g=;
+        b=SmJPczl8Q0RYOsntc+RNSKFGyEo+Heq/ZsmdSxJBkd4YCfKNjqEiH316/WyW+C+oin
+         mPfkKJLhatE/Rl7lzp50ePPrkUgKMpX6gGXkkVTvQntTVV5zYLzO9VJHsIQIlvDYRx4S
+         vPsFNo88Cz59/BwOd6v8x2774kBHQUU28R+dXosx3kMVbDqLgqUOJFC8ko41KvAY4ia/
+         64yT6zv+lb7N894bikzuZO6w80Npm4BbXL0kRbHuIf2Q1fQSjqPw2mSHLk3SHBfMH2an
+         BCJQR9ck1sxwO5kOmzRvrPBaRotswsrJkxQPcTBiAIQGaA1dpyPBZZD95/AlTiuH16Z0
+         /Tvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682414700; x=1685006700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VTQTqCCZGjzymhITgf5Q3xyA6Zyj8CaqqpMT/1f1B9g=;
+        b=Z0u/jZI6YRZPY/4XLUWsR5pDaNpu3KPoBlyXhrJGU0lF8+M3R5xercTYVp6O+Idb8U
+         3nolcI8hTgNo1mkVDNrBo4wmaNXj7gTBim4A15kOAIIT2dIbIZ/B9+PJjo/4MMMRrurQ
+         wfZtmwy8tYR8HtDVIJ+LQ63GEh2fY3l6LZoT4YZ0V7bqMCBVyCCTd27by8sR0UY3evWv
+         m+wciAbNhP3pveoa33LIkI4oVGiijMO0ZPxfXSmduwlC62oSG2OOtFRStvR7sS9lDXXp
+         LEH23RzpYlwrw0qTMdMevvzJqouOJRqYeWBhLGTAkSocf+Mrf4/rY+CKHsdNV1/XBf8H
+         0Ovg==
+X-Gm-Message-State: AAQBX9f52i3VUpxMV5e1lXRkMSDkUD7xqTY1JBibx7kKQ13DvWNG6CmC
+        47yo2qTYK5jxITEc58Z0bgeHBQ==
+X-Google-Smtp-Source: AKy350Y5De3LWSBpvFr02fmhJNDamlcWRUqdhqX87K+rkiKyp9OMtaykxqYMUKNdaWX+LbW2kkhlZQ==
+X-Received: by 2002:aa7:d5d4:0:b0:504:ba4f:3450 with SMTP id d20-20020aa7d5d4000000b00504ba4f3450mr12126271eds.30.1682414700295;
+        Tue, 25 Apr 2023 02:25:00 -0700 (PDT)
+Received: from [192.168.9.102] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7d0cb000000b0050687dbb5dasm5498604edo.31.2023.04.25.02.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 02:24:59 -0700 (PDT)
+Message-ID: <466afe93-f9c2-6a73-ffdb-c30778b273af@linaro.org>
+Date:   Tue, 25 Apr 2023 11:24:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 03/43] dt-bindings: pinctrl: Add DT bindings ep93xx
+ pinctrl
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1prEtX-003CoZ-E4
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:36068
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-4-nikita.shubin@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230424123522.18302-4-nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 6:16 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.26 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.26-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 24/04/2023 14:34, Nikita Shubin wrote:
+> Add YAML bindings ep93xx SoC.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> 
+> Notes:
+>     rfc->v0:
+>     - dropped separate bindings description, left only one with all groups,
+>       functions and etc...
+>     - added Alexander Sverdlin to maintainers
+>     - added Linus Reviwed-by tags, through i shoudn't =) too many changes
+>     - fixed warning and added seq_file header
+> 
+>  .../pinctrl/cirrus,ep93xx-pinctrl.yaml        | 66 +++++++++++++++++++
+>  1 file changed, 66 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/cirrus,ep93xx-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,ep93xx-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,ep93xx-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..cba4be7c5994
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/cirrus,ep93xx-pinctrl.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/cirrus,ep93xx-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus ep93xx pins mux controller
+> +
+> +maintainers:
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cirrus,ep9301-pinctrl
+> +      - cirrus,ep9307-pinctrl
+> +      - cirrus,ep9312-pinctrl
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Blank line
 
-Tested-by: Ron Economos <re@w6rz.net>
+> +  regmap:
+> +    description: phandle to syscon
+
+This should be specific - vendor prefix, property name, explanation what
+do you need here in description. "phandle to syscon" is redundant.
+
+You also miss type.
+
+Anyway, your example contradicts this. You do not have regmap.
+
+> +
+> +patternProperties:
+> +  '^pinctrl-':
+
+'^pins-' instead, because pinctrl is the entire device.
+
+> +    type: object
+> +    description: pin node
+> +    $ref: pinmux-node.yaml#
+> +
+> +    properties:
+> +      function:
+> +        enum: [ spi, ac97, i2s, pwm, keypad, pata, lcd, gpio1, gpio2, gpio3,
+> +                gpio4, gpio6, gpio7 ]
+
+Why gpio has different versions? gpio should be one function.
+
+> +      groups:
+> +        minItems: 1
+> +        maxItems: 2
+> +        items:
+> +          enum: [ ssp, ac97, i2s_on_ssp, i2s_on_ac97, pwm1, gpio1agrp,
+> +                  gpio2agrp, gpio3agrp, gpio4agrp, gpio6agrp, gpio7agrp,
+> +                  rasteronsdram0grp, rasteronsdram3grp, keypadgrp, idegrp]
+> +
+> +    required:
+> +      - function
+> +      - groups
+> +
+> +required:
+> +  - compatible
+> +  - regmap
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscon: syscon@80930000 {
+> +        compatible = "cirrus,ep9301-syscon",
+> +                     "syscon", "simple-mfd";
+
+You created now dependency on this binding. Drop the parent node. If
+this is supposed to be always part of syscon, then example could be in
+parent's node... but I have doubts that is a part of syscon in the first
+place.
+
+> +        reg = <0x80930000 0x1000>;
+> +        #clock-cells = <1>;
+> +        #reset-cells = <1>;
+> +        pinctrl: pinctrl {
+> +                compatible = "cirrus,ep9312-pinctrl";
+
+Mixed indentation. Actually before also looks odd...
+Use 4 spaces for example indentation.
+
+> +                regmap = <&syscon>;
+> +                spi_default_pins: pinctrl-spi {
+> +                        function = "spi";
+> +                        groups = "ssp";
+> +                };
+> +        };
+> +    };
+
+Best regards,
+Krzysztof
 
