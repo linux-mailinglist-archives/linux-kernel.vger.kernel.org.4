@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C236EE39F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183176EE39D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 16:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjDYOHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 10:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S234216AbjDYOGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 10:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbjDYOHB (ORCPT
+        with ESMTP id S231222AbjDYOGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 10:07:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FB2E6A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 07:06:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682431572;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ky4or7cbHu9y2lAhkNJDV4gPS/WcEX9x/ObLAA4vgOA=;
-        b=Or81DViKcry4UI8VdHBJohr8jp+0IwrG9SIyz0/zsRrL92uXACQSacD1i6HSRdf3O7ajcH
-        hmdr1xVg8JrGjgkeINpKTzLRt66BoUJeEfxzCv2JlacTy6oyoVkGJEX13Fufpw2eCwA5oJ
-        sprH3DZMndfa0w3PGAX7dlMtUKW41ho=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-bVPvqCw8PY-I2o_YWzJQCQ-1; Tue, 25 Apr 2023 10:06:09 -0400
-X-MC-Unique: bVPvqCw8PY-I2o_YWzJQCQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C573884EC5;
-        Tue, 25 Apr 2023 14:06:08 +0000 (UTC)
-Received: from p1.luc.cera.cz.com (unknown [10.45.226.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 07EB840C2064;
-        Tue, 25 Apr 2023 14:06:05 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Paul Blakey <paulb@nvidia.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] net/sched: flower: Fix wrong handle assignment during filter change
-Date:   Tue, 25 Apr 2023 16:06:04 +0200
-Message-Id: <20230425140604.169881-1-ivecera@redhat.com>
+        Tue, 25 Apr 2023 10:06:48 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BD0210A;
+        Tue, 25 Apr 2023 07:06:46 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a920d484bdso47548245ad.1;
+        Tue, 25 Apr 2023 07:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682431606; x=1685023606;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pgVL/zYIF4XcbODFmxnXkOmVcf6q9IMBOAtXThWZzgc=;
+        b=InxUH49EiiW3ppy/iRWuLl0rW4LGgc8lOv5f/kIGO7ZHHTeYfQnBuYhS+CkV0l6hr9
+         aKYi3mdJSD8nLqxyd5NkhIH0a0VJSZyugpgRSIbDnVqmo78/8JdibYimEBYMVp76EQvZ
+         5M6x1N/8Xx3BHurcz9zaUYH0m9hhY2DSGXtSJChe//hL6o71/SuaBqDr0kP2VwuGyvK8
+         5Y+pc/ft0jaRk/xc8/VjBTLZTxpYTd2BWWdLHOGVJcjqqiNuA7Y6Am20hja8p4n+nez4
+         TuTuapn9z7M4tjaw5/wSOzchqkm4sPTXQBnbxYPd//hLw8jphLSDV7GGlMmN0AXZgfim
+         NNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682431606; x=1685023606;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pgVL/zYIF4XcbODFmxnXkOmVcf6q9IMBOAtXThWZzgc=;
+        b=WnIqAzBuE/s1OLDC/UETyAyKimvOdwkomoU022FJW0LMyb9Gl2qnbIRvJFsYbBwbKc
+         F0NtUDtYL8mGhndw7eojK/kBTPByeDAmN5SaLGNCn390lrpHcyLNIPYmdoKJFq16dUNE
+         LwffMa4ehBZk/ClTfgNtr+naOVVrN9Jjc1pVjNxcDBBeGqCqboQ2oBSfLLS8ySeCGXQT
+         zYWf8csw29R8WLNLsCbGgrkR9PG6u7k1QYY0f5m3bMOB4sN40NhHsi9JHlVxuqqfPtZS
+         oH+OVTMtFHO6F+dGTTAVyrVdy0bnNTwebnV1NHsR4jVjFxGrhUYxVHlVKos5wfiSY8+s
+         Np4g==
+X-Gm-Message-State: AAQBX9cnPMl+GsbM1FDB8xa+p/Q5mhv3kNLHy8LAAs5m/8SMjNnK4MSs
+        9TRK13qdXNe+wi+Znldaawk1upsPhRY=
+X-Google-Smtp-Source: AKy350bNRWXukim0EYjXvnfjtsCVq2HHeVAnc2lBBPPxJStsWuRE3QZF2cGIc1Lmrd53Lyr3dodPJw==
+X-Received: by 2002:a17:903:2441:b0:1a6:ff6a:83ed with SMTP id l1-20020a170903244100b001a6ff6a83edmr20912153pls.65.1682431605894;
+        Tue, 25 Apr 2023 07:06:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id az1-20020a170902a58100b0019cbe436b87sm8385610plb.81.2023.04.25.07.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 07:06:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
+Date:   Tue, 25 Apr 2023 07:06:43 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1] watchdog: starfive: Fix the probe return error if PM
+ and early_enable are both disabled
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+References: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 08a0063df3ae ("net/sched: flower: Move filter handle initialization
-earlier") moved filter handle initialization but an assignment of
-the handle to fnew->handle is done regardless of fold value. This is wrong
-because if fold != NULL (so fold->handle == handle) no new handle is
-allocated and passed handle is assigned to fnew->handle. Then if any
-subsequent action in fl_change() fails then the handle value is
-removed from IDR that is incorrect as we will have still valid old filter
-instance with handle that is not present in IDR.
-Fix this issue by moving the assignment so it is done only when passed
-fold == NULL.
+On 4/25/23 03:04, Xingyu Wu wrote:
+> When the starfive watchdog driver uses 'pm_runtime_put_sync()' as probe
+> return value at last and 'early_enable' is disabled, it could return the
+> error '-ENOSYS' if the CONFIG_PM is disabled, but the driver should works
+> normally.
+> 
+> Add a check to make sure the PM is enabled and then use
+> 'pm_runtime_put_sync()' as return value when 'early_enable' is disabled.
+> 
+> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+> 
+> Hi, Guenter and Wim,
+> 
+> This patch fixes the issue of StarFive watchdog driver and rebases on
+> the master branch of linux-next.
+> 
+> Thanks.
+>   
+> ---
+>   drivers/watchdog/starfive-wdt.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 1995cceca51e..51e487e09960 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -492,7 +492,8 @@ static int starfive_wdt_probe(struct platform_device *pdev)
+>   		goto err_exit;
+>   
+>   	if (!early_enable)
+> -		return pm_runtime_put_sync(&pdev->dev);
+> +		if (pm_runtime_enabled(&pdev->dev))
+> +			return pm_runtime_put_sync(&pdev->dev);
+>   
 
-Prior the patch:
-[root@machine tc-testing]# ./tdc.py -d enp1s0f0np0 -e 14be
-Test 14be: Concurrently replace same range of 100k flower filters from 10 tc instances
-exit: 123
-exit: 0
-RTNETLINK answers: Invalid argument
-We have an error talking to the kernel
-Command failed tmp/replace_6:1885
+Why not just
 
+	if (!early_enable)
+		pm_runtime_put_sync(&pdev->dev)
 
-All test results:
+like almost every other caller of pm_runtime_put_sync() ?
 
-1..1
-not ok 1 14be - Concurrently replace same range of 100k flower filters from 10 tc instances
-        Command exited with 123, expected 0
-RTNETLINK answers: Invalid argument
-We have an error talking to the kernel
-Command failed tmp/replace_6:1885
-
-After the patch:
-[root@machine tc-testing]# ./tdc.py -d enp1s0f0np0 -e 14be
-Test 14be: Concurrently replace same range of 100k flower filters from 10 tc instances
-
-All test results:
-
-1..1
-ok 1 14be - Concurrently replace same range of 100k flower filters from 10 tc instances
-
-Fixes: 08a0063df3ae ("net/sched: flower: Move filter handle initialization earlier")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- net/sched/cls_flower.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
-index 475fe222a855..fa6c2bb0b626 100644
---- a/net/sched/cls_flower.c
-+++ b/net/sched/cls_flower.c
-@@ -2231,8 +2231,8 @@ static int fl_change(struct net *net, struct sk_buff *in_skb,
- 			kfree(fnew);
- 			goto errout_tb;
- 		}
-+		fnew->handle = handle;
- 	}
--	fnew->handle = handle;
- 
- 	err = tcf_exts_init_ex(&fnew->exts, net, TCA_FLOWER_ACT, 0, tp, handle,
- 			       !tc_skip_hw(fnew->flags));
--- 
-2.39.1
+Guenter
 
