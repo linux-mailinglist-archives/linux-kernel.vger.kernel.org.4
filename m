@@ -2,128 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3336EE93D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBDEF6EE947
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 22:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbjDYUt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 16:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S236289AbjDYUzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 16:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjDYUt0 (ORCPT
+        with ESMTP id S232164AbjDYUzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:49:26 -0400
-Received: from mx0b-00256a01.pphosted.com (mx0b-00256a01.pphosted.com [67.231.153.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54A6146D3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:49:25 -0700 (PDT)
-Received: from pps.filterd (m0144081.ppops.net [127.0.0.1])
-        by mx0b-00256a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PJbZal013033
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 16:49:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyu.edu; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding;
- s=20180315; bh=2SpjziBxMinJvCqJ5ONrJCSYQ5/Fm7e8HW8ZmGTQ0IU=;
- b=0vIGuUYyFUuWH/Nutk4PhpqX4jK95ddw5GduakQ5sVerOsqGgARbOv/GhETVNXtmmDBH
- PSqKCf2cJSaXjndQKHZguU4qYgRC/ZgYMyQ1OMicV0C6e2vOLXDZsMXVAnJpjdNiO9oy
- 3kU3L3dUfXVr4SI8Yb8Bawhhqw22KXiUcR662IsFLShgEgto9J7KKAkCw1iSjiTt4xOK
- Hm5sAa5/63Fcm/YSpdT5gs1mKeCieKuePgfQZx5IQKlCi7AtiJfHnwU39CNcjv+i0fUC
- L6Peffl/R1i3GTAPGN0QFkwe0PHuY1+EuayYJKczL8Of1pTnbH8UaKrUoSgK87aBO8YR ag== 
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-        by mx0b-00256a01.pphosted.com (PPS) with ESMTPS id 3q6n6f913f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 16:49:24 -0400
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3ef35d8acc0so86497921cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 13:49:24 -0700 (PDT)
+        Tue, 25 Apr 2023 16:55:05 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E60D146D3;
+        Tue, 25 Apr 2023 13:55:03 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b953887e70eso8897660276.1;
+        Tue, 25 Apr 2023 13:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682456103; x=1685048103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OU/Nt9B7XN1sCdbr/6eEb0oLClGSXdVDLD5Mdz4L6mI=;
+        b=DxsvyX9FhAGMU+w31NsiCPMJpBjiSmiusOxrrqMuWc7O2JrI3lOOhib9NUZ8evbkVb
+         hnpe+Dv76iu91frLgDA9nGUkKbjFzq0OvBXo0Xoy5xb+tpmzXuaDlwJQYj5J/J53DSjE
+         3v3ta/aG3bSsUUMmV78xGQmvmXq8YucDwfmouyPZOA9/J4waeSO8XWxhagfzpRzcXzAI
+         svko/KEuM58pa4AkiN3pHR7OQ1eIAZ26Cqn/5dxBes0BDJmsgrCcnAOUZ7nOQJVkEKW/
+         7k7i8gws9nQro3wQwqHnMi1d292dOmYhyF5+UUwSdrLE7o2eARF2luNFPTWuEy0N0H2v
+         xkhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682455764; x=1685047764;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2SpjziBxMinJvCqJ5ONrJCSYQ5/Fm7e8HW8ZmGTQ0IU=;
-        b=Oidw4EMJbkT1TZ3lDuOlAMqHp+SVBLoSJ+hOseORF/uS5EVVqTJASopOmGZk1XCByq
-         PIwqhsNz4UjwUweWI8BY3CSkr++FCawoRXw+jOcy/QMlNk7QsgJGJZ25+b2+zETXq1Zw
-         Cp0LkFkxjD6zao/7vnUlZqi/X0VG+5DUQN13ByvtRphnYjOsLIQU5O4FlTXl2qANII3b
-         Zi5b51IWNpMIyts8+1q1Rl+Fqn2Q6FajDEE7+18tJrykRr4xj+NT3EksXK3/V5cRUaU5
-         YxKSZsTJrYqXlesnXM69zzzwkA3NpIBQ/1Q2EYwkvHBFS8Xi6qUBC0xNUXLHAA2dTLzz
-         wFtg==
-X-Gm-Message-State: AAQBX9e8Zl2KR9S3e2vGpOSo27xwVIUL8FOcwZBWj8O6wzp+zHtCFp0P
-        xQUIPqzkBsiCOKak/HbOeqwi9ADqOmr3zJgh8WhMAnWB3UO4VD/NLC5+AzIIOH/BCAdfg1YYxnx
-        3auF8zSVTIdyTBRhpd8ND4Gc=
-X-Received: by 2002:ac8:5915:0:b0:3d9:45a4:e7b9 with SMTP id 21-20020ac85915000000b003d945a4e7b9mr31977216qty.45.1682455764159;
-        Tue, 25 Apr 2023 13:49:24 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b6F5UbwNqQllo6hDifdFdxhv68oGQoFJyHsJCyuacxs20tvumkml1OVP7Ld/N1FQaqGqKMMg==
-X-Received: by 2002:ac8:5915:0:b0:3d9:45a4:e7b9 with SMTP id 21-20020ac85915000000b003d945a4e7b9mr31977193qty.45.1682455763915;
-        Tue, 25 Apr 2023 13:49:23 -0700 (PDT)
-Received: from enviable.nyu.edu (216-165-95-139.natpool.nyu.edu. [216.165.95.139])
-        by smtp.gmail.com with ESMTPSA id h2-20020a05620a21c200b0074636e35405sm4626821qka.65.2023.04.25.13.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 13:49:23 -0700 (PDT)
-From:   Jonathan Singer <jes965@nyu.edu>
-To:     platform-driver-x86@vger.kernel.org
-Cc:     Jonathan Singer <jes965@nyu.edu>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Jorge Lopez <jorge.lopez2@hp.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Rishit Bansal <rishitbansal0@gmail.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        =?UTF-8?q?Barnab=C3=A1s=20P=C5=91cze?= <pobrn@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] platform/x86: hp-wmi: Add camera toggle switch to HP WMI
-Date:   Tue, 25 Apr 2023 16:46:42 -0400
-Message-Id: <20230425204643.11582-1-jes965@nyu.edu>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20221208; t=1682456103; x=1685048103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OU/Nt9B7XN1sCdbr/6eEb0oLClGSXdVDLD5Mdz4L6mI=;
+        b=M4XEUwR49qLlR/xGAC5lHZyV5JzRld8G6WbTimFJSGbGSsNHDiPVza9yWVZeBjBgHG
+         IwgoIU5CT9N10MYMOrNQ0C2UTefrCx6pqJVQYXNNVoRZoxPypfqClkGWoFklGLjsxwq3
+         vhWtjadVsRw5TQpndxAnidpk7is3ApMxWLmLFDKO5kmuGItulo+iHNSQOvyjn5KuRWBb
+         iMZ4GZDK5lUrdfx/MLOiMPqx1TuddOBEYjZProxf4Z+6v7/VdBqdII4bjs2gtEcLTxAF
+         S3OZmd1BFOM8McB1CUYa/nBIu4DyHTjcCyWX+lYs77rKzct6uruF1MQ6uC80IRk3OTZS
+         lJCw==
+X-Gm-Message-State: AAQBX9dD3spzdEJE7bTzrlPosc5R/TIGv/9FcQ7b4vXILcmb1WQdM3jo
+        SfTqkw6ekNjbqEWgtIv2rIA=
+X-Google-Smtp-Source: AKy350ZBOeq+FuyZ+QGosrfgyVeMEZ16y1tOuiCk4iWVjMIHrX23nwDvyYSFgFY7ng6MxhuoZh/xcw==
+X-Received: by 2002:a25:4105:0:b0:b99:75f:8f24 with SMTP id o5-20020a254105000000b00b99075f8f24mr12009761yba.30.1682456102630;
+        Tue, 25 Apr 2023 13:55:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:7dac:d9da:d59f:fcdb? ([2600:1700:2442:6db0:7dac:d9da:d59f:fcdb])
+        by smtp.gmail.com with ESMTPSA id o68-20020a254147000000b00b8f5b078eacsm3687976yba.39.2023.04.25.13.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 13:55:02 -0700 (PDT)
+Message-ID: <ce5b723d-2395-8974-ba62-1ee519732218@gmail.com>
+Date:   Tue, 25 Apr 2023 15:55:01 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: LZnF-5qOPEZJS2bHP1bGueN_RjfQNdES
-X-Proofpoint-GUID: LZnF-5qOPEZJS2bHP1bGueN_RjfQNdES
-X-Orig-IP: 209.85.160.197
-X-Proofpoint-Spam-Details: rule=outbound_bp_notspam policy=outbound_bp score=0 bulkscore=0
- mlxlogscore=669 mlxscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 spamscore=0 impostorscore=0
- suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304250185
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add test metadata
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>, davidgow@google.com,
+        skhan@linuxfoundation.org, keescook@chromium.org,
+        Tim.Bird@sony.com, brendanhiggins@google.com
+Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
+        dlatypov@google.com, kernelci@lists.linux.dev,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230420205734.1288498-1-rmoar@google.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20230420205734.1288498-1-rmoar@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,TRACKER_ID,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, when the camera toggle switch was hit, the hp-wmi driver
-would report an invalid event code. By adding a case for that in the
-event handling switch statement we can eliminate that error code and
-enable a framework for potential further kernel handling of that key.
-This change was tested on my HP Envy x360 15-ey0023dx laptop, but it
-would likely work for any HP laptop with a camera toggle button.
+On 4/20/23 15:57, Rae Moar wrote:
+> Add specification for declaring test metadata to the KTAP v2 spec.
+> 
+> The purpose of test metadata is to allow for the declaration of essential
+> testing information in KTAP output. This information includes test
+> names, test configuration info, test attributes, and test files.
+> 
+> There have been similar ideas around the idea of test metadata such as test
+> prefixes and test name lines. However, I propose this specification as an
+> overall fix for these issues.
 
-Signed-off-by: Jonathan Singer <jes965@nyu.edu>
----
- drivers/platform/x86/hp/hp-wmi.c | 3 +++
- 1 file changed, 3 insertions(+)
+This seems like a cleaner approach.
 
-diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-index 873f59c3e280..b27362209b04 100644
---- a/drivers/platform/x86/hp/hp-wmi.c
-+++ b/drivers/platform/x86/hp/hp-wmi.c
-@@ -90,6 +90,7 @@ enum hp_wmi_event_ids {
- 	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
- 	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
- 	HPWMI_SANITIZATION_MODE		= 0x17,
-+	HPWMI_CAMERA_TOGGLE		= 0x1A,
- 	HPWMI_OMEN_KEY			= 0x1D,
- 	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
- };
-@@ -866,6 +867,8 @@ static void hp_wmi_notify(u32 value, void *context)
- 		break;
- 	case HPWMI_SANITIZATION_MODE:
- 		break;
-+	case HPWMI_CAMERA_TOGGLE:
-+		break;
- 	case HPWMI_SMART_EXPERIENCE_APP:
- 		break;
- 	default:
--- 
-2.40.0
+> 
+> These test metadata lines are a form of diagnostic lines with the
+> format: "# <metadata_type>: <data>". As a type of diagnostic line, test
+> metadata lines are compliant with KTAP v1, which will help to not
+> interfere too much with current parsers.
+> 
+> Specifically the "# Subtest:" line is derived from the TAP 14 spec:
+> https://testanything.org/tap-version-14-specification.html.
+> 
+> The proposed location for test metadata is in the test header, between the
+> version line and the test plan line. Note including diagnostic lines in
+> the test header is a depature from KTAP v1.
+> 
+> This location provides two main benefits:
+> 
+> First, metadata will be printed prior to when subtests are run. Then if a
+> test fails, test metadata can help discern which test is causing the issue
+> and potentially why.
+> 
+> Second, this location ensures that the lines will not be accidentally
+> parsed as a subtest's diagnostic lines because the lines are bordered by
+> the version line and plan line.
+
+I like that.
+
+> 
+> Here is an example of test metadata:
+> 
+>  KTAP version 2
+>  # Config: CONFIG_TEST=y
+>  1..1
+>      KTAP version 2
+>      # Subtest: test_suite
+>      # File: /sys/kernel/...
+>      # Attributes: slow
+>      # Other: example_test
+>      1..2
+>      ok 1 test_1
+>      ok 2 test_2
+>  ok 1 test_suite
+> 
+> Here is a link to a version of the KUnit parser that is able to parse test
+> metadata lines for KTAP version 2. Note this includes test metadata
+> lines for the main level of KTAP.
+> 
+> Link: https://kunit-review.googlesource.com/c/linux/+/5809
+> 
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
+> 
+> Hi everyone,
+> 
+> I would like to use this proposal similar to an RFC to gather ideas on the
+> topic of test metadata. Let me know what you think.
+> 
+> I am also interested in brainstorming a list of recognized metadata types.
+> Providing recognized metadata types would be helpful in parsing and
+> displaying test metadata in a useful way.
+> 
+> Current ideas:
+> - "# Subtest: <test_name>" to indicate test name (name must match
+>   corresponding result line)
+
+I would prefer "Test" to "Subtest" because the type should be allowed for the
+top level test, as well as for subtest levels.
+
+> - "# Attributes: <attributes list>" to indicate test attributes (list
+>   separated by commas)
+> - "# File: <file_path>" to indicate file used in testing
+> 
+> Any other ideas?
+
+(Already used in an example above...)
+
+- "# Config: <config_option list> to indicate kernel configuration options
+  (list separated by commas)
+
+    config_option format:
+      Option XXX is enabled: CONFIG_XXX=y
+      Option XXX is not enabled: CONFIG_XXX=n
+      Option XXX is text: CONFIG_XXX="a text string"
+
+Linux .config format is "#CONFIG_XXX is not set",
+but this would be harder to parse in a list.
+
+A text config option also complicates parsing of a list.  Maybe there
+should not be a list, instead have a separate "# Config:" line for
+each config option.
+
+I would like to bifurcate the name space of metadata types, to names
+specified in the standard vs names not in the standard that can be
+used on an experimental or for future use in existing tests.
+
+I can think of at least two ways to implement this:
+
+(1) types that are in the specification all begin with a specific prefix,
+such as "ktap_" (bike shedding on naming welcomed), so the examples woudld be
+
+  # ktap_test:
+  # ktap_attributes:
+  # ktap_file:
+  # ktap_config:
+
+(2) types that are _not_ in the specification all begin with a specific prefix,
+such as "custom_" (bike shedding on naming welcomed).
+
+> 
+> Note this proposal replaces two of my previous proposals: "ktap_v2: add
+> recognized test name line" and "ktap_v2: allow prefix to KTAP lines."
+> 
+> Thanks!
+> -Rae
+> 
+> Note: this patch is based on Frank's ktap_spec_version_2 branch.
+> 
+>  Documentation/dev-tools/ktap.rst | 51 ++++++++++++++++++++++++++++++--
+>  1 file changed, 48 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
+> index ff77f4aaa6ef..a2d0a196c115 100644
+> --- a/Documentation/dev-tools/ktap.rst
+> +++ b/Documentation/dev-tools/ktap.rst
+> @@ -17,7 +17,9 @@ KTAP test results describe a series of tests (which may be nested: i.e., test
+>  can have subtests), each of which can contain both diagnostic data -- e.g., log
+>  lines -- and a final result. The test structure and results are
+>  machine-readable, whereas the diagnostic data is unstructured and is there to
+> -aid human debugging.
+> +aid human debugging. One exception to this is test metadata lines - a type
+> +of diagnostic lines. Test metadata is located between the version line and
+> +plan line of a test and can be machine-readable.
+>  
+>  KTAP output is built from four different types of lines:
+>  - Version lines
+> @@ -28,8 +30,7 @@ KTAP output is built from four different types of lines:
+>  In general, valid KTAP output should also form valid TAP output, but some
+>  information, in particular nested test results, may be lost. Also note that
+>  there is a stagnant draft specification for TAP14, KTAP diverges from this in
+> -a couple of places (notably the "Subtest" header), which are described where
+> -relevant later in this document.
+> +a couple of places, which are described where relevant later in this document.
+>  
+>  Version lines
+>  -------------
+> @@ -166,6 +167,45 @@ even if they do not start with a "#": this is to capture any other useful
+>  kernel output which may help debug the test. It is nevertheless recommended
+>  that tests always prefix any diagnostic output they have with a "#" character.
+>  
+> +Test metadata lines
+> +-------------------
+> +
+> +Test metadata lines are a type of diagnostic lines used to the declare the
+> +name of a test and other helpful testing information in the test header.
+> +These lines are often helpful for parsing and for providing context during
+> +crashes.
+> +
+> +Test metadata lines must follow the format: "# <metadata_type>: <data>".
+> +These lines must be located between the version line and the plan line
+> +within a test header.
+> +
+> +There are a few currently recognized metadata types:
+> +- "# Subtest: <test_name>" to indicate test name (name must match
+> +  corresponding result line)
+> +- "# Attributes: <attributes list>" to indicate test attributes (list
+> +  separated by commas)
+> +- "# File: <file_path>" to indicate file used in testing
+> +
+> +As a rule, the "# Subtest:" line is generally first to declare the test
+> +name. Note that metadata lines do not necessarily need to use a
+> +recognized metadata type.
+> +
+> +An example of using metadata lines:
+> +
+> +::
+> +
+> +        KTAP version 2
+> +        1..1
+> +        # File: /sys/kernel/...
+> +          KTAP version 2
+> +          # Subtest: example
+> +          # Attributes: slow, example_test
+> +          1..1
+> +          ok 1 test_1
+> +        # example passed
+> +        ok 1 example
+> +
+> +
+>  Unknown lines
+>  -------------
+>  
+> @@ -206,6 +246,7 @@ An example of a test with two nested subtests:
+>  	KTAP version 2
+>  	1..1
+>  	  KTAP version 2
+> +	  # Subtest: example
+>  	  1..2
+>  	  ok 1 test_1
+>  	  not ok 2 test_2
+> @@ -219,6 +260,7 @@ An example format with multiple levels of nested testing:
+>  	KTAP version 2
+>  	1..2
+>  	  KTAP version 2
+> +	  # Subtest: example_test_1
+>  	  1..2
+>  	    KTAP version 2
+>  	    1..2
+> @@ -254,6 +296,7 @@ Example KTAP output
+>  	KTAP version 2
+>  	1..1
+>  	  KTAP version 2
+> +	  # Subtest: main_test
+>  	  1..3
+>  	    KTAP version 2
+>  	    1..1
+> @@ -261,11 +304,13 @@ Example KTAP output
+>  	    ok 1 test_1
+>  	  ok 1 example_test_1
+>  	    KTAP version 2
+> +            # Attributes: slow
+>  	    1..2
+>  	    ok 1 test_1 # SKIP test_1 skipped
+>  	    ok 2 test_2
+>  	  ok 2 example_test_2
+>  	    KTAP version 2
+> +	    # Subtest: example_test_3
+>  	    1..3
+>  	    ok 1 test_1
+>  	    # test_2: FAIL
+> 
+> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
 
