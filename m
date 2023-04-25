@@ -2,59 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593F46EE136
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B449C6EE135
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233944AbjDYLpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
+        id S233888AbjDYLpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233508AbjDYLpm (ORCPT
+        with ESMTP id S233451AbjDYLpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:45:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB87B72A9;
-        Tue, 25 Apr 2023 04:45:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 561F562BA2;
-        Tue, 25 Apr 2023 11:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D99BC433D2;
-        Tue, 25 Apr 2023 11:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682423127;
-        bh=lhPUiRP8Ufw0OGb0XCGRithOUfaDqWV6hZnqnru0Z/8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kHOoY2zhDR/X9kyFZnm4TQwF96PgPyqzZIRccbxRf2F/TxAl7nX1e7JN6z/Og8f4J
-         NrUCLKEdOCpLKvDwjhJtTuFY5A3uBlsMQt8ivu5T3ERC6wAEXpjKZmJXh0nJCBq+lW
-         C245lvfwCfzgG7paUXNuDXqvPBueOaN/dDcuA/stWsZBp1NekvoZfCE6oyH3kZOQP9
-         sA/sx2oYl/blgfgkZeBp1mIgRPBWChpBAybJtcUDEvNESytK2Uh5bzHysKij5bV9Mh
-         vPxiJaYfutwYGEs2l0mEJSsowHyIwh5XjrZeKkAbrXdxEog4KKAVH+QBkm4DqxNRyB
-         0XoPjT0kh/UGg==
-Message-ID: <86ab17b2-d35a-16e2-7791-9e7a13c8e632@kernel.org>
-Date:   Tue, 25 Apr 2023 14:45:22 +0300
+        Tue, 25 Apr 2023 07:45:41 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BFBBBA2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:45:27 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f09b4a156eso37561545e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682423126; x=1685015126;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=imO3AIEoJomqZzm4NUm2eTOkQ1OOyIgveuGZCNLCvOI=;
+        b=l5TAU8xIX+bj+RwpddJG7ytkp1VjQ5YXN945VPvzYXmoqfxbb58TDUPr17DbQw6sWF
+         zd0SqWxUdtGiGWg75gAKvNLGxhb2k+RAkJQVE8qKMt8RzPFj8cxry1nyI3kbtbg86kuk
+         aEcrCIcCpF7gQmwVO0uHffstZX3URnjgdpjr4Zk8VrKU45BfqZn+g4QHecwKTj/+C9ar
+         jL7X4eOqAF+JjhOwfSdMZISueGqwhDxfWIxQmH9re58g3WfLaQLV+oEw4fNhTZ9cqY5I
+         5jFi5UL4S4yaGr0il9WvUNvcUaJ0TQeFtMJ0Fe/qGX2l5VmYC2miWPKegGFYTKnEPUzI
+         BDKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682423126; x=1685015126;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=imO3AIEoJomqZzm4NUm2eTOkQ1OOyIgveuGZCNLCvOI=;
+        b=PZVw0xACmF+FarPXuTE2m7aPPBo5GrLA/MwtPMUebJqOXUwvbD71OWrm2xVPH0w24C
+         MwHtwZOU4vw9kZ6NCwNfhhkG0EJYDYo4hAQmVaMj/nOqMwyRgKcgYSGeQ09lRV+Ae5YM
+         0rxkgLeslafnG5T80LnyERkhhGBBFiLuLPEY4pEOxA0mkCASjKeeWAXG2Qt0WM0Eed+I
+         n1v6G0mZikeQAyqtW7Xrud6XzCji456FE61AuIbuD2IiHyWxYl2glaXtK1gG+esu3+UZ
+         IE3kU7hiCfNu2x5wLwtTTZpMEKut6MhkqLaTF4bDbAqvUlxNiaMkVBZ6+QCxQC1g8Ll+
+         wGiQ==
+X-Gm-Message-State: AAQBX9e2Fckg1vzyRlUTxsUt1AyirI8VRG6kzl8ayrwa62+nGUzqvDaN
+        WIsyjhPEVlkojFxsiTA8VMjBlg==
+X-Google-Smtp-Source: AKy350aDmQuVT7dvYGoVbx0Gl5aM/pIkyIhUH019RsHK8WF6YrdYN02UNxdxZs2bl3hOfdzCUhxXuA==
+X-Received: by 2002:a1c:7211:0:b0:3f1:82d8:8fde with SMTP id n17-20020a1c7211000000b003f182d88fdemr9609077wmc.24.1682423126169;
+        Tue, 25 Apr 2023 04:45:26 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:60a2:ee0e:c790:8f0e? ([2a05:6e02:1041:c10:60a2:ee0e:c790:8f0e])
+        by smtp.googlemail.com with ESMTPSA id p10-20020a1c544a000000b003f03d483966sm18102139wmi.44.2023.04.25.04.45.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 04:45:25 -0700 (PDT)
+Message-ID: <d30fd923-e6e5-a1a6-ca76-1b39f8fad6c9@linaro.org>
+Date:   Tue, 25 Apr 2023 13:45:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v14 4/8] arm64: dts: ti: k3-j721s2-common-proc-board:
- Enable SERDES0
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, nm@ti.com, afd@ti.com,
-        vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-vadapalli@ti.com,
-        vaishnav.a@ti.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230331090028.8373-1-r-gunasekaran@ti.com>
- <20230331090028.8373-5-r-gunasekaran@ti.com>
+ Thunderbird/102.9.0
 Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230331090028.8373-5-r-gunasekaran@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Qinrun Dai <flno@hust.edu.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] timers material for v6.4-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,114 +81,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 31/03/2023 12:00, Ravi Gunasekaran wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Configure first lane to PCIe, the second lane to USB and the last two lanes
-> to eDP. Also, add sub-nodes to SERDES0 DT node to represent SERDES0 is
-> connected to PCIe.
+Hi Thomas,
 
-Is USB0 expected to work in super-speed on this board?
-If yes then you need to add USB0 lane information as well.
-Otherwise please ignore my comment.
+please consider pulling these changes for v6.4-rc1
 
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
-> ---
-> I had reviewed this patch in the v5 series [0].
-> Since I'm taking over upstreaming this series, I removed the self
-> Reviewed-by tag.
-> 
-> [0] - https://lore.kernel.org/all/71ce4ecd-2a50-c69d-28be-f1a8d769970e@ti.com/
-> 
-> changes from v13:
-> * No changes. Only rebased on top of linux-next
-> 
-> Changes from v12:
-> * Removed enabling of "serdes_wiz" node that is already enabled in [2/8]
->   in this version
-> 
-> Changes from v11:
-> * No change
-> 
-> Changes from v10:
-> * Removed Link tag from commit message
-> 
-> Changes from v9:
-> * Enabled serdes related nodes
-> 
-> Changes from v8:
-> * No change
-> 
-> Changes from v7:
-> * No change
-> 
-> Changes from v6:
-> * No change
-> 
-> Changes from v5:
-> * Removed Cc tags from commit message
-> 
-> Changes from v4:
-> * No change
-> 
-> Changes from v3:
-> * No change
-> 
-> Changes from v2:
-> * No change
-> 
-> Changes from v1:
-> * No change
-> 
->  .../dts/ti/k3-j721s2-common-proc-board.dts    | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> index b4b9edfe2d12..1afefaf3f974 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-> @@ -9,6 +9,9 @@
->  
->  #include "k3-j721s2-som-p0.dtsi"
->  #include <dt-bindings/net/ti-dp83867.h>
-> +#include <dt-bindings/phy/phy-cadence.h>
-> +#include <dt-bindings/phy/phy.h>
-> +#include <dt-bindings/mux/ti-serdes.h>
->  
->  / {
->  	compatible = "ti,j721s2-evm", "ti,j721s2";
-> @@ -322,6 +325,26 @@
->  	phy-handle = <&phy0>;
->  };
->  
-> +&serdes_ln_ctrl {
-> +	idle-states = <J721S2_SERDES0_LANE0_PCIE1_LANE0>, <J721S2_SERDES0_LANE1_USB>,
-> +		      <J721S2_SERDES0_LANE2_EDP_LANE2>, <J721S2_SERDES0_LANE3_EDP_LANE3>;
-> +};
-> +
-> +&serdes_refclk {
-> +	clock-frequency = <100000000>;
-> +};
-> +
-> +&serdes0 {
-> +	status = "okay";
-> +	serdes0_pcie_link: phy@0 {
-> +		reg = <0>;
-> +		cdns,num-lanes = <1>;
-> +		#phy-cells = <0>;
-> +		cdns,phy-type = <PHY_TYPE_PCIE>;
-> +		resets = <&serdes_wiz0 1>;
-> +	};
-> +};
-> +
->  &mcu_mcan0 {
->  	status = "okay";
->  	pinctrl-names = "default";
+Sorry for the delay, last weeks have been extremely overloaded
 
-cheers,
--roger
+Thanks
+
+   -- Daniel
+
+
+The following changes since commit f7abf14f0001a5a47539d9f60bbdca649e43536b:
+
+   posix-cpu-timers: Implement the missing timer_wait_running callback 
+(2023-04-21 15:34:33 +0200)
+
+are available in the Git repository at:
+
+   ssh://git@git.linaro.org/people/daniel.lezcano/linux.git 
+tags/timers-v6.4-rc1
+
+for you to fetch changes up to e2a1406c84c43bd104e2f85c4d8ab0b0b1609ab0:
+
+   dt-bindings: timer: rockchip: Add rk3588 compatible (2023-04-24 
+16:56:14 +0200)
+
+----------------------------------------------------------------
+- Fix error returned for shared timers on Exynos MCT timers (Krzysztof 
+Kozlowski)
+
+- Code reorg by splitting the CPUXGPT timer code (AngeloGioacchino Del 
+Regno)
+
+- Remove the unused mxc_timer_init() function on i.MX (Fabio Estevam)
+
+- Replace of_get_address() and of_translate_address() calls with
+   single call to of_address_to_resource() on TI timer (Rob Herring)
+
+- Mark driver as non-removable and remove useless remove() callback on
+   SH MTU2 and STM32 LP timers. Improve the error message in the remove
+   callback of the TI DM timer (Uwe Kleine-König)
+
+- Convert to platform remove callback returning void on Tegra186, TI
+   DM timers (Uwe Kleine-König)
+
+- Drop pointless of_match_ptr for ID table in the STM32 LP timer
+   (Krzysztof Kozlowski)
+
+- Fix memory leak in davinci_timer_register when init fails on DaVinci
+   (Qinrun Dai)
+
+- Fix finding alwon timer regression on Timer TI DM (Tony Lindgren)
+
+- Use of_property_read_bool() for boolean properties on TI timer (Rob
+   Herring)
+
+- Drop superfluous rk3288 compatible and add rk3588 compatible DT
+   bindings (Cristian Ciocaltea)
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+       clocksource/drivers/timer-mediatek: Split out CPUXGPT timers
+
+Cristian Ciocaltea (2):
+       dt-bindings: timer: rockchip: Drop superfluous rk3288 compatible
+       dt-bindings: timer: rockchip: Add rk3588 compatible
+
+Fabio Estevam (1):
+       clocksource/drivers/timer-imx-gpt: Remove non-DT function
+
+Krzysztof Kozlowski (2):
+       clocksource/drivers/exynos_mct: Explicitly return 0 for shared timer
+       clocksource/drivers/stm32-lp: Drop of_match_ptr for ID table
+
+Qinrun Dai (1):
+       clocksource/drivers/davinci: Fix memory leak in 
+davinci_timer_register when init fails
+
+Rob Herring (2):
+       clocksource/drivers/timer-ti-dm: Use of_address_to_resource()
+       clocksource/drivers/ti: Use of_property_read_bool() for boolean 
+properties
+
+Tony Lindgren (1):
+       clocksource/drivers/timer-ti-dm: Fix finding alwon timer
+
+Uwe Kleine-König (5):
+       clocksource/drivers/sh_mtu2: Mark driver as non-removable
+       clocksource/drivers/timer-stm32-lp: Mark driver as non-removable
+       clocksource/drivers/timer-ti-dm: Improve error message in .remove
+       clocksource/drivers/timer-tegra186: Convert to platform remove 
+callback returning void
+       clocksource/drivers/timer-ti-dm: Convert to platform remove 
+callback returning void
+
+  .../bindings/timer/rockchip,rk-timer.yaml          |   2 +-
+  drivers/clocksource/Kconfig                        |   9 ++
+  drivers/clocksource/Makefile                       |   1 +
+  drivers/clocksource/exynos_mct.c                   |   2 +-
+  drivers/clocksource/sh_mtu2.c                      |   7 +-
+  drivers/clocksource/timer-davinci.c                |  30 ++++-
+  drivers/clocksource/timer-imx-gpt.c                |  19 ---
+  drivers/clocksource/timer-mediatek-cpux.c          | 140 
++++++++++++++++++++++
+  drivers/clocksource/timer-mediatek.c               | 114 -----------------
+  drivers/clocksource/timer-stm32-lp.c               |  11 +-
+  drivers/clocksource/timer-tegra186.c               |   6 +-
+  drivers/clocksource/timer-ti-dm-systimer.c         |  63 +++++-----
+  drivers/clocksource/timer-ti-dm.c                  |  15 +--
+  include/soc/imx/timer.h                            |   7 --
+  14 files changed, 221 insertions(+), 205 deletions(-)
+  create mode 100644 drivers/clocksource/timer-mediatek-cpux.c
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
