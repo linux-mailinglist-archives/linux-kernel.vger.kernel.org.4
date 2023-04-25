@@ -2,265 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A03B6ED9F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3E36ED9F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232801AbjDYBmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 21:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
+        id S232940AbjDYBnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjDYBl6 (ORCPT
+        with ESMTP id S233255AbjDYBmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:41:58 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC061AF2B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 18:41:56 -0700 (PDT)
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 24 Apr 2023 21:42:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F0CAF21;
+        Mon, 24 Apr 2023 18:42:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 932283F205
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 01:41:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1682386914;
-        bh=lmdurcU6KIQdQ88/QQmDRrixoBaqul18ztg8rDaEvCs=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=XM5IWsvkYFR7qwIMuvi0aP44uyQb0o/7enf8siqRhY5AOCVH/wpYXxJj/Kxph7kEN
-         zantuOT06cnUFICIieG72QxzFUuFCZTaMHGkKl3FQ4h8CONrWZVQhaSx45Uxh1NPqI
-         dKReqpXMZGgvBYh5kkFJt5cMiv3eziFd8UKYvCRcCF4aAlMEDklmfSazjRNfoRKH82
-         J3bxnl06ZqAX21X9Tvfxb8eqKo3AWeUWGhIgcCKIqEIVz7J/tuCBpAI9Cv2Wu58nVi
-         xTfqrpMFXSgfPOpu+qfbqIYrL6N1ZL4V9I0nzToEF4QAZV4O8+llApmsRpw4KOhWUj
-         ZF08fOqo5OIvw==
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-b99f3aee8e0so791480276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Apr 2023 18:41:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682386913; x=1684978913;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lmdurcU6KIQdQ88/QQmDRrixoBaqul18ztg8rDaEvCs=;
-        b=MpHFdUy9iovRwp+RClTlhCN1iPSiVkftT/u4eihPOxtxATiWJLXME5EVn52xCzd+7o
-         3uw+f2ZNSWdY3HNTvfxEyWxiz29XI/KanDCVtxBGrDPu5hFFUJDp8/IlHnXdEYC9IVaw
-         qBJf1FW11qnxJsSDdIsnLL4zBa3OgEkBJYExm9sIPURHS079Ih8DMv9L6t6dxinG66cx
-         xstmHqYte57T8uF+uAe20U0ZfHLG/lA1YDFIzGpIuLzm296yDxa6dybtt+kAxJ2Hiy02
-         sP4NSvwCYLJrThbCfNJ9c0TMG6WOTLOWv8AiRRbBzTCy6m5y3bn8WjQSAyz4bQIDRulV
-         Agpw==
-X-Gm-Message-State: AAQBX9e1jw6sRH/3Gef6BQIFcT1RCDld2LPAc3AACiCigOCJklUWQ/dZ
-        t44gWkwxYrTwyiGMe6WgE99xFG6pgYX38o9abRdRPzJWG7HgDebWyFdXqve2119T2N5bvUvroCr
-        BUtPlE+UrwmjH2tZT9P6rmcdFb8SaZsvUUp+Xwvw5bPuPAfCPyWrqJOv8ng==
-X-Received: by 2002:a81:700c:0:b0:54b:f8b4:bc8d with SMTP id l12-20020a81700c000000b0054bf8b4bc8dmr9081708ywc.0.1682386913234;
-        Mon, 24 Apr 2023 18:41:53 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZeG8edn54c3dLMBGqk5wjdaTOyz7exz6Y6DYhsO0upkTHqzjkFV2XYLUWuW+dW/MRkt4ay4JPTGQUYSAqVVmM=
-X-Received: by 2002:a81:700c:0:b0:54b:f8b4:bc8d with SMTP id
- l12-20020a81700c000000b0054bf8b4bc8dmr9081693ywc.0.1682386912908; Mon, 24 Apr
- 2023 18:41:52 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D54262AD5;
+        Tue, 25 Apr 2023 01:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52618C433D2;
+        Tue, 25 Apr 2023 01:42:48 +0000 (UTC)
+Date:   Mon, 24 Apr 2023 21:42:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RESEND] selftests/ftrace: Improve integration with
+ kselftest runner
+Message-ID: <20230424214246.3e158fb6@rorschach.local.home>
+In-Reply-To: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
+References: <20230302-ftrace-kselftest-ktap-v1-1-1270085b4cd5@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230411030248.53356-1-chengen.du@canonical.com> <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
-In-Reply-To: <CAPt2mGNqqDeRMeCSVh6oX_=nS0UcGCfhBfVcuaVG9HpdwVSzVg@mail.gmail.com>
-From:   Chengen Du <chengen.du@canonical.com>
-Date:   Tue, 25 Apr 2023 09:41:41 +0800
-Message-ID: <CAPza5qee7vHKwjwhS27xB8xXTgAFHEmv7eiFk6zGTUUc4s8=TQ@mail.gmail.com>
-Subject: Re: [PATCH] NFS: Add mount option 'nofasc'
-To:     trond.myklebust@hammerspace.com
-Cc:     anna@kernel.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 11 Apr 2023 12:19:30 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-May I ask if there are any concerns or opinions regarding the
-introduction of the new mount option?
-If there is a more suitable solution, we can discuss it, and I can
-work on implementing it.
+> The ftrace selftests do not currently produce KTAP output, they produce a
+> custom format much nicer for human consumption. This means that when run in
+> automated test systems we just get a single result for the suite as a whole
+> rather than recording results for individual test cases, making it harder
+> to look at the test data and masking things like inappropriate skips.
+> 
+> Address this by adding support for KTAP output to the ftracetest script and
+> providing a trivial wrapper which will be invoked by the kselftest runner
+> to generate output in this format by default, users using ftracetest
+> directly will continue to get the existing output.
+> 
+> This is not the most elegant solution but it is simple and effective. I
+> did consider implementing this by post processing the existing output
+> format but that felt more complex and likely to result in all output being
+> lost if something goes seriously wrong during the run which would not be
+> helpful. I did also consider just writing a separate runner script but
+> there's enough going on with things like the signal handling for that to
+> seem like it would be duplicating too much.
 
-Best regards,
-Chengen Du
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-On Wed, Apr 19, 2023 at 3:18=E2=80=AFPM Daire Byrne <daire@dneg.com> wrote:
->
-> Just to say, I am personally for this or some other way to opt out of
-> the increased ACCESS calls on select servers (e.g. ones with high
-> latency or with lots of multi user logins).
->
-> I see it as similar to "actimeo" and "nocto" options in allowing users
-> to reduce "correctness" at their own risk if it helps with their
-> workloads and they deem the risk worth it.
->
-> I am currently reverting the original patches in our kernel for our
-> nfs re-exporting workloads.
->
-> Daire
->
->
-> On Tue, 11 Apr 2023 at 04:03, Chengen Du <chengen.du@canonical.com> wrote=
-:
-> >
-> > This mount option is used to skip clearing the file access cache
-> > upon login. Some users or applications switch to other privileged
-> > users via commands such as 'su' to operate on NFS-mounted folders.
-> > In such cases, the privileged user's login time will be renewed,
-> > and NFS ACCESS operations will need to be re-sent, potentially
-> > leading to performance degradation.
-> > In some production environments where the access cache can be
-> > trusted due to stable group membership, this option could be
-> > particularly useful.
-> >
-> > Signed-off-by: Chengen Du <chengen.du@canonical.com>
-> > ---
-> >  fs/nfs/dir.c              | 21 ++++++++++++---------
-> >  fs/nfs/fs_context.c       |  8 ++++++++
-> >  fs/nfs/super.c            |  1 +
-> >  include/linux/nfs_fs_sb.h |  1 +
-> >  4 files changed, 22 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
-> > index 6fbcbb8d6587..9a6d86e2044e 100644
-> > --- a/fs/nfs/dir.c
-> > +++ b/fs/nfs/dir.c
-> > @@ -2953,12 +2953,14 @@ static struct nfs_access_entry *nfs_access_sear=
-ch_rbtree(struct inode *inode, co
-> >         return NULL;
-> >  }
-> >
-> > -static u64 nfs_access_login_time(const struct task_struct *task,
-> > -                                const struct cred *cred)
-> > +static inline
-> > +bool nfs_check_access_stale(const struct task_struct *task,
-> > +                           const struct cred *cred,
-> > +                           const struct nfs_access_entry *cache)
-> >  {
-> >         const struct task_struct *parent;
-> >         const struct cred *pcred;
-> > -       u64 ret;
-> > +       u64 login_time;
-> >
-> >         rcu_read_lock();
-> >         for (;;) {
-> > @@ -2968,15 +2970,15 @@ static u64 nfs_access_login_time(const struct t=
-ask_struct *task,
-> >                         break;
-> >                 task =3D parent;
-> >         }
-> > -       ret =3D task->start_time;
-> > +       login_time =3D task->start_time;
-> >         rcu_read_unlock();
-> > -       return ret;
-> > +
-> > +       return ((s64)(login_time - cache->timestamp) > 0);
-> >  }
-> >
-> >  static int nfs_access_get_cached_locked(struct inode *inode, const str=
-uct cred *cred, u32 *mask, bool may_block)
-> >  {
-> >         struct nfs_inode *nfsi =3D NFS_I(inode);
-> > -       u64 login_time =3D nfs_access_login_time(current, cred);
-> >         struct nfs_access_entry *cache;
-> >         bool retry =3D true;
-> >         int err;
-> > @@ -3005,7 +3007,8 @@ static int nfs_access_get_cached_locked(struct in=
-ode *inode, const struct cred *
-> >                 retry =3D false;
-> >         }
-> >         err =3D -ENOENT;
-> > -       if ((s64)(login_time - cache->timestamp) > 0)
-> > +       if (!(NFS_SERVER(inode)->flags & NFS_MOUNT_NOFASC) &&
-> > +           nfs_check_access_stale(current, cred, cache))
-> >                 goto out;
-> >         *mask =3D cache->mask;
-> >         list_move_tail(&cache->lru, &nfsi->access_cache_entry_lru);
-> > @@ -3025,7 +3028,6 @@ static int nfs_access_get_cached_rcu(struct inode=
- *inode, const struct cred *cre
-> >          * but do it without locking.
-> >          */
-> >         struct nfs_inode *nfsi =3D NFS_I(inode);
-> > -       u64 login_time =3D nfs_access_login_time(current, cred);
-> >         struct nfs_access_entry *cache;
-> >         int err =3D -ECHILD;
-> >         struct list_head *lh;
-> > @@ -3040,7 +3042,8 @@ static int nfs_access_get_cached_rcu(struct inode=
- *inode, const struct cred *cre
-> >                 cache =3D NULL;
-> >         if (cache =3D=3D NULL)
-> >                 goto out;
-> > -       if ((s64)(login_time - cache->timestamp) > 0)
-> > +       if (!(NFS_SERVER(inode)->flags & NFS_MOUNT_NOFASC) &&
-> > +           nfs_check_access_stale(current, cred, cache))
-> >                 goto out;
-> >         if (nfs_check_cache_invalid(inode, NFS_INO_INVALID_ACCESS))
-> >                 goto out;
-> > diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-> > index 9bcd53d5c7d4..5cd9b2882c79 100644
-> > --- a/fs/nfs/fs_context.c
-> > +++ b/fs/nfs/fs_context.c
-> > @@ -88,6 +88,7 @@ enum nfs_param {
-> >         Opt_vers,
-> >         Opt_wsize,
-> >         Opt_write,
-> > +       Opt_fasc,
-> >  };
-> >
-> >  enum {
-> > @@ -194,6 +195,7 @@ static const struct fs_parameter_spec nfs_fs_parame=
-ters[] =3D {
-> >         fsparam_string("vers",          Opt_vers),
-> >         fsparam_enum  ("write",         Opt_write, nfs_param_enums_writ=
-e),
-> >         fsparam_u32   ("wsize",         Opt_wsize),
-> > +       fsparam_flag_no("fasc",         Opt_fasc),
-> >         {}
-> >  };
-> >
-> > @@ -861,6 +863,12 @@ static int nfs_fs_context_parse_param(struct fs_co=
-ntext *fc,
-> >         case Opt_sloppy:
-> >                 ctx->sloppy =3D true;
-> >                 break;
-> > +       case Opt_fasc:
-> > +               if (result.negated)
-> > +                       ctx->flags |=3D NFS_MOUNT_NOFASC;
-> > +               else
-> > +                       ctx->flags &=3D ~NFS_MOUNT_NOFASC;
-> > +               break;
-> >         }
-> >
-> >         return 0;
-> > diff --git a/fs/nfs/super.c b/fs/nfs/super.c
-> > index 05ae23657527..059513d403f8 100644
-> > --- a/fs/nfs/super.c
-> > +++ b/fs/nfs/super.c
-> > @@ -444,6 +444,7 @@ static void nfs_show_mount_options(struct seq_file =
-*m, struct nfs_server *nfss,
-> >                 { NFS_MOUNT_NORDIRPLUS, ",nordirplus", "" },
-> >                 { NFS_MOUNT_UNSHARED, ",nosharecache", "" },
-> >                 { NFS_MOUNT_NORESVPORT, ",noresvport", "" },
-> > +               { NFS_MOUNT_NOFASC, ",nofasc", "" },
-> >                 { 0, NULL, NULL }
-> >         };
-> >         const struct proc_nfs_info *nfs_infop;
-> > diff --git a/include/linux/nfs_fs_sb.h b/include/linux/nfs_fs_sb.h
-> > index ea2f7e6b1b0b..a39ae1bd2217 100644
-> > --- a/include/linux/nfs_fs_sb.h
-> > +++ b/include/linux/nfs_fs_sb.h
-> > @@ -153,6 +153,7 @@ struct nfs_server {
-> >  #define NFS_MOUNT_WRITE_EAGER          0x01000000
-> >  #define NFS_MOUNT_WRITE_WAIT           0x02000000
-> >  #define NFS_MOUNT_TRUNK_DISCOVERY      0x04000000
-> > +#define NFS_MOUNT_NOFASC               0x08000000
-> >
-> >         unsigned int            fattr_valid;    /* Valid attributes */
-> >         unsigned int            caps;           /* server capabilities =
-*/
-> > --
-> > 2.37.2
-> >
+Shuah, care to take this?
+
+-- Steve
