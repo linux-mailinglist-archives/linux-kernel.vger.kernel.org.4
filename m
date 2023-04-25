@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616CD6EE371
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA506EE376
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 15:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbjDYNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 09:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S234155AbjDYNuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 09:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjDYNrT (ORCPT
+        with ESMTP id S233976AbjDYNuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 09:47:19 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06782D76
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:53 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-32ad7e5627bso2564955ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 06:46:53 -0700 (PDT)
+        Tue, 25 Apr 2023 09:50:03 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1EE1708;
+        Tue, 25 Apr 2023 06:50:02 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-518d325b8a2so5844385a12.0;
+        Tue, 25 Apr 2023 06:50:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682430412; x=1685022412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sWT4LDDHDTDTan4b4Z+92OYHL+K27mprNFuaNL6WnjA=;
-        b=1nJIIQwa9wgF4lHDGz+kxbxwTuUJVltwQAbcKRiVUr8nc8hHbWExkW+1fkx5WoI6fm
-         eFzVIleC7/Zrq8d5PBdP9JpT56oymBJ0lFz3jWqiQWsvl5WluanpZI8IxKmAuon7D5eq
-         nPkok3e10A3BuOaxgc+pCrme1NFnkcRWIGILWfKpP+L6efrZNSVd5u5iyXCd5BdBGySc
-         65mNsVocLP1fATCMVpQx3fnZDTqg91MgBpD4zXqrgdiNXTn+9WTAzSz6HhzuU+o3Y3Ww
-         GEBC5J8bcUn5I5dwcnHRuEkLPo4bPVokiBntVfV5N2yK3dbhbQgil5dSx/MvCQ0RmXZ0
-         NmHw==
+        d=gmail.com; s=20221208; t=1682430601; x=1685022601;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2lAuwknu3oppNAiUSZpnFi04sAphUW8dNNMCjOkBABs=;
+        b=jamzRusOo2NjkX7molZM2aCKuhRTgTL0DhlzMquEyNRxa2MjYgzuDwRNGa0LIxc34N
+         e7mJmtfFgZIs1brtVwmW0LO16YcSGlUfOW0x1kkRsrDlhFOFWXLM8tkC3Lr+Qzi0+gJ5
+         xPnzh3BkhQsDNdVyh3OTN4FijvnyjBZUN7LLcBKSblbnQ3jiyL4Sg283i7vxiR3b1UZE
+         5RsspSs88YBOkut/edo7rBsRVJid5/o1rjaYnm8iPdbIv2VXkLV7iEGB4tRqfLHJSuhP
+         QXkmfm23JUgcXyzpXo6uQNN8HbRcXvJUVlJRHu5MRWeLNyg6tq8TmZvurN6sTuKwdmwa
+         cSZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682430412; x=1685022412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sWT4LDDHDTDTan4b4Z+92OYHL+K27mprNFuaNL6WnjA=;
-        b=dOAAGt3FY2EaDV08iuSHKL9zSAdDoGNNxtnFCQLwsIyMAEH5d/OuM8XqFDDWY8CWS2
-         P2JIWrYn7Rbctu4dXZIXWgGEUjXsqKW6sNh7f1Z+O+xs86ffVag01+Dt9QnNJvDPHPGn
-         QkSyAQH3/Vyx1UYpwVo27LaB6Dy06DMJyXPZUnN481wtPGe06zr1bbcc2PQjCmrBhzUV
-         g/7spOA4oPqsVwVWundws0EkBFvNcCKfoCM0SNDBawO6HZ8xjXwFnn/z0pMLb9lOmkOV
-         JoI8saGp8NDUKJAEy23s2jA9DPUXenaLhMWm73RuOOdojwZfnabyxLF+YKZfJ0g/K2VM
-         bkyA==
-X-Gm-Message-State: AAQBX9fmFC4O0nJvIG7vuBu0MQcQ/jVj8MjRnlD2YK0ivDIVxn/bT30B
-        K0xzCP8N4CY3z8+WyxHajKqEaRu3hDl1SKUq3ys=
-X-Google-Smtp-Source: AKy350YTrxS1BtUfMNL2LeuIIK7iBfsRU2g2VBE8kugIz3YHrjtnd8goWvVu4EnYemjGQkYrGBOG2g==
-X-Received: by 2002:a05:6e02:17cd:b0:328:2f36:b6bd with SMTP id z13-20020a056e0217cd00b003282f36b6bdmr11283728ilu.1.1682430412341;
-        Tue, 25 Apr 2023 06:46:52 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id w2-20020a927b02000000b003231580e8e2sm3590068ilc.6.2023.04.25.06.46.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 06:46:51 -0700 (PDT)
-Message-ID: <f9616b01-b185-a2a5-dbc9-a45735ed7e1b@kernel.dk>
-Date:   Tue, 25 Apr 2023 07:46:51 -0600
+        d=1e100.net; s=20221208; t=1682430601; x=1685022601;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2lAuwknu3oppNAiUSZpnFi04sAphUW8dNNMCjOkBABs=;
+        b=FfHH9/w9dtOvPin1lTChwG9nOoy4oyuf96xyL8uh4vKAntzfhEiIbfUNcWnue52Bew
+         /jQfpOLYOHDglbZzFxS4lFKqxeaMo6zuIcGU2/Qh8YQjzDRUuJVYKKheDy5s3VDWYDBx
+         mCJaXcggDO7Y3r9JcAlUI7lLDIQ4n58t/qUYBDmBoKSD538cpq+CTl0VcpJk7+yutTyV
+         VHV7TZSbAvOCuzt60edcL7sDWEQm+zb2JVLo/GizAoB0R5dZZMoKy+oqVqMVpmDhlLnc
+         9P226lzzSFfYCGnCTsbbkVcc8E8VL33L3a+5DE4RtKUU+8a3cZatcfeI9Vw1xjUtCM0J
+         W70A==
+X-Gm-Message-State: AAQBX9eXjR71fCz1sWXQu+3pIsrl+jaRKIcOL0FTKALgjbKMGNCmmAhT
+        7md5j7udqftsy9eEpyaY+aNsY3soPzygbvojW8c=
+X-Google-Smtp-Source: AKy350bSykcNq3VWBNHcmLinwWgOiXbhiBxgTZcPMEi8qD3oJP0OeW7EYXjKHPDrXkcHdS29jHT1he9ARB1EyQCCd1c=
+X-Received: by 2002:a17:90a:6447:b0:23f:a4da:1208 with SMTP id
+ y7-20020a17090a644700b0023fa4da1208mr16749390pjm.39.1682430601304; Tue, 25
+ Apr 2023 06:50:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] pipe: nonblocking rw for io_uring
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230421-seilbahn-vorpreschen-bd73ac3c88d7@brauner>
- <CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com>
- <6882b74e-874a-c116-62ac-564104c5ad34@kernel.dk>
- <CAHk-=wiQ8g+B0bCPJ9fxZ+Oa0LPAUAyryw9i+-fBUe72LoA+QQ@mail.gmail.com>
- <CAHk-=wgGzwaz2yGO9_PFv4O1ke_uHg25Ab0UndK+G9vJ9V4=hw@mail.gmail.com>
- <2e7d4f63-7ddd-e4a6-e7eb-fd2a305d442e@kernel.dk>
- <69ec222c-1b75-cdc1-ac1b-0e9e504db6cb@kernel.dk>
- <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wiaFUoHpztu6Zf_4pyzH-gzeJhdCU0MYNw9LzVg1-kx8g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+ <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
+ <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
+ <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
+ <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
+ <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
+ <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
+ <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com> <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
+In-Reply-To: <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Tue, 25 Apr 2023 21:49:50 +0800
+Message-ID: <CAABZP2zW7aTPChjvZMA1bECdOdFUdTd-q+vEJXJnH2zPU+uR8A@mail.gmail.com>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "lance@osuosl.org" <lance@osuosl.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,74 +85,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 9:16?PM, Linus Torvalds wrote:
-> On Mon, Apr 24, 2023 at 3:45?PM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Something like this. Not tested yet, but wanted to get your feedback
->> early to avoid issues down the line.
-> 
-> Ok, that try_cmpxchg() loop looks odd, but I guess it's the right thing to do.
-> 
-> That said, you should move the
-> 
->         old_fmode = READ_ONCE(file->f_mode);
-> 
-> to outside the loop, because try_cmpxchg() will then update
-> 'old_fmode' to the proper value and it should *not* be done again.
-> 
-> I also suspect that the READ_ONCE() itself is entirely superfluous,
-> because that is very much a value that we should let the compiler
-> optimize to *not* have to access more than it needs to.
-> 
-> So if the compiler had an earlier copy of that value, it should just
-> use it, rather than us forcing it to read it again.
-> 
-> But I suspect in this case it makes no real difference to code
-> generation. There's nothing else around it that uses f_mode, afaik,
-> and the try_cmpxchg() will reload it properly to fix any possible
-> races up.
-> 
-> The READ_ONCE() would possibly make more sense if we actually expected
-> that FMODE_NOWAIT bit to change more than once, but then we'd
-> presuably have some ordering rule and it should be a
-> smp_load_acquire() or whatever.
-> 
-> As it is, if we ever see it clear, we don't care any more, and the
-> real value consistency guarantee is in the try_cmpxchg itself. There
-> are no possible races ot mis-readings that could matter.
-> 
-> So I think it could/should just be something like
-> 
->     void pipe_clear_nowait(struct file *file)
->     {
->         fmode_t fmode = file->f_mode;
->         do {
->             if (!(fmode & FMODE_NOWAIT))
->                 break;
->         } while (!try_cmpxchg(&file->f_mode, &fmode, fmode & ~FMODE_NOWAIT));
->     }
-> 
-> which sadly generates that big constant just because FMODE_NOWAIT is
-> up in the high bits and with the 'try_cmpxchg()', the compiler has no
-> choice but to get the full 32-bit value anyway.
+Hi
 
-I'll go with this, it's definitely simpler. I suspected the important
-bit was just doing the cmpxchg sanely and that the READ_ONCE() was
-superflous given how it's used, and dropping the old_fmode is cleaner.
+On Tue, Apr 25, 2023 at 9:40=E2=80=AFPM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 25/04/2023 =C3=A0 13:06, Joel Fernandes a =C3=A9crit :
+> > On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.c=
+om> wrote:
+> >>
+> >> hi
+> >>
+> >> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infrade=
+ad.org> wrote:
+> >>>
+> >>> On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
+> >>>> This is amazing debugging Boqun, like a boss! One comment below:
+> >>>>
+> >>>>>>> Or something simple I haven't thought of? :)
+> >>>>>>
+> >>>>>> At what points can r13 change?  Only when some particular function=
+s are
+> >>>>>> called?
+> >>>>>>
+> >>>>>
+> >>>>> r13 is the local paca:
+> >>>>>
+> >>>>>          register struct paca_struct *local_paca asm("r13");
+> >>>>>
+> >>>>> , which is a pointer to percpu data.
+> >>>>>
+> >>>>> So if a task schedule from one CPU to anotehr CPU, the value gets
+> >>>>> changed.
+> >>>>
+> >>>> It appears the whole issue, per your analysis, is that the stack
+> >>>> checking code in gcc should not cache or alias r13, and must read it=
+s
+> >>>> most up-to-date value during stack checking, as its value may have
+> >>>> changed during a migration to a new CPU.
+> >>>>
+> >>>> Did I get that right?
+> >>>>
+> >>>> IMO, even without a reproducer, gcc on PPC should just not do that,
+> >>>> that feels terribly broken for the kernel. I wonder what clang does,
+> >>>> I'll go poke around with compilerexplorer after lunch.
+> >>>>
+> >>>> Adding +Peter Zijlstra as well to join the party as I have a feeling
+> >>>> he'll be interested. ;-)
+> >>>
+> >>> I'm a little confused; the way I understand the whole stack protector
+> >>> thing to work is that we push a canary on the stack at call and on
+> >>> return check it is still valid. Since in general tasks randomly migra=
+te,
+> >>> the per-cpu validation canary should be the same on all CPUs.
+> >>>
+> >>> Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
+> >>> raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu=
+,
+> >>> but no guarantees.
+> >>>
+> >>> Both cases use r13 (paca) in a racy manner, and in both cases it shou=
+ld
+> >>> be safe.
+> >> New test results today: both gcc build from git (git clone
+> >> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
+> >> are immune from the above issue. We can see the assembly code on
+> >> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
+> >>
+> >> while
+> >> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
+> >> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
+> >
+> > Do you know what fixes the issue? I would not declare victory yet. My
+> > feeling is something changes in timing, or compiler codegen which
+> > hides the issue. So the issue is still there but it is just a matter
+> > of time before someone else reports it.
+> >
+> > Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
+> > canary? Michael, is this an optimization? Adding Christophe as well
+> > since it came in a few years ago via the following commit:
+>
+> It uses per-task canary. But unlike PPC32, PPC64 doesn't have a fixed
+> register pointing to 'current' at all time so the canary is copied into
+> a per-cpu struct during _switch().
+>
+> If GCC keeps an old value of the per-cpu struct pointer, it then gets
+> the canary from the wrong CPU struct so from a different task.
+This is a fruitful learning process for me!
+Christophe:
+Do you think there is still a need to bisect GCC ? If so, I am very
+glad to continue
 
-FWIW, I don't see any difference in code generation here on arm64 or
-x86-64 if FMODE_NOWAIT is in the lower bits, as we could've just moved
-it. We could make it the sign bit which might make the first compare
-faster in general, but honestly don't think we really care that deeply
-about that.
-
-Updated the branch, it's:
-
-https://git.kernel.dk/cgit/linux/log/?h=pipe-nonblock.2
-
-It's just the cmpxchg patch now and the same "set FMODE_NOWAIT on pipes
-unconditionally" from before.
-
--- 
-Jens Axboe
-
+Cheers
+Zhouyi
+>
+> Christophe
+>
+> >
+> > commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
+> > Author: Christophe Leroy <christophe.leroy@c-s.fr>
+> > Date:   Thu Sep 27 07:05:55 2018 +0000
+> >
+> >      powerpc/64: add stack protector support
+> >
+> >      On PPC64, as register r13 points to the paca_struct at all time,
+> >      this patch adds a copy of the canary there, which is copied at
+> >      task_switch.
+> >      That new canary is then used by using the following GCC options:
+> >      -mstack-protector-guard=3Dtls
+> >      -mstack-protector-guard-reg=3Dr13
+> >      -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, cana=
+ry))
+> >
+> >      Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> >
+> >   - Joel
