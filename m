@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8034C6EE0CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D988F6EE0D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 13:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbjDYLFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 07:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
+        id S233969AbjDYLGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 07:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbjDYLFt (ORCPT
+        with ESMTP id S233931AbjDYLGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 07:05:49 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383D012C97
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:45 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b60366047so4504872b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:44 -0700 (PDT)
+        Tue, 25 Apr 2023 07:06:17 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415D812CB5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b7b54642cso4131733b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 04:05:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682420744; x=1685012744;
+        d=bytedance.com; s=google; t=1682420748; x=1685012748;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Uhpet9rFKKSbNY/rO+kxNiiukorlrEmSdc9GCeX7BVQ=;
-        b=kRDCATpMOFuEPi6tXPsOXLZpTjhUGeNU5eTbsWS/STvZypZztv1c2WheEeS2ZqnMTC
-         kpd1b3dOaUmTKyXaj+z9CyulDGeZtQwWDI4jrkMX22GZUDqIUkdI7glYxD+jmHZth1/E
-         i0VsY7k71T7rtEZsPr0RtaW/qwJYwCCfnFrPYFo8E6rV4sJwqA/Wvf75YGIZtKQjP8gN
-         tXmWXV7YanL+BeCwrwhNMS0CbG66ajylBFYygIuyhlINtNPvpz2OfsBg7buDGPs6x44o
-         m5vs7IxRJ7cIHDTdtX9SfH9SC0bt7BMfYOLlFrjKRITZjTGinAox/LUHikSJzJkWe5Qz
-         ySKg==
+        bh=3wyOOQxSifE+UQ7Biie0VeiE7Xg3ne8+bvtiq6zNGpc=;
+        b=jipQmnHiGZqHhFj+pjse8A990ppkL1/uxO9HRdscpit7rhuWxH1VtL8WteZPa//UVl
+         d+QYWMUc3Pd0xNIJ5KCnsF9R2zsXUbxhe79MilPyoF5EbgQWgrgD5Yx/Z643QyvsML8e
+         Y/jlWVM3tUMLV/IXawWDmC1VAS3dP/bzZfDjJDUx7QS7NhTg5FRO+N5DpeKFva0YH+ux
+         jJWMrmPke8pBOQm1JHvFPXk9am07Mtp+Z4X0pBvH9tYeY/Ky6BThaNUVjVEk3qJFoxRR
+         s2JD+th6vAVyzSwwRovJ2WxkiFVq+PiDC67vi7LzP0ZtSLmtotp3zsqbzMeCtXArnENH
+         cbUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682420744; x=1685012744;
+        d=1e100.net; s=20221208; t=1682420748; x=1685012748;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uhpet9rFKKSbNY/rO+kxNiiukorlrEmSdc9GCeX7BVQ=;
-        b=LlaxBhN1XuUQqbz9ANQ8G3BC4I6v5N0u+fB6KyPa+lOdUvXnbskdZywi1ive1q+0Bm
-         06rwv/2Ke3sYuy/mSQe/H7HOY4cKNlrSG9116fIKRB+mBA89e/plIGJgRkJkrabwCPNL
-         DuSs73NxOooGuAT/+VaTuE5YAG5QSY3hvZ8X61riWECkqTbyACoB5nQICzK+6Fy0UdTn
-         08LBUYWViFc/4QYAS/4o+o1NCt0NzDiKJ4gp01Ndxsjtrrjp/zkd481MdIg+eJvaM3LL
-         iJL1OsAAGQr1ImTtbX3Wpv7I+cOhQv75NysmDn2nHjzA6bCDNKq/P39lcMJxp/KlgAv2
-         yddA==
-X-Gm-Message-State: AAQBX9e5RIRrqVOY5RrzRCgDli37YNdsx+IcVN6u0L1qZ8cFyBfWi7Cp
-        DM2tGoNo/JXKlRvECEovZJHHcwi4aEZs/sX4a9o=
-X-Google-Smtp-Source: AKy350bb8ivezPwkMZceREpecMXYm1R01Tbms6afrN+M43oKICEeAjPUTaLy3P5Yg3AEbvNizSRdwA==
-X-Received: by 2002:a05:6a21:998d:b0:f1:ff77:4a32 with SMTP id ve13-20020a056a21998d00b000f1ff774a32mr23584687pzb.9.1682420744512;
-        Tue, 25 Apr 2023 04:05:44 -0700 (PDT)
+        bh=3wyOOQxSifE+UQ7Biie0VeiE7Xg3ne8+bvtiq6zNGpc=;
+        b=AKOyMqkEcgAWfpd5yja7UolAR7ZUTvwMTC/ix/83lgugveVukpQydg38PHfOf4UqO+
+         7R1+zmPaHMoS736BEAaNbieixEI3EjJ9zpwmVVlB7ebo6ceN2mSocNKKb+sgwYwd9ICH
+         h2nzaG+Uzo420/bmul4ngVhAS2vAL6s9pyoz+2MqPg4tkYX/I/f4AHLClA+rH7l9u4ph
+         HueN2Jasot26bY7dW7SoWmfl+A8s6YXfG2+I2xmpbaXM9OuhMG+L2FyVh2Icr1jeik4W
+         jmNyxICwlneZoBzWoaFA5fRtRd7WntG5aX4P94Mt+clbLeGSy0eAYgYyUn7Xl+QI0tKF
+         y7Hg==
+X-Gm-Message-State: AAQBX9fBeRMZi4wfT+/Ft90HLpg4hh5BGxWvDKa0asSvKH8JOfGucWCQ
+        D7ueEmvOiyhNNDVG+pj27D6F+w==
+X-Google-Smtp-Source: AKy350al2UoM9RccPs0Hhp+BNacNU4gYAWUgaT33yzGBelCRbw3DAB4I5OBYUs9vNRoOZdmxnTocxQ==
+X-Received: by 2002:a05:6a00:1887:b0:624:7c9a:c832 with SMTP id x7-20020a056a00188700b006247c9ac832mr22104593pfh.8.1682420747660;
+        Tue, 25 Apr 2023 04:05:47 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm4422169pfk.79.2023.04.25.04.05.41
+        by smtp.gmail.com with ESMTPSA id u3-20020a056a00158300b0063f3aac78b9sm4422169pfk.79.2023.04.25.04.05.44
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 25 Apr 2023 04:05:44 -0700 (PDT)
+        Tue, 25 Apr 2023 04:05:47 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 6/9] maple_tree: Remove a confusing check
-Date:   Tue, 25 Apr 2023 19:05:08 +0800
-Message-Id: <20230425110511.11680-7-zhangpeng.00@bytedance.com>
+Subject: [PATCH 7/9] maple_tree: Delete redundant code in mas_next_node()
+Date:   Tue, 25 Apr 2023 19:05:09 +0800
+Message-Id: <20230425110511.11680-8-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
 References: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
@@ -73,43 +73,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After this loop, we are at the last slot of a node. Our purpose is to
-find an entry that is not NULL, but the pivot is checked here, delete
-it, and change to mas_logical_pivot() to get the pivot. Finally, only
-check whether the entry is NULL.
-
-Why is this confusing? If the pivot is equal to 0, but if the entry is
-not NULL at this time, it will return NULL because of the pivot, but it
-should not do this, the entry is valid.
+When offset == node_end is satisfied, go to the parent node, mas->max
+will not change. So there is no need to update min on the move.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ lib/maple_tree.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 7f4b2ce84ce61..83441ef2e1f57 100644
+index 83441ef2e1f57..8bfa837b7b752 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -4742,17 +4742,13 @@ static inline void *mas_next_nentry(struct ma_state *mas,
- 		return NULL;
- 	}
+@@ -4616,7 +4616,8 @@ static inline int mas_next_node(struct ma_state *mas, struct maple_node *node,
+ 	enum maple_type mt;
+ 	void __rcu **slots;
  
--	pivot = mas_safe_pivot(mas, pivots, mas->offset, type);
-+	pivot = mas_logical_pivot(mas, pivots, mas->offset, type);
- 	entry = mas_slot(mas, slots, mas->offset);
- 	if (ma_dead_node(node))
- 		return NULL;
+-	if (mas->max >= max)
++	min = mas->max + 1;
++	if (min > max)
+ 		goto no_entry;
  
--	if (!pivot)
--		return NULL;
+ 	level = 0;
+@@ -4624,10 +4625,6 @@ static inline int mas_next_node(struct ma_state *mas, struct maple_node *node,
+ 		if (ma_is_root(node))
+ 			goto no_entry;
+ 
+-		min = mas->max + 1;
+-		if (min > max)
+-			goto no_entry;
 -
- 	if (!entry)
- 		return NULL;
--
- found:
- 	mas->last = pivot;
- 	return entry;
+ 		if (unlikely(mas_ascend(mas)))
+ 			return 1;
+ 
 -- 
 2.20.1
 
