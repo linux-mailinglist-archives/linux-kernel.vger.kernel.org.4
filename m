@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F026ED98E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129596ED98C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Apr 2023 03:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjDYBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Apr 2023 21:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S232667AbjDYBGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Apr 2023 21:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232801AbjDYBGd (ORCPT
+        with ESMTP id S232202AbjDYBG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Apr 2023 21:06:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D12AB468;
-        Mon, 24 Apr 2023 18:06:11 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33P00YwJ028384;
-        Tue, 25 Apr 2023 01:05:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/JE2Tu/eXUj5gxjpv0IdfC9ftwGd1WGPHWuNkdxVajY=;
- b=KySaNFNZdaUjKwBbxqfmMrLKWLkKNKIgygq4K1aSouC2lwMZ5RYZLMCnHhRKQwAiOoJr
- aXpDnqd/t+DJvD7S9cT36n2HDozpe0TzxY7husptJlhoiBDwa32FFhphY+nZDzWGbcRx
- 7WcG5sRp78dISMOPaPnxxezSOI3Nfp1sNUvY1pSf993krLqTmkPV1G7v7wP7mT+Y8XMw
- ImbjhM/fEiN9LE5nUvi8riKemFlq/d+Sle4qyJnTo2WfPdvl91ZDqmaZoQQrmoLXPhpf
- DLGHQh1Iv0ESBF6fgsVWVI0k9IJAjqrQgFC8zdtT5CFJxHPZ8APtqttNPRa59g4eFuGC yg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q5uwj15cf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 01:05:27 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33P15QW2026816
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 01:05:26 GMT
-Received: from [10.110.104.134] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 24 Apr
- 2023 18:05:25 -0700
-Message-ID: <4228ade9-fab2-7732-4143-3edeb1de2059@quicinc.com>
-Date:   Mon, 24 Apr 2023 18:05:24 -0700
+        Mon, 24 Apr 2023 21:06:29 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBCCB47B;
+        Mon, 24 Apr 2023 18:06:02 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b5fca48bcso4405191b3a.0;
+        Mon, 24 Apr 2023 18:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682384761; x=1684976761;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wrCAPeEXhKwKO/yYGy9jgCOEwKGr1fHsPVPzH+QsoQs=;
+        b=GyA/wx0uI0tiaynf3OhQ9Bfcrhi555ap0/1eadvAg6PAxN7rSB/5FsbhFRxESCfEWZ
+         xgsnpumQIXUuSgY/pFscRfLho9rnV8EDGKhuNt025uImLKJ4jeGo7qlhzjLXOr5xrm3S
+         Iu6L3nBi3VTTL3PTgq3JDAttiq8N3tpFI5bT4Da71MpZoR9kRuC/JmmuKk8YD6p2ZhYB
+         5jspUrTRCIv4RHvSKys0pZzQnlm2SmyMZZrd9Hs5FIpzBMIUWyN2SykGTu1srBvKUGFP
+         n5tpATi0P83IFi/V41mh/MhFQ9Cz07I1L9jKqvMpC5729VXXB5irQA+RasEiJjpy8OQq
+         xi7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682384761; x=1684976761;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wrCAPeEXhKwKO/yYGy9jgCOEwKGr1fHsPVPzH+QsoQs=;
+        b=MtQCg627S/soPwOs03Nkcm8OnTgaqw+hM04chqW4XzaAqkvtU3qfE3eoj1XJ1hB8J5
+         5JMC2I1+EGUoh6deV7XWXpXNQRA+Gu+zDbeYi4H6NySzGzDclDSvSd47APOU3x6+5Bqz
+         M6aTaCZvonYyEvlGOIrRBB6Ugf/z7pOXOdMrTR1UKBBHCHzOZdoaGJgARNJ4OYNvR6b/
+         mc/h/S0CyVFmzM/QLEcNadlX54taJOV2zI1EWCpquro1EBrBXLs5XN45YOL9dmIzs37k
+         V9qW88j4XQ5W+E3Fie925yacHX2czkK4ZMfT8eShULDu5d5Ii70eMkwFiFW4aKLvaidh
+         Dc1Q==
+X-Gm-Message-State: AAQBX9eO5TMfdMzLoqT62+tPINAo+eCQioVOyQUQh5RnqiEvfdDBOFUm
+        JYLoJLimguxRmhs7vqHZB/g=
+X-Google-Smtp-Source: AKy350ZKKEzwv82QiHFoPFRuqCyiUrmaGrxijZ7bf1D8FVpCDIvl8ezphoghTsA9cC+A9h6vNpqutw==
+X-Received: by 2002:a05:6a00:a06:b0:63b:5c82:e209 with SMTP id p6-20020a056a000a0600b0063b5c82e209mr25149281pfh.10.1682384760840;
+        Mon, 24 Apr 2023 18:06:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w66-20020a628245000000b0063f16daf7dbsm6423564pfd.55.2023.04.24.18.06.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Apr 2023 18:06:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 24 Apr 2023 18:05:59 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
+Message-ID: <6756ff45-c2f9-4689-8d31-87fa8337eb47@roeck-us.net>
+References: <20230424131133.829259077@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 10/11] drm/msm/dpu: tweak lm pairings in msm8998 hw
- catalog
-Content-Language: en-US
-To:     Arnaud Vrac <avrac@freebox.fr>, Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-10-d1bac46db075@freebox.fr>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230419-dpu-tweaks-v1-10-d1bac46db075@freebox.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cen5c6kz_CXqYbcHoGqWuE6EWoaM8ddI
-X-Proofpoint-GUID: cen5c6kz_CXqYbcHoGqWuE6EWoaM8ddI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-24_12,2023-04-21_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0
- mlxlogscore=826 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304250008
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/19/2023 7:41 AM, Arnaud Vrac wrote:
-> Change lm blocks pairs so that lm blocks with the same features are
-> paired together:
+On Mon, Apr 24, 2023 at 03:16:23PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.26 release.
+> There are 98 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> LM_0 and LM_1 with PP and DSPP
-> LM_2 and LM_5 with PP
-> LM_3 and LM_4
+> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
+> Anything received after that time might be too late.
 > 
-> This matches the sdm845 configuration and allows using pp or dspp when 2
-> lm blocks are needed in the topology. In the previous config the
-> reservation code could never find an lm pair without a matching feature
-> set.
-> 
-> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 519 pass: 519 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
