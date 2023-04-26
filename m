@@ -2,1205 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F186EEEB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F826EEEB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbjDZG7d convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 02:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S239436AbjDZHAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239689AbjDZG7Q (ORCPT
+        with ESMTP id S239405AbjDZHAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:59:16 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A9A30FD;
-        Tue, 25 Apr 2023 23:59:09 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id CC10024E292;
-        Wed, 26 Apr 2023 14:59:07 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 14:59:07 +0800
-Received: from ubuntu.localdomain (202.188.176.82) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 14:59:04 +0800
-From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Emil Renner Berthing <kernel@esmil.dk>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v6 4/4] crypto: starfive - Add hash and HMAC support
-Date:   Wed, 26 Apr 2023 14:58:48 +0800
-Message-ID: <20230426065848.842221-5-jiajie.ho@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230426065848.842221-1-jiajie.ho@starfivetech.com>
-References: <20230426065848.842221-1-jiajie.ho@starfivetech.com>
+        Wed, 26 Apr 2023 03:00:22 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F24D3A84
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:59:55 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f0a2f8216fso324691cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682492386; x=1685084386;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4LOs2mXrfKvRqHFcT1NlSXMhXo1yjASmujpZaX9dLE=;
+        b=d2qg8bW4L7+sZ6lMaHo2jAvzI05vYqIL4KOSyuSCdyaK0mrEQxR7jJ8NdYDVnCnNsK
+         /C9w9w7kLri0M48Djyw0NOyMEfuigZHTXsthTevnIRAojZJ2uvl7VhrLiHwVxOKnK4Ap
+         iS6x+CWWSOUJg2BqOEuxnM/U6AE0sDNxiNHGxNkAmn0t+KGqhxleUW8KnwQqfcueS71q
+         I/UgJrMnD5eMTi8h9nReTdra045UCEoLvmbDsk4OJItEPh3Y3xlzax3nEP3B2E97dm8F
+         ttKPDt5X/VayLyP7tcGK/er/7BxyCKhhcSeNQ2I2O2yF0Rsz5z3hAmpA9Xxdes5Vg2X0
+         hT2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682492386; x=1685084386;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c4LOs2mXrfKvRqHFcT1NlSXMhXo1yjASmujpZaX9dLE=;
+        b=aCCFQq8P5A4fkwxvu3qX4RjLiPk36KpiFlOC+KcxA31XGxaCkcfrBL+kKSEh0nrskL
+         6iewPJL1OCZYROfTliN9Zd0wCYq6wU1F6Rw7gTFYZyWW57SZkVuSk4nQoIPc1iLUb3f9
+         DyYvkq5Is5Is1GTWP7M01UOyzdk0EB60sRlINVTqPPbWzbuUGlDx92n/JMKfIMAjFaJb
+         xZYcuTqKJ5H4Jou5ixZfUO+nzl9CdhU//fHuDNP+q2aNHAjl10jxlWdMPz3Sp9kj+axg
+         9YT8iEAOH3EQ7sdVnj5mZumrutQFuko4DLYo4luAIiUrpo1wGmTowvmJZ2gnj4BGhA7v
+         y3Mg==
+X-Gm-Message-State: AC+VfDxhvnhB0gK72bpItrWVDWk1ZLhttAJdc+P8K0efMn86G7FckRCA
+        rbVOl+pRbGwVrblUnzvnOTsiPMb046ZE8L7gPF9YJg==
+X-Google-Smtp-Source: ACHHUZ7sKCXKKQ5wsKGzwE3wwMMEaGOH5X9vxpZUwPyE5G5/6COsZjgbsAYbToDVkoi8cphmVTXkX19ZuZ/SOELDI10=
+X-Received: by 2002:ac8:5f90:0:b0:3f0:af20:1a37 with SMTP id
+ j16-20020ac85f90000000b003f0af201a37mr156621qta.15.1682492386401; Tue, 25 Apr
+ 2023 23:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [202.188.176.82]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230421084226.2278282-1-davidgow@google.com> <20230421084226.2278282-2-davidgow@google.com>
+ <CAGS_qxp72dSbE9ZD7EyQ-JvXWucMs=LcX7uM1MAYL5oF_mtzgA@mail.gmail.com>
+In-Reply-To: <CAGS_qxp72dSbE9ZD7EyQ-JvXWucMs=LcX7uM1MAYL5oF_mtzgA@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 26 Apr 2023 14:59:35 +0800
+Message-ID: <CABVgOSkH+Nfjg3JeRc0My=8tVF4rXe7YL+_K6ExC_u4eDcvJLA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] kunit: Add kunit_add_action() to defer a call
+ until test exit
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000000d718605fa37c953"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding hash/HMAC support for SHA-2 and SM3 to StarFive cryptographic
-module.
+--0000000000000d718605fa37c953
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Co-developed-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
----
- drivers/crypto/starfive/Kconfig       |   4 +
- drivers/crypto/starfive/Makefile      |   2 +-
- drivers/crypto/starfive/jh7110-cryp.c |  38 ++
- drivers/crypto/starfive/jh7110-cryp.h |  70 +-
- drivers/crypto/starfive/jh7110-hash.c | 896 ++++++++++++++++++++++++++
- 5 files changed, 1006 insertions(+), 4 deletions(-)
- create mode 100644 drivers/crypto/starfive/jh7110-hash.c
+On Wed, 26 Apr 2023 at 10:12, Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Fri, Apr 21, 2023 at 1:42=E2=80=AFAM David Gow <davidgow@google.com> w=
+rote:
+> >
+> > Many uses of the KUnit resource system are intended to simply defer
+> > calling a function until the test exits (be it due to success or
+> > failure). The existing kunit_alloc_resource() function is often used fo=
+r
+> > this, but was awkward to use (requiring passing NULL init functions, et=
+c),
+> > and returned a resource without incrementing its reference count, which
+> > -- while okay for this use-case -- could cause problems in others.
+> >
+> > Instead, introduce a simple kunit_add_action() API: a simple function
+> > (returning nothing, accepting a single void* argument) can be scheduled
+> > to be called when the test exits. Deferred actions are called in the
+> > opposite order to that which they were registered.
+> >
+> > This mimics the devres API, devm_add_action(), and also provides
+> > kunit_remove_action(), to cancel a deferred action, and
+> > kunit_release_action() to trigger one early.
+>
+> Apologies for the delayed bikeshedding.
+>
+> I think mimicking the devres API is a better idea than kunit_defer()
+> and friends.
+> But I can't help but think this still isn't the best name.
+> I personally would have no idea what `kunit_release_action()` does
+> without looking it up.
+>
+> I feel like `kunit_add_cleanup()` probably works better for a unit
+> test framework.
+> I think `kunit_remove_cleanup()` is fine and `kunit_release_cleanup()`
+> is questionably ok.
+> Instead of `release`, maybe it should be `kunit_trigger_cleanup()` or
+> more verbosely, something like `kunit_early_trigger_cleanup()`.
 
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-index 73f39b6bc09f..cde485910f88 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -6,6 +6,10 @@ config CRYPTO_DEV_JH7110
- 	tristate "StarFive JH7110 cryptographic engine driver"
- 	depends on SOC_STARFIVE
- 	select CRYPTO_ENGINE
-+	select CRYPTO_HMAC
-+	select CRYPTO_SHA256
-+	select CRYPTO_SHA512
-+	select CRYPTO_SM3_GENERIC
- 	select ARM_AMBA
- 	select DMADEVICES
- 	select AMBA_PL08X
-diff --git a/drivers/crypto/starfive/Makefile b/drivers/crypto/starfive/Makefile
-index 41221acaee39..2af49062e36d 100644
---- a/drivers/crypto/starfive/Makefile
-+++ b/drivers/crypto/starfive/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_CRYPTO_DEV_JH7110) += jh7110-crypto.o
--jh7110-crypto-objs := jh7110-cryp.o
-+jh7110-crypto-objs := jh7110-cryp.o jh7110-hash.o
-diff --git a/drivers/crypto/starfive/jh7110-cryp.c b/drivers/crypto/starfive/jh7110-cryp.c
-index a944897609a2..8ce8c0859e1c 100644
---- a/drivers/crypto/starfive/jh7110-cryp.c
-+++ b/drivers/crypto/starfive/jh7110-cryp.c
-@@ -82,10 +82,25 @@ static void starfive_dma_cleanup(struct starfive_cryp_dev *cryp)
- 	dma_release_channel(cryp->rx);
- }
- 
-+static irqreturn_t starfive_cryp_irq(int irq, void *priv)
-+{
-+	u32 status;
-+	struct starfive_cryp_dev *cryp = (struct starfive_cryp_dev *)priv;
-+
-+	status = readl(cryp->base + STARFIVE_IE_FLAG_OFFSET);
-+	if (status & STARFIVE_IE_FLAG_HASH_DONE) {
-+		writel(STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		tasklet_schedule(&cryp->hash_done);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int starfive_cryp_probe(struct platform_device *pdev)
- {
- 	struct starfive_cryp_dev *cryp;
- 	struct resource *res;
-+	int irq;
- 	int ret;
- 
- 	cryp = devm_kzalloc(&pdev->dev, sizeof(*cryp), GFP_KERNEL);
-@@ -100,6 +115,8 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(cryp->base),
- 				     "Error remapping memory for platform device\n");
- 
-+	tasklet_init(&cryp->hash_done, starfive_hash_done_task, (unsigned long)cryp);
-+
- 	cryp->phys_base = res->start;
- 	cryp->dma_maxburst = 32;
- 
-@@ -118,6 +135,16 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(cryp->rst),
- 				     "Error getting hardware reset line\n");
- 
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_irq(&pdev->dev, irq, starfive_cryp_irq, 0, pdev->name,
-+			       (void *)cryp);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, irq,
-+				     "Failed to register interrupt handler\n");
-+
- 	clk_prepare_enable(cryp->hclk);
- 	clk_prepare_enable(cryp->ahb);
- 	reset_control_deassert(cryp->rst);
-@@ -141,8 +168,14 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_engine_start;
- 
-+	ret = starfive_hash_register_algs();
-+	if (ret)
-+		goto err_algs_hash;
-+
- 	return 0;
- 
-+err_algs_hash:
-+	crypto_engine_stop(cryp->engine);
- err_engine_start:
- 	crypto_engine_exit(cryp->engine);
- err_engine:
-@@ -151,6 +184,7 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 	spin_lock(&dev_list.lock);
- 	list_del(&cryp->list);
- 	spin_unlock(&dev_list.lock);
-+	tasklet_kill(&cryp->hash_done);
- 
- 	return ret;
- }
-@@ -162,6 +196,10 @@ static int starfive_cryp_remove(struct platform_device *pdev)
- 	if (!cryp)
- 		return -ENODEV;
- 
-+	starfive_hash_unregister_algs();
-+
-+	tasklet_kill(&cryp->hash_done);
-+
- 	crypto_engine_stop(cryp->engine);
- 	crypto_engine_exit(cryp->engine);
- 
-diff --git a/drivers/crypto/starfive/jh7110-cryp.h b/drivers/crypto/starfive/jh7110-cryp.h
-index 393efd38b098..7a589f6eca14 100644
---- a/drivers/crypto/starfive/jh7110-cryp.h
-+++ b/drivers/crypto/starfive/jh7110-cryp.h
-@@ -7,6 +7,8 @@
- #include <linux/dmaengine.h>
- 
- #include <crypto/engine.h>
-+#include <crypto/sha2.h>
-+#include <crypto/sm3.h>
- 
- #define STARFIVE_ALG_CR_OFFSET			0x0
- #define STARFIVE_ALG_FIFO_OFFSET		0x4
-@@ -15,7 +17,43 @@
- #define STARFIVE_DMA_IN_LEN_OFFSET		0x10
- #define STARFIVE_DMA_OUT_LEN_OFFSET		0x14
- 
-+#define STARFIVE_IE_MASK_HASH_DONE		BIT(2)
-+#define STARFIVE_IE_FLAG_HASH_DONE		BIT(2)
-+
- #define STARFIVE_MSG_BUFFER_SIZE		SZ_16K
-+#define MAX_KEY_SIZE				SHA512_BLOCK_SIZE
-+
-+union starfive_hash_csr {
-+	u32 v;
-+	struct {
-+		u32 start			:1;
-+		u32 reset			:1;
-+		u32 ie				:1;
-+		u32 firstb			:1;
-+#define STARFIVE_HASH_SM3			0x0
-+#define STARFIVE_HASH_SHA224			0x3
-+#define STARFIVE_HASH_SHA256			0x4
-+#define STARFIVE_HASH_SHA384			0x5
-+#define STARFIVE_HASH_SHA512			0x6
-+#define STARFIVE_HASH_MODE_MASK			0x7
-+		u32 mode			:3;
-+		u32 rsvd_1			:1;
-+		u32 final			:1;
-+		u32 rsvd_2			:2;
-+#define STARFIVE_HASH_HMAC_FLAGS		0x800
-+		u32 hmac			:1;
-+		u32 rsvd_3			:1;
-+#define STARFIVE_HASH_KEY_DONE			BIT(13)
-+		u32 key_done			:1;
-+		u32 key_flag			:1;
-+		u32 hmac_done			:1;
-+#define STARFIVE_HASH_BUSY			BIT(16)
-+		u32 busy			:1;
-+		u32 hashdone			:1;
-+		u32 rsvd_4			:14;
-+	};
-+};
-+
- 
- union starfive_alg_cr {
- 	u32 v;
-@@ -34,12 +72,18 @@ union starfive_alg_cr {
- struct starfive_cryp_ctx {
- 	struct crypto_engine_ctx		enginectx;
- 	struct starfive_cryp_dev		*cryp;
-+	struct starfive_cryp_request_ctx	*rctx;
-+
-+	unsigned int				hash_mode;
-+	u8					key[MAX_KEY_SIZE];
-+	int					keylen;
-+	bool					is_hmac;
-+	struct crypto_ahash			*ahash_fbk;
- };
- 
- struct starfive_cryp_dev {
- 	struct list_head			list;
- 	struct device				*dev;
--
- 	struct clk				*hclk;
- 	struct clk				*ahb;
- 	struct reset_control			*rst;
-@@ -52,12 +96,32 @@ struct starfive_cryp_dev {
- 	struct dma_chan				*rx;
- 	struct dma_slave_config			cfg_in;
- 	struct dma_slave_config			cfg_out;
--
- 	struct crypto_engine			*engine;
--
-+	struct tasklet_struct			hash_done;
-+	int					err;
- 	union starfive_alg_cr			alg_cr;
-+	union {
-+		struct ahash_request		*hreq;
-+	} req;
-+};
-+
-+struct starfive_cryp_request_ctx {
-+	union {
-+		union starfive_hash_csr		hash;
-+	} csr;
-+
-+	struct scatterlist			*in_sg;
-+	struct ahash_request			ahash_fbk_req;
-+	size_t					total;
-+	unsigned int				blksize;
-+	unsigned int				digsize;
-+	unsigned long				in_sg_len;
- };
- 
- struct starfive_cryp_dev *starfive_cryp_find_dev(struct starfive_cryp_ctx *ctx);
- 
-+int starfive_hash_register_algs(void);
-+void starfive_hash_unregister_algs(void);
-+
-+void starfive_hash_done_task(unsigned long param);
- #endif
-diff --git a/drivers/crypto/starfive/jh7110-hash.c b/drivers/crypto/starfive/jh7110-hash.c
-new file mode 100644
-index 000000000000..5081abe4f5d6
---- /dev/null
-+++ b/drivers/crypto/starfive/jh7110-hash.c
-@@ -0,0 +1,896 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hash function and HMAC support for StarFive driver
-+ *
-+ * Copyright (c) 2022 StarFive Technology
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/crypto.h>
-+#include <linux/dma-direct.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/amba/pl080.h>
-+
-+#include <crypto/hash.h>
-+#include <crypto/scatterwalk.h>
-+#include <crypto/internal/hash.h>
-+
-+#include "jh7110-cryp.h"
-+
-+#define STARFIVE_HASH_REGS_OFFSET	0x300
-+#define STARFIVE_HASH_SHACSR		(STARFIVE_HASH_REGS_OFFSET + 0x0)
-+#define STARFIVE_HASH_SHAWDR		(STARFIVE_HASH_REGS_OFFSET + 0x4)
-+#define STARFIVE_HASH_SHARDR		(STARFIVE_HASH_REGS_OFFSET + 0x8)
-+#define STARFIVE_HASH_SHAWSR		(STARFIVE_HASH_REGS_OFFSET + 0xC)
-+#define STARFIVE_HASH_SHAWLEN3		(STARFIVE_HASH_REGS_OFFSET + 0x10)
-+#define STARFIVE_HASH_SHAWLEN2		(STARFIVE_HASH_REGS_OFFSET + 0x14)
-+#define STARFIVE_HASH_SHAWLEN1		(STARFIVE_HASH_REGS_OFFSET + 0x18)
-+#define STARFIVE_HASH_SHAWLEN0		(STARFIVE_HASH_REGS_OFFSET + 0x1C)
-+#define STARFIVE_HASH_SHAWKR		(STARFIVE_HASH_REGS_OFFSET + 0x20)
-+#define STARFIVE_HASH_SHAWKLEN		(STARFIVE_HASH_REGS_OFFSET + 0x24)
-+
-+#define STARFIVE_HASH_BUFLEN		SHA512_BLOCK_SIZE
-+
-+static inline int starfive_hash_wait_busy(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	u32 status;
-+
-+	return readl_relaxed_poll_timeout(cryp->base + STARFIVE_HASH_SHACSR, status,
-+					  !(status & STARFIVE_HASH_BUSY), 10, 100000);
-+}
-+
-+static inline int starfive_hash_wait_key_done(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	u32 status;
-+
-+	return readl_relaxed_poll_timeout(cryp->base + STARFIVE_HASH_SHACSR, status,
-+					  (status & STARFIVE_HASH_KEY_DONE), 10, 100000);
-+}
-+
-+static int starfive_hash_hmac_key(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	int klen = ctx->keylen, loop;
-+	unsigned int *key = (unsigned int *)ctx->key;
-+	unsigned char *cl;
-+
-+	writel(ctx->keylen, cryp->base + STARFIVE_HASH_SHAWKLEN);
-+
-+	rctx->csr.hash.hmac = 1;
-+	rctx->csr.hash.key_flag = 1;
-+
-+	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+
-+	for (loop = 0; loop < klen / sizeof(unsigned int); loop++, key++)
-+		writel(*key, cryp->base + STARFIVE_HASH_SHAWKR);
-+
-+	if (klen & 0x3) {
-+		cl = (unsigned char *)key;
-+		for (loop = 0; loop < (klen & 0x3); loop++, cl++)
-+			writeb(*cl, cryp->base + STARFIVE_HASH_SHAWKR);
-+	}
-+
-+	if (starfive_hash_wait_key_done(ctx))
-+		return dev_err_probe(cryp->dev, -ETIMEDOUT, "starfive_hash_wait_key_done error\n");
-+
-+	return 0;
-+}
-+
-+static void starfive_hash_start(void *param)
-+{
-+	struct starfive_cryp_ctx *ctx = param;
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	union starfive_alg_cr alg_cr;
-+	union starfive_hash_csr csr;
-+
-+	dma_unmap_sg(cryp->dev, rctx->in_sg, rctx->in_sg_len, DMA_TO_DEVICE);
-+
-+	alg_cr.v = 0;
-+	alg_cr.clear = 1;
-+
-+	writel(alg_cr.v, cryp->base + STARFIVE_ALG_CR_OFFSET);
-+
-+	csr.v = readl(cryp->base + STARFIVE_HASH_SHACSR);
-+	csr.firstb = 0;
-+	csr.final = 1;
-+
-+	writel(~STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+	writel(csr.v, cryp->base + STARFIVE_HASH_SHACSR);
-+}
-+
-+static int starfive_hash_xmit_dma(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct dma_async_tx_descriptor	*in_desc;
-+	union  starfive_alg_cr alg_cr;
-+	int total_len;
-+	int ret;
-+
-+	if (!rctx->total) {
-+		starfive_hash_start(ctx);
-+		return 0;
-+	}
-+
-+	writel(rctx->total, cryp->base + STARFIVE_DMA_IN_LEN_OFFSET);
-+
-+	total_len = rctx->total;
-+	total_len = (total_len & 0x3) ? (((total_len >> 2) + 1) << 2) : total_len;
-+	sg_dma_len(rctx->in_sg) = total_len;
-+
-+	alg_cr.v = 0;
-+	alg_cr.start = 1;
-+	alg_cr.hash_dma_en = 1;
-+
-+	writel(alg_cr.v, cryp->base + STARFIVE_ALG_CR_OFFSET);
-+
-+	ret = dma_map_sg(cryp->dev, rctx->in_sg, rctx->in_sg_len, DMA_TO_DEVICE);
-+	if (!ret)
-+		return dev_err_probe(cryp->dev, -EINVAL, "dma_map_sg() error\n");
-+
-+	cryp->cfg_in.direction = DMA_MEM_TO_DEV;
-+	cryp->cfg_in.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cryp->cfg_in.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cryp->cfg_in.src_maxburst = cryp->dma_maxburst;
-+	cryp->cfg_in.dst_maxburst = cryp->dma_maxburst;
-+	cryp->cfg_in.dst_addr = cryp->phys_base + STARFIVE_ALG_FIFO_OFFSET;
-+
-+	dmaengine_slave_config(cryp->tx, &cryp->cfg_in);
-+
-+	in_desc = dmaengine_prep_slave_sg(cryp->tx, rctx->in_sg,
-+					  ret, DMA_MEM_TO_DEV,
-+					  DMA_PREP_INTERRUPT  |  DMA_CTRL_ACK);
-+
-+	if (!in_desc)
-+		return -EINVAL;
-+
-+	in_desc->callback = starfive_hash_start;
-+	in_desc->callback_param = ctx;
-+
-+	dmaengine_submit(in_desc);
-+	dma_async_issue_pending(cryp->tx);
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_xmit(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	int ret = 0;
-+
-+	rctx->csr.hash.v = 0;
-+	rctx->csr.hash.reset = 1;
-+	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+
-+	if (starfive_hash_wait_busy(ctx))
-+		return dev_err_probe(cryp->dev, -ETIMEDOUT, "Error resetting engine.\n");
-+
-+	rctx->csr.hash.v = 0;
-+	rctx->csr.hash.mode = ctx->hash_mode;
-+	rctx->csr.hash.ie = 1;
-+
-+	if (ctx->is_hmac) {
-+		ret = starfive_hash_hmac_key(ctx);
-+		if (ret)
-+			return ret;
-+	} else {
-+		rctx->csr.hash.start = 1;
-+		rctx->csr.hash.firstb = 1;
-+		writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+	}
-+
-+	return starfive_hash_xmit_dma(ctx);
-+}
-+
-+static int starfive_hash_copy_hash(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	int count, *data;
-+	int mlen;
-+
-+	if (!req->result)
-+		return 0;
-+
-+	mlen = rctx->digsize / sizeof(u32);
-+	data = (u32 *)req->result;
-+
-+	for (count = 0; count < mlen; count++)
-+		data[count] = readl(ctx->cryp->base + STARFIVE_HASH_SHARDR);
-+
-+	return 0;
-+}
-+
-+void starfive_hash_done_task(unsigned long param)
-+{
-+	struct starfive_cryp_dev *cryp = (struct starfive_cryp_dev *)param;
-+	int err = cryp->err;
-+
-+	if (!err)
-+		err = starfive_hash_copy_hash(cryp->req.hreq);
-+
-+	crypto_finalize_hash_request(cryp->engine, cryp->req.hreq, err);
-+}
-+
-+static int starfive_hash_check_aligned(struct scatterlist *sg, size_t total, size_t align)
-+{
-+	int len = 0;
-+
-+	if (!total)
-+		return 0;
-+
-+	if (!IS_ALIGNED(total, align))
-+		return -EINVAL;
-+
-+	while (sg) {
-+		if (!IS_ALIGNED(sg->offset, sizeof(u32)))
-+			return -EINVAL;
-+
-+		if (!IS_ALIGNED(sg->length, align))
-+			return -EINVAL;
-+
-+		len += sg->length;
-+		sg = sg_next(sg);
-+	}
-+
-+	if (len != total)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_one_request(struct crypto_engine *engine, void *areq)
-+{
-+	struct ahash_request *req = container_of(areq, struct ahash_request,
-+						 base);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+
-+	if (!cryp)
-+		return -ENODEV;
-+
-+	return starfive_hash_xmit(ctx);
-+}
-+
-+static int starfive_hash_init(struct ahash_request *req)
-+{
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-+				req->result, req->nbytes);
-+
-+	return crypto_ahash_init(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_update(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-+				req->result, req->nbytes);
-+
-+	return crypto_ahash_update(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_final(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-+				req->result, req->nbytes);
-+
-+	return crypto_ahash_final(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_finup(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-+				req->result, req->nbytes);
-+
-+	return crypto_ahash_finup(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_digest_fb(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req, req->base.flags,
-+				   req->base.complete, req->base.data);
-+
-+	ahash_request_set_crypt(&rctx->ahash_fbk_req, req->src,
-+				req->result, req->nbytes);
-+
-+	return crypto_ahash_digest(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_digest(struct ahash_request *req)
-+{
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+
-+	memset(rctx, 0, sizeof(struct starfive_cryp_request_ctx));
-+
-+	cryp->req.hreq = req;
-+	rctx->total = req->nbytes;
-+	rctx->in_sg = req->src;
-+	rctx->blksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	rctx->digsize = crypto_ahash_digestsize(tfm);
-+	rctx->in_sg_len = sg_nents_for_len(rctx->in_sg, rctx->total);
-+	ctx->rctx = rctx;
-+
-+	if (starfive_hash_check_aligned(rctx->in_sg, rctx->total, rctx->blksize))
-+		return starfive_hash_digest_fb(req);
-+
-+	return crypto_transfer_hash_request_to_engine(cryp->engine, req);
-+}
-+
-+static int starfive_hash_export(struct ahash_request *req, void *out)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	return crypto_ahash_export(&rctx->ahash_fbk_req, out);
-+}
-+
-+static int starfive_hash_import(struct ahash_request *req, const void *in)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	ahash_request_set_callback(&rctx->ahash_fbk_req,
-+				   req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP,
-+				   req->base.complete, req->base.data);
-+
-+	return crypto_ahash_import(&rctx->ahash_fbk_req, in);
-+}
-+
-+static int starfive_hash_init_tfm(struct crypto_ahash *hash,
-+				  const char *alg_name,
-+				  unsigned int mode)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->cryp = starfive_cryp_find_dev(ctx);
-+
-+	if (!ctx->cryp)
-+		return -ENODEV;
-+
-+	ctx->ahash_fbk = crypto_alloc_ahash(alg_name, 0,
-+					    CRYPTO_ALG_NEED_FALLBACK);
-+
-+	if (IS_ERR(ctx->ahash_fbk))
-+		return dev_err_probe(ctx->cryp->dev, PTR_ERR(ctx->ahash_fbk),
-+				     "starfive_hash: Could not load fallback driver.\n");
-+
-+	crypto_ahash_set_statesize(hash, crypto_ahash_statesize(ctx->ahash_fbk));
-+	crypto_ahash_set_reqsize(hash, sizeof(struct starfive_cryp_request_ctx) +
-+				 crypto_ahash_reqsize(ctx->ahash_fbk));
-+
-+	ctx->keylen = 0;
-+	ctx->hash_mode = mode;
-+
-+	ctx->enginectx.op.do_one_request = starfive_hash_one_request;
-+	ctx->enginectx.op.prepare_request = NULL;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+
-+	return 0;
-+}
-+
-+static void starfive_hash_exit_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	crypto_free_ahash(ctx->ahash_fbk);
-+
-+	ctx->ahash_fbk = NULL;
-+	ctx->enginectx.op.do_one_request = NULL;
-+	ctx->enginectx.op.prepare_request = NULL;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+}
-+
-+static int starfive_hash_long_setkey(struct starfive_cryp_ctx *ctx,
-+				     const u8 *key, unsigned int keylen,
-+				     const char *alg_name)
-+{
-+	struct crypto_wait wait;
-+	struct ahash_request *req;
-+	struct scatterlist sg;
-+	struct crypto_ahash *ahash_tfm;
-+	u8 *buf;
-+	int ret;
-+
-+	ahash_tfm = crypto_alloc_ahash(alg_name, 0, 0);
-+	if (IS_ERR(ahash_tfm))
-+		return PTR_ERR(ahash_tfm);
-+
-+	req = ahash_request_alloc(ahash_tfm, GFP_KERNEL);
-+	if (!req) {
-+		ret = -ENOMEM;
-+		goto err_free_ahash;
-+	}
-+
-+	crypto_init_wait(&wait);
-+	ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-+				   crypto_req_done, &wait);
-+	crypto_ahash_clear_flags(ahash_tfm, ~0);
-+
-+	buf = kzalloc(keylen + STARFIVE_HASH_BUFLEN, GFP_KERNEL);
-+	if (!buf) {
-+		ret = -ENOMEM;
-+		goto err_free_req;
-+	}
-+
-+	memcpy(buf, key, keylen);
-+	sg_init_one(&sg, buf, keylen);
-+	ahash_request_set_crypt(req, &sg, ctx->key, keylen);
-+
-+	ret = crypto_wait_req(crypto_ahash_digest(req), &wait);
-+
-+	kfree(buf);
-+err_free_req:
-+	ahash_request_free(req);
-+err_free_ahash:
-+	crypto_free_ahash(ahash_tfm);
-+	return ret;
-+}
-+
-+static int starfive_hash_setkey(struct crypto_ahash *hash,
-+				const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+	unsigned int digestsize = crypto_ahash_digestsize(hash);
-+	unsigned int blocksize = crypto_ahash_blocksize(hash);
-+	const char *alg_name;
-+
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+		return 0;
-+	}
-+
-+	ctx->keylen = digestsize;
-+
-+	switch (digestsize) {
-+	case SHA224_DIGEST_SIZE:
-+		alg_name = "sha224-starfive";
-+		break;
-+	case SHA256_DIGEST_SIZE:
-+		if (ctx->hash_mode == STARFIVE_HASH_SM3)
-+			alg_name = "sm3-starfive";
-+		else
-+			alg_name = "sha256-starfive";
-+		break;
-+	case SHA384_DIGEST_SIZE:
-+		alg_name = "sha384-starfive";
-+		break;
-+	case SHA512_DIGEST_SIZE:
-+		alg_name = "sha512-starfive";
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return starfive_hash_long_setkey(ctx, key, keylen, alg_name);
-+}
-+
-+static int starfive_sha224_init_tfm(struct crypto_ahash *hash)
-+{
-+	return starfive_hash_init_tfm(hash, "sha224-generic",
-+				      STARFIVE_HASH_SHA224);
-+}
-+
-+static int starfive_sha256_init_tfm(struct crypto_ahash *hash)
-+{
-+	return starfive_hash_init_tfm(hash, "sha256-generic",
-+				      STARFIVE_HASH_SHA256);
-+}
-+
-+static int starfive_sha384_init_tfm(struct crypto_ahash *hash)
-+{
-+	return starfive_hash_init_tfm(hash, "sha384-generic",
-+				      STARFIVE_HASH_SHA384);
-+}
-+
-+static int starfive_sha512_init_tfm(struct crypto_ahash *hash)
-+{
-+	return starfive_hash_init_tfm(hash, "sha512-generic",
-+				      STARFIVE_HASH_SHA512);
-+}
-+
-+static int starfive_sm3_init_tfm(struct crypto_ahash *hash)
-+{
-+	return starfive_hash_init_tfm(hash, "sm3-generic",
-+				      STARFIVE_HASH_SM3);
-+}
-+
-+static int starfive_hmac_sha224_init_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->is_hmac = true;
-+
-+	return starfive_hash_init_tfm(hash, "hmac(sha224-generic)",
-+				      STARFIVE_HASH_SHA224);
-+}
-+
-+static int starfive_hmac_sha256_init_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->is_hmac = true;
-+
-+	return starfive_hash_init_tfm(hash, "hmac(sha256-generic)",
-+				      STARFIVE_HASH_SHA256);
-+}
-+
-+static int starfive_hmac_sha384_init_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->is_hmac = true;
-+
-+	return starfive_hash_init_tfm(hash, "hmac(sha384-generic)",
-+				      STARFIVE_HASH_SHA384);
-+}
-+
-+static int starfive_hmac_sha512_init_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->is_hmac = true;
-+
-+	return starfive_hash_init_tfm(hash, "hmac(sha512-generic)",
-+				      STARFIVE_HASH_SHA512);
-+}
-+
-+static int starfive_hmac_sm3_init_tfm(struct crypto_ahash *hash)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(hash);
-+
-+	ctx->is_hmac = true;
-+
-+	return starfive_hash_init_tfm(hash, "hmac(sm3-generic)",
-+				      STARFIVE_HASH_SM3);
-+}
-+
-+static struct ahash_alg algs_sha2_sm3[] = {
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_sha224_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.halg = {
-+		.digestsize = SHA224_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "sha224",
-+			.cra_driver_name	= "sha224-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA224_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_hmac_sha224_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.setkey   = starfive_hash_setkey,
-+	.halg = {
-+		.digestsize = SHA224_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "hmac(sha224)",
-+			.cra_driver_name	= "sha224-hmac-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA224_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_sha256_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.halg = {
-+		.digestsize = SHA256_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "sha256",
-+			.cra_driver_name	= "sha256-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA256_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_hmac_sha256_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.setkey   = starfive_hash_setkey,
-+	.halg = {
-+		.digestsize = SHA256_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "hmac(sha256)",
-+			.cra_driver_name	= "sha256-hmac-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA256_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_sha384_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.halg = {
-+		.digestsize = SHA384_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "sha384",
-+			.cra_driver_name	= "sha384-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA384_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_hmac_sha384_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.setkey   = starfive_hash_setkey,
-+	.halg = {
-+		.digestsize = SHA384_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "hmac(sha384)",
-+			.cra_driver_name	= "sha384-hmac-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA384_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_sha512_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.halg = {
-+		.digestsize = SHA512_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "sha512",
-+			.cra_driver_name	= "sha512-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA512_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_hmac_sha512_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.setkey   = starfive_hash_setkey,
-+	.halg = {
-+		.digestsize = SHA512_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "hmac(sha512)",
-+			.cra_driver_name	= "sha512-hmac-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA512_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.init_tfm = starfive_sm3_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.halg = {
-+		.digestsize = SM3_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sm3_state),
-+		.base = {
-+			.cra_name		= "sm3",
-+			.cra_driver_name	= "sm3-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SM3_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+}, {
-+	.init	  = starfive_hash_init,
-+	.update	  = starfive_hash_update,
-+	.final	  = starfive_hash_final,
-+	.finup	  = starfive_hash_finup,
-+	.digest	  = starfive_hash_digest,
-+	.export	  = starfive_hash_export,
-+	.import	  = starfive_hash_import,
-+	.init_tfm = starfive_hmac_sm3_init_tfm,
-+	.exit_tfm = starfive_hash_exit_tfm,
-+	.setkey	  = starfive_hash_setkey,
-+	.halg = {
-+		.digestsize = SM3_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sm3_state),
-+		.base = {
-+			.cra_name		= "hmac(sm3)",
-+			.cra_driver_name	= "sm3-hmac-starfive",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SM3_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+};
-+
-+int starfive_hash_register_algs(void)
-+{
-+	int ret = 0;
-+
-+	ret = crypto_register_ahashes(algs_sha2_sm3, ARRAY_SIZE(algs_sha2_sm3));
-+
-+	return ret;
-+}
-+
-+void starfive_hash_unregister_algs(void)
-+{
-+	crypto_unregister_ahashes(algs_sha2_sm3, ARRAY_SIZE(algs_sha2_sm3));
-+}
--- 
-2.25.1
+Hmm... While personally I prefer 'defer' or 'cleanup' to 'action' in
+isolation, I think the benefits of matching the devm_ API probably
+exceed the benefits of a slightly better name here.
 
+I'm less convinced by the _release_action() and _remove_action()
+names: I definitely think 'trigger' is more obvious here. I hope that,
+with some extra documentation, we can nevertheless make this
+consistent with devm_*, but it's definitely suboptimal.
+
+>
+> I tried to look for equivalents in other languages/frameworks:
+> * Rust and C++ rely on RAII, don't think they have equivalents in testing=
+ libs
+> * Python has `self.addCleanup()`,
+> https://docs.python.org/3/library/unittest.html#unittest.TestCase.addClea=
+nup
+> * Go has `t.Cleanup()`, https://pkg.go.dev/testing#T.Cleanup
+> * Looking at Zig since it also has a `defer`, I guess they just use
+> that, I don't see anything in
+> https://ziglang.org/documentation/master/std/#A;std:testing
+> * I know nothing about JUnit, but a quick search seems like they rely
+> on @After and @AfterClass annotations,
+> https://junit.org/junit4/javadoc/4.12/org/junit/After.html
+> * I know even less about HUnit, but it looks like it relies on
+> wrapping things via the IO monad,
+> https://hackage.haskell.org/package/HUnit-1.6.2.0/docs/Test-HUnit-Base.ht=
+ml#t:AssertionPredicate
+> * Since we were inspired by TAP, I tried to look at Perl, but didn't
+> immediately see anything that looked equivalent,
+> https://metacpan.org/pod/Test::Most
+>
+
+Thanks for putting that together. It looks like cleanup is the winner
+here, followed maybe by defer. I'd been using 'cleanup' to refer to
+the sum total of all deferred functions, resource free functions, and
+the test 'exit()' function (i.e., everything which runs after a failed
+assertion), so I don't want to totally confuse the issue.
+
+Regardless, it's probably worth at least having a mention in the
+documentation that these are referred to as a cleanup in
+Python/Go/etc, and are vaguely equivalent to 'defer' in Go and Zig.
+
+> >
+> > This is implemented as a resource under the hood, so the ordering
+> > between resource cleanup and deferred functions is maintained.
+> >
+> > Signed-off-by: David Gow <davidgow@google.com>
+> > ---
+>
+> <snip>
+>
+> > diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> > index c0d88b318e90..6db28cd43e9b 100644
+> > --- a/include/kunit/resource.h
+> > +++ b/include/kunit/resource.h
+> > @@ -387,4 +387,80 @@ static inline int kunit_destroy_named_resource(str=
+uct kunit *test,
+> >   */
+> >  void kunit_remove_resource(struct kunit *test, struct kunit_resource *=
+res);
+> >
+> > +
+> > +/**
+> > + * kunit_add_action() - Defer an 'action' (function call) until the te=
+st ends.
+> > + * @test: Test case to associate the action with.
+> > + * @func: The function to run on test exit
+> > + * @ctx: Data passed into @func
+> > + *
+> > + * Defer the execution of a function until the test exits, either norm=
+ally or
+> > + * due to a failure.  @ctx is passed as additional context. All functi=
+ons
+> > + * registered with kunit_add_action() will execute in the opposite ord=
+er to that
+> > + * they were registered in.
+> > + *
+> > + * This is useful for cleaning up allocated memory and resources.
+>
+> Re renaming to kunit_add_cleanup(), I think this makes writing the
+> comment easier.
+>
+> E.g.
+> - kunit_add_action() - Defer an 'action' (function call) until the test e=
+nds.
+> + kunit_add_cleanup() - Call a function when the test ends.
+> + ...
+> + This is useful for cleaning up allocated memory and resources.
+>
+
+Good point. I think we can probably use the better description here
+even if we don't rename the function.
+
+Cheers,
+-- David
+
+> Daniel
+
+--0000000000000d718605fa37c953
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAR
+Gc3rzK+mXUNoQqqxinWU2dcLuMetuAERGTASyxiJtDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MjYwNjU5NDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAkh0oiwSSXxpFu2uTDjOE
+RTmUVoQt67w0Ccpma1lY9qG3q+U8Bf9wnv+OevdrzIpEZlzFdDhBemUOjRUBexjXvTEX0Wb33c7N
+rBODcPjDlrTSWAs6VgA+ICOqJy57ny9HmvHmuqZYshKSGufKZjXo9yE0GSHZLQDqYp5pWp6YWdVI
+I8ic2gwyriwn8YqMbnUwWjtanh8sph2jlTeEdfuPsYp8s61GPnHK8SK1yoQDRf3100DA/QC4A3nt
+LS/cq5+bN6NQ3Fx+A4Y8GY41OJvhkxK8Z353YSK/uhApAFeb9PuCPwONF+7Vn9pNV88Og2fUlFAV
+RMHl1tp8DJdTXKOTNA==
+--0000000000000d718605fa37c953--
