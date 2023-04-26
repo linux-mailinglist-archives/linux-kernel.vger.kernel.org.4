@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F6A6EF0FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AC46EF108
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240177AbjDZJWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S240051AbjDZJYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 05:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbjDZJWA (ORCPT
+        with ESMTP id S239853AbjDZJYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:22:00 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5576E4EFA
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:21:26 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52863157da6so1867798a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google; t=1682500883; x=1685092883;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GxCxYUQlhPobw2YaHoERc69tjdRgnWZj+VY019M7IAU=;
-        b=bvIR4KnC6Zzuh+3JQCJs7pwK+l2c7ezp/MVII5CzoKt4+A0E4ZCFlR3a0kINPtS4fV
-         wVp3TgxR2yflOIBxLS54ClrNOoCyuLo8DjlI27JjjGofJTPkxXV3lt6/3eImb3oNB1e7
-         /tTiuHOD91z6eabm5UZDAS6MhKxEDAharqs0EDXaiA7EeOu2nemA1yso+E3ylmi0Z3OB
-         HUD4AHDkUNOWWW+NosZX3VFbqHzw52V1wH0h2cumFO2J1Bd79VUORFfRPo82UqBI6gLZ
-         16kiRHo47w92iCszX7j/YxJRJENN/qDaFty7iUHaRDH1od8Qa6/HHsNW5Wk9aZBHhEaT
-         SBYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682500883; x=1685092883;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GxCxYUQlhPobw2YaHoERc69tjdRgnWZj+VY019M7IAU=;
-        b=LajUY2zLhkIbwt0dVdjnwkppNlfT8fYki/hqRLLnxcvI3eYshWyRFFnSAWnbGMbTKK
-         m+M+nkO1BDTq0EyfAJs0ULizS4JVCGTHS78AHkO1q14TJy2WtbBfYd/0vtRRKj56bEV2
-         dT/SW47edLwA/n6R3c58WmqYtDR4JcIqfqpIyuEjt8twrcK/4VTKeHw1LdwYoY6JLcfZ
-         ZnlGgLa53iLh4p6DBs6DGo+E9pHkIqDRbJCNieUfEUijZE6rEfSMpMjmchurHfVza2CD
-         OaAv9uYYlXlUuVeENsPQsU++2SETCD3GYCksBvySYioWXyb49vopjctZCXDG0S6qHN/p
-         d8BQ==
-X-Gm-Message-State: AAQBX9csKL0n5zzcyIPEtE1E7Q0muSpnD/3+AMaL04MS4VUtF66+TkVV
-        FDGzZAouWkx7foHgXwkWvv/B4Q==
-X-Google-Smtp-Source: AKy350YkLfCKdwJFqWdBbiclvdhiSi9Ia1cb+z/3icUJQz9gfl++MYJ55Q6nVFyZ75K6+8fIBbqF/Q==
-X-Received: by 2002:a05:6a20:8e10:b0:f3:168f:4c52 with SMTP id y16-20020a056a208e1000b000f3168f4c52mr17386642pzj.25.1682500883243;
-        Wed, 26 Apr 2023 02:21:23 -0700 (PDT)
-Received: from ?IPV6:2405:201:d02f:d855:461d:14be:2cce:b776? ([2405:201:d02f:d855:461d:14be:2cce:b776])
-        by smtp.gmail.com with ESMTPSA id q22-20020a63e956000000b005033e653a17sm9384884pgj.85.2023.04.26.02.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 02:21:22 -0700 (PDT)
-Message-ID: <f966a8df-6998-f6f1-cc3c-fa92e1d5d34b@9elements.com>
-Date:   Wed, 26 Apr 2023 14:51:20 +0530
+        Wed, 26 Apr 2023 05:24:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7A4EF2;
+        Wed, 26 Apr 2023 02:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682501031; x=1714037031;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wCxv9UpBjUg+nIFCxpugJDt198ixgLIiNE9cs8ZnPjI=;
+  b=gbo8BJzUOiGtcxcpZfxUCn8122q8i5IrCEm9sANMHeAVHldTiG8f74QB
+   cuhGLFI/aIWlvrjGn1J7eRUyLDRgKf9OBu1SpGUzfn2soUc1ZuFvijpua
+   35sV/ZC7CricK9MDnHa7dskzwI1/rWjqsPL+drc1i4os4kitidNrmMHcM
+   EA+kL5ra3GltC0ahCKNn/tWvdPKRcM/Ym/YzyTNe9sXCOnqu53ICfj7mF
+   2MVbRPzoON09iogyDYObFCvahH8jyW/IL9XdIz67guvgIqV79+SMO7aa7
+   0dQGuSDSBW3WaUO9hqrj5VWHX8WY/qLG/Nw5hDOsyLXvHJwedpX+abvSs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="433337103"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="433337103"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 02:22:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="818044970"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="818044970"
+Received: from lkp-server01.sh.intel.com (HELO 98ee5a99fc83) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 26 Apr 2023 02:22:48 -0700
+Received: from kbuild by 98ee5a99fc83 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prbMI-0000Ki-1T;
+        Wed, 26 Apr 2023 09:22:42 +0000
+Date:   Wed, 26 Apr 2023 17:21:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yunhui Cui <cuiyunhui@bytedance.com>, rafael@kernel.org,
+        lenb@kernel.org, jdelvare@suse.com, cujomalainey@chromium.org,
+        yc.hung@mediatek.com, angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, ardb@kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] firmware: added a firmware information passing method FFI
+Message-ID: <202304261756.84GsEW3V-lkp@intel.com>
+References: <20230426034001.16-1-cuiyunhui@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] leds: max597x: Add support for max597x
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-References: <20230417094035.998965-1-Naresh.Solanki@9elements.com>
- <20230420115035.GE970483@google.com>
- <079eca63-54f5-7a4b-3b1c-e2515ceae9cc@9elements.com>
- <20230420135428.GD996918@google.com>
- <40b72025-16a8-1af5-d69f-659d37cdeab9@9elements.com>
- <20230421071921.GI996918@google.com>
- <03f1691e-bdc2-90cc-4014-585703d2cf4e@9elements.com>
-Content-Language: en-US
-In-Reply-To: <03f1691e-bdc2-90cc-4014-585703d2cf4e@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426034001.16-1-cuiyunhui@bytedance.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,128 +69,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+Hi Yunhui,
 
-On 24-04-2023 03:10 pm, Naresh Solanki wrote:
-> Hi,
-> 
-> On 21-04-2023 12:49 pm, Lee Jones wrote:
->> On Thu, 20 Apr 2023, Naresh Solanki wrote:
->>
->>> Hi Lee,
->>>
->>> On 20-04-2023 07:24 pm, Lee Jones wrote:
->>>> On Thu, 20 Apr 2023, Naresh Solanki wrote:
->>>>
->>>>> Hi Lee,
->>>>>
->>>>> On 20-04-2023 05:20 pm, Lee Jones wrote:
->>>>>> On Mon, 17 Apr 2023, Naresh Solanki wrote:
->>>>>>
->>>>>>> From: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>>>>>
->>>>>>> max597x is hot swap controller with indicator LED support.
->>>>>>> This driver uses DT property to configure led during boot time &
->>>>>>> also provide the LED control in sysfs.
->>>>>>>
->>>>>>> DTS example:
->>>>>>>        i2c {
->>>>>>>            #address-cells = <1>;
->>>>>>>            #size-cells = <0>;
->>>>>>>            regulator@3a {
->>>>>>>                compatible = "maxim,max5978";
->>>>>>>                reg = <0x3a>;
->>>>>>>                vss1-supply = <&p3v3>;
->>>>>>>
->>>>>>>                regulators {
->>>>>>>                    sw0_ref_0: sw0 {
->>>>>>>                        shunt-resistor-micro-ohms = <12000>;
->>>>>>>                    };
->>>>>>>                };
->>>>>>>
->>>>>>>                leds {
->>>>>>>                    #address-cells = <1>;
->>>>>>>                    #size-cells = <0>;
->>>>>>>                    led@0 {
->>>>>>>                        reg = <0>;
->>>>>>>                        label = "ssd0:green";
->>>>>>>                        default-state = "on";
->>>>>>>                    };
->>>>>>>                    led@1 {
->>>>>>>                        reg = <1>;
->>>>>>>                        label = "ssd1:green";
->>>>>>>                        default-state = "on";
->>>>>>>                    };
->>>>>>>                };
->>>>>>>            };
->>>>>>>        };
->>>>>>
->>>>>> Where is the DT binding document for this?
->>> https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/tree/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml?h=for-mfd-next
->>
->> You need to update it.  It is different to the one you supplied here.
-> Ack.
->>
->>>>>>> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->>>>>>> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->>>>>>> ...
->>>>>>> Changes in V5:
->>>>>>> - Update commit message
->>>>>>> - Fix comments
->>>>>>> - Add necessary new line
->>>>>>> Changes in V4:
->>>>>>> - Remove unwanted preinitialise
->>>>>>> - Remove unneeded line breaks
->>>>>>> - Fix variable name to avoid confusion
->>>>>>> - Update module description to mention LED driver.
->>>>>>> Changes in V3:
->>>>>>> - Remove of_node_put as its handled by for loop
->>>>>>> - Print error if an LED fails to register.
->>>>>>> - Update driver name in Kconfig description
->>>>>>> - Remove unneeded variable assignment
->>>>>>> - Use devm_led_classdev_register to reget led
->>>>>>> Changes in V2:
->>>>>>> - Fix regmap update
->>>>>>> - Remove devm_kfree
->>>>>>> - Remove default-state
->>>>>>> - Add example dts in commit message
->>>>>>> - Fix whitespace in Kconfig
->>>>>>> - Fix comment
->>>>>>> ---
->>>>>>>     drivers/leds/Kconfig        |  11 ++++
->>>>>>>     drivers/leds/Makefile       |   1 +
->>>>>>>     drivers/leds/leds-max597x.c | 115 
->>>>>>> ++++++++++++++++++++++++++++++++++++
->>>>>>>     3 files changed, 127 insertions(+)
->>>>>>>     create mode 100644 drivers/leds/leds-max597x.c
->>
->> [...]
->>
->>>>>> +    led_node = of_get_child_by_name(np, "leds");
->>>>>>> +    if (!led_node)
->>>>>>> +        return -ENODEV;
->>>>
->>>> It's odd for a device to be referring to itself as the "child".
->>> As this is leaf driver, LED specific info is present in "leds" node 
->>> in DT.
->>
->> I'm aware of the architecture.
->>
->> If you give the LEDs driver it's own compatible you don't need to keep
->> doing this self->parent->child level-jumping craziness to obtain
->> resources.
->  From my understanding, it is preferable to have only one compatible per 
-> chip(in this case MFD driver), and the leaf driver can leverage it 
-> unless it is not serving the purpose/breaks something.
-> I think this is acceptable as long as it doesn't creates any 
-> issue/breaks anything.
-I just wanted to kindly follow up and check if we are aligned with the 
-approach. And kindly let me know if you have any concerns regarding this.
+kernel test robot noticed the following build warnings:
 
-Thank you very much for your time and I look forward to hearing back 
-from you soon :)
->>
-> 
-> 
-> Regards,
-> Naresh
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master jdelvare-staging/dmi-for-next v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunhui-Cui/firmware-added-a-firmware-information-passing-method-FFI/20230426-114131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230426034001.16-1-cuiyunhui%40bytedance.com
+patch subject: [PATCH] firmware: added a firmware information passing method FFI
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230426/202304261756.84GsEW3V-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/7d1fe633611738698520294d2a598575a765cfbf
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yunhui-Cui/firmware-added-a-firmware-information-passing-method-FFI/20230426-114131
+        git checkout 7d1fe633611738698520294d2a598575a765cfbf
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304261756.84GsEW3V-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/ffi.c:18:13: warning: no previous prototype for 'of_fdt_fwtbl' [-Wmissing-prototypes]
+      18 | void __init of_fdt_fwtbl(void)
+         |             ^~~~~~~~~~~~
+>> drivers/firmware/ffi.c:53:13: warning: no previous prototype for 'fdt_fwtbl_init' [-Wmissing-prototypes]
+      53 | void __init fdt_fwtbl_init(void)
+         |             ^~~~~~~~~~~~~~
+
+
+vim +/of_fdt_fwtbl +18 drivers/firmware/ffi.c
+
+    17	
+  > 18	void __init of_fdt_fwtbl(void)
+    19	{
+    20		int cfgtbl, len;
+    21		fdt64_t *prop;
+    22	
+    23		cfgtbl = fdt_path_offset(initial_boot_params, "/cfgtables");
+    24		if (cfgtbl < 0) {
+    25			pr_info("cfgtables not found.\n");
+    26			return;
+    27		}
+    28		prop = fdt_getprop_w(initial_boot_params, cfgtbl, "smbios_phy_ptr", &len);
+    29		if (!prop || len != sizeof(u64))
+    30			pr_info("smbios_phy_ptr not found.\n");
+    31		else
+    32			fdt_fwtbl.smbios = fdt64_to_cpu(*prop);
+    33	
+    34		prop = fdt_getprop_w(initial_boot_params, cfgtbl, "smbios3_phy_ptr", &len);
+    35		if (!prop || len != sizeof(u64))
+    36			pr_info("smbios3_phy_ptr not found.\n");
+    37		else
+    38			fdt_fwtbl.smbios3 = fdt64_to_cpu(*prop);
+    39	
+    40		prop = fdt_getprop_w(initial_boot_params, cfgtbl, "acpi_phy_ptr", &len);
+    41		if (!prop || len != sizeof(u64))
+    42			pr_info("acpi_phy_ptr not found.\n");
+    43		else
+    44			fdt_fwtbl.acpi = fdt64_to_cpu(*prop);
+    45	
+    46		prop = fdt_getprop_w(initial_boot_params, cfgtbl, "acpi20_phy_ptr", &len);
+    47		if (!prop || len != sizeof(u64))
+    48			pr_info("acpi20_phy_ptr not found.\n");
+    49		else
+    50			fdt_fwtbl.acpi20 = fdt64_to_cpu(*prop);
+    51	}
+    52	
+  > 53	void __init fdt_fwtbl_init(void)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
