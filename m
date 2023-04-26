@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA3A6EFDBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3F76EFDD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239994AbjDZW6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S236396AbjDZXH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 19:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240477AbjDZW6C (ORCPT
+        with ESMTP id S229582AbjDZXHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:58:02 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094003AB2;
-        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a5197f00e9so60898025ad.1;
-        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682549880; x=1685141880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UnwIOhGkuLaBbl9w7Be9qPcJQ9Y9ui6c1mraZVmd2dw=;
-        b=g12eVio6oB0+C4ec/weafutXhKAEzNho2q5/z5cUMC8Q0nFqHodVk9Po5lDMLdM78x
-         y2r01EMpDYhG5HygXISaHP/F0MMMuLvmV0jSLjR9x5xHEcVbnCzVqYtdg+uoANr3zIIg
-         XmtR6llax9sWnj+hZoVb+HCIO3Il/EYcRnmOCMsePJBDxyJ7Ey4c4cKEejvQewYD9YgT
-         qrrIZLYqUs9SbmKjb8QTi+8PYpvvOTlZcOCOXpvH421JbwMczBP9CbS/A7eGI3dcYfx3
-         LpeKNz5OmFBDvJWMoC0JgaaQ57kHSDq/ZXhUJyLEVKmYQfSWQhcig1/xRp2z5AV4PFjJ
-         UX4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682549880; x=1685141880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UnwIOhGkuLaBbl9w7Be9qPcJQ9Y9ui6c1mraZVmd2dw=;
-        b=kB6aPvesUONIa/GmSO6IHeET6e3tesHqZI5PRtuimXth+eUaLEF3k0ymC5dAJfhBj8
-         9OqYek78YTo4ZXvw7K34JLzcIO2SWsE+7qeb7YKEBiscmTuv1+hTG52fK905Lbo8r1QH
-         5Oud0HbmN8OFbknOjqVwyXDb+/zrnRcqLn92Qc5aZMA4V0iSyAnu+meXmL6ceXap2h9M
-         6jXdZrYOuYvvFgwlHfYQ6FRI4v9UWPZjHwUqs+E//IPUujwX7GQHthXF1RvMCRrUQ8oj
-         5pjzBGY/OEc405IdasbUp5HOxFhWDy12qMNFEZU97aEURPn63oS+qS1GiCFLsRRkQl0n
-         Jz+w==
-X-Gm-Message-State: AAQBX9dKBxyUNfjqWoz7Cld3glYsyAnXxY4UFDgYhBx1Djax9guJYas7
-        Qydr+/koqydWNJNK+7LNFgY=
-X-Google-Smtp-Source: AKy350aaTR+E+2z0v5oYpOGG2Fu3fF+AB5ITQB6lXuauC+m7O+3BWsdGB3/HypvrPXz+Di8ytA4o0w==
-X-Received: by 2002:a17:902:c949:b0:1a6:6fe3:df9e with SMTP id i9-20020a170902c94900b001a66fe3df9emr27420455pla.47.1682549880220;
-        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:f84b:79ee:8ff:d568])
-        by smtp.gmail.com with ESMTPSA id x3-20020a170902ea8300b001a6aff2852dsm10385284plb.148.2023.04.26.15.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 15:57:59 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 15:57:55 -0700
-From:   'Dmitry Torokhov' <dmitry.torokhov@gmail.com>
-To:     "Jingle.Wu" <jingle.wu@emc.com.tw>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw
-Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
-Message-ID: <ZEmsc0HyZuXlJARq@google.com>
-References: <20230320011456.986321-1-jingle.wu@emc.com.tw>
- <ZDBKwo4UMUm+TSnj@penguin>
- <000001d96b4b$6b30cda0$419268e0$@emc.com.tw>
+        Wed, 26 Apr 2023 19:07:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359BBB
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:07:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 620C263345
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 23:07:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C45B4C433D2;
+        Wed, 26 Apr 2023 23:07:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682550440;
+        bh=/+hULzucfSLRlVWrR5BmDeyXpDowzM7ZKzI3SZWoaRU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bi3StrqxZmtuSO0VU5rtR4Xpo0KbCTRtH2j7+0g85WAx1upPH/NRl7Yja1ApSe84k
+         3jS6/yzQK97XcK5J0YTrOeQbvoylykMIOm+JQSMvUGlfL1pmA0V3FtAiY9tJcdJ4yP
+         vG8AoGxZm0rvlqNlfyFkF7Z0bwG3DXDH7iOWcvzWSKPKjX4U5VGc/PgZwcjrgblJti
+         1jJYCRiHc2X7rOoTtk1rJrsc4jfxQJfl/TvgXzy04i/VfQtVd1ZYfyT2b1BrB52Bme
+         lWYEn0qePPm/df1rFJSDTbUSzSAV7nq4k1HcKVo1vqVkhaRRO0lZe9h3rsrqtRxdpF
+         DfTzM3ffHUkeg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A3931C73FF3;
+        Wed, 26 Apr 2023 23:07:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000001d96b4b$6b30cda0$419268e0$@emc.com.tw>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+Subject: Re: [f2fs-dev] [GIT PULL] f2fs update for 6.4
+From:   patchwork-bot+f2fs@kernel.org
+Message-Id: <168255044066.16014.6020850362177131584.git-patchwork-notify@kernel.org>
+Date:   Wed, 26 Apr 2023 23:07:20 +0000
+References: <ZEgdmJWhJX9NJ0fG@google.com>
+In-Reply-To: <ZEgdmJWhJX9NJ0fG@google.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingle,
+Hello:
 
-On Mon, Apr 10, 2023 at 09:26:04AM +0800, Jingle.Wu wrote:
-> HI Dmitry:
+This pull request was applied to jaegeuk/f2fs.git (dev)
+by Linus Torvalds <torvalds@linux-foundation.org>:
+
+On Tue, 25 Apr 2023 11:36:08 -0700 you wrote:
+> Hi Linus,
 > 
-> > +static void elan_close(struct input_dev *input_dev) {
-> > +	if ((input_dev->users) && (!input_dev->inhibited))
-> > +		elan_inhibit(input_dev);
+> Could you please consider this pull request?
 > 
-> This check is for "only inhibit request", and elan_open() its check is for
-> "only uninhibit request".
-> Because input_dev-> open() close() will be executed 2-3 times when initial.
+> Thanks,
+> 
+> The following changes since commit ffe78bbd512166e0ef1cc4858010b128c510ed7d:
+> 
+> [...]
 
-I do not see why this would be an issue if what you are doing is putting
-the device into a low power mode.
+Here is the summary with links:
+  - [f2fs-dev,GIT,PULL] f2fs update for 6.4
+    https://git.kernel.org/jaegeuk/f2fs/c/5c7ecada25d2
 
-If this issue is about need to re-calibrate after opening the lid on
-certain devices, then I think we need to do the same that we did for the
-I2C-HID connected devices on Redrix and hook this functionality to a LID
-handler.
-
-Thanks.
-
+You are awesome, thank you!
 -- 
-Dmitry
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
