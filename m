@@ -2,130 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B49E6EF56C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EBD6EF56E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241161AbjDZNV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S240677AbjDZNWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbjDZNVz (ORCPT
+        with ESMTP id S240655AbjDZNW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:21:55 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D1BC3;
-        Wed, 26 Apr 2023 06:21:53 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QDLkW4096750;
-        Wed, 26 Apr 2023 08:21:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682515306;
-        bh=QdepxYuSwTdOmEf8k5cCZjOM29OP5/kofyPKcNTFUVo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=k7thEKT9zPmrKcNVux/rKwIuW3iqOkvhengLrEOwOaV5GtVzjPD7gSEj+rMVe6KRZ
-         QGF4D57JMY5EdrCSumYXs2M2kBqd0+iviDOj+jAtx2fiWvFRE32q6Y4l8dfHUHK2es
-         yMYzjbH8BSG52dU74Z7vtxg9jr89NDVennyHlkPU=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QDLku7022065
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Apr 2023 08:21:46 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
- Apr 2023 08:21:45 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 26 Apr 2023 08:21:45 -0500
-Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QDLjfG001825;
-        Wed, 26 Apr 2023 08:21:45 -0500
-Message-ID: <163cfe60-4b14-fe5c-29d9-323e7ea495d5@ti.com>
-Date:   Wed, 26 Apr 2023 08:21:45 -0500
+        Wed, 26 Apr 2023 09:22:28 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C627326AC;
+        Wed, 26 Apr 2023 06:22:26 -0700 (PDT)
+Received: from [192.168.1.43] ([77.7.2.190]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MRmwM-1phG3x42lW-00TCmJ; Wed, 26 Apr 2023 15:22:16 +0200
+Message-ID: <aae753d6-6874-4f91-e7ba-bd6c77f07b62@metux.net>
+Date:   Wed, 26 Apr 2023 15:22:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 1/2] arm64: dts: ti: k3-j721s2-main: Add main CPSW2G
- devicetree node
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
-References: <20230426105718.118806-1-s-vadapalli@ti.com>
- <20230426105718.118806-2-s-vadapalli@ti.com>
- <20230426125927.itfd76cpvy32zur7@scrimmage>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20230426125927.itfd76cpvy32zur7@scrimmage>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Content-Language: tl
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Deborah Brouwer <deborah.brouwer@collabora.com>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <ZDSRSWhWsN34MghQ@xps>
+ <CANiq72=n1b=fJ2XZZx_MLKkbKMTmnmTBMgA3GJ_hqyARPtwEiQ@mail.gmail.com>
+ <20230412025834.GA301301@mit.edu>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+In-Reply-To: <20230412025834.GA301301@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:kIMNCDZI5v4YRr19YFds+qt6rpIVxWdz6rvCUbXtO3hAoAE2syC
+ HRnwIZNv3EBLo2axwKVsZQZ+Dte1IA5sjDlDuXU+8g6DRuWAWediP1gES8cKTknragjvEB2
+ xMR7ty6+Gis+GOMi694pmCiyQs9DI5IK7DGak/kSLp+aEo17Y+5B/RVpah0y5qCbb7okRNS
+ VyAo1fEERqiTrjPGYCZTg==
+UI-OutboundReport: notjunk:1;M01:P0:AgO0IiJk3dE=;kbSbdgIKOshJNSuRFL3KjokFj68
+ Zail325umikc21OOrqUplV/57gmpq6YbI3E6+0YNmQyVuQjgxvLdqv3KAt525fNqanriSXceL
+ 3Eer5zmtZUXsJa6e2qC2xvl/DpaI0qLrngaN108vQBlzfr0ihJcClpBaDeBPKMxsvxt3jSB9q
+ UqKHOiptvudXACfz9J5/JehaXjmvzfc0pQBxYbud8Ib7d3dPKt261JeqCKXjGwdQR/me65hrG
+ ZOAEGNK3nD5SBRJClM0tbc4Q3U5N1Oz8poGBYjWHNXOsuHYKjojRVNGH/E2vgzcZiqnI37Ypq
+ dW6YnR6aDNXxFD10hN/JSdIDPo/1OeBhjgHX0obPbdl4msOvRHMrW7dj/jTcbi0GRQJOQ4r7u
+ +s3rEkX1sifmmJYcH5jz10O5AUfrzMFEkq/t3lf+ATzDOB5Mbi2KeThzY0C4BAqDWGf7qO8uX
+ dad1O2OzSzxUVqZ3XFHFk+07KzEjlWNJjan7vjRBiLYQ+BXENgORn9yzigtam9byci7VGLgFK
+ VFmXhqSuxaQ/ktV4/q1AsQXxPLrTwbN0+OtZ9dLYOi5parmEe6MC4EyPXI4mjG+W7E6RrHj8j
+ zm/RaRFOSuf4y64mtjSt20iUUx+Iyi3ki87eYgQ20d9JyANIQFLgqI5ocvn8KI3R1f4z6sA62
+ SiDkFr9ytoUESe3Bweah9fEeQLKtlfe8hifCuyuIGg==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 7:59 AM, Nishanth Menon wrote:
-> On 16:27-20230426, Siddharth Vadapalli wrote:
->> From: Kishon Vijay Abraham I <kishon@ti.com>
->>
->> TI's J721S2 SoC has a MAIN CPSW2G instance of the CPSW Ethernet Switch.
->> Add devicetree node for it.
->>
->> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 69 ++++++++++++++++++++++
->>   1 file changed, 69 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> index 6629b2989180..14dfef7b0758 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
->> @@ -51,6 +51,12 @@ usb_serdes_mux: mux-controller@0 {
->>   			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
->>   		};
->>   
->> +		phy_gmii_sel_cpsw: phy@34 {
->> +			compatible = "ti,am654-phy-gmii-sel";
->> +			reg = <0x34 0x4>;
->> +			#phy-cells = <1>;
->> +		};
-> 
-> 
-> See this thread: https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
-> 
+On 12.04.23 04:58, Theodore Ts'o wrote:
 
-"ti,am654-phy-gmii-sel" already has "reg", so this DT is good as is.
-Adding the driver fallback to use that when the parent is not a "syscon"
-node should be as easy as this:
+> Something that would perhaps be useful is to document (a) what
+> versions of Rust is available for various distributions, or pointers
+> to how to get that information for various distributions.  For
+> example, you can get that information from Debian using [1].  It
+> appears that Fedora isn't distributing rustc at *all*, at least
+> according to [2], so apparently for Fedora people will need to install
+> it from source.
 
---- a/drivers/phy/ti/phy-gmii-sel.c
-+++ b/drivers/phy/ti/phy-gmii-sel.c
-@@ -435,9 +435,12 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
-  
-         priv->regmap = syscon_node_to_regmap(node->parent);
-         if (IS_ERR(priv->regmap)) {
--               ret = PTR_ERR(priv->regmap);
--               dev_err(dev, "Failed to get syscon %d\n", ret);
--               return ret;
-+               priv->regmap = device_node_to_regmap(node);
-+               if (IS_ERR(priv->regmap)) {
-+                       ret = PTR_ERR(priv->regmap);
-+                       dev_err(dev, "Failed to get syscon %d\n", ret);
-+                       return ret;
-+               }
-         }
+As already said in my other mail, one major problem IMHO is (recent 
+enough) toolchain availability for the major distros and package build
+systems - including the embedded ones (ptxdist, buildroot, bitbake,
+...).
+
+IMHO, those who want Rust in the kernel, should take care of this first.
+(and no: asking to download some precompiled binary from somewhere is
+not any acceptable solution)
+
+> If the goal is accelerate adoption of Rustc, and calm people's fears
+> vis-a-vis using Rust, it's not enough to say, "why don't you use the
+> distribution-provided version or Rust"?  It would be helpful if those
+> Rust pioneers can share what versions of Rust they have tested
+> against, especially for those commonly used distributions, such as
+> Debian, and give us a report whether we should expect things to work,
+> so we can ignore the scary warning from the build system that we're
+> using an unsupported version of Rust, and if it breaks, we get to keep
+> both pieces.
+
+ACK. Maybe those folks could set up some CIs for at least building and
+deploying the Rust patches on as many distros as possible - hopefully
+before they're sent to lkml.
 
 
-I'll send this patch when the window opens.
+--mtx
 
-Andrew
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
