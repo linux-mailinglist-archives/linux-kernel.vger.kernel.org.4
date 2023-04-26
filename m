@@ -2,143 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F192B6EF680
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98EF6EF684
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241420AbjDZOcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S241437AbjDZOeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241417AbjDZOcj (ORCPT
+        with ESMTP id S241176AbjDZOd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43DA449D;
-        Wed, 26 Apr 2023 07:32:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 269D160FFF;
-        Wed, 26 Apr 2023 14:32:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9186C433D2;
-        Wed, 26 Apr 2023 14:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682519556;
-        bh=ktz/8GLqpT56U4gXrVOtMd/vE5Ej8x9fgSw4ZRKKRzQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DWZUNmrp1J9T6wNU1LEPJCjB+nApZmfTZ04NMqqug6Y6YiRzcUhqf2OkhtWrJKAKL
-         2DQX9k7HxknJDrAjHxV0O8AdGQOdx1oRZJpJIRgRiYsEWpqMonm6ffFVwAY2Jj2jt8
-         rf0MSMcNZ1nBa1f0JvNdy5fZHPrr10LBvsHupZ1bBtiq21JexplffLnKNEWOS+OB7p
-         Y1HZIV5w23IM5ZYWqoMJNAdB09YCxL5P3s4R/HFARtYUvm451mdcVoIV5chtAurXEZ
-         9PdDBQuaTepgyyAVYEM2YMlB7XRDcK8E+7C9gni+l0Cj2OHPnKObUTg82dOYAr+lS+
-         QoZ/k3B9/24xg==
-Date:   Wed, 26 Apr 2023 15:32:31 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     "Arslanbenzer, Zeynep" <Zeynep.Arslanbenzer@analog.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 8/8] mfd: max77658: Add ADI MAX77643/54/58/59 MFD
- Support
-Message-ID: <20230426143231.GP50521@google.com>
-References: <20230322055628.4441-1-Zeynep.Arslanbenzer@analog.com>
- <20230322055628.4441-9-Zeynep.Arslanbenzer@analog.com>
- <20230330123136.GF434339@google.com>
- <DM6PR03MB519577728975E086D8EB20F38B669@DM6PR03MB5195.namprd03.prod.outlook.com>
- <20230424085942.GA8035@google.com>
- <MN2PR03MB51973EDD4FEDA00200B61C6A8B649@MN2PR03MB5197.namprd03.prod.outlook.com>
+        Wed, 26 Apr 2023 10:33:58 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3587423E;
+        Wed, 26 Apr 2023 07:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=5LP2i8y2xJFTwdbUQ5+4MPdVWFdvS8ZpwBegSvNH80w=; b=uETSTHfNla9N5IyIFrX7Bfxg1f
+        rGLzCbzB//pGQJPJxiSprS7Axe6jBQFLc7FHA/LI+rOtjWoKZwGHyR8n5yzR638jHyP7fW7cU+aLu
+        2kcOHLo4vgvJvzYn3PCcR12gIbXTd/M/Y5KxmhxUqtdcaGBPOVtaMpH6QyBLsNTrhLXc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1prgDS-00BHYH-DS; Wed, 26 Apr 2023 16:33:54 +0200
+Date:   Wed, 26 Apr 2023 16:33:54 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Frank Sae <Frank.Sae@motor-comm.com>
+Cc:     Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v1 2/2] net: phy: motorcomm: Add pad drive strength cfg
+ support
+Message-ID: <4c935728-ab18-4941-9621-c26e3b3799f7@lunn.ch>
+References: <20230426063541.15378-1-samin.guo@starfivetech.com>
+ <20230426063541.15378-3-samin.guo@starfivetech.com>
+ <11f0641a-ef6c-eee8-79f3-45654ae006d5@motor-comm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <MN2PR03MB51973EDD4FEDA00200B61C6A8B649@MN2PR03MB5197.namprd03.prod.outlook.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <11f0641a-ef6c-eee8-79f3-45654ae006d5@motor-comm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023, Arslanbenzer, Zeynep wrote:
+> > +	u32 val;
+> >  
+> >  	ret = ytphy_rgmii_clk_delay_config_with_lock(phydev);
+> >  	if (ret < 0)
+> > @@ -1518,6 +1524,32 @@ static int yt8531_config_init(struct phy_device *phydev)
+> >  			return ret;
+> >  	}
+> >  
+> > +	if (!of_property_read_u32(node, "rx-clk-driver-strength", &val)) {
+> 
+> Please check the val of "val", add the handle of default value.
 
-> On Mon, 24 Apr 2023, Lee Jones wrote:
-> >
-> >On Sun, 23 Apr 2023, Arslanbenzer, Zeynep wrote:
-> >
-> >> On Thu, 30 Mar 2023, Lee Jones wrote:
-> >> 
-> >> >On Wed, 22 Mar 2023, Zeynep Arslanbenzer wrote:
-> >> >
-> >> >> MFD driver for MAX77643/MAX77654/MAX77658/MAX77659 to enable its 
-> >> >> sub
-> >> >
-> >> >Please drop all references to 'MFD'.
-> >> >
-> >> >What are these devices, really?  I suspect they are PMICs?
-> >> >
-> >> >> devices.
-> >> >>
-> >> >> The MAX77643 is a multi-function devices. It includes regulator.
-> >> >>
-> >> >> The MAX77654 is a multi-function devices. It includes regulator and 
-> >> >> charger.
-> >> >>
-> >> >> The MAX77658 is a multi-function devices. It includes regulator, 
-> >> >> charger and battery.
-> >> >>
-> >> >> The MAX77659 is a multi-function devices. It includes regulator and 
-> >> >> charger.
-> >> >>
-> >> >> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-> >> >> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-> >> >> ---
-> >> >>  drivers/mfd/Kconfig          |  15 ++
-> >> >>  drivers/mfd/Makefile         |   1 +
-> >> >>  drivers/mfd/max77658.c       | 448 +++++++++++++++++++++++++++++++++++
-> >> >>  include/linux/mfd/max77658.h |  88 +++++++
-> >> >>  4 files changed, 552 insertions(+)  create mode 100644 
-> >> >> drivers/mfd/max77658.c  create mode 100644 
-> >> >> include/linux/mfd/max77658.h
-> >> >>
-> >> >> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig index
-> >> >> 8b93856de432..7b4be7fb8662 100644
-> >> >> --- a/drivers/mfd/Kconfig
-> >> >> +++ b/drivers/mfd/Kconfig
-> >> >> @@ -821,6 +821,21 @@ config MFD_MAX77650
-> >> >>  	  the following functionalities of the device: GPIO, regulator,
-> >> >>  	  charger, LED, onkey.
-> >> >>
-> >> >> +config MFD_MAX77658
-> >> >> +	tristate "Analog Devices MAX77643/MAX77654/MAX77658/MAX77659 PMIC Support"
-> >> >> +	depends on I2C
-> >> >> +	depends on OF
-> >> >> +	select MFD_CORE
-> >> >> +	select REGMAP_I2C
-> >> >> +	select REGMAP_IRQ
-> >> >> +	help
-> >> >> +	  Say Y here to add support for Analog Devices
-> >> >> +	  MAX77643/MAX77654/MAX77658/MAX77659 Power Management IC.
-> >> >
-> >> >"MAX776xx series"?
-> >> 
-> >> As I realized later, max77620, max77650, max77686, and max77693 drivers were merged to Linux before our patch. They are also PMIC devices and our patch does not cover them. Therefore, I think it would not be appropriate to use MAX776xx.
-> >
-> >Perhaps you can come up with something a little more scalable then.
-> >
-> >What if you added support for another 10 devices?
-> >
-> For now, we have no plans to add any new device support to this driver. We named the driver max77658 because it has the most inclusive feature among the supported devices. We can shorten it to MAX77643/54/58/59 or just type max77658 in Kconfig and specify other supported devices in the device tree. Would one of these be a more suitable solution?
+You can assign val to 3, or better still some #define, before calling
+of_property_read_u32(). If the property is not found, val will retain
+that value, and you can then write it to the register.
 
-The former looks like a nice middle-ground.
+But please do add range checks for when val is in DT. We don't want
+anybody using 42. -EINVAL should be returned.
 
--- 
-Lee Jones [李琼斯]
+	Andrew
