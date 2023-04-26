@@ -2,149 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4C96EFA55
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52BF6EFA65
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234916AbjDZSxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 14:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60180 "EHLO
+        id S233381AbjDZSy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 14:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjDZSxD (ORCPT
+        with ESMTP id S236056AbjDZSyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:53:03 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7FF7EC0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:53:01 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f1950f569eso41739255e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:53:01 -0700 (PDT)
+        Wed, 26 Apr 2023 14:54:45 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1542283E7;
+        Wed, 26 Apr 2023 11:54:44 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso6245763b3a.3;
+        Wed, 26 Apr 2023 11:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682535180; x=1685127180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682535283; x=1685127283;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gyz899e+SgJhAlLn7W+cC4n0so0n3eO93aodRTmFgLc=;
-        b=v1a4GuyVTXuHXlzLqDZYWa/B4Q3UePj4XuV89jNeFhAWlYY2Miy9ys7BcaEk2SyoBG
-         NWOyJXBdYrYqYVzPVhnrjSTa/VUtUIjTywnDg0GtSrJqJ8uLRMNTuM5/MghoInSKHf8W
-         FjUW7ftF/PhexjdJ4jVOTT4H48/WD5wCh/8EoZO0j417gDTW1qWW6zLTUwK2JQYLud0x
-         zsyQgTBCYDhc33IDwtI+P9tCFNIyzdqTUjKnFN2x1kcKE8kIMG3YhlRHKHBGZvgQyk4W
-         C4Bd9lnbMrjHUM3cxVw90MPq2YgQL6H5KkKrELgzzkAgcj0HBQGHt+Z2JBmtHOZrkHrZ
-         SA2w==
+        bh=R07Mi9Mz971NXlM6C0+9m3ePvBeyQwkx2T3l6oVaSvA=;
+        b=Qye9OWjFuOEWZhcxm7u9djE3RkEO2zz5jUeRowPRUvM3LdUaM6cwmH2RJmcvMYNHT4
+         GrckvKFHj9z01woq1G8sG0XtwNhF2Xf4Emh7RNl2SKucGuxocCGTwCj7MdI3+a69zjsE
+         spa0kK5D03b0kby7d98GBeUuM72sxNuibrA8UD9AqVj9XcvZ3RIDf98d0NchVYzIv+HK
+         1ilmdFhHAVYNUctSTvtSGPgZIjYAdmU/nxgXQxX4fdcZSmzDBIQqCUi7LsvukS2syA1u
+         vGLpG3YHSF/pC919ecvDP8y6vHIqYnkykmLJmHs+UGF5tCBSooRY6z29sMiW6qrIhj94
+         kMsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682535180; x=1685127180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682535283; x=1685127283;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gyz899e+SgJhAlLn7W+cC4n0so0n3eO93aodRTmFgLc=;
-        b=FxDAXm7BxgsWciHSRmcrTIaiZn8laec5VGeIgbfqIACMWRBCggs33NfHZgXtf1oalI
-         UPRYr+vZJWYkTxiFnNf+nnk8jFQJfhdEysgxbTvrP39FmO5fed37UYWbocMQuVG4TyOE
-         mrg2ZOzRm46xobH/mR5665C03HQqJ9jaKWn5zrln1C2C5wyXcbegbDVcr6VyTJTdbhoT
-         A8+I8W81TUVmmvXI8XtL6XHm1RsQaMAexZcrptf+zRJNUeuYE8wyDANw6Yi28CQlpGtt
-         r8/0Lq2feyIp3+ABzsaIuGn86kWIolX7EUTIzsdOBk1Zly31M1aOQ83YmsZ0OY0JcrTN
-         xLPw==
-X-Gm-Message-State: AAQBX9c4bJc4jD6JlXpUobKJ1sHeXo09OIVLSEwwPsrouU6FaAT/jnnX
-        7IxxGzkh5WyULCGH8+ltVOjmkatSpFF1gauWYzVfYA==
-X-Google-Smtp-Source: AKy350ZtiEljRNHcOMI/6qG/lYSYiL5i9vY6F7h4V+PLTVCxrmVd3E0R2bhrMxFMiJySjFEPzU3todjbNo00lrxqEb4=
-X-Received: by 2002:a05:600c:20f:b0:3f1:8085:910e with SMTP id
- 15-20020a05600c020f00b003f18085910emr13706961wmi.9.1682535180196; Wed, 26 Apr
- 2023 11:53:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230308073201.3102738-1-avagin@google.com> <20230308073201.3102738-4-avagin@google.com>
-In-Reply-To: <20230308073201.3102738-4-avagin@google.com>
-From:   Andrei Vagin <avagin@google.com>
-Date:   Wed, 26 Apr 2023 11:52:49 -0700
-Message-ID: <CAEWA0a68dgA_sZVV7YWrrvK1=GkpEW1KcF1FNcmFOkDx+QKxYA@mail.gmail.com>
-Subject: Re: [PATCH 3/6] sched: add a few helpers to wake up tasks on the
- current cpu
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     avagin@gmail.com, brauner@kernel.org, dietmar.eggemann@arm.com,
-        juri.lelli@redhat.com, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, luto@amacapital.net,
-        mingo@redhat.com, peterz@infradead.org, posk@google.com,
-        tycho@tycho.pizza, vincent.guittot@linaro.org, wad@chromium.org,
-        yu.c.chen@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=R07Mi9Mz971NXlM6C0+9m3ePvBeyQwkx2T3l6oVaSvA=;
+        b=bPyuxvP9gfS+beYHe/DDpibsxCt18d3emnvnCevLe4zGiJZ9TD3VvrcwfhpQpdF9Fp
+         rgPFFKkgViVIemvENzbDWNaT34IDuJXFerbYs8O8G1wUjYiiVAhzKQkq+P6VCz8U1t+L
+         ih34lWsRa89ToLCMuOPwTNkqDFFE+5BXLGM0CjHCwQJkabgqtndJFtU4u5aq2xpXep2n
+         CvkMdliPiVkw9awfNxCH/AZFrCpblIBiu/P2MAIRYXjSggTNFa1F3H1znNh08oZ89eXh
+         aaYP7jjsjkiJO6GP0nMfpyF6/3n1Dp2LR1UlOc2rC8Jw5hn3ubB9L49cnmDpwWETYpQL
+         AsZQ==
+X-Gm-Message-State: AAQBX9c+9HbvR2/AhGpK5xwUIpi6C2IysC2ngOQS4PJScm0lbndo2kDm
+        ZFpkEP+jtl9cic5gd3KBuZ0j6la/76im9w==
+X-Google-Smtp-Source: AKy350ayADESKqZUED8JafpEZGIjCz4hY19zWIUoZp0bX0AJ4jiUhsSvlxpczQ8Kb+xGm37lSzOy2g==
+X-Received: by 2002:a05:6a00:1acd:b0:63d:2aac:7b88 with SMTP id f13-20020a056a001acd00b0063d2aac7b88mr31945188pfv.25.1682535283105;
+        Wed, 26 Apr 2023 11:54:43 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y72-20020a62644b000000b006372791d708sm11639254pfb.104.2023.04.26.11.54.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Apr 2023 11:54:42 -0700 (PDT)
+From:   Justin Chen <justinpopo6@gmail.com>
+To:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     justinpopo6@gmail.com, justin.chen@broadcom.com,
+        f.fainelli@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        richardcochran@gmail.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com
+Subject: [PATCH v2 net-next 0/6] Brcm ASP 2.0 Ethernet controller
+Date:   Wed, 26 Apr 2023 11:54:26 -0700
+Message-Id: <1682535272-32249-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 7:43=E2=80=AFAM Bernd Schubert <bschubert@ddn.com> =
-wrote:
->
-> > Add complete_on_current_cpu, wake_up_poll_on_current_cpu helpers to wak=
-e
-> > up tasks on the current CPU.
->
-> > These two helpers are useful when the task needs to make a synchronous =
-context
-> > switch to another task. In this context, synchronous means it wakes up =
-the
-> > target task and falls asleep right after that.
->
-> > One example of such workloads is seccomp user notifies. This mechanism =
-allows
-> > the  supervisor process handles system calls on behalf of a target proc=
-ess.
-> > While the supervisor is handling an intercepted system call, the target=
- process
-> > will be blocked in the kernel, waiting for a response to come back.
->
-> > On-CPU context switches are much faster than regular ones.
->
-> > Signed-off-by: Andrei Vagin <avagin@google.com>
->
-> Avoiding cpu switches is very desirable for fuse, I'm working on fuse ove=
-r uring
-> with per core queues. In my current branch and running a single threaded =
-bonnie++
-> I get about 9000 creates/s when I bind the process to a core, about 7000 =
-creates/s
-> when I set SCHED_IDLE for the ring threads and back to 9000 with SCHED_ID=
-LE and
-> disabling cpu migration in fs/fuse/dev.c request_wait_answer() before goi=
-ng into
-> the waitq and enabling it back after waking up.
->
-> I had reported this a few weeks back
-> https://lore.kernel.org/lkml/d0ed1dbd-1b7e-bf98-65c0-7f61dd1a3228@ddn.com=
-/
-> and had been pointed to your and Prateeks patch series. I'm now going
-> through these series. Interesting part is that a few weeks I didn't need
-> SCHED_IDLE, just disabling/enabling migration before/after waking up was
-> enough.
->
-> [...]
->
-> > EXPORT_SYMBOL(swake_up_one);
-> > diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-> > index 133b74730738..47803a0b8d5d 100644
-> > --- a/kernel/sched/wait.c
-> > +++ b/kernel/sched/wait.c
-> > @@ -161,6 +161,11 @@ int __wake_up(struct wait_queue_head *wq_head, uns=
-igned int mode,
-> >  }
-> >  EXPORT_SYMBOL(__wake_up);
->
-> > +void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigne=
-d int mode, void *key)
-> > +{
-> > +     __wake_up_common_lock(wq_head, mode, 1, WF_CURRENT_CPU, key);
-> > +}
->
-> I'm about to test this instead of migrate_disable/migrate_enable, but the=
- symbol needs
-> to be exported - any objection to do that right from the beginning in you=
-r patch?
+v2
+	- Updates to yaml dt documentation
+	- Replace a couple functions with helper functions
+	- Minor formatting fixes
+	- Fix a few WoL issues
 
-I think EXPORT_SYMBOL_GPL should not trigger any objections and it
-covers your case, doesn't it?
+Add support for the Broadcom ASP 2.0 Ethernet controller which is first
+introduced with 72165.
 
-Thanks,
-Andrei
+Add support for 74165 10/100 integrated Ethernet PHY which also uses
+the ASP 2.0 Ethernet controller.
+
+Florian Fainelli (2):
+  dt-bindings: net: Brcm ASP 2.0 Ethernet controller
+  net: phy: bcm7xxx: Add EPHY entry for 74165
+
+Justin Chen (4):
+  dt-bindings: net: brcm,unimac-mdio: Add asp-v2.0
+  net: bcmasp: Add support for ASP2.0 Ethernet controller
+  net: phy: mdio-bcm-unimac: Add asp v2.0 support
+  MAINTAINERS: ASP 2.0 Ethernet driver maintainers
+
+ .../devicetree/bindings/net/brcm,asp-v2.0.yaml     |  145 ++
+ .../devicetree/bindings/net/brcm,unimac-mdio.yaml  |    2 +
+ MAINTAINERS                                        |    9 +
+ drivers/net/ethernet/broadcom/Kconfig              |   11 +
+ drivers/net/ethernet/broadcom/Makefile             |    1 +
+ drivers/net/ethernet/broadcom/asp2/Makefile        |    2 +
+ drivers/net/ethernet/broadcom/asp2/bcmasp.c        | 1476 ++++++++++++++++++++
+ drivers/net/ethernet/broadcom/asp2/bcmasp.h        |  636 +++++++++
+ .../net/ethernet/broadcom/asp2/bcmasp_ethtool.c    |  585 ++++++++
+ drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c   | 1435 +++++++++++++++++++
+ .../net/ethernet/broadcom/asp2/bcmasp_intf_defs.h  |  238 ++++
+ drivers/net/mdio/mdio-bcm-unimac.c                 |    2 +
+ drivers/net/phy/bcm7xxx.c                          |    1 +
+ include/linux/brcmphy.h                            |    1 +
+ 14 files changed, 4544 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/Makefile
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp.h
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_ethtool.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf.c
+ create mode 100644 drivers/net/ethernet/broadcom/asp2/bcmasp_intf_defs.h
+
+-- 
+2.7.4
+
