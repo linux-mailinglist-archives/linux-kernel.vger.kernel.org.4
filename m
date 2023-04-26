@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195346EF794
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677246EF795
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241090AbjDZPO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S241307AbjDZPPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241303AbjDZPOu (ORCPT
+        with ESMTP id S241310AbjDZPOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:14:50 -0400
+        Wed, 26 Apr 2023 11:14:51 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACF24EED
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:14:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90898100
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:14:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682522089; x=1714058089;
+  t=1682522090; x=1714058090;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to;
-  bh=GZ2siilwPKJoLTlkw0z7HwbF5HQzjaq6IQHPrAjkhTM=;
-  b=Jvdao8NorayLF3GPhQT3LIgDzLskO/4RByaKwSoV2cR9HBUgD+VVJ1Ga
-   O8cxXqtcvXC3yh2vrPLGYpa6lJkbZ7F5OMXbtM3uejanbmC3SauyeRxdX
-   dTSJ+bnXVcVwMQJv5w9biP01Q9qxH15YC8dHm0dDOpiYN3kkN4YTaaWl+
-   QQh6Rc+Q4udQzkTLneRezSakNamgNYg9R7RhdK4/dJQsdx20zA9CPoX4D
-   A7TEYiii55lxtU8K6NKsnLlQQwVhME9q6ThxLEwWziz1nMG9HEqmb3UZ6
-   67VkmRHoIEcm+E8ugYo+Fq9Y3zU8iZzzv/oZvjFd3RgmsCsm74cQP/gmb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="412444666"
+  bh=a3rq7E5TI8RGgUZf3JtgYbiTIUGic08SWRrQO5vrU5I=;
+  b=avLRtPcjoX7KlbPB+Y+0yAe72IsUuU9MxoyTHeT89IaZpBzsXF/Est8u
+   pmvNJVFyo05IN187TPqbdpHJ5ZeXAXiL9R4MOlAm/5lX1GkCNVDc0ssNQ
+   HwP1pFua5m4ipDdOsmE+64A7BuD3Uylt/0YjI3OmNVc27jf3cAYvGgAtH
+   DgbA3X0N2mEYkBz7xY6VktjYaoxKTIUGrvPngt1wGWMP3HKIzhJ2/rxrt
+   XIB6eghvwUBKopzpSA4jjdN+nge/cnmbMqRkLmVHpXG7OmrYeoW+A+IiG
+   oSCSJqWm7GXk1k9n0fPQB4m2VJT7uxReJ9YVVs7T9yMmZXypZUJXQ+1ij
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="412444681"
 X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="412444666"
+   d="scan'208";a="412444681"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:32 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:33 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="671366418"
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="671366449"
 X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="671366418"
+   d="scan'208";a="671366449"
 Received: from lab-ah.igk.intel.com ([10.102.138.202])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:31 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:32 -0700
 From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Date:   Wed, 26 Apr 2023 17:14:10 +0200
-Subject: [PATCH v7 1/2] drm/i915: Migrate platform-dependent mock hugepage
- selftests to live
+Date:   Wed, 26 Apr 2023 17:14:11 +0200
+Subject: [PATCH v7 2/2] drm/i915: Use correct huge page manager for MTL
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230425-hugepage-migrate-v7-1-fa6605a986c9@intel.com>
+Message-Id: <20230425-hugepage-migrate-v7-2-fa6605a986c9@intel.com>
 References: <20230425-hugepage-migrate-v7-0-fa6605a986c9@intel.com>
 In-Reply-To: <20230425-hugepage-migrate-v7-0-fa6605a986c9@intel.com>
 To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
@@ -66,261 +65,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jonathan Cavitt <jonathan.cavitt@intel.com>
 
-Convert the igt_mock_ppgtt_huge_fill and igt_mock_ppgtt_64K mock selftests into
-live selftests as their requirements have recently become platform-dependent.
-Additionally, apply necessary platform dependency checks to these tests.
+MTL currently uses gen8_ppgtt_insert_huge when managing huge pages.  This is because
+MTL reports as not supporting 64K pages, or more accurately, the system that reports
+whether a platform has 64K pages reports false for MTL.  This is only half correct,
+as the 64K page support reporting system only cares about 64K page support for LMEM,
+which MTL doesn't have.
 
-v8:
-- handle properly 64K and 2M pages
+MTL should be using xehpsdv_ppgtt_insert_huge.  However, simply changing over to
+using that manager doesn't resolve the issue because MTL is expecting the virtual
+address space for the page table to be flushed after initialization, so we must also
+add a flush statement there.
 
 Signed-off-by: Jonathan Cavitt <jonathan.cavitt@intel.com>
-Co-developed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Reviewed-by: Matthew Auld <matthew.auld@intel.com>
 Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
- drivers/gpu/drm/i915/gem/selftests/huge_pages.c | 105 ++++++++++++++++++------
- 1 file changed, 80 insertions(+), 25 deletions(-)
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gem/selftests/huge_pages.c b/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
-index defece0bcb811f..773e2f31fbad85 100644
---- a/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
-@@ -695,8 +695,7 @@ static int igt_mock_ppgtt_misaligned_dma(void *arg)
- 	return err;
- }
- 
--static void close_object_list(struct list_head *objects,
--			      struct i915_ppgtt *ppgtt)
-+static void close_object_list(struct list_head *objects)
- {
- 	struct drm_i915_gem_object *obj, *on;
- 
-@@ -710,17 +709,36 @@ static void close_object_list(struct list_head *objects,
- 	}
- }
- 
--static int igt_mock_ppgtt_huge_fill(void *arg)
-+static int igt_ppgtt_huge_fill(void *arg)
- {
--	struct i915_ppgtt *ppgtt = arg;
--	struct drm_i915_private *i915 = ppgtt->vm.i915;
--	unsigned long max_pages = ppgtt->vm.total >> PAGE_SHIFT;
-+	struct drm_i915_private *i915 = arg;
-+	unsigned int supported = RUNTIME_INFO(i915)->page_sizes;
-+	bool has_pte64 = GRAPHICS_VER_FULL(i915) >= IP_VER(12, 50);
-+	struct i915_address_space *vm;
-+	struct i915_gem_context *ctx;
-+	unsigned long max_pages;
- 	unsigned long page_num;
-+	struct file *file;
- 	bool single = false;
- 	LIST_HEAD(objects);
- 	IGT_TIMEOUT(end_time);
- 	int err = -ENODEV;
- 
-+	if (supported == I915_GTT_PAGE_SIZE_4K)
-+		return 0;
-+
-+	file = mock_file(i915);
-+	if (IS_ERR(file))
-+		return PTR_ERR(file);
-+
-+	ctx = hugepage_ctx(i915, file);
-+	if (IS_ERR(ctx)) {
-+		err = PTR_ERR(ctx);
-+		goto out;
-+	}
-+	vm = i915_gem_context_get_eb_vm(ctx);
-+	max_pages = vm->total >> PAGE_SHIFT;
-+
- 	for_each_prime_number_from(page_num, 1, max_pages) {
- 		struct drm_i915_gem_object *obj;
- 		u64 size = page_num << PAGE_SHIFT;
-@@ -750,13 +768,14 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
- 
- 		list_add(&obj->st_link, &objects);
- 
--		vma = i915_vma_instance(obj, &ppgtt->vm, NULL);
-+		vma = i915_vma_instance(obj, vm, NULL);
- 		if (IS_ERR(vma)) {
- 			err = PTR_ERR(vma);
- 			break;
- 		}
- 
--		err = i915_vma_pin(vma, 0, 0, PIN_USER);
-+		/* vma start must be aligned to BIT(21) to allow 2M PTEs */
-+		err = i915_vma_pin(vma, 0, BIT(21), PIN_USER);
- 		if (err)
- 			break;
- 
-@@ -784,12 +803,12 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
- 		GEM_BUG_ON(!expected_gtt);
- 		GEM_BUG_ON(size);
- 
--		if (expected_gtt & I915_GTT_PAGE_SIZE_4K)
-+		if (!has_pte64 && obj->base.size < I915_GTT_PAGE_SIZE_2M)
- 			expected_gtt &= ~I915_GTT_PAGE_SIZE_64K;
- 
- 		i915_vma_unpin(vma);
- 
--		if (vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
-+		if (!has_pte64 && vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
- 			if (!IS_ALIGNED(vma->node.start,
- 					I915_GTT_PAGE_SIZE_2M)) {
- 				pr_err("node.start(%llx) not aligned to 2M\n",
-@@ -808,7 +827,7 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
- 		}
- 
- 		if (vma->resource->page_sizes_gtt != expected_gtt) {
--			pr_err("gtt=%u, expected=%u, size=%zd, single=%s\n",
-+			pr_err("gtt=%#x, expected=%#x, size=0x%zd, single=%s\n",
- 			       vma->resource->page_sizes_gtt, expected_gtt,
- 			       obj->base.size, str_yes_no(!!single));
- 			err = -EINVAL;
-@@ -823,19 +842,25 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
- 		single = !single;
- 	}
- 
--	close_object_list(&objects, ppgtt);
-+	close_object_list(&objects);
- 
- 	if (err == -ENOMEM || err == -ENOSPC)
- 		err = 0;
- 
-+	i915_vm_put(vm);
-+out:
-+	fput(file);
- 	return err;
- }
- 
--static int igt_mock_ppgtt_64K(void *arg)
-+static int igt_ppgtt_64K(void *arg)
- {
--	struct i915_ppgtt *ppgtt = arg;
--	struct drm_i915_private *i915 = ppgtt->vm.i915;
-+	struct drm_i915_private *i915 = arg;
-+	bool has_pte64 = GRAPHICS_VER_FULL(i915) >= IP_VER(12, 50);
- 	struct drm_i915_gem_object *obj;
-+	struct i915_address_space *vm;
-+	struct i915_gem_context *ctx;
-+	struct file *file;
- 	const struct object_info {
- 		unsigned int size;
- 		unsigned int gtt;
-@@ -907,16 +932,41 @@ static int igt_mock_ppgtt_64K(void *arg)
- 	if (!HAS_PAGE_SIZES(i915, I915_GTT_PAGE_SIZE_64K))
- 		return 0;
- 
-+	file = mock_file(i915);
-+	if (IS_ERR(file))
-+		return PTR_ERR(file);
-+
-+	ctx = hugepage_ctx(i915, file);
-+	if (IS_ERR(ctx)) {
-+		err = PTR_ERR(ctx);
-+		goto out;
-+	}
-+	vm = i915_gem_context_get_eb_vm(ctx);
-+
- 	for (i = 0; i < ARRAY_SIZE(objects); ++i) {
- 		unsigned int size = objects[i].size;
- 		unsigned int expected_gtt = objects[i].gtt;
- 		unsigned int offset = objects[i].offset;
- 		unsigned int flags = PIN_USER;
- 
-+		/*
-+		 * For modern GTT models, the requirements for marking a page-table
-+		 * as 64K have been relaxed.  Account for this.
-+		 */
-+		if (has_pte64) {
-+			expected_gtt = 0;
-+			if (size >= SZ_64K)
-+				expected_gtt |= I915_GTT_PAGE_SIZE_64K;
-+			if (size & (SZ_64K - 1))
-+				expected_gtt |= I915_GTT_PAGE_SIZE_4K;
-+		}
-+
- 		for (single = 0; single <= 1; single++) {
- 			obj = fake_huge_pages_object(i915, size, !!single);
--			if (IS_ERR(obj))
--				return PTR_ERR(obj);
-+			if (IS_ERR(obj)) {
-+				err = PTR_ERR(obj);
-+				goto out_vm;
-+			}
- 
- 			err = i915_gem_object_pin_pages_unlocked(obj);
- 			if (err)
-@@ -928,7 +978,7 @@ static int igt_mock_ppgtt_64K(void *arg)
- 			 */
- 			obj->mm.page_sizes.sg &= ~I915_GTT_PAGE_SIZE_2M;
- 
--			vma = i915_vma_instance(obj, &ppgtt->vm, NULL);
-+			vma = i915_vma_instance(obj, vm, NULL);
- 			if (IS_ERR(vma)) {
- 				err = PTR_ERR(vma);
- 				goto out_object_unpin;
-@@ -945,7 +995,8 @@ static int igt_mock_ppgtt_64K(void *arg)
- 			if (err)
- 				goto out_vma_unpin;
- 
--			if (!offset && vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
-+			if (!has_pte64 && !offset &&
-+			    vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
- 				if (!IS_ALIGNED(vma->node.start,
- 						I915_GTT_PAGE_SIZE_2M)) {
- 					pr_err("node.start(%llx) not aligned to 2M\n",
-@@ -964,9 +1015,10 @@ static int igt_mock_ppgtt_64K(void *arg)
+diff --git a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
+index 4daaa6f5566888..9c571185395f49 100644
+--- a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
++++ b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
+@@ -570,6 +570,7 @@ xehpsdv_ppgtt_insert_huge(struct i915_address_space *vm,
  			}
+ 		} while (rem >= page_size && index < max);
  
- 			if (vma->resource->page_sizes_gtt != expected_gtt) {
--				pr_err("gtt=%u, expected=%u, i=%d, single=%s\n",
-+				pr_err("gtt=%#x, expected=%#x, i=%d, single=%s offset=%#x size=%#x\n",
- 				       vma->resource->page_sizes_gtt,
--				       expected_gtt, i, str_yes_no(!!single));
-+				       expected_gtt, i, str_yes_no(!!single),
-+				       offset, size);
- 				err = -EINVAL;
- 				goto out_vma_unpin;
- 			}
-@@ -982,7 +1034,7 @@ static int igt_mock_ppgtt_64K(void *arg)
- 		}
- 	}
- 
--	return 0;
-+	goto out_vm;
- 
- out_vma_unpin:
- 	i915_vma_unpin(vma);
-@@ -992,7 +1044,10 @@ static int igt_mock_ppgtt_64K(void *arg)
- 	i915_gem_object_unlock(obj);
- out_object_put:
- 	i915_gem_object_put(obj);
--
-+out_vm:
-+	i915_vm_put(vm);
-+out:
-+	fput(file);
- 	return err;
++		drm_clflush_virt_range(vaddr, PAGE_SIZE);
+ 		vma_res->page_sizes_gtt |= page_size;
+ 	} while (iter->sg && sg_dma_len(iter->sg));
  }
+@@ -707,7 +708,7 @@ static void gen8_ppgtt_insert(struct i915_address_space *vm,
+ 	struct sgt_dma iter = sgt_dma(vma_res);
  
-@@ -1910,8 +1965,6 @@ int i915_gem_huge_page_mock_selftests(void)
- 		SUBTEST(igt_mock_exhaust_device_supported_pages),
- 		SUBTEST(igt_mock_memory_region_huge_pages),
- 		SUBTEST(igt_mock_ppgtt_misaligned_dma),
--		SUBTEST(igt_mock_ppgtt_huge_fill),
--		SUBTEST(igt_mock_ppgtt_64K),
- 	};
- 	struct drm_i915_private *dev_priv;
- 	struct i915_ppgtt *ppgtt;
-@@ -1962,6 +2015,8 @@ int i915_gem_huge_page_live_selftests(struct drm_i915_private *i915)
- 		SUBTEST(igt_ppgtt_sanity_check),
- 		SUBTEST(igt_ppgtt_compact),
- 		SUBTEST(igt_ppgtt_mixed),
-+		SUBTEST(igt_ppgtt_huge_fill),
-+		SUBTEST(igt_ppgtt_64K),
- 	};
- 
- 	if (!HAS_PPGTT(i915)) {
+ 	if (vma_res->bi.page_sizes.sg > I915_GTT_PAGE_SIZE) {
+-		if (HAS_64K_PAGES(vm->i915))
++		if (GRAPHICS_VER_FULL(vm->i915) >= IP_VER(12, 50))
+ 			xehpsdv_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
+ 		else
+ 			gen8_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
 
 -- 
 2.34.1
