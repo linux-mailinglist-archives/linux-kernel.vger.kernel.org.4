@@ -2,76 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5245E6EF3D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB9D6EF3D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbjDZLxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S240501AbjDZLyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240309AbjDZLxu (ORCPT
+        with ESMTP id S240581AbjDZLyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:53:50 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D5759E9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:53:09 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-504fce3d7fbso10776349a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682509978; x=1685101978;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=G425HQU8+ytvuvA/Pa/64FEEumK8hNS/c4LvJz1Q94YJdHDDpkIvh5TbP6GOXlz6/r
-         N1cCs2df+GlYtt4l6JMCvUlPU+ZQEvkOFSw8SmKKWV1WPQGiOgLrpWw2aWaX+uVMCRVr
-         XFhExDDE5Xngu6YBFuc+5wlF0ID2S0cI2M+sGUFIynOijsEC0EQymDz1/eYRFe1QJc1Y
-         mtZ/LXBOhK25AJp1CrRfdFkCnXXp2UDO1JqKuxQZozTXAA+g1p2QMulY5mmnKQxye82h
-         ER9yEQMMOR9a4IHbWRYtojQNijyCEcjXZ+qR2qmNmM5gNS5aex57C/7EiHcFw/sN+Pb9
-         Tcmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682509978; x=1685101978;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=XY4y5vS9eN5bNNtSYkhCEtywGs5g5DuLfZAXtRkyawTprjwSzTtu0u5cRv4s8iDN6c
-         8BlAeH0DaGs6xB+O44xQHEiKtP5BWGnWB20nu5osZ6PTT2gPBSlcQpkTgFfYYQsrr/6y
-         iAtsEE7ltSlzsY83X4W52hqamSpuO61JPPhbtvE4dnQJVDZ0ah6RgsvC7VkhtRJnM38R
-         a4gVBGjriWGdUB13ya3fIz0qr2UMtWFGNJ2jhmRrYVm0fkOktqZf96PP+6cjMuknamQg
-         Dy6vohZweR3DxJxdzQPQqUKRWZkoUBvV2vCjR+zjJDGyMH3GIWC2/klKCAqU/5MYF62B
-         iLpA==
-X-Gm-Message-State: AAQBX9cCco/nWLJYKdkDstLIAEp/sULnjwR1Bnf4cHaRRuUIhpkVXZpf
-        RLH0tegM3SKxXUbDzfph3l6xGmc6BSlRS/fIqJQ=
-X-Google-Smtp-Source: AKy350Zg3fmLPpLXuHn5IlFbpqQqsODRnw5RAjeaXGHup3e5EErltZ9eeBGNTlw2dM4AFuug/VxNZy0jkH6FhVdYQI0=
-X-Received: by 2002:a05:6402:28e:b0:505:337:c537 with SMTP id
- l14-20020a056402028e00b005050337c537mr18151964edv.16.1682509978102; Wed, 26
- Apr 2023 04:52:58 -0700 (PDT)
+        Wed, 26 Apr 2023 07:54:36 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE05B9A;
+        Wed, 26 Apr 2023 04:53:48 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 7EC50D27;
+        Wed, 26 Apr 2023 13:53:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1682509983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RGgieoJu2M0mWFk816sGTOLEYpz179EmxMrNMNHPmVs=;
+        b=FJ73v2j09tV5wSSysU854ogO76xRRAlxU4aMTuFnoTdmNaR3BzbHZqcncONGr7tz9DsLbL
+        ztZm4oTI+ZOfH0Qk6k9FZf/9sMS4GLBVCwh7vekTd5q1gn4zhjRQFhqxb7gZwQvceqL4Ox
+        eugvqzb/Z6vVbrCJVhXCk75vSJf31YIUlrttLhrj7Cn0OL0lDMMq0IZdNVMBo4PYw1aukN
+        mf2huzqw9jP90/Xabywro7N7VYyyxhqX9KDDBpMgRdC6+CiSdLLcWXEnS9vwYOiYwccmAy
+        bc0MYlfVptdwJZgwbG0FXvTujcqQJWv/z7w3Qi3JRlrZOpLAPrqCwQ4Pwev3bg==
 MIME-Version: 1.0
-Received: by 2002:a98:df93:0:b0:1c6:7fd9:9113 with HTTP; Wed, 26 Apr 2023
- 04:52:57 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <daswas250@gmail.com>
-Date:   Wed, 26 Apr 2023 04:52:57 -0700
-Message-ID: <CAM1W4N4cBdqdrqki_MFhMF0Kt8DbsLbm24m6j5F+H7guP6btEQ@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Date:   Wed, 26 Apr 2023 13:53:03 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     "Sahin, Okan" <Okan.Sahin@analog.com>
+Cc:     andy.shevchenko@gmail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
+In-Reply-To: <MN2PR03MB5168689A20C8D6C67F119BB7E7659@MN2PR03MB5168.namprd03.prod.outlook.com>
+References: <20230327130010.8342-1-okan.sahin@analog.com>
+ <20230327130010.8342-3-okan.sahin@analog.com>
+ <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
+ <MN2PR03MB51682210CADA6E33FB99052CE7939@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com>
+ <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
+ <CACRpkdYKEid8-0-7sBECNgSyW3kMRCsv3DeBVUzxo4z6p+Grnw@mail.gmail.com>
+ <ZDBivYlwJ6zgaFTg@surfacebook>
+ <MN2PR03MB516879DCD6600827AEE2BDC9E7949@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <a3ca3e705b5b8668cd511fc15681c75f@walle.cc>
+ <MN2PR03MB5168D7940E322DFC0A1A3148E7679@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <1ff70a97dfbcaddd69029001ce99bb69@walle.cc>
+ <MN2PR03MB5168689A20C8D6C67F119BB7E7659@MN2PR03MB5168.namprd03.prod.outlook.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <d4a6a640c373b6d939e147691efa596c@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+Hi,
+
+> I think I understand what you are trying to say so far. I did not have 
+> too much
+> experience related to gpio. I will set pull_up register in .set_config
+> However, I did not understand where its parameters come from.
+> set_config(struct gpio_chip *chip, unsigned int offset,
+> 	      unsigned long config)
+> It might be trivial question, but Where does config come from?
+
+Others have to answer that one as I don't have that much experience 
+either.
+
+> At the end, I should rewrite the code using regmap_gpio, right? So if I 
+> rewrite
+> code using regmap_gpio, how can I replace set_config(...)?
+
+You'd have to add a .set_config to gpio_regmap_config and then in
+
+gpio_regmap_register():
+   gpio->set_config = config->set_config;
+
+I don't think it makes sense to have a default implementation in 
+gpio-regmap,
+the variances between "simple" gpio controllers might be too broad.
+
+-michael
