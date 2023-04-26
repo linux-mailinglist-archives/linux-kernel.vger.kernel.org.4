@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BC86EF3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373F66EF3DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240688AbjDZL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S240712AbjDZL54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240680AbjDZL5u (ORCPT
+        with ESMTP id S240680AbjDZL5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:57:50 -0400
+        Wed, 26 Apr 2023 07:57:53 -0400
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915AE4ECA;
-        Wed, 26 Apr 2023 04:57:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6901FD3;
+        Wed, 26 Apr 2023 04:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1682510267;
-  x=1714046267;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=/+zkU24+YOKn48BfDGvvRFLuyFTNYniTwcapIDJBP10=;
-  b=WCyNnLEyQMfQnqhb5sG+kWVYtxnFCsvrchLraBW9PFj7oI2xPccOZYbG
-   Oc5CyQluQmWs/zNUSRYvVtfVz8ofoEMtpvTtcjWBEr94PIE8BFOHgOb5e
-   rUhBKjtK5HT3ezYHQQfZz3glSN9v7d7WlDr3qBZCedOJc3GvzqO+M4itL
-   IMdIjiDh0fWreo920GErlHFGPI76caQRKsxJ2h1PcJjqSeIFEx3nBVj+i
-   YWpS+LM6pJB1/TjLisq/51uGYd2SWJZ9kEm3cpK2GMGZbiy5S/J/KbVH7
-   wfDf3+x8AUgVd1QKeYHxfNH5mHo4nMAMj0rxKw1EjgFCFehzMDHkKfoLZ
+  d=axis.com; q=dns/txt; s=axis-central1; t=1682510272;
+  x=1714046272;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=UrVPi9iavO/29AvSYL2Oe59H3w4J+MhU9zUYa5TBKuQ=;
+  b=OO2KIU/Gy71HxJJ8ruD8BxqyJbPQNQoPXnJSN7I6Ei8HuKL7xtfdVTpy
+   zZZLbAmb3+phR9vmyl+q8yGfMQZXd1xDhgwiftlyTAOY8r+D0H1/yf695
+   TyynIR+Lz5y2XF5bmQx8wTd/Ced8Pr83sQvcPZnccFdjyJGzlyCdsmCVG
+   Hzca4TCj03yGAvoZ9x1t8BlpsKxPoLIgznZ5os8FCM4HedbTYfWE9rAJV
+   CPc8+faZ2oiwyxbpFLSi5PAq2eBggyuovi3uxeTD9OOWP6gtbgDBRnnD6
+   H3mLEN9vjJ8YiUAn0VKcEw+0IcO+m8xXJO/hcuk/hNotlxpwLiqT8qtID
    Q==;
 From:   Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-Subject: [PATCH v3 0/2] Support for Texas Instruments OPT4001 Ambient Light
- Sensor
-Date:   Wed, 26 Apr 2023 13:57:28 +0200
-Message-ID: <20230323-add-opt4001-driver-v3-0-62e121dab294@axis.com>
+Date:   Wed, 26 Apr 2023 13:57:29 +0200
+Subject: [PATCH v3 1/2] dt-bindings: iio: light: Document TI OPT4001 light
+ sensor
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKgRSWQC/4WNzQ7CIBAGX6XhLIaf2hRPvofxsMBqObQ0S0Nqm
- r670JMnPc5uvpmNJaSAiV2bjRHmkEKcCuhTw9wA0wt58IWZEkoLrTQH73mcl1YIyT2FjMSNsQb
- Ad0ZLw8rQQkJuCSY31OkIaUGqj5nwGdajdn8UHkJaIr2PeJb1+rOTJRdcthfpnZPW9XCDNaSzi
- yOrtqz+G1QxCAsotOm7zvgvw77vH0Jfvd4OAQAA
+Message-ID: <20230323-add-opt4001-driver-v3-1-62e121dab294@axis.com>
+References: <20230323-add-opt4001-driver-v3-0-62e121dab294@axis.com>
+In-Reply-To: <20230323-add-opt4001-driver-v3-0-62e121dab294@axis.com>
 To:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,58 +57,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for Texas Instruments OPT4001 Ambient light sensor.
-
-The light sensor has a i2c interface and supports continuous, oneshot and
-interruptdriven measurements and has configurable conversion time and range.
-
-This driver uses the sensors continuous mode so it always has a updated light
-value available. The conversion time which is
- (integration time + time to set registers) which is used to configure
-integration time through sysfs. The chip also has a configurable light
-range which this driver sets to Auto where the chip chooses range itself
-depending on previously read values.
-
-Since the OPT4001 has different constants used to calculate lux values
-depeding on packaging of the chip but uses the same device id, two compatible
-string are used depending on the packaging, these are "ti,opt4001-picostar"
-and "ti,opt4001-sot-5x3".
+Add devicetree bindings for opt4001 ambient light sensor.
 
 Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
 ---
-Changes in v3:
-- Removed unneccesary description from devicetree
-- Use correct subject prefix for devicetree bindings
-- No error on device id miss match
-- Removed opt4001_settings as there was only one needed property int_time
-- Link to v2: https://lore.kernel.org/r/20230323-add-opt4001-driver-v2-0-0bae0398669d@axis.com
+ .../devicetree/bindings/iio/light/ti,opt4001.yaml  | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-Changes in v2:
-- Added text about differences of sot-5x3 and picostar
-- Added irq and regulator to devicetree bindings
-- Added regulator support to driver
-- Switched from using .remove to devm_action_or_reset
-- Removed own mutex and reenabled regmaps
-- Updated name in sysfs
-- Added i2c_device_id
-- Rename package_const to chip_info
-- Link to v1: https://lore.kernel.org/r/20230323-add-opt4001-driver-v1-0-1451dcc1bc8a@axis.com
+diff --git a/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml b/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml
+new file mode 100644
+index 000000000000..12b0c7ed5d72
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/light/ti,opt4001.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/light/ti,opt4001.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments OPT4001 Ambient Light Sensor
++
++maintainers:
++  - Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
++
++description:
++  Ambient light sensor with an i2c interface.
++  Last part of compatible is for the packaging used.
++  Picostar is a 4 pinned SMT and sot-5x3 is a 8 pinned SOT.
++  https://www.ti.com/lit/gpn/opt4001
++
++properties:
++  compatible:
++    enum:
++      - ti,opt4001-picostar
++      - ti,opt4001-sot-5x3
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  vdd-supply:
++    description: Regulator that provides power to the sensor
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: ti,opt4001-sot-5x3
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++    else:
++      properties:
++        interrupts: false
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        light-sensor@44 {
++            compatible = "ti,opt4001-sot-5x3";
++            reg = <0x44>;
++            vdd-supply = <&vdd_reg>;
++            interrupt-parent = <&gpio1>;
++            interrupts = <28 IRQ_TYPE_EDGE_FALLING>;
++        };
++    };
++...
 
----
-Stefan Windfeldt-Prytz (2):
-      dt-bindings: iio: light: Document TI OPT4001 light sensor
-      iio: light: Add support for TI OPT4001 light sensor
-
- .../devicetree/bindings/iio/light/ti,opt4001.yaml  |  68 +++
- drivers/iio/light/Kconfig                          |  11 +
- drivers/iio/light/Makefile                         |   1 +
- drivers/iio/light/opt4001.c                        | 467 +++++++++++++++++++++
- 4 files changed, 547 insertions(+)
----
-base-commit: 60c5238813fdfbe167eb579d58172106916b8db0
-change-id: 20230323-add-opt4001-driver-99b9aad69319
-
-Best regards,
 -- 
-Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+2.30.2
 
