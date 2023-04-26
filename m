@@ -2,349 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A0B6EF300
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F696EF30C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbjDZLB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S240619AbjDZLFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjDZLBz (ORCPT
+        with ESMTP id S240482AbjDZLF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:01:55 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CB62694
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:01:52 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id rcuDpKT0qFuuVrcuDpbgiJ; Wed, 26 Apr 2023 13:01:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682506911;
-        bh=P6l6zetgQcrJakLHGkVzKt0vOihvntcZ5fakSmWckj4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=PMEc6EQZwrcoHkmUPELBMsggN7cgyIcmkBlP420dZSsfD2LFWzC2yoMEIX/BtzafN
-         yzv9x8T2KSBN2kryQderxNm0qgN3UNHF1EmkuuF0lC/54uwLDWe6fqaRP/fuQHHbMe
-         UJNY3GQG15k35PL95iySi4ZUscH9mGXaA5k8X83gUJSmTADIrCBzsdvOTw1HMm8mEV
-         kpdeFsSxuT6dFizpHEQg+ehgVpVpo9OjC+fhmnxgERZhIOcVVglikBxHRIVJUz9RxP
-         8u8iIh5syS3fccjH6xvnhnacbRYqBR2G6X/R5NF6G4pE/xBvvjQ4LwGC2MYInWvaeR
-         kdQfj9OlKoXHw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 26 Apr 2023 13:01:50 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <8ff8025f-bdbb-ec5f-9e2b-a182e3ff2e7d@wanadoo.fr>
-Date:   Wed, 26 Apr 2023 13:01:49 +0200
+        Wed, 26 Apr 2023 07:05:29 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38FE524E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:05:23 -0700 (PDT)
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33QB56Ie037041;
+        Wed, 26 Apr 2023 20:05:06 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Wed, 26 Apr 2023 20:05:06 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33QB56il037036
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 26 Apr 2023 20:05:06 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <5cebade5-0aa9-506c-c817-7bcf098eba89@I-love.SAKURA.ne.jp>
+Date:   Wed, 26 Apr 2023 20:05:03 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
-Content-Language: fr, en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: [PATCH] tty: tty_io: remove hung_up_tty_fops
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000013aaac05f9d44e7a@google.com>
+ <CACT4Y+bj7jCOjGV5jCUPzN5zjgdHxRn9vkwQEBuPWVzMbMCnXw@mail.gmail.com>
+ <6ff6fdea-c955-f9dd-289e-b0d613a28280@I-love.SAKURA.ne.jp>
+ <20230423233433.GF3390869@ZenIV>
+ <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
+ <20230424004431.GG3390869@ZenIV>
+ <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
+ <2fca7932-5030-32c3-dd61-48dd78e58e11@I-love.SAKURA.ne.jp>
+ <20230425160344.GS3390869@ZenIV>
+ <1b405689-ea0a-6696-6709-d372ce72d68c@I-love.SAKURA.ne.jp>
+In-Reply-To: <1b405689-ea0a-6696-6709-d372ce72d68c@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 26/04/2023 à 11:03, Naresh Solanki a écrit :
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> 
-> Add support for the Maxim Max59x power switch with current/voltage
-> monitor.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+syzbot is reporting data race between __tty_hangup() and __fput(), for
+filp->f_op readers are not holding tty->files_lock.
 
-Hi,
+Dmitry Vyukov mentioned that this race has possibility of NULL pointer
+dereference, for tty_fops implements e.g. splice_read callback whereas
+hung_up_tty_fops does not.
 
-a few nit below, should there be a v2.
+  CPU0                                  CPU1
+  ----                                  ----
+  do_splice_to() {
+                                        __tty_hangup() {
+    // f_op->splice_read was generic_file_splice_read
+    if (unlikely(!in->f_op->splice_read))
+      return warn_unsupported(in, "read");
+                                          filp->f_op = &hung_up_tty_fops;
+    // f_op->splice_read is now NULL
+    return in->f_op->splice_read(in, ppos, pipe, len, flags);
+    }
+  }
 
-CJ
+If we care about only NULL pointer dereference, implementing missing
+callbacks to hung_up_tty_fops is fine. But if we also care about KCSAN
+reports, we will need to wrap all filp->f_op usages which are reachable
+via tty_fops callbacks using data_race().
 
-> ---
->   drivers/hwmon/Kconfig   |   9 ++
->   drivers/hwmon/Makefile  |   1 +
->   drivers/hwmon/max597x.c | 212 ++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 222 insertions(+)
->   create mode 100644 drivers/hwmon/max597x.c
-> 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 5b3b76477b0e..164d980d9de2 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1097,6 +1097,15 @@ config SENSORS_MAX31760
->   	  This driver can also be built as a module. If so, the module
->   	  will be called max31760.
->   
-> +config SENSORS_MAX597X
-> +	tristate "Maxim 597x power switch and monitor"
-> +	depends on I2C
-> +	depends on OF
-> +	select MFD_MAX597X
-> +	help
-> +	  This driver exposes Maxim 5970/5978 voltage/current monitoring
-> +	  interface.
-> +
->   config SENSORS_MAX6620
->   	tristate "Maxim MAX6620 fan controller"
->   	depends on I2C
-> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> index 88712b5031c8..720eb7d5fe46 100644
-> --- a/drivers/hwmon/Makefile
-> +++ b/drivers/hwmon/Makefile
-> @@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
->   obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
->   obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
->   obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
-> +obj-$(CONFIG_SENSORS_MAX597X)	+= max597x.o
->   obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
->   obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
->   obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
-> diff --git a/drivers/hwmon/max597x.c b/drivers/hwmon/max597x.c
-> new file mode 100644
-> index 000000000000..d4d8c2faf55c
-> --- /dev/null
-> +++ b/drivers/hwmon/max597x.c
-> @@ -0,0 +1,212 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device driver for regulators in MAX5970 and MAX5978 IC
-> + *
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#include <linux/hwmon.h>
-> +#include <linux/i2c.h>
-> +#include <linux/mfd/max597x.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +struct max597x_hwmon {
-> +	int num_switches, irng[MAX5970_NUM_SWITCHES], mon_rng[MAX5970_NUM_SWITCHES];
+Such wrapping is overkill as a fix for tty_io code. Therefore, instead of
+implementing missing callbacks, stop updating filp->f_op and remove
+hung_up_tty_fops. Then, changes will be limited to within tty_io code.
 
-Having 1 item per line is much more usual.
+tty_open() is doing "filp->f_op = &tty_fops;".
+__tty_hangup() is doing "filp->f_op = &hung_up_tty_fops;".
+tty_hung_up_p() is doing "filp->f_op == &hung_up_tty_fops", and
+most functions are checking tty_hung_up_p().
 
-> +	struct regmap *regmap;
-> +};
-> +
-> +static int max597x_read_reg(struct max597x_hwmon *ddata, int reg, int range, long *val)
-> +{
-> +	u8 reg_data[2];
-> +	int ret;
-> +
-> +	ret = regmap_bulk_read(ddata->regmap, reg, &reg_data[0], 2);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
-> +	*val = *val * range;
-> +	/*
-> +	 * From datasheet, the range is fractionally less.
-> +	 * To compensate that, divide with 1033 number.
-> +	 */
-> +	*val = *val / 1033;
-> +
-> +	return 0;
-> +}
-> +
-> +static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
-> +			u32 attr, int channel, long *val)
-> +{
-> +	struct max597x_hwmon *ddata = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	switch (type) {
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
-> +					       ddata->irng[channel], val);
-> +			if (ret < 0)
-> +				return ret;
-> +
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
-> +					       ddata->mon_rng[channel], val);
-> +			if (ret < 0)
-> +				return ret;
-> +			return 0;
-> +		default:
-> +			return -EOPNOTSUPP;
-> +		}
-> +	}
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static umode_t max597x_is_visible(const void *data,
-> +				  enum hwmon_sensor_types type,
-> +				  u32 attr, int channel)
-> +{
-> +	struct max597x_hwmon *ddata = (struct max597x_hwmon *)data;
-> +
-> +	if (channel >= ddata->num_switches)
-> +		return 0;
-> +
-> +	switch (type) {
-> +	case hwmon_in:
-> +		switch (attr) {
-> +		case hwmon_in_input:
-> +			return 0444;
-> +		}
-> +		break;
-> +	case hwmon_curr:
-> +		switch (attr) {
-> +		case hwmon_curr_input:
-> +			return 0444;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static const struct hwmon_ops max597x_hwmon_ops = {
-> +	.is_visible = max597x_is_visible,
-> +	.read = max597x_read,
-> +};
-> +
-> +#define HWMON_CURRENT	HWMON_C_INPUT
-> +#define HWMON_VOLTAGE	HWMON_I_INPUT
-> +
-> +static const struct hwmon_channel_info *max597x_info[] = {
-> +	HWMON_CHANNEL_INFO(in, HWMON_VOLTAGE, HWMON_VOLTAGE),
-> +	HWMON_CHANNEL_INFO(curr, HWMON_CURRENT, HWMON_CURRENT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_chip_info max597x_chip_info = {
-> +	.ops = &max597x_hwmon_ops,
-> +	.info = max597x_info,
-> +};
-> +
-> +static int max597x_adc_range(struct regmap *regmap, const int ch,
-> +			     u32 *irng, u32 *mon_rng)
-> +{
-> +	unsigned int reg;
-> +	int ret;
-> +
-> +	/* Decode current ADC range */
-> +	ret = regmap_read(regmap, MAX5970_REG_STATUS2, &reg);
-> +	if (ret)
-> +		return ret;
-> +	switch (MAX5970_IRNG(reg, ch)) {
-> +	case 0:
-> +		*irng = 100000;	/* 100 mV */
-> +		break;
-> +	case 1:
-> +		*irng = 50000;	/* 50 mV */
-> +		break;
-> +	case 2:
-> +		*irng = 25000;	/* 25 mV */
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Decode current voltage monitor range */
-> +	ret = regmap_read(regmap, MAX5970_REG_MON_RANGE, &reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*mon_rng = MAX5970_MON_MAX_RANGE_UV >> MAX5970_MON(reg, ch);
-> +	*mon_rng /= 1000; /* uV to mV */
-> +
-> +	return 0;
-> +}
-> +
-> +static int max597x_sensor_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
-> +	struct max597x_hwmon *ddata;
-> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	struct device *hwmon_dev;
-> +	int err;
-> +
-> +	if (!regmap)
-> +		return -EPROBE_DEFER;
-> +
-> +	ddata = devm_kzalloc(dev, sizeof(struct max597x_hwmon), GFP_KERNEL);
-> +	if (!ddata)
-> +		return -ENOMEM;
-> +
-> +	if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
-> +		ddata->num_switches = MAX597x_TYPE_MAX5978;
-> +	else if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5970"))
-> +		ddata->num_switches = MAX597x_TYPE_MAX5970;
-> +	else
-> +		return -ENODEV;
-> +
-> +	ddata->regmap = regmap;
-> +
-> +	for (int i = 0; i < ddata->num_switches; i++) {
+Since tty_open() allocates "struct tty_file_private" for each
+"struct file", we can remember whether __tty_hangup() was called
+by adding a flag to "struct tty_file_private".
 
-This is unusual to define 'i' within a 'for' loop.
+Below is detail of where/what to change.
 
-> +		err = max597x_adc_range(regmap, i, &ddata->irng[i], &ddata->mon_rng[i]);
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
-> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
-> +							 "max597x_hwmon", ddata,
-> +							 &max597x_chip_info, NULL);
-> +
+Regarding __tty_hangup(), replace "filp->f_op = &hung_up_tty_fops;" with
+setting the above-mentioned flag.
 
-Unneeded empty line.
+Regarding tty_hungup_p(), replace "filp->f_op == &hung_up_tty_fops" with
+"filp->f_op == &tty_fops" and check the above-mentioned flag.
 
-> +	if (IS_ERR(hwmon_dev)) {
-> +		err = PTR_ERR(hwmon_dev);
-> +		dev_err(dev, "Unable to register hwmon device, returned %d\n", err);
-> +		return err;
+Regarding tty_open(), just remove "filp->f_op = &tty_fops;" because
+"struct tty_file_private" was already released by tty_del_file() from
+tty_release() when control reaches this line.
 
-return dev_err_probe()?
+Regarding tty_{read,write,poll,ioctl,compat_ioctl}(), respectively embed
+hung_up_tty_{read,write,poll,ioctl,compat_ioctl}() right before
+tty_paranoia_check().
 
-CJ
+Regarding tty_fasync(), embed hung_up_tty_fasync() right before tty_lock()
+in tty_fasync() rather than tty_paranoia_check() in __tty_fasync(), for
+tty_hung_up_p() is checked right after tty_lock() returned.
 
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver max597x_sensor_driver = {
-> +	.probe = max597x_sensor_probe,
-> +	.driver = {
-> +		.name = "max597x-hwmon",
-> +	},
-> +};
-> +module_platform_driver(max597x_sensor_driver);
-> +
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
-> +MODULE_LICENSE("GPL v2");
-> 
-> base-commit: b4c288cfd2f84c44994330c408e14645d45dee5b
+Since tty_read() is called via file->f_op->read_iter() from
+call_read_iter() from generic_file_splice_read(), no change is needed for
+tty_fops->splice_read.
+
+Since tty_write() is called via file->f_op->write_iter() from
+call_write_iter() from do_iter_readv_writev() from do_iter_write() from
+vfs_iter_write() from iter_file_splice_write(), no change is needed for
+tty_fops->splice_write.
+
+Since both tty_fops and hung_up_tty_fops point to the same callback for
+llseek/release, no change is needed for tty_fops->{llseek,release}.
+
+Finally, remove hung_up_tty_fops.
+
+Reported-by: syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>
+Link: https://syzkaller.appspot.com/bug?extid=b7c3ba8cdc2f6cf83c21
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+---
+ drivers/tty/tty_io.c | 37 ++++++++++++++++++-------------------
+ include/linux/tty.h  |  1 +
+ 2 files changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 36fb945fdad4..c1748e4da233 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -182,7 +182,7 @@ int tty_alloc_file(struct file *file)
+ {
+ 	struct tty_file_private *priv;
+ 
+-	priv = kmalloc(sizeof(*priv), GFP_KERNEL);
++	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+ 		return -ENOMEM;
+ 
+@@ -491,17 +491,6 @@ static const struct file_operations console_fops = {
+ 	.fasync		= tty_fasync,
+ };
+ 
+-static const struct file_operations hung_up_tty_fops = {
+-	.llseek		= no_llseek,
+-	.read_iter	= hung_up_tty_read,
+-	.write_iter	= hung_up_tty_write,
+-	.poll		= hung_up_tty_poll,
+-	.unlocked_ioctl	= hung_up_tty_ioctl,
+-	.compat_ioctl	= hung_up_tty_compat_ioctl,
+-	.release	= tty_release,
+-	.fasync		= hung_up_tty_fasync,
+-};
+-
+ static DEFINE_SPINLOCK(redirect_lock);
+ static struct file *redirect;
+ 
+@@ -619,7 +608,8 @@ static void __tty_hangup(struct tty_struct *tty, int exit_session)
+ 			continue;
+ 		closecount++;
+ 		__tty_fasync(-1, filp, 0);	/* can't block */
+-		filp->f_op = &hung_up_tty_fops;
++		/* Accept race with tty_hung_up_p() test. */
++		data_race(priv->hung = true);
+ 	}
+ 	spin_unlock(&tty->files_lock);
+ 
+@@ -743,7 +733,9 @@ void tty_vhangup_session(struct tty_struct *tty)
+  */
+ int tty_hung_up_p(struct file *filp)
+ {
+-	return (filp && filp->f_op == &hung_up_tty_fops);
++	return filp && filp->f_op == &tty_fops &&
++		/* Accept race with __tty_hangup(). */
++		data_race(((struct tty_file_private *) filp->private_data)->hung);
+ }
+ EXPORT_SYMBOL(tty_hung_up_p);
+ 
+@@ -911,6 +903,8 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
+ 	struct tty_struct *tty = file_tty(file);
+ 	struct tty_ldisc *ld;
+ 
++	if (tty_hung_up_p(file))
++		return hung_up_tty_read(iocb, to);
+ 	if (tty_paranoia_check(tty, inode, "tty_read"))
+ 		return -EIO;
+ 	if (!tty || tty_io_error(tty))
+@@ -1073,6 +1067,8 @@ static ssize_t file_tty_write(struct file *file, struct kiocb *iocb, struct iov_
+ 	struct tty_ldisc *ld;
+ 	ssize_t ret;
+ 
++	if (tty_hung_up_p(file))
++		return hung_up_tty_write(iocb, from);
+ 	if (tty_paranoia_check(tty, file_inode(file), "tty_write"))
+ 		return -EIO;
+ 	if (!tty || !tty->ops->write ||	tty_io_error(tty))
+@@ -2159,11 +2155,6 @@ static int tty_open(struct inode *inode, struct file *filp)
+ 			return retval;
+ 
+ 		schedule();
+-		/*
+-		 * Need to reset f_op in case a hangup happened.
+-		 */
+-		if (tty_hung_up_p(filp))
+-			filp->f_op = &tty_fops;
+ 		goto retry_open;
+ 	}
+ 	clear_bit(TTY_HUPPED, &tty->flags);
+@@ -2197,6 +2188,8 @@ static __poll_t tty_poll(struct file *filp, poll_table *wait)
+ 	struct tty_ldisc *ld;
+ 	__poll_t ret = 0;
+ 
++	if (tty_hung_up_p(filp))
++		return hung_up_tty_poll(filp, wait);
+ 	if (tty_paranoia_check(tty, file_inode(filp), "tty_poll"))
+ 		return 0;
+ 
+@@ -2249,6 +2242,8 @@ static int tty_fasync(int fd, struct file *filp, int on)
+ 	struct tty_struct *tty = file_tty(filp);
+ 	int retval = -ENOTTY;
+ 
++	if (tty_hung_up_p(filp))
++		return hung_up_tty_fasync(fd, filp, on);
+ 	tty_lock(tty);
+ 	if (!tty_hung_up_p(filp))
+ 		retval = __tty_fasync(fd, filp, on);
+@@ -2658,6 +2653,8 @@ long tty_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	int retval;
+ 	struct tty_ldisc *ld;
+ 
++	if (tty_hung_up_p(file))
++		return hung_up_tty_ioctl(file, cmd, arg);
+ 	if (tty_paranoia_check(tty, file_inode(file), "tty_ioctl"))
+ 		return -EINVAL;
+ 
+@@ -2943,6 +2940,8 @@ static long tty_compat_ioctl(struct file *file, unsigned int cmd,
+ 		return tty_ioctl(file, cmd, arg);
+ 	}
+ 
++	if (tty_hung_up_p(file))
++		return hung_up_tty_compat_ioctl(file, cmd, arg);
+ 	if (tty_paranoia_check(tty, file_inode(file), "tty_ioctl"))
+ 		return -EINVAL;
+ 
+diff --git a/include/linux/tty.h b/include/linux/tty.h
+index 093935e97f42..d7fa18f8c526 100644
+--- a/include/linux/tty.h
++++ b/include/linux/tty.h
+@@ -255,6 +255,7 @@ struct tty_file_private {
+ 	struct tty_struct *tty;
+ 	struct file *file;
+ 	struct list_head list;
++	bool hung;
+ };
+ 
+ /**
+-- 
+2.34.1
 
