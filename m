@@ -2,103 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84AF66EEB7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5926EEB8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbjDZAfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+        id S229772AbjDZAmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236933AbjDZAfr (ORCPT
+        with ESMTP id S238451AbjDZAmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:35:47 -0400
-X-Greylist: delayed 50100 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Apr 2023 17:35:46 PDT
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163D4BB;
-        Tue, 25 Apr 2023 17:35:45 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 97E92C01D; Wed, 26 Apr 2023 02:35:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682469344; bh=WkAOxd1G4B7WbFDuFK2jnLsO97agfT/cj1gWYlIL73s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZe68lAlyVt/HxiPSMN5GL0FDy6zoCEybHQtU6iqUo9/hXQJcYBY/VBz129sC0YfY
-         +DLMPoNQRxR/SUjiW6quXyPGN/zE1LPBrtFpomRyvokxCODmyNyHxF0UMF+4H3lCzV
-         F/LU6RCVi9K5TxLgH1j3h0KaryRrew+22D/W9Gxf4wteizilrS74EBniHU+rDW9fQb
-         3RFe/dMwz3vTsNJNK2NbZ167Qf+lzIiNuIjsIt+ODytYuAlmSdE/9a2BmqwfFZsn5O
-         LUcnxkJLRcnJ/KJ31VSx/clx9QqnIjM8qPIXDNTlQMIHJXZWFw1H6Ab4uv6g7po+A7
-         ee0ymPbYmDLww==
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        Tue, 25 Apr 2023 20:42:22 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63042C172
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:42:21 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b992ed878ebso20899493276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1682469740; x=1685061740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ex64O22Q6MJK3vmUJrUzxDpwyisWe3dSu5BawTJE6oE=;
+        b=aM5snHVJdK41+qi/asnsYEkzt/hrVltqs8FhwWZJzHVoB6pEL3qrWjqm4K8RJ+MirC
+         6I4YEenpRtU+Y+VrpoT0dsSmYhcyFnSe4Y88VoZHxY4HxlRijN/ulaZAbfij1TZ2nUu8
+         yr4cezbYS6UyLwIklvxS2tsbZ0GEgLaQJ2J7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682469740; x=1685061740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ex64O22Q6MJK3vmUJrUzxDpwyisWe3dSu5BawTJE6oE=;
+        b=lXq4jcZiKIOfj09F6nxGGE4eiAwopMLkp6/zAgPZHUrpA/svch1ZfZlJEIqJfLWgUs
+         F+wi9ob8okDTATVU4qEjtXaERo4pcO9PiewjgMkeSmYBy39vMzZOMHyYIWXLp0exGMzs
+         XEw3DsHRXo1/gleTQcVnjN7QWCDQDAaQFkQdSyhIrcI4I2yC817w8sbeyml5VtqlPx4s
+         Wt4IrMyf/mAPl/YixY2wOl8ILZZXHGyRR7jM/uet8OfiXmka2rWsWZyGmDE2ZkEfxpSl
+         ej//AKCRz4BcCE3+adpfhP1ebhc0pTptS/NnKIsqdkZgndqVlaqOAfPPtZF/ML1o6LJB
+         dwig==
+X-Gm-Message-State: AC+VfDyb4rkqA/PeNDBN2fhBA39d+pV1RPgdF+hSwCmLQsA/efqsvVSV
+        cztbDvpy+3AkFGSrq0I/e4ZIylpCDS3K23yRk537mw==
+X-Google-Smtp-Source: ACHHUZ7XSktwiGI80bL5xyuWLRJVxHHTNrtwyhkd9aW9AQ2QgVh4GCjQDrBxrRxes13HDv22h/aP3ezxT/idpZHXHjM=
+X-Received: by 2002:a25:37d0:0:b0:b99:16bd:441c with SMTP id
+ e199-20020a2537d0000000b00b9916bd441cmr558120yba.6.1682469740424; Tue, 25 Apr
+ 2023 17:42:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
+ <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
+ <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
+ <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
+ <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
+ <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
+ <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
+ <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com> <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
+In-Reply-To: <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 25 Apr 2023 20:42:08 -0400
+Message-ID: <CAEXW_YRtPycnjT5kc-YkYo2Tj3+Jt1Cog7OPxg4bG1mbXDp+RA@mail.gmail.com>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "lance@osuosl.org" <lance@osuosl.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
+        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 77F15C009;
-        Wed, 26 Apr 2023 02:35:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682469343; bh=WkAOxd1G4B7WbFDuFK2jnLsO97agfT/cj1gWYlIL73s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mF/VMeuCx6NWy3dSCaV6givEULXRt8VNNvme65N08336Ai4m5pz2D+6DxOMy4VyJH
-         0F1xBHRmSk1rsge9RJ+Qo6ABiol5LtD42GTcfKKtPYic+feaEzWOK3+GZOtmfonf4n
-         BySOYF1NvS05EdhvFZrnwmoVElYMWdI0O1Xf2Ql2FcBGbCWQ3hoqXtmhq/2bKjohf6
-         SPyAKlbg+6aZA+HCfgU0WkxIVP0fCisuusfpH31GeTARl2KZPNX5wf6Ks+7GXvLW5n
-         XhMe7s3u9ccMiFgfcOZumBZzMczNniufG/e3RoHZHeJI/NUGRxKIr6OSTZfaYKjMwG
-         XP1egKzDRErUQ==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 2208154f;
-        Wed, 26 Apr 2023 00:35:37 +0000 (UTC)
-Date:   Wed, 26 Apr 2023 09:35:22 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eric Van Hensbergen <ericvh@kernel.org>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        v9fs@lists.linux.dev
-Subject: Re: [PATCH] fs/9p: Fix a datatype used with V9FS_DIRECT_IO
-Message-ID: <ZEhxygpFsFstKlrX@codewreck.org>
-References: <80bae984fd5ca49b691bb35f2fd8f345f8bb67f1.1682405206.git.christophe.jaillet@wanadoo.fr>
- <ZEd8d7W6HnHE_66m@codewreck.org>
- <CA+_b7DK1s87y-_-D3sQxteqJ+78uvKza-vgWGv9SmGm-tqz7DA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+_b7DK1s87y-_-D3sQxteqJ+78uvKza-vgWGv9SmGm-tqz7DA@mail.gmail.com>
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan Carpenter wrote on Tue, Apr 25, 2023 at 02:14:52PM +0100:
-> The hash is constant unless Eric does a rebase.  When a maintainer rebases
-> then updating the fixes tags is just part of the process.  Often they end up
-> folding the fix into the original patch at that point so the Fixes tag is not
-> required.  If a maintainer doesn't update the tags then the linux-next
-> maintainers will notice and complain.
+On Tue, Apr 25, 2023 at 9:40=E2=80=AFAM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 25/04/2023 =C3=A0 13:06, Joel Fernandes a =C3=A9crit :
+> > On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.c=
+om> wrote:
+> >>
+> >> hi
+> >>
+> >> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infrade=
+ad.org> wrote:
+> >>>
+> >>> On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
+> >>>> This is amazing debugging Boqun, like a boss! One comment below:
+> >>>>
+> >>>>>>> Or something simple I haven't thought of? :)
+> >>>>>>
+> >>>>>> At what points can r13 change?  Only when some particular function=
+s are
+> >>>>>> called?
+> >>>>>>
+> >>>>>
+> >>>>> r13 is the local paca:
+> >>>>>
+> >>>>>          register struct paca_struct *local_paca asm("r13");
+> >>>>>
+> >>>>> , which is a pointer to percpu data.
+> >>>>>
+> >>>>> So if a task schedule from one CPU to anotehr CPU, the value gets
+> >>>>> changed.
+> >>>>
+> >>>> It appears the whole issue, per your analysis, is that the stack
+> >>>> checking code in gcc should not cache or alias r13, and must read it=
+s
+> >>>> most up-to-date value during stack checking, as its value may have
+> >>>> changed during a migration to a new CPU.
+> >>>>
+> >>>> Did I get that right?
+> >>>>
+> >>>> IMO, even without a reproducer, gcc on PPC should just not do that,
+> >>>> that feels terribly broken for the kernel. I wonder what clang does,
+> >>>> I'll go poke around with compilerexplorer after lunch.
+> >>>>
+> >>>> Adding +Peter Zijlstra as well to join the party as I have a feeling
+> >>>> he'll be interested. ;-)
+> >>>
+> >>> I'm a little confused; the way I understand the whole stack protector
+> >>> thing to work is that we push a canary on the stack at call and on
+> >>> return check it is still valid. Since in general tasks randomly migra=
+te,
+> >>> the per-cpu validation canary should be the same on all CPUs.
+> >>>
+> >>> Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions use
+> >>> raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local cpu=
+,
+> >>> but no guarantees.
+> >>>
+> >>> Both cases use r13 (paca) in a racy manner, and in both cases it shou=
+ld
+> >>> be safe.
+> >> New test results today: both gcc build from git (git clone
+> >> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
+> >> are immune from the above issue. We can see the assembly code on
+> >> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
+> >>
+> >> while
+> >> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compiler
+> >> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
+> >
+> > Do you know what fixes the issue? I would not declare victory yet. My
+> > feeling is something changes in timing, or compiler codegen which
+> > hides the issue. So the issue is still there but it is just a matter
+> > of time before someone else reports it.
+> >
+> > Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
+> > canary? Michael, is this an optimization? Adding Christophe as well
+> > since it came in a few years ago via the following commit:
+>
+> It uses per-task canary. But unlike PPC32, PPC64 doesn't have a fixed
+> register pointing to 'current' at all time so the canary is copied into
+> a per-cpu struct during _switch().
+>
+> If GCC keeps an old value of the per-cpu struct pointer, it then gets
+> the canary from the wrong CPU struct so from a different task.
 
-Good to know this is checked as part of the linux-next tree checks.
+Thanks a lot Christophe, that makes sense. Segher, are you convinced
+that it is a compiler issue or is there still some doubt?  Could you
+modify gcc's stack checker to not optimize away r13 reads or is that
+already the case in newer gcc?
 
-> #GitMagic
+thanks,
 
-This isn't magic, this is painful to update manually and easy to forget,
-which is why as a maintainer I'd appreciate having a heads up here and
-why I mentioned it.
-(I'm sure Eric would have noticed anyway given this is fixing one of the
-patchs he really wants to get in this merge window... But, well, in
-general)
+ - Joel
 
-
-Re: folding into the original patch or not is also tricky as it weakens
-recognition to the contributor, so I tend to keep such fixes separate
-unless the tree becomes completely unusable (e.g. doesn't build) for
-bisectability.
-
-(I really, really wish there was a more mainlined maintainer process
-though, so each maintainer wouldn't have to come up with their own rules
-and tricks for everything... But I think that's a lost battle at this
-point)
-
--- 
-Dominique Martinet | Asmadeus
+>
+> Christophe
+>
+> >
+> > commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
+> > Author: Christophe Leroy <christophe.leroy@c-s.fr>
+> > Date:   Thu Sep 27 07:05:55 2018 +0000
+> >
+> >      powerpc/64: add stack protector support
+> >
+> >      On PPC64, as register r13 points to the paca_struct at all time,
+> >      this patch adds a copy of the canary there, which is copied at
+> >      task_switch.
+> >      That new canary is then used by using the following GCC options:
+> >      -mstack-protector-guard=3Dtls
+> >      -mstack-protector-guard-reg=3Dr13
+> >      -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, cana=
+ry))
+> >
+> >      Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
+> >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> >
+> >   - Joel
