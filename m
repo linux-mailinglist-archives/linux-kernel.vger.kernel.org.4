@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4D6EF939
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376B26EF937
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbjDZRWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S234754AbjDZRWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbjDZRWh (ORCPT
+        with ESMTP id S233259AbjDZRWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 13:22:37 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8276A54;
-        Wed, 26 Apr 2023 10:22:33 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1950f5676so62804405e9.3;
-        Wed, 26 Apr 2023 10:22:33 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32CB768F;
+        Wed, 26 Apr 2023 10:22:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f173af665fso49265575e9.3;
+        Wed, 26 Apr 2023 10:22:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682529752; x=1685121752;
+        d=gmail.com; s=20221208; t=1682529753; x=1685121753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GAnZfqczk9XorSugn0T6gsnj6aOYhJlDWU10SzOUFWc=;
-        b=GT7A+6XVhCTLKoabJ1xim2dk4pTd5+NYroN+ZOB1LoPgNHTOCnTHlTiIGNW8mtHS+Q
-         YmxjVjfsR3n42NINIvTfsHi7pvGHJ+frWb9/mQQmGnjzaI5vLH0XuvYcWG7unDEVzpfp
-         0b1ak/id4tsXpOtTzP3OYKaWun2BDVPgJCZeJplHaSwIJMQsU0QxoOCQxmGxSuqPFjNw
-         dWhOq+3dqNde/FzFlxiR6O0M/NPXfk1TY4aN2vgYfqLD46Ou4ckk1/RBVWQEdjQ7lR2h
-         amx2jSznWhtI2UxI/9T05eivoahzyf2whz/lkZH5KyZ4xxFYRTxVndbfDM+mdX94DmQ2
-         hQfw==
+        bh=QGGuuT4kxnu8LAsLSN2/nZn2XL63I1olVWlYc+jmPC8=;
+        b=lwHid8p1I8iTy9vPNQ9QsstpfBfNYMX0SCwBPeSCOrHNYDlEA8itjR4aaI24wsroqJ
+         xz9U9x5RLhvUzDCAsGSCO/02PEaszNEXYIJNOH+7qiUEymIzKizSCLCoP1e0RZIRmpMC
+         8navah0qGqSI0R1CdLmD8uiRXbg7y0MkmKNP1xZk/gyFmnKUPlkKbwoV3gJ9Bim0qQ1f
+         Mm2uge3wRikEapyEZkPoysQYOD5X70QD+BOUt8y95ojFeX4AqQN4gHl3L1ioNEhPlhJR
+         aR+VDXTECHd7suMSc9GnhML8JLLDyLnfIRFtHiPp76Dev8uwj/f8d0T7D6tWDPtWdmNU
+         Bgag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682529752; x=1685121752;
+        d=1e100.net; s=20221208; t=1682529753; x=1685121753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GAnZfqczk9XorSugn0T6gsnj6aOYhJlDWU10SzOUFWc=;
-        b=YsIbg8ju3XFnyXQESn0MN/mAjK0X42ZTtr0XrLEKZ+TKabESM8g7ku+Dd3BO6rNZQU
-         VRHTpGE8TmZcDAvfCeezYMnZE6jklf8EJZMq+izc5zHgT5N8sID+68wGN8dFhCA7e8yQ
-         5r7J3CXdXb5/wJYgAtwn4/Pb2tbY9DLzFKLZ5x2fGEj3b1caRQIxHQeQ8ibDSWUNsOgb
-         RrAJvNELAHpF20b/qtMZv3/+PW51/iJgrHi0SO1V1bMS+wkqNltSTUlhuqYXEBj8M/7c
-         0bFhnsneWB7Tm6gbtYizS7HLqfySZhZ9kwFygtISvGxOdhVVa8FwDXkaAxrKnL/3nv1R
-         zJkg==
-X-Gm-Message-State: AAQBX9ex081l081FM+dQ7hdTP2LcS4pS/RMoNXBlozzHSXL/nSi3iQgx
-        dkJgyxAXl30q6FoZWBHcgZs=
-X-Google-Smtp-Source: AKy350bwGtMoDIBt2EKK1gpeuy4xB+KXy2601PoJesHoIiA4uTMMCRVgk3DkVV1JLhJ4GXUawd4BkQ==
-X-Received: by 2002:a05:600c:3659:b0:3f0:3ab2:a7e5 with SMTP id y25-20020a05600c365900b003f03ab2a7e5mr14332173wmq.34.1682529751699;
-        Wed, 26 Apr 2023 10:22:31 -0700 (PDT)
+        bh=QGGuuT4kxnu8LAsLSN2/nZn2XL63I1olVWlYc+jmPC8=;
+        b=BgF42VOfN1ZApGpL6O1SUOpg9PB/hyL0WilJhE19UWhL3BXr9rlSBY5f+HiZglZe0f
+         DiT8B9QKz3EKsV8353ycjkpghonPsJ54rpsRo2OdDbzwtf1AqRdZ0mCOT5zsoizrr3Bt
+         Y58fPZRHZOEXP+l55rmW0xOomKDja1y7wYn+ZU0C1pK8yQQu24tG/1NlILWVHexcttBu
+         dBTOF09Mkpegf0VbkW3W4U6kaqKiG8rxZgdGR79PyLG6BR1BtyQfEZLcSES2touAnO3z
+         YrDEc6fHt7JfykFXR+x1NsyqCikt1qImi25Ov1dTkFROR7n7JXuFuPvsv/AprdEfJyl8
+         XJOQ==
+X-Gm-Message-State: AAQBX9eACONz5c/rxV3kdNk/AcEgc2BI6cfwpQcKfgV5Hq5W0oZGGKL6
+        yc/ZBtP1lWarCNfq1T1m/Is=
+X-Google-Smtp-Source: AKy350Y1g9yuXHNVum2sTVb3YCthxPQVLi02craw3DCirefDJOXL+pfmmqf/rPuJaXidIs1B5LR3uQ==
+X-Received: by 2002:a05:600c:259:b0:3f1:662a:93d0 with SMTP id 25-20020a05600c025900b003f1662a93d0mr14566645wmj.15.1682529753282;
+        Wed, 26 Apr 2023 10:22:33 -0700 (PDT)
 Received: from localhost.localdomain (host-87-21-14-179.retail.telecomitalia.it. [87.21.14.179])
-        by smtp.gmail.com with ESMTPSA id v21-20020a7bcb55000000b003f16f362ae7sm18675613wmj.21.2023.04.26.10.22.30
+        by smtp.gmail.com with ESMTPSA id v21-20020a7bcb55000000b003f16f362ae7sm18675613wmj.21.2023.04.26.10.22.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 10:22:31 -0700 (PDT)
+        Wed, 26 Apr 2023 10:22:32 -0700 (PDT)
 From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
 To:     Tyler Hicks <code@tyhicks.com>,
         Christian Brauner <brauner@kernel.org>,
@@ -60,14 +60,13 @@ To:     Tyler Hicks <code@tyhicks.com>,
         Al Viro <viro@zeniv.linux.org.uk>, ecryptfs@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH v2 1/3] fs/ecryptfs: Replace kmap() with kmap_local_page()
-Date:   Wed, 26 Apr 2023 19:22:21 +0200
-Message-Id: <20230426172223.8896-2-fmdefrancesco@gmail.com>
+Subject: [PATCH v2 2/3] fs/ecryptfs: Use kmap_local_page() in ecryptfs_write()
+Date:   Wed, 26 Apr 2023 19:22:22 +0200
+Message-Id: <20230426172223.8896-3-fmdefrancesco@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230426172223.8896-1-fmdefrancesco@gmail.com>
 References: <20230426172223.8896-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -79,102 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() has been deprecated in favor of kmap_local_page().
+kmap_atomic() is deprecated in favor of kmap_local_page().
 
-Therefore, replace kmap() with kmap_local_page() in fs/ecryptfs.
+Therefore, replace kmap_atomic() with kmap_local_page() in
+ecryptfs_write().
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-the mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+kmap_atomic() is implemented like kmap_local_page() which also disables
+page-faults and preemption (the latter only for !PREEMPT_RT kernels).
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. The tasks can
-be preempted and, when they are scheduled to run again, the kernel
-virtual addresses are restored and still valid.
-
-Obviously, thread locality implies that the kernel virtual addresses
-returned by kmap_local_page() are only valid in the context of the
-callers (i.e., they cannot be handed to other threads).
-
-The use of kmap_local_page() in fs/ecryptfs does not break the
-above-mentioned assumption, so it is allowed and preferred.
+The code within the mapping/un-mapping in ecryptfs_write() does not
+depend on the above-mentioned side effects so that a mere replacement of
+the old API with the new one is all that is required (i.e., there is no
+need to explicitly call pagefault_disable() and/or preempt_disable()).
 
 Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
 HIGHMEM64GB enabled.
 
 Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 ---
- fs/ecryptfs/crypto.c     | 8 ++++----
- fs/ecryptfs/read_write.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ fs/ecryptfs/read_write.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ecryptfs/crypto.c b/fs/ecryptfs/crypto.c
-index c16f0d660cb7..03bd55069d86 100644
---- a/fs/ecryptfs/crypto.c
-+++ b/fs/ecryptfs/crypto.c
-@@ -441,10 +441,10 @@ int ecryptfs_encrypt_page(struct page *page)
- 	}
- 
- 	lower_offset = lower_offset_for_page(crypt_stat, page);
--	enc_extent_virt = kmap(enc_extent_page);
-+	enc_extent_virt = kmap_local_page(enc_extent_page);
- 	rc = ecryptfs_write_lower(ecryptfs_inode, enc_extent_virt, lower_offset,
- 				  PAGE_SIZE);
--	kunmap(enc_extent_page);
-+	kunmap_local(enc_extent_virt);
- 	if (rc < 0) {
- 		ecryptfs_printk(KERN_ERR,
- 			"Error attempting to write lower page; rc = [%d]\n",
-@@ -490,10 +490,10 @@ int ecryptfs_decrypt_page(struct page *page)
- 	BUG_ON(!(crypt_stat->flags & ECRYPTFS_ENCRYPTED));
- 
- 	lower_offset = lower_offset_for_page(crypt_stat, page);
--	page_virt = kmap(page);
-+	page_virt = kmap_local_page(page);
- 	rc = ecryptfs_read_lower(page_virt, lower_offset, PAGE_SIZE,
- 				 ecryptfs_inode);
--	kunmap(page);
-+	kunmap_local(page_virt);
- 	if (rc < 0) {
- 		ecryptfs_printk(KERN_ERR,
- 			"Error attempting to read lower page; rc = [%d]\n",
 diff --git a/fs/ecryptfs/read_write.c b/fs/ecryptfs/read_write.c
-index 60bdcaddcbe5..5edf027c8359 100644
+index 5edf027c8359..3458f153a588 100644
 --- a/fs/ecryptfs/read_write.c
 +++ b/fs/ecryptfs/read_write.c
-@@ -64,11 +64,11 @@ int ecryptfs_write_lower_page_segment(struct inode *ecryptfs_inode,
+@@ -140,7 +140,7 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
+ 			       ecryptfs_page_idx, rc);
+ 			goto out;
+ 		}
+-		ecryptfs_page_virt = kmap_atomic(ecryptfs_page);
++		ecryptfs_page_virt = kmap_local_page(ecryptfs_page);
  
- 	offset = ((((loff_t)page_for_lower->index) << PAGE_SHIFT)
- 		  + offset_in_page);
--	virt = kmap(page_for_lower);
-+	virt = kmap_local_page(page_for_lower);
- 	rc = ecryptfs_write_lower(ecryptfs_inode, virt, offset, size);
- 	if (rc > 0)
- 		rc = 0;
--	kunmap(page_for_lower);
-+	kunmap_local(virt);
- 	return rc;
- }
- 
-@@ -253,11 +253,11 @@ int ecryptfs_read_lower_page_segment(struct page *page_for_ecryptfs,
- 	int rc;
- 
- 	offset = ((((loff_t)page_index) << PAGE_SHIFT) + offset_in_page);
--	virt = kmap(page_for_ecryptfs);
-+	virt = kmap_local_page(page_for_ecryptfs);
- 	rc = ecryptfs_read_lower(virt, offset, size, ecryptfs_inode);
- 	if (rc > 0)
- 		rc = 0;
--	kunmap(page_for_ecryptfs);
-+	kunmap_local(virt);
- 	flush_dcache_page(page_for_ecryptfs);
- 	return rc;
- }
+ 		/*
+ 		 * pos: where we're now writing, offset: where the request was
+@@ -163,7 +163,7 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
+ 			       (data + data_offset), num_bytes);
+ 			data_offset += num_bytes;
+ 		}
+-		kunmap_atomic(ecryptfs_page_virt);
++		kunmap_local(ecryptfs_page_virt);
+ 		flush_dcache_page(ecryptfs_page);
+ 		SetPageUptodate(ecryptfs_page);
+ 		unlock_page(ecryptfs_page);
 -- 
 2.40.0
 
