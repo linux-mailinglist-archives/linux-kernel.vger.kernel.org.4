@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B526EED04
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C986EED17
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239398AbjDZEmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 00:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S239381AbjDZEtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 00:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239402AbjDZEmu (ORCPT
+        with ESMTP id S229537AbjDZEtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 00:42:50 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49B2702
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:42:48 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id 006d021491bc7-5476a2780a0so2806981eaf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:42:48 -0700 (PDT)
+        Wed, 26 Apr 2023 00:49:40 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1C81B6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:49:36 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-517bb01bac9so4762572a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:49:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682484168; x=1685076168;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
-        b=ahJMIWTh5hWsknwjxsHnHQo9L9VjzYcn1k/0nU23PU9uEZU8NalnBK3f9aVgzZCo5r
-         +p006FX/ZwqMvKSjA6VHEj3uIqzR993g9P1CrFK9Fivzgwmca8kxjeyWkyvWkLEi20By
-         rct6ZAMuikhMKj/3DXx5AKfXigvurLbq4PilgTtzLaX/aYV2jyLFb01f0/lE77UE8BOc
-         ML+1/nS9zkVDTQXcJNJoyM+er+SvJwqMhIgEhQBdEjVaUbzrCEWRuqiCz7c6sMP2L2E+
-         MlXEZJFcfRL02s5L4RO1N8I6SOXxlWfGIeqLuoo5V3O7DfHscz5K73m9EKR1oRzUmK1z
-         5l7w==
+        d=chromium.org; s=google; t=1682484575; x=1685076575;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q87RPXE6DI0eKRLmsGLLiia6SM1aDcMrG91sJC9XiNc=;
+        b=JRGC94+4PwQd6bj+bhMJ0luv77EUyXGXDPWLgjM+9V5XYwVSoDJsyG/MNujIHT3wMU
+         xnqxxjhnlc52TYDsWIGO7u9ZKOE67uPf20AzGUTi6bDwdSGfRczZFPkhbkgd+6uAS5un
+         f/CRZaDq5DKbiW8pq5UmoMX6r/dM2KCv99OmA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682484168; x=1685076168;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
-        b=EvyDZ0pTxK5X21uh1MIpi3zYfBa7NYSq53Vdo69ZpGg6n43U2APKrfDJaTjNRly6e+
-         2PW5RCFT557/vNKkE4PKMKgukP+OeCLNJYHzAxvown6Sw3ItXMCTWQos+ctuRE9ZGfJE
-         wC6rZ2e8auEYJak2RIam8kUGktigcqeWCgwmdpym0/+r6b0ElqKRArI/YIP28sJwzDba
-         m7Bsfkp4Fg+bZWIi2xMNcMBh2XbOAIJMdBKa82smwlwrTeIC1G7cXQoGR3IW4Ppe6xy2
-         N1u1Ikdnz1MN9zN/LFyh0qDHUVjrXGYYpq3+1yupKNNp3PS6uPulFTU1/1HIn3OJt8G8
-         YESw==
-X-Gm-Message-State: AAQBX9cQiEzJFonxEllZQ1G7mVOD+Lyf1FwCztZR5q2K9N0+8kVaLK3b
-        CdNNSxIxl+VeIuFB0q0DUD13X9ARM9KzLFoXbyA=
-X-Google-Smtp-Source: AKy350bOLIyI+w9KrBjo8wnTDAYvlhBLAGs13pccFIMH9r8rI9git9fbIly8hLQTWzX3A/fyOGsGfQkHlyrIgnqmVnc=
-X-Received: by 2002:a05:6808:1885:b0:38b:6c2c:3168 with SMTP id
- bi5-20020a056808188500b0038b6c2c3168mr10879839oib.35.1682484167861; Tue, 25
- Apr 2023 21:42:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682484575; x=1685076575;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q87RPXE6DI0eKRLmsGLLiia6SM1aDcMrG91sJC9XiNc=;
+        b=BWs0f9phKMlBV++EYyjcI89KGpc4bEbcmAgDDu1SaNoJL7aXCe2wmKoJV/JExW6Oce
+         OkMHVetLfW+X6glBreuxkA98hJVDpqqK6SpTvdB+CzqEoUcPmrCb3xzbC+Sop4j0M9bN
+         +avxXuMWWxL3ptsNh5sHxz3fKrt90/pZLAVyeMZOkgpZESkB62UoHcjEzzBhcZr5yjST
+         gSC5rUj0vqkovvhxfWFz7LXeg9Aq2yxjwgNAfhQDNhrktTp6j1ZiiUNFXuRu3Y3KVyGy
+         BgOCcwYy7bC4cFtGUdzD82YXYWKAUHTflanYc5uJthqcL48R6g70DARkrokkTugOHBxc
+         r6Zw==
+X-Gm-Message-State: AAQBX9e/QBRb8ZL02QtMXYVkrDJga6v0Sc2pdevgn4pMjVFuw82KC7k9
+        rXpksxEIF5pGKdOGfCbPWCZ+zQ==
+X-Google-Smtp-Source: AKy350ZMC1xD9dDoVpHt3Z1nGYL5MHRDxYRmBb0Li+R4+np0wLm8hyHeiS8ybBCDD+HubMTW09NfWw==
+X-Received: by 2002:a17:902:a989:b0:1a6:5575:9059 with SMTP id bh9-20020a170902a98900b001a655759059mr18495024plb.62.1682484575457;
+        Tue, 25 Apr 2023 21:49:35 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id bt20-20020a17090af01400b00246cfdb570asm10533287pjb.27.2023.04.25.21.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 21:49:34 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 13:49:28 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     syzbot <syzbot+d692037148a8169fc9dd@syzkaller.appspotmail.com>
+Cc:     alex.gaynor@gmail.com, andriy.shevchenko@linux.intel.com,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com,
+        bpf@vger.kernel.org, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
+        ojeda@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        rust-for-linux@vger.kernel.org, senozhatsky@chromium.org,
+        syzkaller-bugs@googlegroups.com, wedsonaf@gmail.com
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
+ pointer dereference in __dabt_svc
+Message-ID: <20230426044928.GD1496740@google.com>
+References: <00000000000079eebe05fa2ea9ad@google.com>
 MIME-Version: 1.0
-Sender: mrs.nicolemarois555@gmail.com
-Received: by 2002:a05:6850:190d:b0:472:4a8e:9aa6 with HTTP; Tue, 25 Apr 2023
- 21:42:47 -0700 (PDT)
-From:   AVA SMITH <avasmith1181@gmail.com>
-Date:   Wed, 26 Apr 2023 04:42:47 +0000
-X-Google-Sender-Auth: oLN8TkQTeeK3qe33xEXBWukGFxo
-Message-ID: <CANiD9SJaRynGGmJb2Z8thdK8fg7qLtPr09Js5yoCTSpw2g-c1Q@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000079eebe05fa2ea9ad@google.com>
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-My name is Dr Ava Smith,a medical doctor from United States.I have
-Dual citizenship which is English and French.I will share more details
-about me as soon as i get a response from you.
+On (23/04/25 13:06), syzbot wrote:
+> 8<--- cut here ---
+> Unable to handle kernel NULL pointer dereference at virtual address 000005fc when read
+> [000005fc] *pgd=80000080004003, *pmd=00000000
+> Internal error: Oops: 206 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
+> Hardware name: ARM-Versatile Express
 
-Thanks
-Ava
+> Insufficient stack space to handle exception!
+
+So much stuff is going on there.
+
+> Task stack:     [0xdf85c000..0xdf85e000]
+> IRQ stack:      [0xdf804000..0xdf806000]
+> Overflow stack: [0x828ae000..0x828af000]
+> Internal error: kernel stack overflow: 0 [#2] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at __dabt_svc+0x14/0x60 arch/arm/kernel/entry-armv.S:210
+> LR is at vsnprintf+0x378/0x408 lib/vsprintf.c:2862
+> pc : [<80200a74>]    lr : [<817ad5d8>]    psr: 00000193
+> sp : df804028  ip : df805868  fp : df805864
+> r10: 00000060  r9 : ffffffff  r8 : 00000010
+> r7 : 00000020  r6 : 00000004  r5 : ffffffff  r4 : df805960
+> r3 : ffffffff  r2 : 00000040  r1 : ffffffff  r0 : 8264d250
+> Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 30c5387d  Table: 80003000  DAC: 00000000
+> Register r0 information:
+> 8<--- cut here ---
+> Unable to handle kernel NULL pointer dereference at virtual address 000001ff when read
+> [000001ff] *pgd=80000080004003, *pmd=00000000
+> Internal error: Oops: 206 [#3] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
+> PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
+> PC is at find_vm_area mm/vmalloc.c:2571 [inline]
+> PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4108
+> LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
+> LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
+
+Not sure if I can make sense out of this.
