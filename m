@@ -2,295 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E5E6EF5F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BDF6EF5FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240818AbjDZOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S241253AbjDZOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjDZOCo (ORCPT
+        with ESMTP id S241267AbjDZOEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:02:44 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AEC5FED;
-        Wed, 26 Apr 2023 07:02:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 64B7A6017E;
-        Wed, 26 Apr 2023 16:02:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682517760; bh=Iz9hcB9GLNYUr5g+GxKCdWQEiMUXyIVgPkkw/i05YnU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=MPPsba7T0C+OF/ZBgSh275mr2j574cCl6nfO4jGWTE0lxw77Gek2exkU5q5Q7XLsU
-         jSxianVbFGSZWYluFNGW1mrxbq7E3xd9z/wbJN5EKSMJHJOZm8GkskGNBxu2lLvcmS
-         dwdiTcTxTWLxH7171lqPaVal+U1wzVZw5et0KdZUk/QKuKqXSqucW98lWYLdrLXYmr
-         +on3NO0PdY0nYuyOw0XAO7cSbxfiIUIQHtrh/9kkzK1khTeygeKFSIwQ5J6jaGTU1y
-         YSUKcoH3x3Da/Izn4TbxkYR6O7mdSaUSMfv+SDwnYe6ya+64C/J7hO86Om6f+7aNFw
-         iY2yYyw3TIaQQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 40rX7cbhwoeu; Wed, 26 Apr 2023 16:02:37 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 9261E6017C;
-        Wed, 26 Apr 2023 16:02:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682517757; bh=Iz9hcB9GLNYUr5g+GxKCdWQEiMUXyIVgPkkw/i05YnU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lGEMW6qGriqzXJHDKDuv0004BmjZfB01rVnIde5blHbmP4yf0v0KzzsGMqR2a5zW/
-         MnN0aRTS7EFKSKuBBE3V0CIgDQrQ6jN9qW8usu1AS9G9LwU+Z7eLGIylvXvbO5fNI+
-         K7j0EByNwZi3v7dF2CQCiXwI2DpmqP7ZJ+/nk1sd56nCo8yMjItv2CNKCOyeid6OjU
-         TKO4aY68WXzzISLf01ZE1CaFbObeve5eimJi9DA5Ae8OMZcMwrheYkrep0JIoTgCEc
-         Gf/V9c2Bh8w6ApR0jnvOTqKpK/3rrb1AnYkUu/+KCy0EJPZHWtw1GeSfsRnUqtZ5p4
-         rxRXPODDnlsBg==
-Message-ID: <074cf5ed-c39d-1c16-12e7-4b14bbe0cac4@alu.unizg.hr>
-Date:   Wed, 26 Apr 2023 16:02:32 +0200
+        Wed, 26 Apr 2023 10:04:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8E6591
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FrAb4eQWH3TbtEFEDBwTA8GTUoY1eVzC37hGOtqravc=; b=PtgcFBMK52iZ++p3KhpKXU/FA8
+        ejRyQREXgNQzo74llkHHMmoHe18BbtYhCAYOshnbP4aldHXH4FkxfV58nJKMfPgA4cE6qdfZvEv3n
+        qQ3GZ3WewH/TCC1BBvn82iQAheMq6nVpNEHLybJf3P8aJcEc5gRgDfupwoWGCDF4fpfFZ4Wv0yacf
+        3xmZD7T3LYNcwHIjBzs9efhxUQ8V6odC9zlhkdWeafWTlNNwKfyYmXXD+VsA2YJdqP41Aok5mqq7L
+        pR3dYbvYTgZNlhg06iGuPMk5RwTirn5d/pt18/QOdySYu+U4V3ftjcuFFNix5SGyzlqJoII295IiZ
+        Y8otxAkQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1prfk5-00B1EF-0m;
+        Wed, 26 Apr 2023 14:03:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 75069300244;
+        Wed, 26 Apr 2023 16:03:24 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3DC272419A6E4; Wed, 26 Apr 2023 16:03:24 +0200 (CEST)
+Date:   Wed, 26 Apr 2023 16:03:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] sched/fair: Introduce SIS_CURRENT to wake up
+ short task on current CPU
+Message-ID: <20230426140324.GB1377058@hirez.programming.kicks-ass.net>
+References: <cover.1682060436.git.yu.c.chen@intel.com>
+ <98257d0184b227cad8b4e947eedd9246d60191d3.1682060436.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 1/1] wifi: mac80211: fortify the spinlock against
- deadlock by interrupt
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-References: <20230425164005.25272-1-mirsad.todorovac@alu.unizg.hr>
- <20230426064145.GE27649@unreal>
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <20230426064145.GE27649@unreal>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98257d0184b227cad8b4e947eedd9246d60191d3.1682060436.git.yu.c.chen@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 08:41, Leon Romanovsky wrote:
-> On Tue, Apr 25, 2023 at 06:40:08PM +0200, Mirsad Goran Todorovac wrote:
->> In the function ieee80211_tx_dequeue() there is a particular locking
->> sequence:
->>
->> begin:
->> 	spin_lock(&local->queue_stop_reason_lock);
->> 	q_stopped = local->queue_stop_reasons[q];
->> 	spin_unlock(&local->queue_stop_reason_lock);
->>
->> However small the chance (increased by ftracetest), an asynchronous
->> interrupt can occur in between of spin_lock() and spin_unlock(),
->> and the interrupt routine will attempt to lock the same
->> &local->queue_stop_reason_lock again.
->>
->> This will cause a costly reset of the CPU and the wifi device or an
->> altogether hang in the single CPU and single core scenario.
->>
->> The only remaining spin_lock(&local->queue_stop_reason_lock) that
->> did not disable interrupts was patched, which should prevent any
->> deadlocks on the same CPU/core and the same wifi device.
->>
->> This is the probable trace of the deadlock:
->>
->> kernel: ================================
->> kernel: WARNING: inconsistent lock state
->> kernel: 6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4 Tainted: G        W
->> kernel: --------------------------------
->> kernel: inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
->> kernel: kworker/5:0/25656 [HC0[0]:SC0[0]:HE1:SE1] takes:
->> kernel: ffff9d6190779478 (&local->queue_stop_reason_lock){+.?.}-{2:2}, at: return_to_handler+0x0/0x40
->> kernel: {IN-SOFTIRQ-W} state was registered at:
->> kernel:   lock_acquire+0xc7/0x2d0
->> kernel:   _raw_spin_lock+0x36/0x50
->> kernel:   ieee80211_tx_dequeue+0xb4/0x1330 [mac80211]
->> kernel:   iwl_mvm_mac_itxq_xmit+0xae/0x210 [iwlmvm]
->> kernel:   iwl_mvm_mac_wake_tx_queue+0x2d/0xd0 [iwlmvm]
->> kernel:   ieee80211_queue_skb+0x450/0x730 [mac80211]
->> kernel:   __ieee80211_xmit_fast.constprop.66+0x834/0xa50 [mac80211]
->> kernel:   __ieee80211_subif_start_xmit+0x217/0x530 [mac80211]
->> kernel:   ieee80211_subif_start_xmit+0x60/0x580 [mac80211]
->> kernel:   dev_hard_start_xmit+0xb5/0x260
->> kernel:   __dev_queue_xmit+0xdbe/0x1200
->> kernel:   neigh_resolve_output+0x166/0x260
->> kernel:   ip_finish_output2+0x216/0xb80
->> kernel:   __ip_finish_output+0x2a4/0x4d0
->> kernel:   ip_finish_output+0x2d/0xd0
->> kernel:   ip_output+0x82/0x2b0
->> kernel:   ip_local_out+0xec/0x110
->> kernel:   igmpv3_sendpack+0x5c/0x90
->> kernel:   igmp_ifc_timer_expire+0x26e/0x4e0
->> kernel:   call_timer_fn+0xa5/0x230
->> kernel:   run_timer_softirq+0x27f/0x550
->> kernel:   __do_softirq+0xb4/0x3a4
->> kernel:   irq_exit_rcu+0x9b/0xc0
->> kernel:   sysvec_apic_timer_interrupt+0x80/0xa0
->> kernel:   asm_sysvec_apic_timer_interrupt+0x1f/0x30
->> kernel:   _raw_spin_unlock_irqrestore+0x3f/0x70
->> kernel:   free_to_partial_list+0x3d6/0x590
->> kernel:   __slab_free+0x1b7/0x310
->> kernel:   kmem_cache_free+0x52d/0x550
->> kernel:   putname+0x5d/0x70
->> kernel:   do_sys_openat2+0x1d7/0x310
->> kernel:   do_sys_open+0x51/0x80
->> kernel:   __x64_sys_openat+0x24/0x30
->> kernel:   do_syscall_64+0x5c/0x90
->> kernel:   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->> kernel: irq event stamp: 5120729
->> kernel: hardirqs last  enabled at (5120729): [<ffffffff9d149936>] trace_graph_return+0xd6/0x120
->> kernel: hardirqs last disabled at (5120728): [<ffffffff9d149950>] trace_graph_return+0xf0/0x120
->> kernel: softirqs last  enabled at (5069900): [<ffffffff9cf65b60>] return_to_handler+0x0/0x40
->> kernel: softirqs last disabled at (5067555): [<ffffffff9cf65b60>] return_to_handler+0x0/0x40
->> kernel:
->>          other info that might help us debug this:
->> kernel:  Possible unsafe locking scenario:
->> kernel:        CPU0
->> kernel:        ----
->> kernel:   lock(&local->queue_stop_reason_lock);
->> kernel:   <Interrupt>
->> kernel:     lock(&local->queue_stop_reason_lock);
->> kernel:
->>           *** DEADLOCK ***
->> kernel: 8 locks held by kworker/5:0/25656:
->> kernel:  #0: ffff9d618009d138 ((wq_completion)events_freezable){+.+.}-{0:0}, at: process_one_work+0x1ca/0x530
->> kernel:  #1: ffffb1ef4637fe68 ((work_completion)(&local->restart_work)){+.+.}-{0:0}, at: process_one_work+0x1ce/0x530
->> kernel:  #2: ffffffff9f166548 (rtnl_mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
->> kernel:  #3: ffff9d6190778728 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
->> kernel:  #4: ffff9d619077b480 (&mvm->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
->> kernel:  #5: ffff9d61907bacd8 (&trans_pcie->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
->> kernel:  #6: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: iwl_mvm_queue_state_change+0x59/0x3a0 [iwlmvm]
->> kernel:  #7: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
->> kernel:
->>          stack backtrace:
->> kernel: CPU: 5 PID: 25656 Comm: kworker/5:0 Tainted: G        W          6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4
->> kernel: Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN51WW 11/16/2022
->> kernel: Workqueue: events_freezable ieee80211_restart_work [mac80211]
->> kernel: Call Trace:
->> kernel:  <TASK>
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  dump_stack_lvl+0x5f/0xa0
->> kernel:  dump_stack+0x14/0x20
->> kernel:  print_usage_bug.part.46+0x208/0x2a0
->> kernel:  mark_lock.part.47+0x605/0x630
->> kernel:  ? sched_clock+0xd/0x20
->> kernel:  ? trace_clock_local+0x14/0x30
->> kernel:  ? __rb_reserve_next+0x5f/0x490
->> kernel:  ? _raw_spin_lock+0x1b/0x50
->> kernel:  __lock_acquire+0x464/0x1990
->> kernel:  ? mark_held_locks+0x4e/0x80
->> kernel:  lock_acquire+0xc7/0x2d0
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  ? ftrace_return_to_handler+0x8b/0x100
->> kernel:  ? preempt_count_add+0x4/0x70
->> kernel:  _raw_spin_lock+0x36/0x50
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  ieee80211_tx_dequeue+0xb4/0x1330 [mac80211]
->> kernel:  ? prepare_ftrace_return+0xc5/0x190
->> kernel:  ? ftrace_graph_func+0x16/0x20
->> kernel:  ? 0xffffffffc02ab0b1
->> kernel:  ? lock_acquire+0xc7/0x2d0
->> kernel:  ? iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
->> kernel:  ? ieee80211_tx_dequeue+0x9/0x1330 [mac80211]
->> kernel:  ? __rcu_read_lock+0x4/0x40
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_mvm_mac_itxq_xmit+0xae/0x210 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_mvm_queue_state_change+0x311/0x3a0 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_mvm_wake_sw_queue+0x17/0x20 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_txq_gen2_unmap+0x1c9/0x1f0 [iwlwifi]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_txq_gen2_free+0x55/0x130 [iwlwifi]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_txq_gen2_tx_free+0x63/0x80 [iwlwifi]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  _iwl_trans_pcie_gen2_stop_device+0x3f3/0x5b0 [iwlwifi]
->> kernel:  ? _iwl_trans_pcie_gen2_stop_device+0x9/0x5b0 [iwlwifi]
->> kernel:  ? mutex_lock_nested+0x4/0x30
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_trans_pcie_gen2_stop_device+0x5f/0x90 [iwlwifi]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_mvm_stop_device+0x78/0xd0 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  __iwl_mvm_mac_start+0x114/0x210 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  iwl_mvm_mac_start+0x76/0x150 [iwlmvm]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  drv_start+0x79/0x180 [mac80211]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  ieee80211_reconfig+0x1523/0x1ce0 [mac80211]
->> kernel:  ? synchronize_net+0x4/0x50
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  ieee80211_restart_work+0x108/0x170 [mac80211]
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  process_one_work+0x250/0x530
->> kernel:  ? ftrace_regs_caller_end+0x66/0x66
->> kernel:  worker_thread+0x48/0x3a0
->> kernel:  ? __pfx_worker_thread+0x10/0x10
->> kernel:  kthread+0x10f/0x140
->> kernel:  ? __pfx_kthread+0x10/0x10
->> kernel:  ret_from_fork+0x29/0x50
->> kernel:  </TASK>
->>
->> Fixes: 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs for resumption")
->> Link: https://lore.kernel.org/all/1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr/
->> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> Cc: Gregory Greenman <gregory.greenman@intel.com>
->> Cc: Johannes Berg <johannes.berg@intel.com>
->> Link: https://lore.kernel.org/all/cdc80531-f25f-6f9d-b15f-25e16130b53a@alu.unizg.hr/
->> Cc: David S. Miller <davem@davemloft.net>
->> Cc: Eric Dumazet <edumazet@google.com>
->> Cc: Jakub Kicinski <kuba@kernel.org>
->> Cc: Paolo Abeni <pabeni@redhat.com>
->> Cc: Leon Romanovsky <leon@kernel.org>
->> Cc: Alexander Wetzel <alexander@wetzel-home.de>
->> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> ---
->> v3 -> v4:
->> - Added whole lockdep trace as advised.
->> - Trimmed irrelevant line prefix.
->> v2 -> v3:
->> - Fix the Fixes: tag as advised.
->> - Change the net: to wifi: to comply with the original patch that
->>    is being fixed.
->> v1 -> v2:
->> - Minor rewording and clarification.
->> - Cc:-ed people that replied to the original bug report (forgotten
->>    in v1 by omission).
->>
->>   net/mac80211/tx.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> Thanks,
-> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+On Sat, Apr 22, 2023 at 12:08:18AM +0800, Chen Yu wrote:
 
-Not at all.
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4af5799b90fc..46c1321c0407 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6501,6 +6501,46 @@ static int wake_wide(struct task_struct *p)
+>  	return 1;
+>  }
+>  
+> +/*
+> + * Wake up the task on current CPU, if the following conditions are met:
+> + *
+> + * 1. waker A is the only running task on this_cpu
+> + * 3. A is a short duration task (waker will fall asleep soon)
+> + * 4. wakee B is a short duration task (impact of B on A is minor)
+> + * 5. A and B wake up each other alternately
+> + */
+> +static bool
+> +wake_on_current(int this_cpu, struct task_struct *p)
+> +{
+> +	if (!sched_feat(SIS_CURRENT))
+> +		return false;
+> +
+> +	if (cpu_rq(this_cpu)->nr_running > 1)
+> +		return false;
+> +
+> +	/*
+> +	 * If a task switches in and then voluntarily relinquishes the
+> +	 * CPU quickly, it is regarded as a short duration task. In that
+> +	 * way, the short waker is likely to relinquish the CPU soon, which
+> +	 * provides room for the wakee. Meanwhile, a short wakee would bring
+> +	 * minor impact to the target rq. Put the short waker and wakee together
+> +	 * bring benefit to cache-share task pairs and avoid migration overhead.
+> +	 */
+> +	if (!current->se.dur_avg || ((current->se.dur_avg * 8) >= sysctl_sched_min_granularity))
+> +		return false;
+> +
+> +	if (!p->se.dur_avg || ((p->se.dur_avg * 8) >= sysctl_sched_min_granularity))
+> +		return false;
+> +
+> +	if (current->wakee_flips || p->wakee_flips)
+> +		return false;
+> +
+> +	if (current->last_wakee != p || p->last_wakee != current)
+> +		return false;
+> +
+> +	return true;
+> +}
 
-That's awesome! Just to ask, do I need to send the PATCH v5 with the
-Reviewed-by: tag, or it goes automatically?
+So I was going to play with this and found I needed to change things up
+since these sysctl's no longer exist in my EEVDF branch.
 
-Thanks.
+And while I can easily do
+'s/sysctl_sched_min_granularity/sysctl_sched_base_slice/', it did make
+me wonder if that's the right value to use.
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+min_gran/base_slice is related to how long we want a task to run before
+switching, but that is not related to how long it needs to run to
+establish a cache footprint.
 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-
-"What’s this thing suddenly coming towards me very fast? Very very fast.
-... I wonder if it will be friends with me?"
+Would not sched_migration_cost be a better measure to compare against?
+That is also used in task_hot() to prevent migrations.
