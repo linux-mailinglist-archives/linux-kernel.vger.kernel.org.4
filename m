@@ -2,123 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126796EEF68
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9AA6EEF6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239671AbjDZHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S239736AbjDZHkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239381AbjDZHj2 (ORCPT
+        with ESMTP id S239381AbjDZHj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:39:28 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DC30F1;
-        Wed, 26 Apr 2023 00:39:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PCRmkCmow1uEMGeL57btO0h4Rmd+vf5ns0y/BbWjTBI=; b=lWZxauUDvd1nVRFVftz0jJ83W6
-        i0/Z7hxxZz8JwAArPRYDJDODs0fIcak71XzX73MTR77A2Yhi5jPmOqRZjcLhlERP21VVO0UTjXzgD
-        8vRSrWFgR6OrMUduIHWO9QtCGoqavmdu902smnaM/PiyEwvswcIAGMDiQ26QSmCik68hzJR6G6aua
-        eQUagi/0vGvWT0P7IWAYVaZhKA84OfL6kZjZCSBI6QR/KbPydUJtgOFY9SOYjCLqca+PlnF61e/7w
-        YIX2WuC2pTbVIS3ci2rRU93xCaNNlFij8Y0gjxcsJ31HsJQyR0H0zi4i1r2z0Xrx3B88TYwgQe5L2
-        Su9siKFg==;
-Received: from p200300ccff09c2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:c200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1prZkI-0006pi-7L; Wed, 26 Apr 2023 09:39:22 +0200
-Date:   Wed, 26 Apr 2023 09:39:20 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>, linux-omap@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
-Message-ID: <20230426093920.3e9b5c61@aktux>
-In-Reply-To: <20230426071910.GE14287@atomide.com>
-References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
-        <20230425201117.457f224c@aktux>
-        <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
-        <20230425212040.5a4d5b09@aktux>
-        <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
-        <20230425215848.247a936a@aktux>
-        <20230426071910.GE14287@atomide.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
+        Wed, 26 Apr 2023 03:39:59 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2130FE;
+        Wed, 26 Apr 2023 00:39:55 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33Q7daHT055981;
+        Wed, 26 Apr 2023 02:39:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682494776;
+        bh=7LqVdOnzZtTQ3wyb6XvMcLktKP+1tC9WdQjlamBaQlU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qUJhUH9S+HHrl9WS64aXRQcfwCj3end0mvK/GI1XKZTb8t0/EmV2prek6M1kqbTUp
+         AWJTHFTiZAxzvDy9tt0+da/GP0TvjoGflG87BCChXTlz6hMG3iwQpjj3r0NThIvazh
+         n743DtDnN/q4kiNml3V3kKhSnQa4ktMjDNowvV5I=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33Q7daPm107381
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 02:39:36 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
+ Apr 2023 02:39:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 26 Apr 2023 02:39:35 -0500
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33Q7dWNI022730;
+        Wed, 26 Apr 2023 02:39:33 -0500
+Message-ID: <044a723e-b81e-f6f2-8bf7-3680a10abc86@ti.com>
+Date:   Wed, 26 Apr 2023 13:09:32 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: RE: [PATCH v2 4/4] spi: cadence-quadspi: use STIG mode for small
+ reads
+Content-Language: en-US
+To:     Yoshitaka Ikeda <ikeda@nskint.co.jp>
+CC:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Takahiro.Kuwano@infineon.com" <Takahiro.Kuwano@infineon.com>,
+        Pratyush Yadav <ptyadav@amazon.de>,
+        Mark Brown <broonie@kernel.org>
+References: <20230125081023.1573712-1-d-gole@ti.com>
+ <20230125081023.1573712-5-d-gole@ti.com>
+ <OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Yoshitaka,
 
-On Wed, 26 Apr 2023 10:19:10 +0300
-Tony Lindgren <tony@atomide.com> wrote:
-
-> Hi,
+On 26/04/23 08:04, Yoshitaka Ikeda wrote:
+> Hi Dhruva,
 > 
-> * Andreas Kemnade <andreas@kemnade.info> [230425 19:58]:
-> > On Tue, 25 Apr 2023 22:36:37 +0300
-> > Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
-> >   
-> > > On Tue, Apr 25, 2023 at 09:20:40PM +0200, Andreas Kemnade wrote:  
-> > > > Aaro Koskinen <aaro.koskinen@iki.fi> wrote:    
-> > > > > Which commit introduced that regression? Also, the changelog mentions
-> > > > > it happens only with "unusual" probe order. Now, all the ordinary cases
-> > > > > for OMAP1 are broken.
-> > > > >     
-> > > > did not bisect that to an exact commit.
-> > > > Unusual probe order: on the device where I tested it,
-> > > > I did not see a completely successful probe.    
-> > > 
-> > > If you cannot point out a working past commit, there was no regression. If
-> > > you fix something that hasn't worked before or has been long time broken,
-> > > it must not cause breakage to other current users.
-> > >   
-> > Well, I did not take the time for a bisect. As we need a less aggressive
-> > fix, it seems to be worth doing it. 
-> >   
-> > > > > And it's not just that tps65010 thing. E.g. 770 fails to boot as well
-> > > > > and it doesn't use it; and reverting 92bf78b33b0b fixes that one as
-> > > > > well. AFAIK it's because all the gpio_request()s in OMAP1 board files
-> > > > > stopped now working.
-> > > > >     
-> > > > so we break every non-devicetree user of omap-gpio?     
-> > > 
-> > > It seems so.
-> > >   
-> > or maybe an if (not_using_devicetree())  
+> An error occurred in the following environments where this patch was applied, and the flash could not be accessed.
+> However, after reverting to this patch, it is possible to access it.
 > 
-> Not sure what the best way to fix this might be, adding Linus W to Cc too.
-> Maybe using gpio line names in the legacy platform data instead of numbers?
+> - Environment
+>    - OS : Linux 6.3
+>    - SoC : Cyclone V
+
+Please can you send me the register fields information for the
+CQSPI controller used in this device?
+I wanted to verify if atall there were any mismatch between the
+controller I have tested with vs your SOC's controller.
+
+>    - Flash : MT25QL512A
 > 
-> Seems that we should just revert this patch for now and try again after
-> the issues have been fixed.
->
-I think the reason for the patch (besides of cleaning up warnings) is that
-dynamic allocation seems to start at 512, static at zero.
-If both are there, like registering twl_gpio between omap gpiochip 4 and 5,
-dynamic allocation seems just to start after the last static number,
-calling for trouble.
+> - Error at startup
+>    - Kernel log
+> [ 0.980290] spi-nor spi0.0: found mt25ql512a, expected n25q512a
+> [ 1.485140] cadence-qspi ff705000.flash: Flash command execution timed out.
+> [ 1.490792] spi-nor spi0.0: operation failed with -110
+> [ 1.494654] spi-nor spi0.0: mt25ql512a (65536 Kbytes)
+> 
+> - Error at access
+>    - Access command and log
+> # hexdump -Cv /dev/mtdblock0
+> hexdump: /dev/mtdblock0: Input/output error
+> 
+>    - Kernel log
+> [ 2124.201193] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2124.201229] spi-nor spi0.0: operation failed with -110
+> [ 2124.201256] I/O error, dev mtdblock0, sector 0 op 0x0:(READ) flags 0x80700 phys_seg 4 prio class 2
+> [ 2124.711241] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2124.711276] spi-nor spi0.0: operation failed with -110
+> [ 2124.711302] I/O error, dev mtdblock0, sector 8 op 0x0:(READ) flags 0x80700 phys_seg 3 prio class 2
+> [ 2125.221193] cadence-qspi ff705000.flash: QSPI is still busy after 500ms timeout.
+> [ 2125.221230] spi-nor spi0.0: operation failed with -110
+> [ 2125.221256] I/O error, dev mtdblock0, sector 16 op 0x0:(READ) flags 0x80700 phys_seg 2 prio class 2
+> [ 2125.731237] cadence-qspi ff705000.flash:. QSPI is still busy after 500ms timeout.
+> [ 2125.731270] spi-nor spi0.0: operation failed with -110
+> [ 2125.731296] I/O error, dev mtdblock0, sector 24 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 2
+> [ 2126.241190] cadence-qspi ff705000.flash:. QSPI is still busy after 500ms timeout.
+> [ 2126.241224] spi-nor spi0.0: operation failed with -110
+> [ 2126.241251] I/O error, dev mtdblock0, sector 0 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 2
+> [ 2126.241274] Buffer I/O error on dev mtdblock0, logical block 0, async page read
+> 
+> 
+> regards,
+> Yoshitaka Ikeda
+> 
+> 
+> [..snip..]
 
-If dynamic alloc would just start at 512 in that case too, no problem would appear.
-As said I have not bisected it to an exact commit yet.
-So if we need to move backward, we should IMHO first fix that allocation thing.
+It maybe that STIG mode may have some different way of configuring/using
+on your SoC.
 
-Regards,
-Andreas
+However at this point it's only a guess and I will wait till I have the
+exact information on the controller specs being used in this device
+along with the register descriptions.
+
+-- 
+Thanks and Regards,
+Dhruva Gole
