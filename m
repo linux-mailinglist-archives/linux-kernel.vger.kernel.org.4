@@ -2,185 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791BA6EFD10
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4F86EFD11
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239976AbjDZWIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S239994AbjDZWJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239930AbjDZWII (ORCPT
+        with ESMTP id S239972AbjDZWJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:08:08 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB230EB
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:08:00 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-51efefe7814so7708003a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:08:00 -0700 (PDT)
+        Wed, 26 Apr 2023 18:09:10 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA962D56;
+        Wed, 26 Apr 2023 15:09:10 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b4e5fdb1eso9035132b3a.1;
+        Wed, 26 Apr 2023 15:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682546880; x=1685138880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uRRT1JLj5LjVJGBzDSlmTfM7cyr5YAX9h/3Myc2de1I=;
-        b=pjQw7QYK9BB2pMV/QaLm+IMj83pHs4ZI2FsGlXF1qxQrOOs/kb37GCGIjRiPtSBplM
-         HZFALGKiEPoDYjKrL/xmsBkYZ/eNEW8XaqWjZzW1iJfOrbZ5BfroedmAxhR5724JPORf
-         DfXj5feRu/YwyI2vy0ucwMVdatNJGgLAskbx8IlgTOm/dscWl1QFOiROwGNVDN7uwjsT
-         yIdPovwGCDW8FveLveGOXVUEC70eIW8bb/OPWGlPRI0iZHYmN+6TpLvrYzpXk1ArKbvJ
-         RS+8H5OAzWFGjgqop/0FgmlgELJL7YhK73jYxsuWP3Lpp8ST7iqL+CJl3kRnvjacr7Vg
-         l45w==
+        d=gmail.com; s=20221208; t=1682546949; x=1685138949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NxpYnE1u1Q2bjTfyL3mlyd6uQYcX9SBjAJDlWJodPlE=;
+        b=ecBuUF2WKdDeRURQIP2jve85Tdg403UVVTg28R8vqv1Z+iszu5qmMk+RirueEwDrFN
+         4++zFgmKaLm2nUA6Uhodv1/eLdrlDRzkgqnox1hs5J9itu0epPwp0GJRI6H68YMjLPf9
+         LvF0Gdf7zj7XeXbl5FIW+qwP/3SEdPy7W8gPX/XEHmTdiTKwyaeZiVS+ZFVy8hpE1Euo
+         nHNWMlHgiLQ/gYrsgqIHgmwrm8zfzBM02upCm/ZSBgZfD8YwrQ3CwLX1h+wyQbcoosph
+         6tOMuWt4YZCxPhVs5RlFpYFQqhZCwwBuVXoV3w9N8aFmHif2ofr5DZrY9vSM5vs7foCe
+         DbEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682546880; x=1685138880;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682546949; x=1685138949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uRRT1JLj5LjVJGBzDSlmTfM7cyr5YAX9h/3Myc2de1I=;
-        b=iWKb+8bIsq0ZDpFz+KTT1LTC3B6wzHqPjj57liPLoDSghy5lPlGzIGsY6VpMPP0zOU
-         bPCrtR0O12Z8rb407vBy7QiY0Iw7C+LbPc8MNrflX89rsP3U0pVsJYh/UIWiF5LIVJIF
-         aXfRbXFmHYncr3dlLF9B2BOeeswpuh220mx3WynoaQlUCSYyglPZ6+5JOBkGm0qmlJ0C
-         AWb7TjB7trIutzE9lRJIfZ5NjXshgZWKohi5GUd4NpWiL+wSwkTYntUf7RN9dRCl9iTD
-         jecOeUvLkFg7BdXp1FPxTSaGQbU3ZrInpmSefUPUk7fnKhQhAa1eP7qtCYiiqYHES4k3
-         rByA==
-X-Gm-Message-State: AAQBX9e1zrlVUUnh4RauS41c01Gw49m8t1vdzGdOyqL5uSVLkoH6tb2v
-        RH0fXrR3DAPhKzPxtqYDHLPizyOENvKSDsSuJafS5OZH05s7F62woFCUqA==
-X-Google-Smtp-Source: AKy350YEQK2YcFvxW+tZ4RwePGpH2SoL6ZVR2Ng7FDiNxIRK+3oqcHDH8LTMcodQMoXj3e++WVPh9YXcvWlgdyMnCHw=
-X-Received: by 2002:a17:90b:143:b0:246:9a4f:8b2e with SMTP id
- em3-20020a17090b014300b002469a4f8b2emr21659612pjb.1.1682546879653; Wed, 26
- Apr 2023 15:07:59 -0700 (PDT)
+        bh=NxpYnE1u1Q2bjTfyL3mlyd6uQYcX9SBjAJDlWJodPlE=;
+        b=B2bWX9amsBtLPGI/Kb80+PPJJ6hcsmEG1guTsi6p/06QHOQkcL2Ylj6aE2ktXM4AnY
+         7ggbOIem8Nd82rGUAIKujzKSqZmf9InA1tHuea4kfz0o/gi6pR3ly+MAQiJYarXlQJwd
+         FskXrSD1rXZaeN0RX9YToS0s+JyViqfgkqkzHuaGO+E4poq6ojh7Wm/+4mhnEHHE6x9T
+         wYWcsXQuXGsXKOywf4X4+b5Lx57PTMJsLTyed7TAjOMiQ+quYsI3YDmn0Tm6rIg5oRV5
+         fzYqWfH8ERgQfi2nrmgzxDGxQzwFdiUNP+jUliT6yNrqaZt00fSX6Crsuo/QU5ElkNw0
+         4UNA==
+X-Gm-Message-State: AAQBX9cKMve9PGEQ4tjnQt67h9MKFZ3OhGMw202zDryyAkYdSBbDQPCM
+        Nx4/oBO/CHsH/QvGnbm5aZSpyp9R/bs=
+X-Google-Smtp-Source: AKy350ao+O9KfxqiWpxItYiM7+VJzjgeiu3hovDCVESstDcqw4QKVA0p2GgoCsmh0O9uOBMaM7H/qQ==
+X-Received: by 2002:a05:6a21:8dc5:b0:f0:e3ed:469a with SMTP id ti5-20020a056a218dc500b000f0e3ed469amr19873769pzb.55.1682546949331;
+        Wed, 26 Apr 2023 15:09:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:1976])
+        by smtp.gmail.com with ESMTPSA id b6-20020a63d806000000b005143d3fa0e0sm10245458pgh.2.2023.04.26.15.09.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 15:09:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 26 Apr 2023 12:09:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org, riel@surriel.com
+Subject: Re: [PATCH RFC rcu] Stop rcu_tasks_invoke_cbs() from using
+ never-online CPUs
+Message-ID: <ZEmhAzUMnQ1rP2YU@slm.duckdns.org>
+References: <83d037d1-ef12-4b31-a7b9-7b1ed6c3ae42@paulmck-laptop>
+ <ZEmBy0H5T5vQJDUW@slm.duckdns.org>
+ <1713f8f6-88d6-41f1-bbc6-045b2e017289@paulmck-laptop>
+ <ZEmYFLKspo-rhyp4@slm.duckdns.org>
+ <c4d39cb7-dbb7-44ad-b90e-71655bdbefd1@paulmck-laptop>
 MIME-Version: 1.0
-References: <20230425041838.GA150312@mit.edu> <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
- <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
- <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
- <CAKwvOdm3gkAufWcWBqDMQNRXVqJjooFQ4Bi5YPHndWFCPScG+g@mail.gmail.com> <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com>
-In-Reply-To: <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 26 Apr 2023 15:07:48 -0700
-Message-ID: <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
-Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4d39cb7-dbb7-44ad-b90e-71655bdbefd1@paulmck-laptop>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:33=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Apr 26, 2023 at 11:22=E2=80=AFAM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Ah, it does do something in the callee, not the caller:
->
-> Ack, it does seem to have _some_ meaning for the return case, just not
-> the one we'd be looking for as a way to find mistakes in the
-> error-pointer case.
+Hello, Paul.
 
-Is this what you had in mind?
-```
-$ cat linus.c
-#define NULL ((void*)0)
+On Wed, Apr 26, 2023 at 02:55:04PM -0700, Paul E. McKenney wrote:
+> But if the call_rcu_tasks_*() code detects too much lock contention on
+> CPU 0's queue, which indicates that very large numbers of callbacks are
+> being queued, it switches to per-CPU mode.  In which case, we are likely
+> to have lots of callbacks on lots of queues, and in that case we really
+> want to invoke them concurrently.
+> 
+> Then if a later grace period finds that there are no more callbacks, it
+> switches back to CPU-0 mode.  So this extra workqueue overhead should
+> happen only on systems with sparse cpu_online_masks that are under heavy
+> call_rcu_tasks_*() load.
 
-void * _Nonnull foo (void) {
-    return &foo;
-}
+I still wonder whether it can be solved by simply switching to unbound
+workqueues instead of implementing custom load-spreading mechanism. We'd be
+basically asking the scheduler to what it thinks is best instead of trying
+to make manual CPU placement decisions. That said, as a fix, the original
+patch looks fine to me. Gonna go ack that.
 
-void bar (void) {
-    if (foo() =3D=3D NULL) // maybe should warn that foo() returns _Nonnull=
-?
-        bar();
-}
-$ clang linus.c -fsyntax-only
-linus.c:8:15: warning: comparison of _Nonnull function call 'foo'
-equal to a null pointer is always false
-[-Wtautological-pointer-compare]
-    if (foo() =3D=3D NULL) // maybe should warn that foo() returns _Nonnull=
-?
-              ^
-linus.c:3:1: note: return type has '_Nonnull' nullability attribute
-void * _Nonnull foo (void) {
-^
-1 warning generated.
-```
+Thanks.
 
-Quick PoC, obviously incomplete.
-```
-diff --git a/clang/include/clang/Basic/DiagnosticSemaKinds.td
-b/clang/include/clang/Basic/DiagnosticSemaKinds.td
-index 18a0154b0041..10e405b1cf65 100644
---- a/clang/include/clang/Basic/DiagnosticSemaKinds.td
-+++ b/clang/include/clang/Basic/DiagnosticSemaKinds.td
-@@ -3975,8 +3975,9 @@ def note_xor_used_as_pow_silence : Note<
-   "replace expression with '%0' %select{|or use 'xor' instead of '^'
-}1to silence this warning">;
-
- def warn_null_pointer_compare : Warning<
--    "comparison of %select{address of|function|array}0 '%1' %select{not |}=
-2"
--    "equal to a null pointer is always %select{true|false}2">,
-+    "comparison of %select{address of|function|array|_Nonnull function cal=
-l}0 "
-+    "'%1' %select{not |}2equal to a null pointer is always "
-+    "%select{true|false}2">,
-     InGroup<TautologicalPointerCompare>;
- def warn_nonnull_expr_compare : Warning<
-     "comparison of nonnull %select{function call|parameter}0 '%1' "
-@@ -3992,6 +3993,8 @@ def warn_address_of_reference_null_compare : Warning<
-   "code; comparison may be assumed to always evaluate to "
-   "%select{true|false}0">,
-   InGroup<TautologicalUndefinedCompare>;
-+def note_return_type_nonnull :
-+  Note<"return type has '_Nonnull' nullability attribute">;
- def note_reference_is_return_value : Note<"%0 returns a reference">;
-
- def note_pointer_declared_here : Note<
-diff --git a/clang/lib/Sema/SemaChecking.cpp b/clang/lib/Sema/SemaChecking.=
-cpp
-index f66eb9fcf13d..9f6d326f5b72 100644
---- a/clang/lib/Sema/SemaChecking.cpp
-+++ b/clang/lib/Sema/SemaChecking.cpp
-@@ -13176,6 +13176,22 @@ static void AnalyzeImpConvsInComparison(Sema
-&S, BinaryOperator *E) {
- ///
- /// \param E the binary operator to check for warnings
- static void AnalyzeComparison(Sema &S, BinaryOperator *E) {
-+  if (auto Call =3D dyn_cast<CallExpr>(E->getLHS())) {
-+    QualType RetType =3D Call->getCallReturnType(S.Context);
-+    if (std::optional<NullabilityKind> NK =3D RetType->getNullability()) {
-+      if (*NK =3D=3D NullabilityKind::NonNull &&
-+        E->getRHS()->isNullPointerConstant(S.Context,
-+
-Expr::NPC_ValueDependentIsNotNull)) {
-+        std::string result;
-+        llvm::raw_string_ostream os(result);
-+        Call->getDirectCallee()->getNameForDiagnostic(os,
-S.getLangOpts(), true);
-+        S.Diag(E->getExprLoc(), diag::warn_null_pointer_compare) << 3 <<
-+          result << true;
-+        S.Diag(Call->getDirectCallee()->getReturnTypeSourceRange().getBegi=
-n(),
-+               diag::note_return_type_nonnull);
-+      }
-+    }
-+  }
-   // The type the comparison is being performed in.
-   QualType T =3D E->getLHS()->getType();
-
-
-```
-
-
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+tejun
