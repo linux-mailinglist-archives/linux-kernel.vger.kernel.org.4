@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427416EF5C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0F26EF5C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241130AbjDZNsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S240277AbjDZNsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbjDZNs3 (ORCPT
+        with ESMTP id S241210AbjDZNsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:48:29 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3644E4EED;
-        Wed, 26 Apr 2023 06:48:27 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id CDA371C0AAC; Wed, 26 Apr 2023 15:48:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1682516904;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vobIZzsu6G/ruKba7Fcr/sNGHFKo94RsPgCWSvtPggw=;
-        b=EnUnI12wJod78pbZUXWy+B2EbuDd+pFb6VuuVRLCVZmzO2x89Z0qyd4gQs+dSGNNPiz3GO
-        NyEJA6fsoybJSVPvUxkrXvOYBxRQx6KNrBa8syfTLTFKzjBwMXSfAS/GSaHjEjsfXPl66m
-        JG3AW6zRt9J+y48qJgu4+Y82HP2wZxA=
-Date:   Wed, 26 Apr 2023 15:47:19 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-crypto@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        John Allen <john.allen@amd.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/10] Add dynamic boost control support
-Message-ID: <ZEkrZ83fFwiweCTz@localhost>
-References: <20230420163140.14940-1-mario.limonciello@amd.com>
+        Wed, 26 Apr 2023 09:48:38 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E776A70;
+        Wed, 26 Apr 2023 06:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=8wWWPvur8h/Ij6ruLlvui/wCIPbLdjmdshto9tS44Xk=; b=OIhLt+Mx0FLhYVseg7n40tccW9
+        T08XOqPLYztlGByIliFPzd9f4zNosrZKwCvXsZtBG7pAysrtvSXHBz1c0aAuTsn4k9wFjh+5rU5Bp
+        0hIRfrwjd9I8lwmXsicA69Y1J1pSHxD6NI1vvt1gwh51WnWQY5fF75YO+29EmJCHuN5w=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1prfVQ-00BHEm-8J; Wed, 26 Apr 2023 15:48:24 +0200
+Date:   Wed, 26 Apr 2023 15:48:24 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Harini Katakam <harini.katakam@amd.com>
+Cc:     robh+dt@kernel.org, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, vladimir.oltean@nxp.com,
+        wsa+renesas@sang-engineering.com,
+        krzysztof.kozlowski+dt@linaro.org, simon.horman@corigine.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
+        michal.simek@amd.com, radhey.shyam.pandey@amd.com
+Subject: Re: [PATCH net-next v2 3/3] phy: mscc: Add support for VSC8531_02
+ with RGMII tuning
+Message-ID: <2bbbe874-2879-4b1a-bf79-2d5c1a7a35f4@lunn.ch>
+References: <20230426104313.28950-1-harini.katakam@amd.com>
+ <20230426104313.28950-4-harini.katakam@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230420163140.14940-1-mario.limonciello@amd.com>
+In-Reply-To: <20230426104313.28950-4-harini.katakam@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,26 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-> Dynamic boost control is a feature of some SoCs that allows
-> an authenticated entity to send commands to the security processor
-> to control certain SOC characteristics with the intention to improve
-> performance.
+On Wed, Apr 26, 2023 at 04:13:13PM +0530, Harini Katakam wrote:
+> From: Harini Katakam <harini.katakam@xilinx.com>
 > 
-> This is implemented via a mechanism that a userspace application would
-> authenticate using a nonce and key exchange over an IOCTL interface.
-> 
-> After authentication is complete an application can exchange signed
-> messages with the security processor and both ends can validate the
-> data transmitted.
+> Add support for VSC8531_02 (Rev 2) device.
+> Add support for optional RGMII RX and TX delay tuning via devicetree.
+> The hierarchy is:
+> - Retain the defaul 0.2ns delay when RGMII tuning is not set.
+> - Retain the default 2ns delay when RGMII tuning is set and DT delay
+> property is NOT specified.
 
-Why is this acceptable? This precludes cross-platform interfaces,
-right? Why would application want to validate data from PSP? That
-precludes virtualization, right?
+tuning is probably the wrong word here. I normally consider tuning as
+small changes from 0ns/2ns. The course setting of 0ns or 2ns is not
+tuning. I normally use RGMII internal delays to refer to that.
 
-Just put the key in kernel. Users have right to control their own
-hardware.
-							Pavel
+However, i'm not sure there is consistency among drivers.
 
--- 
+	 Andrew
