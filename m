@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698C06EF52A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1786EF52E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241077AbjDZNKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S240830AbjDZNLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240888AbjDZNKb (ORCPT
+        with ESMTP id S240850AbjDZNK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:10:31 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CAF5B8A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:10:26 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-246f856d751so4982789a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ixsystems.com; s=google; t=1682514626; x=1685106626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VFPfcznNavRel3v/2Xb0sNmLucdjhMS4TB31OODj9eQ=;
-        b=SXpo9VgkpDl0hHJLrJEN9WNOhkaEetHoZiCXRCTjOT8FFbE8/K9AMAtgrWqcuwp6Tz
-         4d9MIWedfBbveT+f+rigCkmTgGFn/ystU/yyLMkn/143no8GS/oeZrb6Ybmg8EFRoZBN
-         3gYQJcp3F3A2ymwLp42xXAPX575qOBgLQNRUAhIVyel7ZGn6tPSTAZPz36A4Vd1YqBRA
-         V+MK14VNhPwi8zPFMA55zi0XSjUkkBVnEagz17PWp1OM0iafjcj5oruVjOIYF3C+iC6P
-         4T+oTc/+9ER3ZqP6XwqbLcc9kqMlPqTD2Q+387mMl93EgVuG9dJc5qLQpjKdgPeQ1pwN
-         FbYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682514626; x=1685106626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VFPfcznNavRel3v/2Xb0sNmLucdjhMS4TB31OODj9eQ=;
-        b=lWPK/65TbgYp61PPPP1nqr/+0brcZ5D23xDF+N/3KlhIB5Utzntsnwpfpw27JSO4Di
-         9M2rptraYdsXTS8XNmQEcRLLOIgiGoriFmS7na8Tl6cTHSJUQsuIAYlSfmYDFnygZKK5
-         +LG5wQ1NuGNCxTAawUGzGE5p9eWVJyfBEgtcXmNVxRDCZ3ri/SjKCP24oWGISu8O5USR
-         zh5ZMKaxcJyeCie6GgoSioEmwDm+nuwbugOtr/km9wiiRzYxyCc1YOesi4RWIPZp7UNH
-         5PesoO1nnNm6G52cS/NiTXLrB/fWYcxJ+JHK9swRj09w4ZEYC8WJ32kUXT/m7NxmXnFR
-         oN+Q==
-X-Gm-Message-State: AAQBX9ebmnjdPCdr1YgC630wHk0k3SnPAXUQsiws/tHKa03WgO5+rm/v
-        n/rXWKTu0P0UbH99tBzcmyntEH74F5jsNl+lk6NWSw==
-X-Google-Smtp-Source: AKy350bGt8dPLv0jDwC73a+QwasYP2hRe8jvOSnGkd5BHaoZ5lFcdtvx8ciHOzJ5UMxa9KFBync7KlvVO5wENcx4hiQ=
-X-Received: by 2002:a17:90a:630a:b0:249:748b:a232 with SMTP id
- e10-20020a17090a630a00b00249748ba232mr19303629pjj.25.1682514625952; Wed, 26
- Apr 2023 06:10:25 -0700 (PDT)
+        Wed, 26 Apr 2023 09:10:56 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45168420C;
+        Wed, 26 Apr 2023 06:10:55 -0700 (PDT)
+Received: from [192.168.1.43] ([77.7.2.190]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N1x2P-1qFlNr1zrd-012G3Y; Wed, 26 Apr 2023 15:10:26 +0200
+Message-ID: <0da49a77-14d8-cb9d-e36d-985699746b6b@metux.net>
+Date:   Wed, 26 Apr 2023 15:10:24 +0200
 MIME-Version: 1.0
-References: <20221228160249.428399-1-ahamza@ixsystems.com> <20230106130651.vxz7pjtu5gvchdgt@wittgenstein>
- <ZD9AsWMnNKJ4dpjm@hamza-pc> <05845c12eab34567ae61466db36a0cef@AcuMS.aculab.com>
-In-Reply-To: <05845c12eab34567ae61466db36a0cef@AcuMS.aculab.com>
-From:   Andrew Walker <awalker@ixsystems.com>
-Date:   Wed, 26 Apr 2023 08:10:15 -0500
-Message-ID: <CAB5c7xquuk7-kWZBY7fVmKiGh0_YxR=UhLjMUpdTx=2rF+PuzA@mail.gmail.com>
-Subject: Re: [PATCH] Add new open(2) flag - O_EMPTY_PATH
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Ameer Hamza <ahamza@ixsystems.com>,
-        Christian Brauner <brauner@kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "palmer@rivosinc.com" <palmer@rivosinc.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "slark_xiao@163.com" <slark_xiao@163.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Willy Tarreau <w@1wt.eu>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+ <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <ZDVXbw/097jvjKvK@1wt.eu>
+ <CANiq72n8ZV_bs_xp5rNtar4vmfknJtZg4OHJW6vHuhVFmGs8mg@mail.gmail.com>
+ <ZDWQXDRknzFhngyk@1wt.eu>
+ <CANiq72n=s23naD4-UkmuLesekDTf4b5bsmWc+fYANYPq+X1R9w@mail.gmail.com>
+ <ZDXCeKkbPoZi5k6t@1wt.eu>
+ <CANiq72kceQ8aWk7mtB4MoepUr3hNzF34d=DfVzdeCLGRAZwE6g@mail.gmail.com>
+Content-Language: tl
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+In-Reply-To: <CANiq72kceQ8aWk7mtB4MoepUr3hNzF34d=DfVzdeCLGRAZwE6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:k1I93PH2PUWpwKhagL4rx9XvzvIexBdoYfikjsclZyVQuucR6wx
+ i8wD8puOVehsjkjcg1qTAOwNJHxBuXUQlCV39ybTptJuHIgRjTuffOzkQLUbQwTZogo7nbT
+ stEQXHuer89iS8rHiHhcY+UO26ZBos1+0I1yC6d4S5hVkAS8Ku/i+FyFIPnQXLnp/sed/rI
+ nGRgKGmKdhmsQuAyh7avA==
+UI-OutboundReport: notjunk:1;M01:P0:nVLRMWgcgFo=;DSdQltTDSvJfrn+jeB1nXeoVKzW
+ rYbjCT9UurdF5820GSw36hJv9dmZms5tOLorgZzas7xk10VOlwVYztvpwgX6EqSzQtF2tHxNM
+ WxV4GoVsYbmeXAjVg98CpelC2Dei6BfVrv3gBZigCYirVpHz/hHH3lcBLrjtffHG7LKvVIRh5
+ jNvkK+auju7lxybRHxlEFwGDZPNwEmBsybK28Rlo2WOf6tSfBirpuC6vjhzgrvEmaZClsizY1
+ jahWbdiTHYPdIfxjDh16i+r0G3cmOj+RUkReOzqLSy2giGmalJ/Nptx5Xdbl0mUDbjRaO0ruE
+ f7qv3FeUphYaTRHbdNqmkf1r8PtSrT8W0PAGTeeFhNZrm3fmprWkct1ea4BMTEr3nu8dmK3Iw
+ EgoFgnbN3umhIduCyrJSbbEkdl9FayCQQ1oQsIoEp0SzboBX6E/MyMb2JxDwwPXAI9DfydF2z
+ oo8eta7smAVWgLDGleJhoQKdjTh9/THuTd/Y/DcsgnSai97zupypSwoGYUio35yGZ8rAv3Czm
+ cSP5jZpQQs/UTLPbsz2eNHORkzSDVaUbkoU5u7aJi72Q11kUsN70t1JYCD4BEHnmsdUq7DyBp
+ bS0tcLCeFSDdV233vJEVyRCNCHyT2NUtsPuFMXf+8QmUldeVD8Jk9JurvktWgysjoDlQ/J/mR
+ rtrkbARgbFiUIx26sPJ2jFV/wQc0hxrNWgDqcULgpg==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 4:29=E2=80=AFPM David Laight <David.Laight@aculab.c=
-om> wrote:
-> ISTM that reopening a file READ_WRITE shouldn't be unconditionally allowe=
-d.
-> Checking the inode permissions of the file isn't enough to ensure
-> that the process is allowed to open it.
-> The 'x' (search) permissions on all the parent directories needs to
-> be checked (going back as far as some directory the process has open).
->
-> If a full pathname is generated this check is done.
-> But the proposed O_EMTPY_PATH won't be doing it.
->
-> This all matters if a system is using restricted directory
-> permissions to block a process from opening files in some
-> part of the filesystem, but is also being passed an open
-> fd (for reading) in that part of the filesystem.
-> I'm sure there are systems that will be doing this.
->
->         David
->
+On 12.04.23 00:14, Miguel Ojeda wrote:
 
-So to be safe, hypothetically, the caller should be required to have
-CAP_DAC_READ_SEARCH like with open_by_handle_at(2)?
+> But, yes, if Rust grows to be really successful within the kernel,
+> then at some point some basic understanding of Rust will be needed by
+> most kernel developers. I think that is fine, as long as there is
+> enough time to adjust.
 
-Andrew
+The tricky question is: how much time will be needed ?
+
+Personally, I'm too overloaded for diving deeper into Rust anytime soon.
+
+I've recently managed giving up my reluctance against golang and doing
+some fun project w/ it (freecity, a simcity2000 clone), just to get some
+real hands-on experience (besides some smaller patches for other
+projects i've done over the years).
+
+Rust and golang share some common problems (when coming from traditional
+C + friends):
+* entirely different toolchain concept (workflows are very different
+   from what one's used from GCC + friends)
+* fast-moving target (one has to be careful to expect/use the right
+   toolchain version)
+* rarely understood by traditional kernel devs
+* distro/build engine integration/support still pretty infant,
+   especially in embedded world (very related to the toolchain update
+   problem)
+
+IMHO, before we can practically use Rust at greater scale in the kernel,
+the problems above need to be resolved first. And that's something that
+the Rust community (not the kernel community) should take care of.
+
+And beware: demanding newer toolchains (thus newer distros), just for
+building the kernel, can easily cause *huge* trouble many organisations,
+especially in embedded field. Linux is used in lots of highly safety
+critical environments that need special verification processes and so
+cannot easily upgrade toolchains. If Linux some day suddenly requires
+another language like Rust, those would be immediately cut-off from
+newer releases.
+
+Ergo: the whole process of adding Rust to the Kernel needs to be done
+very, very carefully.
+
+> To be clear, it is still up to each subsystem to decide whether to
+> take Rust code. What I meant by "if they can" is that, if they are
+> willing to, then ideally the code would go through their tree too. The
+> exception are core APIs, where I asked for flexibility from all sides,
+> so that those subsystems willing to try Rust do not get completely > blocked.
+
+For the reasons above, the subsystems shouldn't take those decisions
+lightly, even if they happen to be Rust experts - this could have a
+dramatic effect on downstreams.
+
+Maybe we should (for certain time) go a different path: move all new
+Rust stuff (except for bugfixes) to a separate downstream tree, that's
+rebased on mainline releases, but still let the patches fload through
+the corresponding subsystems.
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
