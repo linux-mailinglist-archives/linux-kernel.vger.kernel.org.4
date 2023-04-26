@@ -2,132 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D172F6EF390
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9966EF395
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240315AbjDZLoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S240628AbjDZLpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjDZLoW (ORCPT
+        with ESMTP id S230023AbjDZLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:44:22 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9FE5261
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:43:51 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a682eee3baso53311885ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682509431; x=1685101431;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SffcOdPFYwFBhUJALuYvbVJpxK8qpMoV7ZnXznDGJxU=;
-        b=aiKsoFcuQ3/rvu7ijYNZLVivEeqZwES90MiJVM7/pm+XuKpyc1P/K36Nyz8bphEPuD
-         f47kr6cdI0l5OTvvxLNoZdd6L47KyPEbUmcLnAom/60XFqhoFa12cmt9m8Rr5ePJFTbD
-         G+5Y4IxsaEPUTCKVu+/0nVVFfRQhLU26MuT16euC3Gq5+d5Genz6rJuv3I0cPxDjkDrZ
-         lMnUMpTlvBGxQIGy/kyHTzbL3NJ81OWq1hqFid1JRDsc35WRaAmiWR0Dz/TveRolN/gO
-         64Z5A+xhhrSfjJ0SJROlPh7yS6C0MUoKbWCwzfYoR/s2EzVjBoW7SPnizZSE5jhVL7rI
-         9A1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682509431; x=1685101431;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SffcOdPFYwFBhUJALuYvbVJpxK8qpMoV7ZnXznDGJxU=;
-        b=GxXq+xs0Hm5L/v0d38N0f166QV7Yyj1FlygNi1/0GTA18r60UCdVES11hnsSEWHGlZ
-         LUyTVhF/fi/tVVzWnstskTzlygbkeH0oSRdNgGSFpGTVyTUiH4f7ljtyTHtewRekV91M
-         JIVHQasXTmQ1bYjkBa2m5TrReNMJIcGPon6qzpq2JeYpMLhCtQhcJocaHWnnamlgty9Y
-         StpJat+W5qCM+4jdQ7gfqAWKb4JTf/GOyKG3SrjzXXQTjzmOFggzAQ7ypNG6+TlZYnv7
-         2m/B7NME5bGskkVZEpizpPsUofhBFvEVThNPUTqyMh5Mfzj8Ycr9UYNhzBfHdvcKpk4Y
-         pzrA==
-X-Gm-Message-State: AC+VfDyuvefIlUbl19qDCer47jpz5vJwX2DadHh5Eg4CFySeL+eac1/9
-        Sj/gF7dM4fKVB9kSYCjQ5K9DV26Pga8plplDO/M=
-X-Google-Smtp-Source: ACHHUZ48IbgMVJXJeGs36QJMmIaB7yhNYon5UCBibgZxmSqy/qWbJ58UNy97GbLoop2nzlqpHuPfvg==
-X-Received: by 2002:a17:902:ea02:b0:1a9:7bf4:17c0 with SMTP id s2-20020a170902ea0200b001a97bf417c0mr11250862plg.4.1682509431419;
-        Wed, 26 Apr 2023 04:43:51 -0700 (PDT)
-Received: from [10.200.11.252] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902ee8d00b001a66bf1406bsm9814008pld.144.2023.04.26.04.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 04:43:51 -0700 (PDT)
-Message-ID: <19049997-7971-f39c-a466-dd4ba498a902@bytedance.com>
-Date:   Wed, 26 Apr 2023 19:43:46 +0800
+        Wed, 26 Apr 2023 07:44:58 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34304C3F;
+        Wed, 26 Apr 2023 04:44:56 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5xcg6yW2z9v7H0;
+        Wed, 26 Apr 2023 19:35:15 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwDXQOyNDklkVnlZAg--.7127S2;
+        Wed, 26 Apr 2023 12:44:27 +0100 (CET)
+Message-ID: <ade93f7324c5f07511a0793f702024d41889636d.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH 4/6] bpf: Introduce bpf_verify_umd_signature() kfunc
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Yonghong Song <yhs@meta.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, herbert@gondor.apana.org.au,
+        davem@davemloft.net, jarkko@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 26 Apr 2023 13:44:09 +0200
+In-Reply-To: <23649e1d-8fee-079a-21de-87f7024add81@meta.com>
+References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
+         <20230425173557.724688-5-roberto.sassu@huaweicloud.com>
+         <23649e1d-8fee-079a-21de-87f7024add81@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH 7/9] maple_tree: Delete redundant code in mas_next_node()
-To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-References: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
- <20230425110511.11680-8-zhangpeng.00@bytedance.com>
- <20230425164507.dulntzwtkm5mp4ia@revolver>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230425164507.dulntzwtkm5mp4ia@revolver>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwDXQOyNDklkVnlZAg--.7127S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCr48Gr1Utw4kWF4UJry8Grg_yoWrZw15pF
+        W8KF4F9ry8JF1xtFyUXa13Za4Skws2qw17G3sFya4fGFnavr1fCw18tF45W3sYk348trZ5
+        ZrW0q34a93W5GaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4yCiQABsh
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-04-25 at 14:25 -0700, Yonghong Song wrote:
+> 
+> On 4/25/23 10:35 AM, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Introduce the bpf_verify_umd_signature() kfunc, to verify UMD-parsed
+> > signatures. The parameters and usage are the same as for
+> > bpf_verify_pkcs7_signature().
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >   kernel/trace/bpf_trace.c | 69 ++++++++++++++++++++++++++++++++--------
+> >   1 file changed, 55 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index e8da032bb6f..c9cae337596 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1271,7 +1271,7 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
+> >    * The key pointer is marked as invalid, to prevent bpf_key_put() from
+> >    * attempting to decrement the key reference count on that pointer. The key
+> >    * pointer set in such way is currently understood only by
+> > - * verify_pkcs7_signature().
+> > + * verify_pkcs7_signature() and verify_umd_signature().
+> >    *
+> >    * Set *id* to one of the values defined in include/linux/verification.h:
+> >    * 0 for the primary keyring (immutable keyring of system keys);
+> > @@ -1317,6 +1317,27 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
+> >   }
+> >   
+> >   #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> > +static int validate_key(struct bpf_key *trusted_keyring)
+> > +{
+> > +	int ret = 0;
+> > +
+> > +	if (trusted_keyring->has_ref) {
+> > +		/*
+> > +		 * Do the permission check deferred in bpf_lookup_user_key().
+> > +		 * See bpf_lookup_user_key() for more details.
+> > +		 *
+> > +		 * A call to key_task_permission() here would be redundant, as
+> > +		 * it is already done by keyring_search() called by
+> > +		 * find_asymmetric_key().
+> > +		 */
+> > +		ret = key_validate(trusted_keyring->key);
+> > +		if (ret < 0)
+> > +			return ret;
+> 
+> The above
+> 	if (ret < 0)
+> 		return ret;
+> can be removed.
 
-在 2023/4/26 00:45, Liam R. Howlett 写道:
-> * Peng Zhang <zhangpeng.00@bytedance.com> [230425 07:05]:
->
-> The title of the patch seems wrong.
->
-> This isn't redundant code and you aren't deleting it.. you are moving a
-> block of code outside a loop.  You did modify the check though, is that
-> the redundant code?
->
->> When offset == node_end is satisfied, go to the parent node, mas->max
->> will not change. So there is no need to update min on the move.
-> Please try not to state the code in your commit message.
->
-> I have moved this block of code in patch 27/34 [1]
->
->> Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
->> ---
->>   lib/maple_tree.c | 7 ++-----
->>   1 file changed, 2 insertions(+), 5 deletions(-)
->>
->> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
->> index 83441ef2e1f57..8bfa837b7b752 100644
->> --- a/lib/maple_tree.c
->> +++ b/lib/maple_tree.c
->> @@ -4616,7 +4616,8 @@ static inline int mas_next_node(struct ma_state *mas, struct maple_node *node,
->>   	enum maple_type mt;
->>   	void __rcu **slots;
->>   
->> -	if (mas->max >= max)
->> +	min = mas->max + 1;
->> +	if (min > max)
->>   		goto no_entry;
-> What happens on overflow?
-Yes, I made a mistake.
-I will drop this patch since you have updated the code in patch 27/34.
->
->>   
->>   	level = 0;
->> @@ -4624,10 +4625,6 @@ static inline int mas_next_node(struct ma_state *mas, struct maple_node *node,
->>   		if (ma_is_root(node))
->>   			goto no_entry;
->>   
->> -		min = mas->max + 1;
->> -		if (min > max)
->> -			goto no_entry;
->> -
->>   		if (unlikely(mas_ascend(mas)))
->>   			return 1;
->>   
->> -- 
->> 2.20.1
->>
-> [1] https://lore.kernel.org/linux-mm/20230425140955.3834476-28-Liam.Howlett@oracle.com/
+Right, thanks!
+
+Roberto
+
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >   /**
+> >    * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
+> >    * @data_ptr: data to verify
+> > @@ -1334,19 +1355,9 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+> >   {
+> >   	int ret;
+> >   
+> > -	if (trusted_keyring->has_ref) {
+> > -		/*
+> > -		 * Do the permission check deferred in bpf_lookup_user_key().
+> > -		 * See bpf_lookup_user_key() for more details.
+> > -		 *
+> > -		 * A call to key_task_permission() here would be redundant, as
+> > -		 * it is already done by keyring_search() called by
+> > -		 * find_asymmetric_key().
+> > -		 */
+> > -		ret = key_validate(trusted_keyring->key);
+> > -		if (ret < 0)
+> > -			return ret;
+> > -	}
+> > +	ret = validate_key(trusted_keyring);
+> > +	if (ret < 0)
+> > +		return ret;
+> >   
+> >   	return verify_pkcs7_signature(data_ptr->data,
+> >   				      bpf_dynptr_get_size(data_ptr),
+> > @@ -1356,6 +1367,35 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
+> >   				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> >   				      NULL);
+> >   }
+> > +
+> > +/**
+> > + * bpf_verify_umd_signature - Verify a UMD-parsed signature
+> > + * @data_ptr: Data to verify
+> > + * @sig_ptr: Signature of the data
+> > + * @trusted_keyring: Keyring with keys trusted for signature verification
+> > + *
+> > + * Verify the UMD-parsed signature *sig_ptr* against the supplied *data_ptr*
+> > + * with keys in a keyring referenced by *trusted_keyring*.
+> > + *
+> > + * Return: 0 on success, a negative value on error.
+> > + */
+> > +__bpf_kfunc int bpf_verify_umd_signature(struct bpf_dynptr_kern *data_ptr,
+> > +					 struct bpf_dynptr_kern *sig_ptr,
+> > +					 struct bpf_key *trusted_keyring)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = validate_key(trusted_keyring);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	return verify_umd_signature(data_ptr->data,
+> > +				    bpf_dynptr_get_size(data_ptr),
+> > +				    sig_ptr->data, bpf_dynptr_get_size(sig_ptr),
+> > +				    trusted_keyring->key,
+> > +				    VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
+> > +				    NULL);
+> > +}
+> >   #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
+> >   
+> >   __diag_pop();
+> > @@ -1366,6 +1406,7 @@ BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
+> >   BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
+> >   #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
+> >   BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
+> > +BTF_ID_FLAGS(func, bpf_verify_umd_signature, KF_SLEEPABLE)
+> >   #endif
+> >   BTF_SET8_END(key_sig_kfunc_set)
+> >   
+
