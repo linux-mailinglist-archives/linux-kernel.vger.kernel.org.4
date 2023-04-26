@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B061D6EFC69
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914276EFC6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239534AbjDZVYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S239635AbjDZV1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjDZVYb (ORCPT
+        with ESMTP id S229582AbjDZV1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:24:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6189519B9;
-        Wed, 26 Apr 2023 14:24:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0034063225;
-        Wed, 26 Apr 2023 21:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BACEC433A1;
-        Wed, 26 Apr 2023 21:24:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682544269;
-        bh=biqI0SeUg9q52FQjztvIn0amAyd7Lxt2JXIvLvrdumI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qEzgqyAvtwDG++3UC2vbPhZFJLt2Sj4C8c8d1wbRHjko8arCya1T9MhgDhQm+j2eM
-         OO8vzfjnw6qnlclyI9OP2yryhnieKQXhV8mt8nwH9GHA+fYkyzeThqhZbIGyq1E9C6
-         AqInplz279nGGvW8HpaiADkQwIg2ny2S0ZZzp7/z5FnxJrK1WLz0QoAPgelwAt/k3m
-         9aPbhKFhEFvS65FKVLTKNI5JnF+HIlHapBO8yC+jjUYtF+lkuBzNxrDfG2MaDnP4sA
-         7lZP0l31m6yWoykkakQEVC+Roq7mw1ZeusA02/TipegJy7+/rBIWTNhcNkT4aZqxZ2
-         MCmjeYUf0yrPA==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so265621e87.2;
-        Wed, 26 Apr 2023 14:24:29 -0700 (PDT)
-X-Gm-Message-State: AAQBX9c6D1UF8rW7VNjfHqjFBCJrcUAQxR3NOMo3b9UCqBC695gKS6l4
-        BaDVmqrdIhV9S+0sPVW7EbW5lMAiqD6UaZit6hI=
-X-Google-Smtp-Source: AKy350agTzJPprN9JAo42IO2gKeS1BWWZRQaCVcwjO3IGP+vGNWnInyObvwbW7VySrTdsZTcen+bRMhNRb1n/zJiL74=
-X-Received: by 2002:ac2:4e49:0:b0:4ec:9f24:3e5f with SMTP id
- f9-20020ac24e49000000b004ec9f243e5fmr5527381lfr.0.1682544267317; Wed, 26 Apr
- 2023 14:24:27 -0700 (PDT)
+        Wed, 26 Apr 2023 17:27:15 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E35E65
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 14:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=P+zvqaA+N/jOdHwRNjllwVTW5FbdEn0G9xqqOFN5Erw=; b=YZkEEswWkyh/1QDUlVD4KYOc6Q
+        GV0aIkxVeSJXRKI1c8eNMHPAWmzPxTkL/BKuHJPNhxtZ+q8qNL+PyHXsLpJuTSCdNHXKEQu0bqNg6
+        T6f3w/dMqoZ0iMJqSgd0vsDV4yLdQqQ55CvpQQ//LPpJCHDf/n9L5wcAfnqJv47Pq4CFP/UPwIDMt
+        jmMGVLufXfkAHqZRTS2yzCWg1t/1qwelNdHzd0I+x7AGaDLRjmVY4yzQjiBfiNvFVmqkDs8G5Cpuv
+        yqxd+XSkB3ooM6JWhXkyEQc+uXn5+WaM/boTMOnEbU59GInIj/3R6n4ufg7dqLWOQTlhwgqAf6HCm
+        72Qz1fbA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1prmf9-002rdk-Tq; Wed, 26 Apr 2023 21:26:56 +0000
+Date:   Wed, 26 Apr 2023 22:26:55 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Hillf Danton <hdanton@sina.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
+Message-ID: <ZEmXH1FpOgT/u6/j@casper.infradead.org>
+References: <20230421221249.1616168-1-dianders@chromium.org>
+ <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
+ <20230422051858.1696-1-hdanton@sina.com>
+ <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
+ <20230425010917.1984-1-hdanton@sina.com>
+ <CAD=FV=XWuQoaGZG_Tm8AqGAsqGSAa822bNw3Dp2QnmR40npURw@mail.gmail.com>
+ <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
+ <ZEk/uVlbX2wWgagN@casper.infradead.org>
+ <CAD=FV=UyLf9GLz7xJyzhW2V_JycwUppwGfe7th17f_KXmMGOqw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230424165726.2245548-1-ardb@kernel.org> <20230426101754.GBZEj6Un+ahT4iZ9fs@fat_crate.local>
-In-Reply-To: <20230426101754.GBZEj6Un+ahT4iZ9fs@fat_crate.local>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 26 Apr 2023 22:24:16 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHM2kpk4CvrkJVW3EHDR9NEth_TzvX7+O+9x=Of8cdA6g@mail.gmail.com>
-Message-ID: <CAMj1kXHM2kpk4CvrkJVW3EHDR9NEth_TzvX7+O+9x=Of8cdA6g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] efi/x86: Avoid legacy decompressor during EFI boot
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=UyLf9GLz7xJyzhW2V_JycwUppwGfe7th17f_KXmMGOqw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,26 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 11:18, Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, Apr 24, 2023 at 06:57:20PM +0200, Ard Biesheuvel wrote:
-> >  arch/x86/boot/compressed/efi_mixed.S           |  55 ---
-> >  arch/x86/boot/compressed/head_32.S             |  24 --
-> >  arch/x86/boot/compressed/head_64.S             |  39 +--
-> >  arch/x86/boot/compressed/misc.c                |  44 ++-
-> >  arch/x86/include/asm/efi.h                     |   2 +
-> >  drivers/firmware/efi/libstub/efi-stub-helper.c |   4 +
-> >  drivers/firmware/efi/libstub/x86-stub.c        | 360 +++++++++++++-------
-> >  7 files changed, 279 insertions(+), 249 deletions(-)
->
-> Upon a quick scan, I can't argue with that diffstat and would prefer
-> a lot more if we did this instead of Evgeny's pile which touches a lot
-> of nasty and hard to debug code which gets executed on *everything*.
->
-> So if people agree with that approach, I'd gladly give it a more
-> detailed look.
->
+On Wed, Apr 26, 2023 at 01:46:58PM -0700, Doug Anderson wrote:
+> On Wed, Apr 26, 2023 at 8:14 AM Matthew Wilcox <willy@infradead.org> wrote:
+> >
+> > I'm not generally a fan of lock-with-timeout approaches.  I think the
+> > rationale for this one makes sense, but we're going to see some people
+> > try to use this for situations where it doesn't make sense.
+> 
+> Although it won't completely prevent the issue, I could add a comment
 
-I think the general approach is better, but to be honest, I may have
-missed a thing or two, so it would be good if people more familiar
-with the history could chime in.
+People don't read comments.
+
+> > Hm.  If the problem is that we want to wait for the lock unless the
+> > lock is being held for I/O, we can actually tell that in the caller.
+> >
+> >         if (folio_test_uptodate(folio))
+> >                 folio_lock(folio);
+> >         else
+> >                 folio_trylock(folio);
+> >
+> > (the folio lock isn't held for writeback, just taken and released;
+> > if the folio is uptodate, the folio lock should only be taken for a
+> > short time; if it's !uptodate then it's probably being read)
+> 
+> The current place in patch #3 where I'm using folio_lock_timeout()
+> only calls it if a folio_trylock() already failed [2]. So I guess the
+> idea would be that if the trylock failed and folio_test_uptodate()
+> returns 0 then we immediately fail, otherwise we call the unbounded
+> folio_trylock()?
+
+Looking at the actual code, here's what I'd do:
+
++++ b/mm/migrate.c
+@@ -1156,6 +1156,14 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
+                if (current->flags & PF_MEMALLOC)
+                        goto out;
+
++               /*
++                * In "light" mode, we can wait for transient locks (eg
++                * inserting a page into the page table), but it's not
++                * worth waiting for I/O.
++                */
++               if (mode == MIGRATE_SYNC_LIGHT && !folio_test_uptodate(folio))
++                       goto out;
++
+                folio_lock(src);
+        }
+        locked = true;
+
+> I put some traces in and ran my test and it turns out that in every
+> case (except one) where the tre initial folio_trylock() failed I saw
+> folio_test_uptodate() return 0. Assuming my test case is typical, I
+> think that means that coding it with folio_test_uptodate() is roughly
+> the same as just never waiting at all for the folio lock in the
+> SYNC_LIGHT case. In the original discussion of my v1 patch people
+> didn't like that idea. ...so I think that for now I'm going to keep it
+> with the timeout flow.
+
+I think that means that your specific test is generally going to
+exercise the case where the lock is held because we're waiting for I/O.
+That's exactly what you set it up to produce, after all!  But it won't
+affect the cases where the folio lock is being held for other reasons,
+which your testcase is incredibly unlikely to produce.
