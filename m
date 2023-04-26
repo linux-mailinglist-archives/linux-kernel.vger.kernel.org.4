@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220AE6EECE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E936EECEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239377AbjDZEMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 00:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S239327AbjDZEP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 00:15:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbjDZEMg (ORCPT
+        with ESMTP id S239023AbjDZEPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 00:12:36 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB826B9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:12:35 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-51f597c975fso6706707a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:12:35 -0700 (PDT)
+        Wed, 26 Apr 2023 00:15:24 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23591990
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:14:58 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a50cb65c92so52845495ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682482354; x=1685074354;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1WEqmaMBFmHP4p7ngRgW+kux9X7VvJXBfEqvQ44Wow=;
-        b=FkNan6seMjrCrf/+Y0Ne53q39DQC2hptzm8MXKt6vLlLuxLwlRNRrFs8YFuWKByRS5
-         M/sOGNSLfOa+fFffafOUQbpHFS0qET5gxIGdgyOdiEkYC6o3QcUFEZHP5lmslR1DqJr6
-         3cYklHnsd6GZ6g2uL9oLhcZV6gT1NXzKcDAMiuH5eZ0WL+xX/hAoyhxLBZBWACuQFCC5
-         G18s+WD22+5jJCyrORTFE0lIQhE0QNJ0M8avMMIU5aA8ET3uLmcegPdswv8wvy0RxAKP
-         CAdzT/QLHCoAAtACqUg73dXNGlInjK7+wI2M99AS12hM4rJwpItoZNt7jPF9P9LlVnCO
-         zSnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682482354; x=1685074354;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1682482498; x=1685074498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X1WEqmaMBFmHP4p7ngRgW+kux9X7VvJXBfEqvQ44Wow=;
-        b=Do+SwR2I9LRoGpZ7wVI8q4HlewOJpiFKGEDuyqwkwmZ7O6NrQzDnhi/MAovWTf8R0w
-         /wQf099jmL9lmEh/QQww+xxff/LErISn5n6p/JbioXw0WQ8xZci76Fboh9PWayi8eZZ9
-         Zn5EymKdB4uu9eTlmQSI7VsL1p9sZGaC382dMDRhzc8pX9rhqeTaEFD7ffpivLlthNlC
-         KoW4oFhy+DbMvDLohNeIR4Kz0ihrIFJRBtaffx1I0z2kY9Ng55V614gWKv3FqBu9m1S4
-         bdReJjW7icCdnmSmQhT4QxUHdLw9Fdx4c1wfuB7WFXNbVQiGRL/fG7YCD5cExJYdO+D3
-         2Sfg==
-X-Gm-Message-State: AAQBX9fs4vHa6BBeEtkHo/DfRL1R7IwgzkwLErDxIVt5HqXblrXRjm6d
-        bxe2VzrMLXZigKUuVIN5zQU=
-X-Google-Smtp-Source: AKy350bN3ku3tn8Ik9slYIdmFWsMuTaJMXfPG00UyeUr8poZu/xi8hZysYSE9D9VZJN7JMNKfEPt0A==
-X-Received: by 2002:a17:902:dacc:b0:19e:ab29:1ec2 with SMTP id q12-20020a170902dacc00b0019eab291ec2mr26919278plx.65.1682482354637;
-        Tue, 25 Apr 2023 21:12:34 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902bc4500b001a68d613ad9sm8983193plz.132.2023.04.25.21.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 21:12:34 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
-Subject: [PATCH 2/2] erofs: replace global decompressors[] with stack memory
-Date:   Wed, 26 Apr 2023 12:10:27 +0800
-Message-Id: <e9d0a320fb45d74f1f602dd77f685d1bae59325c.1682481589.git.huyue2@coolpad.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-References: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-In-Reply-To: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-References: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        bh=f12XBIeKD4zCA/Sk8xAhXMMryIXAoPgMmXZoc14vR/g=;
+        b=FkmPAVs59CIIhjmSzFCOHZImQx2lDgBhy6/um/D0WIY8srLhctqucVObwj5qoSl1PF
+         xkIOlpuHs4Cv022AqonMwPBtq6wKe8ObxRYOs9E+lAr2TEVvHHnI7Xje0O8S53XUFM63
+         f7C19kKqS2NJvJ/5bVz/ONQtRvkjAdq0EU84StTVTaRCxBAVv6F6fdwWsF1K0OJuVS0h
+         hbF0APkjnsJ78cx28KHF4/qDBj6PpuseQpSzaANmB+EI5J2uNe6vIUkmFN67ow5peLYm
+         CvuAZiVzXKBUr30MC0HfA+IIH6HJyJWRcbZG7DOJ7OiVGb7dnBdKOoEvz8TSGYHEzwz8
+         tvXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682482498; x=1685074498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f12XBIeKD4zCA/Sk8xAhXMMryIXAoPgMmXZoc14vR/g=;
+        b=mGMzllLBoI0CK1fbMP6MohqC5aeHJy4MGROROpE8AKVk3r2nbNRr5zfFa2f9lFEUEZ
+         Atxbw+hZsIUf7GZgM/+Cf1LRoa1t8kYoWWka5/12MvBDj1OG4kK837O5MZbiIfCbVCG7
+         Ruy/i7FAEKbcu/PUoNyrPbLAMOIvQZxMbOf3go/6vg70QGj6AA3HHLeYj3ONcCpKSBYc
+         EE/ecWpfHXZ0mDxHWV7EfGT0QtklNKVllQ+q0Uc7r6YNO4BFqu6y/8g8UqS7pzy7PTDS
+         F7GCpyZVsv7uXrglKCY0E3mQLATEm6kXUS4vfXBRSixqd4LNOoX5qJDHX4l7SRfg/kGz
+         zvaA==
+X-Gm-Message-State: AAQBX9ctu0/bTb9JWF9IT8X9GrEfdaoAGgSDLnMm9jAcis62l/wJGRlW
+        VyEtKu+tbW/CYfIyvEVSPt12BA==
+X-Google-Smtp-Source: AKy350ZnwYrxiExp3wU2Qo5QoKE+PvB9AhN3LOXeWKZXGg9E7DIcBU4VEgZ4th+Ae0IrQgs6ziSniA==
+X-Received: by 2002:a17:903:244f:b0:1a8:16d2:a867 with SMTP id l15-20020a170903244f00b001a816d2a867mr25713859pls.62.1682482498248;
+        Tue, 25 Apr 2023 21:14:58 -0700 (PDT)
+Received: from [10.200.11.252] ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id ji9-20020a170903324900b001a1d4a985eesm8980274plb.228.2023.04.25.21.14.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 21:14:57 -0700 (PDT)
+Message-ID: <75ebddd7-641f-0274-72c5-415007d60cdd@bytedance.com>
+Date:   Wed, 26 Apr 2023 12:14:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 02/34] maple_tree: Clean up mas_parent_enum()
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        maple-tree@lists.infradead.org,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230425140955.3834476-1-Liam.Howlett@oracle.com>
+ <20230425140955.3834476-3-Liam.Howlett@oracle.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <20230425140955.3834476-3-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,62 +77,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yue Hu <huyue2@coolpad.com>
 
-Note that only z_erofs_decompress() is using the decompressors[], so no
-need to keep it as global resource, just use local one instead.
+在 2023/4/25 22:09, Liam R. Howlett 写道:
+> From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+>
+> mas_parent_enum() is a simple wrapper for mte_parent_enum() which is
+> only called from that wrapper.  Remove the wrapper and inline
+> mte_parent_enum() into mas_parent_enum().
+>
+> At the same time, clean up the bit masking of the root pointer since it
+> cannot be set by the time the bit masking occurs.  Change the check on
+> the root bit to a WARN_ON(), and fix the verification code to not
+> trigger the WARN_ON() before checking if the node is root.
+>
+> Reported-by: Wei Yang <richard.weiyang@gmail.com>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>   lib/maple_tree.c | 28 +++++++++++-----------------
+>   1 file changed, 11 insertions(+), 17 deletions(-)
+>
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 9cf4fca42310c..ac0245dd88dad 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -428,25 +428,23 @@ static inline unsigned long mte_parent_slot_mask(unsigned long parent)
+>    * mas_parent_enum() - Return the maple_type of the parent from the stored
+>    * parent type.
+>    * @mas: The maple state
+> - * @node: The maple_enode to extract the parent's enum
+> + * @enode: The maple_enode to extract the parent's enum
+>    * Return: The node->parent maple_type
+>    */
+>   static inline
+> -enum maple_type mte_parent_enum(struct maple_enode *p_enode,
+> -				struct maple_tree *mt)
+> +enum maple_type mas_parent_enum(struct ma_state *mas, struct maple_enode *enode)
 
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
----
- fs/erofs/decompressor.c | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+Do you think it's better to rename this function to mas_parent_type()?
+The meaning of enum is not obvious and there is already a similar
+function mte_node_type().
 
-diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-index f416ebd6f0dc..91d91bdd068f 100644
---- a/fs/erofs/decompressor.c
-+++ b/fs/erofs/decompressor.c
-@@ -368,25 +368,24 @@ struct z_erofs_decompressor {
- 			  struct page **pagepool);
- };
- 
--static struct z_erofs_decompressor decompressors[] = {
--	[Z_EROFS_COMPRESSION_SHIFTED] = {
--		.decompress = z_erofs_transform_plain,
--	},
--	[Z_EROFS_COMPRESSION_INTERLACED] = {
--		.decompress = z_erofs_transform_plain,
--	},
--	[Z_EROFS_COMPRESSION_LZ4] = {
--		.decompress = z_erofs_lz4_decompress,
--	},
--#ifdef CONFIG_EROFS_FS_ZIP_LZMA
--	[Z_EROFS_COMPRESSION_LZMA] = {
--		.decompress = z_erofs_lzma_decompress,
--	},
--#endif
--};
--
- int z_erofs_decompress(struct z_erofs_decompress_req *rq,
- 		       struct page **pagepool)
- {
-+	struct z_erofs_decompressor decompressors[] = {
-+		[Z_EROFS_COMPRESSION_SHIFTED] = {
-+			.decompress = z_erofs_transform_plain,
-+		},
-+		[Z_EROFS_COMPRESSION_INTERLACED] = {
-+			.decompress = z_erofs_transform_plain,
-+		},
-+		[Z_EROFS_COMPRESSION_LZ4] = {
-+			.decompress = z_erofs_lz4_decompress,
-+		},
-+#ifdef CONFIG_EROFS_FS_ZIP_LZMA
-+		[Z_EROFS_COMPRESSION_LZMA] = {
-+			.decompress = z_erofs_lzma_decompress,
-+		},
-+#endif
-+	};
- 	return decompressors[rq->alg].decompress(rq, pagepool);
- }
--- 
-2.17.1
-
+>   {
+>   	unsigned long p_type;
+>   
+> -	p_type = (unsigned long)p_enode;
+> -	if (p_type & MAPLE_PARENT_ROOT)
+> -		return 0; /* Validated in the caller. */
+> +	p_type = (unsigned long)mte_to_node(enode)->parent;
+> +	if (WARN_ON(p_type & MAPLE_PARENT_ROOT))
+> +		return 0;
+>   
+>   	p_type &= MAPLE_NODE_MASK;
+> -	p_type = p_type & ~(MAPLE_PARENT_ROOT | mte_parent_slot_mask(p_type));
+> -
+> +	p_type &= ~mte_parent_slot_mask(p_type);
+>   	switch (p_type) {
+>   	case MAPLE_PARENT_RANGE64: /* or MAPLE_PARENT_ARANGE64 */
+> -		if (mt_is_alloc(mt))
+> +		if (mt_is_alloc(mas->tree))
+>   			return maple_arange_64;
+>   		return maple_range_64;
+>   	}
+> @@ -454,12 +452,6 @@ enum maple_type mte_parent_enum(struct maple_enode *p_enode,
+>   	return 0;
+>   }
+>   
+> -static inline
+> -enum maple_type mas_parent_enum(struct ma_state *mas, struct maple_enode *enode)
+> -{
+> -	return mte_parent_enum(ma_enode_ptr(mte_to_node(enode)->parent), mas->tree);
+> -}
+> -
+>   /*
+>    * mte_set_parent() - Set the parent node and encode the slot
+>    * @enode: The encoded maple node.
+> @@ -7008,14 +7000,16 @@ static void mas_validate_parent_slot(struct ma_state *mas)
+>   {
+>   	struct maple_node *parent;
+>   	struct maple_enode *node;
+> -	enum maple_type p_type = mas_parent_enum(mas, mas->node);
+> -	unsigned char p_slot = mte_parent_slot(mas->node);
+> +	enum maple_type p_type;
+> +	unsigned char p_slot;
+>   	void __rcu **slots;
+>   	int i;
+>   
+>   	if (mte_is_root(mas->node))
+>   		return;
+>   
+> +	p_slot = mte_parent_slot(mas->node);
+> +	p_type = mas_parent_enum(mas, mas->node);
+>   	parent = mte_parent(mas->node);
+>   	slots = ma_slots(parent, p_type);
+>   	MT_BUG_ON(mas->tree, mas_mn(mas) == parent);
