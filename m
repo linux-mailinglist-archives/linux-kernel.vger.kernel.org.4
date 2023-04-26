@@ -2,236 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815236EF52D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A666EF532
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241089AbjDZNLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S241108AbjDZNLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240729AbjDZNKy (ORCPT
+        with ESMTP id S241099AbjDZNLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:10:54 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837875B8D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:10:50 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-b99dae893c0so4308328276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682514649; x=1685106649;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vACPPwznA8lYuRITSgExcomV76WPtMWhcF8RbyTwndA=;
-        b=fMhTuIxYyjqcIRk7bNjFHjFTLxIR/NgtstPtVj3WioAhAVoRs14RCZuUsEp7zm42za
-         r3J/pj/HEagTGG4Lcqw+RBC1PZGI676/GNG/FDP5wFdu/9A85CYGba8w63KGz/GSlZCj
-         MBhzuMqNBNhUy9xhZAKROBAUt1oQQMcAU/4TMi6m523zKUioHQVM6UskyiX5SXBz/Ze/
-         wJDG7ktkrWCUturRJT4KmKiIDwZH6mACsX/KYvw/pG2v5zq1l3L0r60+94ZBIq7QnI8/
-         VZ+Qg/OYGAfDYukKxwcvHzTUHn7J1y+SCs+Z40GKABzvK7J7SxZfdeUpdlzb6R+PP7SZ
-         gGZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682514649; x=1685106649;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vACPPwznA8lYuRITSgExcomV76WPtMWhcF8RbyTwndA=;
-        b=RxkRarNISdUgGtF2gOxJXzMihXXcwXCzUxrMeDQuQONVngIrJHlDEJA4Px1t+IXwgu
-         ssHUH7hVdqq+rpdBTfIPtDPaMH+HOidyOTIUHa7JIVPX29rvWoNw3r8S1nVjjqL7s5Qt
-         NU8LA3bbJiIJS+L0ut0EJMzddGJmpoqh9Wpm8Zcm80oAvVdYNn/t2X4HgD8kPx7B0EzU
-         5IhDbObXk1poe4KJ+maVUMVyeh2N6YHh6zSx0qO4FkShxXVytVo2kEWuvzcuKdlMA8mT
-         NQAswf1tn9DopCIJ0sGCXeuT41nX5DUUs8xehfWE7J3S7v8DFuploYhbyMrVXP6hHXM8
-         ASOQ==
-X-Gm-Message-State: AAQBX9c3kPRhl1pkoGwk35M1bNjI5G8sNxTGN3vx89uTuHCShMquMnQB
-        Wi/AZ9O90N2J1wPajO8h4pT2ZW/cYtkB2xXAYiVkng==
-X-Google-Smtp-Source: AKy350abVQY9pCdngRInq66MxUfYChdxizykYfojy5FBTOfIDPipL5pE7RezoHZGUg6jLlcnlpxRCIzcnYOjb/A+Se0=
-X-Received: by 2002:a0d:f207:0:b0:54f:e78d:b592 with SMTP id
- b7-20020a0df207000000b0054fe78db592mr13321837ywf.44.1682514649453; Wed, 26
- Apr 2023 06:10:49 -0700 (PDT)
+        Wed, 26 Apr 2023 09:11:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADA444A1;
+        Wed, 26 Apr 2023 06:11:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AA1263693;
+        Wed, 26 Apr 2023 13:11:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18171C433EF;
+        Wed, 26 Apr 2023 13:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682514663;
+        bh=0Xy4nfIjtJp9Ml67azA3/rEsuiUldnZOda9YJckRL0w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=olqP/0CYbO6RV1mZZfd5wgF1ZG6oXWzG1GxOL6fpgX0kb4iqze2KThTDN/1k7iaio
+         KxcG4Fyx58Z/secfCtV/MtLsBlooInaFl00h1CsH/c5ZBG6kwIvh6zJpkMUAkR25Gw
+         Sjwe/KbiexTvbpaGdWD3HvIeCe09QGOgZ6Q/iToUAVHQ1IyPjnEnz1vHIVwMJsiACy
+         4nKL7Y9KPzK6g/y3g+ESWdUsCAn7JE+zQF6Nlq8u+r9SbzR7+TrOg30mLtznEmuCVR
+         7v6pu3MRv/5eX23b1VPV/E0a8qscrWtDFRhx3IIqwsvXcCV49LaCpqjLKHNjNPzL1d
+         e4jC/7XDJCQHQ==
+Date:   Wed, 26 Apr 2023 14:10:57 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
+Message-ID: <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
+References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
+ <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
+ <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
+ <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
 MIME-Version: 1.0
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
- <20230420200148.GD3280@jannau.net> <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
- <1682386644754589.204.seg@mailgw> <1186d62a5fe7f2aa6e06f06a3dc7605c0072f1eb.camel@kylinos.cn>
-In-Reply-To: <1186d62a5fe7f2aa6e06f06a3dc7605c0072f1eb.camel@kylinos.cn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 26 Apr 2023 16:10:37 +0300
-Message-ID: <CAA8EJppmUtuhAF+VHPh3Q8tNYp1m4T6P7dZ0wYZ8Vzwo0DF6cg@mail.gmail.com>
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-To:     zongmin zhou <zhouzongmin@kylinos.cn>
-Cc:     Janne Grunau <j@jannau.net>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-        daniel@ffwll.ch, neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
-        regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rBlslG3Mk26QI9iP"
+Content-Disposition: inline
+In-Reply-To: <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
+X-Cookie: Drilling for oil is boring.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 12:09, zongmin zhou <zhouzongmin@kylinos.cn> wrote:
->
-> On Sun, 2023-04-23 at 22:51 +0200, Janne Grunau wrote:
-> > On 2023-04-20 23:07:01 +0300, Dmitry Baryshkov wrote:
-> > > On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net> wrote:
-> > > >
-> > > > On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
-> > > > > When drivers call drm_kms_helper_poll_disable from
-> > > > > their device suspend implementation without enabled output
-> > > > > polling before,
-> > > > > following warning will be reported,due to work->func not be
-> > > > > initialized:
-> > > >
-> > > > we see the same warning with the wpork in progress kms driver for
-> > > > apple
-> > > > silicon SoCs. The connectors do not need to polled so the driver
-> > > > never
-> > > > calls drm_kms_helper_poll_init().
-> > > >
-> > > > > [   55.141361] WARNING: CPU: 3 PID: 372 at
-> > > > > kernel/workqueue.c:3066 __flush_work+0x22f/0x240
-> > > > > [   55.141382] Modules linked in: nls_iso8859_1
-> > > > > snd_hda_codec_generic ledtrig_audio snd_hda_intel
-> > > > > snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec snd_hda_core
-> > > > > snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi
-> > > > > snd_seq intel_rapl_msr intel_rapl_common bochs drm_vram_helper
-> > > > > drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul
-> > > > > snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3
-> > > > > aesni_intel drm_kms_helper joydev input_leds syscopyarea
-> > > > > crypto_simd snd cryptd sysfillrect sysimgblt mac_hid serio_raw
-> > > > > soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp
-> > > > > parport drm ramoops reed_solomon pstore_blk pstore_zone
-> > > > > efi_pstore virtio_rng ip_tables x_tables autofs4 hid_generic
-> > > > > usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse
-> > > > > virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover
-> > > > > virtio_blk xhci_pci_renesas failover
-> > > > > [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not tainted
-> > > > > 6.2.0-rc6+ #16
-> > > > > [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9,
-> > > > > 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org
-> > > > > 04/01/2014
-> > > > > [   55.141435] Workqueue: events_unbound async_run_entry_fn
-> > > > > [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
-> > > > > [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff ff
-> > > > > 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff ff
-> > > > > 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2 54
-> > > > > d8 00 66 90 90 90 90 90 90
-> > > > > [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
-> > > > > [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
-> > > > > ffffffff9b72bcbe
-> > > > > [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001 RDI:
-> > > > > ff3ea01e4265e330
-> > > > > [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000 R09:
-> > > > > 8080808080808080
-> > > > > [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f R12:
-> > > > > ff3ea01e4265e330
-> > > > > [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80 R15:
-> > > > > 0000000000000001
-> > > > > [   55.141455] FS:  0000000000000000(0000)
-> > > > > GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
-> > > > > [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0:
-> > > > > 0000000080050033
-> > > > > [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005 CR4:
-> > > > > 0000000000771ee0
-> > > > > [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
-> > > > > 0000000000000000
-> > > > > [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
-> > > > > 0000000000000400
-> > > > > [   55.141466] PKRU: 55555554
-> > > > > [   55.141467] Call Trace:
-> > > > > [   55.141469]  <TASK>
-> > > > > [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
-> > > > > [   55.141478]  ? mptcp_seq_show+0xe0/0x180
-> > > > > [   55.141484]  __cancel_work_timer+0x124/0x1b0
-> > > > > [   55.141487]  cancel_delayed_work_sync+0x17/0x20
-> > > > > [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40
-> > > > > [drm_kms_helper]
-> > > > > [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90
-> > > > > [drm_kms_helper]
-> > > > > [   55.141531]  ? __pm_runtime_resume+0x64/0x90
-> > > > > [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
-> > > > > [   55.141540]  pci_pm_suspend+0x8b/0x1b0
-> > > > > [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
-> > > > > [   55.141547]  dpm_run_callback+0x4c/0x160
-> > > > > [   55.141550]  __device_suspend+0x14c/0x4c0
-> > > > > [   55.141553]  async_suspend+0x24/0xa0
-> > > > > [   55.141555]  async_run_entry_fn+0x34/0x120
-> > > > > [   55.141557]  process_one_work+0x21a/0x3f0
-> > > > > [   55.141560]  worker_thread+0x4e/0x3c0
-> > > > > [   55.141563]  ? __pfx_worker_thread+0x10/0x10
-> > > > > [   55.141565]  kthread+0xf2/0x120
-> > > > > [   55.141568]  ? __pfx_kthread+0x10/0x10
-> > > > > [   55.141570]  ret_from_fork+0x29/0x50
-> > > > > [   55.141575]  </TASK>
-> > > > > [   55.141575] ---[ end trace 0000000000000000 ]---
-> > > > >
-> > > > > Fixes: a4e771729a51 ("drm/probe_helper: sort out poll_running
-> > > > > vs poll_enabled")
-> > > > > Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-> > > > > ---
-> > > > >  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
-> > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/gpu/drm/drm_probe_helper.c
-> > > > > b/drivers/gpu/drm/drm_probe_helper.c
-> > > > > index 8127be134c39..ac72b18e2257 100644
-> > > > > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > > > > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > > > > @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct
-> > > > > drm_device *dev)
-> > > > >       if (dev->mode_config.poll_running)
-> > > > >               drm_kms_helper_disable_hpd(dev);
-> > > > >
-> > > > > -     cancel_delayed_work_sync(&dev-
-> > > > > >mode_config.output_poll_work);
-> > > > > +     if (dev->mode_config.poll_enabled)
-> > > > > +             cancel_delayed_work_sync(&dev-
-> > > > > >mode_config.output_poll_work);
-> > > >
-> > > > Checking for dev->mode_config.poll_enabled at the start of the
-> > > > function
-> > > > and return early if it is not true looks more in style with the
-> > > > rest of
-> > > > drm_probe_helper.c.
-> > >
-> > > I think it is an error to call drm_kms_helper_poll_disable() if
-> > > polling was not initialized. So, in my opinion the fix should go to
-> > > the drm_mode_config_helper_suspend() / _resume() instead. Please
-> > > add a
-> > > guard there using dev->mode_config.poll_enabled.
-> >
-> > While I tend to agree to the sentiment I do not think this is the
-> > correct fix in this situation. drm_kms_helper_poll_disable had the
-> > check since at least 2014. a4e771729a51 is a regression. If we want
-> > to
-> > change the behavior it should be done explicitly and after verifying
-> > all
-> > drm_kms_helper_poll_disable() calls.
-> >
-> > #regzbot ^introduced a4e771729a51
-> >
-> > ciao
-> > Janne
->
-> Dear Janne:
->
-> I agree with you like I mentioned on last letter.
-> Thanks for your time.
->
->
-> Dear Dmitry:
->
-> Is there anything else I can do?
-> Looking forward to your reply.
 
-If it is a common consensus, I'm fine with your approach.
+--rBlslG3Mk26QI9iP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-With best wishes
-Dmitry
+On Wed, Apr 26, 2023 at 02:47:44PM +0200, Rasmus Villemoes wrote:
+> On 26/04/2023 14.25, Mark Brown wrote:
+
+> > I'm not sure this is sensible, it'll be a fairly rare situation and we
+> > don't want to preclude using the built in chip select functionality for
+> > some of the chip selects.  In a situation like this we only need to have
+> > a single chip select to be managed as a GPIO rather than all of them,
+> > which I'd expect to end up handled in the DT by not allocating that chip
+> > select number.
+
+> Sorry, I don't understand what you're saying. What exactly is not
+> sensible? And what is "a situation like this"?
+
+Building hardware which uses all the native chip selects and also GPIO
+ones and then describing it in DT as using native chip selects.
+
+> I described a problem with what is now 87c614175bbf in linux-next: If
+> one has five spi devices, the first four of which use the four native
+> chip selects, there is no way to use a gpio for the fifth, because
+> whichever "channel" you choose in the CHANNEL_SELECT field will cause
+> the ecspi IP block to drive some SSx pin low, while the spi core is also
+> driving the gpio low, so two different devices would be selected.
+
+Sure, and therefore I'd not expect anyone to actually describe the
+hardware like that but to instead describe the hardware as using three
+or fewer of the native chip selects with the remaining chip selects
+described as GPIOs.  If the device requires that a native chip select be
+controlled the hardware simply won't work without at least one native
+chip select being unallocated.
+
+> It's not exactly a regression, because any chip_select >= 4 never
+> actually worked, but what I'm saying is that 87c614175bbf also isn't a
+> complete fix if one wants to support mixing native and gpio chip
+> selects. For that, one really needs the unused_native_cs to be used for
+> all gpio chip selects; in particular, one needs some unused native cs to
+> exist. IOW, what my series tries to do.
+
+No, we only need one unused chip select to be available.
+
+--rBlslG3Mk26QI9iP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJIuEACgkQJNaLcl1U
+h9BgiAgAgkYHH4s+VEMVE8lt5FDgOcuKDX8OAJoS7brgBVg5qntDfktjQXgiDifW
+oNV/buBUQEELmDjDo0dDe85fl9KIPh49UWm0Y5JolLPrLHKelP7u4LxV5UmaeDqE
+AngjdjlIhyTDA0Zlm6dodSpypMBoIdAePBWccNFNGH2qvAeFyuz0wtlz3BJnqifK
+Jvrncz1yMFu/AtBXlKCnQ3Tm2O6Mb+e7W2wm9DMdhiWESUNHeCCly2MCtxoYGOts
+oWAqc1OvwoQiPMGxzA/amDkv4/JTHw4PbM1/mEQUPS1h+ftYjbw+o4JfO0TezTut
+URvN7vCEPokYufiNl/IW0dsvbZ3/NQ==
+=5+FJ
+-----END PGP SIGNATURE-----
+
+--rBlslG3Mk26QI9iP--
