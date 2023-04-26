@@ -2,83 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E486EF854
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DEF6EF861
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjDZQWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S230379AbjDZQYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjDZQWd (ORCPT
+        with ESMTP id S229379AbjDZQYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:22:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EE87693
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682526106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
-        b=HNuPeOYWvl6ZxxIfHHCwoj+B8b2XheaBUzhf8dBXbeqVrakn2He+PnDq5rEV37os6chkiA
-        AmGov6fo0PO0f4p73ZKQyMkJCBsh9/IxJVr43OWmA6/e9WTpxlnEJpeI4QeCCZ+NN8IME7
-        SYzaUFdtnaDiLQj0FnZaVF1fZXbGsM8=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-99-DjyWPPtEPU-lHuxXLZ5DqA-1; Wed, 26 Apr 2023 12:21:44 -0400
-X-MC-Unique: DjyWPPtEPU-lHuxXLZ5DqA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f1912ed0daso23530315e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:21:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682526103; x=1685118103;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
-        b=HCm5QZB3ET0pXkZ3UX+HGaQ8VD4pul5IXkJ2Df4cBRXL6KmjUqYteeooKGoLozxUiP
-         UkTAkZfDofjSLGc++Cpe2+M4alA+tjdtt6MpKk60xMwFkDqiyK0aE7a2evze5U93XFkE
-         6jS3BQPNqyCl3LyGaabJtnibbinl8BIazpTuZmGVoW+aD4zICC95JazTBkZcS8P0wdtV
-         7JkMPr+tGtUPQpWnKnYAhja4v350fGXbqcIjU/D570uk3UiP2deeersJ8Z1KaOlxWz20
-         +3JkVUMlRnp5zkSnL54nbYJcz2jHhFviWXteDxxYe3IItmShIwRgjUOXK/6CnS+UchtV
-         zfGQ==
-X-Gm-Message-State: AAQBX9fsjeFbslQpjvmCYhBj74uhJIYdyJddqFR4fETfGo1oQJydF0XR
-        5uRZ4zU7BIjBVmRgvJXCJ5WdV/uytKldYWvqp3jLuwMy2ardNbjLbmA7uC/Gqd+9M9wz6p6zLPk
-        /zNuuftQU8LIt61jW5QPpjKg=
-X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816127wri.19.1682526103054;
-        Wed, 26 Apr 2023 09:21:43 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZgaMKAQ4zUgM/jX2m3kP07MpmtQjNVd1W0IKLIq3RH/cyKshdQu/7VDp2BGOEiWd4a3fA/wA==
-X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816105wri.19.1682526102688;
-        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
-        by smtp.gmail.com with ESMTPSA id x9-20020a5d60c9000000b002fbdb797483sm16101222wrt.49.2023.04.26.09.21.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
-Message-ID: <eebddf51-c83b-29f0-8ee7-703c2e383070@redhat.com>
-Date:   Wed, 26 Apr 2023 18:21:41 +0200
+        Wed, 26 Apr 2023 12:24:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA9D6E93;
+        Wed, 26 Apr 2023 09:24:34 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QG4XXi025015;
+        Wed, 26 Apr 2023 16:24:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jxCYqtU/KKjkZUQB929AylqzoqPHD48TdjP8lQBgiQo=;
+ b=Uu+TZDjj+vDoVLruPzOacCpgFhY5A2lFI1+RjGNifA9iRNN72IoPFtKCEwpQL2xOp2+G
+ FR9zyLCESBO+kPbJjDN24lwMoZR2zHWuTMDrLZla6kmr/zpanWK8JxQk4OlDyTFRTJ13
+ YQpMhFm4315TrcLEhGpLWIX6QurL/b9aDLpFS9tnZSQyFdcldnr9St6FDEiFcd2ZLuGH
+ 2sncuX3M1nzhcoozWjogtowb9bIPxf4pB/LCTVaX2TTj/YIqSl3V1wOqMi4PfUbEKR+9
+ ad2lyUgVCMAX9zoPsBjzUOtXtXG2mbdjfD41IUnzmcdlPX5xefWksCiO+rpns+VPn4P9 lA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6uprsrct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 16:24:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33QGOMcS019706
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 16:24:22 GMT
+Received: from [10.110.124.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 26 Apr
+ 2023 09:24:20 -0700
+Message-ID: <d44022e0-bc09-122e-5a48-1994cb025ba8@quicinc.com>
+Date:   Wed, 26 Apr 2023 09:24:19 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v4 3/4] fpga: add fake FPGA region
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 06/21] drm/msm/dpu: Use V2 DITHER PINGPONG sub-block in
+ SM8[34]50/SC8280XP
 Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230417122308.131453-1-marpagan@redhat.com>
- <20230417122308.131453-4-marpagan@redhat.com>
- <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org>
+ <20230411-dpu-intf-te-v3-6-693b17fe6500@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230411-dpu-intf-te-v3-6-693b17fe6500@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: rTTZ43xHj4-xreqtiXVZR4FNTkRaHNT6
+X-Proofpoint-GUID: rTTZ43xHj4-xreqtiXVZR4FNTkRaHNT6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_08,2023-04-26_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304260144
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,348 +101,128 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-04-20 20:38, Xu Yilun wrote:
-> On 2023-04-17 at 14:23:07 +0200, Marco Pagani wrote:
->> Add fake FPGA region platform driver with support functions. This
->> module is part of the KUnit tests for the FPGA subsystem.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/tests/fake-fpga-region.c | 259 ++++++++++++++++++++++++++
->>  drivers/fpga/tests/fake-fpga-region.h |  40 ++++
->>  2 files changed, 299 insertions(+)
->>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
->>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
->>
->> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
->> new file mode 100644
->> index 000000000000..b23ae5e94fe6
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-region.c
->> @@ -0,0 +1,259 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Driver for the fake FPGA region
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#include <linux/device.h>
->> +#include <linux/list.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/fpga/fpga-mgr.h>
->> +#include <linux/fpga/fpga-region.h>
->> +#include <linux/fpga/fpga-bridge.h>
->> +#include <kunit/test.h>
->> +
->> +#include "fake-fpga-region.h"
->> +
->> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
->> +
->> +struct fake_region_priv {
->> +	int id;
->> +	struct kunit *test;
->> +	struct list_head bridge_list;
->> +};
->> +
->> +struct bridge_elem {
->> +	struct fpga_bridge *bridge;
->> +	struct list_head node;
->> +};
->> +
->> +struct fake_region_data {
->> +	struct fpga_manager *mgr;
->> +	struct kunit *test;
->> +};
->> +
->> +/**
->> + * fake_fpga_region_register() - register a fake FPGA region.
->> + * @mgr: associated FPGA manager.
->> + * @parent: parent device.
->> + * @test: KUnit test context object.
->> + *
->> + * Return: pointer to a new fake FPGA region on success, an ERR_PTR() encoded
->> + * error code on failure.
->> + */
->> +struct fake_fpga_region *
->> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
->> +			  struct kunit *test)
->> +{
->> +	struct fake_fpga_region *region_ctx;
->> +	struct fake_region_data pdata;
->> +	struct fake_region_priv *priv;
->> +	int ret;
->> +
->> +	region_ctx = kzalloc(sizeof(*region_ctx), GFP_KERNEL);
->> +	if (!region_ctx) {
->> +		ret = -ENOMEM;
->> +		goto err_mem;
->> +	}
->> +
->> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
->> +						 PLATFORM_DEVID_AUTO);
->> +	if (!region_ctx->pdev) {
->> +		pr_err("Fake FPGA region device allocation failed\n");
->> +		ret = -ENOMEM;
->> +		goto err_mem;
->> +	}
->> +
->> +	pdata.mgr = mgr;
->> +	pdata.test = test;
->> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
->> +
->> +	region_ctx->pdev->dev.parent = parent;
->> +	ret = platform_device_add(region_ctx->pdev);
->> +	if (ret) {
->> +		pr_err("Fake FPGA region device add failed\n");
->> +		goto err_pdev;
->> +	}
->> +
->> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
->> +
->> +	if (test) {
->> +		priv = region_ctx->region->priv;
->> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
->> +	}
->> +
->> +	return region_ctx;
->> +
->> +err_pdev:
->> +	platform_device_put(region_ctx->pdev);
->> +	kfree(region_ctx);
->> +err_mem:
->> +	return ERR_PTR(ret);
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
->> +
->> +/**
->> + * fake_fpga_region_unregister() - unregister a fake FPGA region.
->> + * @region_ctx: fake FPGA region context data structure.
->> + */
->> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
->> +{
->> +	struct fake_region_priv *priv;
->> +	struct kunit *test;
->> +	int id;
->> +
->> +	if (!region_ctx)
->> +		return;
->> +
->> +	priv = region_ctx->region->priv;
->> +	test = priv->test;
->> +	id = priv->id;
->> +
->> +	if (region_ctx->pdev) {
->> +		platform_device_unregister(region_ctx->pdev);
->> +		if (test)
->> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
->> +	}
->> +
->> +	kfree(region_ctx);
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
->> +
->> +/**
->> + * fake_fpga_region_add_bridge() - add a bridge to a fake FPGA region.
->> + * @region_ctx: fake FPGA region context data structure.
->> + * @bridge: FPGA bridge.
->> + *
->> + * Return: 0 if registration succeeded, an error code otherwise.
->> + */
->> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
->> +				struct fpga_bridge *bridge)
->> +{
->> +	struct fake_region_priv *priv;
->> +	struct bridge_elem *elem;
->> +
->> +	priv = region_ctx->region->priv;
->> +
->> +	elem = devm_kzalloc(&region_ctx->pdev->dev, sizeof(*elem), GFP_KERNEL);
->> +	if (!elem)
->> +		return -ENOMEM;
->> +
->> +	/* Add bridge to the list of bridges in the private context */
->> +	elem->bridge = bridge;
->> +	list_add(&elem->node, &priv->bridge_list);
->> +
->> +	if (priv->test)
->> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
->> +			   priv->id);
->> +
->> +	return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
-> 
-> To move these exported functions out of fake driver, could we also provide
-> the bridge list in platform_data?
-> 
-> Thanks,
-> Yilun
-
-I feel that the function for adding bridges to the fake region should belong
-to the region driver itself rather than the fpga-test module. However, I can
-certainly include the bridge list also in platform_data.
-
-Thanks,
-Marco
-
-
-> 
->> +
->> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx)
->> +{
->> +	int ret;
->> +
->> +	ret = fpga_region_program_fpga(region_ctx->region);
->> +
->> +	/* fpga_region_program_fpga() already puts the bridges in case of errors */
->> +	if (!ret)
->> +		fpga_bridges_put(&region_ctx->region->bridge_list);
->> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(fake_fpga_region_program);
->> +
->> +static int fake_region_get_bridges(struct fpga_region *region)
->> +{
->> +	struct fake_region_priv *priv;
->> +	struct bridge_elem *elem;
->> +	int ret;
->> +
->> +	priv = region->priv;
->> +
->> +	/* Copy the list of bridges from the private context to the region */
->> +	list_for_each_entry(elem, &priv->bridge_list, node) {
->> +		ret = fpga_bridge_get_to_list(elem->bridge->dev.parent,
->> +					      region->info,
->> +					      &region->bridge_list);
->> +		if (ret)
->> +			break;
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +static int fake_fpga_region_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev;
->> +	struct fpga_region *region;
->> +	struct fpga_manager *mgr;
->> +	struct fake_region_data *pdata;
->> +	struct fake_region_priv *priv;
->> +	struct fpga_region_info info;
->> +	static int id_count;
->> +
->> +	dev = &pdev->dev;
->> +	pdata = dev_get_platdata(dev);
->> +
->> +	if (!pdata) {
->> +		dev_err(&pdev->dev, "Missing platform data\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->> +	if (!priv)
->> +		return -ENOMEM;
->> +
->> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
->> +	if (IS_ERR(mgr))
->> +		return PTR_ERR(mgr);
->> +
->> +	INIT_LIST_HEAD(&priv->bridge_list);
->> +	priv->id = id_count++;
->> +	priv->test = pdata->test;
->> +
->> +	memset(&info, 0, sizeof(info));
->> +	info.priv = priv;
->> +	info.mgr = mgr;
->> +	info.get_bridges = fake_region_get_bridges;
->> +
->> +	region = fpga_region_register_full(dev, &info);
->> +	if (IS_ERR(region)) {
->> +		fpga_mgr_put(mgr);
->> +		return PTR_ERR(region);
->> +	}
->> +
->> +	platform_set_drvdata(pdev, region);
->> +
->> +	return 0;
->> +}
->> +
->> +static int fake_fpga_region_remove(struct platform_device *pdev)
->> +{
->> +	struct fpga_region *region = platform_get_drvdata(pdev);
->> +	struct fpga_manager *mgr = region->mgr;
->> +
->> +	fpga_mgr_put(mgr);
->> +	fpga_region_unregister(region);
->> +
->> +	return 0;
->> +}
->> +
->> +static struct platform_driver fake_fpga_region_drv = {
->> +	.driver = {
->> +		.name = FAKE_FPGA_REGION_DEV_NAME
->> +	},
->> +	.probe = fake_fpga_region_probe,
->> +	.remove = fake_fpga_region_remove,
->> +};
->> +
->> +module_platform_driver(fake_fpga_region_drv);
->> +
->> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
->> +MODULE_DESCRIPTION("Fake FPGA Bridge");
->> +MODULE_LICENSE("GPL v2");
->> diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
->> new file mode 100644
->> index 000000000000..976982c192bc
->> --- /dev/null
->> +++ b/drivers/fpga/tests/fake-fpga-region.h
->> @@ -0,0 +1,40 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Header file for the fake FPGA region
->> + *
->> + * Copyright (C) 2023 Red Hat, Inc.
->> + *
->> + * Author: Marco Pagani <marpagan@redhat.com>
->> + */
->> +
->> +#ifndef __FPGA_FAKE_RGN_H
->> +#define __FPGA_FAKE_RGN_H
->> +
->> +#include <linux/platform_device.h>
->> +#include <kunit/test.h>
->> +#include <linux/fpga/fpga-mgr.h>
->> +#include <linux/fpga/fpga-bridge.h>
->> +
->> +/**
->> + * struct fake_fpga_region - fake FPGA region context data structure
->> + *
->> + * @region: FPGA region.
->> + * @pdev: platform device of the FPGA region.
->> + */
->> +struct fake_fpga_region {
->> +	struct fpga_region *region;
->> +	struct platform_device *pdev;
->> +};
->> +
->> +struct fake_fpga_region *
->> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
->> +			  struct kunit *test);
->> +
->> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
->> +				struct fpga_bridge *bridge);
->> +
->> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx);
->> +
->> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
->> +
->> +#endif /* __FPGA_FAKE_RGN_H */
->> -- 
->> 2.39.2
->>
+On 4/25/2023 4:05 PM, Marijn Suijten wrote:
+> According to downstream sources this DITHER sub-block sits at an offset
+> of 0xe0 with version 0x20000.  The PP_BLK_DITHER macro is _not_ used as
+> downstream still says the size of the PINGPONG block is 0xd4 and not 0.
 > 
 
+the PINGPONG block size is 0x0 on sm8350, sm8450 and sc8280xp.
+
+and length of dither is 0x20 and they all start at 0xe0.
+
+So now does anything prevent us from using PP_BLK_DITHER macro for these?
+
+> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+> Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
+> Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   | 12 ++++++------
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 12 ++++++------
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   | 16 ++++++++--------
+>   3 files changed, 20 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> index 41ef0c8fc993f..4c1bb88029cd3 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> @@ -127,22 +127,22 @@ static const struct dpu_dspp_cfg sm8350_dspp[] = {
+>   };
+>   
+>   static const struct dpu_pingpong_cfg sm8350_pp[] = {
+> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>   			-1),
+> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>   			-1),
+>   };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> index 12c14d15e3863..bab9b0715f8c2 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> @@ -121,17 +121,17 @@ static const struct dpu_dspp_cfg sc8280xp_dspp[] = {
+>   };
+>   
+>   static const struct dpu_pingpong_cfg sc8280xp_pp[] = {
+> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8), -1),
+> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9), -1),
+> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10), -1),
+> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11), -1),
+> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
+> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
+>   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
+>   };
+>   
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> index e409c119b0a2a..ec296a52076ce 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> @@ -128,28 +128,28 @@ static const struct dpu_dspp_cfg sm8450_dspp[] = {
+>   };
+>   /* FIXME: interrupts */
+>   static const struct dpu_pingpong_cfg sm8450_pp[] = {
+> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>   			-1),
+> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>   			-1),
+> -	PP_BLK("pingpong_6", PINGPONG_6, 0x65800, MERGE_3D_3, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_6", PINGPONG_6, 0x65800, MERGE_3D_3, sc7280_pp_sblk,
+>   			-1,
+>   			-1),
+> -	PP_BLK("pingpong_7", PINGPONG_7, 0x65c00, MERGE_3D_3, sdm845_pp_sblk,
+> +	PP_BLK("pingpong_7", PINGPONG_7, 0x65c00, MERGE_3D_3, sc7280_pp_sblk,
+>   			-1,
+>   			-1),
+>   };
+> 
