@@ -2,228 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35EF6EEEE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133C86EEEF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239894AbjDZHHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S239934AbjDZHJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239873AbjDZHGi (ORCPT
+        with ESMTP id S239584AbjDZHIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:06:38 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A50F4C01
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:20 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4edc63e066fso6507e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682492709; x=1685084709;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Uwe4If/ZQQXO6oOuVLGbon0CSGCHg7FHWiRepjGoFE=;
-        b=iJhrTVAm8MRs7jCGH/IZPWmqLj9RdHOS3Edj2yd27MinQTDJXBNZ+c9y5lM+/3Uala
-         rLPL7Y5Cnu7lRnX0R0W0CwvFY0V7QWqE5OCwcn3dpUaCxaH9uayJp3kwZFBxo5PouXM/
-         hOUHJdnUbNl+i0nNRPnudQ89aOSS2fQKI5UmLrGFVCZPViThBMFE6eu6BiiqY2Cmf+l/
-         kW1e2ZDDJzRe1HaYN0+DLGegrCfJJvEGculsLgmSo+7JHXVirsmYTSpNNfFdv219YWgr
-         9tR9aQXK5emiTjTl5aGqJ+83MYg96kf7Iz31OCZOUKSSfrF5T0axk/+Z7TnKtR4EiyIb
-         O36A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682492709; x=1685084709;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+Uwe4If/ZQQXO6oOuVLGbon0CSGCHg7FHWiRepjGoFE=;
-        b=DJIQulQeEqpSdvHdtz45/d6ko7pmvbnpHKVYIfzMjQGVq8yVmTDocs7qmuZ3a1V59O
-         kvyP7P/K6Pm3K9El6mWOvEvoZQFij4jKlOJykqWyttPFVj0Y1qgzeCsigVDXSKC0TROI
-         EX1sKLIwXIu2SOzoHfoSZZh67CIRceQjNme6439CStHndDezGJBQypS0A/pjGMFf+juW
-         7sa+XK7m96rhH47mKKx98ZbGu00Bbd36aOg5j0g2u8IC/1x2urrIkLFN39tn98ON9YGE
-         yP9zKNhIT7bi4Prb1aZbuSKgJOng8iPu/SO7LX9DeN0BvRvLQvn8+3a7Vtu9wtedkoD+
-         zjKw==
-X-Gm-Message-State: AC+VfDxIKQYBKgtcTA5MadjwRSup6YuSfYtY6KbNkDuVDP4voYVIg1rC
-        kontpADP84goBSsAvGpP6Wus5JFcwy5sPQovH/pmmw==
-X-Google-Smtp-Source: ACHHUZ78GssgXZ3WT/4gABd+rxjh+9Fo+BQKCpuTiUsbNVqtw2SGm9SFjuQ1IskUcQ1A1bZIkO+Xylv+eTAoB+tEmZQ=
-X-Received: by 2002:a05:6512:b08:b0:4e8:3fc8:4f80 with SMTP id
- w8-20020a0565120b0800b004e83fc84f80mr143727lfu.4.1682492709016; Wed, 26 Apr
- 2023 00:05:09 -0700 (PDT)
+        Wed, 26 Apr 2023 03:08:45 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on20608.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaf::608])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDA55260;
+        Wed, 26 Apr 2023 00:06:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dBLTdYRi4FBMxvLVrlswx/MoGmZmfrQhAULI9PjQpgTW+d17DDX8qUX1xd2wBX2nONQEvkyemos3B3TAzDLRw2D0qgB+rRHFjZJsv8h5gs2EWtFv6T904pLRKkjw5Xr3Cx4S8JOP0tINnuD8V1nmtf39xwTRyfaF6N4cH4xvw9MPxxE6rfom2qRtSxHLQYPQAmJJPHC7H6LGK/iw2wfYTB353+RyrgBCFveThtkUNE41t4L1Ena+jeSResRHje1t4zbVxolztKB1fMSMPn2la1J4OR/IgqvFmUnxpGRjoCgeskTPzCudMoDR1zTOI5HeN99Am4QCBPIq/kK2Sm/QcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XODiEXB7EIEk8BlX30HkudZ2DMP+UYvkurKqgcXtTKg=;
+ b=e5ro6bPuklJZh3Jbd0OkS8V4hmWT8xp28iLi62LA+OhWWAwzxh/IMVVJTB9ofXz+8ogNLxaIrN2AAEMRl3CFLsuHSDlvGrwe3aZkcKVZ6kphMO+Wi0tBqiUaIkQ2dPf/d5bTXeyv5fYHxEuwemhdZC573AXzOJ6CrCsKs7gKuuM7vrndUMgiZwJ1kCJ9RITVna7Fhwrt5kB+YQgQXxo5oJsfyWmLo7YJZ9fB7a53Ktwh8dAVSKuY4HgCEL0YKX2D6vfNuoYLgG0TCHRxY37Lf1jSaYKu7pBl1j75w5hFFsrWpeM31UZPcNS9aZujHCuzQa+uf0hhvguM3HPDlPnAFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XODiEXB7EIEk8BlX30HkudZ2DMP+UYvkurKqgcXtTKg=;
+ b=AUq8cLSdk+sDPIp88xcvZzr89VkGZxa09J7EB62QHa+JJz9YJRt04hCnQp1ZDbc0quhbE4xhQC+vV2DJM8cEWTJBXUWyMi/i0BUYr2DcQnSzug4sZl5646ymDljYpOhxOvr7sVVT8EO9ZsgZFUBOoMx3RdKSf92JODJoX99Iq9Q=
+Received: from AM0PR04MB6004.eurprd04.prod.outlook.com (2603:10a6:208:11a::11)
+ by AS8PR04MB8200.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
+ 2023 07:05:55 +0000
+Received: from AM0PR04MB6004.eurprd04.prod.outlook.com
+ ([fe80::22df:f288:a27b:b8d3]) by AM0PR04MB6004.eurprd04.prod.outlook.com
+ ([fe80::22df:f288:a27b:b8d3%6]) with mapi id 15.20.6319.033; Wed, 26 Apr 2023
+ 07:05:55 +0000
+From:   Gaurav Jain <gaurav.jain@nxp.com>
+To:     Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Varun Sethi <V.Sethi@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "leonard.crestez@nxp.com" <leonard.crestez@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+Subject: RE: [PATCH v3] crypto: caam - refactor RNG initialization
+Thread-Topic: [PATCH v3] crypto: caam - refactor RNG initialization
+Thread-Index: AQHZcVqAHaxra9tL8kqieh41tJiT/q89ODJQ
+Date:   Wed, 26 Apr 2023 07:05:54 +0000
+Message-ID: <AM0PR04MB60048938761D9C21EC0042D7E7659@AM0PR04MB6004.eurprd04.prod.outlook.com>
+References: <20230405103306.1763491-1-meenakshi.aggarwal@nxp.com>
+ <20230417182839.782924-1-meenakshi.aggarwal@nxp.com>
+In-Reply-To: <20230417182839.782924-1-meenakshi.aggarwal@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6004:EE_|AS8PR04MB8200:EE_
+x-ms-office365-filtering-correlation-id: e879a0f0-726c-49d4-25d9-08db4624ada1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 26ZNrdm/9Vxe0USU+nZQr5sE4n4iL+jmj/NnbP5sf6uL2dHIG0NXwgxYYCDJ/wHXfmFmrM1QO+q03qTtto6f7pn2eCSHDw0eAMAKBr1ZsFoTivPpDQsPRakztlcFqyvDMrsYT94PnKUvsrk33qZpth8HpArJqk+ikvZ6W500U8tz26IZqtJlVqFLFsPf4sejxCPlylJcTM1Ku1t5vj1yDWycp29vSlw9inTOQTcUfdRnN+zSNfTQvNuId7/V7YRiIt8VUouT/PpmDhdMwcG5iVam4A+wQNM1nP5UEA9ZIzppvzraARk3Jb2OBNJXOMBJhgdU2cp7cQNZNmfV6r3cusrGFZWGeola9wips1kHJzMTMynrOvl8eAstOQMcb0EoZVPyptDlZxAEsyrItSF2POSSyOxujyVn9Wla3UNUpmg8mJirj3VokSEKFSqhQpbwBLwC33d3MbHaPtIHdTyXxVvK3WvIGkIC9lL5FJ5wWfmhrPtz41PrSnae8UL99QMvo/vgjDPLptw71pQnF5vm9h1r5ktkMP/tPZljbBIHWLONFcO58fShgiNvVe7/SzrIFCOgDATUFNT/tjRB/ethgPgY4BNyAZYEaFLQ20tqatinTkEc6noXwZVX07EH4dvWyrV4psfKmqar096HsmR1hw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6004.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(366004)(136003)(451199021)(33656002)(122000001)(921005)(52536014)(30864003)(5660300002)(2906002)(44832011)(38070700005)(8936002)(55016003)(316002)(8676002)(66946007)(66446008)(38100700002)(66556008)(41300700001)(86362001)(66476007)(64756008)(6636002)(76116006)(83380400001)(9686003)(186003)(6506007)(26005)(55236004)(53546011)(7696005)(71200400001)(478600001)(110136005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eSTDT3KS+zcvv9KO2oOWibX/onm9mba7P2HVXrOklk6aiSrlZ+/BQZzZGL0I?=
+ =?us-ascii?Q?0JPACWh2hzvg2F49w/d2Hm0RP6a5r5noWQK24e96LTDTHAe2dFYa7vvTWXZe?=
+ =?us-ascii?Q?W+zWJCAv4VmFXIN9VLTk+aVWk1JT0lQSo6hgprRf7FW7rmN0ubq+Gh3imhvb?=
+ =?us-ascii?Q?9He+vnaPLF5vzfrNY/XoOpemNg+OuuUxfhD/7n1DY0AoQCuJ+YJXwXLemBLu?=
+ =?us-ascii?Q?fxIRwUaHOAzJCgkFy0qDP6m/AOjUifscsevq82Ca/JKN6YWcpqUcL5u/hVWT?=
+ =?us-ascii?Q?hAZwW/BFO4z9sVIKc0/V9zN8w5LlVuqdHJLa5AlO4WAe1N8e8bUvQPPPYdpH?=
+ =?us-ascii?Q?5MpbufLvgoRCxD3ezB5LzOKUP0ITSJc+jZqheNxoOPxrSckqt8TO6wkvrv6Q?=
+ =?us-ascii?Q?zncXPHoWqubKmnL/btIkpbIwjo3hSWxqyE4OXsBWanhQA0VASYHNfcYYO5/4?=
+ =?us-ascii?Q?2jfn4/hqaKfzz/ELs3NVlvWzxL+vYYHdLbjPRXL3Oha8oXSCsLdoHpAW81D9?=
+ =?us-ascii?Q?+gkoRu9//t+I1Cf+2CH6Cmr2x0+qRd71YvqkoclN0ERNrUI6WJeL35PPrZg9?=
+ =?us-ascii?Q?L7IVOYaZ4fLda6jrKe28X44oc4YrUhJL2d3FoJz1vdO3nInqUkX35k4XGgCb?=
+ =?us-ascii?Q?+7ZMNZlE8WvuEPYw72EuLNyjOALQVf6f+pzf74c4WXbCzmSZC3mqKVLeg7Xr?=
+ =?us-ascii?Q?08ptoS+3M6V3rzZ47DctZp6AJVbQSpgr5AFiNcjfTkGgiZSoG1eRlMPOnKOH?=
+ =?us-ascii?Q?BkC4TTxhShYYAZeK9rAKOCyWGQ65XRLJoEPgTKCE6VyhoFKlA1ZGzi44pJZN?=
+ =?us-ascii?Q?6Hr59qnQyfh6HaaT/BsgqxkGGvxuPRJzt7A9IXNVxm42v268nxcwVyZFYXWt?=
+ =?us-ascii?Q?omZg7cXxzDU3KBG5cabtzpBWAFNiDoqiC3hNcYePCs0o5Z/cWsd+L6lPSmq/?=
+ =?us-ascii?Q?7g6FdAqyhXH8eWC6er+PPYZPhhIzSyF2aKo8hGrc4NNw+vK5d4d+CZwgE3hR?=
+ =?us-ascii?Q?BJejy2LPmmjx9HeC8zc6DKfZQHqKQ/s/Qr4pPWOfd3zpvg6XVgfKj78AQjDK?=
+ =?us-ascii?Q?OXpndxF9BN6YEXdm5e3fvizdX43IHGZ0fnZpL8vkPx99ViYsR5bmwMKU67Xa?=
+ =?us-ascii?Q?gGPkIOHIXMBWLgIRS1/Dlgxq3diDPcnhd+Q6UW2mxw8BsIK8WynbBAqsneIN?=
+ =?us-ascii?Q?dUIBoP3LxhUFtsEfxdtxAdl+Id08+Oz2ogXwX3F+mPjGFUYUdzhQLHbMEaII?=
+ =?us-ascii?Q?hFc1FfY3Ohd2+hKjLquNpdBDok8xQ3VeXvW/heFjjYJYxYaNsoh8n+HmAvkz?=
+ =?us-ascii?Q?mb2t0QBztDhNtRFI09h2hYpN2Qt27HPeusJYUADiM/zYpejtwMiyXlmvxfDR?=
+ =?us-ascii?Q?XevJwexicCDLZGNAvctkmlzKL4R69TqFBoH3oOXpH2vj9drj+yhe7IzQ2GVv?=
+ =?us-ascii?Q?wUkCgN3/HNCwD/mQXPIOZpYletOeXB0SgkSiJx5bspdez/o2DrSYxVcYu0n1?=
+ =?us-ascii?Q?nY/pxIJFfyPdBhZtMfgU4YTykdECorAsfDvdNo7gxifpcPwYmDA0nlNqLmgo?=
+ =?us-ascii?Q?AZxpR/3WTtxFA+3iMBgUcexJ5PKcVa4dKjzwVyG8?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <00000000000059e1b705fa2494e4@google.com> <CACT4Y+YDzXb6WoMtBu5O-dpWOkVYwhUNKM7szC5gJ9ewtMUPDQ@mail.gmail.com>
- <b4306f50-08e4-d41d-1e59-5be1f9735dd6@hartkopp.net>
-In-Reply-To: <b4306f50-08e4-d41d-1e59-5be1f9735dd6@hartkopp.net>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 26 Apr 2023 09:04:56 +0200
-Message-ID: <CACT4Y+b_3q-AjxKj3zF7JuXyZb5cttCX8hzVb0QMfq+aOnGSpA@mail.gmail.com>
-Subject: Re: [syzbot] [can?] KCSAN: data-race in bcm_can_tx / bcm_tx_setup (3)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     syzbot <syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6004.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e879a0f0-726c-49d4-25d9-08db4624ada1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2023 07:05:54.8503
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DXgoGV/6+MOLZvKDp88gMoXJf3z4KXn7JswVGDubc72Te8OkCHhgRDYNheUUQRGlQx8Ff9jc8u9UHn5k6PuG7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8200
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Apr 2023 at 23:18, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->
-> Hello Dmitry,
->
-> On 25.04.23 10:36, Dmitry Vyukov wrote:
-> > On Tue, 25 Apr 2023 at 10:05, syzbot
-> > <syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> syzbot found the following issue on:
-> >>
-> >> HEAD commit:    1a0beef98b58 Merge tag 'tpmdd-v6.4-rc1' of git://git.kerne..
-> >> git tree:       upstream
-> >> console output: https://syzkaller.appspot.com/x/log.txt?x=1485f1dbc80000
-> >> kernel config:  https://syzkaller.appspot.com/x/.config?x=501f7c86f7a05a13
-> >> dashboard link: https://syzkaller.appspot.com/bug?extid=e1786f049e71693263bf
-> >> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> >>
-> >> Unfortunately, I don't have any reproducer for this issue yet.
-> >>
-> >> Downloadable assets:
-> >> disk image: https://storage.googleapis.com/syzbot-assets/f06c11683242/disk-1a0beef9.raw.xz
-> >> vmlinux: https://storage.googleapis.com/syzbot-assets/5c0a1cd5a059/vmlinux-1a0beef9.xz
-> >> kernel image: https://storage.googleapis.com/syzbot-assets/e4c318183ce3/bzImage-1a0beef9.xz
-> >>
-> >> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> >> Reported-by: syzbot+e1786f049e71693263bf@syzkaller.appspotmail.com
-> >
-> > op->currframe and probably other op fields are concurrently
-> > read/modified by both bcm_tx_setup() and bcm_can_tx().
-> > If I am reading the code correctly, it can lead to a wide range of
-> > misbehavior, e.g. sending wrong/uninit data, reading/writing data
-> > out-of-bounds, etc.
-> > I think these functions need to be somehow serialized (stopping timers
-> > before doing any modifications to op?).
->
-> KCSAN has detected a very special case here:
->
-> The content of the CAN frames (in a running tx-job) has been altered and
-> the number of CAN frames has been reduced. (Increasing if the number of
-> CAN frames is not possible with an active tx-job/running hrtimer).
->
-> Or (alternatively) the TX_RESET_MULTI_IDX flag has been set.
->
-> In both cases op->currframe is set to zero to start the sequence of the
-> CAN frames in op->frames in the next(!) hrtimer execution.
->
-> So setting values in op->currframe to zero (as pointed out by KCSAN) is
-> always a good move.
->
-> When there would be a race between the op->currframe++ in bcm_can_tx()
-> and the test for
-> if (op->nframes != msg_head->nframes) in bcm_tx_setup() this would be
-> fixed with
-> if (op->currframe >= op->nframes) in bcm_can_tx().
->
-> But looking at the code again I'm not sure if we might /potentially/
-> lose the TX_RESET_MULTI_IDX feature when the unlocked op->currframe++ is
-> performed concurrently in bcm_can_tx().
->
-> So a short local locking around the op->currframe r/w operations in
-> bcm_can_tx() and bcm_tx_setup() would make sense IMO.
->
-> The code is intended to update CAN frame content (with a fixed
-> non-increasing length) lock-less on the fly and there should be no other
-> "wide range of misbehavior" cases here.
->
-> I will take a look and send a patch for the op->currframe locking.
->
-> Many thanks for looking into this and best regards,
-> Oliver
+Reviewed-by: Gaurav Jain <gaurav.jain@nxp.com>
 
-bcm_tx_timeout_handler() must also be racing with bcm_tx_setup() and
-it reads more fields (kt_ival1, kt_ival2, flags, count) while they are
-being changed.
-Can bcm_tx_timeout_handler() read unint/partially
-init/inconsistent/stale values for these fields?
-Also can't bcm_can_tx() read partially overwritten/messed cf data when
-sending, since it's already being overwritten by bcm_tx_setup()?
+> -----Original Message-----
+> From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Sent: Monday, April 17, 2023 11:59 PM
+> To: Horia Geanta <horia.geanta@nxp.com>; Varun Sethi <V.Sethi@nxp.com>;
+> Pankaj Gupta <pankaj.gupta@nxp.com>; Gaurav Jain <gaurav.jain@nxp.com>;
+> herbert@gondor.apana.org.au; davem@davemloft.net; linux-
+> crypto@vger.kernel.org; linux-kernel@vger.kernel.org;
+> leonard.crestez@nxp.com; Aisheng Dong <aisheng.dong@nxp.com>
+> Cc: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> Subject: [PATCH v3] crypto: caam - refactor RNG initialization
+>=20
+> From: Horia GeantA <horia.geanta@nxp.com>
+>=20
+> RNG (re-)initialization will be needed on pm resume path, thus refactor t=
+he
+> corresponding code out of the probe callback.
+>=20
+> Signed-off-by: Horia GeantA <horia.geanta@nxp.com>
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
+> ---
+> changes in v2:
+> 	Rebased on "page 0" patches
+>=20
+> changes in v3:
+> 	Incorporated review comments
+>=20
+>  drivers/crypto/caam/ctrl.c   | 205 +++++++++++++++++++----------------
+>  drivers/crypto/caam/intern.h |   1 +
+>  2 files changed, 115 insertions(+), 91 deletions(-)
+>=20
+> diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c inde=
+x
+> 9c5a035e1b96..7070349943c8 100644
+> --- a/drivers/crypto/caam/ctrl.c
+> +++ b/drivers/crypto/caam/ctrl.c
+> @@ -342,13 +342,12 @@ static int instantiate_rng(struct device *ctrldev, =
+int
+> state_handle_mask,
+>  /*
+>   * kick_trng - sets the various parameters for enabling the initializati=
+on
+>   *	       of the RNG4 block in CAAM
+> - * @pdev - pointer to the platform device
+> + * @dev - pointer to the controller device
+>   * @ent_delay - Defines the length (in system clocks) of each entropy sa=
+mple.
+>   */
+> -static void kick_trng(struct platform_device *pdev, int ent_delay)
+> +static void kick_trng(struct device *dev, int ent_delay)
+>  {
+> -	struct device *ctrldev =3D &pdev->dev;
+> -	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(ctrldev);
+> +	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(dev);
+>  	struct caam_ctrl __iomem *ctrl;
+>  	struct rng4tst __iomem *r4tst;
+>  	u32 val;
+> @@ -616,10 +615,115 @@ static bool needs_entropy_delay_adjustment(void)
+>  	return false;
+>  }
+>=20
+> +static int caam_ctrl_rng_init(struct device *dev) {
+> +	struct caam_drv_private *ctrlpriv =3D dev_get_drvdata(dev);
+> +	struct caam_ctrl __iomem *ctrl =3D ctrlpriv->ctrl;
+> +	int ret, gen_sk, ent_delay =3D RTSDCTL_ENT_DLY_MIN;
+> +	u8 rng_vid;
+> +
+> +	if (ctrlpriv->era < 10) {
+> +		struct caam_perfmon __iomem *perfmon;
+> +
+> +		perfmon =3D ctrlpriv->total_jobrs ?
+> +			  (struct caam_perfmon __iomem *)&ctrlpriv->jr[0]-
+> >perfmon :
+> +			  (struct caam_perfmon __iomem *)&ctrl->perfmon;
+> +
+> +		rng_vid =3D (rd_reg32(&perfmon->cha_id_ls) &
+> +			   CHA_ID_LS_RNG_MASK) >> CHA_ID_LS_RNG_SHIFT;
+> +	} else {
+> +		struct version_regs __iomem *vreg;
+> +
+> +		vreg =3D ctrlpriv->total_jobrs ?
+> +			(struct version_regs __iomem *)&ctrlpriv->jr[0]->vreg :
+> +			(struct version_regs __iomem *)&ctrl->vreg;
+> +
+> +		rng_vid =3D (rd_reg32(&vreg->rng) & CHA_VER_VID_MASK) >>
+> +			  CHA_VER_VID_SHIFT;
+> +	}
+> +
+> +	/*
+> +	 * If SEC has RNG version >=3D 4 and RNG state handle has not been
+> +	 * already instantiated, do RNG instantiation
+> +	 * In case of SoCs with Management Complex, RNG is managed by MC
+> f/w.
+> +	 */
+> +	if (!(ctrlpriv->mc_en && ctrlpriv->pr_support) && rng_vid >=3D 4) {
+> +		ctrlpriv->rng4_sh_init =3D
+> +			rd_reg32(&ctrl->r4tst[0].rdsta);
+> +		/*
+> +		 * If the secure keys (TDKEK, JDKEK, TDSK), were already
+> +		 * generated, signal this to the function that is instantiating
+> +		 * the state handles. An error would occur if RNG4 attempts
+> +		 * to regenerate these keys before the next POR.
+> +		 */
+> +		gen_sk =3D ctrlpriv->rng4_sh_init & RDSTA_SKVN ? 0 : 1;
+> +		ctrlpriv->rng4_sh_init &=3D RDSTA_MASK;
+> +		do {
+> +			int inst_handles =3D
+> +				rd_reg32(&ctrl->r4tst[0].rdsta) & RDSTA_MASK;
+> +			/*
+> +			 * If either SH were instantiated by somebody else
+> +			 * (e.g. u-boot) then it is assumed that the entropy
+> +			 * parameters are properly set and thus the function
+> +			 * setting these (kick_trng(...)) is skipped.
+> +			 * Also, if a handle was instantiated, do not change
+> +			 * the TRNG parameters.
+> +			 */
+> +			if (needs_entropy_delay_adjustment())
+> +				ent_delay =3D 12000;
+> +			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
+> +				dev_info(dev,
+> +					 "Entropy delay =3D %u\n",
+> +					 ent_delay);
+> +				kick_trng(dev, ent_delay);
+> +				ent_delay +=3D 400;
+> +			}
+> +			/*
+> +			 * if instantiate_rng(...) fails, the loop will rerun
+> +			 * and the kick_trng(...) function will modify the
+> +			 * upper and lower limits of the entropy sampling
+> +			 * interval, leading to a successful initialization of
+> +			 * the RNG.
+> +			 */
+> +			ret =3D instantiate_rng(dev, inst_handles,
+> +					      gen_sk);
+> +			/*
+> +			 * Entropy delay is determined via TRNG
+> characterization.
+> +			 * TRNG characterization is run across different
+> voltages
+> +			 * and temperatures.
+> +			 * If worst case value for ent_dly is identified,
+> +			 * the loop can be skipped for that platform.
+> +			 */
+> +			if (needs_entropy_delay_adjustment())
+> +				break;
+> +			if (ret =3D=3D -EAGAIN)
+> +				/*
+> +				 * if here, the loop will rerun,
+> +				 * so don't hog the CPU
+> +				 */
+> +				cpu_relax();
+> +		} while ((ret =3D=3D -EAGAIN) && (ent_delay <
+> RTSDCTL_ENT_DLY_MAX));
+> +		if (ret) {
+> +			dev_err(dev, "failed to instantiate RNG");
+> +			return ret;
+> +		}
+> +		/*
+> +		 * Set handles initialized by this module as the complement of
+> +		 * the already initialized ones
+> +		 */
+> +		ctrlpriv->rng4_sh_init =3D ~ctrlpriv->rng4_sh_init & RDSTA_MASK;
+> +
+> +		/* Enable RDB bit so that RNG works faster */
+> +		clrsetbits_32(&ctrl->scfgr, 0, SCFGR_RDBENABLE);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /* Probe routine for CAAM top (controller) level */  static int caam_pro=
+be(struct
+> platform_device *pdev)  {
+> -	int ret, ring, gen_sk, ent_delay =3D RTSDCTL_ENT_DLY_MIN;
+> +	int ret, ring;
+>  	u64 caam_id;
+>  	const struct soc_device_attribute *imx_soc_match;
+>  	struct device *dev;
+> @@ -629,10 +733,8 @@ static int caam_probe(struct platform_device *pdev)
+>  	struct caam_perfmon __iomem *perfmon;
+>  	struct dentry *dfs_root;
+>  	u32 scfgr, comp_params;
+> -	u8 rng_vid;
+>  	int pg_size;
+>  	int BLOCK_OFFSET =3D 0;
+> -	bool pr_support =3D false;
+>  	bool reg_access =3D true;
+>=20
+>  	ctrlpriv =3D devm_kzalloc(&pdev->dev, sizeof(*ctrlpriv), GFP_KERNEL);
+> @@ -768,7 +870,8 @@ static int caam_probe(struct platform_device *pdev)
+>=20
+>  		mc_version =3D fsl_mc_get_version();
+>  		if (mc_version)
+> -			pr_support =3D check_version(mc_version, 10, 20, 0);
+> +			ctrlpriv->pr_support =3D check_version(mc_version, 10,
+> 20,
+> +							     0);
+>  		else
+>  			return -EPROBE_DEFER;
+>  	}
+> @@ -859,9 +962,6 @@ static int caam_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  	}
+>=20
+> -	if (!reg_access)
+> -		goto report_live;
+> -
+>  	comp_params =3D rd_reg32(&perfmon->comp_parms_ls);
+>  	ctrlpriv->blob_present =3D !!(comp_params & CTPR_LS_BLOB);
+>=20
+> @@ -871,8 +971,6 @@ static int caam_probe(struct platform_device *pdev)
+>  	 * check both here.
+>  	 */
+>  	if (ctrlpriv->era < 10) {
+> -		rng_vid =3D (rd_reg32(&perfmon->cha_id_ls) &
+> -			   CHA_ID_LS_RNG_MASK) >> CHA_ID_LS_RNG_SHIFT;
+>  		ctrlpriv->blob_present =3D ctrlpriv->blob_present &&
+>  			(rd_reg32(&perfmon->cha_num_ls) &
+> CHA_ID_LS_AES_MASK);
+>  	} else {
+> @@ -882,91 +980,16 @@ static int caam_probe(struct platform_device *pdev)
+>  			(struct version_regs __iomem *)&ctrlpriv->jr[0]->vreg :
+>  			(struct version_regs __iomem *)&ctrl->vreg;
+>=20
+> -		rng_vid =3D (rd_reg32(&vreg->rng) & CHA_VER_VID_MASK) >>
+> -			   CHA_VER_VID_SHIFT;
+>  		ctrlpriv->blob_present =3D ctrlpriv->blob_present &&
+>  			(rd_reg32(&vreg->aesa) &
+> CHA_VER_MISC_AES_NUM_MASK);
+>  	}
+>=20
+> -	/*
+> -	 * If SEC has RNG version >=3D 4 and RNG state handle has not been
+> -	 * already instantiated, do RNG instantiation
+> -	 * In case of SoCs with Management Complex, RNG is managed by MC
+> f/w.
+> -	 */
+> -	if (!(ctrlpriv->mc_en && pr_support) && rng_vid >=3D 4) {
+> -		ctrlpriv->rng4_sh_init =3D
+> -			rd_reg32(&ctrl->r4tst[0].rdsta);
+> -		/*
+> -		 * If the secure keys (TDKEK, JDKEK, TDSK), were already
+> -		 * generated, signal this to the function that is instantiating
+> -		 * the state handles. An error would occur if RNG4 attempts
+> -		 * to regenerate these keys before the next POR.
+> -		 */
+> -		gen_sk =3D ctrlpriv->rng4_sh_init & RDSTA_SKVN ? 0 : 1;
+> -		ctrlpriv->rng4_sh_init &=3D RDSTA_MASK;
+> -		do {
+> -			int inst_handles =3D
+> -				rd_reg32(&ctrl->r4tst[0].rdsta) &
+> -								RDSTA_MASK;
+> -			/*
+> -			 * If either SH were instantiated by somebody else
+> -			 * (e.g. u-boot) then it is assumed that the entropy
+> -			 * parameters are properly set and thus the function
+> -			 * setting these (kick_trng(...)) is skipped.
+> -			 * Also, if a handle was instantiated, do not change
+> -			 * the TRNG parameters.
+> -			 */
+> -			if (needs_entropy_delay_adjustment())
+> -				ent_delay =3D 12000;
+> -			if (!(ctrlpriv->rng4_sh_init || inst_handles)) {
+> -				dev_info(dev,
+> -					 "Entropy delay =3D %u\n",
+> -					 ent_delay);
+> -				kick_trng(pdev, ent_delay);
+> -				ent_delay +=3D 400;
+> -			}
+> -			/*
+> -			 * if instantiate_rng(...) fails, the loop will rerun
+> -			 * and the kick_trng(...) function will modify the
+> -			 * upper and lower limits of the entropy sampling
+> -			 * interval, leading to a successful initialization of
+> -			 * the RNG.
+> -			 */
+> -			ret =3D instantiate_rng(dev, inst_handles,
+> -					      gen_sk);
+> -			/*
+> -			 * Entropy delay is determined via TRNG
+> characterization.
+> -			 * TRNG characterization is run across different
+> voltages
+> -			 * and temperatures.
+> -			 * If worst case value for ent_dly is identified,
+> -			 * the loop can be skipped for that platform.
+> -			 */
+> -			if (needs_entropy_delay_adjustment())
+> -				break;
+> -			if (ret =3D=3D -EAGAIN)
+> -				/*
+> -				 * if here, the loop will rerun,
+> -				 * so don't hog the CPU
+> -				 */
+> -				cpu_relax();
+> -		} while ((ret =3D=3D -EAGAIN) && (ent_delay <
+> RTSDCTL_ENT_DLY_MAX));
+> -		if (ret) {
+> -			dev_err(dev, "failed to instantiate RNG");
+> +	if (reg_access) {
+> +		ret =3D caam_ctrl_rng_init(dev);
+> +		if (ret)
+>  			return ret;
+> -		}
+> -		/*
+> -		 * Set handles initialized by this module as the complement of
+> -		 * the already initialized ones
+> -		 */
+> -		ctrlpriv->rng4_sh_init =3D ~ctrlpriv->rng4_sh_init & RDSTA_MASK;
+> -
+> -		/* Enable RDB bit so that RNG works faster */
+> -		clrsetbits_32(&ctrl->scfgr, 0, SCFGR_RDBENABLE);
+>  	}
+>=20
+> -report_live:
+> -	/* NOTE: RTIC detection ought to go here, around Si time */
+> -
+>  	caam_id =3D (u64)rd_reg32(&perfmon->caam_id_ms) << 32 |
+>  		  (u64)rd_reg32(&perfmon->caam_id_ls);
+>=20
+> diff --git a/drivers/crypto/caam/intern.h b/drivers/crypto/caam/intern.h =
+index
+> 86ed1b91c22d..b4f7bf77f487 100644
+> --- a/drivers/crypto/caam/intern.h
+> +++ b/drivers/crypto/caam/intern.h
+> @@ -95,6 +95,7 @@ struct caam_drv_private {
+>  	u8 blob_present;	/* Nonzero if BLOB support present in device */
+>  	u8 mc_en;		/* Nonzero if MC f/w is active */
+>  	u8 optee_en;		/* Nonzero if OP-TEE f/w is active */
+> +	bool pr_support;        /* RNG prediction resistance available */
+>  	int secvio_irq;		/* Security violation interrupt number */
+>  	int virt_en;		/* Virtualization enabled in CAAM */
+>  	int era;		/* CAAM Era (internal HW revision) */
+> --
+> 2.25.1
 
-
-> >> ==================================================================
-> >> BUG: KCSAN: data-race in bcm_can_tx / bcm_tx_setup
-> >>
-> >> write to 0xffff888137fcff10 of 4 bytes by task 10792 on cpu 0:
-> >>   bcm_tx_setup+0x698/0xd30 net/can/bcm.c:995
-> >>   bcm_sendmsg+0x38b/0x470 net/can/bcm.c:1355
-> >>   sock_sendmsg_nosec net/socket.c:724 [inline]
-> >>   sock_sendmsg net/socket.c:747 [inline]
-> >>   ____sys_sendmsg+0x375/0x4c0 net/socket.c:2501
-> >>   ___sys_sendmsg net/socket.c:2555 [inline]
-> >>   __sys_sendmsg+0x1e3/0x270 net/socket.c:2584
-> >>   __do_sys_sendmsg net/socket.c:2593 [inline]
-> >>   __se_sys_sendmsg net/socket.c:2591 [inline]
-> >>   __x64_sys_sendmsg+0x46/0x50 net/socket.c:2591
-> >>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >>   do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>
-> >> write to 0xffff888137fcff10 of 4 bytes by interrupt on cpu 1:
-> >>   bcm_can_tx+0x38a/0x410
-> >>   bcm_tx_timeout_handler+0xdb/0x260
-> >>   __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
-> >>   __hrtimer_run_queues+0x217/0x700 kernel/time/hrtimer.c:1749
-> >>   hrtimer_run_softirq+0xd6/0x120 kernel/time/hrtimer.c:1766
-> >>   __do_softirq+0xc1/0x265 kernel/softirq.c:571
-> >>   invoke_softirq kernel/softirq.c:445 [inline]
-> >>   __irq_exit_rcu+0x57/0xa0 kernel/softirq.c:650
-> >>   sysvec_apic_timer_interrupt+0x6d/0x80 arch/x86/kernel/apic/apic.c:1107
-> >>   asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-> >>   kcsan_setup_watchpoint+0x3fe/0x410 kernel/kcsan/core.c:696
-> >>   string_nocheck lib/vsprintf.c:648 [inline]
-> >>   string+0x16c/0x200 lib/vsprintf.c:726
-> >>   vsnprintf+0xa09/0xe20 lib/vsprintf.c:2796
-> >>   add_uevent_var+0xf0/0x1c0 lib/kobject_uevent.c:665
-> >>   kobject_uevent_env+0x225/0x5b0 lib/kobject_uevent.c:539
-> >>   kobject_uevent+0x1c/0x20 lib/kobject_uevent.c:642
-> >>   __loop_clr_fd+0x1e0/0x3b0 drivers/block/loop.c:1167
-> >>   lo_release+0xe4/0xf0 drivers/block/loop.c:1745
-> >>   blkdev_put+0x3fb/0x470
-> >>   kill_block_super+0x83/0xa0 fs/super.c:1410
-> >>   deactivate_locked_super+0x6b/0xd0 fs/super.c:331
-> >>   deactivate_super+0x9b/0xb0 fs/super.c:362
-> >>   cleanup_mnt+0x272/0x2e0 fs/namespace.c:1177
-> >>   __cleanup_mnt+0x19/0x20 fs/namespace.c:1184
-> >>   task_work_run+0x123/0x160 kernel/task_work.c:179
-> >>   resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-> >>   exit_to_user_mode_loop+0xd1/0xe0 kernel/entry/common.c:171
-> >>   exit_to_user_mode_prepare+0x6c/0xb0 kernel/entry/common.c:204
-> >>   __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
-> >>   syscall_exit_to_user_mode+0x26/0x140 kernel/entry/common.c:297
-> >>   do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
-> >>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>
-> >> value changed: 0x00000059 -> 0x00000000
-> >>
-> >> Reported by Kernel Concurrency Sanitizer on:
-> >> CPU: 1 PID: 3096 Comm: syz-executor.5 Not tainted 6.3.0-syzkaller-00113-g1a0beef98b58 #0
-> >> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-> >> ==================================================================
-> >>
-> >>
-> >> ---
-> >> This report is generated by a bot. It may contain errors.
-> >> See https://goo.gl/tpsmEJ for more information about syzbot.
-> >> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >>
-> >> syzbot will keep track of this issue. See:
-> >> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >>
-> >> --
-> >> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> >> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> >> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/00000000000059e1b705fa2494e4%40google.com.
