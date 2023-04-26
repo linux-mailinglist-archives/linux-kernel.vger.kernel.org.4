@@ -2,131 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E766EFDEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22106EFDF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjDZXQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
+        id S233831AbjDZXQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 19:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239435AbjDZXQI (ORCPT
+        with ESMTP id S238445AbjDZXQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 19:16:08 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79EA30DA;
-        Wed, 26 Apr 2023 16:16:05 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64115eef620so865411b3a.1;
-        Wed, 26 Apr 2023 16:16:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682550965; x=1685142965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GmZe4XQJ0YjP7cw54uBUO68nCbJ9qNgc+ctEcUOTuDs=;
-        b=RHERRUh1+lK0ociFRpJqgqwyeNOtTDg9+ksYO4pn+050hYcMe9qMLFxAMUavAyTG3j
-         KTG++bzIwXJeEg5vksXpcOspRhvqhS4zkgL+8GzrpYw7lL1ZRywrOiJI2Eyhf5Ahmy3d
-         ckvcPiMPkXaJs+6hbSiKLVuAK0W3gf3391IgTNNxKdOGiKfn1iBf5ZdOVR8N8DvTG5Mf
-         vwX0nsQS5VlFezaFPEcGpyq47ye7DrwStNVVz/BMjpaIxSfAs9eC90PG0XNkhJM4eG/y
-         JHRRBgyzsYUruP57UEMe9sc8Vf9Wa+R/enDK9DsHJgsMc8bg3ln471M+qlosVawtc/ka
-         0QvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682550965; x=1685142965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GmZe4XQJ0YjP7cw54uBUO68nCbJ9qNgc+ctEcUOTuDs=;
-        b=GkFUl4j7PUnz/o6IqSnTLrKtc/sBjmEM+hqnQAu9rCil684y7VZRtUVGmPw+j4HO/a
-         P4bxHxctbx/+EsIJPzL1SJTqRAo7my1nTZlgpj4NaQi6+PoyRoRz6yeVdgF6+u/c5N+o
-         Qd5opHvRAAxlECVnGL8VrqpjiFJfuWo38EddgkEoDVpMqd1ES5X+MQ3LbVSAqM/9Sj/O
-         Husrg8BL5t4RFRNgITKiRVAsA1kl1HKcxCWU2TVDUmLrrQOD+U60XklNoc2cirlI38aF
-         AHOXZv0rR7dh0YYwJcfLs5uyp3Jkpo83LrRMv9kYkiqdWa9dwpoS4s7UDdAZpGuyubsw
-         xE7Q==
-X-Gm-Message-State: AC+VfDwPae2QNYs9J+xvLknqqHmTlHPTf9G0GoRkXVJ5UI0wCMnXZkRI
-        gZmBcRF8dTNIvqmaZqOtEl69MqybfUY=
-X-Google-Smtp-Source: ACHHUZ7PG7OCVBC8tva2mrwPsZE1pPlfMOdjpYZkTBapPTz3o9o9TTEBt9g8DRlwTx66VrM056By8w==
-X-Received: by 2002:a17:902:f688:b0:1a6:4c2b:9e7f with SMTP id l8-20020a170902f68800b001a64c2b9e7fmr4792217plg.1.1682550965206;
-        Wed, 26 Apr 2023 16:16:05 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:f84b:79ee:8ff:d568])
-        by smtp.gmail.com with ESMTPSA id bv21-20020a17090af19500b002465e66256asm10300282pjb.11.2023.04.26.16.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 16:16:04 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 16:16:01 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Tomas Mudrunka <tomas.mudrunka@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fix freeze in lm8333 i2c keyboard driver
-Message-ID: <ZEmwsViIjUVPZ4Cd@google.com>
-References: <20230425130054.591007-1-tomas.mudrunka@gmail.com>
- <ZEf0RYdD5jhE9JEk@nixie71>
+        Wed, 26 Apr 2023 19:16:31 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E59358E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:16:30 -0700 (PDT)
+Received: from letrec.thunk.org ([76.150.80.181])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33QNGGfR022410
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 19:16:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1682550979; bh=jPPNqKK/iEVCbAHYz5NaOt8zh8lOVVOfpxL1J3t+Tyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=lK+GSX9W2dxse2HyFd8Jo6d+QKzGF9OlBj1oecrFz4S6AZ5ZGvYj0U29jK2r3rSvf
+         y2TN2zWRzzB2lTP1HSeQnY0jMt0kqpisBLhDZNrhy817BlFlks+7Zv0bBXcO3PCQXm
+         xqIeN3l6gl+qQOdokjB/nVcwI01CDenCOl1Y3LMD6O8NfoCc9wls0F1EUSqVI9GWFE
+         XmnNqWZwPVUy1buWspkA61VQgO6+YC/Fzbo/22mPe1Im0l95a/gqOA/GE+Xb7jUohS
+         vikK1LusV/6HXx2EHBKcO5zbLmR7/9McSFlyM8CGcXs8L/X9Tsj+dYps1DLFoz76jh
+         97TRZyhe2Wegw==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 9B5FD8C01FA; Wed, 26 Apr 2023 19:16:16 -0400 (EDT)
+Date:   Wed, 26 Apr 2023 19:16:16 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
+Message-ID: <ZEmwwJ9c3ube00Ug@mit.edu>
+References: <20230425041838.GA150312@mit.edu>
+ <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
+ <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
+ <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
+ <CAKwvOdm3gkAufWcWBqDMQNRXVqJjooFQ4Bi5YPHndWFCPScG+g@mail.gmail.com>
+ <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com>
+ <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEf0RYdD5jhE9JEk@nixie71>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff, Tomas,
-
-On Tue, Apr 25, 2023 at 10:39:49AM -0500, Jeff LaBundy wrote:
-> Hi Tomas,
+On Wed, Apr 26, 2023 at 03:07:48PM -0700, Nick Desaulniers wrote:
+> Is this what you had in mind?
+> ```
+> $ cat linus.c
+> #define NULL ((void*)0)
 > 
-> On Tue, Apr 25, 2023 at 03:00:53PM +0200, Tomas Mudrunka wrote:
-> > LM8333 uses gpio interrupt line which is active-low.
-> > When interrupt is set to FALLING edge and button is pressed
-> > before driver loads, driver will miss the edge and never respond.
-> > To fix this we handle ONESHOT LOW interrupt rather than edge.
-> > 
-> > Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
-> > ---
-> >  drivers/input/keyboard/lm8333.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/input/keyboard/lm8333.c b/drivers/input/keyboard/lm8333.c
-> > index 7457c3220..c5770ebb2 100644
-> > --- a/drivers/input/keyboard/lm8333.c
-> > +++ b/drivers/input/keyboard/lm8333.c
-> > @@ -179,7 +179,7 @@ static int lm8333_probe(struct i2c_client *client)
-> >  	}
-> >  
-> >  	err = request_threaded_irq(client->irq, NULL, lm8333_irq_thread,
-> > -				   IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> > +				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
-> >  				   "lm8333", lm8333);
-> >  	if (err)
-> >  		goto free_mem;
+> void * _Nonnull foo (void) {
+>     return &foo;
+> }
 > 
-> Thanks for the patch, but this is a NAK in my opinion.
-> 
-> First of all, we should not be hard-coding interrupt polarity in the
-> first place; that is an existing piece of technical debt in this driver.
+> void bar (void) {
+>     if (foo() == NULL) // maybe should warn that foo() returns _Nonnull?
+>         bar();
+> }
+>
+> $ clang linus.c -fsyntax-only
+> linus.c:8:15: warning: comparison of _Nonnull function call 'foo'
+> equal to a null pointer is always false
 
-Yes, I wonder if the original hardware was limited to the edge
-interrupts.
+Ideally, the warning should also fire in this case:
 
-> 
-> Second, changing from edge-triggered to level-triggered interrupts runs
-> the risk of creating an interrupt storm depending on the time it takes
-> the device to deassert the irq following the I2C read and the point at
-> which the threaded handler returns. Have you measured this?
+    if (!foo()) {
+    	bar();
+    }
 
-IRQF_ONESHOT ensures that the level interrupt is unmasked only when the
-threaded handler returns.
+And of course, what if the code does this:
 
-> 
-> Can we not simply read the interrupt status registers once at start-up
-> to clear any pending status? This is essentially what your change does
-> anyway, albeit indirectly.
-> 
+    p = foo();
+    if (p) {
+    	quux();
+    }
 
-Thanks.
+Would these also be considered implicit comparisons to a NULL pointer?
 
--- 
-Dmitry
+	    	       	       	  - Ted
+
