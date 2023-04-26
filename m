@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CF36EFD05
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A33C6EFD07
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239882AbjDZWEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S236306AbjDZWHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDZWEY (ORCPT
+        with ESMTP id S231915AbjDZWG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:04:24 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCF6F2;
-        Wed, 26 Apr 2023 15:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=86/z7JpBpTFJ3jh7x1UT3ZNWieULbXEuuoLuCk5wHYw=; b=64SS/vsfibe+zAHrgDLhZlAsXj
-        U8+gqmgFqWYI1epMZKCjf9D22GK6u+mxEoiG9Pr+SDEdrhQQi9iXAkmX/w54J1ivTyqeXzzLnwAnT
-        BfdKNXmlJTB6xLSus6ywuS7nTCOGClKPvRfOFfCWZz4f1/KDT6pFlxycF9S1ZhKjUDCxShEnMZr0k
-        RM4fWp2iHBuHQWewNdXIvJckrf2zYnOupyQs7/ZfDcSwHcSZAWuv3pl3AG163JTiLd2xRoYKZ1ft8
-        tA6hFYdoJUWbXPPjHFZ+kNpqTMnAKfIDezroJPiG1Jl8+o/7qgHRJUSs/jVSIbAuiD93iinx5TUnf
-        cpVqBOgw==;
-Received: from p200300ccff09c2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:c200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1prnFE-0008HC-AR; Thu, 27 Apr 2023 00:04:12 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1prnFD-001o20-2v;
-        Thu, 27 Apr 2023 00:04:11 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        christophe.leroy@csgroup.eu, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ": Tony Lindgren" <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH] gpiolib: fix allocation of mixed dynamic/static GPIOs
-Date:   Thu, 27 Apr 2023 00:03:38 +0200
-Message-Id: <20230426220338.430638-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
+        Wed, 26 Apr 2023 18:06:57 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BEEF2;
+        Wed, 26 Apr 2023 15:06:54 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fe2e39156so92466427b3.2;
+        Wed, 26 Apr 2023 15:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682546814; x=1685138814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yB27/xkS1ZORZE8U10J0r1v6U1ip7jl/0pwGCpzNH3E=;
+        b=rAtvJ80WLsOSlFmslUbWsJn1lVKfvgO7mv2cxxahNB8DDliMuVNAiTZzFDL4YIb7V8
+         wE+j94aErhwt4IkgbaHbuqb0a/VViH3dfmq+DXs5GAwRTNXkLqoVGOlRf312tdNbBzpG
+         PRXve+5sEloCdJOFnCjbg2DPp2hWGOqZ9Vq39DrEWcEvcL2YviW9xUzLGC5frNQeX15q
+         bYtWBLcENSQWXm+fYIUfpeby86hTc7yZYOSkRNKVjyzWXhS/Y9k2tf7Bj4IVY2HZHrIG
+         kN8DKHQ2EZBQXxjbJnOojx0UsMxmnzrNtkkbe2I3jO+jiaZyMpuEI9U/+kyNo9ZDi24F
+         GRzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682546814; x=1685138814;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yB27/xkS1ZORZE8U10J0r1v6U1ip7jl/0pwGCpzNH3E=;
+        b=G0xjMmpgI5paLWTWQqq+UJwcSe3Hheql6+wniNElIyi1ozQvOuhVkbuUXMJjwf/Ndz
+         4T6052PEFaRVJmBjonu6TvW4aizLFfOitnFxXBU0VXh4LzbwkSxEoB+JA3EeKB/pbB9r
+         Mv3pXFnUGelt/OwsuphTAvGFK3KbFbgm9EjuVUuFNCfRgYDWiPQ15vcB38qmJ95zNCGW
+         4zK0ZpMYDt25Rbwjk3LN+exycSI6kY8PMR32j2pRQ7DHdAXqq0frs8hdu9CGxvKJBtuK
+         0HYvavMh3JJ2RcMqWTRdUaSxAXRZkkfeth0vviKmBP4c3P8bjaZFo9asR2ajwr7Akjxe
+         yyiQ==
+X-Gm-Message-State: AAQBX9fOc3jvPeMgSGCiDTlnVVaCRJkBdj0sOCZN48MtJIfNNyDDcIzb
+        mGZMuwiTH1tR3FseLnjNEJP3Ok6Ls7oBKh3XsJU=
+X-Google-Smtp-Source: AKy350YnbbqCqx/MyOk/r9MHPHTb7RDIS4ol/PTLuR9dlSf9naE3buQWIzfeYllEd3yN9JTMHdbVCi5gd70MbRZmiM4=
+X-Received: by 2002:a81:658a:0:b0:54f:badd:d148 with SMTP id
+ z132-20020a81658a000000b0054fbaddd148mr14277444ywb.14.1682546814094; Wed, 26
+ Apr 2023 15:06:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+References: <ZEmbeAUklqmb8leS@virtual>
+In-Reply-To: <ZEmbeAUklqmb8leS@virtual>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 27 Apr 2023 00:06:43 +0200
+Message-ID: <CANiq72ne324Wvp4RG-BtF8V9hqb_qhTZH+kNJwigB5vZHkMz0Q@mail.gmail.com>
+Subject: Re: [PATCH] rust: fix sorting of rust/bindings/bindings_helper.h's
+ #includes Suggested by: Miguel Ojeda <ojeda@kernel.org> Link: https://github.com/Rust-for-Linux/linux/issues/1002
+To:     Roy Matero <materoy@proton.me>
+Cc:     alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
+        gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
+        yakoyoku@gmail.com, aliceryhl@google.com,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If static allocation and dynamic allocation GPIOs are present,
-dynamic allocation pollutes the numberspace for static allocation,
-causing static allocation to fail.
-Enfore dynamic allocation above GPIO_DYNAMIC_BASE.
+On Wed, Apr 26, 2023 at 11:46=E2=80=AFPM Roy Matero <materoy@proton.me> wro=
+te:
+>
+> Signed-off-by: Roy Matero <materoy@proton.me>
 
-Seen on a GTA04 when omap-gpio (static) and twl-gpio (dynamic)
-raced.
-On that device it is fixed invasively by
-commit 92bf78b33b0b4 ("gpio: omap: use dynamic allocation of base")
-but lets also fix that for devices where there is still
-a mixture of static and dynamic allocation.
+Thank you for the patch!
 
-Fixes: 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS")
-Suggested-by: andy.shevchenko@gmail.com
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/gpio/gpiolib.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Something strange happened -- it looks like the body went into the
+subject line. Did you use `git-send-email`?
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 19bd23044b017..18b68d0aec7db 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -188,6 +188,10 @@ static int gpiochip_find_base(int ngpio)
- 	int base = GPIO_DYNAMIC_BASE;
- 
- 	list_for_each_entry(gdev, &gpio_devices, list) {
-+		/* do not pollute area for static allocation */
-+		if (gdev->base < GPIO_DYNAMIC_BASE)
-+			continue;
-+
- 		/* found a free space? */
- 		if (gdev->base >= base + ngpio)
- 			break;
--- 
-2.39.2
+Also, please use a dash in `Suggested-by` and a title like "rust:
+bindings: sort includes". Also, please add a commit description --
+please see Ariel's recent patch [1] and discussion for some more
+details.
 
+[1] https://lore.kernel.org/rust-for-linux/20230426204923.16195-1-amiculas@=
+cisco.com/
+
+Cheers,
+Miguel
