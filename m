@@ -2,216 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72326EF302
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A0B6EF300
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240610AbjDZLCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S240519AbjDZLB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240298AbjDZLCD (ORCPT
+        with ESMTP id S229937AbjDZLBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:02:03 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6791646B0;
-        Wed, 26 Apr 2023 04:02:02 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QAS7vm029033;
-        Wed, 26 Apr 2023 11:01:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=Cj5dmTnSPTrZAX4b3OtVEk8PfXVs6RQPPe+ehz2mU/g=;
- b=da2Mm4AgypG8nkTeVa6E0nW1q7QdfNVqk3mjwHcCVV7RGgF1DQpkg699eFIHkU4qKuJe
- qhbI5JkZk18S+79lBHdbHU0V5nELtqCqvcXi2LjGJU/LCpA1lmcevSrQ3bcjmeDsVIz9
- 6PgdqFNNmkuYARDJm4W44hejSFYFUY5+0yoQPXVVNsyF3EbilF4ED8tjTx052KLDcM9n
- Rf0NVXYrUM7gFaZfzDEBtMkvAxatZPVwtQwObPAbqSpHb5Sm+xHtDjBIVopvYDVCGlYk
- hpXYq4U8b19BGsuGV6rrkVnyD9ZmiEkPpRV4ehBd/XLvM+ofG3i5p1AgafqgS8N6mkN/ Sg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7239949b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 11:01:54 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33PMaXEX020522;
-        Wed, 26 Apr 2023 11:01:52 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3q477729x3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 11:01:52 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33QB1nU34784846
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Apr 2023 11:01:49 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF3A720043;
-        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61CA620040;
-        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
-Received: from localhost (unknown [9.43.0.247])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
-Date:   Wed, 26 Apr 2023 16:31:46 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Subject: Re: [PATCH v2 2/2] selftests/ftrace: Add new test case which checks
- for optimized probes
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
-        shuah@kernel.org
-References: <20230418095557.19061-1-akanksha@linux.ibm.com>
-        <20230418095557.19061-3-akanksha@linux.ibm.com>
-        <20230425091039.9fd523dfdf7be5e800bac4fe@kernel.org>
-        <1682400251.pez54ergiy.naveen@linux.ibm.com>
-        <20230425234125.51455711c4388481c13be5ad@kernel.org>
-In-Reply-To: <20230425234125.51455711c4388481c13be5ad@kernel.org>
+        Wed, 26 Apr 2023 07:01:55 -0400
+Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CB62694
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:01:52 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id rcuDpKT0qFuuVrcuDpbgiJ; Wed, 26 Apr 2023 13:01:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682506911;
+        bh=P6l6zetgQcrJakLHGkVzKt0vOihvntcZ5fakSmWckj4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=PMEc6EQZwrcoHkmUPELBMsggN7cgyIcmkBlP420dZSsfD2LFWzC2yoMEIX/BtzafN
+         yzv9x8T2KSBN2kryQderxNm0qgN3UNHF1EmkuuF0lC/54uwLDWe6fqaRP/fuQHHbMe
+         UJNY3GQG15k35PL95iySi4ZUscH9mGXaA5k8X83gUJSmTADIrCBzsdvOTw1HMm8mEV
+         kpdeFsSxuT6dFizpHEQg+ehgVpVpo9OjC+fhmnxgERZhIOcVVglikBxHRIVJUz9RxP
+         8u8iIh5syS3fccjH6xvnhnacbRYqBR2G6X/R5NF6G4pE/xBvvjQ4LwGC2MYInWvaeR
+         kdQfj9OlKoXHw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 26 Apr 2023 13:01:50 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <8ff8025f-bdbb-ec5f-9e2b-a182e3ff2e7d@wanadoo.fr>
+Date:   Wed, 26 Apr 2023 13:01:49 +0200
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1682506809.uus6y0ir3i.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 2Bss5NlDYwGOPQ0U9MGooBNKyXxErO6n
-X-Proofpoint-GUID: 2Bss5NlDYwGOPQ0U9MGooBNKyXxErO6n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_04,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=891 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304260094
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
+Content-Language: fr, en-US
+To:     Naresh Solanki <naresh.solanki@9elements.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Masami Hiramatsu wrote:
-> On Tue, 25 Apr 2023 10:58:30 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.ibm.com> wrote:
->=20
->> Masami Hiramatsu wrote:
->> > On Tue, 18 Apr 2023 15:25:57 +0530
->> > Akanksha J N <akanksha@linux.ibm.com> wrote:
->> >=20
->> >> Add new test case kprobe_opt_types.tc which enables and checks
->> >> if each probe has been optimized in order to test potential issues wi=
-th
->> >> optimized probes.
->> >> The '|| continue' is added with the echo statement to ignore errors t=
-hat
->> >> are caused by trying to add kprobes to non probeable lines and contin=
-ue
->> >> with the test.
->> >> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
->> >> ---
->> >>  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++=
-++
->> >>  1 file changed, 34 insertions(+)
->> >>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kpro=
-be_opt_types.tc
->> >>=20
->> >> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_=
-types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
->> >> new file mode 100644
->> >> index 000000000000..54e4800b8a13
->> >> --- /dev/null
->> >> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.t=
-c
->> >> @@ -0,0 +1,34 @@
->> >> +#!/bin/sh
->> >> +# SPDX-License-Identifier: GPL-2.0-or-later
->> >> +# Copyright (C) 2023 Akanksha J N, IBM corporation
->> >> +# description: Register/unregister optimized probe
->> >> +# requires: kprobe_events
->> >> +
->> >> +case `uname -m` in
->> >> +x86_64)
->> >> +;;
->> >> +arm*)
->> >> +;;
->> >> +ppc*)
->> >> +;;
->> >> +*)
->> >> +  echo "Please implement other architecture here"
->> >> +  exit_unsupported
->> >> +esac
->> >> +
->> >> +DEFAULT=3D$(cat /proc/sys/debug/kprobes-optimization)
->> >> +echo 1 > /proc/sys/debug/kprobes-optimization
->> >> +for i in `seq 0 255`; do
->> >> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || c=
-ontinue
->> >> +        echo 1 > events/kprobes/enable || continue
->> >> +        (echo "forked")
->> >> +        PROBE_TYPE=3D$(cat /sys/kernel/debug/kprobes/list | grep $FU=
-NCTION_FORK | awk '{print $4}' | awk '{print substr($0,2,length($0)-2)}')
->> >=20
->> > I think we can make it simply;
->> >=20
->> > PROBE=3D$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
->> >=20
->> >> +        echo 0 > events/kprobes/enable
->> >> +        echo > kprobe_events
->> >> +        if [ $PROBE_TYPE =3D "OPTIMIZED" ]; then
->> >=20
->> > and
->> >=20
->> > if echo $PROBE | grep -q OPTIMIZED; then
->> >=20
->> >> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimizat=
-ion
->> >> +                exit_pass
->> >> +        fi
->> >> +done
->> >> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
->> >> +echo "Done"
->> >=20
->> > Hmm, this test does NOT return any error. It always returns success.
->>=20
->> Good catch!
->>=20
->> > I understand that optimization may not be possible within 256 bytes
->> > from the beginning of the function.
->>=20
->> Is that true in practice? Looking at x86 and ppc64le, it looks like we=20
->> will almost always be able to optimize at least one of the instructions=20
->> within the first 256 bytes of kernel_clone(). That's one of the primary=20
->> purposes of this test.
->=20
-> Yeah, usually it should not happen. But since we don't disassemble it,
-> we can not ensure that. So this depends on the compiler at last.
+Le 26/04/2023 à 11:03, Naresh Solanki a écrit :
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+> 
+> Add support for the Maxim Max59x power switch with current/voltage
+> monitor.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 
-Ok.
+Hi,
 
->=20
->>=20
->> Are there valid reasons why we may not be able to optimize instructions?
->=20
-> For example, if the compiler starts inserting some checker instruction
-> on each instruction boundary for security, it may prevent optimizing
-> kprobes. Usually it should not happen (because it bloat up the kernel siz=
-e)
-> but we cannot deny the possibility of such new feature as an option
-> in the future.
->=20
->>=20
->> > In that case, you can return
->> > "unresolved", and not echoing "Done" but the reason why it is
->> > unresolved.
->=20
-> Even in that case, it can notify such case as "unresolved", then we
-> can notice it. (something like WARN_ON)
+a few nit below, should there be a v2.
 
-Sure, exiting as "Unresolved" should help point out a potential issue=20
-with optimizing probes, rather than labeling this as a failure.
+CJ
 
+> ---
+>   drivers/hwmon/Kconfig   |   9 ++
+>   drivers/hwmon/Makefile  |   1 +
+>   drivers/hwmon/max597x.c | 212 ++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 222 insertions(+)
+>   create mode 100644 drivers/hwmon/max597x.c
+> 
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 5b3b76477b0e..164d980d9de2 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1097,6 +1097,15 @@ config SENSORS_MAX31760
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called max31760.
+>   
+> +config SENSORS_MAX597X
+> +	tristate "Maxim 597x power switch and monitor"
+> +	depends on I2C
+> +	depends on OF
+> +	select MFD_MAX597X
+> +	help
+> +	  This driver exposes Maxim 5970/5978 voltage/current monitoring
+> +	  interface.
+> +
+>   config SENSORS_MAX6620
+>   	tristate "Maxim MAX6620 fan controller"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 88712b5031c8..720eb7d5fe46 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -142,6 +142,7 @@ obj-$(CONFIG_SENSORS_MAX197)	+= max197.o
+>   obj-$(CONFIG_SENSORS_MAX31722)	+= max31722.o
+>   obj-$(CONFIG_SENSORS_MAX31730)	+= max31730.o
+>   obj-$(CONFIG_SENSORS_MAX31760)  += max31760.o
+> +obj-$(CONFIG_SENSORS_MAX597X)	+= max597x.o
+>   obj-$(CONFIG_SENSORS_MAX6620)	+= max6620.o
+>   obj-$(CONFIG_SENSORS_MAX6621)	+= max6621.o
+>   obj-$(CONFIG_SENSORS_MAX6639)	+= max6639.o
+> diff --git a/drivers/hwmon/max597x.c b/drivers/hwmon/max597x.c
+> new file mode 100644
+> index 000000000000..d4d8c2faf55c
+> --- /dev/null
+> +++ b/drivers/hwmon/max597x.c
+> @@ -0,0 +1,212 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Device driver for regulators in MAX5970 and MAX5978 IC
+> + *
+> + * Copyright (c) 2022 9elements GmbH
+> + *
+> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+> + */
+> +
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mfd/max597x.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +struct max597x_hwmon {
+> +	int num_switches, irng[MAX5970_NUM_SWITCHES], mon_rng[MAX5970_NUM_SWITCHES];
 
-Thanks,
-Naveen
+Having 1 item per line is much more usual.
+
+> +	struct regmap *regmap;
+> +};
+> +
+> +static int max597x_read_reg(struct max597x_hwmon *ddata, int reg, int range, long *val)
+> +{
+> +	u8 reg_data[2];
+> +	int ret;
+> +
+> +	ret = regmap_bulk_read(ddata->regmap, reg, &reg_data[0], 2);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*val = (reg_data[0] << 2) | (reg_data[1] & 3);
+> +	*val = *val * range;
+> +	/*
+> +	 * From datasheet, the range is fractionally less.
+> +	 * To compensate that, divide with 1033 number.
+> +	 */
+> +	*val = *val / 1033;
+> +
+> +	return 0;
+> +}
+> +
+> +static int max597x_read(struct device *dev, enum hwmon_sensor_types type,
+> +			u32 attr, int channel, long *val)
+> +{
+> +	struct max597x_hwmon *ddata = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_curr:
+> +		switch (attr) {
+> +		case hwmon_curr_input:
+> +			ret = max597x_read_reg(ddata, MAX5970_REG_CURRENT_H(channel),
+> +					       ddata->irng[channel], val);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_input:
+> +			ret = max597x_read_reg(ddata, MAX5970_REG_VOLTAGE_H(channel),
+> +					       ddata->mon_rng[channel], val);
+> +			if (ret < 0)
+> +				return ret;
+> +			return 0;
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +	}
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static umode_t max597x_is_visible(const void *data,
+> +				  enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	struct max597x_hwmon *ddata = (struct max597x_hwmon *)data;
+> +
+> +	if (channel >= ddata->num_switches)
+> +		return 0;
+> +
+> +	switch (type) {
+> +	case hwmon_in:
+> +		switch (attr) {
+> +		case hwmon_in_input:
+> +			return 0444;
+> +		}
+> +		break;
+> +	case hwmon_curr:
+> +		switch (attr) {
+> +		case hwmon_curr_input:
+> +			return 0444;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops max597x_hwmon_ops = {
+> +	.is_visible = max597x_is_visible,
+> +	.read = max597x_read,
+> +};
+> +
+> +#define HWMON_CURRENT	HWMON_C_INPUT
+> +#define HWMON_VOLTAGE	HWMON_I_INPUT
+> +
+> +static const struct hwmon_channel_info *max597x_info[] = {
+> +	HWMON_CHANNEL_INFO(in, HWMON_VOLTAGE, HWMON_VOLTAGE),
+> +	HWMON_CHANNEL_INFO(curr, HWMON_CURRENT, HWMON_CURRENT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info max597x_chip_info = {
+> +	.ops = &max597x_hwmon_ops,
+> +	.info = max597x_info,
+> +};
+> +
+> +static int max597x_adc_range(struct regmap *regmap, const int ch,
+> +			     u32 *irng, u32 *mon_rng)
+> +{
+> +	unsigned int reg;
+> +	int ret;
+> +
+> +	/* Decode current ADC range */
+> +	ret = regmap_read(regmap, MAX5970_REG_STATUS2, &reg);
+> +	if (ret)
+> +		return ret;
+> +	switch (MAX5970_IRNG(reg, ch)) {
+> +	case 0:
+> +		*irng = 100000;	/* 100 mV */
+> +		break;
+> +	case 1:
+> +		*irng = 50000;	/* 50 mV */
+> +		break;
+> +	case 2:
+> +		*irng = 25000;	/* 25 mV */
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Decode current voltage monitor range */
+> +	ret = regmap_read(regmap, MAX5970_REG_MON_RANGE, &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*mon_rng = MAX5970_MON_MAX_RANGE_UV >> MAX5970_MON(reg, ch);
+> +	*mon_rng /= 1000; /* uV to mV */
+> +
+> +	return 0;
+> +}
+> +
+> +static int max597x_sensor_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct i2c_client *i2c = to_i2c_client(pdev->dev.parent);
+> +	struct max597x_hwmon *ddata;
+> +	struct regmap *regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	struct device *hwmon_dev;
+> +	int err;
+> +
+> +	if (!regmap)
+> +		return -EPROBE_DEFER;
+> +
+> +	ddata = devm_kzalloc(dev, sizeof(struct max597x_hwmon), GFP_KERNEL);
+> +	if (!ddata)
+> +		return -ENOMEM;
+> +
+> +	if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5978"))
+> +		ddata->num_switches = MAX597x_TYPE_MAX5978;
+> +	else if (of_device_is_compatible(i2c->dev.of_node, "maxim,max5970"))
+> +		ddata->num_switches = MAX597x_TYPE_MAX5970;
+> +	else
+> +		return -ENODEV;
+> +
+> +	ddata->regmap = regmap;
+> +
+> +	for (int i = 0; i < ddata->num_switches; i++) {
+
+This is unusual to define 'i' within a 'for' loop.
+
+> +		err = max597x_adc_range(regmap, i, &ddata->irng[i], &ddata->mon_rng[i]);
+> +		if (err < 0)
+> +			return err;
+> +	}
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev,
+> +							 "max597x_hwmon", ddata,
+> +							 &max597x_chip_info, NULL);
+> +
+
+Unneeded empty line.
+
+> +	if (IS_ERR(hwmon_dev)) {
+> +		err = PTR_ERR(hwmon_dev);
+> +		dev_err(dev, "Unable to register hwmon device, returned %d\n", err);
+> +		return err;
+
+return dev_err_probe()?
+
+CJ
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver max597x_sensor_driver = {
+> +	.probe = max597x_sensor_probe,
+> +	.driver = {
+> +		.name = "max597x-hwmon",
+> +	},
+> +};
+> +module_platform_driver(max597x_sensor_driver);
+> +
+> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+> +MODULE_DESCRIPTION("MAX5970_hot-swap controller driver");
+> +MODULE_LICENSE("GPL v2");
+> 
+> base-commit: b4c288cfd2f84c44994330c408e14645d45dee5b
 
