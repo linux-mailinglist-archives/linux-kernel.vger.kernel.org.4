@@ -2,207 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9966EF395
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499776EF3A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240628AbjDZLpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S240571AbjDZLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjDZLo6 (ORCPT
+        with ESMTP id S240408AbjDZLus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:44:58 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34304C3F;
-        Wed, 26 Apr 2023 04:44:56 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Q5xcg6yW2z9v7H0;
-        Wed, 26 Apr 2023 19:35:15 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwDXQOyNDklkVnlZAg--.7127S2;
-        Wed, 26 Apr 2023 12:44:27 +0100 (CET)
-Message-ID: <ade93f7324c5f07511a0793f702024d41889636d.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH 4/6] bpf: Introduce bpf_verify_umd_signature() kfunc
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Yonghong Song <yhs@meta.com>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, jarkko@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 26 Apr 2023 13:44:09 +0200
-In-Reply-To: <23649e1d-8fee-079a-21de-87f7024add81@meta.com>
-References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
-         <20230425173557.724688-5-roberto.sassu@huaweicloud.com>
-         <23649e1d-8fee-079a-21de-87f7024add81@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 26 Apr 2023 07:50:48 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B123422D
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:50:46 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so1027750766b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682509844; x=1685101844;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XF0xGBHcygJCTr9DzdnzFyeSKOCMIRoKzWbHkPb9VhY=;
+        b=MCGhx/CQjW9fcbY26z9zbcRwNn59cGN4h712Ax0ubkNa/Ykdtaq/w053opUz2jcXZL
+         5kgLHeP7bRh02ZZ5ocT63MoMP+gw/CL9gPRig8u4RFFVbpw2XyBsxG0mJlWYNdKAsTBD
+         n1gLERaBnDy2pcT9PYY5iENt4FCNS+1apNKhWOQCzpAsGxGe/Ygws+D32/KkvoYWwxnP
+         yc92RoMqvIcNwcsbbpPKuSwfU3jnGytfWzOqJ6EeD2nOz3IOUd5SHq2F1r67QFqSTv2I
+         weNLD6V+3ZioZZFWJb0SFiqpG5+PoeG+7DQti2qe1ILxn+WS+CR4gYVXbHmSCYZxIvEN
+         uSTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682509844; x=1685101844;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XF0xGBHcygJCTr9DzdnzFyeSKOCMIRoKzWbHkPb9VhY=;
+        b=CReVgzQbokIf2i/JJNfLNO2Jfrry8uf+bq+xuKKC5jPeHp7Yet6JiXd6hJe7JeLSY0
+         HcLA7OjFuwuWrikOo3FXB2AK30I5wHa/jtqpTbRLAMp+IZnJ2BjQVJHIRYM9HxPsac9S
+         oXtM+pYI9iVU/DEJibNnmX4RxuqZzWhyGvK0SVhyvJTIisgn7yHF8djYbnS9NG+3Vwmy
+         Pvac4Mdq8cLk3tFtklG03Uvv6WKY1kDMVFa79ospzthgmT8bQ+WDgiTB+TVWjH0bzv2P
+         OPTAHvulzHOeqpkh7MofoR7nCp62ZCx922QNurddzMfnhPCn/nndLUjCre+LUvxQJLAN
+         WFxg==
+X-Gm-Message-State: AAQBX9fwDclyoSHc60cxVrL5z9yVFPPNHVSRUMsISqYbUfKGc2+NJLwl
+        eQLd8rLnnGAsjRAjWjU29Mw=
+X-Google-Smtp-Source: AKy350Z71KMuGV1F4MXStGrjlYbWN9Jx8ikRoIS+9QeyKM4R5f65g0VkG8B509qCbJbNUCiF8TkZVw==
+X-Received: by 2002:a17:906:fd47:b0:94e:75f8:668 with SMTP id wi7-20020a170906fd4700b0094e75f80668mr14592285ejb.56.1682509844176;
+        Wed, 26 Apr 2023 04:50:44 -0700 (PDT)
+Received: from [192.168.178.21] (p4fc2092b.dip0.t-ipconnect.de. [79.194.9.43])
+        by smtp.gmail.com with ESMTPSA id w14-20020a1709060a0e00b0094efcc4a076sm8140458ejf.164.2023.04.26.04.50.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 04:50:43 -0700 (PDT)
+Message-ID: <17626d0f-5f40-c483-deb5-bfba8b5daf97@gmail.com>
+Date:   Wed, 26 Apr 2023 13:50:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwDXQOyNDklkVnlZAg--.7127S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCr48Gr1Utw4kWF4UJry8Grg_yoWrZw15pF
-        W8KF4F9ry8JF1xtFyUXa13Za4Skws2qw17G3sFya4fGFnavr1fCw18tF45W3sYk348trZ5
-        ZrW0q34a93W5GaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
-        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4yCiQABsh
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: BUG: KASAN: null-ptr-deref in drm_sched_job_cleanup+0x96/0x290
+ [gpu_sched]
+Content-Language: en-US
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+To:     "Chen, Guchun" <Guchun.Chen@amd.com>,
+        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+References: <CABXGCsPZxgpFzAVN=eFXu0WV+Jk0vB4rv4p+Jt31C841LcqV=A@mail.gmail.com>
+ <CABXGCsO0sST8+MvQs=T1JP49ogRsaHPT9gMQZGJ3dY7v3m0H8g@mail.gmail.com>
+ <CABXGCsOTEpJG_0NWdGXRvcXQ4iTav6AUJm-U4SQb-vVzjoL6rA@mail.gmail.com>
+ <10b2570f-a297-d236-fa7b-2e001a4dff12@gmail.com>
+ <CABXGCsPcPY8dqZm0aF4c1p0ZvMYHy+NksMrZi9xK0=WdE5_osA@mail.gmail.com>
+ <d96519fb-9e12-5a81-a60b-384dcb286f28@gmail.com>
+ <CABXGCsP2JQMtNjBROSLs2y612iLZuCyoe-uD6OScAWbKHBWsCA@mail.gmail.com>
+ <b6ab0086-7d52-2a41-2f76-44694faed317@amd.com>
+ <CABXGCsP+LSPE9fH4TW781w67ju=HrNMe9s0kigqBarketr_Qog@mail.gmail.com>
+ <CABXGCsNSqJVv4Cerc3_P_59ioUZU2M7Z_TMp2yZKqe3si0QqyA@mail.gmail.com>
+ <BL0PR12MB2465BE82A18038353E48E025F1659@BL0PR12MB2465.namprd12.prod.outlook.com>
+ <989d7a71-ebfc-d245-9e05-a5a46085234e@amd.com>
+In-Reply-To: <989d7a71-ebfc-d245-9e05-a5a46085234e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-04-25 at 14:25 -0700, Yonghong Song wrote:
-> 
-> On 4/25/23 10:35 AM, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Introduce the bpf_verify_umd_signature() kfunc, to verify UMD-parsed
-> > signatures. The parameters and usage are the same as for
-> > bpf_verify_pkcs7_signature().
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >   kernel/trace/bpf_trace.c | 69 ++++++++++++++++++++++++++++++++--------
-> >   1 file changed, 55 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index e8da032bb6f..c9cae337596 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -1271,7 +1271,7 @@ __bpf_kfunc struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags)
-> >    * The key pointer is marked as invalid, to prevent bpf_key_put() from
-> >    * attempting to decrement the key reference count on that pointer. The key
-> >    * pointer set in such way is currently understood only by
-> > - * verify_pkcs7_signature().
-> > + * verify_pkcs7_signature() and verify_umd_signature().
-> >    *
-> >    * Set *id* to one of the values defined in include/linux/verification.h:
-> >    * 0 for the primary keyring (immutable keyring of system keys);
-> > @@ -1317,6 +1317,27 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
-> >   }
-> >   
-> >   #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> > +static int validate_key(struct bpf_key *trusted_keyring)
-> > +{
-> > +	int ret = 0;
-> > +
-> > +	if (trusted_keyring->has_ref) {
-> > +		/*
-> > +		 * Do the permission check deferred in bpf_lookup_user_key().
-> > +		 * See bpf_lookup_user_key() for more details.
-> > +		 *
-> > +		 * A call to key_task_permission() here would be redundant, as
-> > +		 * it is already done by keyring_search() called by
-> > +		 * find_asymmetric_key().
-> > +		 */
-> > +		ret = key_validate(trusted_keyring->key);
-> > +		if (ret < 0)
-> > +			return ret;
-> 
-> The above
-> 	if (ret < 0)
-> 		return ret;
-> can be removed.
+Sending that once more from my mailing list address since AMD internal 
+servers are blocking the mail.
 
-Right, thanks!
+Regards,
+Christian.
 
-Roberto
-
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >   /**
-> >    * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> >    * @data_ptr: data to verify
-> > @@ -1334,19 +1355,9 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> >   {
-> >   	int ret;
-> >   
-> > -	if (trusted_keyring->has_ref) {
-> > -		/*
-> > -		 * Do the permission check deferred in bpf_lookup_user_key().
-> > -		 * See bpf_lookup_user_key() for more details.
-> > -		 *
-> > -		 * A call to key_task_permission() here would be redundant, as
-> > -		 * it is already done by keyring_search() called by
-> > -		 * find_asymmetric_key().
-> > -		 */
-> > -		ret = key_validate(trusted_keyring->key);
-> > -		if (ret < 0)
-> > -			return ret;
-> > -	}
-> > +	ret = validate_key(trusted_keyring);
-> > +	if (ret < 0)
-> > +		return ret;
-> >   
-> >   	return verify_pkcs7_signature(data_ptr->data,
-> >   				      bpf_dynptr_get_size(data_ptr),
-> > @@ -1356,6 +1367,35 @@ __bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> >   				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> >   				      NULL);
-> >   }
-> > +
-> > +/**
-> > + * bpf_verify_umd_signature - Verify a UMD-parsed signature
-> > + * @data_ptr: Data to verify
-> > + * @sig_ptr: Signature of the data
-> > + * @trusted_keyring: Keyring with keys trusted for signature verification
-> > + *
-> > + * Verify the UMD-parsed signature *sig_ptr* against the supplied *data_ptr*
-> > + * with keys in a keyring referenced by *trusted_keyring*.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +__bpf_kfunc int bpf_verify_umd_signature(struct bpf_dynptr_kern *data_ptr,
-> > +					 struct bpf_dynptr_kern *sig_ptr,
-> > +					 struct bpf_key *trusted_keyring)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = validate_key(trusted_keyring);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	return verify_umd_signature(data_ptr->data,
-> > +				    bpf_dynptr_get_size(data_ptr),
-> > +				    sig_ptr->data, bpf_dynptr_get_size(sig_ptr),
-> > +				    trusted_keyring->key,
-> > +				    VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> > +				    NULL);
-> > +}
-> >   #endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-> >   
-> >   __diag_pop();
-> > @@ -1366,6 +1406,7 @@ BTF_ID_FLAGS(func, bpf_lookup_system_key, KF_ACQUIRE | KF_RET_NULL)
-> >   BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
-> >   #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> >   BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
-> > +BTF_ID_FLAGS(func, bpf_verify_umd_signature, KF_SLEEPABLE)
-> >   #endif
-> >   BTF_SET8_END(key_sig_kfunc_set)
-> >   
+Am 26.04.23 um 13:48 schrieb Christian König:
+> WTF? I own you a beer!
+>
+> I've fixed exactly that problem during the review process of the 
+> cleanup patch and because of this didn't considered that the code is 
+> still there.
+>
+> It also explains why we don't see that in our testing.
+>
+> @Mikhail can you test that patch with drm-misc-next?
+>
+> Thanks,
+> Christian.
+>
+> Am 26.04.23 um 04:00 schrieb Chen, Guchun:
+>> After reviewing this whole history, maybe attached patch is able to 
+>> fix your problem. Can you have a try please?
+>>
+>> Regards,
+>> Guchun
+>>
+>>> -----Original Message-----
+>>> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
+>>> Mikhail Gavrilov
+>>> Sent: Tuesday, April 25, 2023 9:20 PM
+>>> To: Koenig, Christian <Christian.Koenig@amd.com>
+>>> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>; dri-devel <dri-
+>>> devel@lists.freedesktop.org>; amd-gfx list 
+>>> <amd-gfx@lists.freedesktop.org>;
+>>> Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+>>> Subject: Re: BUG: KASAN: null-ptr-deref in
+>>> drm_sched_job_cleanup+0x96/0x290 [gpu_sched]
+>>>
+>>> On Thu, Apr 20, 2023 at 3:32 PM Mikhail Gavrilov
+>>> <mikhail.v.gavrilov@gmail.com> wrote:
+>>>> Important don't give up.
+>>>> https://youtu.be/25zhHBGIHJ8 [40 min]
+>>>> https://youtu.be/utnDR26eYBY [50 min]
+>>>> https://youtu.be/DJQ_tiimW6g [12 min]
+>>>> https://youtu.be/Y6AH1oJKivA [6 min]
+>>>> Yes the issue is everything reproducible, but time to time it not
+>>>> happens at first attempt.
+>>>> I also uploaded other videos which proves that the issue definitely
+>>>> exists if someone will launch those games in turn.
+>>>> Reproducibility is only a matter of time.
+>>>>
+>>>> Anyway I didn't want you to spend so much time trying to reproduce it.
+>>>> This monkey business fits me more than you.
+>>>> It would be better if I could collect more useful info.
+>>> Christian,
+>>> Did you manage to reproduce the problem?
+>>>
+>>> At the weekend I faced with slab-use-after-free in
+>>> amdgpu_vm_handle_moved.
+>>> I didn't play in the games at this time.
+>>> The Xwayland process was affected so it leads to desktop hang.
+>>>
+>>> ================================================================
+>>> ==
+>>> BUG: KASAN: slab-use-after-free in
+>>> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu] Read of size 8 at addr
+>>> ffff888295c66190 by task Xwayland:cs0/173185
+>>>
+>>> CPU: 21 PID: 173185 Comm: Xwayland:cs0 Tainted: G        W L
+>>> -------  --- 6.3.0-0.rc7.20230420gitcb0856346a60.59.fc39.x86_64+debug
+>>> #1
+>>> Hardware name: System manufacturer System Product Name/ROG STRIX
+>>> X570-I GAMING, BIOS 4601 02/02/2023 Call Trace:
+>>>   <TASK>
+>>>   dump_stack_lvl+0x76/0xd0
+>>>   print_report+0xcf/0x670
+>>>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]  ?
+>>> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
+>>>   kasan_report+0xa8/0xe0
+>>>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
+>>>   amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
+>>>   amdgpu_cs_ioctl+0x2b7e/0x5630 [amdgpu]
+>>>   ? __pfx___lock_acquire+0x10/0x10
+>>>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ? 
+>>> mark_lock+0x101/0x16e0  ?
+>>> __lock_acquire+0xe54/0x59f0  ? __pfx_lock_release+0x10/0x10  ?
+>>> __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]
+>>>   drm_ioctl_kernel+0x1fc/0x3d0
+>>>   ? __pfx_drm_ioctl_kernel+0x10/0x10
+>>>   drm_ioctl+0x4c5/0xaa0
+>>>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ?
+>>> __pfx_drm_ioctl+0x10/0x10  ? _raw_spin_unlock_irqrestore+0x66/0x80
+>>>   ? lockdep_hardirqs_on+0x81/0x110
+>>>   ? _raw_spin_unlock_irqrestore+0x4f/0x80
+>>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
+>>>   __x64_sys_ioctl+0x131/0x1a0
+>>>   do_syscall_64+0x60/0x90
+>>>   ? do_syscall_64+0x6c/0x90
+>>>   ? lockdep_hardirqs_on+0x81/0x110
+>>>   ? do_syscall_64+0x6c/0x90
+>>>   ? lockdep_hardirqs_on+0x81/0x110
+>>>   ? do_syscall_64+0x6c/0x90
+>>>   ? lockdep_hardirqs_on+0x81/0x110
+>>>   ? do_syscall_64+0x6c/0x90
+>>>   ? lockdep_hardirqs_on+0x81/0x110
+>>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>> RIP: 0033:0x7ffb71b0892d
+>>> Code: 04 25 28 00 00 00 48 89 45 c8 31 c0 48 8d 45 10 c7 45 b0 10 00
+>>> 00 00 48 89 45 b8 48 8d 45 d0 48 89 45 c0 b8 10 00 00 00 0f 05 <89> 
+>>> c2 3d 00
+>>> f0 ff ff 77 1a 48 8b 45 c8 64 48 2b 04 25 28 00 00 00
+>>> RSP: 002b:00007ffb677fe840 EFLAGS: 00000246 ORIG_RAX:
+>>> 0000000000000010
+>>> RAX: ffffffffffffffda RBX: 00007ffb677fe9f8 RCX: 00007ffb71b0892d
+>>> RDX: 00007ffb677fe900 RSI: 00000000c0186444 RDI: 000000000000000d
+>>> RBP: 00007ffb677fe890 R08: 00007ffb677fea50 R09: 00007ffb677fe8e0
+>>> R10: 0000556c4611bec0 R11: 0000000000000246 R12: 00007ffb677fe900
+>>> R13: 00000000c0186444 R14: 000000000000000d R15: 00007ffb677fe9f8
+>>> </TASK>
+>>>
+>>> Allocated by task 173181:
+>>>   kasan_save_stack+0x33/0x60
+>>>   kasan_set_track+0x25/0x30
+>>>   __kasan_kmalloc+0x8f/0xa0
+>>>   __kmalloc_node+0x65/0x160
+>>>   amdgpu_bo_create+0x31e/0xfb0 [amdgpu]
+>>>   amdgpu_bo_create_user+0xca/0x160 [amdgpu]
+>>>   amdgpu_gem_create_ioctl+0x398/0x980 [amdgpu]
+>>>   drm_ioctl_kernel+0x1fc/0x3d0
+>>>   drm_ioctl+0x4c5/0xaa0
+>>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
+>>>   __x64_sys_ioctl+0x131/0x1a0
+>>>   do_syscall_64+0x60/0x90
+>>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>>
+>>> Freed by task 173185:
+>>>   kasan_save_stack+0x33/0x60
+>>>   kasan_set_track+0x25/0x30
+>>>   kasan_save_free_info+0x2e/0x50
+>>>   __kasan_slab_free+0x10b/0x1a0
+>>>   slab_free_freelist_hook+0x11e/0x1d0
+>>>   __kmem_cache_free+0xc0/0x2e0
+>>>   ttm_bo_release+0x667/0x9e0 [ttm]
+>>>   amdgpu_bo_unref+0x35/0x70 [amdgpu]
+>>>   amdgpu_gem_object_free+0x73/0xb0 [amdgpu]
+>>>   drm_gem_handle_delete+0xe3/0x150
+>>>   drm_ioctl_kernel+0x1fc/0x3d0
+>>>   drm_ioctl+0x4c5/0xaa0
+>>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
+>>>   __x64_sys_ioctl+0x131/0x1a0
+>>>   do_syscall_64+0x60/0x90
+>>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>>
+>>> Last potentially related work creation:
+>>>   kasan_save_stack+0x33/0x60
+>>>   __kasan_record_aux_stack+0x97/0xb0
+>>>   __call_rcu_common.constprop.0+0xf8/0x1af0
+>>>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
+>>>   dma_resv_reserve_fences+0x4dc/0x7f0
+>>>   ttm_eu_reserve_buffers+0x3f6/0x1190 [ttm]
+>>>   amdgpu_cs_ioctl+0x204d/0x5630 [amdgpu]
+>>>   drm_ioctl_kernel+0x1fc/0x3d0
+>>>   drm_ioctl+0x4c5/0xaa0
+>>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
+>>>   __x64_sys_ioctl+0x131/0x1a0
+>>>   do_syscall_64+0x60/0x90
+>>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>>
+>>> Second to last potentially related work creation:
+>>>   kasan_save_stack+0x33/0x60
+>>>   __kasan_record_aux_stack+0x97/0xb0
+>>>   __call_rcu_common.constprop.0+0xf8/0x1af0
+>>>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
+>>>   amdgpu_ctx_add_fence+0x2b1/0x390 [amdgpu]
+>>>   amdgpu_cs_ioctl+0x44d0/0x5630 [amdgpu]
+>>>   drm_ioctl_kernel+0x1fc/0x3d0
+>>>   drm_ioctl+0x4c5/0xaa0
+>>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
+>>>   __x64_sys_ioctl+0x131/0x1a0
+>>>   do_syscall_64+0x60/0x90
+>>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>>
+>>> The buggy address belongs to the object at ffff888295c66000 which 
+>>> belongs
+>>> to the cache kmalloc-1k of size 1024 The buggy address is located 
+>>> 400 bytes
+>>> inside of  freed 1024-byte region [ffff888295c66000, ffff888295c66400)
+>>>
+>>> The buggy address belongs to the physical page:
+>>> page:00000000125ffbe3 refcount:1 mapcount:0 mapping:0000000000000000
+>>> index:0x0 pfn:0x295c60
+>>> head:00000000125ffbe3 order:3 entire_mapcount:0 nr_pages_mapped:0
+>>> pincount:0 anon flags:
+>>> 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
+>>> raw: 0017ffffc0010200 ffff88810004cdc0 0000000000000000
+>>> dead000000000001
+>>> raw: 0000000000000000 0000000000100010 00000001ffffffff
+>>> 0000000000000000 page dumped because: kasan: bad access detected
+>>>
+>>> Memory state around the buggy address:
+>>>   ffff888295c66080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>>   ffff888295c66100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>>> ffff888295c66180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>>                           ^
+>>>   ffff888295c66200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>>   ffff888295c66280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>>> ================================================================
+>>> ==
+>>>
+>>> -- 
+>>> Best Regards,
+>>> Mike Gavrilov.
+>
 
