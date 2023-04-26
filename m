@@ -2,113 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F206EEC3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4417F6EEC3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239146AbjDZCKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 22:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57958 "EHLO
+        id S239160AbjDZCLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 22:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238440AbjDZCKr (ORCPT
+        with ESMTP id S238440AbjDZCLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 22:10:47 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869D68699
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1682475043; bh=I4+WTwpJpG+gq3nJRV2vaRoj4MZKnpy9sosOXV2D/j8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YMKsjpU2on/guZTk7uBIzlkb71uOkLwkNhgcX6icve1/bKv3Lz7jD+PXyIWqFzc/e
-         IoedT7juvcYfsVz3TQ2afvuSz+FvpAJxV8Xsw/mIngNgYiIYxfweKdpbUP3FuxAW1r
-         zfdlyaNXO2+51GW4OLuUlz8ST08sAg2eDXQt16pI=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C2824600A6;
-        Wed, 26 Apr 2023 10:10:42 +0800 (CST)
-Message-ID: <b882eb61-d783-985e-7687-386f9e03235d@xen0n.name>
-Date:   Wed, 26 Apr 2023 10:10:41 +0800
+        Tue, 25 Apr 2023 22:11:54 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295868699;
+        Tue, 25 Apr 2023 19:11:52 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B16BC24DF03;
+        Wed, 26 Apr 2023 10:11:50 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 10:11:50 +0800
+Received: from [192.168.125.106] (113.72.145.137) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 10:11:49 +0800
+Message-ID: <f082999f-e870-9685-98c8-e43bdda67744@starfivetech.com>
+Date:   Wed, 26 Apr 2023 10:11:48 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
+To:     Conor Dooley <conor@kernel.org>
+CC:     Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20230419-labored-camper-644d51a7ca96@spud>
+ <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
+ <20230424-baffle-punch-ec73098f2b6a@spud>
+ <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
+ <20230425-unquote-eligible-09f743d81981@wendy>
+ <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
+ <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
+ <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
+ <20230425-resale-footrest-de667778c4fe@wendy>
+ <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
+ <20230425-commotion-prewashed-876247bed4ab@spud>
 Content-Language: en-US
-To:     maobibo <maobibo@loongson.cn>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
- <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
- <ZEPteS82TbIhMQxe@lothringen>
- <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
- <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
- <20230425114937.GC1335080@hirez.programming.kicks-ass.net>
- <5ba79220-683f-a78a-8c3b-bc0b118226f8@loongson.cn>
- <d9c9b2cb-dd5e-03dd-9a7e-27938af96aaf@xen0n.name>
- <f0f029c5-b095-d713-114f-dc7d5c092d8a@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <f0f029c5-b095-d713-114f-dc7d5c092d8a@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230425-commotion-prewashed-876247bed4ab@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/26 08:46, maobibo wrote:
-> 
-> 
-> 在 2023/4/25 21:28, WANG Xuerui 写道:
->> On 2023/4/25 21:25, maobibo wrote:
->>>
->>>
->>> 在 2023/4/25 19:49, Peter Zijlstra 写道:
->>
->> <snip>
->>
+
+
+On 2023/4/26 0:56, Conor Dooley wrote:
+> On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
+>> On 2023/4/25 17:35, Conor Dooley wrote:
+>>> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
+>>>> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
+>>>>> On 25/04/2023 09:57, Changhuang Liang wrote:
+>>>>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
+>>>>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
+>>>>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
+>>>>>> to a power domain controller. I think using the child-node description is closer to
+>>>>>> JH7110 SoC. 
+>>>>>
+>>>>> Unfortunately, I do not see the correlation between these, any
+>>>>> connection. Why being a child of syscon block would mean that this
+>>>>> should no be power domain controller? Really, why? These are two
+>>>>> unrelated things.
 >>>>
->>>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
->>>> index 44ff1ff64260..3c8a6bab98fe 100644
->>>> --- a/arch/loongarch/kernel/genex.S
->>>> +++ b/arch/loongarch/kernel/genex.S
->>>> @@ -18,27 +18,31 @@
->>>>          .align    5
->>>>    SYM_FUNC_START(__arch_cpu_idle)
->>>> -    /* start of rollback region */
->>>> -    LONG_L    t0, tp, TI_FLAGS
->>>> -    nop
->>>> -    andi    t0, t0, _TIF_NEED_RESCHED
->>>> -    bnez    t0, 1f
->>>> -    nop
->>>> -    nop
->>>> -    nop
->>>> +    /* start of idle interrupt region */
->>>> +    move    t0, CSR_CRMD_IE
->>> addi.d  t0, zero, CSR_CRMD_IE can be used here, move is used for reg to reg
->>
->> Or better: li.d t0, CSR_CRMD_IE (prefer pseudo-instruction over concrete ones whenever it helps readability). We don't need to support ancient in-house toolchains without support for even li. ;-)
->    
-> I am not familiar with compiler:(, how many actual instructions does
-> pseudo-instr li.d takes? It will be ok if it uses only one intr, else
-> there will be problem.
+>>>> Let me summarize what has been discussed above. 
+>>>>
+>>>> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
+>>>> 1. (0x17010000) is power-controller node:
+>>>>
+>>>> 	aon_pwrc: power-controller@17010000 {
+>>>> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
+>>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
+>>>> 		#power-domain-cells = <1>;
+>>>> 	};
+>>>>
+>>>>
+>>>> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
+>>>>
+>>>> 	aon_syscon: syscon@17010000 {
+>>>> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
+>>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
+>>>>
+>>>> 		aon_pwrc: power-controller {
+>>>> 			compatible = "starfive,jh7110-aon-pmu";
+>>>> 			#power-domain-cells = <1>;
+>>>> 		};
+>>>> 	};
+>>>
+>>> I thought that Rob was suggesting something like this:
+>>> 	aon_syscon: syscon@17010000 {
+>>> 		compatible = "starfive,jh7110-aon-syscon", ...
+>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
+>>> 		#power-domain-cells = <1>;
+>>> 	};
+> 
+>> I see the kernel:
+>> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
+>> this file line 42:
+>> it's power-controller also has no meaningful properties.
+>> What do you think?
+> 
+> I'm not sure that I follow. It has a bunch of child-nodes does it not,
+> each of which is a domain?
+> 
+> I didn't see such domains in your dts patch, they're defined directly in
+> the driver instead AFAIU. Assuming I have understood that correctly,
+> your situation is different to that mediatek one?
+> 
+> Cheers,
+> Conor.
 
-It's just `ori $t0, $zero, 4` no matter which of li.w or li.d is used. 
-It only matters when the immediate to load is bigger. Given CSR_CRMD_IE 
-is just 4 (1<<2) you can definitely say `li.w` if you want to be extra 
-cautious and it won't hurt. ;-)
+I think there child-nodes just need to operate some clock signals. Maybe
+we don't need to discuss other platforms.
 
--- 
-WANG "xen0n" Xuerui
+If Rob's method is confirmed. I will try it next version.
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Maybe like this:
+aon_syscon: syscon@17010000 {
+	compatible = "starfive,jh7110-aon-syscon", "syscon", "starfive,jh7110-aon-pmu";
+	reg = <0x0 0x17010000 0x0 0x1000>;
+	#power-domain-cells = <1>;
+};
 
+Rob and krzystof:
+
+And I think patch[1][2] need to change. Right? 
+
+[1] https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
+[2] https://lore.kernel.org/all/20230414024157.53203-7-xingyu.wu@starfivetech.com/
