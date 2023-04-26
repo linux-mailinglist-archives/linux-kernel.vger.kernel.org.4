@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A33C6EFD07
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A242A6EFD0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbjDZWHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        id S239906AbjDZWH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDZWG5 (ORCPT
+        with ESMTP id S234109AbjDZWHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:06:57 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BEEF2;
-        Wed, 26 Apr 2023 15:06:54 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fe2e39156so92466427b3.2;
-        Wed, 26 Apr 2023 15:06:54 -0700 (PDT)
+        Wed, 26 Apr 2023 18:07:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8432709
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:07:15 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2478485fd76so5315293a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:07:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682546814; x=1685138814;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yB27/xkS1ZORZE8U10J0r1v6U1ip7jl/0pwGCpzNH3E=;
-        b=rAtvJ80WLsOSlFmslUbWsJn1lVKfvgO7mv2cxxahNB8DDliMuVNAiTZzFDL4YIb7V8
-         wE+j94aErhwt4IkgbaHbuqb0a/VViH3dfmq+DXs5GAwRTNXkLqoVGOlRf312tdNbBzpG
-         PRXve+5sEloCdJOFnCjbg2DPp2hWGOqZ9Vq39DrEWcEvcL2YviW9xUzLGC5frNQeX15q
-         bYtWBLcENSQWXm+fYIUfpeby86hTc7yZYOSkRNKVjyzWXhS/Y9k2tf7Bj4IVY2HZHrIG
-         kN8DKHQ2EZBQXxjbJnOojx0UsMxmnzrNtkkbe2I3jO+jiaZyMpuEI9U/+kyNo9ZDi24F
-         GRzQ==
+        d=google.com; s=20221208; t=1682546834; x=1685138834;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6o3HhDAjNO89E3A0MRfU/b89KbqoEVo8Ba34QDXA+YA=;
+        b=vOoliF7YSsdLjONkRkZIomxWjUfYe8LKdJb6rEHeLX6RhV38s/FBR4eoLfKYHW7zE3
+         IavK6ET/Qqw5poSNg/YQZq3rl6vIwPoyAUWlMwIL/UgLwhldJ2/Nd9O47mnyXXXL9cvc
+         sbFEtL3hc7qQh5FF+QVgJ+bj4+U9dfQxRkPyP9jul2D1FVAiTPMHklz+MO3UfFTHw1Xm
+         oXIIx8QlKD6IFFHxrWK2XZK4XxjXuoHPzTZ/2hRqfXcOlir58wsKvMi0q4JRPoYFFWOv
+         e4yhq3ur0yW91dT8QCcgI0Rp96j+86/T/j+x9r6LdVItESTZ1/6fDdvYKWk3gPn4jiib
+         l8Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682546814; x=1685138814;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yB27/xkS1ZORZE8U10J0r1v6U1ip7jl/0pwGCpzNH3E=;
-        b=G0xjMmpgI5paLWTWQqq+UJwcSe3Hheql6+wniNElIyi1ozQvOuhVkbuUXMJjwf/Ndz
-         4T6052PEFaRVJmBjonu6TvW4aizLFfOitnFxXBU0VXh4LzbwkSxEoB+JA3EeKB/pbB9r
-         Mv3pXFnUGelt/OwsuphTAvGFK3KbFbgm9EjuVUuFNCfRgYDWiPQ15vcB38qmJ95zNCGW
-         4zK0ZpMYDt25Rbwjk3LN+exycSI6kY8PMR32j2pRQ7DHdAXqq0frs8hdu9CGxvKJBtuK
-         0HYvavMh3JJ2RcMqWTRdUaSxAXRZkkfeth0vviKmBP4c3P8bjaZFo9asR2ajwr7Akjxe
-         yyiQ==
-X-Gm-Message-State: AAQBX9fOc3jvPeMgSGCiDTlnVVaCRJkBdj0sOCZN48MtJIfNNyDDcIzb
-        mGZMuwiTH1tR3FseLnjNEJP3Ok6Ls7oBKh3XsJU=
-X-Google-Smtp-Source: AKy350YnbbqCqx/MyOk/r9MHPHTb7RDIS4ol/PTLuR9dlSf9naE3buQWIzfeYllEd3yN9JTMHdbVCi5gd70MbRZmiM4=
-X-Received: by 2002:a81:658a:0:b0:54f:badd:d148 with SMTP id
- z132-20020a81658a000000b0054fbaddd148mr14277444ywb.14.1682546814094; Wed, 26
- Apr 2023 15:06:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682546834; x=1685138834;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6o3HhDAjNO89E3A0MRfU/b89KbqoEVo8Ba34QDXA+YA=;
+        b=Yt6d2JINA9uh7N394Wo9WYYYJrOui2EqojD7h8w54fS3oKcwj2B4moANGFrXT5MtpV
+         DxTCSzK4gkycC3jviioofi4OvV/4IHvvgfd2MuA1rXgNtxH5JchsEbhR1biDDW7EfkYk
+         n9vSX6X+UzD7apy08QrpMg2kGJ4p5k1T4Yy9OxQzycOWYUb0clyk7M6uy45S1r+24kPe
+         Ba+NonqQdFm7eXYxFCLvB3XCVfdx3ndnvuE6sUwmFMJFOS2bNX4O/eNB812Jc8um2LuE
+         KLf+3mcUl/mX9kmKam/KsfHoQ9nauXRUWN2WLxQNMcbqvqZArY8eoTA0XWM80qh9GLjX
+         9T/w==
+X-Gm-Message-State: AAQBX9d2KePt3eAmY9DmE6nKn00ipXgpZBxD917swWMFsA/D3sKtcnB+
+        7yZieYbckSCvQYR2po6xtsBHpSSD/Q9yZ6lY9/3AvQ==
+X-Google-Smtp-Source: AKy350bX4vKLe+c9/tywLjSWFK8JD/QrNCXcfXaXMeIppYVuasWMVt/WvZF7gUIFFE4mxooBAPv/W+J2eK4njGwo/b8=
+X-Received: by 2002:a17:90a:8589:b0:249:7224:41cb with SMTP id
+ m9-20020a17090a858900b00249722441cbmr22904088pjn.31.1682546834469; Wed, 26
+ Apr 2023 15:07:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZEmbeAUklqmb8leS@virtual>
-In-Reply-To: <ZEmbeAUklqmb8leS@virtual>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 27 Apr 2023 00:06:43 +0200
-Message-ID: <CANiq72ne324Wvp4RG-BtF8V9hqb_qhTZH+kNJwigB5vZHkMz0Q@mail.gmail.com>
-Subject: Re: [PATCH] rust: fix sorting of rust/bindings/bindings_helper.h's
- #includes Suggested by: Miguel Ojeda <ojeda@kernel.org> Link: https://github.com/Rust-for-Linux/linux/issues/1002
-To:     Roy Matero <materoy@proton.me>
-Cc:     alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
-        gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
-        yakoyoku@gmail.com, aliceryhl@google.com,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org
+References: <20230406004018.1439952-1-drosen@google.com> <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Wed, 26 Apr 2023 15:07:03 -0700
+Message-ID: <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Dynptr Verifier Adjustments
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:46=E2=80=AFPM Roy Matero <materoy@proton.me> wro=
-te:
 >
-> Signed-off-by: Roy Matero <materoy@proton.me>
+> It is expected that you build the freshest vmlinux image before
+> building selftests, because we generate vmlinux.h from it. In your
+> case we generated vmlinux.h from your system-wide
+> /sys/kernel/btf/vmlinux BTF information, which doesn't yet have latest
+> UAPI enums.
+>
+I'm still unable to build the selftests. I've got it pointed to a
+locally built kernel built using the config/config.x86_64, and have
+tried running the vmtest.sh script, and building just the tests via
+make. I'm using O= to direct it to the out directory for the kernel
+build. I've been hitting various errors when trying this. Confusingly
+the error message isn't always the same. Currently from a clean build,
+it complains about "linux/atomic.h" not found via #include
+"../../../include/linux/filter.h"'s in various files. Other times it's
+complained about the various helper functions from bpf_helper_defs.h
+being unused.
 
-Thank you for the patch!
-
-Something strange happened -- it looks like the body went into the
-subject line. Did you use `git-send-email`?
-
-Also, please use a dash in `Suggested-by` and a title like "rust:
-bindings: sort includes". Also, please add a commit description --
-please see Ariel's recent patch [1] and discussion for some more
-details.
-
-[1] https://lore.kernel.org/rust-for-linux/20230426204923.16195-1-amiculas@=
-cisco.com/
-
-Cheers,
-Miguel
+I'm not sure if I'm invoking the command wrong, or missing
+dependencies or something. I got past some earlier issues by updating
+clang. Any idea what I'm doing wrong?
