@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AE76EEBE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F1D6EEBE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238599AbjDZBX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 21:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
+        id S239036AbjDZB23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238432AbjDZBX5 (ORCPT
+        with ESMTP id S231622AbjDZB21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:23:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296D77285;
-        Tue, 25 Apr 2023 18:23:56 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q5gzx4hRnzLpnb;
-        Wed, 26 Apr 2023 09:21:01 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 26 Apr 2023 09:23:45 +0800
-Message-ID: <6b350187-a9a5-fb37-79b1-bf69068f0182@huawei.com>
-Date:   Wed, 26 Apr 2023 09:23:44 +0800
+        Tue, 25 Apr 2023 21:28:27 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9FB4C02;
+        Tue, 25 Apr 2023 18:28:26 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=m202171830@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33Q1RO6N006360-33Q1RO6O006360
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Wed, 26 Apr 2023 09:27:29 +0800
+From:   Ke Zhang <m202171830@hust.edu.cn>
+To:     Vineet Gupta <vgupta@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Ke Zhang <m202171830@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: arc_uart: fix of_iomap leak in `arc_serial_probe`
+Date:   Wed, 26 Apr 2023 09:27:20 +0800
+Message-Id: <20230426012721.6856-1-m202171830@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "chu, jane" <jane.chu@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <20230417045323.11054-1-wangkefeng.wang@huawei.com>
- <20230418031243.GA2845864@hori.linux.bs1.fc.nec.co.jp>
- <54d761bb-1bcc-21a2-6b53-9d797a3c076b@huawei.com>
- <20230419072557.GA2926483@hori.linux.bs1.fc.nec.co.jp>
- <9fa67780-c48f-4675-731b-4e9a25cd29a0@huawei.com>
- <7d0c38a9-ed2a-a221-0c67-4a2f3945d48b@oracle.com>
- <6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com>
- <9a9876a2-a2fd-40d9-b215-3e6c8207e711@huawei.com>
- <20230421031356.GA3048466@hori.linux.bs1.fc.nec.co.jp>
- <1bd6a635-5a3d-c294-38ce-5c6fcff6494f@huawei.com>
- <20230424064427.GA3267052@hori.linux.bs1.fc.nec.co.jp>
- <SJ1PR11MB60833E08F3C3028F7463FE19FC679@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <316b5a9e-5d5f-3bcf-57c1-86fafe6681c3@huawei.com>
- <SJ1PR11MB6083452F5EB3F1812C0D2DFEFC649@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <SJ1PR11MB6083452F5EB3F1812C0D2DFEFC649@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: m202171830@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Smatch reports:
 
+drivers/tty/serial/arc_uart.c:631 arc_serial_probe() warn:
+'port->membase' from of_iomap() not released on lines: 631.
 
-On 2023/4/26 1:16, Luck, Tony wrote:
->> Thanks for your confirm, and what your option about add
->> MCE_IN_KERNEL_COPYIN to EX_TYPE_DEFAULT_MCE_SAFE/FAULT_MCE_SAFE type
->> to let do_machine_check call queue_task_work(&m, msg, kill_me_never),
->> which kill every call memory_failure_queue() after mc safe copy return?
-> 
-> I haven't been following this thread closely. Can you give a link to the e-mail
-> where you posted a patch that does this? Or just repost that patch if easier.
+In arc_serial_probe(), if uart_add_one_port() fails,
+port->membase is not released, which would cause a resource leak.
 
-The major diff changes is [1], I will post a formal patch when -rc1 out, 
-thanks.
+To fix this, I replace of_iomap with devm_of_iomap.
 
-[1] 
-https://lore.kernel.org/linux-mm/6dc1b117-020e-be9e-7e5e-a349ffb7d00a@huawei.com/
-> 
-> -Tony
+Fixes: 8dbe1d5e09a7 ("serial/arc: inline the probe helper")
+Signed-off-by: Ke Zhang <m202171830@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+This issue is found by static analysis and remains untested.
+---
+ drivers/tty/serial/arc_uart.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/arc_uart.c b/drivers/tty/serial/arc_uart.c
+index 59e25f2b6632..be1f3c379382 100644
+--- a/drivers/tty/serial/arc_uart.c
++++ b/drivers/tty/serial/arc_uart.c
+@@ -606,10 +606,11 @@ static int arc_serial_probe(struct platform_device *pdev)
+ 	}
+ 	uart->baud = val;
+ 
+-	port->membase = of_iomap(np, 0);
+-	if (!port->membase)
++	port->membase = devm_of_iomap(&pdev->dev, np, 0, NULL);
++	if (IS_ERR(port->membase)) {
+ 		/* No point of dev_err since UART itself is hosed here */
+ 		return -ENXIO;
++	}
+ 
+ 	port->irq = irq_of_parse_and_map(np, 0);
+ 
+-- 
+2.25.1
+
