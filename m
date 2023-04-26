@@ -2,145 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191726EF78B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392956EF78F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241189AbjDZPKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
+        id S241186AbjDZPOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240792AbjDZPKR (ORCPT
+        with ESMTP id S240902AbjDZPOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:10:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA98FF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:10:16 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B21D1FDD3;
-        Wed, 26 Apr 2023 15:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682521815; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWbJXquLq0HXw9J9WboI99XWgz39K8W0xoVom0FsQAI=;
-        b=u45u/h7+AK8frS2ho36XCAZj2I/9cFcXCFzbVBRgE2gChmo98PM7wDysxyzugO85vhLoAq
-        9xJKA13bQ2F4LHM2lQofnv83l6IJbwN7l2/pNA12fmP1oFQlvEfZPsg2v9FtZnShxMyz50
-        4mDiq9OyoKe6vsJCBNoQMbF9g8r2+EQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682521815;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWbJXquLq0HXw9J9WboI99XWgz39K8W0xoVom0FsQAI=;
-        b=GRKkt2gc6+JiiRVgH/UDKxHSN8CDIcVfQrbTG/PJNT2NyQOwiU5n9uTOjjeYnJ3GIe1D7r
-        KY7z+gxOQXOebADg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFD9613421;
-        Wed, 26 Apr 2023 15:10:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id H9TANdY+SWR3eQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 26 Apr 2023 15:10:14 +0000
-Message-ID: <c48c4da5-9de5-f060-b6ad-5373ced87d0a@suse.cz>
-Date:   Wed, 26 Apr 2023 17:10:14 +0200
+        Wed, 26 Apr 2023 11:14:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E350B4C0A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Yammpa9IiLASda95uMVgcL3LerSIgwp4czXb64R8Cec=; b=lNE3M2oQhcK/lgbvTsfH5CFeA6
+        FlCPQsdftdyG8+wIg+keOf8qqmWL3NO+UGv16+1KFu44peZ955HlTUOUzLPRkzfQOOhv8/yd8mMkX
+        dNySdSp0+1fwJNYrRVecPtnKgypUM0BL3BEdgxL/BrqmZ2CSJhX4ARnSN9xypqIYUVGb0X5y9EPrn
+        WS7cLZBq/p/HSS1e77eNFM2CWJX0vBOwuehZhPH3nIUxKAbfbRwD+memVM8zhS0Disad60d3dwv3l
+        iqIcFyHgG3veoPHr2OceeP3Vrm521mLwUUAUKbRvucWs03tBbvpTv/fFYvZktGCcrtC2LGmKFiE6Y
+        XUQrSmcA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1prgqH-002a2L-Bk; Wed, 26 Apr 2023 15:14:01 +0000
+Date:   Wed, 26 Apr 2023 16:14:01 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Hillf Danton <hdanton@sina.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yu Zhao <yuzhao@google.com>
+Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
+Message-ID: <ZEk/uVlbX2wWgagN@casper.infradead.org>
+References: <20230421221249.1616168-1-dianders@chromium.org>
+ <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
+ <20230422051858.1696-1-hdanton@sina.com>
+ <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
+ <20230425010917.1984-1-hdanton@sina.com>
+ <CAD=FV=XWuQoaGZG_Tm8AqGAsqGSAa822bNw3Dp2QnmR40npURw@mail.gmail.com>
+ <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] Revert "Revert "mm/compaction: fix set skip in
- fast_find_migrateblock""
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <3576e3520c044beb2a81860aecb2d4f597089300.1682521303.git.baolin.wang@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <3576e3520c044beb2a81860aecb2d4f597089300.1682521303.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 17:03, Baolin Wang wrote:
-> This reverts commit 95e7a450b8190673675836bfef236262ceff084a.
+On Wed, Apr 26, 2023 at 11:09:18AM +0100, Mel Gorman wrote:
+> On Tue, Apr 25, 2023 at 07:19:48AM -0700, Doug Anderson wrote:
+> > On Mon, Apr 24, 2023 at 6:09???PM Hillf Danton <hdanton@sina.com> wrote:
+> > > Take a look at another case of lock wait [1].
+> > >
+> > > [1] https://lore.kernel.org/lkml/CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com/
+> > 
+> > So is this an explicit NAK on this approach, then? It still feels
+> > worthwhile to me given the current kcompactd design where there is a
+> > single thread that's in charge of going through and cleaning up all of
+> > memory. Any single pags isn't _that_ important for kcompactd to deal
+> > with and it's nice not to block the whole task's ability to make
+> > progress. kcompactd is already very much designed in this model (which
+> > is why SYNC_LIGHT exists in the first place) and that's why my patch
+> > series was relatively simple/short. That being said, if people really
+> > don't think I should pursue this then I won't send another version and
+> > we can drop it.
 > 
-> When I tested thpscale with v6.3 kernel, I found the compaction efficiency
-> had a great regression compared to v6.2-rc1 kernel. See below numbers:
->                                     v6.2-rc             v6.3
-> Percentage huge-3        81.35 (   0.00%)       32.97 ( -59.47%)
-> Percentage huge-5        89.92 (   0.00%)       41.70 ( -53.63%)
-> Percentage huge-7        92.41 (   0.00%)       34.08 ( -63.12%)
-> Percentage huge-12       90.29 (   0.00%)       41.10 ( -54.49%)
-> Percentage huge-18       82.38 (   0.00%)       41.24 ( -49.95%)
-> Percentage huge-24       80.34 (   0.00%)       35.99 ( -55.20%)
-> Percentage huge-30       88.90 (   0.00%)       44.20 ( -50.28%)
-> Percentage huge-32       90.69 (   0.00%)       79.57 ( -12.25%)
+> I don't consider it to be an explicit NAK but lets
+> cc Linus because it's a valid question. Linus, the patch is
+> https://lore.kernel.org/lkml/20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid/
+> asnd it's adding folio_lock_timeout which in older terms is a
+> lock_page_timout. The intended use is kcompactd doing out-of-line
+> compaction (like kswapd does out-of-line reclaim) to try lock a page in
+> MIGRATE_SYNC_LIGHT mode but if it cannot be locked quickly then give up
+> and move on to another migration candidate. The MIGRATE_SYNC_LIGHT is
+> expected to incur some delays while trying to make forward progress and
+> the overall problem is that kcompactd can sometimes stall for many seconds
+> and sometimes minutes on one page.
 > 
-> Ops Compaction stalls                 113790.00      207099.00
-> Ops Compaction success                 33983.00      19488.00
-> Ops Compaction failures                79807.00      187611.00
-> Ops Compaction efficiency                 29.86          9.41
+> The reason I don't consider this patch a NAK candidate is that this is not
+> conditional locking as such because no special action is taken if the lock
+> cannot be acquired. In the referenced mail, I think the context for the IO
+> NOWAIT stuff is "try lock and if that fails, delegate the work to an async
+> context". That is not necessarily a universal win and it's potentially
+> complex. It's not a universal win because it's unknown how long it would
+> take to acquire the lock and it may be a short enough period to be cheaper
+> than the setup_for_async+context_switch+completion handler. If that happens
+> often enough in a short window then delegation may be slower overall than
+> doing the work synchronously. It's potentially complex because the setup
+> for async handling and completion needs code that must be maintained.
 > 
-> After some investigation, I found the commit 95e7a450b819
-> ("Revert mm/compaction: fix set skip in fast_find_migrateblock") caused
-> the regression. This commit revert the commit 7efc3b726103 ("mm/compaction:
-> fix set skip in fast_find_migrateblock") to fix a CPU stalling issue, which
-> is caused by compaction stucked in repeating fast_find_migrateblock().
-> 
-> And now the compaction stalling issue is addressed by commit cfccd2e63e7e
-> ("mm, compaction: finish pageblocks on complete migration failure"). So
+> The kcompactd case using folio_lock_timeout is different. If the lock
+> fails, it's not being explicitly delegated to another context, the page
+> is simply ignored and kcompactd moves on. Fair enough, another context
+> may end up migrating the same page in direct compaction or kcompactd
+> at a later time but there is no complex setup for that and it's not
+> explicit delegation. It's vaguely similar to how shrink_folio_list()
+> calls folio_trylock and if that fails, keep the page on the LRU for a
+> future attempt with the main difference being that some time is spent on
+> trylock. This is *also* not necessarily a universal win because kcompactd
+> could find a suitable migration candidate quicker by a plain trylock but
+> that's what MIGRATE_ASYNC is for, MIGRATE_SYNC_LIGHT is expected to delay
+> for short periods of time when MIGRATE_ASYNC fails and the problem being
+> solved is the folio lock taking minutes to acquire.
 
-IIRC at that time I was pointing out some scenarios that could make the
-problem appear even after that commit, and we wanted to revisit that
-when Mel is back.
+I'm not generally a fan of lock-with-timeout approaches.  I think the
+rationale for this one makes sense, but we're going to see some people
+try to use this for situations where it doesn't make sense.  I almost
+wonder if we shouldn't spin rather than sleep on this lock, since the
+window of time we're willing to wait is so short.  I'm certainly not
+willing to NAK this patch since it's clearly fixing a real problem.
 
-> we should revert the temporary fix by commit 95e7a450b819, since the
-> fast pfn found by fast_find_migrateblock() really can help to isolate
-> some migratable pages.
+Hm.  If the problem is that we want to wait for the lock unless the
+lock is being held for I/O, we can actually tell that in the caller.
 
-So thanks for the reminder, yet we should make sure the fix is complete
-before removing the workaround.
+	if (folio_test_uptodate(folio))
+		folio_lock(folio);
+	else
+		folio_trylock(folio);
 
-> After reverting the commit, the regression has gone.
->                                v6.2-rc1                  v6.3           v6.3_patched
-> Percentage huge-3        81.35 (   0.00%)       32.97 ( -59.47%)       87.78 (   7.90%)
-> Percentage huge-5        89.92 (   0.00%)       41.70 ( -53.63%)       89.68 (  -0.27%)
-> Percentage huge-7        92.41 (   0.00%)       34.08 ( -63.12%)       85.89 (  -7.05%)
-> Percentage huge-12       90.29 (   0.00%)       41.10 ( -54.49%)       94.10 (   4.22%)
-> Percentage huge-18       82.38 (   0.00%)       41.24 ( -49.95%)       85.06 (   3.25%)
-> Percentage huge-24       80.34 (   0.00%)       35.99 ( -55.20%)       84.38 (   5.02%)
-> Percentage huge-30       88.90 (   0.00%)       44.20 ( -50.28%)       95.54 (   7.48%)
-> Percentage huge-32       90.69 (   0.00%)       79.57 ( -12.25%)       92.30 (   1.78%)
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  mm/compaction.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 33650541bebc..567c8d41d01e 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -1860,7 +1860,6 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
->  					pfn = cc->zone->zone_start_pfn;
->  				cc->fast_search_fail = 0;
->  				found_block = true;
-> -				set_pageblock_skip(freepage);
->  				break;
->  			}
->  		}
+(the folio lock isn't held for writeback, just taken and released;
+if the folio is uptodate, the folio lock should only be taken for a
+short time; if it's !uptodate then it's probably being read)
