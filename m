@@ -2,65 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DBE6EFDF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BBB6EFDFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbjDZXUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S234980AbjDZXXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 19:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233605AbjDZXUt (ORCPT
+        with ESMTP id S231631AbjDZXXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 19:20:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2110435B8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:20:47 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682551244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cqBwRcRpy9thQoaQTxzTLbqaPTLeGU5fbTtlKBNAtMg=;
-        b=kDWWIM+7Yho7OD3rCwlwgqLCNrvwrOcCWXmvfQS5zFc4BylAMvvCwEyn10B4qKCCsduxO4
-        FvfywsU+hgaaItxaESHPE99uZCfs2wL4AXJb54wqsy6dd+atJA1JoxjzMJBk4bAlrBmV/T
-        /MYvOOVn2rBEP5/HRWMOPy/V6YmNw1TJcBgG+ExrWRMJZAE6oE8dOObLrs6NYBu0XUlsz4
-        PFcn5ONZUX2M0lzn4f+s3kejDYEkT5cZUe2GmWTM4wULjJFhglPHzEgFv2mCNlnB4X2eC2
-        WwSnRADSYm7sd5iCowC/PnGhM68LCX277NUAsoiZXjofPW9n0WB/BgT88mMU1g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682551244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cqBwRcRpy9thQoaQTxzTLbqaPTLeGU5fbTtlKBNAtMg=;
-        b=dGySTZ/hXuhXrnKl7e0OmQjcOuoTDXFDA+eIXTGTPw7lRa7tbbiPTxrY58+MtLJ1HKWHVT
-        UrJJPQqCGFZqoXBQ==
-To:     Andi Kleen <ak@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-In-Reply-To: <ZEmfYpOyyul4BaKP@tassilo>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
- <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
- <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com>
- <87y1mey503.ffs@tglx>
- <ccf57fd2-45b8-1f1f-f46a-55d7f4c56161@cybernetics.com>
- <01a44722-931a-7aff-4f4b-75e78855beb1@amd.com>
- <25dd25d3-2db1-acf6-0814-9bb5bcd65bb9@intel.com>
- <469754ab-d8ec-168a-15c7-61045a880792@amd.com> <ZEmfYpOyyul4BaKP@tassilo>
-Date:   Thu, 27 Apr 2023 01:20:43 +0200
-Message-ID: <87a5yu5iyc.ffs@tglx>
+        Wed, 26 Apr 2023 19:23:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874433A90;
+        Wed, 26 Apr 2023 16:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 240B96308C;
+        Wed, 26 Apr 2023 23:23:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A4CC4339B;
+        Wed, 26 Apr 2023 23:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682551413;
+        bh=ljfhtZUXSaQHweOFdXEqbHy6V/WG7H3gj8DTqCSLU4k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U7ysqy1cyC5qk+5uCIMUWE4azLykmQqFV/eT3GtTTFLLHrGb2LGy2Cw1aSYvgGsiU
+         jC4bTHSc4HZBA12fBSlPObnA++Kr+Y0C8JZ2y0Mkc7DW2vj+pymGJRh5vh27NRt9sQ
+         X3zYYFbvGBwpmqA6SV7V/vJj5f2LucE8QPlWw3M1z9rrNZX9wKyepUbxQb4YOi9OlX
+         FIZDy1mFIyqkDRVUK59+RfzdjIjDJoZMBEVi+76sBwdUeYw/e+F0hjD3/4sw8vxXpU
+         GiT1+6oB8BDn+qMZEBqaEBlW5vgD44v8CzHLdhVcTOIklj9ZdV/ZwjDD4oDNfDyiEZ
+         i8+WC/yAE9uvQ==
+Date:   Wed, 26 Apr 2023 16:23:31 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
+        davem@davemloft.net, conor.dooley@microchip.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu
+Subject: Re: [PATCH v4 0/4] Implement GCM ghash using Zbc and Zbkb extensions
+Message-ID: <20230426232331.GB65659@sol.localdomain>
+References: <20230329140642.2186644-1-heiko.stuebner@vrull.eu>
+ <20230426225550.GA65659@sol.localdomain>
+ <7664296.GXAFRqVoOG@diego>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7664296.GXAFRqVoOG@diego>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,47 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andi!
+On Thu, Apr 27, 2023 at 01:20:31AM +0200, Heiko Stübner wrote:
+> But for me, this small bit of scalar crypto is also sort of a stepping
+> stone :-). Previous versions [0] already included patches using the
+> vector crypto extensions too, I just split that into a separate thing,
+> as _this_ series actually uses ratified extensions :-)
+> 
+> 
+> Heiko
+> 
+> 
+> 
+> [0] https://lore.kernel.org/lkml/20230313191302.580787-12-heiko.stuebner@vrull.eu/T/
 
-On Wed, Apr 26 2023 at 15:02, Andi Kleen wrote:
->> > > This is probably going to pull in a cache line and cause the problem the
->> > > native_wbinvd() is trying to avoid.
->> > 
->> > Is one _more_ cacheline really the problem?
->> 
->> The answer is it depends. If the cacheline ends up modified/dirty, then it
->> can be a problem.
->
-> I haven't followed this all in detail, but if any dirty cache line a
-> problem you probably would need to be sure that any possible NMI user
-> (like perf or watchdogs) is disabled at this point, otherwise you could
-> still get NMIs here. 
->
-> I don't think perf currently has a mechanism to do that other
-> than to offline the CPU.
+That patchset wasn't sent to linux-crypto.  Can you make sure to include
+linux-crypto@vger.kernel.org on any subsequent patchsets?  Thanks!
 
-stop_this_cpu()
-  disable_local_APIC()
-    apic_soft_disable()
-      clear_local_APIC()
-        v = apic_read(APIC_LVTPC);
-        apic_write(APIC_LVTPC, v | APIC_LVT_MASKED);
-
-So after that point the PMU can't raise NMIs anymore which includes the
-default perf based NMI watchdog, no?
-
-External NMIs are a different problem, but they kinda fall into the same
-category as:
-
-> Also there are of course machine checks and SMIs that could still happen, 
-> but I guess there's nothing you could do about them.
-
-Though external NMIs could be disabled via outb(0x70,...) if paranoid
-enough. Albeit if there is an external NMI based watchdog raising the
-NMI during this kexec() scenario then the outcome is probably as
-undefined as in the MCE case independent of the SEV dirty cacheline
-concern.
-
-Thanks,
-
-        tglx
+- Eric
