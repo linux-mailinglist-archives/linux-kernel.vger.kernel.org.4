@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB306EEC4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0179E6EEC54
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbjDZCWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 22:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S238824AbjDZCXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 22:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbjDZCWD (ORCPT
+        with ESMTP id S237911AbjDZCXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 22:22:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE158688;
-        Tue, 25 Apr 2023 19:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682475722; x=1714011722;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=aZSnevCV0ZRoHK+SA5IxOde8adJ7cTFjbdtLQdZjCrA=;
-  b=dQn0yCXm9RqN6DYVe8IuUVa2iDTPXDkYChbDjtacrLCnnKRZgHX66w3o
-   q8jf+yVzww9SAp9LWIfWy2ZLjcvhB8LQor7aJKljR3rGuKdaZq7YmQ8UT
-   gSQKqBk5x5jKwrdLqDVqNZjTw3DBxBVJsYpYfwUwaA2t4G29KAom28dr9
-   YivFtZ3zslKSBxgb6Jls0FplVlyCs3MKzj9t7d6OlwPmKBLAUOfN8LxeV
-   pwnNQN6daCCuW696+t3plxalkJUFJV3pyTbHj/3zq+LENlJw+a+5hLb9w
-   LqdidmdP3DBU4P/GWNr1/CfJDzDr9q1gq8nhpgcyN8AOgAkmXKVQv2WSB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345718608"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="345718608"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 19:22:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="763111662"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="763111662"
-Received: from linux.bj.intel.com ([10.238.156.127])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 19:21:59 -0700
-Date:   Wed, 26 Apr 2023 10:20:34 +0800
-From:   Tao Su <tao1.su@linux.intel.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH] Remove blkg node after destroying blkg
-Message-ID: <ZEiKcqqxqWtY2MQA@linux.bj.intel.com>
-References: <20230425075911.839539-1-tao1.su@linux.intel.com>
- <aa5de32c-c92b-d032-e9bb-83d2436ff72c@huawei.com>
- <ZEegQCCZ96ij6mw5@linux.bj.intel.com>
- <6d486f85-87ed-fa35-00cb-4c37fef17536@huaweicloud.com>
- <9f5eeba2-fbc9-3b56-c7ed-d8ecc1c888b3@huaweicloud.com>
+        Tue, 25 Apr 2023 22:23:33 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D19C192
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:23:31 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Cx9egii0hkxtMAAA--.1423S3;
+        Wed, 26 Apr 2023 10:23:30 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxurIgi0hk4u07AA--.16026S3;
+        Wed, 26 Apr 2023 10:23:28 +0800 (CST)
+Message-ID: <a1815428-36bb-780f-313f-c4dcb22887f3@loongson.cn>
+Date:   Wed, 26 Apr 2023 10:23:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Loongson (and other $ARCHs?) idle VS timer enqueue
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <ZEKDZEQmKExv0O7Q@lothringen> <87leil2r7v.ffs@tglx>
+ <20230422081700.GB1214746@hirez.programming.kicks-ass.net>
+ <ZEPteS82TbIhMQxe@lothringen>
+ <20230422150409.GL1214746@hirez.programming.kicks-ass.net>
+ <7d91fa2a-57c5-6c78-8e2d-7fbdd6a11cba@loongson.cn>
+ <20230425114937.GC1335080@hirez.programming.kicks-ass.net>
+ <5ba79220-683f-a78a-8c3b-bc0b118226f8@loongson.cn>
+ <d9c9b2cb-dd5e-03dd-9a7e-27938af96aaf@xen0n.name>
+ <f0f029c5-b095-d713-114f-dc7d5c092d8a@loongson.cn>
+ <b882eb61-d783-985e-7687-386f9e03235d@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <b882eb61-d783-985e-7687-386f9e03235d@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9f5eeba2-fbc9-3b56-c7ed-d8ecc1c888b3@huaweicloud.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-CM-TRANSID: AQAAf8DxurIgi0hk4u07AA--.16026S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF4kury5Xw1fJryktr1rCrg_yoW8Ar1xpa
+        4kZF4DArW5Ww1kG348tw15urZ0yrykKw45W3W8JFy5Gr4qgryq9F1xXr4qgFyrt393Gr10
+        qr1UXasF9Fy7J3JanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7189UUUUU=
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,77 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 09:13:08AM +0800, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2023/04/25 19:09, Yu Kuai 写道:
-> > Hi,
-> > 
-> > 在 2023/04/25 17:41, Tao Su 写道:
-> > > On Tue, Apr 25, 2023 at 04:09:34PM +0800, Yu Kuai wrote:
-> > > > Hi,
-> > > > 
-> > > > 在 2023/04/25 15:59, Tao Su 写道:
-> > > > > Kernel hang when poweroff or reboot, due to infinite restart
-> > > > > in function
-> > > > > blkg_destroy_all. It will goto restart label when a batch of blkgs are
-> > > > > destroyed, but not remove blkg node in blkg_list. So the blkg_list is
-> > > > > same in every 'restart' and result in kernel hang.
-> > > > > 
-> > > > > By adding list_del to remove blkg node after destroying, can solve this
-> > > > > kernel hang issue and satisfy the previous will to 'restart'.
-> > > > > 
-> > > > > Reported-by: Xiangfei Ma <xiangfeix.ma@intel.com>
-> > > > > Tested-by: Xiangfei Ma <xiangfeix.ma@intel.com>
-> > > > > Tested-by: Farrah Chen <farrah.chen@intel.com>
-> > > > > Signed-off-by: Tao Su <tao1.su@linux.intel.com>
-> > > > > ---
-> > > > >    block/blk-cgroup.c | 1 +
-> > > > >    1 file changed, 1 insertion(+)
-> > > > > 
-> > > > > diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> > > > > index bd50b55bdb61..960eb538a704 100644
-> > > > > --- a/block/blk-cgroup.c
-> > > > > +++ b/block/blk-cgroup.c
-> > > > > @@ -530,6 +530,7 @@ static void blkg_destroy_all(struct gendisk *disk)
-> > > > >            spin_lock(&blkcg->lock);
-> > > > >            blkg_destroy(blkg);
-> > > > > +        list_del(&blkg->q_node);
-> > > > 
-> > > > blkg should stay on the queue list until blkg_free_workfn(), otherwise
-> > > > parent blkg can be freed before child, which will cause some known
-> > > > issue.
-> > > 
-> > > Yes, directly removing blkg node is not appropriate, which I noticed some
-> > > comments in blkg_destroy(), thanks for pointing out this issue.
-> > > 
-> > > > 
-> > > > I think this hung happens when total blkg is greater than
-> > > > BLKG_DESTROY_BATCH_SIZE, right?
-> > > 
-> > > Yes, you are right.
-> > > 
-> > > > 
-> > > > Can you try if following patch fix your problem?
-> > > 
-> > > This patch can also fix my problem, and indeed is a more secure way.
-> > 
-> > Thanks for the test, for a better solution, I think 'blkcg_mutex' can
-> > be used to protect 'blkg->q_node' list instead of 'queue_lock', so that
-> > the 'restart' can be removed because softlockup can be avoided.
-> > 
-> 
-> I looked into this, and I found that this is not a easy thing to do.
-> 
-> Anyway, feel free to submit a new patch based on my orignial suggestion.
 
-Thanks for your contribution and careful review, I will submit the new
-patch if no other comments.
 
-Thanks,
-Tao
+在 2023/4/26 10:10, WANG Xuerui 写道:
+> On 2023/4/26 08:46, maobibo wrote:
+>>
+>>
+>> 在 2023/4/25 21:28, WANG Xuerui 写道:
+>>> On 2023/4/25 21:25, maobibo wrote:
+>>>>
+>>>>
+>>>> 在 2023/4/25 19:49, Peter Zijlstra 写道:
+>>>
+>>> <snip>
+>>>
+>>>>>
+>>>>> diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+>>>>> index 44ff1ff64260..3c8a6bab98fe 100644
+>>>>> --- a/arch/loongarch/kernel/genex.S
+>>>>> +++ b/arch/loongarch/kernel/genex.S
+>>>>> @@ -18,27 +18,31 @@
+>>>>>          .align    5
+>>>>>    SYM_FUNC_START(__arch_cpu_idle)
+>>>>> -    /* start of rollback region */
+>>>>> -    LONG_L    t0, tp, TI_FLAGS
+>>>>> -    nop
+>>>>> -    andi    t0, t0, _TIF_NEED_RESCHED
+>>>>> -    bnez    t0, 1f
+>>>>> -    nop
+>>>>> -    nop
+>>>>> -    nop
+>>>>> +    /* start of idle interrupt region */
+>>>>> +    move    t0, CSR_CRMD_IE
+>>>> addi.d  t0, zero, CSR_CRMD_IE can be used here, move is used for reg to reg
+>>>
+>>> Or better: li.d t0, CSR_CRMD_IE (prefer pseudo-instruction over concrete ones whenever it helps readability). We don't need to support ancient in-house toolchains without support for even li. ;-)
+>>    I am not familiar with compiler:(, how many actual instructions does
+>> pseudo-instr li.d takes? It will be ok if it uses only one intr, else
+>> there will be problem.
+> 
+> It's just `ori $t0, $zero, 4` no matter which of li.w or li.d is used. It only matters when the immediate to load is bigger. Given CSR_CRMD_IE is just 4 (1<<2) you can definitely say `li.w` if you want to be extra cautious and it won't hurt. ;-)
+
+That is good to me, you are compiler expert:)
 
 > 
-> Thanks,
-> Kuai
-> 
+
