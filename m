@@ -2,395 +2,360 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212716EEEF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04786EEEFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240017AbjDZHMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S239972AbjDZHNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239958AbjDZHLo (ORCPT
+        with ESMTP id S239964AbjDZHNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:11:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CEF420A;
-        Wed, 26 Apr 2023 00:10:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE66A633B6;
-        Wed, 26 Apr 2023 07:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C75C4339E;
-        Wed, 26 Apr 2023 07:09:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682492945;
-        bh=UfXtHQLFbD4Qk0s1jZztXQOQEe5nIWBt7eKvofY330o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=okcNitRJm6ndvuv5MKiXTWT/XXVGFrEvPzr6D4ek/WomAObj8zWgn7dnwsO5VzxoJ
-         uczWqEBfSzf+hB49KXJ6TJPFgfndlUKSOdStThfg2t/nnSjw7rjwMcgFNroLSqspT5
-         XsnwJ+XGNXb9Iqid1nwtF8Xsnq/4GqMIAwqXsywyJFLyjBxnl7PVgQGWqw1kTAIsVt
-         Vc8SAU0AXrYnGq+OK4l0epAY7MWI1P5+FcnST7r0B/jtoa7jkonxq/Cwg0tSc6LIAS
-         0Heamnl1d0AuN8R6LCM2mhPMDGSJAcZr6VFNGQCzfDqLbWI8msfK+hR+D1OJMwNI+y
-         Hgcd0CcEHEdCg==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4edcdfa8638so7314294e87.2;
-        Wed, 26 Apr 2023 00:09:05 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzR10OKW/JE0j25Jjj7JG8ZtXJOdVvgz8W2M6ncq8qOR0XO704Z
-        Cm4E+MFLAiMmdi43PxkgW+LSfklQF+sP9s6x+3M=
-X-Google-Smtp-Source: ACHHUZ7vK5qZmgeBTSpyZLgRSq7J2UnnonzQU9mD7M3f/6fxeFAToe1Rxh8rEQ0OHWk/O2/zP5pzdtKJsgpUDSlFs/Y=
-X-Received: by 2002:a05:6512:3744:b0:4ef:fe49:e14f with SMTP id
- a4-20020a056512374400b004effe49e14fmr1092114lfs.20.1682492942989; Wed, 26 Apr
- 2023 00:09:02 -0700 (PDT)
+        Wed, 26 Apr 2023 03:13:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B262133
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:11:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682493020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J8mIbjUj2qN8YemIZ/GSQQQS+vXseUiscxk49XDLsYw=;
+        b=TKBxT33NcfDq0JxqhLyP1IaGyx8yiCmJllQJLZLOe+mRlt8xTNV3i5rmOMgjsEFqhxxGqn
+        2f8md1XmA6UYbQ5kQnW6G+yy57MArllLcwSv+j3DIJtCIPZh67G+G0gkzK4UAjW/J5h1Bx
+        3mVJRDfuUEnyHK13YO0Xpbo3YgalA4Q=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-vtqNOGnmPKyra5CFMzvlJQ-1; Wed, 26 Apr 2023 03:10:19 -0400
+X-MC-Unique: vtqNOGnmPKyra5CFMzvlJQ-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2a8b2ff4379so25715351fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:10:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682493016; x=1685085016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8mIbjUj2qN8YemIZ/GSQQQS+vXseUiscxk49XDLsYw=;
+        b=R4FX0QpCXqx2JZfd/OkFvKUd/ufIQM/EjyeoT+iaHJ3mgfEKSoohOa95nvRiFAXgVa
+         55Lcvbq7BxMupPl7LjhehIZNcReMm970QYjHJSVblW2SwwYF0nscSnojtMPQSHSS8itd
+         UB79c7feTm+Ic55TIDAgCZR/kKnQu8zqQCiO8I4jTtHUzucxLpcf0skSPL05w5h38r+y
+         Bgc4jFMbeMkYw24kLn1Ri9qWiC4o2Izsavs8MGmU5ANUoWwX50WIzSj5ENKBfxah2MVB
+         AHl5e1bna2GVNr9P+kyLPZPIg0V3bSXXu9Kjhfscj9+VaEr61LjRZopFzLZ5i1JpD5O8
+         NLVg==
+X-Gm-Message-State: AAQBX9dmt1d48xMeHKJoLPqLyF1ut2Ej1kJfMUhES5zCZUP9Gx5razLs
+        GhX1pzjFBi/p3QrVzdFrrRIor5+ffzzb8qy5qvrbIXrHnvtMmPUbCRJOwOtS5qK/yV76Dv9RNRl
+        hU2mmoGYJJRlcG4+ir6g8lbQ=
+X-Received: by 2002:a2e:8755:0:b0:2a7:76ab:c42 with SMTP id q21-20020a2e8755000000b002a776ab0c42mr4607325ljj.46.1682493016462;
+        Wed, 26 Apr 2023 00:10:16 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZxcKcHts3uaDzj6ow+rrNHlGzOxHRFZP9iZUKpTqjrYFYEl2NZTypXXJplWm14t9XLOKaeYA==
+X-Received: by 2002:a2e:8755:0:b0:2a7:76ab:c42 with SMTP id q21-20020a2e8755000000b002a776ab0c42mr4607319ljj.46.1682493016065;
+        Wed, 26 Apr 2023 00:10:16 -0700 (PDT)
+Received: from [192.168.1.121] (85-23-48-202.bb.dnainternet.fi. [85.23.48.202])
+        by smtp.gmail.com with ESMTPSA id f27-20020ac2533b000000b004db3e445f1fsm2382730lfh.97.2023.04.26.00.10.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 00:10:15 -0700 (PDT)
+Message-ID: <aa0d9a98-7dd1-0188-d382-5835cf1ddf3a@redhat.com>
+Date:   Wed, 26 Apr 2023 10:10:14 +0300
 MIME-Version: 1.0
-References: <20230426034001.16-1-cuiyunhui@bytedance.com>
-In-Reply-To: <20230426034001.16-1-cuiyunhui@bytedance.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 26 Apr 2023 08:08:51 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
-Message-ID: <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
-Subject: Re: [PATCH] firmware: added a firmware information passing method FFI
-To:     Yunhui Cui <cuiyunhui@bytedance.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     rafael@kernel.org, lenb@kernel.org, jdelvare@suse.com,
-        cujomalainey@chromium.org, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        David Hildenbrand <david@redhat.com>
+References: <3b92d56f55671a0389252379237703df6e86ea48.1682464032.git.lstoakes@gmail.com>
+ <a68fa8f2-8619-63ff-3525-ede7ed1f0a9f@redhat.com>
+ <5ffd7f32-d236-4da4-93f7-c2fe39a6e035@lucifer.local>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <5ffd7f32-d236-4da4-93f7-c2fe39a6e035@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 04:40, Yunhui Cui <cuiyunhui@bytedance.com> wrote:
->
-> Some BootLoaders do not support UEFI and cannot pass ACPI/SBMIOS table
-> addresses through UEFI, such as coreboot.
->
-> On the x86 platform, we pass the ACPI/SMBIOS table through the reserved
-> address segment 0xF0000, but other arches usually do not reserve this
-> address segment.
->
-> We have added a new firmware information transmission method named FFI
-> (FDT FIRMWARE INTERFACE), through FDT to obtain firmware information,
-> such as the base address of the ACPI and SMBIOS table.
->
-> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-
-Hello Yunhui,
-
-I am not sure this is a good idea: this is clearly intended for arm64,
-which cannot use ACPI without the EFI memory map, which it uses to
-cross reference memory opregion accesses, to determine the correct
-memory type attributes.
-
-What is the use case you are trying to accommodate here?
 
 
+On 26.4.2023 10.00, Lorenzo Stoakes wrote:
+> On Wed, Apr 26, 2023 at 06:18:38AM +0300, Mika Penttilä wrote:
+>> Hi,
+>>
+>>
+>> On 26.4.2023 2.15, Lorenzo Stoakes wrote:
+>>> GUP does not correctly implement write-notify semantics, nor does it
+>>> guarantee that the underlying pages are correctly dirtied, which could lead
+>>> to a kernel oops or data corruption when writing to file-backed mappings.
+>>>
+>>> This is only relevant when the mappings are file-backed and the underlying
+>>> file system requires folio dirty tracking. File systems which do not, such
+>>> as shmem or hugetlb, are not at risk and therefore can be written to
+>>> without issue.
+>>>
+>>> Unfortunately this limitation of GUP has been present for some time and
+>>> requires future rework of the GUP API in order to provide correct write
+>>> access to such mappings.
+>>>
+>>> In the meantime, we add a check for the most broken GUP case -
+>>> FOLL_LONGTERM - which really under no circumstances can safely access
+>>> dirty-tracked file mappings.
+>>>
+>>> As part of this change we separate out vma_needs_dirty_tracking() as a
+>>> helper function to determine this, which is distinct from
+>>> vma_wants_writenotify() which is specific to determining which PTE flags to
+>>> set.
+>>>
+>>> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+>>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>>> ---
+>>> v4:
+>>> - Split out vma_needs_dirty_tracking() from vma_wants_writenotify() to reduce
+>>>     duplication and update to use this in the GUP check. Note that both separately
+>>>     check vm_ops_needs_writenotify() as the latter needs to test this before the
+>>>     vm_pgprot_modify() test, resulting in vma_wants_writenotify() checking this
+>>>     twice, however it is such a small check this should not be egregious.
+>>>
+>>> v3:
+>>> - Rebased on latest mm-unstable as of 24th April 2023.
+>>> - Explicitly check whether file system requires folio dirtying. Note that
+>>>     vma_wants_writenotify() could not be used directly as it is very much focused
+>>>     on determining if the PTE r/w should be set (e.g. assuming private mapping
+>>>     does not require it as already set, soft dirty considerations).
+>>> - Tested code against shmem and hugetlb mappings - confirmed that these are not
+>>>     disallowed by the check.
+>>> - Eliminate FOLL_ALLOW_BROKEN_FILE_MAPPING flag and instead perform check only
+>>>     for FOLL_LONGTERM pins.
+>>> - As a result, limit check to internal GUP code.
+>>>    https://lore.kernel.org/all/23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com/
+>>>
+>>> v2:
+>>> - Add accidentally excluded ptrace_access_vm() use of
+>>>     FOLL_ALLOW_BROKEN_FILE_MAPPING.
+>>> - Tweak commit message.
+>>> https://lore.kernel.org/all/c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com/
+>>>
+>>> v1:
+>>> https://lore.kernel.org/all/f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com/
+>>>
+>>>    include/linux/mm.h |  1 +
+>>>    mm/gup.c           | 26 +++++++++++++++++++++++++-
+>>>    mm/mmap.c          | 37 ++++++++++++++++++++++++++++---------
+>>>    3 files changed, 54 insertions(+), 10 deletions(-)
+>>>
+>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>> index 37554b08bb28..f7da02fc89c6 100644
+>>> --- a/include/linux/mm.h
+>>> +++ b/include/linux/mm.h
+>>> @@ -2433,6 +2433,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+>>>    #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+>>>    					    MM_CP_UFFD_WP_RESOLVE)
+>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
+>>>    int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
+>>>    static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
+>>>    {
+>>> diff --git a/mm/gup.c b/mm/gup.c
+>>> index 1f72a717232b..53652453037c 100644
+>>> --- a/mm/gup.c
+>>> +++ b/mm/gup.c
+>>> @@ -959,16 +959,37 @@ static int faultin_page(struct vm_area_struct *vma,
+>>>    	return 0;
+>>>    }
+>>> +/*
+>>> + * Writing to file-backed mappings which require folio dirty tracking using GUP
+>>> + * is a fundamentally broken operation as kernel write access to GUP mappings
+>>> + * may not adhere to the semantics expected by a file system.
+>>> + */
+>>> +static inline bool can_write_file_mapping(struct vm_area_struct *vma,
+>>> +					  unsigned long gup_flags)
+>>> +{
+>>> +	/* If we aren't pinning then no problematic write can occur. */
+>>> +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
+>>> +		return true;
+>>> +
+>>> +	/* We limit this check to the most egregious case - a long term pin. */
+>>> +	if (!(gup_flags & FOLL_LONGTERM))
+>>> +		return true;
+>>> +
+>>> +	/* If the VMA requires dirty tracking then GUP will be problematic. */
+>>> +	return vma_needs_dirty_tracking(vma);
+>>> +}
+>>> +
+>>>    static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>>>    {
+>>>    	vm_flags_t vm_flags = vma->vm_flags;
+>>>    	int write = (gup_flags & FOLL_WRITE);
+>>>    	int foreign = (gup_flags & FOLL_REMOTE);
+>>> +	bool vma_anon = vma_is_anonymous(vma);
+>>>    	if (vm_flags & (VM_IO | VM_PFNMAP))
+>>>    		return -EFAULT;
+>>> -	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
+>>> +	if ((gup_flags & FOLL_ANON) && !vma_anon)
+>>>    		return -EFAULT;
+>>>    	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
+>>> @@ -978,6 +999,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+>>>    		return -EFAULT;
+>>>    	if (write) {
+>>> +		if (!vma_anon && !can_write_file_mapping(vma, gup_flags))
+>>> +			return -EFAULT;
+>>> +
+>>>    		if (!(vm_flags & VM_WRITE)) {
+>>>    			if (!(gup_flags & FOLL_FORCE))
+>>>    				return -EFAULT;
+>>> diff --git a/mm/mmap.c b/mm/mmap.c
+>>> index 536bbb8fa0ae..aac638dd22cf 100644
+>>> --- a/mm/mmap.c
+>>> +++ b/mm/mmap.c
+>>> @@ -1475,6 +1475,32 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+>>>    }
+>>>    #endif /* __ARCH_WANT_SYS_OLD_MMAP */
+>>> +/* Do VMA operations imply write notify is required? */
+>>> +static inline bool vm_ops_needs_writenotify(
+>>> +	const struct vm_operations_struct *vm_ops)
+>>> +{
+>>> +	return vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite);
+>>> +}
+>>> +
+>>> +/*
+>>> + * Does this VMA require the underlying folios to have their dirty state
+>>> + * tracked?
+>>> + */
+>>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma)
+>>> +{
+>>> +	/* Does the filesystem need to be notified? */
+>>> +	if (vm_ops_needs_writenotify(vma->vm_ops))
+>>> +		return true;
+>>> +
+>>> +	/* Specialty mapping? */
+>>> +	if (vma->vm_flags & VM_PFNMAP)
+>>> +		return false;
+>>> +
+>>> +	/* Can the mapping track the dirty pages? */
+>>> +	return vma->vm_file && vma->vm_file->f_mapping &&
+>>> +		mapping_can_writeback(vma->vm_file->f_mapping);
+>>> +}
+>>> +
+>>
+>> What would be the exact reproducer of the problem? AFAIK writenotify is
+>> handled (by handle_mm_fault()) for non cow mappings (shared), where it only
+>> matters.
+> 
+> The issue is reproduced simply by page_to_virt(pinned_page)[0] = 'x' :)
+> 
+> The problem is that no faulting actually occurs, so no writenotify, and no
 
 
-> ---
->  MAINTAINERS                 |  6 +++
->  drivers/acpi/osl.c          |  8 ++++
->  drivers/firmware/Kconfig    | 12 +++++
->  drivers/firmware/Makefile   |  1 +
->  drivers/firmware/dmi_scan.c | 96 ++++++++++++++++++++++---------------
->  drivers/firmware/ffi.c      | 56 ++++++++++++++++++++++
->  include/linux/ffi.h         | 15 ++++++
->  7 files changed, 155 insertions(+), 39 deletions(-)
->  create mode 100644 drivers/firmware/ffi.c
->  create mode 100644 include/linux/ffi.h
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8d5bc223f305..94664f3b4c96 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7750,6 +7750,12 @@ F:       arch/x86/platform/efi/
->  F:     drivers/firmware/efi/
->  F:     include/linux/efi*.h
->
-> +FDT FIRMWARE INTERFACE (FFI)
-> +M:     Yunhui Cui cuiyunhui@bytedance.com
-> +S:     Maintained
-> +F:     drivers/firmware/ffi.c
-> +F:     include/linux/ffi.h
-> +
->  EXTERNAL CONNECTOR SUBSYSTEM (EXTCON)
->  M:     MyungJoo Ham <myungjoo.ham@samsung.com>
->  M:     Chanwoo Choi <cw00.choi@samsung.com>
-> diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
-> index 3269a888fb7a..d45000041d2b 100644
-> --- a/drivers/acpi/osl.c
-> +++ b/drivers/acpi/osl.c
-> @@ -25,6 +25,7 @@
->  #include <linux/nmi.h>
->  #include <linux/acpi.h>
->  #include <linux/efi.h>
-> +#include <linux/ffi.h>
->  #include <linux/ioport.h>
->  #include <linux/list.h>
->  #include <linux/jiffies.h>
-> @@ -206,6 +207,13 @@ acpi_physical_address __init acpi_os_get_root_pointer(void)
->         if (pa)
->                 return pa;
->
-> +#ifdef CONFIG_FDT_FW_INTERFACE
-> +       if (fdt_fwtbl.acpi20 != FDT_INVALID_FWTBL_ADDR)
-> +               return fdt_fwtbl.acpi20;
-> +       if (fdt_fwtbl.acpi != FDT_INVALID_FWTBL_ADDR)
-> +               return fdt_fwtbl.acpi;
-> +       pr_err("Fdt system description tables not found\n");
-> +#endif
->         if (efi_enabled(EFI_CONFIG_TABLES)) {
->                 if (efi.acpi20 != EFI_INVALID_TABLE_ADDR)
->                         return efi.acpi20;
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index b59e3041fd62..13c67b50c17a 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -303,6 +303,18 @@ config TURRIS_MOX_RWTM
->           other manufacturing data and also utilize the Entropy Bit Generator
->           for hardware random number generation.
->
-> +config FDT_FW_INTERFACE
-> +       bool "An interface for passing firmware info through FDT"
-> +       depends on OF && OF_FLATTREE
-> +       default n
-> +       help
-> +         When some bootloaders do not support UEFI, and the arch does not
-> +         support SMBIOS_ENTRY_POINT_SCAN_START, then you can enable this option
-> +         to support the transfer of firmware information, such as acpi, smbios
-> +         tables.
-> +
-> +         Say Y here if you want to pass firmware information by FDT.
-> +
->  source "drivers/firmware/arm_ffa/Kconfig"
->  source "drivers/firmware/broadcom/Kconfig"
->  source "drivers/firmware/cirrus/Kconfig"
-> diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-> index 28fcddcd688f..3b8b5d0868a6 100644
-> --- a/drivers/firmware/Makefile
-> +++ b/drivers/firmware/Makefile
-> @@ -33,6 +33,7 @@ obj-y                         += cirrus/
->  obj-y                          += meson/
->  obj-$(CONFIG_GOOGLE_FIRMWARE)  += google/
->  obj-y                          += efi/
-> +obj-$(CONFIG_FDT_FW_INTERFACE) += ffi.o
->  obj-y                          += imx/
->  obj-y                          += psci/
->  obj-y                          += smccc/
-> diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
-> index 015c95a825d3..1e1a74ed7d3b 100644
-> --- a/drivers/firmware/dmi_scan.c
-> +++ b/drivers/firmware/dmi_scan.c
-> @@ -6,6 +6,7 @@
->  #include <linux/ctype.h>
->  #include <linux/dmi.h>
->  #include <linux/efi.h>
-> +#include <linux/ffi.h>
->  #include <linux/memblock.h>
->  #include <linux/random.h>
->  #include <asm/dmi.h>
-> @@ -655,54 +656,71 @@ static int __init dmi_smbios3_present(const u8 *buf)
->         return 1;
->  }
->
-> -static void __init dmi_scan_machine(void)
-> +/*
-> + * According to the DMTF SMBIOS reference spec v3.0.0, it is
-> + * allowed to define both the 64-bit entry point (smbios3) and
-> + * the 32-bit entry point (smbios), in which case they should
-> + * either both point to the same SMBIOS structure table, or the
-> + * table pointed to by the 64-bit entry point should contain a
-> + * superset of the table contents pointed to by the 32-bit entry
-> + * point (section 5.2)
-> + * This implies that the 64-bit entry point should have
-> + * precedence if it is defined and supported by the OS. If we
-> + * have the 64-bit entry point, but fail to decode it, fall
-> + * back to the legacy one (if available)
-> + */
-> +static int __init dmi_sacn_smbios(unsigned long smbios3, unsigned long smbios)
->  {
-> -       char __iomem *p, *q;
-> +       char __iomem *p;
->         char buf[32];
-> +       #define INVALID_TABLE_ADDR (~0UL)
->
-> -       if (efi_enabled(EFI_CONFIG_TABLES)) {
-> -               /*
-> -                * According to the DMTF SMBIOS reference spec v3.0.0, it is
-> -                * allowed to define both the 64-bit entry point (smbios3) and
-> -                * the 32-bit entry point (smbios), in which case they should
-> -                * either both point to the same SMBIOS structure table, or the
-> -                * table pointed to by the 64-bit entry point should contain a
-> -                * superset of the table contents pointed to by the 32-bit entry
-> -                * point (section 5.2)
-> -                * This implies that the 64-bit entry point should have
-> -                * precedence if it is defined and supported by the OS. If we
-> -                * have the 64-bit entry point, but fail to decode it, fall
-> -                * back to the legacy one (if available)
-> -                */
-> -               if (efi.smbios3 != EFI_INVALID_TABLE_ADDR) {
-> -                       p = dmi_early_remap(efi.smbios3, 32);
-> -                       if (p == NULL)
-> -                               goto error;
-> -                       memcpy_fromio(buf, p, 32);
-> -                       dmi_early_unmap(p, 32);
-> -
-> -                       if (!dmi_smbios3_present(buf)) {
-> -                               dmi_available = 1;
-> -                               return;
-> -                       }
-> -               }
-> -               if (efi.smbios == EFI_INVALID_TABLE_ADDR)
-> -                       goto error;
-> -
-> -               /* This is called as a core_initcall() because it isn't
-> -                * needed during early boot.  This also means we can
-> -                * iounmap the space when we're done with it.
-> -                */
-> -               p = dmi_early_remap(efi.smbios, 32);
-> +       if (smbios3 != INVALID_TABLE_ADDR) {
-> +               p = dmi_early_remap(smbios3, 32);
->                 if (p == NULL)
-> -                       goto error;
-> +                       return -1;
->                 memcpy_fromio(buf, p, 32);
->                 dmi_early_unmap(p, 32);
->
-> -               if (!dmi_present(buf)) {
-> +               if (!dmi_smbios3_present(buf)) {
->                         dmi_available = 1;
-> -                       return;
-> +                       return 0;
->                 }
-> +       }
-> +
-> +       if (smbios == INVALID_TABLE_ADDR)
-> +               return -1;
-> +
-> +       /*
-> +        * This is called as a core_initcall() because it isn't
-> +        * needed during early boot.  This also means we can
-> +        * iounmap the space when we're done with it.
-> +        */
-> +       p = dmi_early_remap(smbios, 32);
-> +       if (p == NULL)
-> +               return -1;
-> +       memcpy_fromio(buf, p, 32);
-> +       dmi_early_unmap(p, 32);
-> +
-> +       if (!dmi_present(buf)) {
-> +               dmi_available = 1;
-> +               return 0;
-> +       }
-> +       return -1;
-> +}
-> +
-> +static void __init dmi_scan_machine(void)
-> +{
-> +       char __iomem *p, *q;
-> +       char buf[32];
-> +
-> +#ifdef CONFIG_FDT_FW_INTERFACE
-> +       if (dmi_sacn_smbios(fdt_fwtbl.smbios3, fdt_fwtbl.smbios))
-> +               goto error;
-> +#endif
-> +       if (efi_enabled(EFI_CONFIG_TABLES)) {
-> +               if (dmi_sacn_smbios(efi.smbios3, efi.smbios))
-> +                       goto error;
->         } else if (IS_ENABLED(CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK)) {
->                 p = dmi_early_remap(SMBIOS_ENTRY_POINT_SCAN_START, 0x10000);
->                 if (p == NULL)
-> diff --git a/drivers/firmware/ffi.c b/drivers/firmware/ffi.c
-> new file mode 100644
-> index 000000000000..83c7abf22220
-> --- /dev/null
-> +++ b/drivers/firmware/ffi.c
-> @@ -0,0 +1,56 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/kobject.h>
-> +#include <linux/ffi.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/libfdt.h>
-> +
-> +struct fdt_fwtable __read_mostly fdt_fwtbl = {
-> +       .acpi                   = FDT_INVALID_FWTBL_ADDR,
-> +       .acpi20                 = FDT_INVALID_FWTBL_ADDR,
-> +       .smbios                 = FDT_INVALID_FWTBL_ADDR,
-> +       .smbios3                = FDT_INVALID_FWTBL_ADDR,
-> +};
-> +EXPORT_SYMBOL(fdt_fwtbl);
-> +
-> +void __init of_fdt_fwtbl(void)
-> +{
-> +       int cfgtbl, len;
-> +       fdt64_t *prop;
-> +
-> +       cfgtbl = fdt_path_offset(initial_boot_params, "/cfgtables");
-> +       if (cfgtbl < 0) {
-> +               pr_info("cfgtables not found.\n");
-> +               return;
-> +       }
-> +       prop = fdt_getprop_w(initial_boot_params, cfgtbl, "smbios_phy_ptr", &len);
-> +       if (!prop || len != sizeof(u64))
-> +               pr_info("smbios_phy_ptr not found.\n");
-> +       else
-> +               fdt_fwtbl.smbios = fdt64_to_cpu(*prop);
-> +
-> +       prop = fdt_getprop_w(initial_boot_params, cfgtbl, "smbios3_phy_ptr", &len);
-> +       if (!prop || len != sizeof(u64))
-> +               pr_info("smbios3_phy_ptr not found.\n");
-> +       else
-> +               fdt_fwtbl.smbios3 = fdt64_to_cpu(*prop);
-> +
-> +       prop = fdt_getprop_w(initial_boot_params, cfgtbl, "acpi_phy_ptr", &len);
-> +       if (!prop || len != sizeof(u64))
-> +               pr_info("acpi_phy_ptr not found.\n");
-> +       else
-> +               fdt_fwtbl.acpi = fdt64_to_cpu(*prop);
-> +
-> +       prop = fdt_getprop_w(initial_boot_params, cfgtbl, "acpi20_phy_ptr", &len);
-> +       if (!prop || len != sizeof(u64))
-> +               pr_info("acpi20_phy_ptr not found.\n");
-> +       else
-> +               fdt_fwtbl.acpi20 = fdt64_to_cpu(*prop);
-> +}
-> +
-> +void __init fdt_fwtbl_init(void)
-> +{
-> +       of_fdt_fwtbl();
-> +}
-> diff --git a/include/linux/ffi.h b/include/linux/ffi.h
-> new file mode 100644
-> index 000000000000..ffb50810a01e
-> --- /dev/null
-> +++ b/include/linux/ffi.h
-> @@ -0,0 +1,15 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_FDT_FW_H
-> +#define _LINUX_FDT_FW_H
-> +
-> +#define FDT_INVALID_FWTBL_ADDR         (~0UL)
-> +extern struct fdt_fwtable {
-> +       unsigned long                   acpi;
-> +       unsigned long                   acpi20;
-> +       unsigned long                   smbios;
-> +       unsigned long                   smbios3;
-> +       unsigned long                   flags;
-> +} fdt_fwtbl;
-> +
-> +#endif
-> --
-> 2.20.1
->
+Could you elaborate? GUP calls handle_mm_fault() that invokes the write 
+notify the pte is made first writable. Of course, virt(pinned_page)[0] = 
+'x' is not supposed to fault while using the kernel mapping.
+
+
+
+> PG_dirty tracking does either. Unexpected page dirtying can occur even
+> after they are cleaned in folio_clear_dirty_for_io(), because the caller
+> might manually mark the page dirty at an unexpected time as with the
+> unpin_*dirty*() helpers.
+> 
+> I think the long-term solution is to provide a different interface where
+> pages are passed back briefly with locks held and with a manual invocation
+> of writeprotect, or perhaps some kthread_use_mm() thing so we actually
+> trigger the faulting logic, but in the meantime this change helps restore
+> some sanity.
+> 
+>>
+>> GUP will only allow FOLL_FORCE without faulting for PageAnonExclusive pages.
+>> So if you want something beyond normal cow semantics you have custom vm_ops
+>> (and mmap() and fault())
+> 
+> This has nothing to do with FOLL_FORCE.
+> 
+>>
+>> Also for longterm pinning gups vs fork vs swap there has been fixes by david
+>> recently.
+> 
+> I don't think these are relevant in any way to this issue.
+> 
+>>
+>>
+>>
+>>>    /*
+>>>     * Some shared mappings will want the pages marked read-only
+>>>     * to track write events. If so, we'll downgrade vm_page_prot
+>>> @@ -1484,14 +1510,13 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+>>>    int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+>>>    {
+>>>    	vm_flags_t vm_flags = vma->vm_flags;
+>>> -	const struct vm_operations_struct *vm_ops = vma->vm_ops;
+>>>    	/* If it was private or non-writable, the write bit is already clear */
+>>>    	if ((vm_flags & (VM_WRITE|VM_SHARED)) != ((VM_WRITE|VM_SHARED)))
+>>>    		return 0;
+>>>    	/* The backer wishes to know when pages are first written to? */
+>>> -	if (vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite))
+>>> +	if (vm_ops_needs_writenotify(vma->vm_ops))
+>>>    		return 1;
+>>>    	/* The open routine did something to the protections that pgprot_modify
+>>> @@ -1511,13 +1536,7 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+>>>    	if (userfaultfd_wp(vma))
+>>>    		return 1;
+>>> -	/* Specialty mapping? */
+>>> -	if (vm_flags & VM_PFNMAP)
+>>> -		return 0;
+>>> -
+>>> -	/* Can the mapping track the dirty pages? */
+>>> -	return vma->vm_file && vma->vm_file->f_mapping &&
+>>> -		mapping_can_writeback(vma->vm_file->f_mapping);
+>>> +	return vma_needs_dirty_tracking(vma);
+>>>    }
+>>>    /*
+>>
+>>
+>> --Mika
+>>
+> 
+
