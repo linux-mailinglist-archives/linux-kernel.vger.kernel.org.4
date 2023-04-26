@@ -2,129 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D156EF81A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9527C6EF822
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241245AbjDZQGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S241333AbjDZQH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjDZQGg (ORCPT
+        with ESMTP id S240843AbjDZQHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:06:36 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157DA4EFA;
-        Wed, 26 Apr 2023 09:06:35 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2472dc49239so6499378a91.1;
-        Wed, 26 Apr 2023 09:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682525194; x=1685117194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OmeuUjmTVHz2Yf3DbVVtEASiC3LP8S4Uh5jt1O7CKaA=;
-        b=XpP1D+BavyO5pihIZh7D7K9mcD0OB78LI+QzlBwEsEZ69MrpboL7VDwvDii2ihT74z
-         DB3P2X4qx9v6Rx2bMjE5SVZ4H6HHAvR+upOun8dPdTXXAkcl7nJd4lZEGzW0tdau3M76
-         VbL4TwNVbA+1TZFDoLnRrX4HUQUE3fNfy0JDmQdp+Fjm9ySAOCed2BACkJfrRnyGJoDd
-         WW0Hm+gIX5khCx/OMuKvg+zKFMaa4rZTA5KBNzNXyvQab0CFEyzo35dpVF8VrxVm/MRj
-         Gy8Kztp02DuM9qg8slGBTRLjA846XTKpHbbrydU6MCx41DSrL0skxtaLoVcO9/zv8w41
-         Bc2Q==
+        Wed, 26 Apr 2023 12:07:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1B84EFA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682525223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aBxS5oLtXxq0CeAGehuC7iIyOGBaLrdAmXmeEYKkpSs=;
+        b=RflfbHA7N0BBcsAHr0/STSJJGOmr7zKWVL9EVc07B4y2j55fQWuxrOFWbjQ5TjYFdkGJ1+
+        M9U+dY5PraMJNX1jjFMb1nlBXq74CKQl1kw8jLQQ3f5+zueSu6dC76szdeGhIrHDcuBimn
+        LgNCU5gPSBxXtRN1KYr6tsutLtz1uVk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-198-Tr14hLAmMY6nrwky4bvbuQ-1; Wed, 26 Apr 2023 12:06:53 -0400
+X-MC-Unique: Tr14hLAmMY6nrwky4bvbuQ-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5083db60747so7857966a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:06:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682525194; x=1685117194;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OmeuUjmTVHz2Yf3DbVVtEASiC3LP8S4Uh5jt1O7CKaA=;
-        b=PjM35z3kIlnXxlmWIQQ7veDnqF/benCrNuwyEtX0lcYn4HkDBBs80NuqX61jk6BlmU
-         LkCOFkZ3X6dcNO1QgtiUaAycihCw0P5GGlwJThF4s5Uk3h5wlxetKA1XQpwZQzbWAiR5
-         /Z/S7IGCbZcKUMlIHFamFague7YGMFQHf9eWCPqCUNPxz/7N/V2DTUZLjKCkYru2vxlC
-         FL+irKOIY0cPu7tCEXEIqSRbEcJhUm6DekfCZVIi5T1EN2aOT+9+nqTuiu5Y1e+5gSjh
-         WqUOVL8q597ltd1mD/UX3gt9+B9O3oy+WLXqbNVdWAc5MFJW62Q7fZB/AQYHAOBwC0KV
-         6HGA==
-X-Gm-Message-State: AAQBX9cVJph7FJFh8w2r0Vt8+Qw+6Lxf2d2NkiRkb1THIr6uNq2SJsbm
-        RxnLb+w9PXZSkRJVHpCxvXDvpH2xBEJujQm53HQ=
-X-Google-Smtp-Source: AKy350YrZy3rlTruwcHri22uBGC5UDj9ur2CGvC1s1k0XJ3Rq5ZTdpYdXtLMgNUUas9wnuXrXBRasCNto+oXfeHg+DA=
-X-Received: by 2002:a17:90a:17e4:b0:239:ea16:5b13 with SMTP id
- q91-20020a17090a17e400b00239ea165b13mr21103730pja.14.1682525194409; Wed, 26
- Apr 2023 09:06:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682525207; x=1685117207;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aBxS5oLtXxq0CeAGehuC7iIyOGBaLrdAmXmeEYKkpSs=;
+        b=M63bGWg6nP+ZpvVARiDtUCKB1SOLN3uWnW24d0CLl4T/Va/it71GABIeTWHCzlqlPy
+         XQTHBHcHMGkoP1/c0BVDI0ldLJ6AKtlMjWtbBmbj7NcbFlgY5ZiBS51tRX9ly4l/c3PC
+         ij8zbGW32ZaIv7jSytaO561hI3MYsQz1uyrvGvJahnsuDLAGTT+v62381V00M3dy45qE
+         7KyChLR15XijcpGOmuilCZZKZUjZm1yg0/i87g1YfZHNFkmJ7p5UCr9j5/kHubGYSZDg
+         jPdqgWwI2ylu14JIk1WNLpuqIrwefI8aPFV2t5iJxC1lSGZnrairGx1Vx5rnHSU1hRrO
+         g/hw==
+X-Gm-Message-State: AAQBX9fdIRQynLIASk1jGUaYKdxD9EgEHuflm+xDOi0qXHXboG7yQcBF
+        BNmYmw+gkqxHSWtyp5aDHJB73smijljxjpD0cBQ13sBq+aHKgD3cy3INtm00uIvLX4esEaXQomc
+        Ygm9PwavE0luW3dtcZs6YOwsUTLd1FKod
+X-Received: by 2002:a17:907:6025:b0:94d:57d2:7632 with SMTP id fs37-20020a170907602500b0094d57d27632mr17190252ejc.31.1682525207248;
+        Wed, 26 Apr 2023 09:06:47 -0700 (PDT)
+X-Google-Smtp-Source: AKy350amP4Ezzr+F4HE1L30mCr0f6LWuyaO9wI823Mi5mAH9xd7WTR+3XoX0LqcDh/jViYBw3gV3Hg==
+X-Received: by 2002:a17:907:6025:b0:94d:57d2:7632 with SMTP id fs37-20020a170907602500b0094d57d27632mr17190235ejc.31.1682525206891;
+        Wed, 26 Apr 2023 09:06:46 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id x19-20020a1709065ad300b0095381e27d13sm8234884ejs.184.2023.04.26.09.06.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 09:06:45 -0700 (PDT)
+Message-ID: <7a3a2c7b-5302-6c56-270c-69c811368118@redhat.com>
+Date:   Wed, 26 Apr 2023 18:06:44 +0200
 MIME-Version: 1.0
-References: <20230424134748.228137-1-james.clark@arm.com>
-In-Reply-To: <20230424134748.228137-1-james.clark@arm.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 26 Apr 2023 09:06:23 -0700
-Message-ID: <CAHbLzkq2WCy_vf0cXNvRT8GYZpymVRHF0J22Dfbrav6+dsusGA@mail.gmail.com>
-Subject: Re: [PATCH 0/7] perf: cs-etm: Fixes around timestamped and timeless decoding
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        denik@google.com, Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] platform/x86: hp-wmi: Add HP WMI camera switch
+Content-Language: en-US, nl
+To:     Jonathan Singer <jes965@nyu.edu>,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Jorge Lopez <jorge.lopez2@hp.com>,
+        Rishit Bansal <rishitbansal0@gmail.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <20230426152139.1692-1-jes965@nyu.edu>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230426152139.1692-1-jes965@nyu.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 6:48=E2=80=AFAM James Clark <james.clark@arm.com> w=
-rote:
->
-> The first commit contains a fix for a recently introduced regression,
-> but was always a shortcoming in the Coresight code anyway.
->
-> The following commits are a tidyup in preparation for the last commit,
-> which is a fairly major change to the decode logic that's also
-> indirectly related to the regression so I thought it would be good time
-> to fix that now.
->
-> Applies to perf/core (9be6ab181b7b)
+Hi Jonathan,
 
-Thanks for working on this. I tested with perf/core branch on acme
-tree, it does solve the "no samples" problem.
+On 4/26/23 17:21, Jonathan Singer wrote:
+> Previously, when the camera toggle switch was hit, the hp-wmi driver
+> would report an invalid event code. By adding a case for that in the
+> event handling switch statement we can eliminate that error code and
+> enable a framework for potential further kernel handling of that key.
+> This change was tested on my HP Envy x360 15-ey0023dx laptop, but it
+> would likely work for any HP laptop with a camera toggle button. Now
+> we emit an SW_CAMERA_LENS_COVER event, on a device that gets created
+> on the first such event so as to not report incorrectly the state of
+> the camera shutter before we can know its state.
+> 
+> Signed-off-by: Jonathan Singer <jes965@nyu.edu>
+> ---
+>  drivers/platform/x86/hp/hp-wmi.c | 50 ++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
+> index 873f59c3e280..a7fb33ac49b8 100644
+> --- a/drivers/platform/x86/hp/hp-wmi.c
+> +++ b/drivers/platform/x86/hp/hp-wmi.c
+> @@ -90,6 +90,7 @@ enum hp_wmi_event_ids {
+>  	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+>  	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
+>  	HPWMI_SANITIZATION_MODE		= 0x17,
+> +	HPWMI_CAMERA_TOGGLE		= 0x1A,
+>  	HPWMI_OMEN_KEY			= 0x1D,
+>  	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
+>  };
+> @@ -228,6 +229,7 @@ static const struct key_entry hp_wmi_keymap[] = {
+>  };
+>  
+>  static struct input_dev *hp_wmi_input_dev;
+> +static struct input_dev *camera_shutter_input_dev;
+>  static struct platform_device *hp_wmi_platform_dev;
+>  static struct platform_profile_handler platform_profile_handler;
+>  static bool platform_profile_support;
+> @@ -739,6 +741,36 @@ static ssize_t postcode_store(struct device *dev, struct device_attribute *attr,
+>  	return count;
+>  }
+>  
+> +static int camera_shutter_input_setup(void)
+> +{
+> +	int err;
+> +
+> +	camera_shutter_input_dev = input_allocate_device();
+> +	if (!camera_shutter_input_dev)
+> +		return -ENOMEM;
+> +
+> +	camera_shutter_input_dev->name = "HP WMI camera shutter";
+> +	camera_shutter_input_dev->phys = "wmi/input1";
+> +	camera_shutter_input_dev->id.bustype = BUS_HOST;
+> +
+> +	__set_bit(EV_SW, camera_shutter_input_dev->evbit);
+> +	__set_bit(SW_CAMERA_LENS_COVER, camera_shutter_input_dev->swbit);
+> +
+> +	/* Set initial hardware state */
+> +	input_sync(camera_shutter_input_dev);
 
-Please feel free to add: Tested-by: Yang Shi <shy828301@gmail.com>
+This initial sync is only necessary if you have actually
+read + set an initial state, which is not happening here,
+so please drop this.
 
->
-> James Clark (7):
->   perf: cs-etm: Fix timeless decode mode detection
->   perf tools: Add util function for overriding user set config values
->   perf: cs-etm: Don't test full_auxtrace because it's always set
->   perf: cs-etm: Validate options after applying them
->   perf: cs-etm: Allow user to override timestamp and contextid settings
->   perf: cs-etm: Use bool type for boolean values
->   perf: cs-etm: Add separate decode paths for timeless and per-thread
->     modes
->
->  tools/perf/arch/arm/util/cs-etm.c             | 223 +++++++++---------
->  tools/perf/arch/arm/util/pmu.c                |   2 +
->  tools/perf/arch/arm64/util/arm-spe.c          |  26 +-
->  tools/perf/arch/x86/util/intel-pt.c           |  22 +-
->  tools/perf/tests/shell/test_arm_coresight.sh  |  24 ++
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   8 +-
->  tools/perf/util/cs-etm.c                      | 200 +++++++++++-----
->  tools/perf/util/cs-etm.h                      |   6 +-
->  tools/perf/util/evsel.c                       |  29 +++
->  tools/perf/util/evsel.h                       |   3 +
->  10 files changed, 325 insertions(+), 218 deletions(-)
->
-> --
-> 2.34.1
->
+The caller of camera_shutter_input_setup() will set
+a state + call input_sync() immediately afterwards anyways,
+so there is no need to set an initial state.
+
+Otherwise this looks good to me, thank you for working on this.
+
+Regards,
+
+Hans
+
+
+> +
+> +	err = input_register_device(camera_shutter_input_dev);
+> +	if (err)
+> +		goto err_free_dev;
+> +
+> +	return 0;
+> +
+> + err_free_dev:
+> +	input_free_device(camera_shutter_input_dev);
+> +	camera_shutter_input_dev = NULL;
+> +	return err;
+> +}
+> +
+>  static DEVICE_ATTR_RO(display);
+>  static DEVICE_ATTR_RO(hddtemp);
+>  static DEVICE_ATTR_RW(als);
+> @@ -866,6 +898,20 @@ static void hp_wmi_notify(u32 value, void *context)
+>  		break;
+>  	case HPWMI_SANITIZATION_MODE:
+>  		break;
+> +	case HPWMI_CAMERA_TOGGLE:
+> +		if (!camera_shutter_input_dev)
+> +			if (camera_shutter_input_setup()) {
+> +				pr_info("Failed to setup camera shutter input device\n");
+> +				break;
+> +			}
+> +		if (event_data == 0xff)
+> +			input_report_switch(camera_shutter_input_dev, SW_CAMERA_LENS_COVER, 1);
+> +		else if (event_data == 0xfe)
+> +			input_report_switch(camera_shutter_input_dev, SW_CAMERA_LENS_COVER, 0);
+> +		else
+> +			pr_info("Unknown camera shutter state - 0x%x\n", event_data);
+> +		input_sync(camera_shutter_input_dev);
+> +		break;
+>  	case HPWMI_SMART_EXPERIENCE_APP:
+>  		break;
+>  	default:
+> @@ -1564,9 +1610,13 @@ static void __exit hp_wmi_exit(void)
+>  	if (wmi_has_guid(HPWMI_EVENT_GUID))
+>  		hp_wmi_input_destroy();
+>  
+> +	if (camera_shutter_input_dev)
+> +		input_unregister_device(camera_shutter_input_dev);
+> +
+>  	if (hp_wmi_platform_dev) {
+>  		platform_device_unregister(hp_wmi_platform_dev);
+>  		platform_driver_unregister(&hp_wmi_driver);
+>  	}
+> +
+>  }
+>  module_exit(hp_wmi_exit);
+
