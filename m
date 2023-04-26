@@ -2,105 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5486EEB66
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2586EEB6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238411AbjDZAYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S238177AbjDZA2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238347AbjDZAYK (ORCPT
+        with ESMTP id S236412AbjDZA2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:24:10 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2916618B90
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:24:07 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760b6765f36so15003639f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1682468646; x=1685060646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xEkXql0myiwlSwKFESLcNnwEuA0avJTRSJrSoXaJZYo=;
-        b=Na2/3KFVLVVwJ5u/up4JIUCZtHMgs5azVk82HBr0KUfunMnOFf1FogCIIFbr3QetTv
-         pmjfzan0dkSUFAZb9a8nluijP9k0kqH+0FuKLqKYj7HKQw9bDM/b2rR6lYSxW+YTSvlY
-         Tf4Uny2BQvTXS2RGDdOHmjltvAquCTsIHJtwQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682468646; x=1685060646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xEkXql0myiwlSwKFESLcNnwEuA0avJTRSJrSoXaJZYo=;
-        b=iInGt9atuqJ6CiPj3AQw/7J5S+ote/qhwP2gqh0MTWuFX97SBAm5prFq/sYA4hEz+H
-         cxmkfBW1LVzRcQuaUWWwXVrnrUOsdpdCIq9CSO7pr3Okp9Q/wdziiv0pbC/yHOjSr3iM
-         VN+Z+3P6N5WhS6JpwoSkgU0Cz+SLdr4SXN7PUf1666ykjTv8PP4SQdnjci2s4XzxKfGk
-         QGfNTcoW1JeA8gT0ihdbRBPtEBG4vg5bs/b4ZWFznb88XzGLTs0uN6R6tiBuST31MNsT
-         vN36qXVoY8vFS5Tu8bLp/Vko/iRD7zGKLHNLEcOQPxDcU4mcotaocKvN6UYTqKv7X3cA
-         k+GQ==
-X-Gm-Message-State: AAQBX9cx2TITQ1bBacbU5GPueJJlr2tLSe5ugwlAapmmAmElPwWWen4h
-        0bqhUoqbt36LEGpxdC01A771CQ==
-X-Google-Smtp-Source: AKy350Zz9fjE7yr8crVz8Do6VigsWw+sdnlMiEqHRz9MaXRVBr+gnwM3rgJr4LeEuBrEHNhSLAqVdg==
-X-Received: by 2002:a05:6602:379a:b0:760:f7e4:7941 with SMTP id be26-20020a056602379a00b00760f7e47941mr10661654iob.0.1682468646567;
-        Tue, 25 Apr 2023 17:24:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q31-20020a056638345f00b0040f91a65669sm4500839jav.21.2023.04.25.17.24.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 17:24:06 -0700 (PDT)
-Message-ID: <02e6ac01-8ea4-320e-8d01-9019dd103d68@linuxfoundation.org>
-Date:   Tue, 25 Apr 2023 18:24:05 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 5.15 00/73] 5.15.109-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230424131129.040707961@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230424131129.040707961@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 25 Apr 2023 20:28:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6030B230;
+        Tue, 25 Apr 2023 17:28:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EDBB62E30;
+        Wed, 26 Apr 2023 00:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F893C433EF;
+        Wed, 26 Apr 2023 00:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682468917;
+        bh=iMl460FsgYxZKT/bQSFPVazG4qV4WaEXmxAruggaakM=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=d8vDDZ0ajEMjXZMUFXVAYmyz4oFcDQJUqol7jKydYsCl2JBZLozmT9N6HldYyGlIz
+         u822996qteuHXf1cc1aTmhqrESTwpEbKZdbq28VHp58jEV8CoepVHHE6rfM3tf2jCv
+         RiMgCFRMyUEuSvdl4qn20Yc7UKZKI9hPm5+3Dy/oHBMlLarVuSL8akAFRVIWJQfRVN
+         aE4bW2Z+I8f56WEvbummC7E3BQV5NTqaAF/vL2S5jkMYrLJrCyeVSGvJdaKR9VKJ9i
+         n9eNFZma0kTGD5/39ZobrfqGiXl+C3UmFnNTypskWeJ7xW+VAf96J2D7mKT50N1rNm
+         4Sfv/WPsnWctw==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 26 Apr 2023 03:28:30 +0300
+Message-Id: <CS69GBAMXJ1X.1T8NO0CZUBXLG@suppilovahvero>
+Cc:     <linux-kernel@vger.kernel.org>, <keyrings@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Roberto Sassu" <roberto.sassu@huawei.com>
+Subject: Re: [RFC][PATCH 3/6] verification: Introduce verify_umd_signature()
+ and verify_umd_message_sig()
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Roberto Sassu" <roberto.sassu@huaweicloud.com>,
+        <dhowells@redhat.com>, <dwmw2@infradead.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <rostedt@goodmis.org>,
+        <mhiramat@kernel.org>, <mykolal@fb.com>, <shuah@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
+ <20230425173557.724688-4-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230425173557.724688-4-roberto.sassu@huaweicloud.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 07:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.109 release.
-> There are 73 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.109-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue Apr 25, 2023 at 8:35 PM EEST, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Introduce verify_umd_signature() and verify_umd_message_sig(), to verify
+> UMD-parsed signatures from detached data. It aims to be used by kernel
+> subsystems wishing to verify the authenticity of system data, with
+> system-defined keyrings as trust anchor.
 
-Compiled and booted on my test system. No dmesg regressions.
+UMD is not generic knowledge. It is a term coined up in this patch set
+so please open code it to each patch.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+One discussion points should be what these handlers should be called.
+Right now the patch set is misleads the reader to think as this was
+some kind of "official" term and set to stone.
 
-thanks,
--- Shuah
+BR, Jarkko
