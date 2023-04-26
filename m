@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60AAF6EF19C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390A26EF197
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240265AbjDZKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S240375AbjDZKBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240396AbjDZKBO (ORCPT
+        with ESMTP id S240322AbjDZKA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:01:14 -0400
-Received: from out28-100.mail.aliyun.com (out28-100.mail.aliyun.com [115.124.28.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384674EC0;
-        Wed, 26 Apr 2023 03:01:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3684256|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0756489-0.0141251-0.910226;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.SRApSpG_1682503259;
-Received: from 10.0.2.15(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.SRApSpG_1682503259)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Apr 2023 18:01:00 +0800
-Message-ID: <04f4e968-946e-cbf0-3d78-cfe6cb17afb3@motor-comm.com>
-Date:   Wed, 26 Apr 2023 17:59:54 +0800
+        Wed, 26 Apr 2023 06:00:59 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085D43599
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:00:50 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-63b57c49c4cso5693288b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682503250; x=1685095250;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OK3qaiVcydKF9XZu8gI/RVWN/3p/t3jhTnRjwV7K8CU=;
+        b=OHfLmQ6TetIifmiTVR9LyyauRXAcQNU3ERRrcAXiXo5JSu8k8e90/F4LPPPxvhJ5Bq
+         qNc1BsfC7SsE7nke5Fb3nrfLJaBSzgAU/H/ABTcbkHZ9NFDeBwaKH53PjgoEeHy8Jsx2
+         Ci9Ik49fYzQ+zyEouDCMivUg0zEswhp3zYDlVUJgVjqjpYyWYJFvzDcs3mkzoF9dVWZI
+         IaCp5zjQmirto4Fk/SULtA7lKvU8rtRf5YTXaFg2J+z8gC8e3pRM94hxSkeVLH8yCu1X
+         9Z3NLJ6A0hU7QyPGbChnho1BtfAlgg1nrRK4IWYQGPgQpry1AoWtfsT5/9NYkdXS8Kaf
+         M1AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682503250; x=1685095250;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OK3qaiVcydKF9XZu8gI/RVWN/3p/t3jhTnRjwV7K8CU=;
+        b=LIl9TOE9Y9e2OC42itcnFS8VlEaRsXZDYmORkqQfxc3uvVFhQ0HqCDSeCjTNjb/SAl
+         VeubumxfLX7WfAULGS200z4+fW19DkkJmBrEzAoh92MLi/hW/mn3i86m3aIXKQnbJoRl
+         mxOJiRI/MGb9e3QMzpahBe5lE1GxfvJ5Js5N68Z3UPjPrKkWE7oMQh8xNH+oJO339TqV
+         MfT2yA3rXSmk9xhF4aB+F0xugbeZD2Cn87ykjXzNc1rchk4aVAQu1WbR7ame6h+sm+Z6
+         w2FRf7F7ihY4G6yoDEDkMOVjTU9k+2f0Y55TOm3n6ViuH/HlcZCW3XLTZKPgcQY/gSyA
+         OhgA==
+X-Gm-Message-State: AAQBX9dcQr5CVCnl0A3LjjjHDGm/JKgouudOLQE7u8Nt8/ztEVmudoiz
+        J5mm8WXliFAbBFHy1K0EXAdK82XthFU=
+X-Google-Smtp-Source: AKy350ahc/rCzAYODAXkAQXwOIl8SBjdAMeWouAOBakREDSTC5hR8ZV2katEqTzZ0BMa/9RHBRaP/w==
+X-Received: by 2002:a05:6a21:788e:b0:f0:5a5b:7bea with SMTP id bf14-20020a056a21788e00b000f05a5b7beamr26480987pzc.61.1682503250334;
+        Wed, 26 Apr 2023 03:00:50 -0700 (PDT)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id u29-20020a056a00099d00b0063d2bb0d107sm10940811pfg.64.2023.04.26.03.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 03:00:48 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, alexghiti@rivosinc.com, heiko@sntech.de,
+        conor.dooley@microchip.com, guoren@kernel.org,
+        anshuman.khandual@arm.com, mick@ics.forth.gr, samuel@sholland.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH -fixes V2] riscv: mm: remove redundant parameter of create_fdt_early_page_table
+Date:   Wed, 26 Apr 2023 18:00:09 +0800
+Message-Id: <20230426100009.685435-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 1/2] dt-bindings: net: motorcomm: Add pad driver
- strength cfg
-To:     Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230426063541.15378-1-samin.guo@starfivetech.com>
- <20230426063541.15378-2-samin.guo@starfivetech.com>
-Content-Language: en-US
-From:   Frank Sae <Frank.Sae@motor-comm.com>
-In-Reply-To: <20230426063541.15378-2-samin.guo@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+create_fdt_early_page_table() explicitly uses early_pg_dir for
+32-bit fdt mapping and the pgdir parameter is redundant here.
+So remove it and its caller.
 
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+---
+Changes in V1:
+https://lore.kernel.org/linux-riscv/83540cb1-0c9b-f572-849a-cb100437d049@ghiti.fr/T/#t
+- fix the typo
+---
+ arch/riscv/mm/init.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-On 2023/4/26 14:35, Samin Guo wrote:
-> The motorcomm phy (YT8531) supports the ability to adjust the drive
-> strength of the rx_clk/rx_data, the value range of pad driver
-> strength is 0 to 7.
-> 
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> ---
->  .../devicetree/bindings/net/motorcomm,yt8xxx.yaml      | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
-> index 157e3bbcaf6f..e648e486b6d8 100644
-> --- a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
-> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
-> @@ -18,6 +18,16 @@ properties:
->        - ethernet-phy-id4f51.e91a
->        - ethernet-phy-id4f51.e91b
->  
-> +  rx-clk-driver-strength:
-> +    description: drive strength of rx_clk pad.
-> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +    default: 3
-> +
-> +  rx-data-driver-strength:
-> +    description: drive strength of rxd/rx_ctl rgmii pad.
-> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +    default: 3
-> +
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 0f14f4a8d179..6ebb75a9a6b9 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -843,8 +843,7 @@ static void __init create_kernel_page_table(pgd_t *pgdir, bool early)
+  * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PGDIR
+  * entry.
+  */
+-static void __init create_fdt_early_page_table(pgd_t *pgdir,
+-					       uintptr_t fix_fdt_va,
++static void __init create_fdt_early_page_table(uintptr_t fix_fdt_va,
+ 					       uintptr_t dtb_pa)
+ {
+ 	uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
+@@ -1034,8 +1033,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+ 	create_kernel_page_table(early_pg_dir, true);
+ 
+ 	/* Setup early mapping for FDT early scan */
+-	create_fdt_early_page_table(early_pg_dir,
+-				    __fix_to_virt(FIX_FDT), dtb_pa);
++	create_fdt_early_page_table(__fix_to_virt(FIX_FDT), dtb_pa);
+ 
+ 	/*
+ 	 * Bootime fixmap only can handle PMD_SIZE mapping. Thus, boot-ioremap
+-- 
+2.20.1
 
-rx-clk-driver-strength and rx-data-driver-strength are not standard, so please add "motorcomm,".
-rx-clk-driver-strength => motorcomm,rx-clk-driver-strength
-
-
->    rx-internal-delay-ps:
->      description: |
->        RGMII RX Clock Delay used only when PHY operates in RGMII mode with
