@@ -2,135 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9478E6EF88D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF466EF896
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbjDZQkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S232486AbjDZQmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjDZQkK (ORCPT
+        with ESMTP id S229915AbjDZQmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:40:10 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC893AB3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:09 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-32abc2e7da8so19601175ab.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:09 -0700 (PDT)
+        Wed, 26 Apr 2023 12:42:51 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CB66181;
+        Wed, 26 Apr 2023 09:42:50 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-5ef4eba2598so33161656d6.3;
+        Wed, 26 Apr 2023 09:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682527208; x=1685119208;
+        d=gmail.com; s=20221208; t=1682527369; x=1685119369;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l4gwcCmmM+Y1PLgZw9XcWeLGKRKHQq/1YEoQ0r3Lmgc=;
-        b=crLkQwUQQ3nXeRFdyqa+13zRbDZxwaKCyPY+cbnyuNPizvmIZ7qSkx1kV1TfGrHIEE
-         RcGysh7goZgwwJV9T+GV1Ml11aWOZ6M0d/GLSC2nvBCmTkJOR7yLCaFupfOJXJABXFhh
-         trW0m/75bBn8vzaK0ztI0UlvWiM/aKGxPqVIo=
+        bh=ggpp339csvMck1qaojB4l0EJxGca4R1Yz1EgNOKYVtM=;
+        b=sT64F7TcldJzjpkimocfIbwdtkCOo+TcMFPZP12s8jidVl0aDSjJ9gRjV5sAQqxZGA
+         hQ78cQAqGL5i53r8U+LXsyeCeZM4a/e3KHPmb9a5O0E51j/SmLlGBMk40NweB+GHVGB7
+         ARZHZoYiGIjsSMQqbkVj3DJG4OCZ5LQl7eOTb9WHN7zeDrp+2E0ZUXvHZtcyqJsnGaE7
+         KTJemL7q1FRyWuupQZDXsfPCVn3tosiFtI5f6bLCaeeDEENDYY/fcKvfUWxLPqU9noT/
+         CWHIEjBBKJAZfH8ONLDNDffetNKmqmYbXjQXpMWloSS9jTpfUaTZSFilmIxN8EG6UZXt
+         nOCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682527208; x=1685119208;
+        d=1e100.net; s=20221208; t=1682527369; x=1685119369;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l4gwcCmmM+Y1PLgZw9XcWeLGKRKHQq/1YEoQ0r3Lmgc=;
-        b=NpEuaLsayeUNXleXxUnIBzJegz57rLTItsFrqTrYdDSufwqAXjpKJmSrtIuF6Yu/LF
-         EYVlVFnjuoh14qO8LmWrSZL5PbtM9rnB0ENYHnLNGl9+qO9ipsNsUQakNg/MByMnwmlM
-         UBV3n9HRVXCt0IXlcObBa3+AL1A8drntiFOcIIoi5uS6TTLUEFH7K7FWAewcN+YKmOED
-         D6mIOPx7xvuM+p06gq52jUslrvavRfyQFx3DrNAbmSzJlzIAPXxJam4Ld/xgGq49BaKV
-         UbZ/o5DgYOQl55UcrxNPQm6zggKiRWue4u5PhBsiLX31nXFva61GLMN+HeolleXei4f0
-         I5cg==
-X-Gm-Message-State: AAQBX9cJObzaAUAzKnYO1ZS6854C5Tx1MmiYVBLQiH8K+JEU17Njh2ng
-        /Dcnt75Mfq/7NkWy1J4b6EFNCkbEUGk6Olj8E+A=
-X-Google-Smtp-Source: AKy350aSmCULI/yjZLEcNW9dhTXJCAb2bw+b4YUw8CBpPts7s4/kQFzaXywRV7lHZbJW9Zjap9IJlw==
-X-Received: by 2002:a05:6e02:80c:b0:32e:63f:35ce with SMTP id u12-20020a056e02080c00b0032e063f35cemr9781223ilm.24.1682527208210;
-        Wed, 26 Apr 2023 09:40:08 -0700 (PDT)
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
-        by smtp.gmail.com with ESMTPSA id l17-20020a056e020dd100b0032a99a9eb8esm4341729ilj.40.2023.04.26.09.40.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 09:40:06 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-329577952c5so286985ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:06 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1be7:b0:32a:f049:edc0 with SMTP id
- y7-20020a056e021be700b0032af049edc0mr280720ilv.17.1682527206123; Wed, 26 Apr
- 2023 09:40:06 -0700 (PDT)
+        bh=ggpp339csvMck1qaojB4l0EJxGca4R1Yz1EgNOKYVtM=;
+        b=S6w/yDN/g/SJ86dP2hxuKd8pJfqNOlv96FK7igVZVCoU05EoXJMMBWIAmVtTisGNA2
+         eFiLmVIsSb8tRPBOTTiA83ZpqPl46uaXOjNmkyK6Idid38+ExluVGn17pd+uyqEaMoe0
+         PnkbXo0/mLlp2d1hJDpycDSfdVr/j+Aczp4wkqUVn9fCOEyBkDc3WpKoWd6I5XrQJ7su
+         5zEn93cICCjDMSGSzqy42dJbgZlDpLauciuni7MIAIs6SQk2BwOlAvcSDgmFAviwvkC8
+         Qst07b9VBOvXc7TvMh5QRhlGKE0mqS/4Ki81628dDdUKBVY5NnBmhAcACvRhRmOltCWY
+         Ojlw==
+X-Gm-Message-State: AAQBX9dYItEnATi2lD4rtVqDc1zTsavuyX1MtTfEgzpEKjNzr97DLD2E
+        eyezQrIedCR+xNlyXf1fbBE9e41Wn94dfQqBaO4=
+X-Google-Smtp-Source: AKy350Y2jqYhQeTdBxdIqzYV84xZ6UGCodZ9YFavgvUcXld9txQu168Q3f9vqRKA7yt1auTUXb2Sa0H+29LvlRVMdF0=
+X-Received: by 2002:a05:6214:20c1:b0:5ea:654e:4d3f with SMTP id
+ 1-20020a05621420c100b005ea654e4d3fmr33485133qve.5.1682527369654; Wed, 26 Apr
+ 2023 09:42:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230426144423.2820826-1-fshao@chromium.org> <20230426144423.2820826-3-fshao@chromium.org>
-In-Reply-To: <20230426144423.2820826-3-fshao@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 26 Apr 2023 09:39:51 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UUXAje++Za2UZU3gVTGR7iCEHA23ZSqWcscg0VsO3g8A@mail.gmail.com>
-Message-ID: <CAD=FV=UUXAje++Za2UZU3gVTGR7iCEHA23ZSqWcscg0VsO3g8A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] HID: i2c-hid: goodix: Add support for
- "goodix,no-reset-during-suspend" property
-To:     Fei Shao <fshao@chromium.org>
-Cc:     Jeff LaBundy <jeff@labundy.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1682327030-25535-3-git-send-email-quic_rohiagar@quicinc.com>
+ <ZEk9lySMZcrRZYwX@surfacebook> <66158251-6934-a07f-4b82-4deaa76fa482@quicinc.com>
+In-Reply-To: <66158251-6934-a07f-4b82-4deaa76fa482@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 26 Apr 2023 19:42:13 +0300
+Message-ID: <CAHp75VcCAOD3utLjjXeQ97nGcUTm7pic5F52+e7cJDxpDXwttA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] pinctrl: qcom: Add SDX75 pincontrol driver
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Apr 26, 2023 at 6:18=E2=80=AFPM Rohit Agarwal <quic_rohiagar@quicin=
+c.com> wrote:
+> On 4/26/2023 8:34 PM, andy.shevchenko@gmail.com wrote:
+> > Mon, Apr 24, 2023 at 02:33:50PM +0530, Rohit Agarwal kirjoitti:
 
-On Wed, Apr 26, 2023 at 7:44=E2=80=AFAM Fei Shao <fshao@chromium.org> wrote=
-:
->
-> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
-> reset line to true state of the regulator") introduced a change to tie
-> the reset line of the Goodix touchscreen to the state of the regulator
-> to fix a power leakage issue in suspend.
->
-> After some time, the change was deemed unnecessary and was reverted in
-> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
-> the regulator") due to difficulties in managing regulator notifiers for
-> designs like Evoker, which provides a second power rail to touchscreen.
->
-> However, the revert caused a power regression on another Chromebook
-> device Steelix in the field, which has a dedicated always-on regulator
-> for touchscreen and was covered by the workaround in the first commit.
->
-> To address both cases, this patch adds the support for the new
-> "goodix,no-reset-during-suspend" property in the driver:
-> - When set to true, the driver does not assert the reset GPIO during
->   power-down.
->   Instead, the GPIO will be asserted during power-up to ensure the
->   touchscreen always has a clean start and consistent behavior after
->   resuming.
->   This is for designs with a dedicated always-on regulator.
-> - When set to false or unset, the driver uses the original control flow
->   and asserts GPIO and disables regulators normally.
->   This is for the two-regulator and shared-regulator designs.
->
-> Signed-off-by: Fei Shao <fshao@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> ---
->
-> Changes in v3:
-> - In power-down, only skip the GPIO but not the regulator calls if the
->   flag is set
->
-> Changes in v2:
-> - Do not change the regulator_enable logic during power-up.
->
->  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+...
 
-You already carried over my Reviewed-by tag, which is fine. ...but
-just sending a quick confirmation that v3 looks good to me. Thanks!
+> >> +#define FUNCTION(fname)                                              =
+       \
+> >> +    [msm_mux_##fname] =3D {                                          =
+ \
+> >> +            .name =3D #fname,                                        =
+ \
+> >> +            .groups =3D fname##_groups,                              =
+ \
+> >> +    .ngroups =3D ARRAY_SIZE(fname##_groups),                         =
+ \
+> >> +    }
+> > PINCTRL_PINFUNCTION() ?
+> Ok, Will update this. Shall I also update "PINGROUP" to "PINCTRL_PINGROUP=
+"?
 
--Doug
+Yes, please.
+
+--=20
+With Best Regards,
+Andy Shevchenko
