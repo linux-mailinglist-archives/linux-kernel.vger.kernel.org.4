@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728866EF26A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9C26EF269
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240540AbjDZKni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        id S240521AbjDZKnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240509AbjDZKn1 (ORCPT
+        with ESMTP id S240505AbjDZKn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 06:43:27 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDC14C03
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:43:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so7307e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682505801; x=1685097801;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1l22hRUUq/IeT+lj7j9mcQyEj+B5z+NRQ6K59AKwb4M=;
-        b=dQ4cunzURjxkU0Leg7LAnW10B6iCwcl0niLLMCTpkjxaqk9CfBvAZ1HgYEeuNEf5Df
-         zZ184SgUKghynTw2tZX+ypOybCxdyCKNL7DMU9IjJu/PdtY2ux8Z/c/xxwn9U7NV4+x8
-         dbDsyMs04VHMB/zNnOJP4wUr69uff9Qqm/M2aWU00bT2qFUwxtFouULN9tFgPzMneHyv
-         lVGDvP5erVVVmurehevtjGrXnOk0JRJsNeS0ZcaQFAOhgyLAM7167hxcZoAYKmlGkLH6
-         KJ9Wkxb5NWiCh8R/jpMyPupA7BUJu+0Opr7z9XpWThO1NjmwZjfbmqdUc5nQgVBLootZ
-         T22g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682505801; x=1685097801;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1l22hRUUq/IeT+lj7j9mcQyEj+B5z+NRQ6K59AKwb4M=;
-        b=SUJx427MNo2mrpSRVvGw7c6SseJE2hozEYo9Bqzk8I8VkjIUwzi/zKzYv5XXYZ/b8X
-         kcfDfkk85H053IW+LD0ITXqhIfSzZSPB1bUNk/64R7VHvPrShdIRgR7njd+WOfIkLbdd
-         GeIzAIkAVAG4ES9T2r/Y0vV5N7ZKRXRlrg/HZo8/i6G5FHmEIFJTI6XmTXDaiNFOZBu2
-         KD0Joguvqo8fFbn+azly4MQ3TBvcVkfO/Er0LI/Igv3/BaXsDt2rl6x4Qaz7s5KS5xIB
-         45+kcj0sRi6vIZoNgic7WLheCME0tylirgCvM4IJJVwnSBDir8bP+eAJpXcB8Ex9w6y4
-         eomg==
-X-Gm-Message-State: AC+VfDz0Z1DUBQL8rQwhpLgsUzUz8yjiUaGGdES26AIA2oZsp6Pzj81W
-        VX9F6ISk7OOhyoDtO6NOjYIWoHRZtkncbeCC+Y/d+w==
-X-Google-Smtp-Source: ACHHUZ4B5f1M+sCvV1r/JKCKg4wqK2GIXRKY8DLF7nDMlL59wkEK2UGwq1KEigLY8M1WXsEVAUtJ+zjYP4xY+/V/nWc=
-X-Received: by 2002:a05:6512:b08:b0:4e8:3fc8:4f80 with SMTP id
- w8-20020a0565120b0800b004e83fc84f80mr177986lfu.4.1682505801347; Wed, 26 Apr
- 2023 03:43:21 -0700 (PDT)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A93D46B0;
+        Wed, 26 Apr 2023 03:43:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZeBamfcYDRumuIfoNEOa3Te5UIWMNycWlKMZhiYE/Hpwk+MlmwRvu6BG6xJh9cc5gmTCf6DnLbd7aLSCzBywuaT0PgEnaFSoxwxSaxYOAIGTIg0IzgeMwasuU52isikfvAn/OJsokGDBwBp9nyDcK3WpEYjyrmWB+enmnh47fLB0ybThy1Y02A5zY++yLB0pjI7eGPGlkjgX7JHfmQMuaMcwAo7/3H3SDKjHCRw44UbCTc+n3PBwF3YSH9Sgzkil8XlqxMSNxSH/vPhLIKG28vlQJISxI4U6ehVy1YFrkngGJ948ZETkDW5bGyAoqIBnju5Cxvmh2mKLDHQgw+7vEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ByTvEJDJotuFtMm6dMGhfHsXAr3pTFCdIxACb2MfSKU=;
+ b=mc+fAzj1knenaSebrwRoTz4fxFd+ujpbTpXVZmte/CwiLnhk2VxiSJpR6Nx4STpzinDKWfF3IG1MLC68vjf8XziDxysbvdqSgw+OjrtojiHkvuLrSv6Ssj/iEioHu01YcXrgSZdMXYJSycYUKEfy+HuDKulN02UDGseTaQI5Kz5eVnLtS2XMPUvXZbJ1lLcxXxieD5N9TsVQ1soxPUTEdFFW6ZgChAchFkEcbmokRojnkP780Eh0Y8j8WHPMOzntSx7L6IMDxDpqFZZcyPR5nh05FfTwnZmz6goAZeegB4nVHUdelxHDT88E1WJ6dvCqTL2lk6okHyYASgmekApGaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ByTvEJDJotuFtMm6dMGhfHsXAr3pTFCdIxACb2MfSKU=;
+ b=2GhFbXS5SZxztxSxgb569KyLgrFmgBZDeCEsD40nZBgRsLZKKW1BJRrJQVtSybH/A8CBfQvnp2l0qpXwRtwk/B0mR4Oir3WVVXjB1DnNE8yXJYpRx7ucI4gClPwco5D05R8mO1gBzGltDssWwPfKotFI+RRSus5jQap9boYxHqI=
+Received: from MW4PR04CA0205.namprd04.prod.outlook.com (2603:10b6:303:86::30)
+ by DM6PR12MB4385.namprd12.prod.outlook.com (2603:10b6:5:2a6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.20; Wed, 26 Apr
+ 2023 10:43:20 +0000
+Received: from CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:86:cafe::21) by MW4PR04CA0205.outlook.office365.com
+ (2603:10b6:303:86::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21 via Frontend
+ Transport; Wed, 26 Apr 2023 10:43:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT088.mail.protection.outlook.com (10.13.175.131) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6340.21 via Frontend Transport; Wed, 26 Apr 2023 10:43:19 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 26 Apr
+ 2023 05:43:18 -0500
+Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 26 Apr 2023 05:43:14 -0500
+From:   Harini Katakam <harini.katakam@amd.com>
+To:     <robh+dt@kernel.org>, <andrew@lunn.ch>, <hkallweit1@gmail.com>,
+        <linux@armlinux.org.uk>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <vladimir.oltean@nxp.com>, <wsa+renesas@sang-engineering.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <simon.horman@corigine.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <harinikatakamlinux@gmail.com>,
+        <michal.simek@amd.com>, <harini.katakam@amd.com>,
+        <radhey.shyam.pandey@amd.com>
+Subject: [PATCH net-next v2 0/3] Add support for VSC8531_02 PHY and DT RGMII tuning
+Date:   Wed, 26 Apr 2023 16:13:10 +0530
+Message-ID: <20230426104313.28950-1-harini.katakam@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <00000000000079eebe05fa2ea9ad@google.com> <CANiq72mor1BkxpAT=v0EsQJN-7fvMjo9K5ooVk1x7ZbBDEyn8g@mail.gmail.com>
- <CACT4Y+aMdct_tjSYsBvvtGoDji6feOiANogRbp3N41qkzU+5CQ@mail.gmail.com>
- <CANiq72nm2dU2o_x_GQ5SdsXaK6yZiDXG2hXEYMykViEAZvuMqQ@mail.gmail.com>
- <CACT4Y+YyYnwg4a1zjTnBU=t0x5Brt1rGuzz-5pXf2Fz3cKf4FQ@mail.gmail.com> <CANiq72=vMydenfkxQx4X7kYvHD0cHzNK19xxxqow3WcLStsdRA@mail.gmail.com>
-In-Reply-To: <CANiq72=vMydenfkxQx4X7kYvHD0cHzNK19xxxqow3WcLStsdRA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 26 Apr 2023 12:43:08 +0200
-Message-ID: <CACT4Y+ZrwXB1W31Rr7rUUOoW15YbKfnC0khY9KnNk8FTf5uQnA@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in __dabt_svc
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     syzkaller@googlegroups.com, alex.gaynor@gmail.com,
-        andriy.shevchenko@linux.intel.com, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, bpf@vger.kernel.org, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
-        ojeda@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
-        rust-for-linux@vger.kernel.org, senozhatsky@chromium.org,
-        syzkaller-bugs@googlegroups.com, wedsonaf@gmail.com,
-        Joe Perches <joe@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT088:EE_|DM6PR12MB4385:EE_
+X-MS-Office365-Filtering-Correlation-Id: 794d96e7-1c76-4c91-a210-08db46430d11
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7V5qKhrCdyMIWeXAVemwEowFo6GW+rhCKOVsJR9FeVOXBxt5mfsemvd2GFUHRnzNi+03XzrFAo6dQ4VO83Ml3ev6d3mXYnOQ9SXOFTCpm6C6yEAPxojK9Nl0eDdH75C8mYfz1f4pArPkOXOfzIo0I1dSO/RGo6UYHQMMYeBGgunsDVp9ErIineFLDR0EvoighlQSc1+eSvwPY/D0t3wOH9DIxmfVgYUkRo+MB1yvw9PM003tObARGTjAiwBPmFsbK/tXKEeYdnCbq6EdGOZqQ/0dMbXOteDlRq+HPON+H0vd53zpdS3INMX5g8Ot+EnL0C/WbZretTWvt68ww7+chkQfKlQW+/1U/fYuRvgSbsRQIBju+BLGWRJentV80ufBCuD4rl2bjyGgiCZQB6NgoUPe1GRm2tnS/Dm6e6ksW5l8NNmpDO+nq4J/kOfPzQkfvAg+8RxFL4Pt8zwUzwRb4Z68wlN2m3A/239LT2XP8m45qvHVV6O09m4QON5QPW5+lpuP7eHjOBCj7M3GS+uFzDr/Lw5o0i7rm33ribSN9IbR9/6ApMX2oO0HpQAw1j8w37w7xiMiZVWAAQuJpOtffZhOilcZYdSF6TND+r6lVh6YiE40cNJGtHMm0iEBchlLlkZSzUSH+XieaorrduE9ds3EHoe2rB152mzRgOZj4KeiOU80B3Umgeavg34nyJogW/4WZjWiuDWO78gHdY7qzmU+54cus+lGXJ8MuGF3ivMWZR2yB+tItZbSxvyT7k50
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199021)(36840700001)(40470700004)(46966006)(2616005)(110136005)(26005)(1076003)(186003)(70206006)(40480700001)(54906003)(36860700001)(47076005)(4326008)(316002)(6666004)(83380400001)(966005)(336012)(86362001)(478600001)(426003)(82310400005)(70586007)(356005)(7416002)(82740400003)(41300700001)(44832011)(5660300002)(40460700003)(2906002)(8676002)(8936002)(81166007)(921005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 10:43:19.7507
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 794d96e7-1c76-4c91-a210-08db46430d11
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4385
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 12:30, Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
-> > In which of the dozens of kernel testing systems? ;)
-> > And also in heads of thousands of kernel developers and users?
-> > All of them use get_maintainer.pl.
->
-> I am aware, but `get_maintainer.pl` is fine as it is -- we still want
-> to know about things that touch things that mention Rust in general,
-> so that we can possibly be helpful to others, especially early on.
->
-> However, if a bot is testing the kernel with Rust actually disabled at
-> runtime, what I am saying is that the chance that it has something to
-> do with Rust is quite low, especially if matched via `K:` rather than
-> `F:`. Thus my request.
->
-> Now, it could be nice to have some logic like that in
-> `get_maintainer.pl` encoded for all bots to filter things out based on
-> the kernel config and the type of match; but otherwise, yes, the bots
-> would need to add the logic.
->
-> Cc'ing Joe in case this is already possible in `get_maintainer.pl` or
-> whether there could be a better approach.
+Add support for VSC8531_02 PHY ID.
+Also provide an option to tune RGMII delay value via devicetree.
+The default delays are retained in the driver.
 
-I understand your intentions and they make sense.
-But adding this logic to syzbot won't help thousands of users of
-get_maintainer.pl and dozens of other testing systems. There also will
-be a bit of get_maintainer.pl inside of syzbot code, so now all kernel
-developers will need to be aware of it and also submit changes to
-syzbot when they want to change maintainers logic.
+v2 changes:
+- Added patch to use a common vendor phy id match
+- Removed dt include header patch because delays should be specied in
+ps, not register values
+- Updated DT binding description and commit for optional delay tuning to
+be clearer on the precedence
+- Updated dt property name to include vendor instead of phy device name
+- Switch both VSC8531 and VSC8531-02 to use exact phy id match as they
+share the same model number
+- Ensure RCT
+- Improve optional property read
 
-I think this also equally applies to all other users of K:.
-And a number of them had similar complaints re how K; works.
+RFC link: https://lore.kernel.org/all/20210629094038.18610-1-harini.katakam@xilinx.com/
 
-I am thinking if K: should actually apply just to patches and be
-ignored for source files?
-If there are files that belong to "rust" (or "bpf" or any other user
-of K:), then I think these should be just listed explicitly in the
-subsystem (that should be a limited set of files that can be
-enumerated with wildcards).
-It's also reasonable to apply K: to patches.
-But if a random source file happened to mention "rust" somewhere once,
-I am not sure you want to be CCed on all issues in that file.
-Does it sound reasonable?
+Harini Katakam (3):
+  phy: mscc: Use PHY_ID_MATCH_VENDOR to minimize PHY ID table
+  dt-bindings: mscc: Add RGMII RX and TX delay tuning
+  phy: mscc: Add support for VSC8531_02 with RGMII tuning
+
+ .../bindings/net/mscc-phy-vsc8531.txt         |  2 +
+ drivers/net/phy/mscc/mscc.h                   |  3 ++
+ drivers/net/phy/mscc/mscc_main.c              | 54 +++++++++++++------
+ 3 files changed, 42 insertions(+), 17 deletions(-)
+
+-- 
+2.17.1
+
