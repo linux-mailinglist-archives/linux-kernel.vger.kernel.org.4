@@ -2,637 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959646EF358
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4C66EF35E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240574AbjDZLVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S240036AbjDZLXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240608AbjDZLVr (ORCPT
+        with ESMTP id S240110AbjDZLW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:21:47 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE453524C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:21:44 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4efe9a98736so4675161e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682508103; x=1685100103;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ifpAFOqSKqYvRcYeiq40O8NH7hnbVXJ0UqEiMQCHhKQ=;
-        b=ixMuPru0fUdeRM+GAPy1sMyO6dnLIiT9KjJpg9UZwSJLi8NmT0C81GjxcZDpsKkTAV
-         yWVSShtYGQ+Bwka/dZnPeZiuCspJnhLtshld57ifTOXCbkUQ8BYNu/d9SZv+5ENnnVqQ
-         OIF5Vf+Wq5jHfWmofIHFXGrJ91lzX681wq31ksFX1IebSsjXQGxnSifY0UPL4eKXDLQ4
-         2Dv6aayzhJd8bG0WBLzndl7sTshVSA+y3gEe34becMqgycx/c6x30W2/IzrZfLigi+nm
-         baMSBE/8YTfMdqzFBl2BZJb7xn4QzMQR2rTKNQBO3YqveYNMWy1a9Wsh1tJ/DYQdFujk
-         lXfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682508103; x=1685100103;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ifpAFOqSKqYvRcYeiq40O8NH7hnbVXJ0UqEiMQCHhKQ=;
-        b=TOuKiyBjM89vo3zO4OHgVeNEdmd9JW2OXbiiPPV5EHZq1WHKTN5hGUyeZT2lQcOELi
-         ZiAmmHGvg0AwNrgKdsJSnpXX8H5177w/jIeiM1EYeLtePiqQcuzJFJ410Ng/Gt5AhL3z
-         G9jW1n0iiY75xc/1J8wg2iq+WENR1QBKEzq0Sd2l+UhreZ1e8qdQ1LPJDYjnegeSYLxN
-         7ACel8QQLg2Ih+QdoecI4R/B3vUm4T5BDRONV57rcluxGlczWYQSg202TL+H7/u18UtI
-         kNkUmlpiHFF7X12EQshdmY7U/41UCmTVcTJaUeukCLYL70if7AaKOTTWkdll22QgD26r
-         kLeg==
-X-Gm-Message-State: AAQBX9cVHUAInwrUt8+sGoiop62MC0xHYVmSOi7MMPhs/gufA1GgxlDu
-        bHA0Dn5GwW+syXogZXJrPejHGA==
-X-Google-Smtp-Source: AKy350bEkWVPreDi1G/BTk6hSkeL6z02X4Sw8m7SGidgmWoiKw/rulMIp+OPLqH5JyQRNOVLx3y2CQ==
-X-Received: by 2002:ac2:522d:0:b0:4ef:ef9f:f255 with SMTP id i13-20020ac2522d000000b004efef9ff255mr2825218lfl.48.1682508102855;
-        Wed, 26 Apr 2023 04:21:42 -0700 (PDT)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id u28-20020a056512041c00b004ec84d24818sm2453237lfk.282.2023.04.26.04.21.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 04:21:42 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 26 Apr 2023 13:21:39 +0200
-Subject: [PATCH v2 2/2] dt-bindings: MFD: Convert STMPE to YAML schema
+        Wed, 26 Apr 2023 07:22:57 -0400
+Received: from out-43.mta1.migadu.com (out-43.mta1.migadu.com [95.215.58.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5185273
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:22:45 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 19:22:35 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1682508163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kIGzdgxp4g5fVIMLMSS9e9A5PrNjxPiV12VtZ2uveU8=;
+        b=EsQMqQafv9G74V7MqGQkrzOmkoRLkPA8wjX8ydUMRCK3iyB9WgpoB44unZ99dWX9vPPGQp
+        AgwKX2l9Pojt1P2b1lWMUFgW9rPfwPYl5I0biwQQF9DZLlizoOSui17aSbB9C0kONS6HUv
+        6QeyjiHFRuxzuLlAiNpwCknp20OlCoM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     Oded Gabbay <ogabbay@kernel.org>,
+        Ohad Sharabi <osharabi@habana.ai>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] accel/habanalabs: Make use of rhashtable
+Message-ID: <ZEkJe5YZY9hCfP2j@chq-MS-7D45>
+References: <20230426092813.44635-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230426-stmpe-dt-bindings-v2-2-2f85a1fffcda@linaro.org>
-References: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
-In-Reply-To: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230426092813.44635-1-cai.huoqing@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This converts the STMPE MFD device tree bindings to the YAML
-schema.
+On 26 4月 23 17:28:02, Cai Huoqing wrote:
+> Using rhashtable to accelerate the search for userptr by address,
+> instead of using a list.
+> 
+> Preferably, the lookup complexity of a hash table is O(1).
+> 
+> This patch will speedup the method
+> hl_userptr_is_pinned by rhashtable_lookup_fast.
+> 
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> ---
+>  .../habanalabs/common/command_submission.c    | 16 ++++++---
+>  drivers/accel/habanalabs/common/habanalabs.h  | 19 +++++-----
+>  drivers/accel/habanalabs/common/memory.c      | 35 +++++++++++++------
+>  drivers/accel/habanalabs/gaudi/gaudi.c        | 16 +++++----
+>  drivers/accel/habanalabs/goya/goya.c          | 14 +++++---
+>  5 files changed, 66 insertions(+), 34 deletions(-)
+> 
+> diff --git a/drivers/accel/habanalabs/common/command_submission.c b/drivers/accel/habanalabs/common/command_submission.c
+> index af9d2e22c6e7..35c2ab934396 100644
+> --- a/drivers/accel/habanalabs/common/command_submission.c
+> +++ b/drivers/accel/habanalabs/common/command_submission.c
+> @@ -312,7 +312,7 @@ static int cs_parser(struct hl_fpriv *hpriv, struct hl_cs_job *job)
+>  	parser.job_id = job->id;
+>  
+>  	parser.hw_queue_id = job->hw_queue_id;
+> -	parser.job_userptr_list = &job->userptr_list;
+> +	parser.job_userptr_ht = &job->userptr_ht;
+>  	parser.patched_cb = NULL;
+>  	parser.user_cb = job->user_cb;
+>  	parser.user_cb_size = job->user_cb_size;
+> @@ -351,7 +351,7 @@ static void hl_complete_job(struct hl_device *hdev, struct hl_cs_job *job)
+>  	struct hl_cs *cs = job->cs;
+>  
+>  	if (is_cb_patched(hdev, job)) {
+> -		hl_userptr_delete_list(hdev, &job->userptr_list);
+> +		hl_userptr_delete_list(hdev, &job->userptr_ht);
+>  
+>  		/*
+>  		 * We might arrive here from rollback and patched CB wasn't
+> @@ -1284,6 +1284,7 @@ struct hl_cs_job *hl_cs_allocate_job(struct hl_device *hdev,
+>  		enum hl_queue_type queue_type, bool is_kernel_allocated_cb)
+>  {
+>  	struct hl_cs_job *job;
+> +	int rc;
+>  
+>  	job = kzalloc(sizeof(*job), GFP_ATOMIC);
+>  	if (!job)
+> @@ -1296,13 +1297,20 @@ struct hl_cs_job *hl_cs_allocate_job(struct hl_device *hdev,
+>  	job->queue_type = queue_type;
+>  	job->is_kernel_allocated_cb = is_kernel_allocated_cb;
+>  
+> -	if (is_cb_patched(hdev, job))
+> -		INIT_LIST_HEAD(&job->userptr_list);
+> +	if (is_cb_patched(hdev, job)) {
+> +		rc = rhashtable_init(&job->userptr_ht, &hl_userptr_rht_params);
+> +		if (rc)
+> +			goto free_job;
+> +	}
+>  
+>  	if (job->queue_type == QUEUE_TYPE_EXT)
+>  		INIT_WORK(&job->finish_work, job_wq_completion);
+>  
+>  	return job;
+> +
+> +free_job:
+> +	kfree(job);
+> +	return NULL;
+>  }
+>  
+>  static enum hl_cs_type hl_cs_get_cs_type(u32 cs_type_flags)
+> diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
+> index eaae69a9f817..9c876d1480d2 100644
+> --- a/drivers/accel/habanalabs/common/habanalabs.h
+> +++ b/drivers/accel/habanalabs/common/habanalabs.h
+> @@ -19,6 +19,7 @@
+>  #include <linux/dma-direction.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/hashtable.h>
+> +#include <linux/rhashtable.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/rwsem.h>
+>  #include <linux/eventfd.h>
+> @@ -540,6 +541,8 @@ struct hl_hints_range {
+>  	u64 end_addr;
+>  };
+>  
+> +extern const struct rhashtable_params hl_userptr_rht_params;
+> +
+>  /**
+>   * struct asic_fixed_properties - ASIC specific immutable properties.
+>   * @hw_queues_props: H/W queues properties.
+> @@ -1915,7 +1918,7 @@ struct hl_ctx_mgr {
+>  /**
+>   * struct hl_userptr - memory mapping chunk information
+>   * @vm_type: type of the VM.
+> - * @job_node: linked-list node for hanging the object on the Job's list.
+> + * @job_node: hashtable node for hanging the object on the Job's list.
+>   * @pages: pointer to struct page array
+>   * @npages: size of @pages array
+>   * @sgt: pointer to the scatter-gather table that holds the pages.
+> @@ -1928,7 +1931,7 @@ struct hl_ctx_mgr {
+>   */
+>  struct hl_userptr {
+>  	enum vm_type		vm_type; /* must be first */
+> -	struct list_head	job_node;
+> +	struct rhash_head	job_node;
+>  	struct page		**pages;
+>  	unsigned int		npages;
+>  	struct sg_table		*sgt;
+> @@ -2028,7 +2031,7 @@ struct hl_cs {
+>   * @patched_cb: in case of patching, this is internal CB which is submitted on
+>   *		the queue instead of the CB we got from the IOCTL.
+>   * @finish_work: workqueue object to run when job is completed.
+> - * @userptr_list: linked-list of userptr mappings that belong to this job and
+> + * @userptr_ht: hashtable of userptr mappings that belong to this job and
+>   *			wait for completion.
+>   * @debugfs_list: node in debugfs list of command submission jobs.
+>   * @refcount: reference counter for usage of the CS job.
+> @@ -2056,7 +2059,7 @@ struct hl_cs_job {
+>  	struct hl_cb		*user_cb;
+>  	struct hl_cb		*patched_cb;
+>  	struct work_struct	finish_work;
+> -	struct list_head	userptr_list;
+> +	struct rhashtable	userptr_ht;
+>  	struct list_head	debugfs_list;
+>  	struct kref		refcount;
+>  	enum hl_queue_type	queue_type;
+> @@ -2075,7 +2078,7 @@ struct hl_cs_job {
+>   * @user_cb: the CB we got from the user.
+>   * @patched_cb: in case of patching, this is internal CB which is submitted on
+>   *		the queue instead of the CB we got from the IOCTL.
+> - * @job_userptr_list: linked-list of userptr mappings that belong to the related
+> + * @job_userptr_ht: hashtable of userptr mappings that belong to the related
+>   *			job and wait for completion.
+>   * @cs_sequence: the sequence number of the related CS.
+>   * @queue_type: the type of the H/W queue this job is submitted to.
+> @@ -2098,7 +2101,7 @@ struct hl_cs_job {
+>  struct hl_cs_parser {
+>  	struct hl_cb		*user_cb;
+>  	struct hl_cb		*patched_cb;
+> -	struct list_head	*job_userptr_list;
+> +	struct rhashtable	*job_userptr_ht;
+>  	u64			cs_sequence;
+>  	enum hl_queue_type	queue_type;
+>  	u32			ctx_id;
+> @@ -3760,9 +3763,9 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
+>  			struct hl_userptr *userptr);
+>  void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr);
+>  void hl_userptr_delete_list(struct hl_device *hdev,
+> -				struct list_head *userptr_list);
+> +				struct rhashtable *userptr_ht);
+>  bool hl_userptr_is_pinned(struct hl_device *hdev, u64 addr, u32 size,
+> -				struct list_head *userptr_list,
+> +				struct rhashtable *userptr_ht,
+>  				struct hl_userptr **userptr);
+>  
+>  int hl_mmu_init(struct hl_device *hdev);
+> diff --git a/drivers/accel/habanalabs/common/memory.c b/drivers/accel/habanalabs/common/memory.c
+> index a7b6a273ce21..e5e7912b3b34 100644
+> --- a/drivers/accel/habanalabs/common/memory.c
+> +++ b/drivers/accel/habanalabs/common/memory.c
+> @@ -23,6 +23,13 @@ MODULE_IMPORT_NS(DMA_BUF);
+>  
+>  #define MEM_HANDLE_INVALID	ULONG_MAX
+>  
+> +const struct rhashtable_params hl_userptr_rht_params = {
+> +	.head_offset = offsetof(struct hl_userptr, job_node),
+> +	.key_offset = offsetof(struct hl_userptr, addr),
+> +	.key_len = sizeof(u64),
+> +	.automatic_shrinking = true,
+> +};
+> +
+>  static int allocate_timestamps_buffers(struct hl_fpriv *hpriv,
+>  			struct hl_mem_in *args, u64 *handle);
+>  
+> @@ -2483,7 +2490,6 @@ int hl_pin_host_memory(struct hl_device *hdev, u64 addr, u64 size,
+>  	userptr->size = size;
+>  	userptr->addr = addr;
+>  	userptr->dma_mapped = false;
+> -	INIT_LIST_HEAD(&userptr->job_node);
+>  
+>  	rc = get_user_memory(hdev, addr, size, npages, start, offset,
+>  				userptr);
+> @@ -2522,8 +2528,6 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+>  	unpin_user_pages_dirty_lock(userptr->pages, userptr->npages, true);
+>  	kvfree(userptr->pages);
+>  
+> -	list_del(&userptr->job_node);
+> -
+>  	sg_free_table(userptr->sgt);
+>  	kfree(userptr->sgt);
+>  }
+> @@ -2531,23 +2535,31 @@ void hl_unpin_host_memory(struct hl_device *hdev, struct hl_userptr *userptr)
+>  /**
+>   * hl_userptr_delete_list() - clear userptr list.
+>   * @hdev: pointer to the habanalabs device structure.
+> - * @userptr_list: pointer to the list to clear.
+> + * @userptr_ht: pointer to the hashtable to clear.
+>   *
+>   * This function does the following:
+>   * - Iterates over the list and unpins the host memory and frees the userptr
+>   *   structure.
+>   */
+>  void hl_userptr_delete_list(struct hl_device *hdev,
+> -				struct list_head *userptr_list)
+> +				struct rhashtable *userptr_ht)
+>  {
+> -	struct hl_userptr *userptr, *tmp;
+> +	struct hl_userptr *userptr;
+> +	struct rhashtable_iter hti;
+> +	struct rhash_head *pos;
+>  
+> -	list_for_each_entry_safe(userptr, tmp, userptr_list, job_node) {
+> +	rhashtable_walk_enter(userptr_ht, &hti);
+> +	rhashtable_walk_start(&hti);
+> +	while ((pos = rhashtable_walk_next(&hti))) {
 
-Reference the existing schema for the ADC, just define the
-other subnode schemas directly in the MFD schema.
+rhashtable_walk_next seems not stable,
+will revert here, keep 'userptr_list' to do clear by list_for_each.
+And send the v2 patch
 
-Add two examples so we have examples covering both the simple
-GPIO expander and the more complex with ADC and touchscreen.
-
-Some in-tree users do not follow the naming conventions for nodes
-so these DTS files need to be augmented to use proper node names
-like "adc", "pwm", "gpio", "keyboard-controller" etc before the
-bindings take effect on them.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Split off the GPIO bindings to their own schema, as the old
-  bindings didn't even have any GPIO bindings. Put the GPIO
-  schema before this schema so we can use GPIO in the examples.
-- Drop nodename and pattern as STMPE is not a generic name.
-- Add maxItems to the resets.
-- Make wakeup-source just :true, as it is a generic property.
-- Move unevaluatedProperties for subnodes right before properties
-  as requested.
-- Name devices "port-expander" in the examples.
-- Use lowercase hex in line init.
----
- .../devicetree/bindings/input/stmpe-keypad.txt     |  41 ---
- .../bindings/input/touchscreen/stmpe.txt           | 108 --------
- .../devicetree/bindings/mfd/st,stmpe.yaml          | 298 +++++++++++++++++++++
- Documentation/devicetree/bindings/mfd/stmpe.txt    |  42 ---
- 4 files changed, 298 insertions(+), 191 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/input/stmpe-keypad.txt b/Documentation/devicetree/bindings/input/stmpe-keypad.txt
-deleted file mode 100644
-index 12bb771d66d4..000000000000
---- a/Documentation/devicetree/bindings/input/stmpe-keypad.txt
-+++ /dev/null
-@@ -1,41 +0,0 @@
--* STMPE Keypad
--
--Required properties:
-- - compatible               : "st,stmpe-keypad"
-- - linux,keymap             : See ./matrix-keymap.txt
--
--Optional properties:
-- - debounce-interval        : Debouncing interval time in milliseconds
-- - st,scan-count            : Scanning cycles elapsed before key data is updated
-- - st,no-autorepeat         : If specified device will not autorepeat
-- - keypad,num-rows          : See ./matrix-keymap.txt
-- - keypad,num-columns       : See ./matrix-keymap.txt
--
--Example:
--
--	stmpe_keypad {
--		compatible = "st,stmpe-keypad";
--
--		debounce-interval = <64>;
--		st,scan-count = <8>;
--		st,no-autorepeat;
--
--		linux,keymap = <0x205006b
--				0x4010074
--				0x3050072
--				0x1030004
--				0x502006a
--				0x500000a
--				0x5008b
--				0x706001c
--				0x405000b
--				0x6070003
--				0x3040067
--				0x303006c
--				0x60400e7
--				0x602009e
--				0x4020073
--				0x5050002
--				0x4030069
--				0x3020008>;
--	};
-diff --git a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt b/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
-deleted file mode 100644
-index 238b51555c04..000000000000
---- a/Documentation/devicetree/bindings/input/touchscreen/stmpe.txt
-+++ /dev/null
-@@ -1,108 +0,0 @@
--STMPE Touchscreen
------------------
--
--Required properties:
-- - compatible: "st,stmpe-ts"
--
--Optional properties:
--- st,ave-ctrl		: Sample average control
--				0 -> 1 sample
--				1 -> 2 samples
--				2 -> 4 samples
--				3 -> 8 samples
--- st,touch-det-delay	: Touch detect interrupt delay (recommended is 3)
--				0 -> 10 us
--				1 -> 50 us
--				2 -> 100 us
--				3 -> 500 us
--				4 -> 1 ms
--				5 -> 5 ms
--				6 -> 10 ms
--				7 -> 50 ms
--- st,settling		: Panel driver settling time (recommended is 2)
--				0 -> 10 us
--				1 -> 100 us
--				2 -> 500 us
--				3 -> 1 ms
--				4 -> 5 ms
--				5 -> 10 ms
--				6 -> 50 ms
--				7 -> 100 ms
--- st,fraction-z		: Length of the fractional part in z (recommended is 7)
--			  (fraction-z ([0..7]) = Count of the fractional part)
--- st,i-drive		: current limit value of the touchscreen drivers
--				0 -> 20 mA (typical 35mA max)
--				1 -> 50 mA (typical 80 mA max)
--
--Optional properties common with MFD (deprecated):
-- - st,sample-time	: ADC conversion time in number of clock.
--				0 -> 36 clocks
--				1 -> 44 clocks
--				2 -> 56 clocks
--				3 -> 64 clocks
--				4 -> 80 clocks (recommended)
--				5 -> 96 clocks
--				6 -> 124 clocks
-- - st,mod-12b		: ADC Bit mode
--				0 -> 10bit ADC
--				1 -> 12bit ADC
-- - st,ref-sel		: ADC reference source
--				0 -> internal
--				1 -> external
-- - st,adc-freq		: ADC Clock speed
--				0 -> 1.625 MHz
--				1 -> 3.25 MHz
--				2 || 3 -> 6.5 MHz
--
--Node should be child node of stmpe node to which it belongs.
--
--Note that common ADC settings of stmpe_touchscreen (child) will take precedence
--over the settings done in MFD.
--
--Example:
--
--stmpe811@41 {
--	compatible = "st,stmpe811";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_touch_int>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--	reg = <0x41>;
--	interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
--	interrupt-parent = <&gpio4>;
--	interrupt-controller;
--	id = <0>;
--	blocks = <0x5>;
--	irq-trigger = <0x1>;
--	/* Common ADC settings */
--	/* 3.25 MHz ADC clock speed */
--	st,adc-freq = <1>;
--	/* 12-bit ADC */
--	st,mod-12b = <1>;
--	/* internal ADC reference */
--	st,ref-sel = <0>;
--	/* ADC converstion time: 80 clocks */
--	st,sample-time = <4>;
--
--	stmpe_touchscreen {
--		compatible = "st,stmpe-ts";
--		reg = <0>;
--		/* 8 sample average control */
--		st,ave-ctrl = <3>;
--		/* 5 ms touch detect interrupt delay */
--		st,touch-det-delay = <5>;
--		/* 1 ms panel driver settling time */
--		st,settling = <3>;
--		/* 7 length fractional part in z */
--		st,fraction-z = <7>;
--		/*
--		 * 50 mA typical 80 mA max touchscreen drivers
--		 * current limit value
--		 */
--		st,i-drive = <1>;
--	};
--	stmpe_adc {
--		compatible = "st,stmpe-adc";
--		st,norequest-mask = <0x0F>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-new file mode 100644
-index 000000000000..dd24ae2d5fb4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-@@ -0,0 +1,298 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/st,stmpe.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectonics Port Expander (STMPE)
-+
-+description: STMicroelectronics Port Expander (STMPE) is a series of slow
-+  bus controllers for various expanded peripherals such as GPIO, keypad,
-+  touchscreen, ADC, PWM or rotator. It can contain one or several different
-+  peripherals connected to SPI or I2C.
-+
-+maintainers:
-+  - Linus Walleij <linus.walleij@linaro.org>
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stmpe601
-+      - st,stmpe801
-+      - st,stmpe811
-+      - st,stmpe1600
-+      - st,stmpe1601
-+      - st,stmpe2401
-+      - st,stmpe2403
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  vcc-supply: true
-+
-+  vio-supply: true
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  st,autosleep-timeout:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 4, 16, 32, 64, 128, 256, 512, 1024 ]
-+    description: Time idle before going to automatic sleep to save power
-+
-+  st,sample-time:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1, 2, 3, 4, 5, 6 ]
-+    description: |
-+      Sample time per iteration
-+      0 = 36 clock ticks
-+      1 = 44 clock ticks
-+      2 = 56 clock ticks
-+      3 = 64 clock ticks
-+      4 = 80 clock ticks - recommended
-+      5 = 96 clock ticks
-+      6 = 124 clock ticks
-+
-+  st,mod-12b:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description: ADC bit mode 0 = 10bit ADC, 1 = 12bit ADC
-+
-+  st,ref-sel:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1 ]
-+    description: ADC reference source 0 = internal, 1 = external
-+
-+  st,adc-freq:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [ 0, 1, 2, 3 ]
-+    description: |
-+      ADC clock speed
-+      0 = 1.625 MHz
-+      1 = 3.25 MHz
-+      2, 3 = 6.5 MHz
-+
-+  adc:
-+    type: object
-+    $ref: /schemas/iio/adc/st,stmpe-adc.yaml#
-+
-+  gpio:
-+    type: object
-+    $ref: /schemas/gpio/st,stmpe-gpio.yaml#
-+
-+  keyboard-controller:
-+    type: object
-+    $ref: /schemas/input/matrix-keymap.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-keypad
-+
-+      debounce-interval:
-+        description: Debouncing interval in milliseconds
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+      st,no-autorepeat:
-+        description: If present, the keys will not autorepeat when pressed
-+        $ref: /schemas/types.yaml#/definitions/flag
-+
-+      st,scan-count:
-+        description: Scanning cycles elapsed before key data is updated
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+
-+    required:
-+      - compatible
-+      - linux,keymap
-+
-+  pwm:
-+    type: object
-+    $ref: /schemas/pwm/pwm.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-pwm
-+
-+    required:
-+      - compatible
-+      - "#pwm-cells"
-+
-+  touchscreen:
-+    type: object
-+    $ref: /schemas/input/touchscreen/touchscreen.yaml#
-+
-+    unevaluatedProperties: false
-+
-+    properties:
-+      compatible:
-+        const: st,stmpe-ts
-+
-+      st,ave-ctrl:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3 ]
-+        description: |
-+          Sample average control
-+          0 = 1 sample
-+          1 = 2 samples
-+          2 = 4 samples
-+          3 = 8 samples
-+
-+      st,touch-det-delay:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: |
-+          Touch detection delay
-+          0 = 10 us
-+          1 = 50 us
-+          2 = 100 us
-+          3 = 500 us - recommended
-+          4 = 1 ms
-+          5 = 5 ms
-+          6 = 10 ms
-+          7 = 50 ms
-+
-+      st,settling:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: |
-+          Panel driver settling time
-+          0 = 10 us
-+          1 = 100 us
-+          2 = 500 us - recommended
-+          3 = 1 ms
-+          4 = 5 ms
-+          5 = 10 ms
-+          6 = 50 ms
-+          7 = 100 ms
-+
-+      st,fraction-z:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+        description: Length of the fractional part in z, recommended is 7
-+          (fraction-z ([0..7]) = Count of the fractional part)
-+
-+      st,i-drive:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 0, 1 ]
-+        description: |
-+          current limit value of the touchscreen drivers
-+          0 = 20 mA (typical 35 mA max)
-+          1 = 50 mA (typical 80 mA max)
-+
-+    required:
-+      - compatible
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/input/input.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      port-expander@43 {
-+        compatible = "st,stmpe2401";
-+        reg = <0x43>;
-+        reset-gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-+        interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
-+        interrupt-parent = <&gpio>;
-+        vcc-supply = <&db8500_vsmps2_reg>;
-+        vio-supply = <&db8500_vsmps2_reg>;
-+        wakeup-source;
-+        st,autosleep-timeout = <1024>;
-+
-+        gpio {
-+          compatible = "st,stmpe-gpio";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+          interrupt-controller;
-+          #interrupt-cells = <2>;
-+          st,norequest-mask = <0xf0f002>;
-+        };
-+
-+        keyboard-controller {
-+          compatible = "st,stmpe-keypad";
-+          debounce-interval = <64>;
-+          st,scan-count = <8>;
-+          st,no-autorepeat;
-+          keypad,num-rows = <8>;
-+          keypad,num-columns = <8>;
-+          linux,keymap = <
-+              MATRIX_KEY(0x00, 0x00, KEY_1)
-+              MATRIX_KEY(0x00, 0x01, KEY_2)
-+              MATRIX_KEY(0x00, 0x02, KEY_3)
-+              MATRIX_KEY(0x00, 0x03, KEY_4)
-+              MATRIX_KEY(0x00, 0x04, KEY_5)
-+              MATRIX_KEY(0x00, 0x05, KEY_6)
-+              MATRIX_KEY(0x00, 0x06, KEY_7)
-+              MATRIX_KEY(0x00, 0x07, KEY_8)
-+              MATRIX_KEY(0x00, 0x08, KEY_9)
-+              MATRIX_KEY(0x00, 0x09, KEY_0)
-+          >;
-+        };
-+
-+        pwm {
-+          compatible = "st,stmpe-pwm";
-+          #pwm-cells = <2>;
-+        };
-+      };
-+
-+      port-expander@41 {
-+        compatible = "st,stmpe811";
-+        reg = <0x41>;
-+        interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
-+        interrupt-parent = <&gpio>;
-+        st,adc-freq = <1>;
-+        st,mod-12b = <1>;
-+        st,ref-sel = <0>;
-+        st,sample-time = <4>;
-+
-+        adc {
-+          compatible = "st,stmpe-adc";
-+          st,norequest-mask = <0x0f>;
-+          #io-channel-cells = <1>;
-+        };
-+
-+        gpio {
-+          compatible = "st,stmpe-gpio";
-+          gpio-controller;
-+          #gpio-cells = <2>;
-+          interrupt-controller;
-+          #interrupt-cells = <2>;
-+        };
-+
-+        pwm {
-+          compatible = "st,stmpe-pwm";
-+          #pwm-cells = <2>;
-+        };
-+
-+        touchscreen {
-+          compatible = "st,stmpe-ts";
-+          st,ave-ctrl = <3>;
-+          st,touch-det-delay = <5>;
-+          st,settling = <3>;
-+          st,fraction-z = <7>;
-+          st,i-drive = <1>;
-+        };
-+      };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/mfd/stmpe.txt b/Documentation/devicetree/bindings/mfd/stmpe.txt
-deleted file mode 100644
-index d4408a417193..000000000000
---- a/Documentation/devicetree/bindings/mfd/stmpe.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--* ST Microelectronics STMPE Multi-Functional Device
--
--STMPE is an MFD device which may expose the following inbuilt devices: gpio,
--keypad, touchscreen, adc, pwm, rotator.
--
--Required properties:
-- - compatible			: "st,stmpe[610|801|811|1600|1601|2401|2403]"
-- - reg				: I2C/SPI address of the device
--
--Optional properties:
-- - interrupts			: The interrupt outputs from the controller
-- - interrupt-controller		: Marks the device node as an interrupt controller
-- - wakeup-source		: Marks the input device as wakable
-- - st,autosleep-timeout		: Valid entries (ms); 4, 16, 32, 64, 128, 256, 512 and 1024
-- - irq-gpio			: If present, which GPIO to use for event IRQ
--
--Optional properties for devices with touch and ADC (STMPE811|STMPE610):
-- - st,sample-time		: ADC conversion time in number of clock.
--					0 -> 36 clocks		4 -> 80 clocks (recommended)
--					1 -> 44 clocks		5 -> 96 clocks
--					2 -> 56 clocks		6 -> 124 clocks
--					3 -> 64 clocks
-- - st,mod-12b			: ADC Bit mode
--					0 -> 10bit ADC		1 -> 12bit ADC
-- - st,ref-sel			: ADC reference source
--					0 -> internal		1 -> external
-- - st,adc-freq			: ADC Clock speed
--					0 -> 1.625 MHz		2 || 3 -> 6.5 MHz
--					1 -> 3.25 MHz
--
--Example:
--
--	stmpe1601: stmpe1601@40 {
--		compatible = "st,stmpe1601";
--		reg = <0x40>;
--		interrupts = <26 0x4>;
--		interrupt-parent = <&gpio6>;
--		interrupt-controller;
--
--		wakeup-source;
--		st,autosleep-timeout = <1024>;
--	};
-
--- 
-2.34.1
-
+Cai-
+Thanks
+> +		if (PTR_ERR(pos) == -EAGAIN)
+> +			continue;
+> +		rhashtable_remove_fast(userptr_ht, hti.p, hl_userptr_rht_params);
+> +		userptr = rhashtable_walk_peek(&hti);
+>  		hl_unpin_host_memory(hdev, userptr);
+>  		kfree(userptr);
+>  	}
+>  
+> -	INIT_LIST_HEAD(userptr_list);
+> +	rhashtable_destroy(userptr_ht);
+>  }
+>  
+>  /**
+> @@ -2555,7 +2567,7 @@ void hl_userptr_delete_list(struct hl_device *hdev,
+>   * @hdev: pointer to the habanalabs device structure.
+>   * @addr: user address to check.
+>   * @size: user block size to check.
+> - * @userptr_list: pointer to the list to clear.
+> + * @userptr_ht: pointer to the hashtable to clear.
+>   * @userptr: pointer to userptr to check.
+>   *
+>   * This function does the following:
+> @@ -2563,10 +2575,11 @@ void hl_userptr_delete_list(struct hl_device *hdev,
+>   *   pinned. If so, returns true, otherwise returns false.
+>   */
+>  bool hl_userptr_is_pinned(struct hl_device *hdev, u64 addr,
+> -				u32 size, struct list_head *userptr_list,
+> +				u32 size, struct rhashtable *userptr_ht,
+>  				struct hl_userptr **userptr)
+>  {
+> -	list_for_each_entry((*userptr), userptr_list, job_node) {
+> +	(*userptr) = rhashtable_lookup_fast(userptr_ht, &addr, hl_userptr_rht_params);
+> +	if (*userptr) {
+>  		if ((addr == (*userptr)->addr) && (size == (*userptr)->size))
+>  			return true;
+>  	}
+> diff --git a/drivers/accel/habanalabs/gaudi/gaudi.c b/drivers/accel/habanalabs/gaudi/gaudi.c
+> index a29aa8f7b6f3..1e1433042413 100644
+> --- a/drivers/accel/habanalabs/gaudi/gaudi.c
+> +++ b/drivers/accel/habanalabs/gaudi/gaudi.c
+> @@ -1031,7 +1031,7 @@ static int _gaudi_init_tpc_mem(struct hl_device *hdev,
+>  	}
+>  
+>  free_job:
+> -	hl_userptr_delete_list(hdev, &job->userptr_list);
+> +	hl_userptr_delete_list(hdev, &job->userptr_ht);
+>  	hl_debugfs_remove_job(hdev, job);
+>  	kfree(job);
+>  	atomic_dec(&cb->cs_cnt);
+> @@ -4901,7 +4901,7 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
+>  	int rc;
+>  
+>  	if (hl_userptr_is_pinned(hdev, addr, le32_to_cpu(user_dma_pkt->tsize),
+> -			parser->job_userptr_list, &userptr))
+> +			parser->job_userptr_ht, &userptr))
+>  		goto already_pinned;
+>  
+>  	userptr = kzalloc(sizeof(*userptr), GFP_KERNEL);
+> @@ -4913,7 +4913,10 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
+>  	if (rc)
+>  		goto free_userptr;
+>  
+> -	list_add_tail(&userptr->job_node, parser->job_userptr_list);
+> +	rc = rhashtable_insert_fast(parser->job_userptr_ht,
+> +				    &userptr->job_node, hl_userptr_rht_params);
+> +	if (rc)
+> +		goto unpin_memory;
+>  
+>  	rc = hdev->asic_funcs->asic_dma_map_sgtable(hdev, userptr->sgt, dir);
+>  	if (rc) {
+> @@ -4931,7 +4934,8 @@ static int gaudi_pin_memory_before_cs(struct hl_device *hdev,
+>  	return 0;
+>  
+>  unpin_memory:
+> -	list_del(&userptr->job_node);
+> +	rhashtable_remove_fast(parser->job_userptr_ht,
+> +			       &userptr->job_node, hl_userptr_rht_params);
+>  	hl_unpin_host_memory(hdev, userptr);
+>  free_userptr:
+>  	kfree(userptr);
+> @@ -5175,7 +5179,7 @@ static int gaudi_patch_dma_packet(struct hl_device *hdev,
+>  	if ((!skip_host_mem_pin) &&
+>  		(!hl_userptr_is_pinned(hdev, addr,
+>  					le32_to_cpu(user_dma_pkt->tsize),
+> -					parser->job_userptr_list, &userptr))) {
+> +					parser->job_userptr_ht, &userptr))) {
+>  		dev_err(hdev->dev, "Userptr 0x%llx + 0x%x NOT mapped\n",
+>  				addr, user_dma_pkt->tsize);
+>  		return -EFAULT;
+> @@ -5472,7 +5476,7 @@ static int gaudi_parse_cb_no_mmu(struct hl_device *hdev,
+>  
+>  free_userptr:
+>  	if (rc)
+> -		hl_userptr_delete_list(hdev, parser->job_userptr_list);
+> +		hl_userptr_delete_list(hdev, parser->job_userptr_ht);
+>  	return rc;
+>  }
+>  
+> diff --git a/drivers/accel/habanalabs/goya/goya.c b/drivers/accel/habanalabs/goya/goya.c
+> index fb0ac9df841a..bfcbb9e8b126 100644
+> --- a/drivers/accel/habanalabs/goya/goya.c
+> +++ b/drivers/accel/habanalabs/goya/goya.c
+> @@ -3347,7 +3347,7 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
+>  	int rc;
+>  
+>  	if (hl_userptr_is_pinned(hdev, addr, le32_to_cpu(user_dma_pkt->tsize),
+> -			parser->job_userptr_list, &userptr))
+> +			parser->job_userptr_ht, &userptr))
+>  		goto already_pinned;
+>  
+>  	userptr = kzalloc(sizeof(*userptr), GFP_KERNEL);
+> @@ -3359,7 +3359,10 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
+>  	if (rc)
+>  		goto free_userptr;
+>  
+> -	list_add_tail(&userptr->job_node, parser->job_userptr_list);
+> +	rc = rhashtable_insert_fast(parser->job_userptr_ht,
+> +				    &userptr->job_node, hl_userptr_rht_params);
+> +	if (rc)
+> +		goto unpin_memory;
+>  
+>  	rc = hdev->asic_funcs->asic_dma_map_sgtable(hdev, userptr->sgt, dir);
+>  	if (rc) {
+> @@ -3377,7 +3380,8 @@ static int goya_pin_memory_before_cs(struct hl_device *hdev,
+>  	return 0;
+>  
+>  unpin_memory:
+> -	list_del(&userptr->job_node);
+> +	rhashtable_remove_fast(parser->job_userptr_ht,
+> +			       &userptr->job_node, hl_userptr_rht_params);
+>  	hl_unpin_host_memory(hdev, userptr);
+>  free_userptr:
+>  	kfree(userptr);
+> @@ -3806,7 +3810,7 @@ static int goya_patch_dma_packet(struct hl_device *hdev,
+>  	if ((!skip_host_mem_pin) &&
+>  		(hl_userptr_is_pinned(hdev, addr,
+>  			le32_to_cpu(user_dma_pkt->tsize),
+> -			parser->job_userptr_list, &userptr) == false)) {
+> +			parser->job_userptr_ht, &userptr) == false)) {
+>  		dev_err(hdev->dev, "Userptr 0x%llx + 0x%x NOT mapped\n",
+>  				addr, user_dma_pkt->tsize);
+>  		return -EFAULT;
+> @@ -4104,7 +4108,7 @@ static int goya_parse_cb_no_mmu(struct hl_device *hdev,
+>  
+>  free_userptr:
+>  	if (rc)
+> -		hl_userptr_delete_list(hdev, parser->job_userptr_list);
+> +		hl_userptr_delete_list(hdev, parser->job_userptr_ht);
+>  	return rc;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
