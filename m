@@ -2,145 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E9E6EEE35
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8A06EEE46
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbjDZGU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S239516AbjDZGZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239564AbjDZGUz (ORCPT
+        with ESMTP id S239384AbjDZGZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:20:55 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9597270E;
-        Tue, 25 Apr 2023 23:20:47 -0700 (PDT)
-X-UUID: 794dd5d6e3fa11edb6b9f13eb10bd0fe-20230426
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=WU3jPIGaeYnCfh0tvdyVkWtQSLr3g7psnjDX46eOhxg=;
-        b=GbSKqM7x6+AvT1faNKgkL/vxN79EpESReJMJScfZ1Fi83aDgJyGcIKP9mcWtbX4+wdVx9aVQ6CKdt23ZjxzKZGnLA5+MCCIFaLT3rtOhB1O3t9FokLGlUczzmqN4lau13DqqfkBePuZK6dX9Q+OktK6+2jkg0lGZUwtKvpv2D1c=;
-X-CID-CACHE: Type:Local,Time:202304261335+08,HitQuantity:1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:e7662229-cfa5-42fe-b90b-8bf1b00345f5,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:120426c,CLOUDID:a5ec8aa2-8fcb-430b-954a-ba3f00fa94a5,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 794dd5d6e3fa11edb6b9f13eb10bd0fe-20230426
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <tze-nan.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2123903616; Wed, 26 Apr 2023 14:20:43 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 26 Apr 2023 14:20:41 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 26 Apr 2023 14:20:41 +0800
-From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <bobule.chang@mediatek.com>, <cheng-jui.wang@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Tze-nan Wu <Tze-nan.Wu@mediatek.com>,
-        <stable@vger.kernel.org>, <npiggin@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v5] ring-buffer: Ensure proper resetting of atomic variables in ring_buffer_reset_online_cpus
-Date:   Wed, 26 Apr 2023 14:20:23 +0800
-Message-ID: <20230426062027.17451-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 26 Apr 2023 02:25:44 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7B32134;
+        Tue, 25 Apr 2023 23:25:43 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33Q64Kfk001000;
+        Tue, 25 Apr 2023 23:25:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=sTSuZ7sUzdC+Zxyb8IFNPQ7YZ/BApBN++Ta63Z3LULg=;
+ b=jsd9yEKViDKd7MGha9VyED1flfFTKOXt8pH1Hco8w2/cBnURsaC7uB7+1PtncaLwxXwm
+ sw4GdFf5aiDzjiGzRT79ur/YaNOj4L9XeX6KmDZ72WjXIuf1XBClSKcytl+AnPvhHktj
+ O/iR2nJeRPBNWO8r89Euhw9dv+0GJLYvmU/T+J4Zgi+ZErlxVGDkfrULC6AWijvy/xve
+ 1Aw3cY5iZuLQ+r6WYdoawrl3TVHbFqQoRX+5Nb5/g5bcSZpJ/LWkoQ7mWVI3rQ70TJQj
+ wbAWRBXdYHnt4GMsX3TrZzmoHt4n6XcS3ia9E6486lUxRRqiwdUDQ475DyWjKk0ESs+v AA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q4f3pdcvu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 23:25:34 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 25 Apr
+ 2023 23:25:32 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Tue, 25 Apr 2023 23:25:32 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id 3C0AE3F703F;
+        Tue, 25 Apr 2023 23:25:29 -0700 (PDT)
+From:   Geetha sowjanya <gakula@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>,
+        <sgoutham@marvell.com>, <gakula@marvell.com>,
+        <sbhatta@marvell.com>, <hkelam@marvell.com>
+Subject: [net PATCH v2 0/9] Macsec fixes for CN10KB
+Date:   Wed, 26 Apr 2023 11:55:19 +0530
+Message-ID: <20230426062528.20575-1-gakula@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: r5hee5INQSL5FeYQidzWHU_llSPj1xRm
+X-Proofpoint-GUID: r5hee5INQSL5FeYQidzWHU_llSPj1xRm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_02,2023-04-25_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ring_buffer_reset_online_cpus, the buffer_size_kb write operation
-may permanently fail if the cpu_online_mask changes between two
-for_each_online_buffer_cpu loops. The number of increases and decreases
-on both cpu_buffer->resize_disabled and cpu_buffer->record_disabled may be
-inconsistent, causing some CPUs to have non-zero values for these atomic
-variables after the function returns.
+This patch set has fixes for the issues encountered while
+testing macsec on CN10KB silicon. Below is the description
+of patches:
 
-This issue can be reproduced by "echo 0 > trace" while hotplugging cpu.
-After reproducing success, we can find out buffer_size_kb will not be
-functional anymore.
+Patch 1: For each LMAC two MCSX_MCS_TOP_SLAVE_CHANNEL_CFG registers exist
+	 in CN10KB. Bypass has to be disabled in two registers.
 
-To prevent leaving 'resize_disabled' and 'record_disabled' non-zero after
-ring_buffer_reset_online_cpus returns, we ensure that each atomic variable
-has been set up before atomic_sub() to it.
+Patch 2: Add workaround for errata w.r.t accessing TCAM DATA and MASK registers.
 
-Cc: stable@vger.kernel.org
-Cc: npiggin@gmail.com
-Fixes: b23d7a5f4a07 ("ring-buffer: speed up buffer resets by avoiding synchronize_rcu for each CPU")
-Reviewed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
+Patch 3: Fixes the parser configuration to allow PTP traffic.
+
+Patch 4: Addresses the IP vector and block level interrupt mask changes.
+ 
+Patch 5: Fix NULL pointer crashes when rebooting
+
+Patch 6: Since MCS is global block shared by all LMACS the TCAM match
+	 must include macsec DMAC also to distinguish each macsec interface
+
+Patch 7: Before freeing MCS hardware resource to AF clear the stats also.
+
+Patch 8: Stats which share single counter in hardware are tracked in software.
+	 This tracking was based on wrong secy mode params.
+	 Use correct secy mode params
+
+Patch 9: When updating secy mode params, PN number was also reset to
+	 initial values. Hence do not write to PN value register when
+	 updating secy.
+
+
+Geetha sowjanya (3):
+  octeonxt2-af: mcs: Fix per port bypass config
+  octeontx2-af: mcs: Config parser to skip 8B header
+  octeontx2-af: mcs: Fix MCS block interrupt  
+
+Subbaraya Sundeep (6):
+  octeontx2-af: mcs: Write TCAM_DATA and TCAM_MASK registers at once
+  octeontx2-pf: mcs: Fix NULL pointer dereferences
+  octeontx2-pf: mcs: Match macsec ethertype along with DMAC
+  octeontx2-pf: mcs: Clear stats before freeing resource
+  octeontx2-pf: mcs: Fix shared counters logic
+  octeontx2-pf: mcs: Do not reset PN when updating secy
+
 ---
-Changes from v4 to v5: https://lore.kernel.org/lkml/20230412112401.25081-1-Tze-nan.Wu@mediatek.com/
-  - Move the define before the function
----
- kernel/trace/ring_buffer.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+v1-v2:
+ -Added Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+ -Corrected the sequence of tear down to fix null pointer dereferences.
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 76a2d91eecad..253ef85a9ec3 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -5345,6 +5345,9 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
- }
- EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
- 
-+/* Flag to ensure proper resetting of atomic variables */
-+#define RESET_BIT	(1 << 30)
-+
- /**
-  * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
-  * @buffer: The ring buffer to reset a per cpu buffer of
-@@ -5361,20 +5364,27 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- 	for_each_online_buffer_cpu(buffer, cpu) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
--		atomic_inc(&cpu_buffer->resize_disabled);
-+		atomic_add(RESET_BIT, &cpu_buffer->resize_disabled);
- 		atomic_inc(&cpu_buffer->record_disabled);
- 	}
- 
- 	/* Make sure all commits have finished */
- 	synchronize_rcu();
- 
--	for_each_online_buffer_cpu(buffer, cpu) {
-+	for_each_buffer_cpu(buffer, cpu) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
-+		/*
-+		 * If a CPU came online during the synchronize_rcu(), then
-+		 * ignore it.
-+		 */
-+		if (!(atomic_read(&cpu_buffer->resize_disabled) & RESET_BIT))
-+			continue;
-+
- 		reset_disabled_cpu_buffer(cpu_buffer);
- 
- 		atomic_dec(&cpu_buffer->record_disabled);
--		atomic_dec(&cpu_buffer->resize_disabled);
-+		atomic_sub(RESET_BIT, &cpu_buffer->resize_disabled);
- 	}
- 
- 	mutex_unlock(&buffer->mutex);
+ .../net/ethernet/marvell/octeontx2/af/mcs.c   | 106 +++++++++---------
+ .../net/ethernet/marvell/octeontx2/af/mcs.h   |  26 ++---
+ .../marvell/octeontx2/af/mcs_cnf10kb.c        |  63 +++++++++++
+ .../ethernet/marvell/octeontx2/af/mcs_reg.h   |   6 +-
+ .../marvell/octeontx2/af/mcs_rvu_if.c         |  37 ++++++
+ .../net/ethernet/marvell/octeontx2/af/rvu.h   |   1 +
+ .../ethernet/marvell/octeontx2/af/rvu_cgx.c   |   2 +
+ .../marvell/octeontx2/af/rvu_debugfs.c        |   4 +-
+ .../marvell/octeontx2/nic/cn10k_macsec.c      |  54 ++++++---
+ .../marvell/octeontx2/nic/otx2_common.h       |   2 +-
+ 10 files changed, 217 insertions(+), 84 deletions(-)
+
 -- 
-2.18.0
+2.25.1
 
