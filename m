@@ -2,182 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A486EFC15
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DCE6EFC1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239970AbjDZU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 16:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
+        id S239971AbjDZVEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239964AbjDZU60 (ORCPT
+        with ESMTP id S239869AbjDZVEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 16:58:26 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEDA30EC;
-        Wed, 26 Apr 2023 13:58:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IhbpX7WZfPX+T6FcnDI8DT8w7K28gdbppFlTPvk9tIGYM9eTA4hrgj9kFqiEMAvGjVUQ1RUzf9aUHHsUj2+bEii+llgyIt6ymjC0xVFZEO1tG3PKXcgIRPUZi12l0rNbCP9xAzxjeQmrwuBg3QWfkrcLf5hCeSvKEWijhCsgdZC4w4WHObDQEljnuyJZjwP7sZzoKbJKNTTxxoeie8WkB277NRIGR+h2Nq4Q2yAy/RkqSRdu8snPcemB7GvuXgXsVMn5s0cpIcFvHenB1iQXjHOAsnXA81nX+MGDPrmz4Fqc0hRwfCluBdeuocwxPgzTY+Aqjn4o+v/8HUP2SaFQzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ytnckJev5Png+ZVHUHHseNg29Ob08ZtCU7n1HmB6PUI=;
- b=Tv9rt+buk+uuZc9Zw4dHg0iI51HmbNqbW1pzphP5a7CTF4EJUkEY34sRuzPjGXh2bSjnbRZ/Rb/EHq/CVZpPLQmgorJgC83q8pTe8BaTmcPb479Prg8EvcSXTV1zjdsTY4uoGWCtzQnlDWbjYkg2nswF0zZMw6pyfJhNBunPBtYWLajELMLbAY5AOzPeV37sEqoL+ahXxl7lh2MPsxQRreIJ7MCpLpxU3WMGDSAc63Cu4sy+2TBy8NDQd654ploQB++epK8l990CaoWtnZvhA9KMbZJyKEnLnXkK5ceNaOf0K2tL30MUcqudXT3Dx1vNpoLx90HYWZ6eIXLlfGGvOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ytnckJev5Png+ZVHUHHseNg29Ob08ZtCU7n1HmB6PUI=;
- b=cSVzxalFpqEhR0aSLhXc7JXKAoFuQauRu14js6Oj6R7jNYCGm5iRc+upWl4QYZguGPC1ANPeVrM/PdvAB9ZgLaGEmTcXZ6X/72S5+bpHDrP3f0cNUbOg4c3ULAWApPahYAuPZ19x0RXbTRUFxqYTncZ7oxejDFrHmUNnZ9e00Rk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- PH8PR12MB6962.namprd12.prod.outlook.com (2603:10b6:510:1bd::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Wed, 26 Apr
- 2023 20:58:22 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6340.021; Wed, 26 Apr 2023
- 20:58:22 +0000
-Message-ID: <57a7ccb9-ff94-22ad-9b66-235b42228c7f@amd.com>
-Date:   Wed, 26 Apr 2023 16:59:46 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH next] drm/amd/display: Fix possible NULL dereference in
- dc_dmub_srv_cmd_run_list()
-Content-Language: en-US
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     dri-devel@lists.freedesktop.org, Josip Pavic <Josip.Pavic@amd.com>,
-        amd-gfx@lists.freedesktop.org, error27@gmail.com,
-        Leo Li <sunpeng.li@amd.com>, kernel-janitors@vger.kernel.org,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
-        Max Tseng <Max.Tseng@amd.com>, Alvin Lee <Alvin.Lee2@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>, Jun Lei <Jun.Lei@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>
-References: <20230426192413.143971-1-harshit.m.mogalapalli@oracle.com>
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230426192413.143971-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0070.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:111::16) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 26 Apr 2023 17:04:41 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC392118;
+        Wed, 26 Apr 2023 14:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1682543036; i=w_armin@gmx.de;
+        bh=/NvD9oCO/r0GrFnR01vAe+1hQd5sbYS115i1sHjdYVU=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=bTmI/9f4BZxjfDmLTJ2FL8gFdxZuVkBIZZa/2ZDoZZA2z6A0dUzRKxVWoF+Ui7ZjN
+         LlqBT8AOiCR7D4PO063jKlFa0cU+QDvTqnnenTsfwLXxIZvg8WryAW9UjUJOccIhpw
+         YocFZfXBqakl7OIEklDOyFvudY1omh0lnYRFNeqiHKbo+1mKOIPlIWSR1et7FlRkTP
+         7MvwPW0Gd7Q+d02g5n8YGHU0dZJ1rAElWStcYkqWPS64nkP2dHCaYk52LMkIsPXUMr
+         ZxJfyyUlwgP0ygMkdUyEWTMfV5crilMOXxk/wHl004Zs+5IQi+nVHmTrw/MIvLvYUb
+         faZ8SoQJ9O/uA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MZTqW-1pp7Xx43Ms-00WUCY; Wed, 26 Apr 2023 23:03:56 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     Mario.Limonciello@amd.com, prasanth.ksr@dell.com,
+        jorgealtxwork@gmail.com, james@equiv.tech,
+        Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC] platform/x86: wmi: Allow retrieving the number of WMI object instances
+Date:   Wed, 26 Apr 2023 23:03:49 +0200
+Message-Id: <20230426210349.100838-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|PH8PR12MB6962:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39900507-8129-48cd-8407-08db4698f833
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7kNs6QSA/nU5GNWuAcgJaiXPRSyRn2euHuujp87I46bDcZkCE87aMPMtzz8VerA6DcpFcAFA3kID6yDZq5NsQov7r/pYqIBEvyOaL7R6aXz/5oV1ifwaSDORKa+cxQ6YgcoIjAXewhDEzgvPZb+LQxbBI3Q6fT91crTodd9yz7zgxuC9KTv5eaJ/kf2YuX+gKK+GJaAe0OcUZa/QRL+SWhWh2yThVYUaaUA+ZFD1H5J98K1z9pVxg0kYCVvfWDLtJupeJsOakW+yYDGeAUfZRbyJey/qGJ6cgHC6c1nUXPKOstfipULMqiWIUs9clvUcb4fQNasFwoijz2vUlCYYVARAY0S7focizxDplKURxt42mjMQKnjNrg6bx8Zr4pfq0ejiMo5Vkm2CTCytZ6G2ESUCzP/6xWqunnn8xHdTKZ8+7/emVDInlHZN1acs1iFAHxkLK0MJDQmuVcPMyqcJd0IedjaigozfZwuGgL153yxgvK99Fl2tMTM5Wih08RrlzsOTwZ7at8huyl1/WmvaspruXh8/pXYH+4C6/DO2BfEWMwOFARqBLMqlVhWYh3An3t6UrQQfCK/UJqENwyJW1hU5d+jhzLmU6KhuVI5mNjeqCKv/WxPstnEjIMVQ3RzNHeF69sZ0PYBKp79BkPpy5A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(366004)(136003)(376002)(451199021)(36756003)(8936002)(8676002)(54906003)(478600001)(66946007)(66476007)(6916009)(4326008)(66556008)(44832011)(41300700001)(316002)(38100700002)(2906002)(186003)(86362001)(5660300002)(2616005)(6506007)(26005)(31686004)(6512007)(53546011)(31696002)(6666004)(6486002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmR5NVZPRHhXcnEvUTVheFZGUFhONVk1M0p5NFB4Z0V4cHYxdHF0MWlKWVls?=
- =?utf-8?B?ZTZ4emQ3d3QwK0ZyYjFHbUdnNlBkRnNIQlZlK2QxNTM1ZzZDZnhkeGN4VkU3?=
- =?utf-8?B?VFp0Q3hxNzNPdFdYaHlPQnlKZ2FXYTNXcmZLdC91Y1lwcjBBb3YyOTZrL2pO?=
- =?utf-8?B?SDB5bnpQZFZrY255Z1o1QThCWFFLdklObUpTb3AwRXJXRGJwc0JIQ0c3MHhV?=
- =?utf-8?B?VERYaUhkV0dUNlpBNUd1SHRNR0d1UzdtV3NacWdPNFhDSENMYXE1Q0VjL1pt?=
- =?utf-8?B?YU51WEh1a0xXaGpzcDhvdytNajZOMGJlWnprZU5KblNKdGdIWlhtR0pOQTF3?=
- =?utf-8?B?T0E4SHVuQUVSTG9ybUF6UE5qdlJzQ0ExcGt5TlcvdEp4OUlqMVJXdkhMZUEz?=
- =?utf-8?B?Ulk0d1c5Z3NqTkd2ai8zTFplRDlUaThaSWZXN1lhendNcDJsQVZZSUFZVmQ2?=
- =?utf-8?B?b3RFcXQrL2JFaUlyVjNzQ1hnc013Qm0xQW56OVNBZ2NRb0s0akxXL2JYWjlL?=
- =?utf-8?B?MzJWWFY3OWRLOHBrZG1qakluYmxab2tVc1EyV25Tc2JQZmFKNlNnUnVRWDRN?=
- =?utf-8?B?MldsMVJkVFh4N1R4eHRaclhOSDdHL3g3WVVIaTlkZmxIeWh1SXJ2Rng2djBS?=
- =?utf-8?B?Sm05V1llTXIrYTlSWWpjd2Z3Ujh0c2ZERGJLdVQxS0xVM2FsMkZMeFpjYnFu?=
- =?utf-8?B?YmtkWGgwa0xGdW5EUGpWbkRLMFFWcmtqdmtJM0ErdVhyeE83SVZLSGpqcDZ3?=
- =?utf-8?B?bCsvYnlrZ0xtMy94WkhYVUhuVHRXb3FMdU5KUzNGS2hCbXphMVA3WVc0WER6?=
- =?utf-8?B?czc3VDlHNENPYllsblpHL0c3a0g4NE1ZSGpLVExQSnV4UnQySEI0SnAyRC8v?=
- =?utf-8?B?SVNFNVZidHNnRlFiVURBa0R4UTNnVXFaR244M2dVUTN6THNaMHp5dlAzWWRN?=
- =?utf-8?B?cEN4b0FEZmJQcHJuYVV6WGpnUmo2d1d4SUlsN2pPZ1lwTHdXQ2x2T200bUZM?=
- =?utf-8?B?ZzZDY3dPRmxyd2xCeFhVUUNlRlpXdC8yd3VFZDRVdmw5M29GT3VZd01CajE1?=
- =?utf-8?B?QkFGNHpwR3hWZVlGWkJHdGxKTHN0U1NOYWZyU1lRQi9DVkZ4ZWFaU1NOQ2dG?=
- =?utf-8?B?dHBHUlE2NUxhUlc2VVlOdGU1OXRCUHRrYnJEMlhma0cxMEUyMW5DWVE0RFBR?=
- =?utf-8?B?YmRBcitkYmNzSDI1cHdoT2daZnFGNDFUR1dFSVJmNGdINk84Mkp6L3pHY3l1?=
- =?utf-8?B?R1ZicjlYQ2RWMGw3RWgvWVJ5cW41ajdsVVdldERMdldVbGxZT3ZjTlQ3eTU4?=
- =?utf-8?B?enYyZHhJdUVTb1ZibnJqbEFMcU96MWxyVWRmem1LKzF1SzJiVjA5UGloSnBB?=
- =?utf-8?B?MlFmM2lQcTRhQlVkVFEvdVV2SXFrYUpNSDZPTVpwcE00ck0yWm1uUFdrQTdx?=
- =?utf-8?B?UmJaMGVIbXhUeVhqblhKbGVjc0FoclF6S3I0NXltWGROS0YyaFczeEE2emtC?=
- =?utf-8?B?S0Q3NGk0S0J0VlFPamZOUXJvK1lRTzRxUmdrYzFYVXpBUXlkeUFkZThVWG9a?=
- =?utf-8?B?aFJERXVDemdsS25OUDA4SVVZdTI4MGorSnNHT2JVS1R2Tm9IZGhETDc0V1NW?=
- =?utf-8?B?c1BpY01vZjlzd3ZXV2dEMXN0Z1VteTVGK2NxZFozYkRzODFVa1p3ZkJnalgv?=
- =?utf-8?B?WURnUnBXYk5MNnkvcGpZMFYvN3NhVGp6THN2ZDc0ZmVHOUd3V3ViMXYrTUF6?=
- =?utf-8?B?amNUR3hFQWY4QmdsWWNhWlRNbmcxQU1QV2ttcU9lYmJvTjZxTEE2dHdaK2Ux?=
- =?utf-8?B?V2FjUVE3d0oxeUJZQUhIQlYveGloRnM3T0w5REZ6bkJ0UXRIT1hULzZEVkdm?=
- =?utf-8?B?VUJDOGtJd0Mrb1BYL2VvTDc4dWJnSlp4cXVIRnZxbFp0TDMvRXduNU8zaUFU?=
- =?utf-8?B?UXFId0c4U3FaZ2RYbFhXZ0FLTytkU1VHV0VCeVd1K0FXNU5uUUUyVzg4MlJj?=
- =?utf-8?B?YmovQ0syVStFZUxtWlJOaEpHL0ZUK2c5VFJXL3RaREdBTlpwb3dFUVRzWGJ1?=
- =?utf-8?B?R0h1Smc0T3B6ZGxYeHRYbGZxTDN5VVd0R0hVMTFBVGNxVHdxWHZUeVMzaW1o?=
- =?utf-8?Q?eCI85Lzy0ifc0ASY2szBapJ+Q?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39900507-8129-48cd-8407-08db4698f833
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 20:58:21.8872
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IcVuYa7r1cKQS+rGlhd0ZzpTewbyN+QEEXWq35NkcDBK59LbzE1s/7N7/A0f3Qa4oAIMu/pcrqXUZMSfLCs6fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6962
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:cLFnNxImVvmhI5yLyiv2KbsyIDd1PiGN5UijaXwnLIS1WQPRbYb
+ vpphjWlTXSvktpdJ3MBk1e7r7uqeAWBDga00p/g8a/B9z7qdjewEUer2Av6ET8MNKEDtPox
+ My4RD8lgVOvqITog/25dDbVp4o+E89MDfoBHcU3SuQAaioiUAMh0/JOkjdDdmH87iDVDaIF
+ TQLo5o826ty7Hs5nGKLeg==
+UI-OutboundReport: notjunk:1;M01:P0:jdhdDSfD7jc=;lk6ccJ3vHPmJIKqakPPBVcjwzXB
+ NwxtyT9RpJeww2CJ2PRBrM59yFqSGIbuHxYPrr684pl02/QSHQsWeVD68MS62qbQ+8uU2gITi
+ PLzycBXN14D9bZNUDlsKpzs9LycbFbepqT0EhnaA+cx0EV2V6jYMDPDnJ1fSWUeRfQ4TXVk7/
+ kIQx8OLi3OgfI2mmQ5vsjyBoZghhZav0DcV1s2wXRqhJaOReerzXhNExuQMGiPrilufThzO8W
+ nLNYJzZY7sDnR677oHoHThzNnFuPu+r2gWaK7z9//xGNPgMhGUQv5F26bNnJv1k2uv12colem
+ BIzco0KWcbVsTtC36p7Up2AQyuPC59sXaAcBKrxUdjjnuNhEYQ7Ob4giWxHprcDdT2kDWKdNk
+ X7tCfeI14fPCjtjlaZk0NIPD0asGJpeMX3hTllJ06beIhGQq7Ug+lcVEtaEDo0u+jJktbDusV
+ IjGoC7FKo/F2tftJ1naW+OxQeUS2Ysa24pHmDo+AoG2yx2HcfC99DMo0WP4+gb4LNKKGn2yK3
+ PufUo+JaJ2ensow+J/xhWDGB1IIwt4rIAiuu2wr8+stm8Xog753nVfca/I2pZsXEqdRs1QeI8
+ /+vReBpMSqMPz9QfHVcCZBMkCMw2VwHB1V6fBkwCg9VrtxPjhRwAPEwL57i1ExyrRXuboAlPh
+ JMNff5oD2GFMONRJ/IaZhEbOVyWGFw+8N32ik+9isYy4bmsY5A1nb8nzIWXaEcT08q0Emo0bc
+ EMG8L40oK71AfuxBbiFALpuq5yDxM+n3QdJarSVsknrzA2YbHnAizI3tvCqoo4uEaEwL+Mrij
+ PI/dDEe1VInst5aM3I2xQkByx9N0JJMAjO1bgIQa/pDLhwumBFQN/K3jnfa++P6fdqsvMQzxK
+ lZLHEVf6XNr7hRmzyqcrB/nC3Viut6B3keq+LU8SZkicyPC59Th70r/r9wnuF06l5Fe+C/khj
+ DQp7dizspiuacNiygViux0zcYtI=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 15:24, Harshit Mogalapalli wrote:
-> We have a NULL check for 'dc_dmub_srv' in dc_dmub_srv_cmd_run_list()
-> but we are dereferencing it before checking.
-> 
-> Fix this moving the dereference next to NULL check.
-> 
-> This issue is found with Smatch(static analysis tool).
-> 
-> Fixes: e97cc04fe0fb ("drm/amd/display: refactor dmub commands into single function")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Currently, the WMI driver core knows how many instances of a given
+WMI object exist, but WMI drivers cannot access this information.
+At the same time, some current and upcoming WMI drivers want to
+have access to this information. Add wmi_instance_count() and
+wmidev_instance_count() to allow WMI drivers to get the number of
+WMI object instances.
 
-Applied, thanks!
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/platform/x86/wmi.c | 40 ++++++++++++++++++++++++++++++++++++++
+ include/linux/acpi.h       |  2 ++
+ include/linux/wmi.h        |  2 ++
+ 3 files changed, 44 insertions(+)
 
-> ---
-> Only compile tested.
-> ---
->   drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> index d15ec32243e2..62d3473c32bc 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dc_dmub_srv.c
-> @@ -125,7 +125,7 @@ bool dc_dmub_srv_cmd_run(struct dc_dmub_srv *dc_dmub_srv, union dmub_rb_cmd *cmd
->   
->   bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int count, union dmub_rb_cmd *cmd_list, enum dm_dmub_wait_type wait_type)
->   {
-> -	struct dc_context *dc_ctx = dc_dmub_srv->ctx;
-> +	struct dc_context *dc_ctx;
->   	struct dmub_srv *dmub;
->   	enum dmub_status status;
->   	int i;
-> @@ -133,6 +133,7 @@ bool dc_dmub_srv_cmd_run_list(struct dc_dmub_srv *dc_dmub_srv, unsigned int coun
->   	if (!dc_dmub_srv || !dc_dmub_srv->dmub)
->   		return false;
->   
-> +	dc_ctx = dc_dmub_srv->ctx;
->   	dmub = dc_dmub_srv->dmub;
->   
->   	for (i = 0 ; i < count; i++) {
--- 
-Hamza
+diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+index c226dd4163a1..7c1a904dec5f 100644
+=2D-- a/drivers/platform/x86/wmi.c
++++ b/drivers/platform/x86/wmi.c
+@@ -263,6 +263,46 @@ int set_required_buffer_size(struct wmi_device *wdev,=
+ u64 length)
+ }
+ EXPORT_SYMBOL_GPL(set_required_buffer_size);
+
++/**
++ * wmi_instance_count - Get number of WMI object instances
++ * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417=
+f2f49ba
++ * @instance_count: variable to hold the instance count
++ *
++ * Get the number of WMI object instances.
++ *
++ * Returns: acpi_status signaling success or error.
++ */
++acpi_status wmi_instance_count(const char *guid_string, u8 *instance_coun=
+t)
++{
++	struct wmi_block *wblock;
++	acpi_status status;
++
++	status =3D find_guid(guid_string, &wblock);
++	if (ACPI_FAILURE(status))
++		return status;
++
++	*instance_count =3D wmidev_instance_count(&wblock->dev);
++
++	return AE_OK;
++}
++EXPORT_SYMBOL_GPL(wmi_instance_count);
++
++/**
++ * wmidev_instance_count - Get number of WMI object instances
++ * @wdev: A wmi bus device from a driver
++ *
++ * Get the number of WMI object instances.
++ *
++ * Returns: Number of WMI object instances.
++ */
++u8 wmidev_instance_count(struct wmi_device *wdev)
++{
++	struct wmi_block *wblock =3D container_of(wdev, struct wmi_block, dev);
++
++	return wblock->gblock.instance_count;
++}
++EXPORT_SYMBOL_GPL(wmidev_instance_count);
++
+ /**
+  * wmi_evaluate_method - Evaluate a WMI method (deprecated)
+  * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417=
+f2f49ba
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index efff750f326d..ab2a4b23e7a3 100644
+=2D-- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -412,6 +412,8 @@ extern bool acpi_is_pnp_device(struct acpi_device *);
+
+ typedef void (*wmi_notify_handler) (u32 value, void *context);
+
++acpi_status wmi_instance_count(const char *guid, u8 *instance_count);
++
+ extern acpi_status wmi_evaluate_method(const char *guid, u8 instance,
+ 					u32 method_id,
+ 					const struct acpi_buffer *in,
+diff --git a/include/linux/wmi.h b/include/linux/wmi.h
+index c1a3bd4e4838..763bd382cf2d 100644
+=2D-- a/include/linux/wmi.h
++++ b/include/linux/wmi.h
+@@ -35,6 +35,8 @@ extern acpi_status wmidev_evaluate_method(struct wmi_dev=
+ice *wdev,
+ extern union acpi_object *wmidev_block_query(struct wmi_device *wdev,
+ 					     u8 instance);
+
++u8 wmidev_instance_count(struct wmi_device *wdev);
++
+ extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
+
+ /**
+=2D-
+2.30.2
 
