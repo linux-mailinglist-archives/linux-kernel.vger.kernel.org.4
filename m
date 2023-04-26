@@ -2,306 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499776EF3A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081C46EF3AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbjDZLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S240617AbjDZLvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240408AbjDZLus (ORCPT
+        with ESMTP id S240408AbjDZLvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:50:48 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B123422D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:50:46 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so1027750766b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 04:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682509844; x=1685101844;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XF0xGBHcygJCTr9DzdnzFyeSKOCMIRoKzWbHkPb9VhY=;
-        b=MCGhx/CQjW9fcbY26z9zbcRwNn59cGN4h712Ax0ubkNa/Ykdtaq/w053opUz2jcXZL
-         5kgLHeP7bRh02ZZ5ocT63MoMP+gw/CL9gPRig8u4RFFVbpw2XyBsxG0mJlWYNdKAsTBD
-         n1gLERaBnDy2pcT9PYY5iENt4FCNS+1apNKhWOQCzpAsGxGe/Ygws+D32/KkvoYWwxnP
-         yc92RoMqvIcNwcsbbpPKuSwfU3jnGytfWzOqJ6EeD2nOz3IOUd5SHq2F1r67QFqSTv2I
-         weNLD6V+3ZioZZFWJb0SFiqpG5+PoeG+7DQti2qe1ILxn+WS+CR4gYVXbHmSCYZxIvEN
-         uSTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682509844; x=1685101844;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XF0xGBHcygJCTr9DzdnzFyeSKOCMIRoKzWbHkPb9VhY=;
-        b=CReVgzQbokIf2i/JJNfLNO2Jfrry8uf+bq+xuKKC5jPeHp7Yet6JiXd6hJe7JeLSY0
-         HcLA7OjFuwuWrikOo3FXB2AK30I5wHa/jtqpTbRLAMp+IZnJ2BjQVJHIRYM9HxPsac9S
-         oXtM+pYI9iVU/DEJibNnmX4RxuqZzWhyGvK0SVhyvJTIisgn7yHF8djYbnS9NG+3Vwmy
-         Pvac4Mdq8cLk3tFtklG03Uvv6WKY1kDMVFa79ospzthgmT8bQ+WDgiTB+TVWjH0bzv2P
-         OPTAHvulzHOeqpkh7MofoR7nCp62ZCx922QNurddzMfnhPCn/nndLUjCre+LUvxQJLAN
-         WFxg==
-X-Gm-Message-State: AAQBX9fwDclyoSHc60cxVrL5z9yVFPPNHVSRUMsISqYbUfKGc2+NJLwl
-        eQLd8rLnnGAsjRAjWjU29Mw=
-X-Google-Smtp-Source: AKy350Z71KMuGV1F4MXStGrjlYbWN9Jx8ikRoIS+9QeyKM4R5f65g0VkG8B509qCbJbNUCiF8TkZVw==
-X-Received: by 2002:a17:906:fd47:b0:94e:75f8:668 with SMTP id wi7-20020a170906fd4700b0094e75f80668mr14592285ejb.56.1682509844176;
-        Wed, 26 Apr 2023 04:50:44 -0700 (PDT)
-Received: from [192.168.178.21] (p4fc2092b.dip0.t-ipconnect.de. [79.194.9.43])
-        by smtp.gmail.com with ESMTPSA id w14-20020a1709060a0e00b0094efcc4a076sm8140458ejf.164.2023.04.26.04.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 04:50:43 -0700 (PDT)
-Message-ID: <17626d0f-5f40-c483-deb5-bfba8b5daf97@gmail.com>
-Date:   Wed, 26 Apr 2023 13:50:42 +0200
+        Wed, 26 Apr 2023 07:51:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE009422D;
+        Wed, 26 Apr 2023 04:51:31 -0700 (PDT)
+Received: from desky.lan (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 900CFC81;
+        Wed, 26 Apr 2023 13:51:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1682509878;
+        bh=81HGjweft5pwVjnqXNa6QvnE/hug7iJI6XuCB8189Os=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IdDSO2ct4izk6gFfkwRkD9TLNGFQsioydCaInw2/dyMD9441zmKwa2SPUcTmknfQS
+         ZECtDoe/7bVXkfHLR1j6/z97NTnnjjmknTcm05kN6FcB82fc/8FYIp6YBrj8Zi+/dj
+         /YSNHBiez+8/NurHNm1GJbt54S5h6STiTKT366HY=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v13 0/8] i2c-atr and FPDLink
+Date:   Wed, 26 Apr 2023 14:51:06 +0300
+Message-Id: <20230426115114.156696-1-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: BUG: KASAN: null-ptr-deref in drm_sched_job_cleanup+0x96/0x290
- [gpu_sched]
-Content-Language: en-US
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-To:     "Chen, Guchun" <Guchun.Chen@amd.com>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsPZxgpFzAVN=eFXu0WV+Jk0vB4rv4p+Jt31C841LcqV=A@mail.gmail.com>
- <CABXGCsO0sST8+MvQs=T1JP49ogRsaHPT9gMQZGJ3dY7v3m0H8g@mail.gmail.com>
- <CABXGCsOTEpJG_0NWdGXRvcXQ4iTav6AUJm-U4SQb-vVzjoL6rA@mail.gmail.com>
- <10b2570f-a297-d236-fa7b-2e001a4dff12@gmail.com>
- <CABXGCsPcPY8dqZm0aF4c1p0ZvMYHy+NksMrZi9xK0=WdE5_osA@mail.gmail.com>
- <d96519fb-9e12-5a81-a60b-384dcb286f28@gmail.com>
- <CABXGCsP2JQMtNjBROSLs2y612iLZuCyoe-uD6OScAWbKHBWsCA@mail.gmail.com>
- <b6ab0086-7d52-2a41-2f76-44694faed317@amd.com>
- <CABXGCsP+LSPE9fH4TW781w67ju=HrNMe9s0kigqBarketr_Qog@mail.gmail.com>
- <CABXGCsNSqJVv4Cerc3_P_59ioUZU2M7Z_TMp2yZKqe3si0QqyA@mail.gmail.com>
- <BL0PR12MB2465BE82A18038353E48E025F1659@BL0PR12MB2465.namprd12.prod.outlook.com>
- <989d7a71-ebfc-d245-9e05-a5a46085234e@amd.com>
-In-Reply-To: <989d7a71-ebfc-d245-9e05-a5a46085234e@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sending that once more from my mailing list address since AMD internal 
-servers are blocking the mail.
+Hi,
 
-Regards,
-Christian.
+You can find v12 from:
 
-Am 26.04.23 um 13:48 schrieb Christian König:
-> WTF? I own you a beer!
->
-> I've fixed exactly that problem during the review process of the 
-> cleanup patch and because of this didn't considered that the code is 
-> still there.
->
-> It also explains why we don't see that in our testing.
->
-> @Mikhail can you test that patch with drm-misc-next?
->
-> Thanks,
-> Christian.
->
-> Am 26.04.23 um 04:00 schrieb Chen, Guchun:
->> After reviewing this whole history, maybe attached patch is able to 
->> fix your problem. Can you have a try please?
->>
->> Regards,
->> Guchun
->>
->>> -----Original Message-----
->>> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
->>> Mikhail Gavrilov
->>> Sent: Tuesday, April 25, 2023 9:20 PM
->>> To: Koenig, Christian <Christian.Koenig@amd.com>
->>> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>; dri-devel <dri-
->>> devel@lists.freedesktop.org>; amd-gfx list 
->>> <amd-gfx@lists.freedesktop.org>;
->>> Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
->>> Subject: Re: BUG: KASAN: null-ptr-deref in
->>> drm_sched_job_cleanup+0x96/0x290 [gpu_sched]
->>>
->>> On Thu, Apr 20, 2023 at 3:32 PM Mikhail Gavrilov
->>> <mikhail.v.gavrilov@gmail.com> wrote:
->>>> Important don't give up.
->>>> https://youtu.be/25zhHBGIHJ8 [40 min]
->>>> https://youtu.be/utnDR26eYBY [50 min]
->>>> https://youtu.be/DJQ_tiimW6g [12 min]
->>>> https://youtu.be/Y6AH1oJKivA [6 min]
->>>> Yes the issue is everything reproducible, but time to time it not
->>>> happens at first attempt.
->>>> I also uploaded other videos which proves that the issue definitely
->>>> exists if someone will launch those games in turn.
->>>> Reproducibility is only a matter of time.
->>>>
->>>> Anyway I didn't want you to spend so much time trying to reproduce it.
->>>> This monkey business fits me more than you.
->>>> It would be better if I could collect more useful info.
->>> Christian,
->>> Did you manage to reproduce the problem?
->>>
->>> At the weekend I faced with slab-use-after-free in
->>> amdgpu_vm_handle_moved.
->>> I didn't play in the games at this time.
->>> The Xwayland process was affected so it leads to desktop hang.
->>>
->>> ================================================================
->>> ==
->>> BUG: KASAN: slab-use-after-free in
->>> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu] Read of size 8 at addr
->>> ffff888295c66190 by task Xwayland:cs0/173185
->>>
->>> CPU: 21 PID: 173185 Comm: Xwayland:cs0 Tainted: G        W L
->>> -------  --- 6.3.0-0.rc7.20230420gitcb0856346a60.59.fc39.x86_64+debug
->>> #1
->>> Hardware name: System manufacturer System Product Name/ROG STRIX
->>> X570-I GAMING, BIOS 4601 02/02/2023 Call Trace:
->>>   <TASK>
->>>   dump_stack_lvl+0x76/0xd0
->>>   print_report+0xcf/0x670
->>>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]  ?
->>> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>>   kasan_report+0xa8/0xe0
->>>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>>   amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>>   amdgpu_cs_ioctl+0x2b7e/0x5630 [amdgpu]
->>>   ? __pfx___lock_acquire+0x10/0x10
->>>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ? 
->>> mark_lock+0x101/0x16e0  ?
->>> __lock_acquire+0xe54/0x59f0  ? __pfx_lock_release+0x10/0x10  ?
->>> __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]
->>>   drm_ioctl_kernel+0x1fc/0x3d0
->>>   ? __pfx_drm_ioctl_kernel+0x10/0x10
->>>   drm_ioctl+0x4c5/0xaa0
->>>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ?
->>> __pfx_drm_ioctl+0x10/0x10  ? _raw_spin_unlock_irqrestore+0x66/0x80
->>>   ? lockdep_hardirqs_on+0x81/0x110
->>>   ? _raw_spin_unlock_irqrestore+0x4f/0x80
->>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>>   __x64_sys_ioctl+0x131/0x1a0
->>>   do_syscall_64+0x60/0x90
->>>   ? do_syscall_64+0x6c/0x90
->>>   ? lockdep_hardirqs_on+0x81/0x110
->>>   ? do_syscall_64+0x6c/0x90
->>>   ? lockdep_hardirqs_on+0x81/0x110
->>>   ? do_syscall_64+0x6c/0x90
->>>   ? lockdep_hardirqs_on+0x81/0x110
->>>   ? do_syscall_64+0x6c/0x90
->>>   ? lockdep_hardirqs_on+0x81/0x110
->>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>> RIP: 0033:0x7ffb71b0892d
->>> Code: 04 25 28 00 00 00 48 89 45 c8 31 c0 48 8d 45 10 c7 45 b0 10 00
->>> 00 00 48 89 45 b8 48 8d 45 d0 48 89 45 c0 b8 10 00 00 00 0f 05 <89> 
->>> c2 3d 00
->>> f0 ff ff 77 1a 48 8b 45 c8 64 48 2b 04 25 28 00 00 00
->>> RSP: 002b:00007ffb677fe840 EFLAGS: 00000246 ORIG_RAX:
->>> 0000000000000010
->>> RAX: ffffffffffffffda RBX: 00007ffb677fe9f8 RCX: 00007ffb71b0892d
->>> RDX: 00007ffb677fe900 RSI: 00000000c0186444 RDI: 000000000000000d
->>> RBP: 00007ffb677fe890 R08: 00007ffb677fea50 R09: 00007ffb677fe8e0
->>> R10: 0000556c4611bec0 R11: 0000000000000246 R12: 00007ffb677fe900
->>> R13: 00000000c0186444 R14: 000000000000000d R15: 00007ffb677fe9f8
->>> </TASK>
->>>
->>> Allocated by task 173181:
->>>   kasan_save_stack+0x33/0x60
->>>   kasan_set_track+0x25/0x30
->>>   __kasan_kmalloc+0x8f/0xa0
->>>   __kmalloc_node+0x65/0x160
->>>   amdgpu_bo_create+0x31e/0xfb0 [amdgpu]
->>>   amdgpu_bo_create_user+0xca/0x160 [amdgpu]
->>>   amdgpu_gem_create_ioctl+0x398/0x980 [amdgpu]
->>>   drm_ioctl_kernel+0x1fc/0x3d0
->>>   drm_ioctl+0x4c5/0xaa0
->>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>>   __x64_sys_ioctl+0x131/0x1a0
->>>   do_syscall_64+0x60/0x90
->>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>>
->>> Freed by task 173185:
->>>   kasan_save_stack+0x33/0x60
->>>   kasan_set_track+0x25/0x30
->>>   kasan_save_free_info+0x2e/0x50
->>>   __kasan_slab_free+0x10b/0x1a0
->>>   slab_free_freelist_hook+0x11e/0x1d0
->>>   __kmem_cache_free+0xc0/0x2e0
->>>   ttm_bo_release+0x667/0x9e0 [ttm]
->>>   amdgpu_bo_unref+0x35/0x70 [amdgpu]
->>>   amdgpu_gem_object_free+0x73/0xb0 [amdgpu]
->>>   drm_gem_handle_delete+0xe3/0x150
->>>   drm_ioctl_kernel+0x1fc/0x3d0
->>>   drm_ioctl+0x4c5/0xaa0
->>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>>   __x64_sys_ioctl+0x131/0x1a0
->>>   do_syscall_64+0x60/0x90
->>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>>
->>> Last potentially related work creation:
->>>   kasan_save_stack+0x33/0x60
->>>   __kasan_record_aux_stack+0x97/0xb0
->>>   __call_rcu_common.constprop.0+0xf8/0x1af0
->>>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
->>>   dma_resv_reserve_fences+0x4dc/0x7f0
->>>   ttm_eu_reserve_buffers+0x3f6/0x1190 [ttm]
->>>   amdgpu_cs_ioctl+0x204d/0x5630 [amdgpu]
->>>   drm_ioctl_kernel+0x1fc/0x3d0
->>>   drm_ioctl+0x4c5/0xaa0
->>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>>   __x64_sys_ioctl+0x131/0x1a0
->>>   do_syscall_64+0x60/0x90
->>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>>
->>> Second to last potentially related work creation:
->>>   kasan_save_stack+0x33/0x60
->>>   __kasan_record_aux_stack+0x97/0xb0
->>>   __call_rcu_common.constprop.0+0xf8/0x1af0
->>>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
->>>   amdgpu_ctx_add_fence+0x2b1/0x390 [amdgpu]
->>>   amdgpu_cs_ioctl+0x44d0/0x5630 [amdgpu]
->>>   drm_ioctl_kernel+0x1fc/0x3d0
->>>   drm_ioctl+0x4c5/0xaa0
->>>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>>   __x64_sys_ioctl+0x131/0x1a0
->>>   do_syscall_64+0x60/0x90
->>>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>>
->>> The buggy address belongs to the object at ffff888295c66000 which 
->>> belongs
->>> to the cache kmalloc-1k of size 1024 The buggy address is located 
->>> 400 bytes
->>> inside of  freed 1024-byte region [ffff888295c66000, ffff888295c66400)
->>>
->>> The buggy address belongs to the physical page:
->>> page:00000000125ffbe3 refcount:1 mapcount:0 mapping:0000000000000000
->>> index:0x0 pfn:0x295c60
->>> head:00000000125ffbe3 order:3 entire_mapcount:0 nr_pages_mapped:0
->>> pincount:0 anon flags:
->>> 0x17ffffc0010200(slab|head|node=0|zone=2|lastcpupid=0x1fffff)
->>> raw: 0017ffffc0010200 ffff88810004cdc0 0000000000000000
->>> dead000000000001
->>> raw: 0000000000000000 0000000000100010 00000001ffffffff
->>> 0000000000000000 page dumped because: kasan: bad access detected
->>>
->>> Memory state around the buggy address:
->>>   ffff888295c66080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>>   ffff888295c66100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>>> ffff888295c66180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>>                           ^
->>>   ffff888295c66200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>>   ffff888295c66280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>> ================================================================
->>> ==
->>>
->>> -- 
->>> Best Regards,
->>> Mike Gavrilov.
->
+https://lore.kernel.org/all/20230425072601.51031-1-tomi.valkeinen@ideasonboard.com/
+
+Diff to v12 is included below.
+
+The changes are:
+
+- Change the i2c-alias-pool to u32 array. The i2c-atr.c will reject any
+  addresses that have bits in the upper 16 bits. This could be changed
+  later if those bits are needed.
+
+- Add maxItems to ub960's i2c-alias-pool. ub960 has 4 rx ports, and each
+  can have 8 aliases, so the absolute maximum is 32.
+
+ Tomi
+
+Luca Ceresoli (1):
+  i2c: add I2C Address Translator (ATR) support
+
+Tomi Valkeinen (7):
+  dt-bindings: i2c: Add I2C Address Translator (ATR)
+  dt-bindings: media: add TI DS90UB913 FPD-Link III Serializer
+  dt-bindings: media: add TI DS90UB953 FPD-Link III Serializer
+  dt-bindings: media: add TI DS90UB960 FPD-Link III Deserializer
+  media: i2c: add DS90UB960 driver
+  media: i2c: add DS90UB913 driver
+  media: i2c: add DS90UB953 driver
+
+ .../devicetree/bindings/i2c/i2c-atr.yaml      |   34 +
+ .../bindings/media/i2c/ti,ds90ub913.yaml      |  133 +
+ .../bindings/media/i2c/ti,ds90ub953.yaml      |  134 +
+ .../bindings/media/i2c/ti,ds90ub960.yaml      |  427 ++
+ Documentation/i2c/i2c-address-translators.rst |   96 +
+ Documentation/i2c/index.rst                   |    1 +
+ MAINTAINERS                                   |   16 +
+ drivers/i2c/Kconfig                           |    9 +
+ drivers/i2c/Makefile                          |    1 +
+ drivers/i2c/i2c-atr.c                         |  710 +++
+ drivers/media/i2c/Kconfig                     |   47 +
+ drivers/media/i2c/Makefile                    |    3 +
+ drivers/media/i2c/ds90ub913.c                 |  906 ++++
+ drivers/media/i2c/ds90ub953.c                 | 1400 ++++++
+ drivers/media/i2c/ds90ub960.c                 | 4049 +++++++++++++++++
+ include/linux/i2c-atr.h                       |  116 +
+ include/media/i2c/ds90ub9xx.h                 |   22 +
+ 17 files changed, 8104 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/i2c/i2c-atr.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+ create mode 100644 Documentation/i2c/i2c-address-translators.rst
+ create mode 100644 drivers/i2c/i2c-atr.c
+ create mode 100644 drivers/media/i2c/ds90ub913.c
+ create mode 100644 drivers/media/i2c/ds90ub953.c
+ create mode 100644 drivers/media/i2c/ds90ub960.c
+ create mode 100644 include/linux/i2c-atr.h
+ create mode 100644 include/media/i2c/ds90ub9xx.h
+
+Interdiff against v12:
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-atr.yaml b/Documentation/devicetree/bindings/i2c/i2c-atr.yaml
+index 470cc6c9af35..1939ab339bfc 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-atr.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-atr.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/i2c/i2c-atr.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Common i2c address translator properties.
++title: Common i2c address translator properties
+ 
+ maintainers:
+   - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+@@ -20,7 +20,7 @@ description:
+ 
+ properties:
+   i2c-alias-pool:
+-    $ref: /schemas/types.yaml#/definitions/uint16-array
++    $ref: /schemas/types.yaml#/definitions/uint32-array
+     description:
+       I2C alias pool is a pool of I2C addresses on the main I2C bus that can be
+       used to access the remote peripherals on the serializer's I2C bus. The
+diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+index 1d5362bea09a..289737721c2c 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
++++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+@@ -13,6 +13,9 @@ description:
+   The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+   forwarding.
+ 
++allOf:
++  - $ref: /schemas/i2c/i2c-atr.yaml#
++
+ properties:
+   compatible:
+     enum:
+@@ -37,7 +40,8 @@ properties:
+       Specifier for the GPIO connected to the PDB pin.
+ 
+   i2c-alias-pool:
+-    $ref: /schemas/i2c/i2c-atr.yaml#/properties/i2c-alias-pool
++    minItems: 1
++    maxItems: 32
+ 
+   links:
+     type: object
+@@ -225,7 +229,7 @@ required:
+   - clock-names
+   - ports
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+@@ -245,7 +249,7 @@ examples:
+ 
+         powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
+ 
+-        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
++        i2c-alias-pool = <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
+ 
+         ports {
+           #address-cells = <1>;
+diff --git a/drivers/i2c/i2c-atr.c b/drivers/i2c/i2c-atr.c
+index 402182a04efd..8ca1daadec93 100644
+--- a/drivers/i2c/i2c-atr.c
++++ b/drivers/i2c/i2c-atr.c
+@@ -428,10 +428,12 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
+ 	struct device *dev = atr->dev;
+ 	unsigned long *alias_use_mask;
+ 	size_t num_aliases;
+-	u16 *aliases;
++	unsigned int i;
++	u32 *aliases32;
++	u16 *aliases16;
+ 	int ret;
+ 
+-	ret = fwnode_property_count_u16(dev_fwnode(dev), "i2c-alias-pool");
++	ret = fwnode_property_count_u32(dev_fwnode(dev), "i2c-alias-pool");
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to count 'i2c-alias-pool' property: %d\n",
+ 			ret);
+@@ -443,32 +445,56 @@ static int i2c_atr_parse_alias_pool(struct i2c_atr *atr)
+ 	if (!num_aliases)
+ 		return 0;
+ 
+-	aliases = kcalloc(num_aliases, sizeof(*aliases), GFP_KERNEL);
+-	if (!aliases)
++	aliases32 = kcalloc(num_aliases, sizeof(*aliases32), GFP_KERNEL);
++	if (!aliases32)
+ 		return -ENOMEM;
+ 
+-	ret = fwnode_property_read_u16_array(dev_fwnode(dev), "i2c-alias-pool",
+-					     aliases, num_aliases);
++	ret = fwnode_property_read_u32_array(dev_fwnode(dev), "i2c-alias-pool",
++					     aliases32, num_aliases);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Failed to read 'i2c-alias-pool' property: %d\n",
+ 			ret);
+-		kfree(aliases);
+-		return ret;
++		goto err_free_aliases32;
++	}
++
++	aliases16 = kcalloc(num_aliases, sizeof(*aliases16), GFP_KERNEL);
++	if (!aliases16) {
++		ret = -ENOMEM;
++		goto err_free_aliases32;
++	}
++
++	for (i = 0; i < num_aliases; i++) {
++		if (!(aliases32[i] & 0xffff0000)) {
++			aliases16[i] = aliases32[i];
++			continue;
++		}
++
++		dev_err(dev, "Failed to parse 'i2c-alias-pool' property: I2C flags are not supported\n");
++		ret = -EINVAL;
++		goto err_free_aliases16;
+ 	}
+ 
+ 	alias_use_mask = bitmap_zalloc(num_aliases, GFP_KERNEL);
+ 	if (!alias_use_mask) {
+-		kfree(aliases);
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto err_free_aliases16;
+ 	}
+ 
++	kfree(aliases32);
++
+ 	atr->num_aliases = num_aliases;
+-	atr->aliases = aliases;
++	atr->aliases = aliases16;
+ 	atr->alias_use_mask = alias_use_mask;
+ 
+ 	dev_dbg(dev, "i2c-alias-pool has %zu aliases", atr->num_aliases);
+ 
+ 	return 0;
++
++err_free_aliases16:
++	kfree(aliases16);
++err_free_aliases32:
++	kfree(aliases32);
++	return ret;
+ }
+ 
+ struct i2c_atr *i2c_atr_new(struct i2c_adapter *parent, struct device *dev,
+-- 
+2.34.1
 
