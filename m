@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B0D6EF0CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117C36EF0CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240067AbjDZJNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S239574AbjDZJNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 05:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240021AbjDZJMe (ORCPT
+        with ESMTP id S239976AbjDZJMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:12:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CAE186;
-        Wed, 26 Apr 2023 02:12:33 -0700 (PDT)
+        Wed, 26 Apr 2023 05:12:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6084219;
+        Wed, 26 Apr 2023 02:12:35 -0700 (PDT)
 Date:   Wed, 26 Apr 2023 09:12:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682500351;
+        s=2020; t=1682500352;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GuxVjsoTXKU254LFESPJjHlOjjGGmyQlCK89QiYa1Mc=;
-        b=A43yC7y7Z7nqh1GriBaom01QU4fEEeQsRIWFzCzfNJDu5UFoCtgvMt41B/KemcphHEfTKo
-        wUiIaFHKc9cRvFmcxvUrI/US0TtFcsXh8xVcFzv6JafWqK0eSfziwahlfu0c4xV9yK53Nd
-        QJjKXjIb/nUM5zzkmqKcXJ0BJ/cVnEtVoJp4h53cPbr4M9CgeZvxv9FfyktR7ltD6nd8gS
-        ZXd1fu97npiHd7KjFoPg8NLObtA8iC2uPHESqeIjuRT7HyXYfzCm7SAgdYdWTzGbvTaRRQ
-        6LT5+0iFsvPzeNiIJSbpzn7SQh/nOx1Kpzjp+jUQeq/hN4ab0KtoEjPNGcgz5g==
+        bh=MgZCJQCK3AX5WcTn6XiMT44OCvMHe53xr/eNTpm8o2c=;
+        b=yaXS9Y39lAg8WsrZ1mUlGZtU9NXBtRY/KhOP5Rn+O0cnoN+GfwOe9yS6WRKn2UDs5uC8Hu
+        +FwPdpRU3mUEHwrnztlFOWoJ7IYCF6+uqPDPO/u/pY31C1yq2FMvjoHq4LZIqhe6vV/aSU
+        Ke9Yg2MARZFSnWKZMhBpiI9jN4y1YG/f3vwvu9nICkUBThcQAbV6Rmq/SO6vCvIef74i/6
+        JtiUlEmNmCmBJ0LzJgNaE7mnWhtx8JUw3uvxdK6XRlGCG/iy96Bx7cgI7ullmWoVV0YHv9
+        lLPuodX3CfvI3ZmfBPVjboYEqedYBd4lKMxyjg3M9Z8j0AwR227CxnXg5rGPFA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682500351;
+        s=2020e; t=1682500352;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GuxVjsoTXKU254LFESPJjHlOjjGGmyQlCK89QiYa1Mc=;
-        b=vbgr1vKXWUAGkYUbLOh6W3RfBQd2YKKDlPbWJWVaxMHZZs99AFRWs8zz2n7eSWaEJgTBz1
-        a0/ykiZpZ+v1PeCg==
-From:   "tip-bot2 for Qinrun Dai" <tip-bot2@linutronix.de>
+        bh=MgZCJQCK3AX5WcTn6XiMT44OCvMHe53xr/eNTpm8o2c=;
+        b=Q6y6/ZBd3H+yWomhb8iiRTxb3DiAqGtLobfJRARbDkEz4PV5/B9SYUeI2qAZ4cmKG1aHpO
+        2+vblywE9jq4DmAQ==
+From:   tip-bot2 for Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/davinci: Fix memory leak in
- davinci_timer_register when init fails
-Cc:     Qinrun Dai <flno@hust.edu.cn>,
+Subject: [tip: timers/core] clocksource/drivers/timer-tegra186: Convert to
+ platform remove callback returning void
+Cc:     u.kleine-koenig@pengutronix.de,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230413135037.1505799-1-flno@hust.edu.cn>
-References: <20230413135037.1505799-1-flno@hust.edu.cn>
+In-Reply-To: <20230313075430.2730803-5-u.kleine-koenig@pengutronix.de>
+References: <20230313075430.2730803-5-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Message-ID: <168250035114.404.784113346970013195.tip-bot2@tip-bot2>
+Message-ID: <168250035186.404.12792243780091538646.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -68,99 +69,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     fb73556386e074e9bee9fa2d253aeaefe4e063e0
-Gitweb:        https://git.kernel.org/tip/fb73556386e074e9bee9fa2d253aeaefe4e063e0
-Author:        Qinrun Dai <flno@hust.edu.cn>
-AuthorDate:    Thu, 13 Apr 2023 13:50:37 
+Commit-ID:     d7b76421c03fa58d16a52eb839302f582602997a
+Gitweb:        https://git.kernel.org/tip/d7b76421c03fa58d16a52eb839302f58260=
+2997a
+Author:        Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+AuthorDate:    Mon, 13 Mar 2023 08:54:29 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Mon, 24 Apr 2023 16:56:13 +02:00
 
-clocksource/drivers/davinci: Fix memory leak in davinci_timer_register when init fails
+clocksource/drivers/timer-tegra186: Convert to platform remove callback retur=
+ning void
 
-Smatch reports:
-drivers/clocksource/timer-davinci.c:332 davinci_timer_register()
-warn: 'base' from ioremap() not released on lines: 274.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-Fix this and other potential memory leak problems
-by adding a set of corresponding exit lables.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-Fixes: 721154f972aa ("clocksource/drivers/davinci: Add support for clockevents")
-Signed-off-by: Qinrun Dai <flno@hust.edu.cn>
-Link: https://lore.kernel.org/r/20230413135037.1505799-1-flno@hust.edu.cn
+Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20230313075430.2730803-5-u.kleine-koenig@peng=
+utronix.de
 ---
- drivers/clocksource/timer-davinci.c | 30 ++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ drivers/clocksource/timer-tegra186.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/timer-davinci.c b/drivers/clocksource/timer-davinci.c
-index 9996c05..b1c2484 100644
---- a/drivers/clocksource/timer-davinci.c
-+++ b/drivers/clocksource/timer-davinci.c
-@@ -257,21 +257,25 @@ int __init davinci_timer_register(struct clk *clk,
- 				resource_size(&timer_cfg->reg),
- 				"davinci-timer")) {
- 		pr_err("Unable to request memory region\n");
--		return -EBUSY;
-+		rv = -EBUSY;
-+		goto exit_clk_disable;
- 	}
- 
- 	base = ioremap(timer_cfg->reg.start, resource_size(&timer_cfg->reg));
- 	if (!base) {
- 		pr_err("Unable to map the register range\n");
--		return -ENOMEM;
-+		rv = -ENOMEM;
-+		goto exit_mem_region;
- 	}
- 
- 	davinci_timer_init(base);
- 	tick_rate = clk_get_rate(clk);
- 
- 	clockevent = kzalloc(sizeof(*clockevent), GFP_KERNEL);
--	if (!clockevent)
--		return -ENOMEM;
-+	if (!clockevent) {
-+		rv = -ENOMEM;
-+		goto exit_iounmap_base;
-+	}
- 
- 	clockevent->dev.name = "tim12";
- 	clockevent->dev.features = CLOCK_EVT_FEAT_ONESHOT;
-@@ -296,7 +300,7 @@ int __init davinci_timer_register(struct clk *clk,
- 			 "clockevent/tim12", clockevent);
- 	if (rv) {
- 		pr_err("Unable to request the clockevent interrupt\n");
--		return rv;
-+		goto exit_free_clockevent;
- 	}
- 
- 	davinci_clocksource.dev.rating = 300;
-@@ -323,13 +327,27 @@ int __init davinci_timer_register(struct clk *clk,
- 	rv = clocksource_register_hz(&davinci_clocksource.dev, tick_rate);
- 	if (rv) {
- 		pr_err("Unable to register clocksource\n");
--		return rv;
-+		goto exit_free_irq;
- 	}
- 
- 	sched_clock_register(davinci_timer_read_sched_clock,
- 			     DAVINCI_TIMER_CLKSRC_BITS, tick_rate);
- 
- 	return 0;
-+
-+exit_free_irq:
-+	free_irq(timer_cfg->irq[DAVINCI_TIMER_CLOCKEVENT_IRQ].start,
-+			clockevent);
-+exit_free_clockevent:
-+	kfree(clockevent);
-+exit_iounmap_base:
-+	iounmap(base);
-+exit_mem_region:
-+	release_mem_region(timer_cfg->reg.start,
-+			   resource_size(&timer_cfg->reg));
-+exit_clk_disable:
-+	clk_disable_unprepare(clk);
-+	return rv;
+diff --git a/drivers/clocksource/timer-tegra186.c b/drivers/clocksource/timer=
+-tegra186.c
+index ea74288..ccc762d 100644
+--- a/drivers/clocksource/timer-tegra186.c
++++ b/drivers/clocksource/timer-tegra186.c
+@@ -447,15 +447,13 @@ unregister_tsc:
+ 	return err;
  }
- 
- static int __init of_davinci_timer_register(struct device_node *np)
+=20
+-static int tegra186_timer_remove(struct platform_device *pdev)
++static void tegra186_timer_remove(struct platform_device *pdev)
+ {
+ 	struct tegra186_timer *tegra =3D platform_get_drvdata(pdev);
+=20
+ 	clocksource_unregister(&tegra->usec);
+ 	clocksource_unregister(&tegra->osc);
+ 	clocksource_unregister(&tegra->tsc);
+-
+-	return 0;
+ }
+=20
+ static int __maybe_unused tegra186_timer_suspend(struct device *dev)
+@@ -505,7 +503,7 @@ static struct platform_driver tegra186_wdt_driver =3D {
+ 		.of_match_table =3D tegra186_timer_of_match,
+ 	},
+ 	.probe =3D tegra186_timer_probe,
+-	.remove =3D tegra186_timer_remove,
++	.remove_new =3D tegra186_timer_remove,
+ };
+ module_platform_driver(tegra186_wdt_driver);
+=20
