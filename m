@@ -2,165 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950C86EEE9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85996EEE9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbjDZGx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S239354AbjDZGyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239463AbjDZGxV (ORCPT
+        with ESMTP id S239309AbjDZGyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:53:21 -0400
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678F730EC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:53:12 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id rZ1RpwxQZMX1TrZ1apoi7l; Wed, 26 Apr 2023 08:53:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682491991;
-        bh=1oZNVU72onEvSJlf/nOroZTsWdZQ0dSMk+VCwOmUX5M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=bcamRcTYVPndFoKl1kVcGFPLlxC2EWR4gMfWdK2XWNXPos8dELczxHav2CKTgNg5f
-         kuSImMQ7ExiyItxpHLpWUxvPdsb9Ei8OBmqA0MisQOcfyeLGtFHvH459Q2tOHdwgPM
-         m9LteJ9Gb8lCVvjfC7CyhMwFc+7n6bFbH6q7Hc+PbRnXauohEOncx5smMN4fIsFkk8
-         bAfXWs90p7aTLR5fOUK3kcltxU1KJW+Lhq57fsFJm8QeAP6b5jOTu0jmivpdq8Oy/w
-         4tcsMzGU2yXx6HV4NawaUFkdzdKgj4HNDvCwhW2HnDcfvwYz/N95w2CKfFGtXcyI1/
-         8qDNcPo2sexSg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 26 Apr 2023 08:53:11 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH 2/2] watchdog: dw_wdt: Simplify clk management
-Date:   Wed, 26 Apr 2023 08:52:49 +0200
-Message-Id: <f6094c55cacf9637d835cd49290d9e888faeb0f7.1682491863.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <fbb650650bbb33a8fa2fd028c23157bedeed50e1.1682491863.git.christophe.jaillet@wanadoo.fr>
-References: <fbb650650bbb33a8fa2fd028c23157bedeed50e1.1682491863.git.christophe.jaillet@wanadoo.fr>
+        Wed, 26 Apr 2023 02:54:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E42693;
+        Tue, 25 Apr 2023 23:53:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F6BB62963;
+        Wed, 26 Apr 2023 06:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219EDC433D2;
+        Wed, 26 Apr 2023 06:53:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682492032;
+        bh=QIhBfq3ajoFrTFgvdAxQ5iAO7C3Q5qspZKjzhdSkFDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G8fiQSngd2qR//FFL6mNV7TiZ0hHExG3DHtksT8WRTQ2IEiiKvj+87IE8fz1JCSPk
+         90pfbu1IicetwgG1l3aeiX9kJjBtMjGh1LXIqVpFrDM8aGqCoY8i1gBQU6gX3U32v+
+         p8ukg9m7oelvw396eLvBAvui7OT7Mp5GBk02ebdaHLPQa1L2e6mP0pm64b5PO6XIoq
+         V1sYIBnXBSv7l646PNYYrpOpUAZfrlZXdPcBZNiy4dv+J3MjQi1Kz6ThTJ456rw0SM
+         GF6+JDokL6O9FnKDuLQi0zOhbeOeaFwXbZEICIku8KX9fFBatJSDz5eLozlDnJNEft
+         CpWXdnfqp2WkA==
+Date:   Wed, 26 Apr 2023 08:53:45 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] fs: add infrastructure for multigrain inode
+ i_m/ctime
+Message-ID: <20230426-meerblick-tortur-c6606f6126fa@brauner>
+References: <20230424151104.175456-1-jlayton@kernel.org>
+ <20230424151104.175456-2-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230424151104.175456-2-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_clk_get_enabled() instead of hand-writing it.
-This saves some LoC.
+On Mon, Apr 24, 2023 at 11:11:02AM -0400, Jeff Layton wrote:
+> The VFS always uses coarse-grained timestamp updates for filling out the
+> ctime and mtime after a change. This has the benefit of allowing
+> filesystems to optimize away a lot metaupdates, to around once per
+> jiffy, even when a file is under heavy writes.
+> 
+> Unfortunately, this has always been an issue when we're exporting via
+> NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
+> lot of exported filesystems don't properly support a change attribute
+> and are subject to the same problems with timestamp granularity. Other
+> applications have similar issues (e.g backup applications).
+> 
+> Switching to always using fine-grained timestamps would improve the
+> situation for NFS, but that becomes rather expensive, as the underlying
+> filesystem will have to log a lot more metadata updates.
+> 
+> What we need is a way to only use fine-grained timestamps when they are
+> being actively queried:
+> 
+> Whenever the mtime changes, the ctime must also change since we're
+> changing the metadata. When a superblock has a s_time_gran >1, we can
+> use the lowest-order bit of the inode->i_ctime as a flag to indicate
+> that the value has been queried. Then on the next write, we'll fetch a
+> fine-grained timestamp instead of the usual coarse-grained one.
+> 
+> We could enable this for any filesystem that has a s_time_gran >1, but
+> for now, this patch adds a new SB_MULTIGRAIN_TS flag to allow filesystems
+> to opt-in to this behavior.
+> 
+> It then adds a new current_ctime function that acts like the
+> current_time helper, but will conditionally grab fine-grained timestamps
+> when the flag is set in the current ctime. Also, there is a new
+> generic_fill_multigrain_cmtime for grabbing the c/mtime out of the inode
+> and atomically marking the ctime as queried.
+> 
+> Later patches will convert filesystems over to this new scheme.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/inode.c         | 57 +++++++++++++++++++++++++++++++++++++++---
+>  fs/stat.c          | 24 ++++++++++++++++++
+>  include/linux/fs.h | 62 ++++++++++++++++++++++++++++++++--------------
+>  3 files changed, 121 insertions(+), 22 deletions(-)
+> 
+> diff --git a/fs/inode.c b/fs/inode.c
+> index 4558dc2f1355..4bd11bdb46d4 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -2030,6 +2030,7 @@ EXPORT_SYMBOL(file_remove_privs);
+>  static int inode_needs_update_time(struct inode *inode, struct timespec64 *now)
+>  {
+>  	int sync_it = 0;
+> +	struct timespec64 ctime = inode->i_ctime;
+>  
+>  	/* First try to exhaust all avenues to not sync */
+>  	if (IS_NOCMTIME(inode))
+> @@ -2038,7 +2039,9 @@ static int inode_needs_update_time(struct inode *inode, struct timespec64 *now)
+>  	if (!timespec64_equal(&inode->i_mtime, now))
+>  		sync_it = S_MTIME;
+>  
+> -	if (!timespec64_equal(&inode->i_ctime, now))
+> +	if (is_multigrain_ts(inode))
+> +		ctime.tv_nsec &= ~I_CTIME_QUERIED;
+> +	if (!timespec64_equal(&ctime, now))
+>  		sync_it |= S_CTIME;
+>  
+>  	if (IS_I_VERSION(inode) && inode_iversion_need_inc(inode))
+> @@ -2062,6 +2065,50 @@ static int __file_update_time(struct file *file, struct timespec64 *now,
+>  	return ret;
+>  }
+>  
+> +/**
+> + * current_ctime - Return FS time (possibly high-res)
+> + * @inode: inode.
+> + *
+> + * Return the current time truncated to the time granularity supported by
+> + * the fs, as suitable for a ctime/mtime change.
+> + *
+> + * For a multigrain timestamp, if the timestamp is flagged as having been
+> + * QUERIED, then get a fine-grained timestamp.
+> + */
+> +struct timespec64 current_ctime(struct inode *inode)
+> +{
+> +	struct timespec64 now;
+> +	long nsec = 0;
+> +	bool multigrain = is_multigrain_ts(inode);
+> +
+> +	if (multigrain) {
+> +		atomic_long_t *pnsec = (atomic_long_t *)&inode->i_ctime.tv_nsec;
+> +
+> +		nsec = atomic_long_fetch_and(~I_CTIME_QUERIED, pnsec);
+> +	}
+> +
+> +	if (nsec & I_CTIME_QUERIED) {
+> +		ktime_get_real_ts64(&now);
+> +	} else {
+> +		ktime_get_coarse_real_ts64(&now);
+> +
+> +		if (multigrain) {
+> +			/*
+> +			 * If we've recently fetched a fine-grained timestamp
+> +			 * then the coarse-grained one may be earlier than the
+> +			 * existing one. Just keep the existing ctime if so.
+> +			 */
+> +			struct timespec64 ctime = inode->i_ctime;
+> +
+> +			if (timespec64_compare(&ctime, &now) > 0)
+> +				now = ctime;
+> +		}
+> +	}
+> +
+> +	return timestamp_truncate(now, inode);
+> +}
+> +EXPORT_SYMBOL(current_ctime);
+> +
+>  /**
+>   * file_update_time - update mtime and ctime time
+>   * @file: file accessed
+> @@ -2080,7 +2127,7 @@ int file_update_time(struct file *file)
+>  {
+>  	int ret;
+>  	struct inode *inode = file_inode(file);
+> -	struct timespec64 now = current_time(inode);
+> +	struct timespec64 now = current_ctime(inode);
+>  
+>  	ret = inode_needs_update_time(inode, &now);
+>  	if (ret <= 0)
+> @@ -2109,7 +2156,7 @@ static int file_modified_flags(struct file *file, int flags)
+>  {
+>  	int ret;
+>  	struct inode *inode = file_inode(file);
+> -	struct timespec64 now = current_time(inode);
+> +	struct timespec64 now = current_ctime(inode);
+>  
+>  	/*
+>  	 * Clear the security bits if the process is not being run by root.
+> @@ -2419,9 +2466,11 @@ struct timespec64 timestamp_truncate(struct timespec64 t, struct inode *inode)
+>  	if (unlikely(t.tv_sec == sb->s_time_max || t.tv_sec == sb->s_time_min))
+>  		t.tv_nsec = 0;
+>  
+> -	/* Avoid division in the common cases 1 ns and 1 s. */
+> +	/* Avoid division in the common cases 1 ns, 2 ns and 1 s. */
+>  	if (gran == 1)
+>  		; /* nothing */
+> +	else if (gran == 2)
+> +		t.tv_nsec &= ~1L;
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This change the order the resources will be released, so review with care.
----
- drivers/watchdog/dw_wdt.c | 44 ++++++++++-----------------------------
- 1 file changed, 11 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index a1354a59eb37..84dca3695f86 100644
---- a/drivers/watchdog/dw_wdt.c
-+++ b/drivers/watchdog/dw_wdt.c
-@@ -566,22 +566,16 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 	 * to the common timer/bus clocks configuration, in which the very
- 	 * first found clock supply both timer and APB signals.
- 	 */
--	dw_wdt->clk = devm_clk_get(dev, "tclk");
-+	dw_wdt->clk = devm_clk_get_enabled(dev, "tclk");
- 	if (IS_ERR(dw_wdt->clk)) {
--		dw_wdt->clk = devm_clk_get(dev, NULL);
-+		dw_wdt->clk = devm_clk_get_enabled(dev, NULL);
- 		if (IS_ERR(dw_wdt->clk))
- 			return PTR_ERR(dw_wdt->clk);
- 	}
- 
--	ret = clk_prepare_enable(dw_wdt->clk);
--	if (ret)
--		return ret;
--
- 	dw_wdt->rate = clk_get_rate(dw_wdt->clk);
--	if (dw_wdt->rate == 0) {
--		ret = -EINVAL;
--		goto out_disable_clk;
--	}
-+	if (dw_wdt->rate == 0)
-+		return -EINVAL;
- 
- 	/*
- 	 * Request APB clock if device is configured with async clocks mode.
-@@ -590,21 +584,13 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 	 * so the pclk phandle reference is left optional. If it couldn't be
- 	 * found we consider the device configured in synchronous clocks mode.
- 	 */
--	dw_wdt->pclk = devm_clk_get_optional(dev, "pclk");
--	if (IS_ERR(dw_wdt->pclk)) {
--		ret = PTR_ERR(dw_wdt->pclk);
--		goto out_disable_clk;
--	}
--
--	ret = clk_prepare_enable(dw_wdt->pclk);
--	if (ret)
--		goto out_disable_clk;
-+	dw_wdt->pclk = devm_clk_get_optional_enabled(dev, "pclk");
-+	if (IS_ERR(dw_wdt->pclk))
-+		return PTR_ERR(dw_wdt->pclk);
- 
- 	dw_wdt->rst = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
--	if (IS_ERR(dw_wdt->rst)) {
--		ret = PTR_ERR(dw_wdt->rst);
--		goto out_disable_pclk;
--	}
-+	if (IS_ERR(dw_wdt->rst))
-+		return PTR_ERR(dw_wdt->rst);
- 
- 	/* Enable normal reset without pre-timeout by default. */
- 	dw_wdt_update_mode(dw_wdt, DW_WDT_RMOD_RESET);
-@@ -621,12 +607,12 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 				       IRQF_SHARED | IRQF_TRIGGER_RISING,
- 				       pdev->name, dw_wdt);
- 		if (ret)
--			goto out_disable_pclk;
-+			return ret;
- 
- 		dw_wdt->wdd.info = &dw_wdt_pt_ident;
- 	} else {
- 		if (ret == -EPROBE_DEFER)
--			goto out_disable_pclk;
-+			return ret;
- 
- 		dw_wdt->wdd.info = &dw_wdt_ident;
- 	}
-@@ -675,12 +661,6 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
- 
- out_assert_rst:
- 	reset_control_assert(dw_wdt->rst);
--
--out_disable_pclk:
--	clk_disable_unprepare(dw_wdt->pclk);
--
--out_disable_clk:
--	clk_disable_unprepare(dw_wdt->clk);
- 	return ret;
- }
- 
-@@ -692,8 +672,6 @@ static void dw_wdt_drv_remove(struct platform_device *pdev)
- 
- 	watchdog_unregister_device(&dw_wdt->wdd);
- 	reset_control_assert(dw_wdt->rst);
--	clk_disable_unprepare(dw_wdt->pclk);
--	clk_disable_unprepare(dw_wdt->clk);
- }
- 
- #ifdef CONFIG_OF
--- 
-2.34.1
-
+Is that trying to mask off I_CTIME_QUERIED?
+If so, can we please use that constant as raw constants tend to be
+confusing in the long run.
