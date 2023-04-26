@@ -2,250 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBA86EF550
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF6A6EF545
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241116AbjDZNQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S241095AbjDZNPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241123AbjDZNQR (ORCPT
+        with ESMTP id S240992AbjDZNPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:16:17 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F904659F;
-        Wed, 26 Apr 2023 06:16:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 35C846017C;
-        Wed, 26 Apr 2023 15:16:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682514974; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jLF34zZySbrMIOar5hbB9l+LuyXzqgbjgZcvmCeF6wi62cxiSBVLdnN33YdtamlH7
-         cxz82IsYoaZRnYV0sAcYqYPs1h2BS4xFbwHv/lb2vTonHxSu9DqH25Xgz8rtlCKLTI
-         tEEmgSqjGTS/zSGn8o2mMkarG1eHI3oxjCTTSntsDb7cib6Yp0EEQsreaud/UKc+Su
-         6yRps4q37snvK5dKB0mjdVu0eP4lDtE9J8Z6zbw1uj7LyHB66qCgBh6XYkk4OqaaOK
-         J2qpvxyNE/CDHmFDdWbokqReuiI/Xvi0AR0M2bA/lPRVT45bJ44IDzw8aGrGdM7CRp
-         oMTYHbrvrkGpA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1v-Us3qcu3JB; Wed, 26 Apr 2023 15:16:11 +0200 (CEST)
-Received: by domac.alu.hr (Postfix, from userid 1014)
-        id BF8626017E; Wed, 26 Apr 2023 15:16:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682514971; bh=DplkcwFmSKllgiewQPCLoUNazOClR1ZbTBiZSdEqy0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jeJ0Ih/8vIHpF7+4lPcHrAOhBKIylrZon4YZvFtptil7dkKd30YiZ7juYT+ui9lC1
-         VVvemuF2C0PxVzqLOwBP38jRFtCOLUAsENzDleEvBBMlIesu8UEjswrCK7Wiwptuh4
-         S2afR3HJ7AYsPq32LgNYJ1U3xFYEkjtUzIv7BDlHJ0j15j4W2jLqzdHalf2tW28X8s
-         olPSgMrSSoG7F20x9Up56Syg3p+JkSxoA1xNLbHSywcZLImZBrJ6vQoQnA+Tp5hIvh
-         T1C4zHtx+IpbcC1qZaO851r7C4rnNjvqnGiBN9rSjCnOQKulBznA+hMCBLwN9OPQU8
-         uObYf4PwasanQ==
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v5 3/3] test_firmware: fix the memory leak of the allocated firmware buffer
-Date:   Wed, 26 Apr 2023 15:14:43 +0200
-Message-Id: <20230426131438.16936-3-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230426131438.16936-1-mirsad.todorovac@alu.unizg.hr>
-References: <20230426131438.16936-1-mirsad.todorovac@alu.unizg.hr>
+        Wed, 26 Apr 2023 09:15:39 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD3C524E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:15:33 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-506bdf29712so53323274a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:15:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682514932; x=1685106932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5X6XbY4GDs1zBv4u666H8NBc+gIaLqZ5jMZDYOgtIiE=;
+        b=csEP7fZdTmBKFMSHuwcvXsv4i9NMYXACDayZgOM4X9kux+rwqi6nmitioNzmZg/a28
+         OUKwei1asmNDrQK9gRNOeSeB4Ey5TY8SihiXJHDiq4+9WeeGm46XbVILUiAuPmTuhtav
+         uqIh3573N7omTVGYjYiKMIbAOkFTe03G7vtsd2i88+IuS+zsVbLhfzZJnipA/D6tstNF
+         zwjFSL50ti7B7jzvO3m4DaXFc8M4apafaGJ0w0zwz9Ur0Y1x/WVzy3ImHD7RgQvY2LF2
+         Gogo+Ckj8cg69f9DfBtLUN8USsA7xsHHLo16l+ca9aikh8Jefe0K3ik5ajQYQfc5XVDr
+         4fTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682514932; x=1685106932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5X6XbY4GDs1zBv4u666H8NBc+gIaLqZ5jMZDYOgtIiE=;
+        b=D16caaOTtoIX6hWoEVX8IuMiMDAB09ZesLrvt82q6/oW32CInNzuLFXalXj+gWvbe2
+         76l36gAdcHCLcU6tTnb6SzeN68UjhqoiIzarrR39nN3pdxY/64thxxTUJLCFLeHW6NBK
+         n8AOW6SidSeGSGaYDyBUZqBVGtTc0E4INlu3FgQrsmJcB5/Y2PZ+iGZ/6S7rbO/Bw5z3
+         uK1dCs0ne5u4YUmGMWPJl8EwmJUSKDNOjCE0IdI5GMREBUr18zcQ1aWmnoY8dmfUL4Vu
+         WOnXShbCnd5KutvH2SxrKzIvzsrq4KRcg3MHNo6io7JQov/BpnJWCEE33sK2372gl0zn
+         h6+w==
+X-Gm-Message-State: AC+VfDykgiH3wkgoIsJ/dNl8ScsS7YpzVStdIf307rNUQJ81+92P9/IE
+        wlFTCz3ns8l9YmKnMFGn5iMOHw==
+X-Google-Smtp-Source: ACHHUZ7nSlGKXPcRIffgSkm2iBxwOkyGHDmgNxJTloG4BcBShfBKk6j6RPxDVvXpOivjiadIjs89+g==
+X-Received: by 2002:a17:906:4898:b0:94f:2020:b5dd with SMTP id v24-20020a170906489800b0094f2020b5ddmr2399230ejq.24.1682514931969;
+        Wed, 26 Apr 2023 06:15:31 -0700 (PDT)
+Received: from [172.23.2.142] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id l20-20020a170906645400b0095342bfb701sm8407935ejn.16.2023.04.26.06.15.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 06:15:31 -0700 (PDT)
+Message-ID: <d30cb539-d5de-94c3-237a-fb27c97e7c5e@linaro.org>
+Date:   Wed, 26 Apr 2023 15:15:30 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/9] dt-bindings: ASoC: Add chv3-i2s
+Content-Language: en-US
+To:     =?UTF-8?Q?Pawe=c5=82_Anikiel?= <pan@semihalf.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dinguyen@kernel.org, lars@metafoo.de, nuno.sa@analog.com,
+        upstream@semihalf.com
+References: <20230414140203.707729-1-pan@semihalf.com>
+ <20230414140203.707729-3-pan@semihalf.com>
+ <5544de12-396c-29d4-859c-a6e17b2e2de4@linaro.org>
+ <CAF9_jYRXsdQX22bOVG5Dp20GnC7JniqGC6popTS5dSxmiqjizQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAF9_jYRXsdQX22bOVG5Dp20GnC7JniqGC6popTS5dSxmiqjizQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following kernel memory leak was noticed after running
-tools/testing/selftests/firmware/fw_run_tests.sh:
+On 25/04/2023 18:01, Paweł Anikiel wrote:
+> On Fri, Apr 14, 2023 at 7:00 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 14/04/2023 16:01, Paweł Anikiel wrote:
+>>> Add binding for chv3-i2s device.
+>>
+>> Your subject needs improvements:
+>> 1. ASoC goes before bindings
+>> 2. You miss some meaningful title of device. "chv3-i2s" can be anything,
+>> so add Google or Google Chameleon. Or use entire compatible.
+> 
+> Would "ASoC: dt-bindings: Add Google Chameleon v3 I2S device" be better?
 
-[root@pc-mtodorov firmware]# cat /sys/kernel/debug/kmemleak
-.
-.
-.
-unreferenced object 0xffff955389bc3400 (size 1024):
-  comm "test_firmware-0", pid 5451, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334b400 (size 1024):
-  comm "test_firmware-1", pid 5452, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334f000 (size 1024):
-  comm "test_firmware-2", pid 5453, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c3348400 (size 1024):
-  comm "test_firmware-3", pid 5454, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov firmware]#
+Yes, thanks.
 
-Note that the size 1024 corresponds to the size of the test firmware
-buffer. The actual number of the buffers leaked is around 70-110,
-depending on the test run.
+> 
+>>
+>>
+>>>
+>>> Signed-off-by: Paweł Anikiel <pan@semihalf.com>
+>>> ---
+>>>  .../bindings/sound/google,chv3-i2s.yaml       | 42 +++++++++++++++++++
+>>>  1 file changed, 42 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
+>>> new file mode 100644
+>>> index 000000000000..6f49cf059ac5
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/sound/google,chv3-i2s.yaml
+>>> @@ -0,0 +1,42 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/sound/google,chv3-i2s.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Google Chameleon v3 I2S device
+>>> +
+>>> +maintainers:
+>>> +  - Paweł Anikiel <pan@semihalf.com>
+>>> +
+>>> +description: |
+>>> +  I2S device for the Google Chameleon v3. The device handles both RX
+>>> +  and TX using a producer/consumer ring buffer design.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: google,chv3-i2s
+>>
+>> Missing blank line.
+>>
+>> Is chv3 the name of your SoC? Where are the SoC bindings? What's exactly
+>> the versioning scheme for it (compatibles must be specific, not generic).
+> 
+> The Chameleon v3 is based around an Intel Arria 10 SoC FPGA. The i2s
+> device is implemented inside the FPGA. Does this case require SoC
+> bindings?
 
-The cause of the leak is the following:
+No, I was mistaken. I somehow get impression that's for Pixel... Sorry
+for the noise.
 
-request_partial_firmware_into_buf() and request_firmware_into_buf()
-provided firmware buffer isn't released on release_firmware(), we
-have allocated it and we are responsible for deallocating it manually.
-This is introduced in a number of context where previously only
-release_firmware() was called, which was insufficient.
+> 
+>>
+>>> +  reg:
+>>> +    items:
+>>> +      - description: core registers
+>>> +      - description: irq registers
+>>
+>> As well...
+>>
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - interrupts
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>> +
+>>> +    i2s0: i2s@c0060300 {
+>>> +        compatible = "google,chv3-i2s";
+>>> +        reg = <0xc0060300 0x100>,
+>>> +              <0xc0060f00 0x10>;
+>>> +        interrupts = <0 20 IRQ_TYPE_LEVEL_HIGH>;
+>>
+>> Isn't 0 also a known define?
+> 
+> Do you mean this?
+> interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dan Carpenter <error27@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei zhang <tianfei.zhang@intel.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Zhengchao Shao <shaozhengchao@huawei.com>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- lib/test_firmware.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 91b232ed3161..1d7d480b8eeb 100644
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -45,6 +45,7 @@ struct test_batched_req {
- 	bool sent;
- 	const struct firmware *fw;
- 	const char *name;
-+	const char *fw_buf;
- 	struct completion completion;
- 	struct task_struct *task;
- 	struct device *dev;
-@@ -175,8 +176,14 @@ static void __test_release_all_firmware(void)
- 
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
--		if (req->fw)
-+		if (req->fw) {
-+			if (req->fw_buf) {
-+				kfree_const(req->fw_buf);
-+				req->fw_buf = NULL;
-+			}
- 			release_firmware(req->fw);
-+			req->fw = NULL;
-+		}
- 	}
- 
- 	vfree(test_fw_config->reqs);
-@@ -670,6 +677,8 @@ static ssize_t trigger_request_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware(&test_firmware, name, dev);
- 	if (rc) {
-@@ -770,6 +779,8 @@ static ssize_t trigger_async_request_store(struct device *dev,
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
- 	test_firmware = NULL;
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
- 				     NULL, trigger_async_request_cb);
- 	if (rc) {
-@@ -812,6 +823,8 @@ static ssize_t trigger_custom_fallback_store(struct device *dev,
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
- 				     dev, GFP_KERNEL, NULL,
-@@ -874,6 +887,8 @@ static int test_fw_run_batch_request(void *data)
- 						 test_fw_config->buf_size);
- 		if (!req->fw)
- 			kfree(test_buf);
-+		else
-+			req->fw_buf = test_buf;
- 	} else {
- 		req->rc = test_fw_config->req_firmware(&req->fw,
- 						       req->name,
-@@ -934,6 +949,7 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
- 		req->fw = NULL;
- 		req->idx = i;
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->dev = dev;
- 		init_completion(&req->completion);
- 		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -1038,6 +1054,7 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->fw = NULL;
- 		req->idx = i;
- 		init_completion(&req->completion);
--- 
-2.30.2
+Yes, please.
+
+Best regards,
+Krzysztof
 
