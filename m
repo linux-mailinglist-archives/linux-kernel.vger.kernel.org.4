@@ -2,119 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BC16EEE12
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CDDC6EEE15
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239315AbjDZGJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S239448AbjDZGK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238464AbjDZGJD (ORCPT
+        with ESMTP id S239409AbjDZGKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:09:03 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3012D4E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:08:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vh1oidN_1682489329;
-Received: from 30.97.49.10(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vh1oidN_1682489329)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Apr 2023 14:08:51 +0800
-Message-ID: <a5a39900-9569-59e8-296f-c5f99b737adc@linux.alibaba.com>
-Date:   Wed, 26 Apr 2023 14:08:49 +0800
+        Wed, 26 Apr 2023 02:10:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546532134
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:10:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682489415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kxyjFnjkq7aSfRW8/bstsMm10LqeieUGuk8at7t8UME=;
+        b=S/gfhtMVhiLinqINBMd4XwedywmLn8JR0gkL4SaPQ7fKH3RjfhawYM1gDe69qvAvjl5Mpe
+        NztHNIEsvIAkIuv6pOOFxxeoZMn9ajsJYvdAbvtN99TFbG3TCjdqHgFV41p/l9c/KcTalk
+        FDivFAkoH6mhlDwtGAhVDyq5sYwvqFw=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-35-IwRp-v2FOUi4mMtwjgRLnA-1; Wed, 26 Apr 2023 02:10:14 -0400
+X-MC-Unique: IwRp-v2FOUi4mMtwjgRLnA-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2a8d01c6bbfso27736081fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:10:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682489411; x=1685081411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kxyjFnjkq7aSfRW8/bstsMm10LqeieUGuk8at7t8UME=;
+        b=hHbF+NYb2BMDzC25pJy0hafwYX+XnzKzaMDn1LpRfTn3zNR7t2CyaPbcIXAHhr5mho
+         iDGVbD2tcbV4dL9UJIwu7WNQUizTwr5Si+NBJ3Qx4b3+kaMk6LA83EV6Q2cFdHOALCsA
+         wleeKNwPECAbkrBGCgTDchJ8gTwiCxbgidmngADP4o3yqwsHsGTWOdoG46UKUVSMH9se
+         e4RuEx2cdcEw5eHALBmrTOmP6xiVT8MqIKjO7whRfpK5opiVWpq+2OvpPLy21n7nIikT
+         3IypId+knd3ossKpvyWK0JQ8CAKr8RZzWamwwMGHL74eKDSmQygZ419/RVj52LIIpEzt
+         EcVw==
+X-Gm-Message-State: AAQBX9cq5ofj5h3yLf9PAlM2ahKAWQOGJ5NQXvUe1wGdmukb9yevOkHe
+        ByeCFmXjYL8SkyDdInK7ZGPjtVTFJjR+y+vh5RF6vUa3kIwClaTsi8VR22jp+Y5lg2obY4qGr7H
+        3C7dTKuIvQaLeblweSXG6HHmOtdWUelQQ8kaO5gES
+X-Received: by 2002:a2e:9357:0:b0:2a8:bd1f:a377 with SMTP id m23-20020a2e9357000000b002a8bd1fa377mr3560572ljh.20.1682489411504;
+        Tue, 25 Apr 2023 23:10:11 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aVnZTEsQyZXycQdCZAWCO8jAdgqYmWukEebnOcWJrst48VToqw0DfcOhzfmlBBNsuu0UBhEIv5nxguqeIZLC0=
+X-Received: by 2002:a2e:9357:0:b0:2a8:bd1f:a377 with SMTP id
+ m23-20020a2e9357000000b002a8bd1fa377mr3560563ljh.20.1682489411154; Tue, 25
+ Apr 2023 23:10:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2] erofs: get rid of name from struct
- z_erofs_decompressor
-To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
-References: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <a0c8b87b5c165750107bbaad6b014c02311b610d.1682481589.git.huyue2@coolpad.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230425102250.3847395-1-mie@igel.co.jp>
+In-Reply-To: <20230425102250.3847395-1-mie@igel.co.jp>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 26 Apr 2023 14:10:00 +0800
+Message-ID: <CACGkMEumt4p7jU+H+T-b9My0buhdS8a-1GCSnWjnCwMAM=wo1Q@mail.gmail.com>
+Subject: Re: [PATCH v3] vringh: IOMEM support
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 25, 2023 at 6:23=E2=80=AFPM Shunsuke Mie <mie@igel.co.jp> wrote=
+:
+>
+> Introduce a new memory accessor for vringh. It is able to use vringh to
+> virtio rings located on io-memory region.
 
+Is there a user for this? It would be better if you can describe the
+use cases for this. Maybe you can post the user or at least a link to
+the git as a reference.
 
-On 2023/4/26 12:10, Yue Hu wrote:
-> From: Yue Hu <huyue2@coolpad.com>
-> 
-> There are no users of the name and we can get this via ->alg if needed.
-> Also, move struct z_erofs_decompressor into decompressor.c which is the
-> only one to use it.
-> 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
-
-I'd like to avoid z_erofs_decompress() function instead honestly.
-name strings might be useful if users would like to get runtime
-supported algorithms.
-
-Thanks,
-Gao Xiang
-
+>
+> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 > ---
->   fs/erofs/compress.h     | 6 ------
->   fs/erofs/decompressor.c | 9 +++++----
->   2 files changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/fs/erofs/compress.h b/fs/erofs/compress.h
-> index 26fa170090b8..d161683bda03 100644
-> --- a/fs/erofs/compress.h
-> +++ b/fs/erofs/compress.h
-> @@ -20,12 +20,6 @@ struct z_erofs_decompress_req {
->   	bool inplace_io, partial_decoding, fillgaps;
->   };
->   
-> -struct z_erofs_decompressor {
-> -	int (*decompress)(struct z_erofs_decompress_req *rq,
-> -			  struct page **pagepool);
-> -	char *name;
-> -};
-> -
->   /* some special page->private (unsigned long, see below) */
->   #define Z_EROFS_SHORTLIVED_PAGE		(-1UL << 2)
->   #define Z_EROFS_PREALLOCATED_PAGE	(-2UL << 2)
-> diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-> index 7021e2cf6146..f416ebd6f0dc 100644
-> --- a/fs/erofs/decompressor.c
-> +++ b/fs/erofs/decompressor.c
-> @@ -363,23 +363,24 @@ static int z_erofs_transform_plain(struct z_erofs_decompress_req *rq,
->   	return 0;
->   }
->   
-> +struct z_erofs_decompressor {
-> +	int (*decompress)(struct z_erofs_decompress_req *rq,
-> +			  struct page **pagepool);
-> +};
+>
+> Changes from v2: https://lore.kernel.org/virtualization/20230202090934.54=
+9556-1-mie@igel.co.jp/
+> - Focus on an adding io memory APIs
+> Remove vringh API unification and some fixes.
+> - Rebase on next-20230414
+>
+>  drivers/vhost/Kconfig  |   6 ++
+>  drivers/vhost/vringh.c | 129 +++++++++++++++++++++++++++++++++++++++++
+>  include/linux/vringh.h |  33 +++++++++++
+>  3 files changed, 168 insertions(+)
+>
+> diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
+> index b455d9ab6f3d..4b0dbb4a8ab3 100644
+> --- a/drivers/vhost/Kconfig
+> +++ b/drivers/vhost/Kconfig
+> @@ -6,6 +6,12 @@ config VHOST_IOTLB
+>           This option is selected by any driver which needs to support
+>           an IOMMU in software.
+>
+> +config VHOST_RING_IOMEM
+> +       tristate
+> +       select VHOST_IOMEM
+> +       help
+> +         This option enables vringh APIs to supports io memory space.
+
+There's no specific Kconfig for all the existing accessors. Any reason
+I/O memory is special or do you care about the size of the module?
+
 > +
->   static struct z_erofs_decompressor decompressors[] = {
->   	[Z_EROFS_COMPRESSION_SHIFTED] = {
->   		.decompress = z_erofs_transform_plain,
-> -		.name = "shifted"
->   	},
->   	[Z_EROFS_COMPRESSION_INTERLACED] = {
->   		.decompress = z_erofs_transform_plain,
-> -		.name = "interlaced"
->   	},
->   	[Z_EROFS_COMPRESSION_LZ4] = {
->   		.decompress = z_erofs_lz4_decompress,
-> -		.name = "lz4"
->   	},
->   #ifdef CONFIG_EROFS_FS_ZIP_LZMA
->   	[Z_EROFS_COMPRESSION_LZMA] = {
->   		.decompress = z_erofs_lzma_decompress,
-> -		.name = "lzma"
->   	},
->   #endif
->   };
+>  config VHOST_RING
+>         tristate
+>         select VHOST_IOTLB
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index 955d938eb663..ce5a88eecc05 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1604,4 +1604,133 @@ EXPORT_SYMBOL(vringh_need_notify_iotlb);
+>
+>  #endif
+>
+
+[...]
+
+>
+> base-commit: d3f2cd24819158bb70701c3549e586f9df9cee67
+> prerequisite-patch-id: 760abbe8c981c52ccc421b8139e8999ab71619aa
+> prerequisite-patch-id: 99d8679ab4569545c8af401e84142c66312e953e
+> prerequisite-patch-id: aca81516aba75b58c8422d37c2dc7db2f61ffe92
+> prerequisite-patch-id: 3d76136200c4e55ba2c41681325f242859dd6dbd
+> prerequisite-patch-id: 47a994feb68d95412d81b0fd1fa27bc7ba05ae18
+> prerequisite-patch-id: a2f7fc3f35358f70b6dad4c919ce293b10295c4f
+> prerequisite-patch-id: 70e2ee32b945be96a0388f0ff564651ac9335220
+> prerequisite-patch-id: 2023690f9c47017b56d7f036332a5ca3ece6bde8
+> prerequisite-patch-id: 211e113fec6c450d13fbdb437ecfad67dec0a157
+> prerequisite-patch-id: f2bcd3168933886e4cd4c39e47446d1bd7cb2691
+> prerequisite-patch-id: 37b131560808733a0b8878e85a3d2a46d6ab02ca
+> prerequisite-patch-id: 79b0219a715cb5ace227d55666d62fdb2dcc6ffe
+> prerequisite-patch-id: 30f1740cd48a19aa1c3c93e625c740cae2845478
+> prerequisite-patch-id: 31989e4a521f2fc6f68c4ccdb6960035e87666a7
+> prerequisite-patch-id: 3948bb3e0c045e2ffff06a714d17bab16c94775d
+> prerequisite-patch-id: cf28e0115b9111bcb77aa9c710d98b2be93c7e89
+> prerequisite-patch-id: ebf2349c0ae1296663854eee2da0b43fe8972f9b
+> prerequisite-patch-id: fc570921d885a2a6000800b4022321e63f1650a5
+> prerequisite-patch-id: 1fd5219fef17c2bf2d76000207b25aae58c368f3
+> prerequisite-patch-id: 34e5f078202762fe69df471e97b51b1341cbdfa9
+> prerequisite-patch-id: 7fa5151b9e0488b48c2b9d1219152cfb047d6586
+> prerequisite-patch-id: 33cca272767af04ae9abe7af2f6cbb9972cc0b77
+> prerequisite-patch-id: bb1a6befc899dd97bcd946c2d76ce73675a1fa45
+> prerequisite-patch-id: 10be04dd92fa451d13676e91d9094b63cd7fbcf8
+> prerequisite-patch-id: 87b86eb4ce9501bba9c04ec81094ac9202392431
+> prerequisite-patch-id: a5ced28762bf6bd6419dae0e4413d02ccafd72c2
+> prerequisite-patch-id: 2db4c9603e00d69bb0184dabcc319e7f74f30305
+> prerequisite-patch-id: 41933f9d53e5e9e02efd6157b68ee7d92b10cfa2
+> prerequisite-patch-id: df3295b4cdde3a45eaf4c40047179698a4224d05
+> prerequisite-patch-id: 9e2fca9ab0ba2b935daa96f1745ff4c909792231
+> prerequisite-patch-id: 8948378099ba4d61e10a87e617d69ed2fc4104ae
+> prerequisite-patch-id: 5e7466f3f0d74880d1a574a1bd91b12091dcf3f5
+> prerequisite-patch-id: 902899e1cd53b7fcc7971f630aed103830fc3e3d
+> prerequisite-patch-id: 42126b180500f9ff123db78748972c6ece18ac57
+> prerequisite-patch-id: 5236a03ef574074f3c1009a52612051862b31eff
+> prerequisite-patch-id: adae1aa80df65bd02a9e3f4db490cf801c1c6119
+> prerequisite-patch-id: 22806fcabb973ee5f04ee6212db6161aab5bcbfc
+> prerequisite-patch-id: 6eb14cfdc2cf31e90556f6afe7361427a332e8dc
+
+These seem meaningless?
+
+Thanks
+
+> --
+> 2.25.1
+>
+
