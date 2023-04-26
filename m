@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A5496EFDBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA3A6EFDBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234977AbjDZW6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S239994AbjDZW6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239175AbjDZW6A (ORCPT
+        with ESMTP id S240477AbjDZW6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:58:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C5535B6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:57:58 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f8fcad732so128595327b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:57:58 -0700 (PDT)
+        Wed, 26 Apr 2023 18:58:02 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094003AB2;
+        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a5197f00e9so60898025ad.1;
+        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682549878; x=1685141878;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JXazE9kznOdLCB9IeWlM55cXnSgWMuYpYcAW4/dwtc8=;
-        b=lnqIcCm010Tlqy2bg4sivFq6oYIiNkB3yshTFdOJoFm+HqZrUaHKuHIHLDJT4UgpVs
-         W6TcIkf3vwwSATn8a7/OYjeas8snENrzIDQipjL/Mo7zl46Cnkp9UOpWVcsc5PQkzeNW
-         7VK0v0TUwmYIwZqob98Tf+hioDA+xicFw7HyIcc8y1nqZ7Axtuj1x/FMNRszDJaIol4Y
-         ZilTZLhixn1wiTlhJkN2so7Zu08a+CuaIWx9TJdXhdt7gL3FVd5+EB5rd8nWLjZURsQm
-         94OPss2dXdHYUum5vpaklCkVDeHBlhNJgLSf8RkqKFiByJvwewvRXaL3By9vJrTC5uUu
-         McMg==
+        d=gmail.com; s=20221208; t=1682549880; x=1685141880;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UnwIOhGkuLaBbl9w7Be9qPcJQ9Y9ui6c1mraZVmd2dw=;
+        b=g12eVio6oB0+C4ec/weafutXhKAEzNho2q5/z5cUMC8Q0nFqHodVk9Po5lDMLdM78x
+         y2r01EMpDYhG5HygXISaHP/F0MMMuLvmV0jSLjR9x5xHEcVbnCzVqYtdg+uoANr3zIIg
+         XmtR6llax9sWnj+hZoVb+HCIO3Il/EYcRnmOCMsePJBDxyJ7Ey4c4cKEejvQewYD9YgT
+         qrrIZLYqUs9SbmKjb8QTi+8PYpvvOTlZcOCOXpvH421JbwMczBP9CbS/A7eGI3dcYfx3
+         LpeKNz5OmFBDvJWMoC0JgaaQ57kHSDq/ZXhUJyLEVKmYQfSWQhcig1/xRp2z5AV4PFjJ
+         UX4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682549878; x=1685141878;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JXazE9kznOdLCB9IeWlM55cXnSgWMuYpYcAW4/dwtc8=;
-        b=UV6m44qOFVr/IimQTz7Gnc41rxykQTfLDci3b4qol5DCENLgCFnF5ZHI4qN/zgoqig
-         1KAtNoO1o5svXU6LeCl9ekJIWUaN+urfNhSevvgDglGOEZpl0VCxZTd4MvIVH2O0VELa
-         1JtHXppzlTUJr2DIDAX/fbAhbPbTWFKw3VMS7okRYDxeo965nKFUnuuH7Or6Fvp7vDIk
-         i+7yzcYYAhi825KVuJo4LCdtr62Cb3jimdJ8UHJ1mHWRC93QiV9XAJIoGuZ4fepWw5Dv
-         4x0CnfPri1PnkS2zEBSILkhZthgsvonEbxDTXyVrlSMfONHI5nsZGgLkbvyyHCd+MjpQ
-         EumA==
-X-Gm-Message-State: AAQBX9eCrInYnY4mBkid0rdjQtG1sbyl457pYenoEmJfPwVgdlHsTz5F
-        ddgNcWV1iC5GHQrtLVmoGyTwjBweJV8=
-X-Google-Smtp-Source: AKy350YrwnCmeOGJE8g1QPZJYanEcWEZPdP6IoP6s2Nltq+2YKtIhHZigpbemZCUfeoGrwRJYpYSJ8PyIh8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ef06:0:b0:54d:3afc:d503 with SMTP id
- o6-20020a81ef06000000b0054d3afcd503mr11139415ywm.8.1682549878047; Wed, 26 Apr
- 2023 15:57:58 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 15:57:45 -0700
-In-Reply-To: <20230426220323.3079789-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230426220323.3079789-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <168254947739.3087722.95836523643262635.b4-ty@google.com>
-Subject: Re: [PATCH v3] KVM: x86: Preserve TDP MMU roots until they are
- explicitly invalidated
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682549880; x=1685141880;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UnwIOhGkuLaBbl9w7Be9qPcJQ9Y9ui6c1mraZVmd2dw=;
+        b=kB6aPvesUONIa/GmSO6IHeET6e3tesHqZI5PRtuimXth+eUaLEF3k0ymC5dAJfhBj8
+         9OqYek78YTo4ZXvw7K34JLzcIO2SWsE+7qeb7YKEBiscmTuv1+hTG52fK905Lbo8r1QH
+         5Oud0HbmN8OFbknOjqVwyXDb+/zrnRcqLn92Qc5aZMA4V0iSyAnu+meXmL6ceXap2h9M
+         6jXdZrYOuYvvFgwlHfYQ6FRI4v9UWPZjHwUqs+E//IPUujwX7GQHthXF1RvMCRrUQ8oj
+         5pjzBGY/OEc405IdasbUp5HOxFhWDy12qMNFEZU97aEURPn63oS+qS1GiCFLsRRkQl0n
+         Jz+w==
+X-Gm-Message-State: AAQBX9dKBxyUNfjqWoz7Cld3glYsyAnXxY4UFDgYhBx1Djax9guJYas7
+        Qydr+/koqydWNJNK+7LNFgY=
+X-Google-Smtp-Source: AKy350aaTR+E+2z0v5oYpOGG2Fu3fF+AB5ITQB6lXuauC+m7O+3BWsdGB3/HypvrPXz+Di8ytA4o0w==
+X-Received: by 2002:a17:902:c949:b0:1a6:6fe3:df9e with SMTP id i9-20020a170902c94900b001a66fe3df9emr27420455pla.47.1682549880220;
+        Wed, 26 Apr 2023 15:58:00 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:f84b:79ee:8ff:d568])
+        by smtp.gmail.com with ESMTPSA id x3-20020a170902ea8300b001a6aff2852dsm10385284plb.148.2023.04.26.15.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 15:57:59 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 15:57:55 -0700
+From:   'Dmitry Torokhov' <dmitry.torokhov@gmail.com>
+To:     "Jingle.Wu" <jingle.wu@emc.com.tw>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw
+Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
+Message-ID: <ZEmsc0HyZuXlJARq@google.com>
+References: <20230320011456.986321-1-jingle.wu@emc.com.tw>
+ <ZDBKwo4UMUm+TSnj@penguin>
+ <000001d96b4b$6b30cda0$419268e0$@emc.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000001d96b4b$6b30cda0$419268e0$@emc.com.tw>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 15:03:23 -0700, Sean Christopherson wrote:
-> Preserve TDP MMU roots until they are explicitly invalidated by gifting
-> the TDP MMU itself a reference to a root when it is allocated.  Keeping a
-> reference in the TDP MMU fixes a flaw where the TDP MMU exhibits terrible
-> performance, and can potentially even soft-hang a vCPU, if a vCPU
-> frequently unloads its roots, e.g. when KVM is emulating SMI+RSM.
+Hi Jingle,
+
+On Mon, Apr 10, 2023 at 09:26:04AM +0800, Jingle.Wu wrote:
+> HI Dmitry:
 > 
-> When KVM emulates something that invalidates _all_ TLB entries, e.g. SMI
-> and RSM, KVM unloads all of the vCPUs roots (KVM keeps a small per-vCPU
-> cache of previous roots).  Unloading roots is a simple way to ensure KVM
-> flushes and synchronizes all roots for the vCPU, as KVM flushes and syncs
-> when allocating a "new" root (from the vCPU's perspective).
+> > +static void elan_close(struct input_dev *input_dev) {
+> > +	if ((input_dev->users) && (!input_dev->inhibited))
+> > +		elan_inhibit(input_dev);
 > 
-> [...]
+> This check is for "only inhibit request", and elan_open() its check is for
+> "only uninhibit request".
+> Because input_dev-> open() close() will be executed 2-3 times when initial.
 
-Applied to kvm-x86 mmu to replace v2.  Same spiel as v2: pushed immediately to get
-testing in -next, will squash trivialities as needed.
+I do not see why this would be an issue if what you are doing is putting
+the device into a low power mode.
 
-[1/1] KVM: x86: Preserve TDP MMU roots until they are explicitly invalidated
-      https://github.com/kvm-x86/linux/commit/edbdb43fc96b
+If this issue is about need to re-calibrate after opening the lid on
+certain devices, then I think we need to do the same that we did for the
+I2C-HID connected devices on Redrix and hook this functionality to a LID
+handler.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+Thanks.
+
+-- 
+Dmitry
