@@ -2,134 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9B36EF612
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92526EF616
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241263AbjDZOOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S241268AbjDZOOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241258AbjDZON7 (ORCPT
+        with ESMTP id S241258AbjDZOOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:13:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C158D6EAB;
-        Wed, 26 Apr 2023 07:13:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E16E63671;
-        Wed, 26 Apr 2023 14:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8019C4339C;
-        Wed, 26 Apr 2023 14:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682518437;
-        bh=AwNbPU1+foXyQkeSpNgmI/G5BPNTipnzyi7nm5HU0Uw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=suWEIPqHrf+YDkdgFML92wIIYXWs5+wnCLC2sa4hcl0f549UtZIXomlunViGsIM4Y
-         GdbWxJBgiU7fylI2kt6S9t35gO+0GhSHbr3VO2TCRrFhmlVftuQn2refNkv6Cl4ttm
-         CpJJuMWbxTAuibS06f4raeYmQhcjMohnhy783klwI3pHt+LvTP4cKKNoFRn4bnu83g
-         1A+l2NWJx+SLDuhiXag01DYJxzoYK/1WGb/iOuno7CPTKWQuqPilm1+q54EwoL+EGz
-         YiZcN6s64hzOx+8Y04BJ/jw8mbVtud3sqv6YOUztea4RWRfzbpgiOtg3MfCVjhFtgm
-         nAy7m1wsNYysw==
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-38c35975545so5000486b6e.1;
-        Wed, 26 Apr 2023 07:13:57 -0700 (PDT)
-X-Gm-Message-State: AAQBX9ctMAZLeW7BgfhzXCnu3ZhX5eK66i1cFTqoTt2uakmft8DKjrC+
-        pwj+f6cvpC3/EmQapqfkd6Jnkmv5Zsmeau79JOM=
-X-Google-Smtp-Source: AKy350aBbJP8LL0jjzmY9Gr9F/FYu7NW2B8grBfzrLNiso5MzvwOI8UMy16A+zC5Dm4NlCzzc74aHDZrODSBOZSJH+w=
-X-Received: by 2002:a05:6808:190d:b0:389:8d22:5ef4 with SMTP id
- bf13-20020a056808190d00b003898d225ef4mr11831040oib.11.1682518437048; Wed, 26
- Apr 2023 07:13:57 -0700 (PDT)
+        Wed, 26 Apr 2023 10:14:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0F66A79
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682518426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZY/DGd7KWtJA1mhxoodB4vkh85XMWSpyoDAgN9JXUHw=;
+        b=KOpQjR3GwKUH81I9JV6G26Mxauaxn8pVTHp0pt6o8+9jyV1kbyM7WSaoj2DXFllJCCS/k+
+        wxGl/Zm6Y9pobtKx0w9GlI7dHHBGh2mbAX2sBzhEfB+t53swbIv9GJWm9Ev/Ntsv7t4DJV
+        ucYrUHNA46M9D9uMb4yZHjcoLmdg/XM=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-292-TcgxbSkPNZmSTXnt30DUqQ-1; Wed, 26 Apr 2023 10:13:36 -0400
+X-MC-Unique: TcgxbSkPNZmSTXnt30DUqQ-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-74e0dd4e504so37814985a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682518410; x=1685110410;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZY/DGd7KWtJA1mhxoodB4vkh85XMWSpyoDAgN9JXUHw=;
+        b=CKZBxFHL1ZNlYaBx1OGOoSeYDl8ka+m1Uvil583vYFl+hzrZkNjS4R7qeuXOq1AOrT
+         APIYspZqNMqWoXbf9FQL5Kti3h5eh8kJXyz5p+hJE7CiF/EXXzdvWcEIRVKIHLeO1hT7
+         a9dcveOEFYBNESFNQvmMvlyT3Gnnm7Hh2K8Hwp9XIg0rpy0XvzRR73AUqPtiJi7nQQ9t
+         H71fKCu2W/65Wk5SftWLDbLBY9rMVCitHO9GbSC8+IQddjSE+s76ky8CqNrlniljB6Js
+         aY3ddUM+o/0befe5znsp6Snn3a3BdvTPGTgoc3Jc6qG4uVtLfuIun/G1bW7VAevFaiQQ
+         6pHg==
+X-Gm-Message-State: AAQBX9dCLI7UnUXuOai899jbSB80NzcraZqugWJmTwjCfCAwN4PEJemf
+        z7rUdcK8t/MoWCc2g7+0rAHXX8uR0GA21CWKa8cNEXpW5TamRZUqTbGk5VKIaR39cdm9ZgafnsU
+        laIMzzk/PYLnzl4yIq4TdEJAK
+X-Received: by 2002:a05:622a:1818:b0:3ef:59e8:511f with SMTP id t24-20020a05622a181800b003ef59e8511fmr35114552qtc.0.1682518410344;
+        Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Ypb1WVI8Au+jeNnS1kOxOesFDM/LXy8R7e8LtLca5Jtza4C18yaEzzsP5hULc8x6Vg88C0Xg==
+X-Received: by 2002:a05:622a:1818:b0:3ef:59e8:511f with SMTP id t24-20020a05622a181800b003ef59e8511fmr35114509qtc.0.1682518410050;
+        Wed, 26 Apr 2023 07:13:30 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id y19-20020a05622a121300b003e390b48958sm2613867qtx.55.2023.04.26.07.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 07:13:29 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 10:13:27 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Paul Gofman <pgofman@codeweavers.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH RESEND v15 2/5] fs/proc/task_mmu: Implement IOCTL to get
+ and optionally clear info about PTEs
+Message-ID: <ZEkxh6dbnAOuYuJj@x1n>
+References: <20230420060156.895881-1-usama.anjum@collabora.com>
+ <20230420060156.895881-3-usama.anjum@collabora.com>
+ <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
 MIME-Version: 1.0
-References: <20230413203857.2629-1-rdunlap@infradead.org>
-In-Reply-To: <20230413203857.2629-1-rdunlap@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 26 Apr 2023 23:13:20 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATX8kEnxrOr1HvaNhwZsZaGhvRdaX37F3goxbs3mpZrDQ@mail.gmail.com>
-Message-ID: <CAK7LNATX8kEnxrOr1HvaNhwZsZaGhvRdaX37F3goxbs3mpZrDQ@mail.gmail.com>
-Subject: Re: [PATCH v3] sparc: unify sparc32/sparc64 archhelp
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fd9ddd43-6737-88bd-4054-3d5b94534271@collabora.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 14, 2023 at 5:39=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> Currently, entering
-> $ make ARCH=3Dsparc32 help
-> prints the archhelp text for sparc64.
-> ["sparc32" is documented (Documentation/kbuild/kbuild.rst)
-> to be a recognized alias for 32-bit sparc.]
->
-> Instead of handling ARCH=3Dsparc or ARCH=3Dsparc32 or ARCH=3Dsparc64,
-> just unify all SPARC archhelp text in one place.
->
-> Fixes: 5e53879008b9 ("sparc,sparc64: unify Makefile")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi, Muhammad,
 
+On Wed, Apr 26, 2023 at 12:06:23PM +0500, Muhammad Usama Anjum wrote:
+> On 4/20/23 11:01 AM, Muhammad Usama Anjum wrote:
+> > +/* Supported flags */
+> > +#define PM_SCAN_OP_GET	(1 << 0)
+> > +#define PM_SCAN_OP_WP	(1 << 1)
+> We have only these flag options available in PAGEMAP_SCAN IOCTL.
+> PM_SCAN_OP_GET must always be specified for this IOCTL. PM_SCAN_OP_WP can
+> be specified as need. But PM_SCAN_OP_WP cannot be specified without
+> PM_SCAN_OP_GET. (This was removed after you had asked me to not duplicate
+> functionality which can be achieved by UFFDIO_WRITEPROTECT.)
+> 
+> 1) PM_SCAN_OP_GET | PM_SCAN_OP_WP
+> vs
+> 2) UFFDIO_WRITEPROTECT
+> 
+> After removing the usage of uffd_wp_range() from PAGEMAP_SCAN IOCTL, we are
+> getting really good performance which is comparable just like we are
+> depending on SOFT_DIRTY flags in the PTE. But when we want to perform wp,
+> PM_SCAN_OP_GET | PM_SCAN_OP_WP is more desirable than UFFDIO_WRITEPROTECT
+> performance and behavior wise.
+> 
+> I've got the results from someone else that UFFDIO_WRITEPROTECT block
+> pagefaults somehow which PAGEMAP_IOCTL doesn't. I still need to verify this
+> as I don't have tests comparing them one-to-one.
+> 
+> What are your thoughts about it? Have you thought about making
+> UFFDIO_WRITEPROTECT perform better?
+> 
+> I'm sorry to mention the word "performance" here. Actually we want better
+> performance to emulate Windows syscall. That is why we are adding this
+> functionality. So either we need to see what can be improved in
+> UFFDIO_WRITEPROTECT or can I please add only PM_SCAN_OP_WP back in
+> pagemap_ioctl?
 
-Applied to linux-kbuild.
-Thank you.
+I'm fine if you want to add it back if it works for you.  Though before
+that, could you remind me why there can be a difference on performance?
 
+Thanks,
 
+-- 
+Peter Xu
 
-> ---
-> v2: rebase/resend; add Masahiro to Cc: list
-> v3: merge (unify) 32/64-bit help text (Masahiro);
->     remove Sam's Ack since the patch has changed;
->
->  arch/sparc/Makefile |   15 ++++-----------
->  1 file changed, 4 insertions(+), 11 deletions(-)
->
-> diff -- a/arch/sparc/Makefile b/arch/sparc/Makefile
-> --- a/arch/sparc/Makefile
-> +++ b/arch/sparc/Makefile
-> @@ -83,18 +83,11 @@ vdso_install:
->  KBUILD_IMAGE :=3D $(boot)/zImage
->
->  # Don't use tabs in echo arguments.
-> -ifeq ($(ARCH),sparc)
->  define archhelp
-> -  echo  '* image        - kernel image ($(boot)/image)'
-> -  echo  '* zImage       - stripped kernel image ($(boot)/zImage)'
-> +  echo  '  vmlinux      - standard SPARC kernel'
-> +  echo  '  image        - kernel image ($(boot)/image)'
-> +  echo  '* zImage       - stripped/compressed kernel image ($(boot)/zIma=
-ge)'
->    echo  '  uImage       - U-Boot SPARC32 Image (only for LEON)'
-> +  echo  '  vmlinux.aout - a.out kernel for SPARC64'
->    echo  '  tftpboot.img - image prepared for tftp'
->  endef
-> -else
-> -define archhelp
-> -  echo  '* vmlinux      - standard sparc64 kernel'
-> -  echo  '* zImage       - stripped and compressed sparc64 kernel ($(boot=
-)/zImage)'
-> -  echo  '  vmlinux.aout - a.out kernel for sparc64'
-> -  echo  '  tftpboot.img - image prepared for tftp'
-> -endef
-> -endif
-
-
-
---=20
-Best Regards
-Masahiro Yamada
