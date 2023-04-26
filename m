@@ -2,32 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D28E6EFD72
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5942D6EFD7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239466AbjDZWiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S240016AbjDZWiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234959AbjDZWh2 (ORCPT
+        with ESMTP id S235264AbjDZWh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:37:28 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C3D3C2B;
-        Wed, 26 Apr 2023 15:37:26 -0700 (PDT)
+        Wed, 26 Apr 2023 18:37:29 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7740F3AA3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:37:27 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3EE5020222;
-        Thu, 27 Apr 2023 00:37:24 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1185420227;
+        Thu, 27 Apr 2023 00:37:25 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Thu, 27 Apr 2023 00:37:24 +0200
-Subject: [PATCH v4 10/22] drm/msm/dpu: Sort INTF registers numerically
+Date:   Thu, 27 Apr 2023 00:37:25 +0200
+Subject: [PATCH v4 11/22] drm/msm/dpu: Take INTF index as parameter in
+ interrupt register defines
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-dpu-intf-te-v4-10-27ce1a5ab5c6@somainline.org>
+Message-Id: <20230411-dpu-intf-te-v4-11-27ce1a5ab5c6@somainline.org>
 References: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
 In-Reply-To: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -54,70 +55,241 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Marijn Suijten <marijn.suijten@somainline.org>
 X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A bunch of registers were appended at the end in e.g. commit
-91143873a05d ("drm/msm/dpu: Add MISR register support for interface")
-rather than being inserted in a place that maintains numerical sorting:
-restore said numerical sorting.
+Instead of hardcoding many register defines for every INTF and AD4 index
+with a fixed stride, turn the defines into singular chunks of math that
+compute the address using the base and this fixed stride multiplied by
+the index given as argument to the definitions.
 
+MDP_SSPP_TOP0_OFF is dropped as that constant is zero anyway, and all
+register offsets related to it live in dpu_hwio.h.
+
+Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 156 ++++++++++------------
+ 1 file changed, 72 insertions(+), 84 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-index 1d22d7dc99b86..1491568f86fcb 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-@@ -36,6 +36,10 @@
- #define INTF_CONFIG2                    0x060
- #define INTF_DISPLAY_DATA_HCTL          0x064
- #define INTF_ACTIVE_DATA_HCTL           0x068
-+
-+#define INTF_DSI_CMD_MODE_TRIGGER_EN    0x084
-+#define INTF_PANEL_FORMAT               0x090
-+
- #define INTF_FRAME_LINE_COUNT_EN        0x0A8
- #define INTF_FRAME_COUNT                0x0AC
- #define INTF_LINE_COUNT                 0x0B0
-@@ -44,8 +48,6 @@
- #define INTF_DEFLICKER_STRNG_COEFF      0x0F4
- #define INTF_DEFLICKER_WEAK_COEFF       0x0F8
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+index 17f3e7e4f1941..152d4272a087a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
+@@ -17,30 +17,18 @@
+  * Register offsets in MDSS register file for the interrupt registers
+  * w.r.t. the MDP base
+  */
+-#define MDP_SSPP_TOP0_OFF		0x0
+-#define MDP_INTF_0_OFF			0x6A000
+-#define MDP_INTF_1_OFF			0x6A800
+-#define MDP_INTF_2_OFF			0x6B000
+-#define MDP_INTF_3_OFF			0x6B800
+-#define MDP_INTF_4_OFF			0x6C000
+-#define MDP_INTF_5_OFF			0x6C800
+-#define INTF_INTR_EN			0x1c0
+-#define INTF_INTR_STATUS		0x1c4
+-#define INTF_INTR_CLEAR			0x1c8
+-#define MDP_AD4_0_OFF			0x7C000
+-#define MDP_AD4_1_OFF			0x7D000
+-#define MDP_AD4_INTR_EN_OFF		0x41c
+-#define MDP_AD4_INTR_CLEAR_OFF		0x424
+-#define MDP_AD4_INTR_STATUS_OFF		0x420
+-#define MDP_INTF_0_OFF_REV_7xxx		0x34000
+-#define MDP_INTF_1_OFF_REV_7xxx		0x35000
+-#define MDP_INTF_2_OFF_REV_7xxx		0x36000
+-#define MDP_INTF_3_OFF_REV_7xxx		0x37000
+-#define MDP_INTF_4_OFF_REV_7xxx		0x38000
+-#define MDP_INTF_5_OFF_REV_7xxx		0x39000
+-#define MDP_INTF_6_OFF_REV_7xxx		0x3a000
+-#define MDP_INTF_7_OFF_REV_7xxx		0x3b000
+-#define MDP_INTF_8_OFF_REV_7xxx		0x3c000
++#define MDP_INTF_OFF(intf)				(0x6A000 + 0x800 * (intf))
++#define MDP_INTF_INTR_EN(intf)				(MDP_INTF_OFF(intf) + 0x1c0)
++#define MDP_INTF_INTR_STATUS(intf)			(MDP_INTF_OFF(intf) + 0x1c4)
++#define MDP_INTF_INTR_CLEAR(intf)			(MDP_INTF_OFF(intf) + 0x1c8)
++#define MDP_AD4_OFF(ad4)				(0x7C000 + 0x1000 * (ad4))
++#define MDP_AD4_INTR_EN_OFF(ad4)			(MDP_AD4_OFF(ad4) + 0x41c)
++#define MDP_AD4_INTR_CLEAR_OFF(ad4)			(MDP_AD4_OFF(ad4) + 0x424)
++#define MDP_AD4_INTR_STATUS_OFF(ad4)			(MDP_AD4_OFF(ad4) + 0x420)
++#define MDP_INTF_REV_7xxx_OFF(intf)			(0x34000 + 0x1000 * (intf))
++#define MDP_INTF_REV_7xxx_INTR_EN(intf)			(MDP_INTF_REV_7xxx_OFF(intf) + 0x1c0)
++#define MDP_INTF_REV_7xxx_INTR_STATUS(intf)		(MDP_INTF_REV_7xxx_OFF(intf) + 0x1c4)
++#define MDP_INTF_REV_7xxx_INTR_CLEAR(intf)		(MDP_INTF_REV_7xxx_OFF(intf) + 0x1c8)
  
--#define INTF_DSI_CMD_MODE_TRIGGER_EN    0x084
--#define INTF_PANEL_FORMAT               0x090
- #define INTF_TPG_ENABLE                 0x100
- #define INTF_TPG_MAIN_CONTROL           0x104
- #define INTF_TPG_VIDEO_CONFIG           0x108
-@@ -57,6 +59,9 @@
- #define INTF_PROG_FETCH_START           0x170
- #define INTF_PROG_ROT_START             0x174
+ /**
+  * struct dpu_intr_reg - array of DPU register sets
+@@ -61,104 +49,104 @@ struct dpu_intr_reg {
+  */
+ static const struct dpu_intr_reg dpu_intr_set[] = {
+ 	[MDP_SSPP_TOP0_INTR] = {
+-		MDP_SSPP_TOP0_OFF+INTR_CLEAR,
+-		MDP_SSPP_TOP0_OFF+INTR_EN,
+-		MDP_SSPP_TOP0_OFF+INTR_STATUS
++		INTR_CLEAR,
++		INTR_EN,
++		INTR_STATUS
+ 	},
+ 	[MDP_SSPP_TOP0_INTR2] = {
+-		MDP_SSPP_TOP0_OFF+INTR2_CLEAR,
+-		MDP_SSPP_TOP0_OFF+INTR2_EN,
+-		MDP_SSPP_TOP0_OFF+INTR2_STATUS
++		INTR2_CLEAR,
++		INTR2_EN,
++		INTR2_STATUS
+ 	},
+ 	[MDP_SSPP_TOP0_HIST_INTR] = {
+-		MDP_SSPP_TOP0_OFF+HIST_INTR_CLEAR,
+-		MDP_SSPP_TOP0_OFF+HIST_INTR_EN,
+-		MDP_SSPP_TOP0_OFF+HIST_INTR_STATUS
++		HIST_INTR_CLEAR,
++		HIST_INTR_EN,
++		HIST_INTR_STATUS
+ 	},
+ 	[MDP_INTF0_INTR] = {
+-		MDP_INTF_0_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_0_OFF+INTF_INTR_EN,
+-		MDP_INTF_0_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(0),
++		MDP_INTF_INTR_EN(0),
++		MDP_INTF_INTR_STATUS(0)
+ 	},
+ 	[MDP_INTF1_INTR] = {
+-		MDP_INTF_1_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_1_OFF+INTF_INTR_EN,
+-		MDP_INTF_1_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(1),
++		MDP_INTF_INTR_EN(1),
++		MDP_INTF_INTR_STATUS(1)
+ 	},
+ 	[MDP_INTF2_INTR] = {
+-		MDP_INTF_2_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_2_OFF+INTF_INTR_EN,
+-		MDP_INTF_2_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(2),
++		MDP_INTF_INTR_EN(2),
++		MDP_INTF_INTR_STATUS(2)
+ 	},
+ 	[MDP_INTF3_INTR] = {
+-		MDP_INTF_3_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_3_OFF+INTF_INTR_EN,
+-		MDP_INTF_3_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(3),
++		MDP_INTF_INTR_EN(3),
++		MDP_INTF_INTR_STATUS(3)
+ 	},
+ 	[MDP_INTF4_INTR] = {
+-		MDP_INTF_4_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_4_OFF+INTF_INTR_EN,
+-		MDP_INTF_4_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(4),
++		MDP_INTF_INTR_EN(4),
++		MDP_INTF_INTR_STATUS(4)
+ 	},
+ 	[MDP_INTF5_INTR] = {
+-		MDP_INTF_5_OFF+INTF_INTR_CLEAR,
+-		MDP_INTF_5_OFF+INTF_INTR_EN,
+-		MDP_INTF_5_OFF+INTF_INTR_STATUS
++		MDP_INTF_INTR_CLEAR(5),
++		MDP_INTF_INTR_EN(5),
++		MDP_INTF_INTR_STATUS(5)
+ 	},
+ 	[MDP_AD4_0_INTR] = {
+-		MDP_AD4_0_OFF + MDP_AD4_INTR_CLEAR_OFF,
+-		MDP_AD4_0_OFF + MDP_AD4_INTR_EN_OFF,
+-		MDP_AD4_0_OFF + MDP_AD4_INTR_STATUS_OFF,
++		MDP_AD4_INTR_CLEAR_OFF(0),
++		MDP_AD4_INTR_EN_OFF(0),
++		MDP_AD4_INTR_STATUS_OFF(0),
+ 	},
+ 	[MDP_AD4_1_INTR] = {
+-		MDP_AD4_1_OFF + MDP_AD4_INTR_CLEAR_OFF,
+-		MDP_AD4_1_OFF + MDP_AD4_INTR_EN_OFF,
+-		MDP_AD4_1_OFF + MDP_AD4_INTR_STATUS_OFF,
++		MDP_AD4_INTR_CLEAR_OFF(1),
++		MDP_AD4_INTR_EN_OFF(1),
++		MDP_AD4_INTR_STATUS_OFF(1),
+ 	},
+ 	[MDP_INTF0_7xxx_INTR] = {
+-		MDP_INTF_0_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_0_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_0_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(0),
++		MDP_INTF_REV_7xxx_INTR_EN(0),
++		MDP_INTF_REV_7xxx_INTR_STATUS(0)
+ 	},
+ 	[MDP_INTF1_7xxx_INTR] = {
+-		MDP_INTF_1_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_1_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_1_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(1),
++		MDP_INTF_REV_7xxx_INTR_EN(1),
++		MDP_INTF_REV_7xxx_INTR_STATUS(1)
+ 	},
+ 	[MDP_INTF2_7xxx_INTR] = {
+-		MDP_INTF_2_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_2_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_2_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(2),
++		MDP_INTF_REV_7xxx_INTR_EN(2),
++		MDP_INTF_REV_7xxx_INTR_STATUS(2)
+ 	},
+ 	[MDP_INTF3_7xxx_INTR] = {
+-		MDP_INTF_3_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_3_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_3_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(3),
++		MDP_INTF_REV_7xxx_INTR_EN(3),
++		MDP_INTF_REV_7xxx_INTR_STATUS(3)
+ 	},
+ 	[MDP_INTF4_7xxx_INTR] = {
+-		MDP_INTF_4_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_4_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_4_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(4),
++		MDP_INTF_REV_7xxx_INTR_EN(4),
++		MDP_INTF_REV_7xxx_INTR_STATUS(4)
+ 	},
+ 	[MDP_INTF5_7xxx_INTR] = {
+-		MDP_INTF_5_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_5_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_5_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(5),
++		MDP_INTF_REV_7xxx_INTR_EN(5),
++		MDP_INTF_REV_7xxx_INTR_STATUS(5)
+ 	},
+ 	[MDP_INTF6_7xxx_INTR] = {
+-		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(6),
++		MDP_INTF_REV_7xxx_INTR_EN(6),
++		MDP_INTF_REV_7xxx_INTR_STATUS(6)
+ 	},
+ 	[MDP_INTF7_7xxx_INTR] = {
+-		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(7),
++		MDP_INTF_REV_7xxx_INTR_EN(7),
++		MDP_INTF_REV_7xxx_INTR_STATUS(7)
+ 	},
+ 	[MDP_INTF8_7xxx_INTR] = {
+-		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_CLEAR,
+-		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_EN,
+-		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_STATUS
++		MDP_INTF_REV_7xxx_INTR_CLEAR(8),
++		MDP_INTF_REV_7xxx_INTR_EN(8),
++		MDP_INTF_REV_7xxx_INTR_STATUS(8)
+ 	},
+ };
  
-+#define INTF_MISR_CTRL                  0x180
-+#define INTF_MISR_SIGNATURE             0x184
-+
- #define INTF_MUX                        0x25C
- #define INTF_STATUS                     0x26C
- 
-@@ -66,9 +71,6 @@
- #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
- #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
- 
--#define INTF_MISR_CTRL			0x180
--#define INTF_MISR_SIGNATURE		0x184
--
- static const struct dpu_intf_cfg *_intf_offset(enum dpu_intf intf,
- 		const struct dpu_mdss_cfg *m,
- 		void __iomem *addr,
 
 -- 
 2.40.1
