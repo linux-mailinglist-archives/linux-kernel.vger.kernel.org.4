@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44426EF2E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E726EF2EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240575AbjDZK5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:57:34 -0400
+        id S240605AbjDZK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:57:39 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjDZK53 (ORCPT
+        with ESMTP id S229627AbjDZK5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:57:29 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60508BF;
-        Wed, 26 Apr 2023 03:57:26 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1prcpi-0003hk-K1; Wed, 26 Apr 2023 12:57:10 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sugar Zhang <sugar.zhang@rock-chips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v3 0/3] Enable rk3588 timer support
-Date:   Wed, 26 Apr 2023 12:57:08 +0200
-Message-Id: <168250659572.356856.7990087922862518615.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
-References: <20230419181309.338354-1-cristian.ciocaltea@collabora.com>
+        Wed, 26 Apr 2023 06:57:35 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E548199B;
+        Wed, 26 Apr 2023 03:57:34 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QAvN9q098609;
+        Wed, 26 Apr 2023 05:57:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682506643;
+        bh=u5140OEklBevtCTnI9XVLuiVqcGcid5zm2W6KeVt14U=;
+        h=From:To:CC:Subject:Date;
+        b=i6vb6lhWdEoQQWSq41rX0vJU3JWfjPJcl6IbJlzrhLdVqsx+0GmsKkZFXUq/HUZ1Z
+         XdTLpDRt+Drno4gprkfIv4O/2t8jmHa4A/aELtt/Zv2E95n5h+FM9ZSUoMq7i1Poxk
+         JiVooc//06F23byiHWjOJmmPGfe26UBLZb9PGCC0=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QAvNe3038244
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 05:57:23 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
+ Apr 2023 05:57:23 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 26 Apr 2023 05:57:23 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QAvJqT001570;
+        Wed, 26 Apr 2023 05:57:19 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [RFC PATCH 0/2] Add MAIN CPSW2G DT support for J721S2
+Date:   Wed, 26 Apr 2023 16:27:16 +0530
+Message-ID: <20230426105718.118806-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Apr 2023 21:13:06 +0300, Cristian Ciocaltea wrote:
-> This patchset enables Rockchip RK3588/RK3588S SoC timer support.
-> While here, it also handles a minor DT binding issue related to RK3288.
-> 
-> Changes in v3:
->  - Updated commit description in patch 1, per Krzysztof's review
->  - Added Acked-by tag from Krzysztof in patch 2
->  - v2: https://lore.kernel.org/lkml/20230418120624.284551-1-cristian.ciocaltea@collabora.com/
-> 
-> [...]
+Hello,
 
-Applied, thanks!
+This series adds devicetree node for MAIN CPSW2G instance of CPSW
+Ethernet Switch on TI's J721S2 SoC. Also, a devicetree overlay is added
+in order to enable MAIN CPSW2G in RGMII-RXID mode using the GESI
+Expansion Board connected to the J7 Common-Processor-Board.
 
-[3/3] arm64: dts: rockchip: Add rk3588 timer
-      commit: 9558529472d72a79ee6cd02da6c4439ec12a63e9
-      [will be rebased on top of 6.4-rc1]
+This series applies on top of the following series:
+https://lore.kernel.org/r/20230331090028.8373-1-r-gunasekaran@ti.com/
 
-Best regards,
+Regards,
+Siddharth.
+
+---
+
+Kishon Vijay Abraham I (2):
+  arm64: dts: ti: k3-j721s2-main: Add main CPSW2G devicetree node
+  arm64: dts: ti: k3-j721s2: Add overlay to enable main CPSW2G with GESI
+
+ arch/arm64/boot/dts/ti/Makefile               |  2 +
+ .../dts/ti/k3-j721s2-evm-gesi-exp-board.dtso  | 83 +++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 69 +++++++++++++++
+ 3 files changed, 154 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
+
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.25.1
+
