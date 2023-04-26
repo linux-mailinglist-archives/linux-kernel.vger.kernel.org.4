@@ -2,73 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC556EF222
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4B36EF256
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240386AbjDZKev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S240373AbjDZKmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240480AbjDZKeW (ORCPT
+        with ESMTP id S229937AbjDZKmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:34:22 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5725C3AA5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:33:54 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-42ca0c08aa9so1707852137.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1682505231; x=1685097231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h1fGPJlHu6l7X7WsfJvCNS6QR0SA3h2Zw922iWfKNZI=;
-        b=Usx265iOT6v3GkItV6XMI1RJds2zK7WSYjz50PJ3sA8RJnt6tLsQLuYW2LrHDbMRaD
-         RXCR8AaaCRnukMDfzvKidWKkfPdBJ8AUw37ccahtk2drjUPT83q+hlgqYc4wI1toM3E1
-         8ZFsSVrcHHBqf1vkDBipQ4F/pxpm0vz/cLtrdF7ReExpjEgTSIRD3iaI8AAe2X9MYCiP
-         8vlVMESiGnxx1G/yJhgb0P5igOIlSAY9ekmaAocYIWZfZkCptiKT5UOGYOb69yPYL0jN
-         eBjaBBrIuvmSdyDfyKQ3Bf+p6LiO3ELzfgMt6E8lRqjHOXUKQubgjd5oDd/MSDiFOJa7
-         cX2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682505231; x=1685097231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h1fGPJlHu6l7X7WsfJvCNS6QR0SA3h2Zw922iWfKNZI=;
-        b=gCgalbLx+K0oxSZIiwMszDmxbN2Re4tL3T/8cLKyUKLqq3v+ufty0UYiC8hbpqiOoC
-         fMm/fOV9LOVZ5Om5IJ/YTvcqZ209YfvbBOFJN28uNu2xCxs1nuvhaVi+aN7GQFFnSXIx
-         1br4pvKfr+00OiVx/vFYBofj2rgF5dZoSKZ6jVfld826dvAJlhsmt/12tbsSoX3ok3Kk
-         mt/qq40wh9hobd+DV/7pTxZN+jkCsoONO7gaU2wC9qwJLdUxsZASgrATTH7oXtQM3l1H
-         +F+oSZB6sD1od/0Psnk536g7gGP+epeGpwZInPALkOYCQTiJ/8H4T5JdJhR+gRIiwvKY
-         P5WA==
-X-Gm-Message-State: AAQBX9cZ7CVB2NnzGYGAygVRZpNlgDXP0DddsYcW49TK5a2hwoekajcN
-        EoZqELFlJoVaM2vx1jowmQ4iAcP2Pv4+qoFiHZJtmA==
-X-Google-Smtp-Source: AKy350bLbcQ1HvoG8xLjW8UzSGSFRdqFANyqcXcuOcFFdYFn0JripAqDqG1+77edDeeYwIMoHU4hKkN7U0F6NAPVC4s=
-X-Received: by 2002:a05:6102:34e2:b0:42f:cfdc:4803 with SMTP id
- bi2-20020a05610234e200b0042fcfdc4803mr9106697vsb.33.1682505231629; Wed, 26
- Apr 2023 03:33:51 -0700 (PDT)
+        Wed, 26 Apr 2023 06:42:00 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2134.outbound.protection.outlook.com [40.107.21.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFD646BC;
+        Wed, 26 Apr 2023 03:41:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LG8+Eoz4WPIpCgZj8OhYZlMsziInJJtSOwPuTOsJ8bGVo6YLyINiZJNZL+Ypl2Biz18Ia4J2D/rwJPaFBxhZVxeZCkaAtao3GEz4roMoTqOkmfQAZIH825CFzwfXXSyast/3iy6Ny1rqTiyhDT8GBgQm8T7PcvdD1pphhec9U2jB+UHiStb9o+XWPTySeJ4ZI7uUNcFZ20cgJYYyF19BGCO5JCjsrJGK2CYP7B/KMgob/cW96c52OK+lb0zixCedBh2y79fCqxsktqkm5WK907ph2Y3WW/NY6x4AYnhajFIWZXB0+qiTtMQUuiwfAiF//OmE93eQ35Cl2lwF8qtbZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Qu8USnRP+LQisbAxv7nzB6SeUzWZUbFaw7Y1TAMLR10=;
+ b=PsL6jpS5hrKx1v8gQbXH0Y6I4sanx6kqiAzmBBWYTGPevIPoh0LyuADtzeOp1H593aiBGnCrpLeLZIhXe6sMzDwEme30rbCFUuHOiSciWSi3cBv9b4v4ygvjw5skvJdJvuavO4pYHiMstjG7ClxG2A+hFLYCDzRqKt1O6XERGHdTOyGsGMdIbTHa8GKSOaDXfUpqPC401Mrx28wazBqyh2SVzZ8BaVoZjYovllnEbUWnDGhG30cLyaJDJ6HsbAR9GBXJztIEPrNGDufHKj74lLDt+vs2e+oh9xPBm1X/0Xcf+Hamj3TG7UwO1iWZnlNt9SKBjMeh694pG4FL7tUE+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
+ s=selector2-estab-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qu8USnRP+LQisbAxv7nzB6SeUzWZUbFaw7Y1TAMLR10=;
+ b=g1Kw38m+wbw+hI3nUIiemJenybKgtTmyCjvZnuoU0UpA60BbBJg/fWCXJ4oX6GFfSd+0AZ5iYmpGBaMrgkFF+/NapHGeAjv/v/0HbPnLtWB5sKyeV0tCm7stf7Gd2hekT6g754Tr3lI2wsUT04jbKM8GdpBCBq/pzCTQxOTwcMw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
+ by DB8P189MB1062.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:166::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
+ 2023 10:41:53 +0000
+Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ ([fe80::c697:dbef:e1d6:c2b5]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ ([fe80::c697:dbef:e1d6:c2b5%6]) with mapi id 15.20.6340.021; Wed, 26 Apr 2023
+ 10:41:53 +0000
+From:   Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+To:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Subject: [PATCH] perf script: Align kfree_skb tracepoint parameters
+Date:   Wed, 26 Apr 2023 12:41:49 +0200
+Message-Id: <20230426104149.14089-1-sriram.yagnaraman@est.tech>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GV2PEPF000000F8.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:144:1:0:1:0:22) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:10:1e7::15)
 MIME-Version: 1.0
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com> <20230425034010.3789376-6-quic_bjorande@quicinc.com>
-In-Reply-To: <20230425034010.3789376-6-quic_bjorande@quicinc.com>
-From:   "Bryan O'Donoghue" <pure.logic@nexus-software.ie>
-Date:   Wed, 26 Apr 2023 11:33:40 +0100
-Message-ID: <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
-Subject: Re: [PATCH 5/7] phy: qcom-qmp-combo: Introduce drm_bridge
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DBBP189MB1433:EE_|DB8P189MB1062:EE_
+X-MS-Office365-Filtering-Correlation-Id: c92558ba-5ce3-4d44-2aed-08db4642d919
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bmUHEJQs5UjcscZ+OyRE5GqARLpdZk4cnXtRmfWgmFmKLFCE+GF+7ht4T2W2gQbBiLet01wWKRikfM8ip/COoMrCP9jQloNZHaKv4oVHQowgJ/NciR97gDjehkdVWU5EovWwq2JP7V1KLW/3KvRQJaH0Umvi7F5U7PIrx4CunhFiawAYFX8+d3anzh9pPNdCwFYKWY+p3EefIdUUaQR9KxoI+MpQgwwl91UJA/fygROKyPr1dJKD11E60j9qbYhN5IE5zq+qabRXu4b6hqSeLp05ggLi8mfqwKfgqI0TV2ai6a5zddCwlr7J87LhyIYAoDSMiwNYT3TIay4guHuKkzdBMojsLqohY9tQ5Ej2PoA+VdJR5LFiqp3NeH9GbQ73B7WhX9BR3sGJGxjBuXygSF0hwXG08BVjJbI0x9Fanb6TjbNEVeR09QaLi7KqZ57p+hzs4JT3xQLP1dZdDaW42ePf3o0ux3ELpju32KT85Sz5HCHTjMKHYEZv4JmDnyFqj+MxN4hnF/aNxAaHTFeQotfgzMvLvlbba4p06jWV4dadN0SYiR42ED3vLRXcZjAulA/SkS1EkKIlNbmL3Uh+RXLcOcQFlga6oJNocqCyfRVCxQskbK8XF6150kCkI8aF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(396003)(136003)(376002)(346002)(451199021)(1076003)(26005)(6506007)(6512007)(186003)(2616005)(83380400001)(36756003)(6486002)(6666004)(41300700001)(316002)(5660300002)(44832011)(54906003)(2906002)(478600001)(7416002)(38100700002)(86362001)(8936002)(8676002)(66476007)(66556008)(66946007)(4326008)(70586007)(37730700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yQX2awOa5FYC/x2fWXiJ9dXOoxcD09xAtwNSAwye+7TZgZjJY40GDgJH/xm9?=
+ =?us-ascii?Q?SS6nN52Mdkw5gXrIuNc81NZkYXzqI+LPh4Bv0vaE2MavwNbQiSLrtk5ROgq4?=
+ =?us-ascii?Q?K2sikPITRM3KXboWrnKTDHhQ7gs95xhZIUVLnlhSopmuu2frD7/DQtWhTGto?=
+ =?us-ascii?Q?YgcL/cNPgt/7JS8mcaQXedmFuQ/UySjxBzTwpX8SpxpZVSs/8I3Vn9UA3bRF?=
+ =?us-ascii?Q?AEi/u+NaunSgdSP3XdNsOOILaHS65AD/woANM7DPQs0L9JVn4ZL9l0dKnIWZ?=
+ =?us-ascii?Q?cvNSLT8IVqxBAFjmLCYkTmIGvU408E8ViRKWU6xA8ShOWeRllc5kQjIzt+C9?=
+ =?us-ascii?Q?LDckEZRnuVxRduGEi3bkqrT8i9Kw4JlZNYPIO5Lf/IzZgoUjEx6PI7n6b1go?=
+ =?us-ascii?Q?FXivaDsPlHOspcx3sFu485i5AxFOdQJPYXbgvcETeDwIjX0hGnPMMeMDXnD3?=
+ =?us-ascii?Q?tHZbv2xp5D53asAeUr28jlER6zDwp+qaDSDHe4uTL8peUn183w7PyOE8T31S?=
+ =?us-ascii?Q?vFV8vo8w+/c4N5TL+gkkJAhOM7JQ2Rf+D1aWFwpFTKP5vFprurs3/+ZvIrZ0?=
+ =?us-ascii?Q?hpLQv7JAvfJZQPY03b5qIixPT3AWVT+OMcb7G01L0p1mKcuopysX2y8gyWAA?=
+ =?us-ascii?Q?+FFFdRgG95QwqkQcQ0prW9nO3hET+FR45JNBUBqcS1unamWU5ZKHPFfc7Kxt?=
+ =?us-ascii?Q?FtdQI2jEEgKuVF0ASkGw6QB2+DLgtY7+qIrWB1QEk7Z+B/UsH378Nkml1zJc?=
+ =?us-ascii?Q?X9gFBl7bztWbnZonPSKJfxmZNio8A00UbGs/dEPIoGBdnOyaSiZwg8ET9dm0?=
+ =?us-ascii?Q?4Qzi0f2B7r+CcRvYzd9Ska0JvsIs8o2QwiJ+MLrj6W/lERc3oCFcYazAkJMd?=
+ =?us-ascii?Q?3dw+NZDdhr0yukxADDTNZPi8BJlB1SoEFn8pJOMnDu7RijGIHOhDjsmJrSRZ?=
+ =?us-ascii?Q?RunDPgfsHxAAzQqSVGVcfQQ4Gr+9a6Tiw+8+wdjNIZpIUVhUWk2SKq5LG8Tr?=
+ =?us-ascii?Q?Z9yAzk8rJd1I2KAXGuglMq9bkvwTSKd0mbOllM2Hl54+m20trXynuS+kfU3T?=
+ =?us-ascii?Q?2FWSs8ocKI0lex/8fy1SI750LyDO+kBCLe/oiXgNHrPmyf0InozhCqWjenhm?=
+ =?us-ascii?Q?GclMffOJSmBHDNMz0K7M0ziuOuJIwHqJaAC611VWeIqF3bkU6sS3PHnEJad2?=
+ =?us-ascii?Q?Y5jd894Mw0s57KTQ77ZUnWu0pEDNCARqY9yMS2sINoBDrYgoPLG4zwUUk+Xk?=
+ =?us-ascii?Q?m9vzWlbws0HNWynPRLjmVWEpmNSUhjsPI1SBzT2YO0dK7ZPfIvaPVaaoi/Sv?=
+ =?us-ascii?Q?cMsuvZX53fe0uLIICnPj1DxQ41j8viEkGZCtfjy0wiS+VvhMnV1ZCiHv7pI1?=
+ =?us-ascii?Q?xF24iqXJvxgIIFewlF+LreiaTl/P+pOQOIAJ/kPdkO1PJq+zF2Lo0lnqXopF?=
+ =?us-ascii?Q?sPGwfFjHZo/3lrk97ANThMhX4vlyrc6VY2Z0DmdiElNKHAyUcwg1WY3OKsLF?=
+ =?us-ascii?Q?i4diFDFbMly3Bj0UsbOVd9oVXzTdsNLAKFZg1E5yPdg/XXROaoyfw9+G7V+O?=
+ =?us-ascii?Q?H08H3ewC7xMMlHfYcLfR+V5wyklRbwpjHCXZYgU8Py9F5xig1qckz8TR7LIm?=
+ =?us-ascii?Q?cA=3D=3D?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: c92558ba-5ce3-4d44-2aed-08db4642d919
+X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 10:41:52.9830
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GO5wHtZQ1qJP3aL56EGb6VJCpaMQdRqnJIJk4p+7l4F0b0LdE9LtkrJ1PFFaNh3iVvBlKGov8bZJ3ONKHRS7uGYhu3abI9pSAgHw4svcfMM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P189MB1062
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,135 +121,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 4:40=E2=80=AFAM Bjorn Andersson
-<quic_bjorande@quicinc.com> wrote:
->
-> The QMP combo PHY sits in an of_graph connected between the DisplayPort
-> controller and a USB Type-C connector (or possibly a redriver).
->
-> The TCPM needs to be able to convey the HPD signal to the DisplayPort
-> controller, but no directly link is provided by DeviceTree so the signal
-> needs to "pass through" the QMP combo phy.
->
-> Handle this by introducing a drm_bridge which upon initialization finds
-> the next bridge (i.e. the usb-c-connector) and chain this together. This
-> way HPD changes in the connector will propagate to the DisplayPort
-> driver.
->
-> The connector bridge is resolved lazily, as the TCPM is expected to be
-> able to resolve the typec mux and switch at probe time, so the QMP combo
-> phy will probe before the TCPM.
->
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 36 +++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qual=
-comm/phy-qcom-qmp-combo.c
-> index 5d6d6ef3944b..84bc08002537 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -22,6 +22,8 @@
->  #include <linux/usb/typec.h>
->  #include <linux/usb/typec_mux.h>
->
-> +#include <drm/drm_bridge.h>
-> +
->  #include <dt-bindings/phy/phy-qcom-qmp.h>
->
->  #include "phy-qcom-qmp.h"
-> @@ -1332,6 +1334,8 @@ struct qmp_combo {
->         struct clk_hw dp_link_hw;
->         struct clk_hw dp_pixel_hw;
->
-> +       struct drm_bridge bridge;
-> +
->         struct typec_switch_dev *sw;
->         enum typec_orientation orientation;
->  };
-> @@ -3196,6 +3200,34 @@ static int qmp_combo_register_clocks(struct qmp_co=
-mbo *qmp, struct device_node *
->         return devm_add_action_or_reset(qmp->dev, phy_clk_release_provide=
-r, dp_np);
->  }
->
-> +static int qmp_combo_bridge_attach(struct drm_bridge *bridge,
-> +                                  enum drm_bridge_attach_flags flags)
-> +{
-> +       struct qmp_combo *qmp =3D container_of(bridge, struct qmp_combo, =
-bridge);
-> +       struct drm_bridge *next_bridge;
-> +
-> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-> +               return -EINVAL;
-> +
-> +       next_bridge =3D devm_drm_of_get_bridge(qmp->dev, qmp->dev->of_nod=
-e, 0, 0);
-> +       if (IS_ERR(next_bridge))
-> +               return dev_err_probe(qmp->dev, PTR_ERR(next_bridge), "fai=
-led to acquire drm_bridge\n");
-> +
-> +       return drm_bridge_attach(bridge->encoder, next_bridge, bridge, DR=
-M_BRIDGE_ATTACH_NO_CONNECTOR);
-> +}
-> +
-> +static const struct drm_bridge_funcs qmp_combo_bridge_funcs =3D {
-> +       .attach =3D qmp_combo_bridge_attach,
-> +};
-> +
-> +static int qmp_combo_dp_register_bridge(struct qmp_combo *qmp)
-> +{
-> +       qmp->bridge.funcs =3D &qmp_combo_bridge_funcs;
-> +       qmp->bridge.of_node =3D qmp->dev->of_node;
-> +
-> +       return devm_drm_bridge_add(qmp->dev, &qmp->bridge);
-> +}
-> +
->  static int qmp_combo_parse_dt_lecacy_dp(struct qmp_combo *qmp, struct de=
-vice_node *np)
->  {
->         struct device *dev =3D qmp->dev;
-> @@ -3459,6 +3491,10 @@ static int qmp_combo_probe(struct platform_device =
-*pdev)
->         if (ret)
->                 return ret;
->
-> +       ret =3D qmp_combo_dp_register_bridge(qmp);
-> +       if (ret)
-> +               return ret;
-> +
->         /* Check for legacy binding with child nodes. */
->         usb_np =3D of_get_child_by_name(dev->of_node, "usb3-phy");
->         if (usb_np) {
-> --
-> 2.39.2
->
-
-You need to add some or all of these
-       select DRM_DISPLAY_DP_HELPER
-       select DRM_DISPLAY_HELPER
-       select DRM_DP_AUX_BUS
-       select DRM_KMS_HELPER
-       select DRM_MIPI_DSI
-       select DRM_PANEL
-
-
-/opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-l=
-inux-gnu-ld:
-Unexpected GOT/PLT entries detected!
-/opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-l=
-inux-gnu-ld:
-Unexpected run-time procedure linkages detected!
-drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function
-`qmp_combo_bridge_attach':
-phy-qcom-qmp-combo.c:(.text+0xb50): undefined reference to
-`devm_drm_of_get_bridge'
-phy-qcom-qmp-combo.c:(.text+0xb6c): undefined reference to `drm_bridge_atta=
-ch'
-drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function `qmp_combo_probe':
-phy-qcom-qmp-combo.c:(.text+0x13fc): undefined reference to
-`devm_drm_bridge_add'
-
+Not sure if the scripts changed in this patch are used, but nevertheless
+here is a patch with a minor bug fix.
 ---
-bod
+
+Include reason parameter that was added in
+commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()")
+
+Signed-off-by: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+---
+ tools/perf/scripts/python/net_dropmonitor.py | 4 ++--
+ tools/perf/scripts/python/netdev-times.py    | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/perf/scripts/python/net_dropmonitor.py b/tools/perf/scripts/python/net_dropmonitor.py
+index 101059971738..a97e7a6e0940 100755
+--- a/tools/perf/scripts/python/net_dropmonitor.py
++++ b/tools/perf/scripts/python/net_dropmonitor.py
+@@ -68,9 +68,9 @@ def trace_end():
+ 	get_kallsyms_table()
+ 	print_drop_table()
+ 
+-# called from perf, when it finds a correspoinding event
++# called from perf, when it finds a corresponding event
+ def skb__kfree_skb(name, context, cpu, sec, nsec, pid, comm, callchain,
+-		   skbaddr, location, protocol):
++		   skbaddr, location, protocol, reason):
+ 	slocation = str(location)
+ 	try:
+ 		drop_log[slocation] = drop_log[slocation] + 1
+diff --git a/tools/perf/scripts/python/netdev-times.py b/tools/perf/scripts/python/netdev-times.py
+index a0cfc7fe5908..00552eeb7178 100644
+--- a/tools/perf/scripts/python/netdev-times.py
++++ b/tools/perf/scripts/python/netdev-times.py
+@@ -288,9 +288,9 @@ def net__net_dev_xmit(name, context, cpu, sec, nsec, pid, comm, callchain,
+ 	all_event_list.append(event_info)
+ 
+ def skb__kfree_skb(name, context, cpu, sec, nsec, pid, comm, callchain,
+-			skbaddr, protocol, location):
++			skbaddr, location, protocol, reason):
+ 	event_info = (name, context, cpu, nsecs(sec, nsec), pid, comm,
+-			skbaddr, protocol, location)
++			skbaddr, location, protocol, reason)
+ 	all_event_list.append(event_info)
+ 
+ def skb__consume_skb(name, context, cpu, sec, nsec, pid, comm, callchain, skbaddr):
+@@ -430,7 +430,7 @@ def handle_net_dev_xmit(event_info):
+ 
+ def handle_kfree_skb(event_info):
+ 	(name, context, cpu, time, pid, comm,
+-		skbaddr, protocol, location) = event_info
++		skbaddr, location, protocol, reason) = event_info
+ 	for i in range(len(tx_queue_list)):
+ 		skb = tx_queue_list[i]
+ 		if skb['skbaddr'] == skbaddr:
+-- 
+2.34.1
+
