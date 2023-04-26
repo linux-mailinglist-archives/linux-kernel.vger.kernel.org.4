@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B796EFD89
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45836EFD84
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240039AbjDZWiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S239716AbjDZWiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236276AbjDZWhb (ORCPT
+        with ESMTP id S236937AbjDZWhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:37:31 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A3235B3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:37:28 -0700 (PDT)
+        Wed, 26 Apr 2023 18:37:32 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A141B35AE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:37:29 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id A6EC820221;
-        Thu, 27 Apr 2023 00:37:26 +0200 (CEST)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 7616B20228;
+        Thu, 27 Apr 2023 00:37:27 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Thu, 27 Apr 2023 00:37:27 +0200
-Subject: [PATCH v4 13/22] drm/msm/dpu: Move autorefresh disable from CMD
- encoder to pingpong
+Date:   Thu, 27 Apr 2023 00:37:28 +0200
+Subject: [PATCH v4 14/22] drm/msm/dpu: Disable pingpong TE on DPU 5.0.0 and
+ above
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-dpu-intf-te-v4-13-27ce1a5ab5c6@somainline.org>
+Message-Id: <20230411-dpu-intf-te-v4-14-27ce1a5ab5c6@somainline.org>
 References: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
 In-Reply-To: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -54,252 +54,305 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Jessica Zhang <quic_jesszhan@quicinc.com>,
         Marijn Suijten <marijn.suijten@somainline.org>
 X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This autorefresh disable logic in the physical command-mode encoder
-consumes three callbacks to the pingpong block, and will explode in
-unnecessary complexity when the same callbacks need to be called on the
-interface block instead to accommodate INTF TE support.  To clean this
-up, move the logic into the pingpong block under a disable_autorefresh
-callback, replacing the aforementioned three get_autorefresh,
-setup_autorefresh and get_vsync_info callbacks.
+Since hardware revision 5.0.0 the TE configuration moved out of the
+PINGPONG block into the INTF block.  Writing these registers has no
+effect, and is omitted downstream via the DPU/SDE_PINGPONG_TE feature
+flag.  This flag is only added to PINGPONG blocks used by hardware prior
+to 5.0.0.
 
-The same logic will have to be replicated to the interface block when it
-receives INTF TE support, but it is less complex than constantly
-switching on a "has_intf_te" boolean to choose a callback.
+The existing PP_BLK_TE macro has been removed in favour of directly
+passing this feature flag, which has thus far been the only difference
+with PP_BLK.  PP_BLK_DITHER has been left in place as its embedded
+feature flag already excludes this DPU_PINGPONG_TE bit and differs by
+setting the block length to zero, as it only contains a DITHER subblock.
 
-Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The code that writes to these registers in the INTF block will follow in
+subsequent patches.
+
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   | 60 ++--------------------
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    | 47 +++++++++++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    | 25 ++-------
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |  4 ++
- 4 files changed, 57 insertions(+), 79 deletions(-)
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  8 ++++----
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  8 ++++----
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 12 ++++++------
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 12 ++++++------
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 12 ++++++------
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  2 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     | 22 ++++++++--------------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    | 12 +++++++-----
+ 10 files changed, 45 insertions(+), 49 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-index 74470d068622e..a60fb8d3736b5 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-@@ -36,10 +36,6 @@
- #define DEFAULT_TEARCHECK_SYNC_THRESH_START	4
- #define DEFAULT_TEARCHECK_SYNC_THRESH_CONTINUE	4
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+index 2b3ae84057dfe..b7845591c384b 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+@@ -112,16 +112,16 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
+ };
  
--#define DPU_ENC_WR_PTR_START_TIMEOUT_US 20000
--
--#define DPU_ENC_MAX_POLL_TIMEOUT_US	2000
--
- static void dpu_encoder_phys_cmd_enable_te(struct dpu_encoder_phys *phys_enc);
+ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+-	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+-	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+-	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+-	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+index ceca741e93c9b..5b9b3b99f1b5f 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+@@ -110,16 +110,16 @@ static const struct dpu_lm_cfg sdm845_lm[] = {
+ };
  
- static bool dpu_encoder_phys_cmd_is_master(struct dpu_encoder_phys *phys_enc)
-@@ -574,28 +570,8 @@ static void dpu_encoder_phys_cmd_prepare_for_kickoff(
- 			atomic_read(&phys_enc->pending_kickoff_cnt));
- }
+ static const struct dpu_pingpong_cfg sdm845_pp[] = {
+-	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+-	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SDM845_TE2_MASK, 0, sdm845_pp_sblk_te,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+-	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+-	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SDM845_MASK, 0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+index 42b0e58624d00..074ba54d420f4 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+@@ -128,22 +128,22 @@ static const struct dpu_dspp_cfg sm8150_dspp[] = {
+ };
  
--static bool dpu_encoder_phys_cmd_is_ongoing_pptx(
--		struct dpu_encoder_phys *phys_enc)
--{
--	struct dpu_hw_pp_vsync_info info;
--
--	if (!phys_enc)
--		return false;
--
--	phys_enc->hw_pp->ops.get_vsync_info(phys_enc->hw_pp, &info);
--	if (info.wr_ptr_line_count > 0 &&
--	    info.wr_ptr_line_count < phys_enc->cached_mode.vdisplay)
--		return true;
--
--	return false;
--}
--
- static void dpu_encoder_phys_cmd_enable_te(struct dpu_encoder_phys *phys_enc)
- {
--	struct dpu_encoder_phys_cmd *cmd_enc =
--		to_dpu_encoder_phys_cmd(phys_enc);
--	int trial = 0;
--
- 	if (!phys_enc)
- 		return;
- 	if (!phys_enc->hw_pp)
-@@ -603,37 +579,11 @@ static void dpu_encoder_phys_cmd_enable_te(struct dpu_encoder_phys *phys_enc)
- 	if (!dpu_encoder_phys_cmd_is_master(phys_enc))
- 		return;
+ static const struct dpu_pingpong_cfg sm8150_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+-	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+-	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+-	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+-	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+ 			-1),
+-	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+ 			-1),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+index e3bdfe7b30f1f..0540d21810857 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+@@ -116,22 +116,22 @@ static const struct dpu_lm_cfg sc8180x_lm[] = {
+ };
  
--	/* If autorefresh is already disabled, we have nothing to do */
--	if (!phys_enc->hw_pp->ops.get_autorefresh(phys_enc->hw_pp, NULL))
--		return;
--
--	/*
--	 * If autorefresh is enabled, disable it and make sure it is safe to
--	 * proceed with current frame commit/push. Sequence fallowed is,
--	 * 1. Disable TE
--	 * 2. Disable autorefresh config
--	 * 4. Poll for frame transfer ongoing to be false
--	 * 5. Enable TE back
--	 */
--	_dpu_encoder_phys_cmd_connect_te(phys_enc, false);
--	phys_enc->hw_pp->ops.setup_autorefresh(phys_enc->hw_pp, 0, false);
--
--	do {
--		udelay(DPU_ENC_MAX_POLL_TIMEOUT_US);
--		if ((trial * DPU_ENC_MAX_POLL_TIMEOUT_US)
--				> (KICKOFF_TIMEOUT_MS * USEC_PER_MSEC)) {
--			DPU_ERROR_CMDENC(cmd_enc,
--					"disable autorefresh failed\n");
--			break;
--		}
--
--		trial++;
--	} while (dpu_encoder_phys_cmd_is_ongoing_pptx(phys_enc));
--
--	_dpu_encoder_phys_cmd_connect_te(phys_enc, true);
--
--	DPU_DEBUG_CMDENC(to_dpu_encoder_phys_cmd(phys_enc),
--			 "disabled autorefresh\n");
-+	if (phys_enc->hw_pp->ops.disable_autorefresh) {
-+		phys_enc->hw_pp->ops.disable_autorefresh(phys_enc->hw_pp,
-+							 DRMID(phys_enc->parent),
-+							 phys_enc->cached_mode.vdisplay);
-+	}
- }
+ static const struct dpu_pingpong_cfg sc8180x_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+-	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+-	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+-	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+-	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+ 			-1),
+-	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+ 			-1),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+index ed130582873c7..b3284de35b8fa 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+@@ -129,22 +129,22 @@ static const struct dpu_dspp_cfg sm8250_dspp[] = {
+ };
  
- static int _dpu_encoder_phys_cmd_wait_for_ctl_start(
+ static const struct dpu_pingpong_cfg sm8250_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+-	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, sdm845_pp_sblk,
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, MERGE_3D_0, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+-	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_2", PINGPONG_2, 0x71000, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+-	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, sdm845_pp_sblk,
++	PP_BLK("pingpong_3", PINGPONG_3, 0x71800, PINGPONG_SM8150_MASK, MERGE_3D_1, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+-	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_4", PINGPONG_4, 0x72000, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+ 			-1),
+-	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, sdm845_pp_sblk,
++	PP_BLK("pingpong_5", PINGPONG_5, 0x72800, PINGPONG_SM8150_MASK, MERGE_3D_2, sdm845_pp_sblk,
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+ 			-1),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+index a46b11730a4d4..03f546e05d095 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+@@ -80,8 +80,8 @@ static const struct dpu_dspp_cfg sc7180_dspp[] = {
+ };
+ 
+ static const struct dpu_pingpong_cfg sc7180_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk, -1, -1),
+-	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk, -1, -1),
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk, -1, -1),
++	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk, -1, -1),
+ };
+ 
+ static const struct dpu_intf_cfg sc7180_intf[] = {
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+index 988d820f7ef2e..e15dc96f1286a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+@@ -60,7 +60,7 @@ static const struct dpu_dspp_cfg sm6115_dspp[] = {
+ };
+ 
+ static const struct dpu_pingpong_cfg sm6115_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+ 		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+index c9003dcc1a59b..2ff98ef6999fe 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+@@ -57,7 +57,7 @@ static const struct dpu_dspp_cfg qcm2290_dspp[] = {
+ };
+ 
+ static const struct dpu_pingpong_cfg qcm2290_pp[] = {
+-	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
++	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+ 		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+ 		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+ };
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+index ca8a02debda98..23a78c38ec777 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+@@ -75,11 +75,15 @@
+ #define MIXER_QCM2290_MASK \
+ 	(BIT(DPU_DIM_LAYER) | BIT(DPU_MIXER_COMBINED_ALPHA))
+ 
+-#define PINGPONG_SDM845_MASK BIT(DPU_PINGPONG_DITHER)
++#define PINGPONG_SDM845_MASK \
++	(BIT(DPU_PINGPONG_DITHER) | BIT(DPU_PINGPONG_TE))
+ 
+-#define PINGPONG_SDM845_SPLIT_MASK \
++#define PINGPONG_SDM845_TE2_MASK \
+ 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
+ 
++#define PINGPONG_SM8150_MASK \
++	(BIT(DPU_PINGPONG_DITHER))
++
+ #define CTL_SC7280_MASK \
+ 	(BIT(DPU_CTL_ACTIVE_CFG) | \
+ 	 BIT(DPU_CTL_FETCH_ACTIVE) | \
+@@ -501,21 +505,11 @@ static const struct dpu_pingpong_sub_blks sc7280_pp_sblk = {
+ 	.intr_done = _done, \
+ 	.intr_rdptr = _rdptr, \
+ 	}
+-#define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+-	{\
+-	.name = _name, .id = _id, \
+-	.base = _base, .len = 0xd4, \
+-	.features = PINGPONG_SDM845_SPLIT_MASK, \
+-	.merge_3d = _merge_3d, \
+-	.sblk = &_sblk, \
+-	.intr_done = _done, \
+-	.intr_rdptr = _rdptr, \
+-	}
+-#define PP_BLK(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
++#define PP_BLK(_name, _id, _base, _features, _merge_3d, _sblk, _done, _rdptr) \
+ 	{\
+ 	.name = _name, .id = _id, \
+ 	.base = _base, .len = 0xd4, \
+-	.features = PINGPONG_SDM845_MASK, \
++	.features = _features, \
+ 	.merge_3d = _merge_3d, \
+ 	.sblk = &_sblk, \
+ 	.intr_done = _done, \
 diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-index b18efd640abd6..dea270c0936f4 100644
+index dea270c0936f4..4a20a5841f223 100644
 --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
 +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-@@ -228,6 +228,49 @@ static u32 dpu_hw_pp_get_line_count(struct dpu_hw_pingpong *pp)
- 	return line;
- }
- 
-+static void dpu_hw_pp_disable_autorefresh(struct dpu_hw_pingpong *pp,
-+					  uint32_t encoder_id, u16 vdisplay)
-+{
-+	struct dpu_hw_pp_vsync_info info;
-+	int trial = 0;
-+
-+	/* If autorefresh is already disabled, we have nothing to do */
-+	if (!dpu_hw_pp_get_autorefresh_config(pp, NULL))
-+		return;
-+
-+	/*
-+	 * If autorefresh is enabled, disable it and make sure it is safe to
-+	 * proceed with current frame commit/push. Sequence followed is,
-+	 * 1. Disable TE
-+	 * 2. Disable autorefresh config
-+	 * 4. Poll for frame transfer ongoing to be false
-+	 * 5. Enable TE back
-+	 */
-+
-+	dpu_hw_pp_connect_external_te(pp, false);
-+	dpu_hw_pp_setup_autorefresh_config(pp, 0, false);
-+
-+	do {
-+		udelay(DPU_ENC_MAX_POLL_TIMEOUT_US);
-+		if ((trial * DPU_ENC_MAX_POLL_TIMEOUT_US)
-+				> (KICKOFF_TIMEOUT_MS * USEC_PER_MSEC)) {
-+			DPU_ERROR("enc%d pp%d disable autorefresh failed\n",
-+				  encoder_id, pp->idx - PINGPONG_0);
-+			break;
-+		}
-+
-+		trial++;
-+
-+		dpu_hw_pp_get_vsync_info(pp, &info);
-+	} while (info.wr_ptr_line_count > 0 &&
-+		 info.wr_ptr_line_count < vdisplay);
-+
-+	dpu_hw_pp_connect_external_te(pp, true);
-+
-+	DPU_DEBUG("enc%d pp%d disabled autorefresh\n",
-+		  encoder_id, pp->idx - PINGPONG_0);
-+}
-+
- static int dpu_hw_pp_dsc_enable(struct dpu_hw_pingpong *pp)
+@@ -300,11 +300,13 @@ static int dpu_hw_pp_setup_dsc(struct dpu_hw_pingpong *pp)
+ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+ 				unsigned long features)
  {
- 	struct dpu_hw_blk_reg_map *c = &pp->hw;
-@@ -260,10 +303,8 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
- 	c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
- 	c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
- 	c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
--	c->ops.get_vsync_info = dpu_hw_pp_get_vsync_info;
--	c->ops.setup_autorefresh = dpu_hw_pp_setup_autorefresh_config;
--	c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
- 	c->ops.get_line_count = dpu_hw_pp_get_line_count;
-+	c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
+-	c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
+-	c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
+-	c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
+-	c->ops.get_line_count = dpu_hw_pp_get_line_count;
+-	c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
++	if (test_bit(DPU_PINGPONG_TE, &features)) {
++		c->ops.setup_tearcheck = dpu_hw_pp_setup_te_config;
++		c->ops.enable_tearcheck = dpu_hw_pp_enable_te;
++		c->ops.connect_external_te = dpu_hw_pp_connect_external_te;
++		c->ops.get_line_count = dpu_hw_pp_get_line_count;
++		c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
++	}
  	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
  	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
  	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-index cf94b4ab603b5..851b013c4c4b6 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h
-@@ -61,9 +61,6 @@ struct dpu_hw_dither_cfg {
-  *  Assumption is these functions will be called after clocks are enabled
-  *  @setup_tearcheck : program tear check values
-  *  @enable_tearcheck : enables tear check
-- *  @get_vsync_info : retries timing info of the panel
-- *  @setup_autorefresh : configure and enable the autorefresh config
-- *  @get_autorefresh : retrieve autorefresh config from hardware
-  *  @setup_dither : function to program the dither hw block
-  *  @get_line_count: obtain current vertical line counter
-  */
-@@ -89,28 +86,14 @@ struct dpu_hw_pingpong_ops {
- 			bool enable_external_te);
- 
- 	/**
--	 * provides the programmed and current
--	 * line_count
--	 */
--	int (*get_vsync_info)(struct dpu_hw_pingpong *pp,
--			struct dpu_hw_pp_vsync_info  *info);
--
--	/**
--	 * configure and enable the autorefresh config
--	 */
--	void (*setup_autorefresh)(struct dpu_hw_pingpong *pp,
--				  u32 frame_count, bool enable);
--
--	/**
--	 * retrieve autorefresh config from hardware
-+	 * Obtain current vertical line counter
- 	 */
--	bool (*get_autorefresh)(struct dpu_hw_pingpong *pp,
--				u32 *frame_count);
-+	u32 (*get_line_count)(struct dpu_hw_pingpong *pp);
- 
- 	/**
--	 * Obtain current vertical line counter
-+	 * Disable autorefresh if enabled
- 	 */
--	u32 (*get_line_count)(struct dpu_hw_pingpong *pp);
-+	void (*disable_autorefresh)(struct dpu_hw_pingpong *pp, uint32_t encoder_id, u16 vdisplay);
- 
- 	/**
- 	 * Setup dither matix for pingpong block
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-index aca39a4689f48..e7fc67381c2bd 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h
-@@ -118,6 +118,10 @@ struct vsync_info {
- 	u32 line_count;
- };
- 
-+#define DPU_ENC_WR_PTR_START_TIMEOUT_US 20000
-+
-+#define DPU_ENC_MAX_POLL_TIMEOUT_US	2000
-+
- #define to_dpu_kms(x) container_of(x, struct dpu_kms, base)
- 
- #define to_dpu_global_state(x) container_of(x, struct dpu_global_state, base)
 
 -- 
 2.40.1
