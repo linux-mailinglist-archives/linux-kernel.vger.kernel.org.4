@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2862C6EFC7C
+	by mail.lfdr.de (Postfix) with ESMTP id C86A86EFC7E
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240005AbjDZV3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S240065AbjDZV3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbjDZV3c (ORCPT
+        with ESMTP id S239999AbjDZV3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:29:32 -0400
+        Wed, 26 Apr 2023 17:29:33 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1269C3AA7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 14:29:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF543A9C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 14:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682544570; x=1714080570;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to;
-  bh=XYLQIHkvfKeSvWSU6i9mepXyNVzspIxyZg3CCSkjC+Q=;
-  b=iPWCCsEI76HX+MKpMSSghhbFLoZbKJueQlIGo2v8+vKhrenxb3YOuWK4
-   6CUyewK1x4KyGwvnqDpq/WTVyF6CcT/dcaYUdsViHYomLRpZyZqTFUCRb
-   RmhIdEbCEFqtktwHXAkkpVt+rnqWt1GEL8yLKITgNmxEX0QVWVrA0EZLD
-   l9CnqkEFolj67lqwpr1kd6VBIcZuM2wBPg6nFmRjlqKH7xhccff2Y8Riq
-   lbigjL65gUn+Bq+nIe44zkXfj8s2Gb9pqPRDv6NUSiEh+6wI1g1ihMuCf
-   b6BUIQGu5eu4g5ZEcQ2luB9DRo/odk9hPO0cFq8p4nWSteL11p1fgXwDZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="344691025"
+  t=1682544572; x=1714080572;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to;
+  bh=HQr3QuWfqr8HjkBvQXdQGVL0T9pRPRkx4Ddqy9aDMLw=;
+  b=TsjlQHYeYt983WcttMSx1EvHnNVS2NkUVf5Da789Q8XaKXW2Q0Epz0TM
+   DxteRu5d6TkodH5jJ2pyYOzVz/BqiogoYphXpLwyDkKvs04AX0SWqd1t2
+   eDLFiDOuxKV10/H2RnrpbgwkG0RzEP+ZoYRH3vZtH5/iqmp6EmdQoxbQN
+   fHTCVoDVtyM3JfWKv5JXkUT6JGpXo2joF43HjKeY2F20hzS7OTneMkjtD
+   Cd/RN9J6nREF8p7258Gc+Y98e8weLiarFQ6oXOFqmnF2b4doFRO7OsAM+
+   dwVhs3R/FAm3WOJlfakWvKw/Ip9Rj904trEc8xMh7QDXIyK7+me7/wmpu
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="344691051"
 X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="344691025"
+   d="scan'208";a="344691051"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:29 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="805679866"
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="805679888"
 X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="805679866"
+   d="scan'208";a="805679888"
 Received: from lab-ah.igk.intel.com ([10.102.138.202])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:27 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:30 -0700
 From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Subject: [PATCH v8 0/2] drm/i915: Hugepage manager and test for MTL
-Date:   Wed, 26 Apr 2023 23:28:48 +0200
-Message-Id: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
+Date:   Wed, 26 Apr 2023 23:28:49 +0200
+Subject: [PATCH v8 2/2] drm/i915: Use correct huge page manager for MTL
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJCXSWQC/32PwY7CMAxEfwXljKskXULDif9AHEzrNpZoWjmhA
- qH++6Zcdk8cx6N543mrRMKU1Gn3VkILJ55iEc1+p9qAcSDgrmhlta31jz1AeAw0Y7mPPAhmAtM4
- j9jXBl2nSuyGieAmGNuwBTsZIfO8ObNQz89P2eVadC9T8YIQ/qsw1ppa66byxrtagwWMHVcpvDK
- f7xwfz4pjpnvVTuMGDZzyJK/PgOW4ob/8uhxBQ4/O6QP6xrX+/Me6ruv6CzEJP/kPAQAA
+Message-Id: <20230425-hugepage-migrate-v8-2-7868d54eaa27@intel.com>
+References: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
+In-Reply-To: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
 To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Jonathan Cavitt <jonathan.cavitt@intel.com>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -65,47 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset patches sent by Jonathan and Andi, with 
-addressed CI failures:
-1. Fixed checking alignment of 64K pages on both Pre-Gen12 and Gen12.
-2. Fixed start alignment of 2M pages.
+From: Jonathan Cavitt <jonathan.cavitt@intel.com>
 
-Regards
-Andrzej
+MTL currently uses gen8_ppgtt_insert_huge when managing huge pages.
+This is because MTL reports as not supporting 64K pages, or more
+accurately, the system that reports whether a platform has 64K pages
+reports false for MTL.  This is only half correct, as the 64K page support
+reporting system only cares about 64K page support for LMEM, which MTL
+doesn't have.
 
-Jonathan Cavitt (2):
-  drm/i915: Migrate platform-dependent mock hugepage selftests to live
-  drm/i915: Use correct huge page manager for MTL
+MTL should be using xehpsdv_ppgtt_insert_huge.  However, simply changing
+over to using that manager doesn't resolve the issue because MTL is
+expecting the virtual address space for the page table to be flushed after
+initialization, so we must also add a flush statement there.
 
-.../gpu/drm/i915/gem/selftests/huge_pages.c   | 88 +++++++++++++++----
- drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |  3 +-
- 2 files changed, 71 insertions(+), 20 deletions(-)
+Signed-off-by: Jonathan Cavitt <jonathan.cavitt@intel.com>
+Reviewed-by: Matthew Auld <matthew.auld@intel.com>
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+---
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Cc: intel-gfx@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Jonathan Cavitt <jonathan.cavitt@intel.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
+diff --git a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
+index 4daaa6f5566888..9c571185395f49 100644
+--- a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
++++ b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
+@@ -570,6 +570,7 @@ xehpsdv_ppgtt_insert_huge(struct i915_address_space *vm,
+ 			}
+ 		} while (rem >= page_size && index < max);
+ 
++		drm_clflush_virt_range(vaddr, PAGE_SIZE);
+ 		vma_res->page_sizes_gtt |= page_size;
+ 	} while (iter->sg && sg_dma_len(iter->sg));
+ }
+@@ -707,7 +708,7 @@ static void gen8_ppgtt_insert(struct i915_address_space *vm,
+ 	struct sgt_dma iter = sgt_dma(vma_res);
+ 
+ 	if (vma_res->bi.page_sizes.sg > I915_GTT_PAGE_SIZE) {
+-		if (HAS_64K_PAGES(vm->i915))
++		if (GRAPHICS_VER_FULL(vm->i915) >= IP_VER(12, 50))
+ 			xehpsdv_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
+ 		else
+ 			gen8_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
+
 -- 
-2.39.2
-
----
-Changes in v8:
-- described in patches
-- Link to v7: https://lore.kernel.org/r/20230425-hugepage-migrate-v7-0-fa6605a986c9@intel.com
-
----
-Jonathan Cavitt (2):
-      drm/i915: Migrate platform-dependent mock hugepage selftests to live
-      drm/i915: Use correct huge page manager for MTL
-
- drivers/gpu/drm/i915/gem/selftests/huge_pages.c | 106 ++++++++++++++++++------
- drivers/gpu/drm/i915/gt/gen8_ppgtt.c            |   3 +-
- 2 files changed, 83 insertions(+), 26 deletions(-)
----
-base-commit: 4d0066a1c0763d50b6fb017e27d12b081ce21b57
-change-id: 20230425-hugepage-migrate-1869aaf31a6d
-
-Best regards,
--- 
-Andrzej Hajda <andrzej.hajda@intel.com>
+2.34.1
