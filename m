@@ -2,197 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3826EF503
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142D06EF510
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240648AbjDZNGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38678 "EHLO
+        id S240998AbjDZNHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240839AbjDZNFk (ORCPT
+        with ESMTP id S241053AbjDZNGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:05:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6667061AF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682514276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fq4Od2HxM/Y6pUx1QLzBOFhnuHgYBugl3wErDAOLIqo=;
-        b=QCroCD7Lnt5snykDX+zVUKSGLXRrhiHxYiZ7RtAIoECGAcxni4sSNm3cKkhOmhPy4BxH0O
-        BHnL/v+TJeZy4sL9GNDJ8aZLMEMuGYoHPxJ+/mxq4Mvrxp92YzeijaQieJ2JOl7sd5gTys
-        kqcDGU5DKIC1UwnjpW++YfvuN3+BtlM=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-497-KwAhbL42OaOgpB4KvhhKMw-1; Wed, 26 Apr 2023 09:04:31 -0400
-X-MC-Unique: KwAhbL42OaOgpB4KvhhKMw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-95376348868so815208166b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:04:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682514269; x=1685106269;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fq4Od2HxM/Y6pUx1QLzBOFhnuHgYBugl3wErDAOLIqo=;
-        b=ENyfkvZF7Ijrs9b2Xk6ZcKjjCS4ReizVvCtRy+3M9vsrG2KUvWTOHtbDQKujXYJHLE
-         OYZ8Yq0EwBKqwvgQ9JFz9a2dggdETrOP7nidHrn+d1Z6CYjKMf5KdMG+us9YH5tdNBeu
-         BUF98QSXCSmB6v8pd9jSa+yHbcLsAhJnfOz7HPug+psQ2+E/aKJ5Mt+NVSIuiVvZ1/gC
-         xzpsSF+wPtwYaYtvWv5psKcXR2Xlu7falkeHXIfttw+ADFWvJrqVrroMUUGS8x1gvptN
-         lCXKojzlPVj5qF2NGQrjsKLsdNtShC9wzbTHmqyj0Uuusk7QdlNusHcTseFjbt4aaaSj
-         Zshg==
-X-Gm-Message-State: AAQBX9eKyzf9dvdMjjey+uWwH6gZ+pkQGlOtXwlV1wvBLBxrBAbEDYY8
-        xZWK001NZSaWEftAz+gvJwbAKgEYEUgP9ysmudni/XRp6dqCQFrnXK6TPeNKxhxKZO3YewGqXor
-        f1d8pqewlzzgj0CRTH37SNM4hfFNYj3k9
-X-Received: by 2002:a17:906:830d:b0:94e:b3a1:3ed9 with SMTP id j13-20020a170906830d00b0094eb3a13ed9mr20202178ejx.49.1682514269333;
-        Wed, 26 Apr 2023 06:04:29 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZWOopZTBlxSVKCxrbUqA87SO0sLZv3R9/ZOpeg+cX6/lPO2BB/fBduMntUiAVZDI4AZkb5yQ==
-X-Received: by 2002:a17:906:830d:b0:94e:b3a1:3ed9 with SMTP id j13-20020a170906830d00b0094eb3a13ed9mr20202159ejx.49.1682514268997;
-        Wed, 26 Apr 2023 06:04:28 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id mb17-20020a170906eb1100b00932fa67b48fsm8068863ejb.183.2023.04.26.06.04.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 06:04:28 -0700 (PDT)
-Message-ID: <2af933f1-1662-2c91-b4da-6e067a9a9389@redhat.com>
-Date:   Wed, 26 Apr 2023 15:04:27 +0200
+        Wed, 26 Apr 2023 09:06:50 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E91A6A7F;
+        Wed, 26 Apr 2023 06:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682514398; x=1714050398;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oVxuTR4A/wrlt9G6C/zKK3j09fIf1TBLj219Iy+IWg4=;
+  b=cZ1CJFmmJ8Tt1hKvS6cEQc1IySVLcvIP8wh6e41qv/0X4X/pgeThcTz3
+   cAl+qwWKE4AuVCW8PPHQVhgfRKMZqSZeACKslaB4RN8Z5x64l7dso3zoQ
+   r7rv6ov9YiWvOP0SDb3QF34n1Zs8xnF9Tq5pcZBo1Pf8EMGhMb6EoEIyZ
+   h6mufUH3JtMTZu/lpkxZFxaXLA1M0VIrILq4ZIk081Em7rzgVdxbSoJna
+   23x+i1Z3yNpjc9r2CNmQrsdnEbkAfddTQ3kVD3hV8nCu/ycfYIdH6vQmR
+   cMXTumocwcVs/+eIl800bI7Zo0Gg6d/da+fv1kDmcUalWcW+h+T2uKfz3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="349033774"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="349033774"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:06:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="783323577"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="783323577"
+Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 06:06:33 -0700
+Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1preqv-0000AU-0U;
+        Wed, 26 Apr 2023 13:06:33 +0000
+Date:   Wed, 26 Apr 2023 21:06:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+Message-ID: <202304262003.Lzpyh2BA-lkp@intel.com>
+References: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v11 01/14] HP BIOSCFG driver - Documentation
-Content-Language: en-US, nl
-To:     Jorge Lopez <jorgealtxwork@gmail.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas@t-8ch.de
-References: <20230420165454.9517-1-jorge.lopez2@hp.com>
- <20230420165454.9517-2-jorge.lopez2@hp.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230420165454.9517-2-jorge.lopez2@hp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jorge, Thomas,
+Hi Arseniy,
 
-Thank you both so much for all your work on this!
+kernel test robot noticed the following build errors:
 
-The userspace API of this looks like it is pretty much
-done now (after the discussed changes for
-the "Sure_Start" attribute), which is great.
+[auto build test ERROR on mtd/nand/next]
+[also build test ERROR on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I have one small remark below (inline).
+url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+patch link:    https://lore.kernel.org/r/20230426072455.3887717-1-AVKrasnov%40sberdevices.ru
+patch subject: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+config: i386-randconfig-a001-20230424 (https://download.01.org/0day-ci/archive/20230426/202304262003.Lzpyh2BA-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/3529f3465e99379489b59c035a8a0506c3756ef4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
+        git checkout 3529f3465e99379489b59c035a8a0506c3756ef4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/mtd/nand/raw/
 
-On 4/20/23 18:54, Jorge Lopez wrote:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304262003.Lzpyh2BA-lkp@intel.com/
 
-<snip>
+All error/warnings (new ones prefixed by >>):
 
-> diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> index 4cdba3477176..73d7b8fbc0b2 100644
-> --- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> +++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
-> @@ -22,6 +22,12 @@ Description:
->  			- integer: a range of numerical values
->  			- string
->  
-> +		HP specific types
-> +		-----------------
-> +			- ordered-list - a set of ordered list valid values
-> +			- sure-start - report audit logs read from BIOS
-> +
-> +
->  		All attribute types support the following values:
->  
->  		current_value:
-> @@ -126,6 +132,44 @@ Description:
->  					value will not be effective through sysfs until this rule is
->  					met.
->  
-> +		HP specific class extensions
-> +		------------------------------
-> +
-> +		On HP systems the following additional attributes are available:
-> +
-> +		"ordered-list"-type specific properties:
-> +
-> +		elements:
-> +					A file that can be read to obtain the possible
-> +					list of values of the <attr>. Values are separated using
-> +					semi-colon (``;``). The order individual elements are listed
-> +					according to their priority.  An Element listed first has the
-> +					highest priority. Writing the list in a different order to
-> +					current_value alters the priority order for the particular
-> +					attribute.
-> +
-> +		"sure-start"-type specific properties:
-> +
-> +		audit_log_entries:
-> +					A read-only file that returns the events in the log.
-> +					Values are separated using semi-colon (``;``)
-
-Looking at the documented format which seems to be 128 raw bytes per entry, I think
-that the "Values are separated using semi-colon (``;``)" line is not correct here
-and that line should not removed here ?
-
-But maybe I'm misunderstanding things here. Do you have an example
-of what catting (or "hexdump -C"-ing if binary)
-the "audit_log_entries" sysfs file looks like ? 
+>> drivers/mtd/nand/raw/nand_macronix.c:384:12: error: implicit declaration of function 'kmalloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+                     ^
+   drivers/mtd/nand/raw/nand_macronix.c:384:12: note: did you mean 'mm_alloc'?
+   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
+   extern struct mm_struct *mm_alloc(void);
+                            ^
+>> drivers/mtd/nand/raw/nand_macronix.c:384:10: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mtd/nand/raw/nand_macronix.c:437:2: error: implicit declaration of function 'kfree' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           kfree(dma_buf);
+           ^
+   1 warning and 2 errors generated.
 
 
+vim +/kmalloc +384 drivers/mtd/nand/raw/nand_macronix.c
 
-> +
-> +					Audit log entry format
-> +
-> +					Byte 0-15:   Requested Audit Log entry  (Each Audit log is 16 bytes)
-> +					Byte 16-127: Unused
-> +
-> +		audit_log_entry_count:
-> +					A read-only file that returns the number of existing audit log events available to be read.
-> +					Values are separated using comma (``,``)
-> +
-> +					[No of entries],[log entry size],[Max number of entries supported]
-> +
-> +					log entry size identifies audit log size for the current BIOS version.
-> +					The current size is 16 bytes but it can be to up to 128 bytes long
-> +					in future BIOS versions.
-> +
-> +
->  What:		/sys/class/firmware-attributes/*/authentication/
->  Date:		February 2021
->  KernelVersion:	5.11
+   366	
+   367	static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
+   368						loff_t offs_in_flash,
+   369						size_t len, size_t *retlen,
+   370						u_char *buf, bool write)
+   371	{
+   372		struct nand_chip *nand;
+   373		size_t bytes_handled;
+   374		unsigned long page;
+   375		off_t offs_in_page;
+   376		void *dma_buf;
+   377		int ret;
+   378	
+   379		/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
+   380		 * so allocate properly aligned memory for it. This is
+   381		 * needed because cross page accesses may lead to unaligned
+   382		 * buffer address for DMA.
+   383		 */
+ > 384		dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+   385		if (!dma_buf)
+   386			return -ENOMEM;
+   387	
+   388		nand = mtd_to_nand(mtd);
+   389		nand_select_target(nand, 0);
+   390	
+   391		ret = macronix_30lfxg18ac_otp_enable(nand);
+   392		if (ret)
+   393			goto out_otp;
+   394	
+   395		page = offs_in_flash;
+   396		/* 'page' will be result of division. */
+   397		offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
+   398		bytes_handled = 0;
+   399	
+   400		while (bytes_handled < len &&
+   401		       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
+   402			size_t bytes_to_handle;
+   403	
+   404			bytes_to_handle = min_t(size_t, len - bytes_handled,
+   405						MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
+   406						offs_in_page);
+   407	
+   408			if (write) {
+   409				memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
+   410				ret = nand_prog_page_op(nand, page, offs_in_page,
+   411							dma_buf, bytes_to_handle);
+   412			} else {
+   413				ret = nand_read_page_op(nand, page, offs_in_page,
+   414							dma_buf, bytes_to_handle);
+   415				if (!ret)
+   416					memcpy(&buf[bytes_handled], dma_buf,
+   417					       bytes_to_handle);
+   418			}
+   419			if (ret)
+   420				goto out_otp;
+   421	
+   422			bytes_handled += bytes_to_handle;
+   423			offs_in_page = 0;
+   424			page++;
+   425		}
+   426	
+   427		*retlen = bytes_handled;
+   428	
+   429	out_otp:
+   430		if (ret)
+   431			dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
+   432	
+   433		ret = macronix_30lfxg18ac_otp_disable(nand);
+   434		WARN(ret, "failed to leave OTP mode after %s\n",
+   435		     write ? "write" : "read");
+   436		nand_deselect_target(nand);
+ > 437		kfree(dma_buf);
+   438	
+   439		return ret;
+   440	}
+   441	
 
-<snip>
-
-> @@ -311,7 +364,7 @@ Description:
->  			==	=========================================
->  			0	All BIOS attributes setting are current
->  			1	A reboot is necessary to get pending BIOS
-> -			        attribute changes applied
-> +				attribute changes applied
->  			==	=========================================
->  
->  		Note, userspace applications need to follow below steps for efficient
-
-This seems like an unrelated whitespace change which
-has accidentally ended up in this patch.
-
-Regards,
-
-Hans
-
-
-p.s.
-
-I'll also read / catch up with all the comments on the actual implementation
-(patches 2-14) and I'll let you know if I have any remarks there.
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
