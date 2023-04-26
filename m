@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B566EF698
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E0C6EF69B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241261AbjDZOjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S241381AbjDZOl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241453AbjDZOju (ORCPT
+        with ESMTP id S241032AbjDZOl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:39:50 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5359FB;
-        Wed, 26 Apr 2023 07:39:49 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f3df30043so1155880866b.2;
-        Wed, 26 Apr 2023 07:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682519988; x=1685111988;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=U3fMS6vGtNlmEZteMKVTwMOKhjb7WLirh4B0WOh1xiU=;
-        b=QaFZNT6fNhNXKLHPDrFxEtroaaMbguLx43qCTMCyoUuNX2Ag1/Y92xZJp60AzURdk0
-         dxIvq0SjOBv97cdPwEHj5HPEtjE+doViBSeQpUIUJfXtiTet7PoNCHbF4/Bxl+KRHUvx
-         lV9lcl5lLTJuA0JaEITMtM1JVc5JF4oQTFpaTgB6MI4AJcR4RmkN+4Sae74M1c9J+vYv
-         Q8Hk2Cy60n0SpC7qfJWQt0QxAkhdQ+op2RcyIYqHLCU55iobl0ZthHflxPRdAU0oiEwL
-         lDCN0KToZa569MY6col+EPk0zJ3fs51uLh34iiD2xI9Cnh/kvF0cE6nJqing/uEwurKR
-         N1Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682519988; x=1685111988;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U3fMS6vGtNlmEZteMKVTwMOKhjb7WLirh4B0WOh1xiU=;
-        b=QJp3h7LOJuIhBRVO/A0fRCWNSexGVOhNVmTfwuk3mNtEf4q7q8bbQsc2QeuSajD0gS
-         tXwEywnmXrTz7dLc7yhjcOZIcdXmMjjN7C0+aquv3Y3aY7NrEByE10fMJqKCQygKH19G
-         eNDYsGo/d2FR3TJ+vMtX+HY654vTlAA8/uqHeXlP03tinTaK9i1dTm3AfwX6/Y4zE5L3
-         wi5XFVm3CkcjHOJWYFW3K9UGpHFajaX5W0QeH4PQVgJlqIr8KTQxzhod4t+eSW8JlWsk
-         1I+6L4p2+TNyK6Yvh40AChuIzbm9zsNq6WEHDs9pQT17HgrFWL1vkdqpU9nI9ejlt1ON
-         o8UA==
-X-Gm-Message-State: AAQBX9cjEFF41V0+ZxoLhCVgehvvXgpxVcz7pIPAUA7syK31X00/hx4/
-        CSizLAepxpvVNHZG3GnzxE8=
-X-Google-Smtp-Source: AKy350ZO3Dl/D/t3V1YrnB4ch7JxvOvlsOl56w/4tw57jx6R8bv580ZQXGKSR3kO9256Hh1y6aicIg==
-X-Received: by 2002:a17:907:8b87:b0:94f:21f3:b5f8 with SMTP id tb7-20020a1709078b8700b0094f21f3b5f8mr17218081ejc.21.1682519987596;
-        Wed, 26 Apr 2023 07:39:47 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id qt2-20020a170906ece200b0094e1344ddfdsm8232330ejb.34.2023.04.26.07.39.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 07:39:47 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 17:39:44 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 04/24] net: dsa: mt7530: properly support
- MT7531AE and MT7531BE
-Message-ID: <20230426143944.s5vmhloepa3yodrj@skbuf>
-References: <20230425082933.84654-1-arinc.unal@arinc9.com>
- <20230425082933.84654-5-arinc.unal@arinc9.com>
- <ZEfsCit0XX8zqUIJ@makrotopia.org>
- <ce681fac-5f00-f0fc-b2cf-89907c50ee7c@arinc9.com>
- <ZEkiIQZsspBlDyEn@makrotopia.org>
+        Wed, 26 Apr 2023 10:41:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998727280;
+        Wed, 26 Apr 2023 07:41:25 -0700 (PDT)
+Received: from [192.168.1.43] ([77.7.2.190]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mgvan-1qU1QJ17AT-00hOoH; Wed, 26 Apr 2023 16:41:18 +0200
+Message-ID: <62fa90f7-e465-8cd7-3007-dd5104bcabe5@metux.net>
+Date:   Wed, 26 Apr 2023 16:41:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Content-Language: tl
+To:     Hans Petter Selasky <hps@selasky.org>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        hverkuil@xs4all.nl
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <441a96cb-7dd1-0885-df64-933ebdb55e9e@selasky.org>
+ <0ec4becd05c49e8f0bf214fbd62208ea67c2b4c3.camel@collabora.com>
+ <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+In-Reply-To: <6fc0a0c6-a7c9-5350-9b9e-1ea9dab568d0@selasky.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZEkiIQZsspBlDyEn@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:Sa3AMuNG8WdeBgqUAVs2KtHI4Dk2mZJi+AcM13wq1T4mCJFlomF
+ Nl2J1o7G1HqDVOKgPbqJica18/CKR0OuBDRF+6eLtGcmORDgGiVrLYfLcgooFu/jbTWVcyQ
+ XuXbF2R7VwHpRO03zdFBo8wy7uBXwl7AeA6Y0bwvcz+diY1jwigdPI80Sg3b1OdZVlP7FsI
+ bdMm7mjNPGzjiE19k8uEg==
+UI-OutboundReport: notjunk:1;M01:P0:/CDVuJ8S2Lk=;NbIQR9K0/rzirW61wQVQ18ijocO
+ +dLHEb4xDdSZIS8LxMoivDw/r3EuIKPxjMmZNvSdMacL2D0W2HdFl0nyWFJgnhX7jETxETOCH
+ G+3t8FbpgIj7xE/8QqLkNGRwhFkVOGVEKaJFYvqcXbA2CbEVPtrv3ICdG7E5bac1wbGsUe5t4
+ XJTV8To8h0uid4CSsnf3RxT1tJLE7BQ+ClvmXoDr1yUggfL2MU+YTDL/FMLOMFJW6Zk2g5kGD
+ lJbLkUXJZAubHkKqChyALrO0/xIR0HRBKFPjC27VhHMzRnNzWEo0LuMWhNcny17aBrIBeuJn2
+ 3ZfW5RbYcF8U+OcNkLb+EE1WSfxSvB6mL1je1+cBwCd30Ah4oO4q+RM4+d1zHybeLBI6MLZ8/
+ bsRL3pYLU3/06OAVrmqqfaNM63TAdFBGGFepNcQONLZujuAyzT5cb+716ol85EdeDN+1a+Kgl
+ 95uFygGuhkyoyEmD4WauAyGOnKtwNPhptUlnfsHrvZbUekt1F7tHvAQ1IsqJK7odKEbhVANLE
+ /NBxlvMi5fcpSMhimVRcx0shw581807oQhoHzpmaChgK1/HTijHb0L3arxXOl0/nN6/7uiiRr
+ TiqKrXalWZXZHIocYfm6LbX8IjAjYRO4qoD7mSKvoxkpMOhraJLLMvrmJkHZfKRRCAwdzPQ1p
+ 7S+6Av1QkEjmmNmyXSaqfgxHSLeQrGERPDVb99hWOg==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 02:07:45PM +0100, Daniel Golle wrote:
-> On Wed, Apr 26, 2023 at 11:12:09AM +0300, Arınç ÜNAL wrote:
-> > On 25.04.2023 18:04, Daniel Golle wrote:
-> > > On Tue, Apr 25, 2023 at 11:29:13AM +0300, arinc9.unal@gmail.com wrote:
-> > > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > > 
-> > > > Introduce the p5_sgmii pointer to store the information for whether port 5
-> > > > has got SGMII or not.
-> > > 
-> > > The p5_sgmii your are introducing to struct mt7530_priv is a boolean
-> > > variable, and not a pointer.
-> > 
-> > I must've meant to say field.
-> 
-> Being just a single boolean variable also 'field' would not be the right
-> word here. We use 'field' as in 'bitfield', ie. usually disguised integer
-> types in which each bit has an assigned meaning.
+On 10.04.23 20:59, Hans Petter Selasky wrote:
 
-"field" is a perfectly legal name for a member of a C structure.
-https://en.wikipedia.org/wiki/Struct_(C_programming_language)
-Not to be confused with bitfield.
+> Adding a dependency to build the Rust compiler even to build one or two 
+> V4L2 device drivers, would mean a lot to my small hselasky/webcamd 
+> project. It already has to fetch a copy of the Linux kernel, and now has 
+> to bootstrap Rust from stage0 to stageN.
+
+Did it ever cross your mind, being a bit thankful that you can use our
+Linux code for your BSD project ?
+
+Linux kernel code was never meant to be used anywhere outside the Linux
+kernel. It's cool to see that such things are possible, but that's
+really out of scope here.
+
+> I personally say no. It's like 
+> XCode unfortunately. I download 100's of GBytes of upgrades to XCode, 
+> and barely upload one millionth worth of code back to Apple. It's not 
+> good. Software developers shouldn't have to download more stuff than 
+> they upload?
+
+Where does the connection to Xcode come from ?
+
+> Why not move Linux-V4L2 drivers to user-space? 
+
+Feel free to send patches.
+
+>> The reality is that it isn't up to anyone to say who should or
+>> shouldn't become
+>> a kernel developer. The resources are out there for anyone to try, and
+>> if
+>> maintainers take in their patches, then that's the end of the story.
+> The GPLv2 license should not be the only reason behind Linux developers 
+> putting drivers in the kernel-space. I think moving more stuff to 
+> user-space would benefit a greater purpose.
+
+I don't recall any specific case for the license being the primary
+reason for putting someting into the kernel instead of userland.
+
+If you want userland v4l drivers: feel free to send patches. Those
+should also be capable of directly passing around HW buffers between
+separate devices (eg. fg -> codec -> display), which often is
+performance critical in embedded devices.
+
+
+--mtx
+
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
