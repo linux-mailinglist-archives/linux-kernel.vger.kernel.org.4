@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4F86EFD11
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8266EFD15
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239994AbjDZWJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S239997AbjDZWML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239972AbjDZWJK (ORCPT
+        with ESMTP id S239350AbjDZWMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:09:10 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA962D56;
-        Wed, 26 Apr 2023 15:09:10 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b4e5fdb1eso9035132b3a.1;
-        Wed, 26 Apr 2023 15:09:10 -0700 (PDT)
+        Wed, 26 Apr 2023 18:12:09 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2AF2715;
+        Wed, 26 Apr 2023 15:12:08 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24736790966so6458042a91.2;
+        Wed, 26 Apr 2023 15:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682546949; x=1685138949;
+        d=gmail.com; s=20221208; t=1682547128; x=1685139128;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NxpYnE1u1Q2bjTfyL3mlyd6uQYcX9SBjAJDlWJodPlE=;
-        b=ecBuUF2WKdDeRURQIP2jve85Tdg403UVVTg28R8vqv1Z+iszu5qmMk+RirueEwDrFN
-         4++zFgmKaLm2nUA6Uhodv1/eLdrlDRzkgqnox1hs5J9itu0epPwp0GJRI6H68YMjLPf9
-         LvF0Gdf7zj7XeXbl5FIW+qwP/3SEdPy7W8gPX/XEHmTdiTKwyaeZiVS+ZFVy8hpE1Euo
-         nHNWMlHgiLQ/gYrsgqIHgmwrm8zfzBM02upCm/ZSBgZfD8YwrQ3CwLX1h+wyQbcoosph
-         6tOMuWt4YZCxPhVs5RlFpYFQqhZCwwBuVXoV3w9N8aFmHif2ofr5DZrY9vSM5vs7foCe
-         DbEw==
+        bh=RIUbRme5WeXEWyWjYTXHJNNDnTyj3IXPcZSGHGz56i8=;
+        b=CLQ+30qUkBPVcFHYRBgpYd2UbY8V0opPaoXSXXx3br1eyHuexHAg5pFU1NxUP0JLOt
+         nwlpT2YC/7JRoFm7iC6banfBljSZjLObYFXQyauAhgvlYkbVwi0v+yTQmB3TIlldtrel
+         zFEAngACpD6niCi3OcgYI+HcjpBkY5A2NJWnYhd80ie86pdbxcwqEV7iGMAnSBs7yJNa
+         0z0QggjDoq6fod9ZKdG2I8CIWQv855ksEJHeXatgwZx9asvUAu2FrgCzC8zneShMJUei
+         zVnQO75ntYnRZiRPYScg5Bt2J0P0MZpqmy/O6kL28TFJpaGfZsQyCByMgwvx9CSnRlZx
+         1s8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682546949; x=1685138949;
+        d=1e100.net; s=20221208; t=1682547128; x=1685139128;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NxpYnE1u1Q2bjTfyL3mlyd6uQYcX9SBjAJDlWJodPlE=;
-        b=B2bWX9amsBtLPGI/Kb80+PPJJ6hcsmEG1guTsi6p/06QHOQkcL2Ylj6aE2ktXM4AnY
-         7ggbOIem8Nd82rGUAIKujzKSqZmf9InA1tHuea4kfz0o/gi6pR3ly+MAQiJYarXlQJwd
-         FskXrSD1rXZaeN0RX9YToS0s+JyViqfgkqkzHuaGO+E4poq6ojh7Wm/+4mhnEHHE6x9T
-         wYWcsXQuXGsXKOywf4X4+b5Lx57PTMJsLTyed7TAjOMiQ+quYsI3YDmn0Tm6rIg5oRV5
-         fzYqWfH8ERgQfi2nrmgzxDGxQzwFdiUNP+jUliT6yNrqaZt00fSX6Crsuo/QU5ElkNw0
-         4UNA==
-X-Gm-Message-State: AAQBX9cKMve9PGEQ4tjnQt67h9MKFZ3OhGMw202zDryyAkYdSBbDQPCM
-        Nx4/oBO/CHsH/QvGnbm5aZSpyp9R/bs=
-X-Google-Smtp-Source: AKy350ao+O9KfxqiWpxItYiM7+VJzjgeiu3hovDCVESstDcqw4QKVA0p2GgoCsmh0O9uOBMaM7H/qQ==
-X-Received: by 2002:a05:6a21:8dc5:b0:f0:e3ed:469a with SMTP id ti5-20020a056a218dc500b000f0e3ed469amr19873769pzb.55.1682546949331;
-        Wed, 26 Apr 2023 15:09:09 -0700 (PDT)
+        bh=RIUbRme5WeXEWyWjYTXHJNNDnTyj3IXPcZSGHGz56i8=;
+        b=I4/bN/8OctTdjAAirjDu1kOsIKIX+4JMPvef94j4jAfTt0vSgQBO8jBsyJJ7I1jcns
+         qFh/vMz3YeLX/hRqmzKKUBrZWFfZyj4q6kgtpOJesRWfuyGCJoqoSAGQHWmwhOHROtaD
+         aKR2psM3wFVcmUi/8KCjLcqfdcZaVc9at/6rMIGmrRLuO0Jtt1mlln04enDkGqRVDvYh
+         QGBSNJv21qxzg8VuZSPPmuFRf05QoI6Xq2k6V2zz3eEgaTeR8Cvmk5PWLUM13BX6RtCa
+         OaLYTT+k9q1dDStfrTaRmxARthB4nVuGLAIbGikrk2Y7o0YRR+vIwPVulfK0Tjl8ABut
+         aV8g==
+X-Gm-Message-State: AAQBX9fiAJVh5W3JxlJwUA21JgqdiJBC23LUvUA6kjqakZuK3n7kb2qa
+        7JmzxKffDhGVdcgbdyqooKQ=
+X-Google-Smtp-Source: AKy350bmkN14WoVa088epc95MoWzxpiaLXkJXl0vRxKbBZbV7AN7huwcSea/WPiXKrLJixUyJdx/6A==
+X-Received: by 2002:a17:90a:a381:b0:247:35f8:81d2 with SMTP id x1-20020a17090aa38100b0024735f881d2mr22758564pjp.29.1682547127529;
+        Wed, 26 Apr 2023 15:12:07 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:1976])
-        by smtp.gmail.com with ESMTPSA id b6-20020a63d806000000b005143d3fa0e0sm10245458pgh.2.2023.04.26.15.09.08
+        by smtp.gmail.com with ESMTPSA id f3-20020a170902ab8300b0019a97a4324dsm10415583plr.5.2023.04.26.15.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 15:09:08 -0700 (PDT)
+        Wed, 26 Apr 2023 15:12:07 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 26 Apr 2023 12:09:07 -1000
+Date:   Wed, 26 Apr 2023 12:12:05 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, rostedt@goodmis.org, riel@surriel.com
 Subject: Re: [PATCH RFC rcu] Stop rcu_tasks_invoke_cbs() from using
  never-online CPUs
-Message-ID: <ZEmhAzUMnQ1rP2YU@slm.duckdns.org>
+Message-ID: <ZEmhtdxpelt5jxAu@slm.duckdns.org>
 References: <83d037d1-ef12-4b31-a7b9-7b1ed6c3ae42@paulmck-laptop>
- <ZEmBy0H5T5vQJDUW@slm.duckdns.org>
- <1713f8f6-88d6-41f1-bbc6-045b2e017289@paulmck-laptop>
- <ZEmYFLKspo-rhyp4@slm.duckdns.org>
- <c4d39cb7-dbb7-44ad-b90e-71655bdbefd1@paulmck-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c4d39cb7-dbb7-44ad-b90e-71655bdbefd1@paulmck-laptop>
+In-Reply-To: <83d037d1-ef12-4b31-a7b9-7b1ed6c3ae42@paulmck-laptop>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -79,25 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Paul.
-
-On Wed, Apr 26, 2023 at 02:55:04PM -0700, Paul E. McKenney wrote:
-> But if the call_rcu_tasks_*() code detects too much lock contention on
-> CPU 0's queue, which indicates that very large numbers of callbacks are
-> being queued, it switches to per-CPU mode.  In which case, we are likely
-> to have lots of callbacks on lots of queues, and in that case we really
-> want to invoke them concurrently.
+On Wed, Apr 26, 2023 at 10:26:38AM -0700, Paul E. McKenney wrote:
+> The rcu_tasks_invoke_cbs() relies on queue_work_on() to silently fall
+> back to WORK_CPU_UNBOUND when the specified CPU is offline.  However,
+> the queue_work_on() function's silent fallback mechanism relies on that
+> CPU having been online at some time in the past.  When queue_work_on()
+> is passed a CPU that has never been online, workqueue lockups ensue,
+> which can be bad for your kernel's general health and well-being.
 > 
-> Then if a later grace period finds that there are no more callbacks, it
-> switches back to CPU-0 mode.  So this extra workqueue overhead should
-> happen only on systems with sparse cpu_online_masks that are under heavy
-> call_rcu_tasks_*() load.
+> This commit therefore checks whether a given CPU is currently online,
+> and, if not substitutes WORK_CPU_UNBOUND in the subsequent call to
+> queue_work_on().  Why not simply omit the queue_work_on() call entirely?
+> Because this function is flooding callback-invocation notifications
+> to all CPUs, and must deal with possibilities that include a sparse
+> cpu_possible_mask.
+> 
+> Fixes: d363f833c6d88 rcu-tasks: Use workqueues for multiple rcu_tasks_invoke_cbs() invocations
+> Reported-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+...
+> +		// If a CPU has never been online, queue_work_on()
+> +		// objects to queueing work on that CPU.  Approximate a
+> +		// check for this by checking if the CPU is currently online.
+> +
+> +		cpus_read_lock();
+> +		cpuwq1 = cpu_online(cpunext) ? cpunext : WORK_CPU_UNBOUND;
+> +		cpuwq2 = cpu_online(cpunext + 1) ? cpunext + 1 : WORK_CPU_UNBOUND;
+> +		cpus_read_unlock();
+> +
+> +		// Yes, either CPU could go offline here.  But that is
+> +		// OK because queue_work_on() will (in effect) silently
+> +		// fall back to WORK_CPU_UNBOUND for any CPU that has ever
+> +		// been online.
 
-I still wonder whether it can be solved by simply switching to unbound
-workqueues instead of implementing custom load-spreading mechanism. We'd be
-basically asking the scheduler to what it thinks is best instead of trying
-to make manual CPU placement decisions. That said, as a fix, the original
-patch looks fine to me. Gonna go ack that.
+Looks like cpus_read_lock() isn't protecting anything really.
+
+> +		queue_work_on(cpuwq1, system_wq, &rtpcp_next->rtp_work);
+>  		cpunext++;
+>  		if (cpunext < smp_load_acquire(&rtp->percpu_dequeue_lim)) {
+>  			rtpcp_next = per_cpu_ptr(rtp->rtpcpu, cpunext);
+> -			queue_work_on(cpunext, system_wq, &rtpcp_next->rtp_work);
+> +			queue_work_on(cpuwq2, system_wq, &rtpcp_next->rtp_work);
+
+As discussed in the thread, I kinda wonder whether just using an unbound
+workqueue would be sufficient but as a fix this looks good to me.
+
+Acked-by: Tejun Heo <tj@kernel.org>
 
 Thanks.
 
