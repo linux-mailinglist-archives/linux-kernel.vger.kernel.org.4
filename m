@@ -2,212 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8CD6EEB29
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F7F6EEB2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237883AbjDZABU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S237909AbjDZABm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237873AbjDZABR (ORCPT
+        with ESMTP id S237906AbjDZABk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:01:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2342B217;
-        Tue, 25 Apr 2023 17:01:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DD39631C7;
-        Wed, 26 Apr 2023 00:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37ECC4339B;
-        Wed, 26 Apr 2023 00:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682467275;
-        bh=65K7Cfyen6bnf2mZnH4Di3GHXwOFItB8erJ//utGX5U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PLK2dHWsdZkgzzxryFF1SLQDynepiILESN5cZIFwk1wqcAGCwINS41doy1UfEqGBZ
-         2gZITqVGzXynLyWmpSzuK3aFFauMJ+mTTF4X1TBmEAbvEHiOIQbCifJGjkCnc8BoRC
-         awFdwd87wFxL8+rl3xFhvPG8l9GhHwJsAwpvyazPMjiiO6dcIdKA/HPDZxKQFJr9nt
-         10OOn2eSR3TRzjtA7L7NnRhCha6A4MmzPy8TiwD+GVEaYj7Aw6qoUq/O1ulOOliOo2
-         9R3el/c/1n3GZnnC4EF1V5YZyYbXkyrROsv6GpDvvwE/nUrH7LZ53319EmG/l9RI41
-         Pjao9J9EWSHPg==
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-54fe0146b01so76924537b3.3;
-        Tue, 25 Apr 2023 17:01:14 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cD7cUGhWiUGGdsBoPfM22iVKC8oo7QSIMxqvApd4YuEcq6OTbM
-        tVMgWe79BYfk7Wql4LvvZSuIFSyL77B6B3VnVZU=
-X-Google-Smtp-Source: AKy350bqhG4b57DBoF/DhuGpuedwoIq9kgM3yX7+amLnkF3rSUHq1JlM73TuDB5N4DEWyuDuFaUh2eLIqE23miJEgUs=
-X-Received: by 2002:a0d:db47:0:b0:54f:ba89:225d with SMTP id
- d68-20020a0ddb47000000b0054fba89225dmr12104461ywe.19.1682467274086; Tue, 25
- Apr 2023 17:01:14 -0700 (PDT)
+        Tue, 25 Apr 2023 20:01:40 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEAE17DCB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:01:38 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50847469a7fso9422318a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682467297; x=1685059297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yTdc9DJ14HbNnnfxarhYVsLnqLsfg9vMdDLB5FChyxE=;
+        b=T2u6R7p0/3Naz9CpQHHIiQlXKSa/8shAFvj+JmuSUz71hjyl/B7wfyjWpKY2MSwt9X
+         kxiSDY2DP8qtEX0Yr4FIsYI2hg7SSG7pTRcabKuDw80MFxmROsrTI++g1HtIGdhFzmID
+         vV+CyugLT6r83uuMVEXW1xXRZqH+T9Wkm1WSrxGD5YEIhPe0nETPbDe1fy8Kt83zxaa+
+         q/vJVVVrSwfux57up5piUclqlR84rIcI5jwSpigbe5uK1sYaZLNbRQ3UUxoJP4iZUv1H
+         ICuzx0Fk90LCu7cjfqcqSSJXvCxy7j3Fzn070mx6aJRI4ndd8TQO64D0zX7Gui2YHRlf
+         s23Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682467297; x=1685059297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yTdc9DJ14HbNnnfxarhYVsLnqLsfg9vMdDLB5FChyxE=;
+        b=NfHLolh1gsi2LM4R08JkwYmiEQwbJYq75h6bHMY/Eq/cLv3rTnJfg0EBROmO7XLwuE
+         98q0LGdZeQ+ixmBcqt42IRoU1kRrwDqiU1faM6x349VV+poMFzIzLRGcpQvwGbwY+h1n
+         RE/DjwBBAzMyxfOkWnZixBf7wQWfb/b/MHTQHeH4luF0MVDrLBZ++couTx3p5g3ncSV6
+         0+FU61+kR9Lz7QtSYPqntc2aDqRpC1itBhBPWskzGLJxTrd7YOtAWvTwoD/cdQXmysHd
+         tFWOqBxllvC5Qi4v0IWF/4HyKKjmOFqfsOtP5FRlrJ1yuj2rSXuRHWaSDYQ2UnFTLmwQ
+         vyIg==
+X-Gm-Message-State: AAQBX9fW9QcxQgXlmC+LfqZYFahl8KdGAb5TiQxW1cURT24R/iJ5PHSF
+        pDXKn+pH11sFgKColB3mqOEXRnEA2LPLJbiUCvki7w==
+X-Google-Smtp-Source: AKy350Yi+SP1ungFzVgkmrReJnEHkZSbkfMXXsoAkLVpKsdFjozoiLrSA2Mv5lSGeMBCu/kUCxwNeQ==
+X-Received: by 2002:a17:907:8b87:b0:94f:21f3:b5f8 with SMTP id tb7-20020a1709078b8700b0094f21f3b5f8mr14879847ejc.21.1682467296852;
+        Tue, 25 Apr 2023 17:01:36 -0700 (PDT)
+Received: from [172.23.2.4] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id op4-20020a170906bce400b0094f39379230sm7381550ejb.163.2023.04.25.17.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 17:01:36 -0700 (PDT)
+Message-ID: <41d74c67-3d66-a363-f888-ee7763c76495@linaro.org>
+Date:   Wed, 26 Apr 2023 03:01:35 +0300
 MIME-Version: 1.0
-References: <20230218003323.2322580-11-ericvh@kernel.org> <ZCEGmS4FBRFClQjS@7e9e31583646>
- <7686c810-4ed6-9e3a-3714-8b803e2d3c46@wanadoo.fr>
-In-Reply-To: <7686c810-4ed6-9e3a-3714-8b803e2d3c46@wanadoo.fr>
-From:   Eric Van Hensbergen <ericvh@kernel.org>
-Date:   Tue, 25 Apr 2023 17:01:03 -0700
-X-Gmail-Original-Message-ID: <CAFkjPT=-EvCf1HKT2-k73G4SVBwRDp=YtvfwhNAcjv6BzS4f9Q@mail.gmail.com>
-Message-ID: <CAFkjPT=-EvCf1HKT2-k73G4SVBwRDp=YtvfwhNAcjv6BzS4f9Q@mail.gmail.com>
-Subject: Re: [PATCH v5] fs/9p: remove writeback fid and fix per-file modes
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     v9fs-developer@lists.sourceforge.net, asmadeus@codewreck.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 04/21] drm/msm/dpu: Reindent REV_7xxx interrupt masks
+ with tabs
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org>
+ <20230411-dpu-intf-te-v3-4-693b17fe6500@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-dpu-intf-te-v3-4-693b17fe6500@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I swear I fixed that, must have been one of my fixes got dropped in
-the process of churning over this patch.  I'm quite concerned that
-this is coming up during the merge window because I'd really rather
-not punt this patch series another two months.  I'm going to apply the
-fix as an additional patch which hopefully Linus will accept with the
-rest of the series.
+On 26/04/2023 02:05, Marijn Suijten wrote:
+> Use tabs for consistency with the other interrupt register definitions,
+> rather than spaces.
+> 
+> Fixes: ed6154a136e4 ("drm/msm/disp/dpu1: add intf offsets for SC7280 target")
+> Fixes: 89688e2119b2 ("drm/msm/dpu: Add more of the INTF interrupt regions")
+> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
 
-On Tue, Apr 25, 2023 at 12:11=E2=80=AFAM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> Le 27/03/2023 =C3=A0 04:59, Eric Van Hensbergen a =C3=A9crit :
-> > This patch removes the creating of an additional writeback_fid
-> > for opened files.  The patch addresses problems when files
-> > were opened write-only or getattr on files with dirty caches.
-> >
-> > This patch also incorporates information about cache behavior
-> > in the fid for every file.  This allows us to reflect cache
-> > behavior from mount flags, open mode, and information from
-> > the server to inform readahead and writeback behavior.
-> >
-> > This includes adding support for a 9p semantic that qid.version=3D=3D0
-> > is used to mark a file as non-cachable which is important for
-> > synthetic files.  This may have a side-effect of not supporting
-> > caching on certain legacy file servers that do not properly set
-> > qid.version.  There is also now a mount flag which can disable
-> > the qid.version behavior.
-> >
-> > Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
-> > ---
-> >   fs/9p/fid.c            | 48 +++++++++-------------
-> >   fs/9p/fid.h            | 33 ++++++++++++++-
-> >   fs/9p/v9fs.h           |  1 -
-> >   fs/9p/vfs_addr.c       | 22 +++++-----
-> >   fs/9p/vfs_file.c       | 91 ++++++++++++++---------------------------=
--
-> >   fs/9p/vfs_inode.c      | 45 +++++++--------------
-> >   fs/9p/vfs_inode_dotl.c | 48 +++++++++-------------
-> >   fs/9p/vfs_super.c      | 33 ++++-----------
-> >   8 files changed, 135 insertions(+), 186 deletions(-)
-> >
->
-> Hi,
->
-> this patch has already reached -next, but there is some spurious code.
->
-> As, I'm not sure what the real intent is, I prefer to reply here instead
-> of sending a patch.
->
->
-> [...]
->
-> > @@ -817,9 +814,14 @@ v9fs_vfs_atomic_open(struct inode *dir, struct den=
-try *dentry,
-> >
-> >       v9ses =3D v9fs_inode2v9ses(dir);
-> >       perm =3D unixmode2p9mode(v9ses, mode);
-> > -     fid =3D v9fs_create(v9ses, dir, dentry, NULL, perm,
-> > -                             v9fs_uflags2omode(flags,
-> > -                                             v9fs_proto_dotu(v9ses)));
-> > +     p9_omode =3D v9fs_uflags2omode(flags, v9fs_proto_dotu(v9ses));
-> > +
-> > +     if ((v9ses->cache >=3D CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)=
-) {
-> > +             p9_omode =3D (p9_omode & !P9_OWRITE) | P9_ORDWR;
->
-> This code looks strange.
-> P9_OWRITE is 0x01, so !P9_OWRITE is 0.
-> So the code is equivalent to "p9_omode =3D P9_ORDWR;"
->
-> Is it what is expexted?
->
-> Maybe
->         p9_omode =3D (p9_omode & ~P9_OWRITE) | P9_ORDWR;
-> ?
->
-> > +             p9_debug(P9_DEBUG_CACHE,
-> > +                     "write-only file with writeback enabled, creating=
- w/ O_RDWR\n");
-> > +     }
-> > +     fid =3D v9fs_create(v9ses, dir, dentry, NULL, perm, p9_omode);
-> >       if (IS_ERR(fid)) {
-> >               err =3D PTR_ERR(fid);
-> >               goto error;
->
-> [...]
->
-> > diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
-> > index a28eb3aeab29..4b9488cb7a56 100644
-> > --- a/fs/9p/vfs_inode_dotl.c
-> > +++ b/fs/9p/vfs_inode_dotl.c
-> > @@ -232,12 +232,12 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, stru=
-ct dentry *dentry,
-> >       int err =3D 0;
-> >       kgid_t gid;
-> >       umode_t mode;
-> > +     int p9_omode =3D v9fs_open_to_dotl_flags(flags);
-> >       const unsigned char *name =3D NULL;
-> >       struct p9_qid qid;
-> >       struct inode *inode;
-> >       struct p9_fid *fid =3D NULL;
-> > -     struct v9fs_inode *v9inode;
-> > -     struct p9_fid *dfid =3D NULL, *ofid =3D NULL, *inode_fid =3D NULL=
-;
-> > +     struct p9_fid *dfid =3D NULL, *ofid =3D NULL;
-> >       struct v9fs_session_info *v9ses;
-> >       struct posix_acl *pacl =3D NULL, *dacl =3D NULL;
-> >       struct dentry *res =3D NULL;
-> > @@ -282,14 +282,19 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, stru=
-ct dentry *dentry,
-> >       /* Update mode based on ACL value */
-> >       err =3D v9fs_acl_mode(dir, &mode, &dacl, &pacl);
-> >       if (err) {
-> > -             p9_debug(P9_DEBUG_VFS, "Failed to get acl values in creat=
- %d\n",
-> > +             p9_debug(P9_DEBUG_VFS, "Failed to get acl values in creat=
-e %d\n",
-> >                        err);
-> >               goto out;
-> >       }
-> > -     err =3D p9_client_create_dotl(ofid, name, v9fs_open_to_dotl_flags=
-(flags),
-> > -                                 mode, gid, &qid);
-> > +
-> > +     if ((v9ses->cache >=3D CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)=
-) {
-> > +             p9_omode =3D (p9_omode & !P9_OWRITE) | P9_ORDWR;
->
-> Same here.
->
-> CJ
->
-> > +             p9_debug(P9_DEBUG_CACHE,
-> > +                     "write-only file with writeback enabled, creating=
- w/ O_RDWR\n");
-> > +     }
-> > +     err =3D p9_client_create_dotl(ofid, name, p9_omode, mode, gid, &q=
-id);
-> >       if (err < 0) {
-> > -             p9_debug(P9_DEBUG_VFS, "p9_client_open_dotl failed in cre=
-at %d\n",
-> > +             p9_debug(P9_DEBUG_VFS, "p9_client_open_dotl failed in cre=
-ate %d\n",
-> >                        err);
-> >               goto out;
-> >       }
->
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+-- 
+With best wishes
+Dmitry
+
