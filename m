@@ -2,139 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0CEE6EF04A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41986EF058
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240114AbjDZIcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 04:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S239663AbjDZIjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 04:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbjDZIca (ORCPT
+        with ESMTP id S229627AbjDZIjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 04:32:30 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649E13AB0;
-        Wed, 26 Apr 2023 01:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1682497949; x=1714033949;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0iMjOB5JdJg/MykZ3p5xH1eehG9iZBRm7jiw5T8R1hQ=;
-  b=soB+lMKoARApxY0xEdHtWX/EoZOkbcQh8Yayr84JlifKasoDzsF9PpzO
-   SD6F4lXrQ9LA30ZK1e16WSma/nmZyn/3Szx6YoJ88/yar+Xc1/LIgFR6P
-   keyYFu25fctQSVwTQjbSVw4eZZ5VV10ShUXyDOeTd+d2yHLUdiOAM3uBs
-   w=;
-X-IronPort-AV: E=Sophos;i="5.99,227,1677542400"; 
-   d="scan'208";a="1126070119"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:32:12 +0000
-Received: from EX19MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-f323d91c.us-west-2.amazon.com (Postfix) with ESMTPS id 02011415A4;
-        Wed, 26 Apr 2023 08:32:11 +0000 (UTC)
-Received: from EX19D008UEC002.ant.amazon.com (10.252.135.242) by
- EX19MTAUEB002.ant.amazon.com (10.252.135.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 26 Apr 2023 08:32:11 +0000
-Received: from EX19MTAUEA001.ant.amazon.com (10.252.134.203) by
- EX19D008UEC002.ant.amazon.com (10.252.135.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 26 Apr 2023 08:32:11 +0000
-Received: from dev-dsk-abusse-1c-9fba1bbe.eu-west-1.amazon.com (10.13.253.110)
- by mail-relay.amazon.com (10.252.134.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26 via Frontend Transport; Wed, 26 Apr 2023 08:32:10 +0000
-From:   Anselm Busse <abusse@amazon.com>
-CC:     <dwmw@amazon.co.uk>, <hborghor@amazon.de>, <sironi@amazon.de>,
-        "Anselm Busse" <abusse@amazon.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] KVM: x86: Add a vCPU stat for #AC exceptions
-Date:   Wed, 26 Apr 2023 08:26:01 +0000
-Message-ID: <20230426082601.85372-1-abusse@amazon.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 26 Apr 2023 04:39:14 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDCC3C1F;
+        Wed, 26 Apr 2023 01:39:13 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33Q8d4uM116076;
+        Wed, 26 Apr 2023 03:39:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682498344;
+        bh=mbfL/rqfS3oPdl/DM6chwFP3C1ZthtsNfud9f4nprGQ=;
+        h=From:To:CC:Subject:Date;
+        b=Beqc1wD55xw7sq08Y1ugwSkfnoXN1QCwVQo6TSMud4+mMTenbw1LSOADNBEuyrUpb
+         B5X+mt3WPLdRvssw85lsQTDohr98y5el6KHjgRVJjdGpl6sGJ301ZJwQFRjrevtkwf
+         qR21UVF5Dk/YLBJLk0yshdrxDmiPnDxTfYSlNpPo=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33Q8d4Aq121315
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 03:39:04 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 26
+ Apr 2023 03:39:04 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 26 Apr 2023 03:39:04 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33Q8d05b023883;
+        Wed, 26 Apr 2023 03:39:01 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <peter.ujfalusi@gmail.com>, <vkoul@kernel.org>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <vigneshr@ti.com>, <s-vadapalli@ti.com>
+Subject: [RFC PATCH] dmaengine: ti: k3-psil-j721s2: Add PSI-L thread map for main CPSW2G
+Date:   Wed, 26 Apr 2023 14:09:00 +0530
+Message-ID: <20230426083900.102229-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a KVM vCPU stat that reflects the number of #AC
-exceptions caused by a guest. This improves the identification and
-debugging of issues that are possibly caused by guests triggering
-split-locks and allows more insides compared to the current situation
-of having only a warning printed when an #AC exception is raised.
+From: Kishon Vijay Abraham I <kishon@ti.com>
 
-Signed-off-by: Anselm Busse <abusse@amazon.com>
+Add PSI-L thread map for main CPSW2G.
+
+Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- arch/x86/include/asm/kvm_host.h | 1 +
- arch/x86/kvm/vmx/vmx.c          | 2 ++
- arch/x86/kvm/x86.c              | 1 +
- 3 files changed, 4 insertions(+)
+ drivers/dma/ti/k3-psil-j721s2.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 808c292ad3f4..b4ab719fbc69 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1523,6 +1523,7 @@ struct kvm_vcpu_stat {
- 	u64 preemption_other;
- 	u64 guest_mode;
- 	u64 notify_window_exits;
-+	u64 split_lock_exceptions;
- };
- 
- struct x86_instruction_info;
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index d2d6e1b6c788..8f48fd8ddead 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5309,6 +5309,8 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
- 		kvm_run->debug.arch.exception = ex_no;
- 		break;
- 	case AC_VECTOR:
-+		vmx->vcpu.stat.split_lock_exceptions++;
-+
- 		if (vmx_guest_inject_ac(vcpu)) {
- 			kvm_queue_exception_e(vcpu, AC_VECTOR, error_code);
- 			return 1;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 3d852ce84920..416a1ed6c423 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -297,6 +297,7 @@ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
- 	STATS_DESC_COUNTER(VCPU, preemption_other),
- 	STATS_DESC_IBOOLEAN(VCPU, guest_mode),
- 	STATS_DESC_COUNTER(VCPU, notify_window_exits),
-+	STATS_DESC_COUNTER(VCPU, split_lock_exceptions),
- };
- 
- const struct kvm_stats_header kvm_vcpu_stats_header = {
+diff --git a/drivers/dma/ti/k3-psil-j721s2.c b/drivers/dma/ti/k3-psil-j721s2.c
+index a488c2250623..1d5430fc5724 100644
+--- a/drivers/dma/ti/k3-psil-j721s2.c
++++ b/drivers/dma/ti/k3-psil-j721s2.c
+@@ -99,6 +99,8 @@ static struct psil_ep j721s2_src_ep_map[] = {
+ 	PSIL_PDMA_XY_PKT(0x461d),
+ 	PSIL_PDMA_XY_PKT(0x461e),
+ 	PSIL_PDMA_XY_PKT(0x461f),
++	/* MAIN_CPSW2G */
++	PSIL_ETHERNET(0x4640),
+ 	/* PDMA_USART_G0 - UART0-1 */
+ 	PSIL_PDMA_XY_PKT(0x4700),
+ 	PSIL_PDMA_XY_PKT(0x4701),
+@@ -161,6 +163,15 @@ static struct psil_ep j721s2_dst_ep_map[] = {
+ 	PSIL_ETHERNET(0xf005),
+ 	PSIL_ETHERNET(0xf006),
+ 	PSIL_ETHERNET(0xf007),
++	/* MAIN_CPSW2G */
++	PSIL_ETHERNET(0xc640),
++	PSIL_ETHERNET(0xc641),
++	PSIL_ETHERNET(0xc642),
++	PSIL_ETHERNET(0xc643),
++	PSIL_ETHERNET(0xc644),
++	PSIL_ETHERNET(0xc645),
++	PSIL_ETHERNET(0xc646),
++	PSIL_ETHERNET(0xc647),
+ 	/* SA2UL */
+ 	PSIL_SA2UL(0xf500, 1),
+ 	PSIL_SA2UL(0xf501, 1),
 -- 
-2.39.2
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+2.25.1
 
