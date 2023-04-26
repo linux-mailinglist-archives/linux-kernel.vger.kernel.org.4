@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50D96EF8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6E06EF8DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233482AbjDZQ6Y convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 12:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S233638AbjDZQ7q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 12:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjDZQ6W (ORCPT
+        with ESMTP id S231186AbjDZQ7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:58:22 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D785B6181;
-        Wed, 26 Apr 2023 09:58:21 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-94ea38c90ccso219813066b.1;
-        Wed, 26 Apr 2023 09:58:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682528300; x=1685120300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6tDRePBPqY1Z5GtQ693ASBarIdQRrHqj1TKI6s9dLP0=;
-        b=HipPXBamGI2sTYLBoSjVKHR4qypjhFEWhcVgoLHL63IbgXpxxcnArtaV/d9iNVOoQd
-         PDd7uF5TG41lP/V2Wt0Q/3JukAgaluYYhVAkBJFcQgnXb5QJNAVJJzSe6rq0gXRN6IWD
-         8Hr26yeHKQhxVm5uhmz/nauwbFrqKmOA1RwzGfmtbxLKDQFyvN/O3QzUQIetcPKtBZi2
-         oRe0sxDCJ5lrnphGaytUrYIm8W3KWFvzYmriJdq8kfd4R0H1RAty5oTEzisJsGvoZDuR
-         FlP5rueuKxERTEPyL7BkWWH/z/4n2yrliSGfwXLfQufNTT28L2gVk5bQan/JadZC2xPm
-         ekBw==
-X-Gm-Message-State: AAQBX9c6kK4TLtCxsdBw6PZd+/PHXLGPU27YWrbEAftYr+5f3g/pdo1c
-        BWk4d/caPF9Z+zFh+n0eiGTxc3ONTWLp1PEHNXwQw0At
-X-Google-Smtp-Source: AKy350YTOiimuXUYsMoqDhYGHlS2mG/fipxzusk4yIMTYvxp6cBiIMmcTn7qjk4HzRf6VVnT6WT/KOkUQaavUxYmrWQ=
-X-Received: by 2002:a17:906:c0cb:b0:94a:5f0d:d9d6 with SMTP id
- bn11-20020a170906c0cb00b0094a5f0dd9d6mr18198475ejb.4.1682528300094; Wed, 26
- Apr 2023 09:58:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
- <20230419083343.505780-7-daniel.lezcano@linaro.org> <CAJZ5v0gi4j=kJBnXCotQ8_+t39CzOFSBie9Yc6x8BV=TYxsjPQ@mail.gmail.com>
- <bcc96406-3f74-b79b-3f75-0c3bd88c5eea@linaro.org>
-In-Reply-To: <bcc96406-3f74-b79b-3f75-0c3bd88c5eea@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Apr 2023 18:58:08 +0200
-Message-ID: <CAJZ5v0jEGw_skrJ_rixnfHmUQ04VQiUjFP-UGsvp8Ta8JkyXsw@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] thermal/drivers/intel_menlow: Make additionnal
- sysfs information optional
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 26 Apr 2023 12:59:44 -0400
+Received: from mail6.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52B36181;
+        Wed, 26 Apr 2023 09:59:42 -0700 (PDT)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id E1862222955;
+        Wed, 26 Apr 2023 18:59:40 +0200 (CEST)
+Received: from mail6.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id CD11E222952;
+        Wed, 26 Apr 2023 18:59:40 +0200 (CEST)
+X-TM-AS-ERS: 10.181.10.102-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
+        by mail6.swissbit.com (Postfix) with ESMTPS;
+        Wed, 26 Apr 2023 18:59:40 +0200 (CEST)
+From:   Christian Loehle <CLoehle@hyperstone.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Avri Altman <avri.altman@wdc.com>
+Subject: [PATCHv2] mmc: block: ensure error propagation for non-blk
+Thread-Topic: [PATCHv2] mmc: block: ensure error propagation for non-blk
+Thread-Index: Adl4YDcDMdbKHG5US4mGcFynSXDFNA==
+Date:   Wed, 26 Apr 2023 16:59:39 +0000
+Message-ID: <59c17ada35664b818b7bd83752119b2d@hyperstone.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+MIME-Version: 1.0
+X-TMASE-Version: DDEI-5.1-9.0.1002-27590.001
+X-TMASE-Result: 10--6.524900-10.000000
+X-TMASE-MatchedRID: 3BVF1Ao4uhpA+YmEQEhsujz6L+U/pejx1QQ6Jx/fflZnyL8x0tKlOyBd
+        4OOd72kg5CeSbCAu+8ORoepQgi+s8uo7bV31UxoOxi///JpaHQO061diBteN18C5DTEMxpeQfiq
+        1gj2xET856WD6kuo88Qt0liPmj9l9Q9tg+p38ZonOvXpg7ONnXX0tCKdnhB58HOI0tZ7A+B36C0
+        ePs7A07SQvY0ueKrc1lspbK0dWqiL/efc0W4tuSQGBboIsOzFJFlT9HO1o+gY=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: a066c7b2-77ab-4c42-a230-bc7981e0c34f-0-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,30 +65,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:40 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 20/04/2023 19:24, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
-> > After looking at it once more, I think that this driver isn't really
-> > functional without the additional sysfs attributes, so if
-> > CONFIG_INTEL_MENLOW_SYSFS_ADDON is set, the driver effectively becomes
-> > dead code.
-> >
-> > That's rather unfortunate and I'm not sure how to deal with it ATM.
-> >
-> > I can queue up the rest of the series for 6.4-rc1 (in which case it
-> > will be pushed in the second half of the merge window), but this
-> > particular patch requires more thought IMV.
->
-> I'm fine if you drop this one from the series.
->
-> Thanks for looking at it more deeply
+Requests to the mmc layer usually come through a block device IO.
+The exceptions are the ioctl interface, RPMB chardev ioctl
+and debugfs, which issue their own blk_mq requests through
+blk_execute_rq and do not query the BLK_STS error but the
+mmcblk-internal drv_op_result. This patch ensures that drv_op_result
+defaults to an error and has to be overwritten by the operation
+to be considered successful.
 
-No problem.
+The behavior leads to a bug where the request never propagates
+the error, e.g. by directly erroring out at mmc_blk_mq_issue_rq if
+mmc_blk_part_switch fails. The ioctl caller of the rpmb chardev then
+can never see an error (BLK_STS_IOERR, but drv_op_result is unchanged)
+and thus may assume that their call executed successfully when it did not.
 
-After some private conversation with Srinivas regarding this driver,
-I've just posted a patch to get rid of it entirely and so I'm going to
-skip all of the patches touching the Menlow driver in this series.
+While always checking the blk_execute_rq return value would be
+advised, let's eliminate the error by always setting
+drv_op_result as -EIO to be overwritten on success (or other error)
+
+Fixes: 614f0388f580 ("mmc: block: move single ioctl() commands to block requests")
+Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+---
+v2: Adopted Adrians suggestions to set the error before calling
+	and rewrote commit message
+ drivers/mmc/core/block.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+index 672ab90c4b2d..0ff294f07465 100644
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -266,6 +266,7 @@ static ssize_t power_ro_lock_store(struct device *dev,
+ 		goto out_put;
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_BOOT_WP;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	blk_execute_rq(req, false);
+ 	ret = req_to_mmc_queue_req(req)->drv_op_result;
+ 	blk_mq_free_request(req);
+@@ -653,6 +654,7 @@ static int mmc_blk_ioctl_cmd(struct mmc_blk_data *md,
+ 	idatas[0] = idata;
+ 	req_to_mmc_queue_req(req)->drv_op =
+ 		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = idatas;
+ 	req_to_mmc_queue_req(req)->ioc_count = 1;
+ 	blk_execute_rq(req, false);
+@@ -724,6 +726,7 @@ static int mmc_blk_ioctl_multi_cmd(struct mmc_blk_data *md,
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op =
+ 		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = idata;
+ 	req_to_mmc_queue_req(req)->ioc_count = n;
+ 	blk_execute_rq(req, false);
+@@ -2808,6 +2811,7 @@ static int mmc_dbg_card_status_get(void *data, u64 *val)
+ 	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_CARD_STATUS;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	blk_execute_rq(req, false);
+ 	ret = req_to_mmc_queue_req(req)->drv_op_result;
+ 	if (ret >= 0) {
+@@ -2846,6 +2850,7 @@ static int mmc_ext_csd_open(struct inode *inode, struct file *filp)
+ 		goto out_free;
+ 	}
+ 	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_EXT_CSD;
++	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+ 	req_to_mmc_queue_req(req)->drv_op_data = &ext_csd;
+ 	blk_execute_rq(req, false);
+ 	err = req_to_mmc_queue_req(req)->drv_op_result;
+-- 
+2.37.3
+
+
+Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+Managing Director: Dr. Jan Peter Berns.
+Commercial register of local courts: Freiburg HRB381782
+
