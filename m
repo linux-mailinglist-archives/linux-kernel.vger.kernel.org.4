@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791F56EEB49
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2206EEB4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbjDZALh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S238350AbjDZAMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjDZALg (ORCPT
+        with ESMTP id S238364AbjDZAMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:11:36 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81810E9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:11:34 -0700 (PDT)
-Received: from [127.0.0.1] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 33Q0Ahlv3867755
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 25 Apr 2023 17:10:44 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 33Q0Ahlv3867755
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023040901; t=1682467844;
-        bh=zlADXuLQzQL6rHF9UUciVfpOcO8xxJBWdPf+jRMOtOY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=jQNul7h3BL6TjIB5IeiXakFXyVmFOZYvsiqT5Y9CCEe2lL0yHHCEnrzPwoJ3iynxH
-         zyOSN4jPN8whhWJcgEvNZ3Cwn5ue4eVAHjUWRFD8WdYSuvdKxyGy3cqHZwfmvr/BzL
-         fgbOwCxq8xyJ7UOh4ped5n6brZ+vBBrBchNZMOnIFWmkUKxOniqjjfvWZtDTjJwycE
-         Z4NQxO8T70KqwH/kQQcVRsDkkQfm2uyVxwEEi10dOPAAVHNDWsMEtrViMZKzbAz1VT
-         UXUpjy1cX9iDEBChgHLfsjobulqrE9R7lOpC6tuWuUxKCeJtoY7MJNlXvA23vd7Joz
-         cPHTCf2EPjBug==
-Date:   Tue, 25 Apr 2023 17:10:42 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ecdea7a8-a748-6ecb-5fc1-93d7eda3c54d@intel.com>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com> <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx> <ecdea7a8-a748-6ecb-5fc1-93d7eda3c54d@intel.com>
-Message-ID: <D9668AEC-9650-4840-A03D-553994B414DD@zytor.com>
+        Tue, 25 Apr 2023 20:12:47 -0400
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24E08699;
+        Tue, 25 Apr 2023 17:12:46 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1a677dffb37so54779605ad.2;
+        Tue, 25 Apr 2023 17:12:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682467966; x=1685059966;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+zA306h9QbtrRdY8f3QEhHfV8lSk2LBCg5jIZCjYsU0=;
+        b=HWFiu6ptD4J6UVLN5qMtCacrNzz/8+RiM9YkDapTNre/nQQEnFfWGOBU8uzpdwFI5M
+         5aGpFo8p9NXed73/As/FIIv/hfLWM7PxipTPfYj7PpG5k0+v96Vxxs8jwwgZQTsR1bGr
+         U8iprJQl3xIGp/Ymg1IuwVEDGjVB8R/1EB2dFqoxlWObNRsO2oGaxmfiSoVzF9OoUxc7
+         jWHxo5z05DQCqmo+DQd1jrqiXy7ikQreumjTDtCzc9+LSQeuI3Z81WKdaCQGOL0Q7GHZ
+         lSS4HfaivvL0Db4cFeEfBcVM76pDLOs6wJu1Ngifghp6xyoaiFoT5Sblngth30LSvojg
+         5hEg==
+X-Gm-Message-State: AAQBX9dXkcqLWYU/lYzuEELofrjv2OGUqnxMGiD8VolWGjhRHzIDPs16
+        ZKNWwO7CJKoOEPf2Uc0iTv8=
+X-Google-Smtp-Source: AKy350axe1uxbKF98wD8SMU+rPJOuRCYssquJZ7bORUPI7pnWiTeGvFS5PBqtNKVob3MgTNClAGhVg==
+X-Received: by 2002:a17:902:bd94:b0:1a6:ef75:3c53 with SMTP id q20-20020a170902bd9400b001a6ef753c53mr17971950pls.11.1682467966290;
+        Tue, 25 Apr 2023 17:12:46 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5099:ad7c:6c1:9570? ([2620:15c:211:201:5099:ad7c:6c1:9570])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170902c15100b0019928ce257dsm8760731plj.99.2023.04.25.17.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 17:12:45 -0700 (PDT)
+Message-ID: <53f22b81-a738-8f94-8e08-2395133d0249@acm.org>
+Date:   Tue, 25 Apr 2023 17:12:43 -0700
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 3/5] ufs: mcq: Added ufshcd_mcq_abort()
+Content-Language: en-US
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        Powen.Kao@mediatek.com, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1681764704.git.quic_nguyenb@quicinc.com>
+ <349ea681e56578191da834250cebfbd7859e9216.1681764704.git.quic_nguyenb@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <349ea681e56578191da834250cebfbd7859e9216.1681764704.git.quic_nguyenb@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 25, 2023 3:29:49 PM PDT, Dave Hansen <dave=2Ehansen@intel=2Ecom> w=
-rote:
->On 4/25/23 14:05, Thomas Gleixner wrote:
->> The only consequence of looking at bit 0 of some random other leaf is
->> that all CPUs which run stop_this_cpu() issue WBINVD in parallel, which
->> is slow but should not be a fatal issue=2E
->>=20
->> Tony observed this is a 50% chance to hang, which means this is a timin=
-g
->> issue=2E
->
->I _think_ the system in question is a dual-socket Westmere=2E  I don't se=
-e
->any obvious errata that we could pin this on:
->
->> https://www=2Eintel=2Ecom/content/dam/www/public/us/en/documents/specif=
-ication-updates/xeon-5600-specification-update=2Epdf
->
->Andi Kleen had an interesting theory=2E  WBINVD is a pretty expensive
->operation=2E  It's possible that it has some degenerative behavior when
->it's called on a *bunch* of CPUs all at once (which this path can do)=2E
->If the instruction takes too long, it could trigger one of the CPU's
->internal lockup detectors and trigger a machine check=2E  At that point,
->all hell breaks loose=2E
->
->I don't know the cache coherency protocol well enough to say for sure,
->but I wonder if there's a storm of cache coherency traffic as all those
->lines get written back=2E  One of the CPUs gets starved from making enoug=
-h
->forward progress and trips a CPU-internal watchdog=2E
->
->Andi also says that it _should_ log something in the machine check banks
->when this happens so there should be at least some kind of breadcrumb=2E
->
->Either way, I'm hoping this hand waving satiates tglx's morbid curiosity
->about hardware that came out from before I even worked at Intel=2E ;)
+On 4/17/23 14:05, Bao D. Nguyen wrote:
+> +	if (!lrbp->cmd) {
+> +		dev_err(hba->dev,
+> +			"%s: skip abort. cmd at tag %d already completed.\n",
+> +			__func__, tag);
+> +		goto out;
+> +	}
 
-"Pretty expensive" doesn't really cover it=2E It is by far the longest tim=
-e an x86 CPU can block out all outside events=2E
+Please do not use lrbp->cmd to check whether or not a command has completed.
+
+> +	if (ufshcd_mcq_sqe_search(hba, hwq, tag)) {
+> +		/*
+> +		 * Failure. The command should not be "stuck" in SQ for
+> +		 * a long time which resulted in command being aborted.
+> +		 */
+> +		dev_err(hba->dev, "%s: cmd found in sq. hwq=%d, tag=%d\n",
+> +				__func__, hwq->id, tag);
+> +		/* Set the Command Type to 0xF per the spec */
+> +		ufshcd_mcq_nullify_cmd(hba, hwq);
+
+The above looks wrong to me. How can ufshcd_mcq_nullify_cmd() identify a 
+command if the 'tag' argument is not passed to that function?
+
+> +	/*
+> +	 * The command is not in the Submission Queue, and it is not
+> +	 * in the Completion Queue either. Query the device to see if
+> +	 * the command is being processed in the device.
+> +	 */
+
+Please only use capitals if these are required.
+
+> +	if (lrbp->cmd)
+> +		ufshcd_release_scsi_cmd(hba, lrbp);
+
+Same comment here - do not use lrbp->cmd to check for completion.
+
+Thanks,
+
+Bart.
