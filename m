@@ -2,122 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB10D6EF98B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559BD6EF98D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236151AbjDZRlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
+        id S236145AbjDZRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbjDZRlg (ORCPT
+        with ESMTP id S236195AbjDZRmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:41:36 -0400
-X-Greylist: delayed 219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Apr 2023 10:41:34 PDT
-Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06AF10C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 10:41:34 -0700 (PDT)
-X-ASG-Debug-ID: 1682530892-1cf4391215320530001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id dsNGcVgsbSHQHQZD; Wed, 26 Apr 2023 13:41:32 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=MoGhA43xzvvZ8t2pH9I2y5/awsGm9F2RnX1GrXJNuEU=;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=oLeM/ElwziYQWjsUDZZ3
-        LYmoa3ncBhpfAPF/JpY7sj5FNjOvNEo/4nmPQZYI3oVltpvarxlDSZXYLqIqrKLgUW+HF9eg2xoGP
-        PDslMvd9eTbxMNgzp9VHdYZH2H/c0BkfmcU1L1+gQtpgO0KorASHBwdjMF4UbSbxkoB7mZDa+M=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 12591946; Wed, 26 Apr 2023 13:41:32 -0400
-Message-ID: <90428c6d-97f6-794f-8cfd-5b30dd5ed140@cybernetics.com>
-Date:   Wed, 26 Apr 2023 13:41:32 -0400
+        Wed, 26 Apr 2023 13:42:10 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3431FE1;
+        Wed, 26 Apr 2023 10:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1682530907; i=frank-w@public-files.de;
+        bh=fzBJ9aehgljKPhYXz04ylxft46ZFFyfph0GM2HpSX6A=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=NixrjmA8i3Beg06Lq02m7wWxG+Yk1fc0N1mn2pCZWB+GmCNBsRnyF5CQ4Yv/a+KYa
+         uKkYDovjyxp0gPRVelMaN/nWtXJniW/iZLV5dBFLwkWUC5+kvy1Va2ltROViJsNv9G
+         o4nTP0PyKQixWHRHu8SY8f2pl1Vm7uA5F5bJLdlrFESA7QdTBw8SEWTWxvMduWDC7y
+         AcftTYKE+LLUOv3A79Gv2q50/fHuIGB17uKpuQTv8/A0lsEQY5Te+5r72RlEHrcEVl
+         IB1siCJKwBrRMdjjwa18V6f+mopynDWdUA0f2uWUB2KLvEtDkMQ9rMfM6W5O0k/KRa
+         eoikXsOBNtc0Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.146.19] ([217.61.146.19]) by web-mail.gmx.net
+ (3c-app-gmx-bs05.server.lan [172.19.170.54]) (via HTTP); Wed, 26 Apr 2023
+ 19:41:47 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: [PATCH v2] x86/cpu: fix SME test in stop_this_cpu()
-Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v2] x86/cpu: fix SME test in stop_this_cpu()
-From:   Tony Battersby <tonyb@cybernetics.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
- <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
- <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com> <87y1mey503.ffs@tglx>
- <ccf57fd2-45b8-1f1f-f46a-55d7f4c56161@cybernetics.com>
-In-Reply-To: <ccf57fd2-45b8-1f1f-f46a-55d7f4c56161@cybernetics.com>
+Message-ID: <trinity-8c5502f4-34bc-456b-9e4b-37edac37c3ed-1682530907724@3c-app-gmx-bs05>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Aw: [PATCH] PCI: mediatek-gen3: handle PERST after reset
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1682530892
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 1719
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Date:   Wed, 26 Apr 2023 19:41:47 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20230402131347.99268-1-linux@fw-web.de>
+References: <20230402131347.99268-1-linux@fw-web.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:dzORq1CAzMS2PqaF9FBOyc0gBlknMTC94Yf2KX1DHMdfdevuyPq8M6Ei6iJ7PM5D9PeKN
+ 8L+RD84dEQ4WCZpamp7vgRtYvOMf0Y9aCwthhw0qFpBa34dMx7A5mYqQpvHltcvN4C3cNhcjydGG
+ eUWPVPzEloSvIMAzNvZoDm3QK6vxi0Y6HvZZ4msiato/LLTZc5/hOLwwIAs9fe9OzLesvIVNSmAj
+ CaIc2miW5cxVFMKcl1ijALj0px70aIJ+bFJtcMIlnGNDPp1LQLdvSeB4yG/HxTP0LqNMbyFI9MOl
+ v8=
+UI-OutboundReport: notjunk:1;M01:P0:ZJ7W47MwB30=;LKsCmYzAPuDvFS+HNRFqVjZU1lF
+ mdKzDe116qQyuDI2RanO1UYZ8pecJImM2lKT/paapBa02gD1iANY8Jf3AztrQudk3ljBfFk8P
+ 7oL6paNP7Iltz06q7neYttlPG+8nhVUpj/Jicv4+5SQ8HG96EekPSha56/92G2VuKwUGVufku
+ kkKCEVSoWW/h0lwKHVdFN0oc2C9SI9+YF66CQozj2GckutLB+IJZp5L3NdfJGw4fCTJTyWXbp
+ Rb+gEFzNArmMyHzkMbgrc6GHASVXIrcfcrFW2vjql7ty1qCF1bwXOG4x8IFkNABkSWRxMNJQQ
+ yhDGkqr1spNyYTUwJHOpayxNFyriCl7MpiSgYZECykoBmlkEDmwUhhj2HG619JxrD6pBGKlzX
+ s569ZRGb3yy1HVVZd65iF/iqp+nPNZZuYpSqilnVPYGgJY5ZwsEP0pHtB9SfwniApiv/UbeQJ
+ WY9bekR8z/E21BBOO2BN18tAejf2exZDzM4en1Xi0QcskuLOQF2PlCY2S1imDw1Jj4b2c22o1
+ sYcpD8VepJem38lXLJtUyVfriPNhux0nKAYaFCFD6Kb69sCogKyV3IbbTI/WFEl5eHVFPmTGp
+ PSEAbFDznQ3CDaCm8c+IGiZ/+SuEKOqhheNcv5aJFR0TXHLHDMEUgaHgAirhRAGRR16YA/nnB
+ j3onTZRjj277pRTG+if9nBBbABqEAp9Ku1acg5E6YXKzHWlq/IEVtLyKswLnGonkfXW9e1/Bx
+ Crx8j3lY9fbvXvfdK3oQZRepH7pmXrPR/QxYyYDVMbMhSkTk6QeS6u4JfPuIpgtRwCyeBxaG2
+ 2AkVrWbi2BnKs6yPvTA8CfgojJpW2fdOE5Q0z1Stfg+ao=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check that the CPU supports the desired CPUID leaf before attempting to
-read it.  On Intel, querying an invalid extended CPUID leaf returns the
-values of the maximum basic CPUID leaf.  Depending on the CPU, this
-could cause the SME test to incorrectly evaluate to true, causing
-native_wbinvd() to be executed when it should have been skipped (seen on
-a Supermicro X8DTH-6F board with Intel Xeon X5650).
+Hi
 
-Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
-Cc: <stable@vger.kernel.org> # 5.18+
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
+> Gesendet: Sonntag, 02. April 2023 um 15:13 Uhr
+> Von: "Frank Wunderlich" <linux@fw-web.de>
+> De-assert PERST in separate step after reset signals to fully comply
+> the PCIe CEM clause 2.2.
+>
+> This fixes some NVME detection issues on mt7986.
+>
+> Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for M=
+T8192")
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> Patch is taken from user Ruslan aka RRKh61 (permitted me to send it
+> with me as author).
+>
+> https://forum.banana-pi.org/t/bpi-r3-nvme-connection-issue/14563/17
+> ---
+>  drivers/pci/controller/pcie-mediatek-gen3.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/c=
+ontroller/pcie-mediatek-gen3.c
+> index b8612ce5f4d0..176b1a04565d 100644
+> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
+> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+> @@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pc=
+ie *pcie)
+>  	msleep(100);
+>
+>  	/* De-assert reset signals */
+> -	val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB | PCIE_PE_RST=
+B);
+> +	val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
+> +	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
+> +
+> +	msleep(100);
+> +
+> +	/* De-assert PERST# signals */
+> +	val &=3D ~(PCIE_PE_RSTB);
+>  	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
+>
+>  	/* Check if the link is up or not */
 
-Changes since v1: updated title and description.
+Hi
 
- arch/x86/kernel/process.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+just a friendly reminder....do i miss any recipient?
 
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b650cde3f64d..26aa32e8f636 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -754,13 +754,15 @@ bool xen_set_default_idle(void)
- 
- void __noreturn stop_this_cpu(void *dummy)
- {
-+	struct cpuinfo_x86 *c = this_cpu_ptr(&cpu_info);
-+
- 	local_irq_disable();
- 	/*
- 	 * Remove this CPU:
- 	 */
- 	set_cpu_online(smp_processor_id(), false);
- 	disable_local_APIC();
--	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
-+	mcheck_cpu_clear(c);
- 
- 	/*
- 	 * Use wbinvd on processors that support SME. This provides support
-@@ -774,7 +776,8 @@ void __noreturn stop_this_cpu(void *dummy)
- 	 * Test the CPUID bit directly because the machine might've cleared
- 	 * X86_FEATURE_SME due to cmdline options.
- 	 */
--	if (cpuid_eax(0x8000001f) & BIT(0))
-+	if (c->extended_cpuid_level >= 0x8000001f &&
-+	    (cpuid_eax(0x8000001f) & BIT(0)))
- 		native_wbinvd();
- 	for (;;) {
- 		/*
--- 
-2.25.1
-
+regards Frank
