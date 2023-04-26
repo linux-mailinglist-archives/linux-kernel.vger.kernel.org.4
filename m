@@ -2,160 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4417F6EEC3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152EE6EEC42
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbjDZCLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 22:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S239009AbjDZCMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 22:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238440AbjDZCLy (ORCPT
+        with ESMTP id S239085AbjDZCMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 22:11:54 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295868699;
-        Tue, 25 Apr 2023 19:11:52 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B16BC24DF03;
-        Wed, 26 Apr 2023 10:11:50 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 10:11:50 +0800
-Received: from [192.168.125.106] (113.72.145.137) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 10:11:49 +0800
-Message-ID: <f082999f-e870-9685-98c8-e43bdda67744@starfivetech.com>
-Date:   Wed, 26 Apr 2023 10:11:48 +0800
+        Tue, 25 Apr 2023 22:12:43 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C82D319
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:12:41 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a950b982d4so154435ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682475161; x=1685067161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQAl7WIDX3nG1b8WyYVDaxQxUXgVIGV2IaFgXNIX3BQ=;
+        b=cDF46ZOLvvKRFEBOEk2p8ZsjyWIwx+A+Khp62kbiCO79drnTEk7FaJM5QzGHnPUCHY
+         pQaGO4GB1RZ0UlzkDQNFA0pJFN7blaF+DPYsxecCFMRVWbZzmrX/mDxVRwtF8c2Z90gP
+         ZTGqSixXO1xYspZpStywkwE568OAH9aLNDjCgqHka8N2j8KWbri3vnYo+6xIYyPPT310
+         8Og80162GDA9fzT44SLcXIR7K5re5fHv83lVoguZSiKdirr2lMHowrUxsY1ji0/HNbtS
+         Rg/Lj7amlTC1wa+Bit14r7RJcEsD78t7RENWC1vDVAfPvsq7TSA+BGZsAkRU0dDbzvEw
+         RDig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682475161; x=1685067161;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UQAl7WIDX3nG1b8WyYVDaxQxUXgVIGV2IaFgXNIX3BQ=;
+        b=EJpR2wZ33S4FPoaAoiJEGnFg+8gbLhYYTpFnbeQgcLudj772JcYVpvMMzUeTh8pbN6
+         j8DzjpEvTQOoWO+Y82ryO+SPCvmYInjHruJNtmE6xOAPvhgTa06+LAK1iXkcPu09dBxB
+         cO9hAA8XdlsDy9OSX70+CMDZpalJ11k1wGJYwRyFpAm+uWeWh4vZs58DPNI9ZUA7SUqj
+         /WfXsX1b4kWlNu5i1OsEUIQVI3Cg5H3KNVw7gzRA+eqqMb5XNUqTPb65cH5Qtq28h/pA
+         0O82AmZDkP/FK0tbQ6AwLps3hXkCH2lU7ZEZ/ZAw8Hmy75ZC+4/XYcpdfzDcwqQplVd5
+         xutA==
+X-Gm-Message-State: AC+VfDzm4oNapXd4Qn4aYTTsZWqvnTF/bTClPkyJb4jjYcOL/wUD9a1J
+        uwIkyFrTZEHHsFYvjDZqmgcjyOhTf7H1w85fx/+MgA==
+X-Google-Smtp-Source: ACHHUZ5TrEeOXF1Ku1oe7rI+MSUtgXxc1PFXG1WC0SxAVGSGPuAvwT5hk5Eks697mlBICtmiJyGox6uCSwhojLPo9G4=
+X-Received: by 2002:a17:902:f1d3:b0:1a8:df:f3c6 with SMTP id
+ e19-20020a170902f1d300b001a800dff3c6mr148837plc.2.1682475160683; Tue, 25 Apr
+ 2023 19:12:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND v2 1/6] dt-bindings: power: Add JH7110 AON PMU support
-To:     Conor Dooley <conor@kernel.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <vkoul@kernel.org>,
-        <linux-phy@lists.infradead.org>
-References: <20230419-labored-camper-644d51a7ca96@spud>
- <1a5b15fa-4f20-51c2-2ba1-a04a2911a694@starfivetech.com>
- <20230424-baffle-punch-ec73098f2b6a@spud>
- <d685a1d4-c07d-7dfa-f1fb-b35ceb2aa0eb@starfivetech.com>
- <20230425-unquote-eligible-09f743d81981@wendy>
- <a7cdfabf-2312-eaf3-f462-5bda7f0a120d@starfivetech.com>
- <68cb565d-bf39-10b0-9e3e-35ba7f54b90b@linaro.org>
- <0988495f-b87a-7f69-f222-37c67d6eae23@starfivetech.com>
- <20230425-resale-footrest-de667778c4fe@wendy>
- <663e9933-b9b3-a48f-98b6-2207215a8ed7@starfivetech.com>
- <20230425-commotion-prewashed-876247bed4ab@spud>
-Content-Language: en-US
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230425-commotion-prewashed-876247bed4ab@spud>
+References: <20230421084226.2278282-1-davidgow@google.com> <20230421084226.2278282-2-davidgow@google.com>
+In-Reply-To: <20230421084226.2278282-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 25 Apr 2023 19:12:29 -0700
+Message-ID: <CAGS_qxp72dSbE9ZD7EyQ-JvXWucMs=LcX7uM1MAYL5oF_mtzgA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] kunit: Add kunit_add_action() to defer a call
+ until test exit
+To:     David Gow <davidgow@google.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Rae Moar <rmoar@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 21, 2023 at 1:42=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> Many uses of the KUnit resource system are intended to simply defer
+> calling a function until the test exits (be it due to success or
+> failure). The existing kunit_alloc_resource() function is often used for
+> this, but was awkward to use (requiring passing NULL init functions, etc)=
+,
+> and returned a resource without incrementing its reference count, which
+> -- while okay for this use-case -- could cause problems in others.
+>
+> Instead, introduce a simple kunit_add_action() API: a simple function
+> (returning nothing, accepting a single void* argument) can be scheduled
+> to be called when the test exits. Deferred actions are called in the
+> opposite order to that which they were registered.
+>
+> This mimics the devres API, devm_add_action(), and also provides
+> kunit_remove_action(), to cancel a deferred action, and
+> kunit_release_action() to trigger one early.
 
+Apologies for the delayed bikeshedding.
 
-On 2023/4/26 0:56, Conor Dooley wrote:
-> On Tue, Apr 25, 2023 at 08:26:35PM +0800, Changhuang Liang wrote:
->> On 2023/4/25 17:35, Conor Dooley wrote:
->>> On Tue, Apr 25, 2023 at 05:18:10PM +0800, Changhuang Liang wrote:
->>>> On 2023/4/25 16:19, Krzysztof Kozlowski wrote:
->>>>> On 25/04/2023 09:57, Changhuang Liang wrote:
->>>>>> Yes, "starfive,jh7110-aon-pmu" is a child-node of "starfive,jh7110-aon-syscon".
->>>>>> In my opinion, "0x17010000" is "aon-syscon" on JH7110 SoC, and this "aon-pmu" is just 
->>>>>> a part of "aon-syscon" function, so I think it is inappropriate to make "aon-syscon"
->>>>>> to a power domain controller. I think using the child-node description is closer to
->>>>>> JH7110 SoC. 
->>>>>
->>>>> Unfortunately, I do not see the correlation between these, any
->>>>> connection. Why being a child of syscon block would mean that this
->>>>> should no be power domain controller? Really, why? These are two
->>>>> unrelated things.
->>>>
->>>> Let me summarize what has been discussed above. 
->>>>
->>>> There has two ways to describe this "starfive,jh7110-aon-syscon"(0x17010000).
->>>> 1. (0x17010000) is power-controller node:
->>>>
->>>> 	aon_pwrc: power-controller@17010000 {
->>>> 		compatible = "starfive,jh7110-aon-pmu", "syscon";
->>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>> 		#power-domain-cells = <1>;
->>>> 	};
->>>>
->>>>
->>>> 2. (0x17010000) is syscon node, power-controller is child-node of syscon:
->>>>
->>>> 	aon_syscon: syscon@17010000 {
->>>> 		compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
->>>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>>>
->>>> 		aon_pwrc: power-controller {
->>>> 			compatible = "starfive,jh7110-aon-pmu";
->>>> 			#power-domain-cells = <1>;
->>>> 		};
->>>> 	};
->>>
->>> I thought that Rob was suggesting something like this:
->>> 	aon_syscon: syscon@17010000 {
->>> 		compatible = "starfive,jh7110-aon-syscon", ...
->>> 		reg = <0x0 0x17010000 0x0 0x1000>;
->>> 		#power-domain-cells = <1>;
->>> 	};
-> 
->> I see the kernel:
->> https://elixir.bootlin.com/linux/latest/source/arch/arm64/boot/dts/mediatek/mt8167.dtsi
->> this file line 42:
->> it's power-controller also has no meaningful properties.
->> What do you think?
-> 
-> I'm not sure that I follow. It has a bunch of child-nodes does it not,
-> each of which is a domain?
-> 
-> I didn't see such domains in your dts patch, they're defined directly in
-> the driver instead AFAIU. Assuming I have understood that correctly,
-> your situation is different to that mediatek one?
-> 
-> Cheers,
-> Conor.
+I think mimicking the devres API is a better idea than kunit_defer()
+and friends.
+But I can't help but think this still isn't the best name.
+I personally would have no idea what `kunit_release_action()` does
+without looking it up.
 
-I think there child-nodes just need to operate some clock signals. Maybe
-we don't need to discuss other platforms.
+I feel like `kunit_add_cleanup()` probably works better for a unit
+test framework.
+I think `kunit_remove_cleanup()` is fine and `kunit_release_cleanup()`
+is questionably ok.
+Instead of `release`, maybe it should be `kunit_trigger_cleanup()` or
+more verbosely, something like `kunit_early_trigger_cleanup()`.
 
-If Rob's method is confirmed. I will try it next version.
+I tried to look for equivalents in other languages/frameworks:
+* Rust and C++ rely on RAII, don't think they have equivalents in testing l=
+ibs
+* Python has `self.addCleanup()`,
+https://docs.python.org/3/library/unittest.html#unittest.TestCase.addCleanu=
+p
+* Go has `t.Cleanup()`, https://pkg.go.dev/testing#T.Cleanup
+* Looking at Zig since it also has a `defer`, I guess they just use
+that, I don't see anything in
+https://ziglang.org/documentation/master/std/#A;std:testing
+* I know nothing about JUnit, but a quick search seems like they rely
+on @After and @AfterClass annotations,
+https://junit.org/junit4/javadoc/4.12/org/junit/After.html
+* I know even less about HUnit, but it looks like it relies on
+wrapping things via the IO monad,
+https://hackage.haskell.org/package/HUnit-1.6.2.0/docs/Test-HUnit-Base.html=
+#t:AssertionPredicate
+* Since we were inspired by TAP, I tried to look at Perl, but didn't
+immediately see anything that looked equivalent,
+https://metacpan.org/pod/Test::Most
 
-Maybe like this:
-aon_syscon: syscon@17010000 {
-	compatible = "starfive,jh7110-aon-syscon", "syscon", "starfive,jh7110-aon-pmu";
-	reg = <0x0 0x17010000 0x0 0x1000>;
-	#power-domain-cells = <1>;
-};
+>
+> This is implemented as a resource under the hood, so the ordering
+> between resource cleanup and deferred functions is maintained.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
 
-Rob and krzystof:
+<snip>
 
-And I think patch[1][2] need to change. Right? 
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index c0d88b318e90..6db28cd43e9b 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -387,4 +387,80 @@ static inline int kunit_destroy_named_resource(struc=
+t kunit *test,
+>   */
+>  void kunit_remove_resource(struct kunit *test, struct kunit_resource *re=
+s);
+>
+> +
+> +/**
+> + * kunit_add_action() - Defer an 'action' (function call) until the test=
+ ends.
+> + * @test: Test case to associate the action with.
+> + * @func: The function to run on test exit
+> + * @ctx: Data passed into @func
+> + *
+> + * Defer the execution of a function until the test exits, either normal=
+ly or
+> + * due to a failure.  @ctx is passed as additional context. All function=
+s
+> + * registered with kunit_add_action() will execute in the opposite order=
+ to that
+> + * they were registered in.
+> + *
+> + * This is useful for cleaning up allocated memory and resources.
 
-[1] https://lore.kernel.org/all/20230414024157.53203-6-xingyu.wu@starfivetech.com/
-[2] https://lore.kernel.org/all/20230414024157.53203-7-xingyu.wu@starfivetech.com/
+Re renaming to kunit_add_cleanup(), I think this makes writing the
+comment easier.
+
+E.g.
+- kunit_add_action() - Defer an 'action' (function call) until the test end=
+s.
++ kunit_add_cleanup() - Call a function when the test ends.
++ ...
++ This is useful for cleaning up allocated memory and resources.
+
+Daniel
