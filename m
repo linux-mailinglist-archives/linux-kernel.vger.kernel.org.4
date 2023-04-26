@@ -2,143 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D72A6EEBD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D225D6EEBDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbjDZBRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 21:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S238472AbjDZBWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbjDZBRn (ORCPT
+        with ESMTP id S233421AbjDZBWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:17:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6FB13C19;
-        Tue, 25 Apr 2023 18:17:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 087ED62CE6;
-        Wed, 26 Apr 2023 01:17:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC61C433D2;
-        Wed, 26 Apr 2023 01:17:38 +0000 (UTC)
-Date:   Tue, 25 Apr 2023 21:17:37 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Tze-nan.Wu" <Tze-nan.Wu@mediatek.com>
-Cc:     <mhiramat@kernel.org>, <bobule.chang@mediatek.com>,
-        <cheng-jui.wang@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <stable@vger.kernel.org>, <npiggin@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        John 'Warthog9' Hawley <warthog9@kernel.org>
-Subject: Re: [PATCH v5] ring-buffer: Ensure proper resetting of atomic
- variables in ring_buffer_reset_online_cpus
-Message-ID: <20230425211737.757208b3@gandalf.local.home>
-In-Reply-To: <20230426010446.10753-1-Tze-nan.Wu@mediatek.com>
-References: <20230426010446.10753-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Apr 2023 21:22:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662B1977A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 18:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682472131; x=1714008131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3AcK52L7rx9goG6cAWOkQxklzraiSoyB+m6ahkCeIqc=;
+  b=E/m6B/1uN2DGMt6lHHb0UXoupnXO6wJ9cDZfcI86r6TzAjM1sIRvAHeM
+   2NZ3TLRorh2fNEHrkks99sw350IOE8vUs5zzmmTmEKgRljqxX/myws35C
+   eRL3du4WOWnweIM/Pv8v7osfE3BUIzFdtExZYxdhaNAmfJ0006MxchuvU
+   ytD7ZTaQF2O3SEAfgGOlwkMolk8OeF4bITM0ko0b/dIcgEnzuW5wO04Cy
+   morD++9NCbfNLeUMUohccGApCMis82yPlw5QDh0tKRqlohDur4rcEFQ1Y
+   IA2kBhL3m3fug3uLxRZT4OBTx+KooO6uKp+aoCNnyUpsHKHKdVC7aLvkP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="335857573"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="335857573"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 18:22:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="817928243"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="817928243"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 25 Apr 2023 18:22:08 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prTrE-000jwa-0c;
+        Wed, 26 Apr 2023 01:22:08 +0000
+Date:   Wed, 26 Apr 2023 09:21:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Subject: Re: [PATCH 27/34] maple_tree: Introduce mas_next_slot() interface
+Message-ID: <202304260907.iHgOR74J-lkp@intel.com>
+References: <20230425140955.3834476-28-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425140955.3834476-28-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Liam,
 
-For some reason, this email did not make it to
-linux-trace-kernel@vger.kernel.org, and therefore did not make it into
-patchwork?
+kernel test robot noticed the following build warnings:
 
-John?
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on linus/master v6.3 next-20230425]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--- Steve
+url:    https://github.com/intel-lab-lkp/linux/commits/Liam-R-Howlett/maple_tree-Fix-static-analyser-cppcheck-issue/20230425-233958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230425140955.3834476-28-Liam.Howlett%40oracle.com
+patch subject: [PATCH 27/34] maple_tree: Introduce mas_next_slot() interface
+config: x86_64-randconfig-a003-20230424 (https://download.01.org/0day-ci/archive/20230426/202304260907.iHgOR74J-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0e736b8a8054e7f0b216320d2458a00b54fcd2b0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liam-R-Howlett/maple_tree-Fix-static-analyser-cppcheck-issue/20230425-233958
+        git checkout 0e736b8a8054e7f0b216320d2458a00b54fcd2b0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304260907.iHgOR74J-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> lib/maple_tree.c:4710:7: warning: no previous prototype for function 'mas_next_slot' [-Wmissing-prototypes]
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+         ^
+   lib/maple_tree.c:4710:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+   ^
+   static 
+   lib/maple_tree.c:4780:10: error: implicit declaration of function 'mas_next_slot_limit' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           entry = mas_next_slot_limit(mas, limit);
+                   ^
+   lib/maple_tree.c:4780:10: note: did you mean 'mas_next_slot'?
+   lib/maple_tree.c:4710:7: note: 'mas_next_slot' declared here
+   void *mas_next_slot(struct ma_state *mas, unsigned long max)
+         ^
+   lib/maple_tree.c:4780:8: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
+           entry = mas_next_slot_limit(mas, limit);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   lib/maple_tree.c:4787:9: warning: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
+           return mas_next_slot_limit(mas, limit);
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings and 1 error generated.
 
 
-On Wed, 26 Apr 2023 09:04:44 +0800
-Tze-nan.Wu <Tze-nan.Wu@mediatek.com> wrote:
+vim +/mas_next_slot +4710 lib/maple_tree.c
 
-> From: "Tze-nan Wu" <Tze-nan.Wu@mediatek.com>
-> 
-> In ring_buffer_reset_online_cpus, the buffer_size_kb write operation
-> may permanently fail if the cpu_online_mask changes between two
-> for_each_online_buffer_cpu loops. The number of increases and decreases
-> on both cpu_buffer->resize_disabled and cpu_buffer->record_disabled may be
-> inconsistent, causing some CPUs to have non-zero values for these atomic
-> variables after the function returns.
-> 
-> This issue can be reproduced by "echo 0 > trace" while hotplugging cpu.
-> After reproducing success, we can find out buffer_size_kb will not be
-> functional anymore.
-> 
-> To prevent leaving 'resize_disabled' and 'record_disabled' non-zero after
-> ring_buffer_reset_online_cpus returns, we ensure that each atomic variable
-> has been set up before atomic_sub() to it.
-> 
-> Cc: stable@vger.kernel.org
-> Cc: npiggin@gmail.com
-> Fixes: b23d7a5f4a07 ("ring-buffer: speed up buffer resets by avoiding synchronize_rcu for each CPU")
-> Reviewed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-> Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-> ---
-> Changes from v4 to v5: https://lore.kernel.org/lkml/20230412112401.25081-1-Tze-nan.Wu@mediatek.com/
->   - Move the define before the function
-> ---
->  kernel/trace/ring_buffer.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-> index 76a2d91eecad..253ef85a9ec3 100644
-> --- a/kernel/trace/ring_buffer.c
-> +++ b/kernel/trace/ring_buffer.c
-> @@ -5345,6 +5345,9 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
->  }
->  EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
->  
-> +/* Flag to ensure proper resetting of atomic variables */
-> +#define RESET_BIT	(1 << 30)
-> +
->  /**
->   * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
->   * @buffer: The ring buffer to reset a per cpu buffer of
-> @@ -5361,20 +5364,27 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
->  	for_each_online_buffer_cpu(buffer, cpu) {
->  		cpu_buffer = buffer->buffers[cpu];
->  
-> -		atomic_inc(&cpu_buffer->resize_disabled);
-> +		atomic_add(RESET_BIT, &cpu_buffer->resize_disabled);
->  		atomic_inc(&cpu_buffer->record_disabled);
->  	}
->  
->  	/* Make sure all commits have finished */
->  	synchronize_rcu();
->  
-> -	for_each_online_buffer_cpu(buffer, cpu) {
-> +	for_each_buffer_cpu(buffer, cpu) {
->  		cpu_buffer = buffer->buffers[cpu];
->  
-> +		/*
-> +		 * If a CPU came online during the synchronize_rcu(), then
-> +		 * ignore it.
-> +		 */
-> +		if (!(atomic_read(&cpu_buffer->resize_disabled) & RESET_BIT))
-> +			continue;
-> +
->  		reset_disabled_cpu_buffer(cpu_buffer);
->  
->  		atomic_dec(&cpu_buffer->record_disabled);
-> -		atomic_dec(&cpu_buffer->resize_disabled);
-> +		atomic_sub(RESET_BIT, &cpu_buffer->resize_disabled);
->  	}
->  
->  	mutex_unlock(&buffer->mutex);
+  4701	
+  4702	/*
+  4703	 * mas_next_slot() - Get the entry in the next slot
+  4704	 *
+  4705	 * @mas: The maple state
+  4706	 * @max: The maximum starting range
+  4707	 *
+  4708	 * Return: The entry in the next slot which is possibly NULL
+  4709	 */
+> 4710	void *mas_next_slot(struct ma_state *mas, unsigned long max)
+  4711	{
+  4712		void __rcu **slots;
+  4713		unsigned long *pivots;
+  4714		unsigned long pivot;
+  4715		enum maple_type type;
+  4716		struct maple_node *node;
+  4717		unsigned char data_end;
+  4718		unsigned long save_point = mas->last;
+  4719		void *entry;
+  4720	
+  4721	retry:
+  4722		node = mas_mn(mas);
+  4723		type = mte_node_type(mas->node);
+  4724		pivots = ma_pivots(node, type);
+  4725		data_end = ma_data_end(node, type, pivots, mas->max);
+  4726		pivot = mas_logical_pivot(mas, pivots, mas->offset, type);
+  4727		if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
+  4728			goto retry;
+  4729	
+  4730		if (pivot >= max)
+  4731			return NULL;
+  4732	
+  4733		if (likely(data_end > mas->offset)) {
+  4734			mas->offset++;
+  4735			mas->index = mas->last + 1;
+  4736		} else  {
+  4737			if (mas_next_node(mas, node, max)) {
+  4738				mas_rewalk(mas, save_point);
+  4739				goto retry;
+  4740			}
+  4741	
+  4742			if (mas_is_none(mas))
+  4743				return NULL;
+  4744	
+  4745			mas->offset = 0;
+  4746			mas->index = mas->min;
+  4747			node = mas_mn(mas);
+  4748			type = mte_node_type(mas->node);
+  4749			pivots = ma_pivots(node, type);
+  4750		}
+  4751	
+  4752		slots = ma_slots(node, type);
+  4753		mas->last = mas_logical_pivot(mas, pivots, mas->offset, type);
+  4754		entry = mas_slot(mas, slots, mas->offset);
+  4755		if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
+  4756			goto retry;
+  4757	
+  4758		return entry;
+  4759	}
+  4760	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
