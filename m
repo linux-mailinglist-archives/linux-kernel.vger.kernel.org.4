@@ -2,174 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA76EF4C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5056EF4D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240740AbjDZM5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 08:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
+        id S240873AbjDZNDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240648AbjDZM5b (ORCPT
+        with ESMTP id S240010AbjDZNDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:57:31 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A980D19B0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:57:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-505934ccc35so12250362a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:57:28 -0700 (PDT)
+        Wed, 26 Apr 2023 09:03:41 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B6440FF;
+        Wed, 26 Apr 2023 06:03:38 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-b95c3b869dcso25206587276.1;
+        Wed, 26 Apr 2023 06:03:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1682513847; x=1685105847;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j1QsbQyF3TR/hoFInEXmDClrMvJnRmuE6Ofnl/uFp38=;
-        b=JmiY6YfBuybCRpi0/YDE8hX7+l6vTaPtTJ79KCJCouinYq1bCpGXoFcc26Bo/pDCfy
-         o4Nn4EiaaS5OOUNhKEbnkQxC3OhyMnr1F/Po4sE+yRvRLT49zfFp0dLSd5DlRpwblCL+
-         uto0euo/3QfNZtfjgrpwBJWVIkme+wT+ak18Q=
+        d=gmail.com; s=20221208; t=1682514218; x=1685106218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9tn7zb5KrY1tZ1RibX4mXJmyAQDX8JQUvrueQad8GjY=;
+        b=KiP4YnyiQR9xXZhaSCRyWzbZXzvrCR7jaygFdawWopk6DSnynzjqUSXo/X8tDPASXC
+         msqdDqqT+rYPKfgKPW64MIVm9+RcX+0B0hZTHKb7g28qNrtr2aY0Pv8eU3r0cqVygA37
+         PZ1Ssv/xsgasH0v8H+VWfmNl+lolhsU1ELS6B+XVWS6/FfkJQ31Wajvwz/RDJqKS2D0Z
+         ZGq8pE+c0CqWZYtCzD/Qv+6ILMR3LOt2OF+qHxAlcHiyC+u4VMSecLpXGGiZox1dFNSu
+         3sYrU6uDXHRKWBZXZSlVR+yWLw0yjJFkAePHzUGcfJVUUuMdDTC0MY4ppcbNtLkucmQE
+         r5dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682513847; x=1685105847;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j1QsbQyF3TR/hoFInEXmDClrMvJnRmuE6Ofnl/uFp38=;
-        b=lryHTuWBM+WznbeLqCumpQULvnTOEwXMzDPBp6RQruh7vkWAXa0amI0W4xGfNe3CAq
-         GuCgvkj2OnM9kVcHU0mUKicOWZERqHsSpej/mUTuLgpilom/S10EE2PSQaDj5Rx+iuuA
-         5vO0spexYY0lOdUkRIGi1zDuXycU65QrxW80bndG2VQwviksDFg3c1N86zlVzSc0fXzL
-         ufdDt7I7lrnMJkpM6CP5SZDUhfuKZ+wVsyC0F/3LVK/1wcDPJLgKnWco59agWOEH1IV3
-         NIMS4fgkIZbcsqKaZ1PRa1zYuqsFIJ1XEeZeSzb/EQraupmdd/S8QIL1Q69aveJEs+a1
-         PDTA==
-X-Gm-Message-State: AAQBX9foESkdo3+7fK8xoFdHVB9REnrYne40RTpuNbV2XYFMeyfHPuzq
-        NgCxrQNwlvdWtMA+KBjjZ92rD2w0RRhj5OY10UO2Lw==
-X-Google-Smtp-Source: AKy350ZGTmt/6Xm8J8Z+YJRO5ZAF5Cg9M4AsqmY4MImaN2aS8xw7FbSFm0eUoRt/8GYZH6ApMntLSdSXB3B6vwQeM54=
-X-Received: by 2002:aa7:c74e:0:b0:502:1cae:8b11 with SMTP id
- c14-20020aa7c74e000000b005021cae8b11mr19006448eds.23.1682513847171; Wed, 26
- Apr 2023 05:57:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682514218; x=1685106218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9tn7zb5KrY1tZ1RibX4mXJmyAQDX8JQUvrueQad8GjY=;
+        b=a4vxp1h8P1zVPRnTz65j/iGglihUwP8wGC0gX4V6UBYiFrZO18vKbhNzGssAEek+HV
+         JjFyKD6bSISfVUpUDist6mDHwIAV6VMuA0dwrYHh5915fQpLkhodcJ3jv3O0KbA/1C0a
+         tRXRIEOo9gUTQhV0DIaSX9bWgOT53dVmiS7GttgxHm0kyzsATuRstwlR4XejnXng0xqd
+         T6H5GnRTTVRHXymnkktFXW4PrAD/dqvR+5OCnjqkg5YWfHQM4WyFlnkr9jpj0CwHRdQ2
+         R8bo8ML7sb0XI9/RcQO+445adfcqLmDvIbEzKLEsrKb8RyaMdczcc/P0b1LQJve9Th2a
+         vAGA==
+X-Gm-Message-State: AC+VfDwWyAmDi31+3tu5LBMLG1Q5+QLy8Ov7QkFvZ7QzBp3KnnEFc9qG
+        Im8XPiqbXerKrwsdKdnr2czd98rX/ll2CzLKlWn04W048hHjk+pnbKg=
+X-Google-Smtp-Source: ACHHUZ4H/VbAY1+pHKI6jnm71og5XCs0SQW7rsBnLfKLTS5Htkp5SGqZr+D6arl2Wej2KL1RrH8fK6wVgFhpuRehc9U=
+X-Received: by 2002:a81:6c42:0:b0:54f:52b7:3eac with SMTP id
+ h63-20020a816c42000000b0054f52b73eacmr1621497ywc.9.1682514217805; Wed, 26 Apr
+ 2023 06:03:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230423075335.92597-1-kal.conley@dectris.com>
- <6446d34f9568_338f220872@john.notmuch> <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
- <644837cec75d1_8f94b20880@john.notmuch>
-In-Reply-To: <644837cec75d1_8f94b20880@john.notmuch>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Wed, 26 Apr 2023 15:02:17 +0200
-Message-ID: <CAHApi-kzaJxQTRgZqYmMSWYa6CW6b0U6x9Sdpk_Kt=fd2hPCjA@mail.gmail.com>
-Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230426124948.1072216-1-zhanggenjian@kylinos.cn>
+In-Reply-To: <20230426124948.1072216-1-zhanggenjian@kylinos.cn>
+From:   genjian zhang <zhanggenjian123@gmail.com>
+Date:   Wed, 26 Apr 2023 21:02:25 +0800
+Message-ID: <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com>
+Subject: Re: [PATCH] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > Was it noticable in some sort of performance test?
-> >
-> > This patch is part of the patchset found at
-> > https://lore.kernel.org/all/20230412162114.19389-3-kal.conley@dectris.com/
-> > which is being actively discussed and needs to be resubmitted anyway
-> > because of a conflict. While the discussion continues, I am submitting
-> > this patch by itself because I think it's an improvement on its own
-> > (regardless of what happens with the rest of the linked patchset). On
-> > one system, I measured a performance regression of 2-3% with xdpsock
-> > and the linked changes without the current patch. With the current
-> > patch, the performance regression was no longer observed.
+On Wed, Apr 26, 2023 at 8:51=E2=80=AFPM Genjian <zhanggenjian123@gmail.com>=
+ wrote:
 >
-> Would be nice to have in commit message so reader has an idea the
-> perf numbers are in fact better.
-
-When I measured this patch by itself (on bpf-next), I didn't measure
-any statistically significant performance gains. However, it did allow
-me to avoid a regression when combined with the other linked patch (as
-mentioned). I don't know if it makes sense to mention that other
-change which is not even applied to any tree. I was mainly submitting
-this patch from the perspective of the code being better not
-contingent on any provable performance gains.
-
+> From: Genjian Zhang <zhanggenjian@kylinos.cn>
 >
-> >
-> > > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> > > > index d318c769b445..a8d7b8a3688a 100644
-> > > > --- a/include/net/xsk_buff_pool.h
-> > > > +++ b/include/net/xsk_buff_pool.h
-> > > > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
-> > > >       if (likely(!cross_pg))
-> > > >               return false;
-> > > >
-> > > > -     return pool->dma_pages_cnt &&
-> > > > +     return pool->dma_pages &&
-> > > >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
-> > > >  }
-> >
-> > I would consider the above code part of the "fast path". It may be
-> > executed approximately once per frame in unaligned mode.
+> compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
 >
-> In the unlikely case though is my reading. So really shouldn't
-> be called for every packet or we have other perf issues by that
-> likely() there.
+> {standard input}: Assembler messages:
+> {standard input}:171: Error: found '(', expected: ')'
+> {standard input}:171: Error: found '(', expected: ')'
+> {standard input}:171: Error: non-constant expression in ".if" statement
+> {standard input}:171: Error: junk at end of line, first unrecognized
+> character is `('
 >
-> I assume the above is where the perf is being gained because below
-> two things are in setup/tear down. But then we are benchmarking
-> an unlikely() path?
-
-I was testing with large chunk sizes in unaligned mode (4000-4096
-bytes) with ZC. For chunk sizes nearly as large as PAGE_SIZE the
-unlikely path is actually the main path.
-
-> >
-> > > This seems to be used in the setup/tear-down paths so your optimizing
-> > > a control side. Is there a fast path with this code? I walked the
-> > > ice driver. If its just setup code we should do whatever is more
-> > > readable.
-> >
-> > It is not only used in setup/tear-down paths (see above).
-> > Additionally, I believe the code is also _more_ readable with this
-> > patch applied. In particular, this patch reduces cognitive complexity
-> > since people (and compilers) reading the code don't need to
-> > additionally think about pool->dma_pages_cnt.
-> >
-> > > Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
-> > > This is so deep into micro-optimizing I'm curious if you could measure it?
-> >
-> > It is saving a load which also reduces code size. This will affect
-> > other decisions such as what to inline. Also in the linked patchset,
-> > dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
+> Preprocessor expand ___SYNC () macros.However,'if' will be wrongly
+> replaced by C code when PROFILE_ALL_BRANCHES is enabled and ___SYNC
+> is used in inline assembly.This leads to syntax errors in the code.
+> Compilers report a lot of errors like the above.
+> Move '.if' into quoted strings to fix it.
 >
-> But again buried in an unlikely path. Sure but removing the conditional
-> altogether would be even better.
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> ---
+>  arch/mips/include/asm/sync.h | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
+> index aabd097933fe..d9f5a87424e7 100644
+> --- a/arch/mips/include/asm/sync.h
+> +++ b/arch/mips/include/asm/sync.h
+> @@ -175,7 +175,7 @@
+>   */
+>  #ifdef CONFIG_CPU_HAS_SYNC
+>  # define ____SYNC(_type, _reason, _else)                       \
+> -       .if     (( _type ) !=3D -1) && ( _reason );               \
+> +       ((_type) !=3D -1) && (_reason);                           \
+>         .set    push;                                           \
+>         .set    MIPS_ISA_LEVEL_RAW;                             \
+>         .rept   __SYNC_rpt(_type);                              \
+> @@ -192,13 +192,15 @@
+>  /*
+>   * Preprocessor magic to expand macros used as arguments before we inser=
+t them
+>   * into assembly code.
+> + * In addition,=E2=80=98if=E2=80=99 can not be substituted when CONFIG_P=
+ROFILE_ALL_BRANCHES is
+> + * enabled.
+>   */
+>  #ifdef __ASSEMBLY__
+>  # define ___SYNC(type, reason, else)                           \
+> -       ____SYNC(type, reason, else)
+> +       .if     ____SYNC(type, reason, else)
+>  #else
+>  # define ___SYNC(type, reason, else)                           \
+> -       __stringify(____SYNC(type, reason, else))
+> +       ".if"   __stringify(____SYNC(type, reason, else))
+>  #endif
+>
+>  #define __SYNC(type, reason)                                   \
+> --
+> 2.25.1
+>
 
-Yeah, I think that is another improvement to consider.
-
-> So my understanding is ZC is preferred and default mode and copy modes
-> are primarily fall back modes. So we are punishing the good case here
-> for a fallback to copy mode. I think overall refactoring the code to
-> avoid burdoning the fast case with a fallback slow case would be ideal
-> solution.
-
-I agree that ZC is preferred and this patch is aimed at improving the
-ZC path. The performance gain I observed was for ZC.
-
-> However, I agree just on readability the patch is fine and good. No
-> objection on my side. But I think if we are making performance
-> arguments for 2-3% here the better thing to do is remove the check
-> and unlikely() and we would see better benchmarks when using the
-> ZC mode which as I understand it is what performance aware folks should
-> be doing.
-
-I totally agree that other better improvements exist but I don't think
-they make this patch any less desirable. This change is only meant as
-a small incremental improvement.
+Maybe the readability of this modification is not very good. Any
+comments and suggestions are welcome. Thanks.
