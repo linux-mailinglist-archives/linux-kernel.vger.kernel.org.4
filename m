@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFE36EFE0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB666EFE12
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242755AbjDZXjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S242765AbjDZXmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 19:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239378AbjDZXje (ORCPT
+        with ESMTP id S241596AbjDZXmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 19:39:34 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CA61FEE;
-        Wed, 26 Apr 2023 16:39:33 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94a34a0b9e2so1153510466b.1;
-        Wed, 26 Apr 2023 16:39:33 -0700 (PDT)
+        Wed, 26 Apr 2023 19:42:07 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1FE2715;
+        Wed, 26 Apr 2023 16:42:06 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-18ef8e9aa00so980348fac.1;
+        Wed, 26 Apr 2023 16:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682552371; x=1685144371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oONRy5l2JLOJyEo1AeYm19pBhJ3UQG2RW3FoWKC6TsI=;
-        b=h2PZfx9252YBjhMtLryYSuzrbcGAljB7L9ewNiOfZlhLJ+zSh7pVKQFYNGo6RwRNNg
-         DxbbL/B5ZtqMoxab3wiA0hGrU7wDbXPBWSTlIUYyeCTUndsBJOkVKxGv0M4thC6Kja2e
-         /OTnpJVVHhcIy83FfS6kqUUm/8iEJBEVkAQEn8bXyHR0yGhx13PpdrxJfseEVF+LCmfe
-         L8rRQuKzKqfcBKNNrPz3YvmjdhwE/xvPP2Ue7Y1Jclhbk7dGmDxs2tC+UmPDPqkt+yie
-         9bv0/pZFuqwCa5gNchfmcpR8Cqx12cVhZtAeMdp1A/fly3Q9Qf15nPwDEMYk1MkI+Tj0
-         owFg==
+        d=gmail.com; s=20221208; t=1682552525; x=1685144525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRVDi1kbibKLZUZ4oONNkFD/814ytulXtGQ2n8Dlnpw=;
+        b=ZDMOXbzPRMvDWZ+K2ZrLEQ2u6bgFR0pNtpgktbA5WsvE1ZBBzHMrsH7p9Zxpt/l0p7
+         2Lg+oPJKkpLEaTUlRKOul3Dhm6WHmSF+fGaqclD7vybRGJ40F8J87UqyD3gAJZn6DTkR
+         N4AsYLZEyn+JUglYpp37uRzum7hyxCB9ZZmaYT5juaOEOximRgPIrxisxY+xOyxtTqNi
+         M3GBaS6Zq4cd83YpssIeN89zQZJAiFnzX43qqeVRZ8kPX2DKyZjYi6iUMOhttrGpoayF
+         JnmJpDH6jZs8jThgmaBwRdaYE2zpJHEjz/W/7a2lAWCo3tKvcdUG9iuRqUp1mRBsxLxF
+         3YHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682552371; x=1685144371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oONRy5l2JLOJyEo1AeYm19pBhJ3UQG2RW3FoWKC6TsI=;
-        b=GVv4+Z2ityS91RNEkumW4GrJxHJlItQENQkPwju83A0TErScafVczYvDMeQfh1iHQc
-         lWPLbHZa412gUCZZ9mSWh6YpeQ68FbqSFk5RoWYOCGblTdrTYCcjfmwev7M16f3RThaH
-         JUpzj2LqK5OgOc6V/M5SJ2WzmpXQY7ZQs5NqXRHZBXCMxvITX0yBCiM+7a/efspBgkcD
-         3upQFWqoeK6UC5N6+VS498gscB5UK8lAwLt9VZTZ8dWSlervdFEkun/4BKivbbeIiG/R
-         ZSugHKtP5/UXWQZroXqyM879PRbkWefF1k6aX21RFHdzueBH950rF5V+vIK/KihuRumb
-         g+xA==
-X-Gm-Message-State: AAQBX9cvB5vC2bNG5kSSsxPWb5cs1XAtY01NywrXWJQn4qEwu2hacFGw
-        b8wVDCrFNuI7YrBmuB2h4pv/cXAEhV+bvmcjZbI=
-X-Google-Smtp-Source: AKy350Z1MS8nZ6TqqFOhSOeHQMwhuHNCsFc5EqpQ0j/N1y3D0WzqBqwVeVHcMT4TKu7NdqndrSkfBJabhLxghswWKQc=
-X-Received: by 2002:a17:906:a103:b0:8aa:a9fe:a3fc with SMTP id
- t3-20020a170906a10300b008aaa9fea3fcmr19604988ejy.8.1682552371348; Wed, 26 Apr
- 2023 16:39:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682552525; x=1685144525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MRVDi1kbibKLZUZ4oONNkFD/814ytulXtGQ2n8Dlnpw=;
+        b=H2F0E0EBJ4BVDlNZlewbRFuXUMc2Zxk3VKATCW8U5i+smfEUH81+IuCzxjG7ChhEM5
+         F0hIEHF40qnrby5WAWn0sC79g9GML3pmE29N92PYPCiZy7vRKc5IcROfz/PhZgY/Ko7C
+         iinQevWyTFjdvNsC2ryPp+WH8df7UqT1xSKAgMwqupeqatDZHMjjRbVrYeB74blFmuVA
+         Vl/vmkOtX7tdEDL7rkVs56Bo3cfQNxYsAvic4qUYXy6RQfZazrO1Ivfh1XcIhFV3zTFB
+         snaWK/HEcUnrWQKGxD7HITPt2GzupLnfX2zBvglApfj8GMFFhhlSU4lwEKG8xjDuzgBj
+         3nVg==
+X-Gm-Message-State: AAQBX9evYc/We8pdJtcbcWefIoamFxVVDtRhnw67FxJ3sCU8aGhVaUJ2
+        cTUoVCSuNJsGJdNXIjUpqw==
+X-Google-Smtp-Source: AKy350Z2NxcqJlpFeQbEJ2g/uhlcLcXVwR4PzkuAFd9Q9hzQ7fgpWk+SDJZfQEYfKGOHlDUonH48zw==
+X-Received: by 2002:a05:6870:80cc:b0:188:1096:246f with SMTP id r12-20020a05687080cc00b001881096246fmr15024879oab.29.1682552525241;
+        Wed, 26 Apr 2023 16:42:05 -0700 (PDT)
+Received: from bytedance ([208.184.112.130])
+        by smtp.gmail.com with ESMTPSA id y10-20020a544d8a000000b0037b6f5d6309sm5085364oix.2.2023.04.26.16.42.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 16:42:04 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 16:42:01 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     Pedro Tammela <pctammela@mojatatu.com>,
+        Seth Forshee <sforshee@digitalocean.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        xiyou.wangcong@gmail.com, peilin.ye@bytedance.com,
+        yepeilin.cs@gmail.com, vladbu@nvidia.com, hdanton@sina.com
+Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
+ mini_qdisc_pair_swap
+Message-ID: <20230426233657.GA11249@bytedance>
+References: <0000000000006cf87705f79acf1a@google.com>
+ <20230328184733.6707ef73@kernel.org>
+ <ZCOylfbhuk0LeVff@do-x1extreme>
+ <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
+ <CAM0EoMn2LnhdeLcxCFdv+4YshthN=YHLnr1rvv4JoFgNS92hRA@mail.gmail.com>
+ <20230417230011.GA41709@bytedance>
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
- <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com>
-In-Reply-To: <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 26 Apr 2023 16:39:19 -0700
-Message-ID: <CAEf4BzZ_4kcM5=Jo3JoWQWugS3wkrtoteyM8YqkykFvYywG+kg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Dynptr Verifier Adjustments
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417230011.GA41709@bytedance>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
@@ -82,39 +84,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 3:07=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
-> wrote:
->
-> >
-> > It is expected that you build the freshest vmlinux image before
-> > building selftests, because we generate vmlinux.h from it. In your
-> > case we generated vmlinux.h from your system-wide
-> > /sys/kernel/btf/vmlinux BTF information, which doesn't yet have latest
-> > UAPI enums.
-> >
-> I'm still unable to build the selftests. I've got it pointed to a
-> locally built kernel built using the config/config.x86_64, and have
-> tried running the vmtest.sh script, and building just the tests via
-> make. I'm using O=3D to direct it to the out directory for the kernel
-> build. I've been hitting various errors when trying this. Confusingly
-> the error message isn't always the same. Currently from a clean build,
-> it complains about "linux/atomic.h" not found via #include
-> "../../../include/linux/filter.h"'s in various files. Other times it's
-> complained about the various helper functions from bpf_helper_defs.h
-> being unused.
->
-> I'm not sure if I'm invoking the command wrong, or missing
-> dependencies or something. I got past some earlier issues by updating
-> clang. Any idea what I'm doing wrong?
++Cc: Vlad Buslov, Hillf Danton
 
-Don't know, show the sequence of commands you are running?
+Hi all,
 
-I have linux source in ~/linux, and KBUILD_OUTPUT set to
-~/linux-build/default. And it only takes this:
+On Mon, Apr 17, 2023 at 04:00:11PM -0700, Peilin Ye wrote:
+> I also reproduced this UAF using the syzkaller reproducer in the report
+> (the C reproducer did not work for me for unknown reasons).  I will look
+> into this.
 
-$ cd ~/linux
-$ make -j90 # build kernel
-$ cd tools/testing/selftests/bpf
-$ make -j90 # build selftests
+Currently, multiple ingress (clsact) Qdiscs can access the per-netdev
+*miniq_ingress (*miniq_egress) pointer concurrently.  This is
+unfortunately true in two senses:
 
-And that's it.
+1. We allow adding ingress (clsact) Qdiscs under parents other than
+TC_H_INGRESS (TC_H_CLSACT):
+
+  $ ip link add ifb0 numtxqueues 8 type ifb
+  $ echo clsact > /proc/sys/net/core/default_qdisc
+  $ tc qdisc add dev ifb0 handle 1: root mq
+  $ tc qdisc show dev ifb0
+  qdisc mq 1: root
+  qdisc clsact 0: parent 1:8
+  qdisc clsact 0: parent 1:7
+  qdisc clsact 0: parent 1:6
+  qdisc clsact 0: parent 1:5
+  qdisc clsact 0: parent 1:4
+  qdisc clsact 0: parent 1:3
+  qdisc clsact 0: parent 1:2
+  qdisc clsact 0: parent 1:1
+
+This is obviously racy and should be prohibited.  I've started working
+on patches to fix this.  The syz repro for this UAF adds ingress Qdiscs
+under TC_H_ROOT, by the way.
+
+2. After introducing RTNL-lockless RTM_{NEW,DEL,GET}TFILTER requests
+[1], it is possible that, when replacing ingress (clsact) Qdiscs, the
+old one can access *miniq_{in,e}gress concurrently with the new one.  For
+example, the syz repro does something like the following:
+
+  Thread 1 creates sch_ingress Qdisc A (containing mini Qdisc a1 and a2),
+  then adds a cls_flower filter X to Qdisc A.
+
+  Thread 2 creates sch_ingress Qdisc B (containing mini Qdisc b1 and b2)
+  to replace Qdisc A, then adds a cls_flower filter Y to Qdisc B.
+
+  Device has 8 TXQs.
+
+ Thread 1               A's refcnt   Thread 2
+  RTM_NEWQDISC (A, locked)    
+   qdisc_create(A)               1
+   qdisc_graft(A)                9
+
+  RTM_NEWTFILTER (X, lockless)
+   __tcf_qdisc_find(A)          10
+   tcf_chain0_head_change(A)
+ ! mini_qdisc_pair_swap(A)           
+            |                        RTM_NEWQDISC (B, locked)
+            |                    2    qdisc_graft(B)
+            |                    1    notify_and_destroy(A)
+            |                                  
+            |                        RTM_NEWTFILTER (Y, lockless)
+            |                         tcf_chain0_head_change(B)
+            |                       ! mini_qdisc_pair_swap(B)
+   tcf_block_release(A)          0             |
+   qdisc_destroy(A)                            |
+   tcf_chain0_head_change_cb_del(A)            |
+ ! mini_qdisc_pair_swap(A)                     |
+            |                                  |
+           ...                                ...
+
+As we can see there're interleaving mini_qdisc_pair_swap() calls between
+Qdisc A and B, causing all kinds of troubles, including the UAF (thread
+2 writing to mini Qdisc a1's rcu_state after Qdisc A has already been
+freed) reported by syzbot.
+
+To fix this, I'm cooking a patch that, when replacing ingress (clsact)
+Qdiscs, in qdisc_graft():
+
+  I.  We should make sure there's no on-the-fly lockless filter requests
+      for the old Qdisc, and return -EBUSY if there's any (or can/should
+      we wait in RTM_NEWQDISC handler?)
+
+  II. We should destory the old Qdisc before publishing the new one
+      (i.e. setting it to dev_ingress_queue(dev)->qdisc_sleeping, so
+      that subsequent filter requests can see it), because
+      {ingress,clsact}_destroy() also call mini_qdisc_pair_swap(), which
+      sets *miniq_{in,e}gress to NULL
+
+Future Qdiscs that support RTNL-lockless cls_ops, if any, won't need
+this fix, as long as their ->chain_head_change() don't access
+out-of-Qdisc-scope data, like pointers in struct net_device.
+
+Do you think this is the right way to go?  Thanks!
+
+[1] Thanks Hillf Danton for the hint:
+    https://syzkaller.appspot.com/text?tag=Patch&x=10d7cd5bc80000
+
+Thanks,
+Peilin Ye
+
