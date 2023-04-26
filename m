@@ -2,134 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D87A6EF1E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463E16EF1F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240081AbjDZK0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S240447AbjDZK3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239853AbjDZK0B (ORCPT
+        with ESMTP id S239463AbjDZK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:26:01 -0400
-Received: from out28-101.mail.aliyun.com (out28-101.mail.aliyun.com [115.124.28.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D9A3C0C;
-        Wed, 26 Apr 2023 03:25:59 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1189686|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0275812-0.000346042-0.972073;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.SRCgG.0_1682504752;
-Received: from 10.0.2.15(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.SRCgG.0_1682504752)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Apr 2023 18:25:53 +0800
-Message-ID: <11f0641a-ef6c-eee8-79f3-45654ae006d5@motor-comm.com>
-Date:   Wed, 26 Apr 2023 18:24:43 +0800
+        Wed, 26 Apr 2023 06:29:41 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4490249F0;
+        Wed, 26 Apr 2023 03:29:39 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A06385FD7A;
+        Wed, 26 Apr 2023 13:29:37 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682504977;
+        bh=G2zp6fXp50ZrnxTL45q7kYiCTTf6jCTtGwh/0Q+wtss=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=TuYBmAqFr809pIi+6bVNedFGOtePyBzWRfuu4qWOQbnHjW3reDXL/t3nwejNgv53k
+         FiXNL54F3rxJtviC8KOfwrX/pM5EgqXxiC+uAuNHP6Ra+TsLWDhLZx+6Po6fW4EEtR
+         LqBqIpoBFQKnNtw/w3RRyyMUJH2MM3tjwLFht3fyey2WuV4iiixgYkeQjipdH8dPjT
+         3u3kBl77oMxFJ9WwanIiJ52RtHisH0hDzJP0lNW7vyxv9TYeORcoidVvUdFxRsfJux
+         6VeTgFjrDiEuFNGHwNpU1lxF51TO7DbCdvNDdIDNA8MKg7XMkOqNrLgoTBQNyh9biA
+         YUThncWFN1BCw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 13:29:35 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
+        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <mturquette@baylibre.com>,
+        <vkoul@kernel.org>, <kishon@kernel.org>, <hminas@synopsys.com>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v3 0/5] arm64: meson: support Amlogic A1 USB OTG controller
+Date:   Wed, 26 Apr 2023 13:29:17 +0300
+Message-ID: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 2/2] net: phy: motorcomm: Add pad drive strength cfg
- support
-Content-Language: en-US
-To:     Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230426063541.15378-1-samin.guo@starfivetech.com>
- <20230426063541.15378-3-samin.guo@starfivetech.com>
-From:   Frank Sae <Frank.Sae@motor-comm.com>
-In-Reply-To: <20230426063541.15378-3-samin.guo@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series introduces full support for the Amlogic A1 USB controller
+in OTG mode (peripheral and host modes switching).
 
+Previously, Amlogic's patch series [1] was applied to the upstream tree,
+but it only had USB host mode support.
+Furthermore, the device tree patchset [2] wasn't merged due to a missing
+clk driver.
+Patchset [2] has been completely reworked:
+    - changed register base offsets to proper values
+    - introduced dwc2 in peripheral mode
+    - OTG mode support
+    - the SoB of Amlogic authors still remain
 
-On 2023/4/26 14:35, Samin Guo wrote:
-> The motorcomm phy (YT8531) supports the ability to adjust the drive
-> strength of the rx_clk/rx_data, and the default strength may not be
-> suitable for all boards. So add configurable options to better match
-> the boards.(e.g. StarFive VisionFive 2)
-> 
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> ---
->  drivers/net/phy/motorcomm.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-> index 2fa5a90e073b..08f28ed83e60 100644
-> --- a/drivers/net/phy/motorcomm.c
-> +++ b/drivers/net/phy/motorcomm.c
-> @@ -236,6 +236,11 @@
->   */
->  #define YTPHY_WCR_TYPE_PULSE			BIT(0)
->  
-> +#define YTPHY_PAD_DRIVE_STRENGTH_REG		0xA010
-> +#define YTPHY_RGMII_RXC_DS			GENMASK(15, 13)
-> +#define YTPHY_RGMII_RXD_DS			GENMASK(5, 4)	/* Bit 1 and 0 of rgmii_rxd_ds */
-> +#define YTPHY_RGMII_RXD_DS2			BIT(12) 	/* Bit 2 of rgmii_rxd_ds */
-> +
+Testing:
+    - USB OTG role switching between gadget and host - OK
+    - Peripheral mode - OK (tested with adb shell/push/pop)
+    - Host mode - OK (tested only USB enumeration and detection)
 
-Please  change YTPHY_RGMII_XXX  to YT8531_RGMII_XXX. YT8521's reg (0xA010) is not same as this.
-Keep bit order.
+Changes v3 since v2 at [4]:
+    - if reset_control_reset() fails during phy_exit() callback
+      execution, do not disable clkin, instead, return an error
+      immediately
+    - provide proper 'phy-names' for the dwc2 device tree node as
+      'usb2-phy' instead of 'usb2_phy' (replace underscore with dash)
 
->  #define YTPHY_SYNCE_CFG_REG			0xA012
->  #define YT8521_SCR_SYNCE_ENABLE			BIT(5)
->  /* 1b0 output 25m clock
-> @@ -1495,6 +1500,7 @@ static int yt8531_config_init(struct phy_device *phydev)
->  {
->  	struct device_node *node = phydev->mdio.dev.of_node;
->  	int ret;
-> +	u32 val;
->  
->  	ret = ytphy_rgmii_clk_delay_config_with_lock(phydev);
->  	if (ret < 0)
-> @@ -1518,6 +1524,32 @@ static int yt8531_config_init(struct phy_device *phydev)
->  			return ret;
->  	}
->  
-> +	if (!of_property_read_u32(node, "rx-clk-driver-strength", &val)) {
+Changes v2 since v1 at [3]:
+    - as Martin suggested in v1, this commit completely removes
+      the 'otg_switch_supported' parameter from dwc3_meson_g12a_drvdata;
+      this parameter is no longer necessary as all IP versions now
+      support OTG switching
+    - this commit moves the USB PHY clkin enable/disable calls to
+      the PHY init/exit routines
 
-Please check the val of "val", add the handle of default value.
+Links:
+    [1] https://lore.kernel.org/all/1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com/
+    [2] https://lore.kernel.org/all/1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com/
+    [3] https://lore.kernel.org/all/20230414152423.19842-1-ddrokosov@sberdevices.ru/
+    [4] https://lore.kernel.org/all/20230418111612.19479-1-ddrokosov@sberdevices.ru/
 
-> +		ret = ytphy_modify_ext_with_lock(phydev,
-> +						 YTPHY_PAD_DRIVE_STRENGTH_REG,
-> +						 YTPHY_RGMII_RXC_DS,
-> +						 FIELD_PREP(YTPHY_RGMII_RXC_DS, val));
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	if (!of_property_read_u32(node, "rx-data-driver-strength", &val)) {
-> +		if (val > FIELD_MAX(YTPHY_RGMII_RXD_DS)) {
-> +			val &= FIELD_MAX(YTPHY_RGMII_RXD_DS);
-> +			val = FIELD_PREP(YTPHY_RGMII_RXD_DS, val);
-> +			val |= YTPHY_RGMII_RXD_DS2;
-> +		} else {
-> +			val = FIELD_PREP(YTPHY_RGMII_RXD_DS, val);
-> +		}
-> +
-> +		ret = ytphy_modify_ext_with_lock(phydev,
-> +						 YTPHY_PAD_DRIVE_STRENGTH_REG,
-> +						 YTPHY_RGMII_RXD_DS | YTPHY_RGMII_RXD_DS2,
-> +						 val);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
+Dmitry Rokosov (5):
+  phy: amlogic: enable/disable clkin during Amlogic USB PHY init/exit
+  usb: dwc2: support dwc2 IP for Amlogic A1 SoC family
+  dt-bindings: usb: dwc2: add support for Amlogic A1 SoC USB peripheral
+  usb: dwc3-meson-g12a: support OTG switch for all IP versions
+  arm64: dts: meson: a1: support USB controller in OTG mode
+
+ .../devicetree/bindings/usb/dwc2.yaml         |  1 +
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi     | 59 +++++++++++++++++++
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c     | 15 ++++-
+ drivers/usb/dwc2/params.c                     | 21 +++++++
+ drivers/usb/dwc3/dwc3-meson-g12a.c            | 16 +----
+ 5 files changed, 97 insertions(+), 15 deletions(-)
+
+-- 
+2.36.0
+
