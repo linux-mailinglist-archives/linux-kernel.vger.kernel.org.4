@@ -2,158 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 764896EFD28
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3236E6EFD53
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjDZWcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S234043AbjDZWhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjDZWcB (ORCPT
+        with ESMTP id S233605AbjDZWhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:32:01 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDFF35A1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:32:00 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f6c285d22so1451700266b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682548318; x=1685140318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SVW5WV/KqwfqyBwNIu5H8m6OJfcQGZ/T7DvmWxmWHzc=;
-        b=SK5WhvdhD+pFQAgeMnn+cxG4NVGIZi8UCWzoAoYEwd6MfKAHL4hGv9hryJHO6lbFKN
-         3cNxiSH2NXz4vM4JDhm5QzJ8OtcUhZ8mZnUNXxzsxaOZmI40cIb6uVQ2OP4uhSsgnZ/5
-         EkWDO8usQILfZAod62VsNHOEm6mbdk3qQCioM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682548318; x=1685140318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SVW5WV/KqwfqyBwNIu5H8m6OJfcQGZ/T7DvmWxmWHzc=;
-        b=T+MK4Mg8yrgTajUcGtg4IJ/ONwDRt9mDdjwePKkMxEI8+1GTuuIw/OUoyOlUeOptkH
-         S5aBGzWumrqLEUSLfoU0M9IuqRvGllkily+R7Xv84oqfpDxuFrWeSGnQJ383WEFqqZOc
-         FYJ79M2X88S4of5Y9tdf4TfYZG9FXhQiSAd+KvcW7MFiF9+ob0MIkPGxe/bbstoM1DYz
-         lFn97CMcWN1KRG0oiyi5v5o+IMMJJlKj0VyZYTrqPmItyQWYAHKP7wehJ+t0g7uuggbK
-         hPuxV7Tldu+NQAujVZ7MvIio3Olb0JBfU7jQASIQNitePsRTmWOl3sKqdGu50T/losiP
-         1xpA==
-X-Gm-Message-State: AAQBX9csuDLZKdeizbxAXuGHaAVfy4chH065kpx70HlCnaL1IvSjL+XK
-        xeHTGa8bYCx8z8MgvXv2dspR+p9B5fHCPf66vFoUMA==
-X-Google-Smtp-Source: AKy350YtI1ccknRKXEIA/S787KNWtmsqhsQzfNafE9Au4YXLiMGJLBx5dWHTjXNbf4vRxvCL+kRIng==
-X-Received: by 2002:a17:907:c001:b0:94f:449e:75db with SMTP id ss1-20020a170907c00100b0094f449e75dbmr21288731ejc.52.1682548318645;
-        Wed, 26 Apr 2023 15:31:58 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id v15-20020a170906338f00b0094c3ac3c2bbsm8783477eja.212.2023.04.26.15.31.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 15:31:57 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-505035e3368so13407118a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:31:57 -0700 (PDT)
-X-Received: by 2002:a17:906:224d:b0:94f:3eca:ab05 with SMTP id
- 13-20020a170906224d00b0094f3ecaab05mr21379641ejr.59.1682548317009; Wed, 26
- Apr 2023 15:31:57 -0700 (PDT)
+        Wed, 26 Apr 2023 18:37:25 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1193BE6D;
+        Wed, 26 Apr 2023 15:37:19 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 486DF2012C;
+        Thu, 27 Apr 2023 00:37:16 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH v4 00/22] drm/msm/dpu: Implement tearcheck support on INTF
+ block
+Date:   Thu, 27 Apr 2023 00:37:14 +0200
+Message-Id: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
 MIME-Version: 1.0
-References: <20230425041838.GA150312@mit.edu> <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
- <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
- <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
- <CAKwvOdm3gkAufWcWBqDMQNRXVqJjooFQ4Bi5YPHndWFCPScG+g@mail.gmail.com>
- <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com> <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 26 Apr 2023 15:31:39 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_=4EXm_FMYETDo-aETdWPBvJ0_bv+GaOMz2bu8UoWxA@mail.gmail.com>
-Message-ID: <CAHk-=wi_=4EXm_FMYETDo-aETdWPBvJ0_bv+GaOMz2bu8UoWxA@mail.gmail.com>
-Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJqnSWQC/33OTQrCMBCG4atI1k7JJDWprryHuOjPpI5oWpJaF
+ OndTQuuKi7fgXn43iJSYIrisHmLQCNH7nyKfLsR9aX0LQE3qYWSSsscEZr+AewHBwMBlabIHWq
+ ShRbpow/k+Llop3PqC8ehC68FH3G+zo5CpVHhTkqTKcTCSEC4l4GvPosPvg7kj7G7l+xv7CnrQ
+ itmbFRfYD1kVCCBnDV1YS1Ve/sT0H8AnQCz1xVaRyZNWwHTNH0A2KETdy0BAAA=
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 3:08=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> Is this what you had in mind?
-> ```
-> void * _Nonnull foo (void)
-> ...
-> void bar (void) {
->     if (foo() =3D=3D NULL) // maybe should warn that foo() returns _Nonnu=
-ll?
->         bar();
-> ...
-> linus.c:8:15: warning: comparison of _Nonnull function call 'foo'
-> equal to a null pointer is always false
+Since DPU 5.0.0 the TEARCHECK registers and interrupts moved out of the
+PINGPONG block and into the INTF.  Implement the necessary callbacks in
+the INTF block, and use these callbacks together with the INTF_TEAR
+interrupts.  Additionally, disable previous register writes and remove
+unused interrupts in the PINGPONG and MDP_TOP blocks for these newer
+platforms.
 
-Yes.
+With these patches the devices on DPU >= 5.0.0 listed below now update
+their panels at 60fps without tearing (nor sluggishness), and without
+repeated timeouts in dmesg.
 
-HOWEVER.
+Tested on the following devices with command-mode panels and TE pins:
 
-I suspect you will find that it gets complicated for more indirect
-uses, and that may be why people have punted on this.
+- Sony Xperia XZ3 (sdm845, DPU 4.0.0, cmdmode panel): no regressions on
+  PINGPONG TE;
+- Sony Xperia 5 (sm8150, DPU 5.0.0);
+- Sony Xperia 10 II (sm6125, DPU 5.0.4).
 
-For example, let's say that you instead have
+---
+Changes in v4:
+- Drop indentation changes from patch 17/21 by initially reserving
+  enough in 10/21;
+- Drop documentation indentation changes in patch 18/21;
+- Drop existing "TODO TE sub-blocks" from SM8550 in patch 18/21;
+- Drop TE2 sub-block and feature flag from all DPU >= 5.0.0 instead of
+  just DPU >= 7.0.0 hardware (patch 2/21);
+  - Use double tabs in SC8280XP PP newline indentation to match the
+    other files, and not having to change it every time the opening
+    brace of the macro changes;
+  - Drop review tags after changing this patch significantly;
+- Insert new patch that sets the PINGPONG block length to zero on DPU >=
+  7.0.0 via the PP_BLK_DITHER macro.
 
-   void *bar(void) { return foo(); }
+v3: https://lore.kernel.org/r/20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org
 
-and 'bar()' gets inlined.
+Changes in v3:
+- Use new commit hashes in Fixes: tags after drm-msm's msm-next was
+  force-pushed;
+- Rename dpu_hw_setup_vsync_source to
+  dpu_hw_setup_vsync_source_and_vsync_sel and drop _v1 suffix from
+  dpu_hw_setup_vsync_source_v1;
+- Refactor dpu_hw_interrupts register offsets to take the block offset
+  as argument and compute the actual register with a base offset and
+  stride, rather than hardcoding the many per-INTF and per-AD4 register
+  offsets with fixed stride manually;
+- Split INTF_TEAR interrupt additions into a core (dpu_hw_interrupts.c)
+  and catalog patch;
+- Add new patch to make DITHER sub-block of SM8[34]50 and SC8280XP V2
+  instead of V1.
 
-The obvious reaction to that is "ok, clearly the result is still
-_Nonnull, and should warn if it is tested.
+v2: https://lore.kernel.org/r/20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org
 
-But that obvious reaction is actually completely wrong, because it may
-be that the real code looks something like
+Changes in v2:
+- Rebase on -next with all the new SC8280XP and SM8[345]50 support;
+  - Remove duplicate PP_BLK_TE macro now that .features is an argument;
+  - Fix PP_BLK_DIPHER -> DITHER typo that was added recently;
+  - Add INTF_TEAR interrupt blocks for DPU 7.0.0 (moved to different
+    register range);
+  - Describe INTF_TEAR support for the newly added SM8350, SM8450,
+    SM8550 and SC8280XP SoCs;
+  - Remove TE2 subblocks from 8[34]50 and sc8280xp (new patch);
+- Rebase on -next with DPU catalog rework;
+  - Remove dpu_hw_intf_v1_get_status which was inlined in the original
+    dpu_hw_intf_get_status function in e3969eadc8ee ("drm/msm/disp/dpu:
+    get timing engine status from intf status register");
+  - Many changes to move all catalog edits to separate files;
+- Add documentation for DPU_MDP_VSYNC_SEL;
+- Fix sdm8150_mdp typo, should be sm8150_mdp;
+- Move unrelated INTF_INTR offsets out of hwio header (new patch);
+- Remove _reg argument from INTF_BLK, since we now have a third
+  interrupt with a different base register.  To prevent confusion all
+  three interrupts should provide the final value from DPU_IRQ_IDX
+  directly.
+- Only request the new tear_rd_ptr in a new INTF_BLK_DSI_TE macro;
+- Drop stray INTF_MISR_SIGNATURE register definition;
+- Clean up registers in dpu_hw_intf.c (many new patches);
+- merged setup_tearcheck() and enable_tearcheck() callbacks;
+- replaced enable_tearcheck(false) with new disable_tearcheck()
+  callback;
+- Moved dpu_encoder_phys_cmd_enable_te intestines (just autorefresh
+  disablement) to INTF and PP block, replacing 3 callbacks in both
+  blocks with just a single disable_autorefresh() callback.
 
-   void *bar(void) {
-#if CONFIG_XYZ
-    if (somecondition) return NULL;
-#endif
-    return foo(); }
+v1: https://lore.kernel.org/r/20221231215006.211860-1-marijn.suijten@somainline.org
 
-and the caller really *should* check for NULL - it's just that the
-compiler never saw that case.
+---
+Konrad Dybcio (1):
+      drm/msm/dpu: Move dpu_hw_{tear_check,pp_vsync_info} to dpu_hw_mdss.h
 
-So only testing the direct return value of a function should warn.
+Marijn Suijten (21):
+      drm/msm/dpu: Remove unused INTF0 interrupt mask from SM6115/QCM2290
+      drm/msm/dpu: Remove TE2 block and feature from DPU >= 5.0.0 hardware
+      drm/msm/dpu: Move non-MDP_TOP INTF_INTR offsets out of hwio header
+      drm/msm/dpu: Reindent REV_7xxx interrupt masks with tabs
+      drm/msm/dpu: Fix PP_BLK_DIPHER -> DITHER typo
+      drm/msm/dpu: Use V2 DITHER PINGPONG sub-block in SM8[34]50/SC8280XP
+      drm/msm/dpu: Set PINGPONG block length to zero for DPU >= 7.0.0
+      drm/msm/dpu: Remove duplicate register defines from INTF
+      drm/msm/dpu: Remove extraneous register define indentation
+      drm/msm/dpu: Sort INTF registers numerically
+      drm/msm/dpu: Take INTF index as parameter in interrupt register defines
+      drm/msm/dpu: Drop unused poll_timeout_wr_ptr PINGPONG callback
+      drm/msm/dpu: Move autorefresh disable from CMD encoder to pingpong
+      drm/msm/dpu: Disable pingpong TE on DPU 5.0.0 and above
+      drm/msm/dpu: Disable MDP vsync source selection on DPU 5.0.0 and above
+      drm/msm/dpu: Factor out shared interrupt register in INTF_BLK macro
+      drm/msm/dpu: Describe TEAR interrupt registers for DSI interfaces
+      drm/msm/dpu: Add TEAR-READ-pointer interrupt to INTF block
+      drm/msm/dpu: Merge setup_- and enable_tearcheck pingpong callbacks
+      drm/msm/dpu: Implement tearcheck support on INTF block
+      drm/msm/dpu: Remove intr_rdptr from DPU >= 5.0.0 pingpong config
 
-And even that "direct return value" is not trivial. What happens if
-you have something like this:
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  26 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  26 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  40 +--
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  48 ++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  40 +--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  16 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  15 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  15 +-
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  40 +--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |  22 +-
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  64 +++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  46 ++--
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  37 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  11 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h   |  10 +-
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   | 210 ++++++++--------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  45 ++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   5 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c  | 183 +++++++-------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h  |   4 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 268 ++++++++++++++++++---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  25 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |  48 ++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |  83 ++++---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.h    |  64 +----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_top.c         |  50 ++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hwio.h           |   3 -
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h            |   4 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_trace.h          |  14 ++
+ 29 files changed, 973 insertions(+), 489 deletions(-)
+---
+base-commit: b7455b10da762f2d447678c88e37cc1eb6cb45ee
+change-id: 20230411-dpu-intf-te-ea684f13e083
 
-   void bar(void) { do_something(foo()); }
+Best regards,
+-- 
+Marijn Suijten <marijn.suijten@somainline.org>
 
-and "do_something()" ends up being inlined - and checks for its
-argument for being NULL? Again, that "test against NULL" may well be
-absolutely required in that context - because *other* call-sites will
-pass in pointers that might be NULL.
-
-Now, I don't know how clang works internally, but I suspect based just
-on the size of your patch that your patch would get all of this
-horribly wrong.
-
-So doing a naked
-
-    void *ptr =3D foo();
-    if (!ptr) ...
-
-should warn.
-
-But doing the exact same thing, except the test for NULL came in some
-other context that just got inlined, cannot warn.
-
-I _suspect_ that the reason clang does what it does is that this is
-just very complicated to do well.
-
-It sounds easy to a human, but ...
-
-          Linus
