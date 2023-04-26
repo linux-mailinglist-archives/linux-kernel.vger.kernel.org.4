@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DBD6EEC45
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0DC6EEC46
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 04:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbjDZCOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 22:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S239052AbjDZCPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 22:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238459AbjDZCOW (ORCPT
+        with ESMTP id S238460AbjDZCP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 22:14:22 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EBE46A1;
-        Tue, 25 Apr 2023 19:14:20 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q5j4z0mJdz18KLb;
-        Wed, 26 Apr 2023 10:10:27 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 26 Apr 2023 10:14:18 +0800
-Subject: Re: Bug: "perf record" reporting buffer overflow when writing data
-To:     Will Ochowicz <Will.Ochowicz@genusplc.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CWLP265MB497033A5B448268D677F03DD9C649@CWLP265MB4970.GBRP265.PROD.OUTLOOK.COM>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <6c88ac58-a2c8-0b15-a106-9c8b0e26b3ac@huawei.com>
-Date:   Wed, 26 Apr 2023 10:14:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 25 Apr 2023 22:15:29 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B0618E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:15:27 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-5ef54bcded4so30350326d6.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 19:15:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1682475327; x=1685067327;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGc47UmShwVrvDYZPpGcnQwNYLvIbd7qZ14xZo9khvU=;
+        b=Q1fA8n97qoplxDSqa8wI8dtHEu1b9yHDm+d49HtS9Hw7PILZx9lDF0GpjgZTSsklU4
+         d1DI5wPp7hQ0hOPbiY8rDzmBs3U2TsTfCBzQ/ibSfH+sv6uza0b6iYchK17Mo2UyP17l
+         dO5hILr4oMBKVAYcmJiiJpCtsCUJqNLkj0Bdk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682475327; x=1685067327;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGc47UmShwVrvDYZPpGcnQwNYLvIbd7qZ14xZo9khvU=;
+        b=TxMXanPSFUnZotTfVmX83wdjtEsKQQH93ZagIsK6bFuf7GgmcIgEyu2KU47Ox+Ms2B
+         MzMATuSNw1oBE8wgQsiyQh3gmo664sdoaVaM1zKLk+CdOwR0udtmh15SwOLTCL44Ec0+
+         c7PqrDSh4REzIPeppRFMcSYLOgO/O/fEpc4/y6dMKbqjbE49M/RmzmR0kWK1it7aGVkZ
+         S9Is8BBQa6gxXKQ0zpqpC/E7gd8v1m2B1Pa7Ap5CjxPgyVuuS3tNn4jFWyxTI5wq0zmu
+         o7FZ/9UnR2QrAzJsbXDwJHRQ/aG0QZeRrCgqNnCmIPzD+CIxwG8pbLTBvSeGi6dCWW1i
+         dj0g==
+X-Gm-Message-State: AAQBX9cMuS7ycs3ureocU0lOvrhQxEsQJzlr6nANneQlQLqX1pHZZ6if
+        5E9Fh/1BLB9/XpmEd6WrDMOhTc010tBG5kuDLdA=
+X-Google-Smtp-Source: AKy350b9uSUMPSCwybpYqSUcr8gjirWn9Qm4JhzaIyDtDY7ICUyQYmQeurkjgnSCeAYc5LUWkrzvdw==
+X-Received: by 2002:a05:6214:2305:b0:5ef:5e1b:a365 with SMTP id gc5-20020a056214230500b005ef5e1ba365mr29059934qvb.10.1682475326878;
+        Tue, 25 Apr 2023 19:15:26 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id b9-20020a0ccd09000000b005e5b2c560d0sm4497149qvm.7.2023.04.25.19.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Apr 2023 19:15:26 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 02:15:25 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "lance@osuosl.org" <lance@osuosl.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
+Message-ID: <20230426021525.GA2171827@google.com>
+References: <20230424151351.GP19790@gate.crashing.org>
+ <ZEagN1jJwg+rUzX4@boqun-archlinux>
+ <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
+ <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
+ <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
+ <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com>
+ <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu>
+ <CAABZP2zW7aTPChjvZMA1bECdOdFUdTd-q+vEJXJnH2zPU+uR8A@mail.gmail.com>
+ <CAEXW_YQJowYrF2A=f2NOKNNjL6qZH6LzghBxt7VnJFgg-i1zgg@mail.gmail.com>
+ <CAABZP2w8eDSRXCoLiWGjGtz6VifPfaaF=Mje7Y8aXjugy-vNkA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CWLP265MB497033A5B448268D677F03DD9C649@CWLP265MB4970.GBRP265.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAABZP2w8eDSRXCoLiWGjGtz6VifPfaaF=Mje7Y8aXjugy-vNkA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Zhouyi,
 
-On 2023/4/26 0:54, Will Ochowicz wrote:
-> Hi all,
-> 
-> [1.] One line summary of the problem: "perf record" reporting buffer overflow when writing data
-> [2.] Full description of the problem/report:
-> I was using perf to monitor the performance of a node server, and when I stopped the server, perf crashed while writing the data with a message of
-> 
->> [ perf record: Woken up 96 times to write data ]
->> *** buffer overflow detected ***: terminated
-> 
-> I downloaded perf version 5.10.158 (the same version that caused the issue) and compiled with debug symbols, but did not run into issues. However, after I started adding libraries to enable additional features, the buffer overflow began again.
-> Below is the stack trace from where the crash occurred:
->       
-> Thread 1 "perf" received signal SIGABRT, Aborted.
-> __pthread_kill_implementation (threadid=<optimized out>, signo=signo@entry=6, no_tid=no_tid@entry=0)
->      at ./nptl/pthread_kill.c:44
-> 44      ./nptl/pthread_kill.c: No such file or directory.
-> (gdb) bt
-> #0  __pthread_kill_implementation (threadid=<optimized out>, signo=signo@entry=6, no_tid=no_tid@entry=0)
->      at ./nptl/pthread_kill.c:44
-> #1  0x00007ffff72d4d2f in __pthread_kill_internal (signo=6, threadid=<optimized out>) at ./nptl/pthread_kill.c:78
-> #2  0x00007ffff7285ef2 in __GI_raise (sig=sig@entry=6) at ../sysdeps/posix/raise.c:26
-> #3  0x00007ffff7270472 in __GI_abort () at ./stdlib/abort.c:79
-> #4  0x00007ffff72c92d0 in __libc_message (action=action@entry=do_abort,
->      fmt=fmt@entry=0x7ffff73e3210 "*** %s ***: terminated\n") at ../sysdeps/posix/libc_fatal.c:155
-> #5  0x00007ffff7361e82 in __GI___fortify_fail (msg=msg@entry=0x7ffff73e31b6 "buffer overflow detected")
->      at ./debug/fortify_fail.c:26
-> #6  0x00007ffff7360990 in __GI___chk_fail () at ./debug/chk_fail.c:28
-> #7  0x00005555557e7ddd in memcpy (__len=40, __src=0x555556a28b38, __dest=0x7fffffff843c)
->      at /usr/include/x86_64-linux-gnu/bits/string_fortified.h:29
-> #8  write_buildid (fd=0x7fffffff8590, misc=<optimized out>, pid=-1, bid=0x555556a28b38,
->      name_len=<optimized out>, name=0x555556a28c0c "/opt/pylon/lib/libpylonbase-6.1.1.so") at util/build-id.c:312
-> #9  machine__write_buildid_table (machine=machine@entry=0x555555d9bef0, fd=fd@entry=0x7fffffff8590)
->      at util/build-id.c:361
-> #10 0x00005555557e865e in perf_session__write_buildid_table (session=session@entry=0x555555d9bd00,
->      fd=fd@entry=0x7fffffff8590) at util/build-id.c:374
-> #11 0x000055555581c4b9 in write_build_id (ff=ff@entry=0x7fffffff8590, evlist=evlist@entry=0x555555d96d60)
->      at util/header.c:320
-> #12 0x0000555555824fa3 in do_write_feat (evlist=0x555555d96d60, p=<synthetic pointer>, type=2, ff=0x7fffffff8590)
->      at util/header.c:3224
-> #13 perf_header__adds_write (fd=3, evlist=0x555555d96d60, header=<optimized out>) at util/header.c:3269
-> #14 perf_session__write_header (session=<optimized out>, evlist=0x555555d96d60, fd=3, at_exit=at_exit@entry=true)
->      at util/header.c:3353
-> #15 0x0000555555760777 in record__finish_output (rec=0x555555b9bb40 <record>) at builtin-record.c:1236
-> #16 0x0000555555763560 in __cmd_record (rec=0x555555b9bb40 <record>, argv=<optimized out>, argc=<optimized out>)
->      at builtin-record.c:2026
-> #17 cmd_record (argc=<optimized out>, argv=<optimized out>) at builtin-record.c:2835
-> #18 0x00005555557dc8a3 in run_builtin (p=p@entry=0x555555ba6cb8 <commands+216>, argc=argc@entry=8,
->      argv=argv@entry=0x7fffffffdb90) at perf.c:312
-> #19 0x000055555574af48 in handle_internal_command (argv=0x7fffffffdb90, argc=8) at perf.c:364
-> #20 run_argv (argv=<synthetic pointer>, argcp=<synthetic pointer>) at perf.c:408
-> #21 main (argc=8, argv=0x7fffffffdb90) at perf.c:538
+On Wed, Apr 26, 2023 at 09:31:17AM +0800, Zhouyi Zhou wrote:
+[..]
+> Joel makes the learning process easier for me, indeed!
 
+I know that feeling being a learner myself ;-)
 
-Can you confirm the following two questions on your environment?
-1. readelf -n /opt/pylon/lib/libpylonbase-6.1.1.so
-Let's see what the output is.
+> One question I have tried very hard to understand, but still confused.
+> for now, I know
+> r13 is fixed, but r1 is not, why "r9,40(r1)"'s 40(r1) can be assumed
+> to be equal to 3192(r10).
 
-2. Patch the following fix and check whether the problem recurs:
+First you have to I guess read up a bit about stack canaries. Google for
+"gcc stack protector" and "gcc stack canaries", and the look for basics of
+"buffer overflow attacks". That'll explain the concept of stack guards etc
+(Sorry if this is too obvious but I did not know how much you knew about it
+already).
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 41882ae8452e..059f88eca630 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -903,7 +903,7 @@ static int elf_read_build_id(Elf *elf, void *bf, 
-size_t size)
-                                 size_t sz = min(size, descsz);
-                                 memcpy(bf, ptr, sz);
-                                 memset(bf + sz, 0, size - sz);
--                               err = descsz;
-+                               err = sz;
-                                 break;
-                         }
-                 }
+40(r1) is where the canary was stored. In the beginning of the function, you
+have this:
 
-Thanks,
-Yang.
+c000000000226d58:	78 0c 2d e9 	ld      r9,3192(r13)
+c000000000226d5c:	28 00 21 f9 	std     r9,40(r1)
+
+r1 is your stack pointer. 3192(r13) is the canary value.
+
+40(r1) is where the canary is stored for later comparison.
+
+r1 should not change through out the function I believe, because otherwise
+you don't know where the stack frame is, right?
+
+Later you have this stuff before the function returns which gcc presumably
+did due to optimization. That mr means move register and is where the caching
+of r13 to r10 happens that Boqun pointed.
+
+c000000000226eb4:	78 6b aa 7d 	mr      r10,r13
+[...]
+and then the canary comparison happens:
+
+c000000000226ed8:	28 00 21 e9 	ld      r9,40(r1)
+c000000000226edc:	78 0c 4a e9 	ld      r10,3192(r10)
+c000000000226ee0:	79 52 29 7d 	xor.    r9,r9,r10
+c000000000226ee4:	00 00 40 39 	li      r10,0
+c000000000226ee8:	b8 03 82 40 	bne     c0000000002272a0 <srcu_gp_start_if_needed+0x5a0>
+
+So looks like for this to blow up, the preemption/migration has to happen
+precisely between the mr doing the caching, and the xor doing the comparison,
+since that's when the r10 will be stale.
+
+thanks,
+
+ - Joel
+
