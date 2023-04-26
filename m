@@ -2,109 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29346EF0EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0984B6EF0F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240250AbjDZJRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S240274AbjDZJUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 05:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240284AbjDZJRW (ORCPT
+        with ESMTP id S240253AbjDZJTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:17:22 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F54A30EF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:16:55 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63d4595d60fso41710146b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682500518; x=1685092518;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1nNIQi3pWLHzY3mOaTfbR0SSgvzLFHi14IClojKi4Y=;
-        b=baXS/3xEL/zgxbl/pFfiKiRTf/R+xesvjrekb2conjC3lDEz3pBuUOC7GF7W181/xh
-         7uQeWmy1gTmVTO1BvNEMCc/7rk68t+K3N8346/FsQEU6rtDJdqXmeB4/mzMYibX+ff7s
-         7kK1epjlx5CgpW+91Fi9AZ2T8Z7grAhAKLdgFZzKV84qfCR98FVyjwUyN8htuVQ8QE0F
-         e68nc2EEE1ut7/A5hbJwuI9LrBXGyd8LYZVk6l9h14gq+XN2ev7OVMzFJ9IBNAycttWL
-         bBP7aY1YPxCe6TENfU1/EPX2uRpjps/CZE/dD/dbxfjCaecQwSJM/myKzlIbpix6vRd/
-         nK5Q==
+        Wed, 26 Apr 2023 05:19:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C302DE9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682500637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hb1p3qZAdlHU1l6iLXytZzmouo7Dtxmm/TUeo1IcTKg=;
+        b=Lxc3P81e82oYm64+dua7XbyM0l28CMF9QApg69pbfMfW620209soE3IMZ+vN2fsgyS6cMi
+        Nm9+EPEY9oRtfidzW/FN5o5IiJMtxlDRxhDYErjCxdbOAmRtCfs+gBv3Ksf29iVigyHaAD
+        zauIwGOhRXPVYsjz86OioHWzDSzcwFU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-79dgo1xEPIyYAk4qsEktSw-1; Wed, 26 Apr 2023 05:17:15 -0400
+X-MC-Unique: 79dgo1xEPIyYAk4qsEktSw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f171d38db3so39801415e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:17:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682500518; x=1685092518;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q1nNIQi3pWLHzY3mOaTfbR0SSgvzLFHi14IClojKi4Y=;
-        b=Zv5Y0xTOoLBNVJl1LqMGGiwGrJUsDJ1kHUQE3/rQBUMS5U9Xq1u9X5uXII46YwMnEI
-         f1sLfrup0uuSaaTl9Ce2/421VS+ay7lF8pxD/0V0o2bVZTNk8c72YXgTA/IvMciap+6T
-         N7iNvKBzOYoZjKHx4xTdlCexd7mBZvFmKUkCaEyNXRvZNveAVe7+YY/T8IaDeGHLay1k
-         Ub2PXf/4FJWy7NeSdyEtRclkBh/6fHy/qMQW4++8RpI9LCQPBkEJDeKXZfhBJF3jU5bD
-         cs7xhVy5HYSsN/AVGWOYTGXI+G0MNo6lyzaZFAEczCCpJIBlO7+On/L/W+B9Jy06wUil
-         To5A==
-X-Gm-Message-State: AC+VfDxymEv8JHb5mXSRYTfn+bM5ywUj83bUW6BfLgmCXtsFzFIuJbRU
-        SakT38eRnUK9qHykyJ5pdj35rxR/K1Q=
-X-Google-Smtp-Source: ACHHUZ6/v7mRGS8g2x9/P7M9ukN+9J0uNGapXrhW4xVZ3urfzV1+NKjuQWYRVCYIFid8HSxDiIXs+g==
-X-Received: by 2002:a05:6a00:139a:b0:5a8:9858:750a with SMTP id t26-20020a056a00139a00b005a89858750amr2327838pfg.13.1682500517625;
-        Wed, 26 Apr 2023 02:15:17 -0700 (PDT)
-Received: from localhost.localdomain ([221.226.144.218])
-        by smtp.gmail.com with ESMTPSA id g9-20020a056a001a0900b0063b642c5230sm11075684pfv.177.2023.04.26.02.15.14
+        d=1e100.net; s=20221208; t=1682500635; x=1685092635;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hb1p3qZAdlHU1l6iLXytZzmouo7Dtxmm/TUeo1IcTKg=;
+        b=iZin3jfMbz2RwuVwys3WBtgTjre8ofwa40GeG+AJe7XEq5KMn1v9wIzSIOiSTvnCme
+         NuHl5sawZM8ZtsBXdjeCwc8n88A78+Nl5y9lDOJiigoV08Fsr+xirLjcEVBjHxsPrNz2
+         rXq8t7/W6bP+votTQ/KTA/kYYBzalwPZZBHVRlfMGYp7sgptuFSLPRuy1rE2r4ZqM4bX
+         0bxnU7YcPtHaftiWsBd1tSQY7c4d17j/ZhFA+m7rHjRB+XgNMamjUYlKgZm6zpV+ugp7
+         04UBxD6X3qqDMVXx4jV5EVzPMr8jj1D2i3rimU7L7hV8In/ZD0U31lHbR+SaW3g31r+e
+         pBqA==
+X-Gm-Message-State: AAQBX9fP2GaTD4cEUB1OhBXwhj8QAs6Yto1hD952H6W/3lmjo6v7ZEO5
+        cG8jPSCVkmLFFH0t/QIbBzJTgwj+zhBut9VV9lL8ZaT/VpxB64lFP0xq5KVvg85sLumWB26MCV1
+        7so6hAWRwbufWiVklOI9cs8Dg
+X-Received: by 2002:a05:600c:d6:b0:3f1:75b0:dc47 with SMTP id u22-20020a05600c00d600b003f175b0dc47mr13169975wmm.15.1682500634753;
+        Wed, 26 Apr 2023 02:17:14 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YEVlQWGWn9MXHPZbupRZG32H3oU+0xy3h1QTn2pkKjRSNMnr+VdpDuWb9ZAW4i29YDBnhrOA==
+X-Received: by 2002:a05:600c:d6:b0:3f1:75b0:dc47 with SMTP id u22-20020a05600c00d600b003f175b0dc47mr13169945wmm.15.1682500634432;
+        Wed, 26 Apr 2023 02:17:14 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id l20-20020a05600c16d400b003f19bca8f03sm10736304wmn.43.2023.04.26.02.17.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 02:15:17 -0700 (PDT)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, alexghiti@rivosinc.com, heiko@sntech.de,
-        conor.dooley@microchip.com, guoren@kernel.org,
-        anshuman.khandual@arm.com, mick@ics.forth.gr, samuel@sholland.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH -fixes] riscv: mm: remove redundant parameter of create_fdt_early_page_table
-Date:   Wed, 26 Apr 2023 17:15:11 +0800
-Message-Id: <20230426091511.674496-1-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 26 Apr 2023 02:17:13 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Pawel Chmielewski <pawel.chmielewski@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Barry Song <baohua@kernel.org>
+Subject: Re: [PATCH v2 2/8] sched/topology: introduce
+ sched_numa_find_next_cpu()
+In-Reply-To: <ZEi1/zO9cGccogea@yury-ThinkPad>
+References: <20230420051946.7463-1-yury.norov@gmail.com>
+ <20230420051946.7463-3-yury.norov@gmail.com>
+ <xhsmh354ol21b.mognet@vschneid.remote.csb>
+ <ZEi1/zO9cGccogea@yury-ThinkPad>
+Date:   Wed, 26 Apr 2023 10:17:12 +0100
+Message-ID: <xhsmhwn1zj947.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-create_fdt_early_page_table() explicitly uses early_pg_dir for
-32-bit ftb mapping and the pgdir parameter is redundant here.
-So remove it and its caller.
+On 25/04/23 22:26, Yury Norov wrote:
+> On Tue, Apr 25, 2023 at 10:54:56AM +0100, Valentin Schneider wrote:
+>> On 19/04/23 22:19, Yury Norov wrote:
+>> > +/*
+>> > + * sched_numa_find_next_cpu() - given the NUMA topology, find the next cpu
+>> > + * cpumask: cpumask to find a cpu from
+>> > + * cpu: current cpu
+>> > + * node: local node
+>> > + * hop: (in/out) indicates distance order of current CPU to a local node
+>> > + *
+>> > + * The function searches for next cpu at a given NUMA distance, indicated
+>> > + * by hop, and if nothing found, tries to find CPUs at a greater distance,
+>> > + * starting from the beginning.
+>> > + *
+>> > + * Return: cpu, or >= nr_cpu_ids when nothing found.
+>> > + */
+>> > +int sched_numa_find_next_cpu(const struct cpumask *cpus, int cpu, int node, unsigned int *hop)
+>> > +{
+>> > +	unsigned long *cur, *prev;
+>> > +	struct cpumask ***masks;
+>> > +	unsigned int ret;
+>> > +
+>> > +	if (*hop >= sched_domains_numa_levels)
+>> > +		return nr_cpu_ids;
+>> > +
+>> > +	masks = rcu_dereference(sched_domains_numa_masks);
+>> > +	cur = cpumask_bits(masks[*hop][node]);
+>> > +	if (*hop == 0)
+>> > +		ret = find_next_and_bit(cpumask_bits(cpus), cur, nr_cpu_ids, cpu);
+>> > +	else {
+>> > +		prev = cpumask_bits(masks[*hop - 1][node]);
+>> > +		ret = find_next_and_andnot_bit(cpumask_bits(cpus), cur, prev, nr_cpu_ids, cpu);
+>> > +	}
+>> > +
+>> > +	if (ret < nr_cpu_ids)
+>> > +		return ret;
+>> > +
+>> > +	*hop += 1;
+>> > +	return sched_numa_find_next_cpu(cpus, 0, node, hop);
+>> 
+>> sched_domains_numa_levels is a fairly small number, so the recursion depth
+>> isn't something we really need to worry about - still, the iterative
+>> variant of this is fairly straightforward to get to:
+>
+> This is a tail recursion. Compiler normally converts it into the loop just
+> as well. At least, my GCC does.
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
----
- arch/riscv/mm/init.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 0f14f4a8d179..6ebb75a9a6b9 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -843,8 +843,7 @@ static void __init create_kernel_page_table(pgd_t *pgdir, bool early)
-  * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PGDIR
-  * entry.
-  */
--static void __init create_fdt_early_page_table(pgd_t *pgdir,
--					       uintptr_t fix_fdt_va,
-+static void __init create_fdt_early_page_table(uintptr_t fix_fdt_va,
- 					       uintptr_t dtb_pa)
- {
- 	uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
-@@ -1034,8 +1033,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	create_kernel_page_table(early_pg_dir, true);
- 
- 	/* Setup early mapping for FDT early scan */
--	create_fdt_early_page_table(early_pg_dir,
--				    __fix_to_virt(FIX_FDT), dtb_pa);
-+	create_fdt_early_page_table(__fix_to_virt(FIX_FDT), dtb_pa);
- 
- 	/*
- 	 * Bootime fixmap only can handle PMD_SIZE mapping. Thus, boot-ioremap
--- 
-2.20.1
+I'd hope so in 2023! I still prefer the iterative approach as I find it
+more readable, but I'm not /too/ strongly attached to it.
 
