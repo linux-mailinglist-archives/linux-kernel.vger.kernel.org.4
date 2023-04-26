@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F73E6EF5AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE036EF599
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241201AbjDZNoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S240958AbjDZNj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjDZNom (ORCPT
+        with ESMTP id S240627AbjDZNjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:44:42 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080246A6F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:44:40 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MYe6H-1pnavA34xn-00Vh0J; Wed, 26 Apr 2023 15:39:15 +0200
-Message-ID: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
-Date:   Wed, 26 Apr 2023 15:39:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Akira Shimahara <akira215corp@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        regressions@lists.linux.dev
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Regression: w1_therm: sysfs w1_slave sometimes report 85 degrees
- Celsius
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:9+Vlw4+jn2N/v7j0vxMPWLyDRwGYp+CO/tXiR5tccEMsaSaH5aQ
- R9ecZ1Xs+q6sHX62lwerzUDDiNhj845FifgwpOZ1VJgSWCou2fvSfNe7+JpFVLNF1L0zSiD
- i2ZYBeApV27GGz95hWR/h2Hyj4YRG/zqPKVEEpmwjSV90jkFKMsB9LYvk6y7a3NmVh/4tX+
- +emoW4k2Y2WPqYNZ+5nCw==
-UI-OutboundReport: notjunk:1;M01:P0:nk+SJ3Skr2A=;+cogvs2GoIuI9QE3rGVaSUzEYdT
- xrXADDJ/vaBxtZU4/iha4mOp4R4x04VC3Lhb9zw9hWbNgFtjFIAMGrcGfNndJbQrOk3I6sOWW
- h87w+0Xc7dFH+9FroUdFW1kS78tKyNnsUFuEC4VonnHwIbr6RtlDPd6KKEpZIPqRQ/jBBg/kS
- UYZkyedrO950gJevgliU73Wa4cwdgF1/rgiFC7lLHaHeaSE+9guiwWA6OWE/3QxuQZY2vYtcm
- kqJlB58C1NQxyAaMMn5dD8UT6YTXyk+3N24312z345S2Lf605UTlszZDw11yywO+gy3zDrJxO
- EjSxExsk2xct3MqHShIq5DiLjxoCRlKqO9u/dHv1YZrbts8/YK8FUFQWDOu3LV3t0R1UZy/Lm
- 4TEytn5KT8CQCa8UFcMng+oyVjON411FtvVxiGOdfDc67T5KH0tGwaZs/z7c4ijnuQoc2QQSv
- aN6to0E7oviT4W5lXiYS/vlO/Bi4jYx7aFYaPDnglAyS8Rb3R+QJAjUQasr2UzAyesn9+HZfw
- fBdI0a9lwDLK9XAZQuy5XLiUOpB4mt6UI/zuIRUYj5ZryMmPiPd3+AcXld5gj+RXuNpxeXJ5d
- vFsTGR3H7/hPcRVMDYgV8lZF8Sy0hgeuDm2tQ079KeVcsBmAb6GHi9zE5dz7ixFjvzt5ag5yf
- WgGHAv5viGZWYsih8XXXQouA7/9wOJqFRA6Iy360pw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 26 Apr 2023 09:39:24 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A33B199
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:39:23 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2479c766e91so4201359a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682516362; x=1685108362;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FB4DXeiyaGWRGpg1RZJs4YrYQeUFxP8q5oC/iiUzgWk=;
+        b=emGe3v+hKdvQrvjl4a2uL61Vidypm6iAFv9LSm15rGZal80ihx30dhzmaX4DR2L5FI
+         tzvhVTsOh4fiIVKvw8+UJCzuQDaHqPwEDZnDfNM9fcc/5zhQ7ZE02esGSLVrOacFGa2w
+         PbUcgEDLQnqqBYxN8oTZvoL/7EkcSB7Fmoc93quhvb+ktB1bnrmZe3xDyxBjM3c6j1rK
+         SAP7DHJ7DGgrwr66cJZRVAOm37uuP+EvleqsdnJUlRGJOdNwzmWm5u2YBeR8mCuVrKsp
+         +4dbdz//BxR2iJejLqq+0lkxEiAE1VA6eocg/jtU4SCC2xkrltYe/xm1xPFS9I+qR8OR
+         Tllw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682516362; x=1685108362;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FB4DXeiyaGWRGpg1RZJs4YrYQeUFxP8q5oC/iiUzgWk=;
+        b=VS7Y2zfEm0nW+eJxolhp+0fe3Wx0PNyU5w6gHUe5qFb/W/ckMg8hpJTMF+AbQbFs0q
+         IwYPQJ/2Zd2DJRkew23oxkxAfhGFUIcuXs900bA4VD6gje2qgeEk3q+t9lQBQbYB7lLe
+         QwdjqZXXdR354MkPZfboU1h2dKqEC8tBDZF6YSnDVKzB6LCbGpWovueaBVxzOrUZfcmD
+         I5csquzC5UbwwixBuc7qXeP5g6efhF4vn34Nt7TBfURQ4hKpHJsXHS/PdSp0gQWqfG7a
+         ThKEzckdIAFvL7lP4Qbuektq/epAHxKrmNmE4TIrwYy/JN9NLkKXSuBzeDVfu1Lg++hq
+         jxOQ==
+X-Gm-Message-State: AAQBX9eFG3gVh+c7uyS097fV2zMDk4eeA0T7Qe0A/BZaHlJBkuXROnN+
+        i5vPDLZUTuMO/qp7z5cMKh9V3MB5m4+G4+Jc
+X-Google-Smtp-Source: AKy350ZjfZ+BIfyJNqEXcvm2T/R2eUKq4ijsukzf0jNghkcUNvTJFaoDf4KZq6ppxB2RiGelh8+DxoA0H1jlZhsC
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:748e:b0:247:101f:954e with SMTP
+ id p14-20020a17090a748e00b00247101f954emr4760228pjk.9.1682516362678; Wed, 26
+ Apr 2023 06:39:22 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 13:39:17 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230426133919.1342942-1-yosryahmed@google.com>
+Subject: [PATCH 0/2] memcg: OOM log improvements
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Muchun Song <muchun.song@linux.dev>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>, Chris Li <chrisl@kernel.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,83 +74,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This short patch series brings back some cgroup v1 stats in OOM logs,
+and it makes memcg OOM logging less reliant on printk() internals.
 
-recently we switch on our Tarragon board (i.MX6ULL) to Linux 6.1 and 
-noticed that the connected 1-wire temperature sensors 
-(w1_therm.w1_strong_pull=0) sometimes (~ 1 of 20 times) report 85 
-degrees Celsius, which is AFAIK the only way to report errors to the 
-1-wire master:
+The series uses seq_buf_do_printk() which was only recently introduced
+[1]. It did not land in Linus's tree yet, but ideally it will land this
+merge window. I thought I would share the patches meanwhile for
+feedback.
 
-sys/bus/w1/devices/28-04168158faff# cat w1_slave
-50 05 4b 46 7f ff 0c 10 1c : crc=1c YES
-50 05 4b 46 7f ff 0c 10 1c t=85000
+[1]https://lore.kernel.org/lkml/20230415100110.1419872-1-senozhatsky@chromium.org/
 
-I wasn't able to reproduce this issue with the old kernel 4.9.
+Yosry Ahmed (2):
+  memcg: use seq_buf_do_printk() with mem_cgroup_print_oom_meminfo()
+  memcg: dump memory.stat during cgroup OOM for v1
 
-After that i successfully bisected the issue to this commit:
-67b392f7b8ed ("w1_therm: optimizing temperature read timings")
+ mm/memcontrol.c | 85 ++++++++++++++++++++++++++++---------------------
+ 1 file changed, 48 insertions(+), 37 deletions(-)
 
-Unfortunately this commit contains a lot of independent changes, which 
-makes it hard to figured out the cause of this issue. So i tried to 
-split this patch in seven independent changes [1]. Now i was able to 
-bisect the cause further to this change [2] which seems to rework the 
-pullup handling within read_therm().
+-- 
+2.40.1.495.gc816e09b53d-goog
 
-Looking closer at the code change and verify it some debug messages, the 
-change inverted the locking behavior (before: no pullup -> keep lock, 
-after: no pullup -> release lock during sleep).
-
-Before:
-	if (external_power) {
-		mutex_unlock(&dev_master->bus_mutex);
-
-		sleep_rem = msleep_interruptible(tm);
-		if (sleep_rem != 0) {
-			ret = -EINTR;
-			goto dec_refcnt;
-		}
-
-		ret = mutex_lock_interruptible(&dev_master->bus_mutex);
-		if (ret != 0)
-			goto dec_refcnt;
-	} else if (!w1_strong_pullup) {
-		sleep_rem = msleep_interruptible(tm);
-		if (sleep_rem != 0) {
-			ret = -EINTR;
-			goto mt_unlock;
-		}
-	}
-
-After:
-	if (strong_pullup) { /*some device need pullup */
-		sleep_rem = msleep_interruptible(tm);
-		if (sleep_rem != 0) {
-			ret = -EINTR;
-			goto mt_unlock;
-		}
-	} else { /*no device need pullup */
-		mutex_unlock(&dev_master->bus_mutex);
-
-		sleep_rem = msleep_interruptible(tm);
-		if (sleep_rem != 0) {
-			ret = -EINTR;
-			goto dec_refcnt;
-		}
-
-		ret = mutex_lock_interruptible(&dev_master->bus_mutex);
-		if (ret != 0)
-			goto dec_refcnt;
-	}
-
-I don't believe this is intended. After inverting the strong_pullup 
-check, the issue wasn't reproducible on our platform anymore. But i'm 
-not sure this is clean.
-
-Best regards
-
-#regzbot introduced: 67b392f7b8ed
-
-[1] - https://github.com/chargebyte/linux/commits/v6.1-tarragon_w1
-[2] - 
-https://github.com/chargebyte/linux/commit/17ca863a32a6a1bdd376959f05c954bef12fc1b5
