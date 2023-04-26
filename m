@@ -2,93 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CBA6EFBF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893CD6EFC02
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbjDZUzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 16:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S239901AbjDZU5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 16:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbjDZUzb (ORCPT
+        with ESMTP id S239910AbjDZU5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 16:55:31 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCCE1FE6;
-        Wed, 26 Apr 2023 13:55:29 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-541b60e0a7fso4128533eaf.1;
-        Wed, 26 Apr 2023 13:55:29 -0700 (PDT)
+        Wed, 26 Apr 2023 16:57:10 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BF72709
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:57:06 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5562c93f140so48010047b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682542529; x=1685134529;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N7BDHHCRt4+aajzCfPWxNu1orJw4/MC8hMj/R8/hq0Q=;
-        b=hJmHaj8bMSyyd1pbrp/d/AV15mwTKEOwMJPLuTsvFfgdodrp+bLrkLD0PJrIgbXEgR
-         QPUYr7KZ5uRaVfLcN6nkQkpi4AG2iYRveH6DIAaZFjKHu+6KuFGi59qlZCAYgLZ3uSN4
-         spFJRw+tsIn2tjEgYOYlzTNKC/NYAxw05S6lhGWiIeSVjbU8P94GObnCglXqOY4kx8ge
-         RZZGybKpRBQYxqSSE+hEdUCFmeDmTEBE6/jtjbwx0aKm4Ln8D2SsENt7K3qqC4V08QZ0
-         HkGTXwCae6hgflRzB380uvjl5/3bo3QhhcQlX4GYPHFQ7jZ7jNbcmKo6E57WwJ0gi2E2
-         JHkA==
+        d=linaro.org; s=google; t=1682542625; x=1685134625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PeyZTvE2qao9z3HUKls5t/zNMEefQNyhwIh3dGLQJIU=;
+        b=MLeMyFt/BrAb2CUUJZ7KmQTqlKOdl+nyYZc7PmyjnwYQvm0Yf7UbAGXqUUW6bmw5G8
+         d9v/M6N+1fVWgVUttzO6DbM8nQI6KJCXhAN7IozpaR9m8Bl7slG7VpsqTKwoquSQxGsD
+         jxjSQ3saNVE9cXwcQLcGF1jRtKLT/eEwI8kJvMSzxcIq2cDfiKWjYhMONbeUEU8V5mkj
+         6Wdd/04hTAUwScC/UEbqqr6+MnHBHQTixxYJ9LZKKkCtwlqFMN3MWW87ziN5fguiVzeh
+         4csevZGxcMK5tYzjndfSfWqBNcCl6Mif+sgasTPGERCLKwqXoxv35oil0C7Hw7NrwoqG
+         vwLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682542529; x=1685134529;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7BDHHCRt4+aajzCfPWxNu1orJw4/MC8hMj/R8/hq0Q=;
-        b=cTBryZqNI3SoNvIJQikhf9jM5S6E8E2NFS8AFXi7FKgmdzL+grFyoGJsiFfxO1NaHq
-         1LHQ9IxZLUn2o/ReBdusVaSsb8eSVE2ScDVQwvKkZ4G9ZHCOiK0PvxcaeA+iqZye2iro
-         vIpBH+2MtzTPiatdc1/SFesUsckd23a+aeCraPhI2ggnpYM4Z4yh9v8oMhq0Z+JAYwjA
-         XmlwFXQLaXSFCWjsZ77Klr9V659OPEZcxJBLtewzeOF+fiXbWfJlIqltDUwsNpa8IBcJ
-         HfV43E0oYIyEFVCPV1wGLByzztDzFvSroPItIztsXSmUywXlhlSraw6VnZZboGzOfCl8
-         1o+A==
-X-Gm-Message-State: AAQBX9cuOGiRtEnUoc3+nmo8ZjIvYcYdqEI+2DOQYAAUHuaS9bfpmFje
-        TiWKnkt6tM3iQkQS5w+JyvM=
-X-Google-Smtp-Source: AKy350ZBvklTH3Zq7nm6uj53wA0YTB3dSTdpbO/3rQMj4/PKskuHIj+Rz0UoC8xQfqL03EucEkLGwQ==
-X-Received: by 2002:a54:4489:0:b0:38e:8e30:677d with SMTP id v9-20020a544489000000b0038e8e30677dmr8468566oiv.3.1682542528807;
-        Wed, 26 Apr 2023 13:55:28 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id q9-20020acaf209000000b003908004b37dsm280080oih.26.2023.04.26.13.55.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 13:55:28 -0700 (PDT)
-Message-ID: <4b8e3c30-9626-dffd-0aff-4b5c650154ad@gmail.com>
-Date:   Wed, 26 Apr 2023 17:55:25 -0300
+        d=1e100.net; s=20221208; t=1682542625; x=1685134625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PeyZTvE2qao9z3HUKls5t/zNMEefQNyhwIh3dGLQJIU=;
+        b=Ve7eMcf+u3ivaLZdeJz50g0Kka+kOOE/VGeOc+FIkYUjvy48scxeWx5eQsBAwIkpTq
+         kzEZ/Ghg37TQd+wbrpIcj70RkgNSyVEOlj3TJUE526cXD0Ff0yOKeDfPM5jkX3XyvjnN
+         4Ll86nmnoHPNVbd+2zr0W0kNKA4eTq2yid9Rkm1bEiGwSQQHqGAjJKks8GEHfQQayvxJ
+         SlMf9E2YWPqoFb4J8Wv7R/ImbdetkHaP15TVCibheZikF7Lv4sqbRnGyffycCSVjJDJt
+         gZlIimjEA7U1/D1xut19b1eoQsFbHvE2s1jOSMqHdhB5grpTnn8fa+5nYDlG7EKNSBAi
+         yi1A==
+X-Gm-Message-State: AAQBX9dCRkTFwubFiJk3+q6dlFTS84rh1+PNeZ3ZWH7rcN8VrUtxF0jV
+        vNL8CIl3pY74DLAddrZLbv/Fn3kDuMYrvcSl/NC8cA==
+X-Google-Smtp-Source: AKy350ajEJHyhyynqyOl0isjddMpiNdULElT/xAxUEM8cmGuE9kOk2QPH86dypmLR0gOJToVISGwrFvJLTDtak1EsDI=
+X-Received: by 2002:a0d:ea0d:0:b0:552:a2e2:684e with SMTP id
+ t13-20020a0dea0d000000b00552a2e2684emr13680157ywe.52.1682542625695; Wed, 26
+ Apr 2023 13:57:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] rust: helpers: sort includes alphabetically in
- rust/helpers.c
-Content-Language: en-US
-To:     Ariel Miculas <amiculas@cisco.com>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
-        gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me
-References: <CANiq72nm-tWGPHMaNF11baVRDFpk8ruvTAVDEWKfraEzADWqQQ@mail.gmail.com>
- <20230426204923.16195-1-amiculas@cisco.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230426204923.16195-1-amiculas@cisco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 26 Apr 2023 22:56:53 +0200
+Message-ID: <CACRpkdarANFQ7-p=-Pi_iuk6L=PfSLDsD3_w4dEVqarwXkEGMQ@mail.gmail.com>
+Subject: Re: [PATCH 00/43] ep93xx device tree conversion
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Brian Norris <briannorris@chromium.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Le Moal <damien.lemoal@opensource.wdc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Reichel <sre@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        netdev@vger.kernel.org, soc@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 17:49, Ariel Miculas wrote:
-> Sort the #include directives of rust/helpers.c alphabetically and add a
-> comment specifying this. The reason for this is to improve readability
-> and to be consistent with the other files with a similar approach within
-> 'rust/'.
-> 
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1003
-> Signed-off-by: Ariel Miculas <amiculas@cisco.com>
-> ---
-> [...]
-Shouldn't the link use the `Link: <url> [1]` format? Otherwise LGTM.
+On Mon, Apr 24, 2023 at 11:35=E2=80=AFAM Nikita Shubin
+<nikita.shubin@maquefel.me> wrote:
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> This series aims to convert ep93xx from platform to full device tree supp=
+ort.
+>
+> Tested on ts7250 64 RAM/128 MiB Nand flash, edb9302.
+
+Neat, I'd say let's merge this for 6.5 once the final rough edges are
+off. The DT bindings should be easy to fix.
+
+This is a big patch set and the improvement to the ARM kernel it
+brings is great, so I am a bit worried about over-review stalling the
+merged. If there start to be nitpicky comments I would prefer that
+we merge it and let minor comments and "nice-to-haves" be
+addressed in-tree during the development cycle.
+
+I encourage you to use b4 to manage the patch series if you
+have time to learn it, it could help you:
+https://people.kernel.org/monsieuricon/sending-a-kernel-patch-with-b4-part-=
+1
+
+Yours,
+Linus Walleij
