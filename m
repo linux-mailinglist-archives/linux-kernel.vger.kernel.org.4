@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB596EF53A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B13A6EF53D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240650AbjDZNMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        id S240939AbjDZNNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240073AbjDZNMq (ORCPT
+        with ESMTP id S240710AbjDZNNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:12:46 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7F626AC
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:12:44 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5055141a8fdso10344538a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682514763; x=1685106763;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IFf6ynUEdWvZg24idlsMEJNdaFi8wG+njYK3TUT9Ygg=;
-        b=FX50yMpsaLk6q0JYobPAobLrNR4o0lBTG6lJGhtMqRJhPOZxaXmXZunFaLlYE58+Kx
-         faiIrdAhs7xoUmtAUmuw+Tr/fH3hIZzvrfFLdslClXVmpXjO/ZW5CWI/aQp9dXbh7S/H
-         6nQw6k1a71VnpkiIEqfkVMw/UNRG0D6egzwTCXPY7x2XqkFN1junFG16jR+qSjQrtUfy
-         RKWibIHIUdkVJcYfrqOeCZnuGZk5QsJ1kkzLV71lAnHiXCg0wuoH883K9+Ezc9qWLz77
-         /42LfzmDU5Geh3rcWjm3ssl91Lj8uITM9fyOFypAvE0PrR9OOVWLO1efyUbEquhJc/kc
-         nlXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682514763; x=1685106763;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IFf6ynUEdWvZg24idlsMEJNdaFi8wG+njYK3TUT9Ygg=;
-        b=Umr94wI4q8yhvYLpHR/hYwn2lJKCjSH7kcYOyypQ3wuArtupFnYoBEo8USSCrApLEG
-         28tE5+zsRcMMcz2ZhtikGTORt+qKirsS5uHn5AFf4JHvY1p5SQKsufxBE3dRKLGG+YR7
-         kj0cpLLBiwbrECsRlKo6AEq5wP7zPfBHtHl1XN4Bupa1bImn/e/cxmKvoLgDu6zUFZXS
-         3Mhl7KWZfhYqIo+TRvMwZa1DpHSJDOIS8eannmlV0Vx9nZAkOAuBOJkv9JYZ+cGoLTH3
-         B4x5uOKRw6smnVpXhIcotiR97S822A6N07roR4RvRaDJCvkTQbKUFFpGoqKZah9EWRkM
-         M9Jg==
-X-Gm-Message-State: AAQBX9dNLX4wZxzLM0qQJYfLaJaenQ/N4z1uZ60m1Ro5P54eFT+BMnj6
-        D+2EG+xeDAYxdXYFLxi6KU5K0A==
-X-Google-Smtp-Source: AKy350bo0t5Ha0uwpw3G4VATjMGhJ2s4SHwb5d83OKKUWvs5hv9CaUzprnuqhPXJ3Orqf9zYo9UwZA==
-X-Received: by 2002:a05:6402:349:b0:504:784e:47d9 with SMTP id r9-20020a056402034900b00504784e47d9mr18236567edw.6.1682514763152;
-        Wed, 26 Apr 2023 06:12:43 -0700 (PDT)
-Received: from [172.23.2.142] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056402064a00b00506addaaab0sm6783210edx.32.2023.04.26.06.12.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 06:12:42 -0700 (PDT)
-Message-ID: <1b67d480-d6f1-965f-ccfa-0874eb9a3b6b@linaro.org>
-Date:   Wed, 26 Apr 2023 15:12:41 +0200
+        Wed, 26 Apr 2023 09:13:19 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C054E5249;
+        Wed, 26 Apr 2023 06:13:18 -0700 (PDT)
+Received: from [192.168.1.43] ([77.7.2.190]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MRTEr-1pfNGk22kv-00NUKv; Wed, 26 Apr 2023 15:13:11 +0200
+Message-ID: <57ec90ad-8535-fa7d-d6de-d5c1d06f37d3@metux.net>
+Date:   Wed, 26 Apr 2023 15:13:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Syzkaller & bisect] There is WARNING in tpm_chip_unregister in
- upstream patch "tpm: st33zp24: Mark ACPI and OF related data as maybe unused"
-To:     Pengfei Xu <pengfei.xu@intel.com>, jarkko@kernel.org
-Cc:     linux-kernel@vger.kernel.org, jgg@ziepe.ca, heng.su@intel.com,
-        peterhuewe@gmx.de, dhowells@redhat.com, lkp@intel.com
-References: <ZEjqhwHWBnxcaRV5@xpf.sh.intel.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZEjqhwHWBnxcaRV5@xpf.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Content-Language: tl
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+ <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <20230426003210.GA31260@pendragon.ideasonboard.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+In-Reply-To: <20230426003210.GA31260@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:/kp+teJsXj+zPsDbO/9jXV2pl8nqJSfn/Z12XaWIEPvIyFVudpS
+ gvzy45liUJTCf2eIGjnnywTj9r2s5ApDWAJf4eiaZ923tjL6+CgtUAePz0khAi1ywDwMo/J
+ lIG0rlfgenFsP8nTfG17Qcwl9/0T+5PeIbR+1xGbZHIrcLxU4LKNZ8bg+0rWw+W1rAsprtk
+ QJluCXN6MCcGuU2KgwQXQ==
+UI-OutboundReport: notjunk:1;M01:P0:K6b8CjFnLDg=;QAgpZbiirFir1BJsZeaUI6ymJ4E
+ AoLTvBx4ecHRztxqK8XhY5Ae5npKq8eVTiRdW5lrHHrpUegiSSDZMEEQDp3mzR76+8v6fCcdY
+ TgT93IR77qwbUDLWOm07C5KU1MJE5gBOulJYjrRvUe+CFgCRW0LKJWhclCZMEeYHBeaq6ntpP
+ MMMDoVW1qnjd2iCFwXWk+Paj7Ko2ZEg6YZWi/EepaFX0ypd0G5Hrsjs849nbU0TsLj/gfC60q
+ ijUP3/v9C/Kh2aXYnlZJh+DCb3UJgiM1v2U8ZCzHX/KaaPTTgVrdooVyzsloR814k0bcMGJrk
+ RBeHFFMxgLkXnyqbsbSwiXn7SGmHLUOqxAUgl47orbQgHZz5J9K0ZGXncDCb9JEvzeR+EEuhi
+ mD2Gd4Dte+k+mGiOqH22OPgW8ASrpqJgy8VrprHeNF59c7jAIevuYelbIfd4dk81t+fTA8ZMX
+ i/5GEYJVWzvk0AQJv/W6yd8ZfipGbsLDrlA5LwJm/PEaDuT8PT+V0WCOCbJiWqrg2ra5H5jdL
+ HsSArSP1Q2ZGftwH0qJu1Z7WgYzchrr5nNlVnx/LjJA4KkkiDRpqSWxN3RbkbXOmsW2TgULjm
+ w8N3H7yFw7lsaypSA/mZ2H/9jc5XLGG9QW0FY3kvW/XchTii+dSs12yPB4CK2dcpLf1u9LlGF
+ Yh+Fw9oOe3QfO2/9oEpEWlkeNoLd3rzDxovvnQGRNQ==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 11:10, Pengfei Xu wrote:
-> Hi Jarkko and Krzysztof Kozlowski,
-> 
-> Greeting!
-> 
-> Platform: x86 platforms
-> 
-> There is WARNING in tpm_chip_unregister in upstream patch "tpm: st33zp24: Mark
-> ACPI and OF related data as maybe unused":
-> https://lore.kernel.org/lkml/20230424144130.1084795-1-jarkko@kernel.org/
-> -> https://lore.kernel.org/lkml/20230319141354.22907-1-krzysztof.kozlowski@linaro.org/
-> 
-> We tested Intel internal kernel and found that, the above patch caused below
-> WARNING and then kernel BUG dmesg info. After reverted above commit on top
-> of Intel internal kernel, this issue was gone.
-> I checked that internal commit:"c3985d8b9c22 tpm: st33zp24: Mark ACPI and OF
-> related data as maybe unused" was same as above link patch.
-> This issue could be reproduced in 155s in VM.
-> 
-> All detailed info: https://github.com/xupengfe/syzkaller_logs/tree/main/230426_132902_tpm_chip_unregister_warning
-> Syzkaller reproduced code: https://github.com/xupengfe/syzkaller_logs/blob/main/230426_132902_tpm_chip_unregister_warning/repro.c
-> Syzkaller syscall reproduced steps: https://github.com/xupengfe/syzkaller_logs/blob/main/230426_132902_tpm_chip_unregister_warning/repro.prog
-> Syzkaller analysis report: https://github.com/xupengfe/syzkaller_logs/blob/main/230426_132902_tpm_chip_unregister_warning/repro.report
-> Kconfig: https://github.com/xupengfe/syzkaller_logs/blob/main/230426_132902_tpm_chip_unregister_warning/kconfig_origin
-> Bisect info: https://github.com/xupengfe/syzkaller_logs/blob/main/230426_132902_tpm_chip_unregister_warning/bisect_info.log
-> 
-> "
-> [   24.638052] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=329 'systemd'
-> [   28.731375] cgroup: Unknown subsys name 'net'
-> [   28.741433] cgroup: Unknown subsys name 'rlimit'
-> [   35.900833] tpm tpm0: Operation Canceled
-> [   35.901377] ------------[ cut here ]------------
-> [   35.901648] refcount_t: addition on 0; use-after-free.
-> [   35.901986] WARNING: CPU: 0 PID: 4095 at lib/refcount.c:25 refcount_warn_saturate+0xe6/0x1c0
+On 26.04.23 02:32, Laurent Pinchart wrote:
 
-Thanks for the report. I am quite surprised that this commit was pointed
-as possible cause. The patch does not touch anything related to reported
-issue... At least I do not see it. Could be some tooling problem in your
-reproduction steps?
+> We have homework to do when it comes to maintenance for the media
+> subsystem, we're doing *really* badly at the moment regarding community
+> management and attracting (and retaining) new core contributors. 
+
+Is this a problem of the subsys (core) itself or individual drivers ?
 
 
-Best regards,
-Krzysztof
+--mtx
 
+-- 
+---
+Hinweis: unverschlüsselte E-Mails können leicht abgehört und manipuliert
+werden ! Für eine vertrauliche Kommunikation senden Sie bitte ihren
+GPG/PGP-Schlüssel zu.
+---
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
