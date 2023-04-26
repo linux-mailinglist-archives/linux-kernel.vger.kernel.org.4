@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBD66EFE18
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB4C6EFE27
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242796AbjDZXnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S242683AbjD0AAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 20:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241632AbjDZXm4 (ORCPT
+        with ESMTP id S242613AbjD0AAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 19:42:56 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E53AAA;
-        Wed, 26 Apr 2023 16:42:48 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-5ef5245e5b2so35147716d6.0;
-        Wed, 26 Apr 2023 16:42:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682552567; x=1685144567;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G8SZe3hC7Z59GY12y1nJWCl9RcoLJZwFGnOEfEm15qo=;
-        b=JGvEGdje26JMCOMaFdeRaz10zZmrg5fkt2/UMeJR64cXoKN2fL4yW20ojTzMdbHM00
-         k1D6qWJb3z5NEicUMcmD4Bx8KFemYp5p6yNP0Ko703nbAOn0evsb7lSJC6xqBgNiisGk
-         3w7t3+rYVGHvnchYZcx2Ow/9cKoW7nfiBn/gJFDxeTJzvZyWXwbq33RXba72YcwOraWl
-         vehS+PxqS6XfwcikkP2VrSEBhQtryBytEROTgMZSIw0TNOeFiK8teDe/EH4ZHPfHIqMm
-         Kuq4R+MukQ5EapqGoVkqWA1XLraYQ8CufBKYpIE1406C8aOmoO6cIWr+Nbr6IVhnJYtL
-         /z3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682552567; x=1685144567;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=G8SZe3hC7Z59GY12y1nJWCl9RcoLJZwFGnOEfEm15qo=;
-        b=AWI8RsT5N7lL4i4QztFpgMLrApLOtxFXXTwbHzQK0EwrBEiRRQNKQYQLbS7QbERwuW
-         FuINtVpicdjYiK1LllABhxIMs0ejgJFpI0428oVS69S6e3cz4hwHavUPDY7pE62nZ5nm
-         ONoeuftc6d24FG4JiizNmCYGWxFDOxmCfjCddpTDyFIwoR2BN1K3ACVxIpq00dxxX2vi
-         e9+CwNQTScx2SPaoa1YaLbPsuIUji2teC+rD2VGvwOC0vbQNYR3HFBB6zWmwNoXFGBey
-         cstcDdUjWKWHkmTVQOkm5kzcRVH0vnWQK3jQsmI0cA6ySnEFe6r25Na026g4kjcS0h+O
-         rKuQ==
-X-Gm-Message-State: AAQBX9dLyTeYj4BgtgXndwOkVWsmc/FUGgbWrBcpvnltmapzt1X5rxmf
-        Sb5frdFSbgMX79M8Esd8tA==
-X-Google-Smtp-Source: AKy350a39RVGLoHUdEi0Nc662WpB0gs58j57a8DoN7U7hUhuJlUMAwEC2Ve5B1CyD/Nnk0NMhUitng==
-X-Received: by 2002:a05:6214:1cc8:b0:5ac:58cc:69d1 with SMTP id g8-20020a0562141cc800b005ac58cc69d1mr34042573qvd.31.1682552567479;
-        Wed, 26 Apr 2023 16:42:47 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id z8-20020a0cf248000000b005f5a05448d8sm5140094qvl.100.2023.04.26.16.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 16:42:46 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from t560.mvista.com (unknown [IPv6:2001:470:b8f6:1b:de9b:7730:1c53:557e])
-        by serve.minyard.net (Postfix) with ESMTPA id C606F180011;
-        Wed, 26 Apr 2023 23:42:45 +0000 (UTC)
-From:   minyard@acm.org
-To:     Craig Shelley <craig@microtron.org.uk>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, Corey Minyard <cmimyard@mvista.com>
-Subject: [PATCH] USB: serial: cp210x: work around silicon bug setting break
-Date:   Wed, 26 Apr 2023 18:42:21 -0500
-Message-Id: <20230426234221.1867222-1-minyard@acm.org>
-X-Mailer: git-send-email 2.35.7
-In-Reply-To: <ZEmDs0ASdnEAnpsL@minyard.net>
-References: <ZEmDs0ASdnEAnpsL@minyard.net>
+        Wed, 26 Apr 2023 20:00:05 -0400
+Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2623AAA;
+        Wed, 26 Apr 2023 17:00:04 -0700 (PDT)
+Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
+        (Authenticated sender: alexandra.nagy@heimpalkorhaz.hu)
+        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id 590983835793E6;
+        Thu, 27 Apr 2023 01:42:27 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu 590983835793E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
+        s=default; t=1682552547;
+        bh=W6ZSce0cCVgkn0l95t889AY595zUPLw5BzNOdwdHQs8=;
+        h=Date:From:To:Subject:Reply-To:From;
+        b=rSOFuH1+D3Yx+tc0ozWZjAa6+/5dR/pDSEIyflsacVJK/BfZqqI/3YRN5ZCNBvO/a
+         5E+eLQne/TJWSxa+ScUP+zNKNYtLeByfrPJA5Ie+sGdQ09hw27V0ugwrFFGcyqi/EP
+         ASefUBmG1w0u2pXYW5rxrS+2PC13/TF2nYzoehP5/57HzhwBnIII01bMRBD7DqZYTX
+         Fwy+O5JhMMOAGhpiF8eVR5HoTi4HN7Jxg9nG4dUEfLM1EyzX3B0ZNAv+b8ENWFgNrB
+         wNrqKb3KxxQqqQDcQvht6nZuLUocPhC5lNmyggZK+JIxtX3UkFlOr8fg8pY/1FSBuQ
+         rqvFdBY0aocsQ==
 MIME-Version: 1.0
+Date:   Thu, 27 Apr 2023 07:42:27 +0800
+From:   "M.K" <mk@heimpalkorhaz.hu>
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E4=BD=A0=E5=A5=BD=E9=99=BD=E5=85=89?=
+Reply-To: kmarion709@gmail.com
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <371937737509fcd13f7dcbf486f08220@heimpalkorhaz.hu>
+X-Sender: mk@heimpalkorhaz.hu
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Rspamd-Queue-Id: 590983835793E6
+X-Spamd-Result: default: False [4.31 / 20.00];
+        R_UNDISC_RCPT(3.00)[];
+        FORGED_RECIPIENTS(2.00)[m:,s:lin060501244@126.com,s:lin080203@163.com,s:lin10zhong@163.com,s:lin115peng@163.com,s:lin12.8@163.com,s:lin13532750916@163.com,s:lin13963@yahoo.com.cn,s:lin14@163.com,s:lin1595568@163.com,s:lin19357@126.com,s:lin19870118@163.com,s:lin19881231@126.com,s:lin1990214@163.com,s:lin19910710@yahoo.com.cn,s:lin1li2qiang3@163.com,s:lin2005000@163.com,s:lin2117050@tom.com,s:lin21654411@yahoo.cn,s:lin22062062@163.com,s:lin25611@163.com,s:lin2mp@yahoo.com.cn,s:lin313176186@163.com,s:lin3417441@163.com,s:lin5096@163.com,s:lin5201314cheng@163.com,s:lin529086183@163.com,s:lin535377889@163.com,s:lin54377@yahoo.cn,s:lin580aa@163.com,s:lin809809@qq.com,s:lin817700389@yahoo.com.cn,s:lin849@yahoo.cn,s:lin850621@163.com,s:lin860613@yahoo.com,s:lin8662344@yahoo.com.cn,s:lin8ai@qq.com,s:lin8kiss@163.com,s:lin919@126.com,s:lin96661@163.com,s:lin98@163.com,s:lin990605@163.com,s:lin9feng@163.com,s:lin@rekacekap.com,s:lin@ucolick.org,s:lin_cong@163.com,s:lin_dream@163.com,s:lin_hai
+ _41@yahoo.com.cn,s:lin_hong@163.com,s:lin_hua_ping@163.com,s:lin_id@163.com,s:lin_jiang_690@eyou.com,s:lin_love_shi@126.com,s:lin_nil21@163.com,s:lin_sen1019@yahoo.com.cn,s:lin_siheng@126.com,s:lin_simin@sina.com,s:lin_wang765@163.com,s:lin_xing_sheng@hotmail.com,s:lin_z2991@sohu.com,s:lina.chan@chemsain.com,s:lina.finnstrom@hotmail.com,s:lina.kim@maec.es,s:lina.velvi@lycee-chateaubriand.eu,s:lina.weinreich@gmx.de,s:lina.yui@163.com,s:lina004@yahoo.cn,s:lina0309@163.com,s:lina1025830@tom.com,s:lina1982@yahoo.com.cn,s:lina200098@163.com,s:lina20971@yahoo.cn,s:lina320583@yahoo.cn,s:lina5546@yahoo.cn,s:lina624@163.com,s:lina6473@yahoo.com,s:lina6911@yahoo.cn,s:lina77403@yahoo.com,s:lina8705@163.com,s:lina_gustafsson@live.se,s:lina_jiao@163.com,s:linaa506@gmail.com,s:linaannisofi@hotmail.com,s:linaaz@126.com,s:linaborg-95@hotmail.com,s:linabury@gmail.com,s:linaertong@yahoo.cn,s:linagsci@hotmail.com,s:linaichao1314@163.com,s:linaimtv@yahoo.cn,s:linaiqin1984@yahoo.cn,s:linaissa88@hotmail.
+ com,s:linaiziana@gmail.com,s:linajina@163.com,s:linalarsson93@hotmail.com,s:linalazi@163.com,s:linalina_hyxb@126.com,s:linan1001@yahoo.com.cn,s:linan321321@126.com,s:linan5566@sina.com];
+        GENERIC_REPUTATION(-0.59)[-0.58797676028171];
+        MIME_GOOD(-0.10)[text/plain];
+        TAGGED_RCPT(0.00)[];
+        FROM_EQ_ENVFROM(0.00)[];
+        RCVD_COUNT_ZERO(0.00)[0];
+        MIME_TRACE(0.00)[0:+];
+        FROM_HAS_DN(0.00)[];
+        FREEMAIL_ENVRCPT(0.00)[126.com,163.com,yahoo.com.cn,tom.com,yahoo.cn,qq.com,yahoo.com,sina.com,hotmail.com,sohu.com,gmx.de,live.se,gmail.com,bellsouth.net,21cn.com,freenet.de,yahoo.co.uk,sbcglobal.net,outlook.com,vip.qq.com,msn.com,hotmail.co.uk,vip.163.com,iinet.net.au,yahoo.com.tw,vip.sina.com,msn.cn,foxmail.com,mail.com,yeah.net,web.de,aol.com,china.com,mail.ru,bigpond.net.au,singnet.com.sg];
+        TO_DN_ALL(0.00)[];
+        MID_RHS_MATCH_FROM(0.00)[];
+        RCPT_COUNT_ONE(0.00)[1];
+        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+        FREEMAIL_REPLYTO(0.00)[gmail.com];
+        HAS_REPLYTO(0.00)[kmarion709@gmail.com]
+X-Rspamd-Server: mail.heimpalkorhaz.hu
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,42 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corey Minyard <cmimyard@mvista.com>
+你好呀，
 
-At least on the CP2105, sending this once doesn't work, you have to send
-it twice to make it happen.  If you only send it once, you will get a
-really short time (a few bits) where the break is sent, right when the
-break is turned off, thus it isn't recognised as a break.  Sending it
-twice won't hurt anything, so just do it all the time.
+很抱歉打擾您並侵犯您的隱私。 我是單身，孤獨，需要一個關懷，愛心和浪漫的伴侶。
 
-Signed-off-by: Corey Minyard <cmimyard@mvista.com>
----
-I played with this a bit, and found this change fixes the issue.  It's
-not ideal, I suppose, but it works.
+我是一個暗戀者，想探索更多了解彼此的機會。 我知道這樣聯繫你很奇怪，希望你能原諒我。 我是一個害羞的人，這是我知道我能引起你注意的唯一方式。 
+我只是想知道你的想法，我的本意不是要冒犯你。 我希望我們能成為朋友，如果那是你想要的，儘管我希望不僅僅是朋友。 
+我知道你有幾個問題要問，我希望我能用一些答案來滿足你的一些好奇心。
 
- drivers/usb/serial/cp210x.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+我相信“對於世界來說，你只是一個人，但對於特別的人來說，你就是全世界”這句話。 我想要的只是來自一個特殊伴侶的愛、浪漫的關懷和關注，我希望是你。
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index cdea1bff3b70..e410a749325b 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -1446,6 +1446,15 @@ static void cp210x_break_ctl(struct tty_struct *tty, int break_state)
- 	dev_dbg(&port->dev, "%s - turning break %s\n", __func__,
- 		state == BREAK_OFF ? "off" : "on");
- 	cp210x_write_u16_reg(port, CP210X_SET_BREAK, state);
-+	/*
-+	 * At least on the CP2105, sending this once doesn't work, you
-+	 * have to send it twice to make it happen.  If you only send
-+	 * it once, you will get a really short time (a few bits) where
-+	 * the break is sent, right when the break is turned off, thus
-+	 * it isn't recognised as a break.  Sending it twice won't hurt
-+	 * anything, so just do it all the time.
-+	 */
-+	cp210x_write_u16_reg(port, CP210X_SET_BREAK, state);
- }
- 
- #ifdef CONFIG_GPIOLIB
--- 
-2.35.7
+我希望這條消息將成為我們之間長期溝通的開始。 感謝您回复此消息，因為這會讓我很高興。
 
+
+擁抱，
+
+你的秘密崇拜者。
