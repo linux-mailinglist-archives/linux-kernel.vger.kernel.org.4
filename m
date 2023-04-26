@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF266EF4A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E616EF4A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240422AbjDZMsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 08:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S240773AbjDZMtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240010AbjDZMsU (ORCPT
+        with ESMTP id S240415AbjDZMtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:48:20 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61820E3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:47:52 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2a8aea0c7dcso66398691fa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682513266; x=1685105266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6G7IUulzTfhtoVZrIH1tOX79wjetImDDZbSdg5ac+R0=;
-        b=cidVwgUgb+SB0lEhEwIVg8U6ogmocpHfzpZS63CzXPqZhH3jHl/HRSLf6lxXrF47hI
-         SJVj598VfLVyKERyW+le9TRY6jCG22CgUyC9gV12JkBBLXxv6c0jHirlJUprWhiJ102G
-         9JAgedzUZR955eUUerbCSqfWxZI18Xc+vr8Vc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682513266; x=1685105266;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6G7IUulzTfhtoVZrIH1tOX79wjetImDDZbSdg5ac+R0=;
-        b=DJA6FCVyhp8HJD1XxP1TTWMuGtM8XQahyvGlitZo/xNCmYKaZcXNFIiG56ULATtK+Q
-         XVIp/32MUOMhnMEU1s3Hbu7Hn7Ir3HHGF+AdBo27iwwWFk6USqTEWE4ssAO/7K5u7QdH
-         dYVQvjtLes7Djd3q/Ia2VYjxVBeLL4zN28g9BT1QKy2peD/71y9g+I14BLGz5dUiJch9
-         ONYbLu7iPKSS7o9fGAw6LpmcCvh/FctHnEsLortjoqmynPFxXe4gfhSRV9wC9ic/vLFX
-         trfqydkwjZymvQ7AaDiMIYrqCP9XMko/fOF0tx68/8hEHuZBtl3HHisZTw6gfy0yMoJa
-         4sPg==
-X-Gm-Message-State: AAQBX9fl4zNNaby34uU5D2mHczZJaOD1syCbZeAaJTk5LxlYmoN3qzLP
-        I88e+Lx1rSXYEChffflSMkweKg==
-X-Google-Smtp-Source: AKy350afV3cJCybPB05LFwljBBHKqqHXBvLD4iZe7owm2yLG2g0nSvChOWgMiUIS88PCZTqioY43kQ==
-X-Received: by 2002:a2e:97cc:0:b0:2a8:d021:4121 with SMTP id m12-20020a2e97cc000000b002a8d0214121mr4180598ljj.26.1682513266081;
-        Wed, 26 Apr 2023 05:47:46 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id a28-20020a2eb17c000000b0029c96178425sm2540381ljm.19.2023.04.26.05.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 05:47:45 -0700 (PDT)
-Message-ID: <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
-Date:   Wed, 26 Apr 2023 14:47:44 +0200
+        Wed, 26 Apr 2023 08:49:19 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C148EC9;
+        Wed, 26 Apr 2023 05:48:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QCmnPh037978;
+        Wed, 26 Apr 2023 07:48:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682513329;
+        bh=3ws5zKPEfE4Ifd7md6CIVe5EF0uPGAT8qRb1QnaTW+I=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=QUmzRSSuVi3nL8guNvwc+BDHUpAWMcLjRsakB7HIRTxEK+dUP4jhgvdRY0PGr3Srh
+         jSQjc/x/g9t50TNzRDkXh8NGgAW/5kfV5zu6bl6WJ1UC0tH/sHvdhK0W89+XaIZdPO
+         /zd/HvuIpDUSW6AFUCNSKYTpz/DrCXzVObPiKZ2g=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QCmnnh117303
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 07:48:49 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
+ Apr 2023 07:48:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 26 Apr 2023 07:48:48 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QCmmpU019878;
+        Wed, 26 Apr 2023 07:48:48 -0500
+Date:   Wed, 26 Apr 2023 07:48:48 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Udit Kumar <u-kumar1@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <m-chawdhry@ti.com>, <n-francis@ti.com>
+Subject: Re: [PATCH 5/5] arm64: dts: ti: k3-j7200: Add bootph-pre-ram for
+ u-boot
+Message-ID: <20230426124848.2af7ombywlsqkbva@autistic>
+References: <20230426103219.1565266-1-u-kumar1@ti.com>
+ <20230426103219.1565266-6-u-kumar1@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Content-Language: en-US, da
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
- <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230426103219.1565266-6-u-kumar1@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +68,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 14.25, Mark Brown wrote:
-> On Wed, Apr 26, 2023 at 09:19:29AM +0200, Rasmus Villemoes wrote:
+On 16:02-20230426, Udit Kumar wrote:
+> Adding bootph-pre-ram property for pin mux needed by
+> uboot.
 > 
->> I did consider that approach, but rejected it because it wouldn't work
->> with mixing native and gpio chip selects. Say, somebody uses SS0
->> natively, but then also have four additional gpios. Then chipselect 4
->> would end up activating both the SS0 pin as well as the gpio, selecting
->> both devices.
+> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts | 5 +++++
+>  arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi           | 3 +++
+>  2 files changed, 8 insertions(+)
 > 
->> I don't know if that's really a realistic scenario. But at least I think
->> the driver should then somehow have a way to indicate to the core that
->> one should either use native or gpio chip selects, but not a mix.
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> index 2cdfd957dd12..1bcb94aec588 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> @@ -81,7 +81,9 @@ vdd_sd_dv: gpio-regulator-TLV71033 {
+>  };
+>  
+>  &wkup_pmx0 {
+> +	bootph-pre-ram;
+>  	mcu_uart0_pins_default: mcu_uart0_pins_default {
+> +		bootph-pre-ram;
+>  		pinctrl-single,pins = <
+>  			J721E_WKUP_IOPAD(0xf4, PIN_INPUT, 0) /* (D20) MCU_UART0_RXD */
+>  			J721E_WKUP_IOPAD(0xf0, PIN_OUTPUT, 0) /* (D19) MCU_UART0_TXD */
+> @@ -91,6 +93,7 @@ J721E_WKUP_IOPAD(0xfc, PIN_OUTPUT, 0) /* (E21) MCU_UART0_RTSn */
+>  	};
+>  
+>  	wkup_uart0_pins_default: wkup_uart0_pins_default {
+> +		bootph-pre-ram;
+>  		pinctrl-single,pins = <
+>  			J721E_WKUP_IOPAD(0xb0, PIN_INPUT, 0) /* (B14) WKUP_UART0_RXD */
+>  			J721E_WKUP_IOPAD(0xb4, PIN_OUTPUT, 0) /* (A14) WKUP_UART0_TXD */
+> @@ -125,7 +128,9 @@ J721E_WKUP_IOPAD(0x0030, PIN_INPUT, 0) /* (L4) MCU_MDIO0_MDIO */
+>  };
+>  
+>  &main_pmx0 {
+> +	bootph-pre-ram;
+>  	main_uart0_pins_default: main_uart0_pins_default {
+> +		bootph-pre-ram;
+>  		pinctrl-single,pins = <
+>  			J721E_IOPAD(0xb0, PIN_INPUT, 0) /* (T16) UART0_RXD */
+>  			J721E_IOPAD(0xb4, PIN_OUTPUT, 0) /* (T17) UART0_TXD */
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> index 269424154771..d2500837a0e8 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> @@ -119,7 +119,9 @@ J721E_WKUP_IOPAD(0x0008, PIN_INPUT, 0)  /* MCU_OSPI0_DQS */
+>  };
+>  
+>  &wkup_pmx2 {
+> +	bootph-pre-ram;
+>  	wkup_i2c0_pins_default: wkup-i2c0-pins-default {
+> +			bootph-pre-ram;
+>  			pinctrl-single,pins = <
+>  			J721E_WKUP_IOPAD(0x98, PIN_INPUT_PULLUP, 0) /* (F20) WKUP_I2C0_SCL */
+>  			J721E_WKUP_IOPAD(0x9c, PIN_INPUT_PULLUP, 0) /* (H21) WKUP_I2C0_SDA */
+> @@ -129,6 +131,7 @@ J721E_WKUP_IOPAD(0x9c, PIN_INPUT_PULLUP, 0) /* (H21) WKUP_I2C0_SDA */
+>  
+>  &main_pmx0 {
+>  	main_i2c0_pins_default: main-i2c0-pins-default {
+> +		bootph-pre-ram;
+>  		pinctrl-single,pins = <
+>  			J721E_IOPAD(0xd4, PIN_INPUT_PULLUP, 0) /* (V3) I2C0_SCL */
+>  			J721E_IOPAD(0xd8, PIN_INPUT_PULLUP, 0) /* (W2) I2C0_SDA */
+> -- 
+> 2.34.1
 > 
-> I'm not sure this is sensible, it'll be a fairly rare situation and we
-> don't want to preclude using the built in chip select functionality for
-> some of the chip selects.  In a situation like this we only need to have
-> a single chip select to be managed as a GPIO rather than all of them,
-> which I'd expect to end up handled in the DT by not allocating that chip
-> select number.
 
-Sorry, I don't understand what you're saying. What exactly is not
-sensible? And what is "a situation like this"?
+There are a bunch of other nodes that neeed bootph-pre-ram -> lets first
+ensure all the nodes needed for u-boot is present (esm is still in
+discussion) then add bootph-pre-ram and related ones in a follow on series.
 
-I described a problem with what is now 87c614175bbf in linux-next: If
-one has five spi devices, the first four of which use the four native
-chip selects, there is no way to use a gpio for the fifth, because
-whichever "channel" you choose in the CHANNEL_SELECT field will cause
-the ecspi IP block to drive some SSx pin low, while the spi core is also
-driving the gpio low, so two different devices would be selected.
-
-It's not exactly a regression, because any chip_select >= 4 never
-actually worked, but what I'm saying is that 87c614175bbf also isn't a
-complete fix if one wants to support mixing native and gpio chip
-selects. For that, one really needs the unused_native_cs to be used for
-all gpio chip selects; in particular, one needs some unused native cs to
-exist. IOW, what my series tries to do.
-
-[OK, now that I re-read what I wrote, I didn't exactly describe "four
-native CS, one gpio", but "one native CS, four gpios". That scenario
-_could_ of course work with my series, but with 87c614175bbf just
-masking the chip-select number, we do get the problem that two devices
-would be selected at the same time. And I don't think expecting the DT
-author to know to use regs 1, 2, 3, 5 for those four gpio chip selects
-is reasonable; nor do I think it would actually work, since the missing
-gpio phandle at index 4 in cs-gpios would be treated by the spi core as
-a "that device, if any, uses native chip select 4", and that
-would/should fail.]
-
-Rasmus
-
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
