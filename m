@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4DD6EECDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 05:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42086EECE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239361AbjDZD5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 23:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S239371AbjDZEHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 00:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233352AbjDZD5j (ORCPT
+        with ESMTP id S229537AbjDZEHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 23:57:39 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C95D187;
-        Tue, 25 Apr 2023 20:57:38 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q5lSY0LR1z4f6Rdv;
-        Wed, 26 Apr 2023 11:57:33 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbAsoUhkg+SsIA--.31415S3;
-        Wed, 26 Apr 2023 11:57:34 +0800 (CST)
-Subject: Re: [PATCH -next v7 5/5] md: protect md_thread with rcu
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     logang@deltatee.com, axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230425115256.3663932-1-yukuai1@huaweicloud.com>
- <20230425115256.3663932-6-yukuai1@huaweicloud.com>
- <CAPhsuW4_tDcmPZbo8Qs32LRxLAQfE6SNNTDys8bOoeHwx-1N=A@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <059a8c6a-628f-ed18-0d5e-7ad3cad93813@huaweicloud.com>
-Date:   Wed, 26 Apr 2023 11:57:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 26 Apr 2023 00:07:04 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8778410FE
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:07:02 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d2e1a72fcca58-63b5c4c769aso8544138b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:07:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682482022; x=1685074022;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gze4HRwVJ4Vf3cIE27SdvNKePaqdVml5/K3XVwc++08=;
+        b=kVMkIoM9vHxXoqqTn0Pkpo8cvgaOpwmRogFt+eyNcYMIfAXLjY8rcGv2RaG0kvL9+4
+         ma9BTcdYWRYy7bMMxgOhTYU0u2n5jZYM91YS9tK7NOCoiYKSOtud9FVhxvKoY8Ui2CJf
+         3NS5d7EPoMLYA/E/ZDqvI5to9Je43HIw+jPp4O2oVSCi7HRHGUXt2Iv8jh/KzCgJnFBB
+         u0nNLlG8FwWIjC5iz1ZCoPP/knN2o/lVokfmx6jlc+kFVfUCFybuz3MOgdm13lyl7CrC
+         BVjJ05PMa5T7fphRV4y59Pj1eu97np/FIRb8SOjTjPk1anDaH8nnzdZcobz0kVApnHrc
+         F/RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682482022; x=1685074022;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Gze4HRwVJ4Vf3cIE27SdvNKePaqdVml5/K3XVwc++08=;
+        b=C29Wgae3y23M2FgpugWwKohn23uf6KtLv5R4I9tzeEJLj8ky0VI87Bxqge2kc3kJaf
+         C385aN7C8lHFUAHTaJxlNO3KlObToOE+w02GLNMabv4tJWlA5iiWuD5Oguy7tfsal0JO
+         bmttKTBY0I2bP8bfNGTgCRT7Gp5oA9t7mR+ONhku7xXY6ZSah8YvIvEdVG1NEcmYXMRe
+         yzwGqGIoj69m7dJkTz/qzJMGUaGfJegXexWCWuqXadMHH0sHDR8HWKW5kAOxPkxAPac0
+         s9VO7RyPDWi+XPhqZgA1SpwBMK2pRm4YqVzPRYtSYr7+Sw3ZixCmQHdo9hVQYLLcjy9a
+         y+TA==
+X-Gm-Message-State: AAQBX9exVzfOJf/BNJwk4feOLS+Q7odP7SOgEPvxb/J8YCehicz0pKoC
+        iAtLKxWDEVxrD5FUXsfxsBw=
+X-Google-Smtp-Source: AKy350YBWiwpnir4ymwvk/sdSgW7SVTB/EYSfKSecg93G943wRMlQZbG+0jnhk01PWLdG6Aa4j24TA==
+X-Received: by 2002:a05:6a20:12c5:b0:f3:256:24d3 with SMTP id v5-20020a056a2012c500b000f3025624d3mr18911672pzg.11.1682482021970;
+        Tue, 25 Apr 2023 21:07:01 -0700 (PDT)
+Received: from [10.200.11.252] ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id t23-20020a6564d7000000b00524dde7231dsm6823197pgv.9.2023.04.25.21.06.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Apr 2023 21:07:01 -0700 (PDT)
+Message-ID: <e0f268f7-d939-8732-af47-a9cd01025afe@gmail.com>
+Date:   Wed, 26 Apr 2023 12:06:56 +0800
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW4_tDcmPZbo8Qs32LRxLAQfE6SNNTDys8bOoeHwx-1N=A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 01/34] maple_tree: Fix static analyser cppcheck issue
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        maple-tree@lists.infradead.org,
+        David Binderman <dcb314@hotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230425140955.3834476-1-Liam.Howlett@oracle.com>
+ <20230425140955.3834476-2-Liam.Howlett@oracle.com>
+From:   Peng Zhang <perlyzhang@gmail.com>
+In-Reply-To: <20230425140955.3834476-2-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbAsoUhkg+SsIA--.31415S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF1DJw45Kw47Zr1UJw1fJFb_yoW8tr43pa
-        yfJFW3uFyjkFsrurWaqa4Uua4Yyw4IqrWUKry3Z3yfJ34avryaqF4UWFykWFyDZFyfWr43
-        tr15tws5GFnYk3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,79 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-在 2023/04/26 11:20, Song Liu 写道:
-> On Tue, Apr 25, 2023 at 4:54 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Our test reports a uaf for 'mddev->sync_thread':
->>
->> T1                      T2
->> md_start_sync
->>   md_register_thread
->>   // mddev->sync_thread is set
->>                          raid1d
->>                           md_check_recovery
->>                            md_reap_sync_thread
->>                             md_unregister_thread
->>                              kfree
->>
->>   md_wakeup_thread
->>    wake_up
->>    ->sync_thread was freed
->>
->> Root cause is that there is a small windown between register thread and
->> wake up thread, where the thread can be freed concurrently.
->>
->> Currently, a global spinlock 'pers_lock' is borrowed to protect
->> 'mddev->thread', this problem can be fixed likewise, however, there are
->> similar problems elsewhere, and use a global lock for all the cases is
->> not good.
->>
->> This patch protect all md_thread with rcu.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   block/blk-cgroup.c        |  3 ++
->>   drivers/md/md-bitmap.c    | 10 ++++--
->>   drivers/md/md-cluster.c   | 17 ++++++----
->>   drivers/md/md-multipath.c |  4 +--
->>   drivers/md/md.c           | 69 ++++++++++++++++++---------------------
->>   drivers/md/md.h           |  8 ++---
->>   drivers/md/raid1.c        |  7 ++--
->>   drivers/md/raid1.h        |  2 +-
->>   drivers/md/raid10.c       | 20 +++++++-----
->>   drivers/md/raid10.h       |  2 +-
->>   drivers/md/raid5-cache.c  | 22 ++++++++-----
->>   drivers/md/raid5.c        | 15 +++++----
->>   drivers/md/raid5.h        |  2 +-
->>   13 files changed, 100 insertions(+), 81 deletions(-)
->>
->> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
->> index 1c1ebeb51003..0ecb4cce8af2 100644
->> --- a/block/blk-cgroup.c
->> +++ b/block/blk-cgroup.c
->> @@ -527,6 +527,9 @@ static void blkg_destroy_all(struct gendisk *disk)
->>          list_for_each_entry_safe(blkg, n, &q->blkg_list, q_node) {
->>                  struct blkcg *blkcg = blkg->blkcg;
->>
->> +               if (hlist_unhashed(&blkg->blkcg_node))
->> +                       continue;
->> +
-> 
-> This change is not related, right?
+在 2023/4/25 22:09, Liam R. Howlett 写道:
+> Static analyser of the maple tree code noticed that the split variable
+> is being used to dereference into an array prior to checking the
+> variable itself.  Fix this issue by changing the order of the statement
+> to check the variable first.
+>
+> Reported-by: David Binderman <dcb314@hotmail.com>
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-Yes, it's not related. Sorry that I missed another fix patch into
-this...
+Reviewed-by: Peng Zhang<zhangpeng.00@bytedance.com>
 
-> 
-> I don't think we can rush this change in the 6.4 merge window. Let's
-> test it more thoroughly and ship it in the next merge window.
-
-Of course.
-
-Thanks,
-Kuai
-
+> ---
+>   lib/maple_tree.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 110a36479dced..9cf4fca42310c 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -1943,8 +1943,9 @@ static inline int mab_calc_split(struct ma_state *mas,
+>   		 * causes one node to be deficient.
+>   		 * NOTE: mt_min_slots is 1 based, b_end and split are zero.
+>   		 */
+> -		while (((bn->pivot[split] - min) < slot_count - 1) &&
+> -		       (split < slot_count - 1) && (b_end - split > slot_min))
+> +		while ((split < slot_count - 1) &&
+> +		       ((bn->pivot[split] - min) < slot_count - 1) &&
+> +		       (b_end - split > slot_min))
+>   			split++;
+>   	}
+>   
