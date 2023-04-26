@@ -2,179 +2,707 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889376EF6C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447C06EF6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241154AbjDZOy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S241227AbjDZO5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232486AbjDZOyY (ORCPT
+        with ESMTP id S241041AbjDZO5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:54:24 -0400
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2466A65
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1682520863;
-  h=message-id:date:from:subject:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=R7v5BIe2O4clRWMHYEawx13M/Bq/XBaPikRawgUEvO4=;
-  b=XfZ/Uwbs+J+c68t5t2acfIrMGSTkgjAZzkMQzxPwh+QUJhprvdPxXtci
-   CX/dFfYT04JrX7DC2fe5ZhiHIQVpeEeZcI4pbIewJoQMMop4DfDN/ooEK
-   8bdm9fIuFWpXEA3TOM3mZ6PEbZEmphuxCmjLBpw/W/diFLXbXF1XV+IjP
-   w=;
-X-IronPort-RemoteIP: 104.47.73.168
-X-IronPort-MID: 109391150
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:xuNlJKq/a83cAaDit+UwGFxFY8ZeBmLSZBIvgKrLsJaIsI4StFCzt
- garIBmEbKzZa2L2etknPojjoB8DupPdz9c2TFFspS42ECIW9puZCYyVIHmrMnLJJKUvbq7FA
- +Y2MYCccZ9uHhcwgj/3b9ANeFEljfngqoLUUbKCYWYpA1c/Ek/NsDo788YhmIlknNOlNA2Ev
- NL2sqX3NUSsnjV5KQr40YrawP9UlKm06WJwUmAWP6gR5weCzSdNVvrzGInqR5fGatgMdgKFb
- 76rIIGRpgvx4xorA9W5pbf3GmVirmn6ZFXmZtJ+AsBOszAazsAA+v9T2Mk0MC+7vw6hjdFpo
- OihgLTrIesf0g8gr8xGO/VQO3kW0aSrY9YrK1Dn2SCY5xWun3cBX5yCpaz5VGEV0r8fPI1Ay
- RAXAAkzdB6zmb6v/JyqZeky3f0JFfXWGpxK7xmMzRmBZRonabbqZv2WoPpnhnI3jM0IGuvCb
- c0EbzYpdA7HfxBEJlYQDtQ5gfusgX78NTZfrTp5p4JuuzSVkFM3j+OraYSFEjCJbZw9ckKwj
- 2TK5WnmRDodM8SS02Gt+XOwnO7f2yj8Xer+EZXhrq8x0QTKmzR75Bs+SwGYkeuyh2KFV/FPB
- XZO/3M3oesx3Rn+JjX6d1jiyJKehTYWQ/JZF+w37lHLxqe8yxqWAngsSj9HdcA8s8k3VXom2
- zehh971CCZ9mLyTR2iU+rqdoXW1Iyd9BX9SOwcHQBED7t2lp5s85jrLT9B+AOu2g8fzFDXY3
- T+Htm49iq8VgMpN0L+0lW0rmBqpr5nNCwsqvAPeWzr56hsjPdD1IYu19VLc8PBMap6DSUWMt
- 2QFnM7Y6/0SCZaKl2qGR+Bl8KyV2stp+Qb02TZHd6TNPRzxk5J/Vei8OA1DGXo=
-IronPort-HdrOrdr: A9a23:XsXxh6u8Y1T2w62sKTzra4cK7skDZ9V00zEX/kB9WHVpm62j+v
- xG+c5xvyMc5wxhO03I5urwWpVoLUmzyXcX2+Us1NWZPDUO0VHARL2KhrGM/9SPIUzDH+dmpM
- JdT5Q=
-X-Talos-CUID: =?us-ascii?q?9a23=3AC8bb7WhMg9ta+9jlbujEr6lN+TJuS0PHwkfOf1a?=
- =?us-ascii?q?EJ3dGSOPOcHWpxJ5CjJ87?=
-X-Talos-MUID: 9a23:niUdKQsNKpby10t0ls2nmmtBBNVj7oiVBGMdv69cvpCdOW9zEmLI
-X-IronPort-AV: E=Sophos;i="5.99,228,1677560400"; 
-   d="scan'208";a="109391150"
-Received: from mail-mw2nam04lp2168.outbound.protection.outlook.com (HELO NAM04-MW2-obe.outbound.protection.outlook.com) ([104.47.73.168])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 26 Apr 2023 10:54:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k5Nqd46QYYirl3BSw+4V9H2pVlw/2ITt08Rqm2ndT/gv4aIfVFIPIJoRdTE/13rQVCwTRM0gRUVbBi70waEgBiwo4usGju3z4uyA3ES9v3arkIrnj2WubiHE8q1Y/lFTL+w4D84R2FcUhHReczpdXPhAt5kE4f+AEF0Y9tFt336NyQW7+o1OHL7YFgbAsFKvBSfOV4ie7JUVN0QmNVlTuR9GBPVfmtLX0x8emNx/rqRRqVtGc0L7ci+1eXPHgonE7vMT8Ij2U3IZ66bb4rlSOV7q/FpabIuoNvx09MzKGsivngSHOBJ10OurRO6evXhrSK3x031YqnEBr648Q9GreA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R7v5BIe2O4clRWMHYEawx13M/Bq/XBaPikRawgUEvO4=;
- b=fG8k1JlimM+eLnNvkoi8i724dOcfA3T325rWugLgzVWUY84aghdISuAZQINMBofUT5xEeJ3CztUdDnRi3WAo/rc2sbqQ6PBGE3kYp6BdVeM0JCg8DqGdbtrhGD+k4aHOSWfXONOtjIfewXi0uXzCxzC/UInBq0wnnidpCrbQ4v3v6T9TyVs722wq8KrxuR47jvU8hWzJ7I3l3Ct08A/TCPf4vv+ehFFSotDyX6fjZXQa8tHy+uXjVA54j6upFDXLLYGU9yD3N2SK0y63HM/9C6UeEPBz8jAuLhhu/MXaosCjJR5qaKb6iMFU3qkdEyVI8msH2g09GNK+j7bEcL4HRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+        Wed, 26 Apr 2023 10:57:17 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D2A6E9A;
+        Wed, 26 Apr 2023 07:57:11 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2496863c2c7so6094166a91.1;
+        Wed, 26 Apr 2023 07:57:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R7v5BIe2O4clRWMHYEawx13M/Bq/XBaPikRawgUEvO4=;
- b=jVxSngl+JwGwR8K1mTtXb3uHccHoTzNUX/llT1pPI+zuPDehGo/7LX4QdnaG56QKXNFptLtR+FDJGlV3JFaYtX005646L7GlFv8VLZ6sY8Q1uAoTj+MCDjAnoq/T0PQYoYjy357r/xBn5ej9HZUHNSOnJ2ZILxIrV40IztBQGqg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by LV8PR03MB7493.namprd03.prod.outlook.com (2603:10b6:408:185::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Wed, 26 Apr
- 2023 14:54:20 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::a5a1:8cae:d45b:2030]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::a5a1:8cae:d45b:2030%4]) with mapi id 15.20.6319.033; Wed, 26 Apr 2023
- 14:54:19 +0000
-Message-ID: <9c5670f3-a3de-a5ed-b458-c52a1c25641a@citrix.com>
-Date:   Wed, 26 Apr 2023 15:54:13 +0100
+        d=gmail.com; s=20221208; t=1682521031; x=1685113031;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OoCwsfl+CtaEH9uwmL99+Tu/UIz2ipHuka2d1/yuUY8=;
+        b=OeJug01A5MyB1zc9ytGdGWi8Q3Kur0ZW8qF0eDtBsPIjamBI/Ut9qFb4pcjzXK5vMX
+         OK390uJBKs7aTgQKYULvtFMcwhLREiIiFvA86iWlXR4wxIemlQ7YqTfa/XaUFKEtZ+mA
+         ZF/y/Aa1PdprdL0md10kNDjcK1QirN+ZCcjesHV18vVZDB/gqihuigZ0tFnaC1dLdX8y
+         vQxkGgTQLrF0MGRxUsu84vi2e8BVvBXaffN8Mx39r9u5QIVMwa2M8sf2NxMsn+qV6EtN
+         3fNA9kQRoIXEX6zapzGVPFHTXvPpza9mCaaHaPN8dWN5xPpgLubISUErlbXpFyrG4mUG
+         idTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682521031; x=1685113031;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OoCwsfl+CtaEH9uwmL99+Tu/UIz2ipHuka2d1/yuUY8=;
+        b=Zcz2HxnD4AM1uHNFUp/SMFVFWQkjVnHmbl5h2eoj6NXiNpdXiiO+IxfKVyz9YcnDIJ
+         CrONfbS36k7jd8t4p4GLYmxgawGvwqrMsSMhfbhCy2pZ3Djg0A03eGAJhEf/NV6SZRGK
+         5yITZhaS2da+nfh/bRKcaYX+w4DrfdoOT6GeiCzg92tKmcC+L7Ryp39V13vpnrrzPB6N
+         KOu98YLHvm/wXRaWz8BfbL2P/KAkdCOUi8+87PP6zSbpxj5VS0mzZfPPmHg7FtI/5VPp
+         bK0Hs6YT1wF/SRoyRiZB4ui7ZyLhmyWe6cirssHQQBm/fqGC0ot86TMe4FVDNCgk6L0v
+         EefQ==
+X-Gm-Message-State: AAQBX9flhcbR3Kbten4kg9rlnzik9m9dyHJtPN/XMamlzhj1zGFp0z7U
+        hnk3/HH2DjXekONkYI6CR8E=
+X-Google-Smtp-Source: AKy350ZY3LH95EiwMTnjnTctG3bZF2lD85M8YGEXB8KGdkz07BrvvYJGsKHlbf63PyrX+fO7ch9oyg==
+X-Received: by 2002:a17:90b:118d:b0:24b:755a:9e99 with SMTP id gk13-20020a17090b118d00b0024b755a9e99mr17214539pjb.31.1682521031195;
+        Wed, 26 Apr 2023 07:57:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lx3-20020a17090b4b0300b00246cc751c6bsm11600571pjb.46.2023.04.26.07.57.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 07:57:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bacd5f00-a6b3-0eca-a1b0-2a39d79ae7de@roeck-us.net>
+Date:   Wed, 26 Apr 2023 07:57:08 -0700
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-From:   Andrew Cooper <Andrew.Cooper3@citrix.com>
-Subject: Re: [PATCH] x86/CPU/AMD: Rename the spectral chicken
-Content-Language: en-GB
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230425195024.17808-1-bp@alien8.de>
- <20230425205944.GB1350354@hirez.programming.kicks-ass.net>
- <20230425211522.GGZEhC6nkdsOapSxVL@fat_crate.local> <87cz3ryph7.ffs@tglx>
- <20230426092106.GAZEjtAusEmYTgr1Hh@fat_crate.local>
-In-Reply-To: <20230426092106.GAZEjtAusEmYTgr1Hh@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:311::6) To BYAPR03MB3623.namprd03.prod.outlook.com
- (2603:10b6:a02:aa::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|LV8PR03MB7493:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a0ece4b-cf21-4523-34c4-08db46661d32
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VLWUyv0nhAFlP86RKxk9udUtUyeMho2nV5JGFDRazBoV129jMmm3v/J4HZB866ORz1poMkMNgXqFp9IBrFEFj4+WZCDy76pRk730q+zjaBot3YnafSDVTAtRpOtVD/D8tqOV226n3Mngs87mvHlg3VXTPfCKgjc9OUL+Kny9RQfogokZsOHp7QMFW0blw5V9sjPManXw8HSrW2tqO+/wFmS04vyhq4KFRsOkYozydXryqS9E+uyUqsdgkDB26OtCKAagy54Uc09HBsKQ1pMKGgZLaQ+k3tW9fJJdykTwfuBSANU3ZazWYPL28kbDbAXqsUpKHnlqTfNTPz1+vYR/nTk8/G6VUn5w5HK/pLS0b6YdUCEPTfXHXkjeQPzEJkZK0tfu1rm0L1nMA0xbUkygYW5XfmbduIz3x4EZ31+RVm513d0Ky2oWAJ0Yuz4/GMbxprahflXWJEKIKoPl2i+yPK/O9BUwUyww7f3jkz6lc/CytTObY+r0pCleX5tEaMQJB6mU0ul/RZe2mDZ/A3XC2hR66v+ulNJsMwckNDo5UKSz8SOYz0yrs0gXWlp3LrPiCwOgXIZqCF1f5udGQxNCn5j9tc8FN24Sd0BYh5vnCC1TByA/2mPKwXhzPXT1b9lMGGyNzMN+W9cc/zUIE2YLgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199021)(558084003)(110136005)(54906003)(478600001)(82960400001)(38100700002)(5660300002)(8676002)(8936002)(86362001)(36756003)(2906002)(31696002)(4326008)(316002)(41300700001)(186003)(31686004)(2616005)(26005)(66556008)(66946007)(6506007)(6512007)(53546011)(66476007)(6486002)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZG54dFdXTDYxT0lVVUFlK0dXOWRpT2dtVmIxRmZkSXprZEdCLzNpTm9sc0Rp?=
- =?utf-8?B?bmJEQjlwM3FtcWdIelB5eUxrVlN3ZlVDK3kyeHN0YmpTdWlvd3daVXEzbDQv?=
- =?utf-8?B?ZDk4NnJmQjVzOFpZMHJhYzB0TWJPQzlidmdNM1B4T0ZRRFV5VmpBbUtsRGZG?=
- =?utf-8?B?bkFrbm9kUGozZVNNWS9tSXZORDQ2elZBZiswN0o1QW1JTk42dThRc3lzaDg5?=
- =?utf-8?B?OXVlaW1uZWNhK3ZlcUFLckNlbzBmYlc2aWNKSEpJZm5pdXJ5OXBEK0FQVGFI?=
- =?utf-8?B?ak1MMVhNUWdHaXdMZDhzL1UyVGN6TGNZdWdEMUNtMEZ2enlVbklHa3g5Q3pQ?=
- =?utf-8?B?UWQ2cklMTlpobDlReUNHWkhTVlEyYXB2eWs5bzRNYlBqRlkySWhkTU5YM3RZ?=
- =?utf-8?B?dmwxSmtqZVhkcytTdGJiNmRMSUl6djJsdjdtVzE4WFdPdWtuS2MwWGo5UzlI?=
- =?utf-8?B?b3RYa3JvcElWdEJHQUwxTE1mYnU3VElJazVIamhxaDl3RC9rWDRrYm5UWUtB?=
- =?utf-8?B?N3VSRzFzZ1JrTURLWXYyU0xqdWtUN2lIdFJpN0twR2h6bU1Gdlh0OHVHOTVh?=
- =?utf-8?B?OWg5Q1h3cHNSNXhYNXVTK0Y2ZHNyMVdIT1NXbDZQUDBValZ1QlJZYnRsUWtk?=
- =?utf-8?B?dDlRTjFOUVp5eHVFRW9aK2ROR1lTQjdnSmZHeElsZTlFQ0dUWlM0dU9uY3Vi?=
- =?utf-8?B?OEx4YUNuRmE5SktaeXNxVk1PeWdpV09MUGdsN3FUekNTWGV5TzIyVllsS3RB?=
- =?utf-8?B?aC9BSk5XTWtqaVdqSEMrR1JCOTFQZFpjV0wvSFNkc05rYUdmV0hmOXY4Tmdu?=
- =?utf-8?B?aXFXUkFCQkQzY3h1MTJUdk9MdGJiVHQ4QmZ6ZW1wdHNNOGtqaFYzaHR3emxZ?=
- =?utf-8?B?Nm1objJJcXFEMkNjMitWcFBNbUo5QVlwdG9hdXJEY1FGcElpZ0M4NktFRkdJ?=
- =?utf-8?B?NVdDeTlFUEdVMjdocVMrUFlvY3dlVnBhRjk2SGFyc3pXODk1dlhVNW82SkNR?=
- =?utf-8?B?TXIxNHBrMEJJbkRxQUgrZkF1U1FMTXJUdGMzTHlxaUNXUnBsVUhjYzVtR2Nw?=
- =?utf-8?B?WjhyNHZxSmRKcjFqQU9vWlRnVEgyOFFjYzhwVFRxUXdZK0Rmdms2clZiWkdJ?=
- =?utf-8?B?Z1JvV1R6WmtRcFV6SDhtYXM3ZHV2VmxLQ1R0RjUxd3BNTXBMc3hzYWszS2Ri?=
- =?utf-8?B?U05pNFdzRStpRC9oTGRLZ0VBNUQyWjRmNlVJS0tTa29BTmFuLzdlQ0ZsdGoy?=
- =?utf-8?B?VW1jb0tldTNqZXJITXk1VHZLdDh5NHc1VGF6aTd2M1hLN1ZPc3M1a0djL2xT?=
- =?utf-8?B?M21ZR3RKQk00c2x2UGQ3Y3Nja3dOanIvRWl0QzdSZUxoVFQvVDkyc3NKS3dH?=
- =?utf-8?B?TU8wRjY1NkNRWTFzUWxKTUR6ejVhNVArVHY4U3EvYkc0aVh2c3d5K0VEV0k5?=
- =?utf-8?B?N3JGS0pkZG1GWHk2NTRRV0wrcDVOQWloWGJoSkg5SVp0Um5xZW4wWDUwVnF5?=
- =?utf-8?B?bnZLSSs0WjZaOFBMUDk3T1p0U1JRY05qOHU2QlZEdGRNQUxzZ2dOK2VQaDB2?=
- =?utf-8?B?YTNkbzdHdDlFcjZueXdWbnBjQUpZOVY1STVuUUZqWkcrbkU3WlNhcnJ3R0dt?=
- =?utf-8?B?TEFOUlpjUjhISTErRHo4WG1nSXB5MHd4WkNTSDAwOTltbDhWK1NOaWMzRk1N?=
- =?utf-8?B?WFZLTTV4dklIdVJiR0VUM2VoSUpQelRXM2NLOVloN29IZTQ3TExjMzlPR2NJ?=
- =?utf-8?B?YWZpWVlJeTIyMHI5SlBsb3oweCsyWC9DWEoraklranhWMFpYcUpybFZ5K3Ny?=
- =?utf-8?B?SGx1K0dUTFV2bFZoYWZsRlp2NTJNaWg3VysyTVZYRXpJMmNzVmN0ZjZPa2Zk?=
- =?utf-8?B?TTRkZFk4ZmZtdUlaSG5jYkRVSFhTQVpUZW9BT1R3ekxZcjJ6cTBEZGhTeU5Q?=
- =?utf-8?B?WWxWLzB4RTByVmVLdVhEaUhmMnA5NW5ONmhneWR4R2g3dHlxc1JEVWkrUE1k?=
- =?utf-8?B?SUphVitBNU9RU09QekFBdURqSVNZbUxMZnNLTEpXbklIc0wzNldhcHk0VzlL?=
- =?utf-8?B?bENRK0oxRmN6WTI3cTFIWXp1R05PUk1BbjZObVphenJjU01YdDVQZ1Q0OHlH?=
- =?utf-8?B?aUhLSXg4N2FReG5EQlFIWDFwZG45cytLLzNWYWhRdHRKYi9ydkVKV0Y2Qm44?=
- =?utf-8?B?Rnc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 8GDAQdOjaWVmO1xeibEpJ4QnZ4I6nLnt1kumIMoyhjkicNAT7DgwQKzhd4p6l0G/nd8XPVJQF+YZVIvFBosTCeKqSorfh8dTf7mtrr40N9+Kr5bSqPHU3/RJv96c+VeQ7wYxi8frv9vToINSwjeoI56EFrLlyLsRl9JRcqJVVQuxXAINna5LXufCKC0Y+IGs5X8UyymP44BRI0R6lHyreGPxf/DwTx3CNuqdf/Orb8M99jYSO9P1JMj0FPCgL+f6fHTFOaBIdyPWubtUaDBF2sFEKjajDKEMNglyO+ynEiq7yMqM6pn0qRSGZR4ij8ijStPdw5AKheKCgqKfuD22/Iv7mrtvRfSl/6Xvj4yjZIMsiAnODrePIX9s0ZU7E0oAbIBOxbatJEd8Hn94LFeVul7Ftz13ACeeqsm5f/g2bl9EH5pBaFumqNQBHFGKU2BSNSKmVwcnF/BGmfc4P8AyQ6fUZwoTZ7F+TtP51UKuGUouyxTEQ/eUgZulGeShvyaouish+lmzpBR35BkZnd3mLMIPlDrKXyqYqn6Fb2Vc8enqU3cgdsnTyGxU5kj31PEkMqwByBmQ+dT78ku/kildP3tKjZZW/t/a1xGm1ehjPJ3vuuynkcp3+V9SzVuTK4zO+Dn7V2I9p61mQf/+4SCOXt1pBG/DI3FLaIqLQqjD027Gnu28hbXABPisIpWYjXGE07Lh6GufLtDOmHcvIPNhUFxAGx1udWK3N5EUqAqDeKjC7NZOE7NqAOJt+axui3H+XpdMvs5otVhlhMHx/ksq4O+ycw1LT0HlVw633yc1w7TFySfUyMbe77nqzqYR8urX5i8mK2BMHYCKvBuhVx3AaWqZAXP9cLf0nRmWBPmBqkMbCGExl/xhMdBhQP8hWYK01hgKNNYhlzID5NdkGXda0g==
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a0ece4b-cf21-4523-34c4-08db46661d32
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 14:54:19.7382
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fNyTJkNfWmjHZF4jLQansFIH3bYznCYeiKS9NQ2GFh6gR/uEmMfTxDB/+h+2hr+3VNsvfUvlwh7ChsUFCMvuBXf8puIfwZb1E8nZihmZvyM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR03MB7493
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20230426124049.258359-1-daniel.matyas@analog.com>
+ <20230426124049.258359-2-daniel.matyas@analog.com>
+ <20230426124049.258359-3-daniel.matyas@analog.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/2] hwmon: max31827: add MAX31827 driver
+In-Reply-To: <20230426124049.258359-3-daniel.matyas@analog.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 10:21 am, Borislav Petkov wrote:
-> On Wed, Apr 26, 2023 at 11:14:44AM +0200, Thomas Gleixner wrote:
->> That's a purely speculative assumption.
-> No, it's not.
+On 4/26/23 05:40, Daniel Matyas wrote:
+> MAX31827 is a low-power temperature switch with I2C interface.
+> 
+> The device is a ±1°C accuracy from -40°C to +125°C
+> (12 bits) local temperature switch and sensor with I2C/SM-
+> Bus interface. The combination of small 6-bump wafer-lev-
+> el package (WLP) and high accuracy makes this temper-
+> ature sensor/switch ideal for a wide range of applications.
+> 
+> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
+> ---
+>   Documentation/hwmon/index.rst    |   1 +
+>   Documentation/hwmon/max31827.rst |  83 +++++++
+>   MAINTAINERS                      |   2 +
+>   drivers/hwmon/Kconfig            |  11 +
+>   drivers/hwmon/Makefile           |   2 +-
+>   drivers/hwmon/max31827.c         | 406 +++++++++++++++++++++++++++++++
+>   6 files changed, 504 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/hwmon/max31827.rst
+>   create mode 100644 drivers/hwmon/max31827.c
+> 
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+> index f1fe75f596a5..965a830ea766 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -139,6 +139,7 @@ Hardware Monitoring Kernel Drivers
+>      max31760
+>      max31785
+>      max31790
+> +   max31827
+>      max34440
+>      max6620
+>      max6639
+> diff --git a/Documentation/hwmon/max31827.rst b/Documentation/hwmon/max31827.rst
+> new file mode 100644
+> index 000000000000..5b94ad62baa3
+> --- /dev/null
+> +++ b/Documentation/hwmon/max31827.rst
+> @@ -0,0 +1,83 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +Kernel driver max31827
+> +======================
+> +
+> +Supported chips:
+> +
+> +  * Maxim MAX31827
+> +
+> +    Prefix: 'max31827'
+> +
+> +    Addresses scanned: I2C 0x40 - 0x5f
+> +
+> +    Datasheet: Publicly available at the Analog Devices website
+> +
+> +  * Maxim MAX31828
+> +
+> +    Prefix: 'max31828'
+> +
+> +    Addresses scanned: I2C 0x40 - 0x5f
+> +
+> +    Datasheet: Publicly available at the Analog Devices website
+> +
+> +  * Maxim MAX31829
+> +
+> +    Prefix: 'max31829'
+> +
+> +    Addresses scanned: I2C 0x40 - 0x5f
+> +
+> +    Datasheet: Publicly available at the Analog Devices website
+> +
+> +
+> +Authors:
+> +	- Daniel Matyas <daniel.matyas@analog.com>
+> +
+> +Description
+> +-----------
+> +
+> +The chips supported by this driver are quite similar. The only difference
+> +between them is found in the default power-on behaviour of the chips. While the
+> +MAX31827's fault queue is set to 1, the other two chip's fault queue is set to
+> +4. Besides this, the MAX31829's alarm active state is high, while the other two
+> +chip's alarms are active on low. It is important to note that the chips can be
+> +configured to operate in the same manner with 1 write operation to the
+> +configuration register. From here on, we will refer to all these chips as
+> +MAX31827.
+> +
+> +MAX31827 implements a temperature sensor with a 6 WLP packaging scheme. This
+> +sensor measures the temperature of the chip itself.
+> +
+> +MAX31827 has low and over temperature alarms with an effective value and a
+> +hysteresis value: -40 and -30 degrees for under temperature alarm and +100 and
+> ++90 degrees for over temperature alarm.
+> +
+> +The alarm can be configured in comparator and interrupt mode. Currently only
+> +comparator mode is implemented. In Comparator mode, the OT/UT status bits have a
+> +value of 1 when the temperature rises above the TH value or falls below TL,
+> +which is also subject to the Fault Queue selection. OT status returns to 0 when
+> +the temperature drops below the TH_HYST value or when shutdown mode is entered.
+> +Similarly, UT status returns to 0 when the temperature rises above TL_HYST value
+> +or when shutdown mode is entered.
+> +
+> +Putting the MAX31827 into shutdown mode also resets the OT/UT status bits. Note
+> +that if the mode is changed while OT/UT status bits are set, an OT/UT status
+> +reset may be required before it begins to behave normally. To prevent this,
+> +it is recommended to perform a read of the configuration/status register to
+> +clear the status bits before changing the operating mode.
+> +
+> +The conversions can be manual with the one-shot functionality and automatic with
+> +a set frequency. When powered on, the chip measures temperatures with 1 conv/s.
+> +Enabling the device when it is already enabled has the side effect of setting
+> +the conversion frequency to 1 conv/s. The conversion time varies depending on
+> +the resolution. The conversion time doubles with every bit of increased
+> +resolution. For 10 bit resolution 35ms are needed, while for 12 bit resolution
+> +(default) 140ms. When chip is in shutdown mode and a read operation is
+> +requested, one-shot is triggered, the device waits for 140 (conversion time) + 1
+> +(error) ms, and only after that is the temperature value register read.
+> +
+> +Notes
+> +-----
+> +
+> +Currently fault queue, alarm polarity and resolution cannot be modified.
+> +PEC is not implemented either.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0997a0490c97..fabc8869b13b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12541,6 +12541,8 @@ L:	linux-hwmon@vger.kernel.org
+>   S:	Supported
+>   W:	http://ez.analog.com/community/linux-device-drivers
+>   F:	Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
+> +F:	Documentation/hwmon/max31827.rst
+> +F:	drivers/hwmon/max31827.c
+>   
+>   MAX6650 HARDWARE MONITOR AND FAN CONTROLLER DRIVER
+>   L:	linux-hwmon@vger.kernel.org
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 5b3b76477b0e..1e8546b3a8f2 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1097,6 +1097,17 @@ config SENSORS_MAX31760
+>   	  This driver can also be built as a module. If so, the module
+>   	  will be called max31760.
+>   
+> +config MAX31827
+> +	tristate "MAX31827 low-power temperature switch and similar devices"
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  If you say yes here you get support for MAX31827, MAX31828 and
+> +	  MAX31829 low-power temperature switches and sensors connected with I2C.
+> +
+> +	  This driver can also be built as a module.  If so, the module
+> +	  will be called max31827.
+> +
+>   config SENSORS_MAX6620
+>   	tristate "Maxim MAX6620 fan controller"
+>   	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index 88712b5031c8..dfb9aaf979bb 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -149,6 +149,7 @@ obj-$(CONFIG_SENSORS_MAX6642)	+= max6642.o
+>   obj-$(CONFIG_SENSORS_MAX6650)	+= max6650.o
+>   obj-$(CONFIG_SENSORS_MAX6697)	+= max6697.o
+>   obj-$(CONFIG_SENSORS_MAX31790)	+= max31790.o
+> +obj-$(CONFIG_MAX31827) += max31827.o
+>   obj-$(CONFIG_SENSORS_MC13783_ADC)+= mc13783-adc.o
+>   obj-$(CONFIG_SENSORS_MC34VR500)	+= mc34vr500.o
+>   obj-$(CONFIG_SENSORS_MCP3021)	+= mcp3021.o
+> @@ -223,4 +224,3 @@ obj-$(CONFIG_SENSORS_PECI)	+= peci/
+>   obj-$(CONFIG_PMBUS)		+= pmbus/
+>   
+>   ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
+> -
+> diff --git a/drivers/hwmon/max31827.c b/drivers/hwmon/max31827.c
+> new file mode 100644
+> index 000000000000..ed8ab9c9abb9
+> --- /dev/null
+> +++ b/drivers/hwmon/max31827.c
+> @@ -0,0 +1,406 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * max31827.c - Support for Maxim Low-Power Switch
+> + *
+> + * Copyright (c) 2023 Daniel Matyas <daniel.matyas@analog.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mutex.h>
+> +#include <linux/regmap.h>
+> +
+> +#define MAX31827_T_REG	0x0
+> +#define MAX31827_CONFIGURATION_REG	0x2
+> +#define MAX31827_TH_REG	0x4
+> +#define MAX31827_TL_REG 0x6
+> +#define MAX31827_TH_HYST_REG	0x8
+> +#define MAX31827_TL_HYST_REG	0xA
+> +
+> +#define MAX31827_CONFIGURATION_1SHOT_MASK	BIT(0)
+> +#define MAX31827_CONFIGURATION_CNV_RATE_MASK	GENMASK(3, 1)
+> +#define MAX31827_CONFIGURATION_U_TEMP_STAT_MASK BIT(14)
+> +#define MAX31827_CONFIGURATION_O_TEMP_STAT_MASK BIT(15)
+> +
+> +#define MAX31827_12_BIT_CNV_TIME	141
+> +
+> +#define MAX31827_CNV_1_DIV_64_HZ	0x1
+> +#define MAX31827_CNV_1_DIV_32_HZ	0x2
+> +#define MAX31827_CNV_1_DIV_16_HZ	0x3
+> +#define MAX31827_CNV_1_DIV_4_HZ		0x4
+> +#define MAX31827_CNV_1_HZ	0x5
+> +#define MAX31827_CNV_4_HZ	0x6
+> +#define MAX31827_CNV_8_HZ	0x7
+> +
+> +#define MAX31827_DEVICE_ENABLE(x) ((x) ? 0xA : 0x0)
+> +
+> +struct max31827_state {
+> +	/*
+> +	 * Prevent simultaneous access to the i2c client.
+> +	 */
+> +	struct mutex lock;
+> +	struct regmap *regmap;
+> +	bool enable;
+> +};
+> +
+> +static const struct regmap_config max31827_regmap = {
+> +	.reg_bits = 8,
+> +	.val_bits = 16,
+> +	.max_register = 0xA,
+> +};
+> +
+> +static int write_alarm_val(struct max31827_state *st, unsigned int reg,
+> +			   long val)
+> +{
+> +	unsigned int cfg;
+> +	unsigned int tmp;
+> +	int ret;
+> +
+> +	/*
+> +	 * Before the Temperature Threshold Alarm and Alarm Hysteresis Threshold
+> +	 * register values are changed over I2C, the part must be in shutdown
+> +	 * mode.
+> +	 *
+> +	 * Mutex is used to ensure, that some other process doesn't change the
+> +	 * configuration register.
+> +	 */
+> +
+> +	if (!st->enable)
+> +		return regmap_write(st->regmap, reg, val);
+> +
+As mentioned above, this check needs to be mutex protected.
 
-Until you retire, I'm not sure you can make that guarantee...
+> +	mutex_lock(&st->lock);
+> +
+> +	ret = regmap_read(st->regmap, MAX31827_CONFIGURATION_REG, &cfg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tmp = cfg & ~(MAX31827_CONFIGURATION_1SHOT_MASK |
+> +		      MAX31827_CONFIGURATION_CNV_RATE_MASK);
+> +	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, tmp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, reg, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_write(st->regmap, MAX31827_CONFIGURATION_REG, cfg);
+> +
+> +	mutex_unlock(&st->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static umode_t max31827_is_visible(const void *state,
+> +				   enum hwmon_sensor_types type, u32 attr,
+> +				   int channel)
+> +{
+> +	if (type == hwmon_temp) {
+> +		switch (attr) {
+> +		case hwmon_temp_enable:
+> +		case hwmon_temp_max:
+> +		case hwmon_temp_min:
+> +		case hwmon_temp_max_hyst:
+> +		case hwmon_temp_min_hyst:
+> +			return 0644;
+> +		case hwmon_temp_input:
+> +		case hwmon_temp_min_alarm:
+> +		case hwmon_temp_max_alarm:
+> +			return 0444;
 
-/me ducks.
+Missing default:
+
+> +		}
+> +	} else if (type == hwmon_chip) {
+> +		if (attr == hwmon_chip_update_interval)
+> +			return 0644;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+> +			 u32 attr, int channel, long *val)
+> +{
+> +	struct max31827_state *st = dev_get_drvdata(dev);
+> +	unsigned int uval;
+> +	int ret;
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_enable:
+> +			ret = regmap_read(st->regmap,
+> +					  MAX31827_CONFIGURATION_REG, &uval);
+> +			uval = FIELD_GET(MAX31827_CONFIGURATION_1SHOT_MASK |
+> +					 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +				uval);
+> +			uval = !!uval;
+> +
+> +			break;
+> +		case hwmon_temp_input:
+> +			if (!st->enable) {
+
+All accesses to st->enable must be mutex protected since the value could otherwise
+change while the rest of the code executes. That includes accesses to temperature
+registers because the chip could otherwise be disabled just before temperature
+registers are read.
+
+> +				/*
+> +				 * This operation requires mutex protection,
+> +				 * because the chip configuration should not
+> +				 * be changed during the conversion process.
+> +				 */
+> +
+> +				mutex_lock(&st->lock);
+> +
+> +				ret = regmap_update_bits(st->regmap,
+> +							 MAX31827_CONFIGURATION_REG,
+> +							 MAX31827_CONFIGURATION_1SHOT_MASK,
+> +							 1);
+> +				if (ret)
+> +					return ret;
+> +
+> +				msleep(MAX31827_12_BIT_CNV_TIME);
+> +
+> +				mutex_unlock(&st->lock);
+> +			}
+> +			ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
+> +
+> +			break;
+> +		case hwmon_temp_max:
+> +			ret = regmap_read(st->regmap, MAX31827_TH_REG, &uval);
+> +			break;
+> +		case hwmon_temp_max_hyst:
+> +			ret = regmap_read(st->regmap, MAX31827_TH_HYST_REG,
+> +					  &uval);
+> +			break;
+> +		case hwmon_temp_max_alarm:
+> +			ret = regmap_read(st->regmap,
+> +					  MAX31827_CONFIGURATION_REG, &uval);
+> +			uval = FIELD_GET(MAX31827_CONFIGURATION_O_TEMP_STAT_MASK,
+> +					 uval);
+> +			break;
+> +		case hwmon_temp_min:
+> +			ret = regmap_read(st->regmap, MAX31827_TL_REG, &uval);
+> +			break;
+> +		case hwmon_temp_min_hyst:
+> +			ret = regmap_read(st->regmap, MAX31827_TL_HYST_REG,
+> +					  &uval);
+> +			break;
+
+Conversion to milli-degrees C is missing.
+
+> +		case hwmon_temp_min_alarm:
+> +			ret = regmap_read(st->regmap,
+> +					  MAX31827_CONFIGURATION_REG, &uval);
+> +			uval = FIELD_GET(MAX31827_CONFIGURATION_U_TEMP_STAT_MASK,
+> +					 uval);
+> +			break;
+> +		default:
+> +			ret = -EOPNOTSUPP;
+
+Please add
+			break;
+for consistency.
+
+> +		}
+> +
+> +		break;
+> +
+> +	case hwmon_chip:
+> +		if (attr == hwmon_chip_update_interval) {
+> +			ret = regmap_read(st->regmap,
+> +					  MAX31827_CONFIGURATION_REG, &uval);
+> +			uval = FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +					 uval);
+> +			switch (uval) {
+> +			case MAX31827_CNV_1_DIV_64_HZ:
+> +				uval = 64000;
+> +				break;
+> +			case MAX31827_CNV_1_DIV_32_HZ:
+> +				uval = 32000;
+> +				break;
+> +			case MAX31827_CNV_1_DIV_16_HZ:
+> +				uval = 16000;
+> +				break;
+> +			case MAX31827_CNV_1_DIV_4_HZ:
+> +				uval = 4000;
+> +				break;
+> +			case MAX31827_CNV_1_HZ:
+> +				uval = 1000;
+> +				break;
+> +			case MAX31827_CNV_4_HZ:
+> +				uval = 250;
+> +				break;
+> +			case MAX31827_CNV_8_HZ:
+> +				uval = 125;
+> +				break;
+> +			default:
+> +				uval = 0;
+
+				break;
+
+> +			}
+> +		}
+> +		break;
+> +
+> +	default:
+> +		ret = -EOPNOTSUPP;
+
+Please add
+		break;
+
+here for consistency (and everywhere else where I missed it).
+
+> +	}
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	*val = (short)uval;
+> +
+> +	return 0;
+> +}
+> +
+> +static int max31827_write(struct device *dev, enum hwmon_sensor_types type,
+> +			  u32 attr, int channel, long val)
+> +{
+> +	struct max31827_state *st = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_enable:
+> +			if (val >> 1)
+> +				return -EOPNOTSUPP;
+> +
+> +			st->enable = val;
+> +
+> +			return regmap_update_bits(st->regmap,
+> +						  MAX31827_CONFIGURATION_REG,
+> +						  MAX31827_CONFIGURATION_1SHOT_MASK |
+> +						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +						  MAX31827_DEVICE_ENABLE(val));
+> +
+> +		case hwmon_temp_max:
+> +			return write_alarm_val(st, MAX31827_TH_REG, val);
+> +
+> +		case hwmon_temp_max_hyst:
+> +			return write_alarm_val(st, MAX31827_TH_HYST_REG, val);
+> +
+> +		case hwmon_temp_min:
+> +			return write_alarm_val(st, MAX31827_TL_REG, val);
+> +
+> +		case hwmon_temp_min_hyst:
+> +			return write_alarm_val(st, MAX31827_TL_HYST_REG, val);
+> +
+> +		default:
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +	case hwmon_chip:
+> +		if (attr == hwmon_chip_update_interval) {
+> +			switch (val) {
+> +			case 125:
+> +				val = MAX31827_CNV_8_HZ;
+> +				break;
+> +			case 250:
+> +				val = MAX31827_CNV_4_HZ;
+> +				break;
+> +			case 1000:
+> +				val = MAX31827_CNV_1_HZ;
+> +				break;
+> +			case 4000:
+> +				val = MAX31827_CNV_1_DIV_4_HZ;
+> +				break;
+> +			case 16000:
+> +				val = MAX31827_CNV_1_DIV_16_HZ;
+> +				break;
+> +			case 32000:
+> +				val = MAX31827_CNV_1_DIV_32_HZ;
+> +				break;
+> +			case 64000:
+> +				val = MAX31827_CNV_1_DIV_64_HZ;
+> +				break;
+> +			default:
+> +				val = 0;
+> +			}
+> +
+> +			if (!val)
+> +				return -EOPNOTSUPP;
+> +
+> +			val = FIELD_PREP(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +					 val);
+> +
+> +			return regmap_update_bits(st->regmap,
+> +						  MAX31827_CONFIGURATION_REG,
+> +						  MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +						  val);
+> +		}
+> +		break;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int max31827_init_client(struct max31827_state *st)
+> +{
+> +	st->enable = true;
+> +
+> +	return regmap_update_bits(st->regmap, MAX31827_CONFIGURATION_REG,
+> +				  MAX31827_CONFIGURATION_1SHOT_MASK |
+> +					  MAX31827_CONFIGURATION_CNV_RATE_MASK,
+> +				  MAX31827_DEVICE_ENABLE(1));
+> +}
+> +
+> +static const struct hwmon_channel_info *max31827_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_ENABLE | HWMON_T_INPUT | HWMON_T_MIN |
+> +					 HWMON_T_MIN_HYST | HWMON_T_MIN_ALARM |
+> +					 HWMON_T_MAX | HWMON_T_MAX_HYST |
+> +					 HWMON_T_MAX_ALARM),
+> +	HWMON_CHANNEL_INFO(chip, HWMON_C_UPDATE_INTERVAL),
+> +	NULL,
+> +};
+> +
+> +static const struct hwmon_ops max31827_hwmon_ops = {
+> +	.is_visible = max31827_is_visible,
+> +	.read = max31827_read,
+> +	.write = max31827_write,
+> +};
+> +
+> +static const struct hwmon_chip_info max31827_chip_info = {
+> +	.ops = &max31827_hwmon_ops,
+> +	.info = max31827_info,
+> +};
+> +
+> +static int max31827_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct max31827_state *st;
+> +	int err;
+> +
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
+> +		return -EOPNOTSUPP;
+> +
+> +	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+> +	if (!st)
+> +		return -ENOMEM;
+> +
+> +	mutex_init(&st->lock);
+> +
+> +	st->regmap = devm_regmap_init_i2c(client, &max31827_regmap);
+> +	if (IS_ERR(st->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(st->regmap),
+> +				     "Failed to allocate regmap.\n");
+> +
+> +	err = max31827_init_client(st);
+> +	if (err)
+> +		return err;
+> +
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, client->name, st,
+> +							 &max31827_chip_info,
+> +							 NULL);
+> +
+> +	return PTR_ERR_OR_ZERO(hwmon_dev);
+> +}
+> +
+> +static const struct i2c_device_id max31827_i2c_ids[] = {
+> +	{ "max31827", 0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, max31827_i2c_ids);
+> +
+
+As mentioned as response to the summary patch, I don't understand why
+you dropped the of table. Please explain.
+
+> +static struct i2c_driver max31827_driver = {
+> +	.class = I2C_CLASS_HWMON,
+> +	.driver = {
+> +		.name = "adi,max31827",
+
+We don't usually have manufacturer prefixes in driver names, only
+in devicetree compatibility tables.
+
+> +	},
+> +	.probe_new = max31827_probe,
+> +	.id_table = max31827_i2c_ids,
+> +};
+> +module_i2c_driver(max31827_driver);
+> +
+> +MODULE_AUTHOR("Daniel Matyas <daniel.matyas@analog.com>");
+> +MODULE_DESCRIPTION("Maxim MAX31827 low-power temperature switch driver");
+> +MODULE_LICENSE("GPL");
+
