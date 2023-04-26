@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C736EF3FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A6E6EF402
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240784AbjDZMG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 08:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S240798AbjDZMI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240267AbjDZMGY (ORCPT
+        with ESMTP id S240644AbjDZMI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:06:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B695B85;
-        Wed, 26 Apr 2023 05:06:23 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6420A660036F;
-        Wed, 26 Apr 2023 13:06:21 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682510782;
-        bh=OfMlzuTrSWbL6RmSjUOMVmGVdnb1BVtFW+nmxN56VS4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DPPysip393PCjfe9Jv+L2SXJuYsGGsHvvK1XWXBikxECYbVFvi/PhDIaAeepxrAL7
-         +wJpLFS1g8wTc4+JN6TZYN4waXDzKuSCrFSe3UPdGsalhSBUGqqMWAbSASbRC0hSW3
-         AODPeJIo40uTfCCReDOlt15TyZCnMp0yEA6AEhkqlYUuxbXrzQoxHX/qPeUX8MOEdr
-         eKD9lPe+MzEvZrNTxRJziSdAgghr//60ohBw/K9jvUEPgjHfVUQ26TERUBZ2QlWsoI
-         kTEze4VfJf0ahBK+l+o6Ht28PDMQZmwAp4oU3WEkBZ3hX+ugF17r7KN+TpWLYFpC0r
-         jQVZrI6+fNDRQ==
-Message-ID: <0c8d08e2-770a-1ec2-e990-1d48bfc0eac6@collabora.com>
-Date:   Wed, 26 Apr 2023 14:06:19 +0200
+        Wed, 26 Apr 2023 08:08:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33ACE41
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:08:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682510934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XCqcamQq4Zyq9k2WUbejlCEtJ2lPQeWzu5/VlCA/Ec0=;
+        b=OND8DEJ3JzN8Y0rrflWW9AvXlqxDtFV0erfX0JgMS3uyfaRnrUV8Z/j2hTzKBfQKx+gdo3
+        8Du4mfK7NM90FvIgda3KmVFHv3s9tK5Qp/cGioFxtRo4oB3iIoizqFSUH8SejKXXp1q6pW
+        63KWtI5oR4fBrnMFgpuHzGLK8jgn+68QtEhUnxRMkcrbfxaHG8ttsz40ZD4g53MUPT8Zbj
+        k19bYdV+HaoqmZk4j9Sxng5M8xkLhUYSX/zYMEka7qzr3x9XVXhTEdk+s8YxN1Z2MECAaM
+        kOri3v7OeAmcnzgAp2y2daiH8ko9l4vYZTCpHlc/BDvLdfYrPDVh9PCWBtg0eg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682510934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XCqcamQq4Zyq9k2WUbejlCEtJ2lPQeWzu5/VlCA/Ec0=;
+        b=khWgThSxPsOMTRdxvyiZCo2+aH/yvKoepdPwS0T6vk3pB1aQTn1uozjLcIfYRElWxDYpq2
+        dVFEabdYuxrgUhAw==
+To:     kernel test robot <yujie.liu@intel.com>,
+        Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Michael Walle <michael@walle.cc>,
+        Shanker Donthineni <sdonthineni@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>
+Subject: Re: [PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors
+ management
+In-Reply-To: <202304251035.19367560-yujie.liu@intel.com>
+References: <202304251035.19367560-yujie.liu@intel.com>
+Date:   Wed, 26 Apr 2023 14:08:54 +0200
+Message-ID: <87a5yuzvzd.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH RESEND v3 6/9] drm/mediatek: Add gamma support different
- bank_size for other SoC
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220912013006.27541-1-jason-jh.lin@mediatek.com>
- <20220912013006.27541-7-jason-jh.lin@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220912013006.27541-7-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,66 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/09/22 03:30, Jason-JH.Lin ha scritto:
-> Add multiple bank support for mt8195.
-> If bank size is 0 which means no bank support.
-> 
-> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
-> ---
->   drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 45 +++++++++++++----------
->   1 file changed, 26 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> index be82d15a5204..45da2b6206c8 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
-> @@ -21,6 +21,7 @@
->   #define GAMMA_LUT_EN					BIT(1)
->   #define GAMMA_DITHERING					BIT(2)
->   #define DISP_GAMMA_SIZE				0x0030
-> +#define DISP_GAMMA_BANK				0x0100
->   #define DISP_GAMMA_LUT				0x0700
->   
->   #define LUT_10BIT_MASK				0x03ff
-> @@ -33,6 +34,7 @@ struct mtk_disp_gamma_data {
->   	bool lut_diff;
->   	u16 lut_size;
->   	u8 lut_bits;
-> +	u16 bank_size;
->   };
->   
->   /*
-> @@ -75,9 +77,10 @@ void mtk_gamma_set_common(struct device *dev, void __iomem *regs, struct drm_crt
->   	struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
->   	bool lut_diff = false;
->   	u16 lut_size = LUT_SIZE_DEFAULT;
-> +	u16 bank_size = lut_size;
+On Tue, Apr 25 2023 at 11:16, kernel test robot wrote:
+> kernel test robot noticed "WARNING:at_arch/x86/kernel/apic/ipi.c:#default_send_IPI_mask_logical" on:
+>
+> commit: 13eb5c4e7d2fb860d3dc5f63d910e3acf78dfd28 ("[PATCH v3 3/3] genirq: Use the maple tree for IRQ descriptors management")
+> url: https://github.com/intel-lab-lkp/linux/commits/Shanker-Donthineni/genirq-Use-hlist-for-managing-resend-handlers/20230410-235853
+> base: https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git 6f3ee0e22b4c62f44b8fa3c8de6e369a4d112a75
+> patch link: https://lore.kernel.org/all/20230410155721.3720991-4-sdonthineni@nvidia.com/
+> patch subject: [PATCH v3 3/3] genirq: Use the maple tree for IRQ
+> descriptors management
 
-Just use gamma->data->bank_size directly, as platform data is always present.
+This happens during CPU hot-unplug.
 
->   	u8 lut_bits = LUT_BITS_DEFAULT;
->   	u8 shift_bits;
-> -	unsigned int i, reg;
-> +	unsigned int i, j, reg, bank_num;
->   	struct drm_color_lut *lut;
->   	void __iomem *lut_base;
->   	u32 word, mask;
-> @@ -87,8 +90,10 @@ void mtk_gamma_set_common(struct device *dev, void __iomem *regs, struct drm_crt
->   		lut_diff = gamma->data->lut_diff;
->   		lut_size = gamma->data->lut_size;
->   		lut_bits = gamma->data->lut_bits;
-> +		bank_size = gamma->data->bank_size;
+[  206.930774][  T228] block/008 => sdb2 (do IO while hotplugging CPUs)            
+[  206.935757][ T2086] run blktests block/008 at 2023-04-22 16:27:25
+[  207.199359][ T2086] smpboot: CPU 2 is now offline
 
-You shall set bank_size = 512 to MT8173 and MT8183, otherwise they break, as this
-will set bank_size to 0.
+[  207.468574][   T30] WARNING: CPU: 3 PID: 30 at arch/x86/kernel/apic/ipi.c:299 default_send_IPI_mask_logical+0x40/0x44
+[  207.568426][   T30] CPU: 3 PID: 30 Comm: migration/3 Tainted: G S          E      6.2.0-rc4-00051-g13eb5c4e7d2f #1
+[  207.588372][   T30] Stopper: multi_cpu_stop+0x0/0xf0 <- stop_machine_cpuslocked+0xf5/0x138
+[  207.596649][   T30] EIP: default_send_IPI_mask_logical+0x40/0x44
 
->   	}
->   
-> +	bank_num = lut_size / bank_size;
->   	shift_bits = LUT_INPUT_BITS - lut_bits;
->   	mask = GENMASK(lut_bits - 1, 0);
->   
+This warns because fixup_irqs() sends an IPI to an offline CPU. In this
+case to CPU3 which just cleared its online bit and is about to vanish:
 
-Regards,
-Angelo
+[  207.622147][   T30] EAX: 00000008 EBX: 00000002 ECX: fffffffc EDX: 00000022
+
+EAX contains the target and ECX the inverted online mask. That's
+probably the ata2 interrupt as that later detects a timeout:
+
+[  238.826212][  T174] ata2.00: exception Emask 0x0 SAct 0x3c00000 SErr 0x0 action 0x6 frozen
+[  238.834522][  T174] ata2.00: failed command: READ FPDMA QUEUED
+[  238.840378][  T174] ata2.00: cmd 60/08:b0:90:3e:90/00:00:25:00:00/40 tag 22 ncq dma 4096 in
+[  238.840378][  T174]          res 40/00:00:00:00:00/00:00:00:00:00/00 Emask 0x4 (timeout)
+
+Which means that migrating the interrupt away from the outgoing CPU3
+failed for yet to understand reasons.
+
+The patch in question is changing the interrupt descriptor storage and
+with that also the iterator function. But I can't spot anything wrong
+right now.
+
+But what I can spot is this:
+
+[    0.000000][    T0] Linux version 6.2.0-rc4-00051-g13eb5c4e7d2f
+
+IOW, that test is based on some random upstream version, which lacks
+about 30 commits to maple_tree, where 12 of them have 'fix' in the
+commit subject.
+
+Can you please retest this on v6.3 and report back when the problem
+persists?
+
+Thanks,
+
+        tglx
+
 
