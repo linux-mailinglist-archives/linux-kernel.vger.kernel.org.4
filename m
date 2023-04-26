@@ -2,209 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33F46EEE92
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8CE6EEE94
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239617AbjDZGwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S239515AbjDZGw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239504AbjDZGwK (ORCPT
+        with ESMTP id S239649AbjDZGwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:52:10 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A2E30E0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:52:02 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef31924c64so317791cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:52:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682491921; x=1685083921;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=E7WUK9l5ab7TXtH6Khba5tk5e927ngC9f08ZD0F1KpI=;
-        b=C26x15qHgibXkdc4k0Lq/V8+IrCd+CWATgbNfZkPlEQwjIITNgfDFNdNWjFnzXgug4
-         H2sHeCQg7xSfy4fCnYZQrkJYYzP8GNL1mWa23CZrNt1FSKBCS3GLf/wu46XygLOI9Amt
-         bbm7CEAIuJAHMTBEq8v4FO9P0N7E/jtfQ19/Vy1C71wYsY2vwRY4ItdeYouNJvAORmiC
-         sLLN/TwY/wpmBBApx+pMi/jcZHURvIu963KGrpuiN2IeljU88xY8Duk/QCzFyz5oYXRg
-         lkQCiVbfo/Yi+NMsQNOTzTZo0Ulsle8t6+QAMxAGm7ckK1Pi7wIi1uw0TawPNAhHtU9U
-         uFFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682491921; x=1685083921;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E7WUK9l5ab7TXtH6Khba5tk5e927ngC9f08ZD0F1KpI=;
-        b=RfSe4wbYLTeE/esysJvgNzxvybsRDNxBaYNb1HirUbpfR08DKLrRJSaGdolOlfGix+
-         q7onXiOMEtqk47pHNBcn11ewxp/lFSZfCNgC49HSW4HAf9ENGnKiyE+U+pFL/aNYyZG+
-         f/sgK+Cs8KUWlGsrIhMHX2iHBVNFXi8UqhCsEhxkiaLzOFQkbjLpQGln2qHu9fYZkO7g
-         5YAA+pKTrzHX1j43bxPT4XanwXLJ186oaHdYnk0hIBSFnXijmfnwr+hOB4WTcAd1Jna0
-         kEaCu1NKMMY5xvFyYbYgFAOD+FOtqpjO5URxWidOaDVlAo0SwnYBX57zcgEIdU/W5ez9
-         h69g==
-X-Gm-Message-State: AC+VfDxTVl7x6H0DILja9Q1aRCQKI7dwLAXS6E/llpiTJ1imR6WXtrs6
-        z/SNioLwOQyNi57ovt5d0zWdPFtonqZPKO5HQ+7sAw==
-X-Google-Smtp-Source: ACHHUZ5D7Ppt024Tijx/Bn5kxD17PMJ9pdt5PyVWCaThwawJ5rB8RwWdk386niifcHohha+LIBpxbX+4wyetVxuiYMU=
-X-Received: by 2002:ac8:7e84:0:b0:3ef:1c85:5b5e with SMTP id
- w4-20020ac87e84000000b003ef1c855b5emr150190qtj.19.1682491921197; Tue, 25 Apr
- 2023 23:52:01 -0700 (PDT)
+        Wed, 26 Apr 2023 02:52:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8292D7E;
+        Tue, 25 Apr 2023 23:52:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 610A163357;
+        Wed, 26 Apr 2023 06:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440DEC4339B;
+        Wed, 26 Apr 2023 06:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682491937;
+        bh=toSMf0jhH3B5lnQsYRYUOC8wB2CtVUisrL1JID/cGdY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LqW4ch8Q+udniHHxcnq+mwILYNLbBEB+T7CCVAZt0lVFYT8lbdGeuV+z/COkps0c7
+         QikcFTfEztwFiRvrTCHlBFpJ7g/fkHm3rh6R/XvrPTTTUtGlwZsr83TitGuoUikXW0
+         Pk48LEpHO1zd/8GxMVaK0q0Kexhi6CD02JhqAd5OxrfPUrC1/7aNQfMhhZzYNBLA7z
+         A16NmEpqoWNgW3uqnSSqqN95fXIqchHp0ClvX9xk9GvJvGh5E2kZvJCfhyH7ftMEAT
+         tPUBaME/69u5xVmUiF/lISzW3oedJaDCVARd7fMwHZ5EPaR04E6qfbXFhQsBFpQdqf
+         33yAjoljQ7oWg==
+Date:   Wed, 26 Apr 2023 09:52:13 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
+        Geethasowjanya Akula <gakula@marvell.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        Hariprasad Kelam <hkelam@marvell.com>
+Subject: Re: [EXT] Re: [net PATCH 5/9] octeontx2-pf: mcs: Fix NULL pointer
+ dereferences
+Message-ID: <20230426065213.GJ27649@unreal>
+References: <20230423095454.21049-1-gakula@marvell.com>
+ <20230423095454.21049-6-gakula@marvell.com>
+ <20230423165133.GH4782@unreal>
+ <CO1PR18MB4666A3A7B44081290B37E375A1679@CO1PR18MB4666.namprd18.prod.outlook.com>
+ <20230425085140.000bbcc1@kernel.org>
+ <20230426061654.GC27649@unreal>
 MIME-Version: 1.0
-References: <20230421084226.2278282-1-davidgow@google.com> <knlcj7ub477vbdhi4jkhxg6eltrluffli2gett4t4w4ed4cztr@qlxpd4rmgx3g>
-In-Reply-To: <knlcj7ub477vbdhi4jkhxg6eltrluffli2gett4t4w4ed4cztr@qlxpd4rmgx3g>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 26 Apr 2023 14:51:50 +0800
-Message-ID: <CABVgOS=doetW4_MMYwh3bLM-VBMaTBm-7JU44Y2=zRDvgoLXbg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] kunit: Deferred action helpers
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Benjamin Berg <benjamin@sipsolutions.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000051124605fa37ad77"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426061654.GC27649@unreal>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000051124605fa37ad77
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Apr 26, 2023 at 09:16:54AM +0300, Leon Romanovsky wrote:
+> On Tue, Apr 25, 2023 at 08:51:40AM -0700, Jakub Kicinski wrote:
+> > On Mon, 24 Apr 2023 10:29:02 +0000 Subbaraya Sundeep Bhatta wrote:
+> > > >How did you get call to .mdo_del_secy if you didn't add any secy?
+> > > >
+> > > >Thanks
+> > > >  
+> > > It is because of the order of teardown in otx2_remove:
+> > >         cn10k_mcs_free(pf);
+> > >         unregister_netdev(netdev);
+> > > 
+> > > cn10k_mcs_free free the resources and makes cfg as NULL.
+> > > Later unregister_netdev calls mdo_del_secy and finds cfg as NULL.
+> > > Thanks for the review I will change the order and submit next version.
+> > 
+> > Leon, ack? Looks like the patches got "changes requested" but I see 
+> > no other complaint.
+> 
+> Honestly, I was confused and didn't know what to answer, so decided to
+> see next version.
+> 
+> From one side Subbaraya said that it is possible (which was not
+> convincing to me, but ok, most time I'm wrong :)), from another
+> he said that he will submit next version.
 
-On Tue, 25 Apr 2023 at 23:23, Maxime Ripard <maxime@cerno.tech> wrote:
->
-> Hi,
->
-> On Fri, Apr 21, 2023 at 04:42:23PM +0800, David Gow wrote:
-> > This is v1 of the KUnit deferred actions API, which implements an
-> > equivalent of devm_add_action[1] on top of KUnit managed resources. This
-> > provides a simple way of scheduling a function to run when the test
-> > terminates (whether successfully, or with an error). It's therefore very
-> > useful for freeing resources, or otherwise cleaning up.
-> >
-> > The notable changes since RFCv2[2] are:
-> > - Got rid of the 'cancellation token' concept. It was overcomplicated,
-> >   and we can add it back if we need to.
-> > - kunit_add_action() therefore now returns 0 on success, and an error
-> >   otherwise (like devm_add_action()). Though you may wish to use:
-> > - Added kunit_add_action_or_reset(), which will call the deferred
-> >   function if an error occurs. (See devm_add_action_or_reset()). This
-> >   also returns an error on failure, which can be asserted safely.
-> > - Got rid of the function pointer typedef. Personally, I liked it, but
-> >   it's more typedef-y than most kernel code.
-> > - Got rid of the 'internal_gfp' argument: all internal state is now
-> >   allocated with GFP_KERNEL. The main KUnit resource API can be used
-> >   instead if this doesn't work for your use-case.
-> >
-> > I'd love to hear any further thoughts!
->
-> I've converted the KMS kunit tests to use that API when relevant, and
-> it works like a charm and is super usable, thanks so much.
+Jakub,
 
-Nice! I'm glad it's working well.
->
-> One improvement we could do as a second step is to provide a
-> kunit_action_t type or something to make casting kfree-like functions
-> easier, but it's already great overall.
+v2 is perfectly fine.
 
-I had that in an earlier version and got rid of it to better match
-what devm_* was doing, but I personally agree that it's nice to have.
-I'll add it back in the next version.
+Thanks
 
-> Reviewed-by: Maxime Ripard <maxime@cerno.tech>
-> Tested-by: Maxime Ripard <maxime@cerno.tech>
-
-
-Cheers,
--- David
-
---00000000000051124605fa37ad77
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAF
-mKDsyAXOV0Ox38QGSxfNUL16n0DdCe/M9KG5m+WKvjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MjYwNjUyMDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAVyijtvIAmiEnQNlclmrP
-ecuB4N1Dfr9FDNKdCCPz+0UOH5j7mbIJbJp37vJERTD/Ca2A/j7J5uuGsBbB/5a15bqiaQLEIuGz
-1s6Qazkwt7W+b7eRGAKAGTeOmWDHOdN4NgWuGGtwqBZM/zC2Ng90SBE9613/FwxUORIM7LCBNdoK
-5mdmnhZujnofXJQ4Wm52vTf1Sioznv7jZzkMXs3zhmpWn8Zl1wzpE332T8Cz23xBrfJgbwFZuOTt
-N96h57bMZDGP10KerXPaspo/jxrrv7epaFfnaFnMXIDSN8YuoGNCqjCRvxI8nblxeONDglZAU/+3
-CAtBx/XxGuiaeTgXFA==
---00000000000051124605fa37ad77--
+> 
+> Thanks
