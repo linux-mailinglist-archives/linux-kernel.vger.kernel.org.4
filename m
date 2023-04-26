@@ -2,144 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BDF6EF5FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D576EF5FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241253AbjDZOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S241256AbjDZOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241267AbjDZOEs (ORCPT
+        with ESMTP id S241058AbjDZOFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:04:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF8E6591
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FrAb4eQWH3TbtEFEDBwTA8GTUoY1eVzC37hGOtqravc=; b=PtgcFBMK52iZ++p3KhpKXU/FA8
-        ejRyQREXgNQzo74llkHHMmoHe18BbtYhCAYOshnbP4aldHXH4FkxfV58nJKMfPgA4cE6qdfZvEv3n
-        qQ3GZ3WewH/TCC1BBvn82iQAheMq6nVpNEHLybJf3P8aJcEc5gRgDfupwoWGCDF4fpfFZ4Wv0yacf
-        3xmZD7T3LYNcwHIjBzs9efhxUQ8V6odC9zlhkdWeafWTlNNwKfyYmXXD+VsA2YJdqP41Aok5mqq7L
-        pR3dYbvYTgZNlhg06iGuPMk5RwTirn5d/pt18/QOdySYu+U4V3ftjcuFFNix5SGyzlqJoII295IiZ
-        Y8otxAkQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1prfk5-00B1EF-0m;
-        Wed, 26 Apr 2023 14:03:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 75069300244;
-        Wed, 26 Apr 2023 16:03:24 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3DC272419A6E4; Wed, 26 Apr 2023 16:03:24 +0200 (CEST)
-Date:   Wed, 26 Apr 2023 16:03:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Aaron Lu <aaron.lu@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/2] sched/fair: Introduce SIS_CURRENT to wake up
- short task on current CPU
-Message-ID: <20230426140324.GB1377058@hirez.programming.kicks-ass.net>
-References: <cover.1682060436.git.yu.c.chen@intel.com>
- <98257d0184b227cad8b4e947eedd9246d60191d3.1682060436.git.yu.c.chen@intel.com>
+        Wed, 26 Apr 2023 10:05:21 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAEA6591
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:05:20 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3294eacb2f6so17779835ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682517919; x=1685109919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wj7WRPReo3X43Tifzj8RaGCINknzpjb7t0vp2Cx5wEA=;
+        b=m5VsICDMGjVd2yiJYEn6dyO90Z+fWmKOxoXEeusA85XRK8jHAJAJ+N18ipdwpRf+FR
+         ReJMVhi3lGbG3TcDhik/fl7Tb0wWsQ1JFDYdkKv8NIYO3SSoaQNBGFSuRDHLGDGn+rhq
+         Nyc/29v8HpsCR8+KdXAMX1Ux4qoRz/bCwFbFs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682517919; x=1685109919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wj7WRPReo3X43Tifzj8RaGCINknzpjb7t0vp2Cx5wEA=;
+        b=gssnk+WGtaxzgmGKv82lNSXnOxgXsfm6xfd1reFIN9/YNkHlYI5rcedzEj/KS+cwO8
+         scx5vI6r9u783cF9LG2jCOMHeLaDPTWtxhp3SfX3VeZ480yRYQ9CISkB0a4LbrYXlbLS
+         hTxFxwhIXwOdl2khJSESKv1oG1/3ly4F1pwScXVeHp5A6BXtGhThPhB2ELTT9TciUTlV
+         R08j515wBQirN8sHMTUnBRzxVAV++2mu0TIFciIWgDFQgYhXK18Kw/Oc0mXvVF4xpOI8
+         27nxC7RGuTMr9pnX259+L6Q6htt/+5/QhG51bCQKpSQDq2I2v4FjiDZVoBCjOz1hsPDT
+         rGNg==
+X-Gm-Message-State: AAQBX9eGhJbrOzIXCcHTU7dvLG6cZ6WXSPPoRdgMeCeYYm0RMzyu7G8i
+        Fqayz4tt2JOiHB94QWlHVXRzLagviN3XmVt9114=
+X-Google-Smtp-Source: AKy350aJ6eeRKdjRi+9zpAS1iJTbk73T30+RBAPWmPreDJ/TFW4cqdouxWOH7GGF/lQtVa4ODKF6QA==
+X-Received: by 2002:a92:d951:0:b0:32c:9c5e:900c with SMTP id l17-20020a92d951000000b0032c9c5e900cmr10621918ilq.8.1682517918941;
+        Wed, 26 Apr 2023 07:05:18 -0700 (PDT)
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com. [209.85.166.180])
+        by smtp.gmail.com with ESMTPSA id e2-20020a022102000000b0040f7b91108esm4294700jaa.144.2023.04.26.07.05.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 07:05:17 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-329577952c5so260325ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:05:17 -0700 (PDT)
+X-Received: by 2002:a05:6e02:2199:b0:326:55d0:efad with SMTP id
+ j25-20020a056e02219900b0032655d0efadmr306665ila.12.1682517916542; Wed, 26 Apr
+ 2023 07:05:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98257d0184b227cad8b4e947eedd9246d60191d3.1682060436.git.yu.c.chen@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230426093231.1466984-1-fshao@chromium.org> <20230426093231.1466984-3-fshao@chromium.org>
+In-Reply-To: <20230426093231.1466984-3-fshao@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 26 Apr 2023 07:05:03 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VY+01V7hBfUeZKR3OnnTcNuuYb-vhLWGgdS5jb4QTLBQ@mail.gmail.com>
+Message-ID: <CAD=FV=VY+01V7hBfUeZKR3OnnTcNuuYb-vhLWGgdS5jb4QTLBQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] HID: i2c-hid: goodix: Add support for
+ "goodix,no-reset-during-suspend" property
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Jeff LaBundy <jeff@labundy.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 22, 2023 at 12:08:18AM +0800, Chen Yu wrote:
+Hi,
 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 4af5799b90fc..46c1321c0407 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6501,6 +6501,46 @@ static int wake_wide(struct task_struct *p)
->  	return 1;
->  }
->  
-> +/*
-> + * Wake up the task on current CPU, if the following conditions are met:
-> + *
-> + * 1. waker A is the only running task on this_cpu
-> + * 3. A is a short duration task (waker will fall asleep soon)
-> + * 4. wakee B is a short duration task (impact of B on A is minor)
-> + * 5. A and B wake up each other alternately
-> + */
-> +static bool
-> +wake_on_current(int this_cpu, struct task_struct *p)
-> +{
-> +	if (!sched_feat(SIS_CURRENT))
-> +		return false;
+On Wed, Apr 26, 2023 at 2:33=E2=80=AFAM Fei Shao <fshao@chromium.org> wrote=
+:
+>
+> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
+> reset line to true state of the regulator") introduced a change to tie
+> the reset line of the Goodix touchscreen to the state of the regulator
+> to fix a power leakage issue in suspend.
+>
+> After some time, the change was deemed unnecessary and was reverted in
+> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
+> the regulator") due to difficulties in managing regulator notifiers for
+> designs like Evoker, which provides a second power rail to touchscreen.
+>
+> However, the revert caused a power regression on another Chromebook
+> device Steelix in the field, which has a dedicated always-on regulator
+> for touchscreen and was covered by the workaround in the first commit.
+>
+> To address both cases, this patch adds the support for the new
+> "goodix,no-reset-during-suspend" property in the driver:
+> - When set to true, the driver does not assert the reset GPIO during
+>   power-down.
+>   Instead, the GPIO will be asserted during power-up to ensure the
+>   touchscreen always has a clean start and consistent behavior after
+>   resuming.
+>   This is for designs with a dedicated always-on regulator.
+> - When set to false or unset, the driver uses the original control flow
+>   and asserts GPIO and disable regulators normally.
+>   This is for the two-regulator and shared-regulator designs.
+>
+> Signed-off-by: Fei Shao <fshao@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
+> ---
+>
+> Changes in v2:
+> - Do not change the regulator_enable logic during power-up.
+>
+>  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 26 +++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hi=
+d/i2c-hid-of-goodix.c
+> index 0060e3dcd775..fc4532fcadcc 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+> @@ -28,6 +28,7 @@ struct i2c_hid_of_goodix {
+>         struct regulator *vdd;
+>         struct regulator *vddio;
+>         struct gpio_desc *reset_gpio;
+> +       bool no_reset_during_suspend;
+>         const struct goodix_i2c_hid_timing_data *timings;
+>  };
+>
+> @@ -37,6 +38,20 @@ static int goodix_i2c_hid_power_up(struct i2chid_ops *=
+ops)
+>                 container_of(ops, struct i2c_hid_of_goodix, ops);
+>         int ret;
+>
+> +       if (ihid_goodix->no_reset_during_suspend) {
+> +               /*
+> +                * This is not mandatory, but we assert reset here (inste=
+ad of
+> +                * during power-down) to ensure the device will have a cl=
+ean
+> +                * state after powering up, just like the normal scenario=
+s will
+> +                * have.
+> +                *
+> +                * Note that in this case we assume the regulators should=
+ be
+> +                * (marked as) always-on, so the regulator core knows wha=
+t to
+> +                * do with them in the following regulator_enable() calls
+> +                * despite regulator_disable() was not called previously.
+> +                */
+> +               gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
+> +       }
+>         ret =3D regulator_enable(ihid_goodix->vdd);
+>         if (ret)
+>                 return ret;
+> @@ -60,6 +75,14 @@ static void goodix_i2c_hid_power_down(struct i2chid_op=
+s *ops)
+>         struct i2c_hid_of_goodix *ihid_goodix =3D
+>                 container_of(ops, struct i2c_hid_of_goodix, ops);
+>
+> +       /*
+> +        * Don't assert reset GPIO if it's set.
+> +        * Also, it's okay to skip the following regulator_disable() call=
+s
+> +        * because the regulators should be always-on in this case.
+> +        */
+> +       if (ihid_goodix->no_reset_during_suspend)
+> +               return;
 > +
-> +	if (cpu_rq(this_cpu)->nr_running > 1)
-> +		return false;
-> +
-> +	/*
-> +	 * If a task switches in and then voluntarily relinquishes the
-> +	 * CPU quickly, it is regarded as a short duration task. In that
-> +	 * way, the short waker is likely to relinquish the CPU soon, which
-> +	 * provides room for the wakee. Meanwhile, a short wakee would bring
-> +	 * minor impact to the target rq. Put the short waker and wakee together
-> +	 * bring benefit to cache-share task pairs and avoid migration overhead.
-> +	 */
-> +	if (!current->se.dur_avg || ((current->se.dur_avg * 8) >= sysctl_sched_min_granularity))
-> +		return false;
-> +
-> +	if (!p->se.dur_avg || ((p->se.dur_avg * 8) >= sysctl_sched_min_granularity))
-> +		return false;
-> +
-> +	if (current->wakee_flips || p->wakee_flips)
-> +		return false;
-> +
-> +	if (current->last_wakee != p || p->last_wakee != current)
-> +		return false;
-> +
-> +	return true;
-> +}
+>         gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
+>         regulator_disable(ihid_goodix->vddio);
+>         regulator_disable(ihid_goodix->vdd);
 
-So I was going to play with this and found I needed to change things up
-since these sysctl's no longer exist in my EEVDF branch.
+I think the above is wrong. You should just skip the GPIO call when
+"no_reset_during_suspend", not the regulator calls. As your code is
+written, you'll enable the regulators over and over again in
+"power_up" and never in "power_down".
 
-And while I can easily do
-'s/sysctl_sched_min_granularity/sysctl_sched_base_slice/', it did make
-me wonder if that's the right value to use.
-
-min_gran/base_slice is related to how long we want a task to run before
-switching, but that is not related to how long it needs to run to
-establish a cache footprint.
-
-Would not sched_migration_cost be a better measure to compare against?
-That is also used in task_hot() to prevent migrations.
+-Doug
