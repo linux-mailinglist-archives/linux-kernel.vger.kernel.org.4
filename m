@@ -2,384 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCFD6EF841
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CDD6EF844
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbjDZQSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S239597AbjDZQTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233315AbjDZQST (ORCPT
+        with ESMTP id S239749AbjDZQSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:18:19 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6469EE
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:18:17 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3ef31924c64so451641cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:18:17 -0700 (PDT)
+        Wed, 26 Apr 2023 12:18:54 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8149BEA;
+        Wed, 26 Apr 2023 09:18:47 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b8f557b241fso5698412276.0;
+        Wed, 26 Apr 2023 09:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682525896; x=1685117896;
+        d=gmail.com; s=20221208; t=1682525926; x=1685117926;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9W02sX+/Hi4nz+GqWmTPn+DU21bazDZwB7HxRWfvvek=;
-        b=tailfJl3EV8FGH5dmAR21htd7YKNYN6qouW89bQ8OM6IUv2DyIUg9YGmCoSD2i2vxI
-         5FORrs22Tp7xc3HaJ+L9wBy/OQqV/DWHHpIvcNvMuBWf2xFOy8eZSs1P0oCfK9UdLaIu
-         1+abaLNZWyUgAKfNRL9i/w0bdMYnLKZcvLU5DXihBwf7LpUlzsBWFthDriWBx4pISApJ
-         bIf6r2UZDRbPwdZdEUdrgk33lEZoHpS01jSAN9K5GbP+5TrX+LcErr24O9guzWUGS1Bn
-         6uIxdxf20gkxy0Vl53I4v7g7WTKK0iPy8FT2leqFyUUfmm9kbcW43NkqtUr/X7XjAWvK
-         uFWA==
+        bh=wSh9sgIRcl+VyffTOcjg6rBcF1wwJvh9yVaf8FbL/QU=;
+        b=jlRIL2PONUJqNfyCIn/+R0cgo2l/he5gu/7d3S4i1FYjx5B+X51Ufj9ibWNX+xu3dl
+         6pGnaxNVsbHq6R/Dv1vK4BadPlP7PfaAjzMjOQuEo21fPm2dIZHpoGwY3iAVgq0jLsd4
+         7JaEjR1YHiohJXEKP13zOV7qjaBEp0EuHCljPfAz7BbDh0bsFFExFeO7xWQPYbMZrlcM
+         /M0PGr1Dwh0e/EErzd3izCvPLe9VIWkdrlgCaRC/+6750kvc17QXi0j6s0UzBD/hWtaf
+         8i6UvK9EVLPemv5gkI+7DbZY7X/BWJFkYYa3wDXrRpd6M84tDynUEjXU1/6WsY8XkFO3
+         z7BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682525896; x=1685117896;
+        d=1e100.net; s=20221208; t=1682525926; x=1685117926;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9W02sX+/Hi4nz+GqWmTPn+DU21bazDZwB7HxRWfvvek=;
-        b=FD74VvBl48eisTcwp2WHxil3Zvdg7x1UI8qaOjUE6d2Tlkf1BeBHRh0cXE7cONQ3bP
-         R0W3I/YntXvlpx2tA/5qAUZVoYTyJOJQcCzNc5CsQuaL1VCrM69x8yqWb+U9qnCgRcZG
-         M0P5moHEYge7t7FBd6KcXvUiCRMowPKOY74gaLq0VQh/aytXVZxaT2URcwBXM6qr3lPA
-         CQPlSHzw5fLH5KWcGAzCLogvs0Ept6FGa2e82JYZmJhFc7ujVG9RBdgQ+Ht7gRIvFawx
-         qVO9Q+sAHzORC9sw08GTD3EqYle3RFPOcaEbiXS1z8l1E9vKuCCHgi4F/PY3f3NWaSKh
-         jqpQ==
-X-Gm-Message-State: AC+VfDyCK9uXNxv2t8wxXbFcuXviDi4V+IJBTjWImMFA4E47tjk7lEzn
-        DiyL8+G2BKz9V1C/KTHjyFZL6ebFwrrnkZ1fq+lSCg==
-X-Google-Smtp-Source: ACHHUZ5qSy43WhoYTYSr7H4zeYG3GOp2G/TDkLGtP15iQBs2p7alpyexFoz7zlKTTveLnuYKaAqp0cMBAD2HvjW1AN8=
-X-Received: by 2002:a05:622a:199a:b0:3de:1aaa:42f5 with SMTP id
- u26-20020a05622a199a00b003de1aaa42f5mr336311qtc.15.1682525896412; Wed, 26 Apr
- 2023 09:18:16 -0700 (PDT)
+        bh=wSh9sgIRcl+VyffTOcjg6rBcF1wwJvh9yVaf8FbL/QU=;
+        b=Acp2WL2URL1ncZuMYcnOWIfN+jDm1iUrNvcJYFApZjLwtLfOtDRM8M7mUNBAa6CfvB
+         8L6IQMgx7U4eRp3CgYO55s+KFTIN8DPo+qmpEbE2VEMrJsDSeiTnPRQYH+O8EZs2ywAG
+         IO44717h8SKU3KEsmQIgnr41gcub15UI28vyCj1r25u3IBOZqIr/tI5U1UPENXYWkIx9
+         XwsjoiYM6yS8lP/kukqwOq6MJUSFrxJKMLBA4uaSO2eiaOfpVPCWsvXIEvxYedhyXaKA
+         URlEVzkSAtn2I4Qre+TDJRd7z7N0dMMow8pJx3WMiTKVIxlPEk4fwO6GPowbt/4OnDZz
+         qOsA==
+X-Gm-Message-State: AAQBX9eIjwTS+heW6ep4vhTJqp3DJmWWZs2vcJHeUJsctQPxpSX43Er6
+        eLVRrrb+aacmk9D8hbeDJp6uwmy9fNtU/YlRriU=
+X-Google-Smtp-Source: AKy350aTRGtpV10EC+AaG5mU6fHFJVobalSpMqKbLpWFHqBKoMkmRVJT/7cNdLLrBXcSryh8h6uMNiRupjyBKVB6iVg=
+X-Received: by 2002:a25:502:0:b0:b92:4a11:e4e1 with SMTP id
+ 2-20020a250502000000b00b924a11e4e1mr13517692ybf.25.1682525926680; Wed, 26 Apr
+ 2023 09:18:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230420205734.1288498-1-rmoar@google.com> <ce5b723d-2395-8974-ba62-1ee519732218@gmail.com>
-In-Reply-To: <ce5b723d-2395-8974-ba62-1ee519732218@gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Wed, 26 Apr 2023 12:18:02 -0400
-Message-ID: <CA+GJov5nG3fXz9KX-DdkpJ2R98f1LD=rnURomzvUzHHsAODr8A@mail.gmail.com>
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add test metadata
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     davidgow@google.com, skhan@linuxfoundation.org,
-        keescook@chromium.org, Tim.Bird@sony.com,
-        brendanhiggins@google.com, corbet@lwn.net,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@lists.linux.dev, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl> <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <20230426003210.GA31260@pendragon.ideasonboard.com>
+In-Reply-To: <20230426003210.GA31260@pendragon.ideasonboard.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 26 Apr 2023 18:18:35 +0200
+Message-ID: <CANiq72nLtpOn2HcOneoQ6v_TcYAEj_W8z2HCQvF4HmB4+OoSZA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        wedsonaf@gmail.com, ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 4:55=E2=80=AFPM Frank Rowand <frowand.list@gmail.co=
-m> wrote:
+On Wed, Apr 26, 2023 at 2:32=E2=80=AFAM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
 >
-> On 4/20/23 15:57, Rae Moar wrote:
-> > Add specification for declaring test metadata to the KTAP v2 spec.
-> >
-> > The purpose of test metadata is to allow for the declaration of essenti=
-al
-> > testing information in KTAP output. This information includes test
-> > names, test configuration info, test attributes, and test files.
-> >
-> > There have been similar ideas around the idea of test metadata such as =
-test
-> > prefixes and test name lines. However, I propose this specification as =
-an
-> > overall fix for these issues.
->
-> This seems like a cleaner approach.
->
-> >
-> > These test metadata lines are a form of diagnostic lines with the
-> > format: "# <metadata_type>: <data>". As a type of diagnostic line, test
-> > metadata lines are compliant with KTAP v1, which will help to not
-> > interfere too much with current parsers.
-> >
-> > Specifically the "# Subtest:" line is derived from the TAP 14 spec:
-> > https://testanything.org/tap-version-14-specification.html.
-> >
-> > The proposed location for test metadata is in the test header, between =
-the
-> > version line and the test plan line. Note including diagnostic lines in
-> > the test header is a depature from KTAP v1.
-> >
-> > This location provides two main benefits:
-> >
-> > First, metadata will be printed prior to when subtests are run. Then if=
- a
-> > test fails, test metadata can help discern which test is causing the is=
-sue
-> > and potentially why.
-> >
-> > Second, this location ensures that the lines will not be accidentally
-> > parsed as a subtest's diagnostic lines because the lines are bordered b=
-y
-> > the version line and plan line.
->
-> I like that.
->
-> >
-> > Here is an example of test metadata:
-> >
-> >  KTAP version 2
-> >  # Config: CONFIG_TEST=3Dy
-> >  1..1
-> >      KTAP version 2
-> >      # Subtest: test_suite
-> >      # File: /sys/kernel/...
-> >      # Attributes: slow
-> >      # Other: example_test
-> >      1..2
-> >      ok 1 test_1
-> >      ok 2 test_2
-> >  ok 1 test_suite
-> >
-> > Here is a link to a version of the KUnit parser that is able to parse t=
-est
-> > metadata lines for KTAP version 2. Note this includes test metadata
-> > lines for the main level of KTAP.
-> >
-> > Link: https://kunit-review.googlesource.com/c/linux/+/5809
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > ---
-> >
-> > Hi everyone,
-> >
-> > I would like to use this proposal similar to an RFC to gather ideas on =
-the
-> > topic of test metadata. Let me know what you think.
-> >
-> > I am also interested in brainstorming a list of recognized metadata typ=
-es.
-> > Providing recognized metadata types would be helpful in parsing and
-> > displaying test metadata in a useful way.
-> >
-> > Current ideas:
-> > - "# Subtest: <test_name>" to indicate test name (name must match
-> >   corresponding result line)
->
-> I would prefer "Test" to "Subtest" because the type should be allowed for=
- the
-> top level test, as well as for subtest levels.
+> Now, I hope that mentioning "lifetime management problems" will be
+> enough to nerd-snipe a rust enthusiast or two to help fix the C code in
+> order to implement proper rust bindings on top ;-)
 
-Hi Frank!
+Good idea ;)
 
-Yes, I can see the reasoning to switch to "Test". Although this is a
-departure from current behavior, it would be clearer. I am happy to
-make this change.
+I think it is definitely a good opportunity to consider how Rust could
+fit the new design, and perhaps borrow some ideas from Rust for the
+new design, even. If you feel like a quick meeting could help on that,
+please let us know.
 
+> That would certainly be a required step, but I don't think it would be
+> enough. On good days I see the media subsystem as barely able to cope
+> with the current load, on bad days it feels it's completely collapsing.
 >
-> > - "# Attributes: <attributes list>" to indicate test attributes (list
-> >   separated by commas)
-> > - "# File: <file_path>" to indicate file used in testing
-> >
-> > Any other ideas?
->
-> (Already used in an example above...)
->
-> - "# Config: <config_option list> to indicate kernel configuration option=
-s
->   (list separated by commas)
->
->     config_option format:
->       Option XXX is enabled: CONFIG_XXX=3Dy
->       Option XXX is not enabled: CONFIG_XXX=3Dn
->       Option XXX is text: CONFIG_XXX=3D"a text string"
->
+> We have homework to do when it comes to maintenance for the media
+> subsystem, we're doing *really* badly at the moment regarding community
+> management and attracting (and retaining) new core contributors. This is
+> a topic I really want to discuss face to face during the media workshop
+> in Prague (and I know that many people are looking forward to that
+> discussion).
 
-I like this addition of the "Config" metadata. I also like all of
-these format options, including the text string option. Although, I
-would be interested in adding "Option XXX is loadable as a module:
-CONFIG_XXX=3Dm" to the format list.
+I am sorry to hear that. One idea would be offsetting the extra work
+by having the Rust person also take care of some of the C parts too.
+That way you can also potentially get them to be a full maintainer at
+some point, even if the Rust experiment does not pan out.
 
-> Linux .config format is "#CONFIG_XXX is not set",
-> but this would be harder to parse in a list.
->
-> A text config option also complicates parsing of a list.  Maybe there
-> should not be a list, instead have a separate "# Config:" line for
-> each config option.
+Of course, easier said than done, and managing more people always
+takes extra time, but getting more people seems to be part of the
+solution anyway, from what you say.
 
-I'm not sure how to deal with multiple config options. I am split
-between either using a list or multiple "Config" lines. I would be
-happy with either approach. Maybe a list would be slightly better,
-since it is slightly closer to the defined behavior for the attributes
-metadata line.
+In any case, thanks a lot for at least considering it :)
 
->
-> I would like to bifurcate the name space of metadata types, to names
-> specified in the standard vs names not in the standard that can be
-> used on an experimental or for future use in existing tests.
->
-> I can think of at least two ways to implement this:
->
-> (1) types that are in the specification all begin with a specific prefix,
-> such as "ktap_" (bike shedding on naming welcomed), so the examples woudl=
-d be
->
->   # ktap_test:
->   # ktap_attributes:
->   # ktap_file:
->   # ktap_config:
->
-> (2) types that are _not_ in the specification all begin with a specific p=
-refix,
-> such as "custom_" (bike shedding on naming welcomed).
->
-
-This is an interesting proposal. I like this idea of using a prefix. I
-would be happy to add this. I like "ktap_" and "custom_".
-
-Thanks!
--Rae
-
-> >
-> > Note this proposal replaces two of my previous proposals: "ktap_v2: add
-> > recognized test name line" and "ktap_v2: allow prefix to KTAP lines."
-> >
-> > Thanks!
-> > -Rae
-> >
-> > Note: this patch is based on Frank's ktap_spec_version_2 branch.
-> >
-> >  Documentation/dev-tools/ktap.rst | 51 ++++++++++++++++++++++++++++++--
-> >  1 file changed, 48 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools=
-/ktap.rst
-> > index ff77f4aaa6ef..a2d0a196c115 100644
-> > --- a/Documentation/dev-tools/ktap.rst
-> > +++ b/Documentation/dev-tools/ktap.rst
-> > @@ -17,7 +17,9 @@ KTAP test results describe a series of tests (which m=
-ay be nested: i.e., test
-> >  can have subtests), each of which can contain both diagnostic data -- =
-e.g., log
-> >  lines -- and a final result. The test structure and results are
-> >  machine-readable, whereas the diagnostic data is unstructured and is t=
-here to
-> > -aid human debugging.
-> > +aid human debugging. One exception to this is test metadata lines - a =
-type
-> > +of diagnostic lines. Test metadata is located between the version line=
- and
-> > +plan line of a test and can be machine-readable.
-> >
-> >  KTAP output is built from four different types of lines:
-> >  - Version lines
-> > @@ -28,8 +30,7 @@ KTAP output is built from four different types of lin=
-es:
-> >  In general, valid KTAP output should also form valid TAP output, but s=
-ome
-> >  information, in particular nested test results, may be lost. Also note=
- that
-> >  there is a stagnant draft specification for TAP14, KTAP diverges from =
-this in
-> > -a couple of places (notably the "Subtest" header), which are described=
- where
-> > -relevant later in this document.
-> > +a couple of places, which are described where relevant later in this d=
-ocument.
-> >
-> >  Version lines
-> >  -------------
-> > @@ -166,6 +167,45 @@ even if they do not start with a "#": this is to c=
-apture any other useful
-> >  kernel output which may help debug the test. It is nevertheless recomm=
-ended
-> >  that tests always prefix any diagnostic output they have with a "#" ch=
-aracter.
-> >
-> > +Test metadata lines
-> > +-------------------
-> > +
-> > +Test metadata lines are a type of diagnostic lines used to the declare=
- the
-> > +name of a test and other helpful testing information in the test heade=
-r.
-> > +These lines are often helpful for parsing and for providing context du=
-ring
-> > +crashes.
-> > +
-> > +Test metadata lines must follow the format: "# <metadata_type>: <data>=
-".
-> > +These lines must be located between the version line and the plan line
-> > +within a test header.
-> > +
-> > +There are a few currently recognized metadata types:
-> > +- "# Subtest: <test_name>" to indicate test name (name must match
-> > +  corresponding result line)
-> > +- "# Attributes: <attributes list>" to indicate test attributes (list
-> > +  separated by commas)
-> > +- "# File: <file_path>" to indicate file used in testing
-> > +
-> > +As a rule, the "# Subtest:" line is generally first to declare the tes=
-t
-> > +name. Note that metadata lines do not necessarily need to use a
-> > +recognized metadata type.
-> > +
-> > +An example of using metadata lines:
-> > +
-> > +::
-> > +
-> > +        KTAP version 2
-> > +        1..1
-> > +        # File: /sys/kernel/...
-> > +          KTAP version 2
-> > +          # Subtest: example
-> > +          # Attributes: slow, example_test
-> > +          1..1
-> > +          ok 1 test_1
-> > +        # example passed
-> > +        ok 1 example
-> > +
-> > +
-> >  Unknown lines
-> >  -------------
-> >
-> > @@ -206,6 +246,7 @@ An example of a test with two nested subtests:
-> >       KTAP version 2
-> >       1..1
-> >         KTAP version 2
-> > +       # Subtest: example
-> >         1..2
-> >         ok 1 test_1
-> >         not ok 2 test_2
-> > @@ -219,6 +260,7 @@ An example format with multiple levels of nested te=
-sting:
-> >       KTAP version 2
-> >       1..2
-> >         KTAP version 2
-> > +       # Subtest: example_test_1
-> >         1..2
-> >           KTAP version 2
-> >           1..2
-> > @@ -254,6 +296,7 @@ Example KTAP output
-> >       KTAP version 2
-> >       1..1
-> >         KTAP version 2
-> > +       # Subtest: main_test
-> >         1..3
-> >           KTAP version 2
-> >           1..1
-> > @@ -261,11 +304,13 @@ Example KTAP output
-> >           ok 1 test_1
-> >         ok 1 example_test_1
-> >           KTAP version 2
-> > +            # Attributes: slow
-> >           1..2
-> >           ok 1 test_1 # SKIP test_1 skipped
-> >           ok 2 test_2
-> >         ok 2 example_test_2
-> >           KTAP version 2
-> > +         # Subtest: example_test_3
-> >           1..3
-> >           ok 1 test_1
-> >           # test_2: FAIL
-> >
-> > base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
->
+Cheers,
+Miguel
