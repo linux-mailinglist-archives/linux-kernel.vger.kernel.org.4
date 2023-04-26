@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DEF6EF861
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254D46EF878
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjDZQYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S231631AbjDZQbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDZQYh (ORCPT
+        with ESMTP id S229937AbjDZQbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:24:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA9D6E93;
-        Wed, 26 Apr 2023 09:24:34 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QG4XXi025015;
-        Wed, 26 Apr 2023 16:24:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jxCYqtU/KKjkZUQB929AylqzoqPHD48TdjP8lQBgiQo=;
- b=Uu+TZDjj+vDoVLruPzOacCpgFhY5A2lFI1+RjGNifA9iRNN72IoPFtKCEwpQL2xOp2+G
- FR9zyLCESBO+kPbJjDN24lwMoZR2zHWuTMDrLZla6kmr/zpanWK8JxQk4OlDyTFRTJ13
- YQpMhFm4315TrcLEhGpLWIX6QurL/b9aDLpFS9tnZSQyFdcldnr9St6FDEiFcd2ZLuGH
- 2sncuX3M1nzhcoozWjogtowb9bIPxf4pB/LCTVaX2TTj/YIqSl3V1wOqMi4PfUbEKR+9
- ad2lyUgVCMAX9zoPsBjzUOtXtXG2mbdjfD41IUnzmcdlPX5xefWksCiO+rpns+VPn4P9 lA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6uprsrct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 16:24:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33QGOMcS019706
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 16:24:22 GMT
-Received: from [10.110.124.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 26 Apr
- 2023 09:24:20 -0700
-Message-ID: <d44022e0-bc09-122e-5a48-1994cb025ba8@quicinc.com>
-Date:   Wed, 26 Apr 2023 09:24:19 -0700
+        Wed, 26 Apr 2023 12:31:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF0576A5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:31:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CC7161121
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 603BEC433EF;
+        Wed, 26 Apr 2023 16:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682526680;
+        bh=LsQFJnxGfjStsxu61/64S4NIq//Zy3OsmBBferjPxOk=;
+        h=From:Date:Subject:To:Cc:From;
+        b=tgPB9KRzc+dlkWvvv4GpVng/VuOueuOe3eiOktEzHMBWZ64LNKyEILKnI0wcsCBDD
+         v22T7aspz8jReXiYx0T+Vht65vG6DlZuvCMRV5mkyoK2ivS5qj4VTmUUA5/9DoAL9Q
+         n84IC7dhv4DXERvPvT1SBCFVcf5nqrooJlRjpob8wFyR1sy7Wsw6wrHkpy4VoDXMOO
+         67+IGngac/+oVj1RP/dIUFiArRwKVRrHKtcvB+ZMwlkpQdPMe2MCXRemFAckJsw5b3
+         e8ZthkHahmbisvS2/LCGNCle5tprATuQ/+dcgbzzCP40+FeCswZUzk20spu5OjRVPf
+         EiRBGt2XtIKsQ==
+From:   Eric Van Hensbergen <ericvh@kernel.org>
+Date:   Wed, 26 Apr 2023 16:30:35 +0000
+Subject: [PATCH] fs/9p: Fix bit operation logic error
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 06/21] drm/msm/dpu: Use V2 DITHER PINGPONG sub-block in
- SM8[34]50/SC8280XP
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC:     <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        "Jami Kettunen" <jami.kettunen@somainline.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-References: <20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org>
- <20230411-dpu-intf-te-v3-6-693b17fe6500@somainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230411-dpu-intf-te-v3-6-693b17fe6500@somainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: rTTZ43xHj4-xreqtiXVZR4FNTkRaHNT6
-X-Proofpoint-GUID: rTTZ43xHj4-xreqtiXVZR4FNTkRaHNT6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_08,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- mlxscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304260144
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Message-Id: <20230426-fix-bitops-v1-1-ab11e8f4f23a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKpRSWQC/x2NQQqDMBBFryKz7tB0WiT2KsVFEsdmNonMiAji3
+ Ru7fPDf+wcYq7DBuztAeROTWho8bh2kHMqXUabGQI6e7kU9zrJjlLUuhsn35IYh+Yk8NCEGY4w
+ aSsqX0sJpy/e5Khbe12uxKDf/f/cZz/MHqlA10H4AAAA=
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        v9fs@lists.linux.dev,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Eric Van Hensbergen <ericvh@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1777; i=ericvh@kernel.org;
+ h=from:subject:message-id; bh=LsQFJnxGfjStsxu61/64S4NIq//Zy3OsmBBferjPxOk=;
+ b=owEBbQKS/ZANAwAKAYj/1ftKX/+YAcsmYgBkSVHWHtYyqX4pP4R4aeyw6Pv1ElRXf5x9d/rTj
+ j5xcPM9kFiJAjMEAAEKAB0WIQSWlvDRlqWQmKTK0VGI/9X7Sl//mAUCZElR1gAKCRCI/9X7Sl//
+ mEHMD/9os90TNiC7CpEujU063unUwCPBB0wMrn1OB8TlFZ9NrB2QeTq9Ki+UCmUgb5fd0MEeLaJ
+ Z5InGevGQhazA5TltCFuWUPT1YtkeY8Z82flW64zSXfYBmJBf80wwAncQUnFX8IxVChRfEVXWlC
+ yudnoqgzGM+k26XrJ2/R0n91f7+sgE1IGMti+SIhww25qh7fergMhIXMos9XKG2t86hyU8F6F1X
+ p6vl+EnZlRyGpNT9otBQaud9sLopTHKAdPu/3dP1lQgUlcbRmGKXOWIdnGDbIOmomYqafjYEp69
+ xRnHm0LU9NDwlxpDY3bP5S/TWlFEE8pUyicVhhMy0JGql3RAiHsOBPTP0nzDLrb0Uqc9ZH17R08
+ YGq7Ix0KGME0f1lbnQV0WhOu7ZcdmVbz7m81RJ/VX2Q0QPrXbrKSXwKCW8isEeeBBgPINafcWwd
+ hsvz8SjoC6xj3cVNDfdPtoXINRyOAeO7MozW/nrNCOUExFUG6CuOKowrsUnswOtMKzfW1jLtZ45
+ dgNbISfl8jK0DSpX2xQ5LcMRaDRBM4qUrDo7Bomws+6CND+cFZRToBvl0cSbIkKm7cFo+tfzmCP
+ jtaKihrCkhzXUBJL9B7+Remq8s7HU9i54alHaMexFwNOl4wVznzSGNM57VmIlACj3bbe4e5hPWH
+ rkown5fAySn5bxQ==
+X-Developer-Key: i=ericvh@kernel.org; a=openpgp;
+ fpr=9696F0D196A59098A4CAD15188FFD5FB4A5FFF98
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,130 +77,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This re-introduces a fix that somehow got dropped during rebase of the
+current series in for-next.  When writeback is enabled, opens
+are forced to support both read and write operations but with the
+logic error other flags may be dropped unintentionaly.
 
+Reported-by: Christophe Jaillet <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Eric Van Hensbergen <ericvh@kernel.org>
+---
+ fs/9p/vfs_inode.c      | 2 +-
+ fs/9p/vfs_inode_dotl.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 4/25/2023 4:05 PM, Marijn Suijten wrote:
-> According to downstream sources this DITHER sub-block sits at an offset
-> of 0xe0 with version 0x20000.  The PP_BLK_DITHER macro is _not_ used as
-> downstream still says the size of the PINGPONG block is 0xd4 and not 0.
-> 
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index 54dfe4f10f43..3791f642c502 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -823,7 +823,7 @@ v9fs_vfs_atomic_open(struct inode *dir, struct dentry *dentry,
+ 	p9_omode = v9fs_uflags2omode(flags, v9fs_proto_dotu(v9ses));
+ 
+ 	if ((v9ses->cache & CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
+-		p9_omode = (p9_omode & !P9_OWRITE) | P9_ORDWR;
++		p9_omode = (p9_omode & ~P9_OWRITE) | P9_ORDWR;
+ 		p9_debug(P9_DEBUG_CACHE,
+ 			"write-only file with writeback enabled, creating w/ O_RDWR\n");
+ 	}
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+index f9371b5b70ea..3acf2bcb69cc 100644
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -288,7 +288,7 @@ v9fs_vfs_atomic_open_dotl(struct inode *dir, struct dentry *dentry,
+ 	}
+ 
+ 	if ((v9ses->cache & CACHE_WRITEBACK) && (p9_omode & P9_OWRITE)) {
+-		p9_omode = (p9_omode & !P9_OWRITE) | P9_ORDWR;
++		p9_omode = (p9_omode & ~P9_OWRITE) | P9_ORDWR;
+ 		p9_debug(P9_DEBUG_CACHE,
+ 			"write-only file with writeback enabled, creating w/ O_RDWR\n");
+ 	}
 
-the PINGPONG block size is 0x0 on sm8350, sm8450 and sc8280xp.
+---
+base-commit: 4eb3117888a923f6b9b1ad2dd093641c49a63ae5
+change-id: 20230426-fix-bitops-c862099c8d28
 
-and length of dither is 0x20 and they all start at 0xe0.
+Best regards,
+-- 
+Eric Van Hensbergen <ericvh@kernel.org>
 
-So now does anything prevent us from using PP_BLK_DITHER macro for these?
-
-> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
-> Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
-> Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   | 12 ++++++------
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 12 ++++++------
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   | 16 ++++++++--------
->   3 files changed, 20 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-> index 41ef0c8fc993f..4c1bb88029cd3 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
-> @@ -127,22 +127,22 @@ static const struct dpu_dspp_cfg sm8350_dspp[] = {
->   };
->   
->   static const struct dpu_pingpong_cfg sm8350_pp[] = {
-> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
-> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->   			-1),
-> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->   			-1),
->   };
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-> index 12c14d15e3863..bab9b0715f8c2 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
-> @@ -121,17 +121,17 @@ static const struct dpu_dspp_cfg sc8280xp_dspp[] = {
->   };
->   
->   static const struct dpu_pingpong_cfg sc8280xp_pp[] = {
-> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8), -1),
-> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9), -1),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10), -1),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11), -1),
-> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
-> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->   		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
->   };
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-> index e409c119b0a2a..ec296a52076ce 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
-> @@ -128,28 +128,28 @@ static const struct dpu_dspp_cfg sm8450_dspp[] = {
->   };
->   /* FIXME: interrupts */
->   static const struct dpu_pingpong_cfg sm8450_pp[] = {
-> -	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
-> -	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
-> -	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
-> -	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
-> -	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->   			-1),
-> -	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sc7280_pp_sblk,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->   			-1),
-> -	PP_BLK("pingpong_6", PINGPONG_6, 0x65800, MERGE_3D_3, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_6", PINGPONG_6, 0x65800, MERGE_3D_3, sc7280_pp_sblk,
->   			-1,
->   			-1),
-> -	PP_BLK("pingpong_7", PINGPONG_7, 0x65c00, MERGE_3D_3, sdm845_pp_sblk,
-> +	PP_BLK("pingpong_7", PINGPONG_7, 0x65c00, MERGE_3D_3, sc7280_pp_sblk,
->   			-1,
->   			-1),
->   };
-> 
