@@ -2,70 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C934A6EF595
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F73E6EF5AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240921AbjDZNho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
+        id S241201AbjDZNoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240647AbjDZNhm (ORCPT
+        with ESMTP id S229744AbjDZNom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:37:42 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8321F199;
-        Wed, 26 Apr 2023 06:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682516260; x=1714052260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mATRcWr0aXBkhLDJViNyss0Ax7HbjLO0ufWDkBE/ZRI=;
-  b=iZMXllqn+53c/VxhP/c0EE13ZB9iVzu26ilR8godPHOjZLzc7jRAijcV
-   fbodpz9sIjIeA14m5e7E5ZpvlUnW6VV3mRlVCquat9HK9C8Aurr/FSDZO
-   Z1gdlnyVnwgVB7eoNEUVLAqUrb5MeMg2ceFV+t9L/5hg9p6lr1HvjwIn3
-   5JQX7lODaL3eU1aPvX7y5HVwIeZ/0lq8+jBPu7Rgmc5IdgnPHkgyhgKWO
-   XUPIvdKPsPLToJPhEQ5Gr+PX4w+KXTjkHEDVW/Kqhw+FQuUZBslWmV+pP
-   yZaqHELt5tTrQlZuJULmLKRxyfanHYwO9tMuPCkcZMAJR4N/DQsCIm+36
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="327432222"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="327432222"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 06:37:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="726524482"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="726524482"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2023 06:37:35 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prfKx-0000EK-0h;
-        Wed, 26 Apr 2023 13:37:35 +0000
-Date:   Wed, 26 Apr 2023 21:37:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        oxffffaa@gmail.com, kernel@sberdevices.ru,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-Message-ID: <202304262101.pP2ae1ol-lkp@intel.com>
-References: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
+        Wed, 26 Apr 2023 09:44:42 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080246A6F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:44:40 -0700 (PDT)
+Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MYe6H-1pnavA34xn-00Vh0J; Wed, 26 Apr 2023 15:39:15 +0200
+Message-ID: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
+Date:   Wed, 26 Apr 2023 15:39:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Akira Shimahara <akira215corp@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        regressions@lists.linux.dev
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Subject: Regression: w1_therm: sysfs w1_slave sometimes report 85 degrees
+ Celsius
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:9+Vlw4+jn2N/v7j0vxMPWLyDRwGYp+CO/tXiR5tccEMsaSaH5aQ
+ R9ecZ1Xs+q6sHX62lwerzUDDiNhj845FifgwpOZ1VJgSWCou2fvSfNe7+JpFVLNF1L0zSiD
+ i2ZYBeApV27GGz95hWR/h2Hyj4YRG/zqPKVEEpmwjSV90jkFKMsB9LYvk6y7a3NmVh/4tX+
+ +emoW4k2Y2WPqYNZ+5nCw==
+UI-OutboundReport: notjunk:1;M01:P0:nk+SJ3Skr2A=;+cogvs2GoIuI9QE3rGVaSUzEYdT
+ xrXADDJ/vaBxtZU4/iha4mOp4R4x04VC3Lhb9zw9hWbNgFtjFIAMGrcGfNndJbQrOk3I6sOWW
+ h87w+0Xc7dFH+9FroUdFW1kS78tKyNnsUFuEC4VonnHwIbr6RtlDPd6KKEpZIPqRQ/jBBg/kS
+ UYZkyedrO950gJevgliU73Wa4cwdgF1/rgiFC7lLHaHeaSE+9guiwWA6OWE/3QxuQZY2vYtcm
+ kqJlB58C1NQxyAaMMn5dD8UT6YTXyk+3N24312z345S2Lf605UTlszZDw11yywO+gy3zDrJxO
+ EjSxExsk2xct3MqHShIq5DiLjxoCRlKqO9u/dHv1YZrbts8/YK8FUFQWDOu3LV3t0R1UZy/Lm
+ 4TEytn5KT8CQCa8UFcMng+oyVjON411FtvVxiGOdfDc67T5KH0tGwaZs/z7c4ijnuQoc2QQSv
+ aN6to0E7oviT4W5lXiYS/vlO/Bi4jYx7aFYaPDnglAyS8Rb3R+QJAjUQasr2UzAyesn9+HZfw
+ fBdI0a9lwDLK9XAZQuy5XLiUOpB4mt6UI/zuIRUYj5ZryMmPiPd3+AcXld5gj+RXuNpxeXJ5d
+ vFsTGR3H7/hPcRVMDYgV8lZF8Sy0hgeuDm2tQ079KeVcsBmAb6GHi9zE5dz7ixFjvzt5ag5yf
+ WgGHAv5viGZWYsih8XXXQouA7/9wOJqFRA6Iy360pw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,163 +59,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Hi,
 
-kernel test robot noticed the following build errors:
+recently we switch on our Tarragon board (i.MX6ULL) to Linux 6.1 and 
+noticed that the connected 1-wire temperature sensors 
+(w1_therm.w1_strong_pull=0) sometimes (~ 1 of 20 times) report 85 
+degrees Celsius, which is AFAIK the only way to report errors to the 
+1-wire master:
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on linus/master v6.3 next-20230425]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+sys/bus/w1/devices/28-04168158faff# cat w1_slave
+50 05 4b 46 7f ff 0c 10 1c : crc=1c YES
+50 05 4b 46 7f ff 0c 10 1c t=85000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230426072455.3887717-1-AVKrasnov%40sberdevices.ru
-patch subject: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-config: hexagon-randconfig-r041-20230425 (https://download.01.org/0day-ci/archive/20230426/202304262101.pP2ae1ol-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3529f3465e99379489b59c035a8a0506c3756ef4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230426-153143
-        git checkout 3529f3465e99379489b59c035a8a0506c3756ef4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/mtd/nand/raw/
+I wasn't able to reproduce this issue with the old kernel 4.9.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304262101.pP2ae1ol-lkp@intel.com/
+After that i successfully bisected the issue to this commit:
+67b392f7b8ed ("w1_therm: optimizing temperature read timings")
 
-All error/warnings (new ones prefixed by >>):
+Unfortunately this commit contains a lot of independent changes, which 
+makes it hard to figured out the cause of this issue. So i tried to 
+split this patch in seven independent changes [1]. Now i was able to 
+bisect the cause further to this change [2] which seems to rework the 
+pullup handling within read_therm().
 
->> drivers/mtd/nand/raw/nand_macronix.c:384:12: error: call to undeclared function 'kmalloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-                     ^
-   drivers/mtd/nand/raw/nand_macronix.c:384:12: note: did you mean 'mm_alloc'?
-   include/linux/sched/mm.h:16:26: note: 'mm_alloc' declared here
-   extern struct mm_struct *mm_alloc(void);
-                            ^
->> drivers/mtd/nand/raw/nand_macronix.c:384:10: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-           dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-                   ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/mtd/nand/raw/nand_macronix.c:397:17: warning: comparison of distinct pointer types ('typeof ((page)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-           offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/mtd/nand/raw/nand_macronix.c:397:17: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-           offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-                   __rem = __div64_32(&(n), __base);       \
-                                      ^~~~
-   include/asm-generic/div64.h:213:38: note: passing argument to parameter 'dividend' here
-   extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-                                        ^
->> drivers/mtd/nand/raw/nand_macronix.c:437:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           kfree(dma_buf);
-           ^
-   drivers/mtd/nand/raw/nand_macronix.c:437:2: note: did you mean 'kvfree'?
-   include/linux/rcutiny.h:99:13: note: 'kvfree' declared here
-   extern void kvfree(const void *addr);
-               ^
->> drivers/mtd/nand/raw/nand_macronix.c:397:17: warning: shift count >= width of type [-Wshift-count-overflow]
-           offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-           } else if (likely(((n) >> 32) == 0)) {          \
-                                  ^  ~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   2 warnings and 4 errors generated.
+Looking closer at the code change and verify it some debug messages, the 
+change inverted the locking behavior (before: no pullup -> keep lock, 
+after: no pullup -> release lock during sleep).
 
+Before:
+	if (external_power) {
+		mutex_unlock(&dev_master->bus_mutex);
 
-vim +/kmalloc +384 drivers/mtd/nand/raw/nand_macronix.c
+		sleep_rem = msleep_interruptible(tm);
+		if (sleep_rem != 0) {
+			ret = -EINTR;
+			goto dec_refcnt;
+		}
 
-   366	
-   367	static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-   368						loff_t offs_in_flash,
-   369						size_t len, size_t *retlen,
-   370						u_char *buf, bool write)
-   371	{
-   372		struct nand_chip *nand;
-   373		size_t bytes_handled;
-   374		unsigned long page;
-   375		off_t offs_in_page;
-   376		void *dma_buf;
-   377		int ret;
-   378	
-   379		/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-   380		 * so allocate properly aligned memory for it. This is
-   381		 * needed because cross page accesses may lead to unaligned
-   382		 * buffer address for DMA.
-   383		 */
- > 384		dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-   385		if (!dma_buf)
-   386			return -ENOMEM;
-   387	
-   388		nand = mtd_to_nand(mtd);
-   389		nand_select_target(nand, 0);
-   390	
-   391		ret = macronix_30lfxg18ac_otp_enable(nand);
-   392		if (ret)
-   393			goto out_otp;
-   394	
-   395		page = offs_in_flash;
-   396		/* 'page' will be result of division. */
- > 397		offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-   398		bytes_handled = 0;
-   399	
-   400		while (bytes_handled < len &&
-   401		       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-   402			size_t bytes_to_handle;
-   403	
-   404			bytes_to_handle = min_t(size_t, len - bytes_handled,
-   405						MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-   406						offs_in_page);
-   407	
-   408			if (write) {
-   409				memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-   410				ret = nand_prog_page_op(nand, page, offs_in_page,
-   411							dma_buf, bytes_to_handle);
-   412			} else {
-   413				ret = nand_read_page_op(nand, page, offs_in_page,
-   414							dma_buf, bytes_to_handle);
-   415				if (!ret)
-   416					memcpy(&buf[bytes_handled], dma_buf,
-   417					       bytes_to_handle);
-   418			}
-   419			if (ret)
-   420				goto out_otp;
-   421	
-   422			bytes_handled += bytes_to_handle;
-   423			offs_in_page = 0;
-   424			page++;
-   425		}
-   426	
-   427		*retlen = bytes_handled;
-   428	
-   429	out_otp:
-   430		if (ret)
-   431			dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-   432	
-   433		ret = macronix_30lfxg18ac_otp_disable(nand);
-   434		WARN(ret, "failed to leave OTP mode after %s\n",
-   435		     write ? "write" : "read");
-   436		nand_deselect_target(nand);
- > 437		kfree(dma_buf);
-   438	
-   439		return ret;
-   440	}
-   441	
+		ret = mutex_lock_interruptible(&dev_master->bus_mutex);
+		if (ret != 0)
+			goto dec_refcnt;
+	} else if (!w1_strong_pullup) {
+		sleep_rem = msleep_interruptible(tm);
+		if (sleep_rem != 0) {
+			ret = -EINTR;
+			goto mt_unlock;
+		}
+	}
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+After:
+	if (strong_pullup) { /*some device need pullup */
+		sleep_rem = msleep_interruptible(tm);
+		if (sleep_rem != 0) {
+			ret = -EINTR;
+			goto mt_unlock;
+		}
+	} else { /*no device need pullup */
+		mutex_unlock(&dev_master->bus_mutex);
+
+		sleep_rem = msleep_interruptible(tm);
+		if (sleep_rem != 0) {
+			ret = -EINTR;
+			goto dec_refcnt;
+		}
+
+		ret = mutex_lock_interruptible(&dev_master->bus_mutex);
+		if (ret != 0)
+			goto dec_refcnt;
+	}
+
+I don't believe this is intended. After inverting the strong_pullup 
+check, the issue wasn't reproducible on our platform anymore. But i'm 
+not sure this is clean.
+
+Best regards
+
+#regzbot introduced: 67b392f7b8ed
+
+[1] - https://github.com/chargebyte/linux/commits/v6.1-tarragon_w1
+[2] - 
+https://github.com/chargebyte/linux/commit/17ca863a32a6a1bdd376959f05c954bef12fc1b5
