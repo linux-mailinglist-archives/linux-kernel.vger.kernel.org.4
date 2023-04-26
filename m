@@ -2,130 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA98F6EF975
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50226EF97C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239026AbjDZRcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S232195AbjDZRez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234770AbjDZRcI (ORCPT
+        with ESMTP id S234747AbjDZRes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:32:08 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5CABE;
-        Wed, 26 Apr 2023 10:32:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1682530289; i=frank-w@public-files.de;
-        bh=GwRobiqv1qHp5RU7uxMCBJnYrMPL3FpHdLHoiVSsaRw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ynmr3saC4iT4xsA2cYSZ05NnIP8XzKG1V0psslk61w24hDwQbkwfcyIvK7GDr4HRm
-         qKnq8HRq+0K0f7auvo5BfThrJfwswJMly83JGZKiGds3/fddIoSAthHgxHonhiqCkr
-         afQsGyGy4PlXj4DAZRWhsDSMzY7+4g77G22J/Q7DjQpdRkeKccVhx9dDXlRs+LoOzK
-         eDU+5AtMTO4BbLnhUYaCY+RoGnseTa/Y8g6fTZrO6ZZTGDxNAGuwcPYE/uk9VTyY5C
-         uHzbI3EsezbKxgI9BI8F5ULgFcaJ6p9SHGtyW0IK2s23Io2dQZDZSoMJO879Q1VIsB
-         H6P8A0wFTkoPQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.146.19] ([217.61.146.19]) by web-mail.gmx.net
- (3c-app-gmx-bs05.server.lan [172.19.170.54]) (via HTTP); Wed, 26 Apr 2023
- 19:31:29 +0200
+        Wed, 26 Apr 2023 13:34:48 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5DDED
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 10:34:39 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24736790966so6229226a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 10:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682530479; x=1685122479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wnP+eYqDIqeo8coo+95vLR95RWSg/j9f2g7CwZiAsuk=;
+        b=Fyjcy32wygKCr5y70MunVl9V2XGmo1U4DuwDAi607v9Ue3C97nr4LlUZi7qsUGpZls
+         ImvvYnA1qdVf91ZJo94qSFXVBumEwweYQcl7BPptk5az7VEGNGJHpipdMG93RdOrZY5t
+         e4KeI8MvLdhMuBCIs2CiGEvQTcrsc2mpPdU3tv9/XNsTxaNTvHb0g0nHPeEPRV3VAyy0
+         QbhIgET9Xed6qIOKqD/yigU3Bx2Uh2uxHjTKcVBQOxeGov1bcaD9hHb+jVia/CS1i2Cf
+         Y2FRbRdwkpbBrbyvnjDKPkBUHOtdOLk2B5au8ovifGxma1TGCRiHAHnQWp5O9sebpsIz
+         tnyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682530479; x=1685122479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wnP+eYqDIqeo8coo+95vLR95RWSg/j9f2g7CwZiAsuk=;
+        b=gdwblGj9KuFlmseJZBDp2CLaBP+KNTq8BJ3JSchI/5IeTahEaVmdHk2ORYgPxErdnk
+         LHO974pdhO2HG/TlUloS4lzCiY1NhXcfjoLFVyMJVQQTGEskhYEAOic5Z7n9jrAo2cJN
+         Uu4g8vlZp1XVbB7bc/R9+bXnZDg/iTfhtWMpoUylRqZjX3v//kZDUi5iekBq5en9AZI9
+         2wFzCXY01LCf1MgUJF0gstC+OcZwEYixDBa9LvGSInBW7HENJAKy5ZIFhHbUwLFqCJ4Q
+         6/MNXP6sXCl43irzmKp8cF3rEnlOKDj2w58jCp6gW6HFcdi0UCx/gFtoKIiXteac0HYw
+         aDrA==
+X-Gm-Message-State: AAQBX9dGX/bxbAmx5VPX+gZpsM1+QXfHvNJXe+9hZWnfy4eOfKNYrmqA
+        3iDnnm2SEP1uoPP/jjMc8RWI1St3gC9iF1A3xy5lSQ==
+X-Google-Smtp-Source: AKy350apifD2OfEFPqhuCMgz9gIY1LT3xl9XDOoAx73C6Vc4BsIQZEoD5WNsc/ODLfUz0nURi9u2HoT+e0XXD1q9hns=
+X-Received: by 2002:a17:90b:a0c:b0:246:5f9e:e4cd with SMTP id
+ gg12-20020a17090b0a0c00b002465f9ee4cdmr21508551pjb.10.1682530478741; Wed, 26
+ Apr 2023 10:34:38 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-bb65fd35-fe52-45d2-975c-230e504cc93f-1682530288982@3c-app-gmx-bs05>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        stable@vger.kernel.org
-Subject: Aw: Re: [net v2] net: ethernet: mtk_eth_soc: drop generic vlan rx
- offload, only use DSA untagging
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 26 Apr 2023 19:31:29 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <61ea49b7-8a04-214d-ef02-3ef6181619e9@arinc9.com>
-References: <20230426172153.8352-1-linux@fw-web.de>
- <61ea49b7-8a04-214d-ef02-3ef6181619e9@arinc9.com>
+References: <20230425041838.GA150312@mit.edu> <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
+In-Reply-To: <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 26 Apr 2023 10:34:27 -0700
+Message-ID: <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
+Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:sfKj/0EyPG6sxAAmaIVKAX88w+UGhKLUJ8ltiFTLiTzen4a0Ujz1BDaHcYGDwLlsOr0+g
- DhKQL0QqklHHQHJumYXj9f4OrvWwWOvttMODD8UUNTbxwnnoVTUB6XBSfQAFrDbfl2ySNqhMwqXc
- iuDSz4V1SoQ7FRc6+NzPgJz5D5gQWyWVcg/kHTnBRX5ntKT3gT3561lhcQNU5b9XYcgYZRd6ANBj
- Ds1hfb6sCWcMiMWf/kaJ+dRT7s2Lc5IDnp0fzQyQ2Lw0C+gCDz2XCiB7mc2S9R11b8wbmbCetKSR
- pQ=
-UI-OutboundReport: notjunk:1;M01:P0:XZz2sY72ML8=;a16m+i1PJgczSaVFW4Bi1WoZCKJ
- bU4Sw6mk+Nslc93fETkWifNuUOKGQ9HxuNA5SpHMig8TsNPkDADeeGEXsVAhuLTRvyHyXwlQm
- k60cNN1Wt5uTNXrJp0wWgblXvahHEEalQA64QKy1eAwpDNTzRhm4N01bFVedyho9fZs/PU+bK
- KflWe02buao1pJrN7oxlaQaku4EvYcCs/+7vv7HTp0/JDMui4173iwUWicwDGVDcNKH+CHkmJ
- VUcUAHVrrWvYMPLYBsEI30RFImCGeNMKjNTfDZ1Di7BlWY2zoZEkdg791z23iqXKhQKBYjprC
- btOCn1dqw+h9U4+1CCIrxWzC6j9SXhJqsZehh36fyu3rkq8yXSP2iU2hAsBN7UqmtLgEnQUQS
- AEsNmBEYCAA5ExvSWANB2UMa4VLs6Hm+pKZCM99HWtFNOu1vcOc421D8FGAKCftT3NO5w6zqD
- i4dYz60FFn8N2cXS1FbRkF9xgH4u1tmtP9BfVZ0ZNat0K/BNO7mq5j3HTTbJsQUIpt4Gk/6CA
- smWTTMG526A0/d26WGfpDbB1ook2ouBq8eOuoXTJYRTEsYeljaymRhuYmD/mFg0PEqeHryPkM
- 7CJR4QvfhSavt2QYiTidHutBDHrW/3QPyAUuRnPREHUvQnd0f1POsrD/WSqfqQar2dPjQ4PNb
- BJjTRMUyCp92giVZeDTWm7YITaWNt3QDI6DTgnUhthcRNQTTu+flToTMtZyhW7fxFGEzGDyk1
- a5BxqFKBqEu3qnRmQTZ6cgFJviLUZ8GdB73IEI2VQe6j8c2V+rhNpTjr7qhFw7EX/nE+dwnkq
- XnA5mwqNbm0853lmblTRY7jw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 26, 2023 at 10:03=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Apr 24, 2023 at 9:18=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wro=
+te:
+> >
+> > Please note that after merging the mm and ext4 trees you will need to
+> > apply the patch found here[1].
+> >
+> > [1] https://lore.kernel.org/r/20230419120923.3152939-1-willy@infradead.=
+org
+> >
+> > This is due to a patch in the mm tree, "mm: return an ERR_PTR from
+> > __filemap_get_folio" changing that function to returning an ERR_PTR
+> > instead of returning NULL on an error.
+>
+> Side note, itr would be wonderful if we could mark the places that
+> return an error pointer as returning "nonnull", and catch things like
+> this automatically at build time where people compare an error pointer
+> to NULL.
 
-> Gesendet: Mittwoch, 26=2E April 2023 um 19:25 Uhr
-> Von: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>
-> On 26/04/2023 20:21, Frank Wunderlich wrote:
-> > From: Felix Fietkau <nbd@nbd=2Ename>
-> >=20
-> > Through testing I found out that hardware vlan rx offload support seem=
-s to
-> > have some hardware issues=2E At least when using multiple MACs and whe=
-n
-> > receiving tagged packets on the secondary MAC, the hardware can someti=
-mes
-> > start to emit wrong tags on the first MAC as well=2E
-> >=20
-> > In order to avoid such issues, drop the feature configuration and use
-> > the offload feature only for DSA hardware untagging on MT7621/MT7622
-> > devices where this feature works properly=2E
-> >=20
-> > Fixes: 08666cbb7dd5 ("net: ethernet: mtk_eth_soc: add support for conf=
-iguring vlan rx offload")
-> > Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
-> > Signed-off-by: Felix Fietkau <nbd@nbd=2Ename>
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
-> > Tested-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc=2Eunal@arinc9=2Ecom>
->=20
-> I'm confused by this=2E What is HW-vlan-untagging, and which SoCs do you=
-=20
-> think this patch would break this feature? How can I utilise this=20
-> feature on Linux so I can confirm whether it works or not?
+That's what clang's _Nonnull attribute does (with -Wnullability-extension).
+https://godbolt.org/z/6jo1zbMd9
+But it's not toolchain portable, at the moment.  Would require changes
+to clang to use the GNU C __attribute__ syntax, too (which I'm not
+against adding support for).
 
-the feature itself breaks vlan on mac of bpi-r3
+>
+> Howeder, it sadly turns out that compilers have gotten this completely wr=
+ong.
+>
+> gcc apparently completely screwed things up, and "nonnull" is not a
+> warning aid, it's a "you can remove tests against NULL silently".
+>
+> And clang does seem to have taken the same approach with
+> "returns_nonnull", which is really really sad, considering that
+> apparently they got it right for "_Nonnull" for function arguments
+> (where it's documented to cause a warning if you pass in a NULL
+> argument, rather than cause the compiler to generate sh*t buggy code)
 
-1 mac is connected to switch and uses dsa tags, the other mac is directly =
-accessible and vlan-tag
-there is stripped by this feature=2E
+Heh, I just had this conversation maybe within the past month with
+Bionic (Android's libc) developers.
 
-with this patch i can use vlans on the "standalone" mac again (see tagged =
-packets incoming)=2E
+Yeah, the nonnull attributes !=3D _Nonnull "attributes." (Quotes because
+IIUC _Nonnull doesn't use the __attribute__ GNU C extension syntax).
+My understanding (which may be wrong) is that nonnull is implemented
+for compatibility with GCC, while _Nonnull was likely implemented by
+Apple (my guess; did not check) (so compatibility with GNU C
+__attribute__ syntax probably wasn't considered in code review).
 
-regards Frank
+https://clang.llvm.org/docs/AttributeReference.html#nullability-attributes
+
+The Bionic developers are deploying _Nonnull throughout the codebase
+and intentionally not using nonnull which is dangerous (a teammate
+used the term "Developer Hostile Behavior"). nonnull has implications
+on codegen, _Nonnull only affects diagnostics.
+
+https://android-review.googlesource.com/q/owner:zijunzhao@google.com+Nullab=
+ility
+
+For examples. Works on return types, too.  So _Nonnull can be used on
+return types rather than returns_nonnull.
+
+>
+> Compiler people who think that "undefined behavior is a good way to
+> implement optimizations" are a menace, and should be shunned. They are
+> paste-eaters of the worst kind.
+
+Thanks! :-*
+
+>
+> Is there any chance that somebody could hit compiler people with a big
+> clue-bat, and say "undefined behavior is not a feature, it's a bug",
+> and try to make them grow up?
+
+Good. I can feel your anger. Strike me down with all of your hatred,
+and your journey to the dark side will be complete.  Your hate has
+made you powerful.  Let the hate flow through you!
+
+>
+> Adding some clang people to the participants, since they at least seem
+> to have *almost* gotten it right.
+>
+>             Linus
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
