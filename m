@@ -2,55 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1FB6EEC0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6956EEC11
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239184AbjDZBvS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Apr 2023 21:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S239258AbjDZBvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239008AbjDZBvM (ORCPT
+        with ESMTP id S239205AbjDZBvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:51:12 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6290E1988;
-        Tue, 25 Apr 2023 18:50:56 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B6E0124DBCE;
-        Wed, 26 Apr 2023 09:50:53 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 09:50:53 +0800
-Received: from [192.168.125.131] (113.72.145.137) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
- 2023 09:50:52 +0800
-Message-ID: <dca081d0-cc06-3e65-ec9b-3885baf5dcde@starfivetech.com>
-Date:   Wed, 26 Apr 2023 09:49:48 +0800
+        Tue, 25 Apr 2023 21:51:22 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D5193D5;
+        Tue, 25 Apr 2023 18:51:16 -0700 (PDT)
+Received: from [IPV6:2001:250:4000:5113:cc18:37eb:8a69:2648] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33Q1oQ02003919-33Q1oQ03003919
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Wed, 26 Apr 2023 09:50:26 +0800
+Message-ID: <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
+Date:   Wed, 26 Apr 2023 09:50:26 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1] watchdog: starfive: Fix the probe return error if PM
- and early_enable are both disabled
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>
-CC:     Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
- <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [113.72.145.137]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Li Ningke <lnk_01@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+ <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+ <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,68 +48,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/25 22:06, Guenter Roeck wrote:
-> On 4/25/23 03:04, Xingyu Wu wrote:
->> When the starfive watchdog driver uses 'pm_runtime_put_sync()' as probe
->> return value at last and 'early_enable' is disabled, it could return the
->> error '-ENOSYS' if the CONFIG_PM is disabled, but the driver should works
->> normally.
->>
->> Add a check to make sure the PM is enabled and then use
->> 'pm_runtime_put_sync()' as return value when 'early_enable' is disabled.
->>
->> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
->>
->> Hi, Guenter and Wim,
->>
->> This patch fixes the issue of StarFive watchdog driver and rebases on
->> the master branch of linux-next.
->>
->> Thanks.
->>   ---
->>   drivers/watchdog/starfive-wdt.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
->> index 1995cceca51e..51e487e09960 100644
->> --- a/drivers/watchdog/starfive-wdt.c
->> +++ b/drivers/watchdog/starfive-wdt.c
->> @@ -492,7 +492,8 @@ static int starfive_wdt_probe(struct platform_device *pdev)
->>           goto err_exit;
->>         if (!early_enable)
->> -        return pm_runtime_put_sync(&pdev->dev);
->> +        if (pm_runtime_enabled(&pdev->dev))
->> +            return pm_runtime_put_sync(&pdev->dev);
->>   
-> 
-> Why not just
-> 
->     if (!early_enable)
->         pm_runtime_put_sync(&pdev->dev)
-> 
-> like almost every other caller of pm_runtime_put_sync() ?
-> 
 
-The function of pm_runtime_put_sync() is that:
+On 2023/4/24 23:52, Mark Brown wrote:
+> On Mon, Apr 24, 2023 at 08:03:42PM +0800, Dongliang Mu wrote:
+>> On 2023/4/24 19:48, Mark Brown wrote:
+>>> Is that check valid?  0 was a valid interrupt for some architectures...
+>> We just follow the comments of platform_get_irq().
+>>   * Gets an IRQ for a platform device and prints an error message if finding
+>> the
+>>   * IRQ fails. Device drivers should check the return value for errors so as
+>> to
+>>   * not pass a negative integer value to the request_irq() APIs.
+> I'm not sure that's universally true yet, though there were some moves
+> to try to get us there.  arm, where this driver is used, was one of the
+> platforms with 0 as a valid interrupt.
 
-static inline int pm_runtime_put_sync(struct device *dev)
-{
-	return __pm_runtime_idle(dev, RPM_GET_PUT);
-}
+Hi Brown,
 
-and when do not enable CONFIG_PM, the __pm_runtime_idle() is that:
+First, we're sorry about the fact that our internal robot(beta) made a 
+mistake and sent our testing message to LKML. We have fixed the 
+incorrect logic.
 
-static inline int __pm_runtime_idle(struct device *dev, int rpmflags)
-{
-	return -ENOSYS;
-}
+Second, from code review of platform_get_irq / 
+platform_get_irq_optional, it would warn IRQ 0 as an invalid IRQ number.
 
-If I do not open PM, it will return error saying probe failed
-but it works fine without PM. I had tested that and probe really
-was failed. So I should add this check before using pm_runtime_put_sync().
+out:
+	if (WARN(!ret, "0 is an invalid IRQ number\n"))
+		return -EINVAL;
+	return ret;
 
-Best regards,
-Xingyu Wu
+Dongliang Mu
 
