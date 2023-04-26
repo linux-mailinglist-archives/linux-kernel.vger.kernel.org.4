@@ -2,131 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559BD6EF98D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA946EF98E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbjDZRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S236322AbjDZRmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236195AbjDZRmK (ORCPT
+        with ESMTP id S234751AbjDZRmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:42:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3431FE1;
-        Wed, 26 Apr 2023 10:42:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1682530907; i=frank-w@public-files.de;
-        bh=fzBJ9aehgljKPhYXz04ylxft46ZFFyfph0GM2HpSX6A=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=NixrjmA8i3Beg06Lq02m7wWxG+Yk1fc0N1mn2pCZWB+GmCNBsRnyF5CQ4Yv/a+KYa
-         uKkYDovjyxp0gPRVelMaN/nWtXJniW/iZLV5dBFLwkWUC5+kvy1Va2ltROViJsNv9G
-         o4nTP0PyKQixWHRHu8SY8f2pl1Vm7uA5F5bJLdlrFESA7QdTBw8SEWTWxvMduWDC7y
-         AcftTYKE+LLUOv3A79Gv2q50/fHuIGB17uKpuQTv8/A0lsEQY5Te+5r72RlEHrcEVl
-         IB1siCJKwBrRMdjjwa18V6f+mopynDWdUA0f2uWUB2KLvEtDkMQ9rMfM6W5O0k/KRa
-         eoikXsOBNtc0Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.146.19] ([217.61.146.19]) by web-mail.gmx.net
- (3c-app-gmx-bs05.server.lan [172.19.170.54]) (via HTTP); Wed, 26 Apr 2023
- 19:41:47 +0200
+        Wed, 26 Apr 2023 13:42:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718981FDE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 10:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682530969; x=1714066969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xRcs0B/eRzmEcbNKZvEudSDHNaIPum++FQBk4XtumU8=;
+  b=ZLe7+LbFqh8Cs9ZPdidKKNle3YXpNpwD/EkCKzOcsRRLQ/Q7eSXk3B3d
+   MrhrwOTyqOUTBtx6Y4tXO+dpqHJcYXHRV0OWoLY3wYdtunPb4HegdYCtP
+   qPxj/euXZwBmaGMBG3yC8Vf8niY/QJ84+4j5K2PELunfPRbLzS5m3rHZG
+   +pSglYVTbvA0gZ625EoIFcp64dBxRweivfXP6TeYb5mpfQUb/fgn1PCQ/
+   bMh1JaYRndUXB9Y/8Ucf4U4vI5/xYT/1yfSYliGWPjWQPMCLbjIlIqxDo
+   2izqZ7iX+yBLlA4A3EySTkfQp7ASpsyhMGYpeaFmwbsPaU0lWCtDEjsTY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="326791668"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="326791668"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 10:42:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="1023722535"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="1023722535"
+Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Apr 2023 10:42:47 -0700
+Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prjAE-0000Pa-28;
+        Wed, 26 Apr 2023 17:42:46 +0000
+Date:   Thu, 27 Apr 2023 01:42:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Justin Stitt <jstitt007@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/net/ethernet/mediatek/mtk_eth_soc.c:2237:38: sparse: sparse:
+ incorrect type in assignment (different base types)
+Message-ID: <202304270116.SvhuHUfR-lkp@intel.com>
 MIME-Version: 1.0
-Message-ID: <trinity-8c5502f4-34bc-456b-9e4b-37edac37c3ed-1682530907724@3c-app-gmx-bs05>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Aw: [PATCH] PCI: mediatek-gen3: handle PERST after reset
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 26 Apr 2023 19:41:47 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20230402131347.99268-1-linux@fw-web.de>
-References: <20230402131347.99268-1-linux@fw-web.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:dzORq1CAzMS2PqaF9FBOyc0gBlknMTC94Yf2KX1DHMdfdevuyPq8M6Ei6iJ7PM5D9PeKN
- 8L+RD84dEQ4WCZpamp7vgRtYvOMf0Y9aCwthhw0qFpBa34dMx7A5mYqQpvHltcvN4C3cNhcjydGG
- eUWPVPzEloSvIMAzNvZoDm3QK6vxi0Y6HvZZ4msiato/LLTZc5/hOLwwIAs9fe9OzLesvIVNSmAj
- CaIc2miW5cxVFMKcl1ijALj0px70aIJ+bFJtcMIlnGNDPp1LQLdvSeB4yG/HxTP0LqNMbyFI9MOl
- v8=
-UI-OutboundReport: notjunk:1;M01:P0:ZJ7W47MwB30=;LKsCmYzAPuDvFS+HNRFqVjZU1lF
- mdKzDe116qQyuDI2RanO1UYZ8pecJImM2lKT/paapBa02gD1iANY8Jf3AztrQudk3ljBfFk8P
- 7oL6paNP7Iltz06q7neYttlPG+8nhVUpj/Jicv4+5SQ8HG96EekPSha56/92G2VuKwUGVufku
- kkKCEVSoWW/h0lwKHVdFN0oc2C9SI9+YF66CQozj2GckutLB+IJZp5L3NdfJGw4fCTJTyWXbp
- Rb+gEFzNArmMyHzkMbgrc6GHASVXIrcfcrFW2vjql7ty1qCF1bwXOG4x8IFkNABkSWRxMNJQQ
- yhDGkqr1spNyYTUwJHOpayxNFyriCl7MpiSgYZECykoBmlkEDmwUhhj2HG619JxrD6pBGKlzX
- s569ZRGb3yy1HVVZd65iF/iqp+nPNZZuYpSqilnVPYGgJY5ZwsEP0pHtB9SfwniApiv/UbeQJ
- WY9bekR8z/E21BBOO2BN18tAejf2exZDzM4en1Xi0QcskuLOQF2PlCY2S1imDw1Jj4b2c22o1
- sYcpD8VepJem38lXLJtUyVfriPNhux0nKAYaFCFD6Kb69sCogKyV3IbbTI/WFEl5eHVFPmTGp
- PSEAbFDznQ3CDaCm8c+IGiZ/+SuEKOqhheNcv5aJFR0TXHLHDMEUgaHgAirhRAGRR16YA/nnB
- j3onTZRjj277pRTG+if9nBBbABqEAp9Ku1acg5E6YXKzHWlq/IEVtLyKswLnGonkfXW9e1/Bx
- Crx8j3lY9fbvXvfdK3oQZRepH7pmXrPR/QxYyYDVMbMhSkTk6QeS6u4JfPuIpgtRwCyeBxaG2
- 2AkVrWbi2BnKs6yPvTA8CfgojJpW2fdOE5Q0z1Stfg+ao=
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   0cfd8703e7da687924371e9bc77a025bdeba9637
+commit: d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7 include/uapi/linux/swab.h: move explicit cast outside ternary
+date:   10 months ago
+config: alpha-randconfig-s032-20230426 (https://download.01.org/0day-ci/archive/20230427/202304270116.SvhuHUfR-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d30dfd490f7dc4cb6a7c11a647bd1ff7a22139e7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/ethernet/mediatek/
 
-> Gesendet: Sonntag, 02. April 2023 um 15:13 Uhr
-> Von: "Frank Wunderlich" <linux@fw-web.de>
-> De-assert PERST in separate step after reset signals to fully comply
-> the PCIe CEM clause 2.2.
->
-> This fixes some NVME detection issues on mt7986.
->
-> Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for M=
-T8192")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> Patch is taken from user Ruslan aka RRKh61 (permitted me to send it
-> with me as author).
->
-> https://forum.banana-pi.org/t/bpi-r3-nvme-connection-issue/14563/17
-> ---
->  drivers/pci/controller/pcie-mediatek-gen3.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/c=
-ontroller/pcie-mediatek-gen3.c
-> index b8612ce5f4d0..176b1a04565d 100644
-> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> @@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pc=
-ie *pcie)
->  	msleep(100);
->
->  	/* De-assert reset signals */
-> -	val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB | PCIE_PE_RST=
-B);
-> +	val &=3D ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
-> +	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
-> +
-> +	msleep(100);
-> +
-> +	/* De-assert PERST# signals */
-> +	val &=3D ~(PCIE_PE_RSTB);
->  	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
->
->  	/* Check if the link is up or not */
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304270116.SvhuHUfR-lkp@intel.com/
 
-Hi
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1371:45: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __sum16 [usertype] check @@     got restricted __be16 [usertype] @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1371:45: sparse:     expected restricted __sum16 [usertype] check
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:1371:45: sparse:     got restricted __be16 [usertype]
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2132:22: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __be32 [usertype] ip @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2132:22: sparse:     expected unsigned int [usertype] val
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2132:22: sparse:     got restricted __be32 [usertype] ip
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int [usertype] val @@     got restricted __be32 [usertype] ip4dst @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse:     expected unsigned int [usertype] val
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse:     got restricted __be32 [usertype] ip4dst
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse: sparse: cast from restricted __be32
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse: sparse: cast from restricted __be32
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse: sparse: cast from restricted __be32
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2177:40: sparse: sparse: cast from restricted __be32
+>> drivers/net/ethernet/mediatek/mtk_eth_soc.c:2237:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 [usertype] ip4dst @@     got unsigned int [usertype] @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2237:38: sparse:     expected restricted __be32 [usertype] ip4dst
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2237:38: sparse:     got unsigned int [usertype]
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2241:38: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be32 [usertype] ip4src @@     got unsigned int @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2241:38: sparse:     expected restricted __be32 [usertype] ip4src
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2241:38: sparse:     got unsigned int
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2243:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] psrc @@     got int @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2243:36: sparse:     expected restricted __be16 [usertype] psrc
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2243:36: sparse:     got int
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2245:36: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be16 [usertype] pdst @@     got int @@
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2245:36: sparse:     expected restricted __be16 [usertype] pdst
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:2245:36: sparse:     got int
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:820:9: sparse: sparse: context imbalance in 'mtk_stats_update' - different lock contexts for basic block
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:845:50: sparse: sparse: context imbalance in 'mtk_get_stats64' - wrong count at exit
+   drivers/net/ethernet/mediatek/mtk_eth_soc.c:3145:13: sparse: sparse: context imbalance in 'mtk_get_ethtool_stats' - different lock contexts for basic block
 
-just a friendly reminder....do i miss any recipient?
+vim +2237 drivers/net/ethernet/mediatek/mtk_eth_soc.c
 
-regards Frank
+7aab747e5563ec Nelson Chang  2016-09-17  2224  
+7aab747e5563ec Nelson Chang  2016-09-17  2225  static int mtk_hwlro_get_fdir_entry(struct net_device *dev,
+7aab747e5563ec Nelson Chang  2016-09-17  2226  				    struct ethtool_rxnfc *cmd)
+7aab747e5563ec Nelson Chang  2016-09-17  2227  {
+7aab747e5563ec Nelson Chang  2016-09-17  2228  	struct mtk_mac *mac = netdev_priv(dev);
+7aab747e5563ec Nelson Chang  2016-09-17  2229  	struct ethtool_rx_flow_spec *fsp =
+7aab747e5563ec Nelson Chang  2016-09-17  2230  		(struct ethtool_rx_flow_spec *)&cmd->fs;
+7aab747e5563ec Nelson Chang  2016-09-17  2231  
+e7e7104e2d5ddf Dan Carpenter 2022-05-26  2232  	if (fsp->location >= ARRAY_SIZE(mac->hwlro_ip))
+e7e7104e2d5ddf Dan Carpenter 2022-05-26  2233  		return -EINVAL;
+e7e7104e2d5ddf Dan Carpenter 2022-05-26  2234  
+7aab747e5563ec Nelson Chang  2016-09-17  2235  	/* only tcp dst ipv4 is meaningful, others are meaningless */
+7aab747e5563ec Nelson Chang  2016-09-17  2236  	fsp->flow_type = TCP_V4_FLOW;
+7aab747e5563ec Nelson Chang  2016-09-17 @2237  	fsp->h_u.tcp_ip4_spec.ip4dst = ntohl(mac->hwlro_ip[fsp->location]);
+7aab747e5563ec Nelson Chang  2016-09-17  2238  	fsp->m_u.tcp_ip4_spec.ip4dst = 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2239  
+7aab747e5563ec Nelson Chang  2016-09-17  2240  	fsp->h_u.tcp_ip4_spec.ip4src = 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2241  	fsp->m_u.tcp_ip4_spec.ip4src = 0xffffffff;
+7aab747e5563ec Nelson Chang  2016-09-17  2242  	fsp->h_u.tcp_ip4_spec.psrc = 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2243  	fsp->m_u.tcp_ip4_spec.psrc = 0xffff;
+7aab747e5563ec Nelson Chang  2016-09-17  2244  	fsp->h_u.tcp_ip4_spec.pdst = 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2245  	fsp->m_u.tcp_ip4_spec.pdst = 0xffff;
+7aab747e5563ec Nelson Chang  2016-09-17  2246  	fsp->h_u.tcp_ip4_spec.tos = 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2247  	fsp->m_u.tcp_ip4_spec.tos = 0xff;
+7aab747e5563ec Nelson Chang  2016-09-17  2248  
+7aab747e5563ec Nelson Chang  2016-09-17  2249  	return 0;
+7aab747e5563ec Nelson Chang  2016-09-17  2250  }
+7aab747e5563ec Nelson Chang  2016-09-17  2251  
+
+:::::: The code at line 2237 was first introduced by commit
+:::::: 7aab747e5563ecbc9f3cb64ddea13fe7b9fee2bd net: ethernet: mediatek: add ethtool functions to configure RX flows of HW LRO
+
+:::::: TO: Nelson Chang <nelson.chang@mediatek.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
