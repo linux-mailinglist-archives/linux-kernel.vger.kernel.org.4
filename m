@@ -2,37 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51096EEFCF
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB956EEFCE
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239999AbjDZIDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 04:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S239989AbjDZIDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 04:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239686AbjDZIDg (ORCPT
+        with ESMTP id S239640AbjDZIDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 04:03:36 -0400
 Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EDF3C03
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DEE3AAD
         for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 01:03:32 -0700 (PDT)
-Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2023042608033045f25e7b2df527a7a6
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20230426080330429f5db1f9e012e83b
         for <linux-kernel@vger.kernel.org>;
         Wed, 26 Apr 2023 10:03:30 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=btnpjanps7GZuVDl1HyLhoOR3uwTdi+jFgZdJzn8lO8=;
- b=W5lRVWftuxQ4NVdnxx0NWP7jI7LdRTLWA1YNChTZ29wLWaE4GfdqQf5dZzFXItnI1kdeRh
- W3yvJuZ/H0lNGx+fSsEaHFHhL/zVScNUR5u78WS+aws60YBQzCDiw1f1kJxL+Db4wmFbbb+N
- lh/lSTsV82AlfnHts8V0yqXXxFsXw=;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=yEGcgQ5Kvtx1tgonDU+9HHY5hBo4q5pCkYVLeZOHs5M=;
+ b=pPtLUQAUadLjVnVs6hB73r7wlCQNX66VtpS9hgOjmZx+bjh7yUSUhnk0wqiOJfmvmymY+G
+ 2S+2knT+AGT5BWzXKSI8Gbcrl4ZSGDaFINdQnhtioG1csliGbRngHDJu8RYd7pjT6FrIDCEB
+ YkC8PZxduG2jn/ql1GQBoTVWeHf90=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v4 1/8] tty: n_gsm: add restart flag to DLC specific ioctl config
-Date:   Wed, 26 Apr 2023 10:03:08 +0200
-Message-Id: <20230426080315.7595-1-daniel.starke@siemens.com>
+Subject: [PATCH v4 2/8] tty: n_gsm: add missing description to structs in gsmmux.h
+Date:   Wed, 26 Apr 2023 10:03:09 +0200
+Message-Id: <20230426080315.7595-2-daniel.starke@siemens.com>
+In-Reply-To: <20230426080315.7595-1-daniel.starke@siemens.com>
+References: <20230426080315.7595-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Flowmailer-Platform: Siemens
@@ -49,88 +51,168 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-Currently, changing the parameters of a DLCI gives no direct control to the
-user whether this should trigger a channel reset or not. The decision is
-solely made by the driver based on the assumption which parameter changes
-are compatible or not. Therefore, the user has no means to perform an
-automatic channel reset after parameter configuration for non-conflicting
-changes.
+Currently, all available structure fields in gsmmux.h except those
+for gsm_config are commented. Furthermore, no kernel doc comments are used.
 
-Add the parameter 'flags' to 'gsm_dlci_config' to force a channel reset
-after ioctl setting regardless of whether the changes made require this or
-not by setting this to 'GSM_FL_RESTART'.
+Fix this by adding appropriate comments to the not commented fields of
+gsm_config. Convert the comments of the other structs to kernel doc format.
 
-Note that 'GSM_FL_RESTART' is currently the only allow flag to allow
-additions here.
+Note that 'mru' and 'mtu' refer to the size without basic/advanced option
+mode header and byte stuffing as defined in the standard in chapter 5.7.2.
 
+Link: https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c         |  4 ++++
- include/uapi/linux/gsmmux.h | 13 ++++++++++++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ include/uapi/linux/gsmmux.h | 104 +++++++++++++++++++++++++++++-------
+ 1 file changed, 84 insertions(+), 20 deletions(-)
 
 v3 -> v4:
-Changed gsm_dlci_config field name from 'restart' to 'flags' and introduced
-'GSM_FL_RESTART' to set the restart flag. The patch description was changed
-accordingly. This was done as suggested during the review.
-The remarked kernel doc compatible field comment is done in patch 2/8.
+Changed comments of all other structs in gsmmux.h to kernel doc format as
+suggested during review. The patch description and subject was changed to
+match this.
 
-Link: https://lore.kernel.org/all/2023042453-dubbed-botany-2ed9@gregkh/
+Link: https://lore.kernel.org/all/2023042438-whole-cannot-1945@gregkh/
+Link: https://lore.kernel.org/all/20230424075251.5216-2-daniel.starke@siemens.com/
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index b411a26cc092..66edcf65a4dd 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2532,6 +2532,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
- 		return -EINVAL;
- 	if (dc->k > 7)
- 		return -EINVAL;
-+	if (dc->flags & ~GSM_FL_RESTART)   /* allow future extensions */
-+		return -EINVAL;
- 
- 	/*
- 	 * See what is needed for reconfiguration
-@@ -2546,6 +2548,8 @@ static int gsm_dlci_config(struct gsm_dlci *dlci, struct gsm_dlci_config *dc, in
- 	/* Requires care */
- 	if (dc->priority != dlci->prio)
- 		need_restart = true;
-+	if (dc->flags & GSM_FL_RESTART)
-+		need_restart = true;
- 
- 	if ((open && gsm->wait_config) || need_restart)
- 		need_open = true;
 diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
-index eb67884e5f38..958257af05ab 100644
+index 958257af05ab..54bc8767bd75 100644
 --- a/include/uapi/linux/gsmmux.h
 +++ b/include/uapi/linux/gsmmux.h
-@@ -2,10 +2,20 @@
- #ifndef _LINUX_GSMMUX_H
- #define _LINUX_GSMMUX_H
+@@ -16,6 +16,28 @@
+ /* Force DLCI channel reset? Always cleared on retrieval. */
+ #define GSM_FL_RESTART	_BITUL(0)
  
-+#include <linux/const.h>
- #include <linux/if.h>
- #include <linux/ioctl.h>
- #include <linux/types.h>
- 
-+/*
-+ * flags definition for n_gsm
++/**
++ * struct gsm_config - n_gsm basic configuration parameters
 + *
-+ * Used by:
-+ * struct gsm_dlci_config.flags
++ * This structure is used in combination with GSMIOC_GETCONF and GSMIOC_SETCONF
++ * to retrieve and set the basic parameters of an n_gsm ldisc.
++ * struct gsm_config_ext can be used to configure extended ldisc parameters.
++ *
++ * All timers are in units of 1/100th of a second.
++ *
++ * @adaption:      Convergence layer type
++ * @encapsulation: Framing (0 = basic option, 1 = advanced option)
++ * @initiator:     Initiator or responder
++ * @t1:            Acknowledgment timer
++ * @t2:            Response timer for multiplexer control channel
++ * @t3:            Response timer for wake-up procedure
++ * @n2:            Maximum number of retransmissions
++ * @mru:           Maximum incoming frame payload size
++ * @mtu:           Maximum outgoing frame payload size
++ * @k:             Window size
++ * @i:             Frame type (1 = UIH, 2 = UI)
++ * @unused:        Can not be used
 + */
-+/* Force DLCI channel reset? Always cleared on retrieval. */
-+#define GSM_FL_RESTART	_BITUL(0)
-+
  struct gsm_config
  {
  	unsigned int adaption;
-@@ -58,7 +68,8 @@ struct gsm_dlci_config {
- 	__u32 priority;		/* Priority (0 for default value) */
- 	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
- 	__u32 k;		/* Window size (0 for default value) */
--	__u32 reserved[8];	/* For future use, must be initialized to zero */
-+	__u32 flags;		/* DLCI specific flags. */
-+	__u32 reserved[7];	/* For future use, must be initialized to zero */
+@@ -29,18 +51,32 @@ struct gsm_config
+ 	unsigned int mtu;
+ 	unsigned int k;
+ 	unsigned int i;
+-	unsigned int unused[8];	/* Can not be used */
++	unsigned int unused[8];
+ };
+ 
+ #define GSMIOC_GETCONF		_IOR('G', 0, struct gsm_config)
+ #define GSMIOC_SETCONF		_IOW('G', 1, struct gsm_config)
+ 
++/**
++ * struct gsm_netconfig - n_gsm network configuration parameters
++ *
++ * This structure is used in combination with GSMIOC_ENABLE_NET and
++ * GSMIOC_DISABLE_NET to enable or disable a network data connection
++ * over a mux virtual tty channel. This is for modems that support
++ * data connections with raw IP frames instead of PPP.
++ *
++ * @adaption: Adaption to use in network mode.
++ * @protocol: Protocol to use - only ETH_P_IP supported.
++ * @unused2:  Can not be used.
++ * @if_name:  Interface name format string.
++ * @unused:   Can not be used.
++ */
+ struct gsm_netconfig {
+-	unsigned int adaption;  /* Adaption to use in network mode */
+-	unsigned short protocol;/* Protocol to use - only ETH_P_IP supported */
+-	unsigned short unused2;	/* Can not be used */
+-	char if_name[IFNAMSIZ];	/* interface name format string */
+-	__u8 unused[28];        /* Can not be used */
++	unsigned int adaption;
++	unsigned short protocol;
++	unsigned short unused2;
++	char if_name[IFNAMSIZ];
++	__u8 unused[28];
+ };
+ 
+ #define GSMIOC_ENABLE_NET      _IOW('G', 2, struct gsm_netconfig)
+@@ -49,27 +85,55 @@ struct gsm_netconfig {
+ /* get the base tty number for a configured gsmmux tty */
+ #define GSMIOC_GETFIRST		_IOR('G', 4, __u32)
+ 
++/**
++ * struct gsm_config_ext - n_gsm extended configuration parameters
++ *
++ * This structure is used in combination with GSMIOC_GETCONF_EXT and
++ * GSMIOC_SETCONF_EXT to retrieve and set the extended parameters of an
++ * n_gsm ldisc.
++ *
++ * All timers are in units of 1/100th of a second.
++ *
++ * @keep_alive:  Control channel keep-alive in 1/100th of a second (0 to disable).
++ * @wait_config: Wait for DLCI config before opening virtual link?
++ * @reserved:    For future use, must be initialized to zero.
++ */
+ struct gsm_config_ext {
+-	__u32 keep_alive;	/* Control channel keep-alive in 1/100th of a
+-				 * second (0 to disable)
+-				 */
+-	__u32 wait_config;	/* Wait for DLCI config before opening virtual link? */
+-	__u32 reserved[6];	/* For future use, must be initialized to zero */
++	__u32 keep_alive;
++	__u32 wait_config;
++	__u32 reserved[6];
+ };
+ 
+ #define GSMIOC_GETCONF_EXT	_IOR('G', 5, struct gsm_config_ext)
+ #define GSMIOC_SETCONF_EXT	_IOW('G', 6, struct gsm_config_ext)
+ 
+-/* Set channel accordingly before calling GSMIOC_GETCONF_DLCI. */
++/**
++ * struct gsm_dlci_config - n_gsm channel configuration parameters
++ *
++ * This structure is used in combination with GSMIOC_GETCONF_DLCI and
++ * GSMIOC_SETCONF_DLCI to retrieve and set the channel specific parameters
++ * of an n_gsm ldisc.
++ *
++ * Set the channel accordingly before calling GSMIOC_GETCONF_DLCI.
++ *
++ * @channel:  DLCI (0 for the associated DLCI).
++ * @adaption: Convergence layer type.
++ * @mtu:      Maximum transfer unit.
++ * @priority: Priority (0 for default value).
++ * @i:        Frame type (1 = UIH, 2 = UI).
++ * @k:        Window size (0 for default value).
++ * @flags:    DLCI specific flags.
++ * @reserved: For future use, must be initialized to zero.
++ */
+ struct gsm_dlci_config {
+-	__u32 channel;		/* DLCI (0 for the associated DLCI) */
+-	__u32 adaption;		/* Convergence layer type */
+-	__u32 mtu;		/* Maximum transfer unit */
+-	__u32 priority;		/* Priority (0 for default value) */
+-	__u32 i;		/* Frame type (1 = UIH, 2 = UI) */
+-	__u32 k;		/* Window size (0 for default value) */
+-	__u32 flags;		/* DLCI specific flags. */
+-	__u32 reserved[7];	/* For future use, must be initialized to zero */
++	__u32 channel;
++	__u32 adaption;
++	__u32 mtu;
++	__u32 priority;
++	__u32 i;
++	__u32 k;
++	__u32 flags;
++	__u32 reserved[7];
  };
  
  #define GSMIOC_GETCONF_DLCI	_IOWR('G', 7, struct gsm_dlci_config)
