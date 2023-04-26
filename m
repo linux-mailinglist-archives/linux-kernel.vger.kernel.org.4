@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59416EF696
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B566EF698
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241443AbjDZOjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S241261AbjDZOjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240794AbjDZOjA (ORCPT
+        with ESMTP id S241453AbjDZOju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:39:00 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD03559FB;
-        Wed, 26 Apr 2023 07:38:59 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b4bf2d74aso5675698b3a.2;
-        Wed, 26 Apr 2023 07:38:59 -0700 (PDT)
+        Wed, 26 Apr 2023 10:39:50 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5359FB;
+        Wed, 26 Apr 2023 07:39:49 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f3df30043so1155880866b.2;
+        Wed, 26 Apr 2023 07:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682519939; x=1685111939;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BCGjGAwt9nzDcLjFkEGmcEFFk7XHVfGUcpqHbAcKNw=;
-        b=cmMOdBE3C5NBm/2htsHx9odWgajCNLikfdgI4VUEL7OVeVDSzY05jJdiFnOykoJF5s
-         5RI44vTJZOBViD1wSXM4KAn8DXihiJc27ywWv89fHIQ8oiyIkTMUbOPBdIQd7DsMaEw+
-         389DWmJ9LAu8D+ct6ELhdPsX1g+LTWPE2pYxrsySX/v191l96+HrvaD8Rp9lTGjy1flR
-         hv4V2ag2VV32HSQKjd9bmimuOtfa92m6efCtwnR9SEwQXR8EMs9NnaZAeOzaZAtQiUKN
-         icQJdv9QztX/oXXl8fNmUko8lecLvZijAAIbfldAez+EaEO70YL98A7G4bdiNNq5lrgh
-         kIlA==
+        d=gmail.com; s=20221208; t=1682519988; x=1685111988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U3fMS6vGtNlmEZteMKVTwMOKhjb7WLirh4B0WOh1xiU=;
+        b=QaFZNT6fNhNXKLHPDrFxEtroaaMbguLx43qCTMCyoUuNX2Ag1/Y92xZJp60AzURdk0
+         dxIvq0SjOBv97cdPwEHj5HPEtjE+doViBSeQpUIUJfXtiTet7PoNCHbF4/Bxl+KRHUvx
+         lV9lcl5lLTJuA0JaEITMtM1JVc5JF4oQTFpaTgB6MI4AJcR4RmkN+4Sae74M1c9J+vYv
+         Q8Hk2Cy60n0SpC7qfJWQt0QxAkhdQ+op2RcyIYqHLCU55iobl0ZthHflxPRdAU0oiEwL
+         lDCN0KToZa569MY6col+EPk0zJ3fs51uLh34iiD2xI9Cnh/kvF0cE6nJqing/uEwurKR
+         N1Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682519939; x=1685111939;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3BCGjGAwt9nzDcLjFkEGmcEFFk7XHVfGUcpqHbAcKNw=;
-        b=Af0JLU3KCXilmYTMeGpKoo9xNAtZmFzrguEmz2a0Ut0mNbiMbbuRp4/ooenEaOsSEH
-         iyfbzZnCUTr5okobt+d32BSJkzQhkRFxulI20tRSzWMKcoK/HB5XpQeWg4QhS8RhaXV1
-         qlvylEHZGtqwW2QCrHY687UFe+ghD2UAziL+I1tNI9stjC4vxheHDMyttn6Qy9HCDLVc
-         IfMZLHJUHPLIlOr7mpxgiAMuPDgGmpHxplm0fPJqh4hpLs6qh03K+HoqSJkO5iMKmmof
-         OXx0q0fKIdCgaKCjT++eBh+rfmFeiNILLOAY1WQcrGnV1DKu8zPmaOVTAtK4FjDZWYvt
-         eQPA==
-X-Gm-Message-State: AAQBX9dqQjP5yVjHEiYnETMw5lb5l06mPrXFH2U0DPHZ6pEhgptODPlS
-        mA0UHAoIXbJimIKsiwltUCE=
-X-Google-Smtp-Source: AKy350Ze6vJVynaE/sosyjaaJ5tbcOIT47nnb+gn9nXczWmDoem3JCnORWv9plbtWgGj1XJAKRY2Fg==
-X-Received: by 2002:a05:6a20:4394:b0:f0:2501:349b with SMTP id i20-20020a056a20439400b000f02501349bmr24646831pzl.25.1682519939069;
-        Wed, 26 Apr 2023 07:38:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056a00234900b0062dfe944c61sm11448152pfj.218.2023.04.26.07.38.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 07:38:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <abe1301a-8bdf-3e5f-9e52-71f0f77d519b@roeck-us.net>
-Date:   Wed, 26 Apr 2023 07:38:56 -0700
+        d=1e100.net; s=20221208; t=1682519988; x=1685111988;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U3fMS6vGtNlmEZteMKVTwMOKhjb7WLirh4B0WOh1xiU=;
+        b=QJp3h7LOJuIhBRVO/A0fRCWNSexGVOhNVmTfwuk3mNtEf4q7q8bbQsc2QeuSajD0gS
+         tXwEywnmXrTz7dLc7yhjcOZIcdXmMjjN7C0+aquv3Y3aY7NrEByE10fMJqKCQygKH19G
+         eNDYsGo/d2FR3TJ+vMtX+HY654vTlAA8/uqHeXlP03tinTaK9i1dTm3AfwX6/Y4zE5L3
+         wi5XFVm3CkcjHOJWYFW3K9UGpHFajaX5W0QeH4PQVgJlqIr8KTQxzhod4t+eSW8JlWsk
+         1I+6L4p2+TNyK6Yvh40AChuIzbm9zsNq6WEHDs9pQT17HgrFWL1vkdqpU9nI9ejlt1ON
+         o8UA==
+X-Gm-Message-State: AAQBX9cjEFF41V0+ZxoLhCVgehvvXgpxVcz7pIPAUA7syK31X00/hx4/
+        CSizLAepxpvVNHZG3GnzxE8=
+X-Google-Smtp-Source: AKy350ZO3Dl/D/t3V1YrnB4ch7JxvOvlsOl56w/4tw57jx6R8bv580ZQXGKSR3kO9256Hh1y6aicIg==
+X-Received: by 2002:a17:907:8b87:b0:94f:21f3:b5f8 with SMTP id tb7-20020a1709078b8700b0094f21f3b5f8mr17218081ejc.21.1682519987596;
+        Wed, 26 Apr 2023 07:39:47 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id qt2-20020a170906ece200b0094e1344ddfdsm8232330ejb.34.2023.04.26.07.39.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 07:39:47 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 17:39:44 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 04/24] net: dsa: mt7530: properly support
+ MT7531AE and MT7531BE
+Message-ID: <20230426143944.s5vmhloepa3yodrj@skbuf>
+References: <20230425082933.84654-1-arinc.unal@arinc9.com>
+ <20230425082933.84654-5-arinc.unal@arinc9.com>
+ <ZEfsCit0XX8zqUIJ@makrotopia.org>
+ <ce681fac-5f00-f0fc-b2cf-89907c50ee7c@arinc9.com>
+ <ZEkiIQZsspBlDyEn@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 0/2] Hwmon driver for MAX31827 temperature switch
-Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230426124049.258359-1-daniel.matyas@analog.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230426124049.258359-1-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZEkiIQZsspBlDyEn@makrotopia.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/23 05:40, Daniel Matyas wrote:
-> Removed of_match_table and kept only id_table. Removed other device id's
-> from id_table (I have them only in the devicetree-binding).
+On Wed, Apr 26, 2023 at 02:07:45PM +0100, Daniel Golle wrote:
+> On Wed, Apr 26, 2023 at 11:12:09AM +0300, Arınç ÜNAL wrote:
+> > On 25.04.2023 18:04, Daniel Golle wrote:
+> > > On Tue, Apr 25, 2023 at 11:29:13AM +0300, arinc9.unal@gmail.com wrote:
+> > > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> > > > 
+> > > > Introduce the p5_sgmii pointer to store the information for whether port 5
+> > > > has got SGMII or not.
+> > > 
+> > > The p5_sgmii your are introducing to struct mt7530_priv is a boolean
+> > > variable, and not a pointer.
+> > 
+> > I must've meant to say field.
 > 
+> Being just a single boolean variable also 'field' would not be the right
+> word here. We use 'field' as in 'bitfield', ie. usually disguised integer
+> types in which each bit has an assigned meaning.
 
-Please explain. Without of_match_table, it is not possible to bind the driver
-using devicetree data. What is the point of that ?
-
-Guenter
-
-> Added mutex protection where it was needed.
-> 
-> Daniel Matyas (2):
->    dt-bindings: hwmon: add MAX31827
->    hwmon: max31827: add MAX31827 driver
-> 
->   .../bindings/hwmon/adi,max31827.yaml          |  54 +++
->   Documentation/hwmon/index.rst                 |   1 +
->   Documentation/hwmon/max31827.rst              |  83 ++++
->   MAINTAINERS                                   |   9 +
->   drivers/hwmon/Kconfig                         |  11 +
->   drivers/hwmon/Makefile                        |   2 +-
->   drivers/hwmon/max31827.c                      | 406 ++++++++++++++++++
->   7 files changed, 565 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
->   create mode 100644 Documentation/hwmon/max31827.rst
->   create mode 100644 drivers/hwmon/max31827.c
-> 
-
+"field" is a perfectly legal name for a member of a C structure.
+https://en.wikipedia.org/wiki/Struct_(C_programming_language)
+Not to be confused with bitfield.
