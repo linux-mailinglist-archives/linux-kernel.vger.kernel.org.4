@@ -2,44 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F1D6EEBE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D98A6EEBEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239036AbjDZB23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 21:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S239047AbjDZBbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjDZB21 (ORCPT
+        with ESMTP id S239039AbjDZBbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:28:27 -0400
-Received: from hust.edu.cn (unknown [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9FB4C02;
-        Tue, 25 Apr 2023 18:28:26 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=m202171830@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 33Q1RO6N006360-33Q1RO6O006360
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Wed, 26 Apr 2023 09:27:29 +0800
-From:   Ke Zhang <m202171830@hust.edu.cn>
-To:     Vineet Gupta <vgupta@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Ke Zhang <m202171830@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] serial: arc_uart: fix of_iomap leak in `arc_serial_probe`
-Date:   Wed, 26 Apr 2023 09:27:20 +0800
-Message-Id: <20230426012721.6856-1-m202171830@hust.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 25 Apr 2023 21:31:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859D04C02
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 18:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682472691; x=1714008691;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=dbQM11BsMfhwEMEoPVos/xk8XjcqFHMg/6FxW7p8SfU=;
+  b=Stu1yR9TNIe86xuYQSFp1TlYGNq+eeICgzCkDfMLRuoosTkGqEum07Yd
+   F18053H30IQN7/ec2FnMifYf9MDUBIHD1DYH0qkPv0qJ6LrJbtdtGb4EO
+   URk4DT9UFibve0BlJLbaBPrMtgexfVwWM/3sJ+AKktXqzlawcS8qm59PB
+   eHOKGswrecH7rbCkldM/ERW3GZuTGd9VHEikUWgAo5p/RlEeZNunMHeEM
+   LQhMQziWXVnsMBaWFC/EKJvVRAYv/epTSLh/31diPu3HPRdjU4+Ullogj
+   4W8VlymqJVirwJRf7VN5MlXvV/PzvCaCR7oecMu7j5HRRBl326hyGmZkX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="348886893"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="348886893"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 18:31:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="783086823"
+X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
+   d="scan'208";a="783086823"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2023 18:31:28 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 20/26] mm: vmscan: use compaction_suitable() check
+ in kswapd
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+        <20230418191313.268131-21-hannes@cmpxchg.org>
+        <87a5ywfyeb.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <20230425142641.GA17132@cmpxchg.org>
+Date:   Wed, 26 Apr 2023 09:30:23 +0800
+In-Reply-To: <20230425142641.GA17132@cmpxchg.org> (Johannes Weiner's message
+        of "Tue, 25 Apr 2023 10:26:41 -0400")
+Message-ID: <87o7nbe8gg.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: m202171830@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,43 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
+Johannes Weiner <hannes@cmpxchg.org> writes:
 
-drivers/tty/serial/arc_uart.c:631 arc_serial_probe() warn:
-'port->membase' from of_iomap() not released on lines: 631.
+> On Tue, Apr 25, 2023 at 11:12:28AM +0800, Huang, Ying wrote:
+>> Johannes Weiner <hannes@cmpxchg.org> writes:
+>> 
+>> > Kswapd currently bails on higher-order allocations with an open-coded
+>> > check for whether it's reclaimed the compaction gap.
+>> >
+>> > compaction_suitable() is the customary interface to coordinate reclaim
+>> > with compaction.
+>> >
+>> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+>> > ---
+>> >  mm/vmscan.c | 67 ++++++++++++++++++-----------------------------------
+>> >  1 file changed, 23 insertions(+), 44 deletions(-)
+>> >
+>> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> > index ee8c8ca2e7b5..723705b9e4d9 100644
+>> > --- a/mm/vmscan.c
+>> > +++ b/mm/vmscan.c
+>> > @@ -6872,12 +6872,18 @@ static bool pgdat_balanced(pg_data_t *pgdat, int order, int highest_zoneidx)
+>> >  		if (!managed_zone(zone))
+>> >  			continue;
+>> >  
+>> > +		/* Allocation can succeed in any zone, done */
+>> >  		if (sysctl_numa_balancing_mode & NUMA_BALANCING_MEMORY_TIERING)
+>> >  			mark = wmark_pages(zone, WMARK_PROMO);
+>> >  		else
+>> >  			mark = high_wmark_pages(zone);
+>> >  		if (zone_watermark_ok_safe(zone, order, mark, highest_zoneidx))
+>> >  			return true;
+>> > +
+>> > +		/* Allocation can't succeed, but enough order-0 to compact */
+>> > +		if (compaction_suitable(zone, order,
+>> > +					highest_zoneidx) == COMPACT_CONTINUE)
+>> > +			return true;
+>> 
+>> Should we check the following first?
+>> 
+>>         order > 0 && zone_watermark_ok_safe(zone, 0, mark, highest_zoneidx)
+>
+> That's what compaction_suitable() does. It checks whether there are
+> enough migration targets for compaction (COMPACT_CONTINUE) or whether
+> reclaim needs to do some more work (COMPACT_SKIPPED).
 
-In arc_serial_probe(), if uart_add_one_port() fails,
-port->membase is not released, which would cause a resource leak.
+Yes.  And I found that the watermark used in compaction_suitable() is
+low_wmark_pages() or min_wmark_pages(), which doesn't match the
+watermark here.  Or did I miss something?
 
-To fix this, I replace of_iomap with devm_of_iomap.
-
-Fixes: 8dbe1d5e09a7 ("serial/arc: inline the probe helper")
-Signed-off-by: Ke Zhang <m202171830@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-This issue is found by static analysis and remains untested.
----
- drivers/tty/serial/arc_uart.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/arc_uart.c b/drivers/tty/serial/arc_uart.c
-index 59e25f2b6632..be1f3c379382 100644
---- a/drivers/tty/serial/arc_uart.c
-+++ b/drivers/tty/serial/arc_uart.c
-@@ -606,10 +606,11 @@ static int arc_serial_probe(struct platform_device *pdev)
- 	}
- 	uart->baud = val;
- 
--	port->membase = of_iomap(np, 0);
--	if (!port->membase)
-+	port->membase = devm_of_iomap(&pdev->dev, np, 0, NULL);
-+	if (IS_ERR(port->membase)) {
- 		/* No point of dev_err since UART itself is hosed here */
- 		return -ENXIO;
-+	}
- 
- 	port->irq = irq_of_parse_and_map(np, 0);
- 
--- 
-2.25.1
-
+Best Regards,
+Huang, Ying
