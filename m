@@ -2,118 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B5E6EF7A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8733E6EF7A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240883AbjDZPSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S241200AbjDZPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjDZPSt (ORCPT
+        with ESMTP id S232584AbjDZPT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:18:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2748530E5;
-        Wed, 26 Apr 2023 08:18:48 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QESoFJ013333;
-        Wed, 26 Apr 2023 15:18:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=lyLd73rOYX6D/T3Cq7pt01Tu2asK7sYLqHdQV7bwk/k=;
- b=mSNXHohmKtf/18bPTTzOW7q0jSWEjFEQGsDeQqLdx7gH8OBnFzuxUk/2/HoCDA7gt71q
- jgh9P35iiRDbBmQXPB8gHog0KGWNOtvjRVwE76tpjcUf2q6sUesStT9s0r5AnUFy/CLQ
- dqdQk6qGp1JWQByKsmROn/3PXQ0hfwI7rclRM5XEYBPFH424xx/EL4WPAhplABy/NlKX
- C+13J8HPH8uMll0DrdhxzMYF8LWp3rdqQwXQem0vMJ2S1njQ47tv8aOnopcrUPTruy5T
- Dc/zMAwRZ586X/OcJ/dsK5AhLak54WiehuD3AUjraB4BYeFRWyK232saidWzxsh51Wd3 cA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6brdv00h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 15:18:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33QFIdxR021866
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 15:18:39 GMT
-Received: from [10.216.40.251] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 26 Apr
- 2023 08:18:34 -0700
-Message-ID: <66158251-6934-a07f-4b82-4deaa76fa482@quicinc.com>
-Date:   Wed, 26 Apr 2023 20:48:29 +0530
+        Wed, 26 Apr 2023 11:19:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654CE30E5;
+        Wed, 26 Apr 2023 08:19:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682522366; x=1714058366;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xGuWhmIvZUObihipML0kUSaC7fW30PvqPKfyEWpF0sM=;
+  b=SBicZZbKDrzUOO1TE0kWaQzYqjCXuQg4EajIIWENhmSuVKRG/MFekZfI
+   GjWEGVRe6YHLoDBHVNxuHT1vmOdX+T/b2OORqD0/rz864wqIRx7UunEHF
+   hgZZGXWjtNo6hPyBIBcykjFnp3BYvzIE2Qlfu7kdK5XJ88PmODIy75jVy
+   OPtGcVv0T/MOflB8PAXA8cvGMKaQPQY09AbbkJj3z4BWHNQYLsbkkLZWH
+   S0Nm+Uvi6iR3km8rHZdEaQiDNJwW1RB5qrE8jVSO9eudPCcMNXzwdEf6q
+   3jAxvrjK6u2JYsI47+peIvgBBHlqylJGtl0r0kXEh4lpWacnkdNHeQHM1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="412446761"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="412446761"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:19:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="671368625"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="671368625"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.168.108]) ([10.249.168.108])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:19:20 -0700
+Message-ID: <3a71a01f-4c3d-f92c-58d7-2c124a0efa94@intel.com>
+Date:   Wed, 26 Apr 2023 23:19:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 2/2] pinctrl: qcom: Add SDX75 pincontrol driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH] KVM: x86: Add a vCPU stat for #AC exceptions
+To:     Anselm Busse <abusse@amazon.com>
+Cc:     dwmw@amazon.co.uk, hborghor@amazon.de, sironi@amazon.de,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230426082601.85372-1-abusse@amazon.com>
 Content-Language: en-US
-To:     <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
- <1682327030-25535-3-git-send-email-quic_rohiagar@quicinc.com>
- <ZEk9lySMZcrRZYwX@surfacebook>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <ZEk9lySMZcrRZYwX@surfacebook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20230426082601.85372-1-abusse@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tedJ_-rvDmxLiF3hjxWieccxITAYulzR
-X-Proofpoint-GUID: tedJ_-rvDmxLiF3hjxWieccxITAYulzR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_07,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 phishscore=0 clxscore=1011 malwarescore=0
- mlxlogscore=770 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304260136
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/26/2023 4:26 PM, Anselm Busse wrote:
+> This patch adds a KVM vCPU stat that reflects the number of #AC
+> exceptions caused by a guest. This improves the identification and
+> debugging of issues that are possibly caused by guests triggering
+> split-locks and allows more insides compared to the current situation
+> of having only a warning printed when an #AC exception is raised.
 
-On 4/26/2023 8:34 PM, andy.shevchenko@gmail.com wrote:
-> Mon, Apr 24, 2023 at 02:33:50PM +0530, Rohit Agarwal kirjoitti:
->> Add initial Qualcomm SDX75 pinctrl driver to support pin configuration
->> with pinctrl framework for SDX75 SoC.
->> While at it, reordering the SDX65 entry.
-> ...
->
->> +#define FUNCTION(fname)							\
->> +	[msm_mux_##fname] = {						\
->> +		.name = #fname,						\
->> +		.groups = fname##_groups,				\
->> +	.ngroups = ARRAY_SIZE(fname##_groups),				\
->> +	}
-> PINCTRL_PINFUNCTION() ?
-Ok, Will update this. Shall I also update "PINGROUP" to "PINCTRL_PINGROUP"?
->
-> ...
->
->> +static const struct of_device_id sdx75_pinctrl_of_match[] = {
->> +	{.compatible = "qcom,sdx75-tlmm", .data = &sdx75_pinctrl}, {},
-> One entry per line.
-> And drop comma in the terminator one.
->
->> +};
-> No MODULE_DEVICE_TABLE()?
-Sure Will update both.
+Note, on Intel platform, #AC exception has three sources according to 
+the latest spec:
 
-Thanks,
-Rohit.
->
+1. violation on alignment check when CPL = 3, while CR0.AM and EFLAG.AC 
+are set;
+
+2. split lock, when MSR_MEMORY_CTRL.[29] is set;
+
+3. UC lock, when CPUID.0x7_0x2:EDX[16] is 1 and 
+MSR_MEMORY_CTRL(0x33).[28] is 1. (see ISE version 048);
+
+you cannot treat every #AC as split lock #AC.
+
+> Signed-off-by: Anselm Busse <abusse@amazon.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h | 1 +
+>   arch/x86/kvm/vmx/vmx.c          | 2 ++
+>   arch/x86/kvm/x86.c              | 1 +
+>   3 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 808c292ad3f4..b4ab719fbc69 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1523,6 +1523,7 @@ struct kvm_vcpu_stat {
+>   	u64 preemption_other;
+>   	u64 guest_mode;
+>   	u64 notify_window_exits;
+> +	u64 split_lock_exceptions;
+>   };
+>   
+>   struct x86_instruction_info;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d2d6e1b6c788..8f48fd8ddead 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -5309,6 +5309,8 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
+>   		kvm_run->debug.arch.exception = ex_no;
+>   		break;
+>   	case AC_VECTOR:
+> +		vmx->vcpu.stat.split_lock_exceptions++;
+> +
+>   		if (vmx_guest_inject_ac(vcpu)) {
+>   			kvm_queue_exception_e(vcpu, AC_VECTOR, error_code);
+>   			return 1;
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 3d852ce84920..416a1ed6c423 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -297,6 +297,7 @@ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
+>   	STATS_DESC_COUNTER(VCPU, preemption_other),
+>   	STATS_DESC_IBOOLEAN(VCPU, guest_mode),
+>   	STATS_DESC_COUNTER(VCPU, notify_window_exits),
+> +	STATS_DESC_COUNTER(VCPU, split_lock_exceptions),
+>   };
+>   
+>   const struct kvm_stats_header kvm_vcpu_stats_header = {
+
