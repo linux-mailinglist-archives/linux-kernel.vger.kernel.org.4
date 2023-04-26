@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFC16EEEC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C14906EEEC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbjDZHDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S239755AbjDZHDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239745AbjDZHCx (ORCPT
+        with ESMTP id S239757AbjDZHC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:02:53 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93BC2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:02:12 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9963a72fd9so8135747276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:02:12 -0700 (PDT)
+        Wed, 26 Apr 2023 03:02:57 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5552449A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:02:15 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-555bffbd109so101570657b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682492527; x=1685084527;
+        d=google.com; s=20221208; t=1682492534; x=1685084534;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hq0rkxZ+nzigWeul/fQuTIxJ14+0rSKTHQhzwukpkHY=;
-        b=Wz5+bOP4poXGvDFuRQ90lq8R1aluz/0G9u+ErkTJ0ioEr+nlJ9oiliW4mYtD65TY/t
-         FFtpm/W7NfDKodNa84YATE7RvBKry00RZczZK0vScGvW+vJgUBCxPzBM3sql/EN3l16z
-         sW5FeGp0tFflf2OLSmv7noYWqd15zuQeH4aQpGU994RD4idq3f6jWApPMm5F1snGRL4f
-         vVXYRzhXPwnd0D4yW3hOy3y4/pLkmxmDaBtK4LvLx4RpLN0lNXcFBtFRKoeQvNSmtwgq
-         jaJ3tyHymdm2H/zcV3VMqI9igrXxPnkX2m9/MzKJ1DPlacL2KhDS9M4sw3jvSt4aLi5T
-         wTNg==
+        bh=/EqV6ROsM4xqPMDxDdZxTjIhMdyygru22Sq7RFV4HJk=;
+        b=a1rQK22SCV68D5GRHhokTQZEsHOGEwQf0pAUVz9tVBZVzw4H4i9keDpVMX/gGYqHey
+         g7VBfmFfr2FAH2eXPshJTgylzg3CSqdOwHXmPY42QbzIiMi4eHNvwlUILbpt/TbFGqWj
+         pU/3gO96SvDr5CONL4ccQVZ4G2B0GaDa4YZMsIe152cE6Ec9oQqUv7sx5ZHB8lUwKWPy
+         E8EpY0PDwTH7MwAhZSZvuF7T3dzNSDFZMW1tqjXieH06BbJHO2bok5V15URMr5KH+ffN
+         9T3/13G0cv6BSuyN0sNzlXXFj1VZxlDrffNu8Q2vn7s8RyhNCdeaz97N81PiR+lUu8+g
+         IIaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682492527; x=1685084527;
+        d=1e100.net; s=20221208; t=1682492534; x=1685084534;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hq0rkxZ+nzigWeul/fQuTIxJ14+0rSKTHQhzwukpkHY=;
-        b=bfnNUFkFg3wSzKiI+iOH/jcQzZ3+71qF+MlByqgtewM+Cs7kfKRyUmsmTNjyidwTgA
-         ee7oMflbgDrTP1p8S4IXJAFFUvt//DB9hXTr0zhTMY7zTJJOamAnsEJ67NHvNAYVQYnu
-         bs5LNbIIODR5oleWqzksUf0MVCem4cmttTZ2GT9Ueqm+ugrNIyGoxnw55lISaUwR6+JI
-         ZcUxbYw0YF059msDYfYHqccWpEM8qdwBIcxhRomSzo8HGoE3CvVhBr4C0VZS0oIeJUHV
-         sbC9AgefpGGr9N0dGUzoNHjjPax3Sva91TjD3eSYS7fCN/qwEa4b6NjUQFscUX52v8a5
-         UW0w==
-X-Gm-Message-State: AC+VfDzKpQXqECMCbqbIb1iRv7Vm2dq71CyhiHUe98GpFRRXtitGSZ68
-        xsFzEnIDowdSf3Ie9JvxgSeClebjsTR6
-X-Google-Smtp-Source: ACHHUZ5v2Ejn/Bj7HpudP7hkJxO2DT5BN+Vz8IjHKYpG17aSw7aVvJaQGRzoc10Rx9irrgVmqKdcxB3v9KOM
+        bh=/EqV6ROsM4xqPMDxDdZxTjIhMdyygru22Sq7RFV4HJk=;
+        b=EPlKxoranUZwSyzVOv+VS/g45dBK4U40vV0kaj5IlcCONzzhILGwEdeXhSgyCVDE7Z
+         ff53cNMIes/pIefzQhK/oo8Obs1g4wdS2wk2UWCvJ0af0R3kCNK6AVLQfRV0YSEatpvX
+         0Uxwov1+etLIdu/MMGaGKBPJ0tQEwDZuZPi4kT1Ph/Ph322tPrzW4bLnqSsVRJgQDIRz
+         nv91kGKbNGNzoFroQP1HVMmndbv0BWKo+F8+NWpaMH0/tBAS5jiHEeqTh/wUeiZzTWn1
+         InBauOO2xrKv3vW5PomwGrNcWVWyp0pkMapP8CbmL4vjoWnv/fOclzxaug4lT/Tn4Du1
+         gVIg==
+X-Gm-Message-State: AAQBX9fSkWmEp5cI0BcO6MSUWYmg4HvKdU/TTafE8KXgYH8fYrdwaTp4
+        ccyNjKTaBNIBhqNUat2h1FnAkI2haUFv
+X-Google-Smtp-Source: AKy350bAbbq7mS5fnaTxFGQL1jHQQFhMjkXz8kZQy9Q5C68pW+ia841ySJKZYGmvvMtpp1Xt1kCeTqL7CTVj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:144f:e890:2b29:48d9])
- (user=irogers job=sendgmr) by 2002:a25:d091:0:b0:b99:b753:342d with SMTP id
- h139-20020a25d091000000b00b99b753342dmr5249850ybg.7.1682492526946; Wed, 26
- Apr 2023 00:02:06 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 00:00:18 -0700
+ (user=irogers job=sendgmr) by 2002:a81:aa4b:0:b0:54f:b95f:8999 with SMTP id
+ z11-20020a81aa4b000000b0054fb95f8999mr9088991ywk.6.1682492534461; Wed, 26 Apr
+ 2023 00:02:14 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 00:00:19 -0700
 In-Reply-To: <20230426070050.1315519-1-irogers@google.com>
-Message-Id: <20230426070050.1315519-9-irogers@google.com>
+Message-Id: <20230426070050.1315519-10-irogers@google.com>
 Mime-Version: 1.0
 References: <20230426070050.1315519-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v1 08/40] perf test: Test more sysfs events
+Subject: [PATCH v1 09/40] perf test: Use valid for PMU tests
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -91,155 +91,95 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parse events for all PMUs, and not just cpu, in test "Parsing of all
-PMU events from sysfs".
+Rather than skip all tests in test__events_pmu if PMU cpu isn't
+present, use the per-test valid test. This allows the running of
+software PMU tests on hybrid and arm systems.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/parse-events.c | 103 +++++++++++++++++---------------
- 1 file changed, 55 insertions(+), 48 deletions(-)
+ tools/perf/tests/parse-events.c | 27 +++++++++------------------
+ 1 file changed, 9 insertions(+), 18 deletions(-)
 
 diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index 8068cfd89b84..385bbbc4a409 100644
+index 385bbbc4a409..08d6b8a3015d 100644
 --- a/tools/perf/tests/parse-events.c
 +++ b/tools/perf/tests/parse-events.c
-@@ -7,6 +7,7 @@
- #include "debug.h"
- #include "pmu.h"
- #include "pmu-hybrid.h"
-+#include "pmus.h"
- #include <dirent.h>
- #include <errno.h>
- #include "fncache.h"
-@@ -2225,49 +2226,24 @@ static int test_pmu(void)
+@@ -1430,6 +1430,11 @@ static int test__checkevent_config_cache(struct evlist *evlist)
+ 	return TEST_OK;
+ }
  
- static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
++static bool test__pmu_cpu_valid(void)
++{
++	return !!perf_pmu__find("cpu");
++}
++
+ static bool test__intel_pt_valid(void)
  {
+ 	return !!perf_pmu__find("intel_pt");
+@@ -1979,21 +1984,25 @@ static const struct evlist_test test__events[] = {
+ static const struct evlist_test test__events_pmu[] = {
+ 	{
+ 		.name  = "cpu/config=10,config1,config2=3,period=1000/u",
++		.valid = test__pmu_cpu_valid,
+ 		.check = test__checkevent_pmu,
+ 		/* 0 */
+ 	},
+ 	{
+ 		.name  = "cpu/config=1,name=krava/u,cpu/config=2/u",
++		.valid = test__pmu_cpu_valid,
+ 		.check = test__checkevent_pmu_name,
+ 		/* 1 */
+ 	},
+ 	{
+ 		.name  = "cpu/config=1,call-graph=fp,time,period=100000/,cpu/config=2,call-graph=no,time=0,period=2000/",
++		.valid = test__pmu_cpu_valid,
+ 		.check = test__checkevent_pmu_partial_time_callgraph,
+ 		/* 2 */
+ 	},
+ 	{
+ 		.name  = "cpu/name='COMPLEX_CYCLES_NAME:orig=cycles,desc=chip-clock-ticks',period=0x1,event=0x2/ukp",
++		.valid = test__pmu_cpu_valid,
+ 		.check = test__checkevent_complex_name,
+ 		/* 3 */
+ 	},
+@@ -2209,21 +2218,6 @@ static int test__terms2(struct test_suite *test __maybe_unused, int subtest __ma
+ 	return test_terms(test__terms, ARRAY_SIZE(test__terms));
+ }
+ 
+-static int test_pmu(void)
+-{
 -	struct stat st;
 -	char path[PATH_MAX];
--	struct dirent *ent;
--	DIR *dir;
 -	int ret;
 -
--	if (!test_pmu())
--		return TEST_SKIP;
--
--	snprintf(path, PATH_MAX, "%s/bus/event_source/devices/cpu/events/",
+-	snprintf(path, PATH_MAX, "%s/bus/event_source/devices/cpu/format/",
 -		 sysfs__mountpoint());
 -
 -	ret = stat(path, &st);
--	if (ret) {
--		pr_debug("omitting PMU cpu events tests: %s\n", path);
--		return TEST_OK;
--	}
-+	struct perf_pmu *pmu;
-+	int ret = TEST_OK;
- 
--	dir = opendir(path);
--	if (!dir) {
--		pr_debug("can't open pmu event dir: %s\n", path);
--		return TEST_FAIL;
--	}
-+	perf_pmus__for_each_pmu(pmu) {
-+		struct stat st;
-+		char path[PATH_MAX];
-+		struct dirent *ent;
-+		DIR *dir;
-+		int err;
- 
--	ret = TEST_OK;
--	while ((ent = readdir(dir))) {
--		struct evlist_test e = { .name = NULL, };
--		char name[2 * NAME_MAX + 1 + 12 + 3];
--		int test_ret;
-+		snprintf(path, PATH_MAX, "%s/bus/event_source/devices/%s/events/",
-+			sysfs__mountpoint(), pmu->name);
- 
--		/* Names containing . are special and cannot be used directly */
--		if (strchr(ent->d_name, '.'))
-+		err = stat(path, &st);
-+		if (err) {
-+			pr_debug("skipping PMU %s events tests: %s\n", pmu->name, path);
-+			ret = combine_test_results(ret, TEST_SKIP);
- 			continue;
+-	if (ret)
+-		pr_debug("omitting PMU cpu tests\n");
+-	return !ret;
+-}
 -
--		snprintf(name, sizeof(name), "cpu/event=%s/u", ent->d_name);
--
--		e.name  = name;
--		e.check = test__checkevent_pmu_events;
--
--		test_ret = test_event(&e);
--		if (test_ret != TEST_OK) {
--			pr_debug("Test PMU event failed for '%s'", name);
--			ret = combine_test_results(ret, test_ret);
- 		}
- 		/*
- 		 * Names containing '-' are recognized as prefixes and suffixes
-@@ -2282,17 +2258,48 @@ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest
- 		if (strchr(ent->d_name, '-'))
- 			continue;
+ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+ 	struct perf_pmu *pmu;
+@@ -2305,9 +2299,6 @@ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest
  
--		snprintf(name, sizeof(name), "%s:u,cpu/event=%s/u", ent->d_name, ent->d_name);
--		e.name  = name;
--		e.check = test__checkevent_pmu_events_mix;
--		test_ret = test_event(&e);
--		if (test_ret != TEST_OK) {
--			pr_debug("Test PMU event failed for '%s'", name);
--			ret = combine_test_results(ret, test_ret);
-+		dir = opendir(path);
-+		if (!dir) {
-+			pr_debug("can't open pmu event dir: %s\n", path);
-+			ret = combine_test_results(ret, TEST_SKIP);
-+			continue;
- 		}
--	}
- 
--	closedir(dir);
-+		while ((ent = readdir(dir))) {
-+			struct evlist_test e = { .name = NULL, };
-+			char name[2 * NAME_MAX + 1 + 12 + 3];
-+			int test_ret;
-+
-+			/* Names containing . are special and cannot be used directly */
-+			if (strchr(ent->d_name, '.'))
-+				continue;
-+
-+			snprintf(name, sizeof(name), "%s/event=%s/u", pmu->name, ent->d_name);
-+
-+			e.name  = name;
-+			e.check = test__checkevent_pmu_events;
-+
-+			test_ret = test_event(&e);
-+			if (test_ret != TEST_OK) {
-+				pr_debug("Test PMU event failed for '%s'", name);
-+				ret = combine_test_results(ret, test_ret);
-+			}
-+
-+			if (!is_pmu_core(pmu->name))
-+				continue;
-+
-+			snprintf(name, sizeof(name), "%s:u,%s/event=%s/u", ent->d_name, pmu->name, ent->d_name);
-+			e.name  = name;
-+			e.check = test__checkevent_pmu_events_mix;
-+			test_ret = test_event(&e);
-+			if (test_ret != TEST_OK) {
-+				pr_debug("Test PMU event failed for '%s'", name);
-+				ret = combine_test_results(ret, test_ret);
-+			}
-+		}
-+
-+		closedir(dir);
-+	}
- 	return ret;
+ static int test__pmu_events2(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+ {
+-	if (!test_pmu())
+-		return TEST_SKIP;
+-
+ 	return test_events(test__events_pmu, ARRAY_SIZE(test__events_pmu));
  }
  
 -- 
