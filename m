@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A666EF532
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FDF6EF537
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241108AbjDZNLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S240990AbjDZNMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbjDZNLK (ORCPT
+        with ESMTP id S240726AbjDZNMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:11:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADA444A1;
-        Wed, 26 Apr 2023 06:11:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AA1263693;
-        Wed, 26 Apr 2023 13:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18171C433EF;
-        Wed, 26 Apr 2023 13:11:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682514663;
-        bh=0Xy4nfIjtJp9Ml67azA3/rEsuiUldnZOda9YJckRL0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=olqP/0CYbO6RV1mZZfd5wgF1ZG6oXWzG1GxOL6fpgX0kb4iqze2KThTDN/1k7iaio
-         KxcG4Fyx58Z/secfCtV/MtLsBlooInaFl00h1CsH/c5ZBG6kwIvh6zJpkMUAkR25Gw
-         Sjwe/KbiexTvbpaGdWD3HvIeCe09QGOgZ6Q/iToUAVHQ1IyPjnEnz1vHIVwMJsiACy
-         4nKL7Y9KPzK6g/y3g+ESWdUsCAn7JE+zQF6Nlq8u+r9SbzR7+TrOg30mLtznEmuCVR
-         7v6pu3MRv/5eX23b1VPV/E0a8qscrWtDFRhx3IIqwsvXcCV49LaCpqjLKHNjNPzL1d
-         e4jC/7XDJCQHQ==
-Date:   Wed, 26 Apr 2023 14:10:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Message-ID: <38eef5df-ca8d-41f1-93e7-e13c1d7b6232@sirena.org.uk>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
- <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
- <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
+        Wed, 26 Apr 2023 09:12:17 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6E8469D
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:12:16 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-51b5490c6f0so6644960a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682514736; x=1685106736;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=U2q37tYLkwIeAQ7ZXXOiSKsROl/9/KjRGrNy3chsxgg=;
+        b=d46VlHFpSUz068jybDOuyfIc55XKqQd/fy3rZ+c3wD3gowLW1/n9RVcd1sXUHMUWQg
+         PM45yKNtgxqLxKoQS5SUylNoa3+zC4IMzmoKnCU9yToOT21v3ZtVaXyiMa9cgGZOxj/G
+         B1k7y4QyQt9eIXgLd8f1jcB3TVtC2bXV98Aghl21VYWn02unNCAvk7aVO+/hLXW69GID
+         Yw3q82T59gGnaDHIA+lXEdZcKGm4L31Q24VAs6/BW8nPhpV0KcO/WPu0+kDeA/pTqxy7
+         O6DQek6wHxi6HYQ9kqQGukAlutpgLcZPksswZcn3ENRTEB1AheeIuJILOuljWJ7X/bHO
+         n76g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682514736; x=1685106736;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U2q37tYLkwIeAQ7ZXXOiSKsROl/9/KjRGrNy3chsxgg=;
+        b=EZKpLANBl18mJljGCvC7SqeoJf3DANlp/33cNyeqnw4CgkTZdiBMz7+cpg1285Z4h6
+         EC4Z0DrEG7o4GtkPOEIuBBJO/L14qmmyO7fuxYfl+th7bskDLpjQqHOuCQZjX1asDMFR
+         VvQcgaHoHjk+N+jK5Yyz2xLWCDk2Mwx+N/mJde9umXt7GUGZsr9MfE6++tDBADSroEjs
+         mCvzsGFEUDzfLaR6cXMghLdAOv75EtHk2cKma2UNa4mUWLhSNLDF1gIDS24MypXHgAQR
+         xSI8n2/2NS+dBc4BMi9VbpBlKzfP+UJ3d8AEaQ5FKkwa07sAFuY9ZZVSwlOj5nwvmVcd
+         Dlbw==
+X-Gm-Message-State: AAQBX9dsPdRz1hBrfyyI7rLqO6V04ISgXwTfNo4Z05ALMoRweqLD/nZB
+        MKImyUGh+UOkICHpStYFiVPEepKUCmUzdaxoeEs=
+X-Google-Smtp-Source: AKy350bPmcFK2/ml74A5pcMwgA+mtDaX6YAFDvpEXRYgFttZA6MCbfOMN5uJaTITEQ4gSkfSqi9ulj4m+ZesQJDbiuc=
+X-Received: by 2002:a17:90b:e09:b0:247:a3ed:63b3 with SMTP id
+ ge9-20020a17090b0e0900b00247a3ed63b3mr21147041pjb.31.1682514735909; Wed, 26
+ Apr 2023 06:12:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rBlslG3Mk26QI9iP"
-Content-Disposition: inline
-In-Reply-To: <9f403dd7-1ac8-bebe-1b24-bede61087bba@rasmusvillemoes.dk>
-X-Cookie: Drilling for oil is boring.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6a11:389:b0:474:f989:3ff5 with HTTP; Wed, 26 Apr 2023
+ 06:12:15 -0700 (PDT)
+Reply-To: a.alessio1976@gmail.com
+From:   Alexander <info.fasttrackds@gmail.com>
+Date:   Wed, 26 Apr 2023 20:12:15 +0700
+Message-ID: <CAASfO-1A=Z3Q6ebD=j_aYOzTNm9wR3TSN6Cb26d4evEq6oG2gQ@mail.gmail.com>
+Subject: I hope you are doing great
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:544 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4991]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [info.fasttrackds[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [a.alessio1976[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Receipt No: 910235
 
---rBlslG3Mk26QI9iP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hello,
 
-On Wed, Apr 26, 2023 at 02:47:44PM +0200, Rasmus Villemoes wrote:
-> On 26/04/2023 14.25, Mark Brown wrote:
+I hope you are doing great. My name is Dr. Alexander Alessio. I'm the
+auditor and head of the computing department of The International
+Development (IDA) Association. Based on our audit report, I verified
+that you have not claimed your (PSP) intervention fund from our
+office.
 
-> > I'm not sure this is sensible, it'll be a fairly rare situation and we
-> > don't want to preclude using the built in chip select functionality for
-> > some of the chip selects.  In a situation like this we only need to have
-> > a single chip select to be managed as a GPIO rather than all of them,
-> > which I'd expect to end up handled in the DT by not allocating that chip
-> > select number.
+The (PSP) payment is a support fund situated as a Pandemic Support
+Payment to help support =E2=80=AFviable and ongoing businesses or
+organizations as a result of the Economic crises ravaging the world.
+The IDA is aware that Businesses and individuals suffered revenue
+setbacks. However, the IDA awarded support funds to beneficiaries
+through nominations based on an active account that was submitted by
+email services providers and through which your email account emerged
+as a beneficiary. The World Bank under the IDA rescue scheme, approved
+special intervention funds for disbursement to entrepreneurs, small
+and large business owners to help individuals build back their economy
+prior to the pandemic challenges which affected lives & businesses.
 
-> Sorry, I don't understand what you're saying. What exactly is not
-> sensible? And what is "a situation like this"?
+Be informed that your Email address was recommended for this
+empowerment support funding by your Email service providers for active
+usage of your email account and business directories.
 
-Building hardware which uses all the native chip selects and also GPIO
-ones and then describing it in DT as using native chip selects.
+The IDA is an international financial institution that offers free
+financial assistance to entrepreneurs, business owners, and
+developers, Its aim is to ensure global development and finance
+projects that will develop infrastructure and improve healthy living.
 
-> I described a problem with what is now 87c614175bbf in linux-next: If
-> one has five spi devices, the first four of which use the four native
-> chip selects, there is no way to use a gpio for the fifth, because
-> whichever "channel" you choose in the CHANNEL_SELECT field will cause
-> the ecspi IP block to drive some SSx pin low, while the spi core is also
-> driving the gpio low, so two different devices would be selected.
+This is free & Legal (NO REFUND).
 
-Sure, and therefore I'd not expect anyone to actually describe the
-hardware like that but to instead describe the hardware as using three
-or fewer of the native chip selects with the remaining chip selects
-described as GPIOs.  If the device requires that a native chip select be
-controlled the hardware simply won't work without at least one native
-chip select being unallocated.
+To receive your IDA payment, Kindly reconfirm your details to enable
+our office in your location to contact you for payment.
 
-> It's not exactly a regression, because any chip_select >= 4 never
-> actually worked, but what I'm saying is that 87c614175bbf also isn't a
-> complete fix if one wants to support mixing native and gpio chip
-> selects. For that, one really needs the unused_native_cs to be used for
-> all gpio chip selects; in particular, one needs some unused native cs to
-> exist. IOW, what my series tries to do.
+Full Name:____
+Age:_______
+Sex:________
+Occupation:___
+Mobile:______
 
-No, we only need one unused chip select to be available.
+Congratulations once again!
 
---rBlslG3Mk26QI9iP
-Content-Type: application/pgp-signature; name="signature.asc"
+I believe you have read  and understood  the framework which aims at
+expanding the scale of financing sustainable development to enable you
+to support your business/projects.
 
------BEGIN PGP SIGNATURE-----
+(IDA) Policies And Procedures Framework:- IS FREE. IDA funding is for
+Development/Empowerment.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJIuEACgkQJNaLcl1U
-h9BgiAgAgkYHH4s+VEMVE8lt5FDgOcuKDX8OAJoS7brgBVg5qntDfktjQXgiDifW
-oNV/buBUQEELmDjDo0dDe85fl9KIPh49UWm0Y5JolLPrLHKelP7u4LxV5UmaeDqE
-AngjdjlIhyTDA0Zlm6dodSpypMBoIdAePBWccNFNGH2qvAeFyuz0wtlz3BJnqifK
-Jvrncz1yMFu/AtBXlKCnQ3Tm2O6Mb+e7W2wm9DMdhiWESUNHeCCly2MCtxoYGOts
-oWAqc1OvwoQiPMGxzA/amDkv4/JTHw4PbM1/mEQUPS1h+ftYjbw+o4JfO0TezTut
-URvN7vCEPokYufiNl/IW0dsvbZ3/NQ==
-=5+FJ
------END PGP SIGNATURE-----
+Thanks In service,
 
---rBlslG3Mk26QI9iP--
+Dr. Alexander Alessio
+(H.O.D-International Development Association)
