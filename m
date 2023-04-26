@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2846EF9D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2926EF9D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238215AbjDZSKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 14:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S234547AbjDZSLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 14:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233072AbjDZSKe (ORCPT
+        with ESMTP id S233072AbjDZSLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:10:34 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A797298
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:10:34 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a814fe0ddeso78412235ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:10:34 -0700 (PDT)
+        Wed, 26 Apr 2023 14:11:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA27F76A9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:11:30 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94f1d0d2e03so1100442866b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:11:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682532633; x=1685124633;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CSnadq1rdsAY73hqg4R8sAB1GhbZrkH/98e+g3pDbGk=;
-        b=Y9nkBSewNWf2SslscrFfOIlQYb0KsxiTuC3JXedSsF/qXT0Txe8XzOgG+aj+9VX8XD
-         wSqehj10r9ctKwSk7XVLKjkgOW7KKhK4vB9FGSEu+CqbKTDsdlnL/5/rNxLZAiAC+BQX
-         iowQG1Zq26ZQuy9OYhzbPuJ5W9es6ySyk+Zd0=
+        d=linux-foundation.org; s=google; t=1682532689; x=1685124689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=emz2lWVV+R7IDYMbl3F7GGb15o68eHk4V8lZiXE9F0I=;
+        b=JIk06fFDX5QQr1JjweV7oXucAFe0Jax1E7iBQBKBxra+E+hZeRsvNZHY0rd1KTEe6l
+         fl/sEh4oQ57S6MkbgBXSkZ9oFSxMZFxKvh3t/ZFS9dHq/7Yhzpt1/7Vt/vgIie6/SHHu
+         MxR85hJA27Fr6NYOZZiBvz9VyDIKiFbWNPZXc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682532633; x=1685124633;
-        h=content-disposition:mime-version:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CSnadq1rdsAY73hqg4R8sAB1GhbZrkH/98e+g3pDbGk=;
-        b=Ok9qLh0Fx9o3m0Nrhk45/boBGhzbgkOl7YoExlcwjIkV4NET4za1Rf8uRM5JvgZD+M
-         9Q1MnFLyYgxHBjt4UzSmMpWpPg//rcsho9ctNJkOIRdZ7GbtQL1wD1D18DrESDicRNtD
-         ZcF16wsfZREhIgHBRP3V0JoggQm56GkC6fbEt5Qj3v85Cm9Qkdamw1gfbujlxpitPYaL
-         RhB6osfYofZ5cIhTW6DV6DFtyr1qjF7OCM/41nCjoqnDvM1Xyyp6wVLR/bFW+C98YNpk
-         vbNrkvXUzWEOP0OrzzW3YbDNLoRKVFWb2mpc0gzL36HjFHQbA411IhgIgqVV4qPHeub2
-         JsEw==
-X-Gm-Message-State: AAQBX9f6pEaj/+RAtJkK2yjwBAOEncQYw2lOstU8ICKmwUAMoziHEELY
-        HF1GVHO1uX6o6x857ZHsfnpRuQ==
-X-Google-Smtp-Source: AKy350bqhgXTLv67FxRqIzwPXI7d3V7K42F2hw3aLiujbQEc/MzY4MFZBmoQV1MBpGU/grMNfacM5A==
-X-Received: by 2002:a17:902:dad1:b0:1a6:d15f:3ce1 with SMTP id q17-20020a170902dad100b001a6d15f3ce1mr27719574plx.34.1682532633548;
-        Wed, 26 Apr 2023 11:10:33 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ij8-20020a170902ab4800b0019c93ee6902sm10182857plb.109.2023.04.26.11.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 11:10:33 -0700 (PDT)
-Message-ID: <64496919.170a0220.2c3ce.53bb@mx.google.com>
-X-Google-Original-Message-ID: <202304261110.@keescook>
-Date:   Wed, 26 Apr 2023 11:10:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Anton Vorontsov <anton@enomsg.org>,
-        Chunhui Li =?utf-8?B?KOadjuaYpei+iSk=?= 
-        <chunhui.li@mediatek.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        John Stultz <jstultz@google.com>,
-        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
-        Midas Chien <midaschieh@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tony Luck <tony.luck@intel.com>, Wei Wang <wvw@google.com>
-Subject: [GIT PULL] pstore update for v6.4-rc1
+        d=1e100.net; s=20221208; t=1682532689; x=1685124689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=emz2lWVV+R7IDYMbl3F7GGb15o68eHk4V8lZiXE9F0I=;
+        b=hIg1QZ3mzYCmZsGmAGio2QOZ1AR4wDHQROWmmPASiXJR44BCZ8GbvnS+nFVxlx+wJM
+         SQHNlEOpt9gT795hq7+TgCh8rOqSW6wmLrt8k4lsyJU2AdNwVMReQUQAhNv9wWXKZrTn
+         ubw7pk9MfxQYi+7mNo+QdJUMCgUk1y7429MbZF+qN6YvIEOcUu1NaK40IoQnTd9N5zC+
+         GmMtB+07HSu++8+h4FXcm/PVeUZac+d2DKjfrK8lm6wBwNMQtww/V1fMK4kpGBldHIpm
+         8+u0N4E1JxM+X3LbFI2Ay0eQ/TG+QAIVxszGeROBSzcieb/FBocYiJf7QEpzWLBWsFmX
+         ZE3g==
+X-Gm-Message-State: AAQBX9fIhzr4UJTE1aucxCviRFc3ZoIBAtUPdxaTLigWnl3OhGUj1FoF
+        Msgie4kHtNfR8jE5iGIqHjbnVXjVFugOGT4bIeZ8mQ==
+X-Google-Smtp-Source: AKy350YHejbQ/dXOpzJUbLkQ0dTu+k8V8+MVehMdwwPB9Rh3G/8tOFhHNR1Uc01G1/A+z6gGl6TwRg==
+X-Received: by 2002:a17:906:16d5:b0:94f:1c90:cb71 with SMTP id t21-20020a17090616d500b0094f1c90cb71mr18987207ejd.65.1682532688771;
+        Wed, 26 Apr 2023 11:11:28 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id aa21-20020a170907355500b00957dad777c1sm6204175ejc.107.2023.04.26.11.11.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 11:11:28 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5050497df77so11533076a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:11:27 -0700 (PDT)
+X-Received: by 2002:aa7:c316:0:b0:506:c1a6:2771 with SMTP id
+ l22-20020aa7c316000000b00506c1a62771mr19994132edq.39.1682532687659; Wed, 26
+ Apr 2023 11:11:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230425041838.GA150312@mit.edu> <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
+ <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
+In-Reply-To: <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 26 Apr 2023 11:11:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
+Message-ID: <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
+Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Apr 26, 2023 at 10:34=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> That's what clang's _Nonnull attribute does (with -Wnullability-extension=
+).
 
-Please pull this tiny pstore update for v6.4-rc1.
+No, that's a warning about using it, not a warning about testing for
+NULL when it's there.
 
-Thanks!
+I actually tested _Nonnull.  It seems to work for arguments. But it
+does not work for return values.
 
--Kees
+Of course, maybe there's some other magic needed, but it does seem to
+be sadly not working for us.
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+> But it's not toolchain portable, at the moment.  Would require changes
+> to clang to use the GNU C __attribute__ syntax, too (which I'm not
+> against adding support for).
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+No need for using the __attribute__ syntax at all, that would _not_ be
+a show-stopper.
 
-are available in the Git repository at:
+While it's true that it's the common syntax, and we sometimes use it
+explicitly because of that, it's by no means the only syntax, and we
+actually tend to try to have more legible wrappers around it.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/pstore-v6.4-rc1
+So, for example, we prefer using '__weak' instead of writing
+'__attribute__((__weak__))'.
 
-for you to fetch changes up to 5239a89b06d6b199f133bf0ffea421683187f257:
+And no, it very much doesn't have to use __attibute__ at all. We
+already have things like
 
-  pstore: Revert pmsg_lock back to a normal mutex (2023-03-08 15:00:25 -0800)
+    #define __diag(s)          _Pragma(__diag_str(GCC diagnostic s))
 
-----------------------------------------------------------------
-pstore update for v6.4-rc1
+so we already use other syntaxes.
 
-- Revert pmsg_lock back to a normal mutex (John Stultz)
+End result: if it actually worked, I'd happily do something like
 
-----------------------------------------------------------------
-John Stultz (1):
-      pstore: Revert pmsg_lock back to a normal mutex
+   #define __return_nonnull _Nonnull
 
- fs/pstore/pmsg.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+in <linux/compiler-clang.h>, with then <linux/compiler-gcc.h> then just hav=
+ing
 
--- 
-Kees Cook
+     #define __return_nonnull
+
+along with a big comment about how __attribute__((nonnull)) is
+horrible garbage that should never every be used.
+
+             Linus
