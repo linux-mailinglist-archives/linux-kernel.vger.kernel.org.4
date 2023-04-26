@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F004A6EF29D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B896EF2A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240442AbjDZKto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:49:44 -0400
+        id S240562AbjDZKtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:49:51 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240282AbjDZKtl (ORCPT
+        with ESMTP id S230023AbjDZKtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:49:41 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B891721
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:49:39 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f178da219bso69130255e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:49:39 -0700 (PDT)
+        Wed, 26 Apr 2023 06:49:42 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9FE1992
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:49:40 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so4228910f8f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682506178; x=1685098178;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682506179; x=1685098179;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kQ2ocTAU3w1gKmLb5aCBlSTPYDVel56Zbysqh02DwsU=;
-        b=XnF9TRXDlY/DK+hthG/Blg3DT8/nuQKX0ruzN6TorxzikeyruZ4/vxjMDGX0QPwc0M
-         f5VIsH1DBzXJt+aeESPe5YF5bE1UbkpC5sySC1kwvM2eQcoK75y8hlRjZcbeuD7Q7I+V
-         NHy3+6UB2aQnRLL4EAG/m4/ozufa8QXrF7UiOMf6CK/0USkr8aBUUfk4RzNFJNlQ9p1W
-         CiPCGZ4cdVCdbYDC1lGMrRUIm2M92MFZbqq6H89X+c8T7Za6uFQNveLsT3uiU34A+GX1
-         z7p2ZOn0dBcgCLIOPRtJ0mv1Yzhi3kfNMf+wOnFsHY6XKLjT0KkGd27R3Y+YnZpiirgP
-         Mo6g==
+        bh=KPpAdhSm4CJD/pgk6jTskL1NGIM3f3MtmEm7eXNsMmc=;
+        b=h8t3mOk1DY13CsWSJvSQLRak2mrfZKHeeT4GR393Ga032pReV4vlUkdVhUo1CqXNK3
+         cRIc0qtPx4p4Fze4D0s9gGQ7i+emYWhu2bs+YDQ+8GxEoweG99yX0OCyvWwggC1jZeWM
+         d9vSWdWy7zB0DdBzlbJsEZIEsy703GY87jJ++wz1ZwqYPAPGXghcXItMGAhUWaXPOXpx
+         i/6YR8dywf+Ma+iXJU9AVz6S1IhDPjliWT0MCfClE00SebboN85a76g/PIZqmxiTGr7W
+         j84/A3oQt+95M/e+nUkETVsbOpfzrwLGiC2zxmn6TyyIH16C9k5b3nOOW+LMRc4o3vfk
+         zwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682506178; x=1685098178;
+        d=1e100.net; s=20221208; t=1682506179; x=1685098179;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kQ2ocTAU3w1gKmLb5aCBlSTPYDVel56Zbysqh02DwsU=;
-        b=g2whpBo5acsr/v6KqIKtSxKqFoJsmgozmHT07+U0ycHpkHyxbNSQtAWLnSsXkykH+W
-         O6hbUHSNr94muWtmMioQrRjqT4lE//NGnurHt9HVWf4H2RMtya9/CBzmIXPR5XwUV25q
-         yuLXlgqCIgeu3PmUWUOlGJrNq52ExZmEOG/cx5qOkdSEL9bvvbdp0Jbk++gm/Lmup94/
-         2/pER0arlE97g/Hy7/DBpirnJqPO+Utf+dytD6nNpqX84T4iuJWprsD9utIOkzOLK/ci
-         veQsQ1z4wN6px3WKvyaCriSTv2NhNsTUOj69PXN7GwyxskcCOS/73GuwPxIsAhnCV5EZ
-         Hgzw==
-X-Gm-Message-State: AAQBX9cvwgmpBk/yO7VvSenJf23iYzuIkdUm+d8WO3FbpCOjOE+UWcl4
-        Qzwi4HR4viTrCBJHenXIkBqsBw==
-X-Google-Smtp-Source: AKy350YS0RMYAbp2tq4KoRMWXe/tmDg25LdX/lZEi3WR4NrxuEmIAgG0m3L0wS2o8+Zw6pLwGW/q8Q==
-X-Received: by 2002:a1c:7918:0:b0:3f1:6942:e024 with SMTP id l24-20020a1c7918000000b003f16942e024mr13035866wme.27.1682506177702;
-        Wed, 26 Apr 2023 03:49:37 -0700 (PDT)
+        bh=KPpAdhSm4CJD/pgk6jTskL1NGIM3f3MtmEm7eXNsMmc=;
+        b=Gf6kul7kKaEIeLkewZ3WVZHh2tKgBmWnm4+yhlolQDxL3V9y+iheozLmpGU/MTFIdt
+         unT5YW/gVXvLBMU7tN0lMsJu9DEY93WS5BuMgNzbDxN3lvISMcWA27HpqZFOZreExLyq
+         Gm0GDySZRjNFv71AL0KxkN01ogkmRGZsun2I23GwL6gho+YiglLKD99xx2OtzDiWvoHO
+         KrMF3I5rbMSCoY4+z1cwYVrFp6uC2ggoehltfWUtlRltni3SygBqq4NVtgQ7+cFzZlA1
+         RN/YFKoXHcUQWniN47yjrpMQqwIw82I99BSjK2P+dZTTkFQlQPKRzgAFSW94K+qcWjRu
+         YOyw==
+X-Gm-Message-State: AAQBX9eR+8hiesUgUFOUuKmLSsLSINCYn28/kmcZFHBcevH9Y21vmzZR
+        R1Y20x8QXh7cb/S7AYcrl9NtmA==
+X-Google-Smtp-Source: AKy350aTontAhbh5/FKzND2ZbdcpHG6W0NonLo78fbx14JplajvW2ZLTYIjXkLeUV543VHR06kgiLA==
+X-Received: by 2002:a5d:5957:0:b0:2f4:3b2c:1b2e with SMTP id e23-20020a5d5957000000b002f43b2c1b2emr14997388wri.31.1682506178885;
+        Wed, 26 Apr 2023 03:49:38 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id 25-20020a05600c025900b003ed2c0a0f37sm17601988wmj.35.2023.04.26.03.49.36
+        by smtp.googlemail.com with ESMTPSA id 25-20020a05600c025900b003ed2c0a0f37sm17601988wmj.35.2023.04.26.03.49.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 03:49:37 -0700 (PDT)
+        Wed, 26 Apr 2023 03:49:38 -0700 (PDT)
 From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Wed, 26 Apr 2023 12:49:01 +0200
-Subject: [PATCH v6 01/12] arm64: defconfig: enable MT6357 regulator
+Date:   Wed, 26 Apr 2023 12:49:02 +0200
+Subject: [PATCH v6 02/12] arm64: defconfig: enable Mediatek PMIC key
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-evk-board-support-v6-1-8d6b1cfe7f29@baylibre.com>
+Message-Id: <20230203-evk-board-support-v6-2-8d6b1cfe7f29@baylibre.com>
 References: <20230203-evk-board-support-v6-0-8d6b1cfe7f29@baylibre.com>
 In-Reply-To: <20230203-evk-board-support-v6-0-8d6b1cfe7f29@baylibre.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -74,34 +74,33 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Alexandre Mergnat <amergnat@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=793; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=mrWNpoe4C/7P/FRc2t6J8feM9yfT9dI6dxq0LTHYw3M=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkSQG/qSDMgZ3r8fdgRPPg4FrVKd77rLRBKVCAHwRF
- uAyw4nuJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZEkBvwAKCRArRkmdfjHURSnKEA
- DG5y+5y/X+JV48T/DjWBISDlJgDT4FA7qzOZH0cDY5DVdhamwKYCcU8847ERf0DwGj78G0QefmdgKo
- szfrdw+b29JrZ888Ofi+sh1oHb3QpeVfhi7/AJVXB3Sf+Uh2bjQLV8bhKIUVXtundZymBw4HQ06WTD
- 5Bb/SmiwL8Ws0HtoYCX0Co9CjrgTsSAVXoS36Qx5hef1YFTOhf4d8ZtxPIJTn98YHS8Ii81K+Ac5Zd
- Iltu2Yl66GRonTMhTd99RUatBOnnYlimiXom1CRUewG4PhMud0w0PUB+13fpLXTr82WiNa5IEeJqlS
- 6PzGEYfCyHGfVcnAF7vZqJesFcdiAlcS1So1N9MVfOZOHpyQT6cL1NQCfG0e8k67EtrDv6LXuPEkwM
- KX7MgrCcXV5UsoW/9hJNqXX5ccC/MyB4g0x2Hr7ci/WRCY8optCd60IB00JxfxLLjmJzKeKbCrQZ3N
- /QCwnwwVB+qfz3MS3trWn2KcqB1oKS+4AjKjhsUR4RE7gVZvGJUrQl0QVcRmetH9rHkvjnsLDAfX3k
- udG7WVzdtKwr9xioRfJrjRnjTNpUFYcLi1BRT1p0MR+eO6Ht2ELKmU4ajGl7hEnuIYEKaiwwImowPs
- SRaJ66Hznhnhi8z9HRTrRZPUN9z+Nwg+60xYAqpHM8e5wHeV4lVDg6EQAC3g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=794; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=k532urY0g0V1o02FuoDf+quB6H4pbB8k/wwqhAx1hVA=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkSQG/E5aHHBqCCuaioO8fxvJXXol/Q6XwEd52YIOD
+ cKygCWSJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZEkBvwAKCRArRkmdfjHUReACEA
+ CbQfWLBQ0a8kH4g5vbThuYhFwqe1JQiv5flAnX7LXAZGSQy5M3ts6LLb1jsnXZk8NnJLcrZglc+SSs
+ vZPml1Moe2faBlLDnGn4LtxZtPHIGnDB3SPB/Ns503pTsz9YWE5SkPVFZZb3VifUzflhpdtyg+09GK
+ wyVc7bfegYDa5XhoC7MD10ifHM/YICo+M0KcSTR+lI8E+V68lOCmrxm77kgj0oqMsrKLBz102sDp9y
+ Qv9S1urL5Xlgyj+SQ0lndl+2RYUk7zbv0EDROmFJ0eyU25zH1pRWyBberZrFP8AhY1d08Zt5iz0fOx
+ l8ddAfnqWmHgsBsyXmzqouY4GaJXc8+nsIZnAIMpIFnZDgRYMG4b0qukFhT5uA/LqDiNJVy4R6jvml
+ xepyJ0wW8mxxfavRDFR2srZIVtftrM0fFBeGR85ifSUibyT6M4OMhkZ8Z7sSNglO8SfFHVDq3cF2LU
+ AgwdoHivc6tghEl5EcZDgraY3bGT+x6z8oXpAo2JINz49IvOvnTsgkQtV65pPQOJxoHLdkP2th80N+
+ tUrMiYYEn5+PLyMs2Z9JScjdWBaYpJuD/1oZEbs1lC/Wzzl9bLy3whNjV3jQCv/K2e2syJmbtVzpL9
+ O7JhubUvP3L9ACz/nxBwnlIOV8LsJD5ggqcpCykJDWjwfii6i6LgIjvbfGOw==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the power regulator support of MediaTek MT6357 PMIC. This driver
-supports the control of different power rails of device through
-regulator interface.
+Some Mediatek PMIC devices can manage Power and Home keys (buttons).
+This patch enable the driver which handle the 2 keys managed by the
+Mediatek PMIC.
 
 Tested-by: Kevin Hilman <khilman@baylibre.com>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
@@ -110,17 +109,17 @@ Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7790ee42c68a..e4cb65889ae6 100644
+index e4cb65889ae6..4a100f147de4 100644
 --- a/arch/arm64/configs/defconfig
 +++ b/arch/arm64/configs/defconfig
-@@ -685,6 +685,7 @@ CONFIG_REGULATOR_MAX77620=y
- CONFIG_REGULATOR_MAX8973=y
- CONFIG_REGULATOR_MP8859=y
- CONFIG_REGULATOR_MT6315=m
-+CONFIG_REGULATOR_MT6357=y
- CONFIG_REGULATOR_MT6358=y
- CONFIG_REGULATOR_MT6359=y
- CONFIG_REGULATOR_MT6360=y
+@@ -409,6 +409,7 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_SNVS_PWRKEY=m
+ CONFIG_KEYBOARD_IMX_SC_KEY=m
+ CONFIG_KEYBOARD_CROS_EC=y
++CONFIG_KEYBOARD_MTK_PMIC=m
+ CONFIG_MOUSE_ELAN_I2C=m
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=m
 
 -- 
 2.25.1
