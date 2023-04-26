@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD706EEFCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2A86EEFD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240016AbjDZIDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 04:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S239990AbjDZIDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 04:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239943AbjDZIDg (ORCPT
+        with ESMTP id S239962AbjDZIDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 04:03:36 -0400
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26233C39
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 01:03:33 -0700 (PDT)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 20230426080331e894376af7320373af
+        Wed, 26 Apr 2023 04:03:37 -0400
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1196CDC
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 01:03:34 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20230426080332c5d2d6dab017c90b88
         for <linux-kernel@vger.kernel.org>;
-        Wed, 26 Apr 2023 10:03:31 +0200
+        Wed, 26 Apr 2023 10:03:32 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=n93VBue8YLe4OhiAewOGivq1aA7fZ4cftiwPcFyOEGA=;
- b=iHhg3PN6pCQYgTPCN2tI8Jn7nBEpR5m7L9OP1UZleR07/97xPskAQLDJAPcOpaj6/MLISf
- RxGW/4L8VGia4AjNB+bOs21NVemge0kmuMzc3N7d2S54tpe/V0FIsgP6o+L8E+/XWscLi98d
- HT3/Oz0kCM08cEwWspWuNjoy3a2dU=;
+ bh=saTOVTX775J8QuM0f3QiYXo+gF2XB4EnX95vsbsYgmg=;
+ b=H4A9kP5YhkfD+yrRnUdwwGuDj+lWE7tRshaKZLg3c2yOrbUb7TVnK6QQZHQmcYUNMgbaBN
+ TDTWPD4BcK+9YqPawXyq4EtNO7s13h1TPu9TIuHvMrp4jX86gjUE+V7pVLGyT7kFodwJLUdd
+ aOYfaHspkuG36aDzD02WLeeGbF3WQ=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v4 5/8] tty: n_gsm: increase malformed counter for malformed control frames
-Date:   Wed, 26 Apr 2023 10:03:12 +0200
-Message-Id: <20230426080315.7595-5-daniel.starke@siemens.com>
+Subject: [PATCH v4 6/8] tty: n_gsm: increase gsm_mux unsupported counted where appropriate
+Date:   Wed, 26 Apr 2023 10:03:13 +0200
+Message-Id: <20230426080315.7595-6-daniel.starke@siemens.com>
 In-Reply-To: <20230426080315.7595-1-daniel.starke@siemens.com>
 References: <20230426080315.7595-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -51,41 +51,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-The malformed counter in gsm_mux is already increased in case of errors
-detected in gsm_queue() and gsm1_receive(). gsm_dlci_command() also
-detects a case for a malformed frame but does not increase the malformed
-counter yet.
+The structure gsm_mux contains the 'unsupported' field. However, there is
+currently no place in the code which increases this counter.
 
-Fix this by also increasing the gsm_mux malformed counter in case of a
-malformed frame in gsm_dlci_command().
-Note that the malformed counter is not yet exposed and only set internally.
+Increase the 'unsupported' statistics counter in the following case:
+- an unsupported frame type has been requested by the peer via parameter
+  negotiation
+- a control frame with an unsupported but known command has been received
+
+Note that we have no means to detect an inconsistent/unsupported adaptation
+sufficient accuracy as this changes the structure of the UI/UIH frames.
+E.g. a one byte header is added in case of convergence layer type 2 instead
+of 1 and contains the modem signal octet with the state of the signal
+lines. There is no checksum or other value which indicates of this field is
+correct or should be present. Therefore, we can only assume protocol
+correctness here. See also 'gsm_dlci_data()' where this is handled.
 
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- drivers/tty/n_gsm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/tty/n_gsm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 v3 -> v4:
 No changes.
 
-Link: https://lore.kernel.org/all/20230424075251.5216-5-daniel.starke@siemens.com/
+Link: https://lore.kernel.org/all/20230424075251.5216-6-daniel.starke@siemens.com/
 
 diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 186f463f0f11..5b6a03668c78 100644
+index 5b6a03668c78..42a8507aae4a 100644
 --- a/drivers/tty/n_gsm.c
 +++ b/drivers/tty/n_gsm.c
-@@ -2455,8 +2455,10 @@ static void gsm_dlci_command(struct gsm_dlci *dlci, const u8 *data, int len)
- 	data += dlen;
- 
- 	/* Malformed command? */
--	if (clen > len)
-+	if (clen > len) {
-+		dlci->gsm->malformed++;
- 		return;
-+	}
- 
- 	if (command & 1)
- 		gsm_control_message(dlci->gsm, command, data, clen);
+@@ -1590,6 +1590,7 @@ static int gsm_process_negotiation(struct gsm_mux *gsm, unsigned int addr,
+ 		if (debug & DBG_ERRORS)
+ 			pr_info("%s unsupported I frame request in PN\n",
+ 				__func__);
++		gsm->unsupported++;
+ 		return -EINVAL;
+ 	default:
+ 		if (debug & DBG_ERRORS)
+@@ -1897,6 +1898,8 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+ 		/* Optional unsupported commands */
+ 	case CMD_RPN:	/* Remote port negotiation */
+ 	case CMD_SNC:	/* Service negotiation command */
++		gsm->unsupported++;
++		fallthrough;
+ 	default:
+ 		/* Reply to bad commands with an NSC */
+ 		buf[0] = command;
 -- 
 2.34.1
 
