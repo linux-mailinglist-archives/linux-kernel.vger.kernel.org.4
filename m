@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A406EF8F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210616EF8FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbjDZRGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S233756AbjDZRGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbjDZRGe (ORCPT
+        with ESMTP id S234557AbjDZRGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 13:06:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6A37D99;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3247D84;
         Wed, 26 Apr 2023 10:06:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA646132A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99DEE63068;
         Wed, 26 Apr 2023 17:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8F965C4339B;
-        Wed, 26 Apr 2023 17:06:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F8D6C433D2;
+        Wed, 26 Apr 2023 17:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682528792;
-        bh=luhXDip7ZThYSriayg4A6CXDv28E1cgSnb+UHfM0u8E=;
+        s=k20201202; t=1682528793;
+        bh=xbO5CCjdTR5OY20rNcqmQ1F5b+Fo9XJdxn5T+Gex6m4=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JFxxa6D8768xouyfUFRqRT3nR+u3110qlBQfn3DHuc6AR18eolzSMo5NPf1ofuST5
-         3b2xuj/Ad/92qy3rzgREOyg8WU4IVCY+WSEB5IuktvIbaP4DV8Lk+LNmmj+wFMSPk5
-         oJw4gZbZghPvxDQrmOrlrXIWlFup2QEwYC/+5FjUncIClnKZmisOaUTxlhae7rlYoE
-         Y5rSdBe3uVls8qvZb0V712ubak5oEyD5Wg9sbor7MH9F7WAyNTROuTFwhEW1jUVGyN
-         TuVvFnESvaVaXq/L/fjotrmZOHiF8zHLH00rz+LqLbh+kpVHexkhscKf3is+lw0L20
-         etcNu8E4J6MXA==
+        b=iOelzbjrDM6IrXCHYj5RjkPwDqleoA6Ew3yX9LlwfTMgtYZ3JEJCnI62Cle7dL05g
+         9YbBWNnKK1V/V0c0lUtB30+Ml5z554IyUJuiB/5+t2r+euUhvDBdOF85DsdkawGv/m
+         zn7lm2x7N+wcJFzW0FuT4cOB7ZsbgjdYKkG26Lj++uE0dJ3uFpfTGYxbctNnEml/g9
+         46IjD4+SrHDWcGuaviFCPqdxhpEt248Tq6dqIeF5YCBFK9XD0+Pk5CAkRS8nroA3HR
+         ntX2vX0Zj6A5oqaLb8l5plNP39GUvzSQh/uAciGhRvvWypaRbtEoGYpqJH7NtUYLfX
+         FJpSIqRfh+Ncg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7F87AC43158;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2884C43158;
         Wed, 26 Apr 2023 17:06:32 +0000 (UTC)
-Subject: Re: [GIT PULL] Crypto Update for 6.4
+Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZEYLC6QsKnqlEQzW@gondor.apana.org.au>
-References: <20211112104815.GA14105@gondor.apana.org.au>
- <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au>
- <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
- <Yui+kNeY+Qg4fKVl@gondor.apana.org.au>
- <Yzv0wXi4Uu2WND37@gondor.apana.org.au>
- <Y5mGGrBJaDL6mnQJ@gondor.apana.org.au>
- <Y/MDmL02XYfSz8XX@gondor.apana.org.au> <ZEYLC6QsKnqlEQzW@gondor.apana.org.au>
+In-Reply-To: <20230425041838.GA150312@mit.edu>
+References: <20230425041838.GA150312@mit.edu>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZEYLC6QsKnqlEQzW@gondor.apana.org.au>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.4-p1
-X-PR-Tracked-Commit-Id: 482c84e906e535072c55395acabd3a58e9443d12
+X-PR-Tracked-Message-Id: <20230425041838.GA150312@mit.edu>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
+X-PR-Tracked-Commit-Id: 519fe1bae7e20fc4e7f179d50b6102b49980e85d
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 733f7e9c18c5e377025c1bfdce6bc9a7d55649be
-Message-Id: <168252879251.19907.570748263553593045.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 0cfcde1fafc23068f57afa50faa3e69487b7cd30
+Message-Id: <168252879298.19907.8093408805770238263.pr-tracker-bot@kernel.org>
 Date:   Wed, 26 Apr 2023 17:06:32 +0000
-To:     Herbert Xu <herbert@gondor.apana.org.au>
+To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,12 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 24 Apr 2023 12:52:27 +0800:
+The pull request you sent on Tue, 25 Apr 2023 00:18:38 -0400:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.4-p1
+> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/733f7e9c18c5e377025c1bfdce6bc9a7d55649be
+https://git.kernel.org/torvalds/c/0cfcde1fafc23068f57afa50faa3e69487b7cd30
 
 Thank you!
 
