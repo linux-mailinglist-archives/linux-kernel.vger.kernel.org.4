@@ -2,155 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7826EF061
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7419F6EF067
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240080AbjDZImA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 04:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S240068AbjDZIpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 04:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239464AbjDZIl5 (ORCPT
+        with ESMTP id S239752AbjDZIpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 04:41:57 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576793C1F;
-        Wed, 26 Apr 2023 01:41:55 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so40348445e9.3;
-        Wed, 26 Apr 2023 01:41:55 -0700 (PDT)
+        Wed, 26 Apr 2023 04:45:04 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DDD2684
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 01:45:03 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-24b89b9a72cso3146508a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 01:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682498514; x=1685090514;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ArnfC+A36KVaoJFRoRkLOWAFxiyb01QcwAzoyNZQfrk=;
-        b=n9wa3FOCIYkEV0LwxjD7q+MJsqrZ/xLRGpZrfpm1L41Qr0+7o4/6/ZYD3BlbEcftEO
-         TWzgVeMf+XcQ9HsFH1vuDYssuU38PJbkjpIsGzwFEbwFCxKe2ZxojqC72bKxomHDmIz1
-         ay801JAtzkZglQqSXez+EB2JvaC/I7cUlvzIIvgZSWJZs9weW1ABvcyD5u63Q7mIkki6
-         NRPaCiSqUjxrZoe54A9PXGWESh3VCD77XzFDvAwQdpuwjTppXlqu1YvSuLi/m5BtM6YY
-         xlJl3a4CxRtLkhLlWSNRXKvWu1vgt+ugy9vY0Wy2ASvgNice9SZVxwotBJabFXuk4qjl
-         bI5w==
+        d=gmail.com; s=20221208; t=1682498703; x=1685090703;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JNu7vD1mUAOPWPPCLuonoHF/qKJcaDrZr6u09Js53+Q=;
+        b=k3YUwEGKnZgw2ZIFSI7w3xy42irEElPKklzcAkwNdvRh0nkJTSAKfk7sJgUQYlHjuv
+         iQ0t/n+ASWfHscSjYgQksetRLpZpBcsbDFlfHc6HZzlYSD0Yn9+1xz0eXcllJA4l99bI
+         w/NUNqUj4rqTqubfrRg0RJyjWJfcguHIDWDRxv+gicCuO9Ly4qjcsEOZ6ajRAxu7Vryi
+         vVSKEnDYfO8bES7F3wl8jdsvnL2MZIaaWADA8tZYfnkSHR6W8Jpg8n31SFqIYA1e5AKu
+         RFWM6U/D8xCIjldtgsIY3X4kxp7fe1uKBbgLjoJEpVdT8vXe9epO2bOeCDPGhPmQ5S7C
+         LhgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682498514; x=1685090514;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ArnfC+A36KVaoJFRoRkLOWAFxiyb01QcwAzoyNZQfrk=;
-        b=YDzQ8taQ/HxY7KP1222ajKQ7hRqmvKGiNq7SgPDaDenvfQJaCD+Qmz66aBifskidli
-         AN0kwt3Cg7w5o9W2cPWz8yWHIw3GMga9ILzgn12jXlXRBHCu4qxUPUpUWGZkkxfCTFPw
-         kMmMX1kWqI5HWgsWVC7QHWPZIelnqikxiqSQJduHOumrZJD3geoS0Q1YLIjGUYJizJSr
-         9YOqiK/RHCL69TCdIDcTg3hnxruSAqsQLctuC3bwbgfT6WQP5WQv5lpT/GCmXy+wZEn6
-         Ff7eIX5JRWfi3MJioiYhpDNcYpS8afRkIcjHyLqOmqcnK0ee7RqzfcfB7cKpmq88Kquc
-         XqEQ==
-X-Gm-Message-State: AAQBX9cmd5cVsly/BEnpoynABUkHpVkJvfMep395e1KzyHVGT4/kVInq
-        9GLhVonkrFh3cHEa3TLGcYw=
-X-Google-Smtp-Source: AKy350Z5NR02Z8oNrVzXCbdERtnNyDO/QN/D6Phr2ymfd0ldQFATBh9gLJnkGVzoLJVNHjNxs5dl8A==
-X-Received: by 2002:a05:600c:2201:b0:3f1:806d:33ad with SMTP id z1-20020a05600c220100b003f1806d33admr11101118wml.6.1682498513622;
-        Wed, 26 Apr 2023 01:41:53 -0700 (PDT)
-Received: from localhost (ip-185-104-136-48.ptr.icomera.net. [185.104.136.48])
-        by smtp.gmail.com with ESMTPSA id t13-20020a7bc3cd000000b003f173c566b5sm17344264wmj.5.2023.04.26.01.41.52
+        d=1e100.net; s=20221208; t=1682498703; x=1685090703;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JNu7vD1mUAOPWPPCLuonoHF/qKJcaDrZr6u09Js53+Q=;
+        b=FjIRrtp/YWrKQQxx38dOmaupy+W+w6PlVGt0j8XI6VvT+8LN8qgzLffET+K1qqkYE1
+         5oXbJwtTrMeJZ6pYC3QZz3irvDYe+4gb76agmjexskQ25d1h35P6S/Hj5i6JgB2ZjOn2
+         eDOa/7sixcevKENbgk6axvZRjj+AEqW+EIMw/ho0ZKfspOGj+QsIP6Ak9KZOTMpDpq8k
+         SxbISKpjOKB/I1yvoDkU8o5ZvAWymQ9Ok6/CpWsnZq6JgMSdI7NKiQfAB1Te/z/uhhs2
+         i3Y7EjetbqSvlxiKUDUrH4qvizbi7pOGo3lY4N2tZXEATMXyyedOGdwb9aiUCQCtPVMm
+         71iQ==
+X-Gm-Message-State: AAQBX9d65+MLZsgj4oCS7Tx1YajuJ5m5a4h8VRN3zayuv2ZR3QNMppMK
+        x/GZ/sCmot1g0iqPy5xLqNHPZv1JDBs=
+X-Google-Smtp-Source: AKy350YbGbwFOFqkJ36bCgdjW82+T26Giy4o1eeWJPBupmIJDDIDVigW6NwGuaxsDdjjkPF9/9dIHA==
+X-Received: by 2002:a17:90a:e2d1:b0:24b:af7c:4626 with SMTP id fr17-20020a17090ae2d100b0024baf7c4626mr10706116pjb.16.1682498702794;
+        Wed, 26 Apr 2023 01:45:02 -0700 (PDT)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id gw13-20020a17090b0a4d00b002470b9503desm11001082pjb.55.2023.04.26.01.45.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 01:41:52 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 09:41:51 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v4] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <ZEjjz_zqynWj0Kcc@murray>
-References: <3b92d56f55671a0389252379237703df6e86ea48.1682464032.git.lstoakes@gmail.com>
- <a68fa8f2-8619-63ff-3525-ede7ed1f0a9f@redhat.com>
- <5ffd7f32-d236-4da4-93f7-c2fe39a6e035@lucifer.local>
- <aa0d9a98-7dd1-0188-d382-5835cf1ddf3a@redhat.com>
- <b7f8daba-1250-4a45-895e-cbb20cc6c2dd@lucifer.local>
- <831f0d02-7671-97bf-a968-e2e5bf92dfd7@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <831f0d02-7671-97bf-a968-e2e5bf92dfd7@redhat.com>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        Wed, 26 Apr 2023 01:45:02 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
+Subject: [PATCH v2] erofs: fold in z_erofs_decompress()
+Date:   Wed, 26 Apr 2023 16:44:49 +0800
+Message-Id: <20230426084449.12781-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:30:03AM +0300, Mika Penttilä wrote:
+From: Yue Hu <huyue2@coolpad.com>
 
-[snip]
+No need this helper since it's just a simple wrapper for decompress
+method and only one caller.  So, let's fold in directly instead.
 
-> > The issue is how dirtying works. Typically for a dirty-tracking mapping the
-> > kernel makes the mapping read-only, then when a write fault occurs,
-> > writenotify is called and the folio is marked dirty. This way the file
-> > system knows which files to writeback, then after writeback it 'cleans'
-> > them, restoring the read-only mapping and relying on the NEXT write marking
-> > write notifying and marking the folio dirty again.
-> >
->
-> I know how the dirty tracking works :). And gup itself actually triggers the
-> _first_ fault on a read only pte.
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+v2:
+ - rename decompressors[] -> erofs_decompressors[]
+ - do not copy struct z_erofs_decompressor item
 
-I'm sure you don't mean to, but this comes off as sarcastic, 'I know how X
-works :)' is not a helpful comment. However, equally apologies if I seemed
-patronising, not intentional, I am just trying to be as clear as possible,
-which always risks sounding that way :)
+ fs/erofs/compress.h     | 3 +--
+ fs/erofs/decompressor.c | 8 +-------
+ fs/erofs/zdata.c        | 4 +++-
+ 3 files changed, 5 insertions(+), 10 deletions(-)
 
-Regardless, this is a very good point! I think I was a little too implicit
-in the whole 'at any time the kernel chooses to write to this writenotify
-won't happen', and you are absolutely right in that we are not clear enough
-about that.
+diff --git a/fs/erofs/compress.h b/fs/erofs/compress.h
+index 26fa170090b8..b1b846504027 100644
+--- a/fs/erofs/compress.h
++++ b/fs/erofs/compress.h
+@@ -89,8 +89,7 @@ static inline bool erofs_page_is_managed(const struct erofs_sb_info *sbi,
+ 
+ int z_erofs_fixup_insize(struct z_erofs_decompress_req *rq, const char *padbuf,
+ 			 unsigned int padbufsize);
+-int z_erofs_decompress(struct z_erofs_decompress_req *rq,
+-		       struct page **pagepool);
++extern const struct z_erofs_decompressor erofs_decompressors[];
+ 
+ /* prototypes for specific algorithms */
+ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
+diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+index 7021e2cf6146..2a29943fa5cc 100644
+--- a/fs/erofs/decompressor.c
++++ b/fs/erofs/decompressor.c
+@@ -363,7 +363,7 @@ static int z_erofs_transform_plain(struct z_erofs_decompress_req *rq,
+ 	return 0;
+ }
+ 
+-static struct z_erofs_decompressor decompressors[] = {
++const struct z_erofs_decompressor erofs_decompressors[] = {
+ 	[Z_EROFS_COMPRESSION_SHIFTED] = {
+ 		.decompress = z_erofs_transform_plain,
+ 		.name = "shifted"
+@@ -383,9 +383,3 @@ static struct z_erofs_decompressor decompressors[] = {
+ 	},
+ #endif
+ };
+-
+-int z_erofs_decompress(struct z_erofs_decompress_req *rq,
+-		       struct page **pagepool)
+-{
+-	return decompressors[rq->alg].decompress(rq, pagepool);
+-}
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index a90d37c7bdd7..5ef9d3863ff9 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -1290,6 +1290,8 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
+ 	struct erofs_sb_info *const sbi = EROFS_SB(be->sb);
+ 	struct z_erofs_pcluster *pcl = be->pcl;
+ 	unsigned int pclusterpages = z_erofs_pclusterpages(pcl);
++	const struct z_erofs_decompressor *decompressor =
++				&erofs_decompressors[pcl->algorithmformat];
+ 	unsigned int i, inputsize;
+ 	int err2;
+ 	struct page *page;
+@@ -1333,7 +1335,7 @@ static int z_erofs_decompress_pcluster(struct z_erofs_decompress_backend *be,
+ 	else
+ 		inputsize = pclusterpages * PAGE_SIZE;
+ 
+-	err = z_erofs_decompress(&(struct z_erofs_decompress_req) {
++	err = decompressor->decompress(&(struct z_erofs_decompress_req) {
+ 					.sb = be->sb,
+ 					.in = be->compressed_pages,
+ 					.out = be->decompressed_pages,
+-- 
+2.17.1
 
->
-> So the problem is accessing the page after that, somewehere in future. I
-> think this is something you should write on the description. Because,
-> technically, GUP itself works and does invoke the write notify. So the
-> misleading part is you say in the description it doesn't. While you mean a
-> later write, from a driver or such, doesn't.
->
-
-Ack, agreed this would be a useful improvement. Will fix on next spin!
-
-[snip]
