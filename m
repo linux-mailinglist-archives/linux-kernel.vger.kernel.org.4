@@ -2,96 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F756EF610
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33366EF62E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241207AbjDZONj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S241299AbjDZOS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240789AbjDZONh (ORCPT
+        with ESMTP id S241290AbjDZOSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:13:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7716A70;
-        Wed, 26 Apr 2023 07:13:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E5C60FFA;
-        Wed, 26 Apr 2023 14:13:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1876C4339B;
-        Wed, 26 Apr 2023 14:13:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682518416;
-        bh=FGzEvw9TbVU4T3e26lHuswObY6PfV6RZ4w7PVZz4AXQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f4Sckc1gV0y+6gByaTDKrw3r1jyCDAO5rEijIAFivAFWrEsgtcXgkUsqZT2U8W0zk
-         t93z4Zk0jrT1K/0VaUkkBwrfgbx0y9TakXUMTQ6f3mv8AWCayCR3TVAQer80Wvyays
-         rTP+oXkU9hwPXEqkCCTiWOy5LzU5JXSYuGaOv5LnxQuw4Zqy2BhayBPu4a8D5dEwhG
-         onrMoG371i1qUYlWcO74Qp2AeenrQPuN/YtTmlLc4aJS1Z59rFyqfyx8BY2HUILKDY
-         JEQ/+l78mw8JzA9oUwUYHQKOrgp7ZAjVsywR7x18nNNtnlvJkmOp3tSDGPT0A0ofn9
-         B7dit+o6WdUZw==
-Date:   Wed, 26 Apr 2023 15:13:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Li Ningke <lnk_01@hust.edu.cn>,
-        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
-Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
-Message-ID: <dbcc6739-e741-495f-85f9-bac104647194@sirena.org.uk>
-References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
- <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
- <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
- <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
- <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
+        Wed, 26 Apr 2023 10:18:24 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D472B4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:18:11 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24b3451b2fcso5213811a91.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:18:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mechatrax-com.20221208.gappssmtp.com; s=20221208; t=1682518691; x=1685110691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5MwzWOCWIuspDBg7KAFQQxg5GAo3xlUEzmvG1oTBePk=;
+        b=C4z89VF+rBbWLGv/jhTMwmKtVZdtJtTYr9ZmKte8XcQa7c4ZcToPjW91qqV7oqPRv8
+         89pPpJ6M89gWwRRH8emA0cVGEf+5K0poWHsKzgvIQRnTohLAbvGsL5nw9E09ihiHsp6+
+         1mFH1pYwRvR7wGuTU+0atLoubi3DpvUgovf+Sw9ZNcrHKxR30ZhicPMUkGjjBZr1hn9J
+         raSZyRqFbduuOFtKJYfbPvbgzMXxpUT99HgXWrpAPOGCQLcMpKGPp9nd0dGqxPYexokM
+         0U9SqmzY8v3cwRkmc1dtZGTTGMz1dvj+hLVxuIH3oKKSucF3KNGGBcPfg8Q2+BO5e+Sp
+         sZfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682518691; x=1685110691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5MwzWOCWIuspDBg7KAFQQxg5GAo3xlUEzmvG1oTBePk=;
+        b=UkZ7TA6P/AgWJ0NdRUozg6Oqzi2adTTYptMqkOWoFuoPTG5JPydEPGBHEXtkQ01Zun
+         RfU+0m6xc1LL7NiXJtNsS05UI/RvHot+kB6L6nXx2ZjQPw7N3s7saGFJJsJweBKVXirA
+         BO5G1uqg04NXqOOnGdzAJf1VKhh2bGbPgDQ9VykW1HOZFCKADLA6dXBnGMqK+3MMOKyQ
+         ra/tHdI/4pXsUSLb6ph+pcy2YrxIau3HXlRFiFCkAkxKLBIaVeSQpbk4BRohwstpjhK3
+         JzOAanxzkyVYBKwZxMDjnPJ+PqeAggvSWYq47vglqL5jS+tZdXNtC/xbIRx3lbwwddZx
+         B25Q==
+X-Gm-Message-State: AAQBX9dJ5TgcP7GsmTDLV9to44vw4akP2R7qjqqIZwBugtC9GSnLRsD6
+        OcAomuu/drqZAtcybNKNwQBsV+u/KrPZo8SFxw3AdGT+n3HTH/96OhA=
+X-Google-Smtp-Source: AKy350ah7qQRQdHFbI9G1+Rzv8005bT1Dz13JOX87BIdn+B4KCjaAHPEOM6muh7yjOnK0OtbtBhQUVouDjWUW/WydOI=
+X-Received: by 2002:a17:90b:390f:b0:246:9170:a9be with SMTP id
+ ob15-20020a17090b390f00b002469170a9bemr20240108pjb.13.1682518691193; Wed, 26
+ Apr 2023 07:18:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Od8kKp2gYUL6gufg"
-Content-Disposition: inline
-In-Reply-To: <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
-X-Cookie: Drilling for oil is boring.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420102316.757-1-honda@mechatrax.com> <20230423121528.259d3cd4@jic23-huawei>
+ <CA+Tz-SEAyXcJ++YDzDC=ySd1gOC-j-DDp8sMHBUCSy9Q3wQ4HA@mail.gmail.com>
+In-Reply-To: <CA+Tz-SEAyXcJ++YDzDC=ySd1gOC-j-DDp8sMHBUCSy9Q3wQ4HA@mail.gmail.com>
+From:   Masahiro Honda <honda@mechatrax.com>
+Date:   Wed, 26 Apr 2023 23:17:34 +0900
+Message-ID: <CA+Tz-SFamk0Fmy7Zhk+7pcMxCkt1wacO=UCtCjTjpeocJ5AnXg@mail.gmail.com>
+Subject: Re: [PATCH v3] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jonathan,
 
---Od8kKp2gYUL6gufg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Apr 26, 2023 at 9:02=E2=80=AFPM Masahiro Honda <honda@mechatrax.com=
+> wrote:
+>
+> I understand. I'll fix it.
+>
 
-On Wed, Apr 26, 2023 at 09:50:26AM +0800, Dongliang Mu wrote:
+Sorry, I made a mistake.
+I would like to wait for a conclusion.
 
-> Second, from code review of platform_get_irq / platform_get_irq_optional, it
-> would warn IRQ 0 as an invalid IRQ number.
-
-> out:
-> 	if (WARN(!ret, "0 is an invalid IRQ number\n"))
-> 		return -EINVAL;
-> 	return ret;
-
-Like I say I'm not sure that's actually accurate for all architectures
-yet.
-
---Od8kKp2gYUL6gufg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJMYoACgkQJNaLcl1U
-h9C2lAf9GVQt82EKlECp9WbwEG+hwJjul3gLVids2AwP3aiURs70c1x2jUFqHvdf
-zlZkjjNOK4TEwy4TiUjws5Ep5rnAv1bUQ46rn9wZN1njGpCrAcSxKBLPBug4XlbJ
-FZcvjrI0mcgX7ZsPNm8Phyggy585Vys2eipru31AnNooURTZDeWf8cZikcofb/n3
-7E6hdhrKyfbvKHwX3D7P/HVcd/appSvwBYAUVS7qxMqowdlkh+3un1Ei+VWMDHcK
-HV8vvO6dfNrMJiVODYR45X61cgtEbAhUeZQ9nae8qExhTyJwWs/XWRWrlgQf4U99
-RteubIvOsSglFeh2vJsvkg58IM4MXQ==
-=bX6c
------END PGP SIGNATURE-----
-
---Od8kKp2gYUL6gufg--
+Regards,
