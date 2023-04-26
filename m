@@ -2,137 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FFC6EF84A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB106EF830
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbjDZQUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S241034AbjDZQMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjDZQUP (ORCPT
+        with ESMTP id S234484AbjDZQME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:20:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFE17D83
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682525967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9wVdlNXWsjTJ8OTeZ7rpKexU/e87QLSsuW8JpNE/mYY=;
-        b=YftjcTm7lznYmJ19gTrPzI+voHxReykPyuOL6QfGPlmPmzOK2sq2GlH9YntPJAIYD6G97y
-        oulu9TY6HThGJyQFRmjwySTe6vZALr/30OClKs6+QizGzq5vOE+ah2McHMte1hfgTIOreh
-        X41GuOxRSzt58F35bK88UAYAR92bWNk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-301--NXaypTUOcikotdTO4xiDA-1; Wed, 26 Apr 2023 12:18:29 -0400
-X-MC-Unique: -NXaypTUOcikotdTO4xiDA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 333F3857F81;
-        Wed, 26 Apr 2023 16:18:08 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DEFB4C15BA0;
-        Wed, 26 Apr 2023 16:18:07 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id E85134038CC40; Wed, 26 Apr 2023 13:10:54 -0300 (-03)
-Date:   Wed, 26 Apr 2023 13:10:54 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZElNDltcv4PA0HsM@tpad>
-References: <20230418150200.027528c155853fea8e4f58b2@linux-foundation.org>
- <ZD/NAaa5TVcL7Mxm@tpad>
- <ZD/Qq9v0EDxUn7HW@tpad>
- <ZD/XoBTqJBL2G+Dk@tpad>
- <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
- <ZD/xE6kR4RSOvUlR@tpad>
- <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
- <ZEAYQBJmVwsjpjGY@tpad>
- <ZEFB8FSKWms2VmaL@tpad>
- <44f2df1a-ace4-0c44-166f-4f2fef49e0c1@suse.cz>
+        Wed, 26 Apr 2023 12:12:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4E189;
+        Wed, 26 Apr 2023 09:12:01 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QGBDns128863;
+        Wed, 26 Apr 2023 11:11:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682525473;
+        bh=jgGajruGTIjdSoKqg0D5ZeNMF0HKGORjWDmcJFN4lP4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=e9zKe/NQqFFykwLSKilqQtVmQP2O094qPoHi5sK+OafNe0stlbzbyn049vWu9ifhz
+         WsAXP8LHPVvN0QPzbRPZVS+PaY+cToPv0jub/o1zZ7r4uus7ZLZ6ocsrmu7dsfQgiz
+         fuEbVcm4N1eJJydgW9rH6M+04W7PsPv4ZHfj6J/g=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QGBDdj027883
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 11:11:13 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 26
+ Apr 2023 11:11:12 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 26 Apr 2023 11:11:12 -0500
+Received: from [128.247.81.102] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QGBCtn019232;
+        Wed, 26 Apr 2023 11:11:12 -0500
+Message-ID: <0261131b-35b5-4570-0283-651432a9d537@ti.com>
+Date:   Wed, 26 Apr 2023 11:11:12 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44f2df1a-ace4-0c44-166f-4f2fef49e0c1@suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/4] can: m_can: Add hrtimer to generate software
+ interrupt
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+References: <20230424195402.516-1-jm@ti.com> <20230424195402.516-2-jm@ti.com>
+ <20230424-canon-primal-ece722b184d4-mkl@pengutronix.de>
+Content-Language: en-US
+From:   "Mendez, Judith" <jm@ti.com>
+In-Reply-To: <20230424-canon-primal-ece722b184d4-mkl@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 05:04:49PM +0200, Vlastimil Babka wrote:
-> On 4/20/23 15:45, Marcelo Tosatti wrote:
-> > Perhaps the complexity should be judged for individual cases 
-> > of interruptions, and if a given interruption-free conversion 
-> > is seen as too complex, then a "disable feature which makes use of per-CPU
-> > caches" style solution can be made (and then userspace has to
-> > explicitly request for that per-CPU feature to be disabled).
-> > 
-> > But i don't see that this patchset introduces unmanageable complexity,
-> > neither: 
-> > 
-> > 01b44456a7aa7c3b24fa9db7d1714b208b8ef3d8 mm/page_alloc: replace local_lock with normal spinlock
-> > 4b23a68f953628eb4e4b7fe1294ebf93d4b8ceee mm/page_alloc: protect PCP lists with a spinlock
+Hello Marc,
+
+On 4/24/2023 3:14 PM, Marc Kleine-Budde wrote:
+> On 24.04.2023 14:53:59, Judith Mendez wrote:
+>> Add an hrtimer to MCAN class device. Each MCAN will have its own
+>> hrtimer instantiated if there is no hardware interrupt found and
+>> poll-interval property is defined in device tree M_CAN node.
+>>
+>> The hrtimer will generate a software interrupt every 1 ms. In
+>> hrtimer callback, we check if there is a transaction pending by
+>> reading a register, then process by calling the isr if there is.
+>>
+>> Signed-off-by: Judith Mendez <jm@ti.com>
+>> ---
+>> Changelog:
+>> v2:
+>> 	1. Add poll-interval to MCAN class device to check if poll-interval propery is
+>> 	present in MCAN node, this enables timer polling method.
+>> 	2. Add 'polling' flag to MCAN class device to check if a device is using timer
+>> 	polling method
+>> 	3. Check if both timer polling and hardware interrupt are enabled for a MCAN
+>> 	device, default to hardware interrupt mode if both are enabled.
+>> 	4. Changed ms_to_ktime() to ns_to_ktime()
+>> 	5. Removed newlines, tabs, and restructure if/else section.
+>>
+>>   drivers/net/can/m_can/m_can.c          | 30 ++++++++++++++++++++-----
+>>   drivers/net/can/m_can/m_can.h          |  5 +++++
+>>   drivers/net/can/m_can/m_can_platform.c | 31 ++++++++++++++++++++++++--
+>>   3 files changed, 59 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+>> index a5003435802b..33e094f88da1 100644
+>> --- a/drivers/net/can/m_can/m_can.c
+>> +++ b/drivers/net/can/m_can/m_can.c
+>> @@ -23,6 +23,7 @@
+>>   #include <linux/pinctrl/consumer.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/pm_runtime.h>
+>> +#include <linux/hrtimer.h>
 > 
-> Well that one is a bit different, as there was one kind of lock replaced
-> with other kind of lock, 
+> keep the list of includes sorted
+> 
+Will do.
+>>   
+>>   #include "m_can.h"
+>>   
+>> @@ -1587,6 +1588,11 @@ static int m_can_close(struct net_device *dev)
+>>   	if (!cdev->is_peripheral)
+>>   		napi_disable(&cdev->napi);
+>>   
+>> +	if (cdev->polling) {
+>> +		dev_dbg(cdev->dev, "Disabling the hrtimer\n");
+>> +		hrtimer_cancel(&cdev->hrtimer);
+>> +	}
+>> +
+>>   	m_can_stop(dev);
+>>   	m_can_clk_stop(cdev);
+>>   	free_irq(dev->irq, dev);
+>> @@ -1793,6 +1799,18 @@ static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+>>   	return NETDEV_TX_OK;
+>>   }
+>>   
+>> +enum hrtimer_restart hrtimer_callback(struct hrtimer *timer)
+>> +{
+>> +	struct m_can_classdev *cdev =
+>> +		container_of(timer, struct m_can_classdev, hrtimer);
+>> +
+>> +	m_can_isr(0, cdev->net);
+>> +
+>> +	hrtimer_forward_now(timer, ms_to_ktime(1));
+> 
+> Please create a define for this
+> 
+Thanks, will create a define for the 1 ms polling interval.
 
-local_lock is defined to NULL if CONFIG_PREEMPT_RT is not set. 
-So for the !CONFIG_PREEMPT_RT case, it introduced a lock.
+>> +
+>> +	return HRTIMER_RESTART;
+>> +}
+>> +
+>>   static int m_can_open(struct net_device *dev)
+>>   {
+>>   	struct m_can_classdev *cdev = netdev_priv(dev);
+>> @@ -1827,13 +1845,15 @@ static int m_can_open(struct net_device *dev)
+>>   		}
+>>   
+>>   		INIT_WORK(&cdev->tx_work, m_can_tx_work_queue);
+>> -
+>>   		err = request_threaded_irq(dev->irq, NULL, m_can_isr,
+>> -					   IRQF_ONESHOT,
+>> -					   dev->name, dev);
+>> -	} else {
+>> -		err = request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
+>> +					   IRQF_ONESHOT, dev->name, dev);
+>> +	} else if (!cdev->polling) {
+>> +			err = request_irq(dev->irq, m_can_isr, IRQF_SHARED, dev->name,
+>>   				  dev);
+> 
+> No need to change the indention
+> 
+Will fix.
 
-> the lock is uncontended unless there's remote
-> flushes happening so it's not causing extra overhead for the fast paths,
-> and later even the irq disabling was removed, which should even improve
-> things. But this patchset is turning all vmstat counter increments a
-> cmpxchg.
+>> +	} else {
+>> +		dev_dbg(cdev->dev, "Start hrtimer\n");
+>> +		cdev->hrtimer.function = &hrtimer_callback;
+>> +		hrtimer_start(&cdev->hrtimer, ms_to_ktime(cdev->poll_interval), HRTIMER_MODE_REL_PINNED);
+>>   	}
+>>   
+>>   	if (err < 0) {
+>> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+>> index a839dc71dc9b..1ba87eb23f8e 100644
+>> --- a/drivers/net/can/m_can/m_can.h
+>> +++ b/drivers/net/can/m_can/m_can.h
+>> @@ -28,6 +28,7 @@
+>>   #include <linux/pm_runtime.h>
+>>   #include <linux/slab.h>
+>>   #include <linux/uaccess.h>
+>> +#include <linux/hrtimer.h>
+> 
+> keep the list of includes sorted
+> 
+>>   
+>>   /* m_can lec values */
+>>   enum m_can_lec_type {
+>> @@ -93,6 +94,10 @@ struct m_can_classdev {
+>>   	int is_peripheral;
+>>   
+>>   	struct mram_cfg mcfg[MRAM_CFG_NUM];
+>> +
+>> +	struct hrtimer hrtimer;
+>> +	u32 poll_interval;
+>> +	u8 polling;
+> 
+> bool
+> 
+Will use bool instead.
+>>   };
+>>   
+>>   struct m_can_classdev *m_can_class_allocate_dev(struct device *dev, int sizeof_priv);
+>> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+>> index 9c1dcf838006..e899c04edc01 100644
+>> --- a/drivers/net/can/m_can/m_can_platform.c
+>> +++ b/drivers/net/can/m_can/m_can_platform.c
+>> @@ -7,6 +7,7 @@
+>>   
+>>   #include <linux/phy/phy.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/hrtimer.h>
+>>   
+>>   #include "m_can.h"
+>>   
+>> @@ -97,11 +98,37 @@ static int m_can_plat_probe(struct platform_device *pdev)
+>>   
+>>   	addr = devm_platform_ioremap_resource_byname(pdev, "m_can");
+>>   	irq = platform_get_irq_byname(pdev, "int0");
+> 
+> use platform_get_irq_byname_optional(), it doesn't print an error
+> message.
+> 
+Thanks.
 
-Yes, and we have a similar situation in this case:
+>> -	if (IS_ERR(addr) || irq < 0) {
+>> -		ret = -EINVAL;
+>> +	if (irq == -EPROBE_DEFER) {
+>> +		ret = -EPROBE_DEFER;
+>>   		goto probe_fail;
+>>   	}
+>>   
+>> +	if (IS_ERR(addr)) {
+>> +		ret = PTR_ERR(addr);
+>> +		goto probe_fail;
+>> +	}
+> 
+> please move the error check for "addr" directly after the "addr = "
+> assignment.
+> 
+Will do.
+>> +
+>> +	mcan_class->polling = 0;
+> 
+> No need to init as "0"
+> 
 
-1) CMPXCHG is already used to protect many vmstat counter increments.
-2) The patchset adds "LOCK CMPXCHG" to existing CMPXCHG user.
-3) The performance decrease is negligible, because cache locking is
-effective.
+Awsome thanks.
+>> +	if (device_property_present(mcan_class->dev, "poll-interval")) {
+>> +		mcan_class->polling = 1;
+>> +	}
+> 
+> No need for the { } here.
+> 
+>> +
+>> +	if (!mcan_class->polling && irq < 0) {
+>> +		ret = -ENODATA;
+> -ENXIO
+>> +		dev_dbg(mcan_class->dev, "Polling not enabled\n");
+> 
+> print a proper error message using dev_err_probe("IRQ %s not found and
+> polling not activated\n")
+> 
+Why %s when MCAN requests 1 IRQ which is "int0"? If we want to print 
+"int0", should it be hardcoded into the print error message?
 
-"To test the performance difference, a page allocator microbenchmark:
-https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
-with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
+>> +		goto probe_fail;
+>> +	}
+>> +
+>> +	if (mcan_class->polling && irq > 0) {
+>> +		mcan_class->polling = 0;
+>> +		dev_dbg(mcan_class->dev, "Polling not enabled, hardware interrupt exists\n");
+>> +	}
+>> +
+>> +	if (mcan_class->polling && irq < 0) {
+>> +		dev_dbg(mcan_class->dev, "Polling enabled, initialize hrtimer");
+>> +		hrtimer_init(&mcan_class->hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
+>> +	}
+> 
+> combine both if (mcan_class->polling) into one.
+> 
+Will do.
+>> +
+>>   	/* message ram could be shared */
+>>   	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "message_ram");
+>>   	if (!res) {
+>> -- 
+>> 2.17.1
+>>
+>>
 
-For the single_page_alloc_free test, which does
-
-       	/** Loop to measure **/
-       	for (i = 0; i < rec->loops; i++) {
-               	my_page = alloc_page(gfp_mask);
-                if (unlikely(my_page == NULL))
-                       	return 0;
-                __free_page(my_page);
-        }                                                                                                           
-
-Unit is cycles.
-
-Vanilla                 Patched         Diff
-115.25                  117             1.4%"
-
-To be honest, that 1.4% difference was not stable but fluctuated between
-positive and negative percentages (so the performance difference was in
-the noise).
-
-So performance is not a decisive factor in this case.
-
+regards,
+Judith
