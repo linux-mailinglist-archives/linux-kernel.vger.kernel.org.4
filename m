@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3616EEF72
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBA46EEF7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239713AbjDZHkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        id S239728AbjDZHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239568AbjDZHkG (ORCPT
+        with ESMTP id S239805AbjDZHnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:40:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A1F3C31
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:40:05 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1prZkd-0000oH-C7; Wed, 26 Apr 2023 09:39:43 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1prZkb-0001VM-MH; Wed, 26 Apr 2023 09:39:41 +0200
-Date:   Wed, 26 Apr 2023 09:39:41 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v8 09/11] reset: Add Nuvoton ma35d1 reset driver support
-Message-ID: <20230426073941.GB4724@pengutronix.de>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
- <20230425102418.185783-10-ychuang570808@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425102418.185783-10-ychuang570808@gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 26 Apr 2023 03:43:00 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D46198E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:42:52 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b46186c03so8034794b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:42:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1682494972; x=1685086972;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C36X7PBYU803ZQK1FU7eiGRzdw+WQCze/9eRJF/8+00=;
+        b=IC6fDc25yro72PytcOu2G5j5Th/XQhlmGVC7qt0vdjRonXlE2ITrOMTDVanbbihTUw
+         QiF5Ga3RYOoEUcJKU0w4zcYFbeichVNo4BQm8/h6ReDxlBLuSV2dG4LcoOI/Xcc6tB9A
+         K6L54zLAUkOEOpxAg9rKLi6Iul/xc2jxU2KAl7NZUNvhG4/sFPnjBQE7aiNr5tZ8qTve
+         43NafeZIVgk9i+kKCHiH6MlfKeeHpMd5u2Mg1z6DSzVM0vhwcdqbwff5N+RwRv+5o/cs
+         +/pL2IU4IO2mKZTpwdqiO3M/zMUDqRiZMGcJCHqJC9WSWWQ6F77n541PSrg4yElaoJe6
+         +O4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682494972; x=1685086972;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=C36X7PBYU803ZQK1FU7eiGRzdw+WQCze/9eRJF/8+00=;
+        b=QqveFMaQfhk50tkRubkj35sGkUyT0W80dKSI3NhaV9Ql51dgRnZljUDIgEeqodpyJZ
+         w9JWVM/BvnjVVyKn9weFx5SOlpUPhDF3ZPaosVA2rCOKE8KrXeAXXCtEQcIw+ARQ7YuJ
+         feYqR4WGh0qKWE4SvvzOWxg9FK0m+Ui/hwy4+xDHCBtI4DQ535Se+B458inA0EpFr68Y
+         kdT3vE0y3tNy+wkSbEKkxUmQ+YydPZUvL4bjhZ3F6HN0ZJJPnXU5joGFIvLRVTdDV397
+         cLHTjhypnXLLkGxjVnOSOWRWNOCe7SZHrfFQs3ybra1bLW/iA/Z8/sfmYjBiTUQEteUx
+         Uz4A==
+X-Gm-Message-State: AC+VfDyVN+uwZRUH+qaRt3Wx9Vcw+g8aGrkeMfDoXaBl5byw9toIQqlL
+        +GudVoGFHVcR8EXHztLi637S/g==
+X-Google-Smtp-Source: ACHHUZ4D2vDCrmJ2H7aGL62FLepGOi1jInGTMSrOY+khvgUtHZ9aO+t5I6MNSceK+7VemRURbUxpBQ==
+X-Received: by 2002:a05:6a00:10d4:b0:640:f519:e1cc with SMTP id d20-20020a056a0010d400b00640f519e1ccmr3521646pfu.34.1682494971956;
+        Wed, 26 Apr 2023 00:42:51 -0700 (PDT)
+Received: from hsinchu26.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id 123-20020a621881000000b00627df85cd72sm10384179pfy.199.2023.04.26.00.42.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 00:42:51 -0700 (PDT)
+From:   Zong Li <zong.li@sifive.com>
+To:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH] dmaengine: xilinx: enable on RISC-V platform
+Date:   Wed, 26 Apr 2023 07:42:48 +0000
+Message-Id: <20230426074248.19336-1-zong.li@sifive.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacky,
+Enable the xilinx dmaengine driver on RISC-V platform. We have verified
+the CDMA on RISC-V platform, enable this configuration to allow build on
+RISC-V.
 
-On Tue, Apr 25, 2023 at 10:24:16AM +0000, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> This driver supports individual IP reset for ma35d1. The reset
-> control registers is a subset of system control registers.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  drivers/reset/Kconfig        |   6 +
->  drivers/reset/Makefile       |   1 +
->  drivers/reset/reset-ma35d1.c | 229 +++++++++++++++++++++++++++++++++++
-[...]
-> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
-> new file mode 100644
-> index 000000000000..648b380becf7
-> --- /dev/null
-> +++ b/drivers/reset/reset-ma35d1.c
-> @@ -0,0 +1,229 @@
-[...]
-> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
-> +			       unsigned long id, bool assert)
-> +{
-> +	u32 reg;
-> +	struct ma35d1_reset_data *data = container_of(rcdev,
-> +						      struct ma35d1_reset_data,
-> +						      rcdev);
-> +
-> +	reg = readl_relaxed(data->base + ma35d1_reset_map[id].reg_ofs);
-> +	if (assert)
-> +		reg |= BIT(ma35d1_reset_map[id].bit);
-> +	else
-> +		reg &= ~(BIT(ma35d1_reset_map[id].bit));
-> +	writel_relaxed(reg, data->base + ma35d1_reset_map[id].reg_ofs);
+Signed-off-by: Zong Li <zong.li@sifive.com>
+---
+ drivers/dma/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is missing a spinlock to protect the read-modify-write cycle from
-simultaneous updates.
+diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+index fb7073fc034f..816f619804b9 100644
+--- a/drivers/dma/Kconfig
++++ b/drivers/dma/Kconfig
+@@ -695,7 +695,7 @@ config XGENE_DMA
+ 
+ config XILINX_DMA
+ 	tristate "Xilinx AXI DMAS Engine"
+-	depends on (ARCH_ZYNQ || MICROBLAZE || ARM64)
++	depends on (ARCH_ZYNQ || MICROBLAZE || ARM64 || RISCV)
+ 	select DMA_ENGINE
+ 	help
+ 	  Enable support for Xilinx AXI VDMA Soft IP.
+-- 
+2.17.1
 
-[...]
-> +static int ma35d1_reset_probe(struct platform_device *pdev)
-> +{
-> +	int err;
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	struct ma35d1_reset_data *reset_data;
-> +
-> +	if (!pdev->dev.of_node) {
-> +		dev_err(&pdev->dev, "Device tree node not found\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
-> +	if (!reset_data)
-> +		return -ENOMEM;
-> +
-> +	reset_data->base = devm_ioremap_resource(&pdev->dev, res);
-
-You could use devm_platform_ioremap_resource() here.
-
-regards
-Philipp
