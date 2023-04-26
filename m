@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85996EEE9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE4C6EEEA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239354AbjDZGyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S239548AbjDZG7A convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 02:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239309AbjDZGyD (ORCPT
+        with ESMTP id S230129AbjDZG65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:54:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808E42693;
-        Tue, 25 Apr 2023 23:53:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F6BB62963;
-        Wed, 26 Apr 2023 06:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219EDC433D2;
-        Wed, 26 Apr 2023 06:53:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682492032;
-        bh=QIhBfq3ajoFrTFgvdAxQ5iAO7C3Q5qspZKjzhdSkFDw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G8fiQSngd2qR//FFL6mNV7TiZ0hHExG3DHtksT8WRTQ2IEiiKvj+87IE8fz1JCSPk
-         90pfbu1IicetwgG1l3aeiX9kJjBtMjGh1LXIqVpFrDM8aGqCoY8i1gBQU6gX3U32v+
-         p8ukg9m7oelvw396eLvBAvui7OT7Mp5GBk02ebdaHLPQa1L2e6mP0pm64b5PO6XIoq
-         V1sYIBnXBSv7l646PNYYrpOpUAZfrlZXdPcBZNiy4dv+J3MjQi1Kz6ThTJ456rw0SM
-         GF6+JDokL6O9FnKDuLQi0zOhbeOeaFwXbZEICIku8KX9fFBatJSDz5eLozlDnJNEft
-         CpWXdnfqp2WkA==
-Date:   Wed, 26 Apr 2023 08:53:45 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] fs: add infrastructure for multigrain inode
- i_m/ctime
-Message-ID: <20230426-meerblick-tortur-c6606f6126fa@brauner>
-References: <20230424151104.175456-1-jlayton@kernel.org>
- <20230424151104.175456-2-jlayton@kernel.org>
+        Wed, 26 Apr 2023 02:58:57 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868A81FE9;
+        Tue, 25 Apr 2023 23:58:55 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5D68E7FD6;
+        Wed, 26 Apr 2023 14:58:54 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 14:58:54 +0800
+Received: from ubuntu.localdomain (202.188.176.82) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 14:58:51 +0800
+From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Emil Renner Berthing <kernel@esmil.dk>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v6 0/4] crypto: starfive - Add drivers for crypto engine
+Date:   Wed, 26 Apr 2023 14:58:44 +0800
+Message-ID: <20230426065848.842221-1-jiajie.ho@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230424151104.175456-2-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [202.188.176.82]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,153 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:11:02AM -0400, Jeff Layton wrote:
-> The VFS always uses coarse-grained timestamp updates for filling out the
-> ctime and mtime after a change. This has the benefit of allowing
-> filesystems to optimize away a lot metaupdates, to around once per
-> jiffy, even when a file is under heavy writes.
-> 
-> Unfortunately, this has always been an issue when we're exporting via
-> NFSv3, which relies on timestamps to validate caches. Even with NFSv4, a
-> lot of exported filesystems don't properly support a change attribute
-> and are subject to the same problems with timestamp granularity. Other
-> applications have similar issues (e.g backup applications).
-> 
-> Switching to always using fine-grained timestamps would improve the
-> situation for NFS, but that becomes rather expensive, as the underlying
-> filesystem will have to log a lot more metadata updates.
-> 
-> What we need is a way to only use fine-grained timestamps when they are
-> being actively queried:
-> 
-> Whenever the mtime changes, the ctime must also change since we're
-> changing the metadata. When a superblock has a s_time_gran >1, we can
-> use the lowest-order bit of the inode->i_ctime as a flag to indicate
-> that the value has been queried. Then on the next write, we'll fetch a
-> fine-grained timestamp instead of the usual coarse-grained one.
-> 
-> We could enable this for any filesystem that has a s_time_gran >1, but
-> for now, this patch adds a new SB_MULTIGRAIN_TS flag to allow filesystems
-> to opt-in to this behavior.
-> 
-> It then adds a new current_ctime function that acts like the
-> current_time helper, but will conditionally grab fine-grained timestamps
-> when the flag is set in the current ctime. Also, there is a new
-> generic_fill_multigrain_cmtime for grabbing the c/mtime out of the inode
-> and atomically marking the ctime as queried.
-> 
-> Later patches will convert filesystems over to this new scheme.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/inode.c         | 57 +++++++++++++++++++++++++++++++++++++++---
->  fs/stat.c          | 24 ++++++++++++++++++
->  include/linux/fs.h | 62 ++++++++++++++++++++++++++++++++--------------
->  3 files changed, 121 insertions(+), 22 deletions(-)
-> 
-> diff --git a/fs/inode.c b/fs/inode.c
-> index 4558dc2f1355..4bd11bdb46d4 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -2030,6 +2030,7 @@ EXPORT_SYMBOL(file_remove_privs);
->  static int inode_needs_update_time(struct inode *inode, struct timespec64 *now)
->  {
->  	int sync_it = 0;
-> +	struct timespec64 ctime = inode->i_ctime;
->  
->  	/* First try to exhaust all avenues to not sync */
->  	if (IS_NOCMTIME(inode))
-> @@ -2038,7 +2039,9 @@ static int inode_needs_update_time(struct inode *inode, struct timespec64 *now)
->  	if (!timespec64_equal(&inode->i_mtime, now))
->  		sync_it = S_MTIME;
->  
-> -	if (!timespec64_equal(&inode->i_ctime, now))
-> +	if (is_multigrain_ts(inode))
-> +		ctime.tv_nsec &= ~I_CTIME_QUERIED;
-> +	if (!timespec64_equal(&ctime, now))
->  		sync_it |= S_CTIME;
->  
->  	if (IS_I_VERSION(inode) && inode_iversion_need_inc(inode))
-> @@ -2062,6 +2065,50 @@ static int __file_update_time(struct file *file, struct timespec64 *now,
->  	return ret;
->  }
->  
-> +/**
-> + * current_ctime - Return FS time (possibly high-res)
-> + * @inode: inode.
-> + *
-> + * Return the current time truncated to the time granularity supported by
-> + * the fs, as suitable for a ctime/mtime change.
-> + *
-> + * For a multigrain timestamp, if the timestamp is flagged as having been
-> + * QUERIED, then get a fine-grained timestamp.
-> + */
-> +struct timespec64 current_ctime(struct inode *inode)
-> +{
-> +	struct timespec64 now;
-> +	long nsec = 0;
-> +	bool multigrain = is_multigrain_ts(inode);
-> +
-> +	if (multigrain) {
-> +		atomic_long_t *pnsec = (atomic_long_t *)&inode->i_ctime.tv_nsec;
-> +
-> +		nsec = atomic_long_fetch_and(~I_CTIME_QUERIED, pnsec);
-> +	}
-> +
-> +	if (nsec & I_CTIME_QUERIED) {
-> +		ktime_get_real_ts64(&now);
-> +	} else {
-> +		ktime_get_coarse_real_ts64(&now);
-> +
-> +		if (multigrain) {
-> +			/*
-> +			 * If we've recently fetched a fine-grained timestamp
-> +			 * then the coarse-grained one may be earlier than the
-> +			 * existing one. Just keep the existing ctime if so.
-> +			 */
-> +			struct timespec64 ctime = inode->i_ctime;
-> +
-> +			if (timespec64_compare(&ctime, &now) > 0)
-> +				now = ctime;
-> +		}
-> +	}
-> +
-> +	return timestamp_truncate(now, inode);
-> +}
-> +EXPORT_SYMBOL(current_ctime);
-> +
->  /**
->   * file_update_time - update mtime and ctime time
->   * @file: file accessed
-> @@ -2080,7 +2127,7 @@ int file_update_time(struct file *file)
->  {
->  	int ret;
->  	struct inode *inode = file_inode(file);
-> -	struct timespec64 now = current_time(inode);
-> +	struct timespec64 now = current_ctime(inode);
->  
->  	ret = inode_needs_update_time(inode, &now);
->  	if (ret <= 0)
-> @@ -2109,7 +2156,7 @@ static int file_modified_flags(struct file *file, int flags)
->  {
->  	int ret;
->  	struct inode *inode = file_inode(file);
-> -	struct timespec64 now = current_time(inode);
-> +	struct timespec64 now = current_ctime(inode);
->  
->  	/*
->  	 * Clear the security bits if the process is not being run by root.
-> @@ -2419,9 +2466,11 @@ struct timespec64 timestamp_truncate(struct timespec64 t, struct inode *inode)
->  	if (unlikely(t.tv_sec == sb->s_time_max || t.tv_sec == sb->s_time_min))
->  		t.tv_nsec = 0;
->  
-> -	/* Avoid division in the common cases 1 ns and 1 s. */
-> +	/* Avoid division in the common cases 1 ns, 2 ns and 1 s. */
->  	if (gran == 1)
->  		; /* nothing */
-> +	else if (gran == 2)
-> +		t.tv_nsec &= ~1L;
+This patch series adds kernel driver support for StarFive JH7110 crypto
+engine. The first patch adds Documentations for the device and Patch 2
+adds device probe and DMA init for the module. Patch 3 adds crypto and
+DMA dts node for VisionFive 2 board. Patch 4 adds hash/hmac support to
+the module.
 
-Is that trying to mask off I_CTIME_QUERIED?
-If so, can we please use that constant as raw constants tend to be
-confusing in the long run.
+Patch 3 needs to be applied on top of:
+https://lore.kernel.org/lkml/20230424135409.6648-3-xingyu.wu@starfivetech.com/
+
+Patch 4 needs to be applied on top of:
+https://lore.kernel.org/linux-crypto/ZEEOXIHwqKblKfBJ@gondor.apana.org.au/T/#u
+
+Changes v5->v6
+- Remove set_crypt in export as request will have been created by
+  init/updated calls (Herbert)
+- Use new helper to set statesize of crypto_ahash (Herbert)
+- Use crypto_ahash_blocksize instead of crypto_ahash_tfm (Herbert)
+- Switch to init_tfm/exit_tfm instead of cra_init/cra_exit (Herbert)
+
+Changes v4->v5
+- Schedule tasklet from IRQ handler instead of using completion to sync
+  events (Herbert)
+
+Changes v3->v4:
+- Use fallback for non-aligned cases as hardware doesn't support
+  hashing piece-meal (Herbert)
+- Use ahash_request_set_* helpers to update members of ahash_request
+  (Herbert)
+- Set callbacks for async fallback (Herbert)
+- Remove completion variable and use dma_callback to do the rest of
+  processing instead. (Herbert)
+
+Changes v2->v3:
+- Only implement digest and use fallback for other ops (Herbert)
+- Use interrupt instead of polling for hash complete (Herbert)
+- Remove manual data copy from out-of-bound memory location as it will
+  be handled by DMA API. (Christoph & Herbert)
+
+Changes v1->v2:
+- Fixed yaml filename and format (Krzysztof)
+- Removed unnecessary property names in yaml (Krzysztof)
+- Moved of_device_id table close to usage (Krzysztof)
+- Use dev_err_probe for error returns (Krzysztof)
+- Dropped redundant readl and writel wrappers (Krzysztof)
+- Updated commit signed offs (Conor)
+- Dropped redundant node in dts, module set to on in dtsi (Conor)
+
+Jia Jie Ho (4):
+  dt-bindings: crypto: Add StarFive crypto module
+  crypto: starfive - Add crypto engine support
+  riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
+  crypto: starfive - Add hash and HMAC support
+
+ .../crypto/starfive,jh7110-crypto.yaml        |  70 ++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  28 +
+ drivers/crypto/Kconfig                        |   1 +
+ drivers/crypto/Makefile                       |   1 +
+ drivers/crypto/starfive/Kconfig               |  21 +
+ drivers/crypto/starfive/Makefile              |   4 +
+ drivers/crypto/starfive/jh7110-cryp.c         | 237 +++++
+ drivers/crypto/starfive/jh7110-cryp.h         | 127 +++
+ drivers/crypto/starfive/jh7110-hash.c         | 896 ++++++++++++++++++
+ 10 files changed, 1392 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
+ create mode 100644 drivers/crypto/starfive/Kconfig
+ create mode 100644 drivers/crypto/starfive/Makefile
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.c
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.h
+ create mode 100644 drivers/crypto/starfive/jh7110-hash.c
+
+-- 
+2.25.1
+
