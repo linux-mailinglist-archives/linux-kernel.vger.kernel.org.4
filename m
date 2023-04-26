@@ -2,209 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CF46EF88B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9478E6EF88D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbjDZQhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S232003AbjDZQkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDZQhF (ORCPT
+        with ESMTP id S229915AbjDZQkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:37:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE9076A5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:37:03 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682527021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hn8NieWkqdkuAmPQepj6vdqp9UsnhNDUClAxwfJ3wZA=;
-        b=ETL1S7p12kuhdIw1P0NLvO1OWqaBna/2XPVyoFajVnYh7ckAoFmC+g6G7VPsG7mVrer+9q
-        KTLGZ/Qg+ao0vTXl0wYAOa0QRQHzCjZbPIfs+FO6O3IBsC4Dunao5j9cgaxMJg2bPrOhd3
-        GKaO3jrGRm5ZG9wrW2xdifrWYCeCXBkSFTuug4xNwv0kx5yuzr7rVss6VpTS/xn7HBAlAv
-        /ZVcIEvEu55G3/p99/mCb4hNWgT9IfTW1WdV/+r7w3elgkTiPiWOWRHFYFnA3UvLQbBq/4
-        rfAmUzR/Uz/jahpMprmrNad2gF8B8zEcHkUoo03R1YvSszCpkPHRief8C6CXBQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682527021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hn8NieWkqdkuAmPQepj6vdqp9UsnhNDUClAxwfJ3wZA=;
-        b=NgMOoIN9k7onzQn6f7JFsROAq5NXRcleF0ETQ2dZdLKESpYEWYyIkQsB6a2XrZawz/2wN+
-        no8P5FpcBkxskmBA==
-To:     Tony Battersby <tonyb@cybernetics.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
-In-Reply-To: <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
- <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
- <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com>
-Date:   Wed, 26 Apr 2023 18:37:00 +0200
-Message-ID: <87y1mey503.ffs@tglx>
+        Wed, 26 Apr 2023 12:40:10 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC893AB3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:09 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-32abc2e7da8so19601175ab.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682527208; x=1685119208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l4gwcCmmM+Y1PLgZw9XcWeLGKRKHQq/1YEoQ0r3Lmgc=;
+        b=crLkQwUQQ3nXeRFdyqa+13zRbDZxwaKCyPY+cbnyuNPizvmIZ7qSkx1kV1TfGrHIEE
+         RcGysh7goZgwwJV9T+GV1Ml11aWOZ6M0d/GLSC2nvBCmTkJOR7yLCaFupfOJXJABXFhh
+         trW0m/75bBn8vzaK0ztI0UlvWiM/aKGxPqVIo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682527208; x=1685119208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l4gwcCmmM+Y1PLgZw9XcWeLGKRKHQq/1YEoQ0r3Lmgc=;
+        b=NpEuaLsayeUNXleXxUnIBzJegz57rLTItsFrqTrYdDSufwqAXjpKJmSrtIuF6Yu/LF
+         EYVlVFnjuoh14qO8LmWrSZL5PbtM9rnB0ENYHnLNGl9+qO9ipsNsUQakNg/MByMnwmlM
+         UBV3n9HRVXCt0IXlcObBa3+AL1A8drntiFOcIIoi5uS6TTLUEFH7K7FWAewcN+YKmOED
+         D6mIOPx7xvuM+p06gq52jUslrvavRfyQFx3DrNAbmSzJlzIAPXxJam4Ld/xgGq49BaKV
+         UbZ/o5DgYOQl55UcrxNPQm6zggKiRWue4u5PhBsiLX31nXFva61GLMN+HeolleXei4f0
+         I5cg==
+X-Gm-Message-State: AAQBX9cJObzaAUAzKnYO1ZS6854C5Tx1MmiYVBLQiH8K+JEU17Njh2ng
+        /Dcnt75Mfq/7NkWy1J4b6EFNCkbEUGk6Olj8E+A=
+X-Google-Smtp-Source: AKy350aSmCULI/yjZLEcNW9dhTXJCAb2bw+b4YUw8CBpPts7s4/kQFzaXywRV7lHZbJW9Zjap9IJlw==
+X-Received: by 2002:a05:6e02:80c:b0:32e:63f:35ce with SMTP id u12-20020a056e02080c00b0032e063f35cemr9781223ilm.24.1682527208210;
+        Wed, 26 Apr 2023 09:40:08 -0700 (PDT)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056e020dd100b0032a99a9eb8esm4341729ilj.40.2023.04.26.09.40.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 09:40:06 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-329577952c5so286985ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:40:06 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1be7:b0:32a:f049:edc0 with SMTP id
+ y7-20020a056e021be700b0032af049edc0mr280720ilv.17.1682527206123; Wed, 26 Apr
+ 2023 09:40:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230426144423.2820826-1-fshao@chromium.org> <20230426144423.2820826-3-fshao@chromium.org>
+In-Reply-To: <20230426144423.2820826-3-fshao@chromium.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 26 Apr 2023 09:39:51 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UUXAje++Za2UZU3gVTGR7iCEHA23ZSqWcscg0VsO3g8A@mail.gmail.com>
+Message-ID: <CAD=FV=UUXAje++Za2UZU3gVTGR7iCEHA23ZSqWcscg0VsO3g8A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] HID: i2c-hid: goodix: Add support for
+ "goodix,no-reset-during-suspend" property
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Jeff LaBundy <jeff@labundy.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tony!
+Hi,
 
-On Wed, Apr 26 2023 at 10:45, Tony Battersby wrote:
-> On 4/25/23 17:05, Thomas Gleixner wrote:
-> For test #1, I have never used IPI before, so I would have to look into
-> how to do that.=C2=A0 Or you could send me a patch to test if you still w=
-ant
-> the test done.=C2=A0 But test #2 produced results, so maybe it is not
-> necessary.
-
-I think we can spare that exercise.
-
-> For test #2, I re-enabled native_wbinvd() by reverting the patch that I
-> sent, and then I applied the following patch:
+On Wed, Apr 26, 2023 at 7:44=E2=80=AFAM Fei Shao <fshao@chromium.org> wrote=
+:
 >
-> diff --git a/arch/x86/kernel/smp.c b/arch/x86/kernel/smp.c
-> index 375b33ecafa2..1a9b225c85b6 100644
-> --- a/arch/x86/kernel/smp.c
-> +++ b/arch/x86/kernel/smp.c
-> @@ -212,6 +212,7 @@ static void native_stop_other_cpus(int wait)
->                         udelay(1);
->         }
->=20=20
-> +       mdelay(100);
->         local_irq_save(flags);
->         disable_local_APIC();
->         mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
+> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
+> reset line to true state of the regulator") introduced a change to tie
+> the reset line of the Goodix touchscreen to the state of the regulator
+> to fix a power leakage issue in suspend.
 >
-> With that I got a successful power-off 10 times in a row.
+> After some time, the change was deemed unnecessary and was reverted in
+> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
+> the regulator") due to difficulties in managing regulator notifiers for
+> designs like Evoker, which provides a second power rail to touchscreen.
+>
+> However, the revert caused a power regression on another Chromebook
+> device Steelix in the field, which has a dedicated always-on regulator
+> for touchscreen and was covered by the workaround in the first commit.
+>
+> To address both cases, this patch adds the support for the new
+> "goodix,no-reset-during-suspend" property in the driver:
+> - When set to true, the driver does not assert the reset GPIO during
+>   power-down.
+>   Instead, the GPIO will be asserted during power-up to ensure the
+>   touchscreen always has a clean start and consistent behavior after
+>   resuming.
+>   This is for designs with a dedicated always-on regulator.
+> - When set to false or unset, the driver uses the original control flow
+>   and asserts GPIO and disables regulators normally.
+>   This is for the two-regulator and shared-regulator designs.
+>
+> Signed-off-by: Fei Shao <fshao@chromium.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
+> ---
+>
+> Changes in v3:
+> - In power-down, only skip the GPIO but not the regulator calls if the
+>   flag is set
+>
+> Changes in v2:
+> - Do not change the regulator_enable logic during power-up.
+>
+>  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 
-Thanks for trying this!
+You already carried over my Reviewed-by tag, which is fine. ...but
+just sending a quick confirmation that v3 looks good to me. Thanks!
 
-The problem really seems to be that the control CPU goes off before the
-other CPUs have finished and depending on timing that causes the
-wreckage. Otherwise the mdelay(100) would not have helped at all.
-
-But looking at it, that num_online_cpus() =3D=3D 1 check in
-stop_other_cpus() is fragile as hell independent of that wbinvd() issue.
-
-Something like the completely untested below should cure that.
-
-Thanks,
-
-        tglx
----
- arch/x86/include/asm/cpu.h |    2 ++
- arch/x86/kernel/process.c  |   10 ++++++++++
- arch/x86/kernel/smp.c      |   15 ++++++++++++---
- 3 files changed, 24 insertions(+), 3 deletions(-)
-
---- a/arch/x86/include/asm/cpu.h
-+++ b/arch/x86/include/asm/cpu.h
-@@ -98,4 +98,6 @@ extern u64 x86_read_arch_cap_msr(void);
- int intel_find_matching_signature(void *mc, unsigned int csig, int cpf);
- int intel_microcode_sanity_check(void *mc, bool print_err, int hdr_type);
-=20
-+extern atomic_t stop_cpus_count;
-+
- #endif /* _ASM_X86_CPU_H */
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -752,6 +752,8 @@ bool xen_set_default_idle(void)
- }
- #endif
-=20
-+atomic_t stop_cpus_count;
-+
- void __noreturn stop_this_cpu(void *dummy)
- {
- 	local_irq_disable();
-@@ -776,6 +778,14 @@ void __noreturn stop_this_cpu(void *dumm
- 	 */
- 	if (cpuid_eax(0x8000001f) & BIT(0))
- 		native_wbinvd();
-+
-+	/*
-+	 * native_stop_other_cpus() will write to @stop_cpus_count after
-+	 * observing that it went down to zero, which will invalidate the
-+	 * cacheline on this CPU.
-+	 */
-+	atomic_dec(&stop_cpus_count);
-+
- 	for (;;) {
- 		/*
- 		 * Use native_halt() so that memory contents don't change
---- a/arch/x86/kernel/smp.c
-+++ b/arch/x86/kernel/smp.c
-@@ -27,6 +27,7 @@
- #include <asm/mmu_context.h>
- #include <asm/proto.h>
- #include <asm/apic.h>
-+#include <asm/cpu.h>
- #include <asm/idtentry.h>
- #include <asm/nmi.h>
- #include <asm/mce.h>
-@@ -171,6 +172,8 @@ static void native_stop_other_cpus(int w
- 		if (atomic_cmpxchg(&stopping_cpu, -1, safe_smp_processor_id()) !=3D -1)
- 			return;
-=20
-+		atomic_set(&stop_cpus_count, num_online_cpus() - 1);
-+
- 		/* sync above data before sending IRQ */
- 		wmb();
-=20
-@@ -183,12 +186,12 @@ static void native_stop_other_cpus(int w
- 		 * CPUs reach shutdown state.
- 		 */
- 		timeout =3D USEC_PER_SEC;
--		while (num_online_cpus() > 1 && timeout--)
-+		while (atomic_read(&stop_cpus_count) > 0 && timeout--)
- 			udelay(1);
- 	}
-=20
- 	/* if the REBOOT_VECTOR didn't work, try with the NMI */
--	if (num_online_cpus() > 1) {
-+	if (atomic_read(&stop_cpus_count) > 0) {
- 		/*
- 		 * If NMI IPI is enabled, try to register the stop handler
- 		 * and send the IPI. In any case try to wait for the other
-@@ -208,7 +211,7 @@ static void native_stop_other_cpus(int w
- 		 * one or more CPUs do not reach shutdown state.
- 		 */
- 		timeout =3D USEC_PER_MSEC * 10;
--		while (num_online_cpus() > 1 && (wait || timeout--))
-+		while (atomic_read(&stop_cpus_count) > 0 && (wait || timeout--))
- 			udelay(1);
- 	}
-=20
-@@ -216,6 +219,12 @@ static void native_stop_other_cpus(int w
- 	disable_local_APIC();
- 	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
- 	local_irq_restore(flags);
-+
-+	/*
-+	 * Ensure that the cache line is invalidated on the other CPUs. See
-+	 * comment vs. SME in stop_this_cpu().
-+	 */
-+	atomic_set(&stop_cpus_count, INT_MAX);
- }
-=20
- /*
-
+-Doug
