@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62466EF1F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094CB6EF201
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240341AbjDZK3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S240434AbjDZKaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbjDZK3l (ORCPT
+        with ESMTP id S239666AbjDZK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 06:29:41 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48CE49F4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47AB49F5;
         Wed, 26 Apr 2023 03:29:39 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 042DB5FD7C;
+        by mx.sberdevices.ru (Postfix) with ESMTP id 3512F5FD7D;
         Wed, 26 Apr 2023 13:29:38 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
         s=mail; t=1682504978;
-        bh=eyzCCsK01f/afWykUeqT1z5S763OYcMrDYYa5HTJ5Mo=;
+        bh=d9FEepOf44U9WlSTkZRyE7W3kPgjD/3/5ttgBCiHj3U=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=g9JZahJWGBQmrx8vhJ0nSwBEYhead3HRMZY0AoFLAOFacFXGCNm5+PpB/CszqPHwV
-         N2MFLEllnAcwuctLrLFN2/ubVoDK1cagkH4gZNMPPDc1G8ZUyAPOpuVXib+x4F6ZYC
-         oYsXJyRF9pxLxGOupUvKtVsQQHYBZeYYM8Ss7bOXg6YRlcKzxM87ESBuPESkjZlLFM
-         olW/fIRnLMR9DAT4gFCM8cbd78wPNrQJr7/QBPRAfvJKFZwD8AJKPH99W/TFRTOCcW
-         vP5I7Z7nVDL8QrlrCuWM2AU2OHSPDpfA+K7ObsDNzSkB2/w9rv65pysvk2TaUHBmR/
-         FzwUGTavhRVMw==
+        b=qdbtYeQwJy+UJ4aEV0cqY1+KmBF7fIJoRu5m3JfWXQCuUbzAcMusboDMZgBscPCzr
+         2SfO4ZP5Pqc29cYTdieESJP3BdRMQ1ttvHooe4eg9S+Z/F+xN80I2C7xSNPR6pg7G2
+         P7HG91pV5CjIKd2QX+AIPxi3ZUdOUFNEatTGZD8apk3ZHs+P8Bv/HBCmCjkHSstKJQ
+         9AFXqut9HAW9HKIDgwef3njUOSXdMo9o5x2nKixnCldUAhulzSV8GxfOtWcKlXUQuJ
+         IdHLvByIY0YFOFq6m20vg6XyheDRJRazXAbba01LByTKxRbg55/91BpOKAgyDXvnww
+         3fInN6QIzI4PQ==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 26 Apr 2023 13:29:37 +0300 (MSK)
+        Wed, 26 Apr 2023 13:29:38 +0300 (MSK)
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <neil.armstrong@linaro.org>,
@@ -46,10 +46,10 @@ CC:     <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
         <linux-amlogic@lists.infradead.org>,
         <linux-phy@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v3 2/5] usb: dwc2: support dwc2 IP for Amlogic A1 SoC family
-Date:   Wed, 26 Apr 2023 13:29:19 +0300
-Message-ID: <20230426102922.19705-3-ddrokosov@sberdevices.ru>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 3/5] dt-bindings: usb: dwc2: add support for Amlogic A1 SoC USB peripheral
+Date:   Wed, 26 Apr 2023 13:29:20 +0300
+Message-ID: <20230426102922.19705-4-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
 References: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
@@ -76,56 +76,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Amlogic A1 uses dwc2 Synopsys IP as its USB peripheral (gadget)
-endpoint, with different DWC2 parameters when compared to previous
-Amlogic SoCs.
+Provide the appropriate compatible string for the DWC2 IP that is found
+inside the Amlogic A1 SoC and used in peripheral mode.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- drivers/usb/dwc2/params.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 9ed9fd956940..098fbfc774ab 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -161,6 +161,25 @@ static void dwc2_set_amlogic_g12a_params(struct dwc2_hsotg *hsotg)
- 	p->hird_threshold_en = false;
- }
- 
-+static void dwc2_set_amlogic_a1_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->otg_caps.hnp_support = false;
-+	p->otg_caps.srp_support = false;
-+	p->speed = DWC2_SPEED_PARAM_HIGH;
-+	p->host_rx_fifo_size = 192;
-+	p->host_nperio_tx_fifo_size = 128;
-+	p->host_perio_tx_fifo_size = 128;
-+	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
-+	p->phy_utmi_width = 8;
-+	p->ahbcfg = GAHBCFG_HBSTLEN_INCR8 << GAHBCFG_HBSTLEN_SHIFT;
-+	p->lpm = false;
-+	p->lpm_clock_gating = false;
-+	p->besl = false;
-+	p->hird_threshold_en = false;
-+}
-+
- static void dwc2_set_amcc_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -258,6 +277,8 @@ const struct of_device_id dwc2_of_match_table[] = {
- 	  .data = dwc2_set_amlogic_params },
- 	{ .compatible = "amlogic,meson-g12a-usb",
- 	  .data = dwc2_set_amlogic_g12a_params },
-+	{ .compatible = "amlogic,meson-a1-usb",
-+	  .data = dwc2_set_amlogic_a1_params },
- 	{ .compatible = "amcc,dwc-otg", .data = dwc2_set_amcc_params },
- 	{ .compatible = "apm,apm82181-dwc-otg", .data = dwc2_set_amcc_params },
- 	{ .compatible = "st,stm32f4x9-fsotg",
+diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+index 371ba93f3ce5..f70be397dac0 100644
+--- a/Documentation/devicetree/bindings/usb/dwc2.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+@@ -53,6 +53,7 @@ properties:
+               - amlogic,meson8b-usb
+               - amlogic,meson-gxbb-usb
+               - amlogic,meson-g12a-usb
++              - amlogic,meson-a1-usb
+               - intel,socfpga-agilex-hsotg
+           - const: snps,dwc2
+       - const: amcc,dwc-otg
 -- 
 2.36.0
 
