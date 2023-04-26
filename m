@@ -2,150 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2109A6EF7FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E5E6EF5F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241084AbjDZPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S240818AbjDZOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241033AbjDZPwO (ORCPT
+        with ESMTP id S232584AbjDZOCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:52:14 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306916A66
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:52:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZGS+N85tPALxX0c17YbMb8XFHUItjsCTUPAOt1Skiog2G3Ow1bVKxnPi8WmDT5dtE3c1z6I/jOeKr4W9hOZmnCGoxi8prdBOXJAjCxwIMCh6n9VP832W3yguiDFpSIiLTzmnOID78Ci5ya68agXjKJcW+H8ZJX1EJAV+l9S8U11oBxTFP/FZsnucRfTiTouaOGAQsHkUguCvC9d1g4aiZciX0SOmZxgl7iZU4QBxm8ZzVGIfvm5vrzIIpRpi7LfPgkImB7QT8NwgvQxpYoz/sq7OUne0ZBsl6N+6P5Jo/9Qs3MGOuBJmtKBBiqS3OBq6A8NXg7MqM3uHjdKYxl8mgQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IjxDWEEUlBcSlhV0ijNDIXUF80A5EMSxZSWEX5Ioi6Y=;
- b=DXXUu7CGCXdehK4MGK8FDnUYo95DV9DtgTkZpqcNEOkDBeFE3PcU9O7caGU2LPxJxseUWBvnSc17Ancg4yeaHDoMROrXjzl4Pmtr0vgtyrN9SdQcd7W/Um0NWnTXIpVz3T4zboX0WhthJGRxUxm+dIN2/LNQk73enFK2YqzhbKD+M6SUx4d0XRQWhQYPn/JfZ7OYHNs7g6DnLO2Hle7AzvpO9fqEfWiWJKE8HvCIUOzfQ0Y6nhUu8FHcweeaDHT3XFsnMtaAH6OHAEIcLinL+tVRgMXw/iAAdFlhf5VaPa8xZqadHtW54nR979JBEwWc7aNuViHCg95S+8ZMAEmwpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IjxDWEEUlBcSlhV0ijNDIXUF80A5EMSxZSWEX5Ioi6Y=;
- b=ZDe9g13DnrL7gW3qGoGjlzvCWy1Zw7bGN5aksGonjfJgZ5OhbIKDNWqwo0rU5hDF8Osd5zty3+ou9c3R6fDEUz2Zbh/PsutZ/BYtX/RsPKzf/mRj4qTo+O3u7OvJlakowRpPW81dH/gN55tAB6D+Xj1Wtp/sOlacwC3wPJALIRU=
-Received: from PH0PR12MB7982.namprd12.prod.outlook.com (2603:10b6:510:28d::5)
- by MN0PR12MB6029.namprd12.prod.outlook.com (2603:10b6:208:3cf::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
- 2023 15:52:10 +0000
-Received: from PH0PR12MB7982.namprd12.prod.outlook.com
- ([fe80::e19e:fb58:51b2:447f]) by PH0PR12MB7982.namprd12.prod.outlook.com
- ([fe80::e19e:fb58:51b2:447f%5]) with mapi id 15.20.6340.020; Wed, 26 Apr 2023
- 15:52:09 +0000
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SJ2PR12MB7800.namprd12.prod.outlook.com (2603:10b6:a03:4c1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20; Wed, 26 Apr
- 2023 11:48:57 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6319.034; Wed, 26 Apr 2023
- 11:48:57 +0000
-Message-ID: <989d7a71-ebfc-d245-9e05-a5a46085234e@amd.com>
-Date:   Wed, 26 Apr 2023 13:48:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Keyword Review - Re: BUG: KASAN: null-ptr-deref in
- drm_sched_job_cleanup+0x96/0x290 [gpu_sched]
-Content-Language: en-US
-To:     "Chen, Guchun" <Guchun.Chen@amd.com>,
-        Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-CC:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-References: <CABXGCsPZxgpFzAVN=eFXu0WV+Jk0vB4rv4p+Jt31C841LcqV=A@mail.gmail.com>
- <CABXGCsO0sST8+MvQs=T1JP49ogRsaHPT9gMQZGJ3dY7v3m0H8g@mail.gmail.com>
- <CABXGCsOTEpJG_0NWdGXRvcXQ4iTav6AUJm-U4SQb-vVzjoL6rA@mail.gmail.com>
- <10b2570f-a297-d236-fa7b-2e001a4dff12@gmail.com>
- <CABXGCsPcPY8dqZm0aF4c1p0ZvMYHy+NksMrZi9xK0=WdE5_osA@mail.gmail.com>
- <d96519fb-9e12-5a81-a60b-384dcb286f28@gmail.com>
- <CABXGCsP2JQMtNjBROSLs2y612iLZuCyoe-uD6OScAWbKHBWsCA@mail.gmail.com>
- <b6ab0086-7d52-2a41-2f76-44694faed317@amd.com>
- <CABXGCsP+LSPE9fH4TW781w67ju=HrNMe9s0kigqBarketr_Qog@mail.gmail.com>
- <CABXGCsNSqJVv4Cerc3_P_59ioUZU2M7Z_TMp2yZKqe3si0QqyA@mail.gmail.com>
- <BL0PR12MB2465BE82A18038353E48E025F1659@BL0PR12MB2465.namprd12.prod.outlook.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <BL0PR12MB2465BE82A18038353E48E025F1659@BL0PR12MB2465.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AS4PR10CA0016.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d8::8) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 26 Apr 2023 10:02:44 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AEC5FED;
+        Wed, 26 Apr 2023 07:02:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 64B7A6017E;
+        Wed, 26 Apr 2023 16:02:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682517760; bh=Iz9hcB9GLNYUr5g+GxKCdWQEiMUXyIVgPkkw/i05YnU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MPPsba7T0C+OF/ZBgSh275mr2j574cCl6nfO4jGWTE0lxw77Gek2exkU5q5Q7XLsU
+         jSxianVbFGSZWYluFNGW1mrxbq7E3xd9z/wbJN5EKSMJHJOZm8GkskGNBxu2lLvcmS
+         dwdiTcTxTWLxH7171lqPaVal+U1wzVZw5et0KdZUk/QKuKqXSqucW98lWYLdrLXYmr
+         +on3NO0PdY0nYuyOw0XAO7cSbxfiIUIQHtrh/9kkzK1khTeygeKFSIwQ5J6jaGTU1y
+         YSUKcoH3x3Da/Izn4TbxkYR6O7mdSaUSMfv+SDwnYe6ya+64C/J7hO86Om6f+7aNFw
+         iY2yYyw3TIaQQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 40rX7cbhwoeu; Wed, 26 Apr 2023 16:02:37 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 9261E6017C;
+        Wed, 26 Apr 2023 16:02:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1682517757; bh=Iz9hcB9GLNYUr5g+GxKCdWQEiMUXyIVgPkkw/i05YnU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lGEMW6qGriqzXJHDKDuv0004BmjZfB01rVnIde5blHbmP4yf0v0KzzsGMqR2a5zW/
+         MnN0aRTS7EFKSKuBBE3V0CIgDQrQ6jN9qW8usu1AS9G9LwU+Z7eLGIylvXvbO5fNI+
+         K7j0EByNwZi3v7dF2CQCiXwI2DpmqP7ZJ+/nk1sd56nCo8yMjItv2CNKCOyeid6OjU
+         TKO4aY68WXzzISLf01ZE1CaFbObeve5eimJi9DA5Ae8OMZcMwrheYkrep0JIoTgCEc
+         Gf/V9c2Bh8w6ApR0jnvOTqKpK/3rrb1AnYkUu/+KCy0EJPZHWtw1GeSfsRnUqtZ5p4
+         rxRXPODDnlsBg==
+Message-ID: <074cf5ed-c39d-1c16-12e7-4b14bbe0cac4@alu.unizg.hr>
+Date:   Wed, 26 Apr 2023 16:02:32 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SJ2PR12MB7800:EE_|MN0PR12MB6029:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ff4191e-d52b-4b06-f95f-08db464c3794
-X-Moderation-Data: 4/26/2023 3:52:08 PM
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zpLglJKHIDCu5ojL+W0tTgrh3OlGYWB+x3TO2TXJRLHjJ+iZddeyjlmudJYFCXXK5+IwuKSOGt1uO7YABSxWqOIHYSItTte5EOue9RWJ0FVfqGjQ7cun4ImVATXUf80HJ3W9dCxvP0qutZJvNoiFrg/zN19vDyAfpRWkAMh9lToHvaZ4F1ZGQo3mztAYksZ1hO8h2uZhkitdQ7Lq33zFgYbToMXHt+8Eq1xbo7hhcb0aOCV9Z4tlVsG4ZFwodIeA0qaAv3PPJpazRamEtbh+Q02/5/6KIUp4Ds/ztDwbNqtIxfPzaBpmMrYSdUuE8UfL493LXnZ/cPyg4Z1Gi722qZahAuK0j//UeTIjzRciGAf6NU7dd1KYdJk9mTZA7nblseP5VfKfJvKKQ2/8NknPEhlgXXo1tBc9gzz1nCZOuYWTbYz2KizDWEP5vzrqPTZedFKFm+8JmucU5uDK8UQ04SqzCRNW3L6RURI7QDb6FtIAeVkvsDF/owBJZAh9/nyOxJNgTOm3dqe6QAPoXPyCfKnh9AhdUGgFIUwA7DHSZG+blI3wKdf+YwGB2q7BhXFz/WZe9LniuhECoC7ExiQG/O1kq3foJTiGCVvqptIK8/cpK5l0GtZAdZsIdYLxRcNYRse2Gt3nA5/bb1z6eHG8Ryig1rtto5HYMz1P4Pzr+bQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7982.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(346002)(376002)(39860400002)(136003)(451199021)(478600001)(31686004)(66946007)(4326008)(66556008)(66476007)(41300700001)(54906003)(316002)(110136005)(5660300002)(6486002)(2906002)(966005)(8676002)(8936002)(6666004)(26005)(53546011)(6512007)(6506007)(186003)(2616005)(83380400001)(36756003)(31696002)(86362001)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WERqRHM2Y0hrcnJuc3QrY2t2SmptSlNPMk1VMzlseTJtQWVZWTJSYU04blUx?=
- =?utf-8?B?TnJ3dk8vNHlPeVNnQktLdXJvcjNkd0VSQzRNbkRaMWpDdG5UalBVY2oyMzJw?=
- =?utf-8?B?NGlFSUhveUZPa2x6QVNjVk9BWUcrdzF1RFJKdDhlNk56NEVDUkFHRG1UNHhK?=
- =?utf-8?B?QnZsWVRTbjRDeWdwRU9JM1V6d1BycnpTTVJGOTJVbWVINWUvS0NaakJzaVl4?=
- =?utf-8?B?RE5YYzJsOVRCTFZZL2NMRjRsL0NyRkF3Q3dmSU9FRUxVTU1HNGcxL0xaQjNY?=
- =?utf-8?B?MnFmazRDQ0VCSGNRbmcwK1ZZTFM3b2k4N2VBTm9CakdGc3NJUkU0Y1F0cGZG?=
- =?utf-8?B?aURlTGdadnRHcUpNUjl1K1c1U2h5M2hjVFNieElGYUEyaUg5ZnkzVzZHUmJZ?=
- =?utf-8?B?ZmNIdE5HZW5VSVBlZC9nRVliUXNjc29UUG1OWklMWGxVMU81bWlxNHFTbGxp?=
- =?utf-8?B?MkZtOHlEaUJ6WDhCUEJiaGY0QlpscmpnUFdReFowVUVQVnFiR2luSmhNSDBh?=
- =?utf-8?B?Y09IWm5BZHVxYS9aN253WW1FVS9xSUJha1cvU2czcDlIcHhyQWNnVXBPK2Er?=
- =?utf-8?B?cVFQblY0ekJQRUczQlZCTW55YndKbnlqN2Q1UllwdEQxbkpwMS9UWHJzcTAz?=
- =?utf-8?B?ZC94NTl4WEc5Slh6eHJnY0FrVDl4dTJLRHF2eGxqWGFYSGpDd1h1N3hJZFVY?=
- =?utf-8?B?eGFaTXJaZS9NVld0bzdtTHNIWkYwZEpGUXBST3hpNlpsbE9IMEZxOFZnT1U4?=
- =?utf-8?B?U05CTFdMMm84aWRxeTAweS9tTGphR3E3ZHZPMG9VSDdwakZMT3A4cnZ3amxM?=
- =?utf-8?B?bzBzdnlHNFZHKy9UV09FMjlyaWxZT0crdVIrZVlKZWxiYzBUaTJFZUwyTEpN?=
- =?utf-8?B?SG96N2krQjdTbUlGRUYzcHZhQ2krRzczQUJlVU9YS1FkUjFxTTdLM2dCa1ZG?=
- =?utf-8?B?VW1YOGJHdHNwT2lWV21KRExRYk9NdFovRGpGMHFYOSthSmlkUTVYQ0FYL0Nr?=
- =?utf-8?B?dWttM2NMaUVsUWV2Y0ZiUWJ3RUFYUXFkUGZYMjRsMWFTVmJLVjNTRlBYbVdL?=
- =?utf-8?B?dXVEcEdyOUIwR0pwVmlDTjFERmM2TWVxNEpoYW12WjB1UEpsVFdldS9JckpN?=
- =?utf-8?B?QTkvUDZGbG84YXNhWlNDSlE4aXBhbFFtQUM1SmJCSUJWVVdmbmtXdU9rRUdt?=
- =?utf-8?B?UkV4SmJuOXpSc1pFWmNnc0ZkNTR3ME5rME8wcHA2Y1VsQldkeDg2bE1HbGpq?=
- =?utf-8?B?cE90dnFheEJkckFPK3dWN21xWWszNldIVFhISVVUd2luSnRLMWgxMVJ4a1cx?=
- =?utf-8?B?bjFVMm5HZGRVVS8wd054UFMvOThKL2loWnY1cmEySDduSFFIc0FiOGNzYkpq?=
- =?utf-8?B?cmlIbzA2SXJlby83QWh2VnR5b2QybzRBaGpycExrMVJCbmdNajZjVm1ITmtu?=
- =?utf-8?B?WWRWenEzVllYMjVhR1JnbVVVN3ROL3MyeHFSaloyc2x3WkN5blhXWWdsc1hJ?=
- =?utf-8?B?dndQNnR0R2lNV1VqUWROTExNeVlCcERoUFpPNUZHbzJwVThDVXd3bHErMUhW?=
- =?utf-8?B?YURTR1ozS1JvcytYaVNMT1VZY01wSjJyT2hGdHNkRVExQ0pQSUhjckovNXJC?=
- =?utf-8?B?MWtwRjBoSnoydlljNlNjNUhHNTJvR1o0Ny9XQXZ1YmIzQS83MkkzSzUrL2Zw?=
- =?utf-8?B?Vmx0MU5TOVJlbDhXNXRKaE5zWExPc3BKZmRBSmtKZVZYNG9HdVRyMlVSSkEy?=
- =?utf-8?B?Nm5ESFRaa2owODAyQ0MwaVJGWmt4WlVUckRsWndjemFYL3k1MGtUQnIxWlBy?=
- =?utf-8?B?L3RLc0ZKNXlXTFRnV3ZKVFFBOGVYcDJka1RnR0pJSzM4U0hKenZ1QjNGRUtv?=
- =?utf-8?B?dE1kR0J4L0hyZjhMcXhjY2ltV3g3Y2ZXT04xQ0orQVJBY0wyNzc4STNjcDJZ?=
- =?utf-8?B?Y1RxZmJoVTJhNlUxZWhBRnVvcGQ0RFp2RWVsS2hKd2NySk5tT2FvUlpuTWZo?=
- =?utf-8?B?b1F5NUpxNm5kZFU0ZGJvaWwvdlhjSlYxcHVGcDlBbmRjZ2lhSWFvWnptWjBU?=
- =?utf-8?B?WTl4OHQ2M0p4cStqeEZjOW1jeFBLMmQwY08rNGN3bkJjMEhLREhNN21NcXlG?=
- =?utf-8?B?cWlqenErcWNxQUV5cUtIb3c0UDVGenVMNFMyL2ZNM3V0bWdLcUIraWgzOStm?=
- =?utf-8?B?NWk0ZWFjczJMbGVkSXNOdWkrWDFoTWU3dHVZWjZXOGwrYmRWbHl4d2F6RFVi?=
- =?utf-8?B?YXpLWjJYb0tnaThPYTQ4VEJBU0JNSGFzZC9Ud25lRkRYMEZPQXVXT29HZzd1?=
- =?utf-8?B?NHhoenFLRWJ0QlM0Wkg3MWtpTFlSeDF2U3ZKSkFNMXlydDlPNHZ3SU9pTk9Z?=
- =?utf-8?Q?4LAVItxsNuptA3tCwFnt+Y4J/I1W6q6ZVt5QS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ff4191e-d52b-4b06-f95f-08db464c3794
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CBFunP1DXZSIT03/W2ttqQIiwl48AoIVpNAb9iBLJonDijYiyoMu08Xhe+sf5G9dxBX48SmULmbE97UDegsnD5qMptvnIHRs3lA971wOxFQ8sTdsps2yx2CkOGRWN/K6jQ7mWeZRFtkTzgfbKw4O/RZzU8IiCdFXAfFPVV/t68Xo+Ya7gTtgADmAE14CyAqJfy0/ClCP5Ka+ttVTm5MJeK4EUXQKajeNAu3LqS9oeClTcShuOLuZGC1fkSOo6YTr
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 15:52:09.7468
- (UTC)
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6029
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 1/1] wifi: mac80211: fortify the spinlock against
+ deadlock by interrupt
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Alexander Wetzel <alexander@wetzel-home.de>
+References: <20230425164005.25272-1-mirsad.todorovac@alu.unizg.hr>
+ <20230426064145.GE27649@unreal>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230426064145.GE27649@unreal>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,213 +78,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-WTF? I own you a beer!
+On 4/26/23 08:41, Leon Romanovsky wrote:
+> On Tue, Apr 25, 2023 at 06:40:08PM +0200, Mirsad Goran Todorovac wrote:
+>> In the function ieee80211_tx_dequeue() there is a particular locking
+>> sequence:
+>>
+>> begin:
+>> 	spin_lock(&local->queue_stop_reason_lock);
+>> 	q_stopped = local->queue_stop_reasons[q];
+>> 	spin_unlock(&local->queue_stop_reason_lock);
+>>
+>> However small the chance (increased by ftracetest), an asynchronous
+>> interrupt can occur in between of spin_lock() and spin_unlock(),
+>> and the interrupt routine will attempt to lock the same
+>> &local->queue_stop_reason_lock again.
+>>
+>> This will cause a costly reset of the CPU and the wifi device or an
+>> altogether hang in the single CPU and single core scenario.
+>>
+>> The only remaining spin_lock(&local->queue_stop_reason_lock) that
+>> did not disable interrupts was patched, which should prevent any
+>> deadlocks on the same CPU/core and the same wifi device.
+>>
+>> This is the probable trace of the deadlock:
+>>
+>> kernel: ================================
+>> kernel: WARNING: inconsistent lock state
+>> kernel: 6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4 Tainted: G        W
+>> kernel: --------------------------------
+>> kernel: inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
+>> kernel: kworker/5:0/25656 [HC0[0]:SC0[0]:HE1:SE1] takes:
+>> kernel: ffff9d6190779478 (&local->queue_stop_reason_lock){+.?.}-{2:2}, at: return_to_handler+0x0/0x40
+>> kernel: {IN-SOFTIRQ-W} state was registered at:
+>> kernel:   lock_acquire+0xc7/0x2d0
+>> kernel:   _raw_spin_lock+0x36/0x50
+>> kernel:   ieee80211_tx_dequeue+0xb4/0x1330 [mac80211]
+>> kernel:   iwl_mvm_mac_itxq_xmit+0xae/0x210 [iwlmvm]
+>> kernel:   iwl_mvm_mac_wake_tx_queue+0x2d/0xd0 [iwlmvm]
+>> kernel:   ieee80211_queue_skb+0x450/0x730 [mac80211]
+>> kernel:   __ieee80211_xmit_fast.constprop.66+0x834/0xa50 [mac80211]
+>> kernel:   __ieee80211_subif_start_xmit+0x217/0x530 [mac80211]
+>> kernel:   ieee80211_subif_start_xmit+0x60/0x580 [mac80211]
+>> kernel:   dev_hard_start_xmit+0xb5/0x260
+>> kernel:   __dev_queue_xmit+0xdbe/0x1200
+>> kernel:   neigh_resolve_output+0x166/0x260
+>> kernel:   ip_finish_output2+0x216/0xb80
+>> kernel:   __ip_finish_output+0x2a4/0x4d0
+>> kernel:   ip_finish_output+0x2d/0xd0
+>> kernel:   ip_output+0x82/0x2b0
+>> kernel:   ip_local_out+0xec/0x110
+>> kernel:   igmpv3_sendpack+0x5c/0x90
+>> kernel:   igmp_ifc_timer_expire+0x26e/0x4e0
+>> kernel:   call_timer_fn+0xa5/0x230
+>> kernel:   run_timer_softirq+0x27f/0x550
+>> kernel:   __do_softirq+0xb4/0x3a4
+>> kernel:   irq_exit_rcu+0x9b/0xc0
+>> kernel:   sysvec_apic_timer_interrupt+0x80/0xa0
+>> kernel:   asm_sysvec_apic_timer_interrupt+0x1f/0x30
+>> kernel:   _raw_spin_unlock_irqrestore+0x3f/0x70
+>> kernel:   free_to_partial_list+0x3d6/0x590
+>> kernel:   __slab_free+0x1b7/0x310
+>> kernel:   kmem_cache_free+0x52d/0x550
+>> kernel:   putname+0x5d/0x70
+>> kernel:   do_sys_openat2+0x1d7/0x310
+>> kernel:   do_sys_open+0x51/0x80
+>> kernel:   __x64_sys_openat+0x24/0x30
+>> kernel:   do_syscall_64+0x5c/0x90
+>> kernel:   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>> kernel: irq event stamp: 5120729
+>> kernel: hardirqs last  enabled at (5120729): [<ffffffff9d149936>] trace_graph_return+0xd6/0x120
+>> kernel: hardirqs last disabled at (5120728): [<ffffffff9d149950>] trace_graph_return+0xf0/0x120
+>> kernel: softirqs last  enabled at (5069900): [<ffffffff9cf65b60>] return_to_handler+0x0/0x40
+>> kernel: softirqs last disabled at (5067555): [<ffffffff9cf65b60>] return_to_handler+0x0/0x40
+>> kernel:
+>>          other info that might help us debug this:
+>> kernel:  Possible unsafe locking scenario:
+>> kernel:        CPU0
+>> kernel:        ----
+>> kernel:   lock(&local->queue_stop_reason_lock);
+>> kernel:   <Interrupt>
+>> kernel:     lock(&local->queue_stop_reason_lock);
+>> kernel:
+>>           *** DEADLOCK ***
+>> kernel: 8 locks held by kworker/5:0/25656:
+>> kernel:  #0: ffff9d618009d138 ((wq_completion)events_freezable){+.+.}-{0:0}, at: process_one_work+0x1ca/0x530
+>> kernel:  #1: ffffb1ef4637fe68 ((work_completion)(&local->restart_work)){+.+.}-{0:0}, at: process_one_work+0x1ce/0x530
+>> kernel:  #2: ffffffff9f166548 (rtnl_mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+>> kernel:  #3: ffff9d6190778728 (&rdev->wiphy.mtx){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+>> kernel:  #4: ffff9d619077b480 (&mvm->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+>> kernel:  #5: ffff9d61907bacd8 (&trans_pcie->mutex){+.+.}-{3:3}, at: return_to_handler+0x0/0x40
+>> kernel:  #6: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: iwl_mvm_queue_state_change+0x59/0x3a0 [iwlmvm]
+>> kernel:  #7: ffffffff9ef9cda0 (rcu_read_lock){....}-{1:2}, at: iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
+>> kernel:
+>>          stack backtrace:
+>> kernel: CPU: 5 PID: 25656 Comm: kworker/5:0 Tainted: G        W          6.3.0-rc6-mt-20230401-00001-gf86822a1170f #4
+>> kernel: Hardware name: LENOVO 82H8/LNVNB161216, BIOS GGCN51WW 11/16/2022
+>> kernel: Workqueue: events_freezable ieee80211_restart_work [mac80211]
+>> kernel: Call Trace:
+>> kernel:  <TASK>
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  dump_stack_lvl+0x5f/0xa0
+>> kernel:  dump_stack+0x14/0x20
+>> kernel:  print_usage_bug.part.46+0x208/0x2a0
+>> kernel:  mark_lock.part.47+0x605/0x630
+>> kernel:  ? sched_clock+0xd/0x20
+>> kernel:  ? trace_clock_local+0x14/0x30
+>> kernel:  ? __rb_reserve_next+0x5f/0x490
+>> kernel:  ? _raw_spin_lock+0x1b/0x50
+>> kernel:  __lock_acquire+0x464/0x1990
+>> kernel:  ? mark_held_locks+0x4e/0x80
+>> kernel:  lock_acquire+0xc7/0x2d0
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  ? ftrace_return_to_handler+0x8b/0x100
+>> kernel:  ? preempt_count_add+0x4/0x70
+>> kernel:  _raw_spin_lock+0x36/0x50
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  ieee80211_tx_dequeue+0xb4/0x1330 [mac80211]
+>> kernel:  ? prepare_ftrace_return+0xc5/0x190
+>> kernel:  ? ftrace_graph_func+0x16/0x20
+>> kernel:  ? 0xffffffffc02ab0b1
+>> kernel:  ? lock_acquire+0xc7/0x2d0
+>> kernel:  ? iwl_mvm_mac_itxq_xmit+0x42/0x210 [iwlmvm]
+>> kernel:  ? ieee80211_tx_dequeue+0x9/0x1330 [mac80211]
+>> kernel:  ? __rcu_read_lock+0x4/0x40
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_mvm_mac_itxq_xmit+0xae/0x210 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_mvm_queue_state_change+0x311/0x3a0 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_mvm_wake_sw_queue+0x17/0x20 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_txq_gen2_unmap+0x1c9/0x1f0 [iwlwifi]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_txq_gen2_free+0x55/0x130 [iwlwifi]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_txq_gen2_tx_free+0x63/0x80 [iwlwifi]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  _iwl_trans_pcie_gen2_stop_device+0x3f3/0x5b0 [iwlwifi]
+>> kernel:  ? _iwl_trans_pcie_gen2_stop_device+0x9/0x5b0 [iwlwifi]
+>> kernel:  ? mutex_lock_nested+0x4/0x30
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_trans_pcie_gen2_stop_device+0x5f/0x90 [iwlwifi]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_mvm_stop_device+0x78/0xd0 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  __iwl_mvm_mac_start+0x114/0x210 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  iwl_mvm_mac_start+0x76/0x150 [iwlmvm]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  drv_start+0x79/0x180 [mac80211]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  ieee80211_reconfig+0x1523/0x1ce0 [mac80211]
+>> kernel:  ? synchronize_net+0x4/0x50
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  ieee80211_restart_work+0x108/0x170 [mac80211]
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  process_one_work+0x250/0x530
+>> kernel:  ? ftrace_regs_caller_end+0x66/0x66
+>> kernel:  worker_thread+0x48/0x3a0
+>> kernel:  ? __pfx_worker_thread+0x10/0x10
+>> kernel:  kthread+0x10f/0x140
+>> kernel:  ? __pfx_kthread+0x10/0x10
+>> kernel:  ret_from_fork+0x29/0x50
+>> kernel:  </TASK>
+>>
+>> Fixes: 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs for resumption")
+>> Link: https://lore.kernel.org/all/1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr/
+>> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Cc: Gregory Greenman <gregory.greenman@intel.com>
+>> Cc: Johannes Berg <johannes.berg@intel.com>
+>> Link: https://lore.kernel.org/all/cdc80531-f25f-6f9d-b15f-25e16130b53a@alu.unizg.hr/
+>> Cc: David S. Miller <davem@davemloft.net>
+>> Cc: Eric Dumazet <edumazet@google.com>
+>> Cc: Jakub Kicinski <kuba@kernel.org>
+>> Cc: Paolo Abeni <pabeni@redhat.com>
+>> Cc: Leon Romanovsky <leon@kernel.org>
+>> Cc: Alexander Wetzel <alexander@wetzel-home.de>
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> ---
+>> v3 -> v4:
+>> - Added whole lockdep trace as advised.
+>> - Trimmed irrelevant line prefix.
+>> v2 -> v3:
+>> - Fix the Fixes: tag as advised.
+>> - Change the net: to wifi: to comply with the original patch that
+>>    is being fixed.
+>> v1 -> v2:
+>> - Minor rewording and clarification.
+>> - Cc:-ed people that replied to the original bug report (forgotten
+>>    in v1 by omission).
+>>
+>>   net/mac80211/tx.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> Thanks,
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
 
-I've fixed exactly that problem during the review process of the cleanup=20
-patch and because of this didn't considered that the code is still there.
+Not at all.
 
-It also explains why we don't see that in our testing.
+That's awesome! Just to ask, do I need to send the PATCH v5 with the
+Reviewed-by: tag, or it goes automatically?
 
-@Mikhail can you test that patch with drm-misc-next?
+Thanks.
 
-Thanks,
-Christian.
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
-Am 26.04.23 um 04:00 schrieb Chen, Guchun:
-> After reviewing this whole history, maybe attached patch is able to fix y=
-our problem. Can you have a try please?
->
-> Regards,
-> Guchun
->
->> -----Original Message-----
->> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of
->> Mikhail Gavrilov
->> Sent: Tuesday, April 25, 2023 9:20 PM
->> To: Koenig, Christian <Christian.Koenig@amd.com>
->> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>; dri-devel <dri-
->> devel@lists.freedesktop.org>; amd-gfx list <amd-gfx@lists.freedesktop.or=
-g>;
->> Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
->> Subject: Re: BUG: KASAN: null-ptr-deref in
->> drm_sched_job_cleanup+0x96/0x290 [gpu_sched]
->>
->> On Thu, Apr 20, 2023 at 3:32=E2=80=AFPM Mikhail Gavrilov
->> <mikhail.v.gavrilov@gmail.com> wrote:
->>> Important don't give up.
->>> https://youtu.be/25zhHBGIHJ8 [40 min]
->>> https://youtu.be/utnDR26eYBY [50 min]
->>> https://youtu.be/DJQ_tiimW6g [12 min]
->>> https://youtu.be/Y6AH1oJKivA [6 min]
->>> Yes the issue is everything reproducible, but time to time it not
->>> happens at first attempt.
->>> I also uploaded other videos which proves that the issue definitely
->>> exists if someone will launch those games in turn.
->>> Reproducibility is only a matter of time.
->>>
->>> Anyway I didn't want you to spend so much time trying to reproduce it.
->>> This monkey business fits me more than you.
->>> It would be better if I could collect more useful info.
->> Christian,
->> Did you manage to reproduce the problem?
->>
->> At the weekend I faced with slab-use-after-free in
->> amdgpu_vm_handle_moved.
->> I didn't play in the games at this time.
->> The Xwayland process was affected so it leads to desktop hang.
->>
->> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> =3D=3D
->> BUG: KASAN: slab-use-after-free in
->> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu] Read of size 8 at addr
->> ffff888295c66190 by task Xwayland:cs0/173185
->>
->> CPU: 21 PID: 173185 Comm: Xwayland:cs0 Tainted: G        W    L
->> -------  ---  6.3.0-0.rc7.20230420gitcb0856346a60.59.fc39.x86_64+debug
->> #1
->> Hardware name: System manufacturer System Product Name/ROG STRIX
->> X570-I GAMING, BIOS 4601 02/02/2023 Call Trace:
->>   <TASK>
->>   dump_stack_lvl+0x76/0xd0
->>   print_report+0xcf/0x670
->>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]  ?
->> amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>   kasan_report+0xa8/0xe0
->>   ? amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>   amdgpu_vm_handle_moved+0x286/0x2d0 [amdgpu]
->>   amdgpu_cs_ioctl+0x2b7e/0x5630 [amdgpu]
->>   ? __pfx___lock_acquire+0x10/0x10
->>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ? mark_lock+0x101/0x16e0  =
-?
->> __lock_acquire+0xe54/0x59f0  ? __pfx_lock_release+0x10/0x10  ?
->> __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]
->>   drm_ioctl_kernel+0x1fc/0x3d0
->>   ? __pfx_drm_ioctl_kernel+0x10/0x10
->>   drm_ioctl+0x4c5/0xaa0
->>   ? __pfx_amdgpu_cs_ioctl+0x10/0x10 [amdgpu]  ?
->> __pfx_drm_ioctl+0x10/0x10  ? _raw_spin_unlock_irqrestore+0x66/0x80
->>   ? lockdep_hardirqs_on+0x81/0x110
->>   ? _raw_spin_unlock_irqrestore+0x4f/0x80
->>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>   __x64_sys_ioctl+0x131/0x1a0
->>   do_syscall_64+0x60/0x90
->>   ? do_syscall_64+0x6c/0x90
->>   ? lockdep_hardirqs_on+0x81/0x110
->>   ? do_syscall_64+0x6c/0x90
->>   ? lockdep_hardirqs_on+0x81/0x110
->>   ? do_syscall_64+0x6c/0x90
->>   ? lockdep_hardirqs_on+0x81/0x110
->>   ? do_syscall_64+0x6c/0x90
->>   ? lockdep_hardirqs_on+0x81/0x110
->>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->> RIP: 0033:0x7ffb71b0892d
->> Code: 04 25 28 00 00 00 48 89 45 c8 31 c0 48 8d 45 10 c7 45 b0 10 00
->> 00 00 48 89 45 b8 48 8d 45 d0 48 89 45 c0 b8 10 00 00 00 0f 05 <89> c2 3=
-d 00
->> f0 ff ff 77 1a 48 8b 45 c8 64 48 2b 04 25 28 00 00 00
->> RSP: 002b:00007ffb677fe840 EFLAGS: 00000246 ORIG_RAX:
->> 0000000000000010
->> RAX: ffffffffffffffda RBX: 00007ffb677fe9f8 RCX: 00007ffb71b0892d
->> RDX: 00007ffb677fe900 RSI: 00000000c0186444 RDI: 000000000000000d
->> RBP: 00007ffb677fe890 R08: 00007ffb677fea50 R09: 00007ffb677fe8e0
->> R10: 0000556c4611bec0 R11: 0000000000000246 R12: 00007ffb677fe900
->> R13: 00000000c0186444 R14: 000000000000000d R15: 00007ffb677fe9f8
->> </TASK>
->>
->> Allocated by task 173181:
->>   kasan_save_stack+0x33/0x60
->>   kasan_set_track+0x25/0x30
->>   __kasan_kmalloc+0x8f/0xa0
->>   __kmalloc_node+0x65/0x160
->>   amdgpu_bo_create+0x31e/0xfb0 [amdgpu]
->>   amdgpu_bo_create_user+0xca/0x160 [amdgpu]
->>   amdgpu_gem_create_ioctl+0x398/0x980 [amdgpu]
->>   drm_ioctl_kernel+0x1fc/0x3d0
->>   drm_ioctl+0x4c5/0xaa0
->>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>   __x64_sys_ioctl+0x131/0x1a0
->>   do_syscall_64+0x60/0x90
->>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> Freed by task 173185:
->>   kasan_save_stack+0x33/0x60
->>   kasan_set_track+0x25/0x30
->>   kasan_save_free_info+0x2e/0x50
->>   __kasan_slab_free+0x10b/0x1a0
->>   slab_free_freelist_hook+0x11e/0x1d0
->>   __kmem_cache_free+0xc0/0x2e0
->>   ttm_bo_release+0x667/0x9e0 [ttm]
->>   amdgpu_bo_unref+0x35/0x70 [amdgpu]
->>   amdgpu_gem_object_free+0x73/0xb0 [amdgpu]
->>   drm_gem_handle_delete+0xe3/0x150
->>   drm_ioctl_kernel+0x1fc/0x3d0
->>   drm_ioctl+0x4c5/0xaa0
->>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>   __x64_sys_ioctl+0x131/0x1a0
->>   do_syscall_64+0x60/0x90
->>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> Last potentially related work creation:
->>   kasan_save_stack+0x33/0x60
->>   __kasan_record_aux_stack+0x97/0xb0
->>   __call_rcu_common.constprop.0+0xf8/0x1af0
->>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
->>   dma_resv_reserve_fences+0x4dc/0x7f0
->>   ttm_eu_reserve_buffers+0x3f6/0x1190 [ttm]
->>   amdgpu_cs_ioctl+0x204d/0x5630 [amdgpu]
->>   drm_ioctl_kernel+0x1fc/0x3d0
->>   drm_ioctl+0x4c5/0xaa0
->>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>   __x64_sys_ioctl+0x131/0x1a0
->>   do_syscall_64+0x60/0x90
->>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> Second to last potentially related work creation:
->>   kasan_save_stack+0x33/0x60
->>   __kasan_record_aux_stack+0x97/0xb0
->>   __call_rcu_common.constprop.0+0xf8/0x1af0
->>   drm_sched_fence_release_scheduled+0xb8/0xe0 [gpu_sched]
->>   amdgpu_ctx_add_fence+0x2b1/0x390 [amdgpu]
->>   amdgpu_cs_ioctl+0x44d0/0x5630 [amdgpu]
->>   drm_ioctl_kernel+0x1fc/0x3d0
->>   drm_ioctl+0x4c5/0xaa0
->>   amdgpu_drm_ioctl+0xd2/0x1b0 [amdgpu]
->>   __x64_sys_ioctl+0x131/0x1a0
->>   do_syscall_64+0x60/0x90
->>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> The buggy address belongs to the object at ffff888295c66000  which belon=
-gs
->> to the cache kmalloc-1k of size 1024 The buggy address is located 400 by=
-tes
->> inside of  freed 1024-byte region [ffff888295c66000, ffff888295c66400)
->>
->> The buggy address belongs to the physical page:
->> page:00000000125ffbe3 refcount:1 mapcount:0 mapping:0000000000000000
->> index:0x0 pfn:0x295c60
->> head:00000000125ffbe3 order:3 entire_mapcount:0 nr_pages_mapped:0
->> pincount:0 anon flags:
->> 0x17ffffc0010200(slab|head|node=3D0|zone=3D2|lastcpupid=3D0x1fffff)
->> raw: 0017ffffc0010200 ffff88810004cdc0 0000000000000000
->> dead000000000001
->> raw: 0000000000000000 0000000000100010 00000001ffffffff
->> 0000000000000000 page dumped because: kasan: bad access detected
->>
->> Memory state around the buggy address:
->>   ffff888295c66080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>   ffff888295c66100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>> ffff888295c66180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>                           ^
->>   ffff888295c66200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->>   ffff888295c66280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> =3D=3D
->>
->> --
->> Best Regards,
->> Mike Gavrilov.
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
 
+"What’s this thing suddenly coming towards me very fast? Very very fast.
+... I wonder if it will be friends with me?"
