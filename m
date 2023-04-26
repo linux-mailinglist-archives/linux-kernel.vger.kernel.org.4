@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3DC6EF439
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8299C6EF43E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240845AbjDZMZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 08:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S240851AbjDZM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240277AbjDZMZ1 (ORCPT
+        with ESMTP id S240601AbjDZM0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:25:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765E1702;
-        Wed, 26 Apr 2023 05:25:26 -0700 (PDT)
+        Wed, 26 Apr 2023 08:26:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631D01702;
+        Wed, 26 Apr 2023 05:26:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F39A362EFC;
-        Wed, 26 Apr 2023 12:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92572C433D2;
-        Wed, 26 Apr 2023 12:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682511925;
-        bh=vuJL6yCTBAU/JeYidaeHQ1VVVOlHKOhea8HHqq/kUFE=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F7162FD7;
+        Wed, 26 Apr 2023 12:26:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C57C433EF;
+        Wed, 26 Apr 2023 12:26:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682511999;
+        bh=cdI2zaKgoeVH8+lh7QkDEcGOwMPtzMzzDqC1Ob1nKds=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FBLiatJcUp5pyQtsxwYdz/RtxnIhOdF3qSezRm8fR7bNiL/Yiz771S+DxknmhXIM0
-         Qqd9av/VX3r+qT9WJDYmXfCLfcqXGGJOr1ncxad2Q/qTSF6PTVJLWdtH9IR4MSUYG6
-         62C0T3RmlKvzgtWjhCiW83LTv8ZL7onaqEOxq6/pEQ0YzF4qt04Ui+2SZ5HIY+2ZYO
-         wXOjZkymI9DoPggtx1QAxH8HGwyqhR5VsI498AOicGup2B4J5Ai54j2Gyr1mj7SRBb
-         Mkx8YLuxTBamtmT3yXGjM35TZ+ESStNJK8bPwUW5tAXTdnZPC7uDYZb1UetICaXw7B
-         aHegbFJwOEh7w==
-Date:   Wed, 26 Apr 2023 13:25:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Subject: Re: [PATCH 0/3] spi: spi-imx: fix use of more than four chip selects
-Message-ID: <fd22bfc4-b019-4445-acc5-f7902a2386fe@sirena.org.uk>
-References: <20230425134527.483607-1-linux@rasmusvillemoes.dk>
- <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
+        b=qnOqm7ybgwu+DC68iZtWPjdOTym6MH7XxTN2/p31qzx99QWiUJFxjFpek/am/RsjL
+         J78JpEkD/lO49If6n8utrPfZrNtelum+LW9DYynU1hPJC7QnHXYzPZdECqdd0aVD7D
+         VlWhKvBu7PcmbTjDYaHQSB/lz1VE7E3fYaXez6xA=
+Date:   Wed, 26 Apr 2023 14:26:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Ondrej Zary <linux@zary.sk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Won Chung <wonchung@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v2 0/7] Allow dynamic allocation of software IO TLB
+ bounce buffers
+Message-ID: <2023042617-wobble-enlighten-9361@gregkh>
+References: <cover.1681898595.git.petr.tesarik.ext@huawei.com>
+ <20230426141520.0caf4386@meshulam.tesarici.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mTo1aoA7l1FLU+ZV"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <706c591f-4800-1b96-52c0-37b5f6de7623@rasmusvillemoes.dk>
-X-Cookie: Drilling for oil is boring.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230426141520.0caf4386@meshulam.tesarici.cz>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 26, 2023 at 02:15:20PM +0200, Petr Tesařík wrote:
+> Hi,
+> 
+> On Wed, 19 Apr 2023 12:03:52 +0200
+> Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
+> 
+> > From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> > 
+> > The goal of my work is to provide more flexibility in the sizing of
+> > SWIOTLB.
+> > 
+> > The software IO TLB was designed with these assumptions:
+> > 
+> > 1. It would not be used much, especially on 64-bit systems.
+> > 2. A small fixed memory area (64 MiB by default) is sufficient to
+> >    handle the few cases which require a bounce buffer.
+> > 3. 64 MiB is little enough that it has no impact on the rest of the
+> >    system.
+> > 
+> > First, if SEV is active, all DMA must be done through shared
+> > unencrypted pages, and SWIOTLB is used to make this happen without
+> > changing device drivers. The software IO TLB size is increased to
+> > 6% of total memory in sev_setup_arch(), but that is more of an
+> > approximation. The actual requirements may vary depending on the
+> > amount of I/O and which drivers are used. These factors may not be
+> > know at boot time, i.e. when SWIOTLB is allocated.
+> > 
+> > Second, other colleagues have noticed that they can reliably get
+> > rid of occasional OOM kills on an Arm embedded device by reducing
+> > the SWIOTLB size. This can be achieved with a kernel parameter, but
+> > determining the right value puts additional burden on pre-release
+> > testing, which could be avoided if SWIOTLB is allocated small and
+> > grows only when necessary.
+> 
+> Now that merging into 6.4 has begun, what about this patch series? I'm
+> eager to get some feedback (positive or negative) and respin the next
+> version.
 
---mTo1aoA7l1FLU+ZV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It's the merge window, we can't add new things that haven't been in
+linux-next already.   Please resubmit it after -rc1 is out.
 
-On Wed, Apr 26, 2023 at 09:19:29AM +0200, Rasmus Villemoes wrote:
+thanks,
 
-> I did consider that approach, but rejected it because it wouldn't work
-> with mixing native and gpio chip selects. Say, somebody uses SS0
-> natively, but then also have four additional gpios. Then chipselect 4
-> would end up activating both the SS0 pin as well as the gpio, selecting
-> both devices.
-
-> I don't know if that's really a realistic scenario. But at least I think
-> the driver should then somehow have a way to indicate to the core that
-> one should either use native or gpio chip selects, but not a mix.
-
-I'm not sure this is sensible, it'll be a fairly rare situation and we
-don't want to preclude using the built in chip select functionality for
-some of the chip selects.  In a situation like this we only need to have
-a single chip select to be managed as a GPIO rather than all of them,
-which I'd expect to end up handled in the DT by not allocating that chip
-select number.
-
---mTo1aoA7l1FLU+ZV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRJGC0ACgkQJNaLcl1U
-h9Cv9gf/XCK1SyOxyzEOvuhk1i/JyK/WG1acRj2U9uzscWVynOdWLKdJep0MUfTy
-AWhKbbp2728bYltDXZ5tyZo2CgEGPuLmeW1+YkeCmuBDTI3SMvIkaRX33m1eGcqd
-JN6MDhEnA7ZlTxIXr+6YzuOZESrwMA9LqY1pJ2uyI5TgKs/mPaAiraa9ciHT60Nk
-tgaEyKYybP/4xdjUIHIe7bExMBm2FmFT6u+k1g194y8mszimefiU0SKtaFM2UcWc
-+96gmYUT5fqQrYM0OgfvJdLrOO72a2DJ6rH5c28/sYWi2g1p6SzGf3PlhHvL/k9S
-t7VhpyKXhsJdpqIpnFKVfEuC5xFavg==
-=eTNG
------END PGP SIGNATURE-----
-
---mTo1aoA7l1FLU+ZV--
+greg k-h
