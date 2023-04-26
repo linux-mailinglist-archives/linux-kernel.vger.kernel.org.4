@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4436B6EF0D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8659C6EF0E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbjDZJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S240331AbjDZJO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 05:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240070AbjDZJMj (ORCPT
+        with ESMTP id S240089AbjDZJMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 05:12:39 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D284496;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A134495;
         Wed, 26 Apr 2023 02:12:35 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 09:12:32 -0000
+Date:   Wed, 26 Apr 2023 09:12:33 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1682500353;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kXREl/1bmbiXbNsXCjOEmqqeut0cSRsTmJ4GkEHgJZ4=;
-        b=oDBVCu8TYB8Knr6Qehs5GPM5KrEA/FRzNBTP61AvHSWqif/1ZPFLgwyCSq3dKUSVE0J5NN
-        DX46GzQLTkMo4SBQBHlaHBb3I+Ff2A9gq5eteVmL2dMO8Mkm9FzWvSLo25ycHvOYrOAodG
-        vmXOyELzixl6gMEmH96zh9QDw0OF8n/rJLV01n5kdLN6Gh32iW7rm5n/rzyhfe0WjqPR5E
-        Aa8rrJiDbmwRLD8tUlADVs7utTkLXEmsefs6hRRacFug34oMjfIXe257yN8yvbXfV4v9Kf
-        XuvfUTEo0SXrJ4VENrsvj+o548VjTgLDfKDoRXM91qXJoD2QEuhTdUbnQdK4nA==
+        bh=AD++uZqsO1TQvdELJ+jJo+eoOluJlmJJrrN46Beilj4=;
+        b=uX/N76n0Pm/oJBlhoLXcuQuEUymv1seEjg6ExkoUq0DTrVesMdomD7iTKHf507Z1COMryY
+        bFaN0KZ3UBkiQ1AGkSocY9bR2fWw26QeyKn2BgECXtty0wKLZQV6mTAA820ZCs9qlGnxnI
+        zxELjtmAtBujYt2dYthwgn0CWpqueuEV5vLAge1ijEOU1LsoWaGvH2sxFIOXrVZi0J2oF8
+        Un2YajMYMtV2YPQs6YTWWoPDOLic2MBMnesWYJmPEAEYiBOJFKZ3UsPhlhFdEfydGV+rvZ
+        LCGy+RZbXfWeUgmUlmjmDHLqIpY/KFxNcu4S7uI8jvZagV+XwisWjvT9pbqVgQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1682500353;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,26 +36,25 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kXREl/1bmbiXbNsXCjOEmqqeut0cSRsTmJ4GkEHgJZ4=;
-        b=3hy56a64hlYEqH6YkP78QsI6HnAX7VW/PzJDCKnyxF395KLfza6ESAxhmMoWnLtWq00acx
-        JmvvXiyk0kL5reDg==
-From:   "tip-bot2 for Rob Herring" <tip-bot2@linutronix.de>
+        bh=AD++uZqsO1TQvdELJ+jJo+eoOluJlmJJrrN46Beilj4=;
+        b=12Ef82nXAyJkxsuwWwonCcTPWH9g5OxLJc+4WbdBNovK59W1D30QN4purxWFWm0poONSCc
+        zKV70F6F8MM1gqAA==
+From:   "tip-bot2 for Fabio Estevam" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] clocksource/drivers/timer-ti-dm: Use
- of_address_to_resource()
-Cc:     Rob Herring <robh@kernel.org>,
+Subject: [tip: timers/core] clocksource/drivers/timer-imx-gpt: Remove non-DT function
+Cc:     Fabio Estevam <festevam@denx.de>, u.kleine-koenig@pengutronix.de,
         Daniel Lezcano <daniel.lezcano@linaro.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230319163220.226273-1-robh@kernel.org>
-References: <20230319163220.226273-1-robh@kernel.org>
+In-Reply-To: <20230307124313.708255-1-festevam@denx.de>
+References: <20230307124313.708255-1-festevam@denx.de>
 MIME-Version: 1.0
-Message-ID: <168250035290.404.6276091333899871488.tip-bot2@tip-bot2>
+Message-ID: <168250035320.404.1746468610150984093.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -68,120 +67,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     0fabf9f3a0c1ca44e01c5c4dccacfe69143413c5
-Gitweb:        https://git.kernel.org/tip/0fabf9f3a0c1ca44e01c5c4dccacfe69143413c5
-Author:        Rob Herring <robh@kernel.org>
-AuthorDate:    Sun, 19 Mar 2023 11:32:20 -05:00
+Commit-ID:     f68a40ee4732731f149961abab27a45b6c11f413
+Gitweb:        https://git.kernel.org/tip/f68a40ee4732731f149961abab27a45b6c1=
+1f413
+Author:        Fabio Estevam <festevam@denx.de>
+AuthorDate:    Tue, 07 Mar 2023 09:43:13 -03:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Mon, 24 Apr 2023 16:56:13 +02:00
 
-clocksource/drivers/timer-ti-dm: Use of_address_to_resource()
+clocksource/drivers/timer-imx-gpt: Remove non-DT function
 
-Replace of_get_address() and of_translate_address() calls with single
-call to of_address_to_resource().
+mxc_timer_init() was originally only used by non-DT i.MX platforms.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+i.MX has already been converted to be a DT-only platform.
+
+Remove the unused mxc_timer_init() function.
+
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20230319163220.226273-1-robh@kernel.org
+Link: https://lore.kernel.org/r/20230307124313.708255-1-festevam@denx.de
 ---
- drivers/clocksource/timer-ti-dm-systimer.c | 57 +++++++++------------
- 1 file changed, 27 insertions(+), 30 deletions(-)
+ drivers/clocksource/timer-imx-gpt.c | 19 -------------------
+ include/soc/imx/timer.h             |  7 -------
+ 2 files changed, 26 deletions(-)
 
-diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
-index 632523c..3b98a3c 100644
---- a/drivers/clocksource/timer-ti-dm-systimer.c
-+++ b/drivers/clocksource/timer-ti-dm-systimer.c
-@@ -251,24 +251,22 @@ static void __init dmtimer_systimer_assign_alwon(void)
- 		counter_32k = -ENODEV;
- 
- 	for_each_matching_node(np, dmtimer_match_table) {
-+		struct resource res;
- 		if (!dmtimer_is_preferred(np))
- 			continue;
- 
--		if (of_property_read_bool(np, "ti,timer-alwon")) {
--			const __be32 *addr;
+diff --git a/drivers/clocksource/timer-imx-gpt.c b/drivers/clocksource/timer-=
+imx-gpt.c
+index 7b2c70f..ca3e4cb 100644
+--- a/drivers/clocksource/timer-imx-gpt.c
++++ b/drivers/clocksource/timer-imx-gpt.c
+@@ -420,25 +420,6 @@ static int __init _mxc_timer_init(struct imx_timer *imxt=
+m)
+ 	return mxc_clockevent_init(imxtm);
+ }
+=20
+-void __init mxc_timer_init(unsigned long pbase, int irq, enum imx_gpt_type t=
+ype)
+-{
+-	struct imx_timer *imxtm;
 -
--			addr = of_get_address(np, 0, NULL, NULL);
--			pa = of_translate_address(np, addr);
--			if (pa) {
--				/* Quirky omap3 boards must use dmtimer12 */
--				if (quirk_unreliable_oscillator &&
--				    pa == 0x48318000)
--					continue;
+-	imxtm =3D kzalloc(sizeof(*imxtm), GFP_KERNEL);
+-	BUG_ON(!imxtm);
 -
--				of_node_put(np);
--				break;
--			}
--		}
-+		if (!of_property_read_bool(np, "ti,timer-alwon"))
-+			continue;
-+
-+		if (of_address_to_resource(np, 0, &res))
-+			continue;
-+
-+		/* Quirky omap3 boards must use dmtimer12 */
-+		if (quirk_unreliable_oscillator && res.start == 0x48318000)
-+			continue;
-+
-+		of_node_put(np);
-+		break;
- 	}
- 
- 	/* Usually no need for dmtimer clocksource if we have counter32 */
-@@ -285,24 +283,22 @@ static void __init dmtimer_systimer_assign_alwon(void)
- static u32 __init dmtimer_systimer_find_first_available(void)
+-	imxtm->clk_per =3D clk_get_sys("imx-gpt.0", "per");
+-	imxtm->clk_ipg =3D clk_get_sys("imx-gpt.0", "ipg");
+-
+-	imxtm->base =3D ioremap(pbase, SZ_4K);
+-	BUG_ON(!imxtm->base);
+-
+-	imxtm->type =3D type;
+-	imxtm->irq =3D irq;
+-
+-	_mxc_timer_init(imxtm);
+-}
+-
+ static int __init mxc_timer_init_dt(struct device_node *np,  enum imx_gpt_ty=
+pe type)
  {
- 	struct device_node *np;
--	const __be32 *addr;
- 	u32 pa = 0;
- 
- 	for_each_matching_node(np, dmtimer_match_table) {
-+		struct resource res;
- 		if (!dmtimer_is_preferred(np))
- 			continue;
- 
--		addr = of_get_address(np, 0, NULL, NULL);
--		pa = of_translate_address(np, addr);
--		if (pa) {
--			if (pa == clocksource || pa == clockevent) {
--				pa = 0;
--				continue;
--			}
+ 	struct imx_timer *imxtm;
+diff --git a/include/soc/imx/timer.h b/include/soc/imx/timer.h
+index b888d50..25f29c6 100644
+--- a/include/soc/imx/timer.h
++++ b/include/soc/imx/timer.h
+@@ -13,11 +13,4 @@ enum imx_gpt_type {
+ 	GPT_TYPE_IMX6DL,	/* i.MX6DL/SX/SL */
+ };
+=20
+-/*
+- * This is a stop-gap solution for clock drivers like imx1/imx21 which call
+- * mxc_timer_init() to initialize timer for non-DT boot.  It can be removed
+- * when these legacy non-DT support is converted or dropped.
+- */
+-void mxc_timer_init(unsigned long pbase, int irq, enum imx_gpt_type type);
 -
--			of_node_put(np);
--			break;
--		}
-+		if (of_address_to_resource(np, 0, &res))
-+			continue;
-+
-+		if (res.start == clocksource || res.start == clockevent)
-+			continue;
-+
-+		pa = res.start;
-+		of_node_put(np);
-+		break;
- 	}
- 
- 	return pa;
-@@ -812,7 +808,7 @@ err_out_free:
-  */
- static int __init dmtimer_systimer_init(struct device_node *np)
- {
--	const __be32 *addr;
-+	struct resource res;
- 	u32 pa;
- 
- 	/* One time init for the preferred timer configuration */
-@@ -826,8 +822,9 @@ static int __init dmtimer_systimer_init(struct device_node *np)
- 		return -EINVAL;
- 	}
- 
--	addr = of_get_address(np, 0, NULL, NULL);
--	pa = of_translate_address(np, addr);
-+
-+	of_address_to_resource(np, 0, &res);
-+	pa = (u32)res.start;
- 	if (!pa)
- 		return -EINVAL;
- 
+ #endif  /* __SOC_IMX_TIMER_H__ */
