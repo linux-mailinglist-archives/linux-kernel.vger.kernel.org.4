@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8733E6EF7A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CD56EF7AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241200AbjDZPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S241237AbjDZPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjDZPT1 (ORCPT
+        with ESMTP id S231848AbjDZPVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:19:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654CE30E5;
-        Wed, 26 Apr 2023 08:19:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682522366; x=1714058366;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xGuWhmIvZUObihipML0kUSaC7fW30PvqPKfyEWpF0sM=;
-  b=SBicZZbKDrzUOO1TE0kWaQzYqjCXuQg4EajIIWENhmSuVKRG/MFekZfI
-   GjWEGVRe6YHLoDBHVNxuHT1vmOdX+T/b2OORqD0/rz864wqIRx7UunEHF
-   hgZZGXWjtNo6hPyBIBcykjFnp3BYvzIE2Qlfu7kdK5XJ88PmODIy75jVy
-   OPtGcVv0T/MOflB8PAXA8cvGMKaQPQY09AbbkJj3z4BWHNQYLsbkkLZWH
-   S0Nm+Uvi6iR3km8rHZdEaQiDNJwW1RB5qrE8jVSO9eudPCcMNXzwdEf6q
-   3jAxvrjK6u2JYsI47+peIvgBBHlqylJGtl0r0kXEh4lpWacnkdNHeQHM1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="412446761"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="412446761"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:19:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="671368625"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="671368625"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.168.108]) ([10.249.168.108])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:19:20 -0700
-Message-ID: <3a71a01f-4c3d-f92c-58d7-2c124a0efa94@intel.com>
-Date:   Wed, 26 Apr 2023 23:19:17 +0800
+        Wed, 26 Apr 2023 11:21:10 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E373AA5;
+        Wed, 26 Apr 2023 08:21:07 -0700 (PDT)
+Received: (Authenticated sender: didi.debian@cknow.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 20AD7E0007;
+        Wed, 26 Apr 2023 15:21:02 +0000 (UTC)
+From:   Diederik de Haas <didi.debian@cknow.org>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Diederik de Haas <didi.debian@cknow.org>
+Subject: Re: [PATCHv7 00/11] Introduce RK806 Support
+Date:   Wed, 26 Apr 2023 17:20:52 +0200
+Message-ID: <4046459.irdbgypaU6@bagend>
+Organization: Connecting Knowledge
+In-Reply-To: <20230307153617.643260-1-sebastian.reichel@collabora.com>
+References: <20230307153617.643260-1-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH] KVM: x86: Add a vCPU stat for #AC exceptions
-To:     Anselm Busse <abusse@amazon.com>
-Cc:     dwmw@amazon.co.uk, hborghor@amazon.de, sironi@amazon.de,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230426082601.85372-1-abusse@amazon.com>
-Content-Language: en-US
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230426082601.85372-1-abusse@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart15156774.uLZWGnKmhe";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/26/2023 4:26 PM, Anselm Busse wrote:
-> This patch adds a KVM vCPU stat that reflects the number of #AC
-> exceptions caused by a guest. This improves the identification and
-> debugging of issues that are possibly caused by guests triggering
-> split-locks and allows more insides compared to the current situation
-> of having only a warning printed when an #AC exception is raised.
+--nextPart15156774.uLZWGnKmhe
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Diederik de Haas <didi.debian@cknow.org>
+Subject: Re: [PATCHv7 00/11] Introduce RK806 Support
+Date: Wed, 26 Apr 2023 17:20:52 +0200
+Message-ID: <4046459.irdbgypaU6@bagend>
+Organization: Connecting Knowledge
+In-Reply-To: <20230307153617.643260-1-sebastian.reichel@collabora.com>
+References: <20230307153617.643260-1-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
 
-Note, on Intel platform, #AC exception has three sources according to 
-the latest spec:
+On Tuesday, 7 March 2023 16:36:06 CEST Sebastian Reichel wrote:
+> The Rockchip RK3588 Evaluation Boards as well as the Rock 5
+> boards and probably most other RK3588 boards use SPI connected
+> RK806 PMICs. Downstream this is handled by a new driver, but
+> apart from being SPI connected this chip is quite similar to
+> the other Rockchip PMICs (and RK806 is promoted to also support
+> I2C). Thus this series instead updates the RK808 driver(s).
 
-1. violation on alignment check when CPL = 3, while CR0.AM and EFLAG.AC 
-are set;
+I don't know if it's relevant or useful, but I tested whether this patch set 
+would cause a regression on the Rock64 (rk3328), Quartz64 Model A and Quartz64 
+Model B (both rk3566) and I can say that it does NOT cause a regression.
 
-2. split lock, when MSR_MEMORY_CTRL.[29] is set;
+If it is relevant or useful, feel free to add my 
+Tested-by: Diederik de Haas <didi.debian@cknow.org>
+--nextPart15156774.uLZWGnKmhe
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
 
-3. UC lock, when CPUID.0x7_0x2:EDX[16] is 1 and 
-MSR_MEMORY_CTRL(0x33).[28] is 1. (see ISE version 048);
+-----BEGIN PGP SIGNATURE-----
 
-you cannot treat every #AC as split lock #AC.
+iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZElBVAAKCRDXblvOeH7b
+bpGeAQDVEucvNJq97OpS0XFTOdR/bKYyYfigTND6d8xdEy8dwQEAlXAQCwktcor7
+LINeGsc3EDltinvqJVhMSBCpC5sPkAI=
+=AyOI
+-----END PGP SIGNATURE-----
 
-> Signed-off-by: Anselm Busse <abusse@amazon.com>
-> ---
->   arch/x86/include/asm/kvm_host.h | 1 +
->   arch/x86/kvm/vmx/vmx.c          | 2 ++
->   arch/x86/kvm/x86.c              | 1 +
->   3 files changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 808c292ad3f4..b4ab719fbc69 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1523,6 +1523,7 @@ struct kvm_vcpu_stat {
->   	u64 preemption_other;
->   	u64 guest_mode;
->   	u64 notify_window_exits;
-> +	u64 split_lock_exceptions;
->   };
->   
->   struct x86_instruction_info;
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d2d6e1b6c788..8f48fd8ddead 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -5309,6 +5309,8 @@ static int handle_exception_nmi(struct kvm_vcpu *vcpu)
->   		kvm_run->debug.arch.exception = ex_no;
->   		break;
->   	case AC_VECTOR:
-> +		vmx->vcpu.stat.split_lock_exceptions++;
-> +
->   		if (vmx_guest_inject_ac(vcpu)) {
->   			kvm_queue_exception_e(vcpu, AC_VECTOR, error_code);
->   			return 1;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 3d852ce84920..416a1ed6c423 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -297,6 +297,7 @@ const struct _kvm_stats_desc kvm_vcpu_stats_desc[] = {
->   	STATS_DESC_COUNTER(VCPU, preemption_other),
->   	STATS_DESC_IBOOLEAN(VCPU, guest_mode),
->   	STATS_DESC_COUNTER(VCPU, notify_window_exits),
-> +	STATS_DESC_COUNTER(VCPU, split_lock_exceptions),
->   };
->   
->   const struct kvm_stats_header kvm_vcpu_stats_header = {
+--nextPart15156774.uLZWGnKmhe--
+
+
 
