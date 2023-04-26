@@ -2,108 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044446EFA85
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0E66EFA8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235925AbjDZS5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 14:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S236285AbjDZS7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 14:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233612AbjDZS53 (ORCPT
+        with ESMTP id S235174AbjDZS7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:57:29 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898F58A7B;
-        Wed, 26 Apr 2023 11:56:54 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-504eb1155d3so782816a12.1;
-        Wed, 26 Apr 2023 11:56:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682535411; x=1685127411;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MIRwizkBlsL+ifd8FsbkRK/NdvO25L/3LYIQ1whi6m8=;
-        b=iQViXoJSnBRS387pYZ2Uoxdt6y376s9PMxxA7oQEPsb5RTOV2toAcjzikM5NhxG0Jo
-         yxg1mbXWan8zXLsHw3BUaePoMKBBqOnCmzYljgceDUeNhq4eQQxoQvb7x7VJC3Bc9e8e
-         wZw0z48eyzE7uER+ncDOGELSmqYRhrS/3eOOz8ZX6+CxsrU1DJF40GrYF9ZMkN1SpTmP
-         trvR9zno3ZeFccOHyzjQ1OtI5Unw8Hv+x1QNDE4sOcLxPwmrXV1dZwYoD/z28FlNxBsU
-         Y0TOXNZrSFX1zt6wEbP6bscdUKqO9C1hqQ9u1eDckhhI1etFwKwMJJzCRaTklqW+Y6eN
-         J0dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682535411; x=1685127411;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MIRwizkBlsL+ifd8FsbkRK/NdvO25L/3LYIQ1whi6m8=;
-        b=JgQ46j9943MBfWFLeQZejzFJoXbzKuCmRipdhio+4l+dC4VgqIxR0ugpAsUKbpPa68
-         neeaYMgG1HzIdHQID9IquRxhjIw7/sQ7CMvFgR7TFTHiu8367th/hfYK3fNjpNS1d5gO
-         mQmTU2838Sgo7DkKi0e2cof+vY7Bf67U8tVWAr0oscTCdconLS5Ohn3ahp/fQcO8ZMOy
-         JiA6J+RnQcRrf4fujrgUo3oObJiYHiO3jVyDCzHwpIOEXl1p6ZoMkx5c2tYIFygZWKg4
-         ZTUV+unBsPzYkeqggzletkuSmDUbwS79jlgnGS56rDp2uyL6J6Bhafd7ehKnOF0a5dPP
-         meBw==
-X-Gm-Message-State: AC+VfDzFbmons6aS8YFhQFY4E4L8YD9vV9AgsJmzmY6LZzubCWcet9yX
-        wZ2ygqTVSEUy8uzZttpUm8k=
-X-Google-Smtp-Source: ACHHUZ5zDTZfGl4gnFj8hI971RkQcX3E0Eq/1CIGPwLFd3QdP/E7NCuX8auzUcLCJtXt+rudRRdmYQ==
-X-Received: by 2002:a17:906:eda6:b0:94e:6edc:71bc with SMTP id sa6-20020a170906eda600b0094e6edc71bcmr3201176ejb.25.1682535410890;
-        Wed, 26 Apr 2023 11:56:50 -0700 (PDT)
-Received: from fedora.. (cpezg-94-253-129-198-cbl.xnet.hr. [94.253.129.198])
-        by smtp.googlemail.com with ESMTPSA id qt2-20020a170906ece200b0094e1344ddfdsm8501348ejb.34.2023.04.26.11.56.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 11:56:50 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH] arm64: dts: qcom: ipq8074: Add QUP5 SPI node
-Date:   Wed, 26 Apr 2023 20:56:47 +0200
-Message-Id: <20230426185647.180166-1-robimarko@gmail.com>
-X-Mailer: git-send-email 2.40.0
+        Wed, 26 Apr 2023 14:59:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA143C28;
+        Wed, 26 Apr 2023 11:58:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 769D363845;
+        Wed, 26 Apr 2023 18:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55317C433EF;
+        Wed, 26 Apr 2023 18:58:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682535519;
+        bh=lCHPNUXMHsaIKajjyxQt1zXitlVWSvdFMaRn9VcrNO8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fHfF5CXHaKUKaXykNS6ee/krSyPz0kskh8/udLZPP0Tha18WWgyaJwXUVbOWmi9RN
+         QjyxYBc7IrtfqDJczDr8FKgZWSz1I9MLPIxuOAroj66HuqmB/tv0fwnHuvwhyklVve
+         Ryq0wLPxRMe7O+18US6fECNq1Bst2lvWZW+NIX3PVvHDBCgmq5wNorAcXfxrAKhLjG
+         wQ2ClH0hZuJ+3Wwk7I7TlV8IUXCTcNbEiQAahvOB+fRGqGf5q3XjCJ9aK5nVbHwhZ6
+         QwhoTgIG8/YYNPJNZS6uLDk/8g/nHiC1bmdGvh3f/kwRuUVfsO/ew+a2xcmY5F0tNo
+         ncbKFn3YsXOnQ==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     linux-kernel@vger.kernel.org, Pengfei Xu <pengfei.xu@intel.com>
+Subject: [PATCH] tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM drivers
+Date:   Wed, 26 Apr 2023 21:58:33 +0300
+Message-Id: <20230426185833.289868-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add node to support the QUP5 SPI controller inside of IPQ8074.
-Some devices use this bus in order to manage external switches.
+TPM chip bootstrapping was removed from tpm_chip_register(), and it
+was relocated to tpm_tis_core. This breaks all drivers which are not
+based on tpm_tis because the chip will not get properly initialized.
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
+Take the corrective steps:
+1. Rename tpm_chip_startup() as tpm_chip_bootstrap() and make it one-shot.
+2. Call tpm_chip_bootstrap() in tpm_chip_register(), which reverts the
+   things  as tehy used to be.
+
+Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Reported-by: Pengfei Xu <pengfei.xu@intel.com>
+Link: https://lore.kernel.org/all/ZEjqhwHWBnxcaRV5@xpf.sh.intel.com/
+Fixes: 548eb516ec0f ("tpm, tpm_tis: startup chip before testing for interrupts")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/char/tpm/tpm-chip.c     | 22 +++++++++++++++++++---
+ drivers/char/tpm/tpm.h          |  2 +-
+ drivers/char/tpm/tpm_tis_core.c |  2 +-
+ include/linux/tpm.h             | 13 +++++++------
+ 4 files changed, 28 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 64c2a30d9c25..4a682e3442f8 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -774,6 +774,20 @@ blsp1_i2c5: i2c@78b9000 {
- 			status = "disabled";
- 		};
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index 6fdfa65a00c3..b8a484b4ff7a 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -606,13 +606,19 @@ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+ }
  
-+		blsp1_spi5: spi@78b9000 {
-+			compatible = "qcom,spi-qup-v2.2.1";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0x78b9000 0x600>;
-+			interrupts = <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&gcc GCC_BLSP1_QUP5_SPI_APPS_CLK>,
-+				 <&gcc GCC_BLSP1_AHB_CLK>;
-+			clock-names = "core", "iface";
-+			dmas = <&blsp_dma 20>, <&blsp_dma 21>;
-+			dma-names = "tx", "rx";
-+			status = "disabled";
-+		};
+ /*
+- * tpm_chip_startup() - performs auto startup and allocates the PCRs
++ * tpm_chip_bootstrap() - Boostrap TPM chip after power on
+  * @chip: TPM chip to use.
++ *
++ * Initialize TPM chip after power on. This a one-shot function: subsequent
++ * calls will have no effect.
+  */
+-int tpm_chip_startup(struct tpm_chip *chip)
++int tpm_chip_bootstrap(struct tpm_chip *chip)
+ {
+ 	int rc;
+ 
++	if (chip->flags & TPM_CHIP_FLAG_BOOTSTRAP)
++		return 0;
 +
- 		blsp1_i2c6: i2c@78ba000 {
- 			compatible = "qcom,i2c-qup-v2.2.1";
- 			#address-cells = <1>;
+ 	rc = tpm_chip_start(chip);
+ 	if (rc)
+ 		return rc;
+@@ -625,9 +631,15 @@ int tpm_chip_startup(struct tpm_chip *chip)
+ stop:
+ 	tpm_chip_stop(chip);
+ 
++	/*
++	 * Unconditionally set, as driver initialization should cease, when the
++	 * boostrapping process fails.
++	 */
++	chip->flags |= TPM_CHIP_FLAG_BOOTSTRAP;
++
+ 	return rc;
+ }
+-EXPORT_SYMBOL_GPL(tpm_chip_startup);
++EXPORT_SYMBOL_GPL(tpm_chip_bootstrap);
+ 
+ /*
+  * tpm_chip_register() - create a character device for the TPM chip
+@@ -644,6 +656,10 @@ int tpm_chip_register(struct tpm_chip *chip)
+ {
+ 	int rc;
+ 
++	rc = tpm_chip_bootstrap(chip);
++	if (rc)
++		return rc;
++
+ 	tpm_sysfs_add_device(chip);
+ 
+ 	tpm_bios_log_setup(chip);
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 88d3bd76e076..f6c99b3f0045 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -263,7 +263,7 @@ static inline void tpm_msleep(unsigned int delay_msec)
+ 		     delay_msec * 1000);
+ };
+ 
+-int tpm_chip_startup(struct tpm_chip *chip);
++int tpm_chip_bootstrap(struct tpm_chip *chip);
+ int tpm_chip_start(struct tpm_chip *chip);
+ void tpm_chip_stop(struct tpm_chip *chip);
+ struct tpm_chip *tpm_find_get_ops(struct tpm_chip *chip);
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index c2421162cf34..02945d53fcef 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -1139,7 +1139,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	init_waitqueue_head(&priv->read_queue);
+ 	init_waitqueue_head(&priv->int_queue);
+ 
+-	rc = tpm_chip_startup(chip);
++	rc = tpm_chip_bootstrap(chip);
+ 	if (rc)
+ 		goto out_err;
+ 
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 4dc97b9f65fb..50bcdee19b12 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -274,13 +274,14 @@ enum tpm2_cc_attrs {
+ #define TPM_VID_ATML     0x1114
+ 
+ enum tpm_chip_flags {
+-	TPM_CHIP_FLAG_TPM2		= BIT(1),
+-	TPM_CHIP_FLAG_IRQ		= BIT(2),
+-	TPM_CHIP_FLAG_VIRTUAL		= BIT(3),
+-	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
+-	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
++	TPM_CHIP_FLAG_TPM2			= BIT(1),
++	TPM_CHIP_FLAG_IRQ			= BIT(2),
++	TPM_CHIP_FLAG_VIRTUAL			= BIT(3),
++	TPM_CHIP_FLAG_HAVE_TIMEOUTS		= BIT(4),
++	TPM_CHIP_FLAG_ALWAYS_POWERED		= BIT(5),
+ 	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
+-	TPM_CHIP_FLAG_FIRMWARE_UPGRADE	= BIT(7),
++	TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
++	TPM_CHIP_FLAG_BOOTSTRAP			= BIT(8),
+ };
+ 
+ #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
 -- 
-2.40.0
+2.39.2
 
