@@ -2,92 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0613C6EFBF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CBA6EFBF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238445AbjDZUvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 16:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S239716AbjDZUzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 16:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbjDZUvq (ORCPT
+        with ESMTP id S234643AbjDZUzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 16:51:46 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936AA19F;
-        Wed, 26 Apr 2023 13:51:40 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b990eb5dc6bso10664191276.3;
-        Wed, 26 Apr 2023 13:51:40 -0700 (PDT)
+        Wed, 26 Apr 2023 16:55:31 -0400
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCCE1FE6;
+        Wed, 26 Apr 2023 13:55:29 -0700 (PDT)
+Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-541b60e0a7fso4128533eaf.1;
+        Wed, 26 Apr 2023 13:55:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682542299; x=1685134299;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmAaRztn7L2EnPrEsEaVR3r6ykpBZdxw7qk/BsB3FWQ=;
-        b=ieCdrTcg/TQkpZiHQ4R4QmxNI1LxseZanWujQPB5grbRVQr7fHRRtB7cOIHzMq6wCA
-         dBsixg4YQQnx31ycVcShjTqT5T2yH3rrrDhONLOQvrBadY4Mbrw6hc+7ADrhCqx2UvLJ
-         +cWrqWwHVeKBUKlDFWNiHA+Q/0YW7AQE3myqgBKbn7GpzZ2M067JQVzzJxGHEbCVDqXW
-         C0c/Iqojex0nEhjjVMPY2JQsWOBdEB8C+9TXtRqmdE/WSyr1nQfhdag7jL1CepnhplJZ
-         5g9lwYU6ZCPheTTLsg1N5QqMzm92KnkLKsbxT+Q1uEO9TJNPNv4w+aTwxjouDZlxfjhR
-         OYKA==
+        d=gmail.com; s=20221208; t=1682542529; x=1685134529;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N7BDHHCRt4+aajzCfPWxNu1orJw4/MC8hMj/R8/hq0Q=;
+        b=hJmHaj8bMSyyd1pbrp/d/AV15mwTKEOwMJPLuTsvFfgdodrp+bLrkLD0PJrIgbXEgR
+         QPUYr7KZ5uRaVfLcN6nkQkpi4AG2iYRveH6DIAaZFjKHu+6KuFGi59qlZCAYgLZ3uSN4
+         spFJRw+tsIn2tjEgYOYlzTNKC/NYAxw05S6lhGWiIeSVjbU8P94GObnCglXqOY4kx8ge
+         RZZGybKpRBQYxqSSE+hEdUCFmeDmTEBE6/jtjbwx0aKm4Ln8D2SsENt7K3qqC4V08QZ0
+         HkGTXwCae6hgflRzB380uvjl5/3bo3QhhcQlX4GYPHFQ7jZ7jNbcmKo6E57WwJ0gi2E2
+         JHkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682542299; x=1685134299;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BmAaRztn7L2EnPrEsEaVR3r6ykpBZdxw7qk/BsB3FWQ=;
-        b=ZDwtjLKrZdZetLbtKkQct3+BLM2WZ4+UrOAzaE9gCAd7CTIOpe1bpBBg6L7x+Vx6q3
-         Lm/Ncz60L9dKbaxZA28LyP5ICLktRjuWXGD/0GRQMor+gANes31R+dcHkQFQj5WcFxYk
-         3Bsly4Gy3vdwSzYHkTOp2YXwLb9GhSpwY0wuA5F3V+wGkSN6XWNR0nuVfod63UVZmtov
-         r/nx/UJrDnG3k43ai+r3llC2aYNkERVzpoyT0leWLNekM2fBDutJUIq8EIIRTgZOuK/Q
-         pUmoQ1plXOGyb4am++8Uq/UmwS0ToqnOh06DGSW6+XtmRtHzUzqhoVIp+hKrTcjJh1FW
-         r1zQ==
-X-Gm-Message-State: AAQBX9eNHSZd86JOcb+hP5iTCt5mcr4v0oYNnaSxi4qrrg6e2x+/ynTY
-        lofA0d0dFhGyPKW9mKNmzoU=
-X-Google-Smtp-Source: AKy350ZTZ/sugYQnq20BuFChg+d7AKiJuoC8Jk7fRZFSym0PBZNRnrjRHgwdGCJyCJmWxCklr1NThQ==
-X-Received: by 2002:a25:ae51:0:b0:b7e:6685:84a with SMTP id g17-20020a25ae51000000b00b7e6685084amr16509680ybe.1.1682542299575;
-        Wed, 26 Apr 2023 13:51:39 -0700 (PDT)
-Received: from localhost ([173.25.37.163])
-        by smtp.gmail.com with ESMTPSA id v7-20020a254807000000b00b8f3e224dcesm4229484yba.13.2023.04.26.13.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 13:51:39 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 13:51:36 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 7/8] lib: add test for for_each_numa_{cpu,hop_mask}()
-Message-ID: <ZEmOxpgZqyoHcMqu@yury-ThinkPad>
-References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-8-yury.norov@gmail.com>
- <xhsmh8rehkxzz.mognet@vschneid.remote.csb>
- <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
- <xhsmhttx3j93u.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20221208; t=1682542529; x=1685134529;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N7BDHHCRt4+aajzCfPWxNu1orJw4/MC8hMj/R8/hq0Q=;
+        b=cTBryZqNI3SoNvIJQikhf9jM5S6E8E2NFS8AFXi7FKgmdzL+grFyoGJsiFfxO1NaHq
+         1LHQ9IxZLUn2o/ReBdusVaSsb8eSVE2ScDVQwvKkZ4G9ZHCOiK0PvxcaeA+iqZye2iro
+         vIpBH+2MtzTPiatdc1/SFesUsckd23a+aeCraPhI2ggnpYM4Z4yh9v8oMhq0Z+JAYwjA
+         XmlwFXQLaXSFCWjsZ77Klr9V659OPEZcxJBLtewzeOF+fiXbWfJlIqltDUwsNpa8IBcJ
+         HfV43E0oYIyEFVCPV1wGLByzztDzFvSroPItIztsXSmUywXlhlSraw6VnZZboGzOfCl8
+         1o+A==
+X-Gm-Message-State: AAQBX9cuOGiRtEnUoc3+nmo8ZjIvYcYdqEI+2DOQYAAUHuaS9bfpmFje
+        TiWKnkt6tM3iQkQS5w+JyvM=
+X-Google-Smtp-Source: AKy350ZBvklTH3Zq7nm6uj53wA0YTB3dSTdpbO/3rQMj4/PKskuHIj+Rz0UoC8xQfqL03EucEkLGwQ==
+X-Received: by 2002:a54:4489:0:b0:38e:8e30:677d with SMTP id v9-20020a544489000000b0038e8e30677dmr8468566oiv.3.1682542528807;
+        Wed, 26 Apr 2023 13:55:28 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id q9-20020acaf209000000b003908004b37dsm280080oih.26.2023.04.26.13.55.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 13:55:28 -0700 (PDT)
+Message-ID: <4b8e3c30-9626-dffd-0aff-4b5c650154ad@gmail.com>
+Date:   Wed, 26 Apr 2023 17:55:25 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhttx3j93u.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] rust: helpers: sort includes alphabetically in
+ rust/helpers.c
+Content-Language: en-US
+To:     Ariel Miculas <amiculas@cisco.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
+        gary@garyguo.net, bjorn3_gh@protonmail.com, benno.lossin@proton.me
+References: <CANiq72nm-tWGPHMaNF11baVRDFpk8ruvTAVDEWKfraEzADWqQQ@mail.gmail.com>
+ <20230426204923.16195-1-amiculas@cisco.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230426204923.16195-1-amiculas@cisco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,48 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I realized I only wrote half the relevant code - comparing node IDs is
-> meaningless, I meant to compare distances as we walk through the
-> CPUs... I tested the below against a few NUMA topologies and it seems to be
-> sane:
+On 4/26/23 17:49, Ariel Miculas wrote:
+> Sort the #include directives of rust/helpers.c alphabetically and add a
+> comment specifying this. The reason for this is to improve readability
+> and to be consistent with the other files with a similar approach within
+> 'rust/'.
 > 
-> @@ -756,12 +773,23 @@ static void __init test_for_each_numa(void)
->  {
->  	unsigned int cpu, node;
->  
-> -	for (node = 0; node < sched_domains_numa_levels; node++) {
-> -		unsigned int hop, c = 0;
-> +	for_each_node(node) {
-> +		unsigned int start_cpu, prev_dist, hop = 0;
-> +
-> +		cpu = cpumask_first(cpumask_of_node(node));
-> +		prev_dist = node_distance(node, node);
-> +		start_cpu = cpu;
->  
->  		rcu_read_lock();
-> -		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
-> -			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
-> +
-> +		/* Assert distance is monotonically increasing */
-> +		for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
-> +			unsigned int dist = node_distance(cpu_to_node(cpu), cpu_to_node(start_cpu));
+> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1003
+> Signed-off-by: Ariel Miculas <amiculas@cisco.com>
+> ---
+> [...]
+Shouldn't the link use the `Link: <url> [1]` format? Otherwise LGTM.
 
-Interestingly, node_distance() is an arch-specific function. Generic
-implementation is quite useless:
-
- #define node_distance(from,to)  ((from) == (to) ? LOCAL_DISTANCE : REMOTE_DISTANCE)
-
-Particularly, arm64 takes the above. With node_distance() implemented
-like that, we can barely test something...
-
-Taking that into the account, I think it's better to test iterator against
-cpumask_local_spread(), like in v2. I'll add a comment about that in v3.
-
-> +
-> +			expect_ge_uint(dist, prev_dist);
-> +			prev_dist = dist;
-> +		}
-> +
->  		rcu_read_unlock();
->  	}
->  }
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
