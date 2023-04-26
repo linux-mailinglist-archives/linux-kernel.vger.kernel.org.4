@@ -2,393 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965636EEF48
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49D56EEF4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239674AbjDZHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S239716AbjDZHaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239597AbjDZHYj (ORCPT
+        with ESMTP id S240023AbjDZH3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:24:39 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9F3C2;
-        Wed, 26 Apr 2023 00:24:37 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63b73203e0aso41013680b3a.1;
-        Wed, 26 Apr 2023 00:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682493876; x=1685085876;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jytQvq7PwiJ5804Vo6WZEBrB2tNyybWr76L9KgVVYI8=;
-        b=dXkt/Vghtssd+Yhu5uO3DuoAJBc/EQjfntlttjP5fNKJ1sKh8+/4RxarX/wwOhe6n9
-         y8/fEtXiOLAi83aOWUjktYFyKq5HLkmUYW6glx37wF+gnJf6hm0N6IkvRsyzb+iNodQx
-         pJNomD7kWbGM5MxqynjrLRmSksiY+e7C+OPp3erDxdDbDRtID6uQMycOwe73T9c8cVcP
-         ghGZZg4YqjYGJTyvAABxvtuG5F9GXq6UDhrM/le71N/XqT8n4bs78w9RC+nQLLmQSeos
-         RUhUBUVqPGdrfQd6GWJxsQt5gtaZoMBslF6jiJBHyF/Cts1btnVG51jTZMDmDroyJY/o
-         9kOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682493876; x=1685085876;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jytQvq7PwiJ5804Vo6WZEBrB2tNyybWr76L9KgVVYI8=;
-        b=jzgGrx+5wvUZIvMSaxzYYftTZg9OlP0Q0Mu7V8EfEYO98syzBA/n8MM9XWdLk58rhW
-         aKHM6Nj4cC00snuEticATAXzZ1hTpQUDJ0rz3RwZcjOrNUIcp1IU19wOeSXiauauQjK7
-         jDh00z5I1GbGjZU7fr+fFR+KaCHC8gpaj6U4eNuKl7KeFSbwP86LKCBiv5V9b3K2x2KO
-         stGXn6bHRClVOxMxDpLaDXjc/MxuVEGnA1ZIaD0343fDiD4O3gNltn2XSmPgZVyoeFvN
-         e7DTY2S8+vtWvhwtL6Pwq3rJgVT4CDJBOobwwJLD482rEiAWOcZ350ziNW5D8zP8O95n
-         q/2g==
-X-Gm-Message-State: AC+VfDxS4VyGsBdY0UPko5K7IdVhlYCaScKD6w/0LZcacByPdvhO+XXx
-        1EHq2DPKPOiYEUl/iPT3M3eJnbgeLNQEbRucn9E=
-X-Google-Smtp-Source: ACHHUZ4aSknLigFC1I8mL48sQqjw/Q8Xr2z5x5zoRf84sqXupYXCLRaiqjENzZgEfM+8Uq9m5qvm0Pz2/YyXqdKwX08=
-X-Received: by 2002:a17:90b:60f:b0:249:67dd:5783 with SMTP id
- gb15-20020a17090b060f00b0024967dd5783mr1909237pjb.18.1682493876517; Wed, 26
- Apr 2023 00:24:36 -0700 (PDT)
+        Wed, 26 Apr 2023 03:29:54 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D1910F3;
+        Wed, 26 Apr 2023 00:29:51 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 586EF5FD6E;
+        Wed, 26 Apr 2023 10:29:49 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682494189;
+        bh=dHg7xkBb0HnprALeBYDMhRRSgdMSlw6mHB6uPNDkV88=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=Msu/wEcbvYUHe8F7DZlH1U9d7kSCIGKdKqtabrjPgcowqH3dmFdHNEKyHPCcxo55i
+         ps5J1CqZhwpGN+txNgtF7qxGSKb25ZJvYcBZMvjIPedilZaNk5IRwtYg3hiBHfRhNL
+         SRLvoM7ENjJHRkQS+vHcb9anIr2TLRi/Vs4MEzESPK1GiKep7nBTeHJJBvAyKSup3v
+         Y2T76DXCjkpBGw8F7qBnMPeaVSylFev9aF/Kt0F+avTAwHTQvdh+kDoplSWozOEVte
+         PIrZpJaCSvOEdH4hrWjTIaozJJClqGlFOxT8vdd9+KHbDkhSXXa6wK1y4TrgAwPRxD
+         rzaxeHPagOvqw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 10:29:47 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>
+Subject: [PATCH v1] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+Date:   Wed, 26 Apr 2023 10:24:52 +0300
+Message-ID: <20230426072455.3887717-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-References: <CAAQoYRm3766SG7+VuwVzu_xH8aWihoKWMEp8xQGNgJ6oOtC9+g@mail.gmail.com>
-In-Reply-To: <CAAQoYRm3766SG7+VuwVzu_xH8aWihoKWMEp8xQGNgJ6oOtC9+g@mail.gmail.com>
-From:   liao jaime <jaimeliao.tw@gmail.com>
-Date:   Wed, 26 Apr 2023 15:24:25 +0800
-Message-ID: <CAAQoYRmXdMp7b2r+yCRUtGrbfQH-Cb8gMAVo7YscuQEM5kgajw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new binding
-To:     Miquel Raynal <miquel.raynal@bootlin.com>, noltari@gmail.com
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi =C3=81lvaro
+This adds support for OTP area access on MX30LFxG18AC chip series.
 
-In nand_scan_tail(), each manufacturer init function call will be execute.
-In macronix_nand_init(), block protect will be execute after flash detect.
-I have validate MX30LF1G18AC in Linux kernel v5.15.
-I didn't got situation "device hangs"  on my side.
-BP is to prevent incorrect operations.
-Please check the controller settings for tracing this issue.
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+---
+ drivers/mtd/nand/raw/nand_macronix.c | 212 +++++++++++++++++++++++++++
+ 1 file changed, 212 insertions(+)
 
-Thanks
-Jaime
+diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
+index 1472f925f386..c0d12979933a 100644
+--- a/drivers/mtd/nand/raw/nand_macronix.c
++++ b/drivers/mtd/nand/raw/nand_macronix.c
+@@ -31,6 +31,20 @@
+ 
+ #define MXIC_CMD_POWER_DOWN 0xB9
+ 
++#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
++#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
++#define MACRONIX_30LFXG18AC_OTP_PAGES		30
++#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
++#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
++	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
++	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++
++#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
++#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
++
+ struct nand_onfi_vendor_macronix {
+ 	u8 reserved;
+ 	u8 reliability_func;
+@@ -316,6 +330,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
+ 	chip->ops.resume = mxic_nand_resume;
+ }
+ 
++static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
++					    size_t *retlen,
++					    struct otp_info *buf)
++{
++	if (len < sizeof(*buf))
++		return -EINVAL;
++
++	/* Don't know how to check that OTP is locked. */
++	buf->locked = 0;
++	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
++	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
++
++	*retlen = sizeof(*buf);
++
++	return 0;
++}
++
++static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
++					loff_t offs_in_flash,
++					size_t len, size_t *retlen,
++					u_char *buf, bool write)
++{
++	struct nand_chip *nand;
++	size_t bytes_handled;
++	unsigned long page;
++	off_t offs_in_page;
++	void *dma_buf;
++	int ret;
++
++	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
++	 * so allocate properly aligned memory for it. This is
++	 * needed because cross page accesses may lead to unaligned
++	 * buffer address for DMA.
++	 */
++	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
++	if (!dma_buf)
++		return -ENOMEM;
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	ret = macronix_30lfxg18ac_otp_enable(nand);
++	if (ret)
++		goto out_otp;
++
++	page = offs_in_flash;
++	/* 'page' will be result of division. */
++	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
++	bytes_handled = 0;
++
++	while (bytes_handled < len &&
++	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
++		size_t bytes_to_handle;
++
++		bytes_to_handle = min_t(size_t, len - bytes_handled,
++					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
++					offs_in_page);
++
++		if (write) {
++			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
++			ret = nand_prog_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++		} else {
++			ret = nand_read_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++			if (!ret)
++				memcpy(&buf[bytes_handled], dma_buf,
++				       bytes_to_handle);
++		}
++		if (ret)
++			goto out_otp;
++
++		bytes_handled += bytes_to_handle;
++		offs_in_page = 0;
++		page++;
++	}
++
++	*retlen = bytes_handled;
++
++out_otp:
++	if (ret)
++		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	WARN(ret, "failed to leave OTP mode after %s\n",
++	     write ? "write" : "read");
++	nand_deselect_target(nand);
++	kfree(dma_buf);
++
++	return ret;
++}
++
++static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
++					 size_t len, size_t *rlen,
++					 const u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
++					    true);
++}
++
++static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
++					size_t len, size_t *rlen,
++					u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
++}
++
++static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
++					size_t len)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++	struct nand_chip *nand;
++	int ret;
++
++	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
++	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
++		return -EINVAL;
++
++	dev_dbg(&mtd->dev, "locking OTP\n");
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
++			 MACRONIX_30LFXG18AC_OTP_LOCKED;
++	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				feature_buf);
++	if (ret) {
++		dev_err(&mtd->dev,
++			"failed to lock OTP (set features): %i\n", ret);
++		nand_deselect_target(nand);
++		return ret;
++	}
++
++	/* Do dummy page prog with zero address. */
++	feature_buf[0] = 0;
++	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
++	if (ret)
++		dev_err(&mtd->dev,
++			"failed to lock OTP (page prog): %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	WARN(ret, "failed to leave OTP mode after lock\n");
++
++	nand_deselect_target(nand);
++
++	return ret;
++}
++
++static void macronix_nand_setup_otp(struct nand_chip *chip)
++{
++	static const char * const supported_otp_models[] = {
++		"MX30LF1G18AC",
++		"MX30LF2G18AC",
++		"MX30LF4G18AC",
++	};
++	struct mtd_info *mtd;
++
++	if (!chip->parameters.supports_set_get_features)
++		return;
++
++	if (match_string(supported_otp_models,
++			 ARRAY_SIZE(supported_otp_models),
++			 chip->parameters.model) < 0)
++		return;
++
++	bitmap_set(chip->parameters.get_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++	bitmap_set(chip->parameters.set_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++
++	mtd = nand_to_mtd(chip);
++	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
++	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
++}
++
+ static int macronix_nand_init(struct nand_chip *chip)
+ {
+ 	if (nand_is_slc(chip))
+@@ -325,6 +536,7 @@ static int macronix_nand_init(struct nand_chip *chip)
+ 	macronix_nand_onfi_init(chip);
+ 	macronix_nand_block_protection_support(chip);
+ 	macronix_nand_deep_power_down_support(chip);
++	macronix_nand_setup_otp(chip);
+ 
+ 	return 0;
+ }
+-- 
+2.35.0
 
->
-> Hello YouChing and Jaime,
->
-> I still didn't get any feedback from you (or Macronix) on this issue.
-> Did you have time to look into it?
->
-> Thanks,
-> =C3=81lvaro.
->
-> El vie, 24 mar 2023 a las 18:04, =C3=81lvaro Fern=C3=A1ndez Rojas
-> (<noltari@gmail.com>) escribi=C3=B3:
-> >
-> > Hi Miqu=C3=A8l,
-> >
-> > 2023-03-24 15:36 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com>:
-> > > Hi =C3=81lvaro,
-> > >
-> > > + YouChing and Jaime from Macronix
-> > > TLDR for them: there is a misbehavior since Mason added block
-> > > protection support. Just checking if the blocks are protected seems t=
-o
-> > > misconfigure the chip entirely, see below. Any hints?
-> >
-> > Could it be that the NAND is stuck expecting a read 0x00 command which
-> > isn=E2=80=99t sent after getting the features?
-> >
-> > >
-> > > noltari@gmail.com wrote on Fri, 24 Mar 2023 15:15:47 +0100:
-> > >
-> > >> Hi Miqu=C3=A8l,
-> > >>
-> > >> 2023-03-24 14:45 GMT+01:00, Miquel Raynal <miquel.raynal@bootlin.com=
->:
-> > >> > Hi =C3=81lvaro,
-> > >> >
-> > >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 12:21:11 +0100:
-> > >> >
-> > >> >> El vie, 24 mar 2023 a las 11:49, Miquel Raynal
-> > >> >> (<miquel.raynal@bootlin.com>) escribi=C3=B3:
-> > >> >> >
-> > >> >> > Hi =C3=81lvaro,
-> > >> >> >
-> > >> >> > noltari@gmail.com wrote on Fri, 24 Mar 2023 11:31:17 +0100:
-> > >> >> >
-> > >> >> > > Hi Miqu=C3=A8l,
-> > >> >> > >
-> > >> >> > > El vie, 24 mar 2023 a las 10:40, Miquel Raynal
-> > >> >> > > (<miquel.raynal@bootlin.com>) escribi=C3=B3:
-> > >> >> > > >
-> > >> >> > > > Hi =C3=81lvaro,
-> > >> >> > > >
-> > >> >> > > > noltari@gmail.com wrote on Thu, 23 Mar 2023 13:45:09 +0100:
-> > >> >> > > >
-> > >> >> > > > > Add new "mxic,disable-block-protection" binding documenta=
-tion.
-> > >> >> > > > > This binding allows disabling block protection support fo=
-r
-> > >> >> > > > > those
-> > >> >> > > > > devices not
-> > >> >> > > > > supporting it.
-> > >> >> > > > >
-> > >> >> > > > > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@=
-gmail.com>
-> > >> >> > > > > ---
-> > >> >> > > > >  Documentation/devicetree/bindings/mtd/nand-macronix.txt =
-| 3
-> > >> >> > > > > +++
-> > >> >> > > > >  1 file changed, 3 insertions(+)
-> > >> >> > > > >
-> > >> >> > > > > diff --git
-> > >> >> > > > > a/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> > >> >> > > > > b/Documentation/devicetree/bindings/mtd/nand-macronix.txt
-> > >> >> > > > > index ffab28a2c4d1..03f65ca32cd3 100644
-> > >> >> > > > > --- a/Documentation/devicetree/bindings/mtd/nand-macronix=
-.txt
-> > >> >> > > > > +++ b/Documentation/devicetree/bindings/mtd/nand-macronix=
-.txt
-> > >> >> > > > > @@ -16,6 +16,9 @@ in children nodes.
-> > >> >> > > > >  Required NAND chip properties in children mode:
-> > >> >> > > > >  - randomizer enable: should be "mxic,enable-randomizer-o=
-tp"
-> > >> >> > > > >
-> > >> >> > > > > +Optional NAND chip properties in children mode:
-> > >> >> > > > > +- block protection disable: should be
-> > >> >> > > > > "mxic,disable-block-protection"
-> > >> >> > > > > +
-> > >> >> > > >
-> > >> >> > > > Besides the fact that nowadays we prefer to see binding
-> > >> >> > > > conversions
-> > >> >> > > > to
-> > >> >> > > > yaml before adding anything, I don't think this will fly.
-> > >> >> > > >
-> > >> >> > > > I'm not sure exactly what "disable block protection" means,=
- we
-> > >> >> > > > already have similar properties like "lock" and
-> > >> >> > > > "secure-regions",
-> > >> >> > > > not
-> > >> >> > > > sure they will fit but I think it's worth checking.
-> > >> >> > >
-> > >> >> > > As explained in 2/2, commit 03a539c7a118 introduced a regress=
-ion
-> > >> >> > > on
-> > >> >> > > Sercomm H500-s (BCM63268) OpenWrt devices with Macronix
-> > >> >> > > MX30LF1G18AC
-> > >> >> > > which hangs the device.
-> > >> >> > >
-> > >> >> > > This is the log with block protection disabled:
-> > >> >> > > [    0.495831] bcm6368_nand 10000200.nand: there is not valid=
- maps
-> > >> >> > > for
-> > >> >> > > state default
-> > >> >> > > [    0.504995] nand: device found, Manufacturer ID: 0xc2, Chi=
-p ID:
-> > >> >> > > 0xf1
-> > >> >> > > [    0.511526] nand: Macronix MX30LF1G18AC
-> > >> >> > > [    0.515586] nand: 128 MiB, SLC, erase size: 128 KiB, page =
-size:
-> > >> >> > > 2048, OOB size: 64
-> > >> >> > > [    0.523516] bcm6368_nand 10000200.nand: detected 128MiB to=
-tal,
-> > >> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> > >> >> > > [    0.535912] Bad block table found at page 65472, version 0=
-x01
-> > >> >> > > [    0.544268] Bad block table found at page 65408, version 0=
-x01
-> > >> >> > > [    0.954329] 9 fixed-partitions partitions found on MTD dev=
-ice
-> > >> >> > > brcmnand.0
-> > >> >> > > ...
-> > >> >> > >
-> > >> >> > > This is the log with block protection enabled:
-> > >> >> > > [    0.495095] bcm6368_nand 10000200.nand: there is not valid=
- maps
-> > >> >> > > for
-> > >> >> > > state default
-> > >> >> > > [    0.504249] nand: device found, Manufacturer ID: 0xc2, Chi=
-p ID:
-> > >> >> > > 0xf1
-> > >> >> > > [    0.510772] nand: Macronix MX30LF1G18AC
-> > >> >> > > [    0.514874] nand: 128 MiB, SLC, erase size: 128 KiB, page =
-size:
-> > >> >> > > 2048, OOB size: 64
-> > >> >> > > [    0.522780] bcm6368_nand 10000200.nand: detected 128MiB to=
-tal,
-> > >> >> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> > >> >> > > [    0.539687] Bad block table not found for chip 0
-> > >> >> > > [    0.550153] Bad block table not found for chip 0
-> > >> >> > > [    0.555069] Scanning device for bad blocks
-> > >> >> > > [    0.601213] CPU 1 Unable to handle kernel paging request a=
-t
-> > >> >> > > virtual
-> > >> >> > > address 10277f00, epc =3D=3D 8039ce70, ra =3D=3D 8016ad50
-> > >> >> > > *** Device hangs ***
-> > >> >> > >
-> > >> >> > > Enabling macronix_nand_block_protection_support() makes the d=
-evice
-> > >> >> > > unable to detect the bad block table and hangs it when trying=
- to
-> > >> >> > > scan
-> > >> >> > > for bad blocks.
-> > >> >> >
-> > >> >> > Please trace nand_macronix.c and look:
-> > >> >> > - are the get_features and set_features really supported by the
-> > >> >> >   controller driver?
-> > >> >>
-> > >> >> This is what I could find by debugging:
-> > >> >> [    0.494993] bcm6368_nand 10000200.nand: there is not valid map=
-s for
-> > >> >> state default
-> > >> >> [    0.505375] nand: device found, Manufacturer ID: 0xc2, Chip ID=
-:
-> > >> >> 0xf1
-> > >> >> [    0.512077] nand: Macronix MX30LF1G18AC
-> > >> >> [    0.515994] nand: 128 MiB, SLC, erase size: 128 KiB, page size=
-:
-> > >> >> 2048, OOB size: 64
-> > >> >> [    0.523928] bcm6368_nand 10000200.nand: detected 128MiB total,
-> > >> >> 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
-> > >> >> [    0.534415] bcm6368_nand 10000200.nand: ll_op cmd 0xa00ee
-> > >> >> [    0.539988] bcm6368_nand 10000200.nand: ll_op cmd 0x600a0
-> > >> >> [    0.545659] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> > >> >> [    0.551214] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
-=3D
-> > >> >> 0x00
-> > >> >> [    0.557843] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> > >> >> [    0.563475] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
-=3D
-> > >> >> 0x00
-> > >> >> [    0.569998] bcm6368_nand 10000200.nand: ll_op cmd 0x10000
-> > >> >> [    0.575653] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
-=3D
-> > >> >> 0x00
-> > >> >> [    0.582246] bcm6368_nand 10000200.nand: ll_op cmd 0x80010000
-> > >> >> [    0.588067] bcm6368_nand 10000200.nand: NAND_CMD_GET_FEATURES =
-=3D
-> > >> >> 0x00
-> > >> >> [    0.594657] nand: nand_get_features: addr=3Da0 subfeature_para=
-m=3D[00
-> > >> >> 00 00 00] -> 0
-> > >> >> [    0.602341] macronix_nand_block_protection_support:
-> > >> >> ONFI_FEATURE_ADDR_MXIC_PROTECTION=3D0
-> > >> >> [    0.610548] macronix_nand_block_protection_support: !=3D
-> > >> >> MXIC_BLOCK_PROTECTION_ALL_LOCK
-> > >> >> [    0.624760] Bad block table not found for chip 0
-> > >> >> [    0.635542] Bad block table not found for chip 0
-> > >> >> [    0.640270] Scanning device for bad blocks
-> > >> >>
-> > >> >> I don't know how to tell if get_features / set_features is really
-> > >> >> supported...
-> > >> >
-> > >> > Looks like your driver does not support exec_op but the core provi=
-des a
-> > >> > get/set_feature implementation.
-> > >>
-> > >> According to Florian, low level should be supported on brcmnand
-> > >> controllers >=3D 4.0
-> > >> Also:
-> > >> https://github.com/nomis/bcm963xx_4.12L.06B_consumer/blob/e2f23ddbb2=
-0bf75689372b6e6a5a0dc613f6e313/shared/opensource/include/bcm963xx/63268_map=
-_part.h#L1597
-> > >
-> > > Just to be sure, you're using a mainline controller driver, not this
-> > > one?
-> >
-> > Yes, this was just to prove that the HW I=E2=80=99m using has get/set f=
-eatures support.
-> > I=E2=80=99m using OpenWrt, so it=E2=80=99s linux v5.15 driver.
-> >
-> > >
-> > >> >
-> > >> >>
-> > >> >> > - what is the state of the locking configuration in the chip wh=
-en
-> > >> >> > you
-> > >> >> >   boot?
-> > >> >>
-> > >> >> Unlocked, I guess...
-> > >> >> How can I check that?
-> > >> >
-> > >> > It's in your dump, the chip returns 0, meaning it's all unlocked,
-> > >> > apparently.
-> > >>
-> > >> Well, I can read/write the device if block protection isn=E2=80=99t =
-disabled,
-> > >> so I guess we can confirm it=E2=80=99s unlocked=E2=80=A6
-> > >>
-> > >> >
-> > >> >> > - is there anything that locks the device by calling mxic_nand_=
-lock()
-> > >> >> > ?
-> > >> >
-> > >> > So nobody locks the device I guess? Did you add traces there?
-> > >>
-> > >> It doesn=E2=80=99t get to the point that it enabled the lock/unlock =
-functions
-> > >> since it fails when checking if feature is 0x38, so there=E2=80=99s =
-no point
-> > >> in adding those traces=E2=80=A6
-> > >
-> > > Right, it returns before setting these I guess.
-> > >
-> > >>
-> > >> >
-> > >> >> > - finding no bbt is one thing, hanging is another, where is it
-> > >> >> > hanging
-> > >> >> >   exactly? (offset in nand/ and line in the code)
-> > >> >>
-> > >> >> I've got no idea...
-> > >> >
-> > >> > You can use ftrace or just add printks a bit everywhere and try to=
- get
-> > >> > closer and closer.
-> > >>
-> > >> I think that after trying to get the feature it just start reading
-> > >> nonsense from the NAND and at some point it hangs due to that garbag=
-e=E2=80=A6
-> > >
-> > > It should refuse to mount the device somehow, but in no case the kern=
-el
-> > > should hang.
-> >
-> > Yes, I think that this is a side effect (maybe a different bug somewher=
-e else).
-> >
-> > >
-> > >> Is it posible that the NAND starts behaving like this after getting
-> > >> the feature due to some specific config of my device?
-> > >>
-> > >> >
-> > >> > I looked at the patch, I don't see anything strange. Besides, I ha=
-ve a
-> > >> > close enough datasheet and I don't see what could confuse the devi=
-ce.
-> > >> >
-> > >> > Are you really sure this patch is the problem? Is the WP pin wired=
- on
-> > >> > your design?
-> > >>
-> > >> There=E2=80=99s no WP pin in brcmnand controllers < 7.0
-> > >
-> > > What about the chip?
-> >
-> > Maybe it has a GPIO controlling that, but I don=E2=80=99t have that inf=
-o=E2=80=A6
-> >
-> > >
-> > > Thanks,
-> > > Miqu=C3=A8l
-> > >
