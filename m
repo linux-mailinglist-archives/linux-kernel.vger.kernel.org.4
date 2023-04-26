@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45066EF9DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEB56EF9E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239009AbjDZSNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 14:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S239328AbjDZSQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 14:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbjDZSNF (ORCPT
+        with ESMTP id S231186AbjDZSQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 14:13:05 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D2E44B5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:13:03 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef36d814a5so484711cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682532783; x=1685124783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wNJP2H7Tti7sCJqZuan3YjXjcNVzDWrJfL5H/TqIl9w=;
-        b=AM3kUmvyQL4L6eAvdHifAGtM5Rz49bNhibzZQdo4AlO0c6tXICsIblPsgnmT9IzWGH
-         zS2AbW3+hrG/clKEqD6s5meok9otDJbQXM2otLMaIdruVNtQDXJWCraoKj7di/rgU5Zg
-         uDyxGKbbBUBfkyiNAj/CFknqS59twz+2kvRTvEPuT9HNmMYMI+mxAX9Hixm+kJdmq1Wz
-         +OGCZMRtuSSiFPJnQIsNKF/WHpP4xPEUNJlRRLEZ2VGDu+zpVDFF1BzOTF1bbxWyo/s2
-         lOTSuXgeW7uuao8PfskNIq2BzelnSrGWzIKzpNwRdjSOsDljfGBJfR3Ma2lpt0sAZxiU
-         mZRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682532783; x=1685124783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wNJP2H7Tti7sCJqZuan3YjXjcNVzDWrJfL5H/TqIl9w=;
-        b=BF3J6NwKhL57UsoaHq/bINZXvK/fsPJvlF8SsKFMBba9cArgXi9JrxZrlIPrEdAdbw
-         fninJzWoLix/6R35bWjFgg88cvlmABVrigTJ1JW7E6IziALjrktYcGuqU+zkbZsQnXTG
-         zd5/unt3pzZdpO+VHeG1/7ZSmxF18UtsYJo8OSdJhwOqg447JyUep/j/zJyi+//by2hq
-         jHrCSe7LYVWz46f6l0pTiBhk70EPpmh0dMcZWVr2vRCkoJffUR0D1cb9MZJpy7wYXODK
-         Lyqb1ny5RXDE0RVE57txg7gfcdzXHglr8SKvhVx7vvfXtlJQ6OFUdzTivU+U4b6Q+chv
-         +nRg==
-X-Gm-Message-State: AC+VfDwHmVf8oR1kLyU9H2lqD5HdanSG3UwKJaH19YfywDOs9J/NxKss
-        Bg2Mbykg6XaKKSNSzLSFI0VdMy/sHqEWuJG0K/xz
-X-Google-Smtp-Source: ACHHUZ5+27EZ/liwNoh2uhKVoZv5KPyytWMmatTKKsKavw690/EnK9BLh6JIc0rvOhiu0BHKl4FQe1LAu7OgewSwRig=
-X-Received: by 2002:ac8:7e84:0:b0:3ef:1c85:5b5e with SMTP id
- w4-20020ac87e84000000b003ef1c855b5emr397486qtj.19.1682532782954; Wed, 26 Apr
- 2023 11:13:02 -0700 (PDT)
+        Wed, 26 Apr 2023 14:16:03 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDE76EAD
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 11:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682532962; x=1714068962;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=s7VMbx8cIE8Pwgd0VjK8we2/lmVTZS2frf1uO4lI0NY=;
+  b=HcQpmb11MwlsIwRCNb9j+7/Im7sk2sQCyAyFZOCHTZi/xPyYMpvEq548
+   C1foKtDzaUuENYssDvpUM7BtRWmeP4ndzVqDbn0eAUgqBByu9jdBbPWFI
+   Za4hvPujCTqU6+lc/2VZyzlZLki8Sun6ck338tPMamhWqTg8jwbHr2xvR
+   Fw1/S199piANFxL66adolRgIu5bYpJJIvxyMnVAUUPIl53ss+4OYhlDKQ
+   JzO0iSaF2D/EVisfaGNR3t9bQ3bgfxPSE3lA2+ycYy6+9NujveDYnctEH
+   jMa9byh8PspRtyflmXVnKm+2AAHDlxazBnHeCWwqkmbMFN4wxaQaG6KG1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="331435196"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="331435196"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 11:16:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="868386061"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="868386061"
+Received: from kdaneshi-mobl2.amr.corp.intel.com (HELO [10.209.15.204]) ([10.209.15.204])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 11:16:01 -0700
+Message-ID: <25dd25d3-2db1-acf6-0814-9bb5bcd65bb9@intel.com>
+Date:   Wed, 26 Apr 2023 11:15:58 -0700
 MIME-Version: 1.0
-References: <06df7b3cbd94f016403bbf6cd2b38e4368e7468f.1682516546.git.geert+renesas@glider.be>
-In-Reply-To: <06df7b3cbd94f016403bbf6cd2b38e4368e7468f.1682516546.git.geert+renesas@glider.be>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 26 Apr 2023 19:12:51 +0100
-Message-ID: <CANDhNCqjkaBKnTdRTumrZbvcmGterak1FpCBn-ZnkTm+fUoPXQ@mail.gmail.com>
-Subject: Re: [PATCH] timekeeping: Fix references to nonexistent ktime_get_fast_ns()
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RFC] x86/cpu: fix intermittent lockup on poweroff
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>
+References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
+ <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
+ <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com> <87y1mey503.ffs@tglx>
+ <ccf57fd2-45b8-1f1f-f46a-55d7f4c56161@cybernetics.com>
+ <01a44722-931a-7aff-4f4b-75e78855beb1@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <01a44722-931a-7aff-4f4b-75e78855beb1@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,19 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 2:43=E2=80=AFPM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> There was never a function named ktime_get_fast_ns().
-> Presumably these should refer to ktime_get_mono_fast_ns() instead.
->
-> Fixes: c1ce406e80fb15fa ("timekeeping: Fix up function documentation for =
-the NMI safe accessors")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 4/26/23 10:51, Tom Lendacky wrote:
+>>> +    /*
+>>> +     * native_stop_other_cpus() will write to @stop_cpus_count after
+>>> +     * observing that it went down to zero, which will invalidate the
+>>> +     * cacheline on this CPU.
+>>> +     */
+>>> +    atomic_dec(&stop_cpus_count);
+> 
+> This is probably going to pull in a cache line and cause the problem the
+> native_wbinvd() is trying to avoid.
 
-Looks sane to me.
+Is one _more_ cacheline really the problem?
 
-Acked-by: John Stultz <jstultz@google.com>
+Or is having _any_ cacheline pulled in a problem?  What about the text
+page containing the WBINVD?  How about all the page table pages that are
+needed to resolve %RIP to a physical address?
 
-thanks
--john
+What about the mds_idle_clear_cpu_buffers() code that snuck into
+native_halt()?
+
+> ffffffff810ede4c:       0f 09                   wbinvd 
+> ffffffff810ede4e:       8b 05 e4 3b a7 02       mov    0x2a73be4(%rip),%eax        # ffffffff83b61a38 <mds_idle_clear>
+> ffffffff810ede54:       85 c0                   test   %eax,%eax
+> ffffffff810ede56:       7e 07                   jle    ffffffff810ede5f <stop_this_cpu+0x9f>
+> ffffffff810ede58:       0f 00 2d b1 75 13 01    verw   0x11375b1(%rip)        # ffffffff82225410 <ds.6688>
+> ffffffff810ede5f:       f4                      hlt    
+> ffffffff810ede60:       eb ec                   jmp    ffffffff810ede4e <stop_this_cpu+0x8e>
+> ffffffff810ede62:       e8 59 40 1a 00          callq  ffffffff81291ec0 <trace_hardirqs_off>
+> ffffffff810ede67:       eb 85                   jmp    ffffffff810eddee <stop_this_cpu+0x2e>
+> ffffffff810ede69:       0f 1f 80 00 00 00 00    nopl   0x0(%rax)
+
