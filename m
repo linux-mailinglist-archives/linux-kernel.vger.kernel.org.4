@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F308E6EEF7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126796EEF68
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239890AbjDZHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S239671AbjDZHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbjDZHl2 (ORCPT
+        with ESMTP id S239381AbjDZHj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:41:28 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2573F3AA6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:41:25 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6073F5FD6F;
-        Wed, 26 Apr 2023 10:41:23 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682494883;
-        bh=2gMo3+6yJgM1RhFv5pwf0HhZ2CqqzaenJjvpSBYPU1U=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=cVdGqoNPv6iHUtqd8oaNXO4U5yhqS+mPEh7Oo/BPDBwzFUrp6ccrxFtVtXJSrycuL
-         xrolozu6/KlN2+Gt01fzBhEfSaXtoHGu6dJl+zDOFxOxF687hYMpr8cJjI5MijHW9h
-         c/BFMuNthBV98PYG84bkK1sZi9RsZS541Fer7W0bRMs9UfHr9ozmMfoR46hIdioOE5
-         JipYeSaVdJ/orpgYV7kD96znwu0NmHhhKKjf6E45ileKOOF5QgbojKdtmOh59QbEO+
-         FqhtXT1vvcLYBCcaVeP1lHQvBxYkFBy9uV9pGtGYk+UABWPOBf3u17ZTlHKThsh7Vy
-         AvB5SAWlzIbPg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 26 Apr 2023 10:41:23 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/5] mtd: rawnand: meson: rename node for chip select
-Date:   Wed, 26 Apr 2023 10:36:31 +0300
-Message-ID: <20230426073632.3905682-6-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20230426073632.3905682-1-AVKrasnov@sberdevices.ru>
-References: <20230426073632.3905682-1-AVKrasnov@sberdevices.ru>
+        Wed, 26 Apr 2023 03:39:28 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DC30F1;
+        Wed, 26 Apr 2023 00:39:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PCRmkCmow1uEMGeL57btO0h4Rmd+vf5ns0y/BbWjTBI=; b=lWZxauUDvd1nVRFVftz0jJ83W6
+        i0/Z7hxxZz8JwAArPRYDJDODs0fIcak71XzX73MTR77A2Yhi5jPmOqRZjcLhlERP21VVO0UTjXzgD
+        8vRSrWFgR6OrMUduIHWO9QtCGoqavmdu902smnaM/PiyEwvswcIAGMDiQ26QSmCik68hzJR6G6aua
+        eQUagi/0vGvWT0P7IWAYVaZhKA84OfL6kZjZCSBI6QR/KbPydUJtgOFY9SOYjCLqca+PlnF61e/7w
+        YIX2WuC2pTbVIS3ci2rRU93xCaNNlFij8Y0gjxcsJ31HsJQyR0H0zi4i1r2z0Xrx3B88TYwgQe5L2
+        Su9siKFg==;
+Received: from p200300ccff09c2001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff09:c200:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1prZkI-0006pi-7L; Wed, 26 Apr 2023 09:39:22 +0200
+Date:   Wed, 26 Apr 2023 09:39:20 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>, linux-omap@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
+Message-ID: <20230426093920.3e9b5c61@aktux>
+In-Reply-To: <20230426071910.GE14287@atomide.com>
+References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
+        <20230425201117.457f224c@aktux>
+        <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
+        <20230425212040.5a4d5b09@aktux>
+        <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
+        <20230425215848.247a936a@aktux>
+        <20230426071910.GE14287@atomide.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,47 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This renames node with values for chip select from "reg" to "cs". It is
-needed because when OTP access is enabled on the attached storage, MTD
-subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
-tries to use "reg" node in its own manner, supposes that it has another
-layout. All of this leads to device initialization failure.
+Hi,
 
-Example:
+On Wed, 26 Apr 2023 10:19:10 +0300
+Tony Lindgren <tony@atomide.com> wrote:
 
-[...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
-[...] mtd mtd0: Failed to register OTP NVMEM device
-[...] meson-nand ffe07800.nfc: failed to register MTD device: -22
-[...] meson-nand ffe07800.nfc: failed to init NAND chips
-[...] meson-nand: probe of ffe07800.nfc failed with error -22
+> Hi,
+> 
+> * Andreas Kemnade <andreas@kemnade.info> [230425 19:58]:
+> > On Tue, 25 Apr 2023 22:36:37 +0300
+> > Aaro Koskinen <aaro.koskinen@iki.fi> wrote:
+> >   
+> > > On Tue, Apr 25, 2023 at 09:20:40PM +0200, Andreas Kemnade wrote:  
+> > > > Aaro Koskinen <aaro.koskinen@iki.fi> wrote:    
+> > > > > Which commit introduced that regression? Also, the changelog mentions
+> > > > > it happens only with "unusual" probe order. Now, all the ordinary cases
+> > > > > for OMAP1 are broken.
+> > > > >     
+> > > > did not bisect that to an exact commit.
+> > > > Unusual probe order: on the device where I tested it,
+> > > > I did not see a completely successful probe.    
+> > > 
+> > > If you cannot point out a working past commit, there was no regression. If
+> > > you fix something that hasn't worked before or has been long time broken,
+> > > it must not cause breakage to other current users.
+> > >   
+> > Well, I did not take the time for a bisect. As we need a less aggressive
+> > fix, it seems to be worth doing it. 
+> >   
+> > > > > And it's not just that tps65010 thing. E.g. 770 fails to boot as well
+> > > > > and it doesn't use it; and reverting 92bf78b33b0b fixes that one as
+> > > > > well. AFAIK it's because all the gpio_request()s in OMAP1 board files
+> > > > > stopped now working.
+> > > > >     
+> > > > so we break every non-devicetree user of omap-gpio?     
+> > > 
+> > > It seems so.
+> > >   
+> > or maybe an if (not_using_devicetree())  
+> 
+> Not sure what the best way to fix this might be, adding Linus W to Cc too.
+> Maybe using gpio line names in the legacy platform data instead of numbers?
+> 
+> Seems that we should just revert this patch for now and try again after
+> the issues have been fixed.
+>
+I think the reason for the patch (besides of cleaning up warnings) is that
+dynamic allocation seems to start at 512, static at zero.
+If both are there, like registering twl_gpio between omap gpiochip 4 and 5,
+dynamic allocation seems just to start after the last static number,
+calling for trouble.
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- drivers/mtd/nand/raw/meson_nand.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If dynamic alloc would just start at 512 in that case too, no problem would appear.
+As said I have not bisected it to an exact commit yet.
+So if we need to move backward, we should IMHO first fix that allocation thing.
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 3737024c33d6..4ff3a3e50c4b 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -1537,7 +1537,7 @@ meson_nfc_nand_chip_init(struct device *dev,
- 	int ret, i;
- 	u32 tmp, nsels;
- 
--	nsels = of_property_count_elems_of_size(np, "reg", sizeof(u32));
-+	nsels = of_property_count_elems_of_size(np, "cs", sizeof(u32));
- 	if (!nsels || nsels > MAX_CE_NUM) {
- 		dev_err(dev, "invalid register property size\n");
- 		return -EINVAL;
-@@ -1551,7 +1551,7 @@ meson_nfc_nand_chip_init(struct device *dev,
- 	meson_chip->nsels = nsels;
- 
- 	for (i = 0; i < nsels; i++) {
--		ret = of_property_read_u32_index(np, "reg", i, &tmp);
-+		ret = of_property_read_u32_index(np, "cs", i, &tmp);
- 		if (ret) {
- 			dev_err(dev, "could not retrieve register property: %d\n",
- 				ret);
--- 
-2.35.0
-
+Regards,
+Andreas
