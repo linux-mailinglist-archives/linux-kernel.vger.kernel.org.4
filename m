@@ -2,350 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE756EF5E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA706EF5E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240930AbjDZNzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S241045AbjDZN6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbjDZNzc (ORCPT
+        with ESMTP id S241148AbjDZN6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:55:32 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D0C527C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:55:29 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5069097bac7so12679060a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682517328; x=1685109328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vmeULLSEOV/APvI8lVuTDzek93PU0j/YjPRUGy5JPfg=;
-        b=cna46+0jOHZUV/FaGzVH6QylkhG3eumA8/giD5NMvaPzs/Xf7JtEtldDse4/WPqjS8
-         7ACHI6qF5I4gWExilfWk4rSVsy6ODf9DN6b9frw57AkxqQccW31SPgWIFtlBbpz4vESi
-         0Te2yvdscb4vW9Q6NQ2e8YqiFE0tWUyocJmMQSITlPPqnBn88bCbSc6nPE1dcnn4YGnl
-         hZBJQAEZhM4IbYtkBOmBIRkM7iNdl5G5wgfZLggp95iF5aDfMrrM1qV8v/SlUS8TANB5
-         e9D+RM7iTK9WpE/hzpszNOsCeE07nQikG2tAn0WqTdFvMHkYet7tV3Yx6Jp7D8kgbjbl
-         pKYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682517328; x=1685109328;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vmeULLSEOV/APvI8lVuTDzek93PU0j/YjPRUGy5JPfg=;
-        b=jCDKRU8O8IJbxQuzX1uC6MDXsqMWrDByiub2q8ogPxkyHWqyp4WnlT4ZzudEhIF/Is
-         jFWcwBGntH35lahc2fcbMzDl0I2/nDMUbh79kAiqXzW4EC1rrMsQ6E434dGPAHYPx5Rm
-         OsrNkxsq/toOU7PgD7YTmuXPFLAu2/gRHe1WT88EFM5P59+DAkFWF1uaPUDOwRVttlQ8
-         NvKxfDnv7LhuOp1isZ851nO4BKmFE3/d0MhAAEA7Xr87zYRqgJU6K29mYEx251BaNKam
-         18Nv41pvS5L+/oSXWnH/QRBxHuGDL8VSeCFbGQC99O+T3hlGkR7tHcKvO0wI/hYO7vQC
-         YzVQ==
-X-Gm-Message-State: AAQBX9dNFktrrn2YRzBrgr451VJx4KEXmhZjJdcofpNdzJ/UiuL8NBBI
-        tpgORPlyygk5W2WT+V+skxor+DWE7D4aWc3aTbo6Hg==
-X-Google-Smtp-Source: AKy350ZSQ7Elfd9u9HcKo93WjXZLuwnnZAgQYcTWxiTwjcoWUY98kdeYIw7Sinq0BkVh8EDR34FSkQD/ZRAIk447qnk=
-X-Received: by 2002:a50:ee83:0:b0:4fe:19cb:4788 with SMTP id
- f3-20020a50ee83000000b004fe19cb4788mr17928498edr.42.1682517327993; Wed, 26
- Apr 2023 06:55:27 -0700 (PDT)
+        Wed, 26 Apr 2023 09:58:41 -0400
+Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [83.166.143.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829A66585
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:58:37 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Q60p31RkfzMqKm8;
+        Wed, 26 Apr 2023 15:58:35 +0200 (CEST)
+Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Q60p10S6VzMpnPs;
+        Wed, 26 Apr 2023 15:58:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1682517515;
+        bh=q7YipNjqfn/z8kn3IJil8RM+axjuqfK/m4XxAXBUf+Y=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=W3ugWyQJtbD1oliKhX2Yzdcz480Vu9ygX9tFHZIoWk3rLpcrlhe0J0wGmRPKueSKw
+         3RvQkqQa2k9xP8f2ipclUpzNvmCuv6awzTMTl9zgXLWrce99hInBlJuFELbhM9S+66
+         ZTIfZHvu2s/84MMyRA7LTcejVHUjMyRZebV9J06g=
+Message-ID: <99c0648d-deec-c7e2-a54f-94a7f6a3a50f@digikod.net>
+Date:   Wed, 26 Apr 2023 15:58:31 +0200
 MIME-Version: 1.0
-References: <20230419221716.3603068-1-atishp@rivosinc.com> <20230419221716.3603068-46-atishp@rivosinc.com>
- <69ba1760-a079-fd8f-b079-fcb01e3eedec@intel.com> <CAHBxVyFhDapAeMQ8quBqWZ10jWSHw1CdE227ciyKQpULHYzffA@mail.gmail.com>
- <81c476f4-ef62-e4a6-0033-8a46a15379fd@intel.com> <CAHBxVyHg7vTaQJWKoVSD8budVZEYSo1eDOyZyZK7gcJApR7SbA@mail.gmail.com>
- <fe1a849a-3276-5fad-869b-bad54bc918f6@intel.com> <CAHBxVyEkcGwcxB+oDWywJuAwkC-k-_0gMC-mXqSEHy_MyTcN4A@mail.gmail.com>
- <CAK9=C2XwPx-0jqE+Wz+zYja9oPkTF+7CD8baBYYLpOWLeCpeXQ@mail.gmail.com>
-In-Reply-To: <CAK9=C2XwPx-0jqE+Wz+zYja9oPkTF+7CD8baBYYLpOWLeCpeXQ@mail.gmail.com>
-From:   Andrew Bresticker <abrestic@rivosinc.com>
-Date:   Wed, 26 Apr 2023 09:55:17 -0400
-Message-ID: <CALE4mHqjvmx-mdHJ8pV5ramCeYz0eOEu75-PHfnh1NWePbthDA@mail.gmail.com>
-Subject: Re: [RFC 45/48] RISC-V: ioremap: Implement for arch specific ioremap hooks
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Kumar Patra <atishp@rivosinc.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-coco@lists.linux.dev, Dylan Reid <dylan@rivosinc.com>,
-        Samuel Ortiz <sameo@rivosinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, roberto.sassu@huawei.com,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <d55baf4d-01d3-e4d7-e07f-9658d1606a8c@huawei.com>
+ <a4dc7c12-b485-2eb2-add5-4f7a387a50fa@digikod.net>
+ <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <5fc97b5b-e76f-99c7-7314-6bb16851f66e@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 6:30=E2=80=AFAM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> On Wed, Apr 26, 2023 at 1:32=E2=80=AFPM Atish Kumar Patra <atishp@rivosin=
-c.com> wrote:
-> >
-> > On Tue, Apr 25, 2023 at 6:40=E2=80=AFPM Dave Hansen <dave.hansen@intel.=
-com> wrote:
-> > >
-> > > On 4/25/23 01:00, Atish Kumar Patra wrote:
-> > > > On Mon, Apr 24, 2023 at 7:18=E2=80=AFPM Dave Hansen <dave.hansen@in=
-tel.com> wrote:
-> > > >> On 4/21/23 12:24, Atish Kumar Patra wrote:
-> > > >> I'm not _quite_ sure what "guest initiated" means.  But SEV and TD=
-X
-> > > >> don't require an ioremap hook like this.  So, even if they *are* "=
-guest
-> > > >> initiated", the question still remains how they work without this =
-patch,
-> > > >> or what they are missing without it.
-> > > >
-> > > > Maybe I misunderstood your question earlier. Are you concerned abou=
-t guests
-> > > > invoking any MMIO region specific calls in the ioremap path or pass=
-ing
-> > > > that information to the host ?
-> > >
-> > > My concern is that I don't know why this patch is here.  There should=
- be
-> > > a very simple answer to the question: Why does RISC-V need this patch
-> > > but x86 does not?
-> > >
-> > > > Earlier, I assumed the former but it seems you are also concerned
-> > > > about the latter as well. Sorry for the confusion in that case.
-> > > > The guest initiation is necessary while the host notification can b=
-e
-> > > > made optional.
-> > > > The "guest initiated" means the guest tells the TSM (equivalent of =
-TDX
-> > > > module in RISC-V) the MMIO region details.
-> > > > The TSM keeps a track of this and any page faults that happen in th=
-at
-> > > > region are forwarded
-> > > > to the host by the TSM after the instruction decoding. Thus TSM can
-> > > > make sure that only ioremapped regions are
-> > > > considered MMIO regions. Otherwise, all memory outside the guest
-> > > > physical region will be considered as the MMIO region.
-> > >
-> > > Ahh, OK, that's a familiar problem.  I see the connection to device
-> > > filtering now.
-> > >
-> > > Is this functionality in the current set?  I went looking for it and =
-all
-> > > I found was the host notification side.
-> > >
-> >
-> > The current series doesn't have the guest filtering feature enabled.
-> > However, we implemented guest filtering and is maintained in a separate=
- tree
-> >
-> > https://github.com/rivosinc/linux/tree/cove-integration-device-filterin=
-g
-> >
-> > We did not include those in this series because the tdx patches are
-> > still undergoing
-> > development. We are planning to rebase our changes once the revised
-> > patches are available.
-> >
-> > > Is this the only mechanism by which the guest tells the TSM which par=
-ts
-> > > of the guest physical address space can be exposed to the host?
-> > >
-> >
-> > This is the current approach defined in CoVE spec. Guest informs about =
-both
-> > shared memory & mmio regions via dedicated SBI calls (
-> > e.g sbi_covg_[add/remove]_mmio_region and
-> > sbi_covg_[share/unshare]_memory_region)
-> >
-> > > For TDX and SEV, that information is inferred from a bit in the page
-> > > tables.  Essentially, there are dedicated guest physical addresses th=
-at
-> > > tell the hardware how to treat the mappings: should the secure page
-> > > tables or the host's EPT/NPT be consulted?
-> > >
-> >
-> > Yes. We don't have such a mechanism defined in CoVE yet.
-> > Having said that, there is nothing in ISA to prevent that and it is doa=
-ble.
-> > Some specific bits in the PTE entry can also be used to encode for
-> > shared & mmio physical memory addresses.
-> > The TSM implementation will probably need to implement a software page
-> > walker in that case.
->
-> We can certainly use PTE bits defined by Svpmbt extension to
-> differentiate between IO and memory. Also, we can use the PTE
-> SW bits to differentiate between shared and non-shared memory.
->
-> >
-> > Are there any performance advantages between the two approaches ?
-> > As per my understanding, we are saving some boot time privilege
-> > transitions & less ABIs but
-> > adds the cost of software walk at runtime faults.
->
-> Performance wise both approaches will be the same because in
-> case of PTE based approach, the TSM can on-demand map the
-> shared memory and do software walk upon first access.
 
-For MMIO sure, we can use Svpbmt or an RSW bit in the VS-stage PTE.
-Performance-wise the difference is a few fetches from guest memory by
-the TSM vs a lookup by the TSM in an internal data-structure.
 
-It's a little more complicated for shared <-> private conversion,
-though. If we were to emulate what TDX does with separate Shared vs
-Secure EPTs, we could use the MSB of the GPA to divide GPA space in
-half between private vs shared. But then we need to enable the host to
-reclaim the private pages on a private -> shared conversion: either
-the TSM must track which parts of GPA space have been converted (which
-gets complicated in the presence of hugepages), or we let the host
-remove whatever private pages it wants. For the latter we'd then need
-an "accept" flow -- we don't have a #VE equivalent on RISC-V, but I
-suppose we could use access fault exceptions for this purpose.
+On 24/04/2023 10:52, xiujianfeng wrote:
+> 
+> 
+> On 2023/4/21 1:40, Mickaël Salaün wrote:
+>>
+>> On 18/04/2023 12:53, xiujianfeng wrote:
+>>> Hi Mickael,
+>>>
+>>> Sorry about the long silence on this work, As we known this work depends
+>>> on another work about changing argument from struct dentry to struct
+>>> path for some attr/xattr related lsm hooks, I'm stuck with this thing,
+>>> because IMA/EVM is a special security module which is not LSM-based
+>>> currently, and severely coupled with the file system. so I am waiting
+>>> for Roberto Sassu' work (Move IMA and EVM to the LSM infrastructure) to
+>>> be ready, I think it can make my work more easy. you can find
+>>> Roberto'work here,
+>>> https://lwn.net/ml/linux-kernel/20230303181842.1087717-1-roberto.sassu@huaweicloud.com/
+>>>
+>>> Any good idea are welcome, thanks.
+>>
+>> Thanks for the update Xiu.
+>>
+>> Which part would be needed from Roberto's patch series?
+>>
+> As we discussed before, the two access rights that need to be added and
+> their usage is as below:
+> LANDLOCK_ACCESS_FS_WRITE_METADATA controls
+> 1.inode_setattr
+> 2.inode_setxattr
+> 3.inode_removexattr
+> 4.inode_set_acl
+> 5.inode_remove_acl
+> LANDLOCK_ACCESS_FS_READ_METADATA controls
+> 1.inode_getattr
+> 2.inode_get_acl
+> 3.inode_getxattr
+> 4.inode_listxattr
+> 
+> all these APIs should be changed to use struct path instead of dentry,
+> and then several vfs APIs as follows are invovled:
+> notify_change,
+> __vfs_setxattr_locked,
+> __vfs_removexattr_locked,
+> __vfs_setxattr_noperm
+> vfs_set_acl
+> vfs_remove_acl
+> vfs_getxattr
+> vfs_listxattr
+> vfs_get_acl
+> and also include some LSM hooks such as inode_post_setxattr and
+> inode_setsecctx.
+> 
+> Since the original places where pass dentry to security_inode_xxx may
+> not have any struct path, we have to pass it from the top caller, so
+> this also touches lots of filesystems(e.g. cachefiles, ecryptfs, ksmbd,
+> nfsd, overlayfs...).
+> 
+> Other LSMs such as selinux, smack can be easy to refator because they
+> are LSM-based, and if VFS passes path to security_inode_xxx and they can
+> just use path->dentry instead inside they own modules.
+> 
+> AS for IMA/EVM, unfortunately they are not LSM-based and coupled with
+> the file system. To make things worse, there is a recursive dependency
+> situation during the update of extended attribute which happen as follows:
+> 
+> __vfs_setxattr_noperm
+>    => security_inode_post_setxattr
+>      => evm_inode_post_setxattr
+>        => evm_update_evmxattr
+> => __vfs_setxattr_noperm
+> 
+> To change the argument of __vfs_setxattr_noperm from a dentry to the
+> path structure, the two EVM functions would have to be altered as well.
+> However, evm_update_evmxattr is called by 3 other EVM functions who
+> lives in the very heart of the complicated EVM framework. Any change to
+> them would cause a nasty chain reaction in EVM and, as IMA would trigger
+> EVM directly, in IMA as well.
+> 
+> There is another callchain as follow:
+> ima_appraise_measurement
+>    =>evm_verifyxattr
+>      =>evm_verifyxattr
+>        =>evm_verify_hmac
+> 	=>evm_calc_hash
+> 	   =>evm_calc_hmac_or_hash
+> 	     =>vfs_getxattr
+> Passing struct path into vfs_getxattr() would also affect this
+> callchain. Currently ima_appraise_measurment accepts a struct file, and
+> dentry is generated from file_dentry(file) in order to mitigate a
+> deadlock issue involving overlayfs(commit e71b9dff0634ed). Once
+> &file->f_path is passed through this callchain, and someone wants the
+> dentry, it will be using file->f_path.dentry, which is different from
+> file_dentry(file). In the overlayfs scenario, may this cause an issue?
 
--Andrew
->
-> >
-> > > If that mechanism is different for RISC-V, it would go a long way to
-> > > explaining why RISC-V needs this patch.
-> > >
-> > > > In the current CoVE implementation, that MMIO region information is=
- also
-> > > > passed to the host to provide additional flexibility. The host may
-> > > > choose to do additional
-> > > > sanity check and bail if the fault address does not belong to
-> > > > requested MMIO regions without
-> > > > going to the userspace. This is purely an optimization and may not =
-be mandatory.
-> > >
-> > > Makes sense, thanks for the explanation.
-> > >
-> > > >>> It can be a subset of the region's host provided the layout. The
-> > > >>> guest device filtering solution is based on this idea as well [1]=
-.
-> > > >>>
-> > > >>> [1] https://lore.kernel.org/all/20210930010511.3387967-1-sathyana=
-rayanan.kuppuswamy@linux.intel.com/
-> > > >>
-> > > >> I don't really see the connection.  Even if that series was going
-> > > >> forward (I'm not sure it is) there is no ioremap hook there.  Ther=
-e's
-> > > >> also no guest->host communication in that series.  The guest doesn=
-'t
-> > > >> _tell_ the host where the MMIO is, it just declines to run code fo=
-r
-> > > >> devices that it didn't expect to see.
-> > > >
-> > > > This is a recent version of the above series from tdx github. This =
-is
-> > > > a WIP as well and has not been posted to
-> > > > the mailing list. Thus, it may be going under revisions as well.
-> > > > As per my understanding the above ioremap changes for TDX mark the
-> > > > ioremapped pages as shared.
-> > > > The guest->host communication happen in the #VE exception handler
-> > > > where the guest converts this to a hypercall by invoking TDG.VP.VMC=
-ALL
-> > > > with an EPT violation set. The host would emulate an MMIO address i=
-f
-> > > > it gets an VMCALL with EPT violation.
-> > > > Please correct me if I am wrong.
-> > >
-> > > Yeah, TDX does:
-> > >
-> > > 1. Guest MMIO access
-> > > 2. Guest #VE handler (if the access faults)
-> > > 3. Guest hypercall->host
-> > > 4. Host fixes the fault
-> > > 5. Hypercall returns, guest returns from #VE via IRET
-> > > 6. Guest retries MMIO instruction
-> > >
-> > > From what you said, RISC-V appears to do:
-> > >
-> > > 1. Guest MMIO access
-> > > 2. Host MMIO handler
-> > > 3. Host handles the fault, returns
-> > > 4. Guest retries MMIO instruction
-> > >
-> > > In other words, this mechanism does the same thing but short-circuits
-> > > the trip through #VE and the hypercall.
-> > >
-> >
-> > Yes. Thanks for summarizing the tdx approach.
-> >
-> > > What happens if this ioremap() hook is not in place?  Does the hardwa=
-re
-> > > (or TSM) generate an exception like TDX gets?  If so, it's probably
-> > > possible to move this "notify the TSM" code to that exception handler
-> > > instead of needing an ioremap() hook.
-> > >
-> >
-> > We don't have a #VE like exception mechanism in RISC-V.
-> >
-> > > I'm not saying that it's _better_ to do that, but it would allow you =
-to
-> > > get rid of this patch for now and get me to shut up. :)
-> > >
-> > > > As I said above, the objective here is to notify the TSM where the
-> > > > MMIO is. Notifying the host is just an optimization that we choose =
-to
-> > > > add. In fact, in this series the KVM code doesn't do anything with
-> > > > that information. The commit text probably can be improved to clari=
-fy
-> > > > that.
-> > >
-> > > Just to close the loop here, please go take a look at
-> > > pgprot_decrypted().  That's where the x86 guest page table bit gets t=
-o
-> > > tell the hardware that the mapping might cause a #VE and is under the
-> > > control of the host.  That's the extent of what x86 does at ioremap()=
- time.
-> > >
-> > > So, to summarize, we have:
-> > >
-> > > x86:
-> > > 1. Guest page table bit to mark shared (host) vs. private (guest)
-> > >    control
-> > > 2. #VE if there is a fault on a shared mapping to call into the host
-> > >
-> > > RISC-V:
-> > > 1. Guest->TSM call to mark MMIO vs. private
-> > > 2. Faults in the MMIO area are then transparent to the guest
-> > >
-> >
-> > Yup. This discussion raised a very valid design aspect of the CoVE spec=
-.
-> > To summarize, we need to investigate whether using PTE bits instead of
-> > additional ABI
-> > for managing shared/confidential/ioremapped pages makes more sense.
-> >
-> > Thanks for putting up with my answers and the feedback :).
->
-> I think we should re-evaluate the PTE (or software walk) based approach
-> for CoVE spec. It is better to keep the CoVE spec as minimal as possible
-> and define SBI calls only if absolutely required.
->
-> >
-> > > That design difference would, indeed, help explain why this patch is
-> > > here.  I'm still not 100% convinced that the patch is *required*, but=
- I
-> > > at least understand how we arrived here.
->
-> Regards,
-> Anup
+I might be OK, but this need to be tested.
+
+> 
+> The patchset of moving IMA and EVM into the LSM infrastructe would be
+> helpfull but still can not completely resolve this situation. more
+> refactor would be needed in EVM. That's all that's happening right now.
+
+OK, thanks for the detailed explanation!
+
+I guess you could start with easier hooks (e.g. inode_getattr and 
+inode_setattr) to see if there is potentially other implications, and 
+incrementally build on that.
+
+
+> 
+>>
+>>>
+>>>
+>>> On 2022/8/27 19:12, Xiu Jianfeng wrote:
+>>>> v2:
+>>>>    * abstract walk_to_visible_parent() helper
+>>>>    * chmod and chown rights only take affect on directory's context
+>>>>    * add testcase for fchmodat/lchown/fchownat
+>>>>    * fix other review issues
+>>>>
+>>>> Xiu Jianfeng (6):
+>>>>     landlock: expand access_mask_t to u32 type
+>>>>     landlock: abstract walk_to_visible_parent() helper
+>>>>     landlock: add chmod and chown support
+>>>>     landlock/selftests: add selftests for chmod and chown
+>>>>     landlock/samples: add chmod and chown support
+>>>>     landlock: update chmod and chown support in document
+>>>>
+>>>>    Documentation/userspace-api/landlock.rst     |   9 +-
+>>>>    include/uapi/linux/landlock.h                |  10 +-
+>>>>    samples/landlock/sandboxer.c                 |  13 +-
+>>>>    security/landlock/fs.c                       | 110 ++++++--
+>>>>    security/landlock/limits.h                   |   2 +-
+>>>>    security/landlock/ruleset.h                  |   2 +-
+>>>>    security/landlock/syscalls.c                 |   2 +-
+>>>>    tools/testing/selftests/landlock/base_test.c |   2 +-
+>>>>    tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
+>>>>    9 files changed, 386 insertions(+), 31 deletions(-)
+>>>>
