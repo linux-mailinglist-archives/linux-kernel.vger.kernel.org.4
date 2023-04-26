@@ -2,167 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30666EF524
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEA76EF4C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241061AbjDZNJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
+        id S240740AbjDZM5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241032AbjDZNJ3 (ORCPT
+        with ESMTP id S240648AbjDZM5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:09:29 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F66213A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:09:25 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230426130922euoutp02c36f7fdfbd0e802c505f61311973d3dd~ZfhRy7yJm1453614536euoutp02S
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:09:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230426130922euoutp02c36f7fdfbd0e802c505f61311973d3dd~ZfhRy7yJm1453614536euoutp02S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682514562;
-        bh=hC8Egsn//5pKfzQNXUjSLdNqRLwtnUlIQyrXHxctICQ=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=cBYqWZmMXcchH17Eyn+QT7YdRVdpLw4LpuyLcprQb3h0lsNhL4S9HgXw96RYiHTTB
-         IX6Rfda+APow/ExY3ZeoNoTohJmw9AdRr4gkbKKRNw1bqI/psMKD0YyqeBo4iEkrty
-         1uoU27T5HB+3MLA5du0L4VL1mLmHthHTqAZ14Njw=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230426130921eucas1p208bd40a0cac655a2b20580b52f54fdeb~ZfhRbsNVx1807918079eucas1p2-;
-        Wed, 26 Apr 2023 13:09:21 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 5F.D7.35386.18229446; Wed, 26
-        Apr 2023 14:09:21 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230426130921eucas1p279078812be7e8d50c1305e47cea53661~ZfhREv2kN1808518085eucas1p2j;
-        Wed, 26 Apr 2023 13:09:21 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230426130921eusmtrp166b0a11733c8dfdc952a32ae2728776d~ZfhRDcP_d0593705937eusmtrp1m;
-        Wed, 26 Apr 2023 13:09:21 +0000 (GMT)
-X-AuditID: cbfec7f4-cdfff70000028a3a-1f-6449228132ec
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id FC.EA.14344.18229446; Wed, 26
-        Apr 2023 14:09:21 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230426130921eusmtip1aa55278beda33ec5aa586b1123e22dda~ZfhQ40EO-0298802988eusmtip1x;
-        Wed, 26 Apr 2023 13:09:21 +0000 (GMT)
-Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 26 Apr 2023 14:09:20 +0100
-Date:   Wed, 26 Apr 2023 15:00:33 +0200
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     Christoph Hellwig <hch@lst.de>
-CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-nfs@vger.kernel.org>, <cluster-devel@redhat.com>,
-        <linux-xfs@vger.kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        David Howells <dhowells@redhat.com>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-ext4@vger.kernel.org>, <ceph-devel@vger.kernel.org>,
-        <p.raghav@samsung.com>
-Subject: Re: [f2fs-dev] [PATCH 16/17] block: use iomap for writes to block
- devices
-Message-ID: <20230426130033.ps363bz472jwlgl6@localhost>
+        Wed, 26 Apr 2023 08:57:31 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A980D19B0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:57:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-505934ccc35so12250362a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1682513847; x=1685105847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j1QsbQyF3TR/hoFInEXmDClrMvJnRmuE6Ofnl/uFp38=;
+        b=JmiY6YfBuybCRpi0/YDE8hX7+l6vTaPtTJ79KCJCouinYq1bCpGXoFcc26Bo/pDCfy
+         o4Nn4EiaaS5OOUNhKEbnkQxC3OhyMnr1F/Po4sE+yRvRLT49zfFp0dLSd5DlRpwblCL+
+         uto0euo/3QfNZtfjgrpwBJWVIkme+wT+ak18Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682513847; x=1685105847;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j1QsbQyF3TR/hoFInEXmDClrMvJnRmuE6Ofnl/uFp38=;
+        b=lryHTuWBM+WznbeLqCumpQULvnTOEwXMzDPBp6RQruh7vkWAXa0amI0W4xGfNe3CAq
+         GuCgvkj2OnM9kVcHU0mUKicOWZERqHsSpej/mUTuLgpilom/S10EE2PSQaDj5Rx+iuuA
+         5vO0spexYY0lOdUkRIGi1zDuXycU65QrxW80bndG2VQwviksDFg3c1N86zlVzSc0fXzL
+         ufdDt7I7lrnMJkpM6CP5SZDUhfuKZ+wVsyC0F/3LVK/1wcDPJLgKnWco59agWOEH1IV3
+         NIMS4fgkIZbcsqKaZ1PRa1zYuqsFIJ1XEeZeSzb/EQraupmdd/S8QIL1Q69aveJEs+a1
+         PDTA==
+X-Gm-Message-State: AAQBX9foESkdo3+7fK8xoFdHVB9REnrYne40RTpuNbV2XYFMeyfHPuzq
+        NgCxrQNwlvdWtMA+KBjjZ92rD2w0RRhj5OY10UO2Lw==
+X-Google-Smtp-Source: AKy350ZGTmt/6Xm8J8Z+YJRO5ZAF5Cg9M4AsqmY4MImaN2aS8xw7FbSFm0eUoRt/8GYZH6ApMntLSdSXB3B6vwQeM54=
+X-Received: by 2002:aa7:c74e:0:b0:502:1cae:8b11 with SMTP id
+ c14-20020aa7c74e000000b005021cae8b11mr19006448eds.23.1682513847171; Wed, 26
+ Apr 2023 05:57:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230424054926.26927-17-hch@lst.de>
-X-Originating-IP: [106.110.32.140]
-X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLKsWRmVeSWpSXmKPExsWy7djPc7qNSp4pBp++qVnMWb+GzWL13X42
-        iw83JzFZnFz9mM3iXdNvFovLT/gsVq4+ymSx95a2xcx5d9gsLi1yt9iz9yRQatccNot7a/6z
-        Wlw4cJrVYtefHewWz3ZvZLb4/WMOm4Ogx+YVWh6Xz5Z6bFrVyeax6dMkdo8TM36zeOxe8JnJ
-        Y/fNBjaP9/uusnmsmHaRyePzJrkArigum5TUnMyy1CJ9uwSujJenLrMUzOOo+DntMlsD4wW2
-        LkZODgkBE4nl01aydzFycQgJrGCUOHdvIzNIQkjgC6PEi2tcEInPjBKzLk5hhuk4vXUrK0Ri
-        OaPE/y2TWOGqjly+wgbhbGGUmHR2NQtIC4uAqsTft5eBEhwcbAJaEo2d7CBhEQEliaevzjKC
-        1DML7GaRaDh9ECwhLBAi0bN9Flg9r4C5REt3FUiYV0BQ4uTMJ2AjOQUMJWatewN1kZJEw+Yz
-        LBB2rcTe5gNg/0gInOOUmPdjP9SjLhKt75tZIWxhiVfHt7BD2DISpyf3QDVXSzy98ZsZormF
-        UaJ/53qwIyQErCX6zuSA1DALZEj8vDsTao6jxKJjTcwQJXwSN94KQpTwSUzaNh0qzCvR0SYE
-        Ua0msfreGxaIsIzEuU98ExiVZiF5bBaS+RC2jsSC3Z/YZgF1MAtISyz/xwFhakqs36W/gJF1
-        FaN4amlxbnpqsVFearlecWJucWleul5yfu4mRmCKPP3v+JcdjMtffdQ7xMjEwXiIUYKDWUmE
-        l7fSPUWINyWxsiq1KD++qDQntfgQozQHi5I4r7btyWQhgfTEktTs1NSC1CKYLBMHp1QD05zy
-        FeGfFk7Z2PNfZ3GLZ/yqt91S15PYD263eK2fVKDim7UpI07dfb+U5b1fSm+830svCT62z/fy
-        aifJhfP2LHaU2ss6pU0y7Zo/x49yxx1ayzT6DTcVa36cFxXU8Cll06OOy45p1+yPTE3Nfzfz
-        569vexI3bYl807uk2Tvx1STNPVO2Ptmoe/alyUuVmGCdRVHpiqtFCo06FthUmleJ28jN0dWO
-        V7HLCjg63exGndcJy9jsiT6TYq6cuxe/Osep43Lz46lF+ptSf1tZ+nysKL7FmWj4YiVb67Zl
-        DnoOnHdYCv/f5ZV6IH30wVNlh9kRJXelvs1onfb2xKu6d7zPeM1Vv/VNzzJJXKvwk/1srhJL
-        cUaioRZzUXEiAHGPVigABAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrCIsWRmVeSWpSXmKPExsVy+t/xu7qNSp4pBmee8VnMWb+GzWL13X42
-        iw83JzFZnFz9mM3iXdNvFovLT/gsVq4+ymSx95a2xcx5d9gsLi1yt9iz9yRQatccNot7a/6z
-        Wlw4cJrVYtefHewWz3ZvZLb4/WMOm4Ogx+YVWh6Xz5Z6bFrVyeax6dMkdo8TM36zeOxe8JnJ
-        Y/fNBjaP9/uusnmsmHaRyePzJrkArig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NY
-        KyNTJX07m5TUnMyy1CJ9uwS9jLn9DSwF91grLp08w9bAuJKli5GTQ0LAROL01q2sXYxcHEIC
-        SxklNv/7xwaRkJHY+OUqK4QtLPHnWhcbRNFHRokndxYwQjhbGCWezrwO1sEioCrx9+1lIJuD
-        g01AS6Kxkx0kLCKgJPH01VmwemaB3SwSK2c0MYMkhAVCJHq2zwKr5xUwl2jprgIJCwmESdzp
-        3ga2mFdAUOLkzCdglzIL6Egs2P0JrJxZQFpi+T8OkDCngKHErHVvmCHuVJJo2HwG6rFaic5X
-        p9kmMArPQjJpFpJJsxAmLWBkXsUoklpanJueW2ykV5yYW1yal66XnJ+7iREY/duO/dyyg3Hl
-        q496hxiZOBgPMUpwMCuJ8PJWuqcI8aYkVlalFuXHF5XmpBYfYjQFBsREZinR5Hxg+skriTc0
-        MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJzU5NLUgtgulj4uCUamDaXttiKlzVfHqHju2S6Rrv
-        bx2IusPDuPFD0hOBklvLd31/wNQdKtfzlN26OtVsb+DbOaqnu3r+vl6XuKoq+2S1/wIN/Yzu
-        rfPOW3Z4yYXqmLvf2RoQMH3xyYaOpbnTUvsfBkalJejJ2UfeTP9dpunZFx454VGZVe75/cFM
-        UgozeypmSbXeWfX/TafXztOplyOXPN9bfyXBJMN1nUvu89T2Z/a6fem9t/LOT5A9PIU/au/8
-        001GUY8ze+sCfotHyrLceXKrzpZ3g88UsdtPz/z7bfx69hyJQxe/CPLPWhzS7D11xeFsW+V3
-        ttv/54ukFvVLFcSwKvwM8jdZs1XkNrfBylTbhH5PRZ/TUpf4jyqxFGckGmoxFxUnAgAAg+8w
-        hwMAAA==
-X-CMS-MailID: 20230426130921eucas1p279078812be7e8d50c1305e47cea53661
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----0IIwcNA8CeD.s59tlljyDEq3yyVAinti4bQgYoqzE0B37Kwt=_fbc0e_"
-X-RootMTR: 20230426130921eucas1p279078812be7e8d50c1305e47cea53661
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230426130921eucas1p279078812be7e8d50c1305e47cea53661
-References: <20230424054926.26927-1-hch@lst.de>
-        <20230424054926.26927-17-hch@lst.de>
-        <CGME20230426130921eucas1p279078812be7e8d50c1305e47cea53661@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230423075335.92597-1-kal.conley@dectris.com>
+ <6446d34f9568_338f220872@john.notmuch> <CAHApi-=Vr4VARgoDNB1T906gfDNB5L5_U24zE=ZHQi+qd__e8w@mail.gmail.com>
+ <644837cec75d1_8f94b20880@john.notmuch>
+In-Reply-To: <644837cec75d1_8f94b20880@john.notmuch>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Wed, 26 Apr 2023 15:02:17 +0200
+Message-ID: <CAHApi-kzaJxQTRgZqYmMSWYa6CW6b0U6x9Sdpk_Kt=fd2hPCjA@mail.gmail.com>
+Subject: Re: [PATCH] xsk: Use pool->dma_pages to check for DMA
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------0IIwcNA8CeD.s59tlljyDEq3yyVAinti4bQgYoqzE0B37Kwt=_fbc0e_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+> > > Was it noticable in some sort of performance test?
+> >
+> > This patch is part of the patchset found at
+> > https://lore.kernel.org/all/20230412162114.19389-3-kal.conley@dectris.com/
+> > which is being actively discussed and needs to be resubmitted anyway
+> > because of a conflict. While the discussion continues, I am submitting
+> > this patch by itself because I think it's an improvement on its own
+> > (regardless of what happens with the rest of the linked patchset). On
+> > one system, I measured a performance regression of 2-3% with xdpsock
+> > and the linked changes without the current patch. With the current
+> > patch, the performance regression was no longer observed.
+>
+> Would be nice to have in commit message so reader has an idea the
+> perf numbers are in fact better.
 
-On Mon, Apr 24, 2023 at 07:49:25AM +0200, Christoph Hellwig wrote:
-> Use iomap in buffer_head compat mode to write to block devices.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  block/Kconfig |  1 +
->  block/fops.c  | 33 +++++++++++++++++++++++++++++----
->  2 files changed, 30 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/Kconfig b/block/Kconfig
-> index 941b2dca70db73..672b08f0096ab4 100644
-> --- a/block/Kconfig
-> +++ b/block/Kconfig
-> @@ -5,6 +5,7 @@
->  menuconfig BLOCK
->         bool "Enable the block layer" if EXPERT
->         default y
-> +       select IOMAP
+When I measured this patch by itself (on bpf-next), I didn't measure
+any statistically significant performance gains. However, it did allow
+me to avoid a regression when combined with the other linked patch (as
+mentioned). I don't know if it makes sense to mention that other
+change which is not even applied to any tree. I was mainly submitting
+this patch from the perspective of the code being better not
+contingent on any provable performance gains.
 
-This needs to be FS_IOMAP.
+>
+> >
+> > > > diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+> > > > index d318c769b445..a8d7b8a3688a 100644
+> > > > --- a/include/net/xsk_buff_pool.h
+> > > > +++ b/include/net/xsk_buff_pool.h
+> > > > @@ -180,7 +180,7 @@ static inline bool xp_desc_crosses_non_contig_pg(struct xsk_buff_pool *pool,
+> > > >       if (likely(!cross_pg))
+> > > >               return false;
+> > > >
+> > > > -     return pool->dma_pages_cnt &&
+> > > > +     return pool->dma_pages &&
+> > > >              !(pool->dma_pages[addr >> PAGE_SHIFT] & XSK_NEXT_PG_CONTIG_MASK);
+> > > >  }
+> >
+> > I would consider the above code part of the "fast path". It may be
+> > executed approximately once per frame in unaligned mode.
+>
+> In the unlikely case though is my reading. So really shouldn't
+> be called for every packet or we have other perf issues by that
+> likely() there.
+>
+> I assume the above is where the perf is being gained because below
+> two things are in setup/tear down. But then we are benchmarking
+> an unlikely() path?
 
->         select SBITMAP
->         help
->  	 Provide block layer support for the kernel.
+I was testing with large chunk sizes in unaligned mode (4000-4096
+bytes) with ZC. For chunk sizes nearly as large as PAGE_SIZE the
+unlikely path is actually the main path.
 
-------0IIwcNA8CeD.s59tlljyDEq3yyVAinti4bQgYoqzE0B37Kwt=_fbc0e_
-Content-Type: text/plain; charset="utf-8"
+> >
+> > > This seems to be used in the setup/tear-down paths so your optimizing
+> > > a control side. Is there a fast path with this code? I walked the
+> > > ice driver. If its just setup code we should do whatever is more
+> > > readable.
+> >
+> > It is not only used in setup/tear-down paths (see above).
+> > Additionally, I believe the code is also _more_ readable with this
+> > patch applied. In particular, this patch reduces cognitive complexity
+> > since people (and compilers) reading the code don't need to
+> > additionally think about pool->dma_pages_cnt.
+> >
+> > > Both the _alloc_ cases read neighboring free_heads_cnt so your saving a load I guess?
+> > > This is so deep into micro-optimizing I'm curious if you could measure it?
+> >
+> > It is saving a load which also reduces code size. This will affect
+> > other decisions such as what to inline. Also in the linked patchset,
+> > dma_pages and dma_pages_cnt do not share a cache line (on x86_64).
+>
+> But again buried in an unlikely path. Sure but removing the conditional
+> altogether would be even better.
 
+Yeah, I think that is another improvement to consider.
 
-------0IIwcNA8CeD.s59tlljyDEq3yyVAinti4bQgYoqzE0B37Kwt=_fbc0e_--
+> So my understanding is ZC is preferred and default mode and copy modes
+> are primarily fall back modes. So we are punishing the good case here
+> for a fallback to copy mode. I think overall refactoring the code to
+> avoid burdoning the fast case with a fallback slow case would be ideal
+> solution.
+
+I agree that ZC is preferred and this patch is aimed at improving the
+ZC path. The performance gain I observed was for ZC.
+
+> However, I agree just on readability the patch is fine and good. No
+> objection on my side. But I think if we are making performance
+> arguments for 2-3% here the better thing to do is remove the check
+> and unlikely() and we would see better benchmarks when using the
+> ZC mode which as I understand it is what performance aware folks should
+> be doing.
+
+I totally agree that other better improvements exist but I don't think
+they make this patch any less desirable. This change is only meant as
+a small incremental improvement.
