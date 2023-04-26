@@ -2,56 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5BD6EFDEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72BD6EFDEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239857AbjDZXMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239680AbjDZXMw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233710AbjDZXMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 26 Apr 2023 19:12:52 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FA358E
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:12:51 -0700 (PDT)
-Received: from letrec.thunk.org ([76.150.80.181])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33QNC4rL018996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 19:12:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1682550727; bh=a28AE7O4X83WWFRQ6/mRv8wwHivs9drRMGuAgV2hNZk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=kY28SrgCLZILV53+lsfg5h5l4QnFMhzMkUbS0hwj0iZDGfLlswNTyZ2M31mmjDvJw
-         ifLN2AaAgKQKDA43ZILHlq2+tJl/xEC/dGageHbtWrvOC8KfQvO+IxJngJPeudtbD+
-         Hx86xFyGSUkznglbZHZWlImznZY2MWZ2L2PZ2gxLUMsnOb/h0Wm0c5JacwJcwM8yE9
-         YZRpbkgG6hL56MW2lj0/xLKMntGZ74EvoK0mNviWl6fPbfpJ40lteUNViJ+bp41OA5
-         hmTCRvNC32iQoOIpTENMRjv9qooe7XZIzYMDmh5dG43++p8qTwj3zryE1WoDQs3uUe
-         +nX8+YLtZSWaA==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id CC6718C01FA; Wed, 26 Apr 2023 19:12:03 -0400 (EDT)
-Date:   Wed, 26 Apr 2023 19:12:03 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Dan Carpenter <error27@gmail.com>
-Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
-Message-ID: <ZEmvw4x+M+4kgENG@mit.edu>
-References: <20230425041838.GA150312@mit.edu>
- <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
- <ZEl3QmF1PYXKaBTz@casper.infradead.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233381AbjDZXMt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 26 Apr 2023 19:12:49 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855EE358E;
+        Wed, 26 Apr 2023 16:12:45 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 01:12:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1682550763;
+        bh=PZpGk7rRCt4ehhsgRDpHyzzOzPQu1DqqumRtK7iBeaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o6cohrkryZuf2TEO3R1+ptwvr0tzx/Eruz4XzqF+/nOK+tLgT1+RZvdRwByxTaHkg
+         xdfNIY8ols2G3HgPepKW+dphh6lUzcS9zAhjx/0jaddQsgOXXyy7/EMLSRu9hHpFKd
+         jy1+G6JiX8uVeZlt6NUjISZTkOZK+dCIPUyo36ys=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 0/3] blk-integrity: drop integrity_kobj from gendisk
+Message-ID: <862c1901-ee6e-44e5-8906-4bb1c3893372@t-8ch.de>
+References: <20230309-kobj_release-gendisk_integrity-v3-0-ceccb4493c46@weissschuh.net>
+ <yq1v8ivtzrn.fsf@ca-mkp.ca.oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZEl3QmF1PYXKaBTz@casper.infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <yq1v8ivtzrn.fsf@ca-mkp.ca.oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,21 +47,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 08:10:58PM +0100, Matthew Wilcox wrote:
+Hi Martin, Christoph, Jens,
+
+On 2023-03-20 07:56:58-0400, Martin K. Petersen wrote:
+> > The embedded member integrity_kobj member of struct gendisk violates
+> > the assumption of the driver core that only one struct kobject should
+> > be embedded into another object and then manages its lifetime.
+> >
+> > As the integrity_kobj is only used to hold a few sysfs attributes it
+> > can be replaced by direct device_attributes and removed.
 > 
-> This feels like something smatch could catch.  Adding Dan.
+> Looks good to me and passed a quick test on a couple of systems. Thanks
+> for cleaning this up!
 > 
-> Unfortunately, I don't know that we have any buildbots that run smatch,
-> and most developers don't, so it'll always be an after-the-fact patch
-> to fix it rather than "anybody using W=1" or "anybody using C=1" will
-> catch it before it gets anywhere near a maintainer.
+> Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-Well, if we can ask Mark Brown to run smatch on linux-next, we can
-catch most of these things quickly; in fact, this would have been
-*only* caught on linux-next, since in this case, we got caught out by
-a change in a function signature happening in one tree, and a new use
-of that function in another tree.
+Am I getting some part of the process for block/ wrong?
 
-Is this something that we could teach sparse to catch?
+It seems my patches for the block subsystem are having a hard time
+getting merged.
 
-   		       	  	      	     	- Ted
+* https://lore.kernel.org/all/20221110052438.2188-1-linux@weissschuh.net/
+* this series
+* https://lore.kernel.org/all/20230419-const-partition-v2-0-817b58f85cd1@weissschuh.net/
+
+Thanks for any pointers,
+Thomas
