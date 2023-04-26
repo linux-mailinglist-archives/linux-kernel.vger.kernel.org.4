@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392956EF78F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B361E6EF793
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbjDZPOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S241282AbjDZPOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240902AbjDZPOU (ORCPT
+        with ESMTP id S241280AbjDZPOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:14:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E350B4C0A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:14:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Yammpa9IiLASda95uMVgcL3LerSIgwp4czXb64R8Cec=; b=lNE3M2oQhcK/lgbvTsfH5CFeA6
-        FlCPQsdftdyG8+wIg+keOf8qqmWL3NO+UGv16+1KFu44peZ955HlTUOUzLPRkzfQOOhv8/yd8mMkX
-        dNySdSp0+1fwJNYrRVecPtnKgypUM0BL3BEdgxL/BrqmZ2CSJhX4ARnSN9xypqIYUVGb0X5y9EPrn
-        WS7cLZBq/p/HSS1e77eNFM2CWJX0vBOwuehZhPH3nIUxKAbfbRwD+memVM8zhS0Disad60d3dwv3l
-        iqIcFyHgG3veoPHr2OceeP3Vrm521mLwUUAUKbRvucWs03tBbvpTv/fFYvZktGCcrtC2LGmKFiE6Y
-        XUQrSmcA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1prgqH-002a2L-Bk; Wed, 26 Apr 2023 15:14:01 +0000
-Date:   Wed, 26 Apr 2023 16:14:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
-Message-ID: <ZEk/uVlbX2wWgagN@casper.infradead.org>
-References: <20230421221249.1616168-1-dianders@chromium.org>
- <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
- <20230422051858.1696-1-hdanton@sina.com>
- <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
- <20230425010917.1984-1-hdanton@sina.com>
- <CAD=FV=XWuQoaGZG_Tm8AqGAsqGSAa822bNw3Dp2QnmR40npURw@mail.gmail.com>
- <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
+        Wed, 26 Apr 2023 11:14:48 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83F54C1E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682522087; x=1714058087;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to;
+  bh=a4tnm3fwJS5ag19L8vGA9PFPuKrEXPbjh7N3g3Z0zMY=;
+  b=T+VTCqasEg4m73b5bXyMHq62RPL5g6fiwudIv/2n8B9GqC3UvnscifYk
+   45z4DTsxiZn99zuBBfafDsrnWuzUYCGPqXKBWOW0OXp4LjytKwlsLTnU7
+   xiF45+OzoG6z5J5Ju9sqCLyooHfUx2zan2wYU/vDZZDcrfNhkGdQh4HIy
+   +Wd1dQC6dPihf0dj94Gi5wzLLe7xtE1Jk4NZ0UnjaJbq0hmPB90llVbtI
+   VNGtttTJ17raQA4M3Z7ULWGp+MI9zvi9G+ZFkbnnVJQ0Fyy4ImzfEEBsF
+   QNsTK3khXGBYDExx1JSwuCGGl9S3+hpuXYONvh7bqoKXodOy+fBxYvu/n
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="412444652"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="412444652"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="671366410"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="671366410"
+Received: from lab-ah.igk.intel.com ([10.102.138.202])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:14:29 -0700
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: [PATCH v7 0/2] drm/i915: Hugepage manager and test for MTL
+Date:   Wed, 26 Apr 2023 17:14:10 +0200
+Message-Id: <20230425-hugepage-migrate-v7-0-fa6605a986c9@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMI/SWQC/02Nyw6CMBBFf4V0bZs+FMWV/2FcDDDQSaCQaTEYw
+ r9bXLk89+bkbCIiE0ZxLzbB+KZIU8hwPRWi8RB6lNRmFlZbp8/2Iv3S4wx5H6lnSCjNrawAOmeg
+ bEXWaogoa4bQ+ENseZSJ5uOZGTtaf7HnK3PHU/48I/wljLXGaX1TlalKp6WVEFpS0X8SPQYKy6o
+ oJBxUM41i379z622EwQAAAA==
+To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jonathan Cavitt <jonathan.cavitt@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:09:18AM +0100, Mel Gorman wrote:
-> On Tue, Apr 25, 2023 at 07:19:48AM -0700, Doug Anderson wrote:
-> > On Mon, Apr 24, 2023 at 6:09???PM Hillf Danton <hdanton@sina.com> wrote:
-> > > Take a look at another case of lock wait [1].
-> > >
-> > > [1] https://lore.kernel.org/lkml/CAHk-=wgyL9OujQ72er7oXt_VsMeno4bMKCTydBT1WSaagZ_5CA@mail.gmail.com/
-> > 
-> > So is this an explicit NAK on this approach, then? It still feels
-> > worthwhile to me given the current kcompactd design where there is a
-> > single thread that's in charge of going through and cleaning up all of
-> > memory. Any single pags isn't _that_ important for kcompactd to deal
-> > with and it's nice not to block the whole task's ability to make
-> > progress. kcompactd is already very much designed in this model (which
-> > is why SYNC_LIGHT exists in the first place) and that's why my patch
-> > series was relatively simple/short. That being said, if people really
-> > don't think I should pursue this then I won't send another version and
-> > we can drop it.
-> 
-> I don't consider it to be an explicit NAK but lets
-> cc Linus because it's a valid question. Linus, the patch is
-> https://lore.kernel.org/lkml/20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid/
-> asnd it's adding folio_lock_timeout which in older terms is a
-> lock_page_timout. The intended use is kcompactd doing out-of-line
-> compaction (like kswapd does out-of-line reclaim) to try lock a page in
-> MIGRATE_SYNC_LIGHT mode but if it cannot be locked quickly then give up
-> and move on to another migration candidate. The MIGRATE_SYNC_LIGHT is
-> expected to incur some delays while trying to make forward progress and
-> the overall problem is that kcompactd can sometimes stall for many seconds
-> and sometimes minutes on one page.
-> 
-> The reason I don't consider this patch a NAK candidate is that this is not
-> conditional locking as such because no special action is taken if the lock
-> cannot be acquired. In the referenced mail, I think the context for the IO
-> NOWAIT stuff is "try lock and if that fails, delegate the work to an async
-> context". That is not necessarily a universal win and it's potentially
-> complex. It's not a universal win because it's unknown how long it would
-> take to acquire the lock and it may be a short enough period to be cheaper
-> than the setup_for_async+context_switch+completion handler. If that happens
-> often enough in a short window then delegation may be slower overall than
-> doing the work synchronously. It's potentially complex because the setup
-> for async handling and completion needs code that must be maintained.
-> 
-> The kcompactd case using folio_lock_timeout is different. If the lock
-> fails, it's not being explicitly delegated to another context, the page
-> is simply ignored and kcompactd moves on. Fair enough, another context
-> may end up migrating the same page in direct compaction or kcompactd
-> at a later time but there is no complex setup for that and it's not
-> explicit delegation. It's vaguely similar to how shrink_folio_list()
-> calls folio_trylock and if that fails, keep the page on the LRU for a
-> future attempt with the main difference being that some time is spent on
-> trylock. This is *also* not necessarily a universal win because kcompactd
-> could find a suitable migration candidate quicker by a plain trylock but
-> that's what MIGRATE_ASYNC is for, MIGRATE_SYNC_LIGHT is expected to delay
-> for short periods of time when MIGRATE_ASYNC fails and the problem being
-> solved is the folio lock taking minutes to acquire.
+This patchset patches sent by Jonathan and Andi, with 
+addressed CI failures:
+1. Fixed checking alignment of 64K pages on both Pre-Gen12 and Gen12.
+2. Fixed start alignment of 2M pages.
 
-I'm not generally a fan of lock-with-timeout approaches.  I think the
-rationale for this one makes sense, but we're going to see some people
-try to use this for situations where it doesn't make sense.  I almost
-wonder if we shouldn't spin rather than sleep on this lock, since the
-window of time we're willing to wait is so short.  I'm certainly not
-willing to NAK this patch since it's clearly fixing a real problem.
+Regards
+Andrzej
 
-Hm.  If the problem is that we want to wait for the lock unless the
-lock is being held for I/O, we can actually tell that in the caller.
+Jonathan Cavitt (2):
+  drm/i915: Migrate platform-dependent mock hugepage selftests to live
+  drm/i915: Use correct huge page manager for MTL
 
-	if (folio_test_uptodate(folio))
-		folio_lock(folio);
-	else
-		folio_trylock(folio);
+.../gpu/drm/i915/gem/selftests/huge_pages.c   | 88 +++++++++++++++----
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |  3 +-
+ 2 files changed, 71 insertions(+), 20 deletions(-)
 
-(the folio lock isn't held for writeback, just taken and released;
-if the folio is uptodate, the folio lock should only be taken for a
-short time; if it's !uptodate then it's probably being read)
+Cc: intel-gfx@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Jonathan Cavitt <jonathan.cavitt@intel.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
+-- 
+2.39.2
+
+---
+Jonathan Cavitt (2):
+      drm/i915: Migrate platform-dependent mock hugepage selftests to live
+      drm/i915: Use correct huge page manager for MTL
+
+ drivers/gpu/drm/i915/gem/selftests/huge_pages.c | 105 ++++++++++++++++++------
+ drivers/gpu/drm/i915/gt/gen8_ppgtt.c            |   3 +-
+ 2 files changed, 82 insertions(+), 26 deletions(-)
+---
+base-commit: 4d0066a1c0763d50b6fb017e27d12b081ce21b57
+change-id: 20230425-hugepage-migrate-1869aaf31a6d
+
+Best regards,
+-- 
+Andrzej Hajda <andrzej.hajda@intel.com>
