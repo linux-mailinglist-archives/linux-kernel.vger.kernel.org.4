@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A82E6EF920
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04646EF925
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234837AbjDZRR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S234896AbjDZRSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233187AbjDZRRw (ORCPT
+        with ESMTP id S234698AbjDZRRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Apr 2023 13:17:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D955B1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07D4659C
         for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 10:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 395F863153
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 561556307A
         for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BECC4339C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B93DDC433A0;
         Wed, 26 Apr 2023 17:17:50 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1prim5-005KYD-1v;
+        id 1prim5-005KYl-2a;
         Wed, 26 Apr 2023 13:17:49 -0400
-Message-ID: <20230426171749.416626191@goodmis.org>
+Message-ID: <20230426171749.616376240@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Wed, 26 Apr 2023 13:17:05 -0400
+Date:   Wed, 26 Apr 2023 13:17:06 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Doug Cook <dcook@linux.microsoft.com>,
         Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [for-next][PATCH 02/11] tracing/user_events: Set event filter_type from type
+Subject: [for-next][PATCH 03/11] tracing: Fix print_fields() for __dyn_loc/__rel_loc
 References: <20230426171703.202523909@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,34 +51,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Beau Belgrave <beaub@linux.microsoft.com>
 
-Users expect that events can be filtered by the kernel. User events
-currently sets all event fields as FILTER_OTHER which limits to binary
-filters only. When strings are being used, functionality is reduced.
+Both print_fields() and print_array() do not handle if dynamic data ends
+at the last byte of the payload for both __dyn_loc and __rel_loc field
+types. For __rel_loc, the offset was off by 4 bytes, leading to
+incorrect strings and data being printed out. In print_array() the
+buffer pos was missed from being advanced, which results in the first
+payload byte being used as the offset base instead of the field offset.
 
-Use filter_assign_type() to find the most appropriate filter
-type for each field in user events to ensure full kernel capabilities.
+Advance __rel_loc offset by 4 to ensure correct offset and advance pos
+to the field offset to ensure correct data is displayed when printing
+arrays. Change >= to > when checking if data is in-bounds, since it's
+valid for dynamic data to include the last byte of the payload.
 
-Link: https://lkml.kernel.org/r/20230419214140.4158-2-beaub@linux.microsoft.com
+Example outputs for event format:
+        field:unsigned short common_type;       offset:0;       size:2; signed:0;
+        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
+        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
+        field:int common_pid;   offset:4;       size:4; signed:1;
 
+        field:__rel_loc char text[];  offset:8;      size:4; signed:1;
+
+Output before:
+tp_rel_loc: text=<OVERFLOW>
+
+Output after:
+tp_rel_loc: text=Test
+
+Link: https://lkml.kernel.org/r/20230419214140.4158-3-beaub@linux.microsoft.com
+
+Fixes: 80a76994b2d8 ("tracing: Add "fields" option to show raw trace event fields")
+Reported-by: Doug Cook <dcook@linux.microsoft.com>
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_events_user.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/trace/trace_output.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index cc8c6d8b69b5..eadb58a3efba 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -918,6 +918,9 @@ static int user_event_add_field(struct user_event *user, const char *type,
- 	field->is_signed = is_signed;
- 	field->filter_type = filter_type;
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 780c6971c944..952cc8aa8e59 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -819,13 +819,15 @@ static void print_array(struct trace_iterator *iter, void *pos,
+ 	len = *(int *)pos >> 16;
  
-+	if (filter_type == FILTER_OTHER)
-+		field->filter_type = filter_assign_type(type);
+ 	if (field)
+-		offset += field->offset;
++		offset += field->offset + sizeof(int);
+ 
+-	if (offset + len >= iter->ent_size) {
++	if (offset + len > iter->ent_size) {
+ 		trace_seq_puts(&iter->seq, "<OVERFLOW>");
+ 		return;
+ 	}
+ 
++	pos = (void *)iter->ent + offset;
 +
- 	list_add(&field->link, &user->fields);
+ 	for (i = 0; i < len; i++, pos++) {
+ 		if (i)
+ 			trace_seq_putc(&iter->seq, ',');
+@@ -861,9 +863,9 @@ static void print_fields(struct trace_iterator *iter, struct trace_event_call *c
+ 			len = *(int *)pos >> 16;
  
- 	/*
+ 			if (field->filter_type == FILTER_RDYN_STRING)
+-				offset += field->offset;
++				offset += field->offset + sizeof(int);
+ 
+-			if (offset + len >= iter->ent_size) {
++			if (offset + len > iter->ent_size) {
+ 				trace_seq_puts(&iter->seq, "<OVERFLOW>");
+ 				break;
+ 			}
 -- 
 2.39.2
