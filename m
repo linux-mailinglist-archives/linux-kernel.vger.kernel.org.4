@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE686EF9AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6A36EF9B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 20:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234959AbjDZR4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
+        id S236205AbjDZR7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjDZR4D (ORCPT
+        with ESMTP id S233479AbjDZR7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:56:03 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490C04EF5;
-        Wed, 26 Apr 2023 10:56:02 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fb8a8a597so89158327b3.0;
-        Wed, 26 Apr 2023 10:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682531761; x=1685123761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hNnFeQsCpLxS8BWhDUFhfQgFVbVpcjM4oqjjdFxwN7g=;
-        b=hUS52wWcuyYhQ2sYsB1elyCiRL5WnwDSjRZdypEG8+lsAsMH0xB/VPibZwzEGP1tnK
-         ufsAeF3GUkg6a9PXxHX+aSVoZGOybH6tqXhUiz7j0/N7MJLy16k6Mls+u70qtS/Ju2IN
-         t4aQe/LSPVrtz27GGSofwEyfDQpt0sK8HKf1Ocs9eF/YcsrV1q52hnymodVSoRvu/+JR
-         qfmFNLYlAQVInFONl1np/ZpFGEGfDB80ERIviInRbJ+d2Xx+MdfWWua+Jo3rPsQg/dxj
-         gthgKJ8T6A6//1A4/c+muHl/9gWhzVgQPkKfgwmQPyeaz2mtwAvOS+ZmcAkWNLGHADFq
-         RmTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682531761; x=1685123761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hNnFeQsCpLxS8BWhDUFhfQgFVbVpcjM4oqjjdFxwN7g=;
-        b=DBQOh1w9rNY56f89DvPNyRE9FLJDvyxczBxojTr4dkMfQ3mum0u5j9W8xYI24Wbcyu
-         biHX8uVT+qxvXTKHTlywPSd2OvIBSt8b73FFfLuLllRrJQlVbG6WNbMnFB8IgXloXgc7
-         ZIqG7O9lJL+yhaclZ7txsFZLophXtFlNR03rBpJqQfZ49XXbdjYSP8s1mWnq7MY0953l
-         olg9kKehBrlWOqL6Tjxc1nRs/CkE0Z9d/nsqUSMspgUH4+uMbPOcieiCY5QMEc2jBykp
-         W3kwlShc4JZ/dWEWObNd5EL7yvqFTryGY/Ee1SwQb545Hd0MMoakWrlJpkw7p2hTeFCl
-         kjQA==
-X-Gm-Message-State: AAQBX9f5bCqNZYFaWt7Rdo+nf7sEZBGLRNsfOuAWrjCU3Xr+2SS9STDb
-        UHgy94LqJYe4A0wCAlNz5hLcOhkeXncBN1KxHAk=
-X-Google-Smtp-Source: AKy350bMaZOhtxUuPaoTkMfU9W5kpbDAZdv0hnpL0C8l3iRJH97GTQOubU51xDiVDprmSc60a5CGJV+tzKnC1i2SkTk=
-X-Received: by 2002:a81:9195:0:b0:555:cd89:cc50 with SMTP id
- i143-20020a819195000000b00555cd89cc50mr14033716ywg.29.1682531761421; Wed, 26
- Apr 2023 10:56:01 -0700 (PDT)
+        Wed, 26 Apr 2023 13:59:52 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0226C618B;
+        Wed, 26 Apr 2023 10:59:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682531954; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=QTP1nSuy3stytDdseimcCoXtiORzUrZ/QMDABvyPNc3fsSlqJRU3MkxrOKj/yGggz+FNvBuxBKlq+O6XuU4mQN6bpmnasCaNVy9YaOuWaa2GorthIuQhUPRQRsZl0uk3pBBW7RzwVaSOwMSONrefoMy3NvvFmv2PRDG2/qDGtZ0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682531954; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9Wi/8nMN9gJCaCyCSAg2V0pWF7JRystcZiffV/EP5n4=; 
+        b=LNUxwyTGv7+KwRZV9M+mdnj4lKHJa7NJiPEtbzen7rgs1UGmTzFcbnFoB1P/L4RCAuzrAPXgBRpojcRBKJppx5woFLZD7b7qdGHao5X1xo4MTFHjokrHG4vOsG5lc+In3V2YGSbi+8HHrtoji7AeQyunbDfRObpHrc++QQVGyew=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682531954;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9Wi/8nMN9gJCaCyCSAg2V0pWF7JRystcZiffV/EP5n4=;
+        b=ExP8dtkFjqQUa+eyrv7X5/ci8YBpV10iB0bdZMsomOUbcJBbHTcrZm3ZmL67sJAT
+        g/4uKOvIlxi+e/9yzFgKC+dYoMtqoHl6AGmkmRNyjx2iW7pX4FJ2Z2uIFAs8BSh/M4w
+        7bi2vLliB9tmoEMes2bbBFEATUKpcc2bqOdc7daI=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 16825319531255.417524925558041; Wed, 26 Apr 2023 10:59:13 -0700 (PDT)
+Message-ID: <d4ebfe62-f951-1646-f3e2-66f419b6ecd4@arinc9.com>
+Date:   Wed, 26 Apr 2023 20:58:58 +0300
 MIME-Version: 1.0
-References: <CANiq72kXa-SgRiVhvjU7X4fa8XSJB4po9xf_V4L6Gn2o+t6T+Q@mail.gmail.com>
- <20230426081715.40834-1-amiculas@cisco.com>
-In-Reply-To: <20230426081715.40834-1-amiculas@cisco.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 26 Apr 2023 19:55:50 +0200
-Message-ID: <CANiq72nm-tWGPHMaNF11baVRDFpk8ruvTAVDEWKfraEzADWqQQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: Sort rust/helpers.c's #include directives
-To:     Ariel Miculas <amiculas@cisco.com>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-        benno.lossin@proton.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Aw: Re: [net v2] net: ethernet: mtk_eth_soc: drop generic vlan rx
+ offload, only use DSA untagging
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        stable@vger.kernel.org
+References: <20230426172153.8352-1-linux@fw-web.de>
+ <61ea49b7-8a04-214d-ef02-3ef6181619e9@arinc9.com>
+ <trinity-a7837941-a0d2-4f38-aa65-0f0bd4759624-1682531537098@3c-app-gmx-bs05>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <trinity-a7837941-a0d2-4f38-aa65-0f0bd4759624-1682531537098@3c-app-gmx-bs05>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:18=E2=80=AFAM Ariel Miculas <amiculas@cisco.com>=
- wrote:
->
-> Sort the #include directives of rust/helpers.c alphabetically and add a
-> comment specifying this.
->
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Link: https://github.com/Rust-for-Linux/linux/issues/1003
-> Signed-off-by: Ariel Miculas <amiculas@cisco.com>
+On 26/04/2023 20:52, Frank Wunderlich wrote:
+> Hi
+>> Gesendet: Mittwoch, 26. April 2023 um 19:25 Uhr
+>> Von: "Arınç ÜNAL" <arinc.unal@arinc9.com>
+> 
+>>> tested this on bananapi-r3 on non-dsa gmac1 and dsa eth0 (wan).
+>>> on both vlan is working, but maybe it breaks HW-vlan-untagging
+>>
+>> I'm confused by this. What is HW-vlan-untagging, and which SoCs do you
+>> think this patch would break this feature? How can I utilise this
+>> feature on Linux so I can confirm whether it works or not?
+> 
+> oh, you mean my wording about "hw-vlan-untagging"...i mean the hw vlan offload feature which may
+> not be working on non-mt7621/7622 devices as i have no idea how to check this. i hope felix can
+> answer this. at least the feature activeated on mt7986 breaks sw-vlan on the gmac1 (without
+> switch).
 
-Looks better, and the content is fine!
+The "hw vlan offload" feature being broken on non-mt7621/7622 devices is 
+already established, hence this patch disabling it for the 
+non-mt7621/7622 devices. I still don't understand why you're mentioning 
+it in this way, unless you're trying to say something else?
 
-A few minor notes and tips:
+Could you also not trim the relevant parts of the mail on your response. 
+It's getting hard to keep track of the conversation.
 
-  - Please annotate the version of the series when you resubmit a
-patch series, e.g. v2, v3, etc. `git-format-patch` can do this for you
-via e.g. `-v2`.
-
-  - Typically the title would be prefixed like "rust: helpers: sort
-includes". In general, try to take a look at a subsystem's pattern for
-similar commits.
-
-  - The description should also give the rationale for the change,
-i.e. the "why" and the "what". This one, for instance, could say that
-this is done to improve readability and to be consistent with the
-other files with a similar approach within `rust/`.
-
-I can fix these on my side if you prefer, but it may be good practice
-if you want to send a quick new version.
-
-Thanks!
-
-Cheers,
-Miguel
+Arınç
