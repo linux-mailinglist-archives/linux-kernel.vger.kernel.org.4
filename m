@@ -2,150 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FF06EFD0D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791BA6EFD10
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239925AbjDZWHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S239976AbjDZWIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239759AbjDZWHm (ORCPT
+        with ESMTP id S239930AbjDZWII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:07:42 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489D530C2;
-        Wed, 26 Apr 2023 15:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682546859; x=1714082859;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=F8xnRKcvkulOCXR731N/Cj9LCIQ/8Q2g3riEynMCITM=;
-  b=CuPcslePIIkpJLMqGKmTZFaT712dtNnSbrS8b0GaGv/NiHXALJ2BK9qq
-   O0zuQCLsPSpm/LcC9RMgHP+7Wr3Q0Hw9FlcwHBRpa5ayKhol/26bykzXX
-   eQU5pOEDvhHoPA8DZgE+wYKnW22F3x66I8M5UK8b8jGUKZhZQEUpQwYco
-   q2xBMByQ79k5sQBxlaWkhHEFiV0owAfG7wUzi3DBezJa+DocLtIn2BsZS
-   khY72xgcMBZFUCAbkzXIov7pYIcEPyJi+6f/jajSeSnysK8l/diwp4GLw
-   uVmbEPtE+EdyYKEb614rioFquwo6fW0JHNiLFjDwBq/i8ieV988EuHUyq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="344698743"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="344698743"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 15:07:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="783486249"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="783486249"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 15:07:37 -0700
-Received: from [10.209.103.254] (kliang2-mobl1.ccr.corp.intel.com [10.209.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 22711580C9A;
-        Wed, 26 Apr 2023 15:07:34 -0700 (PDT)
-Message-ID: <44b8d51d-c4a3-3774-6b87-b853a5a7dec0@linux.intel.com>
-Date:   Wed, 26 Apr 2023 18:07:32 -0400
+        Wed, 26 Apr 2023 18:08:08 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BB230EB
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:08:00 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-51efefe7814so7708003a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 15:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682546880; x=1685138880;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uRRT1JLj5LjVJGBzDSlmTfM7cyr5YAX9h/3Myc2de1I=;
+        b=pjQw7QYK9BB2pMV/QaLm+IMj83pHs4ZI2FsGlXF1qxQrOOs/kb37GCGIjRiPtSBplM
+         HZFALGKiEPoDYjKrL/xmsBkYZ/eNEW8XaqWjZzW1iJfOrbZ5BfroedmAxhR5724JPORf
+         DfXj5feRu/YwyI2vy0ucwMVdatNJGgLAskbx8IlgTOm/dscWl1QFOiROwGNVDN7uwjsT
+         yIdPovwGCDW8FveLveGOXVUEC70eIW8bb/OPWGlPRI0iZHYmN+6TpLvrYzpXk1ArKbvJ
+         RS+8H5OAzWFGjgqop/0FgmlgELJL7YhK73jYxsuWP3Lpp8ST7iqL+CJl3kRnvjacr7Vg
+         l45w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682546880; x=1685138880;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uRRT1JLj5LjVJGBzDSlmTfM7cyr5YAX9h/3Myc2de1I=;
+        b=iWKb+8bIsq0ZDpFz+KTT1LTC3B6wzHqPjj57liPLoDSghy5lPlGzIGsY6VpMPP0zOU
+         bPCrtR0O12Z8rb407vBy7QiY0Iw7C+LbPc8MNrflX89rsP3U0pVsJYh/UIWiF5LIVJIF
+         aXfRbXFmHYncr3dlLF9B2BOeeswpuh220mx3WynoaQlUCSYyglPZ6+5JOBkGm0qmlJ0C
+         AWb7TjB7trIutzE9lRJIfZ5NjXshgZWKohi5GUd4NpWiL+wSwkTYntUf7RN9dRCl9iTD
+         jecOeUvLkFg7BdXp1FPxTSaGQbU3ZrInpmSefUPUk7fnKhQhAa1eP7qtCYiiqYHES4k3
+         rByA==
+X-Gm-Message-State: AAQBX9e1zrlVUUnh4RauS41c01Gw49m8t1vdzGdOyqL5uSVLkoH6tb2v
+        RH0fXrR3DAPhKzPxtqYDHLPizyOENvKSDsSuJafS5OZH05s7F62woFCUqA==
+X-Google-Smtp-Source: AKy350YEQK2YcFvxW+tZ4RwePGpH2SoL6ZVR2Ng7FDiNxIRK+3oqcHDH8LTMcodQMoXj3e++WVPh9YXcvWlgdyMnCHw=
+X-Received: by 2002:a17:90b:143:b0:246:9a4f:8b2e with SMTP id
+ em3-20020a17090b014300b002469a4f8b2emr21659612pjb.1.1682546879653; Wed, 26
+ Apr 2023 15:07:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 00/40] Fix perf on Intel hybrid CPUs
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ian Rogers <irogers@google.com>
-Cc:     Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230426070050.1315519-1-irogers@google.com>
- <ZEmTEHh0A6Uvy/k+@kernel.org> <ZEmYkDPgdKXWM+/e@kernel.org>
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <ZEmYkDPgdKXWM+/e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230425041838.GA150312@mit.edu> <CAHk-=wiP0983VQYvhgJQgvk-VOwSfwNQUiy5RLr_ipz8tbaK4Q@mail.gmail.com>
+ <CAKwvOdmXgThxzBaaL_Lt+gpc7yT1T-e7YgM8vU=c7sUita6aaw@mail.gmail.com>
+ <CAHk-=wjXDzU1j-cCB28Pxt-=NV5VTbnLimY3HG4uF0HPP7us_Q@mail.gmail.com>
+ <CAKwvOdm3gkAufWcWBqDMQNRXVqJjooFQ4Bi5YPHndWFCPScG+g@mail.gmail.com> <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com>
+In-Reply-To: <CAHk-=wib1T7HzHOhZBATast=nKPT+hkRRqgaFT9osahB08zNRg@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 26 Apr 2023 15:07:48 -0700
+Message-ID: <CAKwvOdn3Unm94UCiXygWTM_KyhATNsy68b_CFbqBDFXshd+34Q@mail.gmail.com>
+Subject: Re: [GIT PULL] ext4 changes for the 6.4 merge window
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-04-26 5:33 p.m., Arnaldo Carvalho de Melo wrote:
-> Em Wed, Apr 26, 2023 at 06:09:36PM -0300, Arnaldo Carvalho de Melo escreveu:
->> Em Wed, Apr 26, 2023 at 12:00:10AM -0700, Ian Rogers escreveu:
->>> TL;DR: hybrid doesn't crash, json metrics work on hybrid on both PMUs
->>> or individually, event parsing doesn't always scan all PMUs, more and
->>> new tests that also run without hybrid, less code.
->>>
->>> The first patches were previously posted to improve metrics here:
->>> "perf stat: Introduce skippable evsels"
->>> https://lore.kernel.org/all/20230414051922.3625666-1-irogers@google.com/
->>> "perf vendor events intel: Add xxx metric constraints"
->>> https://lore.kernel.org/all/20230419005423.343862-1-irogers@google.com/
->>>
->>> Next are some general test improvements.
->>
->> Kan,
->>
->> 	Have you looked at this? I'm doing a test build on it now.
-> 
-> And just to make clear, this is for v6.5.
+On Wed, Apr 26, 2023 at 11:33=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
+> On Wed, Apr 26, 2023 at 11:22=E2=80=AFAM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Ah, it does do something in the callee, not the caller:
+>
+> Ack, it does seem to have _some_ meaning for the return case, just not
+> the one we'd be looking for as a way to find mistakes in the
+> error-pointer case.
 
-I'm looking at the patch series, but I cannot finish all the reviews
-today. I will try to finish it tomorrow.
+Is this what you had in mind?
+```
+$ cat linus.c
+#define NULL ((void*)0)
 
-But there is one obvious bug with this series.
-The topdown events of atom are duplicated. The below is just an example.
-Almost all the atom Topdown events in the examples have such issue.
+void * _Nonnull foo (void) {
+    return &foo;
+}
 
-> $ perf stat --cputype=atom -M TopdownL1 -a sleep 1
-> 
->  Performance counter stats for 'system wide':
-> 
->            645,836      cpu_atom/TOPDOWN_RETIRING.ALL/   #     26.4 %  tma_bad_speculation    
->          2,404,468      cpu_atom/TOPDOWN_FE_BOUND.ALL/   #     38.9 %  tma_frontend_bound     
->          1,455,604      cpu_atom/TOPDOWN_BE_BOUND.ALL/   #     23.6 %  tma_backend_bound      
->                                                   #     23.6 %  tma_backend_bound_aux  
->          1,235,109      cpu_atom/CPU_CLK_UNHALTED.CORE/  #     10.4 %  tma_retiring           
->            642,124      cpu_atom/TOPDOWN_RETIRING.ALL/                                        
->          2,398,892      cpu_atom/TOPDOWN_FE_BOUND.ALL/                                        
->          1,503,157      cpu_atom/TOPDOWN_BE_BOUND.ALL/                                  
+void bar (void) {
+    if (foo() =3D=3D NULL) // maybe should warn that foo() returns _Nonnull=
+?
+        bar();
+}
+$ clang linus.c -fsyntax-only
+linus.c:8:15: warning: comparison of _Nonnull function call 'foo'
+equal to a null pointer is always false
+[-Wtautological-pointer-compare]
+    if (foo() =3D=3D NULL) // maybe should warn that foo() returns _Nonnull=
+?
+              ^
+linus.c:3:1: note: return type has '_Nonnull' nullability attribute
+void * _Nonnull foo (void) {
+^
+1 warning generated.
+```
+
+Quick PoC, obviously incomplete.
+```
+diff --git a/clang/include/clang/Basic/DiagnosticSemaKinds.td
+b/clang/include/clang/Basic/DiagnosticSemaKinds.td
+index 18a0154b0041..10e405b1cf65 100644
+--- a/clang/include/clang/Basic/DiagnosticSemaKinds.td
++++ b/clang/include/clang/Basic/DiagnosticSemaKinds.td
+@@ -3975,8 +3975,9 @@ def note_xor_used_as_pow_silence : Note<
+   "replace expression with '%0' %select{|or use 'xor' instead of '^'
+}1to silence this warning">;
+
+ def warn_null_pointer_compare : Warning<
+-    "comparison of %select{address of|function|array}0 '%1' %select{not |}=
+2"
+-    "equal to a null pointer is always %select{true|false}2">,
++    "comparison of %select{address of|function|array|_Nonnull function cal=
+l}0 "
++    "'%1' %select{not |}2equal to a null pointer is always "
++    "%select{true|false}2">,
+     InGroup<TautologicalPointerCompare>;
+ def warn_nonnull_expr_compare : Warning<
+     "comparison of nonnull %select{function call|parameter}0 '%1' "
+@@ -3992,6 +3993,8 @@ def warn_address_of_reference_null_compare : Warning<
+   "code; comparison may be assumed to always evaluate to "
+   "%select{true|false}0">,
+   InGroup<TautologicalUndefinedCompare>;
++def note_return_type_nonnull :
++  Note<"return type has '_Nonnull' nullability attribute">;
+ def note_reference_is_return_value : Note<"%0 returns a reference">;
+
+ def note_pointer_declared_here : Note<
+diff --git a/clang/lib/Sema/SemaChecking.cpp b/clang/lib/Sema/SemaChecking.=
+cpp
+index f66eb9fcf13d..9f6d326f5b72 100644
+--- a/clang/lib/Sema/SemaChecking.cpp
++++ b/clang/lib/Sema/SemaChecking.cpp
+@@ -13176,6 +13176,22 @@ static void AnalyzeImpConvsInComparison(Sema
+&S, BinaryOperator *E) {
+ ///
+ /// \param E the binary operator to check for warnings
+ static void AnalyzeComparison(Sema &S, BinaryOperator *E) {
++  if (auto Call =3D dyn_cast<CallExpr>(E->getLHS())) {
++    QualType RetType =3D Call->getCallReturnType(S.Context);
++    if (std::optional<NullabilityKind> NK =3D RetType->getNullability()) {
++      if (*NK =3D=3D NullabilityKind::NonNull &&
++        E->getRHS()->isNullPointerConstant(S.Context,
++
+Expr::NPC_ValueDependentIsNotNull)) {
++        std::string result;
++        llvm::raw_string_ostream os(result);
++        Call->getDirectCallee()->getNameForDiagnostic(os,
+S.getLangOpts(), true);
++        S.Diag(E->getExprLoc(), diag::warn_null_pointer_compare) << 3 <<
++          result << true;
++        S.Diag(Call->getDirectCallee()->getReturnTypeSourceRange().getBegi=
+n(),
++               diag::note_return_type_nonnull);
++      }
++    }
++  }
+   // The type the comparison is being performed in.
+   QualType T =3D E->getLHS()->getType();
 
 
+```
 
+
+--=20
 Thanks,
-Kan
-
+~Nick Desaulniers
