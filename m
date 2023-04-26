@@ -2,74 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D7C6EF772
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25136EF780
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241036AbjDZPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
+        id S241181AbjDZPIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240482AbjDZPGW (ORCPT
+        with ESMTP id S240754AbjDZPIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:06:22 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862037AAC;
-        Wed, 26 Apr 2023 08:05:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=dJzI1wHa5Hs77g/e2Ra7+W4pHa6Ls/Aizvrowv5+dEU=;
-        t=1682521556; x=1683731156; b=CrzbqLfJPs1hpI2BJiQsfvPpcDS9JkQHeqT1ET35FZwZjOl
-        tnOnfzKXZhWnJl13PU7D0qs7OFW069rHAuV1yZNS/17y/qJrpgYZTix+leAscUqTW430kYvg3IeKD
-        KDcHK7KLSmkIhB+1wMNGLMHVGAOb72EYhdjS0LySVjtOzUQQKK12bvrft36wwv3rD5ahc4iUXBRSu
-        g2/v+XcFVNogGae1T2yMvKziI3Hs592QZacSJNL9JPasPrOztVrcHSfCuDrNh3Xo00pUpsh5hPzLh
-        AhFCe8ixhvATHIRZOXT8Phz8Kwe3+SwmhyHKyp28g7A6Ju4aiRdhsT7HdWga+UsQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1prgiE-009DHv-1e;
-        Wed, 26 Apr 2023 17:05:42 +0200
-Message-ID: <d1e8fff25b49f8ee8d3e38f7b072d6e1911759bb.camel@sipsolutions.net>
-Subject: Re: [PATCH v4 1/1] wifi: mac80211: fortify the spinlock against
- deadlock by interrupt
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-Date:   Wed, 26 Apr 2023 17:05:41 +0200
-In-Reply-To: <074cf5ed-c39d-1c16-12e7-4b14bbe0cac4@alu.unizg.hr>
-References: <20230425164005.25272-1-mirsad.todorovac@alu.unizg.hr>
-         <20230426064145.GE27649@unreal>
-         <074cf5ed-c39d-1c16-12e7-4b14bbe0cac4@alu.unizg.hr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 26 Apr 2023 11:08:16 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37221618E;
+        Wed, 26 Apr 2023 08:07:58 -0700 (PDT)
+Received: from [IPV6:2408:824e:f25:7460:99d6:1295:58e5:1589] ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=PLAIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33QF7CbZ012118-33QF7Cba012118
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Wed, 26 Apr 2023 23:07:12 +0800
+Message-ID: <4cdd1cd2-bf9a-ed55-946d-48f917f72342@hust.edu.cn>
+Date:   Wed, 26 Apr 2023 23:07:12 +0800
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH] spi: davinci: Remove dead code in `davinci_spi_probe()`
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Li Ningke <lnk_01@hust.edu.cn>,
+        hust-os-kernel-patches@googlegroups.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
+References: <20230423032446.34347-1-lnk_01@hust.edu.cn>
+ <d29c4b3e-9e82-4ea9-9f0c-a8e2c7637eb9@sirena.org.uk>
+ <46299274-d827-279f-cadf-020e93296c13@hust.edu.cn>
+ <ed846afc-7155-4998-9a8d-e9d9e8aaf8e2@sirena.org.uk>
+ <1488abfa-9a0e-970b-e074-11842a6c6413@hust.edu.cn>
+ <dbcc6739-e741-495f-85f9-bac104647194@sirena.org.uk>
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <dbcc6739-e741-495f-85f9-bac104647194@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-04-26 at 16:02 +0200, Mirsad Todorovac wrote:
->=20
-> That's awesome! Just to ask, do I need to send the PATCH v5 with the
-> Reviewed-by: tag, or it goes automatically?
->=20
 
-Patchwork will be pick it up automatically.
+On 2023/4/26 22:13, Mark Brown wrote:
+> On Wed, Apr 26, 2023 at 09:50:26AM +0800, Dongliang Mu wrote:
+>
+>> Second, from code review of platform_get_irq / platform_get_irq_optional, it
+>> would warn IRQ 0 as an invalid IRQ number.
+>> out:
+>> 	if (WARN(!ret, "0 is an invalid IRQ number\n"))
+>> 		return -EINVAL;
+>> 	return ret;
+> Like I say I'm not sure that's actually accurate for all architectures
+> yet.
 
-johannes
+I see. Let's wait and see. When it becomes stable and universal for all 
+architectures, we could clean up them all together.
+
+Currently our team just works to make Smatch happy :)
+
