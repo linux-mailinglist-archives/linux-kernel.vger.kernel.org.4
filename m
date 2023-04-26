@@ -2,100 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A936EFBDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35B56EFBDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 22:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjDZUsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 16:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S239315AbjDZUtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 16:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234643AbjDZUse (ORCPT
+        with ESMTP id S239665AbjDZUtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 16:48:34 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC8E19F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:48:33 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fb8a8a597so91377917b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682542112; x=1685134112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cdi2f9tDcSB3djwB4V/VPNjZwmjPBfuLoSA5AYqKL9M=;
-        b=De+4paIaOaWUHgJo5qTgZBNmMmNRF984piBG4ngJC9wZTlZ+2itBTzdIJtUwXqCBMi
-         iCt6+MgVbqPPcB1X9p9rzouHjm3Q6lZ2yUlVkPwUZIKSDX4JTBh/ZKcyHvDcqNZEq45C
-         m1yTI3cWr47skGO8aRVpfQ6w1Y2UQNSYA2BmnQJAiXx1x6Ki5Jq3p/WG8RVfZ7dBEpil
-         FMYig/xdzfp215jroaxhsTtHcxaMm7jI1isFNYCV3+G53agI5qO65CPhmf6Ob99RPye5
-         bOJmz2vZdEIDkfjpmnazYuVxsWCgaZJBFVqG2HfFEn6NUClLsjuB3JmGZ9n2+85tn2fI
-         2wRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682542112; x=1685134112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cdi2f9tDcSB3djwB4V/VPNjZwmjPBfuLoSA5AYqKL9M=;
-        b=jVdFI1BRX8fyMEMYMngx7o+f076X3sO9aLZFVyWqS9bDgIXSSMJ3tXq1RrNjP0oN84
-         MhEuvpxpPQNVi5ovTEv2gqYxQg3DZZ157pzSsjwoywGHxJxa6SEQ6Ipz4rzqoFdbyGT3
-         4p/0MA+b3UZPXW8Hiv9m5HtmnCyQF7bf6tlhjaiLG0sewhNBNqXoMIPhKYmjY/y7fp0p
-         17g1WdAp82wcD14JrTlCk9hPXb+vuQvXtW6EYBEUsvA5JG7xMehCF+W7aLdGoSdQbh12
-         NM1z2m3ErVUuN5hPnAq5H7U+0sC8WuPqsT0ep56MuSjG4DdOKAHkqRWjYpvRDMRIclxM
-         cylQ==
-X-Gm-Message-State: AAQBX9fPtEBJBcESJ4Slwa659/JPDK1QK/TJXQuUQ7NYVCi3offcDGHF
-        aeh8GkAZHHdlxoBJcoh36KhHdyr1voG2CPm2omFiNw==
-X-Google-Smtp-Source: AKy350ZGPBAqkhcjC/oZOR2o49L/Kd+QBwzpHurXSr42uoYO/GZxkR482tzqaNa7u+xXYdbhMGrb+GW3NzTlNXeD9fw=
-X-Received: by 2002:a81:5404:0:b0:54f:bb49:c3a2 with SMTP id
- i4-20020a815404000000b0054fbb49c3a2mr13402352ywb.28.1682542112275; Wed, 26
- Apr 2023 13:48:32 -0700 (PDT)
+        Wed, 26 Apr 2023 16:49:07 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EEB1FE6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 13:49:04 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id rm4TpH0Nn0CGGrm4TpqSEV; Wed, 26 Apr 2023 22:49:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682542142;
+        bh=kp67nxVyh8jZZFZ6p2tHHUiB/eOzKLK57FZQrJ+46xQ=;
+        h=From:To:Cc:Subject:Date;
+        b=ON2127XtGpB/s0nIKPSntB5hb2UXPGUjJbG0gWF4olqVv8Hsoq17f2CVZnTAqGjPb
+         qjEtnnos6bjixkIl2xHm7tJtBGnev6CIXjI+r/RBc8dW7NbISsUDUB7NnFCE6KypH0
+         lIxOQngLIcbBA0anyIK6DzecaH3umtqq7zENdXUXclYTy/DKWymYNq+2xETADox2Ln
+         6JknIAoEWjhca/1nWp+t0OEBIqnT9ohbdJV9S/ITns9T4XEIYLR/ptN58mKZkhsf7e
+         VCh/NJUXID8JMFj3swQEOh/pTUdav3oHh8fzy8uS4VOPC6FU2an3wKS4a6G2DNd03G
+         A+n8GaFpsjuBA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 26 Apr 2023 22:49:02 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH net-next] wifi: ath11k: Use list_count_nodes()
+Date:   Wed, 26 Apr 2023 22:48:59 +0200
+Message-Id: <941484caae24b89d20524b1a5661dd1fd7025492.1682542084.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-33-nikita.shubin@maquefel.me> <20230424163203.GK2701399-robh@kernel.org>
-In-Reply-To: <20230424163203.GK2701399-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 26 Apr 2023 22:48:20 +0200
-Message-ID: <CACRpkdY_1-4QPzuQs0aqX4M=RDzT3y9m7FTA_Dq71vEn22A8qw@mail.gmail.com>
-Subject: Re: [PATCH 32/43] dt-bindings: gpio: Add DT bindings ep93xx gpio
-To:     Rob Herring <robh@kernel.org>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 6:32=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
-> On Mon, Apr 24, 2023 at 03:34:48PM +0300, Nikita Shubin wrote:
+ath11k_wmi_fw_stats_num_vdevs() and ath11k_wmi_fw_stats_num_bcn() really
+look the same as list_count_nodes(), so use the latter instead of hand
+writing it.
 
-> > Add YAML bindings for ep93xx SoC.
-> >
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-(...)
-> > +  chip-label:
-> > +    maxItems: 1
-> > +    description: human readable name.
->
-> Why do you need this? It's not standard and I don't see other GPIO
-> controllers needing it.
+The first ones use list_for_each_entry() and the other list_for_each(), but
+they both count the number of nodes in the list.
 
-Caught my eye too, Nikita can you live without this and just use dev_name()
-or something to name the chip in Linux?
+While at it, also remove to prototypes of non-existent functions.
+Based on the names and prototypes, it is likely that they should be
+equivalent to list_count_nodes().
 
-If it is to conform to EP93xx documentation naming I guess it should be
-cirrus,ep93xx-gpio-chip-name =3D "..."; ?
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Un-tested
+---
+ drivers/net/wireless/ath/ath11k/wmi.c | 24 +-----------------------
+ drivers/net/wireless/ath/ath11k/wmi.h |  3 ---
+ 2 files changed, 1 insertion(+), 26 deletions(-)
 
-Yours,
-Linus Walleij
+diff --git a/drivers/net/wireless/ath/ath11k/wmi.c b/drivers/net/wireless/ath/ath11k/wmi.c
+index d0b59bc2905a..a55b5fe37ecf 100644
+--- a/drivers/net/wireless/ath/ath11k/wmi.c
++++ b/drivers/net/wireless/ath/ath11k/wmi.c
+@@ -6548,28 +6548,6 @@ int ath11k_wmi_pull_fw_stats(struct ath11k_base *ab, struct sk_buff *skb,
+ 				   &parse);
+ }
+ 
+-size_t ath11k_wmi_fw_stats_num_vdevs(struct list_head *head)
+-{
+-	struct ath11k_fw_stats_vdev *i;
+-	size_t num = 0;
+-
+-	list_for_each_entry(i, head, list)
+-		++num;
+-
+-	return num;
+-}
+-
+-static size_t ath11k_wmi_fw_stats_num_bcn(struct list_head *head)
+-{
+-	struct ath11k_fw_stats_bcn *i;
+-	size_t num = 0;
+-
+-	list_for_each_entry(i, head, list)
+-		++num;
+-
+-	return num;
+-}
+-
+ static void
+ ath11k_wmi_fw_pdev_base_stats_fill(const struct ath11k_fw_stats_pdev *pdev,
+ 				   char *buf, u32 *length)
+@@ -6880,7 +6858,7 @@ void ath11k_wmi_fw_stats_fill(struct ath11k *ar,
+ 	}
+ 
+ 	if (stats_id == WMI_REQUEST_BCN_STAT) {
+-		num_bcn = ath11k_wmi_fw_stats_num_bcn(&fw_stats->bcn);
++		num_bcn = list_count_nodes(&fw_stats->bcn);
+ 
+ 		len += scnprintf(buf + len, buf_len - len, "\n");
+ 		len += scnprintf(buf + len, buf_len - len, "%30s (%zu)\n",
+diff --git a/drivers/net/wireless/ath/ath11k/wmi.h b/drivers/net/wireless/ath/ath11k/wmi.h
+index 92fddb77669c..91bc3e648ce1 100644
+--- a/drivers/net/wireless/ath/ath11k/wmi.h
++++ b/drivers/net/wireless/ath/ath11k/wmi.h
+@@ -6372,9 +6372,6 @@ int ath11k_wmi_send_pdev_set_regdomain(struct ath11k *ar,
+ 				       struct pdev_set_regdomain_params *param);
+ int ath11k_wmi_pull_fw_stats(struct ath11k_base *ab, struct sk_buff *skb,
+ 			     struct ath11k_fw_stats *stats);
+-size_t ath11k_wmi_fw_stats_num_peers(struct list_head *head);
+-size_t ath11k_wmi_fw_stats_num_peers_extd(struct list_head *head);
+-size_t ath11k_wmi_fw_stats_num_vdevs(struct list_head *head);
+ void ath11k_wmi_fw_stats_fill(struct ath11k *ar,
+ 			      struct ath11k_fw_stats *fw_stats, u32 stats_id,
+ 			      char *buf);
+-- 
+2.34.1
+
