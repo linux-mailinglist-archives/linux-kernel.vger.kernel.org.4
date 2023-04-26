@@ -2,70 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23256EF66A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A52F6EF66D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241368AbjDZO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S241394AbjDZO3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241092AbjDZO2t (ORCPT
+        with ESMTP id S241092AbjDZO3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:28:49 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AB676A4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:28:35 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a516fb6523so75365085ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682519314; x=1685111314;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2zxN+51kTmRRhvTkz8C5RRZ+SlcUGbzZqD2x7sZii6Y=;
-        b=ihewYFMvT/hjTDnt4kDa4P/YQEexZP+hDKO3d6JWJ8RwltrnIqxaakuDnhfv8EOP9q
-         2XTZQV/mmxqzBNBLtLfwPTAaXFNNYP+kKLchZlJv/tFW9po685xiEAzvFM7xrUEL0xz1
-         2rw6MeynYACVQ+pDkeSDP5afmi+vL/HHWSvTDWeR+g44ZK/salcTXzMQ0D5SmIcVJrCf
-         d/hx2UmhSpN4htF/4Ec9N8vXosJ272hEasAq/dS9c3mqT2Uh7vAK+P0Aaspx1hyW5kmC
-         C8TquSa/wqlmHoQU7iPrym//np/Scogt8klch2qQtOLCn7+pgGY2z4mYR6CdkR5cqAbW
-         sO0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682519314; x=1685111314;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2zxN+51kTmRRhvTkz8C5RRZ+SlcUGbzZqD2x7sZii6Y=;
-        b=Vz+PxVsCi/9OUuuOk7agD2umTSv1kcZ++AP9p+ZUKEfqEhb3YYEWR/rB9AN6JGqYcI
-         g5qYQrBRr7sDvFcPTGnPw1LqGZRjXJ4zv+FoajoczEizCd7a4Tjm6FHVhRSrRSqx7iQB
-         PAkBv0nHrPiXzGF+zDkNrw10AV20Ozzg00AEq4irGQSX9Y8oQI81IkuwX3h18Wgc8k/z
-         jZIQHzva465Q/hU7ITpmUin41HTxG0+utQsjblXh6uIJOLO80I2oK0+eHFikS4fygnQ4
-         bTh5Pm1pvaBCIgGLC9HE0x9ABnKRS78yz7xr5ujsN75kDFncKBACvpbZPcbKrBLr9TJw
-         Gzcw==
-X-Gm-Message-State: AAQBX9dRQ4+QXRHAQDuB9AceN/fNp3CI+2PIszf/5HlmN2D5k4nBJXBc
-        LaoCIE0HroKxvXZg4nZVTCHAKQ==
-X-Google-Smtp-Source: AKy350YR1Bl5RHXjM9s5lsJGEYu5apz6QLx/fMwtQiLLB/BN/jzx/1QiSynUTfY19XWsRTH/8nuD/w==
-X-Received: by 2002:a17:902:d4c6:b0:1a1:cc5a:b04 with SMTP id o6-20020a170902d4c600b001a1cc5a0b04mr27183794plg.3.1682519314628;
-        Wed, 26 Apr 2023 07:28:34 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id iw3-20020a170903044300b0019a5aa7eab0sm10043570plb.54.2023.04.26.07.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 07:28:34 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 07:28:34 -0700 (PDT)
-X-Google-Original-Date: Wed, 26 Apr 2023 07:28:31 PDT (-0700)
-Subject:     Re: [PATCH] dmaengine: xilinx: enable on RISC-V platform
-In-Reply-To: <20230426074248.19336-1-zong.li@sifive.com>
-CC:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        zong.li@sifive.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     zong.li@sifive.com
-Message-ID: <mhng-cdb02a07-40f9-4424-b3cf-938247588537@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Wed, 26 Apr 2023 10:29:30 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984774EE8;
+        Wed, 26 Apr 2023 07:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eJ6kU9377LEtzb94GNpF+uPP087SBNoxlzn9ZJOuDwY=; b=OwvBcSq65JERkQeqoL6gcvtSJF
+        C+DbcZyLHGx50klrTZiKhqU6EqBBNih9g6DU3v/6vlVoIlF2X4PWNDGbVYYip+Cm78KJsj3BwITxJ
+        Z28nUHAXj2hODT1zLA4subiFl6ILSqQPGdMGdkZ1OZoOGUpi+u6ReQmvgNrK/Sbpn6DA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1prg95-00BHWN-ED; Wed, 26 Apr 2023 16:29:23 +0200
+Date:   Wed, 26 Apr 2023 16:29:23 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v1 1/2] dt-bindings: net: motorcomm: Add pad driver
+ strength cfg
+Message-ID: <fef3aed8-b664-4d36-94f5-266cea4c57a7@lunn.ch>
+References: <20230426063541.15378-1-samin.guo@starfivetech.com>
+ <20230426063541.15378-2-samin.guo@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426063541.15378-2-samin.guo@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,28 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 00:42:48 PDT (-0700), zong.li@sifive.com wrote:
-> Enable the xilinx dmaengine driver on RISC-V platform. We have verified
-> the CDMA on RISC-V platform, enable this configuration to allow build on
-> RISC-V.
->
-> Signed-off-by: Zong Li <zong.li@sifive.com>
+On Wed, Apr 26, 2023 at 02:35:40PM +0800, Samin Guo wrote:
+> The motorcomm phy (YT8531) supports the ability to adjust the drive
+> strength of the rx_clk/rx_data, the value range of pad driver
+> strength is 0 to 7.
+> 
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
 > ---
->  drivers/dma/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
-> index fb7073fc034f..816f619804b9 100644
-> --- a/drivers/dma/Kconfig
-> +++ b/drivers/dma/Kconfig
-> @@ -695,7 +695,7 @@ config XGENE_DMA
->
->  config XILINX_DMA
->  	tristate "Xilinx AXI DMAS Engine"
-> -	depends on (ARCH_ZYNQ || MICROBLAZE || ARM64)
-> +	depends on (ARCH_ZYNQ || MICROBLAZE || ARM64 || RISCV)
->  	select DMA_ENGINE
->  	help
->  	  Enable support for Xilinx AXI VDMA Soft IP.
+>  .../devicetree/bindings/net/motorcomm,yt8xxx.yaml      | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> index 157e3bbcaf6f..e648e486b6d8 100644
+> --- a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> @@ -18,6 +18,16 @@ properties:
+>        - ethernet-phy-id4f51.e91a
+>        - ethernet-phy-id4f51.e91b
+>  
+> +  rx-clk-driver-strength:
+> +    description: drive strength of rx_clk pad.
+> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+> +    default: 3
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+What do the numbers mean? What are the units? mA?
+
+     Andrew
