@@ -2,327 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC966EF84D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E486EF854
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 18:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234016AbjDZQVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 12:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S233180AbjDZQWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 12:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233597AbjDZQU7 (ORCPT
+        with ESMTP id S231484AbjDZQWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 12:20:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3EA7A99;
-        Wed, 26 Apr 2023 09:20:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1233763056;
-        Wed, 26 Apr 2023 16:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63377C433D2;
-        Wed, 26 Apr 2023 16:20:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682526049;
-        bh=ueDw44dfBVXk/pPjvnUNET6MEustXuruGTdVY/q5lRM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uv0u/x05kqUV8es23xbe0G64y7tm2XpyppbyrhcP0cwUQDOCXiq9ZoUasW6Ob7wg0
-         nIQ2QCP24MIOeObN4dt2D0tQl+rWKG2iCzKmHyowLJYMFCKzGMAumFIlewwN9Ve08U
-         QulZgEZql+r1n/q+5buizqUVxNoIvwuFOaRNXAvtBMnbs1qCJj7PXkeC1JxKgxlwWz
-         enLXvgwwtyGwkDa5duBrYY7IpWvuBHbG7LQS2/eggEeWM9yrJET7HJ/tbeorJRXtY+
-         6bkxM+hu8FWDVykDnlLYEDTEdJIKdU7v7HlG0dpGOtsXLED5L7GYDQ2VVJTGsSt4zF
-         As2syb5GvwCAw==
-Date:   Wed, 26 Apr 2023 17:20:45 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH v6] leds: max597x: Add support for max597x
-Message-ID: <20230426162045.GR50521@google.com>
-References: <20230420181042.3553335-1-Naresh.Solanki@9elements.com>
+        Wed, 26 Apr 2023 12:22:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EE87693
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682526106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
+        b=HNuPeOYWvl6ZxxIfHHCwoj+B8b2XheaBUzhf8dBXbeqVrakn2He+PnDq5rEV37os6chkiA
+        AmGov6fo0PO0f4p73ZKQyMkJCBsh9/IxJVr43OWmA6/e9WTpxlnEJpeI4QeCCZ+NN8IME7
+        SYzaUFdtnaDiLQj0FnZaVF1fZXbGsM8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-99-DjyWPPtEPU-lHuxXLZ5DqA-1; Wed, 26 Apr 2023 12:21:44 -0400
+X-MC-Unique: DjyWPPtEPU-lHuxXLZ5DqA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f1912ed0daso23530315e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 09:21:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682526103; x=1685118103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2OXep4zNHi4qTSZ6NcQM7JQ/r5lnL1zw8lhoPMi+9jk=;
+        b=HCm5QZB3ET0pXkZ3UX+HGaQ8VD4pul5IXkJ2Df4cBRXL6KmjUqYteeooKGoLozxUiP
+         UkTAkZfDofjSLGc++Cpe2+M4alA+tjdtt6MpKk60xMwFkDqiyK0aE7a2evze5U93XFkE
+         6jS3BQPNqyCl3LyGaabJtnibbinl8BIazpTuZmGVoW+aD4zICC95JazTBkZcS8P0wdtV
+         7JkMPr+tGtUPQpWnKnYAhja4v350fGXbqcIjU/D570uk3UiP2deeersJ8Z1KaOlxWz20
+         +3JkVUMlRnp5zkSnL54nbYJcz2jHhFviWXteDxxYe3IItmShIwRgjUOXK/6CnS+UchtV
+         zfGQ==
+X-Gm-Message-State: AAQBX9fsjeFbslQpjvmCYhBj74uhJIYdyJddqFR4fETfGo1oQJydF0XR
+        5uRZ4zU7BIjBVmRgvJXCJ5WdV/uytKldYWvqp3jLuwMy2ardNbjLbmA7uC/Gqd+9M9wz6p6zLPk
+        /zNuuftQU8LIt61jW5QPpjKg=
+X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816127wri.19.1682526103054;
+        Wed, 26 Apr 2023 09:21:43 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZgaMKAQ4zUgM/jX2m3kP07MpmtQjNVd1W0IKLIq3RH/cyKshdQu/7VDp2BGOEiWd4a3fA/wA==
+X-Received: by 2002:a5d:5962:0:b0:2cf:ee9d:ce2f with SMTP id e34-20020a5d5962000000b002cfee9dce2fmr14816105wri.19.1682526102688;
+        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d60c9000000b002fbdb797483sm16101222wrt.49.2023.04.26.09.21.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 09:21:42 -0700 (PDT)
+Message-ID: <eebddf51-c83b-29f0-8ee7-703c2e383070@redhat.com>
+Date:   Wed, 26 Apr 2023 18:21:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230420181042.3553335-1-Naresh.Solanki@9elements.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v4 3/4] fpga: add fake FPGA region
+Content-Language: en-US
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230417122308.131453-1-marpagan@redhat.com>
+ <20230417122308.131453-4-marpagan@redhat.com>
+ <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZEGGpNQfUxsMUOnh@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Apr 2023, Naresh Solanki wrote:
 
-> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+
+On 2023-04-20 20:38, Xu Yilun wrote:
+> On 2023-04-17 at 14:23:07 +0200, Marco Pagani wrote:
+>> Add fake FPGA region platform driver with support functions. This
+>> module is part of the KUnit tests for the FPGA subsystem.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/tests/fake-fpga-region.c | 259 ++++++++++++++++++++++++++
+>>  drivers/fpga/tests/fake-fpga-region.h |  40 ++++
+>>  2 files changed, 299 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+>>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
+>>
+>> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
+>> new file mode 100644
+>> index 000000000000..b23ae5e94fe6
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fake-fpga-region.c
+>> @@ -0,0 +1,259 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Driver for the fake FPGA region
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/list.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/fpga/fpga-mgr.h>
+>> +#include <linux/fpga/fpga-region.h>
+>> +#include <linux/fpga/fpga-bridge.h>
+>> +#include <kunit/test.h>
+>> +
+>> +#include "fake-fpga-region.h"
+>> +
+>> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
+>> +
+>> +struct fake_region_priv {
+>> +	int id;
+>> +	struct kunit *test;
+>> +	struct list_head bridge_list;
+>> +};
+>> +
+>> +struct bridge_elem {
+>> +	struct fpga_bridge *bridge;
+>> +	struct list_head node;
+>> +};
+>> +
+>> +struct fake_region_data {
+>> +	struct fpga_manager *mgr;
+>> +	struct kunit *test;
+>> +};
+>> +
+>> +/**
+>> + * fake_fpga_region_register() - register a fake FPGA region.
+>> + * @mgr: associated FPGA manager.
+>> + * @parent: parent device.
+>> + * @test: KUnit test context object.
+>> + *
+>> + * Return: pointer to a new fake FPGA region on success, an ERR_PTR() encoded
+>> + * error code on failure.
+>> + */
+>> +struct fake_fpga_region *
+>> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
+>> +			  struct kunit *test)
+>> +{
+>> +	struct fake_fpga_region *region_ctx;
+>> +	struct fake_region_data pdata;
+>> +	struct fake_region_priv *priv;
+>> +	int ret;
+>> +
+>> +	region_ctx = kzalloc(sizeof(*region_ctx), GFP_KERNEL);
+>> +	if (!region_ctx) {
+>> +		ret = -ENOMEM;
+>> +		goto err_mem;
+>> +	}
+>> +
+>> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
+>> +						 PLATFORM_DEVID_AUTO);
+>> +	if (!region_ctx->pdev) {
+>> +		pr_err("Fake FPGA region device allocation failed\n");
+>> +		ret = -ENOMEM;
+>> +		goto err_mem;
+>> +	}
+>> +
+>> +	pdata.mgr = mgr;
+>> +	pdata.test = test;
+>> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
+>> +
+>> +	region_ctx->pdev->dev.parent = parent;
+>> +	ret = platform_device_add(region_ctx->pdev);
+>> +	if (ret) {
+>> +		pr_err("Fake FPGA region device add failed\n");
+>> +		goto err_pdev;
+>> +	}
+>> +
+>> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
+>> +
+>> +	if (test) {
+>> +		priv = region_ctx->region->priv;
+>> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
+>> +	}
+>> +
+>> +	return region_ctx;
+>> +
+>> +err_pdev:
+>> +	platform_device_put(region_ctx->pdev);
+>> +	kfree(region_ctx);
+>> +err_mem:
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
+>> +
+>> +/**
+>> + * fake_fpga_region_unregister() - unregister a fake FPGA region.
+>> + * @region_ctx: fake FPGA region context data structure.
+>> + */
+>> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
+>> +{
+>> +	struct fake_region_priv *priv;
+>> +	struct kunit *test;
+>> +	int id;
+>> +
+>> +	if (!region_ctx)
+>> +		return;
+>> +
+>> +	priv = region_ctx->region->priv;
+>> +	test = priv->test;
+>> +	id = priv->id;
+>> +
+>> +	if (region_ctx->pdev) {
+>> +		platform_device_unregister(region_ctx->pdev);
+>> +		if (test)
+>> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
+>> +	}
+>> +
+>> +	kfree(region_ctx);
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
+>> +
+>> +/**
+>> + * fake_fpga_region_add_bridge() - add a bridge to a fake FPGA region.
+>> + * @region_ctx: fake FPGA region context data structure.
+>> + * @bridge: FPGA bridge.
+>> + *
+>> + * Return: 0 if registration succeeded, an error code otherwise.
+>> + */
+>> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+>> +				struct fpga_bridge *bridge)
+>> +{
+>> +	struct fake_region_priv *priv;
+>> +	struct bridge_elem *elem;
+>> +
+>> +	priv = region_ctx->region->priv;
+>> +
+>> +	elem = devm_kzalloc(&region_ctx->pdev->dev, sizeof(*elem), GFP_KERNEL);
+>> +	if (!elem)
+>> +		return -ENOMEM;
+>> +
+>> +	/* Add bridge to the list of bridges in the private context */
+>> +	elem->bridge = bridge;
+>> +	list_add(&elem->node, &priv->bridge_list);
+>> +
+>> +	if (priv->test)
+>> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
+>> +			   priv->id);
+>> +
+>> +	return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
 > 
-> max597x is hot swap controller with indicator LED support.
-> This driver uses DT property to configure led during boot time &
-> also provide the LED control in sysfs.
+> To move these exported functions out of fake driver, could we also provide
+> the bridge list in platform_data?
 > 
-> DTS example:
->     i2c {
->         #address-cells = <1>;
->         #size-cells = <0>;
->         regulator@3a {
->             compatible = "maxim,max5978";
->             reg = <0x3a>;
->             vss1-supply = <&p3v3>;
+> Thanks,
+> Yilun
+
+I feel that the function for adding bridges to the fake region should belong
+to the region driver itself rather than the fpga-test module. However, I can
+certainly include the bridge list also in platform_data.
+
+Thanks,
+Marco
+
+
 > 
->             regulators {
->                 sw0_ref_0: sw0 {
->                     shunt-resistor-micro-ohms = <12000>;
->                 };
->             };
->         };
-> 
->         leds {
->             #address-cells = <1>;
->             #size-cells = <0>;
->             led@0 {
->                 reg = <0>;
->                 label = "ssd0:green";
->                 default-state = "on";
->             };
->             led@1 {
->                 reg = <1>;
->                 label = "ssd1:green";
->                 default-state = "on";
->             };
->         };
->     };
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> ...
-> Change in V6:
-> - Improve error handling in case of failure in LED setup
-> Changes in V5:
-> - Update commit message
-> - Fix comments
-> - Add necessary new line
-> Changes in V4:
-> - Remove unwanted preinitialise
-> - Remove unneeded line breaks
-> - Fix variable name to avoid confusion
-> - Update module description to mention LED driver.
-> Changes in V3:
-> - Remove of_node_put as its handled by for loop
-> - Print error if an LED fails to register.
-> - Update driver name in Kconfig description
-> - Remove unneeded variable assignment
-> - Use devm_led_classdev_register to reget led
-> Changes in V2:
-> - Fix regmap update
-> - Remove devm_kfree
-> - Remove default-state
-> - Add example dts in commit message
-> - Fix whitespace in Kconfig
-> - Fix comment
-> ---
->  drivers/leds/Kconfig        |  11 +++
->  drivers/leds/Makefile       |   1 +
->  drivers/leds/leds-max597x.c | 133 ++++++++++++++++++++++++++++++++++++
->  3 files changed, 145 insertions(+)
->  create mode 100644 drivers/leds/leds-max597x.c
-> 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 9dbce09eabac..60004cb8c257 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -590,6 +590,17 @@ config LEDS_ADP5520
->  	  To compile this driver as a module, choose M here: the module will
->  	  be called leds-adp5520.
->  
-> +config LEDS_MAX597X
-> +	tristate "LED Support for Maxim 597x"
-> +	depends on LEDS_CLASS
-> +	depends on MFD_MAX597X
-> +	help
-> +	  This option enables support for the Maxim MAX5970 & MAX5978 smart
-> +	  switch indication LEDs via the I2C bus.
-> +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called leds-max597x.
-> +
->  config LEDS_MC13783
->  	tristate "LED Support for MC13XXX PMIC"
->  	depends on LEDS_CLASS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index d30395d11fd8..da1192e40268 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -53,6 +53,7 @@ obj-$(CONFIG_LEDS_LP8501)		+= leds-lp8501.o
->  obj-$(CONFIG_LEDS_LP8788)		+= leds-lp8788.o
->  obj-$(CONFIG_LEDS_LP8860)		+= leds-lp8860.o
->  obj-$(CONFIG_LEDS_LT3593)		+= leds-lt3593.o
-> +obj-$(CONFIG_LEDS_MAX597X)		+= leds-max597x.o
->  obj-$(CONFIG_LEDS_MAX77650)		+= leds-max77650.o
->  obj-$(CONFIG_LEDS_MAX8997)		+= leds-max8997.o
->  obj-$(CONFIG_LEDS_MC13783)		+= leds-mc13783.o
-> diff --git a/drivers/leds/leds-max597x.c b/drivers/leds/leds-max597x.c
-> new file mode 100644
-> index 000000000000..8ba710d20bff
-> --- /dev/null
-> +++ b/drivers/leds/leds-max597x.c
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Device driver for leds in MAX5970 and MAX5978 IC
-> + *
-> + * Copyright (c) 2022 9elements GmbH
-> + *
-> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-> + */
-> +
-> +#include <linux/leds.h>
-> +#include <linux/mfd/max597x.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define ldev_to_maxled(c)       container_of(c, struct max597x_led, cdev)
-> +
-> +struct max597x_led {
-> +	struct device *dev;
-
-This is already in cdev, no?
-
-> +	struct regmap *regmap;
-> +	struct led_classdev cdev;
-> +	unsigned int index;
-> +};
-> +
-> +static int max597x_led_set_brightness(struct led_classdev *cdev,
-> +				      enum led_brightness brightness)
-> +{
-> +	struct max597x_led *ddata = ldev_to_maxled(cdev);
-> +	int ret, val;
-> +
-> +	if (!ddata->regmap)
-> +		return -ENODEV;
-> +
-> +	/* Set/clear corresponding bit for given led index */
-> +	val = !brightness ? BIT(ddata->index) : 0;
-> +
-> +	ret = regmap_update_bits(ddata->regmap, MAX5970_REG_LED_FLASH, BIT(ddata->index), val);
-> +	if (ret < 0)
-> +		dev_err(cdev->dev, "failed to set brightness %d", ret);
-> +
-> +	return ret;
-> +}
-> +
-> +static int max597x_setup_led(struct max597x_led *ddata, struct regmap *regmap,
-> +			     struct device_node *nc, u32 reg)
-> +{
-> +	int ret;
-> +
-> +	if (of_property_read_string(nc, "label", &ddata->cdev.name))
-> +		ddata->cdev.name = nc->name;
-> +
-> +	ddata->cdev.max_brightness = 1;
-> +	ddata->cdev.brightness_set_blocking = max597x_led_set_brightness;
-> +	ddata->cdev.default_trigger = "none";
-> +
-> +	ret = devm_led_classdev_register(ddata->dev, &ddata->cdev);
-
-Pass the pointer to 'dev' as a param instead.
-
-> +	if (ret)
-> +		dev_err(ddata->dev, "Error initializing LED %s", ddata->cdev.name);
-> +
-> +	return ret;
-> +}
-> +
-> +static int max597x_led_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev_of_node(dev->parent);
-> +	struct regmap *regmap;
-> +	struct device_node *led_node;
-> +	struct device_node *child;
-> +	struct max597x_led *ddata[MAX597X_NUM_LEDS];
-> +	int ret = 0, i = 0;
-> +	bool leds_found = false;
-> +
-> +	regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (!regmap)
-> +		return -EPROBE_DEFER;
-> +
-> +	led_node = of_get_child_by_name(np, "leds");
-> +	if (!led_node)
-> +		return -ENODEV;
-> +
-> +	for_each_available_child_of_node(led_node, child) {
-> +		u32 reg;
-> +
-> +		if (of_property_read_u32(child, "reg", &reg))
-> +			continue;
-> +
-> +		if (reg >= MAX597X_NUM_LEDS) {
-> +			dev_err(dev, "invalid LED (%u >= %d)\n", reg, MAX597X_NUM_LEDS);
-> +			continue;
-> +		}
-> +
-> +		ddata[i] = devm_kzalloc(dev, sizeof(struct max597x_led), GFP_KERNEL);
-> +		if (!ddata[i]) {
-> +			ret = -ENOMEM;
-> +			goto exit;
-> +		}
-> +
-> +		ddata[i]->index = reg;
-> +		ddata[i]->regmap = regmap;
-> +		ddata[i]->dev = dev;
-> +
-> +		ret = max597x_setup_led(ddata[i], regmap, child, reg);
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to initialize LED %u\n", reg);
-> +			goto exit;
-> +		}
-> +		i++;
-> +		leds_found = true;
-
-You don't need both of these.
-
-Swap them out for something like num_leds_found.
-
-> +	}
-> +
-> +	if (!leds_found)
-> +		return -ENODEV;
-
-Initialise ret to -ENODEV when you declare it, then you can drop this.
-
-> +exit:
-> +	if (ret < 0)
-> +		for (int j = 0; j < i; j++)
-> +			devm_led_classdev_unregister(dev, &ddata[j]->cdev);
-
-Place this section below the return, then you can omit the check.
-
-> +	return ret;
-> +}
-> +
-> +static struct platform_driver max597x_led_driver = {
-> +	.driver = {
-> +		.name = "max597x-led",
-> +	},
-> +	.probe = max597x_led_probe,
-> +};
-> +
-> +module_platform_driver(max597x_led_driver);
-> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-> +MODULE_DESCRIPTION("MAX5970_hot-swap controller LED driver");
-> +MODULE_LICENSE("GPL");
-> 
-> base-commit: 9d8d0d98885abba451d7ffc4885236d14ead3c9a
-> -- 
-> 2.39.1
+>> +
+>> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = fpga_region_program_fpga(region_ctx->region);
+>> +
+>> +	/* fpga_region_program_fpga() already puts the bridges in case of errors */
+>> +	if (!ret)
+>> +		fpga_bridges_put(&region_ctx->region->bridge_list);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fake_fpga_region_program);
+>> +
+>> +static int fake_region_get_bridges(struct fpga_region *region)
+>> +{
+>> +	struct fake_region_priv *priv;
+>> +	struct bridge_elem *elem;
+>> +	int ret;
+>> +
+>> +	priv = region->priv;
+>> +
+>> +	/* Copy the list of bridges from the private context to the region */
+>> +	list_for_each_entry(elem, &priv->bridge_list, node) {
+>> +		ret = fpga_bridge_get_to_list(elem->bridge->dev.parent,
+>> +					      region->info,
+>> +					      &region->bridge_list);
+>> +		if (ret)
+>> +			break;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int fake_fpga_region_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev;
+>> +	struct fpga_region *region;
+>> +	struct fpga_manager *mgr;
+>> +	struct fake_region_data *pdata;
+>> +	struct fake_region_priv *priv;
+>> +	struct fpga_region_info info;
+>> +	static int id_count;
+>> +
+>> +	dev = &pdev->dev;
+>> +	pdata = dev_get_platdata(dev);
+>> +
+>> +	if (!pdata) {
+>> +		dev_err(&pdev->dev, "Missing platform data\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +
+>> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
+>> +	if (IS_ERR(mgr))
+>> +		return PTR_ERR(mgr);
+>> +
+>> +	INIT_LIST_HEAD(&priv->bridge_list);
+>> +	priv->id = id_count++;
+>> +	priv->test = pdata->test;
+>> +
+>> +	memset(&info, 0, sizeof(info));
+>> +	info.priv = priv;
+>> +	info.mgr = mgr;
+>> +	info.get_bridges = fake_region_get_bridges;
+>> +
+>> +	region = fpga_region_register_full(dev, &info);
+>> +	if (IS_ERR(region)) {
+>> +		fpga_mgr_put(mgr);
+>> +		return PTR_ERR(region);
+>> +	}
+>> +
+>> +	platform_set_drvdata(pdev, region);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int fake_fpga_region_remove(struct platform_device *pdev)
+>> +{
+>> +	struct fpga_region *region = platform_get_drvdata(pdev);
+>> +	struct fpga_manager *mgr = region->mgr;
+>> +
+>> +	fpga_mgr_put(mgr);
+>> +	fpga_region_unregister(region);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver fake_fpga_region_drv = {
+>> +	.driver = {
+>> +		.name = FAKE_FPGA_REGION_DEV_NAME
+>> +	},
+>> +	.probe = fake_fpga_region_probe,
+>> +	.remove = fake_fpga_region_remove,
+>> +};
+>> +
+>> +module_platform_driver(fake_fpga_region_drv);
+>> +
+>> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
+>> +MODULE_DESCRIPTION("Fake FPGA Bridge");
+>> +MODULE_LICENSE("GPL v2");
+>> diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
+>> new file mode 100644
+>> index 000000000000..976982c192bc
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fake-fpga-region.h
+>> @@ -0,0 +1,40 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Header file for the fake FPGA region
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#ifndef __FPGA_FAKE_RGN_H
+>> +#define __FPGA_FAKE_RGN_H
+>> +
+>> +#include <linux/platform_device.h>
+>> +#include <kunit/test.h>
+>> +#include <linux/fpga/fpga-mgr.h>
+>> +#include <linux/fpga/fpga-bridge.h>
+>> +
+>> +/**
+>> + * struct fake_fpga_region - fake FPGA region context data structure
+>> + *
+>> + * @region: FPGA region.
+>> + * @pdev: platform device of the FPGA region.
+>> + */
+>> +struct fake_fpga_region {
+>> +	struct fpga_region *region;
+>> +	struct platform_device *pdev;
+>> +};
+>> +
+>> +struct fake_fpga_region *
+>> +fake_fpga_region_register(struct fpga_manager *mgr, struct device *parent,
+>> +			  struct kunit *test);
+>> +
+>> +int fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+>> +				struct fpga_bridge *bridge);
+>> +
+>> +int fake_fpga_region_program(struct fake_fpga_region *region_ctx);
+>> +
+>> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
+>> +
+>> +#endif /* __FPGA_FAKE_RGN_H */
+>> -- 
+>> 2.39.2
+>>
 > 
 
--- 
-Lee Jones [李琼斯]
