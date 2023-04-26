@@ -2,124 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8427D6EF314
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE8F6EF316
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240604AbjDZLGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S231915AbjDZLGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240629AbjDZLF4 (ORCPT
+        with ESMTP id S240625AbjDZLGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:05:56 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2055.outbound.protection.outlook.com [40.107.212.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197035260;
+        Wed, 26 Apr 2023 07:06:03 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FBB40F9;
         Wed, 26 Apr 2023 04:05:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C2k7Sb4jrUrvKsX/uIoIboM/Z7yMd/Osd3+vwoVYCsQ696yX6/nKJ5jzdHZ5tizN0Fsd+RBV05z4EKDZb0roXxRR0etWpPVjNhi8MAskmQh7ZRRrGRc8FfESqp3v2IqpFpGqzhNNE0KYHn3puBv3+wPmjqJCVtNXR4Wwmu52IAfMoIYHM1ctBDiWNetIs+BT0OJgUuwEz8XAhrqwJqZ2ZqGpOqcz2/9a1wEMUZNDDPMqSPtjpA+S/WM5aQKo+keJWemTgfp3k3nIkvgOR+jI0D5GjCWZje3rsVSFAJU1l70vmmH/jxq5+4SLsPZZ5ZRKRtpaqHR/sSUXqgtVLPNOzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ywNiShvSvew1RdPtvzN/ICA4H+dVo4oRdqm1gNJW9ew=;
- b=U58xqs+IujBrcH5bS2/7pPuqBsPXaX8fHZLf5msGsWZDrGOoq2EcHC/3vIX9JlOlC8+AVrohBzrIpx572DgdeMg//GrrRlYd55saO3ja1CvhJIf1APEQ9he+UpkvdHieYUAnUh5abU4pLP1tt1BIRLGv6AwE7Y5yI1Esfa9YDMGzufSGl9NQ1LB3xeW7xz/rqOu3P3aAL80+qMpWf4xBxnQEc0KnBL/1PaPVMFMm7aY3FdSQxMYFvSXU6GKBliIxxCZgAXbROzY+oiR0+ghQa9L/BURBs6T5hrbFRkC7FHKZWoOI/xXiL4S/Hy3Z0mapuf99gdAqd+ByoMBMk4CljQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ywNiShvSvew1RdPtvzN/ICA4H+dVo4oRdqm1gNJW9ew=;
- b=LdsH9oes/ywKPRQ2xzAHZKHytpnm+BQURD7pmtHs+Y2sT5j/teSH0+3slQ/mjdRXvWodXOUHBTLNF+2BZZLpCBjffcC31apicjjCsHWLRgOJkG1eox8Vpylhq+xKhnvWOVHltZrypS3GGe/V0wNEzkvUqfQLkVFXR1oiGOwNEv0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by LV2PR12MB5797.namprd12.prod.outlook.com (2603:10b6:408:17b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
- 2023 11:05:38 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6319.034; Wed, 26 Apr 2023
- 11:05:38 +0000
-Message-ID: <f889f994-d2cd-fedc-8c95-9c8501037809@amd.com>
-Date:   Wed, 26 Apr 2023 13:05:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/amdgpu: add a missing lock for AMDGPU_SCHED
-Content-Language: en-US
-To:     Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     stable@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230426061718.755586-1-olvaffe@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230426061718.755586-1-olvaffe@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0018.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:15::23) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C3D235FD7A;
+        Wed, 26 Apr 2023 14:05:39 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682507139;
+        bh=mk5alZKFSoxzLGhsqJ1BDxTrptWunt8lfVSZGARmYfI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=i7a8nPO9995Z/5uPXp78chLMg2rLFQ38AZIjzyB//P70pw20qOROtU8HYJ9DB5BA9
+         OvwBnPffCIgd0QU9dju9R02Fdm15D8PyKEVsi6r9pAvwF+brTuKKpx6dFQgzkpHxpi
+         ZP/9bhMPsfaQTfixH9vluA9J4ydQvj8qcOvqT6UIExLfHGsHXqbElwVsLhkaW58xQ4
+         fxiqQCCNRdyjVsBX2MwFle/IlGN0FLFZvijR9DowjTvIaTrLK9QFJRpF4JakaZS1RW
+         UYnJwqHS4T3SxeNgxTO/5cj6j4T5XytWvZRaSDQHCHAwSKsae91T6I4+r9e9PY48to
+         PQunlBKlMGzsw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 14:05:39 +0300 (MSK)
+Date:   Wed, 26 Apr 2023 14:05:38 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Yu Tu <yu.tu@amlogic.com>
+CC:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
+Subject: Re: [PATCH V7 4/4] clk: meson: s4: add support for Amlogic S4 SoC
+ peripheral clock controller
+Message-ID: <20230426110538.y2d4qhv2qffc62vj@CAB-WSD-L081021>
+References: <20230417065005.24967-1-yu.tu@amlogic.com>
+ <20230417065005.24967-5-yu.tu@amlogic.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|LV2PR12MB5797:EE_
-X-MS-Office365-Filtering-Correlation-Id: f44389a1-bcbf-4dcf-e8f6-08db46462a8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3gcxj/seQQO4U/yV6MT7XQwe4lG+fV94ANsafIwtDiqIHtox3Ex4rIpght6eZqnNs8yNPQOttClkl4f+1eher56GlbT7I5U/jqTMlGHGp/3BvLBXD4ZzuBWpPWq4sOa1mw9xw7egdcZ6o7pFOyS3YdURDUeq60MiTsLhNDRiP81lG02C+q4hafFY4uvJeYDew/bddVQqC8Emmv2VozAnwe9GMCMOm5fPqrvUopsLxdlczbXvhQxQ5pSrFfZKXE0gHqnonX4eURZBMRxxi1Km183ikwArbfceElOmzEWyHMVUvgi87MZpCpFzGPKmxwslTDJ4vqGES+bs0FegCZa2dPdRMQgeXdAMncUK7ZkMNptpycmZzyLb96YoCaNM7S8bUGiqN1nbBtg/+kqbS6Os+4YxCNA2y2sfW11CuiLHJelS8/CHiSr+mMsFvTGbm+w4bwqHN+0Y4gzOKuCkGBsidYVahFHrFKnclI9H2U8zzbd94mWah/o20/iyPNjxuBEfoaBOJ7HsyMkCTE1V/yKSdOF1qq/sl6oVPvij4Tpqv0rWveC9mAuz5Do2pGmecaW0HhW7pycH2PLiI4msSzHYyEhMDGc+Nveyd7SHF6ueSoVfFm+hcjCIgzabtOoEm2LHL6XzN++fdmDIrf/y4SZqTA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(451199021)(54906003)(2616005)(66574015)(83380400001)(478600001)(31696002)(6486002)(26005)(6506007)(6512007)(6666004)(66476007)(66556008)(41300700001)(4326008)(316002)(186003)(31686004)(66946007)(5660300002)(8936002)(2906002)(38100700002)(86362001)(8676002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEtaU1lCb004M1JPQmxUU1krbzdMNWhsdmRPdi9PeEw3dFZnVWtDQ1ZnVTFn?=
- =?utf-8?B?VEJHWlhPUktZQUI5VlFSVjlSTGhteS9yWmZJWUl0VFIxbm1XNEpiNS8yQUt0?=
- =?utf-8?B?S3JVMWdMSUsyZDNYNmd4SSs4NkwrRGEzdmxFWEs5OXpacStuSHlQNG9iZ0lp?=
- =?utf-8?B?cXRzMXlGZzVDTWhXakVJTU9SN1lra3BBUTBTSDZPSzBTT0F3ejJNN0FYbnBi?=
- =?utf-8?B?OHBPT3BxVUFocHEwdGpoOUF2aHk5RWZuRERZZUp2Q0wzNnp0ZnN5WVhjNFBo?=
- =?utf-8?B?eWZZbWNPV2dNMTdyaWRkNGgxMDBBZnBTYmNFdTlrejBBNStEeXpHeXpoY2pF?=
- =?utf-8?B?UkpsQ0tTT1gwNkxVd2EzdGo5NGxaL1FzQ3crQ1piNTJUUnlJMEVvTTdHNXFS?=
- =?utf-8?B?Rk5vRFBTbTF2ZnlNWjFJcjBwL2g4ajYzQ2NhWWtmdlJGdXhxTWZzaFhCa01r?=
- =?utf-8?B?a2dkRU1vWFZ3K25XZzNUOVBTcmxhVlQ0QTZJaGU0S0ZUSjVySWdpRG1KR1JI?=
- =?utf-8?B?TTVVa3psY2RhT1hGQjh4Q0F6ZXdvV1kyUVZPajcvQm5NMXRac0Zmc28yWkRF?=
- =?utf-8?B?dE1IaVBXTGFtVytTd01ubUFlTVRyL3pzWmxrWFpoZGFlU2NpcWkzT0dBNUpz?=
- =?utf-8?B?azVJQXVUbCs0dkNFQmlQeHNWaTFoZDdmbU9iQ3BxdWhRditrL0lZbldzRVNz?=
- =?utf-8?B?MG11U25qM2ZhYk1UaHNXckVya2tybjBZYUMwaE11Y2VibnVXS0dicW5MNWlz?=
- =?utf-8?B?QUlLT1k1bXcwZDQrellnWU5lSFZFWlBkdEZSc2Y1V1EvLzVoQ043Ri80U2lM?=
- =?utf-8?B?OUpBOGlBclVtWmI3eGtsd1IrVWRIc3ozZXYyVE5FSzBJMEhlQUhNYVlnZFkz?=
- =?utf-8?B?NisxUHlhMitDMmpnVlM2WndKNFI0YldPQUY3NFJJbUJkOGFkWXR4YkFrZy9u?=
- =?utf-8?B?ZGNSTnVvWGRxWVFMaUFKNkIway8zcGlIUnc0V2QzU2VGN21ZZTg4VlZWem5D?=
- =?utf-8?B?YzRxWEY2VndjUUE2M0FlVG82VDJTUmlUTHZiLzNmY1RSeVMwc3JGWExNNmdU?=
- =?utf-8?B?bVdFZ2M4c1N3WWIxVFROQ3J4U0Zxd0JtNVoyYmMvck1xQ3R2WlVMUkxPanI5?=
- =?utf-8?B?b3FoQnVxcG1uMlIvdWY1NCtEdTlac0ZrVzRnL1BtMFhqemhHRVNYMkU1VGRG?=
- =?utf-8?B?MktsVDNVa1c1bFVGSi80cmpjb0MreTB5VkkxMjEvVDZVOVFQQWJVNE1yaXds?=
- =?utf-8?B?Y1NwSEFuZTJoZG9QSTNQME1aNFR6YXdiNHpvZ2NVcnlQK2pqY0EzWkVzb09q?=
- =?utf-8?B?ajZpQ0htRmV6WkRSdEljRmRENEtEMTZBMXR5WURzVVhQMEtTQnV4QVMySGE4?=
- =?utf-8?B?aUpEekpFM3NNS3g3UU02cHRxNGFoQVdIbTN2S1EzRDJGSGZwT2RvMytYN0tj?=
- =?utf-8?B?Z29ZK2cyaGRWckFzb3dnRklCOUExcnVZcllOVzJGbDBwVzkwZkkrSk1YY25P?=
- =?utf-8?B?alI3emVtT2xwOW9hdXlRaTZZQjVHbkF3dFVHT0ljVWhzdmFQT1RlMHI4WHRD?=
- =?utf-8?B?SEdaVmV6S3BRZEcrMVpMdFlSaTZCQnoxbFFHUkdtWUVaKzJleFUzNHZGVzNW?=
- =?utf-8?B?alpkMmNHUHI2UmF2ZnlDOG1WVGhNa2cvdUNZQTFrMUVmbWt0Y3BScnNBdk9G?=
- =?utf-8?B?YnBUSFhXN1F2ajB3Z0ZpWlliRThmakloWURSaU5YQ2VrU3piNnloanZJZ2Qx?=
- =?utf-8?B?N1I2bUdBTTNOWEpoUGJKMFZOY0d6em9wc1MzMFZGZnRuK2VJeEsyTzdDWWVn?=
- =?utf-8?B?MmZ4ZFBGWTZPdElaWFJ1NFVFNVhzczgzWHBwYWVvbE4vU2gvNmRIZjJMSjRG?=
- =?utf-8?B?V0xyQmFnUUpZVm4ycjFKcm9vbWJZWXd0TzN2Y1B2YUNpaXovdGtoQjY5b1lU?=
- =?utf-8?B?dVp0RGNNRExxNVViRmU1akZaTzNmMmR1Mm15R2VLZFRuY1FPY0tDZ1ZmdTRm?=
- =?utf-8?B?OCtVVHFLQWcxUnp4V0cydkNMR2R2UUhvRStnbGtzaGFHNmZTZWNGQWVGVHVv?=
- =?utf-8?B?L2RZYURqMGw3SWY1R1d6WHd6U0JiR0tpN2RkRmpFMVdpWXNzSGFORFBzZmFn?=
- =?utf-8?Q?tLcc=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f44389a1-bcbf-4dcf-e8f6-08db46462a8b
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 11:05:38.0692
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zdsUST/Vq1M2Y2+f3XC6TkK/KKPFFRMISH+2Fd4WshqEnQGXo7LSzkfxMt98Pe+Y
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5797
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230417065005.24967-5-yu.tu@amlogic.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/26 04:45:00 #21166225
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -128,55 +77,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.04.23 um 08:17 schrieb Chia-I Wu:
-> mgr->ctx_handles should be protected by mgr->lock.
->
-> v2: improve commit message
->
-> Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
-> Cc: stable@vger.kernel.org
-
-Please don't manually CC stable@vger.kernel.org while sending patches 
-out, let us maintainers push that upstream with the appropriate tag and 
-Greg picking it up from there.
-
-A Fixes tag and figuring out to which stable versions this needs to be 
-backported are nice to have as well, but Alex and I can take care of 
-that as well.
-
-Apart from that the technical side of the patch is Reviewed-by: 
-Christian König <christian.koenig@amd.com>.
-
-Regards,
-Christian.
-
+On Mon, Apr 17, 2023 at 02:50:05PM +0800, Yu Tu wrote:
+> Add the peripherals clock controller driver in the s4 SoC family.
+> 
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 > ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> index e9b45089a28a6..863b2a34b2d64 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> @@ -38,6 +38,7 @@ static int amdgpu_sched_process_priority_override(struct amdgpu_device *adev,
->   {
->   	struct fd f = fdget(fd);
->   	struct amdgpu_fpriv *fpriv;
-> +	struct amdgpu_ctx_mgr *mgr;
->   	struct amdgpu_ctx *ctx;
->   	uint32_t id;
->   	int r;
-> @@ -51,8 +52,11 @@ static int amdgpu_sched_process_priority_override(struct amdgpu_device *adev,
->   		return r;
->   	}
->   
-> -	idr_for_each_entry(&fpriv->ctx_mgr.ctx_handles, ctx, id)
-> +	mgr = &fpriv->ctx_mgr;
-> +	mutex_lock(&mgr->lock);
-> +	idr_for_each_entry(&mgr->ctx_handles, ctx, id)
->   		amdgpu_ctx_priority_override(ctx, priority);
-> +	mutex_unlock(&mgr->lock);
->   
->   	fdput(f);
->   	return 0;
+>  drivers/clk/meson/Kconfig          |   12 +
+>  drivers/clk/meson/Makefile         |    1 +
+>  drivers/clk/meson/s4-peripherals.c | 3814 ++++++++++++++++++++++++++++
+>  drivers/clk/meson/s4-peripherals.h |  217 ++
+>  4 files changed, 4044 insertions(+)
+>  create mode 100644 drivers/clk/meson/s4-peripherals.c
+>  create mode 100644 drivers/clk/meson/s4-peripherals.h
+> 
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index a663c90a3f3b..a6eb9fa15c74 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -128,4 +128,16 @@ config COMMON_CLK_S4_PLL
+>  	  aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+>  	  Say Y if you want the board to work, because plls are the parent of most
+>  	  peripherals.
+> +
+> +config COMMON_CLK_S4
+> +	tristate "S4 SoC Peripherals clock controllers support"
+> +	depends on ARM64
+> +	default y
+> +	select COMMON_CLK_MESON_REGMAP
+> +	select COMMON_CLK_MESON_DUALDIV
+> +	select COMMON_CLK_MESON_VID_PLL_DIV
+> +	help
+> +	  Support for the Peripherals clock controller on Amlogic S805X2 and S905Y4
+> +	  devices, aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+> +	  Say Y if you want peripherals to work.
+>  endmenu
+> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> index 376f49cc13f1..c9130afccb48 100644
+> --- a/drivers/clk/meson/Makefile
+> +++ b/drivers/clk/meson/Makefile
+> @@ -20,3 +20,4 @@ obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+>  obj-$(CONFIG_COMMON_CLK_S4_PLL) += s4-pll.o
+> +obj-$(CONFIG_COMMON_CLK_S4) += s4-peripherals.o
 
+[...]
+
+> +static struct clk_regmap s4_ceca_32k_clkin = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = CLKCTRL_CECA_CTRL0,
+> +		.bit_idx = 31,
+> +	},
+> +	.hw.init = &(struct clk_init_data) {
+> +		.name = "ceca_32k_clkin",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", }
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_ceca_32k_div = {
+> +	.data = &(struct meson_clk_dualdiv_data){
+> +		.n1 = {
+> +			.reg_off = CLKCTRL_CECA_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 12,
+> +		},
+> +		.n2 = {
+> +			.reg_off = CLKCTRL_CECA_CTRL0,
+> +			.shift   = 12,
+> +			.width   = 12,
+> +		},
+> +		.m1 = {
+> +			.reg_off = CLKCTRL_CECA_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 12,
+> +		},
+> +		.m2 = {
+> +			.reg_off = CLKCTRL_CECA_CTRL1,
+> +			.shift   = 12,
+> +			.width   = 12,
+> +		},
+> +		.dual = {
+> +			.reg_off = CLKCTRL_CECA_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.table = s4_32k_div_table,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "ceca_32k_div",
+> +		.ops = &meson_clk_dualdiv_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_ceca_32k_clkin.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_ceca_32k_sel_pre = {
+> +	.data = &(struct clk_regmap_mux_data) {
+> +		.offset = CLKCTRL_CECA_CTRL1,
+> +		.mask = 0x1,
+> +		.shift = 24,
+> +		.flags = CLK_MUX_ROUND_CLOSEST,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "ceca_32k_sel_pre",
+> +		.ops = &clk_regmap_mux_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_ceca_32k_div.hw,
+> +			&s4_ceca_32k_clkin.hw
+> +		},
+> +		.num_parents = 2,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_ceca_32k_sel = {
+> +	.data = &(struct clk_regmap_mux_data) {
+> +		.offset = CLKCTRL_CECA_CTRL1,
+> +		.mask = 0x1,
+> +		.shift = 31,
+> +		.flags = CLK_MUX_ROUND_CLOSEST,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "ceca_32k_sel",
+> +		.ops = &clk_regmap_mux_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_ceca_32k_sel_pre.hw,
+> +			&s4_rtc_clk.hw
+> +		},
+> +		.num_parents = 2,
+> +		.flags = CLK_SET_RATE_PARENT,
+
+In my opinion, all clocks that can inherit from a more accurate RTC clock
+should be marked with the CLK_SET_RATE_NO_REPARENT flag.
+This is necessary because in certain situations, it may be required to
+freeze their parent. The setup of these clocks' parent should be located
+on the device tree's side.
+
+[...]
+
+> +
+> +/*
+> + * gen clk is designed for debug/monitor some internal clock quality. Some of the
+> + * corresponding clock sources are not described in the clock tree and internal clock
+> + * for debug, so they are skipped.
+> + */
+> +static u32 s4_gen_clk_mux_table[] = { 0, 4, 5, 7, 19, 21, 22,
+> +				      23, 24, 25, 26, 27, 28 };
+> +static const struct clk_parent_data s4_gen_clk_parent_data[] = {
+> +	{ .fw_name = "xtal", },
+> +	{ .hw = &s4_vid_pll.hw },
+> +	{ .fw_name = "gp0_pll", },
+> +	{ .fw_name = "hifi_pll", },
+> +	{ .fw_name = "fclk_div2", },
+> +	{ .fw_name = "fclk_div3", },
+> +	{ .fw_name = "fclk_div4", },
+> +	{ .fw_name = "fclk_div5", },
+> +	{ .fw_name = "fclk_div7", },
+> +	{ .fw_name = "mpll0", },
+> +	{ .fw_name = "mpll1", },
+> +	{ .fw_name = "mpll2", },
+> +	{ .fw_name = "mpll3", },
+> +};
+> +
+> +static struct clk_regmap s4_gen_clk_sel = {
+> +	.data = &(struct clk_regmap_mux_data){
+> +		.offset = CLKCTRL_GEN_CLK_CTRL,
+> +		.mask = 0x1f,
+> +		.shift = 12,
+> +		.table = s4_gen_clk_mux_table,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "gen_clk_sel",
+> +		.ops = &clk_regmap_mux_ops,
+> +		.parent_data = s4_gen_clk_parent_data,
+> +		.num_parents = ARRAY_SIZE(s4_gen_clk_parent_data),
+
+I think, the gen_clk selector should be marked with the
+CLK_SET_RATE_NO_REPARENT flag. This is because the GEN clock can be
+connected to an external pad and may be set up directly from the
+device tree.
+
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_gen_clk_div = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = CLKCTRL_GEN_CLK_CTRL,
+> +		.shift = 0,
+> +		.width = 11,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "gen_clk_div",
+> +		.ops = &clk_regmap_divider_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_gen_clk_sel.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_gen_clk = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = CLKCTRL_GEN_CLK_CTRL,
+> +		.bit_idx = 11,
+> +	},
+> +	.hw.init = &(struct clk_init_data) {
+> +		.name = "gen_clk",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_gen_clk_div.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
+> +	},
+> +};
+> +
+
+[...]
+
+-- 
+Thank you,
+Dmitry
