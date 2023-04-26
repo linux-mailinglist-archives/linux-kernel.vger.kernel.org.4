@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86A86EFC7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437586EFC81
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240065AbjDZV3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S240093AbjDZVa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239999AbjDZV3d (ORCPT
+        with ESMTP id S240168AbjDZVaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:29:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF543A9C
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 14:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682544572; x=1714080572;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to;
-  bh=HQr3QuWfqr8HjkBvQXdQGVL0T9pRPRkx4Ddqy9aDMLw=;
-  b=TsjlQHYeYt983WcttMSx1EvHnNVS2NkUVf5Da789Q8XaKXW2Q0Epz0TM
-   DxteRu5d6TkodH5jJ2pyYOzVz/BqiogoYphXpLwyDkKvs04AX0SWqd1t2
-   eDLFiDOuxKV10/H2RnrpbgwkG0RzEP+ZoYRH3vZtH5/iqmp6EmdQoxbQN
-   fHTCVoDVtyM3JfWKv5JXkUT6JGpXo2joF43HjKeY2F20hzS7OTneMkjtD
-   Cd/RN9J6nREF8p7258Gc+Y98e8weLiarFQ6oXOFqmnF2b4doFRO7OsAM+
-   dwVhs3R/FAm3WOJlfakWvKw/Ip9Rj904trEc8xMh7QDXIyK7+me7/wmpu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="344691051"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="344691051"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="805679888"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="805679888"
-Received: from lab-ah.igk.intel.com ([10.102.138.202])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:30 -0700
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Date:   Wed, 26 Apr 2023 23:28:49 +0200
-Subject: [PATCH v8 2/2] drm/i915: Use correct huge page manager for MTL
+        Wed, 26 Apr 2023 17:30:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E04E40C8;
+        Wed, 26 Apr 2023 14:29:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AC386394C;
+        Wed, 26 Apr 2023 21:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C62C433A1;
+        Wed, 26 Apr 2023 21:29:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682544591;
+        bh=yLi2JTeqjSBCZyJRqKGRsMaMom6VAZo/Dwzd3fLD8nk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UQMer08dWmP8i4EiUN/cLZ3ZUb7RgcamF/k5bFz6xHSkug0SQZUORXx7VcAoCVk9P
+         qTMKow2h70Pgpy5xsxOL8jjuCVhg8yip10kC9sEQcphp98AHMXp7HEggB07BJl8Gyc
+         Vm5LIGU2qj5GzjOU8WxT1hpjxtoa4icfod1gvgCTFCbEeJIwvdUE+iIU3O48HxJ2Ck
+         VgXOk//PfM/CpARvNR0ZyhGABL82TFAuGuFOEfmK+vNRqCrp9X83BkilCFPIfvP1+v
+         lNHDjt/tnEq/o2MEw5CPFtHxAjJFdLPoDKLgKf/ZJl4wvVq1oGlXFdSjyTbGjyEPyS
+         aJj+vf5/9Uqcw==
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4ec816c9d03so8460030e87.2;
+        Wed, 26 Apr 2023 14:29:50 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dIOOyMXH3HE0MSznhpNvwUf1M2wiYRYj9KtH9DaoSjHrKG/Q9e
+        PLSXewC8G/GnFReytrF6dQ//aHopr69wXZbMBy0=
+X-Google-Smtp-Source: AKy350YBdfM7Iay7B3diQtQJlXEUS1LpawWoNJtXnV0FykEhmRIC8cQ/rLoQqXAMr4IvgC5U9s1+0wbAFbTk9uevI3g=
+X-Received: by 2002:a19:a40d:0:b0:4ed:cb37:7d95 with SMTP id
+ q13-20020a19a40d000000b004edcb377d95mr5947487lfc.44.1682544589032; Wed, 26
+ Apr 2023 14:29:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230425-hugepage-migrate-v8-2-7868d54eaa27@intel.com>
-References: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
-In-Reply-To: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
-To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jonathan Cavitt <jonathan.cavitt@intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230424165726.2245548-1-ardb@kernel.org> <20230424165726.2245548-5-ardb@kernel.org>
+ <20230426104200.drmuewhwmhh3xljh@box.shutemov.name>
+In-Reply-To: <20230426104200.drmuewhwmhh3xljh@box.shutemov.name>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 26 Apr 2023 22:29:38 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEhZ_R7tvdjKfnt63y41JE98wi3vOpav=a_Hqhnmo0xXw@mail.gmail.com>
+Message-ID: <CAMj1kXEhZ_R7tvdjKfnt63y41JE98wi3vOpav=a_Hqhnmo0xXw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] x86: efistub: Perform 4/5 level paging switch from
+ the stub
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Cavitt <jonathan.cavitt@intel.com>
+On Wed, 26 Apr 2023 at 11:42, Kirill A . Shutemov
+<kirill.shutemov@linux.intel.com> wrote:
+>
+> On Mon, Apr 24, 2023 at 06:57:24PM +0200, Ard Biesheuvel wrote:
+> > In preparation for updating the EFI stub boot flow to avoid the bare
+> > metal decompressor code altogether, implement the support code for
+> > switching between 4 and 5 levels of paging before jumping to the kernel
+> > proper.
+>
+> I must admit it is neat. I like it a lot.
+>
 
-MTL currently uses gen8_ppgtt_insert_huge when managing huge pages.
-This is because MTL reports as not supporting 64K pages, or more
-accurately, the system that reports whether a platform has 64K pages
-reports false for MTL.  This is only half correct, as the 64K page support
-reporting system only cares about 64K page support for LMEM, which MTL
-doesn't have.
+Thanks!
 
-MTL should be using xehpsdv_ppgtt_insert_huge.  However, simply changing
-over to using that manager doesn't resolve the issue because MTL is
-expecting the virtual address space for the page table to be flushed after
-initialization, so we must also add a flush statement there.
+> Any chance we can share the code with the traditional decompressor?
+> There's not much that EFI specific here. It should be possible to isolate
+> it from the rest, no?
+>
 
-Signed-off-by: Jonathan Cavitt <jonathan.cavitt@intel.com>
-Reviewed-by: Matthew Auld <matthew.auld@intel.com>
-Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gt/gen8_ppgtt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I agree. The EFI boot code should still avoid the bare metal
+trampoline allocation/deallocation, but the actual payload could be
+the same - it's just an indirect call with the GDT and page table
+pointers as arguments.
 
-diff --git a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
-index 4daaa6f5566888..9c571185395f49 100644
---- a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
-+++ b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
-@@ -570,6 +570,7 @@ xehpsdv_ppgtt_insert_huge(struct i915_address_space *vm,
- 			}
- 		} while (rem >= page_size && index < max);
- 
-+		drm_clflush_virt_range(vaddr, PAGE_SIZE);
- 		vma_res->page_sizes_gtt |= page_size;
- 	} while (iter->sg && sg_dma_len(iter->sg));
- }
-@@ -707,7 +708,7 @@ static void gen8_ppgtt_insert(struct i915_address_space *vm,
- 	struct sgt_dma iter = sgt_dma(vma_res);
- 
- 	if (vma_res->bi.page_sizes.sg > I915_GTT_PAGE_SIZE) {
--		if (HAS_64K_PAGES(vm->i915))
-+		if (GRAPHICS_VER_FULL(vm->i915) >= IP_VER(12, 50))
- 			xehpsdv_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
- 		else
- 			gen8_ppgtt_insert_huge(vm, vma_res, &iter, cache_level, flags);
+>
+> > @@ -792,6 +925,14 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+> >                               (get_efi_config_table(ACPI_20_TABLE_GUID) ?:
+> >                                get_efi_config_table(ACPI_TABLE_GUID));
+> >
+> > +#ifdef CONFIG_X86_64
+> > +     status = efi_setup_5level_paging();
+> > +     if (status != EFI_SUCCESS) {
+> > +             efi_err("efi_setup_5level_paging() failed!\n");
+> > +             goto fail;
+> > +     }
+> > +#endif
+> > +
+> >       /*
+> >        * If the kernel isn't already loaded at a suitable address,
+> >        * relocate it.
+> > @@ -910,6 +1051,10 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+> >               goto fail;
+> >       }
+> >
+> > +#ifdef CONFIG_X86_64
+> > +     efi_5level_switch();
+> > +#endif
+> > +
+> >       return bzimage_addr;
+> >  fail:
+> >       efi_err("efi_main() failed!\n");
+>
+> Maybe use IS_ENABLED() + dummy efi_setup_5level_paging()/efi_5level_switch()
+> instead of #ifdefs?
+>
 
--- 
-2.34.1
+These are functions returning void so I can just move the #ifdef into
+the function implementation. Wo do need #ifdefs at some level, as i386
+does not provide a definition for __KERNEL32_CS
