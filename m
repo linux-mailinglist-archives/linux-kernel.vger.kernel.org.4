@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19526EFDBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167806EFD99
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240480AbjDZW5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S239857AbjDZWnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjDZW5U (ORCPT
+        with ESMTP id S239744AbjDZWnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:57:20 -0400
-Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCD8E2;
-        Wed, 26 Apr 2023 15:57:12 -0700 (PDT)
-Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
-        (Authenticated sender: alexandra.nagy@heimpalkorhaz.hu)
-        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id DD16D384A5F294;
-        Thu, 27 Apr 2023 00:41:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu DD16D384A5F294
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
-        s=default; t=1682548871;
-        bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=;
-        h=Date:From:To:Subject:Reply-To:From;
-        b=eU1/SEqSPDTUZn4mbk4UvUi5DF3ozk18EuQi1ojNiIOmq0Muk/3HhHIDG0SkUsmES
-         wagmVulXe1JTXXmzmgPhz0WurJA9w1ws7whRlmV3a6jwGHAe6zbgQOAcqULWWaxZlu
-         3Bs+qIlfbF/q8PGKefDJgOqehFvu9ZEe1nv5qcjCykGK/kA3vSf9QxYtIe9DTRjjBo
-         CGZRxtnfoX/BW8marGCyXxMzxsrVjBRb2aFc2UcLpmS2suTEJHeTvJpX+YfYf4Hg6b
-         WW4dnoKXZqaV1pyueVpC2AAG4MWw4Jqg7JIdOcDLolDYZwxONX4vyj5F8PlFv3e4tm
-         COzx81JWSb6lg==
+        Wed, 26 Apr 2023 18:43:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BFE4486;
+        Wed, 26 Apr 2023 15:43:08 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QMYQer020606;
+        Wed, 26 Apr 2023 22:42:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=tNfDFxls9ikINAA5C1H2Bn+9LRC06Jht21sjcAW/aUY=;
+ b=ekD12udSAP333nQvo7ZZVMRSY03ei7sBuDcTACFtmehHGpqzNwCtdTQR+5EXinRO8jl1
+ t0jfKoF48KO0LiIE/Hnh9fzFZ9xHK3wDtV8lTLOrDZDwgR1maVreXC4RO9KoC+eTx8Po
+ MD+AozLC46zI4kftIPmNk4N6uR0LiKQKISCwm1S7+rT/fBKGPcCmzJo3PUfYE4lBk/qk
+ YFfCytAnTkYt8fequT5RpCmHB76q9GpsKfUmXbLoJqz3U7tURXaR+SFmjYd2c4kzP9AL
+ jOp4eRoYwLXzTBC4vfiw4rGUn+hJ/KsaX8qbJAAKcQZCizlDTfp5xiRXcXjcmdT2b33e Ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6x62j3yw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 22:42:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33QMghdP006684
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 22:42:43 GMT
+Received: from [10.110.124.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 26 Apr
+ 2023 15:42:41 -0700
+Message-ID: <7cec3d06-9d96-0e58-7920-3e86a26f190d@quicinc.com>
+Date:   Wed, 26 Apr 2023 15:42:40 -0700
 MIME-Version: 1.0
-Date:   Thu, 27 Apr 2023 00:41:10 +0200
-From:   MK <info.me@heimpalkorhaz.hu>
-To:     undisclosed-recipients:;
-Subject: ***SPAM*** Hello sunshine, how are you?
-Reply-To: marionkimmich1@hotmail.com
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a0f030e74dde010794c366246dbce99b@heimpalkorhaz.hu>
-X-Sender: info.me@heimpalkorhaz.hu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v4 02/22] drm/msm/dpu: Remove TE2 block and feature from
+ DPU >= 5.0.0 hardware
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
+ <20230411-dpu-intf-te-v4-2-27ce1a5ab5c6@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230411-dpu-intf-te-v4-2-27ce1a5ab5c6@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: DD16D384A5F294
-X-Spamd-Result: default: False [17.31 / 20.00];
-        FUZZY_DENIED(11.99)[1:edab46d5f3:1.00:txt];
-        R_UNDISC_RCPT(3.00)[];
-        FORGED_RECIPIENTS(2.00)[m:,s:michael.olbrich@uvtech.se,s:carolynf@uw.edu,s:sjw47@uw.edu,s:syliou@uw.edu,s:xfang12@uw.edu,s:jgilarowski@uw.edu.pl,s:francesco.gerali@uwa.edu.au,s:michael.reinsborough@uwe.ac.uk,s:m.meuwese@uwinnipeg.ca,s:bernhark@uwplatt.edu,s:anastasia.makarova@uzh.ch,s:andrea.migliano@uzh.ch,s:antonella.rampazzo@uzh.ch,s:balthasar.bickel@uzh.ch,s:cengiz.akandil@uzh.ch,s:dinara.abildenova@uzh.ch,s:fynn.holm@uzh.ch,s:georg.bauer@uzh.ch,s:guy.bodenmann@uzh.ch,s:mustafa.akcinar@uzh.ch,s:nico.schmidt@uzh.ch,s:olivier.devuyst@uzh.ch,s:steven.moran@uzh.ch,s:thomas.goetschi@uzh.ch,s:uwe.schneider@uzh.ch,s:webaze@uzh.ch,s:yue.zhuang@uzh.ch,s:natalia.natsika@v-dem.net,s:andrew@v51yj.radio,s:CHARLENE.BURLEW@VA.GOV,s:darrel.willoughby@va.gov,s:erica.adkins3@va.gov,s:shelley.adkins2@va.gov,s:anamaria.damian@vait.ro,s:vaitarg@vaitarg.com.ar,s:contact@vajradharaling.org,s:info@vaktro.gr,s:presidencia@valcan-ingenieria.com.ar,s:info@valeriaconte.com.ar,s:jaroslav.vabek@valido.cz,s:i
- nfo@valledeucotours.tur.ar,s:guillermo@valleyresearch.com,s:ivani@valleyresearch.com,s:tracy@valmatic.com.my,s:valmatic@valmatic.com.my,s:info@valobra.ch,s:hans-erik.persson@valonkone.com,s:natalia.afanassieva@valonkone.ru,s:info@valvini.ch,s:lray@vanasch.school.nz,s:aaron.williams@vandenberg.af.mil,s:bob.harding@vandewiele.com,s:Ayas1998email@vandorr.info,s:anya@vanilla.co.za,s:maria@vanrossum.eu,s:ttiwok@vanuatu.gov.vu,s:daiga.vilkaste@varam.gov.lv,s:info@vardforbundet.se,s:rotse-marcelo@varioweb.ch,s:post@varri.no,s:info@varroa-controller.com,s:asl@vassar.edu,s:marschall@vaw.baug.ethz.ch,s:easternbayofplenty@vcc.org.nz,s:wseaman@vcd.hp.com,s:gabriela@vce-international.com,s:info@vci.com.ar,s:J.Schaake@vcp.co.nz,s:mcgee.ch@vcpusd.org,s:verlag@vdf.ethz.ch,s:markus.muenz@vdma.org,s:hrusch@vds.de,s:nvtai@vea.gov.vn,s:sales@vec.com.ar,s:ariel.ternera@vecol.com.co,s:ebxml@veenman.net,s:info@velanegocios.com.ar,s:rihards@velasmajas.lv,s:jeanclaude.boribon@velogic-mu.com,s:peter@venturam
- edical.com.au,s:ola.osterlund@ventyx.abb.com,s:stella@venus.execulink.com,s:algemeen@verbruggen2.demon.nl,s:tourist@verio.com,s:morgan.john@verizon.com,s:abolaw@verizon.net,s:act3csa@verizon.net,s:barroso3@verizon.net,s:batalla.law@verizon.net,s:bluesdvm@verizon.net,s:carolemacdonald@verizon.net,s:chaden@verizon.net,s:debutz@verizon.net,s:golie1@verizon.net,s:jcruseno@verizon.net,s:jlandsve@verizon.net,s:kcollins14@verizon.net,s:luannhouston@verizon.net,s:maribeldunn@verizon.net];
-        SUBJECT_ENDS_QUESTION(1.00)[];
-        GENERIC_REPUTATION(-0.59)[-0.58853791029018];
-        MIME_GOOD(-0.10)[text/plain];
-        BAYES_SPAM(0.00)[33.15%];
-        RCVD_COUNT_ZERO(0.00)[0];
-        FROM_EQ_ENVFROM(0.00)[];
-        MIME_TRACE(0.00)[0:+];
-        RCPT_COUNT_ONE(0.00)[1];
-        MID_RHS_MATCH_FROM(0.00)[];
-        FROM_HAS_DN(0.00)[];
-        TO_DN_ALL(0.00)[];
-        FREEMAIL_ENVRCPT(0.00)[verizon.net,versatel.nl,videotron.ca,virgin.net,wanadoo.es,wanadoo.fr,web.de,webmail.co.za,westnet.com.au,windowslive.com,windstream.net,worldnet.att.net,wp.pl,xtra.co.nz,XTRA.CO.NZ,Xtra.co.nz];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        FREEMAIL_REPLYTO(0.00)[hotmail.com];
-        HAS_REPLYTO(0.00)[marionkimmich1@hotmail.com]
-X-Rspamd-Server: mail.heimpalkorhaz.hu
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oawVTKPH4cVQ8N0B1AkO6phXsscDZbgI
+X-Proofpoint-ORIG-GUID: oawVTKPH4cVQ8N0B1AkO6phXsscDZbgI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_10,2023-04-26_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 mlxscore=0 bulkscore=0 clxscore=1015 mlxlogscore=917
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304260196
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am sorry to bother you and intrude your privacy. I am single,
-  lonely and in need of a caring, loving and romantic companion.
-
-I am a secret admirer and would like to explore the opportunity to
-learn more about each other. I know it is strange to contact you
-this way and I hope you can forgive me. I am a shy person and
-this is the only way I know I could get your attention. I just want
-to know what you think and my intention is not to offend you.
-I hope we can be friends if that is what you want, although I wish
-to be more than just a friend. I know you have a few questions to
-ask and I hope I can satisfy some of your curiosity with a few
-answers.
-
-I believe in the saying that 'to the world you are just one person,
-but to someone special you are the world'. All I want is love,
-romantic care and attention from a special companion which I am
-hoping would be you.
-
-I hope this message will be the beginning of a long term
-communication between us, simply send a reply to this message, it
-will make me happy.
 
 
-Hugs and kisses,
+On 4/26/2023 3:37 PM, Marijn Suijten wrote:
+> No hardware beyond kona (sm8250, DPU 6.0.0) defines the TE2 PINGPONG
+> sub-block offset downstream, and according to insiders no DPU >= 5.0.0
+> hardware has support for it either.  Especially since neither downstream
+> nor upstream utilize these registers in any way, remove the erroneous
+> specification from SM8150, SC8180X, SM8250, SC7180, SM8350, SC8280XP and
+> SM8450 to prevent confusion.
+> 
+> Note that downstream enables the PPSPLIT (split-FIFO) topology (single
+> LM for 2 PP and 2 INTF) based on the presence of a TE2 block.
+> 
+> Fixes: 386fced3f76f ("drm/msm/dpu: add SM8150 to hw catalog")
+> Fixes: 7bdc0c4b8126 ("msm:disp:dpu1: add support for display for SC7180 target")
+> Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
+> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+> Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
 
-Marion.
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
