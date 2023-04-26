@@ -2,121 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9F66EF7E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3D46EF7ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240731AbjDZPqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S241013AbjDZPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240440AbjDZPql (ORCPT
+        with ESMTP id S240591AbjDZPry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:46:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC4065B7;
-        Wed, 26 Apr 2023 08:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682524000; x=1714060000;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ugyCHnG3qWOKkCCGCjpOitlzjFnC6K3seMcmfNep8vw=;
-  b=OTtGfo+7m/8lapFAN//rRFG9gzvMZG6GtwsV1ApECqtuePKtQDJYkh3C
-   uraoLrTLXDfnxYgT7tWnK0z1IEjEbykTfM8H9QgJ24qM+YUh/H2u1n5dk
-   JoTRJa0WvnlIMep46OXmSGcRpSOhhIsTU7B6wbPD79rMuOYm8oDHHmcBH
-   GtVcZ42vsu5JIXxaebvdxBgiwsVne2pFPIid0C0JOAdrHgvYwxTO0BYJu
-   H8V63dYYYPFAcDw+JvFcqWzAsH4DSPSJ2mnbhfg9NbsaRHN7YpuQb2LgS
-   3gNj1ogcKrTx5uoov8sBaDOTA/VLcv3mK9Kn4DiT8Dw7RfE1NGBsGhjwb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="410151758"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="410151758"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:46:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="940280452"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="940280452"
-Received: from kdaneshi-mobl2.amr.corp.intel.com (HELO [10.209.15.204]) ([10.209.15.204])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 08:46:37 -0700
-Message-ID: <da1c807e-66b7-7e9f-143d-44b6f7389b50@intel.com>
-Date:   Wed, 26 Apr 2023 08:46:33 -0700
+        Wed, 26 Apr 2023 11:47:54 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E38A4C1F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:47:52 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a7ff4a454eso233625ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:47:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682524072; x=1685116072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=icRqAe7nXXoFe5wBtlTPQGzEz5lTajsqdZLBPsXJ7Ww=;
+        b=1kUsEkYDmAiZHwWxcCKrKKKOeMDYq2Y7K3oLzlciFgpheZtCxILkGhlvF3Cp2UndY/
+         io2PMoe8Ky0DQmv0TYJoks+L+UzPezu8LObCEtS28GiSObi7aC4ljJdOm37ovf1R48+e
+         q49Y7OPNb68onBjp42GNDzw2qC7hJx0LKt2nWokSzn+NwiboPSaY+JjDYbgW4v6gyt19
+         GtD699pFgSrogm5HOC3NKCccYp1/hFxc1oKf5z8HHa/bJ2Q4BKNYkDVAyEn8NWru/PfI
+         z1bj0pZyxaw9KKL4si7dpwJBVEeOsEC6Rn7BsiJ3ayx+tPH8aOT5pRNSRAGHccULS5v5
+         rRnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682524072; x=1685116072;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=icRqAe7nXXoFe5wBtlTPQGzEz5lTajsqdZLBPsXJ7Ww=;
+        b=cJOaU1A7QJ9RhujvVDH/bWxPp5j6GUBOdbF9SN8X8tR82jO32DK8WwyFkL6xnXoz2v
+         TcKNmvK1uAAo7dtmvu3pdDwg5uf5JhkUgxUmafn/H+LoLTh7jpb2mjav9cbMLuUiKGkE
+         SRZ6tQEYDN6RSsasUAOl7rmi5NrKjWrucUdw2pe0YVftyhC14RVsSH+atLVgVACg2Hmu
+         uJA+OUYvkqmk1NXhzWxRzHg71qKAd1ajBF0GQ4u9AZqMAOOzC8TtlSJMTqbzSWfNZO7U
+         7kPtuKjQT2kr4bwTSEtlDpHbMPym3TkDTexu/bRY/prwLY3Tg2iBcGNyae3WUsEZjzIQ
+         zyMg==
+X-Gm-Message-State: AC+VfDzCYodh5imJkmTx8CX/cKD9fJhkY10G2lq6u0M9fRfWzU8nO0Sz
+        cD6VuC1Yk3pgm8+H5VXZ1a9H7+6CaktWoPQ13qrk7w==
+X-Google-Smtp-Source: ACHHUZ6ARCXcbIQ0cs8zaF3y7UAgEM1sBv+gXAuwRFBBtBsIYLcvAS8vZDH689g2xg7rcARcqBjiXAXeoEKf/f34Kn4=
+X-Received: by 2002:a17:903:234e:b0:1a6:d776:9628 with SMTP id
+ c14-20020a170903234e00b001a6d7769628mr233511plh.19.1682524071958; Wed, 26 Apr
+ 2023 08:47:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
- model
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ardb@kernel.org, kraxel@redhat.com,
-        dovmurik@linux.ibm.com, elena.reshetova@intel.com,
-        dave.hansen@linux.intel.com, Dhaval.Giani@amd.com,
-        michael.day@amd.com, pavankumar.paluri@amd.com,
-        David.Kaplan@amd.com, Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
-        tglx@linutronix.de, dgilbert@redhat.com,
-        gregkh@linuxfoundation.org, dinechin@redhat.com,
-        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
-        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
-        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
-        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
-        bp@alien8.de, security@kernel.org
-References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
- <ZEfrjtgGgm1lpadq@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ZEfrjtgGgm1lpadq@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20230413034108.1902712-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230413034108.1902712-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Wed, 26 Apr 2023 08:47:39 -0700
+Message-ID: <CAAH4kHb_PAhR5jLFi2KsGku9ALNtjtxb-JO-k1ULK-Mj5mi=pw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] selftests/tdx: Test GetQuote TDX attestation feature
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/25/23 08:02, Sean Christopherson wrote:
->> +While the traditional hypervisor has unlimited access to guest data and
->> +can leverage this access to attack the guest, the CoCo systems mitigate
->> +such attacks by adding security features like guest data confidentiality
->> +and integrity protection. This threat model assumes that those features
->> +are available and intact.
-> Again, if you're claiming integrity is a key tenant, then SEV and SEV-ES can't be
-> considered CoCo.
+On Wed, Apr 12, 2023 at 8:42=E2=80=AFPM Kuppuswamy Sathyanarayanan
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+> In TDX guest, the second stage of the attestation process is Quote
+> generation. This process is required to convert the locally generated
+> TDREPORT into a remotely verifiable Quote. It involves sending the
+> TDREPORT data to a Quoting Enclave (QE) which will verify the
+> integerity of the TDREPORT and sign it with an attestation key.
 
-This document is clearly trying to draw a line in the sand and say:
+nit: integrity
 
-	CoCo on one side, non-CoCo on the other
+>
+> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+> allow user agent get the TD Quote.
 
-I think it's less important to name that line than it is to realize what
-we need to do on one side versus the other.
+nit: to get
+>
+> Add a kernel selftest module to verify the Quote generation feature.
+>
+> TD Quote generation involves following steps:
+>
+> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+> * Embed the TDREPORT data in quote buffer and request for quote
+>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+> * Upon completion of the GetQuote request, check for non zero value
+>   in the status field of Quote header to make sure the generated
+>   quote is valid.
+>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@lin=
+ux.intel.com>
+> ---
+>  tools/testing/selftests/tdx/tdx_guest_test.c | 68 ++++++++++++++++++--
+>  1 file changed, 62 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/tdx/tdx_guest_test.c b/tools/testing=
+/selftests/tdx/tdx_guest_test.c
+> index 81d8cb88ea1a..2eccde54185b 100644
+> --- a/tools/testing/selftests/tdx/tdx_guest_test.c
+> +++ b/tools/testing/selftests/tdx/tdx_guest_test.c
+> @@ -18,6 +18,7 @@
+>  #define TDX_GUEST_DEVNAME "/dev/tdx_guest"
+>  #define HEX_DUMP_SIZE 8
+>  #define DEBUG 0
+> +#define QUOTE_SIZE 8192
+>
+>  /**
+>   * struct tdreport_type - Type header of TDREPORT_STRUCT.
+> @@ -128,21 +129,29 @@ static void print_array_hex(const char *title, cons=
+t char *prefix_str,
+>         printf("\n");
+>  }
+>
+> +/* Helper function to get TDREPORT */
+> +long get_tdreport0(int devfd, struct tdx_report_req *req)
+> +{
+> +       int i;
+> +
+> +       /* Generate sample report data */
+> +       for (i =3D 0; i < TDX_REPORTDATA_LEN; i++)
+> +               req->reportdata[i] =3D i;
+> +
 
-For instance, if the system doesn't have strong guest memory
-confidentiality protection, then it's kinda silly to talk about the
-guest's need to defend against "CoCo guest data attacks".
+Shouldn't req be zeroed before populating reportdata? We wouldn't want
+uninitialized memory to leave the guest. I know this is just a test,
+but it's best to model good practices for anyone that might
+copy/paste.
 
-Sure, the mitigations for "CoCo guest data attacks" are pretty sane even
-without all this CoCo jazz. But if your goal is to mitigate damage that
-a VMM out of the TCB can do, then they don't do much if there isn't
-VMM->guest memory confidentiality in the first place.
+> +       return ioctl(devfd, TDX_CMD_GET_REPORT0, req);
+> +}
+> +
+>  TEST(verify_report)
+>  {
+>         struct tdx_report_req req;
+>         struct tdreport *tdreport;
+> -       int devfd, i;
+> +       int devfd;
+>
+>         devfd =3D open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+>         ASSERT_LT(0, devfd);
+>
+> -       /* Generate sample report data */
+> -       for (i =3D 0; i < TDX_REPORTDATA_LEN; i++)
+> -               req.reportdata[i] =3D i;
+> -
+>         /* Get TDREPORT */
+> -       ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_REPORT0, &req));
+> +       ASSERT_EQ(0, get_tdreport0(devfd, &req));
+>
+>         if (DEBUG) {
+>                 print_array_hex("\n\t\tTDX report data\n", "",
+> @@ -160,4 +169,51 @@ TEST(verify_report)
+>         ASSERT_EQ(0, close(devfd));
+>  }
+>
+> +TEST(verify_quote)
+> +{
+> +       struct tdx_quote_hdr *quote_hdr;
+> +       struct tdx_report_req rep_req;
+> +       struct tdx_quote_req req;
+> +       __u64 quote_buf_size;
+> +       __u8 *quote_buf;
+> +       int devfd;
+> +
+> +       /* Open attestation device */
+> +       devfd =3D open(TDX_GUEST_DEVNAME, O_RDWR | O_SYNC);
+> +
+> +       ASSERT_LT(0, devfd);
+> +
+> +       /* Add size for quote header */
+> +       quote_buf_size =3D sizeof(*quote_hdr) + QUOTE_SIZE;
+> +
+> +       /* Allocate quote buffer */
+> +       quote_buf =3D malloc(quote_buf_size);
+> +       ASSERT_NE(NULL, quote_buf);
+> +
+> +       quote_hdr =3D (struct tdx_quote_hdr *)quote_buf;
+> +
+> +       /* Initialize GetQuote header */
+> +       quote_hdr->version =3D 1;
+> +       quote_hdr->status  =3D GET_QUOTE_SUCCESS;
+> +       quote_hdr->in_len  =3D TDX_REPORT_LEN;
+> +       quote_hdr->out_len =3D 0;
+> +
+> +       /* Get TDREPORT data */
+> +       ASSERT_EQ(0, get_tdreport0(devfd, &rep_req));
+> +
+> +       /* Fill GetQuote request */
+> +       memcpy(quote_hdr->data, rep_req.tdreport, TDX_REPORT_LEN);
+> +       req.buf   =3D (__u64)quote_buf;
+> +       req.len   =3D quote_buf_size;
+> +
+> +       ASSERT_EQ(0, ioctl(devfd, TDX_CMD_GET_QUOTE, &req));
+> +
+> +       /* Check whether GetQuote request is successful */
+> +       EXPECT_EQ(0, quote_hdr->status);
+> +
+> +       free(quote_buf);
+> +
+> +       ASSERT_EQ(0, close(devfd));
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.34.1
+>
 
-So, sure, CoCo implementations exist along a continuum.  SGX is in there
-(with and without integrity protection), as are SEV=>SEV-ES=>SEV and
-MKTME=>TDX.
 
-This document is making the case that the kernel should go to some new
-(and extraordinary) lengths to defend itself against ... something.
-Those defenses don't make much sense unless we've crossed that line in
-the sand.
-
-So, let's not quibble about where CoCo starts or ends, but let's _do_
-make a list of things that we need before we do all the nonsense that
-this doc suggests.
-
-You're totally right that this doc forgot to mention guest registers
-(whoops).
+--=20
+-Dionna Glaze, PhD (she/her)
