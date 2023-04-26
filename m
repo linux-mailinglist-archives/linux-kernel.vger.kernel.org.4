@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB9D6EF3D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44E26EF3EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240501AbjDZLyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S240742AbjDZMBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240581AbjDZLyg (ORCPT
+        with ESMTP id S240555AbjDZMBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:54:36 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE05B9A;
-        Wed, 26 Apr 2023 04:53:48 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 7EC50D27;
-        Wed, 26 Apr 2023 13:53:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1682509983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RGgieoJu2M0mWFk816sGTOLEYpz179EmxMrNMNHPmVs=;
-        b=FJ73v2j09tV5wSSysU854ogO76xRRAlxU4aMTuFnoTdmNaR3BzbHZqcncONGr7tz9DsLbL
-        ztZm4oTI+ZOfH0Qk6k9FZf/9sMS4GLBVCwh7vekTd5q1gn4zhjRQFhqxb7gZwQvceqL4Ox
-        eugvqzb/Z6vVbrCJVhXCk75vSJf31YIUlrttLhrj7Cn0OL0lDMMq0IZdNVMBo4PYw1aukN
-        mf2huzqw9jP90/Xabywro7N7VYyyxhqX9KDDBpMgRdC6+CiSdLLcWXEnS9vwYOiYwccmAy
-        bc0MYlfVptdwJZgwbG0FXvTujcqQJWv/z7w3Qi3JRlrZOpLAPrqCwQ4Pwev3bg==
+        Wed, 26 Apr 2023 08:01:42 -0400
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26519524B;
+        Wed, 26 Apr 2023 05:01:41 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id A59581865397;
+        Wed, 26 Apr 2023 14:53:32 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ETms406DFzkv; Wed, 26 Apr 2023 14:53:32 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 4669C186514B;
+        Wed, 26 Apr 2023 14:53:32 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id MRcqEvhIyWKF; Wed, 26 Apr 2023 14:53:32 +0300 (MSK)
+Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.23])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 83A841863E25;
+        Wed, 26 Apr 2023 14:53:31 +0300 (MSK)
+From:   =?UTF-8?q?=D0=90=D0=BD=D0=B0=D1=81=D1=82=D0=B0=D1=81=D0=B8=D1=8F=20=D0=91=D0=B5=D0=BB=D0=BE=D0=B2=D0=B0?= 
+        <abelova@astralinux.ru>
+To:     Chris Mason <clm@fb.com>
+Cc:     Anastasia Belova <abelova@astralinux.ru>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] btrfs: parent bytenr must be aligned to sector size
+Date:   Wed, 26 Apr 2023 14:53:23 +0300
+Message-Id: <20230426115323.9455-1-abelova@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Date:   Wed, 26 Apr 2023 13:53:03 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     "Sahin, Okan" <Okan.Sahin@analog.com>
-Cc:     andy.shevchenko@gmail.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
-In-Reply-To: <MN2PR03MB5168689A20C8D6C67F119BB7E7659@MN2PR03MB5168.namprd03.prod.outlook.com>
-References: <20230327130010.8342-1-okan.sahin@analog.com>
- <20230327130010.8342-3-okan.sahin@analog.com>
- <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
- <MN2PR03MB51682210CADA6E33FB99052CE7939@MN2PR03MB5168.namprd03.prod.outlook.com>
- <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com>
- <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
- <CACRpkdYKEid8-0-7sBECNgSyW3kMRCsv3DeBVUzxo4z6p+Grnw@mail.gmail.com>
- <ZDBivYlwJ6zgaFTg@surfacebook>
- <MN2PR03MB516879DCD6600827AEE2BDC9E7949@MN2PR03MB5168.namprd03.prod.outlook.com>
- <a3ca3e705b5b8668cd511fc15681c75f@walle.cc>
- <MN2PR03MB5168D7940E322DFC0A1A3148E7679@MN2PR03MB5168.namprd03.prod.outlook.com>
- <1ff70a97dfbcaddd69029001ce99bb69@walle.cc>
- <MN2PR03MB5168689A20C8D6C67F119BB7E7659@MN2PR03MB5168.namprd03.prod.outlook.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <d4a6a640c373b6d939e147691efa596c@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Anastasia Belova <abelova@astralinux.ru>
 
-> I think I understand what you are trying to say so far. I did not have 
-> too much
-> experience related to gpio. I will set pull_up register in .set_config
-> However, I did not understand where its parameters come from.
-> set_config(struct gpio_chip *chip, unsigned int offset,
-> 	      unsigned long config)
-> It might be trivial question, but Where does config come from?
+Change nodesize to sectorsize in alignment check
+in print_extent_item. Change requirement in comment.
 
-Others have to answer that one as I don't have that much experience 
-either.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-> At the end, I should rewrite the code using regmap_gpio, right? So if I 
-> rewrite
-> code using regmap_gpio, how can I replace set_config(...)?
+Fixes: ea57788eb76d ("btrfs: require only sector size alignment for paren=
+t eb bytenr")
+Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+---
+ fs/btrfs/print-tree.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You'd have to add a .set_config to gpio_regmap_config and then in
+diff --git a/fs/btrfs/print-tree.c b/fs/btrfs/print-tree.c
+index b93c96213304..cee005fb8209 100644
+--- a/fs/btrfs/print-tree.c
++++ b/fs/btrfs/print-tree.c
+@@ -152,9 +152,9 @@ static void print_extent_item(struct extent_buffer *e=
+b, int slot, int type)
+ 			       offset, btrfs_shared_data_ref_count(eb, sref));
+ 			/*
+ 			 * offset is supposed to be a tree block which
+-			 * must be aligned to nodesize.
++			 * must be aligned to sectorsize.
+ 			 */
+-			if (!IS_ALIGNED(offset, eb->fs_info->nodesize))
++			if (!IS_ALIGNED(offset, eb->fs_info->sectorsize))
+ 				pr_info(
+ 			"\t\t\t(parent %llu not aligned to sectorsize %u)\n",
+ 				     offset, eb->fs_info->sectorsize);
+--=20
+2.30.2
 
-gpio_regmap_register():
-   gpio->set_config = config->set_config;
-
-I don't think it makes sense to have a default implementation in 
-gpio-regmap,
-the variances between "simple" gpio controllers might be too broad.
-
--michael
