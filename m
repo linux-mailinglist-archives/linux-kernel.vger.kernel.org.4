@@ -2,105 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499B76EEB5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A626EEB62
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbjDZATZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S238396AbjDZAVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbjDZATX (ORCPT
+        with ESMTP id S236412AbjDZAVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:19:23 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CEBCC06
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:19:22 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-760a1c94c28so35523139f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1682468362; x=1685060362;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=huNhI4IWX2EwAA9qPYkeCvObWSufY3n/3dilITZs/nE=;
-        b=OaoiOXyVdX6bHwHaWq02JAGXO2oveqZGkFj2EFCI0ciAU6fkWvAVOpckJTDYh2wr/z
-         Ra/9rwRealoYHf1anMaa/opnOB57Zhzn5fZG5LL6VU1FTvnURvw4A2BuXzrHhyZZqqax
-         gqk+3kLYt9F+E4S3hjHmPUX7EO98NwDYJcgXA=
+        Tue, 25 Apr 2023 20:21:48 -0400
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD95CC12;
+        Tue, 25 Apr 2023 17:21:47 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1a677dffb37so54828175ad.2;
+        Tue, 25 Apr 2023 17:21:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682468362; x=1685060362;
+        d=1e100.net; s=20221208; t=1682468506; x=1685060506;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=huNhI4IWX2EwAA9qPYkeCvObWSufY3n/3dilITZs/nE=;
-        b=Z3GGLp+chzwNWfdNsvmrPo5PIYkJW7p1YiJ2e0Q5DqR/olLrKecViLWJebs6lWGPh/
-         tYXl9SDYMCCl+0JS3G0br/2338sme/mk04C2gKh2+vjBK4wGHWx/S1Wtuqn7heOhJ9pr
-         ZU6U49qRsM+fCqGpjMccxnVngD5UxuldIfbUjcKppjAdSoZvKWOUoW9eRkKueDr13LrY
-         4J4PhkRzNLLlDqqWT4Tfgpmw7LXw2FT83IZ7F3100k+zcXPLoGrUCkFfu6GFuggJyXD6
-         0XYQGK3i2KJHou/iXQB8K1hSFnmHXbLUKqrESs00QfeZfwGZS7EGhL1M9xuxPZ26WfFr
-         wy2g==
-X-Gm-Message-State: AAQBX9ddDdbinTfAq7+o5tyduKc/n1C3mgWUhFZe34WRAgcxae1NQHCI
-        y/pNsEciqdCbnc4V78j2Bw/sGQ==
-X-Google-Smtp-Source: AKy350Zr2Bd+FRkC11D/o8t1DbcRF4VismVdhpiUwm2MJNZc65UQF5ztEUvFTSUAX4CmLo1bAR++OA==
-X-Received: by 2002:a05:6602:2d81:b0:760:ea9d:4af6 with SMTP id k1-20020a0566022d8100b00760ea9d4af6mr2690297iow.1.1682468362137;
-        Tue, 25 Apr 2023 17:19:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m43-20020a05663840ab00b00411bf6b457bsm1897216jam.101.2023.04.25.17.19.21
+        bh=ZFqlWu228df0FTCydNSQGPhP2bvBx2rXqvnLi/w4M1M=;
+        b=NZeleoKExR40ohRMQh+SlXO9G06ooVRYuxl4SsAH+S6wHxjQHpCpbGmlxMEKlasVn0
+         a0bTj2GbOtEmBbfczPPkkPk4hF3MZMoGka9S+v62Qpq7wtkd+5heYopKD+DpIo3aus2x
+         8Tw7g39l4XN9tm3VhKAYlesE9AhkVGfz3znPUIgYs3ZImFMniVnBUHAIdXmyTwEjsuHJ
+         uck8gBfsR8MOsz/kNNY+xINuLVgBejBwylvtIxBjIdtcUDGW1ll9OTLgS1e54I2vRUGU
+         xJa+utwMDN6AHo8me1IlAOWi5185KsEbiz1aQPMC9/Pxehx4MHNYV2Ugyw4BdY+ICr5K
+         wvRw==
+X-Gm-Message-State: AAQBX9eFkdhBbkyaPBdWfk3FBYr/Wl9Ack8YdldACrC6ejODXTQJukTD
+        mxD0Ry9anp9MLtpo0Ez7yYI=
+X-Google-Smtp-Source: AKy350bP7JGxOrcIgjoIVCAIgFna6LZ4/5/GTx9Qjx0rb3tIYblBwQlRfR9R9e1zWxNLbjanY7b7bA==
+X-Received: by 2002:a17:903:18d:b0:1a9:6bd4:236a with SMTP id z13-20020a170903018d00b001a96bd4236amr13867817plg.69.1682468506374;
+        Tue, 25 Apr 2023 17:21:46 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:5099:ad7c:6c1:9570? ([2620:15c:211:201:5099:ad7c:6c1:9570])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902848a00b001a95f632340sm5598686plo.46.2023.04.25.17.21.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 17:19:21 -0700 (PDT)
-Message-ID: <d3a2df43-a027-bebd-097b-86fee7e0809a@linuxfoundation.org>
-Date:   Tue, 25 Apr 2023 18:19:20 -0600
+        Tue, 25 Apr 2023 17:21:45 -0700 (PDT)
+Message-ID: <c3297d67-ac6f-e8b5-9167-648302319812@acm.org>
+Date:   Tue, 25 Apr 2023 17:21:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 6.1 00/98] 6.1.26-rc1 review
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 5/5] ufs: core: Add error handling for MCQ mode
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230424131133.829259077@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230424131133.829259077@linuxfoundation.org>
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        Powen.Kao@mediatek.com, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1681764704.git.quic_nguyenb@quicinc.com>
+ <5a52b255001e994d0a65be9b1d61fe69f2a12f6c.1681764704.git.quic_nguyenb@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <5a52b255001e994d0a65be9b1d61fe69f2a12f6c.1681764704.git.quic_nguyenb@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/23 07:16, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.26 release.
-> There are 98 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Apr 2023 13:11:11 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.26-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On 4/17/23 14:05, Bao D. Nguyen wrote:
+> +		/* MCQ mode */
+> +		if (is_mcq_enabled(hba))
+> +			return ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag);
 
-Compiled and booted on my test system. No dmesg regressions.
+The above code will trigger an overflow if lrbp->task_tag >= 8 * 
+sizeof(unsigned long). That's not acceptable.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+>   static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+>   {
+> +	struct ufshcd_lrb *lrbp;
+> +	u32 hwq_num, utag;
+> +	int tag;
+> +
+>   	/* Resetting interrupt aggregation counters first and reading the
+>   	 * DOOR_BELL afterward allows us to handle all the completed requests.
+>   	 * In order to prevent other interrupts starvation the DB is read once
+> @@ -5580,7 +5590,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+>   	 * Ignore the ufshcd_poll() return value and return IRQ_HANDLED since we
+>   	 * do not want polling to trigger spurious interrupt complaints.
+>   	 */
+> -	ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
+> +	if (!is_mcq_enabled(hba)) {
+> +		ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
+> +		goto out;
+> +	}
+> +
+> +	/* MCQ mode */
+> +	for (tag = 0; tag < hba->nutrs; tag++) {
+> +		lrbp = &hba->lrb[tag];
+> +		if (lrbp->cmd) {
+> +			utag = blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->cmd));
+> +			hwq_num = blk_mq_unique_tag_to_hwq(utag);
+> +			ufshcd_poll(hba->host, hwq_num);
+> +		}
+> +	}
 
-thanks,
--- Shuah
+Is my understanding correct that ufshcd_transfer_req_compl() is only 
+called from single doorbell code paths and hence that the above change 
+is not necessary?
+
+
+> +	if (is_mcq_enabled(hba)) {
+> +		struct ufshcd_lrb *lrbp;
+> +		int tag;
+> +
+> +		for (tag = 0; tag < hba->nutrs; tag++) {
+> +			lrbp = &hba->lrb[tag];
+> +			if (lrbp->cmd) {
+> +				ret = ufshcd_try_to_abort_task(hba, tag);
+> +				dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
+> +					hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
+> +					ret ? "failed" : "succeeded");
+> +			}
+> +			if (ret) {
+> +				needs_reset = true;
+> +				goto out;
+> +			}
+> +		}
+> +	} else {
+> +		/* Clear pending transfer requests */
+> +		for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
+> +			ret = ufshcd_try_to_abort_task(hba, tag);
+> +			dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag,
+> +				hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : -1,
+> +				ret ? "failed" : "succeeded");
+> +			if (ret) {
+> +				needs_reset = true;
+> +				goto out;
+> +			}
+>   		}
+>   	}
+
+Please introduce helper functions for the MCQ and SDB code paths such 
+that the nesting level of the above code is reduced.
+
+Thanks,
+
+Bart.
