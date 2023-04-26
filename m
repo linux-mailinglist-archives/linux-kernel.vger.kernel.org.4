@@ -2,149 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80326EFC9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5656EFCA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239440AbjDZVr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S236339AbjDZVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDZVry (ORCPT
+        with ESMTP id S233605AbjDZVum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:47:54 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76253AC;
-        Wed, 26 Apr 2023 14:47:53 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QLZDrV003707;
-        Wed, 26 Apr 2023 14:47:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=loIKsCy2FUJ5gA4qoestcaLVxImydjEisTwtqj/sM+g=;
- b=dMoN4sGijtE+pvsMH10uoht1GN4KfzpwF84ecYuE3I/YSdOdqSPwnvXQnqPLDB9eXB3q
- ErIi//f7/MEiSS0hc1bkQlEUB6tZ+2q+y2mjZOTBO6ucEDBaoleoe3X5TS641gngbmwQ
- zxvFIXKYXoCMIpnl2wRKexKa4k3JUI/TwIxhON1f9axP1WtXL9tywVgq5CcXYYQCZZeB
- 6PVqf/FWu7zpwsdNOUbkJb2TX87fvQhNl8DleEhJBFW7g6Yn4cEwoA196BL9oMurBN+e
- EpA5qb8HybUaeSEa+vV31ADGWDChLavEalP2wxyiKoZfGYBsNr7Ule4WtUbqmBwviHwm nw== 
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2046.outbound.protection.outlook.com [104.47.56.46])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q7av50gs9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 14:47:34 -0700
+        Wed, 26 Apr 2023 17:50:42 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2068.outbound.protection.outlook.com [40.107.95.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FBFE45;
+        Wed, 26 Apr 2023 14:50:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a9Qb+rkgmEYoXbZvkkE+owsQDDphqDCfO1ChR6iPx8Chr1XtqmBaAJdNefgb+Ev5uXH3CT6CORVjnegOT0G+fe92RUA8qd9GrfalT+ChE0l9+lvDbuSrMRp4y5lX5tXKLaoA6on+MR15iQ03tfoDNEDaCj7L6EbpB+hCnXfeRHv4b9UUeFoK7PKEXxSf5KDfshgJHngfKiNHfuIPPiw7sDe7NWeW+18C8Fe1s8wmdOQKWGl+70HebV9obZhZnN1Rus+o5fQlH7EiOqKm9YSNce2bsNfR65+8kW4Tqu3TfUR3xpWqRVO0Tq+vn2faBbv9H2qRKD6cLkleeIu7W/cFQw==
+ b=LyuvhxKTWah59OUOUs/SMQygAyiVYi6/wWIjcrE1rjHUsF/yHlmAvAJipwUU0tLZlIiFMYqdT9+0ps7lt2x3YYZY9dFUoHgVKj5wPxtVgpUN5h9wOfdJY7Ld/UEfpPmHXqJ1c3iecPL3paeARrxgH8jZaoWtC5ksVob2TyLs/hCvyKx/OnXdeTO0iVqQTp/+s5Al9HwmhpsSyQtrgRigvH/XmJuzLol0MpD4k+7SOpa8/+0lWc9uRXrP5b4hHdp0RIvH6Hxds6VjID7oBnCjUnzNs6mampadQajFSpGmssQw9zTJrX8uRM4/qYwSPS8uLRwq3/RjoH7BQDuTEJtrgw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=loIKsCy2FUJ5gA4qoestcaLVxImydjEisTwtqj/sM+g=;
- b=gESHIaTvswmtkCNzZea4T5JPoO0uy4A/lNFBi5fjs+kUkGdwm0tkvPKZPKrssPwH0NBfUBtj8V4FOj+oyoT8jUm2cETxZeC+XkONRMnNUyrXtoN2Or/aIRlQAS/4/X1DWSKfuxqlkYKRL+K/UfzinyOlteVeNfvpwODKeCs0zD7yhnIComQCghKrpkdonyJA8s3ttCJ3/qaVVUQTu2LvInfMW2rnR3EqLKGq1tABBrtCJXwE8qytFLg+izzxQxZ43fFvR2oP1FDdPBLK286oe7A5aFGYvkMNFUbrgsr6QzCsZQu0Jr87DaCtZ4oz3ToTMYzG32276jFmXPkhfO9sFg==
+ bh=mdRTUNRfCuBAZszVfz0ngcsjrITs+8L/Ktp/taVsU8Y=;
+ b=hrroKbd4KQEs+TBCc1+WmYJW01wJxgoOnx3KB8JyVwgDZXfM0hKNHZRgOzSoQ0P0dn7In4C8HcPoK2QoWwi+BBboemzJXQSwjcGi0Y4TLdANaEWNLwsZRdBM92poExLBFR0Vn65WYAO3B9OL/IaJ+8Wjdb6iYF0HIZNzBi8hFm5VFoTGoGmO5ISVcWLspm0DPwGhBFblI+H0yKAAymsiGuFFsM4HJdo1oyyXKHMWyfJNu0EB7odTYYWepS3Bw7DRSGgoIKRvgIid0mNz6wbODTg8Luc3gxh5TQnAfTgCuwPcv7A1/qHIxUWT0k0wPjNH5H1bvE4DJW2N6Fnz1x0XAg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MW5PR15MB5268.namprd15.prod.outlook.com (2603:10b6:303:198::10) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mdRTUNRfCuBAZszVfz0ngcsjrITs+8L/Ktp/taVsU8Y=;
+ b=AgKaQ2d8oK3BV1H133n3ICSC/qExHhEC3SRizPZYRjAz5Yg7CmIJJFjgidnjO2GxjJP0sQbT1I+Rhqr3TEfEcopZVLIJ+aEL61sgyMEiw6y7oXxnoMXJ3n/XOSIiCuv0SDxi16rxL5nckRC5XFf5HBcsZNUcOMH4Q1bZk+Z86d0=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by LV2PR12MB5845.namprd12.prod.outlook.com (2603:10b6:408:176::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.33; Wed, 26 Apr
- 2023 21:47:32 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6319.033; Wed, 26 Apr 2023
- 21:47:32 +0000
-Message-ID: <07e05c57-feb7-5482-9c07-eb41f976f9fd@meta.com>
-Date:   Wed, 26 Apr 2023 14:47:27 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v2] libbpf: Improve version handling when attaching uprobe
-To:     Espen Grindhaug <espen.grindhaug@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <ZEV/EzOM+TJomP66@eg>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
+ 2023 21:50:37 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5%3]) with mapi id 15.20.6340.021; Wed, 26 Apr 2023
+ 21:50:37 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Anisse Astier <anisse@astier.eu>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>
+CC:     Ard Biesheuvel <ardb@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jeremy Kerr <jk@ozlabs.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Anisse Astier <an.astier@criteo.com>,
+        Richard Hughes <hughsient@gmail.com>
+Subject: RE: [PATCH] efivarfs: expose used and total size
+Thread-Topic: [PATCH] efivarfs: expose used and total size
+Thread-Index: AQHZeHmUtN8GhECaG02OKK2EPOLHv68+IQRw
+Date:   Wed, 26 Apr 2023 21:50:37 +0000
+Message-ID: <MN0PR12MB6101768A09C5C2C78C2B9B58E2659@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230426195853.633233-1-anisse@astier.eu>
+In-Reply-To: <20230426195853.633233-1-anisse@astier.eu>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <ZEV/EzOM+TJomP66@eg>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0100.namprd03.prod.outlook.com
- (2603:10b6:a03:333::15) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-04-26T21:50:36Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=0846ac4b-0bac-4777-8145-ac9f87ee12b9;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-04-26T21:50:36Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 39ee30c3-0140-480b-b848-d15d9d0045c7
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|LV2PR12MB5845:EE_
+x-ms-office365-filtering-correlation-id: d3ef41f7-8a8b-4fd1-fcc9-08db46a04573
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NHXgKjUO12m+FDuTEn+lKC3Udbw7MAUOmn6d3VP0BzUUzhUc+SCfQW8UTuLXv6R0V0e3n7rhLFDzDa0lcK2WhOJOrU2F9cpHsCNYep7qqPP3nz8j+jpSoj8DaczSWoUjb+cpx+Y4dAyYkR1QiEyvHvKAeqshaR7ExkeIJz7FBVuQ5vvDpc9/DBzOEP3Fg52IIU7ddfw+//SzkSYRgfg2QpvfMxqMxZ/+G/HNogFpiJB67m6IkcssHFjUxkaCo7dnowJnkzQ8Csp47heGN4OJ8MLcUuS23YlbBVwnVR3bT1GTSj0+2ljzLP/q4CnJgdlk7680ErRIinCA1FmHWDsIX6w96FYRccs7BGDD+X5hrBNITCm1ZrldG58dI8ko3VIweQaCq6pIZzCmQo5q/jmmwyWVmwGc5y1AXJKsGkAQ29wlTesRvpXO7rus929NvnvcRC8bm8pLNM9qqND4kkSnCUILWQSqM0ulFZj6cF7MhIHVMOzm3xn4ev3/bS+RV5XOa9Tig1fsqKtno7KSwqnCS7dl0zS/6ZHKln3h8BhNrmQyTCkmY8+Do8Yko2yPXpl4mYHFakx7/CECqn3IMW/1nutB+x3YTiMoWCablP1YJEaZSDPZYtCywnFO4YI1Ujaj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(366004)(39860400002)(376002)(451199021)(71200400001)(2906002)(7696005)(54906003)(110136005)(83380400001)(478600001)(9686003)(186003)(6506007)(53546011)(26005)(33656002)(316002)(4326008)(66446008)(66556008)(64756008)(122000001)(76116006)(66946007)(66476007)(38100700002)(86362001)(8676002)(8936002)(5660300002)(55016003)(7416002)(52536014)(38070700005)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qfLNfDx/oVjGXU7/UipvcbIcfP6VVrLzzuyC0KetzhuOm/hBcgXkSr+rtH/p?=
+ =?us-ascii?Q?E1JC7XTrHxN+10ykeVkjEy0QXas/GbQiBgSfHpf4JVyBwlN4UEWVtNiVPbXj?=
+ =?us-ascii?Q?AefEOG78gs76xms25TPVbX1VBqDEtBhciCU/DL6CiwffwtdAdVPnxmxzhyIA?=
+ =?us-ascii?Q?lUZRbkfWazMYoyFMAtSfVGXClB4IvZq4Q5GUGAWKUB6MH6lDPLUOpbicmCAM?=
+ =?us-ascii?Q?DL00uD1S+yQHAsIWOYvt7zBMpScYgBi/kgh8i9ZNrVk0RPYPK/drZZrnreEG?=
+ =?us-ascii?Q?ZgxnUK8iABY+8JvkGD2MDqGUX/+TUSLqY2rychcL6dfQ60T+9L/sdpb0pLhi?=
+ =?us-ascii?Q?Rapg2l6pY5rBssRsfNDyqbqCnD2ZiMbsC5OG+tsm/a1jmIdyRwVsXYhJXKXJ?=
+ =?us-ascii?Q?38Fx7aJZdqopgytUNa+ORIzZpVcnEHdaJ7wUoNWMOnVss0idPT5PWDIbZOib?=
+ =?us-ascii?Q?ZfdFHqricdYcQ0Ft+E/VmlipIdt/oEaMKJ+tZxk3tnPkfReZ17OY9FuEw2L6?=
+ =?us-ascii?Q?dhiKrZXlRAq0NiTCsKJjFzc7Ar9/UGNSC2/NzLDWkhvTKeeeoTmfo7+sQRP2?=
+ =?us-ascii?Q?a9TzINEdn7p/Pc2o3gO3cp8HDR0qBPdWmnQ64MRSdauEL82/NeLWJ+j8H0dM?=
+ =?us-ascii?Q?uLo9BUik44uKfGexwnnhODJ5JKqEevsKU8nFQrL4FAOFJrXWl0SNnNFgoV0L?=
+ =?us-ascii?Q?oD0yYXNtmg8ipaEXRf1mkMfTSlG27YoXPES2asLfOPxeTrKKvtqAJJ8GQEBC?=
+ =?us-ascii?Q?JJoN5tdpVLfu535skd2Z1lphdhQWoN6NreT9kYXBaTBBofyoHJFdkkeFCJI7?=
+ =?us-ascii?Q?O+dry+duW34TRAgWQZ6t7whyJ6XMncO/XSXz6Yl1438Ss5b/JEsekQyb5Op3?=
+ =?us-ascii?Q?VwqcRT/5eQmDYoFNBmZGtPC47hA+kt1Bn5p7PjSNUN/tG+7eO4C2ci6vsGIs?=
+ =?us-ascii?Q?8lYqygBVypk4UGfXqR1cKhnc0e8s0/YvDdWkKmjcsXJpDdIuq7NJcyvqF+kB?=
+ =?us-ascii?Q?MdQlBbe+vacTuuN/WHbZLlhl6lEytln1zcTtaBil6DuI8qzW8Z4n0j9K4vms?=
+ =?us-ascii?Q?DLAbG6g9Kbcf46j5qgn/YGYhfxoavuN4lbD8oLTrSUHtJ/WH3TikIgwfHIah?=
+ =?us-ascii?Q?Jm0rZ8w7dAQV8/7N0iePbVxLCsgfg5lMgiONO6rjR4FbOlHXaoq9aYOCrAu7?=
+ =?us-ascii?Q?Oq8t2hcFAPzcj9Vs+Q/7BfJVzJRX5K5n82sENjqq7ebxZ4drQSDba/tRX3vC?=
+ =?us-ascii?Q?wcrqm/OY0JDlYsfJ8SpZbj0BGzz01zcCWw/wWtfrYHK2LjzyDC2mbzzb9wDN?=
+ =?us-ascii?Q?Q22kHkPD4aGbKeHD09zesBXuXz+IFn3Icqtr36HCDFuF9j8Rk+a/4RSNbAYv?=
+ =?us-ascii?Q?tVJXgFnrQFRkyz1xFr0+KnSyJiPHCIQETsFkODvmqQilGUXyuNfOtSml5jct?=
+ =?us-ascii?Q?Hx2WTmRgYwCfaRZyYjG3SMeVX+otOJnByo2u+4xN5JwzoK6vbMXPK/55laZs?=
+ =?us-ascii?Q?sS1EueuapMOd9YVn6J3/AXtBAJ4hTfMOf+U5Cl+IfiQoN2LPKJv3zMuOX7Qd?=
+ =?us-ascii?Q?mqx7CA1epoEDWe4Y7jA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|MW5PR15MB5268:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc6c0ada-419e-4b99-738a-08db469fd6b0
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c027AUdu2vNQyhIRV1HT/ywsCfk+1PeM+Sjl+uSVz3dv/+/njfzX/i8lyOnXKm4NIB0gTMZzxbgEPO4K9U1x9Z5yHbVGugWvlWWSbY6yHXHTKX1+eJphxR+Fd2v5KE/kLt60+awvy6A2hsp536YsPGNO0qeZG8ThimYjSlMrGru7/TsAH01C+8nLQgO+lMBQCIDMblEYPEQpIP2kcmvqngcLL7u0dfp3mkMxyB4AMKHQIZI0jlhcIqCgDB6jsx1G3wWituW/8uqWxdLsxPRb42cgy7uP1oDK4H+HDiw54uwVIbIZ2LUBHEiJkeu6wCBG+muGZzYEZLgkSbILenQi9cTHlHvHD3c302rdx4TQYJDqRTUUD/Oq2CJyduqbMp7xJXzzjgMURC/6RXItaOhwotNbjsT1sHo6F/65kk/fUmg+ZvDFWZhFa3BWgHRLBwF7wyJKrwH25MaPaPNuy26A3V787xt1t6CvhjSm6xk1Y8U1j07Itw7SrifGo84341EpcpqbjLWoeHwXfc1IJDoSe6fa4rZmHGHALhzDQivj08n1pQr7t51sC2+QAFpfIXpcsJ3sYljsmwGEW2ZXCXolHM8AFY6qJL1CCL/EtMLB/nOGX97Cj/qDnuik5YkoAJCzhcOqxukU1WQ+V2ejIvdqXPqqyMHhHuPmOPxpESqmVhk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(136003)(346002)(376002)(451199021)(86362001)(186003)(6506007)(6512007)(38100700002)(5660300002)(53546011)(31686004)(2616005)(6486002)(31696002)(6666004)(83380400001)(478600001)(36756003)(110136005)(7416002)(921005)(41300700001)(2906002)(8936002)(8676002)(4744005)(316002)(66476007)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yy9XY1VRNEtHbGcvOXJYOXltV2lPM2JPVkJFKytxVVBPRmxFQVkzdlJWamJM?=
- =?utf-8?B?ODZMdGtsQ0h0cFhMNk5naVhoY1EvWFZtWGV5RldabUhZamtzL1lpSGpMRlR2?=
- =?utf-8?B?VGF6YU5iRDFCZ3RMdEMzSlpQaXBSWHRQM0RyakJpbkZGZFVjeEhkdG4veFRD?=
- =?utf-8?B?WGxrV1RIbCthVHVkVENCMHhJN3dXLys0d0FyVTQyNHBWTEMvSTZQN25vTXgv?=
- =?utf-8?B?RU15N3dwWXpnRHBXWkhheUtQSE5UNWhHUzJkSndlbVoyZTN0c1FpTldzK3VB?=
- =?utf-8?B?cGFoMFNOem55VGhLWFlZTURTdFo4MUdkUE1JRUZwdlNxdGFCSlBXdHhGOUFD?=
- =?utf-8?B?QjhRZ2hDUTV2b3dmMlUvM25kZHNBVEJpWE16SEpsZG5raXlrY3RHL3RmWFV6?=
- =?utf-8?B?Q0pBM3hXYmV3YXZuSi9lR0FBSmZjVTN1KzdSbW1XRWF4ZWF3TnQxZEV3aU40?=
- =?utf-8?B?SVI5Y1UySGFtVXlncVArU3VQRHJIUFU5OG1kYTN3VWk5YVNYZ09vZmVtNUNH?=
- =?utf-8?B?R3NKRUZHWnBWM0lzL2c3bjBaWm5ZenU1bjVBa2tGVnNOM1RNejFlSC9EcWV3?=
- =?utf-8?B?OXdmOVJJUU9Fd3cxTGhjNmpCMG5STTdmZk1GNkh3bnBXeHdFNnUyUjZuT3A4?=
- =?utf-8?B?NXI1Zk04ZXk4UldmbGRUQUF5eWltWm8vWGZhS1RBTnZCVjBLZlJjaWo4czhC?=
- =?utf-8?B?dUJYMVVlY3FPQStwdmdkdkpZOHp0dVJRbEVQYXRTWlIwVzJIdDBtNHJ4OEF6?=
- =?utf-8?B?M25yUE5EdDBkQ0kvdUc5R1N0dFVDZ3RiODQ1SHlSQ1VCWGRvRWM3QklHa0tU?=
- =?utf-8?B?eDVvTEU5US8yeXFhcElURGR0MXNPU3ZYUTBCblFsbzFFUGtVK2Roam94Q2NC?=
- =?utf-8?B?U3Q5aTdMTUZEMlFqc3BmSExSMTZmVTF6L0dYdk1iRGRFRnFFdUhwTEM3c1F4?=
- =?utf-8?B?SThxdStqeWZlL2VuT3J2dG1PMGkxdnluQzFhVkJVNEp4eUpVVDlYZ0FRb2g2?=
- =?utf-8?B?YUhLOUhvd2h6M2NZQVY5MWtwb2JQSkh4ZzRkZHY4SWdqUUxBMEdpVTVScnpP?=
- =?utf-8?B?NEJkNmpqUGNBcnZ4Rm02eFh6OEVvb09NWkc3clZTdjZuY2NDb1c1cFlnUUZH?=
- =?utf-8?B?Vk5jM1R1WlJzWStYRVV2eURJZmF0ejBlZU00aG9vd1ZWa1JLNFFYZGhOV1dJ?=
- =?utf-8?B?RVFaTlh1OURxYUd5aVdFWGs2em1WTFQvRDBmeS91eWNUcUY3cGlvd0gzR2J3?=
- =?utf-8?B?b3Fwa2g5V0VXcDNYSS9XS1VYbWlTV0Y0dkUyZDlOQTZJT0JhR1dqYmhKRE9x?=
- =?utf-8?B?dXJ3TGY0czRramNQSEg3QldZR2pMNFFucWFPN29GWW5TMXR5elJDK2FvdzE0?=
- =?utf-8?B?VUIreFljSWxBQzlGNXFWMEl2MlVodDk2V3JXbXVFUVVGZVRVZWtFbWt3aktz?=
- =?utf-8?B?ZWJsZzkrcFpLK2d4Y1pDZGhpMitxM1J5UGN1ckdhSnFpQXgrVDIzeEFQVmla?=
- =?utf-8?B?WGNnYU5WckM3TTlRQ09mM0ZkTjVnaXpsL2JVb2JJb0VmZXZKVmZ2dEIydWJB?=
- =?utf-8?B?cGpHMHRHQ2xZeDdsa2k4a3ZSSXVId2hFVmJxWmlmRFRzRERUQ0dna1BYUlB6?=
- =?utf-8?B?QXdETVk1bjVQRE9nbDdvN1RWWml4K1ZBYW9Ld3RWeUVFQUpKMGxrNWQ0M2RG?=
- =?utf-8?B?bjk5NUZNaGRQMFcreENsZ3dMVkthNC9PMnhsVTFRaXJHVDgyZzZDSW9GRDA0?=
- =?utf-8?B?U1k1ZkVpQVRNbTJYNmN1b01nb2dkUTByMTI5T2xDZzZDVjkvZ043MzZPOFBG?=
- =?utf-8?B?RVcwdU14UkxLa1Z0K3lrNWZ5U2k3c3lMQlUxcmo1Yyt0bXB2MHVhRElXaEdL?=
- =?utf-8?B?Vjk5RmtlU2RXR1M2d0N2S3BoeHpEeGlPam5JbmlNK2l1SkV0QzhOS3hTN2pY?=
- =?utf-8?B?WVYyMEQ5amhLWDljaTcvQVpzQkQvZVlsTkpkeTNaeVFqVTdFNXJCNTdZQlVq?=
- =?utf-8?B?d3NzYzlmQm9NdzFhUjd0Q0lQdndUVi9oeVc3NitUKy85RmowZ0IxZmwyb1dx?=
- =?utf-8?B?c3g5MHhtTXc1U3UwVVlMNlNJNnBkY004U0o2Y29nTWlVQjc4UDRBT2RobWha?=
- =?utf-8?B?UFlObEpOZmZoR1lVemlUa05FWUhsT2o2azYwUUdzeHA4UFc1VzNPRmZFUFpN?=
- =?utf-8?B?TlE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc6c0ada-419e-4b99-738a-08db469fd6b0
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 21:47:32.1487
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3ef41f7-8a8b-4fd1-fcc9-08db46a04573
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2023 21:50:37.6471
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KkR4q45NeNpthnkxHGS0lNjAG1SD76qSA8nsCtb7ABrLB97vp7xlhfn4BWsmh9GN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR15MB5268
-X-Proofpoint-ORIG-GUID: sOz-I6c_0tspLBeR7QXQFotuqwCtc1_6
-X-Proofpoint-GUID: sOz-I6c_0tspLBeR7QXQFotuqwCtc1_6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-26_10,2023-04-26_03,2023-02-09_01
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yiW3loqUj5HagTPhGCEWI4xOEZ4MciBGOJf9k43b1jaAcfPK76UPPQb6NPViCInQRY2JcbQN7OPAC/jHyfZSYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5845
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,25 +143,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[Public]
 
 
-On 4/23/23 11:55 AM, Espen Grindhaug wrote:
-> This change fixes the handling of versions in elf_find_func_offset.
-> In the previous implementation, we incorrectly assumed that the
 
-Could you give more explanation/example in the commit message
-what does 'incorrectly' mean here? In which situations the
-current libbpf implementation will not be correct?
+> -----Original Message-----
+> From: Anisse Astier <anisse@astier.eu>
+> Sent: Wednesday, April 26, 2023 14:59
+> To: linux-efi@vger.kernel.org
+> Cc: Ard Biesheuvel <ardb@kernel.org>; Johan Hovold
+> <johan+linaro@kernel.org>; Darren Hart <dvhart@infradead.org>; Andy
+> Shevchenko <andy@infradead.org>; Thomas Gleixner <tglx@linutronix.de>;
+> Ingo Molnar <mingo@redhat.com>; Borislav Petkov <bp@alien8.de>; Dave
+> Hansen <dave.hansen@linux.intel.com>; x86@kernel.org; H. Peter Anvin
+> <hpa@zytor.com>; Jeremy Kerr <jk@ozlabs.org>; platform-driver-
+> x86@vger.kernel.org; linux-kernel@vger.kernel.org; Anisse Astier
+> <anisse@astier.eu>; Anisse Astier <an.astier@criteo.com>
+> Subject: [PATCH] efivarfs: expose used and total size
+>=20
+> From: Anisse Astier <an.astier@criteo.com>
+>=20
+> When writing variables, one might get errors with no other message on
+> why it fails.
+>=20
+> Being able to see how much is used by EFI variables helps analyzing such
+> issues.
+>=20
+> Since this is not a conventionnal filesystem, block size is
+> intentionnally set to 1 instead of PAGE_SIZE.
+>=20
+> x86 quirks of reserved size are taken into account and available and
+> free size can be different, further helping debugging space issues.
 
-> version information would be present in the string found in the
-> string table.
-> 
-> We now look up the correct version string in the version symbol
-> table before constructing the full name and then comparing.
-> 
-> This patch adds support for both name@version and name@@version to
-> match output of the various elf parsers.
-> 
-> Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
++hughsie
 
-[...]
+This can be quite useful for fwupd to be capturing as well with some of the
+weird issues that look like they're probably related to how much variable
+space is left.
+
+>=20
+> Signed-off-by: Anisse Astier <an.astier@criteo.com>
+> ---
+> Notes:
+> Patch isn't split per subsystem intentionally, for better understanding
+> of intent; split could be trivial in a later version.
+>=20
+> I'm not sure whether statfs(2) should return an error if the efi request
+> fails; I think it could be ignored with maybe a WARN_ONCE; which would
+> be close to the current behaviour.
+>=20
+> Regards,
+>=20
+> Anisse
+>=20
+> ---
+>  arch/x86/platform/efi/quirks.c |  8 ++++++++
+>  drivers/firmware/efi/efi.c     |  1 +
+>  drivers/firmware/efi/vars.c    | 12 ++++++++++++
+>  fs/efivarfs/super.c            | 26 +++++++++++++++++++++++++-
+>  include/linux/efi.h            | 10 ++++++++++
+>  5 files changed, 56 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/platform/efi/quirks.c b/arch/x86/platform/efi/quirk=
+s.c
+> index b0b848d6933a..587fa51230e2 100644
+> --- a/arch/x86/platform/efi/quirks.c
+> +++ b/arch/x86/platform/efi/quirks.c
+> @@ -114,6 +114,14 @@ void efi_delete_dummy_variable(void)
+>  				     EFI_VARIABLE_RUNTIME_ACCESS, 0,
+> NULL);
+>  }
+>=20
+> +u64 efi_reserved_space(void)
+> +{
+> +	if (efi_no_storage_paranoia)
+> +		return 0;
+> +	return EFI_MIN_RESERVE;
+> +}
+> +EXPORT_SYMBOL_GPL(efi_reserved_space);
+> +
+>  /*
+>   * In the nonblocking case we do not attempt to perform garbage
+>   * collection if we do not have enough free space. Rather, we do the
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index abeff7dc0b58..d0dfa007bffc 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -211,6 +211,7 @@ static int generic_ops_register(void)
+>  	generic_ops.get_variable =3D efi.get_variable;
+>  	generic_ops.get_next_variable =3D efi.get_next_variable;
+>  	generic_ops.query_variable_store =3D efi_query_variable_store;
+> +	generic_ops.query_variable_info =3D efi.query_variable_info;
+>=20
+>  	if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)) {
+>  		generic_ops.set_variable =3D efi.set_variable;
+> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+> index bd75b87f5fc1..c5382d5c3073 100644
+> --- a/drivers/firmware/efi/vars.c
+> +++ b/drivers/firmware/efi/vars.c
+> @@ -245,3 +245,15 @@ efi_status_t efivar_set_variable(efi_char16_t
+> *name, efi_guid_t *vendor,
+>  	return status;
+>  }
+>  EXPORT_SYMBOL_NS_GPL(efivar_set_variable, EFIVAR);
+> +
+> +efi_status_t efivar_query_variable_info(u32 attr,
+> +					u64 *storage_space,
+> +					u64 *remaining_space,
+> +					u64 *max_variable_size)
+> +{
+> +	if (!__efivars->ops->query_variable_info)
+> +		return EFI_UNSUPPORTED;
+> +	return __efivars->ops->query_variable_info(attr, storage_space,
+> +			remaining_space, max_variable_size);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(efivar_query_variable_info, EFIVAR);
+> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
+> index 482d612b716b..064bfc0243c9 100644
+> --- a/fs/efivarfs/super.c
+> +++ b/fs/efivarfs/super.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/ucs2_string.h>
+>  #include <linux/slab.h>
+>  #include <linux/magic.h>
+> +#include <linux/statfs.h>
+>=20
+>  #include "internal.h"
+>=20
+> @@ -23,8 +24,31 @@ static void efivarfs_evict_inode(struct inode *inode)
+>  	clear_inode(inode);
+>  }
+>=20
+> +static int efivarfs_statfs(struct dentry *dentry, struct kstatfs *buf)
+> +{
+> +	u64 storage_space, remaining_space, max_variable_size;
+> +	efi_status_t status;
+> +	const u32 attr =3D (EFI_VARIABLE_NON_VOLATILE |
+> EFI_VARIABLE_BOOTSERVICE_ACCESS |
+> +	 EFI_VARIABLE_RUNTIME_ACCESS);
+> +
+> +	buf->f_type =3D dentry->d_sb->s_magic;
+> +	buf->f_bsize =3D 1;
+> +	buf->f_namelen =3D NAME_MAX;
+> +
+> +	status =3D efivar_query_variable_info(attr, &storage_space,
+> &remaining_space,
+> +					    &max_variable_size);
+> +	if (status !=3D EFI_SUCCESS)
+> +		return efi_status_to_err(status);
+> +	buf->f_blocks =3D storage_space;
+> +	buf->f_bfree =3D remaining_space;
+> +	if (remaining_space > efi_reserved_space())
+> +		buf->f_bavail =3D remaining_space - efi_reserved_space();
+> +	else
+> +		buf->f_bavail =3D 0;
+> +	return 0;
+> +}
+>  static const struct super_operations efivarfs_ops =3D {
+> -	.statfs =3D simple_statfs,
+> +	.statfs =3D efivarfs_statfs,
+>  	.drop_inode =3D generic_delete_inode,
+>  	.evict_inode =3D efivarfs_evict_inode,
+>  };
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index 7aa62c92185f..d2b686191870 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -703,6 +703,7 @@ static inline void efi_enter_virtual_mode (void) {}
+>  extern efi_status_t efi_query_variable_store(u32 attributes,
+>  					     unsigned long size,
+>  					     bool nonblocking);
+> +extern u64 efi_reserved_space(void);
+>  #else
+>=20
+>  static inline efi_status_t efi_query_variable_store(u32 attributes,
+> @@ -711,6 +712,10 @@ static inline efi_status_t
+> efi_query_variable_store(u32 attributes,
+>  {
+>  	return EFI_SUCCESS;
+>  }
+> +static inline u64 efi_reserved_space(void)
+> +{
+> +	return 0;
+> +}
+>  #endif
+>  extern void __iomem *efi_lookup_mapped_addr(u64 phys_addr);
+>=20
+> @@ -1042,6 +1047,7 @@ struct efivar_operations {
+>  	efi_set_variable_t *set_variable;
+>  	efi_set_variable_t *set_variable_nonblocking;
+>  	efi_query_variable_store_t *query_variable_store;
+> +	efi_query_variable_info_t *query_variable_info;
+>  };
+>=20
+>  struct efivars {
+> @@ -1087,6 +1093,10 @@ efi_status_t
+> efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
+>  efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
+>  				 u32 attr, unsigned long data_size, void
+> *data);
+>=20
+> +efi_status_t efivar_query_variable_info(u32 attr, u64 *storage_space,
+> +					u64 *remaining_space,
+> +					u64 *max_variable_size);
+> +
+>  #if IS_ENABLED(CONFIG_EFI_CAPSULE_LOADER)
+>  extern bool efi_capsule_pending(int *reset_type);
+>=20
+> --
+> 2.34.1
