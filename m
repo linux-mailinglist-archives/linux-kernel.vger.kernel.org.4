@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868ED6EECFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B526EED04
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 06:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239390AbjDZEjA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 00:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S239398AbjDZEmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 00:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbjDZEi5 (ORCPT
+        with ESMTP id S239402AbjDZEmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 00:38:57 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBEF26AC;
-        Tue, 25 Apr 2023 21:38:56 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33Q4cVT21032454, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33Q4cVT21032454
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 26 Apr 2023 12:38:32 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 26 Apr 2023 12:38:33 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 26 Apr 2023 12:38:33 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Wed, 26 Apr 2023 12:38:33 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Ping-Ke Shih <pkshih@realtek.com>,
-        Zhang Shurong <zhang_shurong@foxmail.com>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>
-CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] wifi: rtw88: fix incorrect error codes in rtw_debugfs_copy_from_user
-Thread-Topic: [PATCH v2 1/2] wifi: rtw88: fix incorrect error codes in
- rtw_debugfs_copy_from_user
-Thread-Index: AQHZd5JwMo0jajhBZEqbv0oa4rkPjK88/+uggAABEWA=
-Date:   Wed, 26 Apr 2023 04:38:33 +0000
-Message-ID: <6fb7c4f35f634fb2a0d1afa8818dbf6e@realtek.com>
-References: <cover.1682438257.git.zhang_shurong@foxmail.com>
- <tencent_8BA35E4B9CDF40D4AE6D8D831D7ACC28A00A@qq.com>
- <9c3ddb61020749d4811053e25c949b05@realtek.com>
-In-Reply-To: <9c3ddb61020749d4811053e25c949b05@realtek.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 26 Apr 2023 00:42:50 -0400
+Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49B2702
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:42:48 -0700 (PDT)
+Received: by mail-oo1-xc42.google.com with SMTP id 006d021491bc7-5476a2780a0so2806981eaf.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 21:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682484168; x=1685076168;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
+        b=ahJMIWTh5hWsknwjxsHnHQo9L9VjzYcn1k/0nU23PU9uEZU8NalnBK3f9aVgzZCo5r
+         +p006FX/ZwqMvKSjA6VHEj3uIqzR993g9P1CrFK9Fivzgwmca8kxjeyWkyvWkLEi20By
+         rct6ZAMuikhMKj/3DXx5AKfXigvurLbq4PilgTtzLaX/aYV2jyLFb01f0/lE77UE8BOc
+         ML+1/nS9zkVDTQXcJNJoyM+er+SvJwqMhIgEhQBdEjVaUbzrCEWRuqiCz7c6sMP2L2E+
+         MlXEZJFcfRL02s5L4RO1N8I6SOXxlWfGIeqLuoo5V3O7DfHscz5K73m9EKR1oRzUmK1z
+         5l7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682484168; x=1685076168;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JEkw1KmmzfmMdZjy2G/k2kJ9Rp06l3CUoffIihDDUro=;
+        b=EvyDZ0pTxK5X21uh1MIpi3zYfBa7NYSq53Vdo69ZpGg6n43U2APKrfDJaTjNRly6e+
+         2PW5RCFT557/vNKkE4PKMKgukP+OeCLNJYHzAxvown6Sw3ItXMCTWQos+ctuRE9ZGfJE
+         wC6rZ2e8auEYJak2RIam8kUGktigcqeWCgwmdpym0/+r6b0ElqKRArI/YIP28sJwzDba
+         m7Bsfkp4Fg+bZWIi2xMNcMBh2XbOAIJMdBKa82smwlwrTeIC1G7cXQoGR3IW4Ppe6xy2
+         N1u1Ikdnz1MN9zN/LFyh0qDHUVjrXGYYpq3+1yupKNNp3PS6uPulFTU1/1HIn3OJt8G8
+         YESw==
+X-Gm-Message-State: AAQBX9cQiEzJFonxEllZQ1G7mVOD+Lyf1FwCztZR5q2K9N0+8kVaLK3b
+        CdNNSxIxl+VeIuFB0q0DUD13X9ARM9KzLFoXbyA=
+X-Google-Smtp-Source: AKy350bOLIyI+w9KrBjo8wnTDAYvlhBLAGs13pccFIMH9r8rI9git9fbIly8hLQTWzX3A/fyOGsGfQkHlyrIgnqmVnc=
+X-Received: by 2002:a05:6808:1885:b0:38b:6c2c:3168 with SMTP id
+ bi5-20020a056808188500b0038b6c2c3168mr10879839oib.35.1682484167861; Tue, 25
+ Apr 2023 21:42:47 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Sender: mrs.nicolemarois555@gmail.com
+Received: by 2002:a05:6850:190d:b0:472:4a8e:9aa6 with HTTP; Tue, 25 Apr 2023
+ 21:42:47 -0700 (PDT)
+From:   AVA SMITH <avasmith1181@gmail.com>
+Date:   Wed, 26 Apr 2023 04:42:47 +0000
+X-Google-Sender-Auth: oLN8TkQTeeK3qe33xEXBWukGFxo
+Message-ID: <CANiD9SJaRynGGmJb2Z8thdK8fg7qLtPr09Js5yoCTSpw2g-c1Q@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,72 +67,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+My name is Dr Ava Smith,a medical doctor from United States.I have
+Dual citizenship which is English and French.I will share more details
+about me as soon as i get a response from you.
 
-
-> -----Original Message-----
-> From: Ping-Ke Shih <pkshih@realtek.com>
-> Sent: Wednesday, April 26, 2023 12:29 PM
-> To: Zhang Shurong <zhang_shurong@foxmail.com>; tony0620emma@gmail.com
-> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: RE: [PATCH v2 1/2] wifi: rtw88: fix incorrect error codes in rtw_debugfs_copy_from_user
-> 
-> > -----Original Message-----
-> > From: Zhang Shurong <zhang_shurong@foxmail.com>
-> > Sent: Wednesday, April 26, 2023 12:24 AM
-> > To: tony0620emma@gmail.com
-> > Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
-> > linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Zhang Shurong
-> > <zhang_shurong@foxmail.com>
-> > Subject: [PATCH v2 1/2] wifi: rtw88: fix incorrect error codes in rtw_debugfs_copy_from_user
-> >
-> > If there is a failure during copy_from_user, rtw_debugfs_copy_from_user
-> > should return negative error code instead of a positive value count.
-> >
-> > Fix this bug by returning correct error code. Moreover, the check
-> > of buffer against null is removed since it will be handled by
-> > copy_from_user.
-> >
-> > Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
-> 
-> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
-
-I would take back this temporarily because of below. 
-
-> 
-> > ---
-> >  drivers/net/wireless/realtek/rtw88/debug.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/net/wireless/realtek/rtw88/debug.c b/drivers/net/wireless/realtek/rtw88/debug.c
-> > index fa3d73b333ba..3da477e1ebd3 100644
-> > --- a/drivers/net/wireless/realtek/rtw88/debug.c
-> > +++ b/drivers/net/wireless/realtek/rtw88/debug.c
-> > @@ -183,8 +183,8 @@ static int rtw_debugfs_copy_from_user(char tmp[], int size,
-> >
-> >         tmp_len = (count > size - 1 ? size - 1 : count);
-> >
-> > -       if (!buffer || copy_from_user(tmp, buffer, tmp_len))
-> > -               return count;
-> > +       if (copy_from_user(tmp, buffer, tmp_len))
-> > +               return -EFAULT;
-> >
-> >         tmp[tmp_len] = '\0';
-> >
-
-In the second patch, you check 'ret < 0' instead of 'ret'. That looks like
-you can possibly return positive value (e.g. count), but actually only
-return 0 or - EFAULT after this patch. So, I would like change first or second
-patch to make them intuitive. 
-
-return 0 or -EFAULT          --> check by if (ret)
-return 0 or -EFAULT or count --> check by if (ret < 0)
-
-
-+       ret = rtw_debugfs_copy_from_user(tmp, sizeof(tmp), buffer, count, 2);
-+       if (ret < 0)
-+               return ret;
-
-
-
-
+Thanks
+Ava
