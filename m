@@ -2,163 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16036EF25F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728866EF26A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240390AbjDZKnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S240540AbjDZKni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240503AbjDZKmy (ORCPT
+        with ESMTP id S240509AbjDZKn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:42:54 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AE7A1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:42:52 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763c341d627so267422239f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:42:52 -0700 (PDT)
+        Wed, 26 Apr 2023 06:43:27 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDC14C03
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:43:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ecb7fe8fb8so7307e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 03:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682505801; x=1685097801;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1l22hRUUq/IeT+lj7j9mcQyEj+B5z+NRQ6K59AKwb4M=;
+        b=dQ4cunzURjxkU0Leg7LAnW10B6iCwcl0niLLMCTpkjxaqk9CfBvAZ1HgYEeuNEf5Df
+         zZ184SgUKghynTw2tZX+ypOybCxdyCKNL7DMU9IjJu/PdtY2ux8Z/c/xxwn9U7NV4+x8
+         dbDsyMs04VHMB/zNnOJP4wUr69uff9Qqm/M2aWU00bT2qFUwxtFouULN9tFgPzMneHyv
+         lVGDvP5erVVVmurehevtjGrXnOk0JRJsNeS0ZcaQFAOhgyLAM7167hxcZoAYKmlGkLH6
+         KJ9Wkxb5NWiCh8R/jpMyPupA7BUJu+0Opr7z9XpWThO1NjmwZjfbmqdUc5nQgVBLootZ
+         T22g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682505772; x=1685097772;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I/MUlpUbp43WSfh7jyzDWWiZrAUNyRkJnvIcp0JJ3fU=;
-        b=WUUmv3I1V2fHUbpr/Ood4RBsci2lGz71QtcLoYsZG6emeebxytKyZv4sHWaSz737nc
-         YMhBNj1b8vQL9LbQhxkhXmZ1vAaca6Y/a16eZn8O+7nFclvA+5DI+JpOGrhK3aNkx/dH
-         FLGV6cKCGcGXAekWNjgPJg8d75EhmSUmvEpiplK9ugbXzGIBQ12sRVFdGv+gMQf50Sj8
-         Cou29qOMJqC565MEU3h3Apt0iRCEn4wrod4Pxkau8rPcmJ6sB3eGmc6Eq4wq7OzCFui7
-         zI6pSvgDXECEmYRKxMnA3m2mSxgO0s5t4GzpWLBQiz+tMU65qSq8VA3T56XoVAza3tX9
-         PuKw==
-X-Gm-Message-State: AAQBX9c+LW+NOsU28zA7Kb1vZdjb1T/NHsWEU3LZox2sBmf/VXIMxSHE
-        b4YrcsOOO3b1OqhAIP6dEZ4yfGJc2y3IL27fOLHRF4BHcXLW
-X-Google-Smtp-Source: AKy350bi/inY7tXO3A/YXlv/rCgW0VdwnLoP8pDC7PfbX6BLM7vZxZcbvhhwBlvc/kDC5gfT3AHXBy63Z7+IneDTrE74wIPUOHnp
+        d=1e100.net; s=20221208; t=1682505801; x=1685097801;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1l22hRUUq/IeT+lj7j9mcQyEj+B5z+NRQ6K59AKwb4M=;
+        b=SUJx427MNo2mrpSRVvGw7c6SseJE2hozEYo9Bqzk8I8VkjIUwzi/zKzYv5XXYZ/b8X
+         kcfDfkk85H053IW+LD0ITXqhIfSzZSPB1bUNk/64R7VHvPrShdIRgR7njd+WOfIkLbdd
+         GeIzAIkAVAG4ES9T2r/Y0vV5N7ZKRXRlrg/HZo8/i6G5FHmEIFJTI6XmTXDaiNFOZBu2
+         KD0Joguvqo8fFbn+azly4MQ3TBvcVkfO/Er0LI/Igv3/BaXsDt2rl6x4Qaz7s5KS5xIB
+         45+kcj0sRi6vIZoNgic7WLheCME0tylirgCvM4IJJVwnSBDir8bP+eAJpXcB8Ex9w6y4
+         eomg==
+X-Gm-Message-State: AC+VfDz0Z1DUBQL8rQwhpLgsUzUz8yjiUaGGdES26AIA2oZsp6Pzj81W
+        VX9F6ISk7OOhyoDtO6NOjYIWoHRZtkncbeCC+Y/d+w==
+X-Google-Smtp-Source: ACHHUZ4B5f1M+sCvV1r/JKCKg4wqK2GIXRKY8DLF7nDMlL59wkEK2UGwq1KEigLY8M1WXsEVAUtJ+zjYP4xY+/V/nWc=
+X-Received: by 2002:a05:6512:b08:b0:4e8:3fc8:4f80 with SMTP id
+ w8-20020a0565120b0800b004e83fc84f80mr177986lfu.4.1682505801347; Wed, 26 Apr
+ 2023 03:43:21 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:de05:0:b0:760:d92a:2f4a with SMTP id
- e5-20020a5ede05000000b00760d92a2f4amr8815766iok.2.1682505772236; Wed, 26 Apr
- 2023 03:42:52 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 03:42:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e3087b05fa3ae6c6@google.com>
-Subject: [syzbot] [net?] kernel BUG in __phys_addr
-From:   syzbot <syzbot+54744699b2023abde712@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <00000000000079eebe05fa2ea9ad@google.com> <CANiq72mor1BkxpAT=v0EsQJN-7fvMjo9K5ooVk1x7ZbBDEyn8g@mail.gmail.com>
+ <CACT4Y+aMdct_tjSYsBvvtGoDji6feOiANogRbp3N41qkzU+5CQ@mail.gmail.com>
+ <CANiq72nm2dU2o_x_GQ5SdsXaK6yZiDXG2hXEYMykViEAZvuMqQ@mail.gmail.com>
+ <CACT4Y+YyYnwg4a1zjTnBU=t0x5Brt1rGuzz-5pXf2Fz3cKf4FQ@mail.gmail.com> <CANiq72=vMydenfkxQx4X7kYvHD0cHzNK19xxxqow3WcLStsdRA@mail.gmail.com>
+In-Reply-To: <CANiq72=vMydenfkxQx4X7kYvHD0cHzNK19xxxqow3WcLStsdRA@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 26 Apr 2023 12:43:08 +0200
+Message-ID: <CACT4Y+ZrwXB1W31Rr7rUUOoW15YbKfnC0khY9KnNk8FTf5uQnA@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
+ pointer dereference in __dabt_svc
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     syzkaller@googlegroups.com, alex.gaynor@gmail.com,
+        andriy.shevchenko@linux.intel.com, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, bpf@vger.kernel.org, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
+        ojeda@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        rust-for-linux@vger.kernel.org, senozhatsky@chromium.org,
+        syzkaller-bugs@googlegroups.com, wedsonaf@gmail.com,
+        Joe Perches <joe@perches.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, 26 Apr 2023 at 12:30, Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+> > In which of the dozens of kernel testing systems? ;)
+> > And also in heads of thousands of kernel developers and users?
+> > All of them use get_maintainer.pl.
+>
+> I am aware, but `get_maintainer.pl` is fine as it is -- we still want
+> to know about things that touch things that mention Rust in general,
+> so that we can possibly be helpful to others, especially early on.
+>
+> However, if a bot is testing the kernel with Rust actually disabled at
+> runtime, what I am saying is that the chance that it has something to
+> do with Rust is quite low, especially if matched via `K:` rather than
+> `F:`. Thus my request.
+>
+> Now, it could be nice to have some logic like that in
+> `get_maintainer.pl` encoded for all bots to filter things out based on
+> the kernel config and the type of match; but otherwise, yes, the bots
+> would need to add the logic.
+>
+> Cc'ing Joe in case this is already possible in `get_maintainer.pl` or
+> whether there could be a better approach.
 
-syzbot found the following issue on:
+I understand your intentions and they make sense.
+But adding this logic to syzbot won't help thousands of users of
+get_maintainer.pl and dozens of other testing systems. There also will
+be a bit of get_maintainer.pl inside of syzbot code, so now all kernel
+developers will need to be aware of it and also submit changes to
+syzbot when they want to change maintainers logic.
 
-HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=135fa39fc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
-dashboard link: https://syzkaller.appspot.com/bug?extid=54744699b2023abde712
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I think this also equally applies to all other users of K:.
+And a number of them had similar complaints re how K; works.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+54744699b2023abde712@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at arch/x86/mm/physaddr.c:28!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 12783 Comm: kworker/u4:15 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Workqueue: netns cleanup_net
-RIP: 0010:__phys_addr+0xd7/0x140 arch/x86/mm/physaddr.c:28
-Code: e3 44 89 e9 31 ff 48 d3 eb 48 89 de e8 e2 34 4a 00 48 85 db 75 0f e8 98 38 4a 00 4c 89 e0 5b 5d 41 5c 41 5d c3 e8 89 38 4a 00 <0f> 0b e8 82 38 4a 00 48 c7 c0 10 80 59 8c 48 ba 00 00 00 00 00 fc
-RSP: 0018:ffffc9000bdbf410 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000200000001 RCX: 0000000000000000
-RDX: ffff88807e553a80 RSI: ffffffff8139acc7 RDI: 0000000000000006
-RBP: 0000000280000001 R08: 0000000000000006 R09: 0000000280000001
-R10: 0000778200000001 R11: 0000000000000000 R12: 0000778200000001
-R13: ffffc9000bdbf478 R14: 0000000200000001 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd3aa188fb8 CR3: 0000000022a15000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- virt_to_folio include/linux/mm.h:1215 [inline]
- virt_to_slab mm/kasan/../slab.h:174 [inline]
- qlink_to_cache mm/kasan/quarantine.c:129 [inline]
- qlist_free_all+0x86/0x170 mm/kasan/quarantine.c:182
- kasan_quarantine_reduce+0x195/0x220 mm/kasan/quarantine.c:292
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:711 [inline]
- slab_alloc_node mm/slub.c:3451 [inline]
- kmem_cache_alloc_node+0x185/0x3e0 mm/slub.c:3496
- __alloc_skb+0x288/0x330 net/core/skbuff.c:644
- alloc_skb include/linux/skbuff.h:1288 [inline]
- nlmsg_new include/net/netlink.h:1003 [inline]
- inet6_netconf_notify_devconf+0xa4/0x1f0 net/ipv6/addrconf.c:581
- __addrconf_sysctl_unregister net/ipv6/addrconf.c:7122 [inline]
- addrconf_sysctl_unregister+0x131/0x1c0 net/ipv6/addrconf.c:7146
- addrconf_ifdown.isra.0+0x1350/0x1940 net/ipv6/addrconf.c:3908
- addrconf_notify+0x106/0x19f0 net/ipv6/addrconf.c:3678
- notifier_call_chain+0xb6/0x3c0 kernel/notifier.c:93
- call_netdevice_notifiers_info+0xb9/0x130 net/core/dev.c:1935
- call_netdevice_notifiers_extack net/core/dev.c:1973 [inline]
- call_netdevice_notifiers net/core/dev.c:1987 [inline]
- unregister_netdevice_many_notify+0x75f/0x18c0 net/core/dev.c:10871
- unregister_netdevice_many net/core/dev.c:10927 [inline]
- unregister_netdevice_queue+0x2e5/0x3c0 net/core/dev.c:10807
- unregister_netdevice include/linux/netdevice.h:3109 [inline]
- nsim_destroy+0x43/0x190 drivers/net/netdevsim/netdev.c:375
- __nsim_dev_port_del+0x189/0x240 drivers/net/netdevsim/dev.c:1428
- nsim_dev_port_del_all drivers/net/netdevsim/dev.c:1440 [inline]
- nsim_dev_reload_destroy+0x171/0x510 drivers/net/netdevsim/dev.c:1661
- nsim_dev_reload_down+0x6f/0xe0 drivers/net/netdevsim/dev.c:968
- devlink_reload+0x105/0x460 net/devlink/dev.c:362
- devlink_pernet_pre_exit+0x1b6/0x280 net/devlink/core.c:291
- ops_pre_exit_list net/core/net_namespace.c:160 [inline]
- cleanup_net+0x455/0xb10 net/core/net_namespace.c:602
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x33e/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__phys_addr+0xd7/0x140 arch/x86/mm/physaddr.c:28
-Code: e3 44 89 e9 31 ff 48 d3 eb 48 89 de e8 e2 34 4a 00 48 85 db 75 0f e8 98 38 4a 00 4c 89 e0 5b 5d 41 5c 41 5d c3 e8 89 38 4a 00 <0f> 0b e8 82 38 4a 00 48 c7 c0 10 80 59 8c 48 ba 00 00 00 00 00 fc
-RSP: 0018:ffffc9000bdbf410 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000200000001 RCX: 0000000000000000
-RDX: ffff88807e553a80 RSI: ffffffff8139acc7 RDI: 0000000000000006
-RBP: 0000000280000001 R08: 0000000000000006 R09: 0000000280000001
-R10: 0000778200000001 R11: 0000000000000000 R12: 0000778200000001
-R13: ffffc9000bdbf478 R14: 0000000200000001 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c000a97fc0 CR3: 0000000022a15000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I am thinking if K: should actually apply just to patches and be
+ignored for source files?
+If there are files that belong to "rust" (or "bpf" or any other user
+of K:), then I think these should be just listed explicitly in the
+subsystem (that should be a limited set of files that can be
+enumerated with wildcards).
+It's also reasonable to apply K: to patches.
+But if a random source file happened to mention "rust" somewhere once,
+I am not sure you want to be CCed on all issues in that file.
+Does it sound reasonable?
