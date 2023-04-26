@@ -2,234 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D336EF560
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B49E6EF56C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 15:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241147AbjDZNS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 09:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S241161AbjDZNV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 09:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241152AbjDZNS0 (ORCPT
+        with ESMTP id S241000AbjDZNVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 09:18:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C59170A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 06:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=x7jzFUV2HyNSO4J3Oa2A0SQg9y7+OYpeSpEKp3ww0c4=; b=m6z0rkqkyowXTr86u0aKKfyVeO
-        K1IT6EDiPxYLcdV1NgijKVUq5FL8xW5Fw7E1eLijU2h/EHKB3nsUyuhB3X0iNNXCeedzZd9LX4ub3
-        seCtY3NLtcsYoTW1nKtkVBUxZCHcNqlcFFCtYwoIrL2X5P82/AULTqE64qQXaLxXACnwZrPtvX2u8
-        mka9Ah0Pf+pxlUAxuUhZUNN0RniA77K7JUsp3JTiyoQlHxQ/ehNsie5cYq8ArqTwfFOjEvSz6o3Gk
-        KbROywNqxeJjPb9Tdw2jKgUSv4SgjugNVBKMSFpzWiZqXmqXrYGxBHJrfnd28euxU53ostPOb6cG0
-        ZU6dAdww==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1prf2E-002UvU-MF; Wed, 26 Apr 2023 13:18:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3233230005E;
-        Wed, 26 Apr 2023 15:18:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 15FCB30B02550; Wed, 26 Apr 2023 15:18:13 +0200 (CEST)
-Date:   Wed, 26 Apr 2023 15:18:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
-        ak@linux.intel.com
-Subject: Re: [PATCH V4 1/2] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
- enable
-Message-ID: <20230426131812.GA1377058@hirez.programming.kicks-ass.net>
-References: <20230421184529.3320912-1-kan.liang@linux.intel.com>
+        Wed, 26 Apr 2023 09:21:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D1BC3;
+        Wed, 26 Apr 2023 06:21:53 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33QDLkW4096750;
+        Wed, 26 Apr 2023 08:21:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682515306;
+        bh=QdepxYuSwTdOmEf8k5cCZjOM29OP5/kofyPKcNTFUVo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=k7thEKT9zPmrKcNVux/rKwIuW3iqOkvhengLrEOwOaV5GtVzjPD7gSEj+rMVe6KRZ
+         QGF4D57JMY5EdrCSumYXs2M2kBqd0+iviDOj+jAtx2fiWvFRE32q6Y4l8dfHUHK2es
+         yMYzjbH8BSG52dU74Z7vtxg9jr89NDVennyHlkPU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33QDLku7022065
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Apr 2023 08:21:46 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
+ Apr 2023 08:21:45 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 26 Apr 2023 08:21:45 -0500
+Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33QDLjfG001825;
+        Wed, 26 Apr 2023 08:21:45 -0500
+Message-ID: <163cfe60-4b14-fe5c-29d9-323e7ea495d5@ti.com>
+Date:   Wed, 26 Apr 2023 08:21:45 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421184529.3320912-1-kan.liang@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH 1/2] arm64: dts: ti: k3-j721s2-main: Add main CPSW2G
+ devicetree node
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
+References: <20230426105718.118806-1-s-vadapalli@ti.com>
+ <20230426105718.118806-2-s-vadapalli@ti.com>
+ <20230426125927.itfd76cpvy32zur7@scrimmage>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20230426125927.itfd76cpvy32zur7@scrimmage>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 11:45:28AM -0700, kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
+On 4/26/23 7:59 AM, Nishanth Menon wrote:
+> On 16:27-20230426, Siddharth Vadapalli wrote:
+>> From: Kishon Vijay Abraham I <kishon@ti.com>
+>>
+>> TI's J721S2 SoC has a MAIN CPSW2G instance of the CPSW Ethernet Switch.
+>> Add devicetree node for it.
+>>
+>> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 69 ++++++++++++++++++++++
+>>   1 file changed, 69 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> index 6629b2989180..14dfef7b0758 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+>> @@ -51,6 +51,12 @@ usb_serdes_mux: mux-controller@0 {
+>>   			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
+>>   		};
+>>   
+>> +		phy_gmii_sel_cpsw: phy@34 {
+>> +			compatible = "ti,am654-phy-gmii-sel";
+>> +			reg = <0x34 0x4>;
+>> +			#phy-cells = <1>;
+>> +		};
 > 
-> Several similar kernel warnings can be triggered,
 > 
->   [56605.607840] CPU0 PEBS record size 0, expected 32, config 0
->   cpuc->record_size=208
+> See this thread: https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
 > 
-> when the below commands are running in parallel for a while on SPR.
-> 
->   while true; do perf record --no-buildid -a --intr-regs=AX -e
->   cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
-> 
->   while true; do perf record -o /tmp/out -W -d -e
->   '{ld_blocks.store_forward:period=1000000,
->   MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
->   -c 1037 ./triad; done
->   *The triad program is just the generation of loads/stores.
-> 
-> The warnings are triggered when an unexpected PEBS record (with a
-> different config and size) is found.
-> 
-> A system-wide PEBS event with the large PEBS config may be enabled
-> during a context switch. Some PEBS records for the system-wide PEBS may
-> be generated while the old task is sched out but the new one hasn't been
-> sched in yet. When the new task is sched in, the cpuc->pebs_record_size
-> may be updated for the per-task PEBS events. So the existing system-wide
-> PEBS records have a different size from the later PEBS records.
-> 
-> The PEBS buffer should be flushed right before the hardware is
-> reprogrammed. The new size and threshold should be updated after the old
-> buffer has been flushed.
-> 
-> Reported-by: Stephane Eranian <eranian@google.com>
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
 
-So I find it much easier to read the whole thing when collapsed.
-Something like the below; that ok with you?
+"ti,am654-phy-gmii-sel" already has "reg", so this DT is good as is.
+Adding the driver fallback to use that when the parent is not a "syscon"
+node should be as easy as this:
 
----
- arch/x86/events/intel/ds.c        | 56 ++++++++++++++++++++++-----------------
- arch/x86/include/asm/perf_event.h |  3 +++
- 2 files changed, 35 insertions(+), 24 deletions(-)
+--- a/drivers/phy/ti/phy-gmii-sel.c
++++ b/drivers/phy/ti/phy-gmii-sel.c
+@@ -435,9 +435,12 @@ static int phy_gmii_sel_probe(struct platform_device *pdev)
+  
+         priv->regmap = syscon_node_to_regmap(node->parent);
+         if (IS_ERR(priv->regmap)) {
+-               ret = PTR_ERR(priv->regmap);
+-               dev_err(dev, "Failed to get syscon %d\n", ret);
+-               return ret;
++               priv->regmap = device_node_to_regmap(node);
++               if (IS_ERR(priv->regmap)) {
++                       ret = PTR_ERR(priv->regmap);
++                       dev_err(dev, "Failed to get syscon %d\n", ret);
++                       return ret;
++               }
+         }
 
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index a2e566e53076..df88576d6b2a 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1229,12 +1229,14 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
- 		  struct perf_event *event, bool add)
- {
- 	struct pmu *pmu = event->pmu;
-+
- 	/*
- 	 * Make sure we get updated with the first PEBS
- 	 * event. It will trigger also during removal, but
- 	 * that does not hurt:
- 	 */
--	bool update = cpuc->n_pebs == 1;
-+	if (cpuc->n_pebs == 1)
-+		cpuc->pebs_data_cfg = PEBS_UPDATE_DS_SW;
- 
- 	if (needed_cb != pebs_needs_sched_cb(cpuc)) {
- 		if (!needed_cb)
-@@ -1242,7 +1244,7 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
- 		else
- 			perf_sched_cb_dec(pmu);
- 
--		update = true;
-+		cpuc->pebs_data_cfg |= PEBS_UPDATE_DS_SW;
- 	}
- 
- 	/*
-@@ -1252,24 +1254,13 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
- 	if (x86_pmu.intel_cap.pebs_baseline && add) {
- 		u64 pebs_data_cfg;
- 
--		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
--		if (cpuc->n_pebs == 1) {
--			cpuc->pebs_data_cfg = 0;
--			cpuc->pebs_record_size = sizeof(struct pebs_basic);
--		}
--
- 		pebs_data_cfg = pebs_update_adaptive_cfg(event);
--
--		/* Update pebs_record_size if new event requires more data. */
--		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
--			cpuc->pebs_data_cfg |= pebs_data_cfg;
--			adaptive_pebs_record_size_update();
--			update = true;
--		}
-+		/*
-+		 * Be sure to update the thresholds when we change the record.
-+		 */
-+		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
-+			cpuc->pebs_data_cfg |= pebs_data_cfg | PEBS_UPDATE_DS_SW;
- 	}
--
--	if (update)
--		pebs_update_threshold(cpuc);
- }
- 
- void intel_pmu_pebs_add(struct perf_event *event)
-@@ -1326,9 +1317,17 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
- 	wrmsrl(base + idx, value);
- }
- 
-+static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
-+{
-+	if (cpuc->n_pebs == cpuc->n_large_pebs &&
-+	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
-+		intel_pmu_drain_pebs_buffer();
-+}
-+
- void intel_pmu_pebs_enable(struct perf_event *event)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	u64 pebs_data_cfg = cpuc->pebs_data_cfg & ~PEBS_UPDATE_DS_SW;
- 	struct hw_perf_event *hwc = &event->hw;
- 	struct debug_store *ds = cpuc->ds;
- 	unsigned int idx = hwc->idx;
-@@ -1344,11 +1343,22 @@ void intel_pmu_pebs_enable(struct perf_event *event)
- 
- 	if (x86_pmu.intel_cap.pebs_baseline) {
- 		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
--		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
--			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
--			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
-+		if (pebs_data_cfg != cpuc->active_pebs_data_cfg) {
-+			/*
-+			 * drain_pebs() assumes uniform record size;
-+			 * hence we need to drain when changing said
-+			 * size.
-+			 */
-+			intel_pmu_drain_large_pebs(cpuc);
-+			adaptive_pebs_record_size_update();
-+			wrmsrl(MSR_PEBS_DATA_CFG, pebs_data_cfg);
-+			cpuc->active_pebs_data_cfg = pebs_data_cfg;
- 		}
- 	}
-+	if (cpuc->pebs_data_cfg & PEBS_UPDATE_DS_SW) {
-+		cpuc->pebs_data_cfg = pebs_data_cfg;
-+		pebs_update_threshold(cpuc);
-+	}
- 
- 	if (idx >= INTEL_PMC_IDX_FIXED) {
- 		if (x86_pmu.intel_cap.pebs_format < 5)
-@@ -1391,9 +1401,7 @@ void intel_pmu_pebs_disable(struct perf_event *event)
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 	struct hw_perf_event *hwc = &event->hw;
- 
--	if (cpuc->n_pebs == cpuc->n_large_pebs &&
--	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
--		intel_pmu_drain_pebs_buffer();
-+	intel_pmu_drain_large_pebs(cpuc);
- 
- 	cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
- 
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index 8fc15ed5e60b..abf09882f58b 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -121,6 +121,9 @@
- #define PEBS_DATACFG_LBRS	BIT_ULL(3)
- #define PEBS_DATACFG_LBR_SHIFT	24
- 
-+/* Steal the highest bit of pebs_data_cfg for SW usage */
-+#define PEBS_UPDATE_DS_SW	BIT_ULL(63)
-+
- /*
-  * Intel "Architectural Performance Monitoring" CPUID
-  * detection/enumeration details:
+
+I'll send this patch when the window opens.
+
+Andrew
