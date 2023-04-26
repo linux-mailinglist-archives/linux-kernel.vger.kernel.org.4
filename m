@@ -2,127 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8266EFD15
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694056EFD19
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 00:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239997AbjDZWML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 18:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S239843AbjDZWOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 18:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbjDZWMJ (ORCPT
+        with ESMTP id S229889AbjDZWOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 18:12:09 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2AF2715;
-        Wed, 26 Apr 2023 15:12:08 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24736790966so6458042a91.2;
-        Wed, 26 Apr 2023 15:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682547128; x=1685139128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RIUbRme5WeXEWyWjYTXHJNNDnTyj3IXPcZSGHGz56i8=;
-        b=CLQ+30qUkBPVcFHYRBgpYd2UbY8V0opPaoXSXXx3br1eyHuexHAg5pFU1NxUP0JLOt
-         nwlpT2YC/7JRoFm7iC6banfBljSZjLObYFXQyauAhgvlYkbVwi0v+yTQmB3TIlldtrel
-         zFEAngACpD6niCi3OcgYI+HcjpBkY5A2NJWnYhd80ie86pdbxcwqEV7iGMAnSBs7yJNa
-         0z0QggjDoq6fod9ZKdG2I8CIWQv855ksEJHeXatgwZx9asvUAu2FrgCzC8zneShMJUei
-         zVnQO75ntYnRZiRPYScg5Bt2J0P0MZpqmy/O6kL28TFJpaGfZsQyCByMgwvx9CSnRlZx
-         1s8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682547128; x=1685139128;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RIUbRme5WeXEWyWjYTXHJNNDnTyj3IXPcZSGHGz56i8=;
-        b=I4/bN/8OctTdjAAirjDu1kOsIKIX+4JMPvef94j4jAfTt0vSgQBO8jBsyJJ7I1jcns
-         qFh/vMz3YeLX/hRqmzKKUBrZWFfZyj4q6kgtpOJesRWfuyGCJoqoSAGQHWmwhOHROtaD
-         aKR2psM3wFVcmUi/8KCjLcqfdcZaVc9at/6rMIGmrRLuO0Jtt1mlln04enDkGqRVDvYh
-         QGBSNJv21qxzg8VuZSPPmuFRf05QoI6Xq2k6V2zz3eEgaTeR8Cvmk5PWLUM13BX6RtCa
-         OaLYTT+k9q1dDStfrTaRmxARthB4nVuGLAIbGikrk2Y7o0YRR+vIwPVulfK0Tjl8ABut
-         aV8g==
-X-Gm-Message-State: AAQBX9fiAJVh5W3JxlJwUA21JgqdiJBC23LUvUA6kjqakZuK3n7kb2qa
-        7JmzxKffDhGVdcgbdyqooKQ=
-X-Google-Smtp-Source: AKy350bmkN14WoVa088epc95MoWzxpiaLXkJXl0vRxKbBZbV7AN7huwcSea/WPiXKrLJixUyJdx/6A==
-X-Received: by 2002:a17:90a:a381:b0:247:35f8:81d2 with SMTP id x1-20020a17090aa38100b0024735f881d2mr22758564pjp.29.1682547127529;
-        Wed, 26 Apr 2023 15:12:07 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:1976])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170902ab8300b0019a97a4324dsm10415583plr.5.2023.04.26.15.12.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 15:12:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 26 Apr 2023 12:12:05 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org, riel@surriel.com
-Subject: Re: [PATCH RFC rcu] Stop rcu_tasks_invoke_cbs() from using
- never-online CPUs
-Message-ID: <ZEmhtdxpelt5jxAu@slm.duckdns.org>
-References: <83d037d1-ef12-4b31-a7b9-7b1ed6c3ae42@paulmck-laptop>
+        Wed, 26 Apr 2023 18:14:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98009DD;
+        Wed, 26 Apr 2023 15:14:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3181A6323A;
+        Wed, 26 Apr 2023 22:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB8AC433D2;
+        Wed, 26 Apr 2023 22:14:17 +0000 (UTC)
+Date:   Wed, 26 Apr 2023 18:14:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 4.19 00/29] 4.19.282-rc1 review
+Message-ID: <20230426181415.17c893f5@gandalf.local.home>
+In-Reply-To: <20230426170945.0ec0f1ef@gandalf.local.home>
+References: <20230424131121.155649464@linuxfoundation.org>
+        <CA+G9fYstB_fROK9LHYuQ8dc2ArieGGAW_x69eEX-eAi5xMeE3Q@mail.gmail.com>
+        <20230426170945.0ec0f1ef@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83d037d1-ef12-4b31-a7b9-7b1ed6c3ae42@paulmck-laptop>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:26:38AM -0700, Paul E. McKenney wrote:
-> The rcu_tasks_invoke_cbs() relies on queue_work_on() to silently fall
-> back to WORK_CPU_UNBOUND when the specified CPU is offline.  However,
-> the queue_work_on() function's silent fallback mechanism relies on that
-> CPU having been online at some time in the past.  When queue_work_on()
-> is passed a CPU that has never been online, workqueue lockups ensue,
-> which can be bad for your kernel's general health and well-being.
-> 
-> This commit therefore checks whether a given CPU is currently online,
-> and, if not substitutes WORK_CPU_UNBOUND in the subsequent call to
-> queue_work_on().  Why not simply omit the queue_work_on() call entirely?
-> Because this function is flooding callback-invocation notifications
-> to all CPUs, and must deal with possibilities that include a sparse
-> cpu_possible_mask.
-> 
-> Fixes: d363f833c6d88 rcu-tasks: Use workqueues for multiple rcu_tasks_invoke_cbs() invocations
-> Reported-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-...
-> +		// If a CPU has never been online, queue_work_on()
-> +		// objects to queueing work on that CPU.  Approximate a
-> +		// check for this by checking if the CPU is currently online.
-> +
-> +		cpus_read_lock();
-> +		cpuwq1 = cpu_online(cpunext) ? cpunext : WORK_CPU_UNBOUND;
-> +		cpuwq2 = cpu_online(cpunext + 1) ? cpunext + 1 : WORK_CPU_UNBOUND;
-> +		cpus_read_unlock();
-> +
-> +		// Yes, either CPU could go offline here.  But that is
-> +		// OK because queue_work_on() will (in effect) silently
-> +		// fall back to WORK_CPU_UNBOUND for any CPU that has ever
-> +		// been online.
+On Wed, 26 Apr 2023 17:09:45 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Looks like cpus_read_lock() isn't protecting anything really.
+> Now the question is, why is this triggering on 4.19 but not in latest
+> mainline?
 
-> +		queue_work_on(cpuwq1, system_wq, &rtpcp_next->rtp_work);
->  		cpunext++;
->  		if (cpunext < smp_load_acquire(&rtp->percpu_dequeue_lim)) {
->  			rtpcp_next = per_cpu_ptr(rtp->rtpcpu, cpunext);
-> -			queue_work_on(cpunext, system_wq, &rtpcp_next->rtp_work);
-> +			queue_work_on(cpuwq2, system_wq, &rtpcp_next->rtp_work);
+I found it, I backported this patch and the warning goes away (at least for
+me). Can you add this and see if it makes the warning go away for you too?
 
-As discussed in the thread, I kinda wonder whether just using an unbound
-workqueue would be sufficient but as a fix this looks good to me.
+-- Steve
 
-Acked-by: Tejun Heo <tj@kernel.org>
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri, 7 Aug 2020 20:50:19 +0200
+Subject: [PATCH] sched,idle,rcu: Push rcu_idle deeper into the idle path
 
-Thanks.
+commit 1098582a0f6c4e8fd28da0a6305f9233d02c9c1d upstream.
 
+Lots of things take locks, due to a wee bug, rcu_lockdep didn't notice
+that the locking tracepoints were using RCU.
+
+Push rcu_idle_{enter,exit}() as deep as possible into the idle paths,
+this also resolves a lot of _rcuidle()/RCU_NONIDLE() usage.
+
+Specifically, sched_clock_idle_wakeup_event() will use ktime which
+will use seqlocks which will tickle lockdep, and
+stop_critical_timings() uses lock.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Marco Elver <elver@google.com>
+Link: https://lkml.kernel.org/r/20200821085348.310943801@infradead.org
+---
+ drivers/cpuidle/cpuidle.c | 12 ++++++++----
+ kernel/sched/idle.c       | 22 ++++++++--------------
+ 2 files changed, 16 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index 2d182dc1b49e..01bde6dec13a 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -140,13 +140,14 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+ 	 * executing it contains RCU usage regarded as invalid in the idle
+ 	 * context, so tell RCU about that.
+ 	 */
+-	RCU_NONIDLE(tick_freeze());
++	tick_freeze();
+ 	/*
+ 	 * The state used here cannot be a "coupled" one, because the "coupled"
+ 	 * cpuidle mechanism enables interrupts and doing that with timekeeping
+ 	 * suspended is generally unsafe.
+ 	 */
+ 	stop_critical_timings();
++	rcu_idle_enter();
+ 	drv->states[index].enter_s2idle(dev, drv, index);
+ 	if (WARN_ON_ONCE(!irqs_disabled()))
+ 		local_irq_disable();
+@@ -155,7 +156,8 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+ 	 * first CPU executing it calls functions containing RCU read-side
+ 	 * critical sections, so tell RCU about that.
+ 	 */
+-	RCU_NONIDLE(tick_unfreeze());
++	rcu_idle_exit();
++	tick_unfreeze();
+ 	start_critical_timings();
+ 
+ 	time_end = ns_to_ktime(local_clock());
+@@ -224,16 +226,18 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+ 	/* Take note of the planned idle state. */
+ 	sched_idle_set_state(target_state);
+ 
+-	trace_cpu_idle_rcuidle(index, dev->cpu);
++	trace_cpu_idle(index, dev->cpu);
+ 	time_start = ns_to_ktime(local_clock());
+ 
+ 	stop_critical_timings();
++	rcu_idle_enter();
+ 	entered_state = target_state->enter(dev, drv, index);
++	rcu_idle_exit();
+ 	start_critical_timings();
+ 
+ 	sched_clock_idle_wakeup_event();
+ 	time_end = ns_to_ktime(local_clock());
+-	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, dev->cpu);
++	trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
+ 
+ 	/* The cpu is no longer idle or about to enter idle. */
+ 	sched_idle_set_state(NULL);
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index 44a17366c8ec..4e3d149d64ad 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -53,17 +53,18 @@ __setup("hlt", cpu_idle_nopoll_setup);
+ 
+ static noinline int __cpuidle cpu_idle_poll(void)
+ {
++	trace_cpu_idle(0, smp_processor_id());
++	stop_critical_timings();
+ 	rcu_idle_enter();
+-	trace_cpu_idle_rcuidle(0, smp_processor_id());
+ 	local_irq_enable();
+-	stop_critical_timings();
+ 
+ 	while (!tif_need_resched() &&
+-		(cpu_idle_force_poll || tick_check_broadcast_expired()))
++	       (cpu_idle_force_poll || tick_check_broadcast_expired()))
+ 		cpu_relax();
+-	start_critical_timings();
+-	trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, smp_processor_id());
++
+ 	rcu_idle_exit();
++	start_critical_timings();
++	trace_cpu_idle(PWR_EVENT_EXIT, smp_processor_id());
+ 
+ 	return 1;
+ }
+@@ -90,7 +91,9 @@ void __cpuidle default_idle_call(void)
+ 		local_irq_enable();
+ 	} else {
+ 		stop_critical_timings();
++		rcu_idle_enter();
+ 		arch_cpu_idle();
++		rcu_idle_exit();
+ 		start_critical_timings();
+ 	}
+ }
+@@ -148,7 +151,6 @@ static void cpuidle_idle_call(void)
+ 
+ 	if (cpuidle_not_available(drv, dev)) {
+ 		tick_nohz_idle_stop_tick();
+-		rcu_idle_enter();
+ 
+ 		default_idle_call();
+ 		goto exit_idle;
+@@ -166,19 +168,15 @@ static void cpuidle_idle_call(void)
+ 
+ 	if (idle_should_enter_s2idle() || dev->use_deepest_state) {
+ 		if (idle_should_enter_s2idle()) {
+-			rcu_idle_enter();
+ 
+ 			entered_state = cpuidle_enter_s2idle(drv, dev);
+ 			if (entered_state > 0) {
+ 				local_irq_enable();
+ 				goto exit_idle;
+ 			}
+-
+-			rcu_idle_exit();
+ 		}
+ 
+ 		tick_nohz_idle_stop_tick();
+-		rcu_idle_enter();
+ 
+ 		next_state = cpuidle_find_deepest_state(drv, dev);
+ 		call_cpuidle(drv, dev, next_state);
+@@ -195,8 +193,6 @@ static void cpuidle_idle_call(void)
+ 		else
+ 			tick_nohz_idle_retain_tick();
+ 
+-		rcu_idle_enter();
+-
+ 		entered_state = call_cpuidle(drv, dev, next_state);
+ 		/*
+ 		 * Give the governor an opportunity to reflect on the outcome
+@@ -212,8 +208,6 @@ static void cpuidle_idle_call(void)
+ 	 */
+ 	if (WARN_ON_ONCE(irqs_disabled()))
+ 		local_irq_enable();
+-
+-	rcu_idle_exit();
+ }
+ 
+ /*
 -- 
-tejun
+2.39.2
+
