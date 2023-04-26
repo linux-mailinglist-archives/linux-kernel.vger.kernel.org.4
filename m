@@ -2,108 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 523D36EF38F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3F56EF38A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240025AbjDZLnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S240563AbjDZLnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240571AbjDZLng (ORCPT
+        with ESMTP id S229889AbjDZLnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:43:36 -0400
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CE74C04;
-        Wed, 26 Apr 2023 04:43:34 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Q5xYv0M32z9v7Yn;
-        Wed, 26 Apr 2023 19:32:51 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn7lQ6Dklko7NWAg--.7207S2;
-        Wed, 26 Apr 2023 12:43:07 +0100 (CET)
-Message-ID: <40fbededd8dbe3b70fffb179574f344e9b0aed17.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH 3/6] verification: Introduce verify_umd_signature()
- and verify_umd_message_sig()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, mykolal@fb.com,
-        shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, bpf@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 26 Apr 2023 13:42:45 +0200
-In-Reply-To: <CS69GBAMXJ1X.1T8NO0CZUBXLG@suppilovahvero>
-References: <20230425173557.724688-1-roberto.sassu@huaweicloud.com>
-         <20230425173557.724688-4-roberto.sassu@huaweicloud.com>
-         <CS69GBAMXJ1X.1T8NO0CZUBXLG@suppilovahvero>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 26 Apr 2023 07:43:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199404C04;
+        Wed, 26 Apr 2023 04:43:30 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E77D660324E;
+        Wed, 26 Apr 2023 12:43:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682509407;
+        bh=LHVBsT9EmHiYRsufhxP3C7/xLomL6Pg/ovhoh+Syk1o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Fs4E+VJTXcXu0HIh3Az2PWq4QVtLzeQiYlCCf5uMvRydDn/IOEb9gXaq+SJMNWucM
+         dQ/+vmjEfzlCUXG9ZhQLKhoOe/gnZ+b4RbHRuMzSQqdMX7uI4XCJnnvVpD+1Kfll0P
+         JB/4fLORJx1VzJGtWVb9LMFxlXyJeuBfbdNfEf4GgD6WpKxIhVnkt/2gvFFBUVnyEy
+         d+2aUJzV4l6KgkQT0I2EqNk1tabB/S8i2JXQ3MZ/WxwzMKCYlJTwl9h7OhT98m+FLO
+         gRwPs9QANyW7PoxrW83MG+HUa4leBbV6vQXSp7gDtSEkwJq6FaCDBI/vGXgC32v1AH
+         Sv49JFXKHirSQ==
+Message-ID: <c6a12ebc-99f1-855d-e366-e5a4833dc562@collabora.com>
+Date:   Wed, 26 Apr 2023 13:43:24 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RESEND v3 0/9] Add gamma lut support for mt8195
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     CK Hu <ck.hu@mediatek.com>, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220912013006.27541-1-jason-jh.lin@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220912013006.27541-1-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAn7lQ6Dklko7NWAg--.7207S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7GFyruF4rXw4xKFWxZF43KFg_yoW8Jryxpa
-        n5tF4fKr1Dtr1jyayxKry3ZFW8tw4Yyr1DWw1DC3y5Za4rWFyY9r1Iga13uFZ8ur1FkFZI
-        vanIqa45Z3WDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4yCiAAAsh
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-04-26 at 03:28 +0300, Jarkko Sakkinen wrote:
-> On Tue Apr 25, 2023 at 8:35 PM EEST, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Introduce verify_umd_signature() and verify_umd_message_sig(), to verify
-> > UMD-parsed signatures from detached data. It aims to be used by kernel
-> > subsystems wishing to verify the authenticity of system data, with
-> > system-defined keyrings as trust anchor.
+Il 12/09/22 03:29, Jason-JH.Lin ha scritto:
+> Since the gamma_set_common() function for previous SoC,
+> such as  mt8173 and mt8183, is designed for 9bit-to-10bit
+> conversion.
+> mt8195 is using 10bit-to-12bit conversion, which is
+> not compatible with the previous function.
 > 
-> UMD is not generic knowledge. It is a term coined up in this patch set
-> so please open code it to each patch.
+> Thus, need to update the function to fit the need of mt8195.
 
-Yes, Linus also commented on this:
+Hello,
+can you please respin and fix this series on the latest linux-next?
 
-https://lwn.net/ml/linux-kernel/CAHk-=wihqhksXHkcjuTrYmC-vajeRcNh3s6eeoJNxS7wp77dFQ@mail.gmail.com/
+Besides, please test it carefully: as far as I can see, GNOME Night Light
+(or others) are not working on MT8195 (color temperature/ccorr).
+As for gamma itself, that's not working either; you can test it with a tool
+that will create a color profile by applying a new VCGT table, please look
+at [1] if you need tools.
 
-I will check if the full name is mentioned at least once. So far, it
-seems that using umd for function names should be ok.
+We can confirm that color correction works on at least MT8192 (colord), so
+it's MT8195 at fault.
 
-> One discussion points should be what these handlers should be called.
-> Right now the patch set is misleads the reader to think as this was
-> some kind of "official" term and set to stone.
+[1]: https://github.com/zb3/gnome-gamma-tool
 
-I proposed some naming here (dependency of this patch set):
+Regards,
+Angelo
 
-https://lore.kernel.org/bpf/20230317145240.363908-6-roberto.sassu@huaweicloud.com/
+> ---
+> Change in RESEND v3:
+> Fix build warning
+>>> drivers/gpu/drm/mediatek/mtk_disp_gamma.c:59:14: warning: no previous prototype for 'mtk_gamma_get_size' [-Wmissing-prototypes]
+> 
+> Change in v3:
+> 1. separate 1 dt-binding patch to 2 patches, 1 is for modifying
+>     multiple items list to one and 1 is for moving mt8195 compatible.
+> 2. redefine variables to reduce memory usage.
+> 3. delete unused symbols.
+> 4. separate 1 drm/mediatek patch to 6 patches.
+> 5. rebase on tag 'next-20220909'
+> 
+> Jason-JH.Lin (5):
+>    drm/mediatek: Adjust mtk_drm_gamma_set_common parameters
+>    drm/mediatek: Add gamma support different lut_size for other SoC
+>    drm/mediatek: Add gamma support different lut_bits for other SoC
+>    drm/mediatek: Add gamma support different bank_size for other SoC
+>    drm/mediatek: Add clear RELAY_MODE bit to set gamma
+> 
+> zheng-yan.chen (4):
+>    dt-bindings: mediatek: modify item formatting for gamma
+>    dt-bindings: mediatek: Add gamma compatible for mt8195
+>    drm/mediatek: Add gamma lut support for mt8195
+>    arm64: dts: Modify gamma compatible for mt8195
+> 
+>   .../display/mediatek/mediatek,gamma.yaml      |   8 +-
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |   2 +-
+>   drivers/gpu/drm/mediatek/mtk_disp_aal.c       |   2 +-
+>   drivers/gpu/drm/mediatek/mtk_disp_drv.h       |   3 +-
+>   drivers/gpu/drm/mediatek/mtk_disp_gamma.c     | 115 ++++++++++++++----
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   4 +-
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.h       |   1 -
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |   9 ++
+>   8 files changed, 109 insertions(+), 35 deletions(-)
+> 
 
-Please let me know if it sounds reasonable to you.
-
-Thanks
-
-Roberto
 
