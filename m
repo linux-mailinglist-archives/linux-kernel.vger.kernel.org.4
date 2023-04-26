@@ -2,172 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD476EFC77
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE236EFC7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239879AbjDZV3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S239951AbjDZV3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239843AbjDZV3X (ORCPT
+        with ESMTP id S239997AbjDZV3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:29:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77943AB3;
-        Wed, 26 Apr 2023 14:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1682544537; i=w_armin@gmx.de;
-        bh=/NvD9oCO/r0GrFnR01vAe+1hQd5sbYS115i1sHjdYVU=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=c+jhaqnQYsjNniJayHeKrbysCjrX6izuZRB7X9qDmVdBKK9hpSqjEFA7rtMXwo0Wt
-         pAqYg9mBuGr1WTvKZUGZVHu22FhInlnnyUpDC/46yQJ7iWFCewruJaovn1fXBNkzpp
-         Vvhn4q6a4kJ9Xs/ZIuUiBCT7b1XKcyGWEYxCYMY0z7ts26Clwb7MBJBGIXg4Sr3w/w
-         j1jOWPnfGJdfkkJ/MPjpYr4DvikFiYdxaft8Osn9IcPImU/4uZki6lYLEbowqr6wKc
-         OUuEI9COjPM0xzlLiTB/e9MEEN72vXsEQQ6BZNP6JYApj94hAMwJSezYrNu9UgjHIi
-         hznPILmWgMRTQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
- (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MAfUe-1pyQXR1NzE-00B300; Wed, 26 Apr 2023 23:28:57 +0200
-From:   Armin Wolf <W_Armin@gmx.de>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     Mario.Limonciello@amd.com, prasanth.ksr@dell.com,
-        jorgealtxwork@gmail.com, james@equiv.tech,
-        Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC v2 1/2] platform/x86: wmi: Allow retrieving the number of WMI object instances
-Date:   Wed, 26 Apr 2023 23:28:47 +0200
-Message-Id: <20230426212848.108562-2-W_Armin@gmx.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230426212848.108562-1-W_Armin@gmx.de>
-References: <20230426212848.108562-1-W_Armin@gmx.de>
+        Wed, 26 Apr 2023 17:29:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E663AA9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 14:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682544571; x=1714080571;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to;
+  bh=n2S6Oqqx2tDXFa9lA26s/eufyyhgFSeaQ5i/57xJ+Mo=;
+  b=ZApgK3bBeMrnNVsuewP3wyYslWxT6qLT5IxDvnhZJ026xPOUbCNmV3ir
+   Pf08f/6iBWgap5fgE6KLJCSj/Py4cTftmD8HdibaYSBxFUsBEnp4/khV/
+   HyaDZx7wKmeAW2mMfpxFYbjJB6Kg4el/88/XmJFfZMppOmoCNhJiQgSYz
+   9Nnoam4juinDBoi2H32Rx+mjzK5phWLrjP5g7E2aWfD0jQd3y3QJk8Rd8
+   CpgHHwxp4OI0r31np0fTAE7qNQcv3XzfJRajmoUhSkj0RpFu+fDPKuASt
+   lil+71fhKp+F2lI1pHU/JAtDo6UMmYgb5LA10mg+foajFtmHtbLEPctx3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="344691038"
+X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
+   d="scan'208";a="344691038"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="805679873"
+X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
+   d="scan'208";a="805679873"
+Received: from lab-ah.igk.intel.com ([10.102.138.202])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 14:29:29 -0700
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Date:   Wed, 26 Apr 2023 23:28:48 +0200
+Subject: [PATCH v8 1/2] drm/i915: Migrate platform-dependent mock hugepage
+ selftests to live
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wg2Q3rOcpLLziRjKpSU4Fquh6no2b2+fC594Er1V0xDb7k5rbuj
- mYlKRfhm8IkOUiLhuH6e1R3FgMSWpAVrjIgVSQc+5kTKgRVrUn3TMPj/qjbMHtB1vwNjlcx
- RSPDICvalGcNtRfC1EnuN98VTrfQVNajOaGGruktwHEYCX40EzQLplYXPoeqBcfn/uKavKo
- 4b0EwFBIz5kdq8J/oex2Q==
-UI-OutboundReport: notjunk:1;M01:P0:cbF/7xERkYo=;RR+7kF4mAqVLc4S8JUBV928cxmO
- jnOm57TuDfEcdT9cqNwdV/e2Qm1fMFg9u79C4pHM+UIqETLQdcyqSugXybiHuGNANsE84WYRT
- XCThlj0w0oq/AJlnZoMWK17esHgPppdTuCmMFUVHJb5Pmwynsj67EYVGCWLs21E6b6wJB8fny
- mFCJFxRkomudtVMWsS3Y9ZPNEnQSqxvgppnpySBAApqUZ0/ZNxnVSX6RtUWS7huPbRHqeec5W
- PUTuAlPGehhBVaCCtLHoCx1K+jnECI/wOObpub11oXgtqOMBJihJBvMC8RlrQ3y6axvp30Wd2
- FnVYRfqZGgS3ZBYFDYZxDgIjMGtKa+RvzksMz8ny83sAl7Tdv+bykA0ueyAWh+QDhNXJjki8E
- jAD5To0RHOA9Oj6VL6DVdGPH8+Wf22bI2HlYBREWJ5koA7YbwA97EXaU0GgBv5/3W4E3v5PYz
- Wcd3jhn/pJXqaDkbLQEgNqARTnPS2Hkc+O7WdnhAYoRItZ1MISY2EFkkaQx3lbVkMP5UVa4J0
- tt4QywW5mnEGlJmiI6Cy7kRnEMPHRCQMKXK5vKNshMLOr8WjJW+mOtBee0U4AAkE1NAWfSXTh
- sLHylac+B6xTIcCgl5BoD6mTb6wkO3aepgFx0w4oyPCgtS3/ikuMyIiOYiTsDA6x+VXH0VXUH
- 4GhbVEFb7we3YucdIG9sX9E0GSXavBvuold1YA8GzLCUv+5GZ0o6auhosLGyTENbASytSx8Ka
- X226qLP4gbrOylXiZ9Zpk40GLw/1nT3+mD7F5KYF84DpAtJT+C0oErXH08ZfbRkrBq/cU/swp
- fcC6icx1JqLTgUbzLKWM6g37hk4HjJawLTfiVJoGBocKb/TdcxBIcg/NIeYFtLWLMhezOgRjA
- WVeOHwUgSQvBqAGuUYSz8dHQPRyRnGXJePm2AIqCQuUBPq3jLnyUYFZ55l6h41mlcuwaMwkAO
- uEGMVvA65cQQbvsZMVFccwYOXIQ=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230425-hugepage-migrate-v8-1-7868d54eaa27@intel.com>
+References: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
+In-Reply-To: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
+To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jonathan Cavitt <jonathan.cavitt@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Matthew Auld <matthew.auld@intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the WMI driver core knows how many instances of a given
-WMI object exist, but WMI drivers cannot access this information.
-At the same time, some current and upcoming WMI drivers want to
-have access to this information. Add wmi_instance_count() and
-wmidev_instance_count() to allow WMI drivers to get the number of
-WMI object instances.
+From: Jonathan Cavitt <jonathan.cavitt@intel.com>
 
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-=2D--
- drivers/platform/x86/wmi.c | 40 ++++++++++++++++++++++++++++++++++++++
- include/linux/acpi.h       |  2 ++
- include/linux/wmi.h        |  2 ++
- 3 files changed, 44 insertions(+)
+Convert the igt_mock_ppgtt_huge_fill and igt_mock_ppgtt_64K mock selftests
+into live selftests as their requirements have recently become
+platform-dependent. Additionally, apply necessary platform dependency
+checks to these tests.
 
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index c226dd4163a1..7c1a904dec5f 100644
-=2D-- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -263,6 +263,46 @@ int set_required_buffer_size(struct wmi_device *wdev,=
- u64 length)
+v8:
+- handle properly 64K and 2M pages
+v9:
+- do not expect 64K pages if 2M are present
+- fix hex printing
+- obey commit message line limit
+
+Signed-off-by: Jonathan Cavitt <jonathan.cavitt@intel.com>
+Co-developed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+---
+ drivers/gpu/drm/i915/gem/selftests/huge_pages.c | 106 ++++++++++++++++++------
+ 1 file changed, 81 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gem/selftests/huge_pages.c b/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
+index defece0bcb811f..cb5863f37f9d37 100644
+--- a/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
++++ b/drivers/gpu/drm/i915/gem/selftests/huge_pages.c
+@@ -695,8 +695,7 @@ static int igt_mock_ppgtt_misaligned_dma(void *arg)
+ 	return err;
  }
- EXPORT_SYMBOL_GPL(set_required_buffer_size);
+ 
+-static void close_object_list(struct list_head *objects,
+-			      struct i915_ppgtt *ppgtt)
++static void close_object_list(struct list_head *objects)
+ {
+ 	struct drm_i915_gem_object *obj, *on;
+ 
+@@ -710,17 +709,36 @@ static void close_object_list(struct list_head *objects,
+ 	}
+ }
+ 
+-static int igt_mock_ppgtt_huge_fill(void *arg)
++static int igt_ppgtt_huge_fill(void *arg)
+ {
+-	struct i915_ppgtt *ppgtt = arg;
+-	struct drm_i915_private *i915 = ppgtt->vm.i915;
+-	unsigned long max_pages = ppgtt->vm.total >> PAGE_SHIFT;
++	struct drm_i915_private *i915 = arg;
++	unsigned int supported = RUNTIME_INFO(i915)->page_sizes;
++	bool has_pte64 = GRAPHICS_VER_FULL(i915) >= IP_VER(12, 50);
++	struct i915_address_space *vm;
++	struct i915_gem_context *ctx;
++	unsigned long max_pages;
+ 	unsigned long page_num;
++	struct file *file;
+ 	bool single = false;
+ 	LIST_HEAD(objects);
+ 	IGT_TIMEOUT(end_time);
+ 	int err = -ENODEV;
+ 
++	if (supported == I915_GTT_PAGE_SIZE_4K)
++		return 0;
++
++	file = mock_file(i915);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	ctx = hugepage_ctx(i915, file);
++	if (IS_ERR(ctx)) {
++		err = PTR_ERR(ctx);
++		goto out;
++	}
++	vm = i915_gem_context_get_eb_vm(ctx);
++	max_pages = vm->total >> PAGE_SHIFT;
++
+ 	for_each_prime_number_from(page_num, 1, max_pages) {
+ 		struct drm_i915_gem_object *obj;
+ 		u64 size = page_num << PAGE_SHIFT;
+@@ -750,13 +768,14 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
+ 
+ 		list_add(&obj->st_link, &objects);
+ 
+-		vma = i915_vma_instance(obj, &ppgtt->vm, NULL);
++		vma = i915_vma_instance(obj, vm, NULL);
+ 		if (IS_ERR(vma)) {
+ 			err = PTR_ERR(vma);
+ 			break;
+ 		}
+ 
+-		err = i915_vma_pin(vma, 0, 0, PIN_USER);
++		/* vma start must be aligned to BIT(21) to allow 2M PTEs */
++		err = i915_vma_pin(vma, 0, BIT(21), PIN_USER);
+ 		if (err)
+ 			break;
+ 
+@@ -784,12 +803,13 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
+ 		GEM_BUG_ON(!expected_gtt);
+ 		GEM_BUG_ON(size);
+ 
+-		if (expected_gtt & I915_GTT_PAGE_SIZE_4K)
++		if (!has_pte64 && (obj->base.size < I915_GTT_PAGE_SIZE_2M ||
++				   expected_gtt & I915_GTT_PAGE_SIZE_2M))
+ 			expected_gtt &= ~I915_GTT_PAGE_SIZE_64K;
+ 
+ 		i915_vma_unpin(vma);
+ 
+-		if (vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
++		if (!has_pte64 && vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
+ 			if (!IS_ALIGNED(vma->node.start,
+ 					I915_GTT_PAGE_SIZE_2M)) {
+ 				pr_err("node.start(%llx) not aligned to 2M\n",
+@@ -808,7 +828,7 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
+ 		}
+ 
+ 		if (vma->resource->page_sizes_gtt != expected_gtt) {
+-			pr_err("gtt=%u, expected=%u, size=%zd, single=%s\n",
++			pr_err("gtt=%#x, expected=%#x, size=0x%zx, single=%s\n",
+ 			       vma->resource->page_sizes_gtt, expected_gtt,
+ 			       obj->base.size, str_yes_no(!!single));
+ 			err = -EINVAL;
+@@ -823,19 +843,25 @@ static int igt_mock_ppgtt_huge_fill(void *arg)
+ 		single = !single;
+ 	}
+ 
+-	close_object_list(&objects, ppgtt);
++	close_object_list(&objects);
+ 
+ 	if (err == -ENOMEM || err == -ENOSPC)
+ 		err = 0;
+ 
++	i915_vm_put(vm);
++out:
++	fput(file);
+ 	return err;
+ }
+ 
+-static int igt_mock_ppgtt_64K(void *arg)
++static int igt_ppgtt_64K(void *arg)
+ {
+-	struct i915_ppgtt *ppgtt = arg;
+-	struct drm_i915_private *i915 = ppgtt->vm.i915;
++	struct drm_i915_private *i915 = arg;
++	bool has_pte64 = GRAPHICS_VER_FULL(i915) >= IP_VER(12, 50);
+ 	struct drm_i915_gem_object *obj;
++	struct i915_address_space *vm;
++	struct i915_gem_context *ctx;
++	struct file *file;
+ 	const struct object_info {
+ 		unsigned int size;
+ 		unsigned int gtt;
+@@ -907,16 +933,41 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 	if (!HAS_PAGE_SIZES(i915, I915_GTT_PAGE_SIZE_64K))
+ 		return 0;
+ 
++	file = mock_file(i915);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	ctx = hugepage_ctx(i915, file);
++	if (IS_ERR(ctx)) {
++		err = PTR_ERR(ctx);
++		goto out;
++	}
++	vm = i915_gem_context_get_eb_vm(ctx);
++
+ 	for (i = 0; i < ARRAY_SIZE(objects); ++i) {
+ 		unsigned int size = objects[i].size;
+ 		unsigned int expected_gtt = objects[i].gtt;
+ 		unsigned int offset = objects[i].offset;
+ 		unsigned int flags = PIN_USER;
+ 
++		/*
++		 * For modern GTT models, the requirements for marking a page-table
++		 * as 64K have been relaxed.  Account for this.
++		 */
++		if (has_pte64) {
++			expected_gtt = 0;
++			if (size >= SZ_64K)
++				expected_gtt |= I915_GTT_PAGE_SIZE_64K;
++			if (size & (SZ_64K - 1))
++				expected_gtt |= I915_GTT_PAGE_SIZE_4K;
++		}
++
+ 		for (single = 0; single <= 1; single++) {
+ 			obj = fake_huge_pages_object(i915, size, !!single);
+-			if (IS_ERR(obj))
+-				return PTR_ERR(obj);
++			if (IS_ERR(obj)) {
++				err = PTR_ERR(obj);
++				goto out_vm;
++			}
+ 
+ 			err = i915_gem_object_pin_pages_unlocked(obj);
+ 			if (err)
+@@ -928,7 +979,7 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 			 */
+ 			obj->mm.page_sizes.sg &= ~I915_GTT_PAGE_SIZE_2M;
+ 
+-			vma = i915_vma_instance(obj, &ppgtt->vm, NULL);
++			vma = i915_vma_instance(obj, vm, NULL);
+ 			if (IS_ERR(vma)) {
+ 				err = PTR_ERR(vma);
+ 				goto out_object_unpin;
+@@ -945,7 +996,8 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 			if (err)
+ 				goto out_vma_unpin;
+ 
+-			if (!offset && vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
++			if (!has_pte64 && !offset &&
++			    vma->page_sizes.sg & I915_GTT_PAGE_SIZE_64K) {
+ 				if (!IS_ALIGNED(vma->node.start,
+ 						I915_GTT_PAGE_SIZE_2M)) {
+ 					pr_err("node.start(%llx) not aligned to 2M\n",
+@@ -964,9 +1016,10 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 			}
+ 
+ 			if (vma->resource->page_sizes_gtt != expected_gtt) {
+-				pr_err("gtt=%u, expected=%u, i=%d, single=%s\n",
++				pr_err("gtt=%#x, expected=%#x, i=%d, single=%s offset=%#x size=%#x\n",
+ 				       vma->resource->page_sizes_gtt,
+-				       expected_gtt, i, str_yes_no(!!single));
++				       expected_gtt, i, str_yes_no(!!single),
++				       offset, size);
+ 				err = -EINVAL;
+ 				goto out_vma_unpin;
+ 			}
+@@ -982,7 +1035,7 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 		}
+ 	}
+ 
+-	return 0;
++	goto out_vm;
+ 
+ out_vma_unpin:
+ 	i915_vma_unpin(vma);
+@@ -992,7 +1045,10 @@ static int igt_mock_ppgtt_64K(void *arg)
+ 	i915_gem_object_unlock(obj);
+ out_object_put:
+ 	i915_gem_object_put(obj);
+-
++out_vm:
++	i915_vm_put(vm);
++out:
++	fput(file);
+ 	return err;
+ }
+ 
+@@ -1910,8 +1966,6 @@ int i915_gem_huge_page_mock_selftests(void)
+ 		SUBTEST(igt_mock_exhaust_device_supported_pages),
+ 		SUBTEST(igt_mock_memory_region_huge_pages),
+ 		SUBTEST(igt_mock_ppgtt_misaligned_dma),
+-		SUBTEST(igt_mock_ppgtt_huge_fill),
+-		SUBTEST(igt_mock_ppgtt_64K),
+ 	};
+ 	struct drm_i915_private *dev_priv;
+ 	struct i915_ppgtt *ppgtt;
+@@ -1962,6 +2016,8 @@ int i915_gem_huge_page_live_selftests(struct drm_i915_private *i915)
+ 		SUBTEST(igt_ppgtt_sanity_check),
+ 		SUBTEST(igt_ppgtt_compact),
+ 		SUBTEST(igt_ppgtt_mixed),
++		SUBTEST(igt_ppgtt_huge_fill),
++		SUBTEST(igt_ppgtt_64K),
+ 	};
+ 
+ 	if (!HAS_PPGTT(i915)) {
 
-+/**
-+ * wmi_instance_count - Get number of WMI object instances
-+ * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417=
-f2f49ba
-+ * @instance_count: variable to hold the instance count
-+ *
-+ * Get the number of WMI object instances.
-+ *
-+ * Returns: acpi_status signaling success or error.
-+ */
-+acpi_status wmi_instance_count(const char *guid_string, u8 *instance_coun=
-t)
-+{
-+	struct wmi_block *wblock;
-+	acpi_status status;
-+
-+	status =3D find_guid(guid_string, &wblock);
-+	if (ACPI_FAILURE(status))
-+		return status;
-+
-+	*instance_count =3D wmidev_instance_count(&wblock->dev);
-+
-+	return AE_OK;
-+}
-+EXPORT_SYMBOL_GPL(wmi_instance_count);
-+
-+/**
-+ * wmidev_instance_count - Get number of WMI object instances
-+ * @wdev: A wmi bus device from a driver
-+ *
-+ * Get the number of WMI object instances.
-+ *
-+ * Returns: Number of WMI object instances.
-+ */
-+u8 wmidev_instance_count(struct wmi_device *wdev)
-+{
-+	struct wmi_block *wblock =3D container_of(wdev, struct wmi_block, dev);
-+
-+	return wblock->gblock.instance_count;
-+}
-+EXPORT_SYMBOL_GPL(wmidev_instance_count);
-+
- /**
-  * wmi_evaluate_method - Evaluate a WMI method (deprecated)
-  * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417=
-f2f49ba
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index efff750f326d..ab2a4b23e7a3 100644
-=2D-- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -412,6 +412,8 @@ extern bool acpi_is_pnp_device(struct acpi_device *);
-
- typedef void (*wmi_notify_handler) (u32 value, void *context);
-
-+acpi_status wmi_instance_count(const char *guid, u8 *instance_count);
-+
- extern acpi_status wmi_evaluate_method(const char *guid, u8 instance,
- 					u32 method_id,
- 					const struct acpi_buffer *in,
-diff --git a/include/linux/wmi.h b/include/linux/wmi.h
-index c1a3bd4e4838..763bd382cf2d 100644
-=2D-- a/include/linux/wmi.h
-+++ b/include/linux/wmi.h
-@@ -35,6 +35,8 @@ extern acpi_status wmidev_evaluate_method(struct wmi_dev=
-ice *wdev,
- extern union acpi_object *wmidev_block_query(struct wmi_device *wdev,
- 					     u8 instance);
-
-+u8 wmidev_instance_count(struct wmi_device *wdev);
-+
- extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
-
- /**
-=2D-
-2.30.2
-
+-- 
+2.34.1
