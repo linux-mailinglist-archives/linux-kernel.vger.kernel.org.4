@@ -2,158 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8996EF3EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71876EF3F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 14:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240757AbjDZMC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 08:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
+        id S240764AbjDZMDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 08:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240764AbjDZMCX (ORCPT
+        with ESMTP id S240463AbjDZMDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 08:02:23 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179F359E8;
-        Wed, 26 Apr 2023 05:02:15 -0700 (PDT)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 717F81C0004;
-        Wed, 26 Apr 2023 12:02:12 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lorenz Brun <lorenz@brun.one>
-Subject: Re: [PATCH v2] arm64: dts: rockchip: fix USB regulator on ROCK64
-Date:   Wed, 26 Apr 2023 14:02:02 +0200
-Message-ID: <6383328.LvFx2qVVIh@bagend>
-Organization: Connecting Knowledge
-In-Reply-To: <20230421213841.3079632-1-lorenz@brun.one>
-References: <20230421213841.3079632-1-lorenz@brun.one>
+        Wed, 26 Apr 2023 08:03:18 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E0B4C12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:02:51 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1a6762fd23cso59045715ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 05:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mechatrax-com.20221208.gappssmtp.com; s=20221208; t=1682510570; x=1685102570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R/ZJvITr8KkQOHptvc/4Q9ya9xSDX/U43gmvan7hhKU=;
+        b=LHGu3pjDBJLpaFUJbFE46f0Nt3CTbOiwgFAmrHLLD4f5otkROHDMFrXZe3Nu6+J1A1
+         It6sCGAMNkfTS0Nw/+8/rAsLatPzQzyKq7wWKwFyKq6nXwFpM/cpxxGSEqVWjt9pZYWT
+         5hl8rkHajZIaLtlGecDCaCk323FjJ4k85T502pkYCMjq8PYQwaARmQVdTqZwWu1PS+aJ
+         waIgDO1Sjfe/GZx2GQ23WOnFrcN0yuXq7YHfY9DCmw5nlGhzRYsr64OdsWBEzlt6F/tc
+         eWTCOEYhBTlKDz34zb2d7TXo9J8EcBexkXkjT/lubMJz/5cfvQK9jZ4UpAoBDP3C7ypW
+         YKGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682510570; x=1685102570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R/ZJvITr8KkQOHptvc/4Q9ya9xSDX/U43gmvan7hhKU=;
+        b=btj5r0BgKl1+r6eng/COLhGQh3zOhvmy7YoUdVGYsVENxxDrgAA+wsmoMxYqxo73f5
+         6WM70mbz72HbSjp+O15R6dC+sOMTKOoZdQBj40UMlw46YMVIDhOiE2RQosIq4BIIZb26
+         YDICong0JYCpvix/RetoJCVOY94BZLBA466sQXUJDEcFVXLk8tl+DF8OMr0d2+EJTnGA
+         9vv+SfNta29IDuZ5IQaWa3vLCcEryeW7t6gbDTsRezoGJeN0DyDoyfKP2XpeLwMlXbxt
+         rxI/D513KcllnzucM33QhOtfE2Vxkqkw40+Z3HjlJQKjcsJCTsvLonhfS2KEv/d6HIGJ
+         9X6w==
+X-Gm-Message-State: AAQBX9dX+3n+rtymtUEYMED0zvriaKliU/HggshnxqU9jBEksi0Rtdbg
+        /2ciMM5N96+FJkmtjmT93qcszWgjcZhPROLc7P+woiiZ93uvNkBxNYs=
+X-Google-Smtp-Source: AKy350bHLjfCqNJNNZNVfoIuedLydbz+xrRy8UIckV8r+z3xeD7GYSUoBubCEVMm+SMbra972i0vf4I61xxbcQ6onBU=
+X-Received: by 2002:a17:903:2441:b0:1a0:50bd:31a8 with SMTP id
+ l1-20020a170903244100b001a050bd31a8mr27072916pls.26.1682510570638; Wed, 26
+ Apr 2023 05:02:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4185305.ElGaqSPkdT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420102316.757-1-honda@mechatrax.com> <20230423121528.259d3cd4@jic23-huawei>
+In-Reply-To: <20230423121528.259d3cd4@jic23-huawei>
+From:   Masahiro Honda <honda@mechatrax.com>
+Date:   Wed, 26 Apr 2023 21:02:13 +0900
+Message-ID: <CA+Tz-SEAyXcJ++YDzDC=ySd1gOC-j-DDp8sMHBUCSy9Q3wQ4HA@mail.gmail.com>
+Subject: Re: [PATCH v3] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart4185305.ElGaqSPkdT
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-Date: Wed, 26 Apr 2023 14:02:02 +0200
-Message-ID: <6383328.LvFx2qVVIh@bagend>
-Organization: Connecting Knowledge
-In-Reply-To: <20230421213841.3079632-1-lorenz@brun.one>
-References: <20230421213841.3079632-1-lorenz@brun.one>
-MIME-Version: 1.0
+Hi Jonathan,
 
-On Friday, 21 April 2023 23:38:41 CEST Lorenz Brun wrote:
-> rockchip-pinctrl pinctrl: pin gpio0-2 already requested by vcc-host-5v-regulator; cannot claim for vcc-host1-5v-regulator
-> rockchip-pinctrl pinctrl: pin-2 (vcc-host1-5v-regulator) status -22
-> rockchip-pinctrl pinctrl: could not request pin 2 (gpio0-2) from group usb20-host-drv  on device rockchip-pinctrl 
-> reg-fixed-voltage vcc-host1-5v-regulator: Error applying setting, reverse things back
+On Sun, Apr 23, 2023 at 7:59=E2=80=AFPM Jonathan Cameron <jic23@kernel.org>=
+ wrote:
+>
+> On Thu, 20 Apr 2023 19:23:16 +0900
+> Masahiro Honda <honda@mechatrax.com> wrote:
+>
+> > The Sigma-Delta ADCs supported by this driver can use SDO as an interru=
+pt
+> > line to indicate the completion of a conversion. However, some devices
+> > cannot properly detect the completion of a conversion by an interrupt.
+> > This is for the reason mentioned in the following commit.
+> >
+> > commit e9849777d0e2 ("genirq: Add flag to force mask in
+> >                       disable_irq[_nosync]()")
+> >
+> > A read operation is performed by an extra interrupt before the completi=
+on
+> > of a conversion. This patch fixes the issue by setting IRQ_DISABLE_UNLA=
+ZY
+> > flag.
+> >
+> > Signed-off-by: Masahiro Honda <honda@mechatrax.com>
+> > ---
+> > v3:
+> >  - Remove the Kconfig option.
+> > v2: https://lore.kernel.org/linux-iio/20230414102744.150-1-honda@mechat=
+rax.com/
+> >  - Rework commit message.
+> >  - Add a new entry in the Kconfig.
+> >  - Call irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing th=
+e IRQ.
+> > v1: https://lore.kernel.org/linux-iio/20230306044737.862-1-honda@mechat=
+rax.com/
+> >
+> >  drivers/iio/adc/ad_sigma_delta.c | 25 ++++++++++++++++++++-----
+> >  1 file changed, 20 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigm=
+a_delta.c
+> > index d8570f620..215ecbedb 100644
+> > --- a/drivers/iio/adc/ad_sigma_delta.c
+> > +++ b/drivers/iio/adc/ad_sigma_delta.c
+> > @@ -565,6 +565,14 @@ int ad_sd_validate_trigger(struct iio_dev *indio_d=
+ev, struct iio_trigger *trig)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(ad_sd_validate_trigger, IIO_AD_SIGMA_DELTA);
+> >
+> > +static void ad_sd_free_irq(void *sd)
+> > +{
+> > +     struct ad_sigma_delta *sigma_delta =3D sd;
+> > +
+> > +     irq_clear_status_flags(sigma_delta->spi->irq, IRQ_DISABLE_UNLAZY)=
+;
+> > +     free_irq(sigma_delta->spi->irq, sigma_delta);
+> > +}
+>
+> Don't fuse the two operations unwinding like this.  Just register a callb=
+ack that only
+> does the irq_clear_status_flags immediately after setting them.  Then lea=
+ve
+> the orginally devm_request_irq call alone.  If it fails, the devm cleanup=
+ will
+> deal with the irq_clear_status_flag for you.
+>
+> It almost never makes sense for a single devm call to unwind more than on=
+e function call in
+> a driver.
+>
+> Otherwise this looks fine to me,
+>
+> Thanks,
+>
+> Jonathan
+>
 
-I booted the Debian 6.1.0-8-arm64 kernel (6.1.25-1) on my Rock64 and then
-booted that kernel with this patch applied (6.1.25-2) and this is the result:
+I understand. I'll fix it.
 
-diederik@rock64-dev:~$ uname -a
-Linux rock64-dev 6.1.0-8-arm64 #1 SMP Debian 6.1.25-1 (2023-04-22) aarch64 GNU/Linux
-diederik@rock64-dev:~$ su -l
-Password: 
-root@rock64-dev:~# dmesg --level emerg,alert,crit,err
-[    7.296781] rockchip-pinctrl pinctrl: pin gpio0-2 already requested by vcc-host-5v-regulator; cannot claim for vcc-host1-5v-regulator
-[    7.298007] rockchip-pinctrl pinctrl: pin-2 (vcc-host1-5v-regulator) status -22
-[    7.298694] rockchip-pinctrl pinctrl: could not request pin 2 (gpio0-2) from group usb20-host-drv  on device rockchip-pinctrl
-[    7.299736] reg-fixed-voltage vcc-host1-5v-regulator: Error applying setting, reverse things back
-[    7.525107] rk_gmac-dwmac ff540000.ethernet: cannot get clock clk_mac_speed
-
-root@rock64-dev:~# dmesg --level emerg,alert,crit,err,warn
-[    5.295285] dw-apb-uart ff130000.serial: forbid DMA for kernel console
-[    7.296781] rockchip-pinctrl pinctrl: pin gpio0-2 already requested by vcc-host-5v-regulator; cannot claim for vcc-host1-5v-regulator
-[    7.298007] rockchip-pinctrl pinctrl: pin-2 (vcc-host1-5v-regulator) status -22
-[    7.298694] rockchip-pinctrl pinctrl: could not request pin 2 (gpio0-2) from group usb20-host-drv  on device rockchip-pinctrl
-[    7.299736] reg-fixed-voltage vcc-host1-5v-regulator: Error applying setting, reverse things back
-[    7.312492] dwc2 ff580000.usb: supply vusb_d not found, using dummy regulator
-[    7.313483] dwc2 ff580000.usb: supply vusb_a not found, using dummy regulator
-[    7.525107] rk_gmac-dwmac ff540000.ethernet: cannot get clock clk_mac_speed
-[   12.299438] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
-[   13.244268] systemd-journald[228]: File /var/log/journal/511b5fcdb7574d1f8604d582cf5c5b00/system.journal corrupted or uncleanly shut down, renaming and replacing.
-[   16.537752] dw_wdt ff1a0000.watchdog: No valid TOPs array specified
-[   16.615515] dwhdmi-rockchip ff3c0000.hdmi: supply avdd-0v9 not found, using dummy regulator
-[   16.616532] dwhdmi-rockchip ff3c0000.hdmi: supply avdd-1v8 not found, using dummy regulator
-[   17.177743] rockchip_vdec: module is from the staging directory, the quality is unknown, you have been warned.
-
-root@rock64-dev:~# apt install /home/diederik/linux-image-6.1.0-8-rock64-regulator-arm64-unsigned_6.1.25-2_arm64.deb 
-...
-The following NEW packages will be installed:
-  linux-image-6.1.0-8-rock64-regulator-arm64-unsigned
-0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
-Need to get 0 B/63.4 MB of archives.
-After this operation, 455 MB of additional disk space will be used.
-Get:1 /home/diederik/linux-image-6.1.0-8-rock64-regulator-arm64-unsigned_6.1.25-2_arm64.deb linux-image-6.1.0-8-rock64-regulator-arm64-unsigned arm64 6.1.25-2 [63.4 MB]
-Selecting previously unselected package linux-image-6.1.0-8-rock64-regulator-arm64-unsigned.
-...
-/etc/kernel/postinst.d/zz-update-grub:
-Generating grub configuration file ...
-Found linux image: /boot/vmlinuz-6.1.0-8-rock64-regulator-arm64
-Found initrd image: /boot/initrd.img-6.1.0-8-rock64-regulator-arm64
-Found linux image: /boot/vmlinuz-6.1.0-8-arm64
-Found initrd image: /boot/initrd.img-6.1.0-8-arm64
-Warning: os-prober will not be executed to detect other bootable partitions.
-Systems on them will not be added to the GRUB boot configuration.
-Check GRUB_DISABLE_OS_PROBER documentation entry.
-Adding boot menu entry for UEFI Firmware Settings ...
-done
-N: Download is performed unsandboxed as root as file '/home/diederik/linux-image-6.1.0-8-rock64-regulator-arm64-unsigned_6.1.25-2_arm64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
-root@rock64-dev:~# reboot
-root@rock64-dev:~# Connection to rock64-dev closed by remote host.
-Connection to rock64-dev closed.
-
-diederik@bagend:~$ ssh rock64-dev
-diederik@rock64-dev:~$ uname -a
-Linux rock64-dev 6.1.0-8-rock64-regulator-arm64 #1 SMP Debian 6.1.25-2 (2023-04-25) aarch64 GNU/Linux
-diederik@rock64-dev:~$ su -l
-Password: 
-root@rock64-dev:~# dmesg --level emerg,alert,crit,err
-[    7.134332] rk_gmac-dwmac ff540000.ethernet: cannot get clock clk_mac_speed
-
-root@rock64-dev:~# dmesg --level emerg,alert,crit,err,warn
-[    5.128440] dw-apb-uart ff130000.serial: forbid DMA for kernel console
-[    6.925949] dwc2 ff580000.usb: supply vusb_d not found, using dummy regulator
-[    6.926983] dwc2 ff580000.usb: supply vusb_a not found, using dummy regulator
-[    7.134332] rk_gmac-dwmac ff540000.ethernet: cannot get clock clk_mac_speed
-[   11.465583] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
-[   12.358406] systemd-journald[231]: File /var/log/journal/511b5fcdb7574d1f8604d582cf5c5b00/system.journal corrupted or uncleanly shut down, renaming and replacing.
-[   14.865704] dwhdmi-rockchip ff3c0000.hdmi: supply avdd-0v9 not found, using dummy regulator
-[   14.866899] dwhdmi-rockchip ff3c0000.hdmi: supply avdd-1v8 not found, using dummy regulator
-[   14.882228] dw_wdt ff1a0000.watchdog: No valid TOPs array specified
-[   15.355843] rockchip_vdec: module is from the staging directory, the quality is unknown, you have been warned.
-
-Everything seems to be working fine, but now with less errors in dmesg, so:
-
-Tested-by: Diederik de Haas <didi.debian@cknow.org>
---nextPart4185305.ElGaqSPkdT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZEkSugAKCRDXblvOeH7b
-bqIrAP4g0sF8YmpOc5gFU3UGtEN2TiUB1qPy2i9uOVU0tj5TqQEAv/Q1kbks7CFL
-5CEN/daLxMPuPCOLTXxIweglZn9PzwA=
-=HvZt
------END PGP SIGNATURE-----
-
---nextPart4185305.ElGaqSPkdT--
-
-
-
+Thanks,
