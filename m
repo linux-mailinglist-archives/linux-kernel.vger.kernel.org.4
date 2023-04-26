@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E936EEEDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C086EEEDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 09:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239744AbjDZHGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 03:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        id S239868AbjDZHHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 03:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239749AbjDZHGN (ORCPT
+        with ESMTP id S239855AbjDZHGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:06:13 -0400
+        Wed, 26 Apr 2023 03:06:23 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0ED3AA4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a2abd8f7bso1267157276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B2149DB
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:14 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b96ee51ee20so7375513276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 00:05:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682492689; x=1685084689;
+        d=google.com; s=20221208; t=1682492696; x=1685084696;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpnNnSKNr6mnnFe+yuWHKskNpRSSG4E7c7pHHZX4fiE=;
-        b=vj9JMCucekoTRFbjl0QEfBiOTvFe6D8q/bIyPBes+PyscMFZ/D2bO4bCv/v7pQpPX4
-         adU6Mz2cFazilXSv8xuXMEoTiciGX60KCo9GQXwjExf3WYw8eEuA2J0zH8oyNLH49e49
-         uc+r6YNPDSGUq9RoDQ5cngqfwTBs6WBILyKjG91brZopVs8xUZQ4wb9PfoiVimSSRe7A
-         uvfBP9JMnXV4+4fJz0MZjhKqwkPIYEfacp4fkKcPVpbDWeLeL7IwLAVoJ530sYxIbm2f
-         ORmb6EGxv5pHcMq8DHv8VcZSgaAPuTbiq+FxjjPxYhcf7kVlxPvRA2RbE2s5tDd7YJi1
-         8ukg==
+        bh=uX2HSmx6kEz7AF/sikU4sT7+5OfRWtA69N2zyZbBkbM=;
+        b=V1kfrshmykyBp8yMvqUrIcFCsLJN7oX2qRAw/M9JFjIhK7wu20XfksXvAdE+VvKrx6
+         LZ/YkK0XAw86N7XPrpWITnpiAKwmVOhILAk2awui/pJZnWiHPN8TdhC8qbY07XK1t1cY
+         DvRbN2h9wK3x26IHAiyjE9Ad2qjJGkBVWuGFFdBGEW35zbaFocxZVLw9ckE5I0h6qgub
+         08dpRAxkDl4+5B750jbONX2nAT0O5+j8zQbITF+DzEqpNqC5cXts9sH7XD4T0yvT3YV4
+         W/hINe5iywkAi+y/BQ9FqlvR4kAPirzwHItTIiKwzFhJj3JlulMKA00F/ShcEcawlmcG
+         apQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682492689; x=1685084689;
+        d=1e100.net; s=20221208; t=1682492696; x=1685084696;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpnNnSKNr6mnnFe+yuWHKskNpRSSG4E7c7pHHZX4fiE=;
-        b=M6UXPEOLjTVyN+QdykD5cwWoBYtFACKrdepy+p5giOnFF5dkjIRJBpphwh7oE5na+3
-         VKyOigOGYjZrvd0OlushArbpqGU+KCEGKUB9Nd72zOAtbLj7KU9Az7zvGArtKvm+h27M
-         tB/hEVUdAHuAJ4RPJw1f79s9Nu7wUNfE7I98zHw2b6l5gFqoHdrmuyTpmsGu8qPMoOnR
-         NUbZ0rManB90yGeMuniehrB9S+ZZgFZxXz9aRJb15preToj4a+uBof4caB5/3lIlDsWg
-         avI85sGfiG3yxQwpAF5MjfzL6olXxjQeSNfsTSfn43b6L1bGTmrQKQZkwAHsZDcqCEX1
-         +WwA==
-X-Gm-Message-State: AAQBX9dFDpvQc9WHwSD0flWcfZrlt9ZRiBz3ogUDIrRISgUXAkMhlkDL
-        eFspC7EQZelHxXYGsdBDaSB+k2pUeuA9
-X-Google-Smtp-Source: AKy350ba97MWeLsfOvlPiWC2U2aNlzyAEI8AX/fdg0pO5VfuBRNta3A2QzTp8oFzP/5/g7CWJcI24MqjpLDL
+        bh=uX2HSmx6kEz7AF/sikU4sT7+5OfRWtA69N2zyZbBkbM=;
+        b=IirdxjsfttKPeIMXy5YTlEG3bPdc0jWtxTwUhNek00OQJj1Mb0DSgXEZGHSg5V993S
+         V0CaIODqEC0L5eSFzSyCbmSdBeHwqMauoGH3O8LD+VpjmV9kR/IXleDHP3XetyEzDPE8
+         ztuhbbQKUz1BPfkQiCef5esA2YtUJMEHjSoavq341+dBcHUhe64QIwbq7WOqcq34s3/D
+         1xGs0cmv6LPoeiA8eZLkgiRAVqKfcg9WeN8qGRvL2IlJtBJV/AtSQvMrzLnK+Pur6Ahi
+         T3ymPpjESav1MMYREIXudhIbai0YdqlvwSaagihE7C8gRv3d2BfE/y1SkhEMB2cs9/iF
+         SUcw==
+X-Gm-Message-State: AAQBX9ctT75fG+xGo75he3aZsMLjeLJvtFn34aMfsHbLiRkwPogGhCML
+        Ay0Ax/2/qiBZ7dJZsyKhUR8aoZ20H/i4
+X-Google-Smtp-Source: AKy350bKP7hwWX71EwDiVvvd0qzG+7OeriGaM8zlPjac5a5xaarE3dOb0bJfkVwjlW+bb4k/7xxwnPtWM3+e
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:144f:e890:2b29:48d9])
- (user=irogers job=sendgmr) by 2002:a25:3009:0:b0:b8f:53e1:64b with SMTP id
- w9-20020a253009000000b00b8f53e1064bmr7416418ybw.13.1682492688944; Wed, 26 Apr
- 2023 00:04:48 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 00:00:37 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:70c:b0:54e:8b9a:65be with SMTP id
+ bs12-20020a05690c070c00b0054e8b9a65bemr9617364ywb.6.1682492696589; Wed, 26
+ Apr 2023 00:04:56 -0700 (PDT)
+Date:   Wed, 26 Apr 2023 00:00:38 -0700
 In-Reply-To: <20230426070050.1315519-1-irogers@google.com>
-Message-Id: <20230426070050.1315519-28-irogers@google.com>
+Message-Id: <20230426070050.1315519-29-irogers@google.com>
 Mime-Version: 1.0
 References: <20230426070050.1315519-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v1 27/40] perf stat: Make cputype filter generic
+Subject: [PATCH v1 28/40] perf test: Add cputype testing to perf stat
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -91,230 +91,80 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than limit the --cputype argument for "perf list" and "perf
-stat" to hybrid PMUs of just cpu_atom and cpu_core, allow any PMU.
-
-Note, that if cpu_atom isn't mounted but a filter of cpu_atom is
-requested, then this will now fail. As such a filter would never
-succeed, no events can come from that unmounted PMU, then this
-behavior could never have been useful and failing is clearer.
+Check a bogus PMU fails and that a known PMU succeeds. Limit to PMUs
+known cpu, cpu_atom and armv8_pmuv3_0 ones.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-list.c    | 19 +++++++++++--------
- tools/perf/builtin-stat.c    | 12 +++++++-----
- tools/perf/util/pmu-hybrid.c | 20 --------------------
- tools/perf/util/pmu-hybrid.h |  1 -
- tools/perf/util/pmus.c       | 25 ++++++++++++++++++++++++-
- tools/perf/util/pmus.h       |  3 +++
- 6 files changed, 45 insertions(+), 35 deletions(-)
+ tools/perf/tests/shell/stat.sh | 44 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index 1f5dbd5f0ba4..1b48cf214b6e 100644
---- a/tools/perf/builtin-list.c
-+++ b/tools/perf/builtin-list.c
-@@ -11,8 +11,8 @@
- #include "builtin.h"
- 
- #include "util/print-events.h"
-+#include "util/pmus.h"
- #include "util/pmu.h"
--#include "util/pmu-hybrid.h"
- #include "util/debug.h"
- #include "util/metricgroup.h"
- #include "util/string2.h"
-@@ -429,7 +429,7 @@ int cmd_list(int argc, const char **argv)
- 		.print_event = default_print_event,
- 		.print_metric = default_print_metric,
- 	};
--	const char *hybrid_name = NULL;
-+	const char *cputype = NULL;
- 	const char *unit_name = NULL;
- 	bool json = false;
- 	struct option list_options[] = {
-@@ -443,8 +443,8 @@ int cmd_list(int argc, const char **argv)
- 			    "Print information on the perf event names and expressions used internally by events."),
- 		OPT_BOOLEAN(0, "deprecated", &default_ps.deprecated,
- 			    "Print deprecated events."),
--		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
--			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
-+		OPT_STRING(0, "cputype", &cputype, "cpu type",
-+			   "Limit PMU or metric printing to the given PMU (e.g. cpu, core or atom)."),
- 		OPT_STRING(0, "unit", &unit_name, "PMU name",
- 			   "Limit PMU or metric printing to the specified PMU."),
- 		OPT_INCR(0, "debug", &verbose,
-@@ -484,10 +484,13 @@ int cmd_list(int argc, const char **argv)
- 		assert(default_ps.visited_metrics);
- 		if (unit_name)
- 			default_ps.pmu_glob = strdup(unit_name);
--		else if (hybrid_name) {
--			default_ps.pmu_glob = perf_pmu__hybrid_type_to_pmu(hybrid_name);
--			if (!default_ps.pmu_glob)
--				pr_warning("WARNING: hybrid cputype is not supported!\n");
-+		else if (cputype) {
-+			const struct perf_pmu *pmu = perf_pmus__pmu_for_pmu_filter(cputype);
-+
-+			if (!pmu)
-+				pr_warning("WARNING: cputype is not supported!\n");
-+
-+			default_ps.pmu_glob = pmu->name;
- 		}
- 	}
- 	print_cb.print_start(ps);
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 46210fa3f14b..e2119ffd08de 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -44,6 +44,7 @@
- #include "util/cgroup.h"
- #include <subcmd/parse-options.h>
- #include "util/parse-events.h"
-+#include "util/pmus.h"
- #include "util/pmu.h"
- #include "util/event.h"
- #include "util/evlist.h"
-@@ -69,7 +70,6 @@
- #include "util/pfm.h"
- #include "util/bpf_counter.h"
- #include "util/iostat.h"
--#include "util/pmu-hybrid.h"
- #include "util/util.h"
- #include "asm/bug.h"
- 
-@@ -1089,10 +1089,11 @@ static int parse_stat_cgroups(const struct option *opt,
- 	return parse_cgroups(opt, str, unset);
+diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
+index 2c1d3f704995..fe1283ca39d1 100755
+--- a/tools/perf/tests/shell/stat.sh
++++ b/tools/perf/tests/shell/stat.sh
+@@ -91,9 +91,53 @@ test_topdown_weak_groups() {
+   echo "Topdown weak groups test [Success]"
  }
  
--static int parse_hybrid_type(const struct option *opt,
-+static int parse_cputype(const struct option *opt,
- 			     const char *str,
- 			     int unset __maybe_unused)
- {
-+	const struct perf_pmu *pmu;
- 	struct evlist *evlist = *(struct evlist **)opt->value;
- 
- 	if (!list_empty(&evlist->core.entries)) {
-@@ -1100,11 +1101,12 @@ static int parse_hybrid_type(const struct option *opt,
- 		return -1;
- 	}
- 
--	parse_events_option_args.pmu_filter = perf_pmu__hybrid_type_to_pmu(str);
--	if (!parse_events_option_args.pmu_filter) {
-+	pmu = perf_pmus__pmu_for_pmu_filter(str);
-+	if (!pmu) {
- 		fprintf(stderr, "--cputype %s is not supported!\n", str);
- 		return -1;
- 	}
-+	parse_events_option_args.pmu_filter = pmu->name;
- 
- 	return 0;
- }
-@@ -1230,7 +1232,7 @@ static struct option stat_options[] = {
- 	OPT_CALLBACK(0, "cputype", &evsel_list, "hybrid cpu type",
- 		     "Only enable events on applying cpu with this type "
- 		     "for hybrid platform (e.g. core or atom)",
--		     parse_hybrid_type),
-+		     parse_cputype),
- #ifdef HAVE_LIBPFM
- 	OPT_CALLBACK(0, "pfm-events", &evsel_list, "event",
- 		"libpfm4 event selector. use 'perf list' to list available events",
-diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
-index 38628805a952..bc4cb0738c35 100644
---- a/tools/perf/util/pmu-hybrid.c
-+++ b/tools/perf/util/pmu-hybrid.c
-@@ -50,23 +50,3 @@ bool perf_pmu__is_hybrid(const char *name)
- {
- 	return perf_pmu__find_hybrid_pmu(name) != NULL;
- }
--
--char *perf_pmu__hybrid_type_to_pmu(const char *type)
--{
--	char *pmu_name = NULL;
--
--	if (asprintf(&pmu_name, "cpu_%s", type) < 0)
--		return NULL;
--
--	if (perf_pmu__is_hybrid(pmu_name))
--		return pmu_name;
--
--	/*
--	 * pmu may be not scanned, check the sysfs.
--	 */
--	if (perf_pmu__hybrid_mounted(pmu_name))
--		return pmu_name;
--
--	free(pmu_name);
--	return NULL;
--}
-diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
-index 2b186c26a43e..206b94931531 100644
---- a/tools/perf/util/pmu-hybrid.h
-+++ b/tools/perf/util/pmu-hybrid.h
-@@ -17,7 +17,6 @@ bool perf_pmu__hybrid_mounted(const char *name);
- 
- struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
- bool perf_pmu__is_hybrid(const char *name);
--char *perf_pmu__hybrid_type_to_pmu(const char *type);
- 
- static inline int perf_pmu__hybrid_pmu_num(void)
- {
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index 7f3b93c4d229..140e11f00b29 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -1,5 +1,28 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/list.h>
--#include <pmus.h>
-+#include <string.h>
-+#include "pmus.h"
-+#include "pmu.h"
- 
- LIST_HEAD(pmus);
++test_cputype() {
++  # Test --cputype argument.
++  echo "cputype test"
 +
-+const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(const char *str)
-+{
-+	struct perf_pmu *pmu = NULL;
++  # Bogus PMU should fail.
++  if perf stat --cputype="123" -e instructions true > /dev/null 2>&1
++  then
++    echo "cputype test [Bogus PMU didn't fail]"
++    err=1
++    return
++  fi
 +
-+	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (!strcmp(pmu->name, str))
-+			return pmu;
-+		/* Ignore "uncore_" prefix. */
-+		if (!strncmp(pmu->name, "uncore_", 7)) {
-+			if (!strcmp(pmu->name + 7, str))
-+				return pmu;
-+		}
-+		/* Ignore "cpu_" prefix on Intel hybrid PMUs. */
-+		if (!strncmp(pmu->name, "cpu_", 4)) {
-+			if (!strcmp(pmu->name + 4, str))
-+				return pmu;
-+		}
-+	}
-+	return NULL;
++  # Find a known PMU for cputype.
++  pmu=""
++  for i in cpu cpu_atom armv8_pmuv3_0
++  do
++    if test -d "/sys/devices/$i"
++    then
++      pmu="$i"
++      break
++    fi
++    if perf stat -e "$i/instructions/" true > /dev/null 2>&1
++    then
++      pmu="$i"
++      break
++    fi
++  done
++  if test "x$pmu" = "x"
++  then
++    echo "cputype test [Skipped known PMU not found]"
++    return
++  fi
++
++  # Test running with cputype produces output.
++  if ! perf stat --cputype="$pmu" -e instructions true 2>&1 | grep -E -q "instructions"
++  then
++    echo "cputype test [Failed count missed with given filter]"
++    err=1
++    return
++  fi
++  echo "cputype test [Success]"
 +}
-diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
-index 5ec12007eb5c..d475e2960c10 100644
---- a/tools/perf/util/pmus.h
-+++ b/tools/perf/util/pmus.h
-@@ -3,7 +3,10 @@
- #define __PMUS_H
- 
- extern struct list_head pmus;
-+struct perf_pmu;
- 
- #define perf_pmus__for_each_pmu(pmu) list_for_each_entry(pmu, &pmus, list)
- 
-+const struct perf_pmu *perf_pmus__pmu_for_pmu_filter(const char *str);
 +
- #endif /* __PMUS_H */
+ test_default_stat
+ test_stat_record_report
+ test_stat_repeat_weak_groups
+ test_topdown_groups
+ test_topdown_weak_groups
++test_cputype
+ exit $err
 -- 
 2.40.1.495.gc816e09b53d-goog
 
