@@ -2,155 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35006EED98
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 07:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7586C6EED9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 07:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239358AbjDZFmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 01:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S239406AbjDZFrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 01:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238574AbjDZFmd (ORCPT
+        with ESMTP id S238440AbjDZFrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 01:42:33 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AD7194
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 22:42:32 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f182d745deso66312675e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 22:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682487751; x=1685079751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QAlKjkZlYiS/M9sDjOvQPaGX1RECu1oiyZsTxZm3cVA=;
-        b=BRHvhopr81XtR7ioaSYEpa2HHVUfKy2XIJgfQkOh5R3eyLnIgReyaYbXi55SgKRkvQ
-         2x4NeWvfP+m0NvQpaxTrXyJTEWKmXVNM76rhmKwDO39WgKR2IqppA90ssp77cW7l+sMh
-         X1APAlakl/4i8OhjpSvaczkMLlHA3JH65oT2s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682487751; x=1685079751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QAlKjkZlYiS/M9sDjOvQPaGX1RECu1oiyZsTxZm3cVA=;
-        b=Xs72MI5LG4Fenf/sjZdO+7pd8aWUvfnZvlzxTbRD7m2hoTHyQMJXF/OIAr6hAWGxZC
-         WVDfyuhY5khGfgnI3xtQhtASHyzL/FNoclO09WqCsEMuWAWJH4ZjFSmElInglniejsoJ
-         5P3aXrFE/QdGi/v3pgv2qcG4lJ8Oo5W6pe+datM+XjhHFcLTRzh7Lj94zylyrE2yqf5o
-         JsqiCvUttThmHqUx0nBJDuHOOIMbrLouH1LsdWsvAhlm1MMFXid8y6g1GtmXWsmp2Iwv
-         rahahd37MEwY1GjrjAWhZsGlS3O18NE1iyswUUIjyQbTsmmFtgtpZm0p7nHge0WNkig0
-         knRQ==
-X-Gm-Message-State: AAQBX9f6NednUcA5bcAAcPFmoT447SnU/oozG1GiHQvqFgRSdRzrlohh
-        j3rxM/XETcRw4kIm2N51IdYczlrVj+bzp5Eag91u5Q==
-X-Google-Smtp-Source: AKy350azTF5Cz+YsYzhDQEbaSC7fCbwPbNUtEK2fGWS87SlSCUAcRZmsRWGupgYd2zEybhGkEGy7+LIkyrw02QCxj6I=
-X-Received: by 2002:a7b:cb8a:0:b0:3f1:7368:ccc6 with SMTP id
- m10-20020a7bcb8a000000b003f17368ccc6mr11173389wmi.25.1682487751190; Tue, 25
- Apr 2023 22:42:31 -0700 (PDT)
+        Wed, 26 Apr 2023 01:47:53 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03472133;
+        Tue, 25 Apr 2023 22:47:52 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33Q08kYg003410;
+        Tue, 25 Apr 2023 22:47:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=JTfxwqkfeo+OZ4ivi5IkCaSG/A/YyNvJhN2rrPjPEW8=;
+ b=SAsQ/CdS212bqZOv7MrWinKwZhNtPiqCXwZ4BK2yRfyXgHa5c3CFtNfNco+qxEUQsaG6
+ Cmz3o3nH0vPTkiCgzZZfbS6jxw2GVFKnjegNtkdk09cfrtMG0eSrUTamkl2bzVbY5KQp
+ 9StRWSXlEoni+AzufkRlhBfOsPr1tEDZumIFp4XA8XC/S+25Kte9C+pJDk0my5hcUhat
+ rFQ7BODXnqOcfDeQa8XlxnhEs/HSVW+DFDxe38Ku882sXgXobFzcm86al1KA2qqWAwmb
+ /Chfd4zgkwjs2w8UhwAzgN7g5SVXBGQMO2+Smmk0xrepBmxvL4cdyZN0zkGFxrsxWI7d +Q== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q4f3pd9jn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 25 Apr 2023 22:47:40 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 25 Apr
+ 2023 22:47:38 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Tue, 25 Apr 2023 22:47:38 -0700
+Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
+        by maili.marvell.com (Postfix) with ESMTP id A4D383F706D;
+        Tue, 25 Apr 2023 22:47:32 -0700 (PDT)
+From:   Hariprasad Kelam <hkelam@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>,
+        <willemdebruijn.kernel@gmail.com>, <andrew@lunn.ch>,
+        <sgoutham@marvell.com>, <lcherian@marvell.com>,
+        <gakula@marvell.com>, <jerinj@marvell.com>, <sbhatta@marvell.com>,
+        <hkelam@marvell.com>, <naveenm@marvell.com>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <maxtram95@gmail.com>, <corbet@lwn.net>
+Subject: [net-next Patch v10 0/8] octeontx2-pf: HTB offload support
+Date:   Wed, 26 Apr 2023 11:17:23 +0530
+Message-ID: <20230426054731.5720-1-hkelam@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230424134748.228137-1-james.clark@arm.com> <20230424134748.228137-2-james.clark@arm.com>
- <8acae291-2c3f-6010-de66-d4e54781d21f@arm.com>
-In-Reply-To: <8acae291-2c3f-6010-de66-d4e54781d21f@arm.com>
-From:   Denis Nikitin <denik@chromium.org>
-Date:   Tue, 25 Apr 2023 22:42:19 -0700
-Message-ID: <CADDJ8CWdKQR_-hgLqYdB6QyMZwzkZMtZ5gkoth3Uj7O7i3Cfvg@mail.gmail.com>
-Subject: Re: [PATCH 1/7] perf: cs-etm: Fix timeless decode mode detection
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        shy828301@gmail.com, denik@google.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Ibm8Fwl3JPcWhFpdo5XbB73ZQN78AiVB
+X-Proofpoint-GUID: Ibm8Fwl3JPcWhFpdo5XbB73ZQN78AiVB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_02,2023-04-25_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 8:14=E2=80=AFAM Suzuki K Poulose <suzuki.poulose@ar=
-m.com> wrote:
->
-> On 24/04/2023 14:47, James Clark wrote:
-> > In this context, timeless refers to the trace data rather than the perf
-> > event data. But when detecting whether there are timestamps in the trac=
-e
-> > data or not, the presence of a timestamp flag on any perf event is used=
-.
-> >
-> > Since commit f42c0ce573df ("perf record: Always get text_poke events
-> > with --kcore option") timestamps were added to a tracking event when
-> > --kcore is used which breaks this detection mechanism. Fix it by
-> > detecting if trace timestamps exist by looking at the ETM config flags.
-> > This would have always been a more accurate way of doing it anyway.
-> >
-> > This fixes the following error message when using --kcore with
-> > Coresight:
-> >
-> >    $ perf record --kcore -e cs_etm// --per-thread
-> >    $ perf report
-> >    The perf.data/data data has no samples!
-> >
-> > Fixes: f42c0ce573df ("perf record: Always get text_poke events with --k=
-core option")
-> > Reported-by: Yang Shi <shy828301@gmail.com>
-> > Link: https://lore.kernel.org/lkml/CAHbLzkrJQTrYBtPkf=3Djf3OpQ-yBcJe7Xk=
-vQstX9j2frz4WF-SQ@mail.gmail.com/
-> > Signed-off-by: James Clark <james.clark@arm.com>
-> > ---
-> >   tools/perf/util/cs-etm.c | 30 ++++++++++++++++++------------
-> >   1 file changed, 18 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> > index 8dd81ddd9e4e..50593289d53c 100644
-> > --- a/tools/perf/util/cs-etm.c
-> > +++ b/tools/perf/util/cs-etm.c
-> > @@ -2684,26 +2684,29 @@ static int cs_etm__process_auxtrace_event(struc=
-t perf_session *session,
-> >       return 0;
-> >   }
-> >
-> > -static bool cs_etm__is_timeless_decoding(struct cs_etm_auxtrace *etm)
-> > +static int cs_etm__setup_timeless_decoding(struct cs_etm_auxtrace *etm=
-)
->
-> minor nit: "setup" sound more like prepare to do what is required to
-> do a timeless decoding, while we are doing more like, check if we
-> have to do a timeless decoding. So may be:
->
-> cs_etm_check_timeless_decoding() ?
->
+octeontx2 silicon and CN10K transmit interface consists of five
+transmit levels starting from MDQ, TL4 to TL1. Once packets are
+submitted to MDQ, hardware picks all active MDQs using strict
+priority, and MDQs having the same priority level are chosen using
+round robin. Each packet will traverse MDQ, TL4 to TL1 levels.
+Each level contains an array of queues to support scheduling and
+shaping.
 
-I didn't catch that "setup_timeless_decoding" can be treated as the
-initialization
-of the timeless decoding. On the other hand _check_ doesn't imply that
-it changes
-the flag.
-Maybe "_setup_timeless_decoding_flag" will be more specific about its inten=
-tion?
+As HTB supports classful queuing mechanism by supporting rate and
+ceil and allow the user to control the absolute bandwidth to
+particular classes of traffic the same can be achieved by
+configuring shapers and schedulers on different transmit levels.
 
-- Denis
+This series of patches adds support for HTB offload,
 
->
-> Otherwise, looks good to me
->
-> Suzuki
->
->
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
+Patch1: Allow strict priority parameter in HTB offload mode.
+
+Patch2: Rename existing total tx queues for better readability
+
+Patch3: defines APIs such that the driver can dynamically initialize/
+        deinitialize the send queues.
+
+Patch4: Refactors transmit alloc/free calls as preparation for QOS
+        offload code.
+
+Patch5: moves rate limiting logic to common header which will be used
+        by qos offload code.
+
+Patch6: Adds actual HTB offload support.
+
+Patch7: exposes qos send queue stats over ethtool.
+
+Patch8: Add documentation about htb offload flow in driver
+
+Hariprasad Kelam (5):
+  octeontx2-pf: Rename tot_tx_queues to non_qos_queues
+  octeontx2-pf: Refactor schedular queue alloc/free calls
+  octeontx2-pf: Prepare for QOS offload
+  octeontx2-pf: ethtool expose qos stats
+  docs: octeontx2: Add Documentation for QOS
+
+Naveen Mamindlapalli (2):
+  sch_htb: Allow HTB priority parameter in offload mode
+  octeontx2-pf: Add support for HTB offload
+
+Subbaraya Sundeep (1):
+  octeontx2-pf: qos send queues management
+-----
+v1 -> v2 :
+          ensure other drivers won't affect by allowing 'prio'
+          a parameter in htb offload mode.
+
+v2 -> v3 :
+          1. discard patch supporting devlink to configure TL1 round
+             robin priority
+          2. replace NL_SET_ERR_MSG with NL_SET_ERR_MSG_MOD
+          3. use max3 instead of using max couple of times and use a better
+             naming convention in send queue management code.
+
+v3 -> v4:
+	  1. fix sparse warnings.
+	  2. release mutex lock in error conditions.
+
+v4 -> v5:
+	  1. fix pahole reported issues
+          2. add documentation for htb offload flow.
+
+v5 -> v6:
+	  1. fix synchronization issues w.r.t hlist accessing
+             from ndo_select_queue with rcu lock.
+          2. initialize qos related resources in device init.
+
+v6 -> v7:
+	  1. fix erros reported by sparse and clang
+
+v7 -> v8:
+	  1. cover letter header is malformed in last version.
+             correct the cover letter
+v8 -> v9:
+	  1. fix issues reported by smatch
+
+v9 -> v10:
+         1. split the htb offload patch
+         2. define helper APIs for txschq config
+         3. update commit description and documentation.
+
+
+ .../ethernet/marvell/octeontx2.rst            |   45 +
+ .../ethernet/marvell/octeontx2/af/common.h    |    2 +-
+ .../marvell/octeontx2/af/rvu_debugfs.c        |    5 +
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |   45 +
+ .../ethernet/marvell/octeontx2/nic/Makefile   |    2 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  121 +-
+ .../marvell/octeontx2/nic/otx2_common.h       |   82 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   29 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  114 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_reg.h |   13 +
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  |   29 +-
+ .../marvell/octeontx2/nic/otx2_txrx.c         |   24 +-
+ .../marvell/octeontx2/nic/otx2_txrx.h         |    3 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |   14 +-
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  | 1363 +++++++++++++++++
+ .../net/ethernet/marvell/octeontx2/nic/qos.h  |   69 +
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  296 ++++
+ .../net/ethernet/mellanox/mlx5/core/en/qos.c  |    7 +-
+ include/net/pkt_cls.h                         |    1 +
+ net/sched/sch_htb.c                           |    7 +-
+ 20 files changed, 2144 insertions(+), 127 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos.h
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+
+--
+2.17.1
