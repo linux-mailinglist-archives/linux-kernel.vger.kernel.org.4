@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37DA6EEE91
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33F46EEE92
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239620AbjDZGwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
+        id S239617AbjDZGwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239581AbjDZGwJ (ORCPT
+        with ESMTP id S239504AbjDZGwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:52:09 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7EC2715
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:51:58 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3ef31924c64so317751cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:51:58 -0700 (PDT)
+        Wed, 26 Apr 2023 02:52:10 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A2E30E0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:52:02 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef31924c64so317791cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:52:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682491918; x=1685083918;
+        d=google.com; s=20221208; t=1682491921; x=1685083921;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wElXf1wLx1RJfNW0iKlEDdzRW1/ZkH3DWQqPrw6Tzd4=;
-        b=HF0+QRnw9ICiurw86U/LgM5fzT0mpVosa90P4zqhTwet7UHrqFEjr114y7mxk3Djt+
-         DPNExJRsI9OqUCW9KhYhz7io5UeEkzqvIseYtlb7cUcNhndFTLzUVC0DWGtkswyfeVmQ
-         6M2MzwuZf3XNDMgWqkhJEJzCQ6QWRAm0J/p1oYvkymuNnCk2CDUijxdI12QhSh4K5+fE
-         kXg/kyRBDZmNUTeF9egGb1bxD7lC9Wg0NOh+jXpjgs+1dDw3VwTEMyjEqk1jURTsms6A
-         iXDnBVW+w+qSzqulIRFLymBg0INNcsr3xuTuxFQv1ccqSBlhSDkxEtBgU/PpKIG53cxR
-         kdzg==
+        bh=E7WUK9l5ab7TXtH6Khba5tk5e927ngC9f08ZD0F1KpI=;
+        b=C26x15qHgibXkdc4k0Lq/V8+IrCd+CWATgbNfZkPlEQwjIITNgfDFNdNWjFnzXgug4
+         H2sHeCQg7xSfy4fCnYZQrkJYYzP8GNL1mWa23CZrNt1FSKBCS3GLf/wu46XygLOI9Amt
+         bbm7CEAIuJAHMTBEq8v4FO9P0N7E/jtfQ19/Vy1C71wYsY2vwRY4ItdeYouNJvAORmiC
+         sLLN/TwY/wpmBBApx+pMi/jcZHURvIu963KGrpuiN2IeljU88xY8Duk/QCzFyz5oYXRg
+         lkQCiVbfo/Yi+NMsQNOTzTZo0Ulsle8t6+QAMxAGm7ckK1Pi7wIi1uw0TawPNAhHtU9U
+         uFFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682491918; x=1685083918;
+        d=1e100.net; s=20221208; t=1682491921; x=1685083921;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wElXf1wLx1RJfNW0iKlEDdzRW1/ZkH3DWQqPrw6Tzd4=;
-        b=Jtmg3Xl7lTL33s5W+wywzjfomGuE8bh+Lde8xYVw1wY/8PB3DoUU1MsNhttGcX3Vs1
-         5esN/BEiV9vD1V6z0zBrKxo5GBTmwh2tooA9OiFZfgdEPu0gDdaMrU1DYbswUHLKhL7x
-         6rAUTMrEQmcZaGX4VTsyo/S9/bQ8s5TH/TFUf9l4pL7EvJ7Gl9RtYT/o4NWdb9EQqdpO
-         rkpIcZ3mTriXXP4/0G9tg4QSzcUs3PFhVcLFBFOa9+e0l4EwlNx91TJHBGWtvVxJfDqG
-         vXAEG8D3CYghOD7qGfQTmaqR1lGr8osp7lrNtdJndQgx48GloeygD5LjebVSJcD3dZKc
-         gPig==
-X-Gm-Message-State: AC+VfDwnDSWOMvByEcq4RTmFfNG7Ao+x2gebSVtnzKx2q3auPkaya0yB
-        LY5CXFu0GwxlMiLSffize02SUISXjKNWJjstqa4Y8A==
-X-Google-Smtp-Source: ACHHUZ65QRA+WH2ViYNCiho5VWgtJE4TC91Nkqqj+oOyCYpHaQiXotsbWAsk2qVd2rjv+LsSaYe6KNu2V9kYs9nTiYQ=
-X-Received: by 2002:a05:622a:1ce:b0:3ef:31a5:13c with SMTP id
- t14-20020a05622a01ce00b003ef31a5013cmr165018qtw.3.1682491917727; Tue, 25 Apr
- 2023 23:51:57 -0700 (PDT)
+        bh=E7WUK9l5ab7TXtH6Khba5tk5e927ngC9f08ZD0F1KpI=;
+        b=RfSe4wbYLTeE/esysJvgNzxvybsRDNxBaYNb1HirUbpfR08DKLrRJSaGdolOlfGix+
+         q7onXiOMEtqk47pHNBcn11ewxp/lFSZfCNgC49HSW4HAf9ENGnKiyE+U+pFL/aNYyZG+
+         f/sgK+Cs8KUWlGsrIhMHX2iHBVNFXi8UqhCsEhxkiaLzOFQkbjLpQGln2qHu9fYZkO7g
+         5YAA+pKTrzHX1j43bxPT4XanwXLJ186oaHdYnk0hIBSFnXijmfnwr+hOB4WTcAd1Jna0
+         kEaCu1NKMMY5xvFyYbYgFAOD+FOtqpjO5URxWidOaDVlAo0SwnYBX57zcgEIdU/W5ez9
+         h69g==
+X-Gm-Message-State: AC+VfDxTVl7x6H0DILja9Q1aRCQKI7dwLAXS6E/llpiTJ1imR6WXtrs6
+        z/SNioLwOQyNi57ovt5d0zWdPFtonqZPKO5HQ+7sAw==
+X-Google-Smtp-Source: ACHHUZ5D7Ppt024Tijx/Bn5kxD17PMJ9pdt5PyVWCaThwawJ5rB8RwWdk386niifcHohha+LIBpxbX+4wyetVxuiYMU=
+X-Received: by 2002:ac8:7e84:0:b0:3ef:1c85:5b5e with SMTP id
+ w4-20020ac87e84000000b003ef1c855b5emr150190qtj.19.1682491921197; Tue, 25 Apr
+ 2023 23:52:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230421084226.2278282-1-davidgow@google.com> <54b49d4ddf371d0581f3b795f50f7f6673557a96.camel@sipsolutions.net>
- <5a820cf9aae169e18635a8c867835817a50892b0.camel@sipsolutions.net>
-In-Reply-To: <5a820cf9aae169e18635a8c867835817a50892b0.camel@sipsolutions.net>
+References: <20230421084226.2278282-1-davidgow@google.com> <knlcj7ub477vbdhi4jkhxg6eltrluffli2gett4t4w4ed4cztr@qlxpd4rmgx3g>
+In-Reply-To: <knlcj7ub477vbdhi4jkhxg6eltrluffli2gett4t4w4ed4cztr@qlxpd4rmgx3g>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 26 Apr 2023 14:51:45 +0800
-Message-ID: <CABVgOS=ca71mj=qsPBvji-iTf-QsjDrxGzOymVGBJj8oHaJzWg@mail.gmail.com>
+Date:   Wed, 26 Apr 2023 14:51:50 +0800
+Message-ID: <CABVgOS=doetW4_MMYwh3bLM-VBMaTBm-7JU44Y2=zRDvgoLXbg@mail.gmail.com>
 Subject: Re: [PATCH v1 0/3] kunit: Deferred action helpers
-To:     Benjamin Berg <benjamin@sipsolutions.net>
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
         Brendan Higgins <brendan.higgins@linux.dev>,
         Stephen Boyd <sboyd@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Daniel Latypov <dlatypov@google.com>,
         Rae Moar <rmoar@google.com>,
+        Benjamin Berg <benjamin@sipsolutions.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -69,7 +68,7 @@ Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001c35be05fa37adf5"
+        boundary="00000000000051124605fa37ad77"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -81,48 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001c35be05fa37adf5
+--00000000000051124605fa37ad77
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 24 Apr 2023 at 22:02, Benjamin Berg <benjamin@sipsolutions.net> wrote:
+On Tue, 25 Apr 2023 at 23:23, Maxime Ripard <maxime@cerno.tech> wrote:
 >
-> Hi David,
+> Hi,
 >
-> On Mon, 2023-04-24 at 14:32 +0200, Benjamin Berg wrote:
-> > On Fri, 2023-04-21 at 16:42 +0800, 'David Gow' via KUnit Development wrote:
-> > > This is v1 of the KUnit deferred actions API, which implements an
-> > > equivalent of devm_add_action[1] on top of KUnit managed resources. This
-> > > provides a simple way of scheduling a function to run when the test
-> > > terminates (whether successfully, or with an error). It's therefore very
-> > > useful for freeing resources, or otherwise cleaning up.
-> > >
-> > > The notable changes since RFCv2[2] are:
-> > > - Got rid of the 'cancellation token' concept. It was overcomplicated,
-> > >   and we can add it back if we need to.
-> > > - kunit_add_action() therefore now returns 0 on success, and an error
-> > >   otherwise (like devm_add_action()). Though you may wish to use:
-> > > - Added kunit_add_action_or_reset(), which will call the deferred
-> > >   function if an error occurs. (See devm_add_action_or_reset()). This
-> > >   also returns an error on failure, which can be asserted safely.
-> > > - Got rid of the function pointer typedef. Personally, I liked it, but
-> > >   it's more typedef-y than most kernel code.
-> > > - Got rid of the 'internal_gfp' argument: all internal state is now
-> > >   allocated with GFP_KERNEL. The main KUnit resource API can be used
-> > >   instead if this doesn't work for your use-case.
-> > >
-> > > I'd love to hear any further thoughts!
+> On Fri, Apr 21, 2023 at 04:42:23PM +0800, David Gow wrote:
+> > This is v1 of the KUnit deferred actions API, which implements an
+> > equivalent of devm_add_action[1] on top of KUnit managed resources. This
+> > provides a simple way of scheduling a function to run when the test
+> > terminates (whether successfully, or with an error). It's therefore very
+> > useful for freeing resources, or otherwise cleaning up.
 > >
-> > I am happy with it as-is.
+> > The notable changes since RFCv2[2] are:
+> > - Got rid of the 'cancellation token' concept. It was overcomplicated,
+> >   and we can add it back if we need to.
+> > - kunit_add_action() therefore now returns 0 on success, and an error
+> >   otherwise (like devm_add_action()). Though you may wish to use:
+> > - Added kunit_add_action_or_reset(), which will call the deferred
+> >   function if an error occurs. (See devm_add_action_or_reset()). This
+> >   also returns an error on failure, which can be asserted safely.
+> > - Got rid of the function pointer typedef. Personally, I liked it, but
+> >   it's more typedef-y than most kernel code.
+> > - Got rid of the 'internal_gfp' argument: all internal state is now
+> >   allocated with GFP_KERNEL. The main KUnit resource API can be used
+> >   instead if this doesn't work for your use-case.
+> >
+> > I'd love to hear any further thoughts!
 >
-> Oh, wait. Nothing big, but I just noticed that the new API functions
-> seem to not yet be exported using EXPORT_SYMBOL_GPL.
+> I've converted the KMS kunit tests to use that API when relevant, and
+> it works like a charm and is super usable, thanks so much.
 
-Ah, nice catch! I'll add those to the next version.
+Nice! I'm glad it's working well.
+>
+> One improvement we could do as a second step is to provide a
+> kunit_action_t type or something to make casting kfree-like functions
+> easier, but it's already great overall.
+
+I had that in an earlier version and got rid of it to better match
+what devm_* was doing, but I personally agree that it's nice to have.
+I'll add it back in the next version.
+
+> Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+> Tested-by: Maxime Ripard <maxime@cerno.tech>
+
 
 Cheers,
 -- David
 
---0000000000001c35be05fa37adf5
+--00000000000051124605fa37ad77
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -189,14 +197,14 @@ tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
 m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
 c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDE
-nnWr2Q7B6h+p2p5/j0St/ZSYCpEhhr61wyLxpVkALDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA0MjYwNjUxNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAF
+mKDsyAXOV0Ox38QGSxfNUL16n0DdCe/M9KG5m+WKvjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA0MjYwNjUyMDFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFpVMILgcXbghKLx/GWfu
-rnJs7qNFUppnpiiYCPh+9v9StVg2coG6sZIjyXN2C03flhu4XvuCWW9VkrOyPYzEfu5855kud3ui
-kQAVveJwKujiWhOnNNxTAM0yhHLEVmHXNikpRF34bP+VaNYepSdVrfPW2glIaTDmBlkcHmfg3Q2/
-gyDuV/IKTQA8X7LYClpfmg4TzHa0PIqcX1zp+E/4NANY9hi+3uNqCKVG1nGaHgf06lBByn2JbtA3
-P2uRfDbF//PPtXaiM6vlQXiUXPs5/n4WfIBfxvT2kzgUZuT2Qtj0NdpnUvJX4AeNy7k2QyUP5gqf
-bKKbSJNY7RrTQdj1kw==
---0000000000001c35be05fa37adf5--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAVyijtvIAmiEnQNlclmrP
+ecuB4N1Dfr9FDNKdCCPz+0UOH5j7mbIJbJp37vJERTD/Ca2A/j7J5uuGsBbB/5a15bqiaQLEIuGz
+1s6Qazkwt7W+b7eRGAKAGTeOmWDHOdN4NgWuGGtwqBZM/zC2Ng90SBE9613/FwxUORIM7LCBNdoK
+5mdmnhZujnofXJQ4Wm52vTf1Sioznv7jZzkMXs3zhmpWn8Zl1wzpE332T8Cz23xBrfJgbwFZuOTt
+N96h57bMZDGP10KerXPaspo/jxrrv7epaFfnaFnMXIDSN8YuoGNCqjCRvxI8nblxeONDglZAU/+3
+CAtBx/XxGuiaeTgXFA==
+--00000000000051124605fa37ad77--
