@@ -2,75 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1E96EF195
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AAF6EF19C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239757AbjDZJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S240265AbjDZKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239308AbjDZJ7z (ORCPT
+        with ESMTP id S240396AbjDZKBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:59:55 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1BC4EF2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:59:16 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b8b19901fso8449878b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682503153; x=1685095153;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RDQSmR3vhfuY5wD7//ZjiyUrNw8FfLpaCbF2hNAW7A8=;
-        b=UChbCaTHDh1zDI2Mpv3WMMKP3U0l8VlU7gu+cMaGz9dE0Ei9Mqykvs0cihczEstdSy
-         EY6QxBuqPazZbWYrtzpfOSF5gw03gCVV6SUCR5SM5PIv9prj07Lfh2/MJuzyE1gxj0Jt
-         V6RS7HCRVD67MT55J4G4zun3lz2NZrFz1IslSwhqrUdrhonOzjGNrgZXTkrsMvh6fdT8
-         6QufwBaCnR6dhFEiy1Om0maCKqoOtBjEF6zepJ87py6o5eIztsaoZl+dFdV64ZQjOOS/
-         MeblJzB2WrcJjKLKK8vPB/3V9TltmzAL3ZCrtJHIoM7iYYmlDXH5Vi1Cx9FCFSvZY4qR
-         j2BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682503153; x=1685095153;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RDQSmR3vhfuY5wD7//ZjiyUrNw8FfLpaCbF2hNAW7A8=;
-        b=YPrceZVvG+DjvU6xQcnb95TVJNO2XFlenRLb6DdmxXqxLz1wji32vOBM/aHh0FoVAw
-         azKjpuTLFGUFtr96CDr306Ax3dS52Do6T54JQMiH7gooW8UvYUE5JvpMTs7GAsg7XD9S
-         rBfKLG3Mg9uNBBqJ8LNUECqc5m4kMoJHWB29LmTBAH/jp83G3KV+SpY9gE5zCyTr93IQ
-         psNTDYWhpTGyriahCLdf/oGR2gJZO4UJO0U42VL1JIJhivQw9tsYWK7/4/mWxviYQsNy
-         yayu/boSasLZoWGQHtLcD3u+qYyngRedVvFv39mNwppcNzOJrCJayQvNpk7t13Oc6vda
-         UA2g==
-X-Gm-Message-State: AAQBX9eFxI9Fa0vjqltHVrbLUVXU2Jdqw4GTBJgDEtO27wWbhQCxaLnG
-        ExNskvg/zNa/4vG4QYWYYNhIrj7P1G1sXQ9RTOo=
-X-Google-Smtp-Source: AKy350aeRUFwRFS/9eg5SLTEXt3NPabPbXCpA4JVj2iQdij4+Pb3jl8wR3w9lrqj7t3ZGlfVnpmgtg==
-X-Received: by 2002:a05:6a00:23d6:b0:63d:2910:5c8b with SMTP id g22-20020a056a0023d600b0063d29105c8bmr27702193pfc.29.1682503153326;
-        Wed, 26 Apr 2023 02:59:13 -0700 (PDT)
-Received: from [10.200.11.252] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id c15-20020a624e0f000000b0063f534f0937sm5939078pfb.46.2023.04.26.02.59.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 02:59:13 -0700 (PDT)
-Message-ID: <0201ec78-5b43-40e1-c1a0-4891f47206dc@bytedance.com>
-Date:   Wed, 26 Apr 2023 17:59:08 +0800
+        Wed, 26 Apr 2023 06:01:14 -0400
+Received: from out28-100.mail.aliyun.com (out28-100.mail.aliyun.com [115.124.28.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384674EC0;
+        Wed, 26 Apr 2023 03:01:08 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3684256|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0756489-0.0141251-0.910226;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.SRApSpG_1682503259;
+Received: from 10.0.2.15(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.SRApSpG_1682503259)
+          by smtp.aliyun-inc.com;
+          Wed, 26 Apr 2023 18:01:00 +0800
+Message-ID: <04f4e968-946e-cbf0-3d78-cfe6cb17afb3@motor-comm.com>
+Date:   Wed, 26 Apr 2023 17:59:54 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH 20/34] maple_tree: Remove unnecessary check from
- mas_destroy()
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230425140955.3834476-1-Liam.Howlett@oracle.com>
- <20230425140955.3834476-21-Liam.Howlett@oracle.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230425140955.3834476-21-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/2] dt-bindings: net: motorcomm: Add pad driver
+ strength cfg
+To:     Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230426063541.15378-1-samin.guo@starfivetech.com>
+ <20230426063541.15378-2-samin.guo@starfivetech.com>
+Content-Language: en-US
+From:   Frank Sae <Frank.Sae@motor-comm.com>
+In-Reply-To: <20230426063541.15378-2-samin.guo@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,29 +57,40 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2023/4/25 22:09, Liam R. Howlett 写道:
-> mas_destroy currently checks if mas->node is MAS_START prior to calling
-> mas_start(), but this is unnecessary as mas_start() will do nothing if
-> the node is anything but MAS_START.
->
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Reviewed-by: Peng Zhang <zhangpeng.00@bytedance.com>
+
+On 2023/4/26 14:35, Samin Guo wrote:
+> The motorcomm phy (YT8531) supports the ability to adjust the drive
+> strength of the rx_clk/rx_data, the value range of pad driver
+> strength is 0 to 7.
+> 
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
 > ---
->   lib/maple_tree.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 89e30462f8b62..35c6e12ca9482 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5817,9 +5817,7 @@ void mas_destroy(struct ma_state *mas)
->   	if (mas->mas_flags & MA_STATE_REBALANCE) {
->   		unsigned char end;
->   
-> -		if (mas_is_start(mas))
-> -			mas_start(mas);
-> -
-> +		mas_start(mas);
->   		mtree_range_walk(mas);
->   		end = mas_data_end(mas) + 1;
->   		if (end < mt_min_slot_count(mas->node) - 1)
+>  .../devicetree/bindings/net/motorcomm,yt8xxx.yaml      | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> index 157e3bbcaf6f..e648e486b6d8 100644
+> --- a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> @@ -18,6 +18,16 @@ properties:
+>        - ethernet-phy-id4f51.e91a
+>        - ethernet-phy-id4f51.e91b
+>  
+> +  rx-clk-driver-strength:
+> +    description: drive strength of rx_clk pad.
+> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+> +    default: 3
+> +
+> +  rx-data-driver-strength:
+> +    description: drive strength of rxd/rx_ctl rgmii pad.
+> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+> +    default: 3
+> +
+
+rx-clk-driver-strength and rx-data-driver-strength are not standard, so please add "motorcomm,".
+rx-clk-driver-strength => motorcomm,rx-clk-driver-strength
+
+
+>    rx-internal-delay-ps:
+>      description: |
+>        RGMII RX Clock Delay used only when PHY operates in RGMII mode with
