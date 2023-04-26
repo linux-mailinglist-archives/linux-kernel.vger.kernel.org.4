@@ -2,243 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8376EEB78
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134B96EEB7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 02:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238451AbjDZAdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 20:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S238447AbjDZAea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 20:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbjDZAdS (ORCPT
+        with ESMTP id S236933AbjDZAe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 20:33:18 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B398122
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:33:10 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54f8d59a8a9so78031717b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 17:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682469190; x=1685061190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/m31fXmCYkRykjr64yLyl9No/N7/LO0PyiOq0SfOTcI=;
-        b=mCC2U7P4bVDltEipaZ1XO58WvXI4foGsHyOajzLAv1XL51cy2mClqEWTfeNCdz0BjB
-         FDaoePmyG2l8LR5TIE3yaMDKpElpT5DtYWTyv3aeA2jFJrey8VP4Tdt6aQGdIXfhs3tY
-         +8it1lkZbl8pOt81pRKN37p4nZb779z/7zK/U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682469190; x=1685061190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/m31fXmCYkRykjr64yLyl9No/N7/LO0PyiOq0SfOTcI=;
-        b=hughQL++cCwVWv2iqvWrRp0p6BxinYi2g1udkGw1fFhT63fKcMHhnMzntVqziUVraM
-         SYMVvpS5fwJF/oL1qsRI4r440OQs265Ec2ICfTzBbVj7IpYD7/Ed3ufJbWZ48p3VvW3Z
-         9w4aalKTsHyfvcWcSOxImz6tu76IjdmMLHWlLjFcwdUfo8jkX27g/qJ9vYTSfyJUHWxW
-         dexg5if7lAWfgBeTKVp6zqkTJ7WoOIGN1Xa6Iw/I57wA41yLxiS8xlnarfKRj2/Gbi36
-         Zri9BeUivPlJLQOXpkQljUkcXd+wnCwigX9gNNz+rUnjFQ6LkqVz+4xFLatladccALH6
-         2Cig==
-X-Gm-Message-State: AAQBX9fQG8h6d9F4FkVOth55I/NiUEsOF0G5hPe8P2mxECSW40r4BRRS
-        qz7Cet4ekBY+KY6ZCt/Loe32kd9hcQ14QhSzHbz8ciz1QRiIu0HS8Hg=
-X-Google-Smtp-Source: AKy350Z8Tn/PgyoxEoAPve79RTGvXC15zR/anbf7Twr9gfnfZWc5FlCqSIaNWE0szg0jkK8Nqg1HXvZBZGmykHGG8gQ=
-X-Received: by 2002:a0d:d796:0:b0:54f:aa28:c908 with SMTP id
- z144-20020a0dd796000000b0054faa28c908mr12274895ywd.49.1682469189628; Tue, 25
- Apr 2023 17:33:09 -0700 (PDT)
+        Tue, 25 Apr 2023 20:34:28 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454EB122;
+        Tue, 25 Apr 2023 17:34:28 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33PNJAMn031578;
+        Wed, 26 Apr 2023 00:34:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4agyAIcDc0Cu6zmKCDFisgCp3WWF8uk2+YsbowG0z6Y=;
+ b=LV5nSvmngExikZBm0zfrErDRcTqj5lFjtyARNAbCOVibSTs/1B54o4MVblcBYQa7MxJm
+ luhLxZxRF+a63RnccYzMHk8XM3S52mXIKVVZ6/BN+JW5sTSA10MnvVtX6iLphl79237z
+ 06bgJRO/e+0M1HtIVnbWRGZ5vD6/kkoZD4wKeo3GjttuoqkqlGElJbKpoAzo1ujgjumy
+ c4QhvHDv0ERopPAECspgKSe3R07S+nb7XA/fbGhsLfymgVBgic6fhiJ03rWzXfU6VslB
+ g2bPuFT03KJwY9BJtEC4h3HDqZphmGUiOYXus21EYbx7gJiirehLIPfwWeWLLW9zA2FB jA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6gak1b4d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 00:34:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33Q0XsoF016338
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 00:33:54 GMT
+Received: from [10.110.124.105] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
+ 2023 17:33:53 -0700
+Message-ID: <697f5b26-73b0-b53c-c7a0-1d926778ee70@quicinc.com>
+Date:   Tue, 25 Apr 2023 17:33:52 -0700
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <CAEXW_YSSGYgqTpxqbYikCFS9t=2f+L-0phbU+gAAngB5z-FbyA@mail.gmail.com>
- <ZEXOMC2casTlobE1@boqun-archlinux> <87fs8pzalj.fsf@mail.concordia>
- <20230424151351.GP19790@gate.crashing.org> <ZEagN1jJwg+rUzX4@boqun-archlinux>
- <CAEXW_YRfetnhgCw5OgnwhgZF_U+UkHN=uy=L8ovGLqn1UCtfTg@mail.gmail.com>
- <20230425101324.GD1331236@hirez.programming.kicks-ass.net>
- <CAABZP2ypJ98T3XAqPnLrxxzrYckSQ6sn3woEmpigQ+cRRaw=Zw@mail.gmail.com>
- <CAEXW_YQEarLt7YGQZdwmcSyZcGRCGKf89ovxjQdXBO-TgXAk-w@mail.gmail.com>
- <528b2adc-9955-5545-9e9d-affd1f935838@csgroup.eu> <CAABZP2zW7aTPChjvZMA1bECdOdFUdTd-q+vEJXJnH2zPU+uR8A@mail.gmail.com>
-In-Reply-To: <CAABZP2zW7aTPChjvZMA1bECdOdFUdTd-q+vEJXJnH2zPU+uR8A@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 25 Apr 2023 20:32:57 -0400
-Message-ID: <CAEXW_YQJowYrF2A=f2NOKNNjL6qZH6LzghBxt7VnJFgg-i1zgg@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "lance@osuosl.org" <lance@osuosl.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NORMAL_HTTP_TO_IP,
-        NUMERIC_HTTP_ADDR,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 04/21] drm/msm/dpu: Reindent REV_7xxx interrupt masks
+ with tabs
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Sean Paul" <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Adam Skladowski <a39.skl@gmail.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Kuogee Hsieh" <quic_khsieh@quicinc.com>,
+        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+CC:     <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+References: <20230411-dpu-intf-te-v3-0-693b17fe6500@somainline.org>
+ <20230411-dpu-intf-te-v3-4-693b17fe6500@somainline.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20230411-dpu-intf-te-v3-4-693b17fe6500@somainline.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wAkvFEFaOcfgj7IatlCh_bSFJ3CaYpwi
+X-Proofpoint-GUID: wAkvFEFaOcfgj7IatlCh_bSFJ3CaYpwi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-25_11,2023-04-25_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=637 adultscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304260003
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 9:50=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail.com> =
-wrote:
->
-> Hi
->
-> On Tue, Apr 25, 2023 at 9:40=E2=80=AFPM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
-> >
-> >
-> >
-> > Le 25/04/2023 =C3=A0 13:06, Joel Fernandes a =C3=A9crit :
-> > > On Tue, Apr 25, 2023 at 6:58=E2=80=AFAM Zhouyi Zhou <zhouzhouyi@gmail=
-.com> wrote:
-> > >>
-> > >> hi
-> > >>
-> > >> On Tue, Apr 25, 2023 at 6:13=E2=80=AFPM Peter Zijlstra <peterz@infra=
-dead.org> wrote:
-> > >>>
-> > >>> On Mon, Apr 24, 2023 at 02:55:11PM -0400, Joel Fernandes wrote:
-> > >>>> This is amazing debugging Boqun, like a boss! One comment below:
-> > >>>>
-> > >>>>>>> Or something simple I haven't thought of? :)
-> > >>>>>>
-> > >>>>>> At what points can r13 change?  Only when some particular functi=
-ons are
-> > >>>>>> called?
-> > >>>>>>
-> > >>>>>
-> > >>>>> r13 is the local paca:
-> > >>>>>
-> > >>>>>          register struct paca_struct *local_paca asm("r13");
-> > >>>>>
-> > >>>>> , which is a pointer to percpu data.
-> > >>>>>
-> > >>>>> So if a task schedule from one CPU to anotehr CPU, the value gets
-> > >>>>> changed.
-> > >>>>
-> > >>>> It appears the whole issue, per your analysis, is that the stack
-> > >>>> checking code in gcc should not cache or alias r13, and must read =
-its
-> > >>>> most up-to-date value during stack checking, as its value may have
-> > >>>> changed during a migration to a new CPU.
-> > >>>>
-> > >>>> Did I get that right?
-> > >>>>
-> > >>>> IMO, even without a reproducer, gcc on PPC should just not do that=
-,
-> > >>>> that feels terribly broken for the kernel. I wonder what clang doe=
-s,
-> > >>>> I'll go poke around with compilerexplorer after lunch.
-> > >>>>
-> > >>>> Adding +Peter Zijlstra as well to join the party as I have a feeli=
-ng
-> > >>>> he'll be interested. ;-)
-> > >>>
-> > >>> I'm a little confused; the way I understand the whole stack protect=
-or
-> > >>> thing to work is that we push a canary on the stack at call and on
-> > >>> return check it is still valid. Since in general tasks randomly mig=
-rate,
-> > >>> the per-cpu validation canary should be the same on all CPUs.
-> > >>>
-> > >>> Additionally, the 'new' __srcu_read_{,un}lock_nmisafe() functions u=
-se
-> > >>> raw_cpu_ptr() to get 'a' percpu sdp, preferably that of the local c=
-pu,
-> > >>> but no guarantees.
-> > >>>
-> > >>> Both cases use r13 (paca) in a racy manner, and in both cases it sh=
-ould
-> > >>> be safe.
-> > >> New test results today: both gcc build from git (git clone
-> > >> git://gcc.gnu.org/git/gcc.git) and Ubuntu 22.04 gcc-12.1.0
-> > >> are immune from the above issue. We can see the assembly code on
-> > >> http://140.211.169.189/0425/srcu_gp_start_if_needed-gcc-12.txt
-> > >>
-> > >> while
-> > >> Both native gcc on PPC vm (gcc version 9.4.0), and gcc cross compile=
-r
-> > >> on my x86 laptop (gcc version 10.4.0) will reproduce the bug.
-> > >
-> > > Do you know what fixes the issue? I would not declare victory yet. My
-> > > feeling is something changes in timing, or compiler codegen which
-> > > hides the issue. So the issue is still there but it is just a matter
-> > > of time before someone else reports it.
-> > >
-> > > Out of curiosity for PPC folks, why cannot 64-bit PPC use per-task
-> > > canary? Michael, is this an optimization? Adding Christophe as well
-> > > since it came in a few years ago via the following commit:
-> >
-> > It uses per-task canary. But unlike PPC32, PPC64 doesn't have a fixed
-> > register pointing to 'current' at all time so the canary is copied into
-> > a per-cpu struct during _switch().
-> >
-> > If GCC keeps an old value of the per-cpu struct pointer, it then gets
-> > the canary from the wrong CPU struct so from a different task.
-> This is a fruitful learning process for me!
-
-Nice work Zhouyi..
-
-> Christophe:
-> Do you think there is still a need to bisect GCC ? If so, I am very
-> glad to continue
-
-my 2 cents: It would be good to write a reproducer that Segher
-suggested (but that might be hard since you depend on the compiler to
-cache the r13 -- maybe some trial/error with CompilerExplorer will
-give you the magic recipe?).
-
-If I understand Christophe correctly, the issue requires the following
-ingredients:
-1. Task A is running on CPU 1, and the task's canary is copied into
-the CPU1's per-cpu area pointed to by r13.
-2. r13 is now cached into r10 in the offending function due to the compiler=
-.
-3. Task A running on CPU 1 now gets preempted right in the middle of
-the offending SRCU function and gets migrated to CPU 2.
-4.  CPU 2's per-cpu canary is updated to that of task A since task A
-is the current task now.
-5. Task B now runs on CPU 1 and the per-cpu canary on CPU 1 is now that of =
-B.
-6. Task A exits the function, but stack checking code reads r10 which
-contains CPU 1's canary which is that of task B!
-7. Boom.
-
-So the issue is precisely in #2.  The issue is in the compiler that it
-does not treat r13 as volatile as Boqun had initially mentioned.
-
- - Joel
 
 
+On 4/25/2023 4:05 PM, Marijn Suijten wrote:
+> Use tabs for consistency with the other interrupt register definitions,
+> rather than spaces.
+> 
+> Fixes: ed6154a136e4 ("drm/msm/disp/dpu1: add intf offsets for SC7280 target")
+> Fixes: 89688e2119b2 ("drm/msm/dpu: Add more of the INTF interrupt regions")
+> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
 
->
-> Cheers
-> Zhouyi
-> >
-> > Christophe
-> >
-> > >
-> > > commit 06ec27aea9fc84d9c6d879eb64b5bcf28a8a1eb7
-> > > Author: Christophe Leroy <christophe.leroy@c-s.fr>
-> > > Date:   Thu Sep 27 07:05:55 2018 +0000
-> > >
-> > >      powerpc/64: add stack protector support
-> > >
-> > >      On PPC64, as register r13 points to the paca_struct at all time,
-> > >      this patch adds a copy of the canary there, which is copied at
-> > >      task_switch.
-> > >      That new canary is then used by using the following GCC options:
-> > >      -mstack-protector-guard=3Dtls
-> > >      -mstack-protector-guard-reg=3Dr13
-> > >      -mstack-protector-guard-offset=3Doffsetof(struct paca_struct, ca=
-nary))
-> > >
-> > >      Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> > >      Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-> > >
-> > >   - Joel
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
