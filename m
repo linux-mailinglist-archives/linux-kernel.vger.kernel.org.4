@@ -2,120 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1846EF003
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A032D6EF001
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 10:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbjDZINv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 04:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39786 "EHLO
+        id S239766AbjDZINg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 04:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239976AbjDZINt (ORCPT
+        with ESMTP id S239499AbjDZINd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 04:13:49 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A153C31;
-        Wed, 26 Apr 2023 01:13:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1682496746; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=g2H/eTsheAIYkCOppxipJfD5P5trI7RfjlfLGFx7ZriFbsPQ5doZW6vCvbHCNkkTR0gpPH80WGrvAs1aEWSyrtX272EkYIUttpEhqIFX1sMXk7vbJPie8ZcCOoU7WBY/vT0bExpt9wc6Kya3eRiRdD4bSvVnsgNlkTMluC0vECI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1682496746; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=scdniOaEMN93CnEzkg3P5onK/tzC0rz3np2V8rdqLqo=; 
-        b=czijfwYx310rhCUDxDVJy2aiugbW42a/peCGYLIxLOcaA1HuMSUCB7SynmGOJg+0jRKda6T9kL5XpjrbuzsB1WQ3jr6KYgvGLxYFEUsNizPhZJw243Nnhdu4Sk8yxvCe4KpaKo/aS7vEPFXzO9NpYRBY5YWg9ZJrTHNm4R3hDO4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682496746;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=scdniOaEMN93CnEzkg3P5onK/tzC0rz3np2V8rdqLqo=;
-        b=I0oPro1bUVwflc9HXRdxK81n8+PJ+A3j2HzFyrNaM0p4Yk0InSOZk7LmTp8zOC/+
-        jaOqwPqZyhmB2GIpAoiz672nn5yh5P26Ipg8m4+U56mLCSqPx/9uXD0gfCNfIjEqVrJ
-        FSCU7jBXWYO9xGrAqIn4PQ6EelDecH9C4BZD1Nu4=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1682496745634552.1517854827307; Wed, 26 Apr 2023 01:12:25 -0700 (PDT)
-Message-ID: <ce681fac-5f00-f0fc-b2cf-89907c50ee7c@arinc9.com>
-Date:   Wed, 26 Apr 2023 11:12:09 +0300
+        Wed, 26 Apr 2023 04:13:33 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81510F8;
+        Wed, 26 Apr 2023 01:13:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=wuzongyong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vh2QehR_1682496808;
+Received: from localhost(mailfrom:wuzongyong@linux.alibaba.com fp:SMTPD_---0Vh2QehR_1682496808)
+          by smtp.aliyun-inc.com;
+          Wed, 26 Apr 2023 16:13:29 +0800
+Date:   Wed, 26 Apr 2023 16:13:27 +0800
+From:   Wu Zongyong <wuzongyong@linux.alibaba.com>
+To:     lukas@wunner.de, sdonthineni@nvidia.com, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wllenyj@linux.alibaba.com, wutu.xq2@linux.alibaba.com,
+        gerry@linux.alibaba.com
+Subject: Re: [PATCH] PCI: Mark NVIDIA T4 GPUs to avoid bus reset
+Message-ID: <20230426081327.GA24855@L-PF27918B-1352.localdomain>
+Reply-To: Wu Zongyong <wuzongyong@linux.alibaba.com>
+References: <388bc353a5f88edb502ec04c0dc53ab62a526020.1680090885.git.wuzongyong@linux.alibaba.com>
+ <2dcebea53a6eb9bd212ec6d8974af2e5e0333ef6.1681129861.git.wuzongyong@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next 04/24] net: dsa: mt7530: properly support
- MT7531AE and MT7531BE
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230425082933.84654-1-arinc.unal@arinc9.com>
- <20230425082933.84654-5-arinc.unal@arinc9.com>
- <ZEfsCit0XX8zqUIJ@makrotopia.org>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <ZEfsCit0XX8zqUIJ@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2dcebea53a6eb9bd212ec6d8974af2e5e0333ef6.1681129861.git.wuzongyong@linux.alibaba.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.04.2023 18:04, Daniel Golle wrote:
-> On Tue, Apr 25, 2023 at 11:29:13AM +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Introduce the p5_sgmii pointer to store the information for whether port 5
->> has got SGMII or not.
+On Mon, Apr 10, 2023 at 08:34:11PM +0800, Wu Zongyong wrote:
+> NVIDIA T4 GPUs do not work with SBR. This problem is found when the T4
+> card is direct attached to a Root Port only. So avoid bus reset by
+> marking T4 GPUs PCI_DEV_FLAGS_NO_BUS_RESET.
 > 
-> The p5_sgmii your are introducing to struct mt7530_priv is a boolean
-> variable, and not a pointer.
-
-I must've meant to say field.
-
+> Fixes: 4c207e7121fa ("PCI: Mark some NVIDIA GPUs to avoid bus reset")
+> Signed-off-by: Wu Zongyong <wuzongyong@linux.alibaba.com>
+> ---
+>  drivers/pci/quirks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>
->> Move the comment about MT7531AE and MT7531BE to mt7531_setup(), where the
->> switch is identified.
->>
->> Get rid of mt7531_dual_sgmii_supported() now that priv->p5_sgmii stores the
->> information. Address the code where mt7531_dual_sgmii_supported() is used.
->>
->> Get rid of mt7531_is_rgmii_port() which just prints the opposite of
->> priv->p5_sgmii.
->>
->> Remove P5_INTF_SEL_GMAC5_SGMII. The p5_interface_select enum is supposed to
->> represent the mode that port 5 is being used in, not the hardware
->> information of port 5. Set p5_intf_sel to P5_INTF_SEL_GMAC5 instead, if
->> port 5 is not dsa_is_unused_port().
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
-> 
-> Other than the comment above this change makes sense and looks good to
-> me, so once you correct the commit message, you may add my Acked-by.
-
-Will do, thanks.
-
-Arınç
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 44cab813bf95..be86b93b9e38 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -3618,7 +3618,7 @@ static void quirk_no_bus_reset(struct pci_dev *dev)
+>   */
+>  static void quirk_nvidia_no_bus_reset(struct pci_dev *dev)
+>  {
+> -	if ((dev->device & 0xffc0) == 0x2340)
+> +	if ((dev->device & 0xffc0) == 0x2340 || dev->device == 0x1eb8)
+>  		quirk_no_bus_reset(dev);
+>  }
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_NVIDIA, PCI_ANY_ID,
+> -- 
+> 2.34.3
+Any further comments about this patch? 
