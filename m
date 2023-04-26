@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBA56EF9A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE686EF9AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239185AbjDZRxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S234959AbjDZR4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233428AbjDZRxL (ORCPT
+        with ESMTP id S230043AbjDZR4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:53:11 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887CB61AB;
-        Wed, 26 Apr 2023 10:53:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 63E196017E;
-        Wed, 26 Apr 2023 19:53:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682531583; bh=ix3yZfX9qAGGSCgGBfddgoc3bJRhu281Z1JgEWmvIZQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=E8C8VEInskBWRChFkZ4Vz+TJY2EBceb+E1AZgguFg42BRujK74/XKdmuKbD/fp54A
-         uLEGaQh13KalmQ4k54AvDMC0MKmpbhdaumc6TTNlUSpmfkg1Q0rtDuAgmbtZmI0RZP
-         J8Mnan9OaMw7b4ejwDeHcPVkSrmQBSZMP6Zk8oGGjGetdiYCF4SukB4vmQy66vWvF9
-         KHQJd48ou/TTwAP5CDQBo8UabFO8OSu4gRiZW4V60+coPrLfDzVMt0B8joYwBWM5WT
-         NzPoJ347+fNK31vc/4RzDVFOgW3Uv/Erx5ByOfqnV+w06xFx3/HbQPFZi2lM5E9YvH
-         RvO2Ys3jVnm6A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nsmIIG9q5Hnn; Wed, 26 Apr 2023 19:53:01 +0200 (CEST)
-Received: from [192.168.1.4] (unknown [94.250.188.177])
-        by domac.alu.hr (Postfix) with ESMTPSA id ADFF16017C;
-        Wed, 26 Apr 2023 19:52:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1682531581; bh=ix3yZfX9qAGGSCgGBfddgoc3bJRhu281Z1JgEWmvIZQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lqhmVaopu7TtdZ3rBlQR6ffhkNbIlIDzcOoATDn25HmXEsTsAZAHPqvrpZ+cKHgxy
-         RSijHFO+c2PfdtBBF1VP+GlB0wiqb+rDOrnURqUjp6Hm/ydagtzjejuGL2+QiWP+gf
-         IvN83FycjwQkDe0ZijHG1LI2rfscvT6LuEQI+Xj1jacqwzzTjwkZFCUjC6i90OZKsT
-         DsnaGc+Jl3hoMceEFxhrnBhVRzhI8lvr0EhEePwoJxoxtBY5gpgdCl46S1CExHkdUh
-         7RBqOwXnzr/I8cGZKg3BZ8F/UGb9pt51LgoYrWVYd5hph9y1nXh5LOmTi8h7O0Huv0
-         O8xfhiU3h092w==
-Message-ID: <e6f97703-58a2-befb-d09b-cee7e946a8a4@alu.unizg.hr>
-Date:   Wed, 26 Apr 2023 19:52:45 +0200
+        Wed, 26 Apr 2023 13:56:03 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490C04EF5;
+        Wed, 26 Apr 2023 10:56:02 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54fb8a8a597so89158327b3.0;
+        Wed, 26 Apr 2023 10:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682531761; x=1685123761;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hNnFeQsCpLxS8BWhDUFhfQgFVbVpcjM4oqjjdFxwN7g=;
+        b=hUS52wWcuyYhQ2sYsB1elyCiRL5WnwDSjRZdypEG8+lsAsMH0xB/VPibZwzEGP1tnK
+         ufsAeF3GUkg6a9PXxHX+aSVoZGOybH6tqXhUiz7j0/N7MJLy16k6Mls+u70qtS/Ju2IN
+         t4aQe/LSPVrtz27GGSofwEyfDQpt0sK8HKf1Ocs9eF/YcsrV1q52hnymodVSoRvu/+JR
+         qfmFNLYlAQVInFONl1np/ZpFGEGfDB80ERIviInRbJ+d2Xx+MdfWWua+Jo3rPsQg/dxj
+         gthgKJ8T6A6//1A4/c+muHl/9gWhzVgQPkKfgwmQPyeaz2mtwAvOS+ZmcAkWNLGHADFq
+         RmTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682531761; x=1685123761;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hNnFeQsCpLxS8BWhDUFhfQgFVbVpcjM4oqjjdFxwN7g=;
+        b=DBQOh1w9rNY56f89DvPNyRE9FLJDvyxczBxojTr4dkMfQ3mum0u5j9W8xYI24Wbcyu
+         biHX8uVT+qxvXTKHTlywPSd2OvIBSt8b73FFfLuLllRrJQlVbG6WNbMnFB8IgXloXgc7
+         ZIqG7O9lJL+yhaclZ7txsFZLophXtFlNR03rBpJqQfZ49XXbdjYSP8s1mWnq7MY0953l
+         olg9kKehBrlWOqL6Tjxc1nRs/CkE0Z9d/nsqUSMspgUH4+uMbPOcieiCY5QMEc2jBykp
+         W3kwlShc4JZ/dWEWObNd5EL7yvqFTryGY/Ee1SwQb545Hd0MMoakWrlJpkw7p2hTeFCl
+         kjQA==
+X-Gm-Message-State: AAQBX9f5bCqNZYFaWt7Rdo+nf7sEZBGLRNsfOuAWrjCU3Xr+2SS9STDb
+        UHgy94LqJYe4A0wCAlNz5hLcOhkeXncBN1KxHAk=
+X-Google-Smtp-Source: AKy350bMaZOhtxUuPaoTkMfU9W5kpbDAZdv0hnpL0C8l3iRJH97GTQOubU51xDiVDprmSc60a5CGJV+tzKnC1i2SkTk=
+X-Received: by 2002:a81:9195:0:b0:555:cd89:cc50 with SMTP id
+ i143-20020a819195000000b00555cd89cc50mr14033716ywg.29.1682531761421; Wed, 26
+ Apr 2023 10:56:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 1/1] wifi: mac80211: fortify the spinlock against
- deadlock by interrupt
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Alexander Wetzel <alexander@wetzel-home.de>
-References: <20230425164005.25272-1-mirsad.todorovac@alu.unizg.hr>
- <20230426064145.GE27649@unreal>
- <074cf5ed-c39d-1c16-12e7-4b14bbe0cac4@alu.unizg.hr>
- <d1e8fff25b49f8ee8d3e38f7b072d6e1911759bb.camel@sipsolutions.net>
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <d1e8fff25b49f8ee8d3e38f7b072d6e1911759bb.camel@sipsolutions.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CANiq72kXa-SgRiVhvjU7X4fa8XSJB4po9xf_V4L6Gn2o+t6T+Q@mail.gmail.com>
+ <20230426081715.40834-1-amiculas@cisco.com>
+In-Reply-To: <20230426081715.40834-1-amiculas@cisco.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 26 Apr 2023 19:55:50 +0200
+Message-ID: <CANiq72nm-tWGPHMaNF11baVRDFpk8ruvTAVDEWKfraEzADWqQQ@mail.gmail.com>
+Subject: Re: [PATCH] rust: Sort rust/helpers.c's #include directives
+To:     Ariel Miculas <amiculas@cisco.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
+        benno.lossin@proton.me
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26. 04. 2023. 17:05, Johannes Berg wrote:
-> On Wed, 2023-04-26 at 16:02 +0200, Mirsad Todorovac wrote:
->>
->> That's awesome! Just to ask, do I need to send the PATCH v5 with the
->> Reviewed-by: tag, or it goes automatically?
->>
-> 
-> Patchwork will be pick it up automatically.
-> 
-> johannes
+On Wed, Apr 26, 2023 at 10:18=E2=80=AFAM Ariel Miculas <amiculas@cisco.com>=
+ wrote:
+>
+> Sort the #include directives of rust/helpers.c alphabetically and add a
+> comment specifying this.
+>
+> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+> Link: https://github.com/Rust-for-Linux/linux/issues/1003
+> Signed-off-by: Ariel Miculas <amiculas@cisco.com>
 
-That's awesome, thank you for the update.
+Looks better, and the content is fine!
 
-Mirsad
+A few minor notes and tips:
 
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+  - Please annotate the version of the series when you resubmit a
+patch series, e.g. v2, v3, etc. `git-format-patch` can do this for you
+via e.g. `-v2`.
 
-"I see something approaching fast ... Will it be friends with me?"
+  - Typically the title would be prefixed like "rust: helpers: sort
+includes". In general, try to take a look at a subsystem's pattern for
+similar commits.
 
+  - The description should also give the rationale for the change,
+i.e. the "why" and the "what". This one, for instance, could say that
+this is done to improve readability and to be consistent with the
+other files with a similar approach within `rust/`.
+
+I can fix these on my side if you prefer, but it may be good practice
+if you want to send a quick new version.
+
+Thanks!
+
+Cheers,
+Miguel
