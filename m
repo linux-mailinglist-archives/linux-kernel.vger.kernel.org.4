@@ -2,80 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A416EF2FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72326EF302
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 13:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240475AbjDZLAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 07:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S240610AbjDZLCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 07:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjDZLAh (ORCPT
+        with ESMTP id S240298AbjDZLCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 07:00:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA4BF;
-        Wed, 26 Apr 2023 04:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682506836; x=1714042836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G95PT19yFXrzWRVnbAntY6KRml0hHubfjUN5KoCVDjk=;
-  b=E5VQMjTh//rCxghwZqe7qD9BEbE84dtQDEXtgtcPCxoPNVuv03KYNBzY
-   grftcIqwWqlUdmGN90Pua+M0taPQvtgU9HKjMdJXctsuMVDUdSmiNDoQh
-   Zgd496VWoJ1TbynHQy08fWh9azQeFEgCHDw7JauxDvncS8REpMT4v9mcx
-   /ocC+l1Wna/paaA3hwaCKrx2qr5vHv+ANCWWjAonVYeR4EVU5QV4fk2wn
-   4qg364RKPDlqUEy53G2T777OSPr+HxoaBAJKPW1gVURRR/9aIgP35+lzj
-   2M4h9SsAArMW9lMuT05Sd4XVE/wQoKIpfqzwKKwuterx6BaQeI/8yTF79
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="345826522"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="345826522"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 04:00:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="837879261"
-X-IronPort-AV: E=Sophos;i="5.99,227,1677571200"; 
-   d="scan'208";a="837879261"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2023 04:00:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5C2D24B9; Wed, 26 Apr 2023 14:00:40 +0300 (EEST)
-Date:   Wed, 26 Apr 2023 14:00:40 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        S Sanath <Sanath.S@amd.com>, richard.gong@amd.com,
-        Sanju.Mehta@amd.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] thunderbolt: Move Intel quirks into quirks.c
-Message-ID: <20230426110040.GA66750@black.fi.intel.com>
-References: <20230424195556.2233-1-mario.limonciello@amd.com>
- <20230424195556.2233-2-mario.limonciello@amd.com>
+        Wed, 26 Apr 2023 07:02:03 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6791646B0;
+        Wed, 26 Apr 2023 04:02:02 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QAS7vm029033;
+        Wed, 26 Apr 2023 11:01:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Cj5dmTnSPTrZAX4b3OtVEk8PfXVs6RQPPe+ehz2mU/g=;
+ b=da2Mm4AgypG8nkTeVa6E0nW1q7QdfNVqk3mjwHcCVV7RGgF1DQpkg699eFIHkU4qKuJe
+ qhbI5JkZk18S+79lBHdbHU0V5nELtqCqvcXi2LjGJU/LCpA1lmcevSrQ3bcjmeDsVIz9
+ 6PgdqFNNmkuYARDJm4W44hejSFYFUY5+0yoQPXVVNsyF3EbilF4ED8tjTx052KLDcM9n
+ Rf0NVXYrUM7gFaZfzDEBtMkvAxatZPVwtQwObPAbqSpHb5Sm+xHtDjBIVopvYDVCGlYk
+ hpXYq4U8b19BGsuGV6rrkVnyD9ZmiEkPpRV4ehBd/XLvM+ofG3i5p1AgafqgS8N6mkN/ Sg== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7239949b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 11:01:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33PMaXEX020522;
+        Wed, 26 Apr 2023 11:01:52 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3q477729x3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Apr 2023 11:01:52 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33QB1nU34784846
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Apr 2023 11:01:49 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF3A720043;
+        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61CA620040;
+        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
+Received: from localhost (unknown [9.43.0.247])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Apr 2023 11:01:48 +0000 (GMT)
+Date:   Wed, 26 Apr 2023 16:31:46 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] selftests/ftrace: Add new test case which checks
+ for optimized probes
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Akanksha J N <akanksha@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org,
+        shuah@kernel.org
+References: <20230418095557.19061-1-akanksha@linux.ibm.com>
+        <20230418095557.19061-3-akanksha@linux.ibm.com>
+        <20230425091039.9fd523dfdf7be5e800bac4fe@kernel.org>
+        <1682400251.pez54ergiy.naveen@linux.ibm.com>
+        <20230425234125.51455711c4388481c13be5ad@kernel.org>
+In-Reply-To: <20230425234125.51455711c4388481c13be5ad@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230424195556.2233-2-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1682506809.uus6y0ir3i.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 2Bss5NlDYwGOPQ0U9MGooBNKyXxErO6n
+X-Proofpoint-GUID: 2Bss5NlDYwGOPQ0U9MGooBNKyXxErO6n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_04,2023-04-26_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=891 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304260094
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Masami Hiramatsu wrote:
+> On Tue, 25 Apr 2023 10:58:30 +0530
+> "Naveen N. Rao" <naveen.n.rao@linux.ibm.com> wrote:
+>=20
+>> Masami Hiramatsu wrote:
+>> > On Tue, 18 Apr 2023 15:25:57 +0530
+>> > Akanksha J N <akanksha@linux.ibm.com> wrote:
+>> >=20
+>> >> Add new test case kprobe_opt_types.tc which enables and checks
+>> >> if each probe has been optimized in order to test potential issues wi=
+th
+>> >> optimized probes.
+>> >> The '|| continue' is added with the echo statement to ignore errors t=
+hat
+>> >> are caused by trying to add kprobes to non probeable lines and contin=
+ue
+>> >> with the test.
+>> >> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
+>> >> ---
+>> >>  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++=
+++
+>> >>  1 file changed, 34 insertions(+)
+>> >>  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kpro=
+be_opt_types.tc
+>> >>=20
+>> >> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_=
+types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
+>> >> new file mode 100644
+>> >> index 000000000000..54e4800b8a13
+>> >> --- /dev/null
+>> >> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.t=
+c
+>> >> @@ -0,0 +1,34 @@
+>> >> +#!/bin/sh
+>> >> +# SPDX-License-Identifier: GPL-2.0-or-later
+>> >> +# Copyright (C) 2023 Akanksha J N, IBM corporation
+>> >> +# description: Register/unregister optimized probe
+>> >> +# requires: kprobe_events
+>> >> +
+>> >> +case `uname -m` in
+>> >> +x86_64)
+>> >> +;;
+>> >> +arm*)
+>> >> +;;
+>> >> +ppc*)
+>> >> +;;
+>> >> +*)
+>> >> +  echo "Please implement other architecture here"
+>> >> +  exit_unsupported
+>> >> +esac
+>> >> +
+>> >> +DEFAULT=3D$(cat /proc/sys/debug/kprobes-optimization)
+>> >> +echo 1 > /proc/sys/debug/kprobes-optimization
+>> >> +for i in `seq 0 255`; do
+>> >> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || c=
+ontinue
+>> >> +        echo 1 > events/kprobes/enable || continue
+>> >> +        (echo "forked")
+>> >> +        PROBE_TYPE=3D$(cat /sys/kernel/debug/kprobes/list | grep $FU=
+NCTION_FORK | awk '{print $4}' | awk '{print substr($0,2,length($0)-2)}')
+>> >=20
+>> > I think we can make it simply;
+>> >=20
+>> > PROBE=3D$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
+>> >=20
+>> >> +        echo 0 > events/kprobes/enable
+>> >> +        echo > kprobe_events
+>> >> +        if [ $PROBE_TYPE =3D "OPTIMIZED" ]; then
+>> >=20
+>> > and
+>> >=20
+>> > if echo $PROBE | grep -q OPTIMIZED; then
+>> >=20
+>> >> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimizat=
+ion
+>> >> +                exit_pass
+>> >> +        fi
+>> >> +done
+>> >> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
+>> >> +echo "Done"
+>> >=20
+>> > Hmm, this test does NOT return any error. It always returns success.
+>>=20
+>> Good catch!
+>>=20
+>> > I understand that optimization may not be possible within 256 bytes
+>> > from the beginning of the function.
+>>=20
+>> Is that true in practice? Looking at x86 and ppc64le, it looks like we=20
+>> will almost always be able to optimize at least one of the instructions=20
+>> within the first 256 bytes of kernel_clone(). That's one of the primary=20
+>> purposes of this test.
+>=20
+> Yeah, usually it should not happen. But since we don't disassemble it,
+> we can not ensure that. So this depends on the compiler at last.
 
-On Mon, Apr 24, 2023 at 02:55:55PM -0500, Mario Limonciello wrote:
-> There are two Intel specific quirks for auto clear and end to end
-> that are not specified in the quirks file.  Move them to this location
-> instead.
+Ok.
 
-quirks.c is for USB4 domain quirks (router, retimer, anything actually
-connected to the USB4 domain).
+>=20
+>>=20
+>> Are there valid reasons why we may not be able to optimize instructions?
+>=20
+> For example, if the compiler starts inserting some checker instruction
+> on each instruction boundary for security, it may prevent optimizing
+> kprobes. Usually it should not happen (because it bloat up the kernel siz=
+e)
+> but we cannot deny the possibility of such new feature as an option
+> in the future.
+>=20
+>>=20
+>> > In that case, you can return
+>> > "unresolved", and not echoing "Done" but the reason why it is
+>> > unresolved.
+>=20
+> Even in that case, it can notify such case as "unresolved", then we
+> can notice it. (something like WARN_ON)
 
-nhi.c is the correct place for host interface quirks for now.
+Sure, exiting as "Unresolved" should help point out a potential issue=20
+with optimizing probes, rather than labeling this as a failure.
+
+
+Thanks,
+Naveen
+
