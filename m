@@ -2,247 +2,554 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C92B6EEBC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA146EEBCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbjDZBHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 21:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S238468AbjDZBMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238422AbjDZBHJ (ORCPT
+        with ESMTP id S229772AbjDZBMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:07:09 -0400
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ECEB23B;
-        Tue, 25 Apr 2023 18:07:08 -0700 (PDT)
-Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
-        by mx0b-00230701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33Q0hVvb003923;
-        Tue, 25 Apr 2023 18:06:43 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfptdkimsnps;
- bh=XtBadvPj0MtokK1iUbhNYn5S1K+UTvmoBp13gweGHTA=;
- b=h++7L/p57HjdJzGBfi5P1mSvQu6PRuGyOwj9ONcGO46Cj3JeJ5EzxA5+JYjfCjd3stNd
- h3rriTDQj//RWsq0RyLYfpbfulliUt44IHZfz+qsQ79mTjXdeHpKhcOPrQzMHhygzZnG
- cwUMzNlD6onE1k4q7qQW7WV3LZEprYckBcAH996BRLmIsGtzs0ZQOrhbjiBfuBw5c5X7
- jbDK9Dm/79lbzlUnDVjXw9IzoHB5QDOz9r9FZAiiqWw7IeI+jw8+V7jDvE/7Z4oSGOWl
- y7LKQKW8So8f5A3gS1xO4eaD7yUU61A/JfTcFi/XGjcWMLvjR9DOBoQOS7GFBiasn/B3 yA== 
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-        by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 3q4yqpdjn8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Apr 2023 18:06:42 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1682471202; bh=XtBadvPj0MtokK1iUbhNYn5S1K+UTvmoBp13gweGHTA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=ZMLZ06Z3bhXDx3PnPLRmDrkCh3GYLgVCOTDnvQ1m36R+GoY+icXXdQ3RlDJ0BfUkS
-         QeJIeSORhCrJis6cctm7bZHq8VT2tmvrhaX6qkZecYRPhbFHLOwIvWqaGEOiP+AoXK
-         N9h1dRL1l+F3jjUxLT0uXNj4Hy/uj2e71wLxdjHWLBo4LUMa8MkrYIkCRtWZ5V/tXJ
-         SlbAkbMPKRKdTq2ImjAQFduWcQZLElawrpEnZYBkmcFSyjmnOGYXyGQehumBHo7rec
-         VYaiV4xl4DzV4HB5qWNbKC1s0QKj4zqPVesZDhuqL7j0xbjtI3MTaoaxTkJHEL/6L+
-         M3PpqJoEY+3Tg==
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits)
-         client-signature RSA-PSS (2048 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EFC9940408;
-        Wed, 26 Apr 2023 01:06:41 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 8F656A0071;
-        Wed, 26 Apr 2023 01:06:40 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=OQ+KeI1q;
-        dkim-atps=neutral
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id DCE8B40615;
-        Wed, 26 Apr 2023 01:06:38 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xtckt8A2tQYz60fwQ1h8bqxeX5Pxfj82RLa8mu0w2cvBk6A/vyN96RaHjek4BK6dT4DUG6Y8velB+x1oYWgeyQFrwenxKk4NyrFXFhu7V6ugUgNYw3fFFhEcrVYktQhxB426W1RIvLjsaNlBvsH9sQWD6qlQx4t2B99qALkkIIFrFp1WrAihbxnYwW9UOkDOUtMauCqZsTqiKQpOtfOI4Q4/6mXAtC0rpFObzU0C4rBaTZwv7K3uQaisB35bKjNA3IqQmgi2CJyBCPMYKtz8RlMbuA2I7Ig+3VMwSSx0H1kgBPDKY+2SH7M5c3j0Pru1Ih3hHKru2bLM6+sf8eYTmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XtBadvPj0MtokK1iUbhNYn5S1K+UTvmoBp13gweGHTA=;
- b=gvw3clU3af2aBS9C3GJmm3D4OIRMAB9yGdn+W8F8RVcNaDvawNyMS2MPhKME5oi0bRLPvOewYww3e5NHUtLglkugIbijYzEkBnZXoSzPNt3frfpnw+gjIXC9tgAF1faF6StWk59H7nPtioMzax5q4O5CLGOgxbInBJEojzzr92SSNtnWN9l3f690Oun3V8fano7I3VJwnnSiTI+s936NMkcnWOHAXq6eLy1JohkbYKnv3IXvk4nReJZWlPdeMcg0Ezcb/sL87gGL2nZxBQQZV5pmvhCp/BsuxM+PHv2PeOolEllk8XAoyt5NNpohhIi4bDGwOmAfp6PnwOWuQFSyDA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XtBadvPj0MtokK1iUbhNYn5S1K+UTvmoBp13gweGHTA=;
- b=OQ+KeI1qh0mMlTkwo4EnhyUxQ40KlLSvzky40IPRFodWFo1HDtQTJztNhZVsefhsGLSbeiwCx6bYwYip/d3VOILCKuxI4Bwqm6ffvzNomia9i80yD8oywtCW+w9rFgSLoA1XOm/+U1XGTdIlSt5ciSHae1AWh3Aeueo6dXs/o3E=
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
- by CH3PR12MB7713.namprd12.prod.outlook.com (2603:10b6:610:14d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Wed, 26 Apr
- 2023 01:06:33 +0000
-Received: from BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3103:ba85:b667:315d]) by BYAPR12MB4791.namprd12.prod.outlook.com
- ([fe80::3103:ba85:b667:315d%7]) with mapi id 15.20.6319.034; Wed, 26 Apr 2023
- 01:06:33 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com" <quic_ugoswami@quicinc.com>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Bail out in pullup if soft
- reset timeout happens
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: gadget: Bail out in pullup if soft
- reset timeout happens
-Thread-Index: AQHZYY+ZaTJWoGmlmk+xC9kJuoh9G68884yA
-Date:   Wed, 26 Apr 2023 01:06:33 +0000
-Message-ID: <20230426010631.fnncmfiywlm6jsws@synopsys.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-2-quic_kriskura@quicinc.com>
-In-Reply-To: <20230328160756.30520-2-quic_kriskura@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR12MB4791:EE_|CH3PR12MB7713:EE_
-x-ms-office365-filtering-correlation-id: 0fdabce7-b42d-4d90-1e13-08db45f279f2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3R9O0IfTfg66Ugwb9j9tCQ/YVOmNeANtvEYa+DjP8dvOqc4+coTn792BHQ5cYDDwj5rd58TAtL12Z7LhQxCKygH5wB7PiZu2nlKglCrHtZ7fjm0L7lRye2AnvJ6spL60TAZ0WyjT6Kl4JpULY64ZX6okf8mCY1TXXnorrW1IXLcHJyHeIziQEwvr6uHgdrLxpynXmZpaP/pWDdWneeGeevz66loOkSFnd0TBMovNPxQzyE1rGvuA4UxuJpCG2w1PIp95nc2zuh121xLG0iDUk4oWpQfLTIsvrPqcHNJ1GvcZtXABBEJOS8Yfu6+cNhsSGmDY8rNqXma3sRPz38UQCPU7IP8yaTU0DAzomN11KeNBmU/YalMR+76YvCYt2VawTTY6kxUi/uFY4RMizorEKaaPU7Sfdc8goVL+0x9W/qZFV+IurAfNiE4nDMCaEdRSusuKPeBK0qXdlR6JfYcAG0s5byMOlkPbyuIPSmB3kOugd66uuzQOeeY19OukuPMGPCE1do0yKlHi8mqOzJXbilYPBwALZPnNF8pilKt4/EktT5n4dzM16Q9vGqQIvGzREmso2vdLlAIfvMDyGEyMFfTQ8aCQv+1jKeijq2dXGOL1A9jA8ypu4loOhLfQqxN5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(396003)(39860400002)(366004)(136003)(451199021)(6916009)(4326008)(316002)(54906003)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(36756003)(186003)(6506007)(6512007)(1076003)(26005)(86362001)(122000001)(2616005)(38100700002)(83380400001)(5660300002)(41300700001)(8936002)(8676002)(478600001)(6486002)(71200400001)(38070700005)(7416002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZFZBREFka1Z1MzAxOUtvYWJJREwrQ3NzTXlzNkpBbWh3Ym4yWG1yVkhvUHJH?=
- =?utf-8?B?QUNVU1I0eGZkOW5hZktCckpkQXN2Q1NKUzRhaStra3FxMCs3cklQT1FjQS9n?=
- =?utf-8?B?bEZEZ1VrcC8wUTJXYmlDeGxKTEtmQ2o4OThVb1ZMNXMzOGZyekxhV1J6enU3?=
- =?utf-8?B?TE9kOHZQNXFrNUpaclF3V0JCZFFEYjZJUXlLUWFRbEJpU2lNcW5naDZsSkdW?=
- =?utf-8?B?czREZnJuai9tREJDelQ5NXJKWm9POTdYMnlGTW4zRDNhNGVDTjhlNVFIaFFV?=
- =?utf-8?B?c1BBOVJ3cERwWmtMN2pGZ1Z6VmhBT3FXOFFOdnZPKzVWWXg4cXVZTTdjaU1T?=
- =?utf-8?B?cmpTd2NIK3NLVng2Rk1kRWdLaktMdHFtbW8ybDhJNVNaMUN0cmJ0bGRwaDNu?=
- =?utf-8?B?bThObkMvem9pSEM4Rk1MbkdWNVkyREJDV2pDSjNnTC9vNWN3dnJTbWdqTHhL?=
- =?utf-8?B?bXJBWTVNVS9YVzBNYnlORUhXT1o4bTM0dURYK2Mvd09heDdUSkdOTVlJRHZE?=
- =?utf-8?B?dzlnTU8ydDNNWGxtbGFOT3Jvb01uRWlYbmlQeW5ON0dNZ084eWZwU1p4MkN0?=
- =?utf-8?B?dXNQVjFJaUMyRnhaMzljV3Q0VWZqZjhXekh1Q0lMemZTZDFsc05BbGhScUp4?=
- =?utf-8?B?OVdSbmR6enc1MHVyUEJPc21ZZU1WdkVhVTdQVkVULzBmYXVrTy8xWkN4SmxC?=
- =?utf-8?B?dGc3MDFiRnpIU0tUSUh0YUUza0RncXFDM1FZT2h2ZnJXZlZjbDNTVFJxT0pu?=
- =?utf-8?B?dVVGVExWN1dyQTgrZkxNc0xwbFc0K3dZSjd3YjJCbWRkY2pBd1ZBNzNpcE5u?=
- =?utf-8?B?UXh6aXROc2c2alU0Q21MSHMyTlRqOHBqQmc5dURhbUdiZmZKLzJha1NSZWtH?=
- =?utf-8?B?SWVTaXVKT0VtbG9rTW5ubGdHN2dPQ2dzRHpZWTlhV2s4d3hvMmwrdmFZSzdv?=
- =?utf-8?B?WkVNRElZbiszZnN0dmljN0tzd1V3dEZybFc3dmI0ZnpKS1gxc3ZXUCttcWxN?=
- =?utf-8?B?SmNSVHV0cVpRdW9XSGFOV3QwUU9UM0FnK294QTBpVkx4UjNyMk1sbHVtUkt4?=
- =?utf-8?B?ME1CSjBlNjN5ZTVpdEdvd1hJeEE5MWF6d2krOUVEM3U5ZUhWazlnOUx4SVpW?=
- =?utf-8?B?RHU2M2pOL1VaOGlEbEZvU2tRN0hBeUJNanAyRmNmK1plYlRCajRXUUgwTU5n?=
- =?utf-8?B?MFpydnRXSXpGTm8ycENTcTFYVUhJK2thb1dhRVFHa21LZ3prR0toakVhdEgx?=
- =?utf-8?B?L2ZMeG9SRVY4Z0M5VzRkcDUrZmRvQzhnWnA2TEd0WEFMSjVaUVFmeFptaHdY?=
- =?utf-8?B?ZHh0K0s1dEU5VUgrS0V2N2JKL0xTMXY5a3J1NXE2cVhlZU1kQkVQd2xQWjBj?=
- =?utf-8?B?akRleU9QU1dnbG13cUdxOW5qMS9pR2ZVdlRoSVZQZmdVUnc5eHlDcFBTS1Q2?=
- =?utf-8?B?elZIeW1Tem5ONjhMb0FqdGcxb3JiTi9tenRYMjFTdDB3b1pyMXMzU014blBO?=
- =?utf-8?B?VnFIRTM4bnlFRmNwZnJPbGFrNHN2QTMxOHlkeEU3cmVxM0gvdDUvaUk0dmhZ?=
- =?utf-8?B?YWJaRG5ZT2NXcGlRVzBLOFVFb1FNVTc5Q3Q1SnRTY0hZSjAvY2lGNzhleUt3?=
- =?utf-8?B?ZGp6Q1AyZkFGaFh0RlVXY0xibDlWeGVMVmoxSURrbGJ5V2EvS0JaNERremJE?=
- =?utf-8?B?bFd6L1Fhek5QaFlDSXNUQ2R6blN4WnB3djZMNkRNYkpyT1JkUFNmb1Z4T211?=
- =?utf-8?B?d2tYcUVYbEFlelFMdysyZ0czbWp5RHdVZWlWcmdpZjYyKzc0NFlPeVpuT0ZG?=
- =?utf-8?B?VWgzMnZ6WTJzM1lPYmlIY3hPd0JkMlh2d3AyUmdBLytpQnRWd2RmYk5ZdDBI?=
- =?utf-8?B?VW1jWThvbU9PV044cnBYNGxsNGpoSGNDazVGK0dNTy9JTzIxVG9KcGZWWVdY?=
- =?utf-8?B?ZFhqWVpZdjNCYXRpSnZWQVFSNEw1UzdsZGttNWtvWTlva3RYbFJCRVVkMU1m?=
- =?utf-8?B?M09XdUVCa3l1Y1duYldJTDM4elBrZnJaUUtyeE9JNXMrVWo0UzNBeXVtMERs?=
- =?utf-8?B?ZmdiVkJRL2pudXYvSHRWYUJtWVlkRGlDUGZWQzE0L1R3NTJJNkpCWXE1YWF3?=
- =?utf-8?B?bGozMFhRcjRhQUxpQ29EZTJOcjRUMVFmNTVWNXJCamZKRWZOc3RZOXNnN0Fr?=
- =?utf-8?B?YkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <28416397A154CF47AE1AA01F75C81DA6@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 25 Apr 2023 21:12:20 -0400
+Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497FCB209
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 18:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682471537; bh=WVQ7+xsU/a7vH371TQzXOruRke609WaJUcbp0hxdrsE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XJ91Aov9XIYiuIPUIZ6CynnYyfXHYM/vhOx/Bbou1WHuWhFKlnAYZ7hme1+yfTupzZsFNUs1a/SBm1PYV/k4GLDUHwaHAM1Qo2/Zbhqo7tJtOiTBPn7dCMl79l7PosIIYCpxodvQHXbHrwIBcgEVwZiXtHWH3GCJmxjfYVNX1w0xFbh2iWUHtGLLYhvy3jNIc8CUHAd7lkep+w1uxH+kPcB7ItJR8n4g7rcAvGqAYj9fxaml54TxvD9hq5Qy8xJxTKaelClKRTBIKfiaXUw/DiK4k7zV0fhpqchqjXQhKrMX1yW3XLOSpBPMTI7rWzjlL3JWtruMu70scwZtGbIE+Q==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682471537; bh=xjPhYyqs5Y1n4cx9STsBj/d8DKr+nhqcgnm9PlBUO4a=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=a3s+Fp9m7jFGfFtbuie1mVctqQEE9J8H4Hb84tb+YhwojzrVaHhOLvSKcK86msb7xCgPyt96ZEQjRI4jSWL663B0pDxzIF59N9SL1JpQL7cEBm8yK6rqZwMrTVuR4K2T3qHkdYx0r8XqAIQWn8euSBdLgtAlAfb4sUu9CDvnvp8wmY+J0ITOOm616dZFGouOg/FdtpIMMS0kSVa4iRx6m1gxK5oCM775l4rQ+KUc9l5EKLxBrQQuoT+hLnjaWvtMUg1H80B1OZPN42OfZAxN4qNGm2sNHeQ7sHk7BJWGxIbQKrZA4Ykj3QstbUmwBx52KAyp/ORv1Z7EZ0n5wooNXA==
+X-YMail-OSG: id.v4RUVM1nOpzlFCDQrY6gpmMfrZsfH9dxHOVq6AUbXZkwXM8owajJopcWK0h1
+ jvxQU7NSDOwHyWaMYURl0ZCxKAui0mfyofIFsTT7KEcbvfpfQpzmTfrVioY.5w_iCnWuEM.qAKfI
+ J_dIuAYasT8fEqRc17HbwcmtoHtRkAHlGlLZgKFUueYEju6qxjy0kSiGjiDEdz.Vq4UUlyTukDAm
+ fs1j2d4M5cP7eIIGpmctk1EagYc8VfgmYEUKq3ZCy2IWNnz9lvXzmvEyLcSe9loiw_6oJQ8dsFtz
+ DTMOHDlGG3O9j9dO7ggk97Cti4cz0tq.ZWuuhSNZJyjbgfNaw_V2xUf9CgkwN_NRgtewxipDs2wG
+ AxXqf9hKIMyi1B9L8UA3bjIe0rdhx_mc7lCy9b_jSNZGmvOVHxyoeej86XmF7ljvBxoGtc25ZnS4
+ xA3WbDI7z6uKGZVp_3Aiu6fARY_zeekeldtqiKw.REV6DCxvz7cd8ffTYhaJCEWOryYrF_XT36cQ
+ tHS6CJK0jFrDlOk_i1gqqA3_tOtUoR.V7Z6oAQy94lzM86eviK4G4aPatj2bIr.MhHAoTHIVdiFa
+ gAgXskjf7CKRRYAGEdiPNdeS5lzTch2PqBGIaKiRzeDm5af7mMeyaQLn39rHzBO7FwDQprfhddHB
+ EcgwFCWU8wCWLoC4Y8JVbh2zlP6SnwSJ7U8L.idyc2Tnxqs62EE6oi.2.kO7vM.D.tfEVMWccPO_
+ _tZQjglww.FbUUheLmxClsWlVGa21SK6Bwjm5Csfxp55vRql.mHvFLKb2YsyWeqi7pzDYVlRIQJg
+ ri3GjssW9Jf5bBwlZKshd8FKqCgr3PHdyrec96FZm1h4jQJO4OXZ01hb1g3ETRSDSIhukjuSVT1Q
+ gyghPhK.ka5R8mY_X5MtR4Izo.4oaCy1NaKb_WKQfcrv3Oem2TBPKmHxwYzV4XjUMYWtfixPXWb3
+ 4iRTM_RYk7buBb6HdEICN3hETwgIP.R6BS81lpn1iOeWXn2AJSfL5KDAIgN4VQ2T7GZV56YbH1a_
+ FwgI5ghrHnj2Rtky8lvXsZ8faCLoFluuxeKQ3dgxDTIdOPUq9oSFUzQLUEoslINiIyKEdOU0Ufjh
+ ismIY7.8_i4VEn4VNehFGUONNvVvC8u0JpmsCuc3ispSeF5rPSOJNueVLgCt3H7coGTy4hjEcN4h
+ BelO7DWvbiejx6NjktB0WGU3vHCi0FLc8nnjeL.CQf._u3D_2nvZXSPyQ0wQLPtGHybcwKEJZRN.
+ qww4C0JZP0qlmi8iq5O4AOzGcYrb68nzgvrirySAYXeuOvtV88FnAKb4e4HCMVOcqNL1kqDGeyIE
+ ouHO0Qe8uuL3p598CKCC4UlD662Vtm0PY02ve.MfWzoM0ctN2DFUkWEyJoVNcGyDTiyJHpGFnmN3
+ sdNLKeDTjdM9sw3H.te7yrbfIk_9jW0V5LPupcLRKtX9ujTDdyzS56H1S7YWtogTehAqaTFnN9tU
+ dEMfC1e7JOg.isvwufbADlIvD_HZ.Vry7t2N5vXKGHviYMY8Cs21btQeBFZmT0oySP7VJobK_ycg
+ YiKoc3gJLtYWSzntm4q5RdJXi0nE3YBYUVePJ8NseH0YuNg4uniZHCqmlWCJpDXksxdqXRgOYAQa
+ yLJ9zwzCEmo3NkB5HZuSPHds88jLM8tw3G.jbMC15cgPi608HMznPIOidITzvP4sOkaXKiCm0GGN
+ UW06Vb02gqv10yAWyfQC2t4t5ALcuC06.g.7.jbHEZTTjKrZHyz4uglbfmiRZIWaDikaSDTPDMZa
+ R.Z47s_Mbefg1jkbJ5icNCZt6qmTmM0DDVxe1l9kpKsMQj62yDrnGwr6BHhWdjSxCs7tgq61JVO9
+ gAeRcBjagMPIRotcb7.ptt.zyBoit7e8wtUBtotPzueMW2Ad3NtsV7aCPjmk6IpnzGMMQchPImIk
+ rB55UcBfi.AfKi_MYV6YRyZFeWzwL6ArIYLqmGzxsob4fF4k73bzgZQ7vJ4HQuEXQdZ0ZchEBqGY
+ evkhvgsZCBx6_AsI9Rk1Npb4HCipoWVFc90U04jS9KGpmsyCovdLCb5Fwiceix7rX_rkFbKkgMwa
+ JLP7iXn2WegLUlNN.HlqVKVWmf.3RIPbeBqgCH6Zph9kM.pNLZJzRaLU282MDK8CO.m9FLppD93o
+ bhJPr8nexuiEqK5gJGtfMenYxuuBDCgvHg4aI5aPJpGC6vakilRf5ZuTTZBJm76CBq12jMkk2OQa
+ P1ortgLPQidIfwzSx7HWlZ6haumK17KOawk2FwdvUIC2VyC6LgnReN8s4o2cxcWpVKlZl_E7kEE5
+ 8ww--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 520e5f10-4ebf-4cfc-9b6f-514cb7ec018e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 26 Apr 2023 01:12:17 +0000
+Received: by hermes--production-bf1-5f9df5c5c4-n84wh (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 9bdb229305104c8c6e501579f3d4ce44;
+          Wed, 26 Apr 2023 01:12:13 +0000 (UTC)
+Message-ID: <96d9704d-058a-39f9-d27d-6f31ceb5cc95@schaufler-ca.com>
+Date:   Tue, 25 Apr 2023 18:12:09 -0700
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?aTNhVXNVVlg5MnM5RGNYdGdJZ1QrakQvNFZ3S3VvYTNESm9VYkVyZzduOWNQ?=
- =?utf-8?B?MFpYU0ROVk9wbjd3MlF1TVI4elU4SGlLRWxDWllCV2pDZ25MeTl6SjloaHdC?=
- =?utf-8?B?R0dSdFB0ek13M2NOUjhIQlNjeHpEbHBrVUFMUC9tVTBaVjI2RHVWVnNVRHZm?=
- =?utf-8?B?WWVPdDUrQmFGYnhyOXllMGZuSjY1cis1WE1WWSt2WkFaWWlvTTBJREdWdHZL?=
- =?utf-8?B?VGpmM0NmMm9YbVBnWjVSS1VCTm5JWE9zL2Y0YTdHRGVjTCtBb3JqWHlFTXRa?=
- =?utf-8?B?UEpMek4vM0JZWHpMY0lYUjJtQUZEUnh6bWZFc2k3VUNFcGJyc2wvMFdKUU9O?=
- =?utf-8?B?ZXZqYTJQSGd5TFZXNkVuZ1dxQ0FEc0J1Z2ZHaEk3SkxrY0lBZWJ1KzFsdDl1?=
- =?utf-8?B?SHc3MUQ2bzNldnZ1SSszQUVjZXAzMFRpYzkxclhob3hVWWJoU0JyYWxlMU52?=
- =?utf-8?B?Z0FLVGY0cXVDVEVVdjNQVVkwMnZVS3phNEpyQmlaMER3eHhia3Rhc1h0bURG?=
- =?utf-8?B?RTk4cE5vWnlnYjBnWmVqMG1nSjRsSXo0VUptS2dwS2UxaEd6MzhMU1Z4enRT?=
- =?utf-8?B?OXdXOWMzVmpDN3lSMGI5UEVkVzFUZnB2MW9LSUFudnVLUFhvb2E5bTJrends?=
- =?utf-8?B?M3NHTHUydmhjN3Y3Y0RxMHJqakU4b2hHbEJiT0RNMHI5UllUNkdnNFhRS1pS?=
- =?utf-8?B?K0NQbDh6WWxTYVlXTWQvdlN2WjkzeWFxTlhRWkVmS2VLSHhKeGhCNDFVMXV1?=
- =?utf-8?B?MUNNMmd2Zms3N3JOckV4QjRIdVBaMHpwOEM1T3I3UWVkUllnbDYyQ0ZPbFdy?=
- =?utf-8?B?akE2TnNCeUVnS2YybnE0ZEtyNExvMFU3RmFFemZzd2s3QmltSXF2b2o3NUtD?=
- =?utf-8?B?ZkRwdjJseUIyZjNnTzk3NnhXdS9YVHN0ZVJQMzgra3Npd3pNNHFpeE1vbndV?=
- =?utf-8?B?bThNZ2dkTXc1dGVZWStuamFzYWlMMXVhZlgrSzJQYks1NGJZa0ZsSjBmczZL?=
- =?utf-8?B?K1N5QzYwdVBlVjhsNm9INXliUEt2dVRxS2tTTno2M1czRVowM0xRQUNnWnlD?=
- =?utf-8?B?UFlteEtSYms1VlVFZEdVSjJITGdyblI5L0hTR2R4aC9aZGlDTW9kMytMMnFQ?=
- =?utf-8?B?TitOOEVtb3FhWW9wSWdobXUxMW45TitQMXVxN1JSN1M4LzU3TEJDaXpCdHk4?=
- =?utf-8?B?VkVQQTFieDB4ME1FcFNDN0hDSmxja1IxTzdsc3dtejJyd2lKb28xR1BtdXU3?=
- =?utf-8?B?TDJSOTA5LzQ0engxeWhtWDl2ZEtSSUFnRUJVRFNQbUUvY21Kb285TjBrUEZr?=
- =?utf-8?B?WnFQUE9TY2MwOU9vaHNMZ2dvUDc4d094aUFNQllNU1dFTVMvRkZNMVc0dHBZ?=
- =?utf-8?Q?iyy3Taxe7sSIeYZyCc42tMsgx886yP4k=3D?=
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fdabce7-b42d-4d90-1e13-08db45f279f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2023 01:06:33.3313
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i6FCVgOWxKDywaiBTfdI5o884JSiq+KB6WEQee0BnSyJCTQUE6QDAxF85C1ZzysMWyAggMti7TuxtfNvFXdXOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7713
-X-Proofpoint-GUID: aB848QYAyZwBVEW0IXXGtOk3TAFML2Hi
-X-Proofpoint-ORIG-GUID: aB848QYAyZwBVEW0IXXGtOk3TAFML2Hi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_11,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- adultscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304260008
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v9 04/11] LSM: syscalls for current process attributes
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     paul@paul-moore.com, linux-security-module@vger.kernel.org,
+        jmorris@namei.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        mic@digikod.net, Casey Schaufler <casey@schaufler-ca.com>
+References: <20230421174259.2458-1-casey@schaufler-ca.com>
+ <20230421174259.2458-5-casey@schaufler-ca.com>
+ <6442e5b1.170a0220.9215c.16b7@mx.google.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <6442e5b1.170a0220.9215c.16b7@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBNYXIgMjgsIDIwMjMsIEtyaXNobmEgS3VyYXBhdGkgd3JvdGU6DQo+IElmIHRoZSBj
-b3JlIHNvZnQgcmVzZXQgdGltZW91dCBoYXBwZW5zLCBhdm9pZCBzZXR0aW5nIHVwIGV2ZW50DQo+
-IGJ1ZmZlcnMgYW5kIHN0YXJ0aW5nIGdhZGdldCBhcyB0aGUgd3JpdGVzIHRvIHRoZXNlIHJlZ2lz
-dGVycw0KPiBtYXkgbm90IHJlZmxlY3Qgd2hlbiBpbiByZXNldCBhbmQgc2V0dGluZyB0aGUgcnVu
-IHN0b3AgYml0DQo+IGNhbiBsZWFkIHRoZSBjb250cm9sbGVyIHRvIGFjY2VzcyB3cm9uZyBldmVu
-dCBidWZmZXIgYWRkcmVzcw0KPiByZXN1bHRpbmcgaW4gYSBjcmFzaC4NCj4gDQo+IFNpZ25lZC1v
-ZmYtYnk6IEtyaXNobmEgS3VyYXBhdGkgPHF1aWNfa3Jpc2t1cmFAcXVpY2luYy5jb20+DQo+IC0t
-LQ0KPiAgZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYyB8IDUgKysrKy0NCj4gIDEgZmlsZSBjaGFu
-Z2VkLCA0IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jIGIvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYw0KPiBp
-bmRleCAzYzYzZmE5N2E2ODAuLmYwNDcyODAxZDlhNSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91
-c2IvZHdjMy9nYWRnZXQuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+IEBA
-IC0yNjIwLDEzICsyNjIwLDE2IEBAIHN0YXRpYyBpbnQgZHdjM19nYWRnZXRfcHVsbHVwKHN0cnVj
-dCB1c2JfZ2FkZ2V0ICpnLCBpbnQgaXNfb24pDQo+ICAJCSAqIGRldmljZS1pbml0aWF0ZWQgZGlz
-Y29ubmVjdCByZXF1aXJlcyBhIGNvcmUgc29mdCByZXNldA0KPiAgCQkgKiAoRENUTC5DU2Z0UnN0
-KSBiZWZvcmUgZW5hYmxpbmcgdGhlIHJ1bi9zdG9wIGJpdC4NCj4gIAkJICovDQo+IC0JCWR3YzNf
-Y29yZV9zb2Z0X3Jlc2V0KGR3Yyk7DQo+ICsJCXJldCA9IGR3YzNfY29yZV9zb2Z0X3Jlc2V0KGR3
-Yyk7DQo+ICsJCWlmIChyZXQpDQo+ICsJCQlnb3RvIGRvbmU7DQo+ICANCj4gIAkJZHdjM19ldmVu
-dF9idWZmZXJzX3NldHVwKGR3Yyk7DQo+ICAJCV9fZHdjM19nYWRnZXRfc3RhcnQoZHdjKTsNCj4g
-IAkJcmV0ID0gZHdjM19nYWRnZXRfcnVuX3N0b3AoZHdjLCB0cnVlLCBmYWxzZSk7DQo+ICAJfQ0K
-PiAgDQo+ICtkb25lOg0KPiAgCXBtX3J1bnRpbWVfcHV0KGR3Yy0+ZGV2KTsNCj4gIA0KPiAgCXJl
-dHVybiByZXQ7DQo+IC0tIA0KPiAyLjQwLjANCj4gDQoNCkFja2VkLWJ5OiBUaGluaCBOZ3V5ZW4g
-PFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+DQoNClRoYW5rcywNClRoaW5o
+On 4/21/2023 12:36 PM, Kees Cook wrote:
+> On Fri, Apr 21, 2023 at 10:42:52AM -0700, Casey Schaufler wrote:
+>> Create a system call lsm_get_self_attr() to provide the security
+>> module maintained attributes of the current process.
+>> Create a system call lsm_set_self_attr() to set a security
+>> module maintained attribute of the current process.
+>> Historically these attributes have been exposed to user space via
+>> entries in procfs under /proc/self/attr.
+>>
+>> The attribute value is provided in a lsm_ctx structure. The structure
+>> identifies the size of the attribute, and the attribute value. The format
+>> of the attribute value is defined by the security module. A flags field
+>> is included for LSM specific information. It is currently unused and must
+>> be 0. The total size of the data, including the lsm_ctx structure and any
+>> padding, is maintained as well.
+>>
+>> struct lsm_ctx {
+>>         __u64 id;
+>>         __u64 flags;
+>>         __u64 len;
+>>         __u64 ctx_len;
+>>         __u8 ctx[];
+>> };
+>>
+>> Two new LSM hooks are used to interface with the LSMs.
+>> security_getselfattr() collects the lsm_ctx values from the
+>> LSMs that support the hook, accounting for space requirements.
+>> security_setselfattr() identifies which LSM the attribute is
+>> intended for and passes it along.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> Nits/questions below...
+>
+>> ---
+>>  Documentation/userspace-api/lsm.rst |  15 ++++
+>>  include/linux/lsm_hook_defs.h       |   4 +
+>>  include/linux/lsm_hooks.h           |   9 +++
+>>  include/linux/security.h            |  19 +++++
+>>  include/linux/syscalls.h            |   5 ++
+>>  include/uapi/linux/lsm.h            |  36 +++++++++
+>>  kernel/sys_ni.c                     |   4 +
+>>  security/Makefile                   |   1 +
+>>  security/lsm_syscalls.c             |  55 ++++++++++++++
+>>  security/security.c                 | 110 ++++++++++++++++++++++++++++
+>>  10 files changed, 258 insertions(+)
+>>  create mode 100644 security/lsm_syscalls.c
+>>
+>> diff --git a/Documentation/userspace-api/lsm.rst b/Documentation/userspace-api/lsm.rst
+>> index 6ddf5506110b..b45e402302b3 100644
+>> --- a/Documentation/userspace-api/lsm.rst
+>> +++ b/Documentation/userspace-api/lsm.rst
+>> @@ -48,6 +48,21 @@ creating socket objects.
+>>  The proc filesystem provides this value in ``/proc/self/attr/sockcreate``.
+>>  This is supported by the SELinux security module.
+>>  
+>> +Kernel interface
+>> +================
+>> +
+>> +Set a security attribute of the current process
+>> +--------------------------------------------------
+>> +
+>> +.. kernel-doc:: security/lsm_syscalls.c
+>> +    :identifiers: sys_lsm_set_self_attr
+>> +
+>> +Get the specified security attributes of the current process
+>> +--------------------------------------------------
+>> +
+>> +.. kernel-doc:: security/lsm_syscalls.c
+>> +    :identifiers: sys_lsm_get_self_attr
+>> +
+>>  Additional documentation
+>>  ========================
+>>  
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index 094b76dc7164..7177d9554f4a 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -261,6 +261,10 @@ LSM_HOOK(int, 0, sem_semop, struct kern_ipc_perm *perm, struct sembuf *sops,
+>>  LSM_HOOK(int, 0, netlink_send, struct sock *sk, struct sk_buff *skb)
+>>  LSM_HOOK(void, LSM_RET_VOID, d_instantiate, struct dentry *dentry,
+>>  	 struct inode *inode)
+>> +LSM_HOOK(int, -EOPNOTSUPP, getselfattr, unsigned int __user attr,
+>> +	 struct lsm_ctx __user *ctx, size_t *size, u32 __user flags)
+>> +LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int __user attr,
+>> +	 struct lsm_ctx __user *ctx, size_t size, u32 __user flags)
+>>  LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
+>>  	 char **value)
+>>  LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index 8e6ba0a9896e..ed38ad5eb444 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -25,6 +25,7 @@
+>>  #ifndef __LINUX_LSM_HOOKS_H
+>>  #define __LINUX_LSM_HOOKS_H
+>>  
+>> +#include <uapi/linux/lsm.h>
+>>  #include <linux/security.h>
+>>  #include <linux/init.h>
+>>  #include <linux/rculist.h>
+>> @@ -503,6 +504,14 @@
+>>   *	and writing the xattrs as this hook is merely a filter.
+>>   * @d_instantiate:
+>>   *	Fill in @inode security information for a @dentry if allowed.
+>> + * @getselfattr:
+>> + *	Read attribute @attr for the current process and store it into @ctx.
+>> + *	Return 0 on success, -EOPNOTSUPP if the attribute is not supported,
+>> + *	or another negative value otherwise.
+>> + * @setselfattr:
+>> + *	Set attribute @attr for the current process.
+>> + *	Return 0 on success, -EOPNOTSUPP if the attribute is not supported,
+>> + *	or another negative value otherwise.
+>>   * @getprocattr:
+>>   *	Read attribute @name for process @p and store it into @value if allowed.
+>>   *	Return the length of @value on success, a negative value otherwise.
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index 8faed81fc3b4..f7292890b6a2 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -60,6 +60,7 @@ struct fs_parameter;
+>>  enum fs_value_type;
+>>  struct watch;
+>>  struct watch_notification;
+>> +struct lsm_ctx;
+>>  
+>>  /* Default (no) options for the capable function */
+>>  #define CAP_OPT_NONE 0x0
+>> @@ -473,6 +474,10 @@ int security_sem_semctl(struct kern_ipc_perm *sma, int cmd);
+>>  int security_sem_semop(struct kern_ipc_perm *sma, struct sembuf *sops,
+>>  			unsigned nsops, int alter);
+>>  void security_d_instantiate(struct dentry *dentry, struct inode *inode);
+>> +int security_getselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
+> Scalar values aren't marked with "__user": this is for address space
+> markings (i.e. only on pointers).
+>
+>> +			 size_t __user *size, u32 __user flags);
+>> +int security_setselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
+>> +			 size_t __user size, u32 __user flags);
+>>  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+>>  			 char **value);
+>>  int security_setprocattr(int lsmid, const char *name, void *value, size_t size);
+>> @@ -1343,6 +1348,20 @@ static inline void security_d_instantiate(struct dentry *dentry,
+>>  					  struct inode *inode)
+>>  { }
+>>  
+>> +static inline int security_getselfattr(unsigned int __user attr,
+>> +				       struct lsm_ctx __user *ctx,
+>> +				       size_t __user *size, u32 __user flags)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static inline int security_setselfattr(unsigned int __user attr,
+>> +				       struct lsm_ctx __user *ctx,
+>> +				       size_t __user size, u32 __user flags)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+>>  static inline int security_getprocattr(struct task_struct *p, int lsmid,
+>>  				       const char *name, char **value)
+>>  {
+>> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+>> index 33a0ee3bcb2e..9a94c31bf6b6 100644
+>> --- a/include/linux/syscalls.h
+>> +++ b/include/linux/syscalls.h
+>> @@ -71,6 +71,7 @@ struct clone_args;
+>>  struct open_how;
+>>  struct mount_attr;
+>>  struct landlock_ruleset_attr;
+>> +struct lsm_ctx;
+>>  enum landlock_rule_type;
+>>  
+>>  #include <linux/types.h>
+>> @@ -1058,6 +1059,10 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>>  					    unsigned long home_node,
+>>  					    unsigned long flags);
+>> +asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx *ctx,
+>> +				      size_t *size, __u32 flags);
+>> +asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx *ctx,
+>> +				      size_t size, __u32 flags);
+> It'd be nice if these syscalls could stick to the "verionable" syscall
+> conventions (like openat2) as much as possible. Is "flags" needed here
+> if we this is only ever going to be 1 LSM at a time?
+
+Consider a future LSM that allows you to edit an attribute. Viable flags
+might be LSM_FLAG_ADD_TO_ATTRIBUTE, LSM_FLAG_DELETE_FROM_ATTRIBUTE,
+LSM_FLAG_REPLACE_ATTRIBUTE, LSM_FLAG_SET_ONLY_IF_EMPTY, and so forth.
+This could be useful in an Bell & LaPadula implementation, adding or
+removing categories on the fly. OK, no B&L would really allow that, but
+The point should be clear.
+
+>>  
+>>  /*
+>>   * Architecture-specific system calls
+>> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+>> index f27c9a9cc376..eeda59a77c02 100644
+>> --- a/include/uapi/linux/lsm.h
+>> +++ b/include/uapi/linux/lsm.h
+>> @@ -9,6 +9,36 @@
+>>  #ifndef _UAPI_LINUX_LSM_H
+>>  #define _UAPI_LINUX_LSM_H
+>>  
+>> +#include <linux/types.h>
+>> +#include <linux/unistd.h>
+>> +
+>> +/**
+>> + * struct lsm_ctx - LSM context information
+>> + * @id: the LSM id number, see LSM_ID_XXX
+>> + * @flags: LSM specific flags
+>> + * @len: length of the lsm_ctx struct, @ctx and any other data or padding
+>> + * @ctx_len: the size of @ctx
+>> + * @ctx: the LSM context value
+>> + *
+>> + * The @len field MUST be equal to the size of the lsm_ctx struct
+>> + * plus any additional padding and/or data placed after @ctx.
+>> + *
+>> + * In all cases @ctx_len MUST be equal to the length of @ctx.
+>> + * If @ctx is a string value it should be nul terminated with
+>> + * @ctx_len equal to `strlen(@ctx) + 1`.  Binary values are
+>> + * supported.
+>> + *
+>> + * The @flags and @ctx fields SHOULD only be interpreted by the
+>> + * LSM specified by @id; they MUST be set to zero/0 when not used.
+>> + */
+>> +struct lsm_ctx {
+>> +	__u64 id;
+>> +	__u64 flags;
+>> +	__u64 len;
+>> +	__u64 ctx_len;
+>> +	__u8 ctx[];
+>> +};
+>> +
+>>  /*
+>>   * ID tokens to identify Linux Security Modules (LSMs)
+>>   *
+>> @@ -51,4 +81,10 @@
+>>  #define LSM_ATTR_PREV		104
+>>  #define LSM_ATTR_SOCKCREATE	105
+>>  
+>> +/*
+>> + * LSM_FLAG_XXX definitions identify special handling instructions
+>> + * for the API.
+>> + */
+>> +#define LSM_FLAG_SINGLE	0x0001
+>> +
+>>  #endif /* _UAPI_LINUX_LSM_H */
+>> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+>> index 860b2dcf3ac4..d03c78ef1562 100644
+>> --- a/kernel/sys_ni.c
+>> +++ b/kernel/sys_ni.c
+>> @@ -262,6 +262,10 @@ COND_SYSCALL_COMPAT(recvmsg);
+>>  /* mm/nommu.c, also with MMU */
+>>  COND_SYSCALL(mremap);
+>>  
+>> +/* security/lsm_syscalls.c */
+>> +COND_SYSCALL(lsm_get_self_attr);
+>> +COND_SYSCALL(lsm_set_self_attr);
+>> +
+>>  /* security/keys/keyctl.c */
+>>  COND_SYSCALL(add_key);
+>>  COND_SYSCALL(request_key);
+>> diff --git a/security/Makefile b/security/Makefile
+>> index 18121f8f85cd..59f238490665 100644
+>> --- a/security/Makefile
+>> +++ b/security/Makefile
+>> @@ -7,6 +7,7 @@ obj-$(CONFIG_KEYS)			+= keys/
+>>  
+>>  # always enable default capabilities
+>>  obj-y					+= commoncap.o
+>> +obj-$(CONFIG_SECURITY) 			+= lsm_syscalls.o
+>>  obj-$(CONFIG_MMU)			+= min_addr.o
+>>  
+>>  # Object file lists
+>> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
+>> new file mode 100644
+>> index 000000000000..feee31600219
+>> --- /dev/null
+>> +++ b/security/lsm_syscalls.c
+>> @@ -0,0 +1,55 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * System calls implementing the Linux Security Module API.
+>> + *
+>> + *  Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
+>> + *  Copyright (C) 2022 Intel Corporation
+>> + */
+>> +
+>> +#include <asm/current.h>
+>> +#include <linux/compiler_types.h>
+>> +#include <linux/err.h>
+>> +#include <linux/errno.h>
+>> +#include <linux/security.h>
+>> +#include <linux/stddef.h>
+>> +#include <linux/syscalls.h>
+>> +#include <linux/types.h>
+>> +#include <linux/lsm_hooks.h>
+>> +#include <uapi/linux/lsm.h>
+>> +
+>> +/**
+>> + * sys_lsm_set_self_attr - Set current task's security module attribute
+>> + * @attr: which attribute to set
+>> + * @ctx: the LSM contexts
+>> + * @size: size of @ctx
+>> + * @flags: reserved for future use
+>> + *
+>> + * Sets the calling task's LSM context. On success this function
+>> + * returns 0. If the attribute specified cannot be set a negative
+>> + * value indicating the reason for the error is returned.
+>> + */
+>> +SYSCALL_DEFINE4(lsm_set_self_attr, unsigned int, attr, struct lsm_ctx __user *,
+>> +		ctx, size_t __user, size, u32, flags)
+>> +{
+>> +	return security_setselfattr(attr, ctx, size, flags);
+>> +}
+>> +
+>> +/**
+>> + * sys_lsm_get_self_attr - Return current task's security module attributes
+>> + * @attr: which attribute to set
+>> + * @ctx: the LSM contexts
+>> + * @size: size of @ctx, updated on return
+>> + * @flags: reserved for future use
+>> + *
+>> + * Returns the calling task's LSM contexts. On success this
+>> + * function returns the number of @ctx array elements. This value
+>> + * may be zero if there are no LSM contexts assigned. If @size is
+>> + * insufficient to contain the return data -E2BIG is returned and
+>> + * @size is set to the minimum required size. In all other cases
+>> + * a negative value indicating the error is returned.
+>> + */
+>> +SYSCALL_DEFINE4(lsm_get_self_attr, unsigned int, attr, struct lsm_ctx __user *,
+>> +		ctx, size_t __user *, size, u32, flags)
+>> +{
+>> +	return security_getselfattr(attr, ctx, size, flags);
+>> +}
+>> diff --git a/security/security.c b/security/security.c
+>> index 38ca0e646cac..bc3f166b4bff 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -2167,6 +2167,116 @@ void security_d_instantiate(struct dentry *dentry, struct inode *inode)
+>>  }
+>>  EXPORT_SYMBOL(security_d_instantiate);
+>>  
+>> +/**
+>> + * security_getselfattr - Read an LSM attribute of the current process.
+>> + * @attr: which attribute to return
+>> + * @ctx: the user-space destination for the information, or NULL
+>> + * @size: the size of space available to receive the data
+>> + * @flags: special handling options. LSM_FLAG_SINGLE indicates that only
+>> + * attributes associated with the LSM identified in the passed @ctx be
+>> + * reported
+>> + *
+>> + * Returns the number of attributes found on success, negative value
+>> + * on error. @size is reset to the total size of the data.
+>> + * If @size is insufficient to contain the data -E2BIG is returned.
+>> + */
+>> +int security_getselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
+>> +			 size_t __user *size, u32 __user flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
+>> +	u8 __user *base = (u8 __user *)ctx;
+>> +	size_t total = 0;
+>> +	size_t entrysize;
+>> +	size_t left;
+>> +	bool toobig = false;
+>> +	int count = 0;
+>> +	int rc;
+>> +
+>> +	if (attr == 0)
+>> +		return -EINVAL;
+>> +	if (size == NULL)
+>> +		return -EINVAL;
+>> +	if (get_user(left, size))
+>> +		return -EFAULT;
+>> +
+>> +	if ((flags & LSM_FLAG_SINGLE) == LSM_FLAG_SINGLE) {
+>> +		if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
+>> +			return -EFAULT;
+>> +		if (lctx.id == LSM_ID_UNDEF)
+>> +			return -EINVAL;
+>> +	} else if (flags) {
+>> +		return -EINVAL;
+>> +	}
+> Can this use copy_struct_from_user() instead? It would be nice to reuse
+> that here.
+
+Yes. Missed that one.
+
+>
+>> +
+>> +	hlist_for_each_entry(hp, &security_hook_heads.getselfattr, list) {
+>> +		if (lctx.id != LSM_ID_UNDEF && lctx.id != hp->lsmid->id)
+>> +			continue;
+>> +		entrysize = left;
+>> +		if (base)
+>> +			ctx = (struct lsm_ctx __user *)(base + total);
+>> +		rc = hp->hook.getselfattr(attr, ctx, &entrysize, flags);
+>> +		if (rc == -EOPNOTSUPP) {
+>> +			rc = 0;
+>> +			continue;
+>> +		}
+>> +		if (rc == -E2BIG) {
+>> +			toobig = true;
+>> +			left = 0;
+>> +			continue;
+>> +		}
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		left -= entrysize;
+>> +		total += entrysize;
+>> +		count += rc;
+>> +	}
+>> +	if (put_user(total, size))
+>> +		return -EFAULT;
+>> +	if (toobig)
+>> +		return -E2BIG;
+>> +	if (count == 0)
+>> +		return LSM_RET_DEFAULT(getselfattr);
+>> +	return count;
+>> +}
+>> +
+>> +/**
+>> + * security_setselfattr - Set an LSM attribute on the current process.
+>> + * @attr: which attribute to set
+>> + * @ctx: the user-space source for the information
+>> + * @size: the size of the data
+>> + * @flags: reserved for future use, must be 0
+>> + *
+>> + * Set an LSM attribute for the current process. The LSM, attribute
+>> + * and new value are included in @ctx.
+>> + *
+>> + * Returns 0 on success, -EINVAL if the input is inconsistent, -EFAULT
+>> + * if the user buffer is inaccessible or an LSM specific failure.
+>> + */
+>> +int security_setselfattr(unsigned int __user attr, struct lsm_ctx __user *ctx,
+>> +			 size_t __user size, u32 __user flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx lctx;
+>> +
+>> +	if (flags)
+>> +		return -EINVAL;
+>> +	if (size < sizeof(*ctx))
+>> +		return -EINVAL;
+>> +	if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
+>> +		return -EFAULT;
+>> +	if (size < lctx.len || size < lctx.ctx_len + sizeof(ctx) ||
+>> +	    lctx.len < lctx.ctx_len + sizeof(ctx))
+>> +		return -EINVAL;
+>> +
+>> +	hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
+>> +		if ((hp->lsmid->id) == lctx.id)
+>> +			return hp->hook.setselfattr(attr, ctx, size, flags);
+>> +
+>> +	return LSM_RET_DEFAULT(setselfattr);
+>> +}
+>> +
+>>  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+>>  			 char **value)
+>>  {
+>> -- 
+>> 2.39.2
+>>
