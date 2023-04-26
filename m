@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000C46EFC6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42326EFC76
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 23:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239447AbjDZV2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 17:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S239935AbjDZV31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 17:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232195AbjDZV23 (ORCPT
+        with ESMTP id S239398AbjDZV3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:28:29 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFE4E76;
-        Wed, 26 Apr 2023 14:28:28 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b99f0a0052fso4230819276.3;
-        Wed, 26 Apr 2023 14:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682544507; x=1685136507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=csnG/aChZgPBgsRf67ljm6apadApqU0JoShp+C1rCfY=;
-        b=AcqzPNAqbFwr3Zd1l7i8Gdo2WXhAjJOUyP/djgqVYxwTr93FMPuUVNiGqC98ALD4Ni
-         pPYVt63Trvd1j4Eq39POj+cyJ5CzJIAIruMDpJ8FANdkfjVXJfF/xrRvSjIstqv5Ez6c
-         46p+/cu4pa9826QPY4C3rMo2DH2YmwUgE482Dt45CGy/OahCBX/KWjt9Qf3JOM8eFGAD
-         142UloN2xOLVPy/BUfi5p0XzYyXtJrFqRhhlVvjMNjVygxNITb0m1tN+qdF7Yr4HcZnL
-         sFPhRDqsYQdGcJWTOYP4rxbsTr8MiKwkereb5cAECm+mohK6EBpEkD6mLJv2CcHIEA33
-         c2Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682544507; x=1685136507;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=csnG/aChZgPBgsRf67ljm6apadApqU0JoShp+C1rCfY=;
-        b=Mt2d7mHzNrsL6B+j7cXBw+mbEorQXfQAMfFP7wRz+EpEIFTcyzVJvL7Byp2iJ5degZ
-         Me8JdaEvsPM3b070wkrzj8xyvy5e4uYQPCB1fpiIHOiXCBGWRzCIJ2np/xoGt9c5iC2y
-         EFl9Ut7DbphNih37zu1WwJskHnHyr83bNQXXJZIgqg3jp4lH0yuIPIKV2mT36sDwEq/2
-         SNgRSwD+l2kCDkyb5aXtMElQlIvqmc2ogT6tIBVWI3CDOizODhg+N7RfxwGAGC/yCCOh
-         3SmfDz/QAU6q7TRB0v0VUYGkYVbfpJRMkOVLV+xMgFONyBaxc8c36Q2WWE2W3W9Rn3VI
-         o4vA==
-X-Gm-Message-State: AAQBX9dJUXH/JxzYUvc4eXUn+Cg1H67qn6suFft+3uuzIsfbBI1iJhS0
-        pltOnk7egpQPrHUdYKbv56fjPcRBdKvbui88nkM=
-X-Google-Smtp-Source: AKy350Y+eCrQTpMQt+hqdrQAnZo/eYVzzSodJwnQ6aWkIJSJZbmPk9uwTZd8uxZw/2DbyxvfCZFTkQvspxyn9uKJDQA=
-X-Received: by 2002:a81:5e43:0:b0:555:ac76:a880 with SMTP id
- s64-20020a815e43000000b00555ac76a880mr15308726ywb.1.1682544507411; Wed, 26
- Apr 2023 14:28:27 -0700 (PDT)
+        Wed, 26 Apr 2023 17:29:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC3C40E8;
+        Wed, 26 Apr 2023 14:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1682544536; i=w_armin@gmx.de;
+        bh=oufZCIe50wgKuLFQDyobMgjM8pxGO6eD46RTeNyc1co=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=MEcVvoC2Z7eVXYp+ULDxvM3CMO897WOcSY8vckUQGvHi35Gh35q0odgwj9eL9hhCj
+         FoWSpn6xCb6pptJywqk9qjmHlZN5a6mgXNlJACwyFoGecJkgi0ctSBnfHrt2I3VzzZ
+         ohxPQUx1Aaw84qDNppzGoRRPH6sjbjXtgWi7ySxiKrQanRHFnn8BqBeU1dEDAO1Una
+         9oEfX4hitelWAvi1qY0KnDnfRpxYMnsXYL7LzAwKom6VVgYzTL+QUEz+ghSwsxG3Xc
+         iBaWmlbafNkODWxooQQeRp+vDV+QgsqqOg0eLXvfpkQ3egLmoSPCsREqg4h8dLC20k
+         jFyAg3HlB5ZKA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MAwbz-1py9QU3EjZ-00BO1I; Wed, 26 Apr 2023 23:28:55 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     Mario.Limonciello@amd.com, prasanth.ksr@dell.com,
+        jorgealtxwork@gmail.com, james@equiv.tech,
+        Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC v2 0/2] platform/x86: Allow retrieving the number of WMI object instances
+Date:   Wed, 26 Apr 2023 23:28:46 +0200
+Message-Id: <20230426212848.108562-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <CANiq72nm-tWGPHMaNF11baVRDFpk8ruvTAVDEWKfraEzADWqQQ@mail.gmail.com>
- <20230426204923.16195-1-amiculas@cisco.com> <4b8e3c30-9626-dffd-0aff-4b5c650154ad@gmail.com>
- <CAPDJoNuX17h0=F7VRP=-VODG1bcdCYZAD+WNSofvpWPwwvbxMg@mail.gmail.com>
-In-Reply-To: <CAPDJoNuX17h0=F7VRP=-VODG1bcdCYZAD+WNSofvpWPwwvbxMg@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 26 Apr 2023 23:28:16 +0200
-Message-ID: <CANiq72nX9uHanKZ4at80O3p-c2S8WM4SCRGF3f=PHdO3itEZUA@mail.gmail.com>
-Subject: Re: [PATCH v3] rust: helpers: sort includes alphabetically in rust/helpers.c
-To:     Ariel Miculas <ariel.miculas@gmail.com>
-Cc:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-        Ariel Miculas <amiculas@cisco.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com,
-        benno.lossin@proton.me
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:UK4stO+HSR03CMHiOIHSzBpN810UxiBA1BOVuHh6Gx67kvtz0t8
+ tfLUMcsT0JLww9ZIZHk6HTTtvFBkGKifpLNLwbDYZ5GLVNx7knozxsglYVs+WPSebCT6FJH
+ GmGarmFyhmhERzF/O45eNZhEOPPEPjnVD9gzFmwiBcxpt0r4d4s1iztRlOupIts/7F5cqJM
+ foXh9Lse7OceSt7RLFrOQ==
+UI-OutboundReport: notjunk:1;M01:P0:S7Sq+7hk1j8=;KDfXD1XltpUCKSxe9+J6lqmxvdD
+ Ab2uQgeJZyp2/m4FqjTyZo+GlupIj/lKuhN7oF/e829Pm4rv4KMiqVhir6+5HxhwUrqHlpn7n
+ dO0QdyqerRpbDb2hUqkv27AUhX2yYXNqiK829oXEXrhdSBsnHe4313DHWQZk4DBmxnWWBbSgb
+ m4EUD3N9u6FVfr4y6v9t8hvqW4Tdd73wuK9x+KrCNka7cslgDvRZXgeQLn2+/vETSS1wuzKWz
+ fAO+jy+m6W8/jmFSdiSGRFDoAoeHTyw77lL9jB7hnTxNXW47LCnq+Ld15M6SbTFhMubfqDXlq
+ CMDQewunZzpvukVBM9iu9bWPodepc36wBYisMuyDSevie1kp9dtFyWB46+nj7EX3iFtAFzxdM
+ kXmq5C6UzEogaoMzw8vXN3vhyy3iE09RAxmMHp8bp2GAJRcqxwYWJ3ReIIoKXz7KGR7HQKVGt
+ CQKJjyqjfJmyYSOSIj2LZFvGmM13nLQcSPcr2y5Iz4weCd2jm2HxuDEsbaPsc0acf487bjZWQ
+ YrA8QGrtaltSAR4MKZ8HwQK4h+3FFpjAMRqLd/xFSMZyCMDwttlb+CbfhP/gCBsMoj7aLMELM
+ u1zVLjq7jPbbQk6a/W1NyIC437UekxWSwYVcwwhzXe9PBaEbeeNq9fgzF3CnZYaRaFoUi8RaR
+ d2I8Zf/YrByODZ2o6TUK+G3REeauY9baGkwog6aNxbKO/DRGxhzVFp15aDwmgjdz31ojRQrGy
+ 4TSjbTwt+m7kG1EoeE1LlbQ3lV/a9RNvaylf+KmTbw4otvTHxExZfVLiRM9Rx8jiqSRE+FjIi
+ jVe8VIfVZNdiS0BWnQ4ujfTLcmtfj3V4ck0U1LMQ/CxjYv9QVg+Qd01l9JSnt646ZD8J4mjj8
+ VCbut1P8qywo95ZDndaly9CYF9ySv0b/hy5cPh1bFfIaEWP7XJNqOk0wk5mQI0oQbHxlMi1q8
+ pAuHvRKv6K9BMbcirbZ43e5b57k=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:04=E2=80=AFPM Ariel Miculas <ariel.miculas@gmail=
-.com> wrote:
->
-> This is the format I see in https://docs.kernel.org/process/5.Posting.htm=
-l#
-> ```
-> Link: https://example.com/somewhere.html  optional-other-stuff
-> ```
-> And looking briefly through the git log I see the simple `Link:
-> www.example.com` format.
+This experimental patch series allows WMI drivers to retrieve
+the number of WMI object instances. This functionallity benefits
+several current and upcoming WMI drivers, the dell-wmi-sysman driver
+is converted to use this new API as an example.
 
-Indeed, the one you have in the commit is the right one :)
+The changes are compile-tested only, the change to the dell-wmi-sysman
+driver also needs to be tested on real hardware.
 
-There are 5 commits in the kernel with the format mentioned by Martin,
-but they were probably unintentional.
+Armin Wolf (2):
+  platform/x86: wmi: Allow retrieving the number of WMI object instances
+  platform/x86: dell-sysman: Improve instance detection
 
-Cheers,
-Miguel
+ .../x86/dell/dell-wmi-sysman/sysman.c         | 15 ++++---
+ drivers/platform/x86/wmi.c                    | 40 +++++++++++++++++++
+ include/linux/acpi.h                          |  2 +
+ include/linux/wmi.h                           |  2 +
+ 4 files changed, 51 insertions(+), 8 deletions(-)
+
+=2D-
+2.30.2
+
