@@ -2,143 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341976EF64B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165E76EF650
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241371AbjDZOV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S241109AbjDZOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241341AbjDZOVv (ORCPT
+        with ESMTP id S240704AbjDZOXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:21:51 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2101.outbound.protection.outlook.com [40.107.113.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191647298;
-        Wed, 26 Apr 2023 07:21:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l5kT+WG8nS3EHSbdRQ5klKkozpHotFpZLKjqJx/OlgDMOWDxFsJhcEOLBINq41MUj/Ojrn7mDKXcKMf/jVr7stpkYysKV1oAVKweG1UWVsy6lT3CX4JUcR4M1V7kPxDLtvFJW2rCNWD6t/w0Hx6/UhmcfZCtZxKdhiUnyuWYzEK3GwUNMJBc7G1DhOoiE70tGgVzlxwYlyRhiJgwJ4DrTVxfvEcKZfVXoyNfTITdC0kyMauzN/gPvwKuPVq7l/4IpzvIZQBytLawYtR5mhWm4hLsubfHk4HkXzWWpYN3A/CG8WCkC+v/KfQKjKg1wEAHM6dfN68TUrX76qgkHWZNMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BFQd8FiwDy5NJDHjLbBvFzp9L8rv9W1diZJ65EgoTmw=;
- b=NvpfU7PcMpPhTKMwBTY8cf1PZZJHtCSLrE6SpvdiSADl55EC5XhDh0spviYG/QKegK/Ffva1qjt7hraRfjP3Eox3GkN5kwwODbI1A6pR95Avst1a1cWepTPO/JPpgFH8goEu97ACSnK56LzG2OIZ2yo81Ay9jI5yzAiuW2IMdriBCO/fW264CPkB3eDz+kR6ZWFfjnlZD/52QlUg70K/2+c6HWtRsv9KsfS2R3UBQ6Np4fCxsCkLgM11Z3WwJTYLHpZiwLq31WK8h/LOtbtYNEWb+OH28cqhfOECQmxDM8RxSfUzQD3e8gRpTMy/u8sb15oDnSJA+uQZUAGQNsTd1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BFQd8FiwDy5NJDHjLbBvFzp9L8rv9W1diZJ65EgoTmw=;
- b=K3y1KLHwvvOzVsETdNO9H4LbfeDB4L+8rcz4hhNjzK0LYc+mPwEHe3z9Zeiai6T+sRm1/cGw5qE0l3kZYJYhZcHs8GVBk+lj6gKZKbNaf59Qryk/RjTayP7EZ1YZxRjlRk4fnrP4lYTMSK9Qn8pFntFnwdda4B9mfvzT+Ln8G/c=
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
- by TYCPR01MB12041.jpnprd01.prod.outlook.com (2603:1096:400:387::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
- 2023 14:21:18 +0000
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::f687:2c30:bf97:7ca2]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::f687:2c30:bf97:7ca2%7]) with mapi id 15.20.6340.021; Wed, 26 Apr 2023
- 14:21:18 +0000
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Chris Paterson <Chris.Paterson2@renesas.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>
-Subject: RE: [PATCH] dt-bindings: clock: r9a06g032-sysctrl: Change maintainer
- to Fabrizio Castro
-Thread-Topic: [PATCH] dt-bindings: clock: r9a06g032-sysctrl: Change maintainer
- to Fabrizio Castro
-Thread-Index: AQHZeCczhR3i6SSgIkq7aIkiZrlJa689pD4w
-Date:   Wed, 26 Apr 2023 14:21:17 +0000
-Message-ID: <TYWPR01MB8775B41054C570A70EB65BCAC2659@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-References: <20230426100925.12063-1-chris.paterson2@renesas.com>
-In-Reply-To: <20230426100925.12063-1-chris.paterson2@renesas.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|TYCPR01MB12041:EE_
-x-ms-office365-filtering-correlation-id: 46eef19e-5f63-4b30-9403-08db46618041
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3Ze/iC+1EWD6/KmyXrH0Z9LWnCHcWOE75xx29yV87P7pV6tI/ORVROVA+Ao4MAmpjT01BEkZQMxb/byOnecOkRJjeafXAwJQo5esm4R4tLtiuWMxEYKzJxtVOU5/4enLykAkqKUAE79lF7lOssHVzou2/J5pwtvSdkD/pkWiPm2mDooIjXDlaR5Ar9Ck1fkjMxtLMgaTZBSod2vTLZuWQax4EmKNVBvB/190KbGtYGaED++H4U6hh02vrYZdFY9Wq6HoC3n6Q4A6KFsl4FJ142duWm2Zrl2zRUEDTIORroMUf2Ci0L146qC3x2RtEQtQmnY9+6GX8vY+o0ZuQ1aGPqrzAb43P9yi4ZWPllvvQFzEUsvVacju84SLCVd6C0QU6IPRB4eNVXPfLZ1oahGhYChDWC/rWTdSd4Ng8wO2idaSW1M3djETLkhr0siVYWVHlBfwvPvj4wVabtvwdXX/gYL+g762Y/8VzNIBYzPDCRtqgKZQHhCvjIsLsc1DbZ7G6FEsWhTPmdOIqdXeuzymeEQrpGwCGTkWGwQD2TOp0K79o2PjK4wssr9Eb5LQTZDSrUGJvKgtMPlugtr2IW3cteotnYV3rPVHfB5+ojewBI0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199021)(7696005)(33656002)(5660300002)(52536014)(7416002)(122000001)(558084003)(2906002)(38100700002)(71200400001)(478600001)(55016003)(316002)(41300700001)(38070700005)(4326008)(66946007)(66556008)(66446008)(64756008)(66476007)(76116006)(86362001)(186003)(107886003)(6506007)(9686003)(54906003)(83380400001)(26005)(8936002)(8676002)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/vaiwMtk6o4EtntnLMVFB5YULdaW4XtFDZx2kZ1x+gPgZ17aIU/Ors3gwZRU?=
- =?us-ascii?Q?pKXxHWt6RJyCQUVkKIfiotRfjUSbHeZQq+oQz/2waGXrQ0LtraIRpnc0GBEG?=
- =?us-ascii?Q?3dNms8N3WwonY0nLgtNGmIW0yBE/schIljY8xwL9IAVSigUhDnXO+3znqGDn?=
- =?us-ascii?Q?JyPH4nqHDos4Oz3IR2qwLEmCUW3G/qxDJt4QP/awn1IGOMA1FSGor6kfbeo7?=
- =?us-ascii?Q?idxyXrRJUQjVwKxKwq/YJaN5mcsuq6KjefCWy+n27tP4PjXgNTSV9VDqBy6s?=
- =?us-ascii?Q?roq0/W0Y2DcDnoCYnKHwIMM2AJ/qgEK6qEQijq7qzYXSraxlxgVDS8caNOK/?=
- =?us-ascii?Q?4u16v3DSA39a/aPozVMWi8GIGKqye2VvmYk/CQhpLSNBHDd6gwxUkrvmxArg?=
- =?us-ascii?Q?ie82f5FdG5yYAbG0mhJhDELxELo33CdE79kZHMoDIK7o3mJz588W+sHbDhGU?=
- =?us-ascii?Q?ZwFOjiVeziwHabsbGP2abKQhpD9gYETg9CBUGq5RUD1qyh4OUcMcesfOyMHf?=
- =?us-ascii?Q?Wo99hI07FX0B9Tg8DOzotF9ANbmX8lCkmLNziY2iMmITs32F0kmq/2vbOiNG?=
- =?us-ascii?Q?QAfmZ573Q8ar2hcTh/yowntk/5u1cHXzg85s1wMqvuv+B6F31hXseoUTOHNu?=
- =?us-ascii?Q?xOdgbpD4GuTGFiJpc3OcNqiZIebItFxAkw3QzINaU6Q2BGctHl/ZrF0KR+ag?=
- =?us-ascii?Q?6+oOSjkhdXIZfzTwIUyJsNA5LXOeT1K2BjHabN3qTzV45itFmOBIlo6hdI+e?=
- =?us-ascii?Q?aNkKtRD7GZ0ATNzDKGLjTKUZqXfMBcOMPqa77HWBJZiyCjQBQwO6di5uhTW9?=
- =?us-ascii?Q?4hZO5no8zQyQrjsd2+KIW3fSgPGlDtkB2Mt9o2tWlYZ2Oa4vspOhA+IClfhs?=
- =?us-ascii?Q?83QDMErtjRPzTtGbA0V361AcgTDxrpTMRNSGB7zpMR3Fb/IeBqlQcoUaNiQm?=
- =?us-ascii?Q?hPT/co+JUZgdTc+4dwweAmaX3ozRPZIi+8hI5caP2uN8IO1N9DK1dIN+P698?=
- =?us-ascii?Q?PSqCjl4vwoZtm9aOLkhmNJo7UqnfFfRMN5PDgmCXFEVjXm7vAc3ntQhCPONY?=
- =?us-ascii?Q?uaaYklTFZuxQNbPpH+bqx+DI0GQrBepkxYw/OO89xaOpWh9zy073Jr62Qgag?=
- =?us-ascii?Q?NYIijG64Yy1ph6bVg6vIkGfi3ucSj3DXJm6NT4DTRez9ba7e3I/43JC+oh8p?=
- =?us-ascii?Q?h64oYN8BgOLDtltuH28W3WzunyOyHEg6eGj9zlHzaurg23TKhbmbCwlZlnsj?=
- =?us-ascii?Q?bvGl5XeS340FKoTpIFnxWrmu7p+5+MiI9gBWUuBCYPQBHNNEcTRGrF9jzgSb?=
- =?us-ascii?Q?2VL1h0HiJeKB4yqMKK/O1I5VipoQ++VBItjoI2Ft6juV0n7uPLxjTnNw1Y7N?=
- =?us-ascii?Q?UmDZpFlmGHxoJCTzvwY+Quoq6kcsGKbXhWx+qDFZdR+5WLts8Rm26gHlGVFe?=
- =?us-ascii?Q?F0re+ir9sNPxzAclYoV/R6rj3nkv63FK2M2OihZ5rtmi/FXQJ39yFPEyCCfr?=
- =?us-ascii?Q?PZfoCqVH+7gPS6/iqr63pv7mxFHEfsm6RlAReM01UdWMt+iMRSM8wtl78jUe?=
- =?us-ascii?Q?A+8TTnSEbZELsZ+Q4fpQOR1znLSdMgEiUFKMZuZ6dP2yvBnyGdr6X/JGyaeJ?=
- =?us-ascii?Q?QQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 26 Apr 2023 10:23:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214B9188
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682519018; x=1714055018;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hGcMfMjodPIIpa+/XGYcFbV1tdkSiDTS3gBJDbSLmcA=;
+  b=nDyiknVukdKnKm/mNu/1T0WP6LnN/fU+2Yf8oDAms0tRR2w9FxXEALXz
+   YUJ3jV0PXLGVjwIUhIsujRlVuDwNyqsXel1o1uO+VURNpTlhvnosx2/gk
+   Ojwzycg5idZdd96tmgf2PNs0h9QWT8JbblA6qEsTWIkLAB1uRf/RRCGRG
+   Oi0wrbgv6NEGqZxfqZ2tk96AQ1mT6J3Ba/8epvZ/tN8KZQ0yNLUuvDG2p
+   CtJueLcACcl7eKw6jbADRV47bU1j2cGGF9v1xq1Q61IcUdTvZ7LfqpZrR
+   qt32P+rQh8eYwkVHnnb/uSPGs/gRs8pAMZQhAsB3rSkOP3a4i8pe5qtO5
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="336034216"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="336034216"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 07:23:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="693966640"
+X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
+   d="scan'208";a="693966640"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2023 07:23:37 -0700
+Received: from [10.212.235.211] (kliang2-mobl1.ccr.corp.intel.com [10.212.235.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id C814F580C9A;
+        Wed, 26 Apr 2023 07:23:36 -0700 (PDT)
+Message-ID: <d296056a-8286-ee66-c03a-6e930afcfb9f@linux.intel.com>
+Date:   Wed, 26 Apr 2023 10:23:35 -0400
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46eef19e-5f63-4b30-9403-08db46618041
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Apr 2023 14:21:18.0057
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dQVVSNgP9WlA8ZPU8JM81kUxaSdMNtyUnNMGorC6K0AmuWONa0eXx1GU5JD6zF2nR6zqH3RZzDm4U/hN5BpPvMyDnEwDMp35Vh4dqUn4hK4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB12041
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V4 1/2] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
+ enable
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
+        ak@linux.intel.com
+References: <20230421184529.3320912-1-kan.liang@linux.intel.com>
+ <20230426131812.GA1377058@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230426131812.GA1377058@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
 
-Thanks for your patch.
 
-> From: Chris Paterson <chris.paterson2@renesas.com>
-> Subject: [PATCH] dt-bindings: clock: r9a06g032-sysctrl: Change
-> maintainer to Fabrizio Castro
->=20
-> Gareth no longer works for Renesas.
->=20
-> Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
+On 2023-04-26 9:18 a.m., Peter Zijlstra wrote:
+> On Fri, Apr 21, 2023 at 11:45:28AM -0700, kan.liang@linux.intel.com wrote:
+>> From: Kan Liang <kan.liang@linux.intel.com>
+>>
+>> Several similar kernel warnings can be triggered,
+>>
+>>   [56605.607840] CPU0 PEBS record size 0, expected 32, config 0
+>>   cpuc->record_size=208
+>>
+>> when the below commands are running in parallel for a while on SPR.
+>>
+>>   while true; do perf record --no-buildid -a --intr-regs=AX -e
+>>   cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
+>>
+>>   while true; do perf record -o /tmp/out -W -d -e
+>>   '{ld_blocks.store_forward:period=1000000,
+>>   MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
+>>   -c 1037 ./triad; done
+>>   *The triad program is just the generation of loads/stores.
+>>
+>> The warnings are triggered when an unexpected PEBS record (with a
+>> different config and size) is found.
+>>
+>> A system-wide PEBS event with the large PEBS config may be enabled
+>> during a context switch. Some PEBS records for the system-wide PEBS may
+>> be generated while the old task is sched out but the new one hasn't been
+>> sched in yet. When the new task is sched in, the cpuc->pebs_record_size
+>> may be updated for the per-task PEBS events. So the existing system-wide
+>> PEBS records have a different size from the later PEBS records.
+>>
+>> The PEBS buffer should be flushed right before the hardware is
+>> reprogrammed. The new size and threshold should be updated after the old
+>> buffer has been flushed.
+>>
+>> Reported-by: Stephane Eranian <eranian@google.com>
+>> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+>> ---
+> 
+> So I find it much easier to read the whole thing when collapsed.
+> Something like the below; that ok with you?
 
-Acked-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Yes, the changes look good to me.
+
+Thanks,
+Kan
+> 
+> ---
+>  arch/x86/events/intel/ds.c        | 56 ++++++++++++++++++++++-----------------
+>  arch/x86/include/asm/perf_event.h |  3 +++
+>  2 files changed, 35 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+> index a2e566e53076..df88576d6b2a 100644
+> --- a/arch/x86/events/intel/ds.c
+> +++ b/arch/x86/events/intel/ds.c
+> @@ -1229,12 +1229,14 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+>  		  struct perf_event *event, bool add)
+>  {
+>  	struct pmu *pmu = event->pmu;
+> +
+>  	/*
+>  	 * Make sure we get updated with the first PEBS
+>  	 * event. It will trigger also during removal, but
+>  	 * that does not hurt:
+>  	 */
+> -	bool update = cpuc->n_pebs == 1;
+> +	if (cpuc->n_pebs == 1)
+> +		cpuc->pebs_data_cfg = PEBS_UPDATE_DS_SW;
+>  
+>  	if (needed_cb != pebs_needs_sched_cb(cpuc)) {
+>  		if (!needed_cb)
+> @@ -1242,7 +1244,7 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+>  		else
+>  			perf_sched_cb_dec(pmu);
+>  
+> -		update = true;
+> +		cpuc->pebs_data_cfg |= PEBS_UPDATE_DS_SW;
+>  	}
+>  
+>  	/*
+> @@ -1252,24 +1254,13 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
+>  	if (x86_pmu.intel_cap.pebs_baseline && add) {
+>  		u64 pebs_data_cfg;
+>  
+> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
+> -		if (cpuc->n_pebs == 1) {
+> -			cpuc->pebs_data_cfg = 0;
+> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
+> -		}
+> -
+>  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
+> -
+> -		/* Update pebs_record_size if new event requires more data. */
+> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
+> -			cpuc->pebs_data_cfg |= pebs_data_cfg;
+> -			adaptive_pebs_record_size_update();
+> -			update = true;
+> -		}
+> +		/*
+> +		 * Be sure to update the thresholds when we change the record.
+> +		 */
+> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
+> +			cpuc->pebs_data_cfg |= pebs_data_cfg | PEBS_UPDATE_DS_SW;
+>  	}
+> -
+> -	if (update)
+> -		pebs_update_threshold(cpuc);
+>  }
+>  
+>  void intel_pmu_pebs_add(struct perf_event *event)
+> @@ -1326,9 +1317,17 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
+>  	wrmsrl(base + idx, value);
+>  }
+>  
+> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
+> +{
+> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+> +		intel_pmu_drain_pebs_buffer();
+> +}
+> +
+>  void intel_pmu_pebs_enable(struct perf_event *event)
+>  {
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+> +	u64 pebs_data_cfg = cpuc->pebs_data_cfg & ~PEBS_UPDATE_DS_SW;
+>  	struct hw_perf_event *hwc = &event->hw;
+>  	struct debug_store *ds = cpuc->ds;
+>  	unsigned int idx = hwc->idx;
+> @@ -1344,11 +1343,22 @@ void intel_pmu_pebs_enable(struct perf_event *event)
+>  
+>  	if (x86_pmu.intel_cap.pebs_baseline) {
+>  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
+> -		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
+> -			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
+> -			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
+> +		if (pebs_data_cfg != cpuc->active_pebs_data_cfg) {
+> +			/*
+> +			 * drain_pebs() assumes uniform record size;
+> +			 * hence we need to drain when changing said
+> +			 * size.
+> +			 */
+> +			intel_pmu_drain_large_pebs(cpuc);
+> +			adaptive_pebs_record_size_update();
+> +			wrmsrl(MSR_PEBS_DATA_CFG, pebs_data_cfg);
+> +			cpuc->active_pebs_data_cfg = pebs_data_cfg;
+>  		}
+>  	}
+> +	if (cpuc->pebs_data_cfg & PEBS_UPDATE_DS_SW) {
+> +		cpuc->pebs_data_cfg = pebs_data_cfg;
+> +		pebs_update_threshold(cpuc);
+> +	}
+>  
+>  	if (idx >= INTEL_PMC_IDX_FIXED) {
+>  		if (x86_pmu.intel_cap.pebs_format < 5)
+> @@ -1391,9 +1401,7 @@ void intel_pmu_pebs_disable(struct perf_event *event)
+>  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+>  	struct hw_perf_event *hwc = &event->hw;
+>  
+> -	if (cpuc->n_pebs == cpuc->n_large_pebs &&
+> -	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
+> -		intel_pmu_drain_pebs_buffer();
+> +	intel_pmu_drain_large_pebs(cpuc);
+>  
+>  	cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
+>  
+> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+> index 8fc15ed5e60b..abf09882f58b 100644
+> --- a/arch/x86/include/asm/perf_event.h
+> +++ b/arch/x86/include/asm/perf_event.h
+> @@ -121,6 +121,9 @@
+>  #define PEBS_DATACFG_LBRS	BIT_ULL(3)
+>  #define PEBS_DATACFG_LBR_SHIFT	24
+>  
+> +/* Steal the highest bit of pebs_data_cfg for SW usage */
+> +#define PEBS_UPDATE_DS_SW	BIT_ULL(63)
+> +
+>  /*
+>   * Intel "Architectural Performance Monitoring" CPUID
+>   * detection/enumeration details:
