@@ -2,69 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165E76EF650
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C486EF654
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 16:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241109AbjDZOXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 10:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S241360AbjDZOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 10:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240704AbjDZOXj (ORCPT
+        with ESMTP id S240659AbjDZOYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 10:23:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214B9188
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 07:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682519018; x=1714055018;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hGcMfMjodPIIpa+/XGYcFbV1tdkSiDTS3gBJDbSLmcA=;
-  b=nDyiknVukdKnKm/mNu/1T0WP6LnN/fU+2Yf8oDAms0tRR2w9FxXEALXz
-   YUJ3jV0PXLGVjwIUhIsujRlVuDwNyqsXel1o1uO+VURNpTlhvnosx2/gk
-   Ojwzycg5idZdd96tmgf2PNs0h9QWT8JbblA6qEsTWIkLAB1uRf/RRCGRG
-   Oi0wrbgv6NEGqZxfqZ2tk96AQ1mT6J3Ba/8epvZ/tN8KZQ0yNLUuvDG2p
-   CtJueLcACcl7eKw6jbADRV47bU1j2cGGF9v1xq1Q61IcUdTvZ7LfqpZrR
-   qt32P+rQh8eYwkVHnnb/uSPGs/gRs8pAMZQhAsB3rSkOP3a4i8pe5qtO5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="336034216"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="336034216"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 07:23:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10691"; a="693966640"
-X-IronPort-AV: E=Sophos;i="5.99,228,1677571200"; 
-   d="scan'208";a="693966640"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2023 07:23:37 -0700
-Received: from [10.212.235.211] (kliang2-mobl1.ccr.corp.intel.com [10.212.235.211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C814F580C9A;
-        Wed, 26 Apr 2023 07:23:36 -0700 (PDT)
-Message-ID: <d296056a-8286-ee66-c03a-6e930afcfb9f@linux.intel.com>
-Date:   Wed, 26 Apr 2023 10:23:35 -0400
+        Wed, 26 Apr 2023 10:24:11 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2048.outbound.protection.outlook.com [40.107.95.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECEF188;
+        Wed, 26 Apr 2023 07:24:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LbK3z6iFFuVcKF9hz9NyRN3vYdPiuabZPLbx2W77zOeJmdxILjAs+s9Bbx9L6Eq77gTblTUlIicYwgqKWwU0q6PKvrdLu8vtHaOr9qykr/G94OOLzVbJ5Q2SLzwCMMd2aXy3GnF7fFSX991OR7c/Vvk3KqeNlsrLdmQU7aAIc7e3u01JxXaEZG44aS+No+pR6bXUGdrUt75UYHzg4jwtrzGMqWNqza36MY5HuczGH0mfKsgw+imJ502/PGvQOgc/WhMHIYsCPgj11T3cu2dsrvcEa3OdKqjDru/wnl4zd5EjUScGBWl9/0RmucYYDB+3XvbuhKAMFAfCH+6QRz8ldg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LugBc8R8jQy35B5YaPS7gJjoqxV/e4VPAkfHSORXUQo=;
+ b=gvXmR8FZrJtySxfWdhNR8G/Cx8yd0D6TGAjrhwK+5TiSpWCe1EILiiHCoyCwPRSVOIvvSDaJL7PO5jnaTm/1HT16jpVCl4iH1W0cdJNo7LDqWPuj9Ou6leaCvVwQL8FpRz6mPT7NtJCN+vqpstP5z8QfVe/u6NO74kclKQrNlUGvJTl/9lFC8YPvO95cOD7UQAmVX3ouX7bZQgQfhWA0L+8ha7vD3Bj2nPsnzAtQB0YMXiXqnAWFx9eFhc5L9/TPcUxVUX3x7iq4AhgsRVueSvnwHnlygbMBJzCrfJAsfbeMYa0Xf3zJH7OgZpPvnCpya3uew4A6Jyn8rpWHZkdiZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LugBc8R8jQy35B5YaPS7gJjoqxV/e4VPAkfHSORXUQo=;
+ b=bbEnizWX26IhH+eftvkUQsFVFIVeYQs28bJUqcsVYBj7JPgyAquM5AAfpIKjqZUvNuqsF+z0/frIl4wAvQkHPAf3MTxSRX7XqnJsNPQAaeKO5onbhnzknSceuAOhTfen/VmtD000RRueE5pDCU9LXYgTrweVarr6Q19fdnxJLiP6mKjCCIOg+dFudV6kTQPU5edV8Ko/3D601C0EYCMNezllHiTYdK+QORdxkjjV84TPjz3w9UeXqQDSp9se1fVhS+B7Ec4VCQ7dPRyIqSkqgKjWtQBjfO1XDHtC/+SJGOUuFMdjGyRS8+wpQpXR+/t8MeQcq6Cc2cLK9P0uGFQPyw==
+Received: from DM6PR03CA0078.namprd03.prod.outlook.com (2603:10b6:5:333::11)
+ by DS0PR12MB6605.namprd12.prod.outlook.com (2603:10b6:8:d3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
+ 2023 14:24:05 +0000
+Received: from DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:333:cafe::8e) by DM6PR03CA0078.outlook.office365.com
+ (2603:10b6:5:333::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21 via Frontend
+ Transport; Wed, 26 Apr 2023 14:24:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT112.mail.protection.outlook.com (10.13.173.77) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.22 via Frontend Transport; Wed, 26 Apr 2023 14:24:05 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 26 Apr 2023
+ 07:23:58 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 26 Apr
+ 2023 07:23:58 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Wed, 26 Apr
+ 2023 07:23:57 -0700
+From:   Liming Sun <limings@nvidia.com>
+To:     Vadim Pasternak <vadimp@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+CC:     Liming Sun <limings@nvidia.com>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 1/1] platform/mellanox: fix potential race in mlxbf-tmfifo driver
+Date:   Wed, 26 Apr 2023 10:23:44 -0400
+Message-ID: <b98c0ab61d644ba38fa9b3fd1607b138b0dd820b.1682518748.git.limings@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V4 1/2] perf/x86/intel/ds: Flush the PEBS buffer in PEBS
- enable
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, eranian@google.com,
-        ak@linux.intel.com
-References: <20230421184529.3320912-1-kan.liang@linux.intel.com>
- <20230426131812.GA1377058@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230426131812.GA1377058@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT112:EE_|DS0PR12MB6605:EE_
+X-MS-Office365-Filtering-Correlation-Id: a420fcb1-c1be-4e36-4a13-08db4661e43d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FVD0cRD/2AcBuTW2+6x0jokagcdDVk/UKcgGthM9EKIczH9J3TECRLK7ILzw1Y1LmFaWJIfxMDizvFAoeUsziF5QIXQkPOAHWM8THmHbl6ZsNskbEjW4gWVcP9XJMMEdXNYv9wQvEd7/EJt8hCnK5g5QLU/EenBhpcgHG/eRQqCCEhluBbV6wtnTECXqbkZhkGPIYMgfsnnU0q6HmT3EmcFgN1/GCmFScHqf+5+KFKakSvXVB+6haztR5zSnyF5rZvV9P/S6ZUAQfii0no6faU9H+9Cm4fyZd7k3eYbGvIRpUlUYjN3lt7p/VTtcUW1yZFcesL/w+F7j9okhsu46hbZ32Nj1KSDpIaVmM7yxKs9v2MOxvtTxWLDDbn66jCMtQdnz54y+Q+92V5sBRl7saOBIOodoQVoWDBXwinPysuj2UTkfLwiCGrsony13AicfocqixxvQ2SerszIZc37xspAcY5cXnCVpO82YVFk5l1CfcIO3Q6XT3Kau11txZa9NpqE5ogZYiS6P0Dq3vvlNlOWiaflIqP/LCDxM5fs+mxG45bVGTrlHeK1iUQ8g+oa5FsCliJZR6u026k71F4kryZjfhVhP8m34IZmdXOXoNfx3ytVWttU7SbdEoyVqfRUhl8/BD8GZWSsVJEMVYy0bNoAVGUI0+i1TA+YjtcracmvcGzJhK6vZhYfzqNmrgIJyay/XaIxS17xuxZR9AAQbgG3veQiCYANP1zMOgFqp41M=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(7636003)(356005)(82740400003)(40480700001)(36756003)(86362001)(40460700003)(82310400005)(5660300002)(2616005)(26005)(2906002)(186003)(70586007)(4326008)(70206006)(54906003)(6666004)(478600001)(7696005)(316002)(41300700001)(8936002)(8676002)(47076005)(110136005)(36860700001)(426003)(34020700004)(83380400001)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 14:24:05.6176
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a420fcb1-c1be-4e36-4a13-08db4661e43d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6605
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,185 +107,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This commit adds memory barrier for the 'vq' update in function
+mlxbf_tmfifo_virtio_find_vqs() to avoid potential race due to
+out-of-order memory write. It also adds barrier for the 'is_ready'
+flag to make sure the initializations are visible before this flag
+is checked.
 
+Signed-off-by: Liming Sun <limings@nvidia.com>
+---
+ drivers/platform/mellanox/mlxbf-tmfifo.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-On 2023-04-26 9:18 a.m., Peter Zijlstra wrote:
-> On Fri, Apr 21, 2023 at 11:45:28AM -0700, kan.liang@linux.intel.com wrote:
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> Several similar kernel warnings can be triggered,
->>
->>   [56605.607840] CPU0 PEBS record size 0, expected 32, config 0
->>   cpuc->record_size=208
->>
->> when the below commands are running in parallel for a while on SPR.
->>
->>   while true; do perf record --no-buildid -a --intr-regs=AX -e
->>   cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
->>
->>   while true; do perf record -o /tmp/out -W -d -e
->>   '{ld_blocks.store_forward:period=1000000,
->>   MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
->>   -c 1037 ./triad; done
->>   *The triad program is just the generation of loads/stores.
->>
->> The warnings are triggered when an unexpected PEBS record (with a
->> different config and size) is found.
->>
->> A system-wide PEBS event with the large PEBS config may be enabled
->> during a context switch. Some PEBS records for the system-wide PEBS may
->> be generated while the old task is sched out but the new one hasn't been
->> sched in yet. When the new task is sched in, the cpuc->pebs_record_size
->> may be updated for the per-task PEBS events. So the existing system-wide
->> PEBS records have a different size from the later PEBS records.
->>
->> The PEBS buffer should be flushed right before the hardware is
->> reprogrammed. The new size and threshold should be updated after the old
->> buffer has been flushed.
->>
->> Reported-by: Stephane Eranian <eranian@google.com>
->> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->> ---
-> 
-> So I find it much easier to read the whole thing when collapsed.
-> Something like the below; that ok with you?
+diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c b/drivers/platform/mellanox/mlxbf-tmfifo.c
+index 91a077c35b8b..a79318e90a13 100644
+--- a/drivers/platform/mellanox/mlxbf-tmfifo.c
++++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
+@@ -784,7 +784,7 @@ static void mlxbf_tmfifo_rxtx(struct mlxbf_tmfifo_vring *vring, bool is_rx)
+ 	fifo = vring->fifo;
+ 
+ 	/* Return if vdev is not ready. */
+-	if (!fifo->vdev[devid])
++	if (!fifo || !fifo->vdev[devid])
+ 		return;
+ 
+ 	/* Return if another vring is running. */
+@@ -980,9 +980,13 @@ static int mlxbf_tmfifo_virtio_find_vqs(struct virtio_device *vdev,
+ 
+ 		vq->num_max = vring->num;
+ 
++		vq->priv = vring;
++
++		/* Make vq update visible before using it. */
++		virtio_mb(false);
++
+ 		vqs[i] = vq;
+ 		vring->vq = vq;
+-		vq->priv = vring;
+ 	}
+ 
+ 	return 0;
+@@ -1302,6 +1306,9 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
+ 
+ 	mod_timer(&fifo->timer, jiffies + MLXBF_TMFIFO_TIMER_INTERVAL);
+ 
++	/* Make all updates visible before setting the 'is_ready' flag. */
++	virtio_mb(false);
++
+ 	fifo->is_ready = true;
+ 	return 0;
+ 
+-- 
+2.30.1
 
-Yes, the changes look good to me.
-
-Thanks,
-Kan
-> 
-> ---
->  arch/x86/events/intel/ds.c        | 56 ++++++++++++++++++++++-----------------
->  arch/x86/include/asm/perf_event.h |  3 +++
->  2 files changed, 35 insertions(+), 24 deletions(-)
-> 
-> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-> index a2e566e53076..df88576d6b2a 100644
-> --- a/arch/x86/events/intel/ds.c
-> +++ b/arch/x86/events/intel/ds.c
-> @@ -1229,12 +1229,14 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
->  		  struct perf_event *event, bool add)
->  {
->  	struct pmu *pmu = event->pmu;
-> +
->  	/*
->  	 * Make sure we get updated with the first PEBS
->  	 * event. It will trigger also during removal, but
->  	 * that does not hurt:
->  	 */
-> -	bool update = cpuc->n_pebs == 1;
-> +	if (cpuc->n_pebs == 1)
-> +		cpuc->pebs_data_cfg = PEBS_UPDATE_DS_SW;
->  
->  	if (needed_cb != pebs_needs_sched_cb(cpuc)) {
->  		if (!needed_cb)
-> @@ -1242,7 +1244,7 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
->  		else
->  			perf_sched_cb_dec(pmu);
->  
-> -		update = true;
-> +		cpuc->pebs_data_cfg |= PEBS_UPDATE_DS_SW;
->  	}
->  
->  	/*
-> @@ -1252,24 +1254,13 @@ pebs_update_state(bool needed_cb, struct cpu_hw_events *cpuc,
->  	if (x86_pmu.intel_cap.pebs_baseline && add) {
->  		u64 pebs_data_cfg;
->  
-> -		/* Clear pebs_data_cfg and pebs_record_size for first PEBS. */
-> -		if (cpuc->n_pebs == 1) {
-> -			cpuc->pebs_data_cfg = 0;
-> -			cpuc->pebs_record_size = sizeof(struct pebs_basic);
-> -		}
-> -
->  		pebs_data_cfg = pebs_update_adaptive_cfg(event);
-> -
-> -		/* Update pebs_record_size if new event requires more data. */
-> -		if (pebs_data_cfg & ~cpuc->pebs_data_cfg) {
-> -			cpuc->pebs_data_cfg |= pebs_data_cfg;
-> -			adaptive_pebs_record_size_update();
-> -			update = true;
-> -		}
-> +		/*
-> +		 * Be sure to update the thresholds when we change the record.
-> +		 */
-> +		if (pebs_data_cfg & ~cpuc->pebs_data_cfg)
-> +			cpuc->pebs_data_cfg |= pebs_data_cfg | PEBS_UPDATE_DS_SW;
->  	}
-> -
-> -	if (update)
-> -		pebs_update_threshold(cpuc);
->  }
->  
->  void intel_pmu_pebs_add(struct perf_event *event)
-> @@ -1326,9 +1317,17 @@ static void intel_pmu_pebs_via_pt_enable(struct perf_event *event)
->  	wrmsrl(base + idx, value);
->  }
->  
-> +static inline void intel_pmu_drain_large_pebs(struct cpu_hw_events *cpuc)
-> +{
-> +	if (cpuc->n_pebs == cpuc->n_large_pebs &&
-> +	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
-> +		intel_pmu_drain_pebs_buffer();
-> +}
-> +
->  void intel_pmu_pebs_enable(struct perf_event *event)
->  {
->  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> +	u64 pebs_data_cfg = cpuc->pebs_data_cfg & ~PEBS_UPDATE_DS_SW;
->  	struct hw_perf_event *hwc = &event->hw;
->  	struct debug_store *ds = cpuc->ds;
->  	unsigned int idx = hwc->idx;
-> @@ -1344,11 +1343,22 @@ void intel_pmu_pebs_enable(struct perf_event *event)
->  
->  	if (x86_pmu.intel_cap.pebs_baseline) {
->  		hwc->config |= ICL_EVENTSEL_ADAPTIVE;
-> -		if (cpuc->pebs_data_cfg != cpuc->active_pebs_data_cfg) {
-> -			wrmsrl(MSR_PEBS_DATA_CFG, cpuc->pebs_data_cfg);
-> -			cpuc->active_pebs_data_cfg = cpuc->pebs_data_cfg;
-> +		if (pebs_data_cfg != cpuc->active_pebs_data_cfg) {
-> +			/*
-> +			 * drain_pebs() assumes uniform record size;
-> +			 * hence we need to drain when changing said
-> +			 * size.
-> +			 */
-> +			intel_pmu_drain_large_pebs(cpuc);
-> +			adaptive_pebs_record_size_update();
-> +			wrmsrl(MSR_PEBS_DATA_CFG, pebs_data_cfg);
-> +			cpuc->active_pebs_data_cfg = pebs_data_cfg;
->  		}
->  	}
-> +	if (cpuc->pebs_data_cfg & PEBS_UPDATE_DS_SW) {
-> +		cpuc->pebs_data_cfg = pebs_data_cfg;
-> +		pebs_update_threshold(cpuc);
-> +	}
->  
->  	if (idx >= INTEL_PMC_IDX_FIXED) {
->  		if (x86_pmu.intel_cap.pebs_format < 5)
-> @@ -1391,9 +1401,7 @@ void intel_pmu_pebs_disable(struct perf_event *event)
->  	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
->  	struct hw_perf_event *hwc = &event->hw;
->  
-> -	if (cpuc->n_pebs == cpuc->n_large_pebs &&
-> -	    cpuc->n_pebs != cpuc->n_pebs_via_pt)
-> -		intel_pmu_drain_pebs_buffer();
-> +	intel_pmu_drain_large_pebs(cpuc);
->  
->  	cpuc->pebs_enabled &= ~(1ULL << hwc->idx);
->  
-> diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-> index 8fc15ed5e60b..abf09882f58b 100644
-> --- a/arch/x86/include/asm/perf_event.h
-> +++ b/arch/x86/include/asm/perf_event.h
-> @@ -121,6 +121,9 @@
->  #define PEBS_DATACFG_LBRS	BIT_ULL(3)
->  #define PEBS_DATACFG_LBR_SHIFT	24
->  
-> +/* Steal the highest bit of pebs_data_cfg for SW usage */
-> +#define PEBS_UPDATE_DS_SW	BIT_ULL(63)
-> +
->  /*
->   * Intel "Architectural Performance Monitoring" CPUID
->   * detection/enumeration details:
