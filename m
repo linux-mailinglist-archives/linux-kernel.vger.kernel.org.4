@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE246EF906
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23656EF919
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234142AbjDZRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S234701AbjDZROo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236322AbjDZRII (ORCPT
+        with ESMTP id S234727AbjDZROj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:08:08 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44309194;
-        Wed, 26 Apr 2023 10:07:42 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f199696149so34484275e9.0;
-        Wed, 26 Apr 2023 10:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682528857; x=1685120857;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1JCpsle4OxxsL5c31zEHmi+00et+VHsUj5Z1y1dyYrA=;
-        b=Z3TQSB1GmsI23fZn+HInNEdaAf+QpSrRg8IHLyJg5yOp0hItTh8madnDiN+glNhf4N
-         XjtdSzLw8Ua2UvCFJvCdnBmNTTBr68IvKYJxFemlAfCYasLssd6LxN3l9Wop5EzO3mCl
-         I3TLsQd+wLmeS3g7mwAVMfnHrHLzxLHbBdQrWZbeZfT6A2VVdBQHaoFqsQg5EQqYeMIg
-         023xy3nJWUhylYSTzMZCEHWssV9e5jC0lLF9mWu1L9nnrbrk0oLvJH+yk7u8rekMbRv5
-         BqVDO6AwofNDimvE2fFaAD9yQpeu62p+WXxahLyHgI7XIAxSRebaudfjkVOfoJP3gCuS
-         +EVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682528857; x=1685120857;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1JCpsle4OxxsL5c31zEHmi+00et+VHsUj5Z1y1dyYrA=;
-        b=LCE4TZIqwFqVnD57UjUHILNvmcqS5FkmU5l6xgGrygWzYG9hKRpf2wmRKv5CqO7887
-         ZKs2dFcMDgrL4alewkMu3CtEDsN1PRfp0Nxu7fvo1YHT3f47U8w2cZhueDQb63Qgb8Jb
-         XZqRcYtWvQO/M0LzaH3i/v9NPmrHeHwD0QhiOj5W96Kfi8RKw14aSSFIppi1h0iccXin
-         si8fLk35v/FRJ49XEKnmWzQGtoHQm9uwHzgbJNe4PSN6AzIXTHYxvbf+4wVaMrqVWs6L
-         eSrEWoCH944quNq0FF1Drv3YE3Dho8W4tJJ9cH1BULRa4dpNirfOPTbvrrM8rwrYoXhs
-         pEow==
-X-Gm-Message-State: AAQBX9djdvIOJjWmTuy5X0Jv/CCk+4FJrwtewFLffzYPZpDITTlgZoN7
-        /Sn9OkHC7/f8HqQBSpIG2MXo9WKdjsE=
-X-Google-Smtp-Source: AKy350Ymj/pKQUO/QPGEF2M9IelBgbBq9Huo99W/Yi8pR4Sbltd+PBQm1uc9D9M2pkw2673+Ew5q8g==
-X-Received: by 2002:a05:600c:24cd:b0:3f1:6ef6:c9d0 with SMTP id 13-20020a05600c24cd00b003f16ef6c9d0mr12136173wmu.17.1682528856832;
-        Wed, 26 Apr 2023 10:07:36 -0700 (PDT)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id p8-20020a05600c358800b003f1738d0d13sm29742055wmq.1.2023.04.26.10.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 10:07:36 -0700 (PDT)
-Date:   Wed, 26 Apr 2023 18:07:34 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: mainline build failure due to cf21f328fcaf ("media: nxp: Add i.MX8
- ISI driver")
-Message-ID: <ZElaVmxDsOkZj2DK@debian>
+        Wed, 26 Apr 2023 13:14:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3670446A1;
+        Wed, 26 Apr 2023 10:14:38 -0700 (PDT)
+Received: from [100.127.1.155] (unknown [152.37.90.84])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dwlsalmeida)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B4B756600864;
+        Wed, 26 Apr 2023 18:14:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682529275;
+        bh=Dcun5oNCOCFo7L673tpG/HZq/i2cDaSzyIlQU9SgMeU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=m+0l8j60/rL8i+QHt9zvW3X7PTAwK9B9JjmdoyeXnZJvptHrrNg9QUrqFrYzWlXSJ
+         66KchxA+NrA82qxYe3V+zqsB1m5eK47yXBOLedEzh7JR7BPAgqiRHESV08Al/cbM5N
+         6QatVh8IvgfqpIPX4xIPiThG6tYRWvy4nHRotXzk+puZAGlumj08tRGPxuY1/f/QDb
+         cEx1AL9UduYPVttQ4hxd6/atvogoOQmr9X9W0Ebpfg0P1qk1QLayFvWSsNYZ+72mh2
+         l/0CItHpL4SZrNfBgIt7VOeAdpFRjDw7KyIZQ0qqP7XYKcE+2H5Gg+7kVPym+Xc5qa
+         3uoD/oODmDjeQ==
+Message-ID: <7b4ea4fc-7d73-d229-4645-366b1ea574fb@collabora.com>
+Date:   Wed, 26 Apr 2023 18:14:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 0/6] Initial Rust V4L2 support
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, wedsonaf@gmail.com,
+        ojeda@kernel.org, mchehab@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, kernel@collabora.com,
+        Sakari Ailus <sakari.ailus@iki.fi>
+References: <20230406215615.122099-1-daniel.almeida@collabora.com>
+ <136035a4-26df-1c14-e51e-406b4ee5fe33@xs4all.nl>
+ <CANiq72kzgopREcNcAnjCBk2u9b9cJ4f_jPix6LWYSkcOV5kubw@mail.gmail.com>
+ <20230426003210.GA31260@pendragon.ideasonboard.com>
+ <CANiq72nLtpOn2HcOneoQ6v_TcYAEj_W8z2HCQvF4HmB4+OoSZA@mail.gmail.com>
+ <20230426163512.GE18120@pendragon.ideasonboard.com>
+From:   Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20230426163512.GE18120@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Hi,
 
-The latest mainline kernel branch fails to build xtensa, mips, arm allmodconfig
-with the error:
+As I said higher up on this thread, I can maintain the Rust bits and 
+help out with the issues around it.
 
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c: In function 'mxc_isi_channel_set_inbuf':
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:33:5: error: "CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0 [-Werror=undef]
-   33 | #if CONFIG_ARCH_DMA_ADDR_T_64BIT
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c: In function 'mxc_isi_channel_set_outbuf':
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:51:5: error: "CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0 [-Werror=undef]
-   51 | #if CONFIG_ARCH_DMA_ADDR_T_64BIT
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/media/platform/nxp/imx8-isi/imx8-isi-hw.c:66:5: error: "CONFIG_ARCH_DMA_ADDR_T_64BIT" is not defined, evaluates to 0 [-Werror=undef]
-   66 | #if CONFIG_ARCH_DMA_ADDR_T_64BIT
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IMHO, we should at least try this. Who knows, it might work out :)
 
-git bisect pointed to cf21f328fcaf ("media: nxp: Add i.MX8 ISI driver")
+Laurent, maybe we can take a piecemeal approach? Right now there are no 
+bindings for MC, but I wouldn't complain about fixing some of the C code 
+when the time comes.
 
-I will be happy to test any patch or provide any extra log if needed.
+Just FYI, I am writing some more bindings, just enough to write a 
+stateless decoder driver. I hope to finish it in time for the media 
+summit. It will give us a more in-depth idea of the pros and cons here.
 
-
--- 
-Regards
-Sudip
-
+-- Daniel
