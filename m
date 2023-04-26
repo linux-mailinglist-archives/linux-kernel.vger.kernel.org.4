@@ -2,157 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7516EFB4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 21:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82FA6EFB4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 21:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjDZTrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 15:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        id S232615AbjDZTrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 15:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbjDZTrO (ORCPT
+        with ESMTP id S229744AbjDZTrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 15:47:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41FE2684
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 12:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682538432; x=1714074432;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MGrpL7HK6COHMivxHoFQzpVgjiCt9Ez13UEVwaEnt9E=;
-  b=WBFCGKWRpqRstfcRsrX5YzswwMMybQoD9ExdChyinak7nQY/LFfOWYSw
-   dyYToJLfwPdt3rQvct6oCVbMtOu9JNnUzLRwioyQZNeosTQxTA2Yi+zzb
-   dGqR2irhTkS/XgW07JN+MtTJooHcnDwZBP4sRQ1NPfhzFoudyRKOerS2y
-   ipVaCrFMA3lDuHdqDt3dyEeBWCB6hC5YH0VS4mB1+W4BJkkCRkKfxYB70
-   Dv1677C5b0BY5eflQk7cQVmxAWLDHL/VapHa+qTkCDXUCeeTLiIq1zp1b
-   9BeX+/BmY9NYGs2YNKiJAhNSzNcb23kex5RfWYoMclR3a7c8htKVP/8wX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="327542045"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="327542045"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 12:46:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="694069596"
-X-IronPort-AV: E=Sophos;i="5.99,229,1677571200"; 
-   d="scan'208";a="694069596"
-Received: from lkp-server01.sh.intel.com (HELO 041f065c1b1b) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2023 12:46:51 -0700
-Received: from kbuild by 041f065c1b1b with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prl6J-0000UQ-0Y;
-        Wed, 26 Apr 2023 19:46:51 +0000
-Date:   Thu, 27 Apr 2023 03:46:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype
- for 'mpc52xx_psc_spi_transfer_one_message'
-Message-ID: <202304270332.2o1MDojo-lkp@intel.com>
+        Wed, 26 Apr 2023 15:47:06 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873621FD3;
+        Wed, 26 Apr 2023 12:47:04 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id C748E1C0AAC; Wed, 26 Apr 2023 21:47:02 +0200 (CEST)
+Date:   Wed, 26 Apr 2023 21:47:02 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH 4.19 00/29] 4.19.282-rc1 review
+Message-ID: <ZEl/trjF1Ic76/Ye@duo.ucw.cz>
+References: <20230424131121.155649464@linuxfoundation.org>
+ <CA+G9fYstB_fROK9LHYuQ8dc2ArieGGAW_x69eEX-eAi5xMeE3Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="OWk6w+3ksRt9gcp3"
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CA+G9fYstB_fROK9LHYuQ8dc2ArieGGAW_x69eEX-eAi5xMeE3Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-FYI, the error/warning still remains.
+--OWk6w+3ksRt9gcp3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5c7ecada25d2086aee607ff7deb69e77faa4aa92
-commit: 145cfc3840e5931a789a8e2e76af841ab4cad44b spi: mpc52xx-psc: Switch to using core message queue
-date:   10 months ago
-config: powerpc-buildonly-randconfig-r005-20230426 (https://download.01.org/0day-ci/archive/20230427/202304270332.2o1MDojo-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=145cfc3840e5931a789a8e2e76af841ab4cad44b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 145cfc3840e5931a789a8e2e76af841ab4cad44b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/spi/
+Hi!
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304270332.2o1MDojo-lkp@intel.com/
+This should be show stopper, actually:
 
-All warnings (new ones prefixed by >>):
-
->> drivers/spi/spi-mpc52xx-psc.c:195:5: warning: no previous prototype for 'mpc52xx_psc_spi_transfer_one_message' [-Wmissing-prototypes]
-     195 | int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
-   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_POWERPC_SOC [=y] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
-   Selected by [y]:
-   - SND_MPC52xx_SOC_EFIKA [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_POWERPC_SOC [=y] && PPC_EFIKA [=y]
-   WARNING: unmet direct dependencies detected for SND_SOC_STAC9766
-   Depends on [n]: SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_SOC_AC97_BUS [=n]
-   Selected by [y]:
-   - SND_MPC52xx_SOC_EFIKA [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SND_POWERPC_SOC [=y] && PPC_EFIKA [=y]
+> FYI, This is not a show stopper but worth reporting.
 
 
-vim +/mpc52xx_psc_spi_transfer_one_message +195 drivers/spi/spi-mpc52xx-psc.c
+> NOTE:
+> Following kernel warning notices on stable rc  4.19.282-rc1 from the
+> previous releases 4.19.279-rc1 noticed on arm64, i386 and x86_64. After
+> this kernel warning the system is still stable and up and running.
+>=20
+> This kernel is built with kselftest ftrace merge configs with all
+> required Kconfigs.
+>=20
+> [    0.000000] Linux version 4.19.279-rc1 (tuxmake@tuxmake) (gcc
+> version 11.3.0 (Debian 11.3.0-11)) #1 SMP @1679324856
+> ...
+> [    0.145911] ftrace: allocating 48590 entries in 190 pages
+> ...
+>=20
+> [    2.880223] WARNING: CPU: 0 PID: 0 at
+> include/trace/events/lock.h:13 lock_acquire+0x142/0x150
+> [    2.881454] WARNING: CPU: 1 PID: 0 at
+> include/trace/events/lock.h:58 lock_release+0x1af/0x280
 
-   194	
- > 195	int mpc52xx_psc_spi_transfer_one_message(struct spi_controller *ctlr,
-   196						 struct spi_message *m)
-   197	{
-   198		struct spi_device *spi;
-   199		struct spi_transfer *t = NULL;
-   200		unsigned cs_change;
-   201		int status;
-   202	
-   203		spi = m->spi;
-   204		cs_change = 1;
-   205		status = 0;
-   206		list_for_each_entry (t, &m->transfers, transfer_list) {
-   207			if (t->bits_per_word || t->speed_hz) {
-   208				status = mpc52xx_psc_spi_transfer_setup(spi, t);
-   209				if (status < 0)
-   210					break;
-   211			}
-   212	
-   213			if (cs_change)
-   214				mpc52xx_psc_spi_activate_cs(spi);
-   215			cs_change = t->cs_change;
-   216	
-   217			status = mpc52xx_psc_spi_transfer_rxtx(spi, t);
-   218			if (status)
-   219				break;
-   220			m->actual_length += t->len;
-   221	
-   222			spi_transfer_delay_exec(t);
-   223	
-   224			if (cs_change)
-   225				mpc52xx_psc_spi_deactivate_cs(spi);
-   226		}
-   227	
-   228		m->status = status;
-   229		if (status || !cs_change)
-   230			mpc52xx_psc_spi_deactivate_cs(spi);
-   231	
-   232		mpc52xx_psc_spi_transfer_setup(spi, NULL);
-   233	
-   234		spi_finalize_current_message(ctlr);
-   235	
-   236		return 0;
-   237	}
-   238	
+This indicates locking problem somewhere in cpuidle / ftrace.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I skimmed the patches, and I do not see anything obvious there. Is
+there chance to do a bisection?
+
+Best regards,
+								Pavel
+
+--=20
+DENX Software Engineering GmbH,        Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--OWk6w+3ksRt9gcp3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZEl/tgAKCRAw5/Bqldv6
+8hTCAKCghHkeqrkyD6ZQHjmVWa/tdORG0ACgj5XcrDhQ6VmVOjUgYwVE11PddDk=
+=FNqj
+-----END PGP SIGNATURE-----
+
+--OWk6w+3ksRt9gcp3--
