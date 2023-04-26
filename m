@@ -2,172 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0F16EF205
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6786EF207
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 12:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239790AbjDZKaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 06:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S240345AbjDZKap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 06:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240300AbjDZK3o (ORCPT
+        with ESMTP id S240547AbjDZKai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 06:29:44 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC3149F0;
-        Wed, 26 Apr 2023 03:29:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DM3mT3NAGmLIBN+c7mlAY0UgW1Wga2RSFg/1z5l/gHIN8hk3/6Vs0RLyARIGSTC8RR9daYnxSP92LUA7b9qQUS2lVvUknLldJTNWaN2/3+Vz0Vvzm6ArgSMyEbYrFEiY2vKl1culqETYr0wnFLnEC4D+yXrrpKzAdmORGV4Gqkrc4tUUBMKC/cpabXW3KntWljUAHXHaeb0q3U/XLLqogZ7rk3OlqzwLAa56pkMBfGHUXtefJ/beuCqTTsOdgaZO6td2Ys8rlrxNuG/jKo9D0MH/PkZqF2gFXLtzUQwUYbAgGYS5yPMJ/Y5Z6ZjA1bOlI8ioP/IhVcxBkhZNvpPJSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OS4s3SFUBI15+YziQEswE+UrIXuNAKgj439Dl4HbZdU=;
- b=Hwia+BmkNJgagAEvROsGrhFHjNoO4unRMaKG0Fp6leVJ/+rRQnR2RGNlkcZmCDZYEY4ZoiMv+pZsCT20SmWTmEszhKekg7sUpk43YtTENDx4JICJXk8ZQU41ATkj7S2wvH6KIvC0h+DUTB0WsMEa5w9Z9v7EaN8BgRGEGJOgAimYDhnXpQRSJISB5372kxDYqLvSDmsX68JBXPb1lobil4PxGGieLg2XPxkrKCqB9qjr1mg+yPg4aEYkPHqcAjlq2Yu3n75UJp/CvGJDVEax4CXga1wUW8IdrsDzHuXvCOeBa662skaWN5/yFC8I4rofFmSHZsVo7+aZ8oGzPsf6hQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OS4s3SFUBI15+YziQEswE+UrIXuNAKgj439Dl4HbZdU=;
- b=IwKw5F+DOf1Pw0b5T6UrJJHyK6luOcuKFzkCKCY17hcx4bVnTBsdPVxMjwd0dzdmp4eTQDHib9lxl7tzRiGMladNZPUP3XZgwkQPpHVE/5a5g4StKmSkwDRebki6sL56mAz9jbyXPz577kr/xZOXH3KvBQvN3vse67LXybWsOoY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH0PR12MB8799.namprd12.prod.outlook.com (2603:10b6:510:28e::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
- 2023 10:29:39 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d2f8:7388:39c1:bbed%3]) with mapi id 15.20.6319.034; Wed, 26 Apr 2023
- 10:29:39 +0000
-Message-ID: <b76af325-0b4d-25bf-a009-fbbbb3f99146@amd.com>
-Date:   Wed, 26 Apr 2023 12:29:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/amdgpu: add a missing lock for AMDGPU_SCHED
-Content-Language: en-US
-To:     Chia-I Wu <olvaffe@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     stable@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230426004831.650908-1-olvaffe@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230426004831.650908-1-olvaffe@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0163.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b3::17) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 26 Apr 2023 06:30:38 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F21355B2;
+        Wed, 26 Apr 2023 03:30:10 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b8ed0d0a33dso10575272276.1;
+        Wed, 26 Apr 2023 03:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682505006; x=1685097006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aknvFi5hSkq+8WjOm547lsUjnxn4I/4wm4FxJkh13YY=;
+        b=gTZBuL61YKsetYLA93/Feqi0hw9Z0rkH6t6g9LzW9tuQ7aD/q7V9A2ulDo5MXwUPER
+         YHnMA5E+NAuZA4z/bQGuWZEaZ9jTBkXb6TjZHa59N4gjALxcBEJrAa12pqWV49BYRR7T
+         C74jtIqnlI/5dbnEcOMOwAWpMPu2TyRSZqMs5TmnFPC36sXP9/kbq4850PtTQZJlgtmq
+         /UGtB9pYAPE8ps+Jm3bdkvewTbUx5Kw9BfWBYbk72ra6Ax4xT92RHZnFxqtOtBHP6IwZ
+         8qnQK6aSw+RFeUAirhNnpxG8hpw5/oWMT3IIFp0EGTKxCdnTWJegFyaszFZRYSV8xBjo
+         3K6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682505006; x=1685097006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aknvFi5hSkq+8WjOm547lsUjnxn4I/4wm4FxJkh13YY=;
+        b=Ut+43LH/P9lYF8Pu53+zOE8PrFNl1f8N6idOgD7EWTu/kHDIxYm6xFex+wfYohk4W4
+         dvU7mAwaA60HpXA80hDsT8YpyCU/Mj7of4huQCVAU7zBnb5slLvalQixof7ZAmiOTU+J
+         jJXLV3ZNvYc/6mhoHh1x9z1GV/5MtQCNozeSvvzv/jkPXiHZWq0r8oHvRqaWLzhaarzY
+         YZ3RCdNRx/H9FEQ6yeu3zc4K8IuU2IliCsIHYrkQU9QYLDH1VBDW6qLxf+4J78ucUmOo
+         s4flFLjBKZbRin+EqgJnigiLCmH0+EeqTJfL9w/xl6SESNxX4AP8sg//yK23/ZtVCTRm
+         uLGw==
+X-Gm-Message-State: AAQBX9fxTNp5sC72fKYrwv6uL4KgL2+yaSQGM2sbam4Xy3U/ysqvCBuJ
+        Np07AnEsFFJECSIOsKT5QmNCHHYG6grB6Vt5qCU=
+X-Google-Smtp-Source: AKy350ZoWdEcwFARX6gIl+5gGtgTUve67DhA7PoUNWi7vRqDa7PQDuMehXlSB0W27DMpdq97FRWb/Cl1Vjsxv9Apjaw=
+X-Received: by 2002:a25:2505:0:b0:b99:41f6:ad71 with SMTP id
+ l5-20020a252505000000b00b9941f6ad71mr13506011ybl.60.1682505006596; Wed, 26
+ Apr 2023 03:30:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH0PR12MB8799:EE_
-X-MS-Office365-Filtering-Correlation-Id: 946d3186-916a-47f1-6c2d-08db464123b2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +nKgQolhmzZNEit+34y2Py3cWqJXQ4sQPBVNxE7tDMBk9pNLnNp/U7O1T6/GLwtFcBOBqtGSvOnrv05GRpfiQYxXIzo6bhlIGAtrV5mainnb8LeOQBvWRn0XQskXeNc11rEv1cwqx432bm0uAYU0UVxmJkFMakguzJJLZ6HBzdP31K9Z/m/gcmiQwHdeLfFoDI1CEzdwZ/TRHtRKhehOF3RhC51IdQY+uaiBPYICfJ0jh7m31GRAkdnmr0JceI60w+dbIIk4o6JvcNmBB3CaY6K+owrtx1POa3uX1Kb/kF48LSACwMRlsySAwYj11weauund7VFvWsU6cZCu2f4yl5Z6059t4ljn7qTH2lySs3XRTqrPv1gIOAtz5tYQVBreaPOT9A2gKQ0k9GUS9ev32HqjJtyztKOh0V3yBfhbJ6SGnmYVbssaqEXNjQm5ewqKWlk7Vd/8ptP8MJbpaHIkT/+lrHFrr5/iA6M/UJP5m2JP/0JpXnVREeRJql6oYJomlUZbKPtrZojFTuPucCavPNaNfSdz3RAnob810i+u+0LENzfTV2RUMg9i2cFGxPReoeDK491UN5k0RvZ6Su9msfGe6kZK1m4O4SuoJvyWXbBjSa8qKAlaE/bTaky7OS81tP3xZmhL8zBRBj6uW0EKyw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199021)(36756003)(86362001)(31696002)(54906003)(478600001)(6666004)(6486002)(8936002)(38100700002)(8676002)(41300700001)(66476007)(66556008)(66946007)(316002)(2616005)(4326008)(83380400001)(186003)(31686004)(26005)(6512007)(6506007)(2906002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WFAzZ0NTcFVDSFZrdEQrUE90Z0Y2UXJkbWx5TzVSd1pzRkp5ME5SUkVZYkpU?=
- =?utf-8?B?VU43UFcrUTVNMWVEeTVNakJ3aU02elI0bDdISXd5RGNtMi9aZmRGeFZBS0pj?=
- =?utf-8?B?VjgzSGVGQndoOE84ZHk4MlhuNXRUSWJqTHRrblBoNkV6bm5rWm5jeXkzbmh4?=
- =?utf-8?B?bGxWdEpjUWk2Mm8yU2JhVmxmNmZma0J4V3BUMXlmTUt3Q3Byd014dnBWWVVh?=
- =?utf-8?B?bmVqUWFMSTVmUS83MDI5U1lUU0tCRk5LcU00VG1TRnZnajVubGx2alczYWpU?=
- =?utf-8?B?MitlM2lhUkp2REF5cHUwSDAxdi9FWjJLcDNWa210M0RSWGZKZXAxc0tVaU81?=
- =?utf-8?B?TnBHYVVnOU05TFV4YWdZaWJZQjQrM1hVU21Icy8wa0dVSitTOG5waEszc3BH?=
- =?utf-8?B?cVBlSnhZV000dU1URk02ZkNoaG10bFV2Q1hneTc0ekQzZjVyUFROOE1hK1Ry?=
- =?utf-8?B?ampQMWMra2h4YWovbWVpMnhZNCtYendpdTEvam9CTDhxRCtqczZpbFBBd3V3?=
- =?utf-8?B?RS95TExCTisvdXAycG9iWnZvRko1aHlza0o4NWI4QTlHYS9hOTJ6eGRiZkRt?=
- =?utf-8?B?SjJoR3AvSk9FL1ZUcFF4Yy9CcS9jV1lwL3VPUUFJWDAvUk5qNHJDenNUanlY?=
- =?utf-8?B?c0FsSjJLUWFDQkZVSnplam5xUGtwQTV1VytFemVYSzJ6cU0vQVkxaW9qazBS?=
- =?utf-8?B?cEd6MUtTcFZCNURlQ1NQM1c2dmJGMzE1WE1qdThmZ2xWOXQxZmw4emR3ZlR6?=
- =?utf-8?B?b0lDbUNJRlpucGY1MkFIdDJKbG0vMjRBRmxHcHJHcThIUEJERm4xZFdsdVJX?=
- =?utf-8?B?c2k4QnBhRTBsWURZZ0lGbVkvTDgvbHZSMTNGazQ4T3BPSTI4dnl1eEF0NGd0?=
- =?utf-8?B?Slc2Y2tWZm1ieHFvT2R6VzQ4NmhBbTRnWDJIK2dRbnFBQUp0dTdTNUludCta?=
- =?utf-8?B?TzFGUWMrWXB3a24yK2tUZWVXWUtBS1ZmV1JybXlkOTh6Z2h6RUtFM2pZeVVs?=
- =?utf-8?B?eGJ3eE9DT3lTeFVhOCt5V0t6aUtXbWZHS05pUm9pTUlhanY5N3ZyRnk1QUh4?=
- =?utf-8?B?dXhJSk5iUmJSRlJNRlFXUmxLSFNUZ1BBMmlUR1BCUjN1UDlaN3BZQmRLbTg3?=
- =?utf-8?B?WUFsS0hnM00wanZjSTZSeWZ6NnJWT2R1clRpUnhQelVCMUpDVTVHMkdISGhv?=
- =?utf-8?B?ejcwekRMZ0w4VUZHWTVKQjNJTzZNdTRvUVJYM3BEOGlSVTUyWkxleGRPd3RG?=
- =?utf-8?B?WHNJWWQ5bnBCYm0xellqbHlETnBUcUVHRXNFQzdJZHJ6bGdLbG5ESGNhUUtZ?=
- =?utf-8?B?ZnhDQS9IN081blBHQlFRVWxka0luVFBwYy9jR0ZRaWVzcUVTYTM2Q1BVL3hG?=
- =?utf-8?B?dlFRVlI4NWRZbTI1cWhwZ1ZqTmRMV3NabG0vS2NoaE1JVy83d0FWYkRrS2lz?=
- =?utf-8?B?UkR6ZjZ2VGMyOTJwcWxiVmVmL20xb1BqOU82dnNhMEJnZGlhQzd6SGlaU2hM?=
- =?utf-8?B?MGVqdVk2RWV3YzY1WkFFMG5Mbi84S05zTExMMmMzakZ4U3E3S2EwRTZpY0R6?=
- =?utf-8?B?MWJXTWZxZGYvRmx5d1B3ZTNadDNSUWVyTk1LSW5LSWdpOUZtUWdBQUVaSjRW?=
- =?utf-8?B?Vyt0enA1U2tkZEh4akRuSnJIUlhBVjB6TC8rZzcxcHVKdm5hWE9IZHl1enVU?=
- =?utf-8?B?eVFXbEFMdS9FSjM5YXI5UHZ1emhBQnZDY0lieTh1REZDRTJMR1dyVDNkdzhV?=
- =?utf-8?B?TkI3R3VEODJEZVQyNlViUWN3YldQMktrSWttbExWQW44c2pOTXprQWtPd0Zs?=
- =?utf-8?B?dnJRb3BHc3VkVU1WaEhETFpsV20yS2w3cDlzOEhGM21tZlZzRTdRYkxvYlJq?=
- =?utf-8?B?b2doaWVLeDM4QlRFSXFINjRDQ0lwMDRaRHplajFyYThTVXBhbGJDTng1ODI1?=
- =?utf-8?B?TVRTdWw1TERqekQyMkMyZ0JMV2RpSXRzL0VvZlN4dTQ0L1NGb0pwd1FkWXpu?=
- =?utf-8?B?WWV2Nm5JbkswYzBMWUpIM2RDWGN4YzdiaGRJbVV1aEZ3WEUwS3hJS0U2REVS?=
- =?utf-8?B?SkljYmx1V09kdnU3dDdubG5iSUp2dllGT241dTJ6K2hwUnpZK1ZuSXRpYklS?=
- =?utf-8?Q?pUjCEmPrLbAxG/KkGCXFq/Kul?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 946d3186-916a-47f1-6c2d-08db464123b2
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 10:29:39.1300
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X0OkgdJ2HUjcdkCf2cMxZq/OfWv7fFGRA3hblIRN5yc9lEM2MnA/Jf9IeMIm02cO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8799
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <00000000000079eebe05fa2ea9ad@google.com> <CANiq72mor1BkxpAT=v0EsQJN-7fvMjo9K5ooVk1x7ZbBDEyn8g@mail.gmail.com>
+ <CACT4Y+aMdct_tjSYsBvvtGoDji6feOiANogRbp3N41qkzU+5CQ@mail.gmail.com>
+ <CANiq72nm2dU2o_x_GQ5SdsXaK6yZiDXG2hXEYMykViEAZvuMqQ@mail.gmail.com> <CACT4Y+YyYnwg4a1zjTnBU=t0x5Brt1rGuzz-5pXf2Fz3cKf4FQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+YyYnwg4a1zjTnBU=t0x5Brt1rGuzz-5pXf2Fz3cKf4FQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 26 Apr 2023 12:29:55 +0200
+Message-ID: <CANiq72=vMydenfkxQx4X7kYvHD0cHzNK19xxxqow3WcLStsdRA@mail.gmail.com>
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
+ pointer dereference in __dabt_svc
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzkaller@googlegroups.com, alex.gaynor@gmail.com,
+        andriy.shevchenko@linux.intel.com, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, bpf@vger.kernel.org, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
+        ojeda@kernel.org, pmladek@suse.com, rostedt@goodmis.org,
+        rust-for-linux@vger.kernel.org, senozhatsky@chromium.org,
+        syzkaller-bugs@googlegroups.com, wedsonaf@gmail.com,
+        Joe Perches <joe@perches.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 26.04.23 um 02:48 schrieb Chia-I Wu:
-
-Good catch, but you need some commit message here. Something like "Need 
-to hold the lock while iterating the idr to make sure no context is 
-destroyed." should be sufficient.
-
-Apart from that looks good to me.
-
-Regards,
-Christian.
-
-> Signed-off-by: Chia-I Wu <olvaffe@gmail.com>
-> Cc: stable@vger.kernel.org
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+On Wed, Apr 26, 2023 at 12:12=E2=80=AFPM Dmitry Vyukov <dvyukov@google.com>=
+ wrote:
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> index e9b45089a28a6..863b2a34b2d64 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_sched.c
-> @@ -38,6 +38,7 @@ static int amdgpu_sched_process_priority_override(struct amdgpu_device *adev,
->   {
->   	struct fd f = fdget(fd);
->   	struct amdgpu_fpriv *fpriv;
-> +	struct amdgpu_ctx_mgr *mgr;
->   	struct amdgpu_ctx *ctx;
->   	uint32_t id;
->   	int r;
-> @@ -51,8 +52,11 @@ static int amdgpu_sched_process_priority_override(struct amdgpu_device *adev,
->   		return r;
->   	}
->   
-> -	idr_for_each_entry(&fpriv->ctx_mgr.ctx_handles, ctx, id)
-> +	mgr = &fpriv->ctx_mgr;
-> +	mutex_lock(&mgr->lock);
-> +	idr_for_each_entry(&mgr->ctx_handles, ctx, id)
->   		amdgpu_ctx_priority_override(ctx, priority);
-> +	mutex_unlock(&mgr->lock);
->   
->   	fdput(f);
->   	return 0;
+> In which of the dozens of kernel testing systems? ;)
+> And also in heads of thousands of kernel developers and users?
+> All of them use get_maintainer.pl.
 
+I am aware, but `get_maintainer.pl` is fine as it is -- we still want
+to know about things that touch things that mention Rust in general,
+so that we can possibly be helpful to others, especially early on.
+
+However, if a bot is testing the kernel with Rust actually disabled at
+runtime, what I am saying is that the chance that it has something to
+do with Rust is quite low, especially if matched via `K:` rather than
+`F:`. Thus my request.
+
+Now, it could be nice to have some logic like that in
+`get_maintainer.pl` encoded for all bots to filter things out based on
+the kernel config and the type of match; but otherwise, yes, the bots
+would need to add the logic.
+
+Cc'ing Joe in case this is already possible in `get_maintainer.pl` or
+whether there could be a better approach.
+
+Cheers,
+Miguel
