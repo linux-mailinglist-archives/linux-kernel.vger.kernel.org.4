@@ -2,103 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB056EF70F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA02D6EF78C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbjDZPDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
+        id S241247AbjDZPK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240651AbjDZPD3 (ORCPT
+        with ESMTP id S240792AbjDZPKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:03:29 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB345279
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:03:27 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Vh3nnLS_1682521402;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vh3nnLS_1682521402)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Apr 2023 23:03:23 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, vbabka@suse.cz,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "Revert "mm/compaction: fix set skip in fast_find_migrateblock""
-Date:   Wed, 26 Apr 2023 23:03:13 +0800
-Message-Id: <3576e3520c044beb2a81860aecb2d4f597089300.1682521303.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 26 Apr 2023 11:10:21 -0400
+Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1F87ED
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:10:18 -0700 (PDT)
+Received: from mx0.infotecs-nt (localhost [127.0.0.1])
+        by mx0.infotecs.ru (Postfix) with ESMTP id 7B92A1085789;
+        Wed, 26 Apr 2023 18:04:31 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 7B92A1085789
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
+        t=1682521472; bh=MedIm+CRBEd4wBFXItt1kJMETQQkrwjcl8xl77kiovM=;
+        h=From:To:CC:Subject:Date:From;
+        b=HPLnLR4ts/3Y8SbFjB0Xawyp50TRlwaIt4fceP1t8BbvQc4lgJQTqtFLVJozsO5Ij
+         VKwm55CT0gqEPbRGtPFD/DevevAQJ4l2OrJI+CZFIC0VIPXp4rEzoSX/Z1tj10yAJ9
+         +cgB2C/GewAMwc9RQ2DAVXqp7dFsFtsLBt6mcWEc=
+Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
+        by mx0.infotecs-nt (Postfix) with ESMTP id 754A4305F450;
+        Wed, 26 Apr 2023 18:04:31 +0300 (MSK)
+From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+CC:     Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Patrick McHardy" <kaber@trash.net>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        "coreteam@netfilter.org" <coreteam@netfilter.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: [PATCH] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Topic: [PATCH] netfilter: nf_conntrack_sip: fix the
+ ct_sip_parse_numerical_param() return value.
+Thread-Index: AQHZeFBn+k9SKA6Ie0ib54vOLuLARQ==
+Date:   Wed, 26 Apr 2023 15:04:31 +0000
+Message-ID: <20230426150414.2768070-1-Ilia.Gavrilov@infotecs.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.17.0.10]
+x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 177015 [Apr 26 2023]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 510 510 bc345371020d3ce827abc4c710f5f0ecf15eaf2e, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;infotecs.ru:7.1.1
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2023/04/26 03:46:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2023/04/26 04:45:00 #21166225
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 95e7a450b8190673675836bfef236262ceff084a.
+ct_sip_parse_numerical_param() returns only 0 or 1 now.
+But process_register_request() and process_register_response() imply
+checking for a negative value if parsing of a numerical header parameter
+failed. Let's fix it.
 
-When I tested thpscale with v6.3 kernel, I found the compaction efficiency
-had a great regression compared to v6.2-rc1 kernel. See below numbers:
-                                    v6.2-rc             v6.3
-Percentage huge-3        81.35 (   0.00%)       32.97 ( -59.47%)
-Percentage huge-5        89.92 (   0.00%)       41.70 ( -53.63%)
-Percentage huge-7        92.41 (   0.00%)       34.08 ( -63.12%)
-Percentage huge-12       90.29 (   0.00%)       41.10 ( -54.49%)
-Percentage huge-18       82.38 (   0.00%)       41.24 ( -49.95%)
-Percentage huge-24       80.34 (   0.00%)       35.99 ( -55.20%)
-Percentage huge-30       88.90 (   0.00%)       44.20 ( -50.28%)
-Percentage huge-32       90.69 (   0.00%)       79.57 ( -12.25%)
+Found by InfoTeCS on behalf of Linux Verification Center
+(linuxtesting.org) with SVACE.
 
-Ops Compaction stalls                 113790.00      207099.00
-Ops Compaction success                 33983.00      19488.00
-Ops Compaction failures                79807.00      187611.00
-Ops Compaction efficiency                 29.86          9.41
-
-After some investigation, I found the commit 95e7a450b819
-("Revert mm/compaction: fix set skip in fast_find_migrateblock") caused
-the regression. This commit revert the commit 7efc3b726103 ("mm/compaction:
-fix set skip in fast_find_migrateblock") to fix a CPU stalling issue, which
-is caused by compaction stucked in repeating fast_find_migrateblock().
-
-And now the compaction stalling issue is addressed by commit cfccd2e63e7e
-("mm, compaction: finish pageblocks on complete migration failure"). So
-we should revert the temporary fix by commit 95e7a450b819, since the
-fast pfn found by fast_find_migrateblock() really can help to isolate
-some migratable pages.
-
-After reverting the commit, the regression has gone.
-                               v6.2-rc1                  v6.3           v6.3_patched
-Percentage huge-3        81.35 (   0.00%)       32.97 ( -59.47%)       87.78 (   7.90%)
-Percentage huge-5        89.92 (   0.00%)       41.70 ( -53.63%)       89.68 (  -0.27%)
-Percentage huge-7        92.41 (   0.00%)       34.08 ( -63.12%)       85.89 (  -7.05%)
-Percentage huge-12       90.29 (   0.00%)       41.10 ( -54.49%)       94.10 (   4.22%)
-Percentage huge-18       82.38 (   0.00%)       41.24 ( -49.95%)       85.06 (   3.25%)
-Percentage huge-24       80.34 (   0.00%)       35.99 ( -55.20%)       84.38 (   5.02%)
-Percentage huge-30       88.90 (   0.00%)       44.20 ( -50.28%)       95.54 (   7.48%)
-Percentage huge-32       90.69 (   0.00%)       79.57 ( -12.25%)       92.30 (   1.78%)
-
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Fixes: 0f32a40fc91a ("[NETFILTER]: nf_conntrack_sip: create signalling expe=
+ctations")
+Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
 ---
- mm/compaction.c | 1 -
- 1 file changed, 1 deletion(-)
+ net/netfilter/nf_conntrack_sip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/compaction.c b/mm/compaction.c
-index 33650541bebc..567c8d41d01e 100644
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1860,7 +1860,6 @@ static unsigned long fast_find_migrateblock(struct compact_control *cc)
- 					pfn = cc->zone->zone_start_pfn;
- 				cc->fast_search_fail = 0;
- 				found_block = true;
--				set_pageblock_skip(freepage);
- 				break;
- 			}
- 		}
--- 
-2.27.0
-
+diff --git a/net/netfilter/nf_conntrack_sip.c b/net/netfilter/nf_conntrack_=
+sip.c
+index 77f5e82d8e3f..d0eac27f6ba0 100644
+--- a/net/netfilter/nf_conntrack_sip.c
++++ b/net/netfilter/nf_conntrack_sip.c
+@@ -611,7 +611,7 @@ int ct_sip_parse_numerical_param(const struct nf_conn *=
+ct, const char *dptr,
+ 	start +=3D strlen(name);
+ 	*val =3D simple_strtoul(start, &end, 0);
+ 	if (start =3D=3D end)
+-		return 0;
++		return -1;
+ 	if (matchoff && matchlen) {
+ 		*matchoff =3D start - dptr;
+ 		*matchlen =3D end - start;
+--=20
+2.30.2
