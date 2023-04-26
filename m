@@ -2,200 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2D36EFE16
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBD66EFE18
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 01:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241612AbjDZXm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 19:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S242796AbjDZXnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 19:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241604AbjDZXmY (ORCPT
+        with ESMTP id S241632AbjDZXm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 19:42:24 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86013AB0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:42:17 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-958bb7731a9so992665866b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 16:42:17 -0700 (PDT)
+        Wed, 26 Apr 2023 19:42:56 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E53AAA;
+        Wed, 26 Apr 2023 16:42:48 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-5ef5245e5b2so35147716d6.0;
+        Wed, 26 Apr 2023 16:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682552536; x=1685144536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLVs3263t2teDRTXdz5t8bFzGRiK7kYETPsxms6eL6I=;
-        b=Ttz+SLmrQfsQ2A3EcrAQow5haAlQmo4fTMb+Imrs7ICAuXH7Myhkhco84qhNfFRP5J
-         CjP945mmPsI2U5NP5LsH2u5FzOQhlnUoKaugxPPdUhEDYW6lvJw97+pANAC8zqW44aqG
-         Y2FiIPmIOQTkbw+9VKIsOdhv42OKPJ34QlK1Wzvfq7FFbju2NnrUBGe36lIeCuSDzk58
-         4120Z7AsAjcfoVhzWC//ydHWqXi3cFOafqpH400suCq72WQdQ7j25681Tu/xtP2cXehl
-         OOB+OlyvOFkGleZjvj/rQP4le06vY4JkFYfuA6b8u2f32dvffoiIf/TWNnf0gHXOxtdx
-         fKQA==
+        d=gmail.com; s=20221208; t=1682552567; x=1685144567;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G8SZe3hC7Z59GY12y1nJWCl9RcoLJZwFGnOEfEm15qo=;
+        b=JGvEGdje26JMCOMaFdeRaz10zZmrg5fkt2/UMeJR64cXoKN2fL4yW20ojTzMdbHM00
+         k1D6qWJb3z5NEicUMcmD4Bx8KFemYp5p6yNP0Ko703nbAOn0evsb7lSJC6xqBgNiisGk
+         3w7t3+rYVGHvnchYZcx2Ow/9cKoW7nfiBn/gJFDxeTJzvZyWXwbq33RXba72YcwOraWl
+         vehS+PxqS6XfwcikkP2VrSEBhQtryBytEROTgMZSIw0TNOeFiK8teDe/EH4ZHPfHIqMm
+         Kuq4R+MukQ5EapqGoVkqWA1XLraYQ8CufBKYpIE1406C8aOmoO6cIWr+Nbr6IVhnJYtL
+         /z3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682552536; x=1685144536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLVs3263t2teDRTXdz5t8bFzGRiK7kYETPsxms6eL6I=;
-        b=j857XNm/JLUx2K9xCFhLJj77KtjCM7gPpEaVtUqkPDPhbC/KLGsZBCbD9Gy9wSZjsn
-         yqdWdpkV/1/QQP9y4y6RgOw+mAyz0sJ7ODG8ms/oGzp6u0l2HvciPeuQhLZ8OsvQacKQ
-         teHGNkQk+UQ26bWvKslq7mGIbQchGo24r9kX1iqjDfvgiWU1v4jQGwbetJETJRG89973
-         WS2w57DizduUmvUjopoo4+GpWPEY/nD2Hf450yKe7e7FBADP0lxjx8uOMZMG1O1o2P9A
-         SDFhXmZvrmUGAQfeJcg9MLyv7eLLTiJeHWOT+v3uO6ZcJfMc0byfYoxojuRyC8ohxH9x
-         fBow==
-X-Gm-Message-State: AAQBX9f261uKBXnfJpdVyElYz8Lyq5lCx7Pt/S2apExHzffOy4H4Zfh1
-        r+uX9n5qKSFhBMYI6cmEUZc2Ag==
-X-Google-Smtp-Source: AKy350YsWJrmVXvulbVEZKykpoK9kWHFkFN2sJlJoFlZgl/ec3q490HFPPTRY7ORu7kZUvq3uA76Qg==
-X-Received: by 2002:a17:906:1498:b0:94f:322d:909c with SMTP id x24-20020a170906149800b0094f322d909cmr19109414ejc.34.1682552536106;
-        Wed, 26 Apr 2023 16:42:16 -0700 (PDT)
-Received: from [172.23.2.152] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id e6-20020a1709062c0600b0094ef2003581sm8804723ejh.153.2023.04.26.16.42.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 16:42:15 -0700 (PDT)
-Message-ID: <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
-Date:   Thu, 27 Apr 2023 00:42:15 +0100
+        d=1e100.net; s=20221208; t=1682552567; x=1685144567;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G8SZe3hC7Z59GY12y1nJWCl9RcoLJZwFGnOEfEm15qo=;
+        b=AWI8RsT5N7lL4i4QztFpgMLrApLOtxFXXTwbHzQK0EwrBEiRRQNKQYQLbS7QbERwuW
+         FuINtVpicdjYiK1LllABhxIMs0ejgJFpI0428oVS69S6e3cz4hwHavUPDY7pE62nZ5nm
+         ONoeuftc6d24FG4JiizNmCYGWxFDOxmCfjCddpTDyFIwoR2BN1K3ACVxIpq00dxxX2vi
+         e9+CwNQTScx2SPaoa1YaLbPsuIUji2teC+rD2VGvwOC0vbQNYR3HFBB6zWmwNoXFGBey
+         cstcDdUjWKWHkmTVQOkm5kzcRVH0vnWQK3jQsmI0cA6ySnEFe6r25Na026g4kjcS0h+O
+         rKuQ==
+X-Gm-Message-State: AAQBX9dLyTeYj4BgtgXndwOkVWsmc/FUGgbWrBcpvnltmapzt1X5rxmf
+        Sb5frdFSbgMX79M8Esd8tA==
+X-Google-Smtp-Source: AKy350a39RVGLoHUdEi0Nc662WpB0gs58j57a8DoN7U7hUhuJlUMAwEC2Ve5B1CyD/Nnk0NMhUitng==
+X-Received: by 2002:a05:6214:1cc8:b0:5ac:58cc:69d1 with SMTP id g8-20020a0562141cc800b005ac58cc69d1mr34042573qvd.31.1682552567479;
+        Wed, 26 Apr 2023 16:42:47 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id z8-20020a0cf248000000b005f5a05448d8sm5140094qvl.100.2023.04.26.16.42.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 16:42:46 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from t560.mvista.com (unknown [IPv6:2001:470:b8f6:1b:de9b:7730:1c53:557e])
+        by serve.minyard.net (Postfix) with ESMTPA id C606F180011;
+        Wed, 26 Apr 2023 23:42:45 +0000 (UTC)
+From:   minyard@acm.org
+To:     Craig Shelley <craig@microtron.org.uk>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, Corey Minyard <cmimyard@mvista.com>
+Subject: [PATCH] USB: serial: cp210x: work around silicon bug setting break
+Date:   Wed, 26 Apr 2023 18:42:21 -0500
+Message-Id: <20230426234221.1867222-1-minyard@acm.org>
+X-Mailer: git-send-email 2.35.7
+In-Reply-To: <ZEmDs0ASdnEAnpsL@minyard.net>
+References: <ZEmDs0ASdnEAnpsL@minyard.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
-Content-Language: en-US
-To:     Adrien Thierry <athierry@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
- <ZEcEGJiikEC2wIVE@fedora>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZEcEGJiikEC2wIVE@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Corey Minyard <cmimyard@mvista.com>
 
-On 4/24/23 23:35, Adrien Thierry wrote:
-> Hi Shazad,
->
-> On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
->> Update relavent DT bindings for USB, add new config to the phy driver,
->> add USB and PHY nodes to the .dtsi and enable them in the board .dts
->> for the sa8775p-ride platform.
->>
->> Shazad Hussain (6):
->>    dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
->>    dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
->>    dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
->>      binding
->>    phy: qcom-qmp: Add SA8775P USB3 UNI phy
->>    arm64: dts: qcom: sa8775p: add USB nodes
->>    arm64: dts: qcom: sa8775p-ride: enable USB nodes
->>
->>   .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
->>   .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
->>   .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
->>   arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
->>   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
->>   drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
->>   6 files changed, 381 insertions(+), 2 deletions(-)
->>
->> -- 
->> 2.17.1
->>
-> Thanks for posting this. I tested the series on the sa8775p, and it seems
-> initialization for the controller at a400000 sometimes fails with a
-> timeout (-110) error:
->
->      dwc3 a400000.usb: Adding to iommu group 2
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.0.auto: can't setup: -110
->      xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
->      xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
->      dwc3 a600000.usb: Adding to iommu group 3
->      dwc3 a800000.usb: Adding to iommu group 4
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
->      xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
->      hub 1-0:1.0: USB hub found
->      hub 1-0:1.0: 1 port detected
->      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->      hub 2-0:1.0: USB hub found
->      hub 2-0:1.0: 1 port detected
->
-> In this case, only usb devices for a800000 are showing:
->
->      dracut:/# ls -alh /sys/bus/usb/devices
->      total 0
->      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
->
-> This happens approximately 1 out of 2 reboots. Here's the kernel output
-> when initialization succeeds:
->
->      dwc3 a600000.usb: Adding to iommu group 2
->      dwc3 a800000.usb: Adding to iommu group 3
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
->      xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
->      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
->      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
->      hub 1-0:1.0: USB hub found
->      hub 1-0:1.0: 1 port detected
->      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
->      hub 2-0:1.0: USB hub found
->      hub 2-0:1.0: 1 port detected
->      dwc3 a400000.usb: Adding to iommu group 4
->      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
->      xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
->      xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
->      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
->      hub 3-0:1.0: USB hub found
->      hub 3-0:1.0: 1 port detected
->
-> And the list of usb devices:
->
->      dracut:/# ls -alh /sys/bus/usb/devices
->      total 0
->      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
->      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
->      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
->
-> Have you also encountered this?
+At least on the CP2105, sending this once doesn't work, you have to send
+it twice to make it happen.  If you only send it once, you will get a
+really short time (a few bits) where the break is sent, right when the
+break is turned off, thus it isn't recognised as a break.  Sending it
+twice won't hurt anything, so just do it all the time.
 
-I've had some issues with QMPPHY not (sometimes?) probing in time on SM6115 only when built as a module.. perhaps it'd be worth checking out of it works fine with =y?
+Signed-off-by: Corey Minyard <cmimyard@mvista.com>
+---
+I played with this a bit, and found this change fixes the issue.  It's
+not ideal, I suppose, but it works.
 
+ drivers/usb/serial/cp210x.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Konrad
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index cdea1bff3b70..e410a749325b 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -1446,6 +1446,15 @@ static void cp210x_break_ctl(struct tty_struct *tty, int break_state)
+ 	dev_dbg(&port->dev, "%s - turning break %s\n", __func__,
+ 		state == BREAK_OFF ? "off" : "on");
+ 	cp210x_write_u16_reg(port, CP210X_SET_BREAK, state);
++	/*
++	 * At least on the CP2105, sending this once doesn't work, you
++	 * have to send it twice to make it happen.  If you only send
++	 * it once, you will get a really short time (a few bits) where
++	 * the break is sent, right when the break is turned off, thus
++	 * it isn't recognised as a break.  Sending it twice won't hurt
++	 * anything, so just do it all the time.
++	 */
++	cp210x_write_u16_reg(port, CP210X_SET_BREAK, state);
+ }
+ 
+ #ifdef CONFIG_GPIOLIB
+-- 
+2.35.7
 
->
-> Best,
->
-> Adrien
->
