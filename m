@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1306EF8DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498426EF911
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 19:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbjDZRAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 13:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S234669AbjDZRNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 13:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232972AbjDZRAU (ORCPT
+        with ESMTP id S233954AbjDZRNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 13:00:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA566181;
-        Wed, 26 Apr 2023 10:00:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A6CA635FA;
-        Wed, 26 Apr 2023 17:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA04C433D2;
-        Wed, 26 Apr 2023 17:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682528418;
-        bh=MHqWRvkl5Cm+oF+SgyhqgDdM1Q4M/yDXHwZMMADe8N0=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=hNecQijVZZORG15ytwJCNNM5O9bn8FYhmGWYhiICBh2STfG07xDCjy46L6FysE1Bj
-         WTaU/9GDnboVILfS0vvG0rmGoW67jP6T1Yr5GOwRD0mwbAWxW8/eFONzxAWRlu2P3r
-         BbqJ0YrOsmuH5cNKOuQSYzQOUnVdhu08O+MMDJdLLPmB9KHvwMZXmCnvQ1FdTsl2Ri
-         Z9G6NcIJ8ZTwVktb8NYdW6HKK4wEB+sLRqpCiknzbEVuiZVYpaDqOrsrV0quamwfLq
-         DDUVLaCX0Zq+6bHnC8wTEzK6lYcv1KzxnUgNKCWtYzqKzovH/NNM7+8O4CnK2Vvi8s
-         rKE54/gww4ImA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 26 Apr 2023 20:00:14 +0300
-Message-Id: <CS6UJMSTVA4L.FRQ5VL1I1EF4@suppilovahvero>
-Cc:     "Thorsten Leemhuis" <regressions@leemhuis.info>,
-        "James Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>, "Jan Dabros" <jsd@semihalf.com>,
-        <regressions@lists.linux.dev>,
-        "LKML" <linux-kernel@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Johannes Altmanninger" <aclopte@gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-X-Mailer: aerc 0.14.0
-References: <Y60RoP77HnwaukEA@zx2c4.com>
- <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com>
- <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org>
- <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
- <ZBBxMl5rVjY9FGS9@kernel.org> <ZBBxxftnXHVOjm92@kernel.org>
- <ZBB8R9H3CyQnNfCt@zx2c4.com> <ZBCDeleGG/fFlkt+@kernel.org>
- <ZEKlzaQhjd8sbE7I@kernel.org>
- <CAHmME9q9DZyYo7G__ks=XSrS4kS8sUUZ+eF3c1VSnGCAvfBR+Q@mail.gmail.com>
- <CS48U6SYIBVB.V05DUEX5I01F@suppilovahvero>
- <CS68AWILHXS4.3M36M1EKZLUMS@suppilovahvero>
- <CAHmME9o3HK2ju-HBYpSbB_7-9x5A2rD0ev3gaiLLjB_J8-Ju4Q@mail.gmail.com>
- <CS6TEW6NY7FJ.39VTQYTEN8FBH@suppilovahvero>
-In-Reply-To: <CS6TEW6NY7FJ.39VTQYTEN8FBH@suppilovahvero>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Apr 2023 13:13:41 -0400
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BEF194;
+        Wed, 26 Apr 2023 10:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1682528918;
+        bh=o4udH8OtqEoEDrOP/aTcDA81yzBb2ltJxkP46cbFh5c=;
+        h=From:To:Cc:Subject:Date;
+        b=juYhBBtayxtuIEglDGpYtnMn1Yo2+GoJLV+2HWEXQvlNFlG1rVAudJ2AwTCs8RsQr
+         /CSTwa/e828C7Nfh7R+WkSLHD9hxmtx0FxMf1rM/ci9K5rKh85P207+PvjkTDFvKnq
+         8GqUzAm/xOZzXdx4dDmo/mnZbXSFbYfcw7BQzmco=
+Received: from localhost.localdomain ([220.243.191.11])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 9828290; Thu, 27 Apr 2023 01:02:24 +0800
+X-QQ-mid: xmsmtpt1682528544th5jveq67
+Message-ID: <tencent_1BB7243C6EDA6B2BB6E2C1563C1614D45009@qq.com>
+X-QQ-XMAILINFO: MyIXMys/8kCtWl9GEkWfk7hP4f0VtV8+04aQymT3xHvU/k9TTahy9VKkPLTZh5
+         io2CmzhrX4cceDZ4N2WgF/3ovWk18EE0wqMuvpvRwH5obr5nms3Q/5ESB3vwADixLKudkx4p2LuD
+         pb9UaO/BlXQO2ikEufIf3a8lg0/v3gHJrTO2jWf0iytxddhI8pKPBtLW5uY/7tYiKcm9R4ntfCR9
+         4Cgw+fek5uN+bqMrhoPPHhSNXbkhUNj+PwId7N5M4IVJ+WrPZBla+cxttjEL+QWGbGc/14NnqWol
+         EcuPtlw+zLMf2bErM2Z3FSu562Btc9EXwAO8MgmGGG1HYdUhjneGYT0IpXhzZe4UgEzdM8J1RO9l
+         2LSb/RYImejWvvayVWY2lwwppzv3lP01v4Izus6klBQAkfoaE4KTT2X38u9JB9LHJdQQ9rE0sLqi
+         3vD0UOye0N2SUj30JItjV/IokQ3hQ0LEiyaSR7GD76baekW2SxHERHXfIL7CZmwDty2R3H5HE5qE
+         l3WHhBYkY7Hh1VJBDIyZdoVuoYfa/f0dlrOs5evtx48Vzc9yEkFNXQgtS07THzeSZm+xIAcpYD/n
+         rUJXRShMObCcgvdmH6KN7JzAjaAm2UaxbA7tEKMB5ILlJWWs0PUZpWLkVAT4B7oo0/eqb6x3xVFb
+         f5UlRSh33XlUdp3KG3zEjOVlLkcsh3fQqHaRLCZ1hBX53IB0+N3avaCP9j005HMEt4Nc/VIZHtD5
+         a7BmXZpx+UXd52yPmYCAt8o2Pfy7yv3pervDd4KNEs/506byGSaP+TgHEWJX9PxeSVJFZGseD8Uy
+         dQnBJnmJ23G3jaeP0Fq1iOY/8ZH6UnewlZW0SR8uCCBmtJzFhkKirHw4JQ6oOqI1rFRh6QR1H2HD
+         g12zkHKui5E9nbRK8dA9dqRuLfk1RauAE6SDdFgEEETt7TgIhGOEzCIJOgxa0os/Dd00xwE84oEj
+         IPD5C5IXqi11/mddotZhP4h0J+4+QcEQ9ZQz+pS4N4/aBDZI45qA==
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     pkshih@realtek.com
+Cc:     tony0620emma@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Shurong <zhang_shurong@foxmail.com>
+Subject: [PATCH v3 0/2] wifi: rtw88: error codes fix patches
+Date:   Thu, 27 Apr 2023 01:02:19 +0800
+X-OQ-MSGID: <cover.1682526135.git.zhang_shurong@foxmail.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Apr 26, 2023 at 7:07 PM EEST, Jarkko Sakkinen wrote:
-> On Wed Apr 26, 2023 at 4:32 AM EEST, Jason A. Donenfeld wrote:
-> > Nice work! Happy that you got it figured out. That trace seems
-> > consistent with what I was seeing in my traces, so I think you've
-> > spotted the right bug.
-> >
-> > Jason
->
-> Unfortunately there might be two bugs. Unless I interpreted logs
-> incorrectly also hwrng can race with resume (sorry, I forgot to
-> save it).
->
-> Looking at drivers/char/hw_random/core.c there seems to be no
-> binding to the PM so I guess that this it supports what I'm
-> observing [*].
->
-> So there's two ways to fix the issue:
->
-> 1. Unregister hwrng for the course of suspend
-> 2. Add something like TPM_CHIP_SUSPENDED, which is set by suspend and
->    cleared by the resume.
->
-> I try the 2nd option first because I see it less complicated.
-> Probably would make sense to turn chip flags as atomic while
-> at it.
->
-> [*] https://elixir.bootlin.com/linux/latest/source/drivers/char/hw_random=
-/core.c
+rtw88 does not handle the failure during copy_from_user or invalid
+user-provided data. We fix such problems by first modifying the return
+value of customized function rtw_debugfs_copy_from_user. Then for all 
+the callers rtw_debugfs_set_*, we receive the returned error code. 
+Moreover, negative code is returned if the user-provided data is invalid
+instead of a positive value count.
 
-OK, so I implemented fix also for hwrng and now I get a clean
-resume. I'll add all necessary tags etc. and send for review.
+The changes in this version:
+- check by if (ret) instead of check by if (ret < 0)
 
-BR, Jarkko
+Zhang Shurong (2):
+  wifi: rtw88: fix incorrect error codes in rtw_debugfs_copy_from_user
+  wifi: rtw88: fix incorrect error codes in rtw_debugfs_set_*
+
+ drivers/net/wireless/realtek/rtw88/debug.c | 59 ++++++++++++++++------
+ 1 file changed, 43 insertions(+), 16 deletions(-)
+
+-- 
+2.40.0
+
+
