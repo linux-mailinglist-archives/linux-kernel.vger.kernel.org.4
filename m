@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8CE6EEE94
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1A96EEE97
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 08:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239515AbjDZGw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 02:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S239447AbjDZGxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 02:53:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbjDZGwX (ORCPT
+        with ESMTP id S239361AbjDZGxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 02:52:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8292D7E;
-        Tue, 25 Apr 2023 23:52:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 610A163357;
-        Wed, 26 Apr 2023 06:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440DEC4339B;
-        Wed, 26 Apr 2023 06:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682491937;
-        bh=toSMf0jhH3B5lnQsYRYUOC8wB2CtVUisrL1JID/cGdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LqW4ch8Q+udniHHxcnq+mwILYNLbBEB+T7CCVAZt0lVFYT8lbdGeuV+z/COkps0c7
-         QikcFTfEztwFiRvrTCHlBFpJ7g/fkHm3rh6R/XvrPTTTUtGlwZsr83TitGuoUikXW0
-         Pk48LEpHO1zd/8GxMVaK0q0Kexhi6CD02JhqAd5OxrfPUrC1/7aNQfMhhZzYNBLA7z
-         A16NmEpqoWNgW3uqnSSqqN95fXIqchHp0ClvX9xk9GvJvGh5E2kZvJCfhyH7ftMEAT
-         tPUBaME/69u5xVmUiF/lISzW3oedJaDCVARd7fMwHZ5EPaR04E6qfbXFhQsBFpQdqf
-         33yAjoljQ7oWg==
-Date:   Wed, 26 Apr 2023 09:52:13 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Subbaraya Sundeep Bhatta <sbhatta@marvell.com>,
-        Geethasowjanya Akula <gakula@marvell.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Hariprasad Kelam <hkelam@marvell.com>
-Subject: Re: [EXT] Re: [net PATCH 5/9] octeontx2-pf: mcs: Fix NULL pointer
- dereferences
-Message-ID: <20230426065213.GJ27649@unreal>
-References: <20230423095454.21049-1-gakula@marvell.com>
- <20230423095454.21049-6-gakula@marvell.com>
- <20230423165133.GH4782@unreal>
- <CO1PR18MB4666A3A7B44081290B37E375A1679@CO1PR18MB4666.namprd18.prod.outlook.com>
- <20230425085140.000bbcc1@kernel.org>
- <20230426061654.GC27649@unreal>
+        Wed, 26 Apr 2023 02:53:20 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B23230C1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Apr 2023 23:53:07 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id rZ1RpwxQZMX1TrZ1Rpoi5U; Wed, 26 Apr 2023 08:53:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682491985;
+        bh=KAtKMyZd7naxOW+Rdd07F5idduJev/3DNob3RYZOyX4=;
+        h=From:To:Cc:Subject:Date;
+        b=jtcYJmJzwcQembazxEh1mO1fWZlBgEiuhDv3/vLwH2iUAI4V/z95jF5L9LY4f9NZv
+         si+K/7yFFq3Q40CA0IXnCQRaFpeWL0E9oZayGh/WBL8PnmOIk/HkBeeXiDRZNCUfK+
+         7/tw9+Zg/0wISwhCG+qE2ANsbfBthzZBFAnOfbfUqPCW4k9TAGqS0lLye2TOg1c5YF
+         KnaFAweV5CYgYxr9brt301VM67gBl5aJIzr7fwHvKizLctjMwJRrj4ivokDlbm6Vxc
+         4HIYWw564uGM0GJnlMve910B3V9GiDm/8CbePGw7nLbAuxA1GtndlpvqT80urrAdD1
+         L99XAbt5Z8CYw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 26 Apr 2023 08:53:05 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wim Van Sebroeck <wim@iguana.be>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 1/2] watchdog: dw_wdt: Fix the error handling path of dw_wdt_drv_probe()
+Date:   Wed, 26 Apr 2023 08:52:48 +0200
+Message-Id: <fbb650650bbb33a8fa2fd028c23157bedeed50e1.1682491863.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426061654.GC27649@unreal>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 09:16:54AM +0300, Leon Romanovsky wrote:
-> On Tue, Apr 25, 2023 at 08:51:40AM -0700, Jakub Kicinski wrote:
-> > On Mon, 24 Apr 2023 10:29:02 +0000 Subbaraya Sundeep Bhatta wrote:
-> > > >How did you get call to .mdo_del_secy if you didn't add any secy?
-> > > >
-> > > >Thanks
-> > > >  
-> > > It is because of the order of teardown in otx2_remove:
-> > >         cn10k_mcs_free(pf);
-> > >         unregister_netdev(netdev);
-> > > 
-> > > cn10k_mcs_free free the resources and makes cfg as NULL.
-> > > Later unregister_netdev calls mdo_del_secy and finds cfg as NULL.
-> > > Thanks for the review I will change the order and submit next version.
-> > 
-> > Leon, ack? Looks like the patches got "changes requested" but I see 
-> > no other complaint.
-> 
-> Honestly, I was confused and didn't know what to answer, so decided to
-> see next version.
-> 
-> From one side Subbaraya said that it is possible (which was not
-> convincing to me, but ok, most time I'm wrong :)), from another
-> he said that he will submit next version.
+The commit in Fixes has only updated the remove function and missed the
+error handling path of the probe.
 
-Jakub,
+Add the missing reset_control_assert() call.
 
-v2 is perfectly fine.
+Fixes: 65a3b6935d92 ("watchdog: dw_wdt: get reset lines from dt")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/watchdog/dw_wdt.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Thanks
+diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
+index 6f88bd81f8a1..a1354a59eb37 100644
+--- a/drivers/watchdog/dw_wdt.c
++++ b/drivers/watchdog/dw_wdt.c
+@@ -635,7 +635,7 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+ 
+ 	ret = dw_wdt_init_timeouts(dw_wdt, dev);
+ 	if (ret)
+-		goto out_disable_clk;
++		goto out_assert_rst;
+ 
+ 	wdd = &dw_wdt->wdd;
+ 	wdd->ops = &dw_wdt_ops;
+@@ -667,12 +667,15 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
+ 
+ 	ret = watchdog_register_device(wdd);
+ 	if (ret)
+-		goto out_disable_pclk;
++		goto out_assert_rst;
+ 
+ 	dw_wdt_dbgfs_init(dw_wdt);
+ 
+ 	return 0;
+ 
++out_assert_rst:
++	reset_control_assert(dw_wdt->rst);
++
+ out_disable_pclk:
+ 	clk_disable_unprepare(dw_wdt->pclk);
+ 
+-- 
+2.34.1
 
-> 
-> Thanks
