@@ -2,242 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7226EF0F7
+	by mail.lfdr.de (Postfix) with ESMTP id C84966EF0F8
 	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240325AbjDZJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S230484AbjDZJUo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Apr 2023 05:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240460AbjDZJUe (ORCPT
+        with ESMTP id S240249AbjDZJTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:20:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FEE49E0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682500650;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fyxo9X49FJOFaiRGnal9ZnS5FLek6M+ko6PrXrYgFok=;
-        b=fhItSkiq8a84EmiEwms94TrIMQkZLVnAASsSsUK22aqdqS35KxiFfmnBMnQbzAxAQxLwGw
-        ttyaFyRhRKS4jrx2dh/+rkXb9Z7KQ0OMyZkS0//KAVgZ+XBbGiU7bTPQUgUdVwjvLZ17FY
-        Ce1Xr/GimC/pwz+rv5TL3I0NZe+LdXU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-547-6cV1rc4jOwiPUzcSEc19UQ-1; Wed, 26 Apr 2023 05:17:28 -0400
-X-MC-Unique: 6cV1rc4jOwiPUzcSEc19UQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f171d38db3so39802635e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:17:28 -0700 (PDT)
+        Wed, 26 Apr 2023 05:19:41 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF463C03;
+        Wed, 26 Apr 2023 02:19:08 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-b9246a5f3feso12231382276.1;
+        Wed, 26 Apr 2023 02:19:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682500647; x=1685092647;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fyxo9X49FJOFaiRGnal9ZnS5FLek6M+ko6PrXrYgFok=;
-        b=GJj+aXQjzcQ+Qp2hC1hpQVHiiTpHk2nKXilmfqNZaqzmJGytNTRe6jIVMeoVPnAP8B
-         ekG0z5kCwANTSC6bum/DeJK65ycdYOt9wM6L7q0sRNGR0H9Uy+vCATPmbVbngkFa3dL9
-         X2A8rbta1iida1JWAoprQ+pKJIHmNTsrbIPgfylPDtROv5/Y2Rv2nuC70JkKv8l4gBg+
-         cWazE0z1cR4HAbmsZDmA26ztU9gibX19z5ky4do+cT5QW4wJkTFzxMZOXqwmMkr/v4Fw
-         OruTsSGhIBJpj3TmV/BVAYj0aXr+5QvYVTQnVr1P2AFVEY7EBAn8+IS6mRjpIOq6gvT6
-         uOwg==
-X-Gm-Message-State: AAQBX9fL9XZzDz7bS6WmWyJwmpDXPQR7npGQ9Hu0at1WEiZOs5WO5prp
-        HxHvHrGO3tg1yvO6hYgTwTzZA9ZZ31K2vwX/z+BmCFV4lDBftYRN25eWNmGdgG/lyBVmDYfBWd1
-        SLVWEuJR6unCvgWNTQTJ3y9Wa
-X-Received: by 2002:a7b:cc98:0:b0:3f1:6ebe:d598 with SMTP id p24-20020a7bcc98000000b003f16ebed598mr12093495wma.7.1682500647492;
-        Wed, 26 Apr 2023 02:17:27 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y1cqYlbWoC4PRl3Cjxhzhb92t9R7b55XlDEdK1Iyg/nOK5imWM0UbQf5LWtbMyf2ijZy/Qog==
-X-Received: by 2002:a7b:cc98:0:b0:3f1:6ebe:d598 with SMTP id p24-20020a7bcc98000000b003f16ebed598mr12093489wma.7.1682500647247;
-        Wed, 26 Apr 2023 02:17:27 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id e16-20020a5d5950000000b0030490c8ccafsm3246491wri.52.2023.04.26.02.17.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 02:17:26 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 7/8] lib: add test for for_each_numa_{cpu,hop_mask}()
-In-Reply-To: <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
-References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-8-yury.norov@gmail.com>
- <xhsmh8rehkxzz.mognet@vschneid.remote.csb>
- <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
-Date:   Wed, 26 Apr 2023 10:17:25 +0100
-Message-ID: <xhsmhttx3j93u.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20221208; t=1682500702; x=1685092702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nea43AGTHWHWBjILaENIfdEesjmp3NJp5Ib9Fbp61ic=;
+        b=SByM82THatNkntNrzsAnwcGHyR03DjnVbSsGClf+vRSDh2CisJloEB6VesjtCE9pCK
+         7COUSdiQUijfP/KVTrVSNtIzQwyeZhVAinIbWxASOd9eWUVK4yE7l2SOfezDNcy/7KYL
+         hRnhgfa9FWRJk4gtz7NSWldox3z/4K4Kh4wLjS4nihq9IFOleB2JRcMBYejVrpV3j5Ui
+         HZ7fU80f7OddA9FkI6WK+XMsRqS38H5aBVHOrCKM5+A3CCxoWbr1/wor9yzGAWQGpS2m
+         RnYa9pLhDzg3Ceq2cJojdbzNBfhosF0dpBP0/kPS7LiLcLmHp9VAEOe9XAQ1DgXIt9Ct
+         DBTA==
+X-Gm-Message-State: AC+VfDyxYzUtS264tpHo+D4UHA++gIQ3cSZnJE2vCtwbjL2iqQHFBPB7
+        ixvG6My+Vf1V4TMQZP8zyYb6EqipiiSWpw==
+X-Google-Smtp-Source: ACHHUZ46BdIb5iKIODz22Gu2INxw8w+7w4zeHklIu49Rq7WsBDELZH0eDbSf9TgEBk4Iyg/HYTEIiQ==
+X-Received: by 2002:a25:a10a:0:b0:b99:e0ff:5f16 with SMTP id z10-20020a25a10a000000b00b99e0ff5f16mr4560707ybh.18.1682500701873;
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id e131-20020a253789000000b00b7767ca7473sm3951047yba.16.2023.04.26.02.18.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-b8f549d36e8so12204172276.3;
+        Wed, 26 Apr 2023 02:18:21 -0700 (PDT)
+X-Received: by 2002:a25:1683:0:b0:b8f:54a4:9a55 with SMTP id
+ 125-20020a251683000000b00b8f54a49a55mr12415557ybw.65.1682500701204; Wed, 26
+ Apr 2023 02:18:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+ <20230328160756.30520-3-quic_kriskura@quicinc.com> <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+In-Reply-To: <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 26 Apr 2023 11:18:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+Message-ID: <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] usb: gadget: udc: Handle gadget_connect failure
+ during bind operation
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_ugoswami@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/23 22:50, Yury Norov wrote:
-> Hi Valentin,
->
-> Thanks for review!
->
-> On Mon, Apr 24, 2023 at 06:09:52PM +0100, Valentin Schneider wrote:
->> On 19/04/23 22:19, Yury Norov wrote:
->> > +	for (node = 0; node < sched_domains_numa_levels; node++) {
->> > +		unsigned int hop, c = 0;
->> > +
->> > +		rcu_read_lock();
->> > +		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
->> > +			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
->> > +		rcu_read_unlock();
->> > +	}
->> 
->> I'm not fond of the export of sched_domains_numa_levels, especially
->> considering it's just there for tests.
->> 
->> Furthermore, is there any value is testing parity with
->> cpumask_local_spread()?
->
-> I wanted to emphasize that new NUMA-aware functions are coherent with
-> each other, just like find_nth_bit() is coherent with find_next_bit().
->
-> But all that coherence looks important only in non-NUMA case, because
-> client code may depend on fact that next CPU is never less than current.
-> This doesn't hold for NUMA iterators anyways...
->
+Hi Krishna,
 
-Ah right, I see your point. But yes, distance-ordered walks break this
-assumption.
-
->> Rather, shouldn't we check that using this API does
->> yield CPUs of increasing NUMA distance?
->> 
->> Something like
->> 
->>         for_each_node(node) {
->>                 unsigned int prev_cpu, hop = 0;
->> 
->>                 cpu = cpumask_first(cpumask_of_node(node));
->>                 prev_cpu = cpu;
->> 
->>                 rcu_read_lock();
->> 
->>                 /* Assert distance is monotonically increasing */
->>                 for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
->>                         expect_ge_uint(cpu_to_node(cpu), cpu_to_node(prev_cpu));
->>                         prev_cpu = cpu;
->>                 }
->> 
->>                 rcu_read_unlock();
->>         }
+On Wed, Apr 26, 2023 at 3:17 AM Krishna Kurapati PSSNV
+<quic_kriskura@quicinc.com> wrote:
+> Hi Alan, Geert,
 >
-> Your version of the test looks more straightforward. I need to think
-> for more, but it looks like I can take it in v3.
->
+>   Can you help review and provide comments/approval on the following patch.
 
-I realized I only wrote half the relevant code - comparing node IDs is
-meaningless, I meant to compare distances as we walk through the
-CPUs... I tested the below against a few NUMA topologies and it seems to be
-sane:
+I don't know why you are addressing me, as I never touched the affected
+file, am not listed as its maintainer, and don't know much about USB UDC.
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index 6becb044a66f0..8f8512d139d58 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -174,11 +174,23 @@ __check_eq_str(const char *srcfile, unsigned int line,
- 	return eq;
- }
- 
--#define __expect_eq(suffix, ...)					\
-+static bool __init
-+__check_ge_uint(const char *srcfile, unsigned int line,
-+		const unsigned int a, unsigned int b)
-+{
-+	if (a < b) {
-+		pr_err("[%s:%u] expected a(%u) >= b(%u)\n",
-+			srcfile, line, a, b);
-+		return false;
-+	}
-+	return true;
-+}
-+
-+#define __expect_op(op, suffix, ...)					\
- 	({								\
- 		int result = 0;						\
- 		total_tests++;						\
--		if (!__check_eq_ ## suffix(__FILE__, __LINE__,		\
-+		if (!__check_## op ## _ ## suffix(__FILE__, __LINE__,	\
- 					   ##__VA_ARGS__)) {		\
- 			failed_tests++;					\
- 			result = 1;					\
-@@ -186,6 +198,9 @@ __check_eq_str(const char *srcfile, unsigned int line,
- 		result;							\
- 	})
- 
-+#define __expect_eq(suffix, ...) __expect_op(eq, suffix, ##__VA_ARGS__)
-+#define __expect_ge(suffix, ...) __expect_op(ge, suffix, ##__VA_ARGS__)
-+
- #define expect_eq_uint(...)		__expect_eq(uint, ##__VA_ARGS__)
- #define expect_eq_bitmap(...)		__expect_eq(bitmap, ##__VA_ARGS__)
- #define expect_eq_pbl(...)		__expect_eq(pbl, ##__VA_ARGS__)
-@@ -193,6 +208,8 @@ __check_eq_str(const char *srcfile, unsigned int line,
- #define expect_eq_clump8(...)		__expect_eq(clump8, ##__VA_ARGS__)
- #define expect_eq_str(...)		__expect_eq(str, ##__VA_ARGS__)
- 
-+#define expect_ge_uint(...)		__expect_ge(uint, ##__VA_ARGS__)
-+
- static void __init test_zero_clear(void)
- {
- 	DECLARE_BITMAP(bmap, 1024);
-@@ -756,12 +773,23 @@ static void __init test_for_each_numa(void)
- {
- 	unsigned int cpu, node;
- 
--	for (node = 0; node < sched_domains_numa_levels; node++) {
--		unsigned int hop, c = 0;
-+	for_each_node(node) {
-+		unsigned int start_cpu, prev_dist, hop = 0;
-+
-+		cpu = cpumask_first(cpumask_of_node(node));
-+		prev_dist = node_distance(node, node);
-+		start_cpu = cpu;
- 
- 		rcu_read_lock();
--		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
--			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
-+
-+		/* Assert distance is monotonically increasing */
-+		for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
-+			unsigned int dist = node_distance(cpu_to_node(cpu), cpu_to_node(start_cpu));
-+
-+			expect_ge_uint(dist, prev_dist);
-+			prev_dist = dist;
-+		}
-+
- 		rcu_read_unlock();
- 	}
- }
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
