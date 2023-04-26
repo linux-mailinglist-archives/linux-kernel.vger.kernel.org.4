@@ -2,152 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E336EEBD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D72A6EEBD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 03:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbjDZBRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Apr 2023 21:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S238460AbjDZBRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Apr 2023 21:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjDZBRg (ORCPT
+        with ESMTP id S238366AbjDZBRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Apr 2023 21:17:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6152703;
-        Tue, 25 Apr 2023 18:17:35 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33Q1CkOH017309;
-        Wed, 26 Apr 2023 01:17:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=at4bqF9DgVDcLP0tRwj2xxUb+qw/8ejaLGWivzRhGDI=;
- b=BLIeccEV8p83nfyyXC7VBQaUNB0BjcsABOwerbynCJT4/X/zBeY14g11NExoGabF92cR
- NZ8e1Py0ehTFjkexzSKOJMqhF10MxM4ROT/uz0UYP7a16GeKYxWcmmG7EDCNOdNF7n9P
- hSlW59SqnEv7l9heCiFAQh5dR03SS4nLxtv/2hFOOZqa2d2M+Ncf2nZ7jDQTEyBCtQ02
- GMA1yeX+3wH3J/3ByDre0CNyrvAeBTfGHpUCbdgBs1OADIAwytHZClDMxaHDaevLTUOz
- AzTSTpgatD5KKl14X+4I5W03+oBLAT5BIqNdrpHmsrv6iQv9Z5LCIecGACviL+HYCYoi jA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q6fs2sh22-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 01:17:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33Q1HMon031285
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Apr 2023 01:17:22 GMT
-Received: from [10.216.20.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 25 Apr
- 2023 18:17:18 -0700
-Message-ID: <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
-Date:   Wed, 26 Apr 2023 06:47:13 +0530
+        Tue, 25 Apr 2023 21:17:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6FB13C19;
+        Tue, 25 Apr 2023 18:17:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 087ED62CE6;
+        Wed, 26 Apr 2023 01:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC61C433D2;
+        Wed, 26 Apr 2023 01:17:38 +0000 (UTC)
+Date:   Tue, 25 Apr 2023 21:17:37 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Tze-nan.Wu" <Tze-nan.Wu@mediatek.com>
+Cc:     <mhiramat@kernel.org>, <bobule.chang@mediatek.com>,
+        <cheng-jui.wang@mediatek.com>, <wsd_upstream@mediatek.com>,
+        <stable@vger.kernel.org>, <npiggin@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        John 'Warthog9' Hawley <warthog9@kernel.org>
+Subject: Re: [PATCH v5] ring-buffer: Ensure proper resetting of atomic
+ variables in ring_buffer_reset_online_cpus
+Message-ID: <20230425211737.757208b3@gandalf.local.home>
+In-Reply-To: <20230426010446.10753-1-Tze-nan.Wu@mediatek.com>
+References: <20230426010446.10753-1-Tze-nan.Wu@mediatek.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/2] usb: gadget: udc: Handle gadget_connect failure
- during bind operation
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Jiantao Zhang <water.zhangjiantao@huawei.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-3-quic_kriskura@quicinc.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230328160756.30520-3-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4Xpbz-xUdXLWo7PIvMr1zHfEbL38e08Y
-X-Proofpoint-ORIG-GUID: 4Xpbz-xUdXLWo7PIvMr1zHfEbL38e08Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-25_11,2023-04-25_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0
- bulkscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304260009
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan, Geert,
 
-  Can you help review and provide comments/approval on the following patch.
+For some reason, this email did not make it to
+linux-trace-kernel@vger.kernel.org, and therefore did not make it into
+patchwork?
 
-Regards,
-Krishna,
+John?
 
-On 3/28/2023 9:37 PM, Krishna Kurapati wrote:
-> In the event, gadget_connect call (which invokes pullup) fails,
-> propagate the error to udc bind operation which inturn sends the
-> error to configfs. The userspace can then retry enumeartion if
-> it chooses to.
+-- Steve
+
+
+On Wed, 26 Apr 2023 09:04:44 +0800
+Tze-nan.Wu <Tze-nan.Wu@mediatek.com> wrote:
+
+> From: "Tze-nan Wu" <Tze-nan.Wu@mediatek.com>
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> In ring_buffer_reset_online_cpus, the buffer_size_kb write operation
+> may permanently fail if the cpu_online_mask changes between two
+> for_each_online_buffer_cpu loops. The number of increases and decreases
+> on both cpu_buffer->resize_disabled and cpu_buffer->record_disabled may be
+> inconsistent, causing some CPUs to have non-zero values for these atomic
+> variables after the function returns.
+> 
+> This issue can be reproduced by "echo 0 > trace" while hotplugging cpu.
+> After reproducing success, we can find out buffer_size_kb will not be
+> functional anymore.
+> 
+> To prevent leaving 'resize_disabled' and 'record_disabled' non-zero after
+> ring_buffer_reset_online_cpus returns, we ensure that each atomic variable
+> has been set up before atomic_sub() to it.
+> 
+> Cc: stable@vger.kernel.org
+> Cc: npiggin@gmail.com
+> Fixes: b23d7a5f4a07 ("ring-buffer: speed up buffer resets by avoiding synchronize_rcu for each CPU")
+> Reviewed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
+> Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
 > ---
->   drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
->   1 file changed, 16 insertions(+), 4 deletions(-)
+> Changes from v4 to v5: https://lore.kernel.org/lkml/20230412112401.25081-1-Tze-nan.Wu@mediatek.com/
+>   - Move the define before the function
+> ---
+>  kernel/trace/ring_buffer.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 23b0629a8774..975205a1853f 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1051,12 +1051,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
->   
->   /* ------------------------------------------------------------------------- */
->   
-> -static void usb_udc_connect_control(struct usb_udc *udc)
-> +static int usb_udc_connect_control(struct usb_udc *udc)
->   {
-> +	int ret;
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index 76a2d91eecad..253ef85a9ec3 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -5345,6 +5345,9 @@ void ring_buffer_reset_cpu(struct trace_buffer *buffer, int cpu)
+>  }
+>  EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
+>  
+> +/* Flag to ensure proper resetting of atomic variables */
+> +#define RESET_BIT	(1 << 30)
 > +
->   	if (udc->vbus)
-> -		usb_gadget_connect(udc->gadget);
-> +		ret = usb_gadget_connect(udc->gadget);
->   	else
-> -		usb_gadget_disconnect(udc->gadget);
-> +		ret = usb_gadget_disconnect(udc->gadget);
+>  /**
+>   * ring_buffer_reset_online_cpus - reset a ring buffer per CPU buffer
+>   * @buffer: The ring buffer to reset a per cpu buffer of
+> @@ -5361,20 +5364,27 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
+>  	for_each_online_buffer_cpu(buffer, cpu) {
+>  		cpu_buffer = buffer->buffers[cpu];
+>  
+> -		atomic_inc(&cpu_buffer->resize_disabled);
+> +		atomic_add(RESET_BIT, &cpu_buffer->resize_disabled);
+>  		atomic_inc(&cpu_buffer->record_disabled);
+>  	}
+>  
+>  	/* Make sure all commits have finished */
+>  	synchronize_rcu();
+>  
+> -	for_each_online_buffer_cpu(buffer, cpu) {
+> +	for_each_buffer_cpu(buffer, cpu) {
+>  		cpu_buffer = buffer->buffers[cpu];
+>  
+> +		/*
+> +		 * If a CPU came online during the synchronize_rcu(), then
+> +		 * ignore it.
+> +		 */
+> +		if (!(atomic_read(&cpu_buffer->resize_disabled) & RESET_BIT))
+> +			continue;
 > +
-> +	return ret;
->   }
->   
->   /**
-> @@ -1500,11 +1504,19 @@ static int gadget_bind_driver(struct device *dev)
->   	if (ret)
->   		goto err_start;
->   	usb_gadget_enable_async_callbacks(udc);
-> -	usb_udc_connect_control(udc);
-> +	ret = usb_udc_connect_control(udc);
-> +	if (ret)
-> +		goto err_connect_control;
->   
->   	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->   	return 0;
->   
-> + err_connect_control:
-> +	usb_gadget_disable_async_callbacks(udc);
-> +	if (gadget->irq)
-> +		synchronize_irq(gadget->irq);
-> +	usb_gadget_udc_stop(udc);
-> +
->    err_start:
->   	driver->unbind(udc->gadget);
->   
+>  		reset_disabled_cpu_buffer(cpu_buffer);
+>  
+>  		atomic_dec(&cpu_buffer->record_disabled);
+> -		atomic_dec(&cpu_buffer->resize_disabled);
+> +		atomic_sub(RESET_BIT, &cpu_buffer->resize_disabled);
+>  	}
+>  
+>  	mutex_unlock(&buffer->mutex);
+
