@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA396EF7F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784996EF7F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 17:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241198AbjDZPvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 11:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S241244AbjDZPv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 11:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241050AbjDZPvI (ORCPT
+        with ESMTP id S241245AbjDZPvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 11:51:08 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8925253
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:51:05 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2472740a0dbso6345008a91.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:51:05 -0700 (PDT)
+        Wed, 26 Apr 2023 11:51:12 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1096E61A9
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:51:10 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a6c5acf6ccso55647505ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 08:51:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682524265; x=1685116265;
+        d=google.com; s=20221208; t=1682524269; x=1685116269;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XJZ6NHRQS+3nZd9cVcd+FkVeTPqzQKMLt90y8l8WCOI=;
-        b=Ot0av20P7Hqq04Hq1PCr0ozz1hy05T/NcWFTJuVhxzZELgcaVKSB45hnHn6FNWPc8o
-         SxAscrFtDZEFhD6SfsTUceZLEfLLtnExFGwKcZX9zydmWdKq5Vt5FnHeN/farR9nhfh4
-         MwEEXEbX1nZGSBRS3Ly+v7MV9q9D2X0C5kGmDB3Yv64ygU4XxqeOV1CKC5d5RQNmBd0O
-         HbMfLI4wSqIyjWBFVrXsoKzgy0aQa5bjtLrwFyTT8q5OKiiK1H8Xl5hCIp9LPDmw12fs
-         WtT69uPrYv/azt88cQI7CWdwToYNQGshE6c9cYoeXiWhQQCPeTSYdD+BuJexvvGHO2Gg
-         6qFQ==
+        bh=JAZt4SwBq0kzUhXCO374DApwwiCqj65AMLJ7jYfFhVY=;
+        b=wONEkvpfq/eASdg9qtRBkCqKPWIGN7jF9+5WyNuWNLb/Jtu4Y/jEn/IxoxPGIXv9Q5
+         Ev3gX0JaGekf02cXAI9Sibu8PvQhanwkfz/r4trzy0QIwtNaVcyGLkEu5mKrgf7rHtfk
+         ca3DM0w8EIe0xAXzP4z7TNHaDXKrQCBk4fkg6CHLtiNb3pA7w+Bt6m4X6/hK+WyatIgR
+         LFv463ZxN9D6wwr9/ammqIwg/pkcWmkuEHiOKhI7km6/JPefaTB/eiw/Foiq3GOdVAcV
+         R2nCBd4tyihhOPhTwbaeyKwuwaVEZ3Cxw3xx9qpE9jrlV5kvsg4rRVqSlrR6dPF9+/zX
+         kSeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682524265; x=1685116265;
+        d=1e100.net; s=20221208; t=1682524269; x=1685116269;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XJZ6NHRQS+3nZd9cVcd+FkVeTPqzQKMLt90y8l8WCOI=;
-        b=EWxj0AR/VHp/q09yvH3q+/RS/MVCWRAP6BTYV991/TLzdV7JTkpy0jyDa5kEqthRM9
-         rdGCEbXuW8Lun3CSj8y6UN1FehwbP8KOUUkUhg4qXNe+JxXEUnVE49Gbbc6+PEO65JRR
-         XGYG2U94N7MYPNMV44GxSPK72njW21DN1HMYSRnEHyEC0uVVdH+irrLwk8MOyaDPGChr
-         xYa6VbF2L1OAp4Wbo1R19IFo4o+Z3R/E23CA7tUAOmDqEii+lLvAl9FfuySGll+IhxWR
-         ace/blg72ZKo256PYD0hkQfZIkRZc+q3yiUd+Ae5YkddI9WvJRj1juRV1mCpEPvuM1XN
-         jRFg==
-X-Gm-Message-State: AAQBX9e1xY/ps47phjTPquec2fW7d3FZ2ZE/rKiB3zY5e2Y1U+2Ws85o
-        wCYxE+ei+2xbEq+zyvoEL8eVKYPSFXoZlzL4CCxXKQ==
-X-Google-Smtp-Source: ACHHUZ4vXXN3s9xWz7hucC/toMsWJLyps8E5ryQJ08zx75g679Zv0oCHThA7sUO209hqbMvFkQCCc5n64TyNLjdxyU4=
-X-Received: by 2002:a17:90a:fb4d:b0:247:2680:4090 with SMTP id
- iq13-20020a17090afb4d00b0024726804090mr8856401pjb.11.1682524264954; Wed, 26
- Apr 2023 08:51:04 -0700 (PDT)
+        bh=JAZt4SwBq0kzUhXCO374DApwwiCqj65AMLJ7jYfFhVY=;
+        b=Oqp7ecY+aobygXDoomkiVKpy+jRUVnkREpEVWnrXnbuVbLDtvY3ZsBnMqX5PVaA13v
+         LYVe7dUiEeuqxcJ6aPiTinETCRdoixblY2bDNLZjJR+cd2lu7O262MBA8mULOF5CVRYD
+         fuaFPdg3VYJHZ4yJ/DZroPpDNfeg65myv3Fjn2V6iZ6Tr9m2jmerqmlvSiOJculDBS/q
+         PdJygepaW67P+VFYeHrWJhQthPn8RL356lHxr+MTUYz7NsHQBAIkOsw0PJU+6+FtA/Kp
+         5iYapWNVrzQ79f8X1lZk9h0R6uEVT52kUXXVNBo85LraZ4g3VbH4CmjzHIcD8UqD2H47
+         I4yg==
+X-Gm-Message-State: AAQBX9duFSdbwvZfWuw3CSkTBKz3oNSQ5B0QnJQ2cQW1IP7HkDTbLxz+
+        VpO0iDeQfptyESu90BqtjTVUirkEohAH8jCQe4b/7w==
+X-Google-Smtp-Source: AKy350ZHHrz8NBOxCi4LboZHUxE7CP1TxQqDc8DjZYCaDw4hQPwaGjWQZ+1aaUgkQ7SKzFENBcL2UkIDr/m4KoG2S0A=
+X-Received: by 2002:a17:902:d582:b0:1a9:20ea:f49b with SMTP id
+ k2-20020a170902d58200b001a920eaf49bmr22387086plh.24.1682524269347; Wed, 26
+ Apr 2023 08:51:09 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
  <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
@@ -55,11 +55,11 @@ References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
  <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
  <ZDoEG0VF6fb9y0EC@google.com> <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
  <ZD7Js4fj5YyI2oLd@google.com> <b453462a-3d98-8d0f-9cc0-543032de5a5f@gmail.com>
- <CAKH8qBusi0AWpo_iDaFkLFPUhgZy7-p6JwhimCkpYMhWnToE7g@mail.gmail.com> <927ddd10-ae5b-886c-6725-3daf04456e52@gmail.com>
-In-Reply-To: <927ddd10-ae5b-886c-6725-3daf04456e52@gmail.com>
+ <CAKH8qBusi0AWpo_iDaFkLFPUhgZy7-p6JwhimCkpYMhWnToE7g@mail.gmail.com> <4e177291-0f94-ab71-a982-f3e9f1f64280@gmail.com>
+In-Reply-To: <4e177291-0f94-ab71-a982-f3e9f1f64280@gmail.com>
 From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 26 Apr 2023 08:50:53 -0700
-Message-ID: <CAKH8qBu3d+DpnyaCusRV3Q5xPCjuC4ym0PfJJ7pAOov+Mg2ayw@mail.gmail.com>
+Date:   Wed, 26 Apr 2023 08:50:58 -0700
+Message-ID: <CAKH8qBs=JeNRGkGi6hCEoc+50bKS1h1LMsex_T+dDk0c7s1OQg@mail.gmail.com>
 Subject: Re: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
  net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
 To:     Kui-Feng Lee <sinquersw@gmail.com>
@@ -91,7 +91,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 2:28=E2=80=AFPM Kui-Feng Lee <sinquersw@gmail.com> =
+On Tue, Apr 25, 2023 at 2:11=E2=80=AFPM Kui-Feng Lee <sinquersw@gmail.com> =
 wrote:
 >
 >
@@ -231,21 +231,22 @@ d
 > >
 > > Having a promise might work. This is essentially what we already do
 > > with sockets/etc with acquire/release pattern.
->
-> Would you mind to give me some context of the socket things?
-
-I'm mostly referring to the infra around KF_ACQUIRE/KF_RELEASE where
-the verifier already has some resource tracking functionality. We can
-probably extend it to verify that the program does copy_to_user
-equivalent at the end of the run (or somehow specifically marks that
-it's not needed).
-
 > >
 > > What are the sleepable restrictions you're hinting about? I feel like
+> AFAIK, a sleepable program can use only some types of maps; for example,
+> array, hash, ringbuf,... etc.  Other types of maps are unavailable to
+> sleepable programs; for example, sockmap, sockhash.
+
+Sure, but it doesn't have to stay that way. (hypothetically) If we
+think that sleepable makes sense, we can try to expand the scope.
+
 > > with the sleepable bpf, we can also remove all the temporary buffer
 > > management / extra copies which sounds like a win to me. (we have this
 > > ugly heuristics with BPF_SOCKOPT_KERN_BUF_SIZE) The program can
 > > allocate temporary buffers if needed..
+> Agree!
+>
+>
 > >
 > >>>>> - or maybe we can even have a per-proto bpf_getsockopt_cleanup call=
  that
