@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510336EF0F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7226EF0F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Apr 2023 11:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240164AbjDZJT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 05:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S240325AbjDZJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 05:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240159AbjDZJTX (ORCPT
+        with ESMTP id S240460AbjDZJUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:19:23 -0400
+        Wed, 26 Apr 2023 05:20:34 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D4746A2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:18:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FEE49E0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682500645;
+        s=mimecast20190719; t=1682500650;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jvxWHN4pleINQbtviEy41ebpqPZsaL76Dfbg3weAJmg=;
-        b=GD/KPR/KjRiLaRm9b5HnJTw9zbyHa0eXg0cFe7i3lEM3srnTuqbWbZapWqcQDTi366jn7F
-        wsgGJoGDpPr3clYs2B8cw+ZzZXBRvH98zbHnmPe2gsAT6mCHBnW9lxSoactXiQKsHZutr7
-        8eTUDHpur7gcQ3yB/M/skxSXvrJqfYQ=
+        bh=Fyxo9X49FJOFaiRGnal9ZnS5FLek6M+ko6PrXrYgFok=;
+        b=fhItSkiq8a84EmiEwms94TrIMQkZLVnAASsSsUK22aqdqS35KxiFfmnBMnQbzAxAQxLwGw
+        ttyaFyRhRKS4jrx2dh/+rkXb9Z7KQ0OMyZkS0//KAVgZ+XBbGiU7bTPQUgUdVwjvLZ17FY
+        Ce1Xr/GimC/pwz+rv5TL3I0NZe+LdXU=
 Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
  [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-31-0K4z3M3CMxiSmAMXooe1Ww-1; Wed, 26 Apr 2023 05:17:23 -0400
-X-MC-Unique: 0K4z3M3CMxiSmAMXooe1Ww-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f168827701so26243285e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:17:23 -0700 (PDT)
+ us-mta-547-6cV1rc4jOwiPUzcSEc19UQ-1; Wed, 26 Apr 2023 05:17:28 -0400
+X-MC-Unique: 6cV1rc4jOwiPUzcSEc19UQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f171d38db3so39802635e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 02:17:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682500642; x=1685092642;
+        d=1e100.net; s=20221208; t=1682500647; x=1685092647;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvxWHN4pleINQbtviEy41ebpqPZsaL76Dfbg3weAJmg=;
-        b=C18Qklp513+VclHyI1JdBsblByjQWECb33tnbyPkSmZJJAQs6rCDki+8DIgkM8hsja
-         qu1vByTTv1eHD+TpTcpcksCOTKngWMcqSNiwnyNRWRKp1FXYv6FgP5IMqftg5pzHW2v8
-         e0DIRV0waTa4wtjb0xVmJi1aCe8IOuCn2skaZFfRWD2Et7MUYY42lrlD9nVunT+2FEx/
-         TAXOT1U0CxQ1M+p2zzvSsJFk+nYZ/dqqkol3RisuWDxTQmPoafzwMiA0cj9+8Gg9I1FV
-         eE34ANKv40qgj2i5yS6eGAUcf3a88Uo+Zij2KBqnW/rDBBAHX+GzZAzRTB2ChC7TdCsp
-         3W3g==
-X-Gm-Message-State: AAQBX9dodoDqyzCqKR7WlPkQMlQsNuwebb2ayrYoFOC5cMVhEf3eEy1/
-        K2862P/5ixn1j6yG4R60Ei3p4rRkkI6xYHpg5LgI6u5YB1vpJ5Qog7XBhLYxKi/iu1mKZ+UMl8y
-        rrYveozv5rauxLKOZcdNUXFCz
-X-Received: by 2002:a05:600c:2194:b0:3f0:9ff5:79fb with SMTP id e20-20020a05600c219400b003f09ff579fbmr11935224wme.39.1682500642726;
-        Wed, 26 Apr 2023 02:17:22 -0700 (PDT)
-X-Google-Smtp-Source: AKy350awKZ4trDCLRlRhqFdRT9vYeVZysXcN5ybDgFx6g7OwgLKTxEoxuH/fYZLPrZLtisim1Kn5MQ==
-X-Received: by 2002:a05:600c:2194:b0:3f0:9ff5:79fb with SMTP id e20-20020a05600c219400b003f09ff579fbmr11935192wme.39.1682500642398;
-        Wed, 26 Apr 2023 02:17:22 -0700 (PDT)
+        bh=Fyxo9X49FJOFaiRGnal9ZnS5FLek6M+ko6PrXrYgFok=;
+        b=GJj+aXQjzcQ+Qp2hC1hpQVHiiTpHk2nKXilmfqNZaqzmJGytNTRe6jIVMeoVPnAP8B
+         ekG0z5kCwANTSC6bum/DeJK65ycdYOt9wM6L7q0sRNGR0H9Uy+vCATPmbVbngkFa3dL9
+         X2A8rbta1iida1JWAoprQ+pKJIHmNTsrbIPgfylPDtROv5/Y2Rv2nuC70JkKv8l4gBg+
+         cWazE0z1cR4HAbmsZDmA26ztU9gibX19z5ky4do+cT5QW4wJkTFzxMZOXqwmMkr/v4Fw
+         OruTsSGhIBJpj3TmV/BVAYj0aXr+5QvYVTQnVr1P2AFVEY7EBAn8+IS6mRjpIOq6gvT6
+         uOwg==
+X-Gm-Message-State: AAQBX9fL9XZzDz7bS6WmWyJwmpDXPQR7npGQ9Hu0at1WEiZOs5WO5prp
+        HxHvHrGO3tg1yvO6hYgTwTzZA9ZZ31K2vwX/z+BmCFV4lDBftYRN25eWNmGdgG/lyBVmDYfBWd1
+        SLVWEuJR6unCvgWNTQTJ3y9Wa
+X-Received: by 2002:a7b:cc98:0:b0:3f1:6ebe:d598 with SMTP id p24-20020a7bcc98000000b003f16ebed598mr12093495wma.7.1682500647492;
+        Wed, 26 Apr 2023 02:17:27 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y1cqYlbWoC4PRl3Cjxhzhb92t9R7b55XlDEdK1Iyg/nOK5imWM0UbQf5LWtbMyf2ijZy/Qog==
+X-Received: by 2002:a7b:cc98:0:b0:3f1:6ebe:d598 with SMTP id p24-20020a7bcc98000000b003f16ebed598mr12093489wma.7.1682500647247;
+        Wed, 26 Apr 2023 02:17:27 -0700 (PDT)
 Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id m6-20020a05600c4f4600b003ee5fa61f45sm20899093wmq.3.2023.04.26.02.17.21
+        by smtp.gmail.com with ESMTPSA id e16-20020a5d5950000000b0030490c8ccafsm3246491wri.52.2023.04.26.02.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 02:17:21 -0700 (PDT)
+        Wed, 26 Apr 2023 02:17:26 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Yury Norov <yury.norov@gmail.com>
 Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
@@ -79,59 +79,165 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heiko Carstens <hca@linux.ibm.com>,
         Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 3/8] sched/topology: add for_each_numa_cpu() macro
-In-Reply-To: <ZEi3dLvlg/35DUrM@yury-ThinkPad>
+Subject: Re: [PATCH v2 7/8] lib: add test for for_each_numa_{cpu,hop_mask}()
+In-Reply-To: <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
 References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-4-yury.norov@gmail.com>
- <xhsmh4jp4l21j.mognet@vschneid.remote.csb>
- <ZEi3dLvlg/35DUrM@yury-ThinkPad>
-Date:   Wed, 26 Apr 2023 10:17:20 +0100
-Message-ID: <xhsmhv8hjj93z.mognet@vschneid.remote.csb>
+ <20230420051946.7463-8-yury.norov@gmail.com>
+ <xhsmh8rehkxzz.mognet@vschneid.remote.csb>
+ <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
+Date:   Wed, 26 Apr 2023 10:17:25 +0100
+Message-ID: <xhsmhttx3j93u.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/23 22:32, Yury Norov wrote:
-> On Tue, Apr 25, 2023 at 10:54:48AM +0100, Valentin Schneider wrote:
+On 25/04/23 22:50, Yury Norov wrote:
+> Hi Valentin,
+>
+> Thanks for review!
+>
+> On Mon, Apr 24, 2023 at 06:09:52PM +0100, Valentin Schneider wrote:
 >> On 19/04/23 22:19, Yury Norov wrote:
->> > +/**
->> > + * for_each_numa_cpu - iterate over cpus in increasing order taking into account
->> > + *		       NUMA distances from a given node.
->> > + * @cpu: the (optionally unsigned) integer iterator
->> > + * @hop: the iterator variable, must be initialized to a desired minimal hop.
->> > + * @node: the NUMA node to start the search from.
->> > + * @mask: the cpumask pointer
->> > + *
->> > + * Requires rcu_lock to be held.
->> > + */
->> > +#define for_each_numa_cpu(cpu, hop, node, mask)					\
->> > +	for ((cpu) = 0, (hop) = 0;						\
->> > +		(cpu) = sched_numa_find_next_cpu((mask), (cpu), (node), &(hop)),\
->> > +		(cpu) < nr_cpu_ids;						\
->> > +		(cpu)++)
+>> > +	for (node = 0; node < sched_domains_numa_levels; node++) {
+>> > +		unsigned int hop, c = 0;
 >> > +
+>> > +		rcu_read_lock();
+>> > +		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
+>> > +			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
+>> > +		rcu_read_unlock();
+>> > +	}
 >> 
->> I think we can keep sched_numa_find_next_cpu() as-is, but could we make
->> that macro use cpu_possible_mask by default? We can always add a variant
->> if/when we need to feed in a different mask.
+>> I'm not fond of the export of sched_domains_numa_levels, especially
+>> considering it's just there for tests.
+>> 
+>> Furthermore, is there any value is testing parity with
+>> cpumask_local_spread()?
 >
-> As mentioned in discussion to the driver's patch, all that numa things
-> imply only online CPUs, so cpu_possible_mask may mislead to some extent. 
+> I wanted to emphasize that new NUMA-aware functions are coherent with
+> each other, just like find_nth_bit() is coherent with find_next_bit().
 >
-> Anyways, can you elaborate what you exactly want? Like this?
+> But all that coherence looks important only in non-NUMA case, because
+> client code may depend on fact that next CPU is never less than current.
+> This doesn't hold for NUMA iterators anyways...
 >
->  #define for_each_numa_online_cpu(cpu, hop, node)       \
->         for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
 
-Yeah, something like that. Like you said, the NUMA cpumasks built by the
-scheduler reflect the online topology, so s/possible/online/ shouldn't
-change much here.
+Ah right, I see your point. But yes, distance-ordered walks break this
+assumption.
+
+>> Rather, shouldn't we check that using this API does
+>> yield CPUs of increasing NUMA distance?
+>> 
+>> Something like
+>> 
+>>         for_each_node(node) {
+>>                 unsigned int prev_cpu, hop = 0;
+>> 
+>>                 cpu = cpumask_first(cpumask_of_node(node));
+>>                 prev_cpu = cpu;
+>> 
+>>                 rcu_read_lock();
+>> 
+>>                 /* Assert distance is monotonically increasing */
+>>                 for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
+>>                         expect_ge_uint(cpu_to_node(cpu), cpu_to_node(prev_cpu));
+>>                         prev_cpu = cpu;
+>>                 }
+>> 
+>>                 rcu_read_unlock();
+>>         }
+>
+> Your version of the test looks more straightforward. I need to think
+> for more, but it looks like I can take it in v3.
+>
+
+I realized I only wrote half the relevant code - comparing node IDs is
+meaningless, I meant to compare distances as we walk through the
+CPUs... I tested the below against a few NUMA topologies and it seems to be
+sane:
+
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index 6becb044a66f0..8f8512d139d58 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -174,11 +174,23 @@ __check_eq_str(const char *srcfile, unsigned int line,
+ 	return eq;
+ }
+ 
+-#define __expect_eq(suffix, ...)					\
++static bool __init
++__check_ge_uint(const char *srcfile, unsigned int line,
++		const unsigned int a, unsigned int b)
++{
++	if (a < b) {
++		pr_err("[%s:%u] expected a(%u) >= b(%u)\n",
++			srcfile, line, a, b);
++		return false;
++	}
++	return true;
++}
++
++#define __expect_op(op, suffix, ...)					\
+ 	({								\
+ 		int result = 0;						\
+ 		total_tests++;						\
+-		if (!__check_eq_ ## suffix(__FILE__, __LINE__,		\
++		if (!__check_## op ## _ ## suffix(__FILE__, __LINE__,	\
+ 					   ##__VA_ARGS__)) {		\
+ 			failed_tests++;					\
+ 			result = 1;					\
+@@ -186,6 +198,9 @@ __check_eq_str(const char *srcfile, unsigned int line,
+ 		result;							\
+ 	})
+ 
++#define __expect_eq(suffix, ...) __expect_op(eq, suffix, ##__VA_ARGS__)
++#define __expect_ge(suffix, ...) __expect_op(ge, suffix, ##__VA_ARGS__)
++
+ #define expect_eq_uint(...)		__expect_eq(uint, ##__VA_ARGS__)
+ #define expect_eq_bitmap(...)		__expect_eq(bitmap, ##__VA_ARGS__)
+ #define expect_eq_pbl(...)		__expect_eq(pbl, ##__VA_ARGS__)
+@@ -193,6 +208,8 @@ __check_eq_str(const char *srcfile, unsigned int line,
+ #define expect_eq_clump8(...)		__expect_eq(clump8, ##__VA_ARGS__)
+ #define expect_eq_str(...)		__expect_eq(str, ##__VA_ARGS__)
+ 
++#define expect_ge_uint(...)		__expect_ge(uint, ##__VA_ARGS__)
++
+ static void __init test_zero_clear(void)
+ {
+ 	DECLARE_BITMAP(bmap, 1024);
+@@ -756,12 +773,23 @@ static void __init test_for_each_numa(void)
+ {
+ 	unsigned int cpu, node;
+ 
+-	for (node = 0; node < sched_domains_numa_levels; node++) {
+-		unsigned int hop, c = 0;
++	for_each_node(node) {
++		unsigned int start_cpu, prev_dist, hop = 0;
++
++		cpu = cpumask_first(cpumask_of_node(node));
++		prev_dist = node_distance(node, node);
++		start_cpu = cpu;
+ 
+ 		rcu_read_lock();
+-		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
+-			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
++
++		/* Assert distance is monotonically increasing */
++		for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
++			unsigned int dist = node_distance(cpu_to_node(cpu), cpu_to_node(start_cpu));
++
++			expect_ge_uint(dist, prev_dist);
++			prev_dist = dist;
++		}
++
+ 		rcu_read_unlock();
+ 	}
+ }
 
