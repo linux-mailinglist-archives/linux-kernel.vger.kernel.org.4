@@ -2,186 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36346F0AEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EDC6F0B06
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244273AbjD0RgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S244621AbjD0RhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244395AbjD0RgK (ORCPT
+        with ESMTP id S244408AbjD0RgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:36:10 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2573584;
-        Thu, 27 Apr 2023 10:35:58 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6a5fe1ebc42so3667284a34.1;
-        Thu, 27 Apr 2023 10:35:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682616958; x=1685208958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JsWAUgO6fW04Ok+RjkKHL4mEg/xiIHYfiF+AoGZQ788=;
-        b=RDHvIccQO7B/zuGFC/x5F2IrLVlMeKnuk7fSmKO8f4oujbdLDOlI711XP6opifONu4
-         3qTMFpn/MSn/lftd+A+rt3wZ36FgRZzgThJYK+kxMSgY/BXXj6oWC9z3cjycdDwDx3ha
-         d6O3+7XrzBr6o4F8NglB9hDTqsnPGnGw2NUkeB+nMMsjY4AD+pZrOVHBEZEoTGbLJw38
-         WC6iNgTsH7bn7eLVVh8ewFNnIQcvh5tD85RsQ8AlZpo1ilKQnL49GMPOPRz8ZI2Kqqgn
-         NjqAx0PnWgOGj5YecL0mxNR9ljFyLA9U+zmOJJrqIgFGUt1+344HG9Rys6mLr2y61k8S
-         JQxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682616958; x=1685208958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JsWAUgO6fW04Ok+RjkKHL4mEg/xiIHYfiF+AoGZQ788=;
-        b=GXPZS5Wg0mVHqD/Yjj252vWeTTF22AqUCW07IVuo66OcLTiVUm554IwdX2sU9Sldy6
-         DlWgMkXt9XQPFnQ5P4wzxzjHRCfGn/pEAHEt8DnO7LJXfcqjiLJ2OTb0l5zjoeqcJkCJ
-         BequhIj+Eq75JjtBkGNOPlDCRUt8j711BsxpMkos6jynwv7LiTCPo+QnG9XQ2cqHOYln
-         17/iGIC+u5WLuW//0Upeu23BsjT0s18Zwwd4WbqVL0RrOvFe9+dOJMbFMGqNYAhSGL2U
-         rh/GhxgbUvx8FpA7TNvZ+L72EeGzXGbncIzq02lfgMRGBvkr8C9XP0yn/8XjN35/uk4a
-         ZJmQ==
-X-Gm-Message-State: AC+VfDxMvZd5Lmp9xF1pjGO+w8b5WWX7yodh0XB6uI05rCb5HYGa1oc5
-        zcHmk5cuW6o9m7pdtHTu3A==
-X-Google-Smtp-Source: ACHHUZ66Ytt3OM1N5vIB0b6v0aMusytEm/+vlrJSq2LFyGnocICjTb3N24D7ONWS3r2YNvAv6/q5/Q==
-X-Received: by 2002:a05:6830:c:b0:6a4:2dfa:360c with SMTP id c12-20020a056830000c00b006a42dfa360cmr1180144otp.1.1682616957571;
-        Thu, 27 Apr 2023 10:35:57 -0700 (PDT)
-Received: from bytedance ([208.184.112.130])
-        by smtp.gmail.com with ESMTPSA id z18-20020a05683010d200b006a32ba92994sm3931041oto.23.2023.04.27.10.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 10:35:57 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 10:35:54 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Vlad Buslov <vladbu@nvidia.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Seth Forshee <sforshee@digitalocean.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>,
-        davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
-        xiyou.wangcong@gmail.com, peilin.ye@bytedance.com, hdanton@sina.com
-Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
- mini_qdisc_pair_swap
-Message-ID: <20230427173554.GA11725@bytedance>
-References: <0000000000006cf87705f79acf1a@google.com>
- <20230328184733.6707ef73@kernel.org>
- <ZCOylfbhuk0LeVff@do-x1extreme>
- <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
- <CAM0EoMn2LnhdeLcxCFdv+4YshthN=YHLnr1rvv4JoFgNS92hRA@mail.gmail.com>
- <20230417230011.GA41709@bytedance>
- <20230426233657.GA11249@bytedance>
- <877ctxsdnb.fsf@nvidia.com>
+        Thu, 27 Apr 2023 13:36:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFECF3584;
+        Thu, 27 Apr 2023 10:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682616980; x=1714152980;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wx0g/VEEKyVkdd5dyNHEkEmSINmrbPEj72JoxHw284s=;
+  b=aj4sHD2mlr8XSJ/P1+ulGH6xpQh9g6vVRdfvMrasWJc6Cmwnzy9GjDSa
+   /s4cXnSh+tBCFZO1oviYUdkUwF11/9v/q+hIEfPcrjq4rYDYanq0SJQq4
+   npL/Nbi12uVxMNIQTEQbhlsUDsQQKVmk2uDaL6DntGDXTjCo5CSir5sYk
+   xLrK8vUNW0NWxV+oe9XZPaId0GhD1f9lPYEN5hUrihgaUnAWETrAxfiXW
+   sV2lSNVAJY/JQp/o1910Krbif18NmmXQQzJ+ba2G1XkLV1fpaPz5aIu05
+   ujKFyWBvOzlo4Y3ViDQXtvva0ar5lrWmFPu0Z9KEDJol4dD8lquLpTa+L
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="349496864"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="349496864"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 10:36:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="697172959"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="697172959"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 10:36:19 -0700
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     jgg@nvidia.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        alex.williamson@redhat.com
+Cc:     tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
+        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
+        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
+        reinette.chatre@intel.com, linux-kernel@vger.kernel.org
+Subject: [PATCH V4 00/11] vfio/pci: Support dynamic allocation of MSI-X interrupts
+Date:   Thu, 27 Apr 2023 10:35:57 -0700
+Message-Id: <cover.1682615447.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877ctxsdnb.fsf@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pedro, Vlad,
+Changes since V3:
+- V3: https://lore.kernel.org/lkml/cover.1681837892.git.reinette.chatre@intel.com/
+- Be considerate about layout and size with changes to
+  struct vfio_pci_core_device. Keep flags together and transition all to
+  use bitfields. (Alex and Jason)
+- Do not free dynamically allocated interrupts on error path. (Alex)
+- Please refer to individual patches for localized changes.
 
-On Thu, Apr 27, 2023 at 03:26:03PM +0300, Vlad Buslov wrote:
-> On Wed 26 Apr 2023 at 16:42, Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> > As we can see there're interleaving mini_qdisc_pair_swap() calls between
-> > Qdisc A and B, causing all kinds of troubles, including the UAF (thread
-> > 2 writing to mini Qdisc a1's rcu_state after Qdisc A has already been
-> > freed) reported by syzbot.
-> 
-> Great analysis! However, it is still not quite clear to me how threads 1
-> and 2 access each other RCU state when q->miniqp is a private memory of
-> the Qdisc, so 1 should only see A->miniqp and 2 only B->miniqp. And both
-> miniqps should be protected from deallocation by reference that lockless
-> RTM_NEWTFILTER obtains.
+Changes since V2:
+- V2: https://lore.kernel.org/lkml/cover.1680038771.git.reinette.chatre@intel.com/
+- During testing of V2 "kernel test robot" reported issues resulting from
+  include/linux/pci.h missing a stub for pci_msix_can_alloc_dyn() when
+  CONFIG_PCI_MSI=n. A separate fix was sent to address this. The fix can
+  be found in the kernel (since v6.3-rc7) as
+  commit 195d8e5da3ac ("PCI/MSI: Provide missing stub for pci_msix_can_alloc_dyn()")
+- Biggest change is the transition to "active contexts" for both MSI and MSI-X.
+  Interrupt contexts have always been allocated when the interrupts are
+  allocated while they are only used while interrupts are
+  enabled. In this series interrupt contexts are made dynamic, while doing
+  so their allocation is moved to match how they are used: allocated when
+  interrupts are enabled. Whether a Linux interrupt number exists determines
+  whether an interrupt can be enabled.
+  Previous policy (up to V2) that an allocated interrupt has an interrupt
+  context no longer applies. Instead, an interrupt context has a
+  handler/trigger, aka "active contexts". (Alex)
+- Re-ordered patches in support of "active contexts".
+- Only free interrupts on MSI-X teardown and otherwise use the
+  allocated interrupts as a cache. (Alex)
+- Using unsigned int for the vector broke the unwind loop within
+  vfio_msi_set_block(). (Alex)
+- Introduce new "has_dyn_msix" property of virtual device instead of
+  querying support every time. (Alex)
+- Some smaller changes, please refer to individual patches.
 
-Thanks for taking a look!
+Changes since RFC V1:
+- RFC V1: https://lore.kernel.org/lkml/cover.1678911529.git.reinette.chatre@intel.com/
+- Improved changelogs.
+- Simplify interface so that vfio_irq_ctx_alloc_single() returns pointer to
+  allocated context. (Alex)
+- Remove vfio_irq_ctx_range_allocated() and associated attempts to maintain
+  invalid error path behavior. (Alex and Kevin)
+- Add pointer to interrupt context as function parameter to
+  vfio_irq_ctx_free(). (Alex)
+- Ensure variables are initialized. (Dan Carpenter)
+- Only support dynamic allocation if device supports it. (Alex)
 
-To elaborate, p_miniq is a pointer of pointer of struct mini_Qdisc,
-initialized in ingress_init() to point to eth0->miniq_ingress, which
-isn't private to A or B.
+Qemu allocates interrupts incrementally at the time the guest unmasks an
+interrupt, for example each time a Linux guest runs request_irq().
 
-In other words, both A->miniqp->p_miniq and B->miniqp->p_miniq point to
-eth0->miniq_ingress.
+Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
+This prompted Qemu to, when allocating a new interrupt, first release all
+previously allocated interrupts (including disable of MSI-X) followed
+by re-allocation of all interrupts that includes the new interrupt.
+Please see [2] for a detailed discussion about this issue.
 
-For your reference, roughly speaking, mini_qdisc_pair_swap() does this:
+Releasing and re-allocating interrupts may be acceptable if all
+interrupts are unmasked during device initialization. If unmasking of
+interrupts occur during runtime this may result in lost interrupts.
+For example, consider an accelerator device with multiple work queues,
+each work queue having a dedicated interrupt. A work queue can be
+enabled at any time with its associated interrupt unmasked while other
+work queues are already active. Having all interrupts released and MSI-X
+disabled to enable the new work queue will impact active work queues.
 
-  miniq_old = dev->miniq_ingress;
+This series builds on the recent interrupt sub-system core changes
+that added support for dynamic MSI-X allocation after initial MSI-X
+enabling.
 
-  if (destroying) {
-          dev->miniq_ingress = NULL;
-  } else {
-          rcu_wait();
-          dev->miniq_ingress = miniq_new;
-  }
+Add support for dynamic MSI-X allocation to vfio-pci. A flag
+indicating lack of support for dynamic allocation already exist:
+VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
+support for dynamic MSI-X the flag is cleared for MSI-X when supported,
+enabling Qemu to modify its behavior.
 
-  if (miniq_old)
-          miniq_old->rcu_state = ...
+Any feedback is appreciated
 
-On Wed 26 Apr 2023 at 16:42, Peilin Ye <yepeilin.cs@gmail.com> wrote:
->  Thread 1               A's refcnt   Thread 2
->   RTM_NEWQDISC (A, locked)
->    qdisc_create(A)               1
->    qdisc_graft(A)                9
->
->   RTM_NEWTFILTER (X, lockless)
->    __tcf_qdisc_find(A)          10
->    tcf_chain0_head_change(A)
->  ! mini_qdisc_pair_swap(A)
+Reinette
 
-  1. A adds its first filter,
-     miniq_old (eth0->miniq_ingress) is NULL,
-     RCU wait starts,
-     RCU wait ends,
-     change eth0->miniq_ingress to A's mini Qdisc.
+[1] commit 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
+[2] https://lore.kernel.org/kvm/MWHPR11MB188603D0D809C1079F5817DC8C099@MWHPR11MB1886.namprd11.prod.outlook.com/#t
 
->             |                        RTM_NEWQDISC (B, locked)
->             |                    2    qdisc_graft(B)
->             |                    1    notify_and_destroy(A)
->             |
->             |                        RTM_NEWTFILTER (Y, lockless)
->             |                         tcf_chain0_head_change(B)
->             |                       ! mini_qdisc_pair_swap(B)
+Reinette Chatre (11):
+  vfio/pci: Consolidate irq cleanup on MSI/MSI-X disable
+  vfio/pci: Remove negative check on unsigned vector
+  vfio/pci: Prepare for dynamic interrupt context storage
+  vfio/pci: Move to single error path
+  vfio/pci: Use xarray for interrupt context storage
+  vfio/pci: Remove interrupt context counter
+  vfio/pci: Update stale comment
+  vfio/pci: Use bitfield for struct vfio_pci_core_device flags
+  vfio/pci: Probe and store ability to support dynamic MSI-X
+  vfio/pci: Support dynamic MSI-X
+  vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for MSI-X
 
-                      2. B adds its first filter,
-                         miniq_old (eth0->miniq_ingress) is A's mini Qdisc,
-                         RCU wait starts,
+ drivers/vfio/pci/vfio_pci_core.c  |   8 +-
+ drivers/vfio/pci/vfio_pci_intrs.c | 298 ++++++++++++++++++++----------
+ include/linux/vfio_pci_core.h     |  26 +--
+ include/uapi/linux/vfio.h         |   3 +
+ 4 files changed, 221 insertions(+), 114 deletions(-)
 
->    tcf_block_release(A)          0             |
->    qdisc_destroy(A)                            |
->    tcf_chain0_head_change_cb_del(A)            |
->  ! mini_qdisc_pair_swap(A)                     |
 
-  3. A destroys itself,
-     miniq_old (eth0->miniq_ingress) is A's mini Qdisc,
-     (destroying, so no RCU wait)
-     change eth0->miniq_ingress to NULL,
-     update miniq_old, or A's mini Qdisc's RCU state,
-     A is freed.
-
-                      2. RCU wait ends,
-		         change eth0->miniq_ingress to B's mini Qdisc,
-	 use-after-free: update miniq_old, or A's mini Qdisc's RCU state.
-
-I hope this helps.  Sorry I didn't go into details; this UAF isn't the
-only thing that is unacceptable here:
-
-Consider B.  We add a filter Y to B, expecting ingress packets on eth0
-to go through Y.  Then all of a sudden, A sets eth0->miniq_ingress to
-NULL during its destruction, so packets will not find Y at all on
-datapath (sch_handle_ingress()).  New filter becomes invisible - this is
-already buggy enough :-/
-
-So I think B's first call to mini_qdisc_pair_swap() should happen after
-A's last call (in ingress_destroy()), which is what I am trying to
-achieve here.
-
-Thanks,
-Peilin Ye
+base-commit: 6a8f57ae2eb07ab39a6f0ccad60c760743051026
+-- 
+2.34.1
 
