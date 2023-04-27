@@ -2,139 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DED6EFF74
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 04:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715866EFF76
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242709AbjD0C6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 22:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S242714AbjD0DEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbjD0C6Q (ORCPT
+        with ESMTP id S233414AbjD0DD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 22:58:16 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266931FCE;
-        Wed, 26 Apr 2023 19:58:15 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-18f16bb1a9bso1662340fac.1;
-        Wed, 26 Apr 2023 19:58:15 -0700 (PDT)
+        Wed, 26 Apr 2023 23:03:59 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661CA35A4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:03:56 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5286344e1d4so3340939a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682564294; x=1685156294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682564635; x=1685156635;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dt12pza0kSqr2v/SyPGEEMbF6AGPcE5T8sVhWjoTuNo=;
-        b=PXbRbj/hqLIMG7XcL+7o/0g5pwQ8mX2GCONQE8Hy8VMJndcsn9gZRBM9OvNcwcFNDg
-         bIHFxJQ3oY21rCZ8ujcOTmXrVDEVPWwQQTHbm/E9TI+we0j0zv79E+DPqka570z+F8Gn
-         7+M7ZvrlpdQH+vMOSbOKYM/gsp5VEsCcPlHMn+1a0rywWHcxljl2yUOVIbWHFdRIUcW+
-         dMg2UP09vjd4UuknFAytWQO22a3R+OnjrY3WjcU+vkwoRf/qLXE10hv9TaAEt9yuAOXb
-         xSkAdzV6qAQbqXYxYuu8iniGAhXWlw4XwYWWx5l8zyTsoK5dddzJTLPsA4X0Ayt632Tl
-         Qsuw==
+        bh=1A14gXOIzQ8LsUnpCV+kWBAJ4ogPDSbb3KQJ7ZlYIxs=;
+        b=CGxwL2vk3j0Yl7BI3W9SYPNrRmdSJVZdUm4BiiDFB+Ar6LcG0PXNyNuBzpYQyaxTse
+         XLXQdoVu8xdTnD1fad777iUEp5YoLGOoyTII71EtG/J9igUkFPj0ke6NNWW7gGEcxNKk
+         2F34Ua6ky7fmEE2GSc9QNDRkjbo99IK+Szn5r03o8nJiUEHNoZPtDruWmgdQ0FjLb44E
+         jdemBlMJ+EYcgbdFl8in/JMoBsKdirR2hhczuH4Bq8or+GOvtBosIuoOd8X7chVIyk9O
+         B5yRHTYy4TVPMXmdY8WIfVd/o96m31vJ2eC5gmO9QHkdDf7yYAEgRg2Oed/c0u67mZ+D
+         qnHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682564294; x=1685156294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682564635; x=1685156635;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Dt12pza0kSqr2v/SyPGEEMbF6AGPcE5T8sVhWjoTuNo=;
-        b=dLuZBldOUe8SGe63acQQxzfH/1OZAyPeLOZAsmz+rZeddq6uOBsHcj26afHHRytgUD
-         GZMGYb5NpeAH2LKf374TFOp5PnhcnMqTY3rLvUW/DVZxyR3uKIGUX2TOB9ZT1Qee+RiL
-         5rXUeEBowEtWPljQsLLyloJizbNThWqydTjIxsyTTuvSewgMiYKhhdKv+ROi7PnBozNl
-         e+WlO6zAZA/qJdAmHt1mjmUIv3UJ93jzHg4z0zN0hgHUgBlj3Il+P/aLIr0EpNiK4Sdf
-         IjGjHshq6M7XGdHo+LAWBEVqrsqMaKCrVDGc85eFjcT7ASxDd0SNCE06fpafYF3GJVzB
-         GIOg==
-X-Gm-Message-State: AC+VfDxELzJfUDoHHQXP2oDgEJL0m9nTkRwivNKKARMnKP/SCFPnqd5G
-        Qy+lav3nF23wwpV5dPNXOKKmJxtQ6NocKorlgng=
-X-Google-Smtp-Source: ACHHUZ4ndjHDeEx3LzsOZ9y2jCjKuTk3OrazJpvPy+BXVbdRZERtqrGyjkPlHuYilwC4gi0Rlm8dT7IIPmivIkNS+Ss=
-X-Received: by 2002:a05:6820:627:b0:547:6a8d:67b2 with SMTP id
- e39-20020a056820062700b005476a8d67b2mr263521oow.0.1682564294378; Wed, 26 Apr
- 2023 19:58:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329125558.255239-1-juri.lelli@redhat.com>
- <20230329125558.255239-3-juri.lelli@redhat.com> <fa585497-5c6d-f0ed-bdda-c71a81d315ad@redhat.com>
- <ZEkRq9iGkYP/8T5w@localhost.localdomain> <d53a8af3-46e7-fe6e-5cdd-0421796f80d2@redhat.com>
-In-Reply-To: <d53a8af3-46e7-fe6e-5cdd-0421796f80d2@redhat.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Thu, 27 Apr 2023 10:58:03 +0800
-Message-ID: <CAB8ipk-ns=d+jNkKi1sjkSQmQidziCj34COkHZt6ZkRiG47HHA@mail.gmail.com>
-Subject: Re: [PATCH 2/6] sched/cpuset: Bring back cpuset_mutex
-To:     Waiman Long <longman@redhat.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        =?UTF-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
-        zhiguo.niu@uniissoc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=1A14gXOIzQ8LsUnpCV+kWBAJ4ogPDSbb3KQJ7ZlYIxs=;
+        b=j+dbX9ykNpzqO98QOE64+dTrriEvZ/syxUy5uWkwrjjZSsLUHsu6geky5jMuNgkQ2V
+         g8156SxL+agt2ivbbYJz4CkOF2etxIQCNQI4wWlxsOEeSeTP3ImURNO1MTBQr7g2JHoq
+         81fnVxee0SKUthkqBvHLxV0pO/tWFzYsuIez3nfqRrUVrq9dLZkgV/oThGTSoNvQl+ap
+         xyrzlj5mLOYpjZWVfyUTotGAbCKoBtyRMt3T77JgEXK9b2S3yHTb29qC6lmxsw7jY8Wj
+         B1yzy0VihHPey8mjTchF2IPN9KgQbUlKR26b7kZnac8ERKKY9W5HgKoDYnfhUrW/qAYy
+         eZMA==
+X-Gm-Message-State: AC+VfDy7iqiMnoxwFwxwuLYaw3SAU1gLu5w9NCaKSIA8nD+mjcXlv3S+
+        TI+BqdmO477i1+qf2/xUbs1H4MzFurY=
+X-Google-Smtp-Source: ACHHUZ5NkADkq+bFRhb0WRAgEgeVe3ol89Kb4ts/o7en2zRirP5e/NpezlHp2j9+TAoMVPZxAHratg==
+X-Received: by 2002:a17:90b:313:b0:247:2ff9:1cff with SMTP id ay19-20020a17090b031300b002472ff91cffmr306271pjb.25.1682564635110;
+        Wed, 26 Apr 2023 20:03:55 -0700 (PDT)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id f24-20020a63f118000000b0051b7d83ff22sm10380506pgi.80.2023.04.26.20.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 20:03:54 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
+Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
+        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
+Subject: [PATCH] erofs: do not build pcpubuf.c for uncompressed data
+Date:   Thu, 27 Apr 2023 11:03:46 +0800
+Message-Id: <20230427030346.5624-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Juri,
+From: Yue Hu <huyue2@coolpad.com>
 
-Would this patch be merged tobe stable-rc? In kernel5.15, we also find
-that the rwsem would be blocked for a long  time, when we change the
-task's cpuset cgroup.
-And when we revert to the mutex, the delay would disappear.
+The function of pcpubuf.c is just for low-latency decompression
+algorithms (e.g. lz4).
 
-BR
-Thanks!
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ fs/erofs/Makefile   |  4 ++--
+ fs/erofs/internal.h | 12 +++++++-----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-On Wed, Apr 26, 2023 at 10:50=E2=80=AFPM Waiman Long <longman@redhat.com> w=
-rote:
->
-> On 4/26/23 07:57, Juri Lelli wrote:
-> > On 04/04/23 13:31, Waiman Long wrote:
-> >> On 3/29/23 08:55, Juri Lelli wrote:
-> >>> Turns out percpu_cpuset_rwsem - commit 1243dc518c9d ("cgroup/cpuset:
-> >>> Convert cpuset_mutex to percpu_rwsem") - wasn't such a brilliant idea=
-,
-> >>> as it has been reported to cause slowdowns in workloads that need to
-> >>> change cpuset configuration frequently and it is also not implementin=
-g
-> >>> priority inheritance (which causes troubles with realtime workloads).
-> >>>
-> >>> Convert percpu_cpuset_rwsem back to regular cpuset_mutex. Also grab i=
-t
-> >>> only for SCHED_DEADLINE tasks (other policies don't care about stable
-> >>> cpusets anyway).
-> >>>
-> >>> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> >> I am thinking that maybe we should switch the percpu rwsem to a regula=
-r
-> >> rwsem as there are cases where a read lock is sufficient. This will al=
-so
-> >> avoid the potential PREEMPT_RT problem with PI and reduce the time it =
-needs
-> >> to take a write lock.
-> > I'm not a big fan of rwsems for reasons like
-> > https://lore.kernel.org/lkml/20230321161140.HMcQEhHb@linutronix.de/, so
-> > I'd vote for a standard mutex unless we have a strong argument and/or
-> > numbers.
->
-> That is fine for me too.
->
-> Cheers,
-> Longman
->
+diff --git a/fs/erofs/Makefile b/fs/erofs/Makefile
+index 99bbc597a3e9..a3a98fc3e481 100644
+--- a/fs/erofs/Makefile
++++ b/fs/erofs/Makefile
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ obj-$(CONFIG_EROFS_FS) += erofs.o
+-erofs-objs := super.o inode.o data.o namei.o dir.o utils.o pcpubuf.o sysfs.o
++erofs-objs := super.o inode.o data.o namei.o dir.o utils.o sysfs.o
+ erofs-$(CONFIG_EROFS_FS_XATTR) += xattr.o
+-erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o
++erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o pcpubuf.o
+ erofs-$(CONFIG_EROFS_FS_ZIP_LZMA) += decompressor_lzma.o
+ erofs-$(CONFIG_EROFS_FS_ONDEMAND) += fscache.o
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index af0431a40647..65dbfa76f854 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -472,11 +472,6 @@ static inline void *erofs_vm_map_ram(struct page **pages, unsigned int count)
+ 	return NULL;
+ }
+ 
+-void *erofs_get_pcpubuf(unsigned int requiredpages);
+-void erofs_put_pcpubuf(void *ptr);
+-int erofs_pcpubuf_growsize(unsigned int nrpages);
+-void __init erofs_pcpubuf_init(void);
+-void erofs_pcpubuf_exit(void);
+ 
+ int erofs_register_sysfs(struct super_block *sb);
+ void erofs_unregister_sysfs(struct super_block *sb);
+@@ -512,6 +507,11 @@ int z_erofs_load_lz4_config(struct super_block *sb,
+ 			    struct z_erofs_lz4_cfgs *lz4, int len);
+ int z_erofs_map_blocks_iter(struct inode *inode, struct erofs_map_blocks *map,
+ 			    int flags);
++void *erofs_get_pcpubuf(unsigned int requiredpages);
++void erofs_put_pcpubuf(void *ptr);
++int erofs_pcpubuf_growsize(unsigned int nrpages);
++void __init erofs_pcpubuf_init(void);
++void erofs_pcpubuf_exit(void);
+ #else
+ static inline void erofs_shrinker_register(struct super_block *sb) {}
+ static inline void erofs_shrinker_unregister(struct super_block *sb) {}
+@@ -529,6 +529,8 @@ static inline int z_erofs_load_lz4_config(struct super_block *sb,
+ 	}
+ 	return 0;
+ }
++static inline void erofs_pcpubuf_init(void) {}
++static inline void erofs_pcpubuf_exit(void) {}
+ #endif	/* !CONFIG_EROFS_FS_ZIP */
+ 
+ #ifdef CONFIG_EROFS_FS_ZIP_LZMA
+-- 
+2.17.1
+
