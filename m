@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36E46F0B5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF506F0B60
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244102AbjD0RsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
+        id S244243AbjD0Rs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243737AbjD0Rr7 (ORCPT
+        with ESMTP id S233796AbjD0RsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:47:59 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7584ED2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:47:35 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-24736790966so7378143a91.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:47:35 -0700 (PDT)
+        Thu, 27 Apr 2023 13:48:20 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E29449A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:48:00 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3ef36d814a5so775431cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:48:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682617650; x=1685209650;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AowLft9EBX5gUxctKSIUsNiudl4F28FeVro2d7oaOEM=;
-        b=K4EdX966gif7u1ukpy0llJYHxfFkYWdfFwMYcKVy6usRHt/PkkR2YDimen8qEqOwE8
-         fGzRXODQ5CUo/tjE5+XIHaBeRBSqAYhjo9uObcaIaNjCodLXxRbWT9aG3cBAoPuBk5OL
-         mNdKOFueqrBJqJbPEXDVDz55E7hKGLTusoanE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682617650; x=1685209650;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1682617679; x=1685209679;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AowLft9EBX5gUxctKSIUsNiudl4F28FeVro2d7oaOEM=;
-        b=cvE4HYy4+yW1+JjBRCjnKv9ilW711Sn9I5ZAoJKpRML1+lTbRfa/6xvNqzVB3q+A8m
-         V3xZOXs+ZOcwXXCFHiuAWobbQz+r/trxa8YxzkBX4VY8bLae96MGiAeVFGyr/iScTD81
-         E3qSRsD6MKafuOpvWCdwheJ5FcWpQ8LPGi2/I4h9NLy8xex5SQg1UPVXnDK1Qqy+JZvv
-         12bYv6elvvmkP5K0rTdcyzGj7G0cWpbEwSKtNL7JxNXxPeyAylt6TI5iG2bo2sd5RETP
-         rhQkdYhorx2nZURgFuO8lxflIxB1DapRG3c/x1brLn25NHI+0nPa8jWKO7bksc6fg9TB
-         8imQ==
-X-Gm-Message-State: AC+VfDxl/49FYmG/mJa+51QIDDtA9073DEm9C3/b87t0iE7NGfC9xdPt
-        XgS40CgyoTYYDocAUHZ2YoNZGQ==
-X-Google-Smtp-Source: ACHHUZ7oDO17oEmp71hXDgibg5WFVW2Jl6Z+LeyB/FPq2+qXtjm2demldilHFox1tX28JgToNRGZYA==
-X-Received: by 2002:a17:90b:3e82:b0:246:c223:14ab with SMTP id rj2-20020a17090b3e8200b00246c22314abmr2645491pjb.41.1682617650051;
-        Thu, 27 Apr 2023 10:47:30 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:17bc:8fd4:f9e:3e41])
-        by smtp.gmail.com with ESMTPSA id fv23-20020a17090b0e9700b0023d0290afbdsm13597610pjb.4.2023.04.27.10.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 10:47:29 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 10:47:27 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] wifi: mwifiex: Use list_count_nodes()
-Message-ID: <ZEq1L4LAXvY6yXbw@google.com>
-References: <e77ed7f719787cb8836a93b6a6972f4147e40bc6.1682537509.git.christophe.jaillet@wanadoo.fr>
+        bh=fkY9b1ZD8QmBU/3LOAHMuKOQUldjjMuMq8rdAWwPjIg=;
+        b=Lrq1f4JBoMLciZuhEJXD6iSGdMotUaoFNM5njsugrmbmE2AhJhcZsw7hTIkU868DwX
+         /FqaYbbyjt98V4FHYNhV6l135E083xIkmRatoHvB8FYydZ5gnwOXduw+gjwSL4+Faa6+
+         gzBevtKeaWngpCi+WHH863Ds7PAqvw/pBKcpvuguko2589Vp0kKJb0qILEbrxURB+9ll
+         C11wj8cccug0WlR4/nKcyaKvRCpL0O9N6hkfEtHOsgNCwyTITC1UWsmZwI57eiQzWwNp
+         vloV5KugvpHcQPKx+rbVa/nRr2YbHmkE4KhHRAYP97kmIP+coN867AvdbQlN1o2H2Z8r
+         e51A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682617679; x=1685209679;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fkY9b1ZD8QmBU/3LOAHMuKOQUldjjMuMq8rdAWwPjIg=;
+        b=AoVF31I0cGDFUUveCMb2RIy2GPj/i2cHY0fRi/Mqey/UvVEteZh8WExrPdYb6+YuMY
+         iJpqOa1l4yfUVtnqwRxhGnYM59saS8K9D4BM3cSkwlltdGlUVkngop/jbGysgK8xfAyI
+         lrq9QwtmA/gDmZdG09QTOzIVNXMsd0PRk9OlZ+ud1vPHK+JwaB7gS2K76tPqWLMLbRMP
+         Z7fjqw9f9DjA9TAK1D7meVkSCT1/Iys1hTWXRA1txfTlWBUzI1UjrsGcLwGGo4Oq5gwg
+         /rwKtFo2fl2FhDRI7O8s/wR785ZhPUXAnfdJmm/U4Cb4J1HH3osUm0htDkQjCboki0/p
+         8/Hw==
+X-Gm-Message-State: AC+VfDwLcwu3YAOAjnKWuHrq79ySqaY0DuM5eIkvb8POYlt4By40AkoE
+        /5I0iE5ha9n2H/DDFJyPssYUOC6zWkIzm31d6bM5Tw==
+X-Google-Smtp-Source: ACHHUZ5DrWgfAfBOlDWXVSrI+oj6EOY6bJ1qymVeZ+McKOJ5tyYr7iKb+VXDMQ8aB39oUK1ae5itMCcCQmhDxMA+eAw=
+X-Received: by 2002:a05:622a:1a03:b0:3de:1aaa:42f5 with SMTP id
+ f3-20020a05622a1a0300b003de1aaa42f5mr339663qtb.15.1682617679238; Thu, 27 Apr
+ 2023 10:47:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e77ed7f719787cb8836a93b6a6972f4147e40bc6.1682537509.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <0000000000003f3d9a05f56fcac5@google.com> <000000000000b4f18805fa54b9f7@google.com>
+In-Reply-To: <000000000000b4f18805fa54b9f7@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 27 Apr 2023 19:47:47 +0200
+Message-ID: <CANp29Y4pMRV8ATp+Xb4qAap=m0ruUnNzSgwSbVqomp-FJvTdVg@mail.gmail.com>
+Subject: Re: [syzbot] [kernfs?] WARNING: suspicious RCU usage in mas_start
+To:     syzbot <syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com>
+Cc:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+        david@redhat.com, gregkh@linuxfoundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 09:32:36PM +0200, Christophe JAILLET wrote:
-> mwifiex_wmm_list_len() is the same as list_count_nodes(), so use the latter
-> instead of hand writing it.
-> 
-> Turn 'ba_stream_num' and 'ba_stream_max' in size_t to keep the same type
-> as what is returned by list_count_nodes().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/net/wireless/marvell/mwifiex/11n.h |  4 ++--
->  drivers/net/wireless/marvell/mwifiex/wmm.h | 15 ---------------
->  2 files changed, 2 insertions(+), 17 deletions(-)
+On Thu, Apr 27, 2023 at 7:31=E2=80=AFPM syzbot
+<syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 6db504ce55bdbc575723938fc480713c9183f6a2
+> Author: Liam R. Howlett <Liam.Howlett@oracle.com>
+> Date:   Wed Mar 8 22:03:10 2023 +0000
+>
+>     mm/ksm: fix race with VMA iteration and mm_struct teardown
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1674715fc8=
+0000
+> start commit:   f3a2439f20d9 Merge tag 'rproc-v6.3' of git://git.kernel.o=
+r..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Ddd442ddf29eac=
+a0c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd79e205d463e603=
+f47ff
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12cfaf1cc80=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D149edbf0c8000=
+0
+>
+> If the result looks correct, please mark the issue as fixed by replying w=
+ith:
+>
+> #syz fix: mm/ksm: fix race with VMA iteration and mm_struct teardown
 
-FWIW:
-
-Reviewed-by: Brian Norris <briannorris@chromium.org>
+Seems reasonable.
+#syz fix: mm/ksm: fix race with VMA iteration and mm_struct teardown
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
+ion
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/000000000000b4f18805fa54b9f7%40google.com.
