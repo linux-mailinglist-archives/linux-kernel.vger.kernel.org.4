@@ -2,124 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689786F0C38
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A506F0C3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244414AbjD0TBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
+        id S244555AbjD0TCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244173AbjD0TBV (ORCPT
+        with ESMTP id S244173AbjD0TCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:01:21 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED40421B;
-        Thu, 27 Apr 2023 12:01:18 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so6790787e87.2;
-        Thu, 27 Apr 2023 12:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682622077; x=1685214077;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xV2YAsXnqJOfUPWjxJCvcfAyBJMrkTcR9Pqblefq9RU=;
-        b=I+sgCr7aA+Slw3AlYi53LO5wloydXK2ilcqCqUFdaqjO4CrNyj/OlHk06wDjJdvG5N
-         VtsqTbOxUWMRA/J2bWkcxKhI/9OOquAHPwlEolR2ebBGNYR/Kw6bp8bk/5KvVQwS3Tnj
-         nOqmvUBlTqkK3YOZSB5jMa0VEXYAnnO7/jsUiX6Chj6+9tD3zRJNLuQ4HWxB4Obi23Gc
-         IV278ExMvFRuxqYDXBwBZktgExZTGvR3k9qMqEZnQbyUh3sYOCP0dyBnY9RK7IXGErK0
-         5mgi9li7BwHpQbyu84p//KzO/M4CG0AFUsCEvi2lkYI2PKC0p+P+6YyfvJfR1i4oV1nT
-         WZfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682622077; x=1685214077;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xV2YAsXnqJOfUPWjxJCvcfAyBJMrkTcR9Pqblefq9RU=;
-        b=almSugRxazHD8UZzbxDBcRx+ippaWGuhVeB0HrkuSvgZtV9qXaSSIm2OSha2mT7zHP
-         lNdgPXqWfYC9raOMtP9aowYkUElvja4H9Jrx0feH6qoq7j+doreSKSkbycPzdNpx1GzH
-         LhEG4ZAA9ok3px7rdoRSVouAh9eXEMYTwG+XAmCFWFOo2TmmpvQisZCkHXgaiNtU+hB9
-         Dy8gfycdFFm8Tfqe+f/xdf6udvCuSVrCBUhpDU0ghoU0zSG0xt27cMHKOyqN1dLEHPCr
-         1E5CNjffuwja74q/+LMQtKUqAlKR0Glcfs+dr3IIghpKruLvDv7LbHkxiBnB0SC1TSf8
-         jPtw==
-X-Gm-Message-State: AC+VfDxFeCZSZdPmcFkRlxZRqrN+kRHJDDfvAyTV+NGm9eeYr8lcaItA
-        U5APO2fdeIPIjYUox9GbPy+hqoQrYvDfmA==
-X-Google-Smtp-Source: ACHHUZ7BHztPtrElhYsjUgAKeiaqIWyISizxgSVGLhH9jVMnO9Wtesf/mijV4OjteX/uwOafhm6AnQ==
-X-Received: by 2002:a05:6512:14a:b0:4ea:fa87:7a8a with SMTP id m10-20020a056512014a00b004eafa877a8amr958745lfo.37.1682622076775;
-        Thu, 27 Apr 2023 12:01:16 -0700 (PDT)
-Received: from [10.0.0.100] (host-85-29-92-32.kaisa-laajakaista.fi. [85.29.92.32])
-        by smtp.gmail.com with ESMTPSA id l7-20020ac24a87000000b004edb981dfe7sm3050914lfp.172.2023.04.27.12.01.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 12:01:16 -0700 (PDT)
-Message-ID: <1deaf8c0-0be6-1afe-9a91-ae93ba8a21d9@gmail.com>
-Date:   Thu, 27 Apr 2023 22:01:43 +0300
+        Thu, 27 Apr 2023 15:02:14 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5250540F8;
+        Thu, 27 Apr 2023 12:02:13 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RGRYXP004680;
+        Thu, 27 Apr 2023 19:01:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=MWYCRorc+5qFturYuAgDFOqaOMvMNx+CZjv4+Nmgt+U=;
+ b=XtJdvhgF0XiYweHNOUzKehmkI/W0gSPMUq0I+bW386xPf2qkIOFUIx8mPh+dzuG8WGiv
+ mHOK8BTHqKVFSbZ8Nosceze4f4aFRLXInCVtPkKLx1lnWqlTDg81ip0nS9I1ZGOnw7Nf
+ W5E2ELX1OBCkQ6wn4Dayi6XgF/ztqQjgotIG+3P7Vnx+jqB714y8Zj85qZ27iwh/1WDS
+ 4S+U4yIQbUmdPWHaWoUmqs3qP7pbJwqcrjNMrTHPZAMl7RhzQySoTIZdPpCkL4aAsfDE
+ pRSGuFmpe1c6lyPBcN+tC1zVoESMen8KAUpuUwdC1IwN0O9vkkXWIoym/z2nphMhazU4 uQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7kux9ta7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 19:01:57 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RJ1uBe015101
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 19:01:56 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 27 Apr 2023 12:01:56 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH] usb: host: xhci: Avoid XHCI resume delay if SSUSB device is not present
+Date:   Thu, 27 Apr 2023 12:01:45 -0700
+Message-ID: <20230427190145.4623-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH] dmaengine: ti: k3-psil-j721s2: Add PSI-L thread map
- for main CPSW2G
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com
-References: <20230426083900.102229-1-s-vadapalli@ti.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20230426083900.102229-1-s-vadapalli@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KCXQsZmCbDjIOibSInAAH4zMwvegzaf8
+X-Proofpoint-GUID: KCXQsZmCbDjIOibSInAAH4zMwvegzaf8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 mlxlogscore=649 phishscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270166
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a 120ms delay implemented for allowing the XHCI host controller to
+detect a U3 wakeup pulse.  The intention is to wait for the device to retry
+the wakeup event if the USB3 PORTSC doesn't reflect the RESUME link status
+by the time it is checked.  As per the USB3 specification:
 
+  tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts")
 
-On 26/04/2023 11:39, Siddharth Vadapalli wrote:
-> From: Kishon Vijay Abraham I <kishon@ti.com>
-> 
-> Add PSI-L thread map for main CPSW2G.
+This would allow the XHCI resume sequence to determine if the root hub
+needs to be also resumed.  However, in case there is no device connected,
+or if there is only a HSUSB device connected, this delay would still affect
+the overall resume timing.
 
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+Since this delay is solely for detecting U3 wake events (USB3 specific)
+then ignore this delay for the disconnected case and the HSUSB connected
+only case.
 
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
->   drivers/dma/ti/k3-psil-j721s2.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/dma/ti/k3-psil-j721s2.c b/drivers/dma/ti/k3-psil-j721s2.c
-> index a488c2250623..1d5430fc5724 100644
-> --- a/drivers/dma/ti/k3-psil-j721s2.c
-> +++ b/drivers/dma/ti/k3-psil-j721s2.c
-> @@ -99,6 +99,8 @@ static struct psil_ep j721s2_src_ep_map[] = {
->   	PSIL_PDMA_XY_PKT(0x461d),
->   	PSIL_PDMA_XY_PKT(0x461e),
->   	PSIL_PDMA_XY_PKT(0x461f),
-> +	/* MAIN_CPSW2G */
-> +	PSIL_ETHERNET(0x4640),
->   	/* PDMA_USART_G0 - UART0-1 */
->   	PSIL_PDMA_XY_PKT(0x4700),
->   	PSIL_PDMA_XY_PKT(0x4701),
-> @@ -161,6 +163,15 @@ static struct psil_ep j721s2_dst_ep_map[] = {
->   	PSIL_ETHERNET(0xf005),
->   	PSIL_ETHERNET(0xf006),
->   	PSIL_ETHERNET(0xf007),
-> +	/* MAIN_CPSW2G */
-> +	PSIL_ETHERNET(0xc640),
-> +	PSIL_ETHERNET(0xc641),
-> +	PSIL_ETHERNET(0xc642),
-> +	PSIL_ETHERNET(0xc643),
-> +	PSIL_ETHERNET(0xc644),
-> +	PSIL_ETHERNET(0xc645),
-> +	PSIL_ETHERNET(0xc646),
-> +	PSIL_ETHERNET(0xc647),
->   	/* SA2UL */
->   	PSIL_SA2UL(0xf500, 1),
->   	PSIL_SA2UL(0xf501, 1),
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/host/xhci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
--- 
-Péter
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 78790dc13c5f..7a86cd683502 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -834,7 +834,8 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
+ 	while (port_index--) {
+ 		portsc = readl(ports[port_index]->addr);
+ 		if (portsc & PORT_CHANGE_MASK ||
+-		    (portsc & PORT_PLS_MASK) == XDEV_RESUME)
++		    (portsc & PORT_PLS_MASK) == XDEV_RESUME ||
++		    !(portsc & PORT_CONNECT))
+ 			return true;
+ 	}
+ 	return false;
+@@ -1114,6 +1115,9 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		 * Resume roothubs only if there are pending events.
+ 		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
+ 		 * the first wake signalling failed, give it that chance.
++		 * Avoid this check if there are no devices connected to
++		 * the SS root hub (i.e. HS device connected or no device
++		 * connected)
+ 		 */
+ 		pending_portevent = xhci_pending_portevent(xhci);
+ 		if (!pending_portevent) {
