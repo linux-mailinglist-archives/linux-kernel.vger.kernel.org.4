@@ -2,108 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC8D6F0885
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 323446F0888
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244230AbjD0Pji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S244232AbjD0Pkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243808AbjD0Pjf (ORCPT
+        with ESMTP id S244051AbjD0Pkd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:39:35 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CA326BA;
-        Thu, 27 Apr 2023 08:39:34 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2a7af0cb2e6so84718461fa.0;
-        Thu, 27 Apr 2023 08:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682609972; x=1685201972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mEPxF/PqJY0e08prvcD7fi9mWw6obNqy1gzFbUzR2po=;
-        b=lRdZEz8tUvHufKvw/8Uy6P6MgnSrazF9xGwQG+eTE6NjUAkyFe82xh39kvYR5HsNk0
-         CnVDf2oWFX6YAFyEC8DqrI89RFbAhSlEKV/EhMn4608IUqju5ns26IITZEJrcGipm2ol
-         0EWhiiXtjfSYGOQ8MbyI4/K3nAUA3CWPoDX4RSaB1o+AZdelKIsUiIxvZR5GXxrridB8
-         Yp6/hc5MPkkCNAWgueotIA45gRQyitJQX/POW7oJxcMuRo6OwJpT3ML0NH+9/55NwK0M
-         IT0uiN7J8AUOZ+gf119TP2qNidB1sAnCnEF7beAORYWgPiW7VdFU4/1qocGf3BUiSPxY
-         2eCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682609972; x=1685201972;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mEPxF/PqJY0e08prvcD7fi9mWw6obNqy1gzFbUzR2po=;
-        b=iCl1/pygfm24nfV4yL8F5RgAH0wAmntERbF/5cDq9X2HUGZXiI+Mt1w88OMfm4v6iI
-         RuVr4Onup00YieAiDKi1gHwbtu16oc/mg7lgJYo2+Mfceximvz1xHoaKkepphxf+bNd2
-         /A95+MCiXYytRhofUC8WE6WboUBnZO0K7gddoJPDHS+3822iKfmtlwmulKvyG6/zNit4
-         riwM8KhwTTkWs/dh60pHL20I9JbqvqJJB6bcJuFvr/NmxZlfX8ii9iCLqrlK2PGFHdBv
-         krnWaLfMfQ9/q2P3x07BS7UOhK3f3+MPcIijDhS7mfslY5l4HTQ9qlmrdqm0+siNaVAv
-         /VHQ==
-X-Gm-Message-State: AC+VfDzOn994S6jngYDIYHoRrtB2gHDuH4ZPvdeeDQPuTyhSSULilz78
-        1Fm02xwyCsezQNS8e+hg+WO5Kvff49AnEGItpdY=
-X-Google-Smtp-Source: ACHHUZ4OADDpPg0FKf4M+BPdLzd4cYdkjKzL0CD+N4J6NSTjN7iwPQlTgwZkPGNP1cOiSANq58T4LQ9Giavo/OXJahk=
-X-Received: by 2002:a2e:9815:0:b0:2a8:c8c5:c769 with SMTP id
- a21-20020a2e9815000000b002a8c8c5c769mr752009ljj.36.1682609972345; Thu, 27 Apr
- 2023 08:39:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
- <20230427092628.21fd23e4@gandalf.local.home> <CALOAHbBX1C-eg93Hf3xPLsdsaBzoGn1pHh9jb3Z_-T-7HD60wA@mail.gmail.com>
- <20230427111842.2e40fe3c@gandalf.local.home> <CALOAHbDRSNvihv5n0jJpAsK3onezRRipO78RG3rAf3LGgkzYHg@mail.gmail.com>
- <20230427113602.0e49c0d1@gandalf.local.home>
-In-Reply-To: <20230427113602.0e49c0d1@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 27 Apr 2023 08:39:21 -0700
-Message-ID: <CAADnVQLaBMtBoSY4ZMgeTU1T-rrU6vPSU+xg1HmQpWnnE84sNw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 11:40:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8EA270F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:40:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05BFA61997
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:40:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69EC6C433D2;
+        Thu, 27 Apr 2023 15:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682610031;
+        bh=AGcuhYtNzFrux5McXEODTSUU7MEG3cba++PzlNvwJHY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gkkj4uS6Xr5q6sCOPxmK7/6j6Z3UY9DMRscXSv0jEBE5CuYHN1GyUyU6PUm2dTNrp
+         bDHspHF2HJWVZatZZULJJk08sm+z7D70EBSmQNzwQAA3l0h7bS6pL9jmfjDuHeblJ+
+         TSM/a6XpF1019Kra6vVO+362GmKVgFFBPBSXtd6gWZwS9Z7zcIBdXNnJxXcjI27vOK
+         cKlDKqYgHE9IMNL1cPpPvx0kctp2UJ5q981H6I5ssBDph/l3XBM/L/KcvV7G33QsjF
+         aQXO3PTowFzM0pvQ59G1gPMvLKlPl3f5bNyWAD5hkbgPSajO5Ms6k8lIieMCaunBf3
+         fGxTVddwAhMxQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 567E6C41677;
+        Thu, 27 Apr 2023 15:40:31 +0000 (UTC)
+Subject: Re: [git pull] drm next fixes for 6.4-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAPM=9tw2xUZQJkzmt5aj=F8erC3cv9aAB+KqTQgn7=B7D8haFA@mail.gmail.com>
+References: <CAPM=9tw2xUZQJkzmt5aj=F8erC3cv9aAB+KqTQgn7=B7D8haFA@mail.gmail.com>
+X-PR-Tracked-List-Id: Direct Rendering Infrastructure - Development
+ <dri-devel.lists.freedesktop.org>
+X-PR-Tracked-Message-Id: <CAPM=9tw2xUZQJkzmt5aj=F8erC3cv9aAB+KqTQgn7=B7D8haFA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+X-PR-Tracked-Commit-Id: cf03e2956af307dc25e8c41fd4cffe44482a6ec1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 32f7ad0fbe7521de2a5e8f79c33d46110247fd7c
+Message-Id: <168261003134.27650.4473474129707548062.pr-tracker-bot@kernel.org>
+Date:   Thu, 27 Apr 2023 15:40:31 +0000
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 8:36=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Thu, 27 Apr 2023 23:23:31 +0800
-> Yafang Shao <laoar.shao@gmail.com> wrote:
->
-> > > But I thought you can run a bpf_prog from another bpf_prog. So you do=
-n't
-> > > want to prevent it. You need other logic to detect if it was not supp=
-ose to
-> > > recurs.
-> > >
-> >
-> > If so, we have to keep the prog->active to prevent it, then I'm not
-> > sure if it is worth adding test_recursion_*().
->
-> I thought that the whole point of this exercise was because the
-> migrate_disable() itself could be traced (or call something that can), an=
-d
-> that's outside of prog->active protection. Which the test_recursion_*()
-> code was created for.
+The pull request you sent on Thu, 27 Apr 2023 11:43:17 +1000:
 
-Not sure where did this come from.
-migrate_enable/disable were added to deny list back in 2021.
+> git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/32f7ad0fbe7521de2a5e8f79c33d46110247fd7c
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
