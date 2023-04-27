@@ -2,78 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F7C6F0646
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9688D6F0667
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243850AbjD0M7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S243555AbjD0NL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 09:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243467AbjD0M7O (ORCPT
+        with ESMTP id S243404AbjD0NLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:59:14 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D340114;
-        Thu, 27 Apr 2023 05:59:13 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-187ba2311b7so6798381fac.1;
-        Thu, 27 Apr 2023 05:59:13 -0700 (PDT)
+        Thu, 27 Apr 2023 09:11:24 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279B430C5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:11:22 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so6577730a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682601080; x=1685193080;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfGyHH2PfPrfkbPBpy+bAVZIzfzjqiyX4dJ97CEcQ98=;
+        b=LGlb7KfKTetaiNx8nq8hjUb0MXHmPINSJwSoqGNA0s+/LSzKxdnYhI1vlWSScecZ9k
+         jNMs/WnEx3SxLSdRrSqUdiWJYyDVbdypZvroK8vHQol/hJv9/LwAXhwDWxpXh0XxN/mH
+         V8dEvpOp+t2j2gwcHVdgIzEfWLTKRb/5zkwfFmO+PhVBABlH4MI4gTLeis/+ra26SlFg
+         OmlHWqbOhIlkRZOU0ImB5gFHzjEElhWaKrnprfQ27U/9Y+TgQkK4J6feEYPHM+Md9XyU
+         FaRvhunDRmc2yW0RkkFKYHu8Q3zJcRZIy5R26DwnFWeaLK7qmU20lFOF9+2Pj09ztQyT
+         2a6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682600352; x=1685192352;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HUbPdbUEVpRefm2WfWskYSbK+SXXTuHP7NPaiEMvPts=;
-        b=A73eeN/W8yDdt2Zi6OmWVrtgU7rFihEgYZyOLOLDajwSN6GHClEm2d1oX+wJHER3ru
-         kXUQBLTtdym8Iv6CmK2vebjOT/cGgWeQx4gooYEWEVQLBR8UZFmhJlGiypuMdELn682Q
-         /swhS72dzf0dD/GhplQy5yF8s8AkiRHiI0SZnJSLC/N3ZvYQU8JUHlLVypwLPVIgcKQ5
-         j/Y0s8xMrFmDcdMD21I7AcvQ20ByIS1ZLV40t/Xt7QJqhCI7R/DcWhd9loxEmPNFibWB
-         ObxFCKHFt8PM+w0RhiJsyS6T188x4ThwGvE71E2D2MhunEroSvuNjzCc9hQujNtosfdx
-         mHQA==
-X-Gm-Message-State: AC+VfDxKiYqH4WwGEFpXSwgWz3yPNSHASn+RmHlA1QCNABcYH8mnwEYX
-        lHp19IkGRK6S5hxChAl36w==
-X-Google-Smtp-Source: ACHHUZ52RxEUsGzJRl0FVcWtJTnOarMAM4mqAjabzs0f9nVhPzVogtD3GWscFZ0vmQl9W64kv0mFEQ==
-X-Received: by 2002:a05:6870:e151:b0:184:534f:5e7 with SMTP id z17-20020a056870e15100b00184534f05e7mr716676oaa.35.1682600352377;
-        Thu, 27 Apr 2023 05:59:12 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x12-20020a056820104c00b00524f381f681sm6239540oot.27.2023.04.27.05.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 05:59:11 -0700 (PDT)
-Received: (nullmailer pid 2812630 invoked by uid 1000);
-        Thu, 27 Apr 2023 12:59:10 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        d=1e100.net; s=20221208; t=1682601080; x=1685193080;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bfGyHH2PfPrfkbPBpy+bAVZIzfzjqiyX4dJ97CEcQ98=;
+        b=f0Jb2ud+43Ucc02UBwOuKbE4svrn3hrDpu1xk6JfJZpNkntUlqOGinbR7hSZtrJDT1
+         2DyT/Z0is0aoZMllp8UQ7Mue18coTzBiraEC8mjAoaI+B0rzhOLWioqTtfCgT6mT7sH3
+         uCNMaERcxcXsf8WygFwy1ZFyU51Hs78lEtsAxtS8ESKC10fK0mLpw1kEgTUvAEx1Nxhh
+         Qq7BslGFJ9KDFQzrwMVZfA4B6oc2XE3SpStyqeek0fHBObWvc4VpC6e9aHoDT9Q/dLxl
+         PjaPVTNMwhSrfOpizpj08cWxFLUu3jmJeljBGQ8+C4AGnZOoNLztX8X3wkJ128Yq2nl1
+         zcYg==
+X-Gm-Message-State: AC+VfDxBW7VynuZLeE+4jGCGszIXkO7sT9NyXGGsdZIJOYY6l5O4tgRO
+        HqG9jWZ1zPaq9L5UsX5/VOrr6g==
+X-Google-Smtp-Source: ACHHUZ6hVTIRGQCEx219U2/y5EcPf/pvENXLICV19fheSZjd50j2Y4tyz3ajAGBq+d00Ei+IDurZDw==
+X-Received: by 2002:a17:906:728e:b0:94e:6eb3:abc4 with SMTP id b14-20020a170906728e00b0094e6eb3abc4mr6184980ejl.4.1682601080416;
+        Thu, 27 Apr 2023 06:11:20 -0700 (PDT)
+Received: from [172.23.2.82] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id y21-20020a17090614d500b0094b87711c9fsm9657296ejc.99.2023.04.27.06.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 06:11:20 -0700 (PDT)
+Message-ID: <d1850d73-9d92-c0aa-7cf8-bae4c0e4144b@linaro.org>
+Date:   Thu, 27 Apr 2023 15:11:19 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Tao Zhang <quic_taozha@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        coresight@lists.linaro.org, andersson@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 5/7] phy: qcom-qmp-combo: Introduce drm_bridge
+Content-Language: en-US
+To:     Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <1682586037-25973-2-git-send-email-quic_taozha@quicinc.com>
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
- <1682586037-25973-2-git-send-email-quic_taozha@quicinc.com>
-Message-Id: <168259999089.2806154.10932222963358704695.robh@kernel.org>
-Subject: Re: [PATCH v4 01/11] dt-bindings: arm: Add support for DSB element
- size
-Date:   Thu, 27 Apr 2023 07:59:10 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+ <20230425034010.3789376-6-quic_bjorande@quicinc.com>
+ <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,43 +88,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 26/04/2023 12:33, Bryan O'Donoghue wrote:
+> On Tue, Apr 25, 2023 at 4:40 AM Bjorn Andersson
+> <quic_bjorande@quicinc.com> wrote:
+>>
+>> The QMP combo PHY sits in an of_graph connected between the DisplayPort
+>> controller and a USB Type-C connector (or possibly a redriver).
+>>
+>> The TCPM needs to be able to convey the HPD signal to the DisplayPort
+>> controller, but no directly link is provided by DeviceTree so the signal
+>> needs to "pass through" the QMP combo phy.
+>>
+>> Handle this by introducing a drm_bridge which upon initialization finds
+>> the next bridge (i.e. the usb-c-connector) and chain this together. This
+>> way HPD changes in the connector will propagate to the DisplayPort
+>> driver.
+>>
+>> The connector bridge is resolved lazily, as the TCPM is expected to be
+>> able to resolve the typec mux and switch at probe time, so the QMP combo
+>> phy will probe before the TCPM.
+>>
+>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>> ---
+>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 36 +++++++++++++++++++++++
+>>   1 file changed, 36 insertions(+)
+>>
+>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>> index 5d6d6ef3944b..84bc08002537 100644
+>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>> @@ -22,6 +22,8 @@
+>>   #include <linux/usb/typec.h>
+>>   #include <linux/usb/typec_mux.h>
+>>
+>> +#include <drm/drm_bridge.h>
+>> +
+>>   #include <dt-bindings/phy/phy-qcom-qmp.h>
+>>
+>>   #include "phy-qcom-qmp.h"
+>> @@ -1332,6 +1334,8 @@ struct qmp_combo {
+>>          struct clk_hw dp_link_hw;
+>>          struct clk_hw dp_pixel_hw;
+>>
+>> +       struct drm_bridge bridge;
+>> +
+>>          struct typec_switch_dev *sw;
+>>          enum typec_orientation orientation;
+>>   };
+>> @@ -3196,6 +3200,34 @@ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *
+>>          return devm_add_action_or_reset(qmp->dev, phy_clk_release_provider, dp_np);
+>>   }
+>>
+>> +static int qmp_combo_bridge_attach(struct drm_bridge *bridge,
+>> +                                  enum drm_bridge_attach_flags flags)
+>> +{
+>> +       struct qmp_combo *qmp = container_of(bridge, struct qmp_combo, bridge);
+>> +       struct drm_bridge *next_bridge;
+>> +
+>> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
+>> +               return -EINVAL;
+>> +
+>> +       next_bridge = devm_drm_of_get_bridge(qmp->dev, qmp->dev->of_node, 0, 0);
+>> +       if (IS_ERR(next_bridge))
+>> +               return dev_err_probe(qmp->dev, PTR_ERR(next_bridge), "failed to acquire drm_bridge\n");
+>> +
+>> +       return drm_bridge_attach(bridge->encoder, next_bridge, bridge, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>> +}
+>> +
+>> +static const struct drm_bridge_funcs qmp_combo_bridge_funcs = {
+>> +       .attach = qmp_combo_bridge_attach,
+>> +};
+>> +
+>> +static int qmp_combo_dp_register_bridge(struct qmp_combo *qmp)
+>> +{
+>> +       qmp->bridge.funcs = &qmp_combo_bridge_funcs;
+>> +       qmp->bridge.of_node = qmp->dev->of_node;
+>> +
+>> +       return devm_drm_bridge_add(qmp->dev, &qmp->bridge);
+>> +}
+>> +
+>>   static int qmp_combo_parse_dt_lecacy_dp(struct qmp_combo *qmp, struct device_node *np)
+>>   {
+>>          struct device *dev = qmp->dev;
+>> @@ -3459,6 +3491,10 @@ static int qmp_combo_probe(struct platform_device *pdev)
+>>          if (ret)
+>>                  return ret;
+>>
+>> +       ret = qmp_combo_dp_register_bridge(qmp);
+>> +       if (ret)
+>> +               return ret;
 
-On Thu, 27 Apr 2023 17:00:27 +0800, Tao Zhang wrote:
-> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
-> Bit) element for TPDM. The associated aggregator will read this
-> size before it is enabled. DSB element size currently only
-> supports 32-bit and 64-bit.
+I think the DRM part should be only built if CONFIG_DRM is enabled, I don't
+have a strong opinion on this, I think Vinod could help here.
+
+>> +
+>>          /* Check for legacy binding with child nodes. */
+>>          usb_np = of_get_child_by_name(dev->of_node, "usb3-phy");
+>>          if (usb_np) {
+>> --
+>> 2.39.2
+>>
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> You need to add some or all of these
+>         select DRM_DISPLAY_DP_HELPER
+>         select DRM_DISPLAY_HELPER
+>         select DRM_DP_AUX_BUS
+>         select DRM_KMS_HELPER
+>         select DRM_MIPI_DSI
+>         select DRM_PANEL
+> 
+> 
+> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
+> Unexpected GOT/PLT entries detected!
+> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
+> Unexpected run-time procedure linkages detected!
+> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function
+> `qmp_combo_bridge_attach':
+> phy-qcom-qmp-combo.c:(.text+0xb50): undefined reference to
+> `devm_drm_of_get_bridge'
+> phy-qcom-qmp-combo.c:(.text+0xb6c): undefined reference to `drm_bridge_attach'
+> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function `qmp_combo_probe':
+> phy-qcom-qmp-combo.c:(.text+0x13fc): undefined reference to
+> `devm_drm_bridge_add'
+
+I think CONFIG_DRM_PANEL_BRIDGE in addition to CONFIG_DRM. should be enough.
+
+With this config added and my drm-bridge hat:
+
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+Neil
+
+
+> 
 > ---
->  Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-qcom,dsb-element-size: size (1) error for type uint32
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.example.dtb: tpdm@684c000: qcom,dsb-element-size: size is 8, expected 32
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1682586037-25973-2-git-send-email-quic_taozha@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> bod
 
