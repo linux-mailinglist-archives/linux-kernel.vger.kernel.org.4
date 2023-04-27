@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D136EFE2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEA66EFE34
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242800AbjD0ALE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 20:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
+        id S242934AbjD0ALX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 20:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242697AbjD0AKK (ORCPT
+        with ESMTP id S242710AbjD0AKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 20:10:10 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6339D4205
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:10:09 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QGx6DB014740;
-        Thu, 27 Apr 2023 00:09:05 GMT
+        Wed, 26 Apr 2023 20:10:44 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791924483
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:10:16 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QGwmBj013734;
+        Thu, 27 Apr 2023 00:09:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2023-03-30;
- bh=BRj/3TfYOvjkwblw52yOiKUFYYErGZe4lSnIhVOYAHQ=;
- b=I0kieCx/ycmz6RyPLhJm3IfF3PB5a+grP7b67gzvPqQxqChV4KM13kJpH4NLc8WYyXDa
- +HkpypFJrv6T+eCnkED2zSuIUvWMPAb+iWJ9seI08TwfW5ljYnfb64PWbPHAkDeaET/f
- /+JXX0mOJcMdjWYEMts/G5L7goQwvnM5/sdXuanabg6U17uT0NmCk2zflQzG5/Jje5bR
- +L9PuDpzT8LMhnR5psLHEU4rL1aF8mXtHYck+n+gbbd8lEA7gdgdYT/2WNG8V5OlbCBt
- IFtMb3bwJfZczpej7ZgBCqoKnWLngowu4fDT+aIUW2g4j/jWoqxkI2Pp6vPpmb7zgd1L Cg== 
+ subject : date : message-id : in-reply-to : references; s=corp-2023-03-30;
+ bh=m5WZMJcDB0yDdPEBWmM9MnWGtmdsh6oAci435qRzgOU=;
+ b=QewotladiR+frxDMWZyUDcfpo/8nqkUiKnfHSRs9SL+UuWgOSwzwz6Xrj6GTL5w9DtxW
+ MsjduscPTtA/yoi3zzPoi++bDrBIHN5XH+yM6R4aRZgVRMh+Yn+wYEZctYXL2UHw5isz
+ SZLBRu9mDnChGTVbBWeKV9emv7S6ny2RHEUkysCK3/Bby+X4HpppPpaRGC6yBauLJ509
+ 9vjIT4OFeFr0q6EhWumjwXuxVRWx582ycuLwg7Zj/NgyunYsJp0eat6mXnRj5WXKjUyz
+ xHZNZdfR08moqTT7pVRXGXzUcoxSXd/0HnRaSj3A8t16cPPHaG5hUWiTMGDF5ASf3oX2 Kw== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q47fatmrd-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q47md2umn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 00:09:04 +0000
+        Thu, 27 Apr 2023 00:09:07 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QLgiYR007654;
-        Thu, 27 Apr 2023 00:09:04 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QMn2Cf007147;
+        Thu, 27 Apr 2023 00:09:06 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618mp8e-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618mp9f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 00:09:04 +0000
+        Thu, 27 Apr 2023 00:09:06 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33R0938M013888;
-        Thu, 27 Apr 2023 00:09:03 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33R0938O013888;
+        Thu, 27 Apr 2023 00:09:05 GMT
 Received: from ca-qasparc-x86-2.us.oracle.com (ca-qasparc-x86-2.us.oracle.com [10.147.24.103])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q4618mp42-1;
-        Thu, 27 Apr 2023 00:09:03 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q4618mp42-2;
+        Thu, 27 Apr 2023 00:09:05 +0000
 From:   Anthony Yznaga <anthony.yznaga@oracle.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
@@ -52,10 +52,12 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
         jason.zeng@intel.com, lei.l.li@intel.com,
         steven.sistare@oracle.com, fam.zheng@bytedance.com,
         mgalaxy@akamai.com, kexec@lists.infradead.org
-Subject: [RFC v3 00/21] Preserved-over-Kexec RAM
-Date:   Wed, 26 Apr 2023 17:08:36 -0700
-Message-Id: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
+Subject: [RFC v3 01/21] mm: add PKRAM API stubs and Kconfig
+Date:   Wed, 26 Apr 2023 17:08:37 -0700
+Message-Id: <1682554137-13938-2-git-send-email-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 1.9.4
+In-Reply-To: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
+References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-26_10,2023-04-26_03,2023-02-09_01
@@ -63,8 +65,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 ph
  mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
  definitions=main-2304270000
-X-Proofpoint-ORIG-GUID: kITeu-Uy-ebJonyaTei8eqLB7j2YAgRH
-X-Proofpoint-GUID: kITeu-Uy-ebJonyaTei8eqLB7j2YAgRH
+X-Proofpoint-GUID: oZBoD9zIKFev_Cz5qJgpsNFO-hW5IASo
+X-Proofpoint-ORIG-GUID: oZBoD9zIKFev_Cz5qJgpsNFO-hW5IASo
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -75,117 +77,382 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sending out this RFC in part to guage community interest.
-This patchset implements preserved-over-kexec memory storage or PKRAM as a
-method for saving memory pages of the currently executing kernel so that
-they may be restored after kexec into a new kernel. The patches are adapted
-from an RFC patchset sent out in 2013 by Vladimir Davydov [1]. They
-introduce the PKRAM kernel API.
+Preserved-across-kexec memory or PKRAM is a method for saving memory
+pages of the currently executing kernel and restoring them after kexec
+boot into a new one. This can be utilized for preserving guest VM state,
+large in-memory databases, process memory, etc. across reboot. While
+DRAM-as-PMEM or actual persistent memory could be used to accomplish
+these things, PKRAM provides the latency of DRAM with the flexibility
+of dynamically determining the amount of memory to preserve.
 
-One use case for PKRAM is preserving guest memory and/or auxillary
-supporting data (e.g. iommu data) across kexec to support reboot of the
-host with minimal disruption to the guest. PKRAM provides a flexible way
-for doing this without requiring that the amount of memory used by a fixed
-size created a priori.  Another use case is for databases to preserve their
-block caches in shared memory across reboot.
+The proposed API:
 
-Changes since RFC v2
-  - Rebased onto 6.3
-  - Updated API to save/load folios rather than file pages
-  - Omitted previous patches for implementing and optimizing preservation
-    and restoration of shmem files to reduce the number of patches and
-    focus on core functionality.
+ * Preserved memory is divided into nodes which can be saved or loaded
+   independently of each other. The nodes are identified by unique name
+   strings. A PKRAM node is created when save is initiated by calling
+   pkram_prepare_save(). A PKRAM node is removed when load is initiated by
+   calling pkram_prepare_load(). See below
 
-Changes since RFC v1
-  - Rebased onto 5.12-rc4
-  - Refined the API to reduce the number of calls
-    and better support multithreading.
-  - Allow preserving byte data of arbitrary length
-    (was previously limited to one page).
-  - Build a new memblock reserved list with the
-    preserved ranges and then substitute it for
-    the existing one. (Mike Rapoport)
-  - Use mem_avoid_overlap() to avoid kaslr stepping
-    on preserved ranges. (Kees Cook)
+ * A node is further divided into objects. An object represents closely
+   coupled data in the form of a grouping of folios and/or a stream of
+   byte data.  For example, the folios and attributes of a file.
+   After initiating an operation on a PKRAM node, PKRAM objects are
+   initialized for saving or loading by calling pkram_prepare_save_obj()
+   or pkram_prepare_load_obj().
 
--- Implementation details --
+ * For saving/loading data from a PKRAM node/object instances of the
+   pkram_stream and pkram_access structs are used.  pkram_stream tracks
+   the node and object being operated on while pkram_access tracks the
+   data type and position within an object.
 
- * To aid in quickly finding contiguous ranges of memory containing
-   preserved pages a pseudo physical mapping pagetable is populated
-   with pages as they are preserved.
+   The pkram_stream struct is initialized by calling pkram_prepare_save()
+   or pkram_prepare_load() and then pkram_prepare_save_obj() or
+   pkram_prepare_load_obj().
 
- * If a page to be preserved is found to be in range of memory that was
-   previously reserved during early boot or in range of memory where the
-   kernel will be loaded to on kexec, the page will be copied to a page
-   outside of those ranges and the new page will be preserved. A compound
-   page will be copied to and preserved as individual base pages.
-   Note that this means that a page that cannot be moved (e.g. pinned for
-   DMA) currently cannot safely be preserved. This could be addressed by
-   adding functionality to kexec to reconfigure the destination addreses
-   for the sections of an already-loaded kexec kernel.
+   Once a pkram_stream is fully initialized, a pkram_access struct
+   is initialized for each data type associated with the object.
+   After save or load of a data type for the object is complete,
+   pkram_finish_access() is called.
 
- * A single page is allocated for the PKRAM super block. For the next kernel
-   kexec boot to find preserved memory metadata, the pfn of the PKRAM super
-   block, which is exported via /sys/kernel/pkram, is passed in the 'pkram'
-   boot option.
+   After save or load is complete for the object, pkram_finish_save_obj()
+   or pkram_finish_load_obj() must be called followed by pkram_finish_save()
+   or pkram_finish_load() when save or load is completed for the node.
+   If an error occurred during save, the saved data and the PKRAM node
+   may be freed by calling pkram_discard_save() instead of
+   pkram_finish_save().
 
- * In the newly booted kernel, PKRAM adds all preserved pages to the memblock
-   reserve list during early boot so that they will not be recycled.
+ * Both folio data and byte data can separately be streamed to a PKRAM
+   object.  pkram_save_folio() and pkram_load_folio() are used
+   to stream folio data while pkram_write() and pkram_read() are used to
+   stream byte data.
 
- * Since kexec may load the new kernel code to any memory region, it could
-   destroy preserved memory. When the kernel selects the memory region
-   (kexec_file_load syscall), kexec will avoid preserved pages.  When the
-   user selects the kexec memory region to use (kexec_load syscall) , kexec
-   load will fail if there is conflict with preserved pages. Pages preserved
-   after a kexec kernel is loaded will be relocated if they conflict with
-   the selected memory region.
+A sequence of operations for saving/loading data from PKRAM would
+look like:
 
-[1] https://lkml.org/lkml/2013/7/1/211
+  * For saving data to PKRAM:
 
-Anthony Yznaga (21):
-  mm: add PKRAM API stubs and Kconfig
-  mm: PKRAM: implement node load and save functions
-  mm: PKRAM: implement object load and save functions
-  mm: PKRAM: implement folio stream operations
-  mm: PKRAM: implement byte stream operations
-  mm: PKRAM: link nodes by pfn before reboot
-  mm: PKRAM: introduce super block
-  PKRAM: track preserved pages in a physical mapping pagetable
-  PKRAM: pass a list of preserved ranges to the next kernel
-  PKRAM: prepare for adding preserved ranges to memblock reserved
-  mm: PKRAM: reserve preserved memory at boot
-  PKRAM: free the preserved ranges list
-  PKRAM: prevent inadvertent use of a stale superblock
-  PKRAM: provide a way to ban pages from use by PKRAM
-  kexec: PKRAM: prevent kexec clobbering preserved pages in some cases
-  PKRAM: provide a way to check if a memory range has preserved pages
-  kexec: PKRAM: avoid clobbering already preserved pages
-  mm: PKRAM: allow preserved memory to be freed from userspace
-  PKRAM: disable feature when running the kdump kernel
-  x86/KASLR: PKRAM: support physical kaslr
-  x86/boot/compressed/64: use 1GB pages for mappings
+    /* create a PKRAM node and do initial stream setup */
+    pkram_prepare_save()
 
- arch/x86/boot/compressed/Makefile       |    3 +
- arch/x86/boot/compressed/ident_map_64.c |    9 +-
- arch/x86/boot/compressed/kaslr.c        |   10 +-
- arch/x86/boot/compressed/misc.h         |   10 +
- arch/x86/boot/compressed/pkram.c        |  110 ++
- arch/x86/kernel/setup.c                 |    3 +
- arch/x86/mm/init_64.c                   |    3 +
- include/linux/pkram.h                   |  116 ++
- kernel/kexec.c                          |    9 +
- kernel/kexec_core.c                     |    3 +
- kernel/kexec_file.c                     |   15 +
- mm/Kconfig                              |    9 +
- mm/Makefile                             |    2 +
- mm/pkram.c                              | 1753 +++++++++++++++++++++++++++++++
- mm/pkram_pagetable.c                    |  375 +++++++
- 15 files changed, 2424 insertions(+), 6 deletions(-)
- create mode 100644 arch/x86/boot/compressed/pkram.c
+    /* create a PKRAM object associated with the PKRAM node and complete stream initialization */
+    pkram_prepare_save_obj()
+
+    /* save data to the node/object */
+    PKRAM_ACCESS(pa_folios,...)
+    PKRAM_ACCESS(pa_bytes,...)
+    pkram_save_folio(pa_folios,...)[,...]  /* for file folios */
+    pkram_write(pa_bytes,...)[,...]        /* for a byte stream */
+    pkram_finish_access(pa_folios)
+    pkram_finish_access(pa_bytes)
+
+    pkram_finish_save_obj()
+
+    /* commit the save or discard and delete the node */
+    pkram_finish_save()          /* on success, or
+    pkram_discard_save()          * ... in case of error */
+
+  * For loading data from PKRAM:
+
+    /* remove a PKRAM node from the list and do initial stream setup */
+    pkram_prepare_load()
+
+    /* Remove a PKRAM object from the node and complete stream initializtion for loading data from it. */
+    pkram_prepare_load_obj()
+
+    /* load data from the node/object */
+    PKRAM_ACCESS(pa_folios,...)
+    PKRAM_ACCESS(pa_bytes,...)
+    pkram_load_folio(pa_folios,...)[,...] /* for file folios */
+    pkram_read(pa_bytes,...)[,...]        /* for a byte stream */
+*/
+    pkram_finish_access(pa_folios)
+    pkram_finish_access(pa_bytes)
+
+    /* free the object */
+    pkram_finish_load_obj()
+
+    /* free the node */
+    pkram_finish_load()
+
+Originally-by: Vladimir Davydov <vdavydov.dev@gmail.com>
+Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+---
+ include/linux/pkram.h |  47 +++++++++++++
+ mm/Kconfig            |   9 +++
+ mm/Makefile           |   2 +
+ mm/pkram.c            | 179 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 237 insertions(+)
  create mode 100644 include/linux/pkram.h
  create mode 100644 mm/pkram.c
- create mode 100644 mm/pkram_pagetable.c
 
+diff --git a/include/linux/pkram.h b/include/linux/pkram.h
+new file mode 100644
+index 000000000000..57b8db4229a4
+--- /dev/null
++++ b/include/linux/pkram.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PKRAM_H
++#define _LINUX_PKRAM_H
++
++#include <linux/gfp.h>
++#include <linux/types.h>
++#include <linux/mm_types.h>
++
++/**
++ * enum pkram_data_flags - definition of data types contained in a pkram obj
++ * @PKRAM_DATA_none: No data types configured
++ */
++enum pkram_data_flags {
++	PKRAM_DATA_none		= 0x0,  /* No data types configured */
++};
++
++struct pkram_stream;
++struct pkram_access;
++
++#define PKRAM_NAME_MAX		256	/* including nul */
++
++int pkram_prepare_save(struct pkram_stream *ps, const char *name,
++		       gfp_t gfp_mask);
++int pkram_prepare_save_obj(struct pkram_stream *ps, enum pkram_data_flags flags);
++
++void pkram_finish_save(struct pkram_stream *ps);
++void pkram_finish_save_obj(struct pkram_stream *ps);
++void pkram_discard_save(struct pkram_stream *ps);
++
++int pkram_prepare_load(struct pkram_stream *ps, const char *name);
++int pkram_prepare_load_obj(struct pkram_stream *ps);
++
++void pkram_finish_load(struct pkram_stream *ps);
++void pkram_finish_load_obj(struct pkram_stream *ps);
++
++#define PKRAM_ACCESS(name, stream, type)			\
++	struct pkram_access name
++
++void pkram_finish_access(struct pkram_access *pa, bool status_ok);
++
++int pkram_save_folio(struct pkram_access *pa, struct folio *folio);
++struct folio *pkram_load_folio(struct pkram_access *pa, unsigned long *index);
++
++ssize_t pkram_write(struct pkram_access *pa, const void *buf, size_t count);
++size_t pkram_read(struct pkram_access *pa, void *buf, size_t count);
++
++#endif /* _LINUX_PKRAM_H */
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 4751031f3f05..10f089f4a181 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1202,6 +1202,15 @@ config LRU_GEN_STATS
+ 	  This option has a per-memcg and per-node memory overhead.
+ # }
+ 
++config PKRAM
++	bool "Preserved-over-kexec memory storage"
++	default n
++	help
++	  This option adds the kernel API that enables saving memory pages of
++	  the currently executing kernel and restoring them after a kexec in
++	  the newly booted one. This can be utilized for speeding up reboot by
++	  leaving process memory and/or FS caches in-place.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
+diff --git a/mm/Makefile b/mm/Makefile
+index 8e105e5b3e29..7a8d5a286d48 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -138,3 +138,5 @@ obj-$(CONFIG_IO_MAPPING) += io-mapping.o
+ obj-$(CONFIG_HAVE_BOOTMEM_INFO_NODE) += bootmem_info.o
+ obj-$(CONFIG_GENERIC_IOREMAP) += ioremap.o
+ obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
++obj-$(CONFIG_PKRAM) += pkram.o
++>>>>>>> mm: add PKRAM API stubs and Kconfig
+diff --git a/mm/pkram.c b/mm/pkram.c
+new file mode 100644
+index 000000000000..421de8211e05
+--- /dev/null
++++ b/mm/pkram.c
+@@ -0,0 +1,179 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/err.h>
++#include <linux/gfp.h>
++#include <linux/kernel.h>
++#include <linux/mm.h>
++#include <linux/pkram.h>
++#include <linux/types.h>
++
++/**
++ * Create a preserved memory node with name @name and initialize stream @ps
++ * for saving data to it.
++ *
++ * @gfp_mask specifies the memory allocation mask to be used when saving data.
++ *
++ * Returns 0 on success, -errno on failure.
++ *
++ * After the save has finished, pkram_finish_save() (or pkram_discard_save() in
++ * case of failure) is to be called.
++ */
++int pkram_prepare_save(struct pkram_stream *ps, const char *name, gfp_t gfp_mask)
++{
++	return -EINVAL;
++}
++
++/**
++ * Create a preserved memory object and initialize stream @ps for saving data
++ * to it.
++ *
++ * Returns 0 on success, -errno on failure.
++ *
++ * After the save has finished, pkram_finish_save_obj() (or pkram_discard_save()
++ * in case of failure) is to be called.
++ */
++int pkram_prepare_save_obj(struct pkram_stream *ps, enum pkram_data_flags flags)
++{
++	return -EINVAL;
++}
++
++/**
++ * Commit the object started with pkram_prepare_save_obj() to preserved memory.
++ */
++void pkram_finish_save_obj(struct pkram_stream *ps)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Commit the save to preserved memory started with pkram_prepare_save().
++ * After the call, the stream may not be used any more.
++ */
++void pkram_finish_save(struct pkram_stream *ps)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Cancel the save to preserved memory started with pkram_prepare_save() and
++ * destroy the corresponding preserved memory node freeing any data already
++ * saved to it.
++ */
++void pkram_discard_save(struct pkram_stream *ps)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Remove the preserved memory node with name @name and initialize stream @ps
++ * for loading data from it.
++ *
++ * Returns 0 on success, -errno on failure.
++ *
++ * After the load has finished, pkram_finish_load() is to be called.
++ */
++int pkram_prepare_load(struct pkram_stream *ps, const char *name)
++{
++	return -EINVAL;
++}
++
++/**
++ * Remove the next preserved memory object from the stream @ps and
++ * initialize stream @ps for loading data from it.
++ *
++ * Returns 0 on success, -errno on failure.
++ *
++ * After the load has finished, pkram_finish_load_obj() is to be called.
++ */
++int pkram_prepare_load_obj(struct pkram_stream *ps)
++{
++	return -EINVAL;
++}
++
++/**
++ * Finish the load of a preserved memory object started with
++ * pkram_prepare_load_obj() freeing the object and any data that has not
++ * been loaded from it.
++ */
++void pkram_finish_load_obj(struct pkram_stream *ps)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Finish the load from preserved memory started with pkram_prepare_load()
++ * freeing the corresponding preserved memory node and any data that has
++ * not been loaded from it.
++ */
++void pkram_finish_load(struct pkram_stream *ps)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Finish the data access to or from the preserved memory node and object
++ * associated with pkram stream access @pa.  The access must have been
++ * initialized with PKRAM_ACCESS().
++ */
++void pkram_finish_access(struct pkram_access *pa, bool status_ok)
++{
++	WARN_ON_ONCE(1);
++}
++
++/**
++ * Save folio @folio to the preserved memory node and object associated
++ * with pkram stream access @pa. The stream must have been initialized with
++ * pkram_prepare_save() and pkram_prepare_save_obj() and access initialized
++ * with PKRAM_ACCESS().
++ *
++ * Returns 0 on success, -errno on failure.
++ */
++int pkram_save_folio(struct pkram_access *pa, struct folio *folio)
++{
++	return -EINVAL;
++}
++
++/**
++ * Load the next folio from the preserved memory node and object associated
++ * with pkram stream access @pa. The stream must have been initialized with
++ * pkram_prepare_load() and pkram_prepare_load_obj() and access initialized
++ * with PKRAM_ACCESS().
++ *
++ * If not NULL, @index is initialized with the preserved mapping offset of the
++ * folio loaded.
++ *
++ * Returns the folio loaded or NULL if the node is empty.
++ *
++ * The folio loaded has its refcount incremented.
++ */
++struct folio *pkram_load_folio(struct pkram_access *pa, unsigned long *index)
++{
++	return NULL;
++}
++
++/**
++ * Copy @count bytes from @buf to the preserved memory node and object
++ * associated with pkram stream access @pa. The stream must have been
++ * initialized with pkram_prepare_save() and pkram_prepare_save_obj()
++ * and access initialized with PKRAM_ACCESS();
++ *
++ * On success, returns the number of bytes written, which is always equal to
++ * @count. On failure, -errno is returned.
++ */
++ssize_t pkram_write(struct pkram_access *pa, const void *buf, size_t count)
++{
++	return -EINVAL;
++}
++
++/**
++ * Copy up to @count bytes from the preserved memory node and object
++ * associated with pkram stream access @pa to @buf. The stream must have been
++ * initialized with pkram_prepare_load() and pkram_prepare_load_obj() and
++ * access initialized PKRAM_ACCESS().
++ *
++ * Returns the number of bytes read, which may be less than @count if the node
++ * has fewer bytes available.
++ */
++size_t pkram_read(struct pkram_access *pa, void *buf, size_t count)
++{
++	return 0;
++}
 -- 
 1.9.4
 
