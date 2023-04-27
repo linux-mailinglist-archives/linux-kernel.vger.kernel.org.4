@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDA46F0016
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD1A6F0021
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242728AbjD0EOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 00:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S242701AbjD0ES3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 00:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjD0EOt (ORCPT
+        with ESMTP id S229605AbjD0ES0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 00:14:49 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36946107;
-        Wed, 26 Apr 2023 21:14:48 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33R4Efan031374;
-        Wed, 26 Apr 2023 23:14:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682568881;
-        bh=xAjERUvYRTHSLxch3No3kEFC4BEqtB21qVD0snlUb5w=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=BP4iKz8TttOyH5zGxt/O0MkUkHO8YjSp1fOHktXhs2f8qzgj9teDZx3zWOxuPb34e
-         /hpXUpBQpfmramwwtG7ypYDBnEnnciAwjczxEmwNitL5um7tRu8PBu/ll1z7qtCrJf
-         16zt6/dXEXCwAF6j9KQUwmec7FiVBES3pcGfSAjs=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33R4Ef8a033316
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Apr 2023 23:14:41 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 26
- Apr 2023 23:14:40 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 26 Apr 2023 23:14:40 -0500
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33R4Eajg073378;
-        Wed, 26 Apr 2023 23:14:37 -0500
-Message-ID: <eb1052a9-dd1b-57f1-3223-720b7ea87088@ti.com>
-Date:   Thu, 27 Apr 2023 09:44:36 +0530
+        Thu, 27 Apr 2023 00:18:26 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D9C2D69;
+        Wed, 26 Apr 2023 21:18:23 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so2926111a12.1;
+        Wed, 26 Apr 2023 21:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682569102; x=1685161102;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywLAlcqyQvHluUwFQO9OTiWkldgfOgI7xaqjeiQU70k=;
+        b=eP3PsRBh4LThfm/B2qHH9aUGW3ldl4xCr3zvo1x0nlhzfn5AipMCJ8Z+vx/rgvii79
+         PuFXVkKvX2zHKnaZjK7dLBLa9PJeDYZ7TSGbv5wf3sauylor4tVTQqOYNzJaAP6htHWa
+         8jfcs5F4PlmgFylirtX8MpT2Nc8TcmHdRN5fHSm3mWGAGCj/zY1UR//xvlF882Uw5qAv
+         AGB2m6FmAH5QG3KzvQJbeDLeydcQM7OVcDH1zUm/YILaWWhg5EZROYKqJ7ZItxixUGsK
+         ODTvak+0J7QRd1nYThzhR1HXjKT+lATUD8SWW11DhpdTKRwpGTYgvZQ2cNHrpHgMOry8
+         WprA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682569102; x=1685161102;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywLAlcqyQvHluUwFQO9OTiWkldgfOgI7xaqjeiQU70k=;
+        b=V4uYcjnxK5mxoGyPHRx9GxE0lbLViIi+q1rfmFl7aAvm1PtxJ7QyZsOe44BvyLW/mv
+         snz8g4VFD/0ntJQkw7bfwFKXOEqGhkunAB62Os5oi5CkcYFwkdK/Ksf+CyPv6NnJN+mO
+         i4fE044wgi2HeEEziSzfyTXQI/c9a8Uq/T+6ZcSX56M4/SJTlCIQ3VooV5T0enq33VmR
+         fI19WMrjkjP4RAeifKLuf0kFTfiS4q9i/jxUzRTi/64Bge++3rOBFeU6h/VudLkSWE8I
+         k27+qWWMoJb6MSAKlVnYIFwW8yJWlaOKC13xcV8oeae6cp5M4KfzzgWqGvXF+EpQLzzM
+         gnBQ==
+X-Gm-Message-State: AC+VfDxJDzk/HzLe2a2eMir1EUhbvUV3NquV6b7XVrQQRknk9YtgNl+t
+        tr1eTiKMS4WsQU3CIB6XjCOwdXLus0JZb2egxfE=
+X-Google-Smtp-Source: ACHHUZ4gx0yHaEwwJfiMfzICPenX+Bjye26qFFKc4ujV3oc0Qo6zexrpA3fYqHHVSPmIEFQw4nTpvnStqk0H8b9ciE0=
+X-Received: by 2002:aa7:d559:0:b0:504:8a2b:b3c7 with SMTP id
+ u25-20020aa7d559000000b005048a2bb3c7mr447016edr.11.1682569101604; Wed, 26 Apr
+ 2023 21:18:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: Re: [RFC PATCH 2/2] arm64: dts: ti: k3-j721s2: Add overlay to enable
- main CPSW2G with GESI
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-References: <20230426105718.118806-1-s-vadapalli@ti.com>
- <20230426105718.118806-3-s-vadapalli@ti.com>
- <20230426130003.q2fotsm3b5r7hh27@ominous>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230426130003.q2fotsm3b5r7hh27@ominous>
+References: <20230418014037.2412394-1-drosen@google.com> <20230418014037.2412394-29-drosen@google.com>
+In-Reply-To: <20230418014037.2412394-29-drosen@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 26 Apr 2023 21:18:09 -0700
+Message-ID: <CAEf4Bzb+suNcvM_tXBmYMzG0j9EH9kPW4F_x1s6ZEM118=tAAw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 28/37] WIP: bpf: Add fuse_ops struct_op programs
+To:     Daniel Rosenberg <drosen@google.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-unionfs@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,86 +84,525 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 17, 2023 at 6:42=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
+> wrote:
+>
+> This introduces a new struct_op type: fuse_ops. This program set
+> provides pre and post filters to run around fuse-bpf calls that act
+> directly on the lower filesystem.
+>
+> The inputs are either fixed structures, or struct fuse_buffer's.
+>
+> These programs are not permitted to make any changes to these fuse_buffer=
+s
+> unless they create a dynptr wrapper using the supplied kfunc helpers.
+>
+> Fuse_buffers maintain additional state information that FUSE uses to
+> manage memory and determine if additional set up or checks are needed.
+>
+> Signed-off-by: Daniel Rosenberg <drosen@google.com>
+> ---
+>  include/linux/bpf_fuse.h          | 189 +++++++++++++++++++++++
+>  kernel/bpf/Makefile               |   4 +
+>  kernel/bpf/bpf_fuse.c             | 241 ++++++++++++++++++++++++++++++
+>  kernel/bpf/bpf_struct_ops_types.h |   4 +
+>  kernel/bpf/btf.c                  |   1 +
+>  kernel/bpf/verifier.c             |   9 ++
+>  6 files changed, 448 insertions(+)
+>  create mode 100644 kernel/bpf/bpf_fuse.c
+>
+> diff --git a/include/linux/bpf_fuse.h b/include/linux/bpf_fuse.h
+> index ce8b1b347496..780a7889aea2 100644
+> --- a/include/linux/bpf_fuse.h
+> +++ b/include/linux/bpf_fuse.h
+> @@ -30,6 +30,8 @@ struct fuse_buffer {
+>  #define BPF_FUSE_MODIFIED      (1 << 3) // The helper function allowed w=
+rites to the buffer
+>  #define BPF_FUSE_ALLOCATED     (1 << 4) // The helper function allocated=
+ the buffer
+>
+> +extern void *bpf_fuse_get_writeable(struct fuse_buffer *arg, u64 size, b=
+ool copy);
+> +
+>  /*
+>   * BPF Fuse Args
+>   *
+> @@ -81,4 +83,191 @@ static inline unsigned bpf_fuse_arg_size(const struct=
+ bpf_fuse_arg *arg)
+>         return arg->is_buffer ? arg->buffer->size : arg->size;
+>  }
+>
+> +struct fuse_ops {
+> +       uint32_t (*open_prefilter)(const struct bpf_fuse_meta_info *meta,
+> +                               struct fuse_open_in *in);
+> +       uint32_t (*open_postfilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               const struct fuse_open_in *in,
+> +                               struct fuse_open_out *out);
+> +
+> +       uint32_t (*opendir_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_open_in *in);
+> +       uint32_t (*opendir_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_open_in *in,
+> +                               struct fuse_open_out *out);
+> +
+> +       uint32_t (*create_open_prefilter)(const struct bpf_fuse_meta_info=
+ *meta,
+> +                               struct fuse_create_in *in, struct fuse_bu=
+ffer *name);
+> +       uint32_t (*create_open_postfilter)(const struct bpf_fuse_meta_inf=
+o *meta,
+> +                               const struct fuse_create_in *in, const st=
+ruct fuse_buffer *name,
+> +                               struct fuse_entry_out *entry_out, struct =
+fuse_open_out *out);
+> +
+> +       uint32_t (*release_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_release_in *in);
+> +       uint32_t (*release_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_release_in *in);
+> +
+> +       uint32_t (*releasedir_prefilter)(const struct bpf_fuse_meta_info =
+*meta,
+> +                               struct fuse_release_in *in);
+> +       uint32_t (*releasedir_postfilter)(const struct bpf_fuse_meta_info=
+ *meta,
+> +                               const struct fuse_release_in *in);
+> +
+> +       uint32_t (*flush_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_flush_in *in);
+> +       uint32_t (*flush_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_flush_in *in);
+> +
+> +       uint32_t (*lseek_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_lseek_in *in);
+> +       uint32_t (*lseek_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_lseek_in *in,
+> +                               struct fuse_lseek_out *out);
+> +
+> +       uint32_t (*copy_file_range_prefilter)(const struct bpf_fuse_meta_=
+info *meta,
+> +                               struct fuse_copy_file_range_in *in);
+> +       uint32_t (*copy_file_range_postfilter)(const struct bpf_fuse_meta=
+_info *meta,
+> +                               const struct fuse_copy_file_range_in *in,
+> +                               struct fuse_write_out *out);
+> +
+> +       uint32_t (*fsync_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_fsync_in *in);
+> +       uint32_t (*fsync_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_fsync_in *in);
+> +
+> +       uint32_t (*dir_fsync_prefilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               struct fuse_fsync_in *in);
+> +       uint32_t (*dir_fsync_postfilter)(const struct bpf_fuse_meta_info =
+*meta,
+> +                               const struct fuse_fsync_in *in);
+> +
+> +       uint32_t (*getxattr_prefilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               struct fuse_getxattr_in *in, struct fuse_=
+buffer *name);
+> +       // if in->size > 0, use value. If in->size =3D=3D 0, use out.
+> +       uint32_t (*getxattr_postfilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               const struct fuse_getxattr_in *in, const =
+struct fuse_buffer *name,
+> +                               struct fuse_buffer *value, struct fuse_ge=
+txattr_out *out);
+> +
+> +       uint32_t (*listxattr_prefilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               struct fuse_getxattr_in *in);
+> +       // if in->size > 0, use value. If in->size =3D=3D 0, use out.
+> +       uint32_t (*listxattr_postfilter)(const struct bpf_fuse_meta_info =
+*meta,
+> +                               const struct fuse_getxattr_in *in,
+> +                               struct fuse_buffer *value, struct fuse_ge=
+txattr_out *out);
+> +
+> +       uint32_t (*setxattr_prefilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               struct fuse_setxattr_in *in, struct fuse_=
+buffer *name,
+> +                                       struct fuse_buffer *value);
+> +       uint32_t (*setxattr_postfilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               const struct fuse_setxattr_in *in, const =
+struct fuse_buffer *name,
+> +                                       const struct fuse_buffer *value);
+> +
+> +       uint32_t (*removexattr_prefilter)(const struct bpf_fuse_meta_info=
+ *meta,
+> +                               struct fuse_buffer *name);
+> +       uint32_t (*removexattr_postfilter)(const struct bpf_fuse_meta_inf=
+o *meta,
+> +                               const struct fuse_buffer *name);
+> +
+> +       /* Read and Write iter will likely undergo some sort of change/ad=
+dition to handle changing
+> +        * the data buffer passed in/out. */
+> +       uint32_t (*read_iter_prefilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               struct fuse_read_in *in);
+> +       uint32_t (*read_iter_postfilter)(const struct bpf_fuse_meta_info =
+*meta,
+> +                               const struct fuse_read_in *in,
+> +                               struct fuse_read_iter_out *out);
+> +
+> +       uint32_t (*write_iter_prefilter)(const struct bpf_fuse_meta_info =
+*meta,
+> +                               struct fuse_write_in *in);
+> +       uint32_t (*write_iter_postfilter)(const struct bpf_fuse_meta_info=
+ *meta,
+> +                               const struct fuse_write_in *in,
+> +                               struct fuse_write_iter_out *out);
+> +
+> +       uint32_t (*file_fallocate_prefilter)(const struct bpf_fuse_meta_i=
+nfo *meta,
+> +                               struct fuse_fallocate_in *in);
+> +       uint32_t (*file_fallocate_postfilter)(const struct bpf_fuse_meta_=
+info *meta,
+> +                               const struct fuse_fallocate_in *in);
+> +
+> +       uint32_t (*lookup_prefilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               struct fuse_buffer *name);
+> +       uint32_t (*lookup_postfilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               const struct fuse_buffer *name,
+> +                               struct fuse_entry_out *out, struct fuse_b=
+uffer *entries);
+> +
+> +       uint32_t (*mknod_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_mknod_in *in, struct fuse_buf=
+fer *name);
+> +       uint32_t (*mknod_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_mknod_in *in, const str=
+uct fuse_buffer *name);
+> +
+> +       uint32_t (*mkdir_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_mkdir_in *in, struct fuse_buf=
+fer *name);
+> +       uint32_t (*mkdir_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_mkdir_in *in, const str=
+uct fuse_buffer *name);
+> +
+> +       uint32_t (*rmdir_prefilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               struct fuse_buffer *name);
+> +       uint32_t (*rmdir_postfilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               const struct fuse_buffer *name);
+> +
+> +       uint32_t (*rename2_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_rename2_in *in, struct fuse_b=
+uffer *old_name,
+> +                               struct fuse_buffer *new_name);
+> +       uint32_t (*rename2_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_rename2_in *in, const s=
+truct fuse_buffer *old_name,
+> +                               const struct fuse_buffer *new_name);
+> +
+> +       uint32_t (*rename_prefilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               struct fuse_rename_in *in, struct fuse_bu=
+ffer *old_name,
+> +                               struct fuse_buffer *new_name);
+> +       uint32_t (*rename_postfilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               const struct fuse_rename_in *in, const st=
+ruct fuse_buffer *old_name,
+> +                               const struct fuse_buffer *new_name);
+> +
+> +       uint32_t (*unlink_prefilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               struct fuse_buffer *name);
+> +       uint32_t (*unlink_postfilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               const struct fuse_buffer *name);
+> +
+> +       uint32_t (*link_prefilter)(const struct bpf_fuse_meta_info *meta,
+> +                               struct fuse_link_in *in, struct fuse_buff=
+er *name);
+> +       uint32_t (*link_postfilter)(const struct bpf_fuse_meta_info *meta=
+,
+> +                               const struct fuse_link_in *in, const stru=
+ct fuse_buffer *name);
+> +
+> +       uint32_t (*getattr_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_getattr_in *in);
+> +       uint32_t (*getattr_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_getattr_in *in,
+> +                               struct fuse_attr_out *out);
+> +
+> +       uint32_t (*setattr_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_setattr_in *in);
+> +       uint32_t (*setattr_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_setattr_in *in,
+> +                               struct fuse_attr_out *out);
+> +
+> +       uint32_t (*statfs_prefilter)(const struct bpf_fuse_meta_info *met=
+a);
+> +       uint32_t (*statfs_postfilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_statfs_out *out);
+> +
+> +       //TODO: This does not allow doing anything with path
+> +       uint32_t (*get_link_prefilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               struct fuse_buffer *name);
+> +       uint32_t (*get_link_postfilter)(const struct bpf_fuse_meta_info *=
+meta,
+> +                               const struct fuse_buffer *name);
+> +
+> +       uint32_t (*symlink_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_buffer *name, struct fuse_buf=
+fer *path);
+> +       uint32_t (*symlink_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_buffer *name, const str=
+uct fuse_buffer *path);
+> +
+> +       uint32_t (*readdir_prefilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               struct fuse_read_in *in);
+> +       uint32_t (*readdir_postfilter)(const struct bpf_fuse_meta_info *m=
+eta,
+> +                               const struct fuse_read_in *in,
+> +                               struct fuse_read_out *out, struct fuse_bu=
+ffer *buffer);
+> +
+> +       uint32_t (*access_prefilter)(const struct bpf_fuse_meta_info *met=
+a,
+> +                               struct fuse_access_in *in);
+> +       uint32_t (*access_postfilter)(const struct bpf_fuse_meta_info *me=
+ta,
+> +                               const struct fuse_access_in *in);
+> +
+> +       char name[BPF_FUSE_NAME_MAX];
+> +};
 
+Have you considered grouping this huge amount of callbacks into a
+smaller set of more generic callbacks where each callback would get
+enum argument specifying what sort of operation it is called for? This
+has many advantages, starting from not having to deal with struct_ops
+limits, ending with not needing to instantiate dozens of individual
+BPF programs.
 
-On 26/04/23 18:30, Nishanth Menon wrote:
-> On 16:27-20230426, Siddharth Vadapalli wrote:
->> From: Kishon Vijay Abraham I <kishon@ti.com>
->>
->> The MAIN CPSW2G instance of CPSW on J721S2 SoC can be enabled with the GESI
->> Expansion Board connected to the J7 Common-Proc-Board. Use the overlay
->> to enable this.
->>
->> Add alias for the MAIN CPSW2G port to enable kernel to fetch MAC address
->> directly from U-Boot.
->>
->> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>  arch/arm64/boot/dts/ti/Makefile               |  2 +
->>  .../dts/ti/k3-j721s2-evm-gesi-exp-board.dtso  | 83 +++++++++++++++++++
->>  2 files changed, 85 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
->>
->> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
->> index c83c9d772b81..13db9b8dbe1d 100644
->> --- a/arch/arm64/boot/dts/ti/Makefile
->> +++ b/arch/arm64/boot/dts/ti/Makefile
->> @@ -42,6 +42,7 @@ dtb-$(CONFIG_ARCH_K3) += k3-j721e-sk.dtb
->>  # Boards with J721s2 SoC
->>  dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
->>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->> +dtb-$(CONFIG_ARCH_K3) += k3-j721s2-evm-gesi-exp-board.dtbo
->>  
->>  # Boards with J784s4 SoC
->>  dtb-$(CONFIG_ARCH_K3) += k3-am69-sk.dtb
->> @@ -49,3 +50,4 @@ dtb-$(CONFIG_ARCH_K3) += k3-j784s4-evm.dtb
->>  
->>  # Enable support for device-tree overlays
->>  DTC_FLAGS_k3-am6548-iot2050-advanced-m2 += -@
->> +DTC_FLAGS_k3-j721s2-common-proc-board += -@
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso b/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
->> new file mode 100644
->> index 000000000000..2ec08754bf04
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-evm-gesi-exp-board.dtso
->> @@ -0,0 +1,83 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/**
->> + * DT Overlay for MAIN CPSW2G using GESI Expansion Board with J7 common processor board.
->> + *
-> 
-> product link please.
+E.g., for a lot of operations the difference between pre- and
+post-filter is in having in argument as read-only and maybe having
+extra out argument for post-filter. One way to unify such post/pre
+filters into one callback would be to record whether in has to be
+read-only  or read-write and not allow to create r/w dynptr for the
+former case. Pass bool or enum specifying if it's post or pre filter.
+For that optional out argument, you can simulate effectively the same
+by always supplying it, but making sure that out parameter is
+read-only and zero-sized, for example.
 
-Thank you for pointing it out. I will update this patch with the product link in
-the v2 RFC series.
+That would cut the number of callbacks in two, which I'd say still is
+not great :) I think it would be better still to have even larger
+groups of callbacks for whole families of operations with the same (or
+"unifiable") interface (domain experts like you would need to do an
+analysis here to see what makes sense to group, of course).
 
-> 
->> + * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
->> + */
->> +
->> +/dts-v1/;
->> +/plugin/;
->> +
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/net/ti-dp83867.h>
->> +
->> +#include "k3-pinctrl.h"
->> +
+We'll probably touch on that tomorrow at BPF office hours, but I
+wanted to point this out beforehand, so that you have time to think
+about it.
+
+> +
+>  #endif /* _BPF_FUSE_H */
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index 1d3892168d32..26a2e741ef61 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
 
 [...]
 
->> +
->> +&main_cpsw_port1 {
->> +	status = "okay";
->> +	phy-mode = "rgmii-rxid";
->> +	phy-handle = <&main_cpsw_phy0>;
->> +};
->> -- 
->> 2.25.1
->>
-> 
+> +__diag_push();
+> +__diag_ignore_all("-Wmissing-prototypes",
+> +                  "Global kfuncs as their definitions will be in BTF");
+> +void bpf_fuse_get_rw_dynptr(struct fuse_buffer *buffer, struct bpf_dynpt=
+r_kern *dynptr__uninit, u64 size, bool copy)
 
--- 
-Regards,
-Siddharth.
+not clear why size is passed from outside instead of instantiating
+dynptr with buffer->size? See [0] for bpf_dynptr_adjust and
+bpf_dynptr_clone that allow you to adjust buffer as necessary.
+
+As for the copy parameter, can you elaborate on the idea behind it?
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D741584&=
+state=3D*
+
+> +{
+> +       buffer->data =3D bpf_fuse_get_writeable(buffer, size, copy);
+> +       bpf_dynptr_init(dynptr__uninit, buffer->data, BPF_DYNPTR_TYPE_LOC=
+AL, 0, buffer->size);
+> +}
+> +
+> +void bpf_fuse_get_ro_dynptr(const struct fuse_buffer *buffer, struct bpf=
+_dynptr_kern *dynptr__uninit)
+
+these kfuncs probably should be more consistently named as
+bpf_dynptr_from_fuse_buffer_{ro,rw}() ?
+
+> +{
+> +       bpf_dynptr_init(dynptr__uninit, buffer->data, BPF_DYNPTR_TYPE_LOC=
+AL, 0, buffer->size);
+> +       bpf_dynptr_set_rdonly(dynptr__uninit);
+> +}
+> +
+> +uint32_t bpf_fuse_return_len(struct fuse_buffer *buffer)
+> +{
+> +       return buffer->size;
+
+you should be able to get this with bpf_dynptr_size() (once you create
+it from fuse_buffer).
+
+> +}
+> +__diag_pop();
+> +BTF_SET8_START(fuse_kfunc_set)
+> +BTF_ID_FLAGS(func, bpf_fuse_get_rw_dynptr)
+> +BTF_ID_FLAGS(func, bpf_fuse_get_ro_dynptr)
+> +BTF_ID_FLAGS(func, bpf_fuse_return_len)
+> +BTF_SET8_END(fuse_kfunc_set)
+> +
+> +static const struct btf_kfunc_id_set bpf_fuse_kfunc_set =3D {
+> +       .owner =3D THIS_MODULE,
+> +       .set =3D &fuse_kfunc_set,
+> +};
+> +
+> +static int __init bpf_fuse_kfuncs_init(void)
+> +{
+> +       return register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+> +                                        &bpf_fuse_kfunc_set);
+> +}
+> +
+> +late_initcall(bpf_fuse_kfuncs_init);
+> +
+> +static const struct bpf_func_proto *bpf_fuse_get_func_proto(enum bpf_fun=
+c_id func_id,
+> +                                                             const struc=
+t bpf_prog *prog)
+> +{
+> +       switch (func_id) {
+> +       default:
+> +               return bpf_base_func_proto(func_id);
+> +       }
+> +}
+> +
+> +static bool bpf_fuse_is_valid_access(int off, int size,
+> +                                   enum bpf_access_type type,
+> +                                   const struct bpf_prog *prog,
+> +                                   struct bpf_insn_access_aux *info)
+> +{
+> +       return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
+> +}
+> +
+> +const struct btf_type *fuse_buffer_struct_type;
+> +
+> +static int bpf_fuse_btf_struct_access(struct bpf_verifier_log *log,
+> +                                       const struct bpf_reg_state *reg,
+> +                                       int off, int size)
+> +{
+> +       const struct btf_type *t;
+> +
+> +       t =3D btf_type_by_id(reg->btf, reg->btf_id);
+> +       if (t =3D=3D fuse_buffer_struct_type) {
+> +               bpf_log(log,
+> +                       "direct access to fuse_buffer is disallowed\n");
+> +               return -EACCES;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct bpf_verifier_ops bpf_fuse_verifier_ops =3D {
+> +       .get_func_proto         =3D bpf_fuse_get_func_proto,
+
+you probably should be fine with just using bpf_tracing_func_proto as is
+
+> +       .is_valid_access        =3D bpf_fuse_is_valid_access,
+
+similarly, why custom no-op callback?
+
+> +       .btf_struct_access      =3D bpf_fuse_btf_struct_access,
+> +};
+> +
+> +static int bpf_fuse_check_member(const struct btf_type *t,
+> +                                  const struct btf_member *member,
+> +                                  const struct bpf_prog *prog)
+> +{
+> +       //if (is_unsupported(__btf_member_bit_offset(t, member) / 8))
+> +       //      return -ENOTSUPP;
+> +       return 0;
+> +}
+> +
+> +static int bpf_fuse_init_member(const struct btf_type *t,
+> +                                 const struct btf_member *member,
+> +                                 void *kdata, const void *udata)
+> +{
+> +       const struct fuse_ops *uf_ops;
+> +       struct fuse_ops *f_ops;
+> +       u32 moff;
+> +
+> +       uf_ops =3D (const struct fuse_ops *)udata;
+> +       f_ops =3D (struct fuse_ops *)kdata;
+> +
+> +       moff =3D __btf_member_bit_offset(t, member) / 8;
+> +       switch (moff) {
+> +       case offsetof(struct fuse_ops, name):
+> +               if (bpf_obj_name_cpy(f_ops->name, uf_ops->name,
+> +                                    sizeof(f_ops->name)) <=3D 0)
+> +                       return -EINVAL;
+> +               //if (tcp_ca_find(utcp_ca->name))
+> +               //      return -EEXIST;
+> +               return 1;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static int bpf_fuse_init(struct btf *btf)
+> +{
+> +       s32 type_id;
+> +
+> +       type_id =3D btf_find_by_name_kind(btf, "fuse_buffer", BTF_KIND_ST=
+RUCT);
+> +       if (type_id < 0)
+> +               return -EINVAL;
+> +       fuse_buffer_struct_type =3D btf_type_by_id(btf, type_id);
+> +
+
+see BTF_ID and BTF_ID_LIST uses for how to get ID for your custom
+well-known type
+
+> +       return 0;
+> +}
+> +
+> +static struct bpf_fuse_ops_attach *fuse_reg =3D NULL;
+> +
+
+[...]
