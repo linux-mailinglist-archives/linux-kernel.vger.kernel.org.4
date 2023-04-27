@@ -2,43 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21D46F03D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B1D6F03DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243446AbjD0J60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S243406AbjD0J7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243410AbjD0J6W (ORCPT
+        with ESMTP id S243136AbjD0J7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:58:22 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7637D4C0E;
-        Thu, 27 Apr 2023 02:58:19 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pryOG-0003kL-9j; Thu, 27 Apr 2023 11:58:16 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] arm64: dts: rockchip: fix nEXTRST on SOQuartz
-Date:   Thu, 27 Apr 2023 11:58:08 +0200
-Message-Id: <168258947019.413434.3793815124340047357.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230421152610.21688-1-frattaroli.nicolas@gmail.com>
-References: <20230421152610.21688-1-frattaroli.nicolas@gmail.com>
+        Thu, 27 Apr 2023 05:59:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6D41991
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:59:31 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f59fbe2cbso240940366b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1682589569; x=1685181569;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8NquWHEFbJKZX2gbSm4Ehemad7T4ozQG/E/WvhxNob8=;
+        b=XlLSkFPoXIiTsYTEuukgAkA+JWv9B9jsb3SEnA4LsIHV62THau9IkIKsB5MaB1EdVx
+         QVoQOLTQQNTMLIk2wWgNyPYvRAA0FeGSxpOVDo8J/rkz2s6sHaIrIEPKWDipRtDlmN2V
+         YTRkofG3cWrv2uK1De8el4VUG+cmoMuOc8feQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682589569; x=1685181569;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8NquWHEFbJKZX2gbSm4Ehemad7T4ozQG/E/WvhxNob8=;
+        b=jh06v1h/K2OLbmGPVKSPIjgcTxVcMGerE9lTGLBUNraij/89nyBwfVd4SaMXy4iUSh
+         kvQdK3UJHz8cZbTHWSsxylW+g3R2NcqHSzIU5ABS8o5Hbpx/3ENZTJ/ZIu+ZF0Zujkge
+         FfjdskOyRoAd/WHXzxkoO2NhV8rwixWykSSfPLisBE+lUElsz/xSX0zdWtnncoFdYwL1
+         Wv4hx9wQTgn4ysdYtTbf3QpIIK9u7k7njIjgrfp478VZVIG/7ZqVecL/IDA34vKVWTm5
+         6cP4mdjkij7kI/Uy0sPcGRGW+OkHAfy0algY8T3Q6+ISRzVzLXs/NlxJngDlOUWKg+NS
+         QwEA==
+X-Gm-Message-State: AC+VfDyn8mcXw8q1XjqGHGMndKd5ilEQ6sgE2zKBwhesWxnGmCCdDrUo
+        45zOslCJAHJVy4Qi2w/JPupZCg==
+X-Google-Smtp-Source: ACHHUZ4d1BKrQgAKmkNUl21rH106gG/B6sW+h7EYIFJ7ogoatFxrlwGLtuzu6/dr99r5TFK0aVvnqA==
+X-Received: by 2002:a17:906:64c4:b0:94f:4ec3:f0f5 with SMTP id p4-20020a17090664c400b0094f4ec3f0f5mr1012683ejn.4.1682589569485;
+        Thu, 27 Apr 2023 02:59:29 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b0094fa472a7c4sm9456005ejg.161.2023.04.27.02.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 02:59:29 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 11:59:27 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Mark Yacoub <markyacoub@chromium.org>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, seanpaul@chromium.org,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] drm: Create support for Write-Only property blob
+Message-ID: <ZEpHfxw5IhzGFStV@phenom.ffwll.local>
+Mail-Followup-To: Mark Yacoub <markyacoub@chromium.org>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, seanpaul@chromium.org,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20230421162749.360777-1-markyacoub@google.com>
+ <20230421162749.360777-2-markyacoub@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421162749.360777-2-markyacoub@google.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,27 +85,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023 17:26:10 +0200, Nicolas Frattaroli wrote:
-> In pre-production prototypes (of which I only know one person
-> having one, Peter Geis), GPIO0 pin A5 was tied to the SDMMC
-> power enable pin on the CM4 connector. On all production models,
-> this is not the case; instead, this pin is used for the nEXTRST
-> signal, and the SDMMC power enable pin is always pulled high.
+On Fri, Apr 21, 2023 at 12:27:47PM -0400, Mark Yacoub wrote:
+> From: Mark Yacoub <markyacoub@chromium.org>
 > 
-> Since everyone currently using the SOQuartz device trees will
-> want this change, it is made to the tree without splitting the
-> trees into two separate ones of which users will then inevitably
-> choose the wrong one.
+> [Why]
+> User space might need to inject data into the kernel without allowing it
+> to be read again by any user space.
+> An example of where this is particularly useful is secret keys fetched
+> by user space and injected into the kernel to enable content protection.
 > 
-> [...]
+> [How]
+> Create a DRM_MODE_CREATE_BLOB_WRITE_ONLY flag used by user space to
+> create a blob and mark the blob as write only.
+> On reading back the blob, data will be not be copied if it's a write
+> only blob
 
-Applied, thanks!
+This makes no sense at all, why would you want to disallow reading?
+Userspace already knows the key, there's not much point in hiding it from
+userspace?
 
-[1/1] arm64: dts: rockchip: fix nEXTRST on SOQuartz
-      commit: e5d8752e957872a844ed46736b15f30b08af6591
+Also for new uapi we need the igt patches and userspace, please link
+those.
+-Daniel
 
-As fix for 6.4
+> 
+> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> ---
+>  drivers/gpu/drm/drm_property.c | 3 ++-
+>  include/drm/drm_property.h     | 2 ++
+>  include/uapi/drm/drm_mode.h    | 6 ++++++
+>  3 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_property.c b/drivers/gpu/drm/drm_property.c
+> index dfec479830e49..afedf7109d002 100644
+> --- a/drivers/gpu/drm/drm_property.c
+> +++ b/drivers/gpu/drm/drm_property.c
+> @@ -765,7 +765,7 @@ int drm_mode_getblob_ioctl(struct drm_device *dev,
+>  	if (!blob)
+>  		return -ENOENT;
+>  
+> -	if (out_resp->length == blob->length) {
+> +	if (out_resp->length == blob->length && !blob->is_write_only) {
+>  		if (copy_to_user(u64_to_user_ptr(out_resp->data),
+>  				 blob->data,
+>  				 blob->length)) {
+> @@ -800,6 +800,7 @@ int drm_mode_createblob_ioctl(struct drm_device *dev,
+>  		ret = -EFAULT;
+>  		goto out_blob;
+>  	}
+> +	blob->is_write_only = out_resp->flags & DRM_MODE_CREATE_BLOB_WRITE_ONLY;
+>  
+>  	/* Dropping the lock between create_blob and our access here is safe
+>  	 * as only the same file_priv can remove the blob; at this point, it is
+> diff --git a/include/drm/drm_property.h b/include/drm/drm_property.h
+> index 65bc9710a4702..700782f021b99 100644
+> --- a/include/drm/drm_property.h
+> +++ b/include/drm/drm_property.h
+> @@ -205,6 +205,7 @@ struct drm_property {
+>   * 	&drm_mode_config.property_blob_list.
+>   * @head_file: entry on the per-file blob list in &drm_file.blobs list.
+>   * @length: size of the blob in bytes, invariant over the lifetime of the object
+> + * @is_write_only: user space can't read the blob data.
+>   * @data: actual data, embedded at the end of this structure
+>   *
+>   * Blobs are used to store bigger values than what fits directly into the 64
+> @@ -219,6 +220,7 @@ struct drm_property_blob {
+>  	struct list_head head_global;
+>  	struct list_head head_file;
+>  	size_t length;
+> +	bool is_write_only;
+>  	void *data;
+>  };
+>  
+> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
+> index 46becedf5b2fc..10403c9a73082 100644
+> --- a/include/uapi/drm/drm_mode.h
+> +++ b/include/uapi/drm/drm_mode.h
+> @@ -1168,6 +1168,9 @@ struct drm_format_modifier {
+>  	__u64 modifier;
+>  };
+>  
+> +#define DRM_MODE_CREATE_BLOB_WRITE_ONLY                                        \
+> +	(1 << 0) /* data of the blob can't be read by user space */
+> +
+>  /**
+>   * struct drm_mode_create_blob - Create New blob property
+>   *
+> @@ -1181,6 +1184,9 @@ struct drm_mode_create_blob {
+>  	__u32 length;
+>  	/** @blob_id: Return: new property ID. */
+>  	__u32 blob_id;
+> +	/** Flags for special handling. */
+> +	__u32 flags;
+> +	__u32 pad;
+>  };
+>  
+>  /**
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
+> 
 
-Best regards,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
