@@ -2,133 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B331B6F04DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F8B6F04E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243463AbjD0LT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S243152AbjD0LVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243561AbjD0LTs (ORCPT
+        with ESMTP id S243418AbjD0LU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:19:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A52E5277
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:19:46 -0700 (PDT)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682594385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w7SiOThIQ863K6oJvVNAv7De2opm8Uk3DJjr8iS90qc=;
-        b=oZYijA09gs1W+HixBhBUTywY91zPkNMZlMSfNHnaMbMWBseV8AYEnY8zYx9B5isQZHVMCX
-        wpkZtNYaHOVxJUJv+gSd7PBNmFI0uW3UmwnF1ZQNVLN1D7Cdqtzy9kGlOC88T2wMKycg7D
-        +GpP+cfi5IupFM7/tyvniKKryq9KV/+B7ln8iCcSZMM+W4JOa4P9PqDljCFZpoYTwkPLYk
-        Rv0dTfXJSG5EcrXcXTpJUowENq6TFP8DN/zpXH3Wz0SUJYCX7oEelnKQQh58fcNMIJvYFV
-        4EsLWM8uF6VqbSolkXfIdmakwlFazEBCDC+UX1LNc2POR4Z/m/ge3vFtdSIKag==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682594385;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w7SiOThIQ863K6oJvVNAv7De2opm8Uk3DJjr8iS90qc=;
-        b=YOAwTPHx6SRktxKl/lL048FMWg95bASatMmM3bNYK79/tErexC/Gtrfjto2afxjuVJNGwx
-        TnjHTOIEoStIXICQ==
-To:     linux-kernel@vger.kernel.org
-Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Crystal Wood <swood@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 4/4] locking/rtmutex: Add a lockdep assert to catch potential nested blocking
-Date:   Thu, 27 Apr 2023 13:19:37 +0200
-Message-Id: <20230427111937.2745231-5-bigeasy@linutronix.de>
-In-Reply-To: <20230427111937.2745231-1-bigeasy@linutronix.de>
-References: <20230427111937.2745231-1-bigeasy@linutronix.de>
+        Thu, 27 Apr 2023 07:20:57 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726D359DC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:20:34 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-77a8cc70fdeso802042241.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682594428; x=1685186428;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SxCvkt1t5/3KLMQ59Hp18Juu41+75fyuKvnY3ccR6G4=;
+        b=C9urYLtXOBflCCUNiJ7/vRmZDHqMTNTcoH67UFDCIbkaA8yX8N0o5M+syDGyAxC3Xn
+         DvjJYx1KqNAyRga/fqiZcCse2+zi6YCUcl4kBCbhEcDGQ58auZY6GIOV4D1Uttgfl8o4
+         tIrg4qdGrf+7Hfor5FqrE6D047yatNMjra0jEEGMY0fU0Cc1mICCRuq+Q1I8GCk8KKsB
+         Jn0PRtETkHtFYCCGlkQliJJxvonXxvUTA19RKGF5CadezsTiHZuxSQyJHY/2nlo33zsa
+         pWtcE75B1dBkUGNxQGOEYS452bNdwqDq6tPoXAvdsFZZCyA8NiZgj8zw+lX34BF5U9N5
+         JqIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682594428; x=1685186428;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SxCvkt1t5/3KLMQ59Hp18Juu41+75fyuKvnY3ccR6G4=;
+        b=ibVJNc1GqhxmD4gpl8Qwv9+TbeAfgq/DJLQytCAMHHiqf/5P8Dm0EWfp+pZsizHXBx
+         ArKJ4arK6836gr4jujphXHBWfsQXwPchu9evfFrVpdayXb9YUpuf0qmsCGS3nuLhdoNY
+         jmYL5zQc3ZpPXPpy/ecT7upGpfXGsukl3uJ0TwRkTXTRI+jmzp9wQ28XvJK/fhjKfNli
+         y9eqIfuE7bbIxEdrNaoHRWWGwE9DM28qqRhkBhbkGH/OVwPCunKnBjHghFwklbOE72gf
+         rNno+5/ep0jfEw3UddgL4qYYmc+LE+gXULnOWMetzMIi/hA/hiyFi0PUsW+eJ075B8lL
+         tH+A==
+X-Gm-Message-State: AC+VfDyR5fJyWUSt1SJCrDgU9koZFZm86Upv5xYo0q/HKTO9y7Z5Nq33
+        NiPcNBFO4GTFf/VLCVo1MwRBIJeSZ6aLWNG6C61FPkru0iAyhK0f
+X-Google-Smtp-Source: ACHHUZ7pP2D/vlhEtfTn2rE1xjsLfDlx8m7IS5wSAJY+xGGeHIEfxM3wITJuLURhJCH5XnxLPcq+5UYIi+ZBmm/ywEc=
+X-Received: by 2002:a1f:5cd5:0:b0:440:8c8b:6a45 with SMTP id
+ q204-20020a1f5cd5000000b004408c8b6a45mr314548vkb.2.1682594426369; Thu, 27 Apr
+ 2023 04:20:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230427023345.1369433-1-brpol@chromium.org> <CANiq72nxNtLvx1J-50F8D05QQjx4FBPkrhg6pysc25RL6--Zhw@mail.gmail.com>
+In-Reply-To: <CANiq72nxNtLvx1J-50F8D05QQjx4FBPkrhg6pysc25RL6--Zhw@mail.gmail.com>
+From:   Dan Carpenter <error27@gmail.com>
+Date:   Thu, 27 Apr 2023 12:20:15 +0100
+Message-ID: <CA+_b7DLoTEn6_2auTVN9Wj62ogOFXnhf7kTmh_KCZPkCBfJsSw@mail.gmail.com>
+Subject: Re: [PATCH] .gitignore: ignore smatch generated files
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Brandon Pollack <brpol@chromium.org>, linux-kernel@vger.kernel.org,
+        masahiroy@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com,
+        keescook@chromium.org, nathan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Thanks for this.  To be honest, I hadn't remembered that Smatch
+still generates trinity_smatch.[ch].  I would prefer to just delete that
+stuff.  Another idea is maybe Smatch could put everything in a
+smatch/ directory?  That feels like maybe it would be nicer?
 
-There used to be a BUG_ON(current->pi_blocked_on) in the lock acquisition
-functions, but that vanished in one of the rtmutex overhauls.
-
-Bring it back in form of a lockdep assert to catch code paths which take
-rtmutex based locks with current::pi_blocked_on !=3D NULL.
-
-Reported-by: Crystal Wood <swood@redhat.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- kernel/locking/rtmutex.c     | 2 ++
- kernel/locking/rwbase_rt.c   | 2 ++
- kernel/locking/spinlock_rt.c | 2 ++
- 3 files changed, 6 insertions(+)
-
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index dd76c1b9b7d21..479a9487edcc2 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -1727,6 +1727,8 @@ static int __sched rt_mutex_slowlock(struct rt_mutex_=
-base *lock,
- static __always_inline int __rt_mutex_lock(struct rt_mutex_base *lock,
- 					   unsigned int state)
- {
-+	lockdep_assert(!current->pi_blocked_on);
-+
- 	if (likely(rt_mutex_try_acquire(lock)))
- 		return 0;
-=20
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index 945d474f5d27f..5be92ca5afabc 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -133,6 +133,8 @@ static __always_inline int rwbase_read_lock(struct rwba=
-se_rt *rwb,
- {
- 	int ret;
-=20
-+	lockdep_assert(!current->pi_blocked_on);
-+
- 	if (rwbase_read_trylock(rwb))
- 		return 0;
-=20
-diff --git a/kernel/locking/spinlock_rt.c b/kernel/locking/spinlock_rt.c
-index 62c4a6866087a..9fe282cd145d9 100644
---- a/kernel/locking/spinlock_rt.c
-+++ b/kernel/locking/spinlock_rt.c
-@@ -37,6 +37,8 @@
-=20
- static __always_inline void rtlock_lock(struct rt_mutex_base *rtm)
- {
-+	lockdep_assert(!current->pi_blocked_on);
-+
- 	if (unlikely(!rt_mutex_cmpxchg_acquire(rtm, NULL, current)))
- 		rtlock_slowlock(rtm);
- }
---=20
-2.40.1
-
+regards,
+dan carpenter
