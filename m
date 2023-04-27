@@ -2,140 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C956F6F0D40
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775896F0D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344303AbjD0UfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S245168AbjD0UgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344257AbjD0Uez (ORCPT
+        with ESMTP id S1344095AbjD0UgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:34:55 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FA43C16;
-        Thu, 27 Apr 2023 13:34:54 -0700 (PDT)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id C09CDCEC29;
-        Thu, 27 Apr 2023 20:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1682627692; bh=u0OfrZ8JQA1K+eu8S043JANNKuvEBNwR1oXhG9a518k=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=mV7fmCgl5zkebzcbzU1H4v++iAKjmTa2v7aq56EgSEyyzJ97V5M2XdGoXxdc5bB3l
-         WMkVXNQnlJKGtIew/BwWWRUR8pTxhnKNg8LfpmZ/X8jHlRbB7N4umQsvhsOousVKzV
-         ZpzI6N/ZteBxGLVMjzo5h/e2jfFHDgBAl4EoaV8s=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Thu, 27 Apr 2023 22:34:29 +0200
-Subject: [PATCH 4/4] ARM: dts: qcom: msm8974-hammerhead: Add vibrator
+        Thu, 27 Apr 2023 16:36:14 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83C746A5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:35:47 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f0a2f8216fso827221cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682627747; x=1685219747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ptBdlJ07v8HdQe+LoZZ45Ny20mkYLWz+prXa/vlPc5g=;
+        b=ejGejKzhboVuH/Okkr279d6To4yc4YLxo/pErGIwVBZms1pTi6heNby96nKksTpX3a
+         9ZVW2kjRNWY2WNF5IQ7O6q/srqJLqblDuMKQXyTWzx9rUb53h6IeiwdWT8DdiTvvFlnF
+         ap59K2vgyFhSDWY7ymCDiaotKITRXEl6Kt//xXgyY9bowPyBNnmDww8lxUpkoxb/4MtX
+         yzrPYzVLtrUUMHn6mUxs9CgVgcowuzqlknix5QPRtkcyKv8wsvFTnP59kim9sF5t4wXI
+         vJ14wyoK1j9Bzvlhu/Jfaa3TEjEdAsJjGPGTgyyUrB3KSbgpzbJLTBv4J9aB28owmHQs
+         PI6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682627747; x=1685219747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ptBdlJ07v8HdQe+LoZZ45Ny20mkYLWz+prXa/vlPc5g=;
+        b=M9gE1c84xZQd35AA9By50giSv8+dW8VfbhX6EBVd9g7tLw9oMU8tt+Ig0/qAJJn901
+         0J39b9jmT4UE3mI9Y16+KzqyCk81xFlj+eJ2KG8wcYEFbSVVNBcRmGn4B2l/DIc8doWb
+         gboCbjcmT5atSBZUScDmwKTPH8dbwVxgtrRx0LIh09OOtrlgkLFBjOyInuF0Wg98vx8I
+         UQ7iI8oaw+WP0AdB4kwEXqXpuxyQHpUT22kA1+1NhQTRymkFEaW0SAxo1fQMu39gL7n+
+         vBkXtSG5/fS0o7IRaA/Uuh6mQxRFXC0yLrCn64ay7gKS77i1n+1enurW+H11ZYBRBEhD
+         m/3w==
+X-Gm-Message-State: AC+VfDy2o5NfR+quigRckvewE0NqEihVG9LaA0pwIewq+3TZdxkYqSN1
+        KCTWwQbha0/OMkhRCz5e4YB3SpnWylZXk8HQToN0Qg==
+X-Google-Smtp-Source: ACHHUZ6k2Icr8mvB78iBbOp/hEvzjLIV2SDthfJnvHGJz15ZjsD4VFeV8D723c/xR7fRgPMt1L9PXuavlP+NkvgJ2Pw=
+X-Received: by 2002:ac8:590f:0:b0:3ef:4319:c6c5 with SMTP id
+ 15-20020ac8590f000000b003ef4319c6c5mr58453qty.19.1682627746969; Thu, 27 Apr
+ 2023 13:35:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230427-hammerhead-vibra-v1-4-e87eeb94da51@z3ntu.xyz>
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
-In-Reply-To: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Brian Masney <masneyb@onstation.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1621; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=u0OfrZ8JQA1K+eu8S043JANNKuvEBNwR1oXhG9a518k=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkStxqdiW+kWCefNLPPzqQpnvWWzkWAPLg7kJEW
- kuWJkM6I++JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZErcagAKCRBy2EO4nU3X
- VhquEACXKd8YsE0/iZG3aV/sz4f2rfDYg2ZFsLJSkAmDG8FYnsH7qHaUf0AdidkoLUMrWGntbcJ
- zzTCUvbyr7fNXKKZhFMW/Y5RQot/4L7zGviNsyVyw7L8apKqyAnskyWbkWxg32feNKHkp924Z3f
- y0c2saXLto1l7SHskHaTPEohkM//l0gwcou+OcN3il4Iej3HvP5dQW7FOwcrGY4D82INL59x1Hz
- WYXomaitIzGgwcl1Qgs3rYAopoHwUk/PZzE/DI142JFU0d+3Swb00I9XovXIml/yMWOIfbKB8tq
- H8hl5Ja+z/v8FosPET5fAa6nZ7xtccXQXD/V1JC/C2puZhHGx3zfGjISuueILHpwyOMqZHo9QOl
- sA2o+u4Fzb+/mcDEDruM4A/bvDIpryN2HVHLQbjAnt+TIg1/CdM1ApmKQxJ6rdQ/+GLeD/Y+jXZ
- 2CFthrIKmZ9rxHtuj9Px40dXCRJelef5Hyw21V1XKbEET/lvrkwtTlM8StP5VlRhHpCKHLuAyvS
- sCm/+3BXQnBoSd7mC+2m+B50OD4NdDErZe2eFW8max6E7GhN2bhtOmwg2EFPHjzPitVWgsX5t7z
- 2MkVYKxlN20laGSY+Hqa+crLf968IMZr2cKH0I/IJfXOn/IIkungRbwBPIpRuaEUgkhTYaPBfP2
- KTIbBaABkLs6UqQ==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230427201112.2164776-1-peterx@redhat.com> <20230427201112.2164776-2-peterx@redhat.com>
+In-Reply-To: <20230427201112.2164776-2-peterx@redhat.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 27 Apr 2023 13:35:11 -0700
+Message-ID: <CADrL8HWxdTBD5fKiK9BKRUFCghK_nd1oNOkykmh4RYbn4C7UgA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests/kvm: Setup vcpu_alias only for minor mode test
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anish Moorthy <amoorthy@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Nexus 5 has a vibrator connected to the clock output of GP1_CLK
-which we can use with the clk-pwm driver, then we can use that pwm with
-pwm-vibrator to get haptics functionality.
+On Thu, Apr 27, 2023 at 1:11=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> This fixes two things:
+>
+> - Unbreaks MISSING mode test on anonymous memory type
+>
+> - Prefault alias mem before uffd thread creations, otherwise the uffd
+>   thread timing will be inaccurate when guest mem size is large, because
+>   it'll take prefault time into total time.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-This patch is based on Brian Masney's previous patch with clk-vibrator.
+Reviewed-by: James Houghton <jthoughton@google.com>
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- .../dts/qcom-msm8974-lge-nexus5-hammerhead.dts     | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+FWIW, it looks like this fixes this commit[1]. Not sure if it's worth
+a Fixes: tag.
 
-diff --git a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-index ab35f2d644c0..fea8a6be9021 100644
---- a/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974-lge-nexus5-hammerhead.dts
-@@ -41,6 +41,25 @@ key-volume-down {
- 		};
- 	};
- 
-+	clk_pwm: pwm {
-+		compatible = "clk-pwm";
-+		clocks = <&mmcc CAMSS_GP1_CLK>;
-+
-+		pinctrl-0 = <&vibrator_pin>;
-+		pinctrl-names = "default";
-+
-+		#pwm-cells = <2>;
-+	};
-+
-+	vibrator {
-+		compatible = "pwm-vibrator";
-+		pwms = <&clk_pwm 0 100000>;
-+		pwm-names = "enable";
-+
-+		vcc-supply = <&pm8941_l19>;
-+		enable-gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
-+	};
-+
- 	vreg_wlan: wlan-regulator {
- 		compatible = "regulator-fixed";
- 
-@@ -637,6 +656,22 @@ shutdown-pins {
- 			function = "gpio";
- 		};
- 	};
-+
-+	vibrator_pin: vibrator-state {
-+		core-pins {
-+			pins = "gpio27";
-+			function = "gp1_clk";
-+			drive-strength = <6>;
-+			bias-disable;
-+		};
-+
-+		enable-pins {
-+			pins = "gpio60";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+	};
- };
- 
- &usb {
+[1]: commit a93871d0ea9f ("KVM: selftests: Add a userfaultfd library")
 
--- 
-2.40.0
 
+> ---
+>  .../testing/selftests/kvm/demand_paging_test.c  | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/tes=
+ting/selftests/kvm/demand_paging_test.c
+> index 2439c4043fed..9c18686b4f63 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -128,6 +128,7 @@ static void prefault_mem(void *alias, uint64_t len)
+>
+>  static void run_test(enum vm_guest_mode mode, void *arg)
+>  {
+> +       struct memstress_vcpu_args *vcpu_args;
+>         struct test_params *p =3D arg;
+>         struct uffd_desc **uffd_descs =3D NULL;
+>         struct timespec start;
+> @@ -145,24 +146,24 @@ static void run_test(enum vm_guest_mode mode, void =
+*arg)
+>                     "Failed to allocate buffer for guest data pattern");
+>         memset(guest_data_prototype, 0xAB, demand_paging_size);
+>
+> +       if (p->uffd_mode =3D=3D UFFDIO_REGISTER_MODE_MINOR) {
+> +               for (i =3D 0; i < nr_vcpus; i++) {
+> +                       vcpu_args =3D &memstress_args.vcpu_args[i];
+> +                       prefault_mem(addr_gpa2alias(vm, vcpu_args->gpa),
+> +                                    vcpu_args->pages * memstress_args.gu=
+est_page_size);
+> +               }
+> +       }
+> +
+>         if (p->uffd_mode) {
+>                 uffd_descs =3D malloc(nr_vcpus * sizeof(struct uffd_desc =
+*));
+>                 TEST_ASSERT(uffd_descs, "Memory allocation failed");
+> -
+>                 for (i =3D 0; i < nr_vcpus; i++) {
+> -                       struct memstress_vcpu_args *vcpu_args;
+>                         void *vcpu_hva;
+> -                       void *vcpu_alias;
+>
+>                         vcpu_args =3D &memstress_args.vcpu_args[i];
+>
+>                         /* Cache the host addresses of the region */
+>                         vcpu_hva =3D addr_gpa2hva(vm, vcpu_args->gpa);
+> -                       vcpu_alias =3D addr_gpa2alias(vm, vcpu_args->gpa)=
+;
+> -
+> -                       prefault_mem(vcpu_alias,
+> -                               vcpu_args->pages * memstress_args.guest_p=
+age_size);
+> -
+>                         /*
+>                          * Set up user fault fd to handle demand paging
+>                          * requests.
+> --
+> 2.39.1
+>
