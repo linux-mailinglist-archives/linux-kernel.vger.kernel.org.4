@@ -2,204 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AC36F0BE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DEE6F0BF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244522AbjD0S3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48468 "EHLO
+        id S244522AbjD0Sbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244039AbjD0S3L (ORCPT
+        with ESMTP id S244039AbjD0Sbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:29:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EE244B2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:28:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01D9763E9A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 18:28:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390A7C433D2;
-        Thu, 27 Apr 2023 18:28:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682620135;
-        bh=z2nSyuDXMz7IhBSy11hDGq7ssnsSbj8LVzsiNsuuVWQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JWwECdAolWxzsp6/Qp0gBIQofkMqEsK+Bf2CrluUCI3PfDtiuGYjXrl99HZXrs7qR
-         hjPY9zPSmIbXyq+Sfqc34AYsuAk5MXPHbSeWlk88pS/cVTAacTics4JAmNK8nNKPNd
-         3p9G1wGqGRI7ClZ++xmmY2pwScCbbhTptA7YCGLW5Z7epOmb/oKyYxDfO+ioGxGMWx
-         77yLlLPAM0MkMp3ixKndl2hTzdSXJlhLmXERw6b0TNgKyWcDgOXP2wKZ/crE9OSiVA
-         nMLVdPxfL41wMtwh8YWfCVH4KPf+AzkY5srr9iiz7X5onbXq5X7/dkkKhhUj1zc811
-         VguEnlSgMoArg==
-Date:   Thu, 27 Apr 2023 19:28:49 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        kito.cheng@sifive.com, jrtc27@jrtc27.com, matthias.bgg@gmail.com,
-        heinrich.schuchardt@canonical.com, greentime.hu@sifive.com,
-        nick.knight@sifive.com, christoph.muellner@vrull.eu,
-        philipp.tomsich@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] RISC-V: add support for vendor-extensions via
- AT_BASE_PLATFORM and xthead
-Message-ID: <20230427-maybe-skier-51e7cf09795c@spud>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <20230424194911.264850-5-heiko.stuebner@vrull.eu>
- <20230426-spirits-ludicrous-a5d8275686e6@wendy>
- <5016896.Mh6RI2rZIc@diego>
+        Thu, 27 Apr 2023 14:31:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572A40F2;
+        Thu, 27 Apr 2023 11:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682620308; x=1714156308;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gt14tsep8YaumMAQAuCJ/wwA0Gu1TPM7Y2+3L5l7Fok=;
+  b=eC1MYMdBqfWed3vPDA8B3WH5V870rAT1RKRgJLcDnFnqkgrl/prMlyDV
+   C+qhFLSwYGtq1FTq5iQoaqKqHo1RvrVBRSPErYBelqhPFBj2HQc02i5lE
+   qxIravXNGC6/oHx+Gevkk6knMQUOp8/5JcBAMnXxsaUe1I9yc8V7a1AAn
+   EJvQmZmhAwlbUTnxJG41Jk79kebZZ9yrIbIbH6n6Y1/kjfKy2fl6UrKAq
+   wsBAe+WSF/yaIMjMJ1v4Mh9uEUv3oAML2RlRnAMYC1aOp8IGmL3lzk9+x
+   f1fP+SZNR4GlcQCfBVTgMsuxw1Ra8LIP1YIiRgF9cIAXRAh+pskAjY2el
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336521627"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="336521627"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 11:29:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="806053169"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="806053169"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga002.fm.intel.com with ESMTP; 27 Apr 2023 11:29:24 -0700
+From:   kan.liang@linux.intel.com
+To:     acme@kernel.org, irogers@google.com
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, eranian@google.com,
+        ahmad.yasin@intel.com, ak@linux.intel.com, perry.taylor@intel.com,
+        samantha.alt@intel.com, caleb.biggers@intel.com,
+        weilin.wang@intel.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH] perf stat: Add arch-specific TopdownL1 check for the default mode
+Date:   Thu, 27 Apr 2023 11:29:06 -0700
+Message-Id: <20230427182906.3411695-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nWo5qTPtEHBQI77d"
-Content-Disposition: inline
-In-Reply-To: <5016896.Mh6RI2rZIc@diego>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Kan Liang <kan.liang@linux.intel.com>
 
---nWo5qTPtEHBQI77d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The default of perf stat fails on several Intel platforms.
+Skylake:
 
-Hey Heiko,
+$ perf stat true
+Error:
+Access to performance monitoring and observability operations is limited.
+Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
+access to performance monitoring and observability operations for processes
+without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
+More information can be found at 'Perf events and tool security' document:
+https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+perf_event_paranoid setting is 2:
+  -1: Allow use of (almost) all events by all users
+      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+> = 0: Disallow raw and ftrace function tracepoint access
+> = 1: Disallow CPU event access
+> = 2: Disallow kernel profiling
 
-On Thu, Apr 27, 2023 at 07:15:58PM +0200, Heiko St=C3=BCbner wrote:
-> Am Mittwoch, 26. April 2023, 14:29:16 CEST schrieb Conor Dooley:
-> > On Mon, Apr 24, 2023 at 09:49:11PM +0200, Heiko Stuebner wrote:
-> > > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+ADL (hybrid):
 
-> > I'm not entirely sure if this patch is meant to be a demo, but I don't
-> > like the idea of using these registers to determine what extensions are
-> > reported.
->=20
-> It took me a while to grasp the above, but I think you mean determining
-> extensions based on mvendor etc, right?
+./perf stat
+Segmentation fault (core dumped)
 
-Yes, sorry. Apologies if that was not clear. I suppose the SBI
-implementation could (as ours does!) could report something different to
-the registers themselves, so using that word is probably not a good idea
-anyway.
+The default of perf stat was switched to TopdownL1 Json metric since
+commit 94b1a603fca7("perf stat: Add TopdownL1 metric as a default if
+present"). But the patch only checks whether the TopdownL1 is present
+in the event list. It doesn't check whether the hardware has the
+capability to provide a clean output for the default mode.
 
-> > riscv,isa in a devicetree (for as much as I might dislike it at this
-> > point in time), or the ACPI equivalent, should be the mechanism for
-> > enabling/disabling these kinds of things.
->=20
-> > Otherwise, we are just going to end up causing problems for ourselves
-> > with various lists of this that and the other extension for different
-> > combinations of hardware.
-> > The open source c906 has the same archid/impid too right? Assuming this=
- is
-> > a serious proposal, how would you intend dealing with modified versions
-> > of those cores?
-> >=20
-> > I am pretty sure that you intended this to be a demo though, particular=
-ly
-> > given the wording of the below quote from your cover,
->=20
-> yeah, this one was more following a train of thought. Thinking about the
-> issues, this was more of an addon thought, as I wasn't really sure which
-> way to go.
->=20
-> So you're right, vendor isa-extensions should also come from the ISA
-> string from firmware, similar to the base extensions. Not based on the
-> mvendor-id and friends.
+Add arch_has_topdown_metric() to check the hardware capability as well.
+Drop the TopdownL1 support in the defalut mode for pre-ICL and hybrid
+platforms. Users can still use -M TopdownL1 to access the TopdownL1
+on pre-ICL platforms.
 
-:)
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
 
-> > > Things to still consider:
-> > > -------------------------
-> > > Right now both hwprobe and this approach will only pass through
-> > > extensions the kernel actually knows about itself. This should not
-> > > necessarily be needed (but could be an optional feature for e.g. virt=
-ualization).
-> >=20
-> > What do you mean by virtualisation here? It's the job of the hypervisor
-> > etc to make sure that what it passes to its guest contains only what it
-> > wants the guest to see, right?
-> > IIUC, that's another point against doing what this patch does.
->=20
-> I guess I'm still seeing Zbb and friends - with just computational
-> instructions as always good to have. But I guess you're right that the
-> hypervisor should be able to control itself which extensions.
+The patch tries to workaround the serious issues on pre-ICL and hybrid
+platforms with the default mode of perf stat. It could be a temporary
+fix for the upcoming 6.4. So we have more time to look for a proper fix
+for all metrics issues and output issues with 6.5.
 
-Yah, there may not be any obvious downsides to something like Zbb, but I
-think that taking control away from the hypervisors etc isn't a good
-idea.
-Having a simple policy of blocking things that are known to misbehave
-would require less maint. than a list of things that are okay to pass
-through, but both are probably cans-of-worms.
-I think we need to think carefully about what policy is chosen here.
-Allowlist will be slower, but at least we'll not tell userspace
-something that is not usable. Blocklist will be easier to manage, but
-can only be reactive.
+Thanks,
+Kan
 
-> > > Most extensions don=E2=80=99t introduce new user-mode state that the =
-kernel needs to
-> > > manage (e.g. new registers). Extension that do introduce new user-mod=
-e state
-> > > are usually disabled by default and have to be enabled by S mode or M=
- mode
-> > > (e.g. FS[1:0] for the +floating-point extension). So there should not=
- be a
-> > > reason to filter any extensions that are unknown.
-> >=20
-> > I think in general this can be safely assumed, but I don't think it is
-> > unreasonable to expect someone may make, for example, XConorGigaVector
-> > that gets turned on by the same bits as regular old vector but has some
-> > extra registers.
-> > Not saying that I think that that is a good idea, but it is a distinct
-> > possibility that this will happen, and I don't think forwarding it to
-> > userspace is a good idea.
->=20
-> The thead-vector (0.7.1) would probably fit this description. Though in
-> that case, userspace definitly needs to know about it, to use it :-) .
->=20
-> But of course this should only be forwarded when relevant support
-> is available in the kernel.
+ tools/perf/arch/x86/util/topdown.c | 14 ++++++++++++++
+ tools/perf/builtin-stat.c          |  2 +-
+ tools/perf/util/stat-display.c     |  2 +-
+ tools/perf/util/topdown.c          |  6 ++++++
+ tools/perf/util/topdown.h          |  2 ++
+ 5 files changed, 24 insertions(+), 2 deletions(-)
 
-Right. IIRC, the plan for that is to add `v` to riscv,isa & alternatives
-will do the rest as opposed to doing an `_xtheadvector` type thing.
+diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/util/topdown.c
+index 9ad5e5c7bd27..5d861e851619 100644
+--- a/tools/perf/arch/x86/util/topdown.c
++++ b/tools/perf/arch/x86/util/topdown.c
+@@ -3,6 +3,7 @@
+ #include "util/evsel.h"
+ #include "util/pmu.h"
+ #include "util/topdown.h"
++#include "util/metricgroup.h"
+ #include "topdown.h"
+ #include "evsel.h"
+ 
+@@ -48,3 +49,16 @@ bool arch_topdown_sample_read(struct evsel *leader)
+ 
+ 	return false;
+ }
++
++bool arch_has_topdown_metric(const char *name)
++{
++	/*
++	 * Disable the Topdown events in the default mode
++	 * for hybrid platforms and old platform which
++	 * doesn't support the Topdown metric feature.
++	 */
++	if (!pmu_have_event("cpu", "slots"))
++		return false;
++
++	return metricgroup__has_metric(name);
++}
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index efda63f6bf32..0b865155656d 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1885,7 +1885,7 @@ static int add_default_attributes(void)
+ 		 * Add TopdownL1 metrics if they exist. To minimize
+ 		 * multiplexing, don't request threshold computation.
+ 		 */
+-		if (metricgroup__has_metric("TopdownL1") &&
++		if (arch_has_topdown_metric("TopdownL1") &&
+ 		    metricgroup__parse_groups(evsel_list, "TopdownL1",
+ 					    /*metric_no_group=*/false,
+ 					    /*metric_no_merge=*/false,
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index e6035ecbeee8..73b2ff2ddf29 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -747,7 +747,7 @@ static void uniquify_event_name(struct evsel *counter)
+ 	int ret = 0;
+ 
+ 	if (counter->uniquified_name || counter->use_config_name ||
+-	    !counter->pmu_name || !strncmp(counter->name, counter->pmu_name,
++	    !counter->pmu_name || !strncmp(evsel__name(counter), counter->pmu_name,
+ 					   strlen(counter->pmu_name)))
+ 		return;
+ 
+diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
+index 18fd5fed5d1a..f3a9ebc52f8b 100644
+--- a/tools/perf/util/topdown.c
++++ b/tools/perf/util/topdown.c
+@@ -1,8 +1,14 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "topdown.h"
++#include "metricgroup.h"
+ #include <linux/kernel.h>
+ 
+ __weak bool arch_topdown_sample_read(struct evsel *leader __maybe_unused)
+ {
+ 	return false;
+ }
++
++__weak bool arch_has_topdown_metric(const char *name)
++{
++	return metricgroup__has_metric(name);
++}
+diff --git a/tools/perf/util/topdown.h b/tools/perf/util/topdown.h
+index 1996c5fedcd7..7e83c8b247f2 100644
+--- a/tools/perf/util/topdown.h
++++ b/tools/perf/util/topdown.h
+@@ -8,4 +8,6 @@ struct evsel;
+ 
+ bool arch_topdown_sample_read(struct evsel *leader);
+ 
++bool arch_has_topdown_metric(const char *name);
++
+ #endif
+-- 
+2.35.1
 
-Assuming the latter for a moment, we'd have to blacklist `_xheadvector`
-for kernels compiled without vector support even if the relevant support
-is added to the kernel. Similarly, we'd have to blacklist it for kernels
-with vector support, but without the erratum enabled.
-
-I think the plan was the former though, so you'd have to block passing
-`v` to userspace if vector is enabled and the erratum is not supported.
-Should ERRATA_THEAD_VECTOR be mandatory then for RISCV_ISA_VECTOR &&
-ERRATA_THEAD kernels? What am I missing?
-
-Also, in a world where we do do some sort of passing, should we only
-forward the vendor extensions, or should we forward the standard ones
-too?
-What about supervisor mode only stuff? There's a bunch of questions to
-consider here, even if for some of them the answer may be obvious.
-
-As I said, not really bothered about hwprobe, aux vector etc, but this
-side of things is particularly interesting to me.
-
-Cheers,
-Conor.
-
---nWo5qTPtEHBQI77d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEq+4QAKCRB4tDGHoIJi
-0mtbAQDGhCUIHj+CrP2sJWJZgnpydP4QmYuQFMWLAspoXNz/XwEAwEcvetTlShFu
-S4ux+lKP/3+iQ8Hwj7Jhn2axR7sRFws=
-=cxr9
------END PGP SIGNATURE-----
-
---nWo5qTPtEHBQI77d--
