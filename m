@@ -2,137 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC93C6F08C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729116F08CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244249AbjD0PwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S244257AbjD0Pyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243994AbjD0PwN (ORCPT
+        with ESMTP id S243934AbjD0Pyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:52:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 430D7CD;
-        Thu, 27 Apr 2023 08:52:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 976E72F4;
-        Thu, 27 Apr 2023 08:52:55 -0700 (PDT)
-Received: from [10.57.56.155] (unknown [10.57.56.155])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C42833F64C;
-        Thu, 27 Apr 2023 08:52:08 -0700 (PDT)
-Message-ID: <dac76dd5-d5f0-61dd-fafe-f939f1ebc413@arm.com>
-Date:   Thu, 27 Apr 2023 16:52:06 +0100
+        Thu, 27 Apr 2023 11:54:43 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9787131
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:54:41 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f196e8e2c6so68078145e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682610880; x=1685202880;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NT5OMZcpsLf0lbuTdUMr8iotawbw3Liy9c/Vdmfa24E=;
+        b=nqQ5p8zlRMDLN/yfAruMXjsqwL1+D8WJ+0/kCG4ScMQBqIhCQROP2qjHA6LZbeQwXx
+         /Qw7cInIhmJQC3NteXOpQqvSD9teYyh+6kApv9svjUaIrHOxx7K48Bl3g8rZFl18FKZ7
+         m0Q3riv/cUfRtuj8HQWgtyNuE/vr9/jEUUH7rZsoIEspEvMEs7oMpKIOVvuYqt1lgYFv
+         3JU2Bx1Q2XjDMG3b2LEv2ubVhq7mSD5EZvEgInRfkOztkZHcpcpwDkcDmPItPn4+TaSH
+         mDEfX+oFxZn/0RtZLkcnnVpjDwG8YKCg2a2PLr5t3WZ5pH2BinppK222FZJOyNENpXdK
+         NHJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682610880; x=1685202880;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NT5OMZcpsLf0lbuTdUMr8iotawbw3Liy9c/Vdmfa24E=;
+        b=S1YognEqALK7CtCQ4Ily9wd1zSVcsIdZWQuhlzT/qCAE30VwU/LKwT9oB0p4DJT7VL
+         m6cJSd+bqJxrXR7QTDbLq4oU4pnujyZhUPxym0Vs8n55Af/zT0v2IdIW52oOi0xFcAiw
+         bCNoybQB043NGxIMJkKJPSbTCcu2i6EsFN0HWMZrEAITMwc6pfmfdeW5MCTjIFjACeG0
+         rroBdYLrJAGlkJnxcqcOrxvTb8K69/uLVcy/PiqUx6HEIOU5AlaoWYXuYPFtonKHsw1s
+         rqmGSkZqHf8adgIUY5G4kZJggoX0EZ3TIEBs8ogUYjm5XM0xfpt75CCqgWDQw2YN2oHt
+         w0nw==
+X-Gm-Message-State: AC+VfDywfr78Ke7/B6VVhFfSG29oJXK++gsqy4EEMqWkPe8GoPwKTxqP
+        Pa7waJewlX3jmOsLn7cdoyYfEA==
+X-Google-Smtp-Source: ACHHUZ68RQi5AnxrkZd2UuCXC+9MDWHIGwD4MJusXcFhTSBT7trk0UdJQWtK6Fpjc6YwGpTGvpzOyg==
+X-Received: by 2002:a05:600c:21ca:b0:3eb:3945:d405 with SMTP id x10-20020a05600c21ca00b003eb3945d405mr2065143wmj.38.1682610880148;
+        Thu, 27 Apr 2023 08:54:40 -0700 (PDT)
+Received: from [172.23.2.142] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id c7-20020a5d4cc7000000b002fa5a73bf9bsm18865705wrt.89.2023.04.27.08.54.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 08:54:39 -0700 (PDT)
+Message-ID: <181a8d2e-fb27-13e0-5b7b-42559213ff42@linaro.org>
+Date:   Thu, 27 Apr 2023 17:54:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 4/7] perf: cs-etm: Validate options after applying
- themperf_pmu__format_bits
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
 Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
-        shy828301@gmail.com, denik@google.com,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230424134748.228137-1-james.clark@arm.com>
- <20230424134748.228137-5-james.clark@arm.com>
- <20230427151228.GA152865@leoy-huanghe>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230427151228.GA152865@leoy-huanghe>
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
+ <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
+ <8d6042cd-f690-d274-c658-e83ff3a5776e@linaro.org>
+ <20230426171621.GA2506@standask-GA-A55M-S2HP>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230426171621.GA2506@standask-GA-A55M-S2HP>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27/04/2023 16:12, Leo Yan wrote:
-> Hi James,
-> 
-> On Mon, Apr 24, 2023 at 02:47:44PM +0100, James Clark wrote:
->> Currently the cs_etm_set_option() function both validates and applies
->> the config options. Because it's only called when they are added
->> automatically, there are some paths where the user can apply the option
->> on the command line and skip the validation. By moving it to the end it
->> covers both cases.
+On 26/04/2023 19:16, Stanislav Jakubek wrote:
+> On Mon, Apr 24, 2023 at 03:53:07PM +0200, Krzysztof Kozlowski wrote:
+>> On 23/04/2023 14:40, Stanislav Jakubek wrote:
+>>> Convert Broadcom Kona family I2C bindings to DT schema.
+>>>
+>>> Changes during conversion:
+>>>   - add used, but previously undocumented SoC-specific compatibles
+>>>   - drop references to SoCs that are not upstream
+>>>   - add supported clock frequencies according to the Linux driver [1]
+>>>
+>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/i2c/busses/i2c-bcm-kona.c#n731
 >>
->> Also, options don't need to be re-applied anyway, Perf handles parsing
->> and applying the config terms automatically.
->>
->> Signed-off-by: James Clark <james.clark@arm.com>
->> ---
->>  tools/perf/arch/arm/util/cs-etm.c | 152 +++++++++++++-----------------
->>  1 file changed, 68 insertions(+), 84 deletions(-)
->>
->> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
->> index f9b9ebf7fffc..af0a2400c655 100644
->> --- a/tools/perf/arch/arm/util/cs-etm.c
->> +++ b/tools/perf/arch/arm/util/cs-etm.c
->> @@ -69,21 +69,29 @@ static const char * const metadata_ete_ro[] = {
->>  static bool cs_etm_is_etmv4(struct auxtrace_record *itr, int cpu);
->>  static bool cs_etm_is_ete(struct auxtrace_record *itr, int cpu);
->>  
->> -static int cs_etm_set_context_id(struct auxtrace_record *itr,
->> -				 struct evsel *evsel, int cpu)
->> +static int cs_etm_validate_context_id(struct auxtrace_record *itr,
->> +				      struct evsel *evsel, int cpu)
->>  {
->> -	struct cs_etm_recording *ptr;
->> -	struct perf_pmu *cs_etm_pmu;
->> +	struct cs_etm_recording *ptr =
->> +		container_of(itr, struct cs_etm_recording, itr);
->> +	struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
->>  	char path[PATH_MAX];
->> -	int err = -EINVAL;
->> +	int err;
->>  	u32 val;
->> -	u64 contextid;
->> +	u64 contextid =
->> +		evsel->core.attr.config &
->> +		(perf_pmu__format_bits(&cs_etm_pmu->format, "contextid1") |
->> +		 perf_pmu__format_bits(&cs_etm_pmu->format, "contextid2"));
+>> This line points to moving reference in next, so might no be accurate
+>> later. If you need external reference, then it should be some stable
+>> tag. But anyway if this is in mainline (is this?) then, why referencing
+>> via external link?
 > 
-> Seems to me, this would break backward compability.
+> Yes, it's in mainline since 2013. I just pointed to linux-next since
+> that was what I had open at the time.
 > 
-> The old kernel (before 5.11) doesn't provide 'contextid1' and
-> 'contextid2', so we always check the entry 'contextid' rather than
-> 'contextid1' and 'contextid2'.
-> 
-> With this change, if a kernel doesn't contain 'contextid1' and
-> 'contextid2' formats, will perf tool never trace for contexid?
-> 
+> Just to make sure if I understood correctly, if it's in mainline then
+> there's no need to reference it via link? Or should I point to some tag
+> instead, e.g.:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-bcm-kona.c?h=v6.3#n731
 
-No because I changed to to be purely validation, so the format flags
-would still be applied. But yes I think you are right there is a small
-issue.
+Yes, this would be better but I propose still to drop the link entirely.
+If you know the commit SHA which introduced this, mention it.
 
-Now validation of 'contextid' isn't done on pre 5.11 kernels. But that
-only checks for ETMv3 anyway. Validation of 'contextid1' and
-'contextid2' isn't a problem, because if the kernel doesn't support them
-they can't be applied on the command line anyway.
+Best regards,
+Krzysztof
 
-I can fix it by checking for 'contextid' and ETMv3 first and then doing
-'contextid1' and 'contextid2' after.
-
-> Thanks,
-> Leo
-> 
