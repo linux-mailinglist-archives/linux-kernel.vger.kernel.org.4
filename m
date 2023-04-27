@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D15C6F03B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD596F03B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243036AbjD0Jwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S243406AbjD0Jw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbjD0Jwf (ORCPT
+        with ESMTP id S243404AbjD0Jwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:52:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2A092;
-        Thu, 27 Apr 2023 02:52:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E698B63C25;
-        Thu, 27 Apr 2023 09:52:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022C6C433EF;
-        Thu, 27 Apr 2023 09:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682589153;
-        bh=lDpLhb6oF6to7W+j3Bea839ZLvE12k39h5dsPWICeB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZuX6BWDPYBtsbX8/2NU06aJrEdJZKJzgCLUP5duPvTh3xA6MHn5wjq4sY2c7y2eDM
-         sMifHQnS9CBzV0TU4SncLFWx90ofXHC9uuSDf5J40GUkKzjRIavWLrTBNPl9VC8JnK
-         EChbATmCfGQzWZHtoaYfxEwInABGzSJM+LHd8/Cs=
-Date:   Thu, 27 Apr 2023 11:52:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     sangsup lee <k1rh4.lee@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] misc: fastrpc: Fix a Use after-free-bug by race
- condition
-Message-ID: <2023042702-shuffling-tweet-d9f6@gregkh>
-References: <20230323013655.366-1-k1rh4.lee@gmail.com>
- <CAJkuJRjFCXkS+osc8ezpAw0E2W7WMAJnnxMt_cs4deqgm5OzHw@mail.gmail.com>
+        Thu, 27 Apr 2023 05:52:51 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEFF92;
+        Thu, 27 Apr 2023 02:52:50 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a682eee3baso61717235ad.0;
+        Thu, 27 Apr 2023 02:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682589170; x=1685181170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfS9zL9pATTv1kREOztKOoRXHTEBi6ELKiNPxXxGI+0=;
+        b=LMmy8TPo5qZnNygwSY8DoDFxVGlxIWzJ+ElDtUQGiB05zf5ay+hMBIjeIh2jXKvG49
+         w/6DUnSpvTE0xvE80l9BAlX183DCiCjiK/TmVmCIlkSQdmad34NTOqbXozfzmLBGCL24
+         m8odkuGZhHHV6J2xBl63nDecxq3mz1nwFNlY6o51myeEp2/cvSbW5kz238735Rr+vz9a
+         Z799iewxW/8Qtbz/PR/YKK88tZqNgOo3eZbuDFP2t9x0p6if+GInd5uJzoWk77kwaTGF
+         FnRIeL4pBmBAvF8zFRsu8vAl9zPXFma3llUwNGnLOkjaVAJsM/v4xvE9OAUkj+KJlIrM
+         lMZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682589170; x=1685181170;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gfS9zL9pATTv1kREOztKOoRXHTEBi6ELKiNPxXxGI+0=;
+        b=TOVifVtqfaCmTq+dth+NWdoNiP/M1Df4cM9P3zH0xc+C7ydFZPsKLj1pKNvOMRRa9A
+         siZE/H+gl2TFVXRu2B/Qd6XDdvZD71isR0zStz8OSpq33+6qjuRRBylnq8+LDV4xITmQ
+         AZdb7owlsV7xUagkMXiQCRqJR4hOfNvv7TCFzognGQ1lCdZ7gQRvJKxPLggBWNeIFEMF
+         t2DdC8rzC184uVQobo9E5n/NEIC1PQpo5sWLJnBdGfToVOKmUe3ZXP1P7SdCUxe4264l
+         8xOjlMGX6gPeeaazhMXuam/VUbN3SVKEFhOEKuMC4CDTpuvv8ZVGuZaDPUFn3YCSKN97
+         6Elg==
+X-Gm-Message-State: AC+VfDyD4BNXRdY4RwqUpf5cSsWVVFzh4JF+fPkI96+tTV4PW0MiouXa
+        ebYWbxIi4wYRliJGOXyfePQ=
+X-Google-Smtp-Source: ACHHUZ7kBq9LYS3yAot64ywR9A5gxganVwso7Dvgm6LUbt3XfC3FTfTXWw70KXj8ams7K5Bjel70qg==
+X-Received: by 2002:a17:902:c94d:b0:1a9:6d25:b2d2 with SMTP id i13-20020a170902c94d00b001a96d25b2d2mr988803pla.67.1682589169887;
+        Thu, 27 Apr 2023 02:52:49 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170902c14400b001a64c4023aesm11329065plj.36.2023.04.27.02.52.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 02:52:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <01069261-7e88-b4d1-c435-0298072ac699@roeck-us.net>
+Date:   Thu, 27 Apr 2023 02:52:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJkuJRjFCXkS+osc8ezpAw0E2W7WMAJnnxMt_cs4deqgm5OzHw@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] k10temp: Add pci ID for family 19, model 78h
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     Richard gong <richard.gong@amd.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230427053338.16653-1-mario.limonciello@amd.com>
+ <20230427053338.16653-3-mario.limonciello@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230427053338.16653-3-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 06:29:16PM +0900, sangsup lee wrote:
-> Is there any comment for this issue?
-
-What issue?
-
-> (reference: https://www.spinics.net/lists/kernel/msg4731408.html)
-
-Please use lore.kernel.org links, we have no control over any other
-random email archive .
-
-And the above link just points to this proposed patch.
-
+On 4/26/23 22:33, Mario Limonciello wrote:
+> This enables k10temp to work on this system.
 > 
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+in case someone wants to apply this patch together with the first patch
+of the series. Otherwise I'll wait with applying it until after that
+patch is available upstream.
+
+Guenter
+
+>   drivers/hwmon/k10temp.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> 2023년 3월 23일 (목) 오전 10:37, Sangsup Lee <k1rh4.lee@gmail.com>님이 작성:
-> >
-> > From: Sangsup lee <k1rh4.lee@gmail.com>
-> >
-> > This patch adds mutex_lock for fixing an Use-after-free bug.
-> > fastrpc_req_munmap_impl can be called concurrently in multi-threded environments.
-> > The buf which is allocated by list_for_each_safe can be used after another thread frees it.
+> diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
+> index ba2f6a4f8c16..7b177b9fbb09 100644
+> --- a/drivers/hwmon/k10temp.c
+> +++ b/drivers/hwmon/k10temp.c
+> @@ -507,6 +507,7 @@ static const struct pci_device_id k10temp_id_table[] = {
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
+>   	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
+> +	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
+>   	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
+>   	{}
+>   };
 
-How was this tested?
-
-> >
-> > Signed-off-by: Sangsup lee <k1rh4.lee@gmail.com>
-> > ---
-> >  V1 -> V2: moving the locking to ioctl.
-> >
-> >  drivers/misc/fastrpc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> > index 93ebd174d848..aa1cf0e9f4ed 100644
-> > --- a/drivers/misc/fastrpc.c
-> > +++ b/drivers/misc/fastrpc.c
-> > @@ -1901,7 +1901,9 @@ static long fastrpc_device_ioctl(struct file *file, unsigned int cmd,
-> >                 err = fastrpc_req_mmap(fl, argp);
-> >                 break;
-> >         case FASTRPC_IOCTL_MUNMAP:
-> > +               mutex_lock(&fl->mutex);
-> >                 err = fastrpc_req_munmap(fl, argp);
-> > +               mutex_unlock(&fl->mutex);
-
-Are you sure you can call this function with the lock?  If so, why isn't
-the mmap ioctl also locked?
-
-thanks,
-
-greg k-h
