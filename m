@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D9D6F0391
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEC56F0394
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243204AbjD0JoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        id S243328AbjD0Jog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242980AbjD0JoC (ORCPT
+        with ESMTP id S243290AbjD0Job (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:44:02 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF9F449D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:44:01 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso1955953a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1682588640; x=1685180640;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9h6Btw8PHhXUr3L5p9rqPUrFBGBJRem5mhcTJAFeicc=;
-        b=Y9rOx+v2OjHfDAzkBBWQLdEZjt5mPqrsIx+pVlefyRrj6VNmwN4JeAiAUO7L+c6BcA
-         XmkSIVfT+SVnA6LBr+6rhotImic+iSOmdCH0plrL/+uzgY4IGYXyELCdDN8V8S4Hhxnz
-         FMoFmwbHgYz9UCBL+AJ7EjqAa1zeFw0WWT/Bw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682588640; x=1685180640;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9h6Btw8PHhXUr3L5p9rqPUrFBGBJRem5mhcTJAFeicc=;
-        b=HUBTAbqzJv2fg1foGHYx/mUXeXRob8iweLcrHx5ZoNRuNel1hr96PcUlTt7NxVvjGG
-         48RmkxQJdt/zOYnFy1D0ZDf9CX7PN5f1GtQikYDUPDOXQFElOwfysZvgbwkXtL89cuYn
-         PS7Hck5U/sdWzhcxnlEdGFtrRi6TAbedgEkI6VGZ3mKl9Z/uQc/ITYZCWmeEM9G6MbR2
-         Pu3mQlx0NcSTYZpnniAOEmGThjBWyZsXoTZSoQYkHhEzyYvjXhDmdGskCq9MpU6DXY9H
-         psmpKDiEyoxRCSqiLNaxEz4AMvudJjxHBRQRvaxqv8uuqYVhRhr1PkjhB8NxVok2ZkRZ
-         NljQ==
-X-Gm-Message-State: AC+VfDwb6o32SbfcH7Mf+4oVHr8clPY65oLfW/89g6dTMHtNJoCeCdT6
-        QSNMRcSAKK9j/ckk9jg2D1IvJw==
-X-Google-Smtp-Source: ACHHUZ6VAmexrUu0fojeJELeltvCH9VnpMyeG2fW/GKlGgRxjxerL3jAv+fxsEx651bYl1RCOHnZ5Q==
-X-Received: by 2002:a05:6402:518d:b0:502:1f7b:f069 with SMTP id q13-20020a056402518d00b005021f7bf069mr1128721edd.2.1682588639727;
-        Thu, 27 Apr 2023 02:43:59 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id b13-20020aa7df8d000000b004fa012332ecsm7743325edy.1.2023.04.27.02.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 02:43:59 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 11:43:57 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/fb-helper: Fix height, width, and accel_flags in
- fb_var
-Message-ID: <ZEpD3atNuBycOcLX@phenom.ffwll.local>
-Mail-Followup-To: Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2b6073d9c2d869c6a4eac6edebd616e0568dec91.1681843245.git.geert+renesas@glider.be>
- <ZEAY5Sf/V10ipDZk@phenom.ffwll.local>
- <CAMuHMdWbsFHP7Amoz16o5ge5a=wv5u2x0B+yP7e-0bRJufqrQQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdWbsFHP7Amoz16o5ge5a=wv5u2x0B+yP7e-0bRJufqrQQ@mail.gmail.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 27 Apr 2023 05:44:31 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14AC4C2B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:44:24 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230427094421epoutp02239385a20a62ba79048e3dc35fc36f84~ZwXkfs14X0066600666epoutp026
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:44:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230427094421epoutp02239385a20a62ba79048e3dc35fc36f84~ZwXkfs14X0066600666epoutp026
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682588661;
+        bh=SZ9PcpiyR4kU5oxIFoQ0FGmeCh45hLAdNw7KJrcRuLA=;
+        h=Subject:Reply-To:From:To:Date:References:From;
+        b=fK0nnvosGAcF5Fsjv83K9twoFub+Z4gHYwKYUvMzudvkLPMmH9/O5SLm99iMtdwQF
+         Jj3dVYLZdWdGhpY3o55qaJChkdrHXFeCgXMj9JYySzjuSiozZUZCp75vKM7rIkIHJb
+         lZhuqtpGpWyaJ0a3hTZ6owPUlkkf3nEwpC3SP6ac=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230427094421epcas2p15d7f80bad5f97817c449acbf2d0ca8de~ZwXkBGz4A1604816048epcas2p1L;
+        Thu, 27 Apr 2023 09:44:21 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4Q6W6D2RZvz4x9Py; Thu, 27 Apr
+        2023 09:44:20 +0000 (GMT)
+X-AuditID: b6c32a48-475ff70000005998-2d-644a43f48d32
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        81.59.22936.4F34A446; Thu, 27 Apr 2023 18:44:20 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] scsi: ufs: core: Change the module parameter macro of
+ use_mcq_mode
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
+Date:   Thu, 27 Apr 2023 18:44:20 +0900
+X-CMS-MailID: 20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmhe4XZ68Ug1Uf+SwezNvGZvHy51U2
+        i4MPO1kspn34yWzx8pCmxaPbzxgtFt3YxmRxedccNovu6zvYLA58WMVosfz4PyaLhR1zWSyW
+        br3J6MDrcfmKt8emVZ1sHhMWHWD0aDm5n8Xj+/oONo+PT2+xeEzcU+fRt2UVo8fnTXIe7Qe6
+        mQK4orJtMlITU1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BO
+        V1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBfoFSfmFpfmpevlpZZYGRoYGJkC
+        FSZkZ/TsvsBWsJqn4vK+NpYGxiVcXYycHBICJhITZ25i6WLk4hAS2MEose/eNCCHg4NXQFDi
+        7w5hkBphgVCJmTs2M4LYQgJKEl0LtzJDxA0k1k3fA2azCehJTPl9hxFkjojARhaJfzcOskIs
+        4JWY0f6UBcKWlti+fCsjhK0h8WNZLzOELSpxc/Vbdhj7/bH5UDUiEq33zkLVCEo8+LkbKi4p
+        0XpmKxuEXS/R+v4UO8hiCYEJjBKNx/5ADdKXuNaxEeoZX4kLrXogYRYBVYmli75B3eMisWvp
+        EiYQm1lAXmL72znMIOXMApoS63fpg5gSAsoSR26xQFTwSXQc/ssO81XDxt9Y2TvmPWGCsNUk
+        Hi3YAg0FGYmLc85BfeIh0d3UyzyBUXEWIqBnIblhFsINCxiZVzGKpRYU56anFhsVmMDjNjk/
+        dxMjOBFreexgnP32g94hRiYOxkOMEhzMSiK8vJXuKUK8KYmVValF+fFFpTmpxYcYTYG+n8gs
+        JZqcD8wFeSXxhiaWBiZmZobmRqYG5krivB87lFOEBNITS1KzU1MLUotg+pg4OKUamOSLjB+x
+        FJ1eNT1Pcd9stQfH73ZGe507deWiRlXYfub10Q8db2dUP3S4dNbumFX/KYOjkluFN9XncHps
+        OmpzNeX2m8CWdcnpwnktbhw/Dy1w3PTplITs8gvWe09+eFMW4v5yUuvdZJaSHa6Hi8SkTi8R
+        TcpcNsOhXFz0ymdGjiABqYjH0RldOS15H/sWSFxwWljZd4CzpNyXr9xs3+SZafpbXT4ZmCjz
+        rHNQXaB/bc+aU3c+M/3p1LJuqiz/zGcWt9x9YYTbUs2VffmGccuPrN8hpBbPWdkU7f3p9MNX
+        Fr6ya7ecvb/05aTXk99bB9i9FBQTWuOparTiuLWyVZI3q2ifU8uqmDNPjz4S+eO5WomlOCPR
+        UIu5qDgRAB8OTmNNBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02
+References: <CGME20230427094420epcms2p1043333a3e0c0cf58e66164e0b83b3b02@epcms2p1>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,92 +103,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 11:15:24AM +0200, Geert Uytterhoeven wrote:
-> Hi Daniel,
-> 
-> On Wed, Apr 19, 2023 at 6:38 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > On Tue, Apr 18, 2023 at 08:42:46PM +0200, Geert Uytterhoeven wrote:
-> > > Fbtest contains some very simple validation of the fbdev userspace API
-> > > contract.  When used with shmob-drm, it reports the following warnings
-> > > and errors:
-> > >
-> > >     height changed from 68 to 0
-> > >     height was rounded down
-> > >     width changed from 111 to 0
-> > >     width was rounded down
-> > >     accel_flags changed from 0 to 1
-> > >
-> > > The first part happens because __fill_var() resets the physical
-> > > dimensions of the first connector, as filled in by drm_setup_crtcs_fb().
-> > > Fix this by retaining the original values.
-> > >
-> > > The last part happens because __fill_var() forces the FB_ACCELF_TEXT
-> > > flag on, while fbtest disables all acceleration on purpose, so it can
-> > > draw safely to the frame buffer.  Fix this by setting accel_flags to
-> > > zero, as DRM does not implement any text console acceleration.
-> > > Note that this issue can also be seen in the output of fbset, which
-> > > reports "accel true".
-> > >
-> > > Fixes: ee4cce0a8f03a333 ("drm/fb-helper: fix input validation gaps in check_var")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> > > --- a/drivers/gpu/drm/drm_fb_helper.c
-> > > +++ b/drivers/gpu/drm/drm_fb_helper.c
-> > > @@ -2066,7 +2068,7 @@ static void drm_fb_helper_fill_var(struct fb_info *info,
-> > >       info->pseudo_palette = fb_helper->pseudo_palette;
-> > >       info->var.xoffset = 0;
-> > >       info->var.yoffset = 0;
-> > > -     __fill_var(&info->var, fb);
-> > > +     __fill_var(&info->var, info, fb);
-> >
-> > Bit a bikeshed since it zeroed-allocated anyway, but I'd pass NULL here
-> > for info and catch that in __fill_var and then keep the explicit = 0;
-> 
-> Yeah, it's a bit unfortunate this is done in two places, and
-> info->var.{height,width} are initialized by drm_setup_crtcs_fb()
-> only later.
-> 
-> Most of the var contents cannot change as mode changes are not
-> supported, so drm_fb_helper_check_var() should just do
-> 
->     if (var->foo > info->var.foo)
->             return -EINVAL;
->     var->foo = info->var.foo;
-> 
-> For the parts that can change, based on earlier discussions I saw pass
-> by, I believe there should be a call into atomic try-modesetting at
-> the end of drm_fb_helper_check_var()?
+mcq_mode_ops uses only param_{set,get}_bool(). Therefore, convert
+module_param_cb() to module_param() and remove the mcq_mode_ops.
 
-Yeah ideally that's what we do. And I guess we could limit that to
-atomic-only drivers since with legacy kms there's really no way to
-correctly implement any fbdev mode changes (because there's just no
-check/commit split there and fbdev wants that).
+Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+---
+ drivers/ufs/core/ufshcd.c | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
 
-I guess the trickier part is reworking the drm fbdev code so that it won't
-tamper with it's internal structures (or roll them back) when only doing a
-TEST_ONLY commit.
-
-And in theory we could then actually support proper mode changes through
-fbdev, as long as it fits into the fb we allocated at least. Reallocating
-fbs would be a lot more intrusive but also not impossible.
--Daniel
-
-> > Either way Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> 
-> Thanks!
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> -- 
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9434328ba323..4ae92e8883b3 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -98,7 +98,7 @@
+ /* Polling time to wait for fDeviceInit */
+ #define FDEVICEINIT_COMPL_TIMEOUT 1500 /* millisecs */
+ 
+-/* UFSHC 4.0 compliant HC support this mode, refer param_set_mcq_mode() */
++/* UFSHC 4.0 compliant HC support this mode. */
+ static bool use_mcq_mode = true;
+ 
+ static bool is_mcq_supported(struct ufs_hba *hba)
+@@ -106,23 +106,7 @@ static bool is_mcq_supported(struct ufs_hba *hba)
+ 	return hba->mcq_sup && use_mcq_mode;
+ }
+ 
+-static int param_set_mcq_mode(const char *val, const struct kernel_param *kp)
+-{
+-	int ret;
+-
+-	ret = param_set_bool(val, kp);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
+-}
+-
+-static const struct kernel_param_ops mcq_mode_ops = {
+-	.set = param_set_mcq_mode,
+-	.get = param_get_bool,
+-};
+-
+-module_param_cb(use_mcq_mode, &mcq_mode_ops, &use_mcq_mode, 0644);
++module_param(use_mcq_mode, bool, 0644);
+ MODULE_PARM_DESC(use_mcq_mode, "Control MCQ mode for controllers starting from UFSHCI 4.0. 1 - enable MCQ, 0 - disable MCQ. MCQ is enabled by default");
+ 
+ #define ufshcd_toggle_vreg(_dev, _vreg, _on)				\
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.17.1
+
