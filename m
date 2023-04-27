@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8FF6F0449
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2636F044B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243583AbjD0Khx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S243555AbjD0Kjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243320AbjD0Kht (ORCPT
+        with ESMTP id S243223AbjD0Kjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:37:49 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA92AFF;
-        Thu, 27 Apr 2023 03:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=kMB0XRCHsuAI2geKD5SmnuVr5s6qo5dyKc/cVU06Qig=; b=7WMB1Oele0kgZL8h5FamuK5WvD
-        +52PLwUQuRJanhXYRsv8J8Od/nFA7vRHGld6Jhdq0107Ri2t227KCxnDTU2Y3XuJBpPXKHQWWk2p8
-        56ajOd5D4aufPWJzcnRnqtDdiiRAquYvmWVvB0rMGNoxhj5QEi87BIZy5bfeGwXwrbrLYhPY3prCh
-        wCKaoqLSOuYUX15ofOI4X30NlHScRDi0UI/TDTAKYNkwirjHQ2NUhvQ+rf7IFa1OL48knQKQ+1CzH
-        dzrAvgx3ElhRR1D9xJuaNEmXMG6UsNBI2U/Dmn8BjVtH+SYtIRNbaaBeVaNAiWm7U2k1rsaCRPjqk
-        LVchktyw==;
-Received: from p200300ccff1672001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff16:7200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1prz0I-00010G-Na; Thu, 27 Apr 2023 12:37:34 +0200
-Date:   Thu, 27 Apr 2023 12:37:33 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        ": Tony Lindgren" <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH] gpiolib: fix allocation of mixed dynamic/static GPIOs
-Message-ID: <20230427123733.15ad4aa3@aktux>
-In-Reply-To: <52453352-74bd-979f-03b6-322489800538@csgroup.eu>
-References: <20230426220338.430638-1-andreas@kemnade.info>
-        <f6b261ad-3267-db70-c173-154a12c42bea@csgroup.eu>
-        <CAHp75Vep8VSirY7mvGGCubNi-O4jS_inTALS3Ei9mQu98RV+7Q@mail.gmail.com>
-        <52453352-74bd-979f-03b6-322489800538@csgroup.eu>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
+        Thu, 27 Apr 2023 06:39:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A22DE77
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:39:39 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-32f23e2018fso26164355ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:39:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682591978; x=1685183978;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tW3lXjwwvfoDVqxWAf7Y3WOKVF4KqvvCL69ImettA3o=;
+        b=ghgL301kVsQcKxy5b3K1REOBkdB/Bn6rXh0UWFyScn+O6LbKfsWomYm2cAwy4ACmfI
+         XMPfhOTjSmgbFLbBVHRYcJe+LyT7p4RXzTv4b1pU1FathTs4QlgXPq/plr2P5ezqpY4D
+         xJW8ZTP26GgstlMPCLrRh3fVsdRK7QMeA2DQhip1rtkoa8zoE2vp33iQhGvKc0VRJjUe
+         lB4yXRZq9zfQ/yKTX/q6zCibdQ1u3kHcHn5o4dH1XzoDVlcaiIgsVys8qz5XejLOyD6U
+         rGQNJOLTORNUF8fiOnV55Lh4rXh7VlGfvCBYvi/FY6eQjjCuCVYVB0521SYdMig2Os6M
+         gljQ==
+X-Gm-Message-State: AC+VfDwBNj/lROCmu19EZyfgOQK3LcKlmafXZQdPvjqh5Oc9kubpgZW/
+        Wlr1U3G3M/xuSCxUdA3A8PKbTzzSF7qo14g8pTvlhA6Yzrk2
+X-Google-Smtp-Source: ACHHUZ7UuotYn7/Qzw/4dXAbuxUIl2RCcVpdBNfl5F7f81acWzI1cipma/pIr/+4zaRJCADT1SoJG+S2vLZkF8iW0eH2CUHi5OEA
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c90e:0:b0:32f:ea0:785e with SMTP id
+ t14-20020a92c90e000000b0032f0ea0785emr1077533ilp.2.1682591978799; Thu, 27 Apr
+ 2023 03:39:38 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 03:39:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000032c8c505fa4ef9cc@google.com>
+Subject: [syzbot] Monthly nilfs report (Apr 2023)
+From:   syzbot <syzbot+listf919ad9f1f609cd7cf5d@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Apr 2023 06:20:34 +0000
-Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+Hello nilfs maintainers/developers,
 
-> Le 27/04/2023 =C3=A0 08:00, Andy Shevchenko a =C3=A9crit=C2=A0:
-> > On Thu, Apr 27, 2023 at 8:40=E2=80=AFAM Christophe Leroy
-> > <christophe.leroy@csgroup.eu> wrote: =20
-> >>
-> >>
-> >>
-> >> Le 27/04/2023 =C3=A0 00:03, Andreas Kemnade a =C3=A9crit : =20
-> >>> [Vous ne recevez pas souvent de courriers de andreas@kemnade.info. D=
-=C3=A9couvrez pourquoi ceci est important =C3=A0 https://aka.ms/LearnAboutS=
-enderIdentification ]
-> >>>
-> >>> If static allocation and dynamic allocation GPIOs are present,
-> >>> dynamic allocation pollutes the numberspace for static allocation,
-> >>> causing static allocation to fail.
-> >>> Enfore dynamic allocation above GPIO_DYNAMIC_BASE. =20
-> >>
-> >> Hum ....
-> >>
-> >> Commit 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS") was supposed
-> >> to enforce dynamic allocation above GPIO_DYNAMIC_BASE already.
-> >>
-> >> Can you describe what is going wrong exactly with the above commit ? =
-=20
-> >=20
-> > Above commit only works to the first dynamic allocation, if you need
-> > more than one with static ones present it mistakenly will give you a
-> > base _below_ DYNAMIC_BASE. =20
->=20
-> Ah right, that needs to be fixed.
->=20
-> >=20
-> > However, this change is just PoC I proposed, the conditional and
-> > action should be slightly different to cover a corner case, when
-> > statically allocated chip overlaps the DYNAMIC_BASE, i.e. gdev->base <
-> > DYNAMIC_BASE, while gdev->base + gdev->ngpio >=3D DYNAMIC_BASE.
-> >  =20
->=20
-> Yes you are right, that's gdev->base + gdev->ngpio that should be checked.
->=20
-and that not with simple continue or base might simply stay at DYNAMIC_BASE.
+This is a 31-day syzbot report for the nilfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/nilfs
 
-I will send a v2 of this patch with refined logic.
+During the period, 1 new issues were detected and 3 were fixed.
+In total, 17 issues are still open and 24 have been fixed so far.
 
-Regards,
-Andreas
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  1238    Yes   INFO: task hung in lock_mount
+                   https://syzkaller.appspot.com/bug?extid=221d75710bde87fa0e97
+<2>  605     Yes   WARNING in nilfs_btree_assign
+                   https://syzkaller.appspot.com/bug?extid=31837fe952932efc8fb9
+<3>  321     Yes   WARNING in nilfs_sufile_set_segment_usage
+                   https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
+<4>  241     Yes   INFO: task hung in sync_inodes_sb (4)
+                   https://syzkaller.appspot.com/bug?extid=7d50f1e54a12ba3aeae2
+<5>  195     No    INFO: task hung in path_openat (7)
+                   https://syzkaller.appspot.com/bug?extid=950a0cdaa2fdd14f5bdc
+<6>  55      Yes   INFO: task hung in nilfs_detach_log_writer
+                   https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
+<7>  28      Yes   kernel BUG in folio_end_writeback
+                   https://syzkaller.appspot.com/bug?extid=7e5cf1d80677ec185e63
+<8>  21      No    KASAN: slab-out-of-bounds Read in nilfs_iget_test
+                   https://syzkaller.appspot.com/bug?extid=cac676135771fc8f1eb2
+<9>  6       No    BUG: unable to handle kernel NULL pointer dereference in nilfs_segctor_do_construct
+                   https://syzkaller.appspot.com/bug?extid=5afc832d6dbb2fd17538
+<10> 3       No    WARNING in nilfs_btree_propagate
+                   https://syzkaller.appspot.com/bug?extid=527641d191abe35993c1
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
