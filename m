@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A6F6F0CE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD786F0CE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344146AbjD0UK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S1343652AbjD0UMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245168AbjD0UKz (ORCPT
+        with ESMTP id S1344150AbjD0UMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:10:55 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E82D74;
-        Thu, 27 Apr 2023 13:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=rm4VFHyDYsqXBKBCZiX6B5oR3dBaXDqMYN7/nV3rI0o=; b=oVjhWQHWCGmKy1M95S4AZgQpao
-        aPZfZFUwt0gqinnR6m4oxjlEQu8YYNfEY5wYHAgeWfURDtWW9eh6yB0j9w1ZCUaPLHjdamaTkC5dw
-        K+HliZCX9gTUW4J5N3ZLj3X/HWKYNtmzDrCKjLeGPNMwa/mNmVIIswQyITTh20FlpaB1hmfeIarje
-        KPLVkTfhs6Q9LtJaCzf6uyToiJPAlQYfVC3iPNUdYpd4HvBvKmS/mdOOnJvKRygqm1/0/4iZTRsfc
-        F/q76zK1DIqtAZaVnLaXFKzZixIe1ayxB06fUp25+johy6c+NNtWNVcaowsQu3HkctlJdPinrEAPE
-        LPFF1NqQ==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ps7x5-000JeT-CV; Thu, 27 Apr 2023 22:10:51 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ps7x4-000Lnr-W5; Thu, 27 Apr 2023 22:10:51 +0200
-Subject: Re: [PATCH bpf-next] selftests/bpf: Update the aarch64 tests deny
- list
-To:     Stanislav Fomichev <sdf@google.com>,
-        Florent Revest <revest@chromium.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
-        andrii@kernel.org, kpsingh@kernel.org, mykolal@fb.com,
-        martin.lau@linux.dev, song@kernel.org, xukuohai@huaweicloud.com,
-        mark.rutland@arm.com
-References: <20230427143207.635263-1-revest@chromium.org>
- <CABRcYm+O-_GGhnAmJW6_=9vKeKSvzVLcxBRq3Pfjb3W0_HNjhw@mail.gmail.com>
- <ZErFdVXHhEdJ/m3G@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <60a7370b-9e6a-cba3-4d63-76d47a780982@iogearbox.net>
-Date:   Thu, 27 Apr 2023 22:10:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 27 Apr 2023 16:12:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B343AB1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682626277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AhZUeHYpeOBAxV0IzIBwDv//tE17MPSk4ZjZmgXSJWI=;
+        b=H0033ZNHD+GDaqWZVeb59pAKw4dl4F2sMvrSMvaechkQl4N2iMiQs4Lx2p8cBf9a8yFsC1
+        2mnuqbhxQB3yWYzhPdm10ADoj4BfTRDhm7Xv+4hU+J0kjXjfJMnDIWNRHkL9WCUTWJiriR
+        oCxDgNqoFYKDhPNcA2L0u7aaqMXvDZ4=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-458-lQs8M8yMPkK3ZUqZJLcURw-1; Thu, 27 Apr 2023 16:11:16 -0400
+X-MC-Unique: lQs8M8yMPkK3ZUqZJLcURw-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3ed767b30easo19370041cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:11:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682626275; x=1685218275;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AhZUeHYpeOBAxV0IzIBwDv//tE17MPSk4ZjZmgXSJWI=;
+        b=DTWAga6wakGlHS4N8FH8dBogQqEeygvWgLS0DERZRY2z49yFQyEKjpi6258kxhlffW
+         k1TtmHioXmcfC3rY6fVSbZLD/KZsmXIjCgSeDj1NyMb+EGC1d9cQOV3GXeg59LczykmT
+         1VnigrUZUOoqeMoAHXZUx5sxQ6dD9d5wY+6FAjV6RU7YhvegkVilVD/eSkJi1TdvhqnW
+         tp9zLN5yZqnnaPax0AWsSS/64oOzICaH/QGClVHQ6SFzSz+MNKFXoXzY/0cLsI25fFHB
+         MFSPejtVX8CqSKvEbK1oQZeakenotewN3OyB8arL58M+JFVqrmnh/kK1iGnGzS+8j1a4
+         p/bw==
+X-Gm-Message-State: AC+VfDxnhKfS4oU1Ba1x0svSMDaJer1HAkGdFV7TasZq5AyJb9sjmu5a
+        rfJtqcq4nAWZdyQO9CMzgqESU19XTDX7JbpXJ5TMYnYZ4UgIXXPWfo1hm/um6RBdyEO8ZSvR4P1
+        eeoAvwMh4P7dQdK0v2+l9XUkxyAeGSXX08H9Bhwek7oZptHDKavJKWtp+4ChQ0VZRlKo+pT7uoV
+        Ipld+DqQ==
+X-Received: by 2002:a05:622a:11d3:b0:3ea:ef5:5b8c with SMTP id n19-20020a05622a11d300b003ea0ef55b8cmr5145336qtk.3.1682626274778;
+        Thu, 27 Apr 2023 13:11:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4VhE7QH8N5ots5VW8DKCbhdRPJyfLcsNh6MOOG1ylNSxk/alsE/WyTGIrq2TqNMWsuuXaC5A==
+X-Received: by 2002:a05:622a:11d3:b0:3ea:ef5:5b8c with SMTP id n19-20020a05622a11d300b003ea0ef55b8cmr5145287qtk.3.1682626274390;
+        Thu, 27 Apr 2023 13:11:14 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id d19-20020a05620a241300b0074fb065bde4sm3444283qkn.18.2023.04.27.13.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 13:11:13 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Houghton <jthoughton@google.com>, peterx@redhat.com,
+        Anish Moorthy <amoorthy@google.com>
+Subject: [PATCH 0/2] selftests/kvm: Fixes for demand paging test
+Date:   Thu, 27 Apr 2023 16:11:10 -0400
+Message-Id: <20230427201112.2164776-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.39.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <ZErFdVXHhEdJ/m3G@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/23 8:56 PM, Stanislav Fomichev wrote:
-> On 04/27, Florent Revest wrote:
->> On Thu, Apr 27, 2023 at 4:32 PM Florent Revest <revest@chromium.org> wrote:
->>>
->>> This patch updates the list of BPF selftests which are known to fail so
->>> the BPF CI can validate the tests which pass now.
->>
->> Note: I tested this denylist a few months back by sending a manual PR
->> to https://github.com/kernel-patches/bpf.
->> At the time, it worked
->> https://github.com/kernel-patches/bpf/actions/runs/4106542133/jobs/7085514761
->> (even though there seemed to be a known flake in the gcc variant but
->> unrelated to the new arch support)
->>
->> Every time I wanted to have the CI run on my PRs, I had to annoy Manu
->> by email (I wouldn't have the rights to trigger the CI by myself
->> otherwise). So I haven't tested this *actual* patch rebased on the
->> current CI before sending it to the list. (e.g. the
->> module_fentry_shadow test has been added since then and I just assumed
->> it would pass in CI like the rest)
->>
->> My understanding is that this patch should soon be picked up by the
->> testing bot and we can use that CI run to check that everything works
->> as intended. Let's wait for a CI green light before merging this! :)
->> If there are errors I'll send a v2
-> 
-> Looks green now:
-> 
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> 
-> https://github.com/kernel-patches/bpf/actions/runs/4822595792/jobs/8590732278
+Two trivial fixes per subject, please see each patch, thanks.
 
-That's awesome to see ... big batch of tests which this unlocks!
+Peter Xu (2):
+  selftests/kvm: Setup vcpu_alias only for minor mode test
+  selftests/kvm: Allow dump per-vcpu info for uffd threads
+
+ .../testing/selftests/kvm/demand_paging_test.c  | 17 +++++++++--------
+ .../selftests/kvm/lib/userfaultfd_util.c        |  4 ++--
+ 2 files changed, 11 insertions(+), 10 deletions(-)
+
+-- 
+2.39.1
+
