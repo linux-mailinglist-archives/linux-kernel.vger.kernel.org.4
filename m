@@ -2,192 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01936F05E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076486F05EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243521AbjD0MgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
+        id S243735AbjD0Mgb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 08:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjD0MgW (ORCPT
+        with ESMTP id S243688AbjD0Mg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:36:22 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D989B3AAA;
-        Thu, 27 Apr 2023 05:36:21 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-74de7635180so809485185a.3;
-        Thu, 27 Apr 2023 05:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682598981; x=1685190981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uamYaAPiGbEuD/CCuWzrQEEft21M2zokyUeiq+isD7s=;
-        b=BTlbPFOcy9ohq/rnIcEzr3ktsmGoIkLS5TIak2p0WjRjIS7tVD1nIqK8H28Io6XqVb
-         9aLFzRITd38OHn++1iixe4l+zH9eVbZwDAfhDkBPWusPk/VSHTt3diuofZ1nXTms4rWa
-         JJDnLuoNxKzEPHBsTTAesrqHvIflWeuCV+ypelKfuvD4O+TPSpqMCXAzeoegikWjB/Xn
-         oB//Q9Oj0JVMjfEMXdE+932BDwJurikQ3prEJSDaerswpy8Wg2pAA2X1sKEPI4tHB6Go
-         ZHMRvXK14JUWYrPAmxUScss3xazUqYC7wB2ZNdtCocebfo9MWUezS6nhOC52uXfScmbO
-         Xkvg==
+        Thu, 27 Apr 2023 08:36:27 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6594C0E;
+        Thu, 27 Apr 2023 05:36:25 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-b9963a72fbfso8800571276.3;
+        Thu, 27 Apr 2023 05:36:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682598981; x=1685190981;
+        d=1e100.net; s=20221208; t=1682598985; x=1685190985;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uamYaAPiGbEuD/CCuWzrQEEft21M2zokyUeiq+isD7s=;
-        b=kbVIus5Zlt1nLD/D602IavKg+fKqXa8euUDk5wNeoKeKslEGCRlnf/+FguDfLS7nNr
-         J6OS79tYntZJI5mU8S0NEMJtcagDbH23QkSrOQTJWkoaC/7KZbmAFJ9+aJ/EqObjj/Y3
-         VIpIh7k+9564H7g/f607IQDM+muou5KLm35tSuqVBKwA3ZWSyDUCZf6NWXsF9ztJEqZN
-         XR+OHdg9S99O2R8wQuWrQdVUn9uXvDjenVOGaTr1ah+kcyRFgCTsbBT6N7BbxoHDkBMl
-         U3PAvPdg5UG624P4gmPagdoy7DtOAxfHxAF2cW6HB6nTfR+GG2xwJ9N0XXgOPCTS1vNJ
-         IiWg==
-X-Gm-Message-State: AC+VfDxH0DdzGYSmcdfON4HaNzKOiGX6g63VQOGlZ8rfJB4Iu66akujw
-        aDTw+E6YwojY5QuMYT4n6TkG8IA+UJ1Met7kKKQ=
-X-Google-Smtp-Source: ACHHUZ6z1cQlttoN0k2H76P2WsRE9QHnUy28HBxx03rn8CVmetWUfgyzpbwJvo84hWza6TQwkxJK0ed6dgn0FdEClcE=
-X-Received: by 2002:ad4:5fca:0:b0:615:29ab:e4c6 with SMTP id
- jq10-20020ad45fca000000b0061529abe4c6mr2008193qvb.45.1682598981060; Thu, 27
- Apr 2023 05:36:21 -0700 (PDT)
+        bh=8GfYLDzqUDcm88RwTWgB+qyxg4iuuLuJ42jmjtTcG+g=;
+        b=HKSIjV+NnMDL7T4u3p1+zIjoiw8GE7xdcF3kn5zYCkLxHSgsOzUr58r5/tQgBdEfxj
+         HuFfRm9/HHqJe3RlNybtnigOBfiyYnNBITzbDWU0vOhPhjtvtHkQ8l/0b+ax0d9hbzYc
+         P6KQphO9sIWttqa3SdXhvELofDsyX2ywjfQ72fSTEj/KBooV/NjiTvEG7sUvOGLyNO1t
+         XGhmwt02RTiUF0QxfMFG9H677/iMBCZ6+e7BfUXqObEO3iBL1AHMJLeVUPSo7Sj/BG0i
+         yvqCJT6WmgeosOwngGIdMFh1MLwkSfGM/V1cTxd+Pk2tOKCrkEZmFsQRpG5sJGDWyAvC
+         j7uw==
+X-Gm-Message-State: AC+VfDyVHVUcaOicEuStJaCt9eQ/tlLtDpGtd5H8ynIgB87ncDcLy6FZ
+        /qGQDpGeHcY74vctiy9n8LfX7CvFhbZ30w==
+X-Google-Smtp-Source: ACHHUZ4hIzd3twPacpqPWfBBzVeaQdN4BvBLV6ot6WcGzEhUb9DY/zumwU+rsRt5/hdF63EWTS7XDA==
+X-Received: by 2002:a25:6d83:0:b0:b92:5d7b:2c15 with SMTP id i125-20020a256d83000000b00b925d7b2c15mr718020ybc.25.1682598984843;
+        Thu, 27 Apr 2023 05:36:24 -0700 (PDT)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id z188-20020a8165c5000000b00545a08184bbsm4732949ywb.75.2023.04.27.05.36.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 05:36:24 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-54f8e823e47so95971627b3.2;
+        Thu, 27 Apr 2023 05:36:24 -0700 (PDT)
+X-Received: by 2002:a0d:d44f:0:b0:54f:dafd:a369 with SMTP id
+ w76-20020a0dd44f000000b0054fdafda369mr1011695ywd.51.1682598983950; Thu, 27
+ Apr 2023 05:36:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
- <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com>
- <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
- <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
- <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
- <20230424174049.1c9e54dd@rorschach.local.home> <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
- <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
-In-Reply-To: <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 27 Apr 2023 20:35:45 +0800
-Message-ID: <CALOAHbCXRwp9--MV2k8z3aJyAL6vzQLimtHgkeza7g0C=Edb8g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
+In-Reply-To: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 27 Apr 2023 14:36:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU0V=b1FLiT4UbNVTa42+5hFx3WJQD6gETwNYioSaSoag@mail.gmail.com>
+Message-ID: <CAMuHMdU0V=b1FLiT4UbNVTa42+5hFx3WJQD6gETwNYioSaSoag@mail.gmail.com>
+Subject: Re: [PATCH] ext4: Fix unused iterator variable warnings
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, yanaijie@huawei.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 8:15=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
+On Thu, Apr 20, 2023 at 6:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> When CONFIG_QUOTA is disabled, there are warnings around unused iterator
+> variables:
 >
-> On Thu, Apr 27, 2023 at 5:57=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com=
-> wrote:
-> >
-> > On Tue, Apr 25, 2023 at 5:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis=
-.org> wrote:
-> > >
-> > > On Wed, 19 Apr 2023 15:46:34 -0700
-> > > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > > No. Just one prog at entry into any of the kernel functions
-> > > > and another prog at entry of funcs that 1st bpf prog called indirec=
-tly.
-> > > > Like one prog is tracing networking events while another
-> > > > is focusing on mm. They should not conflict.
-> > >
-> > > You mean that you have:
-> > >
-> > > function start:
-> > >   __bpf_prog_enter_recur()
-> > >     bpf_program1()
-> > >       __bpf_prog_enter_recur()
-> > >         bpf_program2();
-> > >       __bpf_prog_exit_recur()
-> > >   __bpf_prog_exit_recur()
-> > >
-> > >   rest of function
-> > >
-> > > That is, a bpf program can be called within another bpf pogram betwee=
-n
-> > > the prog_enter and prog_exit(), that is in the same context (normal,
-> > > softirq, irq, etc)?
-> > >
-> >
-> > Right, that can happen per my verification. Below is a simple bpf
-> > program to verify it.
-> >
-> > struct {
-> >     __uint(type, BPF_MAP_TYPE_LPM_TRIE);
-> >     __type(key, __u64);
-> >     __type(value, __u64);
-> >     __uint(max_entries, 1024);
-> >     __uint(map_flags, BPF_F_NO_PREALLOC);
-> > } write_map SEC(".maps");
-> >
-> > __u64 key;
-> >
-> > SEC("fentry/kernel_clone")
-> > int program1()
-> > {
-> >     __u64 value =3D 1;
-> >
-> >     bpf_printk("before update");
-> >     // It will call trie_update_elem and thus trigger program2.
-> >     bpf_map_update_elem(&write_map, &key, &value, BPF_ANY);
-> >     __sync_fetch_and_add(&key, 1);
-> >     bpf_printk("after update");
-> >     return 0;
-> > }
-> >
-> > SEC("fentry/trie_update_elem")
-> > int program2()
-> > {
-> >     bpf_printk("trie_update_elem");
-> >     return 0;
-> > }
-> >
-> > The result as follows,
-> >
-> >          kubelet-203203  [018] ....1  9579.862862:
-> > __bpf_prog_enter_recur: __bpf_prog_enter_recur
-> >          kubelet-203203  [018] ...11  9579.862869: bpf_trace_printk:
-> > before update
-> >          kubelet-203203  [018] ....2  9579.862869:
-> > __bpf_prog_enter_recur: __bpf_prog_enter_recur
-> >          kubelet-203203  [018] ...12  9579.862870: bpf_trace_printk:
-> > trie_update_elem
-> >          kubelet-203203  [018] ....2  9579.862870:
-> > __bpf_prog_exit_recur: __bpf_prog_exit_recur
-> >          kubelet-203203  [018] ...11  9579.862870: bpf_trace_printk:
-> > after update
-> >          kubelet-203203  [018] ....1  9579.862871:
-> > __bpf_prog_exit_recur: __bpf_prog_exit_recur
-> >
-> > Note that we can't trace __bpf_prog_enter_recur and
-> > __bpf_prog_exit_recur, so we have to modify the kernel to print them.
-> >
+>   fs/ext4/super.c: In function 'ext4_put_super':
+>   fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
+>    1262 |         int i, err;
+>         |             ^
+>   fs/ext4/super.c: In function '__ext4_fill_super':
+>   fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
+>    5200 |         unsigned int i;
+>         |                      ^
+>   cc1: all warnings being treated as errors
 >
-> ... However, surprisingly it still works even after this patchset is
-> applied, because the hardirq/softirq flag is set when the program2 is
-> running, see also the flags in the above trace_pipe output. Is that
-> expected ?!
-> I need  some time to figure it out, but maybe you have a quick answer...
+> The kernel has updated to gnu11, allowing the variables to be declared
+> within the for loop. Do so to clear up the warnings.
+>
+> Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Answer it by myself, that is because of the
-allowing-one-single-recursion rule. I misread the trace flags before.
-Sorry about the noise.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
 
---=20
-Regards
-Yafang
+> @@ -1311,7 +1311,7 @@ static void ext4_put_super(struct super_block *sb)
+>         ext4_flex_groups_free(sbi);
+>         ext4_percpu_param_destroy(sbi);
+>  #ifdef CONFIG_QUOTA
+> -       for (i = 0; i < EXT4_MAXQUOTAS; i++)
+> +       for (int i = 0; i < EXT4_MAXQUOTAS; i++)
+
+int
+
+>                 kfree(get_qf_name(sb, sbi, i));
+>  #endif
+>
+
+> @@ -5628,7 +5627,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>  #endif
+>
+>  #ifdef CONFIG_QUOTA
+> -       for (i = 0; i < EXT4_MAXQUOTAS; i++)
+> +       for (unsigned int i = 0; i < EXT4_MAXQUOTAS; i++)
+
+unsigned int
+
+>                 kfree(get_qf_name(sb, sbi, i));
+>  #endif
+>         fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
+
+I do see an opportunity to make this more consistent.
+get_qf_name() takes an int for the last parameter, but that should probably
+become unsigned int?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
