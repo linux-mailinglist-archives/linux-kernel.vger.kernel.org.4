@@ -2,108 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FDD6F0BE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6776F0BE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244405AbjD0S2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S244459AbjD0S2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244238AbjD0S2O (ORCPT
+        with ESMTP id S244381AbjD0S2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:28:14 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B0140C4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:28:13 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2473548e65fso8191827a91.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682620093; x=1685212093;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d4aLQGpFNX5qly7iV9G5CqlTNQWcBkLYmo+FRHaOx6I=;
-        b=NJoFhRto2PQlOOjbzPh9oXFg+y0CSQjCKSlgskjud8bzXf5fB0gjG/g6rrcha5ydRJ
-         MIe954s2abHb0UqqKI+4rcQY0IbPgvVKEF6AAA4lqtGYEbLILWHLBfdbIYgU+telaUf9
-         dm1fgFK1tc6p2yEq2NWQLjVNjOiBk3h7w4F4OjgO54xCc9K0bopRwB35McFiyZrKkznJ
-         6X3TdWJk3vw51Ja1MpHnDSjEY+dDE+gm47O2Ly4xVM8B4zgs6vYQX9bufUoOWWU+vTrU
-         8tzfms2tiV6IFB0F0VFvoS7xj2rZhd8hYo8Vzno34/8D3hy4Ovgi7QOmqwtBmR41AEGO
-         jIYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682620093; x=1685212093;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d4aLQGpFNX5qly7iV9G5CqlTNQWcBkLYmo+FRHaOx6I=;
-        b=XD9GBO4PauLBcA6Ocz9tYe6JHni862LSF7Vu5KcdIX0+g4SYjGhdY+OJHA3hvzAEEs
-         sNRXYIA0R7Has1DmJF8L7PrLIBA21zfqActbcIlB1y8i0Lor+D/Ow4J4wv2Drb6FndJn
-         GCaiHSIgQzyzsQc1S7EUb3r/9dY8MUZdfqbEHd6/5Z22XIPDK/AKR7icRmO/6GZ9Z4yG
-         y+MAgNJUnD2W6WlbsTJDhroRq30Pt79/V1IqAHdUSvRnlD0qKS5g7BaWFjkYOy5CP0Pj
-         BgLAUYnacSwyaPKmZ3ZU/N5W+qu+VEQimJYFN/Tg4cCAIbC1OzcI9c4Hr+Ib2Z1AFJ3T
-         OEMw==
-X-Gm-Message-State: AC+VfDztA96ZKnnxmpkvHmlpfIu/OdzOn5pH+iPFLE1vIcALUkWA5nky
-        PBJFFfdxCE8SjJJU2/OPfw2iDRA=
-X-Google-Smtp-Source: ACHHUZ7+0lDE62NqgN7SOmFhEMUOybYiJhSDJKluYTuON5gTSMdUBLUULYmHIFAtGf2ugW7CW6uK/Ls=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90a:3881:b0:247:9111:9d0d with SMTP id
- x1-20020a17090a388100b0024791119d0dmr728351pjb.4.1682620092950; Thu, 27 Apr
- 2023 11:28:12 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 11:28:11 -0700
-In-Reply-To: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
-Mime-Version: 1.0
-References: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
-Message-ID: <ZEq+u0CWs8eO2ED/@google.com>
-Subject: Re: [PATCH v1] selftests/bpf: Do not use sign-file as testcase
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Alexey Gladkov <legion@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 14:28:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3758C3C29;
+        Thu, 27 Apr 2023 11:28:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C056A63EFF;
+        Thu, 27 Apr 2023 18:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4625C4339E;
+        Thu, 27 Apr 2023 18:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682620094;
+        bh=eBxG5p4VvkS1hruiYxFut4TnMP2p0AGA9ZCpb2a/S9Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WK3+Z2QSIuyTRUnMXUba2OgVayK15hLaggwO9SU5drY4T1Gapbkeuga4bWm1QbLDI
+         Y1k7HWzRDC94zvufNaMVWZrB1SZbfGNVOdIA6nHrD8J8CNAIe3FTQ7LaMGallRv1AU
+         HJpfaOAArIjc+zAiBASBwB3Jd2bSw42N/esM4PIJ9eQBKuGOCLt6GHyGitZD3vMOfd
+         D1JtafxEmzhi9FKIO/rRwjQNLDH2hxVFfOReSlRDIgSGwW1IGusKZ5IAPLftQ7CvJJ
+         5aYwx7UOjSR/TRns1R5RDnHSF1CXZDvaJw15o6lRJPiRvoVXm1Wc/YJpLc+hfrgfzl
+         86A8rh3EOWonw==
+Date:   Thu, 27 Apr 2023 13:28:12 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-pci@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [RFC PATCH v2 1/3] PCI: endpoint: introduce a helper to
+ implement pci ep virtio function
+Message-ID: <20230427182812.GA262399@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427104428.862643-2-mie@igel.co.jp>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/27, Alexey Gladkov wrote:
-> The sign-file utility (from scripts/) is used in prog_tests/verify_pkcs7_sig.c,
-> but the utility should not be called as a test. Executing this utility
-> produces the following error:
-> 
-> selftests: /linux/tools/testing/selftests/bpf: urandom_read
-> ok 16 selftests: /linux/tools/testing/selftests/bpf: urandom_read
-> 
-> selftests: /linux/tools/testing/selftests/bpf: sign-file
-> not ok 17 selftests: /linux/tools/testing/selftests/bpf: sign-file # exit=2
-> 
-> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+Simple typos, don't repost until there's more substantive feedback.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+On Thu, Apr 27, 2023 at 07:44:26PM +0900, Shunsuke Mie wrote:
+> The Linux PCIe Endpoint framework supports to implement PCIe endpoint
+> functions using a PCIe controller operating in endpoint mode.
+> It is possble to realize the behavior of PCIe device, such as virtio PCI
+> device. This patch introduces a setof helper functions and data structures
+> to implement a PCIe endpoint function that behaves as a virtio device.
 
-> ---
->  tools/testing/selftests/bpf/Makefile | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b677dcd0b77a..fd214d1526d4 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -88,8 +88,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->  	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
->  	xdp_features
->  
-> -TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
-> -TEST_GEN_FILES += liburandom_read.so
-> +TEST_GEN_FILES += liburandom_read.so urandom_read sign-file
->  
->  # Emit succinct information message describing current building step
->  # $1 - generic step name (e.g., CC, LINK, etc);
-> -- 
-> 2.33.7
-> 
+s/possble/possible/
+s/setof/set of/
+
+> Those functions enable the implementation PCIe endpoint function that
+> comply with the virtio lecacy specification. Because modern virtio
+> specifications require devices to implement custom PCIe capabilities, which
+> are not currently supported by either PCIe controllers/drivers or the PCIe
+> endpoint framework.
+
+s/implementation PCIe endpoint function/implementation of PCIe endpoint functions/
+s/lecacy/legacy/ (What does "legacy" mean?  Is there a spec for this?)
+
+I guess "legacy virtio" devices need not implement custom PCIe
+capabilities, but "modern virtio" devices must implement them?
+
+Capitalize "Endpoint framework" consistently; sometimes it's
+"Endpoint", other times it's "endpoint".
+
+> While this patch provides functions for negotiating with host drivers and
+> copying data, each PCIe function driver must impl ement operations that
+> depend on each specific device, such as network, block, etc.
+
+s/impl ement/implement/
+
+> +#include <linux/virtio_pci.h>
+> +#include <linux/virtio_config.h>
+> +#include <linux/kthread.h>
+
+Typically the header includes would be alphabetized if possible.
+
+> +	vq_virt = pci_epc_map_addr(epf->epc, epf->func_no, epf->vfunc_no,
+> +				   vq_pci_addr, vq_phys, vq_size);
+> +	if (IS_ERR(vq_virt)) {
+> +		pr_err("Failed to map virtuqueue to local");
+
+s/virtuqueue/virtqueue/
+
+I know you probably don't have any way to use dev_err(), but this
+message really needs some context, like a driver name and instance or
+something.
+
+> +#define VIRTIO_PCI_LEGACY_CFG_BAR 0
+
+What makes this a "legacy cfg BAR"?  Is there some spec that covers
+virtio BAR usage?
+
+> + * epf_virtio_init - initialize struct epf_virtio and setup BAR for virtio
+> + * @evio: struct epf_virtio to initialize.
+> + * @hdr: pci configuration space to show remote host.
+> + * @bar_size: pci BAR size it depends on the virtio device type.
+
+s/pci/PCI/ (there were also a few more instances above in messages or
+comments)
+
+> + * epf_virtio_final - finalize struct epf_virtio. it frees bar and memories
+> + * @evio: struct epf_virtio to finalize.
+
+s/bar/BAR/
+
+> +static void epf_virtio_monitor_qnotify(struct epf_virtio *evio)
+> +{
+> +	const u16 qn_default = evio->nvq;
+> +	u16 tmp;
+> +
+> +	/* Since there is no way to synchronize between the host and EP functions,
+> +	 * it is possible to miss multiple notifications.
+
+Multi-line comment style.
+
+> +	err = epf_virtio_negotiate_vq(evio);
+> +	if (err < 0) {
+> +		pr_err("failed to negoticate configs with driver\n");
+
+s/negoticate/negotiate/
+
+> + * epf_virtio_reset - reset virtio status
+
+Some of the function descriptions end with a period (".") and others
+don't.  Please figure out what the most common style is and use that
+consistently.
+
+> +			dst = pci_epc_map_addr(epf->epc, epf->func_no,
+> +					       epf->vfunc_no, dbase, &phys,
+> +					       slen);
+> +			if (IS_ERR(dst)) {
+> +				pr_err("failed to map pci mmoery spact to local\n");
+
+s/pci/PCI/
+s/mmoery/memory/
+s/spact/space/ ?
+
+Also below.
+
+IIRC some previous messages started with a capital letter.  Please
+make them all consistent.
+
+> +		if (dir == DMA_MEM_TO_DEV) {
+> +			pci_epc_unmap_addr(epf->epc, epf->func_no,
+> +					   epf->vfunc_no, phys, dst, slen);
+> +		} else {
+> +			pci_epc_unmap_addr(epf->epc, epf->func_no,
+> +					   epf->vfunc_no, phys, src, slen);
+> +		}
+> +	}
+> +
+> +	return 1;
+
+I guess this function returns either a negative error code or the
+value 1?  That seems sort of weird (I think "negative error code or
+*zero* is more typical), but maybe you're following some convention?
+
+> +#include <linux/pci-epf.h>
+> +#include <linux/pci-epc.h>
+> +#include <linux/vringh.h>
+> +#include <linux/dmaengine.h>
+
+Alpha order if possible
+
+> +	/* Virtual address of pci configuration space */
+
+s/pci/PCI/
+
+> +	/* Callback function and parameter for queue notifcation
+> +	 * Note: PCI EP function cannot detect qnotify accurately, therefore this
+> +	 * callback function should check all of virtqueue's changes.
+> +	 */
+
+Multi-line comment style.
+
+Bjorn
