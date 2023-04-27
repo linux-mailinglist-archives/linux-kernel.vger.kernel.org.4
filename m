@@ -2,87 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26EE6F0CE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9F96F0CEA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344187AbjD0UNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S1344197AbjD0UNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343704AbjD0UNG (ORCPT
+        with ESMTP id S1344185AbjD0UNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:13:06 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C15535AD;
-        Thu, 27 Apr 2023 13:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=LmOazWNjaaUirDK7f0+UUssGhdwbYYxW6pA0G+w5Wtc=; b=fl7QifYhwiQwrJHfZFAKxi8+VC
-        Ek8wl+4yjLOUjcl4OtnLwgiYHMyHqtvCOo6GqIOD7mYc3Kjg1AQS0G7VZCJJYlIjq7My0hundS3qJ
-        ODQ9VsWRZR4sLt0vL1ONC8rw0xjKj/DnWDLfyBoaXYHCXpoGtS1k6U+NfyvDw4LwRl+A=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:60862 helo=debian-acer)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1ps7yc-0002xa-T9; Thu, 27 Apr 2023 16:12:27 -0400
-Date:   Thu, 27 Apr 2023 16:12:26 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <20230427161226.9c971530c6b848aa813c92b3@hugovil.com>
-In-Reply-To: <CAOMZO5BNbRV1fLpwDZWgj9+gihHJBBGeZCvkF1tgm5GhwSn8LQ@mail.gmail.com>
-References: <20230427195538.2718661-1-hugo@hugovil.com>
-        <CAOMZO5CQeeme6uhb8NCzR2QADjkBM-mRC9-GUnmhLWSGo5MMoQ@mail.gmail.com>
-        <20230427160608.f051241d750404939296f60d@hugovil.com>
-        <CAOMZO5BNbRV1fLpwDZWgj9+gihHJBBGeZCvkF1tgm5GhwSn8LQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        Thu, 27 Apr 2023 16:13:09 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1677F46A5;
+        Thu, 27 Apr 2023 13:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682626366; x=1714162366;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=gkgzXX7acwSBnuJ9bdx4m5R1AVWdzJYvB7t1tP5cDvg=;
+  b=ga9laUOlFSTypI2r0ajwWoZ+EaBwaKXXSB2V3UVcMeYZAnNQyqaU/m6/
+   fOQYMojH1iImLK4ynzJrJkKVEBZNf2WxMFZjMeYkLJT1Mk2rQeuCZXFMH
+   vdvXkCx4tUrI20tFxM2O6+AYnoI6OZxXNhydhP1kgrqCeevg5P1NkSTcJ
+   od4ulSSSm3+E0ChPNJRtCGYhyk0jP6TQBs4iudGXkuqdYdPrKUo4GSwxR
+   ywHLFk/+Z4q7cRl08eddgjC8V7uVUWnrWV0RflQ+XHgo28uvPKmqN6hEo
+   gjTaCkJlK4yCuOScwR6HcVGzweSdDOJP/XR+kGlJ1f1ygilJQEdDZEm5E
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410619736"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="410619736"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 13:12:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="671906819"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="671906819"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 27 Apr 2023 13:12:45 -0700
+Received: from [10.209.41.222] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.222])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 76609580377;
+        Thu, 27 Apr 2023 13:12:41 -0700 (PDT)
+Message-ID: <e0532c12-e682-a72c-baa0-11b208a639e4@linux.intel.com>
+Date:   Thu, 27 Apr 2023 16:12:40 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 17/40] perf evsel: Modify group pmu name for software
+ events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230426070050.1315519-1-irogers@google.com>
+ <20230426070050.1315519-18-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230426070050.1315519-18-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-Subject: Re: [PATCH] imx8mn-var-som: dts: fix PHY detection bug by adding
- deassert delay
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Apr 2023 17:07:59 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
 
-> On Thu, Apr 27, 2023 at 5:06 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+On 2023-04-26 3:00 a.m., Ian Rogers wrote:
+> If we have a group of {cycles,faults} then we need the faults software
+> event to appear to be on the same PMU as cycles so that we don't split
+> the group in parse_events__sort_events_and_fix_groups. This case is
+> relatively easy as cycles is the leader and will have a PMU name. In
+> the reverse case, {faults,cycles} we still need faults to appear to
+> have the PMU name of cycles but the old behavior is just to return
+> "cpu". For hybrid this fails as cycles will be on "cpu_core" or
+> "cpu_atom", causing faults to be split into a different group.
 > 
-> > Hi Fabio,
-> > it uses a ADIN1300 PHY.
-> >
-> > The datasheet indicate that the "Management interface active (t4)" state is reached at most 5ms after the reset signal is deasserted.
+> Change the behavior for software events so that the whole group is
+> searched for the named PMU.
 > 
-> Please add this information to the commit log and please add a Fixes: tag.
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Good idea, will do.
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 
-Hugo.
+Thanks,
+Kan
 
-
--- 
-Hugo Villeneuve <hugo@hugovil.com>
+> ---
+>  tools/perf/util/evsel.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 1cd04b5998d2..63522322e118 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -829,23 +829,26 @@ bool evsel__name_is(struct evsel *evsel, const char *name)
+>  
+>  const char *evsel__group_pmu_name(const struct evsel *evsel)
+>  {
+> -	const struct evsel *leader;
+> +	struct evsel *leader, *pos;
+>  
+>  	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
+>  	if (evsel->pmu_name)
+>  		return evsel->pmu_name;
+>  	/*
+>  	 * Software events may be in a group with other uncore PMU events. Use
+> -	 * the pmu_name of the group leader to avoid breaking the software event
+> -	 * out of the group.
+> +	 * the pmu_name of the first non-software event to avoid breaking the
+> +	 * software event out of the group.
+>  	 *
+>  	 * Aux event leaders, like intel_pt, expect a group with events from
+>  	 * other PMUs, so substitute the AUX event's PMU in this case.
+>  	 */
+>  	leader  = evsel__leader(evsel);
+> -	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
+> -	    leader->pmu_name) {
+> -		return leader->pmu_name;
+> +	if (evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) {
+> +		/* Starting with the leader, find the first event with a named PMU. */
+> +		for_each_group_evsel(pos, leader) {
+> +			if (pos->pmu_name)
+> +				return pos->pmu_name;
+> +		}
+>  	}
+>  
+>  	return "cpu";
