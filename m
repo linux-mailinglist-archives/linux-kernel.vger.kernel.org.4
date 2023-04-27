@@ -2,119 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7396F0DC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095336F0DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344202AbjD0Vae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 17:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        id S1344240AbjD0VbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 17:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjD0Vab (ORCPT
+        with ESMTP id S229508AbjD0VbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:30:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF0D212C;
-        Thu, 27 Apr 2023 14:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682631030; x=1714167030;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E7BGj3Gl5g9SCm5OO2PVG1LtEWlAgM0zB1osTNxvMHw=;
-  b=FxmgsdC5JPWD0qmnyK9p6D97xAaWHZYGrdqs9ZAHfF6A1G8G79GjVMQQ
-   z+f9ZJ5DeZ3NUZS76Cg47dVqict1cz3qkxxyhvftfq0DxABtWD+TTFbW9
-   u6Ksrgn3XzjTSfavN0H3ibG4Wf3Atm4vHcSmWOjWTY7qXfSqg0THF2lzh
-   6EcfAWA0JVMMkMdj8bA/KIdo+c0teSTgKc88NXCd+Xlr+lx5s5Gw9JQqt
-   9fkqwVXNiIhudojWo5S1N/rlpioH9XHHeHK+au4E5nQ/VQPsrYZ/0+7/e
-   KBNM9/1PLKhzOMP1dehvxbrgy5B43OO5b9dAjKsCuzvswS9BbI0PfwOrL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="345028871"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="345028871"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 14:30:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="838570345"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="838570345"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2023 14:30:27 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ps9C6-00008N-2M;
-        Thu, 27 Apr 2023 21:30:26 +0000
-Date:   Fri, 28 Apr 2023 05:29:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog driver
-Message-ID: <202304280541.b8a8NzCY-lkp@intel.com>
-References: <20230427071408.8493-2-bbhushan2@marvell.com>
+        Thu, 27 Apr 2023 17:31:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6748A1FFF;
+        Thu, 27 Apr 2023 14:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1682631014; i=ps.report@gmx.net;
+        bh=gG9ay1JgOrFpa75yqkO8/mg6sCJdAOlXhrWdSjos4Rc=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=MlVU8TYUp2EpIPuIX9gQziILxwmdTFs1pEqs8qzhuGBFDonMtXDeuZDH6W7CucaOU
+         Ae780tAnMkXDGwGa4ok18+J7hOmJbq16g/K3wNE5DZQ+NXXHnWges+PaAH1jpf+xAI
+         AuwZxJR0+t4UAweUcyVuUu38ZECMHpGD15yZx4sNipYS9I2oIQx+OE+S39t65NUIY3
+         CJ6AZCg9ud2601ASsXTiZuqjnOqOPh676k8z1d4TbjnLgWwx31MFSTLAaVxG6Pe0Lm
+         Xg48nM86Wb/cVBepNaHaCbB2zc4uAOLjbaxzRyVcvhLcxN/n3yADtzfJtBMFIOseB2
+         e4khuyqpgT8SA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([62.216.209.88]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1q4E0Y1qMW-00Ga6y; Thu, 27
+ Apr 2023 23:30:14 +0200
+Date:   Thu, 27 Apr 2023 23:30:10 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Konrad =?UTF-8?B?R3LDpGZl?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Message-ID: <20230427233010.15f7677d@gmx.net>
+In-Reply-To: <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
+References: <2023042625-rendition-distort-fe06@gregkh>
+        <20230427115120.241954-1-k.graefe@gateware.de>
+        <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427071408.8493-2-bbhushan2@marvell.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:C5ubCS4kTqwQG0zMkeM9Cx269CvGy7tm1IRw5EQmFC0sLeq5tQ2
+ W/38OEF2KyLzn3ZHt9agTt+W3x/9J/HZEvDVxlLn5W+JN+gdwIUts1Hr8UzwtOsVyOvUVuM
+ 1VlTXob5BUMfzi/LK1exvZbqsvAywdyCqkxbbXVduO4OkMrdkRKiLi+XaSlK8KlPEkTMKXe
+ 2Cpt3pZnQ1S6Rp81XCPqQ==
+UI-OutboundReport: notjunk:1;M01:P0:KkGXVEgS7Jo=;VcS/xSULeBpNuNKhc5QmPmSP7sl
+ 4LknYtRg4l4a2VD9+yYYuQAMLjkle+aOGS+mQD+CiueIbG5TitW1ok48WRKw5lARXLxkCsYYg
+ mxJyW4b50FnyxderVFNW0tECC7269XeTpG/p/Ccap2kusTDrbB/fI1Kh2Wmn0OfRPZJCQSgu4
+ XpWttUlBTDjmKrUmPgTZsE2Cwrj8AwnsYmlWefu08lpJ7FOWCjJzCKFHUje8tJVyCBYENQzMj
+ oegWn1fYEa8GCB6P6RsJk2CzXR8EfbOwK/2uPO/5Vq9CxSFUgsHzIsLna2USFBBGGTfGdUufh
+ II+344944Bxfdtz7cZ9yjtsYUEfZh9bld0QfFDw0qmrGEtPowy09g9xpxoeJKtey4/wdSrxF5
+ 7FEsQ1RPJEhJWqJAMkzweAbCwyER2VZkG7s5UdVjLQyMq4Qjv5pwx/Tll8RONGLqQi912oSPM
+ LRqrUMkM62QdEMp4BxcwQStbrIVvMUkyp+DCkh7S9A3l7i7CUrlHVeWVuzi1ys09ISFORxHVW
+ Kou68tm/Pja6CJV3AFv/zZOE11NXqU/mF49tDsObcgFWo3BLxpI//W83TPCwcZpye99KAa/ly
+ 9+hY3Ry41s37meKJT2z3wnB8rhd4oR5D0gFNMXEtb898HXEhY303Y4XR8cIoL6jckf03A6n7A
+ A+boePCoH3788cIouzOwOOCl49zgWAG7GigJQowUckEfi0ILKWf2ngeN4XJ6z0Sm61yIMVjgu
+ QWtqL8nvvxO6Ubh+QA5kq6MyiQmOl1BNiLBmTfaWQtnJxsV9GRxL4jV5Yi7kdInCVu/k52tiH
+ PAkrnwKqyOfXVWA297GdghVKJbLNEHpk1OuMcmbqQJcX16AnEWC8cQiYQVQfRGUSqEGmV/jXw
+ 1eNZCUZRpMjcCIznQ9kCDcJx5UAiLNSt7mhl6lGLxH1EPoYZcvl/yCcReRlwJHt7kxwUcWQuJ
+ n9FkBVTv8f4jFndshaciuMOX+O8=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bharat,
+Hello Rasmus, Konrad, *,
 
-kernel test robot noticed the following build errors:
+On Thu, 27 Apr 2023 14:35:19 +0200, Rasmus Villemoes <linux@rasmusvillemoes=
+.dk> wrote:
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v6.3 next-20230427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> On 27/04/2023 13.51, Konrad Gr=C3=A4fe wrote:
+> > The CDC-ECM specification requires an USB gadget to send the host MAC
+> > address as uppercase hex string. This change adds the appropriate
+> > modifier.
+> >=20
+> > Cc: stable@vger.kernel.org =20
+>=20
+> Why cc stable?
+>=20
+> > Signed-off-by: Konrad Gr=C3=A4fe <k.graefe@gateware.de>
+> > ---
+> > Added in v3
+> >=20
+> >  lib/vsprintf.c | 18 +++++++++++++++---
+> >  1 file changed, 15 insertions(+), 3 deletions(-) =20
+>=20
+> The diffstat here, or for some other patch in the same series,
+> definitely ought to mention lib/test_printf.c.
+>=20
+> > diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+> > index be71a03c936a..8aee1caabd9e 100644
+> > --- a/lib/vsprintf.c
+> > +++ b/lib/vsprintf.c
+> > @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u=
+8 *addr,
+> >  {
+> >  	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
+> >  	char *p =3D mac_addr;
+> > -	int i;
+> > +	int i, pos;
+> >  	char separator;
+> >  	bool reversed =3D false;
+> > +	bool uppercase =3D false;
+> > =20
+> >  	if (check_pointer(&buf, end, addr, spec))
+> >  		return buf;
+> > @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u=
+8 *addr,
+> >  		separator =3D '-';
+> >  		break;
+> > =20
+> > +	case 'U':
+> > +		uppercase =3D true;
+> > +		break;
+> > +
+> >  	case 'R':
+> >  		reversed =3D true;
+> >  		fallthrough; =20
+>=20
+> This seems broken, and I'm surprised the compiler doesn't warn about
+> separator possibly being uninitialized further down. I'm also surprised
+> your testing hasn't caught this. For reference, the full switch
+> statement is currently
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230427-154706
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230427071408.8493-2-bbhushan2%40marvell.com
-patch subject: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog driver
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230428/202304280541.b8a8NzCY-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/86559345de78e2e9f634ba9835a63764b6f88fd5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230427-154706
-        git checkout 86559345de78e2e9f634ba9835a63764b6f88fd5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/watchdog/
+Compiler (gcc) does not warn because of Makefile:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280541.b8a8NzCY-lkp@intel.com/
+  1038 # Enabled with W=3D2, disabled by default as noisy
+  1039 ifdef CONFIG_CC_IS_GCC
+  1040 KBUILD_CFLAGS +=3D -Wno-maybe-uninitialized
+  1041 endif
 
-All errors (new ones prefixed by >>):
+With this commented:
 
->> drivers/watchdog/marvell_gti_wdt.c:13:10: fatal error: asm/arch_timer.h: No such file or directory
-      13 | #include <asm/arch_timer.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   compilation terminated.
+  lib/vsprintf.c: In function =E2=80=98mac_address_string=E2=80=99:
+  lib/vsprintf.c:1310:30: warning: =E2=80=98separator=E2=80=99 may be used =
+uninitialized [-Wmaybe-uninitialized]
+   1310 |                         *p++ =3D separator;
+        |                         ~~~~~^~~~~~~~~~~
+  lib/vsprintf.c:1273:14: note: =E2=80=98separator=E2=80=99 was declared he=
+re
+   1273 |         char separator;
+        |              ^~~~~~~~~
 
+Regards,
+Peter
 
-vim +13 drivers/watchdog/marvell_gti_wdt.c
+>=20
+>         switch (fmt[1]) {
+>         case 'F':
+>                 separator =3D '-';
+>                 break;
+>=20
+>         case 'R':
+>                 reversed =3D true;
+>                 fallthrough;
+>=20
+>         default:
+>                 separator =3D ':';
+>                 break;
+>         }
+>=20
+> > @@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u=
+8 *addr,
+> > =20
+> >  	for (i =3D 0; i < 6; i++) {
+> >  		if (reversed)
+> > -			p =3D hex_byte_pack(p, addr[5 - i]);
+> > +			pos =3D 5 - i;
+> > +		else
+> > +			pos =3D i;
+> > +
+> > +		if (uppercase)
+> > +			p =3D hex_byte_pack_upper(p, addr[pos]);
+> >  		else
+> > -			p =3D hex_byte_pack(p, addr[i]);
+> > +			p =3D hex_byte_pack(p, addr[pos]); =20
+>=20
+> I think this becomes quite hard to follow. We have string_upper() in
+> linux/string_helpers.h, so I'd rather just leave this loop alone and do
+>=20
+>   if (uppercase)
+>     string_upper(mac_addr, mac_addr);
+>=20
+> after the nul-termination.
+>=20
+> Rasmus
+>=20
 
-    12	
-  > 13	#include <asm/arch_timer.h>
-    14	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
