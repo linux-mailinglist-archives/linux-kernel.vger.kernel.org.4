@@ -2,125 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5FA6F0544
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101856F0546
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243617AbjD0MDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S243717AbjD0MDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243215AbjD0MC6 (ORCPT
+        with ESMTP id S243215AbjD0MDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:02:58 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310125249;
-        Thu, 27 Apr 2023 05:02:57 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RC1uME008953;
-        Thu, 27 Apr 2023 12:02:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=WQqbqw8Dk24fd7dt43IolbjnFRtm9rDGQ/pIbOJ9xT4=;
- b=TEs4HeTftYqBgKjq/TFafCimE55xIn6oYFx/LzoHi9V2Ic5+SvnhhBDKin++tg44YTLA
- 5fIeDPx00gH02TBsa7j1dUpwlJsBoQaftQQ+S8F63uADRLovPcMnArZM0+SAy1I1kXEF
- 8S3VmaEKxYqDHdkft3LHB4iiVMXU4jauQHlzryhcrb1A/ZsNE0BG01MRnzpisznn+GJz
- 8B1cg9GsaEJFbE+4ShZw0zrtji/Knh+2q9tUtAaqUS7cxblxR9uE83ThbqI5c4NBaJJn
- iRlhBHLKK/Gl5FDwT1VZD+TYkAcoAB8CnwUVzIH3yCSH9yJ1nrvcFc2oQbUptJYbtT/0 TA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7junj34e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 12:02:52 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33R2u6hC026844;
-        Thu, 27 Apr 2023 12:01:33 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q47772xy7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 12:01:33 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33RC1SYV53871096
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 12:01:28 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1F7FC20043;
-        Thu, 27 Apr 2023 12:01:28 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD76B20040;
-        Thu, 27 Apr 2023 12:01:27 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.90])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 27 Apr 2023 12:01:27 +0000 (GMT)
-Date:   Thu, 27 Apr 2023 14:01:27 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, frankja@linux.ibm.com,
-        borntraeger@de.ibm.com, nrb@linux.ibm.com, nsg@linux.ibm.com,
-        seiden@linux.ibm.com, jgg@nvidia.com
-Subject: Re: [PATCH v2 1/1] KVM: s390: fix race in gmap_make_secure
-Message-ID: <ZEpkFzFFEpqa9zMv@osiris>
-References: <20230426134834.35199-1-imbrenda@linux.ibm.com>
- <20230426134834.35199-2-imbrenda@linux.ibm.com>
- <ZEpUEF7H86E9vVfS@osiris>
- <20230427134649.1e482d91@p-imbrenda>
+        Thu, 27 Apr 2023 08:03:38 -0400
+Received: from pv50p00im-ztdg10012101.me.com (pv50p00im-ztdg10012101.me.com [17.58.6.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA975249
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuroa.me; s=sig1;
+        t=1682597004; bh=S3tlVFENCWANjkyLbRjurNyqZA+oH0TGefJfiZ+gp9w=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=QwnJDrHGfXK1OKhq/sFx5GoNhy3oX3K2XX7aggC4L0Y9ryLTwlqrvkgzDdjRYskvY
+         Xt61rjyytcRNpcac2qsxqJ3OW+YJlqYU/bdC/5XHrLC+8uhShiKmfaMtHPEqhi6S+q
+         SWSqUcxv+xNHVqxg6i7AK8bURlCZzxcZFJpwbRuDHNHGFyhO30JttouHWPhSMXQenW
+         3R2ux+W/V/NmmxPji5yFTwej/FgA49mei33y+rgFiA+KA0GBR0q0kCfcW10ouGhcUM
+         +Mp7Fvl+aBewEhxyuYVuwBcIkhl0Kos/h9Kto2v6L3uhhgVIwlJyEIigvh2bv6yYI/
+         JG03fbkCLM2qA==
+Received: from localhost.localdomain (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+        by pv50p00im-ztdg10012101.me.com (Postfix) with ESMTPSA id 33A2D7400F0;
+        Thu, 27 Apr 2023 12:03:19 +0000 (UTC)
+From:   Xueming Feng <kuro@kuroa.me>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xueming Feng <kuro@kuroa.me>
+Subject: [PATCH bpf-next v4] bpftool: Dump map id instead of value for map_of_maps types
+Date:   Thu, 27 Apr 2023 20:03:13 +0800
+Message-Id: <20230427120313.43574-1-kuro@kuroa.me>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427134649.1e482d91@p-imbrenda>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: LLcr1T1ItDCWmazol86xFND65gqBeZLa
-X-Proofpoint-ORIG-GUID: LLcr1T1ItDCWmazol86xFND65gqBeZLa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=563
- malwarescore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 spamscore=0 suspectscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: BCVk9mO-9Hz41oQRbsPhofC-D2tzs2v8
+X-Proofpoint-GUID: BCVk9mO-9Hz41oQRbsPhofC-D2tzs2v8
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.0.605.474.0000000_definitions?=
+ =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2020-01-23?=
+ =?UTF-8?Q?=5F02_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
+ clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2304270106
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 01:46:49PM +0200, Claudio Imbrenda wrote:
-> On Thu, 27 Apr 2023 12:53:04 +0200
-> Heiko Carstens <hca@linux.ibm.com> wrote:
-> 
-> > On Wed, Apr 26, 2023 at 03:48:34PM +0200, Claudio Imbrenda wrote:
-> > > This patch fixes a potential race in gmap_make_secure and removes the
-> > > last user of follow_page without FOLL_GET.
-> > > 
-> > > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > Fixes: 214d9bbcd3a6 ("s390/mm: provide memory management functions for protected KVM guests")
-> > > ---
-> > >  arch/s390/kernel/uv.c | 32 +++++++++++---------------------
-> > >  1 file changed, 11 insertions(+), 21 deletions(-)  
-> > 
-> > It would be helpful if this would be a bit more descriptive. "Fix
-> > race" is not very helpful :)
-> > 
-> > What race does this fix?
-> > When can this happen?
-> > What are the consequences if the race window is being hit?
-> 
-> We are locking something we don't have a reference to, and as explained
-> by Jason and David in this thread <Y9J4P/RNvY1Ztn0Q@nvidia.com> it can
-> lead to all kind of bad things, including the page getting
-> unmapped (MADV_DONTNEED), freed, reallocated as a larger folio and the
-> unlock_page() would target the wrong bit.
-> 
-> Also there is another race with the FOLL_WRITE, which could race
-> between the follow_page and the get_locked_pte.
-> 
-> The main point of the patch is to remove the last follow_page without
-> FOLL_GET or FOLL_PIN, removing the races can be considered a nice bonus.
+When using `bpftool map dump` with map_of_maps, it is usually
+more convenient to show the inner map id instead of raw value.
 
-I've seen that discussion. What I'm actually asking for is that all of
-this information should be added to the commit description. Nobody
-will remember any of the details in one year.
+We are changing the plain print behavior to show inner_map_id
+instead of hex value, this would help with quick look up of
+inner map with `bpftool map dump id <inner_map_id>`.
+To avoid disrupting scripted behavior, we will add a new
+`inner_map_id` field to json output instead of replacing value.
+
+plain print:
+```
+$ bpftool map dump id 138
+
+Without Patch:
+key:
+fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+27 16 06 00
+value:
+8b 00 00 00
+Found 1 element
+
+With Patch:
+key:
+fc 00 00 00 00 00 00 00  00 00 00 00 00 00 00 05
+27 16 06 00
+inner_map_id:
+139
+Found 1 element
+```
+
+json print:
+```
+$ bpftool -p map dump id 567
+
+Without Patch:
+[{
+        "key": ["0xc0","0x00","0x02","0x05","0x27","0x16","0x06","0x00"
+        ],
+        "value": ["0x38","0x02","0x00","0x00"
+        ]
+    }
+]
+
+With Patch:
+[{
+        "key": ["0xc0","0x00","0x02","0x05","0x27","0x16","0x06","0x00"
+        ],
+        "value": ["0x38","0x02","0x00","0x00"
+        ],
+        "inner_map_id": 568
+    }
+]
+```
+
+Signed-off-by: Xueming Feng <kuro@kuroa.me>
+---
+
+Changes in v4:
+ - Remove unnecessary parenthesis ('{}').
+
+Changes in v3:
+ - In plain print, use printf() directly since inner map id is always a 32bit int.
+ - Remove unused print_uint() function.
+ - Rename `id` to `inner_map_id` in plain print output for clearness.
+ - Add a new `inner_map_id` field to json output.
+ - Add example output to commit message.
+
+Changes in v2:
+ - Fix commit message grammar.
+ - Change `print_uint` to only print to stdout, make `arg` const, 
+   and rename `n` to `arg_size`.
+ - Make `print_uint` able to take any size of argument up to `unsigned long`, 
+   and print it as unsigned decimal.
+
+ tools/bpf/bpftool/map.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index aaeb8939e137..ae9e822aa3fe 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -139,6 +139,9 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
+ 		print_hex_data_json(key, info->key_size);
+ 		jsonw_name(json_wtr, "value");
+ 		print_hex_data_json(value, info->value_size);
++		if (map_is_map_of_maps(info->type))
++			jsonw_uint_field(json_wtr, "inner_map_id",
++					 *(unsigned int *)value);
+ 		if (btf) {
+ 			struct btf_dumper d = {
+ 				.btf = btf,
+@@ -259,8 +262,13 @@ static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
+ 		}
+ 
+ 		if (info->value_size) {
+-			printf("value:%c", break_names ? '\n' : ' ');
+-			fprint_hex(stdout, value, info->value_size, " ");
++			if (map_is_map_of_maps(info->type)) {
++				printf("inner_map_id:%c", break_names ? '\n' : ' ');
++				printf("%u ", *(unsigned int *)value);
++			} else {
++				printf("value:%c", break_names ? '\n' : ' ');
++				fprint_hex(stdout, value, info->value_size, " ");
++			}
+ 		}
+ 
+ 		printf("\n");
+-- 
+2.37.1 (Apple Git-137.1)
+
