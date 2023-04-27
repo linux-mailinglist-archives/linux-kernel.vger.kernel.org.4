@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F796F0D34
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CABE66F0D3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344270AbjD0Udk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S1344286AbjD0Ue7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344203AbjD0Udi (ORCPT
+        with ESMTP id S244338AbjD0Uey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:33:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968393ABC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:33:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B2DA63F99
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B127C433EF;
-        Thu, 27 Apr 2023 20:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682627616;
-        bh=KTbprxbWn3/KMv6+1sSUmWVNFmdM1ZRCv9bkQLvQfk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nAG0QdXGZfixzeLLshwWoYg13S6m5NwnX5PUTxABW4Bd6Cv9F1KbPdQ3kb/iGxneP
-         hzyTlK7uSetgEyOIjHODUJUbQbPepPvfuGo++/fUH/qSqnNUUhgH7+3XOHg15ou/rH
-         Q6PkaXnmHEVQHkQoIVK1Q4wuZaHh1h5Hx7sr95n2sHt4kuscR2iU5lo5Tnv+4MD6/d
-         a1+dbcqc1VU8AKZdoucUV0Z04aRMOE1WAs3oR2weZ5MuQvSPobOfNkb+t+Ef5a7L7w
-         IL7+ctow27X/HdoUqFcVm0vTdYYhB5zE7R8Dsv7drq4zZDmVFqqg7oFJFNlZ4zu8e6
-         /wbroBwOmowzw==
-Date:   Thu, 27 Apr 2023 21:33:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Philippe De Muyter <Philippe.DeMuyter@macq.eu>
-Cc:     linux-kernel@vger.kernel.org, Philippe De Muyter <phdm@macqel.be>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Subject: Re: [PATCH] Documentation: regulator/consumer.rst: fix
- 'regulator_enable' typo.
-Message-ID: <7bda9037-3362-4557-862c-43ce531c90ab@sirena.org.uk>
-Mail-Followup-To: Philippe De Muyter <Philippe.DeMuyter@macq.eu>,
-        linux-kernel@vger.kernel.org, Philippe De Muyter <phdm@macqel.be>,
-        Liam Girdwood <lgirdwood@gmail.com>
-References: <1682537582-2314-1-git-send-email-Philippe.DeMuyter@macq.eu>
+        Thu, 27 Apr 2023 16:34:54 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A372D65
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:34:52 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-3ef36d814a5so822841cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:34:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682627692; x=1685219692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P1yyV2YzfH7rOLyHSf8GhXQSsNeJYF/6E6RCMyqSCyg=;
+        b=xWHYdie28I+Dez+Z3Rys12aHD1WWeZJoHzaHoIa7wcXOPIBcUJrSIuADWRfc0FdzxP
+         8e3l+bJ0YjkOB7WyI1b8J+NETOkP3kmkPs9FH1uEkMUSahlgQMCzLw7FUo6VwDEcAOH+
+         KwKw2xODiy/cUdO8T3O70ZcZ+cOoKsspZOqObuLm9JKxeqRkRgaJ/Dj4jPYu34hBtIfw
+         OesBLyuY6cCeCLFVB70JAVF0/PrWrbBH8zSa8RoScKsj/jSSeMgKmoe+4mDNk347ANPi
+         j7dZ+HIdnJGOx1H1aiH8QrWDYrHtXaKTqFJc7lYOyU3ysXPKDXYB+SWBbYpWApHo8paB
+         7j0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682627692; x=1685219692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P1yyV2YzfH7rOLyHSf8GhXQSsNeJYF/6E6RCMyqSCyg=;
+        b=fja57bEY6s+MoAO6W1cztIby8OgZ4Q0BFM/IcSKAAyFLWmUQoLMRH5MlPdw5v4Y1Xh
+         lpNXfkPftQwdjSc326h9c0VcugkcVRgbGQIG93wF1TS+UokY4lHpOogxBPniX7TZP6pt
+         BdbZvPQBmhgG81/4Fx/VEQ6i0uI7TQMZ6cMVaNQMi7QBqgRZYz+4Qkt4babpLtQY6aYi
+         t7X+F46wPHvaphKGmBI3vFm8gUuiBPiqddtd8CzCh+7zGNG1ayIobNhFNjC23q9qxH0P
+         p0Xgb5qmQbvqbF6yqCGv+1z65SQtZ/dc7Dw7E7KO+hFq9DGRhsfHH7SeExwEp1C42AQl
+         d5Rg==
+X-Gm-Message-State: AC+VfDzAGvnEAfJax6mjXgTuUKrSHywxp0AGufyuUiVy/5sMB57N6LlQ
+        9BdN4jYJM9a3NDbMPHkjGPiWfMnDOgb2gIDNO7l/FgoumKheHBkpLXRt2g==
+X-Google-Smtp-Source: ACHHUZ4UPSDWGdGeDyVcwUFiL8hMkoisHo6Rmqr+2so+fTP3z2DsM7cV0c+3kFYv5gQRh8jeVS7NjJKQsn0vWDjJbIY=
+X-Received: by 2002:ac8:5710:0:b0:3ef:5008:336f with SMTP id
+ 16-20020ac85710000000b003ef5008336fmr99178qtw.1.1682627691911; Thu, 27 Apr
+ 2023 13:34:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="piu5JyvxpHSRKUPb"
-Content-Disposition: inline
-In-Reply-To: <1682537582-2314-1-git-send-email-Philippe.DeMuyter@macq.eu>
-X-Cookie: You will inherit millions of dollars.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230427201112.2164776-1-peterx@redhat.com> <20230427201112.2164776-3-peterx@redhat.com>
+In-Reply-To: <20230427201112.2164776-3-peterx@redhat.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 27 Apr 2023 13:34:16 -0700
+Message-ID: <CADrL8HUAY62FX_TYqU9ro4wfhJhcCAC-aDW=zUS5eYQTbWx3oA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/kvm: Allow dump per-vcpu info for uffd threads
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Anish Moorthy <amoorthy@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 27, 2023 at 1:11=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> There's one PER_VCPU_DEBUG in per-vcpu uffd threads but it's never hit.
+>
+> Trigger that when quit in normal ways (kick pollfd[1]), meanwhile fix the
+> number of nanosec calculation.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
---piu5JyvxpHSRKUPb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: James Houghton <jthoughton@google.com>
 
-On Wed, Apr 26, 2023 at 09:33:02PM +0200, Philippe De Muyter wrote:
-> From: Philippe De Muyter <phdm@macqel.be>
->=20
-> Removing an erroneous 'd' at the end of 'regulator_enable'.
->=20
-> Signed-off-by: Philippe De Muyter <phdm@macqel.be>
+> ---
+>  tools/testing/selftests/kvm/lib/userfaultfd_util.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/t=
+esting/selftests/kvm/lib/userfaultfd_util.c
+> index 92cef20902f1..271f63891581 100644
+> --- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+> +++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
+> @@ -70,7 +70,7 @@ static void *uffd_handler_thread_fn(void *arg)
+>                         r =3D read(pollfd[1].fd, &tmp_chr, 1);
+>                         TEST_ASSERT(r =3D=3D 1,
+>                                     "Error reading pipefd in UFFD thread\=
+n");
+> -                       return NULL;
+> +                       break;
+>                 }
+>
+>                 if (!(pollfd[0].revents & POLLIN))
+> @@ -103,7 +103,7 @@ static void *uffd_handler_thread_fn(void *arg)
+>         ts_diff =3D timespec_elapsed(start);
+>         PER_VCPU_DEBUG("userfaulted %ld pages over %ld.%.9lds. (%f/sec)\n=
+",
+>                        pages, ts_diff.tv_sec, ts_diff.tv_nsec,
+> -                      pages / ((double)ts_diff.tv_sec + (double)ts_diff.=
+tv_nsec / 100000000.0));
+> +                      pages / ((double)ts_diff.tv_sec + (double)ts_diff.=
+tv_nsec / NSEC_PER_SEC));
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+I almost confused this fix for [1]. Thanks for catching this!
 
---piu5JyvxpHSRKUPb
-Content-Type: application/pgp-signature; name="signature.asc"
+[1]: https://lore.kernel.org/kvm/20230223001805.2971237-1-amoorthy@google.c=
+om/
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRK3BsACgkQJNaLcl1U
-h9CsHgf7B7BrTeZtwycYoVV4jw1tgzNxyAlDsE0YQZYwJ13bZJ0RLs8JsQdgVb3b
-V9mVqygirprliw+xDfg4Sr0WeUbowf5xs6hL6hqeSiJfxgw2qxmdoPnZ2roTrEXs
-oSXjq+CRD1Kp5rPaxEnkIjWunKrnp/X4UR2YqnfldNIH3xae2grn87BNWNXOcAjo
-SCUgtM7gHuYoxFPG19WyWo44zvQgtv+MGuXYIUAjoXwfC0s0IqK3Dg4OiksrmwHf
-E97HE2weuxuKNn6zATNlvD5SvbSfxW9yl614VXvRnGAPmr2rsbXvt3aNf3iKaO7l
-YF5/io1ThhPe0nP3t/D2yLTZZp3LSw==
-=RCPU
------END PGP SIGNATURE-----
-
---piu5JyvxpHSRKUPb--
+>
+>         return NULL;
+>  }
+> --
+> 2.39.1
+>
