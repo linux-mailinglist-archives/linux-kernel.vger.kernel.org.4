@@ -2,116 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12996F04BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2746F04C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243666AbjD0LHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S243638AbjD0LLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243264AbjD0LHb (ORCPT
+        with ESMTP id S243285AbjD0LLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:07:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53449CF;
-        Thu, 27 Apr 2023 04:07:30 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R9efxd032126;
-        Thu, 27 Apr 2023 11:07:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vtzHUvX2ZJ0nAzBI6v6t5HuaHprgpY1tbVRgTEtl9ak=;
- b=iT/t6tPtRJ8q1x+9i3C1LY4AwY/rm+BKF9muSnkqdVpxEOEgBR9XbCGf3PfbWw6Jeaqs
- aina92xSVAmcW9yoV7oOzVuwwnDl8M0yP1oXTGhz60gzpgaeU2Yb95agdf30uXlryRpz
- sZfI1d4jmjATrleUE8ZM7XY4NR0upzLxZ0U34wvw764wBCwrNSyygt+4D6OlfLv+gf9d
- h/numVUAf0ObKQGzv70CdPN/TDwOohSDUp3y2FUIesA8A/6JRtH1Yd/1l+S7bZaiDnkp
- Em+Xihi7+fMU8jaT9fp5DzU4FmLabpEdkrnqTtCdGdc1U7Gbfoi6xAM7gQGx8rQ5yY4F vQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7kux8k57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 11:07:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RB7Ifa016377
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 11:07:18 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 27 Apr
- 2023 04:07:14 -0700
-Message-ID: <ca738971-036b-f180-88f7-cefe0ed5a412@quicinc.com>
-Date:   Thu, 27 Apr 2023 16:37:11 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v4 2/2] pinctrl: qcom: Add SDX75 pincontrol driver
+        Thu, 27 Apr 2023 07:11:33 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2056.outbound.protection.outlook.com [40.107.21.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6E44697;
+        Thu, 27 Apr 2023 04:11:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vpg7BVJM44ZxN7T2ejOKq3st2e72sr4W7KnUGf830zu8th2m/WcSq5xAsGmVrWivRvTK87BnNzMtzN4c4urjKqtmkfhZo6J/a42agyyk5K4PJppgx2J5+1Z6jzeeINOC/t/sIDMEncSWZyC8vsySnVWJQ31VNc/VuxRp3beTnmxdKtbq1/pjibdvFpsXu2zA5hVnYf46d3spmdOON33hf4ZGcfPZ8j3cEk7lWSajbpIuewSnpGHksuIjOW2jnxaVOXLv1jaqiIZSzwde+XQZTXAyWh4P9iDzcuOXWYAoLmBLl7aC1sQz0r0Kl1SG6D2FleUsSMzEb1UO0yBZFGfv6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dygWW8BZnIW3ZXLldvg+CMBDIswChGmSMsqzUC5qVLU=;
+ b=DWmq6SC0bqYMqEQ8U/j3XkNnTUtSqLhejpHL/29kL6v8YTz46L3Q25BeAgW1+00hwTPzD2T6ucbWPQ5PdZg7vBc+ImX6tTn7a4vmn9KeSDBnnNpE5cQk+fTZZzaX/JGnp1XmhHWaPq4IQ5N3xjWz58nMWBZvPzyloc+YyEiuKGHEc1ilZR2Nnd4lfVNYBEQhZvhLphN2VL4TD6Aq2KRBSxG6xdlsP8RlZDg1nOe3+oQ2X/MdkmAR63zt9TY2x8mu0hNuXzCiK2JpN4laG0Cim2nUkJYDe0Uab3Y6ikQbCRLRA/URa6FbXYUWeE84WyWOuNWh5pMAeyheTVASQIfaiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wolfvision.net; dmarc=pass action=none
+ header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dygWW8BZnIW3ZXLldvg+CMBDIswChGmSMsqzUC5qVLU=;
+ b=pvU3XIkGZtKere2jmmuXdr8C/e4hPCphuXp6ePHXNFiW6jk7gNbL3jpz+1mM4hI1zXtT8ZOjXO6EjO/lThYkQX7XGo41tqtrMppoe6mzNq4+YeuYPYwmtvTrSMnnXrfJBMXCujV0eEm18Un0Jd+UND87vZ5QJsa5sX8+H84lUuY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wolfvision.net;
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
+ by DB3PR08MB9110.eurprd08.prod.outlook.com (2603:10a6:10:43c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Thu, 27 Apr
+ 2023 11:11:28 +0000
+Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::77dd:14e4:a772:d85f]) by DU0PR08MB9155.eurprd08.prod.outlook.com
+ ([fe80::77dd:14e4:a772:d85f%4]) with mapi id 15.20.6340.022; Thu, 27 Apr 2023
+ 11:11:28 +0000
+Message-ID: <de87d6ae-3449-5581-3e17-4aae72e8197a@wolfvision.net>
+Date:   Thu, 27 Apr 2023 13:11:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC v1 0/4] Input: support virtual objects on touchscreens
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
- <1682327030-25535-3-git-send-email-quic_rohiagar@quicinc.com>
- <ZEk9lySMZcrRZYwX@surfacebook>
- <66158251-6934-a07f-4b82-4deaa76fa482@quicinc.com>
- <CAHp75VcCAOD3utLjjXeQ97nGcUTm7pic5F52+e7cJDxpDXwttA@mail.gmail.com>
- <1ed28be7-7bb5-acc5-c955-f4cf238ffc49@quicinc.com>
- <CAHp75VcDBFyG9+RaOUma4y+Q0em2-Nvuk_71vDkenGk+2HJqEQ@mail.gmail.com>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <CAHp75VcDBFyG9+RaOUma4y+Q0em2-Nvuk_71vDkenGk+2HJqEQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4tgDf_h0YZG3yRazudrZ1kAx0iJi_ZJs
-X-Proofpoint-GUID: 4tgDf_h0YZG3yRazudrZ1kAx0iJi_ZJs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0
- impostorscore=0 mlxlogscore=509 phishscore=0 mlxscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270097
+To:     Pavel Machek <pavel@ucw.cz>,
+        Javier Carrasco <javier.carrasco@wolfvision.net>,
+        phone-devel@vger.kernel.org
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Uwe Kleine-g <u.kleine-koenig@pengutronix.de>,
+        Bastian Hecht <hechtb@gmail.com>
+References: <20230425115049.870003-1-javier.carrasco@wolfvision.net>
+ <ZEpWrWpzkI9kNTkr@duo.ucw.cz>
+From:   Michael Riesch <michael.riesch@wolfvision.net>
+Organization: WolfVision GmbH
+In-Reply-To: <ZEpWrWpzkI9kNTkr@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR09CA0135.eurprd09.prod.outlook.com
+ (2603:10a6:803:12c::19) To DU0PR08MB9155.eurprd08.prod.outlook.com
+ (2603:10a6:10:416::5)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|DB3PR08MB9110:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca7857d1-33ae-4c76-9a84-08db471025a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aAsLDnqge9oR0QGLTt5+Tm2x+xXuNZCdQdvC1W4keJ4yr/a2B+GseIHs/lyl268ziut5qHX4fquWltL2+E6AaXFD+IPqX8isKhHjRD1If0GdHee4WF/SLXjKMIrHksaW3/cO6OLnIcfK5N5Ubu3OVB7e0YJCWj2rgEb/VIn4a7qNlpbTQcMGaMrafCyghJ1Bgm/9XICciapGZY1BNN+A+v/AtwOJecaWjd/LiqouoXICZWFW3puGVIOwJSqwBTHYdzskh2PU0o5q9lxKctRY9/wDRKRhG+jDJ/+Qg9z1md8YEyZMjRmy9vQwS7JXimnGzgDDWL2GYgs2LnRGCK9hQF/nZkUIJbgSB5c67/X172zefSV127S6j/A7u5VFhBlHfh7fnOw+gt08xesT4efsvjFkv20/j8ZtQYkhUD4Zc4mIf5czgVVmRm/i2905Q1sPshcIzp8m9xy4wgztyG+aWeyPBcuxwvaaKyRWiiScpISPPItdvxCi05Uvi+KccX2oPBWN5LAM1fZjXpV6pPnijG18BNJPMkNZ2Hd5Pm0GI4bGZwRumfO5Nqn+5gUnGvP5dYy40ZvarGJvlftSkY4J9mCy6YnAtFBPTSGkBE6iKONAde57mMSwtZLi4t+5ynJnzymuLsb1J6ypFZ9LMDLMCA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39840400004)(136003)(396003)(346002)(366004)(451199021)(478600001)(38100700002)(54906003)(86362001)(31696002)(110136005)(186003)(6506007)(6512007)(26005)(53546011)(36756003)(2616005)(6486002)(6666004)(36916002)(316002)(66946007)(41300700001)(4744005)(66556008)(4326008)(7416002)(44832011)(5660300002)(31686004)(66476007)(2906002)(8936002)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjRzRzFCQjR6dEJUOERJSFpHUE14MlZ2ZkcxTmF4RkFRRkhNNjEyQlorYkti?=
+ =?utf-8?B?MzJvemcrMHk0enptaStXV1ljQXByVTBreDJkUktWSG1RdU9OTmxGUUsvYm5B?=
+ =?utf-8?B?WVF3bnJvbGt2R1BHSmw4NFZwWklzcUtzajliSE1RS0lNSjYyWU8wWFJUZFVi?=
+ =?utf-8?B?dWdVS0ZoN0xESHV4S2lwL1BkVjFvek4yaXpTWTc3VUF0blFuc0pKN2ttSU1u?=
+ =?utf-8?B?dGU3NENsUTNIUFIvR0RLVno1ZjUvM0RuNk5jYVJ3QnlkVUY5UUpid2NwR00z?=
+ =?utf-8?B?ZEhaVEhtZ3h3NlRhRjhMWkhKVWZSUHBhNXF4R1h5bzV5S0MvRjcwTE9yREY0?=
+ =?utf-8?B?bUVsOWNRd09SNUdKazdkTkJScmdoMjlRNDE0eVA5R1k1M0EvVEp2bTFJY3Ns?=
+ =?utf-8?B?QTlmbFZ0SjRRODdBL0Fpb0RuNmZSRktWUVhRYXRveWx1S0RneG44cXB4c3Jk?=
+ =?utf-8?B?Q2V2bHoyTGJPanhVS2I2KzBNSGc1c0ZMS0pJQ0lzbWVreDVCbzdGdFoxWllD?=
+ =?utf-8?B?dkVjc01LQktpa2JPRGdKL2ZQd2FESnJqclArUndpaXZYYTQvL3FtbWRSVTZ3?=
+ =?utf-8?B?aDZFbDJ6VjRqcGsyczJTUmI2ckpqdDVSRmk2b3BycXU1Rzc0Q0k5V2JRNDFG?=
+ =?utf-8?B?SXJvWUcxSjdIYTd5a1NuM1IvV2g3a1lib2NxSkhFaU5jclRzbmxROW54RVRj?=
+ =?utf-8?B?Mm5hYlhZSFRSS2pvejV2UnJuOVJ4dGJSOGgxQ1huQjhIL1RvbmRsdmRmSFc1?=
+ =?utf-8?B?NWpqQ2NIdHVKTEJnNm5IRVp4U0ZPNlROVW9JcjQxeWRpaXI0c1M0RUV3Sit1?=
+ =?utf-8?B?ZFlCN2RXdEtWS2tKSDlWdXBMdGxOLy9WcHZDZkhOQjZGeGVabFAxMWZLSEVk?=
+ =?utf-8?B?Q0lqdXFQeklyMGVjcDhzNEUyc05mWk1UMWpLMWFOc2YvSzk4YjEwbTJIRjZx?=
+ =?utf-8?B?MklvYVpUbkVBTFVmeTFVclc3VmVsNERtL0JjUm5POWg5ZFNIU2dBM3ExSUI1?=
+ =?utf-8?B?ak1kRWNpMjZCcGs2Q2lqZm1DZTZOR0U2TDcwWTc2OU9pVGRVWXZ2N3YrVmxE?=
+ =?utf-8?B?ckhtYTF0a3dybXQ2U0JtOGwwK29BbGlUSlg0SERPRlMxcDYrTGEzWXZtR3Yv?=
+ =?utf-8?B?Y3c4bmh2ZmtnZHJoNHh6bXN1Nmd4WHJhdUp1cnVKM0VDSVFqUlVjNEFpbG1K?=
+ =?utf-8?B?cFFtQWxybHEvdDFmVjRCT0ZQV3FOQ3A2M0VFR3NPb1o3VmNEL2k1TVoxeDZa?=
+ =?utf-8?B?M0p0a0pGM3Y5S1VPSkdKSXZsYnIvWXBDM3k1WGhxQzhrRHlVK2dnRU9NQXAv?=
+ =?utf-8?B?dkRMZ1pZSTZnTkZ4VW9qbklzZWpLWU5sTmtZM284K2Nva2JGQ3lYNkc1UnZQ?=
+ =?utf-8?B?RDBHY1ZGNHk5V3hha2lJbm11dklTcTZOV0c0eDh5bE41UnhiUy90N1Y5akx5?=
+ =?utf-8?B?R3FzVFdBc1FnNDBMS3lpbng5MnYvMnFCMXhHdWlHcWpkOEMvQnlYUTVqcC9v?=
+ =?utf-8?B?elVMUFRZNlVjeC9LTVlSVUZaZzZxc2x6MWJOOXVzaE5ja1FDdVZhYzQ5VXZ2?=
+ =?utf-8?B?M0VQRzZWaE9IUS81cTEwRERCVHJwUVpEZ0hVU1JSOXJxbmpUQnNzREpYZ1Fp?=
+ =?utf-8?B?VlcwTVEwb3FHQUswL09lbEFmRFR1ekF1UG9ZSDFlMi9MRVFaQTBhUzRqWUk3?=
+ =?utf-8?B?c3F3NGFKa1dZTXRLMWhYaTVIdlVUSWo5MkdBTm9rR2pMQ0JxQmJyNTVsSUFF?=
+ =?utf-8?B?b1hTUG5BQThzWHMvbi9vSzBESUh5Q2I2Mkd0Z1BQcDRHMXhsM0luK3RieWtz?=
+ =?utf-8?B?KzZDcDZncjRidS9ZVkpLMWkrZzFHWVNDb0RtZmFQZmVydWxWamhIWUNlRHNT?=
+ =?utf-8?B?RkhSa1p3a2tQQkdDRGRiVWRQTDloOEovM2dZVjZqNXp0S2lNSFZaWERSc0tm?=
+ =?utf-8?B?Z29ES3ppYytWVUYyY3hkak5nVElFdlVRTDNsV2pLQ1RGMEFWK2xneUVUdHhx?=
+ =?utf-8?B?MVFMRWE0Ujd1Wk1mY1FRcjYwSWpzWjYwSFQxNXBWSDFCZ3NXNFZtdnI3bkxN?=
+ =?utf-8?B?M3k5SE1rekdvL01neGl5UW9TZ1IyZ1lzNXlTLzFhMkJaaksyN2RqTVVob1pj?=
+ =?utf-8?B?V2JCZW9LTnFJR25iY24zanNHZnZpL25Pb1BCd1ZMcS9kYUE0aGhLblZDYzZq?=
+ =?utf-8?B?Smc9PQ==?=
+X-OriginatorOrg: wolfvision.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca7857d1-33ae-4c76-9a84-08db471025a1
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 11:11:28.2254
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5831rLwdqCHs0TH1lnoCUrwGJIKINFOwIEMYHvY9uyREH/+BlFNDESiUVHd2WSKCEG4OhiWb49fhNeDZrCxNjO3WdZuMrtucIc81NuePf/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR08MB9110
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Pavel,
 
-On 4/27/2023 4:24 PM, Andy Shevchenko wrote:
-> On Thu, Apr 27, 2023 at 11:53 AM Rohit Agarwal
-> <quic_rohiagar@quicinc.com> wrote:
->> On 4/26/2023 10:12 PM, Andy Shevchenko wrote:
->>> On Wed, Apr 26, 2023 at 6:18 PM Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
->>>> On 4/26/2023 8:34 PM, andy.shevchenko@gmail.com wrote:
-> ...
->
->>>> Ok, Will update this. Shall I also update "PINGROUP" to "PINCTRL_PINGROUP"?
->>> Yes, please.
->> PINCTRL_PINGROUP cannot be used as it is, since msm_pigroup has multiple
->> other fields that needs to be set
->> for each pingroup defined.
->> Would rename this to SDX75_PINGROUP, as seen on some other platforms.
->> Would that be ok?
-> For this patch, yes. But can you create a separate followup that
-> replaces three members of struct msm_pingroup by embedding struct
-> pingroup into it? There are examples of such changes in the kernel
-> already. https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/drivers/pinctrl?id=39b707fa7aba7cbfd7d53be50b6098e620f7a6d4
->
-Sure, create a separate followup patch referring it. Will use 
-SDX75_PINGROUP for now.
-Thanks,
-Rohit.
+On 4/27/23 13:04, Pavel Machek wrote:
+> Hi!
+> 
+>> Some touchscreens are shipped with a physical layer on top of them where
+>> a number of buttons and a resized touchscreen surface might be
+>> available.
+> 
+> Yes, it is quite comon, for example Motorola Droid 4 has 4 virtual
+> buttons below touchscreen.
+
+Are those buttons configurable in some way? Or do they have a fixed purpose?
+
+How does Android handle those buttons, BTW?
+
+> One question is if this should be handled inside the kernel. It will
+> make it compatible with existing software, but it will also reduce
+> flexibility.
+
+I would say that it should be described in device tree if the purpose is
+fixed. For example, if there is no display behind the touch screen at a
+certain point but a printed sheet (e.g., with a home or return symbol)
+then it is clear that this button is not going to change. In such a case
+I doubt that flexibility is required.
+
+Best regards, Michael
+
+> 
+> Best regards,
+> 								Pavel
