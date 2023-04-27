@@ -2,159 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959376F01E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E7A6F01E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243072AbjD0HhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 03:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S242973AbjD0Hht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 03:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbjD0HhI (ORCPT
+        with ESMTP id S243020AbjD0Hhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 03:37:08 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BED2E7;
-        Thu, 27 Apr 2023 00:37:06 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f1e2555b5aso34991345e9.0;
-        Thu, 27 Apr 2023 00:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682581024; x=1685173024;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oxehQfcmJryVNtOnqjPU8dcl4daH8QR4oPGx8PetHgc=;
-        b=A9A1kf0aU5n5maWaTYSpwFq+dFDGkdZCkeAcCwkLD9kYlmE85jcd+hdkN4nKiQWQe+
-         RVnhbx9f5wFVudnxQnUsSqLoUc+G3JM+O42GX9gNZfKeD8PN2HWTR2M+4STfmZxQqx7A
-         ULQDVvEq1TUhKtYHjEQgZl7Jn4EVzSTkmRE2Oecxpq3Lqgdq1vonGcIN3aUKzLbJD2io
-         FpSv3YS013V0nX3CVl5ec1a5D04GehDx526Kyx7RUB+XA1EFrTaBRu+mhMmPRXhFDy36
-         7PFiOvnoAlRW92DFpieLR1YprFoJEGerJot6aeQ7uIG8PKhFuzZejCpTBKtwwOV0mzu8
-         YerA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682581024; x=1685173024;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oxehQfcmJryVNtOnqjPU8dcl4daH8QR4oPGx8PetHgc=;
-        b=f9lBoujANCu7pW2uwxeluX9nIdJjPiu6BlrLGsAqwNDa8ERC+0r5kA7wGGf4fy2S5i
-         1NUfHbZeNBT3pHdisvVj6r8qUgi1zW+OxE4RKbA9Bdr81LB1wyrRMIIXc8wwyMWmPgA9
-         HVn0T95cwXvJA4RFiYgIqdh3sAt6/oCJcW2Zf/Nxa9m078C2fPD3eQJFEJLwsyZ36du5
-         b4F/OIBrlPcS6wINRVKyhKVUU4/3QKq0WBFzw4QxDBLQ9sT8Xv07lK2S+1/pWriW6dfr
-         U/QjQCacocAvk+DME2Q912im4zFVRSMOEQi27YswnCFIdCJDiXiKiDer5MhJPLxLBXGn
-         amKA==
-X-Gm-Message-State: AC+VfDzhn9YNv2HPlujQCQ95vOs58Yt1C/iVNJGVwaowmKob8+Rn2vJ7
-        7UqDPgOdyC1iUGavFGnnbv0=
-X-Google-Smtp-Source: ACHHUZ6j08kRlenxNEOxuCRn5D3dpBgWAxIWK0iOstSqplZ+yyO01YFGKwmwZRllZUj/HWkWlwS2Ow==
-X-Received: by 2002:a5d:5312:0:b0:2f0:df59:1ea7 with SMTP id e18-20020a5d5312000000b002f0df591ea7mr504125wrv.31.1682581024316;
-        Thu, 27 Apr 2023 00:37:04 -0700 (PDT)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i6-20020a5d6306000000b002fed865c55esm17706733wru.56.2023.04.27.00.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 00:37:03 -0700 (PDT)
-Message-ID: <1cfc224b-f8b0-3143-42d2-188b56368c61@gmail.com>
-Date:   Thu, 27 Apr 2023 09:37:01 +0200
+        Thu, 27 Apr 2023 03:37:47 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709F010CE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=equiv.tech;
+        h=from:subject:references:mime-version:content-type:in-reply-to:to:cc:
+        content-transfer-encoding:cc:content-type:from:subject:to;
+        s=org; bh=HJ3ETqPadb7zUTID7tP1U9AwKITVOi9X0oV/h6wnoSo=;
+        b=uptKegTmRlxsYzrx+9oJn0Az6iDbGnsQiVZZ29fgprqKYWAgCFVPHnhiIiExFNk8l8N2
+        xSUzf8NzDMUv25leThxNllGV5iRAkl3+1NGauNep1rPfpJaRVM9PfVlXV8WeeyAofaZ6sS
+        RKXcH3fZ8Js02sdGutBCLCuNhv7oJa9lI=
+Received: by filterdrecv-5848969764-pz6sb with SMTP id filterdrecv-5848969764-pz6sb-1-644A2648-6
+        2023-04-27 07:37:44.16317308 +0000 UTC m=+152153.380604064
+Received: from localhost (unknown)
+        by geopod-ismtpd-3 (SG) with ESMTP
+        id Dj5W3I_3RIewIlJRj5gQrw
+        Thu, 27 Apr 2023 07:37:43.976 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 07:37:44 +0000 (UTC)
+From:   James Seo <james@equiv.tech>
+Subject: Re: [PATCH v3] hwmon: add HP WMI Sensors driver
+Message-ID: <ZEomR842t6QrahyO@equiv.tech>
+References: <20230424100459.41672-1-james@equiv.tech>
+ <cd81a7d6-4b81-f074-1f28-6d1b5300b937@gmx.de>
+ <ZEkkLggFLCGlvq8f@equiv.tech>
+ <30339393-0ba2-9788-6ad8-98c89afc6994@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH 0/1] Categorize ARM dts directory
-Content-Language: en-US, ca-ES, es-ES
-To:     Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-omap@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-arm-kernel@axis.com,
-        linux-aspeed@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        chrome-platform@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        kernel@dh-electronics.com, linux-mediatek@lists.infradead.org,
-        openbmc@lists.ozlabs.org, linux-tegra@vger.kernel.org,
-        linux-oxnas@groups.io, linux-arm-msm@vger.kernel.org,
-        linux-unisoc@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-realtek-soc@lists.infradead.org
-References: <20220328000915.15041-1-ansuelsmth@gmail.com>
- <85eb14ec-f465-7447-ad77-a3dabc666f47@kernel.org>
- <YkKRYnN84D9VZhGj@Ansuel-xps.localdomain>
- <CAL_Jsq+RQQ-ADMxLPUFwk6S6kGmb6oNDy4k52fnU0EtbUvqmSA@mail.gmail.com>
- <CAMuHMdWNTE48MFy6fqxAsfMWz9b6E7dVNXtXtESP95sxk2PGwA@mail.gmail.com>
- <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAL_JsqJthKTm8bhRF2B=ae1tvtPeYYXx_Tm76qQtSwLtH5C6VA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30339393-0ba2-9788-6ad8-98c89afc6994@gmx.de>
+X-SG-EID: =?us-ascii?Q?1X41iaRO4wVP+tFXGLuxpQ0yxxMDhGIesR5UcsYKVengQKgidLJSXwOMZlPQwP?=
+ =?us-ascii?Q?Ws8SOh1Mhvy+aML+f3d=2FS7ziskCfXzIzt9Z3SfQ?=
+ =?us-ascii?Q?dtno+5xENtBaNbUdyeC0nzzETKiFnRLsLddkgG6?=
+ =?us-ascii?Q?nHGIHM=2FkNY1=2FENI9=2FiMhHLxNtVtGZNS776WeRQE?=
+ =?us-ascii?Q?cn3S7JoFAHmxU2NoMPXxDg7JQh4esq=2FvHRKA+9O?=
+ =?us-ascii?Q?unPGpDo61aY9qXSxYL0oY=2Fe2pvgTFui4m71J6j?=
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     James Seo <james@equiv.tech>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Entity-ID: Y+qgTyM7KJvXcwsg19bS4g==
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 26, 2023 at 09:35:33PM +0200, Armin Wolf wrote:
+> Am 26.04.23 um 15:16 schrieb James Seo:
+> 
+>> On Mon, Apr 24, 2023 at 11:13:36PM +0200, Armin Wolf wrote:
+>>> Am 24.04.23 um 12:05 schrieb James Seo:
+>>> 
+>>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, pevents++) {
+>>> Hi,
+>>> 
+>>> the WMI driver core already knows how many instances of a given WMI object are available.
+>>> Unfortunately, this information is currently unavailable to drivers. Would it be convenient
+>>> for you to access this information? I could try to implement such a function if needed.
+>>> 
+>>>> +	for (i = 0; i < HP_WMI_MAX_INSTANCES; i++, info++) {
+>>> Same as above.
+>>> 
+>> Hello,
+>> 
+>> Having the WMI object instance count wouldn't make much difference to
+>> me for now. The driver has to iterate through all instances during
+>> init anyway. If I were forced to accommodate 50+ sensors, I'd rewrite
+>> some things and I think I'd want such a function then, but I picked
+>> the current arbitrary limit of 32 because even that seems unlikely.
+>> 
+>> So, maybe don't worry about it unless you want to. Or am I missing
+>> something?
+>> 
+> Hi,
+> 
+> i already have a experimental patch available which adds such a function.
+> If you could test this patch to see if it works, then i could submit it upstream
+> where other drivers could profit from being able to know the number of
+> WMI object instances.
+> 
 
+Both your proposed functions worked as expected.
 
-On 25/04/2023 17:57, Rob Herring wrote:
-> On Tue, Apr 25, 2023 at 2:28 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>
->> Hi Rob,
->>
->> On Tue, Apr 25, 2023 at 12:16 AM Rob Herring <robh+dt@kernel.org> wrote:
->>> I have a script[1] that does the conversion written the last time this
->>> came up. Just have to agree on directory names. I think the easiest
->>> would be for Arnd/Olof to run it at the end of a merge window before
->>> rc1.
->>
->> "emev2" and "sh7" are missing for renesas.
-> 
-> No doubt it's been bitrotting (or I may have missed some).
-> 
->> Does your script also cater for .dts files not matching any pattern,
->> but including a .dtsi file that does match a pattern?
-> 
-> I assume I built everything after moving, but maybe not...
-> 
-> That's all just "details". First, we need agreement on a) moving
-> things to subdirs and b) doing it 1-by-1 or all at once. So far we've
-> been stuck on a) for being 'too much churn'.
+> Your driver could also profit from such a function, as it could optimize the amount
+> of memory allocated to store WMI object data.
+
+I suppose I might as well. I assume I'm supposed to wait until your
+new functions are merged before making changes that rely on them?
+
+> The current instance discovery algorithm
+> (using a for-loop and break on error) also has a potential issue: when a single WMI call
+> fails for some reason (ACPI error, ...), all following WMI instances are being ignored.
 > 
 
-I think it makes sense to move them and probably the best way to do so is, as 
-you proposed: that Arnd or Olof run the script to move them just before -rc1
+This is the intended behavior for now, on the assumption that a real
+ACPI failure probably indicates that the system has bigger problems.
+I do have vague plans to make the driver more tolerant of failure to
+retrieve or validate instances, but haven't decided anything yet.
 
 Regards,
-Matthias
 
-> One nice thing with subdirs is 'make CHECK_DTBS=y
-> arch/arm/boot/dts/foo/' can build everything for a platform family
-> without having to mess with the kconfig. Maybe most folks don't care,
-> but I do. My CI job running schema checks looks like this to deal with
-> grouping the arm dts files (this list is probably out of date too, but
-> less so):
-> 
->          if [ "$ARCH" = "arm" ]; then
->              VENDOR_LIST="alphascale alpine artpec aspeed axm bcm cx9
-> (ecx|highbank) \
->                efm ep7 imx1 imx23 imx28 imx27 imx5 imx6 imx7 ls vf qcom \
->                (am3|am4|am5|dra|keystone|omap|compulab|logicpd|elpida|motorola-cpcap|da|dm)
-> \
->                nspire armada dove kirkwood orion mvebu mmp2 berlin pxa
-> (arm-|integ|mps|ve) \
->                (at91|sama|usb_|tny_|mpa1600|animeo_ip|aks-cdu|ethernut5|evk-pro3|pm9g45|ge86)
-> \
->                exynos s3c s5p gemini (hisi|hi3|hip) mt meson moxa nuvo
-> lpc owl ox8 \
->                (r7|r8|r9|emev2|sh73a|gr-|iwg) (rk|rv11) socfpga stm
-> (sti|st-pin) ste \
->                spear (sun|axp) tegra uniph (vt8500|wm8) xen zynq"
->          else
->              VENDOR_LIST=$(ls arch/$ARCH/boot/dts/ | xargs)
->          fi
-> 
-> Rob
+James
