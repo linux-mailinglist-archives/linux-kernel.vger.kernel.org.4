@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDFC6F04E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5389E6F04DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243644AbjD0LUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S243679AbjD0LUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243559AbjD0LTs (ORCPT
+        with ESMTP id S243563AbjD0LTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Apr 2023 07:19:48 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81A85244
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:19:45 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599F55263
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:19:46 -0700 (PDT)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1682594384;
@@ -22,21 +22,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ORxxMGTCqHCTuORmt0+70Mqp063X5vrWfREdzEDLbVo=;
-        b=Gck4aSMK7OncrecOxwvKthriuTS5Inm5bndSjBt2etXMraZlGX5LwTrbipYyQ6g+FnQu7h
-        D6VO9eIYi36JjwEB3OCkJEUB+hzWOrMTB9oFx68JZ0joHQ/j1+OXUA23QKOJD/Irt90G4m
-        AJ1/SGpsJ8EzpzsVkIInAWp1z1bKq3hyaegCCjfuUiaPcd7mKKHZACmSqT7tg26AeLB58k
-        GIp+cL1HPMrZgUpwvV3i4rZhC1h1KNAqecJ+RWhFLIyfm+s2Eztv1AUGFfvWjdxVEFewXi
-        f1H2Nnqw3ZVdehzB5XEfdU1SKHPeX65QMa4VXdOe+kbrNXEmJiIXPJt/dJXczw==
+        bh=ss/NEuQeuI1dqjAHKhSBAWsmc81HxasKaGCODSbI4ek=;
+        b=eKuk40/REqcGKS0ii2ASevLY3qsTGyQpKqrPZwA4rFyEtiPLBKFamvgwzZkSxqe7rqHJW4
+        V7/MswqlsuXFxfaXz+WGA8BnoIoKM0NWYcRsY4uUScr1eHt/XaoltlRlkQHJmv71ER4MpW
+        Y4yRirWQjv0+Bp/p6rJymqKaruezQ0uaq36fumnq5Gr2iTQ6zqwhLrGMV0LZWfvnJVZDqn
+        870vy+aipzwSfn/RWuhqJ52LM8KuvjglSYoQ8uMOv8Z7P+y1qMYXsWNOUEsRwebiQZSCjw
+        1vCPylGEcln7uR18jlws4iC9N/tvEzwV4OobbW8in4VPgrhbef9vmrVSVvqneg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1682594384;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ORxxMGTCqHCTuORmt0+70Mqp063X5vrWfREdzEDLbVo=;
-        b=kTs6IfxYm3EWHR6adfgx1jpJcNw3wEw7YFL0cGjAZtgwI9WLXPj1tvs402v/43ghvrNppo
-        dLNHVFDlqOO0g8BQ==
+        bh=ss/NEuQeuI1dqjAHKhSBAWsmc81HxasKaGCODSbI4ek=;
+        b=odiuxUs1bodRYWfNKXGv8oSn53TaRU36lEYWWoaUUgo6tmXnDI/rNSWy8xH4gAaRrZ0T6h
+        4d7RhFEJLodYovAg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Crystal Wood <swood@redhat.com>,
@@ -54,9 +54,9 @@ Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Waiman Long <longman@redhat.com>,
         Will Deacon <will@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 2/4] locking/rtmutex: Submit/resume work explicitly before/after blocking
-Date:   Thu, 27 Apr 2023 13:19:35 +0200
-Message-Id: <20230427111937.2745231-3-bigeasy@linutronix.de>
+Subject: [PATCH v2 3/4] locking/rtmutex: Avoid pointless blk_flush_plug() invocations
+Date:   Thu, 27 Apr 2023 13:19:36 +0200
+Message-Id: <20230427111937.2745231-4-bigeasy@linutronix.de>
 In-Reply-To: <20230427111937.2745231-1-bigeasy@linutronix.de>
 References: <20230427111937.2745231-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -71,166 +71,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-schedule() invokes sched_submit_work() before scheduling and
-sched_resume_work() afterwards to ensure that queued block requests are
-flushed and the (IO)worker machineries can instantiate new workers if
-required. This avoids deadlocks and starvation.
+With DEBUG_RT_MUTEXES enabled the fast-path rt_mutex_cmpxchg_acquire()
+always fails and all lock operations take the slow path, which leads to the
+invocation of blk_flush_plug() even if the lock is not contended which is
+unnecessary and avoids batch processing of requests.
 
-With rt_mutexes this can lead to a subtle problem:
+Provide a new helper inline rt_mutex_try_acquire() which maps to
+rt_mutex_cmpxchg_acquire() in the non-debug case. For the debug case it
+invokes rt_mutex_slowtrylock() which can acquire a non-contended rtmutex
+under full debug coverage.
 
-  When rtmutex blocks current::pi_blocked_on points to the rtmutex it
-  blocks on. When one of the functions in sched_submit/resume_work() conten=
-ds
-  on a rtmutex based lock then that would corrupt current::pi_blocked_on.
+Replace the rt_mutex_cmpxchg_acquire() invocations in __rt_mutex_lock() and
+__ww_rt_mutex_lock() with the new helper function, which avoid the
+blk_flush_plug() for the non-contended case and preserves the debug
+mechanism.
 
-Let rtmutex and the RT lock variants which are based on it invoke
-sched_submit/resume_work() explicitly before and after the slowpath so
-it's guaranteed that current::pi_blocked_on cannot be corrupted by blocking
-on two locks.
+[ tglx: Created a new helper and massaged changelog ]
 
-This does not apply to the PREEMPT_RT variants of spinlock_t and rwlock_t
-as their scheduling slowpath is separate and cannot invoke the work related
-functions due to potential deadlocks anyway.
-
-[ tglx: Make it explicit and symmetric. Massage changelog ]
-
-Fixes: e17ba59b7e8e1 ("locking/rtmutex: Guard regular sleeping locks specif=
-ic functions")
-Reported-by: Crystal Wood <swood@redhat.com>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/4b4ab374d3e24e6ea8df5cadc4297619a6d945af.came=
-l@redhat.com
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/locking/rtmutex.c     | 11 +++++++++--
- kernel/locking/rwbase_rt.c   | 18 ++++++++++++++++--
- kernel/locking/rwsem.c       |  6 ++++++
- kernel/locking/spinlock_rt.c |  3 +++
- 4 files changed, 34 insertions(+), 4 deletions(-)
+ kernel/locking/rtmutex.c     | 25 ++++++++++++++++++++++++-
+ kernel/locking/ww_rt_mutex.c |  2 +-
+ 2 files changed, 25 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 728f434de2bbf..aa66a3c5950a7 100644
+index aa66a3c5950a7..dd76c1b9b7d21 100644
 --- a/kernel/locking/rtmutex.c
 +++ b/kernel/locking/rtmutex.c
-@@ -1555,7 +1555,7 @@ static int __sched rt_mutex_slowlock_block(struct rt_=
-mutex_base *lock,
- 		raw_spin_unlock_irq(&lock->wait_lock);
-=20
- 		if (!owner || !rtmutex_spin_on_owner(lock, waiter, owner))
--			schedule();
-+			schedule_rtmutex();
-=20
- 		raw_spin_lock_irq(&lock->wait_lock);
- 		set_current_state(state);
-@@ -1584,7 +1584,7 @@ static void __sched rt_mutex_handle_deadlock(int res,=
- int detect_deadlock,
- 	WARN(1, "rtmutex deadlock detected\n");
- 	while (1) {
- 		set_current_state(TASK_INTERRUPTIBLE);
--		schedule();
-+		schedule_rtmutex();
- 	}
+@@ -218,6 +218,11 @@ static __always_inline bool rt_mutex_cmpxchg_acquire(s=
+truct rt_mutex_base *lock,
+ 	return try_cmpxchg_acquire(&lock->owner, &old, new);
  }
 =20
-@@ -1679,6 +1679,12 @@ static int __sched rt_mutex_slowlock(struct rt_mutex=
-_base *lock,
- 	unsigned long flags;
- 	int ret;
++static __always_inline bool rt_mutex_try_acquire(struct rt_mutex_base *loc=
+k)
++{
++	return rt_mutex_cmpxchg_acquire(lock, NULL, current);
++}
++
+ static __always_inline bool rt_mutex_cmpxchg_release(struct rt_mutex_base =
+*lock,
+ 						     struct task_struct *old,
+ 						     struct task_struct *new)
+@@ -297,6 +302,24 @@ static __always_inline bool rt_mutex_cmpxchg_acquire(s=
+truct rt_mutex_base *lock,
 =20
+ }
+=20
++static int __sched rt_mutex_slowtrylock(struct rt_mutex_base *lock);
++
++static __always_inline bool rt_mutex_try_acquire(struct rt_mutex_base *loc=
+k)
++{
 +	/*
-+	 * The task is about to sleep. Invoke sched_submit_work() before
-+	 * blocking as that might take locks and corrupt tsk::pi_blocked_on.
++	 * With debug enabled rt_mutex_cmpxchg trylock() will always fail,
++	 * which will unconditionally invoke sched_submit/resume_work() in
++	 * the slow path of __rt_mutex_lock() and __ww_rt_mutex_lock() even
++	 * in the non-contended case.
++	 *
++	 * Avoid that by using rt_mutex_slow_trylock() which is covered by
++	 * the debug code and can acquire a non-contended rtmutex. On
++	 * success the callsite avoids the sched_submit/resume_work()
++	 * dance.
 +	 */
-+	sched_submit_work();
++	return rt_mutex_slowtrylock(lock);
++}
 +
- 	/*
- 	 * Technically we could use raw_spin_[un]lock_irq() here, but this can
- 	 * be called in early boot if the cmpxchg() fast path is disabled
-@@ -1691,6 +1697,7 @@ static int __sched rt_mutex_slowlock(struct rt_mutex_=
+ static __always_inline bool rt_mutex_cmpxchg_release(struct rt_mutex_base =
+*lock,
+ 						     struct task_struct *old,
+ 						     struct task_struct *new)
+@@ -1704,7 +1727,7 @@ static int __sched rt_mutex_slowlock(struct rt_mutex_=
 base *lock,
- 	ret =3D __rt_mutex_slowlock_locked(lock, ww_ctx, state);
- 	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
-=20
-+	sched_resume_work();
- 	return ret;
- }
-=20
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index 25ec0239477c2..945d474f5d27f 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -131,10 +131,21 @@ static int __sched __rwbase_read_lock(struct rwbase_r=
-t *rwb,
- static __always_inline int rwbase_read_lock(struct rwbase_rt *rwb,
- 					    unsigned int state)
+ static __always_inline int __rt_mutex_lock(struct rt_mutex_base *lock,
+ 					   unsigned int state)
  {
-+	int ret;
-+
- 	if (rwbase_read_trylock(rwb))
+-	if (likely(rt_mutex_cmpxchg_acquire(lock, NULL, current)))
++	if (likely(rt_mutex_try_acquire(lock)))
  		return 0;
 =20
--	return __rwbase_read_lock(rwb, state);
-+	/*
-+	 * The task is about to sleep. For rwsems this submits work as that
-+	 * might take locks and corrupt tsk::pi_blocked_on. Must be
-+	 * explicit here because __rwbase_read_lock() cannot invoke
-+	 * rt_mutex_slowlock(). NOP for rwlocks.
-+	 */
-+	rwbase_sched_submit_work();
-+	ret =3D __rwbase_read_lock(rwb, state);
-+	rwbase_sched_resume_work();
-+	return ret;
- }
+ 	return rt_mutex_slowlock(lock, NULL, state);
+diff --git a/kernel/locking/ww_rt_mutex.c b/kernel/locking/ww_rt_mutex.c
+index d1473c624105c..c7196de838edc 100644
+--- a/kernel/locking/ww_rt_mutex.c
++++ b/kernel/locking/ww_rt_mutex.c
+@@ -62,7 +62,7 @@ __ww_rt_mutex_lock(struct ww_mutex *lock, struct ww_acqui=
+re_ctx *ww_ctx,
+ 	}
+ 	mutex_acquire_nest(&rtm->dep_map, 0, 0, nest_lock, ip);
 =20
- static void __sched __rwbase_read_unlock(struct rwbase_rt *rwb,
-@@ -230,7 +241,10 @@ static int __sched rwbase_write_lock(struct rwbase_rt =
-*rwb,
- 	struct rt_mutex_base *rtm =3D &rwb->rtmutex;
- 	unsigned long flags;
-=20
--	/* Take the rtmutex as a first step */
-+	/*
-+	 * Take the rtmutex as a first step. For rwsem this will also
-+	 * invoke sched_submit_work() to flush IO and workers.
-+	 */
- 	if (rwbase_rtmutex_lock_state(rtm, state))
- 		return -EINTR;
-=20
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index acb5a50309a18..aca266006ad47 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -1415,6 +1415,12 @@ static inline void __downgrade_write(struct rw_semap=
-hore *sem)
- #define rwbase_rtmutex_lock_state(rtm, state)		\
- 	__rt_mutex_lock(rtm, state)
-=20
-+#define rwbase_sched_submit_work()			\
-+	sched_submit_work()
-+
-+#define rwbase_sched_resume_work()			\
-+	sched_resume_work()
-+
- #define rwbase_rtmutex_slowlock_locked(rtm, state)	\
- 	__rt_mutex_slowlock_locked(rtm, NULL, state)
-=20
-diff --git a/kernel/locking/spinlock_rt.c b/kernel/locking/spinlock_rt.c
-index 48a19ed8486d8..62c4a6866087a 100644
---- a/kernel/locking/spinlock_rt.c
-+++ b/kernel/locking/spinlock_rt.c
-@@ -159,6 +159,9 @@ rwbase_rtmutex_lock_state(struct rt_mutex_base *rtm, un=
-signed int state)
- 	return 0;
- }
-=20
-+static __always_inline void rwbase_sched_submit_work(void) { }
-+static __always_inline void rwbase_sched_resume_work(void) { }
-+
- static __always_inline int
- rwbase_rtmutex_slowlock_locked(struct rt_mutex_base *rtm, unsigned int sta=
-te)
- {
+-	if (likely(rt_mutex_cmpxchg_acquire(&rtm->rtmutex, NULL, current))) {
++	if (likely(rt_mutex_try_acquire(&rtm->rtmutex))) {
+ 		if (ww_ctx)
+ 			ww_mutex_set_context_fastpath(lock, ww_ctx);
+ 		return 0;
 --=20
 2.40.1
 
