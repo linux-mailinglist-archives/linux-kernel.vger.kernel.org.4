@@ -2,91 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E5A6F0272
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11A66F0278
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243042AbjD0IT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S243045AbjD0IZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243077AbjD0ITx (ORCPT
+        with ESMTP id S229665AbjD0IYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:19:53 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FABE3A9A;
-        Thu, 27 Apr 2023 01:19:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2fa36231b1cso5048438f8f.2;
-        Thu, 27 Apr 2023 01:19:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682583591; x=1685175591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gzFxCmCViEMHXU5pJcqB4vl+bQBH8MRNorgL7voOk4s=;
-        b=LWvz2ZPnfvG2hf+HjF8rsGqkWnAStW32Cgrx9nJgmk+Ur3BQBcsBcHS0t3XIGc0n4a
-         OdBdVB08Y9NS8yXu82+FqsIfptZceNRaQ2bsBl83aNJVqxN6EAx6ucZGdzJdvm/qiaSR
-         eQ/OLKYc8j3RoiBEf73MG1LzUGD6yqHRFDrcZAvzlYh2VEKQExB3pW4UJ+QPcEef4eT3
-         8KAc7d+kLG7LI/2VV1fUubxLaceVm1HNdL9xXxR0e2LJ7aEixMOJNtfbaPL8xmBrw4bv
-         rldWwA+HFyIIFW/WyT1fCK8fY8igQ9IfANwxGDgqTp2eZlkR+CXuBFw+LeWtGuzztiOR
-         ol3g==
+        Thu, 27 Apr 2023 04:24:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A373249D8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682583838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W8usmC3JGK9PorB0wAqvMMI+OvA7gcjYhdZApmddriY=;
+        b=N+faVCjZTFN00z42gAqKl3oYG9GRn6FRnRrF737cQBGA7P9wCKTnNjo55m4c7f0YyDrKlq
+        +xcKGfU8CJ3qMYDjRDEKN2x+52t+SuEXbFdL4SAJ0q2tvisBcaHEaVYS6pc7ylMv5ZSDCN
+        wprGYQhh+UoT7waG3J30G8nCkjjpxBo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-397-nQiIc9wNM_2hHSx1kQ2s0Q-1; Thu, 27 Apr 2023 04:23:56 -0400
+X-MC-Unique: nQiIc9wNM_2hHSx1kQ2s0Q-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f446161e5aso4895677f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:23:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682583591; x=1685175591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gzFxCmCViEMHXU5pJcqB4vl+bQBH8MRNorgL7voOk4s=;
-        b=gFpjMzs2QOjadocMfpEnKYyRp4LvwdcsA58PWFOVc0S3WQkT/Ekb8Yc+b9SIQATWtt
-         RFbYS8cURUax8uAQA2UeSa+uMUY3jOYQuP1ZZw8Jw7ckcIOxFqgvKBF0jPBBYYOck0ta
-         J/n84Cqxtx5hxAQzOrbHNWAMsSnDdX7Hii8QfF+OTh5v2YCSg6XAbKlZ8B5DeA/kCde/
-         uLSuIEsEvotNuc60PFfMAHXtZDzQ7nivB3XDPumB2Kmap2oYn6bIfvhcm67acnJ739DP
-         lmxcsoZZrHR6b9vBcm6E2gX1UDLY0cG4t3q7D/GM0EDGXUj7gYcc+CV+4eYBEHyqB9EU
-         EEZg==
-X-Gm-Message-State: AC+VfDxc3QdsHc07DmCcmD56yI64Okw135fkPf5pUnT+DWkG3iPqWvsa
-        NsKljRWklQqOrjp2eEzTwas2JOguHzd2EU8uaw==
-X-Google-Smtp-Source: ACHHUZ4oLyd8EpikyeMDBjp/0mXOBX8YzZrSOILK/qEv30qbv0kjhzl8WY2s3xULUcVM5j5atJvCMPFRNljPp3w9DT0=
-X-Received: by 2002:adf:da47:0:b0:2f4:4e1a:bea2 with SMTP id
- r7-20020adfda47000000b002f44e1abea2mr583218wrl.59.1682583590838; Thu, 27 Apr
- 2023 01:19:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682583835; x=1685175835;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W8usmC3JGK9PorB0wAqvMMI+OvA7gcjYhdZApmddriY=;
+        b=K9uwhVVq5P6kvr4WjufzQKpJkD79FywFfJSmCcWS8SRf/XPrPZa21eTDOUN1mTwnpN
+         /yvbx03lPLKlttHyV2D/LdhovCX7X4bjgZtp66pKBmEhre1DBSE9eZoDsmKGWQEY1CSa
+         T66yncmGe0WXquW1bTZ44IcFTAiBKKSI+UHJfVzn5tAtEAd3H9dZoFDXWWyK7XFzulCX
+         pagX7YFXTXANvL11ciQwQuVJ5mJ2hiwdiYIL7QcSyvRig1TANKd5e/EBRya9EesnTeKs
+         9lFh4Ob0JmrptiBg0GsUvCmM7k6yIW3TnQNzHV3hd9NfMU5oQ+QmTXbPyd3MECaFv8bk
+         2qWA==
+X-Gm-Message-State: AC+VfDw2Sro8EV4/ZWuhjlS13nw/nhQ3kgayYME7z7EAWyMiPlpUCPaO
+        oywwh3j/nuCmMhF04QluG7eX3gtwv/SznVGM1BqUcSs0TY5Eu/AQ6g94yi3Q/dADH0wl0xdkz0g
+        JwKrkyDxeYS0Wtle5dGfl90Am
+X-Received: by 2002:adf:db8e:0:b0:2fe:f2d1:dcab with SMTP id u14-20020adfdb8e000000b002fef2d1dcabmr580410wri.58.1682583835566;
+        Thu, 27 Apr 2023 01:23:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7rQyd/2UisYbyEnSs2VvV3WiCVMyj0AWWY8+sZq//VJGg92r0G4dwgdN0gnhvMCRphC2USAQ==
+X-Received: by 2002:adf:db8e:0:b0:2fe:f2d1:dcab with SMTP id u14-20020adfdb8e000000b002fef2d1dcabmr580392wri.58.1682583835248;
+        Thu, 27 Apr 2023 01:23:55 -0700 (PDT)
+Received: from redhat.com ([2.52.19.183])
+        by smtp.gmail.com with ESMTPSA id b4-20020a05600010c400b002e45f6ffe63sm17892253wrx.26.2023.04.27.01.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 01:23:54 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 04:23:51 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jasowang@redhat.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
+Message-ID: <20230427042259-mutt-send-email-mst@kernel.org>
+References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
+ <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
+ <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
+ <1682579624.5395834-1-xuanzhuo@linux.alibaba.com>
+ <20230427041206-mutt-send-email-mst@kernel.org>
+ <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230425130054.591007-1-tomas.mudrunka@gmail.com>
- <ZEf0RYdD5jhE9JEk@nixie71> <ZEmwsViIjUVPZ4Cd@google.com> <ZEnBZs9VYxriT1Or@nixie71>
-In-Reply-To: <ZEnBZs9VYxriT1Or@nixie71>
-From:   =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
-Date:   Thu, 27 Apr 2023 10:19:38 +0200
-Message-ID: <CAH2-hcJa_vL9iWTARUAD+adrvQAjzr1N4bQ=cN+8kbE0arVwZw@mail.gmail.com>
-Subject: Re: [PATCH] Fix freeze in lm8333 i2c keyboard driver
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Yes that's correct; what I mean to say is that depending on the nature of
-> the read-to-clear mechanism in the part, there is a chance that the IRQ
-> has not been deasserted by the time the threaded handler returns. On some
-> devices for example, the IRQ is not deasserted until some time after the
-> read's stop condition.
->
-> For these cases, I consider it best practice to measure the I2C and IRQ
-> lines on a scope and if necessary, add a small delay before the interrupt
-> handler returns. This is especially true for open-drain interrupts that
-> may need a few hundred extra us for the pin to rise.
+On Thu, Apr 27, 2023 at 04:13:45PM +0800, Xuan Zhuo wrote:
+> On Thu, 27 Apr 2023 04:12:44 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> > On Thu, Apr 27, 2023 at 03:13:44PM +0800, Xuan Zhuo wrote:
+> > > On Thu, 27 Apr 2023 15:02:26 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
+> > > >
+> > > >
+> > > > On 4/27/23 2:20 PM, Xuan Zhuo wrote:
+> > > > > On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
+> > > > >> For multi-queue and large rx-ring-size use case, the following error
+> > > > >
+> > > > > Cound you give we one number for example?
+> > > >
+> > > > 128 queues and 16K queue_size is typical.
+> > > >
+> > > > >
+> > > > >> occurred when free_unused_bufs:
+> > > > >> rcu: INFO: rcu_sched self-detected stall on CPU.
+> > > > >>
+> > > > >> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+> > > > >> ---
+> > > > >>   drivers/net/virtio_net.c | 1 +
+> > > > >>   1 file changed, 1 insertion(+)
+> > > > >>
+> > > > >> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > > >> index ea1bd4bb326d..21d8382fd2c7 100644
+> > > > >> --- a/drivers/net/virtio_net.c
+> > > > >> +++ b/drivers/net/virtio_net.c
+> > > > >> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
+> > > > >>   		struct virtqueue *vq = vi->rq[i].vq;
+> > > > >>   		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+> > > > >>   			virtnet_rq_free_unused_buf(vq, buf);
+> > > > >> +		schedule();
+> > > > >
+> > > > > Just for rq?
+> > > > >
+> > > > > Do we need to do the same thing for sq?
+> > > > Rq buffers are pre-allocated, take seconds to free rq unused buffers.
+> > > >
+> > > > Sq unused buffers are much less, so do the same for sq is optional.
+> > >
+> > > I got.
+> > >
+> > > I think we should look for a way, compatible with the less queues or the smaller
+> > > rings. Calling schedule() directly may be not a good way.
+> > >
+> > > Thanks.
+> >
+> > Why isn't it a good way?
+> 
+> For the small ring, I don't think it is a good way, maybe we only deal with one
+> buf, then call schedule().
+> 
+> We can call the schedule() after processing a certain number of buffers,
+> or check need_resched () first.
+> 
+> Thanks.
 
-Well before posting the patch i did some testing.
-I was watching the /proc/interrupts and checked that IRQ counter for
-lm8333 matches number of keypresses.
-Which i've only tested for like 20-30 times, but haven't seem any glitch.
 
-But i still recognize the fact that the gpio line getting stuck for
-some reason (short circuit on PCB?) might cause troubles by
-unnecessarily loading the CPU, while with edge trigger it's more
-likely to affect only the function of keyboard itself rather than
-bringing down whole system. But i am not sure if this case is supposed
-to be expected and handled in SW.
+Wenliang, does
+            if (need_resched())
+                    schedule();
+fix the issue for you?
+
+
+> 
+> 
+> >
+> > >
+> > > >
+> > > > >
+> > > > > Thanks.
+> > > > >
+> > > > >
+> > > > >>   	}
+> > > > >>   }
+> > > > >>
+> > > > >> --
+> > > > >> 2.20.1
+> > > > >>
+> >
+
