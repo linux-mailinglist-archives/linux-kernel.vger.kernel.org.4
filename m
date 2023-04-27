@@ -2,131 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BAC6F0D58
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2E96F0D56
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344066AbjD0Ujc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S1344179AbjD0Ui5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjD0Uja (ORCPT
+        with ESMTP id S245168AbjD0Uiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:39:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB7C3ABC;
-        Thu, 27 Apr 2023 13:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682627969; x=1714163969;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0YnxRyvY588QkIhQ/e9X8ygytR0EFyqhjT6BjUsq4hs=;
-  b=m2xcqtHgOMrt6m7Kire8KD+JVUUJq9PNlYetN2kbk2CkRhNhmx9U7Acw
-   gsCtjFFmNsBIqN891fM6FC2lqe6T+bBjAPBogjUHe1/BNnL4iNJPCRvVw
-   CauQ4SnYUDiZ66KL7EUoSuUYlYtRI8gECoDbfFxGVeAlJrLSmWlTLUTkR
-   4Og0F7v68ZLwJfr+IaRu1cIEeHENdmZw0KrOKF2nq7mwe9PYDjDELFjMT
-   hm9lXWsAL1pJQLzKrSH2DateFKYG0yNbvbA5MXG7xFJbY5ufmkwoMDp+3
-   PCx5muJVQwzRxg5hbVX19BChBooTwiC9j4vvbcZo3YbKaILQ7RkWtDjBn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="412924070"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="412924070"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 13:39:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868875373"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="868875373"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2023 13:39:26 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ps8Oj-00006V-1K;
-        Thu, 27 Apr 2023 20:39:25 +0000
-Date:   Fri, 28 Apr 2023 04:38:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Korneliusz Osmenda <korneliuszo@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH 2/3] PCI/sysfs: create private functions for
- pci_create_legacy_files/pci_create_sysfs_dev_files
-Message-ID: <202304280450.17v5JK13-lkp@intel.com>
-References: <20230427142901.3570536-3-alexander.stein@ew.tq-group.com>
+        Thu, 27 Apr 2023 16:38:55 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EA33C15;
+        Thu, 27 Apr 2023 13:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=mb+mw9RoqPzSHwk13zdaZsc81X0xQJcY8tYM6v4FHUI=; b=IJYieqMbLLhnFwjYIv3DzoJbc6
+        w/TidPHt60tuVQEEqr2cd6v1r0PgUuRcEGqsd5mmjkhtUxKBI+bRystWAwkyNBgHUWnF/eScr9Y1D
+        NUFJjXWNu0P+iFi3KSriG6s92Hs7HbV+W6GKOKq89rnxvBCa1RK18Wp/YKF6orgZz+N7SRi5Bztl3
+        JdTCK7zs1vA00180MS5iE3vhv4mAFhqt5zHIgBaCaKf96yuXanhbB6jkHLhpqZtboKduPUu8sHk8R
+        P1OlEVE9sL9+XsUtmh4QkdM4ghZlhzBJAbQ/3POrDxAABHgDZ9AHYPISto+BDensactLlt7QlGYcF
+        acSlnwJQ==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps8OB-00019O-KX; Thu, 27 Apr 2023 22:38:51 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ps8OB-000VKx-9i; Thu, 27 Apr 2023 22:38:51 +0200
+Subject: Re: [PATCH v1] selftests/bpf: Do not use sign-file as testcase
+To:     Stanislav Fomichev <sdf@google.com>,
+        Alexey Gladkov <legion@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <88e3ab23029d726a2703adcf6af8356f7a2d3483.1682607419.git.legion@kernel.org>
+ <ZEq+u0CWs8eO2ED/@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <66b8d805-06db-a0ca-9a69-b715d03d4f5e@iogearbox.net>
+Date:   Thu, 27 Apr 2023 22:38:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427142901.3570536-3-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZEq+u0CWs8eO2ED/@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+On 4/27/23 8:28 PM, Stanislav Fomichev wrote:
+> On 04/27, Alexey Gladkov wrote:
+>> The sign-file utility (from scripts/) is used in prog_tests/verify_pkcs7_sig.c,
+>> but the utility should not be called as a test. Executing this utility
+>> produces the following error:
+>>
+>> selftests: /linux/tools/testing/selftests/bpf: urandom_read
+>> ok 16 selftests: /linux/tools/testing/selftests/bpf: urandom_read
+>>
+>> selftests: /linux/tools/testing/selftests/bpf: sign-file
+>> not ok 17 selftests: /linux/tools/testing/selftests/bpf: sign-file # exit=2
+>>
+>> Fixes: fc97590668ae ("selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc")
+>> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> 
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> 
+>>   tools/testing/selftests/bpf/Makefile | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index b677dcd0b77a..fd214d1526d4 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -88,8 +88,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+>>   	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
+>>   	xdp_features
+>>   
+>> -TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
+>> -TEST_GEN_FILES += liburandom_read.so
+>> +TEST_GEN_FILES += liburandom_read.so urandom_read sign-file
 
-kernel test robot noticed the following build warnings:
+Given you move over both of them, the commit msg should be adapted accordingly
+since it mainly talks about sign-file, less so about urandom_read.
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on pci/for-linus linus/master v6.3 next-20230427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Also now that you remove the TEST_CUSTOM_PROGS, we should probably also remove
+the other two instances:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Stein/PCI-sysfs-sort-headers-alphabetically/20230427-223059
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230427142901.3570536-3-alexander.stein%40ew.tq-group.com
-patch subject: [PATCH 2/3] PCI/sysfs: create private functions for pci_create_legacy_files/pci_create_sysfs_dev_files
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230428/202304280450.17v5JK13-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cbc778730116b49890b5c41ffc9fc664b566e3c4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexander-Stein/PCI-sysfs-sort-headers-alphabetically/20230427-223059
-        git checkout cbc778730116b49890b5c41ffc9fc664b566e3c4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/pci/
+tools/testing/selftests/bpf/Makefile:91:TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
+tools/testing/selftests/bpf/Makefile:156:        $(TEST_CUSTOM_PROGS)): %: $(OUTPUT)/% ;
+tools/testing/selftests/bpf/Makefile:674:EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR) \
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280450.17v5JK13-lkp@intel.com/
+>>   # Emit succinct information message describing current building step
+>>   # $1 - generic step name (e.g., CC, LINK, etc);
+>> -- 
+>> 2.33.7
+>>
 
-All warnings (new ones prefixed by >>):
-
-   drivers/pci/pci-sysfs.c:1256:12: warning: no previous prototype for 'pci_create_resource_files' [-Wmissing-prototypes]
-    1256 | int __weak pci_create_resource_files(struct pci_dev *dev) { return 0; }
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci-sysfs.c:1257:13: warning: no previous prototype for 'pci_remove_resource_files' [-Wmissing-prototypes]
-    1257 | void __weak pci_remove_resource_files(struct pci_dev *dev) { return; }
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/pci/pci-sysfs.c:1502:18: warning: no previous prototype for '__pci_create_sysfs_dev_files' [-Wmissing-prototypes]
-    1502 | int __must_check __pci_create_sysfs_dev_files(struct pci_dev *pdev)
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/pci/pci-sysfs.c:1015:13: warning: '__pci_create_legacy_files' defined but not used [-Wunused-function]
-    1015 | static void __pci_create_legacy_files(struct pci_bus *b) {}
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/__pci_create_sysfs_dev_files +1502 drivers/pci/pci-sysfs.c
-
-  1501	
-> 1502	int __must_check __pci_create_sysfs_dev_files(struct pci_dev *pdev)
-  1503	{
-  1504		return pci_create_resource_files(pdev);
-  1505	}
-  1506	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
