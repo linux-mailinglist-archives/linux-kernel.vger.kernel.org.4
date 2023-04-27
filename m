@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765D96F0EFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD9E6F0EFD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344486AbjD0XbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S1344493AbjD0XbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344417AbjD0Xar (ORCPT
+        with ESMTP id S1344449AbjD0Xat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:30:47 -0400
-Received: from sonic303-21.consmr.mail.ir2.yahoo.com (sonic303-21.consmr.mail.ir2.yahoo.com [77.238.178.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE5F3A82
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682638240; bh=5w6Shyycf9TKW8fxiIBkdZ0V7BL6iy8PZMl/Ylzmv2k=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=lIO/G6G0791liF6HsWkUX3fRrnRTeR40wXCW7myx4n1RJxqWB3xIK0ZPCazMbHMfOvtX1LVGIbh5K4l6GRxaA0J5YRJ9xJyo8NVfQvsco1Au8+0dWGkvO0bp/n1F3a5xB1BdtXQ/8hIn3ZeoZTvuh/sZYTO4nvpLnxbIeRFOYorbw6jF6jUoPBbcwDLkIKgVeXODshUUZwjVm1H6fvcu1Deib+P3ksqBjrHjXNeaH+d4x16SlGZ2l2MZrNLphg0cxxdpTuLMea8DiltbRKdOl98+gi0+DRC44K+jNopaxCFDeD1+0LBf45GQ2yO5qe+z6tYp1H5xnDuC/S9K+W2d0w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682638240; bh=7AwfMWhIcIpV+xE2e+9RfQ22UQGUhT+EcKvKOlDcxZl=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=KVhEIfUmooyuGQCXI8LlgZ0t9gL0MHbJ6QHXJzKx9N9MZTfqeMDQXfX3vJUGJmET/Oe8aAAQRx/G8m7th0Q9juaR1SFonD/3WNZoaXbhQtdmcBGeh6EiHVN5UDfeODDBCCH2zbfEe9u8hhqcgtEM30FsLpygTt5+T/zJCiDWKaGCznPflAFSVZ6lbSX0OaXlHyKFPAYqgKRM7mt9QZx1TWknQO0d0lqFSwpj0XIgy5k1SwgcUzH8X6cAmfvQiOzN4Jh/8NvDeyufwUs1WWeR6Cy+yezq78WsbqVfNZ/lYVnF13dQtf9pwBoCBN8CLoazOicV3hh7QwHsLLKZa5o2PA==
-X-YMail-OSG: JQFEhTAVM1nVEnx7AGEET9qVTJY1EzA4MO1ecXl8CjOgeVtBuCE4qgCvJHdp3_7
- wStUaNVC3dv5fTgIL1uZiRYR40lwyKV9UYG1HP2BJYom8Rkoy7g27WzyX3juj9y7fypv0b6JbDvB
- USYiyUdTcJz1TAveRvRgW6mJygqiHjoK53blXCFObKxhO5Uec59zrIS7ZkGrd1Ad324LCE1HwKB1
- gQx46VXpuWOcnQnwjgNLH7swRNHRHTvRIy.S256ECsVPX3PdWFxfjmjrTeqnzyS_XymM75RcepXZ
- _SpcSgqGcmW4G7jPmBALat_gwKyGRGi2KsxYenmr2jrKTyhXQ7.PwouzkRMHYKO5ZxFia1tclIZz
- DKh8WWRl3s.Ijy5DEwUzQ9INpSlYB03u9MvJoj8RH0MnXFOS8QkN2g478YVTqOimZWJdwuL_YL6m
- oHLtmtAP6ZrpVgMKe923SX0EXdASHuTHB0pXE.kO8sAx7FLkTAbHic_qXPPzZrVpdpQI76XRwSAg
- BZ41sbm7LK_sFH3CaiAbt9Ak.dZO_6Le8UqxCOLS9bVnD5tYF1y7v.c6VmgeNy6L0NL3OU.MzNEu
- vVFTmy5bKm7OizUx2AyFmBB6XoRPdGoSJ54tusLRdSYJBDle.ezhI49xCJtXXDA44DYPvBq80wgm
- JTsd5oiFs5bSf6_xzGqhc6uWptuQS4_vD0ptwrpFuOeUvI_lrhqUkyUfpx9gBRkZeofUIfyeXMB4
- 3KuX6mTm7OYzZJBB1cld4B9hpiN399lVUCMOJh5hBIrkpp9p1ZxWTMb20SaF3vQqv9S8zu_.JcjG
- cX19TvMX_wtqzd3oITXOH9PDJdxdin5Hb7BzNp7V_rtsojhvUjEweaLmU5_sfnlE6MgmHSmjFDPB
- ouEFrWv622XGl00Vxz_KHBnWoJbXsPUMPPJqBBk95C6SUERn463MP_p8061MzV1dTnCSB2Xk6uyR
- NpoHPdVLPHgwvuTZMaXQoWOHnQn.lrZ5mQgYE4FXyOr1OTsODJw4oXrjjZECfERGjb0kB4AiCant
- Bml97dCTZfzffj.P2aCX3FQH4HTiyTvfe8Sjk.enqsWjCzZOrBqq7ejk_99qKcD5yafKeA9EebyZ
- zk0NgNPKbwotEgCepB.tRDZFC_RKS2o4P73iREL0OCehqBbIfP0erBOc_4b7Rt.F.PvAZKGqPzDl
- nOHEGMdTavPkHBlfZDxDDljxR6zqjIWaqSOniTjXnsTMDVNEoi2nCbcmeuxd4I6HjwPt1O44o3RO
- 9PpvlW0cAuKW4B8DhAP7fW1_z3.imXxRF.fXVc_nuQjBlYUeH1CWxygR3qC4I45f_PrGpOVFcHQ3
- 16xS4xeuN6zxPcATRKa3HvFeUY_UdOuOVzyfVEhP5CijzUBC3KVWuwHvjIDtZk8yY.DsEE4BVVDb
- rMCsOJ._4M5zweG01nAYrCIeOyhZQCWVVf7ulMCZtpMg6EtzUmys9mEIafvW4S.y41uK09.cLrZi
- xwSs_x2bawei2kgnwCC_ouOiFXcdYFC6ebymEPEaZv9Ca0O6dNDcbYS_gvg_kuijzjj68w62krEU
- JQxSSPDlgQvfucIdEz1OUvc8ITYBy9M_tq0xe5oN.O9_ulaZSxhoKr114jJ_wgHdUEVkPrj4mn9M
- 0FyVeycms4gmkgnp_9rIFKH_WabeO4CS3zWsGy9VozOpu8Yuu4YI2EF2m9jrFfngo1nKeRMZzI66
- pDmTMN5FqMeMEh_W2QnfgroaOX.Z27R7NHsEjY6TDJmZ4oEbCatsuAfWQvxL8v3ikHXDg.KJshYr
- aWBim1Si0p1_P0CTYqN6.rklnpZ1pS9sm7sfXIqNJuqcswx.kPU4rqv.NSzyiJXEI06Q0rwv_xio
- 8FIqgxNXEfAzH0vU2iIIHlJS_9nXVCwJgb6ePQIiJHg1bfcSsXD5llTdevaOaZjkei.GyZLIXB6s
- nY3o8YX3pzuz6wc_PTt4A2AhHa1ySFV1NJ2lUx9r71zYRvnUSbArjcIM6uWWnETKfuBFuIg7Z3oV
- 9iTzKtnJR2DTifazORl6ecOaxZa9g4x.X4l.mCy0aQvLtLkTZ8hHNZTHYpPVUjw9B0D0jipgxDs6
- i9MeL2Fzl_sPprwmyZekW2TcULxPihz2Bmb0mAByAiD9wVQt3xAqWRZwZekmNhnXNiycolAXPdKD
- R64HPx..OkMvmN5eaiABzU4fKrqPeynNbdziIIbEnSfLX00RSQJVdnMeqZ_bIFjVYGfWP.n3JKiT
- 4bo6n0M5jz5Yf0FmQbF9a8Vti1SsplulEUHWnbVO6R9vv8O6l9V4ZNPIWRMBpu9euP6YxnRK8.cE
- be0Q39cXgTmAcSk6aY36bhi3B
+        Thu, 27 Apr 2023 19:30:49 -0400
+Received: from sonic307-7.consmr.mail.ir2.yahoo.com (sonic307-7.consmr.mail.ir2.yahoo.com [87.248.110.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20564421A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682638244; bh=TaDEAz0Die/QkzhQlShMR0Tj2yb+Ub7LPlpIw0Xo3M8=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=paGgIBAYpFnSYcTWXm0oJsxFurcmBe9GTEi35uS45/e7qrjoKMDhRBihRxHg4UKPD7ZHrY80jSZE0W126kdY0MiaFXO8N4+g6IM5yO6p7S6jxX7AFLpj5KOpuMRtSVGiovzU24il8mywpnheCA8a46QGiBVezDssMl1USl1rpQE+PhikGU0Md3RFwxicej4RsyzcyMAzOaZYAI5rqtFrMwKqZfY0PjH8EMDYHNIpgEUK4nng/rTQaGGGRdDUIDoO2MS7XVKV0GEfZuNYI9kgypRF+1wmQCwc9ehrznlM/dmAGkYafYB96CFNgqCtNsuoklcKanh8QVZWBa95V8JAcw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682638244; bh=TNgW9onR+O95ZYZuvcKmpUJbgxwJaqWYy+TqTUo40V4=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=EKuOp+7DOVP5ny7egNEcgPRkdyx3ntDxpvSU0OgXyti6gN3I70fkOi8r4gHzK3dFok5TNydOMlCLhn7xqJSqodQLnndHD2ISngAge5toAXqypZ8WQWq72dqap5UicLpNVz/OSsAA6aN1pjph8QMPwILRJshbq1yel2kgEZOWnpbuZ206jqTao1gC0YsN3pzAcP10OZoJgxlu9jf3SgiAidnE9YZTeOIFy6nT9z0EBZaLmnIsG1Cm/EYQe7SLFulzsDaei5Rlcl6v6lrfATx26nz0xwuPI6RmRBjibfvWbb4bHjXHXrVN5Iw0WD5n/1x8MWmol6/guOp7heWhQ7J5dA==
+X-YMail-OSG: eYwr.2EVM1ns_A6GKsN2zbL2nXttdgRq.CSbBRgVwnuD13.K1.1mI.SjpOdGYKE
+ O00ZrRIwmD4OGzAdW4fjOFpTPHTGcKtujrpbwF3GzkhCVwjNOwDYeE8xi_Qz5C.RuHtoFO8e1CEi
+ qCu_a.UXbnzV4Wqaq2SwceKKwrhOpaoUsXrI2T.5r8J6xIxFys6.jU04IwX6lIHq91CbS1kjPXxd
+ b7_89OaaaDNxZSuxPjPkdCOnDSEy7tSht_sMmhhPJyK8TF2Pr1PZ99Z5sM1r0zmNFKHKRElcx7PM
+ KngQziPjGjTqQJ96Brts3XxIryK7y6XyhURkxeZmHN8_rSwQmdltXVgRQbKyMGBv2kwK74ghwEil
+ vWjUCC.UfIelZyqlUKIv4mt2T.hv4QPXQVsR89go6Fi1DUBCAk0aJV19S7BqRFGi5uTX2HEXXvd_
+ mK5hGxiLPrpGtlxk7Up3BhK2zc2qhHJIWx7nci03Scl1UkR7ugxPNI9L6glzlb9gypG4W.zhlZs8
+ HQ00XVWokB7bivi6dNkUBITCiGZGhK_XGaBjhIbzuEw9ss1KUqiZ4eytEYt79IcF3Oq29kjWFkk.
+ xrYvyMCirhknBW4Oc526QaJCI10KeEf_AQRgNLpOOkhzrnRa7CVr8gKICQ3t0Dv79GuSvQqZQ4HN
+ fGHPwA6_crPJfb.IDAZP9wKNr27xsZCHvyArPwD6TSEVaWRIFABB4FOok0gaTXUimO6YWddVyr_g
+ dxat0EueqkdXP4W7U0rA8pPcpdJTC5F7P523oA4j29l61InJq61E4dWVXI_SKHln3cdG1wwbzXYx
+ YDJv0ctRkufkCQCqn.9H9I4WtBSqyFln7b.XcIzgHuF1fjgZYVjRxkJ5hL1NYlKYkZqNxf8_9BkQ
+ WZMsiX5txQEAFZetQbFCYDUtnl5qOw5DDMqlQxNJ3X5MGxZMO39snL81H5HVE37FrrIFlwijH4Tp
+ Ok1auuxlTI_GX4qqB0h_DECllhnGn826qfkZ3sYzTVJBrs.vQWnYvxdz2CCpGir1NzpUm8nyeqF2
+ Xn9ncdU0WAeKW4gOcYyqf.17atINUcWHj7D8TtL9w67qlQO_QCiEciB92bO9YXAIRiSYvbCYRZMI
+ W1M.j2Bt_mb9d6YNpccJYbE.bX44tuftTK0TJkjlclLfnD2bLi6hqX5KXenay73j0uqzOK6WTMJL
+ SzlFlQJI5kZew9C9ZRGxO9HZF1Q5w8UquqY06_gCMtj6Ds8VJ0WvHMT3OGsX2i34SYInFaSy7VZx
+ 3wSFjGzFnRM9mnFjiSwRafr2eNbRIvc8vvQI6VAgegRLZhlzGoZlnNOJC3Wrkm2x3B4RHfj_gwDW
+ kDHztxRJ1E09MIg2mKymGDEeS2Qk2LCKpUpGHhv1NALvg6m8IDMD7OLfiboIu226nBJ8sRtAtQ5F
+ QKTEz2zeBT4hpzLH9QVbhPqVWLIWfYxSXlSFgqx6dq5JwEzDxYlUSDztZ2oxhwOjw7gmi65oIPrg
+ ReC91rjjtjAVSZTRSJdDsaj3PWIMhDLr3vkO8g5D833MlxiY1dmTMQFkMKw7SyPJKXT9KohyJOMx
+ 0.ROSbpMIasolaMMbX36wntnACArNAoDytMbLamuO_pq9mrRe_bCeFdOgpo4WvT5LQj9Q4wCcUoy
+ HIKHhdDvbQn9PVila5Zs9XHYgIwiRJwx0s7nYVp5HHVnvBuVAwD96Mpev.502bg9Vq.pCOwbVxo2
+ _znGqW.oZ3FKtyVTcs6vRNbpn8Egin28TxkuWV2ZRD6_nWX31J9S3pKFAeor5WkFD70gB.4x.pQl
+ FWImv7gW3hz_Hwse8WGX5DjKGpH29yyToBPr1ZXgFLnvx7ZVtZnU_mUJRjqyV7lj9S1PhsH3NC9Y
+ GpTFbmiGo5c8YHRDWMKLSHwm4BrVDDWZCVtfh75BZGfo7VnMpNhPu6OfzrdcZg4F_UGX65H7l9Un
+ mxY1aLs0mRVnZArRRtE5GXHNtwXse8Zv0mhHpFLQ30Diz8cUGJV0C.F_Xuc9tZBMUY1SYEe_2Fv2
+ nTGIUklBjL2oB4J.P17qGLUS7mLh4V8KbU6uVbKjWa_sy3zi0UJcEz8GxX8icxH6JPW3TroLQsHy
+ aN2eeEhnL.a7iS0g1ez4R5hRzYui8o40fJvRFMFXbi6D7aUi7ThsMRXUs40XKgCPIQF3oe6cOTWM
+ OQdTbN9bqH30e18aUzsxyHdluntyryYyooCVIW2R94mPUBzn5Txe4lKlfXlrRPAlmPatTP8KO89z
+ HoAsTy3WlYyMDW.pVLt3WLpI2FcruFtRV75UVr1n37Iay.2.JAH8rJau2y0GXtJxS7eTK2fyU.ay
+ U2IQaOjJcCvI0K2SDQ04mBCzT1C.qEQ--
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 0a167e92-6dd8-4fb9-b86e-24f661fe5a24
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ir2.yahoo.com with HTTP; Thu, 27 Apr 2023 23:30:40 +0000
+X-Sonic-ID: 86e4cd83-3766-41b1-8248-00fc4edfbdcc
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Thu, 27 Apr 2023 23:30:44 +0000
 Received: by hermes--production-ir2-74cd8fc864-9w846 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 912b1d1a256b22e43f453e00130c1256;
-          Thu, 27 Apr 2023 23:30:37 +0000 (UTC)
+          Thu, 27 Apr 2023 23:30:39 +0000 (UTC)
 From:   Jakob Hauser <jahau@rocketmail.com>
 To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -71,9 +71,9 @@ Cc:     Beomho Seo <beomho.seo@samsung.com>,
         linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Jakob Hauser <jahau@rocketmail.com>
-Subject: [PATCH v3 4/8] mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
-Date:   Fri, 28 Apr 2023 01:30:07 +0200
-Message-Id: <af691a402160887645739a5ad4ce5de0613b3d22.1682636929.git.jahau@rocketmail.com>
+Subject: [PATCH v3 5/8] power: supply: rt5033_charger: Add RT5033 charger device driver
+Date:   Fri, 28 Apr 2023 01:30:08 +0200
+Message-Id: <0070da504581081906a30d1095b104c4c2930e86.1682636929.git.jahau@rocketmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1682636929.git.jahau@rocketmail.com>
 References: <cover.1682636929.git.jahau@rocketmail.com>
@@ -90,187 +90,523 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Order the register blocks to have the masks in descending manner.
+This patch adds device driver of Richtek RT5033 PMIC. The driver supports
+switching charger. rt5033 charger provides three charging modes. The charging
+modes are pre-charge mode, fast charge mode and constant voltage mode. They
+vary in charge rate, the charge parameters can be controlled by i2c interface.
 
-Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
-MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
-(RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
-(RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
-CFO disable (RT5033_CFO_DISABLE), UUG disable (RT5033_CHARGER_UUG_DISABLE).
-
-The fast charge timer type needs to be written on mask 0x38
-(RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on application, change the
-values of the timer types to fit the mask. Added the timout duration as a
-comment. And the timer between TIMER8 and TIMER12 is most likely TIMER10, see
-e.g. RT5036 [1] page 28 bottom.
-
-Add value options for MIVR (Minimum Input Voltage Regulation).
-
-Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1 register", in order
-to have the masks of the register collected there. To fit the naming scheme,
-rename it to RT5033_CHGCTRL1_TE_EN_MASK.
-
-Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger fast-charge current".
-
-Add new defines RT5033_CV_MAX_VOLTAGE and RT5033_CHG_MAX_PRE_CURRENT to the
-blocks "RT5033 charger constant charge voltage" and "RT5033 charger pre-charge
-current limits".
-
-In include/linux/mfd/rt5033.h, turn power_supply "psy" into a pointer in order
-to use it in devm_power_supply_register().
-
-[1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
-
+Cc: Beomho Seo <beomho.seo@samsung.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>
+Tested-by: Raymond Hackley <raymondhackley@protonmail.com>
 Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 ---
- include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
- include/linux/mfd/rt5033.h         |  2 +-
- 2 files changed, 36 insertions(+), 19 deletions(-)
+ drivers/power/supply/Kconfig          |   8 +
+ drivers/power/supply/Makefile         |   1 +
+ drivers/power/supply/rt5033_charger.c | 464 ++++++++++++++++++++++++++
+ 3 files changed, 473 insertions(+)
+ create mode 100644 drivers/power/supply/rt5033_charger.c
 
-diff --git a/include/linux/mfd/rt5033-private.h b/include/linux/mfd/rt5033-private.h
-index b6773ebf4e6b..0221f806d139 100644
---- a/include/linux/mfd/rt5033-private.h
-+++ b/include/linux/mfd/rt5033-private.h
-@@ -55,22 +55,24 @@ enum rt5033_reg {
- };
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index c78be9f322e6..ea11797670ca 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -766,6 +766,14 @@ config BATTERY_RT5033
+ 	  The fuelgauge calculates and determines the battery state of charge
+ 	  according to battery open circuit voltage.
  
- /* RT5033 Charger state register */
-+#define RT5033_CHG_STAT_TYPE_MASK	0x60
-+#define RT5033_CHG_STAT_TYPE_PRE	0x20
-+#define RT5033_CHG_STAT_TYPE_FAST	0x60
- #define RT5033_CHG_STAT_MASK		0x30
- #define RT5033_CHG_STAT_DISCHARGING	0x00
- #define RT5033_CHG_STAT_FULL		0x10
- #define RT5033_CHG_STAT_CHARGING	0x20
- #define RT5033_CHG_STAT_NOT_CHARGING	0x30
--#define RT5033_CHG_STAT_TYPE_MASK	0x60
--#define RT5033_CHG_STAT_TYPE_PRE	0x20
--#define RT5033_CHG_STAT_TYPE_FAST	0x60
- 
- /* RT5033 CHGCTRL1 register */
- #define RT5033_CHGCTRL1_IAICR_MASK	0xe0
--#define RT5033_CHGCTRL1_MODE_MASK	0x01
-+#define RT5033_CHGCTRL1_TE_EN_MASK	0x08
- #define RT5033_CHGCTRL1_HZ_MASK		0x02
-+#define RT5033_CHGCTRL1_MODE_MASK	0x01
- 
- /* RT5033 CHGCTRL2 register */
- #define RT5033_CHGCTRL2_CV_MASK		0xfc
-+#define RT5033_CHGCTRL2_CV_SHIFT	0x02
- 
- /* RT5033 DEVICE_ID register */
- #define RT5033_VENDOR_ID_MASK		0xf0
-@@ -82,14 +84,15 @@ enum rt5033_reg {
- #define RT5033_CHGCTRL3_TIMER_EN_MASK	0x01
- 
- /* RT5033 CHGCTRL4 register */
--#define RT5033_CHGCTRL4_EOC_MASK	0x07
-+#define RT5033_CHGCTRL4_MIVR_MASK	0xe0
- #define RT5033_CHGCTRL4_IPREC_MASK	0x18
-+#define RT5033_CHGCTRL4_IPREC_SHIFT	0x03
-+#define RT5033_CHGCTRL4_EOC_MASK	0x07
- 
- /* RT5033 CHGCTRL5 register */
--#define RT5033_CHGCTRL5_VPREC_MASK	0x0f
- #define RT5033_CHGCTRL5_ICHG_MASK	0xf0
- #define RT5033_CHGCTRL5_ICHG_SHIFT	0x04
--#define RT5033_CHG_MAX_CURRENT		0x0d
-+#define RT5033_CHGCTRL5_VPREC_MASK	0x0f
- 
- /* RT5033 RT CTRL1 register */
- #define RT5033_RT_CTRL1_UUG_MASK	0x02
-@@ -128,20 +131,28 @@ enum rt5033_reg {
- #define RT5033_AICR_1500_MODE			0xc0
- #define RT5033_AICR_2000_MODE			0xe0
- 
--/* RT5033 use internal timer need to set time */
--#define RT5033_FAST_CHARGE_TIMER4		0x00
--#define RT5033_FAST_CHARGE_TIMER6		0x01
--#define RT5033_FAST_CHARGE_TIMER8		0x02
--#define RT5033_FAST_CHARGE_TIMER9		0x03
--#define RT5033_FAST_CHARGE_TIMER12		0x04
--#define RT5033_FAST_CHARGE_TIMER14		0x05
--#define RT5033_FAST_CHARGE_TIMER16		0x06
-+/* RT5033 charger minimum input voltage regulation */
-+#define RT5033_CHARGER_MIVR_DISABLE		0x00
-+#define RT5033_CHARGER_MIVR_4200MV		0x20
-+#define RT5033_CHARGER_MIVR_4300MV		0x40
-+#define RT5033_CHARGER_MIVR_4400MV		0x60
-+#define RT5033_CHARGER_MIVR_4500MV		0x80
-+#define RT5033_CHARGER_MIVR_4600MV		0xa0
-+#define RT5033_CHARGER_MIVR_4700MV		0xc0
-+#define RT5033_CHARGER_MIVR_4800MV		0xe0
- 
-+/* RT5033 use internal timer need to set time */
-+#define RT5033_FAST_CHARGE_TIMER4		0x00 /*  4 hrs */
-+#define RT5033_FAST_CHARGE_TIMER6		0x08 /*  6 hrs */
-+#define RT5033_FAST_CHARGE_TIMER8		0x10 /*  8 hrs */
-+#define RT5033_FAST_CHARGE_TIMER10		0x18 /* 10 hrs */
-+#define RT5033_FAST_CHARGE_TIMER12		0x20 /* 12 hrs */
-+#define RT5033_FAST_CHARGE_TIMER14		0x28 /* 14 hrs */
-+#define RT5033_FAST_CHARGE_TIMER16		0x30 /* 16 hrs */
++config CHARGER_RT5033
++	tristate "RT5033 battery charger support"
++	depends on MFD_RT5033
++	help
++	  This adds support for battery charger in Richtek RT5033 PMIC.
++	  The device supports pre-charge mode, fast charge mode and
++	  constant voltage mode.
 +
-+#define RT5033_INT_TIMER_DISABLE		0x00
- #define RT5033_INT_TIMER_ENABLE			0x01
- 
--/* RT5033 charger termination enable mask */
--#define RT5033_TE_ENABLE_MASK			0x08
--
- /*
-  * RT5033 charger opa mode. RT5033 has two opa modes for OTG: charger mode
-  * and boost mode.
-@@ -150,25 +161,30 @@ enum rt5033_reg {
- #define RT5033_BOOST_MODE			0x01
- 
- /* RT5033 charger termination enable */
-+#define RT5033_TE_DISABLE			0x00
- #define RT5033_TE_ENABLE			0x08
- 
- /* RT5033 charger CFO enable */
-+#define RT5033_CFO_DISABLE			0x00
- #define RT5033_CFO_ENABLE			0x40
- 
- /* RT5033 charger constant charge voltage (as in CHGCTRL2 register), uV */
- #define RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN	3650000U
- #define RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM   25000U
- #define RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX	4400000U
-+#define RT5033_CV_MAX_VOLTAGE			0x1e
- 
- /* RT5033 charger pre-charge current limits (as in CHGCTRL4 register), uA */
- #define RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN	350000U
- #define RT5033_CHARGER_PRE_CURRENT_STEP_NUM	100000U
- #define RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX	650000U
-+#define RT5033_CHG_MAX_PRE_CURRENT		0x03
- 
- /* RT5033 charger fast-charge current (as in CHGCTRL5 register), uA */
- #define RT5033_CHARGER_FAST_CURRENT_MIN		700000U
- #define RT5033_CHARGER_FAST_CURRENT_STEP_NUM	100000U
- #define RT5033_CHARGER_FAST_CURRENT_MAX		2000000U
-+#define RT5033_CHG_MAX_CURRENT			0x0d
- 
- /*
-  * RT5033 charger const-charge end of charger current (
-@@ -192,6 +208,7 @@ enum rt5033_reg {
-  * RT5033 charger UUG. It enables MOS auto control by H/W charger
-  * circuit.
-  */
-+#define RT5033_CHARGER_UUG_DISABLE		0x00
- #define RT5033_CHARGER_UUG_ENABLE		0x02
- 
- /* RT5033 charger high impedance mode */
-diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
-index 8f306ac15a27..e99e2ab0c1c1 100644
---- a/include/linux/mfd/rt5033.h
-+++ b/include/linux/mfd/rt5033.h
-@@ -51,7 +51,7 @@ struct rt5033_charger_data {
- struct rt5033_charger {
- 	struct device			*dev;
- 	struct rt5033_dev		*rt5033;
--	struct power_supply		psy;
-+	struct power_supply		*psy;
- 	struct rt5033_charger_data	*chg;
- };
- 
+ config CHARGER_RT9455
+ 	tristate "Richtek RT9455 battery charger driver"
+ 	depends on I2C
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 4adbfba02d05..dfc624bbcf1d 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -54,6 +54,7 @@ obj-$(CONFIG_BATTERY_MAX17040)	+= max17040_battery.o
+ obj-$(CONFIG_BATTERY_MAX17042)	+= max17042_battery.o
+ obj-$(CONFIG_BATTERY_MAX1721X)	+= max1721x_battery.o
+ obj-$(CONFIG_BATTERY_RT5033)	+= rt5033_battery.o
++obj-$(CONFIG_CHARGER_RT5033)	+= rt5033_charger.o
+ obj-$(CONFIG_CHARGER_RT9455)	+= rt9455_charger.o
+ obj-$(CONFIG_CHARGER_RT9467)	+= rt9467-charger.o
+ obj-$(CONFIG_CHARGER_RT9471)	+= rt9471.o
+diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply/rt5033_charger.c
+new file mode 100644
+index 000000000000..038530d2f0a0
+--- /dev/null
++++ b/drivers/power/supply/rt5033_charger.c
+@@ -0,0 +1,464 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Battery charger driver for RT5033
++ *
++ * Copyright (C) 2014 Samsung Electronics, Co., Ltd.
++ * Author: Beomho Seo <beomho.seo@samsung.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/power_supply.h>
++#include <linux/mfd/rt5033-private.h>
++#include <linux/mfd/rt5033.h>
++
++static int rt5033_get_charger_state(struct rt5033_charger *charger)
++{
++	struct regmap *regmap = charger->rt5033->regmap;
++	unsigned int reg_data;
++	int state;
++
++	if (!regmap)
++		return POWER_SUPPLY_STATUS_UNKNOWN;
++
++	regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
++
++	switch (reg_data & RT5033_CHG_STAT_MASK) {
++	case RT5033_CHG_STAT_DISCHARGING:
++		state = POWER_SUPPLY_STATUS_DISCHARGING;
++		break;
++	case RT5033_CHG_STAT_CHARGING:
++		state = POWER_SUPPLY_STATUS_CHARGING;
++		break;
++	case RT5033_CHG_STAT_FULL:
++		state = POWER_SUPPLY_STATUS_FULL;
++		break;
++	case RT5033_CHG_STAT_NOT_CHARGING:
++		state = POWER_SUPPLY_STATUS_NOT_CHARGING;
++		break;
++	default:
++		state = POWER_SUPPLY_STATUS_UNKNOWN;
++	}
++
++	return state;
++}
++
++static int rt5033_get_charger_type(struct rt5033_charger *charger)
++{
++	struct regmap *regmap = charger->rt5033->regmap;
++	unsigned int reg_data;
++	int state;
++
++	regmap_read(regmap, RT5033_REG_CHG_STAT, &reg_data);
++
++	switch (reg_data & RT5033_CHG_STAT_TYPE_MASK) {
++	case RT5033_CHG_STAT_TYPE_FAST:
++		state = POWER_SUPPLY_CHARGE_TYPE_FAST;
++		break;
++	case RT5033_CHG_STAT_TYPE_PRE:
++		state = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
++		break;
++	default:
++		state = POWER_SUPPLY_CHARGE_TYPE_NONE;
++	}
++
++	return state;
++}
++
++static int rt5033_get_charger_current_limit(struct rt5033_charger *charger)
++{
++	struct regmap *regmap = charger->rt5033->regmap;
++	unsigned int state, reg_data, data;
++
++	regmap_read(regmap, RT5033_REG_CHG_CTRL5, &reg_data);
++
++	state = (reg_data & RT5033_CHGCTRL5_ICHG_MASK)
++		 >> RT5033_CHGCTRL5_ICHG_SHIFT;
++
++	data = RT5033_CHARGER_FAST_CURRENT_MIN +
++		RT5033_CHARGER_FAST_CURRENT_STEP_NUM * state;
++
++	return data;
++}
++
++static int rt5033_get_charger_const_voltage(struct rt5033_charger *charger)
++{
++	struct regmap *regmap = charger->rt5033->regmap;
++	unsigned int state, reg_data, data;
++
++	regmap_read(regmap, RT5033_REG_CHG_CTRL2, &reg_data);
++
++	state = (reg_data & RT5033_CHGCTRL2_CV_MASK)
++		 >> RT5033_CHGCTRL2_CV_SHIFT;
++
++	data = RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN +
++		RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM * state;
++
++	return data;
++}
++
++static inline int rt5033_init_const_charge(struct rt5033_charger *charger)
++{
++	struct rt5033_charger_data *chg = charger->chg;
++	int ret;
++	unsigned int val;
++	u8 reg_data;
++
++	/* Set constant voltage mode */
++	if (chg->const_uvolt < RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN ||
++	    chg->const_uvolt > RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX) {
++		dev_err(charger->dev,
++			"Value 'constant-charge-voltage-max-microvolt' out of range\n");
++		return -EINVAL;
++	}
++
++	if (chg->const_uvolt == RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN)
++		reg_data = 0x00;
++	else if (chg->const_uvolt == RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MAX)
++		reg_data = RT5033_CV_MAX_VOLTAGE;
++	else {
++		val = chg->const_uvolt;
++		val -= RT5033_CHARGER_CONST_VOLTAGE_LIMIT_MIN;
++		val /= RT5033_CHARGER_CONST_VOLTAGE_STEP_NUM;
++		reg_data = val;
++	}
++
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL2,
++			RT5033_CHGCTRL2_CV_MASK,
++			reg_data << RT5033_CHGCTRL2_CV_SHIFT);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	/* Set end of charge current */
++	if (chg->eoc_uamp < RT5033_CHARGER_EOC_MIN ||
++	    chg->eoc_uamp > RT5033_CHARGER_EOC_MAX) {
++		dev_err(charger->dev,
++			"Value 'charge-term-current-microamp' out of range\n");
++		return -EINVAL;
++	}
++
++	if (chg->eoc_uamp == RT5033_CHARGER_EOC_MIN)
++		reg_data = 0x01;
++	else if (chg->eoc_uamp == RT5033_CHARGER_EOC_MAX)
++		reg_data = 0x07;
++	else {
++		val = chg->eoc_uamp;
++		if (val < RT5033_CHARGER_EOC_REF) {
++			val -= RT5033_CHARGER_EOC_MIN;
++			val /= RT5033_CHARGER_EOC_STEP_NUM1;
++			reg_data = 0x01 + val;
++		} else if (val > RT5033_CHARGER_EOC_REF) {
++			val -= RT5033_CHARGER_EOC_REF;
++			val /= RT5033_CHARGER_EOC_STEP_NUM2;
++			reg_data = 0x04 + val;
++		} else {
++			reg_data = 0x04;
++		}
++	}
++
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL4,
++			RT5033_CHGCTRL4_EOC_MASK, reg_data);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static inline int rt5033_init_fast_charge(struct rt5033_charger *charger)
++{
++	struct rt5033_charger_data *chg = charger->chg;
++	int ret;
++	unsigned int val;
++	u8 reg_data;
++
++	/* Set limit input current */
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL1,
++			RT5033_CHGCTRL1_IAICR_MASK, RT5033_AICR_2000_MODE);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	/* Set fast-charge mode charging current */
++	if (chg->fast_uamp < RT5033_CHARGER_FAST_CURRENT_MIN ||
++	    chg->fast_uamp > RT5033_CHARGER_FAST_CURRENT_MAX) {
++		dev_err(charger->dev,
++			"Value 'constant-charge-current-max-microamp' out of range\n");
++		return -EINVAL;
++	}
++
++	if (chg->fast_uamp == RT5033_CHARGER_FAST_CURRENT_MIN)
++		reg_data = 0x00;
++	else if (chg->fast_uamp == RT5033_CHARGER_FAST_CURRENT_MAX)
++		reg_data = RT5033_CHG_MAX_CURRENT;
++	else {
++		val = chg->fast_uamp;
++		val -= RT5033_CHARGER_FAST_CURRENT_MIN;
++		val /= RT5033_CHARGER_FAST_CURRENT_STEP_NUM;
++		reg_data = val;
++	}
++
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL5,
++			RT5033_CHGCTRL5_ICHG_MASK,
++			reg_data << RT5033_CHGCTRL5_ICHG_SHIFT);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static inline int rt5033_init_pre_charge(struct rt5033_charger *charger)
++{
++	struct rt5033_charger_data *chg = charger->chg;
++	int ret;
++	unsigned int val;
++	u8 reg_data;
++
++	/* Set pre-charge threshold voltage */
++	if (chg->pre_uvolt < RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN ||
++	    chg->pre_uvolt > RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MAX) {
++		dev_err(charger->dev,
++			"Value 'precharge-upper-limit-microvolt' out of range\n");
++		return -EINVAL;
++	}
++
++	if (chg->pre_uvolt == RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN)
++		reg_data = 0x00;
++	else if (chg->pre_uvolt == RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MAX)
++		reg_data = 0x0f;
++	else {
++		val = chg->pre_uvolt;
++		val -= RT5033_CHARGER_PRE_THRESHOLD_LIMIT_MIN;
++		val /= RT5033_CHARGER_PRE_THRESHOLD_STEP_NUM;
++		reg_data = val;
++	}
++
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL5,
++			RT5033_CHGCTRL5_VPREC_MASK, reg_data);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	/* Set pre-charge mode charging current */
++	if (chg->pre_uamp < RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN ||
++	    chg->pre_uamp > RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX) {
++		dev_err(charger->dev,
++			"Value 'precharge-current-microamp' out of range\n");
++		return -EINVAL;
++	}
++
++	if (chg->pre_uamp == RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN)
++		reg_data = 0x00;
++	else if (chg->pre_uamp == RT5033_CHARGER_PRE_CURRENT_LIMIT_MAX)
++		reg_data = RT5033_CHG_MAX_PRE_CURRENT;
++	else {
++		val = chg->pre_uamp;
++		val -= RT5033_CHARGER_PRE_CURRENT_LIMIT_MIN;
++		val /= RT5033_CHARGER_PRE_CURRENT_STEP_NUM;
++		reg_data = val;
++	}
++
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL4,
++			RT5033_CHGCTRL4_IPREC_MASK,
++			reg_data << RT5033_CHGCTRL4_IPREC_SHIFT);
++	if (ret) {
++		dev_err(charger->dev, "Failed regmap update\n");
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int rt5033_charger_reg_init(struct rt5033_charger *charger)
++{
++	int ret = 0;
++
++	/* Enable charging termination */
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL1,
++			RT5033_CHGCTRL1_TE_EN_MASK, RT5033_TE_ENABLE);
++	if (ret) {
++		dev_err(charger->dev, "Failed to enable charging termination.\n");
++		return -EINVAL;
++	}
++
++	/*
++	 * Disable minimum input voltage regulation (MIVR), this improves
++	 * the charging performance.
++	 */
++	ret = regmap_update_bits(charger->rt5033->regmap, RT5033_REG_CHG_CTRL4,
++			RT5033_CHGCTRL4_MIVR_MASK, RT5033_CHARGER_MIVR_DISABLE);
++	if (ret) {
++		dev_err(charger->dev, "Failed to disable MIVR.\n");
++		return -EINVAL;
++	}
++
++	ret = rt5033_init_pre_charge(charger);
++	if (ret)
++		return ret;
++
++	ret = rt5033_init_fast_charge(charger);
++	if (ret)
++		return ret;
++
++	ret = rt5033_init_const_charge(charger);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static enum power_supply_property rt5033_charger_props[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_CHARGE_TYPE,
++	POWER_SUPPLY_PROP_CURRENT_MAX,
++	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
++	POWER_SUPPLY_PROP_MODEL_NAME,
++	POWER_SUPPLY_PROP_MANUFACTURER,
++	POWER_SUPPLY_PROP_ONLINE,
++};
++
++static int rt5033_charger_get_property(struct power_supply *psy,
++			enum power_supply_property psp,
++			union power_supply_propval *val)
++{
++	struct rt5033_charger *charger = power_supply_get_drvdata(psy);
++	int ret = 0;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = rt5033_get_charger_state(charger);
++		break;
++	case POWER_SUPPLY_PROP_CHARGE_TYPE:
++		val->intval = rt5033_get_charger_type(charger);
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_MAX:
++		val->intval = rt5033_get_charger_current_limit(charger);
++		break;
++	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
++		val->intval = rt5033_get_charger_const_voltage(charger);
++		break;
++	case POWER_SUPPLY_PROP_MODEL_NAME:
++		val->strval = RT5033_CHARGER_MODEL;
++		break;
++	case POWER_SUPPLY_PROP_MANUFACTURER:
++		val->strval = RT5033_MANUFACTURER;
++		break;
++	case POWER_SUPPLY_PROP_ONLINE:
++		val->intval = (rt5033_get_charger_state(charger) ==
++				POWER_SUPPLY_STATUS_CHARGING);
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return ret;
++}
++
++static struct rt5033_charger_data *rt5033_charger_dt_init(
++						struct rt5033_charger *charger)
++{
++	struct rt5033_charger_data *chg;
++	struct power_supply_battery_info *info;
++	int ret;
++
++	chg = devm_kzalloc(charger->dev, sizeof(*chg), GFP_KERNEL);
++	if (!chg)
++		return ERR_PTR(-ENOMEM);
++
++	ret = power_supply_get_battery_info(charger->psy, &info);
++	if (ret) {
++		dev_err(charger->dev, "failed to get battery info\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	/* Assign data. Validity will be checked in the init functions. */
++	chg->pre_uamp = info->precharge_current_ua;
++	chg->fast_uamp = info->constant_charge_current_max_ua;
++	chg->eoc_uamp = info->charge_term_current_ua;
++	chg->pre_uvolt = info->precharge_voltage_max_uv;
++	chg->const_uvolt = info->constant_charge_voltage_max_uv;
++
++	return chg;
++}
++
++static const struct power_supply_desc rt5033_charger_desc = {
++	.name = "rt5033-charger",
++	.type = POWER_SUPPLY_TYPE_USB,
++	.properties = rt5033_charger_props,
++	.num_properties = ARRAY_SIZE(rt5033_charger_props),
++	.get_property = rt5033_charger_get_property,
++};
++
++static int rt5033_charger_probe(struct platform_device *pdev)
++{
++	struct rt5033_charger *charger;
++	struct rt5033_dev *rt5033 = dev_get_drvdata(pdev->dev.parent);
++	struct power_supply_config psy_cfg = {};
++	int ret;
++
++	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
++	if (!charger)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, charger);
++	charger->dev = &pdev->dev;
++	charger->rt5033 = rt5033;
++
++	psy_cfg.of_node = pdev->dev.of_node;
++	psy_cfg.drv_data = charger;
++
++	charger->psy = devm_power_supply_register(&pdev->dev,
++						  &rt5033_charger_desc,
++						  &psy_cfg);
++	if (IS_ERR(charger->psy)) {
++		dev_err(&pdev->dev, "failed: power supply register\n");
++		return PTR_ERR(charger->psy);
++	}
++
++	charger->chg = rt5033_charger_dt_init(charger);
++	if (IS_ERR_OR_NULL(charger->chg))
++		return -ENODEV;
++
++	ret = rt5033_charger_reg_init(charger);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct platform_device_id rt5033_charger_id[] = {
++	{ "rt5033-charger", },
++	{ }
++};
++MODULE_DEVICE_TABLE(platform, rt5033_charger_id);
++
++static const struct of_device_id rt5033_charger_of_match[] = {
++	{ .compatible = "richtek,rt5033-charger", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, rt5033_charger_of_match);
++
++static struct platform_driver rt5033_charger_driver = {
++	.driver = {
++		.name = "rt5033-charger",
++		.of_match_table = rt5033_charger_of_match,
++	},
++	.probe = rt5033_charger_probe,
++	.id_table = rt5033_charger_id,
++};
++module_platform_driver(rt5033_charger_driver);
++
++MODULE_DESCRIPTION("Richtek RT5033 charger driver");
++MODULE_AUTHOR("Beomho Seo <beomho.seo@samsung.com>");
++MODULE_LICENSE("GPL v2");
 -- 
 2.39.2
 
