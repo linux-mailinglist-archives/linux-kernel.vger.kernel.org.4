@@ -2,95 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760A36F0BC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15C06F0BD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244429AbjD0SP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S244346AbjD0SUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231577AbjD0SP5 (ORCPT
+        with ESMTP id S231577AbjD0SUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:15:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286FE40C4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:15:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682619356; x=1714155356;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=785UCBXwGM5bsA0zPWVgzoLulCD7I5nsw2bYhst8zvE=;
-  b=JXbtr7LYFgQYqbJRSfWNvY+IBCXXRJXHwVSZsbfqQbpE87Z9ooDVki1J
-   ZQWl5dGAi9xHqt5IdNSuESYsE8AMtrAldBzFWZq+PsanqPkc9wqQUxRrw
-   oWJU48w0a+XHvus5nN+04xe85E4N02nuYhYiPm0Qpd/88Wo61j5KiadLo
-   Obdv8Ro2Q9J3XJKtAZSMMos4kxh3O8lI+FrqBpAltJk2LrZvae5IBVABL
-   EkBn8lKLXl/Fwjwqq4Qc9vrtkUbebTmHol4WjUSxEjE9oX8oUMnEYfUR4
-   h++/RKv6QjKq3VDEYgwFP7+xJ6427xGcpgqZlxWxR9Y0bXo1K7WAgNqRQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="331808611"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="331808611"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 11:15:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="644792056"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="644792056"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by orsmga003.jf.intel.com with ESMTP; 27 Apr 2023 11:15:55 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/tdx for 6.4
-Date:   Thu, 27 Apr 2023 11:15:48 -0700
-Message-Id: <20230427181548.1070481-1-dave.hansen@linux.intel.com>
+        Thu, 27 Apr 2023 14:20:01 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D4830F6;
+        Thu, 27 Apr 2023 11:20:00 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-74d2597fdb2so436766085a.2;
+        Thu, 27 Apr 2023 11:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682619600; x=1685211600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q7ATKwYmuUSj/ogSpDjDq/5jbaMNI6uN2RRcY4VcdQU=;
+        b=JOCYJplpxoGq4Gx3tOkSbP5MJ1e8JEdMLZWEEKKqARz9vZ0cCP/2A5zaqBJUM2PdH8
+         3fn+Gpg6iSnVEEW1QU1ACL0/909mfOd7cCBOuorbhRACGMBtd2x0dRxKOQTN/dw4W7g5
+         p21U+sl6BgEybZ9Iq7IOLi+SLh8Xdem88Q6P4X2X4NBaAERAStw+CqIVy3WbADo7Cs1j
+         PtRP885AlS9Rg6HHvTq/901NA2afjlvnamn2/5XCeFCpT5UQ3ZVSopKfi1544pDKHY3P
+         tTMaGkiJbWYvGFqmgFuCJ2xWUVHg5LCXbOwgWddbNErkyvrlCMuzbaTkJVIQtlkHJgqU
+         1BgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682619600; x=1685211600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q7ATKwYmuUSj/ogSpDjDq/5jbaMNI6uN2RRcY4VcdQU=;
+        b=DzWipB9NfwLXUJtU7wVkXzHshpEsufrhGIQer1PJ7QOU9zhd1zcMZHIIQTwxoZmPTb
+         CN01a1OG9neMweDUbWMgJMJJ0EbsXfIK5U8fo0pEhgjj/IIoX8v4PFXk0aWqglf8lrGt
+         djIYoW1E9yUOZAtwfR+OkRSQq+a10NvJz2zmLpIifFX90cLhIChOQ6En//Gsto3TeQTk
+         qQP844FlbcxySzmaCeVBIhXM0jX9CTKNr/5gAFPBOC8FqjNQjDQ8LQA6KBUFDvctVOgd
+         3Rmy2Va7BDEbUNOvurGifrqce2uEoC9TfzoBPKz0BP/BUwyzsvaOw2qnFWVz7jIqEhsy
+         nE9g==
+X-Gm-Message-State: AC+VfDxxfNpiHD8znS1TrisxiAJv3roSmxvifH8KON/a1t/hCaNx0dgy
+        uwZQESmcEVf8fODLTnk24cCQt8pHUec=
+X-Google-Smtp-Source: ACHHUZ5nf1sWqiRPMpIvBmXBWFXwoqYBBHvnQ6gThP4Mm//W1aDjHOS6sPIa48NYNaXFjJ6oN4KA6Q==
+X-Received: by 2002:a05:6214:c47:b0:5ef:564a:3296 with SMTP id r7-20020a0562140c4700b005ef564a3296mr3654265qvj.44.1682619599827;
+        Thu, 27 Apr 2023 11:19:59 -0700 (PDT)
+Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id s14-20020a0cdc0e000000b005e5b30eef24sm5788316qvk.56.2023.04.27.11.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 11:19:59 -0700 (PDT)
+From:   Doug Berger <opendmb@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        XuDong Liu <m202071377@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Doug Berger <opendmb@gmail.com>
+Subject: [PATCH 0/2] serial: 8250_bcm7271: Fix clock handling
+Date:   Thu, 27 Apr 2023 11:19:14 -0700
+Message-Id: <20230427181916.2983697-1-opendmb@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+XuDong Liu offered a patch to correct some clock issues detected
+in the probe function and Christophe JAILLET pointed out that
+there was a similar issue in remove.
 
-Please pull a single x86/tdx change for 6.4.
+Since no V2 has appeared, I am providing this pair of commits to
+address both cases. This set chooses to use a managed clock to
+avoid the need to explicitly call clk_put from the driver.
 
-The original assembly here took two flags in %RSI to tweak its behavior
-at runtime.  PeterZ recently axed one flag.  Kill the other and tweak
-the 'output' mode with an assembly macro instead.  This results in
-elimination of one push/pop pair and overall easier to read assembly.
+Doug Berger (2):
+  serial: 8250_bcm7271: balance clk_enable calls
+  serial: 8250_bcm7271: fix leak in `brcmuart_probe`
 
---
+ drivers/tty/serial/8250/8250_bcm7271.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+-- 
+2.34.1
 
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git tags/test.1682619270.x86_tdx_for_6.4
-
-for you to fetch changes up to 7a3a401874bea02f568aa416ac29170d8cde0dc2:
-
-  x86/tdx: Drop flags from __tdx_hypercall() (2023-03-22 11:36:05 -0700)
-
-----------------------------------------------------------------
- *  Do conditional __tdx_hypercall() 'output' processing via an
-    assembly macro argument rather than a runtime register.
-
-----------------------------------------------------------------
-Kirill A. Shutemov (1):
-      x86/tdx: Drop flags from __tdx_hypercall()
-
- arch/x86/boot/compressed/tdx.c    |  4 +--
- arch/x86/coco/tdx/tdcall.S        | 66 ++++++++++++++++++++++-----------------
- arch/x86/coco/tdx/tdx.c           | 18 +++++------
- arch/x86/include/asm/shared/tdx.h |  5 ++-
- 4 files changed, 51 insertions(+), 42 deletions(-)
