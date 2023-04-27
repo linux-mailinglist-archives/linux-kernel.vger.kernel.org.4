@@ -2,91 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50696F0710
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B809C6F0715
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243894AbjD0OP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 10:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S243563AbjD0OQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 10:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243885AbjD0OP0 (ORCPT
+        with ESMTP id S243284AbjD0OP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:15:26 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C97510D2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:15:25 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94f3df30043so1388747866b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682604924; x=1685196924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lqzI0wZ2EqQrQrjO8vqAoXJym2hVEg0r8e35+35xmQw=;
-        b=q2xrjcGWRoZmThPFkxvA4QmteJ3wUDZ408LAWzx4rwMTFR/z8YJNxIz+O2Mjg2MMmX
-         M5IsGnIEtDuyGpAX1CRk6f58dZCv1E2AmvkDqebIDtkyNzcZuwZRDrQBn8zySmo2Tz7X
-         YAXCaU2n/ykqnbd9cSgSmfHAyZ+iTDqXTu7iSfhqrWbFE37HlWlAAYDlDuFCQ7GXFmFk
-         fo4JFEU6Lwzii5xIPQXV3ZscUExZZGpdIyNBNhYPf1JM2BDfXqFuvQSPxq3FKavbqGBi
-         J7sgqHN90xjjTkPCgKmF4a2X8Z4FQ2RqtsnSA1NlFkj1aT/RpV/P5V9NqRDnMcCK7lXE
-         R5xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682604924; x=1685196924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lqzI0wZ2EqQrQrjO8vqAoXJym2hVEg0r8e35+35xmQw=;
-        b=c5CHpbkom2Yja6aYydTQAA+TXbhMo+Djg+SrSheK8tZROUw9DPBGAcIIqm0oqmC2n4
-         cdbJSPNecBZSgMzqb+JVn3F2TMrbwVk9dcoIn9ftufnVmgzrjKHV6N6U+iAQ0NAoHhqa
-         Ko36vu0bzh8CoUs4J6dF/s3ac4DjwJqAwKDt1+bPBLmcwvFZV8T5lMt+6i7dQ0OQRSgh
-         ubh/3cY44PaiCoOwviB+PBBnwuwUmry08OWORhHeDpGez6dTMyrzJ0E/jFiYUEYSNtsq
-         nzC/zYphr7VxKg9vrBJLxy699weHGojgpEDvtWF2l8i8nsEUanX0Ppo7AujUWAvVYrbI
-         4Y6A==
-X-Gm-Message-State: AC+VfDziZ5tuydaLQ+hU3do5z7f+UvO4KxNjvTaA4wpNw3LUBRD4xKBh
-        t8YGv8jvCdPFdH79U+bhjqUvNw==
-X-Google-Smtp-Source: ACHHUZ5dGF5nSry14i4bNMUV9qu86lYwG1gJxFEaX/tWakik5oSiGyZqTA3ZLSg6+Q3Lrb4MV+sXRg==
-X-Received: by 2002:a17:906:7307:b0:958:489f:d050 with SMTP id di7-20020a170906730700b00958489fd050mr2012618ejc.43.1682604923689;
-        Thu, 27 Apr 2023 07:15:23 -0700 (PDT)
-Received: from [172.23.2.5] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id pv4-20020a170907208400b0094f49f58019sm9658604ejb.27.2023.04.27.07.15.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 07:15:23 -0700 (PDT)
-Message-ID: <544e3e61-d471-f0b5-4daf-53bfc531f361@linaro.org>
-Date:   Thu, 27 Apr 2023 17:15:22 +0300
+        Thu, 27 Apr 2023 10:15:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717E2120;
+        Thu, 27 Apr 2023 07:15:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 866531FE3F;
+        Thu, 27 Apr 2023 14:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682604954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Il+yD+2lfaLcjR30nIENVgJ22FZJ2MalcSOfRbNauAQ=;
+        b=lUVjqm3Yguq+EVReYw6PKR5y5UazXbk4fNyWxP/8DO1B81BNhuJnCykepn7ZRjNjmnKe00
+        S3+pJDrzmH9//ugqGmT/j5kY8jnNF2nn4W/7SyEZaFr4zTmOPmIa+Bd8ABIVOriR3NPaSU
+        F/3t6lZyZjfX3meojUl5UQ2muc/jb54=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682604954;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Il+yD+2lfaLcjR30nIENVgJ22FZJ2MalcSOfRbNauAQ=;
+        b=NqcuF5KJZVx5kpXGiXxv5BAd7l20u/IWqEXqhHAM7SMK8f41dygb3hYuElQqbTgH4rfN1t
+        6jnfB6yxorXmgYDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 58ADB13910;
+        Thu, 27 Apr 2023 14:15:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7YEUFZqDSmR+EwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 27 Apr 2023 14:15:54 +0000
+Message-ID: <d193613d-150d-bdaa-da7a-62bc088fae5e@suse.cz>
+Date:   Thu, 27 Apr 2023 16:15:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 02/22] drm/msm/dpu: Remove TE2 block and feature from
- DPU >= 5.0.0 hardware
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Robert Foss <rfoss@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-References: <20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org>
- <20230411-dpu-intf-te-v4-2-27ce1a5ab5c6@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230411-dpu-intf-te-v4-2-27ce1a5ab5c6@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.10.0
+Subject: Re: [PATCH for v6.3 regression] mm/mremap: fix vm_pgoff in
+ vma_merge() case 3
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, lstoakes@gmail.com,
+        regressions@lists.linux.dev, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Fabian Vogt <fvogt@suse.com>, stable@vger.kernel.org
+References: <20230427140959.27655-1-vbabka@suse.cz>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230427140959.27655-1-vbabka@suse.cz>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,35 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 01:37, Marijn Suijten wrote:
-> No hardware beyond kona (sm8250, DPU 6.0.0) defines the TE2 PINGPONG
-> sub-block offset downstream, and according to insiders no DPU >= 5.0.0
-> hardware has support for it either.  Especially since neither downstream
-> nor upstream utilize these registers in any way, remove the erroneous
-> specification from SM8150, SC8180X, SM8250, SC7180, SM8350, SC8280XP and
-> SM8450 to prevent confusion.
-> 
-> Note that downstream enables the PPSPLIT (split-FIFO) topology (single
-> LM for 2 PP and 2 INTF) based on the presence of a TE2 block.
-> 
-> Fixes: 386fced3f76f ("drm/msm/dpu: add SM8150 to hw catalog")
-> Fixes: 7bdc0c4b8126 ("msm:disp:dpu1: add support for display for SC7180 target")
-> Fixes: 0e91bcbb0016 ("drm/msm/dpu: Add SM8350 to hw catalog")
-> Fixes: 4a352c2fc15a ("drm/msm/dpu: Introduce SC8280XP")
-> Fixes: 100d7ef6995d ("drm/msm/dpu: add support for SM8450")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+On 4/27/23 16:09, Vlastimil Babka wrote:
+> |later. Alternatively it could be added to mm/mm-stable and upcoming 6.4
+> pull request, but then the stable backport would need adjustment. It's up to
+> Linus and Andrew. |
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+This version applies on mm/mm-stable. Paragraph about case 8 is removed
+as that case sets vma_pgoff explicitly itself.
 
-> ---
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  4 ++--
->   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  4 ++--
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  4 ++--
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  4 ++--
->   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   | 24 +++++++++++-----------
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  4 ++--
->   7 files changed, 24 insertions(+), 24 deletions(-)-- 
-With best wishes
-Dmitry
+----8<----
+From dea6d87bdad1fbb21f987dba96c55195fb88e7b4 Mon Sep 17 00:00:00 2001
+From: Vlastimil Babka <vbabka@suse.cz>
+Date: Thu, 27 Apr 2023 15:28:41 +0200
+Subject: [PATCH] mm/mremap: fix vm_pgoff in vma_merge() case 3
+
+After upgrading build guests to v6.3, rpm started segfaulting for
+specific packages, which was bisected to commit 0503ea8f5ba7 ("mm/mmap:
+remove __vma_adjust()"). rpm is doing many mremap() operations with file
+mappings of its db. The problem is that in vma_merge() case 3 (we merge
+with the next vma, expanding it downwards) vm_pgoff is not adjusted as
+it should when vm_start changes. As a result the rpm process most likely
+sees data from the wrong offset of the file. Fix the vm_pgoff
+calculation.
+
+Reported-and-bisected-by: Jiri Slaby <jirislaby@kernel.org>
+Reported-and-tested-by: Fabian Vogt <fvogt@suse.com>
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1210903
+Fixes: 0503ea8f5ba7 ("mm/mmap: remove __vma_adjust()")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: <stable@vger.kernel.org>
+---
+ mm/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 536bbb8fa0ae..5522130ae606 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1008,7 +1008,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			vma = next;			/* case 3 */
+ 			vma_start = addr;
+ 			vma_end = next->vm_end;
+-			vma_pgoff = next->vm_pgoff;
++			vma_pgoff = next->vm_pgoff - pglen;
+ 			if (curr) {			/* case 8 */
+ 				vma_pgoff = curr->vm_pgoff;
+ 				remove = curr;
+-- 
+2.40.0
+
 
