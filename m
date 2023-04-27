@@ -2,186 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C962D6F0CA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E716F0CA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245572AbjD0Tfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
+        id S1343623AbjD0TjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245501AbjD0Tfm (ORCPT
+        with ESMTP id S244200AbjD0TjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:35:42 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC333C1B;
-        Thu, 27 Apr 2023 12:35:38 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b4960b015so6995646b3a.3;
-        Thu, 27 Apr 2023 12:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682624137; x=1685216137;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aA4RtaJZPtabUlxR3HvRccxE/jFM/xHE97Tk3j3YwIU=;
-        b=jN/5Aq2fcW37cE5wkCpZAgVlM9w+/pVq5KrMSJSN/5jl7B8IrC5cAomcZpfB5NV7rw
-         5S49rwWxBQXO+VMXlw4CndtAa0ucRQJsMkkbkPBlKBginy73ACP/otpzIHzvzAHBJxOI
-         H6HO+Deuv8z7CrxGjajEJIyY/9Aod2LKlgSIn5vwxW66UMNZmYy/H4+no4Xw3YW70L+f
-         ym4dWoBOMxpDv8FlS0OsniLLR41Hn0BCTd/UD99Kg+hZ4YaYov0H1LsFKPaKAxwn3qL/
-         /gKikzaMhOvr0f2x3lCr8G0adDGgkJx8oHpPxq2ZK8iza+imtmw9YSLV4GhXpSrPI1fk
-         HS/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682624137; x=1685216137;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aA4RtaJZPtabUlxR3HvRccxE/jFM/xHE97Tk3j3YwIU=;
-        b=hpLM0wKHbqNHiSZX8QcMhI1LJPTrz4YG1RqhI0KJK7t+DtvNeE1TR0F5SRN59++sbh
-         ZBNcSULh69aXdWFciaFlu6CBn0nm8LounxtSWzdsHpaMfbhOhMzreHawHKm1lIgPoJ8S
-         /4uNpuTAwgQI7xhZ3JRrHz7HxB9oJByNcFgqEHM+sK+BlKi73nSdBASgR8vkkw2WPs/W
-         HYOufxHlMIA6FUxlwcc/VNMChE0buZhrZbaVfNpG9uVdnopfZnorfE1pxhr+v+dXG+he
-         7h6rcdIJQP56M7wK675Pwoh47XONSQJ4sCgOwjwf6w9tYdE7v4H2Fc7R90b3eWwdlo4c
-         Ay9w==
-X-Gm-Message-State: AC+VfDwaV/oCLFgf+ctsUKReE/JBi96NgX6NMf7a3xOvvTxn3rs9rEns
-        7qeuoRLsIMYsU77zHo5LqHg=
-X-Google-Smtp-Source: ACHHUZ5r+ZOisemFY2bO0EdkobtzYRh7LOKH35Ne1K0dfL3H3FB7VK2CFCCHSf2/7VB8Lwlo7Njv0A==
-X-Received: by 2002:a17:902:c948:b0:1a6:abac:9cc with SMTP id i8-20020a170902c94800b001a6abac09ccmr3447712pla.66.1682624137468;
-        Thu, 27 Apr 2023 12:35:37 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-014.fbsv.net. [2a03:2880:ff:e::face:b00c])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b001a04d27ee92sm11997150plj.241.2023.04.27.12.35.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 12:35:37 -0700 (PDT)
-From:   Scott Smith <scott8440@gmail.com>
-To:     linux@roeck-us.net, jdelvare@suse.com
-Cc:     Scott Smith <scott8440@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH] hwmon: (pmbus) add ir35215 driver
-Date:   Thu, 27 Apr 2023 12:35:31 -0700
-Message-Id: <20230427193533.718526-1-scott8440@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Apr 2023 15:39:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B1E213A;
+        Thu, 27 Apr 2023 12:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682624344; x=1714160344;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=gAZ1EG7SDVbzwqKuwmJG1508A0ja1sgvVPDk5S/JuME=;
+  b=TRfaxdLNvcanfpUmv6a39yyac3kIoLKsWT4vwibl86M5swFDxHcJcWmB
+   tiToxRPqENkWdcEqkAVrXoYcaLe6f9EIbvwDZHP0StOE6uTLXqIdNZT/G
+   zXzDqmliKaKLpzBBuJ1qqqTVbknwj1gDuwc6fot7fCxsn6O0BxIf8ApVg
+   HqyMiQIQhbRsGzcZwGnEO1pZt+i8zYo/4bXNci0IVD5rbIPRGKRBUK99m
+   2HD/XFT3VlBAtjVnsWY7PMScWZTviTrm/AT2erYIzDUM18mpx5PTXynLV
+   2ki1ckEgr2HULSeU5L4RW/rW47UImfa5DXO6JyoX3WwZ9eztH7NuVtreM
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410609764"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="410609764"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:39:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="725063041"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="725063041"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 27 Apr 2023 12:39:02 -0700
+Received: from [10.209.41.222] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.222])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id CD829580377;
+        Thu, 27 Apr 2023 12:38:58 -0700 (PDT)
+Message-ID: <05b7b1cf-0b77-0e0f-8d02-1c26016fa7d8@linux.intel.com>
+Date:   Thu, 27 Apr 2023 15:38:57 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 08/40] perf test: Test more sysfs events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230426070050.1315519-1-irogers@google.com>
+ <20230426070050.1315519-9-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230426070050.1315519-9-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IR35215 is a digital multi-phase controller.
 
-Signed-off-by: Scott Smith <scott8440@gmail.com>
----
- drivers/hwmon/pmbus/Kconfig   |  9 +++++
- drivers/hwmon/pmbus/Makefile  |  1 +
- drivers/hwmon/pmbus/ir35215.c | 65 +++++++++++++++++++++++++++++++++++
- 3 files changed, 75 insertions(+)
- create mode 100644 drivers/hwmon/pmbus/ir35215.c
 
-diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
-index 270b6336b76d..5c089f7e4423 100644
---- a/drivers/hwmon/pmbus/Kconfig
-+++ b/drivers/hwmon/pmbus/Kconfig
-@@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
- 	  This driver can also be built as a module. If so, the module will
- 	  be called inspur-ipsps.
- 
-+config SENSORS_IR35215
-+       tristate "Infineon IR35215"
-+       help
-+         If you say yes here you get hardware monitoring support for the
-+         Infineon IR35215 controller.
-+
-+         This driver can also be built as a module. If so, the module will
-+         be called ir35215.
-+
- config SENSORS_IR35221
- 	tristate "Infineon IR35221"
- 	help
-diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
-index 84ee960a6c2d..fbb9cf048326 100644
---- a/drivers/hwmon/pmbus/Makefile
-+++ b/drivers/hwmon/pmbus/Makefile
-@@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
- obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
- obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
- obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
-+obj-$(CONFIG_SENSORS_IR35215)   += ir35215.o
- obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
- obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
- obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
-diff --git a/drivers/hwmon/pmbus/ir35215.c b/drivers/hwmon/pmbus/ir35215.c
-new file mode 100644
-index 000000000000..92d59e78bfd0
---- /dev/null
-+++ b/drivers/hwmon/pmbus/ir35215.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Hardware monitoring driver for Infineon IR35215
-+ *
-+ * Copyright (c) Meta Platforms, Inc. and affiliates.
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include "pmbus.h"
-+
-+static const u32 functionality = PMBUS_HAVE_TEMP
-+	| PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-+	| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-+	| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-+	| PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT
-+	| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP;
-+
-+static struct pmbus_driver_info ir35215_info = {
-+	.pages = 2,
-+	.format[PSC_VOLTAGE_IN] = linear,
-+	.format[PSC_VOLTAGE_OUT] = linear,
-+	.format[PSC_CURRENT_IN] = linear,
-+	.format[PSC_CURRENT_OUT] = linear,
-+	.format[PSC_POWER] = linear,
-+	.format[PSC_TEMPERATURE] = linear,
-+	.func[0] = functionality,
-+	.func[1] = functionality,
-+};
-+
-+static int ir35215_probe(struct i2c_client *client)
-+{
-+	/*
-+	 * IR35215 devices may not stay in page 0 during device
-+	 * probe which leads to probe failure (read status word failed).
-+	 * So let's set the device to page 0 at the beginning.
-+	 */
-+	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
-+	return pmbus_do_probe(client, &ir35215_info);
-+}
-+
-+static const struct i2c_device_id ir35215_id[] = {
-+	{ "ir35215", 0 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, ir35215_id);
-+
-+static struct i2c_driver ir35215_driver = {
-+	.driver = {
-+		   .name = "ir35215",
-+	},
-+	.probe_new = ir35215_probe,
-+	.id_table = ir35215_id,
-+};
-+
-+module_i2c_driver(ir35215_driver);
-+
-+MODULE_AUTHOR("Tao Ren <rentao.bupt@gmail.com>");
-+MODULE_DESCRIPTION("PMBus driver for Infineon IR35215");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS(PMBUS);
--- 
-2.34.1
+On 2023-04-26 3:00 a.m., Ian Rogers wrote:
+> Parse events for all PMUs, and not just cpu, in test "Parsing of all
+> PMU events from sysfs".
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
+Run the test on Cascade Lake and Alder Lake. It looks good.
+
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
+
+Thanks,
+Kan
+> ---
+>  tools/perf/tests/parse-events.c | 103 +++++++++++++++++---------------
+>  1 file changed, 55 insertions(+), 48 deletions(-)
+> 
+> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
+> index 8068cfd89b84..385bbbc4a409 100644
+> --- a/tools/perf/tests/parse-events.c
+> +++ b/tools/perf/tests/parse-events.c
+> @@ -7,6 +7,7 @@
+>  #include "debug.h"
+>  #include "pmu.h"
+>  #include "pmu-hybrid.h"
+> +#include "pmus.h"
+>  #include <dirent.h>
+>  #include <errno.h>
+>  #include "fncache.h"
+> @@ -2225,49 +2226,24 @@ static int test_pmu(void)
+>  
+>  static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+>  {
+> -	struct stat st;
+> -	char path[PATH_MAX];
+> -	struct dirent *ent;
+> -	DIR *dir;
+> -	int ret;
+> -
+> -	if (!test_pmu())
+> -		return TEST_SKIP;
+> -
+> -	snprintf(path, PATH_MAX, "%s/bus/event_source/devices/cpu/events/",
+> -		 sysfs__mountpoint());
+> -
+> -	ret = stat(path, &st);
+> -	if (ret) {
+> -		pr_debug("omitting PMU cpu events tests: %s\n", path);
+> -		return TEST_OK;
+> -	}
+> +	struct perf_pmu *pmu;
+> +	int ret = TEST_OK;
+>  
+> -	dir = opendir(path);
+> -	if (!dir) {
+> -		pr_debug("can't open pmu event dir: %s\n", path);
+> -		return TEST_FAIL;
+> -	}
+> +	perf_pmus__for_each_pmu(pmu) {
+> +		struct stat st;
+> +		char path[PATH_MAX];
+> +		struct dirent *ent;
+> +		DIR *dir;
+> +		int err;
+>  
+> -	ret = TEST_OK;
+> -	while ((ent = readdir(dir))) {
+> -		struct evlist_test e = { .name = NULL, };
+> -		char name[2 * NAME_MAX + 1 + 12 + 3];
+> -		int test_ret;
+> +		snprintf(path, PATH_MAX, "%s/bus/event_source/devices/%s/events/",
+> +			sysfs__mountpoint(), pmu->name);
+>  
+> -		/* Names containing . are special and cannot be used directly */
+> -		if (strchr(ent->d_name, '.'))
+> +		err = stat(path, &st);
+> +		if (err) {
+> +			pr_debug("skipping PMU %s events tests: %s\n", pmu->name, path);
+> +			ret = combine_test_results(ret, TEST_SKIP);
+>  			continue;
+> -
+> -		snprintf(name, sizeof(name), "cpu/event=%s/u", ent->d_name);
+> -
+> -		e.name  = name;
+> -		e.check = test__checkevent_pmu_events;
+> -
+> -		test_ret = test_event(&e);
+> -		if (test_ret != TEST_OK) {
+> -			pr_debug("Test PMU event failed for '%s'", name);
+> -			ret = combine_test_results(ret, test_ret);
+>  		}
+>  		/*
+>  		 * Names containing '-' are recognized as prefixes and suffixes
+> @@ -2282,17 +2258,48 @@ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest
+>  		if (strchr(ent->d_name, '-'))
+>  			continue;
+>  
+> -		snprintf(name, sizeof(name), "%s:u,cpu/event=%s/u", ent->d_name, ent->d_name);
+> -		e.name  = name;
+> -		e.check = test__checkevent_pmu_events_mix;
+> -		test_ret = test_event(&e);
+> -		if (test_ret != TEST_OK) {
+> -			pr_debug("Test PMU event failed for '%s'", name);
+> -			ret = combine_test_results(ret, test_ret);
+> +		dir = opendir(path);
+> +		if (!dir) {
+> +			pr_debug("can't open pmu event dir: %s\n", path);
+> +			ret = combine_test_results(ret, TEST_SKIP);
+> +			continue;
+>  		}
+> -	}
+>  
+> -	closedir(dir);
+> +		while ((ent = readdir(dir))) {
+> +			struct evlist_test e = { .name = NULL, };
+> +			char name[2 * NAME_MAX + 1 + 12 + 3];
+> +			int test_ret;
+> +
+> +			/* Names containing . are special and cannot be used directly */
+> +			if (strchr(ent->d_name, '.'))
+> +				continue;
+> +
+> +			snprintf(name, sizeof(name), "%s/event=%s/u", pmu->name, ent->d_name);
+> +
+> +			e.name  = name;
+> +			e.check = test__checkevent_pmu_events;
+> +
+> +			test_ret = test_event(&e);
+> +			if (test_ret != TEST_OK) {
+> +				pr_debug("Test PMU event failed for '%s'", name);
+> +				ret = combine_test_results(ret, test_ret);
+> +			}
+> +
+> +			if (!is_pmu_core(pmu->name))
+> +				continue;
+> +
+> +			snprintf(name, sizeof(name), "%s:u,%s/event=%s/u", ent->d_name, pmu->name, ent->d_name);
+> +			e.name  = name;
+> +			e.check = test__checkevent_pmu_events_mix;
+> +			test_ret = test_event(&e);
+> +			if (test_ret != TEST_OK) {
+> +				pr_debug("Test PMU event failed for '%s'", name);
+> +				ret = combine_test_results(ret, test_ret);
+> +			}
+> +		}
+> +
+> +		closedir(dir);
+> +	}
+>  	return ret;
+>  }
+>  
