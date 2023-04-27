@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402036F04B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12996F04BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243505AbjD0LF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S243666AbjD0LHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243269AbjD0LFZ (ORCPT
+        with ESMTP id S243264AbjD0LHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:05:25 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CAC8BB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:05:24 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R5FBOL004611;
-        Thu, 27 Apr 2023 06:05:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=e+uZVxVZOBI4/nOG9R68nqSUwYP2oO1jBt1tk3mwG+A=;
- b=XFN7t/MQ+ODDiT3YsTs4K+A0Jy0jSyno13wuFgPyxUEYDvOXxN67J1SJae3aIvLvjFK7
- I6b9lujkfm4qqkveTgki/hI9xMmsxxCjOqpks90P+rYpZg91FlZ187alcF6Mtwm/97q0
- D0VuQHdNAtk9TlfRZJnLl93HWbWHUGpIR8mKKKTLlI8uRNQGqUJ40E40QBSRSvCeHPR0
- 2W71IVCo50JT4iThcxNHDLvKKC5LUqvpQx97vB6MKL0tVaQtc+2XkIAsaJgbYfiG45XN
- 4kASa/TYug8S+Pr+Q+h30lxFH6uNl1wpC832hGgKhPKEZQpfDtgGfnu3QEFhZADLD83d MA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3q4c0pqqw1-1
+        Thu, 27 Apr 2023 07:07:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53449CF;
+        Thu, 27 Apr 2023 04:07:30 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R9efxd032126;
+        Thu, 27 Apr 2023 11:07:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vtzHUvX2ZJ0nAzBI6v6t5HuaHprgpY1tbVRgTEtl9ak=;
+ b=iT/t6tPtRJ8q1x+9i3C1LY4AwY/rm+BKF9muSnkqdVpxEOEgBR9XbCGf3PfbWw6Jeaqs
+ aina92xSVAmcW9yoV7oOzVuwwnDl8M0yP1oXTGhz60gzpgaeU2Yb95agdf30uXlryRpz
+ sZfI1d4jmjATrleUE8ZM7XY4NR0upzLxZ0U34wvw764wBCwrNSyygt+4D6OlfLv+gf9d
+ h/numVUAf0ObKQGzv70CdPN/TDwOohSDUp3y2FUIesA8A/6JRtH1Yd/1l+S7bZaiDnkp
+ Em+Xihi7+fMU8jaT9fp5DzU4FmLabpEdkrnqTtCdGdc1U7Gbfoi6xAM7gQGx8rQ5yY4F vQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7kux8k57-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 06:05:04 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 27 Apr
- 2023 06:05:03 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 27 Apr 2023 06:05:03 -0500
-Received: from lon-bigdaddy.ad.cirrus.com (LONN76BT3D3.ad.cirrus.com [198.90.238.185])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D3DB511C6;
-        Thu, 27 Apr 2023 11:05:02 +0000 (UTC)
-From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>,
-        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-Subject: [PATCH] ALSA: hda/realtek: Add quirk for ThinkPad P1 Gen 6
-Date:   Thu, 27 Apr 2023 12:04:52 +0100
-Message-ID: <20230427110452.13787-1-vitalyr@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Apr 2023 11:07:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RB7Ifa016377
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 11:07:18 GMT
+Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 27 Apr
+ 2023 04:07:14 -0700
+Message-ID: <ca738971-036b-f180-88f7-cefe0ed5a412@quicinc.com>
+Date:   Thu, 27 Apr 2023 16:37:11 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4 2/2] pinctrl: qcom: Add SDX75 pincontrol driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <1682327030-25535-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1682327030-25535-3-git-send-email-quic_rohiagar@quicinc.com>
+ <ZEk9lySMZcrRZYwX@surfacebook>
+ <66158251-6934-a07f-4b82-4deaa76fa482@quicinc.com>
+ <CAHp75VcCAOD3utLjjXeQ97nGcUTm7pic5F52+e7cJDxpDXwttA@mail.gmail.com>
+ <1ed28be7-7bb5-acc5-c955-f4cf238ffc49@quicinc.com>
+ <CAHp75VcDBFyG9+RaOUma4y+Q0em2-Nvuk_71vDkenGk+2HJqEQ@mail.gmail.com>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <CAHp75VcDBFyG9+RaOUma4y+Q0em2-Nvuk_71vDkenGk+2HJqEQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: G8yE1dUBU_OPKhHXtEA2VwmVQIuGFiF5
-X-Proofpoint-ORIG-GUID: G8yE1dUBU_OPKhHXtEA2VwmVQIuGFiF5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4tgDf_h0YZG3yRazudrZ1kAx0iJi_ZJs
+X-Proofpoint-GUID: 4tgDf_h0YZG3yRazudrZ1kAx0iJi_ZJs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 mlxlogscore=509 phishscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270097
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lenovo ThinkPad P1 Gen 6 laptop has 2 CS35L41 amplifies
-on I2C bus connected to Realtek codec.
 
-Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
----
- sound/pci/hda/patch_realtek.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index ab938fa1d65d..d973ebb77743 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9691,6 +9691,8 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x22f1, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x22f2, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x22f3, "Thinkpad", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x2316, "Thinkpad P1 Gen 6", ALC287_FIXUP_CS35L41_I2C_2),
-+	SND_PCI_QUIRK(0x17aa, 0x2317, "Thinkpad P1 Gen 6", ALC287_FIXUP_CS35L41_I2C_2),
- 	SND_PCI_QUIRK(0x17aa, 0x30bb, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
- 	SND_PCI_QUIRK(0x17aa, 0x30e2, "ThinkCentre AIO", ALC233_FIXUP_LENOVO_LINE2_MIC_HOTKEY),
- 	SND_PCI_QUIRK(0x17aa, 0x310c, "ThinkCentre Station", ALC294_FIXUP_LENOVO_MIC_LOCATION),
--- 
-2.34.1
-
+On 4/27/2023 4:24 PM, Andy Shevchenko wrote:
+> On Thu, Apr 27, 2023 at 11:53 AM Rohit Agarwal
+> <quic_rohiagar@quicinc.com> wrote:
+>> On 4/26/2023 10:12 PM, Andy Shevchenko wrote:
+>>> On Wed, Apr 26, 2023 at 6:18 PM Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
+>>>> On 4/26/2023 8:34 PM, andy.shevchenko@gmail.com wrote:
+> ...
+>
+>>>> Ok, Will update this. Shall I also update "PINGROUP" to "PINCTRL_PINGROUP"?
+>>> Yes, please.
+>> PINCTRL_PINGROUP cannot be used as it is, since msm_pigroup has multiple
+>> other fields that needs to be set
+>> for each pingroup defined.
+>> Would rename this to SDX75_PINGROUP, as seen on some other platforms.
+>> Would that be ok?
+> For this patch, yes. But can you create a separate followup that
+> replaces three members of struct msm_pingroup by embedding struct
+> pingroup into it? There are examples of such changes in the kernel
+> already. https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/drivers/pinctrl?id=39b707fa7aba7cbfd7d53be50b6098e620f7a6d4
+>
+Sure, create a separate followup patch referring it. Will use 
+SDX75_PINGROUP for now.
+Thanks,
+Rohit.
