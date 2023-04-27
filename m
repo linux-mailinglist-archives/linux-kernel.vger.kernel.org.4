@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8470E6F0D98
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AE46F0DA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344158AbjD0VEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 17:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S1344255AbjD0VJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 17:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344150AbjD0VEg (ORCPT
+        with ESMTP id S1344248AbjD0VJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:04:36 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554F46AE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:04:35 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        Thu, 27 Apr 2023 17:09:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBC546B8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:26 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ps8rO-0005ET-LI; Thu, 27 Apr 2023 23:09:02 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6712B1F6DC;
-        Thu, 27 Apr 2023 23:04:33 +0200 (CEST)
-Date:   Thu, 27 Apr 2023 23:04:32 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0E20B1B936F;
+        Thu, 27 Apr 2023 21:08:57 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 23:08:57 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-Subject: Re: [PATCH v2 10/13] drm/msm: mdss: Add SM6375 support
-Message-ID: <eyidelorpuv6ed4e5w7q76qlpkj7n34dfsjmnxf6g3wrmrfevv@puf755fnx627>
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-10-5def73f50980@linaro.org>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] can: bxcan: add support for single peripheral
+ configuration
+Message-ID: <20230427-retaining-deeply-fcff70098e7e-mkl@pengutronix.de>
+References: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nzyuuy6jlpbsjjmh"
 Content-Disposition: inline
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v2-10-5def73f50980@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,48 +66,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 00:31:19, Konrad Dybcio wrote:
-> Add support for MDSS on SM6375.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+--nzyuuy6jlpbsjjmh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-(After reusing sm6350 data, as suggested by Dmitry)
+On 27.04.2023 22:45:35, Dario Binacchi wrote:
+>=20
+> The series adds support for managing bxCAN controllers in single peripher=
+al
+> configuration.
+> Unlike stm32f4 SOCs, where bxCAN controllers are only in dual peripheral
+> configuration, stm32f7 SOCs contain three CAN peripherals, CAN1 and CAN2
+> in dual peripheral configuration and CAN3 in single peripheral
+> configuration:
+> - Dual CAN peripheral configuration:
+>  * CAN1: Primary bxCAN for managing the communication between a secondary
+>    bxCAN and the 512-byte SRAM memory.
+>  * CAN2: Secondary bxCAN with no direct access to the SRAM memory.
+>    This means that the two bxCAN cells share the 512-byte SRAM memory and
+>    CAN2 can't be used without enabling CAN1.
+> - Single CAN peripheral configuration:
+>  * CAN3: Primary bxCAN with dedicated Memory Access Controller unit and
+>    512-byte SRAM memory.
 
-> ---
->  drivers/gpu/drm/msm/msm_mdss.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index 4e3a5f0c303c..f2470ce699f7 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -546,6 +546,15 @@ static const struct msm_mdss_data sm6350_data = {
->  	.highest_bank_bit = 1,
->  };
->  
-> +static const struct msm_mdss_data sm6375_data = {
-> +	.ubwc_version = UBWC_2_0,
-> +	.ubwc_dec_version = UBWC_2_0,
-> +	.ubwc_swizzle = 6,
-> +	.ubwc_static = 0x1e,
-> +	/* Possibly 0 for LPDDR3 */
-> +	.highest_bank_bit = 1,
-> +};
-> +
->  static const struct msm_mdss_data sm8150_data = {
->  	.ubwc_version = UBWC_3_0,
->  	.ubwc_dec_version = UBWC_3_0,
-> @@ -580,6 +589,7 @@ static const struct of_device_id mdss_dt_match[] = {
->  	{ .compatible = "qcom,sc8280xp-mdss", .data = &sc8280xp_data },
->  	{ .compatible = "qcom,sm6115-mdss", .data = &sm6115_data },
->  	{ .compatible = "qcom,sm6350-mdss", .data = &sm6350_data },
-> +	{ .compatible = "qcom,sm6375-mdss", .data = &sm6375_data },
->  	{ .compatible = "qcom,sm8150-mdss", .data = &sm8150_data },
->  	{ .compatible = "qcom,sm8250-mdss", .data = &sm8250_data },
->  	{ .compatible = "qcom,sm8350-mdss", .data = &sm8250_data },
-> 
-> -- 
-> 2.40.0
-> 
+This really looks good! Great work! Who takes the DT changes? I can take
+the whole series.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--nzyuuy6jlpbsjjmh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRK5GYACgkQvlAcSiqK
+BOjH2gf/btmb76HmGphNPuGDwudwcjt004XQ1d8nxWuWd74zEwD/+Oz6W9hbZzox
+eshaIvJODyWw6Qgj+FKc+86AZvperVx+8T+Ia5PvPY8mXt0Mbh+aFM2XVTo9qXtk
+brvJPXZU/gkwFYafQeOINt2rohkeXwN+JV3s2cfj0a2b6FKUgR8a1S7DxjQdimIK
+0psXmV4IKyxQq6b2O7j5r99KYDbeokkzwOrowghxt+2JK6uwI9Fea1iOziE9JPUT
+A/mhaieHgpv4KhI4uJBxFoCOn+LPIMT54J8dT3CmChIdYYavdruibezAUvZjtDix
+IVqNdP1EjNlpTWRvNh9cIcwt6NWXrA==
+=/Q1q
+-----END PGP SIGNATURE-----
+
+--nzyuuy6jlpbsjjmh--
