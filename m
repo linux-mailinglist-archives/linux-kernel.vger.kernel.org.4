@@ -2,165 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAA16F08DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD34D6F08E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243934AbjD0P5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S244228AbjD0P7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244286AbjD0P5c (ORCPT
+        with ESMTP id S243864AbjD0P7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:57:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9B249C4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:57:30 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-953343581a4so1330468366b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682611049; x=1685203049;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLGlH+T2fjU4T6lhxmZEwqY6pXWUkubYT9KEtdeRnhQ=;
-        b=Lx2MO7hwEgubSt7jBh5opm5oY3swh/5Q91sn49Iron6Zd69KhSRgsiGUIb/T+wPvaK
-         CK6gzr42knzX/C+lbqjRH9wtHa3Fcd1CkmuH+Cs48QavafuBCWfahn/INfnS34ed/W+W
-         3Sq9m/aOshi+j/omm5uGlk+F4xnuJVkGiKDGRSGj8Z8D3jRmHHBAxUkAEvQdSOMpJFjN
-         hx2R57sY+uOKP/NcU0+YepaXiVi4flygCZJ0eJXlUiMz5kX6KIsMyxNnBeDjc3KpBNfD
-         IEoN6NJnosFX8vsfFJsiU3l+0B0r57agINmVGyzzXmgA4VhGUfO1FiNrvgHUJJFBVeol
-         53Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682611049; x=1685203049;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLGlH+T2fjU4T6lhxmZEwqY6pXWUkubYT9KEtdeRnhQ=;
-        b=h1aw5ZWwTAkWlq4yq7xdLSibRVzXnuC0Nyfl181sxrXgBOJclkUmJ7nqwAp3qcwC+r
-         qy0gTQt1vUZDG2sjb5svPmog7GiLMJYr3MHjBrrLbULCAbyLucVOo/VO1h5cqju2Um6i
-         bibdVbCkF0COXJTQINb0BKNfvpU8Xo8bupDc6TxNApWquQdl0DJGnBkAQbpjNqSzEKUZ
-         dE8KN+WKj/wnx5ihUnnbKp5gcXDQW3myokfuJSsifJX46jYU2Vrf23cDBaDuExhlI/2B
-         4r5SL7mZd5//dI+v2WVMNUxOSZnGcQsdJ7p9ySkJ0jNUWx34OfElbw/4OUPaU8Ovo9MN
-         zi8Q==
-X-Gm-Message-State: AC+VfDzd8Z37r6elNaQQLlhgZqAGUQuejR64MWewGwoTLVHBE99lxlUG
-        g4nGuy8v70gy5jBdkLafu7Clzw==
-X-Google-Smtp-Source: ACHHUZ5ng0m/bjG83RfQXfWcg608zuGJFMPzf7hkRgBQpApiE9pLag/zs0fHIXpFyYd0om4aXI6jmw==
-X-Received: by 2002:a17:906:fd84:b0:94e:d72b:d10c with SMTP id xa4-20020a170906fd8400b0094ed72bd10cmr2276022ejb.40.1682611049258;
-        Thu, 27 Apr 2023 08:57:29 -0700 (PDT)
-Received: from [172.23.2.5] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id n25-20020a1709062bd900b0094fa472a7c4sm9905981ejg.161.2023.04.27.08.57.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 08:57:28 -0700 (PDT)
-Message-ID: <a1a4f31e-b591-498d-d99e-872661d154d1@linaro.org>
-Date:   Thu, 27 Apr 2023 18:57:27 +0300
+        Thu, 27 Apr 2023 11:59:41 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FE9F9;
+        Thu, 27 Apr 2023 08:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+        Resent-Message-ID:In-Reply-To:References;
+        bh=Cuucxv7D/U/64Bqs7uWjVu3OA9YWTZvXVvV+4QELO6Q=; t=1682611180; x=1683820780; 
+        b=B5Binqu88hbf3CBRFF0zAu3u6eA/cgIo5oaHBcOa8Sm1CmCAIrrgW1k9P+U+G8EZnom8VEF/1uj
+        aP45T570CoJ+h/YnbGpC/C39gqrS0RixK/BAMN+59ZBMhNOzTd6KdfFeMu76wG3DsNhEqD/bmLjJv
+        Wsi5114MfdzWF8ktrzBCXhT70Y+GbSWeJDihA/V0ZE6TXRWq4HRq1thHSZ+Pa13g45m4OlfAz1YjK
+        mAN23mqHe3A8jhhghUfFQ6KiK8ia7jdjZbulFcbAbzAJDYiVKK+KnA8CGTabpEKHouDXp4ACZrbWM
+        8AepqrFXFj1Nx5SoaQ0vluz6cdlBwaOjRqOQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1ps41k-00AJvd-1D;
+        Thu, 27 Apr 2023 17:59:24 +0200
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH] tracing: ring-buffer: sync IRQ works before buffer destruction
+Date:   Thu, 27 Apr 2023 17:59:20 +0200
+Message-Id: <20230427175920.a76159263122.I8295e405c44362a86c995e9c2c37e3e03810aa56@changeid>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 3/4] drm/msm/dpu: remove GC related code from dpu
- catalog
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
-        marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230426192246.5517-1-quic_abhinavk@quicinc.com>
- <20230426192246.5517-3-quic_abhinavk@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230426192246.5517-3-quic_abhinavk@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 22:22, Abhinav Kumar wrote:
-> Since Gamma Correction (GC) block is currently unused, drop
-> related code from the dpu hardware catalog otherwise this
-> becomes a burden to carry across chipsets in the catalog.
-> 
-> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Link: https://lore.kernel.org/r/20230421224721.12738-2-quic_abhinavk@quicinc.com
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 4 +---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 6 ------
->   2 files changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 03f162af1a50..badfc3680485 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -91,7 +91,7 @@
->   
->   #define MERGE_3D_SM8150_MASK (0)
->   
-> -#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC) | BIT(DPU_DSPP_GC)
-> +#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
->   
->   #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
->   
-> @@ -449,8 +449,6 @@ static const struct dpu_lm_sub_blks qcm2290_lm_sblk = {
->   static const struct dpu_dspp_sub_blks msm8998_dspp_sblk = {
->   	.pcc = {.id = DPU_DSPP_PCC, .base = 0x1700,
->   		.len = 0x90, .version = 0x10007},
-> -	.gc = { .id = DPU_DSPP_GC, .base = 0x17c0,
-> -		.len = 0x90, .version = 0x10007},
->   };
->   
->   static const struct dpu_dspp_sub_blks sc7180_dspp_sblk = {
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index 71584cd56fd7..e0dcef04bc61 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -127,12 +127,10 @@ enum {
->   /**
->    * DSPP sub-blocks
->    * @DPU_DSPP_PCC             Panel color correction block
-> - * @DPU_DSPP_GC              Gamma correction block
->    * @DPU_DSPP_IGC             Inverse gamma correction block
->    */
->   enum {
->   	DPU_DSPP_PCC = 0x1,
-> -	DPU_DSPP_GC,
->   	DPU_DSPP_IGC,
+From: Johannes Berg <johannes.berg@intel.com>
 
-Don't we need to remove this one too (in the previous patch)?
+If something was written to the buffer just before destruction,
+it may be possible (maybe not in a real system, but it did
+happen in ARCH=um with time-travel) to destroy the ringbuffer
+before the IRQ work ran, leading this KASAN report (or a crash
+without KASAN):
 
->   	DPU_DSPP_MAX
->   };
-> @@ -433,22 +431,18 @@ struct dpu_sspp_sub_blks {
->    * @maxwidth:               Max pixel width supported by this mixer
->    * @maxblendstages:         Max number of blend-stages supported
->    * @blendstage_base:        Blend-stage register base offset
-> - * @gc: gamma correction block
->    */
->   struct dpu_lm_sub_blks {
->   	u32 maxwidth;
->   	u32 maxblendstages;
->   	u32 blendstage_base[MAX_BLOCKS];
-> -	struct dpu_pp_blk gc;
->   };
->   
->   /**
->    * struct dpu_dspp_sub_blks: Information of DSPP block
-> - * @gc : gamma correction block
->    * @pcc: pixel color correction block
->    */
->   struct dpu_dspp_sub_blks {
-> -	struct dpu_pp_blk gc;
->   	struct dpu_pp_blk pcc;
->   };
->   
+    BUG: KASAN: slab-use-after-free in irq_work_run_list+0x11a/0x13a
+    Read of size 8 at addr 000000006d640a48 by task swapper/0
 
+    CPU: 0 PID: 0 Comm: swapper Tainted: G        W  O       6.3.0-rc1 #7
+    Stack:
+     60c4f20f 0c203d48 41b58ab3 60f224fc
+     600477fa 60f35687 60c4f20f 601273dd
+     00000008 6101eb00 6101eab0 615be548
+    Call Trace:
+     [<60047a58>] show_stack+0x25e/0x282
+     [<60c609e0>] dump_stack_lvl+0x96/0xfd
+     [<60c50d4c>] print_report+0x1a7/0x5a8
+     [<603078d3>] kasan_report+0xc1/0xe9
+     [<60308950>] __asan_report_load8_noabort+0x1b/0x1d
+     [<60232844>] irq_work_run_list+0x11a/0x13a
+     [<602328b4>] irq_work_tick+0x24/0x34
+     [<6017f9dc>] update_process_times+0x162/0x196
+     [<6019f335>] tick_sched_handle+0x1a4/0x1c3
+     [<6019fd9e>] tick_sched_timer+0x79/0x10c
+     [<601812b9>] __hrtimer_run_queues.constprop.0+0x425/0x695
+     [<60182913>] hrtimer_interrupt+0x16c/0x2c4
+     [<600486a3>] um_timer+0x164/0x183
+     [...]
+
+    Allocated by task 411:
+     save_stack_trace+0x99/0xb5
+     stack_trace_save+0x81/0x9b
+     kasan_save_stack+0x2d/0x54
+     kasan_set_track+0x34/0x3e
+     kasan_save_alloc_info+0x25/0x28
+     ____kasan_kmalloc+0x8b/0x97
+     __kasan_kmalloc+0x10/0x12
+     __kmalloc+0xb2/0xe8
+     load_elf_phdrs+0xee/0x182
+     [...]
+
+    The buggy address belongs to the object at 000000006d640800
+     which belongs to the cache kmalloc-1k of size 1024
+    The buggy address is located 584 bytes inside of
+     freed 1024-byte region [000000006d640800, 000000006d640c00)
+
+Add the appropriate irq_work_sync() so the work finishes before
+the buffers are destroyed.
+
+Prior to the commit in the Fixes tag below, there was only a
+single global IRQ work, so this issue didn't exist.
+
+Fixes: 15693458c4bc ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+ kernel/trace/ring_buffer.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index af50d931b020..271997076029 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1778,6 +1778,8 @@ static void rb_free_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)
+ 	struct list_head *head = cpu_buffer->pages;
+ 	struct buffer_page *bpage, *tmp;
+ 
++	irq_work_sync(&cpu_buffer->irq_work.work);
++
+ 	free_buffer_page(cpu_buffer->reader_page);
+ 
+ 	if (head) {
+@@ -1884,6 +1886,8 @@ ring_buffer_free(struct trace_buffer *buffer)
+ 
+ 	cpuhp_state_remove_instance(CPUHP_TRACE_RB_PREPARE, &buffer->node);
+ 
++	irq_work_sync(&buffer->irq_work.work);
++
+ 	for_each_buffer_cpu(buffer, cpu)
+ 		rb_free_cpu_buffer(buffer->buffers[cpu]);
+ 
 -- 
-With best wishes
-Dmitry
+2.40.0
 
