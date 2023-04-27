@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7D96F088C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F936F0890
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243928AbjD0Pnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S244205AbjD0PoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243577AbjD0Png (ORCPT
+        with ESMTP id S244053AbjD0PoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:43:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D7D2D72
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:43:33 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682610211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=awrbgIW45PNieWkz8I2v7ZUyJUo+zTbm6E/Z9tnMn0Y=;
-        b=feyS+KwuzOzf3l1QlKmNBa+DlMCV0miXNy63x5rqsVwf7XZoSGiGdbp7rUpFcvI9Y8r/UD
-        /waqBEWpBSSs1Gkf6w2eO1dXbJHRUiSfvxRh2dDQir7bAnQ3mT1qv6lsBWSIw0INEbiNbj
-        HHQsBfwpHR70DRS3bI6AYnj1PjM66iFjKYiVaSnlPIld0k2gcOfM4whmNdfC7OA5a5GZEP
-        v4g9wKNmAxY7BwX7VR7Z+pQn45SM7wRi+vivtGQlFU9xtPJpjnI7JKNfY474ZkMRKiOSzT
-        g8sNd+i+HPq9exLbaqaVQKv756lWM9HYHlhe9U0f9xp7kqchdTt3kQyl5S92+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682610211;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=awrbgIW45PNieWkz8I2v7ZUyJUo+zTbm6E/Z9tnMn0Y=;
-        b=v42dA3cWhm79e2PenfciUfCffPUm8apaRhrt1hq1oUNUBvl/z6iAVOE6fP4tuBNIfW4EzH
-        ODC/YnjDEClxFNAg==
-To:     Petr Mladek <pmladek@suse.com>, Chris Down <chris@chrisdown.name>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v5 2/2] printk: console: Support console-specific loglevels
-In-Reply-To: <ZEp9dXwHCYNPidjC@alley>
-References: <cover.1682427812.git.chris@chrisdown.name>
- <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
- <ZEp9dXwHCYNPidjC@alley>
-Date:   Thu, 27 Apr 2023 17:47:26 +0206
-Message-ID: <87v8hhs57d.fsf@jogness.linutronix.de>
+        Thu, 27 Apr 2023 11:44:15 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195562D79;
+        Thu, 27 Apr 2023 08:44:14 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-74e4f839ae4so278062485a.0;
+        Thu, 27 Apr 2023 08:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682610252; x=1685202252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kHbAq1O9z0Wcn8EPpd+xHP4DyQMv3MaGeXxm3nCZwNY=;
+        b=ITpfC+kb5HXI/KphoMSBMMYdDdKWv0mTqPLKVbQppwV1CacAEHP3eU3bsv86IigRku
+         Y81tDPNoQaonec5bSWbN2Rlc9KBlhZ8ovOL5ptwG+Mcfh7JZcAmFTdDXLEpNztIDSpv6
+         8QBm6UKb1sYV1PynVLyxpd9B34aO7PyID3888bRR/+hFFgximY+MmvF2trWC9fRcq5pN
+         EGbfhqAZ37TNbaWG97C9QJXlKO9ihDH7a2TBmXTeNybbW1LZBrMM5eWuI092evcTT7nh
+         DviiAATtFLwcvjbafZfK68FjjfLs3JEPw8/1rG28fnIR064L/VjWYtB9Unp97euzCghw
+         nGCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682610252; x=1685202252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kHbAq1O9z0Wcn8EPpd+xHP4DyQMv3MaGeXxm3nCZwNY=;
+        b=dUXJdchO28/1Hm3m+ZU3RrCsumUBe4o6OBP4acXeP+1RXlJDNngKT5gSAW3WbAtpdE
+         E26wGiB91A7QwbWWbyLLuq+bP/JZu1oyfqLx4RWdo6DU0QJoJSIZbL5Bt+4QmD8GMYJx
+         2p3GTuddzXKrD+mMGjbcNQRIg6ilvwArnsWDMdE0dbLeYZL6Np/FFR+r6FepKafSB2QK
+         oYjADbVxT1vUdqPJK+8VynraZ1HpNg4PB0XrUnXoj5VEfLGERHALIn37vCYVTt0FVTNC
+         YCkaLuaHT9Kj8xwh1DB8yX5fZnmxX/OlaSF988q41o45mF/CtSgTqPXcEUO0CdDoTJNX
+         2PHw==
+X-Gm-Message-State: AC+VfDyzVjaiJLI/7AhS+qRvUznyTHQSaK4572GmmWRnR7SsPsFnvPnr
+        Hgjyaqkq/eeqyZZyGOLJHYfh9eRd+32iD4n1+MOIpmGZx2E4Lw==
+X-Google-Smtp-Source: ACHHUZ7VGygoieYEkehgwxL7Nf/soDd68XTcv+ZYPCEL6TiPEIuOu//8N0BojGP+QyyPanU3toYTPloQ3bUlWGO9Ukw=
+X-Received: by 2002:ad4:5b85:0:b0:56e:a96b:a3a1 with SMTP id
+ 5-20020ad45b85000000b0056ea96ba3a1mr2702601qvp.7.1682610252270; Thu, 27 Apr
+ 2023 08:44:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
+ <20230427092628.21fd23e4@gandalf.local.home> <CALOAHbBX1C-eg93Hf3xPLsdsaBzoGn1pHh9jb3Z_-T-7HD60wA@mail.gmail.com>
+ <20230427111842.2e40fe3c@gandalf.local.home> <CALOAHbDRSNvihv5n0jJpAsK3onezRRipO78RG3rAf3LGgkzYHg@mail.gmail.com>
+ <20230427113602.0e49c0d1@gandalf.local.home> <CAADnVQLaBMtBoSY4ZMgeTU1T-rrU6vPSU+xg1HmQpWnnE84sNw@mail.gmail.com>
+In-Reply-To: <CAADnVQLaBMtBoSY4ZMgeTU1T-rrU6vPSU+xg1HmQpWnnE84sNw@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 27 Apr 2023 23:43:35 +0800
+Message-ID: <CALOAHbCvZP1-x7Uc39zUFgLdxxvZUVPY9Eh6bL2vjDx_BZSyug@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,74 +83,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-27, Petr Mladek <pmladek@suse.com> wrote:
->> @@ -2764,7 +2982,8 @@ static void console_prepend_dropped(struct printk_message *pmsg, unsigned long d
->>   * of @pmsg are valid. (See the documentation of struct printk_message
->>   * for information about the @pmsg fields.)
->>   */
->> -static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
->> +static bool printk_get_next_message(struct printk_message *pmsg,
->> +				    struct console *con, u64 seq,
->>  				    bool is_extended, bool may_suppress)
+On Thu, Apr 27, 2023 at 11:39=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> @is_extended has to match @con->flags & CON_EXTENDED. It would be
-> ugly if the API is not used correctly and they do not match.
+> On Thu, Apr 27, 2023 at 8:36=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
+rg> wrote:
+> >
+> > On Thu, 27 Apr 2023 23:23:31 +0800
+> > Yafang Shao <laoar.shao@gmail.com> wrote:
+> >
+> > > > But I thought you can run a bpf_prog from another bpf_prog. So you =
+don't
+> > > > want to prevent it. You need other logic to detect if it was not su=
+ppose to
+> > > > recurs.
+> > > >
+> > >
+> > > If so, we have to keep the prog->active to prevent it, then I'm not
+> > > sure if it is worth adding test_recursion_*().
+> >
+> > I thought that the whole point of this exercise was because the
+> > migrate_disable() itself could be traced (or call something that can), =
+and
+> > that's outside of prog->active protection. Which the test_recursion_*()
+> > code was created for.
 >
-> Also the "may_suppress" value might be guessed from @con.
->
-> I see two solutions:
->
-> 1. If we pass @con then @is_extended and @may_suppress parameters
->    are not needed. The values might be guessed. The logic is
->    the following:
->
-> 	if (con) {
-> 		is_extended = console_srcu_read_flags(con) & CON_EXTENDED;
-> 		may_suppress = true;
-> 	} else {
-> 		/* Used only by devkmsg_read(). */
-> 		is_extended = true;
-> 		may_suppress = false;
-> 	}
+> Not sure where did this come from.
+> migrate_enable/disable were added to deny list back in 2021.
 
-This is correct, but we also need to keep in mind that the caller of
-printk_get_next_message() also needs to know if it is extended, so that
-it can know if it should prepend the dropped messages. Although I guess
-it doesn't matter if the caller is also reading @con->flags to get the
-extended status.
+Hi Alexei,
 
-I don't want to move console_prepend_dropped() inside
-printk_get_next_message() because then printk_get_next_message() would
-be modifying @dropped. The main purpose of printk_get_next_message() was
-to locklessly get formatted text, thus simplifying the atomic console
-implementation.
+Don't be uneasy.  It is not good to play word games.
+What Steven really meant is the preempt_count_{sub, add}.
+Anyway thanks Steven for the help with this exercise.
 
->    The drawback is that @con->seq and @seq values might still
->    be inconsistent. But the @seq value must be passed explicitly
->    when called from dev_kmsg() and @con is NULL. Also the explicit
->    @seq parameter will most likely useful also for the
->    con->atomic_write() callback added by John's patchset.
->    The atomic consoles will not use con->seq at all.
-
-Correct. @flags and @loglevel are the _only_ fields that may be read
-locklessly.
-
-> 2. We could pass @con_loglevel instead of @con. And pass it to
->    suppress_message_printing() instead of @con as well.
->
->    It is probably cleaner solution but the many parameters suck.
-
-We would need to pass console_effective_loglevel(). But yes, 3 separate
-parameters when they could be determined from 1 sucks.
-
-> I would personally use the 1st proposal and live with the fact
-> that the function would ignore con->seq and use the passed
-> @seq instead.
-
-Whitelist: only @flags and @level may be read
-
-I agree that we should go with your 1st proposal. But I would like to
-see some comments added into printk_get_next_message() that only @flags
-and @level may be considered valid.
-
-John
+--=20
+Regards
+Yafang
