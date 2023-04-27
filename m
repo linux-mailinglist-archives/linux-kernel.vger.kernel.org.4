@@ -2,223 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0B56F0350
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7F96F0355
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243317AbjD0JXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
+        id S243269AbjD0JYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243295AbjD0JXL (ORCPT
+        with ESMTP id S243267AbjD0JYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:23:11 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A772D76
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:23:03 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b7b54642cso5870533b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682587382; x=1685179382;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b4tmAtbJaHWfTAbFkdGyP1UUwCahMULqyPQK3zTjGzc=;
-        b=YRR8+nwiwBRWdu+ISCLSUieKCxjJzKGl6+oqhEO/3BRqOIOSZ8Qko6ouC9u7p2HpTX
-         gdnzmSG1RwEXmBdnDiO0OZMpDHopOb7UfbKa85eHey0TP0gQd3q1yv1tTPeaxeWx2qIu
-         kY2Mj84whu79JeOW5KjI+dW1EjDkrG8S/u0DbgVxwLqXWdjQfebgAN//TuFJsvpHCzMe
-         WdXHvCJQVo9P4UaFl9zY0C7wB0iXNSnzvnt4mHaUmyeayfGP7okRyh6CZxuwWIpMngbd
-         bYPmen8R4y4/TyTosIADLMAPn3mwYVLIBKA0NA7bBzvfqscFUwnmsFtr4siJ+1x47S6b
-         7PJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682587383; x=1685179383;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b4tmAtbJaHWfTAbFkdGyP1UUwCahMULqyPQK3zTjGzc=;
-        b=XemcgRRscD1lh4TSxLYTZAm2/pkCDhHCq9xM768YOdCbQNiJt5KJ65Aolcr9H+Y5JQ
-         tW0kS2U5o1FRnZGe5GZc70rQZkFUhyl+PUMBwKyEgfeu789rohht/3jeylOShSSb6Pqq
-         5O3n2OausM7lWXGFeCBFxebTB9re9RPEa1iiN6HakncQ1PcdheXuP7xDtsDUZgFEft29
-         AJ81sZAbPemrBdfh3v8OSlzmkU3Opkp+YF9zPiWoDGu2gcbfof8uUtffSGLJFQ4JdnyO
-         nJajzHrC+reXNqevZQ9Zg/0KbTiiEVq9I8NOz9HWV9P2plKv9USeuQO2mG2XzEHfrjh9
-         U9CQ==
-X-Gm-Message-State: AC+VfDyaoT4nEcztFohk+O9pRVAJQ0/OGDW5zbaSEI6MSvzspEf8D9sP
-        3jcyXq7Ye1MWS/GlqIHSDg1qsA==
-X-Google-Smtp-Source: ACHHUZ7RWci9fHcfj1Kz5md3jazQZh7oA/8a9iSA8EEYdE24w8faCyvnC3O4ecPFfRxC69G0cl789g==
-X-Received: by 2002:a05:6a00:22ca:b0:63b:5c82:e21a with SMTP id f10-20020a056a0022ca00b0063b5c82e21amr1814185pfj.1.1682587382560;
-        Thu, 27 Apr 2023 02:23:02 -0700 (PDT)
-Received: from sunil-laptop ([2409:4071:6e90:4e5:b276:2557:8da6:6c7e])
-        by smtp.gmail.com with ESMTPSA id i66-20020a62c145000000b0063d318699f9sm12712205pfg.48.2023.04.27.02.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 02:23:02 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 14:52:50 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, corbet@lwn.net,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, Marc Zyngier <maz@kernel.org>,
-        luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
-Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <ZEo+6rwM+c6DvlMM@sunil-laptop>
-References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
- <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
+        Thu, 27 Apr 2023 05:24:10 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2139.outbound.protection.outlook.com [40.107.117.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79F6DE;
+        Thu, 27 Apr 2023 02:24:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V4lfbJ+N7UxsrqW21HoDC+YHG+BOQ+yk8BgWsAWZ6wp/UAy38pPEpmk7JUS4jCrygo2iB+oYJHMSfQktVOwteSj0SlwgycsUeXn32/tg+/hyROZVxBM+5VUGDYJY0R1imlA90mp7m4SAfrV1S1Ebxxl8mFClOq2pziytrFBwCqzOTYl1dsBTVaPEkqJ8Jiz5QR/i0q6HuPXTf1iB4C3EgBAzd29Fe4FoboeZj65pV3uEUPEhQgnS+F3IG5HKNskpUhSpfYkkDGXjAkBzcQ/J87jbzgd42D6gkXNT8fuEtHaHTKfn8g8X3GrSgGvxi4C8n3IZYTN1uUms/LpamCodIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EEAP1kd7Gsw1rT1BL/l1C3KIcmxNeczLhoxFAmhvXSY=;
+ b=iKABgnLedcBlCns1ke5yR0At3Ak7x/RFTlASeDA9BYPA8jtfgpKJg1BVpOfkIBkkKQfGytdyLAFN8PfvdxV1JgcyEGUSL09wYW0ZIe+50eqQulUBkyOdSzX7B4GHynxSohdWZel/jDYhcMy/XpP3HZQTIBSduS/zDzVJkwH1HkBOz0PEkutDli7EPPedsW41OAmNNxNE2nM3elCV0p1tN/88Ssg6Qiq+IL10hHhaWuSOMsXS4abY+G1RTvk4ZA7nRzMM+8uSEeY+GU7rleGcnyalEhGV5fNR/9htV7Q1lk61YeP+AG+9V100YTfZOeGe3O924TOMvVRBDobdEjTqBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EEAP1kd7Gsw1rT1BL/l1C3KIcmxNeczLhoxFAmhvXSY=;
+ b=gputZezqqWwLvtwVbtCQq9UnmP9HQaMJyM0zqTQAMIKTukhtocgJo/BzUiuZi3rFT/j1hDPDOSZrCN8adLqnkkTZ0WgqgILkw4UoEI5oTcB+BttAk4W39VUGFjQAfUlE4G2Pvn0j35+Q1nfRETgRHffD3TBXvck1kqqP0wtl7+Tzcv/y0QGqTQxdJ5Rr1oKptfeJ6H6twKNGZ9AjOVoSdkFYwSOJ84N6la36frtDQWkQEvqgtxRPbEmSJkP7hnhBiSiYE/sHyIeByictvuXdqHXXuxSmPRvPFGv5oE/rbutEBENSzFfdpM4OsgiV0QZpEOJzbATTq8AYoob8J+lQdQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from SEZPR03MB7033.apcprd03.prod.outlook.com (2603:1096:101:e2::14)
+ by TYZPR03MB5648.apcprd03.prod.outlook.com (2603:1096:400:56::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Thu, 27 Apr
+ 2023 09:24:04 +0000
+Received: from SEZPR03MB7033.apcprd03.prod.outlook.com
+ ([fe80::9d77:7adc:25da:b086]) by SEZPR03MB7033.apcprd03.prod.outlook.com
+ ([fe80::9d77:7adc:25da:b086%3]) with mapi id 15.20.6340.020; Thu, 27 Apr 2023
+ 09:24:04 +0000
+Message-ID: <dec4ab5a-acee-6dee-b4b9-edcd677c5cae@amlogic.com>
+Date:   Thu, 27 Apr 2023 17:23:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 1/2] arm64: amlogic: add new ARCH_AMLIPC for IPC SoC
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     =Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230419073834.972273-1-xianwei.zhao@amlogic.com>
+ <20230419073834.972273-2-xianwei.zhao@amlogic.com>
+ <20230419131416.cns3xvkbzjeyrnux@CAB-WSD-L081021>
+ <661cea17-a4dd-75d1-6a7e-16efa5aea52b@linaro.org>
+ <20230419160405.d7qfir3nv6tlxx2a@CAB-WSD-L081021>
+ <427e79ef-156d-027e-9296-6f4e6513a04d@linaro.org>
+ <20230419170043.auzfa32weevmrt4e@CAB-WSD-L081021>
+ <1c7322c9-8d2d-1cd1-95dc-dd9ec861981f@amlogic.com>
+ <a28766ff-39aa-7e10-394a-6f4db524fff9@linaro.org>
+From:   Kelvin Zhang <kelvin.zhang@amlogic.com>
+In-Reply-To: <a28766ff-39aa-7e10-394a-6f4db524fff9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:4:195::20) To SEZPR03MB7033.apcprd03.prod.outlook.com
+ (2603:1096:101:e2::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR03MB7033:EE_|TYZPR03MB5648:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb52faf7-7b63-4d67-20b4-08db47012513
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BcECIMN8/Bqi6Kq0KY1k6f2Tt1lSKcSgfpbwIFYCO7VwhdWh9a/huzcMT/+E3Wz7PZAq1vbkHI0KfTo0q+oStsvG43D3rMIMMrk4f7AOupw9YNslvJEhmu8WT8oXEOIedM6R/f+uv6foAULktDVDzfXzdt5ArziofSBtBtHysGXELT9h6KOgcE3LNkkJKETtzy3fTjTGs08b9K8hFKQ7NJwo0nqhlSKh+sAr+S5vF4IWWeXR0aJw87lxKpr7y+NcErneBwNg03rVPvwb7NC9yu86dF42z6+Xzbfd7jjvnE6LXVsSMzaJlmZR/Loatu++u+LmavmNigoHL5sGJwOLj4pIxKpX5MFW8mM5N3J4F1iShWjS3Wwzet1rlmVcEUpHhT9jBJokiN2kdR1nBaIThrWpEmS3+bUuG4P8uUtyWkLH/Qnl/Xyn3Ek7ern3N466H1qq9ghKHaY5rHTd+d6C2d/rQvUdWMheWSqX9QRValfzrLOnkrb4bdj8LskcXk7bbyJmsmZ/6JtSb4xa6w/l3EoEpcMg8ILzIQK5xKfFL1DLbYyLCK9bL56UhWTcDqsfuKJDc4NtkgUFDx78jfCnD6y1OVrIbNuSJAxO40JnJ91msJPIQGo4aZQEmo/TnBIvMnel6tAyiTXg7abyYBDP3w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR03MB7033.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39850400004)(376002)(366004)(136003)(396003)(451199021)(44832011)(38100700002)(7416002)(5660300002)(2906002)(8936002)(8676002)(36756003)(86362001)(31696002)(6486002)(6666004)(26005)(6512007)(6506007)(54906003)(478600001)(2616005)(186003)(31686004)(66946007)(66556008)(53546011)(66476007)(316002)(41300700001)(4326008)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bDY3b2FoMGU3bmQxSEMvUFU4YkF3eGM3UEVwODBweGdkYTBweDQ1RXBrYUp4?=
+ =?utf-8?B?Q1g3SGJ0U2pJOUkrVWZvSHB1TWtsQXpybmRGV2QrcVRZa1JNcE9SWGZNOFFw?=
+ =?utf-8?B?Nk9WNmMrR3R0dm9LTkpMdVZUUmd4emg3cU5SWXVRQWtIazVGYzk3WXlIbENN?=
+ =?utf-8?B?dGZETjJocXMydXBRRVN0cWdpOFQ1LzdGWDMzRG9zcGRoaDZ5M3F3MHlMbExh?=
+ =?utf-8?B?SDQ0R1dYTjFxNW4xWXB3VGRmUHl1clVLc2xGMDFPT1BQOVBvMUVkeEpjL282?=
+ =?utf-8?B?VG0xeklWRzk1QlIrcUVqK3ErR010K2lQcXdvUkRjak5xYWZZQzNydyt6dklq?=
+ =?utf-8?B?WkJ0YU1PLzl0MUJQaitRb0xsOWdUcnprM2VLZGlTWEtWeDhZZFVlcWJmNm5p?=
+ =?utf-8?B?cjdYNFJrcmkvU0orakpTUmpBYllQWWJuWDdNS05WSWY5a2ZUNEZRays1WDNR?=
+ =?utf-8?B?ejY3alRXdWE3bjJuMTM0aVJXNGtiZS9kbWYvR1g1dktIRm5NbWxiM00yVnJH?=
+ =?utf-8?B?U2RnSk41SmxWRTdWNEYxVWZYcUtxSmJydGdoMDJLamI0ZmtoSDdOTlBBL1Ru?=
+ =?utf-8?B?am52eGpkdkJ4UHpMTW1COHNxVmg1UEhJaEhpVUcweVFSQTRmMlJQQU1RemZw?=
+ =?utf-8?B?VkpmWENBcnRNV2U1Y1NTNThhYm5rOFFGU1lLeUVka24rQTBtV2VjdUNpdzEz?=
+ =?utf-8?B?UmJuc3oyblhZVHhLdUhJSzhJdklPeGpta2lwdmJ4OFExUUgzeGJuQnVOMThF?=
+ =?utf-8?B?K21NbGE3L0NZSG9yaHhpb3QvM2tvNUxhSzYwS1BCUGU2QW5Nc3gyYTgwaGl6?=
+ =?utf-8?B?SUFSQ1g5TUtYdXMyUXIydVI4YXdtNEcveHh2MTJiTTI0YWM3Vis3dHRwQlVB?=
+ =?utf-8?B?MkV5Nk1aeURSRElFWmVITkRrV25NazFyVGZwWUNCTzBnbitHOWdteVpJN1FJ?=
+ =?utf-8?B?aTZlcjFYRzk2QUJTWEFQVzNzU2MxNU9qTjgzaHRDMVZQMlBhS2xzVVZNWGVB?=
+ =?utf-8?B?bkJLZkEzLzVGc2ZLbEJiMHdPSDgvZTNUemo0azlvSDlaNm84YnhiV0M4OXU3?=
+ =?utf-8?B?MmVSU285YnR5Ync0SGQvTGxWVDFoUXByYUQxOHk2NW5jdXlYcEFUVWlGS1Vq?=
+ =?utf-8?B?d2VqZ2djRUZkMGNDNWtYMnpvTEtTNWFwYURJdkNQNmlFeXRSaDVGZnYrUXpm?=
+ =?utf-8?B?Z05aMG5qRi9ZQVEyeWliUzgxM3h3NjdESjFTS09lNFFscWwxYmFPQlBxNWk1?=
+ =?utf-8?B?NlM5QXA4alBSTTNsRklzbWRKN0hZd21qekZLblg4R2ZHMzVMZmZiaHdMaHBB?=
+ =?utf-8?B?N28xVFN5WGlSWCtHMVVKMjFFZXQ2ZS9kbHJrZDBady8xMHRNMWQ5VVliZTAr?=
+ =?utf-8?B?Y2ZRK0ZtdWU0QjdwZmtpYWtNRmoyc0pCcWlWZWdpejVpcDJ6UGNxTHF4VnRh?=
+ =?utf-8?B?cHFwVC8zUDNkZGZCVTJIMk8wZU5vaFJjTXk2aFkwOEI2YStIeERET0JrNHhW?=
+ =?utf-8?B?OWpvSVNWdHdZd1pDQ2VkeUxQbzNDVVdjZGFGWWRyYTJsUVN0YlRoZFpSTjU2?=
+ =?utf-8?B?OG9PSWhZOGp4SUQybEgwMWIxdWJCVmxXT3JHV09OcUI0Rm0zQlBlNnRSWER0?=
+ =?utf-8?B?aWcwcXVSdVE3L0RHUkxBTTlOQnMrK0FFT2ZvcmdzMnZta0piaXAxNWtTb1hQ?=
+ =?utf-8?B?Sy9nSkg4VGVPdGhIRmUyK0F4bEVuT01BZjh6Ym9sRzUzY1NjeG02Wnd6cVNU?=
+ =?utf-8?B?SEsrNkVFczJLb2hxdWhzb3puWjlwQ1ZFOW1PTEdtUTRpS2hUSU9PZ3hmNnFz?=
+ =?utf-8?B?emluaFRBMFdmNCtDSjJSUUtldDNOZUE0dlNNWm81d1dVM2FwYUtJOHBBa3hN?=
+ =?utf-8?B?allDUWRERVlzUXd5VVAvK0NBSW1mY0dhV0t0d3FNbzZ0UnVmdEN5R0F6d25V?=
+ =?utf-8?B?ODF0WWNkTHBGcGtTZjRLd1dncDlFRVRwOUFhY2Z2Z25udWc2MGVPQ2h3S3U5?=
+ =?utf-8?B?Qm1XNXFxdlJTN3g3Z2w0b0hFOWN5R25Hczg3bWRGMjJsZEwyT0FocUZsM1Fq?=
+ =?utf-8?B?ZXArMGhBTzZVZXR2QzhnaEZwaTNEN0prQW1RSXNUTjQ1cHUvMU1RdElCQ0Nk?=
+ =?utf-8?B?d2NMSXhVM21TUEhBRk9hZjFVR3RSY3cvNXVpS3BHN3BjbWZ0em82WkZGSTB0?=
+ =?utf-8?B?V1E9PQ==?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb52faf7-7b63-4d67-20b4-08db47012513
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR03MB7033.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 09:24:04.8213
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tF+L5m2/TxexDqDROlLUrHYtm/M8TRIXvEk0jQc4UDjdA7OxFQkUiP9FbviEIz2xrLBmafa2eIKB/MPYqdhPkYzVlPHL1qxYLTfsnhqhG3c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5648
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
 
-On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
-> On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> > RINTC structures in the MADT provide mapping between the hartid
-> > and the CPU. This is required many times even at run time like
-> > cpuinfo. So, instead of parsing the ACPI table every time, cache
-> > the RINTC structures and provide a function to get the correct
-> > RINTC structure for a given cpu.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  arch/riscv/include/asm/acpi.h |  2 ++
-> >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
-> >  2 files changed, 62 insertions(+)
-> > 
-> > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-> > index 9be52b6ffae1..1606dce8992e 100644
-> > --- a/arch/riscv/include/asm/acpi.h
-> > +++ b/arch/riscv/include/asm/acpi.h
-> > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
-> > 
-> >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-> > 
-> > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
-> > +u32 get_acpi_id_for_cpu(int cpu);
-> >  #endif /* CONFIG_ACPI */
-> > 
-> >  #endif /*_ASM_ACPI_H*/
-> > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-> > index 81d448c41714..40ab55309c70 100644
-> > --- a/arch/riscv/kernel/acpi.c
-> > +++ b/arch/riscv/kernel/acpi.c
-> > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
-> >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-> >  EXPORT_SYMBOL(acpi_pci_disabled);
-> > 
-> > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
-> > +
-> > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
-> > +{
-> > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
-> > +	int cpuid;
-> > +
-> > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
-> > +		return 0;
-> > +
-> > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
+On 2023/4/20 20:39, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
 > 
-> Unless I'm missing something, this races with CPUs coming online.  Maybe
-> that's a rare enough case we don't care, but I think we'd also just have
-> simpler logic if we fixed it...
-> 
-This depend only on cpuid_to_hartid_map filled up. I wish I could
-initialize this RINTC mapping in setup_smp() itself like ARM64. But in
-RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
-Hence, we need to initialize this array outside of setup_smp().
+> On 20/04/2023 10:43, Kelvin Zhang wrote:
+>>>>>>>> +config ARCH_AMLIPC
+>>>>>>> Do we really need a different ARCH for Amlogic IPC?
+>>>>>>> I can imagine that it's not the Meson architecture at all.
+>>>>>>> But maybe a better solution is just to rename ARCH_MESON to ARCH_AMLOGIC?
+>>>>>> It should be changed treewide, and is it worth it ?
+>>>>> As far as I understand, the A1 and S4 families are not fully compatible
+>>>>> with the Meson architecture, and we haven't provided additional ARCH_*
+>>>>> for them.
+>>>> The GXBB, GXL/GXM, G12A, G12B & SM1 are also not fully compatible,
+>>>> but they lie under the "MESON" umbrella which covers SoC since the
+>>>> Meson6 architecture. It's a facility to include/exclude Amlogic
+>>>> drivers/DT, nothing else.
+>> GXBB, GXL/GXM, G12A, G12B , SM1 and S4 belong to media box.
+>> So, "MESON" represents the media box series.
+>> Up to now, "MESON" works well for all existing chips except A1 and AXG.
+>>>> If you compare it to BCM or NXP, it's different situation, the
+>>>> different ARCH_* actually targets totally different SoCs from
+>>>> completely different Business Units or from companies acquisitions.
+>> Firstly, the new C series is totally different from previous MESON series.
+>>   From the perspective of application, the new C series is designed for
+>> smart IP camera applications,
+>> while MESON series is designed for hybrid OTT/ IP Set Top Box  and
+>> high-end media box applications.
+>>   From the perspective of architecture, the new C series integrates the
+>> sensor interface, image signal processing unit, Dewarp, video encoder,
+>> neural networking processing unit,
 
-I can update the code to initialize this from setup_arch() immediately
-after setup_smp() if ACPI is enabled. That should avoid the global
-variable check also. Let me know if you prefer this.
+These new drivers are still under development.
 
-> > +	/*
-> > +	 * When CONFIG_SMP is disabled, mapping won't be created for
-> > +	 * all cpus.
-> > +	 * CPUs more than NR_CPUS, will be ignored.
-> > +	 */
-> > +	if (cpuid >= 0 && cpuid < NR_CPUS)
-> > +		cpu_madt_rintc[cpuid] = *rintc;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int acpi_init_rintc_array(void)
-> > +{
-> > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
-> > +		return 0;
-> > +
-> > +	return -ENODEV;
-> > +}
-> > +
-> > +/*
-> > + * Instead of parsing (and freeing) the ACPI table, cache
-> > + * the RINTC structures since they are frequently used
-> > + * like in  cpuinfo.
-> > + */
-> > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> > +{
-> > +	static bool rintc_init_done;
+>> which MESON series does not and will never have.
+>> Secondly, there are C1 and C2 besides C3.
+>> Moreover, more other series are on the way, such as T series.
+>> If we always stick to "MESON", people will get more and more confused.
+>> Therefore, I think it is the right time to add ARCH_AMLIPC.
 > 
-> ... basically just get rid of this global variable, and instead have a
+> Your DTS uses compatibles from meson, so I would argue that it is still
+> part of the same architecture.
 > 
->    if (!&cpu_madt_rintc[cpu])
->        ... parse ...
->    return &cpu_madt_rintc[cpu];
-> 
-> that'd probably let us get rid of a handful of these helpers too, as now
-> it's just a call to the parsing bits.
-> 
-I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
-not caching the RINTC pointers but actual contents itself. So, the
-address is always valid. However, as per Drew's earlier feedback I am
-going to reduce one helper. I am planning to send the next version of
-this patch once 6.4 rc1 is available since the ACPICA patches are merged
-now.
+So far, this patch only contains basic peripherals, which are reused IPs.
 
-> > +
-> > +	if (!rintc_init_done) {
-> > +		if (acpi_init_rintc_array()) {
-> > +			pr_err("No valid RINTC entries exist\n");
-> > +			return NULL;
-> > +		}
-> > +
-> > +		rintc_init_done = true;
-> > +	}
-> > +
-> > +	return &cpu_madt_rintc[cpu];
-> > +}
-> > +
-> > +u32 get_acpi_id_for_cpu(int cpu)
-> > +{
-> > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
-> > +
-> > +	BUG_ON(!rintc);
+> Anyway, this is just config symbol, so it does not matter. There will be
+> no confusion and no problem of keeping it ARCH_MESON.
 > 
-> We should have some better error reporting here.  It looks like all the
-> callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
-> returned, so maybe we just pr_warn() something users can understand and then
-> return -1 or something?
 > 
+>>>> We should have named it ARCH_AMLOGIC since the beginning, but we
+>>>> can't change history.
+>> Shouldn't we deserve a chance to make it right?
+>>>>> In my opinion, it's a good time to split the Meson architecture into
+>>>>> proper subsets, or rename it treewide (maybe only config option
+>>>>> ARCH_MESON => ARCH_AMLOGIC).
+>>>> MESON is only a codename to differentiate from other SoC vendors
+>>>> because Amlogic used it as a codename for a long time.
+>>>> Compare this to Allwinner's "sunxi" or Qualcomm's "msm".
+>>>>
+>>>> This config has no functional mean, it's only a config namespace.
+>>>>
+>>>> Renaming it would need renaming it in all subsystems Kconfig/Makefiles
+>>>> and will certainly break builds with custom kernel configs
+>>>> in various publicly used builds like Armbian, meta-meson, LibreELEC,
+>>>> Debian, Suse, ...
+>> Let's get back to ARCH_AMLIPC.
+>> We just need to add ARCH_AMLIPC in the necessary subsystems
+>> Kconfig/Makefile.
+>> This change will keep the existing MESON related code,  and will neither
+>> involve renaming nor break any builds.
+> 
+> It is also not necessary and not justified. We do not have multiple
+> top-level subarchs for one architecture. We had such talks already and
+> there was no consensus to change it.
 
-RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
-for UID. So, there is no bogus value we can return. 
-
-Actually, I just realized this check is redundant. It will never be NULL
-since it is a static array. So, we can just get rid of the BUG.
-
+Got it.
 Thanks!
-Sunil
+> 
+> Best regards,
+> Krzysztof
+> 
