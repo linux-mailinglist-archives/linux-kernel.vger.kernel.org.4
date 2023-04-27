@@ -2,204 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98646F0BAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162D36F0BAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244293AbjD0R7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S244425AbjD0SAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243708AbjD0R7U (ORCPT
+        with ESMTP id S243708AbjD0SAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:59:20 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2046.outbound.protection.outlook.com [40.107.92.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDF53A91;
-        Thu, 27 Apr 2023 10:59:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a7DfTTt2lnLiamPjtmjVAQPixFZRv/iWHqCi7EARrMXYKXzJILBozIbTpuqvmJwTkV9ETBOSMoLJLaXiwyCRrGDdQrruupHVrzIOBNDdySYaJeTOpXMhnZm9Gf69ICcL0vxfHBJ4UbLcUGy1Cn9hxSZN/lODEh0WXQpB3lROutOelGESdcDCq9RlvqbxJl0PE6nBs7W+RWeiTN2CRn+E6ZYlIwuHucTLTYViBPIaODF26EfIT7N3YxnpP+yb3thkYyXlkRRQDhIan/gXzJ4OL3vrmC2kT9tz2TXa/TNHJpp92KY2qfaDxhMY754+pIzB3bxWiMxTDXurJFptJtsabg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DIUqSxTOMAtKAepGZPw+pOk9t7NryFZndtTZ8aZ7Q+Y=;
- b=UrXQpSgxtmVoQSOTKa7JmO3opYOd3cFPMAdXWZHnoaSl0nA2CrUhpZxez/DyKpSduDHsNU4h+Z0p+8SI8+4v0013LMf6IbpW7kpvTcZb3xC7uMarX+zSB1PpaFxBkisc0bQBFO/G+UH2p+wyZILXVhYq0hZlcHSBDYnAkwcE5t7oCu+ZPzir0L2pLI6/cZUB00wxU027EKgwjQwsMGSVLje4/1ziJbsThV23mjYd00qbGZEA5KbSkQVo8//jIzazhqq62iZ5gdqkU386h3cxfclIkf526OQdIJu17nKn6cmWvYVm8zqU7JLKowH4zAgoZ84/syRdhfvk6TF8JmQRzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DIUqSxTOMAtKAepGZPw+pOk9t7NryFZndtTZ8aZ7Q+Y=;
- b=Q3+lQQ1geY/3/Vb+eFMm99qTQswIxwWVMSagp0r8COwgEUMJRPu0C1ALjrr9hxeNWgSFh2lqDro3rPouVoM/5mLzyXt29r2vsIHD1/6y+zjXu1CHib/PkKpaUzwNcUCeQtRJh8I9OAzGsrsY+a7+hjbs2x39sbJxyMdjcDpCFoc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by MN0PR12MB5811.namprd12.prod.outlook.com (2603:10b6:208:377::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Thu, 27 Apr
- 2023 17:59:14 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::fcfe:62dd:e938:3a84]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::fcfe:62dd:e938:3a84%7]) with mapi id 15.20.6340.021; Thu, 27 Apr 2023
- 17:59:14 +0000
-Message-ID: <069c8e3e-5776-b350-7a61-c86e4e448c1c@amd.com>
-Date:   Thu, 27 Apr 2023 12:59:09 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
- model
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Elena Reshetova <elena.reshetova@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
-        "michael.day@amd.com" <michael.day@amd.com>,
-        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
-        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
-        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
-        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "dinechin@redhat.com" <dinechin@redhat.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        "mst@redhat.com" <mst@redhat.com>, "tytso@mit.edu" <tytso@mit.edu>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "cdupontd@redhat.com" <cdupontd@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "sameo@rivosinc.com" <sameo@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "security@kernel.org" <security@kernel.org>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Dylan Reid <dylan@rivosinc.com>,
-        Ravi Sahita <ravi@rivosinc.com>, suzuki.poulose@arm.com,
-        atishp@rivosinc.com
-References: <ZEfrjtgGgm1lpadq@google.com>
- <DM8PR11MB575046B6DAA17B41FFED8080E7659@DM8PR11MB5750.namprd11.prod.outlook.com>
- <9fa5ce43-584d-878d-227a-fb458254c00a@amd.com> <ZElIjw7Ca6N2mYHe@google.com>
- <9021d861-cde6-a51a-7d8c-b3f67eaa01d8@amd.com> <ZEmBULXp24oMxaUH@google.com>
- <04383d21-b71e-93dd-5f4c-b39f5bc21937@amd.com> <ZEmYR0fWl05lGW0d@google.com>
- <DM8PR11MB57502652613A19C1A65D10BDE76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <c99d6a6b-cb8b-c62d-7305-6b739a8c0671@amd.com> <ZEqSRTirPCxjy6M4@google.com>
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <ZEqSRTirPCxjy6M4@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN6PR08CA0008.namprd08.prod.outlook.com
- (2603:10b6:805:66::21) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Thu, 27 Apr 2023 14:00:38 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1E63A91
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:00:37 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ab25e8a4a7so37660211fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682618435; x=1685210435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T2GIu/+OnkLafZqySOKrzD8ciYv3HmQaDFMtQHfu3W8=;
+        b=GNl7C2x83eoYeZnyG+bDI9/h8i2odgcHYWafi46kOk7JzJjF5axhRmi0NAnbCRGi9c
+         kPNaOydGl8zElv98sZkCKsYhuEo6q3b4bxdyYZthrpRKavVJ/zocapR0Q9VCKUJ1qZ+R
+         GDFw8svv0wExYnBphIq+5AZWTMab0jYAR6uy/TDwFyp/zjREqiEQhEbFNYDewIUwc+IR
+         7v4At6FjAiTehnl41XcBRdoxVNivrzejLzKAKEAUaxzcdognTnQNsidMVg5FZqko57HK
+         Vbz2B0VzM74DEmaQAkHl7h/ujsemRRkbnsVpD3f5S2QXJesPf5iQ2madGTTzXbN2stcb
+         6ukg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682618435; x=1685210435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T2GIu/+OnkLafZqySOKrzD8ciYv3HmQaDFMtQHfu3W8=;
+        b=XOe9DVk/po3cN10pmxcwc+8mzLyjabzil4uu14zgSV9MmSr2U1HTyJAsp2KUc9UPfL
+         2bi+sWuet7MzYHf874yk9BVFc5N4nTKbp05PaL+Np1wnHhNQls+dloc0UE+y+SuIzSmh
+         dJ0GAQYJGpTJyJI6PloKdKLnVl1wp0kKPgv1XWcYPHHqy4Z6dObrLlo51Y0RZ3EhVgOu
+         6Wg667FXFmuzoVgzGsOi3U+qllgElWXlAneouICgJ0nuJo2e60dOM7tbLbfGJ0VB74J6
+         hlLVdxKHcnuQFWlC0YsbWKfFB4ysnhXCkO1Bvfbil5SWQrZq1wJowQYzBjypMK8khrZ4
+         tbVA==
+X-Gm-Message-State: AC+VfDwmR2w5m6FBexTcVeu3UVfRtU6oRDIneoSPETve1+hdmU/bm4fC
+        ernx5tlzoBHzUW3wrzFTwE8JbA==
+X-Google-Smtp-Source: ACHHUZ5CcVXxlMWC43mQzxQDgoafzAlqyemf34S/dtcAHVQXQpFbKrBmB2oqIPlr6oiuy0adBms73g==
+X-Received: by 2002:a2e:90c2:0:b0:2a8:ea22:28a6 with SMTP id o2-20020a2e90c2000000b002a8ea2228a6mr946880ljg.9.1682618435356;
+        Thu, 27 Apr 2023 11:00:35 -0700 (PDT)
+Received: from [172.23.2.5] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id f14-20020a2ea0ce000000b002ab1536377fsm1443232ljm.105.2023.04.27.11.00.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 11:00:34 -0700 (PDT)
+Message-ID: <faada5fc-3dda-2d69-508a-15dbf5ddbbcc@linaro.org>
+Date:   Thu, 27 Apr 2023 21:00:33 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|MN0PR12MB5811:EE_
-X-MS-Office365-Filtering-Correlation-Id: de3bc4d0-1cc6-49ef-5a7a-08db47491c93
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ov1GOi9VftN9gZcsTKZz7xJuMc4/TlRx6NaucFZ/x/TSnKIwJaYmoY6awr5ofYS9eHxqmNN4VBVw2uEBhjGM6Jo5I1ohHuODz/f8UBMSCY165i2kHdfoZvo4iAahXtmgrFwrEukdyi/Sqp31LchJVPZuwv9vr/H+ahUcBg8bFVY68q5SFNupqwAoTxQbBfIdMzhe55/bvrMgk7//mhS3FXMZf2a2iJ6l9l7+7oyrrfgD4EF0x9sb/Pu/kbJt2vnthu2kjM1hziNuk5+yyIRbA+KB3GeTVBZG9qGO1dCLWwY0oLT7h72VYo6dFtARvvQ5GPqPxCOHtVs21+Ix3bLIb3mNgpmS91BUNJWxZvmq69cCfUC5Ej0tqDWth1+TXhGYG/Keazk88vdL2D9aBRPzR6P5kJk4j232uARSWUL0EwR0xjZgvRHr/x62qFXfABG7ZSdZf0+XLwN7hGEh+NygUYT4klTbgJU7Vo9RpHySOFOnwwgOljJUfp87CxanZ0oJdMaPGKBs25TXiu/GXVL9rq4EPMsxk/eGUK9U/X/2g2/2Dsmv0pZKJqaukittdDlHca57fGLlW6XtC/M1HqMAAakgmYG9FfQEtuG/N6ux6pu1fvAJgPkMkXoUnTcGGup0WEJhL/EX0X731Li/sn3TSg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(451199021)(31686004)(2616005)(186003)(6506007)(6512007)(53546011)(86362001)(6916009)(4326008)(316002)(66476007)(31696002)(66556008)(66946007)(7406005)(44832011)(2906002)(38100700002)(41300700001)(478600001)(54906003)(8936002)(36756003)(5660300002)(8676002)(6486002)(6666004)(966005)(7416002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWJYZytJMEdBbWVwZkFiM3RzeDEwSjJ4WURJelJka0l4cnkzVEdWZGJZNmhT?=
- =?utf-8?B?U0phN0JrcXZtSG84UklOUEZTUkFxdmpEdnpkOVdSYWpDYmRlZVRsd2tsSSsy?=
- =?utf-8?B?RWdTN2VSVG1LdnVTZXllOFhYR2VpaGk5R0hRK1NlU2ZDYStnWk0zdHBoOWRI?=
- =?utf-8?B?TFloVEdicmxPQlF0UG43VDBvdnhaWjlWcW15aEZucHJmUnFzMlVYTjhTVDRn?=
- =?utf-8?B?MkF2TENzaXBhYVp6T0l1MW9TZk5KVlhDemxIWW41R0FFRElHSXFVZFl6MXh6?=
- =?utf-8?B?UTJScXBVeE9qK0Z2ZXhSVjBQM2FPS2FXL0pZWmZUOWR4SkFyWHBJZ0dmQVhU?=
- =?utf-8?B?djYrR2RXT2Y4UTV4b1VyK3ZKc3BBbnVxRTlTUStUbDV6S3IyUzJYZmdCQXMy?=
- =?utf-8?B?aVk4aDNVOG5HMXIyb3FYeVVrRlBQU1dxMExxZGsvNGlnVzJRZzZEZ3ZUZjg1?=
- =?utf-8?B?QSs5c3ZScjlLL1dyZE9CeWp2NER3VjFUSE52UllVdlVRakMrSElnNGZBTzFR?=
- =?utf-8?B?MmJ1S1dtWXJLYTlCYnF1c2MyLzk3dGFyQkJ6NmJzOG40aWdQMVRwK0NicGs5?=
- =?utf-8?B?bmZtY3cvMU5lTFoxbGxnUW9qUjJ6TG9VVnZveEYzODNhbkxJRGJoeG84bDVa?=
- =?utf-8?B?UGh4a1hmMXJQU0M5OGFGYzFIRnJjVjlwaXBxZHRQWDlBc2cwbzU2Nnpic2Na?=
- =?utf-8?B?eWE0dGVXTTNnanhBdEdtK0ErZk9NdU1RaXc2NTJpczFMcjcwV2V1Yml1b1Jk?=
- =?utf-8?B?YU5rTVI4WHJEYVdjQzJBSGM4UWtiRVR4QWFzVHhUd20vRHNIbktDTUlMSUIz?=
- =?utf-8?B?NnJrSEpqc1NmL0t3SkpNMFVFU2ZMOGg5VkYzZ1l0Z1l3aStNRmkzY1N6RDZI?=
- =?utf-8?B?QnhzckJ0YTFjVHJhcCtxdjRFa0FHM1A3NnUzQXBDNUd2WDl4RWlCZE1rTnBn?=
- =?utf-8?B?MW5JSnpTeHhCZ3ZhcFEvYVFTTklLTUh3R2Q4dWE2cE9EdmlhNkI0b3hNYmtH?=
- =?utf-8?B?YWx0cmZPc2JpeVdiY3RsNlJBbmpQVDBrSDBha003RitOTFZhOHoxZWJtRkw5?=
- =?utf-8?B?KzkxdFFXL2tRWHltZHpCVDhZQ3NwMW1FNFhZaG5KZGR5OUE3c21pTWo0TklY?=
- =?utf-8?B?VWFJM29GVm5VOGtlRDEzcjFlT3AvcXcvU3JHZlc4SmplNkxMZ3BTNmdIU24v?=
- =?utf-8?B?dldxTGhybVlLa0hNZDFyR1Z3aXRsZEQyb0JPR2w3eVRISXloYTJXc2dNR3ZC?=
- =?utf-8?B?dldmSTY1MlR6a2p4dWhKV21wUG85TFVncXQ5dXBKbElRZExza0Y5UFp5MGJN?=
- =?utf-8?B?QVMxdUpWRDJGQ2UyajA5YnhLWC8ycStUSXpNRi9OZlk3ZDNjc0tOemExK25B?=
- =?utf-8?B?RXExWWlnL3FmbVI2WmRaRjUxN3l0Vk54QTRKSEpqWWFKZ0cvU0ZBSnlOanc5?=
- =?utf-8?B?QStsZktxd1k0UVhqdUNBZlNDNzFRNTlPV3JHWStKWmErY3JlUndLZzdtMTMw?=
- =?utf-8?B?RlVHb1NnU3pTbzFSUjBhbWFqSmFvT0dLV1pUeDdOajNQalYrNDMyeDN1cis2?=
- =?utf-8?B?QXo2OXdLMUtmUkt1d24rSnMvc3hhVGQwS2oxQURBZFlubWNuRW51WkpodW0z?=
- =?utf-8?B?KzdVTGp4eStsK2c2dE5Yc2NRTGUvUTliQmZZUTVoaUJTOTFTTGIxbU5TK0c2?=
- =?utf-8?B?WjVsd0U0ekRhSW1JSjdRUjJXR0pPMHVScm45dFVGandoeGlyejdOVEdNaFl6?=
- =?utf-8?B?ZC9VL25wTVpsa0FjTUlzb1ZNMGV1UlpaMDVtVUJnZHNsNE9VekRuSHJJbmdL?=
- =?utf-8?B?VUsyU2FMME1uekYwZkpPeXRmdE11TjI0TGE0dktWOWFadCtaQmQvanhHU29i?=
- =?utf-8?B?S0VuZWJxQTRKYjc4cFBscnVjdTNZZlMySjlMb0VxZlI1cSthaXh2TUZzUTJh?=
- =?utf-8?B?MzM0M1BUU3ZHR2lMUHhHK1JFUUxYZ255b3BpbEZsT2pVTk5LV2VtbzBvRkpT?=
- =?utf-8?B?VnBLSmVPa0o0RWtuTVQ2SFZiTS92MXBGZFZDMkE2UVhKVGo2OEdaUGRsNVBa?=
- =?utf-8?B?STBYcEYzWU5ma0o4L0pHdWphVHNwR2xiSFJuNlZPT1ZuSFBycFVJN1hCclgz?=
- =?utf-8?B?U2xCeTNwZ25jbkZKYTNxbHF1N2xFWnFkeXRaNTUyWHRnVEM5czhSYWJudVJ2?=
- =?utf-8?Q?OwfwQvkAyUTDbvFhj7lg+f8JUWHLEuLM0swNbwlI1am8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de3bc4d0-1cc6-49ef-5a7a-08db47491c93
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 17:59:14.3132
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mNlEDWTcN2str8Ou8iG5Jg8LE2UVCAI/ORx59jeJVOiuUsOFFdr4E1Qu0AU4WEwdXyiLA0lwF/2nq2dmLVOhrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5811
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5/7] phy: qcom-qmp-combo: Introduce drm_bridge
+Content-Language: en-GB
+To:     neil.armstrong@linaro.org,
+        Bryan O'Donoghue <pure.logic@nexus-software.ie>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+ <20230425034010.3789376-6-quic_bjorande@quicinc.com>
+ <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
+ <d1850d73-9d92-c0aa-7cf8-bae4c0e4144b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <d1850d73-9d92-c0aa-7cf8-bae4c0e4144b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/23 10:18 AM, Sean Christopherson wrote:
-> On Thu, Apr 27, 2023, Carlos Bilbao wrote:
->> On 4/27/23 7:29 AM, Reshetova, Elena wrote:
->>> I agree with Dave that I think the goal of this document is not to come up with a
->>> fancy name (I am fine with call it anything), but to introduce kernel developers to the 
->>> new Linux threat model angle for this-particular-use-case-of-confidential-computing.
->>> So that when we submit the hardening mechanisms in the future people are 
->>> already familiar with why we need to do this and we don’t have to repeat this story 
->>> again and again. 
->>
->> Yes! To reiterate, there's two things we definitely wish to do:
->>
->> 1. Narrow down the problem: This new document can be specific to CoCo in
->>    virtual environments. v2 should be clear about that.
+On 27/04/2023 16:11, Neil Armstrong wrote:
+> On 26/04/2023 12:33, Bryan O'Donoghue wrote:
+>> On Tue, Apr 25, 2023 at 4:40 AM Bjorn Andersson
+>> <quic_bjorande@quicinc.com> wrote:
+>>>
+>>> The QMP combo PHY sits in an of_graph connected between the DisplayPort
+>>> controller and a USB Type-C connector (or possibly a redriver).
+>>>
+>>> The TCPM needs to be able to convey the HPD signal to the DisplayPort
+>>> controller, but no directly link is provided by DeviceTree so the signal
+>>> needs to "pass through" the QMP combo phy.
+>>>
+>>> Handle this by introducing a drm_bridge which upon initialization finds
+>>> the next bridge (i.e. the usb-c-connector) and chain this together. This
+>>> way HPD changes in the connector will propagate to the DisplayPort
+>>> driver.
+>>>
+>>> The connector bridge is resolved lazily, as the TCPM is expected to be
+>>> able to resolve the typec mux and switch at probe time, so the QMP combo
+>>> phy will probe before the TCPM.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 36 +++++++++++++++++++++++
+>>>   1 file changed, 36 insertions(+)
+>>>
+>>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c 
+>>> b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>>> index 5d6d6ef3944b..84bc08002537 100644
+>>> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+>>> @@ -22,6 +22,8 @@
+>>>   #include <linux/usb/typec.h>
+>>>   #include <linux/usb/typec_mux.h>
+>>>
+>>> +#include <drm/drm_bridge.h>
+>>> +
+>>>   #include <dt-bindings/phy/phy-qcom-qmp.h>
+>>>
+>>>   #include "phy-qcom-qmp.h"
+>>> @@ -1332,6 +1334,8 @@ struct qmp_combo {
+>>>          struct clk_hw dp_link_hw;
+>>>          struct clk_hw dp_pixel_hw;
+>>>
+>>> +       struct drm_bridge bridge;
+>>> +
+>>>          struct typec_switch_dev *sw;
+>>>          enum typec_orientation orientation;
+>>>   };
+>>> @@ -3196,6 +3200,34 @@ static int qmp_combo_register_clocks(struct 
+>>> qmp_combo *qmp, struct device_node *
+>>>          return devm_add_action_or_reset(qmp->dev, 
+>>> phy_clk_release_provider, dp_np);
+>>>   }
+>>>
+>>> +static int qmp_combo_bridge_attach(struct drm_bridge *bridge,
+>>> +                                  enum drm_bridge_attach_flags flags)
+>>> +{
+>>> +       struct qmp_combo *qmp = container_of(bridge, struct 
+>>> qmp_combo, bridge);
+>>> +       struct drm_bridge *next_bridge;
+>>> +
+>>> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
+>>> +               return -EINVAL;
+>>> +
+>>> +       next_bridge = devm_drm_of_get_bridge(qmp->dev, 
+>>> qmp->dev->of_node, 0, 0);
+>>> +       if (IS_ERR(next_bridge))
+>>> +               return dev_err_probe(qmp->dev, PTR_ERR(next_bridge), 
+>>> "failed to acquire drm_bridge\n");
+>>> +
+>>> +       return drm_bridge_attach(bridge->encoder, next_bridge, 
+>>> bridge, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+>>> +}
+>>> +
+>>> +static const struct drm_bridge_funcs qmp_combo_bridge_funcs = {
+>>> +       .attach = qmp_combo_bridge_attach,
+>>> +};
+>>> +
+>>> +static int qmp_combo_dp_register_bridge(struct qmp_combo *qmp)
+>>> +{
+>>> +       qmp->bridge.funcs = &qmp_combo_bridge_funcs;
+>>> +       qmp->bridge.of_node = qmp->dev->of_node;
+>>> +
+>>> +       return devm_drm_bridge_add(qmp->dev, &qmp->bridge);
+>>> +}
+>>> +
+>>>   static int qmp_combo_parse_dt_lecacy_dp(struct qmp_combo *qmp, 
+>>> struct device_node *np)
+>>>   {
+>>>          struct device *dev = qmp->dev;
+>>> @@ -3459,6 +3491,10 @@ static int qmp_combo_probe(struct 
+>>> platform_device *pdev)
+>>>          if (ret)
+>>>                  return ret;
+>>>
+>>> +       ret = qmp_combo_dp_register_bridge(qmp);
+>>> +       if (ret)
+>>> +               return ret;
 > 
-> Then rename the document as I already suggested.  If you want to claim
-> confidential-computing.rst, then IMO such a doc needs to be written something
-> like the surprisingly good Wikipedia article[*].  Until one of those two things
-> happens, my NAK stands.
+> I think the DRM part should be only built if CONFIG_DRM is enabled, I don't
+> have a strong opinion on this, I think Vinod could help here.
 > 
-> [*] https://en.wikipedia.org/wiki/Confidential_computing
+>>> +
+>>>          /* Check for legacy binding with child nodes. */
+>>>          usb_np = of_get_child_by_name(dev->of_node, "usb3-phy");
+>>>          if (usb_np) {
+>>> -- 
+>>> 2.39.2
+>>>
+>>
+>> You need to add some or all of these
+>>         select DRM_DISPLAY_DP_HELPER
+>>         select DRM_DISPLAY_HELPER
+>>         select DRM_DP_AUX_BUS
+>>         select DRM_KMS_HELPER
+>>         select DRM_MIPI_DSI
+>>         select DRM_PANEL
+>>
+>>
+>> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
+>> Unexpected GOT/PLT entries detected!
+>> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
+>> Unexpected run-time procedure linkages detected!
+>> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function
+>> `qmp_combo_bridge_attach':
+>> phy-qcom-qmp-combo.c:(.text+0xb50): undefined reference to
+>> `devm_drm_of_get_bridge'
+>> phy-qcom-qmp-combo.c:(.text+0xb6c): undefined reference to 
+>> `drm_bridge_attach'
+>> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function `qmp_combo_probe':
+>> phy-qcom-qmp-combo.c:(.text+0x13fc): undefined reference to
+>> `devm_drm_bridge_add'
+> 
+> I think CONFIG_DRM_PANEL_BRIDGE in addition to CONFIG_DRM. should be 
+> enough.
+> 
 
-That's "mea culpa". I should have made it clearer in my previous emails that
-changing the name is a non-issue. Also that we are very interested in
-feedback from other CoCo flavors. In this regard, we've reached out to ARM
-and RISC-V folks. Hopefully, they help us improve the doc and we can add
-them as maintainers. Whenever we have a v2, I'd like to CC people from CSP
-sector (Oracle, etc.) as well.
+I'd say DRM_PANEL_BRIDGE || !DRM_PANEL_BRIDGE in addition to DRM. And we 
+probably should fix the  devm_drm_of_get_bridge() stub to use 
+drm_of_find_panel_or_bridge() with panel = NULL.
 
-Thanks,
-Carlos
+> With this config added and my drm-bridge hat:
+> 
+> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+> 
+> Neil
+> 
+> 
+>>
+>> ---
+>> bod
+> 
+
+-- 
+With best wishes
+Dmitry
+
