@@ -2,174 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083A6F05E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01936F05E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243290AbjD0Mf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
+        id S243521AbjD0MgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjD0Mf0 (ORCPT
+        with ESMTP id S229636AbjD0MgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:35:26 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A4E420A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so14583915a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:35:23 -0700 (PDT)
+        Thu, 27 Apr 2023 08:36:22 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D989B3AAA;
+        Thu, 27 Apr 2023 05:36:21 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-74de7635180so809485185a.3;
+        Thu, 27 Apr 2023 05:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1682598922; x=1685190922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
-        b=Ca1f7Q8QfwsxqnNXTzClKKFDeAyt7kiBMGkpSXoeJRu1dphQh0I2JCVODSjW04F8vi
-         CjTjLl7H2NQ6vkJtEJby5nMlylaSHmZX+3X9P/QBhjFbFR7AEkFC8WLHv7BA7FfE2goN
-         upf8jFn7C6RaZo7YWKMh/RG19f+lxewE/y3OU=
+        d=gmail.com; s=20221208; t=1682598981; x=1685190981;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uamYaAPiGbEuD/CCuWzrQEEft21M2zokyUeiq+isD7s=;
+        b=BTlbPFOcy9ohq/rnIcEzr3ktsmGoIkLS5TIak2p0WjRjIS7tVD1nIqK8H28Io6XqVb
+         9aLFzRITd38OHn++1iixe4l+zH9eVbZwDAfhDkBPWusPk/VSHTt3diuofZ1nXTms4rWa
+         JJDnLuoNxKzEPHBsTTAesrqHvIflWeuCV+ypelKfuvD4O+TPSpqMCXAzeoegikWjB/Xn
+         oB//Q9Oj0JVMjfEMXdE+932BDwJurikQ3prEJSDaerswpy8Wg2pAA2X1sKEPI4tHB6Go
+         ZHMRvXK14JUWYrPAmxUScss3xazUqYC7wB2ZNdtCocebfo9MWUezS6nhOC52uXfScmbO
+         Xkvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682598922; x=1685190922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a0QszDde8nFcOEA4DV9dWez8Vmn1d3+3MQK7HdYNTk0=;
-        b=VnE6OkzQlEPhMlaLtGHgoga/A/39MgZ5Xm/SXrljMShufh0FiL2KptqymOV0qjyYa0
-         0C/ik5YwHVKrK8jYakq0bKAi5S9MOjyNdVvtVfCPsVxIXK5hcT3poOeW7xTFycGaAqoT
-         OGrrdvJdDORO6MN43raNisNmgIg+wccwPSjjeMmfmCKQlE0ah1PUHrgMrNGjpNDpfPml
-         advQ3hd33e7itY3ts/sW38riGcaSiVe3R3EAMHTD8Z20xmqyGBDTcwBYYlHangOSymiM
-         wFHo5PEaaz5/9Fve/LTXhhl5Gl1+0kX5FHG+eM+7PgFEs4iWvL43lroPQmZc14MNJSkR
-         VmBw==
-X-Gm-Message-State: AC+VfDyP7fjB6REkymk2PE1VGZDOOl4EoDScMRpEbNQyuBpss9CqoXLh
-        ugyrnf5veMv2cBBn9gzroTCjy2irIMU4pXVgcRLS2w==
-X-Google-Smtp-Source: ACHHUZ7MmYITJ6kQO4xKV6rvxaVEOOg18gzPAiCryL/tpudRIuT0AQEi3mmw5CFBtqHWXygrP5W2qA==
-X-Received: by 2002:aa7:c94c:0:b0:505:4f7:8a50 with SMTP id h12-20020aa7c94c000000b0050504f78a50mr1328614edt.5.1682598921957;
-        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id n20-20020aa7d054000000b004fc01b0aa55sm7969319edo.4.2023.04.27.05.35.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 05:35:21 -0700 (PDT)
-Message-ID: <d1a14976-5f53-3373-0695-e10e6a9371de@rasmusvillemoes.dk>
-Date:   Thu, 27 Apr 2023 14:35:19 +0200
+        d=1e100.net; s=20221208; t=1682598981; x=1685190981;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uamYaAPiGbEuD/CCuWzrQEEft21M2zokyUeiq+isD7s=;
+        b=kbVIus5Zlt1nLD/D602IavKg+fKqXa8euUDk5wNeoKeKslEGCRlnf/+FguDfLS7nNr
+         J6OS79tYntZJI5mU8S0NEMJtcagDbH23QkSrOQTJWkoaC/7KZbmAFJ9+aJ/EqObjj/Y3
+         VIpIh7k+9564H7g/f607IQDM+muou5KLm35tSuqVBKwA3ZWSyDUCZf6NWXsF9ztJEqZN
+         XR+OHdg9S99O2R8wQuWrQdVUn9uXvDjenVOGaTr1ah+kcyRFgCTsbBT6N7BbxoHDkBMl
+         U3PAvPdg5UG624P4gmPagdoy7DtOAxfHxAF2cW6HB6nTfR+GG2xwJ9N0XXgOPCTS1vNJ
+         IiWg==
+X-Gm-Message-State: AC+VfDxH0DdzGYSmcdfON4HaNzKOiGX6g63VQOGlZ8rfJB4Iu66akujw
+        aDTw+E6YwojY5QuMYT4n6TkG8IA+UJ1Met7kKKQ=
+X-Google-Smtp-Source: ACHHUZ6z1cQlttoN0k2H76P2WsRE9QHnUy28HBxx03rn8CVmetWUfgyzpbwJvo84hWza6TQwkxJK0ed6dgn0FdEClcE=
+X-Received: by 2002:ad4:5fca:0:b0:615:29ab:e4c6 with SMTP id
+ jq10-20020ad45fca000000b0061529abe4c6mr2008193qvb.45.1682598981060; Thu, 27
+ Apr 2023 05:36:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Content-Language: en-US, da
-To:     =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Felipe Balbi <balbi@ti.com>
-Cc:     stable@vger.kernel.org
-References: <2023042625-rendition-distort-fe06@gregkh>
- <20230427115120.241954-1-k.graefe@gateware.de>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
+ <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com>
+ <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
+ <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
+ <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
+ <20230424174049.1c9e54dd@rorschach.local.home> <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
+ <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
+In-Reply-To: <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 27 Apr 2023 20:35:45 +0800
+Message-ID: <CALOAHbCXRwp9--MV2k8z3aJyAL6vzQLimtHgkeza7g0C=Edb8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 13.51, Konrad Gräfe wrote:
-> The CDC-ECM specification requires an USB gadget to send the host MAC
-> address as uppercase hex string. This change adds the appropriate
-> modifier.
-> 
-> Cc: stable@vger.kernel.org
+On Thu, Apr 27, 2023 at 8:15=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
+>
+> On Thu, Apr 27, 2023 at 5:57=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com=
+> wrote:
+> >
+> > On Tue, Apr 25, 2023 at 5:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis=
+.org> wrote:
+> > >
+> > > On Wed, 19 Apr 2023 15:46:34 -0700
+> > > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > > No. Just one prog at entry into any of the kernel functions
+> > > > and another prog at entry of funcs that 1st bpf prog called indirec=
+tly.
+> > > > Like one prog is tracing networking events while another
+> > > > is focusing on mm. They should not conflict.
+> > >
+> > > You mean that you have:
+> > >
+> > > function start:
+> > >   __bpf_prog_enter_recur()
+> > >     bpf_program1()
+> > >       __bpf_prog_enter_recur()
+> > >         bpf_program2();
+> > >       __bpf_prog_exit_recur()
+> > >   __bpf_prog_exit_recur()
+> > >
+> > >   rest of function
+> > >
+> > > That is, a bpf program can be called within another bpf pogram betwee=
+n
+> > > the prog_enter and prog_exit(), that is in the same context (normal,
+> > > softirq, irq, etc)?
+> > >
+> >
+> > Right, that can happen per my verification. Below is a simple bpf
+> > program to verify it.
+> >
+> > struct {
+> >     __uint(type, BPF_MAP_TYPE_LPM_TRIE);
+> >     __type(key, __u64);
+> >     __type(value, __u64);
+> >     __uint(max_entries, 1024);
+> >     __uint(map_flags, BPF_F_NO_PREALLOC);
+> > } write_map SEC(".maps");
+> >
+> > __u64 key;
+> >
+> > SEC("fentry/kernel_clone")
+> > int program1()
+> > {
+> >     __u64 value =3D 1;
+> >
+> >     bpf_printk("before update");
+> >     // It will call trie_update_elem and thus trigger program2.
+> >     bpf_map_update_elem(&write_map, &key, &value, BPF_ANY);
+> >     __sync_fetch_and_add(&key, 1);
+> >     bpf_printk("after update");
+> >     return 0;
+> > }
+> >
+> > SEC("fentry/trie_update_elem")
+> > int program2()
+> > {
+> >     bpf_printk("trie_update_elem");
+> >     return 0;
+> > }
+> >
+> > The result as follows,
+> >
+> >          kubelet-203203  [018] ....1  9579.862862:
+> > __bpf_prog_enter_recur: __bpf_prog_enter_recur
+> >          kubelet-203203  [018] ...11  9579.862869: bpf_trace_printk:
+> > before update
+> >          kubelet-203203  [018] ....2  9579.862869:
+> > __bpf_prog_enter_recur: __bpf_prog_enter_recur
+> >          kubelet-203203  [018] ...12  9579.862870: bpf_trace_printk:
+> > trie_update_elem
+> >          kubelet-203203  [018] ....2  9579.862870:
+> > __bpf_prog_exit_recur: __bpf_prog_exit_recur
+> >          kubelet-203203  [018] ...11  9579.862870: bpf_trace_printk:
+> > after update
+> >          kubelet-203203  [018] ....1  9579.862871:
+> > __bpf_prog_exit_recur: __bpf_prog_exit_recur
+> >
+> > Note that we can't trace __bpf_prog_enter_recur and
+> > __bpf_prog_exit_recur, so we have to modify the kernel to print them.
+> >
+>
+> ... However, surprisingly it still works even after this patchset is
+> applied, because the hardirq/softirq flag is set when the program2 is
+> running, see also the flags in the above trace_pipe output. Is that
+> expected ?!
+> I need  some time to figure it out, but maybe you have a quick answer...
 
-Why cc stable?
+Answer it by myself, that is because of the
+allowing-one-single-recursion rule. I misread the trace flags before.
+Sorry about the noise.
 
-> Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
-> ---
-> Added in v3
-> 
->  lib/vsprintf.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
 
-The diffstat here, or for some other patch in the same series,
-definitely ought to mention lib/test_printf.c.
-
-> diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-> index be71a03c936a..8aee1caabd9e 100644
-> --- a/lib/vsprintf.c
-> +++ b/lib/vsprintf.c
-> @@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  {
->  	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
->  	char *p = mac_addr;
-> -	int i;
-> +	int i, pos;
->  	char separator;
->  	bool reversed = false;
-> +	bool uppercase = false;
->  
->  	if (check_pointer(&buf, end, addr, spec))
->  		return buf;
-> @@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  		separator = '-';
->  		break;
->  
-> +	case 'U':
-> +		uppercase = true;
-> +		break;
-> +
->  	case 'R':
->  		reversed = true;
->  		fallthrough;
-
-This seems broken, and I'm surprised the compiler doesn't warn about
-separator possibly being uninitialized further down. I'm also surprised
-your testing hasn't caught this. For reference, the full switch
-statement is currently
-
-        switch (fmt[1]) {
-        case 'F':
-                separator = '-';
-                break;
-
-        case 'R':
-                reversed = true;
-                fallthrough;
-
-        default:
-                separator = ':';
-                break;
-        }
-
-> @@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
->  
->  	for (i = 0; i < 6; i++) {
->  		if (reversed)
-> -			p = hex_byte_pack(p, addr[5 - i]);
-> +			pos = 5 - i;
-> +		else
-> +			pos = i;
-> +
-> +		if (uppercase)
-> +			p = hex_byte_pack_upper(p, addr[pos]);
->  		else
-> -			p = hex_byte_pack(p, addr[i]);
-> +			p = hex_byte_pack(p, addr[pos]);
-
-I think this becomes quite hard to follow. We have string_upper() in
-linux/string_helpers.h, so I'd rather just leave this loop alone and do
-
-  if (uppercase)
-    string_upper(mac_addr, mac_addr);
-
-after the nul-termination.
-
-Rasmus
-
+--=20
+Regards
+Yafang
