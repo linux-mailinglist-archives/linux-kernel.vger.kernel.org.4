@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2665C6F0706
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3366F0703
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243824AbjD0OKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 10:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S243793AbjD0OKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 10:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243834AbjD0OKk (ORCPT
+        with ESMTP id S243343AbjD0OKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:10:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EFEFB46AE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:10:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B34FA1063;
-        Thu, 27 Apr 2023 07:11:16 -0700 (PDT)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FFD73FA1D;
-        Thu, 27 Apr 2023 07:10:10 -0700 (PDT)
-Message-ID: <01e0704c-6d69-07ca-8a3b-c2cff498c972@arm.com>
-Date:   Thu, 27 Apr 2023 15:09:58 +0100
+        Thu, 27 Apr 2023 10:10:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75043B3;
+        Thu, 27 Apr 2023 07:10:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D4921FE3B;
+        Thu, 27 Apr 2023 14:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1682604607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=jEqRVG+8Dcj6ijJa/JrCFAx9tBcDp1RS6kPZqc1Elbc=;
+        b=MePFwGhaepIE3/27uZpP71e7L5tVtchBYpdXJ4oUagj0/EjIJe+PGXVrfUv0i6427RuUkb
+        QJY+xGZy6cRmiyxihdjr/pJ7I9aRNnult1PaQMd4okCQrejLCHB12LwzqnV4VSuFbCUVMl
+        CLpoDdcszSWFz3Qi2dVWKmwACY0dhUo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1682604607;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=jEqRVG+8Dcj6ijJa/JrCFAx9tBcDp1RS6kPZqc1Elbc=;
+        b=ySABGXvhe1KqxVKho6dXds9Kj/WWS8MSO1VyFw9UZ5laodhQY+uuJ9N9osw8id34H7TGWb
+        vEhr0ZCOsZ8Lt9CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EE850138F9;
+        Thu, 27 Apr 2023 14:10:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id drdvOT6CSmQuEAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 27 Apr 2023 14:10:06 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>, lstoakes@gmail.com,
+        regressions@lists.linux.dev, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Fabian Vogt <fvogt@suse.com>, stable@vger.kernel.org
+Subject: [PATCH for v6.3 regression] mm/mremap: fix vm_pgoff in vma_merge() case 3
+Date:   Thu, 27 Apr 2023 16:09:59 +0200
+Message-Id: <20230427140959.27655-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 08/19] x86/resctrl: Add cpumask_any_housekeeping() for
- limbo/overflow
-Content-Language: en-GB
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     x86@kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, peternewman@google.com
-References: <20230320172620.18254-1-james.morse@arm.com>
- <20230320172620.18254-9-james.morse@arm.com>
- <8f10581c-63ff-fef5-4f9e-d1ded096528@linux.intel.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <8f10581c-63ff-fef5-4f9e-d1ded096528@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilpo,
+After upgrading build guests to v6.3, rpm started segfaulting for
+specific packages, which was bisected to commit 0503ea8f5ba7 ("mm/mmap:
+remove __vma_adjust()"). rpm is doing many mremap() operations with file
+mappings of its db. The problem is that in vma_merge() case 3 (we merge
+with the next vma, expanding it downwards) vm_pgoff is not adjusted as
+it should when vm_start changes. As a result the rpm process most likely
+sees data from the wrong offset of the file. Fix the vm_pgoff
+calculation.
 
-On 21/03/2023 15:14, Ilpo Järvinen wrote:
-> On Mon, 20 Mar 2023, James Morse wrote:
-> 
->> The limbo and overflow code picks a CPU to use from the domain's list
->> of online CPUs. Work is then scheduled on these CPUs to maintain
->> the limbo list and any counters that may overflow.
->>
->> cpumask_any() may pick a CPU that is marked nohz_full, which will
->> either penalise the work that CPU was dedicated to, or delay the
->> processing of limbo list or counters that may overflow. Perhaps
->> indefinitely. Delaying the overflow handling will skew the bandwidth
->> values calculated by mba_sc, which expects to be called once a second.
->>
->> Add cpumask_any_housekeeping() as a replacement for cpumask_any()
->> that prefers housekeeping CPUs. This helper will still return
->> a nohz_full CPU if that is the only option. The CPU to use is
->> re-evaluated each time the limbo/overflow work runs. This ensures
->> the work will move off a nohz_full CPU once a houskeeping CPU is
-> 
-> housekeeping
-> 
->> available.
+For case 8 this is a non-functional change as the resulting vm_pgoff is
+the same.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
->> index 87545e4beb70..0b5fd5a0cda2 100644
->> --- a/arch/x86/kernel/cpu/resctrl/internal.h
->> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
+Reported-and-bisected-by: Jiri Slaby <jirislaby@kernel.org>
+Reported-and-tested-by: Fabian Vogt <fvogt@suse.com>
+Link: https://bugzilla.suse.com/show_bug.cgi?id=1210903
+Fixes: 0503ea8f5ba7 ("mm/mmap: remove __vma_adjust()")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Cc: <stable@vger.kernel.org>
+---
+Hi, I'm sending this patch on top of v6.3 as I think it should be
+applied and backported to 6.3-stable rather sooner than later.
+This means there would be a small conflict when merging mm/mm-stable
+later. Alternatively it could be added to mm/mm-stable and upcoming 6.4
+pull request, but then the stable backport would need adjustment.
+It's up to Linus and Andrew.
 
->> +/**
->> + * cpumask_any_housekeeping() - Chose any cpu in @mask, preferring those that
->> + *			        aren't marked nohz_full
->> + * @mask:	The mask to pick a CPU from.
->> + *
->> + * Returns a CPU in @mask. If there are houskeeping CPUs that don't use
->> + * nohz_full, these are preferred.
->> + */
->> +static inline unsigned int cpumask_any_housekeeping(const struct cpumask *mask)
->> +{
->> +	int cpu, hk_cpu;
->> +
->> +	cpu = cpumask_any(mask);
->> +	if (tick_nohz_full_cpu(cpu)) {
->> +		hk_cpu = cpumask_nth_andnot(0, mask, tick_nohz_full_mask);
-> 
-> Why cpumask_nth_and() is not enough here? ..._andnot() seems to alter 
-> tick_nohz_full_mask which doesn't seem desirable?
+#regzbot introduced: 0503ea8f5ba7 https://bugzilla.suse.com/show_bug.cgi?id=1210903
 
-tick_nohz_full_mask is the list of CPUs we should avoid. This wants to find the first cpu
-set in the domain mask, and clear in tick_nohz_full_mask.
+ mm/mmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Where does cpumask_nth_andnot() modify its arguments? Its arguments are const.
+diff --git a/mm/mmap.c b/mm/mmap.c
+index d5475fbf5729..eefa6f0cda28 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -978,7 +978,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			vma = next;			/* case 3 */
+ 			vma_start = addr;
+ 			vma_end = next->vm_end;
+-			vma_pgoff = mid->vm_pgoff;
++			vma_pgoff = next->vm_pgoff - pglen;
+ 			err = 0;
+ 			if (mid != next) {		/* case 8 */
+ 				remove = mid;
+-- 
+2.40.0
 
-
-Thanks,
-
-James
