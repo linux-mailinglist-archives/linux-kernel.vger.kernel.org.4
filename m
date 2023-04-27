@@ -2,172 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F282A6F0BE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4305C6F0BE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244481AbjD0S23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S244485AbjD0S2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244474AbjD0S2Y (ORCPT
+        with ESMTP id S244039AbjD0S2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:28:24 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3564240C4;
-        Thu, 27 Apr 2023 11:28:23 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RIHeNt021995;
-        Thu, 27 Apr 2023 18:27:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=H9oV7UVH6rhl2KPZ3jEazQ9sDtabu4NrupuCgtU9Zn4=;
- b=ah8nPyPQcD8F00xX8RiV6xjKsaYhPYsSJzPqbsmlD4LN/Oagy/2b76oFPREm26DkfqcJ
- Y/d79GKgBTRWy7YacY6DJovD+GSPypTr1vyX024CycjtPSXP/o9Wg40U3IZ9gIwjEp/L
- rKZJftyfQgmPtocBbRie258J7f+nHTeg8394Dgxo8UenEliPcpX/UKmo6Fv552NzP8XH
- TCOY8y2AJQ+psQ+8LjWpvpMzhix36+g3WTvNmNIYmHIAP2XT9k8ejQZC2DFPiUgVvohn
- o7QIfRY+ybe+hySIfSZY0boUSjhQF7Av3Zp+6MwHKI/mv3Wy1+0h6EA36OQ2kLzJfv4D PA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7uq8w34m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 18:27:50 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33RIRnoG025080;
-        Thu, 27 Apr 2023 18:27:49 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7uq8w343-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 18:27:49 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33RHHmhC024941;
-        Thu, 27 Apr 2023 18:27:48 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3q4778kqkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 18:27:48 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33RIRlb012059294
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 18:27:47 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9D39658063;
-        Thu, 27 Apr 2023 18:27:47 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D443E5805D;
-        Thu, 27 Apr 2023 18:27:42 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.118.80])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Apr 2023 18:27:42 +0000 (GMT)
-Message-ID: <a8379b813d5c5118420c3b7a7e0de69d0166d033.camel@linux.ibm.com>
-Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
- model
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
-        "michael.day@amd.com" <michael.day@amd.com>,
-        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
-        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
-        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
-        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "dinechin@redhat.com" <dinechin@redhat.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "cdupontd@redhat.com" <cdupontd@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "sameo@rivosinc.com" <sameo@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "security@kernel.org" <security@kernel.org>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Dylan Reid <dylan@rivosinc.com>,
-        Ravi Sahita <ravi@rivosinc.com>
-Date:   Thu, 27 Apr 2023 14:27:41 -0400
-In-Reply-To: <20230427131542-mutt-send-email-mst@kernel.org>
-References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
-         <ZEfrjtgGgm1lpadq@google.com>
-         <DM8PR11MB575046B6DAA17B41FFED8080E7659@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <7502e1af0615c08167076ff452fc69ebf316c730.camel@linux.ibm.com>
-         <ZElOfzn37kmesy7e@google.com>
-         <DM8PR11MB57509EBCB1E2146C1768A6EEE76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <efda0be02fb0b5bf23aec11b5398d20908a821ba.camel@linux.ibm.com>
-         <20230427131542-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Thu, 27 Apr 2023 14:28:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFDB44BF
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682620077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T+CX4GL4gGpxnXf/hJ5GWtmKz7MYbRhiiF9QJ1pFsSM=;
+        b=N88+kLHAIM79eS+q/xb+Hwgxt5IWlQ1T7qeA0qgzBeRjx8HT3w5bJo9GtYY3kpHvQkXVJQ
+        3LlSh9/sVCncsokccSB61oVXOx1qx4MQOnorriaFv9kKEdKT9U4IMtrIX9uLc1vEPt3sOC
+        YdKVGtV+qGk+3z3OlMlPzR63n6Vt850=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-562-6Md7NY57MYOOg3tgNAX_OA-1; Thu, 27 Apr 2023 14:27:56 -0400
+X-MC-Unique: 6Md7NY57MYOOg3tgNAX_OA-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-751319bd93cso492554485a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:27:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682620075; x=1685212075;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T+CX4GL4gGpxnXf/hJ5GWtmKz7MYbRhiiF9QJ1pFsSM=;
+        b=F/MAtvQWOhqHOYCGWXlWu8bsRQSZWEA4Y5HVDrzvwgcTG0zBm1cUIct+Uwanl0UyCj
+         yVXJR28TcwGTzDBYmmP20TZCS0jfhE3wd9cHNACISrXrTQzBq4UA9Xk86rcMWB7owzF4
+         5zxnabKoH30fhZNkOWi/pu0O7NRbOufflsHG8fA7OCbeM/m2R1xcUYwvb4JrcWMqyWFO
+         ddsDmdSbMs0rcoP4ohwbQ1MbMaR5dtkg/vFqkzJggEMv81Zil5zy6EdMorORJboVG2RC
+         yiHpd4SQubjerqavuYxaWxXy7ENwVVdkpB7rqmzaGyGyg2P879qcCkd6T6leVRosOD0I
+         lQYA==
+X-Gm-Message-State: AC+VfDyecCpgMUeziKFFRlKyF1TMGLjftZYt6V1HWoBA+0DZyxJzhg3L
+        2MsDVSZWro3rRKIP79y9JvcuZqa0jbKRi2CHbmLS/zg6XR9deyAy+pP4HzAhphBbU+OYEs9zRuw
+        GpOdKquIqGZSN95nT1117ruY1
+X-Received: by 2002:a05:6214:2aa3:b0:5ef:6103:1475 with SMTP id js3-20020a0562142aa300b005ef61031475mr11387352qvb.20.1682620075762;
+        Thu, 27 Apr 2023 11:27:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5vITNttbiX9o2HcGScMwOU1JSe1VuR1YaYTjTVSHMXZNPeaKjyjfa3hzA7JN/b3DzJWeMzfA==
+X-Received: by 2002:a05:6214:2aa3:b0:5ef:6103:1475 with SMTP id js3-20020a0562142aa300b005ef61031475mr11387327qvb.20.1682620075431;
+        Thu, 27 Apr 2023 11:27:55 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id k25-20020a0c9719000000b005ef529dc39esm4016014qvd.108.2023.04.27.11.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 11:27:55 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 11:27:53 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] tpm: Prevent hwrng from activating during resume
+Message-ID: <3r4dorqzh7nrcsqmsedmt47iimqrh52dfzgrmkjduqglhwufkt@3svji6cfdsug>
+References: <20230426172928.3963287-1-jarkko@kernel.org>
+ <20230426172928.3963287-3-jarkko@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9XtbHcBZSboFEHBt3fm2quRRKGplcWca
-X-Proofpoint-GUID: o40wtKUwYkFN8HQQX3bVLzxWbKZo63JG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 adultscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304270158
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426172928.3963287-3-jarkko@kernel.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-27 at 13:19 -0400, Michael S. Tsirkin wrote:
-> On Thu, Apr 27, 2023 at 09:18:08AM -0400, James Bottomley wrote:
-> > I think the problem is that the tenor of the document is that the
-> > CSP should be seen as the enemy of the tenant. Whereas all CSP's
-> > want to be seen as the partner of the tenant (admittedly so they
-> > can upsell services). In particular, even if you adopt (b) there
-> > are several reasons why you'd use confidential computing:
-> > 
-> >    1. Protection from other tenants who break containment in the
-> > cloud. These tenants could exfiltrate data from Non-CoCo VMs, but
-> > likely would be detected before they had time to launch an attack
-> > using vulnerabilities in the current linux device drivers.
-> >    2. Legal data security.  There's a lot of value in a CSP being
-> > able to make the legal statement that it does not have access to a
-> > customer data because of CoCo.
-> >    3. Insider threats (bribe a CSP admin employee).  This one might
-> > get as far as trying to launch an attack on a CoCo VM, but having 
-> > checks at the CSP to detect and defeat this would work instead of
-> > every insider threat having to be defeated inside the VM.
+On Wed, Apr 26, 2023 at 08:29:28PM +0300, Jarkko Sakkinen wrote:
+> Set TPM_CHIP_FLAG_SUSPENDED in tpm_pm_suspend() and reset in
+> tpm_pm_resume(). While the flag is set, tpm_hwrng() gives back zero bytes.
+> This prevents hwrng from racing during resume.
 > 
-> And generally, all these are instances of adopting a zero trust
-> architecture, right? Many CSPs have no need to access VM memory
-> so they would rather not have the ability.
+> Cc: stable@vger.kernel.org
+> Fixes: 6e592a065d51 ("tpm: Move Linux RNG connection to hwrng")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Yes, and no: Zero trust is more an architectural end point statement. 
-I was aiming for minimizing trust contact points.  In the limit they're
-definitely the same thing, but there's still lots of security value to
-minimizing trust even before you get to zero.
 
-James
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com
+
+> ---
+>  drivers/char/tpm/tpm-chip.c      |  4 ++++
+>  drivers/char/tpm/tpm-interface.c | 10 ++++++++++
+>  include/linux/tpm.h              | 13 +++++++------
+>  3 files changed, 21 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index 6fdfa65a00c3..6f5ee27aeda1 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -572,6 +572,10 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  {
+>  	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
+>  
+> +	/* Give back zero bytes, as TPM chip has not yet fully resumed: */
+> +	if (chip->flags & TPM_CHIP_FLAG_SUSPENDED)
+> +		return 0;
+> +
+>  	return tpm_get_random(chip, data, max);
+>  }
+>  
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 7e513b771832..0f941cb32eb1 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -412,6 +412,8 @@ int tpm_pm_suspend(struct device *dev)
+>  	}
+>  
+>  suspended:
+> +	chip->flags |= TPM_CHIP_FLAG_SUSPENDED;
+> +
+>  	if (rc)
+>  		dev_err(dev, "Ignoring error %d while suspending\n", rc);
+>  	return 0;
+> @@ -429,6 +431,14 @@ int tpm_pm_resume(struct device *dev)
+>  	if (chip == NULL)
+>  		return -ENODEV;
+>  
+> +	chip->flags &= ~TPM_CHIP_FLAG_SUSPENDED;
+> +
+> +	/*
+> +	 * Guarantee that SUSPENDED is written last, so that hwrng does not
+> +	 * activate before the chip has been fully resumed.
+> +	 */
+> +	wmb();
+> +
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pm_resume);
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 4dc97b9f65fb..d7073dc45444 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -274,13 +274,14 @@ enum tpm2_cc_attrs {
+>  #define TPM_VID_ATML     0x1114
+>  
+>  enum tpm_chip_flags {
+> -	TPM_CHIP_FLAG_TPM2		= BIT(1),
+> -	TPM_CHIP_FLAG_IRQ		= BIT(2),
+> -	TPM_CHIP_FLAG_VIRTUAL		= BIT(3),
+> -	TPM_CHIP_FLAG_HAVE_TIMEOUTS	= BIT(4),
+> -	TPM_CHIP_FLAG_ALWAYS_POWERED	= BIT(5),
+> +	TPM_CHIP_FLAG_SUSPENDED			= BIT(0),
+> +	TPM_CHIP_FLAG_TPM2			= BIT(1),
+> +	TPM_CHIP_FLAG_IRQ			= BIT(2),
+> +	TPM_CHIP_FLAG_VIRTUAL			= BIT(3),
+> +	TPM_CHIP_FLAG_HAVE_TIMEOUTS		= BIT(4),
+> +	TPM_CHIP_FLAG_ALWAYS_POWERED		= BIT(5),
+>  	TPM_CHIP_FLAG_FIRMWARE_POWER_MANAGED	= BIT(6),
+> -	TPM_CHIP_FLAG_FIRMWARE_UPGRADE	= BIT(7),
+> +	TPM_CHIP_FLAG_FIRMWARE_UPGRADE		= BIT(7),
+>  };
+>  
+>  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
+> -- 
+> 2.39.2
+> 
 
