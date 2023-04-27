@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9016F03FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A9A6F0400
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243415AbjD0KNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
+        id S243449AbjD0KNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbjD0KNO (ORCPT
+        with ESMTP id S243155AbjD0KNt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:13:14 -0400
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C24592;
-        Thu, 27 Apr 2023 03:13:13 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f19afc4f60so38227155e9.1;
-        Thu, 27 Apr 2023 03:13:13 -0700 (PDT)
+        Thu, 27 Apr 2023 06:13:49 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8656E49F4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:13:48 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763bc8ac23aso367121439f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682590392; x=1685182392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mNNjiSHfVRruw15xW6omPfyhEqYHKH/kULEDX2tDZsQ=;
-        b=f4IP2tOYvGDnS0Da4vpBB6t/kiwasxkka/o1ryupst73Dgx1JKZFNhWQvM1CFIysNq
-         Ty8c5I0CN2kttKr7CErviY2L0hi5izMBlHeuESgCWWRbGJCMYE8SPwQLhlFw1ACSeLZy
-         IALETImbvg2pIgdkRWOQqDZcr1BwtDAs+YzrT/reZRL6apTHq9Rxree7pa5WeVRS//LO
-         SmqlBFiyaPbJQAa45k+S8ceNivqICqVCM4TzyfYc+0bRHKUvQaAQ6roJ5pOPAVzCUE8W
-         jAak5kFW0ehSPb9Q89kVaNAcuh1R5z7VwY6RCiCPzSnFRfNao8+KQ0wuJvKv28RHVCYj
-         SOCQ==
-X-Gm-Message-State: AC+VfDxCimmwlxUEtEX7EOXZCkZ3nw0QhEb6e4mBvYd/gP3ujStHjlc5
-        UwC/n0n2zOhs82GrAFldKNQ=
-X-Google-Smtp-Source: ACHHUZ7aIJa5N0WpdlvrNTYsuiwwMvEobcFK1OeJOgnFINS3HviYYEdF0vVuLl48hyF+XtpJnZ2fSw==
-X-Received: by 2002:a7b:c8d9:0:b0:3f1:94fe:65e0 with SMTP id f25-20020a7bc8d9000000b003f194fe65e0mr1073788wml.26.1682590391144;
-        Thu, 27 Apr 2023 03:13:11 -0700 (PDT)
-Received: from costa-tp.redhat.com ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
-        by smtp.gmail.com with ESMTPSA id v19-20020a05600c215300b003ee20b4b2dasm20825920wml.46.2023.04.27.03.13.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 03:13:10 -0700 (PDT)
-From:   Costa Shulyupin <costa.shul@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Costa Shulyupin <costa.shul@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] docs: redirect from old arch to the new one
-Date:   Thu, 27 Apr 2023 13:12:39 +0300
-Message-Id: <20230427101241.1273752-1-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20221208; t=1682590428; x=1685182428;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TIASw9GSY2Of7dAiuTmEdRXJa7/4ehqzLcUcuOFsD+o=;
+        b=A8gkOtmkeij6AEiEa3as8DTQ/r5USVOIi6Iy0n76NALTBmoQ87uKVGw0CFiWUWendA
+         y6otQcL5OJ8IUFlEvQB6bgvHlSryZEX+stP1EEA2aHKxdYF7dUypCiaJpb381nMQb2un
+         VLEHGyMlFZ0kWbBx9cjLmnLbt8cwN/rRS+u5IVeN+A2uMjOx6znVR3sw/6biWp/aOHu2
+         WlgYQLHv73+H36DWBMxBgGnUx6CzPVV2IoPmOfyk1htGLKiwTMVWlGWXLrgbDx1azhGk
+         0q4Lmk8bZMNn6p6g8cVkAIQqb2DO6h0IqxxYMo8dwN/kNIoNbT5md8jxn/i20L3YN3kV
+         ugjg==
+X-Gm-Message-State: AC+VfDyrfRIRHbh5O8IybihCA0ia4pzwtDNFe0lNZpFDx+hI/ViKqlu6
+        XOXf30/l87iIfDso4cCupP9SPLxKqr4UyiLyUByCksDdMKk1
+X-Google-Smtp-Source: ACHHUZ56RFAeCriTAKSh7aExBM934wOdE8tuJWkeAOdKypKxxbZl9RB+VyRBFcAIdtQYvhEFy3z9AqWvUyNz6CChrajmXxlHxL+W
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:6345:0:b0:40f:83e7:a965 with SMTP id
+ j66-20020a026345000000b0040f83e7a965mr484047jac.4.1682590427848; Thu, 27 Apr
+ 2023 03:13:47 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 03:13:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c122fa05fa4e9c55@google.com>
+Subject: [syzbot] Monthly btrfs report (Apr 2023)
+From:   syzbot <syzbot+list8d625089c709215832c5@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to a recent reorganization of 'CPU Architectures', the links to
-the documentation from external resources were rendered invalid.
-This is a common challenge when attempting to make changes
-while maintaining backward compatibility. To address this issue,
-a commit has been made which uses sphinx extension to seamlessly
-redirect users from the old location of the page to the new one.
+Hello btrfs maintainers/developers,
 
+This is a 31-day syzbot report for the btrfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/btrfs
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+During the period, 8 new issues were detected and 0 were fixed.
+In total, 52 issues are still open and 25 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  2242    Yes   kernel BUG in close_ctree
+                   https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
+<2>  486     Yes   VFS: Busy inodes after unmount (use-after-free)
+                   https://syzkaller.appspot.com/bug?extid=0af00f6a2cba2058b5db
+<3>  365     Yes   WARNING in btrfs_block_rsv_release
+                   https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
+<4>  319     Yes   WARNING in __kernel_write_iter
+                   https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
+<5>  274     Yes   WARNING in btrfs_space_info_update_bytes_may_use
+                   https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
+<6>  190     Yes   WARNING in btrfs_remove_chunk
+                   https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
+<7>  181     Yes   WARNING in btrfs_chunk_alloc
+                   https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
+<8>  180     Yes   possible deadlock in btrfs_search_slot
+                   https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
+<9>  162     Yes   WARNING in lookup_inline_extent_backref
+                   https://syzkaller.appspot.com/bug?extid=d6f9ff86c1d804ba2bc6
+<10> 138     Yes   kernel BUG in assertfail (2)
+                   https://syzkaller.appspot.com/bug?extid=c4614eae20a166c25bf0
+
 ---
- Documentation/conf.py                 | 8 +++++++-
- Documentation/sphinx/requirements.txt | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/conf.py b/Documentation/conf.py
-index 37314afd1ac8..514bfe6a8166 100644
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -55,7 +55,13 @@ needs_sphinx = '1.7'
- extensions = ['kerneldoc', 'rstFlatTable', 'kernel_include',
-               'kfigure', 'sphinx.ext.ifconfig', 'automarkup',
-               'maintainers_include', 'sphinx.ext.autosectionlabel',
--              'kernel_abi', 'kernel_feat']
-+              'kernel_abi', 'kernel_feat',
-+              'sphinx_reredirects',
-+]
-+
-+redirects = {
-+     "arch.html": "arch/index.html",
-+}
- 
- if major >= 3:
-     if (major > 3) or (minor > 0 or patch >= 2):
-diff --git a/Documentation/sphinx/requirements.txt b/Documentation/sphinx/requirements.txt
-index 335b53df35e2..0b067e985edb 100644
---- a/Documentation/sphinx/requirements.txt
-+++ b/Documentation/sphinx/requirements.txt
-@@ -1,3 +1,4 @@
- # jinja2>=3.1 is not compatible with Sphinx<4.0
- jinja2<3.1
- Sphinx==2.4.4
-+sphinx_reredirects
--- 
-2.40.0
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
