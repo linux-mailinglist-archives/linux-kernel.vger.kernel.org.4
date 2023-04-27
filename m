@@ -2,160 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A8B6F0D9C
+	by mail.lfdr.de (Postfix) with ESMTP id 714496F0D9D
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344169AbjD0VJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 17:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
+        id S1344170AbjD0VJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 17:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344115AbjD0VJQ (ORCPT
+        with ESMTP id S1344150AbjD0VJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Apr 2023 17:09:16 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D97A35BB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so15654209a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75CD3ABC;
+        Thu, 27 Apr 2023 14:09:15 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2478485fd76so6172110a91.2;
+        Thu, 27 Apr 2023 14:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682629753; x=1685221753;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=FIPY/AsEk9VaaX6Ftm9Kn+pTNQ+Lf9NUsugsitn3Cfs=;
-        b=OciFjJxMCoLoY11urAU20r7fBv49TndA+cxFy4+WAA720uGUP4YA5Kingp+SDjHJdZ
-         O9eCxMayHkR3vv2Asi2IlDaUJcOEfVW/jlWO1Pi/mS7eMom1zomYhUNeEckaUWxgq7ZU
-         MUT27ub/dV/mdVzIBfU2LsuuKvpT710Ip7pqBZPOw8z+9vUAn1OrUefmpxqYtvRSB1//
-         YsRKZ6FEdCTLmg4MTkdcvMoBSK7w8frntBpzUdjfwHqaugZ7v/J07pAwJ2sVT7fiwASS
-         FrI6qsk+mD44P8Cei5z0hVoqJ23TKWnTcYhNkcXRYBnYKBp1WUP5+AGWSdiqtNab/37k
-         yFug==
+        d=gmail.com; s=20221208; t=1682629755; x=1685221755;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KFDXJZIPaM+pqQLwG66fN/jTkXrC7sSivzGv6mtbm3c=;
+        b=PPrsSTe1bAp1dKlcBnSXNSudWSQ1LnBOt426D/P/8GTHob8zTIay9PveFM+eRcMngN
+         1o14jBuBCFgTWhPg9PZU5sJAca672L1ooDAWDNWb1Xx+WIe0bBJRbG2qm7EQPk+albFV
+         PHjWHnrdlVvvoopHIyjfrWTrBbf+2O9StsjwdZLoYqSAsK0BezOTgXmVPVIbTdn9d9+w
+         /0td/xwbq/Atcf+YC5hOMhLNfEa7x1rROCq5dvaS/xCjTrCgdb2h0SRYpxvg/bDmkuf9
+         CPhQvJT7nwapn14ItSJ4BNLaiL3hf1p8NlDO4hNSLUK0ExcOO0+iLN0tLKrP1JCAAEdL
+         PmSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682629753; x=1685221753;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FIPY/AsEk9VaaX6Ftm9Kn+pTNQ+Lf9NUsugsitn3Cfs=;
-        b=AAiElIRECwIjvIVIVsxDMQ4l6Ezr7kF+Djclr4R4yY4DoxkO2Holn+3T2rGzhpDAz7
-         A4hONa97iBuL2x0EN1MunX/bmyVT/Mg7Qt/PUAmoMq7YM5XWSUmxZi4H12n92wylw/w0
-         81bJLAee/e73k9Dku6HNELxWwCEjPsmPUcyEe8shBO23kT/6dPSEQhNYVM2RFgym4UQl
-         QB1Zy+efTurhQkGa3QBFl+G/2wjW2ghhJ+16RuzIODnzmnWM5qBzKEBVFhv+xulFgdN8
-         TGPZu49InyZhStuoFPcU9tBgS0alzs9VCe2D2TwVT3FqclDtCrGvJJUqHU92l8P8fw+f
-         i7GQ==
-X-Gm-Message-State: AC+VfDxNHubZLJixCaLNBrmVTkHVoUEsHONaCiGn9OhdBL3F4ucBLT7/
-        itG9SkT7F24EGZ7WKjGLDnY=
-X-Google-Smtp-Source: ACHHUZ4jXgOQv4v+Qggvhypzif6sgPBdgeN6c1LPn3O53sXG04lepbWlMEpUcmh6q9yb6pbepHva4w==
-X-Received: by 2002:a17:907:701:b0:94f:2347:ce8e with SMTP id xb1-20020a170907070100b0094f2347ce8emr2962691ejb.70.1682629753066;
-        Thu, 27 Apr 2023 14:09:13 -0700 (PDT)
-Received: from gmail.com (1F2EF38A.nat.pool.telekom.hu. [31.46.243.138])
-        by smtp.gmail.com with ESMTPSA id q27-20020a170906361b00b0094e1026bc66sm10238642ejb.140.2023.04.27.14.09.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 14:09:10 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 27 Apr 2023 23:09:08 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [GIT PULL] SMP cross-call changes for v6.4
-Message-ID: <ZErkdNBn7OLkQZWC@gmail.com>
+        d=1e100.net; s=20221208; t=1682629755; x=1685221755;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KFDXJZIPaM+pqQLwG66fN/jTkXrC7sSivzGv6mtbm3c=;
+        b=lKEnWE3juvqIx1M2OFuJnkAtfU0Fg5Z49ITNROcKla+sq9WGVEuhTJm8qnApwRhkGS
+         wDFwId/5xU0IkHyzNb3xFCzJFzQN84yREjfpEOr94J3+eITqMsevMS8tXodVorH29N3A
+         Fq+L2v3mdRp+fsFeGpHoGA84o4XFTDisqhgWzfrdKyiWzy3f905vW+XOr+NeSfrYHcj5
+         R8oPDhPNKQIPqfYcJat0UFJyCgMrddzjw3p8zE3180y6pWUiw0q/STbj+xDKqkMtMmrM
+         r7qzNP/hiPjKWq52qsPXdyWSHbzMd3k3mRnNC+CTYA3mR1ZtZH/i5nY+P18VYjy06NPU
+         E6SQ==
+X-Gm-Message-State: AC+VfDwQhkywPtXGkrLNJ+DzfiTp8AQg4zymoAUwCKkTrXIJxTnS0hyL
+        yGISUupWSnhGKSIqW7D++y6fSMjy0vs=
+X-Google-Smtp-Source: ACHHUZ4mIsMHhH/4ygnusk5BTWZYoaP37jVx0U9QGy0Nlp9qwvJQQhf0G7EHbTbM/Dc0dn9Ftb1kgw==
+X-Received: by 2002:a17:90a:bd98:b0:23d:16d6:2f05 with SMTP id z24-20020a17090abd9800b0023d16d62f05mr3019092pjr.22.1682629754911;
+        Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id gv17-20020a17090b11d100b00246b0faa6b1sm11683839pjb.5.2023.04.27.14.09.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fefa43d8-e013-6656-d27d-27ac65cc953d@roeck-us.net>
+Date:   Thu, 27 Apr 2023 14:09:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Scott Smith <scott8440@gmail.com>, jdelvare@suse.com
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20230427193533.718526-1-scott8440@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (pmbus) add ir35215 driver
+In-Reply-To: <20230427193533.718526-1-scott8440@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/27/23 12:35, Scott Smith wrote:
+> IR35215 is a digital multi-phase controller.
+> 
+> Signed-off-by: Scott Smith <scott8440@gmail.com>
 
-Linus,
+Does this chip really need its own driver ? Please check if it can be added
+to pmbus.c instead. If not, please provide a rationale explaining why
+that does not work. Also, if you have access to the datasheet, please
+make sure that the chip is sufficiently different from IR35221 to warrant
+a separate driver.
 
-Please pull the latest smp/core git tree from:
+Additional comments inline.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp-core-2023-04-27
+Thanks,
+Guenter
 
-   # HEAD: 5c3124975e15c1fadd5af1c61e4d627cf6d97ba2 trace,smp: Trace all smp_function_call*() invocations
+> ---
+>   drivers/hwmon/pmbus/Kconfig   |  9 +++++
+>   drivers/hwmon/pmbus/Makefile  |  1 +
+>   drivers/hwmon/pmbus/ir35215.c | 65 +++++++++++++++++++++++++++++++++++
 
-SMP cross-CPU function-call updates for v6.4:
+Documentation/hwmon/ir35215.rst needed (if this driver is needed).
 
- - Remove diagnostics and adjust config for CSD lock diagnostics
+>   3 files changed, 75 insertions(+)
+>   create mode 100644 drivers/hwmon/pmbus/ir35215.c
+> 
+> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+> index 270b6336b76d..5c089f7e4423 100644
+> --- a/drivers/hwmon/pmbus/Kconfig
+> +++ b/drivers/hwmon/pmbus/Kconfig1 
+> @@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called inspur-ipsps.
+>   
+> +config SENSORS_IR35215
+> +       tristate "Infineon IR35215"
+> +       help
+> +         If you say yes here you get hardware monitoring support for the
+> +         Infineon IR35215 controller.
+> +
+> +         This driver can also be built as a module. If so, the module will
+> +         be called ir35215.
+> +
+>   config SENSORS_IR35221
+>   	tristate "Infineon IR35221"
+>   	help
+> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+> index 84ee960a6c2d..fbb9cf048326 100644
+> --- a/drivers/hwmon/pmbus/Makefile
+> +++ b/drivers/hwmon/pmbus/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+>   obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+>   obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+>   obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
+> +obj-$(CONFIG_SENSORS_IR35215)   += ir35215.o
+>   obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+>   obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
+>   obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+> diff --git a/drivers/hwmon/pmbus/ir35215.c b/drivers/hwmon/pmbus/ir35215.c
+> new file mode 100644
+> index 000000000000..92d59e78bfd0
+> --- /dev/null
+> +++ b/drivers/hwmon/pmbus/ir35215.c
+> @@ -0,0 +1,65 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Hardware monitoring driver for Infineon IR35215
+> + *
+> + * Copyright (c) Meta Platforms, Inc. and affiliates.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/hwmon-sysfs.h>
 
- - Add a generic IPI-sending tracepoint, as currently there's no easy
-   way to instrument IPI origins: it's arch dependent and for some
-   major architectures it's not even consistently available.
+Not needed.
 
- Thanks,
+> +#include <linux/i2c.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include "pmbus.h"
+> +
+> +static const u32 functionality = PMBUS_HAVE_TEMP
+> +	| PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
+> +	| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
+> +	| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
+> +	| PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT
+> +	| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP;
+> +
+> +static struct pmbus_driver_info ir35215_info = {
+> +	.pages = 2,
+> +	.format[PSC_VOLTAGE_IN] = linear,
+> +	.format[PSC_VOLTAGE_OUT] = linear,
+> +	.format[PSC_CURRENT_IN] = linear,
+> +	.format[PSC_CURRENT_OUT] = linear,
+> +	.format[PSC_POWER] = linear,
+> +	.format[PSC_TEMPERATURE] = linear,
+> +	.func[0] = functionality,
+> +	.func[1] = functionality,
+> +};
+> +
+> +static int ir35215_probe(struct i2c_client *client)
+> +{
+> +	/*
+> +	 * IR35215 devices may not stay in page 0 during device
+> +	 * probe which leads to probe failure (read status word failed).
+> +	 * So let's set the device to page 0 at the beginning.
+> +	 */
+> +	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
 
-	Ingo
+That should probably be added to the pmbus core code since
+it potentially affects all PMBus chips.
 
------------------->
-Paul E. McKenney (4):
-      locking/csd_lock: Add Kconfig option for csd_debug default
-      locking/csd_lock: Remove added data from CSD lock debugging
-      locking/csd_lock: Remove per-CPU data indirection from CSD lock debugging
-      kernel/smp: Make csdlock_debug= resettable
+> +	return pmbus_do_probe(client, &ir35215_info);
+> +}
+> +
+> +static const struct i2c_device_id ir35215_id[] = {
+> +	{ "ir35215", 0 },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ir35215_id);
+> +
+> +static struct i2c_driver ir35215_driver = {
+> +	.driver = {
+> +		   .name = "ir35215",
+> +	},
+> +	.probe_new = ir35215_probe,
+> +	.id_table = ir35215_id,
+> +};
+> +
+> +module_i2c_driver(ir35215_driver);
+> +
+> +MODULE_AUTHOR("Tao Ren <rentao.bupt@gmail.com>");
+> +MODULE_DESCRIPTION("PMBus driver for Infineon IR35215");
+> +MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(PMBUS);
 
-Peter Zijlstra (2):
-      trace: Add trace_ipi_send_cpu()
-      trace,smp: Trace all smp_function_call*() invocations
-
-Valentin Schneider (7):
-      trace: Add trace_ipi_send_cpumask()
-      sched, smp: Trace IPIs sent via send_call_function_single_ipi()
-      smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
-      irq_work: Trace self-IPIs sent via arch_irq_work_raise()
-      treewide: Trace IPIs sent via smp_send_reschedule()
-      smp: reword smp call IPI comment
-      sched, smp: Trace smp callback causing an IPI
-
-
- Documentation/admin-guide/kernel-parameters.txt |  17 +-
- arch/alpha/kernel/smp.c                         |   2 +-
- arch/arc/kernel/smp.c                           |   2 +-
- arch/arm/kernel/smp.c                           |   3 +-
- arch/arm/mach-actions/platsmp.c                 |   2 +
- arch/arm64/kernel/smp.c                         |   3 +-
- arch/csky/kernel/smp.c                          |   2 +-
- arch/hexagon/kernel/smp.c                       |   2 +-
- arch/ia64/kernel/smp.c                          |   4 +-
- arch/loongarch/kernel/smp.c                     |   4 +-
- arch/mips/include/asm/smp.h                     |   2 +-
- arch/mips/kernel/rtlx-cmp.c                     |   2 +
- arch/openrisc/kernel/smp.c                      |   2 +-
- arch/parisc/kernel/smp.c                        |   4 +-
- arch/powerpc/kernel/smp.c                       |   6 +-
- arch/powerpc/kvm/book3s_hv.c                    |   3 +
- arch/powerpc/platforms/powernv/subcore.c        |   2 +
- arch/riscv/kernel/smp.c                         |   4 +-
- arch/s390/kernel/smp.c                          |   2 +-
- arch/sh/kernel/smp.c                            |   2 +-
- arch/sparc/kernel/smp_32.c                      |   2 +-
- arch/sparc/kernel/smp_64.c                      |   2 +-
- arch/x86/include/asm/smp.h                      |   2 +-
- arch/x86/kvm/svm/svm.c                          |   4 +
- arch/x86/kvm/x86.c                              |   2 +
- arch/xtensa/kernel/smp.c                        |   2 +-
- include/linux/smp.h                             |  11 +-
- include/trace/events/ipi.h                      |  44 ++++
- kernel/irq_work.c                               |  12 +-
- kernel/sched/core.c                             |  22 +-
- kernel/sched/smp.h                              |   2 +-
- kernel/smp.c                                    | 313 ++++++------------------
- lib/Kconfig.debug                               |   9 +
- virt/kvm/kvm_main.c                             |   3 +
- 34 files changed, 219 insertions(+), 281 deletions(-)
