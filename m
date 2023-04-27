@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C179D6F09E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5220E6F09E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244070AbjD0Qar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S244168AbjD0QbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243524AbjD0Qap (ORCPT
+        with ESMTP id S244083AbjD0QbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:30:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCE7187;
-        Thu, 27 Apr 2023 09:30:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4766663E39;
-        Thu, 27 Apr 2023 16:30:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA46EC433D2;
-        Thu, 27 Apr 2023 16:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682613042;
-        bh=OmjilNqaEg4FBJ0Amg+2m1CqZ7Mi+fj6I+FNpHYmcmw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i8hf+1yM6b/03KJKZP2jvKGFi3P77LMD78cMUdNV1/e6HTudN1OhrZr3VoJbudtuk
-         qN7ucUtubNkoYTOErFvGh7oCSNAPMMzlk2i/Gmu1YZIFahElV0wNVDVRBwonz5C8sb
-         LrQmVwlFEHv8ZEl7Tr/9T4HwI7o6HeRiB1WQ5NRcPDe6E0J2Gl0XsvvG5xKIzWPb5P
-         E5d80QrHLAtsND6tjSRjEDHuJDMcoy75ewjzImcNYkH49L/H/L4UMLkenp9CBuob2v
-         EXN7/BwAqDI1q5wlPNcGdlvska/79VPmwZ0UX3iFJu8z13c2IWWP8Ts030+wiIeKGo
-         ndxk0r+bDS+Hg==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 27 Apr 2023 19:30:36 +0300
-Message-Id: <CS7OJHZ1JZ1C.199SDPTFJU10C@wks-101042-mac.ad.tuni.fi>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Eric Snowberg" <eric.snowberg@oracle.com>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] tpmdd: a critical bug fix for v6.4-rc1
-X-Mailer: aerc 0.14.0
-References: <20230427111125.13769-1-jarkko@kernel.org>
- <CAHk-=wiGauUNbV_1ZdxG92aWF+oqnnqdRg4z2h-FxXjB_w3Xiw@mail.gmail.com>
-In-Reply-To: <CAHk-=wiGauUNbV_1ZdxG92aWF+oqnnqdRg4z2h-FxXjB_w3Xiw@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 12:31:11 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211321707
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:31:10 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6a5f7341850so6816191a34.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682613069; x=1685205069;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=H/F2jXQhEspNf2OSg1QdhIunBBlXl0Bx9YZ26gqXk+Gs3zr1BMEJlTeL5k9J8P05bu
+         GUKysimt65dWa99YmJSJVeBANdqJjBXt3KAmR09VKLgLmOByA2d4V1DF8VdJyCqx0WVy
+         wTTi+XjWh1gjMd/UXjdaOWsjrs8U9CTZzav9EEzBxRv7ygMPsrF21nAtzIqBy0hd6bx/
+         rVCC5lep6mjx7P7X7168S1kDfCavrY2GvkPNq436Edjl3h7XLL4NyZMlDGY38BE+C6i9
+         hP37oyOZN9vjSf9M67zNMdGLB4TBOx9IpsMXcGi+Kf/odO+qLqN4KuSt+YvvfhtsbHfe
+         wshw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682613069; x=1685205069;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
+        b=aRxpDXbr33NTpee5LPFZgFHI8EBcTe6clvdPyW8JJDyGT+wYDktYwuvos0cg6HQQa2
+         c2iwcRS10hsyI5GIxj6sGcSAGWNl2O53iO8/EGTNHtE6sQr0udJM6jJDm3NmO1zTYtiC
+         44vBvnx2PXN1VE7AwJSLzNmLgEE+XIxcxV59FXvb/n8KGPelhv1tknV7HEdrPD0+dJal
+         cAI3jvNw6YEIUrTI0gpGpPFQtKosGbD6RnsLoCgkcibzHb5FiXPoYkL/oJ2vJL3PNQ95
+         d3YJLB47HdJExkvnvcwr+istbnYDHX69x3yc0Gc78OR7hPJnIFgSMYtWGZP9r0ZmwB4Y
+         p1sA==
+X-Gm-Message-State: AC+VfDyPlFErzLm3iHXR+PXjxeitiPb0lZVCjOLhmQCjzxudaqZM0xQn
+        MTQwZjMZekEdY6SPPAuTiR3srcWgd0a9lwifbdM=
+X-Google-Smtp-Source: ACHHUZ4ZWPxxNS1Y5SSo3pDTzI3Cin5siRdLfLJT7PY3lt+Mg1tieNMQ61YcFP1SGBY5C2W7bo73rMjSg69Nd/lxy4o=
+X-Received: by 2002:a05:6871:6b81:b0:188:10b8:5358 with SMTP id
+ zh1-20020a0568716b8100b0018810b85358mr1352670oab.16.1682613069193; Thu, 27
+ Apr 2023 09:31:09 -0700 (PDT)
+MIME-Version: 1.0
+Sender: mrsthereseninna@gmail.com
+Received: by 2002:a05:6358:2489:b0:f1:be9a:c0c5 with HTTP; Thu, 27 Apr 2023
+ 09:31:08 -0700 (PDT)
+From:   Dr Lisa Williams <lw4666555@gmail.com>
+Date:   Thu, 27 Apr 2023 09:31:08 -0700
+X-Google-Sender-Auth: 2oW4L4Na4Ml9J-VMpu6qL-XIbgg
+Message-ID: <CAKVHDg8feap+6aWmD4o2bHD1DZqj_4PvghR9nh0Cm1DaYdQB=A@mail.gmail.com>
+Subject: Hi,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Apr 27, 2023 at 6:38 PM EEST, Linus Torvalds wrote:
-> On Thu, Apr 27, 2023 at 4:11=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.or=
-g> wrote:
-> >
-> > This PR fixes a critical bug in my first pull request.
->
-> That doesn't work AT ALL.
->
-> You have this duplicated line
->
-> -       TPM_CHIP_FLAG_FIRMWARE_UPGRADE  =3D BIT(7),
-> +       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-> +       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-> +       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
->
-> in that patch (presumably due to some edit-time fat-fingering), which
-> causes lots and lots of
->
->   ./include/linux/tpm.h:285:9: error: redeclaration of enumerator
-> =E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99
->     285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   ./include/linux/tpm.h:284:9: note: previous definition of
-> =E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99 with type =E2=80=98int=
-=E2=80=99
->     284 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   ./include/linux/tpm.h:286:9: error: redeclaration of enumerator
-> =E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99
->     286 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> errors.
->
-> While I could easily just remove the duplicated lines in my merge,
-> that would make things non-bisectable, so I unpulled this instead.
->
->              Linus
+Hi,
 
-My bad, please do not. I'll send a new one, cherry pick gone wrong :-(
+My name is Dr. Lisa Williams, from the United States, currently living
+in the United Kingdom.
 
-BR, Jarkko
+I hope you consider my friend request. I will share some of my photos
+and more details about me when I get your reply.
+
+With love
+Lisa
