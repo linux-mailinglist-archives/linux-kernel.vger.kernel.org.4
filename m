@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336FE6F0708
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A95A6F0709
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243846AbjD0OLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 10:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S243859AbjD0OMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 10:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243547AbjD0OLo (ORCPT
+        with ESMTP id S243854AbjD0OMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:11:44 -0400
+        Thu, 27 Apr 2023 10:12:20 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B4994690
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:11:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB9042120
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:12:18 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2965143D;
-        Thu, 27 Apr 2023 07:12:26 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A01F411FB;
+        Thu, 27 Apr 2023 07:13:02 -0700 (PDT)
 Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B2DBB3F7D8;
-        Thu, 27 Apr 2023 07:11:17 -0700 (PDT)
-Message-ID: <8e92b43d-dd8f-80e0-e31b-5ebfed418a0f@arm.com>
-Date:   Thu, 27 Apr 2023 15:11:07 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 786173F64C;
+        Thu, 27 Apr 2023 07:12:11 -0700 (PDT)
+Message-ID: <670081d0-b4fc-79c5-68f8-5b3c162b74b9@arm.com>
+Date:   Thu, 27 Apr 2023 15:12:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
@@ -47,8 +47,9 @@ Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
 References: <20230320172620.18254-1-james.morse@arm.com>
  <20230320172620.18254-10-james.morse@arm.com>
  <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
+ <CALPaoCgnHYwpyVy_aPafPm6-v+DqirXSbVBLP_wx6jEp8pNBOA@mail.gmail.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoCgXYBphe+toVBmF6eGKz8sCHYsaTvvd5ZnrJBf07tjbzg@mail.gmail.com>
+In-Reply-To: <CALPaoCgnHYwpyVy_aPafPm6-v+DqirXSbVBLP_wx6jEp8pNBOA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -62,75 +63,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Peter,
 
-On 22/03/2023 14:07, Peter Newman wrote:
-> On Mon, Mar 20, 2023 at 6:27 PM James Morse <james.morse@arm.com> wrote:
+On 23/03/2023 09:09, Peter Newman wrote:
+> On Wed, Mar 22, 2023 at 3:07 PM Peter Newman <peternewman@google.com> wrote:
+>> On Mon, Mar 20, 2023 at 6:27 PM James Morse <james.morse@arm.com> wrote:
+>>>
+>>> x86 is blessed with an abundance of monitors, one per RMID, that can be
 >>
->> x86 is blessed with an abundance of monitors, one per RMID, that can be
-> 
-> As I explained earlier, this is not the case on AMD.
-
-I'll change it so say Intel.
-
-
->> read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
->> the number implemented is up to the manufacturer. This means when there are
->> fewer monitors than needed, they need to be allocated and freed.
+>> As I explained earlier, this is not the case on AMD.
 >>
->> Worse, the domain may be broken up into slices, and the MMIO accesses
->> for each slice may need performing from different CPUs.
+>>> read from any CPU in the domain. MPAMs monitors reside in the MMIO MSC,
+>>> the number implemented is up to the manufacturer. This means when there are
+>>> fewer monitors than needed, they need to be allocated and freed.
+>>>
+>>> Worse, the domain may be broken up into slices, and the MMIO accesses
+>>> for each slice may need performing from different CPUs.
+>>>
+>>> These two details mean MPAMs monitor code needs to be able to sleep, and
+>>> IPI another CPU in the domain to read from a resource that has been sliced.
 >>
->> These two details mean MPAMs monitor code needs to be able to sleep, and
->> IPI another CPU in the domain to read from a resource that has been sliced.
+>> This doesn't sound very convincing. Could mon_event_read() IPI all the
+>> CPUs in the domain? (after waiting to allocate and install monitors
+>> when necessary?)
 > 
-> This doesn't sound very convincing. Could mon_event_read() IPI all the
-> CPUs in the domain? (after waiting to allocate and install monitors
-> when necessary?)
-
-On the majority of platforms this would be a waste of time as the IPI only needs sending
-to one. I'd like to keep the cost of being strange limited to the strange platforms.
-
-I don't think exposing a 'sub domain' cpumask to resctrl is helpful: this needs to be
-hidden in the architecture specific code.
-
-The IPI is because of SoC components being implemented as slices which are private to that
-slice.
-
-
-The sleeping is because the CSU counters are allowed to be 'not ready' immediately after
-programming. The time is short, and to allow platforms that have too few CSU monitors to
-support the same user-interface as x86^W Intel, the MPAM driver needs to be able to
-multiplex a single CSU monitor between multiple control/monitor groups. Allowing it to
-sleep for the advertised not-ready period is the simplest way of doing this.
-
-
->> mon_event_read() already invokes mon_event_count() via IPI, which means
->> this isn't possible. On systems using nohz-full, some CPUs need to be
->> interrupted to run kernel work as they otherwise stay in user-space
->> running realtime workloads. Interrupting these CPUs should be avoided,
->> and scheduling work on them may never complete.
->>
->> Change mon_event_read() to pick a housekeeping CPU, (one that is not using
->> nohz_full) and schedule mon_event_count() and wait. If all the CPUs
->> in a domain are using nohz-full, then an IPI is used as the fallback.
->>
->> This function is only used in response to a user-space filesystem request
->> (not the timing sensitive overflow code).
->>
->> This allows MPAM to hide the slice behaviour from resctrl, and to keep
->> the monitor-allocation in monitor.c.
+> No wait, I know that isn't correct.
 > 
-> This goal sounds more likely.
+> As you explained it, the remote CPU needs to sleep because it may need
+> to atomically acquire, install, and read a CSU monitor.
 > 
-> If it makes the initial enablement smoother, then I'm all for it.
-
-> Reviewed-By: Peter Newman <peternewman@google.com>
+> It still seems possible for the mon_event_read() thread to do all the
+> waiting (tell remote CPU to program CSU monitor, wait, tell same remote
+> CPU to read monitor), but that sounds like more work that I don't see a
+> lot of benefit to doing today.
 > 
-> These changes worked fine for me on tip/master, though there were merge
-> conflicts to resolve.
-> 
-> Tested-By: Peter Newman <peternewman@google.com>
+> Can you update the changelog to just say the remote CPU needs to block
+> when installing a CSU monitor?
 
-Thanks!
+Sure, I've added this after the first paragraph:
+-------%<-------
+MPAM's CSU monitors are used to back the 'llc_occupancy' monitor file. The
+CSU counter is allowed to return 'not ready' for a small number of
+micro-seconds after programming. To allow one CSU hardware monitor to be
+used for multiple control or monitor groups, the CPU accessing the
+monitor needs to be able to block when configuring and reading the
+counter.
+-------%<-------
 
+
+Thanks,
 
 James
