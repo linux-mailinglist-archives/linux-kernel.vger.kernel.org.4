@@ -2,258 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEE86F0D9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A8B6F0D9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344234AbjD0VJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 17:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S1344169AbjD0VJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 17:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344185AbjD0VJY (ORCPT
+        with ESMTP id S1344115AbjD0VJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:09:24 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE70430F6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:22 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so47015ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:22 -0700 (PDT)
+        Thu, 27 Apr 2023 17:09:16 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D97A35BB
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so15654209a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682629762; x=1685221762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uNUhSGOlXP2sdNxBSWwV4k/Iqeo2iP8PrrbPJhY7BuA=;
-        b=wdrykeXtE4MEGJSCAdNM+35N3D3ulWTKp7nfUItwvMgj867RAazdQ0WP6nwJvSqwjW
-         +QM3PZjin9M/7aXmvaz0WieW8KBMAFlEwEVFHbmJm/l66xDl5ySzV71mMSxTYVDtr6WB
-         7VIdrFhX6dvO6BeCWggjDB5XRK7XV7b1/1V3VD2HlBSbbLrp8GSs9fkl6M/jxBKcegxW
-         /gyhdzDBNyu6D1FKSdEFybUyUXp1kH4U5b4oeTQ4D7DBhP+vcaGhfso0Aj9C0pN1oJCt
-         9BQIATT7S0f2rgDWADgHUxHDtBiAcD+/Af7YVJZAKwV9RPC8ihakq+R7sIb+eHOn8L/j
-         Vdqg==
+        d=gmail.com; s=20221208; t=1682629753; x=1685221753;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=FIPY/AsEk9VaaX6Ftm9Kn+pTNQ+Lf9NUsugsitn3Cfs=;
+        b=OciFjJxMCoLoY11urAU20r7fBv49TndA+cxFy4+WAA720uGUP4YA5Kingp+SDjHJdZ
+         O9eCxMayHkR3vv2Asi2IlDaUJcOEfVW/jlWO1Pi/mS7eMom1zomYhUNeEckaUWxgq7ZU
+         MUT27ub/dV/mdVzIBfU2LsuuKvpT710Ip7pqBZPOw8z+9vUAn1OrUefmpxqYtvRSB1//
+         YsRKZ6FEdCTLmg4MTkdcvMoBSK7w8frntBpzUdjfwHqaugZ7v/J07pAwJ2sVT7fiwASS
+         FrI6qsk+mD44P8Cei5z0hVoqJ23TKWnTcYhNkcXRYBnYKBp1WUP5+AGWSdiqtNab/37k
+         yFug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682629762; x=1685221762;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uNUhSGOlXP2sdNxBSWwV4k/Iqeo2iP8PrrbPJhY7BuA=;
-        b=jb7lRQ0UNr1dM4w5VUwaYKl6P86lALpSIqOOJHg59/WqSvrjeukckAEveIXSauJiHi
-         4baBmG39vWV1gQOrXSOS/HFw8vMV6kmod5l6gUqG6LGjSxE5/UIxGMC5f+PK0I51q65R
-         tD4N+e91S7vhC2QuLG8QUNPyTHwsYjCpgklPNBkEybGKlDN9UAWvwrQT6y08wzdnAESs
-         QduOVlBg3Kt/Qp/adYdcYrM1C7ueaVGezqDxvPGuM6xOB79TxBjvcGeM3MkFYvxP0xBG
-         p0Vho2SIE3+4kGwGrQup7FgjETzsoBcAxYqT6SB1kIx/AEA1BHHjS2i1mX+UNjuZrq4k
-         x3qg==
-X-Gm-Message-State: AC+VfDyfRWcPBNpyLfTOx4SWst9dvKgmPDpGZmfLx+TPzXvCj3HqMwCL
-        QpQgM7CwLR6H11wb8gkhoPamQxlqaw6+sGLk3LvX3g==
-X-Google-Smtp-Source: ACHHUZ70nHtb/GdGztyCGnd62tftQGgL5sON6LnoOc13TW+JSLhGkMPmGz8uDvtCd0K7k7YlBVzUtb4hb8ENsGKM6wo=
-X-Received: by 2002:a05:6e02:1bab:b0:326:3219:85df with SMTP id
- n11-20020a056e021bab00b00326321985dfmr87066ili.14.1682629761851; Thu, 27 Apr
- 2023 14:09:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230426070050.1315519-1-irogers@google.com> <20230426070050.1315519-2-irogers@google.com>
- <77dd1ab3-9c94-c04a-24de-f8c192a6c8d2@linux.intel.com> <CAP-5=fVBFjnmCuzSud=oGj6nGCs7haMkALGS+ZGJEyD4dSYqTA@mail.gmail.com>
- <CAM9d7chavGHmtKiVkAo7fpUm=B3r3xNYgW__6dZe9D+3nmy7dA@mail.gmail.com>
-In-Reply-To: <CAM9d7chavGHmtKiVkAo7fpUm=B3r3xNYgW__6dZe9D+3nmy7dA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 27 Apr 2023 14:09:04 -0700
-Message-ID: <CAP-5=fU+E9hFR5SP9oG6kOKecR02fGvcqtFHKwDvHG3GYKLa1w@mail.gmail.com>
-Subject: Re: [PATCH v1 01/40] perf stat: Introduce skippable evsels
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
+        d=1e100.net; s=20221208; t=1682629753; x=1685221753;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FIPY/AsEk9VaaX6Ftm9Kn+pTNQ+Lf9NUsugsitn3Cfs=;
+        b=AAiElIRECwIjvIVIVsxDMQ4l6Ezr7kF+Djclr4R4yY4DoxkO2Holn+3T2rGzhpDAz7
+         A4hONa97iBuL2x0EN1MunX/bmyVT/Mg7Qt/PUAmoMq7YM5XWSUmxZi4H12n92wylw/w0
+         81bJLAee/e73k9Dku6HNELxWwCEjPsmPUcyEe8shBO23kT/6dPSEQhNYVM2RFgym4UQl
+         QB1Zy+efTurhQkGa3QBFl+G/2wjW2ghhJ+16RuzIODnzmnWM5qBzKEBVFhv+xulFgdN8
+         TGPZu49InyZhStuoFPcU9tBgS0alzs9VCe2D2TwVT3FqclDtCrGvJJUqHU92l8P8fw+f
+         i7GQ==
+X-Gm-Message-State: AC+VfDxNHubZLJixCaLNBrmVTkHVoUEsHONaCiGn9OhdBL3F4ucBLT7/
+        itG9SkT7F24EGZ7WKjGLDnY=
+X-Google-Smtp-Source: ACHHUZ4jXgOQv4v+Qggvhypzif6sgPBdgeN6c1LPn3O53sXG04lepbWlMEpUcmh6q9yb6pbepHva4w==
+X-Received: by 2002:a17:907:701:b0:94f:2347:ce8e with SMTP id xb1-20020a170907070100b0094f2347ce8emr2962691ejb.70.1682629753066;
+        Thu, 27 Apr 2023 14:09:13 -0700 (PDT)
+Received: from gmail.com (1F2EF38A.nat.pool.telekom.hu. [31.46.243.138])
+        by smtp.gmail.com with ESMTPSA id q27-20020a170906361b00b0094e1026bc66sm10238642ejb.140.2023.04.27.14.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 14:09:10 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Thu, 27 Apr 2023 23:09:08 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [GIT PULL] SMP cross-call changes for v6.4
+Message-ID: <ZErkdNBn7OLkQZWC@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 2:00=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> Hello,
->
-> On Thu, Apr 27, 2023 at 1:21=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > On Thu, Apr 27, 2023 at 11:54=E2=80=AFAM Liang, Kan <kan.liang@linux.in=
-tel.com> wrote:
-> > >
-> > >
-> > >
-> > > On 2023-04-26 3:00 a.m., Ian Rogers wrote:
-> > > > Perf stat with no arguments will use default events and metrics. Th=
-ese
-> > > > events may fail to open even with kernel and hypervisor disabled. W=
-hen
-> > > > these fail then the permissions error appears even though they were
-> > > > implicitly selected. This is particularly a problem with the automa=
-tic
-> > > > selection of the TopdownL1 metric group on certain architectures li=
-ke
-> > > > Skylake:
-> > > >
-> > > > ```
-> > > > $ perf stat true
-> > > > Error:
-> > > > Access to performance monitoring and observability operations is li=
-mited.
-> > > > Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to =
-open
-> > > > access to performance monitoring and observability operations for p=
-rocesses
-> > > > without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capabili=
-ty.
-> > > > More information can be found at 'Perf events and tool security' do=
-cument:
-> > > > https://www.kernel.org/doc/html/latest/admin-guide/perf-security.ht=
-ml
-> > > > perf_event_paranoid setting is 2:
-> > > >   -1: Allow use of (almost) all events by all users
-> > > >       Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_=
-LOCK
-> > > >> =3D 0: Disallow raw and ftrace function tracepoint access
-> > > >> =3D 1: Disallow CPU event access
-> > > >> =3D 2: Disallow kernel profiling
-> > > > To make the adjusted perf_event_paranoid setting permanent preserve=
- it
-> > > > in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid =3D <setting>)
-> > > > ```
-> > > >
-> > > > This patch adds skippable evsels that when they fail to open won't
-> > > > fail and won't appear in output. The TopdownL1 events, from the met=
-ric
-> > > > group, are marked as skippable. This turns the failure above to:
-> > > >
-> > > > ```
-> > > > $ perf stat true
-> > > >
-> > > >  Performance counter stats for 'true':
-> > > >
-> > > >               1.26 msec task-clock:u                     #    0.328=
- CPUs utilized
-> > > >                  0      context-switches:u               #    0.000=
- /sec
-> > > >                  0      cpu-migrations:u                 #    0.000=
- /sec
-> > > >                 49      page-faults:u                    #   38.930=
- K/sec
-> > > >            176,449      cycles:u                         #    0.140=
- GHz                         (48.99%)
-> > > >            122,905      instructions:u                   #    0.70 =
- insn per cycle
-> > > >             28,264      branches:u                       #   22.456=
- M/sec
-> > > >              2,405      branch-misses:u                  #    8.51%=
- of all branches
-> > > >
-> > > >        0.003834565 seconds time elapsed
-> > > >
-> > > >        0.000000000 seconds user
-> > > >        0.004130000 seconds sys
-> > > > ```
-> > >
-> > > If the same command runs with root permission, a different output wil=
-l
-> > > be displayed as below:
-> > >
-> > > $ sudo ./perf stat sleep 1
-> > >
-> > >  Performance counter stats for 'sleep 1':
-> > >
-> > >               0.97 msec task-clock                       #    0.001 C=
-PUs
-> > > utilized
-> > >                  1      context-switches                 #    1.030 K=
-/sec
-> > >                  0      cpu-migrations                   #    0.000 /=
-sec
-> > >                 67      page-faults                      #   69.043 K=
-/sec
-> > >          1,135,552      cycles                           #    1.170 G=
-Hz
-> > >                        (50.51%)
-> > >          1,126,446      instructions                     #    0.99  i=
-nsn
-> > > per cycle
-> > >            252,904      branches                         #  260.615 M=
-/sec
-> > >              7,297      branch-misses                    #    2.89% o=
-f
-> > > all branches
-> > >             22,518      CPU_CLK_UNHALTED.REF_XCLK        #   23.205
-> > > M/sec
-> > >             56,994      INT_MISC.RECOVERY_CYCLES_ANY     #   58.732 M=
-/sec
-> > >
-> > > The last two events are useless.
-> >
-> > You missed the system wide (-a) flag.
-> >
-> > Thanks,
-> > Ian
-> >
-> > > It's not reliable to rely on perf_event_open()/kernel to tell whether
-> > > an event is available or skippable. Kernel wouldn't check a specific =
-event.
-> > >
-> > > The patch works for the non-root mode is just because the event requi=
-res
-> > > root permission. It's rejected by the kernel because of lacking
-> > > permission. But if the same command runs with root privileges, the tr=
-ash
-> > > events are printed as above.
-> > >
-> > > I think a better way is to check the HW capability and decided whethe=
-r
-> > > to append the TopdownL1 metrics.
-> > >
-> > > https://lore.kernel.org/lkml/20230427182906.3411695-1-kan.liang@linux=
-.intel.com/
->
-> Maybe we can also check if the event is actually enabled like
-> checking the enabled_time.  Then skip the skippable and not
-> enabled ones.
 
-Good idea, and I think that addresses Kan's concern over missing
-output. I'll add it in v2.
+Linus,
 
-Thanks,
-Ian
+Please pull the latest smp/core git tree from:
 
-> Thanks,
-> Namhyung
+   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp-core-2023-04-27
+
+   # HEAD: 5c3124975e15c1fadd5af1c61e4d627cf6d97ba2 trace,smp: Trace all smp_function_call*() invocations
+
+SMP cross-CPU function-call updates for v6.4:
+
+ - Remove diagnostics and adjust config for CSD lock diagnostics
+
+ - Add a generic IPI-sending tracepoint, as currently there's no easy
+   way to instrument IPI origins: it's arch dependent and for some
+   major architectures it's not even consistently available.
+
+ Thanks,
+
+	Ingo
+
+------------------>
+Paul E. McKenney (4):
+      locking/csd_lock: Add Kconfig option for csd_debug default
+      locking/csd_lock: Remove added data from CSD lock debugging
+      locking/csd_lock: Remove per-CPU data indirection from CSD lock debugging
+      kernel/smp: Make csdlock_debug= resettable
+
+Peter Zijlstra (2):
+      trace: Add trace_ipi_send_cpu()
+      trace,smp: Trace all smp_function_call*() invocations
+
+Valentin Schneider (7):
+      trace: Add trace_ipi_send_cpumask()
+      sched, smp: Trace IPIs sent via send_call_function_single_ipi()
+      smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
+      irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+      treewide: Trace IPIs sent via smp_send_reschedule()
+      smp: reword smp call IPI comment
+      sched, smp: Trace smp callback causing an IPI
+
+
+ Documentation/admin-guide/kernel-parameters.txt |  17 +-
+ arch/alpha/kernel/smp.c                         |   2 +-
+ arch/arc/kernel/smp.c                           |   2 +-
+ arch/arm/kernel/smp.c                           |   3 +-
+ arch/arm/mach-actions/platsmp.c                 |   2 +
+ arch/arm64/kernel/smp.c                         |   3 +-
+ arch/csky/kernel/smp.c                          |   2 +-
+ arch/hexagon/kernel/smp.c                       |   2 +-
+ arch/ia64/kernel/smp.c                          |   4 +-
+ arch/loongarch/kernel/smp.c                     |   4 +-
+ arch/mips/include/asm/smp.h                     |   2 +-
+ arch/mips/kernel/rtlx-cmp.c                     |   2 +
+ arch/openrisc/kernel/smp.c                      |   2 +-
+ arch/parisc/kernel/smp.c                        |   4 +-
+ arch/powerpc/kernel/smp.c                       |   6 +-
+ arch/powerpc/kvm/book3s_hv.c                    |   3 +
+ arch/powerpc/platforms/powernv/subcore.c        |   2 +
+ arch/riscv/kernel/smp.c                         |   4 +-
+ arch/s390/kernel/smp.c                          |   2 +-
+ arch/sh/kernel/smp.c                            |   2 +-
+ arch/sparc/kernel/smp_32.c                      |   2 +-
+ arch/sparc/kernel/smp_64.c                      |   2 +-
+ arch/x86/include/asm/smp.h                      |   2 +-
+ arch/x86/kvm/svm/svm.c                          |   4 +
+ arch/x86/kvm/x86.c                              |   2 +
+ arch/xtensa/kernel/smp.c                        |   2 +-
+ include/linux/smp.h                             |  11 +-
+ include/trace/events/ipi.h                      |  44 ++++
+ kernel/irq_work.c                               |  12 +-
+ kernel/sched/core.c                             |  22 +-
+ kernel/sched/smp.h                              |   2 +-
+ kernel/smp.c                                    | 313 ++++++------------------
+ lib/Kconfig.debug                               |   9 +
+ virt/kvm/kvm_main.c                             |   3 +
+ 34 files changed, 219 insertions(+), 281 deletions(-)
