@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5066C6F04A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F5A6F04AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243332AbjD0LCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S243557AbjD0LEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243531AbjD0LCA (ORCPT
+        with ESMTP id S243269AbjD0LEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:02:00 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9354C04;
-        Thu, 27 Apr 2023 04:01:58 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3eef63eff7eso39567481cf.3;
-        Thu, 27 Apr 2023 04:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682593317; x=1685185317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7nBxwpnNO03GZyJpSYtHfr/pjNmOjj8lIN2yS6Xjf24=;
-        b=I+WaLJX3uhBEFdIn/emBmqExYzyV8Vv50VMH5hEPm2jr8MOIkbXyZtgQEjddZ1tej6
-         0n/eunjHB9eSG4Q5yevvxUjAvUqxzk4q1+i13XjoGyhtHpifufdOuNPGGZktU22apVVo
-         OS5L/BtF8uQ4PLbGzJca2XrsbUE3eKuk5TsQe2zCCFE3WOTexzPF6HE5tN0Lcg8zs35i
-         aFbY4VxaTGcq64HlSJ39V/NyZXMO2xEcqPRJUTVest3afWihhuetT9REJjLesWAZfllB
-         JELJbWAaUsmjjGseAB9amDFSXCfSEcwak3HJBsrDWrp/YGHUR6irsFBR15VPkAnxCuBL
-         9ebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682593317; x=1685185317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7nBxwpnNO03GZyJpSYtHfr/pjNmOjj8lIN2yS6Xjf24=;
-        b=gdzwprZDxQaETgPIc2prFWVw7GuL7ibftyaJkAvO3mUJoPvJIWaxikMrdghFO8et/R
-         pJcnDjqwfaiX6GkFQJdAN4Ml+vOxOjJu8ZnN1qcZ8iw9r0y4hutRaDXJBxc7DUcH6GEh
-         fb+UNiovfUitQEQkNEZD+MrRroK1WjOsKAq+tWZnDkj2Hse5+qS4il+FKh4DBx1wdrlO
-         KHzEAn2A4elUGc7+yd28zeB8dFmvXGMTUchDah/e/qQHUnjBb1LuWlAnh5jVCxeXhAj8
-         AZdTu+oOLx4veurYSwATx1dwgOu6yW5ZNaJwj28u778iX0VUlOzz28NLhCw+lRxWb4z8
-         uMGQ==
-X-Gm-Message-State: AC+VfDyyKUjo/jsK9VU341q/FNMXH6sGsU3uZqe4iEpa4EopiFufRCUa
-        m4vYSCbgg1i3ItFaepZRWYMm3XLZx3+BRQ20XM8=
-X-Google-Smtp-Source: ACHHUZ51PQ/KNlXFOdCWuJgGXK2lpoizYRaYlT2+p6/Zncx2gH0BxqXMXVu37ubbw25C+y0XtzOAHwGd6i9o3fwv//A=
-X-Received: by 2002:a05:622a:289:b0:3ef:4a9b:5dca with SMTP id
- z9-20020a05622a028900b003ef4a9b5dcamr1594011qtw.29.1682593317422; Thu, 27 Apr
- 2023 04:01:57 -0700 (PDT)
+        Thu, 27 Apr 2023 07:04:20 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE44410E;
+        Thu, 27 Apr 2023 04:04:16 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id E89D11C0E6E; Thu, 27 Apr 2023 13:04:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1682593453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gCx6799fPD1mvbmBrIDrAMnxIBHFIp4o9m2BUKCs55s=;
+        b=iGQ3rxURs2j7UDZIKpZa2LfnryQV7Vyw7frtEnKUiCP1USATzOSHsjw9FGggesZRDsmYVA
+        gKLEgNRd5Vaua6p6LgrvDf4V3QIkJW5MCItd/Fev+qDF9H6dOd4jCtNl2ug4VqwqcggW/+
+        32mJaq+rPII/OVLH694uK55/LASSSQY=
+Date:   Thu, 27 Apr 2023 13:04:13 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>,
+        phone-devel@vger.kernel.org
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Uwe Kleine-g <u.kleine-koenig@pengutronix.de>,
+        Bastian Hecht <hechtb@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [RFC v1 0/4] Input: support virtual objects on touchscreens
+Message-ID: <ZEpWrWpzkI9kNTkr@duo.ucw.cz>
+References: <20230425115049.870003-1-javier.carrasco@wolfvision.net>
 MIME-Version: 1.0
-References: <20230426220338.430638-1-andreas@kemnade.info> <f6b261ad-3267-db70-c173-154a12c42bea@csgroup.eu>
- <CAHp75Vep8VSirY7mvGGCubNi-O4jS_inTALS3Ei9mQu98RV+7Q@mail.gmail.com>
- <52453352-74bd-979f-03b6-322489800538@csgroup.eu> <20230427123733.15ad4aa3@aktux>
- <CAHp75VezDMZkRTRHRACtJZCW2S_1NoZL5GDK7tmA2vzjrAhOKg@mail.gmail.com> <d585bdd8-978a-8172-bd55-4494d25299e1@csgroup.eu>
-In-Reply-To: <d585bdd8-978a-8172-bd55-4494d25299e1@csgroup.eu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 27 Apr 2023 14:01:21 +0300
-Message-ID: <CAHp75Vexy1p8E5VYj=kX9VPxAghzVwbh3ANvLVP4yrxkHZ+H7A@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: fix allocation of mixed dynamic/static GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Andreas Kemnade <andreas@kemnade.info>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        ": Tony Lindgren" <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="C8RZd6IZ7KbnjRDA"
+Content-Disposition: inline
+In-Reply-To: <20230425115049.870003-1-javier.carrasco@wolfvision.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 1:55=E2=80=AFPM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 27/04/2023 =C3=A0 12:46, Andy Shevchenko a =C3=A9crit :
-> > On Thu, Apr 27, 2023 at 1:37=E2=80=AFPM Andreas Kemnade <andreas@kemnad=
-e.info> wrote:
-> >> On Thu, 27 Apr 2023 06:20:34 +0000
-> >> Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-...
+--C8RZd6IZ7KbnjRDA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >> I will send a v2 of this patch with refined logic.
-> >
-> > Actually it would be nice to integrate a warning (if we don't have it
-> > yet) when adding a GPIO chip with a static allocation and which will
-> > overlap the dynamic base. Can you add that into your v2?
-> >
->
-> At the time being we have a warning for all static allocations,
-> allthough their has been some discussion about reverting it, see commit
-> 502df79b8605 ("gpiolib: Warn on drivers still using static gpiobase
-> allocation")
+Hi!
 
-Ah, even better! Then no need to have a specific one, thanks!
+> Some touchscreens are shipped with a physical layer on top of them where
+> a number of buttons and a resized touchscreen surface might be
+> available.
 
+Yes, it is quite comon, for example Motorola Droid 4 has 4 virtual
+buttons below touchscreen.
+
+One question is if this should be handled inside the kernel. It will
+make it compatible with existing software, but it will also reduce
+flexibility.
+
+Best regards,
+								Pavel
 --=20
-With Best Regards,
-Andy Shevchenko
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--C8RZd6IZ7KbnjRDA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZEpWrQAKCRAw5/Bqldv6
+8sedAKCiULYxV9Tl2uWqI7oesubhsrSGugCbBS0adKSsnML10omfQxfe3amV/KU=
+=Jsf+
+-----END PGP SIGNATURE-----
+
+--C8RZd6IZ7KbnjRDA--
