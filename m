@@ -2,101 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BE286F0439
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA616F0441
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243555AbjD0KdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S243218AbjD0KgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbjD0Kc7 (ORCPT
+        with ESMTP id S242817AbjD0KgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:32:59 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F67A4ECA;
-        Thu, 27 Apr 2023 03:32:58 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b78b344d5so6552442b3a.1;
-        Thu, 27 Apr 2023 03:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682591578; x=1685183578;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=DVMLhU0hiYSd+fr7Je0IleGr0eMFrfhOsxolYP3fJaU=;
-        b=G0zUEGkAaKc2HlPFV4pY3YsdQdEAP1FtHnsGJUZeupHeXr/HiQL8rmwXBtxeQHy4Kj
-         7sv1E7nPjROoGOtWTJeFLeSQbzjGVylWOsnNdPqw99AgbLh1Oo70SWsGnXCzyLhWVFFU
-         loeG8CgFtFxTY4V2Je1IqLKfLRn7fGmcGvf8hchsljk8gRcGfa6qkmm4kvzdOOj4Xl8m
-         s7qYfGQQN2LxzAX9YKExmeNWXB/EUAt78QcjvT+piah4U5Crrc09IH+zYe+eZ9GPkbQX
-         U4w+MoZPGEO66bzFlsAKEr6zWwgikN6tW8/wqEhPUunpq5dFYcyeAKAPOfoJkxzT0xTI
-         qXjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682591578; x=1685183578;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DVMLhU0hiYSd+fr7Je0IleGr0eMFrfhOsxolYP3fJaU=;
-        b=ZLobZXpVQJzs+Az/vj774IGgnwpyoRML4zVoE6k2Qv1tkPkyr6DLKvUDg+Q0HxesAw
-         BMZLqS7+/CWxV3i41bTc48zvNU4a/g/pkb1SjsXVGaZWQkomAQ/o3R8R3+KtRsm1lwiH
-         FDkcTh3asdjCJC8CILgiYehSmPKY4wXTfP/KN2i8Z6/DsT22txSRPc10Ymw1rIQm7hg9
-         J2t35GBBjkzEYMGJdeXeRBI5bL+12q2tNCPcNRJ1CFasSQUn/45PUV6ht9g4tQqnIX8I
-         pDiFNXocFqyVc3858u4rh+4AZZA4opljk7UxIeqOUsXoJkXGpV6WMqbvrVtLDJiwA9lX
-         c41w==
-X-Gm-Message-State: AC+VfDzfnpo2GXngzvnyY4YnH5GhZo727GDOq4OaoFXFIJ7naF6GNvYs
-        T/5IpbA9MrshPw2537Dh7YONyA7yekk=
-X-Google-Smtp-Source: ACHHUZ6h2JThXBDqhO/KGL11JzIMOttNSgTGB4+kgT71CaSPY5QgWg5nhOBoC8ogaNGCMGh4GrGbfA==
-X-Received: by 2002:a05:6a20:938e:b0:f8:8879:747e with SMTP id x14-20020a056a20938e00b000f88879747emr1292896pzh.59.1682591577960;
-        Thu, 27 Apr 2023 03:32:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l18-20020a62be12000000b0063b7b811ce8sm12815072pff.205.2023.04.27.03.32.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 03:32:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <406dbcfb-7a08-8067-d717-3472e42e19e6@roeck-us.net>
-Date:   Thu, 27 Apr 2023 03:32:56 -0700
+        Thu, 27 Apr 2023 06:36:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4264ECA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682591781; x=1714127781;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Px5B2Gou+pRMmjzFHaxFdtgcphKDMykbYTeJSM0wkQs=;
+  b=PLZmjmdaMRu98ASiFI6blC7/2w6t3bfTAAeN6OeNljRVzfVNXGi46koA
+   +N7Cjb5YwKXDcPrZtqWshoTrL9D9pfYBLzoyTur97Y64UDuM9O0OlcP9W
+   ShFouSPHojuUKyc6jMHpjnj+OfhsNNesDX7VVPweXyY2ozbniOEqmcf0U
+   gK6xtBv78PJPTT2k8EuddXH9vncA53hENP4NQRBwpO3OIN1ckVcngUajl
+   BXW8cf1W46W/9CXPZBVjJ3LWk8OX3njVryDAHSZczlz5BkltyByHVfaep
+   RoDwzhm0Sft3/4mA3ZAUSRFMiH3eI0/ouIwFLBoazrTLGWG1swh6lvO/0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433682468"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="433682468"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 03:36:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="783685885"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="783685885"
+Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2023 03:36:19 -0700
+Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pryz5-0000Az-0C;
+        Thu, 27 Apr 2023 10:36:19 +0000
+Date:   Thu, 27 Apr 2023 18:36:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse:
+ cast removes address space '__iomem' of expression
+Message-ID: <202304271850.sdzTf7L3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] hwmon: (max597x) Add Maxim Max597x
-Content-Language: en-US
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20230426090356.745979-1-Naresh.Solanki@9elements.com>
- <2579ed08-b21d-489e-8a40-8310efdfa1c4@roeck-us.net>
- <5104bcd2-4203-e4f3-ac58-310fa4d45c7b@9elements.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <5104bcd2-4203-e4f3-ac58-310fa4d45c7b@9elements.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/23 02:50, Naresh Solanki wrote:
-> Hi Guenter,
-> 
-[ ... ]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6e98b09da931a00bf4e0477d0fa52748bf28fcce
+commit: b8431920391d36c273f63a29eab0dfc7e884dd17 remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
+date:   1 year, 2 months ago
+config: arm64-randconfig-s042-20230427 (https://download.01.org/0day-ci/archive/20230427/202304271850.sdzTf7L3-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8431920391d36c273f63a29eab0dfc7e884dd17
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b8431920391d36c273f63a29eab0dfc7e884dd17
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
 
->> Again, I think it would make much more sense to add hwmon support
->> to the regulator driver than having a separate driver since there
->> is lots of overlap. For example, the regulator driver already
->> sets and monitors limits.
-> I agree. But the chip also has led functionality. I got review feedback to make it MFD. So when rewriting as MFD driver made separate driver based on subsystem. I'm not sure if it is ok to use hwmon subsytem in regulator driver. Will once check with maintainer on this.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304271850.sdzTf7L3-lkp@intel.com/
 
-LED has completely different functionality. Overlap between regulator and
-hwmon is substantial because the regulator code handles limits and alarms.
-Sure, you kind of bypassed (ignored) that by not implementing limit and alarm
-support in the hwmon driver, but that is really just avoiding the problem,
-not solving it.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse: cast removes address space '__iomem' of expression
 
-Guenter
+vim +/__iomem +432 drivers/remoteproc/ti_k3_dsp_remoteproc.c
 
+   402	
+   403	/*
+   404	 * This function implements the .get_loaded_rsc_table() callback and is used
+   405	 * to provide the resource table for a booted DSP in IPC-only mode. The K3 DSP
+   406	 * firmwares follow a design-by-contract approach and are expected to have the
+   407	 * resource table at the base of the DDR region reserved for firmware usage.
+   408	 * This provides flexibility for the remote processor to be booted by different
+   409	 * bootloaders that may or may not have the ability to publish the resource table
+   410	 * address and size through a DT property. This callback is invoked only in
+   411	 * IPC-only mode.
+   412	 */
+   413	static struct resource_table *k3_dsp_get_loaded_rsc_table(struct rproc *rproc,
+   414								  size_t *rsc_table_sz)
+   415	{
+   416		struct k3_dsp_rproc *kproc = rproc->priv;
+   417		struct device *dev = kproc->dev;
+   418	
+   419		if (!kproc->rmem[0].cpu_addr) {
+   420			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
+   421			return ERR_PTR(-ENOMEM);
+   422		}
+   423	
+   424		/*
+   425		 * NOTE: The resource table size is currently hard-coded to a maximum
+   426		 * of 256 bytes. The most common resource table usage for K3 firmwares
+   427		 * is to only have the vdev resource entry and an optional trace entry.
+   428		 * The exact size could be computed based on resource table address, but
+   429		 * the hard-coded value suffices to support the IPC-only mode.
+   430		 */
+   431		*rsc_table_sz = 256;
+ > 432		return (struct resource_table *)kproc->rmem[0].cpu_addr;
+   433	}
+   434	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
