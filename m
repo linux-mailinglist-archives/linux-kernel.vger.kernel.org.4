@@ -2,119 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E0B6F0651
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA486F0630
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243467AbjD0NE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 09:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S243517AbjD0MwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243492AbjD0NEy (ORCPT
+        with ESMTP id S242895AbjD0MwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 09:04:54 -0400
-X-Greylist: delayed 662 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 06:04:50 PDT
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3972D72
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:04:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-        t=1682600686; bh=9eIpaK6qsbATrucAS3D9t6aE9hGbGWJhmkVCEJk7Msg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=N4s1H+R3pYgmxPaP7B6FHorD1nyJfR5F/9dnnxSlA7z1UTlbwrKJ57qHsHoEQryba
-         1QFHOl1YgCE+vT8L5DbZwx2K4nPmHCRLPA53Dgv6xRKrLOmjRE8uYONjPeEuYw56yq
-         A/5li2tzbSJiSHaGxct/VlsuXPXdO2FNFF9/u8eI=
-Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
-        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
-        id BD4A5CA0; Thu, 27 Apr 2023 20:47:20 +0800
-X-QQ-mid: xmsmtpt1682599640t519ijgnm
-Message-ID: <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
-X-QQ-XMAILINFO: NJ/+omVLhVgasM8xrCwXqQLqxdfhOSMWAGMHYCh5/DRfXhjvY/sQ6rAgga8Kq1
-         e4Ng5wa1JQBXAFEgCvi8ESAnxyhDm7n293s4emhIlkUHGLfigrzv7rB2SNYNWFP8eMq2JbtxzUJt
-         WYSVkiAiy8lw9FgzIEHDF0WxsltFJ4NSBmbP9jN2XYcbW2dopnV9mOSxG9FcZcuM8n9jVrrmnL8/
-         ENOXFKlbCqfTWj0cqlyTvLKLR0JlhewOjfyFvyEXa6nFhTdKkwAxSC01rRnz2jOM1/2zGSzRO8fR
-         CaiN/zgaLNxwW3Ax+rsMcuKp7HtzbCKgnmbD7U6U4e7GpyjMUsx/j/jpmGXDSKQm9VEs8ynR+VxC
-         uWdlmKw2Xw5FrYOcOG2tYCu+sMmO0mnOMfLNL/o5ot02B5AkloCOFn9MoIb95q6zKUbFAvS3jn41
-         CbD8cwVpaG3g+bEu47S0Gshkb6FYrOa+K7Q+wXXKMjwWTobtK6poOBWpHELqfJm4OppdrUM3mHZP
-         8HL82EUbXxBFi8GZLpxEi8i83pVmd4ScQuYz7CxpppKRxB1QNFL3+xQoMHUPnGaeCE75BLKDGJkU
-         +qxoKhfVr2PjmyIE/anieLwxFu9ZloMB1DMvfIao1vebRxxfJCQ3wuoxEE2m/j9Zg/azlIqHYvGd
-         hRI4xNg6tXisFw4A979DxfEZiN31J3bpp6M2wesdhDSFBr6YmpOeBiC5tZUF85QDVUijWjyRFhya
-         G+9Iynryne5GLrvOdrsjlWJm03tZtOnYfRzsGn7RIlEjjryo3ZyhpjBNkXcb2+rUlML2gHV+OtO1
-         FY66QYbYk9bfieost2wl+SNugHcFYfDgU6/lsAJrQYKTnpsNlI+1Mg6LgYh0qR3sg7YqvjkoAymU
-         lyfSoMNQFmFO3isKQCVwh+tgkLtZmTJ11qGgp4I7QGrY8jM8jS9as8lSf0j+hCI0FpXd+sFnzGHg
-         dg83r41vCxHcJ8Yi7Lo9l7jgWKaqs4ssHfUUu7UCm25FhGEqtV4gDqZugPwXn2kpUgJTDle6c=
-From:   Yangyu Chen <cyy@cyyself.name>
-To:     conor@kernel.org
-Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, cyy@cyyself.name,
-        i@zenithal.me, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, soha@lohu.info, twd2.me@gmail.com
-Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
-Date:   Thu, 27 Apr 2023 20:47:18 +0800
-X-OQ-MSGID: <20230427124718.239569-1-cyy@cyyself.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230426-porthole-wronged-d5a6a3b89596@spud>
-References: <20230426-porthole-wronged-d5a6a3b89596@spud>
+        Thu, 27 Apr 2023 08:52:03 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4094046AB
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:52:02 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f86ee42669so8169641f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682599920; x=1685191920;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vfWLAe/fF1E4LgUmECNUtdr8sZ/Z/BT/KZ2q+zP0IlY=;
+        b=ssf4q2tqkQe8GWV2NhnHzlfB1EFlj2xlT5+L+5STyjYwTHyNixHH/xbHNLJ8WQbhDM
+         W9Qy/goPwiyWfsS8LeXJSrrqnZI0ibD7BeHltDffIADyQhnklKeJPHc73w/7A/lfFPii
+         iuTWxKaE4O+PZBxhfX3Rz8Xw/ZQuoixe5wDDUa3a3ow6YZGUORJC3G8/eTBYqPwLn2cG
+         PAHptahVaA7eYA4WoUSXBpAKh0x9DPnoo+boaAWB2y1Cxgl7exLimNNekvidA3nosQvm
+         2mHEib5vZ76wooGH11x6nOUXluNRp5mrMM9/gncTpG02QUqKl/pv93mArpb3Il7ciOq3
+         1uQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682599920; x=1685191920;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vfWLAe/fF1E4LgUmECNUtdr8sZ/Z/BT/KZ2q+zP0IlY=;
+        b=CSnUdRGE7HPp8ofnLCM5UNrWfpXGd+yxGx7ZLLVL/X1d64BYMVUn3A1rX4X5JXx8GS
+         V6YomwRnrh0Jt5jawOV8ZPKBIhC611t9oHWRZ7AGmciN7OeVXnEu/41P/4Fp8NQ4tsrK
+         hSf4tIBTqhPbd5Bja9RH/mcnCVC/F3JahAsFUIy+IJoQn/+hrmcgA/1qjSHDJawjl3nI
+         JhUbw7woaxqIpaIj3sL2YgoxwONaBK54uS9v3KOzfbZhS3MOIduJO9YdipBrWJJ7xob9
+         Gdzai38xhH3jNRFYtz2UgLRnGOCnms5RyrJpPVKomM8Vz3A2Q1Sz0xW2h5Rfpk18WY1H
+         wxiQ==
+X-Gm-Message-State: AC+VfDxUPw54HfyEMGBm0iHCNQxBKJVlj/JzL+mMxxsLFF+cIpAVAPtk
+        LFiWP8z4O+xUuwP89a9U/JSJ7Q==
+X-Google-Smtp-Source: ACHHUZ6jkZGtDsfDwIEI40ww2DZomo1siHaiNuHWw1JgWvoQFqIbKz2YXzN8VVmfDkjJ6lOmgvBLeQ==
+X-Received: by 2002:a5d:6a83:0:b0:2fb:283a:1757 with SMTP id s3-20020a5d6a83000000b002fb283a1757mr1413955wru.26.1682599920684;
+        Thu, 27 Apr 2023 05:52:00 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id e16-20020a5d5950000000b0030490c8ccafsm6499980wri.52.2023.04.27.05.51.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 05:52:00 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     airlied@gmail.com, daniel@ffwll.ch, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        Tom Rix <trix@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230423145300.3937831-1-trix@redhat.com>
+References: <20230423145300.3937831-1-trix@redhat.com>
+Subject: Re: [PATCH] drm/meson: set variables meson_hdmi_*
+ storage-class-specifier to static
+Message-Id: <168259991963.3093924.6221745093198482770.b4-ty@linaro.org>
+Date:   Thu, 27 Apr 2023 14:51:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Conor
+Hi,
 
-Thanks for your meaningful reviews. I agree with most of your advice but
-have a question about the code about checking the first 2 characters are
-"rv" in `arch/riscv/kernel/cpu.c`.
-
-On Wed, 26 Apr 2023 19:54:39 +0100, Conor Dooley wrote:
-> > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
-> >  		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
-> >  		return -ENODEV;
-> >  	}
-> > -	if (isa[0] != 'r' || isa[1] != 'v') {
-> > +	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
-> >  		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
-> >  		return -ENODEV;
+On Sun, 23 Apr 2023 10:53:00 -0400, Tom Rix wrote:
+> smatch has several simailar warnings to
+> drivers/gpu/drm/meson/meson_venc.c:189:28: warning: symbol
+>   'meson_hdmi_enci_mode_480i' was not declared. Should it be static?
 > 
-> I don't understand why this is even here in the first place. I'd be
-> inclined to advocate for it's entire removal. Checking *only* that there
-> is an "rv" in that string seems pointless to me. If you're on a 64-bit
-> kernel and the node has riscv,isa = "rv32ima" it's gonna say it is okay?
-> Drew what do you think?
+> These variables are only used in their defining file so should be static
+> 
+> 
+> [...]
 
-I think this code could be a workaround for running rv32 S-Mode on rv64
-CPU without changing the DT, although the proper way should be to change
-this field in DT by bootloader or any other software.
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
 
-I have tested a simple rv64imac CPU core and left the `riscv,isa` string
-empty in the DT and removed the above 3 lines check from the kernel, and
-the kernel boots successfully, and using busybox as init is also ok. 
-However, if this check exists, the kernel will panic at `setup_smp` due to
-`BUG_ON(!found_boot_cpu)` in `setup_smp`.
+[1/1] drm/meson: set variables meson_hdmi_* storage-class-specifier to static
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=4b733b2c38b7c9304bbb92cf88f1b23f43ca575d
 
-I am wondering whether this should remove or add a more sufficient
-validation. Although this function will not be called in ACPI as I
-reviewed the recent ACPI patches[1], it will not be a problem if I submit
-this patch for better ACPI support. However, If I just simply remove it
-from my patch and submit patch v2 directly, the ISA string in ACPI mode
-with all uppercase letters will be OK. But in DT mode, the kernel behavior
-will accept the ISA string with all uppercase letters except the first two
-"rv". Do you think this behavior is different between DT and ACPI can be
-OK?
-
-After some investigation, I suggest removing this validation since the
-validation is useless for a proper DT and the recent ACPI patches[1] do
-not validate the ISA strings, so we will have the same behavior between
-DT and ACPI.
-
-[1] https://lore.kernel.org/linux-riscv/20230404182037.863533-1-sunilvl@ventanamicro.com/
-
-Thanks,
-Yangyu Chen
+-- 
+Neil
 
