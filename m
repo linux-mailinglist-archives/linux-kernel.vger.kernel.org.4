@@ -2,65 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768266F0E29
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DCF6F0E31
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344037AbjD0WAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 18:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
+        id S1344066AbjD0WDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 18:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjD0WAI (ORCPT
+        with ESMTP id S229724AbjD0WDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:00:08 -0400
+        Thu, 27 Apr 2023 18:03:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1ED30EA;
-        Thu, 27 Apr 2023 15:00:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569D03595
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:03:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6567E63F9F;
-        Thu, 27 Apr 2023 22:00:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD92C433EF;
-        Thu, 27 Apr 2023 22:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682632806;
-        bh=XAJcs9Tq27uSYzyxKqynry6iOShK22+/4P+2nWhnVG4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nmduOKFPBzQZKl9iACWKsy1r+NBRkDCvE/gjaOt5trThiFnAgRb8ApVPqQ0ai4ZPg
-         HQjeNRXos8H2zB0tzul+TrvMaJLKJPFD7Arn6gxSppALgIY6tZoA+FdQNyafXACfCn
-         GnqJ8rHXfVt0zO6R94Olgc+uj2Gz7pXBzJLqX7Pu4NTScksSQ+2PGAGKNnc/igsH5P
-         oYlklycCDK4Mz1CbFvMdZ51p84cmb1Knv6tjca3gxDes3I/9V/noC1AxlX7m4uwL+O
-         gtKlVxu8YvXn5/Jg4l7aEhtCPvgGQbJA9+lz5Ka8i1Gk93fRyhIm7ijtbHE3ehJs75
-         KL12Joi/HBsvw==
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso2563593276.2;
-        Thu, 27 Apr 2023 15:00:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxRyNsJ+gdR87FpJ8y7wA8HZ/h8J8BkoD76Hqg3RV+SYm3f6t2n
-        wv+WBrvhibigoDf3KtUoJL6DcXROh2HCxjfyYw==
-X-Google-Smtp-Source: ACHHUZ7mW/EfaNcdgWrWRr2AEvbTi7Q+LlVB+H74Yy1MlvvgiGwV1CSsI0Flt3OOunhIdUkchExT6Rm/BmnFgYyRSHM=
-X-Received: by 2002:a05:6902:18c8:b0:b8f:3781:248e with SMTP id
- ck8-20020a05690218c800b00b8f3781248emr2890576ybb.51.1682632805841; Thu, 27
- Apr 2023 15:00:05 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E41ED63F9F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:03:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD33C433EF;
+        Thu, 27 Apr 2023 22:03:49 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 18:03:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [for-linus][PATCH] ring-buffer: Sync IRQ works before buffer
+ destruction
+Message-ID: <20230427180347.11d459cb@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230426012721.6856-1-m202171830@hust.edu.cn>
-In-Reply-To: <20230426012721.6856-1-m202171830@hust.edu.cn>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 27 Apr 2023 16:59:54 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLR_REJWVn_dO8R4ngkrqL=E_ksNr=jS0qRmdpmAaD8hQ@mail.gmail.com>
-Message-ID: <CAL_JsqLR_REJWVn_dO8R4ngkrqL=E_ksNr=jS0qRmdpmAaD8hQ@mail.gmail.com>
-Subject: Re: [PATCH] serial: arc_uart: fix of_iomap leak in `arc_serial_probe`
-To:     Ke Zhang <m202171830@hust.edu.cn>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
-        linux-snps-arc@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HEXHASH_WORD,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,52 +45,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 8:27=E2=80=AFPM Ke Zhang <m202171830@hust.edu.cn> w=
-rote:
->
-> Smatch reports:
->
-> drivers/tty/serial/arc_uart.c:631 arc_serial_probe() warn:
-> 'port->membase' from of_iomap() not released on lines: 631.
->
-> In arc_serial_probe(), if uart_add_one_port() fails,
-> port->membase is not released, which would cause a resource leak.
->
-> To fix this, I replace of_iomap with devm_of_iomap.
+From: Johannes Berg <johannes.berg@intel.com>
 
-How about use devm_platform_ioremap_resource() instead (or any ioremap
-variant) as that is preferred over of_iomap().
+If something was written to the buffer just before destruction,
+it may be possible (maybe not in a real system, but it did
+happen in ARCH=um with time-travel) to destroy the ringbuffer
+before the IRQ work ran, leading this KASAN report (or a crash
+without KASAN):
 
-Rob
+    BUG: KASAN: slab-use-after-free in irq_work_run_list+0x11a/0x13a
+    Read of size 8 at addr 000000006d640a48 by task swapper/0
 
->
-> Fixes: 8dbe1d5e09a7 ("serial/arc: inline the probe helper")
-> Signed-off-by: Ke Zhang <m202171830@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
-> This issue is found by static analysis and remains untested.
-> ---
->  drivers/tty/serial/arc_uart.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/tty/serial/arc_uart.c b/drivers/tty/serial/arc_uart.=
-c
-> index 59e25f2b6632..be1f3c379382 100644
-> --- a/drivers/tty/serial/arc_uart.c
-> +++ b/drivers/tty/serial/arc_uart.c
-> @@ -606,10 +606,11 @@ static int arc_serial_probe(struct platform_device =
-*pdev)
->         }
->         uart->baud =3D val;
->
-> -       port->membase =3D of_iomap(np, 0);
-> -       if (!port->membase)
-> +       port->membase =3D devm_of_iomap(&pdev->dev, np, 0, NULL);
-> +       if (IS_ERR(port->membase)) {
->                 /* No point of dev_err since UART itself is hosed here */
->                 return -ENXIO;
+    CPU: 0 PID: 0 Comm: swapper Tainted: G        W  O       6.3.0-rc1 #7
+    Stack:
+     60c4f20f 0c203d48 41b58ab3 60f224fc
+     600477fa 60f35687 60c4f20f 601273dd
+     00000008 6101eb00 6101eab0 615be548
+    Call Trace:
+     [<60047a58>] show_stack+0x25e/0x282
+     [<60c609e0>] dump_stack_lvl+0x96/0xfd
+     [<60c50d4c>] print_report+0x1a7/0x5a8
+     [<603078d3>] kasan_report+0xc1/0xe9
+     [<60308950>] __asan_report_load8_noabort+0x1b/0x1d
+     [<60232844>] irq_work_run_list+0x11a/0x13a
+     [<602328b4>] irq_work_tick+0x24/0x34
+     [<6017f9dc>] update_process_times+0x162/0x196
+     [<6019f335>] tick_sched_handle+0x1a4/0x1c3
+     [<6019fd9e>] tick_sched_timer+0x79/0x10c
+     [<601812b9>] __hrtimer_run_queues.constprop.0+0x425/0x695
+     [<60182913>] hrtimer_interrupt+0x16c/0x2c4
+     [<600486a3>] um_timer+0x164/0x183
+     [...]
 
-If an errno was returned, you should return that errno and not a different =
-one.
+    Allocated by task 411:
+     save_stack_trace+0x99/0xb5
+     stack_trace_save+0x81/0x9b
+     kasan_save_stack+0x2d/0x54
+     kasan_set_track+0x34/0x3e
+     kasan_save_alloc_info+0x25/0x28
+     ____kasan_kmalloc+0x8b/0x97
+     __kasan_kmalloc+0x10/0x12
+     __kmalloc+0xb2/0xe8
+     load_elf_phdrs+0xee/0x182
+     [...]
 
-Rob
+    The buggy address belongs to the object at 000000006d640800
+     which belongs to the cache kmalloc-1k of size 1024
+    The buggy address is located 584 bytes inside of
+     freed 1024-byte region [000000006d640800, 000000006d640c00)
+
+Add the appropriate irq_work_sync() so the work finishes before
+the buffers are destroyed.
+
+Prior to the commit in the Fixes tag below, there was only a
+single global IRQ work, so this issue didn't exist.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20230427175920.a76159263122.I8295e405c44362a86c995e9c2c37e3e03810aa56@changeid
+
+Cc: stable@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Fixes: 15693458c4bc ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/ring_buffer.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 9a0cb94c3972..0d748f1f79ff 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -1767,6 +1767,8 @@ static void rb_free_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)
+ 	struct list_head *head = cpu_buffer->pages;
+ 	struct buffer_page *bpage, *tmp;
+ 
++	irq_work_sync(&cpu_buffer->irq_work.work);
++
+ 	free_buffer_page(cpu_buffer->reader_page);
+ 
+ 	if (head) {
+@@ -1873,6 +1875,8 @@ ring_buffer_free(struct trace_buffer *buffer)
+ 
+ 	cpuhp_state_remove_instance(CPUHP_TRACE_RB_PREPARE, &buffer->node);
+ 
++	irq_work_sync(&buffer->irq_work.work);
++
+ 	for_each_buffer_cpu(buffer, cpu)
+ 		rb_free_cpu_buffer(buffer->buffers[cpu]);
+ 
+-- 
+2.39.2
+
