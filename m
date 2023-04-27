@@ -2,59 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA08C6F0E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D677C6F0E5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344256AbjD0WVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 18:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S1344271AbjD0Wbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 18:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344007AbjD0WVc (ORCPT
+        with ESMTP id S229924AbjD0Wbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:21:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7AF3C01
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682634090; x=1714170090;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xn8Q/ukJMWhDCdLH8ZxmUSJmzivcGakOmczQ0cA6aJU=;
-  b=OV4sSa2uNpjPQH8lUDfawT6vhpBQkH2X6TVxDr8WT40zp4VaPPebhSQe
-   B5q9ukryYrJks6t2bpJ3vVpmMNR6mrmNVrLAu4VCkoPjg2eJFnxlCl5kQ
-   IABH2wF81NDnvUSB5bMGh5UD0/4WTl9AHjFJYqwk+tcOZVy/DeLnLJ9Dm
-   3U3FXPHluwCtI0ZEV+1mBJCt/1ZuCMcTefyvgDImWY6sKarGXFeYbQSsG
-   sbh43wFdvwnnWNmdy8acmGLz1JpXw0C2iZCc3QgZB4Bkt7O61R1RnHNtl
-   +dvLH7fz/8vQxlxnrrDtEoNeWZWLf2FUlbrp5GrSf0UaXfxHcLT7Hlbjz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="347609748"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="347609748"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 15:21:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="727310403"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="727310403"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 27 Apr 2023 15:21:28 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ps9zT-00009n-25;
-        Thu, 27 Apr 2023 22:21:27 +0000
-Date:   Fri, 28 Apr 2023 06:21:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Yan <yanaijie@huawei.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: fs/ext4/super.c:1262:13: warning: unused variable 'i'
-Message-ID: <202304280650.3eVEESjh-lkp@intel.com>
+        Thu, 27 Apr 2023 18:31:34 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B6335BD;
+        Thu, 27 Apr 2023 15:31:32 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f19ab99540so67153545e9.2;
+        Thu, 27 Apr 2023 15:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682634690; x=1685226690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tz2Oe11qyxiYiSKtmA55j9wYjhw20hI2uSu41zqX+7w=;
+        b=H7l3XrCoP1F1mVcVwHaFBZLKOTBxg58ut5KWhPQfU+rskv21YXCP71iy0xd/C2X+2i
+         GSLRMqozWYyC8v6c+koK+iE4GwfIkKYePBM6H19osCBU8TqCPGAAVvBgppJGlhNjMvEQ
+         a0Z9VGLNoqz05Bb09d1BFuki6UqNPWlQMC6PIA4kwOzT7VKseaogAxzNHcvi7325nIYo
+         PElQp42+0dmvXFe4PatAoFcfFWYVPxKjfFdgIiHuJYC3WytwVfSqY8Tt4YfXhLOMZGU6
+         uTpHIc4y8u1cqx7Uc9i/lIu/BMsYry6GEkAo3+3W/E75w9P5+Jtp+KxDdzelrciYb5cs
+         h+jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682634690; x=1685226690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tz2Oe11qyxiYiSKtmA55j9wYjhw20hI2uSu41zqX+7w=;
+        b=G/PbgHoniwQVsiiri1DYuDVnJ0TrVaODYQ6JnvyqcDFshfbEsl0XJLBUfA9dmcOoOy
+         UT8/ek1btTJt+SrdFjxlplHmoYA2CVoPGzO//et+ILBJqvU2tzLcdhzMX7jx1VQr6L6l
+         2mrX3MkcJGQUase7wj3/nX52YE+XDIUesQDsTdLJKtQzZ1pPjSWD3StVxKBXePHz8+Ni
+         aRHmHL17OG1yQmVbA8IL6e8gevCtXLrRRMqaAMitoBbhShOtGJRcGvKdGnU0GGRLN2G6
+         iSOdEV14869iOKQ3JAnuEC2xLuM0Ug0ddmHLr6XmEmMSy1EB74BqdvkfPXBvatR5dEU0
+         AZ/w==
+X-Gm-Message-State: AC+VfDyFoKUPgnX3opo+O5Z/3bXRTR3hnJbuP56iF02Pg6xRN35ckqpK
+        g6rX0TZeDkud5S6XtOM4CuY=
+X-Google-Smtp-Source: ACHHUZ6l/jbczQYmNlznJ9f1JTg0eUFvInHsnpdLhbBGzb0Ztabbf48grSYT65gbfC3vSau2+Qd0/g==
+X-Received: by 2002:a7b:c008:0:b0:3f1:7a18:942e with SMTP id c8-20020a7bc008000000b003f17a18942emr2349590wmb.6.1682634690422;
+        Thu, 27 Apr 2023 15:31:30 -0700 (PDT)
+Received: from localhost (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003f173a2b2f6sm26145371wmo.12.2023.04.27.15.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 15:31:29 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 23:31:28 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: Re: [PATCH v4] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <09e4a2b5-fb4f-447e-a8b1-ffbba75c5e37@lucifer.local>
+References: <3b92d56f55671a0389252379237703df6e86ea48.1682464032.git.lstoakes@gmail.com>
+ <7a3ff186-09c4-1059-9cdf-9e793f985251@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <7a3ff186-09c4-1059-9cdf-9e793f985251@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,161 +109,293 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Wed, Apr 26, 2023 at 05:52:09PM -0700, John Hubbard wrote:
+> On 4/25/23 16:15, Lorenzo Stoakes wrote:
+> > GUP does not correctly implement write-notify semantics, nor does it
+> > guarantee that the underlying pages are correctly dirtied, which could lead
+> > to a kernel oops or data corruption when writing to file-backed mappings.
+> >
+> > This is only relevant when the mappings are file-backed and the underlying
+> > file system requires folio dirty tracking. File systems which do not, such
+> > as shmem or hugetlb, are not at risk and therefore can be written to
+> > without issue.
+> >
+> > Unfortunately this limitation of GUP has been present for some time and
+> > requires future rework of the GUP API in order to provide correct write
+> > access to such mappings.
+> >
+> > In the meantime, we add a check for the most broken GUP case -
+> > FOLL_LONGTERM - which really under no circumstances can safely access
+> > dirty-tracked file mappings.
+> >
+>
+> Hi Lorenzo,
+>
+> As I mentioned in a sub-thread [1], it would be a nice touch to include
+> your more detailed write-up, and a link to Jan Kara's original report,
+> here.
 
-FYI, the error/warning still remains.
+Ack will do.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cec24b8b6bb841a19b5c5555b600a511a8988100
-commit: dcbf87589d90e3bd5a5a4cf832517f22f3c55efb ext4: factor out ext4_flex_groups_free()
-date:   13 days ago
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20230428/202304280650.3eVEESjh-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dcbf87589d90e3bd5a5a4cf832517f22f3c55efb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dcbf87589d90e3bd5a5a4cf832517f22f3c55efb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ext4/
+>
+>
+> > As part of this change we separate out vma_needs_dirty_tracking() as a
+> > helper function to determine this, which is distinct from
+> > vma_wants_writenotify() which is specific to determining which PTE flags to
+> > set.
+>
+> This, I think should go in a separate cleanup patch, because it is
+> (nearly) the same behavior. More notes below on this.
+>
+> More notes below:
+>
+> >
+> > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > ---
+> > v4:
+> > - Split out vma_needs_dirty_tracking() from vma_wants_writenotify() to reduce
+> >    duplication and update to use this in the GUP check. Note that both separately
+> >    check vm_ops_needs_writenotify() as the latter needs to test this before the
+> >    vm_pgprot_modify() test, resulting in vma_wants_writenotify() checking this
+> >    twice, however it is such a small check this should not be egregious.
+> >
+> > v3:
+> > - Rebased on latest mm-unstable as of 24th April 2023.
+> > - Explicitly check whether file system requires folio dirtying. Note that
+> >    vma_wants_writenotify() could not be used directly as it is very much focused
+> >    on determining if the PTE r/w should be set (e.g. assuming private mapping
+> >    does not require it as already set, soft dirty considerations).
+> > - Tested code against shmem and hugetlb mappings - confirmed that these are not
+> >    disallowed by the check.
+> > - Eliminate FOLL_ALLOW_BROKEN_FILE_MAPPING flag and instead perform check only
+> >    for FOLL_LONGTERM pins.
+> > - As a result, limit check to internal GUP code.
+> >   https://lore.kernel.org/all/23c19e27ef0745f6d3125976e047ee0da62569d4.1682406295.git.lstoakes@gmail.com/
+> >
+> > v2:
+> > - Add accidentally excluded ptrace_access_vm() use of
+> >    FOLL_ALLOW_BROKEN_FILE_MAPPING.
+> > - Tweak commit message.
+> > https://lore.kernel.org/all/c8ee7e02d3d4f50bb3e40855c53bda39eec85b7d.1682321768.git.lstoakes@gmail.com/
+> >
+> > v1:
+> > https://lore.kernel.org/all/f86dc089b460c80805e321747b0898fd1efe93d7.1682168199.git.lstoakes@gmail.com/
+> >
+> >   include/linux/mm.h |  1 +
+> >   mm/gup.c           | 26 +++++++++++++++++++++++++-
+> >   mm/mmap.c          | 37 ++++++++++++++++++++++++++++---------
+> >   3 files changed, 54 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 37554b08bb28..f7da02fc89c6 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -2433,6 +2433,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+> >   #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+> >   					    MM_CP_UFFD_WP_RESOLVE)
+> > +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
+> >   int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
+> >   static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
+> >   {
+> > diff --git a/mm/gup.c b/mm/gup.c
+> > index 1f72a717232b..53652453037c 100644
+> > --- a/mm/gup.c
+> > +++ b/mm/gup.c
+> > @@ -959,16 +959,37 @@ static int faultin_page(struct vm_area_struct *vma,
+> >   	return 0;
+> >   }
+> > +/*
+> > + * Writing to file-backed mappings which require folio dirty tracking using GUP
+> > + * is a fundamentally broken operation as kernel write access to GUP mappings
+> > + * may not adhere to the semantics expected by a file system.
+> > + */
+> > +static inline bool can_write_file_mapping(struct vm_area_struct *vma,
+> > +					  unsigned long gup_flags)
+>
+> Perhaps name this:
+>         writeable_file_mapping_allowed()
+>
+> ? "can" is more about "is this possible", whereas the goal here is
+> to express, "should this be allowed".
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280650.3eVEESjh-lkp@intel.com/
+Yes I struggled a bit with how best to name this, I think your suggestion
+is better
 
-All warnings (new ones prefixed by >>):
+>
+> Also a silly tiny nit: let's omit the "inline" keyword, down here in this
+> .c file, and let the compiler work that out instead. "static" should suffice.
 
-   fs/ext4/super.c: In function 'ext4_put_super':
->> fs/ext4/super.c:1262:13: warning: unused variable 'i' [-Wunused-variable]
-    1262 |         int i, err;
-         |             ^
-   fs/ext4/super.c: In function '__ext4_fill_super':
-   fs/ext4/super.c:5104:22: warning: unused variable 'i' [-Wunused-variable]
-    5104 |         unsigned int i;
-         |                      ^
+Ack, I saw some inconsistency in gup.c about this so wondered which way to
+go, obviously it's not really all that useful here (compiler will inline if
+it wants)
 
+>
+> > +{
+> > +	/* If we aren't pinning then no problematic write can occur. */
+> > +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
+> > +		return true;
+> > +
+> > +	/* We limit this check to the most egregious case - a long term pin. */
+> > +	if (!(gup_flags & FOLL_LONGTERM))
+> > +		return true;
+> > +
+> > +	/* If the VMA requires dirty tracking then GUP will be problematic. */
+> > +	return vma_needs_dirty_tracking(vma);
+> > +}
+> > +
+> >   static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+> >   {
+> >   	vm_flags_t vm_flags = vma->vm_flags;
+> >   	int write = (gup_flags & FOLL_WRITE);
+> >   	int foreign = (gup_flags & FOLL_REMOTE);
+> > +	bool vma_anon = vma_is_anonymous(vma);
+>
+> This name:
+>
+>        bool file_backed = !vma_is_anonymous(vma);
+>
+> would lead to a slightly better reading experience below.
 
-vim +/i +1262 fs/ext4/super.c
+Well you see, I'm not so sure about that, because vma_is_anonymous() checks
+vm_ops == NULL not vm_file == NULL which can be the case for a special
+mapping like VDSO that is not in fact file-backed :) the horror, the
+horror.
 
-dcbf87589d90e3 Jason Yan               2023-03-23  1256  
-617ba13b31fbf5 Mingming Cao            2006-10-11  1257  static void ext4_put_super(struct super_block *sb)
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1258  {
-617ba13b31fbf5 Mingming Cao            2006-10-11  1259  	struct ext4_sb_info *sbi = EXT4_SB(sb);
-617ba13b31fbf5 Mingming Cao            2006-10-11  1260  	struct ext4_super_block *es = sbi->s_es;
-97abd7d4b5d9c4 Theodore Ts'o           2017-02-04  1261  	int aborted = 0;
-ef2cabf7c6d838 Hidehiro Kawai          2008-10-27 @1262  	int i, err;
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1263  
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1264  	/*
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1265  	 * Unregister sysfs before destroying jbd2 journal.
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1266  	 * Since we could still access attr_journal_task attribute via sysfs
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1267  	 * path which could have sbi->s_journal->j_task as NULL
-b98535d091795a Ye Bin                  2022-03-22  1268  	 * Unregister sysfs before flush sbi->s_error_work.
-b98535d091795a Ye Bin                  2022-03-22  1269  	 * Since user may read /proc/fs/ext4/xx/mb_groups during umount, If
-b98535d091795a Ye Bin                  2022-03-22  1270  	 * read metadata verify failed then will queue error work.
-b98535d091795a Ye Bin                  2022-03-22  1271  	 * flush_stashed_error_work will call start_this_handle may trigger
-b98535d091795a Ye Bin                  2022-03-22  1272  	 * BUG_ON.
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1273  	 */
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1274  	ext4_unregister_sysfs(sb);
-5e47868fb94b63 Ritesh Harjani          2020-03-18  1275  
-4808cb5b98b436 Zhang Yi                2022-04-12  1276  	if (___ratelimit(&ext4_mount_msg_ratelimit, "EXT4-fs unmount"))
-bb0fbc782ee9fa Lukas Czerner           2022-11-08  1277  		ext4_msg(sb, KERN_INFO, "unmounting filesystem %pU.",
-bb0fbc782ee9fa Lukas Czerner           2022-11-08  1278  			 &sb->s_uuid);
-4808cb5b98b436 Zhang Yi                2022-04-12  1279  
-b98535d091795a Ye Bin                  2022-03-22  1280  	ext4_unregister_li_request(sb);
-b98535d091795a Ye Bin                  2022-03-22  1281  	ext4_quota_off_umount(sb);
-b98535d091795a Ye Bin                  2022-03-22  1282  
-b98535d091795a Ye Bin                  2022-03-22  1283  	flush_work(&sbi->s_error_work);
-b98535d091795a Ye Bin                  2022-03-22  1284  	destroy_workqueue(sbi->rsv_conversion_wq);
-b98535d091795a Ye Bin                  2022-03-22  1285  	ext4_release_orphan_info(sb);
-b98535d091795a Ye Bin                  2022-03-22  1286  
-0390131ba84fd3 Frank Mayhar            2009-01-07  1287  	if (sbi->s_journal) {
-97abd7d4b5d9c4 Theodore Ts'o           2017-02-04  1288  		aborted = is_journal_aborted(sbi->s_journal);
-ef2cabf7c6d838 Hidehiro Kawai          2008-10-27  1289  		err = jbd2_journal_destroy(sbi->s_journal);
-47b4a50bebfd34 Jan Kara                2008-07-11  1290  		sbi->s_journal = NULL;
-878520ac45f9f6 Theodore Ts'o           2019-11-19  1291  		if ((err < 0) && !aborted) {
-54d3adbc29f0c7 Theodore Ts'o           2020-03-28  1292  			ext4_abort(sb, -err, "Couldn't clean up the journal");
-0390131ba84fd3 Frank Mayhar            2009-01-07  1293  		}
-878520ac45f9f6 Theodore Ts'o           2019-11-19  1294  	}
-d4edac314e9ad0 Josef Bacik             2009-12-08  1295  
-d3922a777f9b4c Zheng Liu               2013-07-01  1296  	ext4_es_unregister_shrinker(sbi);
-292a089d78d3e2 Steven Rostedt (Google  2022-12-20  1297) 	timer_shutdown_sync(&sbi->s_err_report);
-d4edac314e9ad0 Josef Bacik             2009-12-08  1298  	ext4_release_system_zone(sb);
-d4edac314e9ad0 Josef Bacik             2009-12-08  1299  	ext4_mb_release(sb);
-d4edac314e9ad0 Josef Bacik             2009-12-08  1300  	ext4_ext_release(sb);
-d4edac314e9ad0 Josef Bacik             2009-12-08  1301  
-bc98a42c1f7d0f David Howells           2017-07-17  1302  	if (!sb_rdonly(sb) && !aborted) {
-e2b911c53584a9 Darrick J. Wong         2015-10-17  1303  		ext4_clear_feature_journal_needs_recovery(sb);
-02f310fcf47fa9 Jan Kara                2021-08-16  1304  		ext4_clear_feature_orphan_present(sb);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1305  		es->s_state = cpu_to_le16(sbi->s_mount_state);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1306  	}
-bc98a42c1f7d0f David Howells           2017-07-17  1307  	if (!sb_rdonly(sb))
-4392fbc4bab57d Jan Kara                2020-12-16  1308  		ext4_commit_super(sb);
-a8e25a83245618 Artem Bityutskiy        2012-03-21  1309  
-6ef684988816fd Jason Yan               2023-03-23  1310  	ext4_group_desc_free(sbi);
-dcbf87589d90e3 Jason Yan               2023-03-23  1311  	ext4_flex_groups_free(sbi);
-1f79467c8a6be6 Jason Yan               2023-03-23  1312  	ext4_percpu_param_destroy(sbi);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1313  #ifdef CONFIG_QUOTA
-a2d4a646e61954 Jan Kara                2014-09-11  1314  	for (i = 0; i < EXT4_MAXQUOTAS; i++)
-33458eaba4dfe7 Theodore Ts'o           2018-10-12  1315  		kfree(get_qf_name(sb, sbi, i));
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1316  #endif
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1317  
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1318  	/* Debugging code just in case the in-memory inode orphan list
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1319  	 * isn't empty.  The on-disk one can be non-empty if we've
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1320  	 * detected an error and taken the fs readonly, but the
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1321  	 * in-memory list had better be clean by this point. */
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1322  	if (!list_empty(&sbi->s_orphan))
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1323  		dump_orphan_list(sb, sbi);
-837c23fbc1b812 Chunguang Xu            2020-11-07  1324  	ASSERT(list_empty(&sbi->s_orphan));
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1325  
-89d96a6f8e6491 Theodore Ts'o           2015-06-20  1326  	sync_blockdev(sb->s_bdev);
-f98393a64ca139 Peter Zijlstra          2007-05-06  1327  	invalidate_bdev(sb->s_bdev);
-ee7ed3aa0f0862 Chunguang Xu            2020-09-24  1328  	if (sbi->s_journal_bdev && sbi->s_journal_bdev != sb->s_bdev) {
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1329  		/*
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1330  		 * Invalidate the journal device's buffers.  We don't want them
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1331  		 * floating about in memory - the physical journal device may
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1332  		 * hotswapped, and it breaks the `ro-after' testing code.
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1333  		 */
-ee7ed3aa0f0862 Chunguang Xu            2020-09-24  1334  		sync_blockdev(sbi->s_journal_bdev);
-ee7ed3aa0f0862 Chunguang Xu            2020-09-24  1335  		invalidate_bdev(sbi->s_journal_bdev);
-617ba13b31fbf5 Mingming Cao            2006-10-11  1336  		ext4_blkdev_remove(sbi);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1337  	}
-50c15df69e062b Chengguang Xu           2018-12-04  1338  
-dec214d00e0d78 Tahsin Erdogan          2017-06-22  1339  	ext4_xattr_destroy_cache(sbi->s_ea_inode_cache);
-dec214d00e0d78 Tahsin Erdogan          2017-06-22  1340  	sbi->s_ea_inode_cache = NULL;
-50c15df69e062b Chengguang Xu           2018-12-04  1341  
-47387409ee2e09 Tahsin Erdogan          2017-06-22  1342  	ext4_xattr_destroy_cache(sbi->s_ea_block_cache);
-47387409ee2e09 Tahsin Erdogan          2017-06-22  1343  	sbi->s_ea_block_cache = NULL;
-50c15df69e062b Chengguang Xu           2018-12-04  1344  
-618f003199c618 Pavel Skripkin          2021-04-30  1345  	ext4_stop_mmpd(sbi);
-618f003199c618 Pavel Skripkin          2021-04-30  1346  
-9060dd2c5036b1 Eric Sandeen            2016-11-26  1347  	brelse(sbi->s_sbh);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1348  	sb->s_fs_info = NULL;
-3197ebdb130473 Theodore Ts'o           2009-03-31  1349  	/*
-3197ebdb130473 Theodore Ts'o           2009-03-31  1350  	 * Now that we are completely done shutting down the
-3197ebdb130473 Theodore Ts'o           2009-03-31  1351  	 * superblock, we need to actually destroy the kobject.
-3197ebdb130473 Theodore Ts'o           2009-03-31  1352  	 */
-3197ebdb130473 Theodore Ts'o           2009-03-31  1353  	kobject_put(&sbi->s_kobj);
-3197ebdb130473 Theodore Ts'o           2009-03-31  1354  	wait_for_completion(&sbi->s_kobj_unregister);
-0441984a339897 Darrick J. Wong         2012-04-29  1355  	if (sbi->s_chksum_driver)
-0441984a339897 Darrick J. Wong         2012-04-29  1356  		crypto_free_shash(sbi->s_chksum_driver);
-705895b61133ef Pekka Enberg            2009-02-15  1357  	kfree(sbi->s_blockgroup_lock);
-8012b866085523 Shiyang Ruan            2022-06-03  1358  	fs_put_dax(sbi->s_daxdev, NULL);
-ac4acb1f4b2b6b Eric Biggers            2020-09-16  1359  	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
-5298d4bfe80f6a Christoph Hellwig       2022-01-18  1360  #if IS_ENABLED(CONFIG_UNICODE)
-f8f4acb6cded4e Daniel Rosenberg        2020-10-28  1361  	utf8_unload(sb->s_encoding);
-c83ad55eaa91c8 Gabriel Krisman Bertazi 2019-04-25  1362  #endif
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1363  	kfree(sbi);
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1364  }
-ac27a0ec112a08 Dave Kleikamp           2006-10-11  1365  
+>
+> Sorry for the small naming and documentation comments here,
+> it's just what I do. :)
+>
+>
+> >   	if (vm_flags & (VM_IO | VM_PFNMAP))
+> >   		return -EFAULT;
+> > -	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
+> > +	if ((gup_flags & FOLL_ANON) && !vma_anon)
+> >   		return -EFAULT;
+> >   	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
+> > @@ -978,6 +999,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+> >   		return -EFAULT;
+> >   	if (write) {
+> > +		if (!vma_anon && !can_write_file_mapping(vma, gup_flags))
+> > +			return -EFAULT;
+> > +
+> >   		if (!(vm_flags & VM_WRITE)) {
+> >   			if (!(gup_flags & FOLL_FORCE))
+> >   				return -EFAULT;
+> > diff --git a/mm/mmap.c b/mm/mmap.c
+> > index 536bbb8fa0ae..aac638dd22cf 100644
+> > --- a/mm/mmap.c
+> > +++ b/mm/mmap.c
+> > @@ -1475,6 +1475,32 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+> >   }
+> >   #endif /* __ARCH_WANT_SYS_OLD_MMAP */
+> > +/* Do VMA operations imply write notify is required? */
+> > +static inline bool vm_ops_needs_writenotify(
+>
+> This "inline" should also be omitted, imho.
+>
 
-:::::: The code at line 1262 was first introduced by commit
-:::::: ef2cabf7c6d838eb0ee2b4fb8ef84f7c06ce16d9 ext4: fix a bug accessing freed memory in ext4_abort
+Same comment as before as to why I did that, but ack
 
-:::::: TO: Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>
-:::::: CC: Theodore Ts'o <tytso@mit.edu>
+> > +	const struct vm_operations_struct *vm_ops)
+> > +{
+> > +	return vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite);
+> > +}
+> > +
+> > +/*
+> > + * Does this VMA require the underlying folios to have their dirty state
+> > + * tracked?
+> > + */
+> > +bool vma_needs_dirty_tracking(struct vm_area_struct *vma)
+> > +{
+> > +	/* Does the filesystem need to be notified? */
+> > +	if (vm_ops_needs_writenotify(vma->vm_ops))
+> > +		return true;
+> > +
+> > +	/* Specialty mapping? */
+> > +	if (vma->vm_flags & VM_PFNMAP)
+> > +		return false;
+> > +
+> > +	/* Can the mapping track the dirty pages? */
+> > +	return vma->vm_file && vma->vm_file->f_mapping &&
+> > +		mapping_can_writeback(vma->vm_file->f_mapping);
+> > +}
+> > +
+> >   /*
+> >    * Some shared mappings will want the pages marked read-only
+> >    * to track write events. If so, we'll downgrade vm_page_prot
+> > @@ -1484,14 +1510,13 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+> >   int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+> >   {
+> >   	vm_flags_t vm_flags = vma->vm_flags;
+> > -	const struct vm_operations_struct *vm_ops = vma->vm_ops;
+> >   	/* If it was private or non-writable, the write bit is already clear */
+> >   	if ((vm_flags & (VM_WRITE|VM_SHARED)) != ((VM_WRITE|VM_SHARED)))
+> >   		return 0;
+> >   	/* The backer wishes to know when pages are first written to? */
+> > -	if (vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite))
+> > +	if (vm_ops_needs_writenotify(vma->vm_ops))
+>
+> OK, so here we are calling vm_ops_needs_writenotify(), that's the
+> first call. And then...
+>
+> >   		return 1;
+> >   	/* The open routine did something to the protections that pgprot_modify
+> > @@ -1511,13 +1536,7 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+> >   	if (userfaultfd_wp(vma))
+> >   		return 1;
+> > -	/* Specialty mapping? */
+> > -	if (vm_flags & VM_PFNMAP)
+> > -		return 0;
+> > -
+> > -	/* Can the mapping track the dirty pages? */
+> > -	return vma->vm_file && vma->vm_file->f_mapping &&
+> > -		mapping_can_writeback(vma->vm_file->f_mapping);
+> > +	return vma_needs_dirty_tracking(vma);
+>
+> ...and now we call it again. I think once should be enough, though.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Right, this was intentional (I think I mentioned it in the revision
+notes?), because there is a conundrum here - the invocation from
+vma_wants_writenotify() needs to check this _first_ before performing the
+_other_ checks in vma_needs_dirty_tracking(), but external calls need all
+the checks. It'd be ugly to pass a boolean to see if we should check this
+or not, and it's hardly an egregious duplication for the _computer_
+(something likely in a cache line != NULL) which aids readability and
+reduces duplication for the _reader_ of the code for a path that is
+inherently slow (likely going to fault in pages etc.)
+
+I think it'd be confusing to have yet another split into
+vma_can_track_dirty() or whatever because then suddenly for the check to be
+meaningful you have to _always_ check 2 things.
+
+Other options like passing an output parameter or returning something other
+than boolean are equally distasteful.
+
+>
+> Also, with the exception of that double call to
+> vm_ops_needs_writenotify(), these changes to mmap.c are code cleanup
+> that has the same behavior as before. As such, it's better to separate
+> them out from this patch whose goal is very much to change behavior.
+
+It's not really cleanup, it's separating out some of the logic explicitly
+to be used in this new context, without which the separation would not be
+useful, so I feel it's a bit over the top to turn a small single patch into
+two simply to avoid this.
+
+>
+>
+> [1] https://lore.kernel.org/all/1b9e3406-c08e-b97c-d46f-22f36535d9e5@nvidia.com/
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
+>
+
+Thanks for the review, I will respin with the suggestions (other than ones
+I don't quite agree with as explained above) and a clearer description in
+line with Mika's suggestions.
+
+Hopefully we can move closer to this actually getting some
+reviewed/acked-by tags soon :)
