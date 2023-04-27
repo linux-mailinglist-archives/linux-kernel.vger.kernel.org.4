@@ -2,237 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00C36F0535
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E2D6F053D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbjD0LyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S243743AbjD0L7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243365AbjD0LyI (ORCPT
+        with ESMTP id S243283AbjD0L7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:54:08 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C3D194
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:54:06 -0700 (PDT)
-Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: shreeya)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 39EE266032B2;
-        Thu, 27 Apr 2023 12:54:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1682596444;
-        bh=j0QYDp6weoRHl94DG/abJ5MIE+9RrKbIHWwFqclcQC0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WnBu7RaywkO2jB4Nl3Qj21vNHdZiEaCuHw2AoDdOG9U3DcVY+lB2iGU0HRO4QVPHg
-         u30BEUg8hOFnQ9+IvRD0XTSc2kqcDDbR3ITI8DFVK9AgQdQS2drmYYNSBty2X4TS62
-         IAvMhtz2bCPp+GaUEBrqYlHgwSUbozmiimRg/hDf5F0lMXH2objz4og94qfr2dzZhA
-         bVJzoGzgz2YWrUNmJJPAPowwlDE0EE3dZqkkMn6uSjzOGYLfEEJ86KU1cNXYhfVtHO
-         LYAhEFqJFR6qM9JMrOLZICris5YASdLa0RUl0ksLle2R81sK47ya+yJK9BBNVv4DaD
-         xI9Y3q5haRiDg==
-Message-ID: <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
-Date:   Thu, 27 Apr 2023 17:23:58 +0530
+        Thu, 27 Apr 2023 07:59:02 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6FA4C3D;
+        Thu, 27 Apr 2023 04:59:00 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-959a626b622so797830466b.0;
+        Thu, 27 Apr 2023 04:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682596739; x=1685188739;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AE7Pspd28nFtHWfyIzA120GvJp4aroY+ZH6NEOLYSVY=;
+        b=fgKLrUtQzL7xid5SkT14yLFXtyHM4Krt/K+Vesqq6FddnrKpdE5lN4tQ9YDsDTkFr3
+         bHfJDJHTjHFfGsTr9C5XddTJyIs3JmngwkkCJHilsVQPJKkRdK06+zYr7YSUrfaLAh7Z
+         FzRTDZcBCuy7rmzM7XJ8G61tUIEWr/aiwDchxCqv6rQnLk0zjJ5mubKQUx7Z/zsq+iuo
+         lg7TsEiQbQSUqrx29E6BRsvePZvHTeEwoAS9QKlGxRvpXx/naySV8aPifxKfhXBDNt0N
+         aE3DPFNJyU+r0r4TTqTzfakJGrnbFJ75RB80NoJ1qKTp8ZqczciQRFZCDKP6oyMsH3dF
+         vcsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682596739; x=1685188739;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AE7Pspd28nFtHWfyIzA120GvJp4aroY+ZH6NEOLYSVY=;
+        b=i9yIHrduY3WzqSL1zjqeD6MUrxIxSeij6qsR4FgrL5E9hivIK3V5YpAgC+uAwByrd1
+         AjVMx+uxBd4Wubku/gL89Rk+/YwSM09Vqb/O60S9o8DMpdxPB5NLqqdQQheuE1A3KHgj
+         7fUaTKgyAJ+5hEKi+jyfFKmincUSjnn46n8+xQkpB06zqG0ejjIJnt6SEgak/NKV0P5L
+         0UyJQsWDiL+7/FoRG8ecPOpeMsDxImAAU2y1oIs/94t2xCwo7BVfMcTjYrtzrZzg5wH2
+         4lKpex75tZdtUTaEO5WYxxtpbdqeEYJzXI0VLGEO3wK0/lFtGq8Z0NIOw7mz/L8PxJ0H
+         HUFQ==
+X-Gm-Message-State: AC+VfDxvXngGkBAbNr0MmD955tyDCKM1stRwFLHw1D/FQiDmbJtpjGAS
+        /MPR5lSD6yd4czpcpYsALzs=
+X-Google-Smtp-Source: ACHHUZ7lpvqWveupZjInIJ3m9ZqG439Xu8iO1z3t4DXYCmhoeZazsYr/aAslTH1pP9VgZXhTerGgUA==
+X-Received: by 2002:a17:907:968a:b0:939:e870:2b37 with SMTP id hd10-20020a170907968a00b00939e8702b37mr1610565ejc.70.1682596739003;
+        Thu, 27 Apr 2023 04:58:59 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-8b88-53b7-c55c-8535.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:8b88:53b7:c55c:8535])
+        by smtp.gmail.com with ESMTPSA id e1-20020a17090681c100b0094f67ea6598sm9491285ejx.193.2023.04.27.04.58.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 04:58:58 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 27 Apr 2023 13:58:56 +0200
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v7 00/11] tracing: Add fprobe events
+Message-ID: <ZEpjgKmDwg1GTCTR@krava>
+References: <168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        regressions@lists.linux.dev
-References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
- <20220919170828.3718437-1-ndesaulniers@google.com>
-Content-Language: en-US
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <20220919170828.3718437-1-ndesaulniers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nick,
+On Thu, Apr 27, 2023 at 10:17:45AM +0900, Masami Hiramatsu (Google) wrote:
+> Hi,
+> 
+> Here is the 7th version of improve fprobe and add a basic fprobe event
+> support for ftrace (tracefs) and perf. Here is the previous version.
+> 
+> https://lore.kernel.org/all/168234755610.2210510.12133559313738141202.stgit@mhiramat.roam.corp.google.com/
+> 
+> This version is rebased on the latest linux-trace/for-next, fixes
+> bpf_get_btf_vmlinux() return value check [6/11] and adds new BTF $retval
+> type support [9/11] (I forgot to implement this feature last time).
+> Also updates according to the BTF $retval type support.
+> 
+> You can also get this series from:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+> 
+> With this fprobe events, we can continue to trace function entry/exit
+> even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> it is not available if the architecture only supports
+> CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+> events can not probe function entry/exit effectively on such architecture.
+> But this problem can be solved if the dynamic events supports fprobe events
+> because fprobe events doesn't use kprobe but ftrace via fprobe.
+> 
+> FPROBE EVENTS
+> =============
+> 
+> Fprobe events allows user to add new events on the entry and exit of kernel
+> functions (which can be ftraced). Unlike kprobe events, the fprobe events
+> can only probe the function entry and exit, and it can only trace the
+> function args, return value, and stacks. (no registers)
+> For probing function body, users can continue to use the kprobe events.
+> 
+> The tracepoint probe events (tprobe events) also allows user to add new
+> events dynamically on the tracepoint. Most of the tracepoint already has
+> trace-events, so this feature is useful if you only want to know a
+> specific parameter, or trace the tracepoints which has no trace-events
+> (e.g. sched_*_tp tracepoints only exposes the tracepoints.)
+> 
+> The fprobe events syntax is;
+> 
+>  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+>  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+> 
+> And tracepoint probe events syntax is;
+> 
+>  t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+> 
+> This series includes BTF argument support for fprobe/tracepoint events,
+> and kprobe events. This allows us to fetch a specific function parameter
+> by name, and all parameters by '$$args'.
 
-On 19/09/22 22:38, Nick Desaulniers wrote:
-> cc-ifversion is GCC specific. Replace it with compiler specific
-> variants. Update the users of cc-ifversion to use these new macros.
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/350
-> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-> Suggested-by: Bill Wendling <morbo@google.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+are you planning to fetch and display more complicated types in future?
+like strings or dereferencing struct field from argument pointer
 
-KernelCI found this patch causes a regression in the
-baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
-see the bisection report for more details [2].
+> Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+> confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+> 
+> E.g.
+> 
+>  # echo 't kfree ptr' >> dynamic_events
+>  # echo 'f kfree object' >> dynamic_events
+>  # cat dynamic_events 
+> t:tracepoints/kfree kfree ptr=ptr
+> f:fprobes/kfree__entry kfree object=object
+>  # echo 1 > events/fprobes/enable
+>  # echo 1 > events/tracepoints/enable
+>  # echo > trace
+>  # head -n 20 trace | tail
+> #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> #              | |         |   |||||     |         |
+>             tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+>             tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+>             tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+>             tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+>             tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+>             tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+>             tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+>             tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
 
-Let me know if you have any questions.
+I checked with perf and record/stat/script seem to work fine with this
 
+  # ./perf record -e 'fprobes:myprobe'
+  ^C[ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.162 MB perf.data (1 samples) ]
 
-[1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
-[2] https://groups.io/g/kernelci-results/message/40804
+  # ./perf script
+    systemd-oomd   479 [001] 14550.722079: fprobes:myprobe: (ffffffff81505be0) filename=0x557b033662b0
 
+perf trace seems to be off with __probe_ip for some reason:
 
-Thanks,
-Shreeya Patel
+  # ./perf trace -e 'fprobes:myprobe'
+     0.000 systemd-oomd/479 fprobes:myprobe(__probe_ip: -2125440032, filename: 93986839069680)
+     1.189 systemd-oomd/479 fprobes:myprobe(__probe_ip: -2125440032, filename: 93986839070144)
 
-#regzbot introduced: 88b61e3bff93
+but it's probably perf issue
 
-> ---
-> Changes v3 -> v4:
-> * Split into its own patch again from series, as per Masahiro.
-> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
->    clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
->
->   Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
->   Makefile                                    |  6 ++---
->   drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
->   scripts/Makefile.compiler                   | 10 ++++---
->   scripts/Makefile.extrawarn                  |  4 +--
->   5 files changed, 29 insertions(+), 22 deletions(-)
->
-> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-> index 11a296e52d68..ee7e3ea1fbe1 100644
-> --- a/Documentation/kbuild/makefiles.rst
-> +++ b/Documentation/kbuild/makefiles.rst
-> @@ -682,22 +682,27 @@ more details, with real examples.
->   	In the above example, -Wno-unused-but-set-variable will be added to
->   	KBUILD_CFLAGS only if gcc really accepts it.
->   
-> -    cc-ifversion
-> -	cc-ifversion tests the version of $(CC) and equals the fourth parameter
-> -	if version expression is true, or the fifth (if given) if the version
-> -	expression is false.
-> +    gcc-min-version
-> +	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
-> +	or equal to the provided value and evaluates to y if so.
->   
->   	Example::
->   
-> -		#fs/reiserfs/Makefile
-> -		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
-> +		cflags-$(call gcc-min-version, 70100) := -foo
->   
-> -	In this example, ccflags-y will be assigned the value -O1 if the
-> -	$(CC) version is less than 4.2.
-> -	cc-ifversion takes all the shell operators:
-> -	-eq, -ne, -lt, -le, -gt, and -ge
-> -	The third parameter may be a text as in this example, but it may also
-> -	be an expanded variable or a macro.
-> +	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
-> +	$(CONFIG_GCC_VERSION) is >= 7.1.
-> +
-> +    clang-min-version
-> +	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
-> +	than or equal to the provided value and evaluates to y if so.
-> +
-> +	Example::
-> +
-> +		cflags-$(call clang-min-version, 110000) := -foo
-> +
-> +	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
-> +	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
->   
->       cc-cross-prefix
->   	cc-cross-prefix is used to check if there exists a $(CC) in path with
-> diff --git a/Makefile b/Makefile
-> index 298f69060f10..411c8480b37e 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
->   
->   KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
->   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
-> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->   
->   ifdef CONFIG_CC_IS_CLANG
->   KBUILD_CPPFLAGS += -Qunused-arguments
-> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
->   KBUILD_CFLAGS += -Wno-maybe-uninitialized
->   endif
->   
-> -ifdef CONFIG_CC_IS_GCC
->   # The allocators already balk at large sizes, so silence the compiler
->   # warnings for bounds checks involving those possible values. While
->   # -Wno-alloc-size-larger-than would normally be used here, earlier versions
-> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
->   # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
->   # choice, we must perform a versioned check to disable this warning.
->   # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
-> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
-> -endif
-> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
-> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
->   
->   # disable invalid "can't wrap" optimizations for signed / pointers
->   KBUILD_CFLAGS	+= -fno-strict-overflow
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> index cb81ed2fbd53..d70838edba80 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
->   endif
->   
->   ifdef CONFIG_CC_IS_GCC
-> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
-> +ifneq ($(call gcc-min-version, 70100),y)
->   IS_OLD_GCC = 1
->   endif
->   endif
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index 94d0d40cddb3..9d18fb91890e 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
->   cc-disable-warning = $(call try-run,\
->   	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
->   
-> -# cc-ifversion
-> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
-> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
-> +# gcc-min-version
-> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
-> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
-> +
-> +# clang-min-version
-> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
-> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
->   
->   # ld-option
->   # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
-> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-> index 6ae482158bc4..5769c1939d40 100644
-> --- a/scripts/Makefile.extrawarn
-> +++ b/scripts/Makefile.extrawarn
-> @@ -48,7 +48,7 @@ else
->   ifdef CONFIG_CC_IS_CLANG
->   KBUILD_CFLAGS += -Wno-initializer-overrides
->   # Clang before clang-16 would warn on default argument promotions.
-> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
-> +ifneq ($(call clang-min-version, 160000),y)
->   # Disable -Wformat
->   KBUILD_CFLAGS += -Wno-format
->   # Then re-enable flags that were part of the -Wformat group that aren't
-> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
->   KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
->   KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
->   # Requires clang-12+.
-> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
-> +ifeq ($(call clang-min-version, 120000),y)
->   KBUILD_CFLAGS += -Wformat-insufficient-args
->   endif
->   endif
+thanks,
+jirka
