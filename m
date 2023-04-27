@@ -2,117 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505C56F0CE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26EE6F0CE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344165AbjD0UMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S1344187AbjD0UNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344147AbjD0UMF (ORCPT
+        with ESMTP id S1343704AbjD0UNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:12:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824EE3595
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682626283;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MVxEyT6YPQv9FpKzpmnFDZ3linRqP6xqGLLw8EoheGs=;
-        b=PP3BryakO+8e6kGCNBYiDrMUGx/XNJxc8+jDN9etosF+e71GjJr5k/ydHDs5crRFDQMjcd
-        G0Ugc9jm38muhE80RNZ1gonVfZ/vTOf+Wolj2YtY2Vud1ri7cPxNC1ZV84modmSSRZtBEv
-        0pX1AlzAHUILuoUR809lXGKshomPL20=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-355-zzXpo4SiM4GQ0zEU17PLqA-1; Thu, 27 Apr 2023 16:11:20 -0400
-X-MC-Unique: zzXpo4SiM4GQ0zEU17PLqA-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-5ef5fbe2cfaso8207696d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:11:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682626279; x=1685218279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MVxEyT6YPQv9FpKzpmnFDZ3linRqP6xqGLLw8EoheGs=;
-        b=T8/0QTFugkeLvJLq00D1KMRkto+WybbngQ4yUIa1kaYQ6zLn98l/LAcR/fSVz7YZXR
-         Kikrj73pV4qPECTF/xdYrOApEesVl7uctzfltNq3MwJyeUcQUjZpnePeZYNmR6l4UV3s
-         jl1TUVYewt1K+wQ9KlaPAwWTjLWXDQ1NOhVV5j4xbI2FCOJva4B7iGq+fbVojdOxaJwB
-         pMiFoPYBbgNlhc0z74t0Vvjl8L/PSwqoUB4Vzat2SjkIC1iEDFrux4Ce7cf8/6FLbhp3
-         u8PmbsnU+N4B36WO+/LxMwc8wNpGxGFGKHT9s3+yzcY4QpJvBnRCXR8P+ornZKBwEd8R
-         QKVA==
-X-Gm-Message-State: AC+VfDx96ANDALITaTiRz7VNDIW7Ak9ncY35J3x2VunhdDPX/bhwBUHs
-        ld6sCHAbakA4tvyMiCOpKSV0381MWOLcdKP8Q1y2J4UsmLb30hUNM/vz84Za8E7e8KXRr2aHZhf
-        1vukQxrrFzzjid+1FQXBGWmvaBTF4k28msUePs49f+ugSBmELeYZNY3Z4atOSjQnFmg+dU8s72e
-        ipNmpQ/Q==
-X-Received: by 2002:a05:622a:1a96:b0:3e6:8da4:427 with SMTP id s22-20020a05622a1a9600b003e68da40427mr4968048qtc.6.1682626279484;
-        Thu, 27 Apr 2023 13:11:19 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5KE3lCDUjGNayup5e1EtQDHBZuAYaJD+lDZp2gHW+Y3izIr/NFp0H2THH7zdu1g2qOvrSQgA==
-X-Received: by 2002:a05:622a:1a96:b0:3e6:8da4:427 with SMTP id s22-20020a05622a1a9600b003e68da40427mr4968005qtc.6.1682626279102;
-        Thu, 27 Apr 2023 13:11:19 -0700 (PDT)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
-        by smtp.gmail.com with ESMTPSA id d19-20020a05620a241300b0074fb065bde4sm3444283qkn.18.2023.04.27.13.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 13:11:18 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        James Houghton <jthoughton@google.com>, peterx@redhat.com,
-        Anish Moorthy <amoorthy@google.com>
-Subject: [PATCH 2/2] selftests/kvm: Allow dump per-vcpu info for uffd threads
-Date:   Thu, 27 Apr 2023 16:11:12 -0400
-Message-Id: <20230427201112.2164776-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230427201112.2164776-1-peterx@redhat.com>
-References: <20230427201112.2164776-1-peterx@redhat.com>
-MIME-Version: 1.0
+        Thu, 27 Apr 2023 16:13:06 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C15535AD;
+        Thu, 27 Apr 2023 13:12:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=LmOazWNjaaUirDK7f0+UUssGhdwbYYxW6pA0G+w5Wtc=; b=fl7QifYhwiQwrJHfZFAKxi8+VC
+        Ek8wl+4yjLOUjcl4OtnLwgiYHMyHqtvCOo6GqIOD7mYc3Kjg1AQS0G7VZCJJYlIjq7My0hundS3qJ
+        ODQ9VsWRZR4sLt0vL1ONC8rw0xjKj/DnWDLfyBoaXYHCXpoGtS1k6U+NfyvDw4LwRl+A=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:60862 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1ps7yc-0002xa-T9; Thu, 27 Apr 2023 16:12:27 -0400
+Date:   Thu, 27 Apr 2023 16:12:26 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20230427161226.9c971530c6b848aa813c92b3@hugovil.com>
+In-Reply-To: <CAOMZO5BNbRV1fLpwDZWgj9+gihHJBBGeZCvkF1tgm5GhwSn8LQ@mail.gmail.com>
+References: <20230427195538.2718661-1-hugo@hugovil.com>
+        <CAOMZO5CQeeme6uhb8NCzR2QADjkBM-mRC9-GUnmhLWSGo5MMoQ@mail.gmail.com>
+        <20230427160608.f051241d750404939296f60d@hugovil.com>
+        <CAOMZO5BNbRV1fLpwDZWgj9+gihHJBBGeZCvkF1tgm5GhwSn8LQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH] imx8mn-var-som: dts: fix PHY detection bug by adding
+ deassert delay
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's one PER_VCPU_DEBUG in per-vcpu uffd threads but it's never hit.
+On Thu, 27 Apr 2023 17:07:59 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Trigger that when quit in normal ways (kick pollfd[1]), meanwhile fix the
-number of nanosec calculation.
+> On Thu, Apr 27, 2023 at 5:06 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> 
+> > Hi Fabio,
+> > it uses a ADIN1300 PHY.
+> >
+> > The datasheet indicate that the "Management interface active (t4)" state is reached at most 5ms after the reset signal is deasserted.
+> 
+> Please add this information to the commit log and please add a Fixes: tag.
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/kvm/lib/userfaultfd_util.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Good idea, will do.
 
-diff --git a/tools/testing/selftests/kvm/lib/userfaultfd_util.c b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-index 92cef20902f1..271f63891581 100644
---- a/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-+++ b/tools/testing/selftests/kvm/lib/userfaultfd_util.c
-@@ -70,7 +70,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 			r = read(pollfd[1].fd, &tmp_chr, 1);
- 			TEST_ASSERT(r == 1,
- 				    "Error reading pipefd in UFFD thread\n");
--			return NULL;
-+			break;
- 		}
- 
- 		if (!(pollfd[0].revents & POLLIN))
-@@ -103,7 +103,7 @@ static void *uffd_handler_thread_fn(void *arg)
- 	ts_diff = timespec_elapsed(start);
- 	PER_VCPU_DEBUG("userfaulted %ld pages over %ld.%.9lds. (%f/sec)\n",
- 		       pages, ts_diff.tv_sec, ts_diff.tv_nsec,
--		       pages / ((double)ts_diff.tv_sec + (double)ts_diff.tv_nsec / 100000000.0));
-+		       pages / ((double)ts_diff.tv_sec + (double)ts_diff.tv_nsec / NSEC_PER_SEC));
- 
- 	return NULL;
- }
+Hugo.
+
+
 -- 
-2.39.1
-
+Hugo Villeneuve <hugo@hugovil.com>
