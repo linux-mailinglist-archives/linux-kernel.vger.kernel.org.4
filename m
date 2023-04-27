@@ -2,56 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0AE6F0E9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3DF96F0E9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344359AbjD0W5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 18:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S1344365AbjD0W7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 18:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjD0W5N (ORCPT
+        with ESMTP id S229912AbjD0W73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:57:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E7EE76
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682636231; x=1714172231;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Oo30p4zjO7R+SHBzRbEWPBwEjv6nOyVJP4VGo+qJFhY=;
-  b=GApZXUG8RM75A1oEFvj72VrWp611QyB5ZtvyNiYJDn2aw0X3T/lMmMA9
-   xFOrUwz7JWiW1vErFI8jMH0I3cRGUmkBAPr+kxQUDmHgCNS6GVcaAuRNH
-   uMeuABP97qOqd7DuU/BTcL96FQvj9qtxu1p1TWBdK9ZQEhrQzKCsGy8wm
-   o1dm4QqAad7m+iyX19dMD2JNQuPlEJfC2cavoirp2Cj0YQ8AO7q7W6a/N
-   usdCTtDQprT0Wfz+CH9vBtQuxm6f8GbZkGEdJ6TR2YnWvnQPFkPKprcHT
-   ku4TcexsYD95w/1rZAkwiafmezWkKTD0O9Z6osW7aslyUgf1aPcWJ0ujv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="433870798"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="433870798"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 15:57:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="725110244"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="725110244"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by orsmga008.jf.intel.com with ESMTP; 27 Apr 2023 15:57:09 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        kirill.shutemov@linux.intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/mm for 6.4
-Date:   Thu, 27 Apr 2023 15:56:47 -0700
-Message-Id: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Apr 2023 18:59:29 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2077.outbound.protection.outlook.com [40.107.100.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B64268B;
+        Thu, 27 Apr 2023 15:59:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TbOjMKmcwWkBwlOzTHrGyrnHDoPXNkYiS/eqzZALTwyXTEBsxYqvr0+FgaNGfmI4KuQyKKdZEJU2qG367AM2wKMV/4YBtE90U2br+HQ/JtFrndpPuCzYkRxFpAFO70FgWH+hu8lf5xGz9liAd9IVuZjKoiGX1XRPoBfXdSU/9K/uLPvAJNucehtwBJxF6ALKJ6ytRWRO7GrDk0csTbo3DjMYsCo2rcbb9h5sUY6XptOoj9yfY0WOxRpz5f8WvlMSpGU2/sK/ypSv7k7913B49mh+9mnvylnFD5xgSmYqFj0gcMx6AuzOwYusvFKzJT8Th74D/FTlAYzA6JReaPoL7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4kl0MTe9SFzjNZpICU/w7xHflGj1I/iizCnOnVpLNVM=;
+ b=bfK7IlpWqud7XDgC0QbARQ2ahwS2LhIEc1cOZ4+gVF4oNkD6ez16CjH5eiwj8U7jkkXd95TpITS+hjDnRFD2JBs/bG144D88r3sihVulyU/80qpjHCFxib4w1uTEKsUs+A3YSQj1S3jSnPGrBnOBGPqN6+yQaMbRv1Br4d6BHF+KUronOiNqZGy7oadJEhmyj6/0BwBb6O3r5nT3z9EMPuYo4ny6T4gB4SOUOYZF5Qq6b+5MgldjEDtBN1etW8EzhAF+4NvuMxaIybx/DzfN+H3CklTY0ClwgIHuE2ZdTh9y6kLVnJzm7WYHZFAnkm8IHO7RBjsysfkG79O1w/OhFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4kl0MTe9SFzjNZpICU/w7xHflGj1I/iizCnOnVpLNVM=;
+ b=B3mf3KyiiOHxIZiRQ2RDNCGgrg9YM6r2Oi3e13UrJMVcr2Qlm0v4r0H9jJWWT8U1NudJQYyQz4xAkgnmQYX9vHa7MJHw6u5I6vQsKrk3mLQq235vKkxow5VrAnLgKPkJcAoeOLVFAmumP2RX8V1TgkwF+uqyWdc8yZhUSRRiyPZeSEMi/s5gHM6o0MPjHMcU38nP/xEhL5SaPdvZUO1D7eWczzB1dRmDS7s9hhgVCtJGT1czRGnrRDRDUO1dv5/JvKZcNCXyaMZMgXne9s+AtLzuAWw1fu6wk70wCsNalFJ3w13p2aIxdl1mPxiEhLTH8cBfoqZE0EgjrnwxhCJzeg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by DS7PR12MB5815.namprd12.prod.outlook.com (2603:10b6:8:77::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20; Thu, 27 Apr
+ 2023 22:59:26 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::6922:cae7:b3cc:4c2a]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::6922:cae7:b3cc:4c2a%6]) with mapi id 15.20.6340.021; Thu, 27 Apr 2023
+ 22:59:26 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Subject: Re: [PATCH] nvmet: Reorder fields in 'struct nvmet_ns'
+Thread-Topic: [PATCH] nvmet: Reorder fields in 'struct nvmet_ns'
+Thread-Index: AQHZeUEoV9vRcEcRDUeYawN1RnJsFq8/xVEA
+Date:   Thu, 27 Apr 2023 22:59:26 +0000
+Message-ID: <ba5df67e-534d-6f79-6277-80c755ca7e94@nvidia.com>
+References: <aea924d31f2bd2f740b1ccc6f462905bd6cab763.1682624855.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <aea924d31f2bd2f740b1ccc6f462905bd6cab763.1682624855.git.christophe.jaillet@wanadoo.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|DS7PR12MB5815:EE_
+x-ms-office365-filtering-correlation-id: 0518450f-6451-47a2-78f5-08db47730ccd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: r8DhI0f0o4DfwZoFXb8nlZgBQm/zrZP0iDMXFCGiCDKTxo0ckLY95+065OpPafgHe8tg1HYSRhJ4h3PNE/jxEIc/HIi2vrhaQwPenAAgcu/ZYv8EYfW+Q2OA/1vYL8mbH1w9NzSSYI0PinW3iYpG6bDxnNhswTwxVFPO9fCjoU9ZcsG2EN+mP8ddE6Mtg+A4piy+31ep5czrxf68xBsyIfIX5zVmgACyzhYVtCG32MvqDtbv2H9DUmv0Ii1UGWoN1zZnE2fSvpOwL/k9/H535I70bPIzsVLOsvZR7fbV785R4nO6IqnIs+kSDWT0MQEf3KoSzIW8wghY4sGabmC60kd6BcxC9gnITpM/RmmBl9azUVv/+iwPpfiie4ZKkSzDhlpn3HwtSTLLKE3ozLP6x2Oxw3SaQaT+MS6cbofWxr4wrfjB+8qnlIu8V3hhbd5kclIjgqW75NWSFLroSw7IrL71BBM75tVmmqlmJ7aMPl8U+eX58a412jOUKAFnZpzhks/Rp+QzrqvJBwNhmA9HQthU7XbYb3sLKLYtZBHdkmB6qsWPVHVxyx2iJPbv0zVuHA0BgZWYaA+acdmfp+0M4JLdYcjuGd0Odqln24VJK4l8ApOdOfKH5gPsME33bCdg2UK/DvXVElVudC2K+qWGD1EMG6ZDzGLmIQ8ks4PiJKAXWbJ+hxoC9Ym4GAhvqo3f
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(366004)(376002)(451199021)(54906003)(36756003)(38070700005)(31696002)(478600001)(86362001)(38100700002)(122000001)(8676002)(2906002)(4744005)(8936002)(6916009)(4326008)(64756008)(66476007)(66556008)(76116006)(316002)(66946007)(5660300002)(66446008)(107886003)(41300700001)(6512007)(91956017)(186003)(53546011)(6506007)(31686004)(2616005)(71200400001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S2MwMkVDeFh0YU1SQnJXL3VqUlJzZys1Z1p2bFhHUHN1c1huZzM5YzZ2Nndz?=
+ =?utf-8?B?RytCRHRRQ2x1L2xCS2p3U2orL0pUb2N1YUZhVWtMTUtuN0lHZlF3UHlKdDRt?=
+ =?utf-8?B?TkdNVXBtRFlHTzNDbWFrY1lOMkxldjRheUc4UHFjRnZGc1pVOG56STVLZEZ6?=
+ =?utf-8?B?SmlzRTMrM2lFblVVdWp3eVNFWGhvSkxQRmxzaTJzQ21NcStTZ2FZa25vKytM?=
+ =?utf-8?B?SDRHMVFXWENMSXYvWWhiQTl3V1IyVExuZVljOHlGa1kwOGFpVllXang2KzJM?=
+ =?utf-8?B?R3gwM0JwOXBvMXc5VGo5YlhVQjhNNUdmTmZwMFhUbDVzdGNSZmZKNFliVkNG?=
+ =?utf-8?B?NHFWL3liU20wUEt1ZFZXeEZSclhXK29rcHJPckdOR05aM3lRSmpvSXhjeUdV?=
+ =?utf-8?B?YWJFMTIyVEdwVHdpT2FNTlRLVHNaR2dBdWVpejZGd25mOFhwZUh4MFZqaU9n?=
+ =?utf-8?B?b3crT3pWc05Eb3BIbFRXM0l6S2hNdG9VT0UyQk8rY1hndXdLK0Q1UzY3am5w?=
+ =?utf-8?B?bFlSNmg2R1l6bWlJMTcwbFQwVEkxWTd0SzJBL0I4dnVFelNRd3NRcTRuZkdS?=
+ =?utf-8?B?WldKMEdQemhpaUVKTjNITkRMYmtrNlkwMkp4U2tjZVF4Q0tJS3prN1BTVFlr?=
+ =?utf-8?B?TmMwc25qalI3dGlYeFdrK3ozR0NvWm5aTDlzMXZTeXlvVkg2L2xwWVJSWjgz?=
+ =?utf-8?B?TWJRNFdhamo0Mk9hdjN1VnpTZjRobGhiVHRSTG4wZDdJTVZUeHI1TmRzSUYz?=
+ =?utf-8?B?V09DZUxhYnpnaTNWMURxYUJEZVYrTnhNZ0VBMWh1SXIyV1g1eFZsbWdCWWxN?=
+ =?utf-8?B?dXI5SVZXczNOY01scWZaTUJCMHl0Q3BXak85VVNYUEpwdGZZQ0xTNytuQlFC?=
+ =?utf-8?B?NWRqYmNvZ3EzcHY4WjkxOTJSQWZ4STBldXpPeXBwOWpoS05Vc3ljYldsUnBj?=
+ =?utf-8?B?blQreEkwRFVHMXNFZlZLMzFIVDFUb2ViRUp0SWJ2M0xIQWVuV0NsZ3JMTFVx?=
+ =?utf-8?B?VkhXb1ZBOExRYkhRR005M0FGU2NCU3dUV01YcnVVV1h3WDNUOEZqbWhqbUdB?=
+ =?utf-8?B?Nm4wcFRhNUdxZEFBUGxqbVpmWUk5OEppcWtCRENQZ2RzTFZoSlZDZ2Rtam1z?=
+ =?utf-8?B?L2daamQ3Qjk2cUtuaUNVUVhMWWRJYzFRUDNuZlBLUURDQmJ1RlcwalJ3WUJB?=
+ =?utf-8?B?YW9aMzVkSDJwWFBhVXBnMGc3SVJTdHBKZm05MTQybDYrdjB6VUFiaWxzSTJ4?=
+ =?utf-8?B?d3dBcU03OFp1V2Mzc3RqSTZLZXF2bnZKdnNtcVNQbjlXUUNPcWJCQ2VKbTVm?=
+ =?utf-8?B?NTBYQ1lCMmllaTRlN0pZQlNyQ1E3YXFVT29ocjZnQ0JCcEhDeVJHZ0N2QVRl?=
+ =?utf-8?B?aUxibVV4cmRxQnkxY2ZVdW5MM2JSNEJNWlh5WVhTQmlPMVlMWCtvL0tJeXI1?=
+ =?utf-8?B?Ykh3c3YyVzNkV0orRU1KRzU4VlVCMUNTanV4UW1KUmNRT05JM1ZYcHM5cHp5?=
+ =?utf-8?B?VjJWYXlhYitnU09XYStlaFBRMlpDaGJ4aEd2WXFJUWxOYXhjZ3VQSG5rT2FC?=
+ =?utf-8?B?UXVJdXVpZGdOYjJxMStYRm9icm1RK2tYK0ZYQnRwd0VpbitoVGFvc3JSTEJI?=
+ =?utf-8?B?K05nbjVtUTNTZjlrQ1NSUjhDYVJ5V1BpUFIzbFBlNGVjMnJVdWJ5UjFFRkoy?=
+ =?utf-8?B?VGZkM0V5T0xRK0pOcVJXWkNVLzJYTnU0N3Z2VnZIc3NSYkEyQzNxYjl6d3dJ?=
+ =?utf-8?B?eFNOYTNEVHN6TVVzR1JDZHNaRkZlWTlyVDNodG9LQ3BUdE85QS9lOTlHamdv?=
+ =?utf-8?B?Nm84dmxDdVFmSHlZcmg0VTVTczk3b0RjRkhGUm1hVjNMZjFxUUlvd3NUUFNN?=
+ =?utf-8?B?U3hBSFZ1dU56TllISGJZRkljTWpXdy9Dc2xGbTJXL1NUZk5KdmcrdTFDNE9B?=
+ =?utf-8?B?RFJJS0ZtLzIyQWp2bExGMlVzNWJCQVpTdmNTc05WdFlZMG4weStac01ZVi9w?=
+ =?utf-8?B?Q0IzOWlDRlVmN3ZqbHU1YncxaUpoUVgxSU5rclRNaE96c3RWQkZ0TDdJUTdn?=
+ =?utf-8?B?VkZqWlB0Sm93djdUcmlCTkNHWDVqQWQwdW5wTDBiclExMmxLbXh4TmpXQ0pX?=
+ =?utf-8?B?YTJ2V0d1YXVEcHBqMDNqUW5jcks3RHlxMzRNNDdFNUZMSXJXNktMcW1IRkZs?=
+ =?utf-8?Q?w9V803KWSk0FxS3X7n3vFHvcBSAE5f78QiOfuGfdqpaW?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <83B64E854DA81E49AACC72BEC5D12C22@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0518450f-6451-47a2-78f5-08db47730ccd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2023 22:59:26.4457
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ciWXSPkW4osnPqFtDeghnbZ3A8dgXqbB+eoDVO+LG2zIq0J4v6s9HsmS8uISp5vb1y2JP72l7RKydelubkluTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5815
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,227 +134,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Please pull some x86/mm changes for 6.4.  The only content here is
-solely a new revision of Kirill's Linear Address Masking implementation.
-
-You had some concerns[1] with the last version and the (lack of) locking
-while the feature was being enabled in multithreaded programs.  It's
-been fixed up since then to simply only allow LAM enabling when the
-process is single threaded.  It's also accumulated a few random fixes
-and cleanups since then.
-
-This conflicts with the shadow stack work (x86/shstk) that I sent
-earlier this week.  This is no surprise since LAM and shadow stacks both
-add prctl()'s, selftests and touch the same headers.
-
-Despite there being a few sites of conflict, the merge is logically
-straightforward.  I've included a suggested resolution.  Both Kirill
-(LAM) and Rick (shadow stacks) tested the result and confirmed that
-nothing broke.
-
-1. https://lore.kernel.org/all/CAHk-=wi=TY3Kte5Z1_nvfcsEh+rcz86pYnzeASw=pbG9QtpJEQ@mail.gmail.com/
-
---
-
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
-
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_mm_for_6.4
-
-for you to fetch changes up to 97740266de26e5dfe6e4fbecacb6995b66c2e378:
-
-  x86/mm/iommu/sva: Do not allow to set FORCE_TAGGED_SVA bit from outside (2023-04-06 13:45:06 -0700)
-
-----------------------------------------------------------------
-Add support for new Linear Address Masking CPU feature.  This is similar
-to ARM's Top Byte Ignore and allows userspace to store metadata in some
-bits of pointers without masking it out before use.
-
-----------------------------------------------------------------
-Kirill A. Shutemov (14):
-      x86/mm: Rework address range check in get_user() and put_user()
-      x86: Allow atomic MM_CONTEXT flags setting
-      x86: CPUID and CR3/CR4 flags for Linear Address Masking
-      x86/mm: Handle LAM on context switch
-      mm: Introduce untagged_addr_remote()
-      x86/uaccess: Provide untagged_addr() and remove tags before address check
-      x86/mm: Reduce untagged_addr() overhead for systems without LAM
-      x86/mm: Provide arch_prctl() interface for LAM
-      mm: Expose untagging mask in /proc/$PID/status
-      iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
-      x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
-      selftests/x86/lam: Add test cases for LAM vs thread creation
-      x86/mm/iommu/sva: Fix error code for LAM enabling failure due to SVA
-      x86/mm/iommu/sva: Do not allow to set FORCE_TAGGED_SVA bit from outside
-
-Weihong Zhang (5):
-      selftests/x86/lam: Add malloc and tag-bits test cases for linear-address masking
-      selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address masking
-      selftests/x86/lam: Add io_uring test cases for linear-address masking
-      selftests/x86/lam: Add inherit test cases for linear-address masking
-      selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for linear-address masking
-
- arch/arm64/include/asm/mmu_context.h        |    6 +
- arch/sparc/include/asm/mmu_context_64.h     |    6 +
- arch/sparc/include/asm/uaccess_64.h         |    2 +
- arch/x86/Kconfig                            |   11 +
- arch/x86/entry/vsyscall/vsyscall_64.c       |    2 +-
- arch/x86/include/asm/cpufeatures.h          |    1 +
- arch/x86/include/asm/disabled-features.h    |    8 +-
- arch/x86/include/asm/mmu.h                  |   18 +-
- arch/x86/include/asm/mmu_context.h          |   49 +-
- arch/x86/include/asm/processor-flags.h      |    2 +
- arch/x86/include/asm/tlbflush.h             |   48 +-
- arch/x86/include/asm/uaccess.h              |   58 +-
- arch/x86/include/uapi/asm/prctl.h           |    5 +
- arch/x86/include/uapi/asm/processor-flags.h |    6 +
- arch/x86/kernel/process.c                   |    6 +
- arch/x86/kernel/process_64.c                |   68 +-
- arch/x86/kernel/traps.c                     |    6 +-
- arch/x86/lib/getuser.S                      |   83 +-
- arch/x86/lib/putuser.S                      |   54 +-
- arch/x86/mm/init.c                          |    5 +
- arch/x86/mm/tlb.c                           |   53 +-
- drivers/iommu/iommu-sva.c                   |    8 +-
- drivers/vfio/vfio_iommu_type1.c             |    2 +-
- fs/proc/array.c                             |    7 +
- fs/proc/task_mmu.c                          |    9 +-
- include/linux/ioasid.h                      |    9 -
- include/linux/mm.h                          |   11 -
- include/linux/mmu_context.h                 |   14 +
- include/linux/sched/mm.h                    |    8 +-
- include/linux/uaccess.h                     |   22 +
- mm/gup.c                                    |    4 +-
- mm/madvise.c                                |    5 +-
- mm/migrate.c                                |   11 +-
- tools/testing/selftests/x86/Makefile        |    2 +-
- tools/testing/selftests/x86/lam.c           | 1241 +++++++++++++++++++++++++++
- 35 files changed, 1701 insertions(+), 149 deletions(-)
- create mode 100644 tools/testing/selftests/x86/lam.c
-diff --cc arch/x86/include/asm/disabled-features.h
-index fafe9be7a6f4,652e366b68a0..702d93fdd10e
---- a/arch/x86/include/asm/disabled-features.h
-+++ b/arch/x86/include/asm/disabled-features.h
-@@@ -120,8 -126,8 +132,8 @@@
-  #define DISABLED_MASK9	(DISABLE_SGX)
-  #define DISABLED_MASK10	0
-  #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
-- 			 DISABLE_CALL_DEPTH_TRACKING)
-+ 			 DISABLE_CALL_DEPTH_TRACKING|DISABLE_USER_SHSTK)
- -#define DISABLED_MASK12	0
- +#define DISABLED_MASK12	(DISABLE_LAM)
-  #define DISABLED_MASK13	0
-  #define DISABLED_MASK14	0
-  #define DISABLED_MASK15	0
-diff --cc arch/x86/include/uapi/asm/prctl.h
-index eb290d89cb32,1b85bc876c2d..abe3fe6db6d2
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@@ -20,9 -20,16 +20,21 @@@
-  #define ARCH_MAP_VDSO_32		0x2002
-  #define ARCH_MAP_VDSO_64		0x2003
-  
-+ /* Don't use 0x3001-0x3004 because of old glibcs */
-+ 
- +#define ARCH_GET_UNTAG_MASK		0x4001
- +#define ARCH_ENABLE_TAGGED_ADDR		0x4002
- +#define ARCH_GET_MAX_TAG_BITS		0x4003
- +#define ARCH_FORCE_TAGGED_SVA		0x4004
- +
-+ #define ARCH_SHSTK_ENABLE		0x5001
-+ #define ARCH_SHSTK_DISABLE		0x5002
-+ #define ARCH_SHSTK_LOCK			0x5003
-+ #define ARCH_SHSTK_UNLOCK		0x5004
-+ #define ARCH_SHSTK_STATUS		0x5005
-+ 
-+ /* ARCH_SHSTK_ features bits */
-+ #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-+ #define ARCH_SHSTK_WRSS			(1ULL <<  1)
-+ 
-  #endif /* _ASM_X86_PRCTL_H */
-diff --cc arch/x86/kernel/process.c
-index 50d950771371,8bf13cff0141..7157b09d1cbf
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@@ -48,7 -48,7 +48,8 @@@
-  #include <asm/frame.h>
-  #include <asm/unwind.h>
-  #include <asm/tdx.h>
- +#include <asm/mmu_context.h>
-+ #include <asm/shstk.h>
-  
-  #include "process.h"
-  
-diff --cc arch/x86/kernel/process_64.c
-index b46924c9e46d,31241930b60c..74c7e84a94d8
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@@ -875,22 -831,13 +877,28 @@@ long do_arch_prctl_64(struct task_struc
-  # endif
-  	case ARCH_MAP_VDSO_64:
-  		return prctl_map_vdso(&vdso_image_64, arg2);
- +#endif
- +#ifdef CONFIG_ADDRESS_MASKING
- +	case ARCH_GET_UNTAG_MASK:
- +		return put_user(task->mm->context.untag_mask,
- +				(unsigned long __user *)arg2);
- +	case ARCH_ENABLE_TAGGED_ADDR:
- +		return prctl_enable_tagged_addr(task->mm, arg2);
- +	case ARCH_FORCE_TAGGED_SVA:
- +		set_bit(MM_CONTEXT_FORCE_TAGGED_SVA, &task->mm->context.flags);
- +		return 0;
- +	case ARCH_GET_MAX_TAG_BITS:
- +		if (!cpu_feature_enabled(X86_FEATURE_LAM))
- +			return put_user(0, (unsigned long __user *)arg2);
- +		else
- +			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
-  #endif
-+ 	case ARCH_SHSTK_ENABLE:
-+ 	case ARCH_SHSTK_DISABLE:
-+ 	case ARCH_SHSTK_LOCK:
-+ 	case ARCH_SHSTK_UNLOCK:
-+ 	case ARCH_SHSTK_STATUS:
-+ 		return shstk_prctl(task, option, arg2);
-  	default:
-  		ret = -EINVAL;
-  		break;
-diff --cc fs/proc/array.c
-index 6daea628bc76,3e1a33dcd0d0..a880c4e44752
---- a/fs/proc/array.c
-+++ b/fs/proc/array.c
-@@@ -424,11 -423,11 +424,16 @@@ static inline void task_thp_status(stru
-  	seq_printf(m, "THP_enabled:\t%d\n", thp_enabled);
-  }
-  
- +static inline void task_untag_mask(struct seq_file *m, struct mm_struct *mm)
- +{
- +	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(mm));
- +}
- +
-+ __weak void arch_proc_pid_thread_features(struct seq_file *m,
-+ 					  struct task_struct *task)
-+ {
-+ }
-+ 
-  int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
-  			struct pid *pid, struct task_struct *task)
-  {
-diff --cc tools/testing/selftests/x86/Makefile
-index 598135d3162b,cfc8a26ad151..fa2216a8c0d5
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@@ -18,7 -18,7 +18,7 @@@ TARGETS_C_32BIT_ONLY := entry_from_vm8
-  			test_FCMOV test_FCOMI test_FISTTP \
-  			vdso_restorer
-  TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
-- 			corrupt_xstate_header amx lam
- -			corrupt_xstate_header amx test_shadow_stack
-++			corrupt_xstate_header amx test_shadow_stack lam
-  # Some selftests require 32bit support enabled also on 64bit systems
-  TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
-  
+T24gNC8yNy8yMyAxMjo0NywgQ2hyaXN0b3BoZSBKQUlMTEVUIHdyb3RlOg0KPiBHcm91cCBzb21l
+IHZhcmlhYmxlcyBiYXNlZCBvbiB0aGVpciBzaXplcyB0byByZWR1Y2UgaG9sZXMuDQo+IE9uIHg4
+Nl82NCwgdGhpcyBzaHJpbmtzIHRoZSBzaXplIG9mICdzdHJ1Y3QgbnZtZXRfbnMnIGZyb20gNTIw
+IHRvIDUxMg0KPiBieXRlcy4NCj4NCg0KQWx0aG91Z2ggdGhpcyBsb29rcyBnb29kLCB3ZSBhdCBs
+ZWFzdCBuZWVkIHRvIGRvY3VtZW50IHdoYXQNCmhhcHBlbnMgb24gb3RoZXIgYXJjaChzKSB3aGlj
+aCBhcmUgbm90IG1lbnRpb25lZCBpbiB0aGUNCmNvbW1pdCBsb2cgPyBpcyB0aGVyZSBhIHBvc3Np
+YmlsaXR5IHRoYXQgc29tZW9uZSBtaWdodCBjb21lDQp1cCB3aXRoIHRoZSBjb250cmFkaWN0b3J5
+IGRhdGEgaW4gZnV0dXJlIGZvciB0aGUgYXJjaChzKSB3aGljaA0KYXJjaCB0aGF0IGFyZSBub3Qg
+bWVudGlvbmVkIGhlcmUgPw0KDQotY2sNCg0KDQo=
