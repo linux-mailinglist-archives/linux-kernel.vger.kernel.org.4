@@ -2,193 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D126F0C43
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048B56F0C44
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244173AbjD0TFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
+        id S244565AbjD0TFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243215AbjD0TFK (ORCPT
+        with ESMTP id S244514AbjD0TFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:05:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D642AC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 12:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682622263;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aIMe4HgR4j+uLyNFZnx6VTdZb99E5zuis1nlCbyNQZ8=;
-        b=ZoGN0D1skXNPJAOFeiuXMXUY4IL0vWlydxfk1UxcHf+CfXBj2+ZNQThI9PS5LkFZwF9hIS
-        ZvSBrOLsUVz2Gtxm5ts8UZvMQgqEcXaswGQOU3fU+Z/BxpWFKkucAzMJq4B4SVrDUPFZVs
-        ImT5TKp2Xn/wfyeWbhfZKo0Cx2EDK/o=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-288-xQB3GiZGN0KY7HNWjV1XQg-1; Thu, 27 Apr 2023 15:04:22 -0400
-X-MC-Unique: xQB3GiZGN0KY7HNWjV1XQg-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-5f1697ce25bso52656476d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 12:04:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682622261; x=1685214261;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIMe4HgR4j+uLyNFZnx6VTdZb99E5zuis1nlCbyNQZ8=;
-        b=JS71e1pI4fwimq4r7Gt2Xy/7xQvj8Q1n1rrv4bL4PG83PyRpH3DsHSTOMkZIOTnJSn
-         S0dcDCdBO7h/j8scwF2qdRV8rGjFApEDp3v3vhWO8f3hNBvk9wE2hNQOn42qwEHBHOBt
-         8GS8IvIw+ZtzfCBOyWcn3mlkNE+QpvEs9T86wB5LyZmlYfKfPIx8pD8yTGzePrcWdMlZ
-         BJ/JFPODuUeOgraOtya1l+oV+SdxZmHTr9TOQCtSZr4ZWQG35+0n9VZubiX+cpMWE1a7
-         gfFC6HEWExBbhtnTqay7EDsaA9R72HzZ1JltGJLtnsdAp1h1aUPLAtdzqupVW9b+tOYR
-         wUbQ==
-X-Gm-Message-State: AC+VfDxQe9k4KFLxiW5fsyxCnN3jamswqW/QH9I4OB9KVqTDdSio499m
-        yl5vUh9yfx5E9hg7b5eWqdRJN6Zm4smkyLmBgkjF59A/9ZT1+UjOLUzpyH6UQ7ZqQ8dCHe4GFQD
-        LpOcg9nMKDY3VyAURFFNVhByb
-X-Received: by 2002:ad4:4ee9:0:b0:5f1:5cf1:b4c8 with SMTP id dv9-20020ad44ee9000000b005f15cf1b4c8mr3813286qvb.35.1682622261416;
-        Thu, 27 Apr 2023 12:04:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4SB3ZpF6dpDmJ9SOMuCZdR4eEW/J9n7aNhD3J51znEIy6E5R4o2TS1XiwTUz6GHVehnHeGPA==
-X-Received: by 2002:ad4:4ee9:0:b0:5f1:5cf1:b4c8 with SMTP id dv9-20020ad44ee9000000b005f15cf1b4c8mr3813243qvb.35.1682622260984;
-        Thu, 27 Apr 2023 12:04:20 -0700 (PDT)
-Received: from ?IPV6:2601:883:c200:210:6ae9:ce2:24c9:b87b? ([2601:883:c200:210:6ae9:ce2:24c9:b87b])
-        by smtp.gmail.com with ESMTPSA id o8-20020a0cf4c8000000b005ef5fc3a136sm5808498qvm.110.2023.04.27.12.04.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 12:04:20 -0700 (PDT)
-Message-ID: <224ae998-d264-c984-263d-a9a7cf6c7a00@redhat.com>
-Date:   Thu, 27 Apr 2023 15:04:19 -0400
+        Thu, 27 Apr 2023 15:05:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A33468F;
+        Thu, 27 Apr 2023 12:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682622331; x=1714158331;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=1cLN38dVwNOQX6DO1LlWeJSqreu7tTNbsZhKhgHiMwY=;
+  b=Kmwy64WQe/AkwjamcO2ldLDmE5BralBn1eVB85Rx5d1I/jRSzp4foOoT
+   xoCCZ9KkvtMjberlRGzIDyFtPh/ljidvFdbaNaf/aRP2u7BeBIBuWbJKp
+   B0cCLx6J8FUgQXKYKdGTlVXrUCMIYl6gtIVYorhpiffLan0yaNHpXqIbr
+   +MLU5OuTZeSechPHZABVEDQ+lwUrJNJEjld4tCPKWTkuQ9puep501ovvn
+   nOp+FFZjQnT9gfxz69mjjraZuxve2cPchH9qmWPnmuHO7RCKccJbDdAI5
+   4pKN94b6yMOEWedeG8ztxSQ3p/1qZXZ0zBqWBUyb0l3yq1Vnf6PU75IE7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="349529038"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="349529038"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:05:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="763956570"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="763956570"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Apr 2023 12:05:29 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 27 Apr 2023 12:05:29 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 27 Apr 2023 12:05:29 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 27 Apr 2023 12:05:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jtCAStz6/2aSlEtTRY7v44BNPJRYCst7q6CtPR+4iQmfsb/x2LvXL0rxPbuHlIrYlNzmfkOhwwFyOWPO+J1c7dK2OH+oblcmOxTVYcMf7MyVIEzYwP4BUbGx2/URZkAI9ivlyrHeJRUdouA3F9bsoiHhGCKAS2EHBLcW9YV79MIT091Qqfy1Pdps0damBgUVSEpBLlwmVjIx3szT6kAFGmsjfo+mJ5OrrnGmqvpZZW3+qaeyJytrz+iuzqU3/e/NPT/nXN4sOKF75Qu4sXdHJjz5KNxin+kbyI9b7tNVQkxzxab5iJ0QXiS98tHGY5rCg/xhu9hTiL1w2sKK+bkNYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1bytaroO4xm9enO8c7aYBgmmD5OKpJncI+2eS0drQC4=;
+ b=YpzhvztdnUmTkkzU5PzIIwJF48mBPCx0cn/hq/yV+SDGwxyAaRQSIqPydhjghw1uoWb89prvxJ3501y1NzKo0GIl6cwZf7nnCjVbkQqW/okFAB0GdeQIPO9rqlGGUyfInJ636341/jKWfekqTBnVYNcIcsLpSH9XGiS3uQsePnF69mz2uqLVg3AdkIQrbBX+JHjrd02hQbLNScdW09j8ZXhddoDEkNlZBkRNA+Df6PvOwz0qqoX6KCm8QnYKnljU1vQLVWIlSjZn/7rsiLiKaFyWzY4PAW5U4Puue6Xh1VD7csV1xWbEM8IA2luQjIE1SqnDQr+Hl8UaFJHpKh2efQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by CH0PR11MB5394.namprd11.prod.outlook.com (2603:10b6:610:b9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Thu, 27 Apr
+ 2023 19:05:27 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::4fe2:e207:596b:d145]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::4fe2:e207:596b:d145%5]) with mapi id 15.20.6340.021; Thu, 27 Apr 2023
+ 19:05:27 +0000
+Date:   Thu, 27 Apr 2023 12:05:24 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Raghu H <raghuhack78@gmail.com>, <linux-cxl@vger.kernel.org>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: Re: [STYLE v1 1/3] cxl/mbox: remove redundant debug msg
+Message-ID: <644ac773f2929_182a92942f@iweiny-mobl.notmuch>
+References: <20230419111443.231151-1-raghuhack78@gmail.com>
+ <20230419111443.231151-2-raghuhack78@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230419111443.231151-2-raghuhack78@gmail.com>
+X-ClientProxiedBy: BYAPR08CA0049.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::26) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: We found a general protection fault in evict
-Content-Language: en-US
-To:     yang lan <lanyang0908@gmail.com>, agruenba@redhat.com,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-References: <CAAehj2ntp=h1ob2MVWv7_3NuT=wtA6Gpdk9ZWWYU=pDy8PvmBw@mail.gmail.com>
-From:   Bob Peterson <rpeterso@redhat.com>
-In-Reply-To: <CAAehj2ntp=h1ob2MVWv7_3NuT=wtA6Gpdk9ZWWYU=pDy8PvmBw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,BITCOIN_SPAM_02,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        NICE_REPLY_A,PDS_BTC_ID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CH0PR11MB5394:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14bed42f-2bd6-405a-0a8f-08db47525ce5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v0pECmtPIlodA9a3nRCun3B2xCUOsVy3FC8KTCdmq/197C/zn/gj4F2d01cbbfz93SojSIR634yR67+h4KzAXl58xUz861IVAf5HhUVKG1ApcGPlgUyyYb5rsUaJiFjySSB2WQrINvx12fbyAkfqez+6ihsX2QM++fdqdVo/K7PPPu2Avhsli9ewc4sK+GnZ7gsohfc+ZBsJVYZEkupQBAqJE53SWTU7e7ADTcagLpbbfjlLxDETUdlMnhi2mKFmodECzOWyY1LUliihibXsIOp6YZYLESsVYoCUsyA/ADeEGRFJvp+00rgCRuTn1AEF7K3ckNtHnwgkJrLXvGcpOZOWFaSeT/6DPpvmN+LlD5rrVaqliVwlRBhQBdmewjMwDJ9LM0yDysV/sE1fHmhz073Ef0eDTN6uUMUSBLvwIb984OIgpssc/xFBzgob5Gj4Bwz8HWbOlxeOTXf3SUZORkXDwfBZtyH21FKXhvfZSgIoiTs0d1ZwnNxplp+vHhIY4uBAMEANqBI2U9UFlWH6WTmRG5ZGIvkkGRgyah85n4eyIRJYs3Gg2oaScevsyhUK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199021)(86362001)(2906002)(4744005)(6486002)(6666004)(83380400001)(186003)(6512007)(9686003)(6506007)(26005)(44832011)(66476007)(4326008)(110136005)(478600001)(6636002)(66556008)(66946007)(82960400001)(38100700002)(41300700001)(8676002)(5660300002)(316002)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Bpfa9N/PBVVpLoIHtrtNePse6xwUx4oQTzt27no69c04GEXy4yVMYISA8KpN?=
+ =?us-ascii?Q?Ij+fAkSeFNM7+cdUtZQ9nR96LEXnU4+NnwKNQAFsAvJ7j8M0FAhlS5GmfPda?=
+ =?us-ascii?Q?ZoPj8yj4azm5QxrfIM1YwvpdDbQlvzNsveyZqRmgqV1ROsW4zRN4s9aT/1KX?=
+ =?us-ascii?Q?zspvCi6Gx8yiSsruYsqxQ/uqocC1AjWjhMNtTgOlmqTDiHWOr65PWK5OgBRV?=
+ =?us-ascii?Q?y+cnCFxoU96wDZkzFPKVfUG4fxBiNVor8OqoD9N3s3pmreUu+3U9SXyPludL?=
+ =?us-ascii?Q?4cwcHQKmpNmvj9I/CT2K1mYjbk4IN4hPdz6Ps7ilPK+LbxY/etFeig1yf8jo?=
+ =?us-ascii?Q?+doZCu/SfGk+x3Y1BUWNl5bdnNQwgcrd6OoP078FENX3YbUmqVZ3i6I9ukQE?=
+ =?us-ascii?Q?0b8Ei0ml1vXE4VwQVnTpO3GZ1FaiHyPiynZV9WmYEKxml25OTUQBjXkdA/oC?=
+ =?us-ascii?Q?8fHOcKmloqhNTt/CjA9hAubPr9M7KdgzjuQXCRRyzpVq8v3LkTmuhUl8W0V8?=
+ =?us-ascii?Q?RAGOis7QVWustgPyOIYCndjTnf61DA9eNej4WQxELBKxntzLTra0ubo63KM9?=
+ =?us-ascii?Q?jX3/6TqIJr7RVh1oedTn7W/KF7eBYKdct/svCOTZ2zpYhvuNt1YiLT2zYAAb?=
+ =?us-ascii?Q?dFlox/YZmPz6I3hx3M/50La9K1uSx1K7cgrkLj80x8eckhptN49hg7C3azOK?=
+ =?us-ascii?Q?K+00oakx15zDMgvbaAfg8MwJC8KJ+wwc8kybnQUryxBgsazciTiTO2mhRkbY?=
+ =?us-ascii?Q?pgPESqMJlxL34SZ+IN5+B0PpbMDtFUgV9O5yaKbGUIJR8gjHwL9L2zM/aB26?=
+ =?us-ascii?Q?QOloaR4rDTbQ+uFhHmFKm2s6+9FYYoF2YEhDntn8YSTPx2JFkYy0uEaTWmLT?=
+ =?us-ascii?Q?DTZC4zb64tzELVPtfBuW2xmSWdtZOuja7H6zvSFd8Rq+4YN9De5T+djXiW55?=
+ =?us-ascii?Q?1onAKvXnCsAFuFpMzI4j4ugo6JUOueOwF231ty85KjAm2cCKrbxwdXWd6gSk?=
+ =?us-ascii?Q?pEMyRU4g8QXZVlZzEyqKNiMjIqm++l2qhtUMVopQOa4wbfHcktm/QcSxzq9X?=
+ =?us-ascii?Q?We6ITJlqnznGSf8CMceodgCGBCONqnhjfebl9KagIBu9+pYLneNuCMEAyhpf?=
+ =?us-ascii?Q?hnJdLbcmdvcGoMRIgYlk2wShgjAuaoxjkvDyrMHHhzLhrcmgW0hn2U85bQXJ?=
+ =?us-ascii?Q?FOMufQM1Sg1OC6ij67biYLG6cKFeegZ2FXEM0nQ1r5mfc/Ii4gguOaZWP2Sh?=
+ =?us-ascii?Q?dxMNKqq/1zb4QJWO/fvpeYVOBYyX51sZsenPg72RTyqFy7OzpoMOnWIOKkOc?=
+ =?us-ascii?Q?fQjtUQj8WdMBtDfLRBDr8Flz5zUskWBtIPFAD1EgjfDW56HiY/cchJqXhl8o?=
+ =?us-ascii?Q?JOyY4mLDxrV2xxEvuzg4HOV/SFLtMZVLxksH2HEv7SRYIR8iJCeRkI/9MR7N?=
+ =?us-ascii?Q?l4F5hdrJmjUu96Sit6RV6gY7zkG7hNQjwnb8Z/MHPwDikSzakRWANQv0QQQe?=
+ =?us-ascii?Q?0gIT/0hlm7BK5xS5vQlq1nb1imda3aqGiPo8/LrZAeSZT9LWE9dkx7zDT0Zq?=
+ =?us-ascii?Q?PphbJNaWfYiB9B0/S9Mb7z4ibTcnQusflmFdJq15?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14bed42f-2bd6-405a-0a8f-08db47525ce5
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 19:05:27.6900
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: grD9LavyMwmoC6BhVe7yS/aQDoJ+ZzY5WwFIAyY/fyou1LZ4MGGZr0mtMXR/JJauJ5jJatFXL1r119QYJmOfBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5394
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/23 11:15 AM, yang lan wrote:
-> Hi,
+Raghu H wrote:
+> A return of errno should be good enough if the memory allocation fails,
+> the debug message here is redundatant as per the coding style, removing it.
 > 
-> We use our modified Syzkaller to fuzz the latest Linux kernel and find a 
-> bug in the gfs2 file system.
-> 
-> We have used the utility syz-execprog to reproduce this bug with 
-> ./syz-execprog -executor=./syz-executor -repeat=100 -procs=6 -cover=1 poc.
-> Now, this bug can be triggered with the following prog provided:
-> 
-> HEAD commit: f1b32fda06d2 tag: v5.10.179
-> console log: https://pastebin.com/raw/3XhteWrX 
-> <https://pastebin.com/raw/3XhteWrX>
-> kernel config: https://pastebin.com/raw/BiggLxRg 
-> <https://pastebin.com/raw/BiggLxRg>
-> Syz reproducer: https://pastebin.com/raw/PwbMR8ag 
-> <https://pastebin.com/raw/PwbMR8ag>
-> C reproducer: 
-> https://drive.google.com/file/d/1j4g8EUrFb1GGdaaRBNHE4ATXiqeg6-zI/view?usp=sharing <https://drive.google.com/file/d/1j4g8EUrFb1GGdaaRBNHE4ATXiqeg6-zI/view?usp=sharing>
-> 
-> gfs2: fsid=syz:syz.0: no resource groups found in the file system.
+> Signed-off-by: Raghu H <raghuhack78@gmail.com>
 
-Hi,
+I'm not seeing a lot of value in this error message either.  There are
+plenty of other places probe can fail without any errors at all.
 
-The upstream kernel doesn't seem to GPF here. I get a non-fatal file 
-system withdraw (which seems reasonable given what the resulting fs 
-looks like):
+I guess:
 
-[root@bob-upstream9 /home/bob/xfstests-dev]# /home/bob/tools/c/poc_evict
-[root@bob-upstream9 /home/bob/xfstests-dev]# echo $?
-0
-
-[ 2530.707005] gfs2: fsid=syz:syz: Trying to join cluster "lock_nolock", 
-"syz:syz"
-[ 2530.707576] gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
-[ 2530.708349] gfs2: fsid=syz:syz.0: fatal: filesystem consistency error
-[ 2530.708349]   inode = 3 2076
-[ 2530.708349]   function = gfs2_dinode_in, file = fs/gfs2/glops.c, line 
-= 472
-[ 2530.709534] gfs2: fsid=syz:syz.0: G:  s:SH n:2/81c f:qobnN t:SH 
-d:EX/0 a:0 v:0 r:3 m:200 p:1
-[ 2530.710165] gfs2: fsid=syz:syz.0:  H: s:SH f:H e:0 p:1825 [mount] 
-gfs2_fill_super+0x8f0/0xef0 [gfs2]
-[ 2530.710846] gfs2: fsid=syz:syz.0:  I: n:3/2076 t:4 f:0x00 
-d:0x00000000 s:0 p:0
-[ 2530.711387] gfs2: fsid=syz:syz.0: about to withdraw this file system
-[ 2530.711857] gfs2: fsid=syz:syz.0: File system withdrawn
-[ 2530.712256] CPU: 6 PID: 1825 Comm: mount Kdump: loaded Not tainted 
-6.3.0-rc3+ #26
-[ 2530.712803] Hardware name: Red Hat KVM/RHEL-AV, BIOS 1.16.1-1.el9 
-04/01/2014
-[ 2530.713324] Call Trace:
-[ 2530.713513]  <TASK>
-[ 2530.713678]  dump_stack_lvl+0x48/0x60
-[ 2530.713959]  gfs2_withdraw+0x479/0x5c0 [gfs2]
-[ 2530.714299]  gfs2_inode_refresh+0x267/0x2d0 [gfs2]
-[ 2530.714667]  gfs2_instantiate+0x87/0xc0 [gfs2]
-[ 2530.715013]  gfs2_glock_wait+0x8b/0xb0 [gfs2]
-[ 2530.715356]  init_journal+0x302/0xaf0 [gfs2]
-[ 2530.715693]  ? vsnprintf+0x2ba/0x560
-[ 2530.715966]  ? gfs2_fill_super+0x8f0/0xef0 [gfs2]
-[ 2530.716326]  ? snprintf+0x3d/0x50
-[ 2530.716576]  gfs2_fill_super+0x8f0/0xef0 [gfs2]
-[ 2530.716927]  ? gfs2_fill_super+0x7aa/0xef0 [gfs2]
-[ 2530.717287]  ? mutex_lock+0x12/0x40
-[ 2530.717552]  ? __pfx_gfs2_fill_super+0x10/0x10 [gfs2]
-[ 2530.717938]  ? snprintf+0x3d/0x50
-[ 2530.718190]  ? sget_fc+0x208/0x300
-[ 2530.718453]  ? __pfx_gfs2_fill_super+0x10/0x10 [gfs2]
-[ 2530.718837]  get_tree_bdev+0x171/0x270
-[ 2530.719126]  gfs2_get_tree+0x22/0x90 [gfs2]
-[ 2530.719446]  vfs_get_tree+0x26/0xd0
-[ 2530.719711]  path_mount+0x464/0xa80
-[ 2530.719981]  __x64_sys_mount+0xeb/0x120
-[ 2530.720271]  do_syscall_64+0x5d/0x90
-[ 2530.720544]  ? syscall_exit_to_user_mode+0x1b/0x40
-[ 2530.720902]  ? do_syscall_64+0x6d/0x90
-[ 2530.721185]  ? do_syscall_64+0x6d/0x90
-[ 2530.721467]  ? syscall_exit_to_user_mode+0x1b/0x40
-[ 2530.721823]  ? do_syscall_64+0x6d/0x90
-[ 2530.722106]  ? do_syscall_64+0x6d/0x90
-[ 2530.722386]  ? do_syscall_64+0x6d/0x90
-[ 2530.722668]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[ 2530.723046] RIP: 0033:0x7f7dcd83f7be
-[ 2530.723316] Code: 48 8b 0d 65 a6 1b 00 f7 d8 64 89 01 48 83 c8 ff c3 
-66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 a5 00 00 00 0f 
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 32 a6 1b 00 f7 d8 64 89 01 48
-[ 2530.724659] RSP: 002b:00007fffe0f3d248 EFLAGS: 00000246 ORIG_RAX: 
-00000000000000a5
-[ 2530.725211] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
-00007f7dcd83f7be
-[ 2530.725733] RDX: 000055b230c02e20 RSI: 000055b230c02e60 RDI: 
-000055b230c02e40
-[ 2530.726256] RBP: 000055b230c02bf0 R08: 0000000000000000 R09: 
-00007fffe0f3bf70
-[ 2530.726776] R10: 0000000000000000 R11: 0000000000000246 R12: 
-0000000000000000
-[ 2530.727298] R13: 000055b230c02e20 R14: 000055b230c02e40 R15: 
-000055b230c02bf0
-[ 2530.727819]  </TASK>
-[ 2530.728005] gfs2: fsid=syz:syz.0: can't read journal index: -5
-
-I'm guessing it's a problem we've already fixed in newer versions, but I 
-don't have easy access to that kernel. Perhaps you can bisect it?
-I could try older kernels but I've already spent a lot of time on this 
-today, so I need to move on to other things.
-
-Regards,
-
-Bob Peterson
-
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
