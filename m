@@ -2,143 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5496F057D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DD96F0591
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243797AbjD0MMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S242993AbjD0MQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243624AbjD0MMk (ORCPT
+        with ESMTP id S243761AbjD0MQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:12:40 -0400
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7FD56197
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:12:10 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-2f4130b898cso884213f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:12:10 -0700 (PDT)
+        Thu, 27 Apr 2023 08:16:13 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C9759FD;
+        Thu, 27 Apr 2023 05:15:55 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-5ef4885bc39so37463006d6.2;
+        Thu, 27 Apr 2023 05:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682597754; x=1685189754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aGVb0EWRnfJN9McMLRCtk+0SPSO6GWCEI8WRdlgALXM=;
+        b=FF/oiEep2XYHShVm4kipE4bafyndFC0DfAXJc9l0ivmUrLkt21SEnV65kOsxWqw8Dy
+         jcsnbofKaTnOcuk0COs5VhHtWz1b0e1ij1rWfV0tyEKcf18FJhkUd0NKoVYbH3yeRwtL
+         5gtT6g0JgFlc80Jbl7cOmY8oZFjl1/Y2WQ433tMBKM4BrlQqVCbKz2JEaYjK0yJ6Zvzr
+         i4u1E1IHI2cF91ppXiqMoXHZ6Yw96AmUYfVUE8CeweBxj/DuMNTZV9Lt6cfr1GLgGGVE
+         6kBeAFaLWga3IXeDM7/w1XxdaaehEXUWO1CB5V5BcBY4mHTW/D+cDhAA8iaFXUnXhPp/
+         MAFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682597487; x=1685189487;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Uxca9pe/yGj61Xn7b0qdaKHJXvzXZBitlFHQ2EJ9gg=;
-        b=Rt4xbvmCZT+SuYk9v0Ojf1fo4IKua2QhL+pcZtKG2Z/k7Yl+YTCeFL8VCWdNfLf7A2
-         kqJrgT8oDPmqm5aSY0ZO5P8vtFjJLgpylbG6sWmM788aEH/zueN05TRLVW7T7sF/gBDS
-         CMwN6d5QPkMBZmMkAxm67JJSiFg2vp4DI6OMalpGjXDS4C8cLg84YlsuE2pwLOnCXCom
-         eUtcENn78EXj/Q4ziGJRd+wRG8VKnJpSYzoEAb6XQENnogvEro5cbfjH6jJ5pC/EsqmR
-         kS+KsJOuLTIyn2TRtgQbeUOlZTbxIxJrcn1dYrnT2Gwl4Jtf2EyTjIQUJyPiB/MUsudw
-         5NhQ==
-X-Gm-Message-State: AC+VfDwR51p5goZbpQV819eygVoi7lLxQMH99aFngt98tGzKZFOtWSKf
-        pC9WpSGg5z9CgWvJsMQUdVY=
-X-Google-Smtp-Source: ACHHUZ7T+CF99CWVFJwXPakc8HIfF+FoSAfxQMp9U3Ks3QprWHCOwT1Ng0PXhjS5LNYHLzCSURsqPA==
-X-Received: by 2002:adf:f349:0:b0:2ef:9699:f906 with SMTP id e9-20020adff349000000b002ef9699f906mr1036242wrp.7.1682597487098;
-        Thu, 27 Apr 2023 05:11:27 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id e8-20020adfdbc8000000b003047d5b8817sm9370339wrj.80.2023.04.27.05.11.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 05:11:26 -0700 (PDT)
-Message-ID: <4517d754-1594-9913-cf7f-da58a7cb23a8@grimberg.me>
-Date:   Thu, 27 Apr 2023 15:11:25 +0300
+        d=1e100.net; s=20221208; t=1682597754; x=1685189754;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aGVb0EWRnfJN9McMLRCtk+0SPSO6GWCEI8WRdlgALXM=;
+        b=Ke4l+aFamJsuTdZChGAYUkszEtjjFOlEKCI+rb1gwWhXHgprzWa7RlGtQXsQQlYR2b
+         1Ttz/xenNL6gY5w6XzHZINmvbhrJG7OO7qn3+RdBXTI6ZIJhK553BMCFc1jGWbAOVO+l
+         osy//eaZb3tXD/Yebsftj/aj2UuQCYc86guDOUjWoYPpFSK2IVF2HWRgdSonlwYlYfnM
+         zxlZbG6zG60FtpIkzSANryizBHftaL/ve505kYyLQfiKKJ+Hw4xg3i2IxBci/8UwnV+a
+         eFptCUd9N+hUDul45Odl9GnuTYllbB2YTpqu2Ihd2RaT6RLHbJ4I4RkfOr1hF1VLNzzd
+         mVyg==
+X-Gm-Message-State: AC+VfDwcPYel5i19TJ7dlNBhtkrPcno96l27IKigAeBHKJbKZwlIlNPG
+        910+nhNzJIJhwOH97BX05LEPJ2oqBe4UOkt/Fc8=
+X-Google-Smtp-Source: ACHHUZ7a21m2eQtsYoV3x5/rC5U45LhJAu9nbaQYI/P0MUx5/lQB2gpnRF92NoVovkByY/W79j0gZXsRexjLdh1xoUQ=
+X-Received: by 2002:a05:6214:1253:b0:616:7cf5:ff70 with SMTP id
+ r19-20020a056214125300b006167cf5ff70mr957371qvv.22.1682597754385; Thu, 27 Apr
+ 2023 05:15:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
-Content-Language: en-US
-To:     Li Feng <fengli@smartx.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20230413062339.2454616-1-fengli@smartx.com>
- <20230413063317.2455680-1-fengli@smartx.com>
- <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me>
- <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
- <03a47920-9165-1d49-1380-fb4c5061df67@grimberg.me>
- <CAHckoCzBBmn8kCuD+ssRKApvFYNxedj_RkqsvgDis+iwV8g-oA@mail.gmail.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <CAHckoCzBBmn8kCuD+ssRKApvFYNxedj_RkqsvgDis+iwV8g-oA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
+ <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com>
+ <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
+ <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
+ <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
+ <20230424174049.1c9e54dd@rorschach.local.home> <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
+In-Reply-To: <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 27 Apr 2023 20:15:18 +0800
+Message-ID: <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 27, 2023 at 5:57=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
+>
+> On Tue, Apr 25, 2023 at 5:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
+rg> wrote:
+> >
+> > On Wed, 19 Apr 2023 15:46:34 -0700
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > No. Just one prog at entry into any of the kernel functions
+> > > and another prog at entry of funcs that 1st bpf prog called indirectl=
+y.
+> > > Like one prog is tracing networking events while another
+> > > is focusing on mm. They should not conflict.
+> >
+> > You mean that you have:
+> >
+> > function start:
+> >   __bpf_prog_enter_recur()
+> >     bpf_program1()
+> >       __bpf_prog_enter_recur()
+> >         bpf_program2();
+> >       __bpf_prog_exit_recur()
+> >   __bpf_prog_exit_recur()
+> >
+> >   rest of function
+> >
+> > That is, a bpf program can be called within another bpf pogram between
+> > the prog_enter and prog_exit(), that is in the same context (normal,
+> > softirq, irq, etc)?
+> >
+>
+> Right, that can happen per my verification. Below is a simple bpf
+> program to verify it.
+>
+> struct {
+>     __uint(type, BPF_MAP_TYPE_LPM_TRIE);
+>     __type(key, __u64);
+>     __type(value, __u64);
+>     __uint(max_entries, 1024);
+>     __uint(map_flags, BPF_F_NO_PREALLOC);
+> } write_map SEC(".maps");
+>
+> __u64 key;
+>
+> SEC("fentry/kernel_clone")
+> int program1()
+> {
+>     __u64 value =3D 1;
+>
+>     bpf_printk("before update");
+>     // It will call trie_update_elem and thus trigger program2.
+>     bpf_map_update_elem(&write_map, &key, &value, BPF_ANY);
+>     __sync_fetch_and_add(&key, 1);
+>     bpf_printk("after update");
+>     return 0;
+> }
+>
+> SEC("fentry/trie_update_elem")
+> int program2()
+> {
+>     bpf_printk("trie_update_elem");
+>     return 0;
+> }
+>
+> The result as follows,
+>
+>          kubelet-203203  [018] ....1  9579.862862:
+> __bpf_prog_enter_recur: __bpf_prog_enter_recur
+>          kubelet-203203  [018] ...11  9579.862869: bpf_trace_printk:
+> before update
+>          kubelet-203203  [018] ....2  9579.862869:
+> __bpf_prog_enter_recur: __bpf_prog_enter_recur
+>          kubelet-203203  [018] ...12  9579.862870: bpf_trace_printk:
+> trie_update_elem
+>          kubelet-203203  [018] ....2  9579.862870:
+> __bpf_prog_exit_recur: __bpf_prog_exit_recur
+>          kubelet-203203  [018] ...11  9579.862870: bpf_trace_printk:
+> after update
+>          kubelet-203203  [018] ....1  9579.862871:
+> __bpf_prog_exit_recur: __bpf_prog_exit_recur
+>
+> Note that we can't trace __bpf_prog_enter_recur and
+> __bpf_prog_exit_recur, so we have to modify the kernel to print them.
+>
 
-> Hi Sagi,
-> 
-> On Wed, Apr 19, 2023 at 5:32 PM Sagi Grimberg <sagi@grimberg.me> wrote:
->>
->>
->>>> Hey Li,
->>>>
->>>>> The default worker affinity policy is using all online cpus, e.g. from 0
->>>>> to N-1. However, some cpus are busy for other jobs, then the nvme-tcp will
->>>>> have a bad performance.
->>>>> This patch adds a module parameter to set the cpu affinity for the nvme-tcp
->>>>> socket worker threads.  The parameter is a comma separated list of CPU
->>>>> numbers.  The list is parsed and the resulting cpumask is used to set the
->>>>> affinity of the socket worker threads.  If the list is empty or the
->>>>> parsing fails, the default affinity is used.
->>>>
->>>> I can see how this may benefit a specific set of workloads, but I have a
->>>> few issues with this.
->>>>
->>>> - This is exposing a user interface for something that is really
->>>> internal to the driver.
->>>>
->>>> - This is something that can be misleading and could be tricky to get
->>>> right, my concern is that this would only benefit a very niche case.
->>> Our storage products needs this feature~
->>> If the user doesn’t know what this is, they can keep it default, so I thinks this is
->>> not unacceptable.
->>
->> It doesn't work like that. A user interface is not something exposed to
->> a specific consumer.
->>
->>>> - If the setting should exist, it should not be global.
->>> V2 has fixed it.
->>>>
->>>> - I prefer not to introduce new modparams.
->>>>
->>>> - I'd prefer to find a way to support your use-case without introducing
->>>> a config knob for it.
->>>>
->>> I’m looking forward to it.
->>
->> If you change queue_work_on to queue_work, ignoring the io_cpu, does it
->> address your problem?
-> Sorry for the late response, I just got my machine back.
-> Replace the queue_work_on to queue_work, looks like it has a little
-> good performance.
-> The  busy worker is `kworker/56:1H+nvme_tcp_wq`, and fio binds to
-> 90('cpus_allowed=90'),
-> I don't know why the worker 56 is selected.
-> The performance of 256k read up from 1.15GB/s to 1.35GB/s.
+... However, surprisingly it still works even after this patchset is
+applied, because the hardirq/softirq flag is set when the program2 is
+running, see also the flags in the above trace_pipe output. Is that
+expected ?!
+I need  some time to figure it out, but maybe you have a quick answer...
 
-The question becomes what would be the impact for multi-threaded
-workloads and different NIC/CPU/App placements... This is the
-tricky part of touching this stuff.
+> > The protection is on the trampoline where the bpf program is called.
+> > Not sure how ftrace can stop BPF or BPF stop ftrace, unless bpf is
+> > tracing a ftrace callback, or ftrace is tracing a bpf function.
+> >
+> > -- Steve
+>
 
->> Not saying that this should be a solution though.
->>
->> How many queues does your controller support that you happen to use
->> queue 0 ?
-> Our controller only support one io queue currently.
 
-I don't think I ever heard of a fabrics controller that supports
-a single io queue.
-
->>
->> Also, what happens if you don't pin your process to a specific cpu, does
->> that change anything?
-> If I don't pin the cpu, the performance has no effect.
-
-Which again, makes this optimization point a niche.
+--=20
+Regards
+Yafang
