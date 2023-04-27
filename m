@@ -2,1074 +2,628 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 986D46F06DF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977BD6F06E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243459AbjD0Nt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 09:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S243417AbjD0Nwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 09:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243284AbjD0Ntw (ORCPT
+        with ESMTP id S243218AbjD0Nw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 09:49:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3464483
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:49:47 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F40011FE35;
-        Thu, 27 Apr 2023 13:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682603386; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Swbzinvf8av35N+IqEK3U3mJZ+XeWnl5lcS/gZxCyog=;
-        b=MhB0mmVjv5JSdajiw417Tn82gW1klD0frORBl+b+PjD4nM6s2aJ/HPyyIO9yHIiLGU9sR6
-        7Y05xdfEzkGM18NevcvuNkSM0zew1ZOW2s4HxX84HkeSd6d0KCr23SztjlvEnK/sEkBCM4
-        Z38WVCC7Izav+H/r9w+MEqK4sKuiEJ4=
-Received: from suse.cz (pmladek.udp.ovpn2.prg.suse.de [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6A24D2C141;
-        Thu, 27 Apr 2023 13:49:45 +0000 (UTC)
-Date:   Thu, 27 Apr 2023 15:49:41 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v5 2/2] printk: console: Support console-specific
- loglevels
-Message-ID: <ZEp9dXwHCYNPidjC@alley>
-References: <cover.1682427812.git.chris@chrisdown.name>
- <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
+        Thu, 27 Apr 2023 09:52:28 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C543C1E;
+        Thu, 27 Apr 2023 06:52:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GfUnzI4N/6xMMe74YWCEoz0LFyPrMYghE8E+EF6GAo0TCw3bCu/rqWja+u/5yd/FIReOrcx01Pm6GnQBtpSjTDMFH6t1LNq3wjWfUYF3tWS/Yg9fSUfe0BT0VHluTgmLuBVd+a+qA7DrElEqt+mmB7xJbp29p1f8TU2vQt1bbxRBjm4ibO8orG8TyU8/sLcyAHXbzijkUN0OZFy3XrzjCm/z0sa8Bih+HXICULhTpQFSCWUtmlPuzWqhDsr3Tt9A9GO8wvhB7V3aPETATQ2GW73DqJZHFemGma8HSSwgyi4/xYk7XVmRmBiGlZelCruRH4htBcLRI05sNYGEUA3bIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cM3ROL/OoPRJwMfOLPjsCqhMihmmfuYUoYrdDPaK6BI=;
+ b=lhoCOv83rl6+tqZEXzMpOoy8Br0lpm4h9yy0q3fQMQNiD28cPxOxnI2z3g/8HyRA5yXGwx1zKzpnQEKJWCmvs8J3W9v45DuPkOD83j+7VapZ1wYIa6mTlEv+jqjdI9+cOdifCS0gBjlHB8E+wx0IL1M3okvXWUvhTpXOv5GHvw2hVlrdri0Mj9ILN02vXefR6lH7notSx/6zCIRi3Ls/pnmDPrz23qC3KMP+xjK6btHASWkaxouqUHsyN1CUoNQ+PhIRu6K9/m2i2uBxF7mbCzath86m9nKKVT5XNWn6L99OFCCju1jFrKIA7C3QPjY8i9N0P4b22Zron2GSMbB/3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cM3ROL/OoPRJwMfOLPjsCqhMihmmfuYUoYrdDPaK6BI=;
+ b=cdTPuIA0Khro5+ySWmMHBj+3/PCOnVixBbiB+ZY94WvxFB6wuJMTGutClUHaaUhi4hZNct6ag8wOeQp1Up3OC1Gb1h6/Ojt+/MwZKgRxhp7rRJqGBETTvyzvU/gRekJ3xX3VBFRdQG5RV2x8mizWzj0QIC34cAcmS945AAGRMRM=
+Received: from BN8PR15CA0066.namprd15.prod.outlook.com (2603:10b6:408:80::43)
+ by CY5PR12MB6369.namprd12.prod.outlook.com (2603:10b6:930:21::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Thu, 27 Apr
+ 2023 13:52:19 +0000
+Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::ad) by BN8PR15CA0066.outlook.office365.com
+ (2603:10b6:408:80::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22 via Frontend
+ Transport; Thu, 27 Apr 2023 13:52:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6340.22 via Frontend Transport; Thu, 27 Apr 2023 13:52:19 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 27 Apr
+ 2023 08:52:16 -0500
+Date:   Thu, 27 Apr 2023 15:52:13 +0200
+From:   Robert Richter <rrichter@amd.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dave.jiang@intel.com>,
+        <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v3 1/6] cxl/pci: Add RCH downstream port AER and RAS
+ register discovery
+Message-ID: <ZEp+DcHrHS+06RE0@rric.localdomain>
+References: <20230411180302.2678736-1-terry.bowman@amd.com>
+ <20230411180302.2678736-2-terry.bowman@amd.com>
+ <643dcf9eed443_1b66294b5@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <643dcf9eed443_1b66294b5@dwillia2-xfh.jf.intel.com.notmuch>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT067:EE_|CY5PR12MB6369:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3bf05a9a-252d-4d15-108e-08db47269e5b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IV9w9QT1k2f6wJLXVILFP0txf63IDxWEm3UG+N66V8CUT1a8IXV5ksslnNF+3h3E3g9uF8ofwKXj28g9up2YkKFxj8vi7rEfcgCNN9Ry7kY681QZmEj8LMEZDeZ7eWv4ori4/aFsN68I2CKxvEdUuGq2P8wJAstY76O0OIcmsw9FWtZVgyVyWYgeGrjCZG6FWHsg7XHtFcE7AJxUAU1PBzzcx4/+d/s+Mum9GjzXMLK2FbqNSrHFRFMFCIYGpIpsAlNc7KaHQ3NzQbzuDld9fBaxuxutshFr9vgs9mYCdoWXAbTxS7ybbXGP//e2AFib1K+N2urd1bF2kHYqcAf0afVu7kbdyErnhwttG3HrY3wNHmINmvo1cmnNvN9PBgNWziJc+6UnQqX//XU8+lqjNJbBjaScc6tXcdwuVYU6y6XQn/eZhpum7Z4LHZffdsE36/X7KP+vL149uWbOOxUKOgmNr7o0NwXM+BKBza+BHiWdaljqYOdVF62tT8QwQDp9DLUli8jt5YgkAjbwsVcImb/8SWGdNu57LwSEZUIEOFXPlWb7o0k/M4nlilEDHz4rfDT4ONo4mkstBxcX89xA6b3ponLVQQcTu0/JRWHR6GKVnYOzF7HWFNVDRg0C/3Kl0EIzGpinlcWr2qrHM7TqucyR1r4+W/rjPyYI9ahPT0A8xB+Tbmj5TR9Dp5bzgAhSJzv3omu9W2plh+auXR71kz0Fe/yMt0x1RezzjvC3peI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(36860700001)(426003)(336012)(47076005)(83380400001)(478600001)(7696005)(6666004)(54906003)(26005)(186003)(16526019)(53546011)(9686003)(7416002)(30864003)(2906002)(40460700003)(5660300002)(70206006)(70586007)(81166007)(6916009)(82740400003)(4326008)(356005)(82310400005)(41300700001)(8676002)(8936002)(55016003)(40480700001)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 13:52:19.3685
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3bf05a9a-252d-4d15-108e-08db47269e5b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6369
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-04-25 14:06:26, Chris Down wrote:
-> Consoles can have vastly different latencies and throughputs. For
-> example, writing a message to the serial console can take on the order
-> of tens of milliseconds to get the UART to successfully write a message.
-> While this might be fine for a single, one-off message, this can cause
-> significant application-level stalls in situations where the kernel
-> writes large amounts of information to the console.
+Hi Dan,
+
+see comment to your patch below.
+
+On 17.04.23 16:00:47, Dan Williams wrote:
+> Terry Bowman wrote:
+
+> > +	/*
+> > +	 * The component registers for an RCD might come from the
+> > +	 * host-bridge RCRB if they are not already mapped via the
+> > +	 * typical register locator mechanism.
+> > +	 */
+> > +	if (cxlds->component_reg_phys == CXL_RESOURCE_NONE)
+> > +		cxlds->component_reg_phys = cxl_rcrb_to_component(
+> > +			&cxlmd->dev, parent_dport->rcrb, CXL_RCRB_UPSTREAM);
+> > +
+> > +	parent_dport->aer_cap = cxl_rcrb_to_aer(parent_dport->dport,
+> > +						parent_dport->rcrb);
 > 
-> This means that while you might want to send at least INFO level
-> messages to (for example) netconsole, which is relatively fast, you may
-> only want to send at least WARN level messages to the serial console.
-> Such an implementation would permit debugging using the serial console
-> in cases that netconsole doesn't receive messages during particularly
-> bad system issues, while still keeping the noise low enough to avoid
-> inducing latency in userspace applications. This patch adds such an
-> interface, extending the existing console loglevel controls to allow
-> each console to have its own loglevel.
-
-I like the approach. I have many comments but there is nothing
-serious. Mostly only cosmetic issues.
-
-> --- /dev/null
-> +++ b/Documentation/admin-guide/per-console-loglevel.rst
-> @@ -0,0 +1,92 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. _per_console_loglevel:
-> +
-> +Per-console loglevel support
-> +============================
-> +
-> +Motivation
-> +----------
-> +
-> +Consoles can have vastly different latencies and throughputs. For example,
-> +writing a message to the serial console can take on the order of tens of
-> +milliseconds to get the UART to successfully write a message. While this might
-> +be fine for a single, one-off message, this can cause significant
-> +application-level stalls in situations where the kernel writes large amounts of
-> +information to the console.
-> +
-> +This means that while you might want to send at least INFO level messages to
-> +(for example) netconsole, which is relatively fast, you may only want to send
-> +at least WARN level messages to the serial console. This permits debugging
-> +using the serial console in cases that netconsole doesn't receive messages
-> +during particularly bad system issues, while still keeping the noise low enough
-> +to avoid inducing latency in userspace applications.
-> +
-
-It would make sense to list the available loglevel somewhere in this
-file:
-
-Loglevel
---------
-
-The loglevels are defined the followind way:
-
-+---+--------------+-----------------------------------+
-| 0 | KERN_EMERG   | system is unusable                |
-+---+--------------+-----------------------------------+
-| 1 | KERN_ALERT   | action must be taken immediately  |
-+---+--------------+-----------------------------------+
-| 2 | KERN_CRIT	   | critical conditions               |
-+---+--------------+-----------------------------------+
-| 3 | KERN_ERR     | error conditions                  |
-+---+--------------+-----------------------------------+
-| 4 | KERN_WARNING | warning conditions                |
-+---+--------------+-----------------------------------+
-| 5 | KERN_NOTICE  | normal but significant condition  |
-+---+--------------+-----------------------------------+
-| 6 | KERN_INFO    | informational                     |
-+---+--------------+-----------------------------------+
-| 7 | KERN_DEBUG   | debug-level messages              |
-+---+--------------+-----------------------------------+
-
-> +Tunables
-> +--------
-> +
-> +In order to allow tuning this, the following controls exist:
-> +
-> +Global
-> +~~~~~~
-> +
-> +The global loglevel is set by the ``kernel.console_loglevel`` sysctl, which can
-> +also be set as ``loglevel=`` on the kernel command line.
-> +
-> +The printk module also takes two parameters which modify this behaviour
-> +further:
-> +
-> +* ``ignore_loglevel`` on the kernel command line or set in printk parameters:
-> +  Emit all messages. All other controls are ignored if this is present.
-
-Please add empty lines between "* item with a long descripion".
-It would make the text better readable in the plain text form.
-
-> +* ``ignore_per_console_loglevel`` on the kernel command line or set in printk
-> +  parameters: Ignore all per-console loglevels and use the global loglevel.
-> +
-> +The default value for ``kernel.console_loglevel`` comes from
-> +``CONFIG_CONSOLE_LOGLEVEL_DEFAULT``, or ``CONFIG_CONSOLE_LOGLEVEL_QUIET`` if
-> +``quiet`` is passed on the kernel command line.
-> +
-> +Console attributes
-> +~~~~~~~~~~~~~~~~~~
-> +
-> +Registered consoles are exposed at ``/sys/class/console``. For example, if you
-> +are using ``ttyS0``, the console backing it can be viewed at
-> +``/sys/class/console/ttyS0/``. The following files are available:
-> +
-> +* ``effective_loglevel`` (r): The effective loglevel after considering all
-> +  loglevel authorities. For example, if the console-specific loglevel is 3, but
-> +  the global minimum console loglevel [*]_ is 5, then the value will be 5.
-
-I would rather avoid this example. It confused me ;-)
-
-I thought that it was talking about the "global console loglevel"
-instead of "global minimum console loglevel". I was surprised
-that the global value was used when a console-specific one
-was defined.
-
-</more details about my confusion>
-The console loglevel defines a maximal message loglevel.
-The important thing is that it defines a "limit". Most people,
-including me, do not remember if the numbers go up or down.
-So I ignored the word "minimum". I though that it described
-the effect of the value and not a limit for the value.
-
-Also the global minimum loglevel is a really weird setting.
-I do not see much practical use for it. I guess that most
-people are not aware of this limit. I think that it creates
-more harm than good.
-</more details about my confusion>
-
-My proposal. I would replace the "confusing" paragraph with
-something like:
-
-  * ``effective_loglevel`` (r): The effective loglevel after considering all
-    loglevel authorities. For example, it would show the value of
-    the console-specific loglevel when it is defined or the global
-    console loglevel value when the console-specific one is not defined.
-
-
-> +* ``effective_loglevel_source`` (r): The loglevel authority which resulted in
-> +  the effective loglevel being set. The following values can be present:
-> +
-> +    * ``local``: The console-specific loglevel is in effect.
-
-> +    * ``global``: The global loglevel (``kernel.console_loglevel``) is in
-> +      effect. Set a console-specific loglevel to override it.
-
-> +    * ``ignore_loglevel``: ``ignore_loglevel`` was specified on the kernel
-> +      command line or at ``/sys/module/printk/parameters/ignore_loglevel``.
-> +      Disable it to use level controls.
-
-> +    * ``ignore_per_console_loglevel``: ``ignore_per_console_loglevel`` was
-> +      specified on the kernel command line or at
-> +      ``/sys/module/printk/parameters/ignore_per_console_loglevel``. Disable it
-> +      to use per-console level controls.
-
-The code does not show this value. And I would not show it either.
-
-> +* ``enabled`` (r): Whether the console is enabled.
-
-> +* ``loglevel`` (rw): The local, console-specific loglevel for this console.
-> +  This will be in effect if no other global control overrides it. Look at
-> +  ``effective_loglevel`` and ``effective_loglevel_source`` to verify that.
-> +
-> +.. [*] The existence of a minimum console loglevel is generally considered to
-> +   be a confusing and rarely used interface, and as such is not exposed through
-> +   the modern printk sysctl APIs that obsoleted ``kernel.printk``. Use the
-> +   legacy ``kernel.printk`` sysctl to control it if you have a rare use case
-> +   that requires changing it. The default value is ``CONSOLE_LOGLEVEL_MIN``.
-> +
-> +Deprecated
-> +~~~~~~~~~~
-> +
-> +* ``kernel.printk`` sysctl: this takes four values, setting
-> +  ``kernel.console_loglevel``, ``kernel.default_message_loglevel``, the minimum
-> +  console loglevel, and a fourth unused value. The interface is generally
-> +  considered to quite confusing, doesn't perform checks on the values given,
-> +  and is unaware of per-console loglevel semantics.
-> +
-> +Chris Down <chris@chrisdown.name>, 27-April-2023
-> diff --git a/Documentation/admin-guide/serial-console.rst b/Documentation/admin-guide/serial-console.rst
-> index 58b32832e50a..4e204115fe4a 100644
-> --- a/Documentation/admin-guide/serial-console.rst
-> +++ b/Documentation/admin-guide/serial-console.rst
-> @@ -32,15 +32,25 @@ The format of this option is::
->  			and F is flow control ('r' for RTS). Default is
->  			9600n8. The maximum baudrate is 115200.
->  
-> +			One can also specify the per-console loglevel for this
-> +			console by providing a loglevel parameter, for example
-> +			"loglevel:4" to set this console's loglevel to 4. The
-> +			value provided can be from 0 (LOGLEVEL_EMERG) to 8
-> +			(LOGLEVEL_DEBUG + 1), and messages below that will be
-> +			emitted onto the console as they become available.
-
-It would be handy to add the table with the available log levels
-into this file as well.
-
-> +
->  You can specify multiple console= options on the kernel command line.
->  Output will appear on all of them. The last device will be used when
->  you open ``/dev/console``. So, for example::
->  
-> -	console=ttyS1,9600 console=tty0
-> +	console=ttyS1,9600,loglevel:5 console=tty0
->  
->  defines that opening ``/dev/console`` will get you the current foreground
-> -virtual console, and kernel messages will appear on both the VGA
-> -console and the 2nd serial port (ttyS1 or COM2) at 9600 baud.
-> +virtual console, and kernel messages will appear on both the VGA console and
-> +the 2nd serial port (ttyS1 or COM2) at 9600 baud. The optional loglevel "5"
-> +indicates that this console will emit messages more serious than
-> +LOGLEVEL_NOTICE (that is, LOGLEVEL_WARNING and below, since more serious
-> +messages have lower ordering).
->  
->  Note that you can only define one console per device type (serial, video).
->  
-> --- a/drivers/tty/sysrq.c
-> +++ b/drivers/tty/sysrq.c
-> @@ -101,12 +102,26 @@ __setup("sysrq_always_enabled", sysrq_always_enabled_setup);
->  static void sysrq_handle_loglevel(int key)
->  {
->  	int i;
-> +	int cookie;
-> +	int warned = 0;
-> +	struct console *con;
->  
->  	i = key - '0';
->  	console_loglevel = CONSOLE_LOGLEVEL_DEFAULT;
->  	pr_info("Loglevel set to %d\n", i);
->  	console_loglevel = i;
-> +
-> +	cookie = console_srcu_read_lock();
-> +	for_each_console_srcu(con) {
-> +		if (!warned && per_console_loglevel_is_set(con)) {
-> +			warned = 1;
-> +			pr_warn("Overriding per-console loglevel from sysrq\n");
-> +		}
-> +		con->level = -1;
-
-Please, use WRITE_ONCE(con->level, -1) to make sure that it will be
-atomic.
-
-READ_ONCE()/WRITE_ONCE() should always be used when the values
-are read/written using RCU synchronization. Otherwise the compiler
-might do some optimizations and read/write bytes separately.
-
-> +	}
-> +	console_srcu_read_unlock(cookie);
->  }
-
-Also we should safe/set/restore "ignore_per_console_loglevel"
-in __handle_sysrq(). It already does the same with
-"console_loglevel".
-
-__handle_sysrq() increases the loglevel to show all
-messages printed by the sysrq handler on all consoles.
-Many handlers print some information that might be useful
-for debugging.
-
->  static const struct sysrq_key_op sysrq_loglevel_op = {
->  	.handler	= sysrq_handle_loglevel,
->  	.help_msg	= "loglevel(0-9)",
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -203,6 +204,8 @@ struct console {
->  	unsigned long		dropped;
->  	void			*data;
->  	struct hlist_node	node;
-> +	int			level;
-> +	struct device		*classdev;
-
-Please, update also the comment above the structure.
-
+> Hmm, how about just retrieve this as part of cxl_rcrb_to_component()
+> (renamed to cxl_probe_rcrb()), and make an rch dport its own distinct
+> object? Otherwise it feels odd to be retrieving downstream port
+> properties this late at upstream port component register detection time.
+> It also feels awkward to keep adding more RCH dport specific details to
+> the common 'struct cxl_dport'. So, I'm thinking something like the
+> following (compiled and cxl_test regression passed):
+> 
+> -- >8 --
+> From 18fbc72f98655d10301c7a35f614b6152f46c44b Mon Sep 17 00:00:00 2001
+> From: Dan Williams <dan.j.williams@intel.com>
+> Date: Mon, 17 Apr 2023 15:45:50 -0700
+> Subject: [PATCH] cxl/rch: Prepare for caching the MMIO mapped PCIe AER
+>  capability
+> 
+> Prepare cxl_probe_rcrb() for retrieving more than just the component
+> register block. The RCH AER handling code wants to get back to the AER
+> capability that happens to be MMIO mapped rather then configuration
+> cycles.
+> 
+> Move rcrb specific dport data, like the RCRB base and the AER capability
+> offset, into its own data structure ('struct cxl_rcrb_info') for
+> cxl_probe_rcrb() to fill.  Introduce 'struct cxl_rch_dport' to wrap a
+> 'struct cxl_dport' with a 'struct cxl_rcrb_info' attribute.
+> 
+> This centralizes all RCRB scanning in one routine.
+> 
+> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> ---
+>  drivers/cxl/acpi.c            | 16 ++++++++--------
+>  drivers/cxl/core/port.c       | 33 +++++++++++++++++++++------------
+>  drivers/cxl/core/regs.c       | 12 ++++++++----
+>  drivers/cxl/cxl.h             | 21 +++++++++++++++------
+>  drivers/cxl/mem.c             | 15 ++++++++++-----
+>  tools/testing/cxl/Kbuild      |  2 +-
+>  tools/testing/cxl/test/cxl.c  | 10 ++++++----
+>  tools/testing/cxl/test/mock.c | 12 ++++++------
+>  tools/testing/cxl/test/mock.h |  7 ++++---
+>  9 files changed, 79 insertions(+), 49 deletions(-)
+> 
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index 4e66483f1fd3..2647eb04fcdb 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -375,7 +375,7 @@ static int add_host_bridge_uport(struct device *match, void *arg)
+>  struct cxl_chbs_context {
+>  	struct device *dev;
+>  	unsigned long long uid;
+> -	resource_size_t rcrb;
+> +	struct cxl_rcrb_info rcrb;
+>  	resource_size_t chbcr;
+>  	u32 cxl_version;
 >  };
+> @@ -395,7 +395,7 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+>  		return 0;
 >  
->  #ifdef CONFIG_LOCKDEP
-> --- a/kernel/printk/console_cmdline.h
-> +++ b/kernel/printk/console_cmdline.h
-> @@ -6,6 +6,8 @@ struct console_cmdline
->  {
->  	char	name[16];			/* Name of the driver	    */
->  	int	index;				/* Minor dev. to use	    */
-> +	int	level;				/* Log level to use */
-> +	short	flags;				/* Initial flags */
-
-Are the initial flags actually set anywhere?
-
->  	bool	user_specified;			/* Specified by command line vs. platform */
->  	char	*options;			/* Options for the driver   */
->  #ifdef CONFIG_A11Y_BRAILLE_CONSOLE
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 041c7bd56005..f006960ce18b 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -1261,9 +1278,119 @@ module_param(ignore_loglevel, bool, S_IRUGO | S_IWUSR);
->  MODULE_PARM_DESC(ignore_loglevel,
->  		 "ignore loglevel setting (prints all kernel messages to the console)");
+>  	ctx->cxl_version = chbs->cxl_version;
+> -	ctx->rcrb = CXL_RESOURCE_NONE;
+> +	ctx->rcrb.base = CXL_RESOURCE_NONE;
+>  	ctx->chbcr = CXL_RESOURCE_NONE;
 >  
-> -static bool suppress_message_printing(int level)
-> +static bool __read_mostly ignore_per_console_loglevel;
-> +
-> +static int __init ignore_per_console_loglevel_setup(char *str)
-> +{
-> +	ignore_per_console_loglevel = true;
-> +	return 0;
-> +}
-> +
-> +early_param("ignore_per_console_loglevel", ignore_per_console_loglevel_setup);
-> +module_param(ignore_per_console_loglevel, bool, 0644);
-> +MODULE_PARM_DESC(
-> +	ignore_per_console_loglevel,
-> +	"ignore per-console loglevel setting (only respect global console loglevel)");
-> +
-> +bool per_console_loglevel_is_set(const struct console *con)
-> +{
-> +	return !ignore_per_console_loglevel && con && (con->level > 0);
+>  	if (!chbs->base)
+> @@ -409,9 +409,8 @@ static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
+>  	if (chbs->length != CXL_RCRB_SIZE)
+>  		return 0;
+>  
+> -	ctx->rcrb = chbs->base;
+> -	ctx->chbcr = cxl_rcrb_to_component(ctx->dev, chbs->base,
+> -					   CXL_RCRB_DOWNSTREAM);
+> +	ctx->chbcr = cxl_probe_rcrb(ctx->dev, chbs->base, &ctx->rcrb,
+> +				    CXL_RCRB_DOWNSTREAM);
 
-It should use READ_ONCE(con->level).
+Let's just extract the rcrb base here and do the probe later in
+__devm_cxl_add_dport(). Which means chbcr will be extracted there and
+we completely remove the cxl_rcrb_to_component() here. The code here
+becomes much simpler and the ACPI table parser no longer contains mmio
+mapping calls etc.
 
-> +}
-> +
-> +/*
-> + * Hierarchy of loglevel authority:
-> + *
-> + * 1. con->level. The locally set, console-specific loglevel. Optional, only
-> + *    valid if >0.
-> + * 2. console_loglevel. The default global console loglevel, always present.
-> + *
-> + * The behaviour can be further changed by the following printk module
-> + * parameters:
-> + *
-> + * 1. ignore_loglevel. Can be set at boot or at runtime with
-> + *    /sys/module/printk/parameters/ignore_loglevel. Overrides absolutely
-> + *    everything since it's used to debug.
-> + * 2. ignore_per_console_loglevel. Existing per-console loglevel values are left
-> + *    intact, but are ignored in favour of console_loglevel as long as this is
-> + *    true. Also manipulated through syslog(SYSLOG_ACTION_CONSOLE_{ON,OFF}).
-> + */
-> +static enum loglevel_source
-> +console_effective_loglevel_source(const struct console *con)
-> +{
-> +	if (WARN_ON_ONCE(!con))
-> +		return LLS_GLOBAL;
-> +
-> +	if (ignore_loglevel)
-> +		return LLS_IGNORE_LOGLEVEL;
-> +
-> +	if (per_console_loglevel_is_set(con))
-> +		return LLS_LOCAL;
-> +
-> +	return LLS_GLOBAL;
-> +}
-> +
-> +static int console_effective_loglevel(const struct console *con)
->  {
-> -	return (level >= console_loglevel && !ignore_loglevel);
-> +	enum loglevel_source source;
-> +	int level;
-> +
-> +	if (WARN_ON_ONCE(!con))
-> +		return default_console_loglevel;
-
-This looks superfluous. The check in
-console_effective_loglevel_source(con) should be enough.
-
-I know that it would change the behavior of this function.
-It would return the value of "console_loglevel" instead of
-"default_console_loglevel" when there is a bug. But it
-does not matter. There is no good value. It just
-should never happen.
-
-> +	source = console_effective_loglevel_source(con);
-> +
-> +	switch (source) {
-> +	case LLS_IGNORE_LOGLEVEL:
-> +		level = CONSOLE_LOGLEVEL_MOTORMOUTH;
-> +		break;
-> +	case LLS_LOCAL:
-> +		level = con->level;
-> +		break;
-> +	case LLS_GLOBAL:
-> +		level = console_loglevel;
-> +		break;
-> +	default:
-> +		pr_warn("Unhandled console loglevel source: %d", source);
-> +		level = default_console_loglevel;
-> +		break;
-> +	}
-> +
-> +	return level;
-> +}
-> +
-> +static const char *
-> +console_effective_loglevel_source_str(const struct console *con)
-> +{
-> +	enum loglevel_source source;
-> +	const char *str;
-> +
-> +	if (WARN_ON_ONCE(!con))
-> +		return "unknown";
-
-Same here. I would remove this check.
-
-> +	source = console_effective_loglevel_source(con);
-> +
-> +	switch (source) {
-> +	case LLS_IGNORE_LOGLEVEL:
-> +		str = "ignore_loglevel";
-> +		break;
-> +	case LLS_LOCAL:
-> +		str = "local";
-> +		break;
-> +	case LLS_GLOBAL:
-> +		str = "global";
-> +		break;
-> +	default:
-> +		pr_warn("Unhandled console loglevel source: %d", source);
-> +		str = "unknown";
-> +		break;
-> +	}
-> +
-> +	return str;
-> +}
-> +
-> +static bool suppress_message_printing(int level, struct console *con)
-> +{
-> +	return level >= console_effective_loglevel(con);
+>  
+>  	return 0;
 >  }
->  
->  #ifdef CONFIG_BOOT_PRINTK_DELAY
-> @@ -2293,7 +2429,14 @@ asmlinkage int vprintk_emit(int facility, int level,
->  		in_sched = true;
+> @@ -451,8 +450,9 @@ static int add_host_bridge_dport(struct device *match, void *arg)
+>  		return 0;
 >  	}
 >  
-> -	printk_delay(level);
-> +	cookie = console_srcu_read_lock();
-> +	for_each_console_srcu(con) {
-> +		if (!suppress_message_printing(level, con)) {
-> +			printk_delay();
-
-This would repeat the delay for each registered and non-supressed console.
-But it should be called only once when there is at least one
-non-suppressed console.
-
-> +			break;
-> +		}
-> +	}
-> +	console_srcu_read_unlock(cookie);
-
-I would prefer to keep the @level parameter and do this in
-printk_delay(). vprintk_emit() historically grew into a monster
-function. It took a long time to clean it. I am happy that
-it contains only the top level logic now ;-)
-
+> -	if (ctx.rcrb != CXL_RESOURCE_NONE)
+> -		dev_dbg(match, "RCRB found for UID %lld: %pa\n", uid, &ctx.rcrb);
+> +	if (ctx.rcrb.base != CXL_RESOURCE_NONE)
+> +		dev_dbg(match, "RCRB found for UID %lld: %pa\n", uid,
+> +			&ctx.rcrb.base);
 >  
->  	printed_len = vprintk_store(facility, level, dev_info, fmt, args);
->  
-> @@ -2410,11 +2556,78 @@ static void set_user_specified(struct console_cmdline *c, bool user_specified)
->  	console_set_on_cmdline = 1;
->  }
->  
-> +static bool find_and_remove_console_option(char *options, const char *key,
-> +					   char *val_buf, size_t val_buf_size)
-> +{
-> +	bool found = false, first = true;
-> +	char *option, *next = options;
-> +
-> +	while ((option = strsep(&next, ","))) {
-> +		char *value;
-> +
-> +		value = strchr(option, ':');
-> +		if (value)
-> +			*(value++) = '\0';
-> +
-> +		if (strcmp(option, key) == 0) {
-> +			found = true;
-> +			if (value) {
-> +				if (strlen(value) > val_buf_size - 1)
-> {
-
-It might undeflow when val_buf_size == 0. I would use:
-
-				if (strlen(value) >= val_buf_size)
-
-> +					pr_warn("Can't copy console option value for %s:%s: not enough space (%zu)\n",
-> +						option, value, val_buf_size);
-> +					found = false;
-> +				} else {
-> +					strscpy(val_buf, value, val_buf_size);
-> +				}
-> +			} else
-> +				*val_buf = '\0';
-> +		}
-> +
-> +		if (found)
-> +			break;
-> +
-> +		if (next)
-> +			*(next - 1) = ',';
-> +		if (value)
-> +			*(value - 1) = ':';
-> +
-> +		first = false;
-> +	}
-> +
-> +	if (found) {
-> +		if (next)
-> +			memmove(option, next, strlen(next) + 1);
-> +		else if (first)
-> +			*option = '\0';
-> +		else
-> +			*--option = '\0';
-> +	}
-> +
-> +	return found;
-> +}
-> +
-> +static int find_and_remove_loglevel_option(char *options)
-> +{
-> +	char val[3];
-> +
-> +	int loglevel;
-> +
-> +	if (!find_and_remove_console_option(options, "loglevel", val,
-> +					    sizeof(val)))
-> +		return -ENOENT;
-> +
-> +	if (kstrtoint(val, 10, &loglevel)) {
-> +		pr_warn("Invalid console loglevel, ignoring: %s\n", val);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return clamp_loglevel(loglevel);
-
-I would use the same logic as in loglevel_store():
-
-	if (clamp_loglevel(loglevel) != loglevel) {
-		pr_warn("Per-console loglevel out of range, ignoring: %d\n", loglevel);
-		return -ERANGE;
-	}
-
-	return loglevel;
-
-Nit: Also I would use a bigger buffer, e.g. val[12]. It would allow to
-     read a bigger range of invalid values. The message about that
-     a value is out of range is more clear than the generic one about
-     that the buffer is too small ;-)
-
-> +}
-> +
->  static int __add_preferred_console(char *name, int idx, char *options,
->  				   char *brl_options, bool user_specified)
+>  	if (ctx.chbcr == CXL_RESOURCE_NONE) {
+>  		dev_warn(match, "CHBCR invalid for Host Bridge (UID %lld)\n",
+> @@ -466,7 +466,7 @@ static int add_host_bridge_dport(struct device *match, void *arg)
+>  	bridge = pci_root->bus->bridge;
+>  	if (ctx.cxl_version == ACPI_CEDT_CHBS_VERSION_CXL11)
+>  		dport = devm_cxl_add_rch_dport(root_port, bridge, uid,
+> -					       ctx.chbcr, ctx.rcrb);
+> +					       ctx.chbcr, &ctx.rcrb);
+>  	else
+>  		dport = devm_cxl_add_dport(root_port, bridge, uid,
+>  					   ctx.chbcr);
+> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> index 4003f445320c..d194f48259ff 100644
+> --- a/drivers/cxl/core/port.c
+> +++ b/drivers/cxl/core/port.c
+> @@ -920,7 +920,7 @@ static void cxl_dport_unlink(void *data)
+>  static struct cxl_dport *
+>  __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
+>  		     int port_id, resource_size_t component_reg_phys,
+> -		     resource_size_t rcrb)
+> +		     struct cxl_rcrb_info *ri)
 >  {
->  	struct console_cmdline *c;
-> -	int i;
-> +	int i, ret;
+>  	char link_name[CXL_TARGET_STRLEN];
+>  	struct cxl_dport *dport;
+> @@ -942,17 +942,26 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
+>  	    CXL_TARGET_STRLEN)
+>  		return ERR_PTR(-EINVAL);
+>  
+> -	dport = devm_kzalloc(host, sizeof(*dport), GFP_KERNEL);
+> -	if (!dport)
+> -		return ERR_PTR(-ENOMEM);
+> +	if (ri && ri->base != CXL_RESOURCE_NONE) {
+> +		struct cxl_rch_dport *rdport;
+> +
+> +		rdport = devm_kzalloc(host, sizeof(*rdport), GFP_KERNEL);
+> +		if (!rdport)
+> +			return ERR_PTR(-ENOMEM);
+> +
+> +		rdport->rcrb.base = ri->base;
+> +		dport = &rdport->dport;
+> +		dport->rch = true;
+> +	} else {
+> +		dport = devm_kzalloc(host, sizeof(*dport), GFP_KERNEL);
+> +		if (!dport)
+> +			return ERR_PTR(-ENOMEM);
+
+I think we can simlify the allocation part if we just move the struct
+into 'struct cxl_dport', see below.
+
+> +	}
+>  
+>  	dport->dport = dport_dev;
+>  	dport->port_id = port_id;
+>  	dport->component_reg_phys = component_reg_phys;
+>  	dport->port = port;
+> -	if (rcrb != CXL_RESOURCE_NONE)
+> -		dport->rch = true;
+> -	dport->rcrb = rcrb;
+>  
+>  	cond_cxl_root_lock(port);
+>  	rc = add_dport(port, dport);
+> @@ -994,7 +1003,7 @@ struct cxl_dport *devm_cxl_add_dport(struct cxl_port *port,
+>  	struct cxl_dport *dport;
+>  
+>  	dport = __devm_cxl_add_dport(port, dport_dev, port_id,
+> -				     component_reg_phys, CXL_RESOURCE_NONE);
+> +				     component_reg_phys, NULL);
+>  	if (IS_ERR(dport)) {
+>  		dev_dbg(dport_dev, "failed to add dport to %s: %ld\n",
+>  			dev_name(&port->dev), PTR_ERR(dport));
+> @@ -1013,24 +1022,24 @@ EXPORT_SYMBOL_NS_GPL(devm_cxl_add_dport, CXL);
+>   * @dport_dev: firmware or PCI device representing the dport
+>   * @port_id: identifier for this dport in a decoder's target list
+>   * @component_reg_phys: optional location of CXL component registers
+> - * @rcrb: mandatory location of a Root Complex Register Block
+> + * @ri: mandatory data about the Root Complex Register Block layout
+>   *
+>   * See CXL 3.0 9.11.8 CXL Devices Attached to an RCH
+>   */
+>  struct cxl_dport *devm_cxl_add_rch_dport(struct cxl_port *port,
+>  					 struct device *dport_dev, int port_id,
+>  					 resource_size_t component_reg_phys,
+> -					 resource_size_t rcrb)
+> +					 struct cxl_rcrb_info *ri)
+>  {
+>  	struct cxl_dport *dport;
+>  
+> -	if (rcrb == CXL_RESOURCE_NONE) {
+> +	if (!ri || ri->base == CXL_RESOURCE_NONE) {
+>  		dev_dbg(&port->dev, "failed to add RCH dport, missing RCRB\n");
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	dport = __devm_cxl_add_dport(port, dport_dev, port_id,
+> -				     component_reg_phys, rcrb);
+> +				     component_reg_phys, ri);
+>  	if (IS_ERR(dport)) {
+>  		dev_dbg(dport_dev, "failed to add RCH dport to %s: %ld\n",
+>  			dev_name(&port->dev), PTR_ERR(dport));
+> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+> index 52d1dbeda527..b1c0db898a50 100644
+> --- a/drivers/cxl/core/regs.c
+> +++ b/drivers/cxl/core/regs.c
+> @@ -332,9 +332,8 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
+>  
+> -resource_size_t cxl_rcrb_to_component(struct device *dev,
+> -				      resource_size_t rcrb,
+> -				      enum cxl_rcrb which)
+> +resource_size_t cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
+> +			       struct cxl_rcrb_info *ri, enum cxl_rcrb which)
+>  {
+>  	resource_size_t component_reg_phys;
+>  	void __iomem *addr;
+> @@ -344,6 +343,8 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
+>  
+>  	if (which == CXL_RCRB_UPSTREAM)
+>  		rcrb += SZ_4K;
+> +	else
+> +		ri->base = rcrb;
+
+For upstream ports nothing is written to ri, allow NULL pointer for ri
+then but check for NULL here.
+
 >  
 >  	/*
->  	 *	See if this tty is not yet registered, and
-> @@ -2435,6 +2648,11 @@ static int __add_preferred_console(char *name, int idx, char *options,
->  	if (!brl_options)
->  		preferred_console = i;
->  	strscpy(c->name, name, sizeof(c->name));
+>  	 * RCRB's BAR[0..1] point to component block containing CXL
+> @@ -364,6 +365,9 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
+>  	cmd = readw(addr + PCI_COMMAND);
+>  	bar0 = readl(addr + PCI_BASE_ADDRESS_0);
+>  	bar1 = readl(addr + PCI_BASE_ADDRESS_1);
 > +
-> +	ret = find_and_remove_loglevel_option(options);
-> +	if (ret >= 0)
-> +		c->level = ret;
-
-c->level == 0 is also the initial value. We should do:
-
-	if (ret >= 0)
-		c->level = ret;
-	else
-		c->level = -1;
-
-I know that it was not a real problem because the level never could be 0
-because of clamping by the minimal console loglevel. But it is not obvious.
-Let's have the logic obvious and clear.
-
+> +	/* TODO: retrieve rcrb->aer_cap here */
 > +
->  	c->options = options;
->  	set_user_specified(c, user_specified);
->  	braille_set_options(c, brl_options);
-> @@ -2764,7 +2982,8 @@ static void console_prepend_dropped(struct printk_message *pmsg, unsigned long d
->   * of @pmsg are valid. (See the documentation of struct printk_message
->   * for information about the @pmsg fields.)
->   */
-> -static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
-> +static bool printk_get_next_message(struct printk_message *pmsg,
-> +				    struct console *con, u64 seq,
->  				    bool is_extended, bool may_suppress)
 
-@is_extended has to match @con->flags & CON_EXTENDED. It would be
-ugly if the API is not used correctly and they do not match.
+Yes, very good. The aer cap of the RCRB would be very early available
+then and independent of of other drivers than cxl_acpi, esp. the pci
+subsystem.
 
-Also the "may_suppress" value might be guessed from @con.
-
-I see two solutions:
-
-1. If we pass @con then @is_extended and @may_suppress parameters
-   are not needed. The values might be guessed. The logic is
-   the following:
-
-	if (con) {
-		is_extended = console_srcu_read_flags(con) & CON_EXTENDED;
-		may_suppress = true;
-	} else {
-		/* Used only by devkmsg_read(). */
-		is_extended = true;
-		may_suppress = false;
-	}
-
-   If we go this way then we should do the parameter switch in a
-   separate patch. The commit message should explain that
-   the upcoming changes will need to read even more information
-   from struct console.
-
-   The drawback is that @con->seq and @seq values might still
-   be inconsistent. But the @seq value must be passed explicitly
-   when called from dev_kmsg() and @con is NULL. Also the explicit
-   @seq parameter will most likely useful also for the
-   con->atomic_write() callback added by John's patchset.
-   The atomic consoles will not use con->seq at all.
-
-
-2. We could pass @con_loglevel instead of @con. And pass it to
-   suppress_message_printing() instead of @con as well.
-
-   It is probably cleaner solution but the many parameters suck.
-
-
-I would personally use the 1st proposal and live with the fact
-that the function would ignore con->seq and use the passed
-@seq instead. The many parameters suck, and especially
-bool parameters suck.
-
->  {
->  	static int panic_console_dropped;
-> @@ -2808,7 +3027,7 @@ static bool printk_get_next_message(struct printk_message *pmsg, u64 seq,
->  	}
+>  	iounmap(addr);
+>  	release_mem_region(rcrb, SZ_4K);
 >  
->  	/* Skip record that has level above the console loglevel. */
-> -	if (may_suppress && suppress_message_printing(r.info->level))
-> +	if (may_suppress && suppress_message_printing(r.info->level, con))
-
-This would be:
-
-	/* Never suppress when used in devkmsg_read() */
-	if (con && suppress_message_printing(r.info->level, con))
-
->  		goto out;
+> @@ -395,4 +399,4 @@ resource_size_t cxl_rcrb_to_component(struct device *dev,
 >  
->  	if (is_extended) {
-> @@ -2851,7 +3070,7 @@ static bool console_emit_next_record(struct console *con, bool *handover, int co
+>  	return component_reg_phys;
+>  }
+> -EXPORT_SYMBOL_NS_GPL(cxl_rcrb_to_component, CXL);
+> +EXPORT_SYMBOL_NS_GPL(cxl_probe_rcrb, CXL);
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index 1503ccec9a84..b0807f54e9fd 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -267,9 +267,9 @@ enum cxl_rcrb {
+>  	CXL_RCRB_DOWNSTREAM,
+>  	CXL_RCRB_UPSTREAM,
+>  };
+> -resource_size_t cxl_rcrb_to_component(struct device *dev,
+> -				      resource_size_t rcrb,
+> -				      enum cxl_rcrb which);
+> +struct cxl_rcrb_info;
+> +resource_size_t cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
+> +			       struct cxl_rcrb_info *ri, enum cxl_rcrb which);
 >  
->  	*handover = false;
->  
-> -	if (!printk_get_next_message(&pmsg, con->seq, is_extended, true))
-> +	if (!printk_get_next_message(&pmsg, con, con->seq, is_extended, true))
-
-The "con, con->seq" parameters look a bit ugly.
-But I could live with it as explained above.
-
->  		return false;
->  
->  	con->dropped += pmsg.dropped;
-> @@ -3199,6 +3418,144 @@ static int __init keep_bootcon_setup(char *str)
->  
->  early_param("keep_bootcon", keep_bootcon_setup);
->  
-> +#ifdef CONFIG_PRINTK
-
-It might be better to put this into separate source file, e.g.
-kernel/printk/sysfs.c, like the existing kernel/printk/sysctl.c.
-
-printk.c is already huge. And any longer #ifdef section is always
-hard to follow in such long files. This would actually be
-3rd #ifdef CONFIG_PRINTK section there.
-
-> +static ssize_t loglevel_show(struct device *dev, struct device_attribute *attr,
-> +			     char *buf)
-> +{
-> +	struct console *con = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", con->level);
-
-It should use READ_ONCE(con->loglevel).
-
-> +}
-> +
-> +static ssize_t loglevel_store(struct device *dev, struct device_attribute *attr,
-> +			      const char *buf, size_t size)
-> +{
-> +	struct console *con = dev_get_drvdata(dev);
-> +	ssize_t ret;
-> +	int level;
-> +
-> +	ret = kstrtoint(buf, 10, &level);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (level == -1) {
-> +		con->level = level;
-> +		return size;
-> +	}
-
-Nit: This might be:
-
-	if (level == -1)
-		goto out:
-
-> +	if (clamp_loglevel(level) != level)
-> +		return -ERANGE;
-
-out:
-> +	con->level = level;
-> +	return size;
-> +}
-> +
-> +static DEVICE_ATTR_RW(loglevel);
-[...]
-> +
-> +static ssize_t enabled_show(struct device *dev, struct device_attribute *attr,
-> +			    char *buf)
-> +{
-> +	struct console *con = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", !!(con->flags & CON_ENABLED));
-
-This should use console_srcu_read_flags(con) & CON_ENABLED);
-
-> +}
-> +
-[...]
-> +static void console_register_device(struct console *con)
-> +{
-
-Please add:
-
-	lockdep_assert_console_list_lock_held();
-
-, see below.
-
-
-> +	/*
-> +	 * We might be called from register_console() before the class is
-> +	 * registered. If that happens, we'll take care of it in
-> +	 * printk_late_init.
-> +	 */
-> +	if (IS_ERR_OR_NULL(console_class))
-> +		return;
-> +
-> +	if (WARN_ON(con->classdev))
-> +		return;
-> +
-> +	con->classdev = kzalloc(sizeof(struct device), GFP_KERNEL);
-
-Better would be sizeof(*con->classdev)
-
-> +	if (!con->classdev)
-> +		return;
-> +
-> +	device_initialize(con->classdev);
-> +	dev_set_name(con->classdev, "%s%d", con->name, con->index);
-> +	dev_set_drvdata(con->classdev, con);
-> +	con->classdev->release = console_classdev_release;
-> +	con->classdev->class = console_class;
-> +	if (device_add(con->classdev))
-> +		put_device(con->classdev);
-> +}
-> +
-> +static void console_setup_class(void)
-
-Please. rename it to console_sysfs_init() to match the name of
-printk_sysctl_init(). They are called after each other in
-printk_late_init()...
-
-> +{
-> +	struct console *con;
-> +	int cookie;
-> +
-> +	/*
-> +	 * printk exists for the lifetime of the kernel, it cannot be unloaded,
-> +	 * so we should never end up back in here.
-> +	 */
-> +	if (WARN_ON(console_class))
-> +		return;
-> +
-> +	console_class = class_create(THIS_MODULE, "console");
-> +	if (!IS_ERR(console_class))
-> +		console_class->dev_groups = console_sysfs_groups;
-> +
-
-I would add a comment here:
-
-	/*
-	 * Create sysfs interface for consoles that were registered
-	 * before the console class was created.
-	 */
-
-> +	cookie = console_srcu_read_lock();
-> +	for_each_console_srcu(con)
-
-This does not loop properly serialized against register_console() and
-unregister_console(). I am not 100% sure. The race is not much
-realistic, definitely. But better be on the safe side and do:
-
-	console_list_lock();
-	for_each_console(con) {
-
-> +		console_register_device(con);
-> +	console_srcu_read_unlock(cookie);
-> +}
-> +#else /* CONFIG_PRINTK */
-> +static void console_register_device(struct console *new)
-> +{
-> +}
-> +static void console_setup_class(void)
-> +{
-> +}
-> +#endif
-> +
->  /*
->   * This is called by register_console() to try to match
->   * the newly registered console with any of the ones selected
-> @@ -3231,6 +3588,14 @@ static int try_enable_preferred_console(struct console *newcon,
->  			if (newcon->index < 0)
->  				newcon->index = c->index;
->  
-> +			if (c->level > 0)
-> +				newcon->level = c->level;
-> +			else
-> +				newcon->level = -1;
-
-Better would be:
-
-			if (c->level >= minimum_console_loglevel)
-				newcon->level = c->level;
-			else
-				newcon->level = -1;
-
-
-> +
-> +			newcon->flags |= c->flags;
-
-Is newcon->flags actually set anywhere, please?
-
-> +			newcon->classdev = NULL;
-> +
->  			if (_braille_register_console(newcon, c))
->  				return 0;
->  
-> @@ -3627,6 +3996,10 @@ void __init console_init(void)
->   * To mitigate this problem somewhat, only unregister consoles whose memory
->   * intersects with the init section. Note that all other boot consoles will
->   * get unregistered when the real preferred console is registered.
-> + *
-> + * Early consoles will also have been registered before we had the
-> + * infrastructure to put them into /sys/class/console, so make sure they get
-> + * set up now that we're ready.
-
-Actually, it is not only about early consoles. Even normal consoles
-are usually registered before late init calls.
-
-Anyway, we do not need to add a comment here. It is too lost and
-unrelated to the above comments. The comment in console_setup_class()
-above the for-cycle would be enough.
-
->   */
->  static int __init printk_late_init(void)
->  {
-> --- a/kernel/printk/sysctl.c
-> +++ b/kernel/printk/sysctl.c
-> @@ -7,10 +7,14 @@
->  #include <linux/printk.h>
->  #include <linux/capability.h>
->  #include <linux/ratelimit.h>
-> +#include <linux/console.h>
->  #include "internal.h"
->  
->  static const int ten_thousand = 10000;
->  
-> +static int min_loglevel = LOGLEVEL_EMERG;
-> +static int max_loglevel = CONSOLE_LOGLEVEL_MOTORMOUTH;
-
-The default message loglevel should be meaningful. I would use
-LOGLEVEL_DEBUG at max.
-
-Also, please, call the variable min_msg_... to make it clear
-that these limits are for message loglevels:
-
-static int min_msg_loglevel = LOGLEVEL_EMERG;
-static int max_msg_loglevel = LOGLEVEL_DEBUG;
-
-> +
->  static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
->  				void *buffer, size_t *lenp, loff_t *ppos)
->  {
-> @@ -20,13 +24,48 @@ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
->  	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
+>  #define CXL_RESOURCE_NONE ((resource_size_t) -1)
+>  #define CXL_TARGET_STRLEN 20
+> @@ -589,12 +589,12 @@ cxl_find_dport_by_dev(struct cxl_port *port, const struct device *dport_dev)
+>  	return xa_load(&port->dports, (unsigned long)dport_dev);
 >  }
 >  
-> +static int printk_sysctl_deprecated(struct ctl_table *table, int write,
-> +				    void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	int res = proc_dointvec(table, write, buffer, lenp, ppos);
 > +
-> +	if (write)
-> +		pr_warn_once(
-> +			"printk: The kernel.printk sysctl is deprecated. Consider using kernel.console_loglevel or kernel.default_message_loglevel instead.\n");
 
-Nit: Please, put it on the same line as pr_warn_once("printk: The kernel....
-     The small shift left did not help much ;-)
+We will drop that.
 
-> +
-> +	return res;
-> +}
-> +
-> +static int printk_console_loglevel(struct ctl_table *table, int write,
-> +				   void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	struct ctl_table ltable = *table;
-> +	int ret, level;
-> +
-> +	if (!write)
-> +		return proc_dointvec(table, write, buffer, lenp, ppos);
-> +
-> +	ltable.data = &level;
-> +
-> +	ret = proc_dointvec(&ltable, write, buffer, lenp, ppos);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (level != -1 && level != clamp_loglevel(level))
-> +		return -ERANGE;
-> +
-> +	console_loglevel = level;
-> +
-> +	return 0;
-> +}
-> +
->  static struct ctl_table printk_sysctls[] = {
->  	{
->  		.procname	= "printk",
->  		.data		= &console_loglevel,
->  		.maxlen		= 4*sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_dointvec,
-> +		.proc_handler	= printk_sysctl_deprecated,
->  	},
->  	{
->  		.procname	= "printk_ratelimit",
-> @@ -76,6 +115,22 @@ static struct ctl_table printk_sysctls[] = {
->  		.extra1		= SYSCTL_ZERO,
->  		.extra2		= SYSCTL_TWO,
->  	},
-> +	{
-> +		.procname	= "console_loglevel",
-> +		.data		= &console_loglevel,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= printk_console_loglevel,
-> +	},
-> +	{
-> +		.procname	= "default_message_loglevel",
-> +		.data		= &default_message_loglevel,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= &min_loglevel,
-> +		.extra2		= &max_loglevel,
-> +	},
->  	{}
+>  /**
+>   * struct cxl_dport - CXL downstream port
+>   * @dport: PCI bridge or firmware device representing the downstream link
+>   * @port_id: unique hardware identifier for dport in decoder target list
+>   * @component_reg_phys: downstream port component registers
+> - * @rcrb: base address for the Root Complex Register Block
+>   * @rch: Indicate whether this dport was enumerated in RCH or VH mode
+>   * @port: reference to cxl_port that contains this downstream port
+>   */
+> @@ -602,11 +602,20 @@ struct cxl_dport {
+>  	struct device *dport;
+>  	int port_id;
+>  	resource_size_t component_reg_phys;
+> -	resource_size_t rcrb;
+>  	bool rch;
+>  	struct cxl_port *port;
 >  };
+>  
+> +struct cxl_rcrb_info {
+> +	resource_size_t base;
+> +	u16 aer_cap;
+> +};
+> +
+> +struct cxl_rch_dport {
+> +	struct cxl_dport dport;
+> +	struct cxl_rcrb_info rcrb;
+> +};
 
-Finally, the patch is really huge. It might cause problems
-when dealing with regressions. It would be nice to split it.
-It would help with review, bisection, and make the life
-easier for future archaeologists.
+How about including cxl_rcrb_info directly in cxl_dport? This
+simplifies dport allocation and allows direct access in cxl_dport to
+the cxl_rcrb_info without a container_of() call:
 
-The following separate patches comes to my mind:
+struct cxl_dport {
+	struct device *dport;
+	struct cxl_port *port;
+	int port_id;
+	resource_size_t component_reg_phys;
+	bool rch;
+	struct cxl_rcrb_info rcrb;
+};
 
-1. Fix printk_delay() call (already done, current 1st patch)
+I know you were complaining about to many RCH dport specific details,
+but all this is kept in cxl_rcrb_info and the struct itself is not too
+big. The flat structure allows quick access, like:
 
-2. Pass @con instead of @is_extended/@may_schedule in
-   in printk_get_next_message().
+	if (dport->rch)
+		component_reg_phys = cxl_probe_rcrb(..., dport->rcrb.base, ...)
 
-3. Add con->level and the logic that will use it in printk(),
-   including console_effective_loglevel(). It will be
-   temporary initialized to -1 in register_console().
+> +
+>  /**
+>   * struct cxl_ep - track an endpoint's interest in a port
+>   * @ep: device that hosts a generic CXL endpoint (expander or accelerator)
+> @@ -674,7 +683,7 @@ struct cxl_dport *devm_cxl_add_dport(struct cxl_port *port,
+>  struct cxl_dport *devm_cxl_add_rch_dport(struct cxl_port *port,
+>  					 struct device *dport_dev, int port_id,
+>  					 resource_size_t component_reg_phys,
+> -					 resource_size_t rcrb);
+> +					 struct cxl_rcrb_info *ri);
+>  
+>  struct cxl_decoder *to_cxl_decoder(struct device *dev);
+>  struct cxl_root_decoder *to_cxl_root_decoder(struct device *dev);
+> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+> index 097d86dd2a8e..7da6135e0b17 100644
+> --- a/drivers/cxl/mem.c
+> +++ b/drivers/cxl/mem.c
+> @@ -71,10 +71,15 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+>  	 * host-bridge RCRB if they are not already mapped via the
+>  	 * typical register locator mechanism.
+>  	 */
+> -	if (parent_dport->rch && cxlds->component_reg_phys == CXL_RESOURCE_NONE)
+> -		component_reg_phys = cxl_rcrb_to_component(
+> -			&cxlmd->dev, parent_dport->rcrb, CXL_RCRB_UPSTREAM);
+> -	else
+> +	if (parent_dport->rch &&
+> +	    cxlds->component_reg_phys == CXL_RESOURCE_NONE) {
+> +		struct cxl_rch_dport *rdport =
+> +			container_of(parent_dport, typeof(*rdport), dport);
+> +
+> +		component_reg_phys =
+> +			cxl_probe_rcrb(&cxlmd->dev, rdport->rcrb.base,
+> +				       &rdport->rcrb, CXL_RCRB_UPSTREAM);
 
-4. Add ignore_per_console_loglevel parameter, use it
-   in per_console_loglevel_is_set(), do_syslog(),
-   and __handle_sysrq().
+This could overwrite the dport's contents with the upstream port info.
+But since we only need the info and write to it in case of a
+downstream port, let's set that to null here (plus adding a check in
+cxl_probe_rcrb()).
 
-5. Add sysfs interface that would allow to set per-console
-   log level at runtime.
+Similar to the host case (cxl_acpi driver) where the rcrb is probed
+early, this code should be moved to cxl_pci. But since RAS does not
+use the upstream port's RCRB it is subject of a separate patch not
+part of this series.
 
-6. Add the command line interface that would allow to define
-   the console loglevel via console= parameter.
+> +	} else
+>  		component_reg_phys = cxlds->component_reg_phys;
+>  	endpoint = devm_cxl_add_port(host, &cxlmd->dev, component_reg_phys,
+>  				     parent_dport);
+> @@ -92,7 +97,7 @@ static int devm_cxl_add_endpoint(struct device *host, struct cxl_memdev *cxlmd,
+>  	}
+>  
+>  	return 0;
+> -}
+> +	}
 
-7. Update the sysctl interface.
+Dropping that change.
 
-I know that it might be painful to do so but I believe that
-it would pay off in the long term.
+>  
+>  static int cxl_mem_probe(struct device *dev)
+>  {
+> diff --git a/tools/testing/cxl/Kbuild b/tools/testing/cxl/Kbuild
+> index fba7bec96acd..bef1bc3bd912 100644
+> --- a/tools/testing/cxl/Kbuild
+> +++ b/tools/testing/cxl/Kbuild
+> @@ -11,7 +11,7 @@ ldflags-y += --wrap=devm_cxl_enumerate_decoders
+>  ldflags-y += --wrap=cxl_await_media_ready
+>  ldflags-y += --wrap=cxl_hdm_decode_init
+>  ldflags-y += --wrap=cxl_dvsec_rr_decode
+> -ldflags-y += --wrap=cxl_rcrb_to_component
+> +ldflags-y += --wrap=cxl_probe_rcrb
+>  
+>  DRIVERS := ../../../drivers
+>  CXL_SRC := $(DRIVERS)/cxl
+> diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
+> index 385cdeeab22c..805c79491485 100644
+> --- a/tools/testing/cxl/test/cxl.c
+> +++ b/tools/testing/cxl/test/cxl.c
+> @@ -983,12 +983,14 @@ static int mock_cxl_port_enumerate_dports(struct cxl_port *port)
+>  	return 0;
+>  }
+>  
+> -resource_size_t mock_cxl_rcrb_to_component(struct device *dev,
+> -					   resource_size_t rcrb,
+> -					   enum cxl_rcrb which)
+> +resource_size_t mock_cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
+> +				    struct cxl_rcrb_info *ri, enum cxl_rcrb which)
+>  {
+>  	dev_dbg(dev, "rcrb: %pa which: %d\n", &rcrb, which);
+>  
+> +	if (which == CXL_RCRB_DOWNSTREAM)
+> +		ri->base = rcrb;
+> +
+>  	return (resource_size_t) which + 1;
+>  }
+>  
+> @@ -1000,7 +1002,7 @@ static struct cxl_mock_ops cxl_mock_ops = {
+>  	.is_mock_dev = is_mock_dev,
+>  	.acpi_table_parse_cedt = mock_acpi_table_parse_cedt,
+>  	.acpi_evaluate_integer = mock_acpi_evaluate_integer,
+> -	.cxl_rcrb_to_component = mock_cxl_rcrb_to_component,
+> +	.cxl_probe_rcrb = mock_cxl_probe_rcrb,
+>  	.acpi_pci_find_root = mock_acpi_pci_find_root,
+>  	.devm_cxl_port_enumerate_dports = mock_cxl_port_enumerate_dports,
+>  	.devm_cxl_setup_hdm = mock_cxl_setup_hdm,
+> diff --git a/tools/testing/cxl/test/mock.c b/tools/testing/cxl/test/mock.c
+> index c4e53f22e421..148bd4f184f5 100644
+> --- a/tools/testing/cxl/test/mock.c
+> +++ b/tools/testing/cxl/test/mock.c
+> @@ -244,9 +244,9 @@ int __wrap_cxl_dvsec_rr_decode(struct device *dev, int dvsec,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(__wrap_cxl_dvsec_rr_decode, CXL);
+>  
+> -resource_size_t __wrap_cxl_rcrb_to_component(struct device *dev,
+> -					     resource_size_t rcrb,
+> -					     enum cxl_rcrb which)
+> +resource_size_t __wrap_cxl_probe_rcrb(struct device *dev, resource_size_t rcrb,
+> +				      struct cxl_rcrb_info *ri,
+> +				      enum cxl_rcrb which)
+>  {
+>  	int index;
+>  	resource_size_t component_reg_phys;
+> @@ -254,14 +254,14 @@ resource_size_t __wrap_cxl_rcrb_to_component(struct device *dev,
+>  
+>  	if (ops && ops->is_mock_port(dev))
+>  		component_reg_phys =
+> -			ops->cxl_rcrb_to_component(dev, rcrb, which);
+> +			ops->cxl_probe_rcrb(dev, rcrb, ri, which);
+>  	else
+> -		component_reg_phys = cxl_rcrb_to_component(dev, rcrb, which);
+> +		component_reg_phys = cxl_probe_rcrb(dev, rcrb, ri, which);
+>  	put_cxl_mock_ops(index);
+>  
+>  	return component_reg_phys;
+>  }
+> -EXPORT_SYMBOL_NS_GPL(__wrap_cxl_rcrb_to_component, CXL);
+> +EXPORT_SYMBOL_NS_GPL(__wrap_cxl_probe_rcrb, CXL);
+>  
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_IMPORT_NS(ACPI);
+> diff --git a/tools/testing/cxl/test/mock.h b/tools/testing/cxl/test/mock.h
+> index bef8817b01f2..7ef21356d052 100644
+> --- a/tools/testing/cxl/test/mock.h
+> +++ b/tools/testing/cxl/test/mock.h
+> @@ -15,9 +15,10 @@ struct cxl_mock_ops {
+>  					     acpi_string pathname,
+>  					     struct acpi_object_list *arguments,
+>  					     unsigned long long *data);
+> -	resource_size_t (*cxl_rcrb_to_component)(struct device *dev,
+> -						 resource_size_t rcrb,
+> -						 enum cxl_rcrb which);
+> +	resource_size_t (*cxl_probe_rcrb)(struct device *dev,
+> +					  resource_size_t rcrb,
+> +					  struct cxl_rcrb_info *ri,
+> +					  enum cxl_rcrb which);
+>  	struct acpi_pci_root *(*acpi_pci_find_root)(acpi_handle handle);
+>  	bool (*is_mock_bus)(struct pci_bus *bus);
+>  	bool (*is_mock_port)(struct device *dev);
+> -- 
+> 2.39.2
+> -- >8 --
+> 
+> 
+> > +
+> > +	parent_dport->ras_cap = cxl_component_to_ras(parent_dport->dport,
+> > +						     parent_dport->component_reg_phys);
+> 
+> Since this is component register offset based can it not be shared with
+> the VH case? I have been expecting that RCH RAS capability and VH RAS
+> capability scanning would need to be unified in the cxl_port driver.
 
-How does this sounds, please?
+I have a modified version of your patch with following changes:
 
-Best Regards,
-Petr
+ * cxl_probe_rcrb():
+
+   * Moved cxl_probe_rcrb() out of ACPI CEDT parse to
+     __devm_cxl_add_dport() (separate patch).
+
+   * Set cxl_rcrb_info pointer to NULL for upstream ports including
+     NULL pointer check.
+
+ * Integrated 'struct cxl_rcrb_info' in 'struct cxl_dport'.
+
+ * Adressed comments above.
+
+ * Dropped unrelated newlines and whitespaces.
+
+We will include the patches in v4.
+
+Thanks,
+
+-Robert
