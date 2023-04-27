@@ -2,180 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41D36F055A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF366F057F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243842AbjD0MKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S243878AbjD0MM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243797AbjD0MKN (ORCPT
+        with ESMTP id S243617AbjD0MMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:10:13 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F2E5BAB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:10:09 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4effb818c37so3603674e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 05:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682597407; x=1685189407;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fQ8qe1BB0G+HYjEpOfPBNu0NP3ENE9SOB00+nySsnF0=;
-        b=EFjdq6kmO3IwygYJjSnuPpG6tNJw3gUimlSwdstfajLcMooVt+zwCL1bDjZdgYGHTf
-         Q682KOpEDxp4ye/cWuCO2P8ylg+7WdkE3xiiO7tNruzmgkdt0HUjjWa/o48ro3GLAmPh
-         m0woCLrad3IJ5sEFZi9ZYKSr0idyDCJ20a+fXOOv4U4SWlgP063t4hd14lCHSWRuDeoh
-         BI5ey7exdfdMtAtYeQ/NKgjmMXdQlfIDliPzF91hD9ErrkPlzfFfjYsbdIPqvc9FvV2J
-         sPThNVpr3BtSxwpHhELKHSG0BkZSzruUtu6QearonKlGqi1mxHGEnTVSykvSAxZA0Agk
-         Rp8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682597407; x=1685189407;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fQ8qe1BB0G+HYjEpOfPBNu0NP3ENE9SOB00+nySsnF0=;
-        b=Uf505zL1dmRDTze8p2ODR2YKFiTXinIEaOYAlbD4phPPJGpioYdnlVow9Enqq+pEYG
-         ogSoJU/DhhRW2darJgpqyKrVhE3KmAxQEXlghwDgpl8NFlxKpcjUhLQ4NFXbSmC60bm4
-         8SecDWVDDnJFSab2zLdsYxsvmQiHC3Tfs6LA2HP5WYQhiquUadsWQdB3/2jlFCxN+8PQ
-         ZGnW+xAIgm1SfdN2kURZZpdWbBh589+3XttbMUqHpSYx2MM3NjUjJVDXRXCr7mgmMTXo
-         5mikct2Gg005Mp6UV9ppzowVcYrEdr709cmdhxX0rkdIYSnurWxfECwaGkcrWUUQ23oW
-         JH7Q==
-X-Gm-Message-State: AC+VfDziSynn5nPRibA2RXWqTIVYqlfEpDQuXvrcLAybpPHNp2lN04LW
-        7IgkQF0AaEPwpG0AulDjMC4MEw==
-X-Google-Smtp-Source: ACHHUZ4uN2zzJ7cgkfoU0GrY/fzKjhLGeZLuKhL0GulOyKqNusZ4umA087qyuSEAS1QpgYGYIzCOsg==
-X-Received: by 2002:ac2:5549:0:b0:4ea:e0e7:d12d with SMTP id l9-20020ac25549000000b004eae0e7d12dmr472076lfk.1.1682597407485;
-        Thu, 27 Apr 2023 05:10:07 -0700 (PDT)
-Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
-        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004d4d7fb0e07sm2892044lfn.216.2023.04.27.05.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 05:10:06 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 27 Apr 2023 14:10:03 +0200
-Subject: [PATCH v2 8/8] ARM: dts: ux500: Add eSRAM nodes
+        Thu, 27 Apr 2023 08:12:42 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A354698;
+        Thu, 27 Apr 2023 05:12:14 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 33RCBd5yA030753, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 33RCBd5yA030753
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 27 Apr 2023 20:11:39 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 27 Apr 2023 20:11:41 +0800
+Received: from fc34.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 27 Apr
+ 2023 20:11:41 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net v2 0/3] r8152: fix 2.5G devices
+Date:   Thu, 27 Apr 2023 20:10:54 +0800
+Message-ID: <20230427121057.29155-405-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230426122805.23301-400-nic_swsd@realtek.com>
+References: <20230426122805.23301-400-nic_swsd@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230417-ux500-dma40-cleanup-v2-8-cdaa68a4b863@linaro.org>
-References: <20230417-ux500-dma40-cleanup-v2-0-cdaa68a4b863@linaro.org>
-In-Reply-To: <20230417-ux500-dma40-cleanup-v2-0-cdaa68a4b863@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The U8500 has 640 KB of eSRAM, split into 5 banks of 128 KB
-each. Add this to the device tree, with ESRAM 0, 1+2 and 3+4
-as separate devices, since these have different power domains.
+v2:
+For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
+and update the commit message.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/arm/boot/dts/ste-dbx5x0.dtsi | 73 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 71 insertions(+), 2 deletions(-)
+For patch #2, define the magic value for OCP register 0xa424.
 
-diff --git a/arch/arm/boot/dts/ste-dbx5x0.dtsi b/arch/arm/boot/dts/ste-dbx5x0.dtsi
-index fead7afd5517..c34ccde04600 100644
---- a/arch/arm/boot/dts/ste-dbx5x0.dtsi
-+++ b/arch/arm/boot/dts/ste-dbx5x0.dtsi
-@@ -110,6 +110,74 @@ soc {
- 		interrupt-parent = <&intc>;
- 		ranges;
- 
-+		/*
-+		 * 640KB ESRAM (embedded static random access memory), divided
-+		 * into 5 banks of 128 KB each. This is a fast memory usually
-+		 * used by different accelerators. We group these according to
-+		 * their power domains: ESRAM0 (always on) ESRAM 1+2 and
-+		 * ESRAM 3+4.
-+		 */
-+		sram@40000000 {
-+			/* The first (always on) ESRAM 0, 128 KB */
-+			compatible = "mmio-sram";
-+			reg = <0x40000000 0x20000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x40000000 0x20000>;
-+
-+			sram@0 {
-+				compatible = "stericsson,u8500-esram";
-+				reg = <0x0 0x10000>;
-+				pool;
-+			};
-+			lcpa: sram@10000 {
-+				/*
-+				 * This eSRAM is used by the DMA40 DMA controller
-+				 * for Logical Channel Paramers (LCP), the address
-+				 * where these parameters are stored is called "LCPA".
-+				 * This is addressed directly by the driver so no
-+				 * pool is used.
-+				 */
-+				compatible = "stericsson,u8500-esram";
-+				label = "DMA40-LCPA";
-+				reg = <0x10000 0x800>;
-+			};
-+			sram@10800 {
-+				compatible = "stericsson,u8500-esram";
-+				reg = <0x10800 0xf800>;
-+				pool;
-+			};
-+		};
-+		sram@40020000 {
-+			/* ESRAM 1+2, 256 KB */
-+			compatible = "mmio-sram";
-+			reg = <0x40020000 0x40000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x40020000 0x40000>;
-+		};
-+		sram@40060000 {
-+			/* ESRAM 3+4, 256 KB */
-+			compatible = "mmio-sram";
-+			reg = <0x40060000 0x40000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0x40060000 0x40000>;
-+
-+			lcla: sram@20000 {
-+				/*
-+				 * This eSRAM is used by the DMA40 DMA controller
-+				 * for Logical Channel Logical Addresses (LCLA), the address
-+				 * where these parameters are stored is called "LCLA".
-+				 * This is addressed directly by the driver so no
-+				 * pool is used.
-+				 */
-+				compatible = "stericsson,u8500-esram";
-+				label = "DMA40-LCLA";
-+				reg = <0x20000 0x2000>;
-+			};
-+		};
-+
- 		ptm@801ae000 {
- 			compatible = "arm,coresight-etm3x", "arm,primecell";
- 			reg = <0x801ae000 0x1000>;
-@@ -536,9 +604,10 @@ usb_per5@a03e0000 {
- 
- 		dma: dma-controller@801C0000 {
- 			compatible = "stericsson,db8500-dma40", "stericsson,dma40";
--			reg = <0x801C0000 0x1000 0x40010000 0x800>;
--			reg-names = "base", "lcpa";
-+			reg = <0x801C0000 0x1000>;
-+			reg-names = "base";
- 			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-+			sram = <&lcpa>, <&lcla>;
- 
- 			#dma-cells = <3>;
- 			memcpy-channels = <56 57 58 59 60>;
+v1:
+These patches are used to fix some issues of RTL8156.
+
+Hayes Wang (3):
+  r8152: fix flow control issue of RTL8156A
+  r8152: fix the poor throughput for 2.5G devices
+  r8152: move setting r8153b_rx_agg_chg_indicate()
+
+ drivers/net/usb/r8152.c | 84 ++++++++++++++++++++++++++++-------------
+ 1 file changed, 58 insertions(+), 26 deletions(-)
 
 -- 
 2.40.0
