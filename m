@@ -2,138 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387976F04E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357306F04E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243416AbjD0LWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S243419AbjD0LXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242993AbjD0LWW (ORCPT
+        with ESMTP id S242993AbjD0LXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:22:22 -0400
-X-Greylist: delayed 78173 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 04:22:21 PDT
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0500F4EE7
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:22:20 -0700 (PDT)
-Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MIxmm-1pXZ8b08oE-00KRYq; Thu, 27 Apr 2023 13:22:11 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Akira Shimahara <akira215corp@gmail.com>,
-        Ivan Zaentsev <ivan.zaentsev@wirenboard.ru>
-Cc:     Stefan Wahren <stefan.wahren@chargebyte.com>,
-        Michael Heimpold <mhei@heimpold.de>,
-        regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH RFC] w1: w1_therm: fix locking behavior in convert_t
-Date:   Thu, 27 Apr 2023 13:21:52 +0200
-Message-Id: <20230427112152.12313-1-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mXFTlYMEyuqMNvMKHHrdHh1Is3vTgLjW5BzKHiZ6Pep4b+X3AjJ
- 2edpqL1cXdA7MsjPPtYlUADuhzVrFsJIQjFnV+oZ697nN84lIO++nrKpmjpNJlWTlzDVkoK
- rDqvSLq5vmTdH21q0nQqanFHTNGiXhBvCce7F9FZPEutOG00PXqw3OV88WeTUebqYplNhPt
- YvKz1js7aryNscSsoS0mQ==
-UI-OutboundReport: notjunk:1;M01:P0:K1YwzZGSK34=;eXhRhPHJh04h1bzdxS3ffGL7HAp
- /ADBL6HW5GDQkCcjdcqgJvQYCs10zTCmegatxh/e7lvAGnPdBFHusYZQHMw1IxNrv5lZA26Jr
- koBfeWpL9Y2SKGvQ+FaYopJQnvlZhfJS1JmyAmp/t277gHpDQMel8EtReYWleBCswe8rDdnL5
- VLhIgjXFw1hhm/iWeQaF4AZoIBCaCTPBxpvXnJUMwO7PeCc3XL1uC8dv2nYa1BZs/dG6qqjds
- w828K6PBoRr3JUEUwbV+f1Cr7evP9o+DD/8nDkBsAz3uYzfv4/UlltrjYSnNH65wwBw4jJh+3
- a2xGJyQIlQ2ULEr1HIt64RlEIlRrRJ6DkoOSSdIMDe9uF2/INsgX3VxkqmiPZ+FiklSO5nICc
- IX+Ik0gZYDjWXgllStiN7Q4jIBfqbDR6gOMipbGnADUY+d2QVASvKXVkNujkYMleZCYpJNUNt
- 7ovQd2iPIuMAph2KIyD2qGioriZyGCumy0exAZmHwHleeaTxWO+wCdt0y74Zi2t50kYAuz/If
- 62UElpP9sjKL0bDE0SgbpOZAIJ6sa8IDlxZl2ysi1Hf93rNbx0JaPyjts2uNUGMETLQEF4NhC
- aokNkg3u2tiToTlRWzvWodF9AnJv1iZ+mlo70bQJTzdIYs11HYqLP0KsJMLAQqZeQftkkiaBa
- MKDaYepOmvaejFLX8fc7/wbyLVNc2gy3j4t/o8yWjw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 07:23:52 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A134C00;
+        Thu, 27 Apr 2023 04:23:50 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id D83BBC01F; Thu, 27 Apr 2023 13:23:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682594626; bh=jVXoVXg8/foIvtk1HSVTS9IFiWavdgfSZrmDFz15p/E=;
+        h=From:Subject:Date:To:Cc:From;
+        b=C7RcQrFkJ1fGRAgnpF7SCNbWDIC1DfcBggZwM+vR8fgkIlrJdfwJGYoufWtmscmi/
+         eGOQVOxJa9t3cYTnKDhBbpqx5kezB7/bjkFLj12AHSENuIOfkI7thwf/V2mc9gFfTA
+         mAah0+pshvxoCxKnAvX+eN8h+QDZZ95gGTv8d5EX9c2LghXdfSuNQiWD8MgYwJneVB
+         tNEUJH2njMBEVD7HfDR8Ol7kREiQ9RGAUDcX3lg4C8ArMTybO5GQpAxBm4uJenWxn7
+         58My583CGEuKTsZlTXPU5bi9+dLbfo5MeuCQpfckRYxokFrFB2M2Wx+wys2SLCNrbz
+         3QFZwz2HSF9yg==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 200E4C009;
+        Thu, 27 Apr 2023 13:23:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682594626; bh=jVXoVXg8/foIvtk1HSVTS9IFiWavdgfSZrmDFz15p/E=;
+        h=From:Subject:Date:To:Cc:From;
+        b=C7RcQrFkJ1fGRAgnpF7SCNbWDIC1DfcBggZwM+vR8fgkIlrJdfwJGYoufWtmscmi/
+         eGOQVOxJa9t3cYTnKDhBbpqx5kezB7/bjkFLj12AHSENuIOfkI7thwf/V2mc9gFfTA
+         mAah0+pshvxoCxKnAvX+eN8h+QDZZ95gGTv8d5EX9c2LghXdfSuNQiWD8MgYwJneVB
+         tNEUJH2njMBEVD7HfDR8Ol7kREiQ9RGAUDcX3lg4C8ArMTybO5GQpAxBm4uJenWxn7
+         58My583CGEuKTsZlTXPU5bi9+dLbfo5MeuCQpfckRYxokFrFB2M2Wx+wys2SLCNrbz
+         3QFZwz2HSF9yg==
+Received: from [127.0.0.2] (localhost [::1])
+        by odin.codewreck.org (OpenSMTPD) with ESMTP id 380c93ba;
+        Thu, 27 Apr 2023 11:23:38 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+Subject: [PATCH 0/5] Fix scan-build warnings
+Date:   Thu, 27 Apr 2023 20:23:33 +0900
+Message-Id: <20230427-scan-build-v1-0-efa05d65e2da@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADVbSmQC/x2NywrCQAwAf6XkbKDdro/6K+Ihm01tQFdJtAil/
+ +7W4zAMs4CLqTicmwVMZnV9lgrdrgGeqNwENVeG0Ia+jeGIzlQwffSeMZ+GyN1h5CHuoQaJXDA
+ ZFZ625EH+FtvEy2TU7/9yua7rD0ZScqp1AAAA
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     v9fs@lists.linux.dev, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Dominique Martinet <asmadeus@codewreck.org>
+X-Mailer: b4 0.13-dev-f371f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1398;
+ i=asmadeus@codewreck.org; h=from:subject:message-id;
+ bh=6PlNe9lfmPfOEWHqtma7PibG4siEPs36zdly+6bGUuk=;
+ b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkSls60h0DpmVzRXj0rpqWog9goutNMT7qXpg6E
+ XpD+qzkMy6JAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZEpbOgAKCRCrTpvsapjm
+ cPNyD/9Z+pd8kuYDrTSem3Amm2Dv49YbUsvjjp9jaR7c8KB2F9UIDgokCdaNp2YzBLkrHLdm8d/
+ VBMPRTgwRuuSF7AFBYIaTsnagjWhMs4tPI29G1AZwZc07GeyPK+LOAX/e12B2peGqQOW5VnbzW8
+ PbEvHwGXygdqMxqaSd63in8qefpsWPBzjChOMdvLNWpoIMRVjGcBhEh2P8bGBGHoTnHM+3dP6tn
+ +FuM8s9Io8b4R03wMbm08LO+5NaW+mF5W7HJy+P6R8UmbgMUCTmoN2GM5aY2LUK3hI8FctPyaOK
+ I0WgWne8r+rDeZk8t58pXzuKjb7b/0/XVLdWjndz/lg+ZxUWaZS+t144JqrtxIOyUusqyYEIRw9
+ ymLmjfk8rvIdQiFbMrDS9b6K1MNulvogMqkM3OqMNqpnf/ox8i7AdOdbThz4KMbOgVktGTRYQFt
+ p94DUtS8mqF7xoAdn6eiaHXh9IUos/rnbM7uhLyX/Wn/GT8hX6vfHG0zfQ+G9SvvYJSauUCIBm8
+ qa9tlTwOehX/3OiBOUHahEToLVY5tDlJUPWBsCZ5JsqhQdfMkDirn9SDSHX2U8Xa+lV3bmrUPh6
+ IDF5B3dfZ1ZRDQGwF9flc0F/gXkG6jJDHw+LVgTwhDZpGTbFCg85Bx16FDbMnhaRfb6iWDmCkoD
+ hbGHJMbH8VlmApw==
+X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
+ fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 67b392f7b8ed ("w1_therm: optimizing temperature read timings")
-accidentially inverted the logic for lock handling of the bus mutex.
+I ran scan-build very crudly on our source files, and there was at least
+one real bug so we might as well run it once in a while, in which case
+we probably ought to also fix the less important things hence this
+series.
+In here the first patch is a real fix and the rest is low priority, the
+last one is arguably not an improvement and can be discussed (happy to
+just move the 0-initializations around to variable declaration which
+would also silence scan-build afaict)
 
-Before:
-  pullup -> release lock before sleep
-  no pullup -> release lock after sleep
+Anyway, it can probably all wait until after this merge, sorry for the
+timing.
 
-After:
-  pullup -> release lock after sleep
-  no pullup -> release lock before sleep
-
-This cause spurious measurements of 85 degree (powerup value) on the
-Tarragon board with connected 1-w temperature sensor
-(w1_therm.w1_strong_pull=0).
-
-In the meantime a new feature for polling the conversion
-completion has been integrated in these branches with
-commit 021da53e65fd ("w1: w1_therm: Add sysfs entries to control
-conversion time and driver features"). But this feature isn't
-available for parasite power mode, so handle this separately.
-
-Link: https://lore.kernel.org/regressions/2023042645-attentive-amends-7b0b@gregkh/T/
-Fixes: 67b392f7b8ed ("w1_therm: optimizing temperature read timings")
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 ---
- drivers/w1/slaves/w1_therm.c | 31 ++++++++++++++-----------------
- 1 file changed, 14 insertions(+), 17 deletions(-)
+Dominique Martinet (5):
+      9p: fix ignored return value in v9fs_dir_release
+      9p: virtio: fix unlikely null pointer deref in handle_rerror
+      9p: virtio: make sure 'offs' is initialized in zc_request
+      9p: virtio: skip incrementing unused variable
+      9p: remove dead stores (variable set again without being read)
 
-diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
-index 067692626cf0..99c58bd9d2df 100644
---- a/drivers/w1/slaves/w1_therm.c
-+++ b/drivers/w1/slaves/w1_therm.c
-@@ -1159,29 +1159,26 @@ static int convert_t(struct w1_slave *sl, struct therm_info *info)
- 
- 			w1_write_8(dev_master, W1_CONVERT_TEMP);
- 
--			if (strong_pullup) { /*some device need pullup */
-+			if (SLAVE_FEATURES(sl) & W1_THERM_POLL_COMPLETION) {
-+				ret = w1_poll_completion(dev_master, W1_POLL_CONVERT_TEMP);
-+				if (ret) {
-+					dev_dbg(&sl->dev, "%s: Timeout\n", __func__);
-+					goto mt_unlock;
-+				}
-+				mutex_unlock(&dev_master->bus_mutex);
-+			} else if (!strong_pullup) { /*no device need pullup */
- 				sleep_rem = msleep_interruptible(t_conv);
- 				if (sleep_rem != 0) {
- 					ret = -EINTR;
- 					goto mt_unlock;
- 				}
- 				mutex_unlock(&dev_master->bus_mutex);
--			} else { /*no device need pullup */
--				if (SLAVE_FEATURES(sl) & W1_THERM_POLL_COMPLETION) {
--					ret = w1_poll_completion(dev_master, W1_POLL_CONVERT_TEMP);
--					if (ret) {
--						dev_dbg(&sl->dev, "%s: Timeout\n", __func__);
--						goto mt_unlock;
--					}
--					mutex_unlock(&dev_master->bus_mutex);
--				} else {
--					/* Fixed delay */
--					mutex_unlock(&dev_master->bus_mutex);
--					sleep_rem = msleep_interruptible(t_conv);
--					if (sleep_rem != 0) {
--						ret = -EINTR;
--						goto dec_refcnt;
--					}
-+			} else { /*some device need pullup */
-+				mutex_unlock(&dev_master->bus_mutex);
-+				sleep_rem = msleep_interruptible(t_conv);
-+				if (sleep_rem != 0) {
-+					ret = -EINTR;
-+					goto dec_refcnt;
- 				}
- 			}
- 			ret = read_scratchpad(sl, info);
+ fs/9p/vfs_dir.c        |  5 +++--
+ fs/9p/vfs_inode.c      |  6 ------
+ fs/9p/vfs_inode_dotl.c |  1 -
+ net/9p/client.c        | 46 ++++++++++++----------------------------------
+ net/9p/trans_virtio.c  |  8 ++++----
+ 5 files changed, 19 insertions(+), 47 deletions(-)
+---
+base-commit: 4eb3117888a923f6b9b1ad2dd093641c49a63ae5
+change-id: 20230427-scan-build-d894c16fc945
+
+Best regards,
 -- 
-2.34.1
+Dominique Martinet | Asmadeus
 
