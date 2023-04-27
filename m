@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18396EFE2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3101A6EFE2F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242819AbjD0AKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 20:10:30 -0400
+        id S242743AbjD0AKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 20:10:17 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242718AbjD0AKF (ORCPT
+        with ESMTP id S242704AbjD0AKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 20:10:05 -0400
+        Wed, 26 Apr 2023 20:10:03 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA5B3AB6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:10:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EEA3C0C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:10:01 -0700 (PDT)
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QGxEQx025323;
-        Thu, 27 Apr 2023 00:09:20 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QGxES2025338;
+        Thu, 27 Apr 2023 00:09:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2023-03-30;
- bh=HqaUuCd1TrikYSZqcmSr/0DHMDDKEbvkxeVBZQXF+4s=;
- b=ymokuz3wRntwI30/UPMDy8uxtvahfMueGv8Da1N3qrPtLBUqqTRtFtKbvokd96e5oZPc
- pGY+TCBPIuSXwvnuN1QwEW7r2+WpUN6T68bsCFTIQXhsaByghzHkSw63dHZAIArr8Zok
- vRy10JtQfeUPrT0F4r+cKjI4JYbseEZWXcPUr7KtYBgw5zozoWZePDLxldsjq0Z8Fbe5
- SJR+63Zf6mzrcGiBcfd8IT3o7crf+MDRZs6cwBzPEY7dvharmXfVNp0dVkumlGxD/XU6
- S108cMR7bmO/7+BFit4IaIqe96T4ktAHBuex20hQ1G56cNGPf/8/HB8tDXQFc3myQwQr Bw== 
+ bh=qCn/KjOTilZ1uLUD9nUQPCZhyulY7CLY6Ex38w3zacI=;
+ b=Bm/jAfF05hZ41Po/Sldj/OVZEgh4vornvAX3ywU3g0/yLbdoYbJMFOMTp7C5akCX3fcZ
+ +pInqqlhBeWA1j5TPNcZ+6iEF6gS/F5sq1lf/buPv1WXX5wsj5gKfhyz8y8F710gFQvy
+ q3dmGfVJQxHlYBNf/drz3+bPaSYVMM92CKhQlUQu4PKBx+edhfUxVnE93LXz0l2c3jod
+ c0Yhtsq4U5CR9dYfi1acKahr/PyUR0HznCt6VPM22Bm0p28plaj/4tvVXewIDniGtxfB
+ U6VxuygBOvSiOhVsBYRZQ4FOX7K5ngh3ZyBqGktoa1h2pAyzX/SDB/RijrDDl5gqc2tg Fw== 
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q46622ty4-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q46622ty5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 00:09:20 +0000
+        Thu, 27 Apr 2023 00:09:21 +0000
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QNV55B007557;
-        Thu, 27 Apr 2023 00:09:19 GMT
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QNUjaf007380;
+        Thu, 27 Apr 2023 00:09:21 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618mpjm-1
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618mpkr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 00:09:19 +0000
+        Thu, 27 Apr 2023 00:09:21 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33R0938g013888;
-        Thu, 27 Apr 2023 00:09:19 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33R0938i013888;
+        Thu, 27 Apr 2023 00:09:20 GMT
 Received: from ca-qasparc-x86-2.us.oracle.com (ca-qasparc-x86-2.us.oracle.com [10.147.24.103])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q4618mp42-11;
-        Thu, 27 Apr 2023 00:09:18 +0000
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q4618mp42-12;
+        Thu, 27 Apr 2023 00:09:20 +0000
 From:   Anthony Yznaga <anthony.yznaga@oracle.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
@@ -52,9 +52,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
         jason.zeng@intel.com, lei.l.li@intel.com,
         steven.sistare@oracle.com, fam.zheng@bytedance.com,
         mgalaxy@akamai.com, kexec@lists.infradead.org
-Subject: [RFC v3 10/21] PKRAM: prepare for adding preserved ranges to memblock reserved
-Date:   Wed, 26 Apr 2023 17:08:46 -0700
-Message-Id: <1682554137-13938-11-git-send-email-anthony.yznaga@oracle.com>
+Subject: [RFC v3 11/21] mm: PKRAM: reserve preserved memory at boot
+Date:   Wed, 26 Apr 2023 17:08:47 -0700
+Message-Id: <1682554137-13938-12-git-send-email-anthony.yznaga@oracle.com>
 X-Mailer: git-send-email 1.9.4
 In-Reply-To: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
 References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
@@ -65,8 +65,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 ph
  mlxlogscore=999 malwarescore=0 mlxscore=0 spamscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
  definitions=main-2304270000
-X-Proofpoint-ORIG-GUID: Pb7Yjfl5p58r9mry-DL31w9dKlO5igMJ
-X-Proofpoint-GUID: Pb7Yjfl5p58r9mry-DL31w9dKlO5igMJ
+X-Proofpoint-ORIG-GUID: ePrmjbJOEXsn1MF-WbF_e2bo2djCeESw
+X-Proofpoint-GUID: ePrmjbJOEXsn1MF-WbF_e2bo2djCeESw
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -77,277 +77,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling memblock_reserve() repeatedly to add preserved ranges is
-inefficient and risks clobbering preserved memory if the memblock
-reserved regions array must be resized.  Instead, calculate the size
-needed to accommodate the preserved ranges, find a suitable range for
-a new reserved regions array that does not overlap any preserved range,
-and populate it with a new, merged regions array.
+Keep preserved pages from being recycled during boot by adding them
+to the memblock reserved list during early boot. If memory reservation
+fails (e.g. a region has already been reserved), all preserved pages
+are dropped.
 
 Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 ---
- mm/pkram.c | 244 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 244 insertions(+)
+ arch/x86/kernel/setup.c |  3 ++
+ arch/x86/mm/init_64.c   |  2 ++
+ include/linux/pkram.h   |  8 +++++
+ mm/pkram.c              | 84 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 4 files changed, 92 insertions(+), 5 deletions(-)
 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index 16babff771bd..2806b21236d0 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -18,6 +18,7 @@
+ #include <linux/memblock.h>
+ #include <linux/panic_notifier.h>
+ #include <linux/pci.h>
++#include <linux/pkram.h>
+ #include <linux/root_dev.h>
+ #include <linux/hugetlb.h>
+ #include <linux/tboot.h>
+@@ -1221,6 +1222,8 @@ void __init setup_arch(char **cmdline_p)
+ 	initmem_init();
+ 	dma_contiguous_reserve(max_pfn_mapped << PAGE_SHIFT);
+ 
++	pkram_reserve();
++
+ 	if (boot_cpu_has(X86_FEATURE_GBPAGES))
+ 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
+ 
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index a190aae8ceaf..a46ffb434f39 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -34,6 +34,7 @@
+ #include <linux/gfp.h>
+ #include <linux/kcore.h>
+ #include <linux/bootmem_info.h>
++#include <linux/pkram.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/bios_ebda.h>
+@@ -1339,6 +1340,7 @@ void __init mem_init(void)
+ 	after_bootmem = 1;
+ 	x86_init.hyper.init_after_bootmem();
+ 
++	totalram_pages_add(pkram_reserved_pages);
+ 	/*
+ 	 * Must be done after boot memory is put on freelist, because here we
+ 	 * might set fields in deferred struct pages that have not yet been
+diff --git a/include/linux/pkram.h b/include/linux/pkram.h
+index b614e9059bba..53d5a1ec42ff 100644
+--- a/include/linux/pkram.h
++++ b/include/linux/pkram.h
+@@ -99,4 +99,12 @@ int pkram_prepare_save(struct pkram_stream *ps, const char *name,
+ ssize_t pkram_write(struct pkram_access *pa, const void *buf, size_t count);
+ size_t pkram_read(struct pkram_access *pa, void *buf, size_t count);
+ 
++#ifdef CONFIG_PKRAM
++extern unsigned long pkram_reserved_pages;
++void pkram_reserve(void);
++#else
++#define pkram_reserved_pages 0UL
++static inline void pkram_reserve(void) { }
++#endif
++
+ #endif /* _LINUX_PKRAM_H */
 diff --git a/mm/pkram.c b/mm/pkram.c
-index 3790e5180feb..c649504fa1fa 100644
+index c649504fa1fa..b711f94dbef4 100644
 --- a/mm/pkram.c
 +++ b/mm/pkram.c
-@@ -7,6 +7,7 @@
- #include <linux/kernel.h>
- #include <linux/kobject.h>
- #include <linux/list.h>
-+#include <linux/memblock.h>
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -1138,3 +1139,246 @@ static unsigned long pkram_populate_regions_list(void)
+@@ -134,6 +134,8 @@ extern void pkram_find_preserved(unsigned long start, unsigned long end, void *p
+ static LIST_HEAD(pkram_nodes);			/* linked through page::lru */
+ static DEFINE_MUTEX(pkram_mutex);		/* serializes open/close */
  
- 	return priv.nr_regions;
++unsigned long __initdata pkram_reserved_pages;
++
+ /*
+  * The PKRAM super block pfn, see above.
+  */
+@@ -143,6 +145,59 @@ static int __init parse_pkram_sb_pfn(char *arg)
  }
-+
-+struct pkram_region *pkram_first_region(struct pkram_super_block *sb,
-+					struct pkram_region_list **rlp, int *idx)
+ early_param("pkram", parse_pkram_sb_pfn);
+ 
++static void * __init pkram_map_meta(unsigned long pfn)
 +{
-+	WARN_ON(!sb);
-+	WARN_ON(!sb->region_list_pfn);
-+
-+	if (!sb || !sb->region_list_pfn)
-+		return NULL;
-+
-+	*rlp = pfn_to_kaddr(sb->region_list_pfn);
-+	*idx = 0;
-+
-+	return &(*rlp)->regions[0];
++	if (pfn >= max_low_pfn)
++		return ERR_PTR(-EINVAL);
++	return pfn_to_kaddr(pfn);
 +}
 +
-+struct pkram_region *pkram_next_region(struct pkram_region_list **rlp, int *idx)
-+{
-+	struct pkram_region_list *rl = *rlp;
-+	int i = *idx;
-+
-+	i++;
-+	if (i >= PKRAM_REGIONS_LIST_MAX) {
-+		if (!rl->next_pfn) {
-+			pr_err("PKRAM: %s: no more pkram_region_list pages\n", __func__);
-+			return NULL;
-+		}
-+		rl = pfn_to_kaddr(rl->next_pfn);
-+		*rlp = rl;
-+		i = 0;
-+	}
-+	*idx = i;
-+
-+	if (rl->regions[i].size == 0)
-+		return NULL;
-+
-+	return &rl->regions[i];
-+}
-+
-+struct pkram_region *pkram_first_region_topdown(struct pkram_super_block *sb,
-+						struct pkram_region_list **rlp, int *idx)
-+{
-+	struct pkram_region_list *rl;
-+
-+	WARN_ON(!sb);
-+	WARN_ON(!sb->region_list_pfn);
-+
-+	if (!sb || !sb->region_list_pfn)
-+		return NULL;
-+
-+	rl = pfn_to_kaddr(sb->region_list_pfn);
-+	if (!rl->prev_pfn) {
-+		WARN_ON(1);
-+		return NULL;
-+	}
-+	rl = pfn_to_kaddr(rl->prev_pfn);
-+
-+	*rlp = rl;
-+
-+	*idx = (sb->nr_regions - 1) % PKRAM_REGIONS_LIST_MAX;
-+
-+	return &rl->regions[*idx];
-+}
-+
-+struct pkram_region *pkram_next_region_topdown(struct pkram_region_list **rlp, int *idx)
-+{
-+	struct pkram_region_list *rl = *rlp;
-+	int i = *idx;
-+
-+	if (i == 0) {
-+		if (!rl->prev_pfn)
-+			return NULL;
-+		rl = pfn_to_kaddr(rl->prev_pfn);
-+		*rlp = rl;
-+		i = PKRAM_REGIONS_LIST_MAX - 1;
-+	} else
-+		i--;
-+
-+	*idx = i;
-+
-+	return &rl->regions[i];
-+}
-+
++int pkram_merge_with_reserved(void);
 +/*
-+ * Use the pkram regions list to allocate a block of memory that does
-+ * not overlap with preserved pages.
-+ */
-+phys_addr_t __init alloc_topdown(phys_addr_t size)
-+{
-+	phys_addr_t hole_start, hole_end, hole_size;
-+	struct pkram_region_list *rl;
-+	struct pkram_region *r;
-+	phys_addr_t addr = 0;
-+	int idx;
-+
-+	hole_end = memblock.current_limit;
-+	r = pkram_first_region_topdown(pkram_sb, &rl, &idx);
-+
-+	while (r) {
-+		hole_start = r->base + r->size;
-+		hole_size = hole_end - hole_start;
-+
-+		if (hole_size >= size) {
-+			addr = memblock_phys_alloc_range(size, PAGE_SIZE,
-+							hole_start, hole_end);
-+			if (addr)
-+				break;
-+		}
-+
-+		hole_end = r->base;
-+		r = pkram_next_region_topdown(&rl, &idx);
-+	}
-+
-+	if (!addr)
-+		addr = memblock_phys_alloc_range(size, PAGE_SIZE, 0, hole_end);
-+
-+	return addr;
-+}
-+
-+int __init pkram_create_merged_reserved(struct memblock_type *new)
-+{
-+	unsigned long cnt_a;
-+	unsigned long cnt_b;
-+	long i, j, k;
-+	struct memblock_region *r;
-+	struct memblock_region *rgn;
-+	struct pkram_region *pkr;
-+	struct pkram_region_list *rl;
-+	int idx;
-+	unsigned long total_size = 0;
-+	unsigned long nr_preserved = 0;
-+
-+	cnt_a = memblock.reserved.cnt;
-+	cnt_b = pkram_sb->nr_regions;
-+
-+	i = 0;
-+	j = 0;
-+	k = 0;
-+
-+	pkr = pkram_first_region(pkram_sb, &rl, &idx);
-+	if (!pkr)
-+		return -EINVAL;
-+	while (i < cnt_a && j < cnt_b && pkr) {
-+		r = &memblock.reserved.regions[i];
-+		rgn = &new->regions[k];
-+
-+		if (r->base + r->size <= pkr->base) {
-+			*rgn = *r;
-+			i++;
-+		} else if (pkr->base + pkr->size <= r->base) {
-+			rgn->base = pkr->base;
-+			rgn->size = pkr->size;
-+			memblock_set_region_node(rgn, MAX_NUMNODES);
-+
-+			nr_preserved +=  (rgn->size >> PAGE_SHIFT);
-+			pkr = pkram_next_region(&rl, &idx);
-+			j++;
-+		} else {
-+			pr_err("PKRAM: unexpected overlap:\n");
-+			pr_err("PKRAM: reserved: base=%pa,size=%pa,flags=0x%x\n", &r->base,
-+				&r->size, (int)r->flags);
-+			pr_err("PKRAM: pkram: base=%pa,size=%pa\n", &pkr->base, &pkr->size);
-+			return -EBUSY;
-+		}
-+		total_size += rgn->size;
-+		k++;
-+	}
-+
-+	while (i < cnt_a) {
-+		r = &memblock.reserved.regions[i];
-+		rgn = &new->regions[k];
-+
-+		*rgn = *r;
-+
-+		total_size += rgn->size;
-+		i++;
-+		k++;
-+	}
-+	while (j < cnt_b && pkr) {
-+		rgn = &new->regions[k];
-+		rgn->base = pkr->base;
-+		rgn->size = pkr->size;
-+		memblock_set_region_node(rgn, MAX_NUMNODES);
-+
-+		nr_preserved += (rgn->size >> PAGE_SHIFT);
-+		total_size += rgn->size;
-+		pkr = pkram_next_region(&rl, &idx);
-+		j++;
-+		k++;
-+	}
-+
-+	WARN_ON(cnt_a + cnt_b != k);
-+	new->cnt = cnt_a + cnt_b;
-+	new->total_size = total_size;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Reserve pages that belong to preserved memory.  This is accomplished by
-+ * merging the existing reserved ranges with the preserved ranges into
-+ * a new, sufficiently sized memblock reserved array.
++ * Reserve pages that belong to preserved memory.
 + *
 + * This function should be called at boot time as early as possible to prevent
 + * preserved memory from being recycled.
 + */
-+int __init pkram_merge_with_reserved(void)
++void __init pkram_reserve(void)
 +{
-+	struct memblock_type new;
-+	unsigned long new_max;
-+	phys_addr_t new_size;
-+	phys_addr_t addr;
-+	int err;
++	int err = 0;
 +
-+	/*
-+	 * Need space to insert one more range into memblock.reserved
-+	 * without memblock_double_array() being called.
-+	 */
-+	if (memblock.reserved.cnt == memblock.reserved.max) {
-+		WARN_ONCE(1, "PKRAM: no space for new memblock list\n");
-+		return -ENOMEM;
++	if (!pkram_sb_pfn)
++		return;
++
++	pr_info("PKRAM: Examining preserved memory...\n");
++
++	/* Verify that nothing else has reserved the pkram_sb page */
++	if (memblock_is_region_reserved(PFN_PHYS(pkram_sb_pfn), PAGE_SIZE)) {
++		err = -EBUSY;
++		goto out;
 +	}
 +
-+	new_max = memblock.reserved.max + pkram_sb->nr_regions;
-+	new_size = PAGE_ALIGN(sizeof(struct memblock_region) * new_max);
++	pkram_sb = pkram_map_meta(pkram_sb_pfn);
++	if (IS_ERR(pkram_sb)) {
++		err = PTR_ERR(pkram_sb);
++		goto out;
++	}
++	/* An empty pkram_sb is not an error */
++	if (!pkram_sb->node_pfn) {
++		pkram_sb = NULL;
++		goto done;
++	}
 +
-+	addr = alloc_topdown(new_size);
-+	if (!addr)
-+		return -ENOMEM;
++	err = pkram_merge_with_reserved();
++out:
++	if (err) {
++		pr_err("PKRAM: Reservation failed: %d\n", err);
++		WARN_ON(pkram_reserved_pages > 0);
++		pkram_sb = NULL;
++		return;
++	}
 +
-+	new.regions = __va(addr);
-+	new.max = new_max;
-+	err = pkram_create_merged_reserved(&new);
-+	if (err)
-+		return err;
-+
-+	memblock.reserved.cnt = new.cnt;
-+	memblock.reserved.max = new.max;
-+	memblock.reserved.total_size = new.total_size;
-+	memblock.reserved.regions = new.regions;
-+
-+	return 0;
++done:
++	pr_info("PKRAM: %lu pages reserved\n", pkram_reserved_pages);
 +}
++
+ static inline struct page *pkram_alloc_page(gfp_t gfp_mask)
+ {
+ 	struct page *page;
+@@ -162,6 +217,7 @@ static inline struct page *pkram_alloc_page(gfp_t gfp_mask)
+ 
+ static inline void pkram_free_page(void *addr)
+ {
++	__ClearPageReserved(virt_to_page(addr));
+ 	pkram_remove_identity_map(virt_to_page(addr));
+ 	free_page((unsigned long)addr);
+ }
+@@ -193,13 +249,23 @@ static void pkram_truncate_link(struct pkram_link *link)
+ {
+ 	struct page *page;
+ 	pkram_entry_t p;
+-	int i;
++	int i, j, order;
+ 
+ 	for (i = 0; i < PKRAM_LINK_ENTRIES_MAX; i++) {
+ 		p = link->entry[i];
+ 		if (!p)
+ 			continue;
++		order = p & PKRAM_ENTRY_ORDER_MASK;
++		if (order >= MAX_ORDER) {
++			pr_err("PKRAM: attempted truncate of invalid page\n");
++			return;
++		}
+ 		page = pfn_to_page(PHYS_PFN(p));
++		for (j = 0; j < (1 << order); j++) {
++			struct page *pg = page + j;
++
++			__ClearPageReserved(pg);
++		}
+ 		pkram_remove_identity_map(page);
+ 		put_page(page);
+ 	}
+@@ -680,7 +746,7 @@ static int __pkram_bytes_save_page(struct pkram_access *pa, struct page *page)
+ static struct page *__pkram_prep_load_page(pkram_entry_t p)
+ {
+ 	struct page *page;
+-	int order;
++	int i, order;
+ 	short flags;
+ 
+ 	flags = (p >> PKRAM_ENTRY_FLAGS_SHIFT) & PKRAM_ENTRY_FLAGS_MASK;
+@@ -690,9 +756,16 @@ static struct page *__pkram_prep_load_page(pkram_entry_t p)
+ 
+ 	page = pfn_to_page(PHYS_PFN(p));
+ 
+-	if (!page_ref_freeze(pg, 1)) {
+-		pr_err("PKRAM preserved page has unexpected inflated ref count\n");
+-		goto out_error;
++	for (i = 0; i < (1 << order); i++) {
++		struct page *pg = page + i;
++		int was_rsvd;
++
++		was_rsvd = PageReserved(pg);
++		__ClearPageReserved(pg);
++		if ((was_rsvd || i == 0) && !page_ref_freeze(pg, 1)) {
++			pr_err("PKRAM preserved page has unexpected inflated ref count\n");
++			goto out_error;
++		}
+ 	}
+ 
+ 	if (order) {
+@@ -1331,6 +1404,7 @@ int __init pkram_create_merged_reserved(struct memblock_type *new)
+ 	}
+ 
+ 	WARN_ON(cnt_a + cnt_b != k);
++	pkram_reserved_pages = nr_preserved;
+ 	new->cnt = cnt_a + cnt_b;
+ 	new->total_size = total_size;
+ 
 -- 
 1.9.4
 
