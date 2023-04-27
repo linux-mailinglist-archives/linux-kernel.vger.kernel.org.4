@@ -2,122 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10196F0345
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A456F034C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243215AbjD0JVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S242803AbjD0JV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjD0JVQ (ORCPT
+        with ESMTP id S243169AbjD0JVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:21:16 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD0EE5;
+        Thu, 27 Apr 2023 05:21:18 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2052.outbound.protection.outlook.com [40.107.21.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10395E1;
         Thu, 27 Apr 2023 02:21:14 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a6670671e3so68426785ad.0;
-        Thu, 27 Apr 2023 02:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682587274; x=1685179274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5uePqlkQGG6AitPdU1LbmX8G4vLuJCgYv5wvbw0sfE8=;
-        b=huKAdQhokLIOhHYEIUvNPnvAMpXk+ZX9ZwJtfBiMBKeA/QGLL8VyUTkasIpZpsNUMV
-         VvrQbXtBxFIloZGJFBGav/yf6JQHfj+2nXwpZIa/ORD4JuKu51FhOAtK1F9k3sP3Ruj5
-         OnN88L0fnG+47QDUb7hDBXi3sfYnEB5NYU6xykBlhFzq5saSJsG+qQJSFImlpjKG5RqK
-         ZJSU4O2YJqVtLCsBnF1JjkSdelb8dyOZGyVfl7TnmjFyEimYzQAMcYzav8731eBkFZM7
-         ww2EgxGqyxBzgqMTLozBLTFYrDMAIazEoNOjG+q14VJfr4blc5eKme+R5eSrS8qdq5M1
-         cZdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682587274; x=1685179274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5uePqlkQGG6AitPdU1LbmX8G4vLuJCgYv5wvbw0sfE8=;
-        b=ioz8MCcQWmnL4vdxsWx6dYny51LJHv+vvcpVl620rSxeILQxH3/lcfgBlV+nAuO2NW
-         CxeW8krDnnskoDIHz1v2io7Sb9raIz9ACZ9EkwcFLSIO5yI+30vs7+AkViHS422G8SHS
-         eIhKfHLrZR1t/KwOdXq2AHBuuQ/hThTR4YgV1ssdCvbbE0yfgY7rVDzZC5lWskCaF3K0
-         rm35lCuRkjl9FragptGWh6mFI3lEsUGuenUy6jrXuZ5wiL8fz4heU9gHBpPuWNdopzyr
-         ZgJwSk5MxYM7wiVuNFGnEQyIKEJrqgJB2FF3L5N13AcL6WVN1kqOrLwfjRmmXXWlK4Fo
-         QruA==
-X-Gm-Message-State: AC+VfDzB7Zu/EIyokGiZRTydeZyNN+HbjOsebd10Q1Lg3GOtzerQwGHz
-        QqZYk2fAh2jB9B7EeYhwj5c1ilWB96MvX7y3R+ZGukVVqwA=
-X-Google-Smtp-Source: ACHHUZ5sk9omXcS/1gUiy/cbZ1CnepPuNVKYPJaAtmR4NnzQRU685UJOfiBe7o+uMCJF2c4p7lcEzoTKBTZieTO8dMU=
-X-Received: by 2002:a17:903:228b:b0:1a6:6d9f:2fc9 with SMTP id
- b11-20020a170903228b00b001a66d9f2fc9mr973492plh.30.1682587274014; Thu, 27 Apr
- 2023 02:21:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kl1MG83E+/ztb877C9M4peV6Z+74H2m9SuXDUEyKec/AkYqSlt/WcdiWkEx2U5E7iIu2NdaQCv8dP0neWtC0OicpypKyrKZ7zSHCbRUQ703sHuLaejVpYZeE9v3avTONtTSi/Gb8U5Blygzp6UD+4hjJ7WFgaxUYg38YHbkU+nSK4D4SYtMcXS+fALXetFt4xX7ei3J9cqGllwwK8URb1+MBuc6jHg9eUN0xMZVwQ/cG55m//cFdpML8NBZ/G0y5xa3l5gD1O2BaKDHTwyaXAHH9UgDZlneKWCrLS8xCIRqCwTirtAg066RrabLaFMtEAvg4ZSyZuyTc/BpsgTDHrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Aa709c/UmayanBuSeO1Iej/NSVHz5VkdNLQg0e9iZLU=;
+ b=WCfntHqd1BOByj7TaSobNlXkcMxiTptLg+yMbHxlB662T3nprgBAR8xnxIfw39ahivIl9UlJs5DyJXY1lNoEzn7rc8yYp+9Sk7cW4y8FLlonYoJ6GQETj31hzx67Oz8nJy5LncQiDKB2QnyFDqYfxKghmGc0LkCB8XvQ43TUHl7WbKovGvUfw6OzXb425zWJCTZC44YeisAJNJrB/JV/ySMIUPeenT3bVxX6EKqNNkRSlDIFpR53i451gbzB+wn5EGXxeiEtDoFlYPgIUDEIkFbuJJVtQ9Fd48bv+anCc6shN35mzsMuX62NF0a9qAyVDopLrPkrQ7SrQaUPSPBa7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aa709c/UmayanBuSeO1Iej/NSVHz5VkdNLQg0e9iZLU=;
+ b=p5e8rDnw9u7FQnrjU8Emsb605yxCtGihZ8TJKzXGXtQFw+ZblKtjxQI+BrDIgNgJLNCv+vpQ2Pv3nOBeWWjuBcXyVPpdC0WG15rdqZhnfcUiMWWgnXjRubi2JuQQmQfGy8dAsZCZoToPZIBQCu6K+gjjdUbW7nhIjTHT+09pStghhXHHlCR7CNR3YN33732UboKu4O08+bb4808GPnUmtm6nAN8VF+chwA76A1/H+NrRamtVLedmyhdkM+ytYwQzHFrgrm9wIqGV7ydJ5ZdqEUGOZNIyRy+LT9OrGTMsXcZOwyByCMFbYmplXxe0B/gH6H/YwFntv3xd7ROFw9suoA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by PRAPR10MB7622.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:295::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.19; Thu, 27 Apr
+ 2023 09:21:11 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d9cd:f02a:9a74:b797]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d9cd:f02a:9a74:b797%4]) with mapi id 15.20.6340.022; Thu, 27 Apr 2023
+ 09:21:11 +0000
+Date:   Thu, 27 Apr 2023 11:21:06 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Simon Guinot <simon.guinot@sequanux.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Xing Tong Wu <xingtong.wu@siemens.com>
+Subject: Re: [PATCH 1/1] gpio-f7188x: fix pin count on nct6116d bank 7
+Message-ID: <20230427112106.697dd352@md1za8fc.ad001.siemens.net>
+In-Reply-To: <ZEoydXMDRONgbhY8@76cbfcf04d45>
+References: <20230425153911.32135-1-henning.schild@siemens.com>
+        <20230425153911.32135-2-henning.schild@siemens.com>
+        <ZEoydXMDRONgbhY8@76cbfcf04d45>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0121.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::8) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
-References: <CAABZP2xJRGhPmfB-PrfesQKzP7fsuZsj+3TewAiLLW8u=YK4dg@mail.gmail.com>
- <87cz3tylwx.fsf@mail.concordia> <CAABZP2zr=jypD7w_o18o95QEj1nkFugLcNH5sbuSAY-caBQoeQ@mail.gmail.com>
- <CAABZP2xVCQhizytn4H9Co7OU3UCSb_qNJaOszOawUFpeo=qpWQ@mail.gmail.com> <87v8hixbql.fsf@mail.concordia>
-In-Reply-To: <87v8hixbql.fsf@mail.concordia>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Thu, 27 Apr 2023 17:21:02 +0800
-Message-ID: <CAABZP2z=xu+07-y5fqFLidZz1VpSgrSwXa1mFHPb=b3Ezr3OtA@mail.gmail.com>
-Subject: Re: BUG : PowerPC RCU: torture test failed with __stack_chk_fail
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, lance@osuosl.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|PRAPR10MB7622:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d71c220-0f82-4edc-6684-08db4700bd7d
+X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XYHhg3NWgNmzNxjeB992oLqO35IOadJ9sGqPyJkd817nFaNCYaDZNnSzCQJaF6DokYgK4UbcIZxbiAycETW8fE536dvCxdjblHbsQs+x93ZQS9f1WjOCEi/kLEYwjmluFRHiNN2pCApcoEo4DXjgzWZVtoYww8730o3ArR4gQ2YrGe4itGMxKqLXAYPXXZUVxuGaSUxXripqEyddzW7CqS9ZeZ172ereI1ytPR/gibxDrcjRAMYu5Cr7XiU6/QOBTCtGgQQP1Iinp/kqwmfO6kACyez6JKgAfFft6EPLK1qirIIH77XoC/arjnVXI/3NA+DVbRotZ1qDxl3GxJxabA1r13GUfPMhUawFRtuF/wCjpNVlydbtdJgcQn7JMLqk2ni4eeygAGEql0fO0zhSCVF29L9L6gIYHMUiFkCa2Pct2l1Cu05VQAVDD22jYgBT8vSNeMpyMGnFWk/zHt0QNnu8e6t1yYpsK/pySFh91Wq7DCMJHyRb/jUNJT0Cs4D9+geANzg+Rg3yLeJ25RYGDz//9JeuFk2Xqjb6lEgpPWHmPUC6zriaADqwPzLvGYis
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199021)(5660300002)(41300700001)(6486002)(8936002)(8676002)(83380400001)(26005)(86362001)(1076003)(9686003)(6506007)(107886003)(6512007)(82960400001)(186003)(38100700002)(66476007)(6916009)(478600001)(4326008)(316002)(54906003)(6666004)(66946007)(66556008)(2906002)(44832011)(66899021);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PJ/8KYyHJonlv3TOp2YltjwZ85qshsNWgw9zKL54eZ7kCffqh7Km2IhwfS56?=
+ =?us-ascii?Q?DuH2Gkq/HFteURAeVrc1RXiOIwDNjK4kfNovPz9HYtZq48ZxLOexQ5Au8zix?=
+ =?us-ascii?Q?KgsnHVe8A8K/a8NwF+lFpvwAN7FOoVu3ywLYeclJvamPKlFFfADjcz0i4KiH?=
+ =?us-ascii?Q?AAswXl87Aow+dOLESi4SqjliIFECvpNZlOhYtHnlXDL75xU8AdbHz9Wg/5Wt?=
+ =?us-ascii?Q?gtRsVOZf2BG8Wu4RwbmUqaylyPfHgM3hzP3iEWdFhfEMFtW6kg9sZhq9d9Uu?=
+ =?us-ascii?Q?NV74gZynYQo2wYS2SeD2zbtqoCImMdGxrome6FLf4Swzii8X5HerA9vkGwL3?=
+ =?us-ascii?Q?Ir+iZd0nc5vZad8kPOqDKAYy88j6A7dNAjiLVII72xSYyyq+BcGcuVyHQbp4?=
+ =?us-ascii?Q?NQzzzU2Qoe2lDvJLuvjDhwwUyPycG28aoY5zFD9r/2bXlr6OsrWWueA98opE?=
+ =?us-ascii?Q?mGmpQmBj2THmwisuuFtulbykYlmTu3cYA2gsc14EMeUsJjvrZb1VGVP9O94u?=
+ =?us-ascii?Q?OWYZbby4ybL0wy26gyRR4QTB59ZXiZY76bkHWRB5qs2INhja+Ns7/o/WthQn?=
+ =?us-ascii?Q?AFlDVSK8wQUDUwbNQzMN3z1s1DslEaaN9uZ+DgwKMTjPrOchXWVOt9pAiXHl?=
+ =?us-ascii?Q?dQIDkcREVH3isRkTyKFEoJgOQCFq7HQqDgxoTebzVg+c5sEGXJ4AZuabhPyI?=
+ =?us-ascii?Q?fhbSLET6oMDNi0M4o434T008HzHKdYoQgkuj2Vvsp13Mrph64//3N2/QgxQw?=
+ =?us-ascii?Q?HuHj8PnrMWQx/3OJWJXD0hYViRDJtNu7678rn2a90Qtt4vAmY8mdb5a+1ZKJ?=
+ =?us-ascii?Q?uIhs8YcIMAJ7jHsQq67w7Tw48OuC43irTXyWSIHYofOQNLsRWxbGbl/+cSiq?=
+ =?us-ascii?Q?uN2tkY8UIsaV4W704ElGX1aXfTYhmk4AgBm2I4z9vS3Eph5Ba9aSRZBx4Vuw?=
+ =?us-ascii?Q?mcXRdCXelBU310KGyyffTki3P2/GVg0TRt5CT2c+FovWZgiIiJaVBJPLASYl?=
+ =?us-ascii?Q?OMCwUf4xln91kIOzKqxaRqXQfWU/0T7tpBjqaSQHAUSYHk6gPRckK1jrYLT6?=
+ =?us-ascii?Q?OK1YJK0rNOvsspKvLtQjF1hu7lEqiUaXTwVhld8OTNm403cFjUNf5D7FU9Ve?=
+ =?us-ascii?Q?oeK8BneqXaLJAwFK79Vo3+0kI9qMqCk1bC3/cr2X4wbtUB9PpNr/cD6264WD?=
+ =?us-ascii?Q?txNHnb1tnTqDhozVHM9hj6PfF7e76PtQkdtG+Z13B3l5jzjukAsQHqAKLh0y?=
+ =?us-ascii?Q?m2er4em0jGUn1fBPCiHkemrwzuWjcabVXj6KZNXe10jOrWZ8uMst23ZkSYWS?=
+ =?us-ascii?Q?Eu8GRA/KkJjzJ7U1Y89gncmH4ylGTJLIBoHwNi72v0Vj+nloBIYIP2Y+klNO?=
+ =?us-ascii?Q?IBBgq5xIZkOpsoURipX3gwJEDFOyfv9ljYI/EzWsSbBjiutZT0TKuRbxrspd?=
+ =?us-ascii?Q?fzU4Mf/gkE6BxX9Zqx4cMUY/p9dV7uF/42QhgtUhxh+e1A8RJ1hnAG8oFsTI?=
+ =?us-ascii?Q?eHzKu6hLYMnnetwm9Z+i4DWcZDe2FKGWJj8gscS6XWXhhxSCN4KtQdqWjOW7?=
+ =?us-ascii?Q?l0qFW6M4+Dpt2j9phBEGOwutPCPg67zaNIz2vwMTmm2/PrKWIbEg9bvME5Wn?=
+ =?us-ascii?Q?YA=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d71c220-0f82-4edc-6684-08db4700bd7d
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 09:21:11.1439
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JijGIgdgTaXT0xZP3i44srVcQiKzH4z0PVFV5NcW6hft6URVWkdyXTwqpl3JS2IKuzgxsb2DJ7xcB0OoxHRR8ALsibNP5YfnYkIWBz5YWeo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PRAPR10MB7622
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 11:09=E2=80=AFAM Michael Ellerman <mpe@ellerman.id.=
-au> wrote:
->
-> Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
-> > On Tue, Apr 25, 2023 at 2:01=E2=80=AFPM Zhouyi Zhou <zhouzhouyi@gmail.c=
-om> wrote:
-> >> On Tue, Apr 25, 2023 at 6:07=E2=80=AFAM Michael Ellerman <mpe@ellerman=
-.id.au> wrote:
-> ...
-> >> >
-> >> > There's 12.2.0 here:
-> >> >   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_=
-64/12.2.0/
-> >> >   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ppc6=
-4le/12.2.0/
->
-> > powerpc64le-linux-gnu-gcc-12 cross compiler on my Ubuntu 22.04 does
-> > not seem to have that issue as gcc-10 does
->
-> OK. So so far it's only that GCC 10 that shows the problem.
->
-> If you have time, you could use some of the other versions to narrow
-> down which versions show the bug:
->
->   https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ppc64le/
->
-> There's an 11.0, 11.1 and 11.3 there, as well as 9.5 and so on.
-GCC test results (Tested on PPC VM of Open Source Lab of Oregon State
-University)
-gcc 9.4 (ubuntu native):          positive, show bug
-gcc 9.5 (download form [1]):   positive, show bug
-gcc 10.1 (download from [1]): positive, show bug
-gcc 10.3 (download from [1]): positive, show bug
-gcc 10.4 (download from [1]): positive, show bug
+Am Thu, 27 Apr 2023 10:29:41 +0200
+schrieb Simon Guinot <simon.guinot@sequanux.org>:
 
-gcc 11.0 (download from [1]): negative, no bug
-gcc 11.1 (download from [1]): negative, no bug
-gcc 11.3 (download from [1]): negative, no bug
-gcc 12.1 (download from [1]): negative, no bug
-gcc 12.2 (download from [1]): negative, no bug
+> On Tue, Apr 25, 2023 at 05:39:11PM +0200, Henning Schild wrote:
+> > The count was wrong because i looked at the wrong spec for the chip
+> > in question. I now got access to the spec for that very chip and
+> > group7 has all 8 pins, just like the other groups.  
+> 
+> Did you use the NCT6102D / NCT6106D datasheet in a first place ?
 
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/ppc64le/
+I do not remember which one, but one of the few one could find online.
+Now i have datasheets for two chips directly from the vendor, both
+files not publicly available and i am afraid i can not share.
 
-I am very happy to cooperate if there is further need ;-)
-Cheers
-Zhouyi
->
-> There's
+> If the only difference with NCT6116D is the number of pins on port
+> GPIO-7, then maybe we should handle it and claim support for this
+> models as well ?
+
+Please hold this patch back until i confirm again. It might be that i
+got the model name wrong as well and might have to fix some strings. I
+basically started my journey with a preliminary driver i got from
+Nuvoton, which maybe made me think i was looking at a NCT6116D while i
+was not.
+
+At least that is what the chip IDs from the specs seem to strongly
+suggest.
+
+I am sorry for the confusion and will try to clean that up.
+
+Now having access to some of those specs, i can offer to add more
+variants without testing. Such support would be in patches on top, not
+subject to fixing what we have in stable already. But i would only do
+this on demand and have a weird feeling about it, the code might be
+trivial but i have no means of testing.
+
+Henning
+
+> Simon
+>  
+> > 
+> > Fixes: d0918a84aff0 ("gpio-f7188x: Add GPIO support for Nuvoton
+> > NCT6116") Reported-by: Xing Tong Wu <xingtong.wu@siemens.com>
+> > Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> > ---
+> >  drivers/gpio/gpio-f7188x.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
+> > index 9effa7769bef..05c0edc4778f 100644
+> > --- a/drivers/gpio/gpio-f7188x.c
+> > +++ b/drivers/gpio/gpio-f7188x.c
+> > @@ -282,7 +282,7 @@ static struct f7188x_gpio_bank
+> > nct6116d_gpio_bank[] = { F7188X_GPIO_BANK(40, 8, 0xF0, DRVNAME
+> > "-4"), F7188X_GPIO_BANK(50, 8, 0xF4, DRVNAME "-5"),
+> >  	F7188X_GPIO_BANK(60, 8, 0xF8, DRVNAME "-6"),
+> > -	F7188X_GPIO_BANK(70, 1, 0xFC, DRVNAME "-7"),
+> > +	F7188X_GPIO_BANK(70, 8, 0xFC, DRVNAME "-7"),
+> >  };
+> >  
+> >  static int f7188x_gpio_get_direction(struct gpio_chip *chip,
+> > unsigned offset) -- 
+> > 2.39.2  
+
