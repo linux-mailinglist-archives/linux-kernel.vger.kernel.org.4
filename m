@@ -2,96 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBE26F0ED6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E58B6F0EE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344392AbjD0XQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S1344316AbjD0X3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344179AbjD0XQS (ORCPT
+        with ESMTP id S229869AbjD0X3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:16:18 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154ED2701;
-        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54f9b37c634so112328087b3.2;
-        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682637377; x=1685229377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
-        b=gjHN8YelBpsoiAqUzc4CL4MWJqhS6Jdye5Gd4OKpOLBYPxYCEnw4PyrwrVtN5tJd4C
-         vNywh+vFVW/Sxm4t8Pm0wgLaVZbT1SFuhlkAjfnIRMuSTDllEp39spv0qP+cTAFQM06n
-         JJ5lGuKz1I6YFpvjAsiEQV/OH4D1WHc9l/nLRCl2+QIizbEWk4amnXGctNG+5e5gi/E+
-         A0neO7GHsSase8Vfx2zrBxJQgWxeyNHFvKGAb7y8TlC87sEJQRwCPXUuIfzcvUlZO3fV
-         kV96cmTLs8G7vz9VbdtLotc/AA378cJUhTMAWhVO2Ciq01jQZYqq0jhiNYOYlrYsxclH
-         Zjkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682637377; x=1685229377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
-        b=MBDki3/hcAAjZDZGSzGGzfJNp+7I+0+VC+bSOC3M4dWhJp042Y09XN3GpxvBGYyJRe
-         yhloYMKc54WjW/fyOx/5bepbpZLWRse0hhV5Uo8qfJb2HKoDbeJtdFNWnlzQKHk+CV2X
-         OhURGSfe52QoMKxlqmpfyM3JaWfCRoA99WffOhp9uAMWqksKsrS3IfgXEfZpS/0vmeJv
-         kx0d0xcGZ+VrMvQBVOF4T2pvhmA4b0o7NcQRXwdm5BC20ThRoOYfXr/d+OGz6eN3psQI
-         tHiODG0cY24JBRLB2ZWOWHE3SONRnDabOdcwgSNA3jwBxaayXqx3LE0t4jvv7pFLjg4p
-         DfBw==
-X-Gm-Message-State: AC+VfDyj5iVlI/GyiP7+OYNMX3OerfDzZNYRlkjtFzr45WCCfUBpRZAP
-        ekGGNlRyTu9v9y/L7ZUwuNfnisPAjhoEU3quKJ8=
-X-Google-Smtp-Source: ACHHUZ4WO1LJTTgQo9Y82F8sUVKEwnGwETAY5RAvp1c5jQLhZ9s9sPxvB3CTr5pWPyMa0/gwbDNqldVKoq65NmbOi1w=
-X-Received: by 2002:a0d:dd88:0:b0:54b:fe8c:350 with SMTP id
- g130-20020a0ddd88000000b0054bfe8c0350mr2556618ywe.19.1682637377262; Thu, 27
- Apr 2023 16:16:17 -0700 (PDT)
+        Thu, 27 Apr 2023 19:29:30 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264A5272E;
+        Thu, 27 Apr 2023 16:29:28 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RMwcL6004359;
+        Thu, 27 Apr 2023 23:29:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=5kEkzm/Fdi8JwRfvv0vFfyC8vMN37mDp9oao13+HLu0=;
+ b=FzeII4UQUZkdJneEBzae56WquO1X97Jg2Pskgl4WDBx1rrTL6wl3eDjX+LDiUuOVCC79
+ Sm2S9Stqo7eFpHyImYgvq/jqM99hvu+nUJxDSleCvSSe4cDMm60fsHD1VAflMXeh0kWG
+ KEtZ07lVUZiPFHStSj0LQcHR34zDeyQln5KH6ArxWsfX8nmCPah3BNw0aN/QpmW/U2UD
+ 3njtVQ7/fXesM+lYefciLXDCdR0OZ0PgfIRbIdTOlgrBr1yzSRi7vwb5OePzCgdD4Y72
+ psci9qzI994734+glg2iTgiO6CBECW5Njg9ICNdTFssVCCygN5YuHBCKMtUaBicU+PhW Uw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7xdy8ecw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 23:29:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RNTMLN024187
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 23:29:22 GMT
+Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 27 Apr 2023 16:29:21 -0700
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
+        <swboyd@chromium.org>, <dianders@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/msm/dp: add module parameter for PSR
+Date:   Thu, 27 Apr 2023 16:28:47 -0700
+Message-ID: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230426184420.99945-1-samsagax@gmail.com> <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
-In-Reply-To: <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
-From:   Joaquin Aramendia <samsagax@gmail.com>
-Date:   Thu, 27 Apr 2023 20:16:05 -0300
-Message-ID: <CABgtM3i+HZJDearvBK-sBrWnfqdrsuNCDYfxASC3QVsn8rAy-Q@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WmEtTQI4ibO6GxJNkOb8YIrrAFMG5Zhv
+X-Proofpoint-ORIG-GUID: WmEtTQI4ibO6GxJNkOb8YIrrAFMG5Zhv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270207
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Guenter and thanks for your quick review.
+On sc7280 where eDP is the primary display, PSR is causing
+IGT breakage even for basic test cases like kms_atomic and
+kms_atomic_transition. Most often the issue starts with below
+stack so providing that as reference
 
-> Please run checkpatch --strict on your patches. Never mind, I'll apply th=
-e
-> patch anyway - I see the other entries are the same.
-I've run it before on the other patches... did something change in the
-checkpatch?
-Nevermid, After this one I may submit a patch to fix all styling in one go
+Call trace:
+ dpu_encoder_assign_crtc+0x64/0x6c
+ dpu_crtc_enable+0x188/0x204
+ drm_atomic_helper_commit_modeset_enables+0xc0/0x274
+ msm_atomic_commit_tail+0x1a8/0x68c
+ commit_tail+0xb0/0x160
+ drm_atomic_helper_commit+0x11c/0x124
+ drm_atomic_commit+0xb0/0xdc
+ drm_atomic_connector_commit_dpms+0xf4/0x110
+ drm_mode_obj_set_property_ioctl+0x16c/0x3b0
+ drm_connector_property_set_ioctl+0x4c/0x74
+ drm_ioctl_kernel+0xec/0x15c
+ drm_ioctl+0x264/0x408
+ __arm64_sys_ioctl+0x9c/0xd4
+ invoke_syscall+0x4c/0x110
+ el0_svc_common+0x94/0xfc
+ do_el0_svc+0x3c/0xb0
+ el0_svc+0x2c/0x7c
+ el0t_64_sync_handler+0x48/0x114
+ el0t_64_sync+0x190/0x194
+---[ end trace 0000000000000000 ]---
+[drm-dp] dp_ctrl_push_idle: PUSH_IDLE pattern timedout
 
-> That makes me have a closer look at the code. What is the purpose of the
-> odd typecast anyway ? Why not just
->         .driver_data =3D (void *)aya_neo_2,
-> and
->         board =3D (enum oxp_board)dmi_entry->driver_data;
-> ?
-I don't know why but the compiler would complain with the casting from
-enum to void*.
-Found out that explicitly casting the enum literal before casting it
-to void* works and
-the compiler stopped complaining so I went with it.
+Other basic use-cases still seem to work fine hence add a
+a module parameter to allow toggling psr enable/disable till
+PSR related issues are hashed out with IGT.
 
-As a follow up question, since this driver has become more AYANEO than
-OXP since its inception,
- wouldn't  it be better to change the description?
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Joaqu=C3=ADn Aramend=C3=ADa
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 628b0e248db6..dba43167de66 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -28,6 +28,10 @@
+ #include "dp_audio.h"
+ #include "dp_debug.h"
+ 
++static bool psr_enabled = false;
++module_param(psr_enabled, bool, 0);
++MODULE_PARM_DESC(psr_enabled, "enable PSR for eDP and DP displays");
++
+ #define HPD_STRING_SIZE 30
+ 
+ enum {
+@@ -407,7 +411,7 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
+ 
+ 	edid = dp->panel->edid;
+ 
+-	dp->dp_display.psr_supported = dp->panel->psr_cap.version;
++	dp->dp_display.psr_supported = dp->panel->psr_cap.version && psr_enabled;
+ 
+ 	dp->audio_supported = drm_detect_monitor_audio(edid);
+ 	dp_panel_handle_sink_request(dp->panel);
+-- 
+2.40.1
+
