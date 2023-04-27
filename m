@@ -2,256 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC266F0187
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91FC6F018D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243028AbjD0HUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 03:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
+        id S242946AbjD0HVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 03:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243201AbjD0HTo (ORCPT
+        with ESMTP id S243093AbjD0HU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 03:19:44 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD4355B7;
-        Thu, 27 Apr 2023 00:18:55 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4efec123b28so6125706e87.1;
-        Thu, 27 Apr 2023 00:18:55 -0700 (PDT)
+        Thu, 27 Apr 2023 03:20:58 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1B8269F;
+        Thu, 27 Apr 2023 00:20:25 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-54fbee69fc4so93007537b3.1;
+        Thu, 27 Apr 2023 00:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682579882; x=1685171882;
+        d=gmail.com; s=20221208; t=1682580009; x=1685172009;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gf2k/tWWnz3zZRH7LzlPM+0OmYCFMnQ1Cd9RSWhky9o=;
-        b=b4L3+D+iGRsHHP/qc0hjCEf6iBrXOxTP0EvCSs8J9CciIdPZrvW86jZd3wudSvOYvF
-         0sp0CkMI4rBxh+PGWdhqygI7VSrmVr8YepdcTrPHzcSeqZo8ISYDxRZ2j7AjIq3OntyA
-         tvC7szGRu67JDU0PwOpitCPL2Ewh3T3zWsgKeTTR80vbs4+tChgJz6PwPmUIoq/qAR5i
-         9yiJZFuxifiAo36FWW3v+JpOjrjNkjCR8oyc7y1OAp/9ALJd1Pi7d0xcYNh25p0Y3/w4
-         MsET8nY2+KODWsj6/xbxWWKQHyv1XAhfvaGnycZRN3+Y6oaSlk99S+yev4j2EogVTu/C
-         sS6A==
+        bh=bzhMDOKc0/Bb4J3yE81nbwK8K9U+SfTK1yAzEB+SVpc=;
+        b=nlaphVcn1IMWdNgpe4560zpAUKd0OZPqIA8zFNBzqNJEjcWHNTryCQHpQgdNCmLyUa
+         NfjvuCTCNQhjXhPphYmnnBaMXSRWiOtfpgaXWdGvn+pfmcnRyTp667egk/l9f0Qej7dV
+         AmFVreDzh0jHKKRc+HVH59YwB+3T49dpd7znNmHur/EipCXTULigi9cARC+65TCVqBSR
+         zxrv7q4pY4su1lePaLuHc0acCXW47oB7wxnSS/uVkpWhl8fjoCwuPpeu2dvRnEon5et9
+         OOVGXADVcUb1Nci0I/3HM/YT7MYLJwcsJG+GtfPcjKjoqBO8D/OfB+Um+jvqcNGGEZQu
+         QyjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682579882; x=1685171882;
+        d=1e100.net; s=20221208; t=1682580009; x=1685172009;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gf2k/tWWnz3zZRH7LzlPM+0OmYCFMnQ1Cd9RSWhky9o=;
-        b=I8weV68CRrWjq4IU54cIYdKM1/IBHQJ1vA7xp55EeCnOMtTgqv7iE5G+Mto/vvW6Gj
-         uBCc0YrbQgcZwn1RjWL/3TprPUHl6hupNgsIyOzGGrrQ9h1f0rXSFSdHy6oZ52OyxW/t
-         QtVOdfWO7uXf1KtlHczPJI6+ruLZ0WQGmyeYNX+gTTd4KEn3FvGV5J0Jx7XSqAXpHsyR
-         wSm/mCtsOoRYXnnd/Ovzc5koPvKZ87v4FMFgR78URipONpwict+E8VK4TxlHKyhueR7D
-         tO21OTfOEeLzKNZ9BgQjpDq1VWeHPuqoNosI3x5U4COesMN+VtYNhAiaqAfsAFaBdjKZ
-         B2uw==
-X-Gm-Message-State: AC+VfDwthpmviAU8l94WbXkqIDXp29/4JXeu34Qdeq8aiZU323riZFsy
-        /EqTo446dHhs8wM15ihHLQ/ijFcQBtv/lKU0+Q==
-X-Google-Smtp-Source: ACHHUZ56wpukJCKWGYD6esmxs8PrAGKvKOBhWwv8HUk1zBd1N3MBIj+/O8yHIi6ndUPlcu2ZXIZcI3DDF0Dx6e/1jJ8=
-X-Received: by 2002:a19:7618:0:b0:4ef:ed49:fcc2 with SMTP id
- c24-20020a197618000000b004efed49fcc2mr240725lff.26.1682579882115; Thu, 27 Apr
- 2023 00:18:02 -0700 (PDT)
+        bh=bzhMDOKc0/Bb4J3yE81nbwK8K9U+SfTK1yAzEB+SVpc=;
+        b=ik4WvhzogeElL+1rg15/V8oyTBAGmxYvAki2JTtsnrxgJWdVXOsrRaLaOizwEqCAMZ
+         mrQs9mue7k3Xfj0ZVkvSGFR4AuANUwKkFI6eBQS0KohT/trZf9ktnSiwu8ec8J+uhoTG
+         5vhBR5azTC76VjKjGRNzQhQ/75M0q+xaqC9VHIrmrRqxa9nJZFXbe+EhEEP80OquZuzB
+         IctxHNTixcLwSEhyi8XnmDd1Z7UIgh14eF8pevHRFVEPoZdWSZ7chxdjdrAFKTSbXG8e
+         tt7VU6WvuT6mPtUwuQ73OQC7uA9UFGzwzP3n9gXxY3K7SP0dnZYVErMzXuhW2rNqZ294
+         fuqQ==
+X-Gm-Message-State: AC+VfDzsCSNGBv+Jzm//pMwL1fe0mxwOZpss/6AcQrpPqF9FFsB+93s0
+        5F1JSZwBWnJla+hxugRyf/IlluLvvYUsZM0jHrrqyY6Y+Zo5Gbo0ODs=
+X-Google-Smtp-Source: ACHHUZ7zikdy7bi1Cn/YcwLvfLk7y6CcCIyyINOQOqxXuNkNK7fkUNboV9O5JjkA8m8fp0Zb2yabFzmQwOsspksUa1c=
+X-Received: by 2002:a81:6d57:0:b0:54f:b5bc:42d1 with SMTP id
+ i84-20020a816d57000000b0054fb5bc42d1mr482282ywc.47.1682580009530; Thu, 27 Apr
+ 2023 00:20:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1680083571.git.quic_nguyenb@quicinc.com> <56ff07e08dbaa6ca3db265c41fa8922a63797905.1680083571.git.quic_nguyenb@quicinc.com>
-In-Reply-To: <56ff07e08dbaa6ca3db265c41fa8922a63797905.1680083571.git.quic_nguyenb@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Thu, 27 Apr 2023 15:17:50 +0800
-Message-ID: <CAGaU9a9BUaWoKPk-7L6cE7D5c4dNuFbnG1jSaq8zR=P0m8z3Tw@mail.gmail.com>
-Subject: Re: [PATCH v1 5/5] ufs: core: Add error handling for MCQ mode
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Cc:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Po-Wen Kao <powen.kao@mediatek.com>, peter.wang@mediatek.com,
-        Alice Chao <alice.chao@mediatek.com>, naomi.chu@mediatek.com
+References: <20230426124948.1072216-1-zhanggenjian@kylinos.cn>
+ <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com> <17660b99-d68d-328e-5fe6-c011709fa3e4@infradead.org>
+In-Reply-To: <17660b99-d68d-328e-5fe6-c011709fa3e4@infradead.org>
+From:   genjian zhang <zhanggenjian123@gmail.com>
+Date:   Thu, 27 Apr 2023 15:18:56 +0800
+Message-ID: <CAOd03yRAmPULzi8fYTnukCpRPHa1Zsv5ZFFeQRcQ7B1abQCGqA@mail.gmail.com>
+Subject: Re: [PATCH] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     tsbogend@alpha.franken.de, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bao,
+On Thu, Apr 27, 2023 at 11:16=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
+>
+> Hi--
+>
+> >
+> > Maybe the readability of this modification is not very good. Any
+> > comments and suggestions are welcome. Thanks.
+>
+> Some of the patch description could use some cleaning up,
+> then I have a question.
+>
+>
+> On 4/26/23 06:02, genjian zhang wrote:
+> > On Wed, Apr 26, 2023 at 8:51=E2=80=AFPM Genjian <zhanggenjian123@gmail.=
+com> wrote:
+> >>
+> >> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+> >>
+> >> compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
+> >>
+> >> {standard input}: Assembler messages:
+> >> {standard input}:171: Error: found '(', expected: ')'
+> >> {standard input}:171: Error: found '(', expected: ')'
+> >> {standard input}:171: Error: non-constant expression in ".if" statemen=
+t
+> >> {standard input}:171: Error: junk at end of line, first unrecognized
+> >> character is `('
+> >>
+> >> Preprocessor expand ___SYNC () macros.However,'if' will be wrongly
+>
+>                 expands ___SYNC() macros. However, 'if' will be wrongly
+>
+> >> replaced by C code when PROFILE_ALL_BRANCHES is enabled and ___SYNC
+> >> is used in inline assembly.This leads to syntax errors in the code.
+>
+>                      assembly. This
+>
+> >> Compilers report a lot of errors like the above.
+> >> Move '.if' into quoted strings to fix it.
+> >>
+> >> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> >> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+> >> ---
+> >>  arch/mips/include/asm/sync.h | 8 +++++---
+> >>  1 file changed, 5 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync=
+.h
+> >> index aabd097933fe..d9f5a87424e7 100644
+> >> --- a/arch/mips/include/asm/sync.h
+> >> +++ b/arch/mips/include/asm/sync.h
+> >> @@ -175,7 +175,7 @@
+> >>   */
+> >>  #ifdef CONFIG_CPU_HAS_SYNC
+> >>  # define ____SYNC(_type, _reason, _else)                       \
+> >> -       .if     (( _type ) !=3D -1) && ( _reason );               \
+> >> +       ((_type) !=3D -1) && (_reason);                           \
+> >>         .set    push;                                           \
+> >>         .set    MIPS_ISA_LEVEL_RAW;                             \
+> >>         .rept   __SYNC_rpt(_type);                              \
+> >> @@ -192,13 +192,15 @@
+> >>  /*
+> >>   * Preprocessor magic to expand macros used as arguments before we in=
+sert them
+> >>   * into assembly code.
+> >> + * In addition,=E2=80=98if=E2=80=99 can not be substituted when CONFI=
+G_PROFILE_ALL_BRANCHES is
+>
+>      * In addition, 'if' cannot be
+>
+> >> + * enabled.
+> >>   */
+> >>  #ifdef __ASSEMBLY__
+> >>  # define ___SYNC(type, reason, else)                           \
+> >> -       ____SYNC(type, reason, else)
+> >> +       .if     ____SYNC(type, reason, else)
+> >>  #else
+> >>  # define ___SYNC(type, reason, else)                           \
+> >> -       __stringify(____SYNC(type, reason, else))
+> >> +       ".if"   __stringify(____SYNC(type, reason, else))
+> >>  #endif
+> >>
+> >>  #define __SYNC(type, reason)                                   \
+> >> --
+> >> 2.25.1
+>
+>
+> Is this problem that you are fixing being aggravated (caused) by
+> the #define of if() in include/linux/compiler.h when CONFIG_PROFILE_ALL_B=
+RANCHES
+> is set?  I suspect that it is.
 
-Bao D. Nguyen <quic_nguyenb@quicinc.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=882=
-9=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:14=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Add support for error handling for MCQ mode.
->
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> ---
->  drivers/ufs/core/ufshcd.c | 80 ++++++++++++++++++++++++++++++++++++++++-=
-------
->  1 file changed, 69 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index fef1907..e947f7f 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -3127,6 +3127,12 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba =
-*hba,
->                 err =3D -ETIMEDOUT;
->                 dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n=
-",
->                         __func__, lrbp->task_tag);
-> +
-> +               /* MCQ mode */
-> +               if (is_mcq_enabled(hba))
-> +                       return ufshcd_clear_cmds(hba, 1UL << lrbp->task_t=
-ag);
+ right .
 
-When a time-out occurs during the command-clearing process, it appears
-that the MCQ path does not properly clear 'hba->dev_cmd.complete'.
-This could result in a null pointer reference if the device command
-interrupt arrives at a later time.
-
-Could you please help check this?
-
-Thanks,
-Stanley Chu
-
-> +
-> +               /* SDB mode */
->                 if (ufshcd_clear_cmds(hba, 1UL << lrbp->task_tag) =3D=3D =
-0) {
->                         /* successfully cleared the command, retry if nee=
-ded */
->                         err =3D -EAGAIN;
-> @@ -5562,6 +5568,10 @@ static int ufshcd_poll(struct Scsi_Host *shost, un=
-signed int queue_num)
->   */
->  static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
->  {
-> +       struct ufshcd_lrb *lrbp;
-> +       u32 hwq_num, utag;
-> +       int tag;
-> +
->         /* Resetting interrupt aggregation counters first and reading the
->          * DOOR_BELL afterward allows us to handle all the completed requ=
-ests.
->          * In order to prevent other interrupts starvation the DB is read=
- once
-> @@ -5580,7 +5590,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struc=
-t ufs_hba *hba)
->          * Ignore the ufshcd_poll() return value and return IRQ_HANDLED s=
-ince we
->          * do not want polling to trigger spurious interrupt complaints.
->          */
-> -       ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
-> +       if (!is_mcq_enabled(hba)) {
-> +               ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT=
-);
-> +               goto out;
-> +       }
-> +
-> +       /* MCQ mode */
-> +       for (tag =3D 0; tag < hba->nutrs; tag++) {
-> +               lrbp =3D &hba->lrb[tag];
-> +               if (lrbp->cmd) {
-> +                       utag =3D blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->c=
-md));
-> +                       hwq_num =3D blk_mq_unique_tag_to_hwq(utag);
-> +                       ufshcd_poll(hba->host, hwq_num);
-> +               }
-> +       }
-> +
-> +out:
+> It wouldn't hurt to mention that (if I am correct).
 >
->         return IRQ_HANDLED;
->  }
-> @@ -6359,18 +6384,36 @@ static bool ufshcd_abort_all(struct ufs_hba *hba)
->         bool needs_reset =3D false;
->         int tag, ret;
->
-> -       /* Clear pending transfer requests */
-> -       for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs) {
-> -               ret =3D ufshcd_try_to_abort_task(hba, tag);
-> -               dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s\n", tag=
-,
-> -                       hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cmnd[0] : =
--1,
-> -                       ret ? "failed" : "succeeded");
-> -               if (ret) {
-> -                       needs_reset =3D true;
-> -                       goto out;
-> +       if (is_mcq_enabled(hba)) {
-> +               struct ufshcd_lrb *lrbp;
-> +               int tag;
-> +
-> +               for (tag =3D 0; tag < hba->nutrs; tag++) {
-> +                       lrbp =3D &hba->lrb[tag];
-> +                       if (lrbp->cmd) {
-> +                               ret =3D ufshcd_try_to_abort_task(hba, tag=
-);
-> +                               dev_err(hba->dev, "Aborting tag %d / CDB =
-%#02x %s\n", tag,
-> +                                       hba->lrb[tag].cmd ? hba->lrb[tag]=
-.cmd->cmnd[0] : -1,
-> +                                       ret ? "failed" : "succeeded");
-> +                       }
-> +                       if (ret) {
-> +                               needs_reset =3D true;
-> +                               goto out;
-> +                       }
-> +               }
-> +       } else {
-> +               /* Clear pending transfer requests */
-> +               for_each_set_bit(tag, &hba->outstanding_reqs, hba->nutrs)=
- {
-> +                       ret =3D ufshcd_try_to_abort_task(hba, tag);
-> +                       dev_err(hba->dev, "Aborting tag %d / CDB %#02x %s=
-\n", tag,
-> +                               hba->lrb[tag].cmd ? hba->lrb[tag].cmd->cm=
-nd[0] : -1,
-> +                               ret ? "failed" : "succeeded");
-> +                       if (ret) {
-> +                               needs_reset =3D true;
-> +                               goto out;
-> +                       }
->                 }
->         }
-> -
->         /* Clear pending task management requests */
->         for_each_set_bit(tag, &hba->outstanding_tasks, hba->nutmrs) {
->                 if (ufshcd_clear_tm_cmd(hba, tag)) {
-> @@ -7302,6 +7345,8 @@ static int ufshcd_eh_device_reset_handler(struct sc=
-si_cmnd *cmd)
->         unsigned long flags, pending_reqs =3D 0, not_cleared =3D 0;
->         struct Scsi_Host *host;
->         struct ufs_hba *hba;
-> +       struct ufs_hw_queue *hwq;
-> +       struct ufshcd_lrb *lrbp;
->         u32 pos;
->         int err;
->         u8 resp =3D 0xF, lun;
-> @@ -7317,6 +7362,19 @@ static int ufshcd_eh_device_reset_handler(struct s=
-csi_cmnd *cmd)
->                 goto out;
->         }
->
-> +       if (is_mcq_enabled(hba)) {
-> +               for (pos =3D 0; pos < hba->nutrs; pos++) {
-> +                       lrbp =3D &hba->lrb[pos];
-> +                       if (lrbp->cmd && lrbp->lun =3D=3D lun) {
-> +                               ufshcd_clear_cmds(hba, 1UL << pos);
-> +                               hwq =3D ufshcd_mcq_req_to_hwq(hba, scsi_c=
-md_to_rq(lrbp->cmd));
-> +                               ufshcd_mcq_poll_cqe_lock(hba, hwq);
-> +                       }
-> +               }
-> +               err =3D 0;
-> +               goto out;
-> +       }
-> +
->         /* clear the commands that were pending for corresponding LUN */
->         spin_lock_irqsave(&hba->outstanding_lock, flags);
->         for_each_set_bit(pos, &hba->outstanding_reqs, hba->nutrs)
+> Thanks.
 > --
-> 2.7.4
->
+> ~Randy
+
+Thank you for your suggestions. I will send a patch v2.
