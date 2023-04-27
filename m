@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CA86F0B12
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B7E6F0B15
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243861AbjD0Rkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
+        id S244436AbjD0Rkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244089AbjD0Rke (ORCPT
+        with ESMTP id S244281AbjD0Rkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:40:34 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56744423C;
-        Thu, 27 Apr 2023 10:40:08 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-546ee6030e5so4633488eaf.3;
-        Thu, 27 Apr 2023 10:40:08 -0700 (PDT)
+        Thu, 27 Apr 2023 13:40:42 -0400
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04187468F;
+        Thu, 27 Apr 2023 10:40:13 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1879e28ab04so7061787fac.2;
+        Thu, 27 Apr 2023 10:40:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682617161; x=1685209161;
+        d=1e100.net; s=20221208; t=1682617190; x=1685209190;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AD3fQdKaQFdku2aIFjpNovuQ9wn6Q2sNynbCaMLgODE=;
-        b=f1cKqGk4LMsllSHXvlXBbDerx2hThF5rV+jYj+N31H6fqYutdXmtnX0HivXfF6e5cw
-         pBmzHese6F+BIz9jmqrXbEo5qkwnX/cfzKGfLM9g36dqPCpfsIJN3WBM484xvAqa64qt
-         tyy0PbmvMNEZa2I/eRLWJImcCUEmiXkfcNAOy8QYIvwhddAUlThlAWJUxE04X05SpGqe
-         D4Zpys6735QhM336BUlZfZnAsBUks5M+tIImUsY3w53jrokPe//GpodSAs6Q69B1dHti
-         /8tcKkz/5i4vG2UHOJStF9ghTD4vGoufg0nGbuiAGexlZcGY8XDa7gVjUXwB/oOVWnCB
-         NXyg==
-X-Gm-Message-State: AC+VfDxeKWwO2tCP7A+7UARmiTe5D9FF8g4xPs1i7waRzFGpzo/WKRNP
-        iysJtO6J5koqH7BxTongC6v19dk35g==
-X-Google-Smtp-Source: ACHHUZ4503HyHI7UJ3zKQxVNIZ7VAtQFhpl7W6Stdj0s/zR4e0u8lGqIZxNeWBv5Zi0MxXJgKlORiQ==
-X-Received: by 2002:a4a:d896:0:b0:547:5725:7711 with SMTP id b22-20020a4ad896000000b0054757257711mr1407382oov.6.1682617161624;
-        Thu, 27 Apr 2023 10:39:21 -0700 (PDT)
+        bh=Mp/j3I3sONtLooZJ2ZhetrqGxDwLVuI0JCZmItKp+34=;
+        b=AILdVA+fnsujpIS56mIdazPXLoqXXO4nsk/9ubzXZdzID/55SZIplz4rbOcTD77/Oc
+         jsiMn1fsDgVJ5TeXJ4USij7gfF8nt7di2D9xofX2rGkK1lL0LXSMR8iM5nfRVLgjAKjb
+         kv73nKhZJ8XJFP+kJqd+TmbPDEpZ770BmpI+SXIoNf+es1T9LDTrrCmjGe61XEU8jw8b
+         +oNLVCyKrs3M29wCx2MFpWTKnrcz5QH+WBjGlovNWt6GzoZh865gF67Cti4QTaj3nkZ/
+         aqYR7W7mcN5zHGZOasxgMq5IHaXWNY81I0U/mHqvvsuCOk9SeGXfeiD5gXmAsQcC8W9b
+         N9dQ==
+X-Gm-Message-State: AC+VfDx2S0cCn+Uc1jySTWbYFQtdcSa7CIor01zri+mZy801cMReQsFE
+        FqB6JJHlF4SxL9pyqQddbB6RwGynUQ==
+X-Google-Smtp-Source: ACHHUZ5ZOl3xNe6CmiHnwhpZsA4e/G9yG2SqbFP7NvA7SwlRkqLC5OQxjafdjg1OZn3oT+MR2nkmPA==
+X-Received: by 2002:a05:6870:44c3:b0:18e:f8e9:a6a8 with SMTP id t3-20020a05687044c300b0018ef8e9a6a8mr1081422oai.38.1682617190082;
+        Thu, 27 Apr 2023 10:39:50 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 27-20020a4ae1bb000000b00541fbbbcd31sm6196058ooy.5.2023.04.27.10.39.20
+        by smtp.gmail.com with ESMTPSA id b6-20020a056830104600b0068bd922a244sm8317143otp.20.2023.04.27.10.39.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 10:39:21 -0700 (PDT)
-Received: (nullmailer pid 3209698 invoked by uid 1000);
-        Thu, 27 Apr 2023 17:39:20 -0000
-Date:   Thu, 27 Apr 2023 12:39:20 -0500
+        Thu, 27 Apr 2023 10:39:49 -0700 (PDT)
+Received: (nullmailer pid 3210298 invoked by uid 1000);
+        Thu, 27 Apr 2023 17:39:49 -0000
+Date:   Thu, 27 Apr 2023 12:39:49 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     conor@kernel.org, devicetree@vger.kernel.org, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org,
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v1] dt-bindings: riscv: explicitly mention assumption of
- Zicsr & Zifencei support
-Message-ID: <168261716012.3209643.3723944369525088026.robh@kernel.org>
-References: <20230427-fence-blurred-c92fb69d4137@wendy>
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/8] dt-bindings: dma: dma40: Prefer to pass sram
+ through phandle
+Message-ID: <168261718864.3210243.12337547291845541745.robh@kernel.org>
+References: <20230417-ux500-dma40-cleanup-v2-0-cdaa68a4b863@linaro.org>
+ <20230417-ux500-dma40-cleanup-v2-1-cdaa68a4b863@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230427-fence-blurred-c92fb69d4137@wendy>
+In-Reply-To: <20230417-ux500-dma40-cleanup-v2-1-cdaa68a4b863@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -68,29 +69,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 27 Apr 2023 11:43:42 +0100, Conor Dooley wrote:
-> The dt-binding was defined before the extraction of csr access and
-> fence.i into their own extensions, and thus the presence of the I
-> base extension implies Zicsr and Zifencei.
-> There's no harm in adding them obviously, but for backwards
-> compatibility with DTs that existed prior to that extraction, software
-> is unable to differentiate between "i" and "i_zicsr_zifencei" without
-> any further information.
+On Thu, 27 Apr 2023 14:09:56 +0200, Linus Walleij wrote:
+> Extend the DMA40 bindings so that we can pass two SRAM
+> segments as phandles instead of directly referring to the
+> memory address in the second reg cell. This enables more
+> granular control over the SRAM, and adds the optiona LCLA
+> SRAM segment as well.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Deprecate the old way of passing LCPA as a second reg cell,
+> make sram compulsory.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
-> CC: Conor Dooley <conor@kernel.org>
-> CC: Rob Herring <robh+dt@kernel.org>
-> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: linux-riscv@lists.infradead.org
-> CC: devicetree@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
+> ChangeLog v1->v2:
+> - Enumerate phandles using inner and outer maxItems as specified
+>   by Rob.
+> - Drop quotes around reference.
 > ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  .../devicetree/bindings/dma/stericsson,dma40.yaml  | 36 +++++++++++++++++-----
+>  1 file changed, 28 insertions(+), 8 deletions(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 
