@@ -2,168 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526B36F081D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9DF6F0821
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244060AbjD0PUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S243909AbjD0PVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243628AbjD0PUx (ORCPT
+        with ESMTP id S244156AbjD0PVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:20:53 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B664224
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:20:52 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-763537830d9so645262039f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:20:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682608851; x=1685200851;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ooUwgEV9UupcorTy+WLxLIX3nFusiETN6t9eu1Vflk=;
-        b=WPGxFQVIlZryB75mgKGoCEWBosk5DgpTYs+wXCK1k2udTECKMGSlrZsahofdhh3xrV
-         t7pp1m3rlSwMhtGeRXlAufhW9vvUM6kPuVSZgp+s4eSBcgJ4AEGgpT2Ecc9wx7/hFtV9
-         nrrdHXGlB5sGIXjeRJQZRGdiAmq0CryOipdptaCQjWPcwUWlXF5UWHpZzQ/fIHWXMa00
-         HjN+8DzlOTil0RfRkUXihkthSKV/Kj82nwPGLpZmdu4bPZ9o4mNpS/AI67xmE8Ri7HoZ
-         KoxU4rOsd1LGRytM2hu1Bd5v87G13471CQ5ZLml6KriE2Npwbm7nFCL+d5R1pUsK9E/8
-         8xGg==
-X-Gm-Message-State: AC+VfDxY1zIDEEHkmBunTh+bNAvH6SXy6oRKIKcHI4uOD41SKmjHrZYL
-        YrmEkSgbkQMWnsffPjnV6QHacLtSbfm7bv2uZl5MjrYcV+pI
-X-Google-Smtp-Source: ACHHUZ4OusLOTLQh/CMn6BfqiMedwdfCcJOMfbeIpQCq92jcqmD+8imXbrGag7V+JjlKONtt4i2o2n1RbVZ/raXQnryDzK7zJjsl
+        Thu, 27 Apr 2023 11:21:15 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2057.outbound.protection.outlook.com [40.107.104.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C5E46AE;
+        Thu, 27 Apr 2023 08:21:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MKUWlYUrp+BCvA2tFuLg4Yoff2Mzp6YKiy4HKzSHoOuju+j24pXvvT9TK8wJvqCMr3yXXcVYaAESiknCfFktCr/29Txw8RF6/wu6Ir4yK1P/lWGUnivYkSHyLVTMyV9Ni9rY21820x+3FGApHAujsFHNolxkMe/eo9Or07bGhckxxu1pnfOMhsIjwrpTXBGd/f9pkyH01KDs2glwx8IEn0T97lbT6XJEbReDFSRE+0PM4stXrAzCS5gV+3zTCRaHQu1LM74z998x7e56bsxShFTwN3rO4MoECFsS9YYTtDs5Cu7J1P10rt+bvU+6scPqn9b8VU6nkysmfAGfscZU/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0dwYpn2Z2butA1Uiew4PUrm2yy50DF4/E+u1RjesvAM=;
+ b=BI2dNWv5FrmkB53XiXXtU7s9QMLEp7sv/xspl6SE0OchLCnydS1ZfJmuZOd7FAGoguG/rCxNGv19HrvfsUI7rnLFPYOMPRZqtuLticVV3LdEplI5pKV61UvFYxNOyRZoYc6tonl8XAOLXsEL4fe6OFeC8beMkaag9d463QCGIFYJEPuZy5hcdhrXB+QMi7v6ErqA8FfltgOb+5AcEZa20s9WNmLpek1ao0EyQcec06/ORBEg3TcLF1mUD4H1ekDchCSZizWubbBF3My58VdYbzwedEB3dcAWDe53MGu5j1o3/MMLUEC4yFvPiySJ0z8O9huq2fa5+s+CeP/ajG22Uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.74) smtp.rcpttodomain=linaro.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0dwYpn2Z2butA1Uiew4PUrm2yy50DF4/E+u1RjesvAM=;
+ b=H+ht/6Vg9356XuLzyWVa/Hk8LcQIJhhgbWpvnGQXxqnzpoZBaLFTI8Q+l30SqLVrBkBei1u/HPbejdsCD/gM+xDr8XKZDYhQkHk11RvtLyi1o56Jw8IjbdgfMjs0+iuVKYoOlhpL+rD8guNfzTwGFU2Xl6zDH5oTT4Y/kLs1kp9XNW2IeK5Q3jDudbEInAMxNgW+74A4HrP0fTh5Zk4ETcqZoYSOYiK+1XqcrLnQqQBX7lATljvxATQFa68yeBHHvqYL65wD9lILdrvqBxk4bMSlN8NHRNSAQ6lOJweI5miipcXzSv7Tz4M/oy8305Rz5NWG27T8SG5zTyzB7/scNg==
+Received: from DUZPR01CA0170.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b3::28) by VI1PR10MB3694.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:135::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Thu, 27 Apr
+ 2023 15:21:08 +0000
+Received: from DB5EUR01FT096.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:4b3:cafe::dc) by DUZPR01CA0170.outlook.office365.com
+ (2603:10a6:10:4b3::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22 via Frontend
+ Transport; Thu, 27 Apr 2023 15:21:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.74)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.74 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.74; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.74) by
+ DB5EUR01FT096.mail.protection.outlook.com (10.152.5.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.22 via Frontend Transport; Thu, 27 Apr 2023 15:21:07 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VQA.ad011.siemens.net (194.138.21.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 27 Apr 2023 17:21:07 +0200
+Received: from md1za8fc.ad001.siemens.net (139.25.69.115) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 27 Apr 2023 17:21:06 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Simon Guinot <simon.guinot@sequanux.org>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH v2 0/1] fix pin count in gpio bank and chip name
+Date:   Thu, 27 Apr 2023 17:20:54 +0200
+Message-ID: <20230427152055.18380-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:114:b0:745:5e5c:f091 with SMTP id
- s20-20020a056602011400b007455e5cf091mr1345241iot.0.1682608851698; Thu, 27 Apr
- 2023 08:20:51 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 08:20:51 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e6cd7405fa52e6ad@google.com>
-Subject: [syzbot] [mm?] kernel BUG in folio_unlock
-From:   syzbot <syzbot+1b2ce6d050776f4403cf@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [139.25.69.115]
+X-ClientProxiedBy: DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT096:EE_|VI1PR10MB3694:EE_
+X-MS-Office365-Filtering-Correlation-Id: b44124cc-ea8a-44b1-3813-08db4733066b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8TFgVTeWg+eYBAqbhIVznDNrmMh/gogPhnN24Vv43JVbpx29XM1YRfqAXnemPMJC/popGgipGMabIZnWr6/TCkrYU1bztZQ1bMZi0D7+sQ83r6hJpkaEsra2zQQic21v2ybUt0P0/pr5s8n2xUv6GOlFyaqwN+XaTG+WGh94O9YAjioScctm7T1rGUKoJtDePm3dikXESPalFImbGNPE9wZzLTgPXLhrcyPt4oIPO5ai19cdn1c7iySW6YEYQFaTiHS5D4DXJ1tvMfzAi9eHt78x1l7xdn5KnaRdcUuQSCUlYmj3J/IMMQl8JfkA8R9D66hxL/0/CP+FQeG/B0tYXKT1epWy8kfe3ULbH1tW7yONq+jhYyryaLos3zONyPuCF6QOjJuzdhNg71Rnjcxqv3o4Nre1eGP/fT3tINfc5GkEXcDoxIIIl2uoN4DJ7spL5s7bWl1D1aLqcZmPKuVmyEepMu0gVVFuzCDd1ArFOXfeiFMpP7v4xS1rBRNQyMmvfhiIxM6uw0k7XhjvsjhKinKtJ3IlyWQ6KoqHqnVOA83i9SYpr4Dvhn7mC2NjZkpVW3p2WpzFM9DUBlSfnl6KFeBDFroAftN/vWZv/ICCrGe6JwDwTYrbravbrH2xLLN1TqxBrmFu0ME/IQkZbgeslqcBotUaGxAz6wxiklgJe10vlCkWSje3oD/aZTEgU76Bx66k4WeZjfhewypaaP4wyA==
+X-Forefront-Antispam-Report: CIP:194.138.21.74;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:hybrid.siemens.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(396003)(346002)(451199021)(36840700001)(46966006)(40470700004)(336012)(1076003)(956004)(2616005)(26005)(41300700001)(316002)(4326008)(70206006)(70586007)(40480700001)(7636003)(356005)(7596003)(107886003)(82960400001)(82740400003)(47076005)(83380400001)(36860700001)(16526019)(186003)(86362001)(82310400005)(40460700003)(36756003)(478600001)(110136005)(6666004)(5660300002)(4744005)(2906002)(15650500001)(54906003)(8676002)(8936002)(44832011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 15:21:07.9026
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b44124cc-ea8a-44b1-3813-08db4733066b
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.74];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT096.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3694
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+change to v1:
+ - rename the chip in the code
 
-syzbot found the following issue on:
+When first writing that code i looked at a spec that was only describing
+a similar chip. Now i have access to the specs and found that i got the
+name of the chip for my given chip id wrong, and also the pin count on
+the 7th bank.
 
-HEAD commit:    d3e1ee0e67e7 Add linux-next specific files for 20230421
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=110654a4280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=53c789efbcc06cf6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1b2ce6d050776f4403cf
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I added a "Fixes" in the hope that this can be backported as a bugfix.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Henning Schild (1):
+  gpio-f7188x: fix chip name and pin count on Nuvoton chip
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c558a9e1fe6a/disk-d3e1ee0e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2ec100a34c4c/vmlinux-d3e1ee0e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1afcd9936dc1/bzImage-d3e1ee0e.xz
+ drivers/gpio/Kconfig       |  2 +-
+ drivers/gpio/gpio-f7188x.c | 28 ++++++++++++++--------------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1b2ce6d050776f4403cf@syzkaller.appspotmail.com
+-- 
+2.39.2
 
- faultin_page mm/gup.c:925 [inline]
- __get_user_pages+0x614/0x10e0 mm/gup.c:1147
- populate_vma_page_range+0x2df/0x420 mm/gup.c:1543
- __mm_populate+0x105/0x3b0 mm/gup.c:1652
- mm_populate include/linux/mm.h:3191 [inline]
- vm_mmap_pgoff+0x2c6/0x3b0 mm/util.c:548
- ksys_mmap_pgoff+0x7d/0x5a0 mm/mmap.c:1440
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-------------[ cut here ]------------
-kernel BUG at mm/filemap.c:1529!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 7377 Comm: syz-executor.1 Not tainted 6.3.0-rc7-next-20230421-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:folio_unlock+0xb2/0xd0 mm/filemap.c:1529
-Code: e8 63 4b d4 ff 48 89 ef 31 f6 e8 f9 fc ff ff 5b 5d e9 52 4b d4 ff e8 4d 4b d4 ff 48 c7 c6 c0 a7 56 8a 48 89 ef e8 ee e0 0f 00 <0f> 0b 48 89 df e8 74 2a 27 00 e9 7c ff ff ff 66 66 2e 0f 1f 84 00
-RSP: 0018:ffffc9001531f7a8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88803c570000 RSI: ffffffff81af9a12 RDI: 0000000000000000
-RBP: ffffea0002128000 R08: 0000000000000001 R09: ffffffff8e796e17
-R10: fffffbfff1cf2dc2 R11: 0000000000000000 R12: ffffc9001531f8d8
-R13: ffffc9001531f8d0 R14: ffffc9001531f8d8 R15: 000000000000001e
-FS:  00007fe54afbc700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007eff0bb831b8 CR3: 0000000023ba2000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- collapse_file+0x1f6d/0x5db0 mm/khugepaged.c:2316
- hpage_collapse_scan_file+0xbef/0x1550 mm/khugepaged.c:2415
- madvise_collapse+0x53b/0xca0 mm/khugepaged.c:2877
- madvise_vma_behavior+0x649/0x20a0 mm/madvise.c:1074
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1248
- do_madvise.part.0+0x287/0x5e0 mm/madvise.c:1428
- do_madvise mm/madvise.c:1441 [inline]
- __do_sys_madvise mm/madvise.c:1441 [inline]
- __se_sys_madvise mm/madvise.c:1439 [inline]
- __x64_sys_madvise+0x117/0x150 mm/madvise.c:1439
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fe54c48c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fe54afbc168 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007fe54c5ac120 RCX: 00007fe54c48c169
-RDX: 0000000000000019 RSI: 000000000060005f RDI: 0000000020000000
-RBP: 00007fe54c4e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff8070a1ff R14: 00007fe54afbc300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:folio_unlock+0xb2/0xd0 mm/filemap.c:1529
-Code: e8 63 4b d4 ff 48 89 ef 31 f6 e8 f9 fc ff ff 5b 5d e9 52 4b d4 ff e8 4d 4b d4 ff 48 c7 c6 c0 a7 56 8a 48 89 ef e8 ee e0 0f 00 <0f> 0b 48 89 df e8 74 2a 27 00 e9 7c ff ff ff 66 66 2e 0f 1f 84 00
-RSP: 0018:ffffc9001531f7a8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88803c570000 RSI: ffffffff81af9a12 RDI: 0000000000000000
-RBP: ffffea0002128000 R08: 0000000000000001 R09: ffffffff8e796e17
-R10: fffffbfff1cf2dc2 R11: 0000000000000000 R12: ffffc9001531f8d8
-R13: ffffc9001531f8d0 R14: ffffc9001531f8d8 R15: 000000000000001e
-FS:  00007fe54afbc700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd2aa586058 CR3: 0000000023ba2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If you want to unassign a label, reply with:
-#syz unset some-label
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
