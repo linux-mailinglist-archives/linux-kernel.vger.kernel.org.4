@@ -2,305 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896F06F08A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CEF6F08AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244235AbjD0Prp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S244245AbjD0PsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244246AbjD0Prl (ORCPT
+        with ESMTP id S244059AbjD0PsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:47:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6999D30D5;
-        Thu, 27 Apr 2023 08:47:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682610459; x=1714146459;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=PUF8aPS0OKx4v6gIhz2D7a+SsHKjz/g9NG0aq4jVUtw=;
-  b=kmG2SjEuG8aIDu8z7cosbC2/dkMouUzvwObAVteDeq0mX9/ldfUDQUwI
-   1Rz/44SKqww9AmdAgIW/yILgC12pceLvWSV/bCBidt9h2hoHGT5+J7r6S
-   ylEsMcUL/rXaWmZUzBCmOsv8+U6i28FZxHMWMyEE2IzAkHieM6pFvPtNx
-   Etd/IhaD4aS6l2KCF5vYmtrP7kPjIPgdXG6fr/V5QWD1F3qnUPEZ49b77
-   8VhYdUtuEA3qYKJYuaMQalGUM84tkBKGeQkl2wLaRg9kKH+5SuaX8gBjj
-   mcfPjyg1RdOeP17cYM6vVfWfhgxPeHEBhe/hba2a9JrfV0uBDfw8CveV9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="327090070"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="327090070"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 08:47:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="671824584"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="671824584"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 27 Apr 2023 08:47:37 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 08:47:36 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 27 Apr 2023 08:47:36 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 27 Apr 2023 08:47:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A9XSmbjJYUE6YttOcntW6nterFKBMqQ1JyA7g7Zm8zjW/JiBbBoz5HO3IR1mPTiDwCPy9T0r2aUUvw7yy/LT5cYhd5hzNXipsp2nJxa3+XfPNNPqDAwCOU5u3Y+xwV3bofQg2b+A/Ywk8yFyn6SQ7q1NGaaUrCki0st2OgvFHBsXxgVffLc2KwXD2FBxqVal2IsgK8c1f7I8QnNVgWCmkJdBrjrAGtzyG1PsBvhJ9vlREW17hvyIRr89T8gQqb6DVuw2hkLq2X7ClWXu3a2C6Q/sRFXLM1s0gvuf8V/a6NvY128qoQ3xNH/N6LFPqaH+13eWgjY3BbSdDsWznf7chQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PUF8aPS0OKx4v6gIhz2D7a+SsHKjz/g9NG0aq4jVUtw=;
- b=nXpTzDtbpwK++P6Ht30Ke4ikThO2iSfWTndx+9LfbHRuT0eBmA/PYDw6gGTCQSLIZSwxqLECgpMxr8Y/56MnZhUUUJ/DyuWI6WO7DNsaEGuqxx8RB2cp/jqI1QWrwVlS/veUpWKCQ3QdutY5uWsoPst+gqoJoojITA57VKcTQKBjBriC7c3xCtnwVoVGYR28qmC5a2xJyhl5rSgm6STYt38ul+Tv5FBLEuOvyUWjF6rq26rlTyu9WolU5udRMTtoBD5EjCpl7yMGBUK39WoekZmZoIRowEDJq/Xm96fHUX9h9qnfl958+pJH1i6f06AdND+Fw1bveCbGfNuzECDE5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM8PR11MB5750.namprd11.prod.outlook.com (2603:10b6:8:11::17) by
- BL1PR11MB5287.namprd11.prod.outlook.com (2603:10b6:208:31b::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.22; Thu, 27 Apr 2023 15:47:33 +0000
-Received: from DM8PR11MB5750.namprd11.prod.outlook.com
- ([fe80::65f0:6a4e:8aac:3e3e]) by DM8PR11MB5750.namprd11.prod.outlook.com
- ([fe80::65f0:6a4e:8aac:3e3e%2]) with mapi id 15.20.6340.022; Thu, 27 Apr 2023
- 15:47:33 +0000
-From:   "Reshetova, Elena" <elena.reshetova@intel.com>
-To:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-CC:     Carlos Bilbao <carlos.bilbao@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
-        "michael.day@amd.com" <michael.day@amd.com>,
-        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
-        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
-        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
-        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "dinechin@redhat.com" <dinechin@redhat.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        "mst@redhat.com" <mst@redhat.com>, "tytso@mit.edu" <tytso@mit.edu>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "cdupontd@redhat.com" <cdupontd@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "sameo@rivosinc.com" <sameo@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "security@kernel.org" <security@kernel.org>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Dylan Reid <dylan@rivosinc.com>,
-        Ravi Sahita <ravi@rivosinc.com>
-Subject: RE: [PATCH] docs: security: Confidential computing intro and threat
- model
-Thread-Topic: [PATCH] docs: security: Confidential computing intro and threat
- model
-Thread-Index: AQHZYLcIL5h5EiW/WUeIdC3dxCgzQa88TIUAgAFu+xCAACeogIAAEHyAgAFTKpCAAA0uAIAAJMug
-Date:   Thu, 27 Apr 2023 15:47:33 +0000
-Message-ID: <DM8PR11MB57502E1C09CDE4842B7F9B30E76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
-References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
-         <ZEfrjtgGgm1lpadq@google.com>
-         <DM8PR11MB575046B6DAA17B41FFED8080E7659@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <7502e1af0615c08167076ff452fc69ebf316c730.camel@linux.ibm.com>
-         <ZElOfzn37kmesy7e@google.com>
-         <DM8PR11MB57509EBCB1E2146C1768A6EEE76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <efda0be02fb0b5bf23aec11b5398d20908a821ba.camel@linux.ibm.com>
-In-Reply-To: <efda0be02fb0b5bf23aec11b5398d20908a821ba.camel@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR11MB5750:EE_|BL1PR11MB5287:EE_
-x-ms-office365-filtering-correlation-id: dc9cc2f6-efce-4002-23f1-08db4736b75b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wIYhrVQEpYgY2yos0eAFCmQOQLhwfAXXvPx3xhB23oiYaZmDMSN2nfvuIirVIWlz8lfcViF5caTgLg+5UESnTvUDgEyCSm1n8XrBUyheLuJyXCLGmjO66Aw8m+tvRGu/Srxgt5cdgFQZEGhCmL2799pzX4l32GgkVjMqpWKx0JIdOxzCSlqxZyApWb/Eq+EHBqZmGI7V9hdBj9OarPD/dPJNxiuNU2K1EwC+8iqLnc/ppwbvldgaC9kly7lho2ssc+p90njNYQEKm1GbECzX21wk/8YpavvKxGqF+5XV0fvPccBrELdI5qn5XBd9GqVlbIOd0tClxPxz9DhgFBUPSRWN4JAiRWWW2UY8/rkCb/Dl5/jjTr9o521aqGv1HWZxMjq0r8i20wKiAa1eVzApmbQMJhIopD44x0B27ZTu4dxWSNcYUmZOXr1x42S0Fq0vNqFMGAgVklYmwyaR6TcjFlHCO/upNs2C8DfclUaQmhEdGiuN5UgxTNrRhTi0vrBBPjYT7MSqpMohXFAVacsE521ukxqC0HFOqrQDvyAQRBBLHRm4FrsCNh2PB4/jbjZDBmHZi3jFfACgIUMioOSbtULsHqBaXpS/qfg3oXendWmOvS46NtDet1XTGWTYvj6Q
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR11MB5750.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199021)(478600001)(86362001)(6506007)(9686003)(26005)(7696005)(55016003)(71200400001)(186003)(33656002)(2906002)(15650500001)(38070700005)(4326008)(64756008)(66476007)(66556008)(76116006)(66946007)(66446008)(316002)(38100700002)(41300700001)(122000001)(82960400001)(7416002)(7406005)(83380400001)(5660300002)(8676002)(52536014)(8936002)(54906003)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OXdZYTF1RHZVMk8xeEZlMUZTWTdsdEdhci8rQy9tSUUxTTVPRExIVWdrUTAz?=
- =?utf-8?B?cmVDclNVZWFBK0Y4SFcxNXBHMHVwcGJIWVF2V0RqRjV6WnZjQ1ZrMjFrVGRo?=
- =?utf-8?B?OFBEMFdURWh5UW95QzRnS0JwaWR1MkQrWm9mRzFiSlZLWnYvaDV1aDJBZWdB?=
- =?utf-8?B?cE9tQkRoUWlpS0JZSzFlc3FCanliTGx2VmpYYXZnMFJOYUNVVERNaGRYUW1y?=
- =?utf-8?B?NjM4UGhKRnpTV1kvZFRSSlRreWJOa0F1WXhqMEVYaktqQUlCdHc3d242b3lh?=
- =?utf-8?B?am9aN1BtZ0IrL0UxMW5STjBqd0F6Z1ViK2NzOVJwNjJHQTdXaDZlcGJRRmIx?=
- =?utf-8?B?M2FEazBlaWVMNzg1QzdsNzNTUllURVZJM1o0TDB1V0ViRGpSSW5FSThPT21C?=
- =?utf-8?B?Z2Y3aG1pdjUwSDNjdnpzM1ZqYTJUU0lsTzVrRk4vRGhYY1JzenhEUVVxeXJp?=
- =?utf-8?B?N29ESW44d2FmQnE3Wmh2SENhc0NobzJKdTNPWStJRmp4Ri90bkxEeE12RlJM?=
- =?utf-8?B?bk0yYVFCYms2KzZDQmhlYi9OZGl0K2dIYU5zYU9LWlRLL3p0M3g3bGtpeHZR?=
- =?utf-8?B?RmhBdlNLd1RYOXhmSC9hNUFhNU5FS0IvY0Rra2hpTDFJT1BnSmNVUEZMK1lx?=
- =?utf-8?B?MVNMTDdOTjFyd0oyQjVCNVQzVC9MT0U4ZWRabXNLVXZ5UERFZHpjRlJUNXpW?=
- =?utf-8?B?VzJlckhRbGttZ3EybEVHTW9LaDQ4MFMwYTlGM0VHb0tPZVZyT3pnRTZub0N4?=
- =?utf-8?B?bHc4R2JTYU9ZbDVRWStOM2Z2VFgvWTMvNkJLclNoSHZ2YWZINXI3TjdHZjdt?=
- =?utf-8?B?clVlRUk5bldkS1BYemZ1blYxaVpac1dmMkhvbk8xRjE3N05kMHJRb2VxQkYw?=
- =?utf-8?B?Vi9CQkptRUlsU1k0SlJJS0dQUTlsRENidGxodm1SZ0pzL3BOZWpjSG45Tmw4?=
- =?utf-8?B?bG85REFFbVFtZDZmZEVUUWk4alp4WnpnTjIxUGh4SXpKb2Jhd1ZNaHluTU9t?=
- =?utf-8?B?VXdxclZwUjVLaG9XQWp0bTZNSWJCRlRYbUhwSEszVERLSzNJbW9ZOC9tbWZu?=
- =?utf-8?B?NmNiZ2cxU1pHa0s1cmdldFE1NDVLSkZHQ1FnSHl5VDh4dUdQZGpDSmRpUzEr?=
- =?utf-8?B?QXJsdzVvaWRCc0ZCMGtweE9DZERheDJ0RStrNUxQZDM3UnZaVEx5c050anhs?=
- =?utf-8?B?bHRSM3JjNVd0MnRHdXZhYnV6YmNLZy91NVY5akFqYWp0c0hUQjE3UVFTU3pX?=
- =?utf-8?B?SDBQRFdFdW41SzJUWXc2Qy96SnZMWkxXQmt5NzdmVThxcjN5Z095MVZBYmV2?=
- =?utf-8?B?SUhXUFVnVmQ2VmIyVjFqQXY3bXNXQTFrTW1BVkZQTm03dlNleHJwUStwbUtH?=
- =?utf-8?B?SGJBM3NjVFFsQU13cjhTbFBpSGFXOXcwd2wxTjRTeW01dG44UEM0Y3k1QjYr?=
- =?utf-8?B?dk9aa0VNYVBWbkd1MURBRHp5a3pzTFc0Y2ZicXFpaVljS1BUSm40Y0ZZZzI3?=
- =?utf-8?B?MjdNVWFGanR0WXdkdnZSSE1vdEVjSGk5V2NJWmIrZDBNbGVCRm8rMjI2WTly?=
- =?utf-8?B?ek9MS1I3dE1lOHJJeWYvVHE1MU9mZDJadUFOWXlMZlJrQUs2S2VLSk1YZ3Bo?=
- =?utf-8?B?LzhKejc4QXd4NlFOcFRTT1FxdDFSblQvVExJakNaUXhpa0h2ZndqQktxN0Vh?=
- =?utf-8?B?eWhYdnJZamU2RXZ4ZXE2aTZCZTNHaWExNkxTMC9pejNSaG5DbkpvUTFWdkYx?=
- =?utf-8?B?SFdKWTcxWWk4ZlcweWVONHVKTnpjTWhTMFpmRnB3U3NId3J3MzQ4d3hqNTY4?=
- =?utf-8?B?MzRHYmZoRTgwekoxazVSVFMrNTdmZWVyQjZPZzRoVnBhRHRvZW9rS2tlV1RB?=
- =?utf-8?B?SWFSdjc0T0trOU9qOWpFT1dBa2dZbzluN0VoUE1OelIySFBHbHV1cDhOVVk3?=
- =?utf-8?B?NnoybmlrS1o4MHVkOEdLWUlTUTViSzBtUGVlUVFiUFZOT1Yxelo3SlFuYSt3?=
- =?utf-8?B?b2wzM0JCTzNzK3ljWU9nWFF0Z1NnMmNhMDA2NEtMZXZBVDdydEpVY01aSEs4?=
- =?utf-8?B?VjlraUVmbnJKWnI5VDBoQzdrRlJENlZRSk8rVnczTEh4WkNuaHgvTTF2YmUw?=
- =?utf-8?Q?/eX5JOlMoMci1hwZx2XV/PCxx?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 27 Apr 2023 11:48:19 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A73998
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:48:17 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5BC1C20139;
+        Thu, 27 Apr 2023 17:48:15 +0200 (CEST)
+Date:   Thu, 27 Apr 2023 17:48:14 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v2 07/13] drm/msm/dpu: Add SM6350 support
+Message-ID: <b3fajcbkfxqy4bxzjezrugbetpbjxdskarr3fhtn2unhqv2srj@y2o3wfd4v7dz>
+References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v2-7-5def73f50980@linaro.org>
+ <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR11MB5750.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc9cc2f6-efce-4002-23f1-08db4736b75b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Apr 2023 15:47:33.2589
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NLWhg+8S9OnmtEgCKvIEBDAPoPCwUUnwNxmxRwNd6Erj6pk8y2v6SlOv+96+fjDIiSM4Xh2DMgW9kB9fL77WplQmWtkTslx1SZ8wASaZkIA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5287
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gVGh1LCAyMDIzLTA0LTI3IGF0IDEyOjQzICswMDAwLCBSZXNoZXRvdmEsIEVsZW5h
-IHdyb3RlOg0KPiA+DQo+ID4gPiBPbiBXZWQsIEFwciAyNiwgMjAyMywgSmFtZXMgQm90dG9tbGV5
-IHdyb3RlOg0KPiA+ID4gPiBPbiBXZWQsIDIwMjMtMDQtMjYgYXQgMTM6MzIgKzAwMDAsIFJlc2hl
-dG92YSwgRWxlbmEgd3JvdGU6DQo+IFsuLi5dDQo+ID4gPiA+ID4gdGhlIHByYWN0aWNhbCBkZXBs
-b3ltZW50IGNhbiBkaWZmZXIgb2YgY291cnNlLiBXZSBjYW4gcmVwaHJhc2UNCj4gPiA+ID4gPiB0
-aGF0IGl0ICJhbGxvd3MgdG8gZXhjbHVkZSBhbGwgdGhlIENTUCdzIGluZnJhc3RydWN0dXJlIGFu
-ZCBTVw0KPiA+ID4gPiA+IG91dCBvZiB0ZW5hbnQncyBUQ0IuIg0KPiA+ID4gPg0KPiA+ID4gPiBU
-aGF0J3MgZ2V0dGluZyBldmVuIG1vcmUgaW5hY2N1cmF0ZS7CoCBUbyBydW7CoCBpbiBhIENsb3Vk
-IHdpdGgNCj4gPiA+ID4gQ29DbyB5b3UgdXN1YWxseSBoYXZlIHRvIGluc2VydCBzb21lIHByb3Zp
-ZGVkIGNvZGUsIGxpa2UgT1ZNRg0KPiA+ID4gPiBhbmQsIGZvciBBTUQsIHRoZSBTVlNNLsKgIFRo
-ZXNlIGFyZSBvZnRlbiBjdXN0b21pemVkIGJ5IHRoZSBDU1AgdG8NCj4gPiA+ID4gc3VpdCB0aGUg
-Y2xvdWQgaW5mcmFzdHJ1Y3R1cmUsIHNvIHlvdSdyZSBydW5uaW5nIHRoZWlyIGNvZGUuwqAgVGhl
-DQo+ID4gPiA+IGdvYWwsIEkgdGhpbmssIGlzIHRvIG1ha2Ugc3VyZSB5b3Ugb25seSBydW4gY29k
-ZSB5b3UgdHJ1c3QgKHNvbWUNCj4gPiA+ID4gb2Ygd2hpY2ggbWF5IGNvbWUgZnJvbSB0aGUgQ1NQ
-KSBpbiB5b3VyIFRDQiwgd2hpY2ggaXMgdmVyeQ0KPiA+ID4gPiBkaWZmZXJlbnQgZnJvbSB0aGUg
-c3RhdGVtZW50IGFib3ZlLg0KPiA+ID4NCj4gPiA+IFllcy7CoCBBbmQgdGFraW5nIHRoaW5ncyBh
-IHN0ZXAgZnVydGhlciwgaWYgd2Ugd2VyZSB0byBhc2sgc2VjdXJpdHkNCj4gPiA+IGNvbmNpb3Vz
-IHVzZXJzIHdoYXQgdGhleSB3b3VsZCBjaG9vc2UgdG8gaGF2ZSBpbiB0aGVpciBUQ0I6IChhKQ0K
-PiA+ID4gY2xvc2VkLXNvdXJjZSBmaXJtd2FyZSB3cml0dGVuIGJ5IGEgaGFyZHdhcmUgdmVuZG9y
-LCBvciAoYikgb3Blbi0NCj4gPiA+IHNvdXJjZSBzb2Z0d2FyZSB0aGF0IGlzIHByb3ZpZGVkIGJ5
-IENTUHMsIEkgYW0gYmV0dGluZyB0aGUNCj4gPiA+IG92ZXJ3aGVsbWluZyBtYWpvcml0eSB3b3Vs
-ZCBjaG9vc2UgKGIpLg0KPiA+DQo+ID4gQXMgSSBhbHJlYWR5IHJlcGxpZWQgaW4gbXkgZWFybGll
-ciBtZXNzYWdlIGZyb20geWVzdGVyZGF5LCB5ZXMsIHRoaXMNCj4gPiBpcyB0aGUgY2hvaWNlIHRo
-YXQgYW55b25lIGhhcyBhbmQgaXQgaXMgZnJlZSB0byBtYWtlIHRoaXMgY2hvaWNlLiBObw0KPiA+
-IHF1ZXN0aW9ucyBhc2tlZC4gKEJ0dywgcGxlYXNlIG5vdGUgdGhhdCB0aGUgYWJvdmUgc3RhdGVt
-ZW50IGlzIG5vdA0KPiA+IDEwMCUgYWNjdXJhdGUgc2luY2UgdGhlIHNvdXJjZSBjb2RlIGZvciBp
-bnRlbCBURFggbW9kdWxlIGlzIGF0IGxlYXN0DQo+ID4gcHVibGljKS4gSG93ZXZlciwgaWYgYXMg
-eW91IHNhaWQgdGhlIG1ham9yaXR5IGNob29zZSAoYiksIHdoeSBkbyB0aGV5DQo+ID4gbmVlZCB0
-byBlbmFibGUgdGhlIENvbmZpZGVudGlhbCBjbG91ZCBjb21wdXRpbmcgdGVjaG5vbG9naWVzIGxp
-a2UgVERYDQo+ID4gb3IgU0VWLVNOUD8gSWYgdGhleSBjaG9vc2UgKGIpLCB0aGVuIHRoZSB3aG9s
-ZSB0aHJlYXQgbW9kZWwgZGVzY3JpYmVkDQo+ID4gaW4gdGhpcyBkb2N1bWVudCBkbyBub3Qgc2lt
-cGx5IGFwcGx5IHRvIHRoZW0gYW5kIHRoZXkgY2FuIGZvcmdldA0KPiA+IGFib3V0IGFueXRoaW5n
-IHRoYXQgd2UgdHJ5IHRvIGRlc2NyaWJlIGhlcmUuDQo+IA0KPiBJIHRoaW5rIHRoZSBwcm9ibGVt
-IGlzIHRoYXQgdGhlIHRlbm9yIG9mIHRoZSBkb2N1bWVudCBpcyB0aGF0IHRoZSBDU1ANCj4gc2hv
-dWxkIGJlIHNlZW4gYXMgdGhlIGVuZW15IG9mIHRoZSB0ZW5hbnQuIA0KDQpXZSBkaWRu4oCZdCBp
-bnRlbmQgdGhpcyBpbnRlcnByZXRhdGlvbiBhbmQgaXQgY2FuIGJlIGNlcnRhaW5seSBiZSBmaXhl
-ZCBpZiANCnBlb3BsZSBzZWUgaXQgdGhpcyB3YXkuIA0KDQpXaGVyZWFzIGFsbCBDU1AncyB3YW50
-IHRvIGJlDQo+IHNlZW4gYXMgdGhlIHBhcnRuZXIgb2YgdGhlIHRlbmFudCAoYWRtaXR0ZWRseSBz
-byB0aGV5IGNhbiB1cHNlbGwNCj4gc2VydmljZXMpLiBJbiBwYXJ0aWN1bGFyLCBldmVuIGlmIHlv
-dSBhZG9wdCAoYikgdGhlcmUgYXJlIHNldmVyYWwNCj4gcmVhc29ucyB3aHkgeW91J2QgdXNlIGNv
-bmZpZGVudGlhbCBjb21wdXRpbmc6DQo+IA0KPiAgICAxLiBQcm90ZWN0aW9uIGZyb20gb3RoZXIg
-dGVuYW50cyB3aG8gYnJlYWsgY29udGFpbm1lbnQgaW4gdGhlIGNsb3VkLg0KPiAgICAgICBUaGVz
-ZSB0ZW5hbnRzIGNvdWxkIGV4ZmlsdHJhdGUgZGF0YSBmcm9tIE5vbi1Db0NvIFZNcywgYnV0IGxp
-a2VseQ0KPiAgICAgICB3b3VsZCBiZSBkZXRlY3RlZCBiZWZvcmUgdGhleSBoYWQgdGltZSB0byBs
-YXVuY2ggYW4gYXR0YWNrIHVzaW5nDQo+ICAgICAgIHZ1bG5lcmFiaWxpdGllcyBpbiB0aGUgY3Vy
-cmVudCBsaW51eCBkZXZpY2UgZHJpdmVycy4NCg0KTm90IHN1cmUgaG93IHRoaXMgImxpa2VseSB0
-byBiZSBkZXRlY3RlZCIgaXMgZ29pbmcgdG8gaGFwcGVuIGluIHByYWN0aWNlLiANCklmIHlvdSBo
-YXZlIGEga25vd24gdnVsbmVyYWJpbGl0eSBhZ2FpbnN0IGEgQ29DbyBWTSAobGV0IHNheSBpbiBh
-IGRldmljZQ0KZHJpdmVyIGludGVyZmFjZSBpdCBleHBvc2VzKSwgaXMgaXQgc28gbXVjaCBtb3Jl
-IGRpZmZpY3VsdCBmb3IgYW4gYXR0YWNrZXINCnRvIGJyZWFrIGludG8gQ29DbyBWTSB2cyBub24t
-Q29DbyBWTSBiZWZvcmUgaXQgaXMgZGV0ZWN0ZWQ/IA0KDQo+ICAgIDIuIExlZ2FsIGRhdGEgc2Vj
-dXJpdHkuIMKgVGhlcmUncyBhIGxvdCBvZiB2YWx1ZSBpbiBhIENTUCBiZWluZyBhYmxlDQo+ICAg
-ICAgIHRvIG1ha2UgdGhlIGxlZ2FsIHN0YXRlbWVudCB0aGF0IGl0IGRvZXMgbm90IGhhdmUgYWNj
-ZXNzIHRvIGENCj4gICAgICAgY3VzdG9tZXIgZGF0YSBiZWNhdXNlIG9mIENvQ28uDQoNCkxldCdz
-IGxlYXZlIGxlZ2FsIG91dCBvZiB0ZWNobmljYWwgZGlzY3Vzc2lvbiwgbm90IG15IGFyZWEuIA0K
-DQo+ICAgIDMuIEluc2lkZXIgdGhyZWF0cyAoYnJpYmUgYSBDU1AgYWRtaW4gZW1wbG95ZWUpLiDC
-oFRoaXMgb25lIG1pZ2h0IGdldA0KPiAgICAgICBhcyBmYXIgYXMgdHJ5aW5nIHRvIGxhdW5jaCBh
-biBhdHRhY2sgb24gYSBDb0NvIFZNLCBidXQgaGF2aW5nDQo+ICAgICAgIGNoZWNrcyBhdCB0aGUg
-Q1NQIHRvIGRldGVjdCBhbmQgZGVmZWF0IHRoaXMgd291bGQgd29yayBpbnN0ZWFkIG9mDQo+ICAg
-ICAgIGV2ZXJ5IGluc2lkZXIgdGhyZWF0IGhhdmluZyB0byBiZSBkZWZlYXRlZCBpbnNpZGUgdGhl
-IFZNLg0KDQpPaywgdGhpcyBhbmdsZSBtaWdodCBiZSB2YWxpZCBmcm9tIENTUCBwb2ludCBvZiB2
-aWV3LCBpLmUuIG5vdGljaW5nIHN1Y2gNCmluc2lkZXIgYXR0YWNrcyBtaWdodCBiZSBlYXNpZXIg
-SSBndWVzcyB3aXRoIENvQ28gVk1zLiANCg0KPiANCj4gSW4gYWxsIG9mIHRob3NlIGNhc2VzICh3
-aGljaCBhcmUgbm90IGV4aGF1c3RpdmUpIHlvdSBjYW4gcmVnYXJkIHRoZSBDU1ANCj4gYXMgYSBw
-YXJ0bmVyIG9mIHRoZSB0ZW5hbnQgd2hlbiBpdCBjb21lcyB0byBwcmV2ZW50aW5nIGFuZCBkZXRl
-Y3RpbmcNCj4gdGhyZWF0cyB0byB0aGUgQ29DbyBWTSwgc28gZXh0cmVtZSBkZXZpY2UgZHJpdmVy
-IGhhcmRlbmluZyBiZWNvbWVzIGZhcg0KPiBsZXNzIHJlbGV2YW50IHRvIHRoZXNlIGZhaXJseSBj
-b25zaWRlcmFibGUgdXNlIGNhc2VzLg0KDQpJIHRoaW5rIHRoZSBmaXJzdCBjYXNlIHN0aWxsIGhv
-bGRzLCBhcyB3ZWxsIGFzIG9uZSBjYXNlIHRoYXQgeW91IGhhdmUgbm90IGxpc3RlZDoNCmEgcmVt
-b3RlIGF0dGFja2VyIGF0dGFja2luZyBDU1Agc3RhY2sgdXNpbmcgc29tZSBkaXNjb3ZlcmVkIGFu
-ZCBub3QgeWV0IA0KZml4ZWQgdnVsbmVyYWJpbGl0eSAoc3RhY2sgaXMgYmlnLCBidWdzIGhhcHBl
-biksIGdldHRpbmcgY29udHJvbCBvZiBDU1Agc3RhY2sNCmFuZCB0aGVuIGdvaW5nIGFmdGVyIHRo
-ZSBDb0NvIFZNcyB0byBzZWUgd2hhdCBpdCBjYW4gZ2V0IHRoZXJlLiANCldoYXQgeW91IGFyZSBz
-YXlpbmcgaXMgdGhhdCB5b3UgKGFzIENTUCkgbWFpbnRhaW4gdGhlIGdvb2QgZmlyc3QgbGV2ZWwg
-ZGVmZW5zZQ0KdG8gcHJldmVudCBhdHRhY2tlciB0byBnZXQgY29udHJvbCBvZiB5b3VyL0NTUCBz
-dGFjayB0byBiZWdpbiB3aXRoLg0KV2hhdCB3ZSB0cnkgdG8gZG8gaXMgdGhlIG5leHQgbGV2ZWwg
-b2YgZGVmZW5zZSAodmVyeSB0eXBpY2FsIGluIGFueSBzZWN1cml0eSk6DQp3ZSBhc3N1bWUgdGhh
-dCBmaXJzdCBsaW5lIG9mIGRlZmVuc2UgaGFzIGJlZW4gYnJva2VuIGZvciBzb21lIHJlYXNvbiBh
-bmQNCm5vdyB0aGVyZSBpcyBhIHNlY29uZCBvbmUgcGxhY2VkIHRvIGFjdHVhbGx5IHByb3RlY3Qg
-Y3VzdG9tZXJzIGVuZCBkYXRhLiAgDQoNCj4gDQo+ID4gTm93IGZyb20gdGhlIHB1cmUgc2VjdXJp
-dHkgcG9pbnQgb2YgdmlldyB0aGUgY2hvaWNlIGJldHdlZW4gKGEpIGFuZA0KPiA+IChiKSBpcyBu
-b3Qgc28gZWFzaWx5IGRvbmUgaW1vLiBVc3VhbGx5IHdlIHRha2UgaW50byBhY2NvdW50IG1hbnkN
-Cj4gPiBmYWN0b3JzIHRoYXQgYWZmZWN0IHRoZSByaXNrL2NoYW5jZXMgdGhhdCBjZXJ0YWluIHBp
-ZWNlIG9mIFNXIGhhcyBhDQo+ID4gaGlnaGVyIHJpc2sgb2YgaGF2aW5nIHZ1bG5lcmFiaWxpdGll
-cy4gVGhpcyBpbmNsdWRlcyB0aGUgc2l6ZSBvZiB0aGUNCj4gPiBjb2RlYmFzZSwgaXRzIGNvbXBs
-ZXhpdHksIGl0cyBhdHRhY2sgc3VyZmFjZSBleHBvc3VyZSB0b3dhcmRzDQo+ID4gZXh0ZXJuYWwg
-aW50ZXJmYWNlcywgbGV2ZWwgb2YgdGVzdGluZywgd2hlbmV2ZXIgdGhlIGNvZGUgaXMgcHVibGlj
-LA0KPiA+IGNvZGUgZGVwZW5kZW5jeSBjaGFpbnMsIGV0Yy4gU21hbGxlciBjb2RlYmFzZSB3aXRo
-IG5vIGRlcGVuZGVuY2llcw0KPiA+IGFuZCBzbWFsbCBzZXQgb2YgZXhwb3NlZCBpbnRlcmZhY2Vz
-IGlzIHVzdWFsbHkgZWFzaWVyIHRvIHJldmlldyBmcm9tDQo+ID4gc2VjdXJpdHkgcG9pbnQgb2Yg
-dmlldyBnaXZlbiB0aGF0IHRoZSBjb2RlIGlzIHB1YmxpYy4NCj4gDQo+IFRoaXMgcmVhZHMgbGlr
-ZSBhbiBhcmd1bWVudCB0aGF0LCBmcm9tIGEgc2VjdXJpdHkgcG9pbnQgb2YgdmlldywNCj4gc21h
-bGxlciBwcm9wcmlldGFyeSBjb2RlIGlzIGJldHRlciB0aGFuIGxhcmdlciwgb3BlbiBzb3VyY2Us
-IGNvZGUuIEkNCj4gcmVhbGx5IGRvbid0IHRoaW5rIHdlIHdhbnQgdG8gb3BlbiB0aGlzIGNhbiBv
-ZiB3b3Jtcy4gDQoNCkkgZG9u4oCZdCB0aGluayBJIGhhdmUgbWFkZSB0aGlzIHN0YXRlbWVudDog
-dGhlIGNvZGUgKmhhcyB0byBiZSBwdWJsaWMqDQpmb3IgYW55b25lIHRvIHJldmlldyBhbmQgSSBk
-aWQgZXhwbGljaXRseSBsaXN0IHRoaXMgaW4gdGhlIHN0YXRlbWVudCBhYm92ZSANCmFzICJnaXZl
-biB0aGF0IHRoZSBjb2RlIGlzIHB1YmxpYyIuICBPbmx5IHRoaW5nIEkgbWVhbnQgaXMgdGhhdCBp
-dCBpcyBub3QgDQpub3Qgc28gZWFzeSB0byBtYWtlIGEgY2FsbCBiZXR3ZWVuIChhKSBhbmQgKGIp
-IGluIGFsbCBjYXNlcyBmcm9tIGEgcHVyZQ0Kc2VjdXJpdHkgcG9pbnQgb2Ygdmlldy4gDQoNCkJl
-c3QgUmVnYXJkcywNCkVsZW5hLg0K
+On 2023-04-27 17:37:42, Marijn Suijten wrote:
+> On 2023-04-21 00:31:16, Konrad Dybcio wrote:
+> > Add SM6350 support to the DPU1 driver to enable display output.
+> > 
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> After addressing the comments from Dmitry (CURSOR0->DMA1 and
+> CURSOR1->DMA2), this is:
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> See below for some nits.
+
+Actually found one glaring issue that might explain why INTF TE wasn't
+working for you the other day!
+
+> > ---
+> >  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 191 +++++++++++++++++++++
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   1 +
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   3 +
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+> >  4 files changed, 196 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> > new file mode 100644
+> > index 000000000000..687a508cbaa6
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> > @@ -0,0 +1,191 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> > + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+> > + * Copyright (c) 2023, Linaro Limited
+> > + */
+> > +
+> > +#ifndef _DPU_6_4_SM6350_H
+> > +#define _DPU_6_4_SM6350_H
+> > +
+> > +static const struct dpu_caps sm6350_dpu_caps = {
+> > +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> > +	.max_mixer_blendstages = 0x7,
+> > +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
+> 
+> I thought it was QSEED3LITE, but doesn't really matter as both are
+> handled similarly.  It'll anyway change when I resubmit:
+> 
+> https://lore.kernel.org/linux-arm-msm/20230215-sspp-scaler-version-v1-0-416b1500b85b@somainline.org/T/#u
+> 
+> which should hardcode the register value directly, making this field
+> superfluous.
+> 
+> > +	.has_src_split = true,
+> > +	.has_dim_layer = true,
+> > +	.has_idle_pc = true,
+> > +	.max_linewidth = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> > +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> > +};
+> > +
+> > +static const struct dpu_ubwc_cfg sm6350_ubwc_cfg = {
+> > +	.ubwc_version = DPU_HW_UBWC_VER_20,
+> > +	.ubwc_swizzle = 6,
+> > +	.highest_bank_bit = 1,
+> > +};
+> > +
+> > +static const struct dpu_mdp_cfg sm6350_mdp[] = {
+> > +	{
+> > +	.name = "top_0", .id = MDP_TOP,
+> > +	.base = 0x0, .len = 0x494,
+> > +	.features = 0,
+> > +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+> > +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+> > +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = { .reg_off = 0x2b4, .bit_off = 8 },
+> > +	.clk_ctrls[DPU_CLK_CTRL_DMA2] = { .reg_off = 0x2c4, .bit_off = 8 },
+> > +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = { .reg_off = 0x2bc, .bit_off = 20 },
+> > +	},
+> > +};
+> > +
+> > +static const struct dpu_ctl_cfg sm6350_ctl[] = {
+> > +	{
+> > +	.name = "ctl_0", .id = CTL_0,
+> > +	.base = 0x1000, .len = 0x1dc,
+> > +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> > +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> > +	},
+> > +	{
+> > +	.name = "ctl_1", .id = CTL_1,
+> > +	.base = 0x1200, .len = 0x1dc,
+> > +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> > +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+> > +	},
+> > +	{
+> > +	.name = "ctl_2", .id = CTL_2,
+> > +	.base = 0x1400, .len = 0x1dc,
+> > +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> > +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+> > +	},
+> > +	{
+> > +	.name = "ctl_3", .id = CTL_3,
+> > +	.base = 0x1600, .len = 0x1dc,
+> > +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> > +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+> > +	},
+> > +};
+> > +
+> > +static const struct dpu_sspp_cfg sm6350_sspp[] = {
+> > +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+> > +		 sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> > +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+> > +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> > +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+> > +		 sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
+> > +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+> > +		 sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
+> > +};
+> > +
+> > +static const struct dpu_lm_cfg sm6350_lm[] = {
+> > +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_SDM845_MASK,
+> > +		&sc7180_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
+> > +	LM_BLK("lm_1", LM_1, 0x45000, MIXER_SDM845_MASK,
+> > +		&sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
+> 
+> These two entries are indented with two tabs and have one character too
+> many to align with the opening parenthesis on the previous line.  Can we
+> please settle on a single style, as this commit mostly uses tabs+spaces
+> to align with the opening parenthesis?
+> 
+> Dmitry vouched for `cino=(0` (when in unclosed parenthesis, align next
+> line with zero extra characters to the opening parenthesis), but I find
+> double tabs more convenient as it doesn't require reindenting when
+> changing the name of the macro (which happened too often in my INTF TE
+> series).
+> 
+> > +};
+> > +
+> > +static const struct dpu_dspp_cfg sm6350_dspp[] = {
+> > +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+> > +		 &sm8150_dspp_sblk),
+> > +};
+> > +
+> > +static struct dpu_pingpong_cfg sm6350_pp[] = {
+> > +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> > +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> > +	       -1),
+> > +	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> > +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+> > +	       -1),
+> 
+> Glad to see no TE2 here, we just removed it from all of DPU >= 5.0.0
+> instead of >= 7.0.0 in [1] as downstream DTS turned out to be wrong.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-2-27ce1a5ab5c6@somainline.org/
+> 
+> - Marijn
+> 
+> > +};
+> > +
+> > +static const struct dpu_intf_cfg sm6350_intf[] = {
+> > +	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x2c0, INTF_DP, 0, 35, INTF_SC7180_MASK,
+> > +		 DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> > +		 DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 25)),
+> > +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 35, INTF_SC7180_MASK,
+> > +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+> > +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+> > +			DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+> > +};
+> > +
+> > +static const struct dpu_vbif_cfg sm6350_vbif[] = {
+> > +	{
+> > +	.name = "vbif_0", .id = VBIF_RT,
+> > +	.base = 0, .len = 0x1044,
+> > +	.features = BIT(DPU_VBIF_QOS_REMAP),
+> > +	.xin_halt_timeout = 0x4000,
+> > +	.qos_rt_tbl = {
+> > +		.npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+> > +		.priority_lvl = sdm845_rt_pri_lvl,
+> > +	},
+> > +	.qos_nrt_tbl = {
+> > +		.npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+> > +		.priority_lvl = sdm845_nrt_pri_lvl,
+> > +	},
+> > +	.memtype_count = 14,
+> > +	.memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+> > +	},
+> > +};
+> > +
+> > +static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
+> > +	{.fl = 0, .lut = 0x0011223344556677 },
+> > +	{.fl = 0, .lut = 0x0011223445566777 },
+> > +};
+> > +
+> > +static const struct dpu_perf_cfg sm6350_perf_data = {
+> > +	.max_bw_low = 4200000,
+> > +	.max_bw_high = 5100000,
+> > +	.min_core_ib = 2500000,
+> > +	.min_llcc_ib = 0,
+> > +	.min_dram_ib = 1600000,
+> > +	.min_prefill_lines = 35,
+> > +	/* TODO: confirm danger_lut_tbl */
+> > +	.danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+> > +	.qos_lut_tbl = {
+> > +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> > +		.entries = sm6350_qos_linear_macrotile
+> > +		},
+> > +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> > +		.entries = sm6350_qos_linear_macrotile
+> > +		},
+> > +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> > +		.entries = sc7180_qos_nrt
+> > +		},
+> > +	},
+> > +	.cdp_cfg = {
+> > +		{.rd_enable = 1, .wr_enable = 1},
+> > +		{.rd_enable = 1, .wr_enable = 0}
+> > +	},
+> > +	.clk_inefficiency_factor = 105,
+> > +	.bw_inefficiency_factor = 120,
+> > +};
+> > +
+> > +const struct dpu_mdss_cfg dpu_sm6350_cfg = {
+> > +	.caps = &sm6350_dpu_caps,
+> > +	.ubwc = &sm6350_ubwc_cfg,
+> > +	.mdp_count = ARRAY_SIZE(sm6350_mdp),
+> > +	.mdp = sm6350_mdp,
+> > +	.ctl_count = ARRAY_SIZE(sm6350_ctl),
+> > +	.ctl = sm6350_ctl,
+> > +	.sspp_count = ARRAY_SIZE(sm6350_sspp),
+> > +	.sspp = sm6350_sspp,
+> > +	.mixer_count = ARRAY_SIZE(sm6350_lm),
+> > +	.mixer = sm6350_lm,
+> > +	.dspp_count = ARRAY_SIZE(sm6350_dspp),
+> > +	.dspp = sm6350_dspp,
+> > +	.pingpong_count = ARRAY_SIZE(sm6350_pp),
+> > +	.pingpong = sm6350_pp,
+> > +	.intf_count = ARRAY_SIZE(sm6350_intf),
+> > +	.intf = sm6350_intf,
+> > +	.vbif_count = ARRAY_SIZE(sm6350_vbif),
+> > +	.vbif = sm6350_vbif,
+> > +	.reg_dma_count = 1,
+> > +	.dma_cfg = &sm8250_regdma,
+> > +	.perf = &sm6350_perf_data,
+> > +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+> > +		     BIT(MDP_SSPP_TOP0_INTR2) | \
+> > +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> > +		     BIT(MDP_INTF0_INTR) | \
+> > +		     BIT(MDP_INTF1_INTR)
+
+For completeness I should've pointed out that you're missing
+MDP_INTF1_TEAR_INTR here, likely resulting in INTF TE not working.
+
+- Marijn
+
+<snip>
