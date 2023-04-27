@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B03A6EFF7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8B76EFF7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242797AbjD0DEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S242833AbjD0DFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbjD0DEm (ORCPT
+        with ESMTP id S233414AbjD0DFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:04:42 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0497335A6;
-        Wed, 26 Apr 2023 20:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Oz51J
-        k6YUdX9xqityJ6AuFrqweYlAXeUQMqAYe93B1k=; b=fDzhYnwGt4S7mcuGlYphK
-        xBCfNn/3BYbjbeC5idZbuTUiWgLPnqZDBq/nIE34DY6zWIAKLPpiaLr/4xicQ8qq
-        c7g3iwxa2rnVIcCj6iDVabnsCs+V4Njq4KW4ootAgHYfN2EkkPJxNMirky/jg12Z
-        VlYKe8nSe3stgmQzZ1HKB4=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wBnn3ct5klkwL3sAA--.55775S2;
-        Thu, 27 Apr 2023 11:04:13 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     deller@gmx.de
-Cc:     javierm@redhat.com, tzimmermann@suse.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] video: imsttfb: Fix use after free bug in imsttfb_probe due  to lack of error-handling of init_imstt
-Date:   Thu, 27 Apr 2023 11:04:11 +0800
-Message-Id: <20230427030411.2375978-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Apr 2023 23:05:31 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B3635B3;
+        Wed, 26 Apr 2023 20:05:30 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-51b0f9d7d70so7931826a12.1;
+        Wed, 26 Apr 2023 20:05:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682564730; x=1685156730;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ove/sTJ8+x/q60am/+KMhPIYHnt+EFjkrJyhwIn48Nk=;
+        b=raTJxDo6NHuN1i4W6/Vl6x/jV++XY9DomGczVyWxak/EnC5sunEIIoypQnfdLjlp+d
+         5aSIfjwfILrNgKOrVO6x+ouEJdYq/+sH5GFzTf/25xH2Lelrq2ddHWX+tx6Rcvz4oGmR
+         +YU5ahqcI51YXd0SugsrUxSkAyAomhKk748mTe+LgiCxkO0Wvcq/nc5ObiSQDR3eOD6m
+         g3tFs2Sufh+im2umEEC8LqY4IdCRz0H8ZG9QxThAaWZI187ZE08VaxXozT0waT7iRumz
+         ugc61A69a53XjCCVoyQyVXhaxHT82PMp5Lkw/WP72Oc6X/unmUsmI6PcqUxscrEtUUfr
+         FAvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682564730; x=1685156730;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ove/sTJ8+x/q60am/+KMhPIYHnt+EFjkrJyhwIn48Nk=;
+        b=TOZzqypjL8ykUstXct4D3iQuHxPWIQoZlrcAqWQW7k/gZm5mdtdh3kpMkbyI5nMYWy
+         DVI1Vtuw1l7AVRfH4Q3U6YZd2jGa7p3pyY4aljp/vcUvoRS+AvojIAHw7+XWvnu4Je8T
+         cFBd3JYYLTjQNWuHqFrY+AfswXVO9UlkiZfNlj2l/EuewoZShjsCO7MJdURS1pexX0ED
+         J2bqhLbJNYhjxRGgAjzOGw0Lhx2DfVqcvirql0MeU+QZzbbUNQFzDHRIezT1NZqeSDc7
+         /imFMofp/2ZSJ1+SD3HCZWWN5ULWUzorImWG6plTdg/AOTVEsZ56KTkn/O1/OYTnGFk5
+         qWcw==
+X-Gm-Message-State: AC+VfDy+u28AUmCORSShuBIiiRoyakQjNZEIQuEIBs3NX0XhZoZ1G/V9
+        ccYRel9byAGIR5N/ZsWaSb4=
+X-Google-Smtp-Source: ACHHUZ65kwaPer2wxQ9EcrHZ03Fe/dmOpR6twng8E0U+ezwpDAjF7cvN1RVn8B+v26FZAyJlptuKaQ==
+X-Received: by 2002:a17:90b:3585:b0:247:1e13:90ef with SMTP id mm5-20020a17090b358500b002471e1390efmr348505pjb.20.1682564729636;
+        Wed, 26 Apr 2023 20:05:29 -0700 (PDT)
+Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:6ebf:37fc:fc60:b353])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001a6d08eb054sm10575168pln.78.2023.04.26.20.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 20:05:29 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sandipan Das <sandipan.das@amd.com>, stable@vger.kernel.org
+Subject: [PATCH] perf/x86: Fix missing sample size update on AMD BRS
+Date:   Wed, 26 Apr 2023 20:05:27 -0700
+Message-ID: <20230427030527.580841-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBnn3ct5klkwL3sAA--.55775S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KFWxKr18uF1kur4rJr4ruFg_yoW8AFWDpF
-        45A3Z8JrZrJF48Gw4kAF4UAF43K3Z7Kr9IgrW7K3sayF15CFWFgr1xJa42yrZ3JrZ7Jr13
-        XF4kt34UC3WUuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRFeU1WBpY8fjAAAss
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A use-after-free bug may occur if init_imstt invokes framebuffer_release
-and free the info ptr. The caller, imsttfb_probe didn't notice that and
-still keeps the ptr as private data in pdev.
+It missed to convert a PERF_SAMPLE_BRANCH_STACK user to call the new
+perf_sample_save_brstack() helper in order to update the dyn_size.
+This affects AMD Zen3 machines with the branch-brs event.
 
-If we remove the driver which will call imsttfb_remove to make cleanup,
-UAF happens.
-
-Fix it by return error code if bad case happens in init_imstt.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Fixes: eb55b455ef9c ("perf/core: Add perf_sample_save_brstack() helper")
+Cc: stable@vger.kernel.org
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- drivers/video/fbdev/imsttfb.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/events/core.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb.c
-index bea45647184e..92b0c5833bda 100644
---- a/drivers/video/fbdev/imsttfb.c
-+++ b/drivers/video/fbdev/imsttfb.c
-@@ -1347,7 +1347,7 @@ static const struct fb_ops imsttfb_ops = {
- 	.fb_ioctl 	= imsttfb_ioctl,
- };
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index d096b04bf80e..9d248703cbdd 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1703,10 +1703,8 @@ int x86_pmu_handle_irq(struct pt_regs *regs)
  
--static void init_imstt(struct fb_info *info)
-+static int init_imstt(struct fb_info *info)
- {
- 	struct imstt_par *par = info->par;
- 	__u32 i, tmp, *ip, *end;
-@@ -1420,7 +1420,7 @@ static void init_imstt(struct fb_info *info)
- 	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres))) {
- 		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->var.yres, info->var.bits_per_pixel);
- 		framebuffer_release(info);
--		return;
-+		return -ENODEV;
- 	}
+ 		perf_sample_data_init(&data, 0, event->hw.last_period);
  
- 	sprintf(info->fix.id, "IMS TT (%s)", par->ramdac == IBM ? "IBM" : "TVP");
-@@ -1529,10 +1529,10 @@ static int imsttfb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	if (!par->cmap_regs)
- 		goto error;
- 	info->pseudo_palette = par->palette;
--	init_imstt(info);
--
--	pci_set_drvdata(pdev, info);
--	return 0;
-+	ret = init_imstt(info);
-+	if (!ret)
-+		pci_set_drvdata(pdev, info);
-+	return ret;
+-		if (has_branch_stack(event)) {
+-			data.br_stack = &cpuc->lbr_stack;
+-			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+-		}
++		if (has_branch_stack(event))
++			perf_sample_save_brstack(&data, event, &cpuc->lbr_stack);
  
- error:
- 	if (par->dc_regs)
+ 		if (perf_event_overflow(event, &data, regs))
+ 			x86_pmu_stop(event, 0);
 -- 
-2.25.1
+2.40.1.495.gc816e09b53d-goog
 
