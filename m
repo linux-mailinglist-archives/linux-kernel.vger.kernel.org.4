@@ -2,75 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D69E6F02C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAF46F02C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243083AbjD0InD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S243147AbjD0Ipq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242999AbjD0InA (ORCPT
+        with ESMTP id S242131AbjD0Ipn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:43:00 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D63A4C39;
-        Thu, 27 Apr 2023 01:42:56 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 22D015FD07;
-        Thu, 27 Apr 2023 11:42:53 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1682584973;
-        bh=p0nB6ehLxKbMTql7Tdal353yorBz0/HMp9iFTOlwkb4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=EEtHzldoZCAUafBeYOHAyOlEDUC/YmqqmblPpZkg+RSInztCbZx9YYQrYzU5A9mGj
-         sLCtkhONHGdqQgfQMfwAdHfyJq+I6eaGigmVnfEc/70BKdn+gJk/+Jzzh0D6wzP9+U
-         qwPxJFzufnUzh5ewRSOptzxPOtHY16eZPClX83xztpR/DxR9ml9Lu7H0EoZefe6xJV
-         CQB/armYXGOyhHfYQEEoY1TUZgsPWxY7J/Xk0iJgmsquh3Y4DKVaBO3RPBEodmHM4b
-         R0xvYa8HPcjepFEnOWXwggIcYYXIq5y+iUZThmMJd4VotxpyTEtPKH8RvLoRVKrHWQ
-         2iisPGHcYZckg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 27 Apr 2023 11:42:52 +0300 (MSK)
-Date:   Thu, 27 Apr 2023 11:42:52 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Yu Tu <yu.tu@amlogic.com>
-CC:     <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
-Subject: Re: [PATCH V7 4/4] clk: meson: s4: add support for Amlogic S4 SoC
- peripheral clock controller
-Message-ID: <20230427084252.yroo3lcu3aapid6v@CAB-WSD-L081021>
-References: <20230417065005.24967-1-yu.tu@amlogic.com>
- <20230417065005.24967-5-yu.tu@amlogic.com>
- <20230426110538.y2d4qhv2qffc62vj@CAB-WSD-L081021>
- <6cc4c3f2-4df5-6456-fe65-71aa4a13c866@amlogic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6cc4c3f2-4df5-6456-fe65-71aa4a13c866@amlogic.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/27 05:34:00 #21173123
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        Thu, 27 Apr 2023 04:45:43 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625844C01
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:45:41 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230427084537epoutp03b1c9bba046feb419a77a7dc36562542b~ZvkR_zexf2679426794epoutp03D
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:45:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230427084537epoutp03b1c9bba046feb419a77a7dc36562542b~ZvkR_zexf2679426794epoutp03D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682585137;
+        bh=PlMURogrOakEItrZ/CspC/ieLWi0smmp1t6x9YbaHkA=;
+        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
+        b=NZfKUqJIZdcalc/kRAHUvQJ/EDPvTZAYIEonaoFwEKknl+KvBoxjkGNsDkMXCy9xB
+         m2JcYRArFHUm9UTK3AdeXarJ9siQrxOnVHYTc9D0Ybrz5XNOwuY/KdVmi26dUI3ssG
+         cAIuIKtAXg/gXqvWxl9uPLNyRtKkAitDj+wMMF/k=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230427084536epcas2p2c2dce5f073875e2e41de267ae6277435~ZvkRfjjfW0972609726epcas2p2c;
+        Thu, 27 Apr 2023 08:45:36 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.99]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Q6TpR6F8Bz4x9Pp; Thu, 27 Apr
+        2023 08:45:35 +0000 (GMT)
+X-AuditID: b6c32a46-8b7ff7000001438d-0c-644a362f3a21
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.D3.17293.F263A446; Thu, 27 Apr 2023 17:45:35 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH] scsi: ufs: core: Simplify param_set_mcq_mode()
+Reply-To: keosung.park@samsung.com
+Sender: Keoseong Park <keosung.park@samsung.com>
+From:   Keoseong Park <keosung.park@samsung.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Keoseong Park <keosung.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "quic_asutoshd@quicinc.com" <quic_asutoshd@quicinc.com>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <ceaaf07b-d684-e88d-cfda-257cef32305a@acm.org>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230427084535epcms2p20fc85abb7cf2efd77866b94ecb718047@epcms2p2>
+Date:   Thu, 27 Apr 2023 17:45:35 +0900
+X-CMS-MailID: 20230427084535epcms2p20fc85abb7cf2efd77866b94ecb718047
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmqa6+mVeKwZobOhYP5m1js3j58yqb
+        xcGHnSwW0z78ZLZ4eUjT4tHtZ4wWi25sY7I4fvIdo8XlXXPYLLqv72CzWH78H5PFwo65LBZL
+        t95kdOD1uHzF22PCogOMHi0n97N4fF/fwebx8ektFo+Je+o8+rasYvT4vEnOo/1AN1MAZ1S2
+        TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7Q1UoKZYk5
+        pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IwF
+        M1pZCk6IVEy8e5m1gfGxQBcjJ4eEgInEkrs3WLoYuTiEBHYwSszd+o69i5GDg1dAUOLvDmGQ
+        GmEBN4lPD26ygthCAkoSXQu3MkPEDSTWTd8DZrMJ6ElM+X2HEWSOiMBGFomNv84xQizglZjR
+        /pQFwpaW2L58K1icU8BaYuuCf1A1GhI/lvUyQ9iiEjdXv2WHsd8fmw9VIyLReu8sVI2gxIOf
+        u6HikhKtZ7ayQdj1Eq3vT7GDHCEhMIFRovHYH6hB+hLXOjaCHcEr4CvR8n0dWDOLgKrEpQfT
+        wB6WEHCR2HikGCTMLCAvsf3tHGaQMLOApsT6XfoQFcoSR26xQFTwSXQc/ssO82HDxt9Y2Tvm
+        PWGCsNUkHi3Ywgphy0hcnHOOeQKj0ixEQM9CsncWwt4FjMyrGMVSC4pz01OLjQqM4HGbnJ+7
+        iRGcfrXcdjBOeftB7xAjEwfjIUYJDmYlEV7eSvcUId6UxMqq1KL8+KLSnNTiQ4ymQA9PZJYS
+        Tc4HZoC8knhDE0sDEzMzQ3MjUwNzJXFeaduTyUIC6YklqdmpqQWpRTB9TBycUg1MDELJO8O2
+        Zj5jLb1jppi4Vuyc8V7bO0fOrtQ17Y94rbL+9owGYFRd+f4l4dWjcINDF5fM28F1/pDEt+Ob
+        8ktc32rnOwZP3NVVbHlVJuyjnuesDTJ/0gL27p4tFr5zyrF0V55ixidulSUtXyWSSp+vX1Mc
+        cUZ/iuE2lQk7GJ5XNU9T+KmZY8TYdG2bh1oiY1YJi+PdheuP332sFae84+AMjgOHbu+Lidxv
+        8aP/U20rx+fXdikzlQVFLstl2P7ouH/G6s5TNw1b3/v63alM3q+/nOFdN9O4eFK4dD2jbNom
+        IRUuL6vdydcsdH4wGoR9WdzkFLbCWnL/pnX3ncITc8I3fYquWGP/2Xzrsc38KquUWIozEg21
+        mIuKEwGlF6GpSAQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230426052153epcms2p27d64a865f15bfd452d564f77d63605db
+References: <ceaaf07b-d684-e88d-cfda-257cef32305a@acm.org>
+        <20230426052153epcms2p27d64a865f15bfd452d564f77d63605db@epcms2p2>
+        <CGME20230426052153epcms2p27d64a865f15bfd452d564f77d63605db@epcms2p2>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,270 +105,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 04:15:28PM +0800, Yu Tu wrote:
-> 
-> 
-> On 2023/4/26 19:05, Dmitry Rokosov wrote:
-> > [Some people who received this message don't often get email from ddrokosov@sberdevices.ru. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > [ EXTERNAL EMAIL ]
-> > 
-> > On Mon, Apr 17, 2023 at 02:50:05PM +0800, Yu Tu wrote:
-> > > Add the peripherals clock controller driver in the s4 SoC family.
-> > > 
-> > > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
-> > > ---
-> > >   drivers/clk/meson/Kconfig          |   12 +
-> > >   drivers/clk/meson/Makefile         |    1 +
-> > >   drivers/clk/meson/s4-peripherals.c | 3814 ++++++++++++++++++++++++++++
-> > >   drivers/clk/meson/s4-peripherals.h |  217 ++
-> > >   4 files changed, 4044 insertions(+)
-> > >   create mode 100644 drivers/clk/meson/s4-peripherals.c
-> > >   create mode 100644 drivers/clk/meson/s4-peripherals.h
-> > > 
-> > > diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-> > > index a663c90a3f3b..a6eb9fa15c74 100644
-> > > --- a/drivers/clk/meson/Kconfig
-> > > +++ b/drivers/clk/meson/Kconfig
-> > > @@ -128,4 +128,16 @@ config COMMON_CLK_S4_PLL
-> > >          aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
-> > >          Say Y if you want the board to work, because plls are the parent of most
-> > >          peripherals.
-> > > +
-> > > +config COMMON_CLK_S4
-> > > +     tristate "S4 SoC Peripherals clock controllers support"
-> > > +     depends on ARM64
-> > > +     default y
-> > > +     select COMMON_CLK_MESON_REGMAP
-> > > +     select COMMON_CLK_MESON_DUALDIV
-> > > +     select COMMON_CLK_MESON_VID_PLL_DIV
-> > > +     help
-> > > +       Support for the Peripherals clock controller on Amlogic S805X2 and S905Y4
-> > > +       devices, aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
-> > > +       Say Y if you want peripherals to work.
-> > >   endmenu
-> > > diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-> > > index 376f49cc13f1..c9130afccb48 100644
-> > > --- a/drivers/clk/meson/Makefile
-> > > +++ b/drivers/clk/meson/Makefile
-> > > @@ -20,3 +20,4 @@ obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
-> > >   obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
-> > >   obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
-> > >   obj-$(CONFIG_COMMON_CLK_S4_PLL) += s4-pll.o
-> > > +obj-$(CONFIG_COMMON_CLK_S4) += s4-peripherals.o
-> > 
-> > [...]
-> 
-> ?
-> 
+Hi Bart,
+Thank you for your review.
 
-I am using the above-mentioned symbols to indicate that I have removed
-a portion of the previous email that is not relevant to my response.
+>On 4/25/23 22:21, Keoseong Park wrote:
+>> This function does not require the "ret" variable because it returns
+>> only the result of param_set_bool().
+>> 
+>> Remove unnecessary "ret" variable and simplify the code.
+>> 
+>> Signed-off-by: Keoseong Park <keosung.park@samsung.com>
+>> ---
+>>   drivers/ufs/core/ufshcd.c | 8 +-------
+>>   1 file changed, 1 insertion(+), 7 deletions(-)
+>> 
+>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>> index 9434328ba323..46c4ed478ad0 100644
+>> --- a/drivers/ufs/core/ufshcd.c
+>> +++ b/drivers/ufs/core/ufshcd.c
+>> @@ -108,13 +108,7 @@ static bool is_mcq_supported(struct ufs_hba *hba)
+>>   
+>>   static int param_set_mcq_mode(const char *val, const struct kernel_param *kp)
+>>   {
+>> -	int ret;
+>> -
+>> -	ret = param_set_bool(val, kp);
+>> -	if (ret)
+>> -		return ret;
+>> -
+>> -	return 0;
+>> +	return param_set_bool(val, kp);
+>>   }
+>>   
+>>   static const struct kernel_param_ops mcq_mode_ops = {
+>
+>Why do we even have the param_set_mcq_mode() callback? Has it been considered
+>to remove mcq_mode_ops as in the untested patch below?
 
-> > 
-> > > +static struct clk_regmap s4_ceca_32k_clkin = {
-> > > +     .data = &(struct clk_regmap_gate_data){
-> > > +             .offset = CLKCTRL_CECA_CTRL0,
-> > > +             .bit_idx = 31,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data) {
-> > > +             .name = "ceca_32k_clkin",
-> > > +             .ops = &clk_regmap_gate_ops,
-> > > +             .parent_data = (const struct clk_parent_data []) {
-> > > +                     { .fw_name = "xtal", }
-> > > +             },
-> > > +             .num_parents = 1,
-> > > +     },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_ceca_32k_div = {
-> > > +     .data = &(struct meson_clk_dualdiv_data){
-> > > +             .n1 = {
-> > > +                     .reg_off = CLKCTRL_CECA_CTRL0,
-> > > +                     .shift   = 0,
-> > > +                     .width   = 12,
-> > > +             },
-> > > +             .n2 = {
-> > > +                     .reg_off = CLKCTRL_CECA_CTRL0,
-> > > +                     .shift   = 12,
-> > > +                     .width   = 12,
-> > > +             },
-> > > +             .m1 = {
-> > > +                     .reg_off = CLKCTRL_CECA_CTRL1,
-> > > +                     .shift   = 0,
-> > > +                     .width   = 12,
-> > > +             },
-> > > +             .m2 = {
-> > > +                     .reg_off = CLKCTRL_CECA_CTRL1,
-> > > +                     .shift   = 12,
-> > > +                     .width   = 12,
-> > > +             },
-> > > +             .dual = {
-> > > +                     .reg_off = CLKCTRL_CECA_CTRL0,
-> > > +                     .shift   = 28,
-> > > +                     .width   = 1,
-> > > +             },
-> > > +             .table = s4_32k_div_table,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data){
-> > > +             .name = "ceca_32k_div",
-> > > +             .ops = &meson_clk_dualdiv_ops,
-> > > +             .parent_hws = (const struct clk_hw *[]) {
-> > > +                     &s4_ceca_32k_clkin.hw
-> > > +             },
-> > > +             .num_parents = 1,
-> > > +     },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_ceca_32k_sel_pre = {
-> > > +     .data = &(struct clk_regmap_mux_data) {
-> > > +             .offset = CLKCTRL_CECA_CTRL1,
-> > > +             .mask = 0x1,
-> > > +             .shift = 24,
-> > > +             .flags = CLK_MUX_ROUND_CLOSEST,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data){
-> > > +             .name = "ceca_32k_sel_pre",
-> > > +             .ops = &clk_regmap_mux_ops,
-> > > +             .parent_hws = (const struct clk_hw *[]) {
-> > > +                     &s4_ceca_32k_div.hw,
-> > > +                     &s4_ceca_32k_clkin.hw
-> > > +             },
-> > > +             .num_parents = 2,
-> > > +             .flags = CLK_SET_RATE_PARENT,
-> > > +     },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_ceca_32k_sel = {
-> > > +     .data = &(struct clk_regmap_mux_data) {
-> > > +             .offset = CLKCTRL_CECA_CTRL1,
-> > > +             .mask = 0x1,
-> > > +             .shift = 31,
-> > > +             .flags = CLK_MUX_ROUND_CLOSEST,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data){
-> > > +             .name = "ceca_32k_sel",
-> > > +             .ops = &clk_regmap_mux_ops,
-> > > +             .parent_hws = (const struct clk_hw *[]) {
-> > > +                     &s4_ceca_32k_sel_pre.hw,
-> > > +                     &s4_rtc_clk.hw
-> > > +             },
-> > > +             .num_parents = 2,
-> > > +             .flags = CLK_SET_RATE_PARENT,
-> > 
-> > In my opinion, all clocks that can inherit from a more accurate RTC clock
-> > should be marked with the CLK_SET_RATE_NO_REPARENT flag.
-> > This is necessary because in certain situations, it may be required to
-> > freeze their parent. The setup of these clocks' parent should be located
-> > on the device tree's side.
-> 
-> We don't need to freeze parent,in a real project.
-> 
+I agree with you in that it only uses param_{set,get}_bool().
+So, I'll test the patch below and send it.
 
-In my opinion, an RTC clock is more accurate and its rate can be
-adjusted to a specific value. If I choose the RTC clock as the parent,
-I don't want to run the rate auto-propagation for the child clock.
-Otherwise, the parent can be changed to fit a specific frequency.
+Best Regards,
+Keoseong
 
-> > 
-> > [...]
-> > 
-> > > +
-> > > +/*
-> > > + * gen clk is designed for debug/monitor some internal clock quality. Some of the
-> > > + * corresponding clock sources are not described in the clock tree and internal clock
-> > > + * for debug, so they are skipped.
-> > > + */
-> > > +static u32 s4_gen_clk_mux_table[] = { 0, 4, 5, 7, 19, 21, 22,
-> > > +                                   23, 24, 25, 26, 27, 28 };
-> > > +static const struct clk_parent_data s4_gen_clk_parent_data[] = {
-> > > +     { .fw_name = "xtal", },
-> > > +     { .hw = &s4_vid_pll.hw },
-> > > +     { .fw_name = "gp0_pll", },
-> > > +     { .fw_name = "hifi_pll", },
-> > > +     { .fw_name = "fclk_div2", },
-> > > +     { .fw_name = "fclk_div3", },
-> > > +     { .fw_name = "fclk_div4", },
-> > > +     { .fw_name = "fclk_div5", },
-> > > +     { .fw_name = "fclk_div7", },
-> > > +     { .fw_name = "mpll0", },
-> > > +     { .fw_name = "mpll1", },
-> > > +     { .fw_name = "mpll2", },
-> > > +     { .fw_name = "mpll3", },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_gen_clk_sel = {
-> > > +     .data = &(struct clk_regmap_mux_data){
-> > > +             .offset = CLKCTRL_GEN_CLK_CTRL,
-> > > +             .mask = 0x1f,
-> > > +             .shift = 12,
-> > > +             .table = s4_gen_clk_mux_table,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data){
-> > > +             .name = "gen_clk_sel",
-> > > +             .ops = &clk_regmap_mux_ops,
-> > > +             .parent_data = s4_gen_clk_parent_data,
-> > > +             .num_parents = ARRAY_SIZE(s4_gen_clk_parent_data),
-> > 
-> > I think, the gen_clk selector should be marked with the
-> > CLK_SET_RATE_NO_REPARENT flag. This is because the GEN clock can be
-> > connected to an external pad and may be set up directly from the
-> > device tree.
-> 
-> This is used by the debug table clock and is not connected externally.
-> 
-
-Sorry, I do not currently have the Y4 datasheet available.
-Previously, the GEN_CLK was muxed to the GPIO on specific boards,
-depending on the board layout, and I referred to this situation as
-'connect to external pad'.
-Therefore, I believe it would be more efficient to have the ability to
-freeze the GEN_CLK parent and rate.
-
-> > 
-> > > +     },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_gen_clk_div = {
-> > > +     .data = &(struct clk_regmap_div_data){
-> > > +             .offset = CLKCTRL_GEN_CLK_CTRL,
-> > > +             .shift = 0,
-> > > +             .width = 11,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data){
-> > > +             .name = "gen_clk_div",
-> > > +             .ops = &clk_regmap_divider_ops,
-> > > +             .parent_hws = (const struct clk_hw *[]) {
-> > > +                     &s4_gen_clk_sel.hw
-> > > +             },
-> > > +             .num_parents = 1,
-> > > +             .flags = CLK_SET_RATE_PARENT,
-> > > +     },
-> > > +};
-> > > +
-> > > +static struct clk_regmap s4_gen_clk = {
-> > > +     .data = &(struct clk_regmap_gate_data){
-> > > +             .offset = CLKCTRL_GEN_CLK_CTRL,
-> > > +             .bit_idx = 11,
-> > > +     },
-> > > +     .hw.init = &(struct clk_init_data) {
-> > > +             .name = "gen_clk",
-> > > +             .ops = &clk_regmap_gate_ops,
-> > > +             .parent_hws = (const struct clk_hw *[]) {
-> > > +                     &s4_gen_clk_div.hw
-> > > +             },
-> > > +             .num_parents = 1,
-> > > +             .flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-> > > +     },
-> > > +};
-> > > +
-> > 
-> > [...]
-> > 
-> > --
-> > Thank you,
-> > Dmitry
-
--- 
-Thank you,
-Dmitry
+>
+>Thanks,
+>
+>Bart.
+>
+>diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>index 7b1e7d7091ff..2b8c2613f7d7 100644
+>--- a/drivers/ufs/core/ufshcd.c
+>+++ b/drivers/ufs/core/ufshcd.c
+>@@ -98,7 +98,7 @@
+>  /* Polling time to wait for fDeviceInit */
+>  #define FDEVICEINIT_COMPL_TIMEOUT 1500 /* millisecs */
+>
+>-/* UFSHC 4.0 compliant HC support this mode, refer param_set_mcq_mode() */
+>+/* UFSHC 4.0 compliant HC support this mode. */
+>  static bool use_mcq_mode = true;
+>
+>  static bool is_mcq_supported(struct ufs_hba *hba)
+>@@ -106,23 +106,7 @@ static bool is_mcq_supported(struct ufs_hba *hba)
+>  	return hba->mcq_sup && use_mcq_mode;
+>  }
+>
+>-static int param_set_mcq_mode(const char *val, const struct kernel_param *kp)
+>-{
+>-	int ret;
+>-
+>-	ret = param_set_bool(val, kp);
+>-	if (ret)
+>-		return ret;
+>-
+>-	return 0;
+>-}
+>-
+>-static const struct kernel_param_ops mcq_mode_ops = {
+>-	.set = param_set_mcq_mode,
+>-	.get = param_get_bool,
+>-};
+>-
+>-module_param_cb(use_mcq_mode, &mcq_mode_ops, &use_mcq_mode, 0644);
+>+module_param(use_mcq_mode, bool, 0644);
+>  MODULE_PARM_DESC(use_mcq_mode, "Control MCQ mode for controllers starting from UFSHCI 4.0. 1 - enable MCQ, 0 - disable MCQ. MCQ is enabled by default");
+>
+>  #define ufshcd_toggle_vreg(_dev, _vreg, _on)				\
