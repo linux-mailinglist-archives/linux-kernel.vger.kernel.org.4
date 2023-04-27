@@ -2,166 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C2A6EFEFF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296D56EFF05
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242838AbjD0BlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 21:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
+        id S242862AbjD0Bne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 21:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242677AbjD0Bk7 (ORCPT
+        with ESMTP id S242556AbjD0Bnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 21:40:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B481D3AA1;
-        Wed, 26 Apr 2023 18:40:57 -0700 (PDT)
-Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q6JHx736nz18KQP;
-        Thu, 27 Apr 2023 09:37:01 +0800 (CST)
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 27 Apr
- 2023 09:40:55 +0800
-Message-ID: <be9efa60-14ec-ba46-91e1-9feb56c40fb8@huawei.com>
-Date:   Thu, 27 Apr 2023 09:40:50 +0800
+        Wed, 26 Apr 2023 21:43:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E99630CA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 18:43:31 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f7a0818aeso1224483566b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 18:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682559810; x=1685151810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TLWZrM6G4E8kyAJ3+hqX8NPwV4Y3xpLTC/w/EM11mYI=;
+        b=PJQiXtBkhSZjq404pH2L5nHxMU/QJEmILV0rBc0uWQuEX/GZtcH58vHc7uzQbb+jpz
+         fblEUhBhdAdu6zHxhPwKTwHHwuA3m4mkN3Xz1T7Wzhc/eu9Tzi3TtQ72Zlr5GRI8oXjw
+         C438pR63pQr3HQMfR2MbA6GiI6gPYaaFoenbwMPSk7X8gRv0WX4vSEORCmnoDEubwAxz
+         a41w5GB95N0ooQR/g+PiLDTkMicsmyxxM6ddmrtwJ0FGmD/oaOgElOjwEjuqF7QmyGFX
+         Uc9vS50wwK/JaMnmgAvrdyv9V7vyy+mc5ngjAVhXG7uNRzVisVmM2crM0dN+62EuGzkr
+         Nvnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682559810; x=1685151810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TLWZrM6G4E8kyAJ3+hqX8NPwV4Y3xpLTC/w/EM11mYI=;
+        b=lh/fIMWetcswtMZ75CIRD6NgIPQ226EbhxQ/NfpMAhty9oY/XdZu27OP3ko6ie1B3I
+         sU/aXwL6eGL5tWtokTPdwTiZ7hzoU7SiyuBD8gWElJwrqsI8mvpmr39GwBzfto1h1Rnq
+         Ww6+jzU9jP+qNQiJT7mifTvoEL0THgCJx4DZeA9au5qa16g+CHH0qxsWy03SmMdJtXnV
+         OyOuU88w6MInxedS7JxjobVlnBE0AByfUBsqgRk6xd06cuK/saq2V0HoGDew7GFvHn8i
+         Z2z6AChhz9FIF1T4HkhZ0rTcgyqVBU132fMwExfNhMJCef4TU+NaqxEQuLey3GcH1U9E
+         7hyw==
+X-Gm-Message-State: AC+VfDwzfY2SMwq0KdyXwsqw6MeEIOQ6ZRada+wKRGeqnYBCiVwUKmVf
+        /+XySTOjmhSpxjGnUGG9HcRGu/9SN+MimE+1uOBtSzY4SRwFWQ==
+X-Google-Smtp-Source: ACHHUZ4DbuKsaZlJwyNtmw3hFB9SA23R5V7wmj7FOeBjSn9C9jyPXXToChmHTrrxjqwCTmipfDvYt7b42di4zffByGA=
+X-Received: by 2002:a17:906:eec8:b0:953:8322:a99f with SMTP id
+ wu8-20020a170906eec800b009538322a99fmr67601ejb.0.1682559809797; Wed, 26 Apr
+ 2023 18:43:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] bpf: Unregister fentry when bpf_trampoline_unlink_prog
- fails to update image
-To:     Yonghong Song <yhs@meta.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <andrii@kernel.org>,
-        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
-        <jolsa@kernel.org>
-References: <20230426095548.176045-1-chenzhongjin@huawei.com>
- <b594a56f-5e1f-da7f-0ab1-71751bd0c5e2@meta.com>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <b594a56f-5e1f-da7f-0ab1-71751bd0c5e2@meta.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Thu, 27 Apr 2023 11:43:17 +1000
+Message-ID: <CAPM=9tw2xUZQJkzmt5aj=F8erC3cv9aAB+KqTQgn7=B7D8haFA@mail.gmail.com>
+Subject: [git pull] drm next fixes for 6.4-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/27 2:17, Yonghong Song wrote:
-> 
-> 
-> On 4/26/23 2:55 AM, Chen Zhongjin wrote:
->> In bpf_link_free, bpf trampoline will update the image and remove the
->> unlinked prog.
->>
->> bpf_trampoline_unlink_prog is committed as 'never fail', however it 
->> depends
->> on the result of image update. It is possible to fail if memory 
->> allocation
->> fail in bpf_trampoline_update.
-> 
-> Could you give more details which memory allocation fail here?
-> bpf_tramp_image_alloc()? Are you using some error injection or
-> this happens in your production workload?
-> 
-I guess it's an error injection because syzkaller reported this.
+Hi Linus,
 
->>
->> The error result of bpf_trampoline_update can't be passed to 
->> bpf_link_free
->> because link release callback returns void. Then it will free the prog
->> whether image updating is successful or not.
->> If the old image tries to call a freed prog, it makes kernel panic.
->>
->>      BUG: unable to handle page fault for address: ffffffffc04a8d20
->>      #PF: supervisor instruction fetch in kernel mode
->>      #PF: error_code(0x0010) - not-present page
->>      RIP: 0010:0xffffffffc04a8d20
->>      Code: Unable to access opcode bytes at RIP 0xffffffffc04a8cf6.
->>      ...
->>      Call Trace:
->>      ? bpf_trampoline_78223_0
->>      bpf_traced_function
->>      ...
-> 
-> Could you explain how 'the old image tries to call a freed prog'?
-> IIUC, the previous bpf_link_free() should not be available to
-> call the bpf prog, right?
-> 
-What I mean here is, if failed to update the image, the image keeps 
-unchanged but the unlinked prog will be freed later.
-Next time when it enter the trampoline the image will call freed prog.
+A bit out of routine fixes pull for rc1, there's a build breakage on
+some platforms due to ttm, this has that fix + qaic uapi removal +
+minor panel fixes.
 
->>
->> Fix this when bpf_trampoline_update failed in bpf_trampoline_unlink_prog,
->> unregister fentry to disable the trampoline. Then other progs on the
->> trampoline can be unlinked safely and finally the trampoline will be
->> released.
-> 
-> Do we still leak tr->cur_image here?
-> 
-No, bpf_tramp_image_put() will free everything when all progs_cnt 
-decline to zero in bpf_trampoline_update(). It is a release function, 
-but called 'put'.
+Dave.
+drm-next-2023-04-27:
+drm-next fixes for 6.4-rc1
 
->>
->> Fixes: 88fd9e5352fe ("bpf: Refactor trampoline update code")
-> 
-> If the above is a refactoring patch, you should not use that
-> as 'Fixes' patch, you should pick one truely introduced the issue.
-> 
->> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->> ---
->>   kernel/bpf/trampoline.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
->> index d0ed7d6f5eec..6daa93b30e81 100644
->> --- a/kernel/bpf/trampoline.c
->> +++ b/kernel/bpf/trampoline.c
->> @@ -604,7 +604,10 @@ static int __bpf_trampoline_unlink_prog(struct 
->> bpf_tramp_link *link, struct bpf_
->>       }
->>       hlist_del_init(&link->tramp_hlist);
->>       tr->progs_cnt[kind]--;
->> -    return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->> +    err =  bpf_trampoline_update(tr, true /* lock_direct_mutex */);
->> +    if (err && tr->cur_image)
->> +        unregister_fentry(tr, tr->cur_image->image);
-> 
-> If error happens for the all subsequent programs,
-> unregister_fentry() will be called multiple times. Any side effect?
-It will fail with no side effect. Actually if there is no error, 
-modify_fentry() will fail in update() as well. The fentry is available 
-until all progs are unlinked and the broken image is freed by 
-bpf_tramp_image_put().
+ttm:
+- Fix TTM build on archs where PMD_SHIFT is not constant.
 
-However with an extra state to record this happens, it's possible to 
-re-register the fentry with new image when the next link/unlink calls 
-update(). It will generate a new image and replace/free the error one.
-> 
-> Overall, I think this is an extreme corner case which happens
-> when kernel memory is extreme tight. If this is the case, not
-> sure whether it is worthwhile to fix it or not.
-> 
-Yes, it's a really rare case. I'm just not sure whether it needs some 
-best-effort to avoid kernel panic at this point.
+qaic:
+- Revert uAPI from accel/qaic.
 
-If you think it's not necessary. Just let it go.
+panel:
+- Improve error handling in nt35950.
+- Fix double unregister in otm8009a when removing the driver.
+The following changes since commit 289af45508ca890585f329376d16e08f41f75bd5=
+:
 
-Thanks for your time!
+  Merge tag 'exynos-drm-next-for-v6.4-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
+drm-next (2023-04-24 10:50:15 +1000)
 
-Best,
-Chen
->> +    return err;
->>   }
->>   /* bpf_trampoline_unlink_prog() should never fail. */
+are available in the Git repository at:
+
+  git://anongit.freedesktop.org/drm/drm tags/drm-next-2023-04-27
+
+for you to fetch changes up to cf03e2956af307dc25e8c41fd4cffe44482a6ec1:
+
+  Merge tag 'drm-misc-next-fixes-2023-04-26' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next (2023-04-27
+11:29:34 +1000)
+
+----------------------------------------------------------------
+drm-next fixes for 6.4-rc1
+
+ttm:
+- Fix TTM build on archs where PMD_SHIFT is not constant.
+
+qaic:
+- Revert uAPI from accel/qaic.
+
+panel:
+- Improve error handling in nt35950.
+- Fix double unregister in otm8009a when removing the driver.
+
+----------------------------------------------------------------
+Christian K=C3=B6nig (1):
+      drm/ttm: revert "Reduce the number of used allocation orders for
+TTM pages"
+
+Dave Airlie (1):
+      Merge tag 'drm-misc-next-fixes-2023-04-26' of
+git://anongit.freedesktop.org/drm/drm-misc into drm-next
+
+James Cowgill (1):
+      drm/panel: otm8009a: Set backlight parent to panel device
+
+Jeffrey Hugo (1):
+      Revert "accel/qaic: Add mhi_qaic_cntl"
+
+Konrad Dybcio (2):
+      drm/panel: novatek-nt35950: Improve error handling
+      drm/panel: novatek-nt35950: Only unregister DSI1 if it exists
+
+ drivers/accel/qaic/Makefile                      |   1 -
+ drivers/accel/qaic/mhi_qaic_ctrl.c               | 569 -------------------=
+----
+ drivers/accel/qaic/mhi_qaic_ctrl.h               |  12 -
+ drivers/accel/qaic/qaic_drv.c                    |  10 -
+ drivers/gpu/drm/panel/panel-novatek-nt35950.c    |  10 +-
+ drivers/gpu/drm/panel/panel-orisetech-otm8009a.c |   2 +-
+ drivers/gpu/drm/ttm/ttm_pool.c                   |  30 +-
+ 7 files changed, 21 insertions(+), 613 deletions(-)
+ delete mode 100644 drivers/accel/qaic/mhi_qaic_ctrl.c
+ delete mode 100644 drivers/accel/qaic/mhi_qaic_ctrl.h
