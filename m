@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BDE6F03F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5C46F03F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243476AbjD0KJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
+        id S243491AbjD0KLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjD0KJ2 (ORCPT
+        with ESMTP id S243378AbjD0KLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:09:28 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3261892;
-        Thu, 27 Apr 2023 03:09:26 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33RA95Eo111786;
-        Thu, 27 Apr 2023 05:09:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682590145;
-        bh=5R2fhojW6V0uw1XdQV9VrPNhcf4y1GUJ9EavXHUjwLA=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Elp678UfEnqHGSTZJvdo/AaSRaJMlsVEFkNjaphsiIC0emALhU4qiw876VZgKOMs/
-         oRN0AooxHfUXXD6yy0wVO9qVWUgRW1rflLh3cGj5QRSTIImjS289OZvdQgc8MJi9zK
-         2sutW7YPi/+1E+vj/FYhTJBoC9bCkxAPkN8rx/1U=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33RA954n102611
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 27 Apr 2023 05:09:05 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
- Apr 2023 05:09:05 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 27 Apr 2023 05:09:05 -0500
-Received: from [10.249.130.34] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33RA91tS043983;
-        Thu, 27 Apr 2023 05:09:01 -0500
-Message-ID: <24ea8982-e2ab-d58d-dedd-f51703d0bb92@ti.com>
-Date:   Thu, 27 Apr 2023 15:39:00 +0530
+        Thu, 27 Apr 2023 06:11:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0226A8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682590308; x=1714126308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=llj1k7SyZo897TodgO+NWeNu2kbu92eWibZnQxYXlIo=;
+  b=xcsCMiL0JBAv34qkuPSItd6S1iVxht3o8T7NevLUef0PW7D7Am3wO9XS
+   tMgiEn1hogyQqcwI38cqsJ2XJAZoPa1n4n6QXB/RCk2Y8sjFSxANYlIPb
+   SXbo4NU4wNDuTt1jPPMsftlW1MgkngjqlyiDrlrZsazmIYr3c3u7xdUhi
+   EWr7Tv6n/LL8qyQwB6Kmn42zzvJmOg5EjVC16IsPt4Hf38RK4cx29cFxA
+   nVVvOepyvdDVwbUolpN0mFz3eGxiTCyvK+LmTuAOUPnhmuxaTQIxMhAFV
+   jUTTu+2frH1GMnagUN8is3LIC6sprErnJctKl7YON0nPbpcI/OCmDJeKo
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
+   d="asc'?scan'208";a="149214073"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 03:11:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 27 Apr 2023 03:11:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 27 Apr 2023 03:11:39 -0700
+Date:   Thu, 27 Apr 2023 11:11:22 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <alexghiti@rivosinc.com>,
+        <heiko@sntech.de>, <guoren@kernel.org>,
+        <anshuman.khandual@arm.com>, <mick@ics.forth.gr>,
+        <samuel@sholland.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -fixes] riscv: mm: remove redundant parameter of
+ create_fdt_early_page_table
+Message-ID: <20230427-lecturer-goon-a7c1245fa2bb@wendy>
+References: <20230426091511.674496-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [EXTERNAL] Re: [PATCH 1/5] arm64: dts: ti: k3-j7200: Add general
- purpose timers
-To:     Tony Lindgren <tony@atomide.com>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <m-chawdhry@ti.com>, <n-francis@ti.com>, <u-kumar1@ti.com>
-References: <20230426103219.1565266-1-u-kumar1@ti.com>
- <20230426103219.1565266-2-u-kumar1@ti.com>
- <20230427080049.GH14287@atomide.com>
-Content-Language: en-US
-From:   "Kumar, Udit" <u-kumar1@ti.com>
-In-Reply-To: <20230427080049.GH14287@atomide.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="B4nDN1w4sHZ1Joe6"
+Content-Disposition: inline
+In-Reply-To: <20230426091511.674496-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +70,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony
+--B4nDN1w4sHZ1Joe6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 4/27/2023 1:30 PM, Tony Lindgren wrote:
-> Hi,
->
-> * Udit Kumar <u-kumar1@ti.com> [230426 10:38]:
->> There are 20 general purpose timers on j7200 that can be used for things
->> like PWM using pwm-omap-dmtimer driver. There are also additional ten
->> timers in the MCU domain.
-> ...
->
-> ....
-> Oh so also the MCU timers now have interrupts, nice. Can you please check
-> if what we have in the comments the other SoCs in the dtsi files for MCU
-> timers not having routable interrupts is correct?
+On Wed, Apr 26, 2023 at 05:15:11PM +0800, Song Shuai wrote:
+> create_fdt_early_page_table() explicitly uses early_pg_dir for
+> 32-bit ftb mapping and the pgdir parameter is redundant here.
+> So remove it and its caller.
 
-checked for AM65 and AM64, looks these SOC follow different IT map wrt J7200
+"and its caller" sounds like you're removing the caller itself when
+that's not what you're doing!
+I am certainly not suggesting that you resubmit because of that though.
 
-On J7200 reading TRM
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-https://www.ti.com/lit/pdf/spruiu1
+Thanks,
+Conor.
 
-Section 9.4.3.1.2 GIC500 SPI Interrupt Map, table Table 9-109.
+--B4nDN1w4sHZ1Joe6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-MCU_TIMER0_INTR_PEND_0 (848) to MCU_TIMER9_INTR_PEND_0 (857)
+-----BEGIN PGP SIGNATURE-----
 
-looks to be available for A core.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEpKSgAKCRB4tDGHoIJi
+0tdyAP9IYmb79WDRFsH48lzLc2Tk5z6eDoSPuuP8mLa3KlnjRQEAjzhtySq7Mq/m
+xlkT1FzflYgXZJShfdRO0yJ6DEQL/Qw=
+=2zWl
+-----END PGP SIGNATURE-----
 
-> Also, should the MCU timers be still tagged with status = "reserved"?
-Will mark status as  reserved
-> See the comments in k3-am62-mcu.dtsi for example for both questions.
->
-> Regards,
->
-> Tony
+--B4nDN1w4sHZ1Joe6--
