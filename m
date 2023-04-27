@@ -2,195 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AE96F024B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3466F0258
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243232AbjD0IE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S242131AbjD0IKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243274AbjD0IEp (ORCPT
+        with ESMTP id S232094AbjD0IKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:04:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C46540E7;
-        Thu, 27 Apr 2023 01:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682582666; x=1714118666;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=YAwLYDdMqQcMoIUVD/XrkZQr1t1fwC+m98oRe+LHHI0=;
-  b=Lfn6JMdzIyBDeDbdLPj2ra8viyfF1aoad4p0j1nQZp+kyoVb/Yozq3VT
-   Z5MI6z5Ir3IVeliFVctSq0M935Zct7ZNNka/KqHSxzaQQMx9+cD+U0tj9
-   K/aRoYa+pS9JCCCLM+Uz05FfABJ0KLswx+qNbHH1Cwbfs5CfQYysrQ9WS
-   jtvIYfeMSAysuqXCxcNYSnAziTSy78WybPMXypsv3HJA/itVnt5hpaRHQ
-   ss0Sf8cCNEh3C3ohBK4cKGTVqzOxNlXK3ozE+sO55EzLmT+5XHGP2lcI/
-   4yRwQciDJPVNr/PRpVZsOcL2KtvCogOmgmDIIRBlgzxHcuMJJhDauCqMf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="336304909"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="336304909"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 01:04:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="758993834"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="758993834"
-Received: from mmaiores-mobl.ger.corp.intel.com ([10.251.215.69])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 01:04:22 -0700
-Date:   Thu, 27 Apr 2023 11:04:17 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-cc:     linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Subject: Re: [PATCH v2 24/24] selftests/resctrl: Rewrite Cache Allocation
- Technology (CAT) test
-In-Reply-To: <ff2b3b61-57d2-04da-a719-c72d8bfd49eb@intel.com>
-Message-ID: <dfe24719-cd5e-9ff-9278-a92356dc1490@linux.intel.com>
-References: <20230418114506.46788-1-ilpo.jarvinen@linux.intel.com> <20230418114506.46788-25-ilpo.jarvinen@linux.intel.com> <eac72c7b-bd01-084e-cf23-ec5e8e0e3cf3@intel.com> <b2f72637-5c16-d25b-8a0-3fee4ca9ec7e@linux.intel.com>
- <ff2b3b61-57d2-04da-a719-c72d8bfd49eb@intel.com>
+        Thu, 27 Apr 2023 04:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584A22D71;
+        Thu, 27 Apr 2023 01:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E42D263AED;
+        Thu, 27 Apr 2023 08:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 409C9C4339B;
+        Thu, 27 Apr 2023 08:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682583019;
+        bh=3SWEG4ZM5mURpRa/lQ43ANg4nKi9ibLJ1sNHY2sKVik=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=czoPbmwFmg+8B8xuRTnQFbfROi1zo+bgPvADca0WQlSIElJUDZvkC8K81DQg8lu8I
+         tHCqoelHLhe3scK1hjpg7KjCbzhCzCvTWow7R/L1YfDaeXf5EKEZ1T/mxGIji8EQUB
+         sxdXFO6PwOFe6pTj2bl16DGRSMCNnGBRrCTxh6L+RDiNuaWBaZFCeJx5NnkYxnZJZc
+         qlO2DN+7x89e2hnvZg88WCea6iC8Ov3TDFQ14mqyLpv/Tq07ioYtasip9GJCQHjyLE
+         4eE/Nir/IrKOlNxwUT25a4Bo67E3kGAaEmne2cs1bEi9aVCa718v2HfBMY4aUyBck3
+         j638igLdJ3jjw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26E91E5FFC8;
+        Thu, 27 Apr 2023 08:10:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-2136314721-1682582664=:1971"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] rxrpc: Fix potential data race in
+ rxrpc_wait_to_be_connected()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168258301915.27262.1188523901051859504.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Apr 2023 08:10:19 +0000
+References: <508133.1682427395@warthog.procyon.org.uk>
+In-Reply-To: <508133.1682427395@warthog.procyon.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot+ebc945fdb4acd72cba78@syzkaller.appspotmail.com,
+        marc.dionne@auristor.com, dvyukov@google.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hello:
 
---8323329-2136314721-1682582664=:1971
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On Wed, 26 Apr 2023, Reinette Chatre wrote:
-> On 4/26/2023 6:58 AM, Ilpo Järvinen wrote:
-> > On Fri, 21 Apr 2023, Reinette Chatre wrote:
-> >> On 4/18/2023 4:45 AM, Ilpo Järvinen wrote:
+On Tue, 25 Apr 2023 13:56:35 +0100 you wrote:
+> Inside the loop in rxrpc_wait_to_be_connected() it checks call->error to
+> see if it should exit the loop without first checking the call state.  This
+> is probably safe as if call->error is set, the call is dead anyway, but we
+> should probably wait for the call state to have been set to completion
+> first, lest it cause surprise on the way out.
 > 
-> ...
+> Fix this by only accessing call->error if the call is complete.  We don't
+> actually need to access the error inside the loop as we'll do that after.
 > 
-> >>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> >>> index 4b505fdb35d7..85053829b9c5 100644
-> >>> --- a/tools/testing/selftests/resctrl/cat_test.c
-> >>> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> >>> @@ -11,11 +11,12 @@
-> >>>  #include "resctrl.h"
-> >>>  #include <unistd.h>
-> >>>  
-> >>> -#define RESULT_FILE_NAME1	"result_cat1"
-> >>> -#define RESULT_FILE_NAME2	"result_cat2"
-> >>> -#define NUM_OF_RUNS		5
-> >>> -#define MAX_DIFF_PERCENT	4
-> >>> -#define MAX_DIFF		1000000
-> >>> +#define RESULT_FILE_NAME		"result_cat"
-> >>> +#define NUM_OF_RUNS			5
-> >>> +#define MIN_DIFF_PERCENT_PER_BIT	2
-> >>
-> >> Could you please start a new trend that adds documentation
-> >> that explains what this constant means and how it was chosen?
-> > 
-> > I can try although that particular 2 was a bit handwavy that just seems to 
-> > work with the tests I performed.
-> 
-> The changelog claims that the existing CAT test does not work with
-> this new test offered as replacement. Considering that I do think it
-> is important to have confidence that this test is able to test CAT.
-> The words "handwave" and "seems to work" are red flags to me.
-> When merged, these tests will be run on a variety of platforms with
-> various configurations. Using test criteria based on measurements
-> from one particular system may work but there needs to be confidence
-> that the criteria maps to all systems these tests will be run on.
+> [...]
 
-My "tests" (in plural) were not limited to one particular system but 
-included systems from different generations.
+Here is the summary with links:
+  - [net] rxrpc: Fix potential data race in rxrpc_wait_to_be_connected()
+    https://git.kernel.org/netdev/net/c/2b5fdc0f5caa
 
-> >>> +static unsigned long current_mask;
-> >>> +static long prev_avg_llc_val;
-> >>>  
-> >>>  /*
-> >>>   * Change schemata. Write schemata to specified
-> >>> @@ -28,13 +29,24 @@ static int cat_setup(struct resctrl_val_param *p)
-> >>>  	int ret = 0;
-> >>>  
-> >>>  	/* Run NUM_OF_RUNS times */
-> >>> -	if (p->num_of_runs >= NUM_OF_RUNS)
-> >>> -		return END_OF_TESTS;
-> >>> +	if (p->num_of_runs >= NUM_OF_RUNS) {
-> >>> +		/* Remove one bit from the consecutive block */
-> >>> +		current_mask &= current_mask >> 1;
-> >>> +		if (!current_mask)
-> >>> +			return END_OF_TESTS;
-> >>> +
-> >>> +		p->num_of_runs = 0;
-> >>
-> >> This seems like a workaround to get the schemata to be written. It is
-> >> problematic since now p->num_of_runs no longer accurately reflects the
-> >> number of test runs.
-> > 
-> > This is already the case. MBA test works around this very same problem by 
-> > using a custom static variable (runs_per_allocation) which is reset to 0 
-> > every NUM_OF_RUNS tests and not keeping ->num_of_runs at all. If MBA test 
-> > would replace runs_per_allocation with use of ->num_of_runs, it would 
-> > match what the new CAT test does.
-> > 
-> > Nothing currently relies on ->num_of_runs counting across the different 
-> > "tests" that are run inside CAT and MBA tests. And I don't have anything 
-> > immediately around the corner that would require ->num_of_runs to count 
-> > total number of repetitions that were ran.
-> > 
-> > I guess it would be possible to attempt to consolidate that second layer
-> > MBA and the rewritten CAT tests need somehow into resctrl_val_param. But 
-> > IMHO that too is low-prio refactor as nothing is broken as is.
-> 
-> I do not think that I would use any of the other tests as reference
-> since all the other tests rely on the same wrapper (resctrl_val())
-> by providing it their own customization (via aptly named ... struct
-> resctrl_val_param). 
-
-Oh, I see. I never made the connection to the function name before this.
-(To be honest, it's pretty stupid name for that particular function,
-given what the function does, but that's an entirely separate issue.)
-
+You are awesome, thank you!
 -- 
- i.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> The CAT test is already unique by _not_ using resctrl_val() but its
-> own test. I do not see why those resctrl_val() customization need to
-> propagate to the CAT test if it is not using the wrapper to begin with.
-> 
-> > 
-> >> I was expecting this mask manipulation to be
-> >> in cat_val() so that it is clear how test works instead of part
-> >> of the logic handled here.
-> > 
-> > That seems to be moving into opposite direction from how things are 
-> > currently handled. Doing it in cat_val() would be relying less on 
-> > ->setup(). If that's the preferred direction, then the question becomes, 
-> > should CAT test do anything in ->setup() because also the schemata 
-> > writing could be done in directly cat_val().
-> > 
-> > What I would prefer not to do is to have a rule which says: if there's a 
-> > test-specific function, don't use ->setup() but do any setup directly 
-> > in the test-specific function but, otherwise use ->setup(). Such an
-> > inconsistency would make things hard to track.
-> 
-> The test specific function can still call a setup function but it
-> can be done directly instead of via "struct resctrl_val_param". The
-> test specific function already transitioned away from using resctrl_val(),
-> it is not clear to me why there should be rules about how
-> function pointers within "struct resctrl_val_param" should be used or
-> indeed why "struct resctrl_val_param" should be used at all.
-> 
-> Reinette
-> 
 
---8323329-2136314721-1682582664=:1971--
