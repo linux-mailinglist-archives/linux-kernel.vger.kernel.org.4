@@ -2,172 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC56F0305
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0586F0309
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbjD0JFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S243181AbjD0JJa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 05:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243126AbjD0JFK (ORCPT
+        with ESMTP id S242961AbjD0JJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:05:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC95E48
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682586297; x=1714122297;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H/3ifw4Me7ZLmwRnUHcz2Bf1iRNy/a2wlnlif9iRpDc=;
-  b=cah3sDFBb5tTV9Mch1JmUFC33HXv1Y1cPd42PSxtXpQnI1bMsTk2vypb
-   pnYvDmHJ06TMMm4fddRwpCoNjp7f31rSPeLA/48P88xtjAsfh5XrqEz+k
-   1J/hE2Wof8DMj8FW0aE+AZEHzHba7rHNxDB1AjqcZtyk7dsNW2EhkR/Aj
-   TooXs0CsSUTCoSADm6GMzUNLJMA4aNKJmVyzLqoE8ZHzqY7RMKJKrxN5S
-   4U9raH+DissYJOJJleY4iPak76Y26ZRDdj7azWKcB05hVIAJgJxDQIX7J
-   4K4/YHCvOYmJcNHGFt9oereBuyCTMluI1T9kz8QVfMPx4M/yiD4N8jthf
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
-   d="asc'?scan'208";a="210933956"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 02:04:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 27 Apr 2023 02:04:54 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 27 Apr 2023 02:04:52 -0700
-Date:   Thu, 27 Apr 2023 10:04:34 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
-        Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
-Message-ID: <20230427-unveiling-kiwi-631e966f77cc@wendy>
-References: <20230425120016.187010-1-cyy@cyyself.name>
- <tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
- <20230426-porthole-wronged-d5a6a3b89596@spud>
- <6kjgearxffbnnq4bsqs7e3jz6efz436m6gb3zjh7cfi357oxlv@krxto6orxwwn>
+        Thu, 27 Apr 2023 05:09:29 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F261A6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:27 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b97ec4bbc5aso6444905276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682586567; x=1685178567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WNpdm3UdM662v+PkmhOF4xRqFKPDMD0thDZpGLd8lkw=;
+        b=RYBXg2XeFOsaEcpqwGfu07IRRZA/vEeZz/Q/D8AW0rBdXP/q9lnZOHTogNZlqbXBBB
+         RjSjLRIjIJ6orI0+dKxDWnuneRn/UbyXILQ5iK8b1OQc16QJvyN6TTTbgFC07fS9qrZR
+         /01quT45K1FTyoiNqNod3suSGiifv/D9hoDMHVMtoFaHbOIFHGTyuUzJtxzIS/KvMgws
+         7j7CnygdcFUV2M64WyeOtL2gaVkS1exmHbTNy6tGC3puJnWnota76IqjdF7IAqqSzUNo
+         viszIRFkcoQvoqptMLWUfPxqN7pLaJGbMvdS3mZDHbl++WWfmB8Fz8VXtxdl6/paukJJ
+         8pGg==
+X-Gm-Message-State: AC+VfDwNdZOo3RuRzLdTBKIAK3otuamtLeFmK3WO6JcZi4126VHdnx0I
+        RBY6plqDRm5AF4cXbiw+Gur69K1prgbzdQ==
+X-Google-Smtp-Source: ACHHUZ7vBG66evaalj4r7uTzVn5QrXGyG7Dt8Jr9KlvsDQCfiXsMNJt7QUp/3QOiG4ZiVwTd7o4d4Q==
+X-Received: by 2002:a0d:e857:0:b0:541:8810:8d7b with SMTP id r84-20020a0de857000000b0054188108d7bmr808241ywe.15.1682586566468;
+        Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id o144-20020a0dcc96000000b00555e6c655f1sm4653603ywd.103.2023.04.27.02.09.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-54fb89e1666so64220217b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
+X-Received: by 2002:a81:4654:0:b0:52e:f109:ba7a with SMTP id
+ t81-20020a814654000000b0052ef109ba7amr655899ywa.51.1682586565812; Thu, 27 Apr
+ 2023 02:09:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="g9EKRzq+LmoI7/Xs"
-Content-Disposition: inline
-In-Reply-To: <6kjgearxffbnnq4bsqs7e3jz6efz436m6gb3zjh7cfi357oxlv@krxto6orxwwn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+ <20230328160756.30520-3-quic_kriskura@quicinc.com> <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+ <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+ <2070d2fc-9bdc-57f8-d789-4fa6412fc7ed@quicinc.com> <CAMuHMdUKqo6paF5efFVr0tmA3mpOAraZORoKyVFi8Pkt=H4z6Q@mail.gmail.com>
+ <592c2095-a6dc-de4b-713d-a9a582f966e0@quicinc.com>
+In-Reply-To: <592c2095-a6dc-de4b-713d-a9a582f966e0@quicinc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 27 Apr 2023 11:09:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
+Message-ID: <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
+Subject: get_maintainer.pl wrong and undeterministic? (was: Re: [PATCH v2 2/2]
+ usb: gadget: udc: Handle gadget_connect failure during bind operation)
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Joe Perches <joe@perches.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---g9EKRzq+LmoI7/Xs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Krishna,
 
-On Thu, Apr 27, 2023 at 09:53:19AM +0200, Andrew Jones wrote:
-> On Wed, Apr 26, 2023 at 07:54:39PM +0100, Conor Dooley wrote:
-> > (+CC Drew)
-> >=20
-> > Hey Yangyu,
-> >=20
-> > One meta-level comment - can you submit this patch + my dt-bindings
-> > patch as a v2?
-> > Some comments below.
-> >=20
-> > On Tue, Apr 25, 2023 at 08:00:15PM +0800, Yangyu Chen wrote:
-> > > According to RISC-V ISA specification, the ISA naming strings are case
-> > > insensitive. The kernel docs require the riscv,isa string must be all
-> > > lowercase to simplify parsing currently. However, this limitation is =
-not
-> > > consistent with RISC-V ISA Spec.
-> >=20
-> > Please remove the above and cite ACPI's case-insensitivity as the
-> > rationale for this change.
-> >=20
-> > > This patch modifies the ISA string parser in the kernel to support
-> > > case-insensitive ISA string parsing. It replaces `strncmp` with
-> > > `strncasecmp`, replaces `islower` with `isalpha`, and wraps the
-> > > dereferenced char in the parser with `tolower`.
-> > >=20
-> > > Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> > > ---
-> > >  arch/riscv/kernel/cpu.c        |  6 ++++--
-> > >  arch/riscv/kernel/cpufeature.c | 20 ++++++++++----------
-> > >  2 files changed, 14 insertions(+), 12 deletions(-)
-> > >=20
-> > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > > index 8400f0cc9704..531c76079b73 100644
-> > > --- a/arch/riscv/kernel/cpu.c
-> > > +++ b/arch/riscv/kernel/cpu.c
-> > > @@ -4,6 +4,7 @@
-> > >   */
-> > > =20
-> > >  #include <linux/cpu.h>
-> > > +#include <linux/ctype.h>
-> > >  #include <linux/init.h>
-> > >  #include <linux/seq_file.h>
-> > >  #include <linux/of.h>
-> > > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *n=
-ode, unsigned long *hart)
-> > >  		pr_warn("CPU with hartid=3D%lu has no \"riscv,isa\" property\n", *=
-hart);
-> > >  		return -ENODEV;
-> > >  	}
-> > > -	if (isa[0] !=3D 'r' || isa[1] !=3D 'v') {
-> > > +	if (tolower(isa[0]) !=3D 'r' || tolower(isa[1]) !=3D 'v') {
-> > >  		pr_warn("CPU with hartid=3D%lu has an invalid ISA of \"%s\"\n", *h=
-art, isa);
-> > >  		return -ENODEV;
-> >=20
-> > I don't understand why this is even here in the first place. I'd be
-> > inclined to advocate for it's entire removal. Checking *only* that there
-> > is an "rv" in that string seems pointless to me. If you're on a 64-bit
-> > kernel and the node has riscv,isa =3D "rv32ima" it's gonna say it is ok=
-ay?
-> > Drew what do you think?
->=20
-> It makes some sense to me as a garbage detector. It's unlikely the first
-> two bytes will be "rv" if the string is random junk.
+CC Joe and lkml
 
-Preventing the input of absolute rubbish is dt-validate's job & if the dtb
-itself has been corrupted somehow I suspect that we have bigger problems
-than checking for "rv" will solve.
+On Thu, Apr 27, 2023 at 10:44 AM Krishna Kurapati PSSNV
+<quic_kriskura@quicinc.com> wrote:
+> On 4/27/2023 1:23 PM, Geert Uytterhoeven wrote:
+> > On Thu, Apr 27, 2023 at 5:49 AM Krishna Kurapati PSSNV
+> > <quic_kriskura@quicinc.com> wrote:
+> >> On 4/26/2023 2:48 PM, Geert Uytterhoeven wrote:
+> >>> On Wed, Apr 26, 2023 at 3:17 AM Krishna Kurapati PSSNV
+> >>> <quic_kriskura@quicinc.com> wrote:
+> >>>> Hi Alan, Geert,
+> >>>>
+> >>>>     Can you help review and provide comments/approval on the following patch.
+> >>>
+> >>> I don't know why you are addressing me, as I never touched the affected
+> >>> file, am not listed as its maintainer, and don't know much about USB UDC.
+> >
+> >>    Apologies. I must have caused some confusion because of same name. I
+> >> must have specified clearly whom I was referring to.
+> >>
+> >> I CC'd and was referring to Geert Uytterhoeven <geert+renesas@glider.be>
+> >> for comments.
+> >
+> > That's actually me, too ;-)
+> >
+> >> As per the output of get_maintainer.pl
+> >>
+> >> ./scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+> >>
+> >> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+> >> SUBSYSTEM,commit_signer:6/6=100%,authored:1/6=17%,removed_lines:2/26=8%)
+> >> Alan Stern <stern@rowland.harvard.edu>
+> >> (commit_signer:4/6=67%,authored:3/6=50%,added_lines:36/45=80%,removed_lines:17/26=65%)
+> >> TaoXue <xuetao09@huawei.com> (commit_signer:1/6=17%)
+> >> "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/6=17%)
+> >> Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/6=17%)
+> >> Colin Ian King <colin.i.king@gmail.com> (authored:1/6=17%)
+> >> Jiantao Zhang <water.zhangjiantao@huawei.com>
+> >> (authored:1/6=17%,added_lines:6/45=13%,removed_lines:6/26=23%)
+> >
+> > Interesting, I don't see me listed when running that command (on v6.3 and
+> > next-20230425), and I never authored any change to that file.
+> > What is the tree (commit sha1) you are running ./scripts/get_maintainer.pl on?
+>
+> I checked it on linux-next a couple of weeks back and it showed me this.
+> But when I synced latest linux kernel, it didn't show it today 😅
+> Not sure, what is the diff here.
 
-> also do a strlen(isa) >=3D 4 check first, though. of_property_read_string=
-()
-> will succeed even when the string is "".
+Interesting:
 
-I don't think that checking that there are at least 4 characters isn't
-even sufficient. Either we should confirm that this is a valid riscv,isa
-to run on (so rv##ima w/ ## matching the kernel) or not bother at all.
+    $ git checkout next-20230425
+    Updating files: 100% (7386/7386), done.
+    Previous HEAD position was 198925fae644b009 Add linux-next
+specific files for 20230329
+    HEAD is now at f600e0bbde8562a0 Add linux-next specific files for 20230425
+    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+SUBSYSTEM,commit_signer:11/11=100%,authored:3/11=27%,removed_lines:5/73=7%)
+    Alan Stern <stern@rowland.harvard.edu>
+(commit_signer:4/11=36%,authored:3/11=27%,added_lines:36/182=20%,removed_lines:17/73=23%)
+    Badhri Jagan Sridharan <badhri@google.com>
+(commit_signer:2/11=18%,authored:2/11=18%,added_lines:107/182=59%,removed_lines:44/73=60%)
+    Elson Roy Serrao <quic_eserrao@quicinc.com>
+(commit_signer:1/11=9%,added_lines:27/182=15%)
+    Sebastian Reichel <sre@kernel.org> (commit_signer:1/11=9%)
+    Colin Ian King <colin.i.king@gmail.com> (authored:1/11=9%)
+    Jiantao Zhang <water.zhangjiantao@huawei.com>
+(authored:1/11=9%,removed_lines:6/73=8%)
+    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+    linux-kernel@vger.kernel.org (open list)
+    $ git checkout next-20230329
+    Updating files: 100% (7386/7386), done.
+    Previous HEAD position was f600e0bbde8562a0 Add linux-next
+specific files for 20230425
+    HEAD is now at 198925fae644b009 Add linux-next specific files for 20230329
+    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
+    Alan Stern <stern@rowland.harvard.edu>
+(commit_signer:3/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
+    Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/8=12%)
+    Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
+    Heikki Krogerus <heikki.krogerus@linux.intel.com> (commit_signer:1/8=12%)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+I, Sebastian, and Heikki never touched this file...
 
-It's a different issue though, and I'd be inclined to revisit it in the
-future when the ACPI stuff is in, along with perhaps the cleanup parts
-of Heiko's series too.
+     Jiantao Zhang <water.zhangjiantao@huawei.com>
+(authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
+    Colin Ian King <colin.i.king@gmail.com> (authored:1/8=12%)
+    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+    linux-kernel@vger.kernel.org (open list)
+    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
+    Alan Stern <stern@rowland.harvard.edu>
+(commit_signer:4/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
+    "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/8=12%)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Heikki and I are gone, but Rafael is new and also hasn't touched this file?
 
---g9EKRzq+LmoI7/Xs
-Content-Type: application/pgp-signature; name="signature.asc"
+    Colin Ian King <colin.i.king@gmail.com>
+(commit_signer:1/8=12%,authored:1/8=12%)
+    Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
+    Jiantao Zhang <water.zhangjiantao@huawei.com>
+(authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
+    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+    linux-kernel@vger.kernel.org (open list)
 
------BEGIN PGP SIGNATURE-----
+You can see the differences when running the following multiple times:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEo6ogAKCRB4tDGHoIJi
-0tBzAP9Gjrxk70KxyJ3D82eZXdg5mq4oq9mwEu5UuYkAARPQawD/U/mk5q1Wts6h
-7VXEioB99Mb4kdKQojdZuCuYnvN6lAU=
-=IMRq
------END PGP SIGNATURE-----
+    $ diff <(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
+<(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
 
---g9EKRzq+LmoI7/Xs--
+Looks like scripts/get_maintainer.pl (a) shows wrong committers (they
+did provide other e.g. Reviewed-by tags), and (b) is not deterministic?
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
