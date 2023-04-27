@@ -2,305 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56996F09D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25386F09DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243524AbjD0Q2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S244205AbjD0Q2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243370AbjD0Q2J (ORCPT
+        with ESMTP id S243825AbjD0Q2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:28:09 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B3D187
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:28:07 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id 7ad0272f-e518-11ed-b972-005056bdfda7;
-        Thu, 27 Apr 2023 19:28:03 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Thu, 27 Apr 2023 19:28:02 +0300
-To:     nick.hawkins@hpe.com
-Cc:     verdun@hpe.com, linus.walleij@linaro.org, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jdelvare@suse.com, linux@roeck-us.net, linux@armlinux.org.uk,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 1/9] gpio: gxp: Add HPE GXP GPIO
-Message-ID: <ZEqikkknyRrFTh2t@surfacebook>
-References: <20230418152824.110823-1-nick.hawkins@hpe.com>
- <20230418152824.110823-2-nick.hawkins@hpe.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230418152824.110823-2-nick.hawkins@hpe.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 27 Apr 2023 12:28:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E6510E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682612904; x=1714148904;
+  h=date:from:to:cc:subject:message-id;
+  bh=AOUlCq53MrBKMBFJuP3TJIA7DEIuwDHxPX6/BCk/AyM=;
+  b=NA1ZxuzUpneM8hUa0G5tXdfEXsqhAAehMeRvzz+uS73x7JAcyPlcXnUE
+   p//ho1C4/e9iEk4riksiBpxtot9NhoMNs+anNT9KpbzZdELQfWsPJK42R
+   MPhoFIO5WLM2OZlMABgYD+4Zxnq/cRb/bQt7vl7GDAW1np1mRg7R9/ALR
+   Xl210M+9AqFXn/Wa1PDLAyEIepLRiolDxr9x/DvuLGGXj0wuu/Y8uU0X2
+   9AipKevIDwQ/WRK/KYuyWikyCBHOd/Z+wKo2ilqg+7KXS+ZPH9ECCeWWd
+   Cp9tF1InAIoOzxdN0seXi+sdIUg8egHSiLchxhXVn9d/00E/WS9nCkB4k
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="347511924"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="347511924"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 09:28:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868786930"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="868786930"
+Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2023 09:28:22 -0700
+Received: from kbuild by b95e16499b55 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ps4Tl-00001E-1L;
+        Thu, 27 Apr 2023 16:28:21 +0000
+Date:   Fri, 28 Apr 2023 00:28:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.04.26a] BUILD REGRESSION
+ 56b38a90a12f76e463a7381d8cff854926fa2b59
+Message-ID: <20230427162805.KbWyR%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Apr 18, 2023 at 10:28:16AM -0500, nick.hawkins@hpe.com kirjoitti:
-> From: Nick Hawkins <nick.hawkins@hpe.com>
-> 
-> The GXP SoC supports GPIO on multiple interfaces: Host, CPLD and Soc
-> pins. The interface from CPLD and Host are interruptable from vic0
-> and vic1. This driver allows support for both of these interfaces
-> through the use of different compatible bindings.
-
-Thank you for your contribution. To begin with, I don't believe a simple GPIO
-driver needs 1000+ LoCs. But see more comments below.
-
-...
-
-> +config GPIO_GXP
-> +        tristate "GXP GPIO support"
-> +        depends on ARCH_HPE_GXP
-> +        select GPIOLIB_IRQCHIP
-> +        help
-> +	  Say Y here to support GXP GPIO controllers. It provides
-> +	  support for the multiple GPIO interfaces available to be
-> +	  available to the Host.
-
-The indentation is rather problematic. Had you run checkpatch.pl?
-
-...
-
-> +#include <linux/gpio.h>
-
-No, new code may not include this header.
-
-...
-
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-
-Why? I haven't seen much evidence of needing of these. What you need are
-rather mod_devicetable.h and property.h (see also below).
-
-...
-
-> +#define GPIDATL		0x40
-> +#define GPIDATH		0x60
-> +#define GPODATL		0xb0
-> +#define GPODATH		0xb4
-> +#define GPODAT2L	0xf8
-> +#define GPODAT2H	0xfc
-
-Use same size of the values, e.g. 0x0fc
-
-> +#define GPOOWNL		0x110
-> +#define GPOOWNH		0x114
-> +#define GPOOWN2L	0x118
-> +#define GPOOWN2H	0x11c
-
-To me this sounds like a 2 8-lines bank GPIO array. Drop those H and L suffixes
-and use proper offset calculation based on the bank number. There are plenty of
-existing GPIO drivers that do that way.
-
-Also why gpio-regmap is not in use?
-
-...
-
-> +#define GPIO_DIR_OUT	0
-> +#define GPIO_DIR_IN	1
-
-Oh, what is this?! You must not interfere with the GPIO_ namespace.
-
-...
-
-> +#define PGOOD_MASK		1
-
-For mask use BIT() / GENMASK()
-
-> +#define PLREG_INT_GRP_STAT_MASK	0x8
-
-Ditto.
-
-...
-
-> +#define PLREG_INT_HI_PRI_EN	0xC
-
-Is it register offset or value?
-
-> +#define PLREG_INT_GRP5_BASE	0x31
-> +#define PLREG_INT_GRP6_BASE	0x35
-> +#define PLREG_INT_GRP5_FLAG	0x30
-> +#define PLREG_INT_GRP6_FLAG	0x34
-
-These need more expanation what they are for and why these specific values are
-being used.
-
-...
-
-
-> +#define PLREG_INT_GRP5_PIN_BASE	59
-> +#define PLREG_INT_GRP6_PIN_BASE	90
-
-What are these for?
-
-...
-
-> +enum plreg_gpio_pn {
-> +	RESET = 192,
-> +	NMI_OUT = 193,
-> +	VPBTN = 210,
-> +	PGOOD,
-> +	PERST,
-> +	POST_COMPLETE,
-
-Why these numbers? If it comes from hardware specification, make _all_ them
-explicitly assigned.
-
-> +};
-
-...
-
-> +struct gxp_gpio_drvdata {
-> +	struct regmap *csm_map;
-> +	void __iomem *fn2_vbtn;
-> +	struct regmap *fn2_stat;
-> +	struct regmap *vuhc0_map;
-> +	void __iomem *vbtn;
-> +	struct regmap *pl_led;
-> +	struct regmap *pl_health;
-> +	struct regmap *pl_int;
-
-> +	struct gpio_chip chip;
-
-Move it to be the first member in the structure. Might save a few bytes in the
-code. 
-
-> +	int irq;
-> +};
-
-...
-
-> +static int gxp_gpio_csm_get(struct gpio_chip *chip, unsigned int offset)
-> +{
-> +	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-> +	int ret = 0;
-
-> +	switch (offset) {
-> +	case 0 ... 31:
-> +		regmap_read(drvdata->csm_map, GPIDATL,	&ret);
-> +		ret = (ret & BIT(offset)) ? 1 : 0;
-> +		break;
-> +	case 32 ... 63:
-> +		regmap_read(drvdata->csm_map, GPIDATH,	&ret);
-> +		ret = (ret & BIT(offset - 32)) ? 1 : 0;
-> +		break;
-> +	case 64 ... 95:
-> +		regmap_read(drvdata->csm_map, GPODATL,	&ret);
-> +		ret = (ret & BIT(offset - 64)) ? 1 : 0;
-> +		break;
-> +	case 96 ... 127:
-> +		regmap_read(drvdata->csm_map, GPODATH,	&ret);
-> +		ret = (ret & BIT(offset - 96)) ? 1 : 0;
-> +		break;
-> +	case 128 ...  159:
-> +		regmap_read(drvdata->csm_map, GPODAT2L,	&ret);
-> +		ret = (ret & BIT(offset - 128)) ? 1 : 0;
-> +		break;
-> +	case 160 ... 191:
-> +		regmap_read(drvdata->csm_map, GPODAT2H,	&ret);
-> +		ret = (ret & BIT(offset - 160)) ? 1 : 0;
-> +		break;
-> +	case 192:
-> +		/* SW_RESET */
-> +		regmap_read(drvdata->csm_map, 0x5C, &ret);
-> +		ret = (ret & BIT(15)) ? 1 : 0;
-> +		break;
-
-Besides redundant " ? 1 : 0" parts, see what I wrote above and calculate offset
-properly and then apply. Ditto for other functions.
-
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-
-I stopped here, this driver requires a lot more work to be done before
-considering for upstream, sorry.
-
-...
-
-> +	girq->default_type = IRQ_TYPE_NONE;
-> +	girq->handler = handle_edge_irq;
-
-Should be handle_bad_irq() by default.
-
-...
-
-> +	ret = devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, drvdata);
-> +	if (ret < 0)
-> +		dev_err(&pdev->dev, "Could not register gpiochip for plreg, %d\n",
-> +			ret);
-
-Huh?! No bailing out?
-
-...
-
-> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_HI_PRI_EN,
-> +			   BIT(4) | BIT(5), BIT(4) | BIT(5));
-
-GENMASK(), but do it as a defined value with meaningful name.
-
-> +	regmap_update_bits(drvdata->pl_int, PLREG_INT_GRP_STAT_MASK,
-> +			   BIT(4) | BIT(5), 0x00);
-
-Ditto.
-
-...
-
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0) {
-
-> +		dev_err(&pdev->dev, "Get irq from platform fail - %d\n", ret);
-
-No. The message is already printed by platform code. You are not supposed to
-pollute logs with duplicative noise.
-
-> +		return ret;
-> +	}
-
-...
-
-> +static const struct of_device_id gxp_gpio_of_match[] = {
-> +	{ .compatible = "hpe,gxp-gpio"},
-> +	{ .compatible = "hpe,gxp-gpio-pl"},
-
-Missing spaces in above two lines.
-
-> +	{}
-> +};
-
-...
-
-> +	const struct of_device_id *match = of_match_device(gxp_gpio_of_match, dev);
-
-device_get_match_data()
-
-...
-
-> +	drvdata = devm_kzalloc(&pdev->dev, sizeof(struct gxp_gpio_drvdata),
-> +			       GFP_KERNEL);
-
-sizeof(*drvdata) and make it one line.
-
-> +	if (!drvdata)
-> +		return -ENOMEM;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.04.26a
+branch HEAD: 56b38a90a12f76e463a7381d8cff854926fa2b59  rcu-tasks: Stop rcu_tasks_invoke_cbs() from using never-onlined CPUs
+
+Error/Warning reports:
+
+https://lore.kernel.org/oe-kbuild-all/202304271412.cbmTIpbf-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202304271416.DjRKPeoJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202304271446.dk8ruOnO-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202304271448.5uG6ip4V-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202304271836.Rr0pBtSE-lkp@intel.com
+
+Error/Warning: (recently discovered and may have been fixed)
+
+arch/arm/kernel/smp.c:385:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
+arch/loongarch/kernel/process.c:68:1: warning: 'noreturn' function does return
+arch/powerpc/kernel/smp.c:1768:1: error: function declared 'noreturn' should not return [-Werror,-Winvalid-noreturn]
+arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for 'set_nmi_torture' [-Wmissing-prototypes]
+arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+kernel/rcu/tree.c:2149 rcu_do_batch() error: uninitialized symbol 'jlimit'.
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- i386-randconfig-a001
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- i386-randconfig-c001
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- i386-randconfig-m021
+|   |-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|   `-- kernel-rcu-tree.c-rcu_do_batch()-error:uninitialized-symbol-jlimit-.
+|-- loongarch-randconfig-r012-20230427
+|   `-- arch-loongarch-kernel-process.c:warning:noreturn-function-does-return
+|-- x86_64-kexec
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- x86_64-randconfig-a011
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- x86_64-randconfig-a013
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- x86_64-randconfig-a015
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+|-- x86_64-randconfig-c002
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+`-- x86_64-randconfig-m001
+    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+clang_recent_errors
+|-- arm-milbeaut_m10v_defconfig
+|   `-- arch-arm-kernel-smp.c:warning:function-declared-noreturn-should-not-return
+|-- i386-allnoconfig
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
+|-- powerpc-buildonly-randconfig-r003-20230427
+|   `-- arch-powerpc-kernel-smp.c:error:function-declared-noreturn-should-not-return-Werror-Winvalid-noreturn
+|-- x86_64-randconfig-a005
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
+|-- x86_64-randconfig-a014
+|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
+`-- x86_64-randconfig-a016
+    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
+
+elapsed time: 723m
+
+configs tested: 109
+configs skipped: 9
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r002-20230427   gcc  
+arc                  randconfig-r043-20230427   gcc  
+arc                        vdk_hs38_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r006-20230427   gcc  
+arm                                 defconfig   gcc  
+arm                           imxrt_defconfig   gcc  
+arm                   milbeaut_m10v_defconfig   clang
+arm                       netwinder_defconfig   clang
+arm                  randconfig-r011-20230427   gcc  
+arm                  randconfig-r046-20230427   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r015-20230427   gcc  
+hexagon      buildonly-randconfig-r003-20230427   clang
+hexagon              randconfig-r003-20230427   clang
+hexagon              randconfig-r004-20230427   clang
+hexagon              randconfig-r041-20230427   clang
+hexagon              randconfig-r045-20230427   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r004-20230427   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230427   gcc  
+loongarch            randconfig-r016-20230427   gcc  
+loongarch            randconfig-r025-20230427   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze   buildonly-randconfig-r005-20230427   gcc  
+microblaze           randconfig-r001-20230427   gcc  
+microblaze           randconfig-r012-20230427   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r034-20230427   gcc  
+nios2                randconfig-r036-20230427   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r024-20230427   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                 mpc834x_itx_defconfig   gcc  
+powerpc                 mpc836x_rdk_defconfig   clang
+powerpc              randconfig-r026-20230427   clang
+powerpc                     redwood_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r021-20230427   clang
+riscv                randconfig-r022-20230427   clang
+riscv                randconfig-r042-20230427   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r006-20230427   gcc  
+s390                 randconfig-r044-20230427   clang
+sh                               allmodconfig   gcc  
+sh                          landisk_defconfig   gcc  
+sh                   secureedge5410_defconfig   gcc  
+sparc        buildonly-randconfig-r002-20230427   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r005-20230427   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r033-20230427   gcc  
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
