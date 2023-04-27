@@ -2,244 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F0D6F0D2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2BF6F0D31
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344257AbjD0UcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S1344264AbjD0Uc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344203AbjD0UcU (ORCPT
+        with ESMTP id S1344203AbjD0Ucy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:32:20 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3632D65
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:32:18 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3ef31924c64so821151cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682627537; x=1685219537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H2IXMdwaTTFrx4Coj66/ubvbio61qlQTkstw1d/6UTM=;
-        b=6FJm3Ua8TJNcakjBTxQlTKYzRiPls5YFeiueDNbRczYXJ72opYFUCA0Zo7pBkjfaIO
-         QeqZXiYFuqW3L/z1bzM3NbQP3+OBGsHS0pzdELmAtv/IVYa7l3XSxoUnA/8/Nx0qfShO
-         uP8VD8cFGBbSmgySBoFR+1lNnV+Um1gjMF7uSaNiq68BJeHw82JVnmVAgzOiXSDcglMk
-         iDmJfWi/GR4CGxB5JtAhtuF8dNAU58CdOhKT4ejGfhE038InnMdW4uNOm8QDp87o8ft+
-         WgGgkob9aODJDAwk8NEiSXRspS0+o+XItngWpN2L/I0AN61L7sbIeYfX7dOsFj1CSSMn
-         HAzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682627537; x=1685219537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H2IXMdwaTTFrx4Coj66/ubvbio61qlQTkstw1d/6UTM=;
-        b=fW+zUKgwgvKix2L+ru7usE3Eoq3yLVY98mRim1GVfljbxsAqOvjgjXmnGTI/NUAi+o
-         C2xu7jFLxf79tNaJPILbcC100tPiiNGjxbU2USA5z4sZ2NUp1EI76T4gtpoBXl/8TzH2
-         HGjIPDijreY9TQm45qpHxTA0XgvmkKV3+TLKUP9lbnlRoVdR24DL1K+h1Y10hI3hdEKw
-         MSiNj4uO2BYOJJbtbyYfh39HexrUWlHSWAdR4Cufb7ezhujovFYqZBuOYccm1rWRvVX2
-         Xpd6fNYE1VJ80wFglSAqRhaPRtcTV2ozlpYUsDV1MNeO3+t7eQsMf9+F15l+jD1QPw5w
-         1ZJg==
-X-Gm-Message-State: AC+VfDwesT/gC/SNL7zVeeUEcJ4ZNgZhYjUUuEAqvPXQvWzksniwuu5V
-        mIDra1umk4qA/+0CxB3MCTFAPcGB790DgYhrUjfAvQ==
-X-Google-Smtp-Source: ACHHUZ5aH2RMztFPkbEUQ+8DV8XApPCnj/hmi785vFmCl/2/ORqwvFJ1p5OWLG3htnKfAJyWNUym++pcdvpf5MxNVIU=
-X-Received: by 2002:a05:622a:8e:b0:3ef:1c85:5b5e with SMTP id
- o14-20020a05622a008e00b003ef1c855b5emr63805qtw.19.1682627537155; Thu, 27 Apr
- 2023 13:32:17 -0700 (PDT)
+        Thu, 27 Apr 2023 16:32:54 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF0E2D65;
+        Thu, 27 Apr 2023 13:32:52 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 13472200D5;
+        Thu, 27 Apr 2023 22:32:51 +0200 (CEST)
+Date:   Thu, 27 Apr 2023 22:32:49 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, quic_sbillaka@quicinc.com,
+        dianders@chromium.org, airlied@gmail.com, andersson@kernel.org,
+        robdclark@gmail.com, dri-devel@lists.freedesktop.org,
+        swboyd@chromium.org, vkoul@kernel.org, agross@kernel.org,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        dmitry.baryshkov@linaro.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, sean@poorly.run,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: always program dsc active bits
+Message-ID: <plyxdgxbiqxmlbs5d53ps6vl4zts6zlzbctrpvshnbvuontqot@uaspqab4kmjt>
+References: <z7wj2lcgcdxsqh7ylhec3ig6o4p6q37zqvpzoxp4bd4vid2z2n@ubsgt3ebqrwr>
+ <83f9a438-52c5-83f3-1767-92d16518d8f0@quicinc.com>
+ <feedv4isliterjtwyicqfarwuvzhtov3jkmvjcwqvt7itkyh7y@e2jq5t6r3lxc>
+ <e78e576a-2a04-e7ca-f6c4-701d508541ad@quicinc.com>
+ <mfzi535qsjtcznwdvgb7qyzk25rcsrkwozah6ji4thqsj73n3m@asybxllomisg>
+ <049697ba-d997-62c0-6e21-ffb287ac3100@quicinc.com>
+ <6s42sutrd2c6tme46t6tchd6y6wonmpwokseqqz2frkrfext7v@vnv44tzwyva4>
+ <82bf6167-d621-1a4e-86f0-7a8567347722@quicinc.com>
+ <2e6dwt74oyy7rroxyus6ebfbylbbtinsi7bccpqazjm64owiv4@gfs52kkq47c3>
+ <8c3a210a-200b-eb1d-e39a-8aad15d790f4@quicinc.com>
 MIME-Version: 1.0
-References: <20230427182906.3411695-1-kan.liang@linux.intel.com>
-In-Reply-To: <20230427182906.3411695-1-kan.liang@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 27 Apr 2023 13:32:05 -0700
-Message-ID: <CAP-5=fUGhOCdG27Cj4nzSytQbkT3uFhrhUfbB+e6a05t5jo67Q@mail.gmail.com>
-Subject: Re: [PATCH] perf stat: Add arch-specific TopdownL1 check for the
- default mode
-To:     kan.liang@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
-        eranian@google.com, ahmad.yasin@intel.com, ak@linux.intel.com,
-        perry.taylor@intel.com, samantha.alt@intel.com,
-        caleb.biggers@intel.com, weilin.wang@intel.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c3a210a-200b-eb1d-e39a-8aad15d790f4@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 11:31=E2=80=AFAM <kan.liang@linux.intel.com> wrote:
->
-> From: Kan Liang <kan.liang@linux.intel.com>
->
-> The default of perf stat fails on several Intel platforms.
-> Skylake:
->
-> $ perf stat true
-> Error:
-> Access to performance monitoring and observability operations is limited.
-> Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open
-> access to performance monitoring and observability operations for process=
-es
-> without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.
-> More information can be found at 'Perf events and tool security' document=
-:
-> https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
-> perf_event_paranoid setting is 2:
->   -1: Allow use of (almost) all events by all users
->       Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
-> > =3D 0: Disallow raw and ftrace function tracepoint access
-> > =3D 1: Disallow CPU event access
-> > =3D 2: Disallow kernel profiling
->
-> ADL (hybrid):
->
-> ./perf stat
-> Segmentation fault (core dumped)
->
-> The default of perf stat was switched to TopdownL1 Json metric since
-> commit 94b1a603fca7("perf stat: Add TopdownL1 metric as a default if
-> present"). But the patch only checks whether the TopdownL1 is present
-> in the event list. It doesn't check whether the hardware has the
-> capability to provide a clean output for the default mode.
->
-> Add arch_has_topdown_metric() to check the hardware capability as well.
-> Drop the TopdownL1 support in the defalut mode for pre-ICL and hybrid
-> platforms. Users can still use -M TopdownL1 to access the TopdownL1
-> on pre-ICL platforms.
->
-> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->
-> The patch tries to workaround the serious issues on pre-ICL and hybrid
-> platforms with the default mode of perf stat. It could be a temporary
-> fix for the upcoming 6.4. So we have more time to look for a proper fix
-> for all metrics issues and output issues with 6.5.
->
-> Thanks,
-> Kan
->
->  tools/perf/arch/x86/util/topdown.c | 14 ++++++++++++++
->  tools/perf/builtin-stat.c          |  2 +-
->  tools/perf/util/stat-display.c     |  2 +-
->  tools/perf/util/topdown.c          |  6 ++++++
->  tools/perf/util/topdown.h          |  2 ++
->  5 files changed, 24 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/perf/arch/x86/util/topdown.c b/tools/perf/arch/x86/uti=
-l/topdown.c
-> index 9ad5e5c7bd27..5d861e851619 100644
-> --- a/tools/perf/arch/x86/util/topdown.c
-> +++ b/tools/perf/arch/x86/util/topdown.c
-> @@ -3,6 +3,7 @@
->  #include "util/evsel.h"
->  #include "util/pmu.h"
->  #include "util/topdown.h"
-> +#include "util/metricgroup.h"
->  #include "topdown.h"
->  #include "evsel.h"
->
-> @@ -48,3 +49,16 @@ bool arch_topdown_sample_read(struct evsel *leader)
->
->         return false;
->  }
-> +
-> +bool arch_has_topdown_metric(const char *name)
-> +{
-> +       /*
-> +        * Disable the Topdown events in the default mode
-> +        * for hybrid platforms and old platform which
-> +        * doesn't support the Topdown metric feature.
-> +        */
-> +       if (!pmu_have_event("cpu", "slots"))
-> +               return false;
+On 2023-04-14 16:51:52, Abhinav Kumar wrote:
+> On 4/14/2023 4:11 PM, Marijn Suijten wrote:
+> > On 2023-04-14 10:57:45, Abhinav Kumar wrote:
+> >> On 4/14/2023 10:34 AM, Marijn Suijten wrote:
+> >>> On 2023-04-14 08:48:43, Abhinav Kumar wrote:
+> >>>> On 4/14/2023 12:35 AM, Marijn Suijten wrote:
+> >>>>> On 2023-04-12 10:33:15, Abhinav Kumar wrote:
+> >>>>> [..]
+> >>>>>>> What happens if a device boots without DSC panel connected?  Will
+> >>>>>>> CTL_DSC_FLUSH be zero and not (unnecessarily, I assume) flush any of the
+> >>>>>>> DSC blocks?  Or could this flush uninitialized state to the block?
+> >>>>>>
+> >>>>>> If we bootup without DSC panel connected, the kernel's cfg->dsc will be
+> >>>>>> 0 and default register value of CTL_DSC_FLUSH will be 0 so it wont flush
+> >>>>>> any DSC blocks.
+> >>>>>
+> >>>>> Ack, that makes sense.  However, if I connect a DSC panel, then
+> >>>>> disconnect it (now the register should be non-zero, but cfg->dsc will be
+> >>>>> zero), and then replug a non-DSC panel multiple times, it'll get flushed
+> >>>>> every time because we never clear CTL_DSC_FLUSH after that?
+> >>>>
+> >>>> If we remove it after kernel starts, that issue is there even today
+> >>>> without that change because DSI is not a hot-pluggable display so a
+> >>>> teardown wont happen when you plug out the panel. How will cfg->dsc be 0
+> >>>> then? In that case, its not a valid test as there was no indication to
+> >>>> DRM that display was disconnected so we cannot tear it down.
+> >>>
+> >>> The patch description itself describes hot-pluggable displays, which I
+> >>> believe is the upcoming DSC support for DP?  You ask how cfg->dsc can
+> >>> become zero, but this is **exactly** what the patch description
+> >>> describes, and what this patch is removing the `if` for.  If we are not
+> >>> allowed to discuss that scenario because it is not currently supported,
+> >>> neither should we allow to apply this patch.
+> >>>
+> >>> With that in mind, can you re-answer the question?
+> >>
+> >> I didnt follow what needs to be re-answered.
+> >>
+> >> This patch is being sent in preparation of the DSC over DP support. This
+> >> does not handle non-hotpluggable displays.
+> > 
+> > Good, because my question is specifically about *hotpluggable*
+> > displays/panels like the upcoming DSC support for DP.  After all there
+> > would be no point in me suggesting to connect and disconnect
+> > non-hotpluggable displays and expect something sensible to happen,
+> > wouldn't it?  Allow me to copy-paste the question again for convenience,
+> > with some minor wording changes:
+> > 
+> > 	However, if I connect a DSC DP display, then disconnect it (now the
+> > 	register should be non-zero, but cfg->dsc will be zero), and then
+> > 	connect and reconnect a non-DSC DP display multiple times, it'll get
+> > 	flushed every time because we never clear CTL_DSC_FLUSH after that?
+> > 
+> > And the missing part is: would multiple flushes be harmful in this case?
+> 
+> Well, you kept asking about "DSC panel" , that made me think you were 
+> asking about a non-hotpluggable MIPI DSI DSC panel and not DP DSC 
+> monitor. On many boards, panels can be removed/connected back to their 
+> daughter card. The term "panel" confused me a bit.
+> 
+> Now answering your question.
+> 
+> Yes, it will get flushed once every hotplug thats not too bad but 
+> importantly DSC wont be active as CTL_DSC_ACTIVE will be set to 0 so it 
+> wont cause any issue.
+> 
+> 
+> >> I do not think dynamic switch
+> >> between DSC and non-DSC of non-hotpluggable displays needs to be
+> >> discussed here as its not handled at all with or without this patch.
+> >>
+> >> We wanted to get early reviews on the patch. If you want this patch to
+> >> be absorbed when rest of DSC over DP lands, I have no concerns with
+> >> that. I wont pick this up for fixes and we will land this together with
+> >> the rest of DP over DSC.
+> > 
+> > I don't mind when and where this lands, just want to have the semantics
+> > clear around persisting the value of CTL_DSC_FLUSh in the register.
+> > 
+> > Regardless, this patch doesn't sound like a fix but a workaround until
+> > reset_intf_cfg() is fixed to be called at the right point, and extended
+> > to clear CTL_DSC_ACTIVE and flush the DSCs.  Perhaps it shouldn't have a
+> > Fixes: tag for that reason, as you intend to reinstate this
+> > if (cfg->dsc) condition when that is done?
+> > 
+> 
+> Its certainly fixing the use-case of DSC to non-DSC switching. So it is 
+> a fix.
+> 
+> But yes not the best fix possible. We have to improve it by moving this 
+> to reset_intf_cfg() as I already committed to.
 
-The only platform crashing with this are hybrid ones, I think the test
-should be:
+Ack, thanks for confirming this all and working on that, sounds good!
 
-if (perf_pmu__has_hybrid())
-   return false;
-
-> +
-> +       return metricgroup__has_metric(name);
-> +}
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index efda63f6bf32..0b865155656d 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -1885,7 +1885,7 @@ static int add_default_attributes(void)
->                  * Add TopdownL1 metrics if they exist. To minimize
->                  * multiplexing, don't request threshold computation.
->                  */
-> -               if (metricgroup__has_metric("TopdownL1") &&
-> +               if (arch_has_topdown_metric("TopdownL1") &&
->                     metricgroup__parse_groups(evsel_list, "TopdownL1",
->                                             /*metric_no_group=3D*/false,
->                                             /*metric_no_merge=3D*/false,
-> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-displa=
-y.c
-> index e6035ecbeee8..73b2ff2ddf29 100644
-> --- a/tools/perf/util/stat-display.c
-> +++ b/tools/perf/util/stat-display.c
-> @@ -747,7 +747,7 @@ static void uniquify_event_name(struct evsel *counter=
-)
->         int ret =3D 0;
->
->         if (counter->uniquified_name || counter->use_config_name ||
-> -           !counter->pmu_name || !strncmp(counter->name, counter->pmu_na=
-me,
-> +           !counter->pmu_name || !strncmp(evsel__name(counter), counter-=
->pmu_name,
-
-This fix is here:
-https://lore.kernel.org/lkml/20230426070050.1315519-1-irogers@google.com/T/=
-#mfce90d81aac130bbbf4743310b9ab918fc73d012
-
-Thanks,
-Ian
-
->                                            strlen(counter->pmu_name)))
->                 return;
->
-> diff --git a/tools/perf/util/topdown.c b/tools/perf/util/topdown.c
-> index 18fd5fed5d1a..f3a9ebc52f8b 100644
-> --- a/tools/perf/util/topdown.c
-> +++ b/tools/perf/util/topdown.c
-> @@ -1,8 +1,14 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include "topdown.h"
-> +#include "metricgroup.h"
->  #include <linux/kernel.h>
->
->  __weak bool arch_topdown_sample_read(struct evsel *leader __maybe_unused=
-)
->  {
->         return false;
->  }
-> +
-> +__weak bool arch_has_topdown_metric(const char *name)
-> +{
-> +       return metricgroup__has_metric(name);
-> +}
-> diff --git a/tools/perf/util/topdown.h b/tools/perf/util/topdown.h
-> index 1996c5fedcd7..7e83c8b247f2 100644
-> --- a/tools/perf/util/topdown.h
-> +++ b/tools/perf/util/topdown.h
-> @@ -8,4 +8,6 @@ struct evsel;
->
->  bool arch_topdown_sample_read(struct evsel *leader);
->
-> +bool arch_has_topdown_metric(const char *name);
-> +
->  #endif
-> --
-> 2.35.1
->
+- Marijn
