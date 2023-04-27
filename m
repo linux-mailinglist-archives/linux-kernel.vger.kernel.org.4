@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AD46EFFBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5746EFFC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242857AbjD0DQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S242942AbjD0DUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjD0DQk (ORCPT
+        with ESMTP id S242668AbjD0DUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:16:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D635A6;
-        Wed, 26 Apr 2023 20:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=f57Zj/04myr3002sVqcVQkqmm+HfOyku1xoDDfbgmL0=; b=x7j9CudlY7a1euI+PbiS85v+KR
-        BRossHnSmCv4GPvBF5aCAXqSRVM31zSZyHrVcYHC82iVfUGEuyNK9Za2v0Hju1HxWyQEazDPe3bzC
-        7bvxRd9YHHMDTC85XvT+F494X1E8b9T+6JjOGuFhiYutabbx3TatB9vWgDslKV90qj9+yR+Vc/uJN
-        t6X5TMJYzqKvlwf9K6d2xLi0urE5mxhDXeJ2zNY6Eh2BXdHRvE4oWctbDR6Vz/6O91K75RWEWfCHR
-        eiDW3bM/tv9Bt0GxqEXmBCUHMBuefOJ0SLDjiEBw34U1sk3K4eoNDyn40Sfx/lGwbYJGMOLNGC4Ta
-        MsFj4dpg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1prs7V-005L2i-0H;
-        Thu, 27 Apr 2023 03:16:33 +0000
-Message-ID: <17660b99-d68d-328e-5fe6-c011709fa3e4@infradead.org>
-Date:   Wed, 26 Apr 2023 20:16:29 -0700
+        Wed, 26 Apr 2023 23:20:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A803C2684;
+        Wed, 26 Apr 2023 20:20:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682565633; x=1714101633;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OyXNcul4Z1z505giNdrRSXjTIM440X0mC1Ilj99V4kQ=;
+  b=ZybGiqEZKm67wNABmHCOuDuG+7CF0r+d3NOSqa1m6KxCzZZb5CcPDziL
+   +4ab6SpVr3bKLHu66bkmDgmd0rWgMJX2GWmOY3nbWsd7EuLLG2E6Xrc1Z
+   bT93aiRc+aAV0DOLOJjfHeHju8ON3FnrgpmbUKQIUGJ8wOIUMUhH5y3gO
+   8zlYhL6uOB8hvoGPSBamCF6C7URkK2Q3WAICHjeLfFL9J48kHcDDj7zqa
+   sdwwTKFIHBlJCIu/AWnEzt5Bbdz1G339xcMCKNWjuxgG/PjscoWzYp6nJ
+   Sjk6l5luuDf15DxVM4LXndo72jDXwfZ2DpqoryVQnqQs3nZU/xsb1mvlR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433594182"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="433594182"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 20:20:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="838192114"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="838192114"
+Received: from lkp-server01.sh.intel.com (HELO 848ce1e85e7c) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2023 20:20:26 -0700
+Received: from kbuild by 848ce1e85e7c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prsBF-000015-2g;
+        Thu, 27 Apr 2023 03:20:25 +0000
+Date:   Thu, 27 Apr 2023 11:20:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     sean.wang@mediatek.com, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        sean.wang@mediatek.com, chris.lu@mediatek.com,
+        Soul.Huang@mediatek.com, Leon.Yen@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
+        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
+        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
+        abhishekpandit@google.com, michaelfsun@google.com,
+        abhishekpandit@chromium.org, mcchou@chromium.org,
+        shawnku@google.com, linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jing Cai <jing.cai@mediatek.com>
+Subject: Re: [PATCH v4 3/3] Bluetooth: btusb: mediatek: add MediaTek
+ devcoredump support
+Message-ID: <202304271131.HetsXcxM-lkp@intel.com>
+References: <01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is
- enabled
-Content-Language: en-US
-To:     genjian zhang <zhanggenjian123@gmail.com>,
-        tsbogend@alpha.franken.de
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20230426124948.1072216-1-zhanggenjian@kylinos.cn>
- <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,91 +78,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Hi,
 
-> 
-> Maybe the readability of this modification is not very good. Any
-> comments and suggestions are welcome. Thanks.
+kernel test robot noticed the following build errors:
 
-Some of the patch description could use some cleaning up,
-then I have a question.
+[auto build test ERROR on bluetooth/master]
+[also build test ERROR on bluetooth-next/master linus/master v6.3 next-20230426]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/sean-wang-mediatek-com/Bluetooth-btmtk-introduce-btmtk-reset-work/20230427-071054
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf%40gmail.com
+patch subject: [PATCH v4 3/3] Bluetooth: btusb: mediatek: add MediaTek devcoredump support
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230427/202304271131.HetsXcxM-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d253c927e94cb7e88bfcd0182449d29e477ca011
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review sean-wang-mediatek-com/Bluetooth-btmtk-introduce-btmtk-reset-work/20230427-071054
+        git checkout d253c927e94cb7e88bfcd0182449d29e477ca011
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304271131.HetsXcxM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/bluetooth/btmtk.c:104:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_IDLE'
+           case HCI_DEVCOREDUMP_IDLE:
+                ^
+>> drivers/bluetooth/btmtk.c:107:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_ACTIVE'; did you mean 'BTMTK_COREDUMP_ACTIVE'?
+           case HCI_DEVCOREDUMP_ACTIVE:
+                ^~~~~~~~~~~~~~~~~~~~~~
+                BTMTK_COREDUMP_ACTIVE
+   drivers/bluetooth/btmtk.c:28:2: note: 'BTMTK_COREDUMP_ACTIVE' declared here
+           BTMTK_COREDUMP_ACTIVE,
+           ^
+>> drivers/bluetooth/btmtk.c:110:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_TIMEOUT'
+           case HCI_DEVCOREDUMP_TIMEOUT:
+                ^
+>> drivers/bluetooth/btmtk.c:111:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_ABORT'
+           case HCI_DEVCOREDUMP_ABORT:
+                ^
+>> drivers/bluetooth/btmtk.c:112:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_DONE'
+           case HCI_DEVCOREDUMP_DONE:
+                ^
+>> drivers/bluetooth/btmtk.c:372:2: error: implicit declaration of function 'hci_devcd_register' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           hci_devcd_register(hdev, btmtk_coredump, btmtk_coredump_hdr,
+           ^
+>> drivers/bluetooth/btmtk.c:389:9: error: implicit declaration of function 'hci_devcd_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   err = hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
+                         ^
+   drivers/bluetooth/btmtk.c:389:9: note: did you mean 'hci_sock_init'?
+   include/net/bluetooth/bluetooth.h:577:5: note: 'hci_sock_init' declared here
+   int hci_sock_init(void);
+       ^
+>> drivers/bluetooth/btmtk.c:393:32: error: no member named 'dump' in 'struct hci_dev'
+                   schedule_delayed_work(&hdev->dump.dump_timeout,
+                                          ~~~~  ^
+>> drivers/bluetooth/btmtk.c:398:9: error: implicit declaration of function 'hci_devcd_append' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   err = hci_devcd_append(hdev, skb);
+                         ^
+   drivers/bluetooth/btmtk.c:398:9: note: did you mean 'hci_dev_open'?
+   include/net/bluetooth/hci_core.h:1500:5: note: 'hci_dev_open' declared here
+   int hci_dev_open(__u16 dev);
+       ^
+>> drivers/bluetooth/btmtk.c:405:4: error: implicit declaration of function 'hci_devcd_complete' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           hci_devcd_complete(hdev);
+                           ^
+   drivers/bluetooth/btmtk.c:405:4: note: did you mean 'hci_devcd_append'?
+   drivers/bluetooth/btmtk.c:398:9: note: 'hci_devcd_append' declared here
+                   err = hci_devcd_append(hdev, skb);
+                         ^
+   10 errors generated.
 
 
-On 4/26/23 06:02, genjian zhang wrote:
-> On Wed, Apr 26, 2023 at 8:51 PM Genjian <zhanggenjian123@gmail.com> wrote:
->>
->> From: Genjian Zhang <zhanggenjian@kylinos.cn>
->>
->> compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
->>
->> {standard input}: Assembler messages:
->> {standard input}:171: Error: found '(', expected: ')'
->> {standard input}:171: Error: found '(', expected: ')'
->> {standard input}:171: Error: non-constant expression in ".if" statement
->> {standard input}:171: Error: junk at end of line, first unrecognized
->> character is `('
->>
->> Preprocessor expand ___SYNC () macros.However,'if' will be wrongly
+vim +/HCI_DEVCOREDUMP_IDLE +104 drivers/bluetooth/btmtk.c
 
-                expands ___SYNC() macros. However, 'if' will be wrongly
+   100	
+   101	static void btmtk_coredump_notify(struct hci_dev *hdev, int state)
+   102	{
+   103		switch (state) {
+ > 104		case HCI_DEVCOREDUMP_IDLE:
+   105			coredump_info.state = BTMTK_COREDUMP_INIT;
+   106			break;
+ > 107		case HCI_DEVCOREDUMP_ACTIVE:
+   108			coredump_info.state = BTMTK_COREDUMP_ACTIVE;
+   109			break;
+ > 110		case HCI_DEVCOREDUMP_TIMEOUT:
+ > 111		case HCI_DEVCOREDUMP_ABORT:
+ > 112		case HCI_DEVCOREDUMP_DONE:
+   113			coredump_info.state = BTMTK_COREDUMP_INIT;
+   114			btmtk_reset_sync(coredump_info.hdev);
+   115			break;
+   116		}
+   117	}
+   118	
 
->> replaced by C code when PROFILE_ALL_BRANCHES is enabled and ___SYNC
->> is used in inline assembly.This leads to syntax errors in the code.
-
-                     assembly. This
-
->> Compilers report a lot of errors like the above.
->> Move '.if' into quoted strings to fix it.
->>
->> Reported-by: k2ci <kernel-bot@kylinos.cn>
->> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
->> ---
->>  arch/mips/include/asm/sync.h | 8 +++++---
->>  1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
->> index aabd097933fe..d9f5a87424e7 100644
->> --- a/arch/mips/include/asm/sync.h
->> +++ b/arch/mips/include/asm/sync.h
->> @@ -175,7 +175,7 @@
->>   */
->>  #ifdef CONFIG_CPU_HAS_SYNC
->>  # define ____SYNC(_type, _reason, _else)                       \
->> -       .if     (( _type ) != -1) && ( _reason );               \
->> +       ((_type) != -1) && (_reason);                           \
->>         .set    push;                                           \
->>         .set    MIPS_ISA_LEVEL_RAW;                             \
->>         .rept   __SYNC_rpt(_type);                              \
->> @@ -192,13 +192,15 @@
->>  /*
->>   * Preprocessor magic to expand macros used as arguments before we insert them
->>   * into assembly code.
->> + * In addition,‘if’ can not be substituted when CONFIG_PROFILE_ALL_BRANCHES is
-
-     * In addition, 'if' cannot be
-
->> + * enabled.
->>   */
->>  #ifdef __ASSEMBLY__
->>  # define ___SYNC(type, reason, else)                           \
->> -       ____SYNC(type, reason, else)
->> +       .if     ____SYNC(type, reason, else)
->>  #else
->>  # define ___SYNC(type, reason, else)                           \
->> -       __stringify(____SYNC(type, reason, else))
->> +       ".if"   __stringify(____SYNC(type, reason, else))
->>  #endif
->>
->>  #define __SYNC(type, reason)                                   \
->> --
->> 2.25.1
-
-
-Is this problem that you are fixing being aggravated (caused) by
-the #define of if() in include/linux/compiler.h when CONFIG_PROFILE_ALL_BRANCHES
-is set?  I suspect that it is.
-It wouldn't hurt to mention that (if I am correct).
-
-Thanks.
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
