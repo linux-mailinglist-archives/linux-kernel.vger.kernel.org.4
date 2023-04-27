@@ -2,71 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5CC6F09C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A376F09D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244245AbjD0QWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        id S244282AbjD0Q0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244318AbjD0QW3 (ORCPT
+        with ESMTP id S239857AbjD0Q0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:22:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CA4494;
-        Thu, 27 Apr 2023 09:22:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Apr 2023 12:26:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D6AC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682612731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q+mSfHIYwgygtxN4zqh6EGSnWzRFToL7aoBJGdpNRnc=;
+        b=bdic6POI1xqLpIeipFZSoD3edhltlV9/PDgnOh5cpyl5yizszxeEI1gxVMmuWZAfDwLdhP
+        y0smU0X6TCLcVquIiLSS4yGmwKN2N1uoq7GPyimzzNYgHSgdu+0hnVLuOtgoXXSCvTP1ut
+        FpU/yX25scn62IWSkFR3gVRamO/LSj4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-GkWBjQSnPwanr_NMARvn3g-1; Thu, 27 Apr 2023 12:25:28 -0400
+X-MC-Unique: GkWBjQSnPwanr_NMARvn3g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63C0A631B5;
-        Thu, 27 Apr 2023 16:22:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 060FCC433D2;
-        Thu, 27 Apr 2023 16:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682612541;
-        bh=NoC/metQtWxNwH0RosbcVrJNpcQq74+J/8p742KjPbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ByACusj3r6+++FnuK3u3nUrdfts8io0ExE9wtpf/gAkvoqsg6OCeMgjZxQthXepX/
-         OAOIoMLodUPtiz9i9GPdhwqHck/61yT4YHGIzZyQKvpoeQUzq0L8+esJJ2t9Buu7dM
-         RZJPcQbK3JPo6Ko0ZuaDcZ3hfqNGehi5Jxu1EWi4KWXe2/H3iB54cIZXs1oSuZqHE4
-         MSXoklDQeSomJOmMgRxlcEPMGzP2sKgdq9a02uVmwCR8Kco0CPVjFtFRFxBmopojWK
-         xcpLY3ugbnyeOuECZbRIrDxCE2LO67mgKfl8ZVs7pIkom1mOeRKo6uIYICRF02VQdE
-         tZehBWygtJwqQ==
-Date:   Thu, 27 Apr 2023 17:22:17 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] mfd: dln2: Remove the unneeded include <linux/i2c.h>
-Message-ID: <20230427162217.GE50521@google.com>
-References: <baf28e7f0fb57e918b76eaa92b94a2ae1a02cce0.1682318879.git.christophe.jaillet@wanadoo.fr>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D7AD2808E74;
+        Thu, 27 Apr 2023 16:25:26 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5438F492B01;
+        Thu, 27 Apr 2023 16:25:26 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 5E59E4038F56E; Thu, 27 Apr 2023 13:25:10 -0300 (-03)
+Date:   Thu, 27 Apr 2023 13:25:10 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
+Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
+Message-ID: <ZEqh5qzFZFrSUja/@tpad>
+References: <ZD/Qq9v0EDxUn7HW@tpad>
+ <ZD/XoBTqJBL2G+Dk@tpad>
+ <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
+ <ZD/xE6kR4RSOvUlR@tpad>
+ <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
+ <ZEAYQBJmVwsjpjGY@tpad>
+ <ZEFB8FSKWms2VmaL@tpad>
+ <44f2df1a-ace4-0c44-166f-4f2fef49e0c1@suse.cz>
+ <ZElNDltcv4PA0HsM@tpad>
+ <ZEo0wctuNFBzaxoJ@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <baf28e7f0fb57e918b76eaa92b94a2ae1a02cce0.1682318879.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZEo0wctuNFBzaxoJ@dhcp22.suse.cz>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023, Christophe JAILLET wrote:
-
-> This driver does not use i2c, so there is no point in including
-> <linux/i2c.h>
+On Thu, Apr 27, 2023 at 10:39:29AM +0200, Michal Hocko wrote:
+> On Wed 26-04-23 13:10:54, Marcelo Tosatti wrote:
+> [...]
+> > "To test the performance difference, a page allocator microbenchmark:
+> > https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
+> > with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
+> > 
+> > For the single_page_alloc_free test, which does
+> > 
+> >        	/** Loop to measure **/
+> >        	for (i = 0; i < rec->loops; i++) {
+> >                	my_page = alloc_page(gfp_mask);
+> >                 if (unlikely(my_page == NULL))
+> >                        	return 0;
+> >                 __free_page(my_page);
+> >         }                                                                                                           
+> > 
+> > Unit is cycles.
+> > 
+> > Vanilla                 Patched         Diff
+> > 115.25                  117             1.4%"
+> > 
+> > To be honest, that 1.4% difference was not stable but fluctuated between
+> > positive and negative percentages (so the performance difference was in
+> > the noise).
+> > 
+> > So performance is not a decisive factor in this case.
 > 
-> Remove it.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/mfd/dln2.c | 1 -
->  1 file changed, 1 deletion(-)
+> It is not neglible considering that majority worklods will not benefit
+> from this change. You are clearly ignoring that vmstat code has been
+> highly optimized for local per-cpu access exactly to avoid locked
+> operations and cache line bouncing.
+> -- 
+> Michal Hocko
+> SUSE Labs
 
-Applied, thanks
+Again, the values fluctuate between positive and negative
+performance difference (i happen to have copied a positive value).
 
--- 
-Lee Jones [李琼斯]
+So the performance difference is in the noise (its not stable at 1.4%),
+but rather close to 0%.
+
+So the data is showing that there is no negative performance impact.
+
