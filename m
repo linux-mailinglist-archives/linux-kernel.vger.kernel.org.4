@@ -2,30 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE686F0572
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB2D6F0588
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243596AbjD0MMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S243967AbjD0MNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243617AbjD0MMh (ORCPT
+        with ESMTP id S243908AbjD0MNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:12:37 -0400
-X-Greylist: delayed 1206 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 05:12:10 PDT
+        Thu, 27 Apr 2023 08:13:01 -0400
 Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7898469E;
-        Thu, 27 Apr 2023 05:12:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E31469E;
+        Thu, 27 Apr 2023 05:12:39 -0700 (PDT)
 Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <k.graefe@gateware.de>)
-        id 1ps0AJ-000Duo-Pn; Thu, 27 Apr 2023 13:51:59 +0200
+        id 1ps0AK-000Duq-2I; Thu, 27 Apr 2023 13:52:00 +0200
 Received: from [2003:ca:6730:e8f8:a2c4:4e1c:f83c:db4b] (helo=tethys.gateware.dom)
         by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <k.graefe@gateware.de>)
-        id 1ps0AJ-000Hyr-3H; Thu, 27 Apr 2023 13:51:59 +0200
+        id 1ps0AJ-000Hyr-Av; Thu, 27 Apr 2023 13:51:59 +0200
 From:   =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>
 To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +39,13 @@ To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
         Felipe Balbi <balbi@ti.com>
 Cc:     =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>,
         stable@vger.kernel.org
-Subject: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
-Date:   Thu, 27 Apr 2023 13:51:19 +0200
-Message-Id: <20230427115120.241954-1-k.graefe@gateware.de>
+Subject: [PATCH v3 2/2] usb: gadget: u_ether: Fix host MAC address case
+Date:   Thu, 27 Apr 2023 13:51:20 +0200
+Message-Id: <20230427115120.241954-2-k.graefe@gateware.de>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2023042625-rendition-distort-fe06@gregkh>
+In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
 References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -60,78 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CDC-ECM specification requires an USB gadget to send the host MAC
-address as uppercase hex string. This change adds the appropriate
-modifier.
+The CDC-ECM specification [1] requires to send the host MAC address as
+an uppercase hexadecimal string in chapter "5.4 Ethernet Networking
+Functional Descriptor":
+    The Unicode character is chosen from the set of values 30h through
+    39h and 41h through 46h (0-9 and A-F).
 
+However, snprintf(.., "%pm", ..) generates a lowercase MAC address
+string. While most host drivers are tolerant to this, UsbNcm.sys on
+Windows 10 is not. Instead it uses a different MAC address with all
+bytes set to zero including and after the first byte containing a
+lowercase letter. On Windows 11 Microsoft fixed it, but apparently they
+did not backport the fix.
+
+This change fixes the issue by using "%pmU" to generate an uppercase hex
+string to comply with the specification.
+
+[1]: https://www.usb.org/document-library/class-definitions-communication-devices-12, file ECM120.pdf
+
+Fixes: bcd4a1c40bee ("usb: gadget: u_ether: construct with default values and add setters/getters")
 Cc: stable@vger.kernel.org
 Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
 ---
-Added in v3
+Changes since v2:
+* Add uppercase MAC address format string and use that instead of
+  manually uppercasing the resulting MAC address string.
 
- lib/vsprintf.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+Changes since v1:
+* Fixed checkpatch.pl warnings
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index be71a03c936a..8aee1caabd9e 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1269,9 +1269,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
- {
- 	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
- 	char *p = mac_addr;
--	int i;
-+	int i, pos;
- 	char separator;
- 	bool reversed = false;
-+	bool uppercase = false;
+ drivers/usb/gadget/function/u_ether.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 6956ad8ba8dd..70e6b825654c 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -963,7 +963,7 @@ int gether_get_host_addr_cdc(struct net_device *net, char *host_addr, int len)
+ 		return -EINVAL;
  
- 	if (check_pointer(&buf, end, addr, spec))
- 		return buf;
-@@ -1281,6 +1282,10 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
- 		separator = '-';
- 		break;
+ 	dev = netdev_priv(net);
+-	snprintf(host_addr, len, "%pm", dev->host_mac);
++	snprintf(host_addr, len, "%pmU", dev->host_mac);
  
-+	case 'U':
-+		uppercase = true;
-+		break;
-+
- 	case 'R':
- 		reversed = true;
- 		fallthrough;
-@@ -1292,9 +1297,14 @@ char *mac_address_string(char *buf, char *end, u8 *addr,
- 
- 	for (i = 0; i < 6; i++) {
- 		if (reversed)
--			p = hex_byte_pack(p, addr[5 - i]);
-+			pos = 5 - i;
-+		else
-+			pos = i;
-+
-+		if (uppercase)
-+			p = hex_byte_pack_upper(p, addr[pos]);
- 		else
--			p = hex_byte_pack(p, addr[i]);
-+			p = hex_byte_pack(p, addr[pos]);
- 
- 		if (fmt[0] == 'M' && i != 5)
- 			*p++ = separator;
-@@ -2279,6 +2289,7 @@ char *rust_fmt_argument(char *buf, char *end, void *ptr);
-  * - 'm' For a 6-byte MAC address, it prints the hex address without colons
-  * - 'MF' For a 6-byte MAC FDDI address, it prints the address
-  *       with a dash-separated hex notation
-+ * - '[mM]U' For a 6-byte MAC address in uppercase hex
-  * - '[mM]R' For a 6-byte MAC address, Reverse order (Bluetooth)
-  * - 'I' [46] for IPv4/IPv6 addresses printed in the usual way
-  *       IPv4 uses dot-separated decimal without leading 0's (1.2.3.4)
-@@ -2407,6 +2418,7 @@ char *pointer(const char *fmt, char *buf, char *end, void *ptr,
- 	case 'M':			/* Colon separated: 00:01:02:03:04:05 */
- 	case 'm':			/* Contiguous: 000102030405 */
- 					/* [mM]F (FDDI) */
-+					/* [mM]U (Uppercase hex) */
- 					/* [mM]R (Reverse order; Bluetooth) */
- 		return mac_address_string(buf, end, ptr, spec, fmt);
- 	case 'I':			/* Formatted IP supported
+ 	return strlen(host_addr);
+ }
 -- 
 2.34.1
 
