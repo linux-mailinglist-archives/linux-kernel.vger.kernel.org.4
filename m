@@ -2,109 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2036F0B6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD5D6F0B72
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244423AbjD0RvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
+        id S244446AbjD0Rwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243982AbjD0RvW (ORCPT
+        with ESMTP id S244039AbjD0Rws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:51:22 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFC210D;
-        Thu, 27 Apr 2023 10:51:21 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id DD897CCBE1;
-        Thu, 27 Apr 2023 17:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1682617849; bh=NIY1N6khezq9+ZTcdf4CI2PZJx2zYchLwM1fp6lZo0A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=aXEMnvun3ENv8iPHd1MiLBtsE5FXHEqngQMklwv+OslGFTyAdx9vqOnq8xShhCEg8
-         +0cqiUeamn2INSEdAz7NDlFZU70J9NNbqnAuwo/H2kbdGg2ph3hEco01xg0Qs4Wtnr
-         2WXv4VZNp1i33nchNq6wUl9EyUd3WxUh4R8YyEEk=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Lee Jones <lee@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] Documentation: leds: Add "rgb:status" path
-Date:   Thu, 27 Apr 2023 19:50:47 +0200
-Message-ID: <5823752.MhkbZ0Pkbq@z3ntu.xyz>
-In-Reply-To: <20230427160559.GC50521@google.com>
-References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
- <20230414-pmi632-v2-8-98bafa909c36@z3ntu.xyz>
- <20230427160559.GC50521@google.com>
+        Thu, 27 Apr 2023 13:52:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6688B35BD;
+        Thu, 27 Apr 2023 10:52:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC54B63EDC;
+        Thu, 27 Apr 2023 17:52:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F7CDC433EF;
+        Thu, 27 Apr 2023 17:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682617966;
+        bh=xkU2AxBp2cbLfWG1K4LLB2Ca1SteiY+51uE8jz1bWrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kKcDZn/T+nclBpGkLojCKhUXmmsC1cLCya0LHePqG3NifX0AER6TEP4W0p4XXljMB
+         mpIyNM/P9rgu63Hnp+rdVLv2HhWGRGSqdQICFSgeFRy/3jstP09jFDiIbdkKz+LyIG
+         zyWjnXdq6Csu1oXhTM/8kd3dxLeAr6bP1xBjZgc6MDzsVAv0MoGCyRJbpCVE62JKrN
+         6mXyx5UN84bPPXmqeHtsInENRxLJePawXrkjBLojzPVJGv0z5tVa83xt9mx23Ax/6S
+         thPo4fiOlWzrdjXlItb+A8Pfh/zbaCoDEY56z8LqCAu3XhdBASlyfgHjXnOVF1yb1s
+         ya3JEpBPvzoXA==
+Date:   Thu, 27 Apr 2023 12:52:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Shunsuke Mie <mie@igel.co.jp>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-pci@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [RFC PATCH v2 0/3] Introduce a PCIe endpoint virtio console
+Message-ID: <20230427175244.GA261197@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427104428.862643-1-mie@igel.co.jp>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 27. April 2023 18:05:59 CEST Lee Jones wrote:
-> On Tue, 18 Apr 2023, Luca Weiss wrote:
-> > The path /sys/class/leds/rgb:status is already widely used with the
-> > qcom-lpg driver and others. Document it.
-> 
-> Where is this used?
-> 
-> $ grep status drivers/leds/rgb/leds-qcom-lpg.c
-> <no results>
+On Thu, Apr 27, 2023 at 07:44:25PM +0900, Shunsuke Mie wrote:
+> ...
+>   PCI: endpoint: introduce a helper to implement pci ep virtio function
+>   virtio_pci: add a definition of queue flag in ISR
+>   PCI: endpoint: Add EP function driver to provide virtio-console
+>     functionality
 
-This is set in devicetree, e.g. from qcom-msm8974pro-fairphone-fp2.dts[0]:
+Capitalize the first word consistently to match history ("Introduce",
+"Add").
 
-    color = <LED_COLOR_ID_RGB>;
-    function = LED_FUNCTION_STATUS;
+Capitalize "PCI" in English text.
 
-And then something in the LED core sets the name based on that, I'd have
-to dig to find where exactly.
+Capitalize "EP" since it's sort of an acronym (you did once, but do it
+both places :))
 
-Regards
-Luca
-
-[0] https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/qcom-msm8974pro-fairphone-fp2.dts#L105-L106
-
-> 
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > 
-> >  Documentation/leds/well-known-leds.txt | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/leds/well-known-leds.txt
-> > b/Documentation/leds/well-known-leds.txt index 2160382c86be..439d4dac4472
-> > 100644
-> > --- a/Documentation/leds/well-known-leds.txt
-> > +++ b/Documentation/leds/well-known-leds.txt
-> > @@ -58,6 +58,7 @@ LEDs on notebook body, indicating that sound input /
-> > output is muted.> 
-> >  * System notification
-> > 
-> > +Good: "rgb:status"
-> > 
-> >  Legacy: "status-led:{red,green,blue}" (Motorola Droid 4)
-> >  Legacy: "lp5523:{r,g,b}" (Nokia N900)
-
-
-
-
+Bjorn
