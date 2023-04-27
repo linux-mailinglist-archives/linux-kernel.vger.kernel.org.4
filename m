@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8065E6F066F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59C16F0673
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243638AbjD0NNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 09:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S243664AbjD0NNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 09:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243404AbjD0NNT (ORCPT
+        with ESMTP id S243389AbjD0NNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 09:13:19 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF0A3C29
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:17 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5051abd03a7so12560063a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:16 -0700 (PDT)
+        Thu, 27 Apr 2023 09:13:44 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF9449E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:39 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-506bfe81303so14311889a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682601195; x=1685193195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
-        b=HIgpg5N7XJjzbxz+z7IgxgVQ5128JI4dtyixvRnwGndbaq5YVIPtJHd+DaOorca26k
-         cr99XyR833joae9EIrXDFvGYDfgdx97lSuMToDnUqFhu9JA7SVMQJHER3oDi1Rp3QEOF
-         mLPJ2w5t3aMH0JrLeMU3g1mTm+pQghwAf7n/nH6OPPuRRH8u1MJicYy4tnsZoD/6nenc
-         EeThR0OHBw47zlfBPnB+cq15TJ0QLrtuGCvLMwLcZZYUg6DqV/RYw9pkk1E3rpyPuXst
-         ayDxj8TjQBJExMKsUnsMDqZQTfzm6bZlQ6b/oOXxuNOUqTuU/9i+0PZUQfGkDAoFnKXE
-         v4wA==
+        d=linaro.org; s=google; t=1682601217; x=1685193217;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vscKZXOMHGCxmqepktG+YSo5xCnMNlJ/MCwp2Reoljw=;
+        b=XPcOuYGP2galzs2LI1gymjd3fb6dsr6uuwFm0V8eKICAYQ2jllVMmRvlIa8RyNLyTF
+         sTB0UsnPJAJRPWYV1nBoTfA3zUCKieRDgjbz+qFi77YJ/LM5aRvraPKcS5cYkYeod1xO
+         ik9LHKFOafUuJoDbMvnebgnXDW38rQmuLO1QXao3tpnhQOlMsTIoQZleKEqV+DFdW7u/
+         lRWobLoVmRvTwOw7c9BhjtmRpDKew+9pvMaSCkJ1rsN/z4+gtouN9e4l9bSvuk0vzRnY
+         JtZvp6qgbF7Q93w/OTqxs2tFMqEprfSeLxOYBE7lH0i0VDBiLpT26m68lzAi9UynsR6b
+         wEZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682601195; x=1685193195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1682601217; x=1685193217;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
-        b=hdrd54fdimaKrKnVgZyEv3pE3QmNEv29/MgOpcVTmMPxsuv0aoOzZ4l3SiRqTu3UQm
-         vxDUJ0M0TADvm1GTP1Jm0mzg9VjdbLPJWfe57YoVUJcFuwXdESVsRPmyzOKfTVkQWsEA
-         z1KtqxdYwdT0IWpZ8yTRAmWe32TzKV29AFcslf3erDJG9aWEy4UajTOJPguJosAajWhn
-         AF7OaQzugUyDzBJi9rK8PgaR7KrvhPVh/3uqnoeu3Xkw/tolEPsZCCiktT2sWS2YQR6c
-         5/u7YblpsCGVFPrca8mozS96o68MC9Nfyp9WoraKqho07FzDzrI+JxBrjHGnvvUrJcHD
-         k/7w==
-X-Gm-Message-State: AC+VfDwESXEAEi0mj5o3JaMP/e3CCwZzyvtbHeapwZR0ctWIJLRZzr4v
-        L6zVdnZwdgUeyaInIwC2Rb/QyQ==
-X-Google-Smtp-Source: ACHHUZ4WhZAaEZw48L4mS8JWz5hV+DtJHTNQLlKB9/bS0XJh3GNfgim97pYJpFirPWLxY6K5pRGJaA==
-X-Received: by 2002:a17:907:7da9:b0:94b:cd7c:59f4 with SMTP id oz41-20020a1709077da900b0094bcd7c59f4mr1742934ejc.16.1682601195517;
-        Thu, 27 Apr 2023 06:13:15 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id t25-20020a17090616d900b009534603453dsm9503863ejd.131.2023.04.27.06.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 06:13:14 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 15:13:13 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
-        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, Marc Zyngier <maz@kernel.org>,
-        luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
-Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <q7bug5j62ceniiif5joz5i73g7lbyebawbokcang4ctit4i634@e5bd6zqozbau>
-References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
- <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
- <ZEo+6rwM+c6DvlMM@sunil-laptop>
- <qqukqrc45zqyjh5bwpjpuiweogwtapuw7qqjjpubjwvteum6ig@esjfwqdivhpa>
- <ZEpUCD+eq/NL7LXJ@sunil-laptop>
+        bh=vscKZXOMHGCxmqepktG+YSo5xCnMNlJ/MCwp2Reoljw=;
+        b=L+hUFNtCvxovATM3tx/VGnDFGfXM6RVbhbLgAEim2MYlodVHtZiGYWezdQ7GKt1Ei3
+         uwRPm2I3yulFr8GMUif110N8kTc8uqCCdISD+DB/J/RBZF1i8Z9/0z8mHCWwf1kKLobe
+         IogwToyRVTSAgRVwpZ8LwQZPanNmKAhuylqEBUKLFKjjZMbO0VFbOVGKP9xPqbLZfhNb
+         D3sVZoqDNz9QEe4fx025xmuC0bMPhbWFes+dfnNmVvc16c74cWAhgcCGJhNV6xzDte1F
+         +8NZKmyBAoG/f0XUDXRYhemr76FTKHafk2PSuMSlCezWt1L+pUwBbFb/ir5qPG9NctiC
+         fWBA==
+X-Gm-Message-State: AC+VfDwk2N9csAfc7eNZy0DUiODJu1D/HnNeQ/Qnjq45mR7qkpMunI04
+        D39hCZta3XO8cJxzsFRoWJ6YGQ==
+X-Google-Smtp-Source: ACHHUZ4JnlMrgC0TMoqqsfF7YY2UG87RI1R6YRDLKvL4ElcA3jeeoPy9T2TGzODxurp48b8hVADTew==
+X-Received: by 2002:a17:907:7ea2:b0:94e:547b:6301 with SMTP id qb34-20020a1709077ea200b0094e547b6301mr1446698ejc.8.1682601217684;
+        Thu, 27 Apr 2023 06:13:37 -0700 (PDT)
+Received: from [172.23.2.82] ([31.221.30.162])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170906285100b0094e597f0e4dsm9541668ejc.121.2023.04.27.06.13.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 06:13:37 -0700 (PDT)
+Message-ID: <e6703585-660b-d0a2-7804-6c2724b2c095@linaro.org>
+Date:   Thu, 27 Apr 2023 15:13:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEpUCD+eq/NL7LXJ@sunil-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 3/7] phy: qcom-qmp-combo: Introduce orientation variable
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
+ <20230425034010.3789376-4-quic_bjorande@quicinc.com>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230425034010.3789376-4-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,159 +86,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 04:22:56PM +0530, Sunil V L wrote:
-> On Thu, Apr 27, 2023 at 12:25:42PM +0200, Andrew Jones wrote:
-> > On Thu, Apr 27, 2023 at 02:52:50PM +0530, Sunil V L wrote:
-> > > Hi Palmer,
-> > > 
-> > > On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
-> > > > On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> > > > > RINTC structures in the MADT provide mapping between the hartid
-> > > > > and the CPU. This is required many times even at run time like
-> > > > > cpuinfo. So, instead of parsing the ACPI table every time, cache
-> > > > > the RINTC structures and provide a function to get the correct
-> > > > > RINTC structure for a given cpu.
-> > > > > 
-> > > > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > > > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > ---
-> > > > >  arch/riscv/include/asm/acpi.h |  2 ++
-> > > > >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
-> > > > >  2 files changed, 62 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-> > > > > index 9be52b6ffae1..1606dce8992e 100644
-> > > > > --- a/arch/riscv/include/asm/acpi.h
-> > > > > +++ b/arch/riscv/include/asm/acpi.h
-> > > > > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
-> > > > > 
-> > > > >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-> > > > > 
-> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
-> > > > > +u32 get_acpi_id_for_cpu(int cpu);
-> > > > >  #endif /* CONFIG_ACPI */
-> > > > > 
-> > > > >  #endif /*_ASM_ACPI_H*/
-> > > > > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-> > > > > index 81d448c41714..40ab55309c70 100644
-> > > > > --- a/arch/riscv/kernel/acpi.c
-> > > > > +++ b/arch/riscv/kernel/acpi.c
-> > > > > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
-> > > > >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-> > > > >  EXPORT_SYMBOL(acpi_pci_disabled);
-> > > > > 
-> > > > > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
-> > > > > +
-> > > > > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
-> > > > > +{
-> > > > > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
-> > > > > +	int cpuid;
-> > > > > +
-> > > > > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
-> > > > > +		return 0;
-> > > > > +
-> > > > > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
-> > > > 
-> > > > Unless I'm missing something, this races with CPUs coming online.  Maybe
-> > > > that's a rare enough case we don't care, but I think we'd also just have
-> > > > simpler logic if we fixed it...
-> > > > 
-> > > This depend only on cpuid_to_hartid_map filled up. I wish I could
-> > > initialize this RINTC mapping in setup_smp() itself like ARM64. But in
-> > > RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
-> > > Hence, we need to initialize this array outside of setup_smp().
-> > > 
-> > > I can update the code to initialize this from setup_arch() immediately
-> > > after setup_smp() if ACPI is enabled. That should avoid the global
-> > > variable check also. Let me know if you prefer this.
-> > > 
-> > > > > +	/*
-> > > > > +	 * When CONFIG_SMP is disabled, mapping won't be created for
-> > > > > +	 * all cpus.
-> > > > > +	 * CPUs more than NR_CPUS, will be ignored.
-> > > > > +	 */
-> > > > > +	if (cpuid >= 0 && cpuid < NR_CPUS)
-> > > > > +		cpu_madt_rintc[cpuid] = *rintc;
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int acpi_init_rintc_array(void)
-> > > > > +{
-> > > > > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
-> > > > > +		return 0;
-> > > > > +
-> > > > > +	return -ENODEV;
-> > > > > +}
-> > > > > +
-> > > > > +/*
-> > > > > + * Instead of parsing (and freeing) the ACPI table, cache
-> > > > > + * the RINTC structures since they are frequently used
-> > > > > + * like in  cpuinfo.
-> > > > > + */
-> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> > > > > +{
-> > > > > +	static bool rintc_init_done;
-> > > > 
-> > > > ... basically just get rid of this global variable, and instead have a
-> > > > 
-> > > >    if (!&cpu_madt_rintc[cpu])
-> > > >        ... parse ...
-> > > >    return &cpu_madt_rintc[cpu];
-> > > > 
-> > > > that'd probably let us get rid of a handful of these helpers too, as now
-> > > > it's just a call to the parsing bits.
-> > > > 
-> > > I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
-> > > not caching the RINTC pointers but actual contents itself. So, the
-> > > address is always valid. However, as per Drew's earlier feedback I am
-> > > going to reduce one helper. I am planning to send the next version of
-> > > this patch once 6.4 rc1 is available since the ACPICA patches are merged
-> > > now.
-> > > 
-> > > > > +
-> > > > > +	if (!rintc_init_done) {
-> > > > > +		if (acpi_init_rintc_array()) {
-> > > > > +			pr_err("No valid RINTC entries exist\n");
-> > > > > +			return NULL;
-> > > > > +		}
-> > > > > +
-> > > > > +		rintc_init_done = true;
-> > > > > +	}
-> > > > > +
-> > > > > +	return &cpu_madt_rintc[cpu];
-> > > > > +}
-> > > > > +
-> > > > > +u32 get_acpi_id_for_cpu(int cpu)
-> > > > > +{
-> > > > > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
-> > > > > +
-> > > > > +	BUG_ON(!rintc);
-> > > > 
-> > > > We should have some better error reporting here.  It looks like all the
-> > > > callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
-> > > > returned, so maybe we just pr_warn() something users can understand and then
-> > > > return -1 or something?
-> > > > 
-> > > 
-> > > RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
-> > > for UID. So, there is no bogus value we can return. 
-> > > 
-> > > Actually, I just realized this check is redundant. It will never be NULL
-> > > since it is a static array. So, we can just get rid of the BUG.
-> > 
-> > It can be NULL on the first call of acpi_cpu_get_madt_rintc(), which is
-> > a good time to BUG if there's isn't an RINTC.
-> > 
-> Sorry, I mean if we change the initialization to get called from
-> setup_arch, then we can get rid of this check along with global variable
-> check, correct?
+On 25/04/2023 05:40, Bjorn Andersson wrote:
+> In multiple places throughout the driver code has been written in
+> prepration for handling of orientation switching.
+> 
+> Introduce a typec_orientation in qmp_combo and fill out the various
+> "placeholders" with the associated logic. By initializing the
+> orientation to "normal" this change has no functional impact, but
+> reduces the size of the upcoming introduction of dynamic orientation
+> switching.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 54 +++++++++++++----------
+>   1 file changed, 30 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> index 7280f7141961..6748f31da7a3 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/regulator/consumer.h>
+>   #include <linux/reset.h>
+>   #include <linux/slab.h>
+> +#include <linux/usb/typec.h>
+>   
+>   #include <dt-bindings/phy/phy-qcom-qmp.h>
+>   
+> @@ -63,6 +64,10 @@
+>   /* QPHY_V3_PCS_MISC_CLAMP_ENABLE register bits */
+>   #define CLAMP_EN				BIT(0) /* enables i/o clamp_n */
+>   
+> +/* QPHY_V3_DP_COM_TYPEC_CTRL register bits */
+> +#define SW_PORTSELECT_VAL			BIT(0)
+> +#define SW_PORTSELECT_MUX			BIT(1)
+> +
+>   #define PHY_INIT_COMPLETE_TIMEOUT		10000
+>   
+>   struct qmp_phy_init_tbl {
+> @@ -1323,6 +1328,8 @@ struct qmp_combo {
+>   	struct clk_fixed_rate pipe_clk_fixed;
+>   	struct clk_hw dp_link_hw;
+>   	struct clk_hw dp_pixel_hw;
+> +
+> +	enum typec_orientation orientation;
+>   };
+>   
+>   static void qmp_v3_dp_aux_init(struct qmp_combo *qmp);
+> @@ -1955,29 +1962,23 @@ static void qmp_v3_configure_dp_tx(struct qmp_combo *qmp)
+>   static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
+>   {
+>   	u32 val;
+> -	bool reverse = false;
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+> +	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>   
+>   	val = DP_PHY_PD_CTL_PWRDN | DP_PHY_PD_CTL_AUX_PWRDN |
+>   	      DP_PHY_PD_CTL_PLL_PWRDN | DP_PHY_PD_CTL_DP_CLAMP_EN;
+>   
+> -	/*
+> -	 * TODO: Assume orientation is CC1 for now and two lanes, need to
+> -	 * use type-c connector to understand orientation and lanes.
+> -	 *
+> -	 * Otherwise val changes to be like below if this code understood
+> -	 * the orientation of the type-c cable.
+> -	 *
+> -	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC2)
+> -	 *	val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
+> -	 * if (lane_cnt == 4 || orientation == ORIENTATION_CC1)
+> -	 *	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
+> -	 * if (orientation == ORIENTATION_CC2)
+> -	 *	writel(0x4c, qmp->dp_dp_phy + QSERDES_V3_DP_PHY_MODE);
+> -	 */
+> -	val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
+> +	if (dp_opts->lanes == 4 || reverse)
+> +		val |= DP_PHY_PD_CTL_LANE_0_1_PWRDN;
+> +	if (dp_opts->lanes == 4 || !reverse)
+> +		val |= DP_PHY_PD_CTL_LANE_2_3_PWRDN;
+> +
+>   	writel(val, qmp->dp_dp_phy + QSERDES_DP_PHY_PD_CTL);
+>   
+> -	writel(0x5c, qmp->dp_dp_phy + QSERDES_DP_PHY_MODE);
+> +	if (reverse)
+> +		writel(0x4c, qmp->pcs + QSERDES_DP_PHY_MODE);
+> +	else
+> +		writel(0x5c, qmp->pcs + QSERDES_DP_PHY_MODE);
+>   
+>   	return reverse;
+>   }
+> @@ -2235,7 +2236,7 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
+>   {
+>   	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>   	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+> -	bool reverse = false;
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+>   	u32 status;
+>   	int ret;
+>   
+> @@ -2299,7 +2300,7 @@ static int qmp_v5_configure_dp_phy(struct qmp_combo *qmp)
+>   {
+>   	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>   	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+> -	bool reverse = false;
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+>   	u32 status;
+>   	int ret;
+>   
+> @@ -2358,7 +2359,7 @@ static int qmp_v6_configure_dp_phy(struct qmp_combo *qmp)
+>   {
+>   	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>   	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+> -	bool reverse = false;
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+>   	u32 status;
+>   	int ret;
+>   
+> @@ -2462,6 +2463,7 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
+>   	const struct qmp_phy_cfg *cfg = qmp->cfg;
+>   	void __iomem *com = qmp->com;
+>   	int ret;
+> +	u32 val;
+>   
+>   	if (qmp->init_count++)
+>   		return 0;
+> @@ -2495,10 +2497,12 @@ static int qmp_combo_com_init(struct qmp_combo *qmp)
+>   			SW_DPPHY_RESET_MUX | SW_DPPHY_RESET |
+>   			SW_USB3PHY_RESET_MUX | SW_USB3PHY_RESET);
+>   
+> -	/* Default type-c orientation, i.e CC1 */
+> -	qphy_setbits(com, QPHY_V3_DP_COM_TYPEC_CTRL, 0x02);
+> -
+> -	qphy_setbits(com, QPHY_V3_DP_COM_PHY_MODE_CTRL, USB3_MODE | DP_MODE);
+> +	/* Use software based port select and switch on typec orientation */
+> +	val = SW_PORTSELECT_MUX;
+> +	if (qmp->orientation == TYPEC_ORIENTATION_REVERSE)
+> +		val |= SW_PORTSELECT_VAL;
+> +	writel(val, com + QPHY_V3_DP_COM_TYPEC_CTRL);
+> +	writel(USB3_MODE | DP_MODE, com + QPHY_V3_DP_COM_PHY_MODE_CTRL);
+>   
+>   	/* bring both QMP USB and QMP DP PHYs PCS block out of reset */
+>   	qphy_clrbits(com, QPHY_V3_DP_COM_RESET_OVRD_CTRL,
+> @@ -3361,6 +3365,8 @@ static int qmp_combo_probe(struct platform_device *pdev)
+>   
+>   	qmp->dev = dev;
+>   
+> +	qmp->orientation = TYPEC_ORIENTATION_NORMAL;
+> +
+>   	qmp->cfg = of_device_get_match_data(dev);
+>   	if (!qmp->cfg)
+>   		return -EINVAL;
 
-Sounds good to me, but now I think we're pushing the question of whether
-to BUG or not on a missing RINTC to that new init function, because
-otherwise we'll still end up in get_acpi_id_for_cpu() eventually with
-or without a valid rintc from which we get the uid (and the uid has no
-specified bogus value).
-
-Thanks,
-drew
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
