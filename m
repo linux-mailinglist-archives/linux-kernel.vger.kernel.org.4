@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869066F0465
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6296F0463
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243600AbjD0KqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S243622AbjD0KqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243111AbjD0KqP (ORCPT
+        with ESMTP id S243555AbjD0KqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:46:15 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D4C524D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:45:51 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a6b17d6387so15605195ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682592350; x=1685184350;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=30nosoiXQAMrXXSjMk3f0ScS/VVQ4IEv4NLyy2tKxdY=;
-        b=Op//te13Se/Cnngme6oQ9wezBIdtyhpuLT07AzPjk6KoHmBrxcqBAbbCwgE2bNDkRq
-         mEqJ4n8a9REsVNW1lXtWNhpWiQYjWU36nlPvSp4zUfojPQ0FBDlTjYiRI1C2gbvonXFN
-         5jJSlQjH/l4tll69GEyH4mq5JA0QJf35MJaEg1Oq5zxWKVgrNUfYKzNIdhKdr4DkSvof
-         md9vbadBNldAqp+VNjf0NBNmNnsthOMGd2/YJDaamNPuxfLPLg4sy8I8s898vIunxb17
-         L3ELKs52PqGJXKcVrFmqnycItqfYDHbEg9u6Pa/3vrguqB7Os6gbbqxOz8DVubTm3XwD
-         XNOw==
+        Thu, 27 Apr 2023 06:46:16 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8560A5586
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:45:56 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-32ab192a7b3so59069385ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:45:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682592350; x=1685184350;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=30nosoiXQAMrXXSjMk3f0ScS/VVQ4IEv4NLyy2tKxdY=;
-        b=Xb4o/x0NQ7TRhjeZQ8GK8peZRAeSGGQC+TxU/2LKTecJxdFyXUVDTsCPntpqpl9e+r
-         4mK4JogFL0VBTzJvsu4Y7fEUY6MMZnkKtY+LdLJiaO+OXD/Z4eJM8qIlQNLTJ21TtwEL
-         53sQ7gkPAHIZ+6qJzD0lpPgHP1Az06YPuXGgIXnYEqmRrzN84Kmvc3q/dTGxIRkErB9V
-         nnuCjIDrlwYSC0thZt/hFxx97G5nzDEyVAitsneMh5Voazm2IdZ42MnipFybJh0CqVZf
-         pJFqJkmGUdIngaj+doaWW7brf92jphTWvyP5nnLRvsq0XfU6SsXNkKpxSGXyZNAX0c9/
-         JonQ==
-X-Gm-Message-State: AC+VfDxUXE3D0TZ4oJz8VtkOC83oMnQxJ//34a1i7E/3MhPhil06ZHgZ
-        KZ+BDl+AMRG5uhyDNQ3JkdNKng==
-X-Google-Smtp-Source: ACHHUZ6/TN+bAdEEGCPnEqHk3/jjucuKbswe5ia2u8r1cKfNOYcJMK4y9V5VUqT+LUg9y/V/yRFefA==
-X-Received: by 2002:a17:902:ecca:b0:1a9:581b:fbaa with SMTP id a10-20020a170902ecca00b001a9581bfbaamr1374722plh.2.1682592350524;
-        Thu, 27 Apr 2023 03:45:50 -0700 (PDT)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id d9-20020a170902b70900b001a96d295f15sm7108460pls.284.2023.04.27.03.45.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 03:45:50 -0700 (PDT)
-Message-ID: <32eb2826-6322-2f3e-9c48-7fd9afc33615@bytedance.com>
-Date:   Thu, 27 Apr 2023 18:45:43 +0800
+        d=1e100.net; s=20221208; t=1682592355; x=1685184355;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r3KK2b0Uit7K5gftG0SKkRqRBmSCncAWQ6WB0lbgTGI=;
+        b=L1eyiqFSXy8o3GtJ6i4x7NZiGa/vPtFqm7/fjSp+HFnfGXNftTs780FlJMjMbMBmRp
+         Ay5twXebHh2zkp9GHta1N4PMSvFbSDvR2oaww75/SstHIR98T6MSo+HuUaSW9uSoEs1r
+         j01VM1+dbenw+pn4kQ5o5EtI3jw6ApCujZJn+T3aYVuG2o22Ah3AdC53G/p83NUAe17A
+         0TEAYWJAXB29dR1H47hc8bQuP0X+Js8vCBVliXK6s2FjkfwLdgyhfHum6H0I60DY+txJ
+         rod6JeJD/i583sLB5BcJBRXKQbB2vWLUNUkkwYTGCQTKSFCMRu3fijHgntJf1Zf4FNJV
+         y1ww==
+X-Gm-Message-State: AC+VfDx8Ze+OUcpAocay4S4PTlYGZ+3k+hx78iUJhvHyYKuLJfORIJHJ
+        qgVCsPe4TxvZo6skt7gao4cnQywjE1Xqs1AFOn2fJoZCuKIXvhU=
+X-Google-Smtp-Source: ACHHUZ5IsR1lZsE9Oa7t/kcvjOIgrZEhiUBJf+S9CaFl3BWEjHg3z8ZW3HHZU9DrlipP6na2XrbEVmsYuM/5fDZTgUw6MWw5PRnA
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jasowang@redhat.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
- <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
- <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
- <1682579624.5395834-1-xuanzhuo@linux.alibaba.com>
- <20230427041206-mutt-send-email-mst@kernel.org>
- <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
- <20230427042259-mutt-send-email-mst@kernel.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230427042259-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a92:4b0b:0:b0:32b:a8bd:50f7 with SMTP id
+ m11-20020a924b0b000000b0032ba8bd50f7mr1020954ilg.2.1682592355631; Thu, 27 Apr
+ 2023 03:45:55 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 03:45:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a8ca8005fa4f0fcf@google.com>
+Subject: [syzbot] Monthly net report (Apr 2023)
+From:   syzbot <syzbot+listb31ed88c701752b673ce@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,94 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello net maintainers/developers,
 
+This is a 31-day syzbot report for the net subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/net
 
-On 2023/4/27 16:23, Michael S. Tsirkin wrote:
-> On Thu, Apr 27, 2023 at 04:13:45PM +0800, Xuan Zhuo wrote:
->> On Thu, 27 Apr 2023 04:12:44 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
->>> On Thu, Apr 27, 2023 at 03:13:44PM +0800, Xuan Zhuo wrote:
->>>> On Thu, 27 Apr 2023 15:02:26 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
->>>>>
->>>>>
->>>>> On 4/27/23 2:20 PM, Xuan Zhuo wrote:
->>>>>> On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
->>>>>>> For multi-queue and large rx-ring-size use case, the following error
->>>>>>
->>>>>> Cound you give we one number for example?
->>>>>
->>>>> 128 queues and 16K queue_size is typical.
->>>>>
->>>>>>
->>>>>>> occurred when free_unused_bufs:
->>>>>>> rcu: INFO: rcu_sched self-detected stall on CPU.
->>>>>>>
->>>>>>> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
->>>>>>> ---
->>>>>>>    drivers/net/virtio_net.c | 1 +
->>>>>>>    1 file changed, 1 insertion(+)
->>>>>>>
->>>>>>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->>>>>>> index ea1bd4bb326d..21d8382fd2c7 100644
->>>>>>> --- a/drivers/net/virtio_net.c
->>>>>>> +++ b/drivers/net/virtio_net.c
->>>>>>> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
->>>>>>>    		struct virtqueue *vq = vi->rq[i].vq;
->>>>>>>    		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
->>>>>>>    			virtnet_rq_free_unused_buf(vq, buf);
->>>>>>> +		schedule();
->>>>>>
->>>>>> Just for rq?
->>>>>>
->>>>>> Do we need to do the same thing for sq?
->>>>> Rq buffers are pre-allocated, take seconds to free rq unused buffers.
->>>>>
->>>>> Sq unused buffers are much less, so do the same for sq is optional.
->>>>
->>>> I got.
->>>>
->>>> I think we should look for a way, compatible with the less queues or the smaller
->>>> rings. Calling schedule() directly may be not a good way.
->>>>
->>>> Thanks.
->>>
->>> Why isn't it a good way?
->>
->> For the small ring, I don't think it is a good way, maybe we only deal with one
->> buf, then call schedule().
->>
->> We can call the schedule() after processing a certain number of buffers,
->> or check need_resched () first.
->>
->> Thanks.
-> 
-> 
-> Wenliang, does
->              if (need_resched())
->                      schedule();
+During the period, 4 new issues were detected and 10 were fixed.
+In total, 77 issues are still open and 1247 have been fixed so far.
 
-Can we just use cond_resched()?
+Some of the still happening issues:
 
-> fix the issue for you?
-> 
-> 
->>
->>
->>>
->>>>
->>>>>
->>>>>>
->>>>>> Thanks.
->>>>>>
->>>>>>
->>>>>>>    	}
->>>>>>>    }
->>>>>>>
->>>>>>> --
->>>>>>> 2.20.1
->>>>>>>
->>>
-> 
+Ref  Crashes Repro Title
+<1>  43630   Yes   BUG: MAX_LOCKDEP_CHAINS too low! (3)
+                   https://syzkaller.appspot.com/bug?extid=8a249628ae32ea7de3a2
+<2>  6296    Yes   WARNING in dev_watchdog (2)
+                   https://syzkaller.appspot.com/bug?extid=d55372214aff0faa1f1f
+<3>  3632    Yes   KMSAN: uninit-value in eth_type_trans (2)
+                   https://syzkaller.appspot.com/bug?extid=0901d0cc75c3d716a3a3
+<4>  2604    No    BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low! (2)
+                   https://syzkaller.appspot.com/bug?extid=9bbbacfbf1e04d5221f7
+<5>  815     Yes   INFO: task hung in switchdev_deferred_process_work (2)
+                   https://syzkaller.appspot.com/bug?extid=8ecc009e206a956ab317
+<6>  431     Yes   INFO: task hung in rtnetlink_rcv_msg
+                   https://syzkaller.appspot.com/bug?extid=8218a8a0ff60c19b8eae
+<7>  347     Yes   KMSAN: uninit-value in IP6_ECN_decapsulate
+                   https://syzkaller.appspot.com/bug?extid=bf7e6250c7ce248f3ec9
+<8>  318     Yes   WARNING in kcm_write_msgs
+                   https://syzkaller.appspot.com/bug?extid=52624bdfbf2746d37d70
+<9>  288     No    KMSAN: uninit-value in __hw_addr_add_ex
+                   https://syzkaller.appspot.com/bug?extid=cec7816c907e0923fdcc
+<10> 272     Yes   BUG: MAX_LOCKDEP_KEYS too low! (2)
+                   https://syzkaller.appspot.com/bug?extid=a70a6358abd2c3f9550f
 
--- 
-Thanks,
-Qi
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
