@@ -2,66 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBCA6F049C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F364E6F04A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243647AbjD0K52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
+        id S243532AbjD0LA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243283AbjD0K5Z (ORCPT
+        with ESMTP id S243201AbjD0LAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:57:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB23580;
-        Thu, 27 Apr 2023 03:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682593044; x=1714129044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SLj/Xnkp0ovw6yMU6P6HV5gsFG1WBUMr4Ctk1pEZW8E=;
-  b=TXHHKkdW6mMIBGRaHLy0sqTrtCFy1boYNNdnxqMa5FZVcLLxoymchOFV
-   S/MVgwyS/bxbTj2i2LPIlzP1axSTaeVS42nkaj8IBHlRltjpH0uFvAIqs
-   KxWYRqjy/34zGk6nmtLCdwLopVJow0wUmaA5LTOWvQ5gcaENYoZGGCcqc
-   Y3EcAu2NYR5OnmCcBYQwzDW95w1mQW5X2l5/R/TvJxqnK61uTMKmq4sKe
-   Fu8kw9aB2rzDFjRNsSA/YXZJywyk2acUTq2j5OTmG1aXZbbbGWEt+s9wn
-   Q6KmfAESKerzTUDpuOHVipyW7F+T/2YYkk3gDcNh8ItcxKpzmeNVrRUlV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="350252387"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="350252387"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 03:57:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="644649684"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="644649684"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 27 Apr 2023 03:57:20 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1przJP-0000BV-1W;
-        Thu, 27 Apr 2023 10:57:19 +0000
-Date:   Thu, 27 Apr 2023 18:56:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     oe-kbuild-all@lists.linux.dev, bblock@linux.ibm.com,
-        acelan.kao@canonical.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] ata: libata: Defer rescan on suspended device
-Message-ID: <202304271800.2IH4Swv7-lkp@intel.com>
-References: <20230427050603.612145-2-kai.heng.feng@canonical.com>
+        Thu, 27 Apr 2023 07:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A2F49C4;
+        Thu, 27 Apr 2023 04:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8304563CA4;
+        Thu, 27 Apr 2023 11:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D919FC4339B;
+        Thu, 27 Apr 2023 11:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682593221;
+        bh=ubbLu6X3aIhQ9+1d6ymWr2oTVqOZVAFne6Q7DPVakj0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=U36Gj3m6C1BZBsjjJL4XbHc3U2LJbYPWQiToq+9OX/Uqw+rgkiL5go68j/iX+FMF3
+         1jazZESyusQEelFIa5KaEXMPWb0OrfK0/XZ9CAVV5RfIyGBpiR682aVvcX/ZqDrz3P
+         B+bT9AeN8Li0ZVwBBxR28l3LQLoV0grsSsQsJHYMQHOFGbnA2+yj/FIsUJkoqWRTfo
+         lefNx65E6ENA3gL3BBdZwRUj+Hd4jxVcEqvzz5WNneV5wWbEmFWfVXNvAHBdeWH8EC
+         YwXnwJ44Wp1NaRtXqobtbQtE9SUTadMvic86io5DiwlUS74BESGTkjxxObe52vZFzj
+         d4DR71AVLniMA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B217FE270D6;
+        Thu, 27 Apr 2023 11:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427050603.612145-2-kai.heng.feng@canonical.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [net PATCH v2 0/9] Macsec fixes for CN10KB
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168259322172.9282.1522773230038872936.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Apr 2023 11:00:21 +0000
+References: <20230426062528.20575-1-gakula@marvell.com>
+In-Reply-To: <20230426062528.20575-1-gakula@marvell.com>
+To:     Geetha sowjanya <gakula@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, richardcochran@gmail.com, sgoutham@marvell.com,
+        sbhatta@marvell.com, hkelam@marvell.com
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,40 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kai-Heng,
+Hello:
 
-kernel test robot noticed the following build errors:
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.3 next-20230426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Wed, 26 Apr 2023 11:55:19 +0530 you wrote:
+> This patch set has fixes for the issues encountered while
+> testing macsec on CN10KB silicon. Below is the description
+> of patches:
+> 
+> Patch 1: For each LMAC two MCSX_MCS_TOP_SLAVE_CHANNEL_CFG registers exist
+> 	 in CN10KB. Bypass has to be disabled in two registers.
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/ata-libata-Defer-rescan-on-suspended-device/20230427-130726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230427050603.612145-2-kai.heng.feng%40canonical.com
-patch subject: [PATCH v3 2/2] ata: libata: Defer rescan on suspended device
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20230427/202304271800.2IH4Swv7-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/0e5dc37a85d9e0c92e2ae38903928499b2b17d04
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kai-Heng-Feng/ata-libata-Defer-rescan-on-suspended-device/20230427-130726
-        git checkout 0e5dc37a85d9e0c92e2ae38903928499b2b17d04
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Here is the summary with links:
+  - [net,v2,1/9] octeonxt2-af: mcs: Fix per port bypass config
+    https://git.kernel.org/netdev/net/c/c222b292a356
+  - [net,v2,2/9] octeontx2-af: mcs: Write TCAM_DATA and TCAM_MASK registers at once
+    https://git.kernel.org/netdev/net/c/b51612198603
+  - [net,v2,3/9] octeontx2-af: mcs: Config parser to skip 8B header
+    https://git.kernel.org/netdev/net/c/65cdc2b637a5
+  - [net,v2,4/9] octeontx2-af: mcs: Fix MCS block interrupt
+    https://git.kernel.org/netdev/net/c/b8aebeaaf9ff
+  - [net,v2,5/9] octeontx2-pf: mcs: Fix NULL pointer dereferences
+    https://git.kernel.org/netdev/net/c/699af748c615
+  - [net,v2,6/9] octeontx2-pf: mcs: Match macsec ethertype along with DMAC
+    https://git.kernel.org/netdev/net/c/57d00d4364f3
+  - [net,v2,7/9] octeontx2-pf: mcs: Clear stats before freeing resource
+    https://git.kernel.org/netdev/net/c/815debbbf7b5
+  - [net,v2,8/9] octeontx2-pf: mcs: Fix shared counters logic
+    https://git.kernel.org/netdev/net/c/9bdfe61054fb
+  - [net,v2,9/9] octeontx2-pf: mcs: Do not reset PN while updating secy
+    https://git.kernel.org/netdev/net/c/3c99bace4ad0
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271800.2IH4Swv7-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "pm_suspend_target_state" [drivers/ata/libata.ko] undefined!
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
