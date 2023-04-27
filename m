@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D926F0CA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083AA6F0CAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343728AbjD0Tkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35658 "EHLO
+        id S1344013AbjD0Too (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245140AbjD0Tkb (ORCPT
+        with ESMTP id S244781AbjD0Toj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:40:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8C3210E;
-        Thu, 27 Apr 2023 12:40:25 -0700 (PDT)
+        Thu, 27 Apr 2023 15:44:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A6A1FE5;
+        Thu, 27 Apr 2023 12:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682624425; x=1714160425;
+  t=1682624678; x=1714160678;
   h=message-id:date:mime-version:subject:to:references:from:
    in-reply-to:content-transfer-encoding;
-  bh=Z5RIkbRi0ccg8zAIylCxLj3HfM8fkyV9h3IQ2iWFllA=;
-  b=ARsZc+PZe/HevI5onPxHrcsSowwQlUOWWehDlxyLYKcOSf8onPyYGiaj
-   NLgvqXWrTK1oys+EIz58VYvhLGrYSo8FB0zwJYukkRGX1qjd+wy0vlOO6
-   4GJonyB9guifgtMKoe9pXgWsv2C0pbeXoZPIkIuCDhoK0JYJDAozvkF47
-   wGNK91Ta9LDy4HxGrdQn6HLsUG+hUUTTa1JDmVIjFzyzdn/uFIXIenb3Q
-   etzZNAOYeDGwAtxpWEoF0lIHV9FSObhjZrZw+5bHchf2xbld0IyPpnMHJ
-   T9kWSILNKPJbMmGV0O4BtJFP7nvjhIK3f8imWAhF9pIqxkFKqoJ1iwhnD
+  bh=TfdZjLC3L1K1UQ20FaYx9/guFNEG5drzopZYjyBO0pg=;
+  b=koyaQpzpfR+Kwv73xHdLxdsUbuSRdV54ygQCUiI1RsEvtNxk1cOSH18w
+   e10iGcE93fUFR8+lsh/9gb4+VElHgYGLQ8VKOmRX+80uG7WhrPwtHE0X0
+   5Gv9fQiJpdYQCZH0AGcSMvnrSxIRaBrhUikJK7ovc/1LYURsdBRWtQ9Be
+   lO0usNFTpinJq5HFubekPm9JPZOjGg0bhDM4v4+mW6lKlFwfWOG7/zq/k
+   f3w1n8+24l7arPjVcKfTzQanIWiYV5vq+QBQOE9Bp8Pvbr/zsdXaT0Dq7
+   VENjNeNzueL/QCCILI6G8gdmhZC9KF+u6D6YbDrFnsvrAzUhbG3hTHe6V
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410610417"
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="345006052"
 X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="410610417"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:40:25 -0700
+   d="scan'208";a="345006052"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:44:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="940786729"
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868853506"
 X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="940786729"
+   d="scan'208";a="868853506"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Apr 2023 12:40:24 -0700
+  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2023 12:44:37 -0700
 Received: from [10.209.41.222] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.222])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E13F5580377;
-        Thu, 27 Apr 2023 12:40:20 -0700 (PDT)
-Message-ID: <9eb6fc9e-7483-500f-937b-c89fdacf9d5b@linux.intel.com>
-Date:   Thu, 27 Apr 2023 15:40:19 -0400
+        by linux.intel.com (Postfix) with ESMTPS id B04DB580CD0;
+        Thu, 27 Apr 2023 12:44:33 -0700 (PDT)
+Message-ID: <c38a0098-bc3d-8c82-c32d-98bb14f7de34@linux.intel.com>
+Date:   Thu, 27 Apr 2023 15:44:32 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v1 11/40] perf test: Test more with config_cache
+Subject: Re: [PATCH v1 12/40] perf test: Roundtrip name, don't assume 1 event
+ per name
 Content-Language: en-US
 To:     Ian Rogers <irogers@google.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -85,9 +86,9 @@ To:     Ian Rogers <irogers@google.com>,
         Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230426070050.1315519-1-irogers@google.com>
- <20230426070050.1315519-12-irogers@google.com>
+ <20230426070050.1315519-13-irogers@google.com>
 From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230426070050.1315519-12-irogers@google.com>
+In-Reply-To: <20230426070050.1315519-13-irogers@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -103,10 +104,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 2023-04-26 3:00 a.m., Ian Rogers wrote:
-> test__checkevent_config_cache checks the parsing of
-> "L1-dcache-misses/name=cachepmu/". Don't just check that the name is
-> set correctly, also validate the rest of the perf_event_attr for
-> L1-dcache-misses.
+> Opening hardware names and a legacy cache event on a hybrid PMU opens
+> it on each PMU. Parsing and checking indexes fails, as the parsed
+> index is double the expected. Avoid checking the index by just
+> comparing the names immediately after the parse.
+> 
+> This change removes hard coded hybrid logic and removes assumptions
+> about the expansion of an event. On hybrid the PMUs may or may not
+> support an event and so using a distance isn't a consistent solution.
 > 
 > Signed-off-by: Ian Rogers <irogers@google.com>
 
@@ -116,21 +121,175 @@ Tested-by: Kan Liang <kan.liang@linux.intel.com>
 
 Thanks,
 Kan
-
 > ---
->  tools/perf/tests/parse-events.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/perf/tests/evsel-roundtrip-name.c | 119 ++++++++++--------------
+>  1 file changed, 49 insertions(+), 70 deletions(-)
 > 
-> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-> index fa016afbc250..177464793aa8 100644
-> --- a/tools/perf/tests/parse-events.c
-> +++ b/tools/perf/tests/parse-events.c
-> @@ -1394,7 +1394,7 @@ static int test__checkevent_config_cache(struct evlist *evlist)
->  	struct evsel *evsel = evlist__first(evlist);
+> diff --git a/tools/perf/tests/evsel-roundtrip-name.c b/tools/perf/tests/evsel-roundtrip-name.c
+> index e94fed901992..15ff86f9da0b 100644
+> --- a/tools/perf/tests/evsel-roundtrip-name.c
+> +++ b/tools/perf/tests/evsel-roundtrip-name.c
+> @@ -4,114 +4,93 @@
+>  #include "parse-events.h"
+>  #include "tests.h"
+>  #include "debug.h"
+> -#include "pmu.h"
+> -#include "pmu-hybrid.h"
+> -#include <errno.h>
+>  #include <linux/kernel.h>
 >  
->  	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "cachepmu"));
-> -	return TEST_OK;
-> +	return test__checkevent_genhw(evlist);
+>  static int perf_evsel__roundtrip_cache_name_test(void)
+>  {
+> -	char name[128];
+> -	int type, op, err = 0, ret = 0, i, idx;
+> -	struct evsel *evsel;
+> -	struct evlist *evlist = evlist__new();
+> +	int ret = TEST_OK;
+>  
+> -        if (evlist == NULL)
+> -                return -ENOMEM;
+> -
+> -	for (type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
+> -		for (op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
+> +	for (int type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
+> +		for (int op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
+>  			/* skip invalid cache type */
+>  			if (!evsel__is_cache_op_valid(type, op))
+>  				continue;
+>  
+> -			for (i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
+> -				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
+> -				err = parse_event(evlist, name);
+> -				if (err)
+> -					ret = err;
+> -			}
+> -		}
+> -	}
+> -
+> -	idx = 0;
+> -	evsel = evlist__first(evlist);
+> +			for (int res = 0; res < PERF_COUNT_HW_CACHE_RESULT_MAX; res++) {
+> +				char name[128];
+> +				struct evlist *evlist = evlist__new();
+> +				struct evsel *evsel;
+> +				int err;
+>  
+> -	for (type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
+> -		for (op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
+> -			/* skip invalid cache type */
+> -			if (!evsel__is_cache_op_valid(type, op))
+> -				continue;
+> +				if (evlist == NULL) {
+> +					pr_debug("Failed to alloc evlist");
+> +					return TEST_FAIL;
+> +				}
+> +				__evsel__hw_cache_type_op_res_name(type, op, res,
+> +								name, sizeof(name));
+>  
+> -			for (i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
+> -				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
+> -				if (evsel->core.idx != idx)
+> +				err = parse_event(evlist, name);
+> +				if (err) {
+> +					pr_debug("Failure to parse cache event '%s' possibly as PMUs don't support it",
+> +						name);
+> +					evlist__delete(evlist);
+>  					continue;
+> -
+> -				++idx;
+> -
+> -				if (strcmp(evsel__name(evsel), name)) {
+> -					pr_debug("%s != %s\n", evsel__name(evsel), name);
+> -					ret = -1;
+>  				}
+> -
+> -				evsel = evsel__next(evsel);
+> +				evlist__for_each_entry(evlist, evsel) {
+> +					if (strcmp(evsel__name(evsel), name)) {
+> +						pr_debug("%s != %s\n", evsel__name(evsel), name);
+> +						ret = TEST_FAIL;
+> +					}
+> +				}
+> +				evlist__delete(evlist);
+>  			}
+>  		}
+>  	}
+> -
+> -	evlist__delete(evlist);
+>  	return ret;
 >  }
 >  
->  static bool test__pmu_cpu_valid(void)
+> -static int __perf_evsel__name_array_test(const char *const names[], int nr_names,
+> -					 int distance)
+> +static int perf_evsel__name_array_test(const char *const names[], int nr_names)
+>  {
+> -	int i, err;
+> -	struct evsel *evsel;
+> -	struct evlist *evlist = evlist__new();
+> +	int ret = TEST_OK;
+>  
+> -        if (evlist == NULL)
+> -                return -ENOMEM;
+> +	for (int i = 0; i < nr_names; ++i) {
+> +		struct evlist *evlist = evlist__new();
+> +		struct evsel *evsel;
+> +		int err;
+>  
+> -	for (i = 0; i < nr_names; ++i) {
+> +		if (evlist == NULL) {
+> +			pr_debug("Failed to alloc evlist");
+> +			return TEST_FAIL;
+> +		}
+>  		err = parse_event(evlist, names[i]);
+>  		if (err) {
+>  			pr_debug("failed to parse event '%s', err %d\n",
+>  				 names[i], err);
+> -			goto out_delete_evlist;
+> +			evlist__delete(evlist);
+> +			ret = TEST_FAIL;
+> +			continue;
+>  		}
+> -	}
+> -
+> -	err = 0;
+> -	evlist__for_each_entry(evlist, evsel) {
+> -		if (strcmp(evsel__name(evsel), names[evsel->core.idx / distance])) {
+> -			--err;
+> -			pr_debug("%s != %s\n", evsel__name(evsel), names[evsel->core.idx / distance]);
+> +		evlist__for_each_entry(evlist, evsel) {
+> +			if (strcmp(evsel__name(evsel), names[i])) {
+> +				pr_debug("%s != %s\n", evsel__name(evsel), names[i]);
+> +				ret = TEST_FAIL;
+> +			}
+>  		}
+> +		evlist__delete(evlist);
+>  	}
+> -
+> -out_delete_evlist:
+> -	evlist__delete(evlist);
+> -	return err;
+> +	return ret;
+>  }
+>  
+> -#define perf_evsel__name_array_test(names, distance) \
+> -	__perf_evsel__name_array_test(names, ARRAY_SIZE(names), distance)
+> -
+>  static int test__perf_evsel__roundtrip_name_test(struct test_suite *test __maybe_unused,
+>  						 int subtest __maybe_unused)
+>  {
+> -	int err = 0, ret = 0;
+> -
+> -	if (perf_pmu__has_hybrid() && perf_pmu__hybrid_mounted("cpu_atom"))
+> -		return perf_evsel__name_array_test(evsel__hw_names, 2);
+> +	int err = 0, ret = TEST_OK;
+>  
+> -	err = perf_evsel__name_array_test(evsel__hw_names, 1);
+> +	err = perf_evsel__name_array_test(evsel__hw_names, PERF_COUNT_HW_MAX);
+>  	if (err)
+>  		ret = err;
+>  
+> -	err = __perf_evsel__name_array_test(evsel__sw_names, PERF_COUNT_SW_DUMMY + 1, 1);
+> +	err = perf_evsel__name_array_test(evsel__sw_names, PERF_COUNT_SW_DUMMY + 1);
+>  	if (err)
+>  		ret = err;
+>  
