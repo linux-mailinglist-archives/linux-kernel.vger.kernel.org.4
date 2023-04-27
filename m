@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075D66F0ECA
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FBE26F0ED6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344336AbjD0XNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        id S1344392AbjD0XQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD0XNc (ORCPT
+        with ESMTP id S1344179AbjD0XQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:13:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DD52711
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682637211; x=1714173211;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mFLC6MQw9xo2DE0SYD/Pxi/XqOZY0FniqW+0JA/FVx0=;
-  b=fy2B3Ma4ub2M2dnLzwrTXdF2JhUb94yQYTZMt75TEbOXo76WfnKDadsu
-   gJygPZEAPbj73K1SpEnMlBEjE6V8VjNliydoG+G6ZX4sYkE0rVPmlrTVD
-   vnbXXfkD5cjIMd1dy4VUCr+CbdmWMe7f87AmBx9Tnf6FDSpVqHbyHMfkF
-   kprXnhwyNvLl7unjMOJ53su6I2S18Ma8LnBDLNFSAj99Hqoi+rnwaEX3L
-   +Ccf/osB2nyj2x29fn+z0up5m6RqI+cgghspIv/wZFyKw9tPrcokIqewe
-   zkx84Q8w8cSDRYu4epwiI4vwqpGEigVjpbbakvY9yuim/kesAK8Mg4bba
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="327215933"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="327215933"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 16:13:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="940851735"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="940851735"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Apr 2023 16:13:29 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psAnp-0000Bx-02;
-        Thu, 27 Apr 2023 23:13:29 +0000
-Date:   Fri, 28 Apr 2023 07:13:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jani Nikula <jani.nikula@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:62: warning: wrong
- kernel-doc identifier on line:
-Message-ID: <202304280719.VTxpdVCP-lkp@intel.com>
+        Thu, 27 Apr 2023 19:16:18 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154ED2701;
+        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54f9b37c634so112328087b3.2;
+        Thu, 27 Apr 2023 16:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682637377; x=1685229377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
+        b=gjHN8YelBpsoiAqUzc4CL4MWJqhS6Jdye5Gd4OKpOLBYPxYCEnw4PyrwrVtN5tJd4C
+         vNywh+vFVW/Sxm4t8Pm0wgLaVZbT1SFuhlkAjfnIRMuSTDllEp39spv0qP+cTAFQM06n
+         JJ5lGuKz1I6YFpvjAsiEQV/OH4D1WHc9l/nLRCl2+QIizbEWk4amnXGctNG+5e5gi/E+
+         A0neO7GHsSase8Vfx2zrBxJQgWxeyNHFvKGAb7y8TlC87sEJQRwCPXUuIfzcvUlZO3fV
+         kV96cmTLs8G7vz9VbdtLotc/AA378cJUhTMAWhVO2Ciq01jQZYqq0jhiNYOYlrYsxclH
+         Zjkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682637377; x=1685229377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xGpWkonDzJU7+QB3sE4Mk+2aNDCSINLhf6pizTNjlbk=;
+        b=MBDki3/hcAAjZDZGSzGGzfJNp+7I+0+VC+bSOC3M4dWhJp042Y09XN3GpxvBGYyJRe
+         yhloYMKc54WjW/fyOx/5bepbpZLWRse0hhV5Uo8qfJb2HKoDbeJtdFNWnlzQKHk+CV2X
+         OhURGSfe52QoMKxlqmpfyM3JaWfCRoA99WffOhp9uAMWqksKsrS3IfgXEfZpS/0vmeJv
+         kx0d0xcGZ+VrMvQBVOF4T2pvhmA4b0o7NcQRXwdm5BC20ThRoOYfXr/d+OGz6eN3psQI
+         tHiODG0cY24JBRLB2ZWOWHE3SONRnDabOdcwgSNA3jwBxaayXqx3LE0t4jvv7pFLjg4p
+         DfBw==
+X-Gm-Message-State: AC+VfDyj5iVlI/GyiP7+OYNMX3OerfDzZNYRlkjtFzr45WCCfUBpRZAP
+        ekGGNlRyTu9v9y/L7ZUwuNfnisPAjhoEU3quKJ8=
+X-Google-Smtp-Source: ACHHUZ4WO1LJTTgQo9Y82F8sUVKEwnGwETAY5RAvp1c5jQLhZ9s9sPxvB3CTr5pWPyMa0/gwbDNqldVKoq65NmbOi1w=
+X-Received: by 2002:a0d:dd88:0:b0:54b:fe8c:350 with SMTP id
+ g130-20020a0ddd88000000b0054bfe8c0350mr2556618ywe.19.1682637377262; Thu, 27
+ Apr 2023 16:16:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230426184420.99945-1-samsagax@gmail.com> <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+In-Reply-To: <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Thu, 27 Apr 2023 20:16:05 -0300
+Message-ID: <CABgtM3i+HZJDearvBK-sBrWnfqdrsuNCDYfxASC3QVsn8rAy-Q@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,88 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cec24b8b6bb841a19b5c5555b600a511a8988100
-commit: 899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8 drm/i915: run kernel-doc on headers as part of HDRTEST
-date:   3 weeks ago
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230428/202304280719.VTxpdVCP-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 899ff790d1a94dda9bd09a4a6bde01fb7ff0bec8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+Hello Guenter and thanks for your quick review.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280719.VTxpdVCP-lkp@intel.com/
+> Please run checkpatch --strict on your patches. Never mind, I'll apply th=
+e
+> patch anyway - I see the other entries are the same.
+I've run it before on the other patches... did something change in the
+checkpatch?
+Nevermid, After this one I may submit a patch to fix all styling in one go
 
-All warnings (new ones prefixed by >>):
+> That makes me have a closer look at the code. What is the purpose of the
+> odd typecast anyway ? Why not just
+>         .driver_data =3D (void *)aya_neo_2,
+> and
+>         board =3D (enum oxp_board)dmi_entry->driver_data;
+> ?
+I don't know why but the compiler would complain with the casting from
+enum to void*.
+Found out that explicitly casting the enum literal before casting it
+to void* works and
+the compiler stopped complaining so I went with it.
 
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'size' not described in '__guc_capture_bufstate'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'data' not described in '__guc_capture_bufstate'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'rd' not described in '__guc_capture_bufstate'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:27: warning: Function parameter or member 'wr' not described in '__guc_capture_bufstate'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'link' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'is_partial' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'eng_class' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'eng_inst' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'guc_id' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'lrca' not described in '__guc_capture_parsed_output'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:59: warning: Function parameter or member 'reginfo' not described in '__guc_capture_parsed_output'
->> drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:62: warning: wrong kernel-doc identifier on line:
-    * struct guc_debug_capture_list_header / struct guc_debug_capture_list
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:80: warning: wrong kernel-doc identifier on line:
-    * struct __guc_mmio_reg_descr / struct __guc_mmio_reg_descr_group
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:105: warning: wrong kernel-doc identifier on line:
-    * struct guc_state_capture_header_t / struct guc_state_capture_t /
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'is_valid' not described in '__guc_capture_ads_cache'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'ptr' not described in '__guc_capture_ads_cache'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'size' not described in '__guc_capture_ads_cache'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:163: warning: Function parameter or member 'status' not described in '__guc_capture_ads_cache'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:216: warning: Function parameter or member 'ads_null_cache' not described in 'intel_guc_state_capture'
-   drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h:216: warning: Function parameter or member 'max_mmio_per_node' not described in 'intel_guc_state_capture'
---
-   drivers/gpu/drm/i915/i915_pmu.h:21: warning: cannot understand function prototype: 'enum i915_pmu_tracked_events '
-   drivers/gpu/drm/i915/i915_pmu.h:32: warning: cannot understand function prototype: 'enum '
->> drivers/gpu/drm/i915/i915_pmu.h:41: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * How many different events we track in the global PMU mask.
---
->> drivers/gpu/drm/i915/i915_request.h:176: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Request queue structure.
-   drivers/gpu/drm/i915/i915_request.h:477: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Returns true if seq1 is later than seq2.
---
->> drivers/gpu/drm/i915/i915_vma.h:145: warning: expecting prototype for i915_vma_offset(). Prototype was for i915_vma_size() instead
+As a follow up question, since this driver has become more AYANEO than
+OXP since its inception,
+ wouldn't  it be better to change the description?
 
-
-vim +62 drivers/gpu/drm/i915/gt/uc/guc_capture_fwif.h
-
-f5718a7265a6f56 Alan Previn 2022-03-21  60  
-24492514ccbd571 Alan Previn 2022-03-21  61  /**
-24492514ccbd571 Alan Previn 2022-03-21 @62   * struct guc_debug_capture_list_header / struct guc_debug_capture_list
-24492514ccbd571 Alan Previn 2022-03-21  63   *
-24492514ccbd571 Alan Previn 2022-03-21  64   * As part of ADS registration, these header structures (followed by
-24492514ccbd571 Alan Previn 2022-03-21  65   * an array of 'struct guc_mmio_reg' entries) are used to register with
-24492514ccbd571 Alan Previn 2022-03-21  66   * GuC microkernel the list of registers we want it to dump out prior
-24492514ccbd571 Alan Previn 2022-03-21  67   * to a engine reset.
-24492514ccbd571 Alan Previn 2022-03-21  68   */
-24492514ccbd571 Alan Previn 2022-03-21  69  struct guc_debug_capture_list_header {
-24492514ccbd571 Alan Previn 2022-03-21  70  	u32 info;
-24492514ccbd571 Alan Previn 2022-03-21  71  #define GUC_CAPTURELISTHDR_NUMDESCR GENMASK(15, 0)
-24492514ccbd571 Alan Previn 2022-03-21  72  } __packed;
-24492514ccbd571 Alan Previn 2022-03-21  73  
-
-:::::: The code at line 62 was first introduced by commit
-:::::: 24492514ccbd57121f168bb14939f32d8905d579 drm/i915/guc: Update GuC ADS size for error capture lists
-
-:::::: TO: Alan Previn <alan.previn.teres.alexis@intel.com>
-:::::: CC: Lucas De Marchi <lucas.demarchi@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Joaqu=C3=ADn Aramend=C3=ADa
