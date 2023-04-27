@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA616F0441
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354426F0443
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243218AbjD0KgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
+        id S243578AbjD0KhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242817AbjD0KgW (ORCPT
+        with ESMTP id S243320AbjD0KhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:36:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4264ECA
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682591781; x=1714127781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Px5B2Gou+pRMmjzFHaxFdtgcphKDMykbYTeJSM0wkQs=;
-  b=PLZmjmdaMRu98ASiFI6blC7/2w6t3bfTAAeN6OeNljRVzfVNXGi46koA
-   +N7Cjb5YwKXDcPrZtqWshoTrL9D9pfYBLzoyTur97Y64UDuM9O0OlcP9W
-   ShFouSPHojuUKyc6jMHpjnj+OfhsNNesDX7VVPweXyY2ozbniOEqmcf0U
-   gK6xtBv78PJPTT2k8EuddXH9vncA53hENP4NQRBwpO3OIN1ckVcngUajl
-   BXW8cf1W46W/9CXPZBVjJ3LWk8OX3njVryDAHSZczlz5BkltyByHVfaep
-   RoDwzhm0Sft3/4mA3ZAUSRFMiH3eI0/ouIwFLBoazrTLGWG1swh6lvO/0
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433682468"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="433682468"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 03:36:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="783685885"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="783685885"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2023 03:36:19 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pryz5-0000Az-0C;
-        Thu, 27 Apr 2023 10:36:19 +0000
-Date:   Thu, 27 Apr 2023 18:36:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Suman Anna <s-anna@ti.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse:
- cast removes address space '__iomem' of expression
-Message-ID: <202304271850.sdzTf7L3-lkp@intel.com>
+        Thu, 27 Apr 2023 06:37:01 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEE84ECA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:36:58 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32b5ec09cf8so58955435ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:36:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682591817; x=1685183817;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RnKvJRGuTj19/qeFfCObJ1mKSwbZtyjNqHI5nsZidCI=;
+        b=Uq59DAwZ4qmt2Y2aBTgIwS1Ln+P8V1v9ctgWHtFhApGzTdjYjMZt6nW7d8jNWI+KQT
+         hsTXAb0OKPLRUHzD9n6LG39447BStzTbNhRYoS+xIZBxLt3w8z17o0zHqoofWHNgIPXL
+         pCRaFDD9WcOBjYwrO82Mfh3YfOpwsd88PFyhqB0uu9wnLYVFF62GGJpzE5q8yKCK8OzN
+         yye1jz7YuM+UTZH3s9f8AJQs1MGog+VDu+Gc2ljgQrsmWl5N059wVIuv1+vxJx7pZ+7J
+         LQqwA0jiwD2/7CNgdAR5RtrMDovHHBdfJUzIw4T9MhojcUy/bEuGT7lqTkPmwyNbfBU1
+         THKA==
+X-Gm-Message-State: AC+VfDxcvN9DsP3zAL9Vmponw5AfA917tdqQNsXBLyauttinSZBcC8Yj
+        OmiWqzusOoBhUMf8Lq4GZi5ciTO4mUzrz+1h9w2Sa2ZHWV07
+X-Google-Smtp-Source: ACHHUZ6SwoeQT/XLmwNrFtRoV/YVN3rzG4Cw/+wZIzYcGxb+fsStPZfJnPBiq+lGfhD2+Ahvdv2JuYGT2BXSEPie7N6Dbd3PO8G1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:548:b0:32a:9e86:242f with SMTP id
+ i8-20020a056e02054800b0032a9e86242fmr996137ils.6.1682591817801; Thu, 27 Apr
+ 2023 03:36:57 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 03:36:57 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a2a1b05fa4eef8f@google.com>
+Subject: [syzbot] Monthly jfs report (Apr 2023)
+From:   syzbot <syzbot+listfa7b6ec26861d7b6f193@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,69 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6e98b09da931a00bf4e0477d0fa52748bf28fcce
-commit: b8431920391d36c273f63a29eab0dfc7e884dd17 remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
-date:   1 year, 2 months ago
-config: arm64-randconfig-s042-20230427 (https://download.01.org/0day-ci/archive/20230427/202304271850.sdzTf7L3-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b8431920391d36c273f63a29eab0dfc7e884dd17
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b8431920391d36c273f63a29eab0dfc7e884dd17
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/remoteproc/
+Hello jfs maintainers/developers,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271850.sdzTf7L3-lkp@intel.com/
+This is a 31-day syzbot report for the jfs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/jfs
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/remoteproc/ti_k3_dsp_remoteproc.c:432:17: sparse: sparse: cast removes address space '__iomem' of expression
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 63 issues are still open and 9 have been fixed so far.
 
-vim +/__iomem +432 drivers/remoteproc/ti_k3_dsp_remoteproc.c
+Some of the still happening issues:
 
-   402	
-   403	/*
-   404	 * This function implements the .get_loaded_rsc_table() callback and is used
-   405	 * to provide the resource table for a booted DSP in IPC-only mode. The K3 DSP
-   406	 * firmwares follow a design-by-contract approach and are expected to have the
-   407	 * resource table at the base of the DDR region reserved for firmware usage.
-   408	 * This provides flexibility for the remote processor to be booted by different
-   409	 * bootloaders that may or may not have the ability to publish the resource table
-   410	 * address and size through a DT property. This callback is invoked only in
-   411	 * IPC-only mode.
-   412	 */
-   413	static struct resource_table *k3_dsp_get_loaded_rsc_table(struct rproc *rproc,
-   414								  size_t *rsc_table_sz)
-   415	{
-   416		struct k3_dsp_rproc *kproc = rproc->priv;
-   417		struct device *dev = kproc->dev;
-   418	
-   419		if (!kproc->rmem[0].cpu_addr) {
-   420			dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
-   421			return ERR_PTR(-ENOMEM);
-   422		}
-   423	
-   424		/*
-   425		 * NOTE: The resource table size is currently hard-coded to a maximum
-   426		 * of 256 bytes. The most common resource table usage for K3 firmwares
-   427		 * is to only have the vdev resource entry and an optional trace entry.
-   428		 * The exact size could be computed based on resource table address, but
-   429		 * the hard-coded value suffices to support the IPC-only mode.
-   430		 */
-   431		*rsc_table_sz = 256;
- > 432		return (struct resource_table *)kproc->rmem[0].cpu_addr;
-   433	}
-   434	
+Ref  Crashes Repro Title
+<1>  4032    Yes   UBSAN: shift-out-of-bounds in extAlloc
+                   https://syzkaller.appspot.com/bug?extid=5f088f29593e6b4c8db8
+<2>  940     Yes   KASAN: slab-out-of-bounds Read in hex_dump_to_buffer
+                   https://syzkaller.appspot.com/bug?extid=489783e0c22fbb27d8e9
+<3>  871     Yes   UBSAN: array-index-out-of-bounds in xtInsert
+                   https://syzkaller.appspot.com/bug?extid=55a7541cfd25df68109e
+<4>  594     Yes   general protection fault in lmLogSync (2)
+                   https://syzkaller.appspot.com/bug?extid=e14b1036481911ae4d77
+<5>  455     Yes   kernel BUG in jfs_evict_inode
+                   https://syzkaller.appspot.com/bug?extid=9c0c58ea2e4887ab502e
+<6>  306     Yes   general protection fault in write_special_inodes
+                   https://syzkaller.appspot.com/bug?extid=c732e285f8fc38d15916
+<7>  229     Yes   kernel BUG in txUnlock
+                   https://syzkaller.appspot.com/bug?extid=a63afa301d1258d09267
+<8>  221     Yes   UBSAN: array-index-out-of-bounds in dbAllocBits
+                   https://syzkaller.appspot.com/bug?extid=ae2f5a27a07ae44b0f17
+<9>  202     Yes   UBSAN: array-index-out-of-bounds in txCommit
+                   https://syzkaller.appspot.com/bug?extid=0558d19c373e44da3c18
+<10> 136     Yes   general protection fault in jfs_flush_journal
+                   https://syzkaller.appspot.com/bug?extid=194bfe3476f96782c0b6
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
