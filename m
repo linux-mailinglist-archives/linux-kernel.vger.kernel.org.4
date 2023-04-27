@@ -2,132 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1296F0AC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692376F0ACB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244151AbjD0RXz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 13:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S244127AbjD0RZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244098AbjD0RXx (ORCPT
+        with ESMTP id S244039AbjD0RZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:23:53 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1549E1;
-        Thu, 27 Apr 2023 10:23:45 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso251648166b.0;
-        Thu, 27 Apr 2023 10:23:45 -0700 (PDT)
+        Thu, 27 Apr 2023 13:25:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9382704
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682616272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
+        b=QstcTcbJyzVLyZn185aqSafia7+k+bbK6CwJQIZpFEKyd8JcNYp7H/p9ke+HvfsEGR+UqZ
+        Keg0L8rZ+qga3nXzO5EGeBP6OPklU4fxZjHS8pw9vKNCOT5r0pH2F2ZGFpN+vs9Iu1k2aH
+        ueC0ftsVLl/Yw4u/h8GYo6qkQVAttkY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-668-CIhGrAXsNpy9V6VT8xlcQQ-1; Thu, 27 Apr 2023 13:24:31 -0400
+X-MC-Unique: CIhGrAXsNpy9V6VT8xlcQQ-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74e47b6e044so439422585a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:24:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682616224; x=1685208224;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bTP6a1svEFt7abENC6zMHAYb3w6MJh1QQije0TuLlWg=;
-        b=Q//gNQB1mbsSgvZxX7ZbOHqiLYsnnT2JmOx7m3SS7o3FI2u3qCSFYyeuDukQ61AD3k
-         rlZ2EEfYeqcCiGKOMrB7J0YZggtDD4wWwYV5Cncp5BJdgvVZ+MFDV5YX7OIFgL9gPD0l
-         ql03LR5mmstihwA545j5p8tWC98joGOdKFQljTznkTHmcQUkgl0fGKl2DwDaVcStcYG8
-         UnRXO5XRf6uKSzbG0Xo2R5MdIPlGyXrF7RgQtLr8Kku385aXKT1knPvrn9SlisRlB511
-         YLodC6XET3uD41uvQUm6GsNEg8c1s/5+ofcUWH24XhMDuWQOjr0ZTbxwxBZkR98cWKpV
-         o8Rw==
-X-Gm-Message-State: AC+VfDwOaXYvnRLVKH9mXcY4x9kCysWreNMHyEa3WSo/UR+zFvLLiZWf
-        +b15LXoIGj6AdxmOZ/d9LNRNODZ/QElcnWLUlzY=
-X-Google-Smtp-Source: ACHHUZ485dQluQHN4run1SAAMDSnNxSG6T1tkQu1Rp6Zfkxp/1f927W3m4kcbh1mQ1P6tLO4gZLHu7N7D2lh42LTgf8=
-X-Received: by 2002:a17:906:2211:b0:94e:d5d7:67eb with SMTP id
- s17-20020a170906221100b0094ed5d767ebmr2250405ejs.5.1682616224026; Thu, 27 Apr
- 2023 10:23:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682616271; x=1685208271;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=28q8f1R5ATkZZRKbMVPNKfNQWWUbVatXGNvWfYjHmSs=;
+        b=YOWRVXt+eEfmKKtI/pVCPsUmYQNtlWaXOxpyp7FElSiHl1iqD28OZJrkw1qhpwt5Hu
+         wnYlZzzSn9fOqv7+0e715XxkVltFqFL/l/EmucjfYb1wCus+ZDPpr3QlmPD2lCY/49nj
+         KOtc1VR8HinN1zQDtqudnz8WX7Vg3tftMKqbWgf5SiTuGSzXZ3FPFpG2ScmXsYIkKc5c
+         KxKR/uUWfWLKoGqc7OYiL1gpbiOiK3ZdrfbxAU27lfNqhwaYrUzQCul7tN+use5K7A3f
+         Ph+g+DlPMFNnuZIVzbB1klLhvSGkiv2X73L378RNgUtVPF0X+6gfCV2yySUSLh64Xt3h
+         MSoA==
+X-Gm-Message-State: AC+VfDzvOCVe9yD7K6qq41vsFu3DP5szK6YDR2c/bRrO3Jm8IItz5piN
+        xhZm32M3tP0+4Za3zNMwdZuSLPyh66DhXr8n5K6cVDp23yak33wA/aRWK1ObOtWK1H6mhPY6AR3
+        hfsMokcJKp15tWiVutlDcRHcL
+X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3430011qtk.40.1682616270990;
+        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5svrizMCWCHRmMrWSPvzIzZhBUFHpvLgjbJkFvifxcpqqAJAjdkw0lFQmIdO2/HiJtRgKJ1A==
+X-Received: by 2002:a05:622a:11cf:b0:3ef:62be:e09b with SMTP id n15-20020a05622a11cf00b003ef62bee09bmr3429975qtk.40.1682616270651;
+        Thu, 27 Apr 2023 10:24:30 -0700 (PDT)
+Received: from fedora (modemcable181.5-202-24.mc.videotron.ca. [24.202.5.181])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac86041000000b003ecf475286csm6297422qtm.39.2023.04.27.10.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 10:24:29 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 13:24:27 -0400
+From:   Adrien Thierry <athierry@redhat.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Message-ID: <ZEqvy+khHeTkC2hf@fedora>
+References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+ <ZEcEGJiikEC2wIVE@fedora>
+ <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
 MIME-Version: 1.0
-References: <20230419083343.505780-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20230419083343.505780-1-daniel.lezcano@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Apr 2023 19:23:32 +0200
-Message-ID: <CAJZ5v0jKRew48KNXXBJjENxpOhEE5jxwfAcmiuu_4nvhQL-FGA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] Thermal zone device structure encapsulation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac49075d-439e-da46-9ef6-0b0828f8e072@linaro.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 10:33 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal zone device structure is defined in the exported thermal
-> header include/linux/thermal.h
->
-> Given the definition being public, the structure is exposed to the
-> external components other than the thermal framework core code. It
-> results the drivers are tampering the structure internals like taking
-> the lock or changing the field values.
->
-> Obviously that is bad for several reasons as the drivers can hook the
-> thermal framework behavior and makes very difficult the changes in the
-> core code as external components depend on it directly.
->
-> Moreover, the thermal trip points being reworked, we don't want the
-> drivers to access the trips array directly in the thermal zone
-> structure and doing assumptions on how they are organized.
->
-> This series provides a second set of changes moving to the thermal
-> zone device structure self-encapsulation.
->
-> The ACPI and the Menlon drivers are using the thermal zone's device
-> fields to create symlinks and new attributes in the sysfs thermal zone
-> directory. These changes provide a hopefully temporary wrapper to
-> access it in order to allow moving forward in the thermal zone device
-> self-encapsulation and a Kconfig option to disable by default such a
-> extra sysfs information.
->
-> Changelog:
->         v4:
->         - Encapsulate extra sysfs information inside a function for
->           ACPI but remove the Kconfig option
->         - Encapsulate extra sysfs information inside a function,
->           create the stubs and put that conditionnal to a Kconfig
->           option for Menlow
->         v3:
->         - Split the Kconfig option to be driver related when disabling
->           the specific attributes
->         - Use the thermal zone's device wrapper to write a trace in
->           the pch intel driver
->         v2:
->         - Add the Kconfig option to remove specific attributes
->         - Add a thermal_zone_device() wrapper to access tz->device
->
-> Daniel Lezcano (6):
->   thermal/core: Encapsulate tz->device field
->   thermal/drivers/intel_pch_thermal: Use thermal driver device to write
->     a trace
->   thermal/drivers/acpi: Use thermal_zone_device()
->   thermal/drivers/menlow: Use thermal_zone_device()
->   thermal/drivers/acpi: Move to dedicated function sysfs extra attr
->     creation
->   thermal/drivers/intel_menlow: Make additionnal sysfs information
->     optional
->
->  drivers/acpi/thermal.c                    | 47 +++++++++++++++--------
->  drivers/thermal/intel/Kconfig             | 11 ++++++
->  drivers/thermal/intel/intel_menlow.c      | 18 +++++++--
->  drivers/thermal/intel/intel_pch_thermal.c |  3 +-
->  drivers/thermal/thermal_core.c            |  6 +++
->  include/linux/thermal.h                   |  1 +
->  6 files changed, 67 insertions(+), 19 deletions(-)
->
-> --
+Hi Konrad,
 
-Patches [4/6] and [6/6] were superseded by the Menlow driver removal.
+On Thu, Apr 27, 2023 at 12:42:15AM +0100, Konrad Dybcio wrote:
+> 
+> On 4/24/23 23:35, Adrien Thierry wrote:
+> > Hi Shazad,
+> > 
+> > On Fri, Apr 21, 2023 at 07:09:15PM +0530, Shazad Hussain wrote:
+> > > Update relavent DT bindings for USB, add new config to the phy driver,
+> > > add USB and PHY nodes to the .dtsi and enable them in the board .dts
+> > > for the sa8775p-ride platform.
+> > > 
+> > > Shazad Hussain (6):
+> > >    dt-bindings: usb: qcom,dwc3: Add bindings for SA8775P
+> > >    dt-bindings: phy: qcom,usb-snps-femto-v2: Add bindings for SA8775P
+> > >    dt-bindings: phy: qcom,sc8280xp-qmp-usb3-uni: Add SA8775P USB PHY
+> > >      binding
+> > >    phy: qcom-qmp: Add SA8775P USB3 UNI phy
+> > >    arm64: dts: qcom: sa8775p: add USB nodes
+> > >    arm64: dts: qcom: sa8775p-ride: enable USB nodes
+> > > 
+> > >   .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   1 +
+> > >   .../bindings/phy/qcom,usb-snps-femto-v2.yaml  |   1 +
+> > >   .../devicetree/bindings/usb/qcom,dwc3.yaml    |   5 +
+> > >   arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  92 +++++++
+> > >   arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 239 +++++++++++++++++-
+> > >   drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |  45 ++++
+> > >   6 files changed, 381 insertions(+), 2 deletions(-)
+> > > 
+> > > -- 
+> > > 2.17.1
+> > > 
+> > Thanks for posting this. I tested the series on the sa8775p, and it seems
+> > initialization for the controller at a400000 sometimes fails with a
+> > timeout (-110) error:
+> > 
+> >      dwc3 a400000.usb: Adding to iommu group 2
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.0.auto: can't setup: -110
+> >      xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
+> >      xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
+> >      dwc3 a600000.usb: Adding to iommu group 3
+> >      dwc3 a800000.usb: Adding to iommu group 4
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a800000
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 2
+> >      xhci-hcd xhci-hcd.1.auto: Host supports USB 3.1 Enhanced SuperSpeed
+> >      hub 1-0:1.0: USB hub found
+> >      hub 1-0:1.0: 1 port detected
+> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+> >      hub 2-0:1.0: USB hub found
+> >      hub 2-0:1.0: 1 port detected
+> > 
+> > In this case, only usb devices for a800000 are showing:
+> > 
+> >      dracut:/# ls -alh /sys/bus/usb/devices
+> >      total 0
+> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
+> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1/1-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2/2-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb1
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.1.auto/usb2
+> > 
+> > This happens approximately 1 out of 2 reboots. Here's the kernel output
+> > when initialization succeeds:
+> > 
+> >      dwc3 a600000.usb: Adding to iommu group 2
+> >      dwc3 a800000.usb: Adding to iommu group 3
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 1
+> >      xhci-hcd xhci-hcd.0.auto: hcc params 0x0110ffc5 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.0.auto: irq 161, io mem 0x0a800000
+> >      xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned bus number 2
+> >      xhci-hcd xhci-hcd.0.auto: Host supports USB 3.1 Enhanced SuperSpeed
+> >      hub 1-0:1.0: USB hub found
+> >      hub 1-0:1.0: 1 port detected
+> >      usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+> >      hub 2-0:1.0: USB hub found
+> >      hub 2-0:1.0: 1 port detected
+> >      dwc3 a400000.usb: Adding to iommu group 4
+> >      xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
+> >      xhci-hcd xhci-hcd.1.auto: new USB bus registered, assigned bus number 3
+> >      xhci-hcd xhci-hcd.1.auto: USB3 root hub has no ports
+> >      xhci-hcd xhci-hcd.1.auto: hcc params 0x0220fe65 hci version 0x110 quirks 0x0000000000010010
+> >      xhci-hcd xhci-hcd.1.auto: irq 162, io mem 0x0a400000
+> >      hub 3-0:1.0: USB hub found
+> >      hub 3-0:1.0: 1 port detected
+> > 
+> > And the list of usb devices:
+> > 
+> >      dracut:/# ls -alh /sys/bus/usb/devices
+> >      total 0
+> >      drwxr-xr-x 2 root root 0 Feb 27 00:00 .
+> >      drwxr-xr-x 4 root root 0 Feb 27 00:00 ..
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 1-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1/1-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 2-0:1.0 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2/2-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 3-0:1.0 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3/3-0:1.0
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb1 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb1
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb2 -> ../../../devices/platform/soc@0/a8f8800.usb/a800000.usb/xhci-hcd.0.auto/usb2
+> >      lrwxrwxrwx 1 root root 0 Feb 27 00:00 usb3 -> ../../../devices/platform/soc@0/a4f8800.usb/a400000.usb/xhci-hcd.1.auto/usb3
+> > 
+> > Have you also encountered this?
+> 
+> I've had some issues with QMPPHY not (sometimes?) probing in time on SM6115 only when built as a module.. perhaps it'd be worth checking out of it works fine with =y?
 
-I've applied the rest as 6.4-rc material, with some subject
-adjustments and after removing some trailing white space in a few
-places.
+Looks like that might be the cause indeed. The arm64 defconfig has the
+PHYs built as modules, but with either CONFIG_PHY_QCOM_QMP_USB=y or
+CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=y, the controllers initialize properly
+all the time.
 
-Thanks!
+So, the series is:
+
+Tested-by: Adrien Thierry <athierry@redhat.com>
+
+> 
+> 
+> Konrad
+> 
+> > 
+> > Best,
+> > 
+> > Adrien
+> > 
+
