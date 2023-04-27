@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFDC6F0779
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BD56F0775
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244175AbjD0Oaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 10:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S244211AbjD0ObI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 10:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244099AbjD0OaZ (ORCPT
+        with ESMTP id S244117AbjD0Oa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:30:25 -0400
+        Thu, 27 Apr 2023 10:30:27 -0400
 Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D346B1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADE346AE
         for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:30:19 -0700 (PDT)
 Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 2F95C20B61;
+        by mail11.truemail.it (Postfix) with ESMTPA id A1E7320B63;
         Thu, 27 Apr 2023 16:29:43 +0200 (CEST)
 From:   Francesco Dolcini <francesco@dolcini.it>
 To:     Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -29,9 +29,9 @@ To:     Andrzej Hajda <andrzej.hajda@intel.com>,
 Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 8/9] drm/bridge: tc358768: fix THS_TRAILCNT computation
-Date:   Thu, 27 Apr 2023 16:29:33 +0200
-Message-Id: <20230427142934.55435-9-francesco@dolcini.it>
+Subject: [PATCH v1 9/9] drm/bridge: tc358768: remove unused variable
+Date:   Thu, 27 Apr 2023 16:29:34 +0200
+Message-Id: <20230427142934.55435-10-francesco@dolcini.it>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230427142934.55435-1-francesco@dolcini.it>
 References: <20230427142934.55435-1-francesco@dolcini.it>
@@ -48,50 +48,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Correct computation of THS_TRAILCNT register.
+Remove the unused phy_delay_nsk variable, before it was wrongly used
+to compute some register value, the fixed computation is no longer using
+it and therefore can be removed.
 
-This register must be set to a value that ensure that
-THS_TRAIL > 60 ns + 4 x UI
- and
-THS_TRAIL > 8 x UI
- and
-THS_TRAIL < TEOT
- with
-TEOT = 105 ns + (12 x UI)
-
-with the actual value of THS_TRAIL being
-
-(1 + THS_TRAILCNT) x ByteClk cycle + ((1 to 2) + 2) xHSBYTECLK cycle +
- - (PHY output delay)
-
-with PHY output delay being about
-
-(8 + (5 to 6)) x MIPIBitClk cycle in the BitClk conversion.
-
-Fixes: ff1ca6397b1d ("drm/bridge: Add tc358768 driver")
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
- drivers/gpu/drm/bridge/tc358768.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/bridge/tc358768.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/tc358768.c b/drivers/gpu/drm/bridge/tc358768.c
-index 854fc04f08d0..947c7dca567a 100644
+index 947c7dca567a..d3af42a16e69 100644
 --- a/drivers/gpu/drm/bridge/tc358768.c
 +++ b/drivers/gpu/drm/bridge/tc358768.c
-@@ -779,9 +779,10 @@ static void tc358768_bridge_pre_enable(struct drm_bridge *bridge)
- 	dev_dbg(priv->dev, "TCLK_POSTCNT: 0x%x\n", val);
- 	tc358768_write(priv, TC358768_TCLK_POSTCNT, val);
+@@ -641,7 +641,7 @@ static void tc358768_bridge_pre_enable(struct drm_bridge *bridge)
+ 	u32 val, val2, lptxcnt, hact, data_type;
+ 	s32 raw_val;
+ 	const struct drm_display_mode *mode;
+-	u32 dsibclk_nsk, dsiclk_nsk, ui_nsk, phy_delay_nsk;
++	u32 dsibclk_nsk, dsiclk_nsk, ui_nsk;
+ 	u32 dsiclk, dsibclk, video_start;
+ 	const u32 internal_delay = 40;
+ 	int ret, i;
+@@ -725,11 +725,9 @@ static void tc358768_bridge_pre_enable(struct drm_bridge *bridge)
+ 				  dsibclk);
+ 	dsiclk_nsk = (u32)div_u64((u64)1000000000 * TC358768_PRECISION, dsiclk);
+ 	ui_nsk = dsiclk_nsk / 2;
+-	phy_delay_nsk = dsibclk_nsk + 2 * dsiclk_nsk;
+ 	dev_dbg(priv->dev, "dsiclk_nsk: %u\n", dsiclk_nsk);
+ 	dev_dbg(priv->dev, "ui_nsk: %u\n", ui_nsk);
+ 	dev_dbg(priv->dev, "dsibclk_nsk: %u\n", dsibclk_nsk);
+-	dev_dbg(priv->dev, "phy_delay_nsk: %u\n", phy_delay_nsk);
  
--	/* 60ns + 4*UI < THS_PREPARE < 105ns + 12*UI */
--	val = tc358768_ns_to_cnt(60 + tc358768_to_ns(15 * ui_nsk),
--				 dsibclk_nsk) - 5;
-+	/* max(60ns + 4*UI, 8*UI) < THS_TRAILCNT < 105ns + 12*UI */
-+	raw_val = tc358768_ns_to_cnt(60 + tc358768_to_ns(18 * ui_nsk),
-+				     dsibclk_nsk) - 4;
-+	val = clamp(raw_val, 0, 15);
- 	dev_dbg(priv->dev, "THS_TRAILCNT: 0x%x\n", val);
- 	tc358768_write(priv, TC358768_THS_TRAILCNT, val);
- 
+ 	/* LP11 > 100us for D-PHY Rx Init */
+ 	val = tc358768_ns_to_cnt(100 * 1000, dsibclk_nsk) - 1;
 -- 
 2.25.1
 
