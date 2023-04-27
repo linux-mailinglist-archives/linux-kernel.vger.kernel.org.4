@@ -2,144 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865C16F0CDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B552B6F0CDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344132AbjD0UIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S1344103AbjD0UKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344103AbjD0UIX (ORCPT
+        with ESMTP id S245168AbjD0UKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:08:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3761359D;
-        Thu, 27 Apr 2023 13:08:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682626101; x=1714162101;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=6RNOiOLxUgmR5lRPnykiNi9TDJ7c0tPX7x1Po6A2slY=;
-  b=DtVQ7gDFuhyrQ1eHEBcskko5BsT5EEw4BVtjExYsuYoild4SRy4xtJKQ
-   k2nNG/Br9S9Q/IxVv7tZzElImCiLJFC26FI10GhyCYSJfsyclShTw/rTB
-   YVrK6VS8WPJMe12UhYlMRX+Zk2YdlB/S5b/3nyaGLwFn0eLHXx0eFUq/J
-   B2xam1Enk83nqroI/KOjdg6CHq2c6RwAsDn6rLqIYnyG3NXqoGy/tmgZK
-   XtZLDCGynWdkQvf/zQEOkpko+le6yEeaI1K7XrN4UtvX7P4Z6GbNG3t1s
-   1LwbsSUwL5QG4zHvKJ5U2dwxSW5cf/OH1DDsu6BKbEwTwaHCIIM116vmm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="331844868"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="331844868"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 13:08:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="1024257335"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="1024257335"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2023 13:08:20 -0700
-Received: from [10.209.41.222] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 27 Apr 2023 16:10:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE30C2D74;
+        Thu, 27 Apr 2023 13:10:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 8E793580CD0;
-        Thu, 27 Apr 2023 13:08:16 -0700 (PDT)
-Message-ID: <5ec89b32-4713-1c28-7dbb-5146de744afa@linux.intel.com>
-Date:   Thu, 27 Apr 2023 16:08:15 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85F1B63F71;
+        Thu, 27 Apr 2023 20:10:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CC5DFC4339B;
+        Thu, 27 Apr 2023 20:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682626219;
+        bh=qoO9gr3mZL+pQDOhmWVeLgTjeillcDNBWuS9b5f9fe0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MF3G96+od6lS4geKf/YIXKI+tIGvFyP5Uj8zIk4aTh5xcegzW9TmkBe1WqEuiuF2g
+         p9VlcCZkT06wwQLbR9JGAmmSH/7uA5CXrQQuCUT9RUcVdGDK+ReUIdCm0H82ejDKaG
+         Hps2UeXJn2QxI3fkUVMUbTyjcV1EHvJguYdu2FFED0Nkte53GveFyF0VjcBMShEYQN
+         bnZiSnHwY3VXIAB6A2ewh8AXglhI8YKzeYLAsxijUt31NUXbntfgMrUCVU/qozXbC6
+         oZsL4CsZpG5HFVIoX/owpTX5kiHWc4QsC2JKXMRWE/d4xH4/a+sQteQZuHV/yse07S
+         9GIXh2ZRTkWvg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B12D4C39562;
+        Thu, 27 Apr 2023 20:10:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 16/40] perf test: Validate events with hyphens in
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230426070050.1315519-1-irogers@google.com>
- <20230426070050.1315519-17-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230426070050.1315519-17-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: Update the aarch64 tests deny list
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168262621972.29037.2266972486752352083.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Apr 2023 20:10:19 +0000
+References: <20230427143207.635263-1-revest@chromium.org>
+In-Reply-To: <20230427143207.635263-1-revest@chromium.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
+        mykolal@fb.com, martin.lau@linux.dev, song@kernel.org,
+        xukuohai@huaweicloud.com, mark.rutland@arm.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-On 2023-04-26 3:00 a.m., Ian Rogers wrote:
-> Rewritten event parsing can handle event names that contain components
-> of legacy events.
-
-
-Run the test on Cascade Lake and Alder Lake. It looks good.
-
-Tested-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
+On Thu, 27 Apr 2023 16:32:07 +0200 you wrote:
+> Now that ftrace supports direct call on arm64, BPF tracing programs work
+> on that architecture. This fixes the vast majority of BPF selftests
+> except for:
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/parse-events.c | 12 ------------
->  1 file changed, 12 deletions(-)
+> - multi_kprobe programs which require fprobe, not available on arm64 yet
+> - tracing_struct which requires trampoline support to access struct args
 > 
-> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-> index 6eadb8a47dbf..cb976765b8b0 100644
-> --- a/tools/perf/tests/parse-events.c
-> +++ b/tools/perf/tests/parse-events.c
-> @@ -2198,18 +2198,6 @@ static int test__pmu_events(struct test_suite *test __maybe_unused, int subtest
->  			ret = combine_test_results(ret, TEST_SKIP);
->  			continue;
->  		}
-> -		/*
-> -		 * Names containing '-' are recognized as prefixes and suffixes
-> -		 * due to '-' being a legacy PMU separator. This fails when the
-> -		 * prefix or suffix collides with an existing legacy token. For
-> -		 * example, branch-brs has a prefix (branch) that collides with
-> -		 * a PE_NAME_CACHE_TYPE token causing a parse error as a suffix
-> -		 * isn't expected after this. As event names in the config
-> -		 * slashes are allowed a '-' in the name we check this works
-> -		 * above.
-> -		 */
-> -		if (strchr(ent->d_name, '-'))
-> -			continue;
->  
->  		dir = opendir(path);
->  		if (!dir) {
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: Update the aarch64 tests deny list
+    https://git.kernel.org/bpf/bpf-next/c/a46441192084
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
