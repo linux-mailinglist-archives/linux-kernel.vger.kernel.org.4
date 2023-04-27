@@ -2,90 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130846F05BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D196F05BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243957AbjD0M1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S243973AbjD0M1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbjD0M1K (ORCPT
+        with ESMTP id S243429AbjD0M1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:27:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914AE30E8;
-        Thu, 27 Apr 2023 05:27:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C66C60A53;
-        Thu, 27 Apr 2023 12:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4145FC4339B;
-        Thu, 27 Apr 2023 12:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682598428;
-        bh=OlYqoix/LTad+dgc4s998RetonnnpYbifeK1u1g4fRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6+sdU47yhwn+Ipbc5M7rH4D+fMp9q9jrRqR5TlUyXNg2iRunEl/9jHfiTHDaO8hO
-         mWS42Lj4sRYoI904bQUq5J3SYpttuuNjY/dGQzYdNrByPl6dkEMVBDQvOAehNDPw3L
-         N9AGgKxnrsslv0XkLSb/4nQ38zKC9iweb68m4wi4=
-Date:   Thu, 27 Apr 2023 14:27:06 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     sangsup lee <k1rh4.lee@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] misc: fastrpc: Fix a Use after-free-bug by race
- condition
-Message-ID: <2023042722-humble-unthread-9597@gregkh>
-References: <20230323013655.366-1-k1rh4.lee@gmail.com>
- <CAJkuJRjFCXkS+osc8ezpAw0E2W7WMAJnnxMt_cs4deqgm5OzHw@mail.gmail.com>
- <2023042702-shuffling-tweet-d9f6@gregkh>
- <CAJkuJRhqU++S+xYPDFDyxawfz_ePGJ0oTk-ZZg8N8BSfKcSdDA@mail.gmail.com>
+        Thu, 27 Apr 2023 08:27:30 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2035B93;
+        Thu, 27 Apr 2023 05:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=j8pd3+4XWrJ0SsoTVsir25DVL+uxcXLJo87srUeRyUQ=; b=mCqK8M4FfKmKvzWqejsRSaDa33
+        wpr/HX9dCnZG8IW6w2nP4KfKPhNN+MNy3sGvHdIbCYp/sY4QsMoWDx0UZfBgnWlOiJFkBBMvDBeJl
+        Q9AzyQA7H9YBxbmrqlFfOA1YDdjRRkCMd/nHw/XC+Y9Bz4TklaKV2iWH2MT2kmWi3X0Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ps0iT-00BLpJ-SG; Thu, 27 Apr 2023 14:27:17 +0200
+Date:   Thu, 27 Apr 2023 14:27:17 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v2 0/3] r8152: fix 2.5G devices
+Message-ID: <a1e306c1-ec0c-40a5-86b2-f31b74dd36ba@lunn.ch>
+References: <20230426122805.23301-400-nic_swsd@realtek.com>
+ <20230427121057.29155-405-nic_swsd@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJkuJRhqU++S+xYPDFDyxawfz_ePGJ0oTk-ZZg8N8BSfKcSdDA@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230427121057.29155-405-nic_swsd@realtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Thu, Apr 27, 2023 at 08:51:48PM +0900, sangsup lee wrote:
-> I reported fastrpc bug in
-> Feb,2023.(https://lore.kernel.org/lkml/20230216014120.3110-1-k1rh4.lee@gmail.com)
-
-That was a patch, not a bug report.  How was this tested?
-
-> And Srinivas recommended this patch code for patch v2.
-> That's why I sent this patch v2 however, I haven't received any reply
-> after that.
+On Thu, Apr 27, 2023 at 08:10:54PM +0800, Hayes Wang wrote:
+> v2:
+> For patch #1, Remove inline for fc_pause_on_auto() and fc_pause_off_auto(),
+> and update the commit message.
 > 
-> I just want to know the next step for patching this code.
-> Should I just keep waiting ? Or Please let me know if I need to
-> provide you with more information.
+> For patch #2, define the magic value for OCP register 0xa424.
+> 
+> v1:
+> These patches are used to fix some issues of RTL8156.
 
-Please read my comments on my last email on the patch for what you need
-to address.
+Please always create a new thread. The patch automation bots can get
+confused if you append to an existing thread, they assume it is just
+comments to the original patchset.
 
-thanks,
-
-greg k-h
+	 Andrew
