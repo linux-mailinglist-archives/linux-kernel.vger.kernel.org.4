@@ -2,231 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B486F0303
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CC56F0305
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243154AbjD0JDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S243235AbjD0JFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242961AbjD0JDw (ORCPT
+        with ESMTP id S243126AbjD0JFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:03:52 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472E555AF;
-        Thu, 27 Apr 2023 02:03:17 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R5Wc4C015988;
-        Thu, 27 Apr 2023 09:01:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UaxooDr7ehm/68Nui88ZmexVMahZ4HXut41Qs3E+wk4=;
- b=acVjIDHJZqncF1LPjXrouSgkGGGMzOWlZPir7zw2POZlQfdgmuIwtS43jgyMzWR8eRBn
- 637+8DEgyiaLVokaVf9cM5qtBbn/Wp8YmG3C0FPDKczhlHQNInvF6uZXocwsSX6UInaH
- ZY7IRwxbsGpfUmNb14CB9SkvLBYXceweTTJH24eWI7ixDke2DTPhx+ukCKi2ktKuoVn1
- nWCx0Ye++IyjbWGsxyY0ndKJ2I/2gN9QVpH/l9v/jBuebWLrJFJpWXXK74pqKkEwLodB
- w2hdPOnkRKnp7vWX+F0ausXPr8ZbUE85PV7WLMox58lUZWXTokPRtwr9Y0liveHU0cEA 4Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7k090e12-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 09:01:54 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33R91rr5003734
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 09:01:53 GMT
-Received: from taozha-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 27 Apr 2023 02:01:47 -0700
-From:   Tao Zhang <quic_taozha@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Tao Zhang <quic_taozha@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>
-Subject: [PATCH v4 11/11] coresight-tpdm: Add nodes for dsb msr support
-Date:   Thu, 27 Apr 2023 17:00:37 +0800
-Message-ID: <1682586037-25973-12-git-send-email-quic_taozha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
-References: <1682586037-25973-1-git-send-email-quic_taozha@quicinc.com>
+        Thu, 27 Apr 2023 05:05:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC95E48
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682586297; x=1714122297;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H/3ifw4Me7ZLmwRnUHcz2Bf1iRNy/a2wlnlif9iRpDc=;
+  b=cah3sDFBb5tTV9Mch1JmUFC33HXv1Y1cPd42PSxtXpQnI1bMsTk2vypb
+   pnYvDmHJ06TMMm4fddRwpCoNjp7f31rSPeLA/48P88xtjAsfh5XrqEz+k
+   1J/hE2Wof8DMj8FW0aE+AZEHzHba7rHNxDB1AjqcZtyk7dsNW2EhkR/Aj
+   TooXs0CsSUTCoSADm6GMzUNLJMA4aNKJmVyzLqoE8ZHzqY7RMKJKrxN5S
+   4U9raH+DissYJOJJleY4iPak76Y26ZRDdj7azWKcB05hVIAJgJxDQIX7J
+   4K4/YHCvOYmJcNHGFt9oereBuyCTMluI1T9kz8QVfMPx4M/yiD4N8jthf
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
+   d="asc'?scan'208";a="210933956"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 02:04:56 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 27 Apr 2023 02:04:54 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 27 Apr 2023 02:04:52 -0700
+Date:   Thu, 27 Apr 2023 10:04:34 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
+        Hongren Zheng <i@zenithal.me>
+Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
+Message-ID: <20230427-unveiling-kiwi-631e966f77cc@wendy>
+References: <20230425120016.187010-1-cyy@cyyself.name>
+ <tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
+ <20230426-porthole-wronged-d5a6a3b89596@spud>
+ <6kjgearxffbnnq4bsqs7e3jz6efz436m6gb3zjh7cfi357oxlv@krxto6orxwwn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4PPAXmT7hbhQwkwcJzfzTWlKqaPcSK-J
-X-Proofpoint-GUID: 4PPAXmT7hbhQwkwcJzfzTWlKqaPcSK-J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_06,2023-04-26_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 clxscore=1015 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270078
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="g9EKRzq+LmoI7/Xs"
+Content-Disposition: inline
+In-Reply-To: <6kjgearxffbnnq4bsqs7e3jz6efz436m6gb3zjh7cfi357oxlv@krxto6orxwwn>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the nodes for DSB subunit MSR(mux select register) support.
-The TPDM MSR (mux select register) interface is an optional
-interface and associated bank of registers per TPDM subunit.
-The intent of mux select registers is to control muxing structures
-driving the TPDM’s’ various subunit interfaces.
+--g9EKRzq+LmoI7/Xs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
----
- .../ABI/testing/sysfs-bus-coresight-devices-tpdm   | 15 ++++++
- drivers/hwtracing/coresight/coresight-tpdm.c       | 53 ++++++++++++++++++++++
- drivers/hwtracing/coresight/coresight-tpdm.h       |  3 ++
- 3 files changed, 71 insertions(+)
+On Thu, Apr 27, 2023 at 09:53:19AM +0200, Andrew Jones wrote:
+> On Wed, Apr 26, 2023 at 07:54:39PM +0100, Conor Dooley wrote:
+> > (+CC Drew)
+> >=20
+> > Hey Yangyu,
+> >=20
+> > One meta-level comment - can you submit this patch + my dt-bindings
+> > patch as a v2?
+> > Some comments below.
+> >=20
+> > On Tue, Apr 25, 2023 at 08:00:15PM +0800, Yangyu Chen wrote:
+> > > According to RISC-V ISA specification, the ISA naming strings are case
+> > > insensitive. The kernel docs require the riscv,isa string must be all
+> > > lowercase to simplify parsing currently. However, this limitation is =
+not
+> > > consistent with RISC-V ISA Spec.
+> >=20
+> > Please remove the above and cite ACPI's case-insensitivity as the
+> > rationale for this change.
+> >=20
+> > > This patch modifies the ISA string parser in the kernel to support
+> > > case-insensitive ISA string parsing. It replaces `strncmp` with
+> > > `strncasecmp`, replaces `islower` with `isalpha`, and wraps the
+> > > dereferenced char in the parser with `tolower`.
+> > >=20
+> > > Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+> > > ---
+> > >  arch/riscv/kernel/cpu.c        |  6 ++++--
+> > >  arch/riscv/kernel/cpufeature.c | 20 ++++++++++----------
+> > >  2 files changed, 14 insertions(+), 12 deletions(-)
+> > >=20
+> > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > > index 8400f0cc9704..531c76079b73 100644
+> > > --- a/arch/riscv/kernel/cpu.c
+> > > +++ b/arch/riscv/kernel/cpu.c
+> > > @@ -4,6 +4,7 @@
+> > >   */
+> > > =20
+> > >  #include <linux/cpu.h>
+> > > +#include <linux/ctype.h>
+> > >  #include <linux/init.h>
+> > >  #include <linux/seq_file.h>
+> > >  #include <linux/of.h>
+> > > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *n=
+ode, unsigned long *hart)
+> > >  		pr_warn("CPU with hartid=3D%lu has no \"riscv,isa\" property\n", *=
+hart);
+> > >  		return -ENODEV;
+> > >  	}
+> > > -	if (isa[0] !=3D 'r' || isa[1] !=3D 'v') {
+> > > +	if (tolower(isa[0]) !=3D 'r' || tolower(isa[1]) !=3D 'v') {
+> > >  		pr_warn("CPU with hartid=3D%lu has an invalid ISA of \"%s\"\n", *h=
+art, isa);
+> > >  		return -ENODEV;
+> >=20
+> > I don't understand why this is even here in the first place. I'd be
+> > inclined to advocate for it's entire removal. Checking *only* that there
+> > is an "rv" in that string seems pointless to me. If you're on a 64-bit
+> > kernel and the node has riscv,isa =3D "rv32ima" it's gonna say it is ok=
+ay?
+> > Drew what do you think?
+>=20
+> It makes some sense to me as a garbage detector. It's unlikely the first
+> two bytes will be "rv" if the string is random junk.
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-index 639b6fb8..f746f25 100644
---- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-+++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
-@@ -170,3 +170,18 @@ Description:
- 		Accepts only one of the 2 values -  0 or 1.
- 		0 : Set the DSB pattern type to value.
- 		1 : Set the DSB pattern type to toggle.
-+
-+What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_msr
-+Date:		March 2023
-+KernelVersion	6.3
-+Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
-+Description:
-+		(Write) Set the MSR(mux select register) of DSB tpdm. Read
-+		the MSR(mux select register) of DSB tpdm.
-+
-+		Expected format is the following:
-+		<integer1> <integer2>
-+
-+		Where:
-+		<integer1> : Index number of MSR register
-+		<integer2> : The value need to be written
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
-index 627de36..5fe0bd5c 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.c
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.c
-@@ -240,6 +240,14 @@ static int tpdm_datasets_setup(struct tpdm_drvdata *drvdata)
- 			if (!drvdata->dsb)
- 				return -ENOMEM;
- 		}
-+		if (!of_property_read_u32(drvdata->dev->of_node,
-+			   "qcom,dsb_msr_num", &drvdata->dsb->msr_num)) {
-+			drvdata->dsb->msr = devm_kzalloc(drvdata->dev,
-+				   (drvdata->dsb->msr_num * sizeof(*drvdata->dsb->msr)),
-+				   GFP_KERNEL);
-+			if (!drvdata->dsb->msr)
-+				return -ENOMEM;
-+		}
- 	}
- 
- 	return 0;
-@@ -765,6 +773,50 @@ static ssize_t dsb_trig_ts_store(struct device *dev,
- }
- static DEVICE_ATTR_RW(dsb_trig_ts);
- 
-+static ssize_t dsb_msr_show(struct device *dev,
-+				 struct device_attribute *attr,
-+				 char *buf)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+	unsigned int i;
-+	ssize_t size = 0;
-+
-+	if (drvdata->dsb->msr_num == 0)
-+		return -EINVAL;
-+
-+	spin_lock(&drvdata->spinlock);
-+	for (i = 0; i < TPDM_DSB_MAX_PATT; i++) {
-+		size += sysfs_emit_at(buf, size,
-+				  "%u 0x%x\n", i, drvdata->dsb->msr[i]);
-+	}
-+	spin_unlock(&drvdata->spinlock);
-+
-+	return size;
-+}
-+
-+static ssize_t dsb_msr_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf,
-+				  size_t size)
-+{
-+	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
-+	unsigned int num, val;
-+	int nval;
-+
-+	if (drvdata->dsb->msr_num == 0)
-+		return -EINVAL;
-+
-+	nval = sscanf(buf, "%u %x", &num, &val);
-+	if ((nval != 2) || (num >= (drvdata->dsb->msr_num - 1)))
-+		return -EINVAL;
-+
-+	spin_lock(&drvdata->spinlock);
-+	drvdata->dsb->msr[num] = val;
-+	spin_unlock(&drvdata->spinlock);
-+	return size;
-+}
-+static DEVICE_ATTR_RW(dsb_msr);
-+
- static struct attribute *tpdm_dsb_attrs[] = {
- 	&dev_attr_dsb_mode.attr,
- 	&dev_attr_dsb_edge_ctrl.attr,
-@@ -777,6 +829,7 @@ static struct attribute *tpdm_dsb_attrs[] = {
- 	&dev_attr_dsb_trig_patt_mask.attr,
- 	&dev_attr_dsb_trig_ts.attr,
- 	&dev_attr_dsb_trig_type.attr,
-+	&dev_attr_dsb_msr.attr,
- 	NULL,
- };
- 
-diff --git a/drivers/hwtracing/coresight/coresight-tpdm.h b/drivers/hwtracing/coresight/coresight-tpdm.h
-index 9ad32a6..05e9f8e 100644
---- a/drivers/hwtracing/coresight/coresight-tpdm.h
-+++ b/drivers/hwtracing/coresight/coresight-tpdm.h
-@@ -18,6 +18,7 @@
- #define TPDM_DSB_XPMR(n)	(0x7E8 + (n * 4))
- #define TPDM_DSB_EDCR(n)	(0x808 + (n * 4))
- #define TPDM_DSB_EDCMR(n)	(0x848 + (n * 4))
-+#define TPDM_DSB_MSR(n)		(0x980 + (n * 4))
- 
- /* Enable bit for DSB subunit */
- #define TPDM_DSB_CR_ENA		BIT(0)
-@@ -113,6 +114,8 @@ struct dsb_dataset {
- 	u32				trig_patt_mask[TPDM_DSB_MAX_PATT];
- 	bool			trig_ts;
- 	bool			trig_type;
-+	u32				msr_num;
-+	u32				*msr;
- };
- 
- /**
--- 
-2.7.4
+Preventing the input of absolute rubbish is dt-validate's job & if the dtb
+itself has been corrupted somehow I suspect that we have bigger problems
+than checking for "rv" will solve.
 
+> also do a strlen(isa) >=3D 4 check first, though. of_property_read_string=
+()
+> will succeed even when the string is "".
+
+I don't think that checking that there are at least 4 characters isn't
+even sufficient. Either we should confirm that this is a valid riscv,isa
+to run on (so rv##ima w/ ## matching the kernel) or not bother at all.
+
+It's a different issue though, and I'd be inclined to revisit it in the
+future when the ACPI stuff is in, along with perhaps the cleanup parts
+of Heiko's series too.
+
+--g9EKRzq+LmoI7/Xs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEo6ogAKCRB4tDGHoIJi
+0tBzAP9Gjrxk70KxyJ3D82eZXdg5mq4oq9mwEu5UuYkAARPQawD/U/mk5q1Wts6h
+7VXEioB99Mb4kdKQojdZuCuYnvN6lAU=
+=IMRq
+-----END PGP SIGNATURE-----
+
+--g9EKRzq+LmoI7/Xs--
