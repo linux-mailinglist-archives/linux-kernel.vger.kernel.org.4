@@ -2,147 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEB86F0533
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00C36F0535
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 13:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243743AbjD0Lw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 07:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
+        id S243743AbjD0LyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 07:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjD0Lw1 (ORCPT
+        with ESMTP id S243365AbjD0LyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 07:52:27 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D922698;
-        Thu, 27 Apr 2023 04:52:26 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso79629741fa.0;
-        Thu, 27 Apr 2023 04:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682596344; x=1685188344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O5r6ZWi9BBJ5A0FizJsC82K01BkpGtpS/NHxJTUoa3U=;
-        b=jWSrhlnxatrRKNL6zRmuH4Q0E75QRlJUDtxxcDGFg4acX0GRE74ZBnSIZNXS92EEaB
-         Qj+KLmPfIV62N/44AavFcmpzc7oq3aZuaPaAyqVtmMXwMvjYbVhPq4OJogARvnTzAUxO
-         C5gs+kH/T3mIKDUGWAomumrE4kl/GQI4u+yTXCJrAAnb7SSO9Js6d7qHmQdEA3AEqV+H
-         AbhDlRDpFj7Pk1K43arr2+El2bawE9F4nZxSO9mB+eXREMehua2BdaTjw8KbyWlr74Sn
-         d9NXHMFmEZmzw5ib044rIIE9vxDOZKekyzCXs0cs3RfezmBNXlv4avk0H2/X9ZkWmXzo
-         C9wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682596344; x=1685188344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O5r6ZWi9BBJ5A0FizJsC82K01BkpGtpS/NHxJTUoa3U=;
-        b=K9cul5K4OUq5x/AeK++6Xhqf/+MdU0Jw9eQR0r0PMVYrURpGwof9WkD3ICox/usBLG
-         HVL6rSq2iwjdrwd4LojQb+qF2VCrQDaYFuDsVIQLQZqQDp0TtLmyWnUatSMQWIFFQ/Eh
-         c6cFMER2hhp68cPqpobcFbXQ4cDJ4ohAw92sFgHEWsy4i/lFLdn39Lg5bAj4XHYnVIMd
-         EHb5X8MHnfwvtc4nt9aQGfpppNabGGbRws7MOcbiL64E6J/Io29HhSJkRF+P3NxDNNaX
-         1B8jA30L0gtH9FuBP9smK25Dz5SowO1LpSx5L02X4e/c41moH1kvQYDVtzdyACP70BM1
-         3PYw==
-X-Gm-Message-State: AC+VfDxrKHbQpbAKrg2k0r4Jf+2gHp7hGvUKKKtUZfIH3Pnd0hBJo5kY
-        rjJX7RzPntE8pjya7hyUorHRqZF4nwhG7wqM4JU=
-X-Google-Smtp-Source: ACHHUZ42uXCU7jrfCUcLudfxdNz7wHRJC7IWs6hLboDDRvfyVfImc7Hsjq3dx98X84fE38cfQSz8QoORBGNgofRmRrY=
-X-Received: by 2002:a2e:80c1:0:b0:2a8:c333:1886 with SMTP id
- r1-20020a2e80c1000000b002a8c3331886mr573082ljg.6.1682596344236; Thu, 27 Apr
- 2023 04:52:24 -0700 (PDT)
+        Thu, 27 Apr 2023 07:54:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C3D194
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 04:54:06 -0700 (PDT)
+Received: from [IPV6:2405:201:0:21ea:73f6:2283:f432:3936] (unknown [IPv6:2405:201:0:21ea:73f6:2283:f432:3936])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 39EE266032B2;
+        Thu, 27 Apr 2023 12:54:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682596444;
+        bh=j0QYDp6weoRHl94DG/abJ5MIE+9RrKbIHWwFqclcQC0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WnBu7RaywkO2jB4Nl3Qj21vNHdZiEaCuHw2AoDdOG9U3DcVY+lB2iGU0HRO4QVPHg
+         u30BEUg8hOFnQ9+IvRD0XTSc2kqcDDbR3ITI8DFVK9AgQdQS2drmYYNSBty2X4TS62
+         IAvMhtz2bCPp+GaUEBrqYlHgwSUbozmiimRg/hDf5F0lMXH2objz4og94qfr2dzZhA
+         bVJzoGzgz2YWrUNmJJPAPowwlDE0EE3dZqkkMn6uSjzOGYLfEEJ86KU1cNXYhfVtHO
+         LYAhEFqJFR6qM9JMrOLZICris5YASdLa0RUl0ksLle2R81sK47ya+yJK9BBNVv4DaD
+         xI9Y3q5haRiDg==
+Message-ID: <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+Date:   Thu, 27 Apr 2023 17:23:58 +0530
 MIME-Version: 1.0
-References: <20230323013655.366-1-k1rh4.lee@gmail.com> <CAJkuJRjFCXkS+osc8ezpAw0E2W7WMAJnnxMt_cs4deqgm5OzHw@mail.gmail.com>
- <2023042702-shuffling-tweet-d9f6@gregkh>
-In-Reply-To: <2023042702-shuffling-tweet-d9f6@gregkh>
-From:   sangsup lee <k1rh4.lee@gmail.com>
-Date:   Thu, 27 Apr 2023 20:51:48 +0900
-Message-ID: <CAJkuJRhqU++S+xYPDFDyxawfz_ePGJ0oTk-ZZg8N8BSfKcSdDA@mail.gmail.com>
-Subject: Re: [PATCH v2] misc: fastrpc: Fix a Use after-free-bug by race condition
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+Content-Language: en-US
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <20220919170828.3718437-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I reported fastrpc bug in
-Feb,2023.(https://lore.kernel.org/lkml/20230216014120.3110-1-k1rh4.lee@gmai=
-l.com)
+Hi Nick,
 
-And Srinivas recommended this patch code for patch v2.
-That's why I sent this patch v2 however, I haven't received any reply
-after that.
+On 19/09/22 22:38, Nick Desaulniers wrote:
+> cc-ifversion is GCC specific. Replace it with compiler specific
+> variants. Update the users of cc-ifversion to use these new macros.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+> Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+> Suggested-by: Bill Wendling <morbo@google.com>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I just want to know the next step for patching this code.
-Should I just keep waiting ? Or Please let me know if I need to
-provide you with more information.
+KernelCI found this patch causes a regression in the
+baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
+see the bisection report for more details [2].
 
-(Ps. I'm sorry, i re-send this reply because of missing text-mode )
+Let me know if you have any questions.
 
-Best regards.
 
-2023=EB=85=84 4=EC=9B=94 27=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 6:52, G=
-reg Kroah-Hartman <gregkh@linuxfoundation.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=
-=EC=84=B1:
+[1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
+[2] https://groups.io/g/kernelci-results/message/40804
+
+
+Thanks,
+Shreeya Patel
+
+#regzbot introduced: 88b61e3bff93
+
+> ---
+> Changes v3 -> v4:
+> * Split into its own patch again from series, as per Masahiro.
+> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>    clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
 >
-> On Thu, Apr 27, 2023 at 06:29:16PM +0900, sangsup lee wrote:
-> > Is there any comment for this issue?
+>   Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+>   Makefile                                    |  6 ++---
+>   drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+>   scripts/Makefile.compiler                   | 10 ++++---
+>   scripts/Makefile.extrawarn                  |  4 +--
+>   5 files changed, 29 insertions(+), 22 deletions(-)
 >
-> What issue?
->
-> > (reference: https://www.spinics.net/lists/kernel/msg4731408.html)
->
-> Please use lore.kernel.org links, we have no control over any other
-> random email archive .
->
-> And the above link just points to this proposed patch.
->
-> >
-> >
-> > 2023=EB=85=84 3=EC=9B=94 23=EC=9D=BC (=EB=AA=A9) =EC=98=A4=EC=A0=84 10:=
-37, Sangsup Lee <k1rh4.lee@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> > >
-> > > From: Sangsup lee <k1rh4.lee@gmail.com>
-> > >
-> > > This patch adds mutex_lock for fixing an Use-after-free bug.
-> > > fastrpc_req_munmap_impl can be called concurrently in multi-threded e=
-nvironments.
-> > > The buf which is allocated by list_for_each_safe can be used after an=
-other thread frees it.
->
-> How was this tested?
->
-> > >
-> > > Signed-off-by: Sangsup lee <k1rh4.lee@gmail.com>
-> > > ---
-> > >  V1 -> V2: moving the locking to ioctl.
-> > >
-> > >  drivers/misc/fastrpc.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> > > index 93ebd174d848..aa1cf0e9f4ed 100644
-> > > --- a/drivers/misc/fastrpc.c
-> > > +++ b/drivers/misc/fastrpc.c
-> > > @@ -1901,7 +1901,9 @@ static long fastrpc_device_ioctl(struct file *f=
-ile, unsigned int cmd,
-> > >                 err =3D fastrpc_req_mmap(fl, argp);
-> > >                 break;
-> > >         case FASTRPC_IOCTL_MUNMAP:
-> > > +               mutex_lock(&fl->mutex);
-> > >                 err =3D fastrpc_req_munmap(fl, argp);
-> > > +               mutex_unlock(&fl->mutex);
->
-> Are you sure you can call this function with the lock?  If so, why isn't
-> the mmap ioctl also locked?
->
-> thanks,
->
-> greg k-h
+> diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+> index 11a296e52d68..ee7e3ea1fbe1 100644
+> --- a/Documentation/kbuild/makefiles.rst
+> +++ b/Documentation/kbuild/makefiles.rst
+> @@ -682,22 +682,27 @@ more details, with real examples.
+>   	In the above example, -Wno-unused-but-set-variable will be added to
+>   	KBUILD_CFLAGS only if gcc really accepts it.
+>   
+> -    cc-ifversion
+> -	cc-ifversion tests the version of $(CC) and equals the fourth parameter
+> -	if version expression is true, or the fifth (if given) if the version
+> -	expression is false.
+> +    gcc-min-version
+> +	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
+> +	or equal to the provided value and evaluates to y if so.
+>   
+>   	Example::
+>   
+> -		#fs/reiserfs/Makefile
+> -		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
+> +		cflags-$(call gcc-min-version, 70100) := -foo
+>   
+> -	In this example, ccflags-y will be assigned the value -O1 if the
+> -	$(CC) version is less than 4.2.
+> -	cc-ifversion takes all the shell operators:
+> -	-eq, -ne, -lt, -le, -gt, and -ge
+> -	The third parameter may be a text as in this example, but it may also
+> -	be an expanded variable or a macro.
+> +	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
+> +	$(CONFIG_GCC_VERSION) is >= 7.1.
+> +
+> +    clang-min-version
+> +	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
+> +	than or equal to the provided value and evaluates to y if so.
+> +
+> +	Example::
+> +
+> +		cflags-$(call clang-min-version, 110000) := -foo
+> +
+> +	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
+> +	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+>   
+>       cc-cross-prefix
+>   	cc-cross-prefix is used to check if there exists a $(CC) in path with
+> diff --git a/Makefile b/Makefile
+> index 298f69060f10..411c8480b37e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+>   
+>   KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+>   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>   
+>   ifdef CONFIG_CC_IS_CLANG
+>   KBUILD_CPPFLAGS += -Qunused-arguments
+> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+>   KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>   endif
+>   
+> -ifdef CONFIG_CC_IS_GCC
+>   # The allocators already balk at large sizes, so silence the compiler
+>   # warnings for bounds checks involving those possible values. While
+>   # -Wno-alloc-size-larger-than would normally be used here, earlier versions
+> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+>   # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+>   # choice, we must perform a versioned check to disable this warning.
+>   # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
+> -endif
+> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) += -Wno-alloc-size-larger-than
+> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>   
+>   # disable invalid "can't wrap" optimizations for signed / pointers
+>   KBUILD_CFLAGS	+= -fno-strict-overflow
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> index cb81ed2fbd53..d70838edba80 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+>   endif
+>   
+>   ifdef CONFIG_CC_IS_GCC
+> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+> +ifneq ($(call gcc-min-version, 70100),y)
+>   IS_OLD_GCC = 1
+>   endif
+>   endif
+> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+> index 94d0d40cddb3..9d18fb91890e 100644
+> --- a/scripts/Makefile.compiler
+> +++ b/scripts/Makefile.compiler
+> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+>   cc-disable-warning = $(call try-run,\
+>   	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+>   
+> -# cc-ifversion
+> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
+> +# gcc-min-version
+> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
+> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+> +
+> +# clang-min-version
+> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
+> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
+>   
+>   # ld-option
+>   # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+> index 6ae482158bc4..5769c1939d40 100644
+> --- a/scripts/Makefile.extrawarn
+> +++ b/scripts/Makefile.extrawarn
+> @@ -48,7 +48,7 @@ else
+>   ifdef CONFIG_CC_IS_CLANG
+>   KBUILD_CFLAGS += -Wno-initializer-overrides
+>   # Clang before clang-16 would warn on default argument promotions.
+> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
+> +ifneq ($(call clang-min-version, 160000),y)
+>   # Disable -Wformat
+>   KBUILD_CFLAGS += -Wno-format
+>   # Then re-enable flags that were part of the -Wformat group that aren't
+> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
+>   KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
+>   KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
+>   # Requires clang-12+.
+> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
+> +ifeq ($(call clang-min-version, 120000),y)
+>   KBUILD_CFLAGS += -Wformat-insufficient-args
+>   endif
+>   endif
