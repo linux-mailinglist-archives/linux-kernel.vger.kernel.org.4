@@ -2,151 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775896F0D4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C2C6F0D4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245168AbjD0UgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S1344238AbjD0Ugh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344095AbjD0UgO (ORCPT
+        with ESMTP id S1343660AbjD0Ugf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:36:14 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83C746A5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:35:47 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f0a2f8216fso827221cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:35:47 -0700 (PDT)
+        Thu, 27 Apr 2023 16:36:35 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F14421B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:36:11 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a6f0d8cdfeso70075075ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:36:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682627747; x=1685219747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptBdlJ07v8HdQe+LoZZ45Ny20mkYLWz+prXa/vlPc5g=;
-        b=ejGejKzhboVuH/Okkr279d6To4yc4YLxo/pErGIwVBZms1pTi6heNby96nKksTpX3a
-         9ZVW2kjRNWY2WNF5IQ7O6q/srqJLqblDuMKQXyTWzx9rUb53h6IeiwdWT8DdiTvvFlnF
-         ap59K2vgyFhSDWY7ymCDiaotKITRXEl6Kt//xXgyY9bowPyBNnmDww8lxUpkoxb/4MtX
-         yzrPYzVLtrUUMHn6mUxs9CgVgcowuzqlknix5QPRtkcyKv8wsvFTnP59kim9sF5t4wXI
-         vJ14wyoK1j9Bzvlhu/Jfaa3TEjEdAsJjGPGTgyyUrB3KSbgpzbJLTBv4J9aB28owmHQs
-         PI6w==
+        d=gmail.com; s=20221208; t=1682627760; x=1685219760;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BLUleJYSpWs43QiNRPT7ecDyRRGcgSDqLfJGdo9eeRA=;
+        b=FqN40mLRF24rYdpJdsZp0htMZst4I/B15vpkr3i0MZlafvlPRb0ru9qO6hWuZ2RuE0
+         lK2BJPF9d/4RShLIlvEu+lMEVzS6aY5rbaOEn2K2oqs2XAB4VXwEa2+JbV4juDPVTkD/
+         rWMBkTmYlVJTvg0wYBrB85AZRN08QxIBDPPzqvz1w1D33MxRp3uzV+D5gluvYKTUPPK8
+         9YoxwzxOkbm/xcwDjNcYfXrUiCkLeP+RzkITuiADvd7kbhHUhyoX5BaoN1OAvqYAurSZ
+         C0yKI0kdhFKpVJQWVp7Dik2W+7dPfuSAzWSJYZl/mz6BeyYfW3gSGenavc/0/sqwQ7Ay
+         4AXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682627747; x=1685219747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ptBdlJ07v8HdQe+LoZZ45Ny20mkYLWz+prXa/vlPc5g=;
-        b=M9gE1c84xZQd35AA9By50giSv8+dW8VfbhX6EBVd9g7tLw9oMU8tt+Ig0/qAJJn901
-         0J39b9jmT4UE3mI9Y16+KzqyCk81xFlj+eJ2KG8wcYEFbSVVNBcRmGn4B2l/DIc8doWb
-         gboCbjcmT5atSBZUScDmwKTPH8dbwVxgtrRx0LIh09OOtrlgkLFBjOyInuF0Wg98vx8I
-         UQ7iI8oaw+WP0AdB4kwEXqXpuxyQHpUT22kA1+1NhQTRymkFEaW0SAxo1fQMu39gL7n+
-         vBkXtSG5/fS0o7IRaA/Uuh6mQxRFXC0yLrCn64ay7gKS77i1n+1enurW+H11ZYBRBEhD
-         m/3w==
-X-Gm-Message-State: AC+VfDy2o5NfR+quigRckvewE0NqEihVG9LaA0pwIewq+3TZdxkYqSN1
-        KCTWwQbha0/OMkhRCz5e4YB3SpnWylZXk8HQToN0Qg==
-X-Google-Smtp-Source: ACHHUZ6k2Icr8mvB78iBbOp/hEvzjLIV2SDthfJnvHGJz15ZjsD4VFeV8D723c/xR7fRgPMt1L9PXuavlP+NkvgJ2Pw=
-X-Received: by 2002:ac8:590f:0:b0:3ef:4319:c6c5 with SMTP id
- 15-20020ac8590f000000b003ef4319c6c5mr58453qty.19.1682627746969; Thu, 27 Apr
- 2023 13:35:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682627760; x=1685219760;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BLUleJYSpWs43QiNRPT7ecDyRRGcgSDqLfJGdo9eeRA=;
+        b=bIvpe6g6Q3ut7Bos4eJrpUgencHdoL6z7gw/WVlnrUEGjwZVerv2WCJjQz9oDqnwB4
+         UDtqYU0S0gEkSg8dLN2uy3CmDYcaqAqxaFLg0xk23nYopXfxvTII61zjo3LqzMv1yrIq
+         wUmqSd/HjFLsIG+wETUPq5m7xy1m2oextgVHBHuBIbSK/WuE8pF3GkAoVYXf3+BcrFEU
+         2Y8BBL0v5NWAcSEpaRaSuMGieRBSjO+mq0+skLWfkRaLCiJK0IFTstBTEkiUrO++kYoc
+         gN3nt53CXN+cF9xHhPl5KxWNtF/1OfQ7RAu2uJWVhcqnmIqtMzzSA/nN7Y00BNsNA21Q
+         gnyA==
+X-Gm-Message-State: AC+VfDxjWP7py0dSGgiPAtmQ1YnDmqcTE+atpRU+3ou7aWzkgACwZSCQ
+        GoyQmkFeVwIrwhBHay+CwAA=
+X-Google-Smtp-Source: ACHHUZ5vLSkV8NJpYOifTDZBwT6DI8bpXwxCNHcqLRpTm8eGrzOH7TV4CvUZyapbSF245/I/snwq3Q==
+X-Received: by 2002:a17:902:d4c8:b0:19f:87b5:1873 with SMTP id o8-20020a170902d4c800b0019f87b51873mr3094241plg.62.1682627760067;
+        Thu, 27 Apr 2023 13:36:00 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902d50b00b001a67a2dae7fsm3657077plg.266.2023.04.27.13.35.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 13:35:59 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 27 Apr 2023 10:35:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [GIT PULL] workqueue changes for v6.4-rc1
+Message-ID: <ZErcro8_Ylius4wC@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230427201112.2164776-1-peterx@redhat.com> <20230427201112.2164776-2-peterx@redhat.com>
-In-Reply-To: <20230427201112.2164776-2-peterx@redhat.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Thu, 27 Apr 2023 13:35:11 -0700
-Message-ID: <CADrL8HWxdTBD5fKiK9BKRUFCghK_nd1oNOkykmh4RYbn4C7UgA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests/kvm: Setup vcpu_alias only for minor mode test
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Anish Moorthy <amoorthy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 1:11=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> This fixes two things:
->
-> - Unbreaks MISSING mode test on anonymous memory type
->
-> - Prefault alias mem before uffd thread creations, otherwise the uffd
->   thread timing will be inaccurate when guest mem size is large, because
->   it'll take prefault time into total time.
->
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+The following changes since commit 8d3c682a5e3d9dfc2448ecbb22f4cd48359b9e21:
 
-Reviewed-by: James Houghton <jthoughton@google.com>
+  Merge tag 'block-6.3-2023-03-16' of git://git.kernel.dk/linux (2023-03-17 11:20:27 -0700)
 
-FWIW, it looks like this fixes this commit[1]. Not sure if it's worth
-a Fixes: tag.
+are available in the Git repository at:
 
-[1]: commit a93871d0ea9f ("KVM: selftests: Add a userfaultfd library")
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/ tags/wq-for-6.4
 
+for you to fetch changes up to 704bc669e1dda3eb8f6d5cb462b21e85558a3912:
 
-> ---
->  .../testing/selftests/kvm/demand_paging_test.c  | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/tes=
-ting/selftests/kvm/demand_paging_test.c
-> index 2439c4043fed..9c18686b4f63 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -128,6 +128,7 @@ static void prefault_mem(void *alias, uint64_t len)
->
->  static void run_test(enum vm_guest_mode mode, void *arg)
->  {
-> +       struct memstress_vcpu_args *vcpu_args;
->         struct test_params *p =3D arg;
->         struct uffd_desc **uffd_descs =3D NULL;
->         struct timespec start;
-> @@ -145,24 +146,24 @@ static void run_test(enum vm_guest_mode mode, void =
-*arg)
->                     "Failed to allocate buffer for guest data pattern");
->         memset(guest_data_prototype, 0xAB, demand_paging_size);
->
-> +       if (p->uffd_mode =3D=3D UFFDIO_REGISTER_MODE_MINOR) {
-> +               for (i =3D 0; i < nr_vcpus; i++) {
-> +                       vcpu_args =3D &memstress_args.vcpu_args[i];
-> +                       prefault_mem(addr_gpa2alias(vm, vcpu_args->gpa),
-> +                                    vcpu_args->pages * memstress_args.gu=
-est_page_size);
-> +               }
-> +       }
-> +
->         if (p->uffd_mode) {
->                 uffd_descs =3D malloc(nr_vcpus * sizeof(struct uffd_desc =
-*));
->                 TEST_ASSERT(uffd_descs, "Memory allocation failed");
-> -
->                 for (i =3D 0; i < nr_vcpus; i++) {
-> -                       struct memstress_vcpu_args *vcpu_args;
->                         void *vcpu_hva;
-> -                       void *vcpu_alias;
->
->                         vcpu_args =3D &memstress_args.vcpu_args[i];
->
->                         /* Cache the host addresses of the region */
->                         vcpu_hva =3D addr_gpa2hva(vm, vcpu_args->gpa);
-> -                       vcpu_alias =3D addr_gpa2alias(vm, vcpu_args->gpa)=
-;
-> -
-> -                       prefault_mem(vcpu_alias,
-> -                               vcpu_args->pages * memstress_args.guest_p=
-age_size);
-> -
->                         /*
->                          * Set up user fault fd to handle demand paging
->                          * requests.
-> --
-> 2.39.1
->
+  workqueue: Introduce show_freezable_workqueues (2023-03-23 15:55:38 -1000)
+
+----------------------------------------------------------------
+workqueue changes for v6.4-rc1
+
+Mostly changes from Petr to improve warning and error reporting. Workqueue
+now reports more of the relevant failures with better context which should
+help debugging.
+
+----------------------------------------------------------------
+Ammar Faizi (2):
+      MAINTAINERS: Add workqueue_internal.h to the WORKQUEUE entry
+      workqueue: Simplify a pr_warn() call in wq_select_unbound_cpu()
+
+Jungseung Lee (1):
+      workqueue: Introduce show_freezable_workqueues
+
+Petr Mladek (5):
+      workqueue: Fix hung time report of worker pools
+      workqueue: Warn when a new worker could not be created
+      workqueue: Interrupted create_worker() is not a repeated event
+      workqueue: Warn when a rescuer could not be created
+      workqueue: Print backtraces from CPUs with hung CPU bound workqueues
+
+ MAINTAINERS               |   1 +
+ include/linux/workqueue.h |   1 +
+ kernel/power/process.c    |   2 +-
+ kernel/workqueue.c        | 134 +++++++++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 124 insertions(+), 14 deletions(-)
