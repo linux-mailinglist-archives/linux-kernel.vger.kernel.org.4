@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A9A6F0400
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC026F0402
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243449AbjD0KNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S243349AbjD0KPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbjD0KNt (ORCPT
+        with ESMTP id S233464AbjD0KPk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:13:49 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8656E49F4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:13:48 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763bc8ac23aso367121439f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:13:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682590428; x=1685182428;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TIASw9GSY2Of7dAiuTmEdRXJa7/4ehqzLcUcuOFsD+o=;
-        b=A8gkOtmkeij6AEiEa3as8DTQ/r5USVOIi6Iy0n76NALTBmoQ87uKVGw0CFiWUWendA
-         y6otQcL5OJ8IUFlEvQB6bgvHlSryZEX+stP1EEA2aHKxdYF7dUypCiaJpb381nMQb2un
-         VLEHGyMlFZ0kWbBx9cjLmnLbt8cwN/rRS+u5IVeN+A2uMjOx6znVR3sw/6biWp/aOHu2
-         WlgYQLHv73+H36DWBMxBgGnUx6CzPVV2IoPmOfyk1htGLKiwTMVWlGWXLrgbDx1azhGk
-         0q4Lmk8bZMNn6p6g8cVkAIQqb2DO6h0IqxxYMo8dwN/kNIoNbT5md8jxn/i20L3YN3kV
-         ugjg==
-X-Gm-Message-State: AC+VfDyrfRIRHbh5O8IybihCA0ia4pzwtDNFe0lNZpFDx+hI/ViKqlu6
-        XOXf30/l87iIfDso4cCupP9SPLxKqr4UyiLyUByCksDdMKk1
-X-Google-Smtp-Source: ACHHUZ56RFAeCriTAKSh7aExBM934wOdE8tuJWkeAOdKypKxxbZl9RB+VyRBFcAIdtQYvhEFy3z9AqWvUyNz6CChrajmXxlHxL+W
+        Thu, 27 Apr 2023 06:15:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF148A0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682590538; x=1714126538;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8b6fS4/PQOVDls/TVoFmw/XTHTAH6akEATEOCqffBgY=;
+  b=A00mtHlULcIn6vLXIH3qN6UCcmvnQUozGwzMWerVl4dsyehrSX5xOaRi
+   PyM7wqOIcgFekK+RYL2ilfg0OB9pnjMlLO91xXIzzkaeB4ZJAqjge/GvC
+   OByvrYInY3eoM+uxrPdubM5jdfy7rFzMsejntPwDlnyvfDCHELyg6Hez5
+   qq0payxJHg2FSUyjMczny9GFTfji1mDWwO9y08ddEGpUNCZwH2AyiIQP0
+   hVv2uLOHKo3A6klTV7jHWldBYTRxnbCLhaPkg6c5b3D3Z9zdc7q82yFZB
+   IJobgg2kT6jPnngDWUZ2b+Q/HVfO95DtvYkB/xwfSOLK48qhgpo+VRoRD
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
+   d="asc'?scan'208";a="149214604"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 03:15:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 27 Apr 2023 03:15:36 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 27 Apr 2023 03:15:34 -0700
+Date:   Thu, 27 Apr 2023 11:15:16 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <alexghiti@rivosinc.com>,
+        <heiko@sntech.de>, <guoren@kernel.org>,
+        <anshuman.khandual@arm.com>, <mick@ics.forth.gr>,
+        <samuel@sholland.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -fixes V2] riscv: mm: remove redundant parameter of
+ create_fdt_early_page_table
+Message-ID: <20230427-prevail-upload-033ca439a54c@wendy>
+References: <20230426100009.685435-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6345:0:b0:40f:83e7:a965 with SMTP id
- j66-20020a026345000000b0040f83e7a965mr484047jac.4.1682590427848; Thu, 27 Apr
- 2023 03:13:47 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 03:13:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c122fa05fa4e9c55@google.com>
-Subject: [syzbot] Monthly btrfs report (Apr 2023)
-From:   syzbot <syzbot+list8d625089c709215832c5@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2zFe0gN+LmyYDnho"
+Content-Disposition: inline
+In-Reply-To: <20230426100009.685435-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello btrfs maintainers/developers,
+--2zFe0gN+LmyYDnho
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is a 31-day syzbot report for the btrfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/btrfs
+On Wed, Apr 26, 2023 at 06:00:09PM +0800, Song Shuai wrote:
+> create_fdt_early_page_table() explicitly uses early_pg_dir for
+> 32-bit fdt mapping and the pgdir parameter is redundant here.
+> So remove it and its caller.
+>=20
+> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 
-During the period, 8 new issues were detected and 0 were fixed.
-In total, 52 issues are still open and 25 have been fixed so far.
+Whoops, I missed the v2, so copy-pasting:
 
-Some of the still happening issues:
+"and its caller" sounds like you're removing the caller itself when
+that's not what you're doing!
+I am certainly not suggesting that you resubmit because of that though.
 
-Ref  Crashes Repro Title
-<1>  2242    Yes   kernel BUG in close_ctree
-                   https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
-<2>  486     Yes   VFS: Busy inodes after unmount (use-after-free)
-                   https://syzkaller.appspot.com/bug?extid=0af00f6a2cba2058b5db
-<3>  365     Yes   WARNING in btrfs_block_rsv_release
-                   https://syzkaller.appspot.com/bug?extid=dde7e853812ed57835ea
-<4>  319     Yes   WARNING in __kernel_write_iter
-                   https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
-<5>  274     Yes   WARNING in btrfs_space_info_update_bytes_may_use
-                   https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
-<6>  190     Yes   WARNING in btrfs_remove_chunk
-                   https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
-<7>  181     Yes   WARNING in btrfs_chunk_alloc
-                   https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
-<8>  180     Yes   possible deadlock in btrfs_search_slot
-                   https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
-<9>  162     Yes   WARNING in lookup_inline_extent_backref
-                   https://syzkaller.appspot.com/bug?extid=d6f9ff86c1d804ba2bc6
-<10> 138     Yes   kernel BUG in assertfail (2)
-                   https://syzkaller.appspot.com/bug?extid=c4614eae20a166c25bf0
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Automation failed to apply this which is a bit weird. What was the
+base-commit?
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Cheers,
+Conor.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+> ---
+> Changes in V1:
+> https://lore.kernel.org/linux-riscv/83540cb1-0c9b-f572-849a-cb100437d049@=
+ghiti.fr/T/#t
+> - fix the typo
+> ---
+>  arch/riscv/mm/init.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index 0f14f4a8d179..6ebb75a9a6b9 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -843,8 +843,7 @@ static void __init create_kernel_page_table(pgd_t *pg=
+dir, bool early)
+>   * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PG=
+DIR
+>   * entry.
+>   */
+> -static void __init create_fdt_early_page_table(pgd_t *pgdir,
+> -					       uintptr_t fix_fdt_va,
+> +static void __init create_fdt_early_page_table(uintptr_t fix_fdt_va,
+>  					       uintptr_t dtb_pa)
+>  {
+>  	uintptr_t pa =3D dtb_pa & ~(PMD_SIZE - 1);
+> @@ -1034,8 +1033,7 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+>  	create_kernel_page_table(early_pg_dir, true);
+> =20
+>  	/* Setup early mapping for FDT early scan */
+> -	create_fdt_early_page_table(early_pg_dir,
+> -				    __fix_to_virt(FIX_FDT), dtb_pa);
+> +	create_fdt_early_page_table(__fix_to_virt(FIX_FDT), dtb_pa);
+> =20
+>  	/*
+>  	 * Bootime fixmap only can handle PMD_SIZE mapping. Thus, boot-ioremap
+> --=20
+> 2.20.1
+>=20
 
-You may send multiple commands in a single email message.
+--2zFe0gN+LmyYDnho
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEpLNAAKCRB4tDGHoIJi
+0pEgAQD3m31cs3VtahRPXPTCH4i1LIzufQcpRdG6aAOc1Juk7wD5AR62nuAwA3MQ
+MSz1apHcc5OiNw5Q8BSkobIIDdksPQs=
+=PAQy
+-----END PGP SIGNATURE-----
+
+--2zFe0gN+LmyYDnho--
