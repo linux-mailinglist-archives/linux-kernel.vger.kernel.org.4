@@ -2,80 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAC76EFEF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C2A6EFEFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242745AbjD0Bax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 21:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S242838AbjD0BlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 21:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjD0Bav (ORCPT
+        with ESMTP id S242677AbjD0Bk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 21:30:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D7F26BC;
-        Wed, 26 Apr 2023 18:30:49 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q6J4F70RtzpTCX;
-        Thu, 27 Apr 2023 09:26:53 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 09:30:47 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <leo.yan@linaro.org>,
-        <eranian@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] perf symbols: Fix return incorrect build_id size in elf_read_build_id()
-Date:   Thu, 27 Apr 2023 01:28:41 +0000
-Message-ID: <20230427012841.231729-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Wed, 26 Apr 2023 21:40:59 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B481D3AA1;
+        Wed, 26 Apr 2023 18:40:57 -0700 (PDT)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q6JHx736nz18KQP;
+        Thu, 27 Apr 2023 09:37:01 +0800 (CST)
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 27 Apr
+ 2023 09:40:55 +0800
+Message-ID: <be9efa60-14ec-ba46-91e1-9feb56c40fb8@huawei.com>
+Date:   Thu, 27 Apr 2023 09:40:50 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] bpf: Unregister fentry when bpf_trampoline_unlink_prog
+ fails to update image
+To:     Yonghong Song <yhs@meta.com>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <kpsingh@kernel.org>, <sdf@google.com>, <haoluo@google.com>,
+        <jolsa@kernel.org>
+References: <20230426095548.176045-1-chenzhongjin@huawei.com>
+ <b594a56f-5e1f-da7f-0ab1-71751bd0c5e2@meta.com>
+Content-Language: en-US
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <b594a56f-5e1f-da7f-0ab1-71751bd0c5e2@meta.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
 X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
+ dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In elf_read_build_id(), if gnu build_id is found, should return the size of
-the actually copied data. If descsz is greater thanBuild_ID_SIZE,
-write_buildid data access may occur.
+On 2023/4/27 2:17, Yonghong Song wrote:
+> 
+> 
+> On 4/26/23 2:55 AM, Chen Zhongjin wrote:
+>> In bpf_link_free, bpf trampoline will update the image and remove the
+>> unlinked prog.
+>>
+>> bpf_trampoline_unlink_prog is committed as 'never fail', however it 
+>> depends
+>> on the result of image update. It is possible to fail if memory 
+>> allocation
+>> fail in bpf_trampoline_update.
+> 
+> Could you give more details which memory allocation fail here?
+> bpf_tramp_image_alloc()? Are you using some error injection or
+> this happens in your production workload?
+> 
+I guess it's an error injection because syzkaller reported this.
 
-Fixes: be96ea8ffa78 ("perf symbols: Fix issue with binaries using 16-bytes buildids (v2)")
-Reported-by: Will Ochowicz <Will.Ochowicz@genusplc.com>
-Link: https://lore.kernel.org/lkml/CWLP265MB49702F7BA3D6D8F13E4B1A719C649@CWLP265MB4970.GBRP265.PROD.OUTLOOK.COM/T/
-Tested-by: Will Ochowicz <Will.Ochowicz@genusplc.com>
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/util/symbol-elf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> The error result of bpf_trampoline_update can't be passed to 
+>> bpf_link_free
+>> because link release callback returns void. Then it will free the prog
+>> whether image updating is successful or not.
+>> If the old image tries to call a freed prog, it makes kernel panic.
+>>
+>>      BUG: unable to handle page fault for address: ffffffffc04a8d20
+>>      #PF: supervisor instruction fetch in kernel mode
+>>      #PF: error_code(0x0010) - not-present page
+>>      RIP: 0010:0xffffffffc04a8d20
+>>      Code: Unable to access opcode bytes at RIP 0xffffffffc04a8cf6.
+>>      ...
+>>      Call Trace:
+>>      ? bpf_trampoline_78223_0
+>>      bpf_traced_function
+>>      ...
+> 
+> Could you explain how 'the old image tries to call a freed prog'?
+> IIUC, the previous bpf_link_free() should not be available to
+> call the bpf prog, right?
+> 
+What I mean here is, if failed to update the image, the image keeps 
+unchanged but the unlinked prog will be freed later.
+Next time when it enter the trampoline the image will call freed prog.
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 41882ae8452e..059f88eca630 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -903,7 +903,7 @@ static int elf_read_build_id(Elf *elf, void *bf, size_t size)
- 				size_t sz = min(size, descsz);
- 				memcpy(bf, ptr, sz);
- 				memset(bf + sz, 0, size - sz);
--				err = descsz;
-+				err = sz;
- 				break;
- 			}
- 		}
--- 
-2.30.GIT
+>>
+>> Fix this when bpf_trampoline_update failed in bpf_trampoline_unlink_prog,
+>> unregister fentry to disable the trampoline. Then other progs on the
+>> trampoline can be unlinked safely and finally the trampoline will be
+>> released.
+> 
+> Do we still leak tr->cur_image here?
+> 
+No, bpf_tramp_image_put() will free everything when all progs_cnt 
+decline to zero in bpf_trampoline_update(). It is a release function, 
+but called 'put'.
 
+>>
+>> Fixes: 88fd9e5352fe ("bpf: Refactor trampoline update code")
+> 
+> If the above is a refactoring patch, you should not use that
+> as 'Fixes' patch, you should pick one truely introduced the issue.
+> 
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>>   kernel/bpf/trampoline.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+>> index d0ed7d6f5eec..6daa93b30e81 100644
+>> --- a/kernel/bpf/trampoline.c
+>> +++ b/kernel/bpf/trampoline.c
+>> @@ -604,7 +604,10 @@ static int __bpf_trampoline_unlink_prog(struct 
+>> bpf_tramp_link *link, struct bpf_
+>>       }
+>>       hlist_del_init(&link->tramp_hlist);
+>>       tr->progs_cnt[kind]--;
+>> -    return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
+>> +    err =  bpf_trampoline_update(tr, true /* lock_direct_mutex */);
+>> +    if (err && tr->cur_image)
+>> +        unregister_fentry(tr, tr->cur_image->image);
+> 
+> If error happens for the all subsequent programs,
+> unregister_fentry() will be called multiple times. Any side effect?
+It will fail with no side effect. Actually if there is no error, 
+modify_fentry() will fail in update() as well. The fentry is available 
+until all progs are unlinked and the broken image is freed by 
+bpf_tramp_image_put().
+
+However with an extra state to record this happens, it's possible to 
+re-register the fentry with new image when the next link/unlink calls 
+update(). It will generate a new image and replace/free the error one.
+> 
+> Overall, I think this is an extreme corner case which happens
+> when kernel memory is extreme tight. If this is the case, not
+> sure whether it is worthwhile to fix it or not.
+> 
+Yes, it's a really rare case. I'm just not sure whether it needs some 
+best-effort to avoid kernel panic at this point.
+
+If you think it's not necessary. Just let it go.
+
+Thanks for your time!
+
+Best,
+Chen
+>> +    return err;
+>>   }
+>>   /* bpf_trampoline_unlink_prog() should never fail. */
