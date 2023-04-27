@@ -2,41 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DCF6F0E31
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149296F0E34
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 00:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344066AbjD0WDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 18:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
+        id S1344066AbjD0WKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 18:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjD0WDw (ORCPT
+        with ESMTP id S229508AbjD0WKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 18:03:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569D03595
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:03:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E41ED63F9F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD33C433EF;
-        Thu, 27 Apr 2023 22:03:49 +0000 (UTC)
-Date:   Thu, 27 Apr 2023 18:03:47 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Thu, 27 Apr 2023 18:10:53 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440DB35BD
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:10:51 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94f32588c13so1365689866b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682633450; x=1685225450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oyoa/O+xLiuZWHEuPVWItqEbSS644YOhbq3/kpsTdWI=;
+        b=uIkFDXD7Gl/5Hged7cy5WzDVEKQLJdxQEgEsJ1xG0dt//zGEZ5cf/fWM5ZrvvknWw7
+         MKEC9kJsNz6NlMHXpjgbBicFkyB7nyfyy7UO9UeHBQcQE/chBKOvcZrMBm98w8ldGdYW
+         HOqP/UaJUCXG2mZsHlp+NOMZHlATpTFSQXMfXoYrzxfzb1JhvsWHRnHj13kK4uO220s+
+         Da/4UKrw12aOt9TdO24U2SLVIAGcQXRPY9X4O7w0hAHmvMm6lruS5PMvqzf/EKS16dqN
+         o6xsG3K2AHYaZuHGdlu1z27vpSg2pjsncIWA+oRxD7Vy/qJ7XpEdDt5PM/rahjNBDk5J
+         OP+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682633450; x=1685225450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oyoa/O+xLiuZWHEuPVWItqEbSS644YOhbq3/kpsTdWI=;
+        b=akX0Fb49fGf4EzE8QWjuIPLQr3v+bFi8eDsStPCiMkI6ZmznQ64AHpW9ifNG7zDySd
+         DQPcroaIVB5ZK9TT/yeLEvhpc/elrIZuHIdPldUTP0aHKx2VUh6P4vF1PqDuoJB0vuE4
+         TXeBYRX37l7bWOmhnqscF+A5VkJ8MSaaybqQFmLZyBRoE4n8XSy0Fw4C+bHjBfy0gkQx
+         xgd3vBHNCPa/TnyLgxtnedO5l0TP9OwYTlCQApxiE7nJ9oBIxHOGFIUPneWrKxJ8dgnK
+         gbGRCJ/cR126v48PIc93OHHHraem08B8FiAtzDMwZ7YeoMrdBiITCPbEKoHOO4sLWnNs
+         a15Q==
+X-Gm-Message-State: AC+VfDwb0cB99kGvtqz0xEkJU9+n9/PkzCKPLiJxae3LAQtzZkehcqiQ
+        o42Ap07/xkfvBtLvxGt7y8E6Zvu2GV5R9P/IpXc=
+X-Google-Smtp-Source: ACHHUZ4DJDiASltZaBlAGInmkmTC8QVWuBREO5qpOYmqWvjKalZg/u0vzUfmhyTrDWjgz8+QGDtm8g==
+X-Received: by 2002:a17:907:701:b0:94f:865d:fb8d with SMTP id xb1-20020a170907070100b0094f865dfb8dmr3486711ejb.11.1682633449563;
+        Thu, 27 Apr 2023 15:10:49 -0700 (PDT)
+Received: from leoy-huanghe ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id pv22-20020a170907209600b0094f0025983fsm10330876ejb.84.2023.04.27.15.10.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 15:10:49 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 06:10:47 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
+        shy828301@gmail.com, denik@google.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [for-linus][PATCH] ring-buffer: Sync IRQ works before buffer
- destruction
-Message-ID: <20230427180347.11d459cb@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] perf: cs-etm: Validate options after applying
+ themperf_pmu__format_bits
+Message-ID: <20230427221047.GA174797@leoy-huanghe>
+References: <20230424134748.228137-1-james.clark@arm.com>
+ <20230424134748.228137-5-james.clark@arm.com>
+ <20230427151228.GA152865@leoy-huanghe>
+ <dac76dd5-d5f0-61dd-fafe-f939f1ebc413@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,HEXHASH_WORD,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dac76dd5-d5f0-61dd-fafe-f939f1ebc413@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,94 +90,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+On Thu, Apr 27, 2023 at 04:52:06PM +0100, James Clark wrote:
 
-If something was written to the buffer just before destruction,
-it may be possible (maybe not in a real system, but it did
-happen in ARCH=um with time-travel) to destroy the ringbuffer
-before the IRQ work ran, leading this KASAN report (or a crash
-without KASAN):
+[...]
 
-    BUG: KASAN: slab-use-after-free in irq_work_run_list+0x11a/0x13a
-    Read of size 8 at addr 000000006d640a48 by task swapper/0
+> >> -static int cs_etm_set_context_id(struct auxtrace_record *itr,
+> >> -				 struct evsel *evsel, int cpu)
+> >> +static int cs_etm_validate_context_id(struct auxtrace_record *itr,
+> >> +				      struct evsel *evsel, int cpu)
+> >>  {
+> >> -	struct cs_etm_recording *ptr;
+> >> -	struct perf_pmu *cs_etm_pmu;
+> >> +	struct cs_etm_recording *ptr =
+> >> +		container_of(itr, struct cs_etm_recording, itr);
+> >> +	struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
+> >>  	char path[PATH_MAX];
+> >> -	int err = -EINVAL;
+> >> +	int err;
+> >>  	u32 val;
+> >> -	u64 contextid;
+> >> +	u64 contextid =
+> >> +		evsel->core.attr.config &
+> >> +		(perf_pmu__format_bits(&cs_etm_pmu->format, "contextid1") |
+> >> +		 perf_pmu__format_bits(&cs_etm_pmu->format, "contextid2"));
+> > 
+> > Seems to me, this would break backward compability.
+> > 
+> > The old kernel (before 5.11) doesn't provide 'contextid1' and
+> > 'contextid2', so we always check the entry 'contextid' rather than
+> > 'contextid1' and 'contextid2'.
+> > 
+> > With this change, if a kernel doesn't contain 'contextid1' and
+> > 'contextid2' formats, will perf tool never trace for contexid?
+> > 
+> 
+> No because I changed to to be purely validation, so the format flags
+> would still be applied. But yes I think you are right there is a small
+> issue.
+> 
+> Now validation of 'contextid' isn't done on pre 5.11 kernels. But that
+> only checks for ETMv3 anyway.
 
-    CPU: 0 PID: 0 Comm: swapper Tainted: G        W  O       6.3.0-rc1 #7
-    Stack:
-     60c4f20f 0c203d48 41b58ab3 60f224fc
-     600477fa 60f35687 60c4f20f 601273dd
-     00000008 6101eb00 6101eab0 615be548
-    Call Trace:
-     [<60047a58>] show_stack+0x25e/0x282
-     [<60c609e0>] dump_stack_lvl+0x96/0xfd
-     [<60c50d4c>] print_report+0x1a7/0x5a8
-     [<603078d3>] kasan_report+0xc1/0xe9
-     [<60308950>] __asan_report_load8_noabort+0x1b/0x1d
-     [<60232844>] irq_work_run_list+0x11a/0x13a
-     [<602328b4>] irq_work_tick+0x24/0x34
-     [<6017f9dc>] update_process_times+0x162/0x196
-     [<6019f335>] tick_sched_handle+0x1a4/0x1c3
-     [<6019fd9e>] tick_sched_timer+0x79/0x10c
-     [<601812b9>] __hrtimer_run_queues.constprop.0+0x425/0x695
-     [<60182913>] hrtimer_interrupt+0x16c/0x2c4
-     [<600486a3>] um_timer+0x164/0x183
-     [...]
+IIUC, 'contextid' is not only used for ETMv3.  Just quotes the comments
+from drivers/hwtracing/coresight/coresight-etm-perf.c:
 
-    Allocated by task 411:
-     save_stack_trace+0x99/0xb5
-     stack_trace_save+0x81/0x9b
-     kasan_save_stack+0x2d/0x54
-     kasan_set_track+0x34/0x3e
-     kasan_save_alloc_info+0x25/0x28
-     ____kasan_kmalloc+0x8b/0x97
-     __kasan_kmalloc+0x10/0x12
-     __kmalloc+0xb2/0xe8
-     load_elf_phdrs+0xee/0x182
-     [...]
+  73 /*
+  74  * contextid always traces the "PID".  The PID is in CONTEXTIDR_EL1
+  75  * when the kernel is running at EL1; when the kernel is at EL2,
+  76  * the PID is in CONTEXTIDR_EL2.
+  77  */
 
-    The buggy address belongs to the object at 000000006d640800
-     which belongs to the cache kmalloc-1k of size 1024
-    The buggy address is located 584 bytes inside of
-     freed 1024-byte region [000000006d640800, 000000006d640c00)
+ETMv4 uses 'contextid' as well, since the user space needs to know which
+exception level's PID should be traced, e.g. when CPU runs in EL2
+'contextid' is set as ETM_OPT_CTXTID2, the perf tool will set 'contextid2'
+to tell driver to trace CONTEXTIDR_EL2.
 
-Add the appropriate irq_work_sync() so the work finishes before
-the buffers are destroyed.
+We can only verify 'contextid', and set 'contextid1' or 'contextid2' based
+on CPU running exception level, finally driver knows how to trace PID.
 
-Prior to the commit in the Fixes tag below, there was only a
-single global IRQ work, so this issue didn't exist.
+Thanks,
+Leo
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230427175920.a76159263122.I8295e405c44362a86c995e9c2c37e3e03810aa56@changeid
-
-Cc: stable@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: 15693458c4bc ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/ring_buffer.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 9a0cb94c3972..0d748f1f79ff 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -1767,6 +1767,8 @@ static void rb_free_cpu_buffer(struct ring_buffer_per_cpu *cpu_buffer)
- 	struct list_head *head = cpu_buffer->pages;
- 	struct buffer_page *bpage, *tmp;
- 
-+	irq_work_sync(&cpu_buffer->irq_work.work);
-+
- 	free_buffer_page(cpu_buffer->reader_page);
- 
- 	if (head) {
-@@ -1873,6 +1875,8 @@ ring_buffer_free(struct trace_buffer *buffer)
- 
- 	cpuhp_state_remove_instance(CPUHP_TRACE_RB_PREPARE, &buffer->node);
- 
-+	irq_work_sync(&buffer->irq_work.work);
-+
- 	for_each_buffer_cpu(buffer, cpu)
- 		rb_free_cpu_buffer(buffer->buffers[cpu]);
- 
--- 
-2.39.2
-
+> Validation of 'contextid1' and
+> 'contextid2' isn't a problem, because if the kernel doesn't support them
+> they can't be applied on the command line anyway.
+>
+> I can fix it by checking for 'contextid' and ETMv3 first and then doing
+> 'contextid1' and 'contextid2' after.
