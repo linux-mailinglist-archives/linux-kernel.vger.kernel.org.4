@@ -2,88 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD28E6F0824
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54D16F0827
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbjD0PVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S244200AbjD0PWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244125AbjD0PVl (ORCPT
+        with ESMTP id S244194AbjD0PWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:21:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8854EEC;
-        Thu, 27 Apr 2023 08:21:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8FB363DF7;
-        Thu, 27 Apr 2023 15:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E283C433D2;
-        Thu, 27 Apr 2023 15:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682608889;
-        bh=uCJP9+ifJpOSESe3KeXP+qDgJhS/W4xajP8uYYOrLAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=og6iRwEO0QR7Rf70moNna279+eo8OY7/dAnh/SCMLdJd27wzv8oV2tHPd8TtC3XlD
-         2DmRD0KRVrCi3CvR9VrUaqdK42hk/RePMJaKQqHwz8iMsmOq5hpfFfyBwDvwuEICeV
-         okdRTAZV0t86Qt65DnpFBXEPRZ83+0lNo7E4Me9R/4t6S0FxCDa9vgjLP92PlnoLsY
-         8aOXWakb0g0GXUsECm7cnrFl32WlTu091/g8eM2NsQztrg0kyj0T0zPa9NlWGtLmgM
-         ST0OYsyGYCyC5DKYh9FLQCkNlhaWt4Q14rusAvHbJgEHgGoZHQAcWm3CIeTgVnSfzl
-         xON/awndvUWCg==
-Date:   Thu, 27 Apr 2023 16:21:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Maarten Zanders <maarten.zanders@mind.be>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v8 1/2] dt-bindings: leds-lp55xx: add ti,charge-pump-mode
-Message-ID: <20230427152124.GX50521@google.com>
-References: <20230421075305.37597-1-maarten.zanders@mind.be>
- <20230421075305.37597-2-maarten.zanders@mind.be>
+        Thu, 27 Apr 2023 11:22:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD104EE9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:21:54 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so1600938266b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:21:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682608912; x=1685200912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qwewOZK7JBxGabnXdHhR1rBDIN8G0aMcI1DZlXZ+li0=;
+        b=g2A6QM0BDUoUqE0IeGiIMb66AZcDuDEzbh8NnUSrTk9Y4Jqq2BZ4N2rqALEc9qWHkc
+         UO4dT6+2nZLmN0BpS5GOp0cQf1DwuKFIyY8US3/JZG5N3sIcGzXqXDTAO9GYPqZP2n0e
+         QHKKaRSyBJoMUgMstqZnPa5+w6oUXLX4GsjpU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682608912; x=1685200912;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qwewOZK7JBxGabnXdHhR1rBDIN8G0aMcI1DZlXZ+li0=;
+        b=Jrftnsr+u1D0OHNOSho+l3wJM1DLnUu+FwadoZ3vBQdDyh1ARreh3dpB4535gsTNv5
+         RrwbGzCed9QMG+ftbOcJWkXgYhpJLDAKAHE1vS/f0MBjNEMv4sXuzSSbVxzxAZVYoxFJ
+         C/7X1xR78iq3XCh4aoPnCcMO68oWMS2o3pYBi6Em2nfMQbAFgTqNTTpYlpfAO2zrXFRu
+         +32UiBmAimBbUGDIUtmwuFIeoQsSq1AkQ/9/XKGTn0FAbhzaguKwl/PFXJJNpAbc5rSG
+         ePqStzxvDGK4ry6hopBEBd2OwQUF5Sqr9kj8ZEp2B185VFu606MI7t9HYKb884ZFegO/
+         1ndA==
+X-Gm-Message-State: AC+VfDyBM1WGKjpbUFA7MEwubtOFBMTzRjf4t1aYxGZVmTAyxMhr+QpF
+        TxDDqLV1m5vfVno+Qm1IexcY5TkYR33PmSEJs6TTXQ==
+X-Google-Smtp-Source: ACHHUZ4czcJl0H71if79lPtebtktB8KJY+hFQqpNrQs94AOA5/baGwy8jtKY4lkgsnkOf4+TjcngUA==
+X-Received: by 2002:a17:907:3ea7:b0:95f:4c5c:4eaf with SMTP id hs39-20020a1709073ea700b0095f4c5c4eafmr2426876ejc.46.1682608912431;
+        Thu, 27 Apr 2023 08:21:52 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id sg9-20020a170907a40900b00959aba150c3sm5235077ejc.50.2023.04.27.08.21.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 08:21:52 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-506b2a08877so14982519a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:21:51 -0700 (PDT)
+X-Received: by 2002:aa7:d407:0:b0:506:c2b2:72fc with SMTP id
+ z7-20020aa7d407000000b00506c2b272fcmr1606707edq.7.1682608911570; Thu, 27 Apr
+ 2023 08:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230421075305.37597-2-maarten.zanders@mind.be>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
+ <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
+ <20230425060427.GP3390869@ZenIV> <20230425-sturheit-jungautor-97d92d7861e2@brauner>
+ <20230427010715.GX3390869@ZenIV> <20230427073908.GA3390869@ZenIV>
+In-Reply-To: <20230427073908.GA3390869@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Apr 2023 08:21:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
+Message-ID: <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
+Subject: Re: [GIT PULL] pidfd updates
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023, Maarten Zanders wrote:
+On Thu, Apr 27, 2023 at 12:39=E2=80=AFAM Al Viro <viro@zeniv.linux.org.uk> =
+wrote:
+>
+> int delayed_dup(struct file *file, unsigned flags)
 
-> Add a binding to configure the internal charge pump for lp55xx.
-> 
-> Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> Notes:
->     v1: implement as bool to disable charge pump
->     v2: rewrite to use string configuration, supporting all modes
->     v3: simplification by replacing string option by u8 constant,
->         removing previous Reviewed-by tags as it's a complete
->         rewrite of the patch.
->     v4: added notes
->     v5: dual license, change property type to u32
->     v6: change license type for leds-lp-55xx.h to preferred tag
->     v8: documentation: add default & maximum constraints
-> 
->  .../devicetree/bindings/leds/leds-lp55xx.yaml          | 10 ++++++++++
->  include/dt-bindings/leds/leds-lp55xx.h                 | 10 ++++++++++
->  2 files changed, 20 insertions(+)
->  create mode 100644 include/dt-bindings/leds/leds-lp55xx.h
+Ok, this is strange. Let me think about it.
 
-Applied, thanks
+But even without thinking about it, this part I hate:
 
--- 
-Lee Jones [李琼斯]
+>         struct delayed_dup *p =3D kmalloc(sizeof(struct delayed_dup), GFP=
+_KERNEL);
+
+Sure, if this is only used in unimportant code where performance
+doesn't matter, doing a kmalloc is fine.
+
+But if that is the only use, I think this is too subtle an interface.
+
+Could we instead limit it to "we only have one pending delayed dup",
+and make this all be more like the restart-block thing, and be part of
+struct task_struct?
+
+I think it's conceptually quite similar to restart_block, ie a "some
+pending system call state" thing.
+
+(Obviously it's entirely different in details).
+
+          Linus
