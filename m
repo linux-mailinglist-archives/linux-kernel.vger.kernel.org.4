@@ -2,85 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9688D6F0667
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8065E6F066F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243555AbjD0NL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 09:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S243638AbjD0NNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 09:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243404AbjD0NLY (ORCPT
+        with ESMTP id S243404AbjD0NNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 09:11:24 -0400
+        Thu, 27 Apr 2023 09:13:19 -0400
 Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279B430C5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:11:22 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so6577730a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:11:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF0A3C29
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5051abd03a7so12560063a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682601080; x=1685193080;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfGyHH2PfPrfkbPBpy+bAVZIzfzjqiyX4dJ97CEcQ98=;
-        b=LGlb7KfKTetaiNx8nq8hjUb0MXHmPINSJwSoqGNA0s+/LSzKxdnYhI1vlWSScecZ9k
-         jNMs/WnEx3SxLSdRrSqUdiWJYyDVbdypZvroK8vHQol/hJv9/LwAXhwDWxpXh0XxN/mH
-         V8dEvpOp+t2j2gwcHVdgIzEfWLTKRb/5zkwfFmO+PhVBABlH4MI4gTLeis/+ra26SlFg
-         OmlHWqbOhIlkRZOU0ImB5gFHzjEElhWaKrnprfQ27U/9Y+TgQkK4J6feEYPHM+Md9XyU
-         FaRvhunDRmc2yW0RkkFKYHu8Q3zJcRZIy5R26DwnFWeaLK7qmU20lFOF9+2Pj09ztQyT
-         2a6Q==
+        d=ventanamicro.com; s=google; t=1682601195; x=1685193195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
+        b=HIgpg5N7XJjzbxz+z7IgxgVQ5128JI4dtyixvRnwGndbaq5YVIPtJHd+DaOorca26k
+         cr99XyR833joae9EIrXDFvGYDfgdx97lSuMToDnUqFhu9JA7SVMQJHER3oDi1Rp3QEOF
+         mLPJ2w5t3aMH0JrLeMU3g1mTm+pQghwAf7n/nH6OPPuRRH8u1MJicYy4tnsZoD/6nenc
+         EeThR0OHBw47zlfBPnB+cq15TJ0QLrtuGCvLMwLcZZYUg6DqV/RYw9pkk1E3rpyPuXst
+         ayDxj8TjQBJExMKsUnsMDqZQTfzm6bZlQ6b/oOXxuNOUqTuU/9i+0PZUQfGkDAoFnKXE
+         v4wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682601080; x=1685193080;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1682601195; x=1685193195;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bfGyHH2PfPrfkbPBpy+bAVZIzfzjqiyX4dJ97CEcQ98=;
-        b=f0Jb2ud+43Ucc02UBwOuKbE4svrn3hrDpu1xk6JfJZpNkntUlqOGinbR7hSZtrJDT1
-         2DyT/Z0is0aoZMllp8UQ7Mue18coTzBiraEC8mjAoaI+B0rzhOLWioqTtfCgT6mT7sH3
-         uCNMaERcxcXsf8WygFwy1ZFyU51Hs78lEtsAxtS8ESKC10fK0mLpw1kEgTUvAEx1Nxhh
-         Qq7BslGFJ9KDFQzrwMVZfA4B6oc2XE3SpStyqeek0fHBObWvc4VpC6e9aHoDT9Q/dLxl
-         PjaPVTNMwhSrfOpizpj08cWxFLUu3jmJeljBGQ8+C4AGnZOoNLztX8X3wkJ128Yq2nl1
-         zcYg==
-X-Gm-Message-State: AC+VfDxBW7VynuZLeE+4jGCGszIXkO7sT9NyXGGsdZIJOYY6l5O4tgRO
-        HqG9jWZ1zPaq9L5UsX5/VOrr6g==
-X-Google-Smtp-Source: ACHHUZ6hVTIRGQCEx219U2/y5EcPf/pvENXLICV19fheSZjd50j2Y4tyz3ajAGBq+d00Ei+IDurZDw==
-X-Received: by 2002:a17:906:728e:b0:94e:6eb3:abc4 with SMTP id b14-20020a170906728e00b0094e6eb3abc4mr6184980ejl.4.1682601080416;
-        Thu, 27 Apr 2023 06:11:20 -0700 (PDT)
-Received: from [172.23.2.82] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id y21-20020a17090614d500b0094b87711c9fsm9657296ejc.99.2023.04.27.06.11.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 06:11:20 -0700 (PDT)
-Message-ID: <d1850d73-9d92-c0aa-7cf8-bae4c0e4144b@linaro.org>
-Date:   Thu, 27 Apr 2023 15:11:19 +0200
+        bh=9ymSyk174Q/aRoWNbYUHHG8erPdr3iK0BpQYJmy801k=;
+        b=hdrd54fdimaKrKnVgZyEv3pE3QmNEv29/MgOpcVTmMPxsuv0aoOzZ4l3SiRqTu3UQm
+         vxDUJ0M0TADvm1GTP1Jm0mzg9VjdbLPJWfe57YoVUJcFuwXdESVsRPmyzOKfTVkQWsEA
+         z1KtqxdYwdT0IWpZ8yTRAmWe32TzKV29AFcslf3erDJG9aWEy4UajTOJPguJosAajWhn
+         AF7OaQzugUyDzBJi9rK8PgaR7KrvhPVh/3uqnoeu3Xkw/tolEPsZCCiktT2sWS2YQR6c
+         5/u7YblpsCGVFPrca8mozS96o68MC9Nfyp9WoraKqho07FzDzrI+JxBrjHGnvvUrJcHD
+         k/7w==
+X-Gm-Message-State: AC+VfDwESXEAEi0mj5o3JaMP/e3CCwZzyvtbHeapwZR0ctWIJLRZzr4v
+        L6zVdnZwdgUeyaInIwC2Rb/QyQ==
+X-Google-Smtp-Source: ACHHUZ4WhZAaEZw48L4mS8JWz5hV+DtJHTNQLlKB9/bS0XJh3GNfgim97pYJpFirPWLxY6K5pRGJaA==
+X-Received: by 2002:a17:907:7da9:b0:94b:cd7c:59f4 with SMTP id oz41-20020a1709077da900b0094bcd7c59f4mr1742934ejc.16.1682601195517;
+        Thu, 27 Apr 2023 06:13:15 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id t25-20020a17090616d900b009534603453dsm9503863ejd.131.2023.04.27.06.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 06:13:14 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 15:13:13 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, Marc Zyngier <maz@kernel.org>,
+        luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
+Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <q7bug5j62ceniiif5joz5i73g7lbyebawbokcang4ctit4i634@e5bd6zqozbau>
+References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
+ <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
+ <ZEo+6rwM+c6DvlMM@sunil-laptop>
+ <qqukqrc45zqyjh5bwpjpuiweogwtapuw7qqjjpubjwvteum6ig@esjfwqdivhpa>
+ <ZEpUCD+eq/NL7LXJ@sunil-laptop>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 5/7] phy: qcom-qmp-combo: Introduce drm_bridge
-Content-Language: en-US
-To:     Bryan O'Donoghue <pure.logic@nexus-software.ie>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-6-quic_bjorande@quicinc.com>
- <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEpUCD+eq/NL7LXJ@sunil-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,139 +85,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 12:33, Bryan O'Donoghue wrote:
-> On Tue, Apr 25, 2023 at 4:40 AM Bjorn Andersson
-> <quic_bjorande@quicinc.com> wrote:
->>
->> The QMP combo PHY sits in an of_graph connected between the DisplayPort
->> controller and a USB Type-C connector (or possibly a redriver).
->>
->> The TCPM needs to be able to convey the HPD signal to the DisplayPort
->> controller, but no directly link is provided by DeviceTree so the signal
->> needs to "pass through" the QMP combo phy.
->>
->> Handle this by introducing a drm_bridge which upon initialization finds
->> the next bridge (i.e. the usb-c-connector) and chain this together. This
->> way HPD changes in the connector will propagate to the DisplayPort
->> driver.
->>
->> The connector bridge is resolved lazily, as the TCPM is expected to be
->> able to resolve the typec mux and switch at probe time, so the QMP combo
->> phy will probe before the TCPM.
->>
->> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 36 +++++++++++++++++++++++
->>   1 file changed, 36 insertions(+)
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
->> index 5d6d6ef3944b..84bc08002537 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
->> @@ -22,6 +22,8 @@
->>   #include <linux/usb/typec.h>
->>   #include <linux/usb/typec_mux.h>
->>
->> +#include <drm/drm_bridge.h>
->> +
->>   #include <dt-bindings/phy/phy-qcom-qmp.h>
->>
->>   #include "phy-qcom-qmp.h"
->> @@ -1332,6 +1334,8 @@ struct qmp_combo {
->>          struct clk_hw dp_link_hw;
->>          struct clk_hw dp_pixel_hw;
->>
->> +       struct drm_bridge bridge;
->> +
->>          struct typec_switch_dev *sw;
->>          enum typec_orientation orientation;
->>   };
->> @@ -3196,6 +3200,34 @@ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *
->>          return devm_add_action_or_reset(qmp->dev, phy_clk_release_provider, dp_np);
->>   }
->>
->> +static int qmp_combo_bridge_attach(struct drm_bridge *bridge,
->> +                                  enum drm_bridge_attach_flags flags)
->> +{
->> +       struct qmp_combo *qmp = container_of(bridge, struct qmp_combo, bridge);
->> +       struct drm_bridge *next_bridge;
->> +
->> +       if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
->> +               return -EINVAL;
->> +
->> +       next_bridge = devm_drm_of_get_bridge(qmp->dev, qmp->dev->of_node, 0, 0);
->> +       if (IS_ERR(next_bridge))
->> +               return dev_err_probe(qmp->dev, PTR_ERR(next_bridge), "failed to acquire drm_bridge\n");
->> +
->> +       return drm_bridge_attach(bridge->encoder, next_bridge, bridge, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
->> +}
->> +
->> +static const struct drm_bridge_funcs qmp_combo_bridge_funcs = {
->> +       .attach = qmp_combo_bridge_attach,
->> +};
->> +
->> +static int qmp_combo_dp_register_bridge(struct qmp_combo *qmp)
->> +{
->> +       qmp->bridge.funcs = &qmp_combo_bridge_funcs;
->> +       qmp->bridge.of_node = qmp->dev->of_node;
->> +
->> +       return devm_drm_bridge_add(qmp->dev, &qmp->bridge);
->> +}
->> +
->>   static int qmp_combo_parse_dt_lecacy_dp(struct qmp_combo *qmp, struct device_node *np)
->>   {
->>          struct device *dev = qmp->dev;
->> @@ -3459,6 +3491,10 @@ static int qmp_combo_probe(struct platform_device *pdev)
->>          if (ret)
->>                  return ret;
->>
->> +       ret = qmp_combo_dp_register_bridge(qmp);
->> +       if (ret)
->> +               return ret;
+On Thu, Apr 27, 2023 at 04:22:56PM +0530, Sunil V L wrote:
+> On Thu, Apr 27, 2023 at 12:25:42PM +0200, Andrew Jones wrote:
+> > On Thu, Apr 27, 2023 at 02:52:50PM +0530, Sunil V L wrote:
+> > > Hi Palmer,
+> > > 
+> > > On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
+> > > > On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
+> > > > > RINTC structures in the MADT provide mapping between the hartid
+> > > > > and the CPU. This is required many times even at run time like
+> > > > > cpuinfo. So, instead of parsing the ACPI table every time, cache
+> > > > > the RINTC structures and provide a function to get the correct
+> > > > > RINTC structure for a given cpu.
+> > > > > 
+> > > > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > > > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > ---
+> > > > >  arch/riscv/include/asm/acpi.h |  2 ++
+> > > > >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
+> > > > >  2 files changed, 62 insertions(+)
+> > > > > 
+> > > > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> > > > > index 9be52b6ffae1..1606dce8992e 100644
+> > > > > --- a/arch/riscv/include/asm/acpi.h
+> > > > > +++ b/arch/riscv/include/asm/acpi.h
+> > > > > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
+> > > > > 
+> > > > >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> > > > > 
+> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+> > > > > +u32 get_acpi_id_for_cpu(int cpu);
+> > > > >  #endif /* CONFIG_ACPI */
+> > > > > 
+> > > > >  #endif /*_ASM_ACPI_H*/
+> > > > > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> > > > > index 81d448c41714..40ab55309c70 100644
+> > > > > --- a/arch/riscv/kernel/acpi.c
+> > > > > +++ b/arch/riscv/kernel/acpi.c
+> > > > > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
+> > > > >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+> > > > >  EXPORT_SYMBOL(acpi_pci_disabled);
+> > > > > 
+> > > > > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
+> > > > > +
+> > > > > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
+> > > > > +{
+> > > > > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
+> > > > > +	int cpuid;
+> > > > > +
+> > > > > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
+> > > > > +		return 0;
+> > > > > +
+> > > > > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
+> > > > 
+> > > > Unless I'm missing something, this races with CPUs coming online.  Maybe
+> > > > that's a rare enough case we don't care, but I think we'd also just have
+> > > > simpler logic if we fixed it...
+> > > > 
+> > > This depend only on cpuid_to_hartid_map filled up. I wish I could
+> > > initialize this RINTC mapping in setup_smp() itself like ARM64. But in
+> > > RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
+> > > Hence, we need to initialize this array outside of setup_smp().
+> > > 
+> > > I can update the code to initialize this from setup_arch() immediately
+> > > after setup_smp() if ACPI is enabled. That should avoid the global
+> > > variable check also. Let me know if you prefer this.
+> > > 
+> > > > > +	/*
+> > > > > +	 * When CONFIG_SMP is disabled, mapping won't be created for
+> > > > > +	 * all cpus.
+> > > > > +	 * CPUs more than NR_CPUS, will be ignored.
+> > > > > +	 */
+> > > > > +	if (cpuid >= 0 && cpuid < NR_CPUS)
+> > > > > +		cpu_madt_rintc[cpuid] = *rintc;
+> > > > > +
+> > > > > +	return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static int acpi_init_rintc_array(void)
+> > > > > +{
+> > > > > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
+> > > > > +		return 0;
+> > > > > +
+> > > > > +	return -ENODEV;
+> > > > > +}
+> > > > > +
+> > > > > +/*
+> > > > > + * Instead of parsing (and freeing) the ACPI table, cache
+> > > > > + * the RINTC structures since they are frequently used
+> > > > > + * like in  cpuinfo.
+> > > > > + */
+> > > > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
+> > > > > +{
+> > > > > +	static bool rintc_init_done;
+> > > > 
+> > > > ... basically just get rid of this global variable, and instead have a
+> > > > 
+> > > >    if (!&cpu_madt_rintc[cpu])
+> > > >        ... parse ...
+> > > >    return &cpu_madt_rintc[cpu];
+> > > > 
+> > > > that'd probably let us get rid of a handful of these helpers too, as now
+> > > > it's just a call to the parsing bits.
+> > > > 
+> > > I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
+> > > not caching the RINTC pointers but actual contents itself. So, the
+> > > address is always valid. However, as per Drew's earlier feedback I am
+> > > going to reduce one helper. I am planning to send the next version of
+> > > this patch once 6.4 rc1 is available since the ACPICA patches are merged
+> > > now.
+> > > 
+> > > > > +
+> > > > > +	if (!rintc_init_done) {
+> > > > > +		if (acpi_init_rintc_array()) {
+> > > > > +			pr_err("No valid RINTC entries exist\n");
+> > > > > +			return NULL;
+> > > > > +		}
+> > > > > +
+> > > > > +		rintc_init_done = true;
+> > > > > +	}
+> > > > > +
+> > > > > +	return &cpu_madt_rintc[cpu];
+> > > > > +}
+> > > > > +
+> > > > > +u32 get_acpi_id_for_cpu(int cpu)
+> > > > > +{
+> > > > > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
+> > > > > +
+> > > > > +	BUG_ON(!rintc);
+> > > > 
+> > > > We should have some better error reporting here.  It looks like all the
+> > > > callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
+> > > > returned, so maybe we just pr_warn() something users can understand and then
+> > > > return -1 or something?
+> > > > 
+> > > 
+> > > RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
+> > > for UID. So, there is no bogus value we can return. 
+> > > 
+> > > Actually, I just realized this check is redundant. It will never be NULL
+> > > since it is a static array. So, we can just get rid of the BUG.
+> > 
+> > It can be NULL on the first call of acpi_cpu_get_madt_rintc(), which is
+> > a good time to BUG if there's isn't an RINTC.
+> > 
+> Sorry, I mean if we change the initialization to get called from
+> setup_arch, then we can get rid of this check along with global variable
+> check, correct?
 
-I think the DRM part should be only built if CONFIG_DRM is enabled, I don't
-have a strong opinion on this, I think Vinod could help here.
+Sounds good to me, but now I think we're pushing the question of whether
+to BUG or not on a missing RINTC to that new init function, because
+otherwise we'll still end up in get_acpi_id_for_cpu() eventually with
+or without a valid rintc from which we get the uid (and the uid has no
+specified bogus value).
 
->> +
->>          /* Check for legacy binding with child nodes. */
->>          usb_np = of_get_child_by_name(dev->of_node, "usb3-phy");
->>          if (usb_np) {
->> --
->> 2.39.2
->>
-> 
-> You need to add some or all of these
->         select DRM_DISPLAY_DP_HELPER
->         select DRM_DISPLAY_HELPER
->         select DRM_DP_AUX_BUS
->         select DRM_KMS_HELPER
->         select DRM_MIPI_DSI
->         select DRM_PANEL
-> 
-> 
-> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
-> Unexpected GOT/PLT entries detected!
-> /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-ld:
-> Unexpected run-time procedure linkages detected!
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function
-> `qmp_combo_bridge_attach':
-> phy-qcom-qmp-combo.c:(.text+0xb50): undefined reference to
-> `devm_drm_of_get_bridge'
-> phy-qcom-qmp-combo.c:(.text+0xb6c): undefined reference to `drm_bridge_attach'
-> drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function `qmp_combo_probe':
-> phy-qcom-qmp-combo.c:(.text+0x13fc): undefined reference to
-> `devm_drm_bridge_add'
-
-I think CONFIG_DRM_PANEL_BRIDGE in addition to CONFIG_DRM. should be enough.
-
-With this config added and my drm-bridge hat:
-
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-
-Neil
-
-
-> 
-> ---
-> bod
-
+Thanks,
+drew
