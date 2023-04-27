@@ -2,119 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE556F0D80
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0A06F0D84
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344061AbjD0Ux7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S1344017AbjD0U46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344142AbjD0Uxz (ORCPT
+        with ESMTP id S229508AbjD0U44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:53:55 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F871BCB;
-        Thu, 27 Apr 2023 13:53:53 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a6715ee82fso93041085ad.1;
-        Thu, 27 Apr 2023 13:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682628833; x=1685220833;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=/5HWPeVY1MQbyixrvVym4tZ22GEw9R6F1zseVGpafmk=;
-        b=emB5v8zA8+Re9OPy+eYSmdTZbC5NAZo0kYdTWKXuC1+PTSPgR9LZnp07/I0f0ex2G2
-         o4Bedy0IxCUyuZAm/IjGAz95AVan+L+JB283acbS4a9hjICkG4afU3tRr2wSdBj9HiCh
-         G2hQSvfdPP4k9dEguUChEcjfn+P/hQTPisKO50Lz4jMJDiOCv+OmadAwWhAYUSxrr0do
-         98BUMbuNcRtlJQK4PAl9KfjI0ZVtcysgNM3JdRIof9jG0pdi7mJatyO4Ip8B1wovVtvZ
-         bhIofXEThLitec/y5p1rEDbbo7zc9tJ6ODxoaWYMhXlUoKFkWK6yT6FqeKsME4twVQ45
-         ahQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682628833; x=1685220833;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/5HWPeVY1MQbyixrvVym4tZ22GEw9R6F1zseVGpafmk=;
-        b=OBrVMk2gJGjNX51VoFUfEcCKo6/bB/88Nf+5flZTKC2k34Q50TfPL9Fs0CikZGjr2I
-         xybG1w0dSNfbSXBRzgsi0GK21K5siOEBct7R6lejALP5wSN7NAVQHiwnBbg59/u/OkId
-         W29IztcznuLs+aiFHGrnS/615M10OZpEUO+MKN4vsmN+wyE3Uh16eJGJ6yao1LOewhi+
-         KgMoSJh84RDAEhvdivvNNyLYajlMztVpcgVMmALkRT+UedHV+eOIvCDhI+8hT0DlWIaW
-         b/mEWta+2mCej/nuZVTIlAJq38iQFvxDgv/B/SrKv0GwGEyxXC4ib0LvxU59CIEwWnx2
-         Rdew==
-X-Gm-Message-State: AC+VfDxz3VOnetb7EyInQ2OohIaIALPAOaFFnuP/Uv1oXHQpG1EgSMZS
-        d4+Yg3+qWolrubVoExcbej1+NzO0Tbs=
-X-Google-Smtp-Source: ACHHUZ6nowdw4FFYg8bfdI8w+PApjBFH6JLx3NdJRskT0XzHWQgFkxXpmk50Jg3MqcKX7Ka8Ai/jzw==
-X-Received: by 2002:a17:902:d4c6:b0:1a6:71b1:a0b9 with SMTP id o6-20020a170902d4c600b001a671b1a0b9mr3255637plg.47.1682628832942;
-        Thu, 27 Apr 2023 13:53:52 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id ji9-20020a170903324900b001a6ed2d0ef8sm12076718plb.273.2023.04.27.13.53.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 13:53:52 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 27 Apr 2023 10:53:51 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        Zefan Li <lizefan.x@bytedance.com>
-Subject: [GIT PULL] cgroup changes for v6.4-rc1
-Message-ID: <ZErg3xZyhlVx_Mw0@slm.duckdns.org>
+        Thu, 27 Apr 2023 16:56:56 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7CBE56;
+        Thu, 27 Apr 2023 13:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=bOKdPgP2f7Sd/FoHLrr6mS68uu9YNkAN+DF4VXlrxTw=; b=W3
+        Blf7KgaPebmxDke7+QYn/5qhkKdTUwp+X5FEX6TAif1REd56XCrCyPEUyK+V3haxDJyaK0pmOO7Hd
+        K7m3J+0KKs2zQrEd9qgpRyj3lU44Q+NseAwT24v431JZMfDtmJsTGsONjVb/HItR/yKtI131hNdGb
+        iSFXsR14KOV7eVs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ps8fQ-00BNU8-VL; Thu, 27 Apr 2023 22:56:40 +0200
+Date:   Thu, 27 Apr 2023 22:56:40 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] imx8mn-var-som: dts: fix PHY detection bug by adding
+ deassert delay
+Message-ID: <31610e60-5c1e-4d19-9beb-83b49ef26155@lunn.ch>
+References: <20230427195538.2718661-1-hugo@hugovil.com>
+ <CAOMZO5CQeeme6uhb8NCzR2QADjkBM-mRC9-GUnmhLWSGo5MMoQ@mail.gmail.com>
+ <20230427160608.f051241d750404939296f60d@hugovil.com>
+ <CAOMZO5BNbRV1fLpwDZWgj9+gihHJBBGeZCvkF1tgm5GhwSn8LQ@mail.gmail.com>
+ <20230427162251.518a956ce7a9dcd88352725a@hugovil.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230427162251.518a956ce7a9dcd88352725a@hugovil.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 292fd843de26c551856e66faf134512c52dd78b4:
+On Thu, Apr 27, 2023 at 04:22:51PM -0400, Hugo Villeneuve wrote:
+> On Thu, 27 Apr 2023 17:07:59 -0300
+> Fabio Estevam <festevam@gmail.com> wrote:
+> 
+> > On Thu, Apr 27, 2023 at 5:06 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > 
+> > > Hi Fabio,
+> > > it uses a ADIN1300 PHY.
+> > >
+> > > The datasheet indicate that the "Management interface active (t4)" state is reached at most 5ms after the reset signal is deasserted.
+> > 
+> > Please add this information to the commit log and please add a Fixes: tag.
+> > 
+> > Thanks
+> 
+> Hi,
+> I am trying to properly add a "Fixes: " tag, but the description for this tag indicates that it is to report that "the patch fixes an issue in a previous commit".
+> 
+> In this case, I cannot identify a commit that introduced that bug, apart from the initial commit of the DTS file which didn't have the reset property present?
 
-  cgroup/cpuset: Fix partition root's cpuset.cpus update bug (2023-03-29 08:37:07 -1000)
+Is the PHY on the SOM or the carrier?
 
-are available in the Git repository at:
+If the PHY is on the carrier, then the delay is a carrier property,
+and should be in the carrier .dts file. So use the commit for when the
+carrier DTS file was added.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.4
+If the PHY is on the SOM, then use the commit for when the SOM DTSI
+was added.
 
-for you to fetch changes up to 9403d9cb564b6a3af86cb18fe722097ed7620f6f:
-
-  docs: cgroup-v1/cpusets: update libcgroup project link (2023-04-14 06:55:48 -1000)
-
-----------------------------------------------------------------
-cgroup changes for v6.4-rc1
-
-* cpuset changes including the fix for an incorrect interaction with CPU
-  hotplug and an optimization.
-
-* Other doc and cosmetic changes.
-
-----------------------------------------------------------------
-Haifeng Xu (1):
-      cpuset: Clean up cpuset_node_allowed
-
-Kamalesh Babulal (2):
-      cgroup: bpf: use cgroup_lock()/cgroup_unlock() wrappers
-      docs: cgroup-v1/cpusets: update libcgroup project link
-
-Tejun Heo (1):
-      Merge branch 'for-6.3-fixes' into for-6.4
-
-Waiman Long (3):
-      cgroup/cpuset: Skip task update if hotplug doesn't affect current cpuset
-      cgroup/cpuset: Include offline CPUs when tasks' cpumasks in top_cpuset are updated
-      cgroup/cpuset: Minor updates to test_cpuset_prs.sh
-
- Documentation/admin-guide/cgroup-v1/cpusets.rst   |  2 +-
- include/linux/cpuset.h                            | 16 +-----
- kernel/bpf/cgroup.c                               | 38 +++++++-------
- kernel/bpf/cgroup_iter.c                          |  4 +-
- kernel/bpf/local_storage.c                        |  4 +-
- kernel/cgroup/cgroup-v1.c                         | 16 +++---
- kernel/cgroup/cgroup.c                            | 60 +++++++++++------------
- kernel/cgroup/cpuset.c                            | 30 +++++++-----
- mm/page_alloc.c                                   |  4 +-
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 25 +++++-----
- 10 files changed, 99 insertions(+), 100 deletions(-)
+	Andrew
