@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729116F08CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464AD6F08D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244257AbjD0Pyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39694 "EHLO
+        id S244100AbjD0P4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243934AbjD0Pyn (ORCPT
+        with ESMTP id S243994AbjD0P4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:54:43 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9787131
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:54:41 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f196e8e2c6so68078145e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:54:41 -0700 (PDT)
+        Thu, 27 Apr 2023 11:56:40 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054DD35B8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:56:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94f0dd117dcso1299488766b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682610880; x=1685202880;
+        d=linaro.org; s=google; t=1682610996; x=1685202996;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NT5OMZcpsLf0lbuTdUMr8iotawbw3Liy9c/Vdmfa24E=;
-        b=nqQ5p8zlRMDLN/yfAruMXjsqwL1+D8WJ+0/kCG4ScMQBqIhCQROP2qjHA6LZbeQwXx
-         /Qw7cInIhmJQC3NteXOpQqvSD9teYyh+6kApv9svjUaIrHOxx7K48Bl3g8rZFl18FKZ7
-         m0Q3riv/cUfRtuj8HQWgtyNuE/vr9/jEUUH7rZsoIEspEvMEs7oMpKIOVvuYqt1lgYFv
-         3JU2Bx1Q2XjDMG3b2LEv2ubVhq7mSD5EZvEgInRfkOztkZHcpcpwDkcDmPItPn4+TaSH
-         mDEfX+oFxZn/0RtZLkcnnVpjDwG8YKCg2a2PLr5t3WZ5pH2BinppK222FZJOyNENpXdK
-         NHJg==
+        bh=JggDLFBdIl/jSBDaH5DGvn2IeczOwVOprHaUhA+GdDk=;
+        b=Jk3yvWCveAWhfNWMrAWwMn2KuWl/3qOYaI5epU7anJ79rrobA77wVhOiAXloDugYhc
+         vXrro+lbFXyjZPW++3+wTYpjCf3AT5QBX/hDCmRGqoMmODoth+o3RZTTXk6NlFNn2fU3
+         vn49NJnrWNIbgMp0I4KgqHh5HYYU3ZEipB+bBFAPa7Z7DMTksLlzOwLesPnOC77gqIob
+         1BJbc4g12Tvk7suRUDGS8skj5B2kreAttIJ8OCz6WCIK/VPnUdZh3ITrSgT0BLex/0Vh
+         Ie7KoD11Kj4X6SD5iHPXTulRnR4uQaUvNnaPXVLsrGunq+TGuM0RBMA02cXS1p2IYRXT
+         MIAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682610880; x=1685202880;
+        d=1e100.net; s=20221208; t=1682610996; x=1685202996;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NT5OMZcpsLf0lbuTdUMr8iotawbw3Liy9c/Vdmfa24E=;
-        b=S1YognEqALK7CtCQ4Ily9wd1zSVcsIdZWQuhlzT/qCAE30VwU/LKwT9oB0p4DJT7VL
-         m6cJSd+bqJxrXR7QTDbLq4oU4pnujyZhUPxym0Vs8n55Af/zT0v2IdIW52oOi0xFcAiw
-         bCNoybQB043NGxIMJkKJPSbTCcu2i6EsFN0HWMZrEAITMwc6pfmfdeW5MCTjIFjACeG0
-         rroBdYLrJAGlkJnxcqcOrxvTb8K69/uLVcy/PiqUx6HEIOU5AlaoWYXuYPFtonKHsw1s
-         rqmGSkZqHf8adgIUY5G4kZJggoX0EZ3TIEBs8ogUYjm5XM0xfpt75CCqgWDQw2YN2oHt
-         w0nw==
-X-Gm-Message-State: AC+VfDywfr78Ke7/B6VVhFfSG29oJXK++gsqy4EEMqWkPe8GoPwKTxqP
-        Pa7waJewlX3jmOsLn7cdoyYfEA==
-X-Google-Smtp-Source: ACHHUZ68RQi5AnxrkZd2UuCXC+9MDWHIGwD4MJusXcFhTSBT7trk0UdJQWtK6Fpjc6YwGpTGvpzOyg==
-X-Received: by 2002:a05:600c:21ca:b0:3eb:3945:d405 with SMTP id x10-20020a05600c21ca00b003eb3945d405mr2065143wmj.38.1682610880148;
-        Thu, 27 Apr 2023 08:54:40 -0700 (PDT)
-Received: from [172.23.2.142] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id c7-20020a5d4cc7000000b002fa5a73bf9bsm18865705wrt.89.2023.04.27.08.54.39
+        bh=JggDLFBdIl/jSBDaH5DGvn2IeczOwVOprHaUhA+GdDk=;
+        b=VJoQdJerls/H2KwSvjO7zbFzyL7DReZeL373orpBBNMBPO0O7iRFCBUjQ94R1FofG0
+         p8tUyQ5URjBbHPW5UIh3XKdYsTgEOXByHDhi4CyZdyyRzRfAQUCywme6bQ2VF4migwOa
+         Q8f+YCkN9ShQQuTFnt60R5rPnTFAC93bQ3+G+iiHbcnfvTBqoSEkyTWXvQ8b8KAJDDoG
+         5AhQHQa3teuadMopYHTjfWYnyW/mBPRUO4a5tT1jrp+BiZWJdOLiudTsP7TwxXO2ObZn
+         kMpbb/QKtDrqhLTHDhr3IlUn3W1xjqqTCOvYQ73kMhwm0xu4vu50oWA1Oe3K5534fwE+
+         fNxg==
+X-Gm-Message-State: AC+VfDxudf8O029iocClrEhfPiv6LLyvAftsoYK2uut9Pb3eTkidB3Nu
+        /otWOrjtqXHwvxMCWfoKyi1qZQ==
+X-Google-Smtp-Source: ACHHUZ4zMr62XOd0+V2I4HhOTLEq7wM6Up0uaIzneJyRKQ0+6VT+qdeHI8kthuaft10zFLjq3+dcUA==
+X-Received: by 2002:a17:906:dc93:b0:94f:1ac0:850b with SMTP id cs19-20020a170906dc9300b0094f1ac0850bmr2523049ejc.71.1682610996504;
+        Thu, 27 Apr 2023 08:56:36 -0700 (PDT)
+Received: from [172.23.2.5] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id e6-20020a1709062c0600b0094ef2003581sm9828030ejh.153.2023.04.27.08.56.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 08:54:39 -0700 (PDT)
-Message-ID: <181a8d2e-fb27-13e0-5b7b-42559213ff42@linaro.org>
-Date:   Thu, 27 Apr 2023 17:54:38 +0200
+        Thu, 27 Apr 2023 08:56:36 -0700 (PDT)
+Message-ID: <3e0b8680-4722-7e5a-a75b-acba1940aa1a@linaro.org>
+Date:   Thu, 27 Apr 2023 18:56:35 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
-Content-Language: en-US
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/4] drm/msm/dpu: remove DPU_DSPP_IGC handling in dspp
+ flush
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
- <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
- <8d6042cd-f690-d274-c658-e83ff3a5776e@linaro.org>
- <20230426171621.GA2506@standask-GA-A55M-S2HP>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230426171621.GA2506@standask-GA-A55M-S2HP>
-Content-Type: text/plain; charset=UTF-8
+References: <20230426192246.5517-1-quic_abhinavk@quicinc.com>
+ <20230426192246.5517-2-quic_abhinavk@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230426192246.5517-2-quic_abhinavk@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,34 +81,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 19:16, Stanislav Jakubek wrote:
-> On Mon, Apr 24, 2023 at 03:53:07PM +0200, Krzysztof Kozlowski wrote:
->> On 23/04/2023 14:40, Stanislav Jakubek wrote:
->>> Convert Broadcom Kona family I2C bindings to DT schema.
->>>
->>> Changes during conversion:
->>>   - add used, but previously undocumented SoC-specific compatibles
->>>   - drop references to SoCs that are not upstream
->>>   - add supported clock frequencies according to the Linux driver [1]
->>>
->>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/i2c/busses/i2c-bcm-kona.c#n731
->>
->> This line points to moving reference in next, so might no be accurate
->> later. If you need external reference, then it should be some stable
->> tag. But anyway if this is in mainline (is this?) then, why referencing
->> via external link?
+On 26/04/2023 22:22, Abhinav Kumar wrote:
+> Inverse gamma correction blocks (IGC) are not used today so lets
+> remove the usage of DPU_DSPP_IGC in the dspp flush to make it easier
+> to remove IGC from the catalog.
 > 
-> Yes, it's in mainline since 2013. I just pointed to linux-next since
-> that was what I had open at the time.
+> We can add this back when IGC is properly supported in DPU with
+> one of the standard DRM properties.
 > 
-> Just to make sure if I understood correctly, if it's in mainline then
-> there's no need to reference it via link? Or should I point to some tag
-> instead, e.g.:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/i2c/busses/i2c-bcm-kona.c?h=v6.3#n731
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-Yes, this would be better but I propose still to drop the link entirely.
-If you know the commit SHA which introduced this, mention it.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Best regards,
-Krzysztof
+-- 
+With best wishes
+Dmitry
 
