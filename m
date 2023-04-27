@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2988D6F0C12
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DB56F0C14
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244588AbjD0SmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
+        id S244596AbjD0Smv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243639AbjD0SmO (ORCPT
+        with ESMTP id S243639AbjD0Smr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:42:14 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C02C10C6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:42:13 -0700 (PDT)
-Received: from [127.0.0.1] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 33RIe6OM375051
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 27 Apr 2023 11:40:07 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 33RIe6OM375051
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023040901; t=1682620809;
-        bh=rYnD7pkCIgEpxgiuVJ8/9sz/T5OnJ8VmHi4qScJQMRM=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=hLU1Quyo2y9woh85OWcLX8Y/ZVhLXw4dueIS4kqyVT30n8nzyx1IKtBn7jwXm5r3I
-         XUWRP6aYpXFqfvGQMRKTEAbBhA5Qi1/7mCCDb2szn7zgtptYBAnfRQXhL1DKcPTLHR
-         7zHOgSLAlgb2O98UAbW4nlormZuVB7635Fas/Z2syNr9o3PjZF/78Jxx8D+BgjNEMw
-         dslA/BA+otZkgWTX2jOcxIzqCqL2/bRPVPdallrO793WSbEIUjJOaXTTpOQTfYFco+
-         BDtaQHdsXG/ITIJQRuU2eLtNYfxOhHfSTcQzBl2Gukm0hG53cpUNAQYyeLqJ9bphGC
-         bZLkYMH75b7fg==
-Date:   Thu, 27 Apr 2023 11:40:02 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-CC:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
-        rppt@kernel.org, akpm@linux-foundation.org, ebiederm@xmission.com,
-        keescook@chromium.org, graf@amazon.com, jason.zeng@intel.com,
-        lei.l.li@intel.com, steven.sistare@oracle.com,
-        fam.zheng@bytedance.com, mgalaxy@akamai.com,
-        kexec@lists.infradead.org
-Subject: Re: [RFC v3 21/21] x86/boot/compressed/64: use 1GB pages for mappings
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1682554137-13938-22-git-send-email-anthony.yznaga@oracle.com>
-References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com> <1682554137-13938-22-git-send-email-anthony.yznaga@oracle.com>
-Message-ID: <70EB1774-A782-47FB-A8EA-534E66A551F6@zytor.com>
+        Thu, 27 Apr 2023 14:42:47 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85032103
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:42:45 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32e74139877so2829955ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 11:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682620965; x=1685212965;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wJCwkrf5r8TPiK35wSY7bI8DqSRmPjjoER5hWO2H+6s=;
+        b=DqgVR8IPVWj9lvO/p2TNEArUnq1yO5NFejZlOVdhX+ao0Hqy5ABUMByGvNVIlS22Qo
+         osfHeZFyepnY9W3RHsCwySw+vxMjk1GEYx0zLFiwtyDQpDRGcWctechvNegEBmraH9Ck
+         OzpYztJeWCEODpkBl5IW7N65u50mUlf4W3Z+rEHNiT20oU/5I1RONWZeY4S1/e7WKLne
+         30vHvV5TdXcPgQCX43p+EgBQ338I8RgGr2QDlh6GbUcpRqaNNiwQNQZyJxu8xOjNhIdr
+         8oxE5Cfg4cyBzVDJFvzyGtsSDUGXZCMWBQyRnmYu4nOJAuDHYnodDRnEQW55f06luc1a
+         Tpyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682620965; x=1685212965;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wJCwkrf5r8TPiK35wSY7bI8DqSRmPjjoER5hWO2H+6s=;
+        b=B1hzSsw7UtcFm7JXPTSbkUvd0EBZ34cImNQ7blUi52tGQo09VEADgdPCb+LJ7YYkYO
+         LcRj4ojh1fbFTh7ut7E1BCdEgQY/t+1Yt33qnn2pvqLpo5Hj+1JXm/MEQADK6HAjFi48
+         4GOnZvguT4NiTrHiZxGeuAwKl9ffuRH6jLABjMLcOhoKhvYckdqRXSmZqDiSRvdtEAXc
+         +Y8HCc8+IO3epjGzwEkZ6yTh3RwbmY5jUPyjEnpSsqpttKs8O+E/PHk9gaxkdb9kIBDw
+         nO29y40GnCNVdxOLDQ7dCPy14Xyxcd4d7rI+8kekRXDWc3YzcVef784QX2iHMgx/dC9E
+         H4KQ==
+X-Gm-Message-State: AC+VfDybt8ITV5feXeANUH05nrxupORtkCG8fozbck2ZfrgAckbceCYm
+        cqHW7+tGd46mwPze+3TPk2IGNsp/EHxTMsAbziA=
+X-Google-Smtp-Source: ACHHUZ4zxeGfPnfv3QOVzrw6mbz3lM/UzfZPvCqhkbRxPCApcS6H+1aigffvASwmtKWo6oK/CxpXsw==
+X-Received: by 2002:a05:6e02:972:b0:32a:eacb:c5d4 with SMTP id q18-20020a056e02097200b0032aeacbc5d4mr1256068ilt.0.1682620965246;
+        Thu, 27 Apr 2023 11:42:45 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id cl5-20020a0566383d0500b0040bb600eb81sm5766664jab.149.2023.04.27.11.42.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 11:42:44 -0700 (PDT)
+Message-ID: <03b13c8f-0f4c-0692-b2f0-e90d7877e327@kernel.dk>
+Date:   Thu, 27 Apr 2023 12:42:43 -0600
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] io_uring/kbuf: Fix size for shared buffer ring
+Content-Language: en-US
+To:     Tudor Cretu <tudor.cretu@arm.com>, io-uring@vger.kernel.org
+Cc:     =axboe@kernel.dk, asml.silence@gmail.com, kevin.brodsky@arm.com,
+        linux-kernel@vger.kernel.org
+References: <20230427143142.3013020-1-tudor.cretu@arm.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230427143142.3013020-1-tudor.cretu@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 26, 2023 5:08:57 PM PDT, Anthony Yznaga <anthony=2Eyznaga@oracle=
-=2Ecom> wrote:
->pkram kaslr code can incur multiple page faults when it walks its
->preserved ranges list called via mem_avoid_overlap()=2E  The multiple
->faults can easily end up using up the small number of pages available
->to be allocated for page table pages=2E
->
->This patch hacks things so that mappings are 1GB which results in the nee=
-d
->for far fewer page table pages=2E  As is this breaks AMD SEV-ES which exp=
-ects
->the mappings to be 2M=2E  This could possibly be fixed by updating split
->code to split 1GB page if the aren't any other issues with using 1GB
->mappings=2E
->
->Signed-off-by: Anthony Yznaga <anthony=2Eyznaga@oracle=2Ecom>
->---
-> arch/x86/boot/compressed/ident_map_64=2Ec | 9 +++++----
-> 1 file changed, 5 insertions(+), 4 deletions(-)
->
->diff --git a/arch/x86/boot/compressed/ident_map_64=2Ec b/arch/x86/boot/co=
-mpressed/ident_map_64=2Ec
->index 321a5011042d=2E=2E1e02cf6dda3c 100644
->--- a/arch/x86/boot/compressed/ident_map_64=2Ec
->+++ b/arch/x86/boot/compressed/ident_map_64=2Ec
->@@ -95,8 +95,8 @@ void kernel_add_identity_map(unsigned long start, unsig=
-ned long end)
-> 	int ret;
->=20
-> 	/* Align boundary to 2M=2E */
->-	start =3D round_down(start, PMD_SIZE);
->-	end =3D round_up(end, PMD_SIZE);
->+	start =3D round_down(start, PUD_SIZE);
->+	end =3D round_up(end, PUD_SIZE);
-> 	if (start >=3D end)
-> 		return;
->=20
->@@ -120,6 +120,7 @@ void initialize_identity_maps(void *rmode)
-> 	mapping_info=2Econtext =3D &pgt_data;
-> 	mapping_info=2Epage_flag =3D __PAGE_KERNEL_LARGE_EXEC | sme_me_mask;
-> 	mapping_info=2Ekernpg_flag =3D _KERNPG_TABLE;
->+	mapping_info=2Edirect_gbpages =3D true;
->=20
-> 	/*
-> 	 * It should be impossible for this not to already be true,
->@@ -365,8 +366,8 @@ void do_boot_page_fault(struct pt_regs *regs, unsigne=
-d long error_code)
->=20
-> 	ghcb_fault =3D sev_es_check_ghcb_fault(address);
->=20
->-	address   &=3D PMD_MASK;
->-	end        =3D address + PMD_SIZE;
->+	address   &=3D PUD_MASK;
->+	end        =3D address + PUD_SIZE;
->=20
-> 	/*
-> 	 * Check for unexpected error codes=2E Unexpected are:
+On 4/27/23 8:31 AM, Tudor Cretu wrote:
+> The size of the ring is the product of ring_entries and the size of
+> struct io_uring_buf. Using struct_size is equivalent to
+>   (ring_entries + 1) * sizeof(struct io_uring_buf)
+> and generates an off-by-one error. Fix it by using size_mul directly.
+> 
+> Signed-off-by: Tudor Cretu <tudor.cretu@arm.com>
+> ---
+>  io_uring/kbuf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+> index 4a6401080c1f..9770757c89a0 100644
+> --- a/io_uring/kbuf.c
+> +++ b/io_uring/kbuf.c
+> @@ -505,7 +505,7 @@ int io_register_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg)
+>  	}
+>  
+>  	pages = io_pin_pages(reg.ring_addr,
+> -			     struct_size(br, bufs, reg.ring_entries),
+> +			     size_mul(sizeof(struct io_uring_buf), reg.ring_entries),
+>  			     &nr_pages);
+>  	if (IS_ERR(pages)) {
+>  		kfree(free_bl);
 
-Strong NAK: 1G pages are not supported by all 64-bit CPUs, *and* by your o=
-wn admission breaks things =2E=2E=2E
+Looking into this again, and some bells ringing in the back of my head,
+we do have:
+
+commit 48ba08374e779421ca34bd14b4834aae19fc3e6a
+Author: Wojciech Lukowicz <wlukowicz01@gmail.com>
+Date:   Sat Feb 18 18:41:41 2023 +0000
+
+    io_uring: fix size calculation when registering buf ring
+
+which should have fixed that issue. What kernel version are you looking at?
+
+-- 
+Jens Axboe
+
+
