@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E606F025F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905026F0274
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242931AbjD0INp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S243061AbjD0IUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbjD0INh (ORCPT
+        with ESMTP id S242701AbjD0IT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:13:37 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E252D79;
-        Thu, 27 Apr 2023 01:13:36 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2febac9cacdso4989293f8f.1;
-        Thu, 27 Apr 2023 01:13:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682583215; x=1685175215;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=W2YdJ16upKTR7fyZcjH5Yz52tSKzgQbMIFH5U7k9qM4=;
-        b=kSTts5ONirlPcLsG3bXihpXCeWHIR1Xzd+Rv6O3764HUcW3eO/Xn4nVfliLtTlBYkU
-         TliokqyisW0v9BeuR7U5GO/jzFsQ/BBtCO1tsfPBInElguvy+mrUelD2TvWbo1XO9MhG
-         L+/Ezz7Zjy6U/BJrKtQ7XHEaGZP3N9PdIchpMKvTtAJ9zREwnBHCRDG9E73Pf66i61Mq
-         DMhXppshDc/VidnhD0CMUqBkdOvUHW7WREg3uf2Q0SafHg+fO9Ojg93qXHImaJjvW1SZ
-         /asPgLvXqPzEjev3qzWNlbb7qnmTUIArP/McUBzg9oEI2jYF6IYZ8O3IlJvp4yawNEVy
-         vMrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682583215; x=1685175215;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W2YdJ16upKTR7fyZcjH5Yz52tSKzgQbMIFH5U7k9qM4=;
-        b=lzthvELC8Knx5oGzNPocN8lcTNHp1iywUO0VUzxJj0+sqMDPsgCORVHZeV5itDz0wv
-         ukH6KNUyB5jYl6jeb23EDmr33yrPpS1A+0FKdPe5N9bKqP/t5fzdyf4YdpFyM6WHXr8y
-         auNEGem5J7e0gCdCnvN/Vbyw6UZhb+ohqwAXyOz/dhf6iHaC/eml+3G67yhPJRpUbkWH
-         ryvH8Mv6CzVkL3tStVX3c82eTDv1ct8zlZPYubPTlrcL3d7XFQtkPFu7eOqkFpnj3JN7
-         l8UAmmkztq2MWDjTMSA4mtcASm5ZVmU7NelTClcts1R6FP/bB5EvjHMStFTitparohDd
-         ABrw==
-X-Gm-Message-State: AC+VfDxJ/Qr0gG9RYXj6XnD0cNTSIjvN/oFzd0+zQygI6VXouNrCoOwC
-        nNc5CK2bWFaZaf+AVgvBEVYg15lMPE1xkomRzh8uEFX6aw==
-X-Google-Smtp-Source: ACHHUZ58CNSZ5iF3CO8HsMCZB+ylZ0Z3HNxrAMDIrzf3j9WXyC5gDT2ffSabtTzc2mfk8VG58xgJXDL+IdfUb0lPOt8=
-X-Received: by 2002:adf:edc2:0:b0:2ff:c0c0:532a with SMTP id
- v2-20020adfedc2000000b002ffc0c0532amr592937wro.25.1682583214884; Thu, 27 Apr
- 2023 01:13:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZEf0RYdD5jhE9JEk@nixie71> <20230425164903.610455-1-tomas.mudrunka@gmail.com>
- <ZEnErxfnSn2JOpvm@nixie71>
-In-Reply-To: <ZEnErxfnSn2JOpvm@nixie71>
-From:   =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
-Date:   Thu, 27 Apr 2023 10:13:22 +0200
-Message-ID: <CAH2-hcLOA0ECg7ubKh_r9BryRuGPjJ1Cv1ErUpMmQ+Yag5qnWA@mail.gmail.com>
-Subject: Re: [PATCH v2] Fix freeze in lm8333 i2c keyboard driver
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 04:19:57 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2EF3A9A;
+        Thu, 27 Apr 2023 01:19:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Vh6aTWS_1682583590;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Vh6aTWS_1682583590)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Apr 2023 16:19:51 +0800
+Message-ID: <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
+Date:   Thu, 27 Apr 2023 16:13:45 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jasowang@redhat.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
+ <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
+ <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
+ <1682579624.5395834-1-xuanzhuo@linux.alibaba.com>
+ <20230427041206-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230427041206-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, thanks for your notes.
-
-> This is the right idea. I am sort of splitting hairs here, however I
-> think it makes sense to place this read before the IRQ is requested
-> and not after.
+On Thu, 27 Apr 2023 04:12:44 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
+> On Thu, Apr 27, 2023 at 03:13:44PM +0800, Xuan Zhuo wrote:
+> > On Thu, 27 Apr 2023 15:02:26 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
+> > >
+> > >
+> > > On 4/27/23 2:20 PM, Xuan Zhuo wrote:
+> > > > On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
+> > > >> For multi-queue and large rx-ring-size use case, the following error
+> > > >
+> > > > Cound you give we one number for example?
+> > >
+> > > 128 queues and 16K queue_size is typical.
+> > >
+> > > >
+> > > >> occurred when free_unused_bufs:
+> > > >> rcu: INFO: rcu_sched self-detected stall on CPU.
+> > > >>
+> > > >> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+> > > >> ---
+> > > >>   drivers/net/virtio_net.c | 1 +
+> > > >>   1 file changed, 1 insertion(+)
+> > > >>
+> > > >> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> > > >> index ea1bd4bb326d..21d8382fd2c7 100644
+> > > >> --- a/drivers/net/virtio_net.c
+> > > >> +++ b/drivers/net/virtio_net.c
+> > > >> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
+> > > >>   		struct virtqueue *vq = vi->rq[i].vq;
+> > > >>   		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+> > > >>   			virtnet_rq_free_unused_buf(vq, buf);
+> > > >> +		schedule();
+> > > >
+> > > > Just for rq?
+> > > >
+> > > > Do we need to do the same thing for sq?
+> > > Rq buffers are pre-allocated, take seconds to free rq unused buffers.
+> > >
+> > > Sq unused buffers are much less, so do the same for sq is optional.
+> >
+> > I got.
+> >
+> > I think we should look for a way, compatible with the less queues or the smaller
+> > rings. Calling schedule() directly may be not a good way.
+> >
+> > Thanks.
 >
+> Why isn't it a good way?
+
+For the small ring, I don't think it is a good way, maybe we only deal with one
+buf, then call schedule().
+
+We can call the schedule() after processing a certain number of buffers,
+or check need_resched () first.
+
+Thanks.
+
+
+
 >
-> As written, there is room for an ever-so-tiny race condition wherein
-> the IRQ is asserted just after it is requested. Before the threaded
-> handler has run however, the new read in probe swallows the IRQ status
-> before the threaded handler can read it and react to errors.
-
-In fact i believe quite the opposite case to be true.
-If i read before registering IRQ there will be ever-so-tiny race condition that
-would allow to miss the edge (exactly the bug this patch is fixing,
-but limited).
-
-In the case you describe the worst scenario is likely that the interrupt handler
-will be called only to re-read status and immediately return on this condition:
-
-if (!status) return IRQ_NONE;
-
-> Also, I think you should at least capture and evaluate lm8333_read8()'s
-> return value as is already done for the calls to lm8333_write8().
-
-Well. If you think this will bring any benefits, i might as well just call
-lm8333_irq_thread() instead of lm8333_read8()
-Would that be acceptable solution?
-
-Tom.
+> >
+> > >
+> > > >
+> > > > Thanks.
+> > > >
+> > > >
+> > > >>   	}
+> > > >>   }
+> > > >>
+> > > >> --
+> > > >> 2.20.1
+> > > >>
+>
