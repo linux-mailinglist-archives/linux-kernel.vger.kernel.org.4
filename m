@@ -2,109 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BC06F0A72
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375B46F0A74
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244256AbjD0RCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S243834AbjD0RCv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 13:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243965AbjD0RCT (ORCPT
+        with ESMTP id S244070AbjD0RCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:02:19 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5608619B4;
-        Thu, 27 Apr 2023 10:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=zypDSDQGjqOR/FlsseRpY/ND9Ad0YBH9OoP0qBm0Myo=; b=QBV+c3q+txlofLC38SEyM6DGjo
-        fgdhNXdlrM6jbKA7UiS1CCjkz9hRePkAZYj8gJeE5rr+XWV5fnrdjtQl89ZyS2M4f+Ns2qeDsjOWu
-        DQ9QA0nFZvqbT8o9/PsALZb4tkcT6evTvH3Nux4zLrs+FR1XF2cqytdBTSdj0cMLOMFN8t8/7DyD5
-        N5DDxwqE9Ur4mgBp0P9UBupkJQohFPTzUkCAnuzMEjrhX0rh/WEWz8DE/e+F1MwpEo8SF4sgjAjf0
-        SqQsF/a9J+lI+NUQ7nmYpYeID+Catr3ql2fnu2JQYG4Wvl3srqZc/xRZtlk7BYywaUrZjud+staXz
-        dfbjUdOg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1ps50Z-00DDpV-29;
-        Thu, 27 Apr 2023 17:02:15 +0000
-Date:   Thu, 27 Apr 2023 18:02:15 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pidfd updates
-Message-ID: <20230427170215.GC3390869@ZenIV>
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
- <20230425060427.GP3390869@ZenIV>
- <20230425-sturheit-jungautor-97d92d7861e2@brauner>
- <20230427010715.GX3390869@ZenIV>
- <20230427073908.GA3390869@ZenIV>
- <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
+        Thu, 27 Apr 2023 13:02:49 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B11A26BE;
+        Thu, 27 Apr 2023 10:02:48 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso250929566b.0;
+        Thu, 27 Apr 2023 10:02:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682614967; x=1685206967;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BGZN0OIlJZEcU3Y6FEqZUH0KBPvZDL+wwAagUBR8bvo=;
+        b=iw0GTrbTlW1B51OhgEuXs31lv7yQNan8kwkEhOld8yDDf9xhEflygjTsE9myZN894Z
+         LWsT1bIM2axdcbuJZnf9sbHXAXwxpudjgm5y7toRxIiNQqf9y83Ym9yB98ZQy2xhUHSE
+         o9Ockk+ClQb5C5aECfoP8YpeF1k/xwbH9Zv5uP9NTdJf6kuV0ykVeH73h57RwUZAvLE1
+         fkS8UfetrZ9wtmqj5Zuh/hezeXSOCt038A+1om1Ld3wiVBD5DO60PhyUaByvIFVmQppt
+         X7IXdEO+faThpkapmp2oesveAVxJaw6N5gbuOq6stg0j5i5HH9IZWZU6bETIqaNFATn9
+         EiJg==
+X-Gm-Message-State: AC+VfDyEnp5/n178loZG4/bZJny+ccjLCRPA/VTiBADDzOuxKPCkB3RI
+        6IOD47od2dNrr7hJ481/LyOPUN3w0lazr3HHVcM=
+X-Google-Smtp-Source: ACHHUZ7WDT1wItUrvDHB7jxZ8M9bA71N73B3eFcrzz8iAvJSFRJ5fRGMt24Cwa13zrFoLDHo+dsZehN5rOqa3HjFjzA=
+X-Received: by 2002:a17:906:6483:b0:94f:4122:28f5 with SMTP id
+ e3-20020a170906648300b0094f412228f5mr2336502ejm.2.1682614966651; Thu, 27 Apr
+ 2023 10:02:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whHbXMF142EGVu4=8bi8=JdexBL--d5FK4gx=x+SUgyaQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1681443714.git.yu.c.chen@intel.com>
+In-Reply-To: <cover.1681443714.git.yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Apr 2023 19:02:35 +0200
+Message-ID: <CAJZ5v0hdmL=pM7QPcox3+m9CBs9SA_sMf+HFbo11W4ho_+vHCw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Fix test_resume failure by openning swap device non-exclusively
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Yifan Li <yifan2.li@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 08:21:34AM -0700, Linus Torvalds wrote:
-> On Thu, Apr 27, 2023 at 12:39 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > int delayed_dup(struct file *file, unsigned flags)
-> 
-> Ok, this is strange. Let me think about it.
-> 
-> But even without thinking about it, this part I hate:
-> 
-> >         struct delayed_dup *p = kmalloc(sizeof(struct delayed_dup), GFP_KERNEL);
-> 
-> Sure, if this is only used in unimportant code where performance
-> doesn't matter, doing a kmalloc is fine.
-> 
-> But if that is the only use, I think this is too subtle an interface.
+On Fri, Apr 14, 2023 at 6:14 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> test_resume does not work in current kernel when using swapfile for hibernation.
+> This is because the swap device should be openned non-exclusively in test_resume mode.
+>
+> Patch 1 is a preparation to turn snapshot_test into a global variable.
+> Patch 2 is the fix to open swap device non-exclusively only for test_resume mode.
+>
+> Change since v2:
+> Adjust the initialization of fmode and refine the commit message
+> per Rafael's suggestion.
+>
+> Change since v1:
+> Turn snapshot_test into global variable and do not introduce parameters for swsusp_check()
+> nor load_image_and_restore().
+>
+> Chen Yu (2):
+>   PM: hibernate: Turn snapshot_test into global variable
+>   PM: hibernate: Do not get block device exclusively in test_resume mode
+>
+>  kernel/power/hibernate.c | 15 ++++++++++++---
+>  kernel/power/power.h     |  1 +
+>  kernel/power/swap.c      |  8 ++++++--
+>  3 files changed, 19 insertions(+), 5 deletions(-)
+>
+> --
 
-Still hadn't finished with the zoo...
-
-> Could we instead limit it to "we only have one pending delayed dup",
-> and make this all be more like the restart-block thing, and be part of
-> struct task_struct?
-
-Interesting...  FWIW, *anything* that wants several descriptors has
-special needs - there are some places like that (binder, for one)
-and they have rather weird code implementing those.
-
-Just to restate the obvious: this is not applicable for the most frequent
-caller - open(2).  For the reasons that have nothing to do with performance.
-If opening the file has hard-to-reverse side effects (like directory
-modification due to O_CREAT), the things are very different.
-
-What I hope for is a small number of patterns, with clear rules for
-choosing the one that is applicable and helpers for each that would
-reduce the amount of headache when using it.  And I've no problem
-with "this particular pattern is not usable if you are adding more
-than one descriptor" - that's not hard to understand and verify.
-So I'm fine with doing that for one descriptor only and getting
-rid of the allocation.
-
-BTW, another pattern is the same sans the "delayed" part.  I.e.
-"here's an opened file, get a descriptor and either attach the
-file to it or fput() the damn thing; in any case, file reference
-is consumed and descriptor-or-error is returned".  That one is
-definitely only for single descriptor case.
-
-In any case, I want to finish the survey of the callers first, just to
-see what's there and whether anything is worth nicking.
-
-While we are at it, I want to make close_fd() use a very big red flag.
-To the point of grepping for new callers in -next and asking the folks
-who introduce those to explain WTF they are doing...
+Both applied as 6.4-rc material, thanks!
