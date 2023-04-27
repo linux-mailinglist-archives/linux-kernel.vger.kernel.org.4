@@ -2,425 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591676F09A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D660C6F09AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244030AbjD0QQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S243206AbjD0QRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjD0QQh (ORCPT
+        with ESMTP id S243188AbjD0QRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:16:37 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280D3585;
-        Thu, 27 Apr 2023 09:16:35 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6a5f7d10dd5so6420772a34.0;
-        Thu, 27 Apr 2023 09:16:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682612195; x=1685204195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YpGI/IPMzlJSZJEMXDYjGQoB78K5TigUGVeI8dSNGfE=;
-        b=ZfIlHYs9z2GNmrYirEd3hiGEdE/TAHdz9q5gO5NGzMSLUeUg4f80rUwCXaGX6spVmQ
-         zCKQtMu9VAE4ISDwjXhOZACFFTNVo+WbOCXwixm3Evoja5RZYOBN+bdkA5OLJnV+vVck
-         WRpbyKTyclGBAt/A7CgPgPOcVGaoAqRq5fo7GqM28zwiik6fZu6ETbsJx3tidePIVGck
-         gwqT+fr9VQ3n4reBoV6iAcuJNA1IpgYXnY67ZbasV/didXLhB+ByGYtsheo+PHoXzKz/
-         4g3QPHO8VFJVT/dikNo0ZQMhx4YDGnDM1Z7xBqgRwxnrfe+uk9qpm9DSJNdSUDmcbuQd
-         MOLg==
-X-Gm-Message-State: AC+VfDxbdkj+EgG/VMzOVbu4ON7izCzZCmR+ffif28xA6KztSHVIeRwe
-        SJvlXTIFqk2YetLy8FmFhw==
-X-Google-Smtp-Source: ACHHUZ5p4dmgEhC6CibBNs/xrzmnRqO5GgJt8tdZzPzR40ZXII5zIwDeSsUyT/gDhpnKcDGNhHWiqg==
-X-Received: by 2002:a05:6830:13d7:b0:68b:cdc3:78d7 with SMTP id e23-20020a05683013d700b0068bcdc378d7mr1034013otq.8.1682612194993;
-        Thu, 27 Apr 2023 09:16:34 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y20-20020a0568301d9400b006a643a2eeb5sm6299001oti.15.2023.04.27.09.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:16:34 -0700 (PDT)
-Received: (nullmailer pid 3118384 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:16:33 -0000
-Date:   Thu, 27 Apr 2023 11:16:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: MFD: Convert STMPE to YAML schema
-Message-ID: <20230427161633.GA3112472-robh@kernel.org>
-References: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
- <20230426-stmpe-dt-bindings-v2-2-2f85a1fffcda@linaro.org>
+        Thu, 27 Apr 2023 12:17:44 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C0CE78;
+        Thu, 27 Apr 2023 09:17:42 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RG2Z7h020499;
+        Thu, 27 Apr 2023 16:17:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=ic+ZivNPG+tZj40FmSaG+MaMh6TbOqrGb38TLThNvJU=;
+ b=mSiwimchq2M3BxiGeHGnG6P/SWh1XxY+QnrSBO59kpJvJAeay1r0v8TfJR8uYkgrvexE
+ t8pA+VqoQ3T8nqtmLs0V6bNIkZfT5gxCT/9uGmqQTOyxs8bn5gJ+erzOe35GxLEnysyF
+ V0IbPCMFkqgAbFA9d+b1WKsC6NBux9oWLcPNn2NKYpUN8UjfbKTjI1/7Xlef1bx1TrqH
+ HCd46MeKC6QiIaCZR84M4mgTNjyAxd4rKJwFKwWMHdOHAu14g3SVQwnzveylrDofOkuh
+ D5nuIciKsw2aWYBCftS6oyJyNsCn0/dByvH3DUUXgjUYZ+fznk0ilsy7RQQ63e6IpCJw EA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7sy6nycn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 16:17:01 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33RFl9e2019857;
+        Thu, 27 Apr 2023 16:17:00 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7sy6nybv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 16:16:59 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33RDKT8R024984;
+        Thu, 27 Apr 2023 16:16:58 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3q4778k84r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 16:16:58 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33RGGvfw13304462
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Apr 2023 16:16:58 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D516B58061;
+        Thu, 27 Apr 2023 16:16:57 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3D09558057;
+        Thu, 27 Apr 2023 16:16:53 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.118.80])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Apr 2023 16:16:53 +0000 (GMT)
+Message-ID: <8f212b0dfa9eb00ccc7acc5bf1483c9615277590.camel@linux.ibm.com>
+Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
+ model
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Christopherson, , Sean" <seanjc@google.com>
+Cc:     Carlos Bilbao <carlos.bilbao@amd.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "kraxel@redhat.com" <kraxel@redhat.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
+        "michael.day@amd.com" <michael.day@amd.com>,
+        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
+        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
+        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
+        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "dinechin@redhat.com" <dinechin@redhat.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "berrange@redhat.com" <berrange@redhat.com>,
+        "mst@redhat.com" <mst@redhat.com>, "tytso@mit.edu" <tytso@mit.edu>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
+        "lukas@wunner.de" <lukas@wunner.de>,
+        "cdupontd@redhat.com" <cdupontd@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "sameo@rivosinc.com" <sameo@rivosinc.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "security@kernel.org" <security@kernel.org>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Rajnesh Kanwal <rkanwal@rivosinc.com>,
+        Dylan Reid <dylan@rivosinc.com>,
+        Ravi Sahita <ravi@rivosinc.com>
+Date:   Thu, 27 Apr 2023 12:16:52 -0400
+In-Reply-To: <DM8PR11MB57502E1C09CDE4842B7F9B30E76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
+References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
+         <ZEfrjtgGgm1lpadq@google.com>
+         <DM8PR11MB575046B6DAA17B41FFED8080E7659@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <7502e1af0615c08167076ff452fc69ebf316c730.camel@linux.ibm.com>
+         <ZElOfzn37kmesy7e@google.com>
+         <DM8PR11MB57509EBCB1E2146C1768A6EEE76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <efda0be02fb0b5bf23aec11b5398d20908a821ba.camel@linux.ibm.com>
+         <DM8PR11MB57502E1C09CDE4842B7F9B30E76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426-stmpe-dt-bindings-v2-2-2f85a1fffcda@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TO8gpNyfbwe4TNdez_mHuVKkUdg0alp_
+X-Proofpoint-ORIG-GUID: TwBNvB-O2QwszmZ6GCQ-CFtxAUIsoChl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270140
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 01:21:39PM +0200, Linus Walleij wrote:
-> This converts the STMPE MFD device tree bindings to the YAML
-> schema.
+On Thu, 2023-04-27 at 15:47 +0000, Reshetova, Elena wrote:
+> > On Thu, 2023-04-27 at 12:43 +0000, Reshetova, Elena wrote:
+> > > 
+> > > > On Wed, Apr 26, 2023, James Bottomley wrote:
+> > > > > On Wed, 2023-04-26 at 13:32 +0000, Reshetova, Elena wrote:
+> > [...]
+> > > > > > the practical deployment can differ of course. We can
+> > > > > > rephrase that it "allows to exclude all the CSP's
+> > > > > > infrastructure and SW out of tenant's TCB."
+> > > > > 
+> > > > > That's getting even more inaccurate.  To run  in a Cloud with
+> > > > > CoCo you usually have to insert some provided code, like OVMF
+> > > > > and, for AMD, the SVSM.  These are often customized by the
+> > > > > CSP to suit the cloud infrastructure, so you're running their
+> > > > > code.  The goal, I think, is to make sure you only run code
+> > > > > you trust (some of which may come from the CSP) in your TCB,
+> > > > > which is very different from the statement above.
+> > > > 
+> > > > Yes.  And taking things a step further, if we were to ask
+> > > > security concious users what they would choose to have in their
+> > > > TCB: (a) closed-source firmware written by a hardware vendor,
+> > > > or (b) open-source software that is provided by CSPs, I am
+> > > > betting the overwhelming majority would choose (b).
+> > > 
+> > > As I already replied in my earlier message from yesterday, yes,
+> > > this is the choice that anyone has and it is free to make this
+> > > choice.  No questions asked. (Btw, please note that the above
+> > > statement is not 100% accurate since the source code for intel
+> > > TDX module is at least public). However, if as you said the
+> > > majority choose (b), why do they need to enable the Confidential
+> > > cloud computing technologies like TDX or SEV-SNP? If they choose
+> > > (b), then the whole threat model described in this document do
+> > > not simply apply to them and they can forget about anything that
+> > > we try to describe here.
+> > 
+> > I think the problem is that the tenor of the document is that the
+> > CSP should be seen as the enemy of the tenant. 
 > 
-> Reference the existing schema for the ADC, just define the
-> other subnode schemas directly in the MFD schema.
+> We didn’t intend this interpretation and it can be certainly be fixed
+> if  people see it this way. 
 > 
-> Add two examples so we have examples covering both the simple
-> GPIO expander and the more complex with ADC and touchscreen.
+> Whereas all CSP's want to be
+> > seen as the partner of the tenant (admittedly so they can upsell
+> > services). In particular, even if you adopt (b) there are several
+> > reasons why you'd use confidential computing:
+> > 
+> >    1. Protection from other tenants who break containment in the
+> > cloud. These tenants could exfiltrate data from Non-CoCo VMs, but
+> > likely would be detected before they had time to launch an attack
+> > using  vulnerabilities in the current linux device drivers.
 > 
-> Some in-tree users do not follow the naming conventions for nodes
-> so these DTS files need to be augmented to use proper node names
-> like "adc", "pwm", "gpio", "keyboard-controller" etc before the
-> bindings take effect on them.
+> Not sure how this "likely to be detected" is going to happen in
+> practice. 
+
+How do you arrive at that conclusion?  Detecting malicious tenant
+behaviour is bread and butter for clouds ... especially as a nasty
+cloud break out is a potentially business destroying event.
+
+> If you have a known vulnerability against a CoCo VM (let say in a
+> device driver interface it exposes), is it so much more difficult for
+> an attacker to break into CoCo VM vs non-CoCo VM before it is
+> detected? 
+
+It's a question of practicality.  Given that a tenant has broken
+containment and potentially escalated to root, what, in addition, would
+they have to do to exfiltrate data from a CoCo VM.  The more they have
+to do to launch the attack, the greater the chance of their being
+detected.
+
+> >    2. Legal data security.  There's a lot of value in a CSP being
+> > able to make the legal statement that it does not have access to a
+> > customer data because of CoCo.
 > 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - Split off the GPIO bindings to their own schema, as the old
->   bindings didn't even have any GPIO bindings. Put the GPIO
->   schema before this schema so we can use GPIO in the examples.
-> - Drop nodename and pattern as STMPE is not a generic name.
-> - Add maxItems to the resets.
-> - Make wakeup-source just :true, as it is a generic property.
-> - Move unevaluatedProperties for subnodes right before properties
->   as requested.
-> - Name devices "port-expander" in the examples.
-> - Use lowercase hex in line init.
-> ---
->  .../devicetree/bindings/input/stmpe-keypad.txt     |  41 ---
->  .../bindings/input/touchscreen/stmpe.txt           | 108 --------
->  .../devicetree/bindings/mfd/st,stmpe.yaml          | 298 +++++++++++++++++++++
->  Documentation/devicetree/bindings/mfd/stmpe.txt    |  42 ---
->  4 files changed, 298 insertions(+), 191 deletions(-)
+> Let's leave legal out of technical discussion, not my area. 
 
-> diff --git a/Documentation/devicetree/bindings/mfd/st,stmpe.yaml b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-> new file mode 100644
-> index 000000000000..dd24ae2d5fb4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/st,stmpe.yaml
-> @@ -0,0 +1,298 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/st,stmpe.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectonics Port Expander (STMPE)
-> +
-> +description: STMicroelectronics Port Expander (STMPE) is a series of slow
-> +  bus controllers for various expanded peripherals such as GPIO, keypad,
-> +  touchscreen, ADC, PWM or rotator. It can contain one or several different
-> +  peripherals connected to SPI or I2C.
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stmpe601
-> +      - st,stmpe801
-> +      - st,stmpe811
-> +      - st,stmpe1600
-> +      - st,stmpe1601
-> +      - st,stmpe2401
-> +      - st,stmpe2403
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  vcc-supply: true
-> +
-> +  vio-supply: true
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  wakeup-source: true
-> +
-> +  st,autosleep-timeout:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 4, 16, 32, 64, 128, 256, 512, 1024 ]
-> +    description: Time idle before going to automatic sleep to save power
-> +
-> +  st,sample-time:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 0, 1, 2, 3, 4, 5, 6 ]
-> +    description: |
-> +      Sample time per iteration
-> +      0 = 36 clock ticks
-> +      1 = 44 clock ticks
-> +      2 = 56 clock ticks
-> +      3 = 64 clock ticks
-> +      4 = 80 clock ticks - recommended
-> +      5 = 96 clock ticks
-> +      6 = 124 clock ticks
-> +
-> +  st,mod-12b:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 0, 1 ]
-> +    description: ADC bit mode 0 = 10bit ADC, 1 = 12bit ADC
-> +
-> +  st,ref-sel:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 0, 1 ]
-> +    description: ADC reference source 0 = internal, 1 = external
-> +
-> +  st,adc-freq:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 0, 1, 2, 3 ]
-> +    description: |
-> +      ADC clock speed
-> +      0 = 1.625 MHz
-> +      1 = 3.25 MHz
-> +      2, 3 = 6.5 MHz
-> +
-> +  adc:
-> +    type: object
-> +    $ref: /schemas/iio/adc/st,stmpe-adc.yaml#
-> +
-> +  gpio:
-> +    type: object
-> +    $ref: /schemas/gpio/st,stmpe-gpio.yaml#
-> +
-> +  keyboard-controller:
-> +    type: object
-> +    $ref: /schemas/input/matrix-keymap.yaml#
-> +
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      compatible:
-> +        const: st,stmpe-keypad
-> +
-> +      debounce-interval:
-> +        description: Debouncing interval in milliseconds
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +      st,no-autorepeat:
-> +        description: If present, the keys will not autorepeat when pressed
-> +        $ref: /schemas/types.yaml#/definitions/flag
-> +
-> +      st,scan-count:
-> +        description: Scanning cycles elapsed before key data is updated
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +    required:
-> +      - compatible
-> +      - linux,keymap
-> +
-> +  pwm:
-> +    type: object
-> +    $ref: /schemas/pwm/pwm.yaml#
-> +
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      compatible:
-> +        const: st,stmpe-pwm
+It *is* a technical argument.  This is about compliance and Data
+Sovereignty, which are both services most clouds are interested in
+providing because they're a potentially huge and fast growing market.
 
-You need to define what value #pwm-cells should be.
+> >    3. Insider threats (bribe a CSP admin employee).  This one might
+> > get as far as trying to launch an attack on a CoCo VM, but having 
+> > checks at the CSP to detect and defeat this would work
+> > instead of every insider threat having to be defeated inside the
+> > VM.
+> 
+> Ok, this angle might be valid from CSP point of view, i.e. noticing
+> such insider attacks might be easier I guess with CoCo VMs. 
+> 
+> > 
+> > In all of those cases (which are not exhaustive) you can regard the
+> > CSP as a partner of the tenant when it comes to preventing and
+> > detecting threats to the CoCo VM, so extreme device driver
+> > hardening becomes far less relevant to these fairly considerable
+> > use cases.
+> 
+> I think the first case still holds, as well as one case that you have
+> not listed: a remote attacker attacking CSP stack using some
+> discovered and not yet fixed vulnerability (stack is big, bugs
+> happen), getting control of CSP stack and then going after the CoCo
+> VMs to see what it can get there. 
 
-> +
-> +    required:
-> +      - compatible
-> +      - "#pwm-cells"
+Well, that's not really any different from a containment break.  Most
+cloud security analysis is performed by outside entities who start with
+"an attacker has gained root on your compute platform, what can they
+do?".  So they skip the how and move straight to what is the threat
+potential.
 
-pwm.yaml already requires this.
+> What you are saying is that you (as CSP) maintain the good first
+> level defense to prevent attacker to get control of your/CSP stack to
+> begin with.  What we try to do is the next level of defense (very
+> typical in any security):  we assume that first line of defense has
+> been broken for some reason and now there is a second one placed to
+> actually protect customers end data. 
 
-With those fixed,
+Well, that's where cloud security analyses also start.  However, what
+you've missed is that the cloud detecting the attack and usually
+shutting down the node is a valid response.  Clouds actually invest
+significantly in intrusion detection and remediation systems for this
+reason.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> > > Now from the pure security point of view the choice between (a)
+> > > and (b) is not so easily done imo. Usually we take into account
+> > > many factors that affect the risk/chances that certain piece of
+> > > SW has a higher risk of having vulnerabilities. This includes the
+> > > size of the codebase, its complexity, its attack surface exposure
+> > > towards external interfaces, level of testing, whenever the code
+> > > is public, code dependency chains, etc. Smaller codebase with no
+> > > dependencies and small set of exposed interfaces is usually
+> > > easier to review from security point of view given that the code
+> > > is public.
+> > 
+> > This reads like an argument that, from a security point of view,
+> > smaller proprietary code is better than larger, open source, code.
+> > I really don't think we want to open this can of worms. 
+> 
+> I don’t think I have made this statement: the code *has to be public*
+> for anyone to review and I did explicitly list this in the statement
+> above as "given that the code is public".
 
-> +
-> +  touchscreen:
-> +    type: object
-> +    $ref: /schemas/input/touchscreen/touchscreen.yaml#
-> +
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      compatible:
-> +        const: st,stmpe-ts
-> +
-> +      st,ave-ctrl:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 0, 1, 2, 3 ]
-> +        description: |
-> +          Sample average control
-> +          0 = 1 sample
-> +          1 = 2 samples
-> +          2 = 4 samples
-> +          3 = 8 samples
-> +
-> +      st,touch-det-delay:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +        description: |
-> +          Touch detection delay
-> +          0 = 10 us
-> +          1 = 50 us
-> +          2 = 100 us
-> +          3 = 500 us - recommended
-> +          4 = 1 ms
-> +          5 = 5 ms
-> +          6 = 10 ms
-> +          7 = 50 ms
-> +
-> +      st,settling:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +        description: |
-> +          Panel driver settling time
-> +          0 = 10 us
-> +          1 = 100 us
-> +          2 = 500 us - recommended
-> +          3 = 1 ms
-> +          4 = 5 ms
-> +          5 = 10 ms
-> +          6 = 50 ms
-> +          7 = 100 ms
-> +
-> +      st,fraction-z:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +        description: Length of the fractional part in z, recommended is 7
-> +          (fraction-z ([0..7]) = Count of the fractional part)
-> +
-> +      st,i-drive:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        enum: [ 0, 1 ]
-> +        description: |
-> +          current limit value of the touchscreen drivers
-> +          0 = 20 mA (typical 35 mA max)
-> +          1 = 50 mA (typical 80 mA max)
-> +
-> +    required:
-> +      - compatible
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/input/input.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      port-expander@43 {
-> +        compatible = "st,stmpe2401";
-> +        reg = <0x43>;
-> +        reset-gpios = <&gpio 13 GPIO_ACTIVE_LOW>;
-> +        interrupts = <26 IRQ_TYPE_EDGE_FALLING>;
-> +        interrupt-parent = <&gpio>;
-> +        vcc-supply = <&db8500_vsmps2_reg>;
-> +        vio-supply = <&db8500_vsmps2_reg>;
-> +        wakeup-source;
-> +        st,autosleep-timeout = <1024>;
-> +
-> +        gpio {
-> +          compatible = "st,stmpe-gpio";
-> +          gpio-controller;
-> +          #gpio-cells = <2>;
-> +          interrupt-controller;
-> +          #interrupt-cells = <2>;
-> +          st,norequest-mask = <0xf0f002>;
-> +        };
-> +
-> +        keyboard-controller {
-> +          compatible = "st,stmpe-keypad";
-> +          debounce-interval = <64>;
-> +          st,scan-count = <8>;
-> +          st,no-autorepeat;
-> +          keypad,num-rows = <8>;
-> +          keypad,num-columns = <8>;
-> +          linux,keymap = <
-> +              MATRIX_KEY(0x00, 0x00, KEY_1)
-> +              MATRIX_KEY(0x00, 0x01, KEY_2)
-> +              MATRIX_KEY(0x00, 0x02, KEY_3)
-> +              MATRIX_KEY(0x00, 0x03, KEY_4)
-> +              MATRIX_KEY(0x00, 0x04, KEY_5)
-> +              MATRIX_KEY(0x00, 0x05, KEY_6)
-> +              MATRIX_KEY(0x00, 0x06, KEY_7)
-> +              MATRIX_KEY(0x00, 0x07, KEY_8)
-> +              MATRIX_KEY(0x00, 0x08, KEY_9)
-> +              MATRIX_KEY(0x00, 0x09, KEY_0)
-> +          >;
-> +        };
-> +
-> +        pwm {
-> +          compatible = "st,stmpe-pwm";
-> +          #pwm-cells = <2>;
-> +        };
-> +      };
-> +
-> +      port-expander@41 {
-> +        compatible = "st,stmpe811";
-> +        reg = <0x41>;
-> +        interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
-> +        interrupt-parent = <&gpio>;
-> +        st,adc-freq = <1>;
-> +        st,mod-12b = <1>;
-> +        st,ref-sel = <0>;
-> +        st,sample-time = <4>;
-> +
-> +        adc {
-> +          compatible = "st,stmpe-adc";
-> +          st,norequest-mask = <0x0f>;
-> +          #io-channel-cells = <1>;
-> +        };
-> +
-> +        gpio {
-> +          compatible = "st,stmpe-gpio";
-> +          gpio-controller;
-> +          #gpio-cells = <2>;
-> +          interrupt-controller;
-> +          #interrupt-cells = <2>;
-> +        };
-> +
-> +        pwm {
-> +          compatible = "st,stmpe-pwm";
-> +          #pwm-cells = <2>;
-> +        };
-> +
-> +        touchscreen {
-> +          compatible = "st,stmpe-ts";
-> +          st,ave-ctrl = <3>;
-> +          st,touch-det-delay = <5>;
-> +          st,settling = <3>;
-> +          st,fraction-z = <7>;
-> +          st,i-drive = <1>;
-> +        };
-> +      };
-> +    };
-> +...
+Public but not open source is still a problem.  The federal government
+has walked into several cloud accounts demanding a source code security
+review, which means the code was made public to them but not generally.
+Without all customers or some third party being able to build the code
+and verify it (or ideally supply it ... think something like Red Hat
+built the OVMF code this cloud is using and you can prove it using
+their build signatures) how do you know the source you're given
+corresponds to the binary the signature verifies.
+
+>   Only thing I meant is that it is not not so easy to make a call
+> between (a) and (b) in all cases from a pure security point of view. 
+
+Proper governance is usually listed as a requirement for security. 
+Public but not Open Source usually exists because of governance or
+control issues, which can be cited as a security risk.  After all,
+whoever does this must have some reason for not running an open source
+project in a security critical area.
+
+James
+
