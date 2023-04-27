@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4CC6F0905
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7806F0909
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243751AbjD0QDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S243324AbjD0QDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243734AbjD0QDT (ORCPT
+        with ESMTP id S243614AbjD0QD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:03:19 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0E3585;
-        Thu, 27 Apr 2023 09:03:13 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-38be107e467so2935078b6e.2;
-        Thu, 27 Apr 2023 09:03:13 -0700 (PDT)
+        Thu, 27 Apr 2023 12:03:26 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C67E10EF;
+        Thu, 27 Apr 2023 09:03:23 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-18ef8e9aa00so1595921fac.1;
+        Thu, 27 Apr 2023 09:03:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682611393; x=1685203393;
+        d=1e100.net; s=20221208; t=1682611403; x=1685203403;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PpUDR78eVgfoaENlXo4BrweBkLjcgbvwpsdEBZODQfU=;
-        b=UDGYcrX9b2Sd5UzmPHBcOE5ZpG97/HV160me2bz4YDNRn4uwlePW7TTP5GJlhtFRG/
-         jZPcFAJ5NOfwVbJbSH9nt6YdCPsyv7AaAQ74HYJfgVDj3/f39gYG1U8MpRz8yk87zf3f
-         2rkQ0lajPsFyydbsthGbHobdMBspHGSp6UjCMUtasv1ij/7o5Rs+IPPpBhX/WZEBUQY1
-         XFmF6/tlGEZ57Pc9Gt3ET/5InJb2D5KfFzY/shqkkyq589QdG6POcqUMP0tEZYWxm+23
-         hhQZVIgKj0cHezC4od8O5v6exobSSM2j2P6FHSsgaFNM+pgg7CJrjDunB9bqbfEiTJ/l
-         SGng==
-X-Gm-Message-State: AC+VfDzWzIkntI5+eRG2vdcv6YD++mSc7QVc/xb0wQD/eEbMc6fB0eQ6
-        DOY1rhw22Q1LQpO6Vek2ig==
-X-Google-Smtp-Source: ACHHUZ7uXMKR7Wlwe7Q/gwyCErihpXXjybpweDLlaHz6Jnvmdt9R+Qb1/zEjBssZhiYR2/3YlNZkfw==
-X-Received: by 2002:a05:6808:2a87:b0:38e:4c7:571d with SMTP id fc7-20020a0568082a8700b0038e04c7571dmr881164oib.50.1682611392688;
-        Thu, 27 Apr 2023 09:03:12 -0700 (PDT)
+        bh=Pr1y9U6JqcjF7tgxauaZ4W4lRJfAulLF5+mGXID0LPk=;
+        b=BEqtMBFXGTyDMab6QiwW4ZgUckaB5zBgwNhzty3Z2n4fElersKI4CqGgCGq5rJoIBI
+         oSFsSwST6rgPOh9GVy2xOF6F2cpmOypLTJJbAdt7DuLQAKe6ftcuD3UPdRt0ZzKv7vnd
+         WeoUGqeb3cB1wh/xFGzv2lIHOHZ4PkgTzJWc0Xv+GAKkFqtwkA35Trjc4GLXfyi20K+k
+         zwFKUYse0llpepoYbTZzJIMHJ9HQ/gOatezbtEO+XsIkrTfSYFrWbJgTuAtH6PipMvF1
+         eNy0AVXLxVinGYyCzrmVW2Vy9g74dJBwEn4RRwAdEscmiEVebb2D0igsR1D6EfVEnJmi
+         XbDA==
+X-Gm-Message-State: AC+VfDxovbZN7W11wrTYPNRHal9b/5lPoKySGu4twtnpq1Ey2FPB5IeX
+        T1idsLYziKhrk1fkPLtJJA==
+X-Google-Smtp-Source: ACHHUZ6rFf24poxiAqmc6FB/PYRptahfgxrPN6FmGKo2Hvr+MIKjFilva6ctFx+7+hhGBXDUE6LApw==
+X-Received: by 2002:a05:6871:4c6:b0:177:b2ab:47d0 with SMTP id n6-20020a05687104c600b00177b2ab47d0mr850569oai.41.1682611402575;
+        Thu, 27 Apr 2023 09:03:22 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s185-20020acadbc2000000b00389898f4c4fsm7861059oig.45.2023.04.27.09.03.11
+        by smtp.gmail.com with ESMTPSA id ea37-20020a056870072500b00177be9585desm7896480oab.1.2023.04.27.09.03.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:03:12 -0700 (PDT)
-Received: (nullmailer pid 3103243 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:03:11 -0000
-Date:   Thu, 27 Apr 2023 11:03:11 -0500
+        Thu, 27 Apr 2023 09:03:22 -0700 (PDT)
+Received: (nullmailer pid 3104041 invoked by uid 1000);
+        Thu, 27 Apr 2023 16:03:20 -0000
+Date:   Thu, 27 Apr 2023 11:03:20 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Chris Paterson <chris.paterson2@renesas.com>
-Cc:     devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] dt-bindings: pinctrl: renesas,rzv2m: Change maintainer
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Subject: Re: [PATCH] dt-bindings: clock: r9a06g032-sysctrl: Change maintainer
  to Fabrizio Castro
-Message-ID: <168261138977.3103147.17710100927203706954.robh@kernel.org>
-References: <20230426100832.11945-1-chris.paterson2@renesas.com>
+Message-ID: <168261139846.3103984.1328887664979311558.robh@kernel.org>
+References: <20230426100925.12063-1-chris.paterson2@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230426100832.11945-1-chris.paterson2@renesas.com>
+In-Reply-To: <20230426100925.12063-1-chris.paterson2@renesas.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -71,12 +72,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 26 Apr 2023 11:08:32 +0100, Chris Paterson wrote:
-> Phil no longer works for Renesas.
+On Wed, 26 Apr 2023 11:09:25 +0100, Chris Paterson wrote:
+> Gareth no longer works for Renesas.
 > 
 > Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
 > ---
->  .../devicetree/bindings/pinctrl/renesas,rzv2m-pinctrl.yaml      | 2 +-
+>  .../devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml    | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
