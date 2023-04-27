@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C496F0AAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD3C6F0AAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244151AbjD0RSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S244122AbjD0RT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243457AbjD0RSi (ORCPT
+        with ESMTP id S243457AbjD0RTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:18:38 -0400
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6447C102
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
-        b=TLJMIi0RX8F2D4MECviwMXYvEcVb0lEsEy3+u8aUlSP8SU8rlCRGlNNmsB/nVOCzgK5pBrkqJQZ1F
-         4Pk0P0hLFN1/gQl0wOoX80yo5LMFFkY8AFk8tIjenbcNtBTjLcrXTVOu35BU0ZgXdWnnSf7qi6nZ3E
-         orNHCnRqwI7LiLkgzVpEQaOMbxTZLeop5dV4q915EpZK5kidlhmu8EBhfMffenaiZSY9k7inpdXkTU
-         Jqtqf/GAdMoncZ0gbyd6bbDaxV/c7d0xakYFi8MhdcA4DCSizJdUq7VgNEnQ2ErW0+f+L1lpNilWl3
-         /TH/k1Te5r34DMQFVMUEym1QgkeLrjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
-        b=G5LZPAqKFgpnZqaJfT/ouJ07IZWuTH9E70Iw4lwAnH6U6PTleuFBBWfBI+H0sNsJGesQJZYrDGZOe
-         rwUJGIwDg==
-X-HalOne-ID: 62b9268b-e51f-11ed-ad1f-231b2edd0ed2
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay5 (Halon) with ESMTPSA
-        id 62b9268b-e51f-11ed-ad1f-231b2edd0ed2;
-        Thu, 27 Apr 2023 17:17:31 +0000 (UTC)
-Date:   Thu, 27 Apr 2023 19:17:29 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
-Message-ID: <20230427171729.GA3899979@ravnborg.org>
-References: <20230426130420.19942-1-tzimmermann@suse.de>
- <20230426192110.GA3791243@ravnborg.org>
- <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
+        Thu, 27 Apr 2023 13:19:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97279102;
+        Thu, 27 Apr 2023 10:19:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC1B63E74;
+        Thu, 27 Apr 2023 17:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820BCC433EF;
+        Thu, 27 Apr 2023 17:19:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682615962;
+        bh=rOTwoERL2Dl5cmarh0a/Ds5UmVgUmPy7ngh1FKGKcFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LoJdG2JSCC1N6zOc+Q1aeqTbhkhB9c8piJOzCDejn62mY/auwRx1htDQxJs66GJW2
+         eOTXBnW9fqvIRounJxNydmBvWqTQm2CTG9ulSOs7tzUJFv6+OItXyXch+9f7pJHer4
+         qmt3/gAgXnAqoSJqf3YyNt7gzzjDlo0Gnmu+Wvc+YQ08VO/cEqSsau55Q9sYgs+OTn
+         FI9Tz+uwWyzMHiZvFlvcXSFkck4ZvC2RFQvsDuwOW6DcquAWtp6OAASn97WON6A7nJ
+         p+GncRN6gN59eKit6goynZcLA2tzbsfCweyg/G7eI7qaluaf1px8qv+CM4nNIPv4oq
+         7Zi/fB60PKcYg==
+Date:   Thu, 27 Apr 2023 18:19:16 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Shengyu Qu <wiagn233@outlook.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andre.przywara@arm.com, conor.dooley@microchip.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 1/3] dt-bindings: mfd: x-powers,axp152: Document the
+ AXP15060 variant
+Message-ID: <20230427171916.GH620451@google.com>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+ <TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Fri, 21 Apr 2023, Shengyu Qu wrote:
 
-On Thu, Apr 27, 2023 at 09:22:47AM +0200, Thomas Zimmermann wrote:
-> Hi Sam
+> The X-Powers AXP15060 is a PMIC seen on Starfive Visionfive 2 board. Add
+> relative compatible item and CPUSLDO support and disables DC-DC
+> frequency setting for it.
 > 
-> Am 26.04.23 um 21:21 schrieb Sam Ravnborg:
-> > Hi Thomas.
-> > 
-> > On Wed, Apr 26, 2023 at 03:04:15PM +0200, Thomas Zimmermann wrote:
-> > > Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
-> > > fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
-> > > depends on the architecture. It's still all located in fbdev's main
-> > > header file <linux/fb.h>. Move all of it into each archtecture's
-> > > <asm/fb.h>, with shared code in <asm-generic/fb.h>.
-> > 
-> > For once I think this cleanup is moving things in the wrong direction.
-> > 
-> > The fb_* helpers predates the generic io.h support and try to
-> > add a generic layer for read read / write operations.
-> > 
-> > The right fix would be to migrate fb_* to use the io helpers
-> > we have today - so we use the existing way to handle the architecture
-> > specific details.
+> ---
+> Changes since v2:
+>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
+>  - Disables DC-DC frequency setting (Andre Przywara)
 > 
-> I looked through the existing versions of the fb_() I/O helpers. They can
-> apparently be implemented with the regular helpers of similar names.
+> Changes since v1:
+>  - Move cpusldo before drivevbus (Krzysztof Kozlowski)
 > 
-> I'm not sure, but even Sparc looks compatible. At least these sbus_
-> functions seem to be equivalent to the __raw_() I/O helpers of similar
-> names.
+> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+> 
+> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-> Do you still have that Sparc emulator?
-I used qemu the last time I played with sparc and saved the instructions
-somewhere how to redo it - but that would use to bohcs driver only I think.
-I have saprc machines, but none of these are easy to get operational.
-We can always ask on sparclinux to get some testing feedback.
+(not sure if I've sent this before or not, but just to make sure):
 
-> 
-> > 
-> >  From a quick look there seems to be some challenges but the current
-> > helpers that re-do part of io.h is not the way forward and hiding them
-> > in arch/include/asm/fb.h seems counter productive.
-> 
-> Which challenges did you see?
-sparc was the main thing - but maybe I did not look close enough.
-And then I tried to map the macros to some of the more highlevel ones
-from io.h, but as Arnd says the __raw* is the way to go here.
+Applied, thanks
 
-	Sam
+-- 
+Lee Jones [李琼斯]
