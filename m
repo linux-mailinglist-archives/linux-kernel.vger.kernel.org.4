@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06516F0EFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB446F0F02
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344510AbjD0Xb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S1344053AbjD0Xcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344444AbjD0XbE (ORCPT
+        with ESMTP id S229508AbjD0Xcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:31:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6194B2D55
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682638217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EVstEm9h+f8vy/mEV9sr+uXiJuKtGJYBIssk81uyPSQ=;
-        b=OIHTp/UyyZBqmXSjR3cLk3i+hamcv44jyxX5XUFSrVVF5uyGw38Kdbz5grrgtiu1PqbKP5
-        ZVgte9bBzxGu6YFIPsjehXaoFwfdb0/yPnWT1DfG+eeDsB5fzlmDsgGTulg34JyynA8sXY
-        iHcy1drSB1m/y3x481ohpWgW7rmPkDY=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-533-tRRrdIqVN5WyV1xZ3wPoyw-1; Thu, 27 Apr 2023 19:30:16 -0400
-X-MC-Unique: tRRrdIqVN5WyV1xZ3wPoyw-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-54f8a3f6b03so142921617b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:30:16 -0700 (PDT)
+        Thu, 27 Apr 2023 19:32:48 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FDE49FC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:32:09 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5052caa1e32so16135634a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682638319; x=1685230319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QF7fY9RgJvsaUiW5+pvB5L5glfDX1/XS+mhzYjwklRY=;
+        b=cqIqvf8vm6hROjWO5JhW02LxQzz3JNYaftG+NiOMADXFEhiuWc3GVCihgYHv1bs0At
+         L70JbEgYb3fGS/cZsKqiq+mmQtVlsoQreErl/PytOztq4uwo/YL2pl4kkYNZn9avYomC
+         G2m60qBgGFepMNEdBtV8oIQWKH0XGvvEIgiqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682638215; x=1685230215;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682638319; x=1685230319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EVstEm9h+f8vy/mEV9sr+uXiJuKtGJYBIssk81uyPSQ=;
-        b=NNABUL0siq7HY7H7aeGKy77yYOyZIki+81UIUYhjU4GU9hS6KlgCPbV7lpyUqjB44d
-         iBoAG8tzqaZDw/fRhk/FsgN193kyVN6iypc4CLT91ILb71rbyCclFHCltG/4HJtCJ64V
-         9YQzoRoZF/FaI3HGRw5G4YFW9/aMttC3p5p3322wur5EjwA1RjGyoCUIrAfVDL7+CxeQ
-         GfbcEDLY6kG/+UoDd7JAYlbAzyRh1qrLtx9nFmpgxMmZVdwJgYifa69AACZUVsej7Wjl
-         UgS/SD1DlqGB47VVyjsTI5+fbslttvfsgoxanhE9o0YCpHYEOcrczITJDFKQORnv/HN0
-         xngQ==
-X-Gm-Message-State: AC+VfDzTThzg0sdvYDNnE3By+OOnvHymvt4fRMg1001QOn068V9+5emj
-        v5APUndozlxbpzwVS2T0eQhbeQteLddSvpY/KoYsjiWHExPXp+TUd/tsc15+p78btatI0wGq0hm
-        yQ9IH7mmet4QckSDs4c++yfcG
-X-Received: by 2002:a0d:d8cf:0:b0:544:5b63:b956 with SMTP id a198-20020a0dd8cf000000b005445b63b956mr2652652ywe.8.1682638215739;
-        Thu, 27 Apr 2023 16:30:15 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4AlF6UPNRzq0q97LZdRYbg5r+sonNynDI2yOTx2L/mRwUr5sNyCxdgQv79FQ8u/uf/zku5iQ==
-X-Received: by 2002:a0d:d8cf:0:b0:544:5b63:b956 with SMTP id a198-20020a0dd8cf000000b005445b63b956mr2652642ywe.8.1682638215497;
-        Thu, 27 Apr 2023 16:30:15 -0700 (PDT)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id k187-20020a816fc4000000b00545a08184b9sm5113278ywc.73.2023.04.27.16.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 16:30:14 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 19:30:12 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/4] Input: pwm-vibra - add newline to dev_err prints
-Message-ID: <ZEsFhOKHs6yGLizc@x1>
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
- <20230427-hammerhead-vibra-v1-2-e87eeb94da51@z3ntu.xyz>
+        bh=QF7fY9RgJvsaUiW5+pvB5L5glfDX1/XS+mhzYjwklRY=;
+        b=cVQYteSaaNp1LHvC6yxUVaiFPm/pzIHpv6zcHl0ipn0Vf624dECh//rzUVND8ffVKl
+         1LH0lEEFWe6Q+Im+7IMMRXRqCh/vgOpSG+n8cBpyplJdmO8kzaQVJsIuryaaxhqovZNH
+         ZW8TUzeUxmtF40fmRMvy0Q4QWR01O9TOC/ZfrRMltjgsNVbe/OIISxBK6Y367U7xgtVY
+         YqxkMAMYKqzHjCiEaoYxdbE0MGXxoUwnuDNoksQ0a2KI26+wz8DN0VAOg+C8K6x3KE3i
+         n4umdFHxCHWB7tMlNodxSKTdpt5bRk9BpTmSQEIYYZbMnSpsoRr4+Fi2QoJnr12p8CRn
+         t3MA==
+X-Gm-Message-State: AC+VfDxYX7z1Zmlh6I2K6yEs0sIFaCqtHOrxgi2BeagAQdj1W/yKyEQh
+        jhfHu01ADpcQtaJd6pdqvlUcu/zRMSzF7OSAIyB8ig==
+X-Google-Smtp-Source: ACHHUZ7PRUN6Cna4Y2DP17SZUts2noySY5MqsZ+5zzRM2+nNpodbyJaRQ9gjJwITyWi+7F6OqNDVJw==
+X-Received: by 2002:aa7:d941:0:b0:504:8c15:a132 with SMTP id l1-20020aa7d941000000b005048c15a132mr2579519eds.7.1682638319137;
+        Thu, 27 Apr 2023 16:31:59 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id d21-20020aa7c1d5000000b005027d31615dsm8277654edp.62.2023.04.27.16.31.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 16:31:58 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5058181d58dso16125519a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:31:57 -0700 (PDT)
+X-Received: by 2002:a17:907:9616:b0:94f:81c:725e with SMTP id
+ gb22-20020a170907961600b0094f081c725emr3578627ejc.59.1682638317464; Thu, 27
+ Apr 2023 16:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427-hammerhead-vibra-v1-2-e87eeb94da51@z3ntu.xyz>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <ZEqEx7C2iuApvrvt@kroah.com>
+In-Reply-To: <ZEqEx7C2iuApvrvt@kroah.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Apr 2023 16:31:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjcvp-JxG2PW7TF6HV2h1xx2_2SMh_HGNZuEpK0CtNTww@mail.gmail.com>
+Message-ID: <CAHk-=wjcvp-JxG2PW7TF6HV2h1xx2_2SMh_HGNZuEpK0CtNTww@mail.gmail.com>
+Subject: Re: [GIT PULL] Driver core updates for 6.4-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Nipun Gupta <nipun.gupta@amd.com>,
+        Nikhil Agarwal <nikhil.agarwal@amd.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:34:27PM +0200, Luca Weiss wrote:
-> Make sure all printed messages end with a newline.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+On Thu, Apr 27, 2023 at 7:21=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> Once again, a busy development cycle, with lots of changes happening in
+> the driver core in the quest to be able to move "struct bus" and "struct
+> class" into read-only memory, a task now complete with these changes.
 
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+Well, this also caused a build failure, and I didn't catch it during
+the merge, because it only happened on arm64.
 
+The reason it only happens on arm64 is that it is in the CDX bus
+driver, and that one has
+
+        depends on OF && ARM64
+
+despite apparently building fine on x86-64 too if you were to just add
+a "|| COMPILE_TEST" to it.
+
+And I did notice this build failure eventually, since I do arm64
+builds on my M2 Macbook Air. But while it's a perfectly cromulent
+laptop, it's not like it's a speed daemon. It takes something like ~75
+minutes for afull allmodconfig build, so certainly not between each
+pull request.
+
+End result: my merge test builds are all done on x86-64, and the arm64
+test builds happen much less regularly (ie: typically a couple of
+times a day).
+
+I did the obvious fixup, but I can only assume (and hope) that this
+was caught by somebody else during the merge window, and that
+
+> All of these have been in linux-next for a while with no reported
+> problems.
+
+was just a lie.
+
+                      Linus
