@@ -2,106 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83E76F0D22
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC826F0D27
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344242AbjD0U3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S1344251AbjD0UaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344204AbjD0U3j (ORCPT
+        with ESMTP id S1344203AbjD0UaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:29:39 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885644236
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:29:38 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id s8FCpJCcq9Qtjs8FCpvUK5; Thu, 27 Apr 2023 22:29:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1682627376;
-        bh=1rsbZtenHmrnqF4Ffk+H2ILDLPPocKXAqSr9a8KsmVQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=YfPbKyrO2pe5kB/c6GCh9r1DveBEBvc6MPrDkGfciG/EuieQ+ED+Kzem0wR5xNxFJ
-         4APp/yRWPBksSycpJWsgCUcMaM372gtwgbWI67LkOrZcqmfprB47wPczQ8e6WkkWSX
-         yZJ70o6I/+MSgSA3pAL9PW7tuVnd3b6/Cs4tyNzkVnVteP5e5ZjmN4P3U7S7cGoWG5
-         pGB4RXCg1u/fmkoaVCfpGM2BDT+A+y1MIyM3W28ehz/bunV2F5/I6/xRmj+wR04aPb
-         PKM6iaYzXPCXBRuUG7aXj88OwZmzeuk4KFckHLyi3UwQ706+0WreLNEHihFPm8h8cp
-         sZXwq7gvpZskQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 27 Apr 2023 22:29:36 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <37c23054-1590-b33d-9299-7d5d6198f8f0@wanadoo.fr>
-Date:   Thu, 27 Apr 2023 22:29:34 +0200
+        Thu, 27 Apr 2023 16:30:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B032137;
+        Thu, 27 Apr 2023 13:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D236563F9B;
+        Thu, 27 Apr 2023 20:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E8E4C433EF;
+        Thu, 27 Apr 2023 20:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682627420;
+        bh=24+VeYb6T1HFq5slOW08jZBYoMoL09riRKeWSl9l4fw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eeueGLik8VI+eJ0ZEr/XqtVsKbAzc8EADDE48BRLYguiMOdXsaSUXMYgeHT0Zy9km
+         T07nmKpZgmQPMTr2emCg1dpWmVQKPXFMpZMpwzIWXYjGKECCBuZuKwF8tMd57Dprf6
+         NftzojSxUchoMYm/pdF3VZ189sntw1rje+Zxngo4JC2IUjMmBa2MFwji8GP0B0FabT
+         IS7FW3sWMrBF+EO6aRWUArAaSjX8lPxTznC+ZFUdltm0cFvO0JHztUzCcoTlN0OisT
+         wZ2rdxsMv4gdUdTGTP5trrOu2zz6pZjxpLo2iMk61ykqLpcLKMnu3vTSfxj+qsxtQi
+         xof7JXbYy+eMQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 08E3CE5FFC8;
+        Thu, 27 Apr 2023 20:30:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] serial: 8250_bcm7271: fix leak in `brcmuart_probe`
-To:     Doug Berger <opendmb@gmail.com>
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        XuDong Liu <m202071377@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20230427181916.2983697-1-opendmb@gmail.com>
- <20230427181916.2983697-3-opendmb@gmail.com>
-Content-Language: fr, en-GB
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230427181916.2983697-3-opendmb@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH bpf-next] xsk: Use pool->dma_pages to check for DMA
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168262742003.5696.300971021135194454.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Apr 2023 20:30:20 +0000
+References: <20230423180157.93559-1-kal.conley@dectris.com>
+In-Reply-To: <20230423180157.93559-1-kal.conley@dectris.com>
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 27/04/2023 à 20:19, Doug Berger a écrit :
-> Smatch reports:
-> drivers/tty/serial/8250/8250_bcm7271.c:1120 brcmuart_probe() warn:
-> 'baud_mux_clk' from clk_prepare_enable() not released on lines: 1032.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Sun, 23 Apr 2023 20:01:56 +0200 you wrote:
+> Compare pool->dma_pages instead of pool->dma_pages_cnt to check for an
+> active DMA mapping. pool->dma_pages needs to be read anyway to access
+> the map so this compiles to more efficient code.
 > 
-> The issue is fixed by using a managed clock.
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
-> Fixes: 41a469482de2 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
-> Reported-by: XuDong Liu <m202071377@hust.edu.cn>
-> Link: https://lore.kernel.org/lkml/20230424125100.4783-1-m202071377@hust.edu.cn/
-> Signed-off-by: Doug Berger <opendmb@gmail.com>
-> ---
->   drivers/tty/serial/8250/8250_bcm7271.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-> index 90ee7bc12f77..af0e1c070187 100644
-> --- a/drivers/tty/serial/8250/8250_bcm7271.c
-> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
-> @@ -1012,7 +1012,7 @@ static int brcmuart_probe(struct platform_device *pdev)
->   	of_property_read_u32(np, "clock-frequency", &clk_rate);
->   
->   	/* See if a Baud clock has been specified */
-> -	baud_mux_clk = of_clk_get_by_name(np, "sw_baud");
-> +	baud_mux_clk = devm_clk_get(dev, "sw_baud");
+> [...]
 
-If switching to devm_clk_get(), maybe devm_clk_get_enabled() could also 
-be an option to fix both issues and avoid adding some LoC.
+Here is the summary with links:
+  - [bpf-next] xsk: Use pool->dma_pages to check for DMA
+    https://git.kernel.org/bpf/bpf-next/c/6ec7be9a2d2b
 
-The order of operation in the remove function would then be different. I 
-don't know if it can be an issue.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Just my 2c.
-
-CJ
-
->   	if (IS_ERR(baud_mux_clk)) {
->   		if (PTR_ERR(baud_mux_clk) == -EPROBE_DEFER) {
->   			ret = -EPROBE_DEFER;
 
