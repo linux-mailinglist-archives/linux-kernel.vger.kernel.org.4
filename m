@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4B66F044E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7956F0470
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243575AbjD0KlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
+        id S243413AbjD0KsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243094AbjD0KlQ (ORCPT
+        with ESMTP id S243448AbjD0KsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:41:16 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DAEFF
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:41:15 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f00d41df22so3050295e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682592074; x=1685184074;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cHhTd4WQ5jW3liGbje3krk/dFm+1ccLit5tZIHiKpw8=;
-        b=X910xCax/ukpQVc/c+0G6R/a9qPGPBxODJ4Ygzoz4IUrPOT92JPtUZZxWDr4J8y156
-         /asqnA+RdWLbsqUgTmzyHPO1IkUi1P36uYi1JwLOP83EoGgPrjgKxgYBx9MVkyza5djc
-         MUU+5yECYifqXyRUEKYygZwHSdXs8aTKRyei1Qbjic6ESLjZA7md0VtFN5E43XwZl1EP
-         9zoX11TrtOwOzHf5L7amr4I4egrJ/pLXD4rsdQBJmqkVvKedxi7lTvVCTD+KpNqLUFxM
-         ZPbjNPbefWZzMZPyFP8/tqLs1mgUNR4Xg27HsJ3HFgSFHutQWfo5uo12H+pooAI7vXII
-         qwBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682592074; x=1685184074;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cHhTd4WQ5jW3liGbje3krk/dFm+1ccLit5tZIHiKpw8=;
-        b=IOz+61F+WZJnEep8rmHR0TxkiW/Pl5wi5X2Ft4fW6AfVLBKGYEim2hDXai343c//Ue
-         vprOoWs4Es2x60duSNk5ixsbWJ1cbMFnsK8xPw/SsvNjHGkMSJhH47Zo8CdMvkhXBLUx
-         avAjYkMUwsQpG+TsIo92n/0xezIJK1dbiUrqk3y6amtXdgJIa794m3Y98SCa1wovcJtx
-         IzjB+c1AguHjlOV9K3PlAOWu4W9nDlOCh0hsHJE7MIGijXB/I88swRzooNHwA3mqDKLJ
-         kInZknnzWN9Il7HXFmjoxB7bPpBH1NBEVDq7gYl5A/asBkrbADl3IScDGMzA8FiJ31E6
-         NqBQ==
-X-Gm-Message-State: AC+VfDz4w63APw+lRVOEhu/hDQwB1bsnP3doouaZqsJ6paEXs14sN95F
-        FJ3D/0ydNduejhoiQxOg2PdFnANywd7ot6bQ6/A=
-X-Google-Smtp-Source: ACHHUZ5n+YDK/JayLtjfLvShgQpAvr74HJWvrzl5Us1xdR0QMWfnJ5YvdCCJkFjcnCzzL9vPXT/2kFOe6NjHv2opq1Q=
-X-Received: by 2002:a05:6512:3e0f:b0:4e8:5c66:e01e with SMTP id
- i15-20020a0565123e0f00b004e85c66e01emr1654737lfv.21.1682592073575; Thu, 27
- Apr 2023 03:41:13 -0700 (PDT)
+        Thu, 27 Apr 2023 06:48:05 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F995256;
+        Thu, 27 Apr 2023 03:48:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682592483; x=1714128483;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DJAw9VNz1ZsUBRAPmSWDnMHm4RxRMWbc9EwxSgNFsyA=;
+  b=2bt6Ah9diZX4DTTTzlc7YnQnFXGyt/6Kf4Na4tefrB6wRUrwmeS+lD22
+   pUguPvIZfIUiOFwM2NQAIIJk+MvqcBCC8Qu6eNBmN8EZvYZKSzZ7p31e8
+   4FYK12JKU4Nfb47LnsDmB3McGUWTVg3ttFZJ1bGpzZlPWAfO8nomqg6cv
+   TXGj3UC83cdFkBVrwk2Dj2rg/viKMJVZCQqHwpHkYOn952D3fD9Ew7Rki
+   jnt9mCAkNsHMB1BJsZ5l9wovueDNJ02mjIecseyEixLvGnRr46dHvZjaI
+   AC41mIFb9Ra9lGPVHpEGfocHiIG/ld92wJw7ybsN+kwVyRoqPShfAwBo+
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
+   d="scan'208";a="211435929"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 03:48:02 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 27 Apr 2023 03:48:01 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 27 Apr 2023 03:47:59 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <palmer@dabbelt.com>
+CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] dt-bindings: riscv: explicitly mention assumption of Zicsr & Zifencei support
+Date:   Thu, 27 Apr 2023 11:43:42 +0100
+Message-ID: <20230427-fence-blurred-c92fb69d4137@wendy>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Received: by 2002:a05:6520:34a:b0:25f:d371:2806 with HTTP; Thu, 27 Apr 2023
- 03:41:13 -0700 (PDT)
-Reply-To: mr.alabbashadi@gmail.com
-From:   MR ABBAS HADI <mrs.annabruun071@gmail.com>
-Date:   Thu, 27 Apr 2023 03:41:13 -0700
-Message-ID: <CAEEmtG4pKjFCKOrq9k=cQX-XVouDWOke2pcfkHOMJMCY+iynKg@mail.gmail.com>
-Subject: WITH ALL DUE RESPECT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:129 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4928]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.annabruun071[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrs.annabruun071[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1731; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=DJAw9VNz1ZsUBRAPmSWDnMHm4RxRMWbc9EwxSgNFsyA=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDClegdfq/j3oPnKMb1NS3+TYBa7qN1tclAtfvXphfWnXyXx2 9/bsjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEykai4jw93ZultuPgqb/fbiv19RZ+ WthEL+JXDOi5AWWcEZrctuc5iR4c6uQ/7qxdpei0/3/YlSq1K7lPTYfsWKuy+bbCS5X3d/YgYA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The dt-binding was defined before the extraction of csr access and
+fence.i into their own extensions, and thus the presence of the I
+base extension implies Zicsr and Zifencei.
+There's no harm in adding them obviously, but for backwards
+compatibility with DTs that existed prior to that extraction, software
+is unable to differentiate between "i" and "i_zicsr_zifencei" without
+any further information.
+
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+CC: Conor Dooley <conor@kernel.org>
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: linux-riscv@lists.infradead.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+index 4c7ce4a37052..a93bc7eae928 100644
+--- a/Documentation/devicetree/bindings/riscv/cpus.yaml
++++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+@@ -85,6 +85,12 @@ properties:
+       User-Level ISA document, available from
+       https://riscv.org/specifications/
+ 
++      Due to revisions of the ISA specification, some deviations
++      have arisen over time.
++      Notably, riscv,isa was defined prior to the creation of the
++      Zicsr and Zifencei extensions and thus "i" implies
++      "zicsr_zifencei".
++
+       While the isa strings in ISA specification are case
+       insensitive, letters in the riscv,isa string must be all
+       lowercase to simplify parsing.
 -- 
-Good Day,
+2.39.2
 
-I am Mr. Abbas Hadi, the manager with BOA i contact you for a deal
-relating to the funds which are in my position I shall furnish
-you with more detail once your response.
-
-Regards,
-Mr. Abbas Hadi
