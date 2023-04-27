@@ -2,323 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E776F089F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49136F08A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244135AbjD0Pq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S244239AbjD0Pra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244105AbjD0Pq6 (ORCPT
+        with ESMTP id S244179AbjD0Pr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:46:58 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD473C16;
-        Thu, 27 Apr 2023 08:46:52 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 0776220084;
-        Thu, 27 Apr 2023 17:46:50 +0200 (CEST)
-Date:   Thu, 27 Apr 2023 17:46:48 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-Subject: Re: [PATCH v2 09/13] drm/msm/dpu: Add SM6375 support
-Message-ID: <rhlkjdphwaqcqgqbac7lue7jwzkjs4iic32jq34qletrcpkss6@hleig3kyot7p>
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-9-5def73f50980@linaro.org>
+        Thu, 27 Apr 2023 11:47:27 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE93C422D;
+        Thu, 27 Apr 2023 08:47:18 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-38e12d973bfso4759015b6e.0;
+        Thu, 27 Apr 2023 08:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682610438; x=1685202438;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c31z0HuMy1qMUEK/A5IDTwlwqb2ZEBzE09RqDF8xAlc=;
+        b=bRuYOu2yWNuTdErOP8Kfzt9oVwcrL9gCwA2b7a33nxY3E599a2ow7kK3XPoVwG3xMJ
+         S0z1uki1ceLS/75TZf5zUh+S7F3sNfyKovrXScSTbBd8B9KtDoejA2e+/zj6whN0ZYNW
+         FkHKi+xDOoAONu9fZlM8T87/tBkjr7OkN8/qhQHy+ILTaedtXqQMafzqqcNcCFZq0C03
+         KDzraktJbNJjVYJUJ5x0XATibonKeXctqLCO54XrGWHv1fsjqMQjAjVXSd7nBgKr5U2i
+         TiGguurBk09La4pXF9ds4pDmbzo8dk7Lzmrxhr5lfVThrJbF8S0MBLcm1Hd4m0z91WvL
+         fYEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682610438; x=1685202438;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c31z0HuMy1qMUEK/A5IDTwlwqb2ZEBzE09RqDF8xAlc=;
+        b=TGssjo6qgMkvTy+DDfE4zmCfIzjfHKKqktH9kP4x7kl3YYQKmo7uO1HSpX2hjE4p8V
+         AyHDSIPnG48X2WDP/H/90XAI99JUzAhrs5TKIFcywC+SR/KCl2QxLjquz0OwRkFCf7tV
+         aTs2d/9TbeWb4v/d6Z59Dtam5JgrH4xYL009yUiiDIRc7FrNpKghXO8wCmU/a+nWkICl
+         u1ixgS1PQnGOPoDCdafNKxi4QDQHyN3ySxTUWU0K3AOJ88RcjA21sNmiHYlq3PtbL6ED
+         cxFHpsLMzF2xtqIU+KaaIVAU/79TF9YxOcjUUCdpkMjd1kgKq6PAquYYHLyxbu8oULdi
+         KTQw==
+X-Gm-Message-State: AC+VfDz1qDk0EtY9mQaI1gufJaB2KWd31EtHuQzh7hcbBNYbT2B3EU6a
+        ypo0b+msU40tS2av8ZMModo=
+X-Google-Smtp-Source: ACHHUZ7N7yM+tN+1iVlFpfDpDsnPokejJx+8yl8WQxMRbJ/xj8XAd5vQGDf+bG5kZHz101V5knVKyQ==
+X-Received: by 2002:a05:6808:d8:b0:38e:8e21:d044 with SMTP id t24-20020a05680800d800b0038e8e21d044mr874831oic.6.1682610438124;
+        Thu, 27 Apr 2023 08:47:18 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:d311:e3b9:f687:8c9f? (2603-8081-140c-1a00-d311-e3b9-f687-8c9f.res6.spectrum.com. [2603:8081:140c:1a00:d311:e3b9:f687:8c9f])
+        by smtp.gmail.com with ESMTPSA id m5-20020a4aab85000000b0053853156b5csm8445014oon.8.2023.04.27.08.47.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 08:47:17 -0700 (PDT)
+Message-ID: <58461c53-ad21-744a-d67a-3a1b9fbc5ae8@gmail.com>
+Date:   Thu, 27 Apr 2023 10:47:16 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v2-9-5def73f50980@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH for-next v4 0/8] On-Demand Paging on SoftRoCE
+To:     "Daisuke Matsuda (Fujitsu)" <matsuda-daisuke@fujitsu.com>,
+        "'Pearson, Robert B'" <robert.pearson2@hpe.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "leonro@nvidia.com" <leonro@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xiao Yang (Fujitsu)" <yangx.jy@fujitsu.com>,
+        "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>
+References: <cover.1681882651.git.matsuda-daisuke@fujitsu.com>
+ <MW4PR84MB23075F0B2E684D7EDE8AD6CCBC629@MW4PR84MB2307.NAMPRD84.PROD.OUTLOOK.COM>
+ <TYCPR01MB84559CC9CB14DC577AD08E60E5639@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+Content-Language: en-US
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <TYCPR01MB84559CC9CB14DC577AD08E60E5639@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 00:31:18, Konrad Dybcio wrote:
-> Add basic SM6375 support to the DPU1 driver to enable display output.
+On 4/19/23 19:28, Daisuke Matsuda (Fujitsu) wrote:
+> On Thu, April 20, 2023 1:07 AM Pearson, Robert B wrote:
+>>
+>> The work queue patch has been submitted and is waiting for some action. -- Bob
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h |   5 -
->  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 152 +++++++++++++++++++++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  14 ++
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
->  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
->  5 files changed, 168 insertions(+), 5 deletions(-)
+> Hi,
+> Could you tell me which is it? I am willing to review it.
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
-> index 687a508cbaa6..d46b43964be6 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
-> @@ -126,11 +126,6 @@ static const struct dpu_vbif_cfg sm6350_vbif[] = {
->  	},
->  };
->  
-> -static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
-> -	{.fl = 0, .lut = 0x0011223344556677 },
-> -	{.fl = 0, .lut = 0x0011223445566777 },
-> -};
-> -
->  static const struct dpu_perf_cfg sm6350_perf_data = {
->  	.max_bw_low = 4200000,
->  	.max_bw_high = 5100000,
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
-> new file mode 100644
-> index 000000000000..19ca0051e072
-> --- /dev/null
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
-> @@ -0,0 +1,152 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
-> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +#ifndef _DPU_6_9_SM6375_H
-> +#define _DPU_6_9_SM6375_H
-> +
-> +static const struct dpu_caps sm6375_dpu_caps = {
-> +	.max_mixer_width = 2048,
-> +	.max_mixer_blendstages = 0x4,
-> +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
-> +	.has_dim_layer = true,
-> +	.has_idle_pc = true,
-> +	.max_linewidth = 2160,
-> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> +};
-> +
-> +static const struct dpu_ubwc_cfg sm6375_ubwc_cfg = {
-> +	.ubwc_version = DPU_HW_UBWC_VER_20,
-> +	.ubwc_swizzle = 6,
-> +	.highest_bank_bit = 1,
-> +};
-> +
-> +static const struct dpu_mdp_cfg sm6375_mdp[] = {
-> +	{
-> +	.name = "top_0", .id = MDP_TOP,
-> +	.base = 0x0, .len = 0x494,
-> +	.features = 0,
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
-> +	},
-> +};
-> +
-> +static const struct dpu_ctl_cfg sm6375_ctl[] = {
-> +	{
-> +	.name = "ctl_0", .id = CTL_0,
-> +	.base = 0x1000, .len = 0x1dc,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
-> +	},
-> +};
-> +
-> +static const struct dpu_sspp_cfg sm6375_sspp[] = {
-> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
-> +		 sm6115_vig_sblk_0, 0, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
-> +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
-> +};
-> +
-> +static const struct dpu_lm_cfg sm6375_lm[] = {
-> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_QCM2290_MASK,
-> +		&sm6375_lm_sblk, PINGPONG_0, 0, DSPP_0),
-
-Same indentation nit here as in SM6350.
-
-> +};
-> +
-> +static const struct dpu_dspp_cfg sm6375_dspp[] = {
-> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
-> +		 &sm8150_dspp_sblk),
-> +};
-> +
-> +static const struct dpu_pingpong_cfg sm6375_pp[] = {
-> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
-> +	       DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> +	       -1),
-> +};
-> +
-> +static const struct dpu_intf_cfg sm6375_intf[] = {
-> +	INTF_BLK("intf_0", INTF_0, 0x00000, 0x2c0, INTF_NONE, 0, 0, 0, 0, 0),
-> +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 24, INTF_SC7280_MASK,
-> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
-> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
-> +			DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
-> +};
-> +
-> +static const struct dpu_vbif_cfg sm6375_vbif[] = {
-> +	{
-> +	.name = "vbif_0", .id = VBIF_RT,
-> +	.base = 0, .len = 0x2008,
-> +	.features = BIT(DPU_VBIF_QOS_REMAP),
-> +	.xin_halt_timeout = 0x4000,
-> +	.qos_rp_remap_size = 0x40,
-> +	.qos_rt_tbl = {
-> +		.npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
-> +		.priority_lvl = sdm845_rt_pri_lvl,
-> +		},
-> +	.qos_nrt_tbl = {
-> +		.npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
-> +		.priority_lvl = sdm845_nrt_pri_lvl,
-> +		},
-> +	.memtype_count = 14,
-> +	.memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
-> +	},
-> +};
-> +
-> +static const struct dpu_perf_cfg sm6375_perf_data = {
-> +	.max_bw_low = 5200000,
-> +	.max_bw_high = 6200000,
-> +	.min_core_ib = 2500000,
-> +	.min_llcc_ib = 0, /* No LLCC on this SoC */
-> +	.min_dram_ib = 1600000,
-> +	.min_prefill_lines = 24,
-> +	/* TODO: confirm danger_lut_tbl */
-> +	.danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
-> +	.qos_lut_tbl = {
-> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
-> +		.entries = sm6350_qos_linear_macrotile
-> +		},
-> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
-> +		.entries = sm6350_qos_linear_macrotile
-> +		},
-> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
-> +		.entries = sc7180_qos_nrt
-> +		},
-> +	},
-> +	.cdp_cfg = {
-> +		{.rd_enable = 1, .wr_enable = 1},
-> +		{.rd_enable = 1, .wr_enable = 0}
-> +	},
-> +	.clk_inefficiency_factor = 105,
-> +	.bw_inefficiency_factor = 120,
-> +};
-> +
-> +const struct dpu_mdss_cfg dpu_sm6375_cfg = {
-> +	.caps = &sm6375_dpu_caps,
-> +	.ubwc = &sm6375_ubwc_cfg,
-> +	.mdp_count = ARRAY_SIZE(sm6375_mdp),
-> +	.mdp = sm6375_mdp,
-> +	.ctl_count = ARRAY_SIZE(sm6375_ctl),
-> +	.ctl = sm6375_ctl,
-> +	.sspp_count = ARRAY_SIZE(sm6375_sspp),
-> +	.sspp = sm6375_sspp,
-> +	.mixer_count = ARRAY_SIZE(sm6375_lm),
-> +	.mixer = sm6375_lm,
-> +	.dspp_count = ARRAY_SIZE(sm6375_dspp),
-> +	.dspp = sm6375_dspp,
-> +	.pingpong_count = ARRAY_SIZE(sm6375_pp),
-> +	.pingpong = sm6375_pp,
-> +	.intf_count = ARRAY_SIZE(sm6375_intf),
-> +	.intf = sm6375_intf,
-> +	.vbif_count = ARRAY_SIZE(sm6375_vbif),
-> +	.vbif = sm6375_vbif,
-> +	.perf = &sm6375_perf_data,
-> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
-> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
-> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> +		     BIT(MDP_INTF0_INTR) | \
-
-INTF0 is set to INTF_NONE, no point in turning on the interrupt for it.
-
-https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-1-27ce1a5ab5c6@somainline.org/
-
-> +		     BIT(MDP_INTF1_INTR)
-
-And you might want to turn on MDP_INTF1_TEAR_INTR (same on SM6350), that
-could explain why INTF TE wasn't working on these SoCs yet.
-
-- Marijn
-
-> +};
-> +
-> +#endif
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 52750b592b36..29516273dd6b 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -440,6 +440,14 @@ static const struct dpu_lm_sub_blks sc7180_lm_sblk = {
->  	},
->  };
->  
-> +static const struct dpu_lm_sub_blks sm6375_lm_sblk = {
-> +	.maxwidth = 2048,
-> +	.maxblendstages = 4, /* excluding base layer */
-> +	.blendstage_base = { /* offsets relative to mixer base */
-> +		0x20, 0x38, 0x50, 0x68
-> +	},
-> +};
-> +
->  /* QCM2290 */
->  
->  static const struct dpu_lm_sub_blks qcm2290_lm_sblk = {
-> @@ -751,6 +759,11 @@ static const struct dpu_qos_lut_entry sc7180_qos_linear[] = {
->  	{.fl = 0, .lut = 0x0011222222335777},
->  };
->  
-> +static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
-> +	{.fl = 0, .lut = 0x0011223344556677 },
-> +	{.fl = 0, .lut = 0x0011223445566777 },
-> +};
-> +
->  static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
->  	{.fl = 0, .lut = 0x0011222222223357 },
->  };
-> @@ -808,6 +821,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
->  #include "catalog/dpu_6_3_sm6115.h"
->  #include "catalog/dpu_6_4_sm6350.h"
->  #include "catalog/dpu_6_5_qcm2290.h"
-> +#include "catalog/dpu_6_9_sm6375.h"
->  
->  #include "catalog/dpu_7_0_sm8350.h"
->  #include "catalog/dpu_7_2_sc7280.h"
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index f9611bd75e02..b4f193037869 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -884,6 +884,7 @@ extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
->  extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
-> +extern const struct dpu_mdss_cfg dpu_sm6375_cfg;
->  extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
->  extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
->  extern const struct dpu_mdss_cfg dpu_sc8280xp_cfg;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 46be7ad8d615..980c3c8f8269 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -1287,6 +1287,7 @@ static const struct of_device_id dpu_dt_match[] = {
->  	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
->  	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
->  	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
-> +	{ .compatible = "qcom,sm6375-dpu", .data = &dpu_sm6375_cfg, },
->  	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
->  	{ .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
->  	{ .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+> This seems to be your latest work queue patch:
+> https://lore.kernel.org/all/TYCPR01MB8455A2D0B3303FD90B3BB6F1E58B9@TYCPR01MB8455.jpnprd01.prod.outlook.com/
+> I cannot find any one newer on the mailing list nor on the Patchwork.
 > 
-> -- 
-> 2.40.0
-> 
+> Daisuke
+
+Daisuke,
+
+Sorry for the delay. I've been on another project for a few days.
+I can't either. After the fix qp counting in task.c the work queue patch is almost trivial.
+I'll send it again.
+
+Bob
