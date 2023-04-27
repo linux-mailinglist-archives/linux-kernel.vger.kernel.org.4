@@ -2,99 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682296F0C4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306D06F0C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:07:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244648AbjD0THd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
+        id S244656AbjD0THl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244646AbjD0THb (ORCPT
+        with ESMTP id S244658AbjD0THi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:07:31 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA772694
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 12:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682622441; x=1714158441;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OgQAqO99SmndNjrWe+916u5vGrg8g9TMY8iNMFotTeY=;
-  b=SwSwA7k0Ee2yhe0yU/NT9bt/1uOAywt5UyavmpqA5QJFgcDKSZqnGfx+
-   4W3s2e0qY7fmkLlc8hfYJ0EAL8IlWwtuEDpNCOeKXZhagA7CTBoH+8a4j
-   GiDr3FY/2UnMXuWTyQYWgCPy06HC3en6dpE6h/1fwywiQQNMyJtFEsdHj
-   PjQJSLY0+0GvD4h46IN3AdDgzPqxb0fdkczfvdJAM2mc5M2eja9m71R8w
-   LiRwDfBlnrhQ/rfS1G+4d0hesmisoP//8JINZztQNIiq0fDr3G1V51xVS
-   CB0yAa80ZTg1vV0bxhNM9Me5xEXloehDAOeXWS2w2fkyamH30D2oVVGAq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="347562924"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="347562924"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:07:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="940777452"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="940777452"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Apr 2023 12:07:20 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/tdx for 6.4 (take 2)
-Date:   Thu, 27 Apr 2023 12:06:53 -0700
-Message-Id: <20230427190653.1076577-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Apr 2023 15:07:38 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274A24488;
+        Thu, 27 Apr 2023 12:07:29 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f315735514so35380385e9.1;
+        Thu, 27 Apr 2023 12:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682622447; x=1685214447;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1DD/i3pbFgHoXQYJbjBQbgWQpfiH0mY/V+lPtAi5i5E=;
+        b=KYfywVJpr98BpGpUIMqxiOWLoVzT8wTs6KkJbyntKqr1amFwN4b1tANgZotb31/3Tr
+         dV1pjRe8tKdaAl6HOWDQ3K+bZo7pMh76x84iLn4BaG7KwdzQFAfOMomj7I0V9G3gA76H
+         8CJYQjapq5+VBAmdu916oOuPUT91BUQAlsLKLVaJnt/vPlm62OaJ+3v/MxmMh07DDnml
+         3SIAiVH5I1m5oYEc8JJMxPZjtE2jLpHMZi1Px2lgsUXW+iv2G7F4qytfXTfdJTXSgEYa
+         YilTrc3ZX4Hv+mzrIdJduqriNZDI2f554NjTYB5tqQNCSXrpx2+uM23KE0KSAt/CEW8L
+         qyFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682622447; x=1685214447;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1DD/i3pbFgHoXQYJbjBQbgWQpfiH0mY/V+lPtAi5i5E=;
+        b=QBHh4DNnA6XrfTEupOLlMwuaFTOYHPIATyJj/zOtO0g0W7PyVybZt7KOAsuUxB60Hz
+         yfu8ULNIUAp9Ulyn/icQE5GSa9JsCQL0QILoUG8UgnINr+G5pDl/fqTZZAQJbsfIOfJ1
+         G9Dq/8TiMz7+fnT+8BoauLZyoDVxBu+1+M6S2RNZU5Wc/bY3zv82mPARMnzn1EvkQAkM
+         q3BDEipdVkIBCBASVQcn88dC+eP0QBeACYds/oSPwvi2vw89kY6swt6rxAHaeqQgmkWw
+         F+9zX+HgyuTDFK+tmDRxEjBRv1+v7rExxflVM1oM0zvTiO3+a6DE0i1erVohsMYVVAlp
+         zVCA==
+X-Gm-Message-State: AC+VfDxxm84rhVIBGcV7VzLR0UoALL97AfU2sNGcXpE+yf9mrffr8uuC
+        gdWreM4BMK1s8jEPMxrnxMzcdDQn0TqCUg==
+X-Google-Smtp-Source: ACHHUZ6YOdz4pEj5ILXL0eZIKrBh1KFvZPGv9RzTwKeNdO3k5tHQ12aCAisCbRh5jM2+tRbYYlKFlw==
+X-Received: by 2002:adf:f5c1:0:b0:2f5:dad1:41a4 with SMTP id k1-20020adff5c1000000b002f5dad141a4mr2302395wrp.6.1682622447461;
+        Thu, 27 Apr 2023 12:07:27 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id d14-20020a5d538e000000b002efac42ff35sm19217573wrv.37.2023.04.27.12.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 12:07:27 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 21:07:25 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: phy: brcm,kona-usb2-phy: convert to YAML
+Message-ID: <20230427190725.GA7730@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Convert Broadcom Kona family USB 2.0 PHY bindings to DT schema.
 
-Please pull a single x86/tdx change for 6.4.
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ .../bindings/phy/brcm,kona-usb2-phy.txt       | 15 --------
+ .../bindings/phy/brcm,kona-usb2-phy.yaml      | 36 +++++++++++++++++++
+ 2 files changed, 36 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.yaml
 
-The original assembly here took two flags in %RSI to tweak its behavior
-at runtime.  PeterZ recently axed one flag.  Kill the other and tweak
-the 'output' mode with an assembly macro instead.  This results in
-elimination of one push/pop pair and overall easier to read assembly.
+diff --git a/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.txt b/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.txt
+deleted file mode 100644
+index 3dc8b3d2ffbb..000000000000
+--- a/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-BROADCOM KONA USB2 PHY
+-
+-Required properties:
+- - compatible: brcm,kona-usb2-phy
+- - reg: offset and length of the PHY registers
+- - #phy-cells: must be 0
+-Refer to phy/phy-bindings.txt for the generic PHY binding properties
+-
+-Example:
+-
+-	usbphy: usb-phy@3f130000 {
+-		compatible = "brcm,kona-usb2-phy";
+-		reg = <0x3f130000 0x28>;
+-		#phy-cells = <0>;
+-	};
+diff --git a/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.yaml
+new file mode 100644
+index 000000000000..d7faeb81f7a7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/brcm,kona-usb2-phy.yaml
+@@ -0,0 +1,36 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/brcm,kona-usb2-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Kona family USB 2.0 PHY
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,kona-usb2-phy
++
++  reg:
++    maxItems: 1
++
++  '#phy-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - '#phy-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    usb-phy@3f130000 {
++        compatible = "brcm,kona-usb2-phy";
++        reg = <0x3f130000 0x28>;
++        #phy-cells = <0>;
++    };
++...
+-- 
+2.25.1
 
-This "take 2" has a proper signed tag in the tip repo instead of an
-unsigned one in my test repo.
-
---
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_tdx_for_6.4
-
-for you to fetch changes up to 7a3a401874bea02f568aa416ac29170d8cde0dc2:
-
-  x86/tdx: Drop flags from __tdx_hypercall() (2023-03-22 11:36:05 -0700)
-
-----------------------------------------------------------------
- *  Do conditional __tdx_hypercall() 'output' processing via an
-    assembly macro argument rather than a runtime register.
-
-----------------------------------------------------------------
-Kirill A. Shutemov (1):
-      x86/tdx: Drop flags from __tdx_hypercall()
-
- arch/x86/boot/compressed/tdx.c    |  4 +--
- arch/x86/coco/tdx/tdcall.S        | 66 ++++++++++++++++++++++-----------------
- arch/x86/coco/tdx/tdx.c           | 18 +++++------
- arch/x86/include/asm/shared/tdx.h |  5 ++-
- 4 files changed, 51 insertions(+), 42 deletions(-)
