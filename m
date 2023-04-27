@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3876F0AD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E643C6F0ADE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244020AbjD0R2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S244261AbjD0Rb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbjD0R2N (ORCPT
+        with ESMTP id S243441AbjD0RbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:28:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC85110
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F64611B4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643E7C433D2;
-        Thu, 27 Apr 2023 17:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682616491;
-        bh=fTIHyMELB7P4mMmUO7vjz/67287/XF7r/7KUpvHIaGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=raRn+1kXDTM/GzlCJKA+5Te3YPVHdgoUeMtH/pxSm2YmAMNMNlSwpODOL46OGiLdc
-         vdLk8IiO24cJnOHdxQwQeHZbmoJHDSTMcfoc2jSFOD/lUI0HtOQMf6tj5TFDfJRddI
-         Jx1o81RQ4CeTKj7FCVOpLNChhVWB0Xg303ciZpt3oMbofaMZbv1AFgovB/fnzA4CzX
-         XJvtNSwNAxQny7MrssylghZSmifwucnOsPWfuEknqaTquot/qLNwRReWFOK39rJ8G9
-         28KvMNuih5oMwx4bzMsc4ex9SaZC348yndTciFdIDEs5wJ6xDXfBK/vPo5OHxwxUzq
-         ENv5cOEu9qVvA==
-Date:   Thu, 27 Apr 2023 18:28:06 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Yangyu Chen <cyy@cyyself.name>
-Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, i@zenithal.me,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, soha@lohu.info,
-        twd2.me@gmail.com
-Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
-Message-ID: <20230427-duplicate-procedure-2eec53856977@spud>
-References: <20230426-porthole-wronged-d5a6a3b89596@spud>
- <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
+        Thu, 27 Apr 2023 13:31:24 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0776A110
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:31:24 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-329572e5abeso133374895ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:31:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682616683; x=1685208683;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jUlb2jQpUPLeatHfobfTWKSKYzA/oDXwJnYhGmKuIMo=;
+        b=f5D51iexpi/Bq4mM1d+d8IORUcTK0ijifEPpNXpkZu+EqDKjLqGhZ+8dLy5/S7TcYz
+         99w8Fke9+G2wVL42sunEky0fy5W9+9LbegP5i5x8n3wasqYpDdampkFgiMQxl7qngRoa
+         JtJBB5/8y/V77DnUqQbw+CX5FkuV+9g/sKd2bvcJlA/Ucb6/0dJJxC25Mjy4A0i4Wp4k
+         ewx0UZXn3Csy5FBybLqHAZ9z9dDGuENNo4fy2IHxbfJCjH4xMlxh+Qyb/38wTUzS3aMu
+         cCU6rAuGgOsKoSzpa7uDoqHyDrV0ZlkrXYW2k1BLMwGos6gpkXznAp6l9ZiEcQ/JNqmf
+         KXmQ==
+X-Gm-Message-State: AC+VfDxK86nFfQb7gLZVXpXB0Yvq1fRysHGmSobPXBfwZfYJBYcOO1pu
+        j9Q1gj+aRldbVn+qsDwbEmFJEGC1O0Qz9+9ZXdDDUE/Dl4wp
+X-Google-Smtp-Source: ACHHUZ406V4aWDyomSLGEJ+Er6RgS0rjyP9CbCoIhylq0ovKgQ8PScAFr1oadne9VH/aIUEzm1B81YXsTDIw+KgyavLgvgA+352O
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VTpKZ7gKyqWX7CfH"
-Content-Disposition: inline
-In-Reply-To: <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:c009:0:b0:328:c3ae:ec08 with SMTP id
+ q9-20020a92c009000000b00328c3aeec08mr1728914ild.1.1682616683390; Thu, 27 Apr
+ 2023 10:31:23 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 10:31:23 -0700
+In-Reply-To: <0000000000003f3d9a05f56fcac5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b4f18805fa54b9f7@google.com>
+Subject: Re: [syzbot] [kernfs?] WARNING: suspicious RCU usage in mas_start
+From:   syzbot <syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com>
+To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+        david@redhat.com, gregkh@linuxfoundation.org,
+        liam.howlett@oracle.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot suspects this issue was fixed by commit:
 
---VTpKZ7gKyqWX7CfH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit 6db504ce55bdbc575723938fc480713c9183f6a2
+Author: Liam R. Howlett <Liam.Howlett@oracle.com>
+Date:   Wed Mar 8 22:03:10 2023 +0000
 
-On Thu, Apr 27, 2023 at 08:47:18PM +0800, Yangyu Chen wrote:
-> Hi, Conor
->=20
-> Thanks for your meaningful reviews. I agree with most of your advice but
-> have a question about the code about checking the first 2 characters are
-> "rv" in `arch/riscv/kernel/cpu.c`.
->=20
-> On Wed, 26 Apr 2023 19:54:39 +0100, Conor Dooley wrote:
-> > > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *n=
-ode, unsigned long *hart)
-> > >  		pr_warn("CPU with hartid=3D%lu has no \"riscv,isa\" property\n", *=
-hart);
-> > >  		return -ENODEV;
-> > >  	}
-> > > -	if (isa[0] !=3D 'r' || isa[1] !=3D 'v') {
-> > > +	if (tolower(isa[0]) !=3D 'r' || tolower(isa[1]) !=3D 'v') {
-> > >  		pr_warn("CPU with hartid=3D%lu has an invalid ISA of \"%s\"\n", *h=
-art, isa);
-> > >  		return -ENODEV;
-> >=20
-> > I don't understand why this is even here in the first place. I'd be
-> > inclined to advocate for it's entire removal. Checking *only* that there
-> > is an "rv" in that string seems pointless to me. If you're on a 64-bit
-> > kernel and the node has riscv,isa =3D "rv32ima" it's gonna say it is ok=
-ay?
-> > Drew what do you think?
->=20
-> I think this code could be a workaround for running rv32 S-Mode on rv64
-> CPU without changing the DT, although the proper way should be to change
-> this field in DT by bootloader or any other software.
->=20
-> I have tested a simple rv64imac CPU core and left the `riscv,isa` string
-> empty in the DT and removed the above 3 lines check from the kernel, and
-> the kernel boots successfully, and using busybox as init is also ok.=20
-> However, if this check exists, the kernel will panic at `setup_smp` due to
-> `BUG_ON(!found_boot_cpu)` in `setup_smp`.
+    mm/ksm: fix race with VMA iteration and mm_struct teardown
 
-The initramfs I have fails to boot because it is build with FP support.
-Out of curiosity, what shows up in /proc/cpuinfo in that case?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1674715fc80000
+start commit:   f3a2439f20d9 Merge tag 'rproc-v6.3' of git://git.kernel.or..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd442ddf29eaca0c
+dashboard link: https://syzkaller.appspot.com/bug?extid=d79e205d463e603f47ff
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12cfaf1cc80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149edbf0c80000
 
-> I am wondering whether this should remove or add a more sufficient
-> validation. Although this function will not be called in ACPI as I
-> reviewed the recent ACPI patches[1], it will not be a problem if I submit
-> this patch for better ACPI support. However, If I just simply remove it
-> from my patch and submit patch v2 directly, the ISA string in ACPI mode
-> with all uppercase letters will be OK. But in DT mode, the kernel behavior
-> will accept the ISA string with all uppercase letters except the first two
-> "rv". Do you think this behavior is different between DT and ACPI can be
-> OK?
+If the result looks correct, please mark the issue as fixed by replying with:
 
-A difference would be fine, if it was that ACPI allowed caps and DT
-didn't. But allowing caps everywhere other than the RV just seems a bit
-silly to me, so I would rather allow the capitalisation of RV.
+#syz fix: mm/ksm: fix race with VMA iteration and mm_struct teardown
 
-> After some investigation, I suggest removing this validation since the
-> validation is useless for a proper DT and the recent ACPI patches[1] do
-> not validate the ISA strings, so we will have the same behavior between
-> DT and ACPI.
-
-I dunno. I'd like to split that function in 2 actually, but I would
-like the ACPI stuff to land before doing so. I think for now, what might
-be best is checking that it has a sufficient strlen in a separate patch,
-earlier in your series, and making the check case-insensitive as you have
-done already here.
-
-Cheers,
-Conor.
-
---VTpKZ7gKyqWX7CfH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEqwpgAKCRB4tDGHoIJi
-0kWfAP9e4VArAxe0AaDHBJoslthiQDLrOA4hOUoJTcqOEXJG/QD+KtBWf2LGLbZs
-LZMF2RrjfiA1vdsCUAO1mBtQvGEE/w4=
-=/PYG
------END PGP SIGNATURE-----
-
---VTpKZ7gKyqWX7CfH--
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
