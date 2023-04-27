@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5746EFFC7
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160746EFFC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242942AbjD0DUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S242885AbjD0DUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242668AbjD0DUf (ORCPT
+        with ESMTP id S232094AbjD0DUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:20:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A803C2684;
-        Wed, 26 Apr 2023 20:20:33 -0700 (PDT)
+        Wed, 26 Apr 2023 23:20:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5162684
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682565633; x=1714101633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OyXNcul4Z1z505giNdrRSXjTIM440X0mC1Ilj99V4kQ=;
-  b=ZybGiqEZKm67wNABmHCOuDuG+7CF0r+d3NOSqa1m6KxCzZZb5CcPDziL
-   +4ab6SpVr3bKLHu66bkmDgmd0rWgMJX2GWmOY3nbWsd7EuLLG2E6Xrc1Z
-   bT93aiRc+aAV0DOLOJjfHeHju8ON3FnrgpmbUKQIUGJ8wOIUMUhH5y3gO
-   8zlYhL6uOB8hvoGPSBamCF6C7URkK2Q3WAICHjeLfFL9J48kHcDDj7zqa
-   sdwwTKFIHBlJCIu/AWnEzt5Bbdz1G339xcMCKNWjuxgG/PjscoWzYp6nJ
-   Sjk6l5luuDf15DxVM4LXndo72jDXwfZ2DpqoryVQnqQs3nZU/xsb1mvlR
+  t=1682565628; x=1714101628;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ufF9LJH3PIPNlWYHXWr3QPnDwk9YPJYJrOwx31fZ0Js=;
+  b=jK1n2FjN5+qBOPKRBg4TitF8haQhtgllmzPE/mf7GElzhG2jRgWbNnZC
+   3gjEEZNW1IHAz22iU4PWPuVMW1yoc0xyu2GRODQbzPBSqgbPGrA7C/j3N
+   NnehTDOHK2wMtwRaUmmS13EAcobbE/VG4pEIl9hCWntjfUoBrR4N5/JBt
+   G9Rxt4u/Ceh2hnW8zNFO/dw8ZJPqjnVwbv1j4jErmZlc85FSeCbLLsD+B
+   ZDX2hwklXC017dnByh7IlUuhGI1WN371gRQPk7A0W3PWl0pXCUSdwYOEN
+   dzAIF2yFF9Bp3G7I9OVUCM+pVlek8CbLLwEBN0t0NnUFRrRfz6lO4Cxvg
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433594182"
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="346064984"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="433594182"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 20:20:33 -0700
+   d="scan'208";a="346064984"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 20:20:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="838192114"
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="724702393"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="838192114"
+   d="scan'208";a="724702393"
 Received: from lkp-server01.sh.intel.com (HELO 848ce1e85e7c) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Apr 2023 20:20:26 -0700
+  by orsmga008.jf.intel.com with ESMTP; 26 Apr 2023 20:20:26 -0700
 Received: from kbuild by 848ce1e85e7c with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1prsBF-000015-2g;
+        id 1prsBF-000013-2b;
         Thu, 27 Apr 2023 03:20:25 +0000
-Date:   Thu, 27 Apr 2023 11:20:09 +0800
+Date:   Thu, 27 Apr 2023 11:20:10 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     sean.wang@mediatek.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        sean.wang@mediatek.com, chris.lu@mediatek.com,
-        Soul.Huang@mediatek.com, Leon.Yen@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jing Cai <jing.cai@mediatek.com>
-Subject: Re: [PATCH v4 3/3] Bluetooth: btusb: mediatek: add MediaTek
- devcoredump support
-Message-ID: <202304271131.HetsXcxM-lkp@intel.com>
-References: <01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: drivers/usb/gadget/udc/omap_udc.c:1915:9: warning: variable 'stat'
+ set but not used
+Message-ID: <202304271143.hmZLtQOw-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf@gmail.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,110 +63,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Arnd,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on bluetooth-next/master linus/master v6.3 next-20230426]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/sean-wang-mediatek-com/Bluetooth-btmtk-introduce-btmtk-reset-work/20230427-071054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/01d3fe06d3a1e333b193e7d9fbc9cbfb4ee5d02b.1682549719.git.objelf%40gmail.com
-patch subject: [PATCH v4 3/3] Bluetooth: btusb: mediatek: add MediaTek devcoredump support
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230427/202304271131.HetsXcxM-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6e98b09da931a00bf4e0477d0fa52748bf28fcce
+commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
+date:   12 months ago
+config: arm-randconfig-r001-20230427 (https://download.01.org/0day-ci/archive/20230427/202304271143.hmZLtQOw-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d253c927e94cb7e88bfcd0182449d29e477ca011
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review sean-wang-mediatek-com/Bluetooth-btmtk-introduce-btmtk-reset-work/20230427-071054
-        git checkout d253c927e94cb7e88bfcd0182449d29e477ca011
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/bluetooth/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/gadget/udc/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271131.HetsXcxM-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304271143.hmZLtQOw-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/bluetooth/btmtk.c:104:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_IDLE'
-           case HCI_DEVCOREDUMP_IDLE:
-                ^
->> drivers/bluetooth/btmtk.c:107:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_ACTIVE'; did you mean 'BTMTK_COREDUMP_ACTIVE'?
-           case HCI_DEVCOREDUMP_ACTIVE:
-                ^~~~~~~~~~~~~~~~~~~~~~
-                BTMTK_COREDUMP_ACTIVE
-   drivers/bluetooth/btmtk.c:28:2: note: 'BTMTK_COREDUMP_ACTIVE' declared here
-           BTMTK_COREDUMP_ACTIVE,
-           ^
->> drivers/bluetooth/btmtk.c:110:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_TIMEOUT'
-           case HCI_DEVCOREDUMP_TIMEOUT:
-                ^
->> drivers/bluetooth/btmtk.c:111:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_ABORT'
-           case HCI_DEVCOREDUMP_ABORT:
-                ^
->> drivers/bluetooth/btmtk.c:112:7: error: use of undeclared identifier 'HCI_DEVCOREDUMP_DONE'
-           case HCI_DEVCOREDUMP_DONE:
-                ^
->> drivers/bluetooth/btmtk.c:372:2: error: implicit declaration of function 'hci_devcd_register' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           hci_devcd_register(hdev, btmtk_coredump, btmtk_coredump_hdr,
-           ^
->> drivers/bluetooth/btmtk.c:389:9: error: implicit declaration of function 'hci_devcd_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   err = hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
-                         ^
-   drivers/bluetooth/btmtk.c:389:9: note: did you mean 'hci_sock_init'?
-   include/net/bluetooth/bluetooth.h:577:5: note: 'hci_sock_init' declared here
-   int hci_sock_init(void);
-       ^
->> drivers/bluetooth/btmtk.c:393:32: error: no member named 'dump' in 'struct hci_dev'
-                   schedule_delayed_work(&hdev->dump.dump_timeout,
-                                          ~~~~  ^
->> drivers/bluetooth/btmtk.c:398:9: error: implicit declaration of function 'hci_devcd_append' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   err = hci_devcd_append(hdev, skb);
-                         ^
-   drivers/bluetooth/btmtk.c:398:9: note: did you mean 'hci_dev_open'?
-   include/net/bluetooth/hci_core.h:1500:5: note: 'hci_dev_open' declared here
-   int hci_dev_open(__u16 dev);
-       ^
->> drivers/bluetooth/btmtk.c:405:4: error: implicit declaration of function 'hci_devcd_complete' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           hci_devcd_complete(hdev);
-                           ^
-   drivers/bluetooth/btmtk.c:405:4: note: did you mean 'hci_devcd_append'?
-   drivers/bluetooth/btmtk.c:398:9: note: 'hci_devcd_append' declared here
-                   err = hci_devcd_append(hdev, skb);
-                         ^
-   10 errors generated.
+>> drivers/usb/gadget/udc/omap_udc.c:1915:9: warning: variable 'stat' set but not used [-Wunused-but-set-variable]
+                                   int stat;
+                                       ^
+   1 warning generated.
 
 
-vim +/HCI_DEVCOREDUMP_IDLE +104 drivers/bluetooth/btmtk.c
+vim +/stat +1915 drivers/usb/gadget/udc/omap_udc.c
 
-   100	
-   101	static void btmtk_coredump_notify(struct hci_dev *hdev, int state)
-   102	{
-   103		switch (state) {
- > 104		case HCI_DEVCOREDUMP_IDLE:
-   105			coredump_info.state = BTMTK_COREDUMP_INIT;
-   106			break;
- > 107		case HCI_DEVCOREDUMP_ACTIVE:
-   108			coredump_info.state = BTMTK_COREDUMP_ACTIVE;
-   109			break;
- > 110		case HCI_DEVCOREDUMP_TIMEOUT:
- > 111		case HCI_DEVCOREDUMP_ABORT:
- > 112		case HCI_DEVCOREDUMP_DONE:
-   113			coredump_info.state = BTMTK_COREDUMP_INIT;
-   114			btmtk_reset_sync(coredump_info.hdev);
-   115			break;
-   116		}
-   117	}
-   118	
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1887  
+7d12e780e003f9 drivers/usb/gadget/omap_udc.c David Howells  2006-10-05  1888  static irqreturn_t omap_udc_pio_irq(int irq, void *_dev)
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1889  {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1890  	u16		epn_stat, irq_src;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1891  	irqreturn_t	status = IRQ_NONE;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1892  	struct omap_ep	*ep;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1893  	int		epnum;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1894  	struct omap_udc	*udc = _dev;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1895  	struct omap_req	*req;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1896  	unsigned long	flags;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1897  
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1898  	spin_lock_irqsave(&udc->lock, flags);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1899  	epn_stat = omap_readw(UDC_EPN_STAT);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1900  	irq_src = omap_readw(UDC_IRQ_SRC);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1901  
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1902  	/* handle OUT first, to avoid some wasteful NAKs */
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1903  	if (irq_src & UDC_EPN_RX) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1904  		epnum = (epn_stat >> 8) & 0x0f;
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1905  		omap_writew(UDC_EPN_RX, UDC_IRQ_SRC);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1906  		status = IRQ_HANDLED;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1907  		ep = &udc->ep[epnum];
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1908  		ep->irqs++;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1909  
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1910  		omap_writew(epnum | UDC_EP_SEL, UDC_EP_NUM);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1911  		ep->fnf = 0;
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1912  		if (omap_readw(UDC_STAT_FLG) & UDC_ACK) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1913  			ep->ackwait--;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1914  			if (!list_empty(&ep->queue)) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16 @1915  				int stat;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1916  				req = container_of(ep->queue.next,
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1917  						struct omap_req, queue);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1918  				stat = read_fifo(ep, req);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1919  				if (!ep->double_buf)
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1920  					ep->fnf = 1;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1921  			}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1922  		}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1923  		/* min 6 clock delay before clearing EP_SEL ... */
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1924  		epn_stat = omap_readw(UDC_EPN_STAT);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1925  		epn_stat = omap_readw(UDC_EPN_STAT);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1926  		omap_writew(epnum, UDC_EP_NUM);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1927  
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1928  		/* enabling fifo _after_ clearing ACK, contrary to docs,
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1929  		 * reduces lossage; timer still needed though (sigh).
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1930  		 */
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1931  		if (ep->fnf) {
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1932  			omap_writew(UDC_SET_FIFO_EN, UDC_CTRL);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1933  			ep->ackwait = 1 + ep->double_buf;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1934  		}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1935  		mod_timer(&ep->timer, PIO_OUT_TIMEOUT);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1936  	}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1937  
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1938  	/* then IN transfers */
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1939  	else if (irq_src & UDC_EPN_TX) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1940  		epnum = epn_stat & 0x0f;
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1941  		omap_writew(UDC_EPN_TX, UDC_IRQ_SRC);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1942  		status = IRQ_HANDLED;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1943  		ep = &udc->ep[16 + epnum];
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1944  		ep->irqs++;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1945  
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1946  		omap_writew(epnum | UDC_EP_DIR | UDC_EP_SEL, UDC_EP_NUM);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1947  		if (omap_readw(UDC_STAT_FLG) & UDC_ACK) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1948  			ep->ackwait = 0;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1949  			if (!list_empty(&ep->queue)) {
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1950  				req = container_of(ep->queue.next,
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1951  						struct omap_req, queue);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1952  				(void) write_fifo(ep, req);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1953  			}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1954  		}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1955  		/* min 6 clock delay before clearing EP_SEL ... */
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1956  		epn_stat = omap_readw(UDC_EPN_STAT);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1957  		epn_stat = omap_readw(UDC_EPN_STAT);
+f35ae6346850f6 drivers/usb/gadget/omap_udc.c Tony Lindgren  2008-07-03  1958  		omap_writew(epnum | UDC_EP_DIR, UDC_EP_NUM);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1959  		/* then 6 clocks before it'd tx */
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1960  	}
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1961  
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1962  	spin_unlock_irqrestore(&udc->lock, flags);
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1963  	return status;
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1964  }
+^1da177e4c3f41 drivers/usb/gadget/omap_udc.c Linus Torvalds 2005-04-16  1965  
+
+:::::: The code at line 1915 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
 -- 
 0-DAY CI Kernel Test Service
