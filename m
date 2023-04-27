@@ -2,82 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070796F0A19
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDDA6F0A1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244271AbjD0Qmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S244102AbjD0Qn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243972AbjD0Qma (ORCPT
+        with ESMTP id S243665AbjD0Qny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:42:30 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C1610CA;
-        Thu, 27 Apr 2023 09:42:29 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-18f16bb1a9bso5462911fac.1;
-        Thu, 27 Apr 2023 09:42:29 -0700 (PDT)
+        Thu, 27 Apr 2023 12:43:54 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C2423C;
+        Thu, 27 Apr 2023 09:43:53 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-18f16bb1a9bso5471358fac.1;
+        Thu, 27 Apr 2023 09:43:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682613748; x=1685205748;
+        d=1e100.net; s=20221208; t=1682613833; x=1685205833;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/qeBYaCNg6vo7r6D0tyPOnjAI0l2bKMXlNaKIsxUD8Q=;
-        b=knqjUB4EWivaN5jZEET2tvIpss4BZlxcHvQNnUsUnefHIeb0qOdm8mw6Dss99MYd/L
-         QBFPTXNcDEWKc3lptu16z65DK2kLfeKOKhVyY19RzoYkIzhMSckWDDNTMnaLI2p2X1b/
-         THVHpnCMWxS6uSOO8Z39iA7orJ7g42rfMaJiK0SWDqZwDFbYgKHygCVsrspE5Y2HXxTg
-         9/KA/0rExf3JEjAEvbTcstNSk5SHPTcuLpsMie9p2fuW80+Qgi6X+kxOyzKoxye5GYMp
-         8CkVXX7B4oCPC7MmGsZYx0+r3vsxpu86xH6GMUj5+pmoaHTieENmpLRpCMy6poUKPPBj
-         y+Rw==
-X-Gm-Message-State: AC+VfDwSbBV7/ZlUtlgshfCcRiYhgY90XCKRsUodPjYw7YXlTQK8axwz
-        5NZxAr1aNbVT7tQHEzjo53Z5IE3W1g==
-X-Google-Smtp-Source: ACHHUZ4SeuCwkCmh9WCQyYFk06qXMizq4bawaVPnJEuzjd3Tyz8kqq3GIBmoGpqeV8Ux/KWyv8rPkA==
-X-Received: by 2002:a9d:75ca:0:b0:6a7:cdb1:88ff with SMTP id c10-20020a9d75ca000000b006a7cdb188ffmr1143258otl.14.1682613748637;
-        Thu, 27 Apr 2023 09:42:28 -0700 (PDT)
+        bh=IJiIdA94Q3aS3ARaP8pkL/+d3e0e0KYGSZTN/HqjbiA=;
+        b=WhlqsutqQb97ZudArF5BW7gsxIhQVCNtYEVi/uWlOI1dRXnpfLNBQc4v5GD8FlymnN
+         CmoPPp0KjfsbnJ/2YwqBqj2JHRxF82hPWXi5A4bCBdL+EoI0E+NilMEzvgmRnHYaW/m3
+         JaHfTLftKa6fF5mUs2a9fCPJAHKRTAfEzaD8x7Iymyw+kwxQ9eLmp1t2X/8wLf2roM6r
+         FNXFH2aUaez9xNe62rjw6Gz38DTDmP7Ngzx4x+LCwS8K4wzn99zM5m0pzT5F559moBBL
+         F1jnjrF8A7BpKWwt+31qbC/K2+0H9zduiZlEGCJ+uX1+fHQrHAt6G9untqDa4mSnhy8P
+         /RtA==
+X-Gm-Message-State: AC+VfDy8Vbd46isq81f5CseOs8c9r3KHNqdSw52N/mZlE+aci1AbOhHr
+        B9VUeOoP8xDtXvhaYqc1eA==
+X-Google-Smtp-Source: ACHHUZ55HiToOuHvfKeip0szuZ15vtRZWifdWsue8eOz2R5vLG2dLRCg/IzNKYj+3l+gh1lxFjue9Q==
+X-Received: by 2002:a9d:651a:0:b0:6a6:463a:1a0b with SMTP id i26-20020a9d651a000000b006a6463a1a0bmr1066482otl.1.1682613832950;
+        Thu, 27 Apr 2023 09:43:52 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o2-20020a9d5c02000000b006a1508d348dsm8063612otk.22.2023.04.27.09.42.27
+        by smtp.gmail.com with ESMTPSA id w21-20020a056830145500b006a6558ef17fsm5245754otp.30.2023.04.27.09.43.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:42:28 -0700 (PDT)
-Received: (nullmailer pid 3146107 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:42:27 -0000
-Date:   Thu, 27 Apr 2023 11:42:27 -0500
+        Thu, 27 Apr 2023 09:43:52 -0700 (PDT)
+Received: (nullmailer pid 3147753 invoked by uid 1000);
+        Thu, 27 Apr 2023 16:43:51 -0000
+Date:   Thu, 27 Apr 2023 11:43:51 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-Cc:     kernel@axis.com, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        linux-kernel@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: iio: light: Document TI OPT4001
- light sensor
-Message-ID: <168261374711.3146053.15570341588238197618.robh@kernel.org>
-References: <20230323-add-opt4001-driver-v3-0-62e121dab294@axis.com>
- <20230323-add-opt4001-driver-v3-1-62e121dab294@axis.com>
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@xilinx.com, linux-serial@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jirislaby@kernel.org, linux-arm-kernel@lists.infradead.org,
+        michal.simek@amd.com, git@amd.com, radhey.shyam.pandey@amd.com,
+        shubhrajyoti.datta@amd.com, srinivas.goud@amd.com,
+        manion05gk@gmail.com
+Subject: Re: [PATCH 1/2] dt-bindings: Add optional gpio property to uartps
+ node to support rs485
+Message-ID: <20230427164351.GA3146210-robh@kernel.org>
+References: <1682512187-8828-1-git-send-email-manikanta.guntupalli@amd.com>
+ <1682512187-8828-2-git-send-email-manikanta.guntupalli@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230323-add-opt4001-driver-v3-1-62e121dab294@axis.com>
+In-Reply-To: <1682512187-8828-2-git-send-email-manikanta.guntupalli@amd.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 26, 2023 at 05:59:46PM +0530, Manikanta Guntupalli wrote:
+> Add optional gpio property to uartps node and add reference to rs485.yaml
 
-On Wed, 26 Apr 2023 13:57:29 +0200, Stefan Windfeldt-Prytz wrote:
-> Add devicetree bindings for opt4001 ambient light sensor.
+The diff tells me that already. Why?
+
 > 
-> Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
 > ---
->  .../devicetree/bindings/iio/light/ti,opt4001.yaml  | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
+>  Documentation/devicetree/bindings/serial/cdns,uart.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+> index a8b323d7bf94..34ed0d80b923 100644
+> --- a/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
+> @@ -46,6 +46,10 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  txrx-gpios:
+> +    description: Optional GPIO to switch transmit and receive modes via pmod.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+What's pmod?
 
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -55,6 +59,7 @@ required:
+>  
+>  allOf:
+>    - $ref: serial.yaml#
+> +  - $ref: rs485.yaml#
+>    - if:
+>        properties:
+>          compatible:
+> -- 
+> 2.25.1
+> 
