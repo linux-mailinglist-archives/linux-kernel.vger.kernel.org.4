@@ -2,145 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E58B6F0EE1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C846F0EE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344316AbjD0X3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S1344345AbjD0XaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjD0X3a (ORCPT
+        with ESMTP id S1344375AbjD0XaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:29:30 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264A5272E;
-        Thu, 27 Apr 2023 16:29:28 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RMwcL6004359;
-        Thu, 27 Apr 2023 23:29:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=5kEkzm/Fdi8JwRfvv0vFfyC8vMN37mDp9oao13+HLu0=;
- b=FzeII4UQUZkdJneEBzae56WquO1X97Jg2Pskgl4WDBx1rrTL6wl3eDjX+LDiUuOVCC79
- Sm2S9Stqo7eFpHyImYgvq/jqM99hvu+nUJxDSleCvSSe4cDMm60fsHD1VAflMXeh0kWG
- KEtZ07lVUZiPFHStSj0LQcHR34zDeyQln5KH6ArxWsfX8nmCPah3BNw0aN/QpmW/U2UD
- 3njtVQ7/fXesM+lYefciLXDCdR0OZ0PgfIRbIdTOlgrBr1yzSRi7vwb5OePzCgdD4Y72
- psci9qzI994734+glg2iTgiO6CBECW5Njg9ICNdTFssVCCygN5YuHBCKMtUaBicU+PhW Uw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7xdy8ecw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 23:29:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33RNTMLN024187
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 23:29:22 GMT
-Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 27 Apr 2023 16:29:21 -0700
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
-        <swboyd@chromium.org>, <dianders@chromium.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/msm/dp: add module parameter for PSR
-Date:   Thu, 27 Apr 2023 16:28:47 -0700
-Message-ID: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
-X-Mailer: git-send-email 2.40.1
+        Thu, 27 Apr 2023 19:30:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163303AAC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682638172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vcFglKyPAkh5dZyTCVBzEYjy5B4nwQaUU2WoJAnQQj8=;
+        b=dsWiFJM6hNbh2NvD5vpY/XQZdhD3Z9VfkQN1nBPV+B+3XGILYnwtDzFmHEtTnIpnjmjibe
+        gizXWI1o2MB7IBzCm9yTYvm/I9tuCwOhTB87dFKP1AK6HZSA3UgpcqZFxC7CmVFV29FsI2
+        ItS5SHfCSpQLIZyrDGyPu3A35SWyeDg=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-_P_NwuKKMp2bzyh6__WT4g-1; Thu, 27 Apr 2023 19:29:31 -0400
+X-MC-Unique: _P_NwuKKMp2bzyh6__WT4g-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-54f8af8b8f1so151897467b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682638170; x=1685230170;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vcFglKyPAkh5dZyTCVBzEYjy5B4nwQaUU2WoJAnQQj8=;
+        b=dzFQeRoyyQ2Ll3AJr5rmvM+LzwO/u49kK811PVcySbHLUw37YCkR+eY12mlaiLfh6B
+         nqZdiQb1MaBwKn4LP0eTx+/sAtomrWNQwJ1qmDFUuwJkGMsjF2hAnpHtPje8d6emFKQY
+         F0emX6OGAXuIkOOqQKy320S5Uc8Oi5Jx6vlGcgriMj283VnbjV9kycG7Jw9rwmqVGhzH
+         l1Hyr4qX9/53toNUMWqldNnXrOOFfXEqyhFsTlO9sHV2ait9djxvDq6tK/XKPbKnTUND
+         NoubPnFBqv1Gs7qxx4terdE+a6ef+0jooyspdCwW1F0l4+2Pd9OXpUuen5MaKzTfPTle
+         GDfA==
+X-Gm-Message-State: AC+VfDyLUq0bTI1vZ0arVNN+Cfkn0iYo8/peWVqImB80aKYvV36s7DYK
+        3+8bWNgS7Mt8X/BhJbueQ/gKx/YFG29NN89Ps32qru5j2GntBSDITx1bSgMEO+0gy9p7Va2D1wx
+        MZnQAg0IlkImjq4xEVNQTsT8m
+X-Received: by 2002:a81:918a:0:b0:54f:8e64:e47f with SMTP id i132-20020a81918a000000b0054f8e64e47fmr2532268ywg.31.1682638170524;
+        Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ745lku6BCkyNoeANYeFs9vOAsqe3xUvEdBgIgvnVsWRepS97b8DYNlJOko6WOTqcIXYs7QKA==
+X-Received: by 2002:a81:918a:0:b0:54f:8e64:e47f with SMTP id i132-20020a81918a000000b0054f8e64e47fmr2532252ywg.31.1682638170263;
+        Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id d201-20020a814fd2000000b0054f8b7b8514sm5092922ywb.128.2023.04.27.16.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 16:29:29 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 19:29:27 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/4] Input: pwm-vibra - add support for enable GPIO
+Message-ID: <ZEsFV6F4CEh2/av8@x1>
+References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
+ <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WmEtTQI4ibO6GxJNkOb8YIrrAFMG5Zhv
-X-Proofpoint-ORIG-GUID: WmEtTQI4ibO6GxJNkOb8YIrrAFMG5Zhv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
- phishscore=0 adultscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270207
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On sc7280 where eDP is the primary display, PSR is causing
-IGT breakage even for basic test cases like kms_atomic and
-kms_atomic_transition. Most often the issue starts with below
-stack so providing that as reference
+On Thu, Apr 27, 2023 at 10:34:28PM +0200, Luca Weiss wrote:
+> Some pwm vibrators have a dedicated enable GPIO that needs to be set
+> high so that the vibrator works. Add support for that optionally.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Call trace:
- dpu_encoder_assign_crtc+0x64/0x6c
- dpu_crtc_enable+0x188/0x204
- drm_atomic_helper_commit_modeset_enables+0xc0/0x274
- msm_atomic_commit_tail+0x1a8/0x68c
- commit_tail+0xb0/0x160
- drm_atomic_helper_commit+0x11c/0x124
- drm_atomic_commit+0xb0/0xdc
- drm_atomic_connector_commit_dpms+0xf4/0x110
- drm_mode_obj_set_property_ioctl+0x16c/0x3b0
- drm_connector_property_set_ioctl+0x4c/0x74
- drm_ioctl_kernel+0xec/0x15c
- drm_ioctl+0x264/0x408
- __arm64_sys_ioctl+0x9c/0xd4
- invoke_syscall+0x4c/0x110
- el0_svc_common+0x94/0xfc
- do_el0_svc+0x3c/0xb0
- el0_svc+0x2c/0x7c
- el0t_64_sync_handler+0x48/0x114
- el0t_64_sync+0x190/0x194
----[ end trace 0000000000000000 ]---
-[drm-dp] dp_ctrl_push_idle: PUSH_IDLE pattern timedout
+Hi Luca,
 
-Other basic use-cases still seem to work fine hence add a
-a module parameter to allow toggling psr enable/disable till
-PSR related issues are hashed out with IGT.
+Thank you for picking up this work!
 
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> +	vibrator->enable_gpio = devm_gpiod_get_optional(&pdev->dev, "enable",
+> +							GPIOD_OUT_LOW);
+> +	err = PTR_ERR_OR_ZERO(vibrator->enable_gpio);
+> +	if (err) {
+> +		if (err != -EPROBE_DEFER)
+> +			dev_err(&pdev->dev, "Failed to request enable gpio: %d\n",
+> +				err);
+> +		return err;
+> +	}
+> +
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 628b0e248db6..dba43167de66 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -28,6 +28,10 @@
- #include "dp_audio.h"
- #include "dp_debug.h"
- 
-+static bool psr_enabled = false;
-+module_param(psr_enabled, bool, 0);
-+MODULE_PARM_DESC(psr_enabled, "enable PSR for eDP and DP displays");
-+
- #define HPD_STRING_SIZE 30
- 
- enum {
-@@ -407,7 +411,7 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
- 
- 	edid = dp->panel->edid;
- 
--	dp->dp_display.psr_supported = dp->panel->psr_cap.version;
-+	dp->dp_display.psr_supported = dp->panel->psr_cap.version && psr_enabled;
- 
- 	dp->audio_supported = drm_detect_monitor_audio(edid);
- 	dp_panel_handle_sink_request(dp->panel);
--- 
-2.40.1
+Take a look at dev_err_probe() to remove the -EPROBE_DEFER check.
+
+With that fixed:
+
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
