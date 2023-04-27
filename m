@@ -2,125 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC5E6F012D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738BC6F0130
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243042AbjD0HDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 03:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
+        id S243051AbjD0HDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 03:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbjD0HC5 (ORCPT
+        with ESMTP id S243086AbjD0HDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 03:02:57 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD3422B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:02:32 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115e652eeso2799912b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682578951; x=1685170951;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AA9076PBQGQ1CvqVfefKSv2pXhUG01wTMuMnD2nJkG8=;
-        b=jLGz1o/gOy7lZRmOeyA5yuMty1mAQ/iuWvCjMifOWvm0j4uLkXKiOgf9UM1A0iY5JH
-         CwSyYAno6AlIplzeAwPsF10c4guM+QMfKhDDGeNLbz5axGI+qayc62rfYQLVXOkRS6vN
-         HRaP5zRygf5AmKRpuXW3wF9qIEGE467ueDrsqFtcdGx0ucZ3hiZEtLGhV+JwGxEmmYMf
-         ZIKCh7PIBKsUj37Sj9sgJd4gVxEP+II7OV/QbY19ys/2EgKPzMo4v8hQxdEkzENsEBOo
-         duNOArJk+4/NimQH712r1Q3q6ldJcpe5y0uOnWQ1EIzf3i0jywK2ozryHq8GVamcGd1+
-         tArQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682578951; x=1685170951;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AA9076PBQGQ1CvqVfefKSv2pXhUG01wTMuMnD2nJkG8=;
-        b=GYR1RGmdJQWmo16ga1LROjHExleA2vOLC7OzfoAUynDb+7F0nm9YNiLT3+il+ffT1g
-         qN2BK8v2Y0QYtjS+yy1v24kx5HLbafUqMjukIlk1AKU0Hh1uPQVmVywCpcz4laCMQuI5
-         R1gSWXSAqGYKxxq4Qj1fyCIkpg2/aOpNO5Pk9nrpbRrPoqg/bdttAtl9wrHoGz3/+Ti/
-         91IgMAEHhnNa3lLO9MbvxWf1YV779zZwNgRut8QbXmtCe926k02vtneb1EtjfuHyTStY
-         SKxVSwAPaYJ0WOVTOCJU3lsNLqGPZJDrqqxtp7oH9kr2+aq7XpKEFjYvCjpBF4x4+67d
-         46mQ==
-X-Gm-Message-State: AC+VfDx83zPGWIlkTLELRPlI5PjYTReu9Jzbv5eWDu9lrWSdMjQIp9LD
-        7cJI4scUfnpdN0ReamuA9XAtQ49RIo+bfFJdfjOZEQT+tY8=
-X-Google-Smtp-Source: ACHHUZ4gfWqDcWy7wjY90zhe6r/Xd5isZr7xM2oIdHs8gM9tlk4CDiQIOcPsD79B4M6XWvGZs4Ze8w==
-X-Received: by 2002:a17:902:d484:b0:1a9:68d2:e4ae with SMTP id c4-20020a170902d48400b001a968d2e4aemr6110340plg.2.1682578951633;
-        Thu, 27 Apr 2023 00:02:31 -0700 (PDT)
-Received: from [10.2.195.40] ([61.213.176.13])
-        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b001a5023e7395sm10942150pli.135.2023.04.27.00.02.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 00:02:31 -0700 (PDT)
-Message-ID: <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
-Date:   Thu, 27 Apr 2023 15:02:26 +0800
+        Thu, 27 Apr 2023 03:03:12 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E34A0422B;
+        Thu, 27 Apr 2023 00:03:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id C06EA80A4;
+        Thu, 27 Apr 2023 07:03:08 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 10:03:07 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andreas Kemnade <andreas@kemnade.info>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        linux-omap@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [BISECTED REGRESSION] OMAP1 GPIO breakage
+Message-ID: <20230427070307.GF14287@atomide.com>
+References: <20230425173241.GF444508@darkstar.musicnaut.iki.fi>
+ <20230425201117.457f224c@aktux>
+ <20230425183857.GG444508@darkstar.musicnaut.iki.fi>
+ <20230425212040.5a4d5b09@aktux>
+ <20230425193637.GH444508@darkstar.musicnaut.iki.fi>
+ <20230425215848.247a936a@aktux>
+ <20230426071910.GE14287@atomide.com>
+ <CACRpkdb7a32Ny=JR7=pAW_QRMj-S5QuhcSN8U6_f4PhAXj5pRA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
-Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
- <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
-From:   Wenliang Wang <wangwenliang.1995@bytedance.com>
-In-Reply-To: <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdb7a32Ny=JR7=pAW_QRMj-S5QuhcSN8U6_f4PhAXj5pRA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+* Linus Walleij <linus.walleij@linaro.org> [230426 20:36]:
+> On Wed, Apr 26, 2023 at 9:19 AM Tony Lindgren <tony@atomide.com> wrote:
+> 
+> > Not sure what the best way to fix this might be, adding Linus W to Cc too.
+> > Maybe using gpio line names in the legacy platform data instead of numbers?
+> 
+> I sent a fat invasive fix which, if it works, will fix the problem once and
+> for all on OSK1.
+> 
+> If it works, I can write the same fix for Nokia 770 or whatever.
+> 
+> I think it is best to just get rid of the static GPIO numbers from these
+> boards so I took a stab at that.
 
+OK makes sense to me thanks!
 
-On 4/27/23 2:20 PM, Xuan Zhuo wrote:
-> On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
->> For multi-queue and large rx-ring-size use case, the following error
-> 
-> Cound you give we one number for example?
-
-128 queues and 16K queue_size is typical.
-
-> 
->> occurred when free_unused_bufs:
->> rcu: INFO: rcu_sched self-detected stall on CPU.
->>
->> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
->> ---
->>   drivers/net/virtio_net.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
->> index ea1bd4bb326d..21d8382fd2c7 100644
->> --- a/drivers/net/virtio_net.c
->> +++ b/drivers/net/virtio_net.c
->> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
->>   		struct virtqueue *vq = vi->rq[i].vq;
->>   		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
->>   			virtnet_rq_free_unused_buf(vq, buf);
->> +		schedule();
-> 
-> Just for rq?
-> 
-> Do we need to do the same thing for sq?
-Rq buffers are pre-allocated, take seconds to free rq unused buffers.
-
-Sq unused buffers are much less, so do the same for sq is optional.
-
-> 
-> Thanks.
-> 
-> 
->>   	}
->>   }
->>
->> --
->> 2.20.1
->>
+Tony
