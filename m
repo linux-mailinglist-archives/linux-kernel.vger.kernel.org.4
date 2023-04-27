@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526D56F061B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E0B6F0651
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 15:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243444AbjD0Mpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S243467AbjD0NE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 09:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243650AbjD0Mpp (ORCPT
+        with ESMTP id S243492AbjD0NEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:45:45 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E740C49F4;
-        Thu, 27 Apr 2023 05:45:38 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RCifR2029419;
-        Thu, 27 Apr 2023 12:45:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=INH7Q3RtKqCz6BKeYwy2Vu3M2doflBXcblbCSd0JFQc=;
- b=KmFIIGxTnJ5Jd6XlI3GRtjvdcqgFwh6zRTDfO3ssM7uicWR/W+H9OjBxUeXvToGhF3jI
- r1dUDLEhoDkoitAZVeXu9uKBmqTjDesNtequwqc65capR3lOK1w58HsP54hl2Et+i01k
- eqwkdr7D4G9r0hOHafFx0f5o+46X5xA82ANZM/bNXZhZUIcamuuifBXibpTm9HGrFg44
- yo41pcVRWwhVm1pT+Yl1Yl9uBWFZrr+ISZy8bY8sxWXXAOLeBBMUPVbvInNZmWEiN0y6
- Vh9lFT1jaie0thzOnMzdDn4Bp4sTme6IOoDvUbfSbN7y+ob0Q5lJShj2rvtKYjl38Y0O Zg== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7junk1p8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 12:45:36 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33RCTt3l000494;
-        Thu, 27 Apr 2023 12:45:33 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3q47772esd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 12:45:31 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33RCjPhX17957474
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Apr 2023 12:45:25 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 54ACD20091;
-        Thu, 27 Apr 2023 12:45:25 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BAB120094;
-        Thu, 27 Apr 2023 12:45:25 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.90])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 27 Apr 2023 12:45:24 +0000 (GMT)
-Date:   Thu, 27 Apr 2023 14:45:24 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, frankja@linux.ibm.com,
-        borntraeger@de.ibm.com, nrb@linux.ibm.com, nsg@linux.ibm.com,
-        seiden@linux.ibm.com, jgg@nvidia.com
-Subject: Re: [PATCH v2 1/1] KVM: s390: fix race in gmap_make_secure
-Message-ID: <ZEpuZGMY3AQq/H4D@osiris>
-References: <20230426134834.35199-1-imbrenda@linux.ibm.com>
- <20230426134834.35199-2-imbrenda@linux.ibm.com>
- <ZEpUEF7H86E9vVfS@osiris>
- <20230427134649.1e482d91@p-imbrenda>
- <ZEpkFzFFEpqa9zMv@osiris>
- <20230427141711.6b071148@p-imbrenda>
+        Thu, 27 Apr 2023 09:04:54 -0400
+X-Greylist: delayed 662 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 06:04:50 PDT
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3972D72
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 06:04:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+        t=1682600686; bh=9eIpaK6qsbATrucAS3D9t6aE9hGbGWJhmkVCEJk7Msg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=N4s1H+R3pYgmxPaP7B6FHorD1nyJfR5F/9dnnxSlA7z1UTlbwrKJ57qHsHoEQryba
+         1QFHOl1YgCE+vT8L5DbZwx2K4nPmHCRLPA53Dgv6xRKrLOmjRE8uYONjPeEuYw56yq
+         A/5li2tzbSJiSHaGxct/VlsuXPXdO2FNFF9/u8eI=
+Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
+        by newxmesmtplogicsvrszc1-0.qq.com (NewEsmtp) with SMTP
+        id BD4A5CA0; Thu, 27 Apr 2023 20:47:20 +0800
+X-QQ-mid: xmsmtpt1682599640t519ijgnm
+Message-ID: <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
+X-QQ-XMAILINFO: NJ/+omVLhVgasM8xrCwXqQLqxdfhOSMWAGMHYCh5/DRfXhjvY/sQ6rAgga8Kq1
+         e4Ng5wa1JQBXAFEgCvi8ESAnxyhDm7n293s4emhIlkUHGLfigrzv7rB2SNYNWFP8eMq2JbtxzUJt
+         WYSVkiAiy8lw9FgzIEHDF0WxsltFJ4NSBmbP9jN2XYcbW2dopnV9mOSxG9FcZcuM8n9jVrrmnL8/
+         ENOXFKlbCqfTWj0cqlyTvLKLR0JlhewOjfyFvyEXa6nFhTdKkwAxSC01rRnz2jOM1/2zGSzRO8fR
+         CaiN/zgaLNxwW3Ax+rsMcuKp7HtzbCKgnmbD7U6U4e7GpyjMUsx/j/jpmGXDSKQm9VEs8ynR+VxC
+         uWdlmKw2Xw5FrYOcOG2tYCu+sMmO0mnOMfLNL/o5ot02B5AkloCOFn9MoIb95q6zKUbFAvS3jn41
+         CbD8cwVpaG3g+bEu47S0Gshkb6FYrOa+K7Q+wXXKMjwWTobtK6poOBWpHELqfJm4OppdrUM3mHZP
+         8HL82EUbXxBFi8GZLpxEi8i83pVmd4ScQuYz7CxpppKRxB1QNFL3+xQoMHUPnGaeCE75BLKDGJkU
+         +qxoKhfVr2PjmyIE/anieLwxFu9ZloMB1DMvfIao1vebRxxfJCQ3wuoxEE2m/j9Zg/azlIqHYvGd
+         hRI4xNg6tXisFw4A979DxfEZiN31J3bpp6M2wesdhDSFBr6YmpOeBiC5tZUF85QDVUijWjyRFhya
+         G+9Iynryne5GLrvOdrsjlWJm03tZtOnYfRzsGn7RIlEjjryo3ZyhpjBNkXcb2+rUlML2gHV+OtO1
+         FY66QYbYk9bfieost2wl+SNugHcFYfDgU6/lsAJrQYKTnpsNlI+1Mg6LgYh0qR3sg7YqvjkoAymU
+         lyfSoMNQFmFO3isKQCVwh+tgkLtZmTJ11qGgp4I7QGrY8jM8jS9as8lSf0j+hCI0FpXd+sFnzGHg
+         dg83r41vCxHcJ8Yi7Lo9l7jgWKaqs4ssHfUUu7UCm25FhGEqtV4gDqZugPwXn2kpUgJTDle6c=
+From:   Yangyu Chen <cyy@cyyself.name>
+To:     conor@kernel.org
+Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, cyy@cyyself.name,
+        i@zenithal.me, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, soha@lohu.info, twd2.me@gmail.com
+Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
+Date:   Thu, 27 Apr 2023 20:47:18 +0800
+X-OQ-MSGID: <20230427124718.239569-1-cyy@cyyself.name>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230426-porthole-wronged-d5a6a3b89596@spud>
+References: <20230426-porthole-wronged-d5a6a3b89596@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427141711.6b071148@p-imbrenda>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: g2NLfA_aMkrGBrDjmsdZdbq2N0W1K8jT
-X-Proofpoint-ORIG-GUID: g2NLfA_aMkrGBrDjmsdZdbq2N0W1K8jT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=603
- malwarescore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 spamscore=0 suspectscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304270111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 02:17:11PM +0200, Claudio Imbrenda wrote:
-> > > > On Wed, Apr 26, 2023 at 03:48:34PM +0200, Claudio Imbrenda wrote:  
-> > > > > This patch fixes a potential race in gmap_make_secure and removes the
-> > > > > last user of follow_page without FOLL_GET.
-> > > > > 
-> > > > > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> > > > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> > > > > Fixes: 214d9bbcd3a6 ("s390/mm: provide memory management functions for protected KVM guests")
-> > > > > ---
-> > > > >  arch/s390/kernel/uv.c | 32 +++++++++++---------------------
-> > > > >  1 file changed, 11 insertions(+), 21 deletions(-)    
-> > > > 
-> > > > It would be helpful if this would be a bit more descriptive. "Fix
-> > > > race" is not very helpful :)
-> > > > 
-> > > > What race does this fix?
-> > > > When can this happen?
-> > > > What are the consequences if the race window is being hit?  
-> > > 
-> > > We are locking something we don't have a reference to, and as explained
-> > > by Jason and David in this thread <Y9J4P/RNvY1Ztn0Q@nvidia.com> it can
-> > > lead to all kind of bad things, including the page getting
-> > > unmapped (MADV_DONTNEED), freed, reallocated as a larger folio and the
-> > > unlock_page() would target the wrong bit.
-> > > 
-> > > Also there is another race with the FOLL_WRITE, which could race
-> > > between the follow_page and the get_locked_pte.
-> > > 
-> > > The main point of the patch is to remove the last follow_page without
-> > > FOLL_GET or FOLL_PIN, removing the races can be considered a nice bonus.  
-> > 
-> > I've seen that discussion. What I'm actually asking for is that all of
-> > this information should be added to the commit description. Nobody
-> > will remember any of the details in one year.
-> 
-> I will put it in the patch description.
-> 
-> do you think the text above is enough?
+Hi, Conor
 
-Fine with me. With a proper Link: tag this is much better than before.
-Thanks!
+Thanks for your meaningful reviews. I agree with most of your advice but
+have a question about the code about checking the first 2 characters are
+"rv" in `arch/riscv/kernel/cpu.c`.
+
+On Wed, 26 Apr 2023 19:54:39 +0100, Conor Dooley wrote:
+> > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
+> >  		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
+> >  		return -ENODEV;
+> >  	}
+> > -	if (isa[0] != 'r' || isa[1] != 'v') {
+> > +	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
+> >  		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
+> >  		return -ENODEV;
+> 
+> I don't understand why this is even here in the first place. I'd be
+> inclined to advocate for it's entire removal. Checking *only* that there
+> is an "rv" in that string seems pointless to me. If you're on a 64-bit
+> kernel and the node has riscv,isa = "rv32ima" it's gonna say it is okay?
+> Drew what do you think?
+
+I think this code could be a workaround for running rv32 S-Mode on rv64
+CPU without changing the DT, although the proper way should be to change
+this field in DT by bootloader or any other software.
+
+I have tested a simple rv64imac CPU core and left the `riscv,isa` string
+empty in the DT and removed the above 3 lines check from the kernel, and
+the kernel boots successfully, and using busybox as init is also ok. 
+However, if this check exists, the kernel will panic at `setup_smp` due to
+`BUG_ON(!found_boot_cpu)` in `setup_smp`.
+
+I am wondering whether this should remove or add a more sufficient
+validation. Although this function will not be called in ACPI as I
+reviewed the recent ACPI patches[1], it will not be a problem if I submit
+this patch for better ACPI support. However, If I just simply remove it
+from my patch and submit patch v2 directly, the ISA string in ACPI mode
+with all uppercase letters will be OK. But in DT mode, the kernel behavior
+will accept the ISA string with all uppercase letters except the first two
+"rv". Do you think this behavior is different between DT and ACPI can be
+OK?
+
+After some investigation, I suggest removing this validation since the
+validation is useless for a proper DT and the recent ACPI patches[1] do
+not validate the ISA strings, so we will have the same behavior between
+DT and ACPI.
+
+[1] https://lore.kernel.org/linux-riscv/20230404182037.863533-1-sunilvl@ventanamicro.com/
+
+Thanks,
+Yangyu Chen
+
