@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CCC6F02AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8986F02B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243186AbjD0Ijh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S243198AbjD0Ik1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242876AbjD0Ijc (ORCPT
+        with ESMTP id S243194AbjD0IkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:39:32 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02A4C39
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:39:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 27 Apr 2023 04:40:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBE24EDF;
+        Thu, 27 Apr 2023 01:40:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 057BE1FDE6;
-        Thu, 27 Apr 2023 08:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682584770; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vMrvZyqM9F6NwS2j3x4LD6uk7Z1GCte7sBQp3tSyrI0=;
-        b=X353LtqfV+6pqSyB966vqMy9+ztle3Z/pqW67hkJRs/EoH5ZR0mfDLsDhPOngvMQURlcG6
-        vCrV3rrt7OVsXzGXuO+nEKNZxlYWJRbJ5bstwD5oXZDa9hsSE7KNAUcyGxlvI8faB7XUcA
-        amefGyok16OH+ZV2mZvvAX9AtVY4Pos=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E6665138F9;
-        Thu, 27 Apr 2023 08:39:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gKb/NcE0SmTpWAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 27 Apr 2023 08:39:29 +0000
-Date:   Thu, 27 Apr 2023 10:39:29 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZEo0wctuNFBzaxoJ@dhcp22.suse.cz>
-References: <ZD/NAaa5TVcL7Mxm@tpad>
- <ZD/Qq9v0EDxUn7HW@tpad>
- <ZD/XoBTqJBL2G+Dk@tpad>
- <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
- <ZD/xE6kR4RSOvUlR@tpad>
- <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
- <ZEAYQBJmVwsjpjGY@tpad>
- <ZEFB8FSKWms2VmaL@tpad>
- <44f2df1a-ace4-0c44-166f-4f2fef49e0c1@suse.cz>
- <ZElNDltcv4PA0HsM@tpad>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1404C61384;
+        Thu, 27 Apr 2023 08:40:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7757FC433D2;
+        Thu, 27 Apr 2023 08:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682584819;
+        bh=w5SRwn8CFNVNdgkBQOCrjSauvflBmm8f8m+sEuKOc3Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uWXqQRzUmERpLQTakXm9//wxt0RKaGwqlreQ5v0TVTRawdKhFD+ln0fEichy01ByG
+         BJohGv0VhyOb3H88g7ZzzXCvwvvgcD3yWUOAYms6R0QcD6ocP3W6ECAuzIk5/J1ncb
+         vGjvv60PeDAQbuplk9nPZWJUz5DdVQkUDF1AKabSjvMqcyaoq+Rle5K8Hrr2KCXalw
+         TDSPRv7qwmQHEakmK6NGIqOtyHazA+GjxfaKl6XdTLYxRWLWeQUR6mUX5UKwqW94ES
+         2b/9OtwrtoW1jspjW/XE/HERyKuvSFB9cCuQre+6sHbY/DOYI6MiNTV553123Zp8kn
+         c7XTqXyXuBtYw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5B236E5FFC7;
+        Thu, 27 Apr 2023 08:40:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZElNDltcv4PA0HsM@tpad>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net/sched: flower: Fix wrong handle assignment during
+ filter change
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168258481936.11272.2256200940539905540.git-patchwork-notify@kernel.org>
+Date:   Thu, 27 Apr 2023 08:40:19 +0000
+References: <20230425140604.169881-1-ivecera@redhat.com>
+In-Reply-To: <20230425140604.169881-1-ivecera@redhat.com>
+To:     Ivan Vecera <ivecera@redhat.com>
+Cc:     netdev@vger.kernel.org, jhs@mojatatu.com, xiyou.wangcong@gmail.com,
+        jiri@resnulli.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, simon.horman@corigine.com,
+        marcelo.leitner@gmail.com, paulb@nvidia.com,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-04-23 13:10:54, Marcelo Tosatti wrote:
-[...]
-> "To test the performance difference, a page allocator microbenchmark:
-> https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
-> with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
-> 
-> For the single_page_alloc_free test, which does
-> 
->        	/** Loop to measure **/
->        	for (i = 0; i < rec->loops; i++) {
->                	my_page = alloc_page(gfp_mask);
->                 if (unlikely(my_page == NULL))
->                        	return 0;
->                 __free_page(my_page);
->         }                                                                                                           
-> 
-> Unit is cycles.
-> 
-> Vanilla                 Patched         Diff
-> 115.25                  117             1.4%"
-> 
-> To be honest, that 1.4% difference was not stable but fluctuated between
-> positive and negative percentages (so the performance difference was in
-> the noise).
-> 
-> So performance is not a decisive factor in this case.
+Hello:
 
-It is not neglible considering that majority worklods will not benefit
-from this change. You are clearly ignoring that vmstat code has been
-highly optimized for local per-cpu access exactly to avoid locked
-operations and cache line bouncing.
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 25 Apr 2023 16:06:04 +0200 you wrote:
+> Commit 08a0063df3ae ("net/sched: flower: Move filter handle initialization
+> earlier") moved filter handle initialization but an assignment of
+> the handle to fnew->handle is done regardless of fold value. This is wrong
+> because if fold != NULL (so fold->handle == handle) no new handle is
+> allocated and passed handle is assigned to fnew->handle. Then if any
+> subsequent action in fl_change() fails then the handle value is
+> removed from IDR that is incorrect as we will have still valid old filter
+> instance with handle that is not present in IDR.
+> Fix this issue by moving the assignment so it is done only when passed
+> fold == NULL.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net] net/sched: flower: Fix wrong handle assignment during filter change
+    https://git.kernel.org/netdev/net/c/32eff6bacec2
+
+You are awesome, thank you!
 -- 
-Michal Hocko
-SUSE Labs
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
