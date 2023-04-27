@@ -2,109 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5257C6F01BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E596F01C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243032AbjD0H2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 03:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S242970AbjD0Har (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 03:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242971AbjD0H2B (ORCPT
+        with ESMTP id S242667AbjD0Hap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 03:28:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C094EFE;
-        Thu, 27 Apr 2023 00:27:35 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Q6Rzm4bbtz18KXF;
-        Thu, 27 Apr 2023 15:23:32 +0800 (CST)
-Received: from [10.67.111.205] (10.67.111.205) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 15:27:25 +0800
-Subject: Re: [PATCH] perf symbols: Fix return incorrect build_id size in
- elf_read_build_id()
-To:     Adrian Hunter <adrian.hunter@intel.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <namhyung@kernel.org>, <irogers@google.com>, <leo.yan@linaro.org>,
-        <eranian@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230427012841.231729-1-yangjihong1@huawei.com>
- <f149f4ce-bd2e-b192-920f-1e2599e5b16f@intel.com>
-From:   Yang Jihong <yangjihong1@huawei.com>
-Message-ID: <d92c26e5-0311-21ce-c52e-6fb81054c100@huawei.com>
-Date:   Thu, 27 Apr 2023 15:27:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Thu, 27 Apr 2023 03:30:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61B37BA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:30:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC8972F4;
+        Thu, 27 Apr 2023 00:31:26 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 840A63F64C;
+        Thu, 27 Apr 2023 00:30:41 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 08:30:32 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Gang Li <ligang.bdlg@bytedance.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Tomasz Nowicki <tomasz.nowicki@linaro.org>,
+        Laura Abbott <lauraa@codeaurora.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [QUESTION FOR ARM64 TLB] performance issue and implementation
+ difference of TLB flush
+Message-ID: <ZEokfJSM9a4ZZvQv@FVFF77S0Q05N>
+References: <2eb026b8-9e13-2b60-9e14-06417b142ac9@bytedance.com>
 MIME-Version: 1.0
-In-Reply-To: <f149f4ce-bd2e-b192-920f-1e2599e5b16f@intel.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.205]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2eb026b8-9e13-2b60-9e14-06417b142ac9@bytedance.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-On 2023/4/27 14:02, Adrian Hunter wrote:
-> On 27/04/23 04:28, Yang Jihong wrote:
->> In elf_read_build_id(), if gnu build_id is found, should return the size of
->> the actually copied data. If descsz is greater thanBuild_ID_SIZE,
->> write_buildid data access may occur.
->>
->> Fixes: be96ea8ffa78 ("perf symbols: Fix issue with binaries using 16-bytes buildids (v2)")
->> Reported-by: Will Ochowicz <Will.Ochowicz@genusplc.com>
->> Link: https://lore.kernel.org/lkml/CWLP265MB49702F7BA3D6D8F13E4B1A719C649@CWLP265MB4970.GBRP265.PROD.OUTLOOK.COM/T/
->> Tested-by: Will Ochowicz <Will.Ochowicz@genusplc.com>
->> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+On Thu, Apr 27, 2023 at 11:26:50AM +0800, Gang Li wrote:
+> Hi all,
 > 
-> As an aside, note that the build ID on the ELF file triggering the bug was
-> 62363266373430613439613534633666326432323334653665623530396566343938656130663039
-> which is 80 ASCII characters, which would have been a 20 byte binary number i.e.
-> 
-> $ echo -en "0000: 62363266373430613439613534633666\n0010: 32643232333465366562353039656634\n0020: 3938656130663039" | xxd -r | od -c -A d
-> 0000000   b   6   2   f   7   4   0   a   4   9   a   5   4   c   6   f
-> 0000016   2   d   2   2   3   4   e   6   e   b   5   0   9   e   f   4
-> 0000032   9   8   e   a   0   f   0   9
-> 0000040
-> 
-> So perhaps a mistake in the creation of the build ID on that ELF file.
-> 
-Yes, it may be an error, or it may be that the build-id was specified 
-when the elf file was created.
+> I have encountered a performance issue on our ARM64 machine, which seems
+> to be caused by the flush_tlb_kernel_range.
 
-I tried ld can specify a build-id larger than 160-bit hexadecimal digits:
+Can you please provide a few more details on what you're seeing?
 
-   $ ld -o test test.o 
---build-id=0x62363266373430613439613534633666326432323334653665623530396566343938656130663039
-   $ readelf -n test
+What does your performance issue look like?
 
-   Displaying notes found in: .note.gnu.build-id
-     Owner                 Data size       Description
-     GNU                  0x00000028       NT_GNU_BUILD_ID (unique build 
-ID bitstring)
-       Build ID: 
-62363266373430613439613534633666326432323334653665623530396566343938656130663039
+Are you sure that the performance issue is caused by flush_tlb_kernel_range()
+specifically?
 
-All in all, it feels like a rare scene :)
-
-> In any case, for the fix:
+> Here is the stack on the ARM64 machine:
 > 
-> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> # ARM64:
+> ```
+>     ghes_unmap
+>     clear_fixmap
+>     __set_fixmap
+>     flush_tlb_kernel_range
+> ```
 > 
-Thanks for the acked-by.
+> As we can see, the ARM64 implementation eventually calls
+> flush_tlb_kernel_range, which flushes the TLB on all cores. However, on
+> AMD64, the implementation calls flush_tlb_one_kernel instead.
+> 
+> # AMD64:
+> ```
+>     ghes_unmap
+>     clear_fixmap
+>     __set_fixmap
+>     mmu.set_fixmap
+>     native_set_fixmap
+>     __native_set_fixmap
+>     set_pte_vaddr
+>     set_pte_vaddr_p4d
+>     __set_pte_vaddr
+>     flush_tlb_one_kernel
+> ```
+> 
+> On our ARM64 machine, flush_tlb_kernel_range is causing a noticeable
+> performance degradation.
+
+As above, could you please provide more details on this?
+
+> This arm64 patch said:
+> https://lore.kernel.org/all/20161201135112.15396-1-fu.wei@linaro.org/
+> (commit 9f9a35a7b654e006250530425eb1fb527f0d32e9)
+> 
+> ```
+> /*
+>  * Despite its name, this function must still broadcast the TLB
+>  * invalidation in order to ensure other CPUs don't end up with junk
+>  * entries as a result of speculation. Unusually, its also called in
+>  * IRQ context (ghes_iounmap_irq) so if we ever need to use IPIs for
+>  * TLB broadcasting, then we're in trouble here.
+>  */
+> static inline void arch_apei_flush_tlb_one(unsigned long addr)
+> {
+>     flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> }
+> ```
+> 
+> 1. I am curious to know the reason behind the design choice of flushing
+> the TLB on all cores for ARM64's clear_fixmap, while AMD64 only flushes
+> the TLB on a single core. Are there any TLB design details that make a
+> difference here?
+
+I don't know why arm64 only clears this on a single CPU.
+
+On arm64 we *must* invalidate the TLB on all CPUs as the kernel page tables are
+shared by all CPUs, and the architectural Break-Before-Make rules in require
+the TLB to be invalidated between two valid (but distinct) entries.
+
+> 2. Is it possible to let the ARM64 to flush the TLB on just one core,
+> similar to the AMD64?
+
+No. If we omitted the broadcast TLB invalidation, then a different CPU may
+fetch the old value into a TLB, then fetch the new value. When this happens,
+the architecture permits "amalgamation", with UNPREDICTABLE results, which
+could result in memory corruption, taking SErrors, etc.
+
+> 3. If so, would there be any potential drawbacks or limitations to
+> making such a change?
+
+As above, we must use broadcast TLB invalidation here.
 
 Thanks,
-Yang
-
+Mark.
