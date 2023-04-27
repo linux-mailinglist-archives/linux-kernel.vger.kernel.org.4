@@ -2,156 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E966F093B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636706F095F
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243913AbjD0QKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S244145AbjD0QMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243023AbjD0QKw (ORCPT
+        with ESMTP id S243023AbjD0QMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:10:52 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E09F35BB;
-        Thu, 27 Apr 2023 09:10:51 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-18f16a2c329so5328206fac.0;
-        Thu, 27 Apr 2023 09:10:51 -0700 (PDT)
+        Thu, 27 Apr 2023 12:12:32 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188793585
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:12:30 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-94f6c285d22so1642491766b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:12:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1682611948; x=1685203948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMqYIMvxQzMeNZyvXScd0d9ZjZQUVmBHnaHMVur7PZI=;
+        b=47g0X7BSbMbvv9L/Q9QUepC51/0/TQau9ztKHNIjZPRAu18BfSZwcYUZVenNlbaewp
+         NiPe9w4TDMscaoknOdvTZvqMxgBuUlKkNmelAbA/YIopx4I29Mfd1897kyLRP88TVqmc
+         8TFGrit4A0yflaIwe9JWcFsSul9heo5Du7IOoDFp+xVjVcCrm2Re6YVcjNu3brkYiqUb
+         ZitjrlWKTlpSCbK0VTC6LjRaG8a16ADuC4RtEungg1SLxdCt8myxiqRtn82yGIavrB4Y
+         mPjJo85tc81DLj8iZiLNJbtICwphoW9xH3sS7FsuxGd2WSaiRd8iICINbz1zs0LioeNr
+         Vhkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682611850; x=1685203850;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2zb4UIqURY+BWTS3e9vX+YTZaBHbEmn0Eg9W3zLRlAs=;
-        b=TVTe8fmkiSObNpKmCb48LRQ9XR6DmHlGNVO4hqQMq3XJZ7mWKBt2P0fKIrwa9oSFzw
-         cySYBtWNR5Ijg90pOuguNvuALh4mHVfCApFzPcz+9wETK5L6fxoBzUVSFVquGNtEQIYU
-         mFEz39VyB/Ur08g++kXD6J0C6bSyKgaNf4aHXmaAeP48zr2aHehtLUKHXxJgXBqXaW/N
-         KqkSOiE76Im9RFVY5CUZZoy29C7OJp4Lpp0cl8ti3DscbQcUH/RV7ImaZvnvVWK1RtvE
-         iUgVJ68WGA5F0/SgsR6ZJSXFyfIdxPhMW16SjxdDV/WTEZxmKfRcUU6A6Q4soo272Xk0
-         ifyA==
-X-Gm-Message-State: AC+VfDwiGBoWL6aWm+Vq06D3ByvVkCGjEJk/qZ9Zr6FKeN36N7mzoDvZ
-        kvRFJlNV83voEH57XHTfHA==
-X-Google-Smtp-Source: ACHHUZ69Sq4w3EraVz3yG/3YjM+ceN2r9AONaP5KgtunTytLs//j63DXjClPMLRDUmHDfuI/a8cy3w==
-X-Received: by 2002:a05:6830:201a:b0:6a7:bced:411e with SMTP id e26-20020a056830201a00b006a7bced411emr1138804otp.3.1682611850271;
-        Thu, 27 Apr 2023 09:10:50 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i15-20020a9d624f000000b0069fb8bfb4f3sm8056756otk.77.2023.04.27.09.10.49
+        d=1e100.net; s=20221208; t=1682611948; x=1685203948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HMqYIMvxQzMeNZyvXScd0d9ZjZQUVmBHnaHMVur7PZI=;
+        b=TtT3z8alFYk+0YqddpK7D5VJiHP8BEthw6h4f/KBxaMqHQ1E3EX3xunrZN6zZRXh13
+         g8LsNpT/7Plee/GyUTuIAfByU15lcNSZMRXDbiFekM0DGk37yIeeFSakwZIq3ZYmii1b
+         V7j6SIYsDRGjIC9ToDP2ckSZIfqOJJ92Rmj985yaNxu1HjvQYs5uY3VWauD2YwVDd0dT
+         YD0nKvjloRSTIwed1YfKk+SaalpgalDbnfbJemhKBm9e/sGQB/dMQWyABNo3G5CmjtQE
+         1a+JXOoiB9qMncPlCxPotgwTIeQOCoU6JwjGSP6Y6UVExfXfO2rCxnhqEhcZshvXpNVb
+         3qXA==
+X-Gm-Message-State: AC+VfDwUfTppiFMd9qpT9we+jCBqRTZ5AnfHTanV76OjU2OG4OwcUtxT
+        fxlH4q5/NGBSYw21NT04ZS5fnA==
+X-Google-Smtp-Source: ACHHUZ7WBBja5Lx65Estj/dqaAZRltQnKHCN4a4WPD9RhhPeRBS3LNkizwx+3dPAR0i1nU1Vxk1z0Q==
+X-Received: by 2002:a17:907:3e1a:b0:957:db05:a35d with SMTP id hp26-20020a1709073e1a00b00957db05a35dmr2670020ejc.48.1682611948580;
+        Thu, 27 Apr 2023 09:12:28 -0700 (PDT)
+Received: from brgl-uxlite.. ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id l18-20020a1709060e1200b0094f3338129asm10144096eji.141.2023.04.27.09.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:10:49 -0700 (PDT)
-Received: (nullmailer pid 3112114 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:10:49 -0000
-Date:   Thu, 27 Apr 2023 11:10:49 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: gpio: Add STMPE YAML DT schema
-Message-ID: <20230427161049.GA3107476-robh@kernel.org>
-References: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
- <20230426-stmpe-dt-bindings-v2-1-2f85a1fffcda@linaro.org>
+        Thu, 27 Apr 2023 09:12:28 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sa8775p: add the watchdog node
+Date:   Thu, 27 Apr 2023 18:12:18 +0200
+Message-Id: <20230427161218.201828-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426-stmpe-dt-bindings-v2-1-2f85a1fffcda@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 01:21:38PM +0200, Linus Walleij wrote:
-> This adds a schema for the STMPE GPIO that while it is used a
-> lot in the kernel tree is anyway missing its bindings.
-> 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - New patch split off from the MFD patch.
-> ---
->  .../devicetree/bindings/gpio/st,stmpe-gpio.yaml    | 60 ++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
-> new file mode 100644
-> index 000000000000..6e991ebbdf77
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/st,stmpe-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectonics Port Expander (STMPE) GPIO Block
-> +
-> +description: STMicroelectronics Port Expander (STMPE) is a series of slow
-> +  bus controllers for various expanded peripherals such as GPIO, keypad,
-> +  touchscreen, ADC, PWM or rotator. It can contain one or several different
-> +  peripherals connected to SPI or I2C. These bindings pertain to the
-> +  GPIO portions of these expanders.
-> +
-> +maintainers:
-> +  - Linus Walleij <linus.walleij@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stmpe-gpio
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +
-> +  interrupt-controller: true
-> +
-> +  st,norequest-mask:
-> +    description: A bitmask of GPIO lines that cannot be requested because for
-> +      for example not being connected to anything on the system
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +patternProperties:
-> +  "^.+-hog(-[0-9]+)?$":
-> +    type: object
-> +
-> +    properties:
-> +      gpio-hog: true
-> +      gpios: true
-> +      input: true
-> +      output-high: true
-> +      output-low: true
-> +      line-name: true
-> +
-> +    required:
-> +      - gpio-hog
-> +      - gpios
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-All you need for hog nodes is:
+Now that the hypervisor issue is fixed, we can add the watchdog node
+for sa8775p platforms.
 
-"^.+-hog(-[0-9]+)?$":
-  type: object
-  required:
-    - gpio-hog
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-The presence of 'gpio-hog' causes the hog schema to be applied.
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+index badabf79c6ef..0737ba38fefe 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
++++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+@@ -1008,6 +1008,13 @@ intc: interrupt-controller@17a00000 {
+ 			redistributor-stride = <0x0 0x20000>;
+ 		};
+ 
++		watchdog@17c10000 {
++			compatible = "qcom,apss-wdt-sa8775p", "qcom,kpss-wdt";
++			reg = <0x0 0x17c10000 0x0 0x1000>;
++			clocks = <&sleep_clk>;
++			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
+ 		memtimer: timer@17c20000 {
+ 			compatible = "arm,armv7-timer-mem";
+ 			reg = <0x0 0x17c20000 0x0 0x1000>;
+-- 
+2.39.2
 
-Rob
