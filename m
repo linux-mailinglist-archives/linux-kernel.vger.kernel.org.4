@@ -2,177 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A936F03A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D7C6F03A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243386AbjD0Js4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S243394AbjD0Jth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243343AbjD0Jsx (ORCPT
+        with ESMTP id S243222AbjD0Jtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:48:53 -0400
-Received: from outbound-smtp43.blacknight.com (outbound-smtp43.blacknight.com [46.22.139.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019C92
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:48:51 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp43.blacknight.com (Postfix) with ESMTPS id B4F1E232A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:48:49 +0100 (IST)
-Received: (qmail 6189 invoked from network); 27 Apr 2023 09:48:49 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 27 Apr 2023 09:48:49 -0000
-Date:   Thu, 27 Apr 2023 10:48:47 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v2 1/4] mm/filemap: Add folio_lock_timeout()
-Message-ID: <20230427094847.fmj4ju4spwkawtez@techsingularity.net>
-References: <20230421151135.v2.1.I2b71e11264c5c214bc59744b9e13e4c353bc5714@changeid>
- <20230422051858.1696-1-hdanton@sina.com>
- <CAD=FV=XAJnWL8YHok8RcgR8aK5igKfvE2iD7aW7Rpr4cDVJedQ@mail.gmail.com>
- <20230425010917.1984-1-hdanton@sina.com>
- <CAD=FV=XWuQoaGZG_Tm8AqGAsqGSAa822bNw3Dp2QnmR40npURw@mail.gmail.com>
- <20230426100918.ku32k6mqoogsnijn@techsingularity.net>
- <ZEk/uVlbX2wWgagN@casper.infradead.org>
- <CAD=FV=UyLf9GLz7xJyzhW2V_JycwUppwGfe7th17f_KXmMGOqw@mail.gmail.com>
- <ZEmXH1FpOgT/u6/j@casper.infradead.org>
- <CAD=FV=Xkg6XgSL0VVVUMm+8xQ65oDgKoTgG0qHY7ALBE3xhCmg@mail.gmail.com>
+        Thu, 27 Apr 2023 05:49:33 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8FB12F
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:49:32 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-440403d34a4so2969387e0c.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682588971; x=1685180971;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wto9pKIHtHAM2Ad2u4MUsD4JSmys3BuIyF+J3wWcMGM=;
+        b=oT7AHjre3+bsN732m6l/hI8c99enC6un8zE2DHUJm9fvFZLatJqrEi2XJ+UAjpW3cH
+         SeUpPvx51YcPejWfxeA3rB024LQnOWWSM1oLZ1+KpcX5JSXbEX7z3n/f9PwDtXhr/s2T
+         6+jv2/P4tHAc+WQhJrWv6VQznbRv4XZIl4Sw0Dsku+z48i6Tj5dpQonL+Hwh4f0d22eM
+         2d/b5hnqWTMEOmg2rXOB71wGBVE7OstRfnlbj8rk9sURGoXDfyZXkLCoIa0iyimVU8Tb
+         jPFWFMaCq5Uv6BhRevvHIqTIMYe7cx2IX9EaWcfq5D8TGNTtai+OIu/v/QkcZ9FTqw7l
+         DHvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682588971; x=1685180971;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wto9pKIHtHAM2Ad2u4MUsD4JSmys3BuIyF+J3wWcMGM=;
+        b=cpg6BXdcM0FV8gfepykDLhbzO8mRAIm5IrnjE5VOjnNZOsnuWpXyuvtcP/57GacLeM
+         vXjSlztlCwHNIVHv/51IuMEdYTYoceeHoZb61Zg6ak8/rf+0fQa9bI8kS0hXkmZmUYUV
+         QC2XkBP6tA1I4n0dgfbl1nudHd0K3N+gznxKU2InYzYXjKoNg5X1DJV9aeNlWuQxicv1
+         e9NlHnbvbQVequ8jJqk+pDYxZtWw0rcCfpcmdvj0AnCk6ktUNOehWc9OYBE+p3ajNWHs
+         NHGsaoPDBHjuUNSOcku+BgdaYcSisKNIGylstlGipluziT6XcBcyzZfcbQskJft1E7Rs
+         GS3A==
+X-Gm-Message-State: AC+VfDxVct61wTJFHuPfBiy3LsraAsvxxb/3ul3mV4z//24WrrZpTtsI
+        DDgB7QsOIVc0WuZMwzH/evaRZgqryD6pZlo+fep9Bg==
+X-Google-Smtp-Source: ACHHUZ5HX63/p5uxT2f2OVWtxJuwIq2uMgzazAFLwRisk67JONp/X53bDBJdfyKQMjn1/Xrf6T1WwUVBQji0McvNddo=
+X-Received: by 2002:a1f:c406:0:b0:440:3793:6ab2 with SMTP id
+ u6-20020a1fc406000000b0044037936ab2mr209235vkf.13.1682588970772; Thu, 27 Apr
+ 2023 02:49:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=Xkg6XgSL0VVVUMm+8xQ65oDgKoTgG0qHY7ALBE3xhCmg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230424131121.155649464@linuxfoundation.org> <CA+G9fYstB_fROK9LHYuQ8dc2ArieGGAW_x69eEX-eAi5xMeE3Q@mail.gmail.com>
+ <20230426170945.0ec0f1ef@gandalf.local.home> <20230426181415.17c893f5@gandalf.local.home>
+In-Reply-To: <20230426181415.17c893f5@gandalf.local.home>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 27 Apr 2023 10:49:19 +0100
+Message-ID: <CA+G9fYtd=dJEM=+xOHA9Egs88r+gEfrnW_gFnTFm4of5uTQ7mA@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/29] 4.19.282-rc1 review
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 02:39:56PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Apr 26, 2023 at 2:27???PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Wed, Apr 26, 2023 at 01:46:58PM -0700, Doug Anderson wrote:
-> > > On Wed, Apr 26, 2023 at 8:14???AM Matthew Wilcox <willy@infradead.org> wrote:
-> > > >
-> > > > I'm not generally a fan of lock-with-timeout approaches.  I think the
-> > > > rationale for this one makes sense, but we're going to see some people
-> > > > try to use this for situations where it doesn't make sense.
-> > >
-> > > Although it won't completely prevent the issue, I could add a comment
-> >
-> > People don't read comments.
-> 
-> Agreed, it's just better than nothing...
-> 
+Hi Steven,
 
-It also acts as something to point to if an ill-advised use of
-trylock_timeout was used.
+On Wed, 26 Apr 2023 at 23:14, Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Wed, 26 Apr 2023 17:09:45 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> > Now the question is, why is this triggering on 4.19 but not in latest
+> > mainline?
+>
+> I found it, I backported this patch and the warning goes away (at least for
+> me). Can you add this and see if it makes the warning go away for you too?
 
-> 
-> > > > Hm.  If the problem is that we want to wait for the lock unless the
-> > > > lock is being held for I/O, we can actually tell that in the caller.
-> > > >
-> > > >         if (folio_test_uptodate(folio))
-> > > >                 folio_lock(folio);
-> > > >         else
-> > > >                 folio_trylock(folio);
-> > > >
-> > > > (the folio lock isn't held for writeback, just taken and released;
-> > > > if the folio is uptodate, the folio lock should only be taken for a
-> > > > short time; if it's !uptodate then it's probably being read)
-> > >
-> > > The current place in patch #3 where I'm using folio_lock_timeout()
-> > > only calls it if a folio_trylock() already failed [2]. So I guess the
-> > > idea would be that if the trylock failed and folio_test_uptodate()
-> > > returns 0 then we immediately fail, otherwise we call the unbounded
-> > > folio_trylock()?
-> >
-> > Looking at the actual code, here's what I'd do:
-> >
-> > +++ b/mm/migrate.c
-> > @@ -1156,6 +1156,14 @@ static int migrate_folio_unmap(new_page_t get_new_page, free_page_t put_new_page
-> >                 if (current->flags & PF_MEMALLOC)
-> >                         goto out;
-> >
-> > +               /*
-> > +                * In "light" mode, we can wait for transient locks (eg
-> > +                * inserting a page into the page table), but it's not
-> > +                * worth waiting for I/O.
-> > +                */
-> > +               if (mode == MIGRATE_SYNC_LIGHT && !folio_test_uptodate(folio))
-> > +                       goto out;
-> > +
-> >                 folio_lock(src);
-> >         }
-> >         locked = true;
-> >
-> > > I put some traces in and ran my test and it turns out that in every
-> > > case (except one) where the tre initial folio_trylock() failed I saw
-> > > folio_test_uptodate() return 0. Assuming my test case is typical, I
-> > > think that means that coding it with folio_test_uptodate() is roughly
-> > > the same as just never waiting at all for the folio lock in the
-> > > SYNC_LIGHT case. In the original discussion of my v1 patch people
-> > > didn't like that idea. ...so I think that for now I'm going to keep it
-> > > with the timeout flow.
-> >
-> > I think that means that your specific test is generally going to
-> > exercise the case where the lock is held because we're waiting for I/O.
-> > That's exactly what you set it up to produce, after all!  But it won't
-> > affect the cases where the folio lock is being held for other reasons,
-> > which your testcase is incredibly unlikely to produce.
-> 
-> Sure, I'm happy to do it like you say. Do you have any suggestions for
-> the similar lock_buffer() case, or are you OK w/ the timeout there?
-> 
-> Mel: do you have any comments? In your previous response [1] you
-> seemed to indicate that you thought that short waits for read were a
-> good idea.
-> 
+I have applied this patch on stable-rc 4.19 branch and tested on
+- arm64: Juno-r2
+ - x86_64 device
 
-I have no objection and it's worth trying the patch against your test
-case although note that short-lived locks may still be skipped (but that's
-ok). Either kcompactd still waits for minutes on folio lock or it does not.
-The potential downside is that kcompactd skips candidates that it shouldn't
-have which will manifest as a drop in compaction efficiency that will be
-difficult to detect. With Johannes' compaction series in the mix though,
-it's more likely we'll notice a drop in efficiency in the short term.
+and the reported problem has been resolved.
 
-I prefer the uptodate check a lot more than "spin rather than sleep on this
-lock". Spinning is surprisingly difficult to get right (see all the changes
-and subsequent fixes that went into mutexes or the changes in "polling
-on the way to idle" logic in cpuidle), it also occupies CPU time when a
-system is already under stress and it's not a great fit for this specific
-case. The timeout is currently specified in ticks and ticking for 1-4ms on
-common kernel configs is a *long* time from a scheduler perspective even
-if it's a non-issue for MM which sometimes deals with time frames suitable
-for slow storage. It's even worse if there is no preemption point and even
-if there was, it hits potential hazards with CFS dealing with the fairness
-of a useless spinning task vs tasks trying to do real work.  Of course
-the spin time could be based on cond_resched or a timeout in nanoseconds
-but cond_resched is a random timeout and picking a specific timeout is
-difficult and will attract negative attention eventually. My MM hat says
-"ah, it'll be fine" and my scheduler hat says "uhhh, don't do that".
+Thanks for finding a quick fix patch.
 
-Matthew's suggestion on checking uptodate is a good one. If he's right,
-the problem goes away. If the problem still persists, I am willing to bet
-that it's mitigated a lot *and* it becomes interesting to find out why a
-!uptodate page could take a very long time to lock because it's possibly
-revealing another real bug. If the idea does not work at all, the timeout
-patch still exists, add to the changelog why checking uptodate doesn't
-work and Linus spelled out clearly why it should be ok in this specific
-case even if we have to watch out for bad users of the new interface.
+>
+> -- Steve
+>
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Fri, 7 Aug 2020 20:50:19 +0200
+> Subject: [PATCH] sched,idle,rcu: Push rcu_idle deeper into the idle path
+>
+> commit 1098582a0f6c4e8fd28da0a6305f9233d02c9c1d upstream.
+>
+> Lots of things take locks, due to a wee bug, rcu_lockdep didn't notice
+> that the locking tracepoints were using RCU.
+>
+> Push rcu_idle_{enter,exit}() as deep as possible into the idle paths,
+> this also resolves a lot of _rcuidle()/RCU_NONIDLE() usage.
+>
+> Specifically, sched_clock_idle_wakeup_event() will use ktime which
+> will use seqlocks which will tickle lockdep, and
+> stop_critical_timings() uses lock.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Tested-by: Marco Elver <elver@google.com>
+> Link: https://lkml.kernel.org/r/20200821085348.310943801@infradead.org
 
--- 
-Mel Gorman
-SUSE Labs
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+test log:
+  - https://lkft.validation.linaro.org/scheduler/job/6380295#L1418
+  - https://lkft.validation.linaro.org/scheduler/job/6380303#L1443
+
+> ---
+>  drivers/cpuidle/cpuidle.c | 12 ++++++++----
+>  kernel/sched/idle.c       | 22 ++++++++--------------
+>  2 files changed, 16 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 2d182dc1b49e..01bde6dec13a 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -140,13 +140,14 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>          * executing it contains RCU usage regarded as invalid in the idle
+>          * context, so tell RCU about that.
+>          */
+> -       RCU_NONIDLE(tick_freeze());
+> +       tick_freeze();
+>         /*
+>          * The state used here cannot be a "coupled" one, because the "coupled"
+>          * cpuidle mechanism enables interrupts and doing that with timekeeping
+>          * suspended is generally unsafe.
+>          */
+>         stop_critical_timings();
+> +       rcu_idle_enter();
+>         drv->states[index].enter_s2idle(dev, drv, index);
+>         if (WARN_ON_ONCE(!irqs_disabled()))
+>                 local_irq_disable();
+> @@ -155,7 +156,8 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>          * first CPU executing it calls functions containing RCU read-side
+>          * critical sections, so tell RCU about that.
+>          */
+> -       RCU_NONIDLE(tick_unfreeze());
+> +       rcu_idle_exit();
+> +       tick_unfreeze();
+>         start_critical_timings();
+>
+>         time_end = ns_to_ktime(local_clock());
+> @@ -224,16 +226,18 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+>         /* Take note of the planned idle state. */
+>         sched_idle_set_state(target_state);
+>
+> -       trace_cpu_idle_rcuidle(index, dev->cpu);
+> +       trace_cpu_idle(index, dev->cpu);
+>         time_start = ns_to_ktime(local_clock());
+>
+>         stop_critical_timings();
+> +       rcu_idle_enter();
+>         entered_state = target_state->enter(dev, drv, index);
+> +       rcu_idle_exit();
+>         start_critical_timings();
+>
+>         sched_clock_idle_wakeup_event();
+>         time_end = ns_to_ktime(local_clock());
+> -       trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, dev->cpu);
+> +       trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
+>
+>         /* The cpu is no longer idle or about to enter idle. */
+>         sched_idle_set_state(NULL);
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index 44a17366c8ec..4e3d149d64ad 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -53,17 +53,18 @@ __setup("hlt", cpu_idle_nopoll_setup);
+>
+>  static noinline int __cpuidle cpu_idle_poll(void)
+>  {
+> +       trace_cpu_idle(0, smp_processor_id());
+> +       stop_critical_timings();
+>         rcu_idle_enter();
+> -       trace_cpu_idle_rcuidle(0, smp_processor_id());
+>         local_irq_enable();
+> -       stop_critical_timings();
+>
+>         while (!tif_need_resched() &&
+> -               (cpu_idle_force_poll || tick_check_broadcast_expired()))
+> +              (cpu_idle_force_poll || tick_check_broadcast_expired()))
+>                 cpu_relax();
+> -       start_critical_timings();
+> -       trace_cpu_idle_rcuidle(PWR_EVENT_EXIT, smp_processor_id());
+> +
+>         rcu_idle_exit();
+> +       start_critical_timings();
+> +       trace_cpu_idle(PWR_EVENT_EXIT, smp_processor_id());
+>
+>         return 1;
+>  }
+> @@ -90,7 +91,9 @@ void __cpuidle default_idle_call(void)
+>                 local_irq_enable();
+>         } else {
+>                 stop_critical_timings();
+> +               rcu_idle_enter();
+>                 arch_cpu_idle();
+> +               rcu_idle_exit();
+>                 start_critical_timings();
+>         }
+>  }
+> @@ -148,7 +151,6 @@ static void cpuidle_idle_call(void)
+>
+>         if (cpuidle_not_available(drv, dev)) {
+>                 tick_nohz_idle_stop_tick();
+> -               rcu_idle_enter();
+>
+>                 default_idle_call();
+>                 goto exit_idle;
+> @@ -166,19 +168,15 @@ static void cpuidle_idle_call(void)
+>
+>         if (idle_should_enter_s2idle() || dev->use_deepest_state) {
+>                 if (idle_should_enter_s2idle()) {
+> -                       rcu_idle_enter();
+>
+>                         entered_state = cpuidle_enter_s2idle(drv, dev);
+>                         if (entered_state > 0) {
+>                                 local_irq_enable();
+>                                 goto exit_idle;
+>                         }
+> -
+> -                       rcu_idle_exit();
+>                 }
+>
+>                 tick_nohz_idle_stop_tick();
+> -               rcu_idle_enter();
+>
+>                 next_state = cpuidle_find_deepest_state(drv, dev);
+>                 call_cpuidle(drv, dev, next_state);
+> @@ -195,8 +193,6 @@ static void cpuidle_idle_call(void)
+>                 else
+>                         tick_nohz_idle_retain_tick();
+>
+> -               rcu_idle_enter();
+> -
+>                 entered_state = call_cpuidle(drv, dev, next_state);
+>                 /*
+>                  * Give the governor an opportunity to reflect on the outcome
+> @@ -212,8 +208,6 @@ static void cpuidle_idle_call(void)
+>          */
+>         if (WARN_ON_ONCE(irqs_disabled()))
+>                 local_irq_enable();
+> -
+> -       rcu_idle_exit();
+>  }
+>
+>  /*
+> --
+> 2.39.2
+
+- Naresh
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
