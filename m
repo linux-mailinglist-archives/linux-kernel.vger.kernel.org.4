@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFEE6F040E
+	by mail.lfdr.de (Postfix) with ESMTP id 444E96F040D
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243551AbjD0KTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S243513AbjD0KTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243521AbjD0KTK (ORCPT
+        with ESMTP id S243524AbjD0KTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 27 Apr 2023 06:19:10 -0400
-Received: from esa6.hc1455-7.c3s2.iphmx.com (esa6.hc1455-7.c3s2.iphmx.com [68.232.139.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F765582
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:18:59 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="116123167"
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2354A55A8
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:19:01 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="103296175"
 X-IronPort-AV: E=Sophos;i="5.99,230,1677510000"; 
-   d="scan'208";a="116123167"
-Received: from unknown (HELO oym-r4.gw.nic.fujitsu.com) ([210.162.30.92])
-  by esa6.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 19:18:57 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-        by oym-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id D7C91DD9A4
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:18:54 +0900 (JST)
+   d="scan'208";a="103296175"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 19:18:58 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 9E607D4322
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:18:56 +0900 (JST)
 Received: from kws-ab1.gw.nic.fujitsu.com (kws-ab1.gw.nic.fujitsu.com [192.51.206.11])
-        by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 12829BCB6F
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:18:54 +0900 (JST)
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id BD5EED55C6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:18:55 +0900 (JST)
 Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
-        by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id 71D921145FC8;
-        Thu, 27 Apr 2023 19:18:51 +0900 (JST)
+        by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id EC5511146B81;
+        Thu, 27 Apr 2023 19:18:53 +0900 (JST)
 From:   Li Zhijian <lizhijian@fujitsu.com>
 To:     x86@kernel.org, nvdimm@lists.linux.dev, kexec@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, y-goto@fujitsu.com,
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org, y-goto@fujitsu.com,
         Li Zhijian <lizhijian@fujitsu.com>,
         Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
         Dave Young <dyoung@redhat.com>
-Subject: [RFC PATCH v2 makedumpfile 1/3] elf_info.c: Introduce is_pmem_pt_load_range
-Date:   Thu, 27 Apr 2023 18:18:36 +0800
-Message-Id: <20230427101838.12267-6-lizhijian@fujitsu.com>
+Subject: [RFC PATCH v2 makedumpfile 2/3] makedumpfile.c: Exclude all pmem pages
+Date:   Thu, 27 Apr 2023 18:18:37 +0800
+Message-Id: <20230427101838.12267-7-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230427101838.12267-1-lizhijian@fujitsu.com>
 References: <20230427101838.12267-1-lizhijian@fujitsu.com>
@@ -48,11 +48,12 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27590.006
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27590.006
-X-TMASE-Result: 10--6.656400-10.000000
-X-TMASE-MatchedRID: g7nni+nG95B15zj/0di3Q2/6CCblACLhCZa9cSpBObnAuQ0xDMaXkH4q
-        tYI9sRE/j6kCfX0Edc4cG6dIciYEQpcLewwAa76fxvp0tuDMx3kXaMhZSeVFDLgbJOZ434BsCeW
-        hs1FY/qX/t6IqZwsJBsYGS5HBZwU4r78SC5iivxwURSScn+QSXt0H8LFZNFG7bkV4e2xSge7fAH
-        kd3wwbgyRebciNZz82XbRAX+BXE40cqC7zaDCQoh/BXqwE9HSW
+X-TMASE-Result: 10--5.941800-10.000000
+X-TMASE-MatchedRID: cV8N6dznfzuBgK4uB6zi2wI0yP/uoH+DwTlc9CcHMZerwqxtE531VIPc
+        XuILVCbaWUOTJnYsQa2lRWSx/oj7ExHdGMlurS250e7jfBjhB8f0swHSFcVJ6NWO4MK8ycTFg4T
+        d/DBNkVPuCkRfzEi2wgclwOc+5StklXlA6F65Sc32TS1YFaI5/xZSD+Gbjz3IqgHTw5IkXxgJfh
+        8gHD4nu42rc3rXpVKc4QeSIpZv9OkfE8yM4pjsDwtuKBGekqUpI/NGWt0UYPDcGMULvOV2rQ7tl
+        vwzkBcKWTZ/RLlgCAbttAMkwZFFNAg1EEshzuUS
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,101 +64,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It checks BIT(4) of Elf64_Phdr, currently only the former 3 bits are used
-by ELF. In kexec-tool, we extend the BIT(4) to indicate pmem or not.
-
-dump_Elf_load:                phys_start         phys_end       virt_start         virt_end  is_pmem
-dump_Elf_load: LOAD[ 0]         6b800000         6e42c000 ffffffffbcc00000 ffffffffbf82c000    false
-dump_Elf_load: LOAD[ 1]             1000            9fc00 ffff975980001000 ffff97598009fc00    false
-dump_Elf_load: LOAD[ 2]           100000         7f000000 ffff975980100000 ffff9759ff000000    false
-dump_Elf_load: LOAD[ 3]         bf000000         bffd7000 ffff975a3f000000 ffff975a3ffd7000    false
-dump_Elf_load: LOAD[ 4]        100000000        140000000 ffff975a80000000 ffff975ac0000000    false
-dump_Elf_load: LOAD[ 5]        140000000        23e200000 ffff975ac0000000 ffff975bbe200000     true
+Generally, the pmem is too large to suitable to be dumped. Further, only
+the namespace of the pmem is dumpable, but actually currently we have no
+idea the excatly layout of the namespace in pmem.
 
 CC: Baoquan He <bhe@redhat.com>
 CC: Vivek Goyal <vgoyal@redhat.com>
 CC: Dave Young <dyoung@redhat.com>
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- elf_info.c | 31 +++++++++++++++++++++++++++----
- elf_info.h |  1 +
- 2 files changed, 28 insertions(+), 4 deletions(-)
+ makedumpfile.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/elf_info.c b/elf_info.c
-index bc24083655d6..41b36b2804d2 100644
---- a/elf_info.c
-+++ b/elf_info.c
-@@ -43,6 +43,7 @@ struct pt_load_segment {
- 	unsigned long long	phys_end;
- 	unsigned long long	virt_start;
- 	unsigned long long	virt_end;
-+	int			is_pmem;
- };
+diff --git a/makedumpfile.c b/makedumpfile.c
+index f40368364cf3..98c3b8c7ced9 100644
+--- a/makedumpfile.c
++++ b/makedumpfile.c
+@@ -100,6 +100,7 @@ mdf_pfn_t pfn_user;
+ mdf_pfn_t pfn_free;
+ mdf_pfn_t pfn_hwpoison;
+ mdf_pfn_t pfn_offline;
++mdf_pfn_t pfn_pmem_userdata;
+ mdf_pfn_t pfn_elf_excluded;
  
- static int			nr_cpus;             /* number of cpu */
-@@ -153,6 +154,8 @@ check_elf_format(int fd, char *filename, int *phnum, unsigned int *num_load)
- 	return FALSE;
- }
+ mdf_pfn_t num_dumped;
+@@ -6326,6 +6327,7 @@ __exclude_unnecessary_pages(unsigned long mem_map,
+ 	unsigned int order_offset, dtor_offset;
+ 	unsigned long flags, mapping, private = 0;
+ 	unsigned long compound_dtor, compound_head = 0;
++	unsigned int is_pmem;
  
-+#define PF_DEV (1 << 4)
+ 	/*
+ 	 * If a multi-page exclusion is pending, do it first
+@@ -6377,6 +6379,13 @@ __exclude_unnecessary_pages(unsigned long mem_map,
+ 				continue;
+ 		}
+ 
++		is_pmem = is_pmem_pt_load_range(pfn << PAGESHIFT(), (pfn + 1) << PAGESHIFT());
++		if (is_pmem) {
++			pfn_pmem_userdata++;
++			clear_bit_on_2nd_bitmap_for_kernel(pfn, cycle);
++			continue;
++		}
 +
- static int
- dump_Elf_load(Elf64_Phdr *prog, int num_load)
- {
-@@ -170,17 +173,37 @@ dump_Elf_load(Elf64_Phdr *prog, int num_load)
- 	pls->virt_end    = pls->virt_start + prog->p_memsz;
- 	pls->file_offset = prog->p_offset;
- 	pls->file_size   = prog->p_filesz;
-+	pls->is_pmem     = !!(prog->p_flags & PF_DEV);
+ 		index_pg = pfn % PGMM_CACHED;
+ 		pcache  = page_cache + (index_pg * SIZE(page));
  
- 	if (num_load == 0)
--		DEBUG_MSG("%8s %16s %16s %16s %16s\n", "",
--			"phys_start", "phys_end", "virt_start", "virt_end");
-+		DEBUG_MSG("%8s %16s %16s %16s %16s %8s\n", "",
-+			"phys_start", "phys_end", "virt_start", "virt_end",
-+			"is_pmem");
+@@ -8084,7 +8093,7 @@ write_elf_pages_cyclic(struct cache_data *cd_header, struct cache_data *cd_page)
+ 	 */
+ 	if (info->flag_cyclic) {
+ 		pfn_zero = pfn_cache = pfn_cache_private = 0;
+-		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = 0;
++		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = pfn_pmem_userdata = 0;
+ 		pfn_memhole = info->max_mapnr;
+ 	}
  
--	DEBUG_MSG("LOAD[%2d] %16llx %16llx %16llx %16llx\n", num_load,
--		pls->phys_start, pls->phys_end, pls->virt_start, pls->virt_end);
-+	DEBUG_MSG("LOAD[%2d] %16llx %16llx %16llx %16llx %8s\n", num_load,
-+		pls->phys_start, pls->phys_end, pls->virt_start, pls->virt_end,
-+		pls->is_pmem ? "true": "false");
+@@ -9422,7 +9431,7 @@ write_kdump_pages_and_bitmap_cyclic(struct cache_data *cd_header, struct cache_d
+ 		 * Reset counter for debug message.
+ 		 */
+ 		pfn_zero = pfn_cache = pfn_cache_private = 0;
+-		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = 0;
++		pfn_user = pfn_free = pfn_hwpoison = pfn_offline = pfn_pmem_userdata = 0;
+ 		pfn_memhole = info->max_mapnr;
  
- 	return TRUE;
- }
+ 		/*
+@@ -10370,7 +10379,7 @@ print_report(void)
+ 	 */
+ 	pfn_original = info->max_mapnr - pfn_memhole;
  
-+int is_pmem_pt_load_range(unsigned long long start, unsigned long long end)
-+{
-+	int i;
-+	struct pt_load_segment *pls;
-+
-+	for (i = 0; i < num_pt_loads; i++) {
-+		pls = &pt_loads[i];
-+		if (pls->is_pmem && pls->phys_start == NOT_PADDR)
-+			return TRUE;
-+		if (pls->is_pmem && pls->phys_start != NOT_PADDR &&
-+		    pls->phys_start <= start && pls->phys_end >= end)
-+			return TRUE;
-+	}
-+
-+	return FALSE;
-+}
-+
- static off_t
- offset_next_note(void *note)
- {
-diff --git a/elf_info.h b/elf_info.h
-index d5416b32cdd7..a08d59a331f6 100644
---- a/elf_info.h
-+++ b/elf_info.h
-@@ -64,6 +64,7 @@ int get_pt_load_extents(int idx,
- 	off_t *file_offset,
- 	off_t *file_size);
- unsigned int get_num_pt_loads(void);
-+int is_pmem_pt_load_range(unsigned long long start, unsigned long long end);
+-	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private
++	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private + pfn_pmem_userdata
+ 	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline;
  
- void set_nr_cpus(int num);
- int get_nr_cpus(void);
+ 	REPORT_MSG("\n");
+@@ -10387,6 +10396,7 @@ print_report(void)
+ 	REPORT_MSG("    Free pages              : 0x%016llx\n", pfn_free);
+ 	REPORT_MSG("    Hwpoison pages          : 0x%016llx\n", pfn_hwpoison);
+ 	REPORT_MSG("    Offline pages           : 0x%016llx\n", pfn_offline);
++	REPORT_MSG("    pmem userdata pages     : 0x%016llx\n", pfn_pmem_userdata);
+ 	REPORT_MSG("  Remaining pages  : 0x%016llx\n",
+ 	    pfn_original - pfn_excluded);
+ 
+@@ -10426,7 +10436,7 @@ print_mem_usage(void)
+ 	*/
+ 	pfn_original = info->max_mapnr - pfn_memhole;
+ 
+-	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private
++	pfn_excluded = pfn_zero + pfn_cache + pfn_cache_private + pfn_pmem_userdata
+ 	    + pfn_user + pfn_free + pfn_hwpoison + pfn_offline;
+ 	shrinking = (pfn_original - pfn_excluded) * 100;
+ 	shrinking = shrinking / pfn_original;
 -- 
 2.29.2
 
