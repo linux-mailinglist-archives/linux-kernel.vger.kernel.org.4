@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212CB6F036D
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E1D6F035B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243351AbjD0JdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S243326AbjD0J1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243188AbjD0JdG (ORCPT
+        with ESMTP id S243068AbjD0J1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:33:06 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 02:33:04 PDT
-Received: from m239-7.eu.mailgun.net (m239-7.eu.mailgun.net [185.250.239.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4BD2D69
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:33:04 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=hewittfamily.org.uk;
- q=dns/txt; s=s1; t=1682587982; x=1682595182; h=To: To: References:
- Message-Id: Content-Transfer-Encoding: Cc: Date: In-Reply-To: From: From:
- Subject: Subject: Mime-Version: Content-Type: Sender: Sender;
- bh=WKlhktvkNCXudJUIlMvUHYKEozR+HdTU1JB7gKtNB7E=;
- b=PvEsJ+Anx+SM2aJP2Bh5/2xq4wmeHtdarl/dA/AyiS6uJQN6skV2/DMNMLdvN/8AfBumMb06ltg9LLaGbhiBKA44cQJed3m4qHDdPK4bt8EclOk8f2xvI0hd28sHGaCbgrX6HANWQtXLyHQcpGdzAb6T0NTdzgiFmcgxuffycz+gdAf74m1qY9KDamiqyMUB0kpNB470QAUFAv5H5thz5RgdBYaxHmdAtDWWSdkVbGaypYRoSf2dt/qBK2GcsXy6Ru9LR7ozSbU6F/SHS9aCb7AWRaVLJVfWSloZ1+LNBsEF4mVPPfyiuHsM8XoCJ+ZPLRn8yLatri9iUA/78xK2RQ==
-X-Mailgun-Sending-Ip: 185.250.239.7
-X-Mailgun-Sid: WyIyNWUwNSIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCJlMzcyMCJd
-Received: from mail.hewittfamily.org.uk (<unknown> [87.200.95.144]) by fe978277b15e with
- SMTP id 644a401f90677e019261cb9e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 Apr 2023 09:27:59 GMT
-Sender: christian@hewittfamily.org.uk
-Received: from smtpclient.apple (unknown [94.57.164.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.hewittfamily.org.uk (Postfix) with ESMTPSA id 990768CBB78;
-        Thu, 27 Apr 2023 13:27:54 +0400 (+04)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.2\))
-Subject: Re: [PATCH V2] arm64: dts: add support for C3 based Amlogic AW409
-From:   Christian Hewitt <christian@hewittfamily.org.uk>
-In-Reply-To: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
-Date:   Thu, 27 Apr 2023 10:26:47 +0100
-Cc:     linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        AML <linux-amlogic@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7C020F0D-315C-4281-BA0E-1E5CFAC97C39@hewittfamily.org.uk>
-References: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
-To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.2)
-X-Synology-Spam-Status: score=0.399, required 5, MID_RHS_MATCH_FROM 0, FROM_HAS_DN 0, TO_DN_SOME 0, MV_CASE 0.5, TO_MATCH_ENVRCPT_ALL 0, MIME_GOOD -0.1, __THREADED 0, RCPT_COUNT_SEVEN 0, RCVD_COUNT_ZERO 0, FROM_EQ_ENVFROM 0, MIME_TRACE 0, __NOT_SPOOFED 0, __BODY_URI_ONLY 0, __HDRS_LCASE_KNOWN 0, NO_RECEIVED -0.001
-X-Synology-Spam-Flag: no
-X-Synology-Virus-Status: no
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 05:27:20 -0400
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF94C3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:27:19 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 7BCBF2B06722;
+        Thu, 27 Apr 2023 05:27:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 27 Apr 2023 05:27:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682587635; x=1682594835; bh=Di
+        IG0SqQqwKC+QxzuzST+OM7ic3p060jotUTDIfc4ws=; b=Dn+Is4x5yrdGG9I/J9
+        ApHGPFahxTBhzqskzdGrli7Yz+fBKHAK2zed1hSfZCngH8KV/gVRkUUC6i4Z8u79
+        WNXzO0aUR5kkBcpydvtpxIGV+yubw/8teSuQrrcthxDYz8S83es01YH/2hETAESR
+        Kc+BMRDQxzQaW/RNAzCQ/QHFDZYUPFRSvZu2jxN92wk+IhUCghQQiLcKqDvO4TCv
+        QtxL45lnpq9qYhxRvv+uoSjsXMbrCEhdK2paHJerNkBHhirbz4LSPLvIorBOaxtY
+        n3bn3P83y+l6uylpp+Gj9pdsLHl2cxcR2/8KYMdvVjFnuRQbmgrhADdmFtwlbpam
+        X/9A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682587635; x=1682594835; bh=DiIG0SqQqwKC+
+        QxzuzST+OM7ic3p060jotUTDIfc4ws=; b=O+IzhBOLswPqo4Q7DC7VEdKHjH2ST
+        YxgfUQCbaKqV0420VrHPgYbUQ07TJH8HVIXtqt04TO1rkSRwxeltCm+NiBsgucuX
+        /j/pDCTbeC5LuoF+5Ho5ZjusWXUCh9Q9XTk7cojkW+2LIXIV0f086JhdkygNq+Kx
+        BnCFxPumMZgCt9biR9zcc60cEU+o5HpZLA/9Hh4+Ofiuv17fpQXqdh9040gTHnzV
+        joNyjI6Sv7pqW/AGdeFN8rCrMx9tlM5URZqgAQHb35T4B1hyfSlxIWvAyeUVDtE3
+        7czqih1jOrh3MDCPMhfcH2EEO5eKoOqz40dDLyMeU3iAfh7QLYdDmJJnw==
+X-ME-Sender: <xms:8j9KZFAnOYGV5MesUxkBMi4Ak9sJrNKjWh60NIQsCeEthkUmA7UREg>
+    <xme:8j9KZDi5XUQJem8w3r0LagYAAU8-S9Ns7t8bxQ30RROA6VeIlQubt70nLesyltScN
+    Ki728lvwrsRVwSodos>
+X-ME-Received: <xmr:8j9KZAmFUJeIeXVIpysJ_0IpkLZVovKjiFreZT0T1APdyJ-Djfq4UVZy5QkUZSlOQJGCpxmJ4zndSyIXHKoMCFVSVCagm54>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeduiedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:8j9KZPwm_ntFwRHPNLGMFMoJi6qaU9SzEOKJ7BMiDu2K1QuhB40Izw>
+    <xmx:8j9KZKTF0NZi-fKYzZVEq6Lxw3tyy0LUe60V9nSYDuzKLs4fMSRPwg>
+    <xmx:8j9KZCYbjPQi9P-2RtB3hlfoaEKTYE2nS44fFHJoXaX-hKS6PEIm9w>
+    <xmx:8z9KZLCfMxW6IqCEN2G3j3m-PI1tGeNIz98Hj7TwYEXIp1we6DTKopM1KDQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Apr 2023 05:27:13 -0400 (EDT)
+Date:   Thu, 27 Apr 2023 11:27:11 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Roman Beranek <me@crly.cz>
+Cc:     Chen-Yu Tsai <wens@csie.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Frank Oltmanns <frank@oltmanns.dev>,
+        Icenowy Zheng <icenowy@aosc.io>, Ondrej Jirman <megi@xff.cz>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] arm64: dts: allwinner: a64: assign PLL_MIPI to
+ CLK_TCON0
+Message-ID: <4o243jwhbdfw32s5gzsbn4nhinicliugo4gqhh55lwxbfxkvkh@2jofbkdavewn>
+References: <20230427091611.99044-1-me@crly.cz>
+ <20230427091611.99044-4-me@crly.cz>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qgslua4gfdtt6xq5"
+Content-Disposition: inline
+In-Reply-To: <20230427091611.99044-4-me@crly.cz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,199 +95,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--qgslua4gfdtt6xq5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On 27 Apr 2023, at 9:58 am, Xianwei Zhao <xianwei.zhao@amlogic.com> =
-wrote:
+On Thu, Apr 27, 2023 at 11:16:07AM +0200, Roman Beranek wrote:
+> Assign pll-mipi parent to tcon0's source clock via 'assigned-clocks'.
 >=20
-> Amlogic C3 is an advanced edge AI processor designed for smart IP =
-camera
-> applications.
->=20
-> Add basic support for the C3 based Amlogic AW409 board, which =
-describes
-> the following components: CPU, GIC, IRQ, Timer, UART. It's capable of
-> booting up into the serial console.
->=20
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
->=20
-> ---
-> V1 -> V2: Remove new arch, and use ARCH_MESON;
->          Modify node name, and delete superfluous blank lines.
-> ---
-> arch/arm64/boot/dts/amlogic/Makefile          |  1 +
-> .../amlogic/amlogic-c3-c302x-aw409-256m.dts   | 29 +++++++
-> arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi   | 86 +++++++++++++++++++
-> 3 files changed, 116 insertions(+)
-> create mode 100644 =
-arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
-> create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
->=20
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile =
-b/arch/arm64/boot/dts/amlogic/Makefile
-> index cd1c5b04890a..bcec872c2444 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -74,3 +74,4 @@ dtb-$(CONFIG_ARCH_MESON) +=3D =
-meson-sm1-odroid-hc4.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-sei610.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-x96-air-gbit.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-x96-air.dtb
-> +dtb-$(CONFIG_ARCH_MESON) +=3D amlogic-c3-c302x-aw409-256m.dtb
+> Signed-off-by: Roman Beranek <me@crly.cz>
 
-^ please keep the list alpha-sorted, and 256m is described in the dts
-so there is no need to include it in the board filename. I would also
-expect meson-c3* to align with existing filenames, but I=E2=80=99ll let =
-others
-comment on naming rules.
+Again, you should be doing it in the driver, not the device tree.
 
-Christian
+Maxime
 
-> diff --git =
-a/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts =
-b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
-> new file mode 100644
-> index 000000000000..edce8850b338
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "amlogic-c3.dtsi"
-> +
-> +/ {
-> +	model =3D "Amlogic C302 aw409 Development Board";
-> +	compatible =3D "amlogic,aw409", "amlogic,c3";
-> +	interrupt-parent =3D <&gic>;
-> +	#address-cells =3D <2>;
-> +	#size-cells =3D <2>;
-> +
-> +	aliases {
-> +		serial0 =3D &uart_b;
-> +	};
-> +
-> +	memory@0 {
-> +		device_type =3D "memory";
-> +		reg =3D <0x0 0x0 0x0 0x10000000>;
-> +	};
-> +};
-> +
-> +&uart_b {
-> +	status =3D "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi =
-b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
-> new file mode 100644
-> index 000000000000..93b335aef605
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
-> @@ -0,0 +1,86 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/gpio/gpio.h>
-> +
-> +/ {
-> +	cpus {
-> +		#address-cells =3D <2>;
-> +		#size-cells =3D <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			device_type =3D "cpu";
-> +			compatible =3D "arm,cortex-a35";
-> +			reg =3D <0x0 0x0>;
-> +			enable-method =3D "psci";
-> +		};
-> +
-> +		cpu1: cpu@1 {
-> +			device_type =3D "cpu";
-> +			compatible =3D "arm,cortex-a35";
-> +			reg =3D <0x0 0x1>;
-> +			enable-method =3D "psci";
-> +		};
-> +	};
-> +
-> +	timer {
-> +		compatible =3D "arm,armv8-timer";
-> +		interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | =
-IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | =
-IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | =
-IRQ_TYPE_LEVEL_LOW)>,
-> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | =
-IRQ_TYPE_LEVEL_LOW)>;
-> +	};
-> +
-> +	psci {
-> +		compatible =3D "arm,psci-1.0";
-> +		method =3D "smc";
-> +	};
-> +
-> +	xtal: xtal-clk {
-> +		compatible =3D "fixed-clock";
-> +		clock-frequency =3D <24000000>;
-> +		clock-output-names =3D "xtal";
-> +		#clock-cells =3D <0>;
-> +	};
-> +
-> +	soc {
-> +		compatible =3D "simple-bus";
-> +		#address-cells =3D <2>;
-> +		#size-cells =3D <2>;
-> +		ranges;
-> +
-> +		gic: interrupt-controller@fff01000 {
-> +			compatible =3D "arm,gic-400";
-> +			#interrupt-cells =3D <3>;
-> +			#address-cells =3D <0>;
-> +			interrupt-controller;
-> +			reg =3D <0x0 0xfff01000 0 0x1000>,
-> +			      <0x0 0xfff02000 0 0x2000>,
-> +			      <0x0 0xfff04000 0 0x2000>,
-> +			      <0x0 0xfff06000 0 0x2000>;
-> +			interrupts =3D <GIC_PPI 9 =
-(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
-> +		};
-> +
-> +		apb4: bus@fe000000 {
-> +			compatible =3D "simple-bus";
-> +			reg =3D <0x0 0xfe000000 0x0 0x480000>;
-> +			#address-cells =3D <2>;
-> +			#size-cells =3D <2>;
-> +			ranges =3D <0x0 0x0 0x0 0xfe000000 0x0 =
-0x480000>;
-> +
-> +			uart_b: serial@7a000 {
-> +				compatible =3D =
-"amlogic,meson-g12a-uart";
-> +				reg =3D <0x0 0x7a000 0x0 0x18>;
-> +				interrupts =3D <GIC_SPI 169 =
-IRQ_TYPE_EDGE_RISING>;
-> +				status =3D "disabled";
-> +				clocks =3D <&xtal>, <&xtal>, <&xtal>;
-> +				clock-names =3D "xtal", "pclk", "baud";
-> +			};
-> +
-> +		};
-> +	};
-> +};
->=20
-> base-commit: ae68fb187b59bc8645974320808ab2d7c41b1833
-> --=20
-> 2.37.1
->=20
->=20
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+--qgslua4gfdtt6xq5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZEo/7wAKCRDj7w1vZxhR
+xeKXAP9u1WrfKJfosG1ywij448ZJihQE5w/g08nQ3OOHuy8mxwD/TadcRTkLXYFT
+CabMDNnhkfOFqrbngXbnseRYpdEFKAw=
+=UrYD
+-----END PGP SIGNATURE-----
+
+--qgslua4gfdtt6xq5--
