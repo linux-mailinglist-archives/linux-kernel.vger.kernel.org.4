@@ -2,182 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D6F6F0431
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1E66F0430
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243512AbjD0K03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S243522AbjD0KZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243564AbjD0K0X (ORCPT
+        with ESMTP id S243512AbjD0KZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:26:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748BF4EC9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682591181; x=1714127181;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wgOjOQleXk3rIPa3yUms+b5ZVmQBoL/vgR2p4oPCjZA=;
-  b=bKjRQZe4rdpuYUMhO3WI98Z3eQAuqbh4OCKDhk9kBLpCQQH2NLqYfd4y
-   xgU5Ax19tTywDH9QPSKAwx9o3fOsuN/qJZwxwY216EWdlxUq2PO4q+f2v
-   AuQPzogznWoAVIR5cz0mv+YgwScJvrHAC+AIF2qhv59EWIfpMVHOmNTOM
-   EBh/jlVd/J8CHaRhqdJ8ByXQOd+cJ6Jb2NjOsSNnfEyfzuXSuV5fN1LHY
-   HusP58e3PBRB1mhYUTdFz7mKCl674B/COAeYasRuF2c8FITmeTSjSrDdB
-   260yIPULtH++aE2lFrBM+Vi5/jqxRapjn9Vq1f+CxLd81pguoJ0MHK9Cn
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="433679834"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="433679834"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 03:26:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="763737187"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="763737187"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Apr 2023 03:26:19 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1prypO-0000Ah-2w;
-        Thu, 27 Apr 2023 10:26:18 +0000
-Date:   Thu, 27 Apr 2023 18:25:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [paulmck-rcu:dev.2023.04.26a 35/51] arch/arm/kernel/smp.c:385:1:
- warning: function declared 'noreturn' should not return
-Message-ID: <202304271836.Rr0pBtSE-lkp@intel.com>
+        Thu, 27 Apr 2023 06:25:52 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2808A4EC9
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:25:51 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-2f833bda191so5080076f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1682591149; x=1685183149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9YirskzzfAT9ZG78j4XI4f+XaKvOs4fPB8pgDEIFrg=;
+        b=dH+YgQI6dQjl1A5Sw11f3xx1ffIcrI4l/QBtnOO+H7Sqe5wuP+Es2b93LL4lwlO6IJ
+         S9U//eRjfTQ5JhXMNJ9VFTRn4S6ziXjfRlALf3KG9SiWq33hh5pjwTda2tGZ5VjEVKuS
+         /RRo8QBGK5SAxVNgR4pWs3MMek91fhyMNEXRq/MI1/EBrCbfzP/n/n13/VRQnRE/kvcR
+         66tMMLGpNxK6QtSqZ/lJNKKtdDvJXVcBK6OspBszFNKXW5pkF+BJcMFd4odAfwzLu26M
+         1PBxkeNIQzUnxSPkxWz1kR6xZxFbt9P6sZAq9fH5yN64HMIL+Lt/SsiFZud6kTiMI1Ls
+         yvZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682591149; x=1685183149;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q9YirskzzfAT9ZG78j4XI4f+XaKvOs4fPB8pgDEIFrg=;
+        b=ZDTVlnWeLbJT3HZGYao5exXOhsWFKZr32rGpXmr9pGVk1P+u+Es98nGaRF6jWcB6dq
+         y4/oNt5/lgkIm8997KuW+MCi6v45imE5ut0OkVcte+d+idSjMARzh0CzWbtmWJspIuLe
+         Cyb1f1qLjx1ASEcoNGGxZppyRkXI6pIPPllUaxTm4V/rz8ObUMgAietgahmijQikkqXt
+         dSqKbUGuOKFKnc6wAohi5fdj9Tjqo9EWCD55fnIzcWW9jgHQJ5TsZu00cG5EnIvLojDK
+         U/oOThjp8T8IzgNnlJR834TF6eZOHDdjulNXivjKFGQS1AOVAs2gLiQSZfjnxH2HbMfC
+         CZFQ==
+X-Gm-Message-State: AC+VfDyNZk4Qf/0h45HZPqdRTaDKc2j+91KIkMKBgBpYTng5MPniSPgU
+        Q3rScrQy2NIt1Fhr4tXqpXHHAg==
+X-Google-Smtp-Source: ACHHUZ6x1wuM4Jn0UPIukgsBYJpg+fMhoKy3/rvqcQ+kvfhVsS//cfS47JS5pbSjqqs83b2EuvSkvQ==
+X-Received: by 2002:adf:f0ce:0:b0:2f0:69c4:3900 with SMTP id x14-20020adff0ce000000b002f069c43900mr927802wro.54.1682591149513;
+        Thu, 27 Apr 2023 03:25:49 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id h3-20020a5d5043000000b002c70ce264bfsm18081249wrt.76.2023.04.27.03.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 03:25:48 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 12:25:42 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
+        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, Marc Zyngier <maz@kernel.org>,
+        luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
+Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <qqukqrc45zqyjh5bwpjpuiweogwtapuw7qqjjpubjwvteum6ig@esjfwqdivhpa>
+References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
+ <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
+ <ZEo+6rwM+c6DvlMM@sunil-laptop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZEo+6rwM+c6DvlMM@sunil-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.04.26a
-head:   56b38a90a12f76e463a7381d8cff854926fa2b59
-commit: 2b927bfdda366c1719e021cd0e9688baf933c9cf [35/51] objtool: Fix for unreachable instruction warning
-config: arm-milbeaut_m10v_defconfig (https://download.01.org/0day-ci/archive/20230427/202304271836.Rr0pBtSE-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=2b927bfdda366c1719e021cd0e9688baf933c9cf
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu dev.2023.04.26a
-        git checkout 2b927bfdda366c1719e021cd0e9688baf933c9cf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/kernel/
+On Thu, Apr 27, 2023 at 02:52:50PM +0530, Sunil V L wrote:
+> Hi Palmer,
+> 
+> On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
+> > On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
+> > > RINTC structures in the MADT provide mapping between the hartid
+> > > and the CPU. This is required many times even at run time like
+> > > cpuinfo. So, instead of parsing the ACPI table every time, cache
+> > > the RINTC structures and provide a function to get the correct
+> > > RINTC structure for a given cpu.
+> > > 
+> > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  arch/riscv/include/asm/acpi.h |  2 ++
+> > >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
+> > >  2 files changed, 62 insertions(+)
+> > > 
+> > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> > > index 9be52b6ffae1..1606dce8992e 100644
+> > > --- a/arch/riscv/include/asm/acpi.h
+> > > +++ b/arch/riscv/include/asm/acpi.h
+> > > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
+> > > 
+> > >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> > > 
+> > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+> > > +u32 get_acpi_id_for_cpu(int cpu);
+> > >  #endif /* CONFIG_ACPI */
+> > > 
+> > >  #endif /*_ASM_ACPI_H*/
+> > > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> > > index 81d448c41714..40ab55309c70 100644
+> > > --- a/arch/riscv/kernel/acpi.c
+> > > +++ b/arch/riscv/kernel/acpi.c
+> > > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
+> > >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+> > >  EXPORT_SYMBOL(acpi_pci_disabled);
+> > > 
+> > > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
+> > > +
+> > > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
+> > > +{
+> > > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
+> > > +	int cpuid;
+> > > +
+> > > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
+> > > +		return 0;
+> > > +
+> > > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
+> > 
+> > Unless I'm missing something, this races with CPUs coming online.  Maybe
+> > that's a rare enough case we don't care, but I think we'd also just have
+> > simpler logic if we fixed it...
+> > 
+> This depend only on cpuid_to_hartid_map filled up. I wish I could
+> initialize this RINTC mapping in setup_smp() itself like ARM64. But in
+> RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
+> Hence, we need to initialize this array outside of setup_smp().
+> 
+> I can update the code to initialize this from setup_arch() immediately
+> after setup_smp() if ACPI is enabled. That should avoid the global
+> variable check also. Let me know if you prefer this.
+> 
+> > > +	/*
+> > > +	 * When CONFIG_SMP is disabled, mapping won't be created for
+> > > +	 * all cpus.
+> > > +	 * CPUs more than NR_CPUS, will be ignored.
+> > > +	 */
+> > > +	if (cpuid >= 0 && cpuid < NR_CPUS)
+> > > +		cpu_madt_rintc[cpuid] = *rintc;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int acpi_init_rintc_array(void)
+> > > +{
+> > > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
+> > > +		return 0;
+> > > +
+> > > +	return -ENODEV;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Instead of parsing (and freeing) the ACPI table, cache
+> > > + * the RINTC structures since they are frequently used
+> > > + * like in  cpuinfo.
+> > > + */
+> > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
+> > > +{
+> > > +	static bool rintc_init_done;
+> > 
+> > ... basically just get rid of this global variable, and instead have a
+> > 
+> >    if (!&cpu_madt_rintc[cpu])
+> >        ... parse ...
+> >    return &cpu_madt_rintc[cpu];
+> > 
+> > that'd probably let us get rid of a handful of these helpers too, as now
+> > it's just a call to the parsing bits.
+> > 
+> I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
+> not caching the RINTC pointers but actual contents itself. So, the
+> address is always valid. However, as per Drew's earlier feedback I am
+> going to reduce one helper. I am planning to send the next version of
+> this patch once 6.4 rc1 is available since the ACPICA patches are merged
+> now.
+> 
+> > > +
+> > > +	if (!rintc_init_done) {
+> > > +		if (acpi_init_rintc_array()) {
+> > > +			pr_err("No valid RINTC entries exist\n");
+> > > +			return NULL;
+> > > +		}
+> > > +
+> > > +		rintc_init_done = true;
+> > > +	}
+> > > +
+> > > +	return &cpu_madt_rintc[cpu];
+> > > +}
+> > > +
+> > > +u32 get_acpi_id_for_cpu(int cpu)
+> > > +{
+> > > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
+> > > +
+> > > +	BUG_ON(!rintc);
+> > 
+> > We should have some better error reporting here.  It looks like all the
+> > callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
+> > returned, so maybe we just pr_warn() something users can understand and then
+> > return -1 or something?
+> > 
+> 
+> RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
+> for UID. So, there is no bogus value we can return. 
+> 
+> Actually, I just realized this check is redundant. It will never be NULL
+> since it is a static array. So, we can just get rid of the BUG.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304271836.Rr0pBtSE-lkp@intel.com/
+It can be NULL on the first call of acpi_cpu_get_madt_rintc(), which is
+a good time to BUG if there's isn't an RINTC.
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/kernel/smp.c:385:1: warning: function declared 'noreturn' should not return [-Winvalid-noreturn]
-   }
-   ^
-   1 warning generated.
-
-
-vim +/noreturn +385 arch/arm/kernel/smp.c
-
-a054a811597a17 Russell King     2005-11-02  314  
-a054a811597a17 Russell King     2005-11-02  315  /*
-a054a811597a17 Russell King     2005-11-02  316   * Called from the idle thread for the CPU which has been shutdown.
-a054a811597a17 Russell King     2005-11-02  317   *
-a054a811597a17 Russell King     2005-11-02  318   * Note that we disable IRQs here, but do not re-enable them
-a054a811597a17 Russell King     2005-11-02  319   * before returning to the caller. This is also the behaviour
-a054a811597a17 Russell King     2005-11-02  320   * of the other hotplug-cpu capable cores, so presumably coming
-a054a811597a17 Russell King     2005-11-02  321   * out of idle fixes this.
-a054a811597a17 Russell King     2005-11-02  322   */
-9205b797dbe519 Stephen Boyd     2015-08-24  323  void arch_cpu_idle_dead(void)
-a054a811597a17 Russell King     2005-11-02  324  {
-a054a811597a17 Russell King     2005-11-02  325  	unsigned int cpu = smp_processor_id();
-a054a811597a17 Russell King     2005-11-02  326  
-a054a811597a17 Russell King     2005-11-02  327  	idle_task_exit();
-a054a811597a17 Russell King     2005-11-02  328  
-f36d340122ae87 Russell King     2010-11-30  329  	local_irq_disable();
-f36d340122ae87 Russell King     2010-11-30  330  
-51acdfd1fa38a2 Russell King     2013-04-18  331  	/*
-51acdfd1fa38a2 Russell King     2013-04-18  332  	 * Flush the data out of the L1 cache for this CPU.  This must be
-51acdfd1fa38a2 Russell King     2013-04-18  333  	 * before the completion to ensure that data is safely written out
-51acdfd1fa38a2 Russell King     2013-04-18  334  	 * before platform_cpu_kill() gets called - which may disable
-51acdfd1fa38a2 Russell King     2013-04-18  335  	 * *this* CPU and power down its cache.
-51acdfd1fa38a2 Russell King     2013-04-18  336  	 */
-51acdfd1fa38a2 Russell King     2013-04-18  337  	flush_cache_louis();
-51acdfd1fa38a2 Russell King     2013-04-18  338  
-51acdfd1fa38a2 Russell King     2013-04-18  339  	/*
-51acdfd1fa38a2 Russell King     2013-04-18  340  	 * Tell __cpu_die() that this CPU is now safe to dispose of.  Once
-51acdfd1fa38a2 Russell King     2013-04-18  341  	 * this returns, power and/or clocks can be removed at any point
-51acdfd1fa38a2 Russell King     2013-04-18  342  	 * from this CPU and its cache by platform_cpu_kill().
-51acdfd1fa38a2 Russell King     2013-04-18  343  	 */
-1d5087ab964d84 Paul E. McKenney 2015-05-12  344  	(void)cpu_report_death();
-3c030beabf937b Russell King     2010-11-30  345  
-a054a811597a17 Russell King     2005-11-02  346  	/*
-51acdfd1fa38a2 Russell King     2013-04-18  347  	 * Ensure that the cache lines associated with that completion are
-51acdfd1fa38a2 Russell King     2013-04-18  348  	 * written out.  This covers the case where _this_ CPU is doing the
-51acdfd1fa38a2 Russell King     2013-04-18  349  	 * powering down, to ensure that the completion is visible to the
-51acdfd1fa38a2 Russell King     2013-04-18  350  	 * CPU waiting for this one.
-51acdfd1fa38a2 Russell King     2013-04-18  351  	 */
-51acdfd1fa38a2 Russell King     2013-04-18  352  	flush_cache_louis();
-51acdfd1fa38a2 Russell King     2013-04-18  353  
-51acdfd1fa38a2 Russell King     2013-04-18  354  	/*
-51acdfd1fa38a2 Russell King     2013-04-18  355  	 * The actual CPU shutdown procedure is at least platform (if not
-51acdfd1fa38a2 Russell King     2013-04-18  356  	 * CPU) specific.  This may remove power, or it may simply spin.
-51acdfd1fa38a2 Russell King     2013-04-18  357  	 *
-51acdfd1fa38a2 Russell King     2013-04-18  358  	 * Platforms are generally expected *NOT* to return from this call,
-51acdfd1fa38a2 Russell King     2013-04-18  359  	 * although there are some which do because they have no way to
-51acdfd1fa38a2 Russell King     2013-04-18  360  	 * power down the CPU.  These platforms are the _only_ reason we
-51acdfd1fa38a2 Russell King     2013-04-18  361  	 * have a return path which uses the fragment of assembly below.
-51acdfd1fa38a2 Russell King     2013-04-18  362  	 *
-51acdfd1fa38a2 Russell King     2013-04-18  363  	 * The return path should not be used for platforms which can
-51acdfd1fa38a2 Russell King     2013-04-18  364  	 * power off the CPU.
-a054a811597a17 Russell King     2005-11-02  365  	 */
-0a301110b7bd33 Russell King     2013-01-14  366  	if (smp_ops.cpu_die)
-0a301110b7bd33 Russell King     2013-01-14  367  		smp_ops.cpu_die(cpu);
-a054a811597a17 Russell King     2005-11-02  368  
-668bc38669f9a6 Russell King     2014-01-11  369  	pr_warn("CPU%u: smp_ops.cpu_die() returned, trying to resuscitate\n",
-668bc38669f9a6 Russell King     2014-01-11  370  		cpu);
-668bc38669f9a6 Russell King     2014-01-11  371  
-a054a811597a17 Russell King     2005-11-02  372  	/*
-a054a811597a17 Russell King     2005-11-02  373  	 * Do not return to the idle loop - jump back to the secondary
-a054a811597a17 Russell King     2005-11-02  374  	 * cpu initialisation.  There's some initialisation which needs
-a054a811597a17 Russell King     2005-11-02  375  	 * to be repeated to undo the effects of taking the CPU offline.
-a054a811597a17 Russell King     2005-11-02  376  	 */
-a054a811597a17 Russell King     2005-11-02  377  	__asm__("mov	sp, %0\n"
-faabfa0816916b Russell King     2010-12-20  378  	"	mov	fp, #0\n"
-19f29aebd929c3 Keith Packard    2021-09-18  379  	"	mov	r0, %1\n"
-a054a811597a17 Russell King     2005-11-02  380  	"	b	secondary_start_kernel"
-a054a811597a17 Russell King     2005-11-02  381  		:
-19f29aebd929c3 Keith Packard    2021-09-18  382  		: "r" (task_stack_page(current) + THREAD_SIZE - 8),
-19f29aebd929c3 Keith Packard    2021-09-18  383  		  "r" (current)
-19f29aebd929c3 Keith Packard    2021-09-18  384  		: "r0");
-a054a811597a17 Russell King     2005-11-02 @385  }
-a054a811597a17 Russell King     2005-11-02  386  #endif /* CONFIG_HOTPLUG_CPU */
-a054a811597a17 Russell King     2005-11-02  387  
-
-:::::: The code at line 385 was first introduced by commit
-:::::: a054a811597a17ffbe92bc4db04a4dc2f1b1ea55 [ARM SMP] Add hotplug CPU infrastructure
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+drew
