@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25C76EFEB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C9F6EFEB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 02:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242722AbjD0Azg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 20:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S242714AbjD0A6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 20:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242797AbjD0Azc (ORCPT
+        with ESMTP id S242674AbjD0A6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 20:55:32 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA893A92
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:55:31 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-63b52ad6311so9179129b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682556931; x=1685148931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yudVX7H4NIkiNzJ9h/7v+Ix6+CQ48FCh3vdWg2CCa+Y=;
-        b=lyo5HpmPPSKolKBMxnPM231JTOTMTYvltSMnwkbTvdMQxeRwrvOaTo//K+J0zWJYLK
-         4/53gNTzI3i5Cxkomb16kK3VD2XaUWL5wSilFWJwDKWwddRdABcgiKcy0yHgG9grtzT+
-         OmsXMqq0zQHNDZphrGnQvCMOGHRkMLS9q32Jc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682556931; x=1685148931;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yudVX7H4NIkiNzJ9h/7v+Ix6+CQ48FCh3vdWg2CCa+Y=;
-        b=NcMqNd/5FSfKtiDyfS5RZY50wyTv208CE+C8x+Uss2LiAd+TIsBQtCWvnRT9uKnCa1
-         sxIpVWS62YZ7mdJ3NDA0vWonGZiADvnQ0SsYlBGYW7QKvF3FN97JVpP4AHmD+A8jVy37
-         nArR76w0+FckzIY3A4fRe2/IgqHhRJuXGJnZob64bgfniWx2AtZtFyAYoG1N44+hvlPN
-         M7sinoiIitexXCgHVNhYOlmpiz0C0dCq1P4DLBubulojl7Ery1FAVYVgmF36SnLcYgzL
-         3HtNqKrGcegRTjOLMLgmXjhX2HfLurAlJtJ6LwCVhcjxdh3CX7wgykeSEU1Ku6XoRWO2
-         H/mA==
-X-Gm-Message-State: AAQBX9ehYq7pA86sPeGPxRN8SVs6SMyOI5TWLLHyzrSsg1cvVRUsh69y
-        s9inIsrVfFKLIipo6NUq6hKRsw==
-X-Google-Smtp-Source: AKy350YskKlSRM7MYbei0qJ+kZPwyxuutnsUnqhTuV4kOICiCIk7mkOGwawDAp85yUEY+tM92eHw0w==
-X-Received: by 2002:a05:6a00:b87:b0:63d:2d99:2e91 with SMTP id g7-20020a056a000b8700b0063d2d992e91mr32488778pfj.28.1682556931215;
-        Wed, 26 Apr 2023 17:55:31 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id q14-20020aa7842e000000b00640dbbd7830sm5830995pfn.18.2023.04.26.17.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 17:55:30 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 09:55:25 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>, Chris Li <chrisl@kernel.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] memcg: use seq_buf_do_printk() with
- mem_cgroup_print_oom_meminfo()
-Message-ID: <20230427005525.GF1496740@google.com>
-References: <20230426133919.1342942-1-yosryahmed@google.com>
- <20230426133919.1342942-2-yosryahmed@google.com>
- <ZElCHJrkOVsy79KY@dhcp22.suse.cz>
+        Wed, 26 Apr 2023 20:58:05 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339A93A92
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 17:58:03 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vh5A7WK_1682557079;
+Received: from 30.97.48.53(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vh5A7WK_1682557079)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Apr 2023 08:58:00 +0800
+Message-ID: <40db45ab-774d-4a27-a604-a56c8447969b@linux.alibaba.com>
+Date:   Thu, 27 Apr 2023 08:57:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZElCHJrkOVsy79KY@dhcp22.suse.cz>
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] Revert "Revert "mm/compaction: fix set skip in
+ fast_find_migrateblock""
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <3576e3520c044beb2a81860aecb2d4f597089300.1682521303.git.baolin.wang@linux.alibaba.com>
+ <c48c4da5-9de5-f060-b6ad-5373ced87d0a@suse.cz>
+ <20230426153331.dfqagb47i4xo3ouv@techsingularity.net>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230426153331.dfqagb47i4xo3ouv@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/04/26 17:24), Michal Hocko wrote:
-> No objection from me but is it possible that more printk calls (one per
-> line with this change correct?) would add a contention on the printk
-> path?
 
-It probably will have opposite effect: console->write of longer lines
-keep local IRQs disabled longer and keep console_waiter printk spinning
-(in console_trylock_spinning()) longer.
+
+On 4/26/2023 11:33 PM, Mel Gorman wrote:
+> On Wed, Apr 26, 2023 at 05:10:14PM +0200, Vlastimil Babka wrote:
+>> On 4/26/23 17:03, Baolin Wang wrote:
+>>> This reverts commit 95e7a450b8190673675836bfef236262ceff084a.
+>>>
+>>> When I tested thpscale with v6.3 kernel, I found the compaction efficiency
+>>> had a great regression compared to v6.2-rc1 kernel. See below numbers:
+>>>                                      v6.2-rc             v6.3
+>>> Percentage huge-3        81.35 (   0.00%)       32.97 ( -59.47%)
+>>> Percentage huge-5        89.92 (   0.00%)       41.70 ( -53.63%)
+>>> Percentage huge-7        92.41 (   0.00%)       34.08 ( -63.12%)
+>>> Percentage huge-12       90.29 (   0.00%)       41.10 ( -54.49%)
+>>> Percentage huge-18       82.38 (   0.00%)       41.24 ( -49.95%)
+>>> Percentage huge-24       80.34 (   0.00%)       35.99 ( -55.20%)
+>>> Percentage huge-30       88.90 (   0.00%)       44.20 ( -50.28%)
+>>> Percentage huge-32       90.69 (   0.00%)       79.57 ( -12.25%)
+>>>
+>>> Ops Compaction stalls                 113790.00      207099.00
+>>> Ops Compaction success                 33983.00      19488.00
+>>> Ops Compaction failures                79807.00      187611.00
+>>> Ops Compaction efficiency                 29.86          9.41
+>>>
+>>> After some investigation, I found the commit 95e7a450b819
+>>> ("Revert mm/compaction: fix set skip in fast_find_migrateblock") caused
+>>> the regression. This commit revert the commit 7efc3b726103 ("mm/compaction:
+>>> fix set skip in fast_find_migrateblock") to fix a CPU stalling issue, which
+>>> is caused by compaction stucked in repeating fast_find_migrateblock().
+>>>
+>>> And now the compaction stalling issue is addressed by commit cfccd2e63e7e
+>>> ("mm, compaction: finish pageblocks on complete migration failure"). So
+>>
+>> IIRC at that time I was pointing out some scenarios that could make the
+>> problem appear even after that commit, and we wanted to revisit that
+>> when Mel is back.
+
+Ah, I missed that, and will check previous discussion.
+
+> Yes, I've prototyped the fix against 6.3-rc7 and the revert is at the
+> end but the revert on its own has the potential for causing problems. The
+> series needs to be rebased, retested and posted. What I last tested
+> should show up shortly at
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git/ mm-follupfastmigrate-v1r1
+
+Thanks.
