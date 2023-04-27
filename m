@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0838B6F0AD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3876F0AD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244352AbjD0R1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S244020AbjD0R2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbjD0R0y (ORCPT
+        with ESMTP id S233796AbjD0R2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:26:54 -0400
+        Thu, 27 Apr 2023 13:28:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758AE2684;
-        Thu, 27 Apr 2023 10:26:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC85110
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:28:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10DBC61049;
-        Thu, 27 Apr 2023 17:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBA6C433D2;
-        Thu, 27 Apr 2023 17:26:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04F64611B4
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 643E7C433D2;
+        Thu, 27 Apr 2023 17:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682616412;
-        bh=OWU4Y8lWvJKyUQGr36R/Qfwlu1aatmPvFSvBxHjKSyk=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=bray3vj7QBE7KrwCzyNrrUuBQUyrrutFvYzrO1OxO699DY1qpuf/PjCNt2bPjix8S
-         T1dZzw5nii93ztrFLnH+L9OS3ggReUxMpziKox+WLTEtpkVS/dw7zw0uufXY9qig/W
-         GSNiU+aOqMCSaDZ4iMxDjOv+wAcsFBtAQbcETlWN6THQVNrNKv0G6iAY6DeeWMJpOr
-         udVYv2+kr0DsC5l6h/a8VeJPDEsdZp831TdYVueCLzuI+bdEJlxGVVXMzWGCjDslvI
-         GUt+0wLi+R/Ubg7c2UVm7uZe+6GpYKF9uPoupmQI49ejkWvqNxf7KM1SJLoLGkhWAy
-         zOzxFy+PmKUqQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 27 Apr 2023 20:26:43 +0300
-Message-Id: <CS7PQGHNLIGG.1PDQ1S2D9QG79@wks-101042-mac.ad.tuni.fi>
-Subject: Re: [PATCH] tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM
- drivers
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        "Pengfei Xu" <pengfei.xu@intel.com>
-Cc:     <linux-integrity@vger.kernel.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>,
-        <heng.su@intel.com>
-X-Mailer: aerc 0.14.0
-References: <20230426185833.289868-1-jarkko@kernel.org>
- <ZEnWykDF6kbZ8nVi@xpf.sh.intel.com>
- <a258fcd353d67e918a0c86a59e27bf1332764a7b.camel@kernel.org>
- <27e8289e-21a4-7d7a-231f-4a27334dd1f9@kunbus.com>
-In-Reply-To: <27e8289e-21a4-7d7a-231f-4a27334dd1f9@kunbus.com>
+        s=k20201202; t=1682616491;
+        bh=fTIHyMELB7P4mMmUO7vjz/67287/XF7r/7KUpvHIaGY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=raRn+1kXDTM/GzlCJKA+5Te3YPVHdgoUeMtH/pxSm2YmAMNMNlSwpODOL46OGiLdc
+         vdLk8IiO24cJnOHdxQwQeHZbmoJHDSTMcfoc2jSFOD/lUI0HtOQMf6tj5TFDfJRddI
+         Jx1o81RQ4CeTKj7FCVOpLNChhVWB0Xg303ciZpt3oMbofaMZbv1AFgovB/fnzA4CzX
+         XJvtNSwNAxQny7MrssylghZSmifwucnOsPWfuEknqaTquot/qLNwRReWFOK39rJ8G9
+         28KvMNuih5oMwx4bzMsc4ex9SaZC348yndTciFdIDEs5wJ6xDXfBK/vPo5OHxwxUzq
+         ENv5cOEu9qVvA==
+Date:   Thu, 27 Apr 2023 18:28:06 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Yangyu Chen <cyy@cyyself.name>
+Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, i@zenithal.me,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, soha@lohu.info,
+        twd2.me@gmail.com
+Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
+Message-ID: <20230427-duplicate-procedure-2eec53856977@spud>
+References: <20230426-porthole-wronged-d5a6a3b89596@spud>
+ <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VTpKZ7gKyqWX7CfH"
+Content-Disposition: inline
+In-Reply-To: <tencent_BC64BBD18CAF41904B9BD1510B1739062805@qq.com>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,50 +58,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Apr 27, 2023 at 6:33 PM EEST, Lino Sanfilippo wrote:
->
-> Hi Jarkko,
->
-> On 27.04.23 12:52, Jarkko Sakkinen wrote:
-> > ATTENTION: This e-mail is from an external sender. Please check attachm=
-ents and links before opening e.g. with mouseover.
-> >=20
-> >=20
-> > On Thu, 2023-04-27 at 09:58 +0800, Pengfei Xu wrote:
-> >> On 2023-04-26 at 21:58:33 +0300, Jarkko Sakkinen wrote:
-> >>> TPM chip bootstrapping was removed from tpm_chip_register(), and it
-> >>> was relocated to tpm_tis_core. This breaks all drivers which are not
-> >>> based on tpm_tis because the chip will not get properly initialized.
-> >>>
-> >>> Take the corrective steps:
-> >>> 1. Rename tpm_chip_startup() as tpm_chip_bootstrap() and make it one-=
-shot.
-> >>> 2. Call tpm_chip_bootstrap() in tpm_chip_register(), which reverts th=
-e
-> >>>    things  as tehy used to be.
-> >>            ^ two space and one typo "they"
-> >>          Thanks for your fixed patch in short time!
-> >>
-> >>   And I tested this patch, it could not be reproduced in 155s, and the=
- patch
-> >>   fixed this issue.
-> >>   Fixed dmesg is in attached.
-> >>
-> >> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> >=20
-> > Thanks a lot! I'll take immediate action to send PR to Linus.
-> >=20
-> > Lino: no worries. It was expected that such a large refactorization
-> > could break a thing or two. You did a good job in any case.
-> >=20
-> > BR, Jarkko
->
-> I guess you are right, there will probably be more issues showing up
-> in the next time. I will try my best to help fixing them.
-> Thank you very much (also for fixing this issue)!
 
-Yeah, no worries, that is my responsibility in the end to take care of
-whatever I accept :-) And yeah, this was complicated change to do, I
-think you did your best and that is good enough as far as I'm concerned.
+--VTpKZ7gKyqWX7CfH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-BR, Jarkko
+On Thu, Apr 27, 2023 at 08:47:18PM +0800, Yangyu Chen wrote:
+> Hi, Conor
+>=20
+> Thanks for your meaningful reviews. I agree with most of your advice but
+> have a question about the code about checking the first 2 characters are
+> "rv" in `arch/riscv/kernel/cpu.c`.
+>=20
+> On Wed, 26 Apr 2023 19:54:39 +0100, Conor Dooley wrote:
+> > > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *n=
+ode, unsigned long *hart)
+> > >  		pr_warn("CPU with hartid=3D%lu has no \"riscv,isa\" property\n", *=
+hart);
+> > >  		return -ENODEV;
+> > >  	}
+> > > -	if (isa[0] !=3D 'r' || isa[1] !=3D 'v') {
+> > > +	if (tolower(isa[0]) !=3D 'r' || tolower(isa[1]) !=3D 'v') {
+> > >  		pr_warn("CPU with hartid=3D%lu has an invalid ISA of \"%s\"\n", *h=
+art, isa);
+> > >  		return -ENODEV;
+> >=20
+> > I don't understand why this is even here in the first place. I'd be
+> > inclined to advocate for it's entire removal. Checking *only* that there
+> > is an "rv" in that string seems pointless to me. If you're on a 64-bit
+> > kernel and the node has riscv,isa =3D "rv32ima" it's gonna say it is ok=
+ay?
+> > Drew what do you think?
+>=20
+> I think this code could be a workaround for running rv32 S-Mode on rv64
+> CPU without changing the DT, although the proper way should be to change
+> this field in DT by bootloader or any other software.
+>=20
+> I have tested a simple rv64imac CPU core and left the `riscv,isa` string
+> empty in the DT and removed the above 3 lines check from the kernel, and
+> the kernel boots successfully, and using busybox as init is also ok.=20
+> However, if this check exists, the kernel will panic at `setup_smp` due to
+> `BUG_ON(!found_boot_cpu)` in `setup_smp`.
+
+The initramfs I have fails to boot because it is build with FP support.
+Out of curiosity, what shows up in /proc/cpuinfo in that case?
+
+> I am wondering whether this should remove or add a more sufficient
+> validation. Although this function will not be called in ACPI as I
+> reviewed the recent ACPI patches[1], it will not be a problem if I submit
+> this patch for better ACPI support. However, If I just simply remove it
+> from my patch and submit patch v2 directly, the ISA string in ACPI mode
+> with all uppercase letters will be OK. But in DT mode, the kernel behavior
+> will accept the ISA string with all uppercase letters except the first two
+> "rv". Do you think this behavior is different between DT and ACPI can be
+> OK?
+
+A difference would be fine, if it was that ACPI allowed caps and DT
+didn't. But allowing caps everywhere other than the RV just seems a bit
+silly to me, so I would rather allow the capitalisation of RV.
+
+> After some investigation, I suggest removing this validation since the
+> validation is useless for a proper DT and the recent ACPI patches[1] do
+> not validate the ISA strings, so we will have the same behavior between
+> DT and ACPI.
+
+I dunno. I'd like to split that function in 2 actually, but I would
+like the ACPI stuff to land before doing so. I think for now, what might
+be best is checking that it has a sufficient strlen in a separate patch,
+earlier in your series, and making the check case-insensitive as you have
+done already here.
+
+Cheers,
+Conor.
+
+--VTpKZ7gKyqWX7CfH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEqwpgAKCRB4tDGHoIJi
+0kWfAP9e4VArAxe0AaDHBJoslthiQDLrOA4hOUoJTcqOEXJG/QD+KtBWf2LGLbZs
+LZMF2RrjfiA1vdsCUAO1mBtQvGEE/w4=
+=/PYG
+-----END PGP SIGNATURE-----
+
+--VTpKZ7gKyqWX7CfH--
