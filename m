@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D85C6F004E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 07:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862A96F0055
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 07:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242817AbjD0FHQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 01:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S242691AbjD0FMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 01:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242675AbjD0FHM (ORCPT
+        with ESMTP id S229455AbjD0FMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 01:07:12 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2247B4489;
-        Wed, 26 Apr 2023 22:07:08 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E186C24E12B;
-        Thu, 27 Apr 2023 13:06:54 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 27 Apr
- 2023 13:06:54 +0800
-Received: from [192.168.155.161] (202.188.176.82) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 27 Apr
- 2023 13:06:51 +0800
-Message-ID: <65fde5d5-6d86-c94e-9985-231e81641386@starfivetech.com>
-Date:   Thu, 27 Apr 2023 13:06:49 +0800
+        Thu, 27 Apr 2023 01:12:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A64E54;
+        Wed, 26 Apr 2023 22:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682572337; x=1714108337;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ex0HqhZvpBa057L+EHY16NvNFOJF0IoHQ781QEDv8VM=;
+  b=VE5IP07VXGabcKPMl7Aw7f1vSQaXZIN+eLXSLHI8GcOfgz2cQ6iM1eJK
+   7QDGTu817Bl9TX6/mRS0KLJZtpNfOG0Gvu7KHmyOyV+SfeVlOjRqqApIR
+   Yox40fq/D8nsBkThcMzDi8/d9EFcMecw/EIgbV1wuUHpgoIGqbwf234i9
+   EKvlSwUDE/UOc8NwpoiN5whX2FKACI2FoOjlM2F0h4iDqs34bIIB4Qe9s
+   AcJWHxxYGpy3EHIHaVXvKN1EaazQJKvw/A4v9neCn7jlLoXgwJa3LS70n
+   xS5bXyTYKNbg+ClmXdI80qgh/P1wyo7OZ5pd+sUOKEauKMx4LhyXd4gaY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="327648348"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="327648348"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 22:12:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="726881959"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="726881959"
+Received: from pboudier-mobl.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.60.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 22:12:14 -0700
+Message-ID: <b5ff9e24-af87-b7a6-fb14-d6fbb950e8ea@intel.com>
+Date:   Thu, 27 Apr 2023 08:12:10 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v6 2/4] crypto: starfive - Add crypto engine support
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     <davem@davemloft.net>, <devicetree@vger.kernel.org>,
-        <herbert@gondor.apana.org.au>, <kernel@esmil.dk>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <palmer@dabbelt.com>,
-        <robh+dt@kernel.org>
-References: <20230426065848.842221-1-jiajie.ho@starfivetech.com>
- <20230426065848.842221-3-jiajie.ho@starfivetech.com>
- <c3faff36-3698-a137-f007-ff8bca6a2e88@wanadoo.fr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [PATCHv2] mmc: block: ensure error propagation for non-blk
+To:     Christian Loehle <CLoehle@hyperstone.com>,
+        ulf hansson <ulf.hansson@linaro.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Avri Altman <avri.altman@wdc.com>
+References: <59c17ada35664b818b7bd83752119b2d@hyperstone.com>
 Content-Language: en-US
-From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
-In-Reply-To: <c3faff36-3698-a137-f007-ff8bca6a2e88@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [202.188.176.82]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <59c17ada35664b818b7bd83752119b2d@hyperstone.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,118 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/4/2023 3:56 pm, Christophe JAILLET wrote:
-> Le 26/04/2023 à 08:58, Jia Jie Ho a écrit :
->> Adding device probe and DMA init for StarFive cryptographic module.
->>
->> Co-developed-by: Huan Feng <huan.feng-bONrM45KWFOXmMXjJBpWqg@public.gmane.org>
->> Signed-off-by: Huan Feng <huan.feng-bONrM45KWFOXmMXjJBpWqg@public.gmane.org>
->> Signed-off-by: Jia Jie Ho <jiajie.ho-bONrM45KWFOXmMXjJBpWqg@public.gmane.org>
->> ---
->>   MAINTAINERS                           |   7 +
->>   drivers/crypto/Kconfig                |   1 +
->>   drivers/crypto/Makefile               |   1 +
->>   drivers/crypto/starfive/Kconfig       |  17 +++
->>   drivers/crypto/starfive/Makefile      |   4 +
->>   drivers/crypto/starfive/jh7110-cryp.c | 199 ++++++++++++++++++++++++++
->>   drivers/crypto/starfive/jh7110-cryp.h |  63 ++++++++
->>   7 files changed, 292 insertions(+)
->>   create mode 100644 drivers/crypto/starfive/Kconfig
->>   create mode 100644 drivers/crypto/starfive/Makefile
->>   create mode 100644 drivers/crypto/starfive/jh7110-cryp.c
->>   create mode 100644 drivers/crypto/starfive/jh7110-cryp.h
->>
-
-[...]
-
->> +
->> +static int starfive_dma_init(struct starfive_cryp_dev *cryp)
->> +{
->> +    dma_cap_mask_t mask;
->> +
->> +    cryp->tx = NULL;
->> +    cryp->rx = NULL;
+On 26/04/23 19:59, Christian Loehle wrote:
+> Requests to the mmc layer usually come through a block device IO.
+> The exceptions are the ioctl interface, RPMB chardev ioctl
+> and debugfs, which issue their own blk_mq requests through
+> blk_execute_rq and do not query the BLK_STS error but the
+> mmcblk-internal drv_op_result. This patch ensures that drv_op_result
+> defaults to an error and has to be overwritten by the operation
+> to be considered successful.
 > 
-> Harmless, but 'crypt' is kzalloc()'ed, so these fields are already NULL.
->
-
-Hi Christophe,
-I'll remove these in the next version.
- 
->> +
->> +    dma_cap_zero(mask);
->> +    dma_cap_set(DMA_SLAVE, mask);
->> +
->> +    cryp->tx = dma_request_chan(cryp->dev, "tx");
->> +    if (IS_ERR(cryp->tx))
->> +        return dev_err_probe(cryp->dev, PTR_ERR(cryp->tx),
->> +                     "Error requesting tx dma channel.\n");
->> +
->> +    cryp->rx = dma_request_chan(cryp->dev, "rx");
->> +    if (IS_ERR(cryp->rx)) {
->> +        dma_release_channel(cryp->tx);
->> +        return dev_err_probe(cryp->dev, PTR_ERR(cryp->rx),
->> +                     "Error requesting rx dma channel.\n");
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->> +static void starfive_dma_cleanup(struct starfive_cryp_dev *cryp)
->> +{
->> +    dma_release_channel(cryp->tx);
->> +    dma_release_channel(cryp->rx);
->> +}
->> +
->> +static int starfive_cryp_probe(struct platform_device *pdev)
->> +{
-
-[...]
-
->> +
->> +    ret = crypto_engine_start(cryp->engine);
->> +    if (ret)
->> +        goto err_engine_start;
->> +
->> +    return 0;
->> +
->> +err_engine_start:
->> +    crypto_engine_exit(cryp->engine);
->> +err_engine:
->> +    starfive_dma_cleanup(cryp);
->> +err_dma_init:
->> +    spin_lock(&dev_list.lock);
->> +    list_del(&cryp->list);
->> +    spin_unlock(&dev_list.lock);
+> The behavior leads to a bug where the request never propagates
+> the error, e.g. by directly erroring out at mmc_blk_mq_issue_rq if
+> mmc_blk_part_switch fails. The ioctl caller of the rpmb chardev then
+> can never see an error (BLK_STS_IOERR, but drv_op_result is unchanged)
+> and thus may assume that their call executed successfully when it did not.
 > 
-> I think that there should be:
->     clk_disable_unprepare(cryp->hclk);
->     clk_disable_unprepare(cryp->ahb);
->     reset_control_assert(cryp->rst);
+> While always checking the blk_execute_rq return value would be
+> advised, let's eliminate the error by always setting
+> drv_op_result as -EIO to be overwritten on success (or other error)
 > 
-> as in the remove function.
+> Fixes: 614f0388f580 ("mmc: block: move single ioctl() commands to block requests")
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
+> ---
+> v2: Adopted Adrians suggestions to set the error before calling
+> 	and rewrote commit message
+>  drivers/mmc/core/block.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-
-Will add these in next version.
-
->> +
->> +    return ret;
->> +}
->> +
->> +static int starfive_cryp_remove(struct platform_device *pdev)
->> +{
->> +    struct starfive_cryp_dev *cryp = platform_get_drvdata(pdev);
->> +
->> +    if (!cryp)
->> +        return -ENODEV;
-> 
-> I don't think that this can happen.
-> 
-
-I'll update this too along with your other comments.
-Thanks for taking time reviewing this patch series.
-
-Best regards,
-Jia Jie
-
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index 672ab90c4b2d..0ff294f07465 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -266,6 +266,7 @@ static ssize_t power_ro_lock_store(struct device *dev,
+>  		goto out_put;
+>  	}
+>  	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_BOOT_WP;
+> +	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+>  	blk_execute_rq(req, false);
+>  	ret = req_to_mmc_queue_req(req)->drv_op_result;
+>  	blk_mq_free_request(req);
+> @@ -653,6 +654,7 @@ static int mmc_blk_ioctl_cmd(struct mmc_blk_data *md,
+>  	idatas[0] = idata;
+>  	req_to_mmc_queue_req(req)->drv_op =
+>  		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
+> +	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+>  	req_to_mmc_queue_req(req)->drv_op_data = idatas;
+>  	req_to_mmc_queue_req(req)->ioc_count = 1;
+>  	blk_execute_rq(req, false);
+> @@ -724,6 +726,7 @@ static int mmc_blk_ioctl_multi_cmd(struct mmc_blk_data *md,
+>  	}
+>  	req_to_mmc_queue_req(req)->drv_op =
+>  		rpmb ? MMC_DRV_OP_IOCTL_RPMB : MMC_DRV_OP_IOCTL;
+> +	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+>  	req_to_mmc_queue_req(req)->drv_op_data = idata;
+>  	req_to_mmc_queue_req(req)->ioc_count = n;
+>  	blk_execute_rq(req, false);
+> @@ -2808,6 +2811,7 @@ static int mmc_dbg_card_status_get(void *data, u64 *val)
+>  	if (IS_ERR(req))
+>  		return PTR_ERR(req);
+>  	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_CARD_STATUS;
+> +	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+>  	blk_execute_rq(req, false);
+>  	ret = req_to_mmc_queue_req(req)->drv_op_result;
+>  	if (ret >= 0) {
+> @@ -2846,6 +2850,7 @@ static int mmc_ext_csd_open(struct inode *inode, struct file *filp)
+>  		goto out_free;
+>  	}
+>  	req_to_mmc_queue_req(req)->drv_op = MMC_DRV_OP_GET_EXT_CSD;
+> +	req_to_mmc_queue_req(req)->drv_op_result = -EIO;
+>  	req_to_mmc_queue_req(req)->drv_op_data = &ext_csd;
+>  	blk_execute_rq(req, false);
+>  	err = req_to_mmc_queue_req(req)->drv_op_result;
 
