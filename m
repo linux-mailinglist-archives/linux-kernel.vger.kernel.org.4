@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428F06F08BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CE16F08BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244142AbjD0Pu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S244214AbjD0PvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244000AbjD0Pux (ORCPT
+        with ESMTP id S244175AbjD0PvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:50:53 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F0411B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:50:52 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-2f40b891420so8401520f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:50:52 -0700 (PDT)
+        Thu, 27 Apr 2023 11:51:06 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5733585
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:51:05 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64115e69e1eso4678622b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:51:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682610650; x=1685202650;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0LVvSUlMhk0oorFb1lfoTKLtwX4+aMi4E0n5BABoD+k=;
-        b=c+SKHywJEzds0l0pCyhmpRVHw64XbWWZYodFHkJRBH9RftRm1ltEbKtJ0Q1eniFQbm
-         E5a9EdzdDvymLqawIOGGmnHOOkdqlyiTBzCFvhJEQTomPojd3SgbhNGBO7CadSusMYwE
-         CYpevFGcVrzmX6yFlmgbOKjcxU0o+BrtRpEnITb+8SdYCGgPYVKe3sIolQRv2OUHcL04
-         G4mzF20cNfZuI3Xi9syc9UAUzbF3qMD+lhKMKqhhpJRGSrDDEblFUuxufcCiOwO/f8B2
-         OTmTFyXOrNAkYtKKx36L6RGpqQL1lNR00jd/JBPIMyJ7dlg3G4JVT07MOV8lFqxLS6Hm
-         ASpQ==
+        d=google.com; s=20221208; t=1682610664; x=1685202664;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/BGmFMzU05ZC8sZHkNJgBYDk4c+irOD6V9U91yPyg9g=;
+        b=paDMNiJunl017JsePs93I3EW8GnrmF4BA+oHSO3Osw6zGVWtLuWrBcMRCJQeWgFPpW
+         kqUV7h4lT1mAxFALgewPDuVLQjgbEqpxdCX3hOh+gIElgZScbMQiYnMhNWGl/jIaK/Qp
+         5RWEi7PZfm2t7ZCOuwGIUAJGkC6FfqWYpOuK/nb1SQpGdKFrPT8QBxKEk3pLf0nFKuA3
+         J4LicDbSLsEZh96t9a+zWsVMFTUzKLprFvHc6WQl9lR7Xh6WXEJER2ULFkzozmZ8AVaK
+         9Hkh7adpeQlYPe2BMdVEAqYrjm5syMMEk92wdM21XhCS8TDxDjy7ttTlvMnaFErqG1qg
+         /rJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682610650; x=1685202650;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0LVvSUlMhk0oorFb1lfoTKLtwX4+aMi4E0n5BABoD+k=;
-        b=d9FSPFU17PY9J94bkW7+dZ7scMvlWPwQeMor1MTsaS4snp28wKbFwzUFjWMX8LrFo1
-         SZ/1G9w6afUskP8t3/a7V7j8b9oIwgHVVMdPs8FTIfMRj0kfnU8IWpMeCp01Gu9uhXfW
-         bEzGPr+/IJQGZ2W2fWKcejtmfG52YJXHa3eR6iNDm9c9xY2RjsZ6aEv5fx2P3coR2G8I
-         DT1KMOcxhwZKiVCcmLTLqNPLFoZPGr+wvMRRbNeyGmalpNbe2QztHDzdk8bpXtA1KW/0
-         MV0soqeGNdsr0MDcOJljkyyAUfnjqlbYzx0E3ErEa/cViGLAkqxteDwPae+r9wok2Dsu
-         i2vQ==
-X-Gm-Message-State: AC+VfDwUh+yjVttJ6iGBYxAKwzmRsm3BzyuRp1bQmdM7X9x6YPaumNjq
-        gnuKzDn5QzZ0V8qnnswdMPj+hQ==
-X-Google-Smtp-Source: ACHHUZ778s8yPgKXmPDAlt/RlHkYZz2JfzhRBBdyvaHRk/xkqvcasCGx57Aq2HdnbyJ5ICWeyf7gww==
-X-Received: by 2002:a5d:470c:0:b0:2e6:3804:5be with SMTP id y12-20020a5d470c000000b002e6380405bemr1494910wrq.59.1682610650706;
-        Thu, 27 Apr 2023 08:50:50 -0700 (PDT)
-Received: from [172.23.2.142] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id z17-20020adfdf91000000b002d97529b3bbsm18808434wrl.96.2023.04.27.08.50.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 08:50:49 -0700 (PDT)
-Message-ID: <563fd75f-5ca7-a441-3e21-542e78afa206@linaro.org>
-Date:   Thu, 27 Apr 2023 17:50:48 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] dt-bindings: display: simplify compatibles syntax
-To:     neil.armstrong@linaro.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Xin Ji <xji@analogixsemi.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230414104230.23165-1-krzysztof.kozlowski@linaro.org>
- <4a5ba8cf-5c24-2e76-4eb2-e05c7d8dfc72@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4a5ba8cf-5c24-2e76-4eb2-e05c7d8dfc72@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682610664; x=1685202664;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/BGmFMzU05ZC8sZHkNJgBYDk4c+irOD6V9U91yPyg9g=;
+        b=fTd6GHzII9iEXzf0JsVGupkC+36DjpLGhG3N76dRgns5hDSJyprVgoq3HzC7FYXBdq
+         AeLWTz48uJK5zhhAjIitgYoqy9i9e2eXx91jx+B0Nf8LCh5lTlNwHB1cXFViOOytd/kD
+         z1F+5tPJxiMEADmvD9Dpw+KsPjzSNJgjDbR/aj9srzK8OesXuXapy/CQtdrSvDtvJZes
+         F5OGFbOJNE3cLJIKOKVLrFKO6KPIx0tcxePh0LMAioX0hW0uiYjW6lI2Y/qEMm85T30p
+         Qs/dPqfy+RQRXtuoNGHUBNwIUwlXylnaPW01aYCimUZVnqtLmbYjD3cSQeaWs0JMBypq
+         lpkw==
+X-Gm-Message-State: AC+VfDzYh6mOBavED9jRPXXI6ifSGVybSUrN+dKrplSNdvhuVChstbNe
+        xSzc03Txj4EjYssorrREwtVjewax6yw=
+X-Google-Smtp-Source: ACHHUZ59+ZgxJdPJ8IvwnjVNT7f9pMVDASDOgxtt6uXXLATg1aP6+8Xr++R3G4gmwms8I2vSzghonubDKkk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:203:0:b0:528:a60c:c06b with SMTP id
+ 3-20020a630203000000b00528a60cc06bmr451235pgc.1.1682610664522; Thu, 27 Apr
+ 2023 08:51:04 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 08:51:03 -0700
+In-Reply-To: <CAGtprH_-i15UpM-f3p_g-+GgnK87kUbMa1RpvwGDBRr34XzTuQ@mail.gmail.com>
+Mime-Version: 1.0
+References: <c49aa7b7bbc016b6c8b698ac2ce3b9d866b551f9.1678643052.git.isaku.yamahata@intel.com>
+ <20230418190904.1111011-1-vannapurve@google.com> <20230419133841.00001ee8.zhi.wang.linux@gmail.com>
+ <CAGtprH_-i15UpM-f3p_g-+GgnK87kUbMa1RpvwGDBRr34XzTuQ@mail.gmail.com>
+Message-ID: <ZEqZ5w7EvzUc8Siv@google.com>
+Subject: Re: [PATCH v13 098/113] KVM: TDX: Handle TDX PV map_gpa hypercall
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vishal Annapurve <vannapurve@google.com>
+Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com,
+        dmatlack@google.com, erdemaktas@google.com,
+        isaku.yamahata@gmail.com, kai.huang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, sagis@google.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/04/2023 13:50, Neil Armstrong wrote:
-> On 14/04/2023 12:42, Krzysztof Kozlowski wrote:
->> Lists (items) with one item should be just const or enum because it is
->> shorter and simpler.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Rebased on next-20230406. I hope it applies cleanly...
->> ---
->>   .../display/bridge/analogix,anx7625.yaml      |  3 +--
->>   .../display/panel/sharp,lq101r1sx01.yaml      |  4 ++--
->>   .../bindings/display/solomon,ssd1307fb.yaml   | 24 +++++++++----------
->>   3 files changed, 14 insertions(+), 17 deletions(-)
->>
-> 
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Should I apply those patches ? Until now Rob finished by applying them.
+On Wed, Apr 26, 2023, Vishal Annapurve wrote:
+> On Wed, Apr 19, 2023 at 3:38=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.co=
+m> wrote:
+> >
+> > On Tue, 18 Apr 2023 19:09:04 +0000
+> > Vishal Annapurve <vannapurve@google.com> wrote:
+> >
+> > > > +static int tdx_map_gpa(struct kvm_vcpu *vcpu)
+> > > > +{
+> > > > +   struct kvm *kvm =3D vcpu->kvm;
+> > > > +   gpa_t gpa =3D tdvmcall_a0_read(vcpu);
+> > > > +   gpa_t size =3D tdvmcall_a1_read(vcpu);
+> > > > +   gpa_t end =3D gpa + size;
+> > > > +
+> > > > +   if (!IS_ALIGNED(gpa, PAGE_SIZE) || !IS_ALIGNED(size, PAGE_SIZE)=
+ ||
+> > > > +       end < gpa ||
+> > > > +       end > kvm_gfn_shared_mask(kvm) << (PAGE_SHIFT + 1) ||
+> > > > +       kvm_is_private_gpa(kvm, gpa) !=3D kvm_is_private_gpa(kvm, e=
+nd)) {
+> > > > +           tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OP=
+ERAND);
+> > > > +           return 1;
+> > > > +   }
+> > > > +
+> > > > +   return tdx_vp_vmcall_to_user(vcpu);
+> > >
+> > > This will result into exits to userspace for MMIO regions as well. Do=
+es it make
+> > > sense to only exit to userspace for guest physical memory regions bac=
+ked by
+> > > memslots?
 
-Thanks. This and the mediatek display one were applied already by Rob.
+No, KVM should exit always, e.g. userspace _could_ choose to create a priva=
+te
+memslot in response to the guest's request.
 
+> > I think this is necessary as when passing a PCI device to a TD, the gue=
+st
+> > needs to convert a MMIO region from private to shared, which is not bac=
+ked
+> > by memslots.
 
-Best regards,
-Krzysztof
+This isn't entirely accurate.  If you're talking about emulated MMIO, then =
+there
+is no memslot.  But the "passing a PCI device" makes it sound like you're t=
+alking
+about device passthrough, in which case there is a memslot that points at a=
+n actual
+MMIO region in the host platform.
 
+In either case, conversions should be unnecessary as MMIO regions should no=
+t be
+enumerated to the guest as supporting encryption, i.e. the guest should kno=
+w from
+time zero that those regions are shared.  If we end up with something like =
+Hyper-V's
+SVSM-based paravisor, then there might be private emulated MMIO, but such a=
+ setup
+would also come with its own brand of enlightment in the guest.
+
+> KVM could internally handle conversion of regions not backed by
+
+No, KVM should never internally handle conversions, at least not in the ini=
+tial
+implementation.  And if KVM ever does go down this route, it needs dedicate=
+d
+support in KVM's uAPI since userspace needs to be kept in the loop, i.e. ne=
+eds
+to opt-in and be notified of any conversions.
