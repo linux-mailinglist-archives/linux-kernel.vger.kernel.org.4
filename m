@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4166F000B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65076F0010
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242784AbjD0EDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 00:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S242877AbjD0EJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 00:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjD0EDh (ORCPT
+        with ESMTP id S229552AbjD0EJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 00:03:37 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E092B2704;
-        Wed, 26 Apr 2023 21:03:34 -0700 (PDT)
+        Thu, 27 Apr 2023 00:09:12 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C982738;
+        Wed, 26 Apr 2023 21:09:11 -0700 (PDT)
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33R432v9020046;
-        Wed, 26 Apr 2023 23:03:02 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33R48q75030133;
+        Wed, 26 Apr 2023 23:08:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682568182;
-        bh=lDWkxQMIi5UtNEXMZtZpvamrMU+V3PJfdZn3N1fqqkw=;
+        s=ti-com-17Q1; t=1682568532;
+        bh=BoYCCHxyk+Mm+YKOeD7PWsrSINby+7eRA3vKMdlDGks=;
         h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=Q296x6S+W49hPkji144wQCUX/Z7gbmaGFb+LsgAkRYPFGRe3IvRvT+VLJ/ucXkGoy
-         oOxuwuHDhcMNviuKs0pEAFPMCCsGHaFGB/DBqYcPY3qqHvPrQJYKtYJvdpYn2ZPcKE
-         F0gaxOL5W+edR6inripbPbXfMBTSBLYHcBE1BXZo=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33R4327w025674
+        b=juV2TQ1J5lOhiYlLbhDPfxFaVBGKE/XUoolDn8B1aTgkDTHIDnsq/tMC0q6v/iWQ8
+         lEHlw8cr6fGwyRdP1rp41Rwh0zfUiNoz69vdrQfsSBph5Onvkakm4ZSN6EaTKu+juz
+         QWK6dxdVDwupEWk4Olo+0rQrfu5JrqaBkr7kRZng=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33R48qV1029314
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Apr 2023 23:03:02 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 26
- Apr 2023 23:03:02 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 26 Apr 2023 23:03:01 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33R42wOu062580;
-        Wed, 26 Apr 2023 23:02:58 -0500
-Message-ID: <5a5b4348-0744-ff6b-6354-c4d0243c4fc6@ti.com>
-Date:   Thu, 27 Apr 2023 09:32:57 +0530
+        Wed, 26 Apr 2023 23:08:52 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 26
+ Apr 2023 23:08:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 26 Apr 2023 23:08:52 -0500
+Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33R48m1G068147;
+        Wed, 26 Apr 2023 23:08:49 -0500
+Message-ID: <cce70be8-4d2a-1499-fea5-5efa6c5f1420@ti.com>
+Date:   Thu, 27 Apr 2023 09:38:48 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
@@ -51,17 +51,17 @@ CC:     <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
         <s-vadapalli@ti.com>
-Subject: Re: [RFC PATCH 1/2] net: phy: dp83867: add w/a for packet errors seen
- with short cables
+Subject: Re: [RFC PATCH 2/2] net: phy: dp83869: fix mii mode when rgmii strap
+ cfg is used
+Content-Language: en-US
 To:     Andrew Lunn <andrew@lunn.ch>
 References: <20230425054429.3956535-1-s-vadapalli@ti.com>
- <20230425054429.3956535-2-s-vadapalli@ti.com>
- <f29411d2-c596-4a07-8b6a-7d6e203c25e0@lunn.ch>
- <540149d0-a353-7225-7c58-a4e9738b7c7c@ti.com>
- <38d9b4f9-06b5-4920-8b09-daa115bd52f4@lunn.ch>
-Content-Language: en-US
+ <20230425054429.3956535-3-s-vadapalli@ti.com>
+ <cbbedaab-b2bf-4a37-88ed-c1a8211920e9@lunn.ch>
+ <99932a4f-4573-b80b-080b-7d9d3f57bef0@ti.com>
+ <5a2bc044-5fb0-4162-a75a-24c94f8ed3f7@lunn.ch>
 From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <38d9b4f9-06b5-4920-8b09-daa115bd52f4@lunn.ch>
+In-Reply-To: <5a2bc044-5fb0-4162-a75a-24c94f8ed3f7@lunn.ch>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -77,46 +77,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 26/04/23 18:06, Andrew Lunn wrote:
->>>> @@ -934,8 +935,20 @@ static int dp83867_phy_reset(struct phy_device *phydev)
->>>>  
->>>>  	usleep_range(10, 20);
->>>>  
->>>> -	return phy_modify(phydev, MII_DP83867_PHYCTRL,
->>>> +	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
->>>>  			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
->>>> +	if (err < 0)
->>>> +		return err;
->>>> +
->>>> +	phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG, 0X0E81);
+On 26/04/23 18:11, Andrew Lunn wrote:
+>>>> @@ -692,8 +692,11 @@ static int dp83869_configure_mode(struct phy_device *phydev,
+>>>>  	/* Below init sequence for each operational mode is defined in
+>>>>  	 * section 9.4.8 of the datasheet.
+>>>>  	 */
+>>>> +	phy_ctrl_val = dp83869->mode;
+>>>> +	if (phydev->interface == PHY_INTERFACE_MODE_MII)
+>>>> +		phy_ctrl_val |= DP83869_OP_MODE_MII;
 >>>
->>> Maybe check the return code for errors?
+>>> Should there be some validation here with dp83869->mode?
+>>>
+>>> DP83869_RGMII_COPPER_ETHERNET, DP83869_RGMII_SGMII_BRIDGE etc don't
+>>> make sense if MII is being used. DP83869_100M_MEDIA_CONVERT and maybe
+>>> DP83869_RGMII_100_BASE seem to be the only valid modes with MII?
 >>
->> The return value of phy_write_mmd() doesn't have to be checked since it will be
->> zero for the following reasons:
->> The dp83867 driver does not have a custom .write_mmd method. Also, the dp83867
->> phy does not support clause 45. Due to this, within __phy_write_mmd(), the ELSE
->> statement will be executed, which results in the return value being zero.
+>> The DP83869_OP_MODE_MII macro corresponds to BIT(5) which is the RGMII_MII_SEL
+>> bit in the OP_MODE_DECODE register. If the RGMII_MII_SEL bit is set, MII mode is
+>> selected. If the bit is cleared, which is the default value, RGMII mode is
+>> selected. As pointed out by you, there are modes which aren't valid with MII
+>> mode. However, a mode which isn't valid with RGMII mode (default value of the
+>> RGMII_MII_SEL bit) also exists: DP83869_SGMII_COPPER_ETHERNET. For this reason,
+>> I believe that setting the bit when MII mode is requested shouldn't cause any
+>> issues.
 > 
-> Interesting.
-> 
-> I would actually say __phy_write_mmd() is broken, and should be
-> returning what __mdiobus_write() returns.
-> 
-> You should assume it will get fixed, and check the return value. And
-> it does no harm to check the return value.
+> If you say so. I was just thinking you could give the poor software
+> engineer a hint the hardware engineer has put on strapping resistors
+> which means the PHY is not going to work.
 
-Thank you for clarifying. The reasoning behind the initial patch not checking
-the return value was:
-At all invocations of phy_write_mmd() in the dp83867 driver, at no place is the
-return value checked, which led me to analyze why that was the case. I noticed
-that it was due to the return value being guaranteed to be zero for this
-particular driver.
+I understand now. I will update this patch to add a print if the MII mode is not
+valid with the configured "dp83869->mode". Would you suggest using a dev_err()
+or a dev_dbg()?
 
-Since the existing __phy_write_mmd() implementation is broken as pointed out by
-you, I will update this patch to check the return value. Also, I will probably
-add a cleanup patch as well, to fix this at all other invocations of
-phy_write_mmd() in the driver.
+Thank you for the feedback on this series.
 
 -- 
 Regards,
