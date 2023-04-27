@@ -2,58 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA2D6F0AA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C496F0AAA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244338AbjD0RRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
+        id S244151AbjD0RSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244326AbjD0RRi (ORCPT
+        with ESMTP id S243457AbjD0RSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:17:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF1A59F1;
-        Thu, 27 Apr 2023 10:17:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E92263DCE;
-        Thu, 27 Apr 2023 17:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6F5C433EF;
-        Thu, 27 Apr 2023 17:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682615847;
-        bh=0xWA8A0zUyKpHuYdXUaZ5SCZXM9LKzezszDIXzsri/I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EFLNI5Y8xqGLUGpTKLeRHASq6Vz8HG18a76B1ZAevLGlYgFL45sxMgHqW65HWt7Kf
-         V2oGRRSayE9yxw3fDhhT5oy8/BX9egr9j3YWsai/fNpdjnJ10QottK2SQn9CZawxTC
-         vC1O5BXmzfbpSsyeDZamy51tCyvCjyXJiPNhFWDBM1JJap3SxNkV3jBN2DcUUFPk2M
-         drjRHy+Wtk/lUpBPEQ415pY6wkMEbi36h7MysKSBznJgSEdCPcN+bRqUmpFAmKtAzp
-         fFLPuKsM+epJDb1xmW4oN67Cj9HtuNKw7OlHO7IwrDL59b+I9FONeoxC3gltaSc9DV
-         mogPQQ78asJTQ==
-Date:   Thu, 27 Apr 2023 18:17:22 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH] dt-bindings: leds: Drop redundant cpus enum match
-Message-ID: <20230427171722.GG620451@google.com>
-References: <20230424151437.256073-1-nm@ti.com>
+        Thu, 27 Apr 2023 13:18:38 -0400
+Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6447C102
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
+        b=TLJMIi0RX8F2D4MECviwMXYvEcVb0lEsEy3+u8aUlSP8SU8rlCRGlNNmsB/nVOCzgK5pBrkqJQZ1F
+         4Pk0P0hLFN1/gQl0wOoX80yo5LMFFkY8AFk8tIjenbcNtBTjLcrXTVOu35BU0ZgXdWnnSf7qi6nZ3E
+         orNHCnRqwI7LiLkgzVpEQaOMbxTZLeop5dV4q915EpZK5kidlhmu8EBhfMffenaiZSY9k7inpdXkTU
+         Jqtqf/GAdMoncZ0gbyd6bbDaxV/c7d0xakYFi8MhdcA4DCSizJdUq7VgNEnQ2ErW0+f+L1lpNilWl3
+         /TH/k1Te5r34DMQFVMUEym1QgkeLrjQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
+        b=G5LZPAqKFgpnZqaJfT/ouJ07IZWuTH9E70Iw4lwAnH6U6PTleuFBBWfBI+H0sNsJGesQJZYrDGZOe
+         rwUJGIwDg==
+X-HalOne-ID: 62b9268b-e51f-11ed-ad1f-231b2edd0ed2
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay5 (Halon) with ESMTPSA
+        id 62b9268b-e51f-11ed-ad1f-231b2edd0ed2;
+        Thu, 27 Apr 2023 17:17:31 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 19:17:29 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Message-ID: <20230427171729.GA3899979@ravnborg.org>
+References: <20230426130420.19942-1-tzimmermann@suse.de>
+ <20230426192110.GA3791243@ravnborg.org>
+ <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230424151437.256073-1-nm@ti.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,69 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023, Nishanth Menon wrote:
+Hi Thomas,
 
-> Commit e91a4d5deb96 ("dt-bindings: leds: Document commonly used
-> LED triggers") introduced a enum match for cpu, while a pattern
-> '^cpu[0-9]*$' already exists.
+On Thu, Apr 27, 2023 at 09:22:47AM +0200, Thomas Zimmermann wrote:
+> Hi Sam
 > 
-> This causes linux,default-trigger = "cpu" to have more than one match
-> and generates the following dtbs_check warning:
+> Am 26.04.23 um 21:21 schrieb Sam Ravnborg:
+> > Hi Thomas.
+> > 
+> > On Wed, Apr 26, 2023 at 03:04:15PM +0200, Thomas Zimmermann wrote:
+> > > Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+> > > fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+> > > depends on the architecture. It's still all located in fbdev's main
+> > > header file <linux/fb.h>. Move all of it into each archtecture's
+> > > <asm/fb.h>, with shared code in <asm-generic/fb.h>.
+> > 
+> > For once I think this cleanup is moving things in the wrong direction.
+> > 
+> > The fb_* helpers predates the generic io.h support and try to
+> > add a generic layer for read read / write operations.
+> > 
+> > The right fix would be to migrate fb_* to use the io helpers
+> > we have today - so we use the existing way to handle the architecture
+> > specific details.
 > 
-> arch/arm64/boot/dts/ti/k3-j721e-beagleboneai64.dtb: leds: led-2:linux,default-trigger: More than one condition true in oneOf schema:
-> 	{'$ref': '/schemas/types.yaml#/definitions/string',
-> 	 'oneOf': [{'items': [{'enum': ['backlight',
-> 	                                'default-on',
-> 	                                'heartbeat',
-> 	                                'disk-activity',
-> 	                                'disk-read',
-> 	                                'disk-write',
-> 	                                'timer',
-> 	                                'pattern',
-> 	                                'audio-micmute',
-> 	                                'audio-mute',
-> 	                                'bluetooth-power',
-> 	                                'cpu',
-> 	                                'flash',
-> 	                                'kbd-capslock',
-> 	                                'mtd',
-> 	                                'nand-disk',
-> 	                                'none',
-> 	                                'torch',
-> 	                                'usb-gadget',
-> 	                                'usb-host',
-> 	                                'usbport']}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^cpu[0-9]*$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^hci[0-9]+-power$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^mmc[0-9]+$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'},
-> 	           {'items': [{'pattern': '^phy[0-9]+tx$'}],
-> 	            'maxItems': 1,
-> 	            'minItems': 1,
-> 	            'type': 'array'}]}
+> I looked through the existing versions of the fb_() I/O helpers. They can
+> apparently be implemented with the regular helpers of similar names.
 > 
-> Drop the explicit match against cpu since the pattern match already
-> covers the same.
-> 
-> Fixes: e91a4d5deb96 ("dt-bindings: leds: Document commonly used LED triggers")
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
->  Documentation/devicetree/bindings/leds/common.yaml | 2 --
->  1 file changed, 2 deletions(-)
+> I'm not sure, but even Sparc looks compatible. At least these sbus_
+> functions seem to be equivalent to the __raw_() I/O helpers of similar
+> names.
 
-Applied, thanks
+> Do you still have that Sparc emulator?
+I used qemu the last time I played with sparc and saved the instructions
+somewhere how to redo it - but that would use to bohcs driver only I think.
+I have saprc machines, but none of these are easy to get operational.
+We can always ask on sparclinux to get some testing feedback.
 
--- 
-Lee Jones [李琼斯]
+> 
+> > 
+> >  From a quick look there seems to be some challenges but the current
+> > helpers that re-do part of io.h is not the way forward and hiding them
+> > in arch/include/asm/fb.h seems counter productive.
+> 
+> Which challenges did you see?
+sparc was the main thing - but maybe I did not look close enough.
+And then I tried to map the macros to some of the more highlevel ones
+from io.h, but as Arnd says the __raw* is the way to go here.
+
+	Sam
