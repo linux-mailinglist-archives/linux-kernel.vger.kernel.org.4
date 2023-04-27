@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE49F6F0EE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E516F0EF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjD0X3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S1344451AbjD0Xau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344331AbjD0X3l (ORCPT
+        with ESMTP id S1344400AbjD0Xap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:29:41 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534C32D6B;
-        Thu, 27 Apr 2023 16:29:40 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a667067275so71201965ad.1;
-        Thu, 27 Apr 2023 16:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682638180; x=1685230180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfABu7Cc2LVPUFjUnfFsZx1Y3J2FYen/EYucbIUAmiM=;
-        b=bB6ttVGdDlatWPnwYoqs9EpnA38tcqe6dI8rkdN0lUdtTiomKwPJyAKJVkbtqZ0628
-         2Bz2Db0BDnMHrVjn3iuL/CrT7/TerOMRTTAm3sijJreV8OWlOBh3lqUjiRd0vDMxD9yv
-         lVyzsdDqvBtaHDfXlsoP6J0v3/3z9A7s1/bBnXNaQeSrTes6G2PEsepIllHxoIIWJhVF
-         QkHWry40uVZKJFw8jqwUgjIFvEqw7+u5Ptq20Jv3QkuWaEmkXskEcffjv57LEPGXt4ol
-         e4inqVBHiptE+YK28eptMcW86cpYiBVN6jykZ6mnYopA/pmR9qNsv6LitUBIQWSjMDaL
-         VBvw==
+        Thu, 27 Apr 2023 19:30:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227F440FE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682638191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=APGco6aEZNObW78hE/OSpvb8OxCU/Biuh2aipIMgkF8=;
+        b=C2/acZjc4zObvp1IQv+u3QHmKG3WPwGTcCAGkgLivD4fzsvIqWCIwez/zPWDvdr8cKBvbL
+        GoYKD9r2aYSpdLBSae9F3gJMPtdZS8wipEb09wIbouxy9atCsOn4iWMuPqaMBB/cDIStvF
+        vVeFcNaFQeyXMwgmshO27rE0pbIlqms=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-669-6cN53Yr4P960T7BFIq1uaA-1; Thu, 27 Apr 2023 19:29:49 -0400
+X-MC-Unique: 6cN53Yr4P960T7BFIq1uaA-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-555f6759323so149344177b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682638180; x=1685230180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfABu7Cc2LVPUFjUnfFsZx1Y3J2FYen/EYucbIUAmiM=;
-        b=Hsj7z8arCnFBd9kTB5q/a3Qv1r6I/AHMFxroCzWz2skZvNKl8IZ1eZ6kN8zQJmmslW
-         AyjanV2o/qnVo9lJC8hLBz1Jlx3PS/LDR0uPEIzMiicYUzSThrIVcgnzXgBJwhcx7puK
-         7qllE6pP++Vx++9oRZd4+p9Mv9l4fTl94YkV4Xqn5toBJfhIoFZnfhKblxlrGWJoJYwT
-         v8Srg3YqgoOn3T2SKr7hyk45gPpYRxFBAEiaMtKAxE5A/kBRbBahStdhKmEaO8qzMShR
-         3szH7LJKWmHeZrfGX+Q1v9ggiEXNFSQAktngqAnmz6Y5M1vMt1MTwmSi2YxWHAhT035g
-         QXzg==
-X-Gm-Message-State: AC+VfDwijJ5L93W8XYKaFYu/a2iiKKDPP/il9rK6yVCfF6sClRru7us7
-        Hb23H0KlNVbEqru54rf/v1M=
-X-Google-Smtp-Source: ACHHUZ4+LxQiAZFcsCO3jxQhJcObopxUPcV8H3quHLqumCeHYnO9PWdu3969Yc9tzcIQEcM2NIAmJw==
-X-Received: by 2002:a17:902:ebd1:b0:1a6:52f9:d4c7 with SMTP id p17-20020a170902ebd100b001a652f9d4c7mr3052365plg.60.1682638179758;
-        Thu, 27 Apr 2023 16:29:39 -0700 (PDT)
-Received: from [10.69.53.73] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id jl13-20020a170903134d00b001a9666376a9sm8330235plb.226.2023.04.27.16.29.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 16:29:39 -0700 (PDT)
-Message-ID: <a8e21766-266c-c0dc-157c-c6951a5727a7@gmail.com>
-Date:   Thu, 27 Apr 2023 16:29:37 -0700
+        d=1e100.net; s=20221208; t=1682638189; x=1685230189;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=APGco6aEZNObW78hE/OSpvb8OxCU/Biuh2aipIMgkF8=;
+        b=JQy21kHlubqcqVCMyom04tcjvMOc9Y1PEzqqeJQpCPJwyXauqgL98Ftsgpk9WC/LRO
+         uP7CnRJxh4PhncYO8mUkAp1kaq9KinkVspf7ND2JhEdnOJLteQGodUkTQIwUjWq50rvb
+         hzGBUz8ZrXfGJommJiiU2pmYMD4iZpQSyRwu7xpyj8B+KhyIaMzDlz88eu00712Fw2sD
+         0RXhCj+I3dTkoufO5hnW4NMd+xtMHsMfcjXVMMA0zgZumUk92m63GZQnTUPZAxm3nWbt
+         fyPpT8GQM5VEguLfRxfCZY8CMAKDkxA8sVMxI71JdQOqxUBpVZJMFutr7g/unPUC6IUO
+         fGUg==
+X-Gm-Message-State: AC+VfDwmx8Ytzy2K7KHBZ9ezhrp/lB4hsUY6roc4Oa+daY8aDNgDM0Y4
+        8+Vd4wADfrJbhtnbv5fMK+MbuYBx5hicfCSEsuQmB/8kzrUY/Tn6ThdCEEM6bk5hvdxbNy3+3ZK
+        hYuKvWQdoHdUDf7J0aAQvE8x9
+X-Received: by 2002:a81:4f51:0:b0:54f:8b2b:adec with SMTP id d78-20020a814f51000000b0054f8b2badecmr2624512ywb.33.1682638189446;
+        Thu, 27 Apr 2023 16:29:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6sokai3nLi8Ghu/YrOhpsnAtHNmXbN/Ev70qVf2+yqg+ChxRtHYPD1D1nlvWdnZWkdWuuWwg==
+X-Received: by 2002:a81:4f51:0:b0:54f:8b2b:adec with SMTP id d78-20020a814f51000000b0054f8b2badecmr2624498ywb.33.1682638189232;
+        Thu, 27 Apr 2023 16:29:49 -0700 (PDT)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id a11-20020a0dd80b000000b0054fb975df99sm5115368ywe.18.2023.04.27.16.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 16:29:48 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 19:29:46 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: input: pwm-vibrator: Add enable-gpio
+Message-ID: <ZEsFajeqFX35e72a@x1>
+References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
+ <20230427-hammerhead-vibra-v1-1-e87eeb94da51@z3ntu.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH 2/2] serial: 8250_bcm7271: fix leak in `brcmuart_probe`
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        XuDong Liu <m202071377@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20230427181916.2983697-1-opendmb@gmail.com>
- <20230427181916.2983697-3-opendmb@gmail.com>
- <37c23054-1590-b33d-9299-7d5d6198f8f0@wanadoo.fr>
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <37c23054-1590-b33d-9299-7d5d6198f8f0@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427-hammerhead-vibra-v1-1-e87eeb94da51@z3ntu.xyz>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/2023 1:29 PM, Christophe JAILLET wrote:
-> Le 27/04/2023 à 20:19, Doug Berger a écrit :
->> Smatch reports:
->> drivers/tty/serial/8250/8250_bcm7271.c:1120 brcmuart_probe() warn:
->> 'baud_mux_clk' from clk_prepare_enable() not released on lines: 1032.
->>
->> The issue is fixed by using a managed clock.
->>
->> Fixes: 41a469482de2 ("serial: 8250: Add new 8250-core based Broadcom 
->> STB driver")
->> Reported-by: XuDong Liu <m202071377@hust.edu.cn>
->> Link: 
->> https://lore.kernel.org/lkml/20230424125100.4783-1-m202071377@hust.edu.cn/
->> Signed-off-by: Doug Berger <opendmb@gmail.com>
->> ---
->>   drivers/tty/serial/8250/8250_bcm7271.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c 
->> b/drivers/tty/serial/8250/8250_bcm7271.c
->> index 90ee7bc12f77..af0e1c070187 100644
->> --- a/drivers/tty/serial/8250/8250_bcm7271.c
->> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
->> @@ -1012,7 +1012,7 @@ static int brcmuart_probe(struct platform_device 
->> *pdev)
->>       of_property_read_u32(np, "clock-frequency", &clk_rate);
->>       /* See if a Baud clock has been specified */
->> -    baud_mux_clk = of_clk_get_by_name(np, "sw_baud");
->> +    baud_mux_clk = devm_clk_get(dev, "sw_baud");
+On Thu, Apr 27, 2023 at 10:34:26PM +0200, Luca Weiss wrote:
+> Some pwm vibrators have a dedicated enable GPIO that needs to be set
+> high so that the vibrator works. Document that.
 > 
-> If switching to devm_clk_get(), maybe devm_clk_get_enabled() could also 
-> be an option to fix both issues and avoid adding some LoC.
-> 
-> The order of operation in the remove function would then be different. I 
-> don't know if it can be an issue.
-I like the idea, but it doesn't backport to the source of the error.
-I'll try to remember to submit something after the merge closes.
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-> 
-> Just my 2c.
-> 
-> CJ
-Thanks!
-     Doug
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
