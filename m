@@ -2,167 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11A66F0278
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740D66F02B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243045AbjD0IZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S243066AbjD0IlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjD0IYq (ORCPT
+        with ESMTP id S243120AbjD0Iky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:24:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A373249D8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682583838;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W8usmC3JGK9PorB0wAqvMMI+OvA7gcjYhdZApmddriY=;
-        b=N+faVCjZTFN00z42gAqKl3oYG9GRn6FRnRrF737cQBGA7P9wCKTnNjo55m4c7f0YyDrKlq
-        +xcKGfU8CJ3qMYDjRDEKN2x+52t+SuEXbFdL4SAJ0q2tvisBcaHEaVYS6pc7ylMv5ZSDCN
-        wprGYQhh+UoT7waG3J30G8nCkjjpxBo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-397-nQiIc9wNM_2hHSx1kQ2s0Q-1; Thu, 27 Apr 2023 04:23:56 -0400
-X-MC-Unique: nQiIc9wNM_2hHSx1kQ2s0Q-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-2f446161e5aso4895677f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:23:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682583835; x=1685175835;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W8usmC3JGK9PorB0wAqvMMI+OvA7gcjYhdZApmddriY=;
-        b=K9uwhVVq5P6kvr4WjufzQKpJkD79FywFfJSmCcWS8SRf/XPrPZa21eTDOUN1mTwnpN
-         /yvbx03lPLKlttHyV2D/LdhovCX7X4bjgZtp66pKBmEhre1DBSE9eZoDsmKGWQEY1CSa
-         T66yncmGe0WXquW1bTZ44IcFTAiBKKSI+UHJfVzn5tAtEAd3H9dZoFDXWWyK7XFzulCX
-         pagX7YFXTXANvL11ciQwQuVJ5mJ2hiwdiYIL7QcSyvRig1TANKd5e/EBRya9EesnTeKs
-         9lFh4Ob0JmrptiBg0GsUvCmM7k6yIW3TnQNzHV3hd9NfMU5oQ+QmTXbPyd3MECaFv8bk
-         2qWA==
-X-Gm-Message-State: AC+VfDw2Sro8EV4/ZWuhjlS13nw/nhQ3kgayYME7z7EAWyMiPlpUCPaO
-        oywwh3j/nuCmMhF04QluG7eX3gtwv/SznVGM1BqUcSs0TY5Eu/AQ6g94yi3Q/dADH0wl0xdkz0g
-        JwKrkyDxeYS0Wtle5dGfl90Am
-X-Received: by 2002:adf:db8e:0:b0:2fe:f2d1:dcab with SMTP id u14-20020adfdb8e000000b002fef2d1dcabmr580410wri.58.1682583835566;
-        Thu, 27 Apr 2023 01:23:55 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7rQyd/2UisYbyEnSs2VvV3WiCVMyj0AWWY8+sZq//VJGg92r0G4dwgdN0gnhvMCRphC2USAQ==
-X-Received: by 2002:adf:db8e:0:b0:2fe:f2d1:dcab with SMTP id u14-20020adfdb8e000000b002fef2d1dcabmr580392wri.58.1682583835248;
-        Thu, 27 Apr 2023 01:23:55 -0700 (PDT)
-Received: from redhat.com ([2.52.19.183])
-        by smtp.gmail.com with ESMTPSA id b4-20020a05600010c400b002e45f6ffe63sm17892253wrx.26.2023.04.27.01.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 01:23:54 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 04:23:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Wenliang Wang <wangwenliang.1995@bytedance.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jasowang@redhat.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
-Message-ID: <20230427042259-mutt-send-email-mst@kernel.org>
-References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
- <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
- <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
- <1682579624.5395834-1-xuanzhuo@linux.alibaba.com>
- <20230427041206-mutt-send-email-mst@kernel.org>
- <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
+        Thu, 27 Apr 2023 04:40:54 -0400
+X-Greylist: delayed 605 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 01:40:48 PDT
+Received: from vm3.sequanux.org (static.55.155.9.5.clients.your-server.de [5.9.155.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81F8F4ED4;
+        Thu, 27 Apr 2023 01:40:48 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by vm3.sequanux.org (Postfix) with ESMTP id 447661086A7;
+        Thu, 27 Apr 2023 10:30:21 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at vm3.sequanux.org
+Received: from vm3.sequanux.org ([127.0.0.1])
+        by localhost (vm3.sequanux.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id C_QRgtPax6JY; Thu, 27 Apr 2023 10:29:55 +0200 (CEST)
+Received: from localhost (softwrestling.org [95.216.36.37])
+        by vm3.sequanux.org (Postfix) with ESMTPSA id 94A861080D6;
+        Thu, 27 Apr 2023 10:29:55 +0200 (CEST)
+Date:   Thu, 27 Apr 2023 10:29:41 +0200
+From:   Simon Guinot <simon.guinot@sequanux.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Xing Tong Wu <xingtong.wu@siemens.com>
+Subject: Re: [PATCH 1/1] gpio-f7188x: fix pin count on nct6116d bank 7
+Message-ID: <ZEoydXMDRONgbhY8@76cbfcf04d45>
+References: <20230425153911.32135-1-henning.schild@siemens.com>
+ <20230425153911.32135-2-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lk7i3m2T2NkJgXE3"
 Content-Disposition: inline
-In-Reply-To: <1682583225.3180113-2-xuanzhuo@linux.alibaba.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230425153911.32135-2-henning.schild@siemens.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 04:13:45PM +0800, Xuan Zhuo wrote:
-> On Thu, 27 Apr 2023 04:12:44 -0400, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > On Thu, Apr 27, 2023 at 03:13:44PM +0800, Xuan Zhuo wrote:
-> > > On Thu, 27 Apr 2023 15:02:26 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
-> > > >
-> > > >
-> > > > On 4/27/23 2:20 PM, Xuan Zhuo wrote:
-> > > > > On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
-> > > > >> For multi-queue and large rx-ring-size use case, the following error
-> > > > >
-> > > > > Cound you give we one number for example?
-> > > >
-> > > > 128 queues and 16K queue_size is typical.
-> > > >
-> > > > >
-> > > > >> occurred when free_unused_bufs:
-> > > > >> rcu: INFO: rcu_sched self-detected stall on CPU.
-> > > > >>
-> > > > >> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
-> > > > >> ---
-> > > > >>   drivers/net/virtio_net.c | 1 +
-> > > > >>   1 file changed, 1 insertion(+)
-> > > > >>
-> > > > >> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > >> index ea1bd4bb326d..21d8382fd2c7 100644
-> > > > >> --- a/drivers/net/virtio_net.c
-> > > > >> +++ b/drivers/net/virtio_net.c
-> > > > >> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
-> > > > >>   		struct virtqueue *vq = vi->rq[i].vq;
-> > > > >>   		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
-> > > > >>   			virtnet_rq_free_unused_buf(vq, buf);
-> > > > >> +		schedule();
-> > > > >
-> > > > > Just for rq?
-> > > > >
-> > > > > Do we need to do the same thing for sq?
-> > > > Rq buffers are pre-allocated, take seconds to free rq unused buffers.
-> > > >
-> > > > Sq unused buffers are much less, so do the same for sq is optional.
-> > >
-> > > I got.
-> > >
-> > > I think we should look for a way, compatible with the less queues or the smaller
-> > > rings. Calling schedule() directly may be not a good way.
-> > >
-> > > Thanks.
-> >
-> > Why isn't it a good way?
-> 
-> For the small ring, I don't think it is a good way, maybe we only deal with one
-> buf, then call schedule().
-> 
-> We can call the schedule() after processing a certain number of buffers,
-> or check need_resched () first.
-> 
-> Thanks.
+
+--Lk7i3m2T2NkJgXE3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-Wenliang, does
-            if (need_resched())
-                    schedule();
-fix the issue for you?
+On Tue, Apr 25, 2023 at 05:39:11PM +0200, Henning Schild wrote:
+> The count was wrong because i looked at the wrong spec for the chip in
+> question. I now got access to the spec for that very chip and group7 has
+> all 8 pins, just like the other groups.
 
+Did you use the NCT6102D / NCT6106D datasheet in a first place ?
 
-> 
-> 
-> >
-> > >
-> > > >
-> > > > >
-> > > > > Thanks.
-> > > > >
-> > > > >
-> > > > >>   	}
-> > > > >>   }
-> > > > >>
-> > > > >> --
-> > > > >> 2.20.1
-> > > > >>
-> >
+If the only difference with NCT6116D is the number of pins on port
+GPIO-7, then maybe we should handle it and claim support for this models
+as well ?
 
+Simon
+=20
+>=20
+> Fixes: d0918a84aff0 ("gpio-f7188x: Add GPIO support for Nuvoton NCT6116")
+> Reported-by: Xing Tong Wu <xingtong.wu@siemens.com>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/gpio/gpio-f7188x.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
+> index 9effa7769bef..05c0edc4778f 100644
+> --- a/drivers/gpio/gpio-f7188x.c
+> +++ b/drivers/gpio/gpio-f7188x.c
+> @@ -282,7 +282,7 @@ static struct f7188x_gpio_bank nct6116d_gpio_bank[] =
+=3D {
+>  	F7188X_GPIO_BANK(40, 8, 0xF0, DRVNAME "-4"),
+>  	F7188X_GPIO_BANK(50, 8, 0xF4, DRVNAME "-5"),
+>  	F7188X_GPIO_BANK(60, 8, 0xF8, DRVNAME "-6"),
+> -	F7188X_GPIO_BANK(70, 1, 0xFC, DRVNAME "-7"),
+> +	F7188X_GPIO_BANK(70, 8, 0xFC, DRVNAME "-7"),
+>  };
+> =20
+>  static int f7188x_gpio_get_direction(struct gpio_chip *chip, unsigned of=
+fset)
+> --=20
+> 2.39.2
+
+--Lk7i3m2T2NkJgXE3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEXW8DgovlR3VS5hA0zyg/RDPmszoFAmRKMnEACgkQzyg/RDPm
+szpmnBAAjOLLHaY/XpmFwJofHE0dYlcMU1TvJLrzVYngBLOXgJC1ItKIoinIdxqq
+ZT7M8iuEpH8/gJ0jcwWIOfnoZU0A4CF7CEeedW1c3ofrsOLipdrl4cdrQrO4+M0p
+WC1Kg+az2/Bi1IuYDzRZ1bcQFM3K6mJHOyFUFUjpPPabnPLpevBEx6t8mvBMu1J1
+HeZN9Qvd9NNIKJw7osVAT39Azg7hoL+JRp2huGII0U0/4RnLwEFf4RfFc4cj9JBa
+tkYckAThgn6YCLhHl+GO/vrvtiIsJ07//I4LRKFPYOPF1O9fyXc3v9zJqVZLzk5T
+I962a+OIXC0nVyoHiRwfjMr5yZkSl0Zzjy8V+u3/YnWuxmNcaIFBY0YViIiS5jjJ
+q3lXewtwQlnEIti9/6qQN1wKWr54lBLtTu4/IPVbDzrbHQyz9Q9+4qfs3idyKwL1
+jtQV5A1OnM2HDADW43qskGkQkdnC23zLC0TXk2L2S3K8twZ6SDcDjmwbxEbACZDS
+RyXu/DJIAJLAQEzWpfiHLPvcCe9C4yhS8zbvn4LLcs1lhwUWEJMLmrSE7NFTUmZq
+k6AXUsi/OMcN4cxOPwO5uzCRumm3EdklK4urSZp4FcKb6VGGmvgb9C07XnDx2M/V
+ay4WxrO0zySq8riy+0c9IA+Mp3zH4qqP7FX6NQb6IkEEkAiWgiU=
+=fkZu
+-----END PGP SIGNATURE-----
+
+--Lk7i3m2T2NkJgXE3--
