@@ -2,123 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DCD6EFFBA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD46EFFBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242820AbjD0DOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S242857AbjD0DQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241692AbjD0DOe (ORCPT
+        with ESMTP id S232094AbjD0DQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:14:34 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD363AAA
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:14:32 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vh5kO3u_1682565269;
-Received: from 30.97.48.233(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vh5kO3u_1682565269)
-          by smtp.aliyun-inc.com;
-          Thu, 27 Apr 2023 11:14:30 +0800
-Message-ID: <f42cb722-cdbe-4c87-1afb-3a81470a243c@linux.alibaba.com>
-Date:   Thu, 27 Apr 2023 11:14:28 +0800
+        Wed, 26 Apr 2023 23:16:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D635A6;
+        Wed, 26 Apr 2023 20:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=f57Zj/04myr3002sVqcVQkqmm+HfOyku1xoDDfbgmL0=; b=x7j9CudlY7a1euI+PbiS85v+KR
+        BRossHnSmCv4GPvBF5aCAXqSRVM31zSZyHrVcYHC82iVfUGEuyNK9Za2v0Hju1HxWyQEazDPe3bzC
+        7bvxRd9YHHMDTC85XvT+F494X1E8b9T+6JjOGuFhiYutabbx3TatB9vWgDslKV90qj9+yR+Vc/uJN
+        t6X5TMJYzqKvlwf9K6d2xLi0urE5mxhDXeJ2zNY6Eh2BXdHRvE4oWctbDR6Vz/6O91K75RWEWfCHR
+        eiDW3bM/tv9Bt0GxqEXmBCUHMBuefOJ0SLDjiEBw34U1sk3K4eoNDyn40Sfx/lGwbYJGMOLNGC4Ta
+        MsFj4dpg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1prs7V-005L2i-0H;
+        Thu, 27 Apr 2023 03:16:33 +0000
+Message-ID: <17660b99-d68d-328e-5fe6-c011709fa3e4@infradead.org>
+Date:   Wed, 26 Apr 2023 20:16:29 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH] erofs: do not build pcpubuf.c for uncompressed data
-To:     Yue Hu <zbestahu@gmail.com>, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org
-Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
-References: <20230427030346.5624-1-zbestahu@gmail.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230427030346.5624-1-zbestahu@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is
+ enabled
+Content-Language: en-US
+To:     genjian zhang <zhanggenjian123@gmail.com>,
+        tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+References: <20230426124948.1072216-1-zhanggenjian@kylinos.cn>
+ <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAOd03yQ98st7KvAkwfFqFvXGBdmWmOZZ-kWAH5DAi7gLd=ngaA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi--
 
-
-On 2023/4/27 11:03, Yue Hu wrote:
-> From: Yue Hu <huyue2@coolpad.com>
 > 
-> The function of pcpubuf.c is just for low-latency decompression
-> algorithms (e.g. lz4).
-> 
-> Signed-off-by: Yue Hu <huyue2@coolpad.com>
+> Maybe the readability of this modification is not very good. Any
+> comments and suggestions are welcome. Thanks.
+
+Some of the patch description could use some cleaning up,
+then I have a question.
 
 
-Subject: erofs: avoid pcpubuf.c inclusion if CONFIG_EROFS_FS_ZIP is off
+On 4/26/23 06:02, genjian zhang wrote:
+> On Wed, Apr 26, 2023 at 8:51 PM Genjian <zhanggenjian123@gmail.com> wrote:
+>>
+>> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+>>
+>> compiler error (mips-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110):
+>>
+>> {standard input}: Assembler messages:
+>> {standard input}:171: Error: found '(', expected: ')'
+>> {standard input}:171: Error: found '(', expected: ')'
+>> {standard input}:171: Error: non-constant expression in ".if" statement
+>> {standard input}:171: Error: junk at end of line, first unrecognized
+>> character is `('
+>>
+>> Preprocessor expand ___SYNC () macros.However,'if' will be wrongly
 
-Otherwise it looks good to me,
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+                expands ___SYNC() macros. However, 'if' will be wrongly
 
-Thanks,
-Gao Xiang
+>> replaced by C code when PROFILE_ALL_BRANCHES is enabled and ___SYNC
+>> is used in inline assembly.This leads to syntax errors in the code.
+
+                     assembly. This
+
+>> Compilers report a lot of errors like the above.
+>> Move '.if' into quoted strings to fix it.
+>>
+>> Reported-by: k2ci <kernel-bot@kylinos.cn>
+>> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
+>> ---
+>>  arch/mips/include/asm/sync.h | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
+>> index aabd097933fe..d9f5a87424e7 100644
+>> --- a/arch/mips/include/asm/sync.h
+>> +++ b/arch/mips/include/asm/sync.h
+>> @@ -175,7 +175,7 @@
+>>   */
+>>  #ifdef CONFIG_CPU_HAS_SYNC
+>>  # define ____SYNC(_type, _reason, _else)                       \
+>> -       .if     (( _type ) != -1) && ( _reason );               \
+>> +       ((_type) != -1) && (_reason);                           \
+>>         .set    push;                                           \
+>>         .set    MIPS_ISA_LEVEL_RAW;                             \
+>>         .rept   __SYNC_rpt(_type);                              \
+>> @@ -192,13 +192,15 @@
+>>  /*
+>>   * Preprocessor magic to expand macros used as arguments before we insert them
+>>   * into assembly code.
+>> + * In addition,‘if’ can not be substituted when CONFIG_PROFILE_ALL_BRANCHES is
+
+     * In addition, 'if' cannot be
+
+>> + * enabled.
+>>   */
+>>  #ifdef __ASSEMBLY__
+>>  # define ___SYNC(type, reason, else)                           \
+>> -       ____SYNC(type, reason, else)
+>> +       .if     ____SYNC(type, reason, else)
+>>  #else
+>>  # define ___SYNC(type, reason, else)                           \
+>> -       __stringify(____SYNC(type, reason, else))
+>> +       ".if"   __stringify(____SYNC(type, reason, else))
+>>  #endif
+>>
+>>  #define __SYNC(type, reason)                                   \
+>> --
+>> 2.25.1
 
 
-> ---
->   fs/erofs/Makefile   |  4 ++--
->   fs/erofs/internal.h | 12 +++++++-----
->   2 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/erofs/Makefile b/fs/erofs/Makefile
-> index 99bbc597a3e9..a3a98fc3e481 100644
-> --- a/fs/erofs/Makefile
-> +++ b/fs/erofs/Makefile
-> @@ -1,8 +1,8 @@
->   # SPDX-License-Identifier: GPL-2.0-only
->   
->   obj-$(CONFIG_EROFS_FS) += erofs.o
-> -erofs-objs := super.o inode.o data.o namei.o dir.o utils.o pcpubuf.o sysfs.o
-> +erofs-objs := super.o inode.o data.o namei.o dir.o utils.o sysfs.o
->   erofs-$(CONFIG_EROFS_FS_XATTR) += xattr.o
-> -erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o
-> +erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o pcpubuf.o
->   erofs-$(CONFIG_EROFS_FS_ZIP_LZMA) += decompressor_lzma.o
->   erofs-$(CONFIG_EROFS_FS_ONDEMAND) += fscache.o
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index af0431a40647..65dbfa76f854 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -472,11 +472,6 @@ static inline void *erofs_vm_map_ram(struct page **pages, unsigned int count)
->   	return NULL;
->   }
->   
-> -void *erofs_get_pcpubuf(unsigned int requiredpages);
-> -void erofs_put_pcpubuf(void *ptr);
-> -int erofs_pcpubuf_growsize(unsigned int nrpages);
-> -void __init erofs_pcpubuf_init(void);
-> -void erofs_pcpubuf_exit(void);
->   
->   int erofs_register_sysfs(struct super_block *sb);
->   void erofs_unregister_sysfs(struct super_block *sb);
-> @@ -512,6 +507,11 @@ int z_erofs_load_lz4_config(struct super_block *sb,
->   			    struct z_erofs_lz4_cfgs *lz4, int len);
->   int z_erofs_map_blocks_iter(struct inode *inode, struct erofs_map_blocks *map,
->   			    int flags);
-> +void *erofs_get_pcpubuf(unsigned int requiredpages);
-> +void erofs_put_pcpubuf(void *ptr);
-> +int erofs_pcpubuf_growsize(unsigned int nrpages);
-> +void __init erofs_pcpubuf_init(void);
-> +void erofs_pcpubuf_exit(void);
->   #else
->   static inline void erofs_shrinker_register(struct super_block *sb) {}
->   static inline void erofs_shrinker_unregister(struct super_block *sb) {}
-> @@ -529,6 +529,8 @@ static inline int z_erofs_load_lz4_config(struct super_block *sb,
->   	}
->   	return 0;
->   }
-> +static inline void erofs_pcpubuf_init(void) {}
-> +static inline void erofs_pcpubuf_exit(void) {}
->   #endif	/* !CONFIG_EROFS_FS_ZIP */
->   
->   #ifdef CONFIG_EROFS_FS_ZIP_LZMA
+Is this problem that you are fixing being aggravated (caused) by
+the #define of if() in include/linux/compiler.h when CONFIG_PROFILE_ALL_BRANCHES
+is set?  I suspect that it is.
+It wouldn't hurt to mention that (if I am correct).
+
+Thanks.
+-- 
+~Randy
