@@ -2,82 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511696EFFED
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11A96EFFEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242867AbjD0DqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S242941AbjD0Dq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242825AbjD0DqK (ORCPT
+        with ESMTP id S242825AbjD0DqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:46:10 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500953C13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:46:08 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso14048000a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682567166; x=1685159166;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kjr1uyrMYaui+GtohqyXliIMiHeH1QRQFMBxyH6C+9c=;
-        b=LAMl+13ugul4+qFJZf6rZpNmm1WOA5LkpENYAWPYjVf/fS1QGJKOpp0/fB64p8ILAi
-         4gsu9UlKw8wn4TcxdLMU+1aCn5xJtAYdtiI40+nfoM2t6mbondtfmgu/s36yHmX9i6fO
-         58fusE7yKiOirChN4q6uYCG173tR7oS5XlwvQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682567166; x=1685159166;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kjr1uyrMYaui+GtohqyXliIMiHeH1QRQFMBxyH6C+9c=;
-        b=O5qvDjDmMbPuzIFT0zNE4nX6JsnTn9M6NvqUgoXooRWyQXpa0L6673d1ZQcL0QmhBL
-         JWJqV8Sun/132RGiflUa0gsPeHoK4TzORy61pWqIlt8BC4CgYlFmuw5a6iTyRJZCZWHD
-         heJNhtagLo3iOZHenKgm+UaVQyxJBhLTlLTUXQgpWuHPfHSqaOtHxKSZrsGXAM3XmYFr
-         7biNbnOYhX5+M0yACIKx9K9jk4HJj9J8FB6mnb4UIaLR+ewoL/x2pkHxCbb7nlhU3O9X
-         CWYIBmK12ZitDvK0Hfo+x1Wb9ZNq9W/14M1LuySZVrU7YbWhF5064rUUVFCDVh293Q9L
-         KDnw==
-X-Gm-Message-State: AC+VfDzeuIDQPp3zoOxeip68rpnksHxtIsOB2smLVgmhs8vmFASrDFpW
-        i2IVFfGXnYAMfvig4Q787T8AVME55xRCHv+i3VForA==
-X-Google-Smtp-Source: ACHHUZ5TFb2tLCCkv/5Whuo2YDF6Pmww+MsfIqIGnxdaWNTjPzAyl3lgvuV8OYzijTa6TVDYJ7259A==
-X-Received: by 2002:aa7:db48:0:b0:504:ba4f:3450 with SMTP id n8-20020aa7db48000000b00504ba4f3450mr388077edt.30.1682567166680;
-        Wed, 26 Apr 2023 20:46:06 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id q9-20020aa7da89000000b005069175dcb7sm7482880eds.58.2023.04.26.20.46.04
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Apr 2023 20:46:04 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so54519135e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:46:04 -0700 (PDT)
-X-Received: by 2002:a1c:f706:0:b0:3f1:923e:e6bc with SMTP id
- v6-20020a1cf706000000b003f1923ee6bcmr266327wmh.0.1682567164086; Wed, 26 Apr
- 2023 20:46:04 -0700 (PDT)
+        Wed, 26 Apr 2023 23:46:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5E0420E;
+        Wed, 26 Apr 2023 20:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682567175; x=1714103175;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vxDIREfs/gWOTr6RZRuTNYwYFcISY67IkdEr84O8tCQ=;
+  b=TC3r27VlFwBaIBn/KKWGomfmiSTab+7ZVyMkCtakCeVYs8JbChUoRA8/
+   VS6+unOVz0gcWFHm4picxktevtKE3vjC2kuHqYCaQhbq+S4hClzzyFn1v
+   7+H2jQXK5Tmo3SMTvywLibMX0vFSZYV1KE/rnlz0pXkrX0OyBFNH4iwmY
+   VL2fH34Q0tRl221wtyIg2eYe55XyiWt09Uvyose26PVmcUKm66S626pl8
+   lpcTZiqrEJbmHryhyRSVEp+bxQjRE0xj/zxb69f2PtcHpgbMfldvfvSGJ
+   949paqPTWQA3V+Oe0iqCvic4/7dMSBSJGGRf8c+qS8PU+8yojlzFRhjbk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="326916673"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="326916673"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 20:46:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="726856647"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="726856647"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.10.34]) ([10.238.10.34])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 20:46:12 -0700
+Message-ID: <a46895fa-3ffa-e2d8-2841-625a1f791ece@linux.intel.com>
+Date:   Thu, 27 Apr 2023 11:46:08 +0800
 MIME-Version: 1.0
-References: <20230426144423.2820826-1-fshao@chromium.org> <20230426144423.2820826-3-fshao@chromium.org>
- <ZEnK7bQkl+fkcHkb@nixie71>
-In-Reply-To: <ZEnK7bQkl+fkcHkb@nixie71>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Thu, 27 Apr 2023 11:45:26 +0800
-X-Gmail-Original-Message-ID: <CAC=S1ni9ii=xNG-t7jPVGhP1kXMMthmGfvoPzCyEWytazFvRdg@mail.gmail.com>
-Message-ID: <CAC=S1ni9ii=xNG-t7jPVGhP1kXMMthmGfvoPzCyEWytazFvRdg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] HID: i2c-hid: goodix: Add support for
- "goodix,no-reset-during-suspend" property
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 09/21] KVM:x86: Load guest FPU state when accessing
+ xsaves-managed MSRs
+To:     Yang Weijiang <weijiang.yang@intel.com>, seanjc@google.com,
+        pbonzini@redhat.com, peterz@infradead.org, john.allen@amd.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     rick.p.edgecombe@intel.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <20230421134615.62539-1-weijiang.yang@intel.com>
+ <20230421134615.62539-10-weijiang.yang@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230421134615.62539-10-weijiang.yang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,141 +67,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Apr 27, 2023 at 9:08=E2=80=AFAM Jeff LaBundy <jeff@labundy.com> wro=
-te:
->
-> Hi Fei,
->
-> On Wed, Apr 26, 2023 at 10:44:22PM +0800, Fei Shao wrote:
-> > In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
-> > reset line to true state of the regulator") introduced a change to tie
-> > the reset line of the Goodix touchscreen to the state of the regulator
-> > to fix a power leakage issue in suspend.
-> >
-> > After some time, the change was deemed unnecessary and was reverted in
-> > commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line t=
-o
-> > the regulator") due to difficulties in managing regulator notifiers for
-> > designs like Evoker, which provides a second power rail to touchscreen.
-> >
-> > However, the revert caused a power regression on another Chromebook
-> > device Steelix in the field, which has a dedicated always-on regulator
-> > for touchscreen and was covered by the workaround in the first commit.
-> >
-> > To address both cases, this patch adds the support for the new
-> > "goodix,no-reset-during-suspend" property in the driver:
-> > - When set to true, the driver does not assert the reset GPIO during
-> >   power-down.
-> >   Instead, the GPIO will be asserted during power-up to ensure the
-> >   touchscreen always has a clean start and consistent behavior after
-> >   resuming.
-> >   This is for designs with a dedicated always-on regulator.
-> > - When set to false or unset, the driver uses the original control flow
-> >   and asserts GPIO and disables regulators normally.
-> >   This is for the two-regulator and shared-regulator designs.
-> >
-> > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> Great work; one tiny nit below. If you do not agree with it or have found
-> precedent that suggests it is OK, feel free to ignore it. Either way:
->
-> Reviewed-by: Jeff LaBundy <jeff@labundy.com>
->
-> >
-> > ---
-> >
-> > Changes in v3:
-> > - In power-down, only skip the GPIO but not the regulator calls if the
-> >   flag is set
-> >
-> > Changes in v2:
-> > - Do not change the regulator_enable logic during power-up.
-> >
-> >  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-=
-hid/i2c-hid-of-goodix.c
-> > index 0060e3dcd775..3ed365b50432 100644
-> > --- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-> > +++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-> > @@ -28,6 +28,7 @@ struct i2c_hid_of_goodix {
-> >       struct regulator *vdd;
-> >       struct regulator *vddio;
-> >       struct gpio_desc *reset_gpio;
-> > +     bool no_reset_during_suspend;
-> >       const struct goodix_i2c_hid_timing_data *timings;
-> >  };
-> >
-> > @@ -37,6 +38,14 @@ static int goodix_i2c_hid_power_up(struct i2chid_ops=
- *ops)
-> >               container_of(ops, struct i2c_hid_of_goodix, ops);
-> >       int ret;
-> >
-> > +     if (ihid_goodix->no_reset_during_suspend) {
-> > +             /*
-> > +              * We assert reset GPIO here (instead of during power-dow=
-n) to
-> > +              * ensure the device will have a clean state after poweri=
-ng up,
-> > +              * just like the normal scenarios will have.
-> > +              */
-> > +             gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> > +     }
->
-> I don't think curly braces are technically required here, as there is onl=
-y
-> one statement within the conditional despite the comments making it appea=
-r
-> otherwise. Maybe this would work too:
->
->         /* ... */
->         if (...)
->                 gpiod_set_value_cansleep(...);
->
-> Again however, I do not feel strongly about this.
 
-Oops, I just carried it over from v1 and didn't think that much at the
-moment, but indeed I should have cleaned that up.
-V4 is on the way, thanks for pointing that out.  :)
-
-Regards,
-Fei
-
+On 4/21/2023 9:46 PM, Yang Weijiang wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 >
-> >       ret =3D regulator_enable(ihid_goodix->vdd);
-> >       if (ret)
-> >               return ret;
-> > @@ -60,7 +69,9 @@ static void goodix_i2c_hid_power_down(struct i2chid_o=
-ps *ops)
-> >       struct i2c_hid_of_goodix *ihid_goodix =3D
-> >               container_of(ops, struct i2c_hid_of_goodix, ops);
-> >
-> > -     gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> > +     if (!ihid_goodix->no_reset_during_suspend)
-> > +             gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> > +
-> >       regulator_disable(ihid_goodix->vddio);
-> >       regulator_disable(ihid_goodix->vdd);
-> >  }
-> > @@ -91,6 +102,9 @@ static int i2c_hid_of_goodix_probe(struct i2c_client=
- *client)
-> >       if (IS_ERR(ihid_goodix->vddio))
-> >               return PTR_ERR(ihid_goodix->vddio);
-> >
-> > +     ihid_goodix->no_reset_during_suspend =3D
-> > +             of_property_read_bool(client->dev.of_node, "goodix,no-res=
-et-during-suspend");
-> > +
-> >       ihid_goodix->timings =3D device_get_match_data(&client->dev);
-> >
-> >       return i2c_hid_core_probe(client, &ihid_goodix->ops, 0x0001, 0);
-> > --
-> > 2.40.1.495.gc816e09b53d-goog
-> >
+> Load the guest's FPU state if userspace is accessing MSRs whose values are
+> managed by XSAVES so that the MSR helpers, e.g. kvm_{get,set}_xsave_msr(),
+So far, kvm_{get,set}_xsave_msr() is not introduced yet.
+IMO, it is a bit confusing to understand the whole picture without the 
+following patches.
+May be add some description or adjust the order?
+
+
+> can simply do {RD,WR}MSR to access the guest's value.
 >
-> Kind regards,
-> Jeff LaBundy
+> If new feature MSRs supported in XSS are passed through to the guest they
+> are saved and restored by XSAVES/XRSTORS, i.e. in the guest's FPU state.
+>
+> Because is also used for the KVM_GET_MSRS device ioctl(), explicitly check
+> @vcpu is non-null before attempting to load guest state. The XSS supporting
+> MSRs cannot be retrieved via the device ioctl() without loading guest FPU
+> state (which doesn't exist).
+>
+> Note that guest_cpuid_has() is not queried as host userspace is allowed
+> to access MSRs that have not been exposed to the guest, e.g. it might do
+> KVM_SET_MSRS prior to KVM_SET_CPUID2.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Co-developed-by: Yang Weijiang <weijiang.yang@intel.com>
+> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
+> ---
+>   arch/x86/kvm/x86.c | 29 ++++++++++++++++++++++++++++-
+>   1 file changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index d2975ca96ac5..7788646bbf1f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -130,6 +130,9 @@ static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+>   static void __get_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2);
+>   
+>   static DEFINE_MUTEX(vendor_module_lock);
+> +static void kvm_load_guest_fpu(struct kvm_vcpu *vcpu);
+> +static void kvm_put_guest_fpu(struct kvm_vcpu *vcpu);
+> +
+>   struct kvm_x86_ops kvm_x86_ops __read_mostly;
+>   
+>   #define KVM_X86_OP(func)					     \
+> @@ -4336,6 +4339,21 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_get_msr_common);
+>   
+> +static const u32 xsave_msrs[] = {
+> +	MSR_IA32_U_CET, MSR_IA32_PL3_SSP,
+> +};
+> +
+> +static bool is_xsaves_msr(u32 index)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(xsave_msrs); i++) {
+> +		if (index == xsave_msrs[i])
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+>   /*
+>    * Read or write a bunch of msrs. All parameters are kernel addresses.
+>    *
+> @@ -4346,11 +4364,20 @@ static int __msr_io(struct kvm_vcpu *vcpu, struct kvm_msrs *msrs,
+>   		    int (*do_msr)(struct kvm_vcpu *vcpu,
+>   				  unsigned index, u64 *data))
+>   {
+> +	bool fpu_loaded = false;
+>   	int i;
+>   
+> -	for (i = 0; i < msrs->nmsrs; ++i)
+> +	for (i = 0; i < msrs->nmsrs; ++i) {
+> +		if (vcpu && !fpu_loaded && kvm_caps.supported_xss &&
+> +		    is_xsaves_msr(entries[i].index)) {
+> +			kvm_load_guest_fpu(vcpu);
+> +			fpu_loaded = true;
+> +		}
+>   		if (do_msr(vcpu, entries[i].index, &entries[i].data))
+>   			break;
+> +	}
+> +	if (fpu_loaded)
+> +		kvm_put_guest_fpu(vcpu);
+>   
+>   	return i;
+>   }
+
