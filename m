@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715866EFF76
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B03A6EFF7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 05:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242714AbjD0DEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 23:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S242797AbjD0DEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 23:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233414AbjD0DD7 (ORCPT
+        with ESMTP id S233414AbjD0DEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 23:03:59 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661CA35A4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:03:56 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5286344e1d4so3340939a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 20:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682564635; x=1685156635;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1A14gXOIzQ8LsUnpCV+kWBAJ4ogPDSbb3KQJ7ZlYIxs=;
-        b=CGxwL2vk3j0Yl7BI3W9SYPNrRmdSJVZdUm4BiiDFB+Ar6LcG0PXNyNuBzpYQyaxTse
-         XLXQdoVu8xdTnD1fad777iUEp5YoLGOoyTII71EtG/J9igUkFPj0ke6NNWW7gGEcxNKk
-         2F34Ua6ky7fmEE2GSc9QNDRkjbo99IK+Szn5r03o8nJiUEHNoZPtDruWmgdQ0FjLb44E
-         jdemBlMJ+EYcgbdFl8in/JMoBsKdirR2hhczuH4Bq8or+GOvtBosIuoOd8X7chVIyk9O
-         B5yRHTYy4TVPMXmdY8WIfVd/o96m31vJ2eC5gmO9QHkdDf7yYAEgRg2Oed/c0u67mZ+D
-         qnHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682564635; x=1685156635;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1A14gXOIzQ8LsUnpCV+kWBAJ4ogPDSbb3KQJ7ZlYIxs=;
-        b=j+dbX9ykNpzqO98QOE64+dTrriEvZ/syxUy5uWkwrjjZSsLUHsu6geky5jMuNgkQ2V
-         g8156SxL+agt2ivbbYJz4CkOF2etxIQCNQI4wWlxsOEeSeTP3ImURNO1MTBQr7g2JHoq
-         81fnVxee0SKUthkqBvHLxV0pO/tWFzYsuIez3nfqRrUVrq9dLZkgV/oThGTSoNvQl+ap
-         xyrzlj5mLOYpjZWVfyUTotGAbCKoBtyRMt3T77JgEXK9b2S3yHTb29qC6lmxsw7jY8Wj
-         B1yzy0VihHPey8mjTchF2IPN9KgQbUlKR26b7kZnac8ERKKY9W5HgKoDYnfhUrW/qAYy
-         eZMA==
-X-Gm-Message-State: AC+VfDy7iqiMnoxwFwxwuLYaw3SAU1gLu5w9NCaKSIA8nD+mjcXlv3S+
-        TI+BqdmO477i1+qf2/xUbs1H4MzFurY=
-X-Google-Smtp-Source: ACHHUZ5NkADkq+bFRhb0WRAgEgeVe3ol89Kb4ts/o7en2zRirP5e/NpezlHp2j9+TAoMVPZxAHratg==
-X-Received: by 2002:a17:90b:313:b0:247:2ff9:1cff with SMTP id ay19-20020a17090b031300b002472ff91cffmr306271pjb.25.1682564635110;
-        Wed, 26 Apr 2023 20:03:55 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id f24-20020a63f118000000b0051b7d83ff22sm10380506pgi.80.2023.04.26.20.03.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 20:03:54 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-To:     xiang@kernel.org, chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     jefflexu@linux.alibaba.com, huyue2@coolpad.com,
-        linux-kernel@vger.kernel.org, zhangwen@coolpad.com
-Subject: [PATCH] erofs: do not build pcpubuf.c for uncompressed data
-Date:   Thu, 27 Apr 2023 11:03:46 +0800
-Message-Id: <20230427030346.5624-1-zbestahu@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 26 Apr 2023 23:04:42 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0497335A6;
+        Wed, 26 Apr 2023 20:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Oz51J
+        k6YUdX9xqityJ6AuFrqweYlAXeUQMqAYe93B1k=; b=fDzhYnwGt4S7mcuGlYphK
+        xBCfNn/3BYbjbeC5idZbuTUiWgLPnqZDBq/nIE34DY6zWIAKLPpiaLr/4xicQ8qq
+        c7g3iwxa2rnVIcCj6iDVabnsCs+V4Njq4KW4ootAgHYfN2EkkPJxNMirky/jg12Z
+        VlYKe8nSe3stgmQzZ1HKB4=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wBnn3ct5klkwL3sAA--.55775S2;
+        Thu, 27 Apr 2023 11:04:13 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     deller@gmx.de
+Cc:     javierm@redhat.com, tzimmermann@suse.de,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] video: imsttfb: Fix use after free bug in imsttfb_probe due  to lack of error-handling of init_imstt
+Date:   Thu, 27 Apr 2023 11:04:11 +0800
+Message-Id: <20230427030411.2375978-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBnn3ct5klkwL3sAA--.55775S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFWxKr18uF1kur4rJr4ruFg_yoW8AFWDpF
+        45A3Z8JrZrJF48Gw4kAF4UAF43K3Z7Kr9IgrW7K3sayF15CFWFgr1xJa42yrZ3JrZ7Jr13
+        XF4kt34UC3WUuFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRFeU1WBpY8fjAAAss
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yue Hu <huyue2@coolpad.com>
+A use-after-free bug may occur if init_imstt invokes framebuffer_release
+and free the info ptr. The caller, imsttfb_probe didn't notice that and
+still keeps the ptr as private data in pdev.
 
-The function of pcpubuf.c is just for low-latency decompression
-algorithms (e.g. lz4).
+If we remove the driver which will call imsttfb_remove to make cleanup,
+UAF happens.
 
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
+Fix it by return error code if bad case happens in init_imstt.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- fs/erofs/Makefile   |  4 ++--
- fs/erofs/internal.h | 12 +++++++-----
- 2 files changed, 9 insertions(+), 7 deletions(-)
+ drivers/video/fbdev/imsttfb.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/erofs/Makefile b/fs/erofs/Makefile
-index 99bbc597a3e9..a3a98fc3e481 100644
---- a/fs/erofs/Makefile
-+++ b/fs/erofs/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
+diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb.c
+index bea45647184e..92b0c5833bda 100644
+--- a/drivers/video/fbdev/imsttfb.c
++++ b/drivers/video/fbdev/imsttfb.c
+@@ -1347,7 +1347,7 @@ static const struct fb_ops imsttfb_ops = {
+ 	.fb_ioctl 	= imsttfb_ioctl,
+ };
  
- obj-$(CONFIG_EROFS_FS) += erofs.o
--erofs-objs := super.o inode.o data.o namei.o dir.o utils.o pcpubuf.o sysfs.o
-+erofs-objs := super.o inode.o data.o namei.o dir.o utils.o sysfs.o
- erofs-$(CONFIG_EROFS_FS_XATTR) += xattr.o
--erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o
-+erofs-$(CONFIG_EROFS_FS_ZIP) += decompressor.o zmap.o zdata.o pcpubuf.o
- erofs-$(CONFIG_EROFS_FS_ZIP_LZMA) += decompressor_lzma.o
- erofs-$(CONFIG_EROFS_FS_ONDEMAND) += fscache.o
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index af0431a40647..65dbfa76f854 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -472,11 +472,6 @@ static inline void *erofs_vm_map_ram(struct page **pages, unsigned int count)
- 	return NULL;
- }
- 
--void *erofs_get_pcpubuf(unsigned int requiredpages);
--void erofs_put_pcpubuf(void *ptr);
--int erofs_pcpubuf_growsize(unsigned int nrpages);
--void __init erofs_pcpubuf_init(void);
--void erofs_pcpubuf_exit(void);
- 
- int erofs_register_sysfs(struct super_block *sb);
- void erofs_unregister_sysfs(struct super_block *sb);
-@@ -512,6 +507,11 @@ int z_erofs_load_lz4_config(struct super_block *sb,
- 			    struct z_erofs_lz4_cfgs *lz4, int len);
- int z_erofs_map_blocks_iter(struct inode *inode, struct erofs_map_blocks *map,
- 			    int flags);
-+void *erofs_get_pcpubuf(unsigned int requiredpages);
-+void erofs_put_pcpubuf(void *ptr);
-+int erofs_pcpubuf_growsize(unsigned int nrpages);
-+void __init erofs_pcpubuf_init(void);
-+void erofs_pcpubuf_exit(void);
- #else
- static inline void erofs_shrinker_register(struct super_block *sb) {}
- static inline void erofs_shrinker_unregister(struct super_block *sb) {}
-@@ -529,6 +529,8 @@ static inline int z_erofs_load_lz4_config(struct super_block *sb,
+-static void init_imstt(struct fb_info *info)
++static int init_imstt(struct fb_info *info)
+ {
+ 	struct imstt_par *par = info->par;
+ 	__u32 i, tmp, *ip, *end;
+@@ -1420,7 +1420,7 @@ static void init_imstt(struct fb_info *info)
+ 	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres))) {
+ 		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->var.yres, info->var.bits_per_pixel);
+ 		framebuffer_release(info);
+-		return;
++		return -ENODEV;
  	}
- 	return 0;
- }
-+static inline void erofs_pcpubuf_init(void) {}
-+static inline void erofs_pcpubuf_exit(void) {}
- #endif	/* !CONFIG_EROFS_FS_ZIP */
  
- #ifdef CONFIG_EROFS_FS_ZIP_LZMA
+ 	sprintf(info->fix.id, "IMS TT (%s)", par->ramdac == IBM ? "IBM" : "TVP");
+@@ -1529,10 +1529,10 @@ static int imsttfb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (!par->cmap_regs)
+ 		goto error;
+ 	info->pseudo_palette = par->palette;
+-	init_imstt(info);
+-
+-	pci_set_drvdata(pdev, info);
+-	return 0;
++	ret = init_imstt(info);
++	if (!ret)
++		pci_set_drvdata(pdev, info);
++	return ret;
+ 
+ error:
+ 	if (par->dc_regs)
 -- 
-2.17.1
+2.25.1
 
