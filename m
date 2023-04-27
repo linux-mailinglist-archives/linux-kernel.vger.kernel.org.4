@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636706F095F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF286F099A
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244145AbjD0QMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S244120AbjD0QPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243023AbjD0QMc (ORCPT
+        with ESMTP id S232698AbjD0QPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:12:32 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188793585
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:12:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-94f6c285d22so1642491766b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1682611948; x=1685203948;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMqYIMvxQzMeNZyvXScd0d9ZjZQUVmBHnaHMVur7PZI=;
-        b=47g0X7BSbMbvv9L/Q9QUepC51/0/TQau9ztKHNIjZPRAu18BfSZwcYUZVenNlbaewp
-         NiPe9w4TDMscaoknOdvTZvqMxgBuUlKkNmelAbA/YIopx4I29Mfd1897kyLRP88TVqmc
-         8TFGrit4A0yflaIwe9JWcFsSul9heo5Du7IOoDFp+xVjVcCrm2Re6YVcjNu3brkYiqUb
-         ZitjrlWKTlpSCbK0VTC6LjRaG8a16ADuC4RtEungg1SLxdCt8myxiqRtn82yGIavrB4Y
-         mPjJo85tc81DLj8iZiLNJbtICwphoW9xH3sS7FsuxGd2WSaiRd8iICINbz1zs0LioeNr
-         Vhkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682611948; x=1685203948;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HMqYIMvxQzMeNZyvXScd0d9ZjZQUVmBHnaHMVur7PZI=;
-        b=TtT3z8alFYk+0YqddpK7D5VJiHP8BEthw6h4f/KBxaMqHQ1E3EX3xunrZN6zZRXh13
-         g8LsNpT/7Plee/GyUTuIAfByU15lcNSZMRXDbiFekM0DGk37yIeeFSakwZIq3ZYmii1b
-         V7j6SIYsDRGjIC9ToDP2ckSZIfqOJJ92Rmj985yaNxu1HjvQYs5uY3VWauD2YwVDd0dT
-         YD0nKvjloRSTIwed1YfKk+SaalpgalDbnfbJemhKBm9e/sGQB/dMQWyABNo3G5CmjtQE
-         1a+JXOoiB9qMncPlCxPotgwTIeQOCoU6JwjGSP6Y6UVExfXfO2rCxnhqEhcZshvXpNVb
-         3qXA==
-X-Gm-Message-State: AC+VfDwUfTppiFMd9qpT9we+jCBqRTZ5AnfHTanV76OjU2OG4OwcUtxT
-        fxlH4q5/NGBSYw21NT04ZS5fnA==
-X-Google-Smtp-Source: ACHHUZ7WBBja5Lx65Estj/dqaAZRltQnKHCN4a4WPD9RhhPeRBS3LNkizwx+3dPAR0i1nU1Vxk1z0Q==
-X-Received: by 2002:a17:907:3e1a:b0:957:db05:a35d with SMTP id hp26-20020a1709073e1a00b00957db05a35dmr2670020ejc.48.1682611948580;
-        Thu, 27 Apr 2023 09:12:28 -0700 (PDT)
-Received: from brgl-uxlite.. ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id l18-20020a1709060e1200b0094f3338129asm10144096eji.141.2023.04.27.09.12.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:12:28 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 27 Apr 2023 12:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B881FD4;
+        Thu, 27 Apr 2023 09:15:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EADB361050;
+        Thu, 27 Apr 2023 16:15:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299DCC433EF;
+        Thu, 27 Apr 2023 16:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682612100;
+        bh=fxTrS+s2c8YlhXQmpP9j+DvPz8LMLKyuHrslsFK1DrE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=NEXNs1L91RH1f0081I2HTyPt6Mj5UFOrhXbEp1sHjFm+HbXtFP5DpJhC3lSAPxuTf
+         +gfHIac8Dmez/eFaWLsGq0GD9+kt+INEqf9Ad+mUGbCafGEQ01eQ88hrAICxrUjH1V
+         GRyH18e/c5aDylm9HEYGzA29Cbr8C0Lk4RdoiWi5jYbxSnLtRW0VlNvEI8Zte13jRG
+         9osgTQusKy+V+Jcm/YOZOdrz+gsijj3br7i+2mr+7j/hK/RkyXb9nC0Tr1mTAUrB3d
+         bwJI4h68Qhd+uG7liwRndW6ufbJYPp8eLrJxqaUSk3ugt4sbOswq7G4Na5pMGRVxnj
+         GEU8r/xV8PGQA==
+Date:   Thu, 27 Apr 2023 11:14:58 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sa8775p: add the watchdog node
-Date:   Thu, 27 Apr 2023 18:12:18 +0200
-Message-Id: <20230427161218.201828-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Korneliusz Osmenda <korneliuszo@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH 0/3] PCI: Fix race condition upon sysfs init
+Message-ID: <20230427161458.GA249886@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427142901.3570536-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Thu, Apr 27, 2023 at 04:28:58PM +0200, Alexander Stein wrote:
+> Hi everyone,
+> 
+> this series is a totally different approach for fixing the sysfs init race
+> condition. The initial problem is stated at [1]. Previous proposals were
+> rejected ([2] and [3]). Here is what's happening
+> 
+> 
+>         CPU 0                                  CPU 1
+> 
+>                                         imx6_pcie_probe()
+>                                         dw_pcie_host_init()
+>                                         pci_host_probe()
+>                                         pci_scan_root_bus_bridge()
+>                                           pci_scan_child_bus_extend()
+>                                           pci_scan_slot()
+>                                           pci_scan_single_device()
+>                                           pci_device_add()
+> pci_sysfs_init()                          device_add()
+>   sysfs_initialized = 1;                  bus_add_device()
+>   for_each_pci_dev()                          ...
+>     pci_create_sysfs_dev_files()                  
+>                                         pci_bus_add_devices()
+>                                         pci_bus_add_device()
+>                                         pci_create_sysfs_dev_files()
+> 
+> Eventually calling pci_create_sysfs_dev_files() twice on the same pci_dev.
+> It's a very tight window, deeper PCIe trees increase that window during
+> host probe. Asynchronous PCIe host probe is a necessity
+> (PROBE_PREFER_ASYNCHRONOUS).
+> 
+> The first two patches are preparations for the last one actually fixing
+> the race. As functions like pci_create_sysfs_dev_files() are called from
+> externtal and internal to pci-sysfs, an internal version without checking
+> for sysfs_initialized is required.
+> For the fix a wait queue is introduced where all callers from external
+> callsites (regarding pci-sysfs.c) are waiting until pci_sysfs_init
+> initcall has finished and woken up all waiters.
+> 
+> A subtlety is that within __pci_create_sysfs_dev_files the resource files
+> (created by pci_sysfs_init) need to be removed, so they can be created
+> again from pci_host_probe call.
 
-Now that the hypervisor issue is fixed, we can add the watchdog node
-for sa8775p platforms.
+I'll look at this in more detail, but if there's any way at all that
+we could get rid of pci_sysfs_init() completely and do this with
+static attributes or some other existing sysfs infrastructure, I would
+STRONGLY prefer it because that infrastructure has already solved this
+problem.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Maybe that's impossible and we really need to make a one-off solution
+just for PCI, but ... I haven't been convinced yet.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index badabf79c6ef..0737ba38fefe 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -1008,6 +1008,13 @@ intc: interrupt-controller@17a00000 {
- 			redistributor-stride = <0x0 0x20000>;
- 		};
- 
-+		watchdog@17c10000 {
-+			compatible = "qcom,apss-wdt-sa8775p", "qcom,kpss-wdt";
-+			reg = <0x0 0x17c10000 0x0 0x1000>;
-+			clocks = <&sleep_clk>;
-+			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
- 		memtimer: timer@17c20000 {
- 			compatible = "arm,armv7-timer-mem";
- 			reg = <0x0 0x17c20000 0x0 0x1000>;
--- 
-2.39.2
-
+> Links:
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215515
+> [2] https://lore.kernel.org/linux-pci/20230316091540.494366-1-alexander.stein@ew.tq-group.com/
+> [3] https://lore.kernel.org/linux-pci/20230316103036.1837869-1-alexander.stein@ew.tq-group.com/
+> 
+> Alexander Stein (3):
+>   PCI/sysfs: sort headers alphabetically
+>   PCI/sysfs: create private functions for
+>     pci_create_legacy_files/pci_create_sysfs_dev_files
+>   PCI/sysfs: Fix sysfs init race condition
+> 
+>  drivers/pci/pci-sysfs.c | 87 +++++++++++++++++++++++++----------------
+>  1 file changed, 53 insertions(+), 34 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
