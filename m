@@ -2,99 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965126F0A2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB996F0A2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244192AbjD0Qqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S244300AbjD0Qq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243734AbjD0Qqv (ORCPT
+        with ESMTP id S244209AbjD0Qqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:46:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF9E40DA;
-        Thu, 27 Apr 2023 09:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=oCSISiBhQ6jeXLv+1vbq+8sBDufgGTcMCBny1IuJcBA=; b=jPsj+NvQ6JhhLQOlQGZSpOSoFr
-        KyvtLIUbux6Rwe0+w+gjmpnSfXrPp34k1WkvkKBE9b5M706N29HEe9G9ldQxTljzBljfUyzwT+rGO
-        qfXD/yWxb8ZRl+Xi+gfMh/WEYtiTyW6s9TL3PMod9pj12JgOCnn5POjk3LG9SKsspbG6selS3z+lQ
-        s//+wQsCVdBOQXP+ZozIMEseKUhCtJCt2FECNCitS+r/gMoG8dU/pFr3vFPxxwI/d01vyNEI3gOja
-        GWQaiHW31r6ACZz9qrwUIHfb65TjChiIKvKz1ZOnYX0t5aOYZlsw3HRHBO3XAWYPpzV74sWZDnow1
-        sPOaNYUw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ps4lQ-0071jA-18;
-        Thu, 27 Apr 2023 16:46:36 +0000
-Message-ID: <8ebcfabb-0be3-f45c-c4f8-99ebc34f658e@infradead.org>
-Date:   Thu, 27 Apr 2023 09:46:31 -0700
+        Thu, 27 Apr 2023 12:46:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C60DF40DA;
+        Thu, 27 Apr 2023 09:46:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FA3063E59;
+        Thu, 27 Apr 2023 16:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8330AC4339B;
+        Thu, 27 Apr 2023 16:46:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682614012;
+        bh=17fxjxInOE1pmRBAKjYLZA9hzBwswVGO+5F5rsMk/j0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UotPGb6RzP9FJ5Ib3+QAdAFc3dZJ/3yHIGuEKxZUDZQ2lbgNTnY5pkk8t5D6jj2JJ
+         5jt8ethLENcrL636wO9GpQZK/E5hOXMUBVwh2VMZchq3YN5yo6Nmx0xl1HO3vfuwIC
+         jardQAHlD5oxZhNjD3TUp8JNpACgX48zuX2SW5/UHJGkk6X2yD7Wr7vpSGlXkMUBn4
+         yeMJXlbAz6zou5ToaGX/fByz0M/f3RPZCDU7xXcDL7RtudSjSNM+zpnsi/2oJSmknv
+         HHs8YkbpWe2wqj+hKeME7h3ZGbGRb+FzAuNgw4xLju6SXOt3eeSoPeTZxidhgUNfrD
+         xX4yuyE2tB15g==
+Date:   Thu, 27 Apr 2023 11:46:51 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Sanket Goswami <Sanket.Goswami@amd.com>,
+        Richard gong <richard.gong@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
+Message-ID: <20230427164651.GA255475@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] docs: security: Confidential computing intro and threat
- model
-Content-Language: en-US
-To:     jejb@linux.ibm.com, "Reshetova, Elena" <elena.reshetova@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "kraxel@redhat.com" <kraxel@redhat.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhaval.Giani@amd.com" <Dhaval.Giani@amd.com>,
-        "michael.day@amd.com" <michael.day@amd.com>,
-        "pavankumar.paluri@amd.com" <pavankumar.paluri@amd.com>,
-        "David.Kaplan@amd.com" <David.Kaplan@amd.com>,
-        "Reshma.Lal@amd.com" <Reshma.Lal@amd.com>,
-        "Jeremy.Powell@amd.com" <Jeremy.Powell@amd.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "dinechin@redhat.com" <dinechin@redhat.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "berrange@redhat.com" <berrange@redhat.com>,
-        "mst@redhat.com" <mst@redhat.com>, "tytso@mit.edu" <tytso@mit.edu>,
-        "jikos@kernel.org" <jikos@kernel.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richard.weinberger@gmail.com" <richard.weinberger@gmail.com>,
-        "lukas@wunner.de" <lukas@wunner.de>,
-        "cdupontd@redhat.com" <cdupontd@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "sameo@rivosinc.com" <sameo@rivosinc.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "security@kernel.org" <security@kernel.org>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Rajnesh Kanwal <rkanwal@rivosinc.com>,
-        Dylan Reid <dylan@rivosinc.com>,
-        Ravi Sahita <ravi@rivosinc.com>
-References: <20230327141816.2648615-1-carlos.bilbao@amd.com>
- <ZEfrjtgGgm1lpadq@google.com>
- <DM8PR11MB575046B6DAA17B41FFED8080E7659@DM8PR11MB5750.namprd11.prod.outlook.com>
- <7502e1af0615c08167076ff452fc69ebf316c730.camel@linux.ibm.com>
- <ZElOfzn37kmesy7e@google.com>
- <DM8PR11MB57509EBCB1E2146C1768A6EEE76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <efda0be02fb0b5bf23aec11b5398d20908a821ba.camel@linux.ibm.com>
- <DM8PR11MB57502E1C09CDE4842B7F9B30E76A9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <8f212b0dfa9eb00ccc7acc5bf1483c9615277590.camel@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <8f212b0dfa9eb00ccc7acc5bf1483c9615277590.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427053338.16653-2-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,22 +61,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 27, 2023 at 12:33:36AM -0500, Mario Limonciello wrote:
+> s2idle previously worked on this system, but it regressed in kernel
+> 6.4 due to commit 310e782a99c7 ("platform/x86/amd: pmc: Utilize SMN
+> index 0 for driver probe").
+> 
+> The reason for the regression is that before this commit the SMN
+> communication was hardcoded, but after amd_smn_read() is used which
+> relies upon the misc PCI ID used by DF function 3 being included in
+> a table.  The ID was missing for model 78h, so this meant that the
+> amd_smn_read() wouldn't work.
+> 
+> Add the missing ID into amd_nb, restoring s2idle on this system.
 
+Is there a long-term solution for this that will not require adding
+new IDs every time new hardware comes out?
 
-On 4/27/23 09:16, James Bottomley wrote:
-> Public but not open source is still a problem.  The federal government
-> has walked into several cloud accounts demanding a source code security
-> review, which means the code was made public to them but not generally.
+drivers/platform/x86/amd/pmc.c already matches ACPI IDs; maybe there's
+some way for the platform to provide the information you need via
+ACPI or something?
 
-Apparently we have different definitions of "public".
-I don't call that public.
-
-> Without all customers or some third party being able to build the code
-> and verify it (or ideally supply it ... think something like Red Hat
-> built the OVMF code this cloud is using and you can prove it using
-> their build signatures) how do you know the source you're given
-> corresponds to the binary the signature verifies.
-
-
--- 
-~Randy
+Bjorn
