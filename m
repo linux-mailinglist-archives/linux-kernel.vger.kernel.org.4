@@ -2,98 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BD36F0D90
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D376F0D93
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 23:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjD0VEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 17:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S1344076AbjD0VEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 17:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjD0VD6 (ORCPT
+        with ESMTP id S1344092AbjD0VEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 17:03:58 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D2A1FF3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 14:03:57 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C674D200D5;
-        Thu, 27 Apr 2023 23:03:55 +0200 (CEST)
-Date:   Thu, 27 Apr 2023 23:03:54 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
-Subject: Re: [PATCH v2 08/13] drm/msm: mdss: Add SM6350 support
-Message-ID: <34x5l7awnu4ft5erwbew6yymopcsicomk222z3ekh2qcy6oan4@yy64w63bkgn7>
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-8-5def73f50980@linaro.org>
+        Thu, 27 Apr 2023 17:04:25 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AD0213A;
+        Thu, 27 Apr 2023 14:04:19 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-18f16bb1a9bso6992218fac.1;
+        Thu, 27 Apr 2023 14:04:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682629459; x=1685221459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D7iFliujUSkel6mL8gHDSSVDhGL8j5l+idukWslg6ZU=;
+        b=OdCfcKSTrmcEiVsz4T10Vs0pDyj/sfJrv5QfOTjUodhN96qVLeNwK3LpgpT33UT868
+         plMY3NNnRxi6X/naS9BlrH4/YtPa5jspbn+MOIDxDLPqKB/NkFBA8+34qEQ5qvsjB6nC
+         KnMQ2RXNkTutnGgXY+a/KrpZY5sVhgCIgzoMj6ZUHit3PivRKZG+8wjGnO/RFk8KGt+0
+         y718j4RgdUyi8gHFkOhCNmutCkak5sgTCsbqeX2wFAjso/lhwvxiCRA/07+mLOW3MB90
+         /7rQT1QVW6yywXuJ7UBIN0AEy7PnCo+vOk0xXEVtwX7E7TOz0eEJZo7nDeK5pAg8eDo5
+         ckkA==
+X-Gm-Message-State: AC+VfDzgaO6GufNCFo6f/CfOusWJPxSKUE6GSD+EuC1fnL6C3OMrj669
+        XsNHj67WqWpvyIMlkdzYuA==
+X-Google-Smtp-Source: ACHHUZ4wTFSImmRssQrZ4PnbGSQf+qWZtCP0hXDPeYZT+0kKmU67xeci9GANGGKB7AUUIraxz9LhTQ==
+X-Received: by 2002:a05:6871:6b8a:b0:176:9fbe:fe02 with SMTP id zh10-20020a0568716b8a00b001769fbefe02mr1603936oab.8.1682629459102;
+        Thu, 27 Apr 2023 14:04:19 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dy14-20020a056870c78e00b0017197629658sm8035605oab.56.2023.04.27.14.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 14:04:18 -0700 (PDT)
+Received: (nullmailer pid 3518678 invoked by uid 1000);
+        Thu, 27 Apr 2023 21:04:17 -0000
+Date:   Thu, 27 Apr 2023 16:04:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Lucas Tanure <tanure@linux.com>
+Cc:     linux-arm-kernel@lists.infradead.org, narmstrong@baylibre.com,
+        devicetree@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        martin.blumenstingl@googlemail.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-amlogic@lists.infradead.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, jbrunet@baylibre.com,
+        stefan@agner.ch, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] of: fdt: Scan /memreserve/ last
+Message-ID: <168262872454.3491083.6407810340850053636.robh@kernel.org>
+References: <20230424113846.46382-1-tanure@linux.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v2-8-5def73f50980@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230424113846.46382-1-tanure@linux.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-21 00:31:17, Konrad Dybcio wrote:
-> Add support for MDSS on SM6350.
+
+On Mon, 24 Apr 2023 12:38:46 +0100, Lucas Tanure wrote:
+> Change the scanning /memreserve/ and /reserved-memory node order to fix
+> Kernel panic on Khadas Vim3 Board.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
+> If /memreserve/ goes first, the memory is reserved, but nomap can't be
+> applied to the region. So the memory won't be used by Linux, but it is
+> still present in the linear map as normal memory, which allows
+> speculation. Legitimate access to adjacent pages will cause the CPU
+> to end up prefetching into them leading to Kernel panic.
+> 
+> So /reserved-memory node should go first, as it has a more updated
+> description of the memory regions and can apply flags, like nomap.
+> 
+> Signed-off-by: Lucas Tanure <tanure@linux.com>i
 > ---
->  drivers/gpu/drm/msm/msm_mdss.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> Previous Threads:
+> #regzbot link: https://lore.kernel.org/linux-arm-kernel/40ca11f84b7cdbfb9ad2ddd480cb204a@agner.ch/#regzbot
+> #regzbot link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
+
+Note that this should have been a 'Link:' entry in the commit message 
+for regzbot. I added it.
+
 > 
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index e8c93731aaa1..4e3a5f0c303c 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -538,6 +538,14 @@ static const struct msm_mdss_data sdm845_data = {
->  	.highest_bank_bit = 2,
->  };
->  
-> +static const struct msm_mdss_data sm6350_data = {
-> +	.ubwc_version = UBWC_2_0,
-> +	.ubwc_dec_version = UBWC_2_0,
-> +	.ubwc_swizzle = 6,
-> +	.ubwc_static = 0x1e,
-> +	.highest_bank_bit = 1,
-> +};
-> +
->  static const struct msm_mdss_data sm8150_data = {
->  	.ubwc_version = UBWC_3_0,
->  	.ubwc_dec_version = UBWC_3_0,
-> @@ -571,6 +579,7 @@ static const struct of_device_id mdss_dt_match[] = {
->  	{ .compatible = "qcom,sc8180x-mdss", .data = &sc8180x_data },
->  	{ .compatible = "qcom,sc8280xp-mdss", .data = &sc8280xp_data },
->  	{ .compatible = "qcom,sm6115-mdss", .data = &sm6115_data },
-> +	{ .compatible = "qcom,sm6350-mdss", .data = &sm6350_data },
->  	{ .compatible = "qcom,sm8150-mdss", .data = &sm8150_data },
->  	{ .compatible = "qcom,sm8250-mdss", .data = &sm8250_data },
->  	{ .compatible = "qcom,sm8350-mdss", .data = &sm8250_data },
+> V1: https://lore.kernel.org/all/20230406151429.524591-1-tanure@linux.com/
+> v2: https://lore.kernel.org/all/20230410120017.41664-1-tanure@linux.com/
+> v3: https://lore.kernel.org/linux-mm/20230412224620.8909-1-tanure@linux.com/T/
 > 
-> -- 
-> 2.40.0
+> Change from V3:
+>  - Drop cover letter
+>  - Add more information into the patch
 > 
+> Change from V2:
+>  - Remove region overlap and reserved checks
+> 
+> Change from V1:
+>  - Instead of allowing to mark nomap a region already reserved, give
+> precedence to /reserved-memory node scan.
+> ---
+>  drivers/of/fdt.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+
+Applied, thanks!
+
+Going to let this sit in linux-next for a bit. I also didn't tag for 
+stable kernels. I want it to get some exposure in mainline at least for 
+a few -rc releases rather than getting backported right away. Please 
+help ensure that happens if you see stable review emails. I'm going to 
+be offline most of the next month.
+
+Rob
+
