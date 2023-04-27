@@ -2,97 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D494D6F093C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E966F093B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244066AbjD0QLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S243913AbjD0QKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243023AbjD0QLV (ORCPT
+        with ESMTP id S243023AbjD0QKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:11:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04B02709
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:11:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682611878; x=1714147878;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WT17EN12I58ZSAp+uG1IXqZlMrM0WWAPtGlhqCyqwIY=;
-  b=cCmOBlxNrMzthsY3kXzSkvU0LkFVVlA2ExGznML1mWuaZ5gBeGmRVHzV
-   ldkvvq9+5VqBWDpWmuKcZT0R+zWtxFVJju5dAv8FgdTqCtzvMJeMuVQz9
-   RShCyFbT5iN9Zh8bnTrXG1SWTgPlUq1zTNbZHRibcr4JZlJX5WkuHZp2H
-   WC+UOovakt1cbanlYy4mEODqEa30apUrPBkTkuQbOBFh2tF8BMQouVYdW
-   YCxFP7Zy1HHbc3g25sLDu0raWBv/PHpXpuzxOwUN6mA4bNeG9kgE7g6u0
-   5FY4T70m2wuFyNWIY2M0q2a5Kh3EFLcyB/Na0AqnW9HXsFpbFeJZHu/1t
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="412838581"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="412838581"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 09:10:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="838451121"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="838451121"
-Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2023 09:10:23 -0700
-From:   Dave Hansen <dave.hansen@linux.intel.com>
-To:     torvalds@linux-foundation.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: [GIT PULL] x86/fpu for 6.4
-Date:   Thu, 27 Apr 2023 09:10:10 -0700
-Message-Id: <20230427161010.1053561-1-dave.hansen@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 27 Apr 2023 12:10:52 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E09F35BB;
+        Thu, 27 Apr 2023 09:10:51 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-18f16a2c329so5328206fac.0;
+        Thu, 27 Apr 2023 09:10:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682611850; x=1685203850;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2zb4UIqURY+BWTS3e9vX+YTZaBHbEmn0Eg9W3zLRlAs=;
+        b=TVTe8fmkiSObNpKmCb48LRQ9XR6DmHlGNVO4hqQMq3XJZ7mWKBt2P0fKIrwa9oSFzw
+         cySYBtWNR5Ijg90pOuguNvuALh4mHVfCApFzPcz+9wETK5L6fxoBzUVSFVquGNtEQIYU
+         mFEz39VyB/Ur08g++kXD6J0C6bSyKgaNf4aHXmaAeP48zr2aHehtLUKHXxJgXBqXaW/N
+         KqkSOiE76Im9RFVY5CUZZoy29C7OJp4Lpp0cl8ti3DscbQcUH/RV7ImaZvnvVWK1RtvE
+         iUgVJ68WGA5F0/SgsR6ZJSXFyfIdxPhMW16SjxdDV/WTEZxmKfRcUU6A6Q4soo272Xk0
+         ifyA==
+X-Gm-Message-State: AC+VfDwiGBoWL6aWm+Vq06D3ByvVkCGjEJk/qZ9Zr6FKeN36N7mzoDvZ
+        kvRFJlNV83voEH57XHTfHA==
+X-Google-Smtp-Source: ACHHUZ69Sq4w3EraVz3yG/3YjM+ceN2r9AONaP5KgtunTytLs//j63DXjClPMLRDUmHDfuI/a8cy3w==
+X-Received: by 2002:a05:6830:201a:b0:6a7:bced:411e with SMTP id e26-20020a056830201a00b006a7bced411emr1138804otp.3.1682611850271;
+        Thu, 27 Apr 2023 09:10:50 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i15-20020a9d624f000000b0069fb8bfb4f3sm8056756otk.77.2023.04.27.09.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 09:10:49 -0700 (PDT)
+Received: (nullmailer pid 3112114 invoked by uid 1000);
+        Thu, 27 Apr 2023 16:10:49 -0000
+Date:   Thu, 27 Apr 2023 11:10:49 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: gpio: Add STMPE YAML DT schema
+Message-ID: <20230427161049.GA3107476-robh@kernel.org>
+References: <20230426-stmpe-dt-bindings-v2-0-2f85a1fffcda@linaro.org>
+ <20230426-stmpe-dt-bindings-v2-1-2f85a1fffcda@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426-stmpe-dt-bindings-v2-1-2f85a1fffcda@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, Apr 26, 2023 at 01:21:38PM +0200, Linus Walleij wrote:
+> This adds a schema for the STMPE GPIO that while it is used a
+> lot in the kernel tree is anyway missing its bindings.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - New patch split off from the MFD patch.
+> ---
+>  .../devicetree/bindings/gpio/st,stmpe-gpio.yaml    | 60 ++++++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
+> new file mode 100644
+> index 000000000000..6e991ebbdf77
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/st,stmpe-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectonics Port Expander (STMPE) GPIO Block
+> +
+> +description: STMicroelectronics Port Expander (STMPE) is a series of slow
+> +  bus controllers for various expanded peripherals such as GPIO, keypad,
+> +  touchscreen, ADC, PWM or rotator. It can contain one or several different
+> +  peripherals connected to SPI or I2C. These bindings pertain to the
+> +  GPIO portions of these expanders.
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stmpe-gpio
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  interrupt-controller: true
+> +
+> +  st,norequest-mask:
+> +    description: A bitmask of GPIO lines that cannot be requested because for
+> +      for example not being connected to anything on the system
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +patternProperties:
+> +  "^.+-hog(-[0-9]+)?$":
+> +    type: object
+> +
+> +    properties:
+> +      gpio-hog: true
+> +      gpios: true
+> +      input: true
+> +      output-high: true
+> +      output-low: true
+> +      line-name: true
+> +
+> +    required:
+> +      - gpio-hog
+> +      - gpios
 
-Please pull some x86/fpu changes for 6.4. There's no _actual_ kernel
-functionality here.  This expands the documentation around AMX support
-including some code examples. The example code also exposed the fact
-that hardware architecture constants as part of the ABI, but there's
-no easy place that they get defined for apps.  Adding them to a uabi
-header will eventually make life easier for consumers of the ABI.
+All you need for hog nodes is:
 
---
+"^.+-hog(-[0-9]+)?$":
+  type: object
+  required:
+    - gpio-hog
 
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+The presence of 'gpio-hog' causes the hog schema to be applied.
 
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_fpu_for_6.4
-
-for you to fetch changes up to 5fbff260755750559aa12a30f6fa7f8a863666f1:
-
-  Documentation/x86: Explain the state component permission for guests (2023-03-22 13:08:02 -0700)
-
-----------------------------------------------------------------
- * Improve AMX documentation along with example code
- * Explicitly make some hardware constants part of the uabi
-
-----------------------------------------------------------------
-Chang S. Bae (4):
-      Documentation/x86: Explain the purpose for dynamic features
-      x86/arch_prctl: Add AMX feature numbers as ABI constants
-      Documentation/x86: Add the AMX enabling example
-      Documentation/x86: Explain the state component permission for guests
-
- Documentation/x86/xstate.rst      | 100 ++++++++++++++++++++++++++++++++++++++
- arch/x86/include/uapi/asm/prctl.h |   3 ++
- 2 files changed, 103 insertions(+)
+Rob
