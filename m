@@ -2,164 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB95C6F03EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BDE6F03F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243482AbjD0KIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S243476AbjD0KJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243204AbjD0KIa (ORCPT
+        with ESMTP id S233483AbjD0KJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:08:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C212449C1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682590107; x=1714126107;
-  h=date:from:to:cc:subject:message-id;
-  bh=7ebaDA4IxXMs6pYlgo/7FqTLg4ABcp4mDsF3xlK7hIY=;
-  b=Pxe6qICfZA0snRbI2Rvy9idKiHcdIV1MtrqCZXp3qn69rvqDOc5JtSpH
-   HqU28Tupytg36dkMFQLN65MN9axnzuxFXVDvFykwu1YPDUjWKfVAtm89e
-   ye0kpeTKyC60GZvRsK6T6XcV/L7cHDcnWyubhfRaiF/JdgQj6G40ndH/2
-   MLJ6sPmH8sGLOfDbHAWSjuI+P/3i44M7lVnYaxRN5ulzdkifG5KyKo1CB
-   W+lyCsyrTo5lJytl2OGARRiLW3yLVGVKwdnMA27fiWzXh8PvaIkh65Sh2
-   JIaGTvqBWmsrdNr0Tna75C8zT6P4P/bHGYMBJW0BwWDwt6nSznzbsZoEn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="331646361"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="331646361"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 03:08:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="724831742"
-X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
-   d="scan'208";a="724831742"
-Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 27 Apr 2023 03:08:19 -0700
-Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pryXy-0000A3-1O;
-        Thu, 27 Apr 2023 10:08:18 +0000
-Date:   Thu, 27 Apr 2023 18:07:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/core] BUILD SUCCESS
- 158009f1b4a33bc0f354b994eea361362bd83226
-Message-ID: <20230427100748.dKUGw%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 27 Apr 2023 06:09:28 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3261892;
+        Thu, 27 Apr 2023 03:09:26 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33RA95Eo111786;
+        Thu, 27 Apr 2023 05:09:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682590145;
+        bh=5R2fhojW6V0uw1XdQV9VrPNhcf4y1GUJ9EavXHUjwLA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Elp678UfEnqHGSTZJvdo/AaSRaJMlsVEFkNjaphsiIC0emALhU4qiw876VZgKOMs/
+         oRN0AooxHfUXXD6yy0wVO9qVWUgRW1rflLh3cGj5QRSTIImjS289OZvdQgc8MJi9zK
+         2sutW7YPi/+1E+vj/FYhTJBoC9bCkxAPkN8rx/1U=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33RA954n102611
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Apr 2023 05:09:05 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 27
+ Apr 2023 05:09:05 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 27 Apr 2023 05:09:05 -0500
+Received: from [10.249.130.34] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33RA91tS043983;
+        Thu, 27 Apr 2023 05:09:01 -0500
+Message-ID: <24ea8982-e2ab-d58d-dedd-f51703d0bb92@ti.com>
+Date:   Thu, 27 Apr 2023 15:39:00 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [EXTERNAL] Re: [PATCH 1/5] arm64: dts: ti: k3-j7200: Add general
+ purpose timers
+To:     Tony Lindgren <tony@atomide.com>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <m-chawdhry@ti.com>, <n-francis@ti.com>, <u-kumar1@ti.com>
+References: <20230426103219.1565266-1-u-kumar1@ti.com>
+ <20230426103219.1565266-2-u-kumar1@ti.com>
+ <20230427080049.GH14287@atomide.com>
+Content-Language: en-US
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+In-Reply-To: <20230427080049.GH14287@atomide.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-branch HEAD: 158009f1b4a33bc0f354b994eea361362bd83226  timekeeping: Fix references to nonexistent ktime_get_fast_ns()
+Hi Tony
 
-elapsed time: 722m
+On 4/27/2023 1:30 PM, Tony Lindgren wrote:
+> Hi,
+>
+> * Udit Kumar <u-kumar1@ti.com> [230426 10:38]:
+>> There are 20 general purpose timers on j7200 that can be used for things
+>> like PWM using pwm-omap-dmtimer driver. There are also additional ten
+>> timers in the MCU domain.
+> ...
+>
+> ....
+> Oh so also the MCU timers now have interrupts, nice. Can you please check
+> if what we have in the comments the other SoCs in the dtsi files for MCU
+> timers not having routable interrupts is correct?
 
-configs tested: 87
-configs skipped: 7
+checked for AM65 and AM64, looks these SOC follow different IT map wrt J7200
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On J7200 reading TRM
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230426   gcc  
-arc                  randconfig-r043-20230426   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230426   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230426   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r004-20230426   gcc  
-hexagon              randconfig-r023-20230426   clang
-hexagon              randconfig-r041-20230426   clang
-hexagon              randconfig-r045-20230426   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r031-20230426   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r005-20230426   gcc  
-m68k                 randconfig-r024-20230426   gcc  
-microblaze           randconfig-r035-20230426   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r026-20230426   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r033-20230426   gcc  
-nios2                randconfig-r034-20230426   gcc  
-openrisc             randconfig-r015-20230426   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r021-20230426   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r002-20230426   clang
-powerpc              randconfig-r032-20230426   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r013-20230426   gcc  
-riscv                randconfig-r042-20230426   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230426   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r012-20230426   gcc  
-sh                   randconfig-r036-20230426   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r014-20230426   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r022-20230426   gcc  
+https://www.ti.com/lit/pdf/spruiu1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Section 9.4.3.1.2 GIC500 SPI Interrupt Map, table Table 9-109.
+
+MCU_TIMER0_INTR_PEND_0 (848) to MCU_TIMER9_INTR_PEND_0 (857)
+
+looks to be available for A core.
+
+> Also, should the MCU timers be still tagged with status = "reserved"?
+Will mark status as  reserved
+> See the comments in k3-am62-mcu.dtsi for example for both questions.
+>
+> Regards,
+>
+> Tony
