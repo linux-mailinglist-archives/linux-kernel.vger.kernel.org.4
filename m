@@ -2,172 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB626F0357
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 212CB6F036D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243300AbjD0JZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S243351AbjD0JdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243267AbjD0JZj (ORCPT
+        with ESMTP id S243188AbjD0JdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:25:39 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE97E5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:25:38 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f1950f5676so70660175e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682587537; x=1685179537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I3/RzN4AJvDC7+eEY0sM4oqgUL0myB76IKp72IpocdI=;
-        b=NDX3YZBXnnQ9XvwEILUzHMDKog2cxLjsSK+NztQGN+KobUMKr6u8RMTbINJ5fd8VLb
-         qRYYGvjbjj5J3YmIJNwIcZfdl+CXDmsX3PhUlPO8zH7odexgLZCPMZHiI6SzHmEiGUyf
-         UNg5SWroYTyiSicZpNz4RjeBG9JDZIjybobXnt+hpoogQKZ17IbQefhgpfsFnMMqLOLf
-         vAHqAZOqzaNMj2xieSeDsThebhslPzfyu99dhZLR9Lf9wPsMLKGLWMDu4z20JzQd6A3L
-         Xxb4LJsj1rFeChtfpFU7x1zjo6qYoStwBx2E+JnQLZx7JJ/YMmRyAiqHxIy8BSXxW9C2
-         A/IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682587537; x=1685179537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I3/RzN4AJvDC7+eEY0sM4oqgUL0myB76IKp72IpocdI=;
-        b=fFuADKjSOMIuykDP6oAs92NAHNFBc8cME6eSG7sb3t+VngPXvvJDEHgd5y8ZMcXEzb
-         RzfbjlDNzP5F+4GW6d7bQxVnAoPP5Es8l6bWEDbzWYvgBN43VV3KudEntRw/cocqTABb
-         LlgrRP1EWy80txXT5Agnb1rUe077+EZOtNQQ7A1gRAfF6JxpVqGjtqZ4cCX/fYCrT2CT
-         I8L8shbYhD4g4Z+Z6nRfIXTiKLTdQ1iEKI+PxULaUMhBaCKqckTRPVZY4FUQ8ln6C8Km
-         juF1FFyWY4VGVluu45GwcvxnHI9o0GVSaknN2+4oBm7ILCFN6f/hv34sbglCf+5zc8RO
-         voow==
-X-Gm-Message-State: AC+VfDxlnhFSMhR4gcjY3r/iwjDpftAVHBrQIrXEPFp7EqNy/ULa3Ceg
-        FrD3LXlzugIbzSOlahvS1sZ1eg==
-X-Google-Smtp-Source: ACHHUZ75rGDonY81KfyHjidrZgSBeiUycDijDGIT5u1Snn62AK+MB0zlt5smJtkHgxXHeG5k2c1Iig==
-X-Received: by 2002:a05:600c:210b:b0:3f1:8b0f:96ea with SMTP id u11-20020a05600c210b00b003f18b0f96eamr840997wml.37.1682587536678;
-        Thu, 27 Apr 2023 02:25:36 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id e26-20020a05600c219a00b003f180d5b145sm20573730wme.40.2023.04.27.02.25.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 02:25:36 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 11:25:34 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Conor Dooley <conor@kernel.org>, Yangyu Chen <cyy@cyyself.name>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
-        Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
-Message-ID: <xvdswl3iyikwvamny7ikrxo2ncuixshtg3f6uucjahpe3xpc5c@ud4cz4fkg5dj>
-References: <20230425120016.187010-1-cyy@cyyself.name>
- <tencent_63090269FF399AE30AC774848C344EF2F10A@qq.com>
- <20230426-porthole-wronged-d5a6a3b89596@spud>
- <6kjgearxffbnnq4bsqs7e3jz6efz436m6gb3zjh7cfi357oxlv@krxto6orxwwn>
- <20230427-unveiling-kiwi-631e966f77cc@wendy>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427-unveiling-kiwi-631e966f77cc@wendy>
+        Thu, 27 Apr 2023 05:33:06 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 02:33:04 PDT
+Received: from m239-7.eu.mailgun.net (m239-7.eu.mailgun.net [185.250.239.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4BD2D69
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:33:04 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=hewittfamily.org.uk;
+ q=dns/txt; s=s1; t=1682587982; x=1682595182; h=To: To: References:
+ Message-Id: Content-Transfer-Encoding: Cc: Date: In-Reply-To: From: From:
+ Subject: Subject: Mime-Version: Content-Type: Sender: Sender;
+ bh=WKlhktvkNCXudJUIlMvUHYKEozR+HdTU1JB7gKtNB7E=;
+ b=PvEsJ+Anx+SM2aJP2Bh5/2xq4wmeHtdarl/dA/AyiS6uJQN6skV2/DMNMLdvN/8AfBumMb06ltg9LLaGbhiBKA44cQJed3m4qHDdPK4bt8EclOk8f2xvI0hd28sHGaCbgrX6HANWQtXLyHQcpGdzAb6T0NTdzgiFmcgxuffycz+gdAf74m1qY9KDamiqyMUB0kpNB470QAUFAv5H5thz5RgdBYaxHmdAtDWWSdkVbGaypYRoSf2dt/qBK2GcsXy6Ru9LR7ozSbU6F/SHS9aCb7AWRaVLJVfWSloZ1+LNBsEF4mVPPfyiuHsM8XoCJ+ZPLRn8yLatri9iUA/78xK2RQ==
+X-Mailgun-Sending-Ip: 185.250.239.7
+X-Mailgun-Sid: WyIyNWUwNSIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCJlMzcyMCJd
+Received: from mail.hewittfamily.org.uk (<unknown> [87.200.95.144]) by fe978277b15e with
+ SMTP id 644a401f90677e019261cb9e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 Apr 2023 09:27:59 GMT
+Sender: christian@hewittfamily.org.uk
+Received: from smtpclient.apple (unknown [94.57.164.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.hewittfamily.org.uk (Postfix) with ESMTPSA id 990768CBB78;
+        Thu, 27 Apr 2023 13:27:54 +0400 (+04)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.2\))
+Subject: Re: [PATCH V2] arm64: dts: add support for C3 based Amlogic AW409
+From:   Christian Hewitt <christian@hewittfamily.org.uk>
+In-Reply-To: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
+Date:   Thu, 27 Apr 2023 10:26:47 +0100
+Cc:     linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        AML <linux-amlogic@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <7C020F0D-315C-4281-BA0E-1E5CFAC97C39@hewittfamily.org.uk>
+References: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.2)
+X-Synology-Spam-Status: score=0.399, required 5, MID_RHS_MATCH_FROM 0, FROM_HAS_DN 0, TO_DN_SOME 0, MV_CASE 0.5, TO_MATCH_ENVRCPT_ALL 0, MIME_GOOD -0.1, __THREADED 0, RCPT_COUNT_SEVEN 0, RCVD_COUNT_ZERO 0, FROM_EQ_ENVFROM 0, MIME_TRACE 0, __NOT_SPOOFED 0, __BODY_URI_ONLY 0, __HDRS_LCASE_KNOWN 0, NO_RECEIVED -0.001
+X-Synology-Spam-Flag: no
+X-Synology-Virus-Status: no
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:04:34AM +0100, Conor Dooley wrote:
-> On Thu, Apr 27, 2023 at 09:53:19AM +0200, Andrew Jones wrote:
-> > On Wed, Apr 26, 2023 at 07:54:39PM +0100, Conor Dooley wrote:
-> > > (+CC Drew)
-> > > 
-> > > Hey Yangyu,
-> > > 
-> > > One meta-level comment - can you submit this patch + my dt-bindings
-> > > patch as a v2?
-> > > Some comments below.
-> > > 
-> > > On Tue, Apr 25, 2023 at 08:00:15PM +0800, Yangyu Chen wrote:
-> > > > According to RISC-V ISA specification, the ISA naming strings are case
-> > > > insensitive. The kernel docs require the riscv,isa string must be all
-> > > > lowercase to simplify parsing currently. However, this limitation is not
-> > > > consistent with RISC-V ISA Spec.
-> > > 
-> > > Please remove the above and cite ACPI's case-insensitivity as the
-> > > rationale for this change.
-> > > 
-> > > > This patch modifies the ISA string parser in the kernel to support
-> > > > case-insensitive ISA string parsing. It replaces `strncmp` with
-> > > > `strncasecmp`, replaces `islower` with `isalpha`, and wraps the
-> > > > dereferenced char in the parser with `tolower`.
-> > > > 
-> > > > Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> > > > ---
-> > > >  arch/riscv/kernel/cpu.c        |  6 ++++--
-> > > >  arch/riscv/kernel/cpufeature.c | 20 ++++++++++----------
-> > > >  2 files changed, 14 insertions(+), 12 deletions(-)
-> > > > 
-> > > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> > > > index 8400f0cc9704..531c76079b73 100644
-> > > > --- a/arch/riscv/kernel/cpu.c
-> > > > +++ b/arch/riscv/kernel/cpu.c
-> > > > @@ -4,6 +4,7 @@
-> > > >   */
-> > > >  
-> > > >  #include <linux/cpu.h>
-> > > > +#include <linux/ctype.h>
-> > > >  #include <linux/init.h>
-> > > >  #include <linux/seq_file.h>
-> > > >  #include <linux/of.h>
-> > > > @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
-> > > >  		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
-> > > >  		return -ENODEV;
-> > > >  	}
-> > > > -	if (isa[0] != 'r' || isa[1] != 'v') {
-> > > > +	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
-> > > >  		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
-> > > >  		return -ENODEV;
-> > > 
-> > > I don't understand why this is even here in the first place. I'd be
-> > > inclined to advocate for it's entire removal. Checking *only* that there
-> > > is an "rv" in that string seems pointless to me. If you're on a 64-bit
-> > > kernel and the node has riscv,isa = "rv32ima" it's gonna say it is okay?
-> > > Drew what do you think?
-> > 
-> > It makes some sense to me as a garbage detector. It's unlikely the first
-> > two bytes will be "rv" if the string is random junk.
-> 
-> Preventing the input of absolute rubbish is dt-validate's job & if the dtb
-> itself has been corrupted somehow I suspect that we have bigger problems
-> than checking for "rv" will solve.
 
-We would, but would they be as easy to debug as this very early sanity
-check? I agree, though, that doing the sanity checking in
-riscv_of_processor_hartid(), which gets called from several different
-places, seems a bit much. It'd be better to do that once, early, and
-never again.
 
-> 
-> > also do a strlen(isa) >= 4 check first, though. of_property_read_string()
-> > will succeed even when the string is "".
-> 
-> I don't think that checking that there are at least 4 characters isn't
-> even sufficient. Either we should confirm that this is a valid riscv,isa
-> to run on (so rv##ima w/ ## matching the kernel) or not bother at all.
+> On 27 Apr 2023, at 9:58 am, Xianwei Zhao <xianwei.zhao@amlogic.com> =
+wrote:
+>=20
+> Amlogic C3 is an advanced edge AI processor designed for smart IP =
+camera
+> applications.
+>=20
+> Add basic support for the C3 based Amlogic AW409 board, which =
+describes
+> the following components: CPU, GIC, IRQ, Timer, UART. It's capable of
+> booting up into the serial console.
+>=20
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+>=20
+> ---
+> V1 -> V2: Remove new arch, and use ARCH_MESON;
+>          Modify node name, and delete superfluous blank lines.
+> ---
+> arch/arm64/boot/dts/amlogic/Makefile          |  1 +
+> .../amlogic/amlogic-c3-c302x-aw409-256m.dts   | 29 +++++++
+> arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi   | 86 +++++++++++++++++++
+> 3 files changed, 116 insertions(+)
+> create mode 100644 =
+arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+> create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+>=20
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile =
+b/arch/arm64/boot/dts/amlogic/Makefile
+> index cd1c5b04890a..bcec872c2444 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -74,3 +74,4 @@ dtb-$(CONFIG_ARCH_MESON) +=3D =
+meson-sm1-odroid-hc4.dtb
+> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-sei610.dtb
+> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-x96-air-gbit.dtb
+> dtb-$(CONFIG_ARCH_MESON) +=3D meson-sm1-x96-air.dtb
+> +dtb-$(CONFIG_ARCH_MESON) +=3D amlogic-c3-c302x-aw409-256m.dtb
 
-Extending the check makes sense, but even more reason to do it outside
-riscv_of_processor_hartid().
+^ please keep the list alpha-sorted, and 256m is described in the dts
+so there is no need to include it in the board filename. I would also
+expect meson-c3* to align with existing filenames, but I=E2=80=99ll let =
+others
+comment on naming rules.
 
-> 
-> It's a different issue though, and I'd be inclined to revisit it in the
-> future when the ACPI stuff is in, along with perhaps the cleanup parts
-> of Heiko's series too.
+Christian
 
-Agreed.
+> diff --git =
+a/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts =
+b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+> new file mode 100644
+> index 000000000000..edce8850b338
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "amlogic-c3.dtsi"
+> +
+> +/ {
+> +	model =3D "Amlogic C302 aw409 Development Board";
+> +	compatible =3D "amlogic,aw409", "amlogic,c3";
+> +	interrupt-parent =3D <&gic>;
+> +	#address-cells =3D <2>;
+> +	#size-cells =3D <2>;
+> +
+> +	aliases {
+> +		serial0 =3D &uart_b;
+> +	};
+> +
+> +	memory@0 {
+> +		device_type =3D "memory";
+> +		reg =3D <0x0 0x0 0x0 0x10000000>;
+> +	};
+> +};
+> +
+> +&uart_b {
+> +	status =3D "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi =
+b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> new file mode 100644
+> index 000000000000..93b335aef605
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> @@ -0,0 +1,86 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +/ {
+> +	cpus {
+> +		#address-cells =3D <2>;
+> +		#size-cells =3D <0>;
+> +
+> +		cpu0: cpu@0 {
+> +			device_type =3D "cpu";
+> +			compatible =3D "arm,cortex-a35";
+> +			reg =3D <0x0 0x0>;
+> +			enable-method =3D "psci";
+> +		};
+> +
+> +		cpu1: cpu@1 {
+> +			device_type =3D "cpu";
+> +			compatible =3D "arm,cortex-a35";
+> +			reg =3D <0x0 0x1>;
+> +			enable-method =3D "psci";
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible =3D "arm,armv8-timer";
+> +		interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | =
+IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | =
+IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | =
+IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | =
+IRQ_TYPE_LEVEL_LOW)>;
+> +	};
+> +
+> +	psci {
+> +		compatible =3D "arm,psci-1.0";
+> +		method =3D "smc";
+> +	};
+> +
+> +	xtal: xtal-clk {
+> +		compatible =3D "fixed-clock";
+> +		clock-frequency =3D <24000000>;
+> +		clock-output-names =3D "xtal";
+> +		#clock-cells =3D <0>;
+> +	};
+> +
+> +	soc {
+> +		compatible =3D "simple-bus";
+> +		#address-cells =3D <2>;
+> +		#size-cells =3D <2>;
+> +		ranges;
+> +
+> +		gic: interrupt-controller@fff01000 {
+> +			compatible =3D "arm,gic-400";
+> +			#interrupt-cells =3D <3>;
+> +			#address-cells =3D <0>;
+> +			interrupt-controller;
+> +			reg =3D <0x0 0xfff01000 0 0x1000>,
+> +			      <0x0 0xfff02000 0 0x2000>,
+> +			      <0x0 0xfff04000 0 0x2000>,
+> +			      <0x0 0xfff06000 0 0x2000>;
+> +			interrupts =3D <GIC_PPI 9 =
+(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+> +		};
+> +
+> +		apb4: bus@fe000000 {
+> +			compatible =3D "simple-bus";
+> +			reg =3D <0x0 0xfe000000 0x0 0x480000>;
+> +			#address-cells =3D <2>;
+> +			#size-cells =3D <2>;
+> +			ranges =3D <0x0 0x0 0x0 0xfe000000 0x0 =
+0x480000>;
+> +
+> +			uart_b: serial@7a000 {
+> +				compatible =3D =
+"amlogic,meson-g12a-uart";
+> +				reg =3D <0x0 0x7a000 0x0 0x18>;
+> +				interrupts =3D <GIC_SPI 169 =
+IRQ_TYPE_EDGE_RISING>;
+> +				status =3D "disabled";
+> +				clocks =3D <&xtal>, <&xtal>, <&xtal>;
+> +				clock-names =3D "xtal", "pclk", "baud";
+> +			};
+> +
+> +		};
+> +	};
+> +};
+>=20
+> base-commit: ae68fb187b59bc8645974320808ab2d7c41b1833
+> --=20
+> 2.37.1
+>=20
+>=20
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
-Thanks,
-drew
