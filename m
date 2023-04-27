@@ -2,85 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C846F0EE6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE49F6F0EE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344345AbjD0XaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S229869AbjD0X3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344375AbjD0XaS (ORCPT
+        with ESMTP id S1344331AbjD0X3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:30:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163303AAC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682638172;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vcFglKyPAkh5dZyTCVBzEYjy5B4nwQaUU2WoJAnQQj8=;
-        b=dsWiFJM6hNbh2NvD5vpY/XQZdhD3Z9VfkQN1nBPV+B+3XGILYnwtDzFmHEtTnIpnjmjibe
-        gizXWI1o2MB7IBzCm9yTYvm/I9tuCwOhTB87dFKP1AK6HZSA3UgpcqZFxC7CmVFV29FsI2
-        ItS5SHfCSpQLIZyrDGyPu3A35SWyeDg=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-584-_P_NwuKKMp2bzyh6__WT4g-1; Thu, 27 Apr 2023 19:29:31 -0400
-X-MC-Unique: _P_NwuKKMp2bzyh6__WT4g-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-54f8af8b8f1so151897467b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
+        Thu, 27 Apr 2023 19:29:41 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534C32D6B;
+        Thu, 27 Apr 2023 16:29:40 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a667067275so71201965ad.1;
+        Thu, 27 Apr 2023 16:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682638180; x=1685230180;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tfABu7Cc2LVPUFjUnfFsZx1Y3J2FYen/EYucbIUAmiM=;
+        b=bB6ttVGdDlatWPnwYoqs9EpnA38tcqe6dI8rkdN0lUdtTiomKwPJyAKJVkbtqZ0628
+         2Bz2Db0BDnMHrVjn3iuL/CrT7/TerOMRTTAm3sijJreV8OWlOBh3lqUjiRd0vDMxD9yv
+         lVyzsdDqvBtaHDfXlsoP6J0v3/3z9A7s1/bBnXNaQeSrTes6G2PEsepIllHxoIIWJhVF
+         QkHWry40uVZKJFw8jqwUgjIFvEqw7+u5Ptq20Jv3QkuWaEmkXskEcffjv57LEPGXt4ol
+         e4inqVBHiptE+YK28eptMcW86cpYiBVN6jykZ6mnYopA/pmR9qNsv6LitUBIQWSjMDaL
+         VBvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682638170; x=1685230170;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcFglKyPAkh5dZyTCVBzEYjy5B4nwQaUU2WoJAnQQj8=;
-        b=dzFQeRoyyQ2Ll3AJr5rmvM+LzwO/u49kK811PVcySbHLUw37YCkR+eY12mlaiLfh6B
-         nqZdiQb1MaBwKn4LP0eTx+/sAtomrWNQwJ1qmDFUuwJkGMsjF2hAnpHtPje8d6emFKQY
-         F0emX6OGAXuIkOOqQKy320S5Uc8Oi5Jx6vlGcgriMj283VnbjV9kycG7Jw9rwmqVGhzH
-         l1Hyr4qX9/53toNUMWqldNnXrOOFfXEqyhFsTlO9sHV2ait9djxvDq6tK/XKPbKnTUND
-         NoubPnFBqv1Gs7qxx4terdE+a6ef+0jooyspdCwW1F0l4+2Pd9OXpUuen5MaKzTfPTle
-         GDfA==
-X-Gm-Message-State: AC+VfDyLUq0bTI1vZ0arVNN+Cfkn0iYo8/peWVqImB80aKYvV36s7DYK
-        3+8bWNgS7Mt8X/BhJbueQ/gKx/YFG29NN89Ps32qru5j2GntBSDITx1bSgMEO+0gy9p7Va2D1wx
-        MZnQAg0IlkImjq4xEVNQTsT8m
-X-Received: by 2002:a81:918a:0:b0:54f:8e64:e47f with SMTP id i132-20020a81918a000000b0054f8e64e47fmr2532268ywg.31.1682638170524;
-        Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ745lku6BCkyNoeANYeFs9vOAsqe3xUvEdBgIgvnVsWRepS97b8DYNlJOko6WOTqcIXYs7QKA==
-X-Received: by 2002:a81:918a:0:b0:54f:8e64:e47f with SMTP id i132-20020a81918a000000b0054f8e64e47fmr2532252ywg.31.1682638170263;
-        Thu, 27 Apr 2023 16:29:30 -0700 (PDT)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d201-20020a814fd2000000b0054f8b7b8514sm5092922ywb.128.2023.04.27.16.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 16:29:29 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 19:29:27 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/4] Input: pwm-vibra - add support for enable GPIO
-Message-ID: <ZEsFV6F4CEh2/av8@x1>
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
- <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz>
+        d=1e100.net; s=20221208; t=1682638180; x=1685230180;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfABu7Cc2LVPUFjUnfFsZx1Y3J2FYen/EYucbIUAmiM=;
+        b=Hsj7z8arCnFBd9kTB5q/a3Qv1r6I/AHMFxroCzWz2skZvNKl8IZ1eZ6kN8zQJmmslW
+         AyjanV2o/qnVo9lJC8hLBz1Jlx3PS/LDR0uPEIzMiicYUzSThrIVcgnzXgBJwhcx7puK
+         7qllE6pP++Vx++9oRZd4+p9Mv9l4fTl94YkV4Xqn5toBJfhIoFZnfhKblxlrGWJoJYwT
+         v8Srg3YqgoOn3T2SKr7hyk45gPpYRxFBAEiaMtKAxE5A/kBRbBahStdhKmEaO8qzMShR
+         3szH7LJKWmHeZrfGX+Q1v9ggiEXNFSQAktngqAnmz6Y5M1vMt1MTwmSi2YxWHAhT035g
+         QXzg==
+X-Gm-Message-State: AC+VfDwijJ5L93W8XYKaFYu/a2iiKKDPP/il9rK6yVCfF6sClRru7us7
+        Hb23H0KlNVbEqru54rf/v1M=
+X-Google-Smtp-Source: ACHHUZ4+LxQiAZFcsCO3jxQhJcObopxUPcV8H3quHLqumCeHYnO9PWdu3969Yc9tzcIQEcM2NIAmJw==
+X-Received: by 2002:a17:902:ebd1:b0:1a6:52f9:d4c7 with SMTP id p17-20020a170902ebd100b001a652f9d4c7mr3052365plg.60.1682638179758;
+        Thu, 27 Apr 2023 16:29:39 -0700 (PDT)
+Received: from [10.69.53.73] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id jl13-20020a170903134d00b001a9666376a9sm8330235plb.226.2023.04.27.16.29.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 16:29:39 -0700 (PDT)
+Message-ID: <a8e21766-266c-c0dc-157c-c6951a5727a7@gmail.com>
+Date:   Thu, 27 Apr 2023 16:29:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/2] serial: 8250_bcm7271: fix leak in `brcmuart_probe`
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        XuDong Liu <m202071377@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230427181916.2983697-1-opendmb@gmail.com>
+ <20230427181916.2983697-3-opendmb@gmail.com>
+ <37c23054-1590-b33d-9299-7d5d6198f8f0@wanadoo.fr>
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <37c23054-1590-b33d-9299-7d5d6198f8f0@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,30 +84,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:34:28PM +0200, Luca Weiss wrote:
-> Some pwm vibrators have a dedicated enable GPIO that needs to be set
-> high so that the vibrator works. Add support for that optionally.
+On 4/27/2023 1:29 PM, Christophe JAILLET wrote:
+> Le 27/04/2023 à 20:19, Doug Berger a écrit :
+>> Smatch reports:
+>> drivers/tty/serial/8250/8250_bcm7271.c:1120 brcmuart_probe() warn:
+>> 'baud_mux_clk' from clk_prepare_enable() not released on lines: 1032.
+>>
+>> The issue is fixed by using a managed clock.
+>>
+>> Fixes: 41a469482de2 ("serial: 8250: Add new 8250-core based Broadcom 
+>> STB driver")
+>> Reported-by: XuDong Liu <m202071377@hust.edu.cn>
+>> Link: 
+>> https://lore.kernel.org/lkml/20230424125100.4783-1-m202071377@hust.edu.cn/
+>> Signed-off-by: Doug Berger <opendmb@gmail.com>
+>> ---
+>>   drivers/tty/serial/8250/8250_bcm7271.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c 
+>> b/drivers/tty/serial/8250/8250_bcm7271.c
+>> index 90ee7bc12f77..af0e1c070187 100644
+>> --- a/drivers/tty/serial/8250/8250_bcm7271.c
+>> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
+>> @@ -1012,7 +1012,7 @@ static int brcmuart_probe(struct platform_device 
+>> *pdev)
+>>       of_property_read_u32(np, "clock-frequency", &clk_rate);
+>>       /* See if a Baud clock has been specified */
+>> -    baud_mux_clk = of_clk_get_by_name(np, "sw_baud");
+>> +    baud_mux_clk = devm_clk_get(dev, "sw_baud");
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> If switching to devm_clk_get(), maybe devm_clk_get_enabled() could also 
+> be an option to fix both issues and avoid adding some LoC.
+> 
+> The order of operation in the remove function would then be different. I 
+> don't know if it can be an issue.
+I like the idea, but it doesn't backport to the source of the error.
+I'll try to remember to submit something after the merge closes.
 
-Hi Luca,
-
-Thank you for picking up this work!
-
-> +	vibrator->enable_gpio = devm_gpiod_get_optional(&pdev->dev, "enable",
-> +							GPIOD_OUT_LOW);
-> +	err = PTR_ERR_OR_ZERO(vibrator->enable_gpio);
-> +	if (err) {
-> +		if (err != -EPROBE_DEFER)
-> +			dev_err(&pdev->dev, "Failed to request enable gpio: %d\n",
-> +				err);
-> +		return err;
-> +	}
-> +
-
-Take a look at dev_err_probe() to remove the -EPROBE_DEFER check.
-
-With that fixed:
-
-Reviewed-by: Brian Masney <bmasney@redhat.com>
+> 
+> Just my 2c.
+> 
+> CJ
+Thanks!
+     Doug
 
