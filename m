@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35136F011A
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 08:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC5E6F012D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 09:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243077AbjD0G4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 02:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
+        id S243042AbjD0HDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 03:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242942AbjD0G4H (ORCPT
+        with ESMTP id S242974AbjD0HC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 02:56:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3114698;
-        Wed, 26 Apr 2023 23:56:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CFBE63AED;
-        Thu, 27 Apr 2023 06:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 76907C4339B;
-        Thu, 27 Apr 2023 06:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682578563;
-        bh=C6DlJnSIVgfRza1lDbmKC4eFjLoL6Dkd0XJsivg/rF8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=H4MslcA1H4Qfs7UVIn1JhbmUHNUenWdCMzRGBi1uUHgTNUwBUWIe3rfrGZSvSBht5
-         /OWuDaB79DBsAZ6CcWfxuqxGng2ovQm1qUnk+nmREQ+yrLLg0bV0Pm4DjznGv8jJ31
-         oSMZxfzLc4jUFgbhsWtPtdKLoo0lt0zsdxPnFjG447y0pBuHAWq1ZIE3zKb9+Lz/65
-         jRC77rzLhrEu6ePtNqPz3w+2hcLajnYNu1QBbsVu5qZbp/cWGJ+fvdIE4KS+89hqQY
-         LMYpusXufqfAeW/gM0LMj3uLgrwr6U7C/2NoIrlezVIEGT12L7POkHQTAhfCQPjTGs
-         A1kltaWlPLJmA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5C49BE5FFC7;
-        Thu, 27 Apr 2023 06:56:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 27 Apr 2023 03:02:57 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FD3422B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:02:32 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115e652eeso2799912b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 00:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1682578951; x=1685170951;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AA9076PBQGQ1CvqVfefKSv2pXhUG01wTMuMnD2nJkG8=;
+        b=jLGz1o/gOy7lZRmOeyA5yuMty1mAQ/iuWvCjMifOWvm0j4uLkXKiOgf9UM1A0iY5JH
+         CwSyYAno6AlIplzeAwPsF10c4guM+QMfKhDDGeNLbz5axGI+qayc62rfYQLVXOkRS6vN
+         HRaP5zRygf5AmKRpuXW3wF9qIEGE467ueDrsqFtcdGx0ucZ3hiZEtLGhV+JwGxEmmYMf
+         ZIKCh7PIBKsUj37Sj9sgJd4gVxEP+II7OV/QbY19ys/2EgKPzMo4v8hQxdEkzENsEBOo
+         duNOArJk+4/NimQH712r1Q3q6ldJcpe5y0uOnWQ1EIzf3i0jywK2ozryHq8GVamcGd1+
+         tArQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682578951; x=1685170951;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AA9076PBQGQ1CvqVfefKSv2pXhUG01wTMuMnD2nJkG8=;
+        b=GYR1RGmdJQWmo16ga1LROjHExleA2vOLC7OzfoAUynDb+7F0nm9YNiLT3+il+ffT1g
+         qN2BK8v2Y0QYtjS+yy1v24kx5HLbafUqMjukIlk1AKU0Hh1uPQVmVywCpcz4laCMQuI5
+         R1gSWXSAqGYKxxq4Qj1fyCIkpg2/aOpNO5Pk9nrpbRrPoqg/bdttAtl9wrHoGz3/+Ti/
+         91IgMAEHhnNa3lLO9MbvxWf1YV779zZwNgRut8QbXmtCe926k02vtneb1EtjfuHyTStY
+         SKxVSwAPaYJ0WOVTOCJU3lsNLqGPZJDrqqxtp7oH9kr2+aq7XpKEFjYvCjpBF4x4+67d
+         46mQ==
+X-Gm-Message-State: AC+VfDx83zPGWIlkTLELRPlI5PjYTReu9Jzbv5eWDu9lrWSdMjQIp9LD
+        7cJI4scUfnpdN0ReamuA9XAtQ49RIo+bfFJdfjOZEQT+tY8=
+X-Google-Smtp-Source: ACHHUZ4gfWqDcWy7wjY90zhe6r/Xd5isZr7xM2oIdHs8gM9tlk4CDiQIOcPsD79B4M6XWvGZs4Ze8w==
+X-Received: by 2002:a17:902:d484:b0:1a9:68d2:e4ae with SMTP id c4-20020a170902d48400b001a968d2e4aemr6110340plg.2.1682578951633;
+        Thu, 27 Apr 2023 00:02:31 -0700 (PDT)
+Received: from [10.2.195.40] ([61.213.176.13])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b001a5023e7395sm10942150pli.135.2023.04.27.00.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 00:02:31 -0700 (PDT)
+Message-ID: <252ee222-f918-426e-68ef-b3710a60662e@bytedance.com>
+Date:   Thu, 27 Apr 2023 15:02:26 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Networking for 6.4
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168257856337.3333.16600030988253941664.git-patchwork-notify@kernel.org>
-Date:   Thu, 27 Apr 2023 06:56:03 +0000
-References: <20230426143118.53556-1-pabeni@redhat.com>
-In-Reply-To: <20230426143118.53556-1-pabeni@redhat.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
+Content-Language: en-US
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+References: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
+ <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
+From:   Wenliang Wang <wangwenliang.1995@bytedance.com>
+In-Reply-To: <1682576442.2203932-1-xuanzhuo@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,30 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This pull request was applied to netdev/net-next.git (main)
-by Linus Torvalds <torvalds@linux-foundation.org>:
 
-On Wed, 26 Apr 2023 16:31:18 +0200 you wrote:
-> Hi Linus!
+On 4/27/23 2:20 PM, Xuan Zhuo wrote:
+> On Thu, 27 Apr 2023 12:34:33 +0800, Wenliang Wang <wangwenliang.1995@bytedance.com> wrote:
+>> For multi-queue and large rx-ring-size use case, the following error
 > 
-> We have a few conflicts with your current tree, specifically:
+> Cound you give we one number for example?
+
+128 queues and 16K queue_size is typical.
+
 > 
-> - between commits:
+>> occurred when free_unused_bufs:
+>> rcu: INFO: rcu_sched self-detected stall on CPU.
+>>
+>> Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+>> ---
+>>   drivers/net/virtio_net.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>> index ea1bd4bb326d..21d8382fd2c7 100644
+>> --- a/drivers/net/virtio_net.c
+>> +++ b/drivers/net/virtio_net.c
+>> @@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
+>>   		struct virtqueue *vq = vi->rq[i].vq;
+>>   		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+>>   			virtnet_rq_free_unused_buf(vq, buf);
+>> +		schedule();
 > 
->   dbb0ea153401 ("thermal: Use thermal_zone_device_type() accessor")
->   5601ef91fba8 ("mlxsw: core_thermal: Use static trip points for transceiver modules")
+> Just for rq?
 > 
-> [...]
+> Do we need to do the same thing for sq?
+Rq buffers are pre-allocated, take seconds to free rq unused buffers.
 
-Here is the summary with links:
-  - [GIT,PULL] Networking for 6.4
-    https://git.kernel.org/netdev/net-next/c/6e98b09da931
+Sq unused buffers are much less, so do the same for sq is optional.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
+> Thanks.
+> 
+> 
+>>   	}
+>>   }
+>>
+>> --
+>> 2.20.1
+>>
