@@ -2,186 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A456F034C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA5D6F034B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242803AbjD0JV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
+        id S243281AbjD0JWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243169AbjD0JVS (ORCPT
+        with ESMTP id S243269AbjD0JWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:21:18 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2052.outbound.protection.outlook.com [40.107.21.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10395E1;
-        Thu, 27 Apr 2023 02:21:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kl1MG83E+/ztb877C9M4peV6Z+74H2m9SuXDUEyKec/AkYqSlt/WcdiWkEx2U5E7iIu2NdaQCv8dP0neWtC0OicpypKyrKZ7zSHCbRUQ703sHuLaejVpYZeE9v3avTONtTSi/Gb8U5Blygzp6UD+4hjJ7WFgaxUYg38YHbkU+nSK4D4SYtMcXS+fALXetFt4xX7ei3J9cqGllwwK8URb1+MBuc6jHg9eUN0xMZVwQ/cG55m//cFdpML8NBZ/G0y5xa3l5gD1O2BaKDHTwyaXAHH9UgDZlneKWCrLS8xCIRqCwTirtAg066RrabLaFMtEAvg4ZSyZuyTc/BpsgTDHrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Aa709c/UmayanBuSeO1Iej/NSVHz5VkdNLQg0e9iZLU=;
- b=WCfntHqd1BOByj7TaSobNlXkcMxiTptLg+yMbHxlB662T3nprgBAR8xnxIfw39ahivIl9UlJs5DyJXY1lNoEzn7rc8yYp+9Sk7cW4y8FLlonYoJ6GQETj31hzx67Oz8nJy5LncQiDKB2QnyFDqYfxKghmGc0LkCB8XvQ43TUHl7WbKovGvUfw6OzXb425zWJCTZC44YeisAJNJrB/JV/ySMIUPeenT3bVxX6EKqNNkRSlDIFpR53i451gbzB+wn5EGXxeiEtDoFlYPgIUDEIkFbuJJVtQ9Fd48bv+anCc6shN35mzsMuX62NF0a9qAyVDopLrPkrQ7SrQaUPSPBa7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Aa709c/UmayanBuSeO1Iej/NSVHz5VkdNLQg0e9iZLU=;
- b=p5e8rDnw9u7FQnrjU8Emsb605yxCtGihZ8TJKzXGXtQFw+ZblKtjxQI+BrDIgNgJLNCv+vpQ2Pv3nOBeWWjuBcXyVPpdC0WG15rdqZhnfcUiMWWgnXjRubi2JuQQmQfGy8dAsZCZoToPZIBQCu6K+gjjdUbW7nhIjTHT+09pStghhXHHlCR7CNR3YN33732UboKu4O08+bb4808GPnUmtm6nAN8VF+chwA76A1/H+NrRamtVLedmyhdkM+ytYwQzHFrgrm9wIqGV7ydJ5ZdqEUGOZNIyRy+LT9OrGTMsXcZOwyByCMFbYmplXxe0B/gH6H/YwFntv3xd7ROFw9suoA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by PRAPR10MB7622.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:295::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.19; Thu, 27 Apr
- 2023 09:21:11 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d9cd:f02a:9a74:b797]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d9cd:f02a:9a74:b797%4]) with mapi id 15.20.6340.022; Thu, 27 Apr 2023
- 09:21:11 +0000
-Date:   Thu, 27 Apr 2023 11:21:06 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Simon Guinot <simon.guinot@sequanux.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Xing Tong Wu <xingtong.wu@siemens.com>
-Subject: Re: [PATCH 1/1] gpio-f7188x: fix pin count on nct6116d bank 7
-Message-ID: <20230427112106.697dd352@md1za8fc.ad001.siemens.net>
-In-Reply-To: <ZEoydXMDRONgbhY8@76cbfcf04d45>
-References: <20230425153911.32135-1-henning.schild@siemens.com>
-        <20230425153911.32135-2-henning.schild@siemens.com>
-        <ZEoydXMDRONgbhY8@76cbfcf04d45>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0121.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::8) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Thu, 27 Apr 2023 05:22:21 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD286E7B
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:22:08 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so4770990a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682587327; x=1685179327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iEYtiCxAFTT9nXuyjd6W9FGtnnEdizlurXntdkjLbWw=;
+        b=DjlOfwcGalpmFwZRlwKkvYAn8STIQN+MKG4F65GC4r7jVv1sLRLlBH3Wcxen9DqUeN
+         0bm6Gj7fDcuXsqj4nk5i662ifcqhyZEZYZH21y+uUc9rNB3V5EQEPJ0Ac8Sxt22MJstO
+         7nwaf8iTBOVAnavohH1/kWyE76bbKgVXU2yrnc4OQGBmJw42GNzTot1mAiGOqFKbrfDJ
+         Nf2GhDxWo836YKH6ifbrTfRhoscfANxgxxCyiOL6eAdqfFrf8OVPxld7nXem9N82ZJNO
+         VGbizhpTMriKxG5mAYlx5TjLuE8/TjK6tn0hx3iC0JAnKmwgG7BFg734fn5nuVsAqFJE
+         Ygew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682587327; x=1685179327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iEYtiCxAFTT9nXuyjd6W9FGtnnEdizlurXntdkjLbWw=;
+        b=K/+AsxzFhsdgHyXWEoNnf6c40z3PFD9jY8iEtF4I1T1pVunw93GhHH+f0iEXoAoh9B
+         mtEwnJ16SMQ3eAr1CjvbvQVNbx3w5Sc3+9K7GcAHiZv394A2URKdK4WBmFmxefwamFTr
+         06YwBEQT+ZmNpBmP0LTrduCDwy6gZ/mVoRflU8aDwDdJkWNvL5zT363aBaa941U80Z3c
+         U/m8T5B1HmEG7KZ1gsntcq1A55ksdbSbdDjFMoKH6M/hBdMvc+LXHRVdlRMbq7l4cLTs
+         6WVJCa8rlp08MbnJ5fSQnNomxKijPAblwUOQY8seTiSHNCByjxWNGIDtzc8VR66tndS5
+         w29w==
+X-Gm-Message-State: AC+VfDxDyUHSEyTVLjKivsbQjKkzZKyQ4257rv2Zsh1/KTFHv4u8D0xF
+        DaJkp8x10QmQix0BYs/IEZ9jadeGhjBdYgDDHcZc/w==
+X-Google-Smtp-Source: ACHHUZ6Wh6BlH1ULxXd9iM0lMPTwmt36G5WzavnnZJLbSCA2zK7uzCMIdtusMtFTayJZMi7PrZ7HhYe2KoJozkEu5Wk=
+X-Received: by 2002:a05:6402:5114:b0:506:bd27:a2f0 with SMTP id
+ m20-20020a056402511400b00506bd27a2f0mr4578982edd.15.1682587326986; Thu, 27
+ Apr 2023 02:22:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|PRAPR10MB7622:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d71c220-0f82-4edc-6684-08db4700bd7d
-X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XYHhg3NWgNmzNxjeB992oLqO35IOadJ9sGqPyJkd817nFaNCYaDZNnSzCQJaF6DokYgK4UbcIZxbiAycETW8fE536dvCxdjblHbsQs+x93ZQS9f1WjOCEi/kLEYwjmluFRHiNN2pCApcoEo4DXjgzWZVtoYww8730o3ArR4gQ2YrGe4itGMxKqLXAYPXXZUVxuGaSUxXripqEyddzW7CqS9ZeZ172ereI1ytPR/gibxDrcjRAMYu5Cr7XiU6/QOBTCtGgQQP1Iinp/kqwmfO6kACyez6JKgAfFft6EPLK1qirIIH77XoC/arjnVXI/3NA+DVbRotZ1qDxl3GxJxabA1r13GUfPMhUawFRtuF/wCjpNVlydbtdJgcQn7JMLqk2ni4eeygAGEql0fO0zhSCVF29L9L6gIYHMUiFkCa2Pct2l1Cu05VQAVDD22jYgBT8vSNeMpyMGnFWk/zHt0QNnu8e6t1yYpsK/pySFh91Wq7DCMJHyRb/jUNJT0Cs4D9+geANzg+Rg3yLeJ25RYGDz//9JeuFk2Xqjb6lEgpPWHmPUC6zriaADqwPzLvGYis
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199021)(5660300002)(41300700001)(6486002)(8936002)(8676002)(83380400001)(26005)(86362001)(1076003)(9686003)(6506007)(107886003)(6512007)(82960400001)(186003)(38100700002)(66476007)(6916009)(478600001)(4326008)(316002)(54906003)(6666004)(66946007)(66556008)(2906002)(44832011)(66899021);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PJ/8KYyHJonlv3TOp2YltjwZ85qshsNWgw9zKL54eZ7kCffqh7Km2IhwfS56?=
- =?us-ascii?Q?DuH2Gkq/HFteURAeVrc1RXiOIwDNjK4kfNovPz9HYtZq48ZxLOexQ5Au8zix?=
- =?us-ascii?Q?KgsnHVe8A8K/a8NwF+lFpvwAN7FOoVu3ywLYeclJvamPKlFFfADjcz0i4KiH?=
- =?us-ascii?Q?AAswXl87Aow+dOLESi4SqjliIFECvpNZlOhYtHnlXDL75xU8AdbHz9Wg/5Wt?=
- =?us-ascii?Q?gtRsVOZf2BG8Wu4RwbmUqaylyPfHgM3hzP3iEWdFhfEMFtW6kg9sZhq9d9Uu?=
- =?us-ascii?Q?NV74gZynYQo2wYS2SeD2zbtqoCImMdGxrome6FLf4Swzii8X5HerA9vkGwL3?=
- =?us-ascii?Q?Ir+iZd0nc5vZad8kPOqDKAYy88j6A7dNAjiLVII72xSYyyq+BcGcuVyHQbp4?=
- =?us-ascii?Q?NQzzzU2Qoe2lDvJLuvjDhwwUyPycG28aoY5zFD9r/2bXlr6OsrWWueA98opE?=
- =?us-ascii?Q?mGmpQmBj2THmwisuuFtulbykYlmTu3cYA2gsc14EMeUsJjvrZb1VGVP9O94u?=
- =?us-ascii?Q?OWYZbby4ybL0wy26gyRR4QTB59ZXiZY76bkHWRB5qs2INhja+Ns7/o/WthQn?=
- =?us-ascii?Q?AFlDVSK8wQUDUwbNQzMN3z1s1DslEaaN9uZ+DgwKMTjPrOchXWVOt9pAiXHl?=
- =?us-ascii?Q?dQIDkcREVH3isRkTyKFEoJgOQCFq7HQqDgxoTebzVg+c5sEGXJ4AZuabhPyI?=
- =?us-ascii?Q?fhbSLET6oMDNi0M4o434T008HzHKdYoQgkuj2Vvsp13Mrph64//3N2/QgxQw?=
- =?us-ascii?Q?HuHj8PnrMWQx/3OJWJXD0hYViRDJtNu7678rn2a90Qtt4vAmY8mdb5a+1ZKJ?=
- =?us-ascii?Q?uIhs8YcIMAJ7jHsQq67w7Tw48OuC43irTXyWSIHYofOQNLsRWxbGbl/+cSiq?=
- =?us-ascii?Q?uN2tkY8UIsaV4W704ElGX1aXfTYhmk4AgBm2I4z9vS3Eph5Ba9aSRZBx4Vuw?=
- =?us-ascii?Q?mcXRdCXelBU310KGyyffTki3P2/GVg0TRt5CT2c+FovWZgiIiJaVBJPLASYl?=
- =?us-ascii?Q?OMCwUf4xln91kIOzKqxaRqXQfWU/0T7tpBjqaSQHAUSYHk6gPRckK1jrYLT6?=
- =?us-ascii?Q?OK1YJK0rNOvsspKvLtQjF1hu7lEqiUaXTwVhld8OTNm403cFjUNf5D7FU9Ve?=
- =?us-ascii?Q?oeK8BneqXaLJAwFK79Vo3+0kI9qMqCk1bC3/cr2X4wbtUB9PpNr/cD6264WD?=
- =?us-ascii?Q?txNHnb1tnTqDhozVHM9hj6PfF7e76PtQkdtG+Z13B3l5jzjukAsQHqAKLh0y?=
- =?us-ascii?Q?m2er4em0jGUn1fBPCiHkemrwzuWjcabVXj6KZNXe10jOrWZ8uMst23ZkSYWS?=
- =?us-ascii?Q?Eu8GRA/KkJjzJ7U1Y89gncmH4ylGTJLIBoHwNi72v0Vj+nloBIYIP2Y+klNO?=
- =?us-ascii?Q?IBBgq5xIZkOpsoURipX3gwJEDFOyfv9ljYI/EzWsSbBjiutZT0TKuRbxrspd?=
- =?us-ascii?Q?fzU4Mf/gkE6BxX9Zqx4cMUY/p9dV7uF/42QhgtUhxh+e1A8RJ1hnAG8oFsTI?=
- =?us-ascii?Q?eHzKu6hLYMnnetwm9Z+i4DWcZDe2FKGWJj8gscS6XWXhhxSCN4KtQdqWjOW7?=
- =?us-ascii?Q?l0qFW6M4+Dpt2j9phBEGOwutPCPg67zaNIz2vwMTmm2/PrKWIbEg9bvME5Wn?=
- =?us-ascii?Q?YA=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d71c220-0f82-4edc-6684-08db4700bd7d
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 09:21:11.1439
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JijGIgdgTaXT0xZP3i44srVcQiKzH4z0PVFV5NcW6hft6URVWkdyXTwqpl3JS2IKuzgxsb2DJ7xcB0OoxHRR8ALsibNP5YfnYkIWBz5YWeo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PRAPR10MB7622
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230426133919.1342942-1-yosryahmed@google.com>
+ <20230426133919.1342942-3-yosryahmed@google.com> <ZElC127xlU2NtlqF@dhcp22.suse.cz>
+In-Reply-To: <ZElC127xlU2NtlqF@dhcp22.suse.cz>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 27 Apr 2023 02:21:30 -0700
+Message-ID: <CAJD7tkZ1cODXRuVQ3fWL0s=VsyKZqDPPNqFZec_COAXm0XfXWA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] memcg: dump memory.stat during cgroup OOM for v1
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Petr Mladek <pmladek@suse.com>, Chris Li <chrisl@kernel.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, 27 Apr 2023 10:29:41 +0200
-schrieb Simon Guinot <simon.guinot@sequanux.org>:
+On Wed, Apr 26, 2023 at 8:27=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
+>
+> On Wed 26-04-23 13:39:19, Yosry Ahmed wrote:
+> > Commit c8713d0b2312 ("mm: memcontrol: dump memory.stat during cgroup
+> > OOM") made sure we dump all the stats in memory.stat during a cgroup
+> > OOM, but it also introduced a slight behavioral change. The code used t=
+o
+> > print the non-hierarchical v1 cgroup stats for the entire cgroup
+> > subtree, not it only prints the v2 cgroup stats for the cgroup under
+> > OOM.
+> >
+> > Although v2 stats are a superset of v1 stats, some of them have
+> > different naming. We also lost the non-hierarchical stats for the cgrou=
+p
+> > under OOM in v1.
+>
+> Why is that a problem worth solving? It would be also nice to add an
+> example of the oom report before and after the patch.
+> --
+> Michal Hocko
+> SUSE Labs
 
-> On Tue, Apr 25, 2023 at 05:39:11PM +0200, Henning Schild wrote:
-> > The count was wrong because i looked at the wrong spec for the chip
-> > in question. I now got access to the spec for that very chip and
-> > group7 has all 8 pins, just like the other groups.  
-> 
-> Did you use the NCT6102D / NCT6106D datasheet in a first place ?
+Thanks for taking a look!
 
-I do not remember which one, but one of the few one could find online.
-Now i have datasheets for two chips directly from the vendor, both
-files not publicly available and i am afraid i can not share.
+The problem is that when upgrading to a kernel that contains
+c8713d0b2312 on cgroup v1, the OOM logs suddenly change. The stats
+names become different, a couple of stats are gone, and the
+non-hierarchical stats disappear.
 
-> If the only difference with NCT6116D is the number of pins on port
-> GPIO-7, then maybe we should handle it and claim support for this
-> models as well ?
+The non-hierarchical stats are important to identify if a memcg OOM'd
+because of the memory consumption of its own processes or its
+descendants. In the example below, I created a parent memcg "a", and a
+child memcg "b". A process in "a" itself ("tail" in this case) is
+hogging memory and causing an OOM, not the processes in the child "b"
+(the "sleep" processes). With non-hierarchical stats, it's clear that
+this is the case.
 
-Please hold this patch back until i confirm again. It might be that i
-got the model name wrong as well and might have to fix some strings. I
-basically started my journey with a preliminary driver i got from
-Nuvoton, which maybe made me think i was looking at a NCT6116D while i
-was not.
+Also, it is generally nice to keep things consistent as much as
+possible. The sudden change of the OOM log with the kernel upgrade is
+confusing, especially that the memcg stats in the OOM logs in cgroup
+v1 now look different from the stats in memory.stat. This patch
+restores the consistency for cgroup v1, without affecting cgroup v2.
+IMO, it's also a nice cleanup to have the stats formatting code be
+consistent across cgroup v1 and v2. I personally didn't like the
+memory_stat_format() vs. memcg_stat_show() distinction.
 
-At least that is what the chip IDs from the specs seem to strongly
-suggest.
+Here is a sample of the OOM logs from the scenario described above:
 
-I am sorry for the confusion and will try to clean that up.
+Before:
+[   88.339330] memory: usage 10240kB, limit 10240kB, failcnt 54
+[   88.339340] memory+swap: usage 10240kB, limit 9007199254740988kB, failcn=
+t 0
+[   88.339347] kmem: usage 552kB, limit 9007199254740988kB, failcnt 0
+[   88.339348] Memory cgroup stats for /a:
+[   88.339458] anon 9900032
+[   88.339483] file 0
+[   88.339483] kernel 565248
+[   88.339484] kernel_stack 0
+[   88.339485] pagetables 294912
+[   88.339486] sec_pagetables 0
+[   88.339486] percpu 15584
+[   88.339487] sock 0
+[   88.339487] vmalloc 0
+[   88.339488] shmem 0
+[   88.339488] zswap 0
+[   88.339489] zswapped 0
+[   88.339489] file_mapped 0
+[   88.339490] file_dirty 0
+[   88.339490] file_writeback 0
+[   88.339491] swapcached 0
+[   88.339491] anon_thp 2097152
+[   88.339492] file_thp 0
+[   88.339492] shmem_thp 0
+[   88.339497] inactive_anon 9797632
+[   88.339498] active_anon 45056
+[   88.339498] inactive_file 0
+[   88.339499] active_file 0
+[   88.339499] unevictable 0
+[   88.339500] slab_reclaimable 19888
+[   88.339500] slab_unreclaimable 42752
+[   88.339501] slab 62640
+[   88.339501] workingset_refault_anon 0
+[   88.339502] workingset_refault_file 0
+[   88.339502] workingset_activate_anon 0
+[   88.339503] workingset_activate_file 0
+[   88.339503] workingset_restore_anon 0
+[   88.339504] workingset_restore_file 0
+[   88.339504] workingset_nodereclaim 0
+[   88.339505] pgscan 0
+[   88.339505] pgsteal 0
+[   88.339506] pgscan_kswapd 0
+[   88.339506] pgscan_direct 0
+[   88.339507] pgscan_khugepaged 0
+[   88.339507] pgsteal_kswapd 0
+[   88.339508] pgsteal_direct 0
+[   88.339508] pgsteal_khugepaged 0
+[   88.339509] pgfault 2750
+[   88.339509] pgmajfault 0
+[   88.339510] pgrefill 0
+[   88.339510] pgactivate 1
+[   88.339511] pgdeactivate 0
+[   88.339511] pglazyfree 0
+[   88.339512] pglazyfreed 0
+[   88.339512] zswpin 0
+[   88.339513] zswpout 0
+[   88.339513] thp_fault_alloc 0
+[   88.339514] thp_collapse_alloc 1
+[   88.339514] Tasks state (memory values in pages):
+[   88.339515] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes
+swapents oom_score_adj name
+[   88.339516] [    108]     0   108     2986     2624    61440
+0             0 tail
+[   88.339525] [     97]     0    97      724      352    32768
+0             0 sleep
+[   88.339538] [     99]     0    99      724      352    32768
+0             0 sleep
+[   88.339541] [     98]     0    98      724      320    32768
+0             0 sleep
+[   88.339542] [    101]     0   101      724      320    32768
+0             0 sleep
+[   88.339544] [    102]     0   102      724      352    32768
+0             0 sleep
+[   88.339546] [    103]     0   103      724      352    32768
+0             0 sleep
+[   88.339548] [    104]     0   104      724      352    32768
+0             0 sleep
+[   88.339549] [    105]     0   105      724      352    32768
+0             0 sleep
+[   88.339551] [    100]     0   100      724      352    32768
+0             0 sleep
+[   88.339558] [    106]     0   106      724      352    32768
+0             0 sleep
+[   88.339563] oom-kill:constraint=3DCONSTRAINT_MEMCG,nodemask=3D(null),cpu=
+set=3D/,mems_allowed=3D0-2,oom_memcg=3D/a,task_memcg=3D/a,task=3Dtail,pid=
+=3D108,uid0
+[   88.339588] Memory cgroup out of memory: Killed process 108 (tail)
+total-vm:11944kB, anon-rss:9216kB, file-rss:0kB, shmem-rss:1280kB,
+UID:00
 
-Now having access to some of those specs, i can offer to add more
-variants without testing. Such support would be in patches on top, not
-subject to fixing what we have in stable already. But i would only do
-this on demand and have a weird feeling about it, the code might be
-trivial but i have no means of testing.
 
-Henning
-
-> Simon
->  
-> > 
-> > Fixes: d0918a84aff0 ("gpio-f7188x: Add GPIO support for Nuvoton
-> > NCT6116") Reported-by: Xing Tong Wu <xingtong.wu@siemens.com>
-> > Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> > ---
-> >  drivers/gpio/gpio-f7188x.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
-> > index 9effa7769bef..05c0edc4778f 100644
-> > --- a/drivers/gpio/gpio-f7188x.c
-> > +++ b/drivers/gpio/gpio-f7188x.c
-> > @@ -282,7 +282,7 @@ static struct f7188x_gpio_bank
-> > nct6116d_gpio_bank[] = { F7188X_GPIO_BANK(40, 8, 0xF0, DRVNAME
-> > "-4"), F7188X_GPIO_BANK(50, 8, 0xF4, DRVNAME "-5"),
-> >  	F7188X_GPIO_BANK(60, 8, 0xF8, DRVNAME "-6"),
-> > -	F7188X_GPIO_BANK(70, 1, 0xFC, DRVNAME "-7"),
-> > +	F7188X_GPIO_BANK(70, 8, 0xFC, DRVNAME "-7"),
-> >  };
-> >  
-> >  static int f7188x_gpio_get_direction(struct gpio_chip *chip,
-> > unsigned offset) -- 
-> > 2.39.2  
-
+After:
+[   74.447997] memory: usage 10240kB, limit 10240kB, failcnt 116
+[   74.447998] memory+swap: usage 10240kB, limit 9007199254740988kB, failcn=
+t 0
+[   74.448000] kmem: usage 548kB, limit 9007199254740988kB, failcnt 0
+[   74.448001] Memory cgroup stats for /a:
+[   74.448103] cache 0
+[   74.448104] rss 9433088
+[   74.448105] rss_huge 2097152
+[   74.448105] shmem 0
+[   74.448106] mapped_file 0
+[   74.448106] dirty 0
+[   74.448107] writeback 0
+[   74.448107] workingset_refault_anon 0
+[   74.448108] workingset_refault_file 0
+[   74.448109] swap 0
+[   74.448109] pgpgin 2304
+[   74.448110] pgpgout 512
+[   74.448111] pgfault 2332
+[   74.448111] pgmajfault 0
+[   74.448112] inactive_anon 9388032
+[   74.448112] active_anon 4096
+[   74.448113] inactive_file 0
+[   74.448113] active_file 0
+[   74.448114] unevictable 0
+[   74.448114] hierarchical_memory_limit 10485760
+[   74.448115] hierarchical_memsw_limit 9223372036854771712
+[   74.448116] total_cache 0
+[   74.448116] total_rss 9818112
+[   74.448117] total_rss_huge 2097152
+[   74.448118] total_shmem 0
+[   74.448118] total_mapped_file 0
+[   74.448119] total_dirty 0
+[   74.448119] total_writeback 0
+[   74.448120] total_workingset_refault_anon 0
+[   74.448120] total_workingset_refault_file 0
+[   74.448121] total_swap 0
+[   74.448121] total_pgpgin 2407
+[   74.448121] total_pgpgout 521
+[   74.448122] total_pgfault 2734
+[   74.448122] total_pgmajfault 0
+[   74.448123] total_inactive_anon 9715712
+[   74.448123] total_active_anon 45056
+[   74.448124] total_inactive_file 0
+[   74.448124] total_active_file 0
+[   74.448125] total_unevictable 0
+[   74.448125] Tasks state (memory values in pages):
+[   74.448126] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes
+swapents oom_score_adj name
+[   74.448127] [    107]     0   107     2982     2592    61440
+0             0 tail
+[   74.448131] [     97]     0    97      724      352    32768
+0             0 sleep
+[   74.448134] [     98]     0    98      724      352    32768
+0             0 sleep
+[   74.448136] [     99]     0    99      724      352    32768
+0             0 sleep
+[   74.448137] [    101]     0   101      724      352    32768
+0             0 sleep
+[   74.448139] [    102]     0   102      724      352    32768
+0             0 sleep
+[   74.448141] [    103]     0   103      724      352    28672
+0             0 sleep
+[   74.448143] [    104]     0   104      724      352    32768
+0             0 sleep
+[   74.448144] [    105]     0   105      724      352    32768
+0             0 sleep
+[   74.448146] [    106]     0   106      724      352    32768
+0             0 sleep
+[   74.448148] [    100]     0   100      724      352    32768
+0             0 sleep
+[   74.448155] oom-kill:constraint=3DCONSTRAINT_MEMCG,nodemask=3D(null),cpu=
+set=3D/,mems_allowed=3D0-2,oom_memcg=3D/a,task_memcg=3D/a,task=3Dtail,pid=
+=3D107,uid0
+[   74.448178] Memory cgroup out of memory: Killed process 107 (tail)
+total-vm:11928kB, anon-rss:9088kB, file-rss:0kB, shmem-rss:1280kB,
+UID:00
