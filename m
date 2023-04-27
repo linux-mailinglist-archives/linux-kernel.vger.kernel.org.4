@@ -2,252 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC376F0F2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445836F0F30
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344359AbjD0XkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S1344423AbjD0Xml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 19:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344432AbjD0XkJ (ORCPT
+        with ESMTP id S1344277AbjD0Xmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:40:09 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507512D55
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 16:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682638807; x=1714174807;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=b0Nv18EPDO/68IevaScKIlb98A/kRwioZQRK2ntey8M=;
-  b=EO1mNStKl0HJ/Pt3qJ0WuWt3shei8sDwsc99gqk3xKIdK+qTdZ2Ew8ec
-   elvN15jmAjTOjivkd9/gOFMzAY8U7Mwk0hT3YoAAbg3ROdi03gy3F9KIQ
-   Ye53PODmLzowpyXdGhHoyBVAHoRBlZT510UbOwEcLw4X1akfTg6gEhJ3i
-   kwOqkzUYudOHVfaYKn/5D2nCeZw0O0ZjB+/WZNxVdvwM6qgoRR5XLNRX8
-   1Z4ITVYYN8c9RdI0DHvINxXOQQVjMZ4Qo8Tt9FtrreHrX2cCVZtcMOAFq
-   158pZxEPA6zf6/EGbn08Z01JKIAKBGY7xS3klNfaoJoIyw8cFJjPA8CJC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="336632619"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="336632619"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 16:40:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="764049535"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="764049535"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga004.fm.intel.com with ESMTP; 27 Apr 2023 16:40:06 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 16:40:05 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 27 Apr 2023 16:40:05 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 27 Apr 2023 16:40:05 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 27 Apr 2023 16:40:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HttCpQBTSnmRwvGHsG/2lU4dKSOPZd7nZvhrSpl79FxoEU7ZcNfzapCXxkA/zGkNjEzriSJLhqQCXK/efZ+klLK/oCOUD5stue9qou9p/dZqgLP9j+A2VgXC7O5naOxOEpJLKoulZaY4TbGj9gCvAtxllEPodHD60hkxlXOeWJAOXXx0RVEhglI9HptswuCYgUnIT8zcx6qa8WIvOLyHhgguqkufNAeRvLhKtKMvJ1NnOhen3tEbDZyxkQ+BQ+fNA7cm5B4s2OS3dXZxtGBEz8+x5TYhJnk7WzYMzeH3wOcxedwcHCQal1MO9aqahC+FmeNeIPw0HCswFd9Jtk2s6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hem/5pMIJA8Nc9XlSI7WUTZOZmzLUa1MWNJCfRK7/54=;
- b=noyqRNDbHUnFvn6gAy2RCiq7GL/ybSFsMyDyAdZgmNCeVMICXNfaj1/d2xjUxScBe/2/LdUDDKyYeDpi3mA8cQ7OE8Vx754BWCSsEtIRPTKEmKnb38386LjHxeQmGGxxpWyejro2V4ffJ1S8xoSu+MedMFUuh2vTOfuKQ5DUo+67wdr5bDuyPhUAT0NF7G4WB9RTrj4HucPretokYLLgf6c5ljmFK2BwQOfz02Ydn4ymJpuYwVEkn+Z3FkUF5khiVQSWodHd/ncxg4OtLe0Gn9WFEyJrSFrJqDXbzAU0LBwLYS701poe50BHwpdglhLUoa5xneB4DP+6vg3oDsTQow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by CH0PR11MB5460.namprd11.prod.outlook.com (2603:10b6:610:d3::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Thu, 27 Apr
- 2023 23:40:02 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6340.022; Thu, 27 Apr 2023
- 23:40:02 +0000
-Message-ID: <28845d8b-cf7a-b5b7-d5ae-1284e33d063c@intel.com>
-Date:   Thu, 27 Apr 2023 16:40:00 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 11/19] x86/resctrl: Allow arch to allocate memory
- needed in resctrl_arch_rmid_read()
-Content-Language: en-US
-To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        <carl@os.amperecomputing.com>, <lcherian@marvell.com>,
-        <bobo.shaobowang@huawei.com>, <tan.shaopeng@fujitsu.com>,
-        <xingxin.hx@openanolis.org>, <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>
-References: <20230320172620.18254-1-james.morse@arm.com>
- <20230320172620.18254-12-james.morse@arm.com>
- <36af82d5-0d48-f899-9e95-1ec89be20581@intel.com>
- <24d3616a-7800-ba91-deed-8bcc639ce6ba@arm.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <24d3616a-7800-ba91-deed-8bcc639ce6ba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0184.namprd03.prod.outlook.com
- (2603:10b6:a03:2ef::9) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Thu, 27 Apr 2023 19:42:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D46930F1;
+        Thu, 27 Apr 2023 16:42:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-2f3fe12de15so5659696f8f.3;
+        Thu, 27 Apr 2023 16:42:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682638956; x=1685230956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5XGoYes4lZe9LymJ1b7BEtzp9oEzXqkK69ZXVdNGO28=;
+        b=fL2eTb8MSCdfF5H27s7rWxS11eVMySNR+UgjCaYYPyw7IM6/KjLmevrV4cS/3ssY7q
+         ZKuM9oVuXrzc+BmFpYkE8GriSs1WUGQwJZXOt4bIfKDFE3NIf3QyilBbtC4tYhmZQ6z2
+         YD7LxwXGZSHZUjSJ8NTdeMEnbrP9bqIhM6GJHNXATHwmBNO/vOdyGR/tezN+6/zgO1KJ
+         wOGuBclWRddmRNkp7hLbCm7EG4IDKsn+mUVcbDp5Tl/lRWGpaN0hA7JAh5l8hXH/Un/R
+         rBJNVbIRvBBJk7wb9yB9vJbKAgSdRYeKaqtk7BJV4Kg99hInez3GR83H+MT5mmZdZF9X
+         h8oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682638956; x=1685230956;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5XGoYes4lZe9LymJ1b7BEtzp9oEzXqkK69ZXVdNGO28=;
+        b=OVKSdhjL7Q2K/b3jn5nnLXBT/qoju04TybaFFAfbITHJzrPrTTY+VB8P0M3pUcOFWF
+         sze95ib+5apKFqyLVIib+IZcHxOa7nywAizqAOkivLFZqZOnB3NzD3SbiVFDBxyoFCRf
+         Y6lWm/3NDwuWJLrMM7xIZmCPfTCrBtEOjpRWxL6SBJqQ3MGvf/XbiDAXOwzVargVmxuC
+         +nLqgYCXdubFas25nUgMeJyWgWUnEuSMP8h8G2a9D14xfErVcQG5xCD0hIr1/Dit+++Z
+         AglN5kU6chY2Kyemjxwg6XkruDz5D48oiISyxhaXuwbksHKoTxWNB5DQMbcIhT+dL0I5
+         oSiw==
+X-Gm-Message-State: AC+VfDxyqSgKxmo9toTiobZsInnFUZoXiixkzSPeMf6EMLL1UGCcXSMw
+        T/mKnhLCm1tILD7oJavME+0=
+X-Google-Smtp-Source: ACHHUZ5syc0yXE2yBca5rqHV13IbDMibdyJ67dnjXrlxd6c+k+UUY77z8gG0q+NaJLFkvL+tcsHgEA==
+X-Received: by 2002:a5d:620d:0:b0:2f5:3fa1:6226 with SMTP id y13-20020a5d620d000000b002f53fa16226mr2407368wru.14.1682638956261;
+        Thu, 27 Apr 2023 16:42:36 -0700 (PDT)
+Received: from lucifer.home (host86-156-84-164.range86-156.btcentralplus.com. [86.156.84.164])
+        by smtp.googlemail.com with ESMTPSA id 25-20020a05600c025900b003ed2c0a0f37sm22520047wmj.35.2023.04.27.16.42.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 16:42:35 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings by default
+Date:   Fri, 28 Apr 2023 00:42:32 +0100
+Message-Id: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CH0PR11MB5460:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e8b703f-d418-4355-3602-08db4778b8c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U3cYT2tNqi9ird+7nUtJOd1lpIB9baX3NYyrOuiEvaXyd6juvW8p4aoYfRpxN2wgsMnvhLm6Tm00T8E0MR4pynj8mM8CxUhbax7VNcc9Q+QEJSwP9WWtZ5a/nIkBDWyxIFkRH1h79SWMM13I77xaTB7w4gESwXb9pEDmYGOYnmWsgxSjvRfpW5sGDHNGjmGCn5ZJAEtMot6oL1A6kGEch4Ln3Y64kHS0WzSPsGo+sI3l+qeuBzm2v6y5fX8rOAo8WAbibKwWiVXbP2SKebuzjxBcQsc4U0WayUdBfn8fgVPaWecavkOqME0PmhLKiXXrjTr5aO42zC9W1dg5aVG6O8947GOHDBeyx55IdWNf4Db83ZCKBWZwrTpOiHTuPmWL9P6dhdXGrYGxlybQV1UJ3gtT7SGk/XfceAnARNWeMmZGu1beH3h3bQM5szRHRfJtA2TdXfYthl5x8VPuPJEwqdBoM+Uqxd8JTQI7FDH3cskAYihwfNv7MMKD4utgxQ/X8hpUEBvDoXX2EiwItBTY2CyxefqsF0DM3dj0teKnHcG5MpnWAgrnXXcj4yHitnqUGjTEeBW7smb7P22aiSihDnJvZWbT9hov2MwjVzsYp1M0j06VQPd8JH7W108hOSjVR1HhNowMQiIJX2uCStEvzA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(346002)(136003)(376002)(366004)(396003)(451199021)(26005)(2616005)(6506007)(316002)(66476007)(41300700001)(31686004)(4326008)(66556008)(66946007)(31696002)(82960400001)(83380400001)(6512007)(53546011)(186003)(86362001)(6486002)(36756003)(478600001)(5660300002)(2906002)(54906003)(38100700002)(8936002)(8676002)(44832011)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1MzR3lyK29tSkVsTDJLSTJ2WitUMTNiZjhSaWI5bGhYS0FCMlhjZWtPNkFz?=
- =?utf-8?B?TUJWTlQxdGlxUjV3R0NxMVByN2pIQzZKSURpalYvaHo0Z1U3bjFrN2lMZFVK?=
- =?utf-8?B?aFRVUHVPMFBOR1pZWG96QTJLbUVOcHJHckRjQ3U2bkJMdm9UUDhlSGJUa3Nu?=
- =?utf-8?B?U0MzZ0RzMGpCeGZIZTNtQ2tCcnpCZ3c2WVRmTHNKQWFtWVp2Y3B3NzNCZnpx?=
- =?utf-8?B?U3p5ZERIME15Z0RqREFkdGM3cGorOWY5UDRuMXRKQ3JTTWdpTnYrMFpFNFAx?=
- =?utf-8?B?UDY1ZHZ2RDhHSVZaRFpEa09EQWkra3E3NllVS3NFZHhHSzdmK25oRW9xTHZ2?=
- =?utf-8?B?b0VodGY3WmU3dFZ2bkNPdkl2dDRSNXFNNjhNRUh6WEhydk9TYlJKeS9tRzRl?=
- =?utf-8?B?Rk9vWmdEbkZsRzVxYnVzTlNlUXZzZHVCYjV6S3RFSU0wTXJwUDBQVm1ZbEFx?=
- =?utf-8?B?ek9TNC8zcmdTbjlDYjBsd1hCT0llTitaSThvVmZlYWx0TGNSYnhYVmhzUjBX?=
- =?utf-8?B?aDZwZ09aUmFVY0pOdVFCRzh4eE1CNG5VNFBTeStPTmQ5b1RGQnhiSENhRmVH?=
- =?utf-8?B?dk9jTXRtVSs2OE9qVUNmdXNQUFplejBwTjZsR0NKY2VhZkQxTDc1Rkh2Ukwv?=
- =?utf-8?B?RHRrN0NzSytJdkJ0cFBvdmRVZzlaU3FzUmMrbVZya2F1eVNmTTZDV3djek0w?=
- =?utf-8?B?REcvdjhrN0N0NjNHWWpvWUZPV2lZclVrSytUN3ErYWl5b25OVUE2bXNEUXFN?=
- =?utf-8?B?eExqUG9sajhDU1A3bkVxN0RXZHByV0ZFblFpZHg5b1k0NkVkcWxOWE1PNmdp?=
- =?utf-8?B?VmIyWkVSVHgzUDNpWWhJOXZMeFdFajVjeW1JVXRjM0hmTDB3UnV0ODVnVjhT?=
- =?utf-8?B?N25MbGtQYTc1Ty9TamtkVXkwZ0o1WHdvRTFxbjU3c3VhWmIrWmpsaDZCREtY?=
- =?utf-8?B?MDE0MzRRaml1dlZ2OXMycjdGWm9ERHZMN2hrSGhNZFpTMUl2RkpMMW9HL1NV?=
- =?utf-8?B?cUY1d0I3djJ4SnFuMFZLQWh4QmhkK1VydGwrQlBMVVZtUFIyd1RnT1VDVEpD?=
- =?utf-8?B?U215ci9vZHJ2WVRGYnRpallXRGI2MFczajRqemtVanQrUmRvVGcyclZFWFdV?=
- =?utf-8?B?T0Z3dElzS1hnVThKYit2bEFrT2NuWisrQ09WeUVCd0d5dGtxVmRSNnJtU0Mv?=
- =?utf-8?B?M3E0dXB5dWJsYWFRdzFHSVkzclEyWDRlZDBSaFZwek9ucXdnYUE3MjdKWW5Y?=
- =?utf-8?B?WHFuN0k5Y3JKbFFYdXhQU0UzeWdlTWNpWTJ6UXpzQmJvVVMwTEl2aFNJVWVj?=
- =?utf-8?B?aVJIeGhzbjEwWUcrVVdFUUFGeWp0V1NlcHd6OEpPeHc3RnlVL3dWdHdNTkdi?=
- =?utf-8?B?WHM0WlVtVWFQV29ueDZaWnhLUnNyTFFlTHoxc285Y05aR1AyT2k2Wm1TdWs1?=
- =?utf-8?B?NVRFZDdzMHVGMTNtcVA5RWkyQTJMcVoyQlZ2REdsOEtGY2xMSWpDd00rNzNX?=
- =?utf-8?B?MkpxaEhIQ3crMTBqNFlRZHNFalBGWWtnUU5YRTVpZkNaODE2NnFva1lTb3lm?=
- =?utf-8?B?c2RhRjkzdENML1hVV3JqeEU1TEJtUkhjdWJFdXlhVjNmcUdYSnNsaWMyVjNh?=
- =?utf-8?B?N2hWWjl0d0NUSWdUWFZDb1NDTzdTQzVoRkNDOURsVXY0Q216OEpSclM5a3Q3?=
- =?utf-8?B?dGpXMHZUR3llK0VLVzEzUFhXSlZkVWYyTHFwblBmR3loS0xySmNPK0w3TzEr?=
- =?utf-8?B?bVpzV1QyVi9sb0R0YVNhdTFkWkhuaWFjQU1mNmtQYS9BeHhWZjRpUng5TlFG?=
- =?utf-8?B?d0tNNDFYbFdlOXhZcnB5dlYzSStMQjkxVVpURnR6UzZ3Ty9JNmpDS3dleUpu?=
- =?utf-8?B?c0pMVkVsNFczV2NqN1c2SWhwR3V4ZFdacUUwdC9kTzRHZkpETDVJaHZRYjlu?=
- =?utf-8?B?bmN4NWdZNGZXZUkrQ0dYTkMzdmxaQzBjSGFINFJMaVJpYzlLSFpZSDNzc2o0?=
- =?utf-8?B?a2RMSExtVGoxdC9ZcTRIZHlzYThzUjdzVGpCenE1eEZLNzNoZ2tXMStRMTRF?=
- =?utf-8?B?MllWYnNZYXFpdVo1VXkrcmVodmVoWlNWQUo0ZUI0VnR5Y29YSkVmYzhYMTd4?=
- =?utf-8?B?YmNmcTU1MThWMzc1RWoyYzNmMktvOERBSDV5eVJySFM2eEhMTXIwWFdFZlh2?=
- =?utf-8?B?Tnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e8b703f-d418-4355-3602-08db4778b8c3
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 23:40:02.6311
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EJDU/8PEBK9feh9V7viTThRDaYpSMKE+MQyC5RCWVr+3Mxs/Kw3SAqQsWWf3xgUJ7JM4J2PtrB3GOm+0bXNALTwjvMpqAMRZU2N0Zmd6yLA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5460
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Writing to file-backed mappings which require folio dirty tracking using
+GUP is a fundamentally broken operation, as kernel write access to GUP
+mappings do not adhere to the semantics expected by a file system.
 
-On 4/27/2023 7:19 AM, James Morse wrote:
-> On 01/04/2023 00:27, Reinette Chatre wrote:
->> On 3/20/2023 10:26 AM, James Morse wrote:
+A GUP caller uses the direct mapping to access the folio, which does not
+cause write notify to trigger, nor does it enforce that the caller marks
+the folio dirty.
 
-...
+The problem arises when, after an initial write to the folio, writeback
+results in the folio being cleaned and then the caller, via the GUP
+interface, writes to the folio again.
 
->>>  #include <linux/module.h>
->>>  #include <linux/sizes.h>
->>>  #include <linux/slab.h>
->>> @@ -271,7 +272,7 @@ static void smp_call_rmid_read(void *_arg)
->>>  
->>>  int resctrl_arch_rmid_read(struct rdt_resource *r, struct rdt_domain *d,
->>>  			   u32 closid, u32 rmid, enum resctrl_event_id eventid,
->>> -			   u64 *val)
->>> +			   u64 *val, int ignored)
->>>  {
->>>  	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
->>>  	struct rdt_hw_domain *hw_dom = resctrl_to_arch_dom(d);
->>> @@ -317,9 +318,14 @@ void __check_limbo(struct rdt_domain *d, bool force_free)
->>>  	u32 idx_limit = resctrl_arch_system_num_rmid_idx();
->>>  	struct rmid_entry *entry;
->>>  	u32 idx, cur_idx = 1;
->>> +	int arch_mon_ctx;
->>>  	bool rmid_dirty;
->>>  	u64 val = 0;
->>>  
->>> +	arch_mon_ctx = resctrl_arch_mon_ctx_alloc(r, QOS_L3_OCCUP_EVENT_ID);
->>> +	if (arch_mon_ctx < 0)
->>> +		return;
-> 
->> The vision for this is not clear to me. When I read that context needs to be allocated
->> I expect it to return a pointer to some new context, not an int. What would the
->> "context" consist of?
-> 
-> It might just need a different name.
-> 
-> For MPAM, this is allocating a monitor, which is the hardware that does the counting in
-> the cache or the memory controller. The number of monitors is an implementation choice,
-> and may not match the number of CLOSID/RMID that are in use. There aren't guaranteed to be
-> enough to allocate one for every control or monitor group up front.
-> 
-> The int being returned is the allocated monitor's index. It identifies which monitor needs
-> programming to read the provided CLOSID/RMID, and the counter register to read with the value.
+As a result of the use of this secondary, direct, mapping to the folio no
+write notify will occur, and if the caller does mark the folio dirty, this
+will be done so unexpectedly.
 
-I see.
+For example, consider the following scenario:-
 
-> 
-> I can allocate memory for an int if you think that is clearer.
-> (I was hoping to leave that for whoever needs something bigger than a pointer)
+1. A folio is written to via GUP which write-faults the memory, notifying
+   the file system and dirtying the folio.
+2. Later, writeback is triggered, resulting in the folio being cleaned and
+   the PTE being marked read-only.
+3. The GUP caller writes to the folio, as it is mapped read/write via the
+   direct mapping.
+4. The GUP caller, now done with the page, unpins it and sets it dirty
+   (though it does not have to).
 
-I'd rather not complicate it in this way.
+This results in both data being written to a folio without writenotify, and
+the folio being dirtied unexpectedly (if the caller decides to do so).
 
->>> diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
->>> index ff7452f644e4..03e4f41cd336 100644
->>> --- a/include/linux/resctrl.h
->>> +++ b/include/linux/resctrl.h
->>> @@ -233,6 +233,7 @@ void resctrl_offline_domain(struct rdt_resource *r, struct rdt_domain *d);
->>>   * @rmid:		rmid of the counter to read.
->>>   * @eventid:		eventid to read, e.g. L3 occupancy.
->>>   * @val:		result of the counter read in bytes.
->>> + * @arch_mon_ctx:	An allocated context from resctrl_arch_mon_ctx_alloc().
->>>   *
-> 
->> Could this description be expanded to indicate what this context is used for?
-> 
-> Sure,
-> "An architecture specific value from resctrl_arch_mon_ctx_alloc(), for MPAM this
-> identifies the hardware monitor allocated for this read request".
+This issue was first reported by Jan Kara [1] in 2018, where the problem
+resulted in file system crashes.
 
-This helps. Thank you.
+This is only relevant when the mappings are file-backed and the underlying
+file system requires folio dirty tracking. File systems which do not, such
+as shmem or hugetlb, are not at risk and therefore can be written to
+without issue.
 
-Reinette
+Unfortunately this limitation of GUP has been present for some time and
+requires future rework of the GUP API in order to provide correct write
+access to such mappings.
+
+However, for the time being we introduce this check to prevent the most
+egregious case of this occurring, use of the FOLL_LONGTERM pin.
+
+These mappings are considerably more likely to be written to after
+folios are cleaned and thus simply must not be permitted to do so.
+
+As part of this change we separate out vma_needs_dirty_tracking() as a
+helper function to determine this which is distinct from
+vma_wants_writenotify() which is specific to determining which PTE flags to
+set.
+
+[1]:https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/
+
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+---
+ include/linux/mm.h |  1 +
+ mm/gup.c           | 41 ++++++++++++++++++++++++++++++++++++++++-
+ mm/mmap.c          | 36 +++++++++++++++++++++++++++---------
+ 3 files changed, 68 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 37554b08bb28..f7da02fc89c6 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2433,6 +2433,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
+ #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+ 					    MM_CP_UFFD_WP_RESOLVE)
+
++bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
+ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
+ static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
+ {
+diff --git a/mm/gup.c b/mm/gup.c
+index 1f72a717232b..d36a5db9feb1 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -959,16 +959,51 @@ static int faultin_page(struct vm_area_struct *vma,
+ 	return 0;
+ }
+
++/*
++ * Writing to file-backed mappings which require folio dirty tracking using GUP
++ * is a fundamentally broken operation, as kernel write access to GUP mappings
++ * do not adhere to the semantics expected by a file system.
++ *
++ * Consider the following scenario:-
++ *
++ * 1. A folio is written to via GUP which write-faults the memory, notifying
++ *    the file system and dirtying the folio.
++ * 2. Later, writeback is triggered, resulting in the folio being cleaned and
++ *    the PTE being marked read-only.
++ * 3. The GUP caller writes to the folio, as it is mapped read/write via the
++ *    direct mapping.
++ * 4. The GUP caller, now done with the page, unpins it and sets it dirty
++ *    (though it does not have to).
++ *
++ * This results in both data being written to a folio without writenotify, and
++ * the folio being dirtied unexpectedly (if the caller decides to do so).
++ */
++static bool writeable_file_mapping_allowed(struct vm_area_struct *vma,
++					   unsigned long gup_flags)
++{
++	/* If we aren't pinning then no problematic write can occur. */
++	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
++		return true;
++
++	/* We limit this check to the most egregious case - a long term pin. */
++	if (!(gup_flags & FOLL_LONGTERM))
++		return true;
++
++	/* If the VMA requires dirty tracking then GUP will be problematic. */
++	return vma_needs_dirty_tracking(vma);
++}
++
+ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+ {
+ 	vm_flags_t vm_flags = vma->vm_flags;
+ 	int write = (gup_flags & FOLL_WRITE);
+ 	int foreign = (gup_flags & FOLL_REMOTE);
++	bool vma_anon = vma_is_anonymous(vma);
+
+ 	if (vm_flags & (VM_IO | VM_PFNMAP))
+ 		return -EFAULT;
+
+-	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
++	if ((gup_flags & FOLL_ANON) && !vma_anon)
+ 		return -EFAULT;
+
+ 	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
+@@ -978,6 +1013,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
+ 		return -EFAULT;
+
+ 	if (write) {
++		if (!vma_anon &&
++		    !writeable_file_mapping_allowed(vma, gup_flags))
++			return -EFAULT;
++
+ 		if (!(vm_flags & VM_WRITE)) {
+ 			if (!(gup_flags & FOLL_FORCE))
+ 				return -EFAULT;
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 536bbb8fa0ae..7b6344d1832a 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1475,6 +1475,31 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+ }
+ #endif /* __ARCH_WANT_SYS_OLD_MMAP */
+
++/* Do VMA operations imply write notify is required? */
++static bool vm_ops_needs_writenotify(const struct vm_operations_struct *vm_ops)
++{
++	return vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite);
++}
++
++/*
++ * Does this VMA require the underlying folios to have their dirty state
++ * tracked?
++ */
++bool vma_needs_dirty_tracking(struct vm_area_struct *vma)
++{
++	/* Does the filesystem need to be notified? */
++	if (vm_ops_needs_writenotify(vma->vm_ops))
++		return true;
++
++	/* Specialty mapping? */
++	if (vma->vm_flags & VM_PFNMAP)
++		return false;
++
++	/* Can the mapping track the dirty pages? */
++	return vma->vm_file && vma->vm_file->f_mapping &&
++		mapping_can_writeback(vma->vm_file->f_mapping);
++}
++
+ /*
+  * Some shared mappings will want the pages marked read-only
+  * to track write events. If so, we'll downgrade vm_page_prot
+@@ -1484,14 +1509,13 @@ SYSCALL_DEFINE1(old_mmap, struct mmap_arg_struct __user *, arg)
+ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+ {
+ 	vm_flags_t vm_flags = vma->vm_flags;
+-	const struct vm_operations_struct *vm_ops = vma->vm_ops;
+
+ 	/* If it was private or non-writable, the write bit is already clear */
+ 	if ((vm_flags & (VM_WRITE|VM_SHARED)) != ((VM_WRITE|VM_SHARED)))
+ 		return 0;
+
+ 	/* The backer wishes to know when pages are first written to? */
+-	if (vm_ops && (vm_ops->page_mkwrite || vm_ops->pfn_mkwrite))
++	if (vm_ops_needs_writenotify(vma->vm_ops))
+ 		return 1;
+
+ 	/* The open routine did something to the protections that pgprot_modify
+@@ -1511,13 +1535,7 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
+ 	if (userfaultfd_wp(vma))
+ 		return 1;
+
+-	/* Specialty mapping? */
+-	if (vm_flags & VM_PFNMAP)
+-		return 0;
+-
+-	/* Can the mapping track the dirty pages? */
+-	return vma->vm_file && vma->vm_file->f_mapping &&
+-		mapping_can_writeback(vma->vm_file->f_mapping);
++	return vma_needs_dirty_tracking(vma);
+ }
+
+ /*
+--
+2.40.0
