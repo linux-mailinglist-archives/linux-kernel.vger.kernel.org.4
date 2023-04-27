@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255CA6F0107
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 08:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0E86F0108
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 08:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243061AbjD0GsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 02:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S243067AbjD0GsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 02:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjD0GsD (ORCPT
+        with ESMTP id S243064AbjD0GsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 02:48:03 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ABEA2D76;
-        Wed, 26 Apr 2023 23:48:01 -0700 (PDT)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Bx7eqfGkpk9XABAA--.2494S3;
-        Thu, 27 Apr 2023 14:47:59 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxsrSZGkpkNDo+AA--.18663S3;
-        Thu, 27 Apr 2023 14:47:54 +0800 (CST)
-Subject: Re: [PATCH v2 5/5] LoongArch: Abstract DYNAMIC_FTRACE_WITH_ARGS
- accesses
-To:     Enze Li <lienze@kylinos.cn>
-References: <1682561552-32324-1-git-send-email-tangyouling@loongson.cn>
- <1682561552-32324-6-git-send-email-tangyouling@loongson.cn>
- <87h6t17sux.fsf@kylinos.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn,
-        Qing Zhang <zhangqing@loongson.cn>
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <b52aff74-17a6-3a91-62b3-d11477645e81@loongson.cn>
-Date:   Thu, 27 Apr 2023 14:47:53 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 27 Apr 2023 02:48:20 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3055D420A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 23:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682578097; x=1714114097;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+x5OGVpOtE0g1KlEEMXNWoueG3GSjsfmnGbwcc6bKi0=;
+  b=aDG2BXVaVOQJzM1ZvIXWiiTfihemaue3wsMejjjf69C1sq+76+3fLMcE
+   90fRUrFd18M7iulmPoo9BrkbBC6hHVkGy3IJUhxJ/rje4ioSSoqNRw+In
+   yb2SbnyQAAUY1eCO0pbAJCiLGD+uTcKuzD8/RiiJP5lXuJNm9EfrQRtTm
+   xqbAtoqlcm7KK97sP6mJ5zyqpXTwyE2wABzXKxWYY/V4uoSknz1wjD9DD
+   KglavilAo9FXA15hV9l8At1gloP69NUbJmWT7AkPOLlfZ8gtF7XroU+uR
+   SvlIcIm6YKJF8qI1nr1/5g4qxv28/vOcn0Aqv856rWgkxUgIsX+JJv/dq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="346106490"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="346106490"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2023 23:48:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10692"; a="783605604"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="783605604"
+Received: from lkp-server01.sh.intel.com (HELO 1e0e07564161) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Apr 2023 23:48:15 -0700
+Received: from kbuild by 1e0e07564161 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1prvQM-000041-33;
+        Thu, 27 Apr 2023 06:48:14 +0000
+Date:   Thu, 27 Apr 2023 14:48:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.04.26a 38/51] arch/x86/kernel/nmi.c:441:6:
+ warning: no previous prototype for function 'set_nmi_torture'
+Message-ID: <202304271448.5uG6ip4V-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <87h6t17sux.fsf@kylinos.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxsrSZGkpkNDo+AA--.18663S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZrW3uFW8ZFy7WFyDXr15XFb_yoW5Zr1xpF
-        Zak3Z8GFW7AFZ2kF429w45XryrJryrJry8Cr92kw13AFyDXr1kGrW29ryqkF1jyry8JryI
-        vF1Yqwnxurn0va7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bsAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4
-        AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF
-        7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
-        CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
-        jxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6c
-        x26rWlOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxv
-        r21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8V
-        WrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAF
-        wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-        0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AK
-        xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr
-        1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7xRiTKZJUU
-        UUU==
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,89 +63,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Enze
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.04.26a
+head:   56b38a90a12f76e463a7381d8cff854926fa2b59
+commit: e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033 [38/51] x86/nmi: Add a set_nmi_torture() function to control NMI testing
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230427/202304271448.5uG6ip4V-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu dev.2023.04.26a
+        git checkout e5bf47f3a53ddfad8e0c56b6cbf048de8d82b033
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/
 
-On 04/27/2023 02:16 PM, Enze Li wrote:
-> On Thu, Apr 27 2023 at 10:12:32 AM +0800, Youling Tang wrote:
->
->> From: Qing Zhang <zhangqing@loongson.cn>
->>
->> 1. Adds new ftrace_regs_{get,set}_*() helpers which can be used to manipulate
->> ftrace_regs. When CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=y, these can always
->> be used on any ftrace_regs, and when CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=n
->> these can be used when regs are available. A new ftrace_regs_has_args(fregs)
->> helper is added which code can use to check when these are usable.
->>
->> 2. Prepare ftrace_regs_set_instruction_pointer support in advance.
->>
->> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->> ---
->>  arch/loongarch/include/asm/ftrace.h | 25 +++++++++++++++++++++++++
->>  1 file changed, 25 insertions(+)
->>
->> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
->> index f789e680f633..30ee01243416 100644
->> --- a/arch/loongarch/include/asm/ftrace.h
->> +++ b/arch/loongarch/include/asm/ftrace.h
->> @@ -54,6 +54,31 @@ static __always_inline struct pt_regs *arch_ftrace_get_regs(struct ftrace_regs *
->>  	return &fregs->regs;
->>  }
->>
->> +static __always_inline void
->> +ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
->> +				    unsigned long ip)
->> +{
->> +	regs_set_return_value(&fregs->regs, ip);
->> +}
->> +
->> +static __always_inline unsigned long
->> +ftrace_regs_get_instruction_pointer(struct ftrace_regs *fregs)
->> +{
->> +	return instruction_pointer(&fregs->regs);
->> +}
->> +
->> +#define ftrace_regs_get_argument(fregs, n) \
->> +	regs_get_kernel_argument(&(fregs)->regs, n)
->> +#define ftrace_regs_get_stack_pointer(fregs) \
->> +	kernel_stack_pointer(&(fregs)->regs)
->> +#define ftrace_regs_return_value(fregs) \
->> +	regs_return_value(&(fregs)->regs)
->> +#define ftrace_regs_set_return_value(fregs, ret) \
->
-> Hi Youling,
->
->> +	regs_set_return_value(&(fregs)->regs, ret)
->        ^^^^^^^^^^^^^^^^^^^^^^^^
-> I can not find the implementation of this function, am I missing
-> something?
-Note: This patch depends on regs_set_return_value() in the patch
-"LoongArch: Add support for function error injection".
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304271448.5uG6ip4V-lkp@intel.com/
 
-https://github.com/chenhuacai/linux/commit/c78e80c75b98feeb02b9a6eefb9de759f9036f42
+All warnings (new ones prefixed by >>):
 
->
->> +#define ftrace_override_function_with_return(fregs) \
->> +	override_function_with_return(&(fregs)->regs)
->> +#define ftrace_regs_query_register_offset(name) \
->                                                  ^^^^^^
-> There seems to be a missing function here.  Otherwise, the backslash
-> should be redundant.  Did I understand correctly?
-Sorry for my oversight.
+>> arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
+   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
+        ^
+   arch/x86/kernel/nmi.c:441:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
+   ^
+   static 
+   1 warning generated.
 
-ftrace_regs_query_register_offset() will reuse
-regs_query_register_offset(), I will modify it as follows,
 
-#define ftrace_regs_query_register_offset(name) \
-          regs_query_register_offset(name)
+vim +/set_nmi_torture +441 arch/x86/kernel/nmi.c
 
-Thanks,
-Youling.
->
-> Best Regards,
-> Enze
->
->> +
->>  #define ftrace_graph_func ftrace_graph_func
->>  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
->>  		       struct ftrace_ops *op, struct ftrace_regs *fregs);
+   439	
+   440	/* Set the test values as desired. */
+ > 441	void set_nmi_torture(int nmi_delay_in, bool nmi_halt1_in, bool nmi_halt2_in, bool nmi_halt3_in)
+   442	{
+   443		WRITE_ONCE(nmi_delay, nmi_delay_in);
+   444		WRITE_ONCE(nmi_halt1, nmi_halt1_in);
+   445		WRITE_ONCE(nmi_halt2, nmi_halt2_in);
+   446		WRITE_ONCE(nmi_halt3, nmi_halt3_in);
+   447		pr_info("%s: Set NMI test parameters nmi_delay=%d nmi_halt1=%d nmi_halt2=%d nmi_halt3=%d\n",
+   448			__func__, nmi_delay, nmi_halt1, nmi_halt2, nmi_halt3);
+   449	}
+   450	EXPORT_SYMBOL_GPL(set_nmi_torture);
+   451	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
