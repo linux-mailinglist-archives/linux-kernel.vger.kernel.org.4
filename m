@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6F86F0915
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9746F0936
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243990AbjD0QGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S239857AbjD0QJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243215AbjD0QGI (ORCPT
+        with ESMTP id S243023AbjD0QJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:06:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A612D72;
-        Thu, 27 Apr 2023 09:06:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FCF463E1E;
-        Thu, 27 Apr 2023 16:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D48C433D2;
-        Thu, 27 Apr 2023 16:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682611566;
-        bh=yAGznPCZ1f2WazjLpiWbzBNsj4vdYifi0lN+d8TNCtU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/3sEjGTsOwO5uk3d4zMUrh86nUJwkupb7f5EPLaMQVyPJSTGa1y6pdHXr9N/ncdw
-         3mMaEmPYOHF0UypoXp6I18DLEk3U91bVOy7mdxCgPNL7gUCKKU5huxVbGPdDUSN0Kt
-         pM+T9OWxhF/BhdnUuecjo+P7I53EMin0HlzUcMYSQzNsR/e85cuNE1tckjYeldSeNO
-         DbD15RCUQE3w2rlu2KkzdYxJwpvGVPUuudrOxQ5oArtC6tLrHPX1aIDcvJEo0mhSaG
-         OrEM0sRh6sIB80F5mji/rWA7k3se54UwIuJAy8NEoDTbwh5hsrBKhxxwuhusLZy2Mr
-         vLvTmz14BukJA==
-Date:   Thu, 27 Apr 2023 17:05:59 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] Documentation: leds: Add "rgb:status" path
-Message-ID: <20230427160559.GC50521@google.com>
-References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
- <20230414-pmi632-v2-8-98bafa909c36@z3ntu.xyz>
+        Thu, 27 Apr 2023 12:09:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925232709
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682611787; x=1714147787;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ClPSbSMHZ6APwD7FTUJlRhQUb9hDopzA54r4WXXsdLo=;
+  b=PAgV1rrSMCjykON0mG7TIQ8wVrPHah2uRCuxGZJZ6Uz252ZCjz39s/LN
+   Nsz18TdC74EEv+vIwiBRwPvlzEFVOLs0TluKLXfbds7V4rR0HwCYcQXpS
+   4EFjLwLCo6o+LMMcGGY0pGRzWalkotZL7Vm8EU4ho6JuxcASRctoKri/T
+   2CckRC4MVvQBDpaWByHZIMcPsm7gw027iMtIzUM9CYMXtfHKALK2jhnxc
+   7lzo3XcY3VmdGbwAV//7vANQl2txqapT/qya6ot9u51ceY3p07BxOxj5c
+   4HpwZ0f+dscvmXuPdnj/P4nH/B9bvbGDpX27qW+ir6Y3bS1GSDHPVtaNH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="375470148"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="375470148"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 09:07:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="644759794"
+X-IronPort-AV: E=Sophos;i="5.99,230,1677571200"; 
+   d="scan'208";a="644759794"
+Received: from viggo.jf.intel.com (HELO ray2.sr71.net) ([10.54.77.144])
+  by orsmga003.jf.intel.com with ESMTP; 27 Apr 2023 09:07:53 -0700
+From:   Dave Hansen <dave.hansen@linux.intel.com>
+To:     torvalds@linux-foundation.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [GIT PULL] x86/cache for 6.4
+Date:   Thu, 27 Apr 2023 09:07:39 -0700
+Message-Id: <20230427160739.1053203-1-dave.hansen@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230414-pmi632-v2-8-98bafa909c36@z3ntu.xyz>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023, Luca Weiss wrote:
+Hi Linus,
 
-> The path /sys/class/leds/rgb:status is already widely used with the
-> qcom-lpg driver and others. Document it.
+Please pull some x86/cache changes for 6.4.  This contains a single commit
+that reduces unnecessary hardware counter reads and also just plain makes
+the code more readable.
 
-Where is this used?
+--
 
-$ grep status drivers/leds/rgb/leds-qcom-lpg.c
-<no results>
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->  Documentation/leds/well-known-leds.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/leds/well-known-leds.txt b/Documentation/leds/well-known-leds.txt
-> index 2160382c86be..439d4dac4472 100644
-> --- a/Documentation/leds/well-known-leds.txt
-> +++ b/Documentation/leds/well-known-leds.txt
-> @@ -58,6 +58,7 @@ LEDs on notebook body, indicating that sound input / output is muted.
->  
->  * System notification
->  
-> +Good: "rgb:status"
->  Legacy: "status-led:{red,green,blue}" (Motorola Droid 4)
->  Legacy: "lp5523:{r,g,b}" (Nokia N900)
->  
-> 
-> -- 
-> 2.40.0
-> 
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
 
--- 
-Lee Jones [李琼斯]
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_cache_for_6.4
+
+for you to fetch changes up to 322b72e0fd10101f2da8985b31b4af70f184bf79:
+
+  x86/resctrl: Avoid redundant counter read in __mon_event_count() (2023-03-15 15:44:15 -0700)
+
+----------------------------------------------------------------
+Reduce redundant counter reads with resctrl refactoring
+
+----------------------------------------------------------------
+Peter Newman (1):
+      x86/resctrl: Avoid redundant counter read in __mon_event_count()
+
+ arch/x86/kernel/cpu/resctrl/monitor.c | 43 ++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 24 deletions(-)
