@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781346F002B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F866F0030
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 06:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242788AbjD0EZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 00:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
+        id S242703AbjD0EfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 00:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242703AbjD0EY6 (ORCPT
+        with ESMTP id S234980AbjD0EfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 00:24:58 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAF30E0;
-        Wed, 26 Apr 2023 21:24:50 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-506c04dd879so13823569a12.3;
-        Wed, 26 Apr 2023 21:24:50 -0700 (PDT)
+        Thu, 27 Apr 2023 00:35:05 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315BC3585
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 21:34:40 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a69f686345so62423175ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 21:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682569489; x=1685161489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e9BPTABkCQ4wyIp6Wf2934lahb8sP4xbJb6UHZ9xVyw=;
-        b=KHlh84VSsn4sm4nugwRFHAFauJyxzdBLWxqsCzWNBEmI9BY4yIKs4uOO9iO6Fsw6nD
-         Knqhtuupm2OTXBhWjOAnrZnOVQAneDhXu1rAg9hViP5c1zQwQdmkjBCiTyPxx53YSsQE
-         OG76ZPvfHdLkfzVj3vqMnhDFZYXovmkg6E95p2QGJHtxXzuit+OUCWqKZS2quzuKtxvM
-         UznIIshU+4AT/2NUgjpbOzMWqDeZH9W8xQ8rUUsUwjd/2x/1GlHXPEcyF28gVUFxUYak
-         Fp+JY6xesvcEHd2+lDZtToWvv5c4v3+lvlwRAGY99s+0HVlntZaFw+2FktD/Vgbdj5oQ
-         wp7A==
+        d=bytedance.com; s=google; t=1682570079; x=1685162079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jy52NvX0OBhGC88NMda1NrOK88NbR9S0vRvwBKXzpTg=;
+        b=hWtQxXkdi0hyHmZTW8vTrUr4HIJ5tIYi8z1ts+5UdtA9f96et30f5RyGxlp5/jeOjz
+         VrwiolC7A0ozBByEgT/ALdIp1cpLU0KwiWVqCKXZCg1YULHh8vC1TQ5/K5CLdVgzHrK3
+         ERhdHw/77lAleDwosbnHzofh/Dx/ryA22h7EIdKMSdREPrIdN7C7uA6Zap28HzxJuTx2
+         qPxt8hRWBEqK041JwtQeivJqHUoelUoq8JJdyl+Iz0AegGCP68SOaUDdV72mxWkuDwij
+         I/KuLVBmuridH7QgpiO+INBabf7USC37bjpcgoNhHeSOSOR9guDzTuY9sPjs3iM3LGgE
+         IR0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682569489; x=1685161489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e9BPTABkCQ4wyIp6Wf2934lahb8sP4xbJb6UHZ9xVyw=;
-        b=ObhC70V1A5C4bofjyhOseHdRFvY1bWXB1uoGTDiLx4ig3ebQnG3k80kNA9kYTiCGm+
-         yxNDImALVTTR/V9EXw28UH2GgamSKBFChXDlsL115gw7ewxfhtW8wAd/Ol2cpcWP9PFo
-         BsPp23qDYxYNRN52JdbpKJ2OOglMKkdVb8gvsFQ+GFPtcy/3hZ3RXn8SjAV/vnB2az5D
-         5hkUsiXOHoWh0m5dDAbbs+WjGfHGyX8fTueuA1sXkQEOE5vqJhWoGrnFCU9R71jxSE1B
-         PgKkRkXMyf3xJcjeiYvCWEblX0geNmDJlpBur+ibCSl2M7TOx+FlhT3EJDbGGC5AEBmB
-         XB9g==
-X-Gm-Message-State: AC+VfDw31a7siT7u/DOJna1qFBGld3bRucc5mOfoO9Hejpzle6Z1LEW1
-        vv7XMRnPwsAJjBhnQYL11eYLZ7qC83nqFryurFo=
-X-Google-Smtp-Source: ACHHUZ5fqfAwKjuAWSkAihFFHvEwlRfsA02iW3+avOLbRVhBPDOZ7ASIChRyDulgSARBNY1hKrj3N2Ty5GA1cdPmSDw=
-X-Received: by 2002:aa7:d603:0:b0:506:bc29:2ce7 with SMTP id
- c3-20020aa7d603000000b00506bc292ce7mr444319edr.29.1682569489175; Wed, 26 Apr
- 2023 21:24:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682570079; x=1685162079;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jy52NvX0OBhGC88NMda1NrOK88NbR9S0vRvwBKXzpTg=;
+        b=CJxclKS0YcPsJTTrRKHJvENFeMpv95S0YTXdROdrgeCOVeUkF3/e2l3RLJ+enBoY0o
+         DGKhh/qvOGgEbHaA9zfISySWHfdQ3oPMPTpjghBUwh2ZwsyW8FuKCZsxousaX4j4s3fK
+         rTppwxtbV5jGltVU8cxSCAswC0S5lncgoHuv+GQRgruf8gxPQOl7v4Vypsi0NPgDwCmo
+         xLC+530MDV2fvZaoKXsiZnFKLJCOeNPRP14sXtJlPcJCUw7YuGvLhTMjk4ueHhG2vaVf
+         FTjVrx9KOViMHmV/gnOMEFMAVuW8siDaS22cuR3Sp5Xm9rEUIh6NZofdt2zucmKG5u9Z
+         X/MA==
+X-Gm-Message-State: AC+VfDxyCOmteZjarszxXkaZJrjohv8FqcovPaQ05fsG00kXw2b4dyLo
+        kjA16LMN1LxtXPH+lh5XnzGDBQ==
+X-Google-Smtp-Source: ACHHUZ4YH5/zqouBwSa2FO1jqQCKQHbtgI1tKYGnKwu9uWgP0iPOowo4zzHuLhWNVHXhzBcyD/pezg==
+X-Received: by 2002:a17:903:27c3:b0:1a2:3108:5cc9 with SMTP id km3-20020a17090327c300b001a231085cc9mr161224plb.40.1682570079693;
+        Wed, 26 Apr 2023 21:34:39 -0700 (PDT)
+Received: from n137-048-144.byted.org ([121.30.179.80])
+        by smtp.gmail.com with ESMTPSA id jb14-20020a170903258e00b001a6370bb33csm10741147plb.41.2023.04.26.21.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 21:34:39 -0700 (PDT)
+From:   Wenliang Wang <wangwenliang.1995@bytedance.com>
+To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wenliang Wang <wangwenliang.1995@bytedance.com>
+Subject: [PATCH] virtio_net: suppress cpu stall when free_unused_bufs
+Date:   Thu, 27 Apr 2023 12:34:33 +0800
+Message-Id: <20230427043433.2594960-1-wangwenliang.1995@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230418014037.2412394-1-drosen@google.com> <20230418014037.2412394-36-drosen@google.com>
-In-Reply-To: <20230418014037.2412394-36-drosen@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 26 Apr 2023 21:24:37 -0700
-Message-ID: <CAEf4BzYD9P+1aP+q77i7RJPJW=iSS6-iTw+rfPuCz=FFB2MiZw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 35/37] tools: Add FUSE, update bpf includes
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 6:42=E2=80=AFPM Daniel Rosenberg <drosen@google.com=
-> wrote:
->
-> Updates the bpf includes under tools, and adds fuse
->
-> Signed-off-by: Daniel Rosenberg <drosen@google.com>
-> ---
->  tools/include/uapi/linux/bpf.h  |   12 +
->  tools/include/uapi/linux/fuse.h | 1135 +++++++++++++++++++++++++++++++
->  2 files changed, 1147 insertions(+)
->  create mode 100644 tools/include/uapi/linux/fuse.h
->
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index 4b20a7269bee..6521c40875c7 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -7155,4 +7155,16 @@ struct bpf_iter_num {
->         __u64 __opaque[1];
->  } __attribute__((aligned(8)));
->
-> +/* Return Codes for Fuse BPF struct_op programs */
-> +#define BPF_FUSE_CONTINUE              0
-> +#define BPF_FUSE_USER                  1
-> +#define BPF_FUSE_USER_PREFILTER                2
-> +#define BPF_FUSE_POSTFILTER            3
-> +#define BPF_FUSE_USER_POSTFILTER       4
+For multi-queue and large rx-ring-size use case, the following error
+occurred when free_unused_bufs:
+rcu: INFO: rcu_sched self-detected stall on CPU.
 
-nit: can this be an enum instead? It would be more self-documenting,
-IMO. At given it's FUSE BPF-specific, why is it not in
-uapi/linux/fuse.h?
+Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+---
+ drivers/net/virtio_net.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
-> +/* Op Code Filter values for BPF Programs */
-> +#define FUSE_OPCODE_FILTER     0x0ffff
-> +#define FUSE_PREFILTER         0x10000
-> +#define FUSE_POSTFILTER                0x20000
-> +
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index ea1bd4bb326d..21d8382fd2c7 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3565,6 +3565,7 @@ static void free_unused_bufs(struct virtnet_info *vi)
+ 		struct virtqueue *vq = vi->rq[i].vq;
+ 		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+ 			virtnet_rq_free_unused_buf(vq, buf);
++		schedule();
+ 	}
+ }
+ 
+-- 
+2.20.1
 
-[...]
