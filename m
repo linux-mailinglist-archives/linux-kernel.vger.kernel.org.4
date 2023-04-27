@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3884F6F0BEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0149B6F0BED
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 20:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244523AbjD0S3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 14:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S244544AbjD0SaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 14:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244533AbjD0S3b (ORCPT
+        with ESMTP id S244526AbjD0SaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 14:29:31 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21A94494;
-        Thu, 27 Apr 2023 11:29:28 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51b603bb360so8621428a12.2;
-        Thu, 27 Apr 2023 11:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682620168; x=1685212168;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=o7ab0uNFW98iuvjPHQi6nmFc33X+FneWQ9yUEiExG+8=;
-        b=QJU5pMJXmsiurfixLvJuicvg2EPKuXqO1QjsrrRXTxF/Au/+RssVsX8E5+VyUcItru
-         ryTXz7dvIqxd/6v1gi765lY3nz51/9nTrNQ4llsJDsBNZoGL/GCUV446DkUrLjchzgeI
-         B0Z/arM2F/MsxvCOzTHm8Amfg2CNfy416hdsG2xa4MG2QQjOKkF07M+LufBTNpZCqDk/
-         8stDzvKYrdXlCKcQi1BoU9ZXuHFhfHm01804G3EwNSBUu0BQeupOjp9n/lQc0dOIqApG
-         2wUr3Dygq/XCOzRL9V+IzLtnt0aM/hNQ9p/XgugN7N0In1O6TdAoyv4W9dWhWncYbYmr
-         HD3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682620168; x=1685212168;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7ab0uNFW98iuvjPHQi6nmFc33X+FneWQ9yUEiExG+8=;
-        b=Khrirg1HFcvuX0iK9gPFrj3RZltowyglNp4fdWimAZxydDIQkU8VuGI0kgepwcmGDD
-         iRpO8tjVY4KIKIOIvlhWI8rApQGd9EUJZwsd26HZ2WOWNrxu4Fr4mf0c0IwS5Y0quGNv
-         6SuBzd1N4HcIHxERuLrFBed0C2GmCMrfQGTt8ceU+XoOVlgXvMSgCDNyAuDb7s4rK5qE
-         FNr2j63QZoWkyhKoEok/iqJQ9xAzn6D4eFpZSCoKD7OiSDGdTMKxhmL2tjpmBdcxiqu8
-         V9MlmWGsj9Je+QXVCxua5PnRqY3A6/wIywE7ziDKpNjFeqJelPvknK0pqOYr52GxMwQk
-         td9g==
-X-Gm-Message-State: AC+VfDxVHGvegizHPyb8ZBt5XfP7176sH5nUlZYgCBjBTTsHKgQSMKlj
-        2ShST3rmx1+G1NPkyNa3j9FxDmXWGV8=
-X-Google-Smtp-Source: ACHHUZ5gcNxTHdITc6sgRyyPCh1gMKHpoD9c9c3Q7qoMnHI7WefsPpWgcA1RQqhoeDR6LDQfeNT+rg==
-X-Received: by 2002:a17:902:e153:b0:1a2:23f7:20f with SMTP id d19-20020a170902e15300b001a223f7020fmr2051917pla.28.1682620168237;
-        Thu, 27 Apr 2023 11:29:28 -0700 (PDT)
-Received: from [10.69.53.73] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y9-20020a170902864900b001a800e03cf9sm11884347plt.256.2023.04.27.11.29.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 11:29:27 -0700 (PDT)
-Message-ID: <e16612a6-abb3-c11c-bfe1-ad82cedeee50@gmail.com>
-Date:   Thu, 27 Apr 2023 11:29:25 -0700
+        Thu, 27 Apr 2023 14:30:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E7F4233;
+        Thu, 27 Apr 2023 11:29:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F76163EDD;
+        Thu, 27 Apr 2023 18:29:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A881C4339B;
+        Thu, 27 Apr 2023 18:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682620198;
+        bh=6raNhLsn3jhA9M0ARzpuznsFRAQ+ToAZBcarkGXjIXs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LY1esqfSsr+T1h4KHxV5BGlbEae9hsQjTFcKCQz7IApBWWc4dLqhwcheEynTyY6/d
+         ntGuE7zatO9/hs8j1IBGxc5aw2uv0DZgpsAa69bDK7+JQBsiB4pUkNETLt6PlcCwQC
+         6wo7rBBj0J1ZLfuBqUCAFxqIfiwKoWKLl+xfrLoXXAYO0WvQFmWbrdvOFLew4og1EB
+         bOoCfrbEQh0BP9Gxat5DiA/LcMfGCmEd3ziSE2NO9hFfS1rA6i0tv2TVl+CiNC/gLy
+         jeGEvV3nebJlu/dhLwI+tW6VS+Hh8xD9ehJJAVISYIkSAWyHXZdD19raASRI8AHeLw
+         +e8ZhPxyn7Z/g==
+Date:   Thu, 27 Apr 2023 11:29:56 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>, tytso@mit.edu
+Cc:     adilger.kernel@dilger.ca, yanaijie@huawei.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ext4: Fix unused iterator variable warnings
+Message-ID: <20230427182956.GA2970@dev-arch.thelio-3990X>
+References: <20230420-ext4-unused-variables-super-c-v1-1-138b6db6c21c@kernel.org>
+ <CAMuHMdU0V=b1FLiT4UbNVTa42+5hFx3WJQD6gETwNYioSaSoag@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [Patch] serial: 8250_bcm7271: fix leak in `brcmuart_probe`
-To:     XuDong Liu <m202071377@hust.edu.cn>,
-        Al Cooper <alcooperx@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424125100.4783-1-m202071377@hust.edu.cn>
-Content-Language: en-US
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <20230424125100.4783-1-m202071377@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdU0V=b1FLiT4UbNVTa42+5hFx3WJQD6gETwNYioSaSoag@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/24/2023 5:51 AM, XuDong Liu wrote:
-> Smatch reports:
-> drivers/tty/serial/8250/8250_bcm7271.c:1120 brcmuart_probe() warn:
-> 'baud_mux_clk' from clk_prepare_enable() not released on lines: 1032.
-> 
-> In the function brcmuart_probe(), baud_mux_clk was not correctly released
-> in subsequent error handling, which may cause memory leaks.
-> 
-> To fix this issue, an error handling branch, err_clk_put, is added to
-> release the variable using clk_put(), and an err_disable branch is added
-> to meet the requirement of balancing clk_disable and clk_enable calls.
-> 
-> Fixes: 15ac1122fd6d ("serial: 8250_bcm7271: Fix arbitration handling")
-> Signed-off-by: XuDong Liu <m202071377@hust.edu.cn>
-> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
-> The issue is discovered by static analysis, and the patch is not tested
-> yet.
-> ---
->   drivers/tty/serial/8250/8250_bcm7271.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_bcm7271.c b/drivers/tty/serial/8250/8250_bcm7271.c
-> index f801b1f5b46c..b1670558868b 100644
-> --- a/drivers/tty/serial/8250/8250_bcm7271.c
-> +++ b/drivers/tty/serial/8250/8250_bcm7271.c
-> @@ -1023,7 +1023,7 @@ static int brcmuart_probe(struct platform_device *pdev)
->   		dev_dbg(dev, "BAUD MUX clock found\n");
->   		ret = clk_prepare_enable(baud_mux_clk);
->   		if (ret)
-> -			goto release_dma;
-> +			goto err_clk_put;
->   		priv->baud_mux_clk = baud_mux_clk;
->   		init_real_clk_rates(dev, priv);
->   		clk_rate = priv->default_mux_rate;
-> @@ -1032,7 +1032,7 @@ static int brcmuart_probe(struct platform_device *pdev)
->   	if (clk_rate == 0) {
->   		dev_err(dev, "clock-frequency or clk not defined\n");
->   		ret = -EINVAL;
-> -		goto release_dma;
-> +		goto err_clk_disable;
->   	}
->   
->   	dev_dbg(dev, "DMA is %senabled\n", priv->dma_enabled ? "" : "not ");
-> @@ -1119,6 +1119,10 @@ static int brcmuart_probe(struct platform_device *pdev)
->   	serial8250_unregister_port(priv->line);
->   err:
->   	brcmuart_free_bufs(dev, priv);
-> +err_clk_disable:
-> +	clk_disable_unprepare(baud_mux_clk);
-> +err_clk_put:
-> +	clk_put(baud_mux_clk);
->   release_dma:
->   	if (priv->dma_enabled)
->   		brcmuart_arbitration(priv, 0);
-Thank you for bringing this to my attention.
+Hi Geert,
 
--Doug
+On Thu, Apr 27, 2023 at 02:36:10PM +0200, Geert Uytterhoeven wrote:
+> On Thu, Apr 20, 2023 at 6:56 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > When CONFIG_QUOTA is disabled, there are warnings around unused iterator
+> > variables:
+> >
+> >   fs/ext4/super.c: In function 'ext4_put_super':
+> >   fs/ext4/super.c:1262:13: error: unused variable 'i' [-Werror=unused-variable]
+> >    1262 |         int i, err;
+> >         |             ^
+> >   fs/ext4/super.c: In function '__ext4_fill_super':
+> >   fs/ext4/super.c:5200:22: error: unused variable 'i' [-Werror=unused-variable]
+> >    5200 |         unsigned int i;
+> >         |                      ^
+> >   cc1: all warnings being treated as errors
+> >
+> > The kernel has updated to gnu11, allowing the variables to be declared
+> > within the for loop. Do so to clear up the warnings.
+> >
+> > Fixes: dcbf87589d90 ("ext4: factor out ext4_flex_groups_free()")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Thank you for the review!
+
+> > --- a/fs/ext4/super.c
+> > +++ b/fs/ext4/super.c
+> 
+> > @@ -1311,7 +1311,7 @@ static void ext4_put_super(struct super_block *sb)
+> >         ext4_flex_groups_free(sbi);
+> >         ext4_percpu_param_destroy(sbi);
+> >  #ifdef CONFIG_QUOTA
+> > -       for (i = 0; i < EXT4_MAXQUOTAS; i++)
+> > +       for (int i = 0; i < EXT4_MAXQUOTAS; i++)
+> 
+> int
+> 
+> >                 kfree(get_qf_name(sb, sbi, i));
+> >  #endif
+> >
+> 
+> > @@ -5628,7 +5627,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+> >  #endif
+> >
+> >  #ifdef CONFIG_QUOTA
+> > -       for (i = 0; i < EXT4_MAXQUOTAS; i++)
+> > +       for (unsigned int i = 0; i < EXT4_MAXQUOTAS; i++)
+> 
+> unsigned int
+> 
+> >                 kfree(get_qf_name(sb, sbi, i));
+> >  #endif
+> >         fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
+> 
+> I do see an opportunity to make this more consistent.
+> get_qf_name() takes an int for the last parameter, but that should probably
+> become unsigned int?
+
+Yes, or I could have just changed the type of this variable to 'int', as
+Arnd did in his version; I just chose to keep the existing type so this
+was basically a "no functional change" patch.
+
+https://lore.kernel.org/20230421070815.2260326-1-arnd@kernel.org/
+
+I do not think it fundamentally matters, EXT4_MAXQUOTAS is defined as 3
+so I do not think unsigned versus signed semantics matter much here :) I
+can make that change in a v2 or separate change or we can just take
+Arnd's patch, but this is now in mainline and there is another patch
+trying to fix this warning so it would be good to get this dealt with
+sooner rather than later...
+
+https://lore.kernel.org/7ca8f790-c14e-6449-f3b5-4214d3fb1e61@googlemail.com/
+
+Cheers,
+Nathan
