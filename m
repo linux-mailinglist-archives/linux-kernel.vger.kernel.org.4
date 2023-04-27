@@ -2,72 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B4F6F07F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A7446F07F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244117AbjD0PLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S244134AbjD0PLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243558AbjD0PLK (ORCPT
+        with ESMTP id S244118AbjD0PLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:11:10 -0400
+        Thu, 27 Apr 2023 11:11:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD9C2726
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:11:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D529235A5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:11:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B1763BED
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0364C433D2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:11:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C95263CBE
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:11:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14243C433D2;
+        Thu, 27 Apr 2023 15:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682608268;
-        bh=l6laNL5+185Lj5BlHWSsODPn1E0DbC9F8Y6d9W1UyDo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c7NNP4wfVjJFXqpVRwA0XeibAdJY77QyeZGs8xSxQzCBbSJHlzrR+NrSxlg4Ky9uX
-         RvMD+KeIWgrALoNz9mkmozZMW5cRhiCa/Uja3HxUgPEUcIcoSIjk08zrv9hIm4CUn2
-         eL+GD2PWs3zIin4Z/O4jEaSu8NuoNBYTdDGPMbDFEm0mx0CnmMOKWx/OrNbpMFTit1
-         R3WdRWcaC6sVxRu5Noi3C+QtoG1PEOo2ak3kzHXxcR7ETm9OX7VIQziQ/ZxztxI5N2
-         PD722DVNMAaiTZ/XfCQNRJ/pFrIaUNYWj/Epnvh2KfbmkU6S6ANH6BYCm+Cq810y5s
-         jgYBSRmn6Ttkg==
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5208be24dcbso6469834a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:11:08 -0700 (PDT)
-X-Gm-Message-State: AC+VfDylU6ErWgrqJNZVRUSsQyNC1A1U7jZjt92jKS0rzipgpnOWcMBQ
-        Gy0SmAjSl6ivOa9AmhcfsVqSAMi3BQOhLcb+So8AVg==
-X-Google-Smtp-Source: ACHHUZ5NxyJDUO4FTy/bs7agRCtWpiWaSIyWZoCCTaOxbDS+Kd/2JIfrEGWJsq3KErFabBaP4K4k3JalnBiKfr02Gio=
-X-Received: by 2002:a17:90a:f481:b0:23d:bbcb:c97f with SMTP id
- bx1-20020a17090af48100b0023dbbcbc97fmr2267524pjb.1.1682608268270; Thu, 27 Apr
- 2023 08:11:08 -0700 (PDT)
+        s=k20201202; t=1682608298;
+        bh=Gf8nlpng7soqr5+IOxjYLYRRA4rKG/YU02EyHleTbyY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BV9ao6OrjxMppVoEoC3CCctoTYVGW62VOyw/PhZ6mtpWAC5RcdQXZKdvWCYNYDhkx
+         jGN69oBmu+vaF+y7dsozQIUS97w4X+Dx/CIHexTEgcz8zINrM671gC/8eZ9JsBbKsC
+         i+n07RYQhjqJWig+0tLNm6J8CYeiSY1dTyH9+fRjwsYoYb/CoSZZg+Zzkm9Lg2fovQ
+         8EZBePLkQt+Ez1ULH5K1e44WKzVsHtrJJfh0pybJfghGOcjm8nYHGLo7bIQ4RdfCRj
+         VhU00Z8Z2k5XbHyW93P2w0MHlSYpfyb0a0+qGqzl9dKNxyc92JO04hGq1j1npuQENo
+         uuRzGzE5dLM5g==
+Date:   Thu, 27 Apr 2023 16:11:34 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: wm831x: Use maple tree register cache
+Message-ID: <20230427151134.GW50521@google.com>
+References: <20230419-mfd-wm831x-maple-v1-1-e03e39d7bb0b@kernel.org>
 MIME-Version: 1.0
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de> <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <14636275-4d26-d639-5f6e-293fc6d1c4c6@web.de> <CAN6tsi7caOQZLLvbL7phMEtNvBLaWgJuHLkLo3YWdqQw7Vxnaw@mail.gmail.com>
- <6f758653-36c9-91a2-7bbc-278ae3f8ccee@web.de>
-In-Reply-To: <6f758653-36c9-91a2-7bbc-278ae3f8ccee@web.de>
-From:   Robert Foss <rfoss@kernel.org>
-Date:   Thu, 27 Apr 2023 17:10:57 +0200
-X-Gmail-Original-Message-ID: <CAN6tsi4WBDOyzvXJ8vV=xJYay1JbBGo+UzZ+vudTBm5Fk5nB=A@mail.gmail.com>
-Message-ID: <CAN6tsi4WBDOyzvXJ8vV=xJYay1JbBGo+UzZ+vudTBm5Fk5nB=A@mail.gmail.com>
-Subject: Re: drm/bridge: it6505: Move a variable assignment behind a null
- pointer check in receive_timing_debugfs_show()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Allen Chen <allen.chen@ite.com.tw>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Hsin-yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230419-mfd-wm831x-maple-v1-1-e03e39d7bb0b@kernel.org>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,41 +54,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 4:16=E2=80=AFPM Markus Elfring <Markus.Elfring@web.=
-de> wrote:
->
-> > This patch seems to be a part of a series without being marked as such,
->
-> The mentioned patch affects only a single function implementation.
->
->
-> > this causes issues when importing this patch with maintainer tools
-> > like b4 which automatically pull in the entire series and not
-> > just the specific patch.
->
-> It is a pity that there are special technical difficulties.
->
->
-> > Either label the patch as being part of a series ( [PATCH 1/XX] ),
->
-> Further software modules were similarly affected.
->
-> See also:
-> Reconsidering pointer dereferences before null pointer checks (with SmPL)
-> https://lore.kernel.org/cocci/1a11455f-ab57-dce0-1677-6beb8492a257@web.de=
-/
-> https://sympa.inria.fr/sympa/arc/cocci/2023-04/msg00021.html
->
->
-> > or submit it separately.
->
-> I thought that I did that (in principle).
+On Tue, 25 Apr 2023, Mark Brown wrote:
 
-You can have a look at LKML for the email message-id to see the whole
-thread of patches.
-https://lore.kernel.org/all/14636275-4d26-d639-5f6e-293fc6d1c4c6@web.de/#r
+> regmap has introduced a maple tree based register cache which makes use of
+> this more advanced data structure which has been added to the kernel
+> recently. Maple trees are much flatter than rbtrees, meaning that they do
+> not grow to such depths when the register map is sparse which makes access
+> a bit more efficient. The maple tree cache type is still a bit of a work
+> in progress but should be effective for some devices already.
+> 
+> The wm831x devices have a pretty sparse register map and being always on
+> devices never do cache syncs so don't hit the major current disadvantage
+> so they should be good candiates for using the maple tree cache.  Update
+> to do so, there should be little if any visible difference at runtime.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  drivers/mfd/wm831x-core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Or https://lore.kernel.org/all/$MSG_ID
+Applied, thanks
 
-Fix the email Sign-off email !=3D Sender email issue, resubmit and I'll
-be able to apply this.
+-- 
+Lee Jones [李琼斯]
