@@ -2,94 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908D06F080B
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CA16F0815
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244150AbjD0PPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46174 "EHLO
+        id S243972AbjD0PSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244168AbjD0PPu (ORCPT
+        with ESMTP id S243404AbjD0PSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:15:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB6D46B8
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:15:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 27 Apr 2023 11:18:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872844233
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682608644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r+17+KTOOVGjge09dstY847TPVDvwXA1kCLuEc8Dqts=;
+        b=cXih+nWhFH/I25Qf0Q6qdx6ROs7pL1zH/o3ut89wWZRoJb7+z8l7RHU2nvjql/6b7cSO3Z
+        ZqUDb8vgsV7M5455V6AdpJL9LffZSnKaFRZLHfKA9hCUDyon3W7mamcqS8Bn5pp7Bl2lkH
+        k/uHFE6FjNu4xMZn28dYNeS0SkTtqTY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-eDukie4rOsKb8xEVznIMOQ-1; Thu, 27 Apr 2023 11:17:16 -0400
+X-MC-Unique: eDukie4rOsKb8xEVznIMOQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A82563DC1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 15:15:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECECC433EF;
-        Thu, 27 Apr 2023 15:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682608543;
-        bh=V9IhCG9PqemeCE3Qpq3sG1yB+zpcZYg7iAHmogiH5dE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IY7pN3G3jvke8e9mAO+bGzpaclxNpETDlrGPcrujTLdysJq0jpF8LO0QcwuGdkjtj
-         0v9bUNfVVy/kgTISSJpgTL5tZC7Ubn1qAyjYceGd2K9TyAUhCs6fhhFEWHywy7Oxsc
-         sw3ofMYDBlugcajGlsgdPWDDgXCdr6QSwupa6SAUczMH8eN7sEprupZry54j76ndaf
-         /evj570FKGggnfDqMW9I11D1MF7fU8DGlVAUZWLK1NiouRqcmfPoIKxYziTOJ2BlOo
-         qLGXHOwXdmjcZIkkDAip0E+z+C7659BtTKhklBcZgxcWsg0k6dNzjmh/dwkk+XF0D+
-         O8ZG1ZPs/Y/+Q==
-Date:   Thu, 27 Apr 2023 16:15:39 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: wm831x: Use maple tree register cache
-Message-ID: <d01e8784-5fb8-41e5-bbdd-8983f559c4f0@sirena.org.uk>
-References: <20230419-mfd-wm831x-maple-v1-1-e03e39d7bb0b@kernel.org>
- <20230427151134.GW50521@google.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2EE551C3A074;
+        Thu, 27 Apr 2023 15:17:04 +0000 (UTC)
+Received: from redhat.com (unknown [10.2.16.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 52231492C3E;
+        Thu, 27 Apr 2023 15:17:03 +0000 (UTC)
+Date:   Thu, 27 Apr 2023 10:17:01 -0500
+From:   Eric Blake <eblake@redhat.com>
+To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org
+Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] nbd: s/handle/cookie/
+Message-ID: <7xvuavcyhqfygrp3ak3iw5jiatbp3fcrhx6teeyqcrrjhdtjn4@ordpaqvft67k>
+References: <20230410180611.1051618-1-eblake@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LttHvgb6LLjcoLby"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230427151134.GW50521@google.com>
-X-Cookie: You will inherit millions of dollars.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230410180611.1051618-1-eblake@redhat.com>
+User-Agent: NeoMutt/20230407
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ping
 
---LttHvgb6LLjcoLby
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Apr 10, 2023 at 01:06:07PM -0500, Eric Blake wrote:
+> v2 was here: https://lkml.org/lkml/2023/3/17/1107
+> since then:
+> - squash patch 2/5 and 3/5 into 3/4 [Ming]
+> - add Josef's R-b
+> - tweak commit messages to match commits in userspace NBD (code itself
+>   is unchanged, modulo the patch squash)
+> 
+> Eric Blake (4):
+>   uapi nbd: improve doc links to userspace spec
+>   uapi nbd: add cookie alias to handle
+>   block nbd: use req.cookie instead of req.handle
+>   docs nbd: userspace NBD now favors github over sourceforge
+> 
+>  Documentation/admin-guide/blockdev/nbd.rst |  2 +-
+>  drivers/block/nbd.c                        |  6 +++---
+>  include/uapi/linux/nbd.h                   | 25 +++++++++++++++++-----
+>  3 files changed, 24 insertions(+), 9 deletions(-)
+> 
+> 
+> base-commit: 09a9639e56c01c7a00d6c0ca63f4c7c41abe075d
+> -- 
+> 2.39.2
+> 
 
-On Thu, Apr 27, 2023 at 04:11:34PM +0100, Lee Jones wrote:
-> On Tue, 25 Apr 2023, Mark Brown wrote:
->=20
-> > regmap has introduced a maple tree based register cache which makes use=
- of
-> > this more advanced data structure which has been added to the kernel
-> > recently. Maple trees are much flatter than rbtrees, meaning that they =
-do
+-- 
+Eric Blake, Principal Software Engineer
+Red Hat, Inc.           +1-919-301-3266
+Virtualization:  qemu.org | libvirt.org
 
-> Applied, thanks
-
-Note that the maple tree support for regmap has only landed in Linus'
-tree during the current merge window, I wasn't anticipating this being
-applied until -rc1 due to it being sent after the merge window opened.
-
---LttHvgb6LLjcoLby
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRKkZoACgkQJNaLcl1U
-h9CYcwf/XZP9qGcOhhUjg/kYzz4RZ7K9AAxma4fMWLOEOtg7YVzwBIPq4+gdlJtN
-FtcXYmkLdlvAgEvZ26WAqXl6lGjIB9Ljc9K+yU+PHbYKtVpPMC5xouYEBnmmp2VY
-jM3+qjaIkx8+X1pjPc4YhRDhH87nqKlBoNGjjJdKPesmpUzSfl0pmc6L+0ZAWzWS
-qAsNg8rbpf2sM5dgy4F1TxmZyz8mTnfCX3/AgZuChCVl0G30qbXlLrULOQ0ZMtLT
-BEuqVfW9eKHxR5cdmrazhkvdKy7CkThxehIdwkfH/j8eHOaFkkezMHsMrX6+hDgz
-ZxqxAE+lzS8utRVzNDKb1n6YLmHb2g==
-=wJh+
------END PGP SIGNATURE-----
-
---LttHvgb6LLjcoLby--
