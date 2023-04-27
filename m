@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD3C6F0AAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4316F0AB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244122AbjD0RT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S244352AbjD0RTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243457AbjD0RTY (ORCPT
+        with ESMTP id S244150AbjD0RTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:19:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97279102;
-        Thu, 27 Apr 2023 10:19:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC1B63E74;
-        Thu, 27 Apr 2023 17:19:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 820BCC433EF;
-        Thu, 27 Apr 2023 17:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682615962;
-        bh=rOTwoERL2Dl5cmarh0a/Ds5UmVgUmPy7ngh1FKGKcFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LoJdG2JSCC1N6zOc+Q1aeqTbhkhB9c8piJOzCDejn62mY/auwRx1htDQxJs66GJW2
-         eOTXBnW9fqvIRounJxNydmBvWqTQm2CTG9ulSOs7tzUJFv6+OItXyXch+9f7pJHer4
-         qmt3/gAgXnAqoSJqf3YyNt7gzzjDlo0Gnmu+Wvc+YQ08VO/cEqSsau55Q9sYgs+OTn
-         FI9Tz+uwWyzMHiZvFlvcXSFkck4ZvC2RFQvsDuwOW6DcquAWtp6OAASn97WON6A7nJ
-         p+GncRN6gN59eKit6goynZcLA2tzbsfCweyg/G7eI7qaluaf1px8qv+CM4nNIPv4oq
-         7Zi/fB60PKcYg==
-Date:   Thu, 27 Apr 2023 18:19:16 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Shengyu Qu <wiagn233@outlook.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wens@csie.org, lgirdwood@gmail.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andre.przywara@arm.com, conor.dooley@microchip.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: mfd: x-powers,axp152: Document the
- AXP15060 variant
-Message-ID: <20230427171916.GH620451@google.com>
-References: <20230421150816.10513-1-wiagn233@outlook.com>
- <TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+        Thu, 27 Apr 2023 13:19:52 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FA71FE5
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:19:51 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-329572e5abeso133179345ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:19:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682615990; x=1685207990;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LK6pOS+jXfVf9cbQQ3licPnrOHrtoTgqZa/zDQdBlfc=;
+        b=c/oGbnhsYPFoZ4uFvsrbk5LnhqgDYOT1+aI/Hsbsf8XY9RGY8DXtfibbxOAMICwP1h
+         +vvhgXEQTienlxltB3Ari5X5dcocf9GCw9C3uwX7x/lMfQoUhEZE739uc134N8ruETiU
+         +XZmH5UuQgw/BdlKgVen/qQmXsDhDU/jATKoo/5mhxqnkaERdBCNEQXaQ2zKI9QGjxQO
+         MYvzGcAfx86SKNFa7fGBSRHu8X6QWx0Ll8tlj3k6tAqe5zKvQ02ssYTWh1HfW8dkHzwZ
+         PGO1tPqFNaiGdk9J0o+F8oFhN/y6fiuh62XxtUGz/l6cpNZhI7Sa+Ahr3FtzyxjX/6Lj
+         HFnw==
+X-Gm-Message-State: AC+VfDyj7mNPn8e/ro5b/sxU5nXk4244gXor11vTvkaa9j/bRg8y7ali
+        z9IBN6U66Gl4ZTeJXMUUbyNmrPxI8DQ49sQGYhZ8OpuintJH
+X-Google-Smtp-Source: ACHHUZ4xrOCAFLQyzd+j5xR5JY8MHEygtuIWw5Hq/Ldp1vk9Ji1q2hIX1FH0gdzVAdHjpSgY45Mk0n+g0XBrD53/l070mruvOxAM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:4c1:b0:32b:13ad:3e4f with SMTP id
+ f1-20020a056e0204c100b0032b13ad3e4fmr1684031ils.5.1682615990663; Thu, 27 Apr
+ 2023 10:19:50 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 10:19:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ac1fb05fa54903e@google.com>
+Subject: [syzbot] Monthly io-uring report (Apr 2023)
+From:   syzbot <syzbot+listc8beb21580bd24573228@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Apr 2023, Shengyu Qu wrote:
+Hello io-uring maintainers/developers,
 
-> The X-Powers AXP15060 is a PMIC seen on Starfive Visionfive 2 board. Add
-> relative compatible item and CPUSLDO support and disables DC-DC
-> frequency setting for it.
-> 
-> ---
-> Changes since v2:
->  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
->  - Disables DC-DC frequency setting (Andre Przywara)
-> 
-> Changes since v1:
->  - Move cpusldo before drivevbus (Krzysztof Kozlowski)
-> 
-> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
-> 
-> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+This is a 31-day syzbot report for the io-uring subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/io-uring
 
-(not sure if I've sent this before or not, but just to make sure):
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 18 issues are still open and 88 have been fixed so far.
 
-Applied, thanks
+Some of the still happening issues:
 
--- 
-Lee Jones [李琼斯]
+Ref Crashes Repro Title
+<1> 3549    Yes   WARNING in io_ring_exit_work
+                  https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
+<2> 3291    Yes   general protection fault in try_to_wake_up (2)
+                  https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
+<3> 783     Yes   INFO: task hung in io_ring_exit_work
+                  https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
+<4> 582     Yes   KMSAN: uninit-value in io_req_cqe_overflow
+                  https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
+<5> 75      Yes   INFO: task hung in io_wq_put_and_exit (3)
+                  https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
