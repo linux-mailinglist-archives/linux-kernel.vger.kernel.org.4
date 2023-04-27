@@ -2,228 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1E66F0430
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C9E6F0434
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243522AbjD0KZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S243373AbjD0K2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243512AbjD0KZw (ORCPT
+        with ESMTP id S243288AbjD0K2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:25:52 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2808A4EC9
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:25:51 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-2f833bda191so5080076f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:25:51 -0700 (PDT)
+        Thu, 27 Apr 2023 06:28:43 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DE55256;
+        Thu, 27 Apr 2023 03:28:38 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f195b164c4so45264865e9.1;
+        Thu, 27 Apr 2023 03:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682591149; x=1685183149;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9YirskzzfAT9ZG78j4XI4f+XaKvOs4fPB8pgDEIFrg=;
-        b=dH+YgQI6dQjl1A5Sw11f3xx1ffIcrI4l/QBtnOO+H7Sqe5wuP+Es2b93LL4lwlO6IJ
-         S9U//eRjfTQ5JhXMNJ9VFTRn4S6ziXjfRlALf3KG9SiWq33hh5pjwTda2tGZ5VjEVKuS
-         /RRo8QBGK5SAxVNgR4pWs3MMek91fhyMNEXRq/MI1/EBrCbfzP/n/n13/VRQnRE/kvcR
-         66tMMLGpNxK6QtSqZ/lJNKKtdDvJXVcBK6OspBszFNKXW5pkF+BJcMFd4odAfwzLu26M
-         1PBxkeNIQzUnxSPkxWz1kR6xZxFbt9P6sZAq9fH5yN64HMIL+Lt/SsiFZud6kTiMI1Ls
-         yvZA==
+        d=gmail.com; s=20221208; t=1682591317; x=1685183317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OsPS+00a1dZLp9LSK0ZrosYCd65h9Kmfa6gKaFuspLg=;
+        b=Vh38b6dKEuPyG3hnP0eVquMuo1sN8FuMyytdNkN9RbQcdCtI9gPDEp5I2CoZh4Fa+d
+         xU+NGZEGqMjNkiZWG0nel5FG2W2qJTT/j3u4iNA1jftt4GQf4A/4C/XZNb6t/8Eremd1
+         P4reS4Iv/yAkPtUGkAauZhR0tFMLHFcj3rEigbG9NIl87PMgUJMEtIqei91UMtKOXvpc
+         SF8OTmQZfpwYONyg2w59DvlQSEbuo6LBK9zbTpz3PnIxu0fikmDt3/TH3Qd6bpFsbpsY
+         pxiTKmy5DmuVDlrdIypbr9HaOj13EQONMThV8liRSNewYG+YLi1AzhDc1YYAevZKUtHM
+         PIgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682591149; x=1685183149;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q9YirskzzfAT9ZG78j4XI4f+XaKvOs4fPB8pgDEIFrg=;
-        b=ZDTVlnWeLbJT3HZGYao5exXOhsWFKZr32rGpXmr9pGVk1P+u+Es98nGaRF6jWcB6dq
-         y4/oNt5/lgkIm8997KuW+MCi6v45imE5ut0OkVcte+d+idSjMARzh0CzWbtmWJspIuLe
-         Cyb1f1qLjx1ASEcoNGGxZppyRkXI6pIPPllUaxTm4V/rz8ObUMgAietgahmijQikkqXt
-         dSqKbUGuOKFKnc6wAohi5fdj9Tjqo9EWCD55fnIzcWW9jgHQJ5TsZu00cG5EnIvLojDK
-         U/oOThjp8T8IzgNnlJR834TF6eZOHDdjulNXivjKFGQS1AOVAs2gLiQSZfjnxH2HbMfC
-         CZFQ==
-X-Gm-Message-State: AC+VfDyNZk4Qf/0h45HZPqdRTaDKc2j+91KIkMKBgBpYTng5MPniSPgU
-        Q3rScrQy2NIt1Fhr4tXqpXHHAg==
-X-Google-Smtp-Source: ACHHUZ6x1wuM4Jn0UPIukgsBYJpg+fMhoKy3/rvqcQ+kvfhVsS//cfS47JS5pbSjqqs83b2EuvSkvQ==
-X-Received: by 2002:adf:f0ce:0:b0:2f0:69c4:3900 with SMTP id x14-20020adff0ce000000b002f069c43900mr927802wro.54.1682591149513;
-        Thu, 27 Apr 2023 03:25:49 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id h3-20020a5d5043000000b002c70ce264bfsm18081249wrt.76.2023.04.27.03.25.48
+        d=1e100.net; s=20221208; t=1682591317; x=1685183317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OsPS+00a1dZLp9LSK0ZrosYCd65h9Kmfa6gKaFuspLg=;
+        b=gl6QkA1iphEPbHRWcH9Yg4xCQU8yq/0nPjCCXEEZgpQ3kcBNY+ckOKeDrwOXJyn84W
+         wfsvmSZebh7+2dD/liBJu7MQRplTSdoAXxpFH+jNSvwaaPxvtugBIVXtv8rORb08cNnP
+         k86CxzAjCFzjorGxHqXxyB0R+/HzTyAWFPPmuh28XSBGiuwcihK7DxERNM0hs9WCBDnj
+         BsIIwrClmogQpt6NLb8CpR0M8VEP9kYotxO6ceLL98h9UtEXszlYvgrI6CNhnpYqUMOU
+         1gJKOE7JrC1ajs+OLIAVOhmxXzdc7GfZBKnawhPan6CGgXr9gHtNsm3AEXeXhFQfycEK
+         FSPQ==
+X-Gm-Message-State: AC+VfDz2aJASeo1RkWtFdj/ERR0qB8tg6Pkh8b/9A7H3Ln/B5gQoscSq
+        39NikQRWmzXOzEGfr/F228hQEsinZ4RHZg==
+X-Google-Smtp-Source: ACHHUZ4iqn612iYgzA3sjBKudq7RLAA6AxGrlYD98j6R3/4n4VFELHkz3cFfxBee61Bigh43AGH+vw==
+X-Received: by 2002:a7b:c015:0:b0:3f1:662a:93d0 with SMTP id c21-20020a7bc015000000b003f1662a93d0mr1123452wmb.15.1682591317134;
+        Thu, 27 Apr 2023 03:28:37 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id z16-20020a05600c221000b003ee1b2ab9a0sm20790097wml.11.2023.04.27.03.28.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 03:25:48 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 12:25:42 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
-        corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, lenb@kernel.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, qianweili@huawei.com, wangzhou1@hisilicon.com,
-        herbert@gondor.apana.org.au, Marc Zyngier <maz@kernel.org>,
-        luzmaximilian@gmail.com, hdegoede@redhat.com, markgross@kernel.org,
-        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
-        rafael@kernel.org, davem@davemloft.net, rafael.j.wysocki@intel.com
-Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
- structure
-Message-ID: <qqukqrc45zqyjh5bwpjpuiweogwtapuw7qqjjpubjwvteum6ig@esjfwqdivhpa>
-References: <20230404182037.863533-9-sunilvl@ventanamicro.com>
- <mhng-fd6c3622-ce6c-4895-8dc9-7dbaa2ab14f4@palmer-ri-x1c9a>
- <ZEo+6rwM+c6DvlMM@sunil-laptop>
+        Thu, 27 Apr 2023 03:28:36 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/spelling.txt: add more spellings to spelling.txt
+Date:   Thu, 27 Apr 2023 11:28:35 +0100
+Message-Id: <20230427102835.83482-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEo+6rwM+c6DvlMM@sunil-laptop>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 02:52:50PM +0530, Sunil V L wrote:
-> Hi Palmer,
-> 
-> On Wed, Apr 26, 2023 at 11:45:00AM -0700, Palmer Dabbelt wrote:
-> > On Tue, 04 Apr 2023 11:20:22 PDT (-0700), sunilvl@ventanamicro.com wrote:
-> > > RINTC structures in the MADT provide mapping between the hartid
-> > > and the CPU. This is required many times even at run time like
-> > > cpuinfo. So, instead of parsing the ACPI table every time, cache
-> > > the RINTC structures and provide a function to get the correct
-> > > RINTC structure for a given cpu.
-> > > 
-> > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  arch/riscv/include/asm/acpi.h |  2 ++
-> > >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
-> > >  2 files changed, 62 insertions(+)
-> > > 
-> > > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-> > > index 9be52b6ffae1..1606dce8992e 100644
-> > > --- a/arch/riscv/include/asm/acpi.h
-> > > +++ b/arch/riscv/include/asm/acpi.h
-> > > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
-> > > 
-> > >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-> > > 
-> > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
-> > > +u32 get_acpi_id_for_cpu(int cpu);
-> > >  #endif /* CONFIG_ACPI */
-> > > 
-> > >  #endif /*_ASM_ACPI_H*/
-> > > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-> > > index 81d448c41714..40ab55309c70 100644
-> > > --- a/arch/riscv/kernel/acpi.c
-> > > +++ b/arch/riscv/kernel/acpi.c
-> > > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
-> > >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-> > >  EXPORT_SYMBOL(acpi_pci_disabled);
-> > > 
-> > > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
-> > > +
-> > > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
-> > > +{
-> > > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
-> > > +	int cpuid;
-> > > +
-> > > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
-> > > +		return 0;
-> > > +
-> > > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
-> > 
-> > Unless I'm missing something, this races with CPUs coming online.  Maybe
-> > that's a rare enough case we don't care, but I think we'd also just have
-> > simpler logic if we fixed it...
-> > 
-> This depend only on cpuid_to_hartid_map filled up. I wish I could
-> initialize this RINTC mapping in setup_smp() itself like ARM64. But in
-> RISC-V, this file smpboot.c gets built only when CONFIG_SMP is enabled.
-> Hence, we need to initialize this array outside of setup_smp().
-> 
-> I can update the code to initialize this from setup_arch() immediately
-> after setup_smp() if ACPI is enabled. That should avoid the global
-> variable check also. Let me know if you prefer this.
-> 
-> > > +	/*
-> > > +	 * When CONFIG_SMP is disabled, mapping won't be created for
-> > > +	 * all cpus.
-> > > +	 * CPUs more than NR_CPUS, will be ignored.
-> > > +	 */
-> > > +	if (cpuid >= 0 && cpuid < NR_CPUS)
-> > > +		cpu_madt_rintc[cpuid] = *rintc;
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int acpi_init_rintc_array(void)
-> > > +{
-> > > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
-> > > +		return 0;
-> > > +
-> > > +	return -ENODEV;
-> > > +}
-> > > +
-> > > +/*
-> > > + * Instead of parsing (and freeing) the ACPI table, cache
-> > > + * the RINTC structures since they are frequently used
-> > > + * like in  cpuinfo.
-> > > + */
-> > > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu)
-> > > +{
-> > > +	static bool rintc_init_done;
-> > 
-> > ... basically just get rid of this global variable, and instead have a
-> > 
-> >    if (!&cpu_madt_rintc[cpu])
-> >        ... parse ...
-> >    return &cpu_madt_rintc[cpu];
-> > 
-> > that'd probably let us get rid of a handful of these helpers too, as now
-> > it's just a call to the parsing bits.
-> > 
-> I am afraid this (!&cpu_madt_rintc[cpu]) check won't work since we are
-> not caching the RINTC pointers but actual contents itself. So, the
-> address is always valid. However, as per Drew's earlier feedback I am
-> going to reduce one helper. I am planning to send the next version of
-> this patch once 6.4 rc1 is available since the ACPICA patches are merged
-> now.
-> 
-> > > +
-> > > +	if (!rintc_init_done) {
-> > > +		if (acpi_init_rintc_array()) {
-> > > +			pr_err("No valid RINTC entries exist\n");
-> > > +			return NULL;
-> > > +		}
-> > > +
-> > > +		rintc_init_done = true;
-> > > +	}
-> > > +
-> > > +	return &cpu_madt_rintc[cpu];
-> > > +}
-> > > +
-> > > +u32 get_acpi_id_for_cpu(int cpu)
-> > > +{
-> > > +	struct acpi_madt_rintc *rintc = acpi_cpu_get_madt_rintc(cpu);
-> > > +
-> > > +	BUG_ON(!rintc);
-> > 
-> > We should have some better error reporting here.  It looks like all the
-> > callerss of get_acpi_id_for_cpu() are tolerant of a nonsense ID being
-> > returned, so maybe we just pr_warn() something users can understand and then
-> > return -1 or something?
-> > 
-> 
-> RINTC is mandatory for ACPI systems. Also, all 32bit values are valid
-> for UID. So, there is no bogus value we can return. 
-> 
-> Actually, I just realized this check is redundant. It will never be NULL
-> since it is a static array. So, we can just get rid of the BUG.
+Some of the more common spelling mistakes and typos that I've found while
+fixing up spelling mistakes in the kernel over the past couple of releases.
 
-It can be NULL on the first call of acpi_cpu_get_madt_rintc(), which is
-a good time to BUG if there's isn't an RINTC.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ scripts/spelling.txt | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Thanks,
-drew
+diff --git a/scripts/spelling.txt b/scripts/spelling.txt
+index f8bd6178d17b..fc7ba95e86a0 100644
+--- a/scripts/spelling.txt
++++ b/scripts/spelling.txt
+@@ -155,6 +155,7 @@ aquired||acquired
+ aquisition||acquisition
+ arbitary||arbitrary
+ architechture||architecture
++archtecture||architecture
+ arguement||argument
+ arguements||arguments
+ arithmatic||arithmetic
+@@ -279,6 +280,7 @@ cant'||can't
+ canot||cannot
+ cann't||can't
+ cannnot||cannot
++capabiity||capability
+ capabilites||capabilities
+ capabilties||capabilities
+ capabilty||capability
+@@ -426,6 +428,7 @@ cotrol||control
+ cound||could
+ couter||counter
+ coutner||counter
++creationg||creating
+ cryptocraphic||cryptographic
+ cummulative||cumulative
+ cunter||counter
+@@ -492,6 +495,7 @@ destorys||destroys
+ destroied||destroyed
+ detabase||database
+ deteced||detected
++detecion||detection
+ detectt||detect
+ detroyed||destroyed
+ develope||develop
+@@ -513,6 +517,7 @@ diferent||different
+ differrence||difference
+ diffrent||different
+ differenciate||differentiate
++diffreential||differential
+ diffrentiate||differentiate
+ difinition||definition
+ digial||digital
+@@ -617,6 +622,7 @@ evalute||evaluate
+ evalutes||evaluates
+ evalution||evaluation
+ excecutable||executable
++excceed||exceed
+ exceded||exceeded
+ exceds||exceeds
+ exceeed||exceed
+@@ -632,6 +638,7 @@ existant||existent
+ exixt||exist
+ exsits||exists
+ exlcude||exclude
++exlcuding||excluding
+ exlcusive||exclusive
+ exlusive||exclusive
+ exmaple||example
+@@ -726,6 +733,8 @@ generiously||generously
+ genereate||generate
+ genereted||generated
+ genric||generic
++gerenal||general
++geting||getting
+ globel||global
+ grabing||grabbing
+ grahical||graphical
+@@ -899,6 +908,7 @@ iteraions||iterations
+ iternations||iterations
+ itertation||iteration
+ itslef||itself
++ivalid||invalid
+ jave||java
+ jeffies||jiffies
+ jumpimng||jumping
+@@ -977,6 +987,7 @@ microprocesspr||microprocessor
+ migrateable||migratable
+ millenium||millennium
+ milliseonds||milliseconds
++minimim||minimum
+ minium||minimum
+ minimam||minimum
+ minimun||minimum
+@@ -1042,6 +1053,7 @@ notifed||notified
+ notity||notify
+ nubmer||number
+ numebr||number
++numer||number
+ numner||number
+ nunber||number
+ obtaion||obtain
+@@ -1061,6 +1073,7 @@ offet||offset
+ offlaod||offload
+ offloded||offloaded
+ offseting||offsetting
++oflload||offload
+ omited||omitted
+ omiting||omitting
+ omitt||omit
+@@ -1105,6 +1118,7 @@ pakage||package
+ paket||packet
+ pallette||palette
+ paln||plan
++palne||plane
+ paramameters||parameters
+ paramaters||parameters
+ paramater||parameter
+@@ -1181,12 +1195,14 @@ previsously||previously
+ primative||primitive
+ princliple||principle
+ priorty||priority
++priting||printing
+ privilaged||privileged
+ privilage||privilege
+ priviledge||privilege
+ priviledges||privileges
+ privleges||privileges
+ probaly||probably
++probabalistic||probabilistic
+ procceed||proceed
+ proccesors||processors
+ procesed||processed
+@@ -1460,6 +1476,7 @@ submited||submitted
+ submition||submission
+ succeded||succeeded
+ suceed||succeed
++succesfuly||successfully
+ succesfully||successfully
+ succesful||successful
+ successed||succeeded
+@@ -1503,6 +1520,7 @@ symetric||symmetric
+ synax||syntax
+ synchonized||synchronized
+ sychronization||synchronization
++sychronously||synchronously
+ synchronuously||synchronously
+ syncronize||synchronize
+ syncronized||synchronized
+@@ -1532,6 +1550,7 @@ threee||three
+ threshhold||threshold
+ thresold||threshold
+ throught||through
++tansition||transition
+ trackling||tracking
+ troughput||throughput
+ trys||tries
+@@ -1611,6 +1630,7 @@ unneccessary||unnecessary
+ unnecesary||unnecessary
+ unneedingly||unnecessarily
+ unnsupported||unsupported
++unuspported||unsupported
+ unmached||unmatched
+ unprecise||imprecise
+ unpriviledged||unprivileged
+@@ -1657,6 +1677,7 @@ verfication||verification
+ veriosn||version
+ verisons||versions
+ verison||version
++veritical||vertical
+ verson||version
+ vicefersa||vice-versa
+ virtal||virtual
+@@ -1677,6 +1698,7 @@ whenver||whenever
+ wheter||whether
+ whe||when
+ wierd||weird
++wihout||without
+ wiil||will
+ wirte||write
+ withing||within
+-- 
+2.30.2
+
