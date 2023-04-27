@@ -2,110 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7956F0470
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36206F045E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 12:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243413AbjD0KsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 06:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S243215AbjD0Kol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 06:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243448AbjD0KsF (ORCPT
+        with ESMTP id S243569AbjD0Koj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 06:48:05 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F995256;
-        Thu, 27 Apr 2023 03:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682592483; x=1714128483;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DJAw9VNz1ZsUBRAPmSWDnMHm4RxRMWbc9EwxSgNFsyA=;
-  b=2bt6Ah9diZX4DTTTzlc7YnQnFXGyt/6Kf4Na4tefrB6wRUrwmeS+lD22
-   pUguPvIZfIUiOFwM2NQAIIJk+MvqcBCC8Qu6eNBmN8EZvYZKSzZ7p31e8
-   4FYK12JKU4Nfb47LnsDmB3McGUWTVg3ttFZJ1bGpzZlPWAfO8nomqg6cv
-   TXGj3UC83cdFkBVrwk2Dj2rg/viKMJVZCQqHwpHkYOn952D3fD9Ew7Rki
-   jnt9mCAkNsHMB1BJsZ5l9wovueDNJ02mjIecseyEixLvGnRr46dHvZjaI
-   AC41mIFb9Ra9lGPVHpEGfocHiIG/ld92wJw7ybsN+kwVyRoqPShfAwBo+
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,230,1677567600"; 
-   d="scan'208";a="211435929"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Apr 2023 03:48:02 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 27 Apr 2023 03:48:01 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 27 Apr 2023 03:47:59 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <palmer@dabbelt.com>
-CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1] dt-bindings: riscv: explicitly mention assumption of Zicsr & Zifencei support
-Date:   Thu, 27 Apr 2023 11:43:42 +0100
-Message-ID: <20230427-fence-blurred-c92fb69d4137@wendy>
-X-Mailer: git-send-email 2.39.2
+        Thu, 27 Apr 2023 06:44:39 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4E92D79
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:44:37 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b733fd00bso6528139b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 03:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1682592277; x=1685184277;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QPjgq3zlWYQFj7c/g/9N/OxqaeG5Njw/y80poNIzu/A=;
+        b=MXoqBeEes7wZrkLALkHP5t+W1nwEgOd2Hsq+KKGx3YGVx3bZZbzO+3lAUhe13VKgNu
+         ZZobnrBUZH1XrJOgVhERqBCThWEyc5bx/rNJOXZMWIKoUUa+LbSS4sMNvaaH6GSMGBQY
+         wgu9WgHdDiH+VL22wrhyazR7yNxzimoxcDyIv0L+JFcLZdRUbvy8N8ANCNDlnZVrvJon
+         KDpKI9bPWiF6oJkJ+1fb2a8WXGPMJTAZIAL/mZyoEPb8d3wuyihrdnovBnk6C8QBbaTV
+         AlgXZi1l9LJXwifEKUcs9KBgM0mzHDQ30TAAxt5h7Zbpq6YYgAOpLcyN4LFDrAw9ZVMD
+         nQSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682592277; x=1685184277;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QPjgq3zlWYQFj7c/g/9N/OxqaeG5Njw/y80poNIzu/A=;
+        b=FInDbv/97Q6I5XpyKWWKuhKicbzj5INyXKxENxl4YCIfQrluuTE2iUSRyV3Ls/Tjq2
+         /ae6uqsxF2XufJxjk2Q7bhgKhxZytrRAvRlqDIIifKv7nHgD6EmeVNUkZ21oqrrVeesx
+         lP2UOUBIQp5dvh0k8Z3VZP7G43XgBzvxD3ZAX3VEJV8dQSrQq3qGsDgx0n0ehjDTI0l/
+         97f9dvjOE4b+I18+mHuhtqSK/Gu2KVg/TzcGne3cLM8t9GWLngWaI/p9XdBpwO1r0ly0
+         h5UaPOd70iCDsgAIdBomWAcqt6obDaR/3WtNtBgO6ZPkesU1zj26DyVPBV9bGqJNoTzq
+         Vwfw==
+X-Gm-Message-State: AC+VfDza92VO9ayq4LCkmXFsf2h7Vo6E0IPoMshP+YJWs1SNDEHPxQaG
+        5JvTn+NPpdRB8fl0J2VE2t98vQ==
+X-Google-Smtp-Source: ACHHUZ6uU2L9eISIY6VmEOhsO9zwuUAYLUCc/j7JkEeY/3QW0LLDLHvBK0O2sX46EQbhgMALIkR9Cw==
+X-Received: by 2002:a05:6a20:8402:b0:ef:ef0d:7dd9 with SMTP id c2-20020a056a20840200b000efef0d7dd9mr1174846pzd.51.1682592276646;
+        Thu, 27 Apr 2023 03:44:36 -0700 (PDT)
+Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
+        by smtp.gmail.com with ESMTPSA id b3-20020a631b03000000b0050f93a3586fsm11029042pgb.37.2023.04.27.03.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 03:44:36 -0700 (PDT)
+From:   Shunsuke Mie <mie@igel.co.jp>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Shunsuke Mie <mie@igel.co.jp>, Frank Li <Frank.Li@nxp.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [RFC PATCH v2 0/3] Introduce a PCIe endpoint virtio console
+Date:   Thu, 27 Apr 2023 19:44:25 +0900
+Message-Id: <20230427104428.862643-1-mie@igel.co.jp>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1731; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=DJAw9VNz1ZsUBRAPmSWDnMHm4RxRMWbc9EwxSgNFsyA=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDClegdfq/j3oPnKMb1NS3+TYBa7qN1tclAtfvXphfWnXyXx2 9/bsjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEykai4jw93ZultuPgqb/fbiv19RZ+ WthEL+JXDOi5AWWcEZrctuc5iR4c6uQ/7qxdpei0/3/YlSq1K7lPTYfsWKuy+bbCS5X3d/YgYA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dt-binding was defined before the extraction of csr access and
-fence.i into their own extensions, and thus the presence of the I
-base extension implies Zicsr and Zifencei.
-There's no harm in adding them obviously, but for backwards
-compatibility with DTs that existed prior to that extraction, software
-is unable to differentiate between "i" and "i_zicsr_zifencei" without
-any further information.
+PCIe endpoint framework provides APIs to implement PCIe endpoint function.
+This framework allows defining various PCIe endpoint function behaviors in
+software. This patch extend the framework for virtio pci device. The
+virtio is defined to communicate guest on virtual machine and host side.
+Advantage of the virtio is the efficiency of data transfer and the conciseness
+of implementation device using software. It also be applied to PCIe
+endpoint function.
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-CC: Conor Dooley <conor@kernel.org>
-CC: Rob Herring <robh+dt@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC: Paul Walmsley <paul.walmsley@sifive.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>
-CC: linux-riscv@lists.infradead.org
-CC: devicetree@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- Documentation/devicetree/bindings/riscv/cpus.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+We designed and implemented a PCIe EP virtio console function driver using
+the extended PCIe endpoint framework for virtio. It can be communicate
+host and endpoint over virtio as console.
 
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index 4c7ce4a37052..a93bc7eae928 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -85,6 +85,12 @@ properties:
-       User-Level ISA document, available from
-       https://riscv.org/specifications/
- 
-+      Due to revisions of the ISA specification, some deviations
-+      have arisen over time.
-+      Notably, riscv,isa was defined prior to the creation of the
-+      Zicsr and Zifencei extensions and thus "i" implies
-+      "zicsr_zifencei".
-+
-       While the isa strings in ISA specification are case
-       insensitive, letters in the riscv,isa string must be all
-       lowercase to simplify parsing.
+An architecture of the function driver is following:
+
+ ┌────────────┐         ┌──────────────────────┬────────────┐
+ │virtio      │         │                      │virtio      │
+ │console drv │         ├───────────────┐      │console drv │
+ ├────────────┤         │(virtio console│      ├────────────┤
+ │ virtio bus │         │ device)       │◄────►│ virtio bus │
+ ├────────────┤         ├---------------┤      └────────────┤
+ │            │         │ pci ep virtio │                   │
+ │  pci bus   │         │  console drv  │                   │
+ │            │  pcie   ├───────────────┤                   │
+ │            │ ◄─────► │  pci ep Bus   │                   │
+ └────────────┘         └───────────────┴───────────────────┘
+   PCIe Root              PCIe Endpoint
+
+Introduced driver is `pci ep virtio console drv` in the figure. It works
+as ep function for PCIe root and virtual virtio console device for PCIe
+endpoint. Each side of virtio console driver has virtqueue, and
+introduced driver transfers data on the virtqueue to each other. A data
+on root tx queue is transfered to endpoint rx queue and vice versa.
+
+This patchset is depend follwing patches which are under discussion.
+
+- [RFC PATCH 0/3] Deal with alignment restriction on EP side
+link: https://lore.kernel.org/linux-pci/20230113090350.1103494-1-mie@igel.co.jp/
+- [PATCH v3] vringh: IOMEM support
+link: https://lore.kernel.org/virtualization/CACGkMEumt4p7jU+H+T-b9My0buhdS8a-1GCSnWjnCwMAM=wo1Q@mail.gmail.com/T/#t
+
+First of this patchset is introduce a helper function to realize pci
+virtio function using PCIe endpoint framework. The second one is adding
+a missing definition for virtio pci header. The last one is for PCIe
+endpoint virtio console driver.
+
+This is tested on next-20230416 and RCar S4 board as PCIe endpoint.
+
+Shunsuke Mie (3):
+  PCI: endpoint: introduce a helper to implement pci ep virtio function
+  virtio_pci: add a definition of queue flag in ISR
+  PCI: endpoint: Add EP function driver to provide virtio-console
+    functionality
+
+ drivers/pci/endpoint/functions/Kconfig        |  19 +
+ drivers/pci/endpoint/functions/Makefile       |   2 +
+ drivers/pci/endpoint/functions/pci-epf-vcon.c | 596 ++++++++++++++++++
+ .../pci/endpoint/functions/pci-epf-virtio.c   | 458 ++++++++++++++
+ .../pci/endpoint/functions/pci-epf-virtio.h   | 126 ++++
+ include/uapi/linux/virtio_pci.h               |   3 +
+ 6 files changed, 1204 insertions(+)
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.c
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-virtio.h
+
 -- 
-2.39.2
+2.25.1
 
