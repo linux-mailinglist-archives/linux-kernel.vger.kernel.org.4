@@ -2,190 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DD96F0591
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317D76F059B
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242993AbjD0MQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 08:16:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
+        id S243776AbjD0MRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243761AbjD0MQN (ORCPT
+        with ESMTP id S243386AbjD0MR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 08:16:13 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C9759FD;
-        Thu, 27 Apr 2023 05:15:55 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-5ef4885bc39so37463006d6.2;
-        Thu, 27 Apr 2023 05:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682597754; x=1685189754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aGVb0EWRnfJN9McMLRCtk+0SPSO6GWCEI8WRdlgALXM=;
-        b=FF/oiEep2XYHShVm4kipE4bafyndFC0DfAXJc9l0ivmUrLkt21SEnV65kOsxWqw8Dy
-         jcsnbofKaTnOcuk0COs5VhHtWz1b0e1ij1rWfV0tyEKcf18FJhkUd0NKoVYbH3yeRwtL
-         5gtT6g0JgFlc80Jbl7cOmY8oZFjl1/Y2WQ433tMBKM4BrlQqVCbKz2JEaYjK0yJ6Zvzr
-         i4u1E1IHI2cF91ppXiqMoXHZ6Yw96AmUYfVUE8CeweBxj/DuMNTZV9Lt6cfr1GLgGGVE
-         6kBeAFaLWga3IXeDM7/w1XxdaaehEXUWO1CB5V5BcBY4mHTW/D+cDhAA8iaFXUnXhPp/
-         MAFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682597754; x=1685189754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aGVb0EWRnfJN9McMLRCtk+0SPSO6GWCEI8WRdlgALXM=;
-        b=Ke4l+aFamJsuTdZChGAYUkszEtjjFOlEKCI+rb1gwWhXHgprzWa7RlGtQXsQQlYR2b
-         1Ttz/xenNL6gY5w6XzHZINmvbhrJG7OO7qn3+RdBXTI6ZIJhK553BMCFc1jGWbAOVO+l
-         osy//eaZb3tXD/Yebsftj/aj2UuQCYc86guDOUjWoYPpFSK2IVF2HWRgdSonlwYlYfnM
-         zxlZbG6zG60FtpIkzSANryizBHftaL/ve505kYyLQfiKKJ+Hw4xg3i2IxBci/8UwnV+a
-         eFptCUd9N+hUDul45Odl9GnuTYllbB2YTpqu2Ihd2RaT6RLHbJ4I4RkfOr1hF1VLNzzd
-         mVyg==
-X-Gm-Message-State: AC+VfDwcPYel5i19TJ7dlNBhtkrPcno96l27IKigAeBHKJbKZwlIlNPG
-        910+nhNzJIJhwOH97BX05LEPJ2oqBe4UOkt/Fc8=
-X-Google-Smtp-Source: ACHHUZ7a21m2eQtsYoV3x5/rC5U45LhJAu9nbaQYI/P0MUx5/lQB2gpnRF92NoVovkByY/W79j0gZXsRexjLdh1xoUQ=
-X-Received: by 2002:a05:6214:1253:b0:616:7cf5:ff70 with SMTP id
- r19-20020a056214125300b006167cf5ff70mr957371qvv.22.1682597754385; Thu, 27 Apr
- 2023 05:15:54 -0700 (PDT)
+        Thu, 27 Apr 2023 08:17:27 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0115B4C37;
+        Thu, 27 Apr 2023 05:17:24 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RBvAHQ017905;
+        Thu, 27 Apr 2023 12:17:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ClN6svg5Zbke6G0BMK6b7HlcsiI44LgCgTwEaaJW9M8=;
+ b=kmSFr1CXti/kglDD+dZes7LK7kKGp0PyHYZLwbiT0O8M9xPvLsSm/5ri/XmtVaGod4go
+ iVTZ16zLXQ+KZklahXs/L12B/bId+43ZrnZ8w0yk3AMh/2XrXCVxdzX9KBS9bzdEl00b
+ HvOhd7jUUN8g66nfOWV5qmUrsQWSTPL2K2zA0K5rRZp8+yCc6LLBTBKF1eyzyPcoHH5e
+ 1dVWH9fydVTFrJVNjFhX3qe/N0zEg6CR1lTZxzXfwk55qsOv1dRnSIEI7nSnXTgUw2zV
+ 1niAXiEjrNmMKHljbGfESfBBZ4mT5lIoMGlvTZQhfJ/g3tQomUwUIyvKlEywS5FZHvH5 AQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q7nru5nkw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 12:17:22 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33QLrcxP007999;
+        Thu, 27 Apr 2023 12:17:19 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3q47772xnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 12:17:19 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33RCHECT21299536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Apr 2023 12:17:14 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 320C52004D;
+        Thu, 27 Apr 2023 12:17:14 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C70FB20040;
+        Thu, 27 Apr 2023 12:17:13 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.56])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 27 Apr 2023 12:17:13 +0000 (GMT)
+Date:   Thu, 27 Apr 2023 14:17:11 +0200
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, frankja@linux.ibm.com,
+        borntraeger@de.ibm.com, nrb@linux.ibm.com, nsg@linux.ibm.com,
+        seiden@linux.ibm.com, jgg@nvidia.com
+Subject: Re: [PATCH v2 1/1] KVM: s390: fix race in gmap_make_secure
+Message-ID: <20230427141711.6b071148@p-imbrenda>
+In-Reply-To: <ZEpkFzFFEpqa9zMv@osiris>
+References: <20230426134834.35199-1-imbrenda@linux.ibm.com>
+        <20230426134834.35199-2-imbrenda@linux.ibm.com>
+        <ZEpUEF7H86E9vVfS@osiris>
+        <20230427134649.1e482d91@p-imbrenda>
+        <ZEpkFzFFEpqa9zMv@osiris>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
- <20230417201457.c43xfcukjzm4u6vx@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbC4Bz_VX52zmv=sScBf0hzscMAC4+EwMCpnd1BcaSVJSw@mail.gmail.com>
- <CAADnVQJw9BCK2itE5bZWdQYz7D-8KdcH96E885zUakEDAOrC+Q@mail.gmail.com>
- <CALOAHbCtPR26it_Wdk7T_TETMTh2se6rgEbL_KC5XKtzvObjiA@mail.gmail.com>
- <CAADnVQ+FO-+1OALTtgVkcpH3Adc6xS9qjzORyq2vwVtwY2UoxQ@mail.gmail.com>
- <20230424174049.1c9e54dd@rorschach.local.home> <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
-In-Reply-To: <CALOAHbAx+W3-iBS6=FsPPShbEuSSZeyQWvLque+uF9Suwe3-HA@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 27 Apr 2023 20:15:18 +0800
-Message-ID: <CALOAHbAqsSq+gVg9xTYGAkrdZaFXc=PVoOYqej33dCEjWtHfFw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PDs8fp8EefkxdtV-yjHqzbCTSpNMHlzc
+X-Proofpoint-ORIG-GUID: PDs8fp8EefkxdtV-yjHqzbCTSpNMHlzc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_07,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ bulkscore=0 mlxlogscore=732 impostorscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 5:57=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
->
-> On Tue, Apr 25, 2023 at 5:40=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > On Wed, 19 Apr 2023 15:46:34 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >
-> > > No. Just one prog at entry into any of the kernel functions
-> > > and another prog at entry of funcs that 1st bpf prog called indirectl=
-y.
-> > > Like one prog is tracing networking events while another
-> > > is focusing on mm. They should not conflict.
-> >
-> > You mean that you have:
-> >
-> > function start:
-> >   __bpf_prog_enter_recur()
-> >     bpf_program1()
-> >       __bpf_prog_enter_recur()
-> >         bpf_program2();
-> >       __bpf_prog_exit_recur()
-> >   __bpf_prog_exit_recur()
-> >
-> >   rest of function
-> >
-> > That is, a bpf program can be called within another bpf pogram between
-> > the prog_enter and prog_exit(), that is in the same context (normal,
-> > softirq, irq, etc)?
-> >
->
-> Right, that can happen per my verification. Below is a simple bpf
-> program to verify it.
->
-> struct {
->     __uint(type, BPF_MAP_TYPE_LPM_TRIE);
->     __type(key, __u64);
->     __type(value, __u64);
->     __uint(max_entries, 1024);
->     __uint(map_flags, BPF_F_NO_PREALLOC);
-> } write_map SEC(".maps");
->
-> __u64 key;
->
-> SEC("fentry/kernel_clone")
-> int program1()
-> {
->     __u64 value =3D 1;
->
->     bpf_printk("before update");
->     // It will call trie_update_elem and thus trigger program2.
->     bpf_map_update_elem(&write_map, &key, &value, BPF_ANY);
->     __sync_fetch_and_add(&key, 1);
->     bpf_printk("after update");
->     return 0;
-> }
->
-> SEC("fentry/trie_update_elem")
-> int program2()
-> {
->     bpf_printk("trie_update_elem");
->     return 0;
-> }
->
-> The result as follows,
->
->          kubelet-203203  [018] ....1  9579.862862:
-> __bpf_prog_enter_recur: __bpf_prog_enter_recur
->          kubelet-203203  [018] ...11  9579.862869: bpf_trace_printk:
-> before update
->          kubelet-203203  [018] ....2  9579.862869:
-> __bpf_prog_enter_recur: __bpf_prog_enter_recur
->          kubelet-203203  [018] ...12  9579.862870: bpf_trace_printk:
-> trie_update_elem
->          kubelet-203203  [018] ....2  9579.862870:
-> __bpf_prog_exit_recur: __bpf_prog_exit_recur
->          kubelet-203203  [018] ...11  9579.862870: bpf_trace_printk:
-> after update
->          kubelet-203203  [018] ....1  9579.862871:
-> __bpf_prog_exit_recur: __bpf_prog_exit_recur
->
-> Note that we can't trace __bpf_prog_enter_recur and
-> __bpf_prog_exit_recur, so we have to modify the kernel to print them.
->
+On Thu, 27 Apr 2023 14:01:27 +0200
+Heiko Carstens <hca@linux.ibm.com> wrote:
 
-... However, surprisingly it still works even after this patchset is
-applied, because the hardirq/softirq flag is set when the program2 is
-running, see also the flags in the above trace_pipe output. Is that
-expected ?!
-I need  some time to figure it out, but maybe you have a quick answer...
+> On Thu, Apr 27, 2023 at 01:46:49PM +0200, Claudio Imbrenda wrote:
+> > On Thu, 27 Apr 2023 12:53:04 +0200
+> > Heiko Carstens <hca@linux.ibm.com> wrote:
+> >   
+> > > On Wed, Apr 26, 2023 at 03:48:34PM +0200, Claudio Imbrenda wrote:  
+> > > > This patch fixes a potential race in gmap_make_secure and removes the
+> > > > last user of follow_page without FOLL_GET.
+> > > > 
+> > > > Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> > > > Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> > > > Fixes: 214d9bbcd3a6 ("s390/mm: provide memory management functions for protected KVM guests")
+> > > > ---
+> > > >  arch/s390/kernel/uv.c | 32 +++++++++++---------------------
+> > > >  1 file changed, 11 insertions(+), 21 deletions(-)    
+> > > 
+> > > It would be helpful if this would be a bit more descriptive. "Fix
+> > > race" is not very helpful :)
+> > > 
+> > > What race does this fix?
+> > > When can this happen?
+> > > What are the consequences if the race window is being hit?  
+> > 
+> > We are locking something we don't have a reference to, and as explained
+> > by Jason and David in this thread <Y9J4P/RNvY1Ztn0Q@nvidia.com> it can
+> > lead to all kind of bad things, including the page getting
+> > unmapped (MADV_DONTNEED), freed, reallocated as a larger folio and the
+> > unlock_page() would target the wrong bit.
+> > 
+> > Also there is another race with the FOLL_WRITE, which could race
+> > between the follow_page and the get_locked_pte.
+> > 
+> > The main point of the patch is to remove the last follow_page without
+> > FOLL_GET or FOLL_PIN, removing the races can be considered a nice bonus.  
+> 
+> I've seen that discussion. What I'm actually asking for is that all of
+> this information should be added to the commit description. Nobody
+> will remember any of the details in one year.
 
-> > The protection is on the trampoline where the bpf program is called.
-> > Not sure how ftrace can stop BPF or BPF stop ftrace, unless bpf is
-> > tracing a ftrace callback, or ftrace is tracing a bpf function.
-> >
-> > -- Steve
->
+I will put it in the patch description.
 
-
---=20
-Regards
-Yafang
+do you think the text above is enough?
