@@ -2,203 +2,795 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0586F0309
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8606E6F0326
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243181AbjD0JJa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 05:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S243190AbjD0JMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242961AbjD0JJ3 (ORCPT
+        with ESMTP id S243003AbjD0JL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:09:29 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F261A6
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:27 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b97ec4bbc5aso6444905276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682586567; x=1685178567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WNpdm3UdM662v+PkmhOF4xRqFKPDMD0thDZpGLd8lkw=;
-        b=RYBXg2XeFOsaEcpqwGfu07IRRZA/vEeZz/Q/D8AW0rBdXP/q9lnZOHTogNZlqbXBBB
-         RjSjLRIjIJ6orI0+dKxDWnuneRn/UbyXILQ5iK8b1OQc16QJvyN6TTTbgFC07fS9qrZR
-         /01quT45K1FTyoiNqNod3suSGiifv/D9hoDMHVMtoFaHbOIFHGTyuUzJtxzIS/KvMgws
-         7j7CnygdcFUV2M64WyeOtL2gaVkS1exmHbTNy6tGC3puJnWnota76IqjdF7IAqqSzUNo
-         viszIRFkcoQvoqptMLWUfPxqN7pLaJGbMvdS3mZDHbl++WWfmB8Fz8VXtxdl6/paukJJ
-         8pGg==
-X-Gm-Message-State: AC+VfDwNdZOo3RuRzLdTBKIAK3otuamtLeFmK3WO6JcZi4126VHdnx0I
-        RBY6plqDRm5AF4cXbiw+Gur69K1prgbzdQ==
-X-Google-Smtp-Source: ACHHUZ7vBG66evaalj4r7uTzVn5QrXGyG7Dt8Jr9KlvsDQCfiXsMNJt7QUp/3QOiG4ZiVwTd7o4d4Q==
-X-Received: by 2002:a0d:e857:0:b0:541:8810:8d7b with SMTP id r84-20020a0de857000000b0054188108d7bmr808241ywe.15.1682586566468;
-        Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id o144-20020a0dcc96000000b00555e6c655f1sm4653603ywd.103.2023.04.27.02.09.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-54fb89e1666so64220217b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:09:26 -0700 (PDT)
-X-Received: by 2002:a81:4654:0:b0:52e:f109:ba7a with SMTP id
- t81-20020a814654000000b0052ef109ba7amr655899ywa.51.1682586565812; Thu, 27 Apr
- 2023 02:09:25 -0700 (PDT)
+        Thu, 27 Apr 2023 05:11:56 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AB9E50;
+        Thu, 27 Apr 2023 02:11:44 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 919BE5FD10;
+        Thu, 27 Apr 2023 12:11:42 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1682586702;
+        bh=i8FGLnAKrdz6rTfVtekEGXQZragW7XhoCO1AcVIACxY=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=G/HxEd3euRdvpAbx8Kn1eM+RgaNfucWCf5EsCCZpQpj7eZZZzzHK2xHzp6VuyLL1z
+         R+lalU8dhzSm63C03aWy0B94t0+PcZVx013UyrEwGiSBxu6hxZyiKD9auta4l0yQB4
+         rGGHICFi46W/sMF26phdLtxhvrsBDmfnWXadrk62kEhFwLIwpY4yfOgmOrI01KPAR/
+         qzbpamom+wUzIWQY8QBXs4rf+yHqWrzRfXXI+l20Z3ze5KTJ2+RBRcEql1MjB8YlgZ
+         mURQ+B5BG1SzBz0JFRd40mVERQV9jAgaY4V/HphVvxd7Upd+aUlOSduCBYr1R/nYYE
+         UrFefmito+vBA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 27 Apr 2023 12:11:42 +0300 (MSK)
+Date:   Thu, 27 Apr 2023 12:11:41 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Yu Tu <yu.tu@amlogic.com>
+CC:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
+Subject: Re: [PATCH V7 3/4] clk: meson: S4: add support for Amlogic S4 SoC
+ PLL clock driver
+Message-ID: <20230427091141.q3fky7ywnu4lsddk@CAB-WSD-L081021>
+References: <20230417065005.24967-1-yu.tu@amlogic.com>
+ <20230417065005.24967-4-yu.tu@amlogic.com>
+ <20230426111358.xh3gbhlvxj46ggi5@CAB-WSD-L081021>
+ <3be758e3-aa41-0003-fd1a-324b8dd4267a@amlogic.com>
 MIME-Version: 1.0
-References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
- <20230328160756.30520-3-quic_kriskura@quicinc.com> <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
- <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
- <2070d2fc-9bdc-57f8-d789-4fa6412fc7ed@quicinc.com> <CAMuHMdUKqo6paF5efFVr0tmA3mpOAraZORoKyVFi8Pkt=H4z6Q@mail.gmail.com>
- <592c2095-a6dc-de4b-713d-a9a582f966e0@quicinc.com>
-In-Reply-To: <592c2095-a6dc-de4b-713d-a9a582f966e0@quicinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Apr 2023 11:09:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
-Message-ID: <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
-Subject: get_maintainer.pl wrong and undeterministic? (was: Re: [PATCH v2 2/2]
- usb: gadget: udc: Handle gadget_connect failure during bind operation)
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3be758e3-aa41-0003-fd1a-324b8dd4267a@amlogic.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/04/27 05:34:00 #21173123
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+On Thu, Apr 27, 2023 at 04:38:20PM +0800, Yu Tu wrote:
+> 
+> 
+> On 2023/4/26 19:13, Dmitry Rokosov wrote:
+> > [Some people who received this message don't often get email from ddrokosov@sberdevices.ru. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> > 
+> > [ EXTERNAL EMAIL ]
+> > 
+> > On Mon, Apr 17, 2023 at 02:50:04PM +0800, Yu Tu wrote:
+> > > Add the S4 PLL clock controller driver in the s4 SoC family.
+> > > 
+> > > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> > > ---
+> > >   drivers/clk/meson/Kconfig  |  13 +
+> > >   drivers/clk/meson/Makefile |   1 +
+> > >   drivers/clk/meson/s4-pll.c | 902 +++++++++++++++++++++++++++++++++++++
+> > >   drivers/clk/meson/s4-pll.h |  87 ++++
+> > >   4 files changed, 1003 insertions(+)
+> > >   create mode 100644 drivers/clk/meson/s4-pll.c
+> > >   create mode 100644 drivers/clk/meson/s4-pll.h
+> > > 
+> > > diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> > > index fc002c155bc3..a663c90a3f3b 100644
+> > > --- a/drivers/clk/meson/Kconfig
+> > > +++ b/drivers/clk/meson/Kconfig
+> > > @@ -115,4 +115,17 @@ config COMMON_CLK_G12A
+> > >        help
+> > >          Support for the clock controller on Amlogic S905D2, S905X2 and S905Y2
+> > >          devices, aka g12a. Say Y if you want peripherals to work.
+> > > +
+> > > +config COMMON_CLK_S4_PLL
+> > > +     tristate "S4 SoC PLL clock controllers support"
+> > > +     depends on ARM64
+> > > +     default y
+> > > +     select COMMON_CLK_MESON_MPLL
+> > > +     select COMMON_CLK_MESON_PLL
+> > > +     select COMMON_CLK_MESON_REGMAP
+> > > +     help
+> > > +       Support for the pll clock controller on Amlogic S805X2 and S905Y4 devices,
+> > > +       aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+> > > +       Say Y if you want the board to work, because plls are the parent of most
+> > > +       peripherals.
+> > >   endmenu
+> > > diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> > > index 6eca2a406ee3..376f49cc13f1 100644
+> > > --- a/drivers/clk/meson/Makefile
+> > > +++ b/drivers/clk/meson/Makefile
+> > > @@ -19,3 +19,4 @@ obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
+> > >   obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+> > >   obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+> > >   obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+> > > +obj-$(CONFIG_COMMON_CLK_S4_PLL) += s4-pll.o
+> > > diff --git a/drivers/clk/meson/s4-pll.c b/drivers/clk/meson/s4-pll.c
+> > > new file mode 100644
+> > > index 000000000000..5a34d304adf7
+> > > --- /dev/null
+> > > +++ b/drivers/clk/meson/s4-pll.c
+> > > @@ -0,0 +1,902 @@
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * Amlogic Meson-S4 PLL Clock Controller Driver
+> > > + *
+> > > + * Copyright (c) 2021 Amlogic, inc.
+> > > + * Author: Yu Tu <yu.tu@amlogic.com>
+> > > + */
+> > > +
+> > > +#include <linux/clk-provider.h>
+> > > +#include <linux/of_device.h>
+> > > +#include <linux/platform_device.h>
+> > > +
+> > > +#include "clk-mpll.h"
+> > > +#include "clk-pll.h"
+> > > +#include "clk-regmap.h"
+> > > +#include "s4-pll.h"
+> > > +
+> > > +static DEFINE_SPINLOCK(meson_clk_lock);
+> > > +
+> > > +static struct clk_regmap s4_fixed_pll_dco = {
+> > > +     .data = &(struct meson_clk_pll_data){
+> > > +             .en = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL0,
+> > > +                     .shift   = 28,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .m = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL0,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 8,
+> > > +             },
+> > > +             .n = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL0,
+> > > +                     .shift   = 10,
+> > > +                     .width   = 5,
+> > > +             },
+> > > +             .frac = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL1,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 17,
+> > > +             },
+> > > +             .l = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL0,
+> > > +                     .shift   = 31,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .rst = {
+> > > +                     .reg_off = ANACTRL_FIXPLL_CTRL0,
+> > > +                     .shift   = 29,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fixed_pll_dco",
+> > > +             /*
+> > > +              * This clock is a fixed value (4GHz) that is initialized by ROMcode.
+> > > +              * This clock won't ever change at runtime.
+> > > +              * The chip design determines that this clock cannot be changed after
+> > > +              * initialization. To prevent system crash caused by changing
+> > > +              * fixed related register in kernel phase. This register is not
+> > > +              * writable in the kernel phase.
+> > > +              * So we use ro_ops.
+> > > +              */
+> > > +             .ops = &meson_clk_pll_ro_ops,
+> > > +             .parent_data = (const struct clk_parent_data []) {
+> > > +                     { .fw_name = "xtal", }
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fixed_pll = {
+> > > +     .data = &(struct clk_regmap_div_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL0,
+> > > +             .shift = 16,
+> > > +             .width = 2,
+> > > +             .flags = CLK_DIVIDER_POWER_OF_TWO,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fixed_pll",
+> > > +             /*
+> > > +              * This clock is a fixed value (2GHz) that is initialized by ROMcode.
+> > > +              * This clock won't ever change at runtime.
+> > > +              * The chip design determines that this clock cannot be changed after
+> > > +              * initialization. To prevent system crash caused by changing
+> > > +              * fixed related register in kernel phase. This register is not
+> > > +              * writable in the kernel phase.
+> > > +              * So we use ro_ops.
+> > > +              */
+> > > +             .ops = &clk_regmap_divider_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fixed_pll_dco.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +             /*
+> > > +              * This clock won't ever change at runtime so
+> > > +              * CLK_SET_RATE_PARENT is not required
+> > > +              */
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div2_div = {
+> > > +     .mult = 1,
+> > > +     .div = 2,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div2_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div2 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 24,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div2",
+> > > +             /*
+> > > +              * This clock is a fixed value (1GHz) that is initialized by ROMcode.
+> > > +              * This clock won't ever ungate at runtime.
+> > > +              * The chip design determines that this clock cannot be changed after
+> > > +              * initialization. To prevent system crash caused by changing
+> > > +              * fixed related register in kernel phase. This register is not
+> > > +              * writable in the kernel phase.
+> > > +              * So we use ro_ops.
+> > > +              */
+> > 
+> > The above comment has been copied and pasted many times.
+> > Please collapse it and refer to it from specific locations.
+> 
+> Just three times. The goal is to make it clear to the viewer.
+> 
 
-CC Joe and lkml
+I think, reference to one time mentioned comment is clear for viewer too.
+Also Jerome has pointed to this problem for the A1 driver as well:
 
-On Thu, Apr 27, 2023 at 10:44 AM Krishna Kurapati PSSNV
-<quic_kriskura@quicinc.com> wrote:
-> On 4/27/2023 1:23 PM, Geert Uytterhoeven wrote:
-> > On Thu, Apr 27, 2023 at 5:49 AM Krishna Kurapati PSSNV
-> > <quic_kriskura@quicinc.com> wrote:
-> >> On 4/26/2023 2:48 PM, Geert Uytterhoeven wrote:
-> >>> On Wed, Apr 26, 2023 at 3:17 AM Krishna Kurapati PSSNV
-> >>> <quic_kriskura@quicinc.com> wrote:
-> >>>> Hi Alan, Geert,
-> >>>>
-> >>>>     Can you help review and provide comments/approval on the following patch.
-> >>>
-> >>> I don't know why you are addressing me, as I never touched the affected
-> >>> file, am not listed as its maintainer, and don't know much about USB UDC.
-> >
-> >>    Apologies. I must have caused some confusion because of same name. I
-> >> must have specified clearly whom I was referring to.
-> >>
-> >> I CC'd and was referring to Geert Uytterhoeven <geert+renesas@glider.be>
-> >> for comments.
-> >
-> > That's actually me, too ;-)
-> >
-> >> As per the output of get_maintainer.pl
-> >>
-> >> ./scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
-> >>
-> >> Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
-> >> SUBSYSTEM,commit_signer:6/6=100%,authored:1/6=17%,removed_lines:2/26=8%)
-> >> Alan Stern <stern@rowland.harvard.edu>
-> >> (commit_signer:4/6=67%,authored:3/6=50%,added_lines:36/45=80%,removed_lines:17/26=65%)
-> >> TaoXue <xuetao09@huawei.com> (commit_signer:1/6=17%)
-> >> "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/6=17%)
-> >> Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/6=17%)
-> >> Colin Ian King <colin.i.king@gmail.com> (authored:1/6=17%)
-> >> Jiantao Zhang <water.zhangjiantao@huawei.com>
-> >> (authored:1/6=17%,added_lines:6/45=13%,removed_lines:6/26=23%)
-> >
-> > Interesting, I don't see me listed when running that command (on v6.3 and
-> > next-20230425), and I never authored any change to that file.
-> > What is the tree (commit sha1) you are running ./scripts/get_maintainer.pl on?
->
-> I checked it on linux-next a couple of weeks back and it showed me this.
-> But when I synced latest linux kernel, it didn't show it today 😅
-> Not sure, what is the diff here.
+https://lore.kernel.org/all/1jtty6o5so.fsf@starbuckisacylon.baylibre.com/
 
-Interesting:
+> > 
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div2_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div3_div = {
+> > > +     .mult = 1,
+> > > +     .div = 3,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div3_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div3 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 20,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div3",
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div3_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div4_div = {
+> > > +     .mult = 1,
+> > > +     .div = 4,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div4_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div4 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 21,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div4",
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div4_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div5_div = {
+> > > +     .mult = 1,
+> > > +     .div = 5,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div5_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div5 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 22,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div5",
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div5_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div7_div = {
+> > > +     .mult = 1,
+> > > +     .div = 7,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div7_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div7 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 23,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div7",
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div7_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_fixed_factor s4_fclk_div2p5_div = {
+> > > +     .mult = 2,
+> > > +     .div = 5,
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div2p5_div",
+> > > +             .ops = &clk_fixed_factor_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fixed_pll.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_fclk_div2p5 = {
+> > > +     .data = &(struct clk_regmap_gate_data){
+> > > +             .offset = ANACTRL_FIXPLL_CTRL1,
+> > > +             .bit_idx = 25,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "fclk_div2p5",
+> > > +             .ops = &clk_regmap_gate_ro_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_fclk_div2p5_div.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static const struct pll_mult_range s4_gp0_pll_mult_range = {
+> > > +     .min = 125,
+> > > +     .max = 250,
+> > > +};
+> > > +
+> > > +/*
+> > > + * Internal gp0 pll emulation configuration parameters
+> > > + */
+> > > +static const struct reg_sequence s4_gp0_init_regs[] = {
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL1,  .def = 0x00000000 },
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL2,  .def = 0x00000000 },
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL3,  .def = 0x48681c00 },
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL4,  .def = 0x88770290 },
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL5,  .def = 0x39272000 },
+> > > +     { .reg = ANACTRL_GP0PLL_CTRL6,  .def = 0x56540000 }
+> > 
+> > Please ensure that the initialization sequence values do not overlap
+> > with the below pll_data bits that are managed during runtime.
+> > 
+> 
+> That's right. There is a timing requirement for PLL initialization.
+> 
 
-    $ git checkout next-20230425
-    Updating files: 100% (7386/7386), done.
-    Previous HEAD position was 198925fae644b009 Add linux-next
-specific files for 20230329
-    HEAD is now at f600e0bbde8562a0 Add linux-next specific files for 20230425
-    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
-SUBSYSTEM,commit_signer:11/11=100%,authored:3/11=27%,removed_lines:5/73=7%)
-    Alan Stern <stern@rowland.harvard.edu>
-(commit_signer:4/11=36%,authored:3/11=27%,added_lines:36/182=20%,removed_lines:17/73=23%)
-    Badhri Jagan Sridharan <badhri@google.com>
-(commit_signer:2/11=18%,authored:2/11=18%,added_lines:107/182=59%,removed_lines:44/73=60%)
-    Elson Roy Serrao <quic_eserrao@quicinc.com>
-(commit_signer:1/11=9%,added_lines:27/182=15%)
-    Sebastian Reichel <sre@kernel.org> (commit_signer:1/11=9%)
-    Colin Ian King <colin.i.king@gmail.com> (authored:1/11=9%)
-    Jiantao Zhang <water.zhangjiantao@huawei.com>
-(authored:1/11=9%,removed_lines:6/73=8%)
-    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-    linux-kernel@vger.kernel.org (open list)
-    $ git checkout next-20230329
-    Updating files: 100% (7386/7386), done.
-    Previous HEAD position was f600e0bbde8562a0 Add linux-next
-specific files for 20230425
-    HEAD is now at 198925fae644b009 Add linux-next specific files for 20230329
-    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
-SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
-    Alan Stern <stern@rowland.harvard.edu>
-(commit_signer:3/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
-    Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/8=12%)
-    Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
-    Heikki Krogerus <heikki.krogerus@linux.intel.com> (commit_signer:1/8=12%)
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-I, Sebastian, and Heikki never touched this file...
+Okay, we have already discussed this in another patch series for A1 clock
+drivers, and some overlaps were found.
+I just want to help you find potential problems.
 
-     Jiantao Zhang <water.zhangjiantao@huawei.com>
-(authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
-    Colin Ian King <colin.i.king@gmail.com> (authored:1/8=12%)
-    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-    linux-kernel@vger.kernel.org (open list)
-    $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
-SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
-    Alan Stern <stern@rowland.harvard.edu>
-(commit_signer:4/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
-    "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/8=12%)
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Heikki and I are gone, but Rafael is new and also hasn't touched this file?
+You can find the discussion here:
 
-    Colin Ian King <colin.i.king@gmail.com>
-(commit_signer:1/8=12%,authored:1/8=12%)
-    Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
-    Jiantao Zhang <water.zhangjiantao@huawei.com>
-(authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
-    linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-    linux-kernel@vger.kernel.org (open list)
+https://lore.kernel.org/linux-amlogic/1jr0u2azfi.fsf@starbuckisacylon.baylibre.com/
 
-You can see the differences when running the following multiple times:
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_gp0_pll_dco = {
+> > > +     .data = &(struct meson_clk_pll_data){
+> > > +             .en = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL0,
+> > > +                     .shift   = 28,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .m = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL0,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 8,
+> > > +             },
+> > > +             .n = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL0,
+> > > +                     .shift   = 10,
+> > > +                     .width   = 5,
+> > > +             },
+> > > +             .frac = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL1,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 17,
+> > > +             },
+> > > +             .l = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL0,
+> > > +                     .shift   = 31,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .rst = {
+> > > +                     .reg_off = ANACTRL_GP0PLL_CTRL0,
+> > > +                     .shift   = 29,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .range = &s4_gp0_pll_mult_range,
+> > > +             .init_regs = s4_gp0_init_regs,
+> > > +             .init_count = ARRAY_SIZE(s4_gp0_init_regs),
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "gp0_pll_dco",
+> > > +             .ops = &meson_clk_pll_ops,
+> > > +             .parent_data = (const struct clk_parent_data []) {
+> > > +                     { .fw_name = "xtal", }
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_gp0_pll = {
+> > > +     .data = &(struct clk_regmap_div_data){
+> > > +             .offset = ANACTRL_GP0PLL_CTRL0,
+> > > +             .shift = 16,
+> > > +             .width = 3,
+> > > +             .flags = (CLK_DIVIDER_POWER_OF_TWO |
+> > > +                       CLK_DIVIDER_ROUND_CLOSEST),
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "gp0_pll",
+> > > +             .ops = &clk_regmap_divider_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_gp0_pll_dco.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +             .flags = CLK_SET_RATE_PARENT,
+> > > +     },
+> > > +};
+> > > +
+> > > +/*
+> > > + * Internal hifi pll emulation configuration parameters
+> > > + */
+> > > +static const struct reg_sequence s4_hifi_init_regs[] = {
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL1, .def = 0x00010e56 },
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL2, .def = 0x00000000 },
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL3, .def = 0x6a285c00 },
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL4, .def = 0x65771290 },
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL5, .def = 0x39272000 },
+> > > +     { .reg = ANACTRL_HIFIPLL_CTRL6, .def = 0x56540000 }
+> > > +};
+> > 
+> > Please ensure that the initialization sequence values do not overlap
+> > with the below pll_data bits that are managed during runtime.
+> 
+> [...]
+> 
+> > 
+> > > +
+> > > +static struct clk_regmap s4_hifi_pll_dco = {
+> > > +     .data = &(struct meson_clk_pll_data){
+> > > +             .en = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> > > +                     .shift   = 28,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .m = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 8,
+> > > +             },
+> > > +             .n = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> > > +                     .shift   = 10,
+> > > +                     .width   = 5,
+> > > +             },
+> > > +             .frac = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL1,
+> > > +                     .shift   = 0,
+> > > +                     .width   = 17,
+> > > +             },
+> > > +             .l = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> > > +                     .shift   = 31,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .rst = {
+> > > +                     .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> > > +                     .shift   = 29,
+> > > +                     .width   = 1,
+> > > +             },
+> > > +             .range = &s4_gp0_pll_mult_range,
+> > > +             .init_regs = s4_hifi_init_regs,
+> > > +             .init_count = ARRAY_SIZE(s4_hifi_init_regs),
+> > > +             .flags = CLK_MESON_PLL_ROUND_CLOSEST,
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "hifi_pll_dco",
+> > > +             .ops = &meson_clk_pll_ops,
+> > > +             .parent_data = (const struct clk_parent_data []) {
+> > > +                     { .fw_name = "xtal", }
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +     },
+> > > +};
+> > > +
+> > > +static struct clk_regmap s4_hifi_pll = {
+> > > +     .data = &(struct clk_regmap_div_data){
+> > > +             .offset = ANACTRL_HIFIPLL_CTRL0,
+> > > +             .shift = 16,
+> > > +             .width = 2,
+> > > +             .flags = (CLK_DIVIDER_POWER_OF_TWO |
+> > > +                       CLK_DIVIDER_ROUND_CLOSEST),
+> > > +     },
+> > > +     .hw.init = &(struct clk_init_data){
+> > > +             .name = "hifi_pll",
+> > > +             .ops = &clk_regmap_divider_ops,
+> > > +             .parent_hws = (const struct clk_hw *[]) {
+> > > +                     &s4_hifi_pll_dco.hw
+> > > +             },
+> > > +             .num_parents = 1,
+> > > +             .flags = CLK_SET_RATE_PARENT,
+> > > +     },
+> > > +};
+> > > +
+> > 
+> > [...]
+> > 
+> > > +static int meson_s4_pll_probe(struct platform_device *pdev)
+> > > +{
+> > > +     struct device *dev = &pdev->dev;
+> > > +     struct regmap *regmap;
+> > > +     void __iomem *base;
+> > > +     int ret, i;
+> > > +
+> > > +     base = devm_platform_ioremap_resource(pdev, 0);
+> > > +     if (IS_ERR(base))
+> > > +             return PTR_ERR(base);
+> > > +
+> > > +     regmap = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+> > > +     if (IS_ERR(regmap))
+> > > +             return PTR_ERR(regmap);
+> > > +
+> > > +     ret = regmap_multi_reg_write(regmap, s4_init_regs, ARRAY_SIZE(s4_init_regs));
+> > > +     if (ret) {
+> > > +             dev_err(dev, "Failed to init registers\n");
+> > 
+> > dev_err_probe()
+> 
+> Clock drivers are the foundation on which other drivers run. There is no
+> need to EPROBE_DEFER. Also use EPROBE_DEFER as long as it is better to use
+> when getting the resource.
+> 
 
-    $ diff <(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
-<(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
+At least you are requesting the ioremap resource, right? :-)
+And clock driver has tristate config, so can be built as module.
 
-Looks like scripts/get_maintainer.pl (a) shows wrong committers (they
-did provide other e.g. Reviewed-by tags), and (b) is not deterministic?
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> > 
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     /* Populate regmap for the regmap backed clocks */
+> > > +     for (i = 0; i < ARRAY_SIZE(s4_pll_clk_regmaps); i++)
+> > > +             s4_pll_clk_regmaps[i]->map = regmap;
+> > > +
+> > > +     for (i = 0; i < s4_pll_hw_onecell_data.num; i++) {
+> > > +             /* array might be sparse */
+> > > +             if (!s4_pll_hw_onecell_data.hws[i])
+> > > +                     continue;
+> > > +
+> > > +             ret = devm_clk_hw_register(dev, s4_pll_hw_onecell_data.hws[i]);
+> > > +             if (ret) {
+> > > +                     dev_err(dev, "Clock registration failed\n");
+> > 
+> > dev_err_probe()
+> 
+> [...]
+> 
+> > 
+> > > +                     return ret;
+> > > +             }
+> > > +     }
+> > > +
+> > > +     return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> > > +                                        &s4_pll_hw_onecell_data);
+> > > +}
+> > > +
+> > > +static const struct of_device_id clkc_match_table[] = {
+> > > +     {
+> > > +             .compatible = "amlogic,s4-pll-clkc",
+> > > +     },
+> > > +     {}
+> > > +};
+> > > +
+> > > +static struct platform_driver s4_driver = {
+> > > +     .probe          = meson_s4_pll_probe,
+> > > +     .driver         = {
+> > > +             .name   = "s4-pll-clkc",
+> > > +             .of_match_table = clkc_match_table,
+> > > +     },
+> > > +};
+> > > +
+> > > +module_platform_driver(s4_driver);
+> > > +MODULE_LICENSE("GPL");
+> > > diff --git a/drivers/clk/meson/s4-pll.h b/drivers/clk/meson/s4-pll.h
+> > > new file mode 100644
+> > > index 000000000000..1fb5bececf5f
+> > > --- /dev/null
+> > > +++ b/drivers/clk/meson/s4-pll.h
+> > > @@ -0,0 +1,87 @@
+> > > +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> > > +/*
+> > > + * Copyright (c) 2021 Amlogic, inc.
+> > > + * Author: Yu Tu <yu.tu@amlogic.com>
+> > > + */
+> > > +
+> > > +#ifndef __MESON_S4_PLL_H__
+> > > +#define __MESON_S4_PLL_H__
+> > > +
+> > > +/* ANA_CTRL - Registers */
+> > > +
+> > > +#define ANACTRL_FIXPLL_CTRL0                       0x040
+> > > +#define ANACTRL_FIXPLL_CTRL1                       0x044
+> > > +#define ANACTRL_FIXPLL_CTRL2                       0x048
+> > > +#define ANACTRL_FIXPLL_CTRL3                       0x04c
+> > > +#define ANACTRL_FIXPLL_CTRL4                       0x050
+> > > +#define ANACTRL_FIXPLL_CTRL5                       0x054
+> > > +#define ANACTRL_FIXPLL_CTRL6                       0x058
+> > > +#define ANACTRL_FIXPLL_STS                         0x05c
+> > > +#define ANACTRL_GP0PLL_CTRL0                       0x080
+> > > +#define ANACTRL_GP0PLL_CTRL1                       0x084
+> > > +#define ANACTRL_GP0PLL_CTRL2                       0x088
+> > > +#define ANACTRL_GP0PLL_CTRL3                       0x08c
+> > > +#define ANACTRL_GP0PLL_CTRL4                       0x090
+> > > +#define ANACTRL_GP0PLL_CTRL5                       0x094
+> > > +#define ANACTRL_GP0PLL_CTRL6                       0x098
+> > > +#define ANACTRL_GP0PLL_STS                         0x09c
+> > > +#define ANACTRL_HIFIPLL_CTRL0                      0x100
+> > > +#define ANACTRL_HIFIPLL_CTRL1                      0x104
+> > > +#define ANACTRL_HIFIPLL_CTRL2                      0x108
+> > > +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
+> > > +#define ANACTRL_HIFIPLL_CTRL4                      0x110
+> > > +#define ANACTRL_HIFIPLL_CTRL5                      0x114
+> > > +#define ANACTRL_HIFIPLL_CTRL6                      0x118
+> > > +#define ANACTRL_HIFIPLL_STS                        0x11c
+> > > +#define ANACTRL_MPLL_CTRL0                         0x180
+> > > +#define ANACTRL_MPLL_CTRL1                         0x184
+> > > +#define ANACTRL_MPLL_CTRL2                         0x188
+> > > +#define ANACTRL_MPLL_CTRL3                         0x18c
+> > > +#define ANACTRL_MPLL_CTRL4                         0x190
+> > > +#define ANACTRL_MPLL_CTRL5                         0x194
+> > > +#define ANACTRL_MPLL_CTRL6                         0x198
+> > > +#define ANACTRL_MPLL_CTRL7                         0x19c
+> > > +#define ANACTRL_MPLL_CTRL8                         0x1a0
+> > > +#define ANACTRL_MPLL_STS                           0x1a4
+> > > +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
+> > > +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
+> > > +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
+> > > +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
+> > > +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
+> > > +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
+> > > +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
+> > > +#define ANACTRL_HDMIPLL_STS                        0x1dc
+> > > +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
+> > > +
+> > > +/*
+> > > + * CLKID index values
+> > > + *
+> > > + * These indices are entirely contrived and do not map onto the hardware.
+> > > + * It has now been decided to expose everything by default in the DT header:
+> > > + * include/dt-bindings/clock/axg-clkc.h. Only the clocks ids we don't want
+> > 
+> > axg-clkc.h?
+> 
+> I will correct.
+> 
+> > 
+> > > + * to expose, such as the internal muxes and dividers of composite clocks,
+> > > + * will remain defined here.
+> > > + */
+> > > +#define CLKID_FIXED_PLL_DCO          0
+> > > +#define CLKID_FCLK_DIV2_DIV          2
+> > > +#define CLKID_FCLK_DIV3_DIV          4
+> > > +#define CLKID_FCLK_DIV4_DIV          6
+> > > +#define CLKID_FCLK_DIV5_DIV          8
+> > > +#define CLKID_FCLK_DIV7_DIV          10
+> > > +#define CLKID_FCLK_DIV2P5_DIV                12
+> > > +#define CLKID_GP0_PLL_DCO            14
+> > > +#define CLKID_HIFI_PLL_DCO           16
+> > > +#define CLKID_HDMI_PLL_DCO           18
+> > > +#define CLKID_HDMI_PLL_OD            19
+> > > +#define CLKID_MPLL_50M_DIV           21
+> > > +#define CLKID_MPLL_PREDIV            23
+> > > +#define CLKID_MPLL0_DIV                      24
+> > > +#define CLKID_MPLL1_DIV                      26
+> > > +#define CLKID_MPLL2_DIV                      28
+> > > +#define CLKID_MPLL3_DIV                      30
+> > > +
+> > > +#define NR_PLL_CLKS                  32
+> > > +/* include the CLKIDs that have been made part of the DT binding */
+> > > +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+> > > +
+> > > +#endif /* __MESON_S4_PLL_H__ */
+> > > --
+> > > 2.33.1
+> > > 
+> > > 
+> > > _______________________________________________
+> > > linux-amlogic mailing list
+> > > linux-amlogic@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> > 
+> > --
+> > Thank you,
+> > Dmitry
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thank you,
+Dmitry
