@@ -2,255 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39956F0C9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C962D6F0CA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 21:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245044AbjD0Tfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 15:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
+        id S245572AbjD0Tfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 15:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245035AbjD0Tfc (ORCPT
+        with ESMTP id S245501AbjD0Tfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 15:35:32 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FA62712
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 12:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682624128; x=1714160128;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QNXXbxAfYh4C+5lqOIiMDqUc4LiqdHH8E3qjvQLuzcg=;
-  b=Qfd9T/OuNIoCl/S9X/l35Dk78//vGxCTkVtQ6t05wDuF68LUcp9tkX4F
-   z7+RmNGcMrZndqN1rBPRd40HDS3J63Foi5tauHfI0A5tJ0qvXt4ofTZHI
-   XMKhcNxBKBd6nf81aOBUSH/irLZ27dDylTiJBYKS9zkuKWl9cdvUE6s3N
-   sWnvn9hmO2b1O1hJwXQlrTHAKsYQH8AFOOZXHP4dc2hbfGUGLM68x3qCp
-   +h1d67yhDZTj2b5i2ODhxbL0U9wOD1pAuvzuV6JPZfMXzB1t/IoIp/tEy
-   YsUMx+lDaDJA9QlEPyS1rsvkdL6uadtI52aOjEorka6qaQoNBPdOYBSYc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="345003795"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="345003795"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 12:35:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868850709"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="868850709"
-Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2023 12:35:25 -0700
-Received: from kbuild by b95e16499b55 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ps7Om-00005l-1s;
-        Thu, 27 Apr 2023 19:35:24 +0000
-Date:   Fri, 28 Apr 2023 03:35:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in
- argument 1 (different address spaces)
-Message-ID: <202304280318.3aZhPbxA-lkp@intel.com>
+        Thu, 27 Apr 2023 15:35:42 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC333C1B;
+        Thu, 27 Apr 2023 12:35:38 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63b4960b015so6995646b3a.3;
+        Thu, 27 Apr 2023 12:35:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682624137; x=1685216137;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aA4RtaJZPtabUlxR3HvRccxE/jFM/xHE97Tk3j3YwIU=;
+        b=jN/5Aq2fcW37cE5wkCpZAgVlM9w+/pVq5KrMSJSN/5jl7B8IrC5cAomcZpfB5NV7rw
+         5S49rwWxBQXO+VMXlw4CndtAa0ucRQJsMkkbkPBlKBginy73ACP/otpzIHzvzAHBJxOI
+         H6HO+Deuv8z7CrxGjajEJIyY/9Aod2LKlgSIn5vwxW66UMNZmYy/H4+no4Xw3YW70L+f
+         ym4dWoBOMxpDv8FlS0OsniLLR41Hn0BCTd/UD99Kg+hZ4YaYov0H1LsFKPaKAxwn3qL/
+         /gKikzaMhOvr0f2x3lCr8G0adDGgkJx8oHpPxq2ZK8iza+imtmw9YSLV4GhXpSrPI1fk
+         HS/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682624137; x=1685216137;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aA4RtaJZPtabUlxR3HvRccxE/jFM/xHE97Tk3j3YwIU=;
+        b=hpLM0wKHbqNHiSZX8QcMhI1LJPTrz4YG1RqhI0KJK7t+DtvNeE1TR0F5SRN59++sbh
+         ZBNcSULh69aXdWFciaFlu6CBn0nm8LounxtSWzdsHpaMfbhOhMzreHawHKm1lIgPoJ8S
+         /4uNpuTAwgQI7xhZ3JRrHz7HxB9oJByNcFgqEHM+sK+BlKi73nSdBASgR8vkkw2WPs/W
+         HYOufxHlMIA6FUxlwcc/VNMChE0buZhrZbaVfNpG9uVdnopfZnorfE1pxhr+v+dXG+he
+         7h6rcdIJQP56M7wK675Pwoh47XONSQJ4sCgOwjwf6w9tYdE7v4H2Fc7R90b3eWwdlo4c
+         Ay9w==
+X-Gm-Message-State: AC+VfDwaV/oCLFgf+ctsUKReE/JBi96NgX6NMf7a3xOvvTxn3rs9rEns
+        7qeuoRLsIMYsU77zHo5LqHg=
+X-Google-Smtp-Source: ACHHUZ5r+ZOisemFY2bO0EdkobtzYRh7LOKH35Ne1K0dfL3H3FB7VK2CFCCHSf2/7VB8Lwlo7Njv0A==
+X-Received: by 2002:a17:902:c948:b0:1a6:abac:9cc with SMTP id i8-20020a170902c94800b001a6abac09ccmr3447712pla.66.1682624137468;
+        Thu, 27 Apr 2023 12:35:37 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-014.fbsv.net. [2a03:2880:ff:e::face:b00c])
+        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b001a04d27ee92sm11997150plj.241.2023.04.27.12.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 12:35:37 -0700 (PDT)
+From:   Scott Smith <scott8440@gmail.com>
+To:     linux@roeck-us.net, jdelvare@suse.com
+Cc:     Scott Smith <scott8440@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: (pmbus) add ir35215 driver
+Date:   Thu, 27 Apr 2023 12:35:31 -0700
+Message-Id: <20230427193533.718526-1-scott8440@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   32f7ad0fbe7521de2a5e8f79c33d46110247fd7c
-commit: 93a4fa622eb061f75f87f0cf9609ab4e69c67d01 LoongArch: Add STACKTRACE support
-date:   9 months ago
-config: loongarch-randconfig-s053-20230427 (https://download.01.org/0day-ci/archive/20230428/202304280318.3aZhPbxA-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 93a4fa622eb061f75f87f0cf9609ab4e69c67d01
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/soc/qcom/ kernel/time/ net/core/
+IR35215 is a digital multi-phase controller.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304280318.3aZhPbxA-lkp@intel.com/
+Signed-off-by: Scott Smith <scott8440@gmail.com>
+---
+ drivers/hwmon/pmbus/Kconfig   |  9 +++++
+ drivers/hwmon/pmbus/Makefile  |  1 +
+ drivers/hwmon/pmbus/ir35215.c | 65 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+)
+ create mode 100644 drivers/hwmon/pmbus/ir35215.c
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got unsigned int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got unsigned int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got unsigned int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got unsigned int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got int [noderef] __percpu *
->> kernel/time/tick-sched.c:1151:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   kernel/time/tick-sched.c:1151:9: sparse:     expected void *ptr
-   kernel/time/tick-sched.c:1151:9: sparse:     got int [noderef] __percpu *
---
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got unsigned int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
->> drivers/soc/qcom/rpmh.c:441:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     expected void *ptr
-   drivers/soc/qcom/rpmh.c:441:9: sparse:     got int [noderef] __percpu *
---
-   net/core/dev.c:3325:23: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int @@
-   net/core/dev.c:3325:23: sparse:     expected restricted __wsum [usertype] csum
-   net/core/dev.c:3325:23: sparse:     got unsigned int
-   net/core/dev.c:3325:23: sparse: sparse: cast from restricted __wsum
-   net/core/dev.c:204:9: sparse: sparse: context imbalance in 'unlist_netdevice' - different lock contexts for basic block
-   net/core/dev.c:3829:17: sparse: sparse: context imbalance in '__dev_queue_xmit' - different lock contexts for basic block
-   net/core/dev.c:5056:17: sparse: sparse: context imbalance in 'net_tx_action' - different lock contexts for basic block
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got unsigned int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got unsigned int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
->> net/core/dev.c:4348:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
-   net/core/dev.c:4348:9: sparse:     expected void *ptr
-   net/core/dev.c:4348:9: sparse:     got int [noderef] __percpu *
-
-vim +1151 kernel/time/tick-sched.c
-
-554c8aa8ecade21 Rafael J. Wysocki   2018-04-03  1141  
-0e7767687fdabfc Rafael J. Wysocki   2018-04-05  1142  /**
-0e7767687fdabfc Rafael J. Wysocki   2018-04-05  1143   * tick_nohz_idle_enter - prepare for entering idle on the current CPU
-2bbb6817c0ac1b5 Frederic Weisbecker 2011-10-08  1144   *
-0e7767687fdabfc Rafael J. Wysocki   2018-04-05  1145   * Called when we start the idle loop.
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1146   */
-1268fbc746ea1cd Frederic Weisbecker 2011-11-17  1147  void tick_nohz_idle_enter(void)
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1148  {
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1149  	struct tick_sched *ts;
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1150  
-ebf3adbad012b89 Frederic Weisbecker 2017-11-06 @1151  	lockdep_assert_irqs_enabled();
-0db49b72bce2634 Linus Torvalds      2012-01-06  1152  
-1268fbc746ea1cd Frederic Weisbecker 2011-11-17  1153  	local_irq_disable();
-1268fbc746ea1cd Frederic Weisbecker 2011-11-17  1154  
-22127e93c587afa Christoph Lameter   2014-08-17  1155  	ts = this_cpu_ptr(&tick_cpu_sched);
-23a8d888107ce4c Rafael J. Wysocki   2018-04-05  1156  
-23a8d888107ce4c Rafael J. Wysocki   2018-04-05  1157  	WARN_ON_ONCE(ts->timer_expires_base);
-23a8d888107ce4c Rafael J. Wysocki   2018-04-05  1158  
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1159  	ts->inidle = 1;
-0e7767687fdabfc Rafael J. Wysocki   2018-04-05  1160  	tick_nohz_start_idle(ts);
-1268fbc746ea1cd Frederic Weisbecker 2011-11-17  1161  
-1268fbc746ea1cd Frederic Weisbecker 2011-11-17  1162  	local_irq_enable();
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1163  }
-280f06774afedf8 Frederic Weisbecker 2011-10-07  1164  
-
-:::::: The code at line 1151 was first introduced by commit
-:::::: ebf3adbad012b89c4a51a3beae718a587d988a3a timers/nohz: Use lockdep to assert IRQs are disabled/enabled
-
-:::::: TO: Frederic Weisbecker <frederic@kernel.org>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
+diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+index 270b6336b76d..5c089f7e4423 100644
+--- a/drivers/hwmon/pmbus/Kconfig
++++ b/drivers/hwmon/pmbus/Kconfig
+@@ -123,6 +123,15 @@ config SENSORS_INSPUR_IPSPS
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called inspur-ipsps.
+ 
++config SENSORS_IR35215
++       tristate "Infineon IR35215"
++       help
++         If you say yes here you get hardware monitoring support for the
++         Infineon IR35215 controller.
++
++         This driver can also be built as a module. If so, the module will
++         be called ir35215.
++
+ config SENSORS_IR35221
+ 	tristate "Infineon IR35221"
+ 	help
+diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
+index 84ee960a6c2d..fbb9cf048326 100644
+--- a/drivers/hwmon/pmbus/Makefile
++++ b/drivers/hwmon/pmbus/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_SENSORS_FSP_3Y)	+= fsp-3y.o
+ obj-$(CONFIG_SENSORS_IBM_CFFPS)	+= ibm-cffps.o
+ obj-$(CONFIG_SENSORS_DPS920AB)	+= dps920ab.o
+ obj-$(CONFIG_SENSORS_INSPUR_IPSPS) += inspur-ipsps.o
++obj-$(CONFIG_SENSORS_IR35215)   += ir35215.o
+ obj-$(CONFIG_SENSORS_IR35221)	+= ir35221.o
+ obj-$(CONFIG_SENSORS_IR36021)	+= ir36021.o
+ obj-$(CONFIG_SENSORS_IR38064)	+= ir38064.o
+diff --git a/drivers/hwmon/pmbus/ir35215.c b/drivers/hwmon/pmbus/ir35215.c
+new file mode 100644
+index 000000000000..92d59e78bfd0
+--- /dev/null
++++ b/drivers/hwmon/pmbus/ir35215.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Hardware monitoring driver for Infineon IR35215
++ *
++ * Copyright (c) Meta Platforms, Inc. and affiliates.
++ */
++
++#include <linux/err.h>
++#include <linux/hwmon-sysfs.h>
++#include <linux/i2c.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include "pmbus.h"
++
++static const u32 functionality = PMBUS_HAVE_TEMP
++	| PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
++	| PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
++	| PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
++	| PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_STATUS_IOUT
++	| PMBUS_HAVE_STATUS_INPUT | PMBUS_HAVE_STATUS_TEMP;
++
++static struct pmbus_driver_info ir35215_info = {
++	.pages = 2,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_POWER] = linear,
++	.format[PSC_TEMPERATURE] = linear,
++	.func[0] = functionality,
++	.func[1] = functionality,
++};
++
++static int ir35215_probe(struct i2c_client *client)
++{
++	/*
++	 * IR35215 devices may not stay in page 0 during device
++	 * probe which leads to probe failure (read status word failed).
++	 * So let's set the device to page 0 at the beginning.
++	 */
++	i2c_smbus_write_byte_data(client, PMBUS_PAGE, 0);
++	return pmbus_do_probe(client, &ir35215_info);
++}
++
++static const struct i2c_device_id ir35215_id[] = {
++	{ "ir35215", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, ir35215_id);
++
++static struct i2c_driver ir35215_driver = {
++	.driver = {
++		   .name = "ir35215",
++	},
++	.probe_new = ir35215_probe,
++	.id_table = ir35215_id,
++};
++
++module_i2c_driver(ir35215_driver);
++
++MODULE_AUTHOR("Tao Ren <rentao.bupt@gmail.com>");
++MODULE_DESCRIPTION("PMBus driver for Infineon IR35215");
++MODULE_LICENSE("GPL");
++MODULE_IMPORT_NS(PMBUS);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
