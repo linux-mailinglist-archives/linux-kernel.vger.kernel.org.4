@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A376F09D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47866F09CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244282AbjD0Q0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55882 "EHLO
+        id S244032AbjD0Q0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239857AbjD0Q0P (ORCPT
+        with ESMTP id S239857AbjD0Q0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:26:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21D6AC
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 09:25:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682612731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q+mSfHIYwgygtxN4zqh6EGSnWzRFToL7aoBJGdpNRnc=;
-        b=bdic6POI1xqLpIeipFZSoD3edhltlV9/PDgnOh5cpyl5yizszxeEI1gxVMmuWZAfDwLdhP
-        y0smU0X6TCLcVquIiLSS4yGmwKN2N1uoq7GPyimzzNYgHSgdu+0hnVLuOtgoXXSCvTP1ut
-        FpU/yX25scn62IWSkFR3gVRamO/LSj4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-GkWBjQSnPwanr_NMARvn3g-1; Thu, 27 Apr 2023 12:25:28 -0400
-X-MC-Unique: GkWBjQSnPwanr_NMARvn3g-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 27 Apr 2023 12:26:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EDD19B;
+        Thu, 27 Apr 2023 09:26:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D7AD2808E74;
-        Thu, 27 Apr 2023 16:25:26 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-3.gru2.redhat.com [10.97.112.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5438F492B01;
-        Thu, 27 Apr 2023 16:25:26 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 5E59E4038F56E; Thu, 27 Apr 2023 13:25:10 -0300 (-03)
-Date:   Thu, 27 Apr 2023 13:25:10 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
-Subject: Re: [PATCH v7 00/13] fold per-CPU vmstats remotely
-Message-ID: <ZEqh5qzFZFrSUja/@tpad>
-References: <ZD/Qq9v0EDxUn7HW@tpad>
- <ZD/XoBTqJBL2G+Dk@tpad>
- <ZD/dYXJD2xcoWFoQ@localhost.localdomain>
- <ZD/xE6kR4RSOvUlR@tpad>
- <ZD/8R6sacS45ggyt@dhcp22.suse.cz>
- <ZEAYQBJmVwsjpjGY@tpad>
- <ZEFB8FSKWms2VmaL@tpad>
- <44f2df1a-ace4-0c44-166f-4f2fef49e0c1@suse.cz>
- <ZElNDltcv4PA0HsM@tpad>
- <ZEo0wctuNFBzaxoJ@dhcp22.suse.cz>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7629163E3D;
+        Thu, 27 Apr 2023 16:26:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB406C433D2;
+        Thu, 27 Apr 2023 16:26:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682612769;
+        bh=Df++tyKJAEiZJoJBg/dkh2ZJQnDTPcTkRcqZSnaNxqo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VczgIKPBfA/tofbNO+AA4uGsdxQTt6HjhyqKUk2gQdhZgxiB6k8maKW8ENIR4hzvR
+         PmQyYoDKjNahbSUCUVbuitAooTbkL1D2DDE1hW8I1pbe6PcvFqBRCX4v9m5PynfP0M
+         qmKZjM46BZMPukSUdxMYNnBj7hDlxTLg0/WjABwJuX/qz4avkx9NgEFvXo3JdhgoDH
+         xcV0f/Wf7E4G31xDEyG0PVpIAYf0pxrh8LZPTn9OXzakkpf3uSkPCo7N9SB63qrESk
+         UxE/Uv2Id4mJB0OIQ97DiEM1yXqhjEcsM0FkaTQGaZi4A4FeU+f0c8ip8y3EgxohWe
+         5cVHv2C4fj6Bw==
+Message-ID: <dafed705-292e-6c03-7599-1b1374b95122@kernel.org>
+Date:   Thu, 27 Apr 2023 19:26:05 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEo0wctuNFBzaxoJ@dhcp22.suse.cz>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: dwc3 gadget: controller stop times out on system sleep
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <24c9f271-ed74-fffa-a49f-6e83da857593@kernel.org>
+ <20230426200140.xa4unnbaw2vog2je@synopsys.com>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230426200140.xa4unnbaw2vog2je@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,47 +59,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:39:29AM +0200, Michal Hocko wrote:
-> On Wed 26-04-23 13:10:54, Marcelo Tosatti wrote:
-> [...]
-> > "To test the performance difference, a page allocator microbenchmark:
-> > https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/mm/bench/page_bench01.c
-> > with loops=1000000 was used, on Intel Core i7-11850H @ 2.50GHz.
-> > 
-> > For the single_page_alloc_free test, which does
-> > 
-> >        	/** Loop to measure **/
-> >        	for (i = 0; i < rec->loops; i++) {
-> >                	my_page = alloc_page(gfp_mask);
-> >                 if (unlikely(my_page == NULL))
-> >                        	return 0;
-> >                 __free_page(my_page);
-> >         }                                                                                                           
-> > 
-> > Unit is cycles.
-> > 
-> > Vanilla                 Patched         Diff
-> > 115.25                  117             1.4%"
-> > 
-> > To be honest, that 1.4% difference was not stable but fluctuated between
-> > positive and negative percentages (so the performance difference was in
-> > the noise).
-> > 
-> > So performance is not a decisive factor in this case.
+Hi,
+
+On 26/04/2023 23:01, Thinh Nguyen wrote:
+> Hi,
 > 
-> It is not neglible considering that majority worklods will not benefit
-> from this change. You are clearly ignoring that vmstat code has been
-> highly optimized for local per-cpu access exactly to avoid locked
-> operations and cache line bouncing.
-> -- 
-> Michal Hocko
-> SUSE Labs
+> On Wed, Apr 26, 2023, Roger Quadros wrote:
+>> Hi Thinh,
+>>
+>> On Linux kernel v6.3
+>> Test procedure: 
+>>
+>> - modprobe g_zero
+>> - Connect to PC host
+>> - systemctl suspend
+>>
+>> A large delay of 3 seconds is observed. The delay comes from dwc3_gadget_suspend()->dwc3_gadget_run_stop() waiting for DWC3_DSTS_DEVCTRLHLT to be set.
+>> It returns -ETIMEDOUT.
+>>
+>> Are we missing something to do a clean stop during suspend?
+>>
+>> FYI. Unloading g_zero does not show this delay on stop.
+>>
+>> cheers,
+>> -roger
+> 
+> When clearing run_stop bit and the controller doesn't halt, that usually
+> means there are active transfers/endpoints that aren't ended yet.
+> 
+> The dwc3_gadget_suspend() doesn't properly do all the cleanup before
+> clearing the run_stop bit. I think you just need to call
+> dwc3_gadget_soft_disconnect() in dwc3_gadget_suspend() to fix this.
 
-Again, the values fluctuate between positive and negative
-performance difference (i happen to have copied a positive value).
+That seems to do the trick.
+How does this look?
 
-So the performance difference is in the noise (its not stable at 1.4%),
-but rather close to 0%.
+-------------------------- drivers/usb/dwc3/gadget.c --------------------------
+@@ -4674,11 +4676,18 @@ void dwc3_gadget_exit(struct dwc3 *dwc)
+ int dwc3_gadget_suspend(struct dwc3 *dwc)
+ {
+ 	unsigned long flags;
++	int ret;
+ 
+-	if (!dwc->gadget_driver)
++	if (!dwc->gadget_driver || !dwc->softconnect)
+ 		return 0;
+ 
+-	dwc3_gadget_run_stop(dwc, false, false);
++	ret = dwc3_gadget_soft_disconnect(dwc);
++	if (ret)
++		goto err0;
++
++	ret = dwc3_gadget_run_stop(dwc, false, false);
++	if (ret)
++		goto err1;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	dwc3_disconnect_gadget(dwc);
+@@ -4686,6 +4695,22 @@ int dwc3_gadget_suspend(struct dwc3 *dwc)
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ 
+ 	return 0;
++
++err1:
++	/*
++	 * In the Synopsys DWC_usb31 1.90a programming guide section
++	 * 4.1.9, it specifies that for a reconnect after a
++	 * device-initiated disconnect requires a core soft reset
++	 * (DCTL.CSftRst) before enabling the run/stop bit.
++	 */
++	dwc3_core_soft_reset(dwc);
++	dwc3_event_buffers_setup(dwc);
++
++	ret = dwc3_gadget_run_stop(dwc, true, false);
++
++err0:
++	dev_info(dwc->dev, "%s error %d\n", __func__, ret);
++	return ret;
+ }
+ 
+ int dwc3_gadget_resume(struct dwc3 *dwc)
+@@ -4695,6 +4720,15 @@ int dwc3_gadget_resume(struct dwc3 *dwc)
+ 	if (!dwc->gadget_driver || !dwc->softconnect)
+ 		return 0;
+ 
++	/*
++	 * In the Synopsys DWC_usb31 1.90a programming guide section
++	 * 4.1.9, it specifies that for a reconnect after a
++	 * device-initiated disconnect requires a core soft reset
++	 * (DCTL.CSftRst) before enabling the run/stop bit.
++	 */
++	dwc3_core_soft_reset(dwc);
++	dwc3_event_buffers_setup(dwc);
++
+ 	ret = __dwc3_gadget_start(dwc);
+ 	if (ret < 0)
+ 		goto err0;
 
-So the data is showing that there is no negative performance impact.
 
+
+--
+cheers,
+-roger
