@@ -2,223 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FE6EFF5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 04:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB1C6EFF62
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 04:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242978AbjD0CbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 22:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S242998AbjD0Cbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 22:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242945AbjD0CbO (ORCPT
+        with ESMTP id S242993AbjD0Cbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 22:31:14 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF8440FF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 19:30:48 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63f273b219eso4010922b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 19:30:48 -0700 (PDT)
+        Wed, 26 Apr 2023 22:31:37 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD7340EF
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 19:31:14 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6a64b5bc7aaso5067148a34.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 19:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682562648; x=1685154648;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ogtFxEiScrp6cRdGGCqsrApRdhckxLBPnpR1IoKzkew=;
-        b=bA5p0z775AmOrdR5ZLb7QB8Jocp+rEvoXZ3vgtDvsV6J7sepKpQynzsvLir06js/Z4
-         Lh4771+ctSLfT7o0ruXzUgyf1d+NpJAmSidEbbyk2DU8JAsEFxMd5h2H5dej55aj+IR8
-         K05zV0vLWWaKuQT2IO5/nDHmIiAPs4aKz2twYdImIZXvi9na1Vz2eO/r6n++Ljv30SQj
-         r5B6bpbWDGyeJM1MY26Rzmx5vzrfsTkYmr0dvQ94cxYgHw/f6ReviMo8UxCzsqgGjOUN
-         B6VAm3rx/CWa26Q4Y9yVifr3IiBJ8/l71Ls8Iiyv0RWHK/IjqNkUMpz6NXXVjFhQJYp+
-         Hjxg==
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1682562673; x=1685154673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WySIrgzWHhxuffFB2/mn8dPJ614lvN5q2OG+38Q9m2A=;
+        b=K5bukTPGQB9EU8Iq/DxiCaOciWeaCVIAHIeVkHuEqdkrW7xvudb9Ko4wUaUBCi35Qs
+         dokxW133JopnSY1NHYQvVWPn4lSPdDpTO+P7F7NQDiRe90/KWkvMGzZeudjj8UywImMk
+         j+B3UcZwaDxvOgTUO6RCDr4rIVPIFIP9vkt2I98nobpLjDvEQzrG8PqGz/W0ly4Xg+Hi
+         nd+5dBOiP1eNMUhcS+HTECsWkwrhSrrbsZgHx7kBK8eayW+eiDpP/MjJNUbD1AH4MH/n
+         +Z9/1oVvM66e7ROZDdjWySOjKWNsJvyma3opM67OzlXYzX+E+dgTU6vvRDLEt1XjZW9r
+         23Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682562648; x=1685154648;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ogtFxEiScrp6cRdGGCqsrApRdhckxLBPnpR1IoKzkew=;
-        b=kgf5F0G+z8vIdHeLpI/5Q1OfdL4bDve+8cok/2O247N5K3YlF2c05K4rUflt5rSC+g
-         9khaZam1fGdFLk+CIz94USyzVsSDIE/Sel3JACgHIjQNAtyS2TjzHO7315qKWs0N+BJl
-         ZlMaMIrNiYzMCp7Wjfxpu2VSKQeEjM39ZFxbxfTGReOBUIk1uCJOMPw3+2v1zG0BNg9a
-         7CG1YLBXbBeVZwi9Wajy9LzrYEpzguB0tGOapdqn/12f6eJVGdL1jFdInKg8FcSj8iRD
-         bOsYLiefcg9/eh4zArFNgMBHMOKMLBKQmY+XZRLZ14Q5ixbukOn+6CxC27JNzf91eTw7
-         EzTA==
-X-Gm-Message-State: AAQBX9ddFMTO7i2gVe7jCxzjGKnUDmHTNFWfRJt4oZAiAnTimTB+u+NG
-        ZxIKxSX56OrSdLKjpKd0HcaCoQ==
-X-Google-Smtp-Source: AKy350bV9f47UAvF0xLg01FVlmb66jGMB6i4YP2z1RRhhPuCDgFPCnP7laevSdmx/RYbDJHCWlaQMw==
-X-Received: by 2002:a05:6a20:3c9e:b0:f2:abda:412a with SMTP id b30-20020a056a203c9e00b000f2abda412amr24422440pzj.25.1682562647814;
-        Wed, 26 Apr 2023 19:30:47 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id m8-20020a654388000000b0051303d3e3c5sm10291852pgp.42.2023.04.26.19.30.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Apr 2023 19:30:47 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mykolal@fb.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add testcase for bpf_task_under_cgroup
-Date:   Thu, 27 Apr 2023 10:30:19 +0800
-Message-Id: <20230427023019.73576-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20230427023019.73576-1-zhoufeng.zf@bytedance.com>
-References: <20230427023019.73576-1-zhoufeng.zf@bytedance.com>
+        d=1e100.net; s=20221208; t=1682562673; x=1685154673;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WySIrgzWHhxuffFB2/mn8dPJ614lvN5q2OG+38Q9m2A=;
+        b=Mi68Z+Sg9xL6mAcQY86pDDTnr4D7prOHukPzSgXRJCR4CINIk3bz7eZIDoZ6EtRD6K
+         VPl14mtXrQ4bKjSTfSO8ogBoccenf+/UIjau4Auvmz4Hadq1XNykks4f+8MPkPpzrFWB
+         fA2CFAEHd8R3C1sqfNTHkDzCVxOCbAWEDi47H292NzMgY4TLtA6yUpWCF4OsVkfmjz3h
+         JUH/b2p4w+fuyMZ7oL5iu33aSfsedtqj530GOP75KcbXREGT+yQqAI3G+Ga3WFv3h/92
+         mW9tqR2KdzRch77U98D+mjjriPRyQZ+us4cvXo7chY+4+j5gEtSJR+r6mg0O7nki6HLL
+         8FGg==
+X-Gm-Message-State: AAQBX9dh4nM1zyT0jL86yy+qyNhzTDKl0YHbc6ajiqq+I5TkSjlzxoEC
+        Ujdmt4MelrYFI9u3ngTSRlibmA==
+X-Google-Smtp-Source: AKy350afl2RKnRM28Wvt2Arjfduxr5EQHGE/8szkIoNxdDSxnMpHqhecimyXMhNU92m6wY65PxDZyg==
+X-Received: by 2002:a9d:6b14:0:b0:69f:1c85:bb90 with SMTP id g20-20020a9d6b14000000b0069f1c85bb90mr12755606otp.26.1682562673429;
+        Wed, 26 Apr 2023 19:31:13 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:fb2a:b3eb:47f1:343a? ([2804:14d:5c5e:44fb:fb2a:b3eb:47f1:343a])
+        by smtp.gmail.com with ESMTPSA id g4-20020a9d6484000000b006a144b97e73sm7427965otl.74.2023.04.26.19.31.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Apr 2023 19:31:13 -0700 (PDT)
+Message-ID: <52543fdc-6f27-138b-ef66-a99fb51c655c@mojatatu.com>
+Date:   Wed, 26 Apr 2023 23:31:07 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [net?] KASAN: slab-use-after-free Write in
+ mini_qdisc_pair_swap
+Content-Language: en-US
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     Seth Forshee <sforshee@digitalocean.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        syzbot <syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        xiyou.wangcong@gmail.com, peilin.ye@bytedance.com,
+        vladbu@nvidia.com, hdanton@sina.com
+References: <0000000000006cf87705f79acf1a@google.com>
+ <20230328184733.6707ef73@kernel.org> <ZCOylfbhuk0LeVff@do-x1extreme>
+ <b4d93f31-846f-3391-db5d-db8682ac3c34@mojatatu.com>
+ <CAM0EoMn2LnhdeLcxCFdv+4YshthN=YHLnr1rvv4JoFgNS92hRA@mail.gmail.com>
+ <20230417230011.GA41709@bytedance> <20230426233657.GA11249@bytedance>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230426233657.GA11249@bytedance>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 26/04/2023 20:42, Peilin Ye wrote:
+> +Cc: Vlad Buslov, Hillf Danton
+> 
+> Hi all,
+> 
+> On Mon, Apr 17, 2023 at 04:00:11PM -0700, Peilin Ye wrote:
+>> I also reproduced this UAF using the syzkaller reproducer in the report
+>> (the C reproducer did not work for me for unknown reasons).  I will look
+>> into this.
+> 
+> Currently, multiple ingress (clsact) Qdiscs can access the per-netdev
+> *miniq_ingress (*miniq_egress) pointer concurrently.  This is
+> unfortunately true in two senses:
+> 
+> 1. We allow adding ingress (clsact) Qdiscs under parents other than
+> TC_H_INGRESS (TC_H_CLSACT):
+> 
+>    $ ip link add ifb0 numtxqueues 8 type ifb
+>    $ echo clsact > /proc/sys/net/core/default_qdisc
+>    $ tc qdisc add dev ifb0 handle 1: root mq
+>    $ tc qdisc show dev ifb0
+>    qdisc mq 1: root
+>    qdisc clsact 0: parent 1:8
+>    qdisc clsact 0: parent 1:7
+>    qdisc clsact 0: parent 1:6
+>    qdisc clsact 0: parent 1:5
+>    qdisc clsact 0: parent 1:4
+>    qdisc clsact 0: parent 1:3
+>    qdisc clsact 0: parent 1:2
+>    qdisc clsact 0: parent 1:1
+> 
+> This is obviously racy and should be prohibited.  I've started working
+> on patches to fix this.  The syz repro for this UAF adds ingress Qdiscs
+> under TC_H_ROOT, by the way.
+> 
+> 2. After introducing RTNL-lockless RTM_{NEW,DEL,GET}TFILTER requests
+> [1], it is possible that, when replacing ingress (clsact) Qdiscs, the
+> old one can access *miniq_{in,e}gress concurrently with the new one.  For
+> example, the syz repro does something like the following:
+> 
+>    Thread 1 creates sch_ingress Qdisc A (containing mini Qdisc a1 and a2),
+>    then adds a cls_flower filter X to Qdisc A.
+> 
+>    Thread 2 creates sch_ingress Qdisc B (containing mini Qdisc b1 and b2)
+>    to replace Qdisc A, then adds a cls_flower filter Y to Qdisc B.
+> 
+>    Device has 8 TXQs.
+> 
+>   Thread 1               A's refcnt   Thread 2
+>    RTM_NEWQDISC (A, locked)
+>     qdisc_create(A)               1
+>     qdisc_graft(A)                9
+> 
+>    RTM_NEWTFILTER (X, lockless)
+>     __tcf_qdisc_find(A)          10
+>     tcf_chain0_head_change(A)
+>   ! mini_qdisc_pair_swap(A)
+>              |                        RTM_NEWQDISC (B, locked)
+>              |                    2    qdisc_graft(B)
+>              |                    1    notify_and_destroy(A)
+>              |
+>              |                        RTM_NEWTFILTER (Y, lockless)
+>              |                         tcf_chain0_head_change(B)
+>              |                       ! mini_qdisc_pair_swap(B)
+>     tcf_block_release(A)          0             |
+>     qdisc_destroy(A)                            |
+>     tcf_chain0_head_change_cb_del(A)            |
+>   ! mini_qdisc_pair_swap(A)                     |
+>              |                                  |
+>             ...                                ...
+> 
+> As we can see there're interleaving mini_qdisc_pair_swap() calls between
+> Qdisc A and B, causing all kinds of troubles, including the UAF (thread
+> 2 writing to mini Qdisc a1's rcu_state after Qdisc A has already been
+> freed) reported by syzbot.
 
-test_progs:
-Tests new kfunc bpf_task_under_cgroup().
+Thanks for the analysis. It makes total sense.
+After going through the call chains, please correct me if my ELI5 is wrong:
 
-The bpf program saves the pid which call the getpgid syscall within a
-given cgroup to the remote_pid, which is convenient for the user-mode
-program to verify the test correctness.
+'clsact_init()' is called for B when dev has miniq_ingress set to 'A', 
+therefore copying a pointer to the miniq_qdisc with lifetime bound to 
+'A' in a miniq_qdisc_pair with lifetime bound to 'B' therefore raising 
+an UAF after A is destroyed and B is manipulated.
 
-The user-mode program creates its own mount namespace, and mounts the
-cgroupsv2 hierarchy in there, call the getpgid syscall, then check if
-remote_pid and local_pid are equal.
+> 
+> To fix this, I'm cooking a patch that, when replacing ingress (clsact)
+> Qdiscs, in qdisc_graft():
+> 
+>    I.  We should make sure there's no on-the-fly lockless filter requests
+>        for the old Qdisc, and return -EBUSY if there's any (or can/should
+>        we wait in RTM_NEWQDISC handler?
+Makes sense.
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
- .../bpf/prog_tests/task_under_cgroup.c        | 47 +++++++++++++++++++
- .../selftests/bpf/progs/cgrp_kfunc_common.h   |  1 +
- .../bpf/progs/test_task_under_cgroup.c        | 37 +++++++++++++++
- 4 files changed, 86 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+> 
+>    II. We should destory the old Qdisc before publishing the new one
+>        (i.e. setting it to dev_ingress_queue(dev)->qdisc_sleeping, so
+>        that subsequent filter requests can see it), because
+>        {ingress,clsact}_destroy() also call mini_qdisc_pair_swap(), which
+>        sets *miniq_{in,e}gress to NULL >
+> Future Qdiscs that support RTNL-lockless cls_ops, if any, won't need
+> this fix, as long as their ->chain_head_change() don't access
+> out-of-Qdisc-scope data, like pointers in struct net_device.
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.s390x b/tools/testing/selftests/bpf/DENYLIST.s390x
-index c7463f3ec3c0..5061d9e24c16 100644
---- a/tools/testing/selftests/bpf/DENYLIST.s390x
-+++ b/tools/testing/selftests/bpf/DENYLIST.s390x
-@@ -26,3 +26,4 @@ user_ringbuf                             # failed to find kernel BTF type ID of
- verif_stats                              # trace_vprintk__open_and_load unexpected error: -9                           (?)
- xdp_bonding                              # failed to auto-attach program 'trace_on_entry': -524                        (trampoline)
- xdp_metadata                             # JIT does not support calling kernel function                                (kfunc)
-+test_task_under_cgroup                   # JIT does not support calling kernel function                                (kfunc)
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-new file mode 100644
-index 000000000000..6d5709a8203d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include <cgroup_helpers.h>
-+#include "test_task_under_cgroup.skel.h"
-+
-+#define FOO	"/foo"
-+
-+void test_task_under_cgroup(void)
-+{
-+	struct test_task_under_cgroup *skel;
-+	int ret, foo = -1;
-+
-+	foo = test__join_cgroup(FOO);
-+	if (!ASSERT_OK(foo < 0, "cgroup_join_foo"))
-+		return;
-+
-+	skel = test_task_under_cgroup__open();
-+	if (!ASSERT_OK_PTR(skel, "test_task_under_cgroup__open"))
-+		goto cleanup;
-+
-+	skel->rodata->local_pid = getpid();
-+	skel->rodata->cgid = get_cgroup_id(FOO);
-+
-+	ret = test_task_under_cgroup__load(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__load"))
-+		goto cleanup;
-+
-+	ret = test_task_under_cgroup__attach(skel);
-+	if (!ASSERT_OK(ret, "test_task_under_cgroup__attach"))
-+		goto cleanup;
-+
-+	syscall(SYS_getpgid);
-+
-+	test_task_under_cgroup__detach(skel);
-+
-+	ASSERT_EQ(skel->bss->remote_pid, skel->rodata->local_pid,
-+		  "test task_under_cgroup");
-+
-+cleanup:
-+	if (foo >= 0)
-+		close(foo);
-+
-+	test_task_under_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-index 22914a70db54..001c416b42bc 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-@@ -26,6 +26,7 @@ struct cgroup *bpf_cgroup_ancestor(struct cgroup *cgrp, int level) __ksym;
- struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
-+int bpf_task_under_cgroup(struct task_struct *task, struct cgroup *ancestor) __ksym;
- 
- static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-new file mode 100644
-index 000000000000..8f23a2933fde
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2023 Bytedance */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#include "bpf_misc.h"
-+#include "cgrp_kfunc_common.h"
-+
-+const volatile int local_pid;
-+const volatile long cgid;
-+int remote_pid;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int sys_getpgid(void *ctx)
-+{
-+	struct cgroup *cgrp;
-+
-+	if (local_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	cgrp = bpf_cgroup_from_id(cgid);
-+	if (!cgrp)
-+		return 0;
-+
-+	if (!bpf_task_under_cgroup(bpf_get_current_task_btf(), cgrp))
-+		goto out;
-+
-+	remote_pid = local_pid;
-+
-+out:
-+	bpf_cgroup_release(cgrp);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.20.1
+Probably worth a comment somewhere in the code
+
+> 
+> Do you think this is the right way to go?  Thanks!
+> 
+> [1] Thanks Hillf Danton for the hint:
+>      https://syzkaller.appspot.com/text?tag=Patch&x=10d7cd5bc80000
+> 
+> Thanks,
+> Peilin Ye
+> 
 
