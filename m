@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EDA6F03A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178D16F03A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243328AbjD0JrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S243326AbjD0JsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243348AbjD0JrL (ORCPT
+        with ESMTP id S243388AbjD0JsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:47:11 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F030E40F5
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:47:05 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33R5FBLm004611;
-        Thu, 27 Apr 2023 04:46:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=kGUJjqL1+qg8otYMpB2IAWWgUB5E/UIRkLDwAapWdsQ=;
- b=ogx9IDv8iZqvPRY43Av0RYr9lEilnSZWS5EU3/1VES9lhuxAva42kotWUQ/zEBZnDYoU
- jude2oEAZtLjPi2B4lU5Y56866duPrk24+qljHXdTTUZ2BhJaH0aNlUE6DzBZaljgvKV
- 68DrFN8tMo+jXthGlh0vZzxGK/TaeE3Jk74KaUOE78txz5IAJLrHtdiI9wmLpwGdoDMC
- ENAZKKZ1GaLKszkMu0I5s6yHEp0Lz106PuU7qEL20adSieHdPIdEywIoH5MD5k8wTiFk
- L2WPDWmFI6k8gHOghpNiuQLaMqYqZ2kkpG26gS6Ndl5lMz0VqlyBjevpq3XATA9ovApB Bw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3q4c0pqn81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Apr 2023 04:46:57 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 27 Apr
- 2023 04:46:55 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
- Transport; Thu, 27 Apr 2023 04:46:55 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9244615A4;
-        Thu, 27 Apr 2023 09:46:55 +0000 (UTC)
-Date:   Thu, 27 Apr 2023 09:46:55 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Lee Jones <lee@kernel.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mfd: wm831x: Use maple tree register cache
-Message-ID: <20230427094655.GD68926@ediswmail.ad.cirrus.com>
-References: <20230419-mfd-wm831x-maple-v1-1-e03e39d7bb0b@kernel.org>
+        Thu, 27 Apr 2023 05:48:13 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC5219A7;
+        Thu, 27 Apr 2023 02:48:12 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso8090887a12.1;
+        Thu, 27 Apr 2023 02:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682588891; x=1685180891;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbQDNFKjRytgCf+GesubNivdLWJXmKPSqFAAYcRK3AU=;
+        b=AokQBJv1jf3ffsFZoWvwqevvIA6UtN78MIdTc1+F0ptj6kFitLPxjXUANZuG/fIgN2
+         mWUnwT8WfY4Fab346smHbQ9R0Gz2Z7IalvJz2yRHrK4TlXoZNoVnSLlogL6Af3dBtEFg
+         XFQY89ZGDKOfptCjyCPeNVJ8UqaWxeLDqrMN4HOWUPATaHiLQLPaS25U/1hyvawW6eIE
+         9ulOackMZec3qoNHrmcKhEJ87eIFvRuEVv6drhhIB3vtj3o0rP2btQH118vEAgseszWv
+         LPcrxnr/34Ns0IWiO90i4XJ5SbVmntk6MW7j42Gh7kDOuXFpvEJlu/jJTKRo9tMcW9ad
+         VjHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682588891; x=1685180891;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QbQDNFKjRytgCf+GesubNivdLWJXmKPSqFAAYcRK3AU=;
+        b=ijy+ErXbMzB7mAiB+cnQuF0M3/v4PCjNYbI1ELmQt8VdvoaaXi2qWP/pRIH0pDQWuM
+         zvrewqgFEeJFclwFoJAoXywrZ+5KPIoLOFvLtJ6CEuOun7DZHIJ4bQ3cSxy2LMHlJkZa
+         O+M2TvDCto1YG1w2xiyQTIX1c4JmOiZjyTTORPb4cKg4SISn2w6tzOmFBpkIqFXVXi2W
+         5md1K0Maxpt5UYCTffnlMT0jXjHIaV5ny4F6A1cT5au/hVtcZcz0nxEEOgHDzO0CF53H
+         hqe0hx4f213Q4HvkvcIntyrzgIzGfHP2h05QkHT/AbtWD2WDZuK3ena1A8P/hRaF73uJ
+         LP2A==
+X-Gm-Message-State: AC+VfDzVwnRWj6FNrwu20QXGuABLQDAyQNl3WTVOPThADqOKYcZnn/5o
+        j3+CVIaW6vvv5Gvj3YKnLB0PPq7wZbo=
+X-Google-Smtp-Source: ACHHUZ4GaJ07HzHqmE3PHX/g78eaeGH2Dx0oA60Ib406Jcb95vkZS13uCUS+Y+SgmQl3I7mF8gctUQ==
+X-Received: by 2002:a17:903:280e:b0:1a9:93fd:e853 with SMTP id kp14-20020a170903280e00b001a993fde853mr816565plb.19.1682588891201;
+        Thu, 27 Apr 2023 02:48:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w14-20020a1709029a8e00b00183c6784704sm11290958plp.291.2023.04.27.02.48.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 02:48:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fd96b2d6-69df-01e0-9784-5dfaddd28711@roeck-us.net>
+Date:   Thu, 27 Apr 2023 02:48:08 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230419-mfd-wm831x-maple-v1-1-e03e39d7bb0b@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: ijmqoti1ksMpMnDKtPaunMU4NAWRYvJM
-X-Proofpoint-ORIG-GUID: ijmqoti1ksMpMnDKtPaunMU4NAWRYvJM
-X-Proofpoint-Spam-Reason: safe
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1] watchdog: starfive: Fix the warning of
+ starfive_wdt_match
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+References: <20230427074400.55380-1-xingyu.wu@starfivetech.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230427074400.55380-1-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,23 +81,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 07:03:33PM +0100, Mark Brown wrote:
-> regmap has introduced a maple tree based register cache which makes use of
-> this more advanced data structure which has been added to the kernel
-> recently. Maple trees are much flatter than rbtrees, meaning that they do
-> not grow to such depths when the register map is sparse which makes access
-> a bit more efficient. The maple tree cache type is still a bit of a work
-> in progress but should be effective for some devices already.
+On 4/27/23 00:44, Xingyu Wu wrote:
+> Drop the function of of_match_ptr() to fix the warning of unused variable
+> 'starfive_wdt_match'.
 > 
-> The wm831x devices have a pretty sparse register map and being always on
-> devices never do cache syncs so don't hit the major current disadvantage
-> so they should be good candiates for using the maple tree cache.  Update
-> to do so, there should be little if any visible difference at runtime.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 > ---
 
-Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Charles
+> 
+> Hi, Guenter and Wim,
+> 
+> This patch fixes the compiler warning of StarFive watchdog driver and
+> rebases on the master branch of linux-next.
+> 
+> Thanks.
+> 
+> ---
+>   drivers/watchdog/starfive-wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 1995cceca51e..64d1ad4d267a 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -595,7 +595,7 @@ static struct platform_driver starfive_wdt_driver = {
+>   	.driver = {
+>   		.name = "starfive-wdt",
+>   		.pm = &starfive_wdt_pm_ops,
+> -		.of_match_table = of_match_ptr(starfive_wdt_match),
+> +		.of_match_table = starfive_wdt_match,
+>   	},
+>   };
+>   module_platform_driver(starfive_wdt_driver);
+
