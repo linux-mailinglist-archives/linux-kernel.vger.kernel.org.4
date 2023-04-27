@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A650F6F0B9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349676F0B9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244616AbjD0Ryn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S244353AbjD0RzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244474AbjD0RyY (ORCPT
+        with ESMTP id S244535AbjD0RyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:54:24 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9436355BB;
-        Thu, 27 Apr 2023 10:54:09 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b5c4c769aso10949306b3a.3;
-        Thu, 27 Apr 2023 10:54:09 -0700 (PDT)
+        Thu, 27 Apr 2023 13:54:25 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A41A3C15;
+        Thu, 27 Apr 2023 10:54:11 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64115eef620so6797419b3a.1;
+        Thu, 27 Apr 2023 10:54:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682618049; x=1685210049;
+        d=gmail.com; s=20221208; t=1682618051; x=1685210051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5X8ws8C9Uya1bH1qvM3ByEZiUSzSNNSQCvKC0+MH6tc=;
-        b=FJmULW49+UMYCVzDkpdb7BszKylFpQ8Go8QKjSNPi9p1Epfy9Abj+ptulI1LZsNXYO
-         Drur1lnhr+2tDX7fQ5TKZA6bWEIgZuH6kNGI3k3r76j0lFiQ2B3/ufbtNACKCxcYD3PD
-         2oiXG504lUTQJI8Ol1FBvV0twNshzJFLFJNj5v2Y/ze2zM7gaXKXVrQkJDZKFLRqg1HA
-         aQ8ArDm80oS8vDG+z7RNtaF5HamxWhVFBKj8cE/bG2KcuxlKFD0q6pBs2kxDH/FJBDIS
-         9mMTob0B48PC8gzJcc/I4A2EMUcHUJj0GYAPsFe5i6yUQQGY7w7y8ITx7QFUaSsqOMRy
-         rQlg==
+        bh=sGLJmibW87WAJcS5t0uIh72jCVPBIb7Gj0WXUx1P9zU=;
+        b=QMXQRPIdXA5q5Km0eEBU7rKyuFO/cgMrtoDCMJdyNqAiJII2NpWeJLh5tHe70Cy232
+         Sm5bFKWRn1oSSzIdYYglEqg8J6RUhcSkcWnMH7d4qgcvGCmFinBCuh81eI4k4yWHVpvx
+         ZGSfIBbB+9WYYIJU6QL3JOedPPhjgrhrXsvSGBPHyj1zrMv0q578RG/AT6Ue8xSs2fL3
+         VqFTs5aUbk2lfTToiCebxdTsxyY8QfQ8af5msEFx2/6VxM7sz1Mj6jn3ZRQ6NcpfhnBz
+         smFVLkXfhebsJulsoQqEEQZQriQbsmux38e2ELM+/aEBKnk7Y2f+FUt5q8Q7P6pfwUeA
+         1fdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682618049; x=1685210049;
+        d=1e100.net; s=20221208; t=1682618051; x=1685210051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5X8ws8C9Uya1bH1qvM3ByEZiUSzSNNSQCvKC0+MH6tc=;
-        b=kpcvvfcxWg/RMimHMjzLMb1S3yv11WdC24rp034vO/oRDl8JWOcV7sJqznZ5K0VBv6
-         KqksEVSFVbFJcJgRAeKxqIA1/WEtHlCOLC7NMPIP1ZddBoNkJPyCV1jnoObUy7NPfnMH
-         PBOJzQstPyJ5LYDBRIbAAsU1/GzGPOFULF8aWrfAibnvGpQ/OFa/s2XhgseCMUOAH3zE
-         AXPJCuFfu004wkl9OiUkQcvpxX8ehIRSzrm+R/emLFnRTvz3XXTxvKCf84FNAKjVvV2d
-         7MgtR/09Dq9YMAzVqTHl7euTwRodcTJoJQE9TKmuXumPr8x/mWK0H0zzZ8ksEZusXP7d
-         Xs9Q==
-X-Gm-Message-State: AC+VfDwMVbY/E3mZ8ezO4hEZkbrulbTd5LfvkrgJSg7sK5Oq48WEARJm
-        zADJkbCkwqsSvwfD/QIvnI5Jv6AEUbk=
-X-Google-Smtp-Source: ACHHUZ4MKuwKrDINV0TTla8lJWfaf+1NN+A7s4Fg1UjvkclS6fQTdlIEtFpva4hScU7H2HtK4HrNrQ==
-X-Received: by 2002:a05:6a00:807:b0:63f:244d:cd07 with SMTP id m7-20020a056a00080700b0063f244dcd07mr3256742pfk.31.1682618048750;
-        Thu, 27 Apr 2023 10:54:08 -0700 (PDT)
+        bh=sGLJmibW87WAJcS5t0uIh72jCVPBIb7Gj0WXUx1P9zU=;
+        b=cBhd0hWS4Ys++9yltsjwGNJMNB03d1QShIL5r+kwcpuVyECHY7/Jl/WWkcWoXnejoK
+         djev7l/IunKyQK6Dy0Es9ZWI9Qc/POP0nTbA5gdO9WYcZqPK+I4ZcrETDGq/zmoonqon
+         l//UNBv1M+LfLXVoW3ubh26ck0ENhAzyEgvbLqkzSbQWHAKGoCBSd5yfnlKWXWgIUQMD
+         0k1OQ0a1H3eYyRmVaLnnhmZj9NZdP05xgs5kyK3ZFnSPF17q3NokT78QLtFwGckBxnaD
+         tn9bgYfGRIcTCawR6G57s+R6unKo02+PX2LrQyPNB97froZ3kL3yBfAssbtjRpGMtOrS
+         LykQ==
+X-Gm-Message-State: AC+VfDxs1g5B3LSbxALWkO57THUhN9NKfsbsCw5uEL5uRmH+QfgKWD7E
+        cPl7/4wtIRrII8CHfTxqhFA=
+X-Google-Smtp-Source: ACHHUZ6Nn15Zn+c1Wo6Qo1HTjwDdKmVdH9HihAreo97OXBbuOLvs3ki9YVei3t6pb2Epm77vQyXY1g==
+X-Received: by 2002:a05:6a20:918f:b0:f0:3fc4:744f with SMTP id v15-20020a056a20918f00b000f03fc4744fmr3333199pzd.8.1682618050907;
+        Thu, 27 Apr 2023 10:54:10 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id s9-20020a63e809000000b00476d1385265sm11680207pgh.25.2023.04.27.10.54.08
+        by smtp.gmail.com with ESMTPSA id y189-20020a62cec6000000b00640defda6d2sm6860749pfg.207.2023.04.27.10.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 10:54:08 -0700 (PDT)
+        Thu, 27 Apr 2023 10:54:10 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -59,17 +59,16 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Emil Velikov <emil.l.velikov@gmail.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        David Airlie <airlied@gmail.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
         linux-doc@vger.kernel.org (open list:DOCUMENTATION),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 7/9] drm/doc: Relax fdinfo string constraints
-Date:   Thu, 27 Apr 2023 10:53:31 -0700
-Message-Id: <20230427175340.1280952-8-robdclark@gmail.com>
+Subject: [PATCH v2 8/9] drm/fdinfo: Add comm/cmdline override fields
+Date:   Thu, 27 Apr 2023 10:53:32 -0700
+Message-Id: <20230427175340.1280952-9-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230427175340.1280952-1-robdclark@gmail.com>
 References: <20230427175340.1280952-1-robdclark@gmail.com>
@@ -87,99 +86,116 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-The restriction about no whitespace, etc, really only applies to the
-usage of strings in keys.  Values can contain anything (other than
-newline).
+These are useful in particular for VM scenarios where the process which
+has opened to drm device file is just a proxy for the real user in a VM
+guest.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
-Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 ---
- Documentation/gpu/drm-usage-stats.rst | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ Documentation/gpu/drm-usage-stats.rst | 18 ++++++++++++++++++
+ drivers/gpu/drm/drm_file.c            | 15 +++++++++++++++
+ include/drm/drm_file.h                | 19 +++++++++++++++++++
+ 3 files changed, 52 insertions(+)
 
 diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-index bfc14150452c..58dc0d3f8c58 100644
+index 58dc0d3f8c58..e4877cf8089c 100644
 --- a/Documentation/gpu/drm-usage-stats.rst
 +++ b/Documentation/gpu/drm-usage-stats.rst
-@@ -24,7 +24,7 @@ File format specification
- - All keys shall be prefixed with `drm-`.
- - Whitespace between the delimiter and first non-whitespace character shall be
-   ignored when parsing.
--- Neither keys or values are allowed to contain whitespace characters.
-+- Keys are not allowed to contain whitespace characters.
- - Numerical key value pairs can end with optional unit string.
- - Data type of the value is fixed as defined in the specification.
+@@ -73,6 +73,24 @@ scope of each device, in which case `drm-pdev` shall be present as well.
+ Userspace should make sure to not double account any usage statistics by using
+ the above described criteria in order to associate data to individual clients.
  
-@@ -39,12 +39,13 @@ Data types
- ----------
- 
- - <uint> - Unsigned integer without defining the maximum value.
--- <str> - String excluding any above defined reserved characters or whitespace.
-+- <keystr> - String excluding any above defined reserved characters or whitespace.
-+- <valstr> - String.
- 
- Mandatory fully standardised keys
- ---------------------------------
- 
--- drm-driver: <str>
-+- drm-driver: <valstr>
- 
- String shall contain the name this driver registered as via the respective
- `struct drm_driver` data structure.
-@@ -75,10 +76,10 @@ the above described criteria in order to associate data to individual clients.
++- drm-comm-override: <valstr>
++
++Returns the client executable override string.  Some drivers support letting
++userspace override this in cases where the userspace is simply a "proxy".
++Such as is the case with virglrenderer drm native context, where the host
++process is just forwarding command submission, etc, from guest userspace.
++This allows the proxy to make visible the executable name of the actual
++app in the VM guest.
++
++- drm-cmdline-override: <valstr>
++
++Returns the client cmdline override string.  Some drivers support letting
++userspace override this in cases where the userspace is simply a "proxy".
++Such as is the case with virglrenderer drm native context, where the host
++process is just forwarding command submission, etc, from guest userspace.
++This allows the proxy to make visible the cmdline of the actual app in the
++VM guest.
++
  Utilization
  ^^^^^^^^^^^
  
--- drm-engine-<str>: <uint> ns
-+- drm-engine-<keystr>: <uint> ns
+diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+index 9321eb0bf020..d7514c313af1 100644
+--- a/drivers/gpu/drm/drm_file.c
++++ b/drivers/gpu/drm/drm_file.c
+@@ -178,6 +178,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
+ 	spin_lock_init(&file->master_lookup_lock);
+ 	mutex_init(&file->event_read_lock);
  
- GPUs usually contain multiple execution engines. Each shall be given a stable
--and unique name (str), with possible values documented in the driver specific
-+and unique name (keystr), with possible values documented in the driver specific
- documentation.
++	mutex_init(&file->override_lock);
++
+ 	if (drm_core_check_feature(dev, DRIVER_GEM))
+ 		drm_gem_open(dev, file);
  
- Value shall be in specified time units which the respective GPU engine spent
-@@ -90,19 +91,19 @@ larger value within a reasonable period. Upon observing a value lower than what
- was previously read, userspace is expected to stay with that larger previous
- value until a monotonic update is seen.
+@@ -292,6 +294,8 @@ void drm_file_free(struct drm_file *file)
+ 	WARN_ON(!list_empty(&file->event_list));
  
--- drm-engine-capacity-<str>: <uint>
-+- drm-engine-capacity-<keystr>: <uint>
+ 	put_pid(file->pid);
++	kfree(file->override_comm);
++	kfree(file->override_cmdline);
+ 	kfree(file);
+ }
  
- Engine identifier string must be the same as the one specified in the
--drm-engine-<str> tag and shall contain a greater than zero number in case the
-+drm-engine-<keystr> tag and shall contain a greater than zero number in case the
- exported engine corresponds to a group of identical hardware engines.
+@@ -995,6 +999,17 @@ void drm_show_fdinfo(struct seq_file *m, struct file *f)
+ 			   PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+ 	}
  
- In the absence of this tag parser shall assume capacity of one. Zero capacity
- is not allowed.
++	mutex_lock(&file->override_lock);
++	if (file->override_comm) {
++		drm_printf(&p, "drm-comm-override:\t%s\n",
++			   file->override_comm);
++	}
++	if (file->override_cmdline) {
++		drm_printf(&p, "drm-cmdline-override:\t%s\n",
++			   file->override_cmdline);
++	}
++	mutex_unlock(&file->override_lock);
++
+ 	if (dev->driver->show_fdinfo)
+ 		dev->driver->show_fdinfo(&p, file);
+ }
+diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+index 1339e925af52..604d05fa6f0c 100644
+--- a/include/drm/drm_file.h
++++ b/include/drm/drm_file.h
+@@ -370,6 +370,25 @@ struct drm_file {
+ 	 */
+ 	struct drm_prime_file_private prime;
  
--- drm-cycles-<str>: <uint>
-+- drm-cycles-<keystr>: <uint>
- 
- Engine identifier string must be the same as the one specified in the
--drm-engine-<str> tag and shall contain the number of busy cycles for the given
-+drm-engine-<keystr> tag and shall contain the number of busy cycles for the given
- engine.
- 
- Values are not required to be constantly monotonic if it makes the driver
-@@ -111,12 +112,12 @@ larger value within a reasonable period. Upon observing a value lower than what
- was previously read, userspace is expected to stay with that larger previous
- value until a monotonic update is seen.
- 
--- drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
-+- drm-maxfreq-<keystr>: <uint> [Hz|MHz|KHz]
- 
- Engine identifier string must be the same as the one specified in the
--drm-engine-<str> tag and shall contain the maximum frequency for the given
--engine.  Taken together with drm-cycles-<str>, this can be used to calculate
--percentage utilization of the engine, whereas drm-engine-<str> only reflects
-+drm-engine-<keystr> tag and shall contain the maximum frequency for the given
-+engine.  Taken together with drm-cycles-<keystr>, this can be used to calculate
-+percentage utilization of the engine, whereas drm-engine-<keystr> only reflects
- time active without considering what frequency the engine is operating as a
- percentage of it's maximum frequency.
- 
++	/**
++	 * @comm: Overridden task comm
++	 *
++	 * Accessed under override_lock
++	 */
++	char *override_comm;
++
++	/**
++	 * @cmdline: Overridden task cmdline
++	 *
++	 * Accessed under override_lock
++	 */
++	char *override_cmdline;
++
++	/**
++	 * @override_lock: Serialize access to override_comm and override_cmdline
++	 */
++	struct mutex override_lock;
++
+ 	/* private: */
+ #if IS_ENABLED(CONFIG_DRM_LEGACY)
+ 	unsigned long lock_count; /* DRI1 legacy lock count */
 -- 
 2.39.2
 
