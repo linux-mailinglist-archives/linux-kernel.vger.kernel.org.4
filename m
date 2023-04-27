@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107966F0D6D
+	by mail.lfdr.de (Postfix) with ESMTP id BE4E96F0D6F
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344334AbjD0UqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S1344340AbjD0UqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344313AbjD0Upx (ORCPT
+        with ESMTP id S1344318AbjD0Up4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:45:53 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC6946BE
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:51 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-953343581a4so1381654766b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:51 -0700 (PDT)
+        Thu, 27 Apr 2023 16:45:56 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAF146B7
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94f3cd32799so1718204266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1682628350; x=1685220350;
+        d=amarulasolutions.com; s=google; t=1682628352; x=1685220352;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8zgyM9/Qsb7y0LcnLSlDess36RbYnrfbiOfx4wd1SRU=;
-        b=C0kEWeMPUx9aQmFafDeK++7KxvR/FRLnqASxZ467WKjEKHO4kRSWw8X66kfedTFAZV
-         k4bgWFabp/4gWrqn5uyRPdUTMUct44VJOkbw1eGKd/h5Y2DwEUi20UwtyMTHTRKtOzQ/
-         uDyeKQzPP2dYzVUk6300KOiLOBWtp47JlVaZA=
+        bh=v1g80Na1OEbBoslJdzzF/Prgy9dbHeWplBduFJrTGTE=;
+        b=DvLGcylpQYmWAth/6x3toQJKgwI8AKXZeYaKAEYk1Qwh5YqdkwBS/r69ziz2Jz0bIk
+         56inSpEO9OPobT/T6x2tgj1d6O0meEzp1hNVCQSnzkuizUqX+GtJcBj76Qh5EB3IW6/n
+         oYNww7liCyUl+1YC28I882Pv7ewDVb5CnDPsQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682628350; x=1685220350;
+        d=1e100.net; s=20221208; t=1682628352; x=1685220352;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8zgyM9/Qsb7y0LcnLSlDess36RbYnrfbiOfx4wd1SRU=;
-        b=UQ9C2neRg8CTqcozmiW1NJwnHjGedaxpV3Q7CwEvmVOYJjn26uSJn1u48HmyFoN44w
-         3reNU7I6JMBqPT5uMySTdusTYP9yzjVqnYOHCD0HDqS0WzmyejcL/YhPTNi0mPJ7+9xx
-         XZtQ9ymyvtI/9ajYMLPcGo0VfB8dgPTjhlwwnIj/CEQs1VDZRqk6xX5lsZdlWRMzd2UT
-         d38L/WaHh6LF8Ka2r1pXB/KdbHJLiBpk7lCyie/IxT2mZzGBIdMXO/1oLF9ddiY4bvRD
-         L+OGqDoFPGYey2GRvS7RMaiIGGhlXLm9/MPChs/hBMEnWiKYEKVzTkeQYtNE69BgyrXv
-         TCjQ==
-X-Gm-Message-State: AC+VfDw9c+7rVMKHI4VxASJMfjwPA/bf54NNNYBsAky+5QrheXzVcVEh
-        DS6qDEUiuRezJazt8Oqp12SHJ/vV7YV/c0i8nXE9wQ==
-X-Google-Smtp-Source: ACHHUZ7xp3LajXmJwIzUw4bO+6Ie+hY8CRiA9yNimoCacSraqyoqOfQE8akxqqf8UroKvyN6TWHbXQ==
-X-Received: by 2002:a17:907:3e1a:b0:94f:1a11:e07d with SMTP id hp26-20020a1709073e1a00b0094f1a11e07dmr3458979ejc.32.1682628349735;
-        Thu, 27 Apr 2023 13:45:49 -0700 (PDT)
+        bh=v1g80Na1OEbBoslJdzzF/Prgy9dbHeWplBduFJrTGTE=;
+        b=LvDjRWQgVcMWaPagXY8Yalsfb4Gcs5pDmV6CbxFLRwLBuqJfif4J65hNVrDtr9eL84
+         UOyK3p91crl5806YCxgoFVeF1JjQZMRbgJq9pnIFvt1lkTzy5eYXav89/D0DOUHBTav1
+         MWwz+dQw5nlpWDeXAi2ag39s1s9tQTyuWa2wVRFbJ1uyq/OtPSVouWlaUzcMiNbEyeXx
+         yXR0lTzrInhut2MuBnSpHZit5wj4luXDFHK1z65PpwZDwOqs8IRsBo5UrBq2yt30bj8I
+         968BZ9Qos2voLSt1SOeTCYXOi3B/qaPUOPH/qkjvZ9CZPu9R21P7LLNGymjj8EH8/DfE
+         ZC6Q==
+X-Gm-Message-State: AC+VfDzj+Xl/+2dSX7lFEuza2d/+DPOqtJNDN+j5CSHTIjm+UYseju3H
+        5yrAftuwukW+SyjJxgbHn3kvHTEKUTHYgjD4ugm5Og==
+X-Google-Smtp-Source: ACHHUZ4PGI/ct8o2uaXVoBpyRsD8PbY2Jehj2M6pOSB2wOzLfB2wdU6oi6hHy1bXWe3tEjrfYjL7dQ==
+X-Received: by 2002:a17:906:4fd6:b0:958:2cb5:9ada with SMTP id i22-20020a1709064fd600b009582cb59adamr3071816ejw.39.1682628352378;
+        Thu, 27 Apr 2023 13:45:52 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-5-99-194.retail.telecomitalia.it. [87.5.99.194])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm10171360ejv.154.2023.04.27.13.45.48
+        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm10171360ejv.154.2023.04.27.13.45.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 13:45:49 -0700 (PDT)
+        Thu, 27 Apr 2023 13:45:51 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2 3/5] ARM: dts: stm32: add pin map for CAN controller on stm32f7
-Date:   Thu, 27 Apr 2023 22:45:38 +0200
-Message-Id: <20230427204540.3126234-4-dario.binacchi@amarulasolutions.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 4/5] can: bxcan: add support for single peripheral configuration
+Date:   Thu, 27 Apr 2023 22:45:39 +0200
+Message-Id: <20230427204540.3126234-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
 References: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
@@ -76,109 +77,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pin configurations for using CAN controller on stm32f7.
+Add support for bxCAN controller in single peripheral configuration:
+- primary bxCAN
+- dedicated Memory Access Controller unit
+- 512-byte SRAM memory
+- 14 filter banks
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
 ---
 
-(no changes since v1)
+Changes in v2:
+- s/fiter/filter/ in the commit message
+- Replace struct bxcan_mb::primary with struct bxcan_mb::cfg.
 
- arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 82 ++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ drivers/net/can/bxcan.c | 34 +++++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-index c8e6c52fb248..9f65403295ca 100644
---- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-@@ -283,6 +283,88 @@ pins2 {
- 					slew-rate = <2>;
- 				};
- 			};
-+
-+			can1_pins_a: can1-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('A', 12, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('A', 11, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can1_pins_b: can1-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 9, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 8, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can1_pins_c: can1-2 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('D', 1, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('D', 0, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+
-+				};
-+			};
-+
-+			can1_pins_d: can1-3 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('H', 14, AF9)>; /* CAN1_RX */
-+					bias-pull-up;
-+
-+				};
-+			};
-+
-+			can2_pins_a: can2-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 6, AF9)>; /* CAN2_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 5, AF9)>; /* CAN2_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can2_pins_b: can2-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 12, AF9)>; /* CAN2_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can3_pins_a: can3-0 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('A', 15, AF11)>; /* CAN3_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('A', 8, AF11)>; /* CAN3_RX */
-+					bias-pull-up;
-+				};
-+			};
-+
-+			can3_pins_b: can3-1 {
-+				pins1 {
-+					pinmux = <STM32_PINMUX('B', 4, AF11)>;  /* CAN3_TX */
-+				};
-+				pins2 {
-+					pinmux = <STM32_PINMUX('B', 3, AF11)>; /* CAN3_RX */
-+					bias-pull-up;
-+				};
-+			};
- 		};
- 	};
+diff --git a/drivers/net/can/bxcan.c b/drivers/net/can/bxcan.c
+index e26ccd41e3cb..027a8a162fe4 100644
+--- a/drivers/net/can/bxcan.c
++++ b/drivers/net/can/bxcan.c
+@@ -118,7 +118,7 @@
+ #define BXCAN_FiR1_REG(b) (0x40 + (b) * 8)
+ #define BXCAN_FiR2_REG(b) (0x44 + (b) * 8)
+ 
+-#define BXCAN_FILTER_ID(primary) (primary ? 0 : 14)
++#define BXCAN_FILTER_ID(cfg) ((cfg) == BXCAN_CFG_DUAL_SECONDARY ? 14 : 0)
+ 
+ /* Filter primary register (FMR) bits */
+ #define BXCAN_FMR_CANSB_MASK GENMASK(13, 8)
+@@ -135,6 +135,12 @@ enum bxcan_lec_code {
+ 	BXCAN_LEC_UNUSED
  };
+ 
++enum bxcan_cfg {
++	BXCAN_CFG_SINGLE = 0,
++	BXCAN_CFG_DUAL_PRIMARY,
++	BXCAN_CFG_DUAL_SECONDARY
++};
++
+ /* Structure of the message buffer */
+ struct bxcan_mb {
+ 	u32 id;			/* can identifier */
+@@ -167,7 +173,7 @@ struct bxcan_priv {
+ 	struct regmap *gcan;
+ 	int tx_irq;
+ 	int sce_irq;
+-	bool primary;
++	enum bxcan_cfg cfg;
+ 	struct clk *clk;
+ 	spinlock_t rmw_lock;	/* lock for read-modify-write operations */
+ 	unsigned int tx_head;
+@@ -202,17 +208,17 @@ static inline void bxcan_rmw(struct bxcan_priv *priv, void __iomem *addr,
+ 	spin_unlock_irqrestore(&priv->rmw_lock, flags);
+ }
+ 
+-static void bxcan_disable_filters(struct bxcan_priv *priv, bool primary)
++static void bxcan_disable_filters(struct bxcan_priv *priv, enum bxcan_cfg cfg)
+ {
+-	unsigned int fid = BXCAN_FILTER_ID(primary);
++	unsigned int fid = BXCAN_FILTER_ID(cfg);
+ 	u32 fmask = BIT(fid);
+ 
+ 	regmap_update_bits(priv->gcan, BXCAN_FA1R_REG, fmask, 0);
+ }
+ 
+-static void bxcan_enable_filters(struct bxcan_priv *priv, bool primary)
++static void bxcan_enable_filters(struct bxcan_priv *priv, enum bxcan_cfg cfg)
+ {
+-	unsigned int fid = BXCAN_FILTER_ID(primary);
++	unsigned int fid = BXCAN_FILTER_ID(cfg);
+ 	u32 fmask = BIT(fid);
+ 
+ 	/* Filter settings:
+@@ -680,7 +686,7 @@ static int bxcan_chip_start(struct net_device *ndev)
+ 		  BXCAN_BTR_BRP_MASK | BXCAN_BTR_TS1_MASK | BXCAN_BTR_TS2_MASK |
+ 		  BXCAN_BTR_SJW_MASK, set);
+ 
+-	bxcan_enable_filters(priv, priv->primary);
++	bxcan_enable_filters(priv, priv->cfg);
+ 
+ 	/* Clear all internal status */
+ 	priv->tx_head = 0;
+@@ -806,7 +812,7 @@ static void bxcan_chip_stop(struct net_device *ndev)
+ 		  BXCAN_IER_EPVIE | BXCAN_IER_EWGIE | BXCAN_IER_FOVIE1 |
+ 		  BXCAN_IER_FFIE1 | BXCAN_IER_FMPIE1 | BXCAN_IER_FOVIE0 |
+ 		  BXCAN_IER_FFIE0 | BXCAN_IER_FMPIE0 | BXCAN_IER_TMEIE, 0);
+-	bxcan_disable_filters(priv, priv->primary);
++	bxcan_disable_filters(priv, priv->cfg);
+ 	bxcan_enter_sleep_mode(priv);
+ 	priv->can.state = CAN_STATE_STOPPED;
+ }
+@@ -931,7 +937,7 @@ static int bxcan_probe(struct platform_device *pdev)
+ 	struct clk *clk = NULL;
+ 	void __iomem *regs;
+ 	struct regmap *gcan;
+-	bool primary;
++	enum bxcan_cfg cfg;
+ 	int err, rx_irq, tx_irq, sce_irq;
+ 
+ 	regs = devm_platform_ioremap_resource(pdev, 0);
+@@ -946,7 +952,13 @@ static int bxcan_probe(struct platform_device *pdev)
+ 		return PTR_ERR(gcan);
+ 	}
+ 
+-	primary = of_property_read_bool(np, "st,can-primary");
++	if (of_property_read_bool(np, "st,can-primary"))
++		cfg = BXCAN_CFG_DUAL_PRIMARY;
++	else if (of_property_read_bool(np, "st,can-secondary"))
++		cfg = BXCAN_CFG_DUAL_SECONDARY;
++	else
++		cfg = BXCAN_CFG_SINGLE;
++
+ 	clk = devm_clk_get(dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(dev, "failed to get clock\n");
+@@ -992,7 +1004,7 @@ static int bxcan_probe(struct platform_device *pdev)
+ 	priv->clk = clk;
+ 	priv->tx_irq = tx_irq;
+ 	priv->sce_irq = sce_irq;
+-	priv->primary = primary;
++	priv->cfg = cfg;
+ 	priv->can.clock.freq = clk_get_rate(clk);
+ 	spin_lock_init(&priv->rmw_lock);
+ 	priv->tx_head = 0;
 -- 
 2.32.0
 
