@@ -2,237 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D969E6EFEC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF7E6EFECC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 03:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242745AbjD0BIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Apr 2023 21:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S242803AbjD0BLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Apr 2023 21:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbjD0BIG (ORCPT
+        with ESMTP id S233710AbjD0BLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Apr 2023 21:08:06 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7A9C0;
-        Wed, 26 Apr 2023 18:08:05 -0700 (PDT)
+        Wed, 26 Apr 2023 21:11:13 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B770C0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Apr 2023 18:11:10 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QGx6an014746;
+        Thu, 27 Apr 2023 01:10:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type :
+ content-transfer-encoding : in-reply-to : mime-version; s=corp-2023-03-30;
+ bh=wZ1ADttNpSNi29i4dyWLkNemxc+dKOygzzOT5f9RYs4=;
+ b=rK80HmslVf0cwryrZkYvpuRgFYNW1djTac4pzx/OXEmmldr5WpqK5X9aTAwOphK92Mgf
+ RxKvLoQ4Z88ECeixTlEHCu9nF5TazI6ARzUM+waPs0JVIR2fjj6NgyAGQDH5zQpWQi7F
+ 1/HWXPKWTsnhgKMcS3PQZDo+V9iRhEVc2GzQ0Y+Kh8tvOV32kCvurEmqqDi3qLrxeFTo
+ VmnhQL0aWhJmINe62KrKviZGuakeEfsGrzbjuusxVCdvYVfkxvmdo6N49JsMlPjmacJU
+ NdVROqIm5g3cBf6pg0CUqaiCZUtloGfpxSjzwI9hVaHjiTmhEqEObaTo5MvXSS+L/Aah cw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q47fatps6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Apr 2023 01:10:49 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QNqJ8c008496;
+        Thu, 27 Apr 2023 01:10:48 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618whak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Apr 2023 01:10:48 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JR7j42Z5mNNhZUJS/HsgT7MEsNIxGS88NZe2bbmgmTjDSW5V7B9FDBPNARFm5KnDFEzkX1KszqhN0h5q2ubGny1JzzTZSdTLQRwq8we1Fza1tTjljuT2xuhq3ipeYGQM11leSuPGJfe6gBUxeo/DGvT1+rpw1QKNClQqCqJiaZtJXicisbY0jprrEyXE3+7OXDag4lPkkwvXoUiPfK0Hz6Z0YkMTCxcPSF63i6afOWDnP9nKW4aYqXCqAHCTAYcNux+raX8GlfGyB5tEU6asvDKsxqwVtmfa39NCrtjbZhrApoNpQcMPSSLAXR+26U3WXmrQeQaM0p5GFiEY47AENw==
+ b=ANxFW2/fA+9dwHufXa448a32TpGZ9tGzwIT+inXoszRp2FEQmn+MUylmleipeRrIF6RFW/vEqgjaLPKrRep0D1GRTMpc6QRe86M9mViIxUsg4ljT94LopuAVcvOceSfQRfc9zkS6IAhWKqgLFMJr0q4B5rpMhnoeXCcRxPwBI1pE2X/oFsa7WItXBv4KbCZwEe5LXwLw6dtjXxJepiYmZ/num6Dq87kff/WWiVl92l7Tsdqu6MCfdJx+khdIobn/UjYRXSdtGnIhx6j+GWlCRtg6At9yCdc1H7tvTW9EbMYs0pBdZcnt2xHlg1boIBgPJM7WUPdBo8ScQ/OQh2EBdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qAUq711HcYSqYuPgIlxU/avkF3pSpFk4gqq8i8Eh2zE=;
- b=D18yE27YufomwbNkVsUGjGlxailkvn7ysxAe0HM87+khgezIXdXy/UK5xfhziMzoiH6907qegaYP7fQLAcKKyv+Q8Ze5CE34++FJUnmTx2ZEAMzoOVk6SL723YBw2umOaXfTj5k2Oj67GrlY4mcY8WiusKVfbNQS6OxictTabDUhvuqJ5UByggTeusjKkMsoOOCrTg2PlAT3Pkfk7w6gCKM1d1ecuYp4oLfe6iOBhf5d46hF3Be1O3r39lM3o1mGHEYvfXE9plTTeEJ5h0N8OllI2qep/VHDPhHDaCYGIrmQdG+akLcnuHehDN+i8/NNI1IA/mDOMFme9rxaObM6BQ==
+ bh=wZ1ADttNpSNi29i4dyWLkNemxc+dKOygzzOT5f9RYs4=;
+ b=i3looDAvYB86XoM41F2ZcQ9UXaod0UtjomyEcWC/zoSO/kL8Wh3OPIOStvsTttVuWG55l2pueCwnYcT1c229BMHBfA3JagZ6OsRDLN9mW32qZgM1H30qYanWxHVUlzt8bmGg1wkE8LqqRq4gXSj9P3SoswgeulJxKvJYbBBEn3Sa6qUMap2P9oLD4T0Hqr1nlmZvsRikK2ZhfhcojKESuh88ncfQcWYvNstus7OxhKbxbKDSNxgj5691eUDN0cZsnzDHvGujHIvcP2K6ORuufjb377gkUu+BxdIfsS5BZKN2JgQKKA5vgCgEvZmacqK37oeivzHaODW/lWLx8Mh51Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qAUq711HcYSqYuPgIlxU/avkF3pSpFk4gqq8i8Eh2zE=;
- b=VI+tBHEZGQgyAew5hqtcwlprAkSvILqqtm/OnFsBG5n/Onu/n8bpczm4iNLSzc8dpOkZvAINetrHQDWrMhFrvUfY73Vza0ONxhsJHAnlqb29cfROyNwjYXKYHbRi9F7SCPnLxI1/gBLVGt7GcvwlxgTocVuYAEZZvCQ5EbIU1lI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=labundy.com;
-Received: from DM5PR0801MB3767.namprd08.prod.outlook.com (2603:10b6:4:7c::37)
- by CH0PR08MB8684.namprd08.prod.outlook.com (2603:10b6:610:18c::15) with
+ bh=wZ1ADttNpSNi29i4dyWLkNemxc+dKOygzzOT5f9RYs4=;
+ b=q6nlEc6L57C3NA7/UgLiywSALCyStapmPjhMiOStq8nqQglNp+sOiPGYVDro1QHnAsJtGhB2EQIPuP/94l4Uxw0PmvdndvOK8K+9LnDxTuFQHpP1N5IUsiIiRdzuU/0RrQsgC4NF6jPuCKK59sB70BwufjF0BW3vTERtDw+nF84=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by SJ0PR10MB4685.namprd10.prod.outlook.com (2603:10b6:a03:2df::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.34; Thu, 27 Apr
- 2023 01:07:59 +0000
-Received: from DM5PR0801MB3767.namprd08.prod.outlook.com
- ([fe80::20b4:97da:18df:16dc]) by DM5PR0801MB3767.namprd08.prod.outlook.com
- ([fe80::20b4:97da:18df:16dc%3]) with mapi id 15.20.6340.021; Thu, 27 Apr 2023
- 01:07:59 +0000
-Date:   Wed, 26 Apr 2023 20:07:57 -0500
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     Fei Shao <fshao@chromium.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] HID: i2c-hid: goodix: Add support for
- "goodix,no-reset-during-suspend" property
-Message-ID: <ZEnK7bQkl+fkcHkb@nixie71>
-References: <20230426144423.2820826-1-fshao@chromium.org>
- <20230426144423.2820826-3-fshao@chromium.org>
-Content-Type: text/plain; charset=us-ascii
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Thu, 27 Apr
+ 2023 01:10:45 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6319.034; Thu, 27 Apr 2023
+ 01:10:45 +0000
+Date:   Wed, 26 Apr 2023 21:10:42 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Peng Zhang <perlyzhang@gmail.com>
+Cc:     Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org
+Subject: Re: [PATCH 3/9] maple_tree: Modify the allocation method of
+ mtree_alloc_range/rrange()
+Message-ID: <20230427011042.dvxn33dm5hbrbxh7@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Peng Zhang <perlyzhang@gmail.com>,
+        Peng Zhang <zhangpeng.00@bytedance.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        maple-tree@lists.infradead.org
+References: <20230425110511.11680-1-zhangpeng.00@bytedance.com>
+ <20230425110511.11680-4-zhangpeng.00@bytedance.com>
+ <20230425160815.mionpme7bmdequzb@revolver>
+ <1ee0cfa0-c442-1e31-24a8-90dd8b7ab2a6@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230426144423.2820826-3-fshao@chromium.org>
-X-ClientProxiedBy: DS7PR03CA0022.namprd03.prod.outlook.com
- (2603:10b6:5:3b8::27) To DM5PR0801MB3767.namprd08.prod.outlook.com
- (2603:10b6:4:7c::37)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1ee0cfa0-c442-1e31-24a8-90dd8b7ab2a6@gmail.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0417.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10b::21) To SN6PR10MB3022.namprd10.prod.outlook.com
+ (2603:10b6:805:d8::25)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR0801MB3767:EE_|CH0PR08MB8684:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94f53591-8648-4172-e0fb-08db46bbd798
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|SJ0PR10MB4685:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ab59f59-f864-422c-58f8-08db46bc3a75
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JK0rpSzMjyeruR/+o9YJidC0GYYxEnOl9Q9G40SLB7pixUh/pOMG0yirBDpqKwW6pQckaCkoqcdnouX5sy9T0npsUNjZtRmnxYKaPVZkZhpvYAv057xC0F8MRiZFfUoKHt+ROpy7Cjt2+KoGwKkcArKg1b3Y0pfXKoBTYLTGZiLTcLoNmwWRrLvIUFMVYMkYL1G90/MAvQo6THc7WVLK63MqA6d6THJtlnkFAWShr2T4DgbyCTrxEzaVidBVNSW2t3gejxp9x0kVCs6tic2Xgm9yWlD5r08AABf153bY2SJLoHj8gFXszIsuUnDp2eU8AvtxGSAxHu40o25Kt/091f7Qqn5hFB9pooS6eNw6WcWRb4MrKnMlq6xfmxPD2H4JN2KbupSAC0o303RNPyEmzcR45919Cuu+hJe7ji9r1OOWBf4N8BVKNQlXMnIQGmbWa07aUNvnvlGY1cMOrwSbU9yK83wM5Sk8hFmUZud9PeVdtniISe1kNJ1NtKXm6PTf/QPm+FiGLZkqy97KBavsvNwpYyIxIATOn+FxpwY8Ag7PFoUAH7megIqsI/UVWxzDMgbGkCWbmmJ1OMqQzzi9A5INvhhNZr7Dikwl8G/lQng=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0801MB3767.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(366004)(39830400003)(136003)(346002)(396003)(451199021)(54906003)(478600001)(86362001)(38100700002)(33716001)(8676002)(2906002)(8936002)(7416002)(6916009)(15650500001)(4326008)(66476007)(66556008)(316002)(66946007)(5660300002)(41300700001)(6512007)(186003)(26005)(6506007)(9686003)(83380400001)(6486002)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: abh3t0li2HKc7z4WxjUMtKK8pmnwzWv4PNSPCyybF7wXcc6BTBIYuX5HiG0G1U0iKOgSWMUi7MyQJ71xX/QTD8Fp4/KU4BLzdHOtY1Yi3vLgBktavybO3hUWHARkKoql9QUmrQ+eNn4Lseubsi+a82k5jLoghrEMfpkS0yV2OoF2gNndMeSmmOAJj4Cvdz/YfzBxQ14n8JirRlKfgWbOxf4i+3xEe9Nl9hFGBxjOGNsZ+84rstlNDSgndM1vsfIjd/JeejuScIeaFzWJFj8RAH3hajm6w8As2O1xyc7Zshi+qzfE8aQSE8UCfjYzDxB00r7JCyWluQgnwhAYoOiGk/JaogJJoO2ZYyKtszlmX0+8e1ll+nVDQl3aDB5GpOU3be5epk2ItAEmGSZjIejPUsG5fGxq4k/0xTggy6iNgqs4iDQ6yFxhqD8FSqIKbxEUkOwKG4vrN4LrmVGh8KSgQldyy+jze3079ZRJxko37n1MDmEs+DripvHz8pqm58TMmh9OKtBaPWAwW00vdWVQ1Fds/nGoVwcGZoLTIwD+87C6RxfMXNEOhLKO6wcyjZyc
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199021)(66899021)(86362001)(33716001)(478600001)(6666004)(6486002)(38100700002)(8936002)(8676002)(41300700001)(66556008)(66946007)(6916009)(316002)(4326008)(83380400001)(186003)(66476007)(26005)(9686003)(1076003)(2906002)(6506007)(6512007)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LdkbYZElJX/FFeSAhufRIJoQ2XebNUSVIIBIKrjbWGug6DUnepLFwgISMaAN?=
- =?us-ascii?Q?yoQtE3AoRN0IaNzktXV0hnTu1IaLSOxGcP58zJ0aSZvPoRSu6bIyrTfWhY2w?=
- =?us-ascii?Q?S2XGGFjAWRGiT9pas1rcMYGcJSsXDOKPhJY9y/D2DeeCtYjoLZ5n2vHNduIE?=
- =?us-ascii?Q?bKZjQ6GwP7KRomx1VNHNjaFnTe6WZbWrn9JlfALpS12mMoo+A9BHWQ39GL/w?=
- =?us-ascii?Q?L37OJuLYSotucFjcqwqV9u6kIl+paXfKNrYd4rkCUOF19eKtT27TwJZT0smp?=
- =?us-ascii?Q?YsayV2sb3EjtIob98D5vyWgg6Aun8Uo2OL7UbeNuFssqkGeudR7/mGCXfTig?=
- =?us-ascii?Q?yeJ4fvQIT/3p6tADjpXgLdHj5yihsYthHslTiHF3yCUFAkCsHOdkX51jah9G?=
- =?us-ascii?Q?SEb/7TVaXLGLXCttOvfMhi+UbeJU4LIiOs6QfCpX8NGDOj3+2EWxizT0C8Ac?=
- =?us-ascii?Q?G9swvhaN1C2vid1pAo3C2X8Ph43fS3e7dJDEeGUoSKFeUmKCWuHihJJ4EKPi?=
- =?us-ascii?Q?MI6i6hAlieLIEmpJN52uLiKmPpmzCR8To16Wlryk/abPq5EVE25Z3e3/i+Vk?=
- =?us-ascii?Q?BMnWC/kEPL3f8nRT0gpExl7toabZgsOfPeGXQqFWcDIO21UxA1m92XIjZ7wa?=
- =?us-ascii?Q?nGp/1STpFaYOMb2YNbI/JcENewKux0S6goQMsb4HrKkA13X7dWfwmKeKpuK9?=
- =?us-ascii?Q?wz6hjIE/fMDaH8nPAeOpSWlzUkQW7zCJHYrWvKZMKqu+Yp2I2u/3fEYjV2SJ?=
- =?us-ascii?Q?lv44izAZ9QktLuqDrO7KYnFxWy3TgAf4F7eivxJ8gkehuGKEsjkVg+MFfS2b?=
- =?us-ascii?Q?c5nxU1aOnbqd7DaxLcSgPlWOjKlPpOsREgVIeZLjzOvIJN77UJCE7ybQK1W+?=
- =?us-ascii?Q?y1vmpUCTqA4KrMRpj84L+6r8H6bRuDXbeaznn+qno1DqSYD2lB+//zSRzrkF?=
- =?us-ascii?Q?fcnLor+BVbo5yy+fLN1fRe4PV5Wh4Tka/s78QYaEKRMcWd21Gtr8hLdLoZ9J?=
- =?us-ascii?Q?qNeZII6bFZ4wAXzkNJgLQwx1zGKpNS1nSjy0/OkoSxxnhJIzeg3RrtHSPAgO?=
- =?us-ascii?Q?JsS9YAve9mNOKssv7w0cxrIRmJWjb3CkQsq11yzuQlx2sKmyP1RLkB4Zy1dZ?=
- =?us-ascii?Q?1qBXNYxadznUCanTkayYd+HdPQPaZPy2MiBbaSxj/5sc8Df5ZGs2+CBd5iYc?=
- =?us-ascii?Q?EyfCk23rEpmlLCZuFaU2AilC35zb1WIDmlcr9KM4kCJV8lZhQDUfskJp4inm?=
- =?us-ascii?Q?FBT+4q3ujh4dopqSbZYejLERdpTYnns7aBIHqilGNGjapm+dPLG5RjVvwC9G?=
- =?us-ascii?Q?1LXEuBL1xFgduQ9sTckEYVCECe8Wco/xNnOetxcMOkwOdiQ9Y3e/gV8VEP6N?=
- =?us-ascii?Q?Tl3pcZT9h4eWPoILPi02z207zPNJHqF4uoB65LQampZtiU+E1kxtGa8K1DlH?=
- =?us-ascii?Q?oFnQsaZundZPE0TqdEK6PYCzxX9vyE6p4HYBptUH5Ip4au0bGnzeJL2jhYkH?=
- =?us-ascii?Q?euJHGIKWaPX+dmjvlawosHW2BIPvbuFMWZHS13MnYV5/nPy+p/JNZWSLGNCh?=
- =?us-ascii?Q?0FecsGSCmrgl/1y6INF3KVoTYlkHxId9Rb+B2PiP?=
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94f53591-8648-4172-e0fb-08db46bbd798
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR0801MB3767.namprd08.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTI2TENhUjZESmxZSHlySGJoemZINjQ1SGpIdVZ5b2E1QWl6dER2ek1tc3FQ?=
+ =?utf-8?B?QzZtamlmYVhjTUs2eGpVYmdoeWZITVc4cXNQQXdBelhLWHFSdXJnM2ZwRFRT?=
+ =?utf-8?B?WDYvWXRaM0F6VXdDcG5BVlBzdEh2U0xBN01KN2JVZVU5ejNBUkFDbkdya3Jo?=
+ =?utf-8?B?dU1OREk0MW1sRFpLNmRIZ1duWE9oUzdaSlZDcFpGVm5pS0tPVmJJVW1qZzFX?=
+ =?utf-8?B?TmZ4VjVTK2F4WHpUeTVYNGk5SnA5RE5KenZ6WGNnZUhpQ2lLZU5UdE1RcENI?=
+ =?utf-8?B?VFY1WDc3WDdUL2FnU1RSNHlzUVd4ZmhUaDhNdDNZTXZ0a0J2d1Fkbzh6bGN2?=
+ =?utf-8?B?blRrb1FJeTN1UldrVXFNMStjSms2SVFxUUE4bnRMMUZLOEZGeG4rMG9XZzlI?=
+ =?utf-8?B?QjVzejJaZUdWR3NrakJhYmMvQmZ4bVpUbjFIVlNGTlJQQmV3KzB4a291dXdC?=
+ =?utf-8?B?UW4wbHBMYUQva01rVFdDRzdlSFlFVnl1eVFaRm41ZC9rR3ZZdFFHVDdSVmVH?=
+ =?utf-8?B?QXZCWE1zenQ3TnM0N1h3NTUzeHVFSWJpZmFDTFFXNUUyWHROUkhuWVB2VlQy?=
+ =?utf-8?B?QnJJeXl5SlArWkY3c2ZjeVhpWjFxTUx1KzAxMmFwTys5RnhiaElXZlpwRTc5?=
+ =?utf-8?B?N21PN3hiY090bklzS0VodVNDbFFsRjdDSm1Cb2YyR1FVMktRcjRqbDJMMENS?=
+ =?utf-8?B?U3J1SG5nTlRyL2J6VEhMbHAxN0NaYjh2TjVqbmFlL2FiczM3ZllTODQ1Y04z?=
+ =?utf-8?B?MXNGRk8yLytpL0orTlVINFVIbjVDNG9rdDgvY280V2IyYWF1OTdOdSt1VGVE?=
+ =?utf-8?B?MUovOFVFcURYL01MQmU2WHZXdStCUUJabGNtQ0h6N3I0VGVGT041MjFkdXBV?=
+ =?utf-8?B?ckF3VndEL3NXSzlHM29LZ3BZL21tbDd3c1dBMmh5MklPYWZkK2lNaHFydWk1?=
+ =?utf-8?B?QzhPZzFTUjFHR2Z0VXpDbHlQWXFic0x1dG1lN01HVzJITWV5TXA3K3VEUmw2?=
+ =?utf-8?B?VGVqNnRUbFZ5OTFNazZXb1NzbmlqcDBzd3orSWtCdGt6bVc5c0Nwd25wS09j?=
+ =?utf-8?B?ZUt2TTd4TnJkYU9LQWMzMTgyZTl2YndZVXlpb1drNnQ4NytIRHd4UnpDYUFl?=
+ =?utf-8?B?UHZERnJhVHVNbzkzTm5ha1BJNFR3cjcwbEVyb0s1Mll1ZDdUV1I1M3VldW43?=
+ =?utf-8?B?Q0YzSW05dG1oWTJkcnpjdUZoZG90OVNsZHhLNzhoMVBnUFpNb1hIc2Z0NjlX?=
+ =?utf-8?B?Vk9XQkdENFUyd2ZIQ3U0TEcvK0RiN2RVNm5YVGtNTWwyVDNJR1ppRnR6d29K?=
+ =?utf-8?B?OVhaQ3RHUUdoSENhZ0VqRGx6bmlRamlrTUFCSzlMdUlCWkZZeWhmQVZHWDV5?=
+ =?utf-8?B?VS9NS3RrNjdDa1pDRER1bWdNMllkZUNlVG9FejVZMFFXTDZrZTN5TWU4Sjd1?=
+ =?utf-8?B?M2lOVUpvMUh3WUNmQjA1a0s3S1gvbDFmRUZMZ1ZnQzBXQTRlOFRXdHY0NGtW?=
+ =?utf-8?B?Mm1yc0E5aTdTTnZFdGY4YkIyZ3k0ZXhxakZNVUUzMnZzWnRKcmRMd2hSQ3N3?=
+ =?utf-8?B?QW1kdjBQaklaTTdUK213Z09hMkc3dGpjNDUvMmVuZDNoRWxERmhyeUlkL1A1?=
+ =?utf-8?B?dnJsUTc2eTZLNHJyVU1qYlNSb2ZEZFgxWlV1S3kxSjJyODAxM1hVZWpiUnd0?=
+ =?utf-8?B?U2JEcEErQlU2S1BNWUxpRnBCcURHRmc1eDJkUkhrTzEvSm9vVTEzT0JIOFhR?=
+ =?utf-8?B?dTJVYjZSWUN0eXljL093WjBZVHYzZENPZmJXMkRZQjVPTFZYMEFkaERZMkVt?=
+ =?utf-8?B?dmllbFFrbUE4Qm05YnRvc2w2R3hjMXVVcERYTkFHcnV3WEFqVXAyVldzcTBs?=
+ =?utf-8?B?bUlsRGR1VVFuVzdac3MyTW9nUDJ5aGVvbFFRZHlyaUhqWnpFWmRKampvWXZk?=
+ =?utf-8?B?S1lKbWg2S2lPS1g2MFl4eTl0eFBkR01xWUhPY0FydzNVZUJuVmw4K25MZW1v?=
+ =?utf-8?B?QXFuczU4L2h1enZFaFhqRDlscTZHaUtKOEJWTDhTYVlKNFJWNUNuNERZVk12?=
+ =?utf-8?B?eEp6bERRcHpoMkUyWEU5SVg3ejFFVXAvbFBQbjFLUmVlMG5UbDJTajQ1cG1l?=
+ =?utf-8?B?aXdSVitNekxhcTNvTy9nVDYvYlY5bVlUak5GVE9hU0JIeGRVb0NXVGplMWZk?=
+ =?utf-8?B?VkE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?ZHUzTGNWNVRiem05QUJyTk4yZ1FzcGxLYnV4Q1dTLzN2OW1JUWwxWG42VUlG?=
+ =?utf-8?B?RnY5bWpyQkpuQXZxYWJrMjg3SDl6Yyt5YnZCZWM1WjNzdnlYMnE0aWtYZko1?=
+ =?utf-8?B?blVsQ2FkK1FGMkZ4aWhiL3l1c01BcUJIMkplNUVQQnRlVHhqVlN2R0ZSYnFu?=
+ =?utf-8?B?NlVHNlpVbm1UK2Zpblg4eEZ2YndRUmQwYW4zSE5XdFVQL2xieGZoS3U0Z3Vn?=
+ =?utf-8?B?Si9IdXhwZzU5dWxuODU0UkZUZzYzUVI5ZVVJZDF2dENnZ0V5bWNyVUR4YTFn?=
+ =?utf-8?B?QndZMFJQUDFqenV6dTdjZEI0d3VmMmxQcGovckdaZ0RiRHBUQUNqMzAyeEl6?=
+ =?utf-8?B?RHpiVnpaUXlrai85UGVwc3p1NSs3T0s4OWpoa3hxeVc2QTZNN2t4elA2Y1kw?=
+ =?utf-8?B?SHpSdTZ0ZVo3SnI4cE9nc0R2dkFvZGdsdXcvaHpkSHlHQ3poZ0F1RzdYejlT?=
+ =?utf-8?B?WEg1dDB2MDhqcXlIdlBkU1FiUXNyRjR3TE93MWJCaXZoeTVHZWVsZE5zUzcz?=
+ =?utf-8?B?d2daT0g1STNvcHFlRE9NTEFHZmlnUEZSck4zTkJOSXpua0ZiQnphaVcxbmYv?=
+ =?utf-8?B?SU05d2c1emJSSG1TREdENGFZNmxYdVd4NjlvUTRCVmhxejdRNENVTGpWdUt6?=
+ =?utf-8?B?L3VvVFZMMnNRL3hnM3kzVmlzNzBaejhmNjd0NyttbEVrbjRSdHNjbzdReGRo?=
+ =?utf-8?B?cmI0Q2l1aEQvcEFHK2xET0VSc3FyYjRhY0FyZUV3cnJGSjRtbTBsTEVqcjRt?=
+ =?utf-8?B?YkFyMUVRaXc4c0JaUkZ5UHB5ZHVGV2hkSitMQmVkeERldHlwMC9HMENEOGJp?=
+ =?utf-8?B?Tms5aGFTSUUxdnJRcDBzSVhxV2djQTR2VGJsQVVLOWZ0c3FwNWxjeG9LR2py?=
+ =?utf-8?B?aW9kSDlmR0ZhRHE5MktJaGN2bzh4OTFFRXZKeUs1b292Q0ZVN2M3YUVUM2tj?=
+ =?utf-8?B?RFg0ZjNheENlSmVrdEdiVW94MUgveGJXTVdKNHE3T1RWd3ovK3ZMckdFWlJ4?=
+ =?utf-8?B?aFpaUWt3VWZ1ZG5WV0FxZTBKcUx4MWhZRlB2ZCtRSDVycDhUTnNTcndHand6?=
+ =?utf-8?B?MjZKREFOUlVxTElRY1VLVGc3dmJxMm1wdWRhVnZuOUVlbFNhSzUzWHYvOVVj?=
+ =?utf-8?B?aUZXZFpzWlgzZmJWV29TbElCMnZtSFVCUjcySzU0cjhOMkJ3TjUvRkZ2d2hu?=
+ =?utf-8?B?ZXVyVmUwaHROVGlja3Nkd1lQRkRueWJ4OWljNHM2QWo2UHJNdS9RdFVpVXB1?=
+ =?utf-8?B?S1B0aDZLbzZxeXk5cWRBL1NUU2dXSGRVQ25aVHFhQkl2QVlCUT09?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ab59f59-f864-422c-58f8-08db46bc3a75
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 01:07:59.4596
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2023 01:10:45.3143
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mZIgLvIU/wEN4JgKivm9ygwiJagtNF01RAGEifQ5s48xWLRpPwlkFT+LayijiIeJcMFs5v8tqkKvw/aWZjoxjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR08MB8684
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: oPPR0HFVL/B1JF/k/d++EVK4n+P7vLonlplngkp5rR/bnWn7JnxV8wy/4RSax24WFMJKDF6kp8Hi1/yTfwvKlA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4685
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-26_11,2023-04-26_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304270008
+X-Proofpoint-ORIG-GUID: gphUFZiE3HrDNkNxS9zQf_Nl-Kir4w_I
+X-Proofpoint-GUID: gphUFZiE3HrDNkNxS9zQf_Nl-Kir4w_I
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fei,
+* Peng Zhang <perlyzhang@gmail.com> [230426 08:34]:
+>=20
+>=20
+> =E5=9C=A8 2023/4/26 00:08, Liam R. Howlett =E5=86=99=E9=81=93:
+> > * Peng Zhang <zhangpeng.00@bytedance.com> [230425 07:05]:
+> > > Let mtree_alloc_range() and mtree_alloc_rrange() use mas_empty_area()
+> > > and mas_empty_area_rev() respectively for allocation to reduce code
+> > > redundancy. And after doing this, we don't need to maintain two logic=
+ally
+> > > identical codes to improve maintainability.
+> > >=20
+> > > In fact, mtree_alloc_range/rrange() has some bugs. For example, when
+> > > dealing with min equals to max (mas_empty_area/area_rev() has been fi=
+xed),
+> > > the allocation will fail.
+> > > There are still some other bugs in it, I saw it with my naked eyes, b=
+ut
+> > > I didn't test it, for example:
+> > > When mtree_alloc_range()->mas_alloc()->mas_awalk(), we set mas.index =
+=3D min,
+> > > mas.last =3D max - size. However, mas_awalk() requires mas.index =3D =
+min,
+> > > mas.last =3D max, which may lead to allocation failures.
+> >=20
+> > Please don't re-state code in your commit messages.
+> >=20
+> > Try to focus on what you did, and not why.
+> >=20
+> > ie: Aligned mtree_alloc_range() to use the same internal function as
+> > mas_empty_area().
+> >=20
+> > >=20
+> > > Right now no users are using these two functions so the bug won't tri=
+gger,
+> > > but this might trigger in the future.
+> > >=20
+> > > Also use mas_store_gfp() instead of mas_fill_gap() as I don't see any
+> > > difference between them.
+> >=20
+> > Yeah, evolution of the code converged on the same design.  Thanks for
+> > seeing this.
+> >=20
+> > >=20
+> > > After doing this, we no longer need the three functions
+> > > mas_fill_gap(), mas_alloc(), and mas_rev_alloc().
+> >=20
+> > Let's just drop mtree_alloc_range() and mtree_alloc_rrange() and
+> > whatever else you found here.  They were planned to simplify the mmap
+> > code allocations, but since there would need to be arch involvement
+> > (coloring, etc) and alignment, etc; it is better to leave this job to
+> > the mm code itself.
+> Ok, I will remove some useless functions here.
+> But mtree_alloc_range() and mtree_alloc_rrange() really don't need to be
+> reserved? Because I don't know if there will be users using it in other
+> scenarios in the future.
 
-On Wed, Apr 26, 2023 at 10:44:22PM +0800, Fei Shao wrote:
-> In the beginning, commit 18eeef46d359 ("HID: i2c-hid: goodix: Tie the
-> reset line to true state of the regulator") introduced a change to tie
-> the reset line of the Goodix touchscreen to the state of the regulator
-> to fix a power leakage issue in suspend.
-> 
-> After some time, the change was deemed unnecessary and was reverted in
-> commit 557e05fa9fdd ("HID: i2c-hid: goodix: Stop tying the reset line to
-> the regulator") due to difficulties in managing regulator notifiers for
-> designs like Evoker, which provides a second power rail to touchscreen.
-> 
-> However, the revert caused a power regression on another Chromebook
-> device Steelix in the field, which has a dedicated always-on regulator
-> for touchscreen and was covered by the workaround in the first commit.
-> 
-> To address both cases, this patch adds the support for the new
-> "goodix,no-reset-during-suspend" property in the driver:
-> - When set to true, the driver does not assert the reset GPIO during
->   power-down.
->   Instead, the GPIO will be asserted during power-up to ensure the
->   touchscreen always has a clean start and consistent behavior after
->   resuming.
->   This is for designs with a dedicated always-on regulator.
-> - When set to false or unset, the driver uses the original control flow
->   and asserts GPIO and disables regulators normally.
->   This is for the two-regulator and shared-regulator designs.
-> 
-> Signed-off-by: Fei Shao <fshao@chromium.org>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+As you showed, a lot of the code is now the same elsewhere, so it
+wouldn't take much to make a version of this outside of the tree if
+someone needs the functionality.
 
-Great work; one tiny nit below. If you do not agree with it or have found
-precedent that suggests it is OK, feel free to ignore it. Either way:
-
-Reviewed-by: Jeff LaBundy <jeff@labundy.com>
-
-> 
-> ---
-> 
-> Changes in v3:
-> - In power-down, only skip the GPIO but not the regulator calls if the
->   flag is set
-> 
-> Changes in v2:
-> - Do not change the regulator_enable logic during power-up.
-> 
->  drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-> index 0060e3dcd775..3ed365b50432 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-> @@ -28,6 +28,7 @@ struct i2c_hid_of_goodix {
->  	struct regulator *vdd;
->  	struct regulator *vddio;
->  	struct gpio_desc *reset_gpio;
-> +	bool no_reset_during_suspend;
->  	const struct goodix_i2c_hid_timing_data *timings;
->  };
->  
-> @@ -37,6 +38,14 @@ static int goodix_i2c_hid_power_up(struct i2chid_ops *ops)
->  		container_of(ops, struct i2c_hid_of_goodix, ops);
->  	int ret;
->  
-> +	if (ihid_goodix->no_reset_during_suspend) {
-> +		/*
-> +		 * We assert reset GPIO here (instead of during power-down) to
-> +		 * ensure the device will have a clean state after powering up,
-> +		 * just like the normal scenarios will have.
-> +		 */
-> +		gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> +	}
-
-I don't think curly braces are technically required here, as there is only
-one statement within the conditional despite the comments making it appear
-otherwise. Maybe this would work too:
-
-	/* ... */
-	if (...)
-		gpiod_set_value_cansleep(...);
-
-Again however, I do not feel strongly about this.
-
->  	ret = regulator_enable(ihid_goodix->vdd);
->  	if (ret)
->  		return ret;
-> @@ -60,7 +69,9 @@ static void goodix_i2c_hid_power_down(struct i2chid_ops *ops)
->  	struct i2c_hid_of_goodix *ihid_goodix =
->  		container_of(ops, struct i2c_hid_of_goodix, ops);
->  
-> -	gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> +	if (!ihid_goodix->no_reset_during_suspend)
-> +		gpiod_set_value_cansleep(ihid_goodix->reset_gpio, 1);
-> +
->  	regulator_disable(ihid_goodix->vddio);
->  	regulator_disable(ihid_goodix->vdd);
->  }
-> @@ -91,6 +102,9 @@ static int i2c_hid_of_goodix_probe(struct i2c_client *client)
->  	if (IS_ERR(ihid_goodix->vddio))
->  		return PTR_ERR(ihid_goodix->vddio);
->  
-> +	ihid_goodix->no_reset_during_suspend =
-> +		of_property_read_bool(client->dev.of_node, "goodix,no-reset-during-suspend");
-> +
->  	ihid_goodix->timings = device_get_match_data(&client->dev);
->  
->  	return i2c_hid_core_probe(client, &ihid_goodix->ops, 0x0001, 0);
-> -- 
-> 2.40.1.495.gc816e09b53d-goog
-> 
-
-Kind regards,
-Jeff LaBundy
+>=20
+> Thank you for all your suggestions on this patch set, I will update them.
+> >=20
+> > >=20
+> > > Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+> > > Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> > > ---
+> > >   lib/maple_tree.c | 45 ++++++++++++---------------------------------
+> > >   1 file changed, 12 insertions(+), 33 deletions(-)
+> > >=20
+> > > diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> > > index aa55c914818a0..294d4c8668323 100644
+> > > --- a/lib/maple_tree.c
+> > > +++ b/lib/maple_tree.c
+> > > @@ -6362,32 +6362,20 @@ int mtree_alloc_range(struct maple_tree *mt, =
+unsigned long *startp,
+> > >   {
+> > >   	int ret =3D 0;
+> > > -	MA_STATE(mas, mt, min, max - size);
+> > > +	MA_STATE(mas, mt, 0, 0);
+> > >   	if (!mt_is_alloc(mt))
+> > >   		return -EINVAL;
+> > >   	if (WARN_ON_ONCE(mt_is_reserved(entry)))
+> > >   		return -EINVAL;
+> > > -	if (min > max)
+> > > -		return -EINVAL;
+> > > -
+> > > -	if (max < size)
+> > > -		return -EINVAL;
+> > > -
+> > > -	if (!size)
+> > > -		return -EINVAL;
+> > > -
+> > >   	mtree_lock(mt);
+> > > -retry:
+> > > -	mas.offset =3D 0;
+> > > -	mas.index =3D min;
+> > > -	mas.last =3D max - size;
+> > > -	ret =3D mas_alloc(&mas, entry, size, startp);
+> > > -	if (mas_nomem(&mas, gfp))
+> > > -		goto retry;
+> > > -
+> > > +	ret =3D mas_empty_area(&mas, min, max, size);
+> > > +	if (!ret)
+> > > +		ret =3D mas_store_gfp(&mas, entry, gfp);
+> > >   	mtree_unlock(mt);
+> > > +	if (!ret)
+> > > +		*startp =3D mas.index;
+> > >   	return ret;
+> > >   }
+> > >   EXPORT_SYMBOL(mtree_alloc_range);
+> > > @@ -6398,29 +6386,20 @@ int mtree_alloc_rrange(struct maple_tree *mt,=
+ unsigned long *startp,
+> > >   {
+> > >   	int ret =3D 0;
+> > > -	MA_STATE(mas, mt, min, max - size);
+> > > +	MA_STATE(mas, mt, 0, 0);
+> > >   	if (!mt_is_alloc(mt))
+> > >   		return -EINVAL;
+> > >   	if (WARN_ON_ONCE(mt_is_reserved(entry)))
+> > >   		return -EINVAL;
+> > > -	if (min >=3D max)
+> > > -		return -EINVAL;
+> > > -
+> > > -	if (max < size - 1)
+> > > -		return -EINVAL;
+> > > -
+> > > -	if (!size)
+> > > -		return -EINVAL;
+> > > -
+> > >   	mtree_lock(mt);
+> > > -retry:
+> > > -	ret =3D mas_rev_alloc(&mas, min, max, entry, size, startp);
+> > > -	if (mas_nomem(&mas, gfp))
+> > > -		goto retry;
+> > > -
+> > > +	ret =3D mas_empty_area_rev(&mas, min, max, size);
+> > > +	if (!ret)
+> > > +		ret =3D mas_store_gfp(&mas, entry, gfp);
+> > >   	mtree_unlock(mt);
+> > > +	if (!ret)
+> > > +		*startp =3D mas.index;
+> > >   	return ret;
+> > >   }
+> > >   EXPORT_SYMBOL(mtree_alloc_rrange);
+> > > --=20
+> > > 2.20.1
+> > >=20
