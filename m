@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF506F0B60
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0946F0B41
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 19:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244243AbjD0Rs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 13:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        id S244478AbjD0Rpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 13:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233796AbjD0RsU (ORCPT
+        with ESMTP id S244163AbjD0Rpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 13:48:20 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E29449A
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:48:00 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3ef36d814a5so775431cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 10:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682617679; x=1685209679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fkY9b1ZD8QmBU/3LOAHMuKOQUldjjMuMq8rdAWwPjIg=;
-        b=Lrq1f4JBoMLciZuhEJXD6iSGdMotUaoFNM5njsugrmbmE2AhJhcZsw7hTIkU868DwX
-         /FqaYbbyjt98V4FHYNhV6l135E083xIkmRatoHvB8FYydZ5gnwOXduw+gjwSL4+Faa6+
-         gzBevtKeaWngpCi+WHH863Ds7PAqvw/pBKcpvuguko2589Vp0kKJb0qILEbrxURB+9ll
-         C11wj8cccug0WlR4/nKcyaKvRCpL0O9N6hkfEtHOsgNCwyTITC1UWsmZwI57eiQzWwNp
-         vloV5KugvpHcQPKx+rbVa/nRr2YbHmkE4KhHRAYP97kmIP+coN867AvdbQlN1o2H2Z8r
-         e51A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682617679; x=1685209679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fkY9b1ZD8QmBU/3LOAHMuKOQUldjjMuMq8rdAWwPjIg=;
-        b=AoVF31I0cGDFUUveCMb2RIy2GPj/i2cHY0fRi/Mqey/UvVEteZh8WExrPdYb6+YuMY
-         iJpqOa1l4yfUVtnqwRxhGnYM59saS8K9D4BM3cSkwlltdGlUVkngop/jbGysgK8xfAyI
-         lrq9QwtmA/gDmZdG09QTOzIVNXMsd0PRk9OlZ+ud1vPHK+JwaB7gS2K76tPqWLMLbRMP
-         Z7fjqw9f9DjA9TAK1D7meVkSCT1/Iys1hTWXRA1txfTlWBUzI1UjrsGcLwGGo4Oq5gwg
-         /rwKtFo2fl2FhDRI7O8s/wR785ZhPUXAnfdJmm/U4Cb4J1HH3osUm0htDkQjCboki0/p
-         8/Hw==
-X-Gm-Message-State: AC+VfDwLcwu3YAOAjnKWuHrq79ySqaY0DuM5eIkvb8POYlt4By40AkoE
-        /5I0iE5ha9n2H/DDFJyPssYUOC6zWkIzm31d6bM5Tw==
-X-Google-Smtp-Source: ACHHUZ5DrWgfAfBOlDWXVSrI+oj6EOY6bJ1qymVeZ+McKOJ5tyYr7iKb+VXDMQ8aB39oUK1ae5itMCcCQmhDxMA+eAw=
-X-Received: by 2002:a05:622a:1a03:b0:3de:1aaa:42f5 with SMTP id
- f3-20020a05622a1a0300b003de1aaa42f5mr339663qtb.15.1682617679238; Thu, 27 Apr
- 2023 10:47:59 -0700 (PDT)
+        Thu, 27 Apr 2023 13:45:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACFE35A5;
+        Thu, 27 Apr 2023 10:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682617521; x=1714153521;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sL1Oogrx9xSZdLUnJG5ws6JoMbQTO9hqS3tsfFCI38U=;
+  b=UwEImCoa0/Gi6LOCz6SeD1pb5ujIdyhBVu6NHPJrwUOpTGkXwsaDA+9I
+   fI6q+cDwJYno3oPoSn8UsWZ48cFTmheXSk4ZZJnsaVz8pXoIBEEAaAmgM
+   LrA9v5CzMdKOhlVzUIcXxcUJwNMVv6GpwUB3tit384cuJZRvhTQxSFrGg
+   Vt5fptj2S+OFoUuCDaa00lGi6mX8Fe7uTLCljRbn902kYMo1UnLUKdHhc
+   kQDlvpqyAmG2oUvxXY4Nk8ArMZWoG9rt17Iijxv7dcy9noJ7+XDg7HmGC
+   T6G4iBRfplX4OvmvCVxB1lgC3G2plme+T9uatjcHSg7tWAyGAZPAXBUNM
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="350398689"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="350398689"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 10:45:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="1024219686"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="1024219686"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2023 10:45:19 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+Cc:     "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v5 0/7] Re-enable IDXD kernel workqueue under DMA API
+Date:   Thu, 27 Apr 2023 10:49:30 -0700
+Message-Id: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <0000000000003f3d9a05f56fcac5@google.com> <000000000000b4f18805fa54b9f7@google.com>
-In-Reply-To: <000000000000b4f18805fa54b9f7@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 27 Apr 2023 19:47:47 +0200
-Message-ID: <CANp29Y4pMRV8ATp+Xb4qAap=m0ruUnNzSgwSbVqomp-FJvTdVg@mail.gmail.com>
-Subject: Re: [syzbot] [kernfs?] WARNING: suspicious RCU usage in mas_start
-To:     syzbot <syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com>
-Cc:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
-        david@redhat.com, gregkh@linuxfoundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 7:31=E2=80=AFPM syzbot
-<syzbot+d79e205d463e603f47ff@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 6db504ce55bdbc575723938fc480713c9183f6a2
-> Author: Liam R. Howlett <Liam.Howlett@oracle.com>
-> Date:   Wed Mar 8 22:03:10 2023 +0000
->
->     mm/ksm: fix race with VMA iteration and mm_struct teardown
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D1674715fc8=
-0000
-> start commit:   f3a2439f20d9 Merge tag 'rproc-v6.3' of git://git.kernel.o=
-r..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Ddd442ddf29eac=
-a0c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd79e205d463e603=
-f47ff
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D12cfaf1cc80=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D149edbf0c8000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: mm/ksm: fix race with VMA iteration and mm_struct teardown
+Hi all,
 
-Seems reasonable.
-#syz fix: mm/ksm: fix race with VMA iteration and mm_struct teardown
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/syzkaller-bugs/000000000000b4f18805fa54b9f7%40google.com.
+IDXD kernel work queues were disabled due to the flawed use of kernel VA
+and SVA API.
+Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
+
+The solution is to enable it under DMA API where IDXD shared workqueue users
+can use ENQCMDS to submit work on buffers mapped by DMA API.
+
+This patchset adds support for attaching PASID to the device's default
+domain and the ability to allocate global PASIDs from IOMMU APIs. We can then
+re-enable the kernel work queues and use them under DMA API.
+
+This depends on the IOASID removal series. (merged)
+https://lore.kernel.org/all/ZCaUBJvUMsJyD7EW@8bytes.org/
+
+
+Thanks,
+
+Jacob
+
+---
+Changelog:
+v5:
+	- exclude two patches related to supervisor mode, taken by VT-d
+	maintainer Baolu.
+	- move PASID range check into allocation API so that device drivers
+	  only need to pass in struct device*. (Kevin)
+	- factor out helper functions in device-domain attach (Baolu)
+	- make explicit use of RID_PASID across architectures
+v4:
+	- move dummy functions outside ifdef CONFIG_IOMMU_SVA (Baolu)
+	- dropped domain type check while disabling idxd system PASID (Baolu)
+
+v3:
+	- moved global PASID allocation API from SVA to IOMMU (Kevin)
+	- remove #ifdef around global PASID reservation during boot (Baolu)
+	- remove restriction on PASID 0 allocation (Baolu)
+	- fix a bug in sysfs domain change when attaching devices
+	- clear idxd user interrupt enable bit after disabling device( Fenghua)
+v2:
+	- refactored device PASID attach domain ops based on Baolu's early patch
+	- addressed TLB flush gap
+	- explicitly reserve RID_PASID from SVA PASID number space
+	- get dma domain directly, avoid checking domain types
+
+
+Jacob Pan (6):
+  iommu: Generalize default PCIe requester ID PASID
+  iommu/sva: Explicitly exclude RID_PASID from SVA
+  iommu: Move global PASID allocation from SVA to core
+  iommu/vt-d: Prepare PASID attachment beyond RID_PASID
+  iommu/vt-d: Implement set_dev_pasid domain op
+  dmaengine/idxd: Re-enable kernel workqueue under DMA API
+
+Lu Baolu (1):
+  iommu/vt-d: Factoring out PASID set up helper function
+
+ drivers/dma/idxd/device.c   |  30 +----
+ drivers/dma/idxd/init.c     |  60 ++++++++-
+ drivers/dma/idxd/sysfs.c    |   7 --
+ drivers/iommu/intel/iommu.c | 240 +++++++++++++++++++++++++++++-------
+ drivers/iommu/intel/iommu.h |   8 ++
+ drivers/iommu/intel/pasid.c |   2 +-
+ drivers/iommu/intel/pasid.h |   1 -
+ drivers/iommu/iommu-sva.c   |  25 +---
+ drivers/iommu/iommu.c       |  24 ++++
+ include/linux/iommu.h       |  10 ++
+ 10 files changed, 305 insertions(+), 102 deletions(-)
+
+-- 
+2.25.1
+
