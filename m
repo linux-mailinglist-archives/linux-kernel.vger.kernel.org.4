@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18426F0880
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC8D6F0885
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243711AbjD0Pib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S244230AbjD0Pji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244020AbjD0Pi3 (ORCPT
+        with ESMTP id S243808AbjD0Pjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:38:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41A2701
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:38:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-95369921f8eso1412144766b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:38:27 -0700 (PDT)
+        Thu, 27 Apr 2023 11:39:35 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CA326BA;
+        Thu, 27 Apr 2023 08:39:34 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2a7af0cb2e6so84718461fa.0;
+        Thu, 27 Apr 2023 08:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682609906; x=1685201906;
+        d=gmail.com; s=20221208; t=1682609972; x=1685201972;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d7uiTmpUlfL81ZU9AzSI0GBW5946jNS5Utc+TlhKUqY=;
-        b=BF8k0gsGCynf3Aschz2b6YGMo5KEVMtqbqXm/NtTeTwR8Lt9X+D1gnm7GmWlchSfdz
-         5QoRUYrWwomsEZHFhpFgcmIqqw7Q+lnpQIPlG3hMVMoznFCy/R1z2gYNEVWj+TRaHK70
-         7VY5oHrvBVRcXAMEQNT3+FrZKg9hE+R6Fu0zk=
+        bh=mEPxF/PqJY0e08prvcD7fi9mWw6obNqy1gzFbUzR2po=;
+        b=lRdZEz8tUvHufKvw/8Uy6P6MgnSrazF9xGwQG+eTE6NjUAkyFe82xh39kvYR5HsNk0
+         CnVDf2oWFX6YAFyEC8DqrI89RFbAhSlEKV/EhMn4608IUqju5ns26IITZEJrcGipm2ol
+         0EWhiiXtjfSYGOQ8MbyI4/K3nAUA3CWPoDX4RSaB1o+AZdelKIsUiIxvZR5GXxrridB8
+         Yp6/hc5MPkkCNAWgueotIA45gRQyitJQX/POW7oJxcMuRo6OwJpT3ML0NH+9/55NwK0M
+         IT0uiN7J8AUOZ+gf119TP2qNidB1sAnCnEF7beAORYWgPiW7VdFU4/1qocGf3BUiSPxY
+         2eCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682609906; x=1685201906;
+        d=1e100.net; s=20221208; t=1682609972; x=1685201972;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d7uiTmpUlfL81ZU9AzSI0GBW5946jNS5Utc+TlhKUqY=;
-        b=InIHqDE4uUiQ2EEZOxB7yPTfR96YvkQvfxh6er+drAvXVlxgQLfXZ4A53TBbcpxzAj
-         ed0pNfvEVNG26ByENmviLCDuSmuZgL+hYQnKx6zOSeD1hipNq4lrS2N9DB5AxvOTfPTa
-         UKzrGqPIh6hbbNAqayknT3mAxmaa/TAY4FcQYmKqa9rTZ/4erwHxyoFgz6KTSlvsPtV+
-         RkfZz9EooxnV7cNtYb9ggms+1loQTuYxR03kW/opMJrknQjppH8I+84fZ1WcxgrbDGko
-         41Lp59BoLPTPS3KDdFnZW4BqzvsyQPM2wfSE+MbKsnQC5i/G64SNJptMG3n6o9DH0gbG
-         VMJw==
-X-Gm-Message-State: AC+VfDxidCbrGXeaCOp7W5ouTJ1ckfz2pR2LfJ4I+4k07QpgyO7svREn
-        kb2SFgkoOS50tO/KIts08b0svwW0zY2eW2okLdJl3w==
-X-Google-Smtp-Source: ACHHUZ43CM5pQoH6cHIoXnmp9N886kS+OqjtUyJcM6igtbe+dc12Niv91sBBNRw/RVx5S93mtFyhLw==
-X-Received: by 2002:a17:907:368d:b0:94d:8b66:46cb with SMTP id bi13-20020a170907368d00b0094d8b6646cbmr2058466ejc.3.1682609906117;
-        Thu, 27 Apr 2023 08:38:26 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1709063bca00b0094ee3e4c934sm9865289ejf.221.2023.04.27.08.38.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 08:38:25 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-50847469a7fso12593954a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:38:25 -0700 (PDT)
-X-Received: by 2002:a05:6402:403:b0:50a:1604:f04c with SMTP id
- q3-20020a056402040300b0050a1604f04cmr1972054edv.4.1682609904880; Thu, 27 Apr
- 2023 08:38:24 -0700 (PDT)
+        bh=mEPxF/PqJY0e08prvcD7fi9mWw6obNqy1gzFbUzR2po=;
+        b=iCl1/pygfm24nfV4yL8F5RgAH0wAmntERbF/5cDq9X2HUGZXiI+Mt1w88OMfm4v6iI
+         RuVr4Onup00YieAiDKi1gHwbtu16oc/mg7lgJYo2+Mfceximvz1xHoaKkepphxf+bNd2
+         /A95+MCiXYytRhofUC8WE6WboUBnZO0K7gddoJPDHS+3822iKfmtlwmulKvyG6/zNit4
+         riwM8KhwTTkWs/dh60pHL20I9JbqvqJJB6bcJuFvr/NmxZlfX8ii9iCLqrlK2PGFHdBv
+         krnWaLfMfQ9/q2P3x07BS7UOhK3f3+MPcIijDhS7mfslY5l4HTQ9qlmrdqm0+siNaVAv
+         /VHQ==
+X-Gm-Message-State: AC+VfDzOn994S6jngYDIYHoRrtB2gHDuH4ZPvdeeDQPuTyhSSULilz78
+        1Fm02xwyCsezQNS8e+hg+WO5Kvff49AnEGItpdY=
+X-Google-Smtp-Source: ACHHUZ4OADDpPg0FKf4M+BPdLzd4cYdkjKzL0CD+N4J6NSTjN7iwPQlTgwZkPGNP1cOiSANq58T4LQ9Giavo/OXJahk=
+X-Received: by 2002:a2e:9815:0:b0:2a8:c8c5:c769 with SMTP id
+ a21-20020a2e9815000000b002a8c8c5c769mr752009ljj.36.1682609972345; Thu, 27 Apr
+ 2023 08:39:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230427111125.13769-1-jarkko@kernel.org>
-In-Reply-To: <20230427111125.13769-1-jarkko@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Apr 2023 08:38:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiGauUNbV_1ZdxG92aWF+oqnnqdRg4z2h-FxXjB_w3Xiw@mail.gmail.com>
-Message-ID: <CAHk-=wiGauUNbV_1ZdxG92aWF+oqnnqdRg4z2h-FxXjB_w3Xiw@mail.gmail.com>
-Subject: Re: [GIT PULL] tpmdd: a critical bug fix for v6.4-rc1
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Eric Snowberg <eric.snowberg@oracle.com>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230417154737.12740-1-laoar.shao@gmail.com> <20230417154737.12740-6-laoar.shao@gmail.com>
+ <20230427092628.21fd23e4@gandalf.local.home> <CALOAHbBX1C-eg93Hf3xPLsdsaBzoGn1pHh9jb3Z_-T-7HD60wA@mail.gmail.com>
+ <20230427111842.2e40fe3c@gandalf.local.home> <CALOAHbDRSNvihv5n0jJpAsK3onezRRipO78RG3rAf3LGgkzYHg@mail.gmail.com>
+ <20230427113602.0e49c0d1@gandalf.local.home>
+In-Reply-To: <20230427113602.0e49c0d1@gandalf.local.home>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 27 Apr 2023 08:39:21 -0700
+Message-ID: <CAADnVQLaBMtBoSY4ZMgeTU1T-rrU6vPSU+xg1HmQpWnnE84sNw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: Improve tracing recursion prevention mechanism
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yafang Shao <laoar.shao@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 4:11=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.org>=
- wrote:
+On Thu, Apr 27, 2023 at 8:36=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
 >
-> This PR fixes a critical bug in my first pull request.
+> On Thu, 27 Apr 2023 23:23:31 +0800
+> Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> > > But I thought you can run a bpf_prog from another bpf_prog. So you do=
+n't
+> > > want to prevent it. You need other logic to detect if it was not supp=
+ose to
+> > > recurs.
+> > >
+> >
+> > If so, we have to keep the prog->active to prevent it, then I'm not
+> > sure if it is worth adding test_recursion_*().
+>
+> I thought that the whole point of this exercise was because the
+> migrate_disable() itself could be traced (or call something that can), an=
+d
+> that's outside of prog->active protection. Which the test_recursion_*()
+> code was created for.
 
-That doesn't work AT ALL.
-
-You have this duplicated line
-
--       TPM_CHIP_FLAG_FIRMWARE_UPGRADE  =3D BIT(7),
-+       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-+       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-+       TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-
-in that patch (presumably due to some edit-time fat-fingering), which
-causes lots and lots of
-
-  ./include/linux/tpm.h:285:9: error: redeclaration of enumerator
-=E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99
-    285 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ./include/linux/tpm.h:284:9: note: previous definition of
-=E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99 with type =E2=80=98int=E2=
-=80=99
-    284 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ./include/linux/tpm.h:286:9: error: redeclaration of enumerator
-=E2=80=98TPM_CHIP_FLAG_FIRMWARE_UPGRADE=E2=80=99
-    286 |         TPM_CHIP_FLAG_FIRMWARE_UPGRADE          =3D BIT(7),
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-errors.
-
-While I could easily just remove the duplicated lines in my merge,
-that would make things non-bisectable, so I unpulled this instead.
-
-             Linus
+Not sure where did this come from.
+migrate_enable/disable were added to deny list back in 2021.
