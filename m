@@ -2,56 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D066F029F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C15E6F02A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 10:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243162AbjD0Idr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 04:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S243147AbjD0IeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 04:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242907AbjD0Idp (ORCPT
+        with ESMTP id S243178AbjD0IeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 04:33:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A849D8;
-        Thu, 27 Apr 2023 01:33:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66781611FC;
-        Thu, 27 Apr 2023 08:33:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF347C433D2;
-        Thu, 27 Apr 2023 08:33:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682584422;
-        bh=ENn2OWUvA1rQkKqlqTqZfLxN0tWDEscUe4wjLWNox3Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BFNHUnqUQvcVUeS0x1krOU8fmWG7nz9M7wh9oSU+As4Nztc18CpjNl/XR3gtG2Qdw
-         VHU5BAYLycvzBLrqyo6yz3jfSuX8Biq6gRCEhA4Ts01r9i4zb0S3iAKZ/Ct3F5AwEF
-         d83UA+zNLp7C9AXFaLRGwQrULf9WKNp7XDSwBPWmrYme+btM9uKvjwDzRsDOQ9g5QH
-         CCGmaJEmVPAPa+635WyY1dqJIHxTpZLm7h/LdoO6U3eag058maZljRno0eLKRt4W6R
-         5XBOAFFSJAXTVkmT3ix/H81ByR0SDCL9GGq5tN1zPN03hz6+eGaAzOq/3yzbG+EwGl
-         ONoQioElzhEww==
-Date:   Thu, 27 Apr 2023 10:33:38 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pidfd updates
-Message-ID: <20230427-postweg-ruder-ae997dab3346@brauner>
-References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
- <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
- <20230425060427.GP3390869@ZenIV>
- <20230425-sturheit-jungautor-97d92d7861e2@brauner>
- <20230427010715.GX3390869@ZenIV>
- <20230427073908.GA3390869@ZenIV>
+        Thu, 27 Apr 2023 04:34:06 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AD64EC6
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:34:02 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-763da065494so102247339f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682584442; x=1685176442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sABY6A67E6Cr5HzYkc9PhVkZQhkD8kgg0GZ6k0SOVCs=;
+        b=ZXCewySSCGLGW2ssIYmj8XvdD9bNIevJa4tXEfsy/2Rz+vT3jB+TdKdDT0dHQdtQ7P
+         NhkiCmfWRYa1242dz9Hna3BPrYr0bHYXfjGTQyIMEr46utyp7Zty4/mxL4k08MdVqMbv
+         NysGsqgJnHdLCcEzprjPToeuBT/32G1FAqNKY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682584442; x=1685176442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sABY6A67E6Cr5HzYkc9PhVkZQhkD8kgg0GZ6k0SOVCs=;
+        b=NL1H/ifgyY1jZkrZ5saN6am6An2gyXDKIry7g/ZGjF2rZBJKlwpiCgPjB+yQLJzuzn
+         0Ua3fs4+EBco0ZQgQ+7tym4PVVoJ/tZiGGaf6snwzlDNLW3OGbWfUq3C1GI9DLHVFW/W
+         rPoohRVzMD+3QrTZLt0WW39lbfBqBHDUi59AKKaUTxjvRBAMyRiFLVKNP/YvOUguVCl0
+         fMFiBDs/eD8EdypXj/JS8HV+M5mH2Eet9DNXB2+cW3NxZR/bdwbz7k280bU9Y9OQ7ms6
+         8fOs+u2FJeGEkj4UrZQSnS2QYiGJgZptFBced2rc4Wl+e5yV89gm0GFEXgekzrra5vwS
+         2GdQ==
+X-Gm-Message-State: AC+VfDzvC/EXiI9iYWVxapexrDjo/Pgwuvzt0Naxwfc6FYdHFPKklJ2p
+        JuZS5/zty/RgYij7k3BKcgnH6rAWZmvjJKpozL42xw==
+X-Google-Smtp-Source: ACHHUZ6G8bxKhwblghlEc4n/zFsjFZp0dwMaJ3weKd4SVVgKwn7iy+BZ9ek6/DBO+rvf15mslpALYE3KPS/vz18U6n8=
+X-Received: by 2002:a92:c84d:0:b0:318:ab40:4e9b with SMTP id
+ b13-20020a92c84d000000b00318ab404e9bmr742195ilq.2.1682584441951; Thu, 27 Apr
+ 2023 01:34:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230427073908.GA3390869@ZenIV>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230331091145.737305-1-treapking@chromium.org>
+ <20230331091145.737305-5-treapking@chromium.org> <CAE-0n51E5foFWQAsA73662_5e6XP426wuUCVVmcS5UWwiYpDmw@mail.gmail.com>
+ <CAEXTbpdcbB_z4ZGCGzc-cM74ECKyxekbroKCWFnhH8eR=4HmvA@mail.gmail.com>
+ <CAE-0n50atfmr-bFh5XtTCm4WpSijJGSe0B5JP8ni7CCYk7Bs5A@mail.gmail.com>
+ <CAE-0n51Qy-KDGHOCr4Smpebq1fCURqvJ2RJz6KAtVpv5e+DSGA@mail.gmail.com> <CAEXTbpeKe1dVHp9cauMN-9nQb35oJ-ZhdFV-8BiWzjjhWAy0Zg@mail.gmail.com>
+In-Reply-To: <CAEXTbpeKe1dVHp9cauMN-9nQb35oJ-ZhdFV-8BiWzjjhWAy0Zg@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Thu, 27 Apr 2023 16:33:51 +0800
+Message-ID: <CAEXTbpcBrd9W_BLcDO5JO9v=r+WOOfU8KmuSyZKr5sT=ezk6KA@mail.gmail.com>
+Subject: Re: [PATCH v15 04/10] dt-bindings: display: bridge: anx7625: Add
+ mode-switch support
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Lyude Paul <lyude@redhat.com>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,194 +102,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 08:39:08AM +0100, Al Viro wrote:
-> On Thu, Apr 27, 2023 at 02:07:15AM +0100, Al Viro wrote:
-> > On Tue, Apr 25, 2023 at 02:34:15PM +0200, Christian Brauner wrote:
-> > 
-> > 
-> > > struct fd_file {
-> > > 	struct file *file;
-> > > 	int fd;
-> > > 	int __user *fd_user;
-> > 
-> > Why is it an int?  Because your case has it that way?
-> > 
-> > We have a bunch of places where we have an ioctl with
-> > a field in some structure filled that way; any primitive
-> > that combines put_user() with descriptor handling is
-> > going to cause trouble as soon as somebody deals with
-> > a structure where such member is unsigned long.  Gets
-> > especially funny on 64bit big-endian...
-> > 
-> > And that objection is orthogonal to that 3-member structure -
-> > even if you pass int __user * as an explicit argument into
-> > your helper, the same trouble will be there.
-> > 
-> > Al, still going through that zoo...
-> 
-> FWIW, surprisingly large part of messy users in ioctls might get
-> simplified nicely if we add something along the lines of
-> 
-> int delayed_dup(struct file *file, unsigned flags)
-> {
-> 	struct delayed_dup *p = kmalloc(sizeof(struct delayed_dup), GFP_KERNEL);
-> 	int fd;
-> 
-> 	if (likely(p))
-> 		fd = p->fd = get_unused_fd_flags(flags);
-> 	else
-> 		fd = -ENOMEM;
-> 	if (likely(fd >= 0)) {
-> 		p->file = file;
-> 		init_task_work(&p->work, __do_delayed_dup);
-> 		if (!task_work_add(&p, TWA_RESUME))
-> 			return fd;
-> 		put_unused_fd(fd);
-> 		fd = -EINVAL;
-> 	}
-> 	fput(file);
-> 	kfree(p);
-> 	return fd;
-> }
-> 
-> with
-> 
-> struct delayed_dup {
-> 	struct callback_head work;
-> 	struct file *file;
-> 	unsigned fd;
-> };
-> 
-> static void __do_delayed_dup(struct callback_head *work)
-> {
-> 	struct delayed_dup *p = container_of(work, struct delayed_dup, work);
-> 
-> 	if (!syscall_get_error(current, current_pt_regs())) {
-> 		fd_install(p->fd, p->file);
-> 	} else {
-> 		put_unused_fd(p->fd);
-> 		fput(p->file);
-> 	}
-> 	kfree(p);
-> }
-> 
-> Random example (completely untested - I'm not even sure it compiles):
-> 
-> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
-> index af57799c86ce..7c62becfddc9 100644
-> --- a/drivers/dma-buf/sync_file.c
-> +++ b/drivers/dma-buf/sync_file.c
-> @@ -207,55 +207,34 @@ static __poll_t sync_file_poll(struct file *file, poll_table *wait)
->  static long sync_file_ioctl_merge(struct sync_file *sync_file,
->  				  unsigned long arg)
->  {
-> -	int fd = get_unused_fd_flags(O_CLOEXEC);
->  	int err;
->  	struct sync_file *fence2, *fence3;
-> +	struct sync_merge_data __user *argp = (void *)arg;
->  	struct sync_merge_data data;
->  
-> -	if (fd < 0)
-> -		return fd;
-> -
-> -	if (copy_from_user(&data, (void __user *)arg, sizeof(data))) {
-> -		err = -EFAULT;
-> -		goto err_put_fd;
-> -	}
-> +	if (copy_from_user(&data, argp, sizeof(data)))
-> +		return -EFAULT;
->  
-> -	if (data.flags || data.pad) {
-> -		err = -EINVAL;
-> -		goto err_put_fd;
-> -	}
-> +	if (data.flags || data.pad)
-> +		return -EINVAL;
->  
->  	fence2 = sync_file_fdget(data.fd2);
-> -	if (!fence2) {
-> -		err = -ENOENT;
-> -		goto err_put_fd;
-> -	}
-> +	if (!fence2)
-> +		return -ENOENT;
->  
->  	data.name[sizeof(data.name) - 1] = '\0';
->  	fence3 = sync_file_merge(data.name, sync_file, fence2);
-> -	if (!fence3) {
-> +	if (fence3)
-> +		err = delayed_dup(fence3->file, O_CLOEXEC);
-> +	else
->  		err = -ENOMEM;
-> -		goto err_put_fence2;
-> -	}
->  
-> -	data.fence = fd;
-> -	if (copy_to_user((void __user *)arg, &data, sizeof(data))) {
-> -		err = -EFAULT;
-> -		goto err_put_fence3;
-> +	if (err >= 0) {
-> +		data.fence = err;
-> +		err = copy_to_user(argp, &data, sizeof(data)) ? -EFAULT : 0;
->  	}
->  
-> -	fd_install(fd, fence3->file);
-> -	fput(fence2->file);
-> -	return 0;
-> -
-> -err_put_fence3:
-> -	fput(fence3->file);
-> -
-> -err_put_fence2:
->  	fput(fence2->file);
-> -
-> -err_put_fd:
-> -	put_unused_fd(fd);
->  	return err;
->  }
->  
-> 
-> IMO it's much easier to follow that way, and that's a fairly typical
-> example.  One primitive call instead of three, *much* simpler handling
-> of failure exits, no need to deal with unroll on copy_to_user() failures
-> (here those were handled; most of the drivers/gpu/drm stuff is buried
-> quite a few call levels deeper than the place where copyout is done,
-> so currently it doesn't even try to DTRT in that respect).
-> 
-> It's not a panacea - for that to be useful we need
-> 	* no side effects of file opening that wouldn't be undone by fput()
-> 	* enough work done to make the overhead negligible
-> 	* moderate amount of files opened in one call
-> 	* a pattern that could be massaged into "open file, then deal with
-> inserting it into descriptor table".
-> 
-> There's a plenty of fd_install() users that match that pattern.
-> Certainly not all of them, but almost everything in drivers does.
-> 
-> I'm still digging through the rest - there's a couple of other patterns
-> that seem to be common, but I'm not through the entire pile yet.
+On Thu, Apr 20, 2023 at 5:10=E2=80=AFPM Pin-yen Lin <treapking@chromium.org=
+> wrote:
+>
+> On Thu, Apr 20, 2023 at 2:10=E2=80=AFPM Stephen Boyd <swboyd@chromium.org=
+> wrote:
+> >
+> > Quoting Stephen Boyd (2023-04-13 17:22:46)
+> > > Quoting Pin-yen Lin (2023-04-13 02:50:44)
+> > > >
+> > > > Actually the `mode-switch` property here is mainly because
+> > > > `fwnode_typec_mux_get`[1] and `typec_mux_match`[2] only return matc=
+hes
+> > > > when the property is present. I am not sure what side effects would=
+ be
+> > > > if I remove the ID-matching condition in `typec_mux_match`, so I ad=
+ded
+> > > > the property here.
+> > > >
+> > > > Is it feasible to remove the `mode-switch` property here given the
+> > > > existing implementation of the Type-C framework?
+> > >
+> > > Omitting the mode-switch property would require changes to the type-c
+> > > framework.
+> > >
+> > > I'm wondering if we can have this anx driver register mode switches f=
+or
+> > > however many endpoints exist in the output port all the time when the
+> > > aux-bus node doesn't exist. Then the type-c framework can walk from t=
+he
+> > > usb-c-connector to each connected node looking for a device that is b=
+oth
+> > > a drm_bridge and a mode-switch. When it finds that combination, it kn=
+ows
+> > > that the mode-switch has been found. This hinges on the idea that a
+> > > device that would have the mode-switch property is a drm_bridge and
+> > > would register a mode-switch with the type-c framework.
 
-So the earlier proposal plus added complexity to hide it from users.
-I don't feel strongly that we really do need to do something here but if
-this is something you feel strongly about then sure. But a few points:
+I spent some time working on this approach on the Type-C side. The
+issue I met is that the driver doesn't know whether a node is a
+drm_bridge before the anx7625 driver probes. When there is a
+"mode-switch" property in the node, the Type-C framework knows that
+"here is a mode switch, but the corresponding driver hasn't registered
+the typec_mux". So it returns -EPROBE_DEFER and retries later.
+However, if we remove the property, the Type-C framework won't know
+whether a node will be registered as a drm_bridge and register a
+typec_mux.
 
-* I don't think this is much of a simplification for file descriptor
-  handling in those callers. Judging by the example you pasted here the
-  simplifications to this function are much more based on changing the
-  general structure. I suspect it'll be the same for a lot of other
-  codepaths. But I'm happy to be convinced otherwise.
-* This delayed_dup() thing is fairly complex with the task work stuff
-  and the memory allocation mixed in there.
-* It adds an async pattern into the fd installation path which
-  feels like yet another complex add on.
+Do you have other suggestions on this if we want to choose this approach?
 
-Ultimately what I try to gauge with changes like that is how likely are
-people going to use a pattern without someone having to go through the
-tree every few months to make sure that the api isn't abused. I'm not
-sure that this wouldn't just end up being misused.
-
-File descriptor installation is not core functionality for drivers. It's
-just something that they have to do and so it's not that people usually
-put a lot of thought into it. So that's why I think an API has to be
-dumb enough. A three call api may still be simpler to use than an overly
-clever single call api.
+Best regards,
+Pin-yen
+> > >
+> > > It may be a little complicated though, because we would only register
+> > > one drm_bridge for the input to this anx device. The type-c walking c=
+ode
+> > > would need to look at the graph endpoint, and find the parent device =
+to
+> > > see if it is a drm_bridge.
+> >
+> > I've been thinking more about this. I think we should only have the
+> > 'mode-switch' property possible when the USB input pins (port@2) are
+> > connected and the DPI input pins are connected (port@0). Probably you
+> > don't have that case though?
+>
+> No we don't have the use case that uses the USB input pins on anx7625.
+> >
+> > In your case, this device should register either one or two drm_bridges
+> > that connect to whatever downstream is actually muxing the 2 DP lanes
+> > with the USB SS lanes onto the usb-c-connector.
+>
+> What do you mean by "muxing the 2 DP lanes with the USB SS lanes''? In
+> our use case, the USB data lanes from both ports are connected to a
+> USB hub, but the DP lanes are muxed by the crosspoint switch on
+> anx7625. HPD and AUX for the external display are muxed by the EC. You
+> can find the diagram at
+> https://lore.kernel.org/linux-usb/YxGzk6DNAt0aCvIY@chromium.org/
+>
+> > If that is the EC for
+> > ChromeOS, then the EC should have a binding that accepts some number of
+> > input ports for DP. The EC would act as a drm_bridge, or in this case
+> > probably two bridges, and also as two type-c switches for each
+> > drm_bridge corresponding to the usb-c-connector nodes. When DP is on th=
+e
+> > cable, the type-c switch/mux would signal to the drm_bridge that the
+> > display is 'connected' via DRM_BRIDGE_OP_DETECT and struct
+> > drm_bridge_funcs::detect(). Then the drm_bridge in this anx part would
+> > implement struct drm_bridge_funcs::atomic_enable() and configure the
+> > crosspoint switch the right way depending on the reg property of the
+> > output node in port@1.
+>
+> So there will be two drm bridges that act as the downstreams for
+> anx7625, and we find the downstream with connector_status_connected to
+> configure the crosspoint switch? How do we support that kind of
+> topology given that the drm bridge chain is currently a list? Are you
+> suggesting making the bridge topology to a tree, or maintaining the
+> two downstreams inside the anx7625 driver and not attaching them to
+> the bridge chain?
+>
+> Also, if we still register mode switches on the two downstream
+> bridges, why do you prefer that over the original approach that
+> register switches in the anx7625 driver?
+>
+> >
+> > Because you don't have the part that implements the orientation-switch,
+> > you don't need to implement the code for it. I think simply adding
+> > support in the binding for mode-switch and orientation-switch if this i=
+s
+> > directly wired to a usb-c-connector should be sufficient. Those
+> > properties would be at the top-level and not part of the graph binding.
