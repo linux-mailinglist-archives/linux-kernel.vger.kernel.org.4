@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDDA6F0A1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECC86F0A22
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 18:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244102AbjD0Qn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 12:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S244285AbjD0Qo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 12:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243665AbjD0Qny (ORCPT
+        with ESMTP id S243665AbjD0QoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 12:43:54 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C2423C;
-        Thu, 27 Apr 2023 09:43:53 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-18f16bb1a9bso5471358fac.1;
-        Thu, 27 Apr 2023 09:43:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682613833; x=1685205833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IJiIdA94Q3aS3ARaP8pkL/+d3e0e0KYGSZTN/HqjbiA=;
-        b=WhlqsutqQb97ZudArF5BW7gsxIhQVCNtYEVi/uWlOI1dRXnpfLNBQc4v5GD8FlymnN
-         CmoPPp0KjfsbnJ/2YwqBqj2JHRxF82hPWXi5A4bCBdL+EoI0E+NilMEzvgmRnHYaW/m3
-         JaHfTLftKa6fF5mUs2a9fCPJAHKRTAfEzaD8x7Iymyw+kwxQ9eLmp1t2X/8wLf2roM6r
-         FNXFH2aUaez9xNe62rjw6Gz38DTDmP7Ngzx4x+LCwS8K4wzn99zM5m0pzT5F559moBBL
-         F1jnjrF8A7BpKWwt+31qbC/K2+0H9zduiZlEGCJ+uX1+fHQrHAt6G9untqDa4mSnhy8P
-         /RtA==
-X-Gm-Message-State: AC+VfDy8Vbd46isq81f5CseOs8c9r3KHNqdSw52N/mZlE+aci1AbOhHr
-        B9VUeOoP8xDtXvhaYqc1eA==
-X-Google-Smtp-Source: ACHHUZ55HiToOuHvfKeip0szuZ15vtRZWifdWsue8eOz2R5vLG2dLRCg/IzNKYj+3l+gh1lxFjue9Q==
-X-Received: by 2002:a9d:651a:0:b0:6a6:463a:1a0b with SMTP id i26-20020a9d651a000000b006a6463a1a0bmr1066482otl.1.1682613832950;
-        Thu, 27 Apr 2023 09:43:52 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w21-20020a056830145500b006a6558ef17fsm5245754otp.30.2023.04.27.09.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 09:43:52 -0700 (PDT)
-Received: (nullmailer pid 3147753 invoked by uid 1000);
-        Thu, 27 Apr 2023 16:43:51 -0000
-Date:   Thu, 27 Apr 2023 11:43:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@xilinx.com, linux-serial@vger.kernel.org,
+        Thu, 27 Apr 2023 12:44:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE3E49FC;
+        Thu, 27 Apr 2023 09:44:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A07D063E58;
+        Thu, 27 Apr 2023 16:44:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7389FC433D2;
+        Thu, 27 Apr 2023 16:44:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682613861;
+        bh=c3LZjV/jiKmjxjorTiw6SfDRxZNWLX6lW/xXacYiA7I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CO+OTuUyWQxcMzOKzhW3UOvAl34YsyYK4LVIHE5fquqor16ccbmPx1gW5TCL+wkR6
+         buEJTdJVUgQSA1YaGv6Pqa9i1tCDBtel0qNjwYZ7KspO1uH/jWfFtSxABOsfXw64fo
+         HJFRMl4yNfs6mLYEiajdu2GR3a1+HpA+jz9b7ELHlaHSH1WKH3yN66oIGBE5Q1nYEu
+         z4B5E24+x3iYU8qvIqFVQoGhSoA0q5qIGsgesRJ6FMVFETkxRHeitoR4/bRih6huFH
+         hIQyCM9yxjqlBQSNEbYBYcdRmKkE1IGHyGKG4EY7S+RD+qCwbP5n8pVgrlt0m7KH2b
+         Dcr/GQ9yCDqrQ==
+Date:   Thu, 27 Apr 2023 17:44:16 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jirislaby@kernel.org, linux-arm-kernel@lists.infradead.org,
-        michal.simek@amd.com, git@amd.com, radhey.shyam.pandey@amd.com,
-        shubhrajyoti.datta@amd.com, srinivas.goud@amd.com,
-        manion05gk@gmail.com
-Subject: Re: [PATCH 1/2] dt-bindings: Add optional gpio property to uartps
- node to support rs485
-Message-ID: <20230427164351.GA3146210-robh@kernel.org>
-References: <1682512187-8828-1-git-send-email-manikanta.guntupalli@amd.com>
- <1682512187-8828-2-git-send-email-manikanta.guntupalli@amd.com>
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v6 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel
+ i2c LED driver
+Message-ID: <20230427164416.GB620451@google.com>
+References: <20230419111806.1100437-1-andreas@kemnade.info>
+ <20230419111806.1100437-3-andreas@kemnade.info>
+ <20230424131740.GE50521@google.com>
+ <20230424210634.70c26688@aktux>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1682512187-8828-2-git-send-email-manikanta.guntupalli@amd.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230424210634.70c26688@aktux>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 05:59:46PM +0530, Manikanta Guntupalli wrote:
-> Add optional gpio property to uartps node and add reference to rs485.yaml
+On Mon, 24 Apr 2023, Andreas Kemnade wrote:
 
-The diff tells me that already. Why?
-
+> On Mon, 24 Apr 2023 14:17:40 +0100
+> Lee Jones <lee@kernel.org> wrote:
 > 
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-> ---
->  Documentation/devicetree/bindings/serial/cdns,uart.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+> > On Wed, 19 Apr 2023, Andreas Kemnade wrote:
+> > 
+> > > The device provides 6 channels which can be individually
+> > > turned off and on but groups of two channels share a common brightness
+> > > register.
+> > > 
+> > > Limitation: The GPIO to enable the device is not used yet.
+> > > 
+> > > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > > Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > > Acked-by: Pavel Machek <pavel@ucw.cz>
+> > > ---
+> > >  drivers/leds/Kconfig          |  14 +++
+> > >  drivers/leds/Makefile         |   1 +
+> > >  drivers/leds/leds-bd2606mvv.c | 160 ++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 175 insertions(+)
+> > >  create mode 100644 drivers/leds/leds-bd2606mvv.c  
+> > 
+> > Applied, thanks
+> > 
+> contrary to the binding doc, it does not appear on
+> https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/log/?h=for-leds-next
 > 
-> diff --git a/Documentation/devicetree/bindings/serial/cdns,uart.yaml b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-> index a8b323d7bf94..34ed0d80b923 100644
-> --- a/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-> +++ b/Documentation/devicetree/bindings/serial/cdns,uart.yaml
-> @@ -46,6 +46,10 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  txrx-gpios:
-> +    description: Optional GPIO to switch transmit and receive modes via pmod.
+> Any problems with applying it?
 
-What's pmod?
+Now applied to the correct branch, thanks.
 
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> @@ -55,6 +59,7 @@ required:
->  
->  allOf:
->    - $ref: serial.yaml#
-> +  - $ref: rs485.yaml#
->    - if:
->        properties:
->          compatible:
-> -- 
-> 2.25.1
-> 
+-- 
+Lee Jones [李琼斯]
