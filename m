@@ -2,148 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16D76F0378
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79266F0379
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 11:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243311AbjD0JgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 05:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
+        id S243375AbjD0JhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 05:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242895AbjD0JgF (ORCPT
+        with ESMTP id S242895AbjD0JhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 05:36:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15FE2715
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682588119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nLTOa2gvY/yQPlkBPm/UDjW99+fDZr0dsfJVgkOBXe8=;
-        b=C69Ar5miGCrWMuFHYyktAfb+hYK1MrS83ors27O/0XiFabb/XOGC2lViBd3AaWHivIO5EP
-        T6mY748Qc9odiN+FvHBm68h7w2L0zLvT9u63/cCj4COASR9dwKMoojMTqp65MeeB8f/jRh
-        hs0cQ5WE5l5Xk3pF3c0uAXDmPS82Xck=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-650-LmMBa-qLPeOxali63_Vi5Q-1; Thu, 27 Apr 2023 05:35:17 -0400
-X-MC-Unique: LmMBa-qLPeOxali63_Vi5Q-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f168827701so31857665e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:35:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682588116; x=1685180116;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLTOa2gvY/yQPlkBPm/UDjW99+fDZr0dsfJVgkOBXe8=;
-        b=X0inn5tt6SUyjy220O+JeBoZp2WSYmEe6IUDJaZU1JBYkU7F11U5tuYTn6TYvbSA5F
-         gM/Yyz42Un/um2LxcDwfHgcOet26/VXTxk0lBOrm/wUzrwpdJ8ImW4Q7TZubZc1u8/Ov
-         dorsYFUaR7E3QqT61z8QN0LBpWLd3vzDOqcFFMfR/gddb0zAJqX7jTUCqcbyB52QqrIa
-         hlLx0UZpbsaHPhyeyV41By1h1pbhJXFX0rrzCVRVlC52wkK1PqHfkeF1treFuy3mPEYL
-         b0dcrXe5FHqhVXW87IwXOe9P3BAduks8Zlzp2MFGuan8E3Mfz5Pg3unvoRAXCVSQ/iBd
-         6vGA==
-X-Gm-Message-State: AC+VfDyaUGtMSvWQ/NOW2a0fENoiVRCMM9mWxS0y29YaDvkNKbtgopa3
-        CszY5aS7O+C8l6l4kJBAfl5Wz2wgyATfX2YxXNnWSt5MkV1nTmaR3wW3fMm6aNIQ4Y01JWZm+Fc
-        evG4h7aoye+h0535TLGY7MQaZ
-X-Received: by 2002:a7b:c4c2:0:b0:3eb:29fe:f922 with SMTP id g2-20020a7bc4c2000000b003eb29fef922mr905187wmk.29.1682588116476;
-        Thu, 27 Apr 2023 02:35:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ70GfP+ZZHQ6xluKgBksQTzeWz0mxAUsXLWSbOrJGn1bNSVtyNdb3QOaLXsLQkF4nyomIuayg==
-X-Received: by 2002:a7b:c4c2:0:b0:3eb:29fe:f922 with SMTP id g2-20020a7bc4c2000000b003eb29fef922mr905155wmk.29.1682588116119;
-        Thu, 27 Apr 2023 02:35:16 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id k36-20020a05600c1ca400b003f1733feb3dsm24321037wms.0.2023.04.27.02.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 02:35:15 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH v2 7/8] lib: add test for for_each_numa_{cpu,hop_mask}()
-In-Reply-To: <ZEmOxpgZqyoHcMqu@yury-ThinkPad>
-References: <20230420051946.7463-1-yury.norov@gmail.com>
- <20230420051946.7463-8-yury.norov@gmail.com>
- <xhsmh8rehkxzz.mognet@vschneid.remote.csb>
- <ZEi7n4ZJgF2o8Ps9@yury-ThinkPad>
- <xhsmhttx3j93u.mognet@vschneid.remote.csb>
- <ZEmOxpgZqyoHcMqu@yury-ThinkPad>
-Date:   Thu, 27 Apr 2023 10:35:14 +0100
-Message-ID: <xhsmho7n9k6r1.mognet@vschneid.remote.csb>
+        Thu, 27 Apr 2023 05:37:13 -0400
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95C22D69
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 02:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+        t=1682588227; bh=7GwSg/VETfevsc3piSQWo4R9qz03aZ3BJS+mJ+1KmqE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Gw6XWpfO52Txf3GnQMRel2fpYOy85kLi+OBVcUngZ8b6W5jBrrNGoctMDZ/B9ndUV
+         zHv6hsq5jVplnrsIEP0N3rJqxOFLXJvGQXO2K5BnUzpVueGSVGaxUq4nKHct3MV3D5
+         ON0nlxfX/fLPMAWqfkzHI2VaemjoCjWG6tRuPRZM=
+Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 91BAA2AE; Thu, 27 Apr 2023 17:36:27 +0800
+X-QQ-mid: xmsmtpt1682588187tigkwr02y
+Message-ID: <tencent_D9A598A810BDC656BE2BC15A6D0FC76C5C07@qq.com>
+X-QQ-XMAILINFO: OZZSS56D9fAjDF03k4K0vSOU3wg7BGGYLofnVha6/an8Aa/x9/8DpfwPP21hQr
+         2Kny59+lA3mDsczPLeIBmCS1gSizPT0UoVZUzDYgt63Tn9iP0nq6vFt3A6H40oVkGYkFIKDCwlad
+         B8PI96uF2vElvY9aOzRZUj0BOgrOUy+bcz/lrr3gAh351iBSf2NaKo6VPqYxHsTfOrbz8ritH0/0
+         5mqEkAc8xQTkPGcDvr2RIggy9v+denE9SjJeMoiJzFxpEqdlupvjlLPPu9jSU4HUves4m476ricW
+         kjhJGy6geNVa+POtdQlYToO/BI8PEqUOyl5Y2r0QIMIoXuvgFgIc3pA80Wl6GmEDAdvig/guuWI+
+         RDqybH5517LDK4TJPbVwa/woWWbG4tRVfjgKK7zUG8F9mB0BFHaoXxGQk4ExCs5u0AuSA9P8V+YI
+         oxUJUeTGCV41EUDBCxJQw2wyQ/inldOUNeQDkqkr/jiK1chwIhBdbCUlsscWShnXD1NTgyfHWpaC
+         u9a7dDJ9HCgKX48JYTCzlHrEZ2LSJEocV6JRojlZGFuLtmYNvBprK0XI5m2WgHWGjpvxpeb9kHdl
+         27s6fXY6I7BCEeJv59f8gt4w3EEVXUVBmYvoGY2d7/PLjC2DK5p4ZYQn1ZZMjYXItRjVjadY0Xc5
+         My+9I8QsV9cRkZ8GoGFj5mterx2ZKy/XuoBsWAA3FKqtswj6QdCDySTPDA7+pBDXIFL/zD7lIqvz
+         TPnH8nTvBU/2UzFz0G3bb4TZ8z6tAjQWC/s1l+HRMHlMoQmIOssoBZJNZPWPtUOMWOd8MvnhIuex
+         PMlHW+HRlMvmwEB6D4RX3x2wzGjwvMgjz8JE/8qAQCcG7GohTKYjA5e7Y1jOdV2ZXCnuovRIb43O
+         7F7toposXsS4F1U+8gikXkY6hlKMp4d/beQbVmsP9n50uVjsRyK02716efJ6gQ//JaKVtiZsMpU/
+         etznZH4ZiPQPUvN6A0b0Fcb96FHJ0Z9IIcXMklGgzuENsDUq34Mw==
+From:   Yangyu Chen <cyy@cyyself.name>
+To:     conor.dooley@microchip.com
+Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, conor@kernel.org,
+        cyy@cyyself.name, i@zenithal.me, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, soha@lohu.info, twd2.me@gmail.com
+Subject: Re: [PATCH 1/2] riscv: allow case-insensitive ISA string parsing
+Date:   Thu, 27 Apr 2023 17:36:25 +0800
+X-OQ-MSGID: <20230427093625.155634-1-cyy@cyyself.name>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230427-unveiling-kiwi-631e966f77cc@wendy>
+References: <20230427-unveiling-kiwi-631e966f77cc@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/23 13:51, Yury Norov wrote:
->> I realized I only wrote half the relevant code - comparing node IDs is
->> meaningless, I meant to compare distances as we walk through the
->> CPUs... I tested the below against a few NUMA topologies and it seems to be
->> sane:
->> 
->> @@ -756,12 +773,23 @@ static void __init test_for_each_numa(void)
->>  {
->>  	unsigned int cpu, node;
->>  
->> -	for (node = 0; node < sched_domains_numa_levels; node++) {
->> -		unsigned int hop, c = 0;
->> +	for_each_node(node) {
->> +		unsigned int start_cpu, prev_dist, hop = 0;
->> +
->> +		cpu = cpumask_first(cpumask_of_node(node));
->> +		prev_dist = node_distance(node, node);
->> +		start_cpu = cpu;
->>  
->>  		rcu_read_lock();
->> -		for_each_numa_cpu(cpu, hop, node, cpu_online_mask)
->> -			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
->> +
->> +		/* Assert distance is monotonically increasing */
->> +		for_each_numa_cpu(cpu, hop, node, cpu_online_mask) {
->> +			unsigned int dist = node_distance(cpu_to_node(cpu), cpu_to_node(start_cpu));
->
-> Interestingly, node_distance() is an arch-specific function. Generic
-> implementation is quite useless:
->
->  #define node_distance(from,to)  ((from) == (to) ? LOCAL_DISTANCE : REMOTE_DISTANCE)
->
-> Particularly, arm64 takes the above. With node_distance() implemented
-> like that, we can barely test something...
->
+Hi, Conor
 
-riscv and arm64 rely on drivers/base/arch_numa.c to provide
-__node_distance() (cf. CONFIG_GENERIC_ARCH_NUMA).
+I have a different opinion about whether the isa string length should be
+checked.
 
-x86, sparc, powerpc and ia64 define __node_distance()
-loongarch and mips define their own node_distance().
+On Thu, 27 Apr 2023 10:04:34 +0100, Conor Dooley wrote:
+> Preventing the input of absolute rubbish is dt-validate's job & if the dtb
+> itself has been corrupted somehow I suspect that we have bigger problems
+> than checking for "rv" will solve.
 
-So all of those archs will have a usable node_distance(), the others won't
-and that means the scheduler can't do anything about it - the scheduler
-relies on node_distance() to understand the topolgoy!
+> > also do a strlen(isa) >= 4 check first, though. of_property_read_string()
+> > will succeed even when the string is "".
+
+> I don't think that checking that there are at least 4 characters isn't
+> even sufficient. Either we should confirm that this is a valid riscv,isa
+> to run on (so rv##ima w/ ## matching the kernel) or not bother at all.
+
+What will happen if we have a bootloader in the future which allows
+overriding isa string in the DT or ACPI table, the memory corruption could
+happen if we didn't check it first.
+
+Although the kernel will not boot in this case, anything about the user
+input string should be parse carefuly that you never know what the future
+code will be but leave a checker here will remind someone who will change
+the parse in the future to check the length carefully.
+
+So I agree with drew, we should do check strlen before check the first
+two characters.
+
+On Thu, 27 Apr 2023 10:04:34 +0100, Conor Dooley wrote:
+> It's a different issue though, and I'd be inclined to revisit it in the
+> future when the ACPI stuff is in, along with perhaps the cleanup parts
+> of Heiko's series too.
+
+Agreed.
+
+Thanks,
+Yangyu Chen
 
