@@ -2,145 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CE16F08BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC93C6F08C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 17:52:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244214AbjD0PvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 11:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S244249AbjD0PwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 11:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244175AbjD0PvG (ORCPT
+        with ESMTP id S243994AbjD0PwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 11:51:06 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5733585
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:51:05 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64115e69e1eso4678622b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 08:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682610664; x=1685202664;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/BGmFMzU05ZC8sZHkNJgBYDk4c+irOD6V9U91yPyg9g=;
-        b=paDMNiJunl017JsePs93I3EW8GnrmF4BA+oHSO3Osw6zGVWtLuWrBcMRCJQeWgFPpW
-         kqUV7h4lT1mAxFALgewPDuVLQjgbEqpxdCX3hOh+gIElgZScbMQiYnMhNWGl/jIaK/Qp
-         5RWEi7PZfm2t7ZCOuwGIUAJGkC6FfqWYpOuK/nb1SQpGdKFrPT8QBxKEk3pLf0nFKuA3
-         J4LicDbSLsEZh96t9a+zWsVMFTUzKLprFvHc6WQl9lR7Xh6WXEJER2ULFkzozmZ8AVaK
-         9Hkh7adpeQlYPe2BMdVEAqYrjm5syMMEk92wdM21XhCS8TDxDjy7ttTlvMnaFErqG1qg
-         /rJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682610664; x=1685202664;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=/BGmFMzU05ZC8sZHkNJgBYDk4c+irOD6V9U91yPyg9g=;
-        b=fTd6GHzII9iEXzf0JsVGupkC+36DjpLGhG3N76dRgns5hDSJyprVgoq3HzC7FYXBdq
-         AeLWTz48uJK5zhhAjIitgYoqy9i9e2eXx91jx+B0Nf8LCh5lTlNwHB1cXFViOOytd/kD
-         z1F+5tPJxiMEADmvD9Dpw+KsPjzSNJgjDbR/aj9srzK8OesXuXapy/CQtdrSvDtvJZes
-         F5OGFbOJNE3cLJIKOKVLrFKO6KPIx0tcxePh0LMAioX0hW0uiYjW6lI2Y/qEMm85T30p
-         Qs/dPqfy+RQRXtuoNGHUBNwIUwlXylnaPW01aYCimUZVnqtLmbYjD3cSQeaWs0JMBypq
-         lpkw==
-X-Gm-Message-State: AC+VfDzYh6mOBavED9jRPXXI6ifSGVybSUrN+dKrplSNdvhuVChstbNe
-        xSzc03Txj4EjYssorrREwtVjewax6yw=
-X-Google-Smtp-Source: ACHHUZ59+ZgxJdPJ8IvwnjVNT7f9pMVDASDOgxtt6uXXLATg1aP6+8Xr++R3G4gmwms8I2vSzghonubDKkk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:203:0:b0:528:a60c:c06b with SMTP id
- 3-20020a630203000000b00528a60cc06bmr451235pgc.1.1682610664522; Thu, 27 Apr
- 2023 08:51:04 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 08:51:03 -0700
-In-Reply-To: <CAGtprH_-i15UpM-f3p_g-+GgnK87kUbMa1RpvwGDBRr34XzTuQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <c49aa7b7bbc016b6c8b698ac2ce3b9d866b551f9.1678643052.git.isaku.yamahata@intel.com>
- <20230418190904.1111011-1-vannapurve@google.com> <20230419133841.00001ee8.zhi.wang.linux@gmail.com>
- <CAGtprH_-i15UpM-f3p_g-+GgnK87kUbMa1RpvwGDBRr34XzTuQ@mail.gmail.com>
-Message-ID: <ZEqZ5w7EvzUc8Siv@google.com>
-Subject: Re: [PATCH v13 098/113] KVM: TDX: Handle TDX PV map_gpa hypercall
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     Zhi Wang <zhi.wang.linux@gmail.com>, isaku.yamahata@intel.com,
-        dmatlack@google.com, erdemaktas@google.com,
-        isaku.yamahata@gmail.com, kai.huang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com, sagis@google.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 11:52:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 430D7CD;
+        Thu, 27 Apr 2023 08:52:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 976E72F4;
+        Thu, 27 Apr 2023 08:52:55 -0700 (PDT)
+Received: from [10.57.56.155] (unknown [10.57.56.155])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C42833F64C;
+        Thu, 27 Apr 2023 08:52:08 -0700 (PDT)
+Message-ID: <dac76dd5-d5f0-61dd-fafe-f939f1ebc413@arm.com>
+Date:   Thu, 27 Apr 2023 16:52:06 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/7] perf: cs-etm: Validate options after applying
+ themperf_pmu__format_bits
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     linux-perf-users@vger.kernel.org, coresight@lists.linaro.org,
+        shy828301@gmail.com, denik@google.com,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230424134748.228137-1-james.clark@arm.com>
+ <20230424134748.228137-5-james.clark@arm.com>
+ <20230427151228.GA152865@leoy-huanghe>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230427151228.GA152865@leoy-huanghe>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023, Vishal Annapurve wrote:
-> On Wed, Apr 19, 2023 at 3:38=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.co=
-m> wrote:
-> >
-> > On Tue, 18 Apr 2023 19:09:04 +0000
-> > Vishal Annapurve <vannapurve@google.com> wrote:
-> >
-> > > > +static int tdx_map_gpa(struct kvm_vcpu *vcpu)
-> > > > +{
-> > > > +   struct kvm *kvm =3D vcpu->kvm;
-> > > > +   gpa_t gpa =3D tdvmcall_a0_read(vcpu);
-> > > > +   gpa_t size =3D tdvmcall_a1_read(vcpu);
-> > > > +   gpa_t end =3D gpa + size;
-> > > > +
-> > > > +   if (!IS_ALIGNED(gpa, PAGE_SIZE) || !IS_ALIGNED(size, PAGE_SIZE)=
- ||
-> > > > +       end < gpa ||
-> > > > +       end > kvm_gfn_shared_mask(kvm) << (PAGE_SHIFT + 1) ||
-> > > > +       kvm_is_private_gpa(kvm, gpa) !=3D kvm_is_private_gpa(kvm, e=
-nd)) {
-> > > > +           tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OP=
-ERAND);
-> > > > +           return 1;
-> > > > +   }
-> > > > +
-> > > > +   return tdx_vp_vmcall_to_user(vcpu);
-> > >
-> > > This will result into exits to userspace for MMIO regions as well. Do=
-es it make
-> > > sense to only exit to userspace for guest physical memory regions bac=
-ked by
-> > > memslots?
 
-No, KVM should exit always, e.g. userspace _could_ choose to create a priva=
-te
-memslot in response to the guest's request.
 
-> > I think this is necessary as when passing a PCI device to a TD, the gue=
-st
-> > needs to convert a MMIO region from private to shared, which is not bac=
-ked
-> > by memslots.
+On 27/04/2023 16:12, Leo Yan wrote:
+> Hi James,
+> 
+> On Mon, Apr 24, 2023 at 02:47:44PM +0100, James Clark wrote:
+>> Currently the cs_etm_set_option() function both validates and applies
+>> the config options. Because it's only called when they are added
+>> automatically, there are some paths where the user can apply the option
+>> on the command line and skip the validation. By moving it to the end it
+>> covers both cases.
+>>
+>> Also, options don't need to be re-applied anyway, Perf handles parsing
+>> and applying the config terms automatically.
+>>
+>> Signed-off-by: James Clark <james.clark@arm.com>
+>> ---
+>>  tools/perf/arch/arm/util/cs-etm.c | 152 +++++++++++++-----------------
+>>  1 file changed, 68 insertions(+), 84 deletions(-)
+>>
+>> diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
+>> index f9b9ebf7fffc..af0a2400c655 100644
+>> --- a/tools/perf/arch/arm/util/cs-etm.c
+>> +++ b/tools/perf/arch/arm/util/cs-etm.c
+>> @@ -69,21 +69,29 @@ static const char * const metadata_ete_ro[] = {
+>>  static bool cs_etm_is_etmv4(struct auxtrace_record *itr, int cpu);
+>>  static bool cs_etm_is_ete(struct auxtrace_record *itr, int cpu);
+>>  
+>> -static int cs_etm_set_context_id(struct auxtrace_record *itr,
+>> -				 struct evsel *evsel, int cpu)
+>> +static int cs_etm_validate_context_id(struct auxtrace_record *itr,
+>> +				      struct evsel *evsel, int cpu)
+>>  {
+>> -	struct cs_etm_recording *ptr;
+>> -	struct perf_pmu *cs_etm_pmu;
+>> +	struct cs_etm_recording *ptr =
+>> +		container_of(itr, struct cs_etm_recording, itr);
+>> +	struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
+>>  	char path[PATH_MAX];
+>> -	int err = -EINVAL;
+>> +	int err;
+>>  	u32 val;
+>> -	u64 contextid;
+>> +	u64 contextid =
+>> +		evsel->core.attr.config &
+>> +		(perf_pmu__format_bits(&cs_etm_pmu->format, "contextid1") |
+>> +		 perf_pmu__format_bits(&cs_etm_pmu->format, "contextid2"));
+> 
+> Seems to me, this would break backward compability.
+> 
+> The old kernel (before 5.11) doesn't provide 'contextid1' and
+> 'contextid2', so we always check the entry 'contextid' rather than
+> 'contextid1' and 'contextid2'.
+> 
+> With this change, if a kernel doesn't contain 'contextid1' and
+> 'contextid2' formats, will perf tool never trace for contexid?
+> 
 
-This isn't entirely accurate.  If you're talking about emulated MMIO, then =
-there
-is no memslot.  But the "passing a PCI device" makes it sound like you're t=
-alking
-about device passthrough, in which case there is a memslot that points at a=
-n actual
-MMIO region in the host platform.
+No because I changed to to be purely validation, so the format flags
+would still be applied. But yes I think you are right there is a small
+issue.
 
-In either case, conversions should be unnecessary as MMIO regions should no=
-t be
-enumerated to the guest as supporting encryption, i.e. the guest should kno=
-w from
-time zero that those regions are shared.  If we end up with something like =
-Hyper-V's
-SVSM-based paravisor, then there might be private emulated MMIO, but such a=
- setup
-would also come with its own brand of enlightment in the guest.
+Now validation of 'contextid' isn't done on pre 5.11 kernels. But that
+only checks for ETMv3 anyway. Validation of 'contextid1' and
+'contextid2' isn't a problem, because if the kernel doesn't support them
+they can't be applied on the command line anyway.
 
-> KVM could internally handle conversion of regions not backed by
+I can fix it by checking for 'contextid' and ETMv3 first and then doing
+'contextid1' and 'contextid2' after.
 
-No, KVM should never internally handle conversions, at least not in the ini=
-tial
-implementation.  And if KVM ever does go down this route, it needs dedicate=
-d
-support in KVM's uAPI since userspace needs to be kept in the loop, i.e. ne=
-eds
-to opt-in and be notified of any conversions.
+> Thanks,
+> Leo
+> 
