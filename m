@@ -2,216 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14436F0CCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAB36F0CD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344085AbjD0UCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S1344092AbjD0UGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD0UCj (ORCPT
+        with ESMTP id S233562AbjD0UGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:02:39 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB9359D;
-        Thu, 27 Apr 2023 13:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682625757; x=1714161757;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=9e4/YqMXyoBnn1jPIF7cYj7Exl/lR9jrAZBauXk1HN8=;
-  b=eB/amGSgabBKJJyyO6hFA/V6Ab6oW7JrQLWKyCDesqf15rz6EbAA5NLK
-   hoQx3iIyouRJOy64PRv/Sc0tUAFfImxjl2ut1Fh4i4pXebWTMt1qe46TM
-   4W3aswF6G4t3oS1osocTlYV5HD5CVn4F/g6XC5y/pEPihSJ/30kLvu2s7
-   /FKRHMhL/HZ5KpPQiw6yHJKkE9/aBZhxLJRYmXXr64YIjN02aUeVcFB6O
-   JG1jiYAl+Qnz6Y95r4Lsg61KcYldi340F0nJxjTfe9X59fcWHx35P2LH+
-   FP7i6ErbbwrZEyxiXNBYXVGRMwy/KyE6MC6p/Kha+3hCyZColi4Q2kBPr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="410616712"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="410616712"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 13:01:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="759294092"
-X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
-   d="scan'208";a="759294092"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Apr 2023 13:01:23 -0700
-Received: from [10.209.41.222] (kliang2-mobl1.ccr.corp.intel.com [10.209.41.222])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id AC75A580CD0;
-        Thu, 27 Apr 2023 13:01:19 -0700 (PDT)
-Message-ID: <528dd99d-6a2f-8b10-e3e3-21f682ab9101@linux.intel.com>
-Date:   Thu, 27 Apr 2023 16:01:18 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v1 14/40] perf print-events: Avoid unnecessary strlist
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230426070050.1315519-1-irogers@google.com>
- <20230426070050.1315519-15-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230426070050.1315519-15-irogers@google.com>
+        Thu, 27 Apr 2023 16:06:21 -0400
+X-Greylist: delayed 584 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 13:06:19 PDT
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782932D74;
+        Thu, 27 Apr 2023 13:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Qi4Ky9bHoQupBknSueBNjMmFnel/nlUG0MuoAvTepic=; b=X08Kv91mrUTH7bTUkTtL2mdJB+
+        7xScUhy7JtNjqms3IHnqX6A8ljNdSxuOtlORC90lmpwouAdphNBj23xdPSWMTqJ9t8KE3ikPiVJVo
+        nKI1N7jVFBRUalq3HLDoj59MzcFKAGLHNwLge8psKa+ACPw+2/2zf8z/46DWRlAIkA4g=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:47152 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1ps7sX-0002qM-1i; Thu, 27 Apr 2023 16:06:10 -0400
+Date:   Thu, 27 Apr 2023 16:06:08 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <20230427160608.f051241d750404939296f60d@hugovil.com>
+In-Reply-To: <CAOMZO5CQeeme6uhb8NCzR2QADjkBM-mRC9-GUnmhLWSGo5MMoQ@mail.gmail.com>
+References: <20230427195538.2718661-1-hugo@hugovil.com>
+        <CAOMZO5CQeeme6uhb8NCzR2QADjkBM-mRC9-GUnmhLWSGo5MMoQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH] imx8mn-var-som: dts: fix PHY detection bug by adding
+ deassert delay
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 27 Apr 2023 17:00:41 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-
-On 2023-04-26 3:00 a.m., Ian Rogers wrote:
-> The strlist in print_hwcache_events holds the event names as they are
-> generated, and then it is iterated and printed. This is unnecessary
-> and each event can just be printed as it is processed.
-> Rename the variable i to res, to be more intention revealing and
-> consistent with other code.
+> Hi Hugo,
 > 
-
-Looks good to me.
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
-
-> Signed-off-by: Ian Rogers <irogers@google.com>> ---
->  tools/perf/util/print-events.c | 60 ++++++++++++++++++----------------
->  1 file changed, 31 insertions(+), 29 deletions(-)
+> On Thu, Apr 27, 2023 at 4:56 PM Hugo Villeneuve <hugo@hugovil.com> wrote:
+> >
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >
+> > While testing the ethernet interface on a symphony carrier
+> > board using an imx8mn SOM with an onboard PHY (EC hardware
+> > configuration), the ethernet PHY is not detected.
+> >
+> > The device tree in Variscite custom linux git repository uses the
+> > following property:
+> >
+> >     phy-reset-post-delay = <20>;
+> >
+> > Add a new property 'reset-deassert-us' of 20ms to have the same delay
+> > inside the ethphy handle.
 > 
-> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-> index 386b1ab0b60e..93bbb868d400 100644
-> --- a/tools/perf/util/print-events.c
-> +++ b/tools/perf/util/print-events.c
-> @@ -226,58 +226,60 @@ void print_sdt_events(const struct print_callbacks *print_cb, void *print_state)
->  
->  int print_hwcache_events(const struct print_callbacks *print_cb, void *print_state)
->  {
-> -	struct strlist *evt_name_list = strlist__new(NULL, NULL);
-> -	struct str_node *nd;
-> +	const char *event_type_descriptor = event_type_descriptors[PERF_TYPE_HW_CACHE];
->  
-> -	if (!evt_name_list) {
-> -		pr_debug("Failed to allocate new strlist for hwcache events\n");
-> -		return -ENOMEM;
-> -	}
->  	for (int type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
->  		for (int op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
->  			/* skip invalid cache type */
->  			if (!evsel__is_cache_op_valid(type, op))
->  				continue;
->  
-> -			for (int i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
-> +			for (int res = 0; res < PERF_COUNT_HW_CACHE_RESULT_MAX; res++) {
->  				struct perf_pmu *pmu = NULL;
->  				char name[64];
->  
-> -				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
-> +				__evsel__hw_cache_type_op_res_name(type, op, res,
-> +								   name, sizeof(name));
->  				if (!perf_pmu__has_hybrid()) {
->  					if (is_event_supported(PERF_TYPE_HW_CACHE,
-> -							       type | (op << 8) | (i << 16)))
-> -						strlist__add(evt_name_list, name);
-> +								type | (op << 8) | (res << 16))) {
-> +						print_cb->print_event(print_state,
-> +								"cache",
-> +								/*pmu_name=*/NULL,
-> +								name,
-> +								/*event_alias=*/NULL,
-> +								/*scale_unit=*/NULL,
-> +								/*deprecated=*/false,
-> +								event_type_descriptor,
-> +								/*desc=*/NULL,
-> +								/*long_desc=*/NULL,
-> +								/*encoding_desc=*/NULL);
-> +					}
->  					continue;
->  				}
->  				perf_pmu__for_each_hybrid_pmu(pmu) {
->  					if (is_event_supported(PERF_TYPE_HW_CACHE,
-> -					    type | (op << 8) | (i << 16) |
-> +					    type | (op << 8) | (res << 16) |
->  					    ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT))) {
->  						char new_name[128];
-> -							snprintf(new_name, sizeof(new_name),
-> -								 "%s/%s/", pmu->name, name);
-> -							strlist__add(evt_name_list, new_name);
-> +						snprintf(new_name, sizeof(new_name),
-> +							"%s/%s/", pmu->name, name);
-> +						print_cb->print_event(print_state,
-> +								"cache",
-> +								pmu->name,
-> +								name,
-> +								new_name,
-> +								/*scale_unit=*/NULL,
-> +								/*deprecated=*/false,
-> +								event_type_descriptor,
-> +								/*desc=*/NULL,
-> +								/*long_desc=*/NULL,
-> +								/*encoding_desc=*/NULL);
->  					}
->  				}
->  			}
->  		}
->  	}
-> -
-> -	strlist__for_each_entry(nd, evt_name_list) {
-> -		print_cb->print_event(print_state,
-> -				"cache",
-> -				/*pmu_name=*/NULL,
-> -				nd->s,
-> -				/*event_alias=*/NULL,
-> -				/*scale_unit=*/NULL,
-> -				/*deprecated=*/false,
-> -				event_type_descriptors[PERF_TYPE_HW_CACHE],
-> -				/*desc=*/NULL,
-> -				/*long_desc=*/NULL,
-> -				/*encoding_desc=*/NULL);
-> -	}
-> -	strlist__delete(evt_name_list);
->  	return 0;
->  }
->  
+> Which Ethernet PHY does this board use?
+> 
+> What does its datasheet recommend?
+
+Hi Fabio,
+it uses a ADIN1300 PHY.
+
+The datasheet indicate that the "Management interface active (t4)" state is reached at most 5ms after the reset signal is deasserted.
+
+Hugo.
+
+-- 
+Hugo Villeneuve <hugo@hugovil.com>
