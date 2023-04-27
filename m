@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04E96F0D73
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF5B6F0D79
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 22:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344318AbjD0UqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 16:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S1344022AbjD0Uuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 16:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344336AbjD0UqC (ORCPT
+        with ESMTP id S229508AbjD0Uux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 16:46:02 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABEE4C2B
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so10584103a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1682628354; x=1685220354;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pOyJLwrnL8b7sS3XOE4C9Z2ANwLoqbgl4r9TqJMyALQ=;
-        b=YFXpenH2mzoQXEXnTQ0Z3TJtyZoy5uV/6TCUoR2xIm6PYWa84vCB78MyevgbFQEhF5
-         k+j6dxBfXeGBzjnklQwP8SOp0F2ftNSZE5VOU8CKGzEM1Us+V6S+XXN4HAG++Y8vgo2r
-         8YRxMtTSpS9uPEgjc8II5qs8Ep1oGPkl21SG0=
+        Thu, 27 Apr 2023 16:50:53 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E521DC
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:50:50 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-766588051b3so137847939f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 13:50:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682628354; x=1685220354;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pOyJLwrnL8b7sS3XOE4C9Z2ANwLoqbgl4r9TqJMyALQ=;
-        b=FJd0wDfZFF1F9XU7CLw1ISz+7xjDuOy1uIaxtx/HGuRbBoO7lXV9ztWW89DcV3/uVf
-         ms0H/NtaMuUX0wr350XCanOwxQriHRCZA5huMay3/j181njUye6IXm3ou5aQoY8Q3q3v
-         zPFouf+YTu4mFOd+IHWlBET8d1jJC1mHgrZNiYf1wz44YEhAHY9//6Ci1Djk/iE2iDyA
-         MLO1e6cSTaesYQTNGPE3QV2xUb5HgZuhQEP5F62VQR6aQHmcGlYwgRqS8+CKs9RMkZ4o
-         IhPc6mMtIdDv51UQaDacPi72oYpBP+1swMMUf5a6nrTkAYgyuMIuPDNQ/iRxRhOoeNVF
-         C8Dw==
-X-Gm-Message-State: AC+VfDyZhdVpyrSKHP+ErN9ACWtnpxMgRKFqJOFxbmzn4+KQ+M+366oA
-        CXjRclDpGq8WiV8r82ce/BDLC2xnlQI6w6a+RVnGCg==
-X-Google-Smtp-Source: ACHHUZ4wTLVspWRSjwRxm69+yp//qRYMj0/O8K3FuIRMf6s8rUTIpE4GJYaZcDFa9HjrC81Gnpji+g==
-X-Received: by 2002:a17:907:8687:b0:94e:ffab:4ce3 with SMTP id qa7-20020a170907868700b0094effab4ce3mr3151905ejc.32.1682628354060;
-        Thu, 27 Apr 2023 13:45:54 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-87-5-99-194.retail.telecomitalia.it. [87.5.99.194])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170906bc4c00b00947ed087a2csm10171360ejv.154.2023.04.27.13.45.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 13:45:53 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v2 5/5] ARM: dts: stm32: add CAN support on stm32f746
-Date:   Thu, 27 Apr 2023 22:45:40 +0200
-Message-Id: <20230427204540.3126234-6-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
-References: <20230427204540.3126234-1-dario.binacchi@amarulasolutions.com>
+        d=1e100.net; s=20221208; t=1682628650; x=1685220650;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6D7HRIAwrsObnR9dyvXF3uP+7wKnGIKQal8KLKI9eXw=;
+        b=H5mc/4POYmq1NBIHFeqwHvwUoB/PqxpyOiYQBF+9VuPdSOFQHmxRk0Nt1/aQC8r5xW
+         ViyEljU/myc2gisZCgGFxIRUWFjrvNnzdR7r2dmkQ/NcR2LIXujSesmQlDOsVak4pKOj
+         kP4qoJlO9i2BYSmsSxdRbkkr2GXDOHU+633A1zc3ThigwiAzHicoysFKKSfofphBwQx6
+         1EDbpCHj81pda+beB0R/LQf/XTBxQiqDOV2ikyB8M589h0x8bNhxSWfc10eJGOvDhjCS
+         dBBt2YDyGRYq9zMNpLf+8YmsJ93kj4PerL055Dh657o3hSQaYHd1/kySh1+JzNqHOgl4
+         70zw==
+X-Gm-Message-State: AC+VfDy2uqztIB1d5oitdAXv/viXjqbRsryg4prlirII8rb95viSbayU
+        lFw8q1vt8gI3xtNheUNnJTJeOLDEfXSyUd8aKQv5vo2lP/ad
+X-Google-Smtp-Source: ACHHUZ4O3E/9FC8Do7EX3PLXGXOn7rcfY2qg1X1VNPP7GAW/K2fREoO4osuhYIThQEftQ9zV9NQ1ymcLTmTPjd5dx+clfI33GVT0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a02:9505:0:b0:40f:b3a8:6e43 with SMTP id
+ y5-20020a029505000000b0040fb3a86e43mr1431971jah.6.1682628649835; Thu, 27 Apr
+ 2023 13:50:49 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 13:50:49 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f66a3005fa578223@google.com>
+Subject: [syzbot] [crypto?] KMSAN: uninit-value in __crc32c_le_base (3)
+From:   syzbot <syzbot+a6d6b8fffa294705dbd8@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,109 +55,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for bxcan (Basic eXtended CAN controller) to STM32F746. The
-chip contains three CAN peripherals, CAN1 and CAN2 in dual peripheral
-configuration and CAN3 in single peripheral configuration:
-- Dual CAN peripheral configuration:
-  * CAN1: Primary bxCAN for managing the communication between a secondary
-    bxCAN and the 512-byte SRAM memory.
-  * CAN2: Secondary bxCAN with no direct access to the SRAM memory.
-  This means that the two bxCAN cells share the 512-byte SRAM memory and
-  CAN2 can't be used without enabling CAN1.
-- Single CAN peripheral configuration:
-  * CAN3: Primary bxCAN with dedicated Memory Access Controller unit and
-    512-byte SRAM memory.
+Hello,
 
- -------------------------------------------------------------------------
-| features | CAN1              | CAN2               | CAN 3               |
- -------------------------------------------------------------------------
-| SRAM     | 512-byte shared between CAN1 & CAN2    | 512-byte            |
- -------------------------------------------------------------------------
-| Filters  | 26 filters shared between CAN1 & CAN2  | 14 filters          |
- -------------------------------------------------------------------------
+syzbot found the following issue on:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+HEAD commit:    81af97bdef5e printk: Export console trace point for kcsan/..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=178eaf77c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=60f9227cd7ef4e36
+dashboard link: https://syzkaller.appspot.com/bug?extid=a6d6b8fffa294705dbd8
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/959cdbc34509/disk-81af97bd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/21bf12585d87/vmlinux-81af97bd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d46348c365bd/bzImage-81af97bd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a6d6b8fffa294705dbd8@syzkaller.appspotmail.com
+
+XFS: attr2 mount option is deprecated.
+XFS (loop3): Mounting V5 Filesystem a2f82aab-77f8-4286-afd4-a8f747a74bab
+XFS (loop3): Ending clean mount
+XFS (loop3): Quotacheck needed: Please wait.
+=====================================================
+BUG: KMSAN: uninit-value in crc32_body lib/crc32.c:112 [inline]
+BUG: KMSAN: uninit-value in crc32_le_generic lib/crc32.c:179 [inline]
+BUG: KMSAN: uninit-value in __crc32c_le_base+0x467/0xd80 lib/crc32.c:201
+ crc32_body lib/crc32.c:112 [inline]
+ crc32_le_generic lib/crc32.c:179 [inline]
+ __crc32c_le_base+0x467/0xd80 lib/crc32.c:201
+ chksum_update+0x5b/0xd0 crypto/crc32c_generic.c:88
+ crypto_shash_update+0x28f/0x400 crypto/shash.c:121
+ crc32c+0xd9/0x1a0 lib/libcrc32c.c:47
+ xlog_cksum fs/xfs/xfs_log.c:1867 [inline]
+ xlog_sync+0xf66/0x11e0 fs/xfs/xfs_log.c:2111
+ xlog_state_release_iclog+0x3d0/0x7e0 fs/xfs/xfs_log.c:619
+ xlog_force_iclog fs/xfs/xfs_log.c:888 [inline]
+ xlog_force_and_check_iclog fs/xfs/xfs_log.c:3172 [inline]
+ xfs_log_force+0x9d3/0xf20 fs/xfs/xfs_log.c:3249
+ xfs_qm_dqflush+0x11d9/0x17f0 fs/xfs/xfs_dquot.c:1293
+ xfs_qm_flush_one+0x148/0x5b0 fs/xfs/xfs_qm.c:1260
+ xfs_qm_dquot_walk+0x2be/0x7b0 fs/xfs/xfs_qm.c:87
+ xfs_qm_quotacheck+0x4e1/0xb20 fs/xfs/xfs_qm.c:1338
+ xfs_qm_mount_quotas+0x3ef/0x890 fs/xfs/xfs_qm.c:1457
+ xfs_mountfs+0x2184/0x2410 fs/xfs/xfs_mount.c:959
+ xfs_fs_fill_super+0x1fb3/0x22b0 fs/xfs/xfs_super.c:1677
+ get_tree_bdev+0x890/0xd10 fs/super.c:1303
+ xfs_fs_get_tree+0x34/0x40 fs/xfs/xfs_super.c:1724
+ vfs_get_tree+0xa5/0x500 fs/super.c:1510
+ do_new_mount+0x69a/0x1580 fs/namespace.c:3042
+ path_mount+0x725/0x1ee0 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount+0x734/0x840 fs/namespace.c:3571
+ __ia32_sys_mount+0xe3/0x150 fs/namespace.c:3571
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Uninit was stored to memory at:
+ xlog_write_iovec fs/xfs/xfs_log.c:2259 [inline]
+ xlog_write_full fs/xfs/xfs_log.c:2294 [inline]
+ xlog_write+0x1c3c/0x21a0 fs/xfs/xfs_log.c:2563
+ xlog_cil_write_chain fs/xfs/xfs_log_cil.c:973 [inline]
+ xlog_cil_push_work+0x30c7/0x4430 fs/xfs/xfs_log_cil.c:1318
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
+ worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
+ kthread+0x31f/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+Uninit was created at:
+ slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:774
+ slab_alloc_node mm/slub.c:3452 [inline]
+ __kmem_cache_alloc_node+0x518/0x920 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0x121/0x3c0 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ xlog_kvmalloc fs/xfs/xfs_log_priv.h:700 [inline]
+ xlog_cil_alloc_shadow_bufs fs/xfs/xfs_log_cil.c:338 [inline]
+ xlog_cil_commit+0x493/0x4c80 fs/xfs/xfs_log_cil.c:1629
+ __xfs_trans_commit+0x78e/0x13d0 fs/xfs/xfs_trans.c:1005
+ xfs_trans_roll+0x10a/0x6e0 fs/xfs/xfs_trans.c:1153
+ xfs_defer_trans_roll+0x10f/0x590 fs/xfs/libxfs/xfs_defer.c:366
+ xfs_defer_finish_noroll+0x49d/0x2d40 fs/xfs/libxfs/xfs_defer.c:551
+ __xfs_trans_commit+0x979/0x13d0 fs/xfs/xfs_trans.c:970
+ xfs_trans_commit+0x2f/0x40 fs/xfs/xfs_trans.c:1049
+ xfs_dquot_disk_alloc+0xd4f/0x11a0 fs/xfs/xfs_dquot.c:384
+ xfs_qm_dqread+0x149/0x950 fs/xfs/xfs_dquot.c:665
+ xfs_qm_dqget+0x32c/0xb40 fs/xfs/xfs_dquot.c:870
+ xfs_qm_quotacheck_dqadjust+0xc4/0x860 fs/xfs/xfs_qm.c:1085
+ xfs_qm_dqusage_adjust+0x51b/0x910 fs/xfs/xfs_qm.c:1190
+ xfs_iwalk_ag_recs+0x5ca/0xa50 fs/xfs/xfs_iwalk.c:220
+ xfs_iwalk_run_callbacks+0x27f/0x590 fs/xfs/xfs_iwalk.c:376
+ xfs_iwalk_ag+0xee3/0x1080 fs/xfs/xfs_iwalk.c:482
+ xfs_iwalk_ag_work+0x207/0x300 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x97/0x2b0 fs/xfs/xfs_pwork.c:47
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
+ worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
+ kthread+0x31f/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+CPU: 1 PID: 5349 Comm: syz-executor.3 Not tainted 6.3.0-syzkaller-g81af97bdef5e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+=====================================================
+
 
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Changes in v2:
-- Move after the patch "can: bxcan: add support for single peripheral configuration".
-- Add node gcan3.
-- Rename gcan as gcan1.
-- Add property "st,can-secondary" to can2 node.
-- Drop patch "dt-bindings: mfd: stm32f7: add binding definition for CAN3"
-  because it has been accepted.
-- Add patch "ARM: dts: stm32f429: put can2 in secondary mode".
-- Add patch "dt-bindings: net: can: add "st,can-secondary" property".
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
- arch/arm/boot/dts/stm32f746.dtsi | 47 ++++++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-diff --git a/arch/arm/boot/dts/stm32f746.dtsi b/arch/arm/boot/dts/stm32f746.dtsi
-index dc868e6da40e..973698bc9ef4 100644
---- a/arch/arm/boot/dts/stm32f746.dtsi
-+++ b/arch/arm/boot/dts/stm32f746.dtsi
-@@ -257,6 +257,23 @@ rtc: rtc@40002800 {
- 			status = "disabled";
- 		};
- 
-+		can3: can@40003400 {
-+			compatible = "st,stm32f4-bxcan";
-+			reg = <0x40003400 0x200>;
-+			interrupts = <104>, <105>, <106>, <107>;
-+			interrupt-names = "tx", "rx0", "rx1", "sce";
-+			resets = <&rcc STM32F7_APB1_RESET(CAN3)>;
-+			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
-+			st,gcan = <&gcan3>;
-+			status = "disabled";
-+		};
-+
-+		gcan3: gcan@40003600 {
-+			compatible = "st,stm32f4-gcan", "syscon";
-+			reg = <0x40003600 0x200>;
-+			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN3)>;
-+		};
-+
- 		usart2: serial@40004400 {
- 			compatible = "st,stm32f7-uart";
- 			reg = <0x40004400 0x400>;
-@@ -337,6 +354,36 @@ i2c4: i2c@40006000 {
- 			status = "disabled";
- 		};
- 
-+		can1: can@40006400 {
-+			compatible = "st,stm32f4-bxcan";
-+			reg = <0x40006400 0x200>;
-+			interrupts = <19>, <20>, <21>, <22>;
-+			interrupt-names = "tx", "rx0", "rx1", "sce";
-+			resets = <&rcc STM32F7_APB1_RESET(CAN1)>;
-+			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
-+			st,can-primary;
-+			st,gcan = <&gcan1>;
-+			status = "disabled";
-+		};
-+
-+		gcan1: gcan@40006600 {
-+			compatible = "st,stm32f4-gcan", "syscon";
-+			reg = <0x40006600 0x200>;
-+			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN1)>;
-+		};
-+
-+		can2: can@40006800 {
-+			compatible = "st,stm32f4-bxcan";
-+			reg = <0x40006800 0x200>;
-+			interrupts = <63>, <64>, <65>, <66>;
-+			interrupt-names = "tx", "rx0", "rx1", "sce";
-+			resets = <&rcc STM32F7_APB1_RESET(CAN2)>;
-+			clocks = <&rcc 0 STM32F7_APB1_CLOCK(CAN2)>;
-+			st,can-secondary;
-+			st,gcan = <&gcan1>;
-+			status = "disabled";
-+		};
-+
- 		cec: cec@40006c00 {
- 			compatible = "st,stm32-cec";
- 			reg = <0x40006C00 0x400>;
--- 
-2.32.0
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
