@@ -2,119 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604EA6F0791
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E786F079D
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 16:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244087AbjD0OfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 10:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S243981AbjD0OiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 10:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244062AbjD0OfL (ORCPT
+        with ESMTP id S243276AbjD0OiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:35:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2AB133;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-24b9e5a9a68so3668319a91.3;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682606110; x=1685198110;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nhLUOg/O0ErdhjEBLThxBOr1HWHr6gY9gruopyLBAXY=;
-        b=a+LN2y+Eccy1++eyl5EldZerqR7ygJorniBBeyL6EnKP6gSZaPQAscgd7gRE9DaIiN
-         IF8EpTQszUjaWyy3JSzC4KnnqF+/Q1gmor+3R5CqXTS4fUXsfVvjyX7PaFg4LW3p36+l
-         0aUTAl3pPXRIRwYfVLbsQDt6wnj1mteP0XUjiR/2oEgCyuYLVL+KURzwUmPdXtWyCq2K
-         ei61aAEugueW2XzY/GlFTrO0hTkOa87m2bD0psyFpRyvotO2Y785zUljzvCwOX7Idi0Q
-         40TFlN20wUoZCkLi7/jcUZq1KfDvNPyfBEI+DzhM6KABCIFZKHnWPXZTq1rwGmWlZTNs
-         XUWA==
+        Thu, 27 Apr 2023 10:38:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F423F3C29
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682606244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P+bc7ZuC8G9X6V5Pyx75I64zhOn5ekB770BG95AHrN0=;
+        b=Np+xfUz84d0s0i5jGaMf/uIZV5hlXe8YKoHqlXqiCrAHLfYRqEFBlpZdPkhQkTW0x7YuhT
+        1iOeevhXrqi+el20rjcP2aFk8OzZ7ThQHXv/XNG0QZ3f2yW2i/hESU1wh29gDSDcyOrFMP
+        0L81pEtVZFKNMhr7v9yRbURl+hsJrnI=
+Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
+ [209.85.217.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-460-JYYJ_BBONRGyPw0F1WGp3g-1; Thu, 27 Apr 2023 10:36:59 -0400
+X-MC-Unique: JYYJ_BBONRGyPw0F1WGp3g-1
+Received: by mail-vs1-f70.google.com with SMTP id ada2fe7eead31-42ff5f5c5daso143214137.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 07:36:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682606110; x=1685198110;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nhLUOg/O0ErdhjEBLThxBOr1HWHr6gY9gruopyLBAXY=;
-        b=UJjlr8di+MiNWao+54JlLjqWe2zHwwJVj6jlY07SvFgDzlIo7vi0n8xl4gRs/v6hl6
-         ZoC5O4dVYfUtx10FyTIkBEvWopQ1R64PiBuPoPDXdB5sU4XX2as7vii8fC4RPharVyFA
-         XHbe5K5b4F/QwwKANygNpB7QU61wkwIc+sw36k0pDsi8K1UJamKByKDMe0o9aN78jKI9
-         HK06naUWB38W6zFVXjZwL5CHA4fDsAjLlzpBauR+G+jA15/MWYApO1743j6HFZe/Y466
-         gS/6Ax8BZlcMrtQftUAwwiCdwnu+uJuo2Zi0Ht3257sqLkZOMbTfjgyNxNd9nKPHyrf/
-         K14Q==
-X-Gm-Message-State: AC+VfDz08mqyVHWPhEnx0tLD/etWQ/V3xUvhZU3vD4p66VG5p9OsJaeO
-        zpC5pXxZ/nTLTSQZ1WfQ8FLD+G7JzIE=
-X-Google-Smtp-Source: ACHHUZ4bkFOW4nTAq8dOr8kuMNLc4Ejdgh+ck3hGHyRf4jbfV3DPjWOw7pUZ7hLAQhP5wXhtPQMF1w==
-X-Received: by 2002:a17:90a:5d0e:b0:247:a68d:7f22 with SMTP id s14-20020a17090a5d0e00b00247a68d7f22mr2278984pji.4.1682606110033;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gd12-20020a17090b0fcc00b00246578736bbsm11501537pjb.8.2023.04.27.07.35.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 07:35:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05d08707-520f-9b94-81cf-a6a8d4c5386c@roeck-us.net>
-Date:   Thu, 27 Apr 2023 07:35:08 -0700
+        d=1e100.net; s=20221208; t=1682606208; x=1685198208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P+bc7ZuC8G9X6V5Pyx75I64zhOn5ekB770BG95AHrN0=;
+        b=Xj2YvEVbxG+N0Wxg+APXVND9Q+dVvCa77YyeMprzC9CCVfQCOXF0j6ZBJiWn3Y4jOr
+         TsQ2pQKJX+SSk3ODB0696R0IOYiQwDpknye1kXlYPcxZQMYxwcPe7jq1s2em/7mE1d4Q
+         fqMMOCG+HWpHvnREg9R4xb+u9K9ShfV56cJaIlj6uhIU7rDiswt6cDPCDToODfbV0SbF
+         MTU/hmb9dmWF/5LmOgv6w83nVzGnpsbaxNBB14elcz8QHN4rI+kpBr7M7/sY8PKS1VrL
+         Uv8RVyqPtuy/Aufdsq/OCsAQZKBzYHyufv5+IpX8sZU/ENePEdsN8ELlH3VWBrnvlsv3
+         eIQw==
+X-Gm-Message-State: AC+VfDzbQVlCnyEiPWopSNU5E7lt/BoYj51BrrzGYvsTlovVPCb+KJXs
+        xJ0HNty5EC+XIVN6Heh8uPkzrLUtzePQ/TcWcMtxoiEbRet0zwNfBdhiQecBKGZke/sOevAc1vL
+        U2V96c7to/jr5EdSupV5AAumXznqvFxqoRP1k4vh8
+X-Received: by 2002:a67:cd16:0:b0:42c:599d:f96a with SMTP id u22-20020a67cd16000000b0042c599df96amr919448vsl.0.1682606207809;
+        Thu, 27 Apr 2023 07:36:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ58HGmVOdnmzREy9nBdtSIoSod5J7jyQssPmFiLqufzftlIDgM4+jwwoaJI/AuCnje4qJMYnlgc9cLWHGPGCAQ=
+X-Received: by 2002:a67:cd16:0:b0:42c:599d:f96a with SMTP id
+ u22-20020a67cd16000000b0042c599df96amr919432vsl.0.1682606207540; Thu, 27 Apr
+ 2023 07:36:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: watchdog: pcwd driver updates (was: No subject)
-Content-Language: en-US
-To:     Oliver Neukum <oneukum@suse.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230427133350.31064-1-oneukum@suse.com>
- <a6dd47dd-6dfc-787b-43ed-edda0cc0e51f@roeck-us.net>
- <a0ce066a-fa24-1e56-ade9-22d7cde18c14@suse.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <a0ce066a-fa24-1e56-ade9-22d7cde18c14@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230413062339.2454616-1-fengli@smartx.com> <20230413063317.2455680-1-fengli@smartx.com>
+ <7f553d34-9ada-426c-4847-c7cd1aba64a8@grimberg.me> <E23A9D5C-35CF-412C-AE35-37389242BC71@smartx.com>
+ <03a47920-9165-1d49-1380-fb4c5061df67@grimberg.me> <CAHckoCzBBmn8kCuD+ssRKApvFYNxedj_RkqsvgDis+iwV8g-oA@mail.gmail.com>
+ <c15d89c5-4cc2-68b9-d8fa-6c3a8590cfdf@suse.de>
+In-Reply-To: <c15d89c5-4cc2-68b9-d8fa-6c3a8590cfdf@suse.de>
+From:   Ming Lei <ming.lei@redhat.com>
+Date:   Thu, 27 Apr 2023 22:36:36 +0800
+Message-ID: <CAFj5m9+1VBuDV5HFM3-BiS9T5cxvdB5BuaZOTCYs8uTMxuTzqw@mail.gmail.com>
+Subject: Re: [PATCH] nvme/tcp: Add support to set the tcp worker cpu affinity
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Li Feng <fengli@smartx.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/27/23 07:19, Oliver Neukum wrote:
-> 
-> 
-> On 27.04.23 16:12, Guenter Roeck wrote:
->> Oliver,
->>
->> On 4/27/23 06:33, Oliver Neukum wrote:
->>> This fixes some long standing deficiencies in error handling,
->>> several race conditions and disconnect handling.
->>> Finally a cleanup as we now can get the device easily
->>> from the interface.
->>>
->>
->> This series is a no-go. If you want to improve the driver, please
->> convert it to use the watchdog subsystem API.
->>
->> Please note that the subject of your patches should start with
->> "watchdog: pcwd:"
-> 
-> Hi,
-> 
-> this would be problematic, because I do not have the hardware
-> and given its age I won't. I certainly will break the driver
-> if I do this extensive a change without testing it.
-> 
-> However, as is the driver has obvious issues, which I can fix.
-> We can either do the sensible fixes or let it quietly rot.
-> 
+On Wed, Apr 26, 2023 at 7:34=E2=80=AFPM Hannes Reinecke <hare@suse.de> wrot=
+e:
+>
+> On 4/25/23 10:32, Li Feng wrote:
+> > Hi Sagi,
+> >
+> > On Wed, Apr 19, 2023 at 5:32=E2=80=AFPM Sagi Grimberg <sagi@grimberg.me=
+> wrote:
+> >>
+> >>
+> >>>> Hey Li,
+> >>>>
+> >>>>> The default worker affinity policy is using all online cpus, e.g. f=
+rom 0
+> >>>>> to N-1. However, some cpus are busy for other jobs, then the nvme-t=
+cp will
+> >>>>> have a bad performance.
+> >>>>> This patch adds a module parameter to set the cpu affinity for the =
+nvme-tcp
+> >>>>> socket worker threads.  The parameter is a comma separated list of =
+CPU
+> >>>>> numbers.  The list is parsed and the resulting cpumask is used to s=
+et the
+> >>>>> affinity of the socket worker threads.  If the list is empty or the
+> >>>>> parsing fails, the default affinity is used.
+> >>>>
+> >>>> I can see how this may benefit a specific set of workloads, but I ha=
+ve a
+> >>>> few issues with this.
+> >>>>
+> >>>> - This is exposing a user interface for something that is really
+> >>>> internal to the driver.
+> >>>>
+> >>>> - This is something that can be misleading and could be tricky to ge=
+t
+> >>>> right, my concern is that this would only benefit a very niche case.
+> >>> Our storage products needs this feature~
+> >>> If the user doesn=E2=80=99t know what this is, they can keep it defau=
+lt, so I thinks this is
+> >>> not unacceptable.
+> >>
+> >> It doesn't work like that. A user interface is not something exposed t=
+o
+> >> a specific consumer.
+> >>
+> >>>> - If the setting should exist, it should not be global.
+> >>> V2 has fixed it.
+> >>>>
+> >>>> - I prefer not to introduce new modparams.
+> >>>>
+> >>>> - I'd prefer to find a way to support your use-case without introduc=
+ing
+> >>>> a config knob for it.
+> >>>>
+> >>> I=E2=80=99m looking forward to it.
+> >>
+> >> If you change queue_work_on to queue_work, ignoring the io_cpu, does i=
+t
+> >> address your problem?
+> > Sorry for the late response, I just got my machine back.
+> > Replace the queue_work_on to queue_work, looks like it has a little
+> > good performance.
+> > The  busy worker is `kworker/56:1H+nvme_tcp_wq`, and fio binds to
+> > 90('cpus_allowed=3D90'),
+> > I don't know why the worker 56 is selected.
+> > The performance of 256k read up from 1.15GB/s to 1.35GB/s.
+> >
+> >>
+> >> Not saying that this should be a solution though.
+> >>
+> >> How many queues does your controller support that you happen to use
+> >> queue 0 ?
+> > Our controller only support one io queue currently.
+>
+> Ouch.
+> Remember, NVMe gets most of the performance improvements by using
+> several queues, and be able to bind the queues to cpu sets.
+> Exposing just one queue will be invalidating any assumptions we do,
+> and trying to improve interrupt steering won't work anyway.
+>
+> I sincerely doubt we should try to 'optimize' for this rather peculiar
+> setup.
 
-Several of those issues would be solved by using the watchdog subsystem.
+Queue isn't free, and it does consume both host and device resources,
+especially blk-mq takes static mapping.
 
-I am not going to review patches for watchdog drivers not using
-the watchdog subsystem. I would suggest to refrain from making changes
-to such drivers, even more so if you don't have the hardware to test
-those changes.
+Also it may depend on how application uses the nvme/tcp, such as,
+io_uring may saturate one device easily in very limited tasks/queues
+(one or two or a little more, depends on the device and driver implementati=
+on)
 
 Thanks,
-Guenter
+Ming
 
