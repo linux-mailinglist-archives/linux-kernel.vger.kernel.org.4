@@ -2,307 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213746F1C47
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495716F1C4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345989AbjD1QJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S1346089AbjD1QJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjD1QJY (ORCPT
+        with ESMTP id S1345696AbjD1QJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:09:24 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5315E4E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:09:22 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-63b70ca0a84so198320b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682698162; x=1685290162;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XcwITyl7B7aWtvTq9Hih72gCunbXi/igXG+go8uAIWM=;
-        b=clUvxnnz45DJ5mgyZGkwZS5xwHT8p+S/sGv1oayYvXCftLvLijJV5iQFS+UgEvM3vZ
-         YWjhSB6GjHorIFW0eXSUITEofCe3wbx2P0AnMtOOEQ5e5I/enD+0q4XUZK50YUCpAN5C
-         iOOok9mC+VcsgEh6EVwFMFdC4COmIcsve1HeL1UUSbGxPki38k7NU6B6cRjS+GXdEMTQ
-         Ppp75qP3R7vmiMNcxV1jpwBdWlAQZZdu2koCrU0OabTrqDNhM1aUHnaBkdL4FteMJgvL
-         7Yz18w4B4/pfrnPxqSwC+dM0cHQh3jg8Kw8mgGXbFJoynQihWpKuYZc7m+eGtHTB+nKI
-         Ps9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682698162; x=1685290162;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XcwITyl7B7aWtvTq9Hih72gCunbXi/igXG+go8uAIWM=;
-        b=RiHbxkjMzdWDxps5vNS20PeDyAnwsbkQZr/ixF0q10aJVTd0p+zVxixDqsBRUC3Vdl
-         7QZ8OD98e50wM7dVGoUq7OUKTHgr588SkSG3m5/V360CEviBhYdHP/7zwQCH1VBUJzOM
-         gDFUo0c709+ehx902jUhWIBjr7d6rB+wkQjai+Rup6WFpa1lPgZAZdAfT7A0tCBOlPG9
-         dzPsGB2fB7uDL5QWj4frE62NejnKYxY2D4WP5XoN7TQCVrJidKduOh1rYkN/0UIxFvjC
-         QvOOhWvLna/pYKYnLZyOKDZcZIVwHMvBmlSGqEQopWWmq8ZF1LSnyi9LgtEnWR83XoVf
-         2IQw==
-X-Gm-Message-State: AC+VfDwi8OfkNpbHd+LPe26qHfNTxHGA+LjGXEI4Dhv7ZONDXfL0uXTw
-        hTFFtx1UsdaG4B0wFYPbxkbNcg==
-X-Google-Smtp-Source: ACHHUZ6y+Wgr5nXQFsXkg8FHV7SvHI8noRtp4AISyA3kcAM85Yi+Qyc09GrqjzLm5YEvSJlgnvFAhQ==
-X-Received: by 2002:a05:6a00:1a92:b0:635:6603:2534 with SMTP id e18-20020a056a001a9200b0063566032534mr7312869pfv.14.1682698162187;
-        Fri, 28 Apr 2023 09:09:22 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id n41-20020a056a000d6900b005e0699464e3sm15343235pfv.206.2023.04.28.09.09.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 09:09:21 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 09:09:21 -0700 (PDT)
-X-Google-Original-Date: Fri, 28 Apr 2023 09:08:32 PDT (-0700)
-Subject: [GIT PULL] RISC-V Patches for the 6.4 Merge Window, Part 1
-CC:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 28 Apr 2023 12:09:41 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348D35261;
+        Fri, 28 Apr 2023 09:09:38 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 645C72B0694E;
+        Fri, 28 Apr 2023 12:09:32 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 28 Apr 2023 12:09:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1682698172; x=
+        1682705372; bh=cbTkCGhDldgonJsiL/EQyO8MV5eih+uB/j3ETloCYi8=; b=U
+        TKTcGQ8yytq19css891tWK51auYev0Reld9bJ2my3BP3Ifw8+k1H1f8i/2a2JcwW
+        4tUKfHWVGOe2XMolnZknhJILbtoA9XhdE7Pz/fuDtvzGQwm5l/ePS4LPlHWCIJ9H
+        igWwwG/T18AJtu6qcnbiJ06P1t4JZTVoKFg0hmp96woab3Wen/tOgb18Slzot/Zs
+        KT6dSF/51ILQfun3/pGQ+5g8RjJO1SswYg+tdzZhQ2vN3lw0b5o9YEU6xymzcVf+
+        xMZNDwY7kk7JA+ml7SgZn+Ls05W1+MmnllgCx8xaVgalQNH+nwTeqDq+mIflZwaI
+        PGzKAOeMLzsosAbl99HUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682698172; x=1682705372; bh=cbTkCGhDldgon
+        JsiL/EQyO8MV5eih+uB/j3ETloCYi8=; b=KwoQuMAh1OWYUsQgYguWDapvbenN+
+        NPb1xxRBlTpeCEUB06Fmt1l8S5j051HrQN0bMWCA30PS/5c5y6x+JicySX2X1SML
+        nXjP2gqaVmpN3OHeFX19ZG2OfkP9XhkJFeG/8nBNWVJoDeU7Ytd7B21sMbraVKAJ
+        xpzmJviZg59T4n60trgG4+aXTgZUe2cPxyWOtiCPF4+aHa6/RIvDASNVjBxpM6P8
+        Hq5bMIPkTkfjhkXXzjcl3GqKwux6BGiC7FI8UWSAhpctF21GjFfYVyu9rF1zsi5Y
+        4pqy8t80fkltCAvjQr3KCe57qRmNjdnZkrak5kLMp45AvJrtV098LKWLQ==
+X-ME-Sender: <xms:ue9LZHc15g2COXDiT235MxBncV3-Ks6UYezPeeWJYINkFuXpOriZ_A>
+    <xme:ue9LZNPJt4JqPx1KiFB90OqISOQoJatrad8ziZdtMUM0EmMzeLgzASGf6Xn5QHcQF
+    _lVt5AnBdg2sXcV5gY>
+X-ME-Received: <xmr:ue9LZAjZeMdgdQ8y8BQ4sdXsnXbhYZHm7kQq_V2DxC_NU6jZ4RxHw2CuZwjg7GLDGYwtLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedukedgleekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhepgfdtveeugeethfffffeklefgkeelgfekfedt
+    heeileetuefhkeefleduvddtkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:ue9LZI8EtclLzxy3ZY7zPpzbhOAHJaYrRZ46mRD072g_oj5E51VD3Q>
+    <xmx:ue9LZDsvQ_abrLpWkCXZ-AZmB0XFGWRAkxFK35nN-oET8Jv2HlVuXA>
+    <xmx:ue9LZHG6VGyrNfjx6oHcM3AUlmxe7fSmc_YALlcAKXdHteQ9CfbL_Q>
+    <xmx:vO9LZFbSdoe0zavFOra8obUbyloAG3xDqqIz538zJw2J5uFgP_37lwMtrx8>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Apr 2023 12:09:28 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 856481041AE; Fri, 28 Apr 2023 19:09:25 +0300 (+03)
+Date:   Fri, 28 Apr 2023 19:09:25 +0300
+From:   "Kirill A . Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
+References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+ <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
+ <ZEvZtIb2EDb/WudP@nvidia.com>
+ <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
+ <400da248-a14e-46a4-420a-a3e075291085@redhat.com>
+ <077c4b21-8806-455f-be98-d7052a584259@lucifer.local>
+ <62ec50da-5f73-559c-c4b3-bde4eb215e08@redhat.com>
+ <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 1ee7fc3f4d0a93831a20d5566f203d5ad6d44de8:
+On Fri, Apr 28, 2023 at 05:43:52PM +0200, David Hildenbrand wrote:
+> On 28.04.23 17:34, David Hildenbrand wrote:
+> > On 28.04.23 17:33, Lorenzo Stoakes wrote:
+> > > On Fri, Apr 28, 2023 at 05:23:29PM +0200, David Hildenbrand wrote:
+> > > > > > 
+> > > > > > Security is the primary case where we have historically closed uAPI
+> > > > > > items.
+> > > > > 
+> > > > > As this patch
+> > > > > 
+> > > > > 1) Does not tackle GUP-fast
+> > > > > 2) Does not take care of !FOLL_LONGTERM
+> > > > > 
+> > > > > I am not convinced by the security argument in regard to this patch.
+> > > > > 
+> > > > > 
+> > > > > If we want to sells this as a security thing, we have to block it
+> > > > > *completely* and then CC stable.
+> > > > 
+> > > > Regarding GUP-fast, to fix the issue there as well, I guess we could do
+> > > > something similar as I did in gup_must_unshare():
+> > > > 
+> > > > If we're in GUP-fast (no VMA), and want to pin a !anon page writable,
+> > > > fallback to ordinary GUP. IOW, if we don't know, better be safe.
+> > > 
+> > > How do we determine it's non-anon in the first place? The check is on the
+> > > VMA. We could do it by following page tables down to folio and checking
+> > > folio->mapping for PAGE_MAPPING_ANON I suppose?
+> > 
+> > PageAnon(page) can be called from GUP-fast after grabbing a reference.
+> > See gup_must_unshare().
+> 
+> IIRC, PageHuge() can also be called from GUP-fast and could special-case
+> hugetlb eventually, as it's table while we hold a (temporary) reference.
+> Shmem might be not so easy ...
 
-  RISC-V: always select RISCV_ALTERNATIVE for non-xip kernels (2023-03-29 11:48:39 -0700)
+page->mapping->a_ops should be enough to whitelist whatever fs you want.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.4-mw1
-
-for you to fetch changes up to b09313dd2e726fe5e1fa574cd73f5e326c6030a4:
-
-  RISC-V: hwprobe: Explicity check for -1 in vdso init (2023-04-26 08:58:34 -0700)
-
-----------------------------------------------------------------
-RISC-V Patches for the 6.4 Merge Window, Part 1
-
-* Support for runtime detection of the Svnapot extension.
-* Support for Zicboz when clearing pages.
-* We've moved to GENERIC_ENTRY.
-* Support for !MMU on rv32 systems.
-* The linear region is now mapped via huge pages.
-* Support for building relocatable kernels.
-* Support for the hwprobe interface.
-* Various fixes and cleanups throughout the tree.
-
-----------------------------------------------------------------
-I'm definately going to have a second PR for the merge window, there's already
-some fixes on the lists and there's some stragglers that I'm hoping can get
-cleaned up in time.
-
-I have two minor build issues, but otherwise this is clean.  The fixes are on
-the lists
-<https://lore.kernel.org/all/20230428152156.22840-1-palmer@rivosinc.com/>, but
-I don't think they're directly relevant to this (and they're only manifesting
-post-merge).
-
-----------------------------------------------------------------
-Alexandre Ghiti (16):
-      riscv: Get rid of riscv_pfn_base variable
-      riscv: Move the linear mapping creation in its own function
-      riscv: Use PUD/P4D/PGD pages for the linear mapping
-      riscv: Split early and final KASAN population functions
-      riscv: Rework kasan population functions
-      riscv: Move DTB_EARLY_BASE_VA to the kernel address space
-      riscv: Fix EFI stub usage of KASAN instrumented strcmp function
-      riscv: Fix ptdump when KASAN is enabled
-      riscv: Unconditionnally select KASAN_VMALLOC if KASAN
-      riscv: Prepare EFI header for relocatable kernels
-      riscv: Move .rela.dyn outside of init to avoid empty relocations
-      riscv: Introduce CONFIG_RELOCATABLE
-      powerpc: Move script to check relocations at compile time in scripts/
-      riscv: Check relocations at compile time
-      riscv: Use --emit-relocs in order to move .rela.dyn in init
-      riscv: Allow to downgrade paging mode from the command line
-
-Andrew Jones (16):
-      riscv: Clarify RISCV_ALTERNATIVE help text
-      riscv: Rename Kconfig.erratas to Kconfig.errata
-      riscv: alternatives: Remove unnecessary define and unused struct
-      riscv: alternatives: Rename errata_id to patch_id
-      riscv: lib: Include hwcap.h directly
-      riscv: cpufeature: Drop errata_list.h and other unused includes
-      RISC-V: alternatives: Support patching multiple insns in assembly
-      RISC-V: Factor out body of riscv_init_cbom_blocksize loop
-      dt-bindings: riscv: Document cboz-block-size
-      RISC-V: Add Zicboz detection and block size parsing
-      RISC-V: cpufeatures: Put the upper 16 bits of patch ID to work
-      RISC-V: Use Zicboz in clear_page when available
-      RISC-V: KVM: Provide UAPI for Zicboz block size
-      RISC-V: KVM: Expose Zicboz to the guest
-      RISC-V: hwprobe: There can only be one first
-      RISC-V: hwprobe: Explicity check for -1 in vdso init
-
-Björn Töpel (1):
-      riscv: entry: Save a0 prior syscall_enter_from_user_mode()
-
-Conor Dooley (3):
-      RISC-V: convert new selectors of RISCV_ALTERNATIVE to dependencies
-      RISC-V: align ISA extension Kconfig help text with each other
-      dt-bindings: riscv: add sv57 mmu-type
-
-Evan Green (7):
-      RISC-V: Move struct riscv_cpuinfo to new header
-      RISC-V: Add a syscall for HW probing
-      RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
-      RISC-V: hwprobe: Support probing of misaligned access performance
-      selftests: Test the new RISC-V hwprobe interface
-      RISC-V: Add hwprobe vDSO function and data
-      RISC-V: hwprobe: Remove __init on probe_vendor_features()
-
-Guo Ren (3):
-      riscv: ptrace: Remove duplicate operation
-      riscv: entry: Add noinstr to prevent instrumentation inserted
-      riscv: entry: Convert to generic entry
-
-Jesse Taube (1):
-      riscv: configs: Add nommu PHONY defconfig for RV32
-
-Jisheng Zhang (3):
-      riscv: entry: Remove extra level wrappers of trace_hardirqs_{on,off}
-      riscv: entry: Consolidate ret_from_kernel_thread into ret_from_fork
-      riscv: entry: Consolidate general regs saving/restoring
-
-Palmer Dabbelt (10):
-      Merge patch series "riscv, mm: detect svnapot cpu support at runtime"
-      Merge patch series "riscv: alternative/cpufeature related cleanups"
-      Merge patch series "RISC-V: Apply Zicboz to clear_page"
-      Merge patch series "riscv: Add GENERIC_ENTRY support"
-      Merge patch series "Add RISC-V 32 NOMMU support"
-      Merge patch series "RISC-V: Fixes for riscv_has_extension[un]likely()'s alternative dependency"
-      Merge patch series "RISC-V Hardware Probing User Interface"
-      Merge patch series "riscv: Use PUD/P4D/PGD pages for the linear mapping"
-      Merge patch series "RISC-V kasan rework"
-      Merge patch series "Introduce 64b relocatable kernel"
-
-Qinglin Pan (3):
-      riscv: mm: modify pte format for Svnapot
-      riscv: mm: support Svnapot in hugetlb page
-      riscv: mm: support Svnapot in huge vmap
-
-Song Shuai (3):
-      Revert "riscv: Set more data to cacheinfo"
-      riscv: export cpu/freq invariant to scheduler
-      riscv: Kconfig: enable SCHED_MC kconfig
-
-Yimin Gu (1):
-      riscv: Kconfig: Allow RV32 to build with no MMU
-
- Documentation/admin-guide/kernel-parameters.txt    |   5 +-
- Documentation/devicetree/bindings/riscv/cpus.yaml  |   6 +
- Documentation/riscv/hwprobe.rst                    |  86 ++++
- Documentation/riscv/index.rst                      |   1 +
- arch/powerpc/tools/relocs_check.sh                 |  18 +-
- arch/riscv/Kconfig                                 |  78 +++-
- arch/riscv/{Kconfig.erratas => Kconfig.errata}     |   0
- arch/riscv/Makefile                                |  12 +-
- arch/riscv/Makefile.postlink                       |  49 ++
- arch/riscv/boot/Makefile                           |   7 +
- arch/riscv/errata/sifive/errata.c                  |   8 +-
- arch/riscv/errata/thead/errata.c                   |  14 +-
- arch/riscv/include/asm/alternative-macros.h        |  72 +--
- arch/riscv/include/asm/alternative.h               |  20 +-
- arch/riscv/include/asm/asm-prototypes.h            |   2 +
- arch/riscv/include/asm/asm.h                       |  61 +++
- arch/riscv/include/asm/cacheflush.h                |   3 +-
- arch/riscv/include/asm/cpufeature.h                |  23 +
- arch/riscv/include/asm/csr.h                       |   1 -
- arch/riscv/include/asm/entry-common.h              |  11 +
- arch/riscv/include/asm/hugetlb.h                   |  34 +-
- arch/riscv/include/asm/hwcap.h                     |   2 +
- arch/riscv/include/asm/hwprobe.h                   |  13 +
- arch/riscv/include/asm/insn-def.h                  |   4 +
- arch/riscv/include/asm/page.h                      |  30 +-
- arch/riscv/include/asm/pgtable-64.h                |  34 ++
- arch/riscv/include/asm/pgtable.h                   |  39 +-
- arch/riscv/include/asm/ptrace.h                    |  10 +-
- arch/riscv/include/asm/set_memory.h                |   3 +
- arch/riscv/include/asm/stacktrace.h                |   5 +
- arch/riscv/include/asm/syscall.h                   |  25 +
- arch/riscv/include/asm/thread_info.h               |  13 +-
- arch/riscv/include/asm/topology.h                  |  21 +
- arch/riscv/include/asm/vdso/data.h                 |  17 +
- arch/riscv/include/asm/vdso/gettimeofday.h         |   8 +
- arch/riscv/include/asm/vmalloc.h                   |  61 ++-
- arch/riscv/include/uapi/asm/hwprobe.h              |  37 ++
- arch/riscv/include/uapi/asm/kvm.h                  |   2 +
- arch/riscv/include/uapi/asm/unistd.h               |   9 +
- arch/riscv/kernel/Makefile                         |   4 +-
- arch/riscv/kernel/alternative.c                    |  21 +-
- arch/riscv/kernel/cacheinfo.c                      |  66 +--
- arch/riscv/kernel/compat_vdso/Makefile             |   2 +-
- arch/riscv/kernel/cpu.c                            |  10 +-
- arch/riscv/kernel/cpufeature.c                     |  67 ++-
- arch/riscv/kernel/efi-header.S                     |  19 +-
- arch/riscv/kernel/entry.S                          | 321 ++-----------
- arch/riscv/kernel/head.h                           |   1 -
- arch/riscv/kernel/image-vars.h                     |   2 -
- arch/riscv/kernel/mcount-dyn.S                     |  57 +--
- arch/riscv/kernel/pi/Makefile                      |  39 ++
- arch/riscv/kernel/pi/cmdline_early.c               |  62 +++
- arch/riscv/kernel/process.c                        |   5 +-
- arch/riscv/kernel/ptrace.c                         |  44 --
- arch/riscv/kernel/setup.c                          |   2 +-
- arch/riscv/kernel/signal.c                         |  29 +-
- arch/riscv/kernel/smpboot.c                        |   1 +
- arch/riscv/kernel/sys_riscv.c                      | 230 ++++++++-
- arch/riscv/kernel/trace_irq.c                      |  27 --
- arch/riscv/kernel/trace_irq.h                      |  11 -
- arch/riscv/kernel/traps.c                          | 144 +++++-
- arch/riscv/kernel/vdso.c                           |   6 -
- arch/riscv/kernel/vdso/Makefile                    |   4 +
- arch/riscv/kernel/vdso/hwprobe.c                   |  52 +++
- arch/riscv/kernel/vdso/sys_hwprobe.S               |  15 +
- arch/riscv/kernel/vdso/vdso.lds.S                  |   3 +
- arch/riscv/kernel/vmlinux.lds.S                    |  35 +-
- arch/riscv/kvm/vcpu.c                              |  11 +
- arch/riscv/lib/Makefile                            |   1 +
- arch/riscv/lib/clear_page.S                        |  74 +++
- arch/riscv/lib/memcpy.S                            |   2 +
- arch/riscv/lib/memmove.S                           |   2 +
- arch/riscv/lib/strcmp.S                            |   3 +-
- arch/riscv/lib/strlen.S                            |   4 +-
- arch/riscv/lib/strncmp.S                           |   3 +-
- arch/riscv/mm/Makefile                             |   4 +
- arch/riscv/mm/cacheflush.c                         |  64 +--
- arch/riscv/mm/fault.c                              |   6 +-
- arch/riscv/mm/hugetlbpage.c                        | 301 ++++++++++++
- arch/riscv/mm/init.c                               | 194 ++++++--
- arch/riscv/mm/kasan_init.c                         | 516 ++++++++++++---------
- arch/riscv/mm/physaddr.c                           |  16 +
- arch/riscv/mm/ptdump.c                             |  24 +-
- arch/riscv/tools/relocs_check.sh                   |  26 ++
- drivers/of/fdt.c                                   |  11 +-
- scripts/relocs_check.sh                            |  20 +
- tools/testing/selftests/Makefile                   |   1 +
- tools/testing/selftests/riscv/Makefile             |  58 +++
- tools/testing/selftests/riscv/hwprobe/Makefile     |  10 +
- tools/testing/selftests/riscv/hwprobe/hwprobe.c    |  90 ++++
- .../testing/selftests/riscv/hwprobe/sys_hwprobe.S  |  12 +
- 91 files changed, 2589 insertions(+), 987 deletions(-)
- create mode 100644 Documentation/riscv/hwprobe.rst
- rename arch/riscv/{Kconfig.erratas => Kconfig.errata} (100%)
- create mode 100644 arch/riscv/Makefile.postlink
- create mode 100644 arch/riscv/include/asm/cpufeature.h
- create mode 100644 arch/riscv/include/asm/entry-common.h
- create mode 100644 arch/riscv/include/asm/hwprobe.h
- create mode 100644 arch/riscv/include/asm/topology.h
- create mode 100644 arch/riscv/include/asm/vdso/data.h
- create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
- create mode 100644 arch/riscv/kernel/pi/Makefile
- create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
- delete mode 100644 arch/riscv/kernel/trace_irq.c
- delete mode 100644 arch/riscv/kernel/trace_irq.h
- create mode 100644 arch/riscv/kernel/vdso/hwprobe.c
- create mode 100644 arch/riscv/kernel/vdso/sys_hwprobe.S
- create mode 100644 arch/riscv/lib/clear_page.S
- create mode 100755 arch/riscv/tools/relocs_check.sh
- create mode 100755 scripts/relocs_check.sh
- create mode 100644 tools/testing/selftests/riscv/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
- create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
- create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
