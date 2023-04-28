@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFEE6F166A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6C96F167F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345763AbjD1LKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S231589AbjD1LWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345700AbjD1LKw (ORCPT
+        with ESMTP id S230435AbjD1LWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:10:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C75D44B6;
-        Fri, 28 Apr 2023 04:10:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9305642E2;
-        Fri, 28 Apr 2023 11:10:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2E4C433A8;
-        Fri, 28 Apr 2023 11:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682680248;
-        bh=MgfPMfiKjI0tNegcTrXd2ZOXVx68i9D4rnYhMXY2OtQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=niadc1KLJ5jjSy0V0s6jR4CaWAsX8tkW40W47LEu5MIozrpJDPc6i0Bk3UfrXFU7M
-         PMBJLMGq1KJJKyhZchZOrcVhuZKTLZSLRgMjj5Rlfd2JkLGde8S/KyqJ3n20J+0T1M
-         RyTdZoiWogIYYfh2reQi5ZTGhPUGFbWph2Pvz33D/HbBQf9KeL2Q4GaO2VKoVjOWqI
-         W8LqGxtaYWQA0yAwNReSVWBbQq54BbeV8m//2LoLXfchQleIz2SQUwpwDrXmMhvYOw
-         vbJH81jhp/7aZF4V9Xzuui2E1GGxemmZPm47ROf0IBHloCDg1lgbCk/i00fAFiC7Ka
-         f5tYb9qf+C6/Q==
-Message-ID: <3328747ef568361bd3bd5f053ec9a2c27e7f9c48.camel@kernel.org>
-Subject: Re: [PATCH] ceph: Reorder fields in 'struct ceph_snapid_map'
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Xiubo Li <xiubli@redhat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        ceph-devel@vger.kernel.org
-Date:   Fri, 28 Apr 2023 07:10:46 -0400
-In-Reply-To: <f6b869ea-979c-efda-d454-8dc688d1986b@redhat.com>
-References: <559c9a70419846e0cfc319505d3d5fffd45b3358.1682618727.git.christophe.jaillet@wanadoo.fr>
-         <f6b869ea-979c-efda-d454-8dc688d1986b@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Fri, 28 Apr 2023 07:22:21 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A21F30C2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:22:19 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f09b4a156eso66059295e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:22:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1682680938; x=1685272938;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zJgSTzgu9YtliSGCYghLe0j5dXYcDcHesNq23aEuzOY=;
+        b=JzUGb2nbnQdOEy+fCVy1d07ZMcLNqZcFnocE+qzql7z90iPjdixMT6M4TPzfRwLFwj
+         4Fyqm5ke4Jk8pGzUBoA5KlH9jafEccsaekRgtzViTM8/v2fjj2ApEQdz0kOjx29YDiFf
+         VLQFJu4z1dN2zyik04Hg5s5rYgl7Q2py/yW3yrB2An+MNwFmz6rRK0LC/m+muXZBxBck
+         xlCbtJD8HiKGpWHCsnKdpYlZuoVefRHQlGQn520OE7NmX0OI+tCyNnVXEkd8Mprves0v
+         hfqJFT3y6RAyCMsuSrDEyPsP3zaFQ9TEPG8pJ62+oQZ3ZdwcYS4dKrTunmcRkgPWlFu0
+         FlTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682680938; x=1685272938;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zJgSTzgu9YtliSGCYghLe0j5dXYcDcHesNq23aEuzOY=;
+        b=J6EOPqzRQiIq5Ah6GLy6K+ZWErJtAAOHbrlV78o0Tac8C7/HIAdqdma5rm8MhJxH7K
+         vbSnApnjR18kzVGKLso5hAgn2xlkcaW1VFOZk74BpJU9cKxYmMP8Vchxc0QA42YGlrKh
+         Ud6NkBAX326RtmZjHNWv3ONI7Hldy/d8za6hCfkAbYcTwbYWwDHQs6XugAi5Tha+TWk9
+         5XrzBHy93Yy3Es11o7F9YBlRdhP+iYMRzxs9oapu+CSijDiksNb4aBjZA3bqLLble5tX
+         QEB/bTR1q1LY2+EZLLMvdTIwNLZfTOnCpFQuYWQU8Fgx1+Codt5ITl3ROYQ+mq6XS9Yp
+         +0xA==
+X-Gm-Message-State: AC+VfDwD/ock03IGsAIA3u7b5gCL/yAXv/OqwxhoSn7SDSqamf+jWiph
+        8cdz+GIY6nDyYA0GUpiSSrxD4Q==
+X-Google-Smtp-Source: ACHHUZ46FKfHw7Wbog8Bl1L81IHin1MlXlUbC8ahQWZEJ0IXJgskxA8IQzIeuUmU0e33kSivR5zKWA==
+X-Received: by 2002:a5d:56c6:0:b0:2ee:da1c:381a with SMTP id m6-20020a5d56c6000000b002eeda1c381amr3549607wrw.69.1682680938097;
+        Fri, 28 Apr 2023 04:22:18 -0700 (PDT)
+Received: from airbuntu ([104.132.45.110])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056000008200b002f53fa16239sm20851726wrx.103.2023.04.28.04.22.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 04:22:17 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 12:22:16 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     Xuewen Yan <xuewen.yan94@gmail.com>,
+        Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
+        zhiguo.niu@uniissoc.com
+Subject: Re: [PATCH 2/6] sched/cpuset: Bring back cpuset_mutex
+Message-ID: <20230428112216.cftofdixwbl4hufm@airbuntu>
+References: <20230329125558.255239-1-juri.lelli@redhat.com>
+ <20230329125558.255239-3-juri.lelli@redhat.com>
+ <fa585497-5c6d-f0ed-bdda-c71a81d315ad@redhat.com>
+ <ZEkRq9iGkYP/8T5w@localhost.localdomain>
+ <d53a8af3-46e7-fe6e-5cdd-0421796f80d2@redhat.com>
+ <CAB8ipk-ns=d+jNkKi1sjkSQmQidziCj34COkHZt6ZkRiG47HHA@mail.gmail.com>
+ <ZEoN1wq47uhE201p@localhost.localdomain>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZEoN1wq47uhE201p@localhost.localdomain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-04-28 at 08:53 +0800, Xiubo Li wrote:
-> On 4/28/23 02:05, Christophe JAILLET wrote:
-> > Group some variables based on their sizes to reduce holes.
-> > On x86_64, this shrinks the size of 'struct ceph_snapid_map' from 72 to=
- 64
-> > bytes.
-> >=20
-> > When such a structure is allocated, because of the way memory allocatio=
-n
-> > works, when 72 bytes were requested, 96 bytes were allocated.
-> >=20
-> > So, on x86_64, this change saves 32 bytes per allocation and has the
-> > structure fit in a single cacheline.
-> >=20
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
-> > Using pahole
-> >=20
-> > Before:
-> > =3D=3D=3D=3D=3D=3D
-> > struct ceph_snapid_map {
-> > 	struct rb_node             node __attribute__((__aligned__(8))); /*   =
-  0    24 */
-> > 	struct list_head           lru;                  /*    24    16 */
-> > 	atomic_t                   ref;                  /*    40     4 */
-> >=20
-> > 	/* XXX 4 bytes hole, try to pack */
-> >=20
-> > 	u64                        snap;                 /*    48     8 */
-> > 	dev_t                      dev;                  /*    56     4 */
-> >=20
-> > 	/* XXX 4 bytes hole, try to pack */
-> >=20
-> > 	/* --- cacheline 1 boundary (64 bytes) --- */
-> > 	long unsigned int          last_used;            /*    64     8 */
-> >=20
-> > 	/* size: 72, cachelines: 2, members: 6 */
-> > 	/* sum members: 64, holes: 2, sum holes: 8 */
-> > 	/* forced alignments: 1 */
-> > 	/* last cacheline: 8 bytes */
-> > } __attribute__((__aligned__(8)));
-> > ---
-> >   fs/ceph/mds_client.h | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-> > index 0598faa50e2e..2328dbda5ab6 100644
-> > --- a/fs/ceph/mds_client.h
-> > +++ b/fs/ceph/mds_client.h
-> > @@ -355,8 +355,8 @@ struct ceph_snapid_map {
-> >   	struct rb_node node;
-> >   	struct list_head lru;
-> >   	atomic_t ref;
-> > -	u64 snap;
-> >   	dev_t dev;
-> > +	u64 snap;
-> >   	unsigned long last_used;
-> >   };
-> >  =20
->=20
-> This looks good to me. Thanks.
->=20
-> Will apply it to the testing branch.
->=20
-> - Xiubo
->=20
->=20
->=20
+On 04/27/23 07:53, Juri Lelli wrote:
+> Hi,
+> 
+> On 27/04/23 10:58, Xuewen Yan wrote:
+> > HI Juri,
+> > 
+> > Would this patch be merged tobe stable-rc? In kernel5.15, we also find
+> > that the rwsem would be blocked for a long  time, when we change the
+> > task's cpuset cgroup.
+> > And when we revert to the mutex, the delay would disappear.
+> 
+> Honestly, I'm not sure. This change is mostly improving performance, but
+> it is also true that it's fixing some priority inheritance corner cases.
+> So, I'm not sure it qualifies for stable, but it would be probably good to
+> have it there.
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+I'm under the impression we need the whole lot back to stable, no? I'm not sure
+if we can decouple this patch from the rest.
+
+FWIW, I did my testing on 5.15 - so we can definitely help with the backport
+and testing for 5.15 and 5.10.
+
+
+Thanks!
+
+--
+Qais Yousef
