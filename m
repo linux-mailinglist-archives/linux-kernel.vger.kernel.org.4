@@ -2,139 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08926F101D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D8D6F1025
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbjD1ByL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 21:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S1344746AbjD1CAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 22:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjD1ByI (ORCPT
+        with ESMTP id S1344379AbjD1CAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:54:08 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2055.outbound.protection.outlook.com [40.92.99.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7BB3A82;
-        Thu, 27 Apr 2023 18:54:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kE+9ZNK9blFEVD3ZKRqk1uxcX4GmXVcPZPjNsDF7PIaf1a1d+9Yd/54JiqU0fUvyyWDfIXFiqovqfel1jz8Rli9iue2JYKxGbAx5TU5k4xvQwCi/2fVHxxydWEYyxU7166JuHm7Cb19QlaxhdvZOetUROYEUH4MhCk+L/aWpdbSlwaWKESHtOpqYp6VCy165tqzD9M59iTQmclal+W/v4eXtYKf16TWcatJqFuiG3cqVOsi/gyrBJxkNSS4WbZcWToR+SqmBjDCSUcLcEH7b+YGYltC7a+Zjh5f9KU5gYAW2Y1Wf0k8Px8CdL0ykw46a0LmahFzOyLRNuQQIN7BCEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s/DhCtu2AFYl2BEFvjDodkAlcnabRIvAr6fPMABjVyk=;
- b=S0wITDO8qhEsojDWnJ3hvE665fQ9986tmO9El3zLU4VVbXAs4qgHursWywzPPCcWj1IABgcTwZgOffp84uNMq9B5U+Tj3rRCOT2PJI3SkHinKLfDg+UiT2pokrXErxbyem0vLIB7hGfYmS5oKTQZBmQXItJv91VtvusVo99gYzR72OgHaaGDQDfO64MW9rjwCE0fGQGUlB51hWbhwsGUhun4iZUtuw5NQjzWe+MyGaYR3pWJtOsA95xLt7BwZWVVfHSCsVp9Q7uSlWkgH1bDKqEv7Yes+N/Bo1q6NQ4YmU+zC05ezAtN0NBh7buhAiPk/8ZRGQjlvSocD2h/lhd0Ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s/DhCtu2AFYl2BEFvjDodkAlcnabRIvAr6fPMABjVyk=;
- b=ZcE4PKBkq34LpgVY6VwEWOQvyrvpXWAohFgTSNhc7b3heRyqy+6FcJotNx3M6h5Yr5GDJxsflzE5GHltyCJuzaw7tTaxMmekh8JSqNbd9DiWqnyhpl8wY36KkbieHU7hB8fOuUh/CJbqPy154k1TNu6uMQEfDm97/2iIfw3V6SgMPWJYvOXYoV5KjfBSOz1u/3uovivzjrj9rx8NXCJGf1DLjz0MSxNs7hPUubS3zJ3PiBypzkKbuDj+BoALKKCFpHD0+/kgDIUZ0CGGx5vpzXedAaz2CnyDfF20e9IbmbrDtBCdJopZX69j1jozlGDACsLGrwxGtiDN583+s+8VFw==
-Received: from OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:ca::9) by
- TYCP286MB1730.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:187::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.23; Fri, 28 Apr 2023 01:54:04 +0000
-Received: from OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ea75:e5e5:1236:341d]) by OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM
- ([fe80::ea75:e5e5:1236:341d%4]) with mapi id 15.20.6340.023; Fri, 28 Apr 2023
- 01:54:03 +0000
-Message-ID: <OS0P286MB06283D2E74F02D7C541E46D79E6B9@OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM>
-Date:   Fri, 28 Apr 2023 09:53:58 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-core: Simplies if condition
-To:     dlemoal@kernel.org
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yahu Gao <gaoyh12@lenovo.com>, Jiwei Sun <sunjw10@lenovo.com>
-References: <20230422121415.6276-1-yahu.gao@outlook.com>
- <OS3P286MB0632739A614E451725FF697D9E619@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
-From:   Yahu Gao <yahu.gao@outlook.com>
-In-Reply-To: <OS3P286MB0632739A614E451725FF697D9E619@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [e/IRxFVxlL5/S3MRPT58EjVmvI4FyFO5]
-X-ClientProxiedBy: SG2P153CA0027.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::14)
- To OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:ca::9)
-X-Microsoft-Original-Message-ID: <f314efd8-a5ca-cc3c-9d3f-ff75798ce4ec@outlook.com>
+        Thu, 27 Apr 2023 22:00:19 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3006A3A82
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:00:17 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-440375334c1so3631433e0c.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1682647216; x=1685239216;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Bu06xaZjqwdhavFM+nCEMDPQNzUKIISgFnYAUBIAag=;
+        b=h6oFHljrG+HXxPmuqq2stsVnzZgqSPxUe26OkBrjJGIzolHbcrwCzznfpD8JNP0X1V
+         spbVfzVFjDvR7S9HlGCRX4GesPpcLHrdYOmTgRlF2ryVQPVwrLqn/JAqpH6dwKw4DMTZ
+         Mrtm/GkHlmjehI9V6YrBDNVzc5cjBIYZ+Ibg/6Hx8r/352f4zzDozQMbzbyW/BV+zdAX
+         pdoVs6EOkNJgxjUb7Lr78elGeTxCa4s68Hp657YqlLLfpKJHypL4r20qUS2qh3nwEF38
+         w20T2pkVHcO0r9TnEbTECCHvra6OxPelXVr2YQkIt4IGdKzR/3Bct6PRFHAO/yUpghYl
+         yIWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682647216; x=1685239216;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4Bu06xaZjqwdhavFM+nCEMDPQNzUKIISgFnYAUBIAag=;
+        b=icCO2KjkBXkUk6hMPi61LnTggMytSdbD/CGdOFf9t9XVz2FwueklfLPUlUyFY/feRg
+         Metcc7faBlrxgcM3rogCutgEhK7RbSSqxHzsmq7Jy0SSXGQFsWz2Vhj2Y3eFTrEKTQ+p
+         zTSDO6aP7l9nr19Xj1X+hAQpSNNnPU56cvOYT/ITCtXSFXbnYXI+l6q/CUfPVezZ6Nzl
+         uQkOn6NYYCjLFOuiEuS4DS/L+l6a49XYxZhL05bOxtMSW6LFe46LV+n04O31BcfJM5zc
+         V6o6PP2Pr4ToolWaTPaxWbaNAD9jRUvobr2XWAynqlYtQQMp6zj9UT5JSbPZ4h7MNnDV
+         esfw==
+X-Gm-Message-State: AC+VfDxXaSwmhgr611egveQmPmWcIwWZE2TRNpRFMKlqum0GOpEgU3Km
+        ShaXRqjz3KRWFtRZ0pQ0hw1oCTpV+wKmyW99RYdnXg==
+X-Google-Smtp-Source: ACHHUZ5q50UOPeI0svu3+cdmdaaSAo9Ud0iFTTHsDeVc7WvvOu/Nn3vVEHATa5X99m1ESmYr6ewdb1QJqxLTp/rywBE=
+X-Received: by 2002:a1f:bfd4:0:b0:440:8a24:e716 with SMTP id
+ p203-20020a1fbfd4000000b004408a24e716mr1726465vkf.6.1682647215811; Thu, 27
+ Apr 2023 19:00:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS0P286MB0628:EE_|TYCP286MB1730:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43e23ed0-a34b-416e-5d03-08db478b718c
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l1bu7KU3Jb+AhjraQQf7lU3Bezhzs8+RV+TZBNZ440Mu6keKMKAm9ZLbg3qXDjlYUlQcdWFg0XwYB1turwpdOCDb6shUdhvJv8cN8oMYw6kzFXtSMCDtGnuiNWgEtTHBeU7Txxk6StEZVXxz3J6Rvr+wje6rgklIBTNcRZNrQE4lior7t3X3r6dJuYJ2U6HEuxHUdG7Et78QIqcCHx4ErWD0dLDeHK9wssaJt3N73TIBdURSEx5pQpmZkT95BpDG5vd6buLmoUCWpBjZVcfy6PMb1HymhnkkXw2l9RTnN285uEK+CPraBW4zAD5XS8vgHzg3kJLoQauNSg/+ovvEHOQleO0UgbLuzj53DJZF+cBV7ZK8dIYuvDARg1p4dqg5Xe/KY+qEVhyT1R7eyl0egqGDBcm4GdubJBDvXzmugw+XCo5kph+YxZDNOsgdiFMS+KRZrDnRn9vcerBF0okrTRYo5Dwow2fuOAgkwpjMHyB1w60P+4qMUB67TOYlZp6QmODLdpZX2N4jKBJ7+RgBlDuY5uJ6eiqkngsGJ/yfWWbtPVr2R2wxexESM/CEaM8Y/lPLzWhVabiI0FslXboav6lsDMja/qVHLLwngZTeT725EoWeBedXPA+5l536cF7h
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDdWV3dMYUNIaU50UVVlVVhGN2x5MlF6dmZNWEptcDNsQmlQeEJvWm42bFhu?=
- =?utf-8?B?bkxNSzhjd0RVaFB0Vy9vK1d4Tnk1aVo5TCtFSUcwbG50ZDJKQXBjUTNuU2pr?=
- =?utf-8?B?QlZMeWFKdEppSUt1a1lSbElOendjaWZySkRjVjNWbTlpN0tFOHJrUU45dUhi?=
- =?utf-8?B?d2k0bnU5RkpnVmZRTlo2RVBXTG5RZ3d6K2pFc2c3SExETHRqYkp5T2lpS0p1?=
- =?utf-8?B?QTVlNVhmb09ad2owM1JkZVU4U0duQkYvaVNsL2g2YXRUcXV0bXMwaEtGTFZx?=
- =?utf-8?B?QmRjaWpaUDdxVWFaYTFkN0xUazh0SEFBTHJlMFZ2UnZzVnphV1RCcGtsOWNr?=
- =?utf-8?B?ajZEVFhyaUpna2RaZDA5dUEzSUIzTWYyRzFUK21aWllBNFJ3SkdoczZJNWlw?=
- =?utf-8?B?VXI0S3lEeU1RWWRkdjVzYXdaKzBFU2xXK2IyTU9lMEFhcERRWm9iOXg2VVhk?=
- =?utf-8?B?TTZweWpQajVrYXhQU21sU2Iyb0pZYkF2SVJqdFF0MWJwQUdva1dnVjdNYXZo?=
- =?utf-8?B?Rk1WbDA1RTQ4SDhPWUt0Y0ZLVnE2QVN1TStCVVhUTU9jZyt2TDF2ODNTbG5L?=
- =?utf-8?B?T0FSQjRhT3JodHBKSlVxUklKNFRPRHA4RmtIUUN4cUlaTkQ5N2dlZ1drSDFS?=
- =?utf-8?B?V1BERlFlaWJZL3h3SzhTY1VuMy9QdFdBRGozK0VpUUhWRVVuOHFTaG5yWjF5?=
- =?utf-8?B?MDhaRzFMTVN4Y1Z1U0RrYXozY1Z5K0V1LzBNMEphY0RZSnRVZytWVUthQXF1?=
- =?utf-8?B?azFZaTZsNDlocml2OVZpcms5Z0s4TFJXcC82Zy8ybml4VlVRVHFIajA4bC9E?=
- =?utf-8?B?OGNqTkU3T2JJZFFYN0dTQkJSK2hWTFFVZVU3eTBsc1dxSDdhYkJUZTc4M096?=
- =?utf-8?B?VFdyeHR3bXdINFZxWk1idEQ1Z3oybXl6VStLOWRYblg2aC9Rc0x3MGxHNysx?=
- =?utf-8?B?a2dpYXJNK3RWVnpTTUo3RDFJbkNMVG5maXZ3Z2hpNG5XWjVmYnM2SXYwRUJj?=
- =?utf-8?B?VjNkK3dmQzBCRExhQk9BdzNoZFlpOTg3a2EzNHZqVzZpc0d6QlhCY0Z3Z0ox?=
- =?utf-8?B?QWd2NGMyeTVOanRZL3M5d1lwTFVzcE0wT1ZhaS94aEw3LzdUY3ZXdUdIVTIz?=
- =?utf-8?B?Q3Q3MUtON3MzSnMrOFdVQkFiNzRuRFZJVW5DYXVFcUp2V2tWbDVvSDczU2FZ?=
- =?utf-8?B?TTRaUWZmTSt0S3gzYjh4YTJNV0ZMUm9WVytURHZ2Uzl5RHAzT25mVjkwOG1s?=
- =?utf-8?B?OEFzMGlkL3J5Q0FlcmRtcGNJTlFYUWwrc20rNUFvNkhzbTBIREYzT2RqdjZw?=
- =?utf-8?B?OERWN2djbFlnV2wvcVhOaEFjZWp1cWdxQXNiTjRYbFhOVncxTXRJYi84V25s?=
- =?utf-8?B?aCtkUXhoMWJTLzhaREgxLzhKNnhWSURjOEZiQzFUY0tCaTVoSGcwTElTOUNY?=
- =?utf-8?B?UFkvMk0zRlpScDFPQ044VGdmdU5PZnVzY3k5R28xNy95ZjZIUTNMRjZxTHZH?=
- =?utf-8?B?K2ZKRE5xbjJ4WWVIQUZzZVl4bHNIS0tXb3BmYjF2enExb2paZi9pbGY2U1Jk?=
- =?utf-8?B?SFN4T2pORjM0ZjA1TERZNXFSQWtwUkQ1Y0w3OGJKMndYZ2JFYjlkSndqWUFs?=
- =?utf-8?B?c2pQS1JKYWg0L1d2cGY4aWtmb2pnT0E9PQ==?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43e23ed0-a34b-416e-5d03-08db478b718c
-X-MS-Exchange-CrossTenant-AuthSource: OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 01:54:03.9153
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB1730
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230425102250.3847395-1-mie@igel.co.jp> <CACGkMEumt4p7jU+H+T-b9My0buhdS8a-1GCSnWjnCwMAM=wo1Q@mail.gmail.com>
+In-Reply-To: <CACGkMEumt4p7jU+H+T-b9My0buhdS8a-1GCSnWjnCwMAM=wo1Q@mail.gmail.com>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Fri, 28 Apr 2023 11:00:04 +0900
+Message-ID: <CANXvt5pn5uFxp1RYX+UQuVq=RyTjVZHBb-LgipFDN4L-0Z6ekg@mail.gmail.com>
+Subject: Re: [PATCH v3] vringh: IOMEM support
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping ...
-
-在 2023/4/22 20:14, Yahu Gao 写道:
-> From: Yahu Gao <gaoyh12@lenovo.com>
+2023=E5=B9=B44=E6=9C=8826=E6=97=A5(=E6=B0=B4) 15:10 Jason Wang <jasowang@re=
+dhat.com>:
 >
-> Replace conditions of avoid issuing [P]IDENTIFY to PMP.
+> On Tue, Apr 25, 2023 at 6:23=E2=80=AFPM Shunsuke Mie <mie@igel.co.jp> wro=
+te:
+> >
+> > Introduce a new memory accessor for vringh. It is able to use vringh to
+> > virtio rings located on io-memory region.
 >
-> Reviewed-by: Jiwei Sun <sunjw10@lenovo.com>
-> Signed-off-by: Yahu Gao <gaoyh12@lenovo.com>
+> Is there a user for this? It would be better if you can describe the
+> use cases for this. Maybe you can post the user or at least a link to
+> the git as a reference.
+This is for the following patch.
+https://lore.kernel.org/virtualization/20230427175244.GA261197@bhelgaas/T/#=
+m30a258509caca2413a21f9a9ce0f5fd31d3bd006
+I'd like to add a description of how this feature will be used in the
+next version.
+> >
+> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> > ---
+> >
+> > Changes from v2: https://lore.kernel.org/virtualization/20230202090934.=
+549556-1-mie@igel.co.jp/
+> > - Focus on an adding io memory APIs
+> > Remove vringh API unification and some fixes.
+> > - Rebase on next-20230414
+> >
+> >  drivers/vhost/Kconfig  |   6 ++
+> >  drivers/vhost/vringh.c | 129 +++++++++++++++++++++++++++++++++++++++++
+> >  include/linux/vringh.h |  33 +++++++++++
+> >  3 files changed, 168 insertions(+)
+> >
+> > diff --git a/drivers/vhost/Kconfig b/drivers/vhost/Kconfig
+> > index b455d9ab6f3d..4b0dbb4a8ab3 100644
+> > --- a/drivers/vhost/Kconfig
+> > +++ b/drivers/vhost/Kconfig
+> > @@ -6,6 +6,12 @@ config VHOST_IOTLB
+> >           This option is selected by any driver which needs to support
+> >           an IOMMU in software.
+> >
+> > +config VHOST_RING_IOMEM
+> > +       tristate
+> > +       select VHOST_IOMEM
+> > +       help
+> > +         This option enables vringh APIs to supports io memory space.
 >
-> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-> index 14c17c3bda4e..53f65d751189 100644
-> --- a/drivers/ata/libata-core.c
-> +++ b/drivers/ata/libata-core.c
-> @@ -3802,11 +3802,7 @@ int ata_dev_revalidate(struct ata_device *dev, unsigned int new_class,
->   		return -ENODEV;
->   
->   	/* fail early if !ATA && !ATAPI to avoid issuing [P]IDENTIFY to PMP */
-> -	if (ata_class_enabled(new_class) &&
-> -	    new_class != ATA_DEV_ATA &&
-> -	    new_class != ATA_DEV_ATAPI &&
-> -	    new_class != ATA_DEV_ZAC &&
-> -	    new_class != ATA_DEV_SEMB) {
-> +	if (new_class == ATA_DEV_PMP) {
->   		ata_dev_info(dev, "class mismatch %u != %u\n",
->   			     dev->class, new_class);
->   		rc = -ENODEV;
+> There's no specific Kconfig for all the existing accessors. Any reason
+> I/O memory is special or do you care about the size of the module?
+I followed the IOTLB that is used for vhost and vringh. However, this code =
+has
+little effect on the code size and dependencies if included, so I
+would like to remove
+the Kconfig.
+> > +
+> >  config VHOST_RING
+> >         tristate
+> >         select VHOST_IOTLB
+> > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> > index 955d938eb663..ce5a88eecc05 100644
+> > --- a/drivers/vhost/vringh.c
+> > +++ b/drivers/vhost/vringh.c
+> > @@ -1604,4 +1604,133 @@ EXPORT_SYMBOL(vringh_need_notify_iotlb);
+> >
+> >  #endif
+> >
+>
+> [...]
+>
+> >
+> > base-commit: d3f2cd24819158bb70701c3549e586f9df9cee67
+> > prerequisite-patch-id: 760abbe8c981c52ccc421b8139e8999ab71619aa
+> > prerequisite-patch-id: 99d8679ab4569545c8af401e84142c66312e953e
+> > prerequisite-patch-id: aca81516aba75b58c8422d37c2dc7db2f61ffe92
+> > prerequisite-patch-id: 3d76136200c4e55ba2c41681325f242859dd6dbd
+> > prerequisite-patch-id: 47a994feb68d95412d81b0fd1fa27bc7ba05ae18
+> > prerequisite-patch-id: a2f7fc3f35358f70b6dad4c919ce293b10295c4f
+> > prerequisite-patch-id: 70e2ee32b945be96a0388f0ff564651ac9335220
+> > prerequisite-patch-id: 2023690f9c47017b56d7f036332a5ca3ece6bde8
+> > prerequisite-patch-id: 211e113fec6c450d13fbdb437ecfad67dec0a157
+> > prerequisite-patch-id: f2bcd3168933886e4cd4c39e47446d1bd7cb2691
+> > prerequisite-patch-id: 37b131560808733a0b8878e85a3d2a46d6ab02ca
+> > prerequisite-patch-id: 79b0219a715cb5ace227d55666d62fdb2dcc6ffe
+> > prerequisite-patch-id: 30f1740cd48a19aa1c3c93e625c740cae2845478
+> > prerequisite-patch-id: 31989e4a521f2fc6f68c4ccdb6960035e87666a7
+> > prerequisite-patch-id: 3948bb3e0c045e2ffff06a714d17bab16c94775d
+> > prerequisite-patch-id: cf28e0115b9111bcb77aa9c710d98b2be93c7e89
+> > prerequisite-patch-id: ebf2349c0ae1296663854eee2da0b43fe8972f9b
+> > prerequisite-patch-id: fc570921d885a2a6000800b4022321e63f1650a5
+> > prerequisite-patch-id: 1fd5219fef17c2bf2d76000207b25aae58c368f3
+> > prerequisite-patch-id: 34e5f078202762fe69df471e97b51b1341cbdfa9
+> > prerequisite-patch-id: 7fa5151b9e0488b48c2b9d1219152cfb047d6586
+> > prerequisite-patch-id: 33cca272767af04ae9abe7af2f6cbb9972cc0b77
+> > prerequisite-patch-id: bb1a6befc899dd97bcd946c2d76ce73675a1fa45
+> > prerequisite-patch-id: 10be04dd92fa451d13676e91d9094b63cd7fbcf8
+> > prerequisite-patch-id: 87b86eb4ce9501bba9c04ec81094ac9202392431
+> > prerequisite-patch-id: a5ced28762bf6bd6419dae0e4413d02ccafd72c2
+> > prerequisite-patch-id: 2db4c9603e00d69bb0184dabcc319e7f74f30305
+> > prerequisite-patch-id: 41933f9d53e5e9e02efd6157b68ee7d92b10cfa2
+> > prerequisite-patch-id: df3295b4cdde3a45eaf4c40047179698a4224d05
+> > prerequisite-patch-id: 9e2fca9ab0ba2b935daa96f1745ff4c909792231
+> > prerequisite-patch-id: 8948378099ba4d61e10a87e617d69ed2fc4104ae
+> > prerequisite-patch-id: 5e7466f3f0d74880d1a574a1bd91b12091dcf3f5
+> > prerequisite-patch-id: 902899e1cd53b7fcc7971f630aed103830fc3e3d
+> > prerequisite-patch-id: 42126b180500f9ff123db78748972c6ece18ac57
+> > prerequisite-patch-id: 5236a03ef574074f3c1009a52612051862b31eff
+> > prerequisite-patch-id: adae1aa80df65bd02a9e3f4db490cf801c1c6119
+> > prerequisite-patch-id: 22806fcabb973ee5f04ee6212db6161aab5bcbfc
+> > prerequisite-patch-id: 6eb14cfdc2cf31e90556f6afe7361427a332e8dc
+>
+> These seem meaningless?
+I'm sorry, that didn't make sense. I'll remove it.
+> Thanks
+>
+> > --
+> > 2.25.1
+> >
+>
+Best regards,
+Shunsuke
