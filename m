@@ -2,115 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13266F10D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE126F10D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345172AbjD1DV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 23:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S1345099AbjD1DZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 23:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345143AbjD1DVV (ORCPT
+        with ESMTP id S230156AbjD1DZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 23:21:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05942116;
-        Thu, 27 Apr 2023 20:21:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682652080; x=1714188080;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4R43bx9gM2wJSRgR+/lm2js0NqBwBMtOMTj3g9bM1to=;
-  b=AQllBeKsuMzjfYyzmcLXEJ0UZpDeZPN63r8qu9VbnKUuprdpm2CwdLtb
-   46YXxe4ntDYpkp9SO0AaUlKGDCXATi7pcXvJV2YmTC1vN+2XFsuW8F+ge
-   JJPsiRzLmDRW7+lbjOnltfIsZHPNnqZE4kzkQdum2z0UzIhuncalFr21X
-   ENT2xvz9LLpmKDXEDMkggoOZ7kUGQKE6G7PmryZJEPNjLar3wRiGi1DrX
-   pdiKgnQGBkGYdHuh3FXOCbPxBuWsK3/y/kMw5KbFq4gnWhkqrfvPv4C0v
-   QOPK3pUyBQp/CoBd9OP05Eu6SYMFFa17C4Y6bSbf6lBAU1etvyvwJpIFz
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="346394248"
-X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
-   d="scan'208";a="346394248"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 20:21:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="806215105"
-X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
-   d="scan'208";a="806215105"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Apr 2023 20:21:15 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psEfc-00004D-0l;
-        Fri, 28 Apr 2023 03:21:16 +0000
-Date:   Fri, 28 Apr 2023 11:20:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2 5/5] ARM: dts: stm32: add CAN support on stm32f746
-Message-ID: <202304281111.wSsZVm5t-lkp@intel.com>
-References: <20230427204540.3126234-6-dario.binacchi@amarulasolutions.com>
+        Thu, 27 Apr 2023 23:25:15 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299B2211E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:25:13 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94f6c285d92so1781615366b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:25:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682652311; x=1685244311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XtcfavXCgC97sXeM2tBhYDMeAO+0wKfV/28poedCpKI=;
+        b=eGvbuwPngN5eh8s2qx04NIVRYGePJ2BrMcx8RZMZyG30Qana2OUuckQhxzKhr3UTSO
+         5LoxVeOCIQLPiEyqi84VGNaqjaYIa3ciHotnSHjOSeQkCLRX78rq0onFe7Gx0kyiVwDc
+         V/wscIV+WgGwx0NlyGNLfpg39xBgAIMR3eXjk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682652311; x=1685244311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XtcfavXCgC97sXeM2tBhYDMeAO+0wKfV/28poedCpKI=;
+        b=L/LNaLPTJNxRGOUQXG5317+9My+tVVnDqkEQug7TIZxYdSgOUay1OsRwG3Te0Q3Hia
+         GeFbZqyPn3WOWxtvlmXzpqicg2qU0HnP0SmSy7+Sjm+j3LuvU73a9pgp482X68+6QAPB
+         BDzOp2AdKiDJOqYB4fmsuhbS+9poid4pWxC34Gh4afG8fiB9UMgsWweuMpRAfFh8o2wf
+         zMYffIbmm6Nnf4kW++uM4pC37y7AoKuCT0BMGAT0N8+LYR/ncwA4ueVbOxHJilqZ2k1U
+         m8Nrm1/QtH5WKkmhhgk3LIF1WHfGpDGsmmuaSIN6gqO/c+4fnrz82njCmqSq62fEwW7H
+         AceA==
+X-Gm-Message-State: AC+VfDwFENB8K/BSU/7LjKyBFjZOovVNbaIRo0znSD4hdRsVpA4se/7v
+        r7XFBTRs7cRCYTyNiztV75S8CxHyLLQ8j0Q0wRIJOw==
+X-Google-Smtp-Source: ACHHUZ7POC6cTJ0+RBcfWbDdYOnQ3tE/71huhAmm2Ur5zg8KA1Km45vK6LFOeSSfioXld7gCldwlSA==
+X-Received: by 2002:a17:906:dc95:b0:94f:ca5:1a66 with SMTP id cs21-20020a170906dc9500b0094f0ca51a66mr4780935ejc.59.1682652311346;
+        Thu, 27 Apr 2023 20:25:11 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id g13-20020a170906348d00b0095337c5da35sm10655981ejb.15.2023.04.27.20.25.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 20:25:10 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-94f6c285d92so1781611366b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:25:10 -0700 (PDT)
+X-Received: by 2002:a17:907:2d8f:b0:957:278c:fb27 with SMTP id
+ gt15-20020a1709072d8f00b00957278cfb27mr4205144ejc.21.1682652309848; Thu, 27
+ Apr 2023 20:25:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427204540.3126234-6-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org> <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Apr 2023 20:24:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wicaWSn3JLwpexH=gu1HoHWpecyWoLYBwD3qPd0-t9aJA@mail.gmail.com>
+Message-ID: <CAHk-=wicaWSn3JLwpexH=gu1HoHWpecyWoLYBwD3qPd0-t9aJA@mail.gmail.com>
+Subject: Re: [GIT PULL] MM updates for 6.4-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario,
+On Thu, Apr 27, 2023 at 8:15=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Most of the bulk of the conflicts were around __filemap_get_folio()
+> now returning an ERR_PTR, particularly then with Willy doing the ext4
+> folio conversion.
+>
+> So Christoph, Willy, mind just double-checking me?
 
-kernel test robot noticed the following build errors:
+Just to clarify: I do take a look at linux-next, but I do it as an
+after-the-fact "let's double-check my resolution", and some of my
+resolutions don't end up being identical because I end up doing things
+differently.
 
-[auto build test ERROR on mkl-can-next/testing]
-[also build test ERROR on net-next/main net/main linus/master next-20230427]
-[cannot apply to atorgue-stm32/stm32-next v6.3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+For example, I found the linux-next resolution in
+ext4_read_merkle_tree_page() to be nonsensical. I think it probably
+generates the same code as my resolution, but doing "&folio->page" on
+an ERR_PTR folio is some funky funky sh*t.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dario-Binacchi/dt-bindings-net-can-add-st-can-secondary-property/20230428-044723
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20230427204540.3126234-6-dario.binacchi%40amarulasolutions.com
-patch subject: [PATCH v2 5/5] ARM: dts: stm32: add CAN support on stm32f746
-config: arm-randconfig-r011-20230427 (https://download.01.org/0day-ci/archive/20230428/202304281111.wSsZVm5t-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/efdb48d32dc845ff8f52bfe8c7345b61c9671940
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dario-Binacchi/dt-bindings-net-can-add-st-can-secondary-property/20230428-044723
-        git checkout efdb48d32dc845ff8f52bfe8c7345b61c9671940
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Only after looking at the linux-next resolution did I grep around and
+notice that that kind of funky struff had already made it into
+mainline in non-conflicting places. Willy - it seems to be you
+spreading that crazy pattern. Please stop.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304281111.wSsZVm5t-lkp@intel.com/
+Anyway.
 
-All errors (new ones prefixed by >>):
+I did some things differently, and while I think my resolution is the
+right one, the fact that it is different could also just mean that I'm
+confused.
 
->> Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-   FATAL ERROR: Unable to parse input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+                   Linus
