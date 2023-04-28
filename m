@@ -2,189 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB496F1E8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92766F1E94
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346621AbjD1TGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 15:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S240110AbjD1TLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 15:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346616AbjD1TG3 (ORCPT
+        with ESMTP id S229661AbjD1TLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 15:06:29 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A0B59F4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:06:27 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a9253d4551so2779925ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682708786; x=1685300786;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jFqKaSshbd38sYLtbvsFAsIC70cXgzSexspJ+qNkyV8=;
-        b=XnAwbOcj3oIdGm5mgK/A1KMo0zl0NXPLsK6Ex+j8wTHj+YS4AYBq7F0FGQ9EepC3AF
-         f4g18o9k3NnlNok/OmbZTwiPhH7Xtpg5hYXbZPE7BppyipgRFvEIyb3ORWx46F3Zl9NX
-         YRdibn90f2gEVEtCJijmmlViY71zsqd9e2JsieEzo7eK68Onw032p4Zw7kKqhC4onVrM
-         fnwI1OUbLF2SlPyb8Qeo80sjBjkeZGskUE6W1tjBTUUsoTkMf6BDwclOUA2/DAs5IoWh
-         jHfKhpJjHTjfMGJSZcgqE6rUGXD34lTbp/VA/OWdkOgPZD/kbiB/uQofgLQvPeZcNGZa
-         9R1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682708786; x=1685300786;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jFqKaSshbd38sYLtbvsFAsIC70cXgzSexspJ+qNkyV8=;
-        b=SglD5mc81EetWst1AqxUPbPuf1c586NQoa7kHRXZ1max+FzSBcJHptKudHFGMZj7oJ
-         eqvGv1tHdpkksejBqkofycgw+vw5QiHWzzgJJXj2xqTr6Bua9rP9P5RAxt/GZ/XVkS5D
-         KCbXDRtk4tQPz7g/QQJ8XzbkeIo1LAN0iD4A7a05cvA31bnc2M8kakJ3nLN9LcA72xC7
-         4jmcM1vOklgZdoyZVPz7msDaF0MZlZYV4BRVDHnlZ0WgHkY2iOLDqycpmA7RRC2cLiUi
-         YacXU17x86MB3Iw8wQfe+Pd/xgRk3xXBYwn5A0y2FMHczTxfPrHhsGttpKz+fBsrD1lc
-         2kLQ==
-X-Gm-Message-State: AC+VfDxv2Kw1PNBprIde0GghL+7CqFL6a9TuEMvvqYrXlMX7n7iqiSGq
-        N1cRC+isBdh207S5Ue1b44Ueiw==
-X-Google-Smtp-Source: ACHHUZ6zsK/rXeuvueCzLKmEwUjIV1KR62eq0QfUEx2BJ11PBtuHXRuJ+WOwWqzn3qupChOIwIMv7Q==
-X-Received: by 2002:a17:903:228b:b0:1a1:b174:836c with SMTP id b11-20020a170903228b00b001a1b174836cmr8128192plh.16.1682708786587;
-        Fri, 28 Apr 2023 12:06:26 -0700 (PDT)
-Received: from evan.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id w15-20020a170902d70f00b001a6c58e95d7sm13580733ply.269.2023.04.28.12.06.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 12:06:26 -0700 (PDT)
-From:   Evan Green <evan@rivosinc.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Evan Green <evan@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH 3/3] RISC-V: hwprobe: Expose Zba and Zbb
-Date:   Fri, 28 Apr 2023 12:06:08 -0700
-Message-Id: <20230428190609.3239486-4-evan@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230428190609.3239486-1-evan@rivosinc.com>
-References: <20230428190609.3239486-1-evan@rivosinc.com>
+        Fri, 28 Apr 2023 15:11:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F19E9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:11:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6373761A14
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 19:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA0EC433D2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 19:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682709090;
+        bh=Fn0wHdSUaUY6z2W/CYrjzC+4DwMPs13cWXwfDOygrc0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nYd/4Amu/Jss/rWEg5F927+9DBJ33MqH6g03WGgEoUGsk4knKkPxopZYLGWwwazR8
+         iV6K5HMm+hm3ZciHIX2U+ykpLsEU10YahJ8SdyFs668mEUZpLyDBZ2uxHbJJ1H2wMp
+         6pHHhmapcqe0GdpOSsq+9AW2FN2hUD9b93/e82/+AGkdPEsNgcjJ9SfJKUtGnsfvCC
+         a43MF/TqdGM3Q11cIFazvIOJwFLj5gN25WqB3GjL0CjIGtBmH66v6zYmq4isOT2C0G
+         BJC4pZxOSl3+zOwoMs0XiYOTD5wPSBb6/1CTkd471yvSql7WQq1DSqed7aRjGMhv6b
+         ihmifN96w9TXw==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4edcc885d8fso307835e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:11:30 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyvuieSCt4l2mLAOOb6z66KlDKpXIK3YMmdCiv71AqAHum0S/gR
+        WTPs7SPiDWRKwf/9swKX+fG2tQsUM11Ju2uMouM=
+X-Google-Smtp-Source: ACHHUZ6gc4m+zw4z92rYhyV0RIDeQJ5qISydofoy9raQbrEuYMH5PL1Tl/uHJxRhg3RHZMrJwUBfg+qTxf9rGr3bFdQ=
+X-Received: by 2002:a05:6512:38cc:b0:4ed:c76b:6aaf with SMTP id
+ p12-20020a05651238cc00b004edc76b6aafmr1574821lft.56.1682709088789; Fri, 28
+ Apr 2023 12:11:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230428050442.180913-1-maskray@google.com> <CAMj1kXGpbKgS8mNxVuAyPvT-vW0LWZOXgqsy5TvKhzJRs_rHkA@mail.gmail.com>
+ <20230428185814.mmnb3jafp7fnwdrh@google.com>
+In-Reply-To: <20230428185814.mmnb3jafp7fnwdrh@google.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 28 Apr 2023 20:11:17 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFgv6GHm5PvR9Qq9-VwL+5NXwpChkB59c-0-tEJPNYdVQ@mail.gmail.com>
+Message-ID: <CAMj1kXFgv6GHm5PvR9Qq9-VwL+5NXwpChkB59c-0-tEJPNYdVQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: lds: move .got section out of .text
+To:     Fangrui Song <maskray@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two new bits to the IMA_EXT_0 key for ZBA and ZBB extensions. These
-are accurately reported per CPU.
+On Fri, 28 Apr 2023 at 19:58, Fangrui Song <maskray@google.com> wrote:
+>
+> On 2023-04-28, Ard Biesheuvel wrote:
+> >Hello Fangrui,
+>
+> Hello Ard, thank you for the rapid response.
+>
+> >On Fri, 28 Apr 2023 at 06:05, Fangrui Song <maskray@google.com> wrote:
+> >>
+> >> Currently, the .got section is placed within the output section .text.
+> >> However, when .got is non-empty, the SHF_WRITE flag is set when linked
+> >> by lld. GNU ld recognizes .text as a special section and ignores the
+> >> SHF_WRITE flag. By renaming .text, we can also get the SHF_WRITE flag.
+> >>
+> >> Conventionally, the .got section is placed just before .got.plt (which
+> >> should be empty and omitted in the kernel). Therefore, we move the .got
+> >> section to a conventional location (between .text and .data) and remove
+> >> the unneeded `. = ALIGN(16)`.
+> >>
+> >> Signed-off-by: Fangrui Song <maskray@google.com>
+> >> ---
+> >>  arch/arm64/kernel/vmlinux.lds.S | 20 ++++++++++----------
+> >>  1 file changed, 10 insertions(+), 10 deletions(-)
+> >>
+> >> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> >> index b9202c2ee18e..2bcb3b30db41 100644
+> >> --- a/arch/arm64/kernel/vmlinux.lds.S
+> >> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> >> @@ -181,18 +181,8 @@ SECTIONS
+> >>                         KPROBES_TEXT
+> >>                         HYPERVISOR_TEXT
+> >>                         *(.gnu.warning)
+> >> -               . = ALIGN(16);
+> >> -               *(.got)                 /* Global offset table          */
+> >>         }
+> >>
+> >> -       /*
+> >> -        * Make sure that the .got.plt is either completely empty or it
+> >> -        * contains only the lazy dispatch entries.
+> >> -        */
+> >> -       .got.plt : { *(.got.plt) }
+> >> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> >> -              "Unexpected GOT/PLT entries detected!")
+> >> -
+> >>         . = ALIGN(SEGMENT_ALIGN);
+> >>         _etext = .;                     /* End of text section */
+> >>
+> >> @@ -247,6 +237,16 @@ SECTIONS
+> >>
+> >>         . = ALIGN(SEGMENT_ALIGN);
+> >>         __inittext_end = .;
+> >> +
+> >> +       .got : { *(.got) }
+> >
+> >This is the .init region, which gets freed and unmapped after boot. If
+> >the GOT is non-empty, it needs to remain mapped, so we cannot place it
+> >here.
+>
+> Thanks.  I did not know the constraint.
+>
+> >We have the same issue with the .rodata section, which incorporates
+> >variables marked as __ro_after_init, which are not const qualified. So
+> >given that .rodata is already emitted as WA, and we cannot do anything
+> >about that, let's move the GOT in there.
+>
+> Yes, writable .data..ro_after_init and __jump_table sections in
+> include/asm-generic/vmlinux.lds.h (#define RO_DATA(align)) makes the
+> output section .rodata writable.  Perhaps this is very difficult to fix,
+> and we will have writable .rodata for a long time.
+>
+> What do you think of moving .got/.got.plt immediately before .data?
+> I want to place .got/.got.plt before the guaranteed-writable sections,
+> not some sections which are "unfortunately" writable (.rodata, __modver,
+> .hyp.rodata, .rodata.text, etc).
+>
+> For userspace programs, either linked with GNU ld or lld, .got/.got.plt
+> are usually immediately before .data .
+>
 
-Signed-off-by: Evan Green <evan@rivosinc.com>
+I don't think that would be the right choice.
 
----
+We have five pseudo-segments in the kernel
 
- Documentation/riscv/hwprobe.rst       |  7 +++++
- arch/riscv/include/uapi/asm/hwprobe.h |  2 ++
- arch/riscv/kernel/sys_riscv.c         | 43 ++++++++++++++++++++++-----
- 3 files changed, 45 insertions(+), 7 deletions(-)
+text (RX)
+rodata (R)
+inittext (RX)
+initdata (RW)
+data (RW)
 
-diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
-index 9f0dd62dcb5d..21f444a38359 100644
---- a/Documentation/riscv/hwprobe.rst
-+++ b/Documentation/riscv/hwprobe.rst
-@@ -64,6 +64,13 @@ The following keys are defined:
-   * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
-     by version 2.2 of the RISC-V ISA manual.
- 
-+  * :c:macro:`RISCV_HWPROBE_EXT_ZBA`: The Zba address generation extension is
-+       supported, as defined in version 1.0 of the Bit-Manipulation ISA
-+       extensions.
-+
-+  * :c:macro:`RISCV_HWPROBE_IMA_ZBB`: The Zbb extension is supporte, as defined
-+       in version 1.0 of the Bit-Manipulation ISA extensions.
-+
- * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
-   information about the selected set of processors.
- 
-diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
-index 8d745a4ad8a2..ef3b060d4e8d 100644
---- a/arch/riscv/include/uapi/asm/hwprobe.h
-+++ b/arch/riscv/include/uapi/asm/hwprobe.h
-@@ -25,6 +25,8 @@ struct riscv_hwprobe {
- #define RISCV_HWPROBE_KEY_IMA_EXT_0	4
- #define		RISCV_HWPROBE_IMA_FD		(1 << 0)
- #define		RISCV_HWPROBE_IMA_C		(1 << 1)
-+#define		RISCV_HWPROBE_EXT_ZBA		(1 << 2)
-+#define		RISCV_HWPROBE_EXT_ZBB		(1 << 3)
- #define RISCV_HWPROBE_KEY_CPUPERF_0	5
- #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
- #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 5db29683ebee..adfcb6b64db7 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -121,6 +121,41 @@ static void hwprobe_arch_id(struct riscv_hwprobe *pair,
- 	pair->value = id;
- }
- 
-+static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
-+			     const struct cpumask *cpus)
-+{
-+	int cpu;
-+	u64 missing = 0;
-+
-+	pair->value = 0;
-+	if (has_fpu())
-+		pair->value |= RISCV_HWPROBE_IMA_FD;
-+
-+	if (riscv_isa_extension_available(NULL, c))
-+		pair->value |= RISCV_HWPROBE_IMA_C;
-+
-+	/*
-+	 * Loop through and record extensions that 1) anyone has, and 2) anyone
-+	 * doesn't have.
-+	 */
-+	for_each_cpu(cpu, cpus) {
-+		struct riscv_isainfo *isainfo = &hart_isa[cpu];
-+
-+		if (riscv_isa_extension_available(isainfo->isa, ZBA))
-+			pair->value |= RISCV_HWPROBE_EXT_ZBA;
-+		else
-+			missing |= RISCV_HWPROBE_EXT_ZBA;
-+
-+		if (riscv_isa_extension_available(isainfo->isa, ZBB))
-+			pair->value |= RISCV_HWPROBE_EXT_ZBB;
-+		else
-+			missing |= RISCV_HWPROBE_EXT_ZBB;
-+	}
-+
-+	/* Now turn off reporting features if any CPU is missing it. */
-+	pair->value &= ~missing;
-+}
-+
- static u64 hwprobe_misaligned(const struct cpumask *cpus)
- {
- 	int cpu;
-@@ -164,13 +199,7 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_IMA_EXT_0:
--		pair->value = 0;
--		if (has_fpu())
--			pair->value |= RISCV_HWPROBE_IMA_FD;
--
--		if (riscv_isa_extension_available(NULL, c))
--			pair->value |= RISCV_HWPROBE_IMA_C;
--
-+		hwprobe_isa_ext0(pair, cpus);
- 		break;
- 
- 	case RISCV_HWPROBE_KEY_CPUPERF_0:
--- 
-2.25.1
+where the init ones disappear entirely when the boot completes.
 
+The GOT should not be modifiable, so it should not be in .data. So the
+only appropriate 'segment' for the GOT is rodata
+
+Note that we don't use PIC codegen for the kernel, so all const
+qualified data structures containing statically initialized global
+pointer variables are emitted into .rodata as well, and relocated at
+boot. So having the GOT in rodata too makes sense imho.
+
+
+
+
+> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> index b9202c2ee18e..48bd7c25b6ab 100644
+> --- a/arch/arm64/kernel/vmlinux.lds.S
+> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> @@ -181,18 +181,8 @@ SECTIONS
+>                         KPROBES_TEXT
+>                         HYPERVISOR_TEXT
+>                         *(.gnu.warning)
+> -               . = ALIGN(16);
+> -               *(.got)                 /* Global offset table          */
+>         }
+>
+> -       /*
+> -        * Make sure that the .got.plt is either completely empty or it
+> -        * contains only the lazy dispatch entries.
+> -        */
+> -       .got.plt : { *(.got.plt) }
+> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> -              "Unexpected GOT/PLT entries detected!")
+> -
+>         . = ALIGN(SEGMENT_ALIGN);
+>         _etext = .;                     /* End of text section */
+>
+> @@ -286,6 +276,15 @@ SECTIONS
+>         __initdata_end = .;
+>         __init_end = .;
+>
+> +       .got : { *(.got) }
+> +       /*
+> +        * Make sure that the .got.plt is either completely empty or it
+> +        * contains only the lazy dispatch entries.
+> +        */
+> +       .got.plt : { *(.got.plt) }
+> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> +              "Unexpected GOT/PLT entries detected!")
+> +
+>         _data = .;
+>         _sdata = .;
+>         RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_ALIGN)
+> --
+> 2.40.1.495.gc816e09b53d-goog
+>
+>
+> >> +       /*
+> >> +        * Make sure that the .got.plt is either completely empty or it
+> >> +        * contains only the lazy dispatch entries.
+> >> +        */
+> >> +       .got.plt : { *(.got.plt) }
+> >> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> >> +              "Unexpected GOT/PLT entries detected!")
+> >> +
+> >>         __initdata_begin = .;
+> >>
+> >>         init_idmap_pg_dir = .;
+> >> --
+> >> 2.40.1.495.gc816e09b53d-goog
+> >>
