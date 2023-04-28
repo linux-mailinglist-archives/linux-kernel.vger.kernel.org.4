@@ -2,192 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 600E56F1C22
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E31F6F1C29
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjD1QBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S230162AbjD1QDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjD1QBK (ORCPT
+        with ESMTP id S229662AbjD1QDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:01:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017F12D51
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682697630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aTvTmC3w8cSoK1sZTIItrjPETSg3RyPhXAPGqmBpz9w=;
-        b=LmzXQ4ualJrHt5+AZRrIEtd5fRIccmnjZCbeQNCsD9mb/G9dtJKFrvqqzXScr1tPu1CJqY
-        UxGCb25tyBUktnBPdqS3d7GCjzzQPk9E+avUGbN0qQKOwL7xis3WT2XWfd/afKF8f63/ql
-        x6b02MoWNQ+gEPq1Fy5SdzMYBDEpXr0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-465-N5x-K5JANMmlOGvVnY_QzA-1; Fri, 28 Apr 2023 12:00:28 -0400
-X-MC-Unique: N5x-K5JANMmlOGvVnY_QzA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f3157128b4so43723955e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:00:28 -0700 (PDT)
+        Fri, 28 Apr 2023 12:03:00 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A94B2709;
+        Fri, 28 Apr 2023 09:02:59 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115e652eeso13597439b3a.0;
+        Fri, 28 Apr 2023 09:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682697779; x=1685289779;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFqCvF6zcr5bU/PC6sitkV28Z2TiIUDFVfcU6fA1uhs=;
+        b=PwjZmFWjx0l6/Cp3B6ZEV6WQ7Zx28GfcOc51v/XK+23ClDY50ePtgxT09IwNgPEopC
+         XgFev2tc3ytoXpXLsu2m7KZ5WzuFJI08T+0tRjFosmfzexucrkduyA3QGDctCx5X1sl3
+         1Enws9t3ncavnNHrV7394jQs6V2A1q0TUYUigkpb3CxG/rDvjjqvkDXW0VazHIbG+l7L
+         bkjeRYHv6/rRV69VLp7KVgFOX3e9KAbdkhb6BWIUhT/urHkwkoMdUf5v9LLm6CeLVkRr
+         z0fnVDsae2mmHQiEdZuIdHcl6LHoFqiGR5rtgFHEVb5carY4Nr9lqieW4rWV43BzLB25
+         TPPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682697627; x=1685289627;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1682697779; x=1685289779;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aTvTmC3w8cSoK1sZTIItrjPETSg3RyPhXAPGqmBpz9w=;
-        b=fGksDSGcT3vCh8qAoN/f+U9EKKKxc0yGRfjPiVQVZ6rBVpTDwPGeFcYyUXI/PQcPVW
-         HLVnkZmhdlBWOzVPMVN0byb1I5fLibNOtuNiO3FwftdtmKPugRidRZWUgQ82GTqrCklb
-         0Xiv3NsBbtx+NHB7rTUIgJAGD9p9Y/S10tdQt9k19BtEQ4TlVt9sGbOnQOGxsz1TBXT+
-         +Vgq7PklblQnL9aedd5aTW/2gegN0F5b8wJVF1ct/BXngaJcJK2Wvvbu+xYVsp6MriuZ
-         eljwbjInbm9hte/WTDp/tSvMOA4Wud4SEnaR+lOGv4jtxlAA6LliG86XiH1m6IgWBSl0
-         +FtQ==
-X-Gm-Message-State: AC+VfDyS5Lw11PpKS9HUjuexSlgwlvYa+SOVCCDuBVCphMJliojYUZbY
-        x3M7IBx67GyqXcTOYJr1JBx+GP8Qc9WHP2a6E6kwKgB6V+7R3P5k2y8ihCwNFMAibjrfKooKd+3
-        0FD/3pPtFns0M13jP8c+1ivQm
-X-Received: by 2002:a05:600c:2046:b0:3ed:3268:5f35 with SMTP id p6-20020a05600c204600b003ed32685f35mr4408016wmg.18.1682697627085;
-        Fri, 28 Apr 2023 09:00:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4CuV5Y9R4xOZ0iO1MIIj9ynREbGl3f73GmNX7T5mCyhDkj53kzHkbrow+2KlrZE2FhtmwsQw==
-X-Received: by 2002:a05:600c:2046:b0:3ed:3268:5f35 with SMTP id p6-20020a05600c204600b003ed32685f35mr4407973wmg.18.1682697626733;
-        Fri, 28 Apr 2023 09:00:26 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
-        by smtp.gmail.com with ESMTPSA id m9-20020a7bce09000000b003f049a42689sm24709589wmc.25.2023.04.28.09.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 09:00:25 -0700 (PDT)
-Message-ID: <620882a8-2b93-b709-1093-a323570f0fd2@redhat.com>
-Date:   Fri, 28 Apr 2023 18:00:22 +0200
+        bh=NFqCvF6zcr5bU/PC6sitkV28Z2TiIUDFVfcU6fA1uhs=;
+        b=TzyT3czTpo8LpGEnHaBuOQyA0xWNMvu1eQepYtGzzlMFaRuOKKRRctXffPVhxh3IBZ
+         5qVVjbTbm7v++leWh6PIS12G2pj1vmD6XxcatVepDVoelmB4eVeTjlSVA4D+RlWPYdqW
+         r9r/f5t4gKnkqzJwhoGoSdD4zsVnMepcBo5k5gYNKz8KsX7X4eK0iDJ6R4UCXPFxCJuq
+         5UVP9lCNq2INia9T2jsIV22Rzfsnci1VjO7s4D1TGYiUDM0RZzqiuZCH7/RhkBZtwfLA
+         rUSuEXAswbm8Vk/hGuqqWOhI+Odeoyc+lMYC7lx/PhcKXb7kQbf6IMTShGvRk/RmWHJX
+         TXeg==
+X-Gm-Message-State: AC+VfDwpcH/uD6scI98zjFCX6FCj+yfditoTyGAQ28hDKOF9Jvgp1e9B
+        4sg55r1XrmCioJZp7fd2arc=
+X-Google-Smtp-Source: ACHHUZ4n9eWm1zNiFdfRPnFXpG+pdAIxXQZgdvnrdjIN6cuRBezH8a5Vp7dwCkgu/eE23rnzdDfxEw==
+X-Received: by 2002:a17:902:dacb:b0:1a2:a904:c42e with SMTP id q11-20020a170902dacb00b001a2a904c42emr7025837plx.24.1682697778013;
+        Fri, 28 Apr 2023 09:02:58 -0700 (PDT)
+Received: from localhost.localdomain (n220246252240.netvigator.com. [220.246.252.240])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902820f00b001a045f45d49sm13354756pln.281.2023.04.28.09.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 09:02:57 -0700 (PDT)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Jianhua Lu <lujianhua000@gmail.com>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: [PATCH] dt-bindings: leds: backlight: ktz8866: Add reg property and update example
+Date:   Sat, 29 Apr 2023 00:02:46 +0800
+Message-Id: <20230428160246.16982-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
- <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
- <f60722d4-1474-4876-9291-5450c7192bd3@lucifer.local>
- <a8561203-a4f3-4b3d-338a-06a60541bd6b@redhat.com>
- <49ebb100-afd2-4810-b901-1a0f51f45cfc@lucifer.local>
- <a501219c-f75a-4467-fefe-bd571e84f99e@redhat.com>
- <b11d8e94-1324-41b3-91ba-78dbef0b1fc0@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-In-Reply-To: <b11d8e94-1324-41b3-91ba-78dbef0b1fc0@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+The kinetic,ktz8866 is a I2C driver, so add the missing reg property.
+And update example to make it clear.
 
->>>
->>> Personally I come at this from the 'I just want my vmas patch series' unblocked
->>> perspective :) and feel there's a functional aspect here too.
->>
->> I know, it always gets messy when touching such sensible topics :P
-> 
-> I feel that several people owe me drinks at LSF/MM :P
-> 
-> To cut a long story short to your other points, I'm _really_ leaning
-> towards an opt-in variant of this change that we just hand to io_uring to
-> make everything simple with minimum risk (if Jens was also open to this
-> idea, it'd simply be deleting the open coded vma checks there and adding
-> FOLL_SAFE_FILE_WRITE).
-> 
-> That way we can save the delightful back and forth for another time while
-> adding a useful feature and documenting the issue.
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+---
+ .../leds/backlight/kinetic,ktz8866.yaml       | 29 ++++++++++++-------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
 
-Just for the records: I'm not opposed to disabling it system-wide, 
-especially once this is an actual security issue and can bring down the 
-machine easily (thanks to Jason for raising the security aspect). I just 
-wanted to raise awareness that there might be users affected ...
-
-Sure, we could glue this to some system knob like Jason said, if we want 
-to play safe.
-
-> 
-> Altneratively I could try to adapt this to also do the GUP-fast check,
-> hoping that no FOLL_FAST_ONLY users would get nixed (I'd have to check who
-> uses that). The others should just get degraded to a standard GUP right?
-
-Yes. When you need the VMA to make a decision, fallback to standard GUP.
-
-The only problematic part is something like get_user_pages_fast_only(), 
-that would observe a change. But KVM never passes FOLL_LONGTERM, so at 
-least in that context the change should be fine I guess.
-
-The performance concern is the most problematic thing (how to identify 
-shmem pages).
-
-> 
-> I feel these various series have really helped beat out some details about
-> GUP, so as to your point on another thread (trying to reduce noise here
-> :P), I think discussion at LSF/MM is also a sensible idea, also you know,
-> if beers were bought too it could all work out nicely :]
-
-The issue is, that GUP is so complicated, that each and every MM 
-developer familiar with GUP has something to add :P
-
-What stood out to me is that we disallow something for ordinary GUP but 
-disallow it for GUP-fast, which looks very odd.
-
-So sorry again for jumping in late ...
-
+diff --git a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+index e1191453c2f0..6ec40cce3f11 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+@@ -21,6 +21,9 @@ properties:
+   compatible:
+     const: kinetic,ktz8866
+ 
++  reg:
++    maxItems: 1
++
+   vddpos-supply:
+     description: positive boost supply regulator.
+ 
+@@ -53,6 +56,7 @@ properties:
+ 
+ required:
+   - compatible
++  - reg
+   - vddpos-supply
+   - vddneg-supply
+   - enable-gpios
+@@ -63,14 +67,19 @@ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+ 
+-    backlight {
+-        compatible = "kinetic,ktz8866";
+-
+-        vddpos-supply = <&bl_vddpos_5p5>;
+-        vddneg-supply = <&bl_vddneg_5p5>;
+-        enable-gpios = <&tlmm 139 GPIO_ACTIVE_HIGH>;
+-        current-num-sinks = <5>;
+-        kinetic,current-ramp-delay-ms = <128>;
+-        kinetic,led-enable-ramp-delay-ms = <1>;
+-        kinetic,enable-lcd-bias;
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        backlight@11 {
++            compatible = "kinetic,ktz8866";
++            reg = <0x11>;
++            vddpos-supply = <&bl_vddpos_5p5>;
++            vddneg-supply = <&bl_vddneg_5p5>;
++            enable-gpios = <&tlmm 139 GPIO_ACTIVE_HIGH>;
++            current-num-sinks = <5>;
++            kinetic,current-ramp-delay-ms = <128>;
++            kinetic,led-enable-ramp-delay-ms = <1>;
++            kinetic,enable-lcd-bias;
++        };
+     };
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
