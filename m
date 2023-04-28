@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A236F1116
+	by mail.lfdr.de (Postfix) with ESMTP id 87DFA6F1118
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 06:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbjD1EpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 00:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42438 "EHLO
+        id S1345336AbjD1Epz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 00:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjD1EpF (ORCPT
+        with ESMTP id S229502AbjD1Epw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 00:45:05 -0400
+        Fri, 28 Apr 2023 00:45:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B2A2696
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 21:45:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D926A1;
+        Thu, 27 Apr 2023 21:45:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E49B63EA7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:45:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10820C433EF;
-        Fri, 28 Apr 2023 04:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682657102;
-        bh=Omj+SL5zqTsoKaLqrqXUY1PyXUHPTRyCAvEul9HQv8M=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 885D0640A4;
+        Fri, 28 Apr 2023 04:45:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6886FC433D2;
+        Fri, 28 Apr 2023 04:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682657151;
+        bh=7rszxrAAfy8VU8gN+K5tak5zsE1EJudMdjmMp2s2PMo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MHTufx1BvoVAN/sP7vEbGBBVMysIynmpWajofD1UGvid6AhWj2FUZRXJ0bTTnJTsF
-         HgpW12cAND2I2MiUMCYJSNk3LIJHYUGwtdrHoGk9oZ2+OyQGKHAhMfski6Q/YKUNYV
-         CLi5r+zu4Cb4Yrp8tofpBJV/KJI5fYAO2hBzSEpRR+MtQAgBK5/5FulPnZ5Wd0eLia
-         TraRD9gPr886vQD34GrZfNXaczVbUFQFEPKoR8WVZeOD7Q5dSaWH9RFXV5MawPFKSg
-         6Wd6V4TWu32cwHTlj9chgegk7nV35Eo/QVjZfkVDl/KZKh6QXRBiV7c/uvfWSOxS3n
-         OvILD//WJ3zWQ==
-Date:   Thu, 27 Apr 2023 21:45:00 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, ak@linux.intel.com, David.Laight@ACULAB.COM
-Subject: Re: [PATCH v3] x86: profiling: remove lock functions profiling in
- profile_pc
-Message-ID: <20230428044500.h5eaabiezuw7duxr@treble>
-References: <20230423012744.24320-1-chenzhongjin@huawei.com>
+        b=q8i2zLn+IxVuWGsQokgx/J2kK75hsTheE1aH5EQO56h++q5CWSM8KodAO7Wt8yFa0
+         XtGI08wsN35V8b3uOv8alEVOarm4TCR8y5t/eYr2NnO3IIGX2T9oAuL/u7rubssfUK
+         Oh/Io340l7vyubUTHfttTK27hOxuV1sQ+UuaORlo=
+Date:   Fri, 28 Apr 2023 06:45:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] MAINTAINERS: update Microchip MPF FPGA reviewers
+Message-ID: <ZEtPe-3MUZV0AQgF@kroah.com>
+References: <20230426073519.9167-1-i.bornyakov@metrotek.ru>
+ <20230426073519.9167-2-i.bornyakov@metrotek.ru>
+ <20230427-episode-overdrawn-ed2d1d30cb34@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230423012744.24320-1-chenzhongjin@huawei.com>
+In-Reply-To: <20230427-episode-overdrawn-ed2d1d30cb34@spud>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -56,32 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 09:27:44AM +0800, Chen Zhongjin wrote:
-> Syzbot has been reporting the problem of stack-out-of-bounds in
-> profile_pc for a long time:
-> https://syzkaller.appspot.com/bug?extid=84fe685c02cd112a2ac3
+On Thu, Apr 27, 2023 at 04:28:23PM +0100, Conor Dooley wrote:
+> Hey Ivan,
 > 
-> profile_pc will get return address for caller if current function
-> is lock function. For !CONFIG_FRAME_POINTER it uses a hack way to get
-> the caller by directly reading sp[0] or sp [1].
-> It not works when KASAN is enabled because KASAN pushes data on stack
-> which makes sp[0/1] become KASAN red zone. Then profile_pc reads wrong
-> memory and triggers KASAN warning frequently.
+> On Wed, Apr 26, 2023 at 10:35:18AM +0300, Ivan Bornyakov wrote:
+> > As I'm leaving Metrotek, I'll have no access to the hardware and my
+> > Metrotek email will be off soon.
 > 
-> This hack might be ok when first added at 2006 but now it's different:
+> Good luck so!
 > 
-> 1. There are some lock functions which have frame longer than two stack
-> slots. For these functions sp[0/1] is not a legal return address even
-> KASAN is not enabled.
-> 2. !CONFIG_FRAME_POINTER is more used today because UNWINDER_ORC.
-> 3. Lock function caller information can be prfiled by perf better.
+> > Replace my email with Metrotek System
+> > Team collective inbox.
 > 
-> Since profile as a low level facility it's not proper to depend on
-> complex generic unwinder to get the next frame. As lock profiling is
-> no longer useful, it's fine to remove it.
+> Hmm, I am not too sure about this. I've previously seen the likes of
+> Greg KH frowning on these sort of shared mailboxes.
 
-In that case we can remove the in_lock_functions() check from all the
-other arches' implementations of profile_pc().
+Yes, shared mailboxes mean no accountability and responsibility.  Please
+don't do that.
 
--- 
-Josh
+thanks,
+
+greg k-h
