@@ -2,126 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873F46F13D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EF56F13DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345616AbjD1JHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 05:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S1345618AbjD1JHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 05:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjD1JHg (ORCPT
+        with ESMTP id S1345644AbjD1JHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 05:07:36 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DFD2D5B;
-        Fri, 28 Apr 2023 02:07:34 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33S96pq1060684;
-        Fri, 28 Apr 2023 04:06:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682672811;
-        bh=o1rSdOmMRwFvIuaD+mfrZqbuIO8xyaxUVPv2FuoJHCs=;
-        h=Date:Subject:From:To:CC:References:In-Reply-To;
-        b=KIsIiiv9JP3wRNCZzTczcPRGEINj/pPz2AFDsHVpxyCA2/o4cRoOW2lL2lZ3/l0YU
-         PdqEjdZTfBffRphiZC6YVweUmXGVoGYX1NK8HZou+lP1yS4NxUeMbZJAuF6gjyenl9
-         Ix1W0RPb0l6+71ZyouOCEUmsMJ+wUchuJd40yLEc=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33S96p0k057141
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 Apr 2023 04:06:51 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 28
- Apr 2023 04:06:50 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 28 Apr 2023 04:06:50 -0500
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33S96hWV077030;
-        Fri, 28 Apr 2023 04:06:44 -0500
-Message-ID: <ff6fe35f-ca4b-a48d-777f-196b771a14d3@ti.com>
-Date:   Fri, 28 Apr 2023 14:36:42 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [EXTERNAL] Re: [RFC PATCH v6 2/2] net: ti: icssg-prueth: Add
- ICSSG ethernet driver
-Content-Language: en-US
-From:   Md Danish Anwar <a0501179@ti.com>
-To:     Simon Horman <simon.horman@corigine.com>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>,
+        Fri, 28 Apr 2023 05:07:43 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6BD4696;
+        Fri, 28 Apr 2023 02:07:40 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 35F29166B6C;
+        Fri, 28 Apr 2023 11:07:36 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1682672856; bh=fSr4PauhzPiknlEm9f1x9jaf0EP4/nRRsNaPi7F6oq8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=1A8Aj6vFQ9OMmP4Cog+6T6QXa6fal+LKll7jPxBdWh6gTHb2NcCWIT2opzUFnClcm
+         Za3pILziDiG1G2Q/pHQ3reYCGVThne+WvgK0/PjHdMoO7NngsBiq4CC4zmTYXRY1KQ
+         cpEb/ECwMtXQjwn9MSSUQ8uefBRj5PZnuuHLwkdC7a/FDc70XAuIuxc5VdK6dIpADs
+         HCDxS0hRuxWR+cbRkQHYSg02dDuJm0khJ5+iy7w2qU9Xoh2PeLY0UvhUfW0xWGolMD
+         1wahwh0CIrIH0ErPk+m47YLjZlY2HM0Klgzmx87U/YnSF209NU+v8CL7UuRW8qkICN
+         n3CH65zUiUaMQ==
+Date:   Fri, 28 Apr 2023 11:07:35 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Mike Lothian <mike@fireburn.co.uk>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
         Randy Dunlap <rdunlap@infradead.org>,
-        Richard Cochran <richardcochran@gmail.com>, <nm@ti.com>,
-        <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230424053233.2338782-1-danishanwar@ti.com>
- <20230424053233.2338782-3-danishanwar@ti.com> <ZEl2zh879QAX+QsK@corigine.com>
- <9c97e367-56d6-689e-856a-c1a6ff575b63@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <9c97e367-56d6-689e-856a-c1a6ff575b63@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Ondrej Zary <linux@zary.sk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Petr Tesarik <petr.tesarik.ext@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Won Chung <wonchung@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v2 0/7] Allow dynamic allocation of software IO TLB
+ bounce buffers
+Message-ID: <20230428110735.4348511d@meshulam.tesarici.cz>
+In-Reply-To: <CAHbf0-HwQhFsYW8cp0t9660877b9tTxZBego7VSfx0ayAwKePQ@mail.gmail.com>
+References: <cover.1681898595.git.petr.tesarik.ext@huawei.com>
+        <CAHbf0-HwQhFsYW8cp0t9660877b9tTxZBego7VSfx0ayAwKePQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon.
+On Fri, 28 Apr 2023 09:53:38 +0100
+Mike Lothian <mike@fireburn.co.uk> wrote:
 
-On 27/04/23 12:42, Md Danish Anwar wrote:
-> Hi Simon,
-> Thanks for the comments.
+> On Wed, 19 Apr 2023 at 11:05, Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
+> >
+> > From: Petr Tesarik <petr.tesarik.ext@huawei.com>
+> >
+> > The goal of my work is to provide more flexibility in the sizing of
+> > SWIOTLB.
+> >
+> > The software IO TLB was designed with these assumptions:
+> >
+> > 1. It would not be used much, especially on 64-bit systems.
+> > 2. A small fixed memory area (64 MiB by default) is sufficient to
+> >    handle the few cases which require a bounce buffer.
+> > 3. 64 MiB is little enough that it has no impact on the rest of the
+> >    system.
+> >
+> > First, if SEV is active, all DMA must be done through shared
+> > unencrypted pages, and SWIOTLB is used to make this happen without
+> > changing device drivers. The software IO TLB size is increased to
+> > 6% of total memory in sev_setup_arch(), but that is more of an
+> > approximation. The actual requirements may vary depending on the
+> > amount of I/O and which drivers are used. These factors may not be
+> > know at boot time, i.e. when SWIOTLB is allocated.
+> >
+> > Second, other colleagues have noticed that they can reliably get
+> > rid of occasional OOM kills on an Arm embedded device by reducing
+> > the SWIOTLB size. This can be achieved with a kernel parameter, but
+> > determining the right value puts additional burden on pre-release
+> > testing, which could be avoided if SWIOTLB is allocated small and
+> > grows only when necessary.
+> >
+> > Changes from v1-devel-v7:
+> > - Add comments to acquire/release barriers
+> > - Fix whitespace issues reported by checkpatch.pl
+> >
+> > Changes from v1-devel-v6:
+> > - Provide long description of functions
+> > - Fix kernel-doc (Returns: to Return:)
+> > - Rename __lookup_dyn_slot() to lookup_dyn_slot_locked()
+> >
+> > Changes from RFC:
+> > - Track dynamic buffers per device instead of per swiotlb
+> > - Use a linked list instead of a maple tree
+> > - Move initialization of swiotlb fields of struct device to a
+> >   helper function
+> > - Rename __lookup_dyn_slot() to lookup_dyn_slot_locked()
+> > - Introduce per-device flag if dynamic buffers are in use
+> > - Add one more user of DMA_ATTR_MAY_SLEEP
+> > - Add kernel-doc comments for new (and some old) code
+> > - Properly escape '*' in dma-attributes.rst
+> >
+> > Petr Tesarik (7):
+> >   swiotlb: Use a helper to initialize swiotlb fields in struct device
+> >   swiotlb: Move code around in preparation for dynamic bounce buffers
+> >   dma-mapping: introduce the DMA_ATTR_MAY_SLEEP attribute
+> >   swiotlb: Dynamically allocated bounce buffers
+> >   swiotlb: Add a boot option to enable dynamic bounce buffers
+> >   drm: Use DMA_ATTR_MAY_SLEEP from process context
+> >   swiotlb: per-device flag if there are dynamically allocated buffers
+> >
+> >  .../admin-guide/kernel-parameters.txt         |   6 +-
+> >  Documentation/core-api/dma-attributes.rst     |  10 +
+> >  drivers/base/core.c                           |   4 +-
+> >  drivers/gpu/drm/drm_gem_shmem_helper.c        |   2 +-
+> >  drivers/gpu/drm/drm_prime.c                   |   2 +-
+> >  include/linux/device.h                        |  12 +
+> >  include/linux/dma-mapping.h                   |   6 +
+> >  include/linux/swiotlb.h                       |  54 ++-
+> >  kernel/dma/swiotlb.c                          | 382 ++++++++++++++++--
+> >  9 files changed, 443 insertions(+), 35 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >  
 > 
-> On 27/04/23 00:39, Simon Horman wrote:
->> On Mon, Apr 24, 2023 at 11:02:33AM +0530, MD Danish Anwar wrote:
->>> From: Roger Quadros <rogerq@ti.com>
->>>
->>> This is the Ethernet driver for TI AM654 Silicon rev. 2
->>> with the ICSSG PRU Sub-system running dual-EMAC firmware.
->>>
+> Hi
+> 
+> Is this a potential fix for
+> https://bugzilla.kernel.org/show_bug.cgi?id=217310 where I'm manually
+> setting bigger buffers to keep my wifi working?
 
-[ ... ]
+Yes. With these patches applied, your system should run just fine with
+swiotlb=dynamic. However, keep in mind that this implementation adds a
+bit of overhead. In short, it trades a bit of performance for not
+having to figure out the optimal swiotlb size at boot time.
 
->>
->> ...
->>
->>> +MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
->>> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
->>> +MODULE_AUTHOR("Md Danish Anwar <danishanwar@ti.com>");
->>> +MODULE_DESCRIPTION("PRUSS ICSSG Ethernet Driver");
->>> +MODULE_LICENSE("GPL");
->>
->> SPDK says GPL-2.0, so perhaps this should be "GPL v2" ?
->>
-
-I am getting checkpatch warning while changing GPL version.
-
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure
-the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#3602: FILE: drivers/net/ethernet/ti/icssg_prueth.c:1866:
-+MODULE_LICENSE("GPL v2");
-
-Should I ignore this warning and change it to "GPL v2"
-
--- 
-Thanks and Regards,
-Danish.
+Petr T
