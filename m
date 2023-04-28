@@ -2,277 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9416F0FBE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CAE6F0FC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344746AbjD1Am0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 20:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S1344368AbjD1Apy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 20:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344654AbjD1AmS (ORCPT
+        with ESMTP id S229508AbjD1Apw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 20:42:18 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AD03A82
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:41:57 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-52855ba7539so3164282a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:41:57 -0700 (PDT)
+        Thu, 27 Apr 2023 20:45:52 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE9AC;
+        Thu, 27 Apr 2023 17:45:50 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9536df4b907so1740380766b.0;
+        Thu, 27 Apr 2023 17:45:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682642516; x=1685234516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ezb/mtBWXto18t5BMeGyfP88KWTxkli4FptKeY/x46M=;
-        b=cBpNq4kDOoS1KXNAw36+zGssSnylFqMaR3rTdo/Bbi9j+uSIW0zcOYI0md0xbW4j6W
-         +PHFxJ/rOe3KUn/hfS4DGeQhcETYJOxEfXjZyGlSMKsv+CSEvmuki2TM5s9h+sqzZXkm
-         zFMImG52kUZ92kxbvfqyxdPPLXjw/DJeyVb7bUVcVONfdKFL8z9+VjLIhMS0+re2GE2O
-         zEwtBtEBHkyndAa1lteLDV2QAeqC8zrgH0gfV610xTUo+Pm8uYlqrCTPp0id3O0nqgM8
-         EO4A4dGanmX/FeoSb2uM1T+dObQeuLR3ZhqUU9X+KEIF6pPvyCLlK8E7wcVNgFeDCjlE
-         Uraw==
+        d=gmail.com; s=20221208; t=1682642749; x=1685234749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kl96LCCkpjgD23grkbS1yyST45SlEkE3SGRzL04YVVA=;
+        b=RJAufDGR1WE8/kTpjEXn/SvE1akzytsLkLMSFAJuQmkq+aQ8VH3RyUdR1ZfgYEC01H
+         dmeIFGhI24rxqIiby9nWCw+j8K0i3X9sQbFmN75plsAoXnd9Zj8Q6o2R6qjte3BuY417
+         hUaAJ6cnQ30c2uNMkqx3cFnGaRy1ap/Rj1eGCPQ/w/mi24OP2rRGsSjBcondz35Q+U8g
+         nqYb0c1YNnlph2ix5Sq0pZm4FK1G8TCXFubpXMmi0pHzzxZPy5Xf4JLqT1mavNSfSUoh
+         l3q1uIo1B1tNbnDB1xi7cAl8jrXPKyYBmAKg76zKhV4tinMQXyTUkdWTeHBOHS0KjO7j
+         KWcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682642516; x=1685234516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ezb/mtBWXto18t5BMeGyfP88KWTxkli4FptKeY/x46M=;
-        b=lYQCpCorHHymnhdArlIeoy8FvwBXiUSwYDXMUrD4+/1TUrvPClckboVjN0OpUm5vIc
-         pUza3mZLnS2oVysbAKdXtB+G17SAgMHS4onOTwt7ztNRWM9mUhMIiQCNY/U1svw5OV47
-         QLLlAlPILFnmCsPwof3KkJYLyLoipuuDUy9/6ulz4vxD6sAFjV4RkPEwPW+WfUBptpqQ
-         4jkjKzQc1g3moZ4ggOc/8ucaVF5TksKYv2bJG+7PHmbJSQlR7mvmynH0RDzv/YqqYrax
-         m9IJq6Q+wgvHSoM6HXk7xqV0rNHq6hwETsx46sjz+NH0/4J9I2nTWMYIvB47CgnWIIft
-         V5TA==
-X-Gm-Message-State: AC+VfDzrFWOfOsxKRvjmz7xlVJA87TwyO5GoHSdg3WyPfFi8Z+WC6CfM
-        s9i2pgMNs7NO7AJ1xEaitmTq7SqIpGYGcg==
-X-Google-Smtp-Source: ACHHUZ4uSTJSvROEy8sBOqqJIAEA7UBFzhEBDJSv45cu5mSBlwmubK7GVOYVl6ekjsL6kpRFWsParYbdrONO0g==
-X-Received: from yjq3.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:272f])
- (user=jiaqiyan job=sendgmr) by 2002:a63:2885:0:b0:513:953f:fee4 with SMTP id
- bs127-20020a632885000000b00513953ffee4mr815399pgb.10.1682642516710; Thu, 27
- Apr 2023 17:41:56 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 00:41:39 +0000
-In-Reply-To: <20230428004139.2899856-1-jiaqiyan@google.com>
-Mime-Version: 1.0
-References: <20230428004139.2899856-1-jiaqiyan@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230428004139.2899856-8-jiaqiyan@google.com>
-Subject: [RFC PATCH v1 7/7] selftest/mm: test PAGESIZE unmapping UFFD WP
- marker HWPOISON pages
-From:   Jiaqi Yan <jiaqiyan@google.com>
-To:     mike.kravetz@oracle.com, peterx@redhat.com, naoya.horiguchi@nec.com
-Cc:     songmuchun@bytedance.com, duenwen@google.com,
-        axelrasmussen@google.com, jthoughton@google.com,
-        rientjes@google.com, linmiaohe@huawei.com, shy828301@gmail.com,
-        baolin.wang@linux.alibaba.com, wangkefeng.wang@huawei.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Jiaqi Yan <jiaqiyan@google.com>
+        d=1e100.net; s=20221208; t=1682642749; x=1685234749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kl96LCCkpjgD23grkbS1yyST45SlEkE3SGRzL04YVVA=;
+        b=QFjZbWTvzN/2p1RvrQdtIIl2C1nnVvQZpRt1k9TekjKaWGtipl/AZbqXmGQoZx0uJg
+         vtyKHdK6anXWVVur1wWSV2PJge/MiVb0eqyyLkau/C54NR04yRz2E+hFxRPCDWYYKsUx
+         EfUDnjOdguIfEG5Ns6XClHIgVZy3jK9fu9ZAOv5zKZRILEu0GS7nskkVvjStR0AmfOKs
+         KzHZlNQChlpBc3nRzwQsJNkHN3X/60EgT1HAM5VfxojhKHYr5fcN1FdHI15+for6s2hd
+         BYPxKuZYyalp5XsVwC0JY1UCox0fbAdrAAETzTQa6+QnWG94jkwefXcO0bbHkd2LAQN8
+         9FSQ==
+X-Gm-Message-State: AC+VfDxRAlhBSZOb5fxMATUmV2Jqk1rQgrWrStmjGuJVF42sIGP5k9JG
+        qVyyCmGO/b2vXiR1i028QSuRkT/rlKacaa8yyB8=
+X-Google-Smtp-Source: ACHHUZ7B0b4msmyMH8xuBKiO++UE2DzmKb86fdqinlxALx425ntv5PITQowYd8G9Wnbi1TbWybLGz4JLLXngOlOJbf8=
+X-Received: by 2002:a17:906:dc93:b0:94e:5708:1564 with SMTP id
+ cs19-20020a170906dc9300b0094e57081564mr4377799ejc.22.1682642749260; Thu, 27
+ Apr 2023 17:45:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230419122233.3440-1-hackyzh002@gmail.com> <CAF6NKda1Jy_wfxaVqWt-o75f1BO-o4JXHY9HS9_JtJ2FHztMmQ@mail.gmail.com>
+ <CADnq5_MfynMAPU8c-Lq1X_dcDOdRpjW6i=m-Qo8zsZZ=dO-62w@mail.gmail.com>
+In-Reply-To: <CADnq5_MfynMAPU8c-Lq1X_dcDOdRpjW6i=m-Qo8zsZZ=dO-62w@mail.gmail.com>
+From:   whitehat002 whitehat002 <hackyzh002@gmail.com>
+Date:   Fri, 28 Apr 2023 08:45:36 +0800
+Message-ID: <CAF6NKdaxK_ZRkKRyWtm9Cj-8fNE9RptW3FjW-V39rmaHaCGHTw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] drm/amdgpu: Fix integer overflow in amdgpu_cs_pass1
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        sumit.semwal@linaro.org, linaro-mm-sig@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        airlied@gmail.com, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For not-yet-faulted hugepage containing HWPOISON raw page, test
-1. only HWPOISON raw page will not be faulted, and a BUS_MCEERR_AR
-   SIGBUS will be sent to userspace.
-2. healthy raw pages are faulted in as normal. Since the hugepage
-   has been writeprotect by UFFD, non BUS_MCEERR_AR SIGBUS will be
-   sent to userspace.
+Alex,I have a question, why I don't see it on the
+https://patchwork.freedesktop.org/
 
-Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
----
- tools/testing/selftests/mm/hugetlb-hgm.c | 170 +++++++++++++++++++++++
- 1 file changed, 170 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/hugetlb-hgm.c b/tools/testing/selftests/mm/hugetlb-hgm.c
-index bc9529986b66..81ee2d99fea8 100644
---- a/tools/testing/selftests/mm/hugetlb-hgm.c
-+++ b/tools/testing/selftests/mm/hugetlb-hgm.c
-@@ -515,6 +515,169 @@ static int uffd_register(int uffd, char *primary_map, unsigned long len,
- 	return ioctl(uffd, UFFDIO_REGISTER, &reg);
- }
- 
-+static int setup_present_map(char *present_map, size_t len)
-+{
-+	size_t offset = 0;
-+	unsigned char iter = 0;
-+	unsigned long pagesize = getpagesize();
-+	uint64_t size;
-+
-+	for (size = len/2; size >= pagesize;
-+			offset += size, size /= 2) {
-+		iter++;
-+		memset(present_map + offset, iter, size);
-+	}
-+	return 0;
-+}
-+
-+static enum test_status test_hwpoison_absent_uffd_wp(int fd, size_t hugepagesize, size_t len)
-+{
-+	int uffd;
-+	char *absent_map, *present_map;
-+	struct uffdio_api api;
-+	int register_args;
-+	struct sigaction new, old;
-+	enum test_status status = TEST_SKIPPED;
-+	const unsigned long pagesize = getpagesize();
-+	const unsigned long hwpoison_index = 128;
-+	char *hwpoison_addr;
-+
-+	if (hwpoison_index >= (len / pagesize)) {
-+		printf(ERROR_PREFIX "hwpoison_index out of range");
-+		return TEST_FAILED;
-+	}
-+
-+	if (ftruncate(fd, len) < 0) {
-+		perror(ERROR_PREFIX "ftruncate failed");
-+		return TEST_FAILED;
-+	}
-+
-+	uffd = userfaultfd(O_CLOEXEC);
-+	if (uffd < 0) {
-+		perror(ERROR_PREFIX "uffd not created");
-+		return TEST_FAILED;
-+	}
-+
-+	absent_map = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (absent_map == MAP_FAILED) {
-+		perror(ERROR_PREFIX "mmap for ABSENT mapping failed");
-+		goto close_uffd;
-+	}
-+	printf(PREFIX "ABSENT mapping: %p\n", absent_map);
-+
-+	api.api = UFFD_API;
-+	api.features = UFFD_FEATURE_SIGBUS | UFFD_FEATURE_EXACT_ADDRESS |
-+		UFFD_FEATURE_EVENT_FORK;
-+	if (ioctl(uffd, UFFDIO_API, &api) == -1) {
-+		perror(ERROR_PREFIX "UFFDIO_API failed");
-+		goto unmap_absent;
-+	}
-+
-+	/*
-+	 * Register with UFFDIO_REGISTER_MODE_WP to have UFFD WP bit on
-+	 * the HugeTLB page table entry.
-+	 */
-+	register_args = UFFDIO_REGISTER_MODE_MISSING | UFFDIO_REGISTER_MODE_WP;
-+	if (uffd_register(uffd, absent_map, len, register_args)) {
-+		perror(ERROR_PREFIX "UFFDIO_REGISTER failed");
-+		goto unmap_absent;
-+	}
-+
-+	new.sa_sigaction = &sigbus_handler;
-+	new.sa_flags = SA_SIGINFO;
-+	if (sigaction(SIGBUS, &new, &old) < 0) {
-+		perror(ERROR_PREFIX "could not setup SIGBUS handler");
-+		goto unmap_absent;
-+	}
-+
-+	/*
-+	 * Set WP markers to the absent huge mapping. With HGM enabled in
-+	 * kernel CONFIG, memory_failure will enabled HGM in kernel,
-+	 * so no need to enable HGM from userspace.
-+	 */
-+	if (userfaultfd_writeprotect(uffd, absent_map, len, true) < 0) {
-+		status = TEST_FAILED;
-+		goto unmap_absent;
-+	}
-+
-+	status = TEST_PASSED;
-+
-+	/*
-+	 * With MAP_SHARED hugetlb memory, we cna inject memory error to
-+	 * not-yet-faulted mapping (absent_map) by injecting memory error
-+	 * to a already faulted mapping (present_map).
-+	 */
-+	present_map = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	if (present_map == MAP_FAILED) {
-+		perror(ERROR_PREFIX "mmap for non present mapping failed");
-+		goto close_uffd;
-+	}
-+	printf(PREFIX "PRESENT mapping: %p\n", present_map);
-+	setup_present_map(present_map, len);
-+
-+	hwpoison_addr = present_map + hwpoison_index * pagesize;
-+	if (madvise(hwpoison_addr, pagesize, MADV_HWPOISON)) {
-+		perror(PREFIX "MADV_HWPOISON a page in PRESENT mapping failed");
-+		status = TEST_FAILED;
-+		goto unmap_present;
-+	}
-+
-+	printf(PREFIX "checking poisoned range [%p, %p) (len=%#lx) in PRESENT mapping\n",
-+	       hwpoison_addr, hwpoison_addr + pagesize, pagesize);
-+	if (test_sigbus(hwpoison_addr, true) < 0) {
-+		status = TEST_FAILED;
-+		goto done;
-+	}
-+	printf(PREFIX "checking healthy pages in PRESENT mapping\n");
-+	unsigned long hwpoison_addrs[] = {
-+		(unsigned long)hwpoison_addr,
-+		(unsigned long)hwpoison_addr,
-+		(unsigned long)hwpoison_addr
-+	};
-+	status = verify_raw_pages(present_map, len, hwpoison_addrs);
-+	if (status != TEST_PASSED) {
-+		printf(ERROR_PREFIX "checking healthy pages failed\n");
-+		goto done;
-+	}
-+
-+	for (int i = 0; i < len; i += pagesize) {
-+		if (i == hwpoison_index * pagesize) {
-+			printf(PREFIX "checking poisoned range [%p, %p) (len=%#lx) in ABSENT mapping\n",
-+				absent_map + i, absent_map + i + pagesize, pagesize);
-+			if (test_sigbus(absent_map + i, true) < 0) {
-+				status = TEST_FAILED;
-+				break;
-+			}
-+		} else {
-+			/*
-+			 * With UFFD_FEATURE_SIGBUS, we should get a SIGBUS for
-+			 * every not faulted (non present) page/byte.
-+			 */
-+			if (test_sigbus(absent_map + i, false) < 0) {
-+				printf(PREFIX "checking healthy range [%p, %p) (len=%#lx) in ABSENT mapping failed\n",
-+					absent_map + i, absent_map + i + pagesize, pagesize);
-+				status = TEST_FAILED;
-+				break;
-+			}
-+		}
-+	}
-+done:
-+	if (ftruncate(fd, 0) < 0) {
-+		perror(ERROR_PREFIX "ftruncate back to 0 failed");
-+		status = TEST_FAILED;
-+	}
-+unmap_present:
-+	printf(PREFIX "Unmap PRESENT mapping=%p\n", absent_map);
-+	munmap(present_map, len);
-+unmap_absent:
-+	printf(PREFIX "Unmap ABSENT mapping=%p\n", absent_map);
-+	munmap(absent_map, len);
-+close_uffd:
-+	printf(PREFIX "Close UFFD\n");
-+	close(uffd);
-+	return status;
-+}
-+
- enum test_type {
- 	TEST_DEFAULT,
- 	TEST_UFFDWP,
-@@ -744,6 +907,13 @@ int main(void)
- 	printf("HGM hwpoison test: %s\n", status_to_str(status));
- 	if (status == TEST_FAILED)
- 		ret = -1;
-+
-+	printf("HGM hwpoison UFFD-WP marker test...\n");
-+	status = test_hwpoison_absent_uffd_wp(fd, hugepagesize, len);
-+	printf("HGM hwpoison UFFD-WP marker test: %s\n",
-+		status_to_str(status));
-+	if (status == TEST_FAILED)
-+		ret = -1;
- close:
- 	close(fd);
- 
--- 
-2.40.1.495.gc816e09b53d-goog
-
+Alex Deucher <alexdeucher@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8827=E6=
+=97=A5=E5=91=A8=E5=9B=9B 20:40=E5=86=99=E9=81=93=EF=BC=9A
+>
+> As per my prior reply, it has been applied.
+>
+> Thanks,
+>
+> Alex
+>
+> On Thu, Apr 27, 2023 at 8:39=E2=80=AFAM whitehat002 whitehat002
+> <hackyzh002@gmail.com> wrote:
+> >
+> > hello
+> > What is the current status of this patch, has it been applied?
+> >
+> >
+> > hackyzh002 <hackyzh002@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8819=E6=
+=97=A5=E5=91=A8=E4=B8=89 20:23=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > The type of size is unsigned int, if size is 0x40000000, there will
+> > > be an integer overflow, size will be zero after size *=3D sizeof(uint=
+32_t),
+> > > will cause uninitialized memory to be referenced later.
+> > >
+> > > Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+> > > ---
+> > >  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm=
+/amd/amdgpu/amdgpu_cs.c
+> > > index 08eced097..89bcacc65 100644
+> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > > @@ -192,7 +192,7 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_parse=
+r *p,
+> > >         uint64_t *chunk_array_user;
+> > >         uint64_t *chunk_array;
+> > >         uint32_t uf_offset =3D 0;
+> > > -       unsigned int size;
+> > > +       size_t size;
+> > >         int ret;
+> > >         int i;
+> > >
+> > > --
+> > > 2.34.1
+> > >
