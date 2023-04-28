@@ -2,67 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F324D6F1DA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B51D66F1DAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346305AbjD1Rwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S1346417AbjD1Rxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345949AbjD1Rws (ORCPT
+        with ESMTP id S229599AbjD1Rxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:52:48 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190491725
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:52:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a6c5acf6ccso1931695ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682704367; x=1685296367;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=Sm6/iSCnW/BG0/EaShhAT/vTfvS6f0HmuxjwLPnDMFrftS+cKBG9MgVeJ1PKYiRMGt
-         MMu0XSVgJtjo7FR/zGDQmdMWhdsAekgOtC9mnXf4L+oi2B7ih5xw+DEx1Kqnxme7wWy6
-         KOzWTMYqGga06TzO/8CH4Q582R8bsv8e/mdO1gHQmaZ7nJjzRQG55AZ9MpkcKvniIKAZ
-         TbuaCLohwgg5DyUWH5SU60Bm5cvMHwB9M6vLowy5hnuS33zyQHJhnYk2+jM9rk/ib0zQ
-         vYV3rTq7Y0jgGV1XD18Bu6YROjlIbskrKuKn30AWSbUsMMH04HBzHZUrnHeAqFphPYvK
-         dmwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682704367; x=1685296367;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=UvplQSenpLgs0q4HA2ugv09Qs0/Ut0JpaiL1WnPLGvYZ47cHHQ+lj6yXLfRLJ+NZP7
-         hJpl75McoL1tyXMEAlUBg/adHokTzTXPBA3rey1j/g0akn0L/RDGv/iby85J0smz2eyy
-         o8b39BzZrhfZ2mmSOjarq5efRzC5DZYT/2iGADhoGd3tWsTiuVjKOdTqm39Ox2PPYCYz
-         yBgDGd2JFvQQXNnvYnJRpLMPXFN34w4prlRpb4EyoZtM3/ELMn5FZTdlUkKkBJnhTfyp
-         DnpusEfINuBbCrCMfH30hs44DhlBM1Y4OO9qXOvPJMtQLP+vebT4CJl4stwe/bZsYQC5
-         FTBw==
-X-Gm-Message-State: AC+VfDybcPRegVNHBNyVWs5SUhBe0wswh2nPU7JIR90Yhi+RMfxB0mMY
-        qTmXsK4ZkWnt5YKniskH7AM3kARocjg2no0Nr43Q4z+Y
-X-Google-Smtp-Source: ACHHUZ4rMkggqNW+9vIcG65vMduqqNYaVL1KHY6im50exu4VT7gsHNg7YB3cklu95nj+WuOukeIBVxQgK+siMZOUijo=
-X-Received: by 2002:a17:90a:4dc5:b0:246:b4b4:5540 with SMTP id
- r5-20020a17090a4dc500b00246b4b45540mr6195656pjl.1.1682704367263; Fri, 28 Apr
- 2023 10:52:47 -0700 (PDT)
+        Fri, 28 Apr 2023 13:53:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155153C1E;
+        Fri, 28 Apr 2023 10:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682704427; x=1714240427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aRx7+mpDK8aR3HdTkR8Ocvm6w1M4ROBM1nP0BJX1Q1U=;
+  b=cxDfTD8UPJVQpc41IkSLZthX5SKrCss4/k48m+erTyhK/YjgBmJI+4YG
+   oWWp9lEsZ8HgrfbMW2K30BaGXyb18AP98s69hYV8QzMs/+OhdzJN598lO
+   23yb4LejbT+WieooB25rdjgbnchGsZnOMJLYWDnv4v4vK5XIrej2hT/Bp
+   6U+JsotFNjYQqPMOgvMbc5HDVWaX/I4qmHFRkW1Q+KyjvQLEMx9vXt3tZ
+   PvtO3q697AJCcwwVBkmylVA4upvu0zWHvwAN69SZNE0ocmuhxslfWi5hH
+   oiipUSuXQ5Mtfg4FwYoIi49SjBidLXeb/l2orGp+EdUw3yph6esuWfKRF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349839385"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="349839385"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 10:53:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="688899459"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="688899459"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Apr 2023 10:53:40 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psSHr-0000aR-0S;
+        Fri, 28 Apr 2023 17:53:39 +0000
+Date:   Sat, 29 Apr 2023 01:53:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yi-De Wu <yi-de.wu@mediatek.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        David Bradil <dbrazdil@google.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>
+Subject: Re: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor
+ support
+Message-ID: <202304290120.5Ad0n6XR-lkp@intel.com>
+References: <20230428103622.18291-4-yi-de.wu@mediatek.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:cc55:b0:d9:238f:3fb3 with HTTP; Fri, 28 Apr 2023
- 10:52:46 -0700 (PDT)
-From:   Calors Lowwth1 <calorsloweth1@gmail.com>
-Date:   Fri, 28 Apr 2023 10:52:46 -0700
-Message-ID: <CACA_ZJZCiPVSADPWrQQnpA7beowpJT2aR32ud_myXztnNortyw@mail.gmail.com>
-Subject: Reply me back i have something important to tell you
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428103622.18291-4-yi-de.wu@mediatek.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yi-De,
 
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on robh/for-next arnd-asm-generic/master linus/master v6.3 next-20230427]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20230428103622.18291-4-yi-de.wu%40mediatek.com
+patch subject: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor support
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20230429/202304290120.5Ad0n6XR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0e3f05a6e4547eb309032d047115a47d8f59641d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
+        git checkout 0e3f05a6e4547eb309032d047115a47d8f59641d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304290120.5Ad0n6XR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> usr/include/linux/gzvm.h:15: included file 'asm-x86/gzvm_arch.h' is not exported
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
