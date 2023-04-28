@@ -2,103 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8FD6F1D62
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04AC26F1D6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346111AbjD1R1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S1346315AbjD1R2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346093AbjD1R1g (ORCPT
+        with ESMTP id S1346309AbjD1R2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:27:36 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25684690
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:27:32 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-760dff4b701so359839f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682702852; x=1685294852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rh6V4tYiLlllRSr0PfsNXhLUe9cYUsXg2EQxXpgmKK8=;
-        b=q6MUYFZZqhT76ANijpfoaVA0+tjHHNSOMXOqFpKYothGCxai6tDgo9w2NZDUEzjHpK
-         Kt7xDBwNDQjknpnwoCG1kbz09vVe8mPb8p8WSePXvS2bpSfUXvMCEVMMc6yuadU6CX7U
-         G8z7LeT7M984KfYVP0u5fxprBvNwvnebY2yDKrWGsLBy7iuwHjSeClT2AucE2J1JG7Qs
-         /SkTgEzOlgADHXS7UXQKbBIsiL6z7uFLxM+1XlUD8Ss1VP4lAtbUpiij18c8s0FSXY4B
-         RlFTkhAVBl1GvPdPsfSGRWBjQC4PAXLyQQRRf6b+58D5hoz3Gmf4EwJqtQu6uoF0Bhh+
-         eFQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682702852; x=1685294852;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rh6V4tYiLlllRSr0PfsNXhLUe9cYUsXg2EQxXpgmKK8=;
-        b=ULZfR32QbujmMG4WcOgCOUz7+oTV/+nWV4fDFm+TU+mYyW85k4OZbma6x7CGpFttOC
-         AHS6Y4C5V6rXOCy2HPmMZsA4YFAl2OGrri1LP26c4KMPkJWKpgbCLjIcHYfkospqvhDX
-         9bVGwZkoiCpFTJEfzLiBCgKK6/7T6Q2lWsEc2qw0qmEMp8idgggp71RA0NraLAVamNjN
-         +8pZ3qsh22SSnYOqLa9CzGWbSdtAVrc8u5xBUsNe4xYRyjd3Djt1V4AQbyG1N1eWDf/r
-         zroCkflOk3tgkus6RG63bsqlQr+dkYp6aIm2RwDTrTXK0Jfs3h1XBa+k29E6Kci4y0Ag
-         Gcuw==
-X-Gm-Message-State: AC+VfDyXsnJYGhU2MpzrNB4Av9jExydqp6YQAwbU8JP04mL+L2/cqPP5
-        1sEsARTH3PBo3br3tvo6ax8W/g==
-X-Google-Smtp-Source: ACHHUZ7TyzxVowF7SKHydjwyEQVrsACZzNuP633Lc5sSX90cvV9YVZ/rf28aj6JGV291hDpi2KxITw==
-X-Received: by 2002:a6b:b412:0:b0:763:86b1:6111 with SMTP id d18-20020a6bb412000000b0076386b16111mr2820503iof.2.1682702852302;
-        Fri, 28 Apr 2023 10:27:32 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id d9-20020a026209000000b0040f9a41e06asm6398207jac.0.2023.04.28.10.27.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 10:27:31 -0700 (PDT)
-Message-ID: <786c3e8c-5fc3-9ee0-e026-e32a4b061eee@kernel.dk>
-Date:   Fri, 28 Apr 2023 11:27:30 -0600
+        Fri, 28 Apr 2023 13:28:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C35830D5
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D08644E0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EB9C4339E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682702886;
+        bh=awzlaeaMJVwFKmd4eU3dpKmk4Ck+BaGjudrb7tg482Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mpSa/cBmj2Xf/Og6E2MVuM86bg7KoArkd+R9npdtcWIZdgS/QlvNlN7HApdJJPj+o
+         QEp0ofqOZ7XUCRgIBYE6AbzDFPs9eZjH+wYSg3ypO/SREJVl8KkYDV1VSUgD52ZVoM
+         pck/f1RtXnV6kgHUIvN7Yt1ioFpeuPB5972rTqzB7k0eiTT8yU1jxkYp35TtvcyaWD
+         c9Jni6GuGbFCbHokR6cls9ft9asL6vONlZa1jhqVXNP8ZziJ1voZkXDQyA2AbH4hYq
+         3PEIc9yi/bxTKvh8V8ODYC81+7t7NpYfZLs3z52jPpMhEGWF8HHm4I77LbXs/1n/a+
+         XHkWyLYcTq3sw==
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-247048f86c7so160425a91.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:06 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxwuy0AnCiOha6Mf73xFFryLwZbeBz6WALujEDQE54TuB9uLaGE
+        xfE+hXul37tDVAoEEClPc8ETHCnz12wkB1PS7QGjVA==
+X-Google-Smtp-Source: ACHHUZ4EzFJTkyoWOCd5UTE8lkquxKZMsfmdTvY1kPMRpButj1PQ3EvMJaw4oZOSH7LC5CPepwlb1PcWF+Mg7++5nVc=
+X-Received: by 2002:a17:90b:4ac3:b0:24c:1de9:493 with SMTP id
+ mh3-20020a17090b4ac300b0024c1de90493mr4272026pjb.47.1682702885951; Fri, 28
+ Apr 2023 10:28:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 3/3] io_uring: Remove unnecessary BUILD_BUG_ON
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
-        linux-nvme@lists.infradead.org, asml.silence@gmail.com
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, sagi@grimberg.me, hch@lst.de,
-        kbusch@kernel.org, ming.lei@redhat.com
-References: <20230421114440.3343473-1-leitao@debian.org>
- <20230421114440.3343473-4-leitao@debian.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230421114440.3343473-4-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de> <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
+ <14636275-4d26-d639-5f6e-293fc6d1c4c6@web.de> <CAN6tsi7caOQZLLvbL7phMEtNvBLaWgJuHLkLo3YWdqQw7Vxnaw@mail.gmail.com>
+ <6f758653-36c9-91a2-7bbc-278ae3f8ccee@web.de> <CAN6tsi4WBDOyzvXJ8vV=xJYay1JbBGo+UzZ+vudTBm5Fk5nB=A@mail.gmail.com>
+ <14083012-2f19-3760-a840-d685fcedc15e@web.de> <CAN6tsi7263VnTba+WUUWR171Y+CsOKAb=it8cofPQGRk26K=aA@mail.gmail.com>
+ <fa69384f-1485-142b-c4ee-3df54ac68a89@web.de>
+In-Reply-To: <fa69384f-1485-142b-c4ee-3df54ac68a89@web.de>
+From:   Robert Foss <rfoss@kernel.org>
+Date:   Fri, 28 Apr 2023 19:27:54 +0200
+X-Gmail-Original-Message-ID: <CAN6tsi5vukABCxWMNtUHokXj3+xObnX_aKvP-oQDde+M+Biv4g@mail.gmail.com>
+Message-ID: <CAN6tsi5vukABCxWMNtUHokXj3+xObnX_aKvP-oQDde+M+Biv4g@mail.gmail.com>
+Subject: Re: [PATCH resent] drm/bridge: it6505: Move a variable assignment
+ behind a null pointer check in receive_timing_debugfs_show()
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Hermes Wu <hermes.wu@ite.com.tw>,
+        Hsin-yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/21/23 5:44?AM, Breno Leitao wrote:
-> In the io_uring_cmd_prep_async() there is a unnecessary compilation time
-> check to check if cmd is correctly placed at field 48 of the SQE.
-> 
-> This is uncessary, since this check is already in place at
-> io_uring_init():
-> 
->           BUILD_BUG_SQE_ELEM(48, __u64,  addr3);
-> 
-> Remove it and the uring_cmd_pdu_size() function, which is not used
-> anymore.
-> 
-> Keith started a discussion about this topic in the following thread:
-> https://lore.kernel.org/lkml/ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com/
+On Fri, Apr 28, 2023 at 5:56=E2=80=AFPM Markus Elfring <Markus.Elfring@web.=
+de> wrote:
+>
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Sun, 16 Apr 2023 17:30:46 +0200
+>
+> The address of a data structure member was determined before
+> a corresponding null pointer check in the implementation of
+> the function =E2=80=9Creceive_timing_debugfs_show=E2=80=9D.
+>
+> Thus avoid the risk for undefined behaviour by moving the assignment
+> for the variable =E2=80=9Cvid=E2=80=9D behind the null pointer check.
+>
+> This issue was detected by using the Coccinelle software.
+>
+> Fixes: b5c84a9edcd418cd055becad6a22439e7c5e3bf8 ("drm/bridge: add it6505 =
+driver")
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>  drivers/gpu/drm/bridge/ite-it6505.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge=
+/ite-it6505.c
+> index abaf6e23775e..45f579c365e7 100644
+> --- a/drivers/gpu/drm/bridge/ite-it6505.c
+> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
+> @@ -3207,7 +3207,7 @@ static ssize_t receive_timing_debugfs_show(struct f=
+ile *file, char __user *buf,
+>                                            size_t len, loff_t *ppos)
+>  {
+>         struct it6505 *it6505 =3D file->private_data;
+> -       struct drm_display_mode *vid =3D &it6505->video_info;
+> +       struct drm_display_mode *vid;
+>         u8 read_buf[READ_BUFFER_SIZE];
+>         u8 *str =3D read_buf, *end =3D read_buf + READ_BUFFER_SIZE;
+>         ssize_t ret, count;
+> @@ -3216,6 +3216,7 @@ static ssize_t receive_timing_debugfs_show(struct f=
+ile *file, char __user *buf,
+>                 return -ENODEV;
+>
+>         it6505_calc_video_info(it6505);
+> +       vid =3D &it6505->video_info;
+>         str +=3D scnprintf(str, end - str, "---video timing---\n");
+>         str +=3D scnprintf(str, end - str, "PCLK:%d.%03dMHz\n",
+>                          vid->clock / 1000, vid->clock % 1000);
+> --
+> 2.40.0
+>
 
-Just turn that into a:
-
-Link: https://lore.kernel.org/lkml/ZDBmQOhbyU0iLhMw@kbusch-mbp.dhcp.thefacebook.com/
-
-instead.
-
--- 
-Jens Axboe
-
+Applied to drm-misc-next.
