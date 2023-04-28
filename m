@@ -2,175 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30266F119E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47DC6F11A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345361AbjD1GJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 02:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S1345355AbjD1GKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345357AbjD1GJt (ORCPT
+        with ESMTP id S229794AbjD1GKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:09:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9ED2735;
-        Thu, 27 Apr 2023 23:09:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682662188; x=1714198188;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZHxkrpzwTBdGO4RoIArFt2sZX/Zj8/L1F9atRiy0s5g=;
-  b=AmJ0Orj/pZpDGNZAlRNx/iivFqAu4QLEEg2cTFaAAX53k+LZTDGeRubf
-   DY0mv2TC5VQ3LSVtZlE7Bq3uc54MGFVVPaqL7D9aQ/amOTJaibQtJFUro
-   4qaTvnS67S/CN8sOJclAKfhQ1KrJnZa4HfPNFnW4583GL6m5E3EP0uz0V
-   +Yn3VzpBsRdaBQBSMMb9IcdGFnFhyx6KJ8cSl5oo0miDFEd/yK+q4d0+j
-   2WCQ3WNZAYCmw+p2GRQm+2uWmfMbcC2vKxhxz0eikqPhJYSIFZxP15L/e
-   Xmp6Nq9uFi565L955fHqguRCehuF5JqqD3FqFwEZ2wA6Ia8wg3YGHSX78
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="327281390"
-X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
-   d="scan'208";a="327281390"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 23:09:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="838740252"
-X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
-   d="scan'208";a="838740252"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.211.34]) ([10.254.211.34])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 23:09:45 -0700
-Message-ID: <d923f839-7505-21fc-2976-673c9e698b6f@linux.intel.com>
-Date:   Fri, 28 Apr 2023 14:09:43 +0800
+        Fri, 28 Apr 2023 02:10:31 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F4D273E
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=w00AD2RND4svXJ4bvhmsCWapD4KY7uMvXpZBcuXzcMg=; b=Of4PlOMoiK8lg+fqBSD6qB/Xqf
+        lpEZaIEWVy2+q0uWrJQ5lqH4j/MoH0cXwDcxEm5kxXis/rxXiU/9qrp/1K9sk8JbsZc5dz7VqqPa5
+        04W4UcjfQzyN+vbxpokKpYslciSu4rYEjx/+6GvG4LB2qoVq3xAs4nmc6HL9T9MK5eEaPbm6Sb0+s
+        3pd+J5vGSwkHlWmMnP1xbac6PkoLaZTPGJ+q9TCr/hloQ9JBd60g5iNTOGSwONnvjNSe9dhqLsJ85
+        ce7Sm3PikLGsRnI9zU3etZoN95mM7NbUecUfx49/yQS1pzerXpHqDKVwTQoGYXv5YYezjBgH0VsfW
+        KQ3B5/Ng==;
+Received: from [2001:4bb8:189:a74f:c914:942b:f941:7c82] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1psHJM-008Gt5-0C;
+        Fri, 28 Apr 2023 06:10:28 +0000
+Date:   Fri, 28 Apr 2023 08:10:25 +0200
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+Subject: [GIT PULL] dma-mapping updates for Linux 6.4
+Message-ID: <ZEtjUWcp6qm4l+zl@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 10/21] KVM:x86: Add #CP support in guest exception
- classification
-To:     Yang Weijiang <weijiang.yang@intel.com>, seanjc@google.com,
-        pbonzini@redhat.com, peterz@infradead.org, john.allen@amd.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rick.p.edgecombe@intel.com
-References: <20230421134615.62539-1-weijiang.yang@intel.com>
- <20230421134615.62539-11-weijiang.yang@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230421134615.62539-11-weijiang.yang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit 0eee5ae1025699ea93d44fdb6ef2365505082103:
 
+  swiotlb: fix slot alignment checks (2023-03-22 09:03:17 +0100)
 
-On 4/21/2023 9:46 PM, Yang Weijiang wrote:
-> Add handling for Control Protection (#CP) exceptions(vector 21).
-> The new vector is introduced for Intel's Control-Flow Enforcement
-> Technology (CET) relevant violation cases.
-> See Intel's SDM for details.
->
-> Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-> ---
->   arch/x86/include/uapi/asm/kvm.h |  1 +
->   arch/x86/kvm/vmx/nested.c       |  2 +-
->   arch/x86/kvm/x86.c              | 10 +++++++---
->   arch/x86/kvm/x86.h              | 13 ++++++++++---
->   4 files changed, 19 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> index 7f467fe05d42..1c002abe2be8 100644
-> --- a/arch/x86/include/uapi/asm/kvm.h
-> +++ b/arch/x86/include/uapi/asm/kvm.h
-> @@ -33,6 +33,7 @@
->   #define MC_VECTOR 18
->   #define XM_VECTOR 19
->   #define VE_VECTOR 20
-> +#define CP_VECTOR 21
->   
->   /* Select x86 specific features in <linux/kvm.h> */
->   #define __KVM_HAVE_PIT
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 96ede74a6067..7bc62cd72748 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -2850,7 +2850,7 @@ static int nested_check_vm_entry_controls(struct kvm_vcpu *vcpu,
->   		/* VM-entry interruption-info field: deliver error code */
->   		should_have_error_code =
->   			intr_type == INTR_TYPE_HARD_EXCEPTION && prot_mode &&
-> -			x86_exception_has_error_code(vector);
-> +			x86_exception_has_error_code(vcpu, vector);
->   		if (CC(has_error_code != should_have_error_code))
->   			return -EINVAL;
->   
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 7788646bbf1f..a768cbf3fbb7 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -520,11 +520,15 @@ EXPORT_SYMBOL_GPL(kvm_spurious_fault);
->   #define EXCPT_CONTRIBUTORY	1
->   #define EXCPT_PF		2
->   
-> -static int exception_class(int vector)
-> +static int exception_class(struct kvm_vcpu *vcpu, int vector)
->   {
->   	switch (vector) {
->   	case PF_VECTOR:
->   		return EXCPT_PF;
-> +	case CP_VECTOR:
-> +		if (vcpu->arch.cr4_guest_rsvd_bits & X86_CR4_CET)
-> +			return EXCPT_BENIGN;
-> +		return EXCPT_CONTRIBUTORY;
-By definition, #CP is Contributory.
-Can you explain more about this change here which treats #CP as 
-EXCPT_BENIGN when CET is not enabled in guest?
+are available in the Git repository at:
 
-In current KVM code, there is suppose no #CP triggered in guest if CET 
-is not enalbed in guest, right?
->   	case DE_VECTOR:
->   	case TS_VECTOR:
->   	case NP_VECTOR:
-> @@ -707,8 +711,8 @@ static void kvm_multiple_exception(struct kvm_vcpu *vcpu,
->   		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
->   		return;
->   	}
-> -	class1 = exception_class(prev_nr);
-> -	class2 = exception_class(nr);
-> +	class1 = exception_class(vcpu, prev_nr);
-> +	class2 = exception_class(vcpu, nr);
->   	if ((class1 == EXCPT_CONTRIBUTORY && class2 == EXCPT_CONTRIBUTORY) ||
->   	    (class1 == EXCPT_PF && class2 != EXCPT_BENIGN)) {
->   		/*
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index c544602d07a3..2ba7c7fc4846 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -171,13 +171,20 @@ static inline bool is_64_bit_hypercall(struct kvm_vcpu *vcpu)
->   	return vcpu->arch.guest_state_protected || is_64_bit_mode(vcpu);
->   }
->   
-> -static inline bool x86_exception_has_error_code(unsigned int vector)
-> +static inline bool x86_exception_has_error_code(struct kvm_vcpu *vcpu,
-> +						unsigned int vector)
->   {
->   	static u32 exception_has_error_code = BIT(DF_VECTOR) | BIT(TS_VECTOR) |
->   			BIT(NP_VECTOR) | BIT(SS_VECTOR) | BIT(GP_VECTOR) |
-> -			BIT(PF_VECTOR) | BIT(AC_VECTOR);
-> +			BIT(PF_VECTOR) | BIT(AC_VECTOR) | BIT(CP_VECTOR);
->   
-> -	return (1U << vector) & exception_has_error_code;
-> +	if (!((1U << vector) & exception_has_error_code))
-> +		return false;
-> +
-> +	if (vector == CP_VECTOR)
-> +		return !(vcpu->arch.cr4_guest_rsvd_bits & X86_CR4_CET);
-> +
-> +	return true;
->   }
->   
->   static inline bool mmu_is_nested(struct kvm_vcpu *vcpu)
+  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-6.4-2023-04-28
 
+for you to fetch changes up to ec274aff21b6a94c7973384ca80a503c1bc3b173:
+
+  swiotlb: Omit total_used and used_hiwater if !CONFIG_DEBUG_FS (2023-04-20 14:51:41 +0200)
+
+----------------------------------------------------------------
+dma-mapping updates for Linux 6.4
+
+ - fix a PageHighMem check in dma-coherent initialization (Doug Berger)
+ - clean up the coherency defaul initialiation (Jiaxun Yang)
+ - add cacheline to user/kernel dma-debug space dump messages
+   (Desnes Nunes, Geert Uytterhoeve)
+ - swiotlb statistics improvements (Michael Kelley)
+ - misc cleanups (Petr Tesarik)
+
+----------------------------------------------------------------
+Desnes Nunes (2):
+      dma-debug: small dma_debug_entry's comment and variable name updates
+      dma-debug: add cacheline to user/kernel space dump messages
+
+Doug Berger (1):
+      swiotlb: relocate PageHighMem test away from rmem_swiotlb_setup
+
+Geert Uytterhoeven (1):
+      dma-debug: Use %pa to format phys_addr_t
+
+Jiaxun Yang (3):
+      dma-mapping: provide a fallback dma_default_coherent
+      dma-mapping: provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
+      of: address: always use dma_default_coherent for default coherency
+
+Michael Kelley (2):
+      swiotlb: fix debugfs reporting of reserved memory pools
+      swiotlb: track and report io_tlb_used high water marks in debugfs
+
+Petr Tesarik (2):
+      dma-direct: cleanup parameters to dma_direct_optimal_gfp_mask
+      swiotlb: Omit total_used and used_hiwater if !CONFIG_DEBUG_FS
+
+ arch/powerpc/Kconfig        |   2 +-
+ arch/riscv/Kconfig          |   2 +-
+ drivers/of/Kconfig          |   4 --
+ drivers/of/address.c        |   2 +-
+ include/linux/dma-map-ops.h |   2 +
+ include/linux/swiotlb.h     |   9 +++
+ kernel/dma/Kconfig          |   7 +++
+ kernel/dma/debug.c          | 131 +++++++++++++++++++++++---------------------
+ kernel/dma/direct.c         |  15 +++--
+ kernel/dma/mapping.c        |   6 +-
+ kernel/dma/swiotlb.c        |  97 ++++++++++++++++++++++++++++----
+ 11 files changed, 189 insertions(+), 88 deletions(-)
