@@ -2,181 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C0E6F1F30
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD616F1F36
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345716AbjD1URt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 16:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
+        id S1345927AbjD1UVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjD1URr (ORCPT
+        with ESMTP id S229479AbjD1UVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:17:47 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2C6F1;
-        Fri, 28 Apr 2023 13:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682713066; x=1714249066;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yDRDS5djblnagCc1RW+ZqryqFHXn3yoxu+/t6ww9oCY=;
-  b=c2rXiPK/eNwDsRck9fRuSApxaVD/Q8qYlmOJ8x+/vpqR4a8T3OiMh2+O
-   9CHzgKajieZ7xBPXXP1M/VTlfDjC4MPJlXRTj3RjPSGz+Orvq9WB4qoKd
-   dzD7hfeACSDfQecpjgcMVwYTf5xMXkTJPdH9UAiYbawGUKV5LjRM3/1ep
-   6eam5kO3Ip7OWZ4vKXJVxZ/Fs90/d6TPPQJRsG6HwWWiMR2yK8AyQdDXC
-   rQ0UphZBYAROWN0wpapZcAS8T3AhuZymdqJgXAATOWUaz4qID0J80Gavo
-   lwykAUYsYC3zQzPoxmAa1uMJU3p7XBtoskJegiX9mCfKYj6fJw3TadsBq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="346618461"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="346618461"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 13:17:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="838973080"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="838973080"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2023 13:17:43 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psUXG-0000fJ-1W;
-        Fri, 28 Apr 2023 20:17:42 +0000
-Date:   Sat, 29 Apr 2023 04:17:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ziqin Liu <ziqin_l@hust.edu.cn>, dzm91@hust.edu.cn,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        hust-os-kernel-patches@googlegroups.com,
-        Ziqin Liu <ziqin_l@hust.edu.cn>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in
- clk_mt8173_apmixed_probe
-Message-ID: <202304290405.yLxJEMC4-lkp@intel.com>
-References: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
-MIME-Version: 1.0
+        Fri, 28 Apr 2023 16:21:19 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2122.outbound.protection.outlook.com [40.107.243.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BE41FE6;
+        Fri, 28 Apr 2023 13:21:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HkKxWPfQEx7gLewLqVKTN24XUHSAHQAIIC0fpofMBHEOrZYrNrKIew26tVB6XlkvVlBOIPsAk+Sd8UyBArmI6oMPQpUEUaRUwjZ4sFPBKyVRo/0rR+MZIoGHOyDCeVJhnp5OgB+SDItyi/Ni5OMoX0eO4bXLuPRP/8jcw1nT293m2rxCS3uzLnEpHE3SvUkt6Zu3WJ0gWbCQHb1Vhgjlug9JjyjTMoXNTL59eEmRf7cxb72QWp9T9Mbn/TvuagsAchOgLTnQ6S4mc4ipqp/dh3wJgAog5JvYkgpnowasvp/hIplBSOebRbfUIcmN3rUaY3x4gGQsj8J9rdoFmpshrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DtNeKrUgHWgybUZiwFn9ZUfLZPf1mFcItNAAG+dA7hk=;
+ b=dpMVVlZIcRmccmfiJgTr6bHlHKiTsntVmP8p8/GkXFU5SL2YFEj49B8xGBCYltLjn3wS//rrE740ShQJGbJcO20nQBqG5R4UvRca/oWA3wctKqZzMHHrUSZ6eAuMNhxu7+odlMI8D3QoDH9abj9SoLLScRVvRIYPMUXI/cOK/1Ia/JReVzqJIV/zJPvpCWISfgRsbQbWsphpAwCt7CPEhQ8qkDLUomG1PDRU1KMCxd27ehVmvDjg9LyM4AewcOjFegwHvYi7fVr//Yqqz9aEQ4wxVSuOfntPutxS8OX72EYemL3mXNu//4lyotPL5oGUi8yFL40EWtK1Z1yGnX+Khg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DtNeKrUgHWgybUZiwFn9ZUfLZPf1mFcItNAAG+dA7hk=;
+ b=Mkgog0ehn9Aau+MxIt/2tQ+I8n+/oV7VCUl//1iyhpC8CoCnZ5mlerGxpzgZCK0PZS6ixLpBG6rkW2Dhg5moK+04DQv3bomeL4eQzYLKh2rKzX/IXYKmfGaeA19Z38zuB6xEdVyIo06yb7pInKbVuOHAAm+nut9IZJG5Z4vuYqE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BLAPR13MB4675.namprd13.prod.outlook.com (2603:10b6:208:321::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 20:21:15 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 20:21:15 +0000
+Date:   Fri, 28 Apr 2023 22:21:07 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] wifi: ath11k: Use list_count_nodes()
+Message-ID: <ZEwqs0B9FSarvYS6@corigine.com>
+References: <941484caae24b89d20524b1a5661dd1fd7025492.1682542084.git.christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425132601.106181-1-ziqin_l@hust.edu.cn>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <941484caae24b89d20524b1a5661dd1fd7025492.1682542084.git.christophe.jaillet@wanadoo.fr>
+X-ClientProxiedBy: AS4P251CA0029.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d3::19) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BLAPR13MB4675:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f5094f4-aafa-48de-027c-08db48261dfe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VjM/JXx14lSGvdZA807urD+wP0UqxfHJQkbppjjLUtjsfxE3gfhk5/gSrL0GZ/IvmLwn9cVGndSKXVsdJfkzO3ILWncR6f9NwoehJTucsJcENYchJGpl4DKTz7jFhsQzbzCxS7ELF0pFlNQhjJ0kgujvXxnCoSryolxxPsW5SF0XuDPazU0bv9PyKActrx/8ub5RDXFY+vUwdYBEY4VXV2g/+1Hnb3+vCRv48Jh9klOlkITqk4oqIdXPe70GJclS/lN5nlOIgO6T0WHWjR2uFmecNOpJgJswak0kFetU0UwonewJcKpq+PCzUCrdY0Hz/HFYwQnzymQH0er++olFz3wQXfBMQauLNmvfJDqckw88wegGv+kgQLsjXtq/XQQVZqjDdc1rMLQthEf25zRR5X2NJxeQlzZGWwM6HNMp6JeOEGez+jWtWYZ5WGrau3PnSaf3unQY9cOIzMgolb7B9islzBG3cm+SrcCk67UptGsxvVFt+KWLHV7uazcHNIfKrl5qFs41+RCLrHxZaCs/GCfpyIu6JHOhGGwBfMXj/CW6OmcHhZzJPDOmq5hLYNVR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(366004)(136003)(346002)(396003)(451199021)(186003)(6512007)(6506007)(2616005)(66476007)(44832011)(66946007)(6916009)(66556008)(7416002)(316002)(41300700001)(38100700002)(5660300002)(4744005)(4326008)(2906002)(86362001)(54906003)(478600001)(8936002)(6666004)(8676002)(6486002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KZRZdbQH3vaTK6Yab+jIUvny66vZkD+xK34jdIK3FBTuY29GdMWDTGe2pO4q?=
+ =?us-ascii?Q?fyPHA2/L/SAEeQp7Rfuo70IYVlhUMx+FU6eXdNnZ4AsjWnq7ltcK1p3xFPbS?=
+ =?us-ascii?Q?2Q7r4xDEiavYyZyim4Hq45v1j6rML/xxvObkLnCn8HqTTgEHyJAjWTitZeqO?=
+ =?us-ascii?Q?D7zLs/KcwEOGpEf8S2lSWxEq/p4u68K8PUqQtnfZ8vru76AtAlMam7ahp9vT?=
+ =?us-ascii?Q?KyzqHkBoHH6axxxJ+pZri1+iphykBLQU/9TCoYD1yGeYQl4V4fSkGAH2T65n?=
+ =?us-ascii?Q?x8kGq4VePlryfKRQS6yiTbW+1pdU8sisbVfwKipVgbC26hPJG32+hTn/EmHs?=
+ =?us-ascii?Q?k3P5l6+tAMN9ue2IarhMpiWAuxeYjpHqpQ0oV/a3wLcXBWdJG/MJVQeTno2J?=
+ =?us-ascii?Q?oT7WiuhUojx42YB7aSdc2jBg3Bz+UNd9xXl+68Ga69Op5w7Pc6xvZz46hk++?=
+ =?us-ascii?Q?UWwmc4Jsg2QUqQsFECjFuCBsRHuYSA85UmIx/WimnAknm2O5k3mInqBGG5oU?=
+ =?us-ascii?Q?ljwB6IpiFWKP7fftjYdosPk6igLzHoaCMCxBDbzwZMFfM6x3Xk6C065S07Rl?=
+ =?us-ascii?Q?PFw+HnsJ5SfoRQB2lj/NbcwqXpsImms1Bhg06ZbEsa5I/uklunRBY6QhFOI8?=
+ =?us-ascii?Q?T/NEFRE0vVpexRI8q3CJOZP+x1OuxyqYdd6QBSkMxDCa7MNANMEp6QecwLf7?=
+ =?us-ascii?Q?LxdPtrBWcks69SeQ5VYxlfofdAd0HwxseGcSOva22ZGHVupO6H5bxSSFFkEV?=
+ =?us-ascii?Q?tK292Nb/6PfgV8cFdVNXacanZ/JNmpEnW7Doun1CMi8hcvtyPKwjPjjltYM4?=
+ =?us-ascii?Q?g+IvAc50E/ztDHd7WKy4q6dsRgV0u6eXTve4ReiYfCBuR8uhHBhaRtAMLQZl?=
+ =?us-ascii?Q?bjQfNQkSeY8lfQT4W/nw6Y+2hwWfw9hEOICspcbUufdCq8Ug6iJ34wf6y3de?=
+ =?us-ascii?Q?P2vh5pJrmwy1x1KU5eGmPBMO4h9TypSS9DjaFbV2noQNealxwc0hZ7yvdbdd?=
+ =?us-ascii?Q?TYGPCWT1oN91vt/zLU0jBJgoErtcV0C/iJ/wWqXwFvnaB36LAX6QQViVFo1M?=
+ =?us-ascii?Q?p7cbJqiKcyzjr35xd/4/U+++wQFe8YMVtiifSYe0jTbaSE7CVTLFc52bxfS6?=
+ =?us-ascii?Q?4qt3BdtibHxNDHxfmVYWvEJsdReAiJWwfNt7pV3GD5Rb7UoYTeYirxhpw/Oe?=
+ =?us-ascii?Q?C4+HmmCkJj26CB3wwxQ2iUNu05pTK/D1xdl9ABXlmxqh1eTYlBwb8kT2FQgK?=
+ =?us-ascii?Q?KPFYZmQuKwvjlYg0NFGGkoUvuDAA3iDNmYYMfde38mPuYK2EuQdZpvO/dh7Y?=
+ =?us-ascii?Q?O/pH494o0w4GVBL5Qjp8qi89C6+9Mmbol0JpcPuTOV89X+X1FZzlTftj7h5X?=
+ =?us-ascii?Q?hO17lBhXP4bukR60gnOAonZKLHAk+Ef55/J65mpq9YO6G/MExV3TNt879qz9?=
+ =?us-ascii?Q?LKnlr00eqGwbEy99Ze9YKQV/uGPiPNC1KV6OLUnNFq0dhlMdVgI+iLnPv0nw?=
+ =?us-ascii?Q?NPkvgqlD1vC4VjTPXAJOIFlVKSUKyvTJg5Vgw5QtmVc4oWC/hlcQXlfsZQ+v?=
+ =?us-ascii?Q?KCyqK1rnDoNr9oxbaxe5vXrdpKSP3ykOB/Ec1I9BQ2M9zqZ5gfYhVmB+dcK7?=
+ =?us-ascii?Q?9QPjzwidn3MQ+oIGHBghMQOu37dDiuhQb9QdOxj1Eg8svDlbqXkHWYDoAKBY?=
+ =?us-ascii?Q?vl1lQA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f5094f4-aafa-48de-027c-08db48261dfe
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 20:21:15.3698
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 34zwtlkeyK24Y8+7caO3KN9DUB395jFAC+5lRYmtoiaXf5N5YpPlwkU+AHvqOPYDrBKo+slPsOZRA1I4tqwsdndubXpXY8Xk4FnC76X/K1o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR13MB4675
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ziqin,
+On Wed, Apr 26, 2023 at 10:48:59PM +0200, Christophe JAILLET wrote:
+> ath11k_wmi_fw_stats_num_vdevs() and ath11k_wmi_fw_stats_num_bcn() really
+> look the same as list_count_nodes(), so use the latter instead of hand
+> writing it.
+> 
+> The first ones use list_for_each_entry() and the other list_for_each(), but
+> they both count the number of nodes in the list.
+> 
+> While at it, also remove to prototypes of non-existent functions.
+> Based on the names and prototypes, it is likely that they should be
+> equivalent to list_count_nodes().
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230425132601.106181-1-ziqin_l%40hust.edu.cn
-patch subject: [PATCH] clk: mediatek: clk-mt8173: fix memory leak in clk_mt8173_apmixed_probe
-config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20230429/202304290405.yLxJEMC4-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cb4be4dcd48924984a6d0e3df7809cfc26286032
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ziqin-Liu/clk-mediatek-clk-mt8173-fix-memory-leak-in-clk_mt8173_apmixed_probe/20230425-212917
-        git checkout cb4be4dcd48924984a6d0e3df7809cfc26286032
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/clk/mediatek/ drivers/video/fbdev/core/ mm/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290405.yLxJEMC4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/clk/mediatek/clk-mt8173-apmixedsys.c: In function 'clk_mt8173_apmixed_probe':
->> drivers/clk/mediatek/clk-mt8173-apmixedsys.c:149:34: error: incompatible type for argument 1 of 'devm_of_iomap'
-     149 |         base = devm_of_iomap(pdev->dev, node, 0, NULL);
-         |                              ~~~~^~~~~
-         |                                  |
-         |                                  struct device
-   In file included from include/linux/platform_device.h:13,
-                    from drivers/clk/mediatek/clk-mt8173-apmixedsys.c:11:
-   include/linux/device.h:241:44: note: expected 'struct device *' but argument is of type 'struct device'
-     241 | void __iomem *devm_of_iomap(struct device *dev,
-         |                             ~~~~~~~~~~~~~~~^~~
-
-
-vim +/devm_of_iomap +149 drivers/clk/mediatek/clk-mt8173-apmixedsys.c
-
-   139	
-   140	static int clk_mt8173_apmixed_probe(struct platform_device *pdev)
-   141	{
-   142		const u8 *fhctl_node = "mediatek,mt8173-fhctl";
-   143		struct device_node *node = pdev->dev.of_node;
-   144		struct clk_hw_onecell_data *clk_data;
-   145		void __iomem *base;
-   146		struct clk_hw *hw;
-   147		int r;
-   148	
- > 149		base = devm_of_iomap(pdev->dev, node, 0, NULL);
-   150		if (!base)
-   151			return PTR_ERR(base);
-   152	
-   153		clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-   154		if (IS_ERR_OR_NULL(clk_data))
-   155			return -ENOMEM;
-   156	
-   157		fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
-   158		r = mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
-   159					    pllfhs, ARRAY_SIZE(pllfhs), clk_data);
-   160		if (r)
-   161			goto free_clk_data;
-   162	
-   163		hw = mtk_clk_register_ref2usb_tx("ref2usb_tx", "clk26m", base + REGOFF_REF2USB);
-   164		if (IS_ERR(hw)) {
-   165			r = PTR_ERR(hw);
-   166			dev_err(&pdev->dev, "Failed to register ref2usb_tx: %d\n", r);
-   167			goto unregister_plls;
-   168		}
-   169		clk_data->hws[CLK_APMIXED_REF2USB_TX] = hw;
-   170	
-   171		hw = devm_clk_hw_register_divider(&pdev->dev, "hdmi_ref", "tvdpll_594m", 0,
-   172						  base + REGOFF_HDMI_REF, 16, 3,
-   173						  CLK_DIVIDER_POWER_OF_TWO, NULL);
-   174		clk_data->hws[CLK_APMIXED_HDMI_REF] = hw;
-   175	
-   176		r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-   177		if (r)
-   178			goto unregister_ref2usb;
-   179	
-   180		return 0;
-   181	
-   182	unregister_ref2usb:
-   183		mtk_clk_unregister_ref2usb_tx(clk_data->hws[CLK_APMIXED_REF2USB_TX]);
-   184	unregister_plls:
-   185		mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-   186					  ARRAY_SIZE(pllfhs), clk_data);
-   187	free_clk_data:
-   188		mtk_free_clk_data(clk_data);
-   189		return r;
-   190	}
-   191	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
