@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967966F16E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0336F16E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239683AbjD1Lho convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Apr 2023 07:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S230145AbjD1Lhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjD1Lhl (ORCPT
+        with ESMTP id S229657AbjD1Lhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:37:41 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221F59FB;
-        Fri, 28 Apr 2023 04:37:40 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-94f59fbe2cbso280472866b.1;
-        Fri, 28 Apr 2023 04:37:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682681859; x=1685273859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pQiAdmvtnwSb14cjiMRaVpHdjTkVg4P9ZJ6La/hDMEU=;
-        b=YnHhrlJqThjMfhttHi0UKColRYCW+VNH+8p6WSzKrTdmsPidLH4qPE5Hf4JmzVIt4Q
-         y1s4+4Zw2yxrR782iDd/4VWVj9aBXfjjPvxnwY3dICQzFLrVzhWJy4ovBkpKbNJyGXiL
-         TN8Cyf3Bn2wAZzhR6wLC0wSxNkLQDIfswekCC64zo8+ycVu5EdubwcptkVh7WiYW6b16
-         +X30/5JkPKn28A4xmNMKsVtotqzBwabEaWrEwenNJ5JrumD8l/EGM0SHc4OkOaCpJepg
-         Mz4QIQqR9E43VpX4q3YD2Szub6z4GXlhP9e2KfIKFZPB6/6j2wrj5HhWh5EsBsRJa6vP
-         twrg==
-X-Gm-Message-State: AC+VfDyCOrcM9rXELEraPCPcDZAcglJ7In1ZgZ9UyYgk/0idiM3iU49a
-        hur45jVbu3TK04DMh506wOjBrhNEUuDcl6efY0w=
-X-Google-Smtp-Source: ACHHUZ7b83N+99IjPNrm9q4SfjsN0/3pu7yue2W8TTat+5Di3COuETAjaTyh9pN0yPc4hXwcjAl94wgjwcrGshwc6vQ=
-X-Received: by 2002:a17:906:7a51:b0:94e:63ae:5b9b with SMTP id
- i17-20020a1709067a5100b0094e63ae5b9bmr2033742ejo.7.1682681858835; Fri, 28 Apr
- 2023 04:37:38 -0700 (PDT)
+        Fri, 28 Apr 2023 07:37:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E662713
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:37:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682681855; x=1714217855;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r+lEb9TiFos67P+XBhpmGcYi3Yo9mEf1O2PfhzE4aek=;
+  b=fXZlS5/9rKlGrGozdYxxYtKcYOwSkgQN2dCi142+OQkqjhG93niP26Vl
+   zojcVeUUBzjCcniauVUYWonJ4a4tUWsQEFu2BTXoopGkdvvHsPFTTZYRh
+   etZ0tPb/TZKSGGL/izLWTQn3UC7ebKMeTL3my1G4YKMHQFBaQrhsKTgbO
+   2Ug1IvJJKv4YRpnblujdlFzOmesCq+sBp8h8cMv1/B7zwV4DRviQRvTsA
+   DStZ3w23ZddjtyFtsHU5tiSQsQ4wraEWq4yFbO2ctI4RRLSdEv3mY56ZW
+   nQh40si0CZ6PSQ/efUWNlv6V3NJ21/dzVwUtIwyQTa2pEq9Pfii8R++wy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="328059572"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="328059572"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:37:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="759629569"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="759629569"
+Received: from ahermans-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.35.91])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:37:31 -0700
+Date:   Fri, 28 Apr 2023 13:37:28 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>, Juergen Gross <jgross@suse.com>,
+        linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH] x86/mm: Fix PAT bit missing from page protection
+ modify mask
+Message-ID: <ZEuv+PoleXWAa4Nw@ashyti-mobl2.lan>
+References: <20230424123524.17008-1-janusz.krzysztofik@linux.intel.com>
 MIME-Version: 1.0
-References: <20230428070314.225560-1-wangyouwan@126.com>
-In-Reply-To: <20230428070314.225560-1-wangyouwan@126.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Apr 2023 13:37:26 +0200
-Message-ID: <CAJZ5v0jT0tiwQtTpg-YeptVYq_t80o0nW3O7d9OBDmAxdv8=Dw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: create cooling device based on ACPI
-To:     wangyouwan@126.com
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424123524.17008-1-janusz.krzysztofik@linux.intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 9:19 AM <wangyouwan@126.com> wrote:
->
-> From: youwan Wang <wangyouwan@126.com>
->
-> When using the "scpi_cpufreq" driver, an error
-> occurs:cpufreq_cooling: OF node not available for cpu*.
-> The current computer motherboard is using ACPI firmware.
-> Go to see that the error is caused by calling the
-> "of_cpufreq_cooling_register" interface.
-> comment:create cpufreq cooling device based on DT.
->
-> Signed-off-by: youwan Wang <wangyouwan@126.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6b52ebe5a890..3418c68959d5 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1528,8 +1528,13 @@ static int cpufreq_online(unsigned int cpu)
->         if (cpufreq_driver->ready)
->                 cpufreq_driver->ready(policy);
->
-> -       if (cpufreq_thermal_control_enabled(cpufreq_driver))
-> +       if (cpufreq_thermal_control_enabled(cpufreq_driver)) {
-> +#ifdef CONFIG_ACPI
-> +               policy->cdev = cpufreq_cooling_register(policy);
-> +#else
->                 policy->cdev = of_cpufreq_cooling_register(policy);
-> +#endif
+Hi Janusz,
 
-Please avoid adding #ifdefs like this in random places.
+On Mon, Apr 24, 2023 at 02:35:24PM +0200, Janusz Krzysztofik wrote:
+> Visible glitches have been observed when running graphics applications on
+> Linux under Xen hypervisor.  Those observations have been confirmed with
+> failures from kms_pwrite_crc Intel GPU test that verifies data coherency
+> of DRM frame buffer objects using hardware CRC checksums calculated by
+> display controllers, exposed to userspace via debugfs.  Affected
+> processing paths have then been identified with new test variants that
+> mmap the objects using different methods and caching modes.
 
-Moreover, what if the kernel supports ACPI and the platform is DT-based?
+BTW, are you going to update those tests in IGT?
 
-> +       }
->
->         pr_debug("initialization complete\n");
->
-> --
+Andi
