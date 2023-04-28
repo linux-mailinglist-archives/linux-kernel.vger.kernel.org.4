@@ -2,103 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E89A6F1C58
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B806F1C5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjD1QMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S230015AbjD1QN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjD1QMS (ORCPT
+        with ESMTP id S229453AbjD1QN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:12:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843E11BC3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682698292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xvahxQLiQFCmxj/da0CErLJVS9PB2G5zFVCmECHMB00=;
-        b=DGvkDp8UAKUWvdmFGUOjFjB5Md5vXBR6ipW9JD423ZqAilPZRxgLFdVEbxr41R3rreeLPP
-        QSufe7KGCXVtas9ztJtvCcaTw8kPZ/b6YBKmwOZjygqFd94J27AttyrSQyUDBirf57r4WX
-        kuFkspy0ckkCP9qOjF4EnkLJuWGoAYE=
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
- [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-638-Sa6dKrrDNpu61gkan9yHfA-1; Fri, 28 Apr 2023 12:11:31 -0400
-X-MC-Unique: Sa6dKrrDNpu61gkan9yHfA-1
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-54f94262a87so337257b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:11:31 -0700 (PDT)
+        Fri, 28 Apr 2023 12:13:28 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389972D61;
+        Fri, 28 Apr 2023 09:13:27 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4efe8991bafso104962e87.0;
+        Fri, 28 Apr 2023 09:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682698405; x=1685290405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h6HpevGuSeKVYRWiHzaC5C3PvoQ9zXlfTGqpoJB0Fpo=;
+        b=QFnSbPBqc8rULLiYh43yU6s3POFfVoXpcuFaDGA4dotETjtDC3qnydjfG2NycpeCAg
+         SOTAvfpRdoD7zDCuwHd2L4qmHQ1cYxiqG/pHlkDKk2i1WFNdlgnY178CGUwUYLwRo3FB
+         PJpMgwhw799Jvffz/Wl6eYqkW+i0G76n2zRQWHIltS+QWMlv1L3IfDHT52hEHHWTOuMf
+         kNZag1PGG/nd4Pa8fCvuE9lXlc9X3AmjV9ME/Ue2Hw417Uh60c2cFvxG3Sh3JZ8kMQxa
+         NvpR8PvEz5xGer+rVAFAg0a+u5VGxqodtiux9tIfAGUYDD4WPZUit6hdJmPJBwJTBSdX
+         s3Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682698290; x=1685290290;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1682698405; x=1685290405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xvahxQLiQFCmxj/da0CErLJVS9PB2G5zFVCmECHMB00=;
-        b=gQPJ+vI30mN53VnvHuQjNVB5BzQ4AmcTMdXR4rUZUHxKqhpfC5DQxNU06cdrc97aRm
-         M5PwAcGiMG6tfTEPyFTfBzrq+gAsL7T0oyywBoxQPBh2IddHbjOoWMqnWfKH9iSprlHh
-         JCYGQF0k5b5CoD6CRi/Ja8AMzEcaMSAsKVdvVhA3uiJsOOKeBIBzStceT0J6ydcwHXX4
-         NnomTc2DzVZm8fLBs0gRGIg3FoZEXTO3teunjax3TRPE+9nBrieeqoBi0nMOgA8rpynb
-         c76SqaHy7HB93e4iXSQmJlbmvxzgmPOIgtpJMcv+QY1De/dVViAfc3vvZyQ/CRiQJjhc
-         0u6A==
-X-Gm-Message-State: AC+VfDxjqvQGJgZRTWlH1rgeVDwB9XgwAKNbZNcbmSltFDZ80yq+Iyg6
-        t6ieEPu0YZNkKQsc59LaDQrdMHGx6DJOABnhepHAxXXsRps8q6z/66e+ZgjV6yQYEYEtihihoFU
-        V+4nKfyr3gfFx6TuwNHgNBpBauOJvxIbo
-X-Received: by 2002:a0d:e781:0:b0:54f:7971:4f87 with SMTP id q123-20020a0de781000000b0054f79714f87mr4293697ywe.36.1682698290454;
-        Fri, 28 Apr 2023 09:11:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6eQOValmuJ/zOGLy7XBJvtcPQGnD4pUgv35/t3W92dQB8jJAbCq53fx3gGDoRQ4+mPyAlOcw==
-X-Received: by 2002:a0d:e781:0:b0:54f:7971:4f87 with SMTP id q123-20020a0de781000000b0054f79714f87mr4293686ywe.36.1682698290218;
-        Fri, 28 Apr 2023 09:11:30 -0700 (PDT)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d190-20020a0df4c7000000b0054fcbf35b94sm5497442ywf.87.2023.04.28.09.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 09:11:29 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 12:11:27 -0400
-From:   Brian Masney <bmasney@redhat.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 3/4] Input: pwm-vibra - add support for enable GPIO
-Message-ID: <ZEvwL69i2Wzdoagt@x1>
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
- <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz>
- <ZEsFV6F4CEh2/av8@x1>
- <8250064.NyiUUSuA9g@z3ntu.xyz>
+        bh=h6HpevGuSeKVYRWiHzaC5C3PvoQ9zXlfTGqpoJB0Fpo=;
+        b=USYHsHkXkK5OQYtenbbat8+w5ROC2IPtb53WAQUr9RHFndzNTzrexj0tLuzATb9Op5
+         iny0ORe9+Git5d2S66rR9cxWkDa9aZS87a+MgbJRU6kQ1OGCcsveMi9xZAim1tWO4k90
+         vCdvwXfRNBnQhW8ai4pno4W6FU7BvQ0mUKlVm/tlse8jLMLybykG2k2e639VeUi/IiqS
+         1vB1kWWo366ZjN+ho4VTuTQMOoAjH51wfYO8U54w3tCgO07su+2bG6I7ZuxWX9w7ZTEC
+         D8hhy8ngODDXo2xybTz71K5LGNXq9yBaLdvwpeqUTbWpVQIE62gK+DCyn54JIfGC9aGS
+         J04Q==
+X-Gm-Message-State: AC+VfDzHwlmtLeMcJd70KQrRfamwcJryL8Y0NLCp6hG+PkqVhaHa2RjR
+        ZX3DZtC/FaE8cZgyIo9nEzQZVeSY4f09DOrZ41c=
+X-Google-Smtp-Source: ACHHUZ76w8Yi9LRDcm13mL6+0ksU3T5OdE3rL55wTmJe4rUXdCTQqtagEYTArGsVpVo5afeYTlHKVved1YzxBmMI7WA=
+X-Received: by 2002:ac2:5549:0:b0:4ed:b818:48ae with SMTP id
+ l9-20020ac25549000000b004edb81848aemr1577073lfk.21.1682698405140; Fri, 28 Apr
+ 2023 09:13:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8250064.NyiUUSuA9g@z3ntu.xyz>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-13-jorge.lopez2@hp.com>
+ <cf54c6f4-d177-4904-82ee-9d33566fb920@t-8ch.de> <CAOOmCE8rpA=XvWBxcyRVu_gOHie3qN0E15Rs9bLfhb6tPZ7tyg@mail.gmail.com>
+ <479b18e3-a35b-45c7-8c8a-cd30af646977@t-8ch.de> <CAOOmCE87dV6pnnU7r8Ycf0XcVERpRFRZeK6=y+nC+_Fc1EuJMg@mail.gmail.com>
+ <7bdac640-cf61-429f-acd0-f8aa40b41e73@t-8ch.de> <CAOOmCE9pWqqN1zNAfdaWFL_cZvSfiEpQjETVeECR0BAw9-sVDQ@mail.gmail.com>
+ <52554657-2902-454b-b2af-ed632dd2f081@t-8ch.de>
+In-Reply-To: <52554657-2902-454b-b2af-ed632dd2f081@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Fri, 28 Apr 2023 11:12:59 -0500
+Message-ID: <CAOOmCE_jDOf4qE4kZJkW-TSP-_pvo54q9o3pKpaSM+UnjWGCjQ@mail.gmail.com>
+Subject: Re: [PATCH v11 12/14] HP BIOSCFG driver - surestart-attributes
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 06:06:20PM +0200, Luca Weiss wrote:
-> On Freitag, 28. April 2023 01:29:27 CEST Brian Masney wrote:
-> > Take a look at dev_err_probe() to remove the -EPROBE_DEFER check.
-> 
-> The input subsystem doesn't like dev_err_probe for some reason, you should 
-> quickly find examples of that being rejected on the mailing list (or see   
-> "git grep dev_err_probe drivers/input/")
+On Fri, Apr 28, 2023 at 11:06=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8c=
+h.de> wrote:
+>
+> On 2023-04-28 10:40:59-0500, Jorge Lopez wrote:
+> > On Fri, Apr 28, 2023 at 10:21=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@=
+t-8ch.de> wrote:
+> > >
+> > > On 2023-04-28 09:58:01-0500, Jorge Lopez wrote:
+> > > > On Fri, Apr 28, 2023 at 1:03=E2=80=AFAM Thomas Wei=C3=9Fschuh <thom=
+as@t-8ch.de> wrote:
+> > > > >
+> > > > > On 2023-04-27 17:17:57-0500, Jorge Lopez wrote:
+> > > > > > On Sun, Apr 23, 2023 at 7:16=E2=80=AFAM Thomas Wei=C3=9Fschuh <=
+thomas@t-8ch.de> wrote:
+> > > > > > >
+> > > > > > > On 2023-04-20 11:54:52-0500, Jorge Lopez wrote:
+> > > > > > > >  .../x86/hp/hp-bioscfg/surestart-attributes.c  | 130 ++++++=
+++++++++++++
+> > > > > > > >  1 file changed, 130 insertions(+)
+> > > > > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/sure=
+start-attributes.c
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-a=
+ttributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+> > > > > > > > new file mode 100644
+> > >
+> > > <snip>
+> > >
+> > > > > > > Instead of not returning any data, why not show as many resul=
+ts as
+> > > > > > > possible?
+> > > > > > >
+> > > > > >
+> > > > > > if count * LOG_ENTRY_SIZE > PAGE_SIZE then I prefer to return a=
+n error.
+> > > > > > if the count is correct but a failure occurs while reading indi=
+vidual
+> > > > > > audit logs then we will return a partial list of all audit logs
+> > > > > > This changes will be included in Version 12
+> > > > >
+> > > > > What prevents the firmware from having more log entries?
+> > > > > Wouldn't these audit log entries not accumulate for each logged
+> > > > > operation over the lifetime of the device / boot?
+> > > > >
+> > > > > This would make the interface unusable as soon as there are more
+> > > > > entries.
+> > > >
+> > > > BIOS stores a max number of audit logs appropriate to the current
+> > > > audit log size.The first audit logs are kept in a FIFO queue by BIO=
+S
+> > > > so when the queue is full and a new audit log arrives, then the  fi=
+rst
+> > > > audit log will be deleted.
+> > >
+> > > How does it determine "appropriate"?
+> > > This would also be great in a comment.
+> > >
+> > > If the BIOS is just using FIFO the driver could return the first
+> > > LOG_MAX_ENTRIES entries.
+> > > This would avoid trusting the firmware for a reasonable definition of
+> > > "appropriate".
+> > >
+> > > > >
+> > > > > > > > +
+> > > > > > > > +     if (ret < 0)
+> > > > > > > > +             return ret;
+> > > > >
+> > > > > And this should first validate ret and then count.
+> > > >
+> > > > Done!
+> > > >
+> > > > >
+> > > > > > > > +
+> > > > > > > > +     /*
+> > > > > > > > +      * We are guaranteed the buffer is 4KB so today all t=
+he event
+> > > > > > > > +      * logs will fit
+> > > > > > > > +      */
+> > > > > > > > +
+> > > > > > > > +     for (i =3D 0; ((i < count) & (ret >=3D 0)); i++) {
+> > > > > > >
+> > > > > > > &&
+> > > > > > >
+> > > > > > > Better yet, pull the condition ret >=3D 0 into the body, as a=
+n else-branch
+> > > > > > > for the existing check.
+> > > > > > >
+> > > > > >
+> > > > > > Done!
+> > > > > >
+> > > > > > > > +             *buf =3D (i + 1);
+> > > > > > >
+> > > > > > > Isn't this directly overwritten by the query below?
+> > > > > >
+> > > > > > buf input value indicates the audit log to be read hence the re=
+ason
+> > > > > > why it is overwritten.
+> > > > > > This is an expected behavior.
+> > > > >
+> > > > > So this is read by the HPWMI_SURESTART_GET_LOG method in the firm=
+ware?
+> > > > >
+> > > > > Make sense but need a comment.
+> > > >
+> > > > Done!
+> > > >
+> > > > >
+> > > > > > >
+> > > > > > > > +             ret =3D hp_wmi_perform_query(HPWMI_SURESTART_=
+GET_LOG,
+> > > > > > > > +                                        HPWMI_SURESTART,
+> > > > > > > > +                                        buf, 1, 128);
+> > > > > > > > +             if (ret >=3D 0)
+> > > > > > > > +                     buf +=3D LOG_ENTRY_SIZE;
+> > > > > > >
+> > > > > > > So 128 bytes are read but only the first 16 bytes are preserv=
+ed?
+> > > > > > >
+> > > > > > > The documentation says that each entry has 128 bytes in the f=
+ile.
+> > > > > > > And that they are separated by ";", which is not implemented.
+> > > > > >
+> > > > > > The statement will be removed from documentation  (separated by=
+ ";")
+> > > > > > audit log size is 16 bytes.
+> > > > > > >
+> > > > > > > Can the audit-log not contain all-zero bytes?
+> > > > > > > If it does this would need to be a bin_attribute.
+> > > > > >
+> > > > > > Bytes 16-127 are ignored and not used at this time.  If the aud=
+it log
+> > > > > > changes, then the driver will need to change to accommodate the=
+ new
+> > > > > > audit log size.
+> > > > >
+> > > > > buf is not guaranteed to have 128 bytes left for this data.
+> > > > >
+> > > > > For example if this is entry number 253 we are at offset 253 * 16=
+ =3D 4048
+> > > > > in the sysfs buffer. Now hw_wmi_perform_query may try to write to=
+ 4048 +
+> > > > > 127 =3D 4175 which is out of bounds for the buf of size 4096.
+> > > > >
+> > > > > Writing first to a stack buffer would be better,
+> > > > > or pass outsize =3D LOG_ENTRY_SIZE.
+> > > > >
+> > > > BIOS currently stores 16 bytes for each audit log although the WMI
+> > > > query reads 128 bytes.  The 128 bytes size is set to provide suppor=
+t
+> > > > in future BIOS for audit log sizes >=3D 16 and < 128 bytes.
+> > >
+> > > And if an old driver is running on a new BIOS then this would write o=
+ut
+> > > of bounds.
+> > > Or if the BIOS is buggy.
+> > >
+> > > If the current driver can only handle 16 byte sized log entries then =
+the
+> > > this should be used in the call to HPWMI_SURESTART_GET_LOG.
+> >
+> > BIOS WMI specification indicates that the HPWMI_SURESTART_GET_LOG call
+> > expects a 128 byte size output buffer regardless of the actual audit
+> > log size currently supported.
+> >
+> > Return Values:
+> > Byte 0-15: a requested Audit Log entry (Each Audit log is 16 bytes)
+> > Byte 16-127: Unused
+> > >
+> > > Storing it in a 128 byte stackvariable would also sidestep the issue.
+> >
+> > The driver hardcodes the audit log size to 16 bytes.  If the new BIOS
+> > provides an audit log that is larger than 16 bytes, then the logs
+> > provided to the user application by the old driver will be truncated.
+>
+> HPWMI_SURESTART_GET_LOG is directly passed a pointer into "buf" which
+> comes from sysfs core and is one page, 4096 bytes large.
+> It is told to write 128 bytes into it at a given offset.
+>
+> In the loop if i =3D=3D 253 then this offset will be LOG_ENTRY_SIZE * 253=
+ =3D 4048.
+>
+> So on a new BIOS the driver may write 128 bytes at offset 4048.
+> This goes up to 4175 which is larger than the 4096 buffer.
+>
+> (See also the calculation in the previous mail)
+>
+> Just use a 128 byte stack buffer and copy 16 bytes of it to the output
+> buffer.
+> (After having validated that the BIOS actually returned 16 bytes)
 
-OK, that's fine then. Feel free to include my Reviewed-by.
-
-Brian
-
+Thank you for the clarification.
+Done!
