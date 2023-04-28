@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FC86F1B4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C547C6F1B50
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjD1PTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
+        id S1345591AbjD1PT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjD1PTU (ORCPT
+        with ESMTP id S229623AbjD1PTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:19:20 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF7B1FED
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1gWqmK1pf0FFJ4TSP7xU2y80RRLOAbNJTnqFlNM4mlc=; b=mxOtYJegObyEWHQUWDnHdnqDV2
-        YfXcE224wfFB3l7fXDc6XtignNaOwjIpY5BuH2NVvfEPgPv0GxE9W0/Tw6Du5C7H+s7/bV4WIlsnX
-        Fj4rJH5BcKmQP8DXrKgi8k3IOd+3+gUPu+PqRR37ZDM/PjBERIX6DwvAbl2o8CGF27vPoYEYLldDC
-        xRmNJQb80K+npd79u48CI67ZT8v00ru6NZr3U/tpgYNIuGD1C5wsl1l7CmssmsMq+8qDtjNXF5iVc
-        U9jEVOUmjsA7jrU0l6S0OnNqyH4sMGMFPHoTwGk8PBTPkIFa/If9tHi58I4OxNKCuLVTTDzboU73r
-        3ra7qnNw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1psPrr-00DMpp-1u;
-        Fri, 28 Apr 2023 15:18:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 12697300300;
-        Fri, 28 Apr 2023 17:18:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E8450241AEB03; Fri, 28 Apr 2023 17:18:37 +0200 (CEST)
-Date:   Fri, 28 Apr 2023 17:18:37 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Subject: Re: [PATCH RFC 34/43] objtool: Adapt indirect call of __fentry__()
- for PIE support
-Message-ID: <20230428151837.GD1449475@hirez.programming.kicks-ass.net>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <804a7d5a4ef939b767ae540ebbb24a811d99e100.1682673543.git.houwenlong.hwl@antgroup.com>
+        Fri, 28 Apr 2023 11:19:25 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8FD559F
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:19:25 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a92513abebso654845ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682695165; x=1685287165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uc6SVgjQVy/8xdDmpqE6kegdWc2XYcBn7ME2NMVrIWg=;
+        b=a2wQcCSzJiPV6HLT5OJe0dVPUYI8Gp/tKxtd34p+7dwTrPOe9YQf5HbEYpT8Ww1Kot
+         j8r6LIiaBBa5egkwwkWxG6RDsIfc+/f8BNe5dpNw6a8LBOs+UkiIsbWHTH+O5n/8GJjV
+         2jPvoOTj8CVAeWgkXROOO1oAEqQJrcNIjXG6qKw5625/c2EJLk5sUgLvV0IUq3vkXT8q
+         PXfhfGkGEF2dj51VOShoMbTPW9WubD9RVl5unUt0+hsmDhCYwlCDuuBcXuEg9ugORrbj
+         BVASkxZCltbuQXj6VI8/ya9MaoHC8kaxrYSO/e1I55+WF03+eJAV2Y3PG58vkrj7kBJD
+         QUog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682695165; x=1685287165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uc6SVgjQVy/8xdDmpqE6kegdWc2XYcBn7ME2NMVrIWg=;
+        b=c0Q/U3cYneBbtINNbg69GD2+KPBAvSwJwOPUKaF/m4fthqzIBNvdtr7H+y4iX2MT0x
+         QxDuUhWzPsWQUU3BaOq0zr9rYUQyORlKyfcnLNm23DkLTcO+jgIc2zdkfvc2sS9uB1wQ
+         vNQZGHQBP2T5SnovM6tQBk83Nfnysxv1zLiFK4GBIzZViXl+82ok4lQuDbBiIkil2liv
+         CI6PPOT6uIhwjKKAJX+RD4ZvcWjlleO/IQ5uHYh9JCJCVc9chVlKLOkO20drvHgaV6/6
+         l+Q87iJQy3MJgwV42YP7oa0Gzc6UPiXu4Eo3GhSiT3fiC8NKZ2F0KAkw6zm8SVfCkIhG
+         D2cA==
+X-Gm-Message-State: AC+VfDzOEYRu3K6fSiQ5GOVMPA9nktp3HDq05ydb6oprS6drxiiQtSZi
+        2jKI1el8BK7Jp1ER1kuzmDk=
+X-Google-Smtp-Source: ACHHUZ7BLsWWcbRarrz0mQrYzfShIHbxWuszM2234lMPlr3N3XzHsw31s2mCGyVvwEJqJj2f/GAcsA==
+X-Received: by 2002:a17:902:f681:b0:1a9:736a:5251 with SMTP id l1-20020a170902f68100b001a9736a5251mr6464854plg.16.1682695164211;
+        Fri, 28 Apr 2023 08:19:24 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id io13-20020a17090312cd00b001a212a93295sm1505828plb.189.2023.04.28.08.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 08:19:23 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 28 Apr 2023 05:19:21 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 4/5] workqueue: Automatically mark CPU-hogging work items
+ CPU_INTENSIVE
+Message-ID: <ZEvj-eet6anRUR6o@slm.duckdns.org>
+References: <20230418205159.724789-1-tj@kernel.org>
+ <20230418205159.724789-5-tj@kernel.org>
+ <20230425131254.GF1335080@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <804a7d5a4ef939b767ae540ebbb24a811d99e100.1682673543.git.houwenlong.hwl@antgroup.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230425131254.GF1335080@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 05:51:14PM +0800, Hou Wenlong wrote:
+Hello, Peter.
 
-> --- a/tools/objtool/arch/x86/decode.c
-> +++ b/tools/objtool/arch/x86/decode.c
-> @@ -747,15 +747,21 @@ void arch_initial_func_cfi_state(struct cfi_init_state *state)
->  
->  const char *arch_nop_insn(int len)
->  {
-> -	static const char nops[5][5] = {
-> +	static const char nops[6][6] = {
->  		{ BYTES_NOP1 },
->  		{ BYTES_NOP2 },
->  		{ BYTES_NOP3 },
->  		{ BYTES_NOP4 },
->  		{ BYTES_NOP5 },
-> +		/*
-> +		 * For PIE kernel, use a 5-byte nop
-> +		 * and 1-byte nop to keep the frace
-> +		 * hooking algorithm working correct.
-> +		 */
-> +		{ BYTES_NOP5, BYTES_NOP1 },
->  	};
-> -	if (len < 1 || len > 5) {
-> +	if (len < 1 || len > 6) {
->  		WARN("invalid NOP size: %d\n", len);
->  		return NULL;
->  	}
+On Tue, Apr 25, 2023 at 03:12:54PM +0200, Peter Zijlstra wrote:
+> On Tue, Apr 18, 2023 at 10:51:58AM -1000, Tejun Heo wrote:
+> > If a per-cpu work item hogs the CPU, it can prevent other work items from
+> > starting through concurrency management. A per-cpu workqueue which intends
+> > to host such CPU-hogging work items can choose to not participate in
+> > concurrency management by setting %WQ_CPU_INTENSIVE; however, this can be
+> > error-prone and difficult to debug when missed.
+> 
+> Well; you could use this very heuristic, and instead of silently trying
+> to fix up, complain about the missing CPU_INTENSIVE thing.
+...
+> But why not keep it a debug mechanism? Now you're got a heuristic with
+> all the down-sides that they bring.
 
-Like Steve already said, this is broken, we hard rely on these things
-being single instructions, this must absolutely be BYTES_NOP6.
+I'm working on improving the locality of unbound workqueues and it isn't
+clear whether there's enough space for per-cpu CPU_INTENSIVE work items -
+ie. if it's gonna saturate the CPU for extended periods of time to the point
+of requiring CPU_INTENSIVE, it might as well be an unbound work item if the
+baseline locality can be good enough. There aren't that many users of
+CPU_INTENSIVE in tree and we can decide based on how unbound workqueues
+actually work out for them.
 
-And yes, then you get to fix a whole lot more.
+As for warnings, yeah, that'd be great to have regardless of how
+CPU_INTENSIVE turns out. Just gotta make sure it doesn't fire spuriously and
+become a nuisance.
+
+Thanks.
+
+-- 
+tejun
