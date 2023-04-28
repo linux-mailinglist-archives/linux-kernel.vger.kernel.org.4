@@ -2,230 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2316F12E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069266F12ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345488AbjD1HzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S1345828AbjD1H4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345876AbjD1Hy4 (ORCPT
+        with ESMTP id S1345817AbjD1H4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:54:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04F23584
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682668452; x=1714204452;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OlsA+AX7WyRohAddj2ZGazyt0PvfVc7tI53YweesSB0=;
-  b=iq9LyqSpiKXkczyQRjF6+wb4ZUDId3Kir6tL/gMj9wYEJcbfJjCq8EPE
-   2iMI8+S8Fkk4byK++u4LzqYRW+EQv8uUHx7y29isQ9TAzeDAUbo6Kvcz2
-   3Agtvu6JEEp5axau28wqSfn95GMefrfRPQK2WRKn/9luLnG7BarwGahIg
-   rQtLI+5G35eACODMida6C36GEyDMGReBzaPjcbfAlvK6W60y9QPaD8DgN
-   QN6sDopqQxxEqdwzqcq6/zBYF5eytSnkLXLsr2gfiVktpqi5LMhbYfrQK
-   FI2ZMC68KmTnRFfnkxki/FeKlv7tPkrccef+lOwp+xzxwuZIma1oV9Svh
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,233,1677567600"; 
-   d="asc'?scan'208";a="149397349"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Apr 2023 00:54:11 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Apr 2023 00:54:10 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 28 Apr 2023 00:54:07 -0700
-Date:   Fri, 28 Apr 2023 08:53:49 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Conor Dooley <conor@kernel.org>
-CC:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <paul.walmsley@sifive.com>, <kito.cheng@sifive.com>,
-        <jrtc27@jrtc27.com>, <matthias.bgg@gmail.com>,
-        <heinrich.schuchardt@canonical.com>, <greentime.hu@sifive.com>,
-        <nick.knight@sifive.com>, <christoph.muellner@vrull.eu>,
-        <philipp.tomsich@vrull.eu>, <richard.henderson@linaro.org>,
-        <arnd@arndb.de>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] RISC-V: add support for vendor-extensions via
- AT_BASE_PLATFORM and xthead
-Message-ID: <20230428-survey-uniquely-99bdc105ce3b@wendy>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <20230424194911.264850-5-heiko.stuebner@vrull.eu>
- <20230426-spirits-ludicrous-a5d8275686e6@wendy>
- <5016896.Mh6RI2rZIc@diego>
- <20230427-maybe-skier-51e7cf09795c@spud>
+        Fri, 28 Apr 2023 03:56:07 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2048.outbound.protection.outlook.com [40.107.6.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351D52689;
+        Fri, 28 Apr 2023 00:55:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zw63doySFtOQdUI0x3XdvU2aK+aMRqVZRG5gEVlGWlfyX9tmiUeYNG6LssckuwMh5pmBXgjZrumy4oh0BHKtGctQ93rA8eswriPIYhTsuxx0/tPDREpPcvKwdxiQJgldmAXx2dTvK1t2+9Kd7bTkqo9zUskthv5sDIXIQhO21Z6yRX+A77TgMes0zfzsO1X8Vm7qIvx1SGJXMRXtN+dGAyJs8G77/aXGh8VDb6O/NZPvapfOndx3Ha4GG5m6XHWsZL/e4XP3PL6bVG129nxh/NZo0ny4Lj+/LUi+Zfdo0ouBKxsBG38GC/nZJabEPpH8xB9wMfYofTUspLKGa0nDHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PKZ4XkyPeSQEq+jctXRx8+EK8S0DeDJAkY0KzQluAWM=;
+ b=XhZ2z3TGrxzJ5dL01oPiiPU2hdCYLDSaUOXs7YJHU0mpoNrcw0s8KN3wl1nHrx4r/KLxvR5ahkFuXZbeY0hirIoj2KWeo5NEuJGEJ8y+nu9T75WUlLqhjJ3PYj2evUnGjh27bwkxhIXlUO/5e1Chg68GZwoHpuyjmgqFFav2YB4HLKk8uaa+MFFUiv8feLZRUU3HvtwJdjihQ3cFE6SFqkllrRSOXaTn1YjVV3rxzDs3f6QCiqLtD7ulOGrUWhIhC7zI2OxNBigXygciT+zPpHL9YLY5wgEFSbMwH6qb6QQnR1XHrtqVSP/RxdAKlXOyYiQSfl3GnbyHVnr68Gv8JA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PKZ4XkyPeSQEq+jctXRx8+EK8S0DeDJAkY0KzQluAWM=;
+ b=FuRVuQ8doS4nyp/JdaRLYdQD7Wmo/VoPOMzD/2baIj9Wv7/DPQDpQ26ldf89e89XDE97Jhj1pGrAqjuDrNswsnCi/bdwKAxFwU2mvfk6CSpqKjdSqL3c0qK/NGHxYk+BOXCVuZRAXUiswAJYpR7cnIQ9+XFYalCfliI25anlu3I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8876.eurprd04.prod.outlook.com (2603:10a6:20b:40b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24; Fri, 28 Apr
+ 2023 07:55:43 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::b999:f2c6:a8cc:7b4%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 07:55:43 +0000
+Message-ID: <ff56e0f0-bdf8-6914-443a-d463fe863bb7@oss.nxp.com>
+Date:   Fri, 28 Apr 2023 15:55:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 2/2] clk: imx: clk-imx8mp: add error handling of
+ of_clk_add_hw_provider
+To:     Yuxing Liu <lyx2022@hust.edu.cn>, Abel Vesa <abelvesa@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230424092411.124706-1-lyx2022@hust.edu.cn>
+From:   Peng Fan <peng.fan@oss.nxp.com>
+In-Reply-To: <20230424092411.124706-1-lyx2022@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG3P274CA0004.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::16)
+ To DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="y5bW1V7trXX+9VZK"
-Content-Disposition: inline
-In-Reply-To: <20230427-maybe-skier-51e7cf09795c@spud>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8876:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b6072aa-50ed-4c54-ce66-08db47bdf7ae
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xGYDzuznICsqGrhRJ6DLCuGPziiD0kVFhI/V0CUA6nE2DCcEbT4m23QrhJXnHsdkoX8c162+ERcAmxnR/5sZsgDkwQraLM08B/MhQdkjo00xp++bkyXYWA5I9nHQ6lbpHn5RBeDKsYIUO2jzbYO3sg0voq/atHn5am2gCeCINe0X0rVFMp1PUjRxYRDKCQWHnQiz6Kw8ahkaMhK+l3YDGVFQyiHovg5Z4jE2mdU7ClCb3KBoIxsEY2vE0E7kyCBXKMF19aKqNxItMMtO2wlvyeEEwu0xUYi3K0p2J/obEFmVuDLloL4UBRoP+3f+x9ZPMtcsHzrhYCfHLhGFVhFIMBdwOZ0h1OpqXM6iaRhxkrf3OFoQoo0gYSfmZgZhOIrEu1P/7i4UwyUfPKrYwOr8ReOltBEPooSFW32pNKNmZfs2RViQIKfpjW2EZqqSxy4pM0OIIjxeuKqb6UqqxYCHgGN8G6FduTLFyFP5gaD6/hOW2dv54yt/VGEhWA2T44c6A26wwuSVWoS2qs73KGPfpbSv0uiUmt4ZPmcbMRfwMJ6X1jxtaGRdZKjHaIKGtgjOV8SlD1ZMmzogXOTn8zeGkFh6618Gz03oXuEmAjfq7mdEpm2KR0Z9+FgrPzykF4zeutbzynqTJ4FL3ixRSkWNGwnu9iIidRXXonGkGA8Oy+8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(366004)(396003)(39860400002)(451199021)(2616005)(186003)(5660300002)(31696002)(8676002)(8936002)(7416002)(83380400001)(86362001)(44832011)(31686004)(41300700001)(6666004)(53546011)(6486002)(316002)(478600001)(6512007)(6506007)(26005)(66946007)(66476007)(66556008)(38100700002)(2906002)(4326008)(110136005)(921005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eVl3ZHM1anRWd2pNWFFFRmRkU2pJVTFIQzF5cyt4Sy9Gck1ZdDVEUGlqRm9r?=
+ =?utf-8?B?b2RFQjZtV0JqVUxvdUYxMGkyMHUvdUNtbUk3VFBOV2piNTVUTnNhS1g1T0t0?=
+ =?utf-8?B?RURPbjhoQjVsMkhpS0VsT0R4RnV1a1BwbVBMMERyQUphREtjcEtBRVBXSllT?=
+ =?utf-8?B?ZjR5OWlKa3FyUVd2aXBwOTJxaXgvK1hDUnVTUDhROXh3UTVjODNLSWdnMk5z?=
+ =?utf-8?B?Yjg5TTJrdy9odnVLSUFad2lvTVh6R2FLem9HaFN6MUtSTjRGaG9lTk15a28y?=
+ =?utf-8?B?ckh2TWVxZGx2a3JyaWV2QkdpU0dMVnJlTExIVjl0YkJJSlZXMFNLMWFTcCsx?=
+ =?utf-8?B?cTdkejlhZnAvcEZvQUYrWnc2Uk4wcVFIZ2lPWWxNcnk0UDM5N0VBYXlIK1Fs?=
+ =?utf-8?B?M0xpcjhOM2g4dHd4SEY4N3JsQ2lrZmdlSFdWNmFYQWVRbU9ST3hyVSt3Y1l6?=
+ =?utf-8?B?ZHB0aTJ5QWs3dnloK09IVDZRVUJ5WnpLdzRocGx4eXhWcE55ZjFOWHFCcm5L?=
+ =?utf-8?B?ajh3MVhNNWNONUNoaG5YNUM0cXFPektPcmg3WFRIWGdJOFY3WkszZy9kY1V1?=
+ =?utf-8?B?akl1NEVWTXNHaXdqRGpIRFVGVHhNYTdQNlM1NjViVHM1c2FxTCtnVkpwS3FX?=
+ =?utf-8?B?WHl4TndRL3RnTlRad2IxRUxIM0VRMDFpZlFVUEF0TDZ4a1NVUFFWZEp4QUVB?=
+ =?utf-8?B?ZnVoN1JUcHcyc3hHZGMxbVFuUldpR1ZFL0QrVUxZNXpVUTFoRFl3d1FzNXRv?=
+ =?utf-8?B?NVVZTkJjdGo5blZUbnVaTWpldzh5d1pEQTgxMVIvK3hwRFQ3ak5Yd1IwQ2FI?=
+ =?utf-8?B?K01mQTVEYTRHOE5ndlNmOFN3Qk40OHRBR3B3MkpCSTFLUU1Jdm5Td2tZTEhC?=
+ =?utf-8?B?ekV0cDdQVkIrdURXajNGRkFGNGVwWUFEaHlGYWNwWnVnV1UzTXR4TUZ3VDUx?=
+ =?utf-8?B?UzFjR2JHWUxhUGN0U1pMQ05tc2h3RWpBckVoVXNSd1I4RUtYeEhVOWxGUk9L?=
+ =?utf-8?B?Q212NHBQejJkbFd6eG5vWXlKWTlmd2ZjTWdwajRYdzZrdDV3aDc3QVN5U2tC?=
+ =?utf-8?B?a2F3Y3JveU9VZXlFVnZHYzZkaExoc05FQWdIenZTZ1M2TlJhRThjSUlBeXR5?=
+ =?utf-8?B?UE0rMkRyaVJLQU5RU2NYVElpRjM0dHdiRjVySHV3cTNVc0gxaDJmMCtpeGFI?=
+ =?utf-8?B?R0IzMEVKS3UzY3FEMUc2RXpmbjdFQ2E1M1Q0OFY2L3U1YWFCbCs1c0lxaW1m?=
+ =?utf-8?B?WGd2a01HOTBnRUNTTU1FVTArdkNIV2ZYMVpuR1R1Mzh3SEpmdytiUGY1YlR6?=
+ =?utf-8?B?WkZpbUU1R05MUnZ2UUV6RjQ1a3psUnhRVnA5dlUrNzZ5U29wWVN6cFlxYzQr?=
+ =?utf-8?B?a3VzcVhGcmVKWWhRLzFsMjhYVVhQRDM2NUJRK1pPMzRQNm1oUFc3czVtblVF?=
+ =?utf-8?B?ZysrcUw0WldYY1N6eHRXNkxvbXpkZkZWa25HeEhZQWRlSVhvT2xzdWZuNDMz?=
+ =?utf-8?B?YTNaNXlSSHlqYmZZWWJ6dmhqNTFHdG4rcUIxaWdOVUlKUzVLZjdxMkI1NFNJ?=
+ =?utf-8?B?ZHlBb1pKcmp2YUkyd0wxTlhKU2tMcWlheEpnWW1ZNU5JU1NvNDhOMGtpbGVX?=
+ =?utf-8?B?cGd5YTJKcW02bk5PNzlUbjV5bjl5cWhVbVpqd0pOYU53dmFZUHdBempzWERk?=
+ =?utf-8?B?a1Z2bTlIVGNCRTU5NXovVXh5OEVVZkhVVGJGUHArVjhhUGNraGRBYzlTQW81?=
+ =?utf-8?B?QXJrNW00c1Q4dTZFRDJJbHNQWjlUeUtqRnUvWGR5RG5BSk4zYlArQ1BuTlMr?=
+ =?utf-8?B?WkJaTjdXcnoycFUwaTRjajAzNXRGM2JMRmx1QXlDa085N0s1ZlcyREkvbmxy?=
+ =?utf-8?B?VkYvT2NZM2syUVpRaGVzNXNNRTJPUkFkaE9ySGdyT2U1K0dvRzR2WmpTMG1w?=
+ =?utf-8?B?V2NWb2pSZzQyWjJPWVA3THJNQUpSMkt6bzgwQ0U0WElxN1pLditVSC9WK3hR?=
+ =?utf-8?B?cG9qVG1zOGVNcVlDYkpJS0xqUXplbkpuWUFXQUd1Mi8rK005dUtmdy9jVC9Q?=
+ =?utf-8?B?dnBXRVRYYmNya3h0aTVVcDN3M1J4YVhmZ1g0dTE4TGNSMWJHaUpYaUx5L2pO?=
+ =?utf-8?Q?rD4X5H+mXYXXd8QuGwufYVjiy?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b6072aa-50ed-4c54-ce66-08db47bdf7ae
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 07:55:43.6034
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iIeREhHp61FH4/UXNCeZR0ke76XL4mdRsGNpaQ8S3McAG36IgcoIF5sfAzhi1pEk4P4TsHo3sZuGL3yz+SAVYw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8876
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---y5bW1V7trXX+9VZK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 27, 2023 at 07:28:49PM +0100, Conor Dooley wrote:
-> Hey Heiko,
->=20
-> On Thu, Apr 27, 2023 at 07:15:58PM +0200, Heiko St=C3=BCbner wrote:
-> > Am Mittwoch, 26. April 2023, 14:29:16 CEST schrieb Conor Dooley:
-> > > On Mon, Apr 24, 2023 at 09:49:11PM +0200, Heiko Stuebner wrote:
-> > > > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->=20
-> > > I'm not entirely sure if this patch is meant to be a demo, but I don't
-> > > like the idea of using these registers to determine what extensions a=
-re
-> > > reported.
-> >=20
-> > It took me a while to grasp the above, but I think you mean determining
-> > extensions based on mvendor etc, right?
->=20
-> Yes, sorry. Apologies if that was not clear. I suppose the SBI
-> implementation could (as ours does!) could report something different to
-> the registers themselves, so using that word is probably not a good idea
-> anyway.
->=20
-> > > riscv,isa in a devicetree (for as much as I might dislike it at this
-> > > point in time), or the ACPI equivalent, should be the mechanism for
-> > > enabling/disabling these kinds of things.
-> >=20
-> > > Otherwise, we are just going to end up causing problems for ourselves
-> > > with various lists of this that and the other extension for different
-> > > combinations of hardware.
-> > > The open source c906 has the same archid/impid too right? Assuming th=
-is is
-> > > a serious proposal, how would you intend dealing with modified versio=
-ns
-> > > of those cores?
-> > >=20
-> > > I am pretty sure that you intended this to be a demo though, particul=
-arly
-> > > given the wording of the below quote from your cover,
-> >=20
-> > yeah, this one was more following a train of thought. Thinking about the
-> > issues, this was more of an addon thought, as I wasn't really sure which
-> > way to go.
-> >=20
-> > So you're right, vendor isa-extensions should also come from the ISA
-> > string from firmware, similar to the base extensions. Not based on the
-> > mvendor-id and friends.
->=20
-> :)
->=20
-> > > > Things to still consider:
-> > > > -------------------------
-> > > > Right now both hwprobe and this approach will only pass through
-> > > > extensions the kernel actually knows about itself. This should not
-> > > > necessarily be needed (but could be an optional feature for e.g. vi=
-rtualization).
-> > >=20
-> > > What do you mean by virtualisation here? It's the job of the hypervis=
-or
-> > > etc to make sure that what it passes to its guest contains only what =
-it
-> > > wants the guest to see, right?
-> > > IIUC, that's another point against doing what this patch does.
-> >=20
-> > I guess I'm still seeing Zbb and friends - with just computational
-> > instructions as always good to have. But I guess you're right that the
-> > hypervisor should be able to control itself which extensions.
->=20
-> Yah, there may not be any obvious downsides to something like Zbb, but I
-> think that taking control away from the hypervisors etc isn't a good
-> idea.
-> Having a simple policy of blocking things that are known to misbehave
-> would require less maint. than a list of things that are okay to pass
-> through, but both are probably cans-of-worms.
-> I think we need to think carefully about what policy is chosen here.
-> Allowlist will be slower, but at least we'll not tell userspace
-> something that is not usable. Blocklist will be easier to manage, but
-> can only be reactive.
->=20
-> > > > Most extensions don=E2=80=99t introduce new user-mode state that th=
-e kernel needs to
-> > > > manage (e.g. new registers). Extension that do introduce new user-m=
-ode state
-> > > > are usually disabled by default and have to be enabled by S mode or=
- M mode
-> > > > (e.g. FS[1:0] for the +floating-point extension). So there should n=
-ot be a
-> > > > reason to filter any extensions that are unknown.
-> > >=20
-> > > I think in general this can be safely assumed, but I don't think it is
-> > > unreasonable to expect someone may make, for example, XConorGigaVector
-> > > that gets turned on by the same bits as regular old vector but has so=
-me
-> > > extra registers.
-> > > Not saying that I think that that is a good idea, but it is a distinct
-> > > possibility that this will happen, and I don't think forwarding it to
-> > > userspace is a good idea.
-> >=20
-> > The thead-vector (0.7.1) would probably fit this description. Though in
-> > that case, userspace definitly needs to know about it, to use it :-) .
-> >=20
-> > But of course this should only be forwarded when relevant support
-> > is available in the kernel.
->=20
-> Right. IIRC, the plan for that is to add `v` to riscv,isa & alternatives
-> will do the rest as opposed to doing an `_xtheadvector` type thing.
->=20
-> Assuming the latter for a moment, we'd have to blacklist `_xheadvector`
-> for kernels compiled without vector support even if the relevant support
-> is added to the kernel. Similarly, we'd have to blacklist it for kernels
-> with vector support, but without the erratum enabled.
->=20
-> I think the plan was the former though, so you'd have to block passing
-> `v` to userspace if vector is enabled and the erratum is not supported.
-> Should ERRATA_THEAD_VECTOR be mandatory then for RISCV_ISA_VECTOR &&
-> ERRATA_THEAD kernels?
-
-> What am I missing?
-
-I think what I missed is that for riscv,isa containing `_xtheadvector`
-but a kernel without support for vector then we'd hit Andy's
-trap-on-first-use and that's one of the cases that don't need to be
-considered here.
-
-> Also, in a world where we do do some sort of passing, should we only
-> forward the vendor extensions, or should we forward the standard ones
-> too?
-> What about supervisor mode only stuff? There's a bunch of questions to
-> consider here, even if for some of them the answer may be obvious.
->=20
-> As I said, not really bothered about hwprobe, aux vector etc, but this
-> side of things is particularly interesting to me.
->=20
-> Cheers,
-> Conor.
 
 
+On 4/24/2023 5:24 PM, Yuxing Liu wrote:
+> Referring to clk-imx8mq.c, check the return code of of_clk_add_hw_provider,
+> if it returns negtive, print error info and unregister hws,
+> which makes the program more robust.
 
---y5bW1V7trXX+9VZK
-Content-Type: application/pgp-signature; name="signature.asc"
+Patch 1 & 2 merged into 1 patch, no need seperate.
 
------BEGIN PGP SIGNATURE-----
+Regards,
+Peng.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEt7gQAKCRB4tDGHoIJi
-0gvTAP9v25hf36KUdcSWM6VwpCVXzeAKy7CvWw66jh3chdPECgD7B109eUCb+KO/
-1DXwoW8m6oj1K0zu8rMpdQzxW0WcPgs=
-=4qRX
------END PGP SIGNATURE-----
-
---y5bW1V7trXX+9VZK--
+> 
+> Signed-off-by: Yuxing Liu <lyx2022@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> This patch is untested on real device.
+> ---
+>   drivers/clk/imx/clk-imx8mp.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index 353d58b665f9..de7d2d2176be 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -414,6 +414,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>   	struct device *dev = &pdev->dev;
+>   	struct device_node *np;
+>   	void __iomem *anatop_base, *ccm_base;
+> +	int err;
+>   
+>   	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mp-anatop");
+>   	anatop_base = devm_of_iomap(dev, np, 0, NULL);
+> @@ -717,7 +718,12 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>   
+>   	imx_check_clk_hws(hws, IMX8MP_CLK_END);
+>   
+> -	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> +	err = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> +	if (err < 0) {
+> +		dev_err(dev, "failed to register hws for i.MX8MP\n");
+> +		imx_unregister_hw_clocks(hws, IMX8MP_CLK_END);
+> +		return err;
+> +	}
+>   
+>   	imx_register_uart_clocks();
+>   
