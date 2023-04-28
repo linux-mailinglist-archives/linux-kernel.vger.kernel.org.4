@@ -2,130 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB1D6F0F5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727FD6F0F62
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344291AbjD1AAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 20:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S1344385AbjD1APg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 20:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjD1AAl (ORCPT
+        with ESMTP id S229750AbjD1APe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 20:00:41 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F902694;
-        Thu, 27 Apr 2023 17:00:39 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b990eb5dc6bso13194252276.3;
-        Thu, 27 Apr 2023 17:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682640038; x=1685232038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUcDpEJHAussWXp/YYiDDsR1eHJl9Fmj5B8fxAP8T6s=;
-        b=TOwSJQl6LC+n21H5SUqZBuWXjhVPzXPbY07Hx6FNxo07cVUIUHbdAiHUTiowIREZHy
-         jsDhhL2vor6uiwKNDOpf9t9LxxDbKZ6htNeSzXfw9qc8ByyPQInYZ+nSlFcj4G7HilRn
-         LayVHguzoPmaH7e1UJEuDVWF3G1JtD2CPlNz71uqeZQ7Hh86SmUjFCVF1xA8S36hJRMq
-         Kc3tyAjI7Cu6QQCppoIAnzI6U66dmilG5cqr6sODdImeBzcCldwFvBz7tgkEHWnOnSSy
-         JaiMJ9K8T0wi3GHTKRXibyaQBpYnud52grL4dHnD6cIWUHmdczA03oVMyHaOAHZcFNVA
-         thfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682640038; x=1685232038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUcDpEJHAussWXp/YYiDDsR1eHJl9Fmj5B8fxAP8T6s=;
-        b=I5x7/MfiPzHm7KSv1B+ZMfwT0k/Q3+dLLkTCJvtuvurw2q1ExmqmMDES1qpxxBAVP7
-         7BJkGaiaX8x6qyeVGJFwfwicbCHp2MPieh780eLCcLcik8Me+y9WbeV1ZeD6DAtOGash
-         Yr11XQd0hcT7ma0epAh0x6+HRtCCWG/DpXd0UixLP0fJSjm7/BOdqp4DV51OUz+6u6FV
-         YqU1UV84QpmtfjwNRbhI974LSzbbsCHuCQ/gsXJ5TGuIQjwprf8doUN5Qv7xI0hWRTxy
-         ori8eR+Ps87+46IqWYI/LlyDdChgis5rhi/1gKbhSTvg90GlOGCsNGTmTKnvkzhQlVDn
-         SIhQ==
-X-Gm-Message-State: AC+VfDzW39MxT1Oq80i0Ilhfwyei89xZ/LBkvJHigGHOHgo5Gilfe4L3
-        HdGPS91uVzi8qY+aL6MDGOmmsOLzX71NslZztJ4=
-X-Google-Smtp-Source: ACHHUZ43oj1OhQg+lpZx1wswXGxfrl392bP770xpXxVSbV22QuwlM1tk7UnpNBALpRwVy/+SwL9AeMXnv5XvoeLVQto=
-X-Received: by 2002:a25:73cf:0:b0:b99:71dd:869 with SMTP id
- o198-20020a2573cf000000b00b9971dd0869mr2836162ybc.53.1682640038607; Thu, 27
- Apr 2023 17:00:38 -0700 (PDT)
+        Thu, 27 Apr 2023 20:15:34 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC22706
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682640932; x=1714176932;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/evQb/sFjxB1OZf6O2iJAPxelGlxTqHFs8emOxK2d9Y=;
+  b=BFhs7/PpZGvRLi3noid0orySbkS8kCz4Tb+HPq50vqRRgHs5zeURqF5y
+   na4gOqoqicrnoHvjjvJqVsW0g5UGkGFcbPeC0A2/8OCO1hq/CYIrF0vQr
+   ZgT+Zmapmr9/VM1kpZ0rnOBT9MepSAB+Pojhm9zE/LHYVS7auDdVe8S/6
+   +iXuJ7jTcfbUqgv/wE8SS3uK6QroxzqDg3YPS+mbkmrisyQnjUICQXoZx
+   H2+rKrHI1pFOboJrW9lJk3k8LmdW3b/6KwFE6Yxf1JCVe9epo1TqRrjvG
+   LpXc6KdJafh1z3mzUuYJmnzYgXoL1cXjdGc9L0WPFPDK9EktmCWoA3Jiv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="412989414"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="412989414"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 17:15:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="868940767"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="868940767"
+Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 27 Apr 2023 17:15:30 -0700
+Received: from kbuild by b95e16499b55 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psBlp-0000DR-38;
+        Fri, 28 Apr 2023 00:15:29 +0000
+Date:   Fri, 28 Apr 2023 08:14:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        David Sterba <dsterba@suse.com>
+Subject: fs/btrfs/tree-log.c:6211:23: warning: 'last_range_start' may be used
+ uninitialized in this function
+Message-ID: <202304280811.DeQmh7Ky-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230419111443.231151-1-raghuhack78@gmail.com>
- <20230419111443.231151-4-raghuhack78@gmail.com> <644ac94ad6977_182a92946e@iweiny-mobl.notmuch>
- <ZErR1J/PqEvfxHCi@aschofie-mobl2>
-In-Reply-To: <ZErR1J/PqEvfxHCi@aschofie-mobl2>
-From:   RAGHU H <raghuhack78@gmail.com>
-Date:   Fri, 28 Apr 2023 05:30:27 +0530
-Message-ID: <CAGWUp4ps_gkXpNerCNGSrsoZrJoL5PJu5yB4k9dGuOY8_mnWZQ@mail.gmail.com>
-Subject: Re: [STYLE v1 3/3] cxl/core/region:Remove else after return statement
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>, linux-cxl@vger.kernel.org,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Alison & Ira for comments
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+commit: f372463124df5f980de6ee0cd6000a3e43df0e01 btrfs: mark btrfs_assertfail() __noreturn
+date:   10 days ago
+config: i386-randconfig-a014 (https://download.01.org/0day-ci/archive/20230428/202304280811.DeQmh7Ky-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f372463124df5f980de6ee0cd6000a3e43df0e01
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f372463124df5f980de6ee0cd6000a3e43df0e01
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/btrfs/
 
-I missed your messages due to personal reasons.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304280811.DeQmh7Ky-lkp@intel.com/
 
-Will clean and follow it up with v2 very soon.
+Note: it may well be a FALSE warning. FWIW you are at least aware of it now.
+http://gcc.gnu.org/wiki/Better_Uninitialized_Warnings
 
-On Fri, Apr 28, 2023 at 1:19=E2=80=AFAM Alison Schofield
-<alison.schofield@intel.com> wrote:
->
-> On Thu, Apr 27, 2023 at 12:13:14PM -0700, Ira Weiny wrote:
-> > Raghu H wrote:
-> > > The else section here is redundant after return statement, removing i=
-t.
-> > > Sanity and correctness is not affected due to this fix.
-> > >
-> > > Signed-off-by: Raghu H <raghuhack78@gmail.com>
-> >
-> > Ok, per my eyes I would have liked an extra space before the dev_err()
-> > but...
->
-> Well, I asked Rahgu to give us a v2 with mostly patch formatting fixups,
-> so let's get that extra space too :)
->
-> >
-> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> >
-> > > ---
-> > >  drivers/cxl/core/region.c | 7 +++----
-> > >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> > > index f29028148806..1d695107b4a7 100644
-> > > --- a/drivers/cxl/core/region.c
-> > > +++ b/drivers/cxl/core/region.c
-> > > @@ -2666,11 +2666,10 @@ static int cxl_region_invalidate_memregion(st=
-ruct cxl_region *cxlr)
-> > >                             "Bypassing cpu_cache_invalidate_memregion=
-() for testing!\n");
-> > >                     clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
-> > >                     return 0;
-> > > -           } else {
-> > > -                   dev_err(&cxlr->dev,
-> > > -                           "Failed to synchronize CPU cache state\n"=
-);
-> > > -                   return -ENXIO;
-> > >             }
-> > > +           dev_err(&cxlr->dev,
-> > > +                   "Failed to synchronize CPU cache state\n");
-> > > +           return -ENXIO;
-> > >     }
-> > >
-> > >     cpu_cache_invalidate_memregion(IORES_DESC_CXL);
-> > > --
-> > > 2.39.2
-> > >
+All warnings (new ones prefixed by >>):
+
+   fs/btrfs/tree-log.c: In function 'log_delayed_deletions_incremental.isra':
+>> fs/btrfs/tree-log.c:6211:23: warning: 'last_range_start' may be used uninitialized in this function [-Wmaybe-uninitialized]
+    6211 |                 ret = insert_dir_log_key(trans, log, path, key.objectid,
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6212 |                                          first_dir_index, last_dir_index);
+         |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/last_range_start +6211 fs/btrfs/tree-log.c
+
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6152  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6153  static int log_delayed_deletions_incremental(struct btrfs_trans_handle *trans,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6154  					     struct btrfs_inode *inode,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6155  					     struct btrfs_path *path,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6156  					     const struct list_head *delayed_del_list,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6157  					     struct btrfs_log_ctx *ctx)
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6158  {
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6159  	struct btrfs_root *log = inode->root->log_root;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6160  	const struct btrfs_delayed_item *curr;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6161  	u64 last_range_start;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6162  	u64 last_range_end = 0;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6163  	struct btrfs_key key;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6164  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6165  	key.objectid = btrfs_ino(inode);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6166  	key.type = BTRFS_DIR_INDEX_KEY;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6167  	curr = list_first_entry(delayed_del_list, struct btrfs_delayed_item,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6168  				log_list);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6169  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6170  	while (!list_entry_is_head(curr, delayed_del_list, log_list)) {
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6171  		const struct btrfs_delayed_item *last = curr;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6172  		u64 first_dir_index = curr->index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6173  		u64 last_dir_index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6174  		bool deleted_items = false;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6175  		int ret;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6176  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6177  		key.offset = curr->index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6178  		ret = btrfs_search_slot(trans, log, &key, path, -1, 1);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6179  		if (ret < 0) {
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6180  			return ret;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6181  		} else if (ret == 0) {
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6182  			ret = batch_delete_dir_index_items(trans, inode, path, ctx,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6183  							   delayed_del_list, curr,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6184  							   &last);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6185  			if (ret)
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6186  				return ret;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6187  			deleted_items = true;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6188  		}
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6189  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6190  		btrfs_release_path(path);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6191  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6192  		/*
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6193  		 * If we deleted items from the leaf, it means we have a range
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6194  		 * item logging their range, so no need to add one or update an
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6195  		 * existing one. Otherwise we have to log a dir range item.
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6196  		 */
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6197  		if (deleted_items)
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6198  			goto next_batch;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6199  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6200  		last_dir_index = last->index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6201  		ASSERT(last_dir_index >= first_dir_index);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6202  		/*
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6203  		 * If this range starts right after where the previous one ends,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6204  		 * then we want to reuse the previous range item and change its
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6205  		 * end offset to the end of this range. This is just to minimize
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6206  		 * leaf space usage, by avoiding adding a new range item.
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6207  		 */
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6208  		if (last_range_end != 0 && first_dir_index == last_range_end + 1)
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6209  			first_dir_index = last_range_start;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6210  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22 @6211  		ret = insert_dir_log_key(trans, log, path, key.objectid,
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6212  					 first_dir_index, last_dir_index);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6213  		if (ret)
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6214  			return ret;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6215  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6216  		last_range_start = first_dir_index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6217  		last_range_end = last_dir_index;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6218  next_batch:
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6219  		curr = list_next_entry(last, log_list);
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6220  	}
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6221  
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6222  	return 0;
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6223  }
+30b80f3ce0f9d5 Filipe Manana 2022-08-22  6224  
+
+:::::: The code at line 6211 was first introduced by commit
+:::::: 30b80f3ce0f9d58ab8a2094922f3d54d2fd4f92e btrfs: use delayed items when logging a directory
+
+:::::: TO: Filipe Manana <fdmanana@suse.com>
+:::::: CC: David Sterba <dsterba@suse.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
