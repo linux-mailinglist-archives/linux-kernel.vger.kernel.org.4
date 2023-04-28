@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D146F198D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A486F1991
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346287AbjD1Nbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S1346295AbjD1Nbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346198AbjD1Nbi (ORCPT
+        with ESMTP id S1346198AbjD1Nbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:31:38 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357191FF5;
-        Fri, 28 Apr 2023 06:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682688697; x=1714224697;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=JKJX8OIwrYW1IiYZfvoJYOgISllpu9BWAtbOG2WofMo=;
-  b=KVx7UxRFguLBhtG/cUxW5TtNfcw7ArSGJ6i++kHrOy/fCxKCXOyKx6hC
-   i06eDlCiMcIbpzG4yfZXFKJk9JHEomKetEYW9nFYR0GpopYb99K3ZgsjQ
-   qlZjF4mPND9J0OFjQdAaGZ84wwNexYaOAyTKC42LOg3I4zu/xTNhWFPWo
-   OnLq8nrsiuD8+WJjSZvu6sWAmy5piq0lNA2/saE86o3HxJxXE5O0WkBLr
-   QNkXL7snXpxi4ATQiol2VCwV7ncfrpIUizuNyKkZsfFF4xA77GDAu4pVv
-   wypRwuKtSC25lkgSx2FXcTSUp75Z7txJM8iJytHPayBZRlC7tpdLPMvAt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="410845727"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="410845727"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 06:31:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="764281486"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="764281486"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Apr 2023 06:31:35 -0700
-Received: from [10.212.155.101] (kliang2-mobl1.ccr.corp.intel.com [10.212.155.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 9105A580A5D;
-        Fri, 28 Apr 2023 06:31:31 -0700 (PDT)
-Message-ID: <920c682a-3789-51fb-805e-4561c85f4219@linux.intel.com>
-Date:   Fri, 28 Apr 2023 09:31:30 -0400
+        Fri, 28 Apr 2023 09:31:46 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29D93A9D;
+        Fri, 28 Apr 2023 06:31:44 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-187fc21f6acso3773040fac.2;
+        Fri, 28 Apr 2023 06:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682688704; x=1685280704;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kjkfMeDN5MElQoz8pTsP+XGTEHdi6FRFZYxvJHVi3ac=;
+        b=FDeDMqBwExbEym6j6TOk37nY9oI4HncB9PyjAK3xsu85s//1YumEwNM6XHMpBiJaTl
+         LIcOQoKJF3duQpQ4fi3MUuNe95JzAdbMC+jaDaenqC9vQQ1PkPeCQDxUORlr4jph7+mF
+         aeh4W4qQGGJCNLbzlh8+cRDwOptfjIM4q4M1u5OCET/NL/eBuHsz2HgpROszr0KEGVox
+         XSGj4sSLwyz5aSOVxxH6xSfd0oTKHk67mW+/DdbNEIUn2vRkkBoWq+38UrBLH0AHIwhl
+         qxH1tfTR+iPiFkm6BnPOWuyjX76DWygTZTpasvFWXmgnhAxOU2daWz5NAHvLmcPA197T
+         7mYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682688704; x=1685280704;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kjkfMeDN5MElQoz8pTsP+XGTEHdi6FRFZYxvJHVi3ac=;
+        b=FIsp3IAgXUNT7YzTr8zbyHHZ5gapV63+XoqvtKQuvWSTo3VVacFtUchfDCOgRfVr/A
+         a+9Zb/iXf0FJiQstawi7vs5pZbcGv2o6DlHrKcC02ZrNfGYBmNN9qPDgolxll6dOcqZ1
+         Yh7QeZWkSlOLRjFCC/lt0Wa7qy4gkb7KFCe1zdlR48fX31EkJTdNao+SHUEvRdkFgcO8
+         ICxOVaLqijyIya4tlxWj92FDhNHAYg6zXjhTkZ0XgG39O+40Eaq0UI76U12iTOnM9waf
+         GsXerFeFDRUvCYicCPcUx8qDf5GxerjwxRUE6mLQ7Ds4pBNbe+D60bgITQglv2HtlX6K
+         nq4g==
+X-Gm-Message-State: AC+VfDwHNkN6KCiJPaO3eZNsPnCFz0oH1uJEx/JLfxGAO8DVSuUeaHII
+        3xhEV5QVb7ECi1HJx5vxfJBGQsr+J+xW+LuK4DI=
+X-Google-Smtp-Source: ACHHUZ7yvFYc1g1/6ZrWu+yC981EbH+g9hDzh8IJ1jVWuHgi19JnIS7N2v3hh/Wbl3/EX2jYloKqk69fVlW/msgtfZM=
+X-Received: by 2002:a05:6870:51d5:b0:18e:ae84:7d87 with SMTP id
+ b21-20020a05687051d500b0018eae847d87mr2369255oaj.53.1682688704128; Fri, 28
+ Apr 2023 06:31:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 01/43] perf stat: Disable TopdownL1 on hybrid
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230428073809.1803624-1-irogers@google.com>
- <20230428073809.1803624-2-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230428073809.1803624-2-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230419122233.3440-1-hackyzh002@gmail.com> <CAF6NKda1Jy_wfxaVqWt-o75f1BO-o4JXHY9HS9_JtJ2FHztMmQ@mail.gmail.com>
+ <CADnq5_MfynMAPU8c-Lq1X_dcDOdRpjW6i=m-Qo8zsZZ=dO-62w@mail.gmail.com> <CAF6NKdaxK_ZRkKRyWtm9Cj-8fNE9RptW3FjW-V39rmaHaCGHTw@mail.gmail.com>
+In-Reply-To: <CAF6NKdaxK_ZRkKRyWtm9Cj-8fNE9RptW3FjW-V39rmaHaCGHTw@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 28 Apr 2023 09:31:33 -0400
+Message-ID: <CADnq5_MrRC-htfEn3TbR7pbs4rRZJL=zW-3swuc8VZQyHW0DXw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] drm/amdgpu: Fix integer overflow in amdgpu_cs_pass1
+To:     whitehat002 whitehat002 <hackyzh002@gmail.com>
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        sumit.semwal@linaro.org, linaro-mm-sig@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        airlied@gmail.com, christian.koenig@amd.com,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+these?
+https://patchwork.freedesktop.org/series/116699/
+https://patchwork.freedesktop.org/series/116695/
 
-
-On 2023-04-28 3:37 a.m., Ian Rogers wrote:
-> Bugs with event parsing, event grouping and metrics causes the
-> TopdownL1 metricgroup to crash the perf command. Temporarily disable
-> the group if no events/metrics are spcecified.
-> 
-
-I think it's OK to only disable the metric for perf stat default
-temporarily on hybrid as a workaround for 6.4.
-Now, the only problem is the default of perf stat on pre-icl in 6.4.
-
-> Signed-off-by: Ian Rogers <irogers@google.com>
-
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Arnaldo, could you please back port this for 6.4 as well?
-
-Thanks,
-Kan
-> ---
->  tools/perf/builtin-stat.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-> index efda63f6bf32..be9677aa642f 100644
-> --- a/tools/perf/builtin-stat.c
-> +++ b/tools/perf/builtin-stat.c
-> @@ -1885,7 +1885,12 @@ static int add_default_attributes(void)
->  		 * Add TopdownL1 metrics if they exist. To minimize
->  		 * multiplexing, don't request threshold computation.
->  		 */
-> -		if (metricgroup__has_metric("TopdownL1") &&
-> +		/*
-> +		 * TODO: TopdownL1 is disabled on hybrid CPUs to avoid a crashes
-> +		 * caused by exposing latent bugs. This is fixed properly in:
-> +		 * https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
-> +		 */
-> +		if (metricgroup__has_metric("TopdownL1") && !perf_pmu__has_hybrid() &&
->  		    metricgroup__parse_groups(evsel_list, "TopdownL1",
->  					    /*metric_no_group=*/false,
->  					    /*metric_no_merge=*/false,
-> @@ -1894,6 +1899,7 @@ static int add_default_attributes(void)
->  					    stat_config.system_wide,
->  					    &stat_config.metric_events) < 0)
->  			return -1;
-> +
->  		/* Platform specific attrs */
->  		if (evlist__add_default_attrs(evsel_list, default_null_attrs) < 0)
->  			return -1;
+On Thu, Apr 27, 2023 at 8:45=E2=80=AFPM whitehat002 whitehat002
+<hackyzh002@gmail.com> wrote:
+>
+> Alex,I have a question, why I don't see it on the
+> https://patchwork.freedesktop.org/
+>
+> Alex Deucher <alexdeucher@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8827=
+=E6=97=A5=E5=91=A8=E5=9B=9B 20:40=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > As per my prior reply, it has been applied.
+> >
+> > Thanks,
+> >
+> > Alex
+> >
+> > On Thu, Apr 27, 2023 at 8:39=E2=80=AFAM whitehat002 whitehat002
+> > <hackyzh002@gmail.com> wrote:
+> > >
+> > > hello
+> > > What is the current status of this patch, has it been applied?
+> > >
+> > >
+> > > hackyzh002 <hackyzh002@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8819=
+=E6=97=A5=E5=91=A8=E4=B8=89 20:23=E5=86=99=E9=81=93=EF=BC=9A
+> > > >
+> > > > The type of size is unsigned int, if size is 0x40000000, there will
+> > > > be an integer overflow, size will be zero after size *=3D sizeof(ui=
+nt32_t),
+> > > > will cause uninitialized memory to be referenced later.
+> > > >
+> > > > Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
+> > > > ---
+> > > >  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/d=
+rm/amd/amdgpu/amdgpu_cs.c
+> > > > index 08eced097..89bcacc65 100644
+> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> > > > @@ -192,7 +192,7 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_par=
+ser *p,
+> > > >         uint64_t *chunk_array_user;
+> > > >         uint64_t *chunk_array;
+> > > >         uint32_t uf_offset =3D 0;
+> > > > -       unsigned int size;
+> > > > +       size_t size;
+> > > >         int ret;
+> > > >         int i;
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
