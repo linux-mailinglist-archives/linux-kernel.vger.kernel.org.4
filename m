@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994656F2035
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18656F2038
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346547AbjD1VmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 17:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S1346101AbjD1VoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 17:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346524AbjD1VmG (ORCPT
+        with ESMTP id S1346495AbjD1VoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 17:42:06 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B0B40CB;
-        Fri, 28 Apr 2023 14:41:59 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-18f16a2c329so14129707fac.0;
-        Fri, 28 Apr 2023 14:41:59 -0700 (PDT)
+        Fri, 28 Apr 2023 17:44:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7310D26AF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682718207;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rkn6IrE/1wPx281zaEZo+27hctd8JO9FCinWB/Ya0Z0=;
+        b=bElHuq/rstftKgXURT0p7HxF9Hm1N/FnV+FygTLoWxS5n8vlZALJopJFpM8Nl8VHpgXEll
+        xEYZgzlkHXWVojBvfJrQjVdphoG4GP3E9iOCJ9uQjrY6mPZ2ucOqH82zpNVgpmbJejTIGW
+        l5HZ1gEsGu4yGQCNkxfZ8/m0CzL0S60=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-97-T0vSyvdwNRe0SbqPnxMeaQ-1; Fri, 28 Apr 2023 17:43:25 -0400
+X-MC-Unique: T0vSyvdwNRe0SbqPnxMeaQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74e04ba5cbbso21386885a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:43:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682718119; x=1685310119;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IxtZnuIy0A7kqLFx2X9sGSOUm6gtVrEopxo0uafl4ms=;
-        b=TC2FAGgk8oNSwSyic1J0ZVw10Avcvd9lLjACZZ9o3oJEsACh1uFwbynF9MvYNQs+gj
-         UiM0jGexdKwkH5aCg44WVu+54uuLVLWpcj/heLzFR6hDMelqkIKcBE1D1lpmUWu87OcH
-         lsxAjjHzhgN0Sl7dp4sEDdAboEQu0ll9FLZbUfYOppoYC6d30gbOKjeN2WuuhCEIKgCz
-         Y6rVfeIbLLwYGnj9ROykmU30LIrcUnIBFcu8koD/UqrVaMb3PDhY2ElgOFcMAyidACYf
-         SP4l1pUkfKqdRxNqhCg5l7MqdVIsSaI9nzI+bA42HiSrurpFay9aaYR+i/9opWY7e4Tq
-         hZbQ==
-X-Gm-Message-State: AC+VfDysJf0FrD/h54OpFrqMwNhn99aIUHIObenXfUngYZGcqskrUozD
-        YW2vrI6WPBGmbttw7m+Lzu1umdsPEg==
-X-Google-Smtp-Source: ACHHUZ7ig/kRGrr3EBDJFMjrS7DQC209jAzc9ANKsoMDyT4ZiCAvOl0+vyGPxIeVYeEzqvF/Kp/Ovw==
-X-Received: by 2002:aca:3257:0:b0:38e:32b5:cfba with SMTP id y84-20020aca3257000000b0038e32b5cfbamr4878446oiy.10.1682718118679;
-        Fri, 28 Apr 2023 14:41:58 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e131-20020acab589000000b00383d9700294sm9272371oif.40.2023.04.28.14.41.57
+        d=1e100.net; s=20221208; t=1682718204; x=1685310204;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rkn6IrE/1wPx281zaEZo+27hctd8JO9FCinWB/Ya0Z0=;
+        b=iZs4wpCxcoFg3YcpDZNXzStPXOGRjR1W0qgRj1IEpPpuH7lX0I7yytua+HQBnZ+nb0
+         mhtgsZK0vRXWLeFzPLDztFpx+vz7Qqy8uyUUYtPElZjEBPi/rLtDXjCPgOpNzRwwHco0
+         igYpZXcntFfymL0Crv6YAKwh7PfQq1N2v7T5M9tNOsg+H0oWCQbQb3kegnrQoHyZCOeE
+         JATVwdpjYy2jHALYypw7nwXEpQpo+aWUG53s66c1pjPfwZjjm4KZa74S+t1KhQCwwU+U
+         4YIYPmWgVxVhpeLTEctB2CtvUqBTyWfXQ1GFnA+bZdLWVJIUpcwnomqLLD6EXUmZ42ba
+         0SLg==
+X-Gm-Message-State: AC+VfDw6u/I54TBba/ztgGoV3VGrBobOSRxwM52aq0HpiTKksZFSywhv
+        DHqZYzudEQr1XIs7RJ5LqMrI6+RZKFAFpA+R39QlVZC9xYkWzPA2UG/XR27hAjKM829NM3aW5dn
+        qETuvMyANSYQcGUe8Kq+lBJiG
+X-Received: by 2002:a05:622a:1810:b0:3ec:48a3:d597 with SMTP id t16-20020a05622a181000b003ec48a3d597mr11924044qtc.60.1682718204760;
+        Fri, 28 Apr 2023 14:43:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7BclvjqY/ztOGK7ynswcchWqvG+mQWN+yI3Ly6yi6kNabY5gungBzrhTkyRC3+/IXvo4njag==
+X-Received: by 2002:a05:622a:1810:b0:3ec:48a3:d597 with SMTP id t16-20020a05622a181000b003ec48a3d597mr11924033qtc.60.1682718204523;
+        Fri, 28 Apr 2023 14:43:24 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id bj11-20020a05620a190b00b0074e21c3bc8asm7029968qkb.126.2023.04.28.14.43.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 14:41:58 -0700 (PDT)
-Received: (nullmailer pid 326660 invoked by uid 1000);
-        Fri, 28 Apr 2023 21:41:57 -0000
-Date:   Fri, 28 Apr 2023 16:41:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Valentin Caron <valentin.caron@foss.st.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/7] dt-bindings: spi: stm32: add address-cells and
- size-cells into yaml
-Message-ID: <20230428214157.GA322525-robh@kernel.org>
-References: <20230428121524.2125832-1-valentin.caron@foss.st.com>
- <20230428121524.2125832-2-valentin.caron@foss.st.com>
+        Fri, 28 Apr 2023 14:43:24 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     irusskikh@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] net: atlantic: Define aq_pm_ops conditionally on CONFIG_PM
+Date:   Fri, 28 Apr 2023 17:43:21 -0400
+Message-Id: <20230428214321.2678571-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428121524.2125832-2-valentin.caron@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 02:15:18PM +0200, Valentin Caron wrote:
-> Theses properties need to be described to satisfy dtbs_check.
+For s390, gcc with W=1 reports
+drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c:458:32: error:
+  'aq_pm_ops' defined but not used [-Werror=unused-const-variable=]
+  458 | static const struct dev_pm_ops aq_pm_ops = {
+      |                                ^~~~~~~~~
 
-No, they are defined in spi-controller.yaml, so they should not be 
-needed here.
+The only use of aq_pm_ops is conditional on CONFIG_PM.
+The definition of aq_pm_ops and its functions should also
+be conditional on CONFIG_PM.
 
-> 
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-> ---
->  Documentation/devicetree/bindings/spi/st,stm32-spi.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> index 9ca1a843c820..c599eb359d56 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -29,6 +29,9 @@ allOf:
->          st,spi-midi-ns: false
->  
->  properties:
-> +  "#address-cells": true
-> +  "#size-cells": true
-> +
->    compatible:
->      enum:
->        - st,stm32f4-spi
-> -- 
-> 2.25.1
-> 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+index 8647125d60ae..baa5f8cc31f2 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
+@@ -379,6 +379,7 @@ static void aq_pci_shutdown(struct pci_dev *pdev)
+ 	}
+ }
+ 
++#ifdef CONFIG_PM
+ static int aq_suspend_common(struct device *dev)
+ {
+ 	struct aq_nic_s *nic = pci_get_drvdata(to_pci_dev(dev));
+@@ -463,6 +464,7 @@ static const struct dev_pm_ops aq_pm_ops = {
+ 	.restore = aq_pm_resume_restore,
+ 	.thaw = aq_pm_thaw,
+ };
++#endif
+ 
+ static struct pci_driver aq_pci_ops = {
+ 	.name = AQ_CFG_DRV_NAME,
+-- 
+2.27.0
+
