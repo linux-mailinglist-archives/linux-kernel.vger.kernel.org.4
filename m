@@ -2,143 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690206F1A7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8736F16CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjD1O3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S1345847AbjD1LbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjD1O3m (ORCPT
+        with ESMTP id S1345833AbjD1LbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:29:42 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE91BEE;
-        Fri, 28 Apr 2023 07:29:40 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-5476a2780a0so4595054eaf.3;
-        Fri, 28 Apr 2023 07:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682692180; x=1685284180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lYzqB28RMSFODBuTMB/KY5cl7Tjsfy3OkCWgNjZ6ZLE=;
-        b=kh97gIflH3BI4ERsMSHvjFc0yOO2bt2fLm/uIbDsDrqqCu8s1sBxd1qDVEdBRIXaVx
-         iL5RpT2zMNzyg+NFwLpVdMi4AybUyNQoR4/KTIyCNQ6rbL1F0DeQ5KmZHZmRbVrbxMMI
-         EVvL2F+CnVM44ANsh30EStkooMTY3pgBJcPpfXLKde2v/nu6v57pykRxydjH1nTW2/FA
-         TfRXpk1QRjR02exKoXYK2MUCINulVfTlZ+sUo+7AckhEWV6lOlDp77IYs7xS8lGE0Ir4
-         PzdyIuMruilIAnr8RxZgmYIczOd6F8olt3vtZ53rzCG7Ai88S1HDJjafAmDY7EMzhuzg
-         t0MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682692180; x=1685284180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lYzqB28RMSFODBuTMB/KY5cl7Tjsfy3OkCWgNjZ6ZLE=;
-        b=MWmUCjKe7xfzVYh1vNOYIdjUgz3AD5meYKS1aNgGxs9CA1N9HdDvHyxszFZI6dbDfj
-         PgNY5HOy2reKj5sIXjsgOvOttcsb3dTC+/LmfUr1l8Y+IQ8T64Ka/27ZD8j/9VJlE0b/
-         TgWGI6bllc+unwodaF4ONDdHe0Ch/olwkkhw8DCbjvx8reMF/Vr3TIRR/VSolxQ3mLuf
-         U7Xc2mt202AmarOYFbWrswZ02nZCAuyeTyGITu5hmceD6e5+7FZZGhQxRt9E1YlK+r6t
-         h00kosi3HMa1A06hKwO8SJ7eoLQ4wda4rH/yXtd4kqdaAbioBuWBoIpcuYzznPmS/nBQ
-         S8Lw==
-X-Gm-Message-State: AC+VfDznPb+X3KBwEPuk8P4i/GA2MVfYVz+SlButIJJPizB0DXy2n18J
-        tA8QOy1PouqisWsB1/m2vnwzBrplJ05nep8ath0=
-X-Google-Smtp-Source: ACHHUZ5KCaCwW1hvzW8OWPVzp040UD7tuDkE/lZ6cadmhT2Hjv5r9AbIl/f2DmSYTc/uRNg/F3c8gxInAbFvh4+1rRI=
-X-Received: by 2002:a05:6808:5da:b0:38e:e0c3:5cce with SMTP id
- d26-20020a05680805da00b0038ee0c35ccemr2440343oij.18.1682692180051; Fri, 28
- Apr 2023 07:29:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230427175340.1280952-1-robdclark@gmail.com> <20230427175340.1280952-2-robdclark@gmail.com>
- <0be60cda-6b8b-5844-c4fe-b711e7279cc7@amd.com>
-In-Reply-To: <0be60cda-6b8b-5844-c4fe-b711e7279cc7@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 28 Apr 2023 07:29:28 -0700
-Message-ID: <CAF6AEGtd=fP1_JnD6-V7U_ZNnD1VG-rZean6mNDTLHsqZJdeYw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] drm/docs: Fix usage stats typos
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Fri, 28 Apr 2023 07:31:05 -0400
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d500])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E32555A3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:31:03 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:b14:0:640:93f9:0])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id 1FC2D5E7B0;
+        Fri, 28 Apr 2023 14:31:01 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id xUHfdw0DZ8c0-MMVwmCQb;
+        Fri, 28 Apr 2023 14:31:00 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682681460;
+        bh=NwxRsu8ht1atvOJT+L90HFqBBiIpbm8MFFmBYW6Zgcg=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=FNHvO6bWnBk2y/dQjZHyQBjMkk+QLTdaJbEjCUYIs+penWxplDFFFO+dB4tCQ/fMo
+         jflzbouhJVv943orvd+aW26rts+UcxB08FeMf6IWBccjPGi5drQF9nfeaCxYJQUmQf
+         PBVDDgNLnEzcNYdu9WyzcTAlgqQvROmLS3cS/MIs=
+Authentication-Results: mail-nwsmtp-smtp-production-main-85.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <bd4554f1910ba253d7833bae99d7c00b9098eae2.camel@maquefel.me>
+Subject: Re: [PATCH 29/43] rtc: m48t86: add DT support for m48t86
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     andy.shevchenko@gmail.com
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 28 Apr 2023 17:31:01 +0300
+In-Reply-To: <ZEkozMAM674O2r7e@surfacebook>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-30-nikita.shubin@maquefel.me>
+         <ZEkozMAM674O2r7e@surfacebook>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 1:50=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 27.04.23 um 19:53 schrieb Rob Clark:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Fix a couple missing ':'s.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
->
-> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
->
-> Since this is a pretty clear fix I suggest to get this pushed to reduce
-> the number of patches in the set.
+On Wed, 2023-04-26 at 16:36 +0300, andy.shevchenko@gmail.com wrote:
+> Mon, Apr 24, 2023 at 03:34:45PM +0300, Nikita Shubin kirjoitti:
+> > - get regs from device tree
+>=20
+> ...
+>=20
+> > +#include <linux/of.h>
+>=20
+> mod_devicetable.h and drop ugly ifdeffery along with of_match_ptr().
+>=20
+> ...
+>=20
+> > +static const struct of_device_id m48t86_rtc_of_ids[] =3D {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ .compatible =3D "dallas,rt=
+c-m48t86" },
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ /* end of table */ },
+>=20
+> No comma for the terminator entry
+>=20
+> > +};
+>=20
 
-Thanks, this is fine by me if someone wants to push it for me.  Note
-that the later .rst updates in this series depend on this so if/when
-they are merged it probably should be the same tree
+Thanks you for all your comments and effort!
 
-BR,
--R
-
-> Christian.
->
-> > ---
-> >   Documentation/gpu/drm-usage-stats.rst | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/=
-drm-usage-stats.rst
-> > index b46327356e80..72d069e5dacb 100644
-> > --- a/Documentation/gpu/drm-usage-stats.rst
-> > +++ b/Documentation/gpu/drm-usage-stats.rst
-> > @@ -105,7 +105,7 @@ object belong to this client, in the respective mem=
-ory region.
-> >   Default unit shall be bytes with optional unit specifiers of 'KiB' or=
- 'MiB'
-> >   indicating kibi- or mebi-bytes.
-> >
-> > -- drm-cycles-<str> <uint>
-> > +- drm-cycles-<str>: <uint>
-> >
-> >   Engine identifier string must be the same as the one specified in the
-> >   drm-engine-<str> tag and shall contain the number of busy cycles for =
-the given
-> > @@ -117,7 +117,7 @@ larger value within a reasonable period. Upon obser=
-ving a value lower than what
-> >   was previously read, userspace is expected to stay with that larger p=
-revious
-> >   value until a monotonic update is seen.
-> >
-> > -- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
-> > +- drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
-> >
-> >   Engine identifier string must be the same as the one specified in the
-> >   drm-engine-<str> tag and shall contain the maximum frequency for the =
-given
->
+All will be fixed conforming your comments.
