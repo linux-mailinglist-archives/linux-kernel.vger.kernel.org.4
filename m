@@ -2,261 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 275346F0FF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62906F0FF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344643AbjD1BRY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 27 Apr 2023 21:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S1344723AbjD1BUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 21:20:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjD1BRW (ORCPT
+        with ESMTP id S1344665AbjD1BUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:17:22 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6E62122;
-        Thu, 27 Apr 2023 18:17:19 -0700 (PDT)
-X-UUID: cd50ef11d3c34755ab4be2551cc1b666-20230428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:408dea53-6e23-4300-b724-4ae2918a6d1e,IP:5,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-4
-X-CID-INFO: VERSION:1.1.22,REQID:408dea53-6e23-4300-b724-4ae2918a6d1e,IP:5,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:-9,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:-4
-X-CID-META: VersionHash:120426c,CLOUDID:8eda256a-2f20-4998-991c-3b78627e4938,B
-        ulkID:230428091715JX7J7YU3,BulkQuantity:0,Recheck:0,SF:19|41|24|17|102,TC:
-        nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-        I:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: cd50ef11d3c34755ab4be2551cc1b666-20230428
-X-User: zhouzongmin@kylinos.cn
-Received: from [172.20.12.156] [(116.128.244.169)] by mailgw
-        (envelope-from <zhouzongmin@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 710927598; Fri, 28 Apr 2023 09:17:14 +0800
-Message-ID: <6599319fea8ed1e3d6968e5b986661f0cf175902.camel@kylinos.cn>
-Subject: Re: [PATCH] drm/probe_helper: fix the warning reported when calling
- drm_kms_helper_poll_disable during suspend
-From:   zongmin zhou <zhouzongmin@kylinos.cn>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Janne Grunau <j@jannau.net>, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-        daniel@ffwll.ch, neil.armstrong@linaro.org, tony.luck@intel.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org, laurentiu.palcu@oss.nxp.com,
-        regressions@lists.linux.dev
-Date:   Fri, 28 Apr 2023 09:17:12 +0800
-In-Reply-To: <CAA8EJppmUtuhAF+VHPh3Q8tNYp1m4T6P7dZ0wYZ8Vzwo0DF6cg@mail.gmail.com>
-References: <20230328023129.3596968-1-zhouzongmin@kylinos.cn>
-         <20230420200148.GD3280@jannau.net>
-         <CAA8EJpoK3yv3E==bJuDoQhsW2Q1LdqKakJgdZx6S=ec-CvyGyw@mail.gmail.com>
-         <1682386644754589.204.seg@mailgw>
-         <1186d62a5fe7f2aa6e06f06a3dc7605c0072f1eb.camel@kylinos.cn>
-         <CAA8EJppmUtuhAF+VHPh3Q8tNYp1m4T6P7dZ0wYZ8Vzwo0DF6cg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 27 Apr 2023 21:20:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5836B212C;
+        Thu, 27 Apr 2023 18:20:17 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33S01Gt1031786;
+        Thu, 27 Apr 2023 18:19:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=b+IL6lki3t07t+VRGNFFC2DRyZWTeBGI3jrGva87ies=;
+ b=TS9ob6gulyBMO1DITs27lUKwlqQjEBrI6Sfb0/11eW26uzDCXbEdO5ZTRCaGe++G/muo
+ jNjdSbPbY5T6KKrHW21iLEQ7STN/a9TCpYoKh8ksSlmMbWSkgmHPW4g1hjVvEEQhUwEc
+ SFs2peuEelQAd33LZs0/EvFjJq+0JbO9jlekM8OPIm+2ePFVY3OO2OuCbZe3GZePaI6M
+ E5o6PQSGXqOMOKFwFm05qdrcT7jCM6ol84Bd/e0K+PD8k0O5EBZUEu4ihRMV9KTFGG7L
+ F8JaGtl+o6Alh8GfZtY7vzjqUZ7UX+QRa43ugKjqggJ4x0mvSwn0x/bkhZ+1hUCt4ZV8 yQ== 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3q837ugbje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 27 Apr 2023 18:19:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AilQBcHjZbtVqHiRlqH+Yv/nqRe9J2sW82pIDZat7MUu+Cxj0MTuroMYEk/Ws7ekpdlAqsmvmPH4s1SJsnqtzUI5crdqYtc8trnK1aSwd06IC97yyEJIA+8zIAZoIGOxPkHfjghJxWL29B/wri1btrc4m5T6Fz+2YpuX8jsZCK4ey/GzKX6KusdrgoQT7Dln7dMfQdd2v6hRt1ofQveOGBVaWgL1zyDS0Bi/P28dLurV/tLFs4+dyVDuCieOBpDv16kRJavnmRn1mMiBRyRZwAVADZNzjrvClK2EDg4hyk6nG8wQslg5BZdM8L1ioe6Hcx4LQWIl2Uy2RTzgLr5hlg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b+IL6lki3t07t+VRGNFFC2DRyZWTeBGI3jrGva87ies=;
+ b=UIeCJFOokxGBzplFSHT9/tGO+39Gvslh9LL5SHrTjQIchdzlJlJExi7NFUPbyMeDDyADwNJmcziGsqxOKyhnnC9rnRXbIRXROdEGObw9lupTisvIbY3q6MmasNx+ad1lsivILwm2+kv3v432GVLYvMb0jMkKnFLnm6rFHL2TDZR1hmG6O8SNNtYqGkas2tOlsH2jd4GmHacDqzwpGZ7lTnAUQWRmWJvL7RYjEISnlCmVlW+qUmPRGytw8mceQyzll1w9KPu/vj8suuBkHmnDH5xQyamLaJ4Ggh7z86DwCDci8RV8xjfQw94bjOTvhm1EQEUaDoqtFQ67yDCN04OeTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BLAPR15MB3828.namprd15.prod.outlook.com (2603:10b6:208:27d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 01:19:34 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 01:19:34 +0000
+Message-ID: <0e7b884a-05c3-83c7-0de1-9bfe14ff77b3@meta.com>
+Date:   Thu, 27 Apr 2023 18:19:29 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v2] libbpf: Improve version handling when attaching uprobe
+Content-Language: en-US
+To:     Espen Grindhaug <espen.grindhaug@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <ZEV/EzOM+TJomP66@eg>
+ <07e05c57-feb7-5482-9c07-eb41f976f9fd@meta.com> <ZErK0M/qAi/VS8U8@eg>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <ZErK0M/qAi/VS8U8@eg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0156.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::11) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BLAPR15MB3828:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed135a75-14f3-4fb8-bd19-08db4786a012
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WtyCQTs8neUKjFmuoGHOrcVG17tMCrFDPKFxo6VpgY3sY+SYgvn2qQ55uBCbOvD4CgUO3Hkk1A1VErkQVwiAyQR0rRfZZw5g1+MF77BzrSCFeWMpPnrxVX27lgd/PXw6W9gien8TYOxufTd3R3WkvVhbuABxE+/G8PaUivJOsVMx6dpXkwWCafIZB898Aw0u7Ra/PnA34QZKP2Vi0QshMD1RilM+CRgB3QgQOc033m4ODokTa6CGaUms4rSZ0FDXCxyIfaclyIUi3szlUGSW3q2F0wDp23geYyrNr4h+PVbwXkiGrYcLjvxQrnciWkSgt8sNNuVhuUj0KPGIV5GNvh8P27lLFVW2ufF5cwpx9Ygqp3rVTKP83CLHh6CyNPMFezpk/+VuPCAuMfhBChbGKMW6Zm4AZfiFv/Q32seYjLTdurGu8xBBHfqg19gb0O19rEChD70/0EB1H6CKNZLmYjsy6oAioVmQy7glsrHoCgRmFVXy8V3YCPKhHLa+0f/Sc7IPrbMJIbtKsLVk/QHboC3HR88Bwd+L/PQqGJpb+ovM5xAqZAQ6tWrmG0/N2xu42w0ohQQJpLOfOKJetixaVIc/CBNPuhZLDW9e2Ao8H8IulkBeHXytonhIUrKe8LBTqoLoPTHYXLA1c1MEmLbCVQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(451199021)(31686004)(2616005)(36756003)(41300700001)(38100700002)(7416002)(2906002)(316002)(8676002)(86362001)(8936002)(31696002)(5660300002)(66476007)(66556008)(4326008)(66946007)(6916009)(83380400001)(186003)(54906003)(6512007)(6506007)(53546011)(6666004)(478600001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MVdWQ3NvZFEzbjZ4Y2l1WGo4cG1DQXA0eXRLUnRnVDdRVWdWTWwraE9CSm1m?=
+ =?utf-8?B?TUVrbjdDUFRFeWcvV1Rjekd3eklNVkpSZzBlSlJYTUhDQVdNT2gzbWhxNUxS?=
+ =?utf-8?B?aFY3dnZUNUFxWXhGUTAwRkdjL0tOYnk5dUxmWGtabWdhbjZQbS9ROHo2RVlX?=
+ =?utf-8?B?RGkvRGM0TWZpZnZ6K09jdDkyTHFGRVhjQnhUUnhzMVNRdGhHQVhrUklaeTZr?=
+ =?utf-8?B?K2pQMkVRQ2x3SFM4aXpYNFFEczhKM0pZSnpFNzZBS2JhVk5jeURlOWNnS0sz?=
+ =?utf-8?B?SitRZHZiMjRHY2ZFT1lKOUFwZmZEdTZYa0MvcHdkUUpHcFJXSzI2S3hPTW9h?=
+ =?utf-8?B?RHg2VWJqZWoya1JiLzV3aVUzT2QxRlN1M2x1UnJDa1VFdzZIcklXQW1mRjB5?=
+ =?utf-8?B?VjFJaG4vSmhLMWF0OFlsWld5T0twRXp3Z2lhb1l3WjlBK1hWamFBV2RYeHNW?=
+ =?utf-8?B?cGNjTjVPZzV1WlpsejZzU21zV0ViSnRZV2pUY2tWRG9VenFhei9ZRDE3NG1E?=
+ =?utf-8?B?OVNWV0crNmZzajl3Z1Z3THVydDc2akxKZHZ0aEpLbUpST3dqazJvZk5IM3hG?=
+ =?utf-8?B?VjdqdnUyLzZyNUZhWmRueDBhUW1FWGtkZVdLRWpCZGtOVW1zeUJ6c3pMUUhj?=
+ =?utf-8?B?REF5eWl3RmVuQ1FNcWVWdmhNaENHMXNsTk5Gb0NaZVdnVFZhdzdWVWMyQ055?=
+ =?utf-8?B?bFZxVGVicFRtOGRCVzIzRHFFU1ZDL1dTNEVITDBDcHBkekdhb2R6UUpmbHpJ?=
+ =?utf-8?B?Q3NaaUtYakJZVjhPeUVrWGlLclBzczZ2dlZCNG05aFZ6a21GNEtGMENXelhw?=
+ =?utf-8?B?SnB1ZHdabDRwSG1KeTNEN09rQWh0Y2pncWJxY2lqb3dqTzlDYXh2OWZmRVBk?=
+ =?utf-8?B?cnk0YVdPSWtGTzZRUytHeGF1R3Ixb2l4YVIxdWNsZXMwWnJIdDVRSlNhaGZm?=
+ =?utf-8?B?bnQwZkJuVHVKSFYvWU1MVEZnMnFXOGRwMVNRWGFJdE16bmFuM2M3eVVtYkRE?=
+ =?utf-8?B?OE9rUWFpQVpOMjFBQndFSmFPNVpzcUpFY1M1UTQ3bDloQWIzVDBNdUJwZjlJ?=
+ =?utf-8?B?bUxtR3BQa2QxRjFlcm0vaVdxa0VGcUR6Rm5aMkhIQ3VHS3VyZG5lVXdlcTRT?=
+ =?utf-8?B?U0E3SUttUXl0WUwvNXFId242Z29BWjJYRTZUTktHcDE5YlgzWXllQzdaUWFk?=
+ =?utf-8?B?UFU4UjQ1TjA1YWxGWTFxOGk4OHJFS2pnSHQxM3k0TjRqZTdNU2NoMUl4MkVw?=
+ =?utf-8?B?Yllrc25ybHZSdXl2RUtqbVQ3WlB4NUFwRCtpQUwrUmlBSjM1bUtoMlBDbmZm?=
+ =?utf-8?B?WmxzaS9MRWxydlhUMlJQUndxVVYyOGJHSzBVRDJhUGF1RlF0TVZZRjNoczJC?=
+ =?utf-8?B?aVlWWXk5dUhibEVkWkc2RG9sVzgxOGhsa0NtR042RkFLVG5WWnZiTnc5WUV5?=
+ =?utf-8?B?c1FjSy93dmQ5OWtrL0pMNmZ6OGg0c3dKcE5ucjhWbkFyc3k1dEhRM2tiakps?=
+ =?utf-8?B?Z0NNcDlzNTVWMUpuelJOdGxwYm1VVmFtbHQ5R0NjTm1KY0hwR05BZWhhUXhl?=
+ =?utf-8?B?VCtQMXBMQTJsUDdJb2p0SFlrRzc0Z1ZvT3hRV2ZNNWZINDlUdFdQVzNTa2tW?=
+ =?utf-8?B?VncxcEZVbk1NZ2ZIV1VhaWgyZVlyZlFpZE5xdzd6bm1WWGRpQkNoU2JCUnlO?=
+ =?utf-8?B?eXJHcGpuQnBYaWJDcGZXb0lHN3dDLzFsSzBFb0M1OWd3WnRLWlhOb3owVGhk?=
+ =?utf-8?B?TWY3WVBoOHhkL1gyQ1ZSWTU2dEh5ci9SeUt3T0FGUGIrTE84SFY4dW9PRXdC?=
+ =?utf-8?B?dDNJOTZQbkJqZXVhcmFDN0lXdjhZREhlbE5DV3JTampBL0NqejV3a0VEVmhl?=
+ =?utf-8?B?ekJvTlZIaFk5THFLb3lIMHlGWXdiWkEzYStKSG9FTlZ4Qzg2SXA5RG5IKzBz?=
+ =?utf-8?B?eVN4NVBEM2drWEhwcTBsOXpHNkNCZHQxdFFCYVpEWlZHWGZBeFJpQWhiQ2hB?=
+ =?utf-8?B?eFJNMTltR1Radk0zNXNJdzdaamdQUXd5elN1NzlNVStyWmR6VDFjbzRjbHZs?=
+ =?utf-8?B?Q0V4OUVsaXc5UWJpVmVCNGdFZGpheVlEOC9WeE1ZTWxyeW00U3dSNWxkaTIy?=
+ =?utf-8?B?YUdlL2xYWHpJMkxlVFRwazJyM2FPNHBFQm4wVGcxVkh3blBVcmFlR0NROTVM?=
+ =?utf-8?B?N2c9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed135a75-14f3-4fb8-bd19-08db4786a012
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 01:19:34.1558
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YGzqQOcDH7rQb4f98ExdhAUCQM/mhMVbb4c2CAlfa3RKXseWW9r7tbiLTkRUaTkO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR15MB3828
+X-Proofpoint-GUID: Y0AyB57-Hrj1c0Ei0AQ0Li_tajhdzrLH
+X-Proofpoint-ORIG-GUID: Y0AyB57-Hrj1c0Ei0AQ0Li_tajhdzrLH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-27_09,2023-04-27_01,2023-02-09_01
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-04-26 at 16:10 +0300, Dmitry Baryshkov wrote:
-> On Wed, 26 Apr 2023 at 12:09, zongmin zhou <zhouzongmin@kylinos.cn>
-> wrote:
-> > 
-> > On Sun, 2023-04-23 at 22:51 +0200, Janne Grunau wrote:
-> > > On 2023-04-20 23:07:01 +0300, Dmitry Baryshkov wrote:
-> > > > On Thu, 20 Apr 2023 at 23:01, Janne Grunau <j@jannau.net>
-> > > > wrote:
-> > > > > 
-> > > > > On 2023-03-28 10:31:29 +0800, Zongmin Zhou wrote:
-> > > > > > When drivers call drm_kms_helper_poll_disable from
-> > > > > > their device suspend implementation without enabled output
-> > > > > > polling before,
-> > > > > > following warning will be reported,due to work->func not be
-> > > > > > initialized:
-> > > > > 
-> > > > > we see the same warning with the wpork in progress kms driver
-> > > > > for
-> > > > > apple
-> > > > > silicon SoCs. The connectors do not need to polled so the
-> > > > > driver
-> > > > > never
-> > > > > calls drm_kms_helper_poll_init().
-> > > > > 
-> > > > > > [   55.141361] WARNING: CPU: 3 PID: 372 at
-> > > > > > kernel/workqueue.c:3066 __flush_work+0x22f/0x240
-> > > > > > [   55.141382] Modules linked in: nls_iso8859_1
-> > > > > > snd_hda_codec_generic ledtrig_audio snd_hda_intel
-> > > > > > snd_intel_dspcfg snd_intel_sdw_acpi snd_hda_codec
-> > > > > > snd_hda_core
-> > > > > > snd_hwdep snd_pcm snd_seq_midi snd_seq_midi_event
-> > > > > > snd_rawmidi
-> > > > > > snd_seq intel_rapl_msr intel_rapl_common bochs
-> > > > > > drm_vram_helper
-> > > > > > drm_ttm_helper snd_seq_device nfit ttm crct10dif_pclmul
-> > > > > > snd_timer ghash_clmulni_intel binfmt_misc sha512_ssse3
-> > > > > > aesni_intel drm_kms_helper joydev input_leds syscopyarea
-> > > > > > crypto_simd snd cryptd sysfillrect sysimgblt mac_hid
-> > > > > > serio_raw
-> > > > > > soundcore qemu_fw_cfg sch_fq_codel msr parport_pc ppdev lp
-> > > > > > parport drm ramoops reed_solomon pstore_blk pstore_zone
-> > > > > > efi_pstore virtio_rng ip_tables x_tables autofs4
-> > > > > > hid_generic
-> > > > > > usbhid hid ahci virtio_net i2c_i801 crc32_pclmul psmouse
-> > > > > > virtio_scsi libahci i2c_smbus lpc_ich xhci_pci net_failover
-> > > > > > virtio_blk xhci_pci_renesas failover
-> > > > > > [   55.141430] CPU: 3 PID: 372 Comm: kworker/u16:9 Not
-> > > > > > tainted
-> > > > > > 6.2.0-rc6+ #16
-> > > > > > [   55.141433] Hardware name: QEMU Standard PC (Q35 + ICH9,
-> > > > > > 2009), BIOS rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org
-> > > > > > 04/01/2014
-> > > > > > [   55.141435] Workqueue: events_unbound async_run_entry_fn
-> > > > > > [   55.141441] RIP: 0010:__flush_work+0x22f/0x240
-> > > > > > [   55.141444] Code: 8b 43 28 48 8b 53 30 89 c1 e9 f9 fe ff
-> > > > > > ff
-> > > > > > 4c 89 f7 e8 b5 95 d9 00 e8 00 53 08 00 45 31 ff e9 11 ff ff
-> > > > > > ff
-> > > > > > 0f 0b e9 0a ff ff ff <0f> 0b 45 31 ff e9 00 ff ff ff e8 e2
-> > > > > > 54
-> > > > > > d8 00 66 90 90 90 90 90 90
-> > > > > > [   55.141446] RSP: 0018:ff59221940833c18 EFLAGS: 00010246
-> > > > > > [   55.141449] RAX: 0000000000000000 RBX: 0000000000000000
-> > > > > > RCX:
-> > > > > > ffffffff9b72bcbe
-> > > > > > [   55.141450] RDX: 0000000000000001 RSI: 0000000000000001
-> > > > > > RDI:
-> > > > > > ff3ea01e4265e330
-> > > > > > [   55.141451] RBP: ff59221940833c90 R08: 0000000000000000
-> > > > > > R09:
-> > > > > > 8080808080808080
-> > > > > > [   55.141453] R10: ff3ea01e42b3caf4 R11: 000000000000000f
-> > > > > > R12:
-> > > > > > ff3ea01e4265e330
-> > > > > > [   55.141454] R13: 0000000000000001 R14: ff3ea01e505e5e80
-> > > > > > R15:
-> > > > > > 0000000000000001
-> > > > > > [   55.141455] FS:  0000000000000000(0000)
-> > > > > > GS:ff3ea01fb7cc0000(0000) knlGS:0000000000000000
-> > > > > > [   55.141456] CS:  0010 DS: 0000 ES: 0000 CR0:
-> > > > > > 0000000080050033
-> > > > > > [   55.141458] CR2: 0000563543ad1546 CR3: 000000010ee82005
-> > > > > > CR4:
-> > > > > > 0000000000771ee0
-> > > > > > [   55.141464] DR0: 0000000000000000 DR1: 0000000000000000
-> > > > > > DR2:
-> > > > > > 0000000000000000
-> > > > > > [   55.141465] DR3: 0000000000000000 DR6: 00000000fffe0ff0
-> > > > > > DR7:
-> > > > > > 0000000000000400
-> > > > > > [   55.141466] PKRU: 55555554
-> > > > > > [   55.141467] Call Trace:
-> > > > > > [   55.141469]  <TASK>
-> > > > > > [   55.141472]  ? pcie_wait_cmd+0xdf/0x220
-> > > > > > [   55.141478]  ? mptcp_seq_show+0xe0/0x180
-> > > > > > [   55.141484]  __cancel_work_timer+0x124/0x1b0
-> > > > > > [   55.141487]  cancel_delayed_work_sync+0x17/0x20
-> > > > > > [   55.141490]  drm_kms_helper_poll_disable+0x26/0x40
-> > > > > > [drm_kms_helper]
-> > > > > > [   55.141516]  drm_mode_config_helper_suspend+0x25/0x90
-> > > > > > [drm_kms_helper]
-> > > > > > [   55.141531]  ? __pm_runtime_resume+0x64/0x90
-> > > > > > [   55.141536]  bochs_pm_suspend+0x16/0x20 [bochs]
-> > > > > > [   55.141540]  pci_pm_suspend+0x8b/0x1b0
-> > > > > > [   55.141545]  ? __pfx_pci_pm_suspend+0x10/0x10
-> > > > > > [   55.141547]  dpm_run_callback+0x4c/0x160
-> > > > > > [   55.141550]  __device_suspend+0x14c/0x4c0
-> > > > > > [   55.141553]  async_suspend+0x24/0xa0
-> > > > > > [   55.141555]  async_run_entry_fn+0x34/0x120
-> > > > > > [   55.141557]  process_one_work+0x21a/0x3f0
-> > > > > > [   55.141560]  worker_thread+0x4e/0x3c0
-> > > > > > [   55.141563]  ? __pfx_worker_thread+0x10/0x10
-> > > > > > [   55.141565]  kthread+0xf2/0x120
-> > > > > > [   55.141568]  ? __pfx_kthread+0x10/0x10
-> > > > > > [   55.141570]  ret_from_fork+0x29/0x50
-> > > > > > [   55.141575]  </TASK>
-> > > > > > [   55.141575] ---[ end trace 0000000000000000 ]---
-> > > > > > 
-> > > > > > Fixes: a4e771729a51 ("drm/probe_helper: sort out
-> > > > > > poll_running
-> > > > > > vs poll_enabled")
-> > > > > > Signed-off-by: Zongmin Zhou<zhouzongmin@kylinos.cn>
-> > > > > > ---
-> > > > > >  drivers/gpu/drm/drm_probe_helper.c | 3 ++-
-> > > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/gpu/drm/drm_probe_helper.c
-> > > > > > b/drivers/gpu/drm/drm_probe_helper.c
-> > > > > > index 8127be134c39..ac72b18e2257 100644
-> > > > > > --- a/drivers/gpu/drm/drm_probe_helper.c
-> > > > > > +++ b/drivers/gpu/drm/drm_probe_helper.c
-> > > > > > @@ -855,7 +855,8 @@ void drm_kms_helper_poll_disable(struct
-> > > > > > drm_device *dev)
-> > > > > >       if (dev->mode_config.poll_running)
-> > > > > >               drm_kms_helper_disable_hpd(dev);
-> > > > > > 
-> > > > > > -     cancel_delayed_work_sync(&dev-
-> > > > > > > mode_config.output_poll_work);
-> > > > > > +     if (dev->mode_config.poll_enabled)
-> > > > > > +             cancel_delayed_work_sync(&dev-
-> > > > > > > mode_config.output_poll_work);
-> > > > > 
-> > > > > Checking for dev->mode_config.poll_enabled at the start of
-> > > > > the
-> > > > > function
-> > > > > and return early if it is not true looks more in style with
-> > > > > the
-> > > > > rest of
-> > > > > drm_probe_helper.c.
-> > > > 
-> > > > I think it is an error to call drm_kms_helper_poll_disable() if
-> > > > polling was not initialized. So, in my opinion the fix should
-> > > > go to
-> > > > the drm_mode_config_helper_suspend() / _resume() instead.
-> > > > Please
-> > > > add a
-> > > > guard there using dev->mode_config.poll_enabled.
-> > > 
-> > > While I tend to agree to the sentiment I do not think this is the
-> > > correct fix in this situation. drm_kms_helper_poll_disable had
-> > > the
-> > > check since at least 2014. a4e771729a51 is a regression. If we
-> > > want
-> > > to
-> > > change the behavior it should be done explicitly and after
-> > > verifying
-> > > all
-> > > drm_kms_helper_poll_disable() calls.
-> > > 
-> > > #regzbot ^introduced a4e771729a51
-> > > 
-> > > ciao
-> > > Janne
-> > 
-> > Dear Janne:
-> > 
-> > I agree with you like I mentioned on last letter.
-> > Thanks for your time.
-> > 
-> > 
-> > Dear Dmitry:
-> > 
-> > Is there anything else I can do?
-> > Looking forward to your reply.
-> 
-> If it is a common consensus, I'm fine with your approach.
-> 
-Dear Dmitry:
 
-Ok.Thanks for your reply.
 
-Best regards!
+On 4/27/23 12:19 PM, Espen Grindhaug wrote:
+> On Wed, Apr 26, 2023 at 02:47:27PM -0700, Yonghong Song wrote:
+>>
+>>
+>> On 4/23/23 11:55 AM, Espen Grindhaug wrote:
+>>> This change fixes the handling of versions in elf_find_func_offset.
+>>> In the previous implementation, we incorrectly assumed that the
+>>
+>> Could you give more explanation/example in the commit message
+>> what does 'incorrectly' mean here? In which situations the
+>> current libbpf implementation will not be correct?
+>>
+> 
+> How about something like this?
+> 
+> 
+> libbpf: Improve version handling when attaching uprobe
+> 
+> This change fixes the handling of versions in elf_find_func_offset.
+> 
+> For example, let's assume we are trying to attach an uprobe to pthread_create in
+> glibc. Prior to this commit, it would fail with an error message saying 'elf:
+> ambiguous match [...]', this is because there are two entries in the symbol
+> table with that name.
+> 
+> $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+> 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+> 0000000000094cc0 T pthread_create@@GLIBC_2.34
+> 
+> So we go ahead and modify our code to attach to 'pthread_create@@GLIBC_2.34',
+> and this also fails, but this time with the error 'elf: failed to find symbol
+> [...]'. This fails because we incorrectly assumed that the version information
+> would be present in the string found in the string table, but there is only the
+> string 'pthread_create'.
+
+I tried one example with my centos8 libpthread library.
+
+$ llvm-readelf -s /lib64/libc-2.28.so | grep pthread_cond_signal
+     39: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14 
+pthread_cond_signal@@GLIBC_2.3.2
+     40: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14 
+pthread_cond_signal@GLIBC_2.2.5
+   3160: 0000000000096250    43 FUNC    LOCAL  DEFAULT    14 
+__pthread_cond_signal_2_0
+   3589: 0000000000095f70    43 FUNC    LOCAL  DEFAULT    14 
+__pthread_cond_signal
+   5522: 0000000000095f70    43 FUNC    GLOBAL DEFAULT    14 
+pthread_cond_signal@@GLIBC_2.3.2
+   5545: 0000000000096250    43 FUNC    GLOBAL DEFAULT    14 
+pthread_cond_signal@GLIBC_2.2.5
+$ nm -D /lib64/libc-2.28.so | grep pthread_cond_signal
+0000000000095f70 T pthread_cond_signal@@GLIBC_2.3.2
+0000000000096250 T pthread_cond_signal@GLIBC_2.2.5
+$
+
+Note that two pthread_cond_signal functions have different addresses,
+which is expected as they implemented for different versions.
+
+But in your case,
+ > $ nm -D /lib/x86_64-linux-gnu/libc.so.6 | grep pthread_create
+ > 0000000000094cc0 T pthread_create@GLIBC_2.2.5
+ > 0000000000094cc0 T pthread_create@@GLIBC_2.34
+
+Two functions have the same address which is very weird and I suspect
+some issues here at least needs some investigation.
+
+Second, for the symbol table, the following is ELF encoding,
+
+typedef struct {
+         Elf64_Word      st_name;
+         unsigned char   st_info;
+         unsigned char   st_other;
+         Elf64_Half      st_shndx;
+         Elf64_Addr      st_value;
+         Elf64_Xword     st_size;
+} Elf64_Sym;
+
+where
+st_name
+
+     An index into the object file's symbol string table, which holds 
+the character representations of the symbol names. If the value is 
+nonzero, the value represents a string table index that gives the symbol 
+name. Otherwise, the symbol table entry has no name.
+
+So, the function name (including @..., @@...) should be in string table
+which is the same for the above two pthread_cond_signal symbols.
+
+I think it is worthwhile to debug why in your situation 
+pthread_create@GLIBC_2.2.5 and pthread_create@@GLIBC_2.34 do not
+have them in the string table.
+
+> 
+> This patch reworks how we compare the symbol name provided by the user if it is
+> qualified with a version (using @ or @@). We now look up the correct version
+> string in the version symbol table before constructing the full name, as also
+> done above by nm, before comparing.
+> 
+>>> version information would be present in the string found in the
+>>> string table.
+>>>
+>>> We now look up the correct version string in the version symbol
+>>> table before constructing the full name and then comparing.
+>>>
+>>> This patch adds support for both name@version and name@@version to
+>>> match output of the various elf parsers.
+>>>
+>>> Signed-off-by: Espen Grindhaug <espen.grindhaug@gmail.com>
+>>
+>> [...]
