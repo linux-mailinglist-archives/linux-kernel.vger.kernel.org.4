@@ -2,104 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E000F6F1C07
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ADD6F1BF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjD1Pzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S1345870AbjD1PwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjD1Pzh (ORCPT
+        with ESMTP id S230420AbjD1Pv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:55:37 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B4E5B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:55:35 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5083bd8e226so15455013a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682697334; x=1685289334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xChxJ7IJyqQRc+Iv7KzaMBMnKurmuv9xIrMDMyvDmO8=;
-        b=WSuwB3mxNB7cx2qpUWtEXkAC+XSbnxC8tadFflT+Ebzrg1suB8ZhU1vbvnCHguuc6X
-         jHR6sauNMag5A+8Z6+wY+6d1rgfa++M8VSoYb93VpmE2Oaw6GYh9sIYJncJoS7p8KyVe
-         30sUGet5iL9NUzUFidDxWw44ip5kzzKSp/wy0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682697334; x=1685289334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xChxJ7IJyqQRc+Iv7KzaMBMnKurmuv9xIrMDMyvDmO8=;
-        b=KAoz8kgqXbTy0pFNFi+U9r1YwOW2FydluH9WXB4SpvxsQFhyjWmHoQ4uPIxnscSnZG
-         a+ohPGhhfaEEOdr3jj5alFo6Xho2t1sNOkv69k0n9g3E+jKLLHKbf1gbIvV1E4WgMsTB
-         kFxPtU/vyFdN5T/Mw6rdLdbkWSCMqzK2aRkjjnbFywYnup5esULyHmKBA7aC0gA2iCTs
-         W0HvJpi2VdZdNsBmaKr/+RcJfVwW7N2MPu5lyKCjZmbJCUpXgBSDwFXHHx2kv61WH7qd
-         23dVsiWUSpRNm9yyN5zLY/lm3x/9Fk76Q8g4QX0LqiD5KOBpuyb+3RXYzGtZZIh5sRL5
-         RCqg==
-X-Gm-Message-State: AC+VfDxwnJXwx2wm7/FtwT0lW2v2nv4KWlNn3K9mA7WqsjNCzUDGx+ly
-        J2D0ZeFa5iGzwDF4QNu+W05QoO+42GtVJT0SBngMng==
-X-Google-Smtp-Source: ACHHUZ59ANPvId+IRX5TgjGq7I6gl6Ziw4+HLtnGM42LC5L3ZJOG1IRSODYkSQuY34VbwfKodIqaQw==
-X-Received: by 2002:a05:6402:ca:b0:504:78aa:4f2d with SMTP id i10-20020a05640200ca00b0050478aa4f2dmr4814711edu.0.1682697333854;
-        Fri, 28 Apr 2023 08:55:33 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa7c6c8000000b005068d7ccfb0sm9144041eds.83.2023.04.28.08.55.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 08:55:33 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-504fce3d7fbso15459713a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:55:33 -0700 (PDT)
-X-Received: by 2002:a17:907:961b:b0:94e:6a24:9463 with SMTP id
- gb27-20020a170907961b00b0094e6a249463mr6666354ejc.28.1682697332875; Fri, 28
- Apr 2023 08:55:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZEqEx7C2iuApvrvt@kroah.com> <CAHk-=wjcvp-JxG2PW7TF6HV2h1xx2_2SMh_HGNZuEpK0CtNTww@mail.gmail.com>
- <ZEtVvK6LTQHw6Onu@kroah.com>
-In-Reply-To: <ZEtVvK6LTQHw6Onu@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Apr 2023 08:55:16 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wip5BKsjcN2Efu8PoWmtOdqDgmG7hGLsq_NZcz=FJVDxg@mail.gmail.com>
-Message-ID: <CAHk-=wip5BKsjcN2Efu8PoWmtOdqDgmG7hGLsq_NZcz=FJVDxg@mail.gmail.com>
-Subject: Re: [GIT PULL] Driver core updates for 6.4-rc1
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Nipun Gupta <nipun.gupta@amd.com>,
-        Nikhil Agarwal <nikhil.agarwal@amd.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Fri, 28 Apr 2023 11:51:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917D21984;
+        Fri, 28 Apr 2023 08:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682697117; x=1714233117;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vrd2psdUQes7KhjYx4FBAisXAZuT9MhfS8Jsg+nYJhs=;
+  b=jy7dWJppzhEZhNt80Fuyo0Br5jiJa5VY2+EmWZPxOBdVxpJyFapw8ngx
+   EiIkgoMntyNaPvDaATskLIGMGrBFibRq/cYK1yr+HOnr075VUdjWjUHA0
+   wP8AkacSkHK5fBwkh+kIqbx9ZxEHB9GzGoTDWH5b+KninxsHbE4oMMnjZ
+   tifLOlv/UfcRuFsiIfQdJ7ddB4r03W6IJypZwnrETftLSkbOp06/ySw5U
+   NqxjGlIuSq3aJzZK3A8rE+5TqlghgEjpqdI/lb/9hyMDdwKDMhZgXJdW1
+   u9V57OSXLgaf8naHQiK0KO1Z2+Sjv0DhaOJMEoVSSZOnVc76wwk9AUPhj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="434072115"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="434072115"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 08:51:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="941136513"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="941136513"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 08:51:56 -0700
+Date:   Fri, 28 Apr 2023 08:56:15 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
         Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        "Ranganathan, Narayan" <narayan.ranganathan@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v5 1/7] iommu: Generalize default PCIe requester ID
+ PASID
+Message-ID: <20230428085615.58e437c9@jacob-builder>
+In-Reply-To: <BN9PR11MB5276FD027EC3D6BAA24046F58C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230427174937.471668-1-jacob.jun.pan@linux.intel.com>
+        <20230427174937.471668-2-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB5276FD027EC3D6BAA24046F58C6B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 10:12=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> In the future, how do you want stuff like "when this is merged with that
-> tree, something needs to be done" type of things to be pointed out?
+Hi Kevin,
 
-Just having it pointed out is fine. I notice build errors on x86-64
-myself, but other architectures get rather iffy. arm64 is the best of
-the bunch, in that I *will* do the build test, it's just not as
-timely.
+On Fri, 28 Apr 2023 09:38:32 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-If known merge issues get pointed out, I (a) know to look out for them
-and (b) know that the trees involved actually were in linux-next and
-people were paying attention.
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Friday, April 28, 2023 1:50 AM
+> > 
+> > PCIe Process address space ID (PASID) is used to tag DMA traffic, it
+> > provides finer grained isolation than requester ID (RID).
+> > 
+> > For each RID, 0 is as a special PASID for the legacy DMA (without
+> > PASID), thus RID_PASID. This is universal across all architectures,
+> > therefore warranted to be declared in the common header.
+> > Noting that VT-d could support none-zero RID_PASID, but currently not
+> > used.
+> > 
+> > By having a common RID_PASID, we can avoid conflicts between different
+> > use cases in the generic code. e.g. SVA and DMA API with PASIDs.  
+> 
+> You intend it to be generic but in the end only vt-d driver is changed
+> to use it in this series...
+change for SVA is in the patch.
 
-It's usually not been a problem with your trees, particularly since
-most of your stuff does build on x86. This whole CDX subsystem being
-arm64-only is not great for build coverage.
+> > @@ -190,6 +190,7 @@ enum iommu_dev_features {
+> >  	IOMMU_DEV_FEAT_IOPF,
+> >  };
+> > 
+> > +#define IOMMU_DEF_RID_PASID	(0U) /* Reserved for DMA w/o PASID
+> > */  
+> 
+> Is RID a general team on other platform?
+RID, aka  requester id is a PCI term. so I this it is common though on SMMU
+might be better called stream ID PASID?
 
-               Linus
+> Would IOMMU_DEF_NO_PASID serve the purpose better?
+not sure, it is still a PASID. For completeness, might be called
+IOMMU_DEF_PASID_FOR_DMA_NO_PASID :)
+
+other suggestions?
+
+Thanks,
+
+Jacob
