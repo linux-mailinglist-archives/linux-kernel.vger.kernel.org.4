@@ -2,283 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B526F1F56
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3753E6F1F5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346607AbjD1U3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 16:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S1346220AbjD1UbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346624AbjD1U3F (ORCPT
+        with ESMTP id S229619AbjD1UbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:29:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F8B2728
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682713693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=41KUBQaFistzCqjFah0QVDYkKS+WNIdy9b94n5s+HCs=;
-        b=M1xAVGJqhnDUlT4M8Y6sE/HjHtCRL8wf7J6gLkI+C0EBD78PhTB+hvnCTVAKrVXCFIlgjq
-        GdlElXEcvfIGWqZu7BUqkZ9EZe1jhwzn4mZ8tspkvR+17e8Iu2EdHcKVYS3lBwJu9nWAV2
-        W2I3EIsutAeuccsGBFRpWyqpUgII3a8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-158-hO9dkLOQO523hDB9GezRGw-1; Fri, 28 Apr 2023 16:28:07 -0400
-X-MC-Unique: hO9dkLOQO523hDB9GezRGw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AFD4FA0F385;
-        Fri, 28 Apr 2023 20:28:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.42.28.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D9002166B4F;
-        Fri, 28 Apr 2023 20:28:05 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net 3/3] rxrpc: Fix timeout of a call that hasn't yet been granted a channel
-Date:   Fri, 28 Apr 2023 21:27:56 +0100
-Message-Id: <20230428202756.1186269-4-dhowells@redhat.com>
-In-Reply-To: <20230428202756.1186269-1-dhowells@redhat.com>
-References: <20230428202756.1186269-1-dhowells@redhat.com>
+        Fri, 28 Apr 2023 16:31:01 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E7D5589
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:30:29 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-247296def99so289379a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682713828; x=1685305828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5BBSaM4viJse91izjI7kqxRyJnpTb5xhj5RhMLOsisI=;
+        b=Iyf1MyFQjkZvjPsBoNrzcGAw7Bq5xbB4PiSYUTEMKCIRkHQEPR2fXwmCq1F8ryDMJ1
+         xQdL4ueYMrjlqepGS0eB1psFE7yNC1sgSAosDtcelE7Z7oNW9PGzoMLotqB0LYRRa2Ob
+         lcu4oYCnv6y7MB/tx40sjK6/Wtp2ilTk4RcY0szl73r1SBJdhpwzPCANh/y4P7kBIlyY
+         0HE4kMYmug/memLIlI/1NxtjJvL63jFhzlZOABPjhbmbPCU4wzeRQjSDHr5olnhRB842
+         9HJcS6JiF7rIe0bhoK9+3naB7dXPxRQkcCkafNS4It2flZlYr0+9zpjF7X5XnEgtiO79
+         Mn/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682713828; x=1685305828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5BBSaM4viJse91izjI7kqxRyJnpTb5xhj5RhMLOsisI=;
+        b=GVVVUt3lChtFNEJ4q1lY4Q0hOxXdCnxAyukZlnP1bPrX5CUY80a/55a9Tnz6h6O6LH
+         VOeoh1lBRGjRIOmNrfUBToEkpB6EYnzlRLhRRUEE2Bj90PMYqY3A6WyI+yvo7z7RQRnH
+         2/ZdwFUepfzyfydkabfMl5M2/RWSgDXDDnAdXUuenYc4OCkAvMpsrfhggxH078WU/nhD
+         lctKwGOfj9rIJklS2eJQyBKjqn52QJtj5GVq95hh/PkEDQdRAm2YuvL/gnnaE5PDVHVZ
+         VE+gVy6z1+D6mn84uRnNjxQRtcMHd9vf8K7ssnTMGqDF7THgLQxu3LiYmCDqCdQvwHMi
+         NqSw==
+X-Gm-Message-State: AC+VfDwvZzGFlgE2ILjvx3Anw8HSGn6CYgkuijvN75d1BcDkSsQ3jbN7
+        pp43useRVhH06Y9e8jvN+1bsWRY1hK34uvku+0m+Yw==
+X-Google-Smtp-Source: ACHHUZ7QGJcZJActleLC+67XkcEQINvuEAKkRYu+dP1dV1iQpDn3+MrobU9vljU6I+TUwbLnn2AdH9EU0yxRTo99Nu8=
+X-Received: by 2002:a17:90b:3e8e:b0:247:2152:6391 with SMTP id
+ rj14-20020a17090b3e8e00b0024721526391mr6188228pjb.17.1682713827919; Fri, 28
+ Apr 2023 13:30:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230427165813.2844530-1-wonchung@google.com>
+In-Reply-To: <20230427165813.2844530-1-wonchung@google.com>
+From:   Manasi Navare <navaremanasi@google.com>
+Date:   Fri, 28 Apr 2023 13:30:17 -0700
+Message-ID: <CAMNLLoToZrKHq3mdSsGErLJndQhZD8A+oyOzmvHUUV8XHqz8qw@mail.gmail.com>
+Subject: Re: [PATCH v6] drm/sysfs: Link DRM connectors to corresponding Type-C connectors
+To:     Won Chung <wonchung@google.com>
+Cc:     bleung@google.com, pmalani@chromium.org,
+        heikki.krogerus@linux.intel.com, imre.deak@intel.com,
+        gildekel@chromium.org, seanpaul@chromium.org, daniel@ffwll.ch,
+        navaremanasi@chromium.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-afs_make_call() calls rxrpc_kernel_begin_call() to begin a call (which may
-get stalled in the background waiting for a connection to become
-available); it then calls rxrpc_kernel_set_max_life() to set the timeouts -
-but that starts the call timer so the call timer might then expire before
-we get a connection assigned - leading to the following oops if the call
-stalled:
+Hi Won,
 
-	BUG: kernel NULL pointer dereference, address: 0000000000000000
-	...
-	CPU: 1 PID: 5111 Comm: krxrpcio/0 Not tainted 6.3.0-rc7-build3+ #701
-	RIP: 0010:rxrpc_alloc_txbuf+0xc0/0x157
-	...
-	Call Trace:
-	 <TASK>
-	 rxrpc_send_ACK+0x50/0x13b
-	 rxrpc_input_call_event+0x16a/0x67d
-	 rxrpc_io_thread+0x1b6/0x45f
-	 ? _raw_spin_unlock_irqrestore+0x1f/0x35
-	 ? rxrpc_input_packet+0x519/0x519
-	 kthread+0xe7/0xef
-	 ? kthread_complete_and_exit+0x1b/0x1b
-	 ret_from_fork+0x22/0x30
+Thanks for the patch, patch now merged to drm-misc-next
 
-Fix this by noting the timeouts in struct rxrpc_call when the call is
-created.  The timer will be started when the first packet is transmitted.
+Regards
+Manasi
 
-It shouldn't be possible to trigger this directly from userspace through
-AF_RXRPC as sendmsg() will return EBUSY if the call is in the
-waiting-for-conn state if it dropped out of the wait due to a signal.
 
-Fixes: 9d35d880e0e4 ("rxrpc: Move client call connection to the I/O thread")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: netdev@vger.kernel.org
-cc: linux-kernel@vger.kernel.org
----
- fs/afs/afs.h            |  4 ++--
- fs/afs/internal.h       |  2 +-
- fs/afs/rxrpc.c          |  8 +++-----
- include/net/af_rxrpc.h  | 21 +++++++++++----------
- net/rxrpc/af_rxrpc.c    |  3 +++
- net/rxrpc/ar-internal.h |  1 +
- net/rxrpc/call_object.c |  9 ++++++++-
- net/rxrpc/sendmsg.c     |  1 +
- 8 files changed, 30 insertions(+), 19 deletions(-)
-
-diff --git a/fs/afs/afs.h b/fs/afs/afs.h
-index 432cb4b23961..81815724db6c 100644
---- a/fs/afs/afs.h
-+++ b/fs/afs/afs.h
-@@ -19,8 +19,8 @@
- #define AFSPATHMAX		1024	/* Maximum length of a pathname plus NUL */
- #define AFSOPAQUEMAX		1024	/* Maximum length of an opaque field */
- 
--#define AFS_VL_MAX_LIFESPAN	(120 * HZ)
--#define AFS_PROBE_MAX_LIFESPAN	(30 * HZ)
-+#define AFS_VL_MAX_LIFESPAN	120
-+#define AFS_PROBE_MAX_LIFESPAN	30
- 
- typedef u64			afs_volid_t;
- typedef u64			afs_vnodeid_t;
-diff --git a/fs/afs/internal.h b/fs/afs/internal.h
-index ad8523d0d038..68ae91d21b57 100644
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@ -128,7 +128,7 @@ struct afs_call {
- 	spinlock_t		state_lock;
- 	int			error;		/* error code */
- 	u32			abort_code;	/* Remote abort ID or 0 */
--	unsigned int		max_lifespan;	/* Maximum lifespan to set if not 0 */
-+	unsigned int		max_lifespan;	/* Maximum lifespan in secs to set if not 0 */
- 	unsigned		request_size;	/* size of request data */
- 	unsigned		reply_max;	/* maximum size of reply */
- 	unsigned		count2;		/* count used in unmarshalling */
-diff --git a/fs/afs/rxrpc.c b/fs/afs/rxrpc.c
-index e08b850c3e6d..ed1644e7683f 100644
---- a/fs/afs/rxrpc.c
-+++ b/fs/afs/rxrpc.c
-@@ -335,7 +335,9 @@ void afs_make_call(struct afs_addr_cursor *ac, struct afs_call *call, gfp_t gfp)
- 	/* create a call */
- 	rxcall = rxrpc_kernel_begin_call(call->net->socket, srx, call->key,
- 					 (unsigned long)call,
--					 tx_total_len, gfp,
-+					 tx_total_len,
-+					 call->max_lifespan,
-+					 gfp,
- 					 (call->async ?
- 					  afs_wake_up_async_call :
- 					  afs_wake_up_call_waiter),
-@@ -350,10 +352,6 @@ void afs_make_call(struct afs_addr_cursor *ac, struct afs_call *call, gfp_t gfp)
- 	}
- 
- 	call->rxcall = rxcall;
--
--	if (call->max_lifespan)
--		rxrpc_kernel_set_max_life(call->net->socket, rxcall,
--					  call->max_lifespan);
- 	call->issue_time = ktime_get_real();
- 
- 	/* send the request */
-diff --git a/include/net/af_rxrpc.h b/include/net/af_rxrpc.h
-index 01a35e113ab9..5531dd08061e 100644
---- a/include/net/af_rxrpc.h
-+++ b/include/net/af_rxrpc.h
-@@ -40,16 +40,17 @@ typedef void (*rxrpc_user_attach_call_t)(struct rxrpc_call *, unsigned long);
- void rxrpc_kernel_new_call_notification(struct socket *,
- 					rxrpc_notify_new_call_t,
- 					rxrpc_discard_new_call_t);
--struct rxrpc_call *rxrpc_kernel_begin_call(struct socket *,
--					   struct sockaddr_rxrpc *,
--					   struct key *,
--					   unsigned long,
--					   s64,
--					   gfp_t,
--					   rxrpc_notify_rx_t,
--					   bool,
--					   enum rxrpc_interruptibility,
--					   unsigned int);
-+struct rxrpc_call *rxrpc_kernel_begin_call(struct socket *sock,
-+					   struct sockaddr_rxrpc *srx,
-+					   struct key *key,
-+					   unsigned long user_call_ID,
-+					   s64 tx_total_len,
-+					   u32 hard_timeout,
-+					   gfp_t gfp,
-+					   rxrpc_notify_rx_t notify_rx,
-+					   bool upgrade,
-+					   enum rxrpc_interruptibility interruptibility,
-+					   unsigned int debug_id);
- int rxrpc_kernel_send_data(struct socket *, struct rxrpc_call *,
- 			   struct msghdr *, size_t,
- 			   rxrpc_notify_end_tx_t);
-diff --git a/net/rxrpc/af_rxrpc.c b/net/rxrpc/af_rxrpc.c
-index c32b164206f9..31f738d65f1c 100644
---- a/net/rxrpc/af_rxrpc.c
-+++ b/net/rxrpc/af_rxrpc.c
-@@ -265,6 +265,7 @@ static int rxrpc_listen(struct socket *sock, int backlog)
-  * @key: The security context to use (defaults to socket setting)
-  * @user_call_ID: The ID to use
-  * @tx_total_len: Total length of data to transmit during the call (or -1)
-+ * @hard_timeout: The maximum lifespan of the call in sec
-  * @gfp: The allocation constraints
-  * @notify_rx: Where to send notifications instead of socket queue
-  * @upgrade: Request service upgrade for call
-@@ -283,6 +284,7 @@ struct rxrpc_call *rxrpc_kernel_begin_call(struct socket *sock,
- 					   struct key *key,
- 					   unsigned long user_call_ID,
- 					   s64 tx_total_len,
-+					   u32 hard_timeout,
- 					   gfp_t gfp,
- 					   rxrpc_notify_rx_t notify_rx,
- 					   bool upgrade,
-@@ -313,6 +315,7 @@ struct rxrpc_call *rxrpc_kernel_begin_call(struct socket *sock,
- 	p.tx_total_len		= tx_total_len;
- 	p.interruptibility	= interruptibility;
- 	p.kernel		= true;
-+	p.timeouts.hard		= hard_timeout;
- 
- 	memset(&cp, 0, sizeof(cp));
- 	cp.local		= rx->local;
-diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
-index 67b0a894162d..5d44dc08f66d 100644
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -616,6 +616,7 @@ struct rxrpc_call {
- 	unsigned long		expect_term_by;	/* When we expect call termination by */
- 	u32			next_rx_timo;	/* Timeout for next Rx packet (jif) */
- 	u32			next_req_timo;	/* Timeout for next Rx request packet (jif) */
-+	u32			hard_timo;	/* Maximum lifetime or 0 (jif) */
- 	struct timer_list	timer;		/* Combined event timer */
- 	struct work_struct	destroyer;	/* In-process-context destroyer */
- 	rxrpc_notify_rx_t	notify_rx;	/* kernel service Rx notification function */
-diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
-index e9f1f49d18c2..fecbc73054bc 100644
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -226,6 +226,13 @@ static struct rxrpc_call *rxrpc_alloc_client_call(struct rxrpc_sock *rx,
- 	if (cp->exclusive)
- 		__set_bit(RXRPC_CALL_EXCLUSIVE, &call->flags);
- 
-+	if (p->timeouts.normal)
-+		call->next_rx_timo = min(msecs_to_jiffies(p->timeouts.normal), 1UL);
-+	if (p->timeouts.idle)
-+		call->next_req_timo = min(msecs_to_jiffies(p->timeouts.idle), 1UL);
-+	if (p->timeouts.hard)
-+		call->hard_timo = p->timeouts.hard * HZ;
-+
- 	ret = rxrpc_init_client_call_security(call);
- 	if (ret < 0) {
- 		rxrpc_prefail_call(call, RXRPC_CALL_LOCAL_ERROR, ret);
-@@ -257,7 +264,7 @@ void rxrpc_start_call_timer(struct rxrpc_call *call)
- 	call->keepalive_at = j;
- 	call->expect_rx_by = j;
- 	call->expect_req_by = j;
--	call->expect_term_by = j;
-+	call->expect_term_by = j + call->hard_timo;
- 	call->timer.expires = now;
- }
- 
-diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
-index c1b074c17b33..8e0b94714e84 100644
---- a/net/rxrpc/sendmsg.c
-+++ b/net/rxrpc/sendmsg.c
-@@ -651,6 +651,7 @@ int rxrpc_do_sendmsg(struct rxrpc_sock *rx, struct msghdr *msg, size_t len)
- 		if (IS_ERR(call))
- 			return PTR_ERR(call);
- 		/* ... and we have the call lock. */
-+		p.call.nr_timeouts = 0;
- 		ret = 0;
- 		if (rxrpc_call_is_complete(call))
- 			goto out_put_unlock;
-
+On Thu, Apr 27, 2023 at 9:58=E2=80=AFAM Won Chung <wonchung@google.com> wro=
+te:
+>
+> Create a symlink pointing to USB Type-C connector for DRM connectors
+> when they are created. The link will be created only if the firmware is
+> able to describe the connection beween the two connectors.
+>
+> Currently, even if a display uses a USB Type-C port, there is no way for
+> the userspace to find which port is used for which display. With the
+> symlink, display information would be accessible from Type-C connectors
+> and port information would be accessible from DRM connectors.
+>
+> Associating the two subsystems, userspace would have potential to expose
+> and utilize more complex information. ChromeOS intend to use this
+> information for metrics collection. For example, we want to tell which
+> port is deriving which displays. Also, combined with USB PD information,
+> we can tell whether user is charging their device through display.
+> Chromium patch for parsing the symlink from the kernel is at
+> http://crrev.com/c/4317207.
+>
+> We already have a framework in typec port-mapper.c where it goes through
+> component devices and runs the bind functions for those with matching
+> _PLD (physical location of device).
+> https://elixir.bootlin.com/linux/v5.18.1/source/drivers/usb/typec/port-ma=
+pper.c
+> Since _PLD is ACPI specific field, this linking would only work on ACPI
+> x86 as long as _PLD field for Type-C connectors and DRM connectors are
+> correctly added to the firmware.
+>
+> Currently, USB ports and USB4 ports are added as components to create a
+> symlink with Type C connector.
+> USB:
+> https://lore.kernel.org/all/20211223082349.45616-1-heikki.krogerus@linux.=
+intel.com/
+> USB4:
+> https://lore.kernel.org/all/20220418175932.1809770-3-wonchung@google.com/
+> So, we follow the same pattern in this patch.
+>
+> Signed-off-by: Won Chung <wonchung@google.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Reviewed-by: Manasi Navare <navaremanasi@chromium.org>
+> ---
+> Changes from v5:
+> - Add more details to the error message
+>
+> Changes from v4: (4 months ago)
+> - Update commit message with an actual use case from cros userspace
+> - Move component_add to before ddc check which possibly returns
+> - Rebased
+>
+> Changes from v3:
+> - Append to the commit message on why this patch is needed
+>
+> Changes from v2:
+> - Resend the patch to dri-devel list
+>
+> Changes from v1:
+> - Fix multiple lines to single line
+>
+>
+>  drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> index 183130355997..bc869c6fa420 100644
+> --- a/drivers/gpu/drm/drm_sysfs.c
+> +++ b/drivers/gpu/drm/drm_sysfs.c
+> @@ -11,12 +11,14 @@
+>   */
+>
+>  #include <linux/acpi.h>
+> +#include <linux/component.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/export.h>
+>  #include <linux/gfp.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kdev_t.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
+>
+>  #include <drm/drm_accel.h>
+> @@ -96,6 +98,34 @@ static char *drm_devnode(const struct device *dev, umo=
+de_t *mode)
+>         return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
+>  }
+>
+> +static int typec_connector_bind(struct device *dev,
+> +       struct device *typec_connector, void *data)
+> +{
+> +       int ret;
+> +
+> +       ret =3D sysfs_create_link(&dev->kobj, &typec_connector->kobj, "ty=
+pec_connector");
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret =3D sysfs_create_link(&typec_connector->kobj, &dev->kobj, "dr=
+m_connector");
+> +       if (ret)
+> +               sysfs_remove_link(&dev->kobj, "typec_connector");
+> +
+> +       return ret;
+> +}
+> +
+> +static void typec_connector_unbind(struct device *dev,
+> +       struct device *typec_connector, void *data)
+> +{
+> +       sysfs_remove_link(&typec_connector->kobj, "drm_connector");
+> +       sysfs_remove_link(&dev->kobj, "typec_connector");
+> +}
+> +
+> +static const struct component_ops typec_connector_ops =3D {
+> +       .bind =3D typec_connector_bind,
+> +       .unbind =3D typec_connector_unbind,
+> +};
+> +
+>  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
+>
+>  /**
+> @@ -353,9 +383,16 @@ int drm_sysfs_connector_add(struct drm_connector *co=
+nnector)
+>
+>         connector->kdev =3D kdev;
+>
+> +       if (dev_fwnode(kdev)) {
+> +               r =3D component_add(kdev, &typec_connector_ops);
+> +               if (r)
+> +                       drm_err(dev, "failed to add component to create l=
+ink to typec connector\n");
+> +       }
+> +
+>         if (connector->ddc)
+>                 return sysfs_create_link(&connector->kdev->kobj,
+>                                  &connector->ddc->dev.kobj, "ddc");
+> +
+>         return 0;
+>
+>  err_free:
+> @@ -371,6 +408,9 @@ void drm_sysfs_connector_remove(struct drm_connector =
+*connector)
+>         if (connector->ddc)
+>                 sysfs_remove_link(&connector->kdev->kobj, "ddc");
+>
+> +       if (dev_fwnode(connector->kdev))
+> +               component_del(connector->kdev, &typec_connector_ops);
+> +
+>         DRM_DEBUG("removing \"%s\" from sysfs\n",
+>                   connector->name);
+>
+> --
+> 2.40.1.495.gc816e09b53d-goog
+>
