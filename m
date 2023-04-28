@@ -2,174 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B978C6F1BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58A56F1BB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346459AbjD1Pfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
+        id S1346482AbjD1PfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346361AbjD1Pfc (ORCPT
+        with ESMTP id S1346516AbjD1PfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:35:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291B75584
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682696083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i1I3bxKpOJ94ZKtbze6sl4BqpXL9nzWwU/RAx5bKUL4=;
-        b=I86QE1TkxvKun1/s4wc+il8yvi/qtSvfYjP9cmcqZ6op3SuD+hxaFeiBIi2Y4GEvYF4xKy
-        SgKCSvl6Uf73EGKkV+ogdydNy2+NzbgYuIXyl2y/h+W2KRUuHAbyWOcKgXJsi6vrcPLNfR
-        lyVRc2/cxpmlZXibJceTPaIr+GdnilU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-294-ZqREt6g5Nau0YNtIF7rH9w-1; Fri, 28 Apr 2023 11:34:40 -0400
-X-MC-Unique: ZqREt6g5Nau0YNtIF7rH9w-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f25376e3b1so22112845e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:34:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682696079; x=1685288079;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i1I3bxKpOJ94ZKtbze6sl4BqpXL9nzWwU/RAx5bKUL4=;
-        b=YThsUKLyeXnH3XU2911sgbNp35A9zbQJFc1PevOeQUk2AQ1qWhlZgoq0fyf1csT9Zq
-         CUvL2v6WJoIH3XbAHtJcE1iWiUpjswxqGq7Ll8S6CAKt+EfDxPks0KduV3iDRHMgrRy9
-         bQXiBQ/SZSkDU7DqyJWSo/WpJhhHaghGPUq5lAHhV8ddKks3nb7QoBL8P5Ml1VG13vww
-         Rm9ziageR6yjkPGda1rLlWuCdOEmceeaV6skSE4ZpIKlc+iemUpbM7lJDAaRASIDIkna
-         jYwTKP6LlhfYxMFrPRVVfu+iSNk+W8DLg7jyCJAGmWJX8pm10LB9voyi/zovj85ICKiZ
-         Dtvw==
-X-Gm-Message-State: AC+VfDyLQkU75p0UQEmfRyrFxpPahl+x7fdJYykpMWGBHH+VnOqMSMsb
-        K6XKetAMDvKWzLnGZclxJ3Ojtk301NzWRbt9GX0h4tAVpleqfN2DPqKzNHMeddUJZAMpzed3RlW
-        VobXw0wJpD8P6mLtAVU24kOsg
-X-Received: by 2002:a7b:c408:0:b0:3f1:643e:3872 with SMTP id k8-20020a7bc408000000b003f1643e3872mr4562572wmi.2.1682696079114;
-        Fri, 28 Apr 2023 08:34:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Z+53Bygi3DB3brEFB63AzkuIarkk5LoZoC423ssWGGEMwrQKBO68KVGzpDBEWIV0h6613fA==
-X-Received: by 2002:a7b:c408:0:b0:3f1:643e:3872 with SMTP id k8-20020a7bc408000000b003f1643e3872mr4562508wmi.2.1682696078744;
-        Fri, 28 Apr 2023 08:34:38 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c000900b003f0aa490336sm27987597wmc.26.2023.04.28.08.34.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 08:34:38 -0700 (PDT)
-Message-ID: <62ec50da-5f73-559c-c4b3-bde4eb215e08@redhat.com>
-Date:   Fri, 28 Apr 2023 17:34:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
- <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
- <ZEvZtIb2EDb/WudP@nvidia.com>
- <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
- <400da248-a14e-46a4-420a-a3e075291085@redhat.com>
- <077c4b21-8806-455f-be98-d7052a584259@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <077c4b21-8806-455f-be98-d7052a584259@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 28 Apr 2023 11:35:03 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804C32106;
+        Fri, 28 Apr 2023 08:35:01 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SF3uAa001576;
+        Fri, 28 Apr 2023 15:34:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2023-03-30;
+ bh=TqPJawlS8vnHqAAbbtgbBvah7H60ySgm+W383xPXe28=;
+ b=hJJAI2pM6HMeh/ykHNTzF3kgcfcNFv1eYCHQxS4EeP49omgsq4EjSuXo2M1tEzC0gGM0
+ AnqS4YBqdlg1qz+LYcnl0gymPgUztP6b7J6tAenuVlvPMH+L4azUptO8UjJcSGoFLp9v
+ 2dkChFKOdTsumJonQISXC9sGSEeZ8CM8QGuHlROxg6ds2tjZDkg0kjwrRFG9Ca3diq7Q
+ bnMTsSZMFtidI+IU9JHaUP4bitvvPL+yMU2uwTNZRVkoro8Qg9sBQ9XJJMZ7/6eTbluF
+ UCfluQwaECGd7rTCxuapT317GDVJdUuy27zGBw4RNsNCQ9w+rEdxhuwEwPu2/Urcs7cC pw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q47md6rcp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 15:34:54 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33SE3UFc028277;
+        Fri, 28 Apr 2023 15:34:53 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q461b4rmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 15:34:53 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SFYqUA028134;
+        Fri, 28 Apr 2023 15:34:52 GMT
+Received: from myrouter.uk.oracle.com (dhcp-10-175-188-60.vpn.oracle.com [10.175.188.60])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q461b4rm0-1;
+        Fri, 28 Apr 2023 15:34:52 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org
+Cc:     corbet@lwn.net, shuah@kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 tracing 0/6] tracing: additional filter predicates
+Date:   Fri, 28 Apr 2023 16:34:43 +0100
+Message-Id: <1682696089-27937-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304280125
+X-Proofpoint-GUID: 8rp1Tm198pK-pEjxQs267h97MnabH-RY
+X-Proofpoint-ORIG-GUID: 8rp1Tm198pK-pEjxQs267h97MnabH-RY
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.04.23 17:33, Lorenzo Stoakes wrote:
-> On Fri, Apr 28, 2023 at 05:23:29PM +0200, David Hildenbrand wrote:
->>>>
->>>> Security is the primary case where we have historically closed uAPI
->>>> items.
->>>
->>> As this patch
->>>
->>> 1) Does not tackle GUP-fast
->>> 2) Does not take care of !FOLL_LONGTERM
->>>
->>> I am not convinced by the security argument in regard to this patch.
->>>
->>>
->>> If we want to sells this as a security thing, we have to block it
->>> *completely* and then CC stable.
->>
->> Regarding GUP-fast, to fix the issue there as well, I guess we could do
->> something similar as I did in gup_must_unshare():
->>
->> If we're in GUP-fast (no VMA), and want to pin a !anon page writable,
->> fallback to ordinary GUP. IOW, if we don't know, better be safe.
-> 
-> How do we determine it's non-anon in the first place? The check is on the
-> VMA. We could do it by following page tables down to folio and checking
-> folio->mapping for PAGE_MAPPING_ANON I suppose?
+For cases like IPv6 addresses, having a means to supply tracing
+predicates for fields with more than 8 bytes would be convenient.
+This series provides a simple way to support this by allowing
+simple ==, != memory comparison with the predicate supplied when
+the size of the field exceeds 8 bytes.  For example, to trace
+::1, the predicate
 
-PageAnon(page) can be called from GUP-fast after grabbing a reference. 
-See gup_must_unshare().
+        "dst == 0x00000000000000000000000000000001"
 
-> 
->>
->> Of course, this would prevent hugetlb/shmem from getting pinned writable
->> during gup-fast. Unless we're able to whitelist them somehow in there.
-> 
-> We could degrade those to non-fast assuming not FOLL_FAST_ONLY. But it'd be
-> a pity.
+..could be used.  Patch 1 implements this.
+
+As a convenience, support for IPv4, IPv6 and MAC addresses are
+also included; patches 2-4 cover these and allow simpler
+comparisons which do not require getting the exact number of
+bytes right; for exmaple
+
+	"dst == ::1"
+	"src != 127.0.0.1"
+	"mac_addr == ab:cd:ef:01:23:45"
+
+Patch 5 adds tests for existing and new filter predicates, and patch 6
+documents the fact that for the various addresses supported and
+the >8 byte memory comparison. only == and != are supported.
+
+Changes since v1 [1]:
+
+- added support for IPv4, IPv6 and MAC addresses (patches 2-4)
+  (Masami and Steven)
+- added selftests for IPv4, IPv6 and MAC addresses and updated
+  docs accordingly (patches 5,6)
+
+Changes since RFC [2]:
+
+- originally a fix was intermixed with the new functionality as
+  patch 1 in series [2]; the fix landed separately
+- small tweaks to how filter predicates are defined via fn_num as
+  opposed to via fn directly
+
+[1] https://lore.kernel.org/linux-trace-kernel/1682414197-13173-1-git-send-email-alan.maguire@oracle.com/
+[22] https://lore.kernel.org/lkml/1659910883-18223-1-git-send-email-alan.maguire@oracle.com/
+
+Alan Maguire (6):
+  tracing: support > 8 byte array filter predicates
+  tracing: support IPv4 address filter predicate
+  tracing: support IPv6 filter predicates
+  tracing: support MAC address filter predicates
+  selftests/ftrace: add test coverage for filter predicates
+  tracing: document IPv4, IPv6, MAC address and > 8 byte numeric
+    filtering support
+
+ Documentation/trace/events.rst                |  21 +++
+ kernel/trace/trace_events_filter.c            | 164 +++++++++++++++++-
+ .../selftests/ftrace/test.d/event/filter.tc   |  91 ++++++++++
+ 3 files changed, 275 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/event/filter.tc
 
 -- 
-Thanks,
-
-David / dhildenb
+2.31.1
 
