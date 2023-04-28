@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFE16F15E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB18F6F15EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345505AbjD1Kl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 06:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
+        id S1345531AbjD1KnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 06:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjD1Kl4 (ORCPT
+        with ESMTP id S230106AbjD1KnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 06:41:56 -0400
-Received: from outbound-smtp36.blacknight.com (outbound-smtp36.blacknight.com [46.22.139.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10C3CD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:41:54 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp36.blacknight.com (Postfix) with ESMTPS id 1E9B923E1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:41:53 +0100 (IST)
-Received: (qmail 32649 invoked from network); 28 Apr 2023 10:41:52 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 28 Apr 2023 10:41:52 -0000
-Date:   Fri, 28 Apr 2023 11:41:51 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Rientjes <rientjes@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 10/26] mm: page_alloc: allow compaction capturing
- from larger blocks
-Message-ID: <20230428104151.tau2mru65rdsisyg@techsingularity.net>
-References: <20230418191313.268131-1-hannes@cmpxchg.org>
- <20230418191313.268131-11-hannes@cmpxchg.org>
- <20230421141447.2cw5cfwibb7jxf6n@techsingularity.net>
- <20230425154026.GC17132@cmpxchg.org>
+        Fri, 28 Apr 2023 06:43:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 428A8E76
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:43:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C532C14;
+        Fri, 28 Apr 2023 03:43:44 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.21.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AAB963F64C;
+        Fri, 28 Apr 2023 03:42:58 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 11:42:56 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3 03/60] arm64: mm: get rid of kimage_vaddr global
+ variable
+Message-ID: <ZEujMHRbqXS3gxhY@FVFF77S0Q05N>
+References: <20230307140522.2311461-1-ardb@kernel.org>
+ <20230307140522.2311461-4-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230425154026.GC17132@cmpxchg.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230307140522.2311461-4-ardb@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,61 +48,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 11:40:26AM -0400, Johannes Weiner wrote:
-> On Fri, Apr 21, 2023 at 03:14:47PM +0100, Mel Gorman wrote:
-> > On Tue, Apr 18, 2023 at 03:12:57PM -0400, Johannes Weiner wrote:
-> > > Currently, capturing only works on matching orders and matching
-> > > migratetypes. However, if capturing is initially skipped on the
-> > > migratetype, it's possible that merging continues up to a full
-> > > pageblock, in which case the migratetype is up for grabs again.
-> > > 
-> > > Allow capturing to grab smaller chunks from claimed pageblocks, and
-> > > expand the remainder of the block back onto the freelists.
-> > > 
-> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > 
-> > No objections other than we're still in the preparation phase and the
-> > series needs to be split. Out of curiousity, how often does this actually
-> > trigger in practice? I ask because superficially, I would expect capture to
-> > happen while pages are being merged and I'm not sure how much this actually
-> > helps. If anything the anomaly would be merging !MOVABLE types, capturing
-> > one pageblock and leaving the adjacent block eligible for splitting as
-> > UNMOVABLE/RECLAIMABLE which is not necessarily desirable.
+On Tue, Mar 07, 2023 at 03:04:25PM +0100, Ard Biesheuvel wrote:
+> We store the address of _text in kimage_vaddr, but since commit
+> 09e3c22a86f6889d ("arm64: Use a variable to store non-global mappings
+> decision"), we no longer reference this variable from modules so we no
+> longer need to export it.
 > 
-> Looking at this patch independently, once merging continues to the
-> full block, a fallback would be allowed to claim it anyway
-> (can_steal_fallback() returns true). I don't quite see a downside
-> letting capture apply in this case. The plus is of course avoiding the
-> indirection through the freelist which risks an opportunist request of
-> a smaller order fragmenting the block and wasting the contiguity work.
+> In fact, we don't need it at all so let's just get rid of it.
 > 
-> In the context of the full series, this becomes even more
-> important. Once watermarks are required to be met in MIGRATE_FREE
-> blocks, and reclaim/compaction recycle full blocks, merging up to
-> pageblock_order happens all the time - and needs to happen for
-> allocations to succeed. This applies to all types of direct reclaim:
-> unmovable request freeing reclaimable/movable blocks, reclaimable
-> freeing movable blocks, movable freeing reclaimable blocks.
-> 
-> I see your point about smaller orders now always ending the merge at
-> the pageblock, even when there could be additional merging
-> opportunities beyond. However, I'm not sure these accidental larger
-> merges beyond what's needed to fulfill the request at hand are a
-> preferable aspect over reclaimer fairness, and thus ultimately the
-> reliability of orders up to the pageblock size.
-> 
-> I'll try to get some numbers for this patch independently, though.
-> This should manifest in p99 allocation latencies and near-OOM
-> behavior. Is there anything else you'd want me to look for?
-> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 
-Any major change in the number of the mm_page_alloc_extfrag trace event
-triggering. Also put the patch at the end of the preparation series of
-possible or even do it as a separate follow-up patch after the bulk of
-the series has been handled. While I cannot 100% convince myself either
-way, I wonder if variable high-order allocation requests smaller than a
-pageblock could cause premature mixing due to capture.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
--- 
-Mel Gorman
-SUSE Labs
+Mark.
+
+> ---
+>  arch/arm64/include/asm/memory.h | 6 ++----
+>  arch/arm64/kernel/head.S        | 2 +-
+>  arch/arm64/mm/mmu.c             | 3 ---
+>  3 files changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 78e5163836a0ab95..a4e1d832a15a2d7a 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -182,6 +182,7 @@
+>  #include <linux/types.h>
+>  #include <asm/boot.h>
+>  #include <asm/bug.h>
+> +#include <asm/sections.h>
+>  
+>  #if VA_BITS > 48
+>  extern u64			vabits_actual;
+> @@ -193,15 +194,12 @@ extern s64			memstart_addr;
+>  /* PHYS_OFFSET - the physical address of the start of memory. */
+>  #define PHYS_OFFSET		({ VM_BUG_ON(memstart_addr & 1); memstart_addr; })
+>  
+> -/* the virtual base of the kernel image */
+> -extern u64			kimage_vaddr;
+> -
+>  /* the offset between the kernel virtual and physical mappings */
+>  extern u64			kimage_voffset;
+>  
+>  static inline unsigned long kaslr_offset(void)
+>  {
+> -	return kimage_vaddr - KIMAGE_VADDR;
+> +	return (u64)&_text - KIMAGE_VADDR;
+>  }
+>  
+>  static inline bool kaslr_enabled(void)
+> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+> index b98970907226b36c..65cdaaa2c859418f 100644
+> --- a/arch/arm64/kernel/head.S
+> +++ b/arch/arm64/kernel/head.S
+> @@ -482,7 +482,7 @@ SYM_FUNC_START_LOCAL(__primary_switched)
+>  
+>  	str_l	x21, __fdt_pointer, x5		// Save FDT pointer
+>  
+> -	ldr_l	x4, kimage_vaddr		// Save the offset between
+> +	adrp	x4, _text			// Save the offset between
+>  	sub	x4, x4, x0			// the kernel virtual and
+>  	str_l	x4, kimage_voffset, x5		// physical mappings
+>  
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 6f9d8898a02516f6..81e1420d2cc13246 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -50,9 +50,6 @@ u64 vabits_actual __ro_after_init = VA_BITS_MIN;
+>  EXPORT_SYMBOL(vabits_actual);
+>  #endif
+>  
+> -u64 kimage_vaddr __ro_after_init = (u64)&_text;
+> -EXPORT_SYMBOL(kimage_vaddr);
+> -
+>  u64 kimage_voffset __ro_after_init;
+>  EXPORT_SYMBOL(kimage_voffset);
+>  
+> -- 
+> 2.39.2
+> 
+> 
