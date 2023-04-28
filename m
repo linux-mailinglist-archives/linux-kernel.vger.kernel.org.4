@@ -2,111 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7578D6F1B40
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852F66F1B47
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346149AbjD1POO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S1346342AbjD1PPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346355AbjD1POJ (ORCPT
+        with ESMTP id S229642AbjD1PPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:14:09 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2E555AD;
-        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a814fe0ddeso745565ad.2;
-        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
+        Fri, 28 Apr 2023 11:15:13 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 165E41FDC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:15:12 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-32ea67ffec0so515745ab.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:15:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682694848; x=1685286848;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682694911; x=1685286911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2G5YGVJMpaYxgR8YDEHDAec3LMDJyqn+fzyMxvzxI+0=;
-        b=brVUMje2rJvkyiQGSjQQzsS/UTcLgnZ1Lwt79IqdoccAm62kk27VXknofgDMUAA6Ke
-         cYpayxlQhxqyVr5jYblJzVBMCJXFT8cr91SGWdEoEvOKgYAUg57jVm5H/GCUHODNqrL/
-         3vMooYLQH0k886U2c0q8Mel0L8s15qGG6Ll9OuN6zwGAilkQqyeTV0HxmWcgeH0X7AAQ
-         G17k5KWqFp067xRtLCTeolekyiaA+1k3fNAtT/VLWL6OtB9tiZJqeL09eLpkUxzgY0UG
-         vnrmjVrq3eTAo4wtbQH3iPivOy5IonoI28lU0T87l0ZgaW9khnSVDiHVMZc2492jSTEM
-         Ex5A==
+        bh=KvymAYqQK8KafKPQ5ggpjpSP3LazlAMFXcBeQlY3Tv8=;
+        b=v9IxTveS3HPmNDFvCE4PdJhCt4toAfvjEZHmytNPmIa3Tm64QwiVEScxyI1hdHU6FF
+         eH4V3Hmcfch8d5rp5bxbizVx9JFdZQ5DMpeZvSuqnKZ6Wy/1pDhEj95DYpUW+cCkQPPJ
+         ZR9b8KsQlfhtM7lVA/4ZuvuuMSdpJmXUC43fPEdRrnVMW6TVjqKOuvsEIUG68Vju0UyW
+         bnTKYEAb6CEhsT9Jhlp2YGhJy5OqTb+UuHMS41JelIi5lxgjBN1fzOT4aSasCDIKKDTf
+         l0Lx9nMuplJa1gY29e9SvXtEmd3ibLyo8w6epMBLhKibHnhlDzX8VkcpFriagsO4nMuL
+         rdAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682694848; x=1685286848;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682694911; x=1685286911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2G5YGVJMpaYxgR8YDEHDAec3LMDJyqn+fzyMxvzxI+0=;
-        b=SFsAdH/rFM8SHmJdi7XhaU/ijr3MHjJQK6s02nAIdUdNHsY+ACiEoxJzjE43wrMSpu
-         r2vCktCioh8ukzaXFEr1rJy1f90yMDBCXGVrTLAwOY0yGfQUiRMYWAn0pD5QNdWJ4++5
-         o2VGEixOLWbM7B+ZSDZcXChivdEsqR0TvWtJi3zT8oTzydZY3sHbPEjiX5aT7ST35znu
-         v3r1E6Flbt/nq8bSzaghTSUqM2zMnLgUF7Lmn9Ir15XWGPLS4H9CjM1OURHT5PwmmOx7
-         EgEIkeoV91YSlb4rdWmnhfv34oRUh1fYI07h9pGHuVzcXtqcX7OYTd1rxZl4N4N09NNd
-         Wp7g==
-X-Gm-Message-State: AC+VfDykyWljPFsyDVOMxb6/H3HfdQg9yt/NUmv6t2rYW8Fis3RYZXH9
-        PjxbYR0zqxMqKQuOJkDkpdo=
-X-Google-Smtp-Source: ACHHUZ59NMfbLgX1zFUs0psmfAfD4RnHSdPcJ6aGXqizBLnVu2QjWGasnDp6eX0PNHIyp9kRIUInlw==
-X-Received: by 2002:a17:902:d488:b0:1a6:961e:fd0b with SMTP id c8-20020a170902d48800b001a6961efd0bmr6609119plg.4.1682694848276;
-        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id fv23-20020a17090b0e9700b0023d0290afbdsm15134556pjb.4.2023.04.28.08.14.06
+        bh=KvymAYqQK8KafKPQ5ggpjpSP3LazlAMFXcBeQlY3Tv8=;
+        b=BdDo3WIAsHqgNSQkLV0Si8J75+thm566RSx9sj+tnTg7v2R8YwOLMJCsgTS9wfeKYR
+         coGGjo0c5moBa9DkJMZFcfJVCBHY9ytXsAW/uzpNQ59fv7uqrPQPezKkr1x4M4GpsvNj
+         S/KgaNs+yisMONsTx4WndggHqU3zPTuN+AW156pJ+Kz/sfsGCdXI3gSMXGoyQItyM+z+
+         3lceNURwRemFOsPzRMOZL3lvCfuM1S/MxN4/xn2oo0ARelLaUsX8FluoH1pM2xjO/rAS
+         tBwwzNuGz7KS0Gd3L9O+gNKv3y65/ME9/j+8NzztwbHukPPSZv0gjv5D0RDQJSwrL3TX
+         4XOw==
+X-Gm-Message-State: AC+VfDxk1Tg+0XbHZs7auJ2YHVRJ8V6uJss/bppic8UadXbqjEY8meEH
+        MCgdvI7EzymCsYcPR+teLCynGg==
+X-Google-Smtp-Source: ACHHUZ7hkEKonWLs0qWMkb0o+prXhuaF3QWK2pa6XoVDvYzAG0Ws5Agj+FneE7A1Jf5T+LYM0qMG6w==
+X-Received: by 2002:a05:6e02:1be4:b0:32a:a8d7:f099 with SMTP id y4-20020a056e021be400b0032aa8d7f099mr1824171ilv.3.1682694911349;
+        Fri, 28 Apr 2023 08:15:11 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id x7-20020a92dc47000000b0032f493364c1sm697858ilq.52.2023.04.28.08.15.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 08:14:07 -0700 (PDT)
-Message-ID: <86db3414-bebc-7470-a9ed-cfc092093563@gmail.com>
-Date:   Sat, 29 Apr 2023 00:14:01 +0900
+        Fri, 28 Apr 2023 08:15:10 -0700 (PDT)
+Message-ID: <447d0270-9c0e-23f4-3c62-33c3eff325af@kernel.dk>
+Date:   Fri, 28 Apr 2023 09:15:08 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] Documentation/translations/ja_JP/SubmittingPatches: fix
- some typos
-To:     Jonathan Corbet <corbet@lwn.net>, wangdeming@inspur.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shibata@linuxfoundation.org
-References: <20230428091018.1558-1-wangdeming@inspur.com>
- <71c91ae5-2ed7-cfd5-7b7f-6cb5a0141816@gmail.com>
- <871qk4awn2.fsf@meer.lwn.net>
+Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
+ by default
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <871qk4awn2.fsf@meer.lwn.net>
+To:     David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+ <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
+ <f60722d4-1474-4876-9291-5450c7192bd3@lucifer.local>
+ <a8561203-a4f3-4b3d-338a-06a60541bd6b@redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <a8561203-a4f3-4b3d-338a-06a60541bd6b@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 08:50:41 -0600, Jonathan Corbet wrote:
-> Akira Yokosawa <akiyks@gmail.com> writes:
-> 
->> Your patch is rejected by "git am".
+On 4/28/23 9:13?AM, David Hildenbrand wrote:
+>>> I know, Jason und John will disagree, but I don't think we want to be very
+>>> careful with changing the default.
+>>>
+>>> Sure, we could warn, or convert individual users using a flag (io_uring).
+>>> But maybe we should invest more energy on a fix?
 >>
->> In the header part of your email, I see these fields:
->>
->>> X-Mailer: git-send-email 2.31.1
->>> MIME-Version: 1.0
->>> Content-Type: text/plain; charset="y"
->>> Content-Transfer-Encoding: 8bit
->>
->> This looks broken.
->> Please make sure your email header has a proper Content-Type
->> as shown below:
->>
->>     Content-Type: text/plain; charset=UTF-8
+>> This is proactively blocking a cleanup (eliminating vmas) that I believe
+>> will be useful in moving things forward. I am not against an opt-in option
+>> (I have been responding to community feedback in adapting my approach),
+>> which is the way I implemented it all the way back then :)
 > 
-> This something that git send-email does on occasion; it's truly
-> obnoxious, and I have no idea why.  I end up fixing up patches by hand
-> when I see it.  If the change itself is OK, I can manage it from here.
+> There are alternatives: just use a flag as Jason initially suggested
+> and use that in io_uring code. Then, you can also bail out on the
+> GUP-fast path as "cannot support it right now, never do GUP-fast".
 
-The change looks OK.
+Since I've seen this brougth up a few times, what's the issue on the
+io_uring side? We already dropped the special vma checking, it's in -git
+right. Hence I don't believe there are any special cases left for
+io_uring at all, and we certainly don't allow real file backings either,
+never have done.
 
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+-- 
+Jens Axboe
 
-        Thanks, Akira
-
-> 
-> Thanks,
-> 
-> jon
