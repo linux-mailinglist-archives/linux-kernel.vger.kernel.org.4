@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59A06F14AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5E96F14AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345705AbjD1Jzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 05:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S1345968AbjD1Jzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 05:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345775AbjD1JzJ (ORCPT
+        with ESMTP id S1345897AbjD1JzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Apr 2023 05:55:09 -0400
-Received: from out187-21.us.a.mail.aliyun.com (out187-21.us.a.mail.aliyun.com [47.90.187.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287C82726
+Received: from out187-6.us.a.mail.aliyun.com (out187-6.us.a.mail.aliyun.com [47.90.187.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB935584
         for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 02:54:47 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047187;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---.STFoGTP_1682675583;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STFoGTP_1682675583)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=17;SR=0;TI=SMTPD_---.STFQGPs_1682675586;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STFQGPs_1682675586)
           by smtp.aliyun-inc.com;
-          Fri, 28 Apr 2023 17:53:04 +0800
+          Fri, 28 Apr 2023 17:53:07 +0800
 From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
@@ -29,10 +29,15 @@ Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
         "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
         "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "Andy Lutomirski" <luto@kernel.org>
-Subject: [PATCH RFC 23/43] x86/pie: Force hidden visibility for all symbol references
-Date:   Fri, 28 Apr 2023 17:51:03 +0800
-Message-Id: <63feba4a3826335f1ad32e484ebed31efd608d51.1682673543.git.houwenlong.hwl@antgroup.com>
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Alexander Potapenko" <glider@google.com>,
+        "Xin Li" <xin3.li@intel.com>
+Subject: [PATCH RFC 24/43] x86/boot/compressed: Adapt sed command to generate voffset.h when PIE is enabled
+Date:   Fri, 28 Apr 2023 17:51:04 +0800
+Message-Id: <8d6bbaf66b90cf1a8fd2c5da98f5e094b9ffcb27.1682673543.git.houwenlong.hwl@antgroup.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
@@ -47,60 +52,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eliminate all GOT entries in the kernel, by forcing hidden visibility
-for all symbol references, which informs the compiler that such
-references will be resolved at link time without the need for allocating
-GOT entries. However, there are still some GOT entries after this, one
-for __fentry__() indirect call, and others are due to global weak symbol
-references.
+When PIE is enabled, all symbols would be set as hidden to reduce GOT
+references. According to generic ABI, a hidden symbol contained in a
+relocatable object must be either removed or converted to STB_LOCAL
+binding by the link-editor when the relocatable object is included in an
+executable file or shared object. Both gold and ld.lld change the
+binding of a STV_HIDDEND symbol to STB_LOCAL. But For GNU ld, it will
+keep global hidden.  However, sed command to generate voffset.h only
+captures global symbol, then empty voffset.h would be generated when PIE
+is enabled with lld. So capture local symbol too in sed command.
 
 Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
 Cc: Thomas Garnier <thgarnie@chromium.org>
 Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Cc: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/Makefile            | 7 +++++++
- arch/x86/entry/vdso/Makefile | 2 +-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/boot/compressed/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 57e4dbbf501d..81500011396d 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -158,6 +158,11 @@ else
-         KBUILD_RUSTFLAGS += $(rustflags-y)
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 6b6cfe607bdb..678881496c44 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -79,7 +79,7 @@ LDFLAGS_vmlinux += -T
+ hostprogs	:= mkpiggy
+ HOST_EXTRACFLAGS += -I$(srctree)/tools/include
  
-         KBUILD_CFLAGS += -mno-red-zone
-+
-+ifdef CONFIG_X86_PIE
-+        PIE_CFLAGS := -include $(srctree)/include/linux/hidden.h
-+        KBUILD_CFLAGS += $(PIE_CFLAGS)
-+endif
-         KBUILD_CFLAGS += -mcmodel=kernel
-         KBUILD_RUSTFLAGS += -Cno-redzone=y
-         KBUILD_RUSTFLAGS += -Ccode-model=kernel
-@@ -176,6 +181,8 @@ ifeq ($(CONFIG_STACKPROTECTOR),y)
- 	endif
- endif
+-sed-voffset := -e 's/^\([0-9a-fA-F]*\) [ABCDGRSTVW] \(_text\|__bss_start\|_end\)$$/\#define VO_\2 _AC(0x\1,UL)/p'
++sed-voffset := -e 's/^\([0-9a-fA-F]*\) [ABCDGRSTVWabcdgrstvw] \(_text\|__bss_start\|_end\)$$/\#define VO_\2 _AC(0x\1,UL)/p'
  
-+export PIE_CFLAGS
-+
- #
- # If the function graph tracer is used with mcount instead of fentry,
- # '-maccumulate-outgoing-args' is needed to prevent a GCC bug
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index 6a1821bd7d5e..9437653a9de2 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -92,7 +92,7 @@ ifneq ($(RETPOLINE_VDSO_CFLAGS),)
- endif
- endif
- 
--$(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
-+$(vobjs): KBUILD_CFLAGS := $(filter-out $(PIE_CFLAGS) $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- $(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
- 
- #
+ quiet_cmd_voffset = VOFFSET $@
+       cmd_voffset = $(NM) $< | sed -n $(sed-voffset) > $@
 -- 
 2.31.1
 
