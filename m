@@ -2,82 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AF96F1D4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E9E6F1D52
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346361AbjD1RUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S1346430AbjD1RWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjD1RUa (ORCPT
+        with ESMTP id S1346392AbjD1RWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:20:30 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DB92D50;
-        Fri, 28 Apr 2023 10:20:28 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-94ed7e49541so4152566b.1;
-        Fri, 28 Apr 2023 10:20:28 -0700 (PDT)
+        Fri, 28 Apr 2023 13:22:45 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB92E4EC7;
+        Fri, 28 Apr 2023 10:22:42 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3ef49c15454so726201cf.0;
+        Fri, 28 Apr 2023 10:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682702427; x=1685294427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=orF2TGjKH9RnkI54wP/gNHzEqDj6sbeR6PxFmMBG6iU=;
-        b=Og6im9eIF6DaYG2GWJ5b2TKo9T6LHVbDSI0mRdlIMWomUWZJqYz62QFIt0Wf4XxZfk
-         ECtGRKZN/GPSuYSJFdzw8JTKZBztaKXICMfDh/W6JQnlMYnk8zqQcvCmPfARv9YNb+Rk
-         vGLmbfzCS/pH4ue6J8AcHQvPLnF9Zc6/NyiJvfxN8bt5ojGg6Wk6tQg0LZTLm8UivTG+
-         AAhFOAodZj8oyEq/iK1u2MYPnenON4Oo220ZYgq0TwfF2mg2WSVK+npODFrwK4cwrBp6
-         shIxTMqGnbFh0K6OJ9uvcncy013NihsMSIFPVLm9ZHoXRypMgheDJ2hneNpIKvxmPfyu
-         NfKQ==
+        d=gmail.com; s=20221208; t=1682702562; x=1685294562;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AAiiv9GsxvY8biLmdAscKWHe+NudNnl/0EZJjn39MN8=;
+        b=ZLl+Ok+qlmf88oDwoCLd4n3mf8DUZyFA12liJOivOE9QAh6PozBMDc0nQ8vMhgix8c
+         2pxr+fz01ZcGEGZ/Wzz+8Fd/CbiH/PpHbrPIIcc0+V28CR5+TnqHl6h+4SHWdXK/QwNu
+         zsz9hjOhQBf1EZmH6a5TIAmyKfH2o9lNvWQoSeHMlC5vuaZ5BIL5yANHvphpo/1R8wKx
+         BnRwK9UbG8kFdrBHvAT64LMdAM2RmZbrcduD/qBsXeagddO+wX8JFKW/nYpAhlsjjvy3
+         6mPO2hAebWYjZrE5qoUxqO+X1iHuR6h+5Mntf2d2fdDOCjRWqz+emA6q1sv9V4rxAnYo
+         VcUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682702427; x=1685294427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=orF2TGjKH9RnkI54wP/gNHzEqDj6sbeR6PxFmMBG6iU=;
-        b=DPBOMhOxVGhuqOO+BqOncCpYBFT+2Okv/CDH9p+AXrUeIaQpAo+qNkz45Qzjmqa2AD
-         bkETdbRrkWOvVnRF8HbyIk2/mUZCdfnW9ugCf1Xu/mHErFBnwKuUzeSJ6UkZeC6ZKyoh
-         2+Z/ePGajENB2YWObEIMkN7VLY0uOEI7YMnByxoGy6YUPp9Lubkb7RMHIRUMiVHcLNwc
-         51TIHAZR450/hXZG1KFF+wyR2k/Ll5uEGQiG+2d/F8lzqcAWli5G2KBnjfk3n4BwSyRb
-         zpNvDi4BVA8zIpJuiHZ+CKnWcXL66vvbivfI/BA3HT8BmeQXLI9tORCrm9AltcH3xPHR
-         zdKg==
-X-Gm-Message-State: AC+VfDzRdtSWlTMJSSgSu6olc/kzheLKR1p/hOfN7wxigfsHSmd2u9Xk
-        jUcmUVU5zAZhJtwT4pK9K9iVb5n3R4bMtbmCmpU=
-X-Google-Smtp-Source: ACHHUZ4TjhFZe9MIfvPxUNoAWXx/IV5F5hXGaGCwsr/HgJpKWF1URF/cmz9de4Ju8388pxFCrtZLaOOfo1loiwbySuk=
-X-Received: by 2002:a17:907:9703:b0:94f:8605:3f30 with SMTP id
- jg3-20020a170907970300b0094f86053f30mr5739104ejc.24.1682702427237; Fri, 28
- Apr 2023 10:20:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682702562; x=1685294562;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AAiiv9GsxvY8biLmdAscKWHe+NudNnl/0EZJjn39MN8=;
+        b=QCALr4d0YMlDH0o7s8/Gh+L0rojyW37qJ8EiTqQHXnIET3arz1HAeHqnMSnHah3u0y
+         ynrsUCM6pA08fPY7P95cGNBpb3Dn/9kWzlpDW8CLhf0dFL42bG7MzsGpmG/C2OWEJ8Mc
+         XMSGfoSRFxUokKZmgSbS5JZDuwdgZXFLgaasuRVXVEZxt+5n12hFCfLcO8bPiYJLG77h
+         MAx1/pJWLscYsJk3xQOuC/LV7vrlOEcTe/eerLu0gYuhde379w9tYF61lF6NVVHkz5/Q
+         XvVGnJ116vUMKNOdXtsOpaZnCl35w9+ZZea8srDmAbq3M9imS4pSv6ntFVO9zenRtjDm
+         V1qA==
+X-Gm-Message-State: AC+VfDwAPx0NXxRxaAo4Qyk7V6icEkG/bFLA7SsOYwMcx99Hv9HSFe6d
+        ndayXjLpaetYsJ79Q5XyX7E=
+X-Google-Smtp-Source: ACHHUZ6p1oLq98ooWnU/CgTxQZ4bd6HPSPRfojYddHilL+gAML+8D2BODYINVNuUN0yExpMdu7og/A==
+X-Received: by 2002:a05:622a:1819:b0:3ec:47d5:ec65 with SMTP id t25-20020a05622a181900b003ec47d5ec65mr9562526qtc.60.1682702561936;
+        Fri, 28 Apr 2023 10:22:41 -0700 (PDT)
+Received: from [192.168.12.239] ([172.56.185.106])
+        by smtp.gmail.com with ESMTPSA id f15-20020ac8470f000000b003ef33e02eb9sm7195198qtp.83.2023.04.28.10.22.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 10:22:41 -0700 (PDT)
+Message-ID: <6a3d7b4e-7350-e52a-6139-e14eb64191ed@gmail.com>
+Date:   Fri, 28 Apr 2023 10:22:37 -0700
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <CAEf4BzZ2zjJKhyUtZKUxbNXJMggcot4MyNEeg6n4Lho-EVbBbg@mail.gmail.com>
- <CA+PiJmTHO3SPM_LvwFYWP+uf_KU4QytBshGzk78CZi8oGJ+rnw@mail.gmail.com>
- <CAEf4BzZ_4kcM5=Jo3JoWQWugS3wkrtoteyM8YqkykFvYywG+kg@mail.gmail.com>
- <CA+PiJmTsEsUi3c5soodZHxS_PvMPnJG-4bFvdfpLq-kPZ0j4UQ@mail.gmail.com>
- <CAEf4BzatBnBH8RHczLerMsW4NvTtx6xj5COjGzVvTkRxfciw4Q@mail.gmail.com> <874jp0bcoy.fsf@oracle.com>
-In-Reply-To: <874jp0bcoy.fsf@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 28 Apr 2023 10:20:15 -0700
-Message-ID: <CAEf4BzbOCHkBJq5OFNtwcbFWVjZBosECiYx_dLgnNYTX_MdAaA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Dynptr Verifier Adjustments
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc:     Daniel Rosenberg <drosen@google.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH 3/3] Revert "input: gpio-keys - use
+ device_pm_move_to_tail"
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Gergo Koteles <soyer@irl.hu>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+References: <20230427221625.116050-1-opendmb@gmail.com>
+ <20230427221625.116050-4-opendmb@gmail.com> <ZEtP3uRX5Ib1W_Kd@kroah.com>
+ <CAJZ5v0jFAkBUAhNj8hbpM+6n1F3ETTtpxeP_QDsmKWdE=uueFw@mail.gmail.com>
+Content-Language: en-US
+From:   Doug Berger <opendmb@gmail.com>
+In-Reply-To: <CAJZ5v0jFAkBUAhNj8hbpM+6n1F3ETTtpxeP_QDsmKWdE=uueFw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,59 +89,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 2:04=E2=80=AFAM Jose E. Marchesi
-<jose.marchesi@oracle.com> wrote:
->
->
-> > On Thu, Apr 27, 2023 at 4:36=E2=80=AFPM Daniel Rosenberg <drosen@google=
-.com> wrote:
-> >>
-> >> On Wed, Apr 26, 2023 at 4:39=E2=80=AFPM Andrii Nakryiko
-> >> <andrii.nakryiko@gmail.com> wrote:
-> >> >
-> >> > Don't know, show the sequence of commands you are running?
-> >> >
-> >> > I have linux source in ~/linux, and KBUILD_OUTPUT set to
-> >> > ~/linux-build/default. And it only takes this:
-> >> >
-> >> > $ cd ~/linux
-> >> > $ make -j90 # build kernel
-> >> > $ cd tools/testing/selftests/bpf
-> >> > $ make -j90 # build selftests
-> >> >
-> >> > And that's it.
-> >>
-> >> I've tried the same, modulo some paths. I'm pretty sure it's version
-> >> related at this point.
-> >> The current issue I'm seeing is "error: indirect call in function,
-> >> which are not supported by eBPF" when using GCC-BPF for
-> >> progs/bind4_prog.c
-> >
-> > I don't think GCC-BPF is able to compile selftests properly just yet.
-> > So I guess the problem is that you do have some version of gcc-bpf in
-> > the system and selftest's Makefile tries to build gcc variants of
-> > test_progs? That's bad (I don't have GCC-BPF locally, and everyone
-> > else apparently as well).
-> >
-> > So for now just `make BPF_GCC=3D` ? CC'ing Jose, we should probably
-> > agree on some criteria of "GCC-BPF is really capable of building
-> > selftests" and adjust Makefile to only attempt GCC BPF build in that
-> > case.
->
-> Being able to run the selftests is our goal at the moment, but we are
-> not there yet, no.
->
-> What about making the kernel build system to emit a visible warning
-> before it builds the GCC variants of the tests programs?  Something like
-> "this is experimental and will likely fail".
+On 4/28/2023 4:40 AM, Rafael J. Wysocki wrote:
+> On Fri, Apr 28, 2023 at 6:47 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Thu, Apr 27, 2023 at 03:16:25PM -0700, Doug Berger wrote:
+>>> This reverts commit 2569873096f7eb1acf63624e9772d82b23923bf4.
+>>
+>> You have to give a reason why you are reverting it please...
+> 
+> Also, the commit ID above doesn't match any commits in the mainline.
 
-Given gcc-bpf can't build selftests right now, should we just disable
-it until there is a version on which gcc-bpf works? We can make it
-such that you can force it to build using gcc-bpf (make USE_GCC_BPF=3D1
-or something).
+Apologies. I attempted to explain this in the cover letter, but as 
+anticipated it caused confusion. The relevant text was:
+   Both commits shouldn't really exist in the same kernel so the
+   third patch reverts the first in an attempt to make that clear
+   (though it may be a source of confusion for some).
 
->
-> >>
-> >> Currently using clang 16.0.0 and gcc 12.2.0-14.
-> >> I did manage to get it to build by just commenting out TEST_GEN_PROGS
-> >> +=3D test_progs-bpf_gcc
+This commit ID is the ID of the first patch of this set in my tree. It 
+slipped my mind that of course that wouldn't be conveyed through 
+send-mail :). D'oh!
+
+To be clear, this is really a "straw man" request for comment with hope 
+of finding a more elegant solution to the issue.
+
+Thanks,
+     Doug
