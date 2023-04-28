@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B29E6F20B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3766F20BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346461AbjD1WHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 18:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S1346678AbjD1WNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 18:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjD1WHv (ORCPT
+        with ESMTP id S229727AbjD1WNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 18:07:51 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FBA422E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:07:50 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94f0dd117dcso44161966b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682719669; x=1685311669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JRoBBar8E2JJYtfPk9TIhfuEqjogVCwVQEdTJpuJHEA=;
-        b=SZXqnYZ0hMhjj4JmFsIOfK1s4bRP/JhyNGzzN4kUgBX14TYqUHwAqpI/N/XVETNZpx
-         0Md5uNyy9EOa/fRBRjdQj73kRm1abAYkeaXe49BWXy3/cyrCSAFiFi5+QUzPvaCwhVz0
-         3d0L3M2wAW26qUXJLmonwYicNDlJRyDXIwFKc=
+        Fri, 28 Apr 2023 18:13:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1553144AE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682719965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4SoSIPzR5rKJuvsqRvAsre6hhkg4OyDHoRlHAIoohdY=;
+        b=QQ0td0puVWBteFZ2bKvDUyTj07Db7q20MvmgQOVF1HbC2XykDdo4przXYn4u5wjaw3M/gE
+        CuPVHJAZoRvRK6vr9fRgJLQEgm6MNB3MDuI55mxmw9QEt7Fz0+f9NxaSLQ3hbAaxCqYj6v
+        HJWgG6MuEYjmsdBdmeQWQHjJP46mvHA=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-invdo9CnPmC5M6OhTy3GtQ-1; Fri, 28 Apr 2023 18:12:44 -0400
+X-MC-Unique: invdo9CnPmC5M6OhTy3GtQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-5ef4314d9e5so6919196d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:12:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682719669; x=1685311669;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JRoBBar8E2JJYtfPk9TIhfuEqjogVCwVQEdTJpuJHEA=;
-        b=WPCcPERykOBV6znUJiYsXfyiQILIUXA8KUjnE2Dyn0pSNMfFuw4Be/SShwWh2K58Ve
-         vZgOVoUWRvKEb02nwOyS7lwTM1ciu/d+0i+uvFCgSzeu6lYXfrZj/NdkmFkAQ0v0cyBu
-         9AkhifH0UmI5npVZwgS33g+64160ALH4kOyabDEFyFvJ4Bo49KenAPviR9zEnp2BPQCM
-         xkXA9MJpqzyoTlLBLRfKWtlLbdsAlZipGbx7kjlJTrqPdSpVDuH3yovaoXlxejF4CIim
-         m0gyUOVhSPJY++aExqWlXahJ0cKNNPpZEt+SLWEFsXUHaGs6ETsunOmY8IoRj6NEKlKn
-         C0aQ==
-X-Gm-Message-State: AC+VfDyk17II73zdWbUVvLSDCcXWNZ+wu0cAzdgoi71OruswXM7jKMZa
-        3zWtGHRUx46QLaNKpfsRl3EOxJqBRoZSiqElDzd2tg==
-X-Google-Smtp-Source: ACHHUZ4XIxyi1WefFelFX059Tq/w5VZmjD68IRX9NTqgKdviVGsLzC7tucdQm6qI0DK5AuIKSBoxuQ==
-X-Received: by 2002:a17:907:94c2:b0:94e:dd30:54b5 with SMTP id dn2-20020a17090794c200b0094edd3054b5mr7684535ejc.6.1682719669029;
-        Fri, 28 Apr 2023 15:07:49 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id my24-20020a1709065a5800b0094a8115e148sm11783237ejc.87.2023.04.28.15.07.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 15:07:47 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50674656309so344113a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:07:47 -0700 (PDT)
-X-Received: by 2002:aa7:cd13:0:b0:508:39e3:58b with SMTP id
- b19-20020aa7cd13000000b0050839e3058bmr255067edw.35.1682719666969; Fri, 28 Apr
- 2023 15:07:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682719963; x=1685311963;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4SoSIPzR5rKJuvsqRvAsre6hhkg4OyDHoRlHAIoohdY=;
+        b=dtKOuosHZLTSl3aF8fHcROKKCOebScZ2/JzHV8K2TpfUpEiQuvhtK6cqrWJUtmGws+
+         I213Su5qbVWTPp0XVy34oItxP8bElYQS+k0mf3RxauIXAKnbH6/STqP9c8zhPxUZas0L
+         gGo1DAq7jXwLSYq9goG7DFahLzYzJ2t31HiOVOqISqOXifTj3LwlqqBHmacc38ihEI4K
+         urq9FkG6Kp7Z1CrdlKvt6SpdbWFR9/vIlkoMNYvbSXBZAP+vSN00luh94RKHITbD8Uy2
+         ZPJWsli586sgPGvmYKMsSZcu6h3gO1MvhSg2ynt8q6gFAF2yLxi1ybxhinysoVWNDbyS
+         jFOw==
+X-Gm-Message-State: AC+VfDzfm02OkB30FVVnti6y0o1eAs92SMXYeFKNW6USyEVlX5MO3OA9
+        b+S1Q0uGM5cQdlH4yoxgVmmmlu/pLUFLFYQuSurRA+zb5bCoPysNbbyTei6J7/zTzz0vsyu0cfS
+        LEF7MMqTmsSR9ehVF7EvBtXDY
+X-Received: by 2002:a05:6214:5015:b0:5f1:5cf1:b4c0 with SMTP id jo21-20020a056214501500b005f15cf1b4c0mr11992743qvb.38.1682719963545;
+        Fri, 28 Apr 2023 15:12:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ68wQ60YLfWK41nYriImzutStd+XuFNGZ3TB+rrfiw7k7lQMX+A0ewHmTHgEP7TF2v1ef0Bwg==
+X-Received: by 2002:a05:6214:5015:b0:5f1:5cf1:b4c0 with SMTP id jo21-20020a056214501500b005f15cf1b4c0mr11992721qvb.38.1682719963287;
+        Fri, 28 Apr 2023 15:12:43 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id j13-20020a0cf50d000000b005eee5c22f30sm6731089qvm.139.2023.04.28.15.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 15:12:42 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     arnd@arndb.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] powerpc: remove unneeded if-checks
+Date:   Fri, 28 Apr 2023 18:12:40 -0400
+Message-Id: <20230428221240.2679194-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <ZErkdNBn7OLkQZWC@gmail.com>
-In-Reply-To: <ZErkdNBn7OLkQZWC@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Apr 2023 15:07:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whfTLDYqHtTi3Z62FRuAJw09aOuFOup5LPxmYeXTAf6Rg@mail.gmail.com>
-Message-ID: <CAHk-=whfTLDYqHtTi3Z62FRuAJw09aOuFOup5LPxmYeXTAf6Rg@mail.gmail.com>
-Subject: Re: [GIT PULL] SMP cross-call changes for v6.4
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 2:09=E2=80=AFPM Ingo Molnar <mingo@kernel.org> wrot=
-e:
->
-> SMP cross-CPU function-call updates for v6.4:
->
->  - Remove diagnostics and adjust config for CSD lock diagnostics
+For ppc64, gcc with W=1 reports
+arch/powerpc/platforms/cell/spu_base.c:330:17: error:
+  suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+  330 |                 ;
+      |                 ^
+arch/powerpc/platforms/cell/spu_base.c:333:17: error:
+  suggest braces around empty body in an 'if' statement [-Werror=empty-body]
+  333 |                 ;
+      |                 ^
 
-Thank you.
+These if-checks do not do anything so remove them.
 
-It's rare that this kind of "old debugging that isn't really relevant
-any more" gets removed.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ arch/powerpc/platforms/cell/spu_base.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-It's good that it happens.
+diff --git a/arch/powerpc/platforms/cell/spu_base.c b/arch/powerpc/platforms/cell/spu_base.c
+index 7bd0b563e163..dea6f0f25897 100644
+--- a/arch/powerpc/platforms/cell/spu_base.c
++++ b/arch/powerpc/platforms/cell/spu_base.c
+@@ -326,12 +326,6 @@ spu_irq_class_1(int irq, void *data)
+ 	if (stat & CLASS1_STORAGE_FAULT_INTR)
+ 		__spu_trap_data_map(spu, dar, dsisr);
+ 
+-	if (stat & CLASS1_LS_COMPARE_SUSPEND_ON_GET_INTR)
+-		;
+-
+-	if (stat & CLASS1_LS_COMPARE_SUSPEND_ON_PUT_INTR)
+-		;
+-
+ 	spu->class_1_dsisr = 0;
+ 	spu->class_1_dar = 0;
+ 
+-- 
+2.27.0
 
-               Linus
