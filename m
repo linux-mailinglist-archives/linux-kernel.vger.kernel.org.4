@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502346F1F22
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8379E6F1F25
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjD1UJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 16:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S230258AbjD1UKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjD1UJY (ORCPT
+        with ESMTP id S230063AbjD1UKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:09:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F9626A1;
-        Fri, 28 Apr 2023 13:09:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 28 Apr 2023 16:10:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E056926B1;
+        Fri, 28 Apr 2023 13:10:49 -0700 (PDT)
+Received: from notapiano (unknown [194.36.25.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFCA76446A;
-        Fri, 28 Apr 2023 20:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE2DC433D2;
-        Fri, 28 Apr 2023 20:09:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682712559;
-        bh=audxmFyFfzKOzyoEf7CTSzuG77aOVueJU+fs+OT6QdM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=gmwmeh3nYlaOJciNrWIxTRgwUw5/hXOkHvvVy1aYvbFtfN5+EpxW2zz6bXYD2JtY5
-         r/iFRuaIJFNiHddfPEXA0VigK56abay3652iAhmUYyWDFYQM1abYps8AqZ0G8u9HkQ
-         JBTf+moZ3ny3l2ZNWzXp0Vff6iDJ+7KMiNOiSiumbHO1Z0tRwax1Icf1eTRVAM0OxE
-         5ApUk8Vcc0TY4MrfIeXzxMOFIKdyto5geze7Aiktfv0DL/bkSlUeTwv3McX1Ep41Io
-         XCVbfWDK3dKw1OdOSRlJXogNkh7YfZTLkBVNqPD7Z3uE0vgrxVLxiNHEEwBZlzT6cw
-         C7ckCPuGonLMg==
-Date:   Fri, 28 Apr 2023 15:09:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] PCI: mediatek-gen3: handle PERST after reset
-Message-ID: <20230428200916.GA361406@bhelgaas>
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1E58866032CF;
+        Fri, 28 Apr 2023 21:10:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682712648;
+        bh=b5em7hgy8DNSPO5+mn/VtcgYEzm4w56x9wJfr+VO8D4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mOYtKibkW1pr8UXj77mTOfkBfTEHE2oP6mK91rL1sLuM5uyyvweODtM13BjoCDbqq
+         FFlgX6LUhK6MPAje3n1giNCCJZ6nK4Jzn282wQtxAY3Vs3fUeYfiB0HcI4kr75L+QD
+         dtA550hoHvFG0YaRobuOVtopR1PCjQlRpnP/TYL21qS0vVL4cseX7YVT1gXlGIHQJY
+         Cm5igPAjkdFstwIoKSWNP0DM2AqJnoDgW3xoW0u7vuXjWkqqJnBXPphbruh4q3VzOf
+         EYiQtcnpkVuoWrFv54pwSmzpmg18h9OujEAIIqdPwFmu+14kVVWc/OuZiWOp4YltMr
+         20V+GcMJtpdWw==
+Date:   Fri, 28 Apr 2023 16:10:38 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     bchihi@baylibre.com
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com,
+        amergnat@baylibre.com, khilman@baylibre.com
+Subject: Re: [PATCH v2 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192
+ support
+Message-ID: <37680c5e-e61c-410b-b48d-829914200e4a@notapiano>
+References: <20230425133052.199767-1-bchihi@baylibre.com>
+ <20230425133052.199767-4-bchihi@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230402131347.99268-1-linux@fw-web.de>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230425133052.199767-4-bchihi@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 03:13:47PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
+On Tue, Apr 25, 2023 at 03:30:50PM +0200, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> De-assert PERST in separate step after reset signals to fully comply
-> the PCIe CEM clause 2.2.
-
-I guess this refers to PCIe CEM r5.0, sec 2.2.
-
-> This fixes some NVME detection issues on mt7986.
+> Add LVTS Driver support for MT8192.
 > 
-> Fixes: d3bf75b579b9 ("PCI: mediatek-gen3: Add MediaTek Gen3 driver for MT8192")
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > ---
-> Patch is taken from user Ruslan aka RRKh61 (permitted me to send it
-> with me as author).
+>  drivers/thermal/mediatek/lvts_thermal.c | 92 +++++++++++++++++++++++++
+>  1 file changed, 92 insertions(+)
 > 
-> https://forum.banana-pi.org/t/bpi-r3-nvme-connection-issue/14563/17
-> ---
->  drivers/pci/controller/pcie-mediatek-gen3.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-> index b8612ce5f4d0..176b1a04565d 100644
-> --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> @@ -350,7 +350,13 @@ static int mtk_pcie_startup_port(struct mtk_gen3_pcie *pcie)
->  	msleep(100);
->  
->  	/* De-assert reset signals */
-> -	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB | PCIE_PE_RSTB);
-> +	val &= ~(PCIE_MAC_RSTB | PCIE_PHY_RSTB | PCIE_BRG_RSTB);
-> +	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
-> +
-> +	msleep(100);
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 5ea8a9d569ea6..8df7b4c72a658 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+[..]
+> +static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
+> +	{
+> +		.cal_offset = { 0x04, 0x08 },
+> +		.lvts_sensor = {
+> +			{ .dt_id = MT8192_MCU_BIG_CPU0 },
+> +			{ .dt_id = MT8192_MCU_BIG_CPU1 }
+> +		},
+> +		.num_lvts_sensor = 2,
+> +		.offset = 0x0,
+> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
 
-There should be a #define for the 100ms value since it is required by
-the generic PCIe CEM spec, not by anything specific to mediatek.  If
-one already exists, we should use it.  If not, we should add one.
+Hi Balsam,
 
-pcie-tegra194.c and pcie-mediatek.c (at least) also have similar
-delays and should also use the same #define.  There are several other
-drivers that contain "msleep(100)", but I didn't look to see their
-purpose.
+during the investigation I did to fix the interrupt issues I mentioned in v1, I
+noticed that the threshold interrupts (hot, hot to normal, cold), only trigger
+when the controller is configured to filtered mode. In immediate mode the
+threshold interrupts are not triggered.
 
-> +	/* De-assert PERST# signals */
-> +	val &= ~(PCIE_PE_RSTB);
->  	writel_relaxed(val, pcie->base + PCIE_RST_CTRL_REG);
->  
->  	/* Check if the link is up or not */
-> -- 
-> 2.34.1
-> 
-> 
+So I say we add
+
+               .mode = LVTS_MSR_FILTERED_MODE,
+
+for all the controllers here. Same for MT8195, although I guess that'd be better
+done in a separate series. And I haven't had time to test more on MT8195 to see
+if I can get any interrupts there.
+
+One issue with filtered mode is that the data read is often not ready (valid bit
+unset), so most of the time it returns -EAGAIN. But I think that should be easy
+to address by reading with a timeout (equal to the measurement interval we
+already know), instead of a single time, if on filtered mode.
+
+I'll also try to review the other commits in this series, though that'll have to
+wait for next week.
+
+Thanks,
+Nícolas
