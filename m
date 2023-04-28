@@ -2,159 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579616F1C77
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7806F1C7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346103AbjD1QSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
+        id S1346066AbjD1QTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346135AbjD1QSI (ORCPT
+        with ESMTP id S229843AbjD1QTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:18:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA06855AD;
-        Fri, 28 Apr 2023 09:18:02 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 18:17:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682698680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mzS+nASlzJJ71hOUETyldjCAo0rPcFGVD/ziZrVHrC0=;
-        b=XykYgAUDaIogjvrWDIlXmT35362xw49kmEHMI5mKG+jSKXgXguBBep5kaYcUDsm0GR0cCD
-        GCz0K8a0/QNSq1N1BHd7uSaBCR3HfU+0mPLTiKDQbZEf6wfbvgpaNWozOpTQYaVOm2u7CC
-        TimNLl+y5/Tl03z4hNzfSfkOJ2O17oJb/5uzCTRpAr1GLmTbDDFsiDSxvoh0cQNWlmI+E4
-        C4h9/veUDUhg4RvscuVPhLBM03AeFGC0zmkNjGfhGK27rlkVoCrQ9uICa4HMr1vPm3gaL2
-        YxtKtPYEETqJvpZubSYlymZDkJpXjLF4kO694WautuLAMiUOKZeAH8I9sRyn3Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682698680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mzS+nASlzJJ71hOUETyldjCAo0rPcFGVD/ziZrVHrC0=;
-        b=vhS8VxmDgeTTyWX5t4uB6QfcMnbQuw8lhHiBw/mUtZyn1O9XvduAnqXvubA27PfIF7E/NI
-        tgmxMxKul5pxV8BQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v7 1/3] sched/core: warn on call put_task_struct in
- invalid context
-Message-ID: <20230428161758.xN5vwuUq@linutronix.de>
-References: <20230425114307.36889-1-wander@redhat.com>
- <20230425114307.36889-2-wander@redhat.com>
+        Fri, 28 Apr 2023 12:19:32 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B2103;
+        Fri, 28 Apr 2023 09:19:31 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2a8b3ecf59fso102592021fa.0;
+        Fri, 28 Apr 2023 09:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682698770; x=1685290770;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zbYtNDNd7fInWlCfzLh9+4U1ztvtKyyC6684B51v+E0=;
+        b=nURJRNftdcjd1VJaEvq1ins9kvKw/pT8QmehI8qmoRYyQJaLPLTZnLzCFjlDgRgBIG
+         nBWFVY2JKEAPd0gLaX3fLA2Yj5uhcDj46WeKsxqUY4OaVRzqiAQUcPBQr1aKB+K5i4c6
+         x3TUEWyO25HR+CNXHvup07Kc/NXjOyuIYaxe2cjKOxLfIpYVwPz+sOvaLhtE1GoDOAaN
+         1vzlPu0h79Eu4NWmJ0bAp0L5IsBnuwqFV423MjWalLXrfq0G6Gskb9J93gtBflUcHux7
+         A8Be2ubvo1MlQINWA/1xP/sinY4WZW5cT5Kb3LhTYwb01lyjU5Gz0sn31Agr01VSPIH0
+         mGaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682698770; x=1685290770;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zbYtNDNd7fInWlCfzLh9+4U1ztvtKyyC6684B51v+E0=;
+        b=hMx3j7sItvEdC6j/Cpt7YPL8xZCTpMEp+es/uIfn7EouvrQCGOvH/Z11EFBWu39zmO
+         Edcp6zGk+zki+qsYIdFDGJBOhp9zZfcmgTr7GWAPQ9xACPr/gPq5h3EII9Tzy0/tv6nK
+         GwcLHLl6Wv1ZK7aUXFYQW8U+c85A+KM2KGBySsI+/lN3cdSb2nBSnflUd3xTcR7ORzx4
+         KxXQ/Qld5n/HttkcVvpGnCB2DbKcP0irocHX5Lg2sicqhrX0pOO7/bLQoXi8pqi/e+QR
+         D5zFzoa6ofO1G+bIrNY4sGyfZu88Dws9iTplCcvCthxSq8DSDxX9QJG7fzGoyCPBz6Kg
+         sASw==
+X-Gm-Message-State: AC+VfDzQoHhLCWr/xK1BSzGRrUiJJqoOLUndPgiQ//k4WYdOhqH9Tky/
+        TkmiFs5B3itsNIjV9l8/KanTKtu2lzi7cktYW4E=
+X-Google-Smtp-Source: ACHHUZ6DubOHX0qskMIgfgi4eLbKcDnTZZHs5OKRqefkrhhPg46vGzwlM2nIv+0kTo9CXo6e/IyKiig9HdLTiZ6S3qo=
+X-Received: by 2002:a2e:9995:0:b0:2ab:bd1:93da with SMTP id
+ w21-20020a2e9995000000b002ab0bd193damr1969451lji.10.1682698769664; Fri, 28
+ Apr 2023 09:19:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230425114307.36889-2-wander@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-9-jorge.lopez2@hp.com>
+ <ca74121b-bb78-4093-8625-13359c324c28@t-8ch.de> <CAOOmCE_MpCBFOHd6QtzD5ufcwEz_FhJvqevj68pVeY_JS+V=Rg@mail.gmail.com>
+ <462b5d12-0430-4fbe-8c26-7b6126556ec8@t-8ch.de> <CAOOmCE8iBfeuodTO7C=0EUOkqv16008h7vsZO2hhBZPuLoLECw@mail.gmail.com>
+ <152fb7c0-1075-4718-bca1-c2083c425788@t-8ch.de>
+In-Reply-To: <152fb7c0-1075-4718-bca1-c2083c425788@t-8ch.de>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Fri, 28 Apr 2023 11:19:04 -0500
+Message-ID: <CAOOmCE-KK3AYmjaDO=qV7WzpsgeZ6d7U1Ep9a9=dcu9CEmohLQ@mail.gmail.com>
+Subject: Re: [PATCH v11 08/14] HP BIOSCFG driver - bioscfg-h
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-25 08:43:01 [-0300], Wander Lairson Costa wrote:
-> Under PREEMPT_RT, spinlocks become sleepable locks. put_task_struct()
-> indirectly acquires a spinlock. Therefore, it can't be called in
-> atomic/interrupt context in RT kernels.
-> 
-> To prevent such conditions, add a check for atomic/interrupt context
-> before calling put_task_struct().
-> 
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+On Fri, Apr 28, 2023 at 11:09=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8c=
+h.de> wrote:
+>
+> On 2023-04-28 11:03:56-0500, Jorge Lopez wrote:
+> > On Fri, Apr 28, 2023 at 10:36=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@=
+t-8ch.de> wrote:
+> > >
+> > > On 2023-04-28 10:24:40-0500, Jorge Lopez wrote:
+> > > > On Sun, Apr 23, 2023 at 7:01=E2=80=AFAM Thomas Wei=C3=9Fschuh <thom=
+as@t-8ch.de> wrote:
+> > > > >
+> > > > > On 2023-04-20 11:54:48-0500, Jorge Lopez wrote:
+> > > > > > ---
+> > > > > >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h | 613 +++++++++++=
+++++++++
+> > > > > >  1 file changed, 613 insertions(+)
+> > > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.=
+h
+>
+> <snip>
+>
+> > > > > > +#define ATTRIBUTE_PROPERTY_STORE(curr_val, type)              =
+       \
+> > > > > > +     static ssize_t curr_val##_store(struct kobject *kobj,    =
+       \
+> > > > > > +                                     struct kobj_attribute *at=
+tr,    \
+> > > > > > +                                     const char *buf, size_t c=
+ount)  \
+> > > > > > +     {                                                        =
+       \
+> > > > > > +             char *p =3D NULL;                                =
+         \
+> > > > > > +             char *attr_value =3D NULL;                       =
+         \
+> > > > > > +             int i;                                           =
+       \
+> > > > > > +             int ret =3D -EIO;                                =
+         \
+> > > > > > +                                                              =
+       \
+> > > > > > +             attr_value =3D kstrdup(buf, GFP_KERNEL);         =
+         \
+> > > > > > +             if (!attr_value)                                 =
+       \
+> > > > > > +                     return -ENOMEM;                          =
+       \
+> > > > > > +                                                              =
+       \
+> > > > > > +             p =3D memchr(attr_value, '\n', count);           =
+         \
+> > > > > > +             if (p !=3D NULL)                                 =
+         \
+> > > > > > +                     *p =3D '\0';                             =
+         \
+> > > > >
+> > > > > This can also truncate the string if there is data after the newl=
+ine.
+> > > >
+> > > > This is a expected behavior as described by Hans in a later email
+> > >
+> > > I'm fine with stripping a trailing newline.
+> > >
+> > > But this truncates the string at the first newline.
+> > >
+> > > "foo\nbar" -> "foo"
+> > > "\nfoo" -> ""
+> > >
+> > All inputs expected by this driver and respectively by BIOS are a
+> > single line.  For this reason, '\n' will cause the string to be
+> > truncated.
+> > I propose reporting a warning message indicating that the data entered
+> > has a '\n' character and will be truncated in addition to failing the
+> > operation with -EINVAL
+>
+> EINVAL sounds good, but a warning is overkill IMO.
+>
+> Whoever put in the garbage value will see the error.
+>
+> Stripping a trailing newline still seems fine though.
 
-Been only CCed here.
+So. should the driver return an -EINVAL error or truncate the line,
+report a warning message, and allow it to proceed.?
+Please advice
 
-I asked to not special case PREEMPT_RT but doing this (clean up via RCU)
-unconditionally. I don't remember that someone said "this is a bad
-because $reason".
-
-Lockdep will complain about this on !RT.
-
-The below open codes rtlock_might_resched() with no explanation on why
-it works or where it comes from.
-
-The function is named put_task_struct_atomic_safe() yet it behaves it
-differently on PREEMPT_RT otherwise it remains put_task_struct().
-
-Not good.
-
-> ---
->  include/linux/sched/task.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-> index 357e0068497c..b597b97b1f8f 100644
-> --- a/include/linux/sched/task.h
-> +++ b/include/linux/sched/task.h
-> @@ -113,14 +113,28 @@ static inline struct task_struct *get_task_struct(struct task_struct *t)
->  
->  extern void __put_task_struct(struct task_struct *t);
->  
-> +#define PUT_TASK_RESCHED_OFFSETS \
-> +	(rcu_preempt_depth() << MIGHT_RESCHED_RCU_SHIFT)
-> +
-> +#define __put_task_might_resched() \
-> +	__might_resched(__FILE__, __LINE__, PUT_TASK_RESCHED_OFFSETS)
-> +
-> +#define put_task_might_resched()			\
-> +	do {						\
-> +		if (IS_ENABLED(CONFIG_PREEMPT_RT))	\
-> +			__put_task_might_resched();	\
-> +	} while (0)
-> +
->  static inline void put_task_struct(struct task_struct *t)
->  {
-> +	put_task_might_resched();
->  	if (refcount_dec_and_test(&t->usage))
->  		__put_task_struct(t);
->  }
->  
->  static inline void put_task_struct_many(struct task_struct *t, int nr)
->  {
-> +	put_task_might_resched();
->  	if (refcount_sub_and_test(nr, &t->usage))
->  		__put_task_struct(t);
->  }
-> -- 
-> 2.40.0
-> 
-
-Sebastian
+> This would be a very good candidate for a helper function.
