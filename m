@@ -2,64 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF786F1C7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DBC6F1C80
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346116AbjD1QTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
+        id S1346233AbjD1QTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345594AbjD1QTm (ORCPT
+        with ESMTP id S1346148AbjD1QTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:19:42 -0400
+        Fri, 28 Apr 2023 12:19:50 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952DE103
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:19:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C86E524B;
+        Fri, 28 Apr 2023 09:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682698781; x=1714234781;
+  t=1682698785; x=1714234785;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+ZpQk9tAcoryWI38DUUiVvWpt7vJGjwLk5lCeWTJvIQ=;
-  b=HIJh1f/YUFOJj0U2UP0E0I39hf+8MTzPkPZmadf7bAdMsUX4Uq+V25gB
-   NlypIRdgWdli7+MJIgbIB5nZ/9FhaJomuWoi+Vflf5rHFwS+Kb0gJD4e1
-   86G8NBqo6vFJsonybvZqX+E6MI66hOls29wAc8tTn2TPB7OPSH6ie6d5v
-   Ebrti6WLtFMTvmLILG5yC/csk/k5TGyShjlcRHwKp4R2MyTLlGFKXhevL
-   Gi7PpuuSRTvVuo53gu+ORm+3m1qo6W+o+CBif7axYAYgX2/JAnGSeKTYV
-   WKf37uY0Q61j0SBckQx9JxvSl0+r2EmN5g8cTQdsJKcF6vX14sy+6lhsO
+  bh=mJSFhPkeknNj2O1iNEZ3l9oQeY99f0eWfnaVt0hI+2w=;
+  b=byi9cyMyPuqVZoKPTMXBXHIdGLGCrNOJZlG+xtH3VxuqHXiQqToydZxz
+   Xt0hd3ZHdYtXJ6zIPyX2TJ4BcI7IML3l/Psb8Nfzj52TSnXiDUxDOC28r
+   IpWOiiGWHco5jTgSc+Z7XDiKRaZ7iGFUok/ICeu0mqSQz0Ge8Vr4LT/x4
+   abS+/UApNO9jIIo8p1kjrrj29utYP/HsKq9uPe5o2dRRPBHrvzjxMvg3l
+   E2kzAAs5hdPz566nusAH8kaUxgStbzAWvlqyTsS3Tujta+6zqa+GSNPIO
+   QI18/NoUiEETTl95R7Rh3FywLtyHBUB00jaZhRQUyPmt7cAP11xLSkYLG
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349816322"
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349816349"
 X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="349816322"
+   d="scan'208";a="349816349"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 09:19:40 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 09:19:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819061759"
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819061758"
 X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="819061759"
+   d="scan'208";a="819061758"
 Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
   by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 09:19:38 -0700
 Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1psQor-0000YB-1O;
+        id 1psQor-0000Y9-1I;
         Fri, 28 Apr 2023 16:19:37 +0000
-Date:   Sat, 29 Apr 2023 00:19:33 +0800
+Date:   Sat, 29 Apr 2023 00:19:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Petr Mladek <pmladek@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
-Subject: Re: [PATCH v5 2/2] printk: console: Support console-specific
- loglevels
-Message-ID: <202304290057.wh62fc4w-lkp@intel.com>
-References: <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
+To:     Yi-De Wu <yi-de.wu@mediatek.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        David Bradil <dbrazdil@google.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>
+Subject: Re: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor
+ support
+Message-ID: <202304290052.49kcXbnl-lkp@intel.com>
+References: <20230428103622.18291-4-yi-de.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
+In-Reply-To: <20230428103622.18291-4-yi-de.wu@mediatek.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -71,32 +88,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chris,
+Hi Yi-De,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 61d325dcbc05d8fef88110d35ef7776f3ac3f68b]
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on robh/for-next arnd-asm-generic/master linus/master v6.3 next-20230427]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230425-210828
-base:   61d325dcbc05d8fef88110d35ef7776f3ac3f68b
-patch link:    https://lore.kernel.org/r/4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris%40chrisdown.name
-patch subject: [PATCH v5 2/2] printk: console: Support console-specific loglevels
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/c92f68c2bbfd8d7ff05785c20f0c2535861143c5
+url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20230428103622.18291-4-yi-de.wu%40mediatek.com
+patch subject: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor support
+config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20230429/202304290052.49kcXbnl-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0e3f05a6e4547eb309032d047115a47d8f59641d
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230425-210828
-        git checkout c92f68c2bbfd8d7ff05785c20f0c2535861143c5
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
+        git checkout 0e3f05a6e4547eb309032d047115a47d8f59641d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290057.wh62fc4w-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202304290052.49kcXbnl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> Warning: kernel/printk/printk.c references a file that doesn't exist: Documentation/admin-guide/per-console-loglevel
+>> usr/include/linux/gzvm.h:15: included file 'asm-x86/gzvm_arch.h' is not exported
 
 -- 
 0-DAY CI Kernel Test Service
