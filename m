@@ -2,192 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABE96F1373
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1486F1377
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345471AbjD1IrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 04:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S1345529AbjD1Iry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjD1Iq6 (ORCPT
+        with ESMTP id S1345489AbjD1Iru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:46:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9981A2728;
-        Fri, 28 Apr 2023 01:46:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A11A61411;
-        Fri, 28 Apr 2023 08:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A446EC433D2;
-        Fri, 28 Apr 2023 08:46:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682671614;
-        bh=mCUVhJ/yf9+Zbv9PHEQScTzGuHyq2YKo5CQGfRfHFO4=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=tAsTEcSc1JhvpjJ7q2pg2Tbuj+oBgVxElnaZU/eNVxkK6Vz28K0BxFJ0bO31XlKgL
-         +i2F0zVN1UneePAdwdRF4xkW5sV90huXHKjnR3MnJGTAhhgpCkfJnsGNqriD4hcR/b
-         0Uded35/Yc9GVWH4/fhpO4o33E+BzoANK4NT8X9A5c2GEKy8QC3MCBQl6XWwvIC8+o
-         0C44Mn8BEQ7G6HevgAlIBTxQdQ8F8LS6yg01ZiGpRvGX3A8gMxBfzf83EDS6lp4EA8
-         yTbFmwZe7X0zHB1muNlh590CUEDTbWVJG1BfWzYZnDM6+CW4Mon0jSC5HnphtUcUTQ
-         AkwxDH6UKkJPQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     davem@davemloft.net, edumazet@google.com, johannes.berg@intel.com,
-        johannes@sipsolutions.net, kernel-janitors@vger.kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, quic_alokad@quicinc.com,
-        quic_msinada@quicinc.com
-Subject: Re: [PATCH net] wifi: mac80211: Fix puncturing bitmap handling in __ieee80211_csa_finalize()
-References: <e84a3f80fe536787f7a2c7180507efc36cd14f95.1682358088.git.christophe.jaillet@wanadoo.fr>
-        <87mt2sppgs.fsf@kernel.org>
-        <a94ce60d-423a-5f8e-5f8e-9b462854db54@wanadoo.fr>
-Date:   Fri, 28 Apr 2023 11:46:48 +0300
-In-Reply-To: <a94ce60d-423a-5f8e-5f8e-9b462854db54@wanadoo.fr> (Christophe
-        JAILLET's message of "Fri, 28 Apr 2023 10:19:56 +0200")
-Message-ID: <87pm7os8av.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 28 Apr 2023 04:47:50 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967462D5B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:47:47 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32cb1ba941fso68468145ab.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:47:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682671667; x=1685263667;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QeuIWsyfE8QRzGIA3wUsHQCHj888JIoXAHIN3OdB9K0=;
+        b=C3gGJ5wMk1fp3PKCy3t94KIpAU0nSKXMys/7ebJhmwrRG8m0AZ02iyLElv4IENwEt/
+         fy9R3zcfiVwnck+J3AejJvRdVfxs7aYk6ho7y4A4c+x/aEZoVduTJ6ARTK4wUnST4O+D
+         Jgq/XYVis0f+dHr4GRMGTsA+VIvWCE+qZEZ4hzw7HPA3nsp7KqZesSHHg9a1N6M4pN6L
+         7wKp2uKf+HAQHhp4Va3vcM1CPZ4Xjlw5mIgInbNFPkRCAw88Jdg8Tb7SJ+uPjYM0phiM
+         u7meummsq6TJFusGd6NV3gd8u+wIqY6ZzakgCSjCGeAGdTVScwLfnZoEGbK0Ytlx5JeD
+         SJHw==
+X-Gm-Message-State: AC+VfDzt9g78m2JBUYRJf2KTJnS9QFdh1j6U11rB+b6b2L8oG+UOyc6L
+        6AZDu11wC66FroWaRnULH1gf1DDiyBvKAF6Yddq2cq4oB5y4
+X-Google-Smtp-Source: ACHHUZ7s6abN+81ptcOqufkCU1xVEq3ObpiyN0LRdnzVgEL2H0zSA9O8g1YLLv6Cedw91IRSkN+kBZoArcjC7p3MXSArJEzW8smo
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a14a:0:b0:3c5:1971:1b7f with SMTP id
+ m10-20020a02a14a000000b003c519711b7fmr2433851jah.6.1682671666917; Fri, 28 Apr
+ 2023 01:47:46 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 01:47:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000faf54f05fa6186db@google.com>
+Subject: [syzbot] Monthly ntfs3 report (Apr 2023)
+From:   syzbot <syzbot+list1d8e27291d051da3b6be@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> writes:
+Hello ntfs3 maintainers/developers,
 
-> Le 28/04/2023 =C3=A0 07:04, Kalle Valo a =C3=A9crit=C2=A0:
->> Christophe JAILLET <christophe.jaillet-39ZsbGIQGT5GWvitb5QawA@public.gma=
-ne.org> writes:
->>
->>> 'changed' can be OR'ed with BSS_CHANGED_EHT_PUNCTURING which is larger =
-than
->>> an u32.
->>> So, turn 'changed' into an u64 and update ieee80211_set_after_csa_beaco=
-n()
->>> accordingly.
->>>
->>> In the commit in Fixes, only ieee80211_start_ap() was updated.
->>>
->>> Fixes: 2cc25e4b2a04 ("wifi: mac80211: configure puncturing bitmap")
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet-39ZsbGIQGT5GWvitb=
-5QawA@public.gmane.org>
->>
->> FWIW mac80211 patches go to wireless tree, not net.
->
-> net/<something> or drivers/net/<something> goes to 'net'.
-> drivers/net/wireless/<something> goes to 'wireless'.
->
-> now:
-> net/mac80211/ goes also to 'wireless' as well.
-> ath11 and ath12 are special cases that goes to 'ath'.
->
-> Based on the get_maintainer.pl, my last patch against drivers/isdn
-> looks well suited to deserve a -net-next as well?
->
->
-> without speaking of -next variations.
->
->
-> How many other oddities are there?
+This is a 31-day syzbot report for the ntfs3 subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/ntfs3
 
-Oddities? We have had separate wireless trees for something like 15
-years now, so not a new thing :D
+During the period, 8 new issues were detected and 0 were fixed.
+In total, 62 issues are still open and 21 have been fixed so far.
 
-But we have also separate trees for most active wireless drivers. For
-example, Felix has a tree for mt76, Intel for iwlwifi, I have for
-ath9k/ath10k/ath11k/ath12k and so on.
+Some of the still happening issues:
 
-> I try to make my best to add net or net-next.
-> I could do the same with wireless. (I guess that there is also a
-> wireless-next?)
+Ref  Crashes Repro Title
+<1>  3546    Yes   KASAN: slab-out-of-bounds Read in ntfs_iget5
+                   https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
+<2>  1835    Yes   UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
+                   https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
+<3>  1013    Yes   KASAN: out-of-bounds Write in end_buffer_read_sync
+                   https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
+<4>  843     Yes   possible deadlock in attr_data_get_block
+                   https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
+<5>  388     Yes   possible deadlock in ntfs_set_state
+                   https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
+<6>  352     Yes   possible deadlock in mi_read
+                   https://syzkaller.appspot.com/bug?extid=bc7ca0ae4591cb2550f9
+<7>  242     No    possible deadlock in ntfs_mark_rec_free
+                   https://syzkaller.appspot.com/bug?extid=f83f0dbef763c426e3cf
+<8>  65      Yes   WARNING in do_symlinkat
+                   https://syzkaller.appspot.com/bug?extid=e78eab0c1cf4649256ed
+<9>  58      Yes   KASAN: vmalloc-out-of-bounds Write in find_lock_entries
+                   https://syzkaller.appspot.com/bug?extid=e498ebacfd2fd78cf7b2
+<10> 51      Yes   WARNING in do_mkdirat
+                   https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
 
-Yes, there is also wireless-next.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> I can do it when rules are SIMPLE.
->
-> Is there a place where ALL these "rules" are described?
-> Could MAINTAINERS and scripts be instrumented for that?
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-The maintainers file should document what tree to use:
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-QUALCOMM ATHEROS ATH11K WIRELESS DRIVER
-M:      Kalle Valo <kvalo@kernel.org>
-L:      ath11k@lists.infradead.org
-S:      Supported
-T:      git git://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
-F:      Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-F:      drivers/net/wireless/ath/ath11k/
-
-If a wireless driver has no git tree then you can use the tree from the
-top level entry:
-
-NETWORKING DRIVERS (WIRELESS)
-M:      Kalle Valo <kvalo@kernel.org>
-L:      linux-wireless@vger.kernel.org
-S:      Maintained
-W:      https://wireless.wiki.kernel.org/
-Q:      https://patchwork.kernel.org/project/linux-wireless/list/
-T:      git
-git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git
-T:      git
-git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
-F:      Documentation/devicetree/bindings/net/wireless/
-F:      drivers/net/wireless/
-
-But of course some of the entries could be out-of-date. Patches welcome
-if you see those :)
-
-> I DO understand that the easiest it is for maintainers, the better for
-> them, but please stop asking for casual contributors to know that and
-> follow your, not that easy to find or remember, rules.
->
-> I'm tempt not to TRY to put the right branch in the subject of my
-> commits anymore, because even when I try to do it right and follow
-> simple rules for that, it is not enough and I'm WRONG.
->
-> Most of my contributions are related to error handling paths.
-> The remaining ones are mostly related to number of LoC reduction.
->
-> Should my contributions be ignored because of the lack of tools to
-> help me target the correct branch, then keep the bugs and keep the
-> LoC.
-
-I don't see anyone saying anything about ignoring your fixes, at least I
-have always valued your fixes and I hope you can continue submitting
-them.
-
-> git log --oneline --author=3Djaillet --grep Fixes: drivers/net | wc -l
-> 97
-> git log --oneline --author=3Djaillet drivers/net | wc -l
-> 341
->
-> git log --oneline --author=3Djaillet --grep Fixes: net | wc -l
-> 7
-> git log --oneline --author=3Djaillet net | wc -l
-> 327
->
-> No hard feelings, but slightly upset.
-
-No need to be upset really, this is just coordination between
-maintainers so that we don't accidentally take wrong patches. Please
-don't take it personally.
-
-If you are not familiar with network trees, I have seen some
-contributors just using '-next' without specifying the actual tree and
-letting the maintainers deal with what tree to take it. I consider that
-as a safe option.
-
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+You may send multiple commands in a single email message.
