@@ -2,124 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EAD6F1795
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6DB6F1799
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346028AbjD1MU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 08:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
+        id S1346023AbjD1MVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 08:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346023AbjD1MUz (ORCPT
+        with ESMTP id S240226AbjD1MVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 08:20:55 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F27A5584
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:20:42 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50a14564d17so16638762a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:20:42 -0700 (PDT)
+        Fri, 28 Apr 2023 08:21:14 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D62619B
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:21:01 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-2f6401ce8f8so6156688f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682684441; x=1685276441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GnnxJC/OUshYooHsz1QQh8YEyfrU6zYiR5EaHZYQGjo=;
-        b=hcKmT1rZfUbs6SLCw+L707tSSylwm0tH/5kdN29nzQaSEwAi5o2Ivg8aJLxY8G8mco
-         00BnIge4SNFj0DkPpKyYGvCIkNpxDOJvU4UKiw8O0AwqRODRTumCOc6CH6dnZ9Th/63y
-         CzpFQ8l3MXQUef72IZ6PPRD3sO0PcWDKWhmbHRLix2LGN5ywMYur+Asjg6HkojUMbknk
-         6SjglWxiU2MlXFom7TGCLZY9H87Ikzc1/+jqGbQmTtQTYmmCAXDMUp8LBWDWDCmmlVsI
-         7T+QqclJhKv4orvLKf9MiGIHMuh+eRkQ6IFkiwQc6uzy8lgw12cAo/VaE/x8sDq7suLK
-         Tntg==
+        d=linaro.org; s=google; t=1682684459; x=1685276459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QpeQU6IkVIN1ly6E38pITYrefuVTR9SPX5jEk0qIoZ0=;
+        b=iSawk03mpSiV7zoQBTgeXzmXjgORfLHbHFibARf9aeo38ta85qN/jTLCKS6i16XuHE
+         wDGNEExr3DS6IuUR67EMK/Ymt33gDLK0koSvgxc/qCy9Lx1vZW5s4LTJ8c00ogIwlD2a
+         jX1buqNtxCRFRb13C1BaUG7XibeILanBuf1Jm3RyX4xcD60iDy/syw5LRPXBaqGx6t2Q
+         JgKEh0q1gAkM5MSk9uQtEB9Afuvtpb8wE1xvA8ewRXcfygOXhe5BkkB2geM/pp1q2jIf
+         +kPu7brB+r0CQ+1fs7Td4uE1WzbEpGvp90Oe2eJiK4soHlNxLPm5cznJWACAsKJO2CsD
+         9AWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682684441; x=1685276441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GnnxJC/OUshYooHsz1QQh8YEyfrU6zYiR5EaHZYQGjo=;
-        b=Po4ALwYIf7R8diKzSL7YQGmmZ1OaVSUJS252EjNcpdDXdUVJvmqRJk/TTtYd0ELw7N
-         mzCzJplpJsVxqAy0owYAoFP8ahzn4Xt2D7JA6RpGPTpISPqb85zYFvup9mB6L6T/t9No
-         IT5A17Ja6e4PrXKdd8CKCkWN9YUvC9Uen3pypAKbtxTjAQXe92p1IHyIrfZM7q7vEBhQ
-         4KP96K9QT7xtnNhf8CIwCN2Y9e99nSDACU4/9xQHk5QfWQbaEoR0o2RWiS+CWP8xMjhN
-         MUHY7hvGcUWyp4EbHrdVU5CoChYZezCry/ThQkXVdiN+NA25+JZwWWBNRLJUvAzpszS2
-         cjnw==
-X-Gm-Message-State: AC+VfDz8g1ZYMrk7l+9VAbDJoE/x5aRevRK4O8hEIM79zZwGemvb0V+g
-        ccdvEJVMqiLcCqRqeVTnfO0bIRuVdEiE47ZTpwg=
-X-Google-Smtp-Source: ACHHUZ67lj31zawW4SweLmq4ntxfryIPZgNl0tp/ZKZj7OlnH5rbmtwB/XFRUH3BF83fWHs9dYDy5Q==
-X-Received: by 2002:a17:906:728e:b0:94e:6eb3:abc4 with SMTP id b14-20020a170906728e00b0094e6eb3abc4mr9678802ejl.4.1682684440749;
-        Fri, 28 Apr 2023 05:20:40 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id gj19-20020a170906e11300b0095ec8dfc439sm4358565ejb.166.2023.04.28.05.20.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 05:20:40 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 14:20:39 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
-Cc:     linux@yadro.com, Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] perf: RISC-V: Limit the number of counters returned
- from SBI.
-Message-ID: <nz7dxazar52et54ia6kgl3onsuevq62pm4lffdfcnsrxgormga@a62zyukdxyj6>
-References: <20230428110256.711352-1-v.v.mitrofanov@yadro.com>
- <20230428110256.711352-2-v.v.mitrofanov@yadro.com>
+        d=1e100.net; s=20221208; t=1682684459; x=1685276459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QpeQU6IkVIN1ly6E38pITYrefuVTR9SPX5jEk0qIoZ0=;
+        b=WrF4GH90gg2lhpNjMfuLfrMosCFaU8dLZQ4vNgD7kgvcrsGxWfjnE0LlbinelBh563
+         AK4iClL80wRsQvYdRPnCaydsaHxANBLHnK4XD38pnTq2tejv3HxdcrwFuWArzsA5uX+3
+         Vp5WY0TveQU1Ugi1oM5hPFkJNsPRIouKaADNCmq3vcDqj3dFYjsGpVm3bFFVsyyyeP1P
+         kqotHykG85ZdWKi58huQYzhc1bwzRGoV7poKGoCHXMW79hzqj9X2TSz6sOB4Cy2uG13a
+         tO0+3DvO2Dnxwjst6PVDg7ZaglHe7PNViRznpS6LG0K5Giq0IT5UcbrCn7BikoBp3YgW
+         Jv5g==
+X-Gm-Message-State: AC+VfDyAyqNaZgPXPAXQAo/9Hdtap9kDw7DaGPrBz8+ZWcpMahFVf5Jx
+        cjhEnkMIoJCiSFzhhVwvDHYdHw==
+X-Google-Smtp-Source: ACHHUZ6rsPO6wDlFQzENrINCgsq67v79X8zDwqpmHyUTSf6dwPi4DygquY3+5uJxS0R/2QopMOXwVw==
+X-Received: by 2002:adf:f94f:0:b0:2f9:1224:2475 with SMTP id q15-20020adff94f000000b002f912242475mr3388938wrr.68.1682684459639;
+        Fri, 28 Apr 2023 05:20:59 -0700 (PDT)
+Received: from [172.23.2.142] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id m10-20020a5d56ca000000b002c54c9bd71fsm20979563wrw.93.2023.04.28.05.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 05:20:59 -0700 (PDT)
+Message-ID: <e73cec19-9ac8-bee2-8c28-c7a40b929e53@linaro.org>
+Date:   Fri, 28 Apr 2023 14:20:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428110256.711352-2-v.v.mitrofanov@yadro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 09/43] dt-bindings: watchdog: add DT bindings for Cirrus
+ EP93x
+Content-Language: en-US
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-10-nikita.shubin@maquefel.me>
+ <00882340-477b-dc0b-d489-94efdf045f1c@linaro.org>
+ <cb0b1779a8bd18212439f9baf70fdb183c9f0fc7.camel@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cb0b1779a8bd18212439f9baf70fdb183c9f0fc7.camel@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 11:02:56AM +0000, Viacheslav Mitrofanov wrote:
-> Perf gets the number of supported counters from SBI. If it happens that
-> the number of returned counters more than RISCV_MAX_COUNTERS the code
-> trusts it. It does not lead to an immediate problem but can potentially
-> lead to it. Prevent getting more than RISCV_MAX_COUNTERS from SBI.
-
-I recall suggesting we do this during the KVM PMU review, but I guess we
-forgot.
-
+On 28/04/2023 16:33, Nikita Shubin wrote:
+> Hello Krzysztof!
 > 
-> Signed-off-by: Viacheslav Mitrofanov <v.v.mitrofanov@yadro.com>
-> ---
->  drivers/perf/riscv_pmu_sbi.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> On Tue, 2023-04-25 at 11:31 +0200, Krzysztof Kozlowski wrote:
+>> On 24/04/2023 14:34, Nikita Shubin wrote:
+>>> This adds device tree bindings for the Cirrus Logic EP93xx
+>>> watchdog block used in these SoCs.
+>>>
+>>> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+>>> ---
+>>>  .../bindings/watchdog/cirrus,ep93xx-wdt.yaml  | 38
+>>> +++++++++++++++++++
+>>>  1 file changed, 38 insertions(+)
+>>>  create mode 100644
+>>> Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
+>>>
+>>> diff --git
+>>> a/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
+>>> b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-wdt.yaml
+>>> new file mode 100644
+>>> index 000000000000..f39d6b14062d
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
+>>> wdt.yaml
+>>> @@ -0,0 +1,38 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id:
+>>> http://devicetree.org/schemas/watchdog/cirrus,ep93xx-wdt.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Cirrus Logic EP93xx Watchdog Timer
+>>
+>> EP93xx is no EP9301. This does not match your compatible list. You
+>> should probably list all of your devices. With or without
+>> compatibility
+>> between them (so with a generic fallback for example).
 > 
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index 70cb50fd41c2..0183bf911bfb 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -867,6 +867,11 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
->  		pr_err("SBI PMU extension doesn't provide any counters\n");
->  		goto out_free;
->  	}
+> I will rename file to cirrus,ep9301-wdt.yaml, all ep93xx SoC family has
+> the same watchdog, so there is now reason for other compatible i think.
 
-Need blank line here
+You should always have dedicated compatibles, even if using one fallback.
+https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
 
-> +	/* It is possible to get from SBI more than max number of counters */
-> +	if (num_counters > RISCV_MAX_COUNTERS) {
-> +		pr_warn("SBI returned more than maximum number of counters\n");
-                                               ^ the
+Best regards,
+Krzysztof
 
-This should be a pr_info.
-
-
-> +		num_counters = RISCV_MAX_COUNTERS;
-> +	}
-
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
