@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E752E6F20B4
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCE96F20A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346220AbjD1WKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 18:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S1346669AbjD1WEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 18:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjD1WKn (ORCPT
+        with ESMTP id S1346705AbjD1WES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 18:10:43 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E4D44A0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:10:41 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so21596056a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:10:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682719840; x=1685311840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D4iO4gL3f17c/4O7Vnz35nnzwF/arL2tqtDIT8Zr1GM=;
-        b=TRz4P5zya+02wAD5k9pUGU3E1ZPd4oKqZWJpJRd66+EHgLth+bwWuUxENORKbFzOfy
-         MfOoADTIknRTqnlQN+1eQ7qPTVwnhtZTAHWcsCZYep9onAv1rYD2UEqf+3IO8Dnf8oFR
-         IrUNjfSMcGgnSfSijcNrJFzho/VrrMpvnCWaU=
+        Fri, 28 Apr 2023 18:04:18 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9B41730;
+        Fri, 28 Apr 2023 15:04:17 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6a5f8e1f6d1so202066a34.0;
+        Fri, 28 Apr 2023 15:04:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682719840; x=1685311840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D4iO4gL3f17c/4O7Vnz35nnzwF/arL2tqtDIT8Zr1GM=;
-        b=Njmr/LbgJr4My2vlibZ3Uck2Vfx2L4enfSsPzJQVXg+hfakObCe0JIcH1J8DdcnrzC
-         gizuzl3YGPlCutE1lx1dY8jYNzR3kYfkhlxw5a2O4lIDoNcvrPlsG/VNiqjLgjyA51qm
-         2Zya0jszace2P//yfGDvkKz9ItuQBT3QStCxOvrKHPlZhefccCQRF3p2fRVLdgcKiXSy
-         YWpW209laMUPlshRyL9HJcRIr5GmqaVBd4sCDfWmbsLLfAhC8lZ6ufvN0qo+FCwQn5vv
-         EceU6bRaPob05kWUDiDX7tU5eMJ/nfrKl0CeqtdgOsDu9pCTZ1UjqQveNsFaWfGWv9ge
-         Yk2A==
-X-Gm-Message-State: AC+VfDy1jv8l1AvtRrbfrPxISUnc9l5H8ayE63Z2oCTKnzffgv2TcxTG
-        HJ4f5uAN1OSYzgAbytENaM450XWff8pWO3HqMuSGIw==
-X-Google-Smtp-Source: ACHHUZ6hiWyBgyv9UpiXoIhOJeyzYkRaRU77bxBbBnlwFE5iN5bdoWZuCaElDWjfWmPxX9orTrh0OQ==
-X-Received: by 2002:a05:6402:510d:b0:506:bd27:a2f0 with SMTP id m13-20020a056402510d00b00506bd27a2f0mr219611edd.15.1682719839753;
-        Fri, 28 Apr 2023 15:10:39 -0700 (PDT)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id u11-20020aa7d0cb000000b0050687dbb5dasm9601379edo.31.2023.04.28.15.10.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 15:10:39 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-50a145a0957so21595935a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 15:10:39 -0700 (PDT)
-X-Received: by 2002:a17:906:9f07:b0:94f:2a13:4df4 with SMTP id
- fy7-20020a1709069f0700b0094f2a134df4mr9961168ejc.22.1682719391201; Fri, 28
- Apr 2023 15:03:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682719456; x=1685311456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OSL6cU8mthSN6NR4w0n7GJtDQyapluQsx3VIbxSqClg=;
+        b=Fb/nAp4CLrfHT2idIrPAWushGREyIt6AxBfq6q+pf7rA2plzfpz9U5qd/3BvxdYA+M
+         zt/mNofOBPrkX59R3fe3sKV+F3VeY0lDJsac//FI8LADSh7wqNqp27tdPRo2xibfPtPk
+         glZjgsBlE4UHbhdvbLqAPD9bcQsg4Zc2V7stfPIAR5tvsDGSlF9bL95pfKvffspSf/LC
+         51PrtawtSFQRyKv/Q82LS4fwWgedtq71WBJkcniVmMkx6dCVOA38bjYdnflovrYnDFjS
+         IJ2YqEEBcpZ2xHdRTPgqu7Gh/SsHCw3FoJVvHwzOeKC+sHEf7ay+EqNbxLPXMd4F0Uzn
+         5Odw==
+X-Gm-Message-State: AC+VfDwSk5Uo5SaMayZ+jcm/XLii7RqNK2dj2Q146FOr3LJ/HMFVRvp3
+        8BA8TTuP2SJovITIcNF4RA==
+X-Google-Smtp-Source: ACHHUZ6ucH5SHt4E7Jpk8b7MwgfV3+tM9nbRHp6pMEJyo/jiIfJCPJnKTTjuQs2hnQ0kIytWlu3+0w==
+X-Received: by 2002:a05:6808:a0b:b0:38d:e93d:f90 with SMTP id n11-20020a0568080a0b00b0038de93d0f90mr3008291oij.7.1682719456458;
+        Fri, 28 Apr 2023 15:04:16 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f2-20020a4abb02000000b0053b543b027bsm5285936oop.42.2023.04.28.15.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 15:04:16 -0700 (PDT)
+Received: (nullmailer pid 358836 invoked by uid 1000);
+        Fri, 28 Apr 2023 22:04:15 -0000
+Date:   Fri, 28 Apr 2023 17:04:15 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: fpga: replace Ivan Bornyakov
+ maintainership
+Message-ID: <20230428220415.GA351049-robh@kernel.org>
+References: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
+ <20230428140150.2592-3-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-References: <ZErgOfOLrBwluTbd@gmail.com>
-In-Reply-To: <ZErgOfOLrBwluTbd@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Apr 2023 15:02:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj-t1N7a2dH=y7MCjctk_Zw77C8_V6cfS-UC7f3jXAF6g@mail.gmail.com>
-Message-ID: <CAHk-=wj-t1N7a2dH=y7MCjctk_Zw77C8_V6cfS-UC7f3jXAF6g@mail.gmail.com>
-Subject: Re: [GIT PULL] scheduler changes for v6.4
-To:     Ingo Molnar <mingo@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428140150.2592-3-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,23 +70,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 1:51=E2=80=AFPM Ingo Molnar <mingo@kernel.org> wrot=
-e:
->
->  - Fix performance regression introduced by mm_cid
+On Fri, Apr 28, 2023 at 05:01:50PM +0300, Ivan Bornyakov wrote:
+> As I'm leaving Metrotek, hand over Lattice Slave SPI sysCONFIG FPGA
+> manager and Microchip Polarfire FPGA manager maintainership duties to
+> Vladimir.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Signed-off-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
 
-This causes a conflict with commit b20b0368c614 ("mm: fix memory leak
-on mm_init error handling") that came in through the MM tree.
+The patch sender's Sob goes last. And only Vladimir should add his Sob 
+(when an author or sender).
 
-That conflict is trivial to resolve, and I did so.
-
-Except I also checked my resolution with what was going on in
-linux-next, and it's different.
-
-I'm pretty sure the resolution in linux-next is wrong, but I thought
-I'd mention this, since clearly this wasn't caught in linux-next.
-
-Or maybe it's me that did it wrong, but hey, that couldn't actually
-happen, could it?
-
-                  Linus
+> ---
+>  Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml   | 2 +-
+>  .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml    | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> index 4fb05eb84e2a..164331eb6275 100644
+> --- a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> +++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Lattice Slave SPI sysCONFIG FPGA manager
+>  
+>  maintainers:
+> -  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +  - Vladimir Georgiev <v.georgiev@metrotek.ru>
+>  
+>  description: |
+>    Lattice sysCONFIG port, which is used for FPGA configuration, among others,
+> diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> index 527532f039ce..a157eecfb5fc 100644
+> --- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> +++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Microchip Polarfire FPGA manager.
+>  
+>  maintainers:
+> -  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> +  - Vladimir Georgiev <v.georgiev@metrotek.ru>
+>  
+>  description:
+>    Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
+> -- 
+> 2.40.0
+> 
+> 
