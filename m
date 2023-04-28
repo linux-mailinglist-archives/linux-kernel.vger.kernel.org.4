@@ -2,103 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B86F6F1A2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B74E6F1A26
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346036AbjD1OGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
+        id S1345870AbjD1OE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239683AbjD1OGi (ORCPT
+        with ESMTP id S229805AbjD1OE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:06:38 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6D126BC;
-        Fri, 28 Apr 2023 07:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=q8zcS4eSpLOU+KM3Wsz07PCE+lkv5k2H0fjoK3Tf61A=;
-        b=Jz4ShgvhOp0AjDyYF5HFxRhmaNfl98bCm+qpITBdRYOT+bfXa5MUJ0WtZgOYjMG3HgTgVg997b+lZ
-         XK49ezrXGRUtAHQWIMyHmnHNtmQ+uW089YbDmTlciTEuQyTZw2ZiDrE8dvuN5RZ4Qz+YJKElEavF8J
-         UIXQEAqtNa/Wtes/5zDJYP+XutFRmRCLFJPN0+nQq6qTk7z7J5YOgKCdrY3sEN5bnbYKQbGp0moHk9
-         RocyQrANCde6dT6kGeX/8yY1/vJ+4czIv3zJhHUxUjymZqbUlcIfj5rkfT1ot65P1nDKAtgKqVYGq6
-         6xzORmxjOH2uFPj9DK3/FH93z25GNog==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000008,0.009770)], BW: [Enabled, t: (0.000016,0.000001)], RTDA: [Enabled, t: (0.098375), Hit: No, Details: v2.49.0; Id: 15.pmd6d.1gv42uom2.8dpe; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Fri, 28 Apr 2023 17:05:59 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: fpga: replace Ivan Bornyakov maintainership
-Date:   Fri, 28 Apr 2023 17:01:50 +0300
-Message-Id: <20230428140150.2592-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
-References: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
+        Fri, 28 Apr 2023 10:04:57 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178E626A6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:04:55 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230428140452euoutp01cf9b2f85563aec9dad65d8f6d70f3d34~aHkTz_KSv0262102621euoutp01z
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:04:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230428140452euoutp01cf9b2f85563aec9dad65d8f6d70f3d34~aHkTz_KSv0262102621euoutp01z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682690692;
+        bh=EEtGe+wC47aB14p+DivmoE+r5CH+S8ucH6jCvDwAe4U=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=k6RP6w9kDJ2nKQT/HsYHToW0EkvBh74tYVrsmTXu61J/u8mkRVXg6HZHjYHzGT6bc
+         Atle8maLFIpyYHpI8WHBayt3VI3DwkA2xAwxfTl/kQ3beBtNIMBQxaXvhalzvUbr3u
+         hTfmERjfu6ej/cb/Ff9uAZpsmTDgFFY22wJiYm6E=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230428140451eucas1p15749d752a76bc63e9a7664cabfef9caa~aHkTeEraG0945809458eucas1p1j;
+        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 57.DF.35386.382DB446; Fri, 28
+        Apr 2023 15:04:51 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230428140451eucas1p14a5f254adb9477e517327cb1572b1710~aHkTAJxWW0947109471eucas1p1n;
+        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230428140451eusmtrp22215fcddd4d373bae7de42d3bb2b01fa~aHkS-UIy62734327343eusmtrp2P;
+        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
+X-AuditID: cbfec7f4-cc9ff70000028a3a-2a-644bd283992b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9F.E4.14344.382DB446; Fri, 28
+        Apr 2023 15:04:51 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230428140450eusmtip1f98789af73ddbb43bf193cdb93a7c58f~aHkSHJYBy2624626246eusmtip1R;
+        Fri, 28 Apr 2023 14:04:50 +0000 (GMT)
+Message-ID: <46429c9b-cf14-a67e-81a8-b56be0350ea3@samsung.com>
+Date:   Fri, 28 Apr 2023 16:04:50 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst
+ mode
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        dario.binacchi@amarulasolutions.com, l.stach@pengutronix.de,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAHCN7x+QU29Wv9TQEANhbxLcL4jCZUKbk+uGu2sOwhCcTt798A@mail.gmail.com>
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTZxjNe796S6xcS03fsA9dRRcwK+pIdtmmcZGxa2bizBIykIi13CEO
+        sGtlU4ZJxQ1pUSh1GaPlFiIwWDeKQSyfRiQbpcjA1VWlw1SdwUlKGBRacYBbuXXj33nOc07O
+        ed68JCouJqLJ7LxjrDpPkSMjIjB7//zIa6dd72duKda+To/9fh2lu92lAnrg9gWE9tb5MfqZ
+        vQKlKzrMBP3b3BRBn2sYxmmj14DRs60Ggn5UYwO00+fG6HvcKELrKuoF9M2uaoL2FZ8C9FSn
+        B9BGyyi+U8w0T3tx5nGjFmUspgGMuRKoxZhO010BYy6pwpm6nscI02rVEcxP7jqcGTC4EGbs
+        Vg/BeEsdCFO+uIUpa7MCxt/68geRaRFvZ7I52Z+x6vgdByMON9+rRlSO6OO2GwuEFvSu1QMh
+        CakE2GQLInoQQYqpJgDHuXqcH2YBtD85Gx78ALa3LIDnloo+m4BfNALodVSGVdMAmq+Z8ZBK
+        RO2AT3qdWAhj1EbYa/oK8Pwa6Kx6uMyvpVhYZPYJQjiK2gtvuazLGKWk0POwBglhCSWDd4cW
+        Ac/PY7D0jjSECWor1E/qCT0gSSG1D3aOfchL1sHTl81oqA+kAkL4fZsH51snwYnhM+ELouCE
+        o03A4xfhs84ahDecAbD2b294MACofeQJO96CY8NPl9NQKha2dMXz9DtwqOE8GqIhtRremVzD
+        l1gNjfbKMC2CJcViXr0Jmhy2/2Kv3XChBiAzrXgV04rrTSvOMf2fWwswK5Cy+ZrcLFazLY/9
+        XK5R5Gry87LkyqO5reDfr3p9yTHbARonpuV9ACFBH4AkKpOIRCfeyxSLMhUnClj10Qx1fg6r
+        6QMvkJhMKtq83akUU1mKY+wnLKti1c+3CCmM1iLp24mi0qptvqeeYP167lN36kGigLvquxqz
+        b+IX6+3CjcH15QmcdFdzHPHxjw1pyhT03Ywj6f3G+6k9qp2bI/1xuxWqI9KC8aFT7d0tWdS8
+        ZW9KVfBX3cj85RFrkeHV8j2DB2It/qYEIZfUXqKUBy92pK6qFhgT/7x/qWFhJvDFnpQYl7Ic
+        t/lnmp12VdmGjLnCSkmXZFXhrrT+xj8cFt3UptH4yGQ0cW5JfjNw/I3Bb2J3c2/Gn3V/HbV/
+        XM5deKBvT4055/9hPxG5TrOY2K17wPyVVDScPHMy6tuRaq5wSPdR7eB3ZcaXAgqJ+uQr2cm9
+        IH1q8stDS84N1BVnf8HPMkxzWLE1DlVrFP8ADwxgyBkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsVy+t/xu7rNl7xTDK4dFrK4c/s0s8Xuq93s
+        FieuL2KyuL/4M4vF/20TmS0m7pjNZnHl63s2i96l51gtJt2fwGLxZdMENovn89cxWpx8c5XF
+        4sHcm0wWnROXsFtc3jWHzeJNWyOjxfudtxgtJs27yeog5LH2431Wj5fLG5g95s06weKx99sC
+        Fo+ds+6ye8zumMnqsXjPSyaPTas62TyOXF3M6nFiwiUmjzvX9rB53O8+zuTR/9fAo2/LKkaP
+        z5vkAvij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S
+        9DLWPpjDVHBcqmLdhT9sDYwHRLsYOTkkBEwkJh5ax97FyMUhJLCUUWLO/4VsEAkZiZPTGlgh
+        bGGJP9e6wOJCAu8ZJaZ0RYHYvAJ2Ej8OnGQBsVkEVCUOzGplhIgLSpyc+QQsLiqQKnFjzx+w
+        XmEBX4lzcxrAapgFxCVuPZnPBGKLCChJ3D3zlxHkCGaB3ywSv48fY4G4aCuzxMxH38Gq2AQM
+        JbreglzBwcEpECix804wxCAzia6tXVBD5SWat85mnsAoNAvJHbOQ7JuFpGUWkpYFjCyrGEVS
+        S4tz03OLjfSKE3OLS/PS9ZLzczcxApPItmM/t+xgXPnqo94hRiYOxkOMEhzMSiK8vJXuKUK8
+        KYmVValF+fFFpTmpxYcYTYGBMZFZSjQ5H5jG8kriDc0MTA1NzCwNTC3NjJXEeT0LOhKFBNIT
+        S1KzU1MLUotg+pg4OKUamOoKFgl7ls5gnh67MKp1xaOpsj4a1kfynh3L5DpuP98o7exziTfH
+        Hh9XOr3JT7VHXLbnwpS/MgJWeWpsxvoSs0R26remBU5oSON6/WGvpbPl1tIn28UCNX0V1r9a
+        NMXm4s0lWk93f9pj/iJ+jlab5dOpJk+/TjqXyT8z9lbd2uA2D+Xpv9dvn9hXszFvmZxNw+WA
+        DWEytfLZ5SGqKnlOem8OyRxzjFjw4Hq5YVO9+4PK1k/cu4wnHW07d2fnjBl3HZ+9XJYUqbe+
+        YZnymuPrFq2xZi8xy764dWumZNXppiUPzz9wneUlJZFl6rL8SHiBJA9fvJ30q6bzAid4OH0Z
+        Nz1wWhMYmiSROGuWdSGzlBJLcUaioRZzUXEiACOK0X6rAwAA
+X-CMS-MailID: 20230428140451eucas1p14a5f254adb9477e517327cb1572b1710
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+References: <20230423121232.1345909-1-aford173@gmail.com>
+        <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
+        <20230423121232.1345909-6-aford173@gmail.com>
+        <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
+        <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
+        <343f8d25-566f-9d14-64db-4e796cc9e406@samsung.com>
+        <CAHCN7x+QU29Wv9TQEANhbxLcL4jCZUKbk+uGu2sOwhCcTt798A@mail.gmail.com>
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As I'm leaving Metrotek, hand over Lattice Slave SPI sysCONFIG FPGA
-manager and Microchip Polarfire FPGA manager maintainership duties to
-Vladimir.
+On 28.04.2023 15:35, Adam Ford wrote:
+> On Fri, Apr 28, 2023 at 7:31 AM Marek Szyprowski
+> <m.szyprowski@samsung.com> wrote:
+>> On 24.04.2023 12:00, Adam Ford wrote:
+>>> On Mon, Apr 24, 2023 at 3:25 AM Marek Szyprowski
+>>> <m.szyprowski@samsung.com> wrote:
+>>>> On 23.04.2023 14:12, Adam Ford wrote:
+>>>>> The high-speed clock is hard-coded to the burst-clock
+>>>>> frequency specified in the device tree.  However, when
+>>>>> using devices like certain bridge chips without burst mode
+>>>>> and varying resolutions and refresh rates, it may be
+>>>>> necessary to set the high-speed clock dynamically based
+>>>>> on the desired pixel clock for the connected device.
+>>>>>
+>>>>> This also removes the need to set a clock speed from
+>>>>> the device tree for non-burst mode operation, since the
+>>>>> pixel clock rate is the rate requested from the attached
+>>>>> device like an HDMI bridge chip.  This should have no
+>>>>> impact for people using burst-mode and setting the burst
+>>>>> clock rate is still required for those users.
+>>>>>
+>>>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+>>>> This one breaks Exynos-5433 based TM2e board with a DSI panel.
+>>> Marek S,
+>>>
+>>> Thank you for testing!  I knoiw there are several of us who appreciate
+>>> your testing this since it's hard to know if something broke without
+>>> hardware.  Is there any way you can tell me if the flag is set to
+>>> enable MIPI_DSI_MODE_VIDEO_BURST?
+>> TM2e board uses the DSI panel operated in command mode and handled by
+>> panel-samsung-s6e3ha2.c driver. The MIPI_DSI_MODE_VIDEO_BURST flag is
+>> not set by the driver. However, the MIPI_DSI_CLOCK_NON_CONTINUOUS flags
+>> is set there. I really have no idea if setting VIDEO_BURST would make
+>> sense together with CLOCK_NON_CONTINUOUS or not. Maybe the driver lacks
+>> setting it?
+>>
+>>
+>>> I was trying to be diligent about not breaking your boards, but
+>>> without your boards, it's difficult.  The theory was that if
+>>> MIPI_DSI_MODE_VIDEO_BURST is set and there is a burst clock set in the
+>>> device tree, it would use the burst clock.
+>>>
+>>> As a fall-back I could just simply check for the presence of the
+>>> burst_clock_rate instead of both MIPI_DSI_MODE_VIDEO_BURST and
+>>> burst_clock_rate.
+>> Maybe you should extend your check also for the
+>> MIPI_DSI_CLOCK_NON_CONTINUOUS flag? Does it make sense?
+> Looking at some of the devices that might attach in the future, It
+> appears that ti-sn65dsi86.c sets this flag.  It's a display port
+> bridge, so I would expect it to need a variable clock rate similar to
+> how the HDMI bridge that I need works.  I am concerned that I make the
+> burst clock dependent on MIPI_DSI_CLOCK_NON_CONTINUOUS, it might break
+> the Display Port bridge.
+>
+> I think it's better to just check if the samsung,burst-clock-frequency
+> is present in the device tree and use it when present.  If it's not
+> present, then fall back to the pixel clock of the connected device.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Signed-off-by: Vladimir Georgiev <v.georgiev@metrotek.ru>
----
- Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml   | 2 +-
- .../devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Right, this sounds rational.
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-index 4fb05eb84e2a..164331eb6275 100644
---- a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Lattice Slave SPI sysCONFIG FPGA manager
- 
- maintainers:
--  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+  - Vladimir Georgiev <v.georgiev@metrotek.ru>
- 
- description: |
-   Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-diff --git a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-index 527532f039ce..a157eecfb5fc 100644
---- a/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-+++ b/Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
-@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Microchip Polarfire FPGA manager.
- 
- maintainers:
--  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+  - Vladimir Georgiev <v.georgiev@metrotek.ru>
- 
- description:
-   Device Tree Bindings for Microchip Polarfire FPGA Manager using slave SPI to
+> I looked at a bunch of Exynos parts, and it looks like they all use
+> the samsung,burst-clock-frequency device tree setting.  Is that true,
+> or did I miss one?
+
+That true. All Exynos based boards with DSI panels use constant DSI 
+burst frequency defined in the device tree.
+
+
+Best regards
 -- 
-2.40.0
-
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
