@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A3D6F1643
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DFB6F1648
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345422AbjD1LAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S1345519AbjD1LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjD1LAR (ORCPT
+        with ESMTP id S229600AbjD1LBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:00:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF08E2706
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:00:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4ACFEC14;
-        Fri, 28 Apr 2023 04:01:00 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.21.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E05973F64C;
-        Fri, 28 Apr 2023 04:00:14 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 12:00:09 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3 05/60] arm64: mm: Move fixmap region above vmemmap
- region
-Message-ID: <ZEunOUCH90QvX93Z@FVFF77S0Q05N>
-References: <20230307140522.2311461-1-ardb@kernel.org>
- <20230307140522.2311461-6-ardb@kernel.org>
+        Fri, 28 Apr 2023 07:01:43 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88882706
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:01:40 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 33SB17r7034907;
+        Fri, 28 Apr 2023 19:01:07 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Fri, 28 Apr 2023 19:01:01 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
+Subject: [PATCH] mm: optimization on page allocation when CMA enabled
+Date:   Fri, 28 Apr 2023 19:00:41 +0800
+Message-ID: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307140522.2311461-6-ardb@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 33SB17r7034907
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 03:04:27PM +0100, Ard Biesheuvel wrote:
-> Move the fixmap region above the vmemmap region, so that the start of
-> the vmemmap delineates the end of the region available for vmalloc and
-> vmap allocations and the randomized placement of the kernel and modules.
-> 
-> In a subsequent patch, we will take advantage of this to reclaim most of
-> the vmemmap area when running a 52-bit VA capable build with 52-bit
-> virtual addressing disabled at runtime.
-> 
-> Note that the existing guard region of 256 MiB covers the fixmap and PCI
-> I/O regions as well, so we can reduce it 8 MiB, which is what we use in
-> other places too.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/arm64/include/asm/memory.h  | 2 +-
->  arch/arm64/include/asm/pgtable.h | 2 +-
->  arch/arm64/mm/ptdump.c           | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-As a heads-up, this will (trivially) conflict with some of the arm64 fixmap
-cleanups that'll be in v6.4-rc1, due to the FIXADDR_TOT_* changes.
+Please be notice bellowing typical scenario that commit 168676649 introduce,
+that is, 12MB free cma pages 'help' GFP_MOVABLE to keep draining/fragmenting
+U&R page blocks until they shrink to 12MB without enter slowpath which against
+current reclaiming policy. This commit change the criteria from hard coded '1/2'
+to watermark check which leave U&R free pages stay around WMARK_LOW when being
+fallback.
 
-> 
-> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-> index 6e321cc06a3c30f0..9b9e52d823beccc6 100644
-> --- a/arch/arm64/include/asm/memory.h
-> +++ b/arch/arm64/include/asm/memory.h
-> @@ -51,7 +51,7 @@
->  #define VMEMMAP_END		(VMEMMAP_START + VMEMMAP_SIZE)
->  #define PCI_IO_START		(VMEMMAP_END + SZ_8M)
->  #define PCI_IO_END		(PCI_IO_START + PCI_IO_SIZE)
-> -#define FIXADDR_TOP		(VMEMMAP_START - SZ_32M)
-> +#define FIXADDR_TOP		(ULONG_MAX - SZ_8M + 1)
+DMA32 free:25900kB boost:0kB min:4176kB low:25856kB high:29516kB
 
-Can we make this:
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ mm/page_alloc.c | 40 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 36 insertions(+), 4 deletions(-)
 
-  #define FIXADDR_TOP	(-SZ_8M)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aed..97768fe 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3071,6 +3071,39 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 
+ }
+ 
++#ifdef CONFIG_CMA
++static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
++{
++	unsigned long cma_proportion = 0;
++	unsigned long cma_free_proportion = 0;
++	unsigned long watermark = 0;
++	unsigned long wm_fact[ALLOC_WMARK_MASK] = {1, 1, 2};
++	long count = 0;
++	bool cma_first = false;
++
++	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
++	/*check if GFP_MOVABLE pass previous watermark check via the help of CMA*/
++	if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
++	{
++		alloc_flags &= ALLOC_WMARK_MASK;
++		/* WMARK_LOW failed lead to using cma first, this helps U&R stay
++		 * around low when being drained by GFP_MOVABLE
++		 */
++		if (alloc_flags <= ALLOC_WMARK_LOW)
++			cma_first = true;
++		/*check proportion for WMARK_HIGH*/
++		else {
++			count = atomic_long_read(&zone->managed_pages);
++			cma_proportion = zone->cma_pages * 100 / count;
++			cma_free_proportion = zone_page_state(zone, NR_FREE_CMA_PAGES) * 100
++				/  zone_page_state(zone, NR_FREE_PAGES);
++			cma_first = (cma_free_proportion >= wm_fact[alloc_flags] * cma_proportion
++					|| cma_free_proportion >= 50);
++		}
++	}
++	return cma_first;
++}
++#endif
+ /*
+  * Do the hard work of removing an element from the buddy allocator.
+  * Call me with the zone->lock already held.
+@@ -3087,10 +3120,9 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 		 * allocating from CMA when over half of the zone's free memory
+ 		 * is in the CMA area.
+ 		 */
+-		if (alloc_flags & ALLOC_CMA &&
+-		    zone_page_state(zone, NR_FREE_CMA_PAGES) >
+-		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
+-			page = __rmqueue_cma_fallback(zone, order);
++		if (migratetype == MIGRATE_MOVABLE) {
++			bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
++			page = cma_first ? __rmqueue_cma_fallback(zone, order) : NULL;
+ 			if (page)
+ 				return page;
+ 		}
+-- 
+1.9.1
 
-... as that would match the way we define PAGE_OFFSET (and VMEMMAP_START), and
-it removes the need for the '+1' to handle ULONG_MAX being one-off what we
-actually want to subtact from.
-
-Mark.
-
->  
->  #if VA_BITS > 48
->  #define VA_BITS_MIN		(48)
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index b6ba466e2e8a3fc7..3eff06c5d0eb73c7 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -22,7 +22,7 @@
->   *	and fixed mappings
->   */
->  #define VMALLOC_START		(MODULES_END)
-> -#define VMALLOC_END		(VMEMMAP_START - SZ_256M)
-> +#define VMALLOC_END		(VMEMMAP_START - SZ_8M)
->  
->  #define vmemmap			((struct page *)VMEMMAP_START - (memstart_addr >> PAGE_SHIFT))
->  
-> diff --git a/arch/arm64/mm/ptdump.c b/arch/arm64/mm/ptdump.c
-> index 9d1f4cdc6672ed5f..76d28056bd14920a 100644
-> --- a/arch/arm64/mm/ptdump.c
-> +++ b/arch/arm64/mm/ptdump.c
-> @@ -45,12 +45,12 @@ static struct addr_marker address_markers[] = {
->  	{ MODULES_END,			"Modules end" },
->  	{ VMALLOC_START,		"vmalloc() area" },
->  	{ VMALLOC_END,			"vmalloc() end" },
-> -	{ FIXADDR_START,		"Fixmap start" },
-> -	{ FIXADDR_TOP,			"Fixmap end" },
->  	{ VMEMMAP_START,		"vmemmap start" },
->  	{ VMEMMAP_START + VMEMMAP_SIZE,	"vmemmap end" },
->  	{ PCI_IO_START,			"PCI I/O start" },
->  	{ PCI_IO_END,			"PCI I/O end" },
-> +	{ FIXADDR_START,		"Fixmap start" },
-> +	{ FIXADDR_TOP,			"Fixmap end" },
->  	{ -1,				NULL },
->  };
->  
-> -- 
-> 2.39.2
-> 
-> 
