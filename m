@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F256F1ED0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4D26F1ED4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjD1TqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 15:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
+        id S1346338AbjD1Tr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 15:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjD1TqB (ORCPT
+        with ESMTP id S229578AbjD1Tr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 15:46:01 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603A04C0A;
-        Fri, 28 Apr 2023 12:45:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=n0HEdOXTo+zId9zo8aOubJqhnEHlrz74l1keHNz3grs=; b=dPFtxyfSmpgxLnjCLqLHRtRi5Q
-        IlUr38R8tWU1eYVrgwd8FyQmZYSYG4/NN3TPgtypJUU9YEF9nLRdbdKmRUtWFrfheU66i70Oeoqb3
-        OooIflXRd4R4KqeiBkuzPVvjAsOlTaVXnWrPL3Mu6/qCq50WftH7zhu5MBWmTZ+m8pjZu/XHYAV8b
-        mEpgHum6XhJEmQxDXyRZYFBRJL2hj5hXbW9uqRmH2sdnBOePMVLrm2BdE1iaW83Dx+Bd0Li+yh+9Z
-        ZBVL9s7rXAj7+YZ6T0tJiHl9/iSqjW6IvKSubgVOZGPgt01vrK7FlnL9f9sCobYnTpjUDQvuP7v42
-        YD/XOzHA==;
-Received: from p200300ccff0a9c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0a:9c00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1psU2M-0003xr-D8; Fri, 28 Apr 2023 21:45:46 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1psU2L-0028qt-2x;
-        Fri, 28 Apr 2023 21:45:45 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        christophe.leroy@csgroup.eu, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v2] gpiolib: fix allocation of mixed dynamic/static GPIOs
-Date:   Fri, 28 Apr 2023 21:45:41 +0200
-Message-Id: <20230428194541.510674-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
+        Fri, 28 Apr 2023 15:47:27 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2127.outbound.protection.outlook.com [40.107.220.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF8B19B9;
+        Fri, 28 Apr 2023 12:47:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ApTpUO2cFlyC1FQhC0J+wfJc2XcBBhtNJ8vkOGZpzyu2shXyRdppMqw2oD79z6z5P1g7UXyaQWDsse0Bq9mY5ARcf2TsvqLjYPnKDo836ooagZp8PkCW4lfSrc97yL7rZaov8TEvUYk3UzQlrpxFcwPuicj3FFsVicdqy3RLe6FIY+h/hIUgLYBAY48v/BLdCSghjLQO8fm/ErgmKrhumU0gHj+h5XMzg1UHvqEf1Icwu3hn6X7NLQ9qMUTcaKhcwm7e1PP8b6j+gWA2RAwJJOa+ZQyGJrCz6cDfZ8lpznhZirSaDVZIKOpSswzMfWzx2KcJcpNXYKFrkOKYI6VD2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RaFl4fqMIYsj9k8l7A1XUu8w29DTpzfQPosA5TF2tMw=;
+ b=PKppm9prbd2EOdNlK+XcNN1SdqFA56wQWRgzjNy445InnLcIkujln9YAr9Ypzk46t5vDYiO3BMc/5el9LCUrmLO7KsppdaSE5AjNL+2oPIxnDzQMg7fZHJhzLs0OpYmq13fVFpFLKZwptQZCQF0oyGiZdiTJ1S1BhwS0cjcYbCfOvPvJWhZ7LEB9kemHylA4RmfIu9RaQc133ZHpNYLlm/g2LUIy6rig/EeCLmPInzePtVhCN2ryaPaWMi5DSfhshEoyxcvcbEchhrHGRnAHWHtxjukSOgsg3giE98MUsQgkRnpZU4zibfgrFPtQ/2xox0RTIkcV91VvzLxAbUqlew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RaFl4fqMIYsj9k8l7A1XUu8w29DTpzfQPosA5TF2tMw=;
+ b=oH4vLaEjNZOAfQBJvXPFIcavxJ77oj9ken4Vl7nzJi6Y6V/OPo2ilB2oCN/uJpZuKyqPY6J2GJex6DX3Di+l/h0Ld/oNDVQgsQ9QOidW6Q0TtB2UE13P3uViajHFK18ZlejNBoTelEfz5OxyA8ALPtDEXEShiutfyDqiElh5or8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DS7PR13MB4752.namprd13.prod.outlook.com (2603:10b6:5:3a4::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 19:47:23 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 19:47:23 +0000
+Date:   Fri, 28 Apr 2023 21:47:15 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] wifi: ath10k: Use list_count_nodes()
+Message-ID: <ZEwiw+zPc7Wdyixf@corigine.com>
+References: <e6ec525c0c5057e97e33a63f8a4aa482e5c2da7f.1682541872.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6ec525c0c5057e97e33a63f8a4aa482e5c2da7f.1682541872.git.christophe.jaillet@wanadoo.fr>
+X-ClientProxiedBy: AM9P193CA0006.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::11) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4752:EE_
+X-MS-Office365-Filtering-Correlation-Id: 14456666-8ee1-47d2-2b73-08db482162ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uXAQ5g7KFywjQGWKrzVfFcx8OmHxeICAOBvUeauFiu+iNiULf9Bq1qsWhY+8L5Jh21qK9/NGOPo1tkrTzHpIjAlMPcM8GhGl7bnkX8xliU3FRpUnxyLiz2+ja3vTqY0yANrFEnEStWd4l/+VKU7gquCuOL7Z+OzC6lxUWn8JoncpP4EmpsOoYYktPclw6Njl4ayeg697l2/7TdI0BjkzhOPmV2csMVRrSD69ZNoZ4XmOC69ZzbW80pOoG4N0PZPMb7L9VnvhLaDcbf9jsX9tCu0HzStrUN0dAeDFXHoNAWz+1EhMT5nAa7soE8j4hdesOaj0aTdLGzNgODM3HHmVvXYg1hIOLQl5bBZ9geH/XsixBliyEARmOJaNE0fqEyre89meuh8FOCzrV+iAyKu2cEYwYlN0+rPMj5X6Vaam/ufmUPDhLgl9BQQXV3LtC3Vjx31sTmDFyobTP4m/AVZUgR3tgl7WV6hJGcUtq4tSHqtMU++PM1DQySbsydweoJNLFxSCdDxe6/F5ksgmqo7JuuskwENaYquyZWytTM5o9/M0/1tFP60in5aobJ3ZrH/yKBZWqSrnHDjLzUFoeEZTN8v8q1B9WbC3Kk9FhhG5istgJUF66gqjKyqXP1nSexBZZNHKAOikpAuaHyBVsPpU0w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39840400004)(366004)(136003)(346002)(451199021)(86362001)(4744005)(2906002)(36756003)(44832011)(186003)(6486002)(6666004)(6512007)(6506007)(66556008)(4326008)(6916009)(2616005)(478600001)(66476007)(316002)(5660300002)(38100700002)(41300700001)(66946007)(54906003)(8936002)(8676002)(7416002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HmNHl4RPj92g1vhf4WQAgv3QcIE6ZEzZdgxb9HCKTv93e5YD190iyxlDw5uJ?=
+ =?us-ascii?Q?c2Yrke+T/ZZPVhiJZR5Va23aem8D5l42h6wDFJtWVSB76NpWLpfeHDX4tPI6?=
+ =?us-ascii?Q?F4xnrRfIFWGUHHcIRnCMqiCgElcihBOD4TuimeltVjYpvN0nUet4rlCoHd+J?=
+ =?us-ascii?Q?vkemYcPSvqgCEWcRkIz2Li7I90k/mUDVYOIHIkSAfKKxtMSkkDeVHDMAFNbA?=
+ =?us-ascii?Q?ZzdjKQPPVI5I++ysV9UeJ3LKO7gopZLUiTGlmdI+sVCA9C9hXsIVrQS0Mvzo?=
+ =?us-ascii?Q?wHrCosrNLUU+HVrV3U+A2VAIiWX4DacFAAchQvug5YIRlUVhffVrxYKYPgt7?=
+ =?us-ascii?Q?U19anPUtnJnvbuukDyIrwktuPIjZy0RpfDNJmWdmHmh9GYmUZmITGG0Y1+Qk?=
+ =?us-ascii?Q?7ZKuLnmZ+JYfafh3DNXOn/RREuAtnzMOMZc9ZWSP5Zf8z74L8z7V3ewWptsK?=
+ =?us-ascii?Q?EUbE76WMikINX7xVpq+E10+6J24GD0Ki1GniV7sXs8eNHrZsdhBNPAS+3uZC?=
+ =?us-ascii?Q?9jY43DlPq4nviiyjYHS9itbGQftPqCzA7QQGylmeIFLOhA4WSJw9Dczq5yFk?=
+ =?us-ascii?Q?h3+HgDqe43CUG1GJbAGC8GZx9ENF3QBj+mNYuyHOBqw2HO9jroZxA1ll20WI?=
+ =?us-ascii?Q?t7s4+RdhjwirlJzTZznyNDNStSbQvDnGDKl0PykuHB1UCMtPekcfo0s8ydl6?=
+ =?us-ascii?Q?YL0kCJ6R6ZfF+X4H5NeFpaq/ZJdMm9bnGutk0C5niID36AQtPhsbuYPKysfZ?=
+ =?us-ascii?Q?P5UcJ3UPKlJ6u0Rk+XLYaqZuUWZW4u+1/GhG1qRWBBcWdiDfN2KTVbV14kYg?=
+ =?us-ascii?Q?zcPjwlHQ+KBxCWOV+9YlXWZ+AkRBvV27h7b/FLtTCzQc7U6pMZ82osnfXaQt?=
+ =?us-ascii?Q?cSO2OKzXIOLxNDWn+QNVIT9+3JUa06LE0CpPse1O7MMiF8f5gCBK2FcljiHL?=
+ =?us-ascii?Q?PU2C1b3gUhsEIO8svd0zGJFb7Br4RYMShivfeGQ26FCpVSaFX1xKlIxQrDIt?=
+ =?us-ascii?Q?3OkXL1EDqXJd8q+EC739lX5biB1QiPrAugjCQ0iXj/Z4vGCBhPAqUrLwAcVS?=
+ =?us-ascii?Q?irWMxmfWqoM9rheR4EfJDAd52qIz0rA0wnuiIuvFvZ0dQIEWoCEs4U6uS9Fb?=
+ =?us-ascii?Q?QKKPQIEba5o1uvtzsYeTRsMuYY1G8bq+J24BgaJKX1vBP5yrPFIVtdvZAJHQ?=
+ =?us-ascii?Q?Ibu5qjB2Gjv1W3uFYTE7X8YyNx+G3ozkWXvYB9Xvn/cGxXS7ivj1aRVpgy/r?=
+ =?us-ascii?Q?hxE/Bxw1ai4KSwhVXnzeVEunuE1emckXlt4pQTraRwgMEd6d1AFIOhJo5XSa?=
+ =?us-ascii?Q?PY7do0G/LwAXCqc+Ah8UbOozWXsq91XhfXb7/lxHet7S093bEp7HXCXatGc3?=
+ =?us-ascii?Q?vvD+CcyQj+YLqUBN8Ae8MAKCdqXt8bmZAhqoZVQmC/rnHc4mfjLl720GP+5R?=
+ =?us-ascii?Q?06ZaaGk0ANl+4Z+PBJ/hTMEQIpvdlOwCzLD4aDfLP8n8IQNblScHFPNnf3rY?=
+ =?us-ascii?Q?6NWW4V5dXgMDn5o+JgVVWNe6f/WNMgsAZPzJxynP7TWaQ9MgsgHyEEOqAoXv?=
+ =?us-ascii?Q?5Y5dN3fznFmoPAlOKavLQLweSrv2HMM3sPv0YL2eF3Id5Ywxh1fAKva5xr7d?=
+ =?us-ascii?Q?PUzevG8fdyvI9rl91Gh2gaD4SOR05y8l9XEXQsyiSBb91xKU1rPl5BbAntzl?=
+ =?us-ascii?Q?Yk+YiA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14456666-8ee1-47d2-2b73-08db482162ba
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 19:47:23.2073
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MSWPTu+lAtrWK3G64Tia3etA7gEsDw4UNWdlGPelNAbGMmV/dtsaHocrW40Kpqc+i4fXW/J3BOWRvmx8zCH9VQIqatnsvaaEqnxh2j2FFlk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4752
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If static allocation and dynamic allocation GPIOs are present,
-dynamic allocation pollutes the numberspace for static allocation,
-causing static allocation to fail.
-Enfore dynamic allocation above GPIO_DYNAMIC_BASE.
+On Wed, Apr 26, 2023 at 10:49:07PM +0200, Christophe JAILLET wrote:
+> ath10k_wmi_fw_stats_num_peers() and ath10k_wmi_fw_stats_num_vdevs() really
+> look the same as list_count_nodes(), so use the latter instead of hand
+> writing it.
+> 
+> The first ones use list_for_each_entry() and the other list_for_each(), but
+> they both count the number of nodes in the list.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Seen on a GTA04 when omap-gpio (static) and twl-gpio (dynamic)
-raced:
-[some successful registrations of omap_gpio instances]
-[    2.553833] twl4030_gpio twl4030-gpio: gpio (irq 145) chaining IRQs 161..178
-[    2.561401] gpiochip_find_base: found new base at 160
-[    2.564392] gpio gpiochip5: (twl4030): added GPIO chardev (254:5)
-[    2.564544] gpio gpiochip5: registered GPIOs 160 to 177 on twl4030
-[...]
-[    2.692169] omap-gpmc 6e000000.gpmc: GPMC revision 5.0
-[    2.697357] gpmc_mem_init: disabling cs 0 mapped at 0x0-0x1000000
-[    2.703643] gpiochip_find_base: found new base at 178
-[    2.704376] gpio gpiochip6: (omap-gpmc): added GPIO chardev (254:6)
-[    2.704589] gpio gpiochip6: registered GPIOs 178 to 181 on omap-gpmc
-[...]
-[    2.840393] gpio gpiochip7: Static allocation of GPIO base is deprecated, use dynamic allocation.
-[    2.849365] gpio gpiochip7: (gpio-160-191): GPIO integer space overlap, cannot add chip
-[    2.857513] gpiochip_add_data_with_key: GPIOs 160..191 (gpio-160-191) failed to register, -16
-[    2.866149] omap_gpio 48310000.gpio: error -EBUSY: Could not register gpio chip
-
-On that device it is fixed invasively by
-commit 92bf78b33b0b4 ("gpio: omap: use dynamic allocation of base")
-but lets also fix that for devices where there is still
-a mixture of static and dynamic allocation.
-
-Fixes: 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS")
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-Changes in V2:
-   handle also the case of overlapping static allocation
-   across DYNAMIC_BASE
-
- drivers/gpio/gpiolib.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 19bd23044b017..4472214fcd43a 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -193,6 +193,8 @@ static int gpiochip_find_base(int ngpio)
- 			break;
- 		/* nope, check the space right after the chip */
- 		base = gdev->base + gdev->ngpio;
-+		if (base < GPIO_DYNAMIC_BASE)
-+			base = GPIO_DYNAMIC_BASE;
- 	}
- 
- 	if (gpio_is_valid(base)) {
--- 
-2.39.2
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
