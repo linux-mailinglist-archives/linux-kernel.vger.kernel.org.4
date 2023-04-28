@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2F16F202D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 133016F2031
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345755AbjD1Vkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 17:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S1346101AbjD1Vlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 17:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjD1Vkg (ORCPT
+        with ESMTP id S1346408AbjD1Vlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 17:40:36 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1419426B9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:40:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-94f0dd117dcso40591466b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:40:33 -0700 (PDT)
+        Fri, 28 Apr 2023 17:41:45 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35EF26AF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:41:42 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-304935cc79bso196158f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682718031; x=1685310031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cUzKFSvu7gqE2LOQ2ASIII1DpQpe5hDaoMDHqLiR2FU=;
-        b=A0GGoiXYbYrTtmCNgZfBQ01fJqFC85hd8Uh+WZ9oX8tMsPx9wn9tAbHSF19ElNTYc6
-         E/hAmWo767JX0IoERMZqylIO/qpg7ItxkxLL1+mII/jE498vmu6vosL7tC3dnHjIFkbz
-         nws4fAIcQDfUN1+NmWCMqx6PGnYhlh5lAoyN0=
+        d=linaro.org; s=google; t=1682718101; x=1685310101;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E1Eb5RgOQ6G6T/ToVAmMxv+nVh8+Egk1H9oMyEZ/kPI=;
+        b=B/Iiy08dVrTDqQP14DEVLVYhm+dghBPD41nm5Po2ZOuME8qd4mRykxC/KUS1dma/B8
+         OYe4mDjjXpKf/mjMk/TINQ2iqlM7f9KPy3QRKOW4LctPN9VjIQFkKZ9bMxW3L71cjS4n
+         5Vg0L1BGlUKVQxuvhloewhVnEI5cwoh1WLquTnvm8+uN8LOIW8L5mxApE/yg0hq+CPvf
+         AxJx5nX4jrGwm5xKVJ4ZcxJLOV8AzTqeA5Rlp/1R318ochH9XwDOwv5ykAM+4socbTnM
+         3GDRpzhwcs1Yc2y0k6suRwULbbgiY2ZDeB51EF4xiUDHCQlaAuVq2nInSiOXRthJQS+q
+         hOgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682718031; x=1685310031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cUzKFSvu7gqE2LOQ2ASIII1DpQpe5hDaoMDHqLiR2FU=;
-        b=XBEcU0yWq0ARnUwVv7H2S7chiQWi6bAkYELUMyHNraaRFx02RoE1CAGuHlc5eN/gvl
-         m9UBNaKS85E8zWrWP8nATk7am8fQktAOqzTn+Q6Fs7hbfBmIBX/RtKiZjqOYYoWPtCUr
-         nYtZOJpADyiyY9frTrnLVLhDCnqHrod4xeUFTU8COpZyAz7aN7Kjf8i1i9z1yrUnmGS1
-         JYt/XwzJuJRaFCOENQxU0k4d3aWKG7+9GOK5IX4NMwWdv8fuM8h8+mCEUONyej/OG4L3
-         3krEMYCLQBdeI8omnXHbGSParvAYyadI4yEk2dTD3qAGpmE7iwnevnZViQML0RKtVSM6
-         24HQ==
-X-Gm-Message-State: AC+VfDyyAAGOsJe06z+AzqZh/3WPpXsqY40p6SaDRCcJFj5DX8QDXF8I
-        8gr+0jpta3nYCro3y6d1QB+j3jfGUjoWulEsh78BDg==
-X-Google-Smtp-Source: ACHHUZ6KXWm2YaQuMLdSI68Pb7Faq07BGxCMYH6tD0tGmuiOxzbV6lC97pXXaeszeSf+TXzYK5Yr7g==
-X-Received: by 2002:a17:907:7291:b0:957:48c8:b081 with SMTP id dt17-20020a170907729100b0095748c8b081mr6747402ejc.24.1682718031425;
-        Fri, 28 Apr 2023 14:40:31 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id h6-20020aa7c606000000b005068ea7f54dsm9643611edq.96.2023.04.28.14.40.29
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1682718101; x=1685310101;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E1Eb5RgOQ6G6T/ToVAmMxv+nVh8+Egk1H9oMyEZ/kPI=;
+        b=MZ3I1pUd1sArdde7BnK3Lon/aUCvQRmCjiP6SLaK2Pbg0zB6DgnDryikugr/djDAdy
+         lKBveQFMruhYz5PIcPhPCM3ZT3D76Ujr/M47Y5/ejj5IKvwCLdfX02S24/vQit5n0bEz
+         FuD/Bm4xPbAnZp2p/w02MC/pjT7En2WpN1ThJUpms9zdtmZqAjp1EeoLCPMQX+GeAd93
+         1nEpN5k/ySe7qDLQwXD/KlerPur6yyssLi+H/Fs9fOs5Jj4UyY1toIre7xxay1sqWKdX
+         ufIR8HEMCKUVczDmAISiN65NsADlpkOUS1E6hAh9klLqSjD0Dg6VMIQpuP8jVOvctGQH
+         XJKA==
+X-Gm-Message-State: AC+VfDxVmAy6RE8fkBiR1f12csygF+0Zy05NbqJI3epGcM2WqbxQ4wcq
+        eYacK02kLgBD/NXiLPnKnIGMXQ==
+X-Google-Smtp-Source: ACHHUZ5RGdr21sjT6mATshpr/YItNaJEnWe3GQDudidU/5n3YX0H1yKJh85dhh6eziC69IuYXUMV6Q==
+X-Received: by 2002:adf:e481:0:b0:2ee:f1f0:14bb with SMTP id i1-20020adfe481000000b002eef1f014bbmr5138651wrm.49.1682718101303;
+        Fri, 28 Apr 2023 14:41:41 -0700 (PDT)
+Received: from [10.6.26.43] ([212.140.138.202])
+        by smtp.gmail.com with ESMTPSA id d15-20020adfe84f000000b002fb60c7995esm22205929wrn.8.2023.04.28.14.41.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 14:40:30 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5050497df77so294085a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:40:29 -0700 (PDT)
-X-Received: by 2002:aa7:c1d3:0:b0:4fb:5089:6e01 with SMTP id
- d19-20020aa7c1d3000000b004fb50896e01mr253085edp.6.1682718029414; Fri, 28 Apr
- 2023 14:40:29 -0700 (PDT)
+        Fri, 28 Apr 2023 14:41:40 -0700 (PDT)
+Message-ID: <3dc6e993-bcca-4e0d-5aca-686fcc8b5b73@linaro.org>
+Date:   Sat, 29 Apr 2023 00:41:39 +0300
 MIME-Version: 1.0
-References: <Y/NmzouehvMWTPVZ@gmail.com> <ZErTyKxjGQvF6EqP@gmail.com>
-In-Reply-To: <ZErTyKxjGQvF6EqP@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Apr 2023 14:40:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
-Message-ID: <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
-Subject: Re: [GIT PULL] locking changes for v6.4
-To:     Ingo Molnar <mingo@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1 0/6] arm64: qcom: sa8775p: add support for USB
+Content-Language: en-GB
+To:     Adrien Thierry <athierry@redhat.com>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230421133922.8520-1-quic_shazhuss@quicinc.com>
+ <ZEcEGJiikEC2wIVE@fedora>
+ <CAA8EJpr27=2jAXbamN6J7yF+7G=L5Af8+XReB5UnFuihcEwMQA@mail.gmail.com>
+ <ZEgV+H3yZLp48Dlc@fedora>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <ZEgV+H3yZLp48Dlc@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 12:58=E2=80=AFPM Ingo Molnar <mingo@kernel.org> wro=
-te:
->
->  - Add non-atomic __xchg() variant, use it in a couple of places
+On 25/04/2023 21:03, Adrien Thierry wrote:
+> Hi Dmitry,
+> 
+>> Semi-random suggestion, but could you please try using
+>> clk_regmap_phy_mux/clk_regmap_phy_mux_ops for USB pipe clk src?
+> 
+> Which specific clock are you refering to? I'm not very familiar with
+> those, in the device tree I'm seeing "pipe" clocks for usb_0 and usb_1
+> phys, but not for usb_2, which is the one that's causing issues.
+> 
 
-Guys, this is insane, and completely unacceptable.
+Ah, I see. Could you please try adding the 
+'qcom,select-utmi-as-pipe-clk' property to the usb_2 host node and 
+running the test again?
 
-I pulled this, but I'm going to unpull it, because the code is
-actively wrong and ugly.
 
-It not only randomly decides to re-use a name that has existing users
-that now need to be fixed up.
+-- 
+With best wishes
+Dmitry
 
-It then *also* decides to start "preferring" this absolutely
-disgusting new name over a much more legible one in the i915 driver,
-which had this same functionality except it used a prettier name:
-
-   fetch_and_zero()
-
-But what then takes the cake for me is that this horribly ugly feature
-then didn't even get that right, and only randomly converted *some* of
-the users, with most of them remaining:
-
-  git grep fetch_and_zero drivers/gpu/drm/i915/ | wc
-     58     187    5534
-  git grep -w __xchg drivers/gpu/drm/i915/ | wc
-     22     109    1899
-
-and it looks like the only "logic" to this is that the converted ones
-were in the "gt/" subdirectory. What a random choice, but happily it
-caused a trivial conflict, and as a result I noticed how bad things
-were.
-
-Anyway, I really find this all offensively ugly and pointless. I'm not
-going to pull some "fixed" version of this. This needs to go away and
-never come back.
-
-What was so magically great about the name "__xchg" that it needed to
-be taken over by this function? And why was that legibly named version
-of it replaced so randomly?
-
-The *whole* point of two underscores is to say "don't use this - it's
-an internal implementation". That's the historical meaning, and it's
-the meaning we have in the kernel too. Two underscores means "this is
-special and doesn't do everything required" (it might need locking
-around it, for example).
-
-So then making a new interface with two underscores and thinking "we
-should now make random drivers use this" is fundamentally bogus.
-
-Look, just grep for "__xchg" in the main tree (ie the one *without*
-this change). It all makes sense. It's all clearly an internal helper
-- as marked by that double underscore - and it's not used by any
-driver or filesystem code.
-
-Exactly like K&R and God intended.
-
-                  Linus
