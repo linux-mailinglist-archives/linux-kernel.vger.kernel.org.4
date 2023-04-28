@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC406F13BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03F76F13C3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345398AbjD1JAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 05:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S1345595AbjD1JAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 05:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345600AbjD1I74 (ORCPT
+        with ESMTP id S1345505AbjD1JAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:59:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CD110C6;
-        Fri, 28 Apr 2023 01:59:54 -0700 (PDT)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Q75zQ3mPvzSv36;
-        Fri, 28 Apr 2023 16:55:30 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 28 Apr 2023 16:59:49 +0800
-Message-ID: <5bab3a6d-62e7-21d1-df18-6d0f6b031216@huawei.com>
-Date:   Fri, 28 Apr 2023 16:59:49 +0800
+        Fri, 28 Apr 2023 05:00:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939F726BA;
+        Fri, 28 Apr 2023 02:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 259206421F;
+        Fri, 28 Apr 2023 09:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 80F49C4339B;
+        Fri, 28 Apr 2023 09:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682672421;
+        bh=Bc1Uwb/0zuN2VMbm3eDNwVbtJ8iIXcfsh5Kyk9iRCkk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=CuspvcwqXvTbKKyMP8EVRkWLONFvnBdMwTFcaShCTQhCVPs12W4roIYn3BRSzqlzf
+         AbIGqUjRYePbxiP4WRBGK0ioKgE7v3Hv4xxVXMxyiVb8jOen3nX5k5YMvlnOI8CbH2
+         3W9dlwbBj9O7A8dJk3cphow9fRqvXeTsIzzadArFAUTMi6PVVT5v+tcGR1A0XgIAdl
+         ybljQLEAjPuUF8VPDBv8RrgLn37sVAhGbxYkBFcu+W2bzvx++RnOYlX316ZHxLSF5U
+         5yYj+nuIyeyEE41rUj9aaq4NtA5gF/1LGSjQui2FNi6BsPr/Hk6/7fffN8fusm/17X
+         hbsH2J+DFUVRw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 51369C41677;
+        Fri, 28 Apr 2023 09:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2] mm: hwpoison: coredump: support recovery from
- dump_user_range()
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "chu, jane" <jane.chu@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        Jens Axboe <axboe@kernel.dk>
-References: <9a9876a2-a2fd-40d9-b215-3e6c8207e711@huawei.com>
- <20230421031356.GA3048466@hori.linux.bs1.fc.nec.co.jp>
- <1bd6a635-5a3d-c294-38ce-5c6fcff6494f@huawei.com>
- <20230424064427.GA3267052@hori.linux.bs1.fc.nec.co.jp>
- <SJ1PR11MB60833E08F3C3028F7463FE19FC679@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <316b5a9e-5d5f-3bcf-57c1-86fafe6681c3@huawei.com>
- <SJ1PR11MB6083452F5EB3F1812C0D2DFEFC649@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <6b350187-a9a5-fb37-79b1-bf69068f0182@huawei.com>
- <SJ1PR11MB60833517FCAA19AC5F20FC3CFC659@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <f345b2b4-73e5-a88d-6cff-767827ab57d0@huawei.com>
- <20230427023045.GA3499768@hori.linux.bs1.fc.nec.co.jp>
- <SJ1PR11MB6083E48452A7FE8D874F5CF0FC6A9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <SJ1PR11MB6083E48452A7FE8D874F5CF0FC6A9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [net] selftests: srv6: make srv6_end_dt46_l3vpn_test more robust
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168267242132.9185.1977179149314031503.git-patchwork-notify@kernel.org>
+Date:   Fri, 28 Apr 2023 09:00:21 +0000
+References: <20230427094923.20432-1-andrea.mayer@uniroma2.it>
+In-Reply-To: <20230427094923.20432-1-andrea.mayer@uniroma2.it>
+To:     Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, stefano.salsano@uniroma2.it,
+        paolo.lungaroni@uniroma2.it, ahabdels.dev@GMAIL.COM,
+        liuhangbin@GMAIL.COM
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-On 2023/4/28 0:45, Luck, Tony wrote:
->>> But in the core dump case there is no return to user. The process is being
->>> terminated by the signal that leads to this core dump. So even though you
->>> may consider the page being accessed to be a "user" page, you can't fix
->>> it by queueing work to run on return to user.
->>
->> For coredump，the task work will be called too, see following code,
->>
->> get_signal
->> 	sig_kernel_coredump
->> 		elf_core_dump
->> 			dump_user_range
->> 				_copy_from_iter // with MC-safe copy, return without panic
->> 	do_group_exit(ksig->info.si_signo);
->> 		do_exit
->> 			exit_task_work
->> 				task_work_run
->> 					kill_me_never
->> 						memory_failure
->>
+On Thu, 27 Apr 2023 11:49:23 +0200 you wrote:
+> On some distributions, the rp_filter is automatically set (=1) by
+> default on a netdev basis (also on VRFs).
+> In an SRv6 End.DT46 behavior, decapsulated IPv4 packets are routed using
+> the table associated with the VRF bound to that tunnel. During lookup
+> operations, the rp_filter can lead to packet loss when activated on the
+> VRF.
+> Therefore, we chose to make this selftest more robust by explicitly
+> disabling the rp_filter during tests (as it is automatically set by some
+> Linux distributions).
 > 
-> Nice. I didn't realize that the exit code path would clear any pending task_work() requests.
-> But it makes sense that this happens. Thanks for filling a gap in my knowledge.
-> 
-Yep, we could be benefit from it to unify memory failure handling :)
+> [...]
 
-> -Tony
+Here is the summary with links:
+  - [net] selftests: srv6: make srv6_end_dt46_l3vpn_test more robust
+    https://git.kernel.org/netdev/net/c/46ef24c60f8e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
