@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFF06F135F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332BE6F1362
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345445AbjD1IkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 04:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S1345500AbjD1Ikl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjD1IkV (ORCPT
+        with ESMTP id S229714AbjD1Iki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:40:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC18C2717;
-        Fri, 28 Apr 2023 01:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47F00641EE;
-        Fri, 28 Apr 2023 08:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A753BC4339B;
-        Fri, 28 Apr 2023 08:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682671219;
-        bh=hzbuxjl8laM60byWXm/NuRNenKvCk0gQ+Oy81tcIESE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FGLYqCuHapTY9XsVInCh5I/0cxBGQj7EAU5VT9HYsVmY94HTVU85/7KQ81diztk3g
-         edsK8OioTQ+gVM2lEiA+0p/2vC270qVIdTi1jeaV+JhElI7R/ZOeUw8eyOGQvguAWd
-         4WRLWX4ehr2h2JcGcQNAT4okSz0i7L2T6b4kUp4PlWJa5JKm9Kcag4TcQGBebUNAES
-         diC3wgByxNGBWZfDED+CyieZUjIG4jENJGWUcWzMjPxULXlj/4/f+1jl1RKonsIhmu
-         SIHz2KO/XjHpWYSjI1ggZytmPpEbrPKDn2OO5JhH1sgpKxDFKP6aKOpYqRQFWSIBPo
-         m0lFBzyurfSTw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8B842E5FFC5;
-        Fri, 28 Apr 2023 08:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Apr 2023 04:40:38 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62393A91
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:40:34 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-214-fJcAo6zoM7-VoaW85-dBPw-1; Fri, 28 Apr 2023 09:40:32 +0100
+X-MC-Unique: fJcAo6zoM7-VoaW85-dBPw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 28 Apr
+ 2023 09:40:31 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 28 Apr 2023 09:40:31 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [GIT PULL] pidfd updates
+Thread-Topic: [GIT PULL] pidfd updates
+Thread-Index: AQHZd5MX9MAWlQde30y10AgREU+GGK9AaFPw
+Date:   Fri, 28 Apr 2023 08:40:31 +0000
+Message-ID: <eb05bc4e50464579a60b80ddfd596a6a@AcuMS.aculab.com>
+References: <20230421-kurstadt-stempeln-3459a64aef0c@brauner>
+ <CAHk-=whOE+wXrxykHK0GimbNmxyr4a07kTpG8dzoceowTz1Yxg@mail.gmail.com>
+ <20230425060427.GP3390869@ZenIV>
+ <20230425-sturheit-jungautor-97d92d7861e2@brauner>
+ <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
+In-Reply-To: <CAHk-=wjpBq2D97ih_AA0D7+KJ8ihT6WW_cn1BQc43wVgUioH2w@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net/ncsi: clear Tx enable mode when handling a Config
- required AEN
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168267121956.29185.4280925593881439460.git-patchwork-notify@kernel.org>
-Date:   Fri, 28 Apr 2023 08:40:19 +0000
-References: <20230426081350.1214512-1-chou.cosmo@gmail.com>
-In-Reply-To: <20230426081350.1214512-1-chou.cosmo@gmail.com>
-To:     Cosmo Chou <chou.cosmo@gmail.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, sam@mendozajonas.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        cosmo.chou@quantatw.com
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,30 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 26 Apr 2023 16:13:50 +0800 you wrote:
-> ncsi_channel_is_tx() determines whether a given channel should be
-> used for Tx or not. However, when reconfiguring the channel by
-> handling a Configuration Required AEN, there is a misjudgment that
-> the channel Tx has already been enabled, which results in the Enable
-> Channel Network Tx command not being sent.
-> 
-> Clear the channel Tx enable flag before reconfiguring the channel to
-> avoid the misjudgment.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2] net/ncsi: clear Tx enable mode when handling a Config required AEN
-    https://git.kernel.org/netdev/net/c/6f75cd166a5a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjUgQXByaWwgMjAyMyAxNzoyOQ0KPiANCj4g
+T24gVHVlLCBBcHIgMjUsIDIwMjMgYXQgNTozNOKAr0FNIENocmlzdGlhbiBCcmF1bmVyIDxicmF1
+bmVyQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gSGVsbCwgeW91IGNvdWxkIGV2ZW4gZXh0
+ZW5kIHRoYXQgcHJvcG9zYWwgYmVsb3cgdG8gd3JhcCB0aGUNCj4gPiBwdXRfdXNlcigpLi4uDQo+
+ID4NCj4gPiBzdHJ1Y3QgZmRfZmlsZSB7DQo+ID4gICAgICAgICBzdHJ1Y3QgZmlsZSAqZmlsZTsN
+Cj4gPiAgICAgICAgIGludCBmZDsNCj4gPiAgICAgICAgIGludCBfX3VzZXIgKmZkX3VzZXI7DQo+
+ID4gfTsNCj4gDQo+IFNvIEkgZG9uJ3QgbGlrZSB0aGlzIGV4dGVuZGVkIHZlcnNpb24sIGJ1dCB5
+b3VyIHByb3Bvc2FsIHBhdGNoIGJlbG93DQo+IGxvb2tzIGdvb2QgdG8gbWUuDQo+IA0KPiBXaHk/
+IFNpbXBseSBiZWNhdXNlIHRoZSAidHdvLXdvcmQgc3RydWN0IiBpcyBhY3R1YWxseSBhIGdvb2Qg
+d2F5IHRvDQo+IHJldHVybiB0d28gdmFsdWVzLiBCdXQgYSB0aHJlZS13b3JkIG9uZSB3b3VsZCBi
+ZSBwYXNzZWQgb24gdGhlIHN0YWNrLg0KPiANCj4gQm90aCBnY2MgYW5kIGNsYW5nIHJldHVybiBz
+bWFsbCBzdHJ1Y3RzICh3aGVyZSAic21hbGwiIGlzIGxpdGVyYWxseQ0KPiBqdXN0IHR3byB3b3Jk
+cykgaW4gcmVnaXN0ZXJzLCBhbmQgaXQncyBwYXJ0IG9mIG1vc3QgKGFsbD8pIEFCSXMgYW5kDQo+
+IHdlJ3ZlIHJlbGllZCBvbiB0aGF0IGJlZm9yZS4NCg0KSXQgaXMgZGVmaW5pdGVseSBhcmNoaXRl
+Y3R1cmUgZGVwZW5kYW50Lg0KeDg2LTY0IGFuZCBhcm0tNjQgd2lsbCByZXR1cm4gdHdvIDY0Yml0
+IHZhbHVlcyBpbiByZWdpc3RlcnMuDQp4ODYtMzIgYW5kIGFybS0zMiByZXR1cm4gdHdvIDMyYml0
+IHZhbHVlcyBvbiBzdGFjay4NCg0KUHJldHR5IG11Y2ggZXZlcnl0aGluZyBwYXNzZXMgc2hvcnQg
+c3RydWN0dXJlcyBkaXJlY3RseSBieSB2YWx1ZS4NCihJJ20gbm90IHN1cmUgYWJvdXQgc3BhcmMt
+MzIgdGhvdWdoLCBJJ20gc3VyZSBpdCBwYXNzZWQgYWxsDQpzdHJ1Y3R1cmVzIGJ5IHJlZmVyZW5j
+ZSBiYWNrIGluIHRoZSAxOTgwcykNCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBM
+YWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBU
+LCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
