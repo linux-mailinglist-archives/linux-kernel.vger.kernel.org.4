@@ -2,104 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC8B6F1080
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D71F6F1087
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344779AbjD1Cpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 22:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S1344687AbjD1CvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 22:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344379AbjD1Cpn (ORCPT
+        with ESMTP id S229963AbjD1CvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 22:45:43 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23122703
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:45:41 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-51fdc1a1270so6672498a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682649941; x=1685241941;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=shkjoVKKITZ/5MAi+590OVZBJeowg3PtxdqAgmyjXno=;
-        b=VExamBjAnyZ80vWcAl4/fkj+50jfIxFs01f7YACx4pUWweT2aOR13h5b/W1PYkE5ca
-         TWUK6/bJ/CSrRqD5DtY4G+eeg/G7euJKNdYbHrh2X8T2R8qXFQmmDsE9dHGdzXZa3+ui
-         SgdfBoBjQAhiOHkBwpQevSg9hkw+ZEEIp6JEXoK8nA+VWLswl+/M63aZ2buaDT0UVApf
-         Tlq7h/F0M1Y9lkbgKYIvLugTaBGCQreNeKIdH2onO7GBSQsZzpfo6Fh3P5Sf24Hm4hb1
-         zxTwDCRxBDJTUI2NtK1iWyLIycJVhs9D7OS5rel3yKXYW9FbdPrXt+xg9icLPMlcED8y
-         JkRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682649941; x=1685241941;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=shkjoVKKITZ/5MAi+590OVZBJeowg3PtxdqAgmyjXno=;
-        b=alx/pvnQLklOLU2coZBX7Odq3jJwNRcEl5c71dMmNEMtGGn3FJVNASQsY9c3fkmW3d
-         84gM3drWQFHUK7i8Jj0CxI7z4NiNzecPeIzhA0t2JtRkRYtyjt3H1AS3jsEKUD0LAMHf
-         tWJCjQsWqF0uMBkzfdjDwKZKh2HQKfiupudSabxB+dhU8De+H9sPdfIpCk77GwaiTDbF
-         DKMQFUyOUxYIWQ0lq+uUGO/IuKce6MafZrTnYf6VD8RlNggKrtMgWjwpPuPpikYdtkcI
-         P7EL6rku226YQW8m7Cm1VImn+tv4WWI6p3yg3jr0gJl1fXM34sNv27miAzH6rnTQhCt7
-         smyg==
-X-Gm-Message-State: AC+VfDzoeerMOSVFcQQQNha/FcbhhO5MIdPaNthlUVCoF+tsuU6NLrw2
-        Le6amxOJ3AmBsm3khGbyazVCjQz3ApPpl5u2
-X-Google-Smtp-Source: ACHHUZ58/0I26sE/2t6q2i3j0e5GQCEuSI5keu9kzniMU/YbvkwOmwqvpo58DO1Qf0gVbc/SPM0Xtw==
-X-Received: by 2002:a05:6a20:8412:b0:f3:ac88:c048 with SMTP id c18-20020a056a20841200b000f3ac88c048mr4869137pzd.7.1682649941127;
-        Thu, 27 Apr 2023 19:45:41 -0700 (PDT)
-Received: from [10.200.10.82] ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id e27-20020a630f1b000000b00502e7115cbdsm3996427pgl.51.2023.04.27.19.45.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 19:45:40 -0700 (PDT)
-Message-ID: <c7cb9cc6-591b-413a-2df1-4001ee41dea8@gmail.com>
-Date:   Fri, 28 Apr 2023 10:45:35 +0800
+        Thu, 27 Apr 2023 22:51:23 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4A2720;
+        Thu, 27 Apr 2023 19:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/xYyM2/2fZUrV7AGHMUU/V2Uxg54bIXQhTCl/g3j+5Q=; b=bb0NWY/niB+va5+6SUnPBr7MTD
+        0GNjerPbZuqTQYKebB32VcTwKMcWGV5jfs7RCjv4ZNdvAVzA3h/S70daX9uofpUSQ/GCS7/QwUMAY
+        KxrAurqgj9uX1Z7XwhKmtqLr8eUTmSHSRka6LCt53RjdIWdtEXjpg7t4PMnKgVsrH2j1p2qe4LX+R
+        OPfwuHP3MH2/lFhaB6dQ+ZV4iuhPAwZgud6icdZhZBRaxpGKXf6wWDHGy3cK/qbKeKwBdfi/4wWr+
+        Cxhkr/S8nnn3AyYjznZcPN21RQgOUJeIA4LFPvOgRfSNetyKp9Hq8JmEwhvZ2mapaxXXrAdVs7+Z5
+        78oRl9hA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1psECD-004Bcp-3V; Fri, 28 Apr 2023 02:50:53 +0000
+Date:   Fri, 28 Apr 2023 03:50:53 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Jane Chu <jane.chu@oracle.com>, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] dax: enable dax fault handler to report
+ VM_FAULT_HWPOISON
+Message-ID: <ZEs0jSYkMobnFxXg@casper.infradead.org>
+References: <20230406230127.716716-1-jane.chu@oracle.com>
+ <644aeadcba13b_2028294c9@dwillia2-xfh.jf.intel.com.notmuch>
+ <a3c1bef3-4226-7c24-905a-d58bd67b89f1@oracle.com>
+ <644b22fddc18c_1b6629488@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH 21/34] maple_tree: mas_start() reset depth on dead node
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        maple-tree@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230425140955.3834476-1-Liam.Howlett@oracle.com>
- <20230425140955.3834476-22-Liam.Howlett@oracle.com>
-From:   Peng Zhang <perlyzhang@gmail.com>
-In-Reply-To: <20230425140955.3834476-22-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <644b22fddc18c_1b6629488@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/4/25 22:09, Liam R. Howlett 写道:
-> When a dead node is detected, the depth has already been set to 1 so
-> reset it to 0.
+On Thu, Apr 27, 2023 at 06:35:57PM -0700, Dan Williams wrote:
+> Jane Chu wrote:
+> > Hi, Dan,
+> > 
+> > On 4/27/2023 2:36 PM, Dan Williams wrote:
+> > > Jane Chu wrote:
+> > >> When dax fault handler fails to provision the fault page due to
+> > >> hwpoison, it returns VM_FAULT_SIGBUS which lead to a sigbus delivered
+> > >> to userspace with .si_code BUS_ADRERR.  Channel dax backend driver's
+> > >> detection on hwpoison to the filesystem to provide the precise reason
+> > >> for the fault.
+> > > 
+> > > It's not yet clear to me by this description why this is an improvement
+> > > or will not cause other confusion. In this case the reason for the
+> > > SIGBUS is because the driver wants to prevent access to poison, not that
+> > > the CPU consumed poison. Can you clarify what is lost by *not* making
+> > > this change?
+> > 
+> > Elsewhere when hwpoison is detected by page fault handler and helpers as 
+> > the direct cause to failure, VM_FAULT_HWPOISON or 
+> > VM_FAULT_HWPOISON_LARGE is flagged to ensure accurate SIGBUS payload is 
+> > produced, such as wp_page_copy() in COW case, do_swap_page() from 
+> > handle_pte_fault(), hugetlb_fault() in hugetlb page fault case where the 
+> > huge fault size would be indicated in the payload.
+> > 
+> > But dax fault has been an exception in that the SIGBUS payload does not 
+> > indicate poison, nor fault size.  I don't see why it should be though,
+> > recall an internal user expressing confusion regarding the different 
+> > SIGBUS payloads.
 > 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-Reviewed-by: Peng Zhang <zhangpeng.00@bytedance.com>
-> ---
->   lib/maple_tree.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 35c6e12ca9482..1542274dc2b7f 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -1397,9 +1397,9 @@ static inline struct maple_enode *mas_start(struct ma_state *mas)
->   
->   		mas->min = 0;
->   		mas->max = ULONG_MAX;
-> -		mas->depth = 0;
->   
->   retry:
-> +		mas->depth = 0;
->   		root = mas_root(mas);
->   		/* Tree with nodes */
->   		if (likely(xa_is_node(root))) {
+> ...but again this the typical behavior with block devices. If a block
+> device has badblock that causes page cache page not to be populated
+> that's a SIGBUS without hwpoison information. If the page cache is
+> properly populated and then the CPU consumes poison that's a SIGBUS with
+> the additional hwpoison information.
+
+I'm not sure that's true when we mmap().  Yes, it's not consistent with
+-EIO from read(), but we have additional information here, and it's worth
+providing it.  You can think of it as *in this instance*, the error is
+found "in the page cache", because that's effectively where the error
+is from the point of view of the application?
