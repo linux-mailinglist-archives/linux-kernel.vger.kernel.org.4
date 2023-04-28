@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF0F6F1F87
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1E86F1F0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346676AbjD1Ugk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 16:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
+        id S1346186AbjD1UA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346647AbjD1Ug3 (ORCPT
+        with ESMTP id S229572AbjD1UA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:36:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5259A3A8D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682714130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QTPz7eQjXeuR2VgVi4hv9A45H01RIqdRghA7/gA//1E=;
-        b=hvCEM2yRKSgwNyssEPZKS1vrnwme7mSXdXF3UuXjeFdSn+4+9hh+5jqOT7CSC+ap0bAAxO
-        AKy/gnA47HaX5PwAYi7IXwL7zOsrUk3+gCdZR4c6onQlsUQzYhlLouit73/RjUU7Xsyan9
-        6sGTVRU+8tpdnrxdONkAScnriGZSr8I=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-246-5uAOG3w1NYOsBmwqUHP3Og-1; Fri, 28 Apr 2023 16:35:29 -0400
-X-MC-Unique: 5uAOG3w1NYOsBmwqUHP3Og-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-74a9043b68bso15621185a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:35:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682714128; x=1685306128;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QTPz7eQjXeuR2VgVi4hv9A45H01RIqdRghA7/gA//1E=;
-        b=WQOsKZwz4UHLdA47adNZLNTHVLzef/aHVMvdpGWjor6K9eUxa2VwboJwg8gHMoUcb1
-         fIkZDw6MNXt+QDWCq5UKHVM7RQwLconfCwDU4CFTD8vltuThiad7TlRcSnsq3vnySxjq
-         FMLU888UyRUXKTQvmO5IWIZaRUp2qpyZ0l+M9Kgp69WVBbpY+ZEovX/rAhtXjEL0LsER
-         guKof97lUHX4iUwsx2bGrO3FJotZEwTfdoZ7qI0hOCWw4Nf6Mj4L7creLluDkZzksij2
-         /ho1RxfdhYYFANpvhquuB2xLSc2IVlRd/Fl9/j+xoMCzUmuoH0/Ahk7DPQulPnOEka2y
-         Xs3g==
-X-Gm-Message-State: AC+VfDwBymKOk7OAdnqtjwEsKXaDw1pY2FDiFj0Dg1PwE4HB2WDy/vkx
-        FaOgKSuBpwMWeTp7elIV2I7wH+ZkL87CRBUP1Yp+Y/ekgUaw/97QD5uNNDiseagEAsYXjZNuk2o
-        mzRJ/4aR8gMiP19LcggoSkAmr
-X-Received: by 2002:a05:622a:394:b0:3ef:3dac:44e7 with SMTP id j20-20020a05622a039400b003ef3dac44e7mr9906864qtx.2.1682714128580;
-        Fri, 28 Apr 2023 13:35:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5XGP3FpKHgGxVj6RqKSawttiSiOXczzRy5FAhiPQUMuftmadSZcMvSRWAY2z0hjSDX5E7ACQ==
-X-Received: by 2002:a05:622a:394:b0:3ef:3dac:44e7 with SMTP id j20-20020a05622a039400b003ef3dac44e7mr9906842qtx.2.1682714128334;
-        Fri, 28 Apr 2023 13:35:28 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id a145-20020ae9e897000000b0074de7b1fe1csm7044947qkg.17.2023.04.28.13.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 13:35:27 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] igb: Define igb_pm_ops conditionally on CONFIG_PM
-Date:   Fri, 28 Apr 2023 16:00:09 -0400
-Message-Id: <20230428200009.2224348-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Fri, 28 Apr 2023 16:00:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3168D211C;
+        Fri, 28 Apr 2023 13:00:55 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SIwwwU018235;
+        Fri, 28 Apr 2023 20:00:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=enCByRO6b0ykPwBxtn+l8VqQuuFD2VtVHiDgiu6XVHo=;
+ b=eWiujVF7bZbcaHy41a19XjWFTl3mRB9mhGmlBFlWkTTKK8Blaoev0rKESG1l+lkF9ncg
+ Ps2yuKq2uJpxQa9fqkjhjFaBoaEk3tYlDtJKGQvICYjhJeaYVssiXUqS/jftBefPMRhS
+ Q8/7MXrDAwmS+30QVzUEJK4NTcdZubn3qhYlZLYcQ/B96ztkQpSR/eJDoPRa2XhKmkn0
+ 2RaczffyC8CWZJkM+qTqGqj7EQRuZ/tZXCL2+g6u5v2lrUKtUbAUncRzOh7OMhN67PnB
+ sU48O40lyqyhPE1GjYFEkinPUf+YkUo3Ybloni0vOm/mkTcPF1xF60/c82xRujyCyhXl MQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8k0w8813-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 20:00:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33SK0jRm021856
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 20:00:45 GMT
+Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 28 Apr 2023 13:00:44 -0700
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        Jordan Crouse <jordan@cosmicpenguin.net>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: Re: (subset) [PATCH v3 0/3] drm/msm/dpu: Drop useless for-loop HW block lookup
+Date:   Fri, 28 Apr 2023 13:00:30 -0700
+Message-ID: <168271198315.17728.9108874132629533053.b4-ty@quicinc.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230418-dpu-drop-useless-for-lookup-v3-0-e8d869eea455@somainline.org>
+References: <20230418-dpu-drop-useless-for-lookup-v3-0-e8d869eea455@somainline.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: A-vLA0Ir98ixbOmExFvWTHl_fL94vnIj
+X-Proofpoint-ORIG-GUID: A-vLA0Ir98ixbOmExFvWTHl_fL94vnIj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_06,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=738 clxscore=1015 impostorscore=0 priorityscore=1501
+ mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304280163
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For s390, gcc with W=1 reports
-drivers/net/ethernet/intel/igb/igb_main.c:186:32: error:
-  'igb_pm_ops' defined but not used [-Werror=unused-const-variable=]
-  186 | static const struct dev_pm_ops igb_pm_ops = {
-      |                                ^~~~~~~~~~
 
-The only use of igb_pm_ops is conditional on CONFIG_PM.
-The definition of igb_pm_ops should also be conditional on CONFIG_PM
+On Wed, 26 Apr 2023 01:11:08 +0200, Marijn Suijten wrote:
+> Doing a for loop in every DPU HW block driver init to find a catalog
+> entry matching the given ID is rather useless if the init function
+> called by RM already has that catalog entry pointer, and uses exactly
+> its ID to drive this init and for loop.  Remove all that machinery to
+> drop quite some lines of unnecessarily-complicated code, and the
+> fallibility that comes with it, by simply giving _init() the catalog
+> entry pointers straight away.
+> 
+> [...]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/ethernet/intel/igb/igb_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+Applied, thanks!
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 58872a4c2540..c5cdb880774d 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -183,11 +183,13 @@ static int igb_resume(struct device *);
- static int igb_runtime_suspend(struct device *dev);
- static int igb_runtime_resume(struct device *dev);
- static int igb_runtime_idle(struct device *dev);
-+#ifdef CONFIG_PM
- static const struct dev_pm_ops igb_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(igb_suspend, igb_resume)
- 	SET_RUNTIME_PM_OPS(igb_runtime_suspend, igb_runtime_resume,
- 			igb_runtime_idle)
- };
-+#endif
- static void igb_shutdown(struct pci_dev *);
- static int igb_pci_sriov_configure(struct pci_dev *dev, int num_vfs);
- #ifdef CONFIG_IGB_DCA
+[1/3] drm/msm/dpu: Assign missing writeback log_mask
+      https://gitlab.freedesktop.org/abhinavk/msm/-/commit/a432fc31f03d
+
+Best regards,
 -- 
-2.27.0
-
+Abhinav Kumar <quic_abhinavk@quicinc.com>
