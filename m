@@ -2,173 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2B56F1193
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934D66F1195
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbjD1GBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 02:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S1345317AbjD1GEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345071AbjD1GBq (ORCPT
+        with ESMTP id S229512AbjD1GEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:01:46 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE5F2D65
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:01:43 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32f23e2018fso63532595ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:01:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682661703; x=1685253703;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RADR7osfU6tYqXb0l/8u4uv1x29ciz4ia9oQNvcCWng=;
-        b=Z6KNUdOhe1vbZgfIU8Qr2ka3tvIGzKidiAJ6Z25cckLP2oW8KC73XzeBtI6sFuklBH
-         M89ZkJYXScXaePJ5gVLwsrttKc8PCOSjmDE2oSYVcDzOCtpiK4+ECBQILX4c0z4MgbH6
-         V//S/uk4DzYWb/jBK9S335QCucKUJoGZoQ38XpZ0XX2tnkHOXp/KZIWlVxhbN1z7CpxF
-         kU8RMVesn/A/NO1U4qBr/uR2r0toNX0957Bad3/2DVDnA4AxhK/v9nHUugKXkXg6Ds8u
-         P1zgORNPDOe8tXVTPd9NmcANCC1MZY6Ct3gGvIwCOx8wKAKXF1X8Ta0gTfXGNM9p7vUK
-         setQ==
-X-Gm-Message-State: AC+VfDzOxdP6OXIeYvqtw76G/j+95EoAuYXYpydzywhSNcQulXKV4JDJ
-        fSVu7mzQr/IXBoRWgJb5/OWMjbK1ze9AUM5E8/YvPYQkHR1A
-X-Google-Smtp-Source: ACHHUZ7PPsw6gW2hGgmZp2GgG6jG8jLffk1LukuhkSm8fL1OoU7BVoh1vrPtriARxNK+dMdTZpNKdFt870NrItFmn0oS0JkGLKD0
+        Fri, 28 Apr 2023 02:04:02 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DCE2689;
+        Thu, 27 Apr 2023 23:03:59 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 08:03:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1682661836; bh=9Lg6IUGjZgJaTrtUJOs/dW6AatMFh0yFMB4mzaohHWY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DrziE8tag3Hdcer/9g1N1DTMpG1X3ET7uGNIELbwWWESfARzWLLmlotqgJhBhBW48
+         gycco6BdLEFqQm1MLlZiq/WgeXRW4XuHY1be8//oLoKkSno2WSbzjFI1aZUQhRyXOh
+         QC+UEp2JwhGz8VG8kXWwXgMloTe/4UoEodoUs9+Y=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 12/14] HP BIOSCFG driver - surestart-attributes
+Message-ID: <479b18e3-a35b-45c7-8c8a-cd30af646977@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-13-jorge.lopez2@hp.com>
+ <cf54c6f4-d177-4904-82ee-9d33566fb920@t-8ch.de>
+ <CAOOmCE8rpA=XvWBxcyRVu_gOHie3qN0E15Rs9bLfhb6tPZ7tyg@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:701:b0:760:ee03:7e95 with SMTP id
- f1-20020a056602070100b00760ee037e95mr6500715iox.1.1682661702937; Thu, 27 Apr
- 2023 23:01:42 -0700 (PDT)
-Date:   Thu, 27 Apr 2023 23:01:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014b32705fa5f3585@google.com>
-Subject: [syzbot] [btrfs?] general protection fault in btrfs_orphan_cleanup
-From:   syzbot <syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOOmCE8rpA=XvWBxcyRVu_gOHie3qN0E15Rs9bLfhb6tPZ7tyg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2023-04-27 17:17:57-0500, Jorge Lopez wrote:
+> On Sun, Apr 23, 2023 at 7:16 AM Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> >
+> > On 2023-04-20 11:54:52-0500, Jorge Lopez wrote:
+> > >  .../x86/hp/hp-bioscfg/surestart-attributes.c  | 130 ++++++++++++++++++
+> > >  1 file changed, 130 insertions(+)
+> > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+> > >
+> > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+> > > new file mode 100644
+> > > index 000000000000..72952758ffe3
+> > > --- /dev/null
+> > > +++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+> > > @@ -0,0 +1,130 @@
 
-syzbot found the following issue on:
+<snip>
 
-HEAD commit:    6e98b09da931 Merge tag 'net-next-6.4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17699f80280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5b762354749a3d5d
-dashboard link: https://syzkaller.appspot.com/bug?extid=2e15a1e4284bf8517741
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > +
+> > > +/*
+> > > + * audit_log_entries_show() - Return all entries found in log file
+> > > + */
+> > > +static ssize_t audit_log_entries_show(struct kobject *kobj,
+> > > +                                   struct kobj_attribute *attr, char *buf)
+> > > +{
+> > > +     int ret;
+> > > +     int i;
+> > > +     u32 count = 0;
+> > > +
+> > > +     // Get the number of event logs
+> > > +     ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
+> > > +                                HPWMI_SURESTART,
+> > > +                                &count, 1, sizeof(count));
+> > > +
+> > > +     /*
+> > > +      * The show() api will not work if the audit logs ever go
+> > > +      *  beyond 4KB
+> > > +      */
+> > > +     if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
+> > > +             return -EFAULT;
+> >
+> > The error code seems not to match.
+> >
+> 
+> Changing error to -EINVAL
 
-Unfortunately, I don't have any reproducer for this issue yet.
+-EIO seems better.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8ad082c4dcdf/disk-6e98b09d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/96565e4d870d/vmlinux-6e98b09d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/cfcfe15601e5/bzImage-6e98b09d.xz
+The problem is not due to some value a user passed but an unhandled from
+the hardware.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com
+> 
+> > Instead of not returning any data, why not show as many results as
+> > possible?
+> >
+> 
+> if count * LOG_ENTRY_SIZE > PAGE_SIZE then I prefer to return an error.
+> if the count is correct but a failure occurs while reading individual
+> audit logs then we will return a partial list of all audit logs
+> This changes will be included in Version 12
 
-general protection fault, probably for non-canonical address 0xdffffc000000001a: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000d0-0x00000000000000d7]
-CPU: 0 PID: 17330 Comm: syz-executor.2 Not tainted 6.3.0-syzkaller-07919-g6e98b09da931 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1764
-Code: d6 80 92 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 e2 49 e9 ff 48 89 1c 24 48 8b 1b 48
-RSP: 0000:ffffc90014d47a10 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
-RDX: ffffc900131c3000 RSI: 000000000002326c RDI: 000000000002326d
-RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed1005547aef
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802d122000
-R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
-FS:  00007f523909c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4e34428000 CR3: 0000000031e52000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_orphan_cleanup+0xa55/0xcf0 fs/btrfs/inode.c:3629
- create_snapshot+0x520/0x7e0 fs/btrfs/ioctl.c:852
- btrfs_mksubvol+0x5d0/0x750 fs/btrfs/ioctl.c:994
- btrfs_mksnapshot+0xb5/0xf0 fs/btrfs/ioctl.c:1040
- __btrfs_ioctl_snap_create+0x338/0x450 fs/btrfs/ioctl.c:1293
- btrfs_ioctl_snap_create+0x136/0x190 fs/btrfs/ioctl.c:1320
- btrfs_ioctl+0xbbc/0xd40
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f523828c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f523909c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f52383abf80 RCX: 00007f523828c169
-RDX: 00000000200000c0 RSI: 0000000050009401 RDI: 0000000000000009
-RBP: 00007f52382e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe28ec0fbf R14: 00007f523909c300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1764
-Code: d6 80 92 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 e2 49 e9 ff 48 89 1c 24 48 8b 1b 48
-RSP: 0000:ffffc90014d47a10 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
-RDX: ffffc900131c3000 RSI: 000000000002326c RDI: 000000000002326d
-RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed1005547aef
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802d122000
-R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
-FS:  00007f523909c700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe5b93ff000 CR3: 0000000031e52000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	80 92 ff 48 85 ed 0f 	adcb   $0xf,-0x127ab701(%rdx)
-   7:	84 56 03             	test   %dl,0x3(%rsi)
-   a:	00 00                	add    %al,(%rax)
-   c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  13:	fc ff df
-  16:	48 8d 9d d8 00 00 00 	lea    0xd8(%rbp),%rbx
-  1d:	48 89 d9             	mov    %rbx,%rcx
-  20:	48 c1 e9 03          	shr    $0x3,%rcx
-  24:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
-* 29:	80 3c 01 00          	cmpb   $0x0,(%rcx,%rax,1) <-- trapping instruction
-  2d:	74 08                	je     0x37
-  2f:	48 89 df             	mov    %rbx,%rdi
-  32:	e8 e2 49 e9 ff       	callq  0xffe94a19
-  37:	48 89 1c 24          	mov    %rbx,(%rsp)
-  3b:	48 8b 1b             	mov    (%rbx),%rbx
-  3e:	48                   	rex.W
+What prevents the firmware from having more log entries?
+Wouldn't these audit log entries not accumulate for each logged
+operation over the lifetime of the device / boot?
 
+This would make the interface unusable as soon as there are more
+entries.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > +
+> > > +     if (ret < 0)
+> > > +             return ret;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+And this should first validate ret and then count.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+> > > +
+> > > +     /*
+> > > +      * We are guaranteed the buffer is 4KB so today all the event
+> > > +      * logs will fit
+> > > +      */
+> > > +
+> > > +     for (i = 0; ((i < count) & (ret >= 0)); i++) {
+> >
+> > &&
+> >
+> > Better yet, pull the condition ret >= 0 into the body, as an else-branch
+> > for the existing check.
+> >
+> 
+> Done!
+> 
+> > > +             *buf = (i + 1);
+> >
+> > Isn't this directly overwritten by the query below?
+> 
+> buf input value indicates the audit log to be read hence the reason
+> why it is overwritten.
+> This is an expected behavior.
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+So this is read by the HPWMI_SURESTART_GET_LOG method in the firmware?
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+Make sense but needs a comment.
 
-If you want to undo deduplication, reply with:
-#syz undup
+> >
+> > > +             ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
+> > > +                                        HPWMI_SURESTART,
+> > > +                                        buf, 1, 128);
+> > > +             if (ret >= 0)
+> > > +                     buf += LOG_ENTRY_SIZE;
+> >
+> > So 128 bytes are read but only the first 16 bytes are preserved?
+> >
+> > The documentation says that each entry has 128 bytes in the file.
+> > And that they are separated by ";", which is not implemented.
+> 
+> The statement will be removed from documentation  (separated by ";")
+> audit log size is 16 bytes.
+> >
+> > Can the audit-log not contain all-zero bytes?
+> > If it does this would need to be a bin_attribute.
+> 
+> Bytes 16-127 are ignored and not used at this time.  If the audit log
+> changes, then the driver will need to change to accommodate the new
+> audit log size.
+
+buf is not guaranteed to have 128 bytes left for this data.
+
+For example if this is entry number 253 we are at offset 253 * 16 = 4048
+in the sysfs buffer. Now hw_wmi_perform_query may try to write to 4048 +
+127 = 4175 which is out of bounds for the buf of size 4096.
+
+Writing first to a stack buffer would be better,
+or pass outsize = LOG_ENTRY_SIZE.
+
+> The audit log file cannot contain all zero bytes.
+
+I doublechecked this and zero bytes seem to also be fine in normal text
+attributes.
+
+> > > +   return (count * LOG_ENTRY_SIZE);
+
+If one of the calls to hp_wmi_perform_query() fails this return value is wrong,
+it does not reflect the amount of actually written data.
