@@ -2,124 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3398A6F1B3B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEB96F174E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346253AbjD1POA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
+        id S1345520AbjD1MNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 08:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjD1PN6 (ORCPT
+        with ESMTP id S229866AbjD1MNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:13:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471451A2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682694800;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=depf0vqfZUKkwnLh+yDxi5hRj+V4M9FQr1DR9klBV44=;
-        b=brXlhn7b/BBiMK2KNduYL9O6t9L5Tryc4LhY3TuGjd3e6Tx3z0WcpsK2Dhf7IgB2GK57mq
-        NFTPQy3IBtuJ6SQijZEfiXTRumKAcXiNTSQJmHzgV2j3AJciyKEXadMZyyDis205LXWWB3
-        wyWxBzgoi3UgI0DzzTpaeple1gKosDQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-rsFu4KFiMwW5shpA2_Z7aQ-1; Fri, 28 Apr 2023 11:13:14 -0400
-X-MC-Unique: rsFu4KFiMwW5shpA2_Z7aQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f1763fac8bso64479805e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:13:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682694791; x=1685286791;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=depf0vqfZUKkwnLh+yDxi5hRj+V4M9FQr1DR9klBV44=;
-        b=E6HwtCr6R06h2fjpFPzslXWq6HlGc3XK1lY7c0nAZxzS17Hapnfs4DOE02AOmhN4ex
-         l8v7Jlgyrtb7zdcbGVICyraWjaW1BxQGbVg4Aj2CJKbkE6ZMAF+Z6DIOMgk+kDFCJWsA
-         9M62A+yAi0+AxqTUv+FJ3AYPcxiu99AYiz3pDAJdGPHj+TbVXxZ8AD+1FP7qSihkTr2d
-         avZWw15Xm+Qan0xoOj+vY079ZHDFXmCR3i4A7OjZ7CkTN1hkSDa+Y3SgCoJlgLkltx3l
-         B0VkzjVnWESOqTDUo1rNZ0uQY8iKeUsutr/G9EfJbg2LP2zaCUb9+SqV1jgNrQN0wSd6
-         eClg==
-X-Gm-Message-State: AC+VfDyXEBGwkqUPXeQHvlN9K6Esn5j1NA50rb1mw3Qo+pQ6vGoJlUAv
-        UWOrLeSOIebIwUCiqgLZn1ifoqIEhlGqm/7xwM2G/ABk4ny1zzQspWFmfz8mjfsAa9xD5BE81A1
-        3hADh6+OTMwNYgUiKbzsapNZa
-X-Received: by 2002:a7b:cb8f:0:b0:3f1:885f:2e52 with SMTP id m15-20020a7bcb8f000000b003f1885f2e52mr4523095wmi.16.1682694790743;
-        Fri, 28 Apr 2023 08:13:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5A46oc6/5KsPhnjzI9jqw0Qx/rYGoBNxjyg10n7h76H5Gcv8U/7NgNFGUbNeZYthhJy5Najw==
-X-Received: by 2002:a7b:cb8f:0:b0:3f1:885f:2e52 with SMTP id m15-20020a7bcb8f000000b003f1885f2e52mr4523060wmi.16.1682694790337;
-        Fri, 28 Apr 2023 08:13:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
-        by smtp.gmail.com with ESMTPSA id k18-20020a05600c0b5200b003edf2dc7ca3sm24464915wmr.34.2023.04.28.08.13.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 08:13:09 -0700 (PDT)
-Message-ID: <a8561203-a4f3-4b3d-338a-06a60541bd6b@redhat.com>
-Date:   Fri, 28 Apr 2023 17:13:07 +0200
+        Fri, 28 Apr 2023 08:13:37 -0400
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B215D1726;
+        Fri, 28 Apr 2023 05:13:34 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:8a85:0:640:8fc9:0])
+        by forward500b.mail.yandex.net (Yandex) with ESMTP id 7B71D5EB59;
+        Fri, 28 Apr 2023 15:13:32 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UDIqPQ1DRSw0-oizJTPZv;
+        Fri, 28 Apr 2023 15:13:31 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682684011;
+        bh=8/DsglW6bXdL6cKM+snErWK1zkh/4xaDsTI58/cmNVI=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=TJwmrTCcVjrFrr3pAzJ629AteXtzNuVp9rAvtkWbI8aOWxvUiGt62HaU1oBYn/IUz
+         IPICn1gnZTN/TY61XhL2BLxp7IWtwIFXOr3iX+z/upMRANUUGYm8C8d24THa1YgWMp
+         ht8TU9U/75ncMus/ytq78TOG1VrJT6W/0gbTg+pE=
+Authentication-Results: mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <90ad7d369ec3cae132245aa75daf460b90ec7b4e.camel@maquefel.me>
+Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>,
+        support@embeddedTS.com
+Date:   Fri, 28 Apr 2023 18:13:31 +0300
+In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-35-nikita.shubin@maquefel.me>
+         <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
- <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
- <f60722d4-1474-4876-9291-5450c7192bd3@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f60722d4-1474-4876-9291-5450c7192bd3@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,195 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+Hello Arnd!
 
->> This change has the potential to break existing setups. Simple example:
->> libvirt domains configured for file-backed VM memory that also has a vfio
->> device configured. It can easily be configured by users (evolving VM
->> configuration, copy-paste etc.). And it works from a VM perspective, because
->> the guest memory is essentially stale once the VM is shutdown and the pages
->> were unpinned. At least we're not concerned about stale data on disk.
->>
->> With your changes, such VMs would no longer start, breaking existing user
->> setups with a kernel update.
-> 
-> Which vfio vm_ops are we talking about? vfio_pci_mmap_ops for example
-> doesn't specify page_mkwrite or pfn_mkwrite. Unless you mean some arbitrary
-> file system in the guest?
+On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
+> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
+> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has
+> > been
+> > my testing target for ep93xx device support.
+> >=20
+> > Also inluded device tree for Liebherr BK3.1 board through it's not
+> > a
+> > complete support.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+>=20
+> Can you describe which parts are missing for BK3.1 in the
+> changelog? I'm fairly sure that Liebherr is still supporting
+> this board, but I don't have a contact to add to Cc here.
 
-Sorry, you define a VM to have its memory backed by VM memory and, at 
-the same time, define a vfio-pci device for your VM, which will end up 
-long-term pinning the VM memory.
+The current dt implementation is missing:
 
-> 
-> I may well be missing context on this so forgive me if I'm being a little
-> dumb here, but it'd be good to get a specific example.
+- I2S
+- MMC on SPI
 
-I was giving to little details ;)
+I will add those nodes so it will be a complete dt, however i have no
+possibility to test it.
 
-[...]
 
->>
->> I know, Jason und John will disagree, but I don't think we want to be very
->> careful with changing the default.
->>
->> Sure, we could warn, or convert individual users using a flag (io_uring).
->> But maybe we should invest more energy on a fix?
-> 
-> This is proactively blocking a cleanup (eliminating vmas) that I believe
-> will be useful in moving things forward. I am not against an opt-in option
-> (I have been responding to community feedback in adapting my approach),
-> which is the way I implemented it all the way back then :)
-
-There are alternatives: just use a flag as Jason initially suggested and 
-use that in io_uring code. Then, you can also bail out on the GUP-fast 
-path as "cannot support it right now, never do GUP-fast".
-
-IMHO, this patch is not a prereq.
-
-> 
-> But given we know this is both entirely broken and a potential security
-> issue, and FOLL_LONGTERM is about as egregious as you can get (user
-> explicitly saying they'll hold write access indefinitely) I feel it is an
-> important improvement and makes clear that this is not an acceptable usage.
-> 
-> I see Jason has said more on this also :)
-> 
->>
->>
->>
->>
->>> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
->>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
->>> ---
->>>    include/linux/mm.h |  1 +
->>>    mm/gup.c           | 41 ++++++++++++++++++++++++++++++++++++++++-
->>>    mm/mmap.c          | 36 +++++++++++++++++++++++++++---------
->>>    3 files changed, 68 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>> index 37554b08bb28..f7da02fc89c6 100644
->>> --- a/include/linux/mm.h
->>> +++ b/include/linux/mm.h
->>> @@ -2433,6 +2433,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
->>>    #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
->>>    					    MM_CP_UFFD_WP_RESOLVE)
->>>
->>> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
->>>    int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
->>>    static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
->>>    {
->>> diff --git a/mm/gup.c b/mm/gup.c
->>> index 1f72a717232b..d36a5db9feb1 100644
->>> --- a/mm/gup.c
->>> +++ b/mm/gup.c
->>> @@ -959,16 +959,51 @@ static int faultin_page(struct vm_area_struct *vma,
->>>    	return 0;
->>>    }
->>>
->>> +/*
->>> + * Writing to file-backed mappings which require folio dirty tracking using GUP
->>> + * is a fundamentally broken operation, as kernel write access to GUP mappings
->>> + * do not adhere to the semantics expected by a file system.
->>> + *
->>> + * Consider the following scenario:-
->>> + *
->>> + * 1. A folio is written to via GUP which write-faults the memory, notifying
->>> + *    the file system and dirtying the folio.
->>> + * 2. Later, writeback is triggered, resulting in the folio being cleaned and
->>> + *    the PTE being marked read-only.
->>> + * 3. The GUP caller writes to the folio, as it is mapped read/write via the
->>> + *    direct mapping.
->>> + * 4. The GUP caller, now done with the page, unpins it and sets it dirty
->>> + *    (though it does not have to).
->>> + *
->>> + * This results in both data being written to a folio without writenotify, and
->>> + * the folio being dirtied unexpectedly (if the caller decides to do so).
->>> + */
->>> +static bool writeable_file_mapping_allowed(struct vm_area_struct *vma,
->>> +					   unsigned long gup_flags)
->>> +{
->>> +	/* If we aren't pinning then no problematic write can occur. */
->>> +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
->>> +		return true;
->>
->> FOLL_LONGTERM only applies to FOLL_PIN. This check can be dropped.
-> 
-> I understand that of course (well maybe not of course, but I mean I do, I
-> have oodles of diagrams referencing this int he book :) This is intended to
-> document the fact that the check isn't relevant if we don't pin at all,
-> e.g. reading this you see:-
-> 
-> - (implicit) if not writing or anon we're good
-> - if not pin we're good
-> - ok we are only currently checking one especially egregious case
-> - finally, perform the dirty tracking check.
-> 
-> So this is intentional.
-> 
->>
->>> +
->>> +	/* We limit this check to the most egregious case - a long term pin. */
->>> +	if (!(gup_flags & FOLL_LONGTERM))
->>> +		return true;
->>> +
->>> +	/* If the VMA requires dirty tracking then GUP will be problematic. */
->>> +	return vma_needs_dirty_tracking(vma);
->>> +}
->>> +
->>>    static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->>>    {
->>>    	vm_flags_t vm_flags = vma->vm_flags;
->>>    	int write = (gup_flags & FOLL_WRITE);
->>>    	int foreign = (gup_flags & FOLL_REMOTE);
->>> +	bool vma_anon = vma_is_anonymous(vma);
->>>
->>>    	if (vm_flags & (VM_IO | VM_PFNMAP))
->>>    		return -EFAULT;
->>>
->>> -	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
->>> +	if ((gup_flags & FOLL_ANON) && !vma_anon)
->>>    		return -EFAULT;
->>>
->>>    	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
->>> @@ -978,6 +1013,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->>>    		return -EFAULT;
->>>
->>>    	if (write) {
->>> +		if (!vma_anon &&
->>> +		    !writeable_file_mapping_allowed(vma, gup_flags))
->>> +			return -EFAULT;
->>> +
->>>    		if (!(vm_flags & VM_WRITE)) {
->>>    			if (!(gup_flags & FOLL_FORCE))
->>>    				return -EFAULT;
->>> diff --git a/mm/mmap.c b/mm/mmap.c
->>> index 536bbb8fa0ae..7b6344d1832a 100644
->>> --- a/mm/mmap.c
->>
->>
->> I'm probably missing something, why don't we have to handle GUP-fast (having
->> said that, it's hard to handle ;) )? The sequence you describe above should
->> apply to GUP-fast as well, no?
->>
->> 1) Pin writable mapped page using GUP-fast
->> 2) Trigger writeback
->> 3) Write to page via pin
->> 4) Unpin and set dirty
-> 
-> You're right, and this is an excellent point. I worry about other GUP use
-> cases too, but we're a bit out of luck there because we don't get to check
-> the VMA _at all_ (which opens yet another Pandora's box about how safe it
-> is to do unlocked pinning :)
-> 
-> But again, this comes down to the fact we're trying to make things
-> _incrementally__ better rather than throwing our hands up and saying one
-> day my ship will come in...
-
-That's not how security fixes are supposed to work IMHO, sorry.
-
--- 
-Thanks,
-
-David / dhildenb
+>=20
+> I've added Lukasz Majewski to Cc here, as he originally worked
+> on BK3.1 and likely either has the hardware or knows someone
+> who does.=C2=A0 Technologic Systems also lists the ts7250 as supported
+> on their website, but the only contact I found for them is the
+> generic support@embeddedTS.com. In case someone from Technologic
+> is available for giving the series a spin, see [1] for the
+> full set of patches.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
+>=20
+> [1]
+> https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel=
+.me/
 
