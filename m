@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6AD6F10BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BED6F10BF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345012AbjD1DPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 23:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S1344875AbjD1DQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 23:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344986AbjD1DPJ (ORCPT
+        with ESMTP id S230036AbjD1DQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 23:15:09 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED00E75;
-        Thu, 27 Apr 2023 20:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1682651705;
-        bh=aQE8eazy0RcIqT818s9oCMYv7+qMqDDlz9r6IgAFmKc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=e2ybsKO+E+m6itkBHmI/dkUGZqEn9fKjOzrl7AHdwjHB6SvqkExdt66Jentr95E7O
-         3GduXr2qD6yURkzE89G39LD02dFGsX2Bu73AZLynVFR7ndEjoSkYOr0/AFXqX/NNOv
-         GIqGivpINfzR1/8uVm/6sY7aTbEnsXTO0Cf8ulGPstddfY/6IP4iNKpClFWgxtzVnU
-         Zkugh4j+3QeydSvdXJ7wpoQm61SsHVTyYMNAr8k/l/b8esSM03zO4/WRWa8JSNkXPT
-         EnP+Pj9zegDgr+mQekB+fZelcY2lvypjgYBuBbpcxbYeHfb5tMrq1NO+ZopmZpJJ08
-         VhwyJdB87x6IA==
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.144])
-        by gnuweeb.org (Postfix) with ESMTPSA id 18B2E245A10;
-        Fri, 28 Apr 2023 10:15:01 +0700 (WIB)
-Date:   Fri, 28 Apr 2023 10:14:58 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     David Sterba <dsterba@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>, Memet <zxce3@gnuweeb.org>,
-        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [GIT PULL] Btrfs updates for 6.3
-Message-ID: <ZEs6Mnx0s/siIZwv@biznet-home.integral.gnuweeb.org>
-References: <cover.1676908729.git.dsterba@suse.com>
- <CAHk-=wh6-qpZ=yzseD_CQn8Gc+nGDLrufFxSFvVO2qK6+8fGUw@mail.gmail.com>
- <4b35f3a4-9972-b7f0-287f-165a817c0f73@gnuweeb.org>
- <20230425145412.GC19619@suse.cz>
+        Thu, 27 Apr 2023 23:16:18 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD312709
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:17 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-959a3e2dc72so1152997266b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682651775; x=1685243775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W7sdITuIFnEQoKW0N5OSKzGyU3doRmglDS9WyyDhnvg=;
+        b=eGb+aPgX+DH/BU1Feq4tdkTB+pn1heXwPBeihvAsYFF1/y6lDG1UwgcmYcYooxszbl
+         LCdKCNVkUeH0T/t+6BVGCKlxYGjBM1OI1Tq5JV3PCCybyrejmolRu3BXxz91FQ8QFOyb
+         /dF/fRqY3aZ3pjpkB2Wlbd4FWbht2fUAh+7no=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682651775; x=1685243775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W7sdITuIFnEQoKW0N5OSKzGyU3doRmglDS9WyyDhnvg=;
+        b=Dwc0M/YDw4cmo1/rHuO6Oka+ZKZpQPV4Mw5sGvc5hbf/Gd0iyhgrSOzkb2dEajihgr
+         Vocn9jxQjyURVmVUE6ewKgOOeRoDgtdWEFNV50IJDkZHyNuCKTmn1EoQJ61WQt+79gPq
+         khNUavrpmcuqXEptuNwsgAmgXVLpKlRr/t219iwsBeZlo26f2VZ2EHvMFtLHiBvNOg3i
+         pa5TsaiylLlBEh7DMcJOmWoAj/cNGdiMFA9sGd7eF1kWYPXr1em3FWVRJJxZEy2fMWgl
+         FlN26yF8wBPfLlrhXRQlwXDav9qxZnRLHv7p1xF9mOdo5ecbIbgNXfJSeyOPGXC3GSEr
+         2bBA==
+X-Gm-Message-State: AC+VfDzGdD63NgPgoWFY0qaSpnSwyOI20PZNrCxhNSoiDom/vAg4s9Ey
+        Hi62jaoQZseMALwOVUX0cCO2/v9yGkS86SzDSH5kBQ==
+X-Google-Smtp-Source: ACHHUZ7nS8vXwfB3Z9qXkgg8xD3XBvYLwd/rXZs/1OWLXJ7wUBpet2Xk/1Lc9slTU36/8z03DeRs2Q==
+X-Received: by 2002:a17:907:c0d:b0:947:71bf:ca19 with SMTP id ga13-20020a1709070c0d00b0094771bfca19mr3943128ejc.65.1682651775357;
+        Thu, 27 Apr 2023 20:16:15 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id qn7-20020a170907210700b0094e44899367sm10390883ejb.101.2023.04.27.20.16.14
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 20:16:14 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-959a3e2dc72so1152992866b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:14 -0700 (PDT)
+X-Received: by 2002:a17:907:5c1:b0:94a:90e5:b2b6 with SMTP id
+ wg1-20020a17090705c100b0094a90e5b2b6mr3512007ejb.58.1682651774330; Thu, 27
+ Apr 2023 20:16:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425145412.GC19619@suse.cz>
-X-Bpl:  hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
+In-Reply-To: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 27 Apr 2023 20:15:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
+Message-ID: <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
+Subject: Re: [GIT PULL] MM updates for 6.4-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 04:54:12PM +0200, David Sterba wrote:
-> On Sun, Apr 23, 2023 at 09:27:30AM +0700, Ammar Faizi wrote:
-> > On 2/21/23 4:02 AM, Linus Torvalds wrote:
-> > > On Mon, Feb 20, 2023 at 11:26 AM David Sterba <dsterba@suse.com> wrote:
-> > >> Other:
-> > >>
-> > >> - locally enable -Wmaybe-uninitialized after fixing all warnings
-> > > 
-> > > I've pulled this, but I strongly suspect this change will get reverted.
-> > > 
-> > > I bet neither you nor linux-next is testing even _remotely_ a big
-> > > chunk of the different compiler versions that are out there, and the
-> > > reason flags like '-Wmaybe-uninitialized' get undone is because some
-> > > random compiler version on some random config and target archiecture
-> > > gives completely nonsensical warnings for odd reasons.
-> > > 
-> > > But hey, maybe the btrfs code is special.
-> > 
-> > Maybe it's too late for 6.3. So please fix this in 6.4 and backport it to
-> > 6.3 stable.
-> 
-> Fix for this warning is in 6.4 pull request, there's no CC:stable tag
-> but we can ask to add it once the code lands in master.
+On Thu, Apr 27, 2023 at 3:33=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-20=
+23-04-27-15-30
 
-It landed in master.
+Ok, so all the merge conflicts looked straightforward enough (except
+the one I asked Vlastimil to look at - and that conflict was tiny and
+straightforward too, it was just in a really grotty place).
 
-[ Adding stable team to the Cc list ]
+However, let's not get cocky - so I'd ask people double-check my
+conflict resolution, even if it looked fairly straightforward.
+Mistakes happen.
 
-Hi Greg and stable team, could you please backport:
+Most of the bulk of the conflicts were around __filemap_get_folio()
+now returning an ERR_PTR, particularly then with Willy doing the ext4
+folio conversion.
 
-  commit 8ba7d5f5ba931be68a94b8c91bcced1622934e7a upstream
-  ("btrfs: fix uninitialized variable warnings")
+So Christoph, Willy, mind just double-checking me?
 
-to v6.3 to fix gcc (10, 9, 7) build error?
-
-The fs/btrfs/volumes.c hunk won't apply cleanly, but it can auto-merge:
-
-  $ git cherry-pick 8ba7d5f5ba931be68a94b8c91bcced1622934e7a
-  Auto-merging fs/btrfs/volumes.c
-  [detached HEAD 572410288a1070c1] btrfs: fix uninitialized variable warnings
-   Author: Genjian Zhang <zhanggenjian@kylinos.cn>
-   Date: Fri Mar 24 10:08:38 2023 +0800
-   2 files changed, 2 insertions(+), 2 deletions(-)
-
-Thanks,
-
--- 
-Ammar Faizi
-
+                 Linus
