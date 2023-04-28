@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0608C6F1662
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFEE6F166A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345685AbjD1LHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S1345763AbjD1LKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbjD1LHb (ORCPT
+        with ESMTP id S1345700AbjD1LKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:07:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B87448C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:07:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 28 Apr 2023 07:10:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C75D44B6;
+        Fri, 28 Apr 2023 04:10:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 856CF2005F;
-        Fri, 28 Apr 2023 11:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682680048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ow3aw4xOvVLC6jge2IF3IgMxcgiXds6JLxSLB6q5HcY=;
-        b=ANKTYutrVBEqWMZ9swOBzcpO+F6v3VRWJC1kQxIr/LVvQP0QCuY9D3iPITCsOaBFWNZZFK
-        xrQ5XqTmePAdS/VRHMDhFOc+a4W4wNPP41J9/qLBapFguH8ljQYPlbAnZ44ibKfGPnJj11
-        YG0OfLhuROKznSSfMhFBRuxiDn8kqCY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 75289138FA;
-        Fri, 28 Apr 2023 11:07:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PRjDG/CoS2SBTgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Fri, 28 Apr 2023 11:07:28 +0000
-Date:   Fri, 28 Apr 2023 13:07:28 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     david@redhat.com, osalvador@suse.de, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/memory_hotplug: fix dead loop in offline_pages()
-Message-ID: <ZEuo8PiA3EzVnrEi@dhcp22.suse.cz>
-References: <20230428100846.95535-1-yajun.deng@linux.dev>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9305642E2;
+        Fri, 28 Apr 2023 11:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2E4C433A8;
+        Fri, 28 Apr 2023 11:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682680248;
+        bh=MgfPMfiKjI0tNegcTrXd2ZOXVx68i9D4rnYhMXY2OtQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=niadc1KLJ5jjSy0V0s6jR4CaWAsX8tkW40W47LEu5MIozrpJDPc6i0Bk3UfrXFU7M
+         PMBJLMGq1KJJKyhZchZOrcVhuZKTLZSLRgMjj5Rlfd2JkLGde8S/KyqJ3n20J+0T1M
+         RyTdZoiWogIYYfh2reQi5ZTGhPUGFbWph2Pvz33D/HbBQf9KeL2Q4GaO2VKoVjOWqI
+         W8LqGxtaYWQA0yAwNReSVWBbQq54BbeV8m//2LoLXfchQleIz2SQUwpwDrXmMhvYOw
+         vbJH81jhp/7aZF4V9Xzuui2E1GGxemmZPm47ROf0IBHloCDg1lgbCk/i00fAFiC7Ka
+         f5tYb9qf+C6/Q==
+Message-ID: <3328747ef568361bd3bd5f053ec9a2c27e7f9c48.camel@kernel.org>
+Subject: Re: [PATCH] ceph: Reorder fields in 'struct ceph_snapid_map'
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiubo Li <xiubli@redhat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        ceph-devel@vger.kernel.org
+Date:   Fri, 28 Apr 2023 07:10:46 -0400
+In-Reply-To: <f6b869ea-979c-efda-d454-8dc688d1986b@redhat.com>
+References: <559c9a70419846e0cfc319505d3d5fffd45b3358.1682618727.git.christophe.jaillet@wanadoo.fr>
+         <f6b869ea-979c-efda-d454-8dc688d1986b@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428100846.95535-1-yajun.deng@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,92 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 28-04-23 18:08:46, Yajun Deng wrote:
-> When migration failure in do_migrate_range() and then the
-> scan_movable_pages() will most likely return the same movable pfn.
-> In this case, there is no condition to bail out, they will
-> always run like this:
-> 
-> ...
-> [878020.623959] migrating pfn 1727813 failed ret:1
-> [878020.623960] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
-> [878020.623962] memcg:ffffa0ff82d5a000
-> [878020.623962] aops:def_blk_aops ino:fd00001
-> [878020.623964] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
-> [878020.623966] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
-> [878020.623967] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
-> [878020.623968] page dumped because: migration failure
-> [878020.626196] migrating pfn 1727813 failed ret:1
-> [878020.626198] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
-> [878020.626200] memcg:ffffa0ff82d5a000
-> [878020.626200] aops:def_blk_aops ino:fd00001
-> [878020.626202] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
-> [878020.626204] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
-> [878020.626205] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
-> [878020.626206] page dumped because: migration failure
-> ...
-> 
-> Bail out when migration failures reach 3 times.
-> 
-> Fixes: bb8965bd82fd ("mm, memory_hotplug: deobfuscate migration part of offlining")
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+On Fri, 2023-04-28 at 08:53 +0800, Xiubo Li wrote:
+> On 4/28/23 02:05, Christophe JAILLET wrote:
+> > Group some variables based on their sizes to reduce holes.
+> > On x86_64, this shrinks the size of 'struct ceph_snapid_map' from 72 to=
+ 64
+> > bytes.
+> >=20
+> > When such a structure is allocated, because of the way memory allocatio=
+n
+> > works, when 72 bytes were requested, 96 bytes were allocated.
+> >=20
+> > So, on x86_64, this change saves 32 bytes per allocation and has the
+> > structure fit in a single cacheline.
+> >=20
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > ---
+> > Using pahole
+> >=20
+> > Before:
+> > =3D=3D=3D=3D=3D=3D
+> > struct ceph_snapid_map {
+> > 	struct rb_node             node __attribute__((__aligned__(8))); /*   =
+  0    24 */
+> > 	struct list_head           lru;                  /*    24    16 */
+> > 	atomic_t                   ref;                  /*    40     4 */
+> >=20
+> > 	/* XXX 4 bytes hole, try to pack */
+> >=20
+> > 	u64                        snap;                 /*    48     8 */
+> > 	dev_t                      dev;                  /*    56     4 */
+> >=20
+> > 	/* XXX 4 bytes hole, try to pack */
+> >=20
+> > 	/* --- cacheline 1 boundary (64 bytes) --- */
+> > 	long unsigned int          last_used;            /*    64     8 */
+> >=20
+> > 	/* size: 72, cachelines: 2, members: 6 */
+> > 	/* sum members: 64, holes: 2, sum holes: 8 */
+> > 	/* forced alignments: 1 */
+> > 	/* last cacheline: 8 bytes */
+> > } __attribute__((__aligned__(8)));
+> > ---
+> >   fs/ceph/mds_client.h | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
+> > index 0598faa50e2e..2328dbda5ab6 100644
+> > --- a/fs/ceph/mds_client.h
+> > +++ b/fs/ceph/mds_client.h
+> > @@ -355,8 +355,8 @@ struct ceph_snapid_map {
+> >   	struct rb_node node;
+> >   	struct list_head lru;
+> >   	atomic_t ref;
+> > -	u64 snap;
+> >   	dev_t dev;
+> > +	u64 snap;
+> >   	unsigned long last_used;
+> >   };
+> >  =20
+>=20
+> This looks good to me. Thanks.
+>=20
+> Will apply it to the testing branch.
+>=20
+> - Xiubo
+>=20
+>=20
+>=20
 
-Any hard coded failure retry limit will lead to premature failures. Have
-a look at 72b39cfc4d75 ("mm, memory_hotplug: do not fail offlining too
-early"). A proper way to deal with this is to implement termination from
-the userspace (e.g. timeout $TIMEOUT /bin/echo 0 > $PATH_TO_MEM/online)
-Nacked-by: Michal Hocko <mhocko@suse.com>
-
-> ---
->  mm/memory_hotplug.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 8e0fa209d533..72dd385b8892 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1800,11 +1800,12 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  			struct zone *zone, struct memory_group *group)
->  {
->  	const unsigned long end_pfn = start_pfn + nr_pages;
-> -	unsigned long pfn, system_ram_pages = 0;
-> +	unsigned long pfn, tmp_pfn, system_ram_pages = 0;
->  	const int node = zone_to_nid(zone);
->  	unsigned long flags;
->  	struct memory_notify arg;
->  	char *reason;
-> +	int count = 0;
->  	int ret;
->  
->  	/*
-> @@ -1887,12 +1888,20 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  
->  			cond_resched();
->  
-> +			tmp_pfn = pfn;
->  			ret = scan_movable_pages(pfn, end_pfn, &pfn);
->  			if (!ret) {
-> -				/*
-> -				 * TODO: fatal migration failures should bail
-> -				 * out
-> -				 */
-> +				if (pfn == tmp_pfn)
-> +					count++;
-> +				else
-> +					count = 0;
-> +
-> +				if (unlikely(count == 3)) {
-> +					ret = -EBUSY;
-> +					reason = "migration failure";
-> +					goto failed_removal_isolated;
-> +				}
-> +
->  				do_migrate_range(pfn, end_pfn);
->  			}
->  		} while (!ret);
-> -- 
-> 2.25.1
-
--- 
-Michal Hocko
-SUSE Labs
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
