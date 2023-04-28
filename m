@@ -2,227 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0096F1D2E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5226F1D28
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346104AbjD1RGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S229943AbjD1RGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346032AbjD1RGe (ORCPT
+        with ESMTP id S229441AbjD1RGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:06:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7225C26BC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682701544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qcZ+WIIKui2ih8uJD3NXlW2Fr/ddGQDIFYF8VWxxYcs=;
-        b=fx1PJekASWLJe8WchFgSu7HRdzSUMvtjIUAFuHusiuNzs3NcXbYzaqgxqYQrkY6hNb5FIV
-        OcY4lXbUk8+FJyibqgAkiQqfdm3+EYiB7Mkot/Ieia2+FSyu83VsBfwgWXiGzHESoEUrut
-        VRju169iIYCM557/yrLeQ1EkatCVzw0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-607-Knpz-TXTPdqGJurPmcQpwQ-1; Fri, 28 Apr 2023 13:05:43 -0400
-X-MC-Unique: Knpz-TXTPdqGJurPmcQpwQ-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-2f8b5e23d23so6138125f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:05:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682701542; x=1685293542;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qcZ+WIIKui2ih8uJD3NXlW2Fr/ddGQDIFYF8VWxxYcs=;
-        b=ZzRD5l/FrEZelxkOJ2oGbMLpXZOQhzHq7Mu5mjQeV9fOMlMZkfb0PYUXswz4eW+aXs
-         6oRjK9j6XH74hUK2mizWcjAWVRehn2edtaDPOeaAyJmmBrBZnJC+6iS0n+bTN+IUYcwz
-         o59v270Q9BG230V9n7DkLDXrICtjCcLAB1djVXkIHpEWFnSES/tuwAZDcOkBbD4NwMjD
-         H3VyTeotr3gTck0w9Rj2kXaR5R8zswW0pwV3rEtNhX6iOYB2k7AQ85C1Arf98tB0OjjE
-         pHjhdbZ54KSHjMb8jFeCrNEhY+EUMN4RcBurkP6jSM0ihkQ9tSJcyPg+loYr/YBVLy07
-         2aOw==
-X-Gm-Message-State: AC+VfDxXVuxzxPayAkBpnLeS2z1SzYJX1WWUK2erTrqdCixVGsJnhoMf
-        u8UgmzMEeDniYNbxGZMYt+TLKHRXEa3woLvLG4/yS1vT23XrROMwWIqc9yvwaZDPJuFiOzPFEys
-        c8Vi3PcgcooC6IcdM9cutbR+N
-X-Received: by 2002:a5d:42c5:0:b0:2e5:31a3:38d4 with SMTP id t5-20020a5d42c5000000b002e531a338d4mr4645464wrr.55.1682701541841;
-        Fri, 28 Apr 2023 10:05:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5JDIkQuL8RvtQo+J5juy3yRpAXIxSzrWjCLBEsPvjv/ikxb+OC+k037Hoxb/q734TWFy/U7w==
-X-Received: by 2002:a5d:42c5:0:b0:2e5:31a3:38d4 with SMTP id t5-20020a5d42c5000000b002e531a338d4mr4645444wrr.55.1682701541451;
-        Fri, 28 Apr 2023 10:05:41 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
-        by smtp.gmail.com with ESMTPSA id c7-20020a5d4cc7000000b002fa5a73bf9bsm21531981wrt.89.2023.04.28.10.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 10:05:40 -0700 (PDT)
-Message-ID: <3d7fcfab-e445-1dc7-f000-9fbe7bea04c0@redhat.com>
-Date:   Fri, 28 Apr 2023 19:05:38 +0200
+        Fri, 28 Apr 2023 13:06:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED002694
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:05:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A4D5644C2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52ECCC433D2;
+        Fri, 28 Apr 2023 17:05:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682701558;
+        bh=PBNgi24wLhulSF0zuj6iMWeLEm97lHhM6E5QUQLKk3o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TCYBDwRJ0dzlVXBN4iA/ohH3nPhKEeoAux3MMWX6gRNTNzzR55VTo2dAldmWdCRrM
+         2LYZoFENr0kx8IVk9D/whEz37pOlSUCL3flWEBJcM2xPI0Y2T/XqOYo3Zs6vU1Np8s
+         I3VA5s6Ko4xbmBlabtxEVozLLDFhlCgzT9qdhGIQATRXjdlfG1iDRum+a0DIA9d7+S
+         QvSRqFYboBy1GkGyEzePbtYr08Y5bkrMBvRSg1kxoRFd11YEyB21Cj4MW3rxgYFY6n
+         Zc02bduRKLXALq6qi8G4eZC+6C0bJw1mysndoksvtCsQYIk70gafm05h9FEKPMyM37
+         lb2Wb254b8XrQ==
+Date:   Fri, 28 Apr 2023 18:05:53 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Yangyu Chen <cyy@cyyself.name>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
+        Hongren Zheng <i@zenithal.me>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: riscv: drop invalid comment about
+ riscv,isa lower-case reasoning
+Message-ID: <20230428-repacking-percolate-79be27947af6@spud>
+References: <20230428141601.678489-1-cyy@cyyself.name>
+ <tencent_85F69423082E524C478844E31D5F8920A506@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
- <400da248-a14e-46a4-420a-a3e075291085@redhat.com>
- <077c4b21-8806-455f-be98-d7052a584259@lucifer.local>
- <62ec50da-5f73-559c-c4b3-bde4eb215e08@redhat.com>
- <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
- <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
- <39cc0f26-8fc2-79dd-2e84-62238d27fd98@redhat.com>
- <20230428162207.o3ejmcz7rzezpt6n@box.shutemov.name> <ZEv2196tk5yWvgW5@x1n>
- <173337c0-14f4-3246-15ff-7fbf03861c94@redhat.com>
- <40fc128f-1978-42db-b9c1-77ac3c2cebfe@lucifer.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <40fc128f-1978-42db-b9c1-77ac3c2cebfe@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="duh32IVum06IkP5O"
+Content-Disposition: inline
+In-Reply-To: <tencent_85F69423082E524C478844E31D5F8920A506@qq.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.04.23 19:01, Lorenzo Stoakes wrote:
-> On Fri, Apr 28, 2023 at 06:51:46PM +0200, David Hildenbrand wrote:
->> On 28.04.23 18:39, Peter Xu wrote:
->>> On Fri, Apr 28, 2023 at 07:22:07PM +0300, Kirill A . Shutemov wrote:
->>>> On Fri, Apr 28, 2023 at 06:13:03PM +0200, David Hildenbrand wrote:
->>>>> On 28.04.23 18:09, Kirill A . Shutemov wrote:
->>>>>> On Fri, Apr 28, 2023 at 05:43:52PM +0200, David Hildenbrand wrote:
->>>>>>> On 28.04.23 17:34, David Hildenbrand wrote:
->>>>>>>> On 28.04.23 17:33, Lorenzo Stoakes wrote:
->>>>>>>>> On Fri, Apr 28, 2023 at 05:23:29PM +0200, David Hildenbrand wrote:
->>>>>>>>>>>>
->>>>>>>>>>>> Security is the primary case where we have historically closed uAPI
->>>>>>>>>>>> items.
->>>>>>>>>>>
->>>>>>>>>>> As this patch
->>>>>>>>>>>
->>>>>>>>>>> 1) Does not tackle GUP-fast
->>>>>>>>>>> 2) Does not take care of !FOLL_LONGTERM
->>>>>>>>>>>
->>>>>>>>>>> I am not convinced by the security argument in regard to this patch.
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> If we want to sells this as a security thing, we have to block it
->>>>>>>>>>> *completely* and then CC stable.
->>>>>>>>>>
->>>>>>>>>> Regarding GUP-fast, to fix the issue there as well, I guess we could do
->>>>>>>>>> something similar as I did in gup_must_unshare():
->>>>>>>>>>
->>>>>>>>>> If we're in GUP-fast (no VMA), and want to pin a !anon page writable,
->>>>>>>>>> fallback to ordinary GUP. IOW, if we don't know, better be safe.
->>>>>>>>>
->>>>>>>>> How do we determine it's non-anon in the first place? The check is on the
->>>>>>>>> VMA. We could do it by following page tables down to folio and checking
->>>>>>>>> folio->mapping for PAGE_MAPPING_ANON I suppose?
->>>>>>>>
->>>>>>>> PageAnon(page) can be called from GUP-fast after grabbing a reference.
->>>>>>>> See gup_must_unshare().
->>>>>>>
->>>>>>> IIRC, PageHuge() can also be called from GUP-fast and could special-case
->>>>>>> hugetlb eventually, as it's table while we hold a (temporary) reference.
->>>>>>> Shmem might be not so easy ...
->>>>>>
->>>>>> page->mapping->a_ops should be enough to whitelist whatever fs you want.
->>>>>>
->>>>>
->>>>> The issue is how to stabilize that from GUP-fast, such that we can safely
->>>>> dereference the mapping. Any idea?
->>>>>
->>>>> At least for anon page I know that page->mapping only gets cleared when
->>>>> freeing the page, and we don't dereference the mapping but only check a
->>>>> single flag stored alongside the mapping. Therefore, PageAnon() is fine in
->>>>> GUP-fast context.
->>>>
->>>> What codepath you are worry about that clears ->mapping on pages with
->>>> non-zero refcount?
->>>>
->>>> I can only think of truncate (and punch hole). READ_ONCE(page->mapping)
->>>> and fail GUP_fast if it is NULL should be fine, no?
->>>>
->>>> I guess we should consider if the inode can be freed from under us and the
->>>> mapping pointer becomes dangling. But I think we should be fine here too:
->>>> VMA pins inode and VMA cannot go away from under GUP.
->>>
->>> Can vma still go away if during a fast-gup?
->>>
->>
->> So, after we grabbed the page and made sure the the PTE didn't change (IOW,
->> the PTE was stable while we processed it), the page can get unmapped (but
->> not freed, because we hold a reference) and the VMA can theoretically go
->> away (and as far as I understand, nothing stops the file from getting
->> deleted, truncated etc).
->>
->> So we might be looking at folio->mapping and the VMA is no longer there.
->> Maybe even the file is no longer there.
->>
-> 
-> This shouldn't be an issue though right? Because after a pup call unlocks the
-> mmap_lock we're in the same situation anyway. GUP doesn't generally guarantee
-> the mapping remains valid, only pinning the underlying folio.
 
-Yes. But the issue here is rather dereferencing something that has 
-already been freed, eventually leading to undefined behavior.
+--duh32IVum06IkP5O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Maybe de-referencing folio->mapping is fine ... but yes, we could handle 
-that optimization in a separate patch.
+On Fri, Apr 28, 2023 at 10:16:01PM +0800, Yangyu Chen wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> "Ease of parsing" may have been the initial argument for keeping this
+> string in lower-case, but parsers may have been written that expect
+> lower-case only.
+> For example, the one in released kernels currently does not behave
+> correctly for multi-letter extensions that begin with a capital letter.
+> Allowing upper-case here brings about no benefit but would break
+> compatibility between new devicetrees and older kernels.
+>=20
+> Drop the comment to avoid confusing people.
+>=20
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 
--- 
-Thanks,
+You missed an Acked-by from Rob here:
+https://lore.kernel.org/all/168261158214.3107331.4410018416833510357.robh@k=
+ernel.org/
 
-David / dhildenb
+Also, when you are submitting a patch authored by another person, you
+need to append your Signed-off-by to the patch ;)
 
+Cheers,
+Conor.
+
+
+> ---
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Document=
+ation/devicetree/bindings/riscv/cpus.yaml
+> index 001931d526ec..1ee97621d0c7 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -81,7 +81,7 @@ properties:
+> =20
+>        While the isa strings in ISA specification are case
+>        insensitive, letters in the riscv,isa string must be all
+> -      lowercase to simplify parsing.
+> +      lowercase.
+>      $ref: "/schemas/types.yaml#/definitions/string"
+>      pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:=
+_[hsxz](?:[a-z])+)*$
+> =20
+> --=20
+> 2.40.0
+>=20
+
+--duh32IVum06IkP5O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEv88QAKCRB4tDGHoIJi
+0jmsAP99ehYUNjIbvjxkbNmAqoqscoLdD0claGcn5TvVuJyyTAD+P2K++thvAX97
+EKhJQedy4RCGdCPiHbW3eqRL5fjwyQI=
+=bqeQ
+-----END PGP SIGNATURE-----
+
+--duh32IVum06IkP5O--
