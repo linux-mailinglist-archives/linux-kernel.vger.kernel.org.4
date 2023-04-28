@@ -2,118 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E52D6F196C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BC16F1973
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346273AbjD1N1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S1346282AbjD1N2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346279AbjD1N1K (ORCPT
+        with ESMTP id S229835AbjD1N2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:27:10 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC99E4ECA
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:27:07 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2f917585b26so9017238f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682688426; x=1685280426;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gkJoG1LPHO8i6Q8wWiW6Rl5rdW7E3T2NGYe6a0Rghqs=;
-        b=ZdfR/e7VVW6XiNkmL3LmeM9+R4kj8X362H1qodHBMdg+uyiTshG0jpKr6rOibBTLeu
-         DA6AQrMAhDORd2ChFpbJX2cLTnbyPu/BHIGoBE75Na1jUzq6e5AC0V+UIGD++SG/sNXJ
-         mGDaZ8yLslXk5mssqHuBP36BhSqhv+mPHsLS0BPVVZ4BED7q8ohax35mMWz6I9VPGZ3t
-         OPOLiuu8l7Yaw62vcREt7DtwhNkiHcKre57Q5mvg4Esp9IK6s6lMW30S6s6PLj05uT4H
-         e+sgnqYRSRKx4U2/nHvg3skEwxeqVxsEjqS6KT74CuzPHkxQDm2TxYR1vuAwCaLefcer
-         MIsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688426; x=1685280426;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gkJoG1LPHO8i6Q8wWiW6Rl5rdW7E3T2NGYe6a0Rghqs=;
-        b=REnbbTXj3IYwYL7JxUYkARrV7y+THuTrReKtZcaya9C/OcS65eK22qcV1YBrjV6bp0
-         cEqJTf6QjVYnX1+OhOTV7fETQhlDBxIm0UdWxaYXYdNm/qbfv1SYnS0tDeaz2T+WCvCA
-         c8+fBQBMeaPcByiORijwM4JgO0emNfAWvCaliPsV4ogMn1OftYD3JmTFUduQ2AtGP1CN
-         lfp2R39H0QisrN5l+/3eoPIXck92zeT/ICI/d98QyHE8dp5mIU2D9AskGWeTqqrZLNNI
-         X4bLin1tNqEpAebav3GidN1KEIZUdHfEMrLdLh+p2mTPweYVHQbZSpG4qB5Hj3vj6O3V
-         tF5w==
-X-Gm-Message-State: AC+VfDzbNOvVpe1k0PnhDDYk22nuO+JmDlE2GWWeWlsAHve3yXP0pwRe
-        5aOrI438kBxRx5vyJUmKWTkllw==
-X-Google-Smtp-Source: ACHHUZ4s83IplXBwoNtSQYlpNZ2jgP0cGcl1S9RUA3BThTitRPqEC3TEtyd9ZfVctIWKGMQH4+ujZQ==
-X-Received: by 2002:adf:e54c:0:b0:2fa:a4b5:6b8 with SMTP id z12-20020adfe54c000000b002faa4b506b8mr3865844wrm.27.1682688426294;
-        Fri, 28 Apr 2023 06:27:06 -0700 (PDT)
-Received: from [172.23.2.142] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id f6-20020a5d6646000000b002f6dafef040sm21107235wrw.12.2023.04.28.06.27.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 06:27:05 -0700 (PDT)
-Message-ID: <4b690859-be5a-c331-8243-b875136d4807@linaro.org>
-Date:   Fri, 28 Apr 2023 15:27:04 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/6] dt-bindings: usb: qcom,dwc3: Add bindings for
- SA8775P
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     dmitry.baryshkov@linaro.org, athierry@redhat.com, robh@kernel.org,
-        konrad.dybcio@linaro.org, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Fri, 28 Apr 2023 09:28:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ED51FC6;
+        Fri, 28 Apr 2023 06:28:18 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SDRo3g031091;
+        Fri, 28 Apr 2023 13:28:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=xN0N0nEHYTHT3aHanWrFgcKMgv5F9/5r+uCyl997wVM=;
+ b=gtfUzQjHeGoahNZusOotn+oYePQ/6Yp6wALmL7YC4wogQS6O0iXvKPzB9Ab2Un+COeZZ
+ BxMpcnpcelqWnll/kEI09c1HJ064RRFtsx3f79cTWMl3POoz8Nlh3FXHC1cdZxkwrHOV
+ fuj8m4t4J1TEKSsqHvkSLlBTAcyaM0cZ6GojsqeGF7hB/0u4Qd2lT/KMKCrhGOMfBcGi
+ mX8WZGcAdDsRyp6F2Nj8TGzfsUpmX2H99G3NUdfkaJMBgxAorinWv2Att9PAFITsX4as
+ xQh67oGf3HVSwSmmXFw+bPfJXkZMKYi2U+aPKoHnoTxaUfN6gVkQIG2BUq3o98PIq1ic MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8dqp2j48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:04 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SDS3IQ032296;
+        Fri, 28 Apr 2023 13:28:03 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8dqp2j25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:03 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33S48dt3012258;
+        Fri, 28 Apr 2023 13:28:00 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q47773kdm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:00 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33SDRv0Y23331358
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 13:27:57 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF04C2004B;
+        Fri, 28 Apr 2023 13:27:57 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D78432004D;
+        Fri, 28 Apr 2023 13:27:56 +0000 (GMT)
+Received: from [9.171.55.26] (unknown [9.171.55.26])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 28 Apr 2023 13:27:56 +0000 (GMT)
+Message-ID: <017df2d4fa3f2ed5f08106ba39bec3f0db382a8f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 05/38] counter: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230428130824.23803-1-quic_shazhuss@quicinc.com>
- <20230428130824.23803-2-quic_shazhuss@quicinc.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230428130824.23803-2-quic_shazhuss@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-iio@vger.kernel.org
+Date:   Fri, 28 Apr 2023 15:27:56 +0200
+In-Reply-To: <ZBBrl4v9L8Zw+AsN@fedora>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-6-schnelle@linux.ibm.com> <ZBBrl4v9L8Zw+AsN@fedora>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aItC10cNzchiV006qSd16xw7jSl83UXj
+X-Proofpoint-GUID: llGHDROBe3Rt--RgnPvEdP9U5ngfr7nj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304280107
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/04/2023 15:08, Shazad Hussain wrote:
-> Add the compatible string for SA8775P SoC from Qualcomm.
-> 
-> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> ---
+On Tue, 2023-03-14 at 08:41 -0400, William Breathitt Gray wrote:
+> On Tue, Mar 14, 2023 at 01:11:43PM +0100, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
+s
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/counter/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
+> > index b5ba8fb02cf7..1cae5097217e 100644
+> > --- a/drivers/counter/Kconfig
+> > +++ b/drivers/counter/Kconfig
+> > @@ -15,6 +15,7 @@ if COUNTER
+> >  config 104_QUAD_8
+> >  	tristate "ACCES 104-QUAD-8 driver"
+> >  	depends on (PC104 && X86) || COMPILE_TEST
+> > +	depends on HAS_IOPORT
+> >  	select ISA_BUS_API
+> >  	help
+> >  	  Say yes here to build support for the ACCES 104-QUAD-8 quadrature
+> > --=20
+> > 2.37.2
+>=20
+> Is HAS_IOPORT needed because this driver uses devm_ioport_map()? The
+> inb()/outb() functions and such are not used in this driver, so would it
+> suffice to depend on HAS_IOPORT_MAP instead?
+>=20
+> William Breathitt Gray
 
-(...)
+Yes, good catch HAS_IOPORT_MAP indeed seems to be enough. Will be
+changed in v4. Thankfully the Kconfig change to add HAS_IOPORT has
+already landed in Linus' tree so for the future these per subsystem
+patches can be merged independently.
 
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sa8775p-dwc3
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 3
-> +          maxItems: 4
-> +        interrupt-names:
-> +          minItems: 3
-> +          items:
-> +            - const: pwr_event
-> +            - const: dp_hs_phy_irq
-> +            - const: dm_hs_phy_irq
-> +            - const: ss_phy_irq
-
-Why the last interrupt line is optional? Is it really optional?
-
-Best regards,
-Krzysztof
-
+Thanks,
+Niklas
