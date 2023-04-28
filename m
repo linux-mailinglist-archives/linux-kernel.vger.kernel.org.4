@@ -2,127 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B1D6F20F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3656F20F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346822AbjD1Whg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 18:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
+        id S1346862AbjD1WiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 18:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346748AbjD1Whc (ORCPT
+        with ESMTP id S1346828AbjD1WiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 18:37:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3CA97;
-        Fri, 28 Apr 2023 15:37:31 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SJ9cJv008763;
-        Fri, 28 Apr 2023 22:37:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=YoSilu77Juqav4uFECUwWsVVGvTcpVdYAT4bQdmnNaE=;
- b=Cuh3+my1aC61ND3crOKY7s1tbbN65iQoWuDhTsHpwaNdeBLpCPWbGZlcfKeYHAl3B65G
- G6yGNvP7WwXpD6nXpSWHjTIuSvvv0S+CAfwIFedPyrqwkYM5RZFdLsrbIEddFQAxyn+o
- pIFAoy7svJb1JaCDHuB3PhzRrXKx3mw7svvNYYb+2jOMC33Vi638ufLmmMxitKqL1P6o
- qLewhE6TwPSr/uXa5SN0ugkqMXyUTrcC+XtRnTRr7CXjqprON4yLz3tWnD/IzGW4zt6g
- AaKe6lQ1pVtj7qaAybtcfNYdbsJPVDTsInsv/2utV4BifinsFkJkJ3uy0tz5nl6MHP2/ 6A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8abpt85s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 22:37:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33SMbPQS030459
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 22:37:25 GMT
-Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 28 Apr 2023 15:37:24 -0700
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
-        <marijn.suijten@somainline.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 4/4] drm/msm/dpu: drop DSPP_MSM8998_MASK from hw catalog
-Date:   Fri, 28 Apr 2023 15:36:46 -0700
-Message-ID: <20230428223646.23595-4-quic_abhinavk@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
-References: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
+        Fri, 28 Apr 2023 18:38:03 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20608.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::608])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662E959DA;
+        Fri, 28 Apr 2023 15:37:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=exKd0P5m7/vAa2SphfFBgnkCd9vLi4H6A8xgoSDzUDMViH5deTKLIAwVXZ+drr9A2yazaR/5K7f8h8H32wMlTdNTtnao87O8SvZV2Pq5uB53GXy960KBIWGAiIvDt6dPCcmUMmS8sSV9dly0o15zOu4aHPfKO28zye2bvMzo9He+UoWmjMWKByPmH2ueWcJWaOup2bXX84/MVFoYcbsBUrb6Jquuv5MumE2KSx49ICi4W2TOd6keVNzgzkQePffhRg5gqsz2rugm10XiGclS9fsQxlqcaMrCOTxgFTwy++UkaAs7jJJaLO1ItmFczIzF+QbNIL0o7TeWHQfepCNKmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VGqIbEi2Dws6Nh8Vb+4WJHJUjlwhkBjvy701pGKlw/Y=;
+ b=gnknoyfoYebAwMtda0CtPduykvIXka52pFj8/SiCiR7+BFSU/qOdz5HtPEmt8s1aVDLdkC+jhnCqOof+hw8BkEabtsBtBZ5dU3b1/eJdqsg5Aa23L5TBRnnkUU4kds+44ZIqeZo1Whr3zkidNNtbNnhlQzxa08Y2R/A1WR+RKVwmitBneHnOFCGXmx8QsVEaOaRXOHWmJYh9qSu0u2Ay1yyl4Z+8meVl2BQ/g5OYkytbScPKutsjgrHbTEDotLtw8nqmfcw8PAmB8tZ0KWOybgRdA8t/NHOGUt781DF4Hyl1ibETGwUNHNrjn5ZDP/o6RNeJLeJRYja5wNvJSthzoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VGqIbEi2Dws6Nh8Vb+4WJHJUjlwhkBjvy701pGKlw/Y=;
+ b=QNa+1K80vxNTqopGuc5Yr4opAcTuTHmJHoHkiVKJje2FKeAxXqKRWg7WuGaxZPN8o8zFeZIdpoUJ5DQafckY3jycM/T3yq9gexgcZs2p/N2gTIESF4ENh5JCXTEX80XM1y7Sh03IVDFeP5edgwLOhMx7xIfAV65rWbxG1GYWPi7n2GlyAUgwz0VSQaBbg82y9MWYcSYgzGGrvN0v7+5lKZDd6fmtpIJPcx4aw9LTKjaBeFi06vemQNzU6ZZ++7rzh8ri4qAROHRP1ooONHlpVU7nSVJimS06JJeXWauVVKAL9sIkao+4uSlqc0xGYESBJTgspDCjUKdy/WEGfFQ4IQ==
+Received: from MW4PR03CA0279.namprd03.prod.outlook.com (2603:10b6:303:b5::14)
+ by MW6PR12MB8960.namprd12.prod.outlook.com (2603:10b6:303:23e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Fri, 28 Apr
+ 2023 22:37:44 +0000
+Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b5:cafe::c7) by MW4PR03CA0279.outlook.office365.com
+ (2603:10b6:303:b5::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24 via Frontend
+ Transport; Fri, 28 Apr 2023 22:37:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.25 via Frontend Transport; Fri, 28 Apr 2023 22:37:44 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 28 Apr 2023
+ 15:37:32 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 28 Apr
+ 2023 15:37:32 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Fri, 28 Apr
+ 2023 15:37:30 -0700
+From:   Feng Liu <feliu@nvidia.com>
+To:     <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     Jason Wang <jasowang@redhat.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Feng Liu <feliu@nvidia.com>, "William Tu" <witu@nvidia.com>,
+        Parav Pandit <parav@nvidia.com>
+Subject: [PATCH net v1 1/2] virtio_net: Fix error unwinding of XDP initialization
+Date:   Fri, 28 Apr 2023 18:37:12 -0400
+Message-ID: <20230428223712.67499-1-feliu@nvidia.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wz4DVunhIB-C9geqtkNaLEbs_rmmxWmG
-X-Proofpoint-GUID: wz4DVunhIB-C9geqtkNaLEbs_rmmxWmG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 suspectscore=0 spamscore=0 impostorscore=0 mlxscore=0
- bulkscore=0 malwarescore=0 clxscore=1015 adultscore=0 priorityscore=1501
- mlxlogscore=884 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280188
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT045:EE_|MW6PR12MB8960:EE_
+X-MS-Office365-Filtering-Correlation-Id: 630cbd54-b5d5-4e8a-6938-08db48392f18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eaAbERAKqri5HWQIh+4/VIRY5eYP/FGkVZflHVbICQR8c/UhOLQ+g0SSkY49OnEFQAujfGMtna+Z6/FdxKKGQ3QZQMaP1r3SYGTbrOkijvcU1aioB74SwJMjLlyv77jQZOlDVGijHS+S4H8CaqPbLp8NNVj34AZepFXz5exHa4ptqZaBD3ZOM7M3zIW0WHV6JtLPjD5vBCiO2YsFE+hc0Ws7Yt6gSCGyEbC5h+bZZ0npbovvevyIfjq+Rw2aCm3kuswsHyy7eCkSliK4MOM8LWfuI9Y6a1l4WG+JS2uEGDxsW3uRsJCXfJRRx+iObo7hHsyapJxZFVm1AsC95K+iDD6sTtwUK+XPrkIB0xddHRIDEtKTeIWPQL1lGjvgQr60KEeL9drKYikhknvVMVwBqX5Wkm/LAOnPttzYpHOEljRGQa6LM+kwnka8Faxy5NuQK1wbQZcFnOoYHmvz+qkiw7xKsTEPH+OYf4sgSLBmBiBpJ9PliRqAQIdeGCoep+Hzh/NDoy/w0OyXxtskiSa+MIksNf9Fhcdi1MPwvippJOTNZWc6FK9hwZ9FIG8f5MqM0kod6tCTsDKKxrca5e+H+rzDcZbJ7uERcth86CvbQsub44E81T2SFbfBimVjJzT5QSo6ea5McZVKm6GYMQW3wxOFpl12D6jbpLKPZ4zMaAzYXdITMhi2fpy2K/vaxrW/KnXHCQhX09iejy3RdChf0w==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(39860400002)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(1076003)(26005)(40460700003)(186003)(54906003)(110136005)(478600001)(82310400005)(8676002)(7696005)(5660300002)(6666004)(36756003)(8936002)(2906002)(82740400003)(41300700001)(70206006)(4326008)(86362001)(316002)(70586007)(7636003)(356005)(107886003)(40480700001)(2616005)(83380400001)(336012)(426003)(36860700001)(47076005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 22:37:44.2271
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 630cbd54-b5d5-4e8a-6938-08db48392f18
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8960
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since GC and IGC masks have now been dropped DSPP_MSM8998_MASK
-is same as DSPP_SC7180_MASK. Since DSPP_SC7180_MASK is used more
-than DSPP_MSM8998_MASK, lets drop the latter.
+When initializing XDP in virtnet_open(), some rq xdp initialization
+may hit an error causing net device open failed. However, previous
+rqs have already initialized XDP and enabled NAPI, which is not the
+expected behavior. Need to roll back the previous rq initialization
+to avoid leaks in error unwinding of init code.
 
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+Signed-off-by: Feng Liu <feliu@nvidia.com>
+Reviewed-by: William Tu <witu@nvidia.com>
+Reviewed-by: Parav Pandit <parav@nvidia.com>
 ---
- drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 4 ++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c          | 2 --
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/virtio_net.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-index bdcd554fc8a8..a4679f72a262 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-@@ -127,9 +127,9 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
- };
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 8d8038538fc4..fc6ee833a09f 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1868,6 +1868,13 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+ 	return received;
+ }
  
- static const struct dpu_dspp_cfg msm8998_dspp[] = {
--	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
-+	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
- 		 &msm8998_dspp_sblk),
--	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_MSM8998_MASK,
-+	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_SC7180_MASK,
- 		 &msm8998_dspp_sblk),
- };
++static void virtnet_disable_qp(struct virtnet_info *vi, int qp_index)
++{
++	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
++	napi_disable(&vi->rq[qp_index].napi);
++	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
++}
++
+ static int virtnet_open(struct net_device *dev)
+ {
+ 	struct virtnet_info *vi = netdev_priv(dev);
+@@ -1883,20 +1890,27 @@ static int virtnet_open(struct net_device *dev)
  
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 791a6fc8bdbf..efd466f6122b 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -91,8 +91,6 @@
+ 		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
+ 		if (err < 0)
+-			return err;
++			goto err_xdp_info_reg;
  
- #define MERGE_3D_SM8150_MASK (0)
+ 		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+ 						 MEM_TYPE_PAGE_SHARED, NULL);
+-		if (err < 0) {
+-			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+-			return err;
+-		}
++		if (err < 0)
++			goto err_xdp_reg_mem_model;
  
--#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
--
- #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
+ 		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+ 		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
+ 	}
  
- #define INTF_SDM845_MASK (0)
+ 	return 0;
++
++	/* error unwinding of xdp init */
++err_xdp_reg_mem_model:
++	xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
++err_xdp_info_reg:
++	for (i = i - 1; i >= 0; i--)
++		virtnet_disable_qp(vi, i);
++
++	return err;
+ }
+ 
+ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
 -- 
-2.40.1
+2.37.1 (Apple Git-137.1)
 
