@@ -2,172 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05A16F1E21
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89F16F1E25
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346500AbjD1Siv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 14:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
+        id S1346503AbjD1Skm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 14:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjD1Sit (ORCPT
+        with ESMTP id S1346338AbjD1Skk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 14:38:49 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537171BEB
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:38:48 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id 006d021491bc7-546de76c23eso130319eaf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682707127; x=1685299127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6b+Htt6CLQb89zu+TCed4Uelo19IvsWFLMs9XiUa7MQ=;
-        b=fu45N3qU9YtD8VGGP9MFC2YqwcPCE/WQUJN6O/kveVsVfV0kr5P5qeU3r9o8tK58a9
-         Jr76FCQqdD1bG2PUjPeqWeIFKfpGInorn/CuL5ryX3COAgbmpWvkv64p/S1r7SHO5M+U
-         4ZNYCgp4NI4urSCgEzbDreZl1WSR+C5YVLkBlO2oxqgKsNPAb4L0LsNDE9oM8YcgnRBs
-         eqFBSBZW7pXXHQT6tgVo1vKKUJISevpmveyibFTx4LbYuuou/D6t/IL/oHtQgung/b4j
-         9iKl9lpc9yZJuLiQn+vUgzMRSTW/9gX5u6/UDyAeuVPoNKsjhU4SKFIRyK5G1/Yz31I6
-         FPLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682707127; x=1685299127;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6b+Htt6CLQb89zu+TCed4Uelo19IvsWFLMs9XiUa7MQ=;
-        b=lfxl8ytufXeJWU2UdckU3EA7is94yW0E8GpjfvxMWCpEouQPNZUTXZU008on10ndZJ
-         g60ORkTSLNiR687KizqGnuzGB9m/zW1LpS1nze9aTYUjxVu23zbHY8Xzl7AnfvEkLDQi
-         eI1lkiDeh0v0NjTp1BrcNeGPzp7egK+avORV1IOkYDCF01rUGKS3DpRiYSjcUyZr7uWa
-         LEFHoJ5GvOKNO8wPpEHXjkLDpJuX8V8i4iTKe9DPvya+8nPh/zhS0+9bj6TR1Z66Q2I/
-         iLl8xx/OvsCWVT7TmNAUfMoZGteZ9I0qlupnXKC2cQ+spoIrPd5qolXjU6R+V1sBlxm/
-         jkJQ==
-X-Gm-Message-State: AC+VfDwt8V/OqleWjYESJBM7em9zZZ3uO7ok0mFX9oFrJeBW7sxE0tKZ
-        G92XslF8VPwU7YkgT1O8jd+2qYbE6ajS9Qytqik3QQ==
-X-Google-Smtp-Source: ACHHUZ5C6UXIJImJC7x2BnIsepKsnuk8WixladYssB3eQmybOMYqJHcy2LP6lv5R4CyJFwMBkelofvcgzUPBWzyZHDg=
-X-Received: by 2002:a05:6820:1b15:b0:547:8545:acaf with SMTP id
- bv21-20020a0568201b1500b005478545acafmr3192957oob.7.1682707127442; Fri, 28
- Apr 2023 11:38:47 -0700 (PDT)
+        Fri, 28 Apr 2023 14:40:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9F51BEB;
+        Fri, 28 Apr 2023 11:40:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 060CF644EC;
+        Fri, 28 Apr 2023 18:40:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188BEC433EF;
+        Fri, 28 Apr 2023 18:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682707238;
+        bh=6QaYrKKqyi4SPrBpxEaO4Zgaql0xJU+aoMiwQ/TM5Jk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QGKCyKl7px4vlnQhfu2pG7CkleOfS41l+UtwgIfUZpKbfW3EZplr3j1EBIxMReUtt
+         pVpFfOcGp3PrNPZr/2Mc5UiDqv/nvZEPKaVrCpwsSO8Gr8VaCewfnp2iNdM3nu79Zx
+         1oAzoZnSt5LxEGiY3dMLiVRqIb6HP5VVckCIsY/kuArlJS5prOsH4Ty0V3GPikiLez
+         YUmqvPnKo+ORKr4mBYCyy7hmrMP7bHU6ZeqzRmZ7jw3w52jrgjXzVcTqgeHDRT78Q4
+         jBj25YWdtT2uib/KW1HErKs8Nedrx/Ju80G27SCFCWifqD3XgRdsdSnrGpfpKEzvfY
+         e7I2ZZBDyJrOA==
+Date:   Fri, 28 Apr 2023 13:40:36 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     korantwork@gmail.com
+Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: Re: [PATCH v5] PCI: vmd: Add the module param to adjust MSI mode
+Message-ID: <20230428184036.GA298937@bhelgaas>
 MIME-Version: 1.0
-References: <20230427000152.1407471-1-biswarupp@google.com>
-In-Reply-To: <20230427000152.1407471-1-biswarupp@google.com>
-From:   Siarhei Vishniakou <svv@google.com>
-Date:   Fri, 28 Apr 2023 11:38:36 -0700
-Message-ID: <CAKF84v2Rw8xQv=m+ciL+n_uXhyAZWFmhYpgA63Q=DnVh5sbOsw@mail.gmail.com>
-Subject: Re: [PATCH] Call input_set_timestamp for events injected using uinput
-To:     Biswarup Pal <biswarupp@google.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        kernel-team@android.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420070914.1383918-1-korantwork@gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Biswarup!
+On Thu, Apr 20, 2023 at 03:09:14PM +0800, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> In the past, the vmd MSI mode can only be adjusted by configuring
+> vmd_ids table. This patch adds another way to adjust MSI mode by
+> adjusting module parameter, which allows users easier to adjust the vmd
+> according to the I/O scenario without rebuilding driver.
 
-Just to add a bit of context: we were concerned with  breaking the
-existing uinput usages where the caller might be setting an incorrect
-value (since previously, that had no effect).
-So the 10 second guard was added to fall back to the default behaviour
-for those devices.
+We're making good progress here, but I still have a hard time
+understanding what's going on, partly because some of the naming is
+confusing to me.
 
-Reviewed-by: Siarhei Vishniakou <svv@google.com>
+The "VMCONFIG_MSI_REMAP" name suggests that setting this bit enables
+MSI remapping, but I think it actually *disables* MSI remapping.  IMO
+this should be named something like "VMCONFIG_MSI_REMAP_DISABLE".
+(This would be a separate patch if we did anything like this.)
 
-On Wed, Apr 26, 2023 at 5:03=E2=80=AFPM Biswarup Pal <biswarupp@google.com>=
- wrote:
+> - "disable_msi_bypass=0 or other values":
+>   Under normal circumstances, we recommend enable the VMD MSI-X bypass
+>   feature, which improves interrupt handling performance by avoiding
+>   the VMD MSI-X domain interrupt handler.
+
+The "disable_msi_bypass" parameter name also leads to some complicated
+logic.  IIUC, "disable_msi_bypass=0" means "do not disable MSI remap
+bypassing" or, in other words, "do not remap MSIs."  This is only
+supported by some VMDs.  Using "disable_msi_bypass=0" to *enable* the
+bypass feature is confusing.
+
+And I guess "disable_msi_bypass=1" means "remap MSIs" (which is
+supported by all VMD versions)?
+
+What if you made boolean parameters like these:
+
+  no_msi_remap
+
+    If the VMD supports it, disable VMD MSI-X remapping.  This
+    improves interrupt performance because child device interrupts
+    avoid the VMD MSI-X domain interrupt handler.
+
+  msi_remap
+
+    Remap child MSI-X interrupts into VMD MSI-X interrupts.  This
+    limits the number of MSI-X vectors available to the whole child
+    device domain to the number of VMD MSI-X interrupts.
+
+Is it also the case that "msi_remap" may be required for some
+virtualization scenarios when the vmd driver can't work that out
+itself via vmd_get_phys_offsets()?
+
+> - "disable_msi_bypass=1":
+>   Use this when multiple NVMe devices are mounted on the same PCIe
+>   node with a high volume of 4K random I/O. It mitigates excessive
+>   pressure on the PCIe node caused by numerous interrupts from NVMe
+>   drives, resulting in improved I/O performance. Such as:
 >
-> Currently, uinput doesn't use the input_set_timestamp API, so any
-> event injected using uinput is not accurately timestamped in terms of
-> measuring when the actual event happened. Hence, call the
-> input_set_timestamp API from uinput in order to provide a more
-> accurate sense of time for the event. Propagate only the timestamps
-> which are a) positive, b) within a pre-defined offset (10 secs) from
-> the current time, and c) not in the future.
->
-> Signed-off-by: Biswarup Pal <biswarupp@google.com>
+>   In FIO 4K random test when 4 NVME(Gen4) mounted on the same PCIE port:
+>     - Enable bypass: read: IOPS=562k, BW=2197MiB/s, io=644GiB
+>     - Disable bypass: read: IOPS=1144k, BW=4470MiB/s, io=1310GiB
+
+I still don't understand what causes the performance problem here.  I
+guess you see higher performance when the VMD remaps child MSIs?  So
+adding the VMD MSI-X domain interrupt handler and squashing all the
+child MSI vectors into the VMD MSI vector space makes things better?
+That seems backwards.  Is this because of cache effects or something?
+
+What does "excessive pressure on the PCIe node" mean?  I assume the
+PCIe node means the VMD?  It receives the same number of child
+interrupts in either case.
+
+> As not all devices support VMD MSI-X bypass, this parameter is
+> only applicable to devices that support the bypass function and
+> have already enabled it, such as VMD_28C0.
+
+If you made two boolean parameters, "msi_remap" would work for all
+devices, and "no_msi_remap" would work only on certain VMDs, right?
+
+> Besides, this parameter does not affect the MSI-X working mode in
+> guest.
+
+I don't understand what you're saying here.  From the patch, I think
+that "disable_msi_bypass=1", i.e., "always remap child MSIs", means we
+pretend this VMD doesn't support the VMCONFIG_MSI_REMAP bit.  In that
+case MSI remapping always happens.
+
+If the user may need to use "disable_msi_bypass=1" (or "msi_remap") in
+some virtualization scenarios, we should mention that and maybe give a
+hint about what happens *without* that parameter.
+
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
 > ---
->  drivers/input/misc/uinput.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->
-> diff --git a/drivers/input/misc/uinput.c b/drivers/input/misc/uinput.c
-> index f2593133e524..d98212d55108 100644
-> --- a/drivers/input/misc/uinput.c
-> +++ b/drivers/input/misc/uinput.c
-> @@ -33,6 +33,7 @@
->  #define UINPUT_NAME            "uinput"
->  #define UINPUT_BUFFER_SIZE     16
->  #define UINPUT_NUM_REQUESTS    16
-> +#define UINPUT_TIMESTAMP_ALLOWED_OFFSET_SECS 10
->
->  enum uinput_state { UIST_NEW_DEVICE, UIST_SETUP_COMPLETE, UIST_CREATED }=
-;
->
-> @@ -569,11 +570,40 @@ static int uinput_setup_device_legacy(struct uinput=
-_device *udev,
->         return retval;
->  }
->
+>  drivers/pci/controller/vmd.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 990630ec57c6..8ee673810cbf 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -34,6 +34,20 @@
+>  #define MB2_SHADOW_OFFSET	0x2000
+>  #define MB2_SHADOW_SIZE		16
+>  
 > +/*
-> + * Returns true if the given timestamp is valid (i.e., if all the follow=
-ing
-> + * conditions are satisfied), false otherwise.
-> + * 1) given timestamp is positive
-> + * 2) it's within the allowed offset before the current time
-> + * 3) it's not in the future
+> + * The VMD disable_msi_bypass module parameter provides the alternative
+> + * way to adjust MSI mode when loading vmd.ko. This parameter is only applicable
+> + * to devices that both support and have enabled bypass, such as VMD_28C0.
+> + * Besides, it does not affect MSI-X mode in the guest.
+> + *
+> + * 1: disable MSI-X bypass
+> + * other values: not disable MSI-X bypass
 > + */
-> +static bool is_valid_timestamp(const ktime_t timestamp)
+> +static int disable_msi_bypass;
+> +module_param(disable_msi_bypass, int, 0444);
+> +MODULE_PARM_DESC(disable_msi_bypass, "Whether to disable MSI-X bypass function.\n"
+> +	"\t\t  Only effective on the device supporting bypass, such as 28C0.");
+> +
+>  enum vmd_features {
+>  	/*
+>  	 * Device may contain registers which hint the physical location of the
+> @@ -875,6 +889,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  			return ret;
+>  
+>  		vmd_set_msi_remapping(vmd, true);
+> +		dev_info(&vmd->dev->dev, "init vmd with remapping MSI-X\n");
+>  
+>  		ret = vmd_create_irq_domain(vmd);
+>  		if (ret)
+> @@ -887,6 +902,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+>  	} else {
+>  		vmd_set_msi_remapping(vmd, false);
+> +		dev_info(&vmd->dev->dev, "init vmd with bypass MSI-X\n");
+>  	}
+>  
+>  	pci_add_resource(&resources, &vmd->resources[0]);
+> @@ -955,6 +971,17 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  	return 0;
+>  }
+>  
+> +static void vmd_config_msi_bypass_param(unsigned long *features)
 > +{
-> +       ktime_t zero_time;
-> +       ktime_t current_time;
-> +       ktime_t min_time;
-> +       ktime_t offset;
-> +
-> +       zero_time =3D ktime_set(0, 0);
-> +       if (ktime_compare(zero_time, timestamp) >=3D 0)
-> +               return false;
-> +
-> +       current_time =3D ktime_get();
-> +       offset =3D ktime_set(UINPUT_TIMESTAMP_ALLOWED_OFFSET_SECS, 0);
-> +       min_time =3D ktime_sub(current_time, offset);
-> +
-> +       if (ktime_after(min_time, timestamp) || ktime_after(timestamp, cu=
-rrent_time))
-> +               return false;
-> +
-> +       return true;
+> +	/*
+> +	 * Not every VMD device supports and enables bypass MSI-X.
+> +	 * Make sure current device has the bypass flag set.
+> +	 */
+> +	if (disable_msi_bypass == 1 &&
+> +	  *features & VMD_FEAT_CAN_BYPASS_MSI_REMAP)
+> +		*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
 > +}
 > +
->  static ssize_t uinput_inject_events(struct uinput_device *udev,
->                                     const char __user *buffer, size_t cou=
-nt)
+>  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
 >  {
->         struct input_event ev;
->         size_t bytes =3D 0;
-> +       ktime_t timestamp;
->
->         if (count !=3D 0 && count < input_event_size())
->                 return -EINVAL;
-> @@ -588,6 +618,10 @@ static ssize_t uinput_inject_events(struct uinput_de=
-vice *udev,
->                 if (input_event_from_user(buffer + bytes, &ev))
->                         return -EFAULT;
->
-> +               timestamp =3D ktime_set(ev.input_event_sec, ev.input_even=
-t_usec * NSEC_PER_USEC);
-> +               if (is_valid_timestamp(timestamp))
-> +                       input_set_timestamp(udev->dev, timestamp);
+>  	unsigned long features = (unsigned long) id->driver_data;
+> @@ -984,6 +1011,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	if (err < 0)
+>  		goto out_release_instance;
+>  
+> +	vmd_config_msi_bypass_param(&features);
 > +
->                 input_event(udev->dev, ev.type, ev.code, ev.value);
->                 bytes +=3D input_event_size();
->                 cond_resched();
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
+>  	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
+>  	if (!vmd->cfgbar) {
+>  		err = -ENOMEM;
+> -- 
+> 2.31.1
+> 
