@@ -2,275 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B226F1300
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249E86F1303
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345438AbjD1IJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 04:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S229993AbjD1IJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjD1IJD (ORCPT
+        with ESMTP id S1345483AbjD1IJL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:09:03 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4952D1BF3;
-        Fri, 28 Apr 2023 01:09:00 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:56220.1166601949
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id D2D49100237;
-        Fri, 28 Apr 2023 16:08:56 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id b7a89ae67736480d9bfae214343db7a0 for 15330273260@189.cn;
-        Fri, 28 Apr 2023 16:08:58 CST
-X-Transaction-ID: b7a89ae67736480d9bfae214343db7a0
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <d788894c-0afa-d5cf-a2f8-cbf201200db6@189.cn>
-Date:   Fri, 28 Apr 2023 16:08:54 +0800
+        Fri, 28 Apr 2023 04:09:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF2430F4;
+        Fri, 28 Apr 2023 01:09:09 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.187.173])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2791266032C3;
+        Fri, 28 Apr 2023 09:09:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682669347;
+        bh=j90SNX8gDxgMch3e8i0rNxBg5i2HnX4rEsOIw0VxQug=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=nI15zjo251FRTC5y40Ph5kANUL6OpwjTQHhBiCc1uYNex6zMsiHvISoE8uCrrfUDO
+         CZnVGzeLa5xN2QyYXcoIMztjkby06Zm8lyrvdYl03Wv78nYdfG7+cLw3Bc7PEbKdyJ
+         Wwekx7SqPnqQXON2mPROfZV+pjJvaPBOrV7zrvrWwJMuBoHDg9gVNYDqMMX8n7UAK+
+         UEpK8FZlXwJOytRYk80h1vkjDKl6Odzin94OAbo8/pkXzvQaAFQSqVmO9XfPBiNy+Y
+         hTUKl2JvxqKfdSiijdFoFtMUHNftbg8e0JO6bMfryIgGK9/jvAslyRWk/1XTeQsfbA
+         5zW4Nyd2rTyQw==
+Message-ID: <b0af0f17-907c-3905-faf8-1c1e43acbca2@collabora.com>
+Date:   Fri, 28 Apr 2023 13:09:00 +0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
- access
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
-References: <20230413180622.1014016-1-15330273260@189.cn>
- <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
- <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
- <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
- <95ef7589-9775-5ad4-f09c-43bcd696823a@189.cn>
- <ZEpBmkf8CWMwZ/gr@phenom.ffwll.local>
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/powerpc: Replace obsolete memalign() with
+ posix_memalign()
 Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <ZEpBmkf8CWMwZ/gr@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Deming Wang <wangdeming@inspur.com>, mpe@ellerman.id.au,
+        shuah@kernel.org
+References: <20230413010250.4254-1-wangdeming@inspur.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230413010250.4254-1-wangdeming@inspur.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 4/13/23 6:02 AM, Deming Wang wrote:
+> memalign() is obsolete according to its manpage.
+> 
+> Replace memalign() with posix_memalign() and remove malloc.h include
+> that was there for memalign().
+Thanks for the patch.
 
-On 2023/4/27 17:34, Daniel Vetter wrote:
-> On Thu, Apr 20, 2023 at 02:47:24AM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/4/17 15:29, Thomas Zimmermann wrote:
->>> Hi
->>>
->>> Am 14.04.23 um 12:58 schrieb Sui Jingfeng:
->>>> Hi,
->>>>
->>>> On 2023/4/14 03:16, Thomas Zimmermann wrote:
->>>>> Hi,
->>>>>
->>>>> thanks for the patch. This is effectively a revert of commit
->>>>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM
->>>>> buffer"). Please add a Fixes tag.
->>>>>
->>>>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
->>>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>
->>>>>> The crazy fbdev test of IGT may write after EOF, which lead
->>>>>> to out-of-bound
->>>>> Please drop 'crazy'. :)
->>>> This is OK.
->>>>
->>>> By using the world 'crazy',
->>>>
->>>> I meant that the test is very good and maybe it is written by
->>>> professional  peoples
->>>>
->>>> with the guidance by  experienced  engineer. So that even the corner
->>>> get tested.
->>>>
->>>>
->>>>>> access for the drm drivers using fbdev-generic. For example,
->>>>>> run fbdev test
->>>>>> on a x86-64+ast2400 platform with 1680x1050 resolution will
->>>>>> cause the linux
->>>>>> kernel hang with following call trace:
->>>>>>
->>>>>>     Oops: 0000 [#1] PREEMPT SMP PTI
->>>>>>     [IGT] fbdev: starting subtest eof
->>>>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
->>>>>>     [IGT] fbdev: starting subtest nullptr
->>>>>>
->>>>>>     RIP: 0010:memcpy_erms+0xa/0x20
->>>>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
->>>>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
->>>>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
->>>>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
->>>>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
->>>>>>     R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
->>>>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
->>>>>> knlGS:0000000000000000
->>>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
->>>>>>     Call Trace:
->>>>>>      <TASK>
->>>>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
->>>>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
->>>>>>      process_one_work+0x21f/0x430
->>>>>>      worker_thread+0x4e/0x3c0
->>>>>>      ? __pfx_worker_thread+0x10/0x10
->>>>>>      kthread+0xf4/0x120
->>>>>>      ? __pfx_kthread+0x10/0x10
->>>>>>      ret_from_fork+0x2c/0x50
->>>>>>      </TASK>
->>>>>>     CR2: ffffa17d40e0b000
->>>>>>     ---[ end trace 0000000000000000 ]---
->>>>>>
->>>>>> The indirect reason is drm_fb_helper_memory_range_to_clip()
->>>>>> generate damage
->>>>>> rectangles which partially or completely go out of the
->>>>>> active display area.
->>>>>> The second of argument 'off' is passing from the user-space,
->>>>>> this will lead
->>>>>> to the out-of-bound if it is large than (fb_height + 1) *
->>>>>> fb_pitches; while
->>>>>> DIV_ROUND_UP() may also controbute to error by 1.
->>>>>>
->>>>>> This patch will add code to restrict the damage rect
->>>>>> computed go beyond of
->>>>>> the last line of the framebuffer.
->>>>>>
->>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>> ---
->>>>>>    drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
->>>>>>    drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
->>>>>>    2 files changed, 13 insertions(+), 5 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
->>>>>> b/drivers/gpu/drm/drm_fb_helper.c
->>>>>> index 64458982be40..6bb1b8b27d7a 100644
->>>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
->>>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
->>>>>> @@ -641,19 +641,27 @@ static void
->>>>>> drm_fb_helper_damage(struct drm_fb_helper *helper, u32 x,
->>>>>> u32 y,
->>>>>>    static void drm_fb_helper_memory_range_to_clip(struct
->>>>>> fb_info *info, off_t off, size_t len,
->>>>>>                               struct drm_rect *clip)
->>>>>>    {
->>>>>> +    u32 line_length = info->fix.line_length;
->>>>>> +    u32 fb_height = info->var.yres;
->>>>>>        off_t end = off + len;
->>>>>>        u32 x1 = 0;
->>>>>> -    u32 y1 = off / info->fix.line_length;
->>>>>> +    u32 y1 = off / line_length;
->>>>>>        u32 x2 = info->var.xres;
->>>>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
->>>>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
->>>>>> +
->>>>>> +    /* Don't allow any of them beyond the bottom bound of
->>>>>> display area */
->>>>>> +    if (y1 > fb_height)
->>>>>> +        y1 = fb_height;
->>>>>> +    if (y2 > fb_height)
->>>>>> +        y2 = fb_height;
->>>>>>          if ((y2 - y1) == 1) {
->>>>>>            /*
->>>>>>             * We've only written to a single scanline. Try to reduce
->>>>>>             * the number of horizontal pixels that need an update.
->>>>>>             */
->>>>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
->>>>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
->>>>>> +        off_t bit_off = (off % line_length) * 8;
->>>>>> +        off_t bit_end = (end % line_length) * 8;
->>>>> Please scratch all these changes. The current code should work
->>>>> as intended. Only the generic fbdev emulation uses this code and
->>>>> it should really be moved there at some point.
->>>>
->>>> Are you meant  that we should remove all these changes in
->>>> drivers/gpu/drm/drm_fb_helper.c ?
->>> As Daniel mentioned, there's the discussion in the other thread. I don't
->>> want to reopen it here. Just to summarize: I'm not convinced that this
->>> should be DRM code because it can be shared with other fbdev drivers.
->>>
->>> [...]
->>>
->>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> index 8e5148bf40bb..b057cfbba938 100644
->>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
->>>>>> @@ -94,7 +94,7 @@ static int
->>>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper
->>>>>> *fb_helper,
->>>>>>        fb_helper->buffer = buffer;
->>>>>>        fb_helper->fb = buffer->fb;
->>>>>>    -    screen_size = buffer->gem->size;
->>>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
->>> This has been bothering me over the weekend. And I think it's because
->>> what we want the screen_size to be heigth * pitch,  but the mmap'ed
->>> memory is still at page granularity. Therefore...
->>>
->>> [...]
->>>>>>        screen_buffer = vzalloc(screen_size);
->>> ... this line should explicitly allocate multiples of pages. Something
->>> like
->>>
->>>      /* allocate page-size multiples for mmap */
->>>      vzalloc(PAGE_ALIGN(screen_size))
->>>
->> I just thought about your instruction at here, thanks!
->>
->> But it is already page size aligned if we don't tough it.
->>
->> It is guaranteed by the GEM memory manger,
->>
->> so a previous patch tested by me, is turn out to be a extremely correct?
->>
->> We exposed a  page size aligned buffer(even though it is larger than needed)
->> is actually for mmap ?
-> mmap() is always page aligned, because that's the smallest size the cpu
-> pagetables can map. So there's fundamentally always a bit of memory at the
-> end of the buffer which logically is not part of the framebuffer memory.
-> And somehow we need to handle that to make sure we don't overflow.
-> -Daniel
+> 
+> As a pointer is passed into posix_memalign(), initialize *s to NULL
+I'm unable to find this initialization below. Did you really mean to add
+the initialization?
 
-Yeah, buffer allocating should be page size aligned,
+> to silence a warning about the function's return value being used as
+> uninitialized (which is not valid anyway because the error is properly
+> checked before s is returned).
+> 
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  tools/testing/selftests/powerpc/stringloops/strlen.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/powerpc/stringloops/strlen.c b/tools/testing/selftests/powerpc/stringloops/strlen.c
+> index 9055ebc484d0..f9c1f9cc2d32 100644
+> --- a/tools/testing/selftests/powerpc/stringloops/strlen.c
+> +++ b/tools/testing/selftests/powerpc/stringloops/strlen.c
+> @@ -1,5 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include <malloc.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <time.h>
+> @@ -51,10 +50,11 @@ static void bench_test(char *s)
+>  static int testcase(void)
+>  {
+>  	char *s;
+> +	int ret;
+>  	unsigned long i;
+>  
+> -	s = memalign(128, SIZE);
+> -	if (!s) {
+> +	ret = posix_memalign((void **)&s, 128, SIZE);
+> +	if (ret < 0) {
+Can we do if (!ret) instead? The page says:
+posix_memalign()  returns zero on success.
+>  		perror("memalign");
+>  		exit(1);
+>  	}
 
-A single page share the same caching property.
-
-
-fbdev test use the `smem_len` member of `fix_info` to know the true size 
-of the shadow screen buffer.
-
-Exposing a large one actually allow the test writing to somewhere beyond 
-the logically visible area.
-
-
-I need to learn more and testing more to verify if there are still 
-risks, I'll take a look.
-
-Thanks for sharing the knowledge.
-
->>
->>> It has not been a bug so far because vzalloc() always returns full pages
->>> IIRC. It's still worth fixing.
->>>
->>> Best regards
->>> Thomas
->>>
->>>
->>>>>>        if (!screen_buffer) {
->>>>>>            ret = -ENOMEM;
+-- 
+BR,
+Muhammad Usama Anjum
