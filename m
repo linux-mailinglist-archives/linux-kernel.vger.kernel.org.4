@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0786F1E5A
+	by mail.lfdr.de (Postfix) with ESMTP id A95826F1E5B
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346628AbjD1S44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 14:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37516 "EHLO
+        id S1346624AbjD1S4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 14:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346576AbjD1S4g (ORCPT
+        with ESMTP id S1346559AbjD1S4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 28 Apr 2023 14:56:36 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C694B6A5E
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2064.outbound.protection.outlook.com [40.107.243.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C46A5D
         for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:56:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=exjIg+g5CFc0DNuL/KUOZObTLr2itsr/B1HaJsWcwyUp0r5z6TLQwWtY6Hs8lVqG2ih0Ccl4vUkftPyYJ494ucm3e1ssQcAzWyZtFpEqObrrCDK1vZrWSPPIwvDdStvCVd749ORpoXplOslZA4E2dJ2dBKjPlgSi4ORWut/vckRAV0B6eVO2wRTAQ2NsKR4z6bbcl1pozE6/+WcAy1SEwnsuaHFBNxR20lGQXs6iCwkfh8IIxhH1mNW3Jp75cVMDTiP2dkl5hcsbTj74liJnKlCdaTc9n3YRr33Cy0UuCRvizNJjaBb13AK92lVUCen04p03ejRdWfvbVN6IP5Hndw==
+ b=Oo/GHAdyjR95txDmjBbKt9NyD+a8kCdtos6sMrMNv1h7mGpu7IBjcnm1oyZycQtmT2XTlli36ziacowMn+dDUJlkMe0li5jqIYo52ESXNi0bTqohsF6HmQuUok6x+c/+25pla5JQvetW5E1FmESvXNM2O7+QcYQGpQqeCRuP3VJ92CaSq3B5M2wJaqLDIO85essUKhelVJ3T0nM4AqfBSbE4wPM5vAb5fcZ4HTF4ieOtW4Ekz07TcIUeIsAae4hWRDgiAhU0guWsS006byy7SQf9BIWqfJWLB9hOMxTjJvUEF1lpO78FeZrKhcr9gCUDD/Jj42mmnp5wMMt3C7sctg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lJ2R7p1+EheZHnyiiVN2R3UsfUXuzN8/4nby8MGswZg=;
- b=eeUK7lDdemklkzV32asHZuC+YIoY9L9NfswMziBYpU6+sIbg+ji42hpcX3zegcsh0NbpqGDuqeoXl/a1N2/2oMGiWUzcDTlX7KQKedMcYnZE7w91DEoW13QiXRa/e3Wi9rxZwj1zwRyE5VgLphXUS8lIVigF96ZeBcp4/+iH37ASXicjldefEZagFql9nW8N9ftWVwymrD9gFRSdZsHHjwioRehl5rj4AgDJvzza/auip4LZpQe7TlG6SM3NWv9pF4b34z53QjSyyAMIDo1MmIMTfKJ428KUn2yAcsRH7r/OzNib1/wY8rX8NhMnpU2ZKIpJwtgLV2VOE/4rjWhyzA==
+ bh=3vRp3oQ5mI3lG5LA7CKfO8Bfupy1g/R2DxOVyVWTqMs=;
+ b=evp98eq3JyTx6cXNnqotftgQXUKq+Oj/51IhOdhk3GKzY+dOoBnU+GGob7wUFYG29p0/1Ao1K/AwbQdDMMBiAi5fL1PmS/lZpZKD3TNo4MCU9esD4u6EgpyHv8n3utVOXWNA1cAotQ9eBrBodTHgPnEWntEyH/YJ4jvgUy+gkph8OQZ3fbI4WFrDDB1ayx4Kz1amT3Jy12eHXm5Os/b5GvyEVlqirKajB+UEYrMBf0AghWD5gW0ell6pbC/5c5R+q9I6MGULzFPyuaw749sHR0by2KrmnfQ+iWD0tGuR6RnxABFE8Iwlbu8GRyqF8mNzu9jI62a0Ma/ouROVbOH6/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lJ2R7p1+EheZHnyiiVN2R3UsfUXuzN8/4nby8MGswZg=;
- b=xllvhv5BQzvR+EHXlq11r3anhZkVEGmAZMIMFUkAwLPIj+cUu3lVG0p6FCQUTpB0J9Kw/eMepKuL8osmz1XAtb86V04EAFSwASo9FRXVUKKfVaD+eLD5tYeX3SG5+88ymA2zsoHu4hkcY5Ol98SziwPGlXMzKAR5SRnNN0aQ1Kw=
-Received: from DM6PR11CA0064.namprd11.prod.outlook.com (2603:10b6:5:14c::41)
- by SJ2PR12MB8977.namprd12.prod.outlook.com (2603:10b6:a03:539::20) with
+ bh=3vRp3oQ5mI3lG5LA7CKfO8Bfupy1g/R2DxOVyVWTqMs=;
+ b=Z1D6lIdZuhlRseIdiDHhrRoMsP5BfRL/HW6UoquYK5Mkp41nwKTX0MVUhWtCdBssxjLmDqZ5MXIPvdUbtmEkx+Yr1CNTpvdb2PKaJMrwgVscraSJHqlRFg97sPXQGxMvNaxgFgsHkCdxxGITKbItXN7LgfWKqsuwDnGn+Z3m4q8=
+Received: from DM6PR11CA0045.namprd11.prod.outlook.com (2603:10b6:5:14c::22)
+ by DM4PR12MB5040.namprd12.prod.outlook.com (2603:10b6:5:38b::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.23; Fri, 28 Apr
  2023 18:56:13 +0000
 Received: from DM6NAM11FT045.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:14c:cafe::d) by DM6PR11CA0064.outlook.office365.com
- (2603:10b6:5:14c::41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.25 via Frontend
- Transport; Fri, 28 Apr 2023 18:56:12 +0000
+ (2603:10b6:5:14c:cafe::7e) by DM6PR11CA0045.outlook.office365.com
+ (2603:10b6:5:14c::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24 via Frontend
+ Transport; Fri, 28 Apr 2023 18:56:13 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -49,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  DM6NAM11FT045.mail.protection.outlook.com (10.13.173.123) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6340.23 via Frontend Transport; Fri, 28 Apr 2023 18:56:12 +0000
+ 15.20.6340.23 via Frontend Transport; Fri, 28 Apr 2023 18:56:13 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 28 Apr
- 2023 13:56:09 -0500
+ 2023 13:56:11 -0500
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         Tom Lendacky <thomas.lendacky@amd.com>,
@@ -61,9 +61,9 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
 CC:     David S Miller <davem@davemloft.net>,
         John Allen <john.allen@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 08/10] crypto: ccp: Add a sample script for Dynamic Boost Control
-Date:   Fri, 28 Apr 2023 13:55:38 -0500
-Message-ID: <20230428185543.8381-9-mario.limonciello@amd.com>
+Subject: [PATCH v2 09/10] crypto: ccp: Add unit tests for dynamic boost control
+Date:   Fri, 28 Apr 2023 13:55:39 -0500
+Message-ID: <20230428185543.8381-10-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230428185543.8381-1-mario.limonciello@amd.com>
 References: <20230428185543.8381-1-mario.limonciello@amd.com>
@@ -75,23 +75,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT045:EE_|SJ2PR12MB8977:EE_
-X-MS-Office365-Filtering-Correlation-Id: 59393b40-f0ae-4ceb-ceb9-08db481a3ccd
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT045:EE_|DM4PR12MB5040:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bde77d4-bef4-4440-cae8-08db481a3d0b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UuAZn0TY9zoz6UPmDoJTKdjvlHvqGuYxutDjrf1yOwISDXsYbQH3phnCLRB8xVjHVrjpXUhcdkR/cn5/CSQTgKTvlVEKop0IyhDQB2bKeDL9d7hYthSgwMJBhYjqx9kCwUzTtYnG+8HAEA+Tz9pRoIHY5JiY/XAm07So34WdK8mGwdOwZvEnSbwkIzIfSvjlG5A9PPlv7DvHynBLuAYsEOsgkXuYx0itQZE/daSQponLATrp1zx3R46aNzujiH9aDS7oFlT7C849n/Tl0Xy09wMoUG4UweWHro2MP1BA5SzNGBQ1kqu4eQMR/5ZnNTUrumMPJFjiePogk4nWMu98hJpX+RDEFPZMX2YXHEIzn7reSArLjD1ksNpjNyzE3SN0e0dF+kZF/B2YO+lGO3kbQ476cj2AXrMBVg4hYbLUNvmVqH/yEg82RhSC9cpgpBUQEjw8iSsSFjat1UZJ1pCtsUENZQDM3MVYtGLrLMfH6d3ptIhO1YNSc3qWFo9WpbRehe5WifYsrm18BSKSMByNUYzbkdKsGtnqevZrC/xL7h1b8DPHLs0OWIs1c1PK59+K/rtlmntOqUykvSIHm2rANf75Jto/ChB5BfrfV64bYE2RKMi1IYQ+EJBped10NC5C/CglwzpuN3o4P0Pd4jvcQigE+67HMAKNazefoAgfgALL5UxJdnNUeXycmT2/vnlBI7uIrIQCqbYkWiUaJbOYS2h47MbbQjRf+2gmO4WpF3c=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(39860400002)(136003)(451199021)(46966006)(36840700001)(40470700004)(40480700001)(40460700003)(70206006)(110136005)(70586007)(54906003)(8676002)(8936002)(41300700001)(5660300002)(316002)(4326008)(478600001)(356005)(81166007)(82740400003)(16526019)(7696005)(426003)(336012)(83380400001)(186003)(47076005)(6666004)(36860700001)(2616005)(44832011)(26005)(1076003)(86362001)(36756003)(2906002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: l29cr6afXNCPRZFUpio7EMjnwP42NB933fcgxNnVBcWfEF2wIL3SDDeYmKRXvxZhus/CXo14rtCFZhsPm0b4LWorV2SNf6LPTs0x9rmbaLgOli9i1MZb79UAsMu4kGb2ygYzwhfskL7eeCWZxUrIbjTc6/xvGN2VMWfY+deVwNbnwUQfh3vp8Xd7XLw9QNgMyUX03XI0nH5LpWMEXXpp1nKCdJjavoKDrLQheaUdziL2LCJexP/iQcAN/JmYCNox0SAXKA9ELwaWKMaZJX0qFfc+aO30EKCklIh3yJgKySuo3L/hggN01E+ay8mVEP4nVuSH96X2pGAs57HRFtfCnfXEG3MMtFJxqSAaMzmhdhGj3VAs4v0G3EhF2DASX8tUf/mfFt3G6AYOjttvDySQdI8kAvwd8yShlu5iriqbLff8tomuv9Al8CfXkvladVmvNfApiwtDWGqBtOPI7MVpfu9vMYVd1DN5JZNiQAMxSuDzgmmYO3gul4XBDVCfBP0QhHd8Yg62Q55/83bWxIhoE2HeMz8Jepkp694VtdZUTEP4q6WelUcB++F9Wn4yRCfX6f6uohnBRVqi+AFfY/O5gh/nykNPI1qoPKK1Zcg8r6PK6wJqYghRXsX/uMdAyRmvLCfaxRt8v9nG8ImckV+/xxB5AJfBbF4rCMdBUwqsOEgxwvi654r/yca7t2fGOSga2IRDoGTyCbmymOTyDNTm3+UP5cJH0lqSHAyj1bcYcGw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(46966006)(36840700001)(40470700004)(81166007)(356005)(44832011)(8676002)(8936002)(5660300002)(83380400001)(70586007)(316002)(41300700001)(4326008)(70206006)(36860700001)(82740400003)(82310400005)(2616005)(336012)(47076005)(426003)(40460700003)(2906002)(54906003)(478600001)(16526019)(86362001)(186003)(1076003)(110136005)(26005)(40480700001)(6666004)(7696005)(36756003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 18:56:12.8746
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 18:56:13.2808
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 59393b40-f0ae-4ceb-ceb9-08db481a3ccd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bde77d4-bef4-4440-cae8-08db481a3d0b
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT045.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8977
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5040
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -103,267 +103,301 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dynamic Boost Control is utilized by userspace with a collection
-of 2 R/W IOCTLs and 1 W IOCTL. Userspace needs to prepare buffers
-with the appropriate signature data and details of the request.
+Interacting with dynamic boost control messages requires the caller
+to supply a signature. To allow validation of individual dynamic
+boost control components, introduce a set of tests that can be run.
 
-To allow rapid prototyping and testing this interface, add a python3
-command line script that can validate the functionality of these
-IOCTLs.
+The tests can be run in 3 distinct different environments, and so
+certain tests will be skipped depending on the environment.
 
-NOTE: This script does *not* generate signatures.  They will need to
-be prepared separately and passed as arguments.
+1. Systems that do not support DBC.
+2. Production systems that support DBC but are secured silicon.
+3. Pre-production systems that support DBC but are unsecured silicon.
+
+Unsecured silicon does not validate the signature, and so this allows
+testing more of the state machine and functionality.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- tools/crypto/ccp/.gitignore |   1 +
- tools/crypto/ccp/dbc.py     |  98 ++++++++++++++++++++++++++++
- tools/crypto/ccp/dbc_cli.py | 123 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 222 insertions(+)
- create mode 100644 tools/crypto/ccp/.gitignore
- create mode 100644 tools/crypto/ccp/dbc.py
- create mode 100755 tools/crypto/ccp/dbc_cli.py
+v1->v2:
+    * Update commit message
+---
+ tools/crypto/ccp/test_dbc.py | 266 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 266 insertions(+)
+ create mode 100755 tools/crypto/ccp/test_dbc.py
 
-diff --git a/tools/crypto/ccp/.gitignore b/tools/crypto/ccp/.gitignore
-new file mode 100644
-index 000000000000..bee8a64b79a9
+diff --git a/tools/crypto/ccp/test_dbc.py b/tools/crypto/ccp/test_dbc.py
+new file mode 100755
+index 000000000000..a58c153d52e6
 --- /dev/null
-+++ b/tools/crypto/ccp/.gitignore
-@@ -0,0 +1 @@
-+__pycache__
-diff --git a/tools/crypto/ccp/dbc.py b/tools/crypto/ccp/dbc.py
-new file mode 100644
-index 000000000000..f1b7342060b1
---- /dev/null
-+++ b/tools/crypto/ccp/dbc.py
-@@ -0,0 +1,98 @@
++++ b/tools/crypto/ccp/test_dbc.py
+@@ -0,0 +1,266 @@
 +#!/usr/bin/python3
 +# SPDX-License-Identifier: GPL-2.0
++import unittest
++import os
++import time
++import glob
++from dbc import *
 +
-+from ioctl_opt import IOWR, IOW
-+import ctypes
-+import fcntl
-+
-+DBC_UID_SIZE = 16
-+DBC_NONCE_SIZE = 16
-+DBC_SIG_SIZE = 32
-+
-+PARAM_GET_FMAX_CAP = (0x3,)
-+PARAM_SET_FMAX_CAP = (0x4,)
-+PARAM_GET_PWR_CAP = (0x5,)
-+PARAM_SET_PWR_CAP = (0x6,)
-+PARAM_GET_GFX_MODE = (0x7,)
-+PARAM_SET_GFX_MODE = (0x8,)
-+PARAM_GET_CURR_TEMP = (0x9,)
-+PARAM_GET_FMAX_MAX = (0xA,)
-+PARAM_GET_FMAX_MIN = (0xB,)
-+PARAM_GET_SOC_PWR_MAX = (0xC,)
-+PARAM_GET_SOC_PWR_MIN = (0xD,)
-+PARAM_GET_SOC_PWR_CUR = (0xE,)
-+
-+DEVICE_NODE = "/dev/dbc"
++# Artificial delay between set commands
++SET_DELAY = 0.5
 +
 +
-+class _dbc_get_nonce(ctypes.Structure):
++class invalid_param(ctypes.Structure):
 +    _fields_ = [
-+        ("auth_needed", ctypes.c_uint32),
-+        ("nonce", ctypes.c_uint8 * DBC_NONCE_SIZE),
-+        ("signature", ctypes.c_uint8 * DBC_SIG_SIZE),
++        ("data", ctypes.c_uint8),
 +    ]
 +
 +
-+class _dbc_set_uid(ctypes.Structure):
-+    _fields_ = [
-+        ("uid", ctypes.c_uint8 * DBC_UID_SIZE),
-+        ("signature", ctypes.c_uint8 * DBC_SIG_SIZE),
-+    ]
-+
-+
-+class _dbc_param(ctypes.Structure):
-+    _fields_ = [
-+        ("msg_index", ctypes.c_uint32),
-+        ("parameter", ctypes.c_uint32),
-+        ("signature", ctypes.c_uint8 * DBC_SIG_SIZE),
-+    ]
-+
-+
-+DBCIOCNONCE = IOWR(ord("D"), 0x01, _dbc_get_nonce)
-+DBCIOCUID = IOW(ord("D"), 0x02, _dbc_set_uid)
-+DBCIOCPARAM = IOWR(ord("D"), 0x03, _dbc_param)
-+
-+
-+def get_nonce(device, signature):
-+    nonce = _dbc_get_nonce()
-+    if signature:
-+        nonce.auth_needed = 1
-+        tmp = ctypes.c_ubyte * len(signature)
-+        nonce.signature = tmp.from_buffer_copy(bytes(signature, "ascii"))
-+    result = fcntl.ioctl(device, DBCIOCNONCE, nonce, True)
-+    if result < 0:
-+        raise IOError(result)
-+    return nonce
-+
-+
-+def set_uid(device, new_uid, signature):
-+    uid = _dbc_set_uid()
-+    if not signature:
-+        raise ValueError("Signature required")
-+    if not new_uid:
-+        raise ValueError("UID required")
-+    tmp = ctypes.c_ubyte * len(signature)
-+    tmp2 = ctypes.c_ubyte * len(new_uid)
-+    uid.signature = tmp.from_buffer_copy(bytes(signature, "ascii"))
-+    uid.uid = tmp2.from_buffer_copy(bytes(new_uid, "ascii"))
-+    result = fcntl.ioctl(device, DBCIOCUID, uid, True)
-+    if result < 0:
-+        raise IOError(result)
++def system_is_secured() -> bool:
++    fused_part = glob.glob("/sys/bus/pci/drivers/ccp/**/fused_part")[0]
++    if os.path.exists(fused_part):
++        with open(fused_part, "r") as r:
++            return int(r.read()) == 1
 +    return True
 +
 +
-+def process_param(device, message, signature, data=None):
-+    param = _dbc_param()
-+    if not signature:
-+        raise ValueError("Signature required")
-+    if type(message) != tuple:
-+        raise ValueError("Expected message tuple")
-+    tmp = ctypes.c_ubyte * len(signature)
-+    param.signature = tmp.from_buffer_copy(bytes(signature, "ascii"))
-+    param.msg_index = message[0]
-+    if data:
-+        param.parameter = data
-+    result = fcntl.ioctl(device, DBCIOCPARAM, param, True)
-+    if result < 0:
-+        raise IOError(result)
-+    return param
-diff --git a/tools/crypto/ccp/dbc_cli.py b/tools/crypto/ccp/dbc_cli.py
-new file mode 100755
-index 000000000000..2dbefc2b7ed3
---- /dev/null
-+++ b/tools/crypto/ccp/dbc_cli.py
-@@ -0,0 +1,123 @@
-+#!/usr/bin/python3
-+# SPDX-License-Identifier: GPL-2.0
-+import argparse
-+import binascii
-+import os
-+import errno
-+from dbc import *
++class DynamicBoostControlTest(unittest.TestCase):
++    def __init__(self, data) -> None:
++        self.d = None
++        self.signature = "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
++        self.uid = "1111111111111111"
++        super().__init__(data)
 +
-+ERRORS = {
-+    errno.EACCES: "Access is denied",
-+    errno.E2BIG: "Excess data provided",
-+    errno.EINVAL: "Bad parameters",
-+    errno.EAGAIN: "Bad state",
-+    errno.ENOENT: "Not implemented or message failure",
-+    errno.EBUSY: "Busy",
-+    errno.ENFILE: "Overflow",
-+    errno.EPERM: "Signature invalid",
-+}
++    def setUp(self) -> None:
++        self.d = open(DEVICE_NODE)
++        return super().setUp()
 +
-+messages = {
-+    "get-fmax-cap": PARAM_GET_FMAX_CAP,
-+    "set-fmax-cap": PARAM_SET_FMAX_CAP,
-+    "get-power-cap": PARAM_GET_PWR_CAP,
-+    "set-power-cap": PARAM_SET_PWR_CAP,
-+    "get-graphics-mode": PARAM_GET_GFX_MODE,
-+    "set-graphics-mode": PARAM_SET_GFX_MODE,
-+    "get-current-temp": PARAM_GET_CURR_TEMP,
-+    "get-fmax-max": PARAM_GET_FMAX_MAX,
-+    "get-fmax-min": PARAM_GET_FMAX_MAX,
-+    "get-soc-power-max": PARAM_GET_SOC_PWR_MAX,
-+    "get-soc-power-min": PARAM_GET_SOC_PWR_MIN,
-+    "get-soc-power-cur": PARAM_GET_SOC_PWR_CUR,
-+}
++    def tearDown(self) -> None:
++        if self.d:
++            self.d.close()
++        return super().tearDown()
 +
 +
-+def _pretty_buffer(ba):
-+    return str(binascii.hexlify(ba, " "))
++class TestUnsupportedSystem(DynamicBoostControlTest):
++    def setUp(self) -> None:
++        if os.path.exists(DEVICE_NODE):
++            self.skipTest("system is supported")
++        with self.assertRaises(FileNotFoundError) as error:
++            super().setUp()
++        self.assertEqual(error.exception.errno, 2)
++
++    def test_unauthenticated_nonce(self) -> None:
++        """fetch unauthenticated nonce"""
++        with self.assertRaises(TypeError) as error:
++            get_nonce(self.d, None)
 +
 +
-+def parse_args():
-+    parser = argparse.ArgumentParser(
-+        description="Dynamic Boost control command line interface"
-+    )
-+    parser.add_argument(
-+        "command",
-+        choices=["get-nonce", "get-param", "set-param", "set-uid"],
-+        help="Command to send",
-+    )
-+    parser.add_argument("--device", default="/dev/dbc", help="Device to operate")
-+    parser.add_argument("--signature", help="Signature for command")
-+    parser.add_argument("--message", choices=messages.keys(), help="Message index")
-+    parser.add_argument("--data", help="Argument to pass to message")
-+    parser.add_argument("--uid", help="UID to pass")
-+    return parser.parse_args()
++class TestInvalidIoctls(DynamicBoostControlTest):
++    def __init__(self, data) -> None:
++        self.data = invalid_param()
++        self.data.data = 1
++        super().__init__(data)
++
++    def setUp(self) -> None:
++        if not os.path.exists(DEVICE_NODE):
++            self.skipTest("system is unsupported")
++        return super().setUp()
++
++    def test_invalid_nonce_ioctl(self) -> None:
++        """tries to call get_nonce ioctl with invalid data structures"""
++
++        # 0x1 (get nonce), and invalid data
++        INVALID1 = IOWR(ord("D"), 0x01, invalid_param)
++        with self.assertRaises(OSError) as error:
++            fcntl.ioctl(self.d, INVALID1, self.data, True)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_invalid_setuid_ioctl(self) -> None:
++        """tries to call set_uid ioctl with invalid data structures"""
++
++        # 0x2 (set uid), and invalid data
++        INVALID2 = IOW(ord("D"), 0x02, invalid_param)
++        with self.assertRaises(OSError) as error:
++            fcntl.ioctl(self.d, INVALID2, self.data, True)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_invalid_setuid_rw_ioctl(self) -> None:
++        """tries to call set_uid ioctl with invalid data structures"""
++
++        # 0x2 as RW (set uid), and invalid data
++        INVALID3 = IOWR(ord("D"), 0x02, invalid_param)
++        with self.assertRaises(OSError) as error:
++            fcntl.ioctl(self.d, INVALID3, self.data, True)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_invalid_param_ioctl(self) -> None:
++        """tries to call param ioctl with invalid data structures"""
++        # 0x3 (param), and invalid data
++        INVALID4 = IOWR(ord("D"), 0x03, invalid_param)
++        with self.assertRaises(OSError) as error:
++            fcntl.ioctl(self.d, INVALID4, self.data, True)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_invalid_call_ioctl(self) -> None:
++        """tries to call the DBC ioctl with invalid data structures"""
++        # 0x4, and invalid data
++        INVALID5 = IOWR(ord("D"), 0x04, invalid_param)
++        with self.assertRaises(OSError) as error:
++            fcntl.ioctl(self.d, INVALID5, self.data, True)
++        self.assertEqual(error.exception.errno, 22)
 +
 +
-+def pretty_error(code):
-+    if code in ERRORS:
-+        print(ERRORS[code])
-+    else:
-+        print("failed with return code %d" % code)
++class TestInvalidSignature(DynamicBoostControlTest):
++    def setUp(self) -> None:
++        if not os.path.exists(DEVICE_NODE):
++            self.skipTest("system is unsupported")
++        if not system_is_secured():
++            self.skipTest("system is unfused")
++        return super().setUp()
++
++    def test_unauthenticated_nonce(self) -> None:
++        """fetch unauthenticated nonce"""
++        get_nonce(self.d, None)
++
++    def test_multiple_unauthenticated_nonce(self) -> None:
++        """ensure state machine always returns nonce"""
++        for count in range(0, 2):
++            get_nonce(self.d, None)
++
++    def test_authenticated_nonce(self) -> None:
++        """fetch authenticated nonce"""
++        with self.assertRaises(OSError) as error:
++            get_nonce(self.d, self.signature)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_set_uid(self) -> None:
++        """set uid"""
++        with self.assertRaises(OSError) as error:
++            set_uid(self.d, self.uid, self.signature)
++        self.assertEqual(error.exception.errno, 11)
++
++    def test_get_param(self) -> None:
++        """fetch a parameter"""
++        with self.assertRaises(OSError) as error:
++            process_param(self.d, PARAM_GET_SOC_PWR_CUR, self.signature)
++        self.assertEqual(error.exception.errno, 11)
++
++    def test_set_param(self) -> None:
++        """set a parameter"""
++        with self.assertRaises(OSError) as error:
++            process_param(self.d, PARAM_SET_PWR_CAP, self.signature, 1000)
++        self.assertEqual(error.exception.errno, 11)
++
++
++class TestUnFusedSystem(DynamicBoostControlTest):
++    def setup_identity(self) -> None:
++        """sets up the identity of the caller"""
++        # if already authenticated these may fail
++        try:
++            get_nonce(self.d, None)
++        except PermissionError:
++            pass
++        try:
++            set_uid(self.d, self.uid, self.signature)
++        except BlockingIOError:
++            pass
++        try:
++            get_nonce(self.d, self.signature)
++        except PermissionError:
++            pass
++
++    def setUp(self) -> None:
++        if not os.path.exists(DEVICE_NODE):
++            self.skipTest("system is unsupported")
++        if system_is_secured():
++            self.skipTest("system is fused")
++        super().setUp()
++        self.setup_identity()
++        time.sleep(SET_DELAY)
++
++    def test_get_valid_param(self) -> None:
++        """fetch all possible parameters"""
++        # SOC power
++        soc_power_max = process_param(self.d, PARAM_GET_SOC_PWR_MAX, self.signature)
++        soc_power_min = process_param(self.d, PARAM_GET_SOC_PWR_MIN, self.signature)
++        self.assertGreater(soc_power_max.parameter, soc_power_min.parameter)
++
++        # fmax
++        fmax_max = process_param(self.d, PARAM_GET_FMAX_MAX, self.signature)
++        fmax_min = process_param(self.d, PARAM_GET_FMAX_MIN, self.signature)
++        self.assertGreater(fmax_max.parameter, fmax_min.parameter)
++
++        # cap values
++        keys = {
++            "fmax-cap": PARAM_GET_FMAX_CAP,
++            "power-cap": PARAM_GET_PWR_CAP,
++            "current-temp": PARAM_GET_CURR_TEMP,
++            "soc-power-cur": PARAM_GET_SOC_PWR_CUR,
++        }
++        for k in keys:
++            result = process_param(self.d, keys[k], self.signature)
++            self.assertGreater(result.parameter, 0)
++
++    def test_get_invalid_param(self) -> None:
++        """fetch an invalid parameter"""
++        try:
++            set_uid(self.d, self.uid, self.signature)
++        except OSError:
++            pass
++        with self.assertRaises(OSError) as error:
++            process_param(self.d, (0xF,), self.signature)
++        self.assertEqual(error.exception.errno, 22)
++
++    def test_set_fmax(self) -> None:
++        """get/set fmax limit"""
++        # fetch current
++        original = process_param(self.d, PARAM_GET_FMAX_CAP, self.signature)
++
++        # set the fmax
++        target = original.parameter - 100
++        process_param(self.d, PARAM_SET_FMAX_CAP, self.signature, target)
++        time.sleep(SET_DELAY)
++        new = process_param(self.d, PARAM_GET_FMAX_CAP, self.signature)
++        self.assertEqual(new.parameter, target)
++
++        # revert back to current
++        process_param(self.d, PARAM_SET_FMAX_CAP, self.signature, original.parameter)
++        time.sleep(SET_DELAY)
++        cur = process_param(self.d, PARAM_GET_FMAX_CAP, self.signature)
++        self.assertEqual(cur.parameter, original.parameter)
++
++    def test_set_power_cap(self) -> None:
++        """get/set power cap limit"""
++        # fetch current
++        original = process_param(self.d, PARAM_GET_PWR_CAP, self.signature)
++
++        # set the fmax
++        target = original.parameter - 10
++        process_param(self.d, PARAM_SET_PWR_CAP, self.signature, target)
++        time.sleep(SET_DELAY)
++        new = process_param(self.d, PARAM_GET_PWR_CAP, self.signature)
++        self.assertEqual(new.parameter, target)
++
++        # revert back to current
++        process_param(self.d, PARAM_SET_PWR_CAP, self.signature, original.parameter)
++        time.sleep(SET_DELAY)
++        cur = process_param(self.d, PARAM_GET_PWR_CAP, self.signature)
++        self.assertEqual(cur.parameter, original.parameter)
++
++    def test_set_3d_graphics_mode(self) -> None:
++        """set/get 3d graphics mode"""
++        # these aren't currently implemented but may be some day
++        # they are *expected* to fail
++        with self.assertRaises(OSError) as error:
++            process_param(self.d, PARAM_GET_GFX_MODE, self.signature)
++        self.assertEqual(error.exception.errno, 2)
++
++        time.sleep(SET_DELAY)
++
++        with self.assertRaises(OSError) as error:
++            process_param(self.d, PARAM_SET_GFX_MODE, self.signature, 1)
++        self.assertEqual(error.exception.errno, 2)
 +
 +
 +if __name__ == "__main__":
-+    args = parse_args()
-+    data = 0
-+    if not os.path.exists(args.device):
-+        raise IOError("Missing device {device}".format(device=args.device))
-+    if args.signature and len(args.signature) != DBC_SIG_SIZE:
-+        raise ValueError(
-+            "Invalid signature length %d (expected %d)"
-+            % (len(args.signature), DBC_SIG_SIZE)
-+        )
-+    if args.uid and len(args.uid) != DBC_UID_SIZE:
-+        raise ValueError(
-+            "Invalid UID length %d (expected %d)" % (len(args.uid), DBC_UID_SIZE)
-+        )
-+    if args.data:
-+        try:
-+            data = int(args.data, 10)
-+        except ValueError:
-+            data = int(args.data, 16)
-+
-+    with open(args.device) as d:
-+        if args.command == "get-nonce":
-+            try:
-+                nonce = get_nonce(d, args.signature)
-+                print("Nonce: %s" % _pretty_buffer(bytes(nonce.nonce)))
-+            except OSError as e:
-+                pretty_error(e.errno)
-+        elif args.command == "set-uid":
-+            try:
-+                result = set_uid(d, args.uid, args.signature)
-+                if result:
-+                    print("Set UID")
-+            except OSError as e:
-+                pretty_error(e.errno)
-+        elif args.command == "get-param":
-+            if not args.message or args.message.startswith("set"):
-+                raise ValueError("Invalid message %s" % args.message)
-+            try:
-+                param = process_param(d, messages[args.message], args.signature)
-+                print(
-+                    "Parameter: {par}, response signature {sig}".format(
-+                        par=param.parameter,
-+                        sig=_pretty_buffer(bytes(param.signature)),
-+                    )
-+                )
-+            except OSError as e:
-+                pretty_error(e.errno)
-+        elif args.command == "set-param":
-+            if not args.message or args.message.startswith("get"):
-+                raise ValueError("Invalid message %s" % args.message)
-+            try:
-+                param = process_param(d, messages[args.message], args.signature, data)
-+                print(
-+                    "Parameter: {par}, response signature {sig}".format(
-+                        par=param.parameter,
-+                        sig=_pretty_buffer(bytes(param.signature)),
-+                    )
-+                )
-+            except OSError as e:
-+                pretty_error(e.errno)
++    unittest.main()
 -- 
 2.34.1
 
