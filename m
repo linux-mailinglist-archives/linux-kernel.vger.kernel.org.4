@@ -2,292 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD206F1A9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5717C6F1AA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbjD1OjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S230410AbjD1Okw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjD1OjS (ORCPT
+        with ESMTP id S229580AbjD1Oku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:39:18 -0400
-Received: from out-27.mta1.migadu.com (out-27.mta1.migadu.com [IPv6:2001:41d0:203:375::1b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325FE4C03
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:39:14 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 16:39:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1682692751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bMx6OTRIJwaSYCgtTQhYpKMdrEpNqX+maRQV25Yjn0g=;
-        b=AmxHRRunYY0A/ohh8FCgGb2ps0vCoSGpStqPEPESelyx9uq6sjy0EkiJVSAC1P+YWsKwmF
-        wuRwETVk6yL6MwZMdWkEfW1wawGFnRcL4rv/9w88VBB1Z6BTHt9zuqd8I2NE0S4YVeS4N0
-        kVDZ9X01BzPTKZbUChoF+5bZ+DGzvRE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
-Message-ID: <ZEvaixFJGk/Nr1m2@L14.lan>
-References: <cover.1682636929.git.jahau@rocketmail.com>
- <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
-MIME-Version: 1.0
+        Fri, 28 Apr 2023 10:40:50 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2108.outbound.protection.outlook.com [40.107.94.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D82696;
+        Fri, 28 Apr 2023 07:40:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QMpy+rPJOmJZNc3ZAG5b6mNjUc/XRorrphzc1dGuYcp4t2ULzMUWm7ZYzSB+mgoxX7wAnk42CjWnEohojFnt82yzyrTbmiQb7syn4J0Ddhe2poqsbEQYC3xR6otsAbHeHoEjXnS3ykwHeBk3Q6CLqmu7Ak7p1txE9CG8jOli9fLUc2Q9McqU//WSIRmTDDWHhTmdCpXqP/2t/o9JKRw0uZw+E8uYcC8WMcwqyUGPANbsaE6w2epA97ZllOawR6huZXPTVWjR/yj0Lu0h+n18oSwaiH2t5Hn1n7YKjbeifrSCwLKXqSaL5xYcjf5UOr+2UHw3Vlq18JamiyZu5ij/pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JTHqVbCBKL3Q5/5gHEkaESQglK4mwDpaukPLQuSgtKE=;
+ b=YQoBJxmKC6IgV1bozbq6OQqoxRGVE/dQZbHDMq6hdRwxCq8FL0lkN0Kt6Gj/h3JRLld98vKDzvSFJzUVY4a2NDhvBjw91OuThPijCF1oC2QS62RTSF3cNzKyNRP29idva443+P/G4Xtx5LRW5Dkt8kt5A3sawLyswcl4XraeRObMcGeJ1gMeEwhNhmRYsPFcUi7L2EvXFlzzFmvtX7xhrJXKXSv7RYfEkr8ytSkSO4JwSqf2rx3uETI7FIXXY6R9bLd88JbmNXoU08rEfQcuKVreIevmiRjnVvAnJcwlh0q5uSituDawOEOk9xxBvgRhDQgTpNJvGtdxuUrydhX5mA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JTHqVbCBKL3Q5/5gHEkaESQglK4mwDpaukPLQuSgtKE=;
+ b=DOaxPq1fpfya73wB6TYXs/tscnhMl40Y6lFXT0WoNtOKBACO+BcJt7kg02OpmF//fL1VhN7a4uahD4CC7S1Fo33WG9JI+5YZGOhUxJy0CYdMmsHckw0w9qSTQ9CFp/8WrpsRynHN5wdMsq5B3ZR6kYWaKHLYaiTgjxlyM6NPsak=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB5061.namprd13.prod.outlook.com (2603:10b6:303:db::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 14:40:45 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 14:40:45 +0000
+Date:   Fri, 28 Apr 2023 16:40:38 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Wen Gu <guwen@linux.alibaba.com>
+Cc:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-s390@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH net-next v5 2/9] net/smc: Decouple ism_dev from SMC-D
+ DMB registration
+Message-ID: <ZEva5rj3DWQEmix8@corigine.com>
+References: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
+ <1682252271-2544-3-git-send-email-guwen@linux.alibaba.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1682252271-2544-3-git-send-email-guwen@linux.alibaba.com>
+X-ClientProxiedBy: AS4P189CA0019.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5db::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB5061:EE_
+X-MS-Office365-Filtering-Correlation-Id: e6619a79-1472-4360-62f7-08db47f68c62
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8ffH8/ZSyV5kCSbYm5sEsCBzWH0mZ12a9Qa8qeU7U28A9CIh2zb+zK30gSXoCdZEacvCXrlYHNEkZFLZoq1OzGVtfMqzOLDTcC2NShmvZe5lkZ3otCSbcyX3k+uzHOj7KiSambj0gwqQv9qBcOkGX1zhx1TasKOXnFjDsOmVS085rMZAqbLl4DEX/11WHGOGV02nNvMCxFmX+ADFzzMzXcWZmNEGYyrFrcXMuRqMh+/3Dt6IksQ72KHPLRBBzLTAHm1maxX6WOp68Fdg6arJVQA9LOm972hyW37p9QDymbjEbxrme3b/dNJXM7kZnfsLTjLs1LWEE2IZgXuCx1fEmWwkvXUIQVWYxeb2io9bv/WK5aHkS2/oIvnsFPSNrXN3POyR+Iz9kdlBa9HY9zvvF6Dk9//b4e3p6lR2sTLDh2HdcWId27Ove5Bd2mwAtfW39PXGR7cP8N4qOZj4FMsG3mm/H/vtK6nBwyajDKu83qBz7WIDaLE4hsoAdn49oE+I3ulESANMPlHIxIiEiWKq4bQA2ax3jFTs4fDYYFncri42NP5k0YEoo0VU8c4up5Yt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(366004)(39840400004)(451199021)(86362001)(36756003)(2906002)(6486002)(186003)(2616005)(83380400001)(6512007)(44832011)(4326008)(6916009)(66476007)(66556008)(478600001)(6666004)(66946007)(6506007)(41300700001)(38100700002)(316002)(8676002)(5660300002)(8936002)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gvJnJBO/fxZuty+w1CEZay49R7PWYANJ+BGAk3UlxVeyRZy9udJUIojORFPx?=
+ =?us-ascii?Q?jNrFdfUVK3zfWYSHpKONhUCQvZ7H/4ZESzDz1R1/+nIJJX8WgX9SnsT+FWDS?=
+ =?us-ascii?Q?U0DuMxtB2fopIB3gIljMen5NK9vOLv2gqlN0NTDXFaeLm0Fx5oLJCx5vykdv?=
+ =?us-ascii?Q?OwDZsjOig8Bv7vkrOPNmin9g53UOuIz0E3ORJ2XEms6bx5GJeHycs8YTmwyH?=
+ =?us-ascii?Q?+LDDzvrUU7emeS7O/XwRokSUDgL3vGveZYN4OlSd00Wqt2Cq2w6d6xkEb30E?=
+ =?us-ascii?Q?JcifI1Tcq5WMygHzNjofeNyfmXixEB0dzTH2WzT0FiRSCBtODj/KAKwnTbE9?=
+ =?us-ascii?Q?/Janyu2OIXm++yeFMPYWo2+v7wxa3azl/91yPpS2g6tKVrHmgAmjM1cdRAbT?=
+ =?us-ascii?Q?mRpkh9suJHSHx+PwGwJ6FT8f9UT9YQ2x4FSBLFK54LtD1a3fBqVA+i93zAUm?=
+ =?us-ascii?Q?rUiiJv1yy2Byl41+uV9zmSXgfIQv/jK07eAFlNOD3SqXyOkLhEGL9iMGjdQn?=
+ =?us-ascii?Q?S9GiT3xYdQU/c4nbAGRFSMstYnEjxaSQbLgtDsAoE5p7B1lUTwvBcebAx2e/?=
+ =?us-ascii?Q?ajdDLW/BjtwY8auFb9oIF96BmXCDIIv8iJYvJn3dw96XhqYw8vKdy2aQDQpW?=
+ =?us-ascii?Q?EIHZ6qawF+1YI9tjI8FJNaWv3TqGuICpGbFqv+Lcrh4oKWDPOAv5ghDfhBpi?=
+ =?us-ascii?Q?WN/SY8mPJxlLviMYnGXVbSYmJSfPsZQyBFeqO7gG4+AMQJv5Jft2nodmivu1?=
+ =?us-ascii?Q?jcvwiSVwXDdqKwxLDJ6cpyse2yZDUzL09NTCeL7W580R8yUJwVQBsIVqZLg2?=
+ =?us-ascii?Q?6CbuZ7JUEUAnkzRPL9GbINwEJu00h5pW8zyqtRjxOqVu1Nl68eGuF47g15a+?=
+ =?us-ascii?Q?ZZZxbyMjJ4UCTiAPourqiUJ9DKI3016UCQ/A7qmhtNTKBsK2wfgggsBnFfLS?=
+ =?us-ascii?Q?FfJpZ4b8A6D5p/B++S0v5xsFc901DmXp/XrgCeMohdPAO6w8piDPYbadEdZr?=
+ =?us-ascii?Q?0L+EQNDNP1YlPHJw/R5rHGoFfL9eoy+KquDc5Er70srITswGf9RwYTEM2X5g?=
+ =?us-ascii?Q?SLVMkRs7Tf9KioBhUPDJQLAD1rqh5qFSHzR5YgxVhU/sxpEZLLgbc7SSshpb?=
+ =?us-ascii?Q?qCS2YQHZ0fVICqaVWxTy0FKeCj32LFs4R/MaKm3OVSB4VZMec6Heinr4T73M?=
+ =?us-ascii?Q?jeUx8KCBYRuBfXhqEGD2l/Yfc/zDPKNo4LJu3PBg7ha5Ha5ntDYhuAZmvwZg?=
+ =?us-ascii?Q?mk+TJjfdMvgX8Ui9uEKtzVGqeieTMT2StLpVnRHLK3QkMhWnwhZZM2yXxEgN?=
+ =?us-ascii?Q?p6qj4MR3NjgjAW0rJWUZk/UoJ3rA4A/O/YP69G3U3wfHFg4VGguQbRnKPgrS?=
+ =?us-ascii?Q?Z19gx6COw4Wx1dpI9JCuK63L4DwAh2R8f6LsyaNXn2VWFWxNKCn/a6zUjLkC?=
+ =?us-ascii?Q?ClqMp3cCmcvRmMop/nBhOSzckTn2edBguf2Csi+Huu8mAqj/vqWRPeFSQ89N?=
+ =?us-ascii?Q?rCpzLHKLMb9WU72dhm+yAtqV+hMjmkyp9P+ubDMXXcu+g3kH1AhrKr5QXD6B?=
+ =?us-ascii?Q?VgbQTzj9c7C6RbBf+2uMrKm4KWpq2mWjIZ+RS7y1C1xI3pAMnosjmYjjb3Eu?=
+ =?us-ascii?Q?uuhSoDUyhcbcz/q2Q58gW2J8sflA3+49tjVLoryE/e6MolQj/pMzSsoQJp0Y?=
+ =?us-ascii?Q?3WC75A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6619a79-1472-4360-62f7-08db47f68c62
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 14:40:44.9696
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: taybg2DLUxM5EwOuZEbdRmScNnFhr9KpuXr0ZZWvJLDQ+WObryaKqc2x8dRfOBhdp3j/YAZIL3TStaR171qdkOIL4l1SiAkOcPLCdikwD+4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB5061
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakob,
-
-One question inline.
-
-On Fri, Apr 28, 2023 at 01:30:11AM +0200, Jakob Hauser wrote:
-> Add device tree binding documentation for rt5033 multifunction device, voltage
-> regulator and battery charger.
+On Sun, Apr 23, 2023 at 08:17:44PM +0800, Wen Gu wrote:
+> This patch tries to decouple ISM device from SMC-D DMB registration,
+> So that the register_dmb option is not restricted to be used by ISM
+> device.
 > 
-> Cc: Beomho Seo <beomho.seo@samsung.com>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
 > ---
-> The patch is based on next-20230413.
+>  drivers/s390/net/ism_drv.c | 5 +++--
+>  include/net/smc.h          | 4 ++--
+>  net/smc/smc_ism.c          | 7 ++-----
+>  3 files changed, 7 insertions(+), 9 deletions(-)
 > 
-> The drivers for rt5033 (mfd) and rt5033-regulator are existing. Whereas the
-> the driver rt5033-charger is new in this patchset.
-> 
-> The extcon phandle is still there, as I didn't know what Rob meant by
-> "standard connector bindings".
-> 
-> Changes in v3:
->  - Removed redundant "documentation" in the commit title.
->  - Squashed regulator into the mfd binding.
->  - Restored the regulator node names to uppercase because it is an existing
->    driver.
->  - In the charger binding replaced the vendor properties by "battery" node
->    style. Accodringly updated the example in the mfd.
-> 
->  .../bindings/mfd/richtek,rt5033.yaml          | 105 ++++++++++++++++++
->  .../power/supply/richtek,rt5033-charger.yaml  |  63 +++++++++++
->  2 files changed, 168 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> new file mode 100644
-> index 000000000000..ee704914201f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/richtek,rt5033.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Richtek RT5033 Power Management Integrated Circuit
-> +
-> +maintainers:
-> +  - Jakob Hauser <jahau@rocketmail.com>
-> +
-> +description:
-> +  RT5033 is a multifunction device which includes battery charger, fuel gauge,
-> +  flash LED current source, LDO and synchronous Buck converter for portable
-> +  applications. It is interfaced to host controller using I2C interface. The
-> +  battery fuel gauge uses a separate I2C bus.
-> +
-> +properties:
-> +  compatible:
-> +    const: richtek,rt5033
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  regulators:
-> +    description:
-> +      The regulators of RT5033 have to be instantiated under a sub-node named
-> +      "regulators". For SAFE_LDO voltage there is only one value of 4.9 V. LDO
+> diff --git a/drivers/s390/net/ism_drv.c b/drivers/s390/net/ism_drv.c
+> index 8acb9eb..5eeb54d 100644
+> --- a/drivers/s390/net/ism_drv.c
+> +++ b/drivers/s390/net/ism_drv.c
+> @@ -796,9 +796,10 @@ static int smcd_query_rgid(struct smcd_dev *smcd, u64 rgid, u32 vid_valid,
+>  }
+>  
+>  static int smcd_register_dmb(struct smcd_dev *smcd, struct smcd_dmb *dmb,
+> -			     struct ism_client *client)
+> +			     void *client_priv)
+>  {
+> -	return ism_register_dmb(smcd->priv, (struct ism_dmb *)dmb, client);
+> +	return ism_register_dmb(smcd->priv, (struct ism_dmb *)dmb,
+> +				(struct ism_client *)client_priv);
 
-Is only 4.9 V valid for SAFE_LDO? If I am reading driver found in
-vendor kernel for SM-A500F it seems to to allow values between 3.3 and
-4.95 V [1]. Same range is also written in the devicetree for the
-device [2].
+Hi Wen Gu,
 
-[1] https://github.com/msm8916-mainline/linux-downstream/blob/SM-A500F/drivers/regulator/rt5033_regulator.c#L109-L114
-[2] https://github.com/msm8916-mainline/linux-downstream/blob/SM-A500F/arch/arm/boot/dts/samsung/msm8916/msm8916-sec-a5u-eur-r01.dtsi#L148-L149
+a minor nit from my side: there is no need to cast a void pointer to
+another type.
 
-Best regards,
-Henrik Grimler
+>  }
+>  
+>  static int smcd_unregister_dmb(struct smcd_dev *smcd, struct smcd_dmb *dmb)
 
-> +      voltage ranges from 1.2 V to 3.0 V in 0.1 V steps. BUCK voltage ranges
-> +      from 1.0 V to 3.0 V in 0.1 V steps.
-> +    type: object
-> +    patternProperties:
-> +      "^(SAFE_LDO|LDO|BUCK)$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +    additionalProperties: false
-> +
-> +  charger:
-> +    type: object
-> +    $ref: /schemas/power/supply/richtek,rt5033-charger.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    battery: battery {
-> +        compatible = "simple-battery";
-> +        precharge-current-microamp = <450000>;
-> +        constant-charge-current-max-microamp = <1000000>;
-> +        charge-term-current-microamp = <150000>;
-> +        precharge-upper-limit-microvolt = <3500000>;
-> +        constant-charge-voltage-max-microvolt = <4350000>;
-> +    };
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        pmic@34 {
-> +            compatible = "richtek,rt5033";
-> +            reg = <0x34>;
-> +
-> +            interrupt-parent = <&msmgpio>;
-> +            interrupts = <62 IRQ_TYPE_EDGE_FALLING>;
-> +
-> +            pinctrl-names = "default";
-> +            pinctrl-0 = <&pmic_int_default>;
-> +
-> +            regulators {
-> +                safe_ldo_reg: SAFE_LDO {
-> +                    regulator-name = "SAFE_LDO";
-> +                    regulator-min-microvolt = <4900000>;
-> +                    regulator-max-microvolt = <4900000>;
-> +                    regulator-always-on;
-> +                };
-> +                ldo_reg: LDO {
-> +                    regulator-name = "LDO";
-> +                    regulator-min-microvolt = <2800000>;
-> +                    regulator-max-microvolt = <2800000>;
-> +                };
-> +                buck_reg: BUCK {
-> +                    regulator-name = "BUCK";
-> +                    regulator-min-microvolt = <1200000>;
-> +                    regulator-max-microvolt = <1200000>;
-> +                };
-> +            };
-> +
-> +            charger {
-> +                compatible = "richtek,rt5033-charger";
-> +                monitored-battery = <&battery>;
-> +                extcon = <&muic>;
-> +            };
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> new file mode 100644
-> index 000000000000..bf08e8db365e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/richtek,rt5033-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Richtek RT5033 PIMC Battery Charger
-> +
-> +maintainers:
-> +  - Jakob Hauser <jahau@rocketmail.com>
-> +
-> +description:
-> +  The battery charger of the multifunction device RT5033 has to be instantiated
-> +  under sub-node named "charger" using the following format.
-> +
-> +properties:
-> +  compatible:
-> +    const: richtek,rt5033-charger
-> +
-> +  monitored-battery:
-> +    description: |
-> +      Phandle to the monitored battery according to battery.yaml. The battery
-> +      node needs to contain five parameters.
-> +
-> +      precharge-current-microamp:
-> +      Current of pre-charge mode. The pre-charge current levels are 350 mA
-> +      to 650 mA programmed by I2C per 100 mA.
-> +
-> +      constant-charge-current-max-microamp:
-> +      Current of fast-charge mode. The fast-charge current levels are 700 mA
-> +      to 2000 mA programmed by I2C per 100 mA.
-> +
-> +      charge-term-current-microamp:
-> +      This property is end of charge current. Its level ranges from 150 mA
-> +      to 600 mA. Between 150 mA and 300 mA in 50 mA steps, between 300 mA and
-> +      600 mA in 100 mA steps.
-> +
-> +      precharge-upper-limit-microvolt:
-> +      Voltage of pre-charge mode. If the battery voltage is below the pre-charge
-> +      threshold voltage, the charger is in pre-charge mode with pre-charge
-> +      current. Its levels are 2.3 V to 3.8 V programmed by I2C per 0.1 V.
-> +
-> +      constant-charge-voltage-max-microvolt:
-> +      Battery regulation voltage of constant voltage mode. This voltage levels
-> +      from 3.65 V to 4.4 V by I2C per 0.025 V.
-> +
-> +  extcon:
-> +    description:
-> +      Phandle to the extcon device.
-> +    maxItems: 1
-> +
-> +required:
-> +  - monitored-battery
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    charger {
-> +        compatible = "richtek,rt5033-charger";
-> +        monitored-battery = <&battery>;
-> +        extcon = <&muic>;
-> +    };
-> -- 
-> 2.39.2
-> 
+...
