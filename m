@@ -2,119 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0016F1C76
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579616F1C77
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346111AbjD1QSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S1346103AbjD1QSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346089AbjD1QR5 (ORCPT
+        with ESMTP id S1346135AbjD1QSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:17:57 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9997AF4
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:17:56 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-54fbee69fc4so833627b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:17:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682698676; x=1685290676;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YFyJc8+p4qTuozgH/v/B+1NflQRfcLItZsoQOpNrm4I=;
-        b=KI6WifT1huW26vIMkQLL3klATIcHmUITIOLhmKPoBSZAVdw5odSR4lQ7QfzgVL2Sa6
-         sxnbscyqWPfKsK5XMqqlJdblwIl5wfDje0FeISy/ie3hUuH/dOexjxVSWRpGN9JqF3ro
-         4MNwZVuy+59IWxX+ch7zlDRFoY5BgvXTavJOX3+x6Q2lRog2uL/q8EdKNYf72eBox+po
-         Yh9BW0u3jMdlKf+GNY7aANIEwQZjscT85ORaOaSIMcTXGg5DbC/ZyKzTsNmSEIN6smK5
-         tE1ZbfxSG9NQLg//0mv3u6163fclJcSgt3Eu+FIu8sPSd4S0OUqnIGw17uK6AGVUPWQK
-         SVqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682698676; x=1685290676;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YFyJc8+p4qTuozgH/v/B+1NflQRfcLItZsoQOpNrm4I=;
-        b=dVJ7gryrxQCN0gDClwwD6bbI2sDhyZtHkvREfMKBSyyJtUFHKlvJPfBxVxER1FePGl
-         vvVclg7kpZr+XSDrJZSx9rODX7OE8BPRvMrSFde081oebYvu5rp+xolF2SxossPvPyFI
-         7m4Nnp7BMO0QF6Ddbl0EF/UQyDBQJr99YomDI3p+4wTWxkWHbSSnruTZq64YVGHloPzQ
-         48OaN8iTcKmxSvXQ/Z40OjIL5uN/6SFOgebh8C4m9cTCoy0itG5urPJnUxVxy5y6Tzgk
-         7u9+NAfzCHdZFYzzZXXPrVPgqKjDgUwRqfQBCE9I04pvzvOcguSgFxlHBwXCPAeVCvP4
-         c0oA==
-X-Gm-Message-State: AC+VfDwsExQHse2dop6SQVAHolg0X6U1WA0DgewOREyDm9bk6DAlV7Rq
-        nThvxKyAFu9ERiatoT2+z1CBIDdMk7rYXgpiaFzohQ==
-X-Google-Smtp-Source: ACHHUZ7nYMiGVX+Zyd6HKF12DlZ5nRD3X367dMTMrVNC7OnmWNX9lMIAFe2WO1BbxF00t0ps+U4NpYzDWgoMKA/4Uhs=
-X-Received: by 2002:a81:4ed3:0:b0:540:c99d:efc1 with SMTP id
- c202-20020a814ed3000000b00540c99defc1mr3296966ywb.35.1682698675470; Fri, 28
- Apr 2023 09:17:55 -0700 (PDT)
+        Fri, 28 Apr 2023 12:18:08 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA06855AD;
+        Fri, 28 Apr 2023 09:18:02 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 18:17:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682698680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzS+nASlzJJ71hOUETyldjCAo0rPcFGVD/ziZrVHrC0=;
+        b=XykYgAUDaIogjvrWDIlXmT35362xw49kmEHMI5mKG+jSKXgXguBBep5kaYcUDsm0GR0cCD
+        GCz0K8a0/QNSq1N1BHd7uSaBCR3HfU+0mPLTiKDQbZEf6wfbvgpaNWozOpTQYaVOm2u7CC
+        TimNLl+y5/Tl03z4hNzfSfkOJ2O17oJb/5uzCTRpAr1GLmTbDDFsiDSxvoh0cQNWlmI+E4
+        C4h9/veUDUhg4RvscuVPhLBM03AeFGC0zmkNjGfhGK27rlkVoCrQ9uICa4HMr1vPm3gaL2
+        YxtKtPYEETqJvpZubSYlymZDkJpXjLF4kO694WautuLAMiUOKZeAH8I9sRyn3Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682698680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mzS+nASlzJJ71hOUETyldjCAo0rPcFGVD/ziZrVHrC0=;
+        b=vhS8VxmDgeTTyWX5t4uB6QfcMnbQuw8lhHiBw/mUtZyn1O9XvduAnqXvubA27PfIF7E/NI
+        tgmxMxKul5pxV8BQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v7 1/3] sched/core: warn on call put_task_struct in
+ invalid context
+Message-ID: <20230428161758.xN5vwuUq@linutronix.de>
+References: <20230425114307.36889-1-wander@redhat.com>
+ <20230425114307.36889-2-wander@redhat.com>
 MIME-Version: 1.0
-References: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
- <CAHk-=wi5=LfeCMv5ZPAtzWhJyW=y1rVJFTRBfgcqzoUNk5NRDA@mail.gmail.com>
- <CAJuCfpHZSEjG2nti5iWbPQjWgXcHZ95hFS2FKwaPC-sZPdSznw@mail.gmail.com>
- <CAHk-=wg0SyFDp_sdcEH-D+LNxuzL_dWA1vZEowUN16n_+yRHPQ@mail.gmail.com> <CAJuCfpHouhrEtomhPe2sf+p0oG4pGFKb3xidhOXP6BN-PydY-Q@mail.gmail.com>
-In-Reply-To: <CAJuCfpHouhrEtomhPe2sf+p0oG4pGFKb3xidhOXP6BN-PydY-Q@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 28 Apr 2023 09:17:44 -0700
-Message-ID: <CAJuCfpGcnJiJyU78v1r548W3bZ2LyfaYpr5huKKG8-WaiRHFHA@mail.gmail.com>
-Subject: Re: [GIT PULL] MM updates for 6.4-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230425114307.36889-2-wander@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 9:14=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Fri, Apr 28, 2023 at 9:08=E2=80=AFAM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Fri, Apr 28, 2023 at 9:03=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
-le.com> wrote:
-> > >
-> > > I wanted these stats enabled by default to be able to identify
-> > > possible pathological cases and to also let users disable them if the=
-y
-> > > can't tolerate even a small overhead in the pagefault path. Should I
-> > > document this reasoning for the config option?
-> >
-> > You should document what the stats actually count (at a high enough
-> > level for a user to understand), and why anybody would want to keep
-> > them on.
-> >
-> > Honestly, 99% of the time, these are things that *developers* think
-> > they might want, but that nobody else will ever ever use.
-> >
-> > Really, ask yourself if a normal user would ever look at them?
-> >
-> > Now, ask yourself whether this might be something that a cloud
-> > provider would want to look at to gather statistics.
-> >
-> > And if it's the latter case, then it should be "default n", because
-> > the default should be for the people who DO NOT KNOW, AND DO NOT CARE.
-> >
-> > The cloud provider will be using a custom config anyway. The default
-> > is irrelevant for that use. The use that *matters* is literally the
-> > clueless end user who I bet will never look at these numbers, and will
-> > never be asked for them.
->
-> Ok, sounds like this should be 'default n'. I'll prepare a patch. Thanks!
+On 2023-04-25 08:43:01 [-0300], Wander Lairson Costa wrote:
+> Under PREEMPT_RT, spinlocks become sleepable locks. put_task_struct()
+> indirectly acquires a spinlock. Therefore, it can't be called in
+> atomic/interrupt context in RT kernels.
+> 
+> To prevent such conditions, add a check for atomic/interrupt context
+> before calling put_task_struct().
+> 
+> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+> Suggested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-Should I send a replacement patch for "mm: introduce per-VMA lock
-statistics" or a followup patch fixing it?
+Been only CCed here.
 
->
-> >
-> >                Linus
+I asked to not special case PREEMPT_RT but doing this (clean up via RCU)
+unconditionally. I don't remember that someone said "this is a bad
+because $reason".
+
+Lockdep will complain about this on !RT.
+
+The below open codes rtlock_might_resched() with no explanation on why
+it works or where it comes from.
+
+The function is named put_task_struct_atomic_safe() yet it behaves it
+differently on PREEMPT_RT otherwise it remains put_task_struct().
+
+Not good.
+
+> ---
+>  include/linux/sched/task.h | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> index 357e0068497c..b597b97b1f8f 100644
+> --- a/include/linux/sched/task.h
+> +++ b/include/linux/sched/task.h
+> @@ -113,14 +113,28 @@ static inline struct task_struct *get_task_struct(struct task_struct *t)
+>  
+>  extern void __put_task_struct(struct task_struct *t);
+>  
+> +#define PUT_TASK_RESCHED_OFFSETS \
+> +	(rcu_preempt_depth() << MIGHT_RESCHED_RCU_SHIFT)
+> +
+> +#define __put_task_might_resched() \
+> +	__might_resched(__FILE__, __LINE__, PUT_TASK_RESCHED_OFFSETS)
+> +
+> +#define put_task_might_resched()			\
+> +	do {						\
+> +		if (IS_ENABLED(CONFIG_PREEMPT_RT))	\
+> +			__put_task_might_resched();	\
+> +	} while (0)
+> +
+>  static inline void put_task_struct(struct task_struct *t)
+>  {
+> +	put_task_might_resched();
+>  	if (refcount_dec_and_test(&t->usage))
+>  		__put_task_struct(t);
+>  }
+>  
+>  static inline void put_task_struct_many(struct task_struct *t, int nr)
+>  {
+> +	put_task_might_resched();
+>  	if (refcount_sub_and_test(nr, &t->usage))
+>  		__put_task_struct(t);
+>  }
+> -- 
+> 2.40.0
+> 
+
+Sebastian
