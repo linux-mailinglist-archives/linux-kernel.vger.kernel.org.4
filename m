@@ -2,131 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA516F1205
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029386F1209
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345415AbjD1Gz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 02:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
+        id S1345428AbjD1G5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345175AbjD1Gz4 (ORCPT
+        with ESMTP id S1345422AbjD1G5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:55:56 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFF81BF3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:55:54 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-42e668a2c5eso2807581137.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:55:54 -0700 (PDT)
+        Fri, 28 Apr 2023 02:57:05 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F5DCA
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:57:03 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4edc7cc6f46so10221920e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20221208.gappssmtp.com; s=20221208; t=1682664953; x=1685256953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=02MWxkaQdLRTYwyy27lw5gzanHvXJVQsMktOlzAmIEM=;
-        b=ebeNvPj0ds7czi+movITwBF+RYZUj9k6IwRy5acHyTPjgL4ttUoayc4qtQ8Y1i721n
-         cWVC/OmgHvRifsKHa+q0LUntGu96Do5gqdhBHWiXUtyYF0AB6MHKJGHmatJiZHLaqJ5c
-         HNJBYH1iJcFkIZE3hd7dls2452H4HRjWJWbSjhMFOsOS3WuXgWTpGJNB+HzsiFpPt6zw
-         WpEPBkP6XP3lVja50lQsymE4YNEDI+uahKtiJcMg2/22Q78D3GZJP5zkzX93xkWXi6Ji
-         hwrGOSVhvlYL38Zp0bBOoRfuHGo3h1vanHPuQpBXPJxeDVcNGATvwUsqM01svL3BZagM
-         cNcg==
+        d=rasmusvillemoes.dk; s=google; t=1682665022; x=1685257022;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1kJlvIqcTMDqaxW/AEohe0PhfCoogquhxNv0DiWrFl4=;
+        b=hJrB/747zFXzcSCMIBOVwV3xa6T2YgbhBZZsKRIA/c4J5g6210WKxzAKVyb1IeYyfF
+         umxdRhqdsw4ysLjMPiAvx5b08DYGj8cKn0FR9Os+zGbzDwEotIS3QI5JL52sQdjdHIm7
+         HgklUG96wfRfvY0rLT96m2UDMaHmlcj0Zt5rI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682664953; x=1685256953;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=02MWxkaQdLRTYwyy27lw5gzanHvXJVQsMktOlzAmIEM=;
-        b=KGR4fAX7JoDX7HQFi710bkn03OfXoTDRtz2rkepX0GnVfZefBvXcu0YNXc6+Zq0tc8
-         xnROSOs30YG3o2o/zVzLr3dNFjAWQwexnArkC5QJpT0iPquBG1R+dxl2OPnTYZHUYtWe
-         HcmWXwNqpZveXRlnAOElM/GtmIjZeHY0M9xy34JTnd/0mDWxMMVnkcwwT2vCgQREISSv
-         eGHioYlnhOKumUL63LjgO3/pHSuiA0n6zsw6WHQgoM+R99aFrDXRGi0HOMNjikLsCWnQ
-         KyqQNgF6heVM+ccBckkEBKFX7ngbnLZFnfo0SwGPaTuN6h9bIZRW+hQzld+E2UO+HBRG
-         LEDQ==
-X-Gm-Message-State: AC+VfDxApvMG6cTQiMStyXm5ANxntBem8RBeOw5eo7rbQzFm4Caj3cbo
-        8SIPJr7Yk/zbfWLOg2hwP4jh8Yaiq2FZf+VAF8n0qw==
-X-Google-Smtp-Source: ACHHUZ6EamEmWhWbB0deRP2ZL3ue6TcG8tSIpzkQ/uaEtAe82grayOte7QF7M0W1v9o43SUVKKxggkSC1iQSMRAIYAE=
-X-Received: by 2002:a05:6102:34ca:b0:42e:5b8c:7a2b with SMTP id
- a10-20020a05610234ca00b0042e5b8c7a2bmr1736524vst.9.1682664953609; Thu, 27 Apr
- 2023 23:55:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682665022; x=1685257022;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kJlvIqcTMDqaxW/AEohe0PhfCoogquhxNv0DiWrFl4=;
+        b=ZU4/SRWXbbinlv9e1wXRzfQWRgcUOzHiiNhnnxvrm/iXp1DEoik1Mvvs5RoHoVXfaC
+         aDk8YZcLvKt6mHsqYWUlJPsGFt7Xs7Ce/9S2ySzDrejoif8FsKTo7P7LspaFQcJCsZdq
+         27Y+z5icbs69d6yqgiW44YIZvFOJ/sKXst6XQxyXjZUN4PQFCz+9aX4KgHFiLPINpoO1
+         Sr9DCz52eRPjAiRYknnxD/CUgR8rgnILiOqyo0yUaJ/vHVD6klkTiTqMSWDCOFTggPJC
+         dyV1+pfTz4R67XgK+J+wa2uf1zjVDcrhjuFwtavtA/5yFIuu8DhdBPUrASyt7q9reaFB
+         EI/A==
+X-Gm-Message-State: AC+VfDwflHHnwtnL2h2F7Vce309VBj2+Y9q2OO1otX0NMcPEoIiJZpzw
+        QF8a7r8mwg1eiGXDWWkt7V7z6g==
+X-Google-Smtp-Source: ACHHUZ6g6AxxBbf7Sw+PzyY8NXopLVuAvHozwPPBKPyF1ze7pXoradtPdGYIMWg6QbQJ4i3geVRLcQ==
+X-Received: by 2002:a2e:7c12:0:b0:2a8:db03:83f7 with SMTP id x18-20020a2e7c12000000b002a8db0383f7mr1145785ljc.32.1682665022157;
+        Thu, 27 Apr 2023 23:57:02 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id u19-20020a2e8553000000b0029839faa74fsm3214063ljj.134.2023.04.27.23.57.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 23:57:01 -0700 (PDT)
+Message-ID: <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+Date:   Fri, 28 Apr 2023 08:56:59 +0200
 MIME-Version: 1.0
-References: <20230425034010.3789376-1-quic_bjorande@quicinc.com>
- <20230425034010.3789376-6-quic_bjorande@quicinc.com> <CAJB8c04ah3YfK2VGxDhHMHK4KVJ7kZQv0b5JfPBu7jOk3mFQRA@mail.gmail.com>
- <20230427195545.GC870858@hu-bjorande-lv.qualcomm.com>
-In-Reply-To: <20230427195545.GC870858@hu-bjorande-lv.qualcomm.com>
-From:   "Bryan O'Donoghue" <pure.logic@nexus-software.ie>
-Date:   Fri, 28 Apr 2023 07:55:41 +0100
-Message-ID: <CAJB8c06zxy7Q9eSsnpOsW9ymPsCyWZ4p9oE3b4sP3YGPTiLT_A@mail.gmail.com>
-Subject: Re: [PATCH 5/7] phy: qcom-qmp-combo: Introduce drm_bridge
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Content-Language: en-US, da
+To:     =?UTF-8?Q?Konrad_Gr=c3=a4fe?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>
+Cc:     stable@vger.kernel.org
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20230427115120.241954-1-k.graefe@gateware.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 8:56=E2=80=AFPM Bjorn Andersson
-<quic_bjorande@quicinc.com> wrote:
->
-> On Wed, Apr 26, 2023 at 11:33:40AM +0100, Bryan O'Donoghue wrote:
-> > On Tue, Apr 25, 2023 at 4:40=E2=80=AFAM Bjorn Andersson
-> > <quic_bjorande@quicinc.com> wrote:
-> > >
-> [..]
-> > You need to add some or all of these
-> >        select DRM_DISPLAY_DP_HELPER
-> >        select DRM_DISPLAY_HELPER
-> >        select DRM_DP_AUX_BUS
-> >        select DRM_KMS_HELPER
-> >        select DRM_MIPI_DSI
-> >        select DRM_PANEL
-> >
-> >
-> > /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch=
-64-linux-gnu-ld:
-> > Unexpected GOT/PLT entries detected!
-> > /opt/linaro/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu/bin/aarch=
-64-linux-gnu-ld:
-> > Unexpected run-time procedure linkages detected!
-> > drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function
-> > `qmp_combo_bridge_attach':
-> > phy-qcom-qmp-combo.c:(.text+0xb50): undefined reference to
-> > `devm_drm_of_get_bridge'
-> > phy-qcom-qmp-combo.c:(.text+0xb6c): undefined reference to `drm_bridge_=
-attach'
-> > drivers/phy/qualcomm/phy-qcom-qmp-combo.o: In function `qmp_combo_probe=
-':
-> > phy-qcom-qmp-combo.c:(.text+0x13fc): undefined reference to
-> > `devm_drm_bridge_add'
-> >
->
-> You're correct, and TYPEC. Realized that I forgot these once I had
-> posted the patches. Will figure out the actual set for v2.
->
-> Thanks,
-> Bjorn
+On 27/04/2023 13.51, Konrad Gräfe wrote:
+> The CDC-ECM specification requires an USB gadget to send the host MAC
+> address as uppercase hex string. This change adds the appropriate
+> modifier.
 
-So I added CONFIG_DRM to Kconfig for the combo phy and then replaced
-the old patch we had with your series.
+Thinking more about it, I'm not sure this is appropriate, not for a
+single user like this. vsprintf() should not and cannot satisfy all
+possible string formatting requirements for the whole kernel. The %pX
+extensions are convenient for use with printk() and friends where one
+needs what in other languages would be "string interpolation" (because
+then the caller doesn't need to deal with temporary stack buffers and
+pass them as %s arguments), but for single items like this, snprintf()
+is not necessarily the right tool for the job.
 
-Works for me with my TCPM set with zero changes - aside from slotting
-the old PHY patch with your expanded series on SM8250
+In this case, the caller can just as well call string_upper() on the
+result, or not use sprintf() at all and do a tiny loop with
+hex_byte_pack_upper().
 
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Rasmus
 
-https://git.codelinaro.org/bryan.odonoghue/kernel/-/tree/linux-next-23-04-2=
-8-pm8150b-tcpm-qcom-wrapper-typec-mux-bjorn
