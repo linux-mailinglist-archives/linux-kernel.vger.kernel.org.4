@@ -2,226 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661966F1298
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5686F12A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345652AbjD1Hlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S1345674AbjD1Hny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345684AbjD1HlG (ORCPT
+        with ESMTP id S1345641AbjD1Hng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:41:06 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F646AC;
-        Fri, 28 Apr 2023 00:40:45 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id a1e0cc1a2514c-772661d22c2so3293385241.0;
-        Fri, 28 Apr 2023 00:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682667643; x=1685259643;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MnQ5of6M5/y7NIEMwyCrgsAXsP/6p2NWEIphTReCHEM=;
-        b=o9mc1/g7mBWHjnVTA6rJ/gtnlcn3yIosoBwhs0YVtkhqkH6vQncrIO/B+LDPDJ/9tp
-         IZtNSYL9F12hLX0U9o2p+Ie3FyfFskFqHfKAOZIKj5DJadgOBY5/WKqZI8VgF6Xflf/R
-         lFCwaABW1YUvgH8Luh01/5Y2z2EEgiD7sGkPuMyhFvXFQzdYlFIsPfQkkEIN+gjDySQc
-         idmVofYdKf/o1oZl83ANxLD47SjSFldOLV/3Go1xLtKNEPaQyisDWtIqP1RvC8K8nvD1
-         a1p0K1OtJg3temYIZW+kaWpgmt/V+9LLb7UgVMuJ1hcre0Si01amy6z9Cfdq+Y6DtbhY
-         bLvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682667643; x=1685259643;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MnQ5of6M5/y7NIEMwyCrgsAXsP/6p2NWEIphTReCHEM=;
-        b=eRypm7KuCe5IbZk+e9h+xlRRwfYLbbRyEYWPdQBfgsBJfFawQ6ItUqo4DfwDVx2d1R
-         sdGJUCI2WuhduLlr5XOTNKMF8jDlGMOoE+caffftKArEGt1xV3X0ShHeMs4memjH3ptT
-         4zL8RCZk95kX2cK6kIrP9vwEsB/+rTg5yg3UeinSs1XSL/5ojkR5eVqVfiZ63Shlq94Y
-         K3+UDG4MeK7eesBYmpWWqbYczeSTZQ0LbOvITKcgXp0LzD/jBx9x5UVn5q+mUpdqHMcQ
-         YIIKDBc+Iuaun0ADedrg+PM3WkTkuv8Yovqqoe6UnIF3a5U1o3GT1a7Z3sXUhHGtANhA
-         mi/A==
-X-Gm-Message-State: AC+VfDxRT7MV1gIvT2/SgHBoZ5CoNb4yTIEbEtdtYj6VAWMsLafyc9kY
-        m3SoJBiQV72dTGJJVu1MyiQdNazYYUE2P29Ayi8=
-X-Google-Smtp-Source: ACHHUZ73o2NFQLqN/VJRmpmG5rttPIfs6eFu1Z7n2MTiFytaKZNNxdtR5y2DVukspV/gGCNoBDGiBrAO9+GsIrdOxb4=
-X-Received: by 2002:a05:6102:2455:b0:430:3aec:efb5 with SMTP id
- g21-20020a056102245500b004303aecefb5mr2036514vss.3.1682667643018; Fri, 28 Apr
- 2023 00:40:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230207091902.2512905-1-milkfafa@gmail.com> <20230207091902.2512905-8-milkfafa@gmail.com>
- <d91457ea-44c3-b96b-ce60-3e5ce9a80f7b@xs4all.nl>
-In-Reply-To: <d91457ea-44c3-b96b-ce60-3e5ce9a80f7b@xs4all.nl>
-From:   Kun-Fa Lin <milkfafa@gmail.com>
-Date:   Fri, 28 Apr 2023 15:40:31 +0800
-Message-ID: <CADnNmFoJc_9irFx8CbmnXZ+qW_XNRJ5-SbBLLiAXYS8PHb0LPA@mail.gmail.com>
-Subject: Re: [PATCH v11 7/7] media: nuvoton: Add driver for NPCM video capture
- and encode engine
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     mchehab@kernel.org, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
-        benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrzej.p@collabora.com,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        kwliu@nuvoton.com, kflin@nuvoton.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Apr 2023 03:43:36 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D015FC0;
+        Fri, 28 Apr 2023 00:42:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 615423200319;
+        Fri, 28 Apr 2023 03:41:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 28 Apr 2023 03:41:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=DclSOfxipXonjr10Zfze2g04tEcMacCmPEMQj9KSUXPgBjVvL3b
+        MQo6fuWFJzT27nHJRs74jQBGwTtn2n2KHu5aTUjHmlrE0229hVE5oHF9yZDkS3ew
+        p1PmAZmZsXTagjeqlDcNnPsWoMKrE3WDRUgwOnllR2Mxd40mEjio8JDSoZrBhcLY
+        EpF/qnQ//QXfqOClL6sTo+6QcKph0TMZrseOTG+p/07lIk+CJDRuw9l1QbbyGXjO
+        Eb35nUJHmU87iS3+aXTcjIEw3yWT1ZcEtVJ4ScA81na/2JXShjG0jXm+bNsByN9H
+        0auAMaDbwZPPaqpkQeZO7SI/+wjiURWUsIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=ZK/ac6fyNoZWTXPXbTwDD4R131otN5WDVVkeFrFt0hh+B+HJxI8
+        X1G/CekMUpexmmrmmtZG9J6nlcBpYM2so1ttFbssFuvmAd/ypJumITr52uxj1kqy
+        Zy5c2xC/bhpYC6ggOg+MvqevGn68/zmzyOJ/3I3FVAlKSomAD5e4Rd6yFIqBKGoS
+        hfpNiJGqsm98wDNSPOSseTUhCzwwWb6vjvWT3xqdwN747++XNPbtRAEMqvBh4uIw
+        8a5wbLZI4Yp1uAxenqy8Yq0fZoWyfdJOOTsgpDQXZZOenD4BGJ/pbNjPRx5NNA7H
+        eRdIwS64tODrt1vngpa6XkfH9l9gVEeJE5g==
+X-ME-Sender: <xms:sXhLZC_w2Ek7ASHPBn9INJdoLclKFnb0_xbl3lC3xmLCPyKQXxk-BA>
+    <xme:sXhLZCuacs7cUiWYO0nEuiBYqB32l5BX1MLYeiBEMcK-fUP18Owr4Xr3Py6CFXhZd
+    _Jcbs_IxCTeOMDCEhI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedujedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:sXhLZICeUj5YmbBGBf_2m0H6PdWJkxUh3cvjU_9w54cXtxEeD9Uaeg>
+    <xmx:sXhLZKfodyYkaB9AElovPFxDfwUHR8mUJf5ooIYAhxFkIsxA5POH_w>
+    <xmx:sXhLZHPdS6QKadaKE8YtYrFaIvC03TvHzezzcglBLhUn06N1drpMBQ>
+    <xmx:snhLZPb3qpLzi_KGSCW3CvjqMT17lW441eMUaxBX-rqa1NYZ3zdyZQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1B945B60086; Fri, 28 Apr 2023 03:41:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <52dd950a-e714-4ebe-a663-4e0ec6463d03@app.fastmail.com>
+In-Reply-To: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+Date:   Fri, 28 Apr 2023 08:40:51 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanislav Kinsburskii" <skinsburskii@linux.microsoft.com>
+Cc:     "Matt Turner" <mattst88@gmail.com>, x86@kernel.org,
+        "Stanislav Kinsburskii" <stanislav.kinsburskii@gmail.com>,
+        "Borislav Petkov" <bp@alien8.de>, linux-ia64@vger.kernel.org,
+        "Mark Brown" <broonie@kernel.org>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        linux-kernel@vger.kernel.org, "Brian Cain" <bcain@quicinc.com>,
+        linux-mips@vger.kernel.org,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Omar Sandoval" <osandov@fb.com>, "Helge Deller" <deller@gmx.de>,
+        linuxppc-dev@lists.ozlabs.org, linux-hexagon@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Chris Down" <chris@chrisdown.name>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH 0/7] Expect immutable pointer in virt_to_phys/isa_virt_to_bus
+ prototypes
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
-
-Sorry for the late response.
-
-> > +static void npcm_video_get_resolution(struct npcm_video *video)
+On Sat, Apr 15, 2023, at 12:17, Stanislav Kinsburskii wrote:
+> This series is aimed to address compilation warnings when a constant p=
+ointer
+> is passed to virt_to_phys and isa_virt_to_bus functions:
 >
-> I think 'ncpm_video_detect_resolution' might be a better name.
-
-OK, will change to 'ncpm_video_detect_resolution'.
-
-
-> > +{
-> > +     struct v4l2_bt_timings *act = &video->active_timings;
-> > +     struct v4l2_bt_timings *det = &video->detected_timings;
-> > +     struct regmap *gfxi;
-> > +     unsigned int dispst;
-> > +
-> > +     video->v4l2_input_status = 0;
-> > +     det->width = npcm_video_hres(video);
-> > +     det->height = npcm_video_vres(video);
-> > +
-> > +     if (act->width != det->width || act->height != det->height) {
-> > +             dev_dbg(video->dev, "Resolution changed\n");
-> > +             npcm_video_bufs_done(video, VB2_BUF_STATE_ERROR);
+>   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discar=
+ds =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
+>   warning: passing argument 1 of =E2=80=98isa_virt_to_bus=E2=80=99 dis=
+cards =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
 >
-> Why return all buffers? You shouldn't have to do this.
+> The change(s) is the same for all architectures, but it's split into a=
+ series on
+> per-arch basis to simplify applying and testing on the maintainers sid=
+e.
 >
-> Right now this function is only called at start streaming and when
-> query_dv_timings is called. Is it possible for the resolution to change
-> while streaming? If so, do you get an interrupt or is there some other
-> mechanism to detect this? Normally a resolution change will raise a
-> V4L2_EVENT_SOURCE_CHANGE event, and userspace then decides what to do
-> (typically stopping streaming and reconfiguring the video pipeline).
->
-> What happens if you continue streaming when the resolution changes?
-> Particularly when the new resolution is larger than the current
-> buffer size.
 
-Yes, it is possible for the resolution to change while streaming.
-In our case, userspace application keeps monitoring resolution by
-calling query_dv_timings,
-and it will stop streaming and reconfiguration if resolution changes.
-I've checked that VCD can support resolution change interruptions.
-I'll add interrupt support as you suggested.
+Looks all good to me. If everyone is happy with it, I'll queue it up
+after in the asm-generic tree for 6.5, once rc1 is out.
 
-
-> > +     if (det->width == 0 || det->height == 0) {
-> > +             det->width = MIN_WIDTH;
-> > +             det->height = MIN_HEIGHT;
-> > +             npcm_video_clear_gmmap(video);
->
-> This looks like a potentially dangerous side-effect. I would not expect this
-> function to have any side effects: it just detects the new resolution.
-
-Will remove this and modify the flow of ncpm_video_detect_resolution.
-
-
-> > +static int npcm_video_enum_input(struct file *file, void *fh,
-> > +                              struct v4l2_input *inp)
-> > +{
-> > +     struct npcm_video *video = video_drvdata(file);
-> > +
-> > +     if (inp->index)
-> > +             return -EINVAL;
-> > +
->
-> You need to call npcm_video_get_resolution(video); here as well,
-> to ensure inp->status is valid. Although ideally you know if there is a
-> new resolution due to an interrupt or something like that.
-
-Understand. Will add support for resolution change interrupt to ensure
-inp->status is valid.
-
-
-> > +     if (vb2_is_busy(&video->queue)) {
-> > +             dev_err(video->dev, "%s device busy\n", __func__);
-> > +             return -EBUSY;
-> > +     }
-> > +
-> > +     video->active_timings = timings->bt;
->
-> This updates the active_timings even if npcm_video_set_resolution
-> fails. Is that what you would expect?
-
-active_timings should be updated only if npcm_video_set_resolution
-succeeds, will modify it.
-
-
-> > +static int npcm_video_sub_event(struct v4l2_fh *fh,
-> > +                             const struct v4l2_event_subscription *sub)
-> > +{
-> > +     switch (sub->type) {
-> > +     case V4L2_EVENT_SOURCE_CHANGE:
-> > +             return v4l2_src_change_event_subscribe(fh, sub);
-> > +     }
->
-> This makes no sense unless you can actually detect resolution changes
-> and raise this event.
->
-> If there is no easy asynchronous way of telling the driver that the resolution
-> changed, would it be possible to have a thread that periodically checks the
-> current detected resolution?
-
-Will add support for resolution change interrupt and raise the event.
-
-
-> > +     switch (ctrl->id) {
-> > +     case V4L2_CID_NPCM_RECT_COUNT:
-> > +             ctrl->val = video->rect[video->vb_index];
->
-> Does this change per frame? This is not really a reliable way of passing this
-> information to userspace.
->
-> I also wonder if the number of rects isn't something that can be deduced from
-> the payload size of the buffer.
-
-VCD supports two capture modes:
-  - COMPLETE mode: Capture the next complete frame into memory.
-  - DIFF mode: Compare the incoming frame with the frame stored in
-memory, and update the differentiated rects in memory.
-
-If using COMPLETE mode, rect_count is always 1 (complete frame).
-If using DIFF mode, rect_count will be the number of differentiated rects.
-In DIFF mode case, rect_count is not deducible so userspace needs to
-use V4L2_CID_NPCM_RECT_COUNT control to get the information.
-
-
-> > +     kfree(video->rect);
-> > +     video->rect = NULL;
->
-> This line is not needed.
->
-> > +
-> > +     video->rect = kcalloc(*num_buffers, sizeof(*video->rect), GFP_KERNEL);
->
-> Possibly overkill to allocate this. It can be an array of size VIDEO_MAX_FRAME
-> as well. Up to you, though.
-
-OK, I will modify it as you suggested.
-
-
-> > +     vbq->io_modes = VB2_MMAP | VB2_READ | VB2_DMABUF;
->
-> Does VB2_READ make sense? It can't really be used with a HEXTILE format
-> since that has variable length payloads, and with read() you don't know
-> the size of each compressed frame.
-
-VB2_READ should be removed. Thank you so much for the detailed review.
-
-Regards,
-Marvin
+ Arnd
