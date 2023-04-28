@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89466F14B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A04B6F14BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 11:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345978AbjD1J4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 05:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
+        id S1346016AbjD1J4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 05:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345838AbjD1Jzo (ORCPT
+        with ESMTP id S1345778AbjD1J4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 05:55:44 -0400
-Received: from out187-18.us.a.mail.aliyun.com (out187-18.us.a.mail.aliyun.com [47.90.187.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3095BBC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 02:55:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047213;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.STFoGcy_1682675612;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STFoGcy_1682675612)
+        Fri, 28 Apr 2023 05:56:12 -0400
+Received: from out0-210.mail.aliyun.com (out0-210.mail.aliyun.com [140.205.0.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9B25599;
+        Fri, 28 Apr 2023 02:55:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047213;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---.STFoGdv_1682675616;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STFoGdv_1682675616)
           by smtp.aliyun-inc.com;
-          Fri, 28 Apr 2023 17:53:33 +0800
+          Fri, 28 Apr 2023 17:53:37 +0800
 From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
@@ -29,14 +29,19 @@ Cc:     "Thomas Garnier" <thgarnie@chromium.org>,
         "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
         "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
         "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Pasha Tatashin" <pasha.tatashin@soleen.com>
-Subject: [PATCH RFC 32/43] x86/boot/64: Use data relocation to get absloute address when PIE is enabled
-Date:   Fri, 28 Apr 2023 17:51:12 +0800
-Message-Id: <bcdf9c31498fbd143848c15639d0c4fa46d804d6.1682673543.git.houwenlong.hwl@antgroup.com>
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Sathvika Vasireddy" <sv@linux.ibm.com>,
+        "=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?=" <linux@weissschuh.net>,
+        <linux-kbuild@vger.kernel.org>
+Subject: [PATCH RFC 33/43] objtool: Add validation for x86 PIE support
+Date:   Fri, 28 Apr 2023 17:51:13 +0800
+Message-Id: <226af8c63c5bfa361763dd041a997ee84fe926cf.1682673543.git.houwenlong.hwl@antgroup.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
 References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
@@ -51,110 +56,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When PIE is enabled, all symbol references are RIP-relative, so there is
-no need to fixup global symbol references when in low address.  However,
-in order to acquire absloute virtual address of symbol, introduce a
-macro to use data relocation to get it.
+For x86 PIE binary, only RIP-relative addressing is allowed, however,
+there are still a little absolute references of R_X86_64_64 relocation
+type for data section and a little absolute references of R_X86_64_32S
+relocation type in pvh_start_xen() function.
 
 Suggested-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
 Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
 Cc: Thomas Garnier <thgarnie@chromium.org>
 Cc: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/kernel/head64.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ arch/x86/Kconfig                        |  1 +
+ scripts/Makefile.lib                    |  1 +
+ tools/objtool/builtin-check.c           |  4 +-
+ tools/objtool/check.c                   | 82 +++++++++++++++++++++++++
+ tools/objtool/include/objtool/builtin.h |  1 +
+ 5 files changed, 88 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index 49f7629b17f7..ef7ad96f2154 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -86,10 +86,22 @@ static struct desc_ptr startup_gdt_descr = {
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 715f0734d065..b753a54e5ea7 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2224,6 +2224,7 @@ config RELOCATABLE
+ config X86_PIE
+ 	def_bool n
+ 	depends on X86_64
++	select OBJTOOL if HAVE_OBJTOOL
  
- #define __head	__section(".head.text")
+ config RANDOMIZE_BASE
+ 	bool "Randomize the address of the kernel image (KASLR)"
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 100a386fcd71..e3c804fbc421 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -270,6 +270,7 @@ objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
+ objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
+ objtool-args-$(CONFIG_GCOV_KERNEL)			+= --no-unreachable
+ objtool-args-$(CONFIG_PREFIX_SYMBOLS)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
++objtool-args-$(CONFIG_X86_PIE)			        += --pie
  
-+#ifdef CONFIG_X86_PIE
-+#define SYM_ABS_VAL(sym)	\
-+	({ static unsigned long __initdata __##sym = (unsigned long)sym; __##sym; })
-+
-+static void __head *fixup_pointer(void *ptr, unsigned long physaddr)
+ objtool-args = $(objtool-args-y)					\
+ 	$(if $(delay-objtool), --link)					\
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 7c175198d09f..1cf1d00464e0 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -81,6 +81,7 @@ static const struct option check_options[] = {
+ 	OPT_BOOLEAN('t', "static-call", &opts.static_call, "annotate static calls"),
+ 	OPT_BOOLEAN('u', "uaccess", &opts.uaccess, "validate uaccess rules for SMAP"),
+ 	OPT_BOOLEAN(0  , "cfi", &opts.cfi, "annotate kernel control flow integrity (kCFI) function preambles"),
++	OPT_BOOLEAN(0, "pie", &opts.pie, "validate addressing rules for PIE"),
+ 	OPT_CALLBACK_OPTARG(0, "dump", NULL, NULL, "orc", "dump metadata", parse_dump),
+ 
+ 	OPT_GROUP("Options:"),
+@@ -137,7 +138,8 @@ static bool opts_valid(void)
+ 	    opts.sls			||
+ 	    opts.stackval		||
+ 	    opts.static_call		||
+-	    opts.uaccess) {
++	    opts.uaccess		||
++	    opts.pie) {
+ 		if (opts.dump_orc) {
+ 			ERROR("--dump can't be combined with other options");
+ 			return false;
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 5b600bbf2389..d67b80251eec 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -131,6 +131,27 @@ static struct instruction *prev_insn_same_sym(struct objtool_file *file,
+ 	for (insn = next_insn_same_sec(file, insn); insn;		\
+ 	     insn = next_insn_same_sec(file, insn))
+ 
++static struct instruction *find_insn_containing(struct objtool_file *file,
++						struct section *sec,
++						unsigned long offset)
 +{
-+	return ptr;
-+}
-+#else
-+#define SYM_ABS_VAL(sym) ((unsigned long)sym)
++	struct instruction *insn;
 +
- static void __head *fixup_pointer(void *ptr, unsigned long physaddr)
++	insn = find_insn(file, sec, 0);
++	if (!insn)
++		return NULL;
++
++	sec_for_each_insn_from(file, insn) {
++		if (insn->offset > offset)
++			return NULL;
++		if (insn->offset <= offset && (insn->offset + insn->len) > offset)
++			return insn;
++	}
++
++	return NULL;
++}
++
++
+ static inline struct symbol *insn_call_dest(struct instruction *insn)
  {
- 	return ptr - (void *)_text + (void *)physaddr;
+ 	if (insn->type == INSN_JUMP_DYNAMIC ||
+@@ -4529,6 +4550,61 @@ static int validate_reachable_instructions(struct objtool_file *file)
+ 	return 0;
  }
-+#endif /* CONFIG_X86_PIE */
  
- static unsigned long __head *fixup_long(void *ptr, unsigned long physaddr)
++static int is_in_pvh_code(struct instruction *insn)
++{
++	struct symbol *sym = insn->sym;
++
++	return sym && !strcmp(sym->name, "pvh_start_xen");
++}
++
++static int validate_pie(struct objtool_file *file)
++{
++	struct section *sec;
++	struct reloc *reloc;
++	struct instruction *insn;
++	int warnings = 0;
++
++	for_each_sec(file, sec) {
++		if (!sec->reloc)
++			continue;
++		if (!(sec->sh.sh_flags & SHF_ALLOC))
++			continue;
++
++		list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
++			switch (reloc->type) {
++			case R_X86_64_NONE:
++			case R_X86_64_PC32:
++			case R_X86_64_PLT32:
++			case R_X86_64_64:
++			case R_X86_64_PC64:
++			case R_X86_64_GOTPCREL:
++				break;
++			case R_X86_64_32:
++			case R_X86_64_32S:
++				insn = find_insn_containing(file, sec, reloc->offset);
++				if (!insn) {
++					WARN("can't find relocate insn near %s+0x%lx",
++					     sec->name, reloc->offset);
++				} else {
++					if (is_in_pvh_code(insn))
++						break;
++					WARN("insn at %s+0x%lx is not compatible with PIE",
++					     sec->name, insn->offset);
++				}
++				warnings++;
++				break;
++			default:
++				WARN("unexpected relocation type %d at %s+0x%lx",
++				     reloc->type, sec->name, reloc->offset);
++				warnings++;
++				break;
++			}
++		}
++	}
++
++	return warnings;
++}
++
+ int check(struct objtool_file *file)
  {
-@@ -142,8 +154,8 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
- 	 * attribute.
- 	 */
- 	if (sme_get_me_mask()) {
--		vaddr = (unsigned long)__start_bss_decrypted;
--		vaddr_end = (unsigned long)__end_bss_decrypted;
-+		vaddr = SYM_ABS_VAL(__start_bss_decrypted);
-+		vaddr_end = SYM_ABS_VAL(__end_bss_decrypted);
+ 	int ret, warnings = 0;
+@@ -4673,6 +4749,12 @@ int check(struct objtool_file *file)
+ 		warnings += ret;
+ 	}
  
- 		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
- 			/*
-@@ -189,6 +201,8 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	bool la57;
- 	int i;
- 	unsigned int *next_pgt_ptr;
-+	unsigned long text_base = SYM_ABS_VAL(_text);
-+	unsigned long end_base = SYM_ABS_VAL(_end);
++	if (opts.pie) {
++		ret = validate_pie(file);
++		if (ret < 0)
++			return ret;
++		warnings += ret;
++	}
  
- 	la57 = check_la57_support(physaddr);
+ 	if (opts.stats) {
+ 		printf("nr_insns_visited: %ld\n", nr_insns_visited);
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index 2a108e648b7a..1151211a5cea 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -26,6 +26,7 @@ struct opts {
+ 	bool uaccess;
+ 	int prefix;
+ 	bool cfi;
++	bool pie;
  
-@@ -200,7 +214,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	 * Compute the delta between the address I am compiled to run at
- 	 * and the address I am actually running at.
- 	 */
--	load_delta = physaddr - (unsigned long)(_text - __START_KERNEL_map);
-+	load_delta = physaddr - (text_base - __START_KERNEL_map);
- 
- 	/* Is the address not 2M aligned? */
- 	if (load_delta & ~PMD_MASK)
-@@ -214,9 +228,9 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	pgd = fixup_pointer(&early_top_pgt, physaddr);
- 	p = pgd + pgd_index(__START_KERNEL_map);
- 	if (la57)
--		*p = (unsigned long)level4_kernel_pgt;
-+		*p = SYM_ABS_VAL(level4_kernel_pgt);
- 	else
--		*p = (unsigned long)level3_kernel_pgt;
-+		*p = SYM_ABS_VAL(level3_kernel_pgt);
- 	*p += _PAGE_TABLE_NOENC - __START_KERNEL_map + load_delta;
- 
- 	if (la57) {
-@@ -273,7 +287,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	pmd_entry += sme_get_me_mask();
- 	pmd_entry +=  physaddr;
- 
--	for (i = 0; i < DIV_ROUND_UP(_end - _text, PMD_SIZE); i++) {
-+	for (i = 0; i < DIV_ROUND_UP(end_base - text_base, PMD_SIZE); i++) {
- 		int idx = i + (physaddr >> PMD_SHIFT);
- 
- 		pmd[idx % PTRS_PER_PMD] = pmd_entry + i * PMD_SIZE;
-@@ -298,11 +312,11 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	pmd = fixup_pointer(level2_kernel_pgt, physaddr);
- 
- 	/* invalidate pages before the kernel image */
--	for (i = 0; i < pmd_index((unsigned long)_text); i++)
-+	for (i = 0; i < pmd_index(text_base); i++)
- 		pmd[i] &= ~_PAGE_PRESENT;
- 
- 	/* fixup pages that are part of the kernel image */
--	for (; i <= pmd_index((unsigned long)_end); i++)
-+	for (; i <= pmd_index(end_base); i++)
- 		if (pmd[i] & _PAGE_PRESENT)
- 			pmd[i] += load_delta;
- 
+ 	/* options: */
+ 	bool backtrace;
 -- 
 2.31.1
 
