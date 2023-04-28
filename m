@@ -2,204 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414DB6F113E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680346F1144
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345165AbjD1FGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 01:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S1344707AbjD1FMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 01:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjD1FGr (ORCPT
+        with ESMTP id S229445AbjD1FMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 01:06:47 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA6270C
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:06:45 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a920d4842bso69243965ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:06:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1682658404; x=1685250404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K+priwgVTI5G9m2IAcDviTBaPANz0KSFOmw49YgGUdI=;
-        b=DdoVOedUxUiBDMPss2+elnVBPyCyJNeO8QeLYntRLaBFlrFnUj55nnP40KvPb/QaAr
-         maZi1ZZfOQWs2UfwLn2KK6ptXfIYAl+vkpoN2pBTcXDhEbJfyum8KYEGrgUAFTB3AGQW
-         0zUK6RP+MghQbeuKlwuyrYjV3AM+lTf8yutDYyhNp3xJrZVCkukxfHC6BanumEniBhyG
-         YOGPbHdOOFhvz4j65V6ArQqZupnSWlmPapfcjS2u/5jTHCZMIW4gZcJ5jsTvrgZdFmVo
-         1TPgDCV+xMiaeNdwt1RUTXybDDc/2d+VZSxN350zQhp7JynKdPV2wewFf1Oic96zDZpb
-         tLew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682658404; x=1685250404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+priwgVTI5G9m2IAcDviTBaPANz0KSFOmw49YgGUdI=;
-        b=jhhnwLNg55Toq9m5IDcdRsJEwexfCzWv/YxNyehtzlTP4TlO/uM1YsEN5UCmOl/xWq
-         xX/BE2hVfPmLKk5a9oI937UKvH2CZHbA4VjFwNU9I4S1ed4Z/goeVf7ANvSQ5+GlA57I
-         S0N4B7CFt92R3RRJuNh1SKtV6MusuARBl+mj2nOTaAjVeGDBJcCprDrCStWEUoH/ITec
-         Lau9ZAjrXeyP4gGbSxsnoKasdcRdNOybaTyXj02bkLNoDVAeiEkf/kB1IqdubNpDMQ0p
-         JvTyzCdkZpHFrXhn8axa7mJTv1HqbtWnmEiPV4zlRv2l4dpJqJRC/h90QVeUqAPWFYkD
-         2luQ==
-X-Gm-Message-State: AC+VfDzzI3UBo27GFjQkz7MPR/1EX+bau9/QLljf1LrMvPXpcbCaqz7R
-        +jUBHH1qLgFcOJLqwxZoCq9W2Q==
-X-Google-Smtp-Source: ACHHUZ4335WaLJ0IvStVlJSpeRvka4TYtBqleZr3zv6nyrNafUFSz86H7cUtmDNEwU72UdEYNQQMuQ==
-X-Received: by 2002:a17:902:b702:b0:1a6:c595:d7c3 with SMTP id d2-20020a170902b70200b001a6c595d7c3mr3692487pls.22.1682658404604;
-        Thu, 27 Apr 2023 22:06:44 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902900900b001a514d75d16sm12405984plp.13.2023.04.27.22.06.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 22:06:44 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1psGJc-008kwW-Oy; Fri, 28 Apr 2023 15:06:40 +1000
-Date:   Fri, 28 Apr 2023 15:06:40 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <20230428050640.GA1969623@dread.disaster.area>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
- <ZEXChAJfCRPv9vbs@codewreck.org>
+        Fri, 28 Apr 2023 01:12:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AE270A
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8ED863DA7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:12:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C26C433D2;
+        Fri, 28 Apr 2023 05:12:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1682658752;
+        bh=DhCCN/+Mv7LdBSrGrD3rhW6i08LYvc7UAwLhwOx63ZM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RJkrCiTgjLYfbI1lnlSeAsfy5CiLQPyTrWuMqwxyvk7P4+mvzQ8stVKOCJDFkgMG2
+         d/gDLR9eO/nkhUXd6HlmpIr0Qzebz4aVpfyjfbGbhC244exeF3g9VJJRKV1yodqzxS
+         GeeyjSItTMVaDGFqL47t/CkNFzBVYSPJYN8dLOUA=
+Date:   Fri, 28 Apr 2023 07:12:28 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nipun Gupta <nipun.gupta@amd.com>,
+        Nikhil Agarwal <nikhil.agarwal@amd.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>
+Subject: Re: [GIT PULL] Driver core updates for 6.4-rc1
+Message-ID: <ZEtVvK6LTQHw6Onu@kroah.com>
+References: <ZEqEx7C2iuApvrvt@kroah.com>
+ <CAHk-=wjcvp-JxG2PW7TF6HV2h1xx2_2SMh_HGNZuEpK0CtNTww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZEXChAJfCRPv9vbs@codewreck.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjcvp-JxG2PW7TF6HV2h1xx2_2SMh_HGNZuEpK0CtNTww@mail.gmail.com>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 08:43:00AM +0900, Dominique Martinet wrote:
-> Dave Chinner wrote on Mon, Apr 24, 2023 at 08:40:45AM +1000:
-> > This doesn't actually introduce non-blocking getdents operations, so
-> > what's the point? If it just shuffles the getdents call off to a
-> > background thread, why bother with io_uring in the first place?
+On Thu, Apr 27, 2023 at 04:31:39PM -0700, Linus Torvalds wrote:
+> On Thu, Apr 27, 2023 at 7:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > Once again, a busy development cycle, with lots of changes happening in
+> > the driver core in the quest to be able to move "struct bus" and "struct
+> > class" into read-only memory, a task now complete with these changes.
 > 
-> As said in the cover letter my main motivation really is simplifying the
-> userspace application:
->  - style-wise, mixing in plain old getdents(2) or readdir(3) in the
-> middle of an io_uring handling loop just feels wrong; but this may just
-> be my OCD talking.
->  - in my understanding io_uring has its own thread pool, so even if the
-> actual getdents is blocking other IOs can progress (assuming there is
-> less blocked getdents than threads), without having to build one's own
-> extra thread pool next to the uring handling.
-> Looking at io_uring/fs.c the other "metadata related" calls there also
-> use the synchronous APIs (renameat, unlinkat, mkdirat, symlinkat and
-> linkat all do), so I didn't think of that as a problem in itself.
-
-I think you missed the point. getdents is not an exclusive operation
-- it is run under shared locking unlike all the other direcotry
-modification operations you cite above. They use exclusive locking
-so there's no real benefit by trying to run them non-blocking or
-as an async operation as they are single threaded and will consume
-a single thread context from start to end.
-
-Further, one of the main reasons they get punted to the per-thread
-pool is so that io_uring can optimise away the lock contention
-caused by running multiple work threads on exclusively locked
-objects; it does this by only running one work item per inode at a
-time.
-
-This is exactly what we don't want with getdents - we want to be
-able to run as many concurrent getdents and lookup operations in
-parallel as we can as both all use shared locking. IOWs, getdents
-and inode lookups are much closer in behaviour and application use
-to concurrent buffered data reads than they are to directory
-modification operations.
-
-We can already do concurrent getdents/lookup operations on a single
-directory from userspace with multiple threads, but the way this
-series adds support to io_uring somewhat prevents concurrent
-getdents/lookup operations on the same directory inode via io_uring.
-IOWs, adding getdents support to io_uring like this is not a step
-forwards for applications that use/need concurrency in directory
-lookup operations.
-
-Keep in mind that if the directory is small enough to fit in the
-inode, XFS can return all the getdents information immediately as it
-is guaranteed to be in memory without doing any IO at all. Why
-should that fast path that is commonly hit get punted to a work
-queue and suddenly cost an application at least two extra context
-switches?
-
-> > Filesystems like XFS can easily do non-blocking getdents calls - we
-> > just need the NOWAIT plumbing (like we added to the IO path with
-> > IOCB_NOWAIT) to tell the filesystem not to block on locks or IO.
-> > Indeed, filesystems often have async readahead built into their
-> > getdents paths (XFS does), so it seems to me that we really want
-> > non-blocking getdents to allow filesystems to take full advantage of
-> > doing work without blocking and then shuffling the remainder off to
-> > a background thread when it actually needs to wait for IO....
+> Well, this also caused a build failure, and I didn't catch it during
+> the merge, because it only happened on arm64.
 > 
-> I believe that can be done without any change of this API, so that'll be
-> a very welcome addition when it is ready;
+> The reason it only happens on arm64 is that it is in the CDX bus
+> driver, and that one has
+> 
+>         depends on OF && ARM64
+> 
+> despite apparently building fine on x86-64 too if you were to just add
+> a "|| COMPILE_TEST" to it.
+> 
+> And I did notice this build failure eventually, since I do arm64
+> builds on my M2 Macbook Air. But while it's a perfectly cromulent
+> laptop, it's not like it's a speed daemon. It takes something like ~75
+> minutes for afull allmodconfig build, so certainly not between each
+> pull request.
+> 
+> End result: my merge test builds are all done on x86-64, and the arm64
+> test builds happen much less regularly (ie: typically a couple of
+> times a day).
+> 
+> I did the obvious fixup, but I can only assume (and hope) that this
+> was caught by somebody else during the merge window, and that
+> 
+> > All of these have been in linux-next for a while with no reported
+> > problems.
+> 
+> was just a lie.
 
-Again, I think you miss the point.
+Sorry about that, on it's own, it was fine, but merged with the
+char-misc tree, there was a build issue, I had forgotten all about that.
+I know we had already resolved one issue with merging this tree with the
+DRM tree by reworking the DRM tree in advance, and that had pushed this
+instance out of my memory.
 
-Non blocking data IO came before io_uring and we had the
-infrastructure in place before io_uring took advantage of it.
-Application developers asked the fs developers to add support for
-non-blocking direct IO operations and because we pretty much had all
-the infrastructure to support already in place it got done quickly
-via preadv2/pwritev2 via RWF_NOWAIT flags.
+In the future, how do you want stuff like "when this is merged with that
+tree, something needs to be done" type of things to be pointed out?
+linux-next keeps resolution patches around, do you want just a pointer
+to that to make things easier?
 
-We already pass a struct dir_context to ->iterate_shared(), so we
-have a simple way to add context specific flags down the filesystem
-from iterate_dir(). This is similar to the iocb for file data IO
-that contains the flags field that holds the IOCB_NOWAIT context for
-io_uring based IO. So the infrastructure to plumb it all the way
-down the fs implementation of ->iterate_shared is already there.
+And thanks for the fixup, it looks correct.
 
-XFS also has async metadata IO capability and we use that for
-readahead in the xfs_readdir() implementation. hence we've got all
-the parts we need to do non-blocking readdir already in place. This
-is very similar to how we already had all the pieces in the IO path
-ready to do non-block IO well before anyone asked for IOCB_NOWAIT
-functionality....
-
-AFAICT, the io_uring code wouldn't need to do much more other than
-punt to the work queue if it receives a -EAGAIN result. Otherwise
-the what the filesystem returns doesn't need to change, and I don't
-see that we need to change how the filldir callbacks work, either.
-We just keep filling the user buffer until we either run out of
-cached directory data or the user buffer is full.
-
-And as I've already implied, several filesystems perform async
-readahead from their ->iterate_shared methods, so there's every
-chance they will return some data while there is readahead IO in
-progress. By the time the io_uring processing loop gets back to
-issue another getdents operation, that IO will have completed and the
-application will be able to read more dirents without blocking. The
-filesystem will issue more readahead while processing what it
-already has available, and around the loop we go.
-
-> I don't think the adding the
-> uring op should wait on this if we can agree a simple wrapper API is
-> good enough (or come up with a better one if someone has a Good Idea)
-
-It doesn't look at all hard to me. If you add a NOWAIT context flag
-to the dir_context it should be relatively trivial to connect all
-the parts together. If you do all the VFS, io_uring and userspace
-testing infrastructure work, I should be able to sort out the
-changes needed to xfs_readdir() to support nonblocking
-->iterate_shared() behaviour.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+greg k-h
