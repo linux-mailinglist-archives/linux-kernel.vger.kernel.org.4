@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336F06F125F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D026F1261
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345523AbjD1HaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S1345510AbjD1HaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345510AbjD1HaR (ORCPT
+        with ESMTP id S1345518AbjD1HaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:30:17 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86C268E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:30:14 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1B89B40007;
-        Fri, 28 Apr 2023 07:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1682667013;
+        Fri, 28 Apr 2023 03:30:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C36E26A1;
+        Fri, 28 Apr 2023 00:30:20 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 09:30:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1682667018;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iWBTxT4oyu6/mZM/P/Ah3o6QGBXo1mkLcX+rJvFiAcA=;
-        b=IzLGQ+hx3RDpUx5pk5wdyfx3i1Zr4VlVadxAm0pnO83yakXm19TVdjd7Bj2KPBhYH6Y2VJ
-        ftjNcXPoZq+hrE5td7RrDjGXB+OkHJmjcsTVlb41I5IFM4eiM4ZjMj42eKGAQdcsommaLp
-        Zc2C3X1QZs545xQJe/M3U5QmkQ2i1OehEVD7hG1DZGbtA+qACAcSgObdygtEaO9hXTV2c8
-        oJpVExjUo/1REDMA+D1jEnNQLPjKsfaKwB5swEE38mGvXKJmCcZMFySdCOQKrTXsMP2LIE
-        mEnCRpby/PKf1y5LWtpklOtfd2CqtLEH9ZZTzPMRKLFwDsom52sKl0CoqBbsEQ==
-Date:   Fri, 28 Apr 2023 09:30:10 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
-Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
-Message-ID: <20230428093010.07e61080@pc-7.home>
-In-Reply-To: <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
-References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
-        <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
-        <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        bh=tN4Is3StFqX6AUDx4ZBtDx5Nj+CllWKd/w/6il3hpyQ=;
+        b=wqx15uW1RLL0CbZDoxYf5ZOThN2vIOeOq2pRMcep3M6h57EQBqS88obhqiWbiw88KViOj6
+        VA9ReGQc1QdyFAU9Gnu0TvgpcXr2nJoMzLhf67lUeuOCdPETj+rrDQlY595Qk93t3RsRo1
+        0LM7o3oy4fgT10huAydY8TmBduSwhpCojwWPdG+wd+jyUCw33XwLC//pPeuhftiFBfonp+
+        22G7LfpOG5qABkwEuu2FEvauekWlNzGgu2IkD/WHuUCArEEroDybVQZHHhtotts8UvPDLO
+        1/NqGZlcelpcpp6qqvob0aYwbCWiMEAyuHcRpq5iz2+gWeLztgzNKXOppRs9dA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1682667018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tN4Is3StFqX6AUDx4ZBtDx5Nj+CllWKd/w/6il3hpyQ=;
+        b=CY/OuaBlaNjH98AS9nB9bbKmsmkIbHNhue8djrmt85kZjYTw4OyGfX3OLYI3jiKqaWeXOn
+        oEy3cUiN/9aAPTCA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Kurt Kanzenbach <kurt@linutronix.de>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Bouska, Zdenek" <zdenek.bouska@siemens.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rt-users@vger.kernel.org" <linux-rt-users@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>, Puranjay Mohan <p-mohan@ti.com>
+Subject: Re: Unfair qspinlocks on ARM64 without LSE atomics => 3ms delay in
+ interrupt handling
+Message-ID: <20230428073016.YfrIGGoN@linutronix.de>
+References: <AS1PR10MB567534190B05A4493674173BEB659@AS1PR10MB5675.EURPRD10.PROD.OUTLOOK.COM>
+ <87pm7qxrg6.ffs@tglx>
+ <19641ab0-ab6a-9af7-8c64-34030e187848@siemens.com>
+ <871qk5782i.fsf@kurt>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <871qk5782i.fsf@kurt>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,54 +68,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mark, Colin,
-
-On Tue, 25 Apr 2023 13:56:23 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> On Fri, Apr 21, 2023 at 08:50:30AM -0700, Colin Foster wrote:
-> > On Thu, Apr 20, 2023 at 05:06:17PM +0200, Maxime Chevallier wrote:  
+On 2023-04-27 15:45:09 [+0200], Kurt Kanzenbach wrote:
+> > Are we aware of other concrete case where it bites? Even with just
+> > "normal" contented spin_lock usage?
 > 
-> > > On regmap consumers that require address translation through
-> > > up/downshifting, the alignment check in the regmap core doesn't
-> > > take the translation into account. This doesn't matter when
-> > > downshifting the register address, as any address that fits a
-> > > given alignment requirement will still meet it when downshifted
-> > > (a 4-byte aligned address will always also be 2-bytes aligned for
-> > > example).  
-> 
-> > > However, when upshifting, this check causes spurious errors, as it
-> > > occurs before the upshifting.  
-> 
-> > I don't follow why upshifting should make a difference to alignment.
-> > Assuming it does though, would it make sense to test  
-> 
-> > map->format.reg_shift > 0  
-> 
-> > instead of just !map->format.reg_shift?  
-> 
-> Yeah, I think the question is more when we should run the alignment
-> check than if we should have one.  I think running the check after any
-> shifting makes sense, we'd be better off reorganising the checks if
-> needed than removing them.
+> Well, some years ago I've observed a similar problem with ARM64
+> spinlocks, cpu_relax() and retry loops (in the futex code). It also
+> generated latency spikes up to 2-3ms. Back then, it was easily
+> reproducible using stress-ng --ptrace 4.
 
-In the initial RFC I suggested this [1] approach, which checked for
-alignment after shifting, that way we are sure that the alignment check
-is done according to the underlying regmap provider's constraints. Maybe
-this could be sufficient ?
+That was fixed by
+	https://patchwork.kernel.org/project/linux-arm-kernel/patch/1399528508-2806-1-git-send-email-arjun.kv@samsung.com
 
-Thanks,
+if my memory serves me well.
 
-Maxime
+> Thanks,
+> Kurt
 
-> >   
-> > > -	if (!IS_ALIGNED(reg, map->reg_stride))
-> > > +	if (!map->format.reg_shift && !IS_ALIGNED(reg,
-> > > map->reg_stride)) return -EINVAL;  
-> > 
-> > In the case of ocelot_spi, we'd want to flag an invalid access to a
-> > register like 0x71070003... Before this patch it would return
-> > -EINVAL, after this patch it would access 0x71070000.
-> > 
-> > Colin Foster  
-
+Sebastian
