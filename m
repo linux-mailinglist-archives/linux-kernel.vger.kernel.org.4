@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189B86F126C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D0F6F1275
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345369AbjD1HfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
+        id S1345494AbjD1Hg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjD1HfF (ORCPT
+        with ESMTP id S1345179AbjD1HgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:35:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C5F26B9;
-        Fri, 28 Apr 2023 00:35:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6797161050;
-        Fri, 28 Apr 2023 07:35:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A17C433EF;
-        Fri, 28 Apr 2023 07:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1682667301;
-        bh=HtXEKyZ+SeW3yKVP526Ucm0QpU6JFEOGDSj9KpDTkVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XrxdkVhL0B+9dFgyS5EtFVko1FawTCdRD9Ijs1CjYMg9NTmMBYlMCIqzfyn/fLok5
-         tj7Mq1NRwYV8S6HpYNlgVP/mk6Y79wEFWGPzeoYwaUC0IYrOKleHxnngKLGbhaeU2b
-         nzaayA78kjvuBx+G91MQovDZVoTjzwamOFSXXzpE=
-Date:   Fri, 28 Apr 2023 09:34:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     David Sterba <dsterba@suse.cz>, stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Sterba <dsterba@suse.com>, Qu Wenruo <wqu@suse.com>,
-        Josef Bacik <josef@toxicpanda.com>, Memet <zxce3@gnuweeb.org>,
-        Linux Btrfs Mailing List <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [GIT PULL] Btrfs updates for 6.3
-Message-ID: <2023042839-cube-snowflake-0721@gregkh>
-References: <cover.1676908729.git.dsterba@suse.com>
- <CAHk-=wh6-qpZ=yzseD_CQn8Gc+nGDLrufFxSFvVO2qK6+8fGUw@mail.gmail.com>
- <4b35f3a4-9972-b7f0-287f-165a817c0f73@gnuweeb.org>
- <20230425145412.GC19619@suse.cz>
- <ZEs6Mnx0s/siIZwv@biznet-home.integral.gnuweeb.org>
+        Fri, 28 Apr 2023 03:36:21 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5822701;
+        Fri, 28 Apr 2023 00:36:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a677dffb37so77547445ad.2;
+        Fri, 28 Apr 2023 00:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682667379; x=1685259379;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r4T9X6ORTgiJIhVcjeFoQF4kfGQPAh+aPhJ9TCOLtx4=;
+        b=gTkMq43ck648y6RXcRGmriNhxjIOInPfKt5o9jPe9LMJ3iz00MefD9rJqTbBvvgyoE
+         n+YGdtHh9a37pUY7eFw4CB/nD1D3437E2uZD/SRcEaKHSghT3u7OufYEJmPsnIlmBVHb
+         p6VDeiJIpWJ6f37+X2fopxRBcna17GK/b+ymsPcLVyv7yZ2cAfOmnC6VHLvfZ/6XebZY
+         hQ0zkF8NMjv+pmrpO6wx+qAS/A0tvdSo8SrZMcOiZxZaF6FGxDBXxzSUfBBxfN4MvuHC
+         D5KmyFkVJHu07yYZwCnG36VzBr4mK+BQogBKOP8A4lm3amFn6dwayw9KhWFDrGn5SUh5
+         x3QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682667379; x=1685259379;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r4T9X6ORTgiJIhVcjeFoQF4kfGQPAh+aPhJ9TCOLtx4=;
+        b=jY1iSrUKJOStacwZZfQG8yCTYCIdV06QOJhWbJpdlqNi2S5fEfe0/azZ8qVfdDBAE6
+         Z2+VyZXFYpzbXNx9TWZD3oP7wXKL3CMdG4iu7t3df1hZ9G5rdxCf2AKbXd5dzg0lzEIn
+         sJwxIw7VIMF1WG8vxFIeW/9hqKvuLfUR1E3y1n7E9J+iw0C3P7u8M1kqCPP45z/1FNIN
+         69HCbP5PqgvJ3pyRKoQUmTCzStklv1do/nw/meaq2j9mzICMFg72ICDO45W7v4BXs+dX
+         fSDlfREdGJvpMlna25NhyWZ2QxWIWlor6mtGvgHTRxqV9ziRtAD2zhY94i1wgKXuKqcs
+         QwEw==
+X-Gm-Message-State: AC+VfDwgdr/TgJobfe3ZR+y7jdFX/SEDqKy+1cXSVsOkdjKmojRWrkgv
+        ZzkKKsvTDmMs82uMxQ4jUO0=
+X-Google-Smtp-Source: ACHHUZ60fKWLEIqyAWAnKeWdOP4G0oY86AfBkmNu1uZtkYt7SeEF7oCuxi56kt2NKqeyahklw8TmVw==
+X-Received: by 2002:a17:902:e849:b0:1a9:5674:282e with SMTP id t9-20020a170902e84900b001a95674282emr4744876plg.14.1682667379021;
+        Fri, 28 Apr 2023 00:36:19 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-82.three.co.id. [180.214.232.82])
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902a5c500b001a4fecf79e4sm12713524plq.49.2023.04.28.00.36.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 00:36:18 -0700 (PDT)
+Message-ID: <ab90dcf6-5861-48dc-f261-d6851e150863@gmail.com>
+Date:   Fri, 28 Apr 2023 14:36:13 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEs6Mnx0s/siIZwv@biznet-home.integral.gnuweeb.org>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] blk-ioprio: Introduce promote-to-rt policy
+To:     Hou Tao <houtao@huaweicloud.com>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
+        Chaitanya Kulkarni <kch@nvidia.com>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+References: <20230428074404.280532-1-houtao@huaweicloud.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20230428074404.280532-1-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 10:14:58AM +0700, Ammar Faizi wrote:
-> On Tue, Apr 25, 2023 at 04:54:12PM +0200, David Sterba wrote:
-> > On Sun, Apr 23, 2023 at 09:27:30AM +0700, Ammar Faizi wrote:
-> > > On 2/21/23 4:02 AM, Linus Torvalds wrote:
-> > > > On Mon, Feb 20, 2023 at 11:26 AM David Sterba <dsterba@suse.com> wrote:
-> > > >> Other:
-> > > >>
-> > > >> - locally enable -Wmaybe-uninitialized after fixing all warnings
-> > > > 
-> > > > I've pulled this, but I strongly suspect this change will get reverted.
-> > > > 
-> > > > I bet neither you nor linux-next is testing even _remotely_ a big
-> > > > chunk of the different compiler versions that are out there, and the
-> > > > reason flags like '-Wmaybe-uninitialized' get undone is because some
-> > > > random compiler version on some random config and target archiecture
-> > > > gives completely nonsensical warnings for odd reasons.
-> > > > 
-> > > > But hey, maybe the btrfs code is special.
-> > > 
-> > > Maybe it's too late for 6.3. So please fix this in 6.4 and backport it to
-> > > 6.3 stable.
-> > 
-> > Fix for this warning is in 6.4 pull request, there's no CC:stable tag
-> > but we can ask to add it once the code lands in master.
-> 
-> It landed in master.
-> 
-> [ Adding stable team to the Cc list ]
-> 
-> Hi Greg and stable team, could you please backport:
-> 
->   commit 8ba7d5f5ba931be68a94b8c91bcced1622934e7a upstream
->   ("btrfs: fix uninitialized variable warnings")
-> 
-> to v6.3 to fix gcc (10, 9, 7) build error?
-> 
-> The fs/btrfs/volumes.c hunk won't apply cleanly, but it can auto-merge:
-> 
->   $ git cherry-pick 8ba7d5f5ba931be68a94b8c91bcced1622934e7a
->   Auto-merging fs/btrfs/volumes.c
->   [detached HEAD 572410288a1070c1] btrfs: fix uninitialized variable warnings
->    Author: Genjian Zhang <zhanggenjian@kylinos.cn>
->    Date: Fri Mar 24 10:08:38 2023 +0800
->    2 files changed, 2 insertions(+), 2 deletions(-)
+On 4/28/23 14:44, Hou Tao wrote:
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index f67c0829350b..7544ce00e0cb 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2024,31 +2024,33 @@ that attribute:
+>    no-change
+>  	Do not modify the I/O priority class.
+>  
+> -  none-to-rt
+> -	For requests that do not have an I/O priority class (NONE),
+> -	change the I/O priority class into RT. Do not modify
+> -	the I/O priority class of other requests.
+> +  promote-to-rt
+> +	For requests that have a non-RT I/O priority class, change it into RT.
+> +	Also change the priority level of these requests to 4. Do not modify
+> +	the I/O priority of requests that have priority class RT.
+>  
+>    restrict-to-be
+>  	For requests that do not have an I/O priority class or that have I/O
+> -	priority class RT, change it into BE. Do not modify the I/O priority
+> -	class of requests that have priority class IDLE.
+> +	priority class RT, change it into BE. Also change the priority level
+> +	of these requests to 0. Do not modify the I/O priority class of
+> +	requests that have priority class IDLE.
+>  
+>    idle
+>  	Change the I/O priority class of all requests into IDLE, the lowest
+>  	I/O priority class.
+>  
+> +  none-to-rt
+> +	Deprecated. Just an alias for promote-to-rt.
+> +
+>  The following numerical values are associated with the I/O priority policies:
+>  
+> -+-------------+---+
+> -| no-change   | 0 |
+> -+-------------+---+
+> -| none-to-rt  | 1 |
+> -+-------------+---+
+> -| rt-to-be    | 2 |
+> -+-------------+---+
+> -| all-to-idle | 3 |
+> -+-------------+---+
+> ++----------------+---+
+> +| no-change      | 0 |
+> ++----------------+---+
+> +| rt-to-be       | 2 |
+> ++----------------+---+
+> +| all-to-idle    | 3 |
+> ++----------------+---+
+>  
+>  The numerical value that corresponds to each I/O priority class is as follows:
+>  
+> @@ -2064,9 +2066,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
+>  
+>  The algorithm to set the I/O priority class for a request is as follows:
+>  
+> -- Translate the I/O priority class policy into a number.
+> -- Change the request I/O priority class into the maximum of the I/O priority
+> -  class policy number and the numerical I/O priority class.
+> +- If I/O priority class policy is promote-to-rt, change the request I/O
+> +  priority class to IOPRIO_CLASS_RT and change the request I/O priority
+> +  level to 4.
+> +- If I/O priorityt class is not promote-to-rt, translate the I/O priority
+> +  class policy into a number, then change the request I/O priority class
+> +  into the maximum of the I/O priority class policy number and the numerical
+> +  I/O priority class.
+>  
+>  PID
+>  ---
 
-Now queued up, thanks.
+The doc LGTM, thanks!
 
-greg k-h
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
