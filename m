@@ -2,169 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 668526F1E03
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E296D6F1E3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346475AbjD1S2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 14:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S1346487AbjD1Swf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 14:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjD1S2o (ORCPT
+        with ESMTP id S229542AbjD1Swd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 14:28:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B782E5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:28:43 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b96ee51ee20so14438276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682706522; x=1685298522;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6QMZhDexxfLA2RQm0j2+ddKdXUKAWu/zoiDOxn4nNp0=;
-        b=eGuGclpc9YdkQ55iylhcpFpKDIDB1qtK+qNyaGX+Zrug29FfoCVq1V4jOJjTnEFQvC
-         YYmyGGwqYf/O/NMyOjjDNnMSa32sEzYlpgPM16T9wInkHaSj42BRPPDeaUXuYkRyLT5f
-         rFGnGA77a2skM9iKQPI4F0+0ZVnGdY2/oJMD7HBscHhC/XzNOERZ9WIWIiuBlu7NNV3L
-         i8KDtNOzE/V2ddHpOC5BSL4qvkxMDF+P/Oea+7d4d+iX9nLr8TsjMU08fTVRPaxnnHQg
-         Hs4hEx4TVEnJmvPHVn7uSXXsScegWDkY7Gpx1iHfRKbDuKVOSMecmZTlJtUUHYGz1kAK
-         e7aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682706522; x=1685298522;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6QMZhDexxfLA2RQm0j2+ddKdXUKAWu/zoiDOxn4nNp0=;
-        b=cIbwcHp0DjDm6wGbuMOTOUOHA3M4/EkdEMLmHF+wVv5s2OLPHbepVVfFa3mDZRQs9e
-         pKnrK+U9pytpGTbcti8r0hPVZ8TawxYdhTvHyuHQsZDTQGJntW/iPlbhZb+99hcAJxQS
-         FaG4APM/8xNYH4g5BZ2OWpwrPCu852KDM85Jxm2luCp14Y0S/brkIJnSdcwbGJJyBqjh
-         FhY3KCelN0HfN+6vRtIaKWeTW2ASOpHUIE5W3Hu886O0/UfObm3pbIZTphwXFIHGREbo
-         AicXIzD3sefYA2Asg+xb3hnLnhZpysCJZY0V7LBiUfOnqfZoStK1kgJ/YFCFiHF+fb8K
-         3vXg==
-X-Gm-Message-State: AC+VfDyHWAqBj8bDlLpf7Te1RjnlYWr6A3P3YgqZpFEjblWH+Bnt43Hf
-        eVvcfJGQ0Wemr95OivECQAymbJUQ25cIMbSTWHk=
-X-Google-Smtp-Source: ACHHUZ5idZkiCKz1EASMYbM/j7+zkwXFRJf1BxJBqhW+ZeS3z8V2nM2ANgbXZ3SvrzrKtWFu8y+4WqTlKCaaigOgti8=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:7fbc:5712:e6b1:f733])
- (user=ndesaulniers job=sendgmr) by 2002:a25:c04b:0:b0:b8f:4696:8fa1 with SMTP
- id c72-20020a25c04b000000b00b8f46968fa1mr3494622ybf.10.1682706522647; Fri, 28
- Apr 2023 11:28:42 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 11:28:17 -0700
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAEAQTGQC/1WNzQ6DIBCEX8XsuTSKxJ+e+h6NB8BVSSqYxVAbw
- 7sXvDVz+mYmMyd4JIMeHsUJhMF442wCfitAL9LOyMyYGHjJ61LwjsnPwXRbT0KN2PZaQGoq6ZE
- pklYvubtKvyPlYCOczHHNv4bEi/G7o+/1Fqrs/g+HiiVNoi951yjZ8Ofs3PzGu3YrDDHGH5o7+ 2OwAAAA
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682706521; l=2902;
- i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=dTA9ynq73YQ/e9h+i1pEgv2IYWGxww8jCupOBbep0Wk=; b=5emz5BsCicOnQUdl7fVcK6+ZNZyTu3YFpE7YTmPGddTU7ZbUO8M6Hke1drny3VKssnBapXLq7qqK
- bSVTFj/TAKr79xqt9rrUkE94aToiU0IpJJor4JUFOMxTLyp7YaGL
-X-Mailer: b4 0.12.2
-Message-ID: <20230428-awx-v2-1-b197ffa16edc@google.com>
-Subject: [PATCH v2] arm64: kernel: remove SHF_WRITE|SHF_EXECINSTR from .idmap.text
-From:   ndesaulniers@google.com
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Apr 2023 14:52:33 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AB030D6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:52:31 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SIffHl002605;
+        Fri, 28 Apr 2023 18:51:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=h5MMbqwNWM1UuGgEnhB+WpFKFfKQZSmOMuSC+Pj4ZQQ=;
+ b=GLruJiDXuKOPHKAr4rgfpL7tZeUo10yw5VWUeuFgjyj3IiFCLl4k8mbSFpBkFU4s2FyD
+ 5hk3JCOZUXs3TfKnyQbRrvtDhpOoAs8N9G+Y3s20mcmsIpEhSKhdD0yIUizyyR8MNhHp
+ CHgcbnNmmr0pnRV4+tRDFkkD5P/HuVqiZfr6hsONARVZNBcF0OWFklrJck0k2AgAF/zN
+ OvaYbg9oSgZnlIxzP+wwIxjOnNUyBpH2FzF1PDbjC8KWxVnclxewvdYSytS0TeiooKvm
+ RRmnrFDJlmzG79xmdtM8z+HiejQ2e/5sDBZqwgEbEhyFT165mgl3Ji6DKVpsdL0WDAfa GA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8k8v9068-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 18:51:26 +0000
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SIpJTk017148;
+        Fri, 28 Apr 2023 18:51:25 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8k8v902x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 18:51:25 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33SHcZqL024049;
+        Fri, 28 Apr 2023 18:31:13 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q47773qt0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 18:31:13 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33SIVAE544368248
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 18:31:10 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C650720040;
+        Fri, 28 Apr 2023 18:31:10 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B451720043;
+        Fri, 28 Apr 2023 18:31:04 +0000 (GMT)
+Received: from [9.43.39.167] (unknown [9.43.39.167])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 28 Apr 2023 18:31:04 +0000 (GMT)
+Message-ID: <97d18ae8-468d-cff5-0a32-4f07b050899e@linux.ibm.com>
+Date:   Sat, 29 Apr 2023 00:01:03 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v21 5/7] x86/crash: add x86 crash hotplug support
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+References: <20230404180326.6890-1-eric.devolder@oracle.com>
+ <20230404180326.6890-6-eric.devolder@oracle.com>
+ <da95e01d-24bd-676b-3a48-bafda1b36cda@linux.ibm.com>
+ <ZEo3NK/9Nkc7ctrc@bhe.users.ipa.redhat.com>
+ <409c8253-49b9-6993-f79e-8e6203ce4b31@linux.ibm.com>
+ <ZEuQ/hxmZey+eFZs@MiWiFi-R3L-srv>
+From:   Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <ZEuQ/hxmZey+eFZs@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NRmGodiaPurq9qe1241VYotLXV9DhjR3
+X-Proofpoint-ORIG-GUID: _ddVJxwuS15o0lOIO2w8Gqf19LfZvSmA
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_05,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ spamscore=0 mlxscore=0 adultscore=0 malwarescore=0 mlxlogscore=999
+ bulkscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304280150
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
-modified some of the section assembler directives that declare
-.idmap.text to be SHF_ALLOC instead of
-SHF_ALLOC|SHF_WRITE|SHF_EXECINSTR.
 
-This patch fixes up the remaining stragglers that were left behind.  Add
-Fixes tag so that this doesn't precede related change in stable.
+On 28/04/23 2:55 pm, Baoquan He wrote:
+> On 04/27/23 at 10:26pm, Hari Bathini wrote:
+>> On 27/04/23 2:19 pm, Baoquan He wrote:
+>>> On 04/27/23 at 12:39pm, Hari Bathini wrote:
+>>>> Hi Eric,
+>>>>
+>>>> On 04/04/23 11:33 pm, Eric DeVolder wrote:
+>>>>> When CPU or memory is hot un/plugged, or off/onlined, the crash
+>>>>> elfcorehdr, which describes the CPUs and memory in the system,
+>>>>> must also be updated.
+>>>>>
+>>>>> The segment containing the elfcorehdr is identified at run-time
+>>>>> in crash_core:crash_handle_hotplug_event(), which works for both
+>>>>> the kexec_load() and kexec_file_load() syscalls. A new elfcorehdr
+>>>>> is generated from the available CPUs and memory into a buffer,
+>>>>> and then installed over the top of the existing elfcorehdr.
+>>>>>
+>>>>> In the patch 'kexec: exclude elfcorehdr from the segment digest'
+>>>>> the need to update purgatory due to the change in elfcorehdr was
+>>>>> eliminated.  As a result, no changes to purgatory or boot_params
+>>>>> (as the elfcorehdr= kernel command line parameter pointer
+>>>>> remains unchanged and correct) are needed, just elfcorehdr.
+>>>>>
+>>>>> To accommodate a growing number of resources via hotplug, the
+>>>>> elfcorehdr segment must be sufficiently large enough to accommodate
+>>>>> changes, see the CRASH_MAX_MEMORY_RANGES description. This is used
+>>>>> only on the kexec_file_load() syscall; for kexec_load() userspace
+>>>>> will need to size the segment similarly.
+>>>>>
+>>>>> To accommodate kexec_load() syscall in the absence of
+>>>>
+>>>> Firstly, thanks! This series is a nice improvement to kdump support
+>>>> in hotplug environment.
+>>>>
+>>>> One concern though is that this change assumes corresponding support
+>>>> in kexec-tools. Without that support kexec_load would fail to boot
+>>>> with digest verification failure, iiuc.
+>>>
+>>> Eric has posted patchset to modify kexec_tools to support that, please
+>>> see the link Eric pasted in the cover letter.
+>>>
+>>> http://lists.infradead.org/pipermail/kexec/2022-October/026032.html
+>>
+>> Right, Baoquan.
+>>
+>> I did see that and if I read the code correctly, without that patchset
+>> kexec_load would fail. Not with an explicit error that hotplug support
+>> is missing or such but it would simply fail to boot into capture kernel
+>> with digest verification failure.
+>>
+>> My suggestion was to avoid that userspace tool breakage for older
+>> kexec-tools version by introducing a new kexec flag that can tell
+>> kernel that kexec-tools is ready to use this in-kernel update support.
+>> So, if kexec_load happens without the flag, avoid doing an in-kernel
+>> update on hotplug. I hope that clears the confusion.
+> 
+> Yeah, sounds like a good idea. It may be extended in later patch.
 
-Fixes: d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
-Reported-by: Greg Thelen <gthelen@google.com>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
-Changes in v2:
-- Drop irrelevant paragraph.
-- Pick up Ard's RB tag.
-- Link to v1: https://lore.kernel.org/r/20230428-awx-v1-1-1f490286ba62@google.com
----
- arch/arm64/kernel/cpu-reset.S | 2 +-
- arch/arm64/kernel/sleep.S     | 2 +-
- arch/arm64/mm/proc.S          | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Fixing it in this series itself would be a cleaner way, I guess.
 
-diff --git a/arch/arm64/kernel/cpu-reset.S b/arch/arm64/kernel/cpu-reset.S
-index 6b752fe89745..c87445dde674 100644
---- a/arch/arm64/kernel/cpu-reset.S
-+++ b/arch/arm64/kernel/cpu-reset.S
-@@ -14,7 +14,7 @@
- #include <asm/virt.h>
- 
- .text
--.pushsection    .idmap.text, "awx"
-+.pushsection    .idmap.text, "a"
- 
- /*
-  * cpu_soft_restart(el2_switch, entry, arg0, arg1, arg2)
-diff --git a/arch/arm64/kernel/sleep.S b/arch/arm64/kernel/sleep.S
-index 2ae7cff1953a..2aa5129d8253 100644
---- a/arch/arm64/kernel/sleep.S
-+++ b/arch/arm64/kernel/sleep.S
-@@ -97,7 +97,7 @@ SYM_FUNC_START(__cpu_suspend_enter)
- 	ret
- SYM_FUNC_END(__cpu_suspend_enter)
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- SYM_CODE_START(cpu_resume)
- 	mov	x0, xzr
- 	bl	init_kernel_el
-diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-index 91410f488090..c2cb437821ca 100644
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@ -167,7 +167,7 @@ alternative_else_nop_endif
- SYM_FUNC_END(cpu_do_resume)
- #endif
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- 
- .macro	__idmap_cpu_set_reserved_ttbr1, tmp1, tmp2
- 	adrp	\tmp1, reserved_pg_dir
-@@ -201,7 +201,7 @@ SYM_FUNC_END(idmap_cpu_replace_ttbr1)
- 
- #define KPTI_NG_PTE_FLAGS	(PTE_ATTRINDX(MT_NORMAL) | SWAPPER_PTE_FLAGS)
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- 
- 	.macro	kpti_mk_tbl_ng, type, num_entries
- 	add	end_\type\()p, cur_\type\()p, #\num_entries * 8
-@@ -400,7 +400,7 @@ SYM_FUNC_END(idmap_kpti_install_ng_mappings)
-  * Output:
-  *	Return in x0 the value of the SCTLR_EL1 register.
-  */
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- SYM_FUNC_START(__cpu_setup)
- 	tlbi	vmalle1				// Invalidate local TLB
- 	dsb	nsh
-
----
-base-commit: 22b8cc3e78f5448b4c5df00303817a9137cd663f
-change-id: 20230428-awx-c73f4bde79c4
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
-
+Thanks
+Hari
