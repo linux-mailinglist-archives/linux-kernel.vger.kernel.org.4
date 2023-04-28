@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F906F1DCF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956B66F1DD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346341AbjD1SJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 14:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S1346186AbjD1SNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 14:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjD1SJe (ORCPT
+        with ESMTP id S1346225AbjD1SNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 14:09:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C30126BA
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:09:33 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55605fd3e19so3123137b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:09:33 -0700 (PDT)
+        Fri, 28 Apr 2023 14:13:15 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A3859E4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:13:12 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a950b982d4so548745ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682705372; x=1685297372;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=szMrRB+6uNQ8eyciuRiQr527CZbWdvgob9TY/kwfLGs=;
-        b=jEnM8h2WmRSYHOV7JrVXCdH7EBqADBVIVINDIxCdBx1grlEFJxiRlEBBigmN2JQXfN
-         16i3etlXVKLhvp9qsaKWCaO0lYp4/FqCGDwplm5MZr/+LKSek+WK0Q4pgoiMkJme0RLm
-         M6hsvWI4GyHkus7zmtDEGioT2PW8jBf8JqsNfNWxWYLQOLBUfOgVZslYNEodffOyBL1U
-         B4XG88dh5csyvULX3rBHAbHa7yxNTnHfV3Dmh4cYo0V9L+K3Y+Bd7eFkt2P/0uSW/sij
-         WAufZ06cW0+hbORLORjZx2i3XULQpPyas8KwYHLmKGlyrgU517TSRa/TViT6QEEOp/Yd
-         Vzzw==
+        d=google.com; s=20221208; t=1682705592; x=1685297592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k4DzREAspzv+9F+ia0lpOSMVfxCtA4Nx7vKfou+aOwE=;
+        b=d+6VLxidtChkJY4/WS7CasSpBFZXqUZo6ZmDWxeVkVQYYSEwdgnOEkOPQBCqA+6WwA
+         rBG9dWdcdzYt63nMTkb2hTH4Xeftmy/TTvQ3cr06Qd94vBvB2TAdNpDUwU0Ptd5IGHhD
+         8ft4KZA1X5fErW4/T9+arum6SKodO2BKgVLSFWGsFDMj4arnTgJ9HvR+XItAVNpIzOEB
+         GF++AUen3m1CuMGL6Yqy6YTw8itJjIaKxT6C8Qr+U7dfLq/y+Pe8+6fFp4SEMG11mf4m
+         EHYITlMN9tbORerf5g78PCNoLh+neg9gx8Gjws7eA2Tesuyvy3vxA1Y5fKMv1eeJiMoL
+         TyVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682705372; x=1685297372;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=szMrRB+6uNQ8eyciuRiQr527CZbWdvgob9TY/kwfLGs=;
-        b=LAu1P5Ay8Y5sK3uIUBU5IsMmPwkeAzfX29BgT0hxaJOH/j64qGDb6gzrOSegNH3q5f
-         oV4/kikx4moShIiu7OoKwQa0yWXZUiafPw8ckUyHzjQkG+KEr180rz2rhaFqKnGWX75P
-         oGdc05NKgznX6sAgJg7dDKmEv3Vi8/cyjXrw5Ivid8aCQayc/IL1HgCrEi0zkvbGj4E2
-         Q1Wo5FXH6Lae8YTrwgAcw3r1cuET6H8roOWEeBm6lN8gvMO6THVxajfTVEVcpadKo3GY
-         kepE4BxgLoHBG5aO6m4NHIQyuZZmqG0rZfq3GA49C+U7XZG15NFUMy8Sl+qxlvfyNev2
-         hi6Q==
-X-Gm-Message-State: AC+VfDxGQ2S6hAWEISbY/JGCWzhZ8J42aM0GsMUusqu70ClhO+jVau60
-        6sfzRXWh58O5x9jfFktNQz0VuFuvr43OCbFfup4=
-X-Google-Smtp-Source: ACHHUZ4Dh0ZhHgHRrQTm+kfQrvOqSe4pbWS2GUqcJ1c3wpAvIoGqdFFanowzodwW/xY1NsQc1gIGkCeFZc77UL3yDP8=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:7fbc:5712:e6b1:f733])
- (user=ndesaulniers job=sendgmr) by 2002:a81:4011:0:b0:54f:9e1b:971c with SMTP
- id l17-20020a814011000000b0054f9e1b971cmr3698136ywn.1.1682705372224; Fri, 28
- Apr 2023 11:09:32 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 11:09:25 -0700
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIANQLTGQC/x2MSwqFMAwAryJZW9Ba8HMVcZHWqFlYJZH3BPHuV
- pfDDHOBkjApdNkFQj9W3mKCMs8gLBhnMjwmBlvYqnC2Mfg/TairyfmR6jY4SKVHJeMFY1jedkU 9SF6xC018fvt+uO8H78bmTG4AAAA=
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682705370; l=2976;
- i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=OJwVNKGwwd9jKotxFOlwqnw1rAfDxwhSr52KJhekYzI=; b=ZgrE30nmkV43i/VkWMTHmOw+6R/JwtaexxX9U/Hudmwq3K8EiFhFYVBa7BfIE+CZyxrU2+j1A7mc
- rMoBi3cCDZ/RN9YoMdrI3vrTq1PDmJbcG7hwOG83crnzRZOfiqCW
-X-Mailer: b4 0.12.2
-Message-ID: <20230428-awx-v1-1-1f490286ba62@google.com>
-Subject: [PATCH] arm64: kernel: remove SHF_WRITE|SHF_EXECINSTR from .idmap.text
-From:   ndesaulniers@google.com
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1682705592; x=1685297592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k4DzREAspzv+9F+ia0lpOSMVfxCtA4Nx7vKfou+aOwE=;
+        b=N8W4yuk76UEk+/dYZDKqbdUoOnOpHQLCZ3lLu61wrt6HrxG/zmBfxSe1cPTLJxqVRN
+         WM7lLVFnU376pFCkgIYIG4dMlXofxpmdsMs5CPnt+hafnyRygAkT5PH2gvrNOhlzss5F
+         SHwaBzT9UZC+PpkI78fT16Mq5Kg5xZBdPkP6lDKvHVRQqo9zKDQ70XBjqQvWGEqBsEd4
+         zjKexIzvHupzn1QRmgCUZf+9FvVBHhjqAIpKOlaQPH5pqniy6JOfDlq0lLNctnLYQUUQ
+         ObCMSnp39Y3W4ifxSXgL5piHyNeq/K9/re+KSVhnVV0WdqxRbf7yZlxO3sb7gNULum2r
+         eNww==
+X-Gm-Message-State: AC+VfDzsiTzk47o6I2T9NXAwfMv7SNOczyNoBKp++kpNnDUuSA4kBYq3
+        ysHrB9p7mtQ1hmDXulhI5dD4AakILcqkBWJzW/+mxw==
+X-Google-Smtp-Source: ACHHUZ5xwx/KmPH4YaopIMhmcJf4lU/VxnJbHHlT3nSV6UuxiEhWSnDBbYK5AfyrD5ke+nFMUmAPhLQ2N+DjVWOGYQQ=
+X-Received: by 2002:a17:902:e843:b0:1a6:6b90:a137 with SMTP id
+ t3-20020a170902e84300b001a66b90a137mr1640plg.11.1682705591493; Fri, 28 Apr
+ 2023 11:13:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230416213406.2966521-1-davidai@google.com> <20230419175414.ycnlaperdkjxgypx@airbuntu>
+ <20230428115755.7uklfd4fmpoee4dp@airbuntu>
+In-Reply-To: <20230428115755.7uklfd4fmpoee4dp@airbuntu>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 28 Apr 2023 11:12:35 -0700
+Message-ID: <CAGETcx9xjLzQ2b3FraPsmG=w6=4pYU-tzW-na0Fd5qyrU+C+Yw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce SCHED_FLAG_RESET_UCLAMP_ON_FORK
+ flag
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,91 +82,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
-modified some of the section assembler directives that declare
-.idmap.text to be SHF_ALLOC instead of
-SHF_ALLOC|SHF_WRITE|SHF_EXECINSTR.
+On Fri, Apr 28, 2023 at 4:57=E2=80=AFAM Qais Yousef <qyousef@layalina.io> w=
+rote:
+>
+> On 04/19/23 18:54, Qais Yousef wrote:
+>
+> [...]
+>
+> > I was considering to have something a bit more generic that allows sele=
+cting
+> > which attributes to reset.
+> >
+> > For example a syscall with SCHED_FLAG_RESET_ON_FORK_SEL combined with
+> > SCHED_FLAG_UCLAMP_MIN/MAX will only reset those. This should make it ex=
+tensible
+> > if we have other similar use cases in the future. The downside it *migh=
+t*
+> > require to be done in a separate syscall to the one that sets these par=
+ameter.
+> > But it should be done once.
+> >
+> > Maybe there's a better interface, but I think it makes sense to do it i=
+n a way
+> > that we won't have to do this again. Would be good to hear from maintai=
+ners
+> > first before you take my word for it ;-)
+>
+> Actually I think we can do a better and simpler generic interface. We don=
+'t
+> need a new flag. We can just add a new parameter for what to reset on for=
+k.
+> When this value is 0 (which it should be by default), it means reset
+> everything.
 
-This patch fixes up the remaining stragglers that were left behind.
+Isn't he default NOT to reset everything?
 
-Because .idmap.text is merged into .text, LLD will retain the
-SHF_EXECINSTR on .text, in addition to the synthetic .got.  This doesn't
-matter to the kernel loader, but syzkaller is having trouble symboling
-such sections. Clean this up while we additionally fix up syzkaller. Add
-Fixes tag so that this doesn't precede related change in stable.
+> // pseudo code
+>
+> #define RESET_ON_FORK_ALL       0
+> #define RESET_ON_FORK_POLICY    BIT(1) // implies resetting priority
+> #define RESET_ON_FORK_PRIORITY  BIT(2)
+> #define RESET_ON_FORK_UCLAMP    BIT(3)
+>
+> struct sched_attr {
+>         ...
+>         __u64 sched_reset_on_fork_flags;
+> };
+>
 
-Fixes: d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
-Reported-by: Greg Thelen <gthelen@google.com>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- arch/arm64/kernel/cpu-reset.S | 2 +-
- arch/arm64/kernel/sleep.S     | 2 +-
- arch/arm64/mm/proc.S          | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Also, honestly I think this is over designing for a hypothetical. We
+have approximately 53 unused bits. By the time we run out of those,
+we'd have added at least 20-50 more fields. At that point, we can
+always add a flags2 field if we need it. I like David's patch as is --
+it's clear and simple. Add a flag for explicitly what we are trying to
+do and extend as needed.
 
-diff --git a/arch/arm64/kernel/cpu-reset.S b/arch/arm64/kernel/cpu-reset.S
-index 6b752fe89745..c87445dde674 100644
---- a/arch/arm64/kernel/cpu-reset.S
-+++ b/arch/arm64/kernel/cpu-reset.S
-@@ -14,7 +14,7 @@
- #include <asm/virt.h>
- 
- .text
--.pushsection    .idmap.text, "awx"
-+.pushsection    .idmap.text, "a"
- 
- /*
-  * cpu_soft_restart(el2_switch, entry, arg0, arg1, arg2)
-diff --git a/arch/arm64/kernel/sleep.S b/arch/arm64/kernel/sleep.S
-index 2ae7cff1953a..2aa5129d8253 100644
---- a/arch/arm64/kernel/sleep.S
-+++ b/arch/arm64/kernel/sleep.S
-@@ -97,7 +97,7 @@ SYM_FUNC_START(__cpu_suspend_enter)
- 	ret
- SYM_FUNC_END(__cpu_suspend_enter)
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- SYM_CODE_START(cpu_resume)
- 	mov	x0, xzr
- 	bl	init_kernel_el
-diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-index 91410f488090..c2cb437821ca 100644
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@ -167,7 +167,7 @@ alternative_else_nop_endif
- SYM_FUNC_END(cpu_do_resume)
- #endif
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- 
- .macro	__idmap_cpu_set_reserved_ttbr1, tmp1, tmp2
- 	adrp	\tmp1, reserved_pg_dir
-@@ -201,7 +201,7 @@ SYM_FUNC_END(idmap_cpu_replace_ttbr1)
- 
- #define KPTI_NG_PTE_FLAGS	(PTE_ATTRINDX(MT_NORMAL) | SWAPPER_PTE_FLAGS)
- 
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- 
- 	.macro	kpti_mk_tbl_ng, type, num_entries
- 	add	end_\type\()p, cur_\type\()p, #\num_entries * 8
-@@ -400,7 +400,7 @@ SYM_FUNC_END(idmap_kpti_install_ng_mappings)
-  * Output:
-  *	Return in x0 the value of the SCTLR_EL1 register.
-  */
--	.pushsection ".idmap.text", "awx"
-+	.pushsection ".idmap.text", "a"
- SYM_FUNC_START(__cpu_setup)
- 	tlbi	vmalle1				// Invalidate local TLB
- 	dsb	nsh
-
----
-base-commit: 22b8cc3e78f5448b4c5df00303817a9137cd663f
-change-id: 20230428-awx-c73f4bde79c4
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
-
+-Saravana
