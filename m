@@ -2,149 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959176F1134
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F91F6F113A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345091AbjD1FAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 01:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
+        id S1345211AbjD1FE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 01:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjD1FAq (ORCPT
+        with ESMTP id S229570AbjD1FE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 01:00:46 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A50E269F;
-        Thu, 27 Apr 2023 22:00:43 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2a8ba5f1d6bso91398621fa.2;
-        Thu, 27 Apr 2023 22:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682658040; x=1685250040;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lnYDs5O+lpcMObRSDdsk44BWcyPiz0zcPcKC4GaBYVY=;
-        b=gkFTg/cXXXB+sw6EP6iP4NIjEbu5k0eqG3zHM9oe+HyO14Jmr5iHR57egC5GaboEzK
-         Hrc6VKxGFeEZhkUXk0kY2ljpPUmejNxNRfSSCbwKs0Fz7xSg+/q6T/PP1XuuecuxJx/k
-         TdDmvePdTrvCh74I66JSqz32RpTp4eQbygwDLaejhs0gbQiINS8uH76u8pD5FmX39F1E
-         DAEuhYObU3RLwkrzsJpEJoXt7o306gvomsiHoUwnmvNNF/O6MsTvzclyApxtlWGQRuw5
-         ZuJshfit9NRD351q6yXyBFgf18ziafsIWcpMHhxa1yEW8dfxKIIfz3W49QVMLT31cOnf
-         tzAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682658040; x=1685250040;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lnYDs5O+lpcMObRSDdsk44BWcyPiz0zcPcKC4GaBYVY=;
-        b=PSIf0zLtLSUnZRhc5EviXqZYx/SjZ7lY/lUqApNU0wbayg7S3Hnzw/wmA7FVBzWCEy
-         bmED+o+rlw8SdHTLVzHVjZjj2OT9dnR86tgLh/uNHYiTEXgwu1rYozqjO3q6FMHoKDoV
-         G801S8N87B/G8waK1SFcxS6kM0QczrI8UQXhqhyC2Q/KaQK86Kl3BYVhMp2uhWaSWRQ1
-         nkXrGcyJiePh9hMnEMFt0Y6f5mgjEdTExW7qonECAMVr0ZTe+r9TVZ0kjopn0oykscuX
-         rKOwsSS7oMe4PBy3Is31904AyX9Wcdsm2AcvTMKgRiQUJEQ7Gg/w08OAse2QU6IN5796
-         GT6w==
-X-Gm-Message-State: AC+VfDwl4Re07lS2hCmzyA8WO7YtM9c1TEEtiCj7gkHdlR8l/3WCRqv8
-        TmuMXoKGcgznjcOeeYEJmpy5MZ4kiooD3OXfW5ybYuBEbVm2re5K
-X-Google-Smtp-Source: ACHHUZ4MNy+/Dtb2UrcTh7ZDuR0U++EWSFuekrVl2ZAxVG/67UxwACMHzMpdGCMCAVue5SSa61YOJVqc2KKkYOXI6Yc=
-X-Received: by 2002:a2e:9987:0:b0:2a8:a5b8:185a with SMTP id
- w7-20020a2e9987000000b002a8a5b8185amr1236090lji.10.1682658039733; Thu, 27 Apr
- 2023 22:00:39 -0700 (PDT)
+        Fri, 28 Apr 2023 01:04:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEEA26A2;
+        Thu, 27 Apr 2023 22:04:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7A8660AB4;
+        Fri, 28 Apr 2023 05:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC619C433D2;
+        Fri, 28 Apr 2023 05:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682658264;
+        bh=1jG17+/ymFzEo1DeDLBm4GJ1/6GRzCzGRAUyoi4cchE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=WUpZRmPs+HS5nSEp2lgOEhgiHzBXVP1F5Zeods3BiFK9ogpLPHdf6SR0TF9cclENd
+         2CULicHnBKqko0P9GmyZEe12EJbf8lzw+htBtqEHGxIEXSwwJGNacj8gWksXnJ6tv6
+         ot5hv+spL+5dy7gZUtoFtXO+0bD2GiCBvUqLTqvFTRp0tbl5x364LID+luPvwzdzx2
+         bfFK2sRD9evMxl2EB13Sr3ocNoHujQ2e9rdNXFRd0DkJvKK5g24wYcROTh7DNhcIEj
+         oLhONSt6TrVDjBBNxLA5uorU3GIK5gQjl8X88DnKc3JB18CdvHGDRIFuMqxK9tuGHv
+         khXWAXkfdsqPA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Aloka Dixit <quic_alokad@quicinc.com>,
+        Muna Sinada <quic_msinada@quicinc.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net] wifi: mac80211: Fix puncturing bitmap handling in __ieee80211_csa_finalize()
+References: <e84a3f80fe536787f7a2c7180507efc36cd14f95.1682358088.git.christophe.jaillet@wanadoo.fr>
+Date:   Fri, 28 Apr 2023 08:04:19 +0300
+In-Reply-To: <e84a3f80fe536787f7a2c7180507efc36cd14f95.1682358088.git.christophe.jaillet@wanadoo.fr>
+        (Christophe JAILLET's message of "Mon, 24 Apr 2023 19:42:04 +0200")
+Message-ID: <87mt2sppgs.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20230323013655.366-1-k1rh4.lee@gmail.com> <CAJkuJRjFCXkS+osc8ezpAw0E2W7WMAJnnxMt_cs4deqgm5OzHw@mail.gmail.com>
- <2023042702-shuffling-tweet-d9f6@gregkh>
-In-Reply-To: <2023042702-shuffling-tweet-d9f6@gregkh>
-From:   sangsup lee <k1rh4.lee@gmail.com>
-Date:   Fri, 28 Apr 2023 14:00:04 +0900
-Message-ID: <CAJkuJRiJYLL2pxdRF_R_FZ8_yHGQziyhSmecypMBX04WFdv86Q@mail.gmail.com>
-Subject: Re: [PATCH v2] misc: fastrpc: Fix a Use after-free-bug by race condition
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I apologize for recognizing the email in the TOP POST format. I missed
-the comment in the previous email.
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> writes:
 
-2023=EB=85=84 4=EC=9B=94 27=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 6:52, G=
-reg Kroah-Hartman <gregkh@linuxfoundation.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=
-=EC=84=B1:
+> 'changed' can be OR'ed with BSS_CHANGED_EHT_PUNCTURING which is larger than
+> an u32.
+> So, turn 'changed' into an u64 and update ieee80211_set_after_csa_beacon()
+> accordingly.
 >
-> On Thu, Apr 27, 2023 at 06:29:16PM +0900, sangsup lee wrote:
-> > Is there any comment for this issue?
+> In the commit in Fixes, only ieee80211_start_ap() was updated.
 >
-> What issue?
->
-> > (reference: https://www.spinics.net/lists/kernel/msg4731408.html)
->
-> Please use lore.kernel.org links, we have no control over any other
-> random email archive .
->
-> And the above link just points to this proposed patch.
->
-> >
-> >
-> > 2023=EB=85=84 3=EC=9B=94 23=EC=9D=BC (=EB=AA=A9) =EC=98=A4=EC=A0=84 10:=
-37, Sangsup Lee <k1rh4.lee@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> > >
-> > > From: Sangsup lee <k1rh4.lee@gmail.com>
-> > >
-> > > This patch adds mutex_lock for fixing an Use-after-free bug.
-> > > fastrpc_req_munmap_impl can be called concurrently in multi-threded e=
-nvironments.
-> > > The buf which is allocated by list_for_each_safe can be used after an=
-other thread frees it.
->
-> How was this tested?
->
+> Fixes: 2cc25e4b2a04 ("wifi: mac80211: configure puncturing bitmap")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I was unable to configure the environment in which this code is running.
-Therefore, I could not go through dynamic testing for the related issue.
-However, I found vulnerabilities in similar types of functions
-in other drivers in the mobile environment, so I think this code is
-also problematic.
+FWIW mac80211 patches go to wireless tree, not net.
 
-> > >
-> > > Signed-off-by: Sangsup lee <k1rh4.lee@gmail.com>
-> > > ---
-> > >  V1 -> V2: moving the locking to ioctl.
-> > >
-> > >  drivers/misc/fastrpc.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> > > index 93ebd174d848..aa1cf0e9f4ed 100644
-> > > --- a/drivers/misc/fastrpc.c
-> > > +++ b/drivers/misc/fastrpc.c
-> > > @@ -1901,7 +1901,9 @@ static long fastrpc_device_ioctl(struct file *f=
-ile, unsigned int cmd,
-> > >                 err =3D fastrpc_req_mmap(fl, argp);
-> > >                 break;
-> > >         case FASTRPC_IOCTL_MUNMAP:
-> > > +               mutex_lock(&fl->mutex);
-> > >                 err =3D fastrpc_req_munmap(fl, argp);
-> > > +               mutex_unlock(&fl->mutex);
->
-> Are you sure you can call this function with the lock?  If so, why isn't
-> the mmap ioctl also locked?
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-I am convinced that FASTRPC_IOCTL_MUNMAP can lead to a race condition bug.
-However, as I mentioned in patch v1, I am not an expert in fastrpc.
-I worried about the side effects of the code I suggested.
-So, I asked you to recommend which code to use, and this is the code
-that was recommended to me.
-And I didn't check the mmap function because I couldn't find a bug in mmap.
-
->
-> thanks,
->
-> greg k-h
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
