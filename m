@@ -2,153 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3D76F1C3C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A4A6F1C44
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjD1QGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S1345440AbjD1QHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjD1QGD (ORCPT
+        with ESMTP id S229978AbjD1QHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:06:03 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7A82D67
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:06:00 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-b99e0ffbabbso8530340276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1682697960; x=1685289960;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b5lwLxqW5VKmY2A43cr9IwcGLbMR5CgyRtASHDDCzvw=;
-        b=Kgk4Eae1aP7UAuXMG2GCAySB2r0ZPNhQeU0yBcvJXJ6/0PIs4s7Ld+qmjhc7YMDJK8
-         3CHZHe+bkXTnnwKbXaypBSa9guGEx3TJDS/789EPghQfEh2m3QBTGkLfeX9kYi8F6i9i
-         YkrJ8FfhMdQbI0+Z1N3DpVbQ/F0NpEgDwHZcaFwC7KEEbTIKjW2hiUGxXwD/4ydBuAC6
-         A55pwq8Txjyp/zqzRvmxQpvZb3mWtxi2BlSAgQTmHbdrD0rqISv9QNCKGLB83iOOjzsw
-         /4GiOStfqQptBAeQmBGlX493AGsDpxdF2NASt1uCp/5ZLIJDbqt3D7sqalAc0gop2J75
-         wtKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682697960; x=1685289960;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b5lwLxqW5VKmY2A43cr9IwcGLbMR5CgyRtASHDDCzvw=;
-        b=GA8zI/YuiuVqyV6EBbi55u2Ktu4DTpehGyz0lgXKJqYnU9FVmfjuT5NQo6eQLjDRks
-         dqh7tXgytZWmQ3AlcA9VkrOlU28kAouYeUdSc6K8w1hlb3K7h3rY70RdYzeoFom2P423
-         iklJw4Y2dzG3XCeDkA3NFAYMqNmjVI7NPbzqa0Zm8VfseyEtzjweerbSDQA4yO5zDpvV
-         1L+peCsZhKNMlLMgct/xUjlf00X+uqVIA5CNiDPI0cGTAm6Yfp3mK/Mnhc/F9HvpY5Ih
-         mo9brw1VBFUJZuEkVJRwbASWH6Ip7tsLgREEUC22H8dlsTnvJu7jfjxIOj4+0qt3f0Ha
-         CJ9A==
-X-Gm-Message-State: AC+VfDxE8K1wGYyHuFOiJOiH9E9UKTC+4oavUrZ0Are2cmuG3UU3y8oL
-        /DybpYQSWZCC0oQS65KcBoe6IBnpbuo2qDtB+YDL
-X-Google-Smtp-Source: ACHHUZ6FGZWVLRbJ0Vtr4MD2R/979p76yJnZwYUUc8G4bL5ujRwJBt2UCfCS3wLLk3W8UDR0BgoH5jCuz8afYiz+U5A=
-X-Received: by 2002:a25:34c7:0:b0:b8e:e918:33ac with SMTP id
- b190-20020a2534c7000000b00b8ee91833acmr4602032yba.1.1682697959947; Fri, 28
- Apr 2023 09:05:59 -0700 (PDT)
+        Fri, 28 Apr 2023 12:07:00 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127375BBB;
+        Fri, 28 Apr 2023 09:06:52 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 185D6C5EDB;
+        Fri, 28 Apr 2023 16:06:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1682697981; bh=H2ZopAaOaipo4s98rSRyLSqJBKSYIs1cRJ7qufNhEFQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=YdKQkX4gT87XWqXdCdKZkie+EnWmT6j18T9qh4Xix6woowAR6puqI4OtJE8/ASwr6
+         LSlgtfQvaTxHMZAQyI81kwec9hCdcS/8PCq+wcVwe9gCjc9HD4GFpnAcHk1SOr/G97
+         LCWC15LqIZAYZlzy2mmFhynXPQvo46tDjNpa5dMM=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 3/4] Input: pwm-vibra - add support for enable GPIO
+Date:   Fri, 28 Apr 2023 18:06:20 +0200
+Message-ID: <8250064.NyiUUSuA9g@z3ntu.xyz>
+In-Reply-To: <ZEsFV6F4CEh2/av8@x1>
+References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
+ <20230427-hammerhead-vibra-v1-3-e87eeb94da51@z3ntu.xyz> <ZEsFV6F4CEh2/av8@x1>
 MIME-Version: 1.0
-References: <20230428030916.2966-1-rdunlap@infradead.org> <CAHC9VhQoa5yw2e1jiN844pxNXXT+CosJn9ip7ysFnsnUbQUi2Q@mail.gmail.com>
- <7a8df04e-ee81-8b4a-152f-1588b8d6cb42@infradead.org>
-In-Reply-To: <7a8df04e-ee81-8b4a-152f-1588b8d6cb42@infradead.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 28 Apr 2023 12:05:49 -0400
-Message-ID: <CAHC9VhS0KjFRjamDZsUCZHDRk1bg08JH0iFJi9SN3ZqMOg2+xQ@mail.gmail.com>
-Subject: Re: [PATCH] lsm: move hook comments docs to security/security.c
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 10:46=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
-> On 4/28/23 07:43, Paul Moore wrote:
-> > On Thu, Apr 27, 2023 at 11:09=E2=80=AFPM Randy Dunlap <rdunlap@infradea=
-d.org> wrote:
-> >>
-> >> Fix one kernel-doc warning, but invesigating that led to other
-> >> kernel-doc movement (lsm_hooks.h to security.c) that needs to be
-> >> fixed also.
-> >>
-> >> include/linux/lsm_hooks.h:1: warning: no structured comments found
-> >>
-> >> Fixes: e261301c851a ("lsm: move the remaining LSM hook comments to sec=
-urity/security.c")
-> >> Fixes: 1cd2aca64a5d ("lsm: move the io_uring hook comments to security=
-/security.c")
-> >> Fixes: 452b670c7222 ("lsm: move the perf hook comments to security/sec=
-urity.c")
-> >> Fixes: 55e853201a9e ("lsm: move the bpf hook comments to security/secu=
-rity.c")
-> >> Fixes: b14faf9c94a6 ("lsm: move the audit hook comments to security/se=
-curity.c")
-> >> Fixes: 1427ddbe5cc1 ("lsm: move the binder hook comments to security/s=
-ecurity.c")
-> >> Fixes: 43fad2821876 ("lsm: move the sysv hook comments to security/sec=
-urity.c")
-> >> Fixes: ecc419a44535 ("lsm: move the key hook comments to security/secu=
-rity.c")
-> >> Fixes: 742b99456e86 ("lsm: move the xfrm hook comments to security/sec=
-urity.c")
-> >> Fixes: ac318aed5498 ("lsm: move the Infiniband hook comments to securi=
-ty/security.c")
-> >> Fixes: 4a49f592e931 ("lsm: move the SCTP hook comments to security/sec=
-urity.c")
-> >> Fixes: 6b6bbe8c02a1 ("lsm: move the socket hook comments to security/s=
-ecurity.c")
-> >> Fixes: 2c2442fd46cd ("lsm: move the AF_UNIX hook comments to security/=
-security.c")
-> >> Fixes: 2bcf51bf2f03 ("lsm: move the netlink hook comments to security/=
-security.c")
-> >> Fixes: 130c53bfee4b ("lsm: move the task hook comments to security/sec=
-urity.c")
-> >> Fixes: a0fd6480de48 ("lsm: move the file hook comments to security/sec=
-urity.c")
-> >> Fixes: 9348944b775d ("lsm: move the kernfs hook comments to security/s=
-ecurity.c")
-> >> Fixes: 916e32584dfa ("lsm: move the inode hook comments to security/se=
-curity.c")
-> >> Fixes: 08526a902cc4 ("lsm: move the filesystem hook comments to securi=
-ty/security.c")
-> >> Fixes: 36819f185590 ("lsm: move the fs_context hook comments to securi=
-ty/security.c")
-> >> Fixes: 1661372c912d ("lsm: move the program execution hook comments to=
- security/security.c")
-> >> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> >> Cc: Paul Moore <paul@paul-moore.com>
-> >> Cc: James Morris <jmorris@namei.org>
-> >> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> >> Cc: linux-security-module@vger.kernel.org
-> >> Cc: Jonathan Corbet <corbet@lwn.net>
-> >> Cc: linux-doc@vger.kernel.org
-> >> Cc: KP Singh <kpsingh@kernel.org>
-> >> Cc: bpf@vger.kernel.org
-> >> ---
-> >>  Documentation/bpf/prog_lsm.rst             |    2 +-
-> >>  Documentation/security/lsm-development.rst |    6 +++---
-> >>  Documentation/security/lsm.rst             |    2 +-
-> >>  3 files changed, 5 insertions(+), 5 deletions(-)
-> >
-> > Thanks Randy.  Did you want to take this via the doc tree, or would
-> > you prefer if I pulled this into the LSM tree?
->
-> I think that the LSM tree would be appropriate for it.
+On Freitag, 28. April 2023 01:29:27 CEST Brian Masney wrote:
+> On Thu, Apr 27, 2023 at 10:34:28PM +0200, Luca Weiss wrote:
+> > Some pwm vibrators have a dedicated enable GPIO that needs to be set
+> > high so that the vibrator works. Add support for that optionally.
+> > 
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> 
+> Hi Luca,
+> 
+> Thank you for picking up this work!
+> 
+> > +	vibrator->enable_gpio = devm_gpiod_get_optional(&pdev->dev, 
+"enable",
+> > +							
+GPIOD_OUT_LOW);
+> > +	err = PTR_ERR_OR_ZERO(vibrator->enable_gpio);
+> > +	if (err) {
+> > +		if (err != -EPROBE_DEFER)
+> > +			dev_err(&pdev->dev, "Failed to request enable 
+gpio: %d\n",
+> > +				err);
+> > +		return err;
+> > +	}
+> > +
+> 
+> Take a look at dev_err_probe() to remove the -EPROBE_DEFER check.
 
-Fair enough, I just merged this into the lsm/stable-6.4 branch and
-I'll send this up to Linus shortly.
+The input subsystem doesn't like dev_err_probe for some reason, you should 
+quickly find examples of that being rejected on the mailing list (or see   
+"git grep dev_err_probe drivers/input/")
 
---=20
-paul-moore.com
+> 
+> With that fixed:
+> 
+> Reviewed-by: Brian Masney <bmasney@redhat.com>
+
+Thanks for the reviews!
+
+
