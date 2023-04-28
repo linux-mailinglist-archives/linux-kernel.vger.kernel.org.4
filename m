@@ -2,209 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B74E6F1A26
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE8B6F1A2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345870AbjD1OE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S1346122AbjD1OGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjD1OE5 (ORCPT
+        with ESMTP id S1345631AbjD1OGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:04:57 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178E626A6
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:04:55 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230428140452euoutp01cf9b2f85563aec9dad65d8f6d70f3d34~aHkTz_KSv0262102621euoutp01z
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:04:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230428140452euoutp01cf9b2f85563aec9dad65d8f6d70f3d34~aHkTz_KSv0262102621euoutp01z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682690692;
-        bh=EEtGe+wC47aB14p+DivmoE+r5CH+S8ucH6jCvDwAe4U=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=k6RP6w9kDJ2nKQT/HsYHToW0EkvBh74tYVrsmTXu61J/u8mkRVXg6HZHjYHzGT6bc
-         Atle8maLFIpyYHpI8WHBayt3VI3DwkA2xAwxfTl/kQ3beBtNIMBQxaXvhalzvUbr3u
-         hTfmERjfu6ej/cb/Ff9uAZpsmTDgFFY22wJiYm6E=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230428140451eucas1p15749d752a76bc63e9a7664cabfef9caa~aHkTeEraG0945809458eucas1p1j;
-        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 57.DF.35386.382DB446; Fri, 28
-        Apr 2023 15:04:51 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230428140451eucas1p14a5f254adb9477e517327cb1572b1710~aHkTAJxWW0947109471eucas1p1n;
-        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230428140451eusmtrp22215fcddd4d373bae7de42d3bb2b01fa~aHkS-UIy62734327343eusmtrp2P;
-        Fri, 28 Apr 2023 14:04:51 +0000 (GMT)
-X-AuditID: cbfec7f4-cc9ff70000028a3a-2a-644bd283992b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9F.E4.14344.382DB446; Fri, 28
-        Apr 2023 15:04:51 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230428140450eusmtip1f98789af73ddbb43bf193cdb93a7c58f~aHkSHJYBy2624626246eusmtip1R;
-        Fri, 28 Apr 2023 14:04:50 +0000 (GMT)
-Message-ID: <46429c9b-cf14-a67e-81a8-b56be0350ea3@samsung.com>
-Date:   Fri, 28 Apr 2023 16:04:50 +0200
+        Fri, 28 Apr 2023 10:06:39 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676E526A6
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:06:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682690798; x=1714226798;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6U2Cuq5bNHHidqMCNuA2/bRalbQNJmzMDJcFmv3qNMA=;
+  b=FDHzaaJrvU5CEwVFekmiM4HSKcFaC9eqxoTtMR3SRzJ1FVzy8PFL7FtS
+   uBunp7tJrK6undiOjok5NQ+yAoJU5vQiHq90WDfEN6JMOVOd+XYTgV8Xc
+   +nUZynnXXtN2K7YZo4l93lP3yBYSPquhgoPNlMX2A9wuGdxyfJGlY0fXZ
+   zUShd9oT8diwtKWWZSLeyoEzce+G6wIQ3R3vw0LpI8DSf8jQWA77ZviUk
+   IIcfus8E5cpjSw/y+IjgVZRnULL3rI2pzAocBI1eUAkjIQzNpZAYTgx4g
+   yr5q0WTrym74eihVKha8mCqop6AszWXOAhSTE2+T/ct+oRY+Pdo9MBppJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="350668795"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="350668795"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 07:06:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="1024607857"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="1024607857"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Apr 2023 07:06:35 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psOk6-0000Tx-14;
+        Fri, 28 Apr 2023 14:06:34 +0000
+Date:   Fri, 28 Apr 2023 22:05:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm: optimization on page allocation when CMA enabled
+Message-ID: <202304282107.O93rPndb-lkp@intel.com>
+References: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst
- mode
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        dario.binacchi@amarulasolutions.com, l.stach@pengutronix.de,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAHCN7x+QU29Wv9TQEANhbxLcL4jCZUKbk+uGu2sOwhCcTt798A@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbUxTZxjNe796S6xcS03fsA9dRRcwK+pIdtmmcZGxa2bizBIykIi13CEO
-        sGtlU4ZJxQ1pUSh1GaPlFiIwWDeKQSyfRiQbpcjA1VWlw1SdwUlKGBRacYBbuXXj33nOc07O
-        ed68JCouJqLJ7LxjrDpPkSMjIjB7//zIa6dd72duKda+To/9fh2lu92lAnrg9gWE9tb5MfqZ
-        vQKlKzrMBP3b3BRBn2sYxmmj14DRs60Ggn5UYwO00+fG6HvcKELrKuoF9M2uaoL2FZ8C9FSn
-        B9BGyyi+U8w0T3tx5nGjFmUspgGMuRKoxZhO010BYy6pwpm6nscI02rVEcxP7jqcGTC4EGbs
-        Vg/BeEsdCFO+uIUpa7MCxt/68geRaRFvZ7I52Z+x6vgdByMON9+rRlSO6OO2GwuEFvSu1QMh
-        CakE2GQLInoQQYqpJgDHuXqcH2YBtD85Gx78ALa3LIDnloo+m4BfNALodVSGVdMAmq+Z8ZBK
-        RO2AT3qdWAhj1EbYa/oK8Pwa6Kx6uMyvpVhYZPYJQjiK2gtvuazLGKWk0POwBglhCSWDd4cW
-        Ac/PY7D0jjSECWor1E/qCT0gSSG1D3aOfchL1sHTl81oqA+kAkL4fZsH51snwYnhM+ELouCE
-        o03A4xfhs84ahDecAbD2b294MACofeQJO96CY8NPl9NQKha2dMXz9DtwqOE8GqIhtRremVzD
-        l1gNjfbKMC2CJcViXr0Jmhy2/2Kv3XChBiAzrXgV04rrTSvOMf2fWwswK5Cy+ZrcLFazLY/9
-        XK5R5Gry87LkyqO5reDfr3p9yTHbARonpuV9ACFBH4AkKpOIRCfeyxSLMhUnClj10Qx1fg6r
-        6QMvkJhMKtq83akUU1mKY+wnLKti1c+3CCmM1iLp24mi0qptvqeeYP167lN36kGigLvquxqz
-        b+IX6+3CjcH15QmcdFdzHPHxjw1pyhT03Ywj6f3G+6k9qp2bI/1xuxWqI9KC8aFT7d0tWdS8
-        ZW9KVfBX3cj85RFrkeHV8j2DB2It/qYEIZfUXqKUBy92pK6qFhgT/7x/qWFhJvDFnpQYl7Ic
-        t/lnmp12VdmGjLnCSkmXZFXhrrT+xj8cFt3UptH4yGQ0cW5JfjNw/I3Bb2J3c2/Gn3V/HbV/
-        XM5deKBvT4055/9hPxG5TrOY2K17wPyVVDScPHMy6tuRaq5wSPdR7eB3ZcaXAgqJ+uQr2cm9
-        IH1q8stDS84N1BVnf8HPMkxzWLE1DlVrFP8ADwxgyBkEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsVy+t/xu7rNl7xTDK4dFrK4c/s0s8Xuq93s
-        FieuL2KyuL/4M4vF/20TmS0m7pjNZnHl63s2i96l51gtJt2fwGLxZdMENovn89cxWpx8c5XF
-        4sHcm0wWnROXsFtc3jWHzeJNWyOjxfudtxgtJs27yeog5LH2431Wj5fLG5g95s06weKx99sC
-        Fo+ds+6ye8zumMnqsXjPSyaPTas62TyOXF3M6nFiwiUmjzvX9rB53O8+zuTR/9fAo2/LKkaP
-        z5vkAvij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S
-        9DLWPpjDVHBcqmLdhT9sDYwHRLsYOTkkBEwkJh5ax97FyMUhJLCUUWLO/4VsEAkZiZPTGlgh
-        bGGJP9e6wOJCAu8ZJaZ0RYHYvAJ2Ej8OnGQBsVkEVCUOzGplhIgLSpyc+QQsLiqQKnFjzx+w
-        XmEBX4lzcxrAapgFxCVuPZnPBGKLCChJ3D3zlxHkCGaB3ywSv48fY4G4aCuzxMxH38Gq2AQM
-        JbreglzBwcEpECix804wxCAzia6tXVBD5SWat85mnsAoNAvJHbOQ7JuFpGUWkpYFjCyrGEVS
-        S4tz03OLjfSKE3OLS/PS9ZLzczcxApPItmM/t+xgXPnqo94hRiYOxkOMEhzMSiK8vJXuKUK8
-        KYmVValF+fFFpTmpxYcYTYGBMZFZSjQ5H5jG8kriDc0MTA1NzCwNTC3NjJXEeT0LOhKFBNIT
-        S1KzU1MLUotg+pg4OKUamOoKFgl7ls5gnh67MKp1xaOpsj4a1kfynh3L5DpuP98o7exziTfH
-        Hh9XOr3JT7VHXLbnwpS/MgJWeWpsxvoSs0R26remBU5oSON6/WGvpbPl1tIn28UCNX0V1r9a
-        NMXm4s0lWk93f9pj/iJ+jlab5dOpJk+/TjqXyT8z9lbd2uA2D+Xpv9dvn9hXszFvmZxNw+WA
-        DWEytfLZ5SGqKnlOem8OyRxzjFjw4Hq5YVO9+4PK1k/cu4wnHW07d2fnjBl3HZ+9XJYUqbe+
-        YZnymuPrFq2xZi8xy764dWumZNXppiUPzz9wneUlJZFl6rL8SHiBJA9fvJ30q6bzAid4OH0Z
-        Nz1wWhMYmiSROGuWdSGzlBJLcUaioRZzUXEiACOK0X6rAwAA
-X-CMS-MailID: 20230428140451eucas1p14a5f254adb9477e517327cb1572b1710
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
-References: <20230423121232.1345909-1-aford173@gmail.com>
-        <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
-        <20230423121232.1345909-6-aford173@gmail.com>
-        <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
-        <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
-        <343f8d25-566f-9d14-64db-4e796cc9e406@samsung.com>
-        <CAHCN7x+QU29Wv9TQEANhbxLcL4jCZUKbk+uGu2sOwhCcTt798A@mail.gmail.com>
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.04.2023 15:35, Adam Ford wrote:
-> On Fri, Apr 28, 2023 at 7:31 AM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 24.04.2023 12:00, Adam Ford wrote:
->>> On Mon, Apr 24, 2023 at 3:25 AM Marek Szyprowski
->>> <m.szyprowski@samsung.com> wrote:
->>>> On 23.04.2023 14:12, Adam Ford wrote:
->>>>> The high-speed clock is hard-coded to the burst-clock
->>>>> frequency specified in the device tree.  However, when
->>>>> using devices like certain bridge chips without burst mode
->>>>> and varying resolutions and refresh rates, it may be
->>>>> necessary to set the high-speed clock dynamically based
->>>>> on the desired pixel clock for the connected device.
->>>>>
->>>>> This also removes the need to set a clock speed from
->>>>> the device tree for non-burst mode operation, since the
->>>>> pixel clock rate is the rate requested from the attached
->>>>> device like an HDMI bridge chip.  This should have no
->>>>> impact for people using burst-mode and setting the burst
->>>>> clock rate is still required for those users.
->>>>>
->>>>> Signed-off-by: Adam Ford <aford173@gmail.com>
->>>> This one breaks Exynos-5433 based TM2e board with a DSI panel.
->>> Marek S,
->>>
->>> Thank you for testing!  I knoiw there are several of us who appreciate
->>> your testing this since it's hard to know if something broke without
->>> hardware.  Is there any way you can tell me if the flag is set to
->>> enable MIPI_DSI_MODE_VIDEO_BURST?
->> TM2e board uses the DSI panel operated in command mode and handled by
->> panel-samsung-s6e3ha2.c driver. The MIPI_DSI_MODE_VIDEO_BURST flag is
->> not set by the driver. However, the MIPI_DSI_CLOCK_NON_CONTINUOUS flags
->> is set there. I really have no idea if setting VIDEO_BURST would make
->> sense together with CLOCK_NON_CONTINUOUS or not. Maybe the driver lacks
->> setting it?
->>
->>
->>> I was trying to be diligent about not breaking your boards, but
->>> without your boards, it's difficult.  The theory was that if
->>> MIPI_DSI_MODE_VIDEO_BURST is set and there is a burst clock set in the
->>> device tree, it would use the burst clock.
->>>
->>> As a fall-back I could just simply check for the presence of the
->>> burst_clock_rate instead of both MIPI_DSI_MODE_VIDEO_BURST and
->>> burst_clock_rate.
->> Maybe you should extend your check also for the
->> MIPI_DSI_CLOCK_NON_CONTINUOUS flag? Does it make sense?
-> Looking at some of the devices that might attach in the future, It
-> appears that ti-sn65dsi86.c sets this flag.  It's a display port
-> bridge, so I would expect it to need a variable clock rate similar to
-> how the HDMI bridge that I need works.  I am concerned that I make the
-> burst clock dependent on MIPI_DSI_CLOCK_NON_CONTINUOUS, it might break
-> the Display Port bridge.
->
-> I think it's better to just check if the samsung,burst-clock-frequency
-> is present in the device tree and use it when present.  If it's not
-> present, then fall back to the pixel clock of the connected device.
+Hi zhaoyang.huang,
 
-Right, this sounds rational.
+kernel test robot noticed the following build errors:
 
-> I looked at a bunch of Exynos parts, and it looks like they all use
-> the samsung,burst-clock-frequency device tree setting.  Is that true,
-> or did I miss one?
+[auto build test ERROR on akpm-mm/mm-everything]
 
-That true. All Exynos based boards with DSI panels use constant DSI 
-burst frequency defined in the device tree.
+url:    https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-optimization-on-page-allocation-when-CMA-enabled/20230428-190140
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/1682679641-13652-1-git-send-email-zhaoyang.huang%40unisoc.com
+patch subject: [PATCH] mm: optimization on page allocation when CMA enabled
+config: nios2-randconfig-r003-20230428 (https://download.01.org/0day-ci/archive/20230428/202304282107.O93rPndb-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/dbda57eee661a0c9b47f23720bcc9741495d00a5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review zhaoyang-huang/mm-optimization-on-page-allocation-when-CMA-enabled/20230428-190140
+        git checkout dbda57eee661a0c9b47f23720bcc9741495d00a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304282107.O93rPndb-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   mm/page_alloc.c: In function '__rmqueue':
+>> mm/page_alloc.c:2328:42: error: implicit declaration of function '__if_use_cma_first' [-Werror=implicit-function-declaration]
+    2328 |                         bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
+         |                                          ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-Best regards
+vim +/__if_use_cma_first +2328 mm/page_alloc.c
+
+  2277	
+  2278	#ifdef CONFIG_CMA
+  2279	static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
+  2280	{
+  2281		unsigned long cma_proportion = 0;
+  2282		unsigned long cma_free_proportion = 0;
+  2283		unsigned long watermark = 0;
+  2284		unsigned long wm_fact[ALLOC_WMARK_MASK] = {1, 1, 2};
+  2285		long count = 0;
+  2286		bool cma_first = false;
+  2287	
+  2288		watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
+  2289		/*check if GFP_MOVABLE pass previous watermark check via the help of CMA*/
+  2290		if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
+  2291		{
+  2292			alloc_flags &= ALLOC_WMARK_MASK;
+  2293			/* WMARK_LOW failed lead to using cma first, this helps U&R stay
+  2294			 * around low when being drained by GFP_MOVABLE
+  2295			 */
+  2296			if (alloc_flags <= ALLOC_WMARK_LOW)
+  2297				cma_first = true;
+  2298			/*check proportion for WMARK_HIGH*/
+  2299			else {
+  2300				count = atomic_long_read(&zone->managed_pages);
+  2301				cma_proportion = zone->cma_pages * 100 / count;
+  2302				cma_free_proportion = zone_page_state(zone, NR_FREE_CMA_PAGES) * 100
+  2303					/  zone_page_state(zone, NR_FREE_PAGES);
+  2304				cma_first = (cma_free_proportion >= wm_fact[alloc_flags] * cma_proportion
+  2305						|| cma_free_proportion >= 50);
+  2306			}
+  2307		}
+  2308		return cma_first;
+  2309	}
+  2310	#endif
+  2311	/*
+  2312	 * Do the hard work of removing an element from the buddy allocator.
+  2313	 * Call me with the zone->lock already held.
+  2314	 */
+  2315	static __always_inline struct page *
+  2316	__rmqueue(struct zone *zone, unsigned int order, int migratetype,
+  2317							unsigned int alloc_flags)
+  2318	{
+  2319		struct page *page;
+  2320	
+  2321		if (IS_ENABLED(CONFIG_CMA)) {
+  2322			/*
+  2323			 * Balance movable allocations between regular and CMA areas by
+  2324			 * allocating from CMA when over half of the zone's free memory
+  2325			 * is in the CMA area.
+  2326			 */
+  2327			if (migratetype == MIGRATE_MOVABLE) {
+> 2328				bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
+  2329				page = cma_first ? __rmqueue_cma_fallback(zone, order) : NULL;
+  2330				if (page)
+  2331					return page;
+  2332			}
+  2333		}
+  2334	retry:
+  2335		page = __rmqueue_smallest(zone, order, migratetype);
+  2336		if (unlikely(!page)) {
+  2337			if (alloc_flags & ALLOC_CMA)
+  2338				page = __rmqueue_cma_fallback(zone, order);
+  2339	
+  2340			if (!page && __rmqueue_fallback(zone, order, migratetype,
+  2341									alloc_flags))
+  2342				goto retry;
+  2343		}
+  2344		return page;
+  2345	}
+  2346	
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
