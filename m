@@ -2,152 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7323F6F1569
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B8E6F1572
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjD1K2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 06:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
+        id S1345599AbjD1K3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 06:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346056AbjD1K22 (ORCPT
+        with ESMTP id S230053AbjD1K3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 06:28:28 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E0CE69
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:28:27 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so66542275e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682677706; x=1685269706;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZfGMC/jhsgLfQzo0SHoljXr/2t2JYSln8rtomysk++I=;
-        b=hD7I0XgjY/BZDDPHQ+bgeA+CzkoJHzb94OGZh6JPpB6nTGgMf6Abo9pAWt5zAJQsKh
-         Uw/tqn9PDEPNuqMLk0xc+X5fxNeH8EnQdTGpKw4S7WqAMjj5jiRPUio15MtGFNgiUiWD
-         8ZAefvucanbeodh2jPn8dWJYIJBsjCLdbW1KBVO8jjmHhRONh6kJVNj+MfeLWvtAMw94
-         TVDxz1b6zM+IAX8DIbBjjBO8vmIrSevukwEvv/Vl3mM1LgzV5fwTq0keO1kKEuaARJmp
-         gXLIZCJaGXCRDNwEAqaGsFGATpr7G+6/lalolDT6hfYSTHSrJpPnQw1kYksm2pYXpVmp
-         hnWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682677706; x=1685269706;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZfGMC/jhsgLfQzo0SHoljXr/2t2JYSln8rtomysk++I=;
-        b=NGjP543AoQfuoOgMObeEur18eN4X2X0BkLVW+8oN14Y0MHLXUu1FMycuYreYvwCXGt
-         O0KckVLTbXY2mujBgdgCyTf+iPJnY+/HsuEh6XpW8bkx93Gspd04RtfQK01A8xk558aW
-         PYlD1N+2XfDkGoWpCGvg1SbSk6QCyf23XluGi6k/Jk1UL+cXGP2Gkn5BjbHkgMlMT50F
-         VlTVPKt35jOIy+7tBZD0Pkj/3nQBuLm/s0oigUORZ+kfahGIrGzFQV8kS8zTgHe9dw2t
-         q/cBXmoet6fUML3MtwTq5S2yni8pwXpJF8anRsACiutRFV8NzWbWq5rdTWslNDlmT5Ys
-         EMIA==
-X-Gm-Message-State: AC+VfDxrkyUAwMyn5PVhVxNH8Q4kvTGS+ijbTRmqs58dOZ4ex9j442A0
-        fxgNcFJGk3J/XTbnqlqhTlItHQ==
-X-Google-Smtp-Source: ACHHUZ635hgVhCN8pnLlW+6Lu4Byx+Ptd0TOnsSoSl2JFuNMjarpMQdZkrvvjK/Qn/HAEKr8ROkJ9Q==
-X-Received: by 2002:a05:600c:2205:b0:3f1:6ead:34fe with SMTP id z5-20020a05600c220500b003f16ead34femr3747198wml.26.1682677705900;
-        Fri, 28 Apr 2023 03:28:25 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id v15-20020a05600c444f00b003f09cda253esm27676885wmn.34.2023.04.28.03.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 03:28:25 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 12:28:24 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        kito.cheng@sifive.com, jrtc27@jrtc27.com, matthias.bgg@gmail.com,
-        heinrich.schuchardt@canonical.com, greentime.hu@sifive.com,
-        nick.knight@sifive.com, christoph.muellner@vrull.eu,
-        philipp.tomsich@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] RISC-V: add support for vendor-extensions via
- AT_BASE_PLATFORM and xthead
-Message-ID: <d6lqggv2bbtmv7exalcqqwgbntibdxotsswataxqxhx6kmf4rg@5kgb3axdwgst>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <20230424194911.264850-5-heiko.stuebner@vrull.eu>
- <20230426-spirits-ludicrous-a5d8275686e6@wendy>
- <5016896.Mh6RI2rZIc@diego>
- <20230427-maybe-skier-51e7cf09795c@spud>
+        Fri, 28 Apr 2023 06:29:43 -0400
+Received: from outbound-smtp03.blacknight.com (outbound-smtp03.blacknight.com [81.17.249.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5037E1BFE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:29:41 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp03.blacknight.com (Postfix) with ESMTPS id A48CEC0E9F
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:29:39 +0100 (IST)
+Received: (qmail 29727 invoked from network); 28 Apr 2023 10:29:39 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 28 Apr 2023 10:29:38 -0000
+Date:   Fri, 28 Apr 2023 11:29:36 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, Kaiyang Zhao <kaiyang2@cs.cmu.edu>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 05/26] mm: page_alloc: per-migratetype pcplist for
+ THPs
+Message-ID: <20230428102936.7qsaskyjkpiyapgq@techsingularity.net>
+References: <20230418191313.268131-1-hannes@cmpxchg.org>
+ <20230418191313.268131-6-hannes@cmpxchg.org>
+ <20230421124744.skrxvziwg3bx7rgt@techsingularity.net>
+ <20230421150648.GB320347@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230427-maybe-skier-51e7cf09795c@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230421150648.GB320347@cmpxchg.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 07:28:49PM +0100, Conor Dooley wrote:
-> Hey Heiko,
-> 
-> On Thu, Apr 27, 2023 at 07:15:58PM +0200, Heiko Stübner wrote:
-> > Am Mittwoch, 26. April 2023, 14:29:16 CEST schrieb Conor Dooley:
-> > > On Mon, Apr 24, 2023 at 09:49:11PM +0200, Heiko Stuebner wrote:
-> > > > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
-...
-> > > What do you mean by virtualisation here? It's the job of the hypervisor
-> > > etc to make sure that what it passes to its guest contains only what it
-> > > wants the guest to see, right?
-> > > IIUC, that's another point against doing what this patch does.
+On Fri, Apr 21, 2023 at 11:06:48AM -0400, Johannes Weiner wrote:
+> On Fri, Apr 21, 2023 at 01:47:44PM +0100, Mel Gorman wrote:
+> > On Tue, Apr 18, 2023 at 03:12:52PM -0400, Johannes Weiner wrote:
+> > > Right now, there is only one pcplist for THP allocations. However,
+> > > while most THPs are movable, the huge zero page is not. This means a
+> > > movable THP allocation can grab an unmovable block from the pcplist,
+> > > and a subsequent THP split, partial free, and reallocation of the
+> > > remainder will mix movable and unmovable pages in the block.
+> > > 
+> > > While this isn't a huge source of block pollution in practice, it
+> > > happens often enough to trigger debug warnings fairly quickly under
+> > > load. In the interest of tightening up pageblock hygiene, make the THP
+> > > pcplists fully migratetype-aware, just like the lower order ones.
+> > > 
+> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 > > 
-> > I guess I'm still seeing Zbb and friends - with just computational
-> > instructions as always good to have. But I guess you're right that the
-> > hypervisor should be able to control itself which extensions.
+> > Split out :P
+> > 
+> > Take special care of this one because, while I didn't check this, I
+> > suspect it'll push the PCP structure size into the next cache line and
+> > increase overhead.
+> >
+> > The changelog makes it unclear why exactly this happens or why the
+> > patch fixes it.
 > 
-> Yah, there may not be any obvious downsides to something like Zbb, but I
-> think that taking control away from the hypervisors etc isn't a good
-> idea.
+> Before this, I'd see warnings from the last patch in the series about
+> received migratetype not matching requested mt.
+> 
+> The way it happens is that the zero page gets freed and the unmovable
+> block put on the pcplist. A regular THP allocation is subsequently
+> served from an unmovable block.
+> 
+> Mental note, I think this can happen the other way around too: a
+> regular THP on the pcp being served to a MIGRATE_UNMOVABLE zero
+> THP. It's not supposed to, but it looks like there is a bug in the
+> code that's meant to prevent that from happening in rmqueue():
+> 
+> 	if (likely(pcp_allowed_order(order))) {
+> 		/*
+> 		 * MIGRATE_MOVABLE pcplist could have the pages on CMA area and
+> 		 * we need to skip it when CMA area isn't allowed.
+> 		 */
+> 		if (!IS_ENABLED(CONFIG_CMA) || alloc_flags & ALLOC_CMA ||
+> 				migratetype != MIGRATE_MOVABLE) {
+> 			page = rmqueue_pcplist(preferred_zone, zone, order,
+> 					migratetype, alloc_flags);
+> 			if (likely(page))
+> 				goto out;
+> 		}
+> 	}
+> 
+> Surely that last condition should be migratetype == MIGRATE_MOVABLE?
+> 
 
-If there's any chance that a VM will need to migrate from a host with,
-e.g. Zbb, to one without it, then the VM will need Zbb disabled from the
-start.
+It should be. It would have been missed for ages because it would need a
+test case based on a machine configuration that requires CMA for functional
+correctness and is using THP which is an unlikely combination.
 
-> Having a simple policy of blocking things that are known to misbehave
-> would require less maint. than a list of things that are okay to pass
-> through, but both are probably cans-of-worms.
-> I think we need to think carefully about what policy is chosen here.
-> Allowlist will be slower, but at least we'll not tell userspace
-> something that is not usable. Blocklist will be easier to manage, but
-> can only be reactive.
+> > The huge zero page strips GFP_MOVABLE (so unmovable)
+> > but at allocation time, it doesn't really matter what the movable type
+> > is because it's a full pageblock. It doesn't appear to be a hazard until
+> > the split happens. Assuming that's the case, it should be ok to always
+> > set the pageblock movable for THP allocations regardless of GFP flags at
+> > allocation time or else set the pageblock MOVABLE at THP split (always
+> > MOVABLE at allocation time makes more sense).
+> 
+> The regular allocator compaction skips over compound pages anyway, so
+> the migratetype should indeed not matter there.
+> 
+> The bigger issue is CMA. alloc_contig_range() will try to move THPs to
+> free a larger range. We have to be careful not to place an unmovable
+> zero THP into a CMA region. That means we can not play games with MT -
+> we really do have to physically keep unmovable and movable THPs apart.
+> 
 
-I have experience [trying] to maintain deny-lists for CPU features,
-both for x86 Xen guests and Arm KVM guests. I don't recommend it. To
-do it right, you need to be proactive, tracking upcoming CPU features
-to add the ones that can't be supported by virt or aren't ready to
-be supported by virt to the deny-list before somebody trips over them.
-In practice, usually somebody trips over it first, causing fires which
-have to be put out. If an allow-list is used, then, when a new feature
-is missed, no fires are started. The worst that can happen is somebody
-expected the feature and didn't see it, so they complain, at which
-point you add it.
+Fair point.
 
-...
+> Another option would be not to use pcp for the zero THP. It's cached
+> anyway in the caller. But it would add branches to the THP alloc and
+> free fast paths (pcp_allowed_order() also checking migratetype).
 
-> Also, in a world where we do do some sort of passing, should we only
-> forward the vendor extensions, or should we forward the standard ones
-> too?
+And this is probably the most straight-forward option. The intent behind
+caching some THPs on PCP was faulting large mappings of normal THPs and
+reducing the contention on the zone lock a little. The zero THP is somewhat
+special because it should not be allocated at high frequency.
 
-I guess we need to forward anything userspace can and should use.
-
-> What about supervisor mode only stuff?
-
-That's not something userspace can use. If we want to expose which
-supervisor mode features the CPU has to userspace, for information
-purposes, then I think proc or sysfs would be sufficient for that.
-
-The downside of using an allow-list for what extensions get exposed
-to userspace is that even extensions the kernel can't/won't use
-will need a kernel patch before userspace can use them. But, as
-I stated above, that downside (people complaining a feature they
-expect is missing), is, IMO, better than the alternative of exposing
-things that shouldn't be.
-
-Thanks,
-drew
+-- 
+Mel Gorman
+SUSE Labs
