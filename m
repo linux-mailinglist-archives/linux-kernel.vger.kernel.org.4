@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0346F11F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A116F11FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345374AbjD1Gtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 02:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S1345349AbjD1Gvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345341AbjD1Gti (ORCPT
+        with ESMTP id S1345285AbjD1Gvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:49:38 -0400
-Received: from www484.your-server.de (www484.your-server.de [78.47.237.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C845B30E8;
-        Thu, 27 Apr 2023 23:49:34 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www484.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1psHv7-000KXf-R2; Fri, 28 Apr 2023 08:49:29 +0200
-Received: from [2003:ca:6730:e8f8:9fd6:4f62:9dbd:374f] (helo=tethys.gateware.dom)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <k.graefe@gateware.de>)
-        id 1psHv7-0005zg-3u; Fri, 28 Apr 2023 08:49:29 +0200
-From:   =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>
-To:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     =?UTF-8?q?Konrad=20Gr=C3=A4fe?= <k.graefe@gateware.de>,
-        stable@vger.kernel.org
-Subject: [PATCH v4 2/2] usb: gadget: u_ether: Fix host MAC address case
-Date:   Fri, 28 Apr 2023 08:49:05 +0200
-Message-Id: <20230428064905.145858-2-k.graefe@gateware.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230428064905.145858-1-k.graefe@gateware.de>
-References: <20230427115120.241954-2-k.graefe@gateware.de>
- <20230428064905.145858-1-k.graefe@gateware.de>
+        Fri, 28 Apr 2023 02:51:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA2D30E8;
+        Thu, 27 Apr 2023 23:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682664693; x=1714200693;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aB2YsP1K3RdhXZS8cylTDflNzVA0nU4HK1q9q5xhY3s=;
+  b=KoQKVBPpfgizayAK6YpfB0D9GZGS5gBSbkpXj6PtvEE7O/GDKTvXbRd9
+   dKmdQuiPS5FCtcjmhZ/yqwpmj+5iiw04twk65XdJfEf03jkmXf1S/YsZt
+   Sza5kEWPGIYbd66QaVPsX/2rO221V2pW0FySdIe/CRIbaWFoT2K4Bf2rZ
+   Ip0cR6tUT1GNyUrs98hU0MrkVHexexQ0u8YlRFqCeKdwNCQJPJxvJrwIK
+   eayNzUyq7NC/ymYfY9b83CVAXCtrq36cupeiZzlT8gPPEC+DHdvCR4r2O
+   YwmrFCmMb3z7LAo+qzr2OmKP4GwCoZXOYV7WJDTKOD7730y+KsR2GDtfs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="347694937"
+X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
+   d="scan'208";a="347694937"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 23:51:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="644999650"
+X-IronPort-AV: E=Sophos;i="5.99,233,1677571200"; 
+   d="scan'208";a="644999650"
+Received: from linux.bj.intel.com ([10.238.156.127])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 23:51:30 -0700
+Date:   Fri, 28 Apr 2023 14:49:53 +0800
+From:   Tao Su <tao1.su@linux.intel.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v2] block: Skip destroyed blkg when restart in
+ blkg_destroy_all()
+Message-ID: <ZEtskeNOTKeqW2rS@linux.bj.intel.com>
+References: <20230428045149.1310073-1-tao1.su@linux.intel.com>
+ <c007f189-8573-8390-4338-ae4c281ffbee@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: k.graefe@gateware.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26889/Thu Apr 27 09:25:48 2023)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <c007f189-8573-8390-4338-ae4c281ffbee@huaweicloud.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,54 +65,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CDC-ECM specification [1] requires to send the host MAC address as
-an uppercase hexadecimal string in chapter "5.4 Ethernet Networking
-Functional Descriptor":
-    The Unicode character is chosen from the set of values 30h through
-    39h and 41h through 46h (0-9 and A-F).
+On Fri, Apr 28, 2023 at 02:12:06PM +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2023/04/28 12:51, Tao Su 写道:
+> > Kernel hang in blkg_destroy_all() when total blkg greater than
+> > BLKG_DESTROY_BATCH_SIZE, because of not removing destroyed blkg in
+> > blkg_list. So the size of blkg_list is same after destroying a
+> > batch of blkg, and the infinite 'restart' occurs.
+> > 
+> > Since blkg should stay on the queue list until blkg_free_workfn(),
+> > skip destroyed blkg when restart a new round, which will solve this
+> > kernel hang issue and satisfy the previous will to restart.
+> 
+> Please add a fix tag:
+> 
+> Fixes: f1c006f1c685 ("blk-cgroup: synchronize pd_free_fn() from
+> blkg_free_workfn() and blkcg_deactivate_policy()")
+> > 
+> > Reported-by: Xiangfei Ma <xiangfeix.ma@intel.com>
+> > Tested-by: Xiangfei Ma <xiangfeix.ma@intel.com>
+> > Tested-by: Farrah Chen <farrah.chen@intel.com>
+> > Signed-off-by: Yu Kuai <yukuai1@huaweicloud.com>
+> 
+> You can remove this tag, and feel free to add:
+> 
+> Suggested-and-reviewed-by: Yu Kuai <yukuai3@huawei.com>
 
-However, snprintf(.., "%pm", ..) generates a lowercase MAC address
-string. While most host drivers are tolerant to this, UsbNcm.sys on
-Windows 10 is not. Instead it uses a different MAC address with all
-bytes set to zero including and after the first byte containing a
-lowercase letter. On Windows 11 Microsoft fixed it, but apparently they
-did not backport the fix.
+Got it, thanks!
 
-This change fixes the issue by using "%pmU" to generate an uppercase hex
-string to comply with the specification.
+Tao
 
-[1]: https://www.usb.org/document-library/class-definitions-communication-devices-12, file ECM120.pdf
-
-Fixes: bcd4a1c40bee ("usb: gadget: u_ether: construct with default values and add setters/getters")
-Cc: stable@vger.kernel.org
-Signed-off-by: Konrad Gräfe <k.graefe@gateware.de>
----
-
-Changes since v3: None
-
-Changes since v2:
-* Add uppercase MAC address format string and use that instead of
-  manually uppercasing the resulting MAC address string.
-
-Changes since v1:
-* Fixed checkpatch.pl warnings
-
- drivers/usb/gadget/function/u_ether.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 6956ad8ba8dd..70e6b825654c 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -963,7 +963,7 @@ int gether_get_host_addr_cdc(struct net_device *net, char *host_addr, int len)
- 		return -EINVAL;
- 
- 	dev = netdev_priv(net);
--	snprintf(host_addr, len, "%pm", dev->host_mac);
-+	snprintf(host_addr, len, "%pmU", dev->host_mac);
- 
- 	return strlen(host_addr);
- }
--- 
-2.34.1
-
+> 
+> Thanks,
+> Kuai
+> > Signed-off-by: Tao Su <tao1.su@linux.intel.com>
+> > ---
+> > v2:
+> > - change 'directly remove destroyed blkg' to 'skip destroyed blkg'
+> > 
+> > v1:
+> > - https://lore.kernel.org/all/20230425075911.839539-1-tao1.su@linux.intel.com/
+> > 
+> >   block/blk-cgroup.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> > index bd50b55bdb61..75bad5d60c9f 100644
+> > --- a/block/blk-cgroup.c
+> > +++ b/block/blk-cgroup.c
+> > @@ -528,6 +528,9 @@ static void blkg_destroy_all(struct gendisk *disk)
+> >   	list_for_each_entry_safe(blkg, n, &q->blkg_list, q_node) {
+> >   		struct blkcg *blkcg = blkg->blkcg;
+> > +		if (hlist_unhashed(&blkg->blkcg_node))
+> > +			continue;
+> > +
+> >   		spin_lock(&blkcg->lock);
+> >   		blkg_destroy(blkg);
+> >   		spin_unlock(&blkcg->lock);
+> > 
+> 
