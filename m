@@ -2,131 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04AC26F1D6B
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2796F1D6C
 	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346315AbjD1R2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:28:20 -0400
+        id S1346363AbjD1R2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:28:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346309AbjD1R2R (ORCPT
+        with ESMTP id S1346262AbjD1R2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:28:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C35830D5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 39D08644E0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:28:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83EB9C4339E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682702886;
-        bh=awzlaeaMJVwFKmd4eU3dpKmk4Ck+BaGjudrb7tg482Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mpSa/cBmj2Xf/Og6E2MVuM86bg7KoArkd+R9npdtcWIZdgS/QlvNlN7HApdJJPj+o
-         QEp0ofqOZ7XUCRgIBYE6AbzDFPs9eZjH+wYSg3ypO/SREJVl8KkYDV1VSUgD52ZVoM
-         pck/f1RtXnV6kgHUIvN7Yt1ioFpeuPB5972rTqzB7k0eiTT8yU1jxkYp35TtvcyaWD
-         c9Jni6GuGbFCbHokR6cls9ft9asL6vONlZa1jhqVXNP8ZziJ1voZkXDQyA2AbH4hYq
-         3PEIc9yi/bxTKvh8V8ODYC81+7t7NpYfZLs3z52jPpMhEGWF8HHm4I77LbXs/1n/a+
-         XHkWyLYcTq3sw==
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-247048f86c7so160425a91.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:06 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxwuy0AnCiOha6Mf73xFFryLwZbeBz6WALujEDQE54TuB9uLaGE
-        xfE+hXul37tDVAoEEClPc8ETHCnz12wkB1PS7QGjVA==
-X-Google-Smtp-Source: ACHHUZ4EzFJTkyoWOCd5UTE8lkquxKZMsfmdTvY1kPMRpButj1PQ3EvMJaw4oZOSH7LC5CPepwlb1PcWF+Mg7++5nVc=
-X-Received: by 2002:a17:90b:4ac3:b0:24c:1de9:493 with SMTP id
- mh3-20020a17090b4ac300b0024c1de90493mr4272026pjb.47.1682702885951; Fri, 28
- Apr 2023 10:28:05 -0700 (PDT)
+        Fri, 28 Apr 2023 13:28:18 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB89F1733
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:16 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-32ae537c23fso3862935ab.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:28:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682702896; x=1685294896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mx+u+e8F3tpe9jME3ZkNhf/uGT2LdeSIrgmUdMOCoHA=;
+        b=StkHpsTFpc04mYRpir23kIUT3IfSMOjigxosKHgX+gCeWel7dyhRfqGvXbHUZwOaj5
+         cOmpDi3mLtJz1AcA9iR3BmwiuJ2G29nre1arFQstFKx8fo7wCREJHYvPPagMXM5Pv67v
+         CGQc9H89+myfRH8sV3i5udBtHw1LMoZj4bEJmm6XkLju7wGfcsTSRbQ25G/Yrxq8HNdo
+         9k8pTj0NfwdNMyUF7oBvrqgu8uj5CNNJZ0sAJn+Y3KlOC8s4abk9wsZHUojThtZnGUao
+         1BI5+xbPnnEDtyZ+OziPsSMtxIFr83qa5KTVmeR23CRHek3oKvSC5oJq2elYhPFhVF5j
+         Uxjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682702896; x=1685294896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mx+u+e8F3tpe9jME3ZkNhf/uGT2LdeSIrgmUdMOCoHA=;
+        b=JqHMksCN+BjLaPP8gcUgyMDaXTM+DXVycDceu0PM7TwsyoW4akR09PMtKIDITk20BC
+         QYcFnQwGjj3K7woesP0CvwRyjdA69uLmkdeb5AiG6XZKUD4EzeVrJAHwELT2eRfQGsxp
+         gpJWm3Lo2jIqamuzTVyRjz9NcdojJWBcHgzODBm7ZoGhFtpLnLmf572UeftV5u2ZOZMQ
+         e3rhxqjV/vqNZqEYR/7cKRkLCkHae5wyePGy+8+ds/FpcNgcyakY3epeG/iOndFu9w65
+         fh4NHiXW2I5+TdsdlJPzQvFvcrBkIPpotkZoHtBqBdEN4kRCUQyIVGK95xB8f9GUfSn1
+         zsgg==
+X-Gm-Message-State: AC+VfDy3VL8/wbOjgmeIdD8tq3j7zDUyapY3uLYgXFN7vk5VOxG+J0fh
+        80oq2fKT4j00jOuOLgKXLN6G/Q==
+X-Google-Smtp-Source: ACHHUZ6VVhmsMluENvVdOeusjeeWlsYRSHQORwLpr/F9aC6roaNxN8srB7J+NWD6SEU5RENT5xw02Q==
+X-Received: by 2002:a05:6602:1696:b0:760:dfd3:208d with SMTP id s22-20020a056602169600b00760dfd3208dmr4267661iow.0.1682702896169;
+        Fri, 28 Apr 2023 10:28:16 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id d123-20020a026281000000b00405f36ed05asm6225655jac.55.2023.04.28.10.28.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 10:28:15 -0700 (PDT)
+Message-ID: <678232fa-fd02-37b7-3048-a124c4ffdc71@kernel.dk>
+Date:   Fri, 28 Apr 2023 11:28:14 -0600
 MIME-Version: 1.0
-References: <40c60719-4bfe-b1a4-ead7-724b84637f55@web.de> <1a11455f-ab57-dce0-1677-6beb8492a257@web.de>
- <14636275-4d26-d639-5f6e-293fc6d1c4c6@web.de> <CAN6tsi7caOQZLLvbL7phMEtNvBLaWgJuHLkLo3YWdqQw7Vxnaw@mail.gmail.com>
- <6f758653-36c9-91a2-7bbc-278ae3f8ccee@web.de> <CAN6tsi4WBDOyzvXJ8vV=xJYay1JbBGo+UzZ+vudTBm5Fk5nB=A@mail.gmail.com>
- <14083012-2f19-3760-a840-d685fcedc15e@web.de> <CAN6tsi7263VnTba+WUUWR171Y+CsOKAb=it8cofPQGRk26K=aA@mail.gmail.com>
- <fa69384f-1485-142b-c4ee-3df54ac68a89@web.de>
-In-Reply-To: <fa69384f-1485-142b-c4ee-3df54ac68a89@web.de>
-From:   Robert Foss <rfoss@kernel.org>
-Date:   Fri, 28 Apr 2023 19:27:54 +0200
-X-Gmail-Original-Message-ID: <CAN6tsi5vukABCxWMNtUHokXj3+xObnX_aKvP-oQDde+M+Biv4g@mail.gmail.com>
-Message-ID: <CAN6tsi5vukABCxWMNtUHokXj3+xObnX_aKvP-oQDde+M+Biv4g@mail.gmail.com>
-Subject: Re: [PATCH resent] drm/bridge: it6505: Move a variable assignment
- behind a null pointer check in receive_timing_debugfs_show()
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     kernel-janitors@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        Hsin-yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 0/3] io_uring: Pass the whole sqe to commands
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org,
+        linux-nvme@lists.infradead.org, asml.silence@gmail.com
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, sagi@grimberg.me, hch@lst.de,
+        kbusch@kernel.org, ming.lei@redhat.com
+References: <20230421114440.3343473-1-leitao@debian.org>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230421114440.3343473-1-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 5:56=E2=80=AFPM Markus Elfring <Markus.Elfring@web.=
-de> wrote:
->
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Sun, 16 Apr 2023 17:30:46 +0200
->
-> The address of a data structure member was determined before
-> a corresponding null pointer check in the implementation of
-> the function =E2=80=9Creceive_timing_debugfs_show=E2=80=9D.
->
-> Thus avoid the risk for undefined behaviour by moving the assignment
-> for the variable =E2=80=9Cvid=E2=80=9D behind the null pointer check.
->
-> This issue was detected by using the Coccinelle software.
->
-> Fixes: b5c84a9edcd418cd055becad6a22439e7c5e3bf8 ("drm/bridge: add it6505 =
-driver")
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> ---
->  drivers/gpu/drm/bridge/ite-it6505.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge=
-/ite-it6505.c
-> index abaf6e23775e..45f579c365e7 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -3207,7 +3207,7 @@ static ssize_t receive_timing_debugfs_show(struct f=
-ile *file, char __user *buf,
->                                            size_t len, loff_t *ppos)
->  {
->         struct it6505 *it6505 =3D file->private_data;
-> -       struct drm_display_mode *vid =3D &it6505->video_info;
-> +       struct drm_display_mode *vid;
->         u8 read_buf[READ_BUFFER_SIZE];
->         u8 *str =3D read_buf, *end =3D read_buf + READ_BUFFER_SIZE;
->         ssize_t ret, count;
-> @@ -3216,6 +3216,7 @@ static ssize_t receive_timing_debugfs_show(struct f=
-ile *file, char __user *buf,
->                 return -ENODEV;
->
->         it6505_calc_video_info(it6505);
-> +       vid =3D &it6505->video_info;
->         str +=3D scnprintf(str, end - str, "---video timing---\n");
->         str +=3D scnprintf(str, end - str, "PCLK:%d.%03dMHz\n",
->                          vid->clock / 1000, vid->clock % 1000);
-> --
-> 2.40.0
->
+On 4/21/23 5:44?AM, Breno Leitao wrote:
+> These three patches prepare for the sock support in the io_uring cmd, as
+> described in the following RFC:
+> 
+> 	https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/
+> 
+> Since the support linked above depends on other refactors, such as the sock
+> ioctl() sock refactor[1], I would like to start integrating patches that have
+> consensus and can bring value right now.  This will also reduce the patchset
+> size later.
+> 
+> Regarding to these three patches, they are simple changes that turn
+> io_uring cmd subsystem more flexible (by passing the whole SQE to the
+> command), and cleaning up an unnecessary compile check.
+> 
+> These patches were tested by creating a file system and mounting an NVME disk
+> using ubdsrv/ublkb0.
 
-Applied to drm-misc-next.
+Looks mostly good to me, do agree with Christoph's comments on the two
+patches. Can you spin a v3? Would be annoying to miss 6.4 with this, as
+other things will be built on top of it.
+
+-- 
+Jens Axboe
+
