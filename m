@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E046F12CE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974366F12D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345895AbjD1Hsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S1345911AbjD1Hva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345885AbjD1Hs0 (ORCPT
+        with ESMTP id S1345452AbjD1HvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:48:26 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECD0525C
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:46:51 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a69f686345so73340705ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:46:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1682667925; x=1685259925;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xoe5HpGF9vZnqLd03J3yds9FnNAjqjJWeyLDyyNqms4=;
-        b=gy5+wiMc32xSHzrr0S2/8xoO/E0Nq2p8Kd9U8o1eaNVb2oeiLMK99wCeuoEirqa12w
-         J8sD50eYLyVgX3jMKuJe9EkXUCP4m33HE2q+QCZ4C7jXAg8PGT59JJsRthLKRTUandO9
-         1fE8JTl5Xkrkys6V94qGl6dspIzpWi3cpqVx29YhfmkC/WHUuGUvFj2tKY8WVhyYZ5HE
-         69FZ7jR75TGeLS0Sm/TZgeyJ/7Gus1EW3wIjjRNe7nLBuhFY/GSGBlZwxOlkVFxa4bSI
-         MG24ZylaDijVesM/+ON79Lgz7N4sNz7uO1Ch2vjrv9hTJ89+VpZyE/r7TJHWPdhtOsnX
-         V7jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682667925; x=1685259925;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xoe5HpGF9vZnqLd03J3yds9FnNAjqjJWeyLDyyNqms4=;
-        b=RV0aJST8K3zE0foTq+QSx0rWIFpHD0kgQE1i+Rml3zkpdt/6N1LQFmHeWkx1pewebi
-         qCNs/7rs+qmyz6h85JECdaUXXlzsHaN8RN7rKHWby34mVGqsseHBcnA7cUvzyfKHFVPw
-         jT/A1hRUEZ3kKSTqS0x17WC+50dy5ALJwsTGWqhkOWIVpH9F5zKHcNiUqknJUv/2xsJR
-         s4tpw9l/4+2WLEzM0l2eZ2t7+1NkRagEtkpC94Rrm8aTw8vWe/6S0ZEkG3via0dVf5pX
-         eWFL0wtUqIFdIZN9wLv726wQ9Vvay1QcSBr1CZU+GPYrwJDYg1086MxJ76fMiuPdQ3Y8
-         WF6w==
-X-Gm-Message-State: AC+VfDxuFoLj1QFinDtYcDo29Vw3jcANIFovt0z7m9jxmT65e/JA2gge
-        Q1dMQnHqvYq/eJkDVKZW2cssFg==
-X-Google-Smtp-Source: ACHHUZ6ZESvfhR8LIslq4fdn2ZOXMRlLNtFud+KKn77WEJxdYrYtyMuMDIFr0dPVM+ApZg6vGhOUIw==
-X-Received: by 2002:a17:903:2348:b0:1a6:7ed0:147e with SMTP id c8-20020a170903234800b001a67ed0147emr5026755plh.33.1682667925031;
-        Fri, 28 Apr 2023 00:45:25 -0700 (PDT)
-Received: from [10.2.117.253] ([61.213.176.8])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902dad000b00194caf3e975sm12693998plx.208.2023.04.28.00.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 00:45:24 -0700 (PDT)
-Message-ID: <9befca58-2425-5b4f-2dab-98b3ed4037ac@bytedance.com>
-Date:   Fri, 28 Apr 2023 15:45:18 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: Re: [PATCH v6 0/2] sched/numa: add per-process numa_balancing
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Fri, 28 Apr 2023 03:51:06 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C706190
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:50:28 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-146-RO6yIwq1NPCn28Piz-Aq2A-1; Fri, 28 Apr 2023 08:46:15 +0100
+X-MC-Unique: RO6yIwq1NPCn28Piz-Aq2A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 28 Apr
+ 2023 08:46:14 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 28 Apr 2023 08:46:14 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        =?utf-8?B?S29ucmFkIEdyw6RmZQ==?= <k.graefe@gateware.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-References: <20230412140701.58337-1-ligang.bdlg@bytedance.com>
- <9ba3577b-0098-86da-ff2e-636cb5a8ae1a@bytedance.com>
- <76534699-e270-b450-c18e-f7c35c325bcf@gmail.com>
-From:   Gang Li <ligang.bdlg@bytedance.com>
-In-Reply-To: <76534699-e270-b450-c18e-f7c35c325bcf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Felipe Balbi <balbi@ti.com>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Thread-Topic: [PATCH v3 1/2] vsprintf: Add %p[mM]U for uppercase MAC address
+Thread-Index: AQHZeZ6mT7/jda5LSEivIvi7ndHGNq9AV0+Q
+Date:   Fri, 28 Apr 2023 07:46:14 +0000
+Message-ID: <954a3b8d5be0487e8ead23bef450fabe@AcuMS.aculab.com>
+References: <2023042625-rendition-distort-fe06@gregkh>
+ <20230427115120.241954-1-k.graefe@gateware.de>
+ <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+In-Reply-To: <c075b668-8194-6aea-484c-0223f164cb4d@rasmusvillemoes.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you.
+RnJvbTogUmFzbXVzIFZpbGxlbW9lcw0KPiBTZW50OiAyOCBBcHJpbCAyMDIzIDA3OjU3DQo+IA0K
+PiBPbiAyNy8wNC8yMDIzIDEzLjUxLCBLb25yYWQgR3LDpGZlIHdyb3RlOg0KPiA+IFRoZSBDREMt
+RUNNIHNwZWNpZmljYXRpb24gcmVxdWlyZXMgYW4gVVNCIGdhZGdldCB0byBzZW5kIHRoZSBob3N0
+IE1BQw0KPiA+IGFkZHJlc3MgYXMgdXBwZXJjYXNlIGhleCBzdHJpbmcuIFRoaXMgY2hhbmdlIGFk
+ZHMgdGhlIGFwcHJvcHJpYXRlDQo+ID4gbW9kaWZpZXIuDQo+IA0KPiBUaGlua2luZyBtb3JlIGFi
+b3V0IGl0LCBJJ20gbm90IHN1cmUgdGhpcyBpcyBhcHByb3ByaWF0ZSwgbm90IGZvciBhDQo+IHNp
+bmdsZSB1c2VyIGxpa2UgdGhpcy4gdnNwcmludGYoKSBzaG91bGQgbm90IGFuZCBjYW5ub3Qgc2F0
+aXNmeSBhbGwNCj4gcG9zc2libGUgc3RyaW5nIGZvcm1hdHRpbmcgcmVxdWlyZW1lbnRzIGZvciB0
+aGUgd2hvbGUga2VybmVsLiBUaGUgJXBYDQo+IGV4dGVuc2lvbnMgYXJlIGNvbnZlbmllbnQgZm9y
+IHVzZSB3aXRoIHByaW50aygpIGFuZCBmcmllbmRzIHdoZXJlIG9uZQ0KPiBuZWVkcyB3aGF0IGlu
+IG90aGVyIGxhbmd1YWdlcyB3b3VsZCBiZSAic3RyaW5nIGludGVycG9sYXRpb24iIChiZWNhdXNl
+DQo+IHRoZW4gdGhlIGNhbGxlciBkb2Vzbid0IG5lZWQgdG8gZGVhbCB3aXRoIHRlbXBvcmFyeSBz
+dGFjayBidWZmZXJzIGFuZA0KPiBwYXNzIHRoZW0gYXMgJXMgYXJndW1lbnRzKSwgYnV0IGZvciBz
+aW5nbGUgaXRlbXMgbGlrZSB0aGlzLCBzbnByaW50ZigpDQo+IGlzIG5vdCBuZWNlc3NhcmlseSB0
+aGUgcmlnaHQgdG9vbCBmb3IgdGhlIGpvYi4NCj4gDQo+IEluIHRoaXMgY2FzZSwgdGhlIGNhbGxl
+ciBjYW4ganVzdCBhcyB3ZWxsIGNhbGwgc3RyaW5nX3VwcGVyKCkgb24gdGhlDQo+IHJlc3VsdCwg
+b3Igbm90IHVzZSBzcHJpbnRmKCkgYXQgYWxsIGFuZCBkbyBhIHRpbnkgbG9vcCB3aXRoDQo+IGhl
+eF9ieXRlX3BhY2tfdXBwZXIoKS4NCg0KT3Igc25wcmludGYgd2l0aCAiJTAyWDolMDJYOiUwMlg6
+JTAyWDolMDJYOiUwMlgiLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2Vz
+aWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVL
+DQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-I'll keep an eye on the progress.
-
-On 2023/4/28 15:40, Bagas Sanjaya wrote:
-> On 4/27/23 12:17, Gang Li wrote:
->> Hi,
->>
->> Looks like there are no objections or comments. Do you have any ideas?
->>
->> Can we merge this patch in the next merge window.
->>
-> 
-> We're at 6.4 merge window, so the maintainer focus is to send PR updates
-> to Linus. And this series didn't get applied before this merge window.
-> Wait until 6.4-rc1 is out and reroll.
-> 
-> Thanks.
-> 
