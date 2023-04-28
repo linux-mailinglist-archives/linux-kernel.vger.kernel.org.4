@@ -2,125 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B776F1BB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0456F1BC0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjD1Pfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S229825AbjD1Pha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346539AbjD1PfN (ORCPT
+        with ESMTP id S229851AbjD1Ph2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:35:13 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05DA2210C;
-        Fri, 28 Apr 2023 08:35:12 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SF3oxp020054;
-        Fri, 28 Apr 2023 15:35:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2023-03-30;
- bh=RSxC4dWNE/2O3qu1GoLDyqzY8ygixzh0e37oJcbfFXY=;
- b=iE5bg7XhGAAl+xGcwP7EklzRB8jLyYEGDDv1PWq2bjXYArMTddijJXlsRkXULWl8fvYZ
- OsYz69q1GOeeLUEBcE9VC3BC0AhwyQsIESr3fIysJHbn8jRkkdWgPLndqyLsp/qs5Dw1
- oGzovernceL5RcvS2iR1hzUy89KerdDBUqiLiQ0sX/s0EugMZ25cL/wclsk9lkS9D+om
- 1MlpnOZ6BlmIM1rbxttfZiGBHPqBnh/mRbXokZolrGeC+vsZamXM9CbZs7ijIQaTsc7a
- ysO2bWwMIOG8nBGf39BjfW5fbVttC/mI0Mvqd6JiuvSX/cEV7Duit7hOVavAMj27RxHs UA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q476u6ged-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 15:35:08 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33SE5vmh028177;
-        Fri, 28 Apr 2023 15:35:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q461b4rvq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 15:35:07 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SFYqUM028134;
-        Fri, 28 Apr 2023 15:35:07 GMT
-Received: from myrouter.uk.oracle.com (dhcp-10-175-188-60.vpn.oracle.com [10.175.188.60])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q461b4rm0-7;
-        Fri, 28 Apr 2023 15:35:06 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     corbet@lwn.net, shuah@kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 tracing 6/6] tracing: document IPv4, IPv6, MAC address and > 8 byte numeric filtering support
-Date:   Fri, 28 Apr 2023 16:34:49 +0100
-Message-Id: <1682696089-27937-7-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1682696089-27937-1-git-send-email-alan.maguire@oracle.com>
-References: <1682696089-27937-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304280125
-X-Proofpoint-GUID: jp-r6OidS0SqBkV1800aMVkzMX12rjV8
-X-Proofpoint-ORIG-GUID: jp-r6OidS0SqBkV1800aMVkzMX12rjV8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Apr 2023 11:37:28 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C66355AD;
+        Fri, 28 Apr 2023 08:36:53 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 17:36:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1682696178; bh=7jLiEj7+Pv2h4RAIi3yfMfMbNX9AW+A1ZOdwGlDD00k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U/0pCfV8PHvTtLuVAuSw4fiWwMZVPBpaRzGM+KJ15OUjgA0TR7DT1JzjyR9vDYLU4
+         aDgJ6y0jMJJGsiGBxzIwgFl8BwER6MLaxqsC8EAIrrk15CK6c/J0zWLUoI3wM6JwQM
+         4QupQhQ/0wLFTCKV6NXcueD+nDQuIPl9S/PrXFOs=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 08/14] HP BIOSCFG driver - bioscfg-h
+Message-ID: <462b5d12-0430-4fbe-8c26-7b6126556ec8@t-8ch.de>
+References: <20230420165454.9517-1-jorge.lopez2@hp.com>
+ <20230420165454.9517-9-jorge.lopez2@hp.com>
+ <ca74121b-bb78-4093-8625-13359c324c28@t-8ch.de>
+ <CAOOmCE_MpCBFOHd6QtzD5ufcwEz_FhJvqevj68pVeY_JS+V=Rg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOOmCE_MpCBFOHd6QtzD5ufcwEz_FhJvqevj68pVeY_JS+V=Rg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document that only == and != predicates are supported for
-IPv4, IPv6 and MAC addresses.
+On 2023-04-28 10:24:40-0500, Jorge Lopez wrote:
+> On Sun, Apr 23, 2023 at 7:01 AM Thomas Weißschuh <thomas@t-8ch.de> wrote:
+> >
+> > On 2023-04-20 11:54:48-0500, Jorge Lopez wrote:
+> > > ---
+> > >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h | 613 +++++++++++++++++++
+> > >  1 file changed, 613 insertions(+)
+> > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.h
 
-For values > 8 bytes in size, only == and != filter predicates are
-supported; document this also.
+<snip>
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- Documentation/trace/events.rst | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+> > > +/* global structure used by multiple WMI interfaces */
+> > > +extern struct bioscfg_priv bioscfg_drv;
+> > > +
+> > > +enum hp_wmi_data_type {
+> > > +     HPWMI_STRING_TYPE               = 0x00,
+> > > +     HPWMI_INTEGER_TYPE              = 0x01,
+> > > +     HPWMI_ENUMERATION_TYPE          = 0x02,
+> > > +     HPWMI_ORDERED_LIST_TYPE         = 0x03,
+> > > +     HPWMI_PASSWORD_TYPE             = 0x04,
+> > > +     HPWMI_SECURE_PLATFORM_TYPE      = 0x05,
+> > > +     HPWMI_SURE_START_TYPE           = 0x06
+> > > +};
+> >
+> > Unused.
+> 
+> Both hp_wmi_data_type and hp_wmi_data_elements are used
+> for instance  HP_WMI_STRING_TYPE
+> 
+> bioscfg.c:338: case HPWMI_STRING_TYPE:
+> bioscfg.c:626: case HPWMI_STRING_TYPE:
+> bioscfg.c:722: case HPWMI_STRING_TYPE:
+> bioscfg.c:798: case HPWMI_STRING_TYPE:
+> bioscfg.c:906: ret = hp_init_bios_attributes(HPWMI_STRING_TYPE,
+> HP_WMI_BIOS_STRING_GUID);
+> bioscfg.h:247: HPWMI_STRING_TYPE
 
-diff --git a/Documentation/trace/events.rst b/Documentation/trace/events.rst
-index f5fcb8e1218f..6a75e4e256c9 100644
---- a/Documentation/trace/events.rst
-+++ b/Documentation/trace/events.rst
-@@ -182,10 +182,31 @@ The field-names available for use in filters can be found in the
- 
- The relational-operators depend on the type of the field being tested:
- 
-+For IPv4, IPv6 and MAC addresses, the available operators are:
-+
-+==, !=
-+
-+For example
-+
-+"dst == 127.0.0.1"
-+
-+"src != ::1"
-+
-+"mac_addr == ab:cd:ef:12:34:56"
-+
- The operators available for numeric fields are:
- 
- ==, !=, <, <=, >, >=, &
- 
-+For numeric fields larger than 8 bytes, only
-+
-+==, !=
-+
-+...are allowed, and values for comparison must match field size exactly.
-+For example, to match the "::1" IPv6 address:
-+
-+"dst == 0x00000000000000000000000000000001"
-+
- And for string fields they are:
- 
- ==, !=, ~
--- 
-2.31.1
+Indeed. I think I just searched for "hp_wmi_data_type".
 
+The proper enum hp_wmi_data_type type should be used instead of
+"int attr_type".
+
+<snip>
+
+> > > +
+> > > +enum hp_wmi_elements_count {
+> > > +     STRING_ELEM_CNT         = 12,
+> > > +     INTEGER_ELEM_CNT        = 13,
+> > > +     ENUM_ELEM_CNT           = 13,
+> > > +     ORDERED_ELEM_CNT        = 12,
+> > > +     PASSWORD_ELEM_CNT       = 15
+> > > +};
+> >
+> > To make it clearer where these values come from you could put them into
+> > the enum hp_wmi_data_elements.
+> >
+> > ...
+> >         ORD_LIST_ELEMENTS = 11,
+> >         ORD_LIST_ELEM_CNT = 12,
+> > ...
+> 
+> Done!  changes provided across all files affected.
+> 
+> >
+> > But replacing the loop logic would remove the need for these enums
+> > completely.
+> >
+> 
+> _CNT values are necessary when elements are read from a buffer (
+> populate_string_elements_from_buffer).
+> _CNT values are not needed when elements are read from a package
+> (populate_string_package_data)
+
+Hm, I don't see why populate_string_elements_from_buffer() would need
+the _CNT define.
+
+(In another review mail I wrote down how I would expect it to look
+without the loop)
+
+<snip>
+
+> > > +
+> > > +#define ATTRIBUTE_PROPERTY_STORE(curr_val, type)                     \
+> > > +     static ssize_t curr_val##_store(struct kobject *kobj,           \
+> > > +                                     struct kobj_attribute *attr,    \
+> > > +                                     const char *buf, size_t count)  \
+> > > +     {                                                               \
+> > > +             char *p = NULL;                                         \
+> > > +             char *attr_value = NULL;                                \
+> > > +             int i;                                                  \
+> > > +             int ret = -EIO;                                         \
+> > > +                                                                     \
+> > > +             attr_value = kstrdup(buf, GFP_KERNEL);                  \
+> > > +             if (!attr_value)                                        \
+> > > +                     return -ENOMEM;                                 \
+> > > +                                                                     \
+> > > +             p = memchr(attr_value, '\n', count);                    \
+> > > +             if (p != NULL)                                          \
+> > > +                     *p = '\0';                                      \
+> >
+> > This can also truncate the string if there is data after the newline.
+> 
+> This is a expected behavior as described by Hans in a later email
+
+I'm fine with stripping a trailing newline.
+
+But this truncates the string at the first newline.
+
+"foo\nbar" -> "foo"
+"\nfoo" -> ""
+
+<snip>
