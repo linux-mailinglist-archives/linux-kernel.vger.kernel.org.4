@@ -2,195 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD2D6F1A70
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690206F1A7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjD1OZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
+        id S230189AbjD1O3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjD1OZ4 (ORCPT
+        with ESMTP id S229595AbjD1O3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:25:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59C2719
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1682691954; x=1714227954;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gnNojlXbMDN9N2lkFqtg0abQH7uELFRlQ/gsQlbk+ZM=;
-  b=KdV34ofTffWC8R+BPpjREnDf11PB06xxQM6NaQNNAIXNo81HYL2cqtxL
-   4Fl0uzBTc/u2eUF8Vj923My79ya+AJS8SZRj660iLmmlGsMEahDkyaCGy
-   bYg2Wa0NAT6DnFI3JouYs18LbSet+CBnKY1Re0mw5mrZoolO3BLriDoV2
-   Ro9pyOCeLo0ZvgdWJVjzBAc4bCQiIcSBB6MRnorvqRF097UEhMYDU/O1Q
-   ULnYwt/W6GzAFK5LyeEiwLOWM6Nn/enomz4DeK8uWlJu/zShTPcvRLO72
-   KNORII4DvvQMhI2ieGnmhvKmo+1hxTnIKJyrzfN6mDJS4alkGWKL9VPYP
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,234,1677567600"; 
-   d="asc'?scan'208";a="212792438"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Apr 2023 07:25:53 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Apr 2023 07:25:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 28 Apr 2023 07:25:49 -0700
-Date:   Fri, 28 Apr 2023 15:25:31 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
-        <paul.walmsley@sifive.com>, <kito.cheng@sifive.com>,
-        <jrtc27@jrtc27.com>, <matthias.bgg@gmail.com>,
-        <heinrich.schuchardt@canonical.com>, <greentime.hu@sifive.com>,
-        <nick.knight@sifive.com>, <christoph.muellner@vrull.eu>,
-        <philipp.tomsich@vrull.eu>, <richard.henderson@linaro.org>,
-        <arnd@arndb.de>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] RISC-V: add support for vendor-extensions via
- AT_BASE_PLATFORM and xthead
-Message-ID: <20230428-versus-shady-d20735a19d41@wendy>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
- <20230424194911.264850-5-heiko.stuebner@vrull.eu>
- <20230426-spirits-ludicrous-a5d8275686e6@wendy>
- <5016896.Mh6RI2rZIc@diego>
- <20230427-maybe-skier-51e7cf09795c@spud>
- <d6lqggv2bbtmv7exalcqqwgbntibdxotsswataxqxhx6kmf4rg@5kgb3axdwgst>
+        Fri, 28 Apr 2023 10:29:42 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FE91BEE;
+        Fri, 28 Apr 2023 07:29:40 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-5476a2780a0so4595054eaf.3;
+        Fri, 28 Apr 2023 07:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682692180; x=1685284180;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lYzqB28RMSFODBuTMB/KY5cl7Tjsfy3OkCWgNjZ6ZLE=;
+        b=kh97gIflH3BI4ERsMSHvjFc0yOO2bt2fLm/uIbDsDrqqCu8s1sBxd1qDVEdBRIXaVx
+         iL5RpT2zMNzyg+NFwLpVdMi4AybUyNQoR4/KTIyCNQ6rbL1F0DeQ5KmZHZmRbVrbxMMI
+         EVvL2F+CnVM44ANsh30EStkooMTY3pgBJcPpfXLKde2v/nu6v57pykRxydjH1nTW2/FA
+         TfRXpk1QRjR02exKoXYK2MUCINulVfTlZ+sUo+7AckhEWV6lOlDp77IYs7xS8lGE0Ir4
+         PzdyIuMruilIAnr8RxZgmYIczOd6F8olt3vtZ53rzCG7Ai88S1HDJjafAmDY7EMzhuzg
+         t0MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682692180; x=1685284180;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lYzqB28RMSFODBuTMB/KY5cl7Tjsfy3OkCWgNjZ6ZLE=;
+        b=MWmUCjKe7xfzVYh1vNOYIdjUgz3AD5meYKS1aNgGxs9CA1N9HdDvHyxszFZI6dbDfj
+         PgNY5HOy2reKj5sIXjsgOvOttcsb3dTC+/LmfUr1l8Y+IQ8T64Ka/27ZD8j/9VJlE0b/
+         TgWGI6bllc+unwodaF4ONDdHe0Ch/olwkkhw8DCbjvx8reMF/Vr3TIRR/VSolxQ3mLuf
+         U7Xc2mt202AmarOYFbWrswZ02nZCAuyeTyGITu5hmceD6e5+7FZZGhQxRt9E1YlK+r6t
+         h00kosi3HMa1A06hKwO8SJ7eoLQ4wda4rH/yXtd4kqdaAbioBuWBoIpcuYzznPmS/nBQ
+         S8Lw==
+X-Gm-Message-State: AC+VfDznPb+X3KBwEPuk8P4i/GA2MVfYVz+SlButIJJPizB0DXy2n18J
+        tA8QOy1PouqisWsB1/m2vnwzBrplJ05nep8ath0=
+X-Google-Smtp-Source: ACHHUZ5KCaCwW1hvzW8OWPVzp040UD7tuDkE/lZ6cadmhT2Hjv5r9AbIl/f2DmSYTc/uRNg/F3c8gxInAbFvh4+1rRI=
+X-Received: by 2002:a05:6808:5da:b0:38e:e0c3:5cce with SMTP id
+ d26-20020a05680805da00b0038ee0c35ccemr2440343oij.18.1682692180051; Fri, 28
+ Apr 2023 07:29:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3LKaALfH552SyaYA"
-Content-Disposition: inline
-In-Reply-To: <d6lqggv2bbtmv7exalcqqwgbntibdxotsswataxqxhx6kmf4rg@5kgb3axdwgst>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230427175340.1280952-1-robdclark@gmail.com> <20230427175340.1280952-2-robdclark@gmail.com>
+ <0be60cda-6b8b-5844-c4fe-b711e7279cc7@amd.com>
+In-Reply-To: <0be60cda-6b8b-5844-c4fe-b711e7279cc7@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 28 Apr 2023 07:29:28 -0700
+Message-ID: <CAF6AEGtd=fP1_JnD6-V7U_ZNnD1VG-rZean6mNDTLHsqZJdeYw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/9] drm/docs: Fix usage stats typos
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---3LKaALfH552SyaYA
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Apr 28, 2023 at 1:50=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 27.04.23 um 19:53 schrieb Rob Clark:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Fix a couple missing ':'s.
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> Since this is a pretty clear fix I suggest to get this pushed to reduce
+> the number of patches in the set.
 
-On Fri, Apr 28, 2023 at 12:28:24PM +0200, Andrew Jones wrote:
-> On Thu, Apr 27, 2023 at 07:28:49PM +0100, Conor Dooley wrote:
-> > On Thu, Apr 27, 2023 at 07:15:58PM +0200, Heiko St=FCbner wrote:
-> > > Am Mittwoch, 26. April 2023, 14:29:16 CEST schrieb Conor Dooley:
-> > > > On Mon, Apr 24, 2023 at 09:49:11PM +0200, Heiko Stuebner wrote:
-> > > > > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> ...
-> > > > What do you mean by virtualisation here? It's the job of the hyperv=
-isor
-> > > > etc to make sure that what it passes to its guest contains only wha=
-t it
-> > > > wants the guest to see, right?
-> > > > IIUC, that's another point against doing what this patch does.
-> > >=20
-> > > I guess I'm still seeing Zbb and friends - with just computational
-> > > instructions as always good to have. But I guess you're right that the
-> > > hypervisor should be able to control itself which extensions.
-> >=20
-> > Yah, there may not be any obvious downsides to something like Zbb, but I
-> > think that taking control away from the hypervisors etc isn't a good
-> > idea.
->=20
-> If there's any chance that a VM will need to migrate from a host with,
-> e.g. Zbb, to one without it, then the VM will need Zbb disabled from the
-> start.
+Thanks, this is fine by me if someone wants to push it for me.  Note
+that the later .rst updates in this series depend on this so if/when
+they are merged it probably should be the same tree
 
-(Almost) Everything is obvious to someone :)
+BR,
+-R
 
-> > Having a simple policy of blocking things that are known to misbehave
-> > would require less maint. than a list of things that are okay to pass
-> > through, but both are probably cans-of-worms.
-> > I think we need to think carefully about what policy is chosen here.
-> > Allowlist will be slower, but at least we'll not tell userspace
-> > something that is not usable. Blocklist will be easier to manage, but
-> > can only be reactive.
->=20
-> I have experience [trying] to maintain deny-lists for CPU features,
-> both for x86 Xen guests and Arm KVM guests. I don't recommend it. To
-> do it right, you need to be proactive, tracking upcoming CPU features
-> to add the ones that can't be supported by virt or aren't ready to
-> be supported by virt to the deny-list before somebody trips over them.
-> In practice, usually somebody trips over it first, causing fires which
-> have to be put out. If an allow-list is used, then, when a new feature
-> is missed, no fires are started. The worst that can happen is somebody
-> expected the feature and didn't see it, so they complain, at which
-> point you add it.
-
-Right. Blocking-unless-known is what I suggested when canvassed for an
-opinion last week but the complaint was that the kernel having to
-maintain a list would be a significant speed-bump for people.
-With a lighter-weight method of forwarding to userspace extensions that
-the kernel doesn't need to care about (no integration with
-=2E._has_extension[un]likely() etc) hopefully the roadblock would be a
-speedbump instead.
-
-I think I would rather speed-bumps & complaints about things being slow,
-than having to fight fires.
-
-> > Also, in a world where we do do some sort of passing, should we only
-> > forward the vendor extensions, or should we forward the standard ones
-> > too?
->=20
-> I guess we need to forward anything userspace can and should use.
-
-That, combined with what we have now, would mean that userspace would
-get told both what the kernel supports and additional other things that
-the kernel may not support, but userspace can use without that support
-being present.
-
-I think that is a reasonable thing to do, although it'd muddy the waters
-a bit with what the output in /proc/cpuinfo means. (I'm kinda taking the
-particular bit of the series in isolation, as if /proc/cpuinfo is the
-only place in which this information will be exposed.)
-
-> > What about supervisor mode only stuff?
->=20
-> That's not something userspace can use. If we want to expose which
-> supervisor mode features the CPU has to userspace, for information
-> purposes, then I think proc or sysfs would be sufficient for that.
-
-Yeah, as above I'm kinda looking at it from a really naive "only
-/proc/cpuinfo exists" point of view for the sake of simplicity.
-Depending on implementation, reporting supervisor-only stuff that the
-kernel supports may make life easier & there's probably some value to
-someone in passing that information to userspace too.
-
-> The downside of using an allow-list for what extensions get exposed
-> to userspace is that even extensions the kernel can't/won't use
-> will need a kernel patch before userspace can use them. But, as
-> I stated above, that downside (people complaining a feature they
-> expect is missing), is, IMO, better than the alternative of exposing
-> things that shouldn't be.
-
-Yeah, I would be in that camp too, but gotta suggest the various options
-for the sake of stirring discussion :)
-
-Thanks,
-Conor.
-
---3LKaALfH552SyaYA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEvXWwAKCRB4tDGHoIJi
-0qNHAP0c8lqCdLl8JRxRiLWW8lTRO9Rv12Dv/9leiqgd0GXaMAEAqh7oqM481ghG
-Ki+qZ6DT424RfarScyqP9XK5lkaEbgc=
-=LTNI
------END PGP SIGNATURE-----
-
---3LKaALfH552SyaYA--
+> Christian.
+>
+> > ---
+> >   Documentation/gpu/drm-usage-stats.rst | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/=
+drm-usage-stats.rst
+> > index b46327356e80..72d069e5dacb 100644
+> > --- a/Documentation/gpu/drm-usage-stats.rst
+> > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > @@ -105,7 +105,7 @@ object belong to this client, in the respective mem=
+ory region.
+> >   Default unit shall be bytes with optional unit specifiers of 'KiB' or=
+ 'MiB'
+> >   indicating kibi- or mebi-bytes.
+> >
+> > -- drm-cycles-<str> <uint>
+> > +- drm-cycles-<str>: <uint>
+> >
+> >   Engine identifier string must be the same as the one specified in the
+> >   drm-engine-<str> tag and shall contain the number of busy cycles for =
+the given
+> > @@ -117,7 +117,7 @@ larger value within a reasonable period. Upon obser=
+ving a value lower than what
+> >   was previously read, userspace is expected to stay with that larger p=
+revious
+> >   value until a monotonic update is seen.
+> >
+> > -- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
+> > +- drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
+> >
+> >   Engine identifier string must be the same as the one specified in the
+> >   drm-engine-<str> tag and shall contain the maximum frequency for the =
+given
+>
