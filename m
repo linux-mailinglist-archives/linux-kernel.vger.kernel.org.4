@@ -2,102 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEB96F174E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7578D6F1B40
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345520AbjD1MNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 08:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S1346149AbjD1POO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjD1MNh (ORCPT
+        with ESMTP id S1346355AbjD1POJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 08:13:37 -0400
-Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B215D1726;
-        Fri, 28 Apr 2023 05:13:34 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:8a85:0:640:8fc9:0])
-        by forward500b.mail.yandex.net (Yandex) with ESMTP id 7B71D5EB59;
-        Fri, 28 Apr 2023 15:13:32 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UDIqPQ1DRSw0-oizJTPZv;
-        Fri, 28 Apr 2023 15:13:31 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682684011;
-        bh=8/DsglW6bXdL6cKM+snErWK1zkh/4xaDsTI58/cmNVI=;
-        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=TJwmrTCcVjrFrr3pAzJ629AteXtzNuVp9rAvtkWbI8aOWxvUiGt62HaU1oBYn/IUz
-         IPICn1gnZTN/TY61XhL2BLxp7IWtwIFXOr3iX+z/upMRANUUGYm8C8d24THa1YgWMp
-         ht8TU9U/75ncMus/ytq78TOG1VrJT6W/0gbTg+pE=
-Authentication-Results: mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <90ad7d369ec3cae132245aa75daf460b90ec7b4e.camel@maquefel.me>
-Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>,
-        support@embeddedTS.com
-Date:   Fri, 28 Apr 2023 18:13:31 +0300
-In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-35-nikita.shubin@maquefel.me>
-         <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Fri, 28 Apr 2023 11:14:09 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2E555AD;
+        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1a814fe0ddeso745565ad.2;
+        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682694848; x=1685286848;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2G5YGVJMpaYxgR8YDEHDAec3LMDJyqn+fzyMxvzxI+0=;
+        b=brVUMje2rJvkyiQGSjQQzsS/UTcLgnZ1Lwt79IqdoccAm62kk27VXknofgDMUAA6Ke
+         cYpayxlQhxqyVr5jYblJzVBMCJXFT8cr91SGWdEoEvOKgYAUg57jVm5H/GCUHODNqrL/
+         3vMooYLQH0k886U2c0q8Mel0L8s15qGG6Ll9OuN6zwGAilkQqyeTV0HxmWcgeH0X7AAQ
+         G17k5KWqFp067xRtLCTeolekyiaA+1k3fNAtT/VLWL6OtB9tiZJqeL09eLpkUxzgY0UG
+         vnrmjVrq3eTAo4wtbQH3iPivOy5IonoI28lU0T87l0ZgaW9khnSVDiHVMZc2492jSTEM
+         Ex5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682694848; x=1685286848;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2G5YGVJMpaYxgR8YDEHDAec3LMDJyqn+fzyMxvzxI+0=;
+        b=SFsAdH/rFM8SHmJdi7XhaU/ijr3MHjJQK6s02nAIdUdNHsY+ACiEoxJzjE43wrMSpu
+         r2vCktCioh8ukzaXFEr1rJy1f90yMDBCXGVrTLAwOY0yGfQUiRMYWAn0pD5QNdWJ4++5
+         o2VGEixOLWbM7B+ZSDZcXChivdEsqR0TvWtJi3zT8oTzydZY3sHbPEjiX5aT7ST35znu
+         v3r1E6Flbt/nq8bSzaghTSUqM2zMnLgUF7Lmn9Ir15XWGPLS4H9CjM1OURHT5PwmmOx7
+         EgEIkeoV91YSlb4rdWmnhfv34oRUh1fYI07h9pGHuVzcXtqcX7OYTd1rxZl4N4N09NNd
+         Wp7g==
+X-Gm-Message-State: AC+VfDykyWljPFsyDVOMxb6/H3HfdQg9yt/NUmv6t2rYW8Fis3RYZXH9
+        PjxbYR0zqxMqKQuOJkDkpdo=
+X-Google-Smtp-Source: ACHHUZ59NMfbLgX1zFUs0psmfAfD4RnHSdPcJ6aGXqizBLnVu2QjWGasnDp6eX0PNHIyp9kRIUInlw==
+X-Received: by 2002:a17:902:d488:b0:1a6:961e:fd0b with SMTP id c8-20020a170902d48800b001a6961efd0bmr6609119plg.4.1682694848276;
+        Fri, 28 Apr 2023 08:14:08 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id fv23-20020a17090b0e9700b0023d0290afbdsm15134556pjb.4.2023.04.28.08.14.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 08:14:07 -0700 (PDT)
+Message-ID: <86db3414-bebc-7470-a9ed-cfc092093563@gmail.com>
+Date:   Sat, 29 Apr 2023 00:14:01 +0900
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] Documentation/translations/ja_JP/SubmittingPatches: fix
+ some typos
+To:     Jonathan Corbet <corbet@lwn.net>, wangdeming@inspur.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shibata@linuxfoundation.org
+References: <20230428091018.1558-1-wangdeming@inspur.com>
+ <71c91ae5-2ed7-cfd5-7b7f-6cb5a0141816@gmail.com>
+ <871qk4awn2.fsf@meer.lwn.net>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <871qk4awn2.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Arnd!
+On Fri, 28 Apr 2023 08:50:41 -0600, Jonathan Corbet wrote:
+> Akira Yokosawa <akiyks@gmail.com> writes:
+> 
+>> Your patch is rejected by "git am".
+>>
+>> In the header part of your email, I see these fields:
+>>
+>>> X-Mailer: git-send-email 2.31.1
+>>> MIME-Version: 1.0
+>>> Content-Type: text/plain; charset="y"
+>>> Content-Transfer-Encoding: 8bit
+>>
+>> This looks broken.
+>> Please make sure your email header has a proper Content-Type
+>> as shown below:
+>>
+>>     Content-Type: text/plain; charset=UTF-8
+> 
+> This something that git send-email does on occasion; it's truly
+> obnoxious, and I have no idea why.  I end up fixing up patches by hand
+> when I see it.  If the change itself is OK, I can manage it from here.
 
-On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
-> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
-> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has
-> > been
-> > my testing target for ep93xx device support.
-> >=20
-> > Also inluded device tree for Liebherr BK3.1 board through it's not
-> > a
-> > complete support.
-> >=20
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
->=20
-> Can you describe which parts are missing for BK3.1 in the
-> changelog? I'm fairly sure that Liebherr is still supporting
-> this board, but I don't have a contact to add to Cc here.
+The change looks OK.
 
-The current dt implementation is missing:
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
 
-- I2S
-- MMC on SPI
+        Thanks, Akira
 
-I will add those nodes so it will be a complete dt, however i have no
-possibility to test it.
-
-
->=20
-> I've added Lukasz Majewski to Cc here, as he originally worked
-> on BK3.1 and likely either has the hardware or knows someone
-> who does.=C2=A0 Technologic Systems also lists the ts7250 as supported
-> on their website, but the only contact I found for them is the
-> generic support@embeddedTS.com. In case someone from Technologic
-> is available for giving the series a spin, see [1] for the
-> full set of patches.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0 Arnd
->=20
-> [1]
-> https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel=
-.me/
-
+> 
+> Thanks,
+> 
+> jon
