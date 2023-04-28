@@ -2,45 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4B36F0F91
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DDA6F0F94
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344397AbjD1AY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 20:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S1344256AbjD1A2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 20:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344037AbjD1AY1 (ORCPT
+        with ESMTP id S229724AbjD1A2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 20:24:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF11D2D51;
-        Thu, 27 Apr 2023 17:24:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F72D2F4;
-        Thu, 27 Apr 2023 17:25:09 -0700 (PDT)
-Received: from [10.57.23.190] (unknown [10.57.23.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 665683F587;
-        Thu, 27 Apr 2023 17:24:24 -0700 (PDT)
-Message-ID: <7d7cafea-37b2-a050-7247-6c0234cb4f4c@arm.com>
-Date:   Fri, 28 Apr 2023 01:24:20 +0100
+        Thu, 27 Apr 2023 20:28:03 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C682711
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:28:02 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3ef34c49cb9so868391cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682641681; x=1685233681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kHkXe29J0rH8JTdbNwSRd8QPJhbLRY43ryyovIJGnsM=;
+        b=hgdsAO6uMrKNw2z6LsvZgPvbnSKIfLf7zoTS4QxqdYtQEGgQC0dm7qlPV+zlHFkGPY
+         skPeyJ99yRfgNsWydkwncjcTZveFiA3JxHgYbCVxCdsQQdBGQFqwC5f0xnbpeOTzAZua
+         5gCpwgssgA0XZ40bB6PU+Mpsq0QhoFPav4JX/Ra5Xr19C5kgHcAVFMTlnxs+FlqWMZnH
+         jkYbKynFHQ/Bd0c3s07U9bJVfcg/5P4BGWhQBco5+tW2NAs/ZqC7dak9bWMod6+NIQgR
+         xmuaJjASiIDNpB4jaD3abUU9wWy0URSq95LWJMbGWoGa7DLOB7rkvUe3xvx/OZRwiZ5/
+         /gcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682641681; x=1685233681;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kHkXe29J0rH8JTdbNwSRd8QPJhbLRY43ryyovIJGnsM=;
+        b=QO4cSzjOgF9xc0kTWFtfZKiq6lFZV3MqvUOHzsNq/qOAusnV2p56isoimcvWSqvQs8
+         y7cKvaoxhwL/kuQgD459O/v9R3okqalLZcNh6CPJwpEvEePh/aapO0N+jV3yyjmscNRj
+         P8KxUVdhPu77DSX2GV3OruFIP5cPikPD8zRWCBw9AWfYrmukblEHrzYGAjlrQRLnW/30
+         LC+d2B5EuSrG3kki1LESqJHm5ShiMSxpBgRuv2mJN2A+cPQkoVC0ssuXmwqTyh/mrE6A
+         wNDnYHK2sunVZVMckNk30+WT5DwpRizk4x6dj+oqTpplbSeLLUeetV7LDnzpju42NC2Z
+         eiIQ==
+X-Gm-Message-State: AC+VfDzeHbIkx5oyIdNXZpFASLVCGkF+WGB1f//Za8QKM6UHjyDjQC+E
+        PZiBKSUJTw1aGCyGgKQ/z3Y7YxGf3pUty2UuTiGJ8g==
+X-Google-Smtp-Source: ACHHUZ7e+gtNGqUY0Us2JQuPzoAFOc54z7qsE4n4ASaCnlqteYLhb7K23F8WHD1MYYV7YKDMkAeIFxwvlTigifKrgK8=
+X-Received: by 2002:ac8:57d3:0:b0:3d6:5f1b:1e7c with SMTP id
+ w19-20020ac857d3000000b003d65f1b1e7cmr74403qta.9.1682641681488; Thu, 27 Apr
+ 2023 17:28:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] perf: ampere: Add support for Ampere SoC PMUs
-Content-Language: en-GB
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230427215325.1067752-1-ilkka@os.amperecomputing.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230427215325.1067752-1-ilkka@os.amperecomputing.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230427230502.1526136-1-namhyung@kernel.org>
+In-Reply-To: <20230427230502.1526136-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 27 Apr 2023 17:27:50 -0700
+Message-ID: <CAP-5=fUYfVDfi_+JGqU=o_TcPRNVboMwZewuhU6q+K3md6nUkA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] perf list: Fix memory leaks in print_tracepoint_events()
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,100 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-27 22:53, Ilkka Koskinen wrote:
-> Add support for Ampere SoC PMUs. This driver supports MCU PMU
-> available in the AmpereOne SoC.
-> 
-> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> ---
->   .../admin-guide/perf/ampere-soc-pmu.rst       |  36 +
->   Documentation/admin-guide/perf/index.rst      |   1 +
->   drivers/perf/Kconfig                          |  10 +
->   drivers/perf/Makefile                         |   1 +
->   drivers/perf/ampere_soc_pmu.c                 | 724 ++++++++++++++++++
->   5 files changed, 772 insertions(+)
->   create mode 100644 Documentation/admin-guide/perf/ampere-soc-pmu.rst
->   create mode 100644 drivers/perf/ampere_soc_pmu.c
-> 
-> diff --git a/Documentation/admin-guide/perf/ampere-soc-pmu.rst b/Documentation/admin-guide/perf/ampere-soc-pmu.rst
-> new file mode 100644
-> index 000000000000..5161fbd1c548
-> --- /dev/null
-> +++ b/Documentation/admin-guide/perf/ampere-soc-pmu.rst
-> @@ -0,0 +1,36 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +============================================
-> +Ampere SoC Performance Monitoring Unit (PMU)
-> +============================================
-> +
-> +Ampere SoC PMU is a generic PMU IP. At the first phase it's used for counting
-> +MCU events on AmpereOne.
-> +
-> +MCU PMU events
-> +--------------
-> +
-> +The PMU driver registers a PMU device for every supported PMU instance on each
-> +SoC. See /sys/devices/AMPC0100:<nn>/.
-> +
-> +The PMU driver supports setting filters for "rank", "bank", and "threshold". The
-> +filter settings are device specific and shared between all the relevant events.
-> +The default value for all the filters is zero. The filters can be modified by
-> +setting them with the last event of the particular device. All the previous
-> +settings are overwritten.
+On Thu, Apr 27, 2023 at 4:05=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> It should free entries (not only the array) filled by scandirat()
+> after use.
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Yeah, that doesn't really work... what is the "last event" relative to? 
-Order of arguments to arbitrary tools? Order of perf_event_open 
-syscalls? Order in which events are actually scheduled on the PMU? 
-(which users can't even control - think event rotation)
-
-To be practical I think you'll have to handle this the same way as 
-arm_smmuv3_pmu's global filtering, and only allow events with matching 
-filter configs to be scheduled together.
-
-[...]
-> +#define SOC_PMEVCNTR0_LO	0x000
-> +#define SOC_PMEVCNTR0_HI	0x004
-> +#define SOC_PMCCNTR_LO		0x0F8
-> +#define SOC_PMCCNTR_HI		0x0FC
-> +
-> +#define SOC_PMEVTYPER0		0x400
-> +
-> +#define SOC_PMELCSR		0xA10
-> +
-> +#define SOC_PMCNTENSET		0xC00
-> +#define SOC_PMCNTENCLR		0xC20
-> +#define SOC_PMINTENSET		0xC40
-> +#define SOC_PMINTENCLR		0xC60
-> +#define SOC_PMOVSCLR		0xC80
-> +#define SOC_PMOVSSET		0xCC0
-> +
-> +#define SOC_PMAUXR0		0xD80
-> +#define SOC_PMAUXR1		0xD84
-> +#define SOC_PMAUXR2		0xD88
-> +#define SOC_PMAUXR3		0xD8C
-> +
-> +#define SOC_PMCFGR		0xE00
-> +#define SOC_PMCR		0xE04
-> +#define PMU_PMCR_E		BIT(0)
-> +#define PMU_PMCR_P		BIT(1)
-> +
-> +#define SOC_PMAUTHSTATUS	0xFB8
-> +#define SOC_PMDEVARCH		0xFBC
-> +#define SOC_PMDEVTYPE		0xFCC
-> +#define SOC_PMPIDR4		0xFD0
-> +#define SOC_PMPIDR0		0xFE0
-> +#define SOC_PMPIDR1		0xFE4
-> +#define SOC_PMPIDR2		0xFE8
-> +#define SOC_PMPIDR3		0xFEC
-> +#define SOC_PMCIDR0		0xFF0
-> +#define SOC_PMCIDR1		0xFF4
-> +#define SOC_PMCIDR2		0xFF8
-> +#define SOC_PMCIDR3		0xFFC
-
-This register map quite clearly follows the Arm CoreSight PMU 
-architecture. Nice to see it being used, but would you mind having a go 
-at hooking up your imp-def bits to the existing arm_cspmu driver?
+Reviewed-by: Ian Rogers <irogers@google.com>
 
 Thanks,
-Robin.
+Ian
+
+> ---
+>  tools/perf/util/print-events.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-event=
+s.c
+> index d416c5484cd5..0a97912fd894 100644
+> --- a/tools/perf/util/print-events.c
+> +++ b/tools/perf/util/print-events.c
+> @@ -83,11 +83,11 @@ void print_tracepoint_events(const struct print_callb=
+acks *print_cb __maybe_unus
+>                 if (sys_dirent->d_type !=3D DT_DIR ||
+>                     !strcmp(sys_dirent->d_name, ".") ||
+>                     !strcmp(sys_dirent->d_name, ".."))
+> -                       continue;
+> +                       goto next_sys;
+>
+>                 dir_fd =3D openat(events_fd, sys_dirent->d_name, O_PATH);
+>                 if (dir_fd < 0)
+> -                       continue;
+> +                       goto next_sys;
+>
+>                 evt_items =3D scandirat(events_fd, sys_dirent->d_name, &e=
+vt_namelist, NULL, alphasort);
+>                 for (int j =3D 0; j < evt_items; j++) {
+> @@ -98,12 +98,12 @@ void print_tracepoint_events(const struct print_callb=
+acks *print_cb __maybe_unus
+>                         if (evt_dirent->d_type !=3D DT_DIR ||
+>                             !strcmp(evt_dirent->d_name, ".") ||
+>                             !strcmp(evt_dirent->d_name, ".."))
+> -                               continue;
+> +                               goto next_evt;
+>
+>                         snprintf(evt_path, sizeof(evt_path), "%s/id", evt=
+_dirent->d_name);
+>                         evt_fd =3D openat(dir_fd, evt_path, O_RDONLY);
+>                         if (evt_fd < 0)
+> -                               continue;
+> +                               goto next_evt;
+>                         close(evt_fd);
+>
+>                         snprintf(evt_path, MAXPATHLEN, "%s:%s",
+> @@ -119,9 +119,13 @@ void print_tracepoint_events(const struct print_call=
+backs *print_cb __maybe_unus
+>                                         /*desc=3D*/NULL,
+>                                         /*long_desc=3D*/NULL,
+>                                         /*encoding_desc=3D*/NULL);
+> +next_evt:
+> +                       free(evt_namelist[j]);
+>                 }
+>                 close(dir_fd);
+>                 free(evt_namelist);
+> +next_sys:
+> +               free(sys_namelist[i]);
+>         }
+>
+>         free(sys_namelist);
+> --
+> 2.40.1.495.gc816e09b53d-goog
+>
