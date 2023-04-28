@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DE66F1001
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76A16F0581
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Apr 2023 14:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344630AbjD1B3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 21:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
+        id S243894AbjD0MM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 08:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjD1B3V (ORCPT
+        with ESMTP id S243796AbjD0MMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:29:21 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCC92717
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 18:29:20 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a7ff4a454eso456995ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 18:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682645360; x=1685237360;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cDQryB2NkV6iOjfYv+oDQDtHOKarGgoQkHlUF2y61dM=;
-        b=jgF8VM6nwW/wHzLI+NPkqovh9OvMp+9g2ZK71Vva5HYarKNRN9vjD9AjSXnBvksmtL
-         tP+3OiB7iJgvULjxQsQArWySGAFJagWeSR9KC1lLr2DL08OuBvVIXGbCkkwJTMDIjxA9
-         kAXOdLtzhHc/1DG5+kqVyZVeyJX3+OgBZ82jMq5R5/135yzNVXKdBg5hQWiDoiiUNL8s
-         pVAAXGo8vMkciOa0Wa2S6ZWHmc5dzbkwRAKCR3OwlCiAkZLnu/FsUvCD5tpOctqCQD4h
-         OFsSVnquIX5+SWdoiGq9FnVU0ufd8DmpuTUACjIuzFe4R7dRZsPqu0i22HvBavWcm1qo
-         YnIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682645360; x=1685237360;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cDQryB2NkV6iOjfYv+oDQDtHOKarGgoQkHlUF2y61dM=;
-        b=bNhl08+So0AzWkBpgu9wtJ20ZhsDZobr5BaDG8rdbR7maK1M4fru2GdmHCRwYC5SuM
-         ym6D1ATSGn+Fp4aKzoavOdp0mWS+UgQQq3oAIp/WF+2zFlTFuTnmhLeE94h2OJYte58G
-         oxK+0TThqkRe66LHJJSzlaYHo4SHia2qigkt9MKrVTTIXnwNF5Y1Pdie4b+bVwWicyRB
-         Ww8SSAZbEXvxthZ3Afiv7Cmr4o8pwmexvpSHMog+Yr0lK2jAXUm0rh/cyFUpPQwroQTx
-         PsDGWOJjKyCyGcCsxyZA2HHRvjjNlcxFLb+1u8EBSkmaTIl+ePeliWWjbXgEU03uyYoB
-         Uudw==
-X-Gm-Message-State: AC+VfDyiV7m12J6g6X/YD6Z9krvPXuH4Vr1o3i4mFElCu2aSkc40JNPs
-        dU4cCMhUuaV7pGeqmYrTekEzDwwM+SOfOBv2/5TujA==
-X-Google-Smtp-Source: ACHHUZ7S3SgdNPPYby223Abz3M3r/m16fAwU7XDht72rGOUuyOcox1wByB6KpOCCrZg8phPTxeoazzlCo4FoIYmj+GY=
-X-Received: by 2002:a17:902:cec4:b0:1a1:c3bf:810b with SMTP id
- d4-20020a170902cec400b001a1c3bf810bmr136641plg.6.1682645360176; Thu, 27 Apr
- 2023 18:29:20 -0700 (PDT)
+        Thu, 27 Apr 2023 08:12:44 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA547524F;
+        Thu, 27 Apr 2023 05:12:17 -0700 (PDT)
+Received: from kwepemm600012.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Q6ZJ85BYhzpT79;
+        Thu, 27 Apr 2023 20:08:08 +0800 (CST)
+Received: from build.huawei.com (10.175.101.6) by
+ kwepemm600012.china.huawei.com (7.193.23.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 27 Apr 2023 20:12:02 +0800
+From:   Wenchao Hao <haowenchao2@huawei.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <linfeilong@huawei.com>, <louhongxiang@huawei.com>,
+        Wenchao Hao <haowenchao2@huawei.com>
+Subject: [PATCH v2 0/6] scsi:scsi_debug: Add error injection for single device
+Date:   Fri, 28 Apr 2023 09:33:14 +0800
+Message-ID: <20230428013320.347050-1-haowenchao2@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20230413034108.1902712-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20230413034108.1902712-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <CAAH4kHaBLvxLF+9CmAsLdVYtDM5SVzra2PVMu94v0ydRp3fiSQ@mail.gmail.com> <35a7839d-b970-fbe6-3dff-7774255dda62@linux.intel.com>
-In-Reply-To: <35a7839d-b970-fbe6-3dff-7774255dda62@linux.intel.com>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Thu, 27 Apr 2023 18:29:07 -0700
-Message-ID: <CAAH4kHbRmeK3SuEeryWnaU_daFcqPF==gU0H=fneJ2q9OmdG0g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] virt: tdx-guest: Add Quote generation support
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600012.china.huawei.com (7.193.23.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> How about the following?
->
-> Although this method reserves a fixed chunk of memory for GetQuote
-> requests, such one-time allocation is preferable to the alternative
-> choice of repeatedly allocating/freeing the shared buffer in the
-> TDX_CMD_GET_QUOTE IOCTL handler, which will damage the direct map (because
-> the sharing/unsharing process modifies the direct map). This allocation
-> model is similar to that used by the AMD SEV guest driver.
->
->
+The original error injection mechanism was based on scsi_host which
+could not inject fault for a single SCSI device.
 
-Yes, this is clear, thank you.
+This patchset provides the ability to inject errors for a single
+SCSI device. Now we supports inject timeout errors, queuecommand
+errors, and hostbyte, driverbyte, statusbyte, and sense data for
+specific SCSI Command.
+
+The first two patch add an debugfs interface to add and inquiry single
+device's error injection info; the third patch defined how to remove
+an injection which has been added. The following 3 patches use the
+injection info and generate the related error type.
+
+V2:
+  - Using debugfs rather than sysfs attribute interface to manage error
+
+Wenchao Hao (6):
+  scsi:scsi_debug: create scsi_debug directory in the debugfs filesystem
+  scsi:scsi_debug: Add interface to manage single device's error inject
+  scsi:scsi_debug: Define grammar to remove added error injection
+  scsi:scsi_debug: timeout command if the error is injected
+  scsi:scsi_debug: Return failed value if the error is injected
+  scsi:scsi_debug: set command's result and sense data if the error is
+    injected
+
+ drivers/scsi/scsi_debug.c | 318 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 318 insertions(+)
 
 
 -- 
--Dionna Glaze, PhD (she/her)
+2.32.0
+
