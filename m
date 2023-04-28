@@ -2,128 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7076F0FF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10FA6F0FF9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344760AbjD1BWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 21:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S1343716AbjD1BW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 21:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344303AbjD1BWa (ORCPT
+        with ESMTP id S229971AbjD1BWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:22:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AAB212D;
-        Thu, 27 Apr 2023 18:22:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAF461DE4;
-        Fri, 28 Apr 2023 01:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9654CC433D2;
-        Fri, 28 Apr 2023 01:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682644949;
-        bh=XaCC5NAJmW00ZGy4LFRYDHsTuAomILBmil6dBGf4mvo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dNXwIngTdD4iZDNgfN3c43qvxxIFCrRA904hegsAfZ+yYn2b+JkdXk68VVKTlX53r
-         npFYhrwGCm926XQvWBcJF2FaS9+sL05EjDN/J4w31qNiDRIAqklnGx3dq1evuz54nh
-         oSM2mJDogYbDpRp2WCPZcjVMgjYBPrwvaKxebMPWw7BzJLQUpJZ+IFUbU5j9WKEAlA
-         HwKalIldF9ve0bGPnIu0PraNW96XOV6NysRYw7OWac5PRJSaBnCrZSRVRDO+gGtkMR
-         115mSA945fJc8d3tmYZ8qVfW8QsAcTBDpcldXg8Zggtl9uc6h3jPH4wrBFFdKkU1FP
-         UJS4hXbTb7J0Q==
-Date:   Fri, 28 Apr 2023 10:22:24 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v7 04/11] tracing/probes: Add tracepoint support on
- fprobe_events
-Message-Id: <20230428102224.061dfbc9a925ab550cb978a8@kernel.org>
-In-Reply-To: <ZEpjh8ZfZMch2Av/@krava>
-References: <168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com>
-        <168255830406.2565678.710162679499561673.stgit@mhiramat.roam.corp.google.com>
-        <ZEpjh8ZfZMch2Av/@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 21:22:54 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8442703;
+        Thu, 27 Apr 2023 18:22:49 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b8b19901fso11082781b3a.3;
+        Thu, 27 Apr 2023 18:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682644968; x=1685236968;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MPajQmXQGIwF2HyN1A4/AnHxv20zylpy6p+xELO3g+g=;
+        b=BvJ89HWTbn3AmTAoQhva07IVXRNpf0XcKbpMBNJmk9DTry5Tk3hxGTJZT+45XE/g2V
+         9dNWQ8GNgpb2zUbwmfjuLNp5iKrNkxX6bMgUPEqnlZchDyVfn7wQwZlzxbKK7XeWh1cD
+         ljXj6yvRiK8wTYAZdyCYO35hIf1QmFhaiVYQMsKMOsvC1BWlySBAaW3isnbe++gtcMxw
+         fq5E0WjQ7NnZHg/SSHFHhEl8Epdaep3lOrJi8wi9KIHZu2v5HKm2247BEUAhYP8oHgOp
+         B37N1Jo40dT/g2Wni5Oqz3mQFC2zCpmokux4XZJ7KSn63LB1wzlNdzZKcV72c3l4EgbO
+         zLlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682644968; x=1685236968;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MPajQmXQGIwF2HyN1A4/AnHxv20zylpy6p+xELO3g+g=;
+        b=IuQu6z8fEM6+WofHVzffWe1B2Ld5mlOBXVFJenFV1NBUg4bJf9fOgNvUB7Ov6mQqTq
+         6wuciDwQHPqjGuSbFLFrAfY9yzz+U7E6OFDMWQx3K5SFxtovX4tmGzkH52HUmkJK1mYm
+         vjwgBeVZnoxkF41BsIdfBWh0JkCVCcwBwEd5XMhozUZzGntfY7BdwDLcF24yFeNhtmK3
+         yzJssSBsBFl64dyhrac8vBG0XYck5BHtywvY2wCqOLtoFtHxu7qmFbYH4aEK8WPWdGzi
+         8R/fRa/8JpSk2EGNEmdiSXB8w8jBqyIiIROoZUJ2QxX2JSlsRlJMdKmgOvIGh0mfxWdI
+         Cv3A==
+X-Gm-Message-State: AC+VfDz7h7AwCTX5ViUSuvLiNQVBGLliwtP32TrpYwMifXkKHms3IQ7R
+        kSMXjB/bxiL84rjAFVThlId7+apxvLc=
+X-Google-Smtp-Source: ACHHUZ76nVc91TRWfs+rdK7rULrVvLw6fw1D+yXLukyxd0lRoC6CrMxtG0+05N81yuVIRuEwVKoNsQ==
+X-Received: by 2002:a05:6a00:b84:b0:63d:3a18:4a03 with SMTP id g4-20020a056a000b8400b0063d3a184a03mr5040002pfj.5.1682644968623;
+        Thu, 27 Apr 2023 18:22:48 -0700 (PDT)
+Received: from cxl-test.. ([103.181.222.211])
+        by smtp.gmail.com with ESMTPSA id t65-20020a628144000000b0063b8b8580a7sm13691356pfd.29.2023.04.27.18.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 18:22:48 -0700 (PDT)
+From:   Raghu H <raghuhack78@gmail.com>
+To:     linux-cxl@vger.kernel.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Fixing check patch styling issues
+Date:   Fri, 28 Apr 2023 01:22:33 +0000
+Message-Id: <20230428012235.119333-1-raghuhack78@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Apr 2023 13:59:03 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
+v2 changes:
+Thanks Alison, Ira for your comments, modified the v1 patches as suggested.
+Dropped the patch containing tab changes in port.c
 
-> On Thu, Apr 27, 2023 at 10:18:24AM +0900, Masami Hiramatsu (Google) wrote:
-> 
-> SNIP
-> 
-> >  	ret = traceprobe_parse_probe_arg(&ep->tp, i, argv[i], flags);
-> > diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-> > index 0049d9ef2402..7c8be8a3616f 100644
-> > --- a/kernel/trace/trace_fprobe.c
-> > +++ b/kernel/trace/trace_fprobe.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/rculist.h>
-> >  #include <linux/security.h>
-> > +#include <linux/tracepoint.h>
-> >  #include <linux/uaccess.h>
-> >  
-> >  #include "trace_dynevent.h"
-> > @@ -17,6 +18,7 @@
-> >  #include "trace_probe_tmpl.h"
-> >  
-> >  #define FPROBE_EVENT_SYSTEM "fprobes"
-> > +#define TRACEPOINT_EVENT_SYSTEM "tracepoints"
-> 
-> so the created tracepoints go under 'events/tracepoints' directory,
-> should the name be more fprobe specific? like under 'events/fprobe/tracepoints' ?
+v1 cover letter:
+The following patches are cleanup or fixing the styling issues found
+using checkpatch
 
-No, because trace event only support single-level class directory, and
-I think this can provide a more abstract interface to the user.
+In cxl/core/mbox.c, in case of null check failure, returning errno or
+-ENOMEM in this case is good enough, removing the redundant dev_err
+message.
 
-Thanks,
+In cxl/core/region.c, the else is not required after the return
+statement, cleaned it up.
 
-> 
-> jirka
-> 
-> >  #define RETHOOK_MAXACTIVE_MAX 4096
-> >  
-> >  static int trace_fprobe_create(const char *raw_command);
-> > @@ -41,6 +43,8 @@ struct trace_fprobe {
-> >  	struct dyn_event	devent;
-> >  	struct fprobe		fp;
-> >  	const char		*symbol;
-> > +	struct tracepoint	*tpoint;
-> > +	struct module		*mod;
-> >  	struct trace_probe	tp;
-> >  };
-> >  
-> > @@ -68,6 +72,11 @@ static bool trace_fprobe_is_return(struct trace_fprobe *tf)
-> >  	return tf->fp.exit_handler != NULL;
-> >  }
-> >  
-> > +static bool trace_fprobe_is_tracepoint(struct trace_fprobe *tf)
-> > +{
-> > +	return tf->tpoint != NULL;
-> > +}
-> > +
-> 
-> SNIP
+Verified the build and sanity by booting the guest VM using the freshly
+built components.
 
+Raghu H (2):
+  cxl/mbox: Remove redundant dev_err() after failed mem alloc
+  cxl/region: Remove else after return statement
+
+ drivers/cxl/core/mbox.c   | 4 +---
+ drivers/cxl/core/region.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.39.2
+
