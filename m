@@ -2,135 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5686F12A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886A96F1320
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345674AbjD1Hny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S1345225AbjD1IRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345641AbjD1Hng (ORCPT
+        with ESMTP id S230060AbjD1IRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:43:36 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D015FC0;
-        Fri, 28 Apr 2023 00:42:35 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 615423200319;
-        Fri, 28 Apr 2023 03:41:39 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 28 Apr 2023 03:41:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
-        JdT/8deI=; b=DclSOfxipXonjr10Zfze2g04tEcMacCmPEMQj9KSUXPgBjVvL3b
-        MQo6fuWFJzT27nHJRs74jQBGwTtn2n2KHu5aTUjHmlrE0229hVE5oHF9yZDkS3ew
-        p1PmAZmZsXTagjeqlDcNnPsWoMKrE3WDRUgwOnllR2Mxd40mEjio8JDSoZrBhcLY
-        EpF/qnQ//QXfqOClL6sTo+6QcKph0TMZrseOTG+p/07lIk+CJDRuw9l1QbbyGXjO
-        Eb35nUJHmU87iS3+aXTcjIEw3yWT1ZcEtVJ4ScA81na/2JXShjG0jXm+bNsByN9H
-        0auAMaDbwZPPaqpkQeZO7SI/+wjiURWUsIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
-        JdT/8deI=; b=ZK/ac6fyNoZWTXPXbTwDD4R131otN5WDVVkeFrFt0hh+B+HJxI8
-        X1G/CekMUpexmmrmmtZG9J6nlcBpYM2so1ttFbssFuvmAd/ypJumITr52uxj1kqy
-        Zy5c2xC/bhpYC6ggOg+MvqevGn68/zmzyOJ/3I3FVAlKSomAD5e4Rd6yFIqBKGoS
-        hfpNiJGqsm98wDNSPOSseTUhCzwwWb6vjvWT3xqdwN747++XNPbtRAEMqvBh4uIw
-        8a5wbLZI4Yp1uAxenqy8Yq0fZoWyfdJOOTsgpDQXZZOenD4BGJ/pbNjPRx5NNA7H
-        eRdIwS64tODrt1vngpa6XkfH9l9gVEeJE5g==
-X-ME-Sender: <xms:sXhLZC_w2Ek7ASHPBn9INJdoLclKFnb0_xbl3lC3xmLCPyKQXxk-BA>
-    <xme:sXhLZCuacs7cUiWYO0nEuiBYqB32l5BX1MLYeiBEMcK-fUP18Owr4Xr3Py6CFXhZd
-    _Jcbs_IxCTeOMDCEhI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedujedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:sXhLZICeUj5YmbBGBf_2m0H6PdWJkxUh3cvjU_9w54cXtxEeD9Uaeg>
-    <xmx:sXhLZKfodyYkaB9AElovPFxDfwUHR8mUJf5ooIYAhxFkIsxA5POH_w>
-    <xmx:sXhLZHPdS6QKadaKE8YtYrFaIvC03TvHzezzcglBLhUn06N1drpMBQ>
-    <xmx:snhLZPb3qpLzi_KGSCW3CvjqMT17lW441eMUaxBX-rqa1NYZ3zdyZQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B945B60086; Fri, 28 Apr 2023 03:41:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <52dd950a-e714-4ebe-a663-4e0ec6463d03@app.fastmail.com>
-In-Reply-To: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
-References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
-Date:   Fri, 28 Apr 2023 08:40:51 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stanislav Kinsburskii" <skinsburskii@linux.microsoft.com>
-Cc:     "Matt Turner" <mattst88@gmail.com>, x86@kernel.org,
-        "Stanislav Kinsburskii" <stanislav.kinsburskii@gmail.com>,
-        "Borislav Petkov" <bp@alien8.de>, linux-ia64@vger.kernel.org,
-        "Mark Brown" <broonie@kernel.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        linux-kernel@vger.kernel.org, "Brian Cain" <bcain@quicinc.com>,
-        linux-mips@vger.kernel.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Omar Sandoval" <osandov@fb.com>, "Helge Deller" <deller@gmx.de>,
-        linuxppc-dev@lists.ozlabs.org, linux-hexagon@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Chris Down" <chris@chrisdown.name>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH 0/7] Expect immutable pointer in virt_to_phys/isa_virt_to_bus
- prototypes
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 28 Apr 2023 04:17:02 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B51FE4
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:16:57 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1psIjg-00085X-3P; Fri, 28 Apr 2023 09:41:44 +0200
+Message-ID: <325ae81d-b3a5-71b3-39e9-96408968ab0b@leemhuis.info>
+Date:   Fri, 28 Apr 2023 09:41:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, de-DE
+To:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Michal Marek <michal.lkml@markovi.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com>
+ <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+In-Reply-To: <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1682669817;5a5fd77a;
+X-HE-SMSGID: 1psIjg-00085X-3P
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 15, 2023, at 12:17, Stanislav Kinsburskii wrote:
-> This series is aimed to address compilation warnings when a constant p=
-ointer
-> is passed to virt_to_phys and isa_virt_to_bus functions:
->
->   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discar=
-ds =E2=80=98const=E2=80=99=20
-> qualifier from pointer target type
->   warning: passing argument 1 of =E2=80=98isa_virt_to_bus=E2=80=99 dis=
-cards =E2=80=98const=E2=80=99=20
-> qualifier from pointer target type
->
-> The change(s) is the same for all architectures, but it's split into a=
- series on
-> per-arch basis to simplify applying and testing on the maintainers sid=
-e.
->
+Hi Shreeya!
 
-Looks all good to me. If everyone is happy with it, I'll queue it up
-after in the asm-generic tree for 6.5, once rc1 is out.
+On 27.04.23 13:53, Shreeya Patel wrote:
+> On 19/09/22 22:38, Nick Desaulniers wrote:
+>> cc-ifversion is GCC specific. Replace it with compiler specific
+>> variants. Update the users of cc-ifversion to use these new macros.
+>>
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/350
+>> Link:
+>> https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
+>> Suggested-by: Bill Wendling <morbo@google.com>
+>> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> KernelCI found this patch causes a regression in the
+> baseline.logintest on qemu_arm-virt-gicv3-uefi [1],
+> see the bisection report for more details [2].
+> 
+> Let me know if you have any questions.
+> 
+> [1] https://linux.kernelci.org/test/case/id/644596a0beca2ead032e8669/
+> [2] https://groups.io/g/kernelci-results/message/40804> [...]
+> #regzbot introduced: 88b61e3bff93
 
- Arnd
+How much of this text is auto generated? I ask for two reasons:
+
+* You made regzbot track this, which is great, but didn't specify a
+title. That is fine in general, if the subject round about says what the
+regression is about. But in this case it doesn't; hence it would be
+great if you in the future could specify one through "#regzbot title:"
+or adjust the mail's subject (I guess the former is what developers will
+prefer).
+
+* I'm not a developer that has to look into bugs like this, but from my
+experience I expect a lot more developers are likely willing to look
+into reports like this if you specified what the actual problem is --
+ideally with the relevant error messages.
+
+Side note: I for one still am unsure what this is actually about after
+looking at the page you provided as [1] and clicking on a few links
+there (which took me a few minutes, which I guess not everyone is
+willing to invest). I noticed two kernel warning in the log (one from
+"arch/arm/kernel/insn.c:48 __arm_gen_branch+0x88/0xa4", the other
+"kernel/trace/ftrace.c:2176 ftrace_bug+0x340/0x3b4") and a complaint
+UBSAN (btw: those newlines in the logs make things harder to read, at
+least for me).
+
+To check if those were old or new problems, I tired to go back in the
+history and on page 9 found an entry for the last succeeding test. But
+clicking on the logs got me a 404 :-/
+
+Then I looked at the logs on [1] again and in the html view "Boot
+result: FAIL". Is that the actual problem?
+
+Ciao, Thorsten
+
+P.S.: let me update the regzbot title while at it:
+
+#regzbot title: kernelci: qemu_arm-virt-gicv3-uefi stopped booting
+
+>> ---
+>> Changes v3 -> v4:
+>> * Split into its own patch again from series, as per Masahiro.
+>> * Rebase on top of b0839b281c427e844143dba3893e25c83cdd6c17 and update
+>>    clang -Wformat logic in scripts/Makefile.extrawarn, as per Masahiro.
+>>
+>>   Documentation/kbuild/makefiles.rst          | 29 ++++++++++++---------
+>>   Makefile                                    |  6 ++---
+>>   drivers/gpu/drm/amd/display/dc/dml/Makefile |  2 +-
+>>   scripts/Makefile.compiler                   | 10 ++++---
+>>   scripts/Makefile.extrawarn                  |  4 +--
+>>   5 files changed, 29 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/Documentation/kbuild/makefiles.rst
+>> b/Documentation/kbuild/makefiles.rst
+>> index 11a296e52d68..ee7e3ea1fbe1 100644
+>> --- a/Documentation/kbuild/makefiles.rst
+>> +++ b/Documentation/kbuild/makefiles.rst
+>> @@ -682,22 +682,27 @@ more details, with real examples.
+>>       In the above example, -Wno-unused-but-set-variable will be added to
+>>       KBUILD_CFLAGS only if gcc really accepts it.
+>>   -    cc-ifversion
+>> -    cc-ifversion tests the version of $(CC) and equals the fourth
+>> parameter
+>> -    if version expression is true, or the fifth (if given) if the
+>> version
+>> -    expression is false.
+>> +    gcc-min-version
+>> +    gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is
+>> greater than
+>> +    or equal to the provided value and evaluates to y if so.
+>>         Example::
+>>   -        #fs/reiserfs/Makefile
+>> -        ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
+>> +        cflags-$(call gcc-min-version, 70100) := -foo
+>>   -    In this example, ccflags-y will be assigned the value -O1 if the
+>> -    $(CC) version is less than 4.2.
+>> -    cc-ifversion takes all the shell operators:
+>> -    -eq, -ne, -lt, -le, -gt, and -ge
+>> -    The third parameter may be a text as in this example, but it may
+>> also
+>> -    be an expanded variable or a macro.
+>> +    In this example, cflags-y will be assigned the value -foo if
+>> $(CC) is gcc and
+>> +    $(CONFIG_GCC_VERSION) is >= 7.1.
+>> +
+>> +    clang-min-version
+>> +    clang-min-version tests if the value of $(CONFIG_CLANG_VERSION)
+>> is greater
+>> +    than or equal to the provided value and evaluates to y if so.
+>> +
+>> +    Example::
+>> +
+>> +        cflags-$(call clang-min-version, 110000) := -foo
+>> +
+>> +    In this example, cflags-y will be assigned the value -foo if
+>> $(CC) is clang
+>> +    and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
+>>         cc-cross-prefix
+>>       cc-cross-prefix is used to check if there exists a $(CC) in path
+>> with
+>> diff --git a/Makefile b/Makefile
+>> index 298f69060f10..411c8480b37e 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -790,7 +790,6 @@ KBUILD_CFLAGS += $(stackp-flags-y)
+>>     KBUILD_CFLAGS-$(CONFIG_WERROR) += -Werror
+>>   KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) += -Wno-array-bounds
+>> -KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>     ifdef CONFIG_CC_IS_CLANG
+>>   KBUILD_CPPFLAGS += -Qunused-arguments
+>> @@ -972,7 +971,6 @@ ifdef CONFIG_CC_IS_GCC
+>>   KBUILD_CFLAGS += -Wno-maybe-uninitialized
+>>   endif
+>>   -ifdef CONFIG_CC_IS_GCC
+>>   # The allocators already balk at large sizes, so silence the compiler
+>>   # warnings for bounds checks involving those possible values. While
+>>   # -Wno-alloc-size-larger-than would normally be used here, earlier
+>> versions
+>> @@ -984,8 +982,8 @@ ifdef CONFIG_CC_IS_GCC
+>>   # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
+>>   # choice, we must perform a versioned check to disable this warning.
+>>   # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
+>> -KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901,
+>> -Wno-alloc-size-larger-than)
+>> -endif
+>> +KBUILD_CFLAGS-$(call gcc-min-version, 90100) +=
+>> -Wno-alloc-size-larger-than
+>> +KBUILD_CFLAGS += $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+>>     # disable invalid "can't wrap" optimizations for signed / pointers
+>>   KBUILD_CFLAGS    += -fno-strict-overflow
+>> diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>> b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>> index cb81ed2fbd53..d70838edba80 100644
+>> --- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>> +++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
+>> @@ -34,7 +34,7 @@ dml_ccflags := -mhard-float -maltivec
+>>   endif
+>>     ifdef CONFIG_CC_IS_GCC
+>> -ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+>> +ifneq ($(call gcc-min-version, 70100),y)
+>>   IS_OLD_GCC = 1
+>>   endif
+>>   endif
+>> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
+>> index 94d0d40cddb3..9d18fb91890e 100644
+>> --- a/scripts/Makefile.compiler
+>> +++ b/scripts/Makefile.compiler
+>> @@ -61,9 +61,13 @@ cc-option-yn = $(call try-run,\
+>>   cc-disable-warning = $(call try-run,\
+>>       $(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip
+>> $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
+>>   -# cc-ifversion
+>> -# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
+>> -cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] &&
+>> echo $(3) || echo $(4))
+>> +# gcc-min-version
+>> +# Usage: cflags-$(call gcc-min-version, 70100) += -foo
+>> +gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
+>> +
+>> +# clang-min-version
+>> +# Usage: cflags-$(call clang-min-version, 110000) += -foo
+>> +clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] &&
+>> echo y)
+>>     # ld-option
+>>   # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+>> diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+>> index 6ae482158bc4..5769c1939d40 100644
+>> --- a/scripts/Makefile.extrawarn
+>> +++ b/scripts/Makefile.extrawarn
+>> @@ -48,7 +48,7 @@ else
+>>   ifdef CONFIG_CC_IS_CLANG
+>>   KBUILD_CFLAGS += -Wno-initializer-overrides
+>>   # Clang before clang-16 would warn on default argument promotions.
+>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -lt 160000 ] && echo y),y)
+>> +ifneq ($(call clang-min-version, 160000),y)
+>>   # Disable -Wformat
+>>   KBUILD_CFLAGS += -Wno-format
+>>   # Then re-enable flags that were part of the -Wformat group that aren't
+>> @@ -56,7 +56,7 @@ KBUILD_CFLAGS += -Wno-format
+>>   KBUILD_CFLAGS += -Wformat-extra-args -Wformat-invalid-specifier
+>>   KBUILD_CFLAGS += -Wformat-zero-length -Wnonnull
+>>   # Requires clang-12+.
+>> -ifeq ($(shell [ $(CONFIG_CLANG_VERSION) -ge 120000 ] && echo y),y)
+>> +ifeq ($(call clang-min-version, 120000),y)
+>>   KBUILD_CFLAGS += -Wformat-insufficient-args
+>>   endif
+>>   endif
+> 
+> 
