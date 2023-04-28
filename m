@@ -2,152 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7D6F1234
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AABF06F1235
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345423AbjD1HRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S1345451AbjD1HRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjD1HRL (ORCPT
+        with ESMTP id S1345440AbjD1HRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:17:11 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563012125;
-        Fri, 28 Apr 2023 00:17:10 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33S6ktEm032540;
-        Fri, 28 Apr 2023 07:17:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=nqig2+ej3w4Jhp8vgYn+OLQTxwiF7rppO0W2C5VOZGo=;
- b=QSWKPo4Pa+KwGHI9pvPAl6UVis43eA5Bu0VaUCVn1fhPTQ1bwo5akN1i27IapSe9XtFF
- 8YWFEQmzWlFcDHCJbgMKvlUA+sWEg6mqbhJJcR3H7ATcjVCkH007KU0cIc6UOj+M+lkx
- qgppDiu240azJDsEPxY+u4sC/8elXFT2qc7K+uI9IVf7nxwkGnAIq1dTkvnWlxlq7OAt
- kxZyxNQJxxHRdifuARQ3l8Qd6JiEEQ5vsVVXvZZkwDBc38dkh+FSduEw5jpOHLO+zfgq
- J40qS42oTnsu1ylplov7KLKUMDXc63qyupprD9LVHCiOjl0FG73u4qEkMQyUn4LiBpDO lA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q7wm59bs6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 07:17:04 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 33S7Gx4R023216;
-        Fri, 28 Apr 2023 07:16:59 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3q48nmbs2d-1;
-        Fri, 28 Apr 2023 07:16:59 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33S7Gx0E023208;
-        Fri, 28 Apr 2023 07:16:59 GMT
-Received: from hyd-lablnx377.qualcomm.com (hyd-lablnx377.qualcomm.com [10.204.178.226])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 33S7Gx92023205;
-        Fri, 28 Apr 2023 07:16:59 +0000
-Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
-        id B71CF20ECF; Fri, 28 Apr 2023 12:46:58 +0530 (IST)
-From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
-        quic_rameshn@quicinc.com, jiangzp@google.com, mmandlik@google.com,
-        Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Subject: [PATCH v1 1/2] Bluetooth: hci_qca: Add qcomm devcoredump sysfs support
-Date:   Fri, 28 Apr 2023 12:46:53 +0530
-Message-Id: <1682666213-7973-1-git-send-email-quic_saluvala@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YgMRD4flNPKIrKjXB1B7LrcnDlC5n7TV
-X-Proofpoint-ORIG-GUID: YgMRD4flNPKIrKjXB1B7LrcnDlC5n7TV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_02,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 adultscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 clxscore=1011 suspectscore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280058
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Apr 2023 03:17:52 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4B03581
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:17:50 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-51fdc1a1270so6811515a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1682666270; x=1685258270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ukMaBLPXL+Km2GlrH9mAFaejvqqjOkS5iDjlAGQ7GAY=;
+        b=MJsEXN/X56AtbGcdtftxmkDoW4CjqAstmIw63sZCSjxnxfcz4HCr5gfJ0ZcNjsp+aU
+         VomhmzDYHgHGbiDjetF70zrlY0E9U2eXQl/s7fV1KCBy/rZLoSoFhNlrSXdeQ3epjujI
+         33zHwShNStT5XcnHJdLANH2a4UGUlmwFA+bvd35kJmFyZQRDsP+Z/FdPuoLZUUElnmXE
+         2uXO4si4jFYWkDADrJKEFG4DsRYs9/93dP+lNRdzDV4zwCRXMWdbJjI4dfH7ZjGpe9lw
+         +5kf1kH6a4Sx7rCjOwt115A9TXNRtM7jyYyCz+Se9lSmOfk4L3FjQofipcNvOnspEE2q
+         APPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682666270; x=1685258270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ukMaBLPXL+Km2GlrH9mAFaejvqqjOkS5iDjlAGQ7GAY=;
+        b=b3EcEity6BZWzxCpJDP5wvCVlZx/SoLYM/beWilddOhovvbT6Bawbl8JyzoSkpnbWh
+         jFfoKqhrkSjkLNBPahJ7dklVr2W5UBpVTx5+Yfz+iVdw6njvC/dZBRiVkfo41diRPrbb
+         ZNHVjqE/fVAcud7ZCXQuJ+lnvOzy9mFGXtT7Ivkz0MzRoHDi5huYvPy3Y+2t+3gWXvH6
+         Vx2FpTkFQVJ0en5OhR6eQ+/12eTYOY5t38/J4WX0rNGINtc++ESEeXZilM1EnMU9Vxpv
+         A4kzVJDl3KkVddiIXdFWL0qoyjQ0Vmgap1M7Eibgw1faO37XL4vZU/gehOpooRxDNluT
+         H/hA==
+X-Gm-Message-State: AC+VfDz2Mv4adn7BnRY+qmbRt4Fy7YsgUhNJrrOx8z949goGHBz8zo0J
+        f5pA9BqWzK3F1oqJKGZ+iwCIhw==
+X-Google-Smtp-Source: ACHHUZ5YsRCK7s1Ipah26XWJmbC2dPQFPOOLy6IpRQ+5lOSJft2l8ZFBG3iszAMzgA9g3+4R4kA+MQ==
+X-Received: by 2002:a17:90b:4a10:b0:237:b5d4:c0cc with SMTP id kk16-20020a17090b4a1000b00237b5d4c0ccmr4730936pjb.39.1682666269807;
+        Fri, 28 Apr 2023 00:17:49 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id j2-20020a17090a318200b0024739d29252sm14159939pjb.15.2023.04.28.00.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 00:17:49 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next v4 0/2] Introduce a new kfunc of bpf_task_under_cgroup
+Date:   Fri, 28 Apr 2023 15:17:35 +0800
+Message-Id: <20230428071737.43849-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch implements the hci_qca driver side .coredump() callback to
-trigger a devcoredump via sysfs and .enable_coredump() callback to
-check if the devcoredump functionality is enabled for a device.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
-Reviewed-by: Manish Mandlik <mmandlik@google.com>
+Trace sched related functions, such as enqueue_task_fair, it is necessary to
+specify a task instead of the current task which within a given cgroup.
 
----
- drivers/bluetooth/hci_qca.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Feng Zhou (2):
+  bpf: Add bpf_task_under_cgroup() kfunc
+  selftests/bpf: Add testcase for bpf_task_under_cgroup
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1b06450..e21180d 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1702,6 +1702,15 @@ static int qca_power_on(struct hci_dev *hdev)
- 	return ret;
- }
- 
-+#ifdef CONFIG_DEV_COREDUMP
-+static bool hciqca_coredump_enabled(struct hci_dev *hdev)
-+{
-+	struct hci_uart *hu = hci_get_drvdata(hdev);
-+
-+	return !hu->serdev->dev.coredump_disabled;
-+}
-+#endif
-+
- static int qca_setup(struct hci_uart *hu)
- {
- 	struct hci_dev *hdev = hu->hdev;
-@@ -1780,6 +1789,9 @@ static int qca_setup(struct hci_uart *hu)
- 		qca_debugfs_init(hdev);
- 		hu->hdev->hw_error = qca_hw_error;
- 		hu->hdev->cmd_timeout = qca_cmd_timeout;
-+#ifdef CONFIG_DEV_COREDUMP
-+		hu->hdev->dump.enabled = hciqca_coredump_enabled;
-+#endif
- 		if (device_can_wakeup(hu->serdev->ctrl->dev.parent))
- 			hu->hdev->wakeup = qca_wakeup;
- 	} else if (ret == -ENOENT) {
-@@ -2380,6 +2392,18 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
- #endif
- 
-+#ifdef CONFIG_DEV_COREDUMP
-+static void hciqca_coredump(struct device *dev)
-+{
-+	struct serdev_device *serdev = to_serdev_device(dev);
-+	struct qca_serdev *qcadev = serdev_device_get_drvdata(serdev);
-+	struct hci_uart *hu = &qcadev->serdev_hu;
-+	struct hci_dev  *hdev = hu->hdev;
-+
-+	if (!dev->coredump_disabled && hdev->dump.coredump)
-+		hdev->dump.coredump(hdev);
-+}
-+#endif
- 
- static struct serdev_device_driver qca_serdev_driver = {
- 	.probe = qca_serdev_probe,
-@@ -2390,6 +2414,9 @@ static struct serdev_device_driver qca_serdev_driver = {
- 		.acpi_match_table = ACPI_PTR(qca_bluetooth_acpi_match),
- 		.shutdown = qca_serdev_shutdown,
- 		.pm = &qca_pm_ops,
-+#ifdef CONFIG_DEV_COREDUMP
-+		.coredump = hciqca_coredump,
-+#endif
- 	},
- };
- 
+Changelog:
+v3->v4: Addressed comments from Yonghong Song
+- Modify test cases and test other tasks, not the current task.
+Details in here:
+https://lore.kernel.org/all/20230427023019.73576-1-zhoufeng.zf@bytedance.com/
+
+v2->v3: Addressed comments from Alexei Starovoitov
+- Modify the comment information of the function.
+- Narrow down the testcase's hook point
+Details in here:
+https://lore.kernel.org/all/20230421090403.15515-1-zhoufeng.zf@bytedance.com/
+
+v1->v2: Addressed comments from Alexei Starovoitov
+- Add kfunc instead.
+Details in here:
+https://lore.kernel.org/all/20230420072657.80324-1-zhoufeng.zf@bytedance.com/
+
+ kernel/bpf/helpers.c                          | 20 +++++++
+ tools/testing/selftests/bpf/DENYLIST.s390x    |  1 +
+ .../bpf/prog_tests/task_under_cgroup.c        | 55 +++++++++++++++++++
+ .../bpf/progs/test_task_under_cgroup.c        | 51 +++++++++++++++++
+ 4 files changed, 127 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_under_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_under_cgroup.c
+
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+2.20.1
 
