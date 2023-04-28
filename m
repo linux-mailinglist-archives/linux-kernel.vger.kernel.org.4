@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3753E6F1F5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA136F1F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346220AbjD1UbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 16:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S1346048AbjD1Ub5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjD1UbB (ORCPT
+        with ESMTP id S1346602AbjD1Ubr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:31:01 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E7D5589
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:30:29 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-247296def99so289379a91.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:30:29 -0700 (PDT)
+        Fri, 28 Apr 2023 16:31:47 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B404A5FC7
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:31:22 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-24b3451b2fcso285986a91.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:31:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682713828; x=1685305828;
+        d=google.com; s=20221208; t=1682713882; x=1685305882;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5BBSaM4viJse91izjI7kqxRyJnpTb5xhj5RhMLOsisI=;
-        b=Iyf1MyFQjkZvjPsBoNrzcGAw7Bq5xbB4PiSYUTEMKCIRkHQEPR2fXwmCq1F8ryDMJ1
-         xQdL4ueYMrjlqepGS0eB1psFE7yNC1sgSAosDtcelE7Z7oNW9PGzoMLotqB0LYRRa2Ob
-         lcu4oYCnv6y7MB/tx40sjK6/Wtp2ilTk4RcY0szl73r1SBJdhpwzPCANh/y4P7kBIlyY
-         0HE4kMYmug/memLIlI/1NxtjJvL63jFhzlZOABPjhbmbPCU4wzeRQjSDHr5olnhRB842
-         9HJcS6JiF7rIe0bhoK9+3naB7dXPxRQkcCkafNS4It2flZlYr0+9zpjF7X5XnEgtiO79
-         Mn/A==
+        bh=pXLt9wAJDw5YIyP39CbEzK00xStIP8ydgtlC5ZAJKyQ=;
+        b=MnkIoreJEUloIXZzUBXgNzmPaj8SiO0fvhpbdWNeLksM5OxjkW9KMggEtpobPJuoVl
+         lA6WEfTWfrjHpi54gX8P6to5K0XiCzaVbaev/Cc5NYOQTszbKNsoaqjI88qdHCkRL24O
+         CRtg93BSrJ1monq03RALntx+qcE6wII69WOiXrHZFOTz1ZaMw4a53hCV1ayscU4caPoy
+         UTEE4oW58qQ7iN8KnVGATpWbsn+t0Sxj2xD7sVqlAnXW5rcgKXtbwnA7Qi0Rz8v0YhVJ
+         FjJDUUjRjqkfUbwA6LExbqwlLDYSpgn/C1tnwfAPdgTJ6PESZUl2iPjyETLYNBkVLwTM
+         4l7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682713828; x=1685305828;
+        d=1e100.net; s=20221208; t=1682713882; x=1685305882;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5BBSaM4viJse91izjI7kqxRyJnpTb5xhj5RhMLOsisI=;
-        b=GVVVUt3lChtFNEJ4q1lY4Q0hOxXdCnxAyukZlnP1bPrX5CUY80a/55a9Tnz6h6O6LH
-         VOeoh1lBRGjRIOmNrfUBToEkpB6EYnzlRLhRRUEE2Bj90PMYqY3A6WyI+yvo7z7RQRnH
-         2/ZdwFUepfzyfydkabfMl5M2/RWSgDXDDnAdXUuenYc4OCkAvMpsrfhggxH078WU/nhD
-         lctKwGOfj9rIJklS2eJQyBKjqn52QJtj5GVq95hh/PkEDQdRAm2YuvL/gnnaE5PDVHVZ
-         VE+gVy6z1+D6mn84uRnNjxQRtcMHd9vf8K7ssnTMGqDF7THgLQxu3LiYmCDqCdQvwHMi
-         NqSw==
-X-Gm-Message-State: AC+VfDwvZzGFlgE2ILjvx3Anw8HSGn6CYgkuijvN75d1BcDkSsQ3jbN7
-        pp43useRVhH06Y9e8jvN+1bsWRY1hK34uvku+0m+Yw==
-X-Google-Smtp-Source: ACHHUZ7QGJcZJActleLC+67XkcEQINvuEAKkRYu+dP1dV1iQpDn3+MrobU9vljU6I+TUwbLnn2AdH9EU0yxRTo99Nu8=
-X-Received: by 2002:a17:90b:3e8e:b0:247:2152:6391 with SMTP id
- rj14-20020a17090b3e8e00b0024721526391mr6188228pjb.17.1682713827919; Fri, 28
- Apr 2023 13:30:27 -0700 (PDT)
+        bh=pXLt9wAJDw5YIyP39CbEzK00xStIP8ydgtlC5ZAJKyQ=;
+        b=JCa6PtcSudZt3LevW8E200hqOSWP/ePT/Ux76jfm0/xQwiMGYV6qCaetb02QZNB9aq
+         S8A3qo9EBMtqK5pVjGDk5eZ4SQ2hlXu7jd9MEctUEgBuJsFMXPOmy9Eng/SfEOa9MG31
+         Kuz4ja6YhFXBD+wM71k0iRQEK4n3AhrYw+WyxGlYdMpCiCK83PIapK/Ue82IvR6B7AK8
+         DAyvKIZUdJLSuykvuzeHnxtJq4EC4qeQOyk9B7+4ygyOYPuy1e7uYFjey9A4iNZW2fy8
+         igEYYba5mnJ52P9nuIppke9lhU+j9FJCKbIp7jxAyssXTIkzup2xB89tBcWnfnfD8hrH
+         XGqA==
+X-Gm-Message-State: AC+VfDyVMg0G0lGc3f5ox2Y7Yybhqi/FQ89i3Umhf//dOjS+KdIqlHze
+        sIQIjGCjpvCDHR+lDmSd2OtEhf2mHplSe61T2Fh/Hw==
+X-Google-Smtp-Source: ACHHUZ4Pov48bf0gISCx/rGTtlp+yX9CjKCf4ZJnCB5oghVCg/WhWHjD2AYTgk1SerazyOIYZnJjAs9h3wANb0OQLZM=
+X-Received: by 2002:a17:90a:eb06:b0:246:9a43:39e5 with SMTP id
+ j6-20020a17090aeb0600b002469a4339e5mr6341864pjz.23.1682713882061; Fri, 28 Apr
+ 2023 13:31:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230427165813.2844530-1-wonchung@google.com>
-In-Reply-To: <20230427165813.2844530-1-wonchung@google.com>
+References: <20230329014455.1990104-1-wonchung@google.com> <CAMNLLoRpWBONxqVG=5ksddZeD-O3LcuTtwDj6CpcvpWsCMcs8w@mail.gmail.com>
+In-Reply-To: <CAMNLLoRpWBONxqVG=5ksddZeD-O3LcuTtwDj6CpcvpWsCMcs8w@mail.gmail.com>
 From:   Manasi Navare <navaremanasi@google.com>
-Date:   Fri, 28 Apr 2023 13:30:17 -0700
-Message-ID: <CAMNLLoToZrKHq3mdSsGErLJndQhZD8A+oyOzmvHUUV8XHqz8qw@mail.gmail.com>
-Subject: Re: [PATCH v6] drm/sysfs: Link DRM connectors to corresponding Type-C connectors
+Date:   Fri, 28 Apr 2023 13:31:11 -0700
+Message-ID: <CAMNLLoT=D5C8o0tQ_Jo4SAPow5n_B8ThzLt45ByJpRTZiNOHJQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/sysfs: Expose DRM connector id in each connector sysfs
 To:     Won Chung <wonchung@google.com>
 Cc:     bleung@google.com, pmalani@chromium.org,
         heikki.krogerus@linux.intel.com, imre.deak@intel.com,
-        gildekel@chromium.org, seanpaul@chromium.org, daniel@ffwll.ch,
-        navaremanasi@chromium.org, dri-devel@lists.freedesktop.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        jani.nikula@linux.intel.com, gildekel@chromium.org,
+        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -75,162 +77,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Won,
 
-Thanks for the patch, patch now merged to drm-misc-next
+Thanks for the patch, I have now merged to drm-misc-next
 
 Regards
 Manasi
 
-
-On Thu, Apr 27, 2023 at 9:58=E2=80=AFAM Won Chung <wonchung@google.com> wro=
-te:
+On Mon, Apr 17, 2023 at 3:52=E2=80=AFPM Manasi Navare <navaremanasi@google.=
+com> wrote:
 >
-> Create a symlink pointing to USB Type-C connector for DRM connectors
-> when they are created. The link will be created only if the firmware is
-> able to describe the connection beween the two connectors.
+> On Tue, Mar 28, 2023 at 6:45=E2=80=AFPM Won Chung <wonchung@google.com> w=
+rote:
+> >
+> > Expose DRM connector id in device sysfs so that we can map the connecto=
+r
+> > id to the connector syspath. Currently, even if we can derive the
+> > connector id from modeset, we do not have a way to find the
+> > corresponding connector's syspath.
+> >
+> > This is helpful when determining the root connector of MST tree. When a
+> > tree of multiple MST hub is connected to the system, modeset describes
+> > the tree in the PATH blob. For example, consider the following scenario=
+.
+> >
+> > +-------------+
+> > | Source      |    +-------------+
+> > | (Device)    |    | BranchX     |
+> > |             |    | (MST)       |
+> > |       [conn6]--->|       [port1]--->DisplayA
+> > +-------------+    |             |
+> >                    |             |    +-------------+
+> >                    |             |    | BranchY     |
+> >                    |             |    | (MST)       |
+> >                    |       [port2]--->|       [port1]----->DisplayB
+> >                    +-------------+    |             |
+> >                                       |       [port2]----->DisplayC
+> >                                       +-------------+
+> >
+> > DPMST connector of DisplayA would have "mst:6-1" PATH.
+> > DPMST connector of DisplayB would have "mst:6-2-1" PATH.
+> > DPMST connector of DisplayC would have "mst:6-2-2" PATH.
+> >
+> > Given that connector id of 6 is the root of the MST connector tree, we
+> > can utilize this patch to parse through DRM connectors sysfs and find
+> > which connector syspath corresponds to the root connector (id =3D=3D 6)=
+.
+> >
+> > ChromeOS intend to use this information for metrics collection. For
+> > example, we want to tell which port is deriving which displays even wit=
+h
+> > a MST hub. Chromium patch for parsing DRM connector id from the kernel
+> > is at http://crrev.com/c/4317207.
+> >
+> > Signed-off-by: Won Chung <wonchung@google.com>
 >
-> Currently, even if a display uses a USB Type-C port, there is no way for
-> the userspace to find which port is used for which display. With the
-> symlink, display information would be accessible from Type-C connectors
-> and port information would be accessible from DRM connectors.
+> Exposing connector id in device sysfs looks good to me.
 >
-> Associating the two subsystems, userspace would have potential to expose
-> and utilize more complex information. ChromeOS intend to use this
-> information for metrics collection. For example, we want to tell which
-> port is deriving which displays. Also, combined with USB PD information,
-> we can tell whether user is charging their device through display.
-> Chromium patch for parsing the symlink from the kernel is at
-> http://crrev.com/c/4317207.
->
-> We already have a framework in typec port-mapper.c where it goes through
-> component devices and runs the bind functions for those with matching
-> _PLD (physical location of device).
-> https://elixir.bootlin.com/linux/v5.18.1/source/drivers/usb/typec/port-ma=
-pper.c
-> Since _PLD is ACPI specific field, this linking would only work on ACPI
-> x86 as long as _PLD field for Type-C connectors and DRM connectors are
-> correctly added to the firmware.
->
-> Currently, USB ports and USB4 ports are added as components to create a
-> symlink with Type C connector.
-> USB:
-> https://lore.kernel.org/all/20211223082349.45616-1-heikki.krogerus@linux.=
-intel.com/
-> USB4:
-> https://lore.kernel.org/all/20220418175932.1809770-3-wonchung@google.com/
-> So, we follow the same pattern in this patch.
->
-> Signed-off-by: Won Chung <wonchung@google.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > Reviewed-by: Manasi Navare <navaremanasi@chromium.org>
-> ---
-> Changes from v5:
-> - Add more details to the error message
 >
-> Changes from v4: (4 months ago)
-> - Update commit message with an actual use case from cros userspace
-> - Move component_add to before ddc check which possibly returns
-> - Rebased
+> Manasi
 >
-> Changes from v3:
-> - Append to the commit message on why this patch is needed
->
-> Changes from v2:
-> - Resend the patch to dri-devel list
->
-> Changes from v1:
-> - Fix multiple lines to single line
->
->
->  drivers/gpu/drm/drm_sysfs.c | 40 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
->
-> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> index 183130355997..bc869c6fa420 100644
-> --- a/drivers/gpu/drm/drm_sysfs.c
-> +++ b/drivers/gpu/drm/drm_sysfs.c
-> @@ -11,12 +11,14 @@
->   */
->
->  #include <linux/acpi.h>
-> +#include <linux/component.h>
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
->  #include <linux/gfp.h>
->  #include <linux/i2c.h>
->  #include <linux/kdev_t.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->
->  #include <drm/drm_accel.h>
-> @@ -96,6 +98,34 @@ static char *drm_devnode(const struct device *dev, umo=
-de_t *mode)
->         return kasprintf(GFP_KERNEL, "dri/%s", dev_name(dev));
->  }
->
-> +static int typec_connector_bind(struct device *dev,
-> +       struct device *typec_connector, void *data)
-> +{
-> +       int ret;
-> +
-> +       ret =3D sysfs_create_link(&dev->kobj, &typec_connector->kobj, "ty=
-pec_connector");
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret =3D sysfs_create_link(&typec_connector->kobj, &dev->kobj, "dr=
-m_connector");
-> +       if (ret)
-> +               sysfs_remove_link(&dev->kobj, "typec_connector");
-> +
-> +       return ret;
-> +}
-> +
-> +static void typec_connector_unbind(struct device *dev,
-> +       struct device *typec_connector, void *data)
-> +{
-> +       sysfs_remove_link(&typec_connector->kobj, "drm_connector");
-> +       sysfs_remove_link(&dev->kobj, "typec_connector");
-> +}
-> +
-> +static const struct component_ops typec_connector_ops =3D {
-> +       .bind =3D typec_connector_bind,
-> +       .unbind =3D typec_connector_unbind,
-> +};
-> +
->  static CLASS_ATTR_STRING(version, S_IRUGO, "drm 1.1.0 20060810");
->
->  /**
-> @@ -353,9 +383,16 @@ int drm_sysfs_connector_add(struct drm_connector *co=
-nnector)
->
->         connector->kdev =3D kdev;
->
-> +       if (dev_fwnode(kdev)) {
-> +               r =3D component_add(kdev, &typec_connector_ops);
-> +               if (r)
-> +                       drm_err(dev, "failed to add component to create l=
-ink to typec connector\n");
-> +       }
-> +
->         if (connector->ddc)
->                 return sysfs_create_link(&connector->kdev->kobj,
->                                  &connector->ddc->dev.kobj, "ddc");
-> +
->         return 0;
->
->  err_free:
-> @@ -371,6 +408,9 @@ void drm_sysfs_connector_remove(struct drm_connector =
-*connector)
->         if (connector->ddc)
->                 sysfs_remove_link(&connector->kdev->kobj, "ddc");
->
-> +       if (dev_fwnode(connector->kdev))
-> +               component_del(connector->kdev, &typec_connector_ops);
-> +
->         DRM_DEBUG("removing \"%s\" from sysfs\n",
->                   connector->name);
->
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
+> > ---
+> >  drivers/gpu/drm/drm_sysfs.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> > index 183130355997..11f98c5d6103 100644
+> > --- a/drivers/gpu/drm/drm_sysfs.c
+> > +++ b/drivers/gpu/drm/drm_sysfs.c
+> > @@ -282,16 +282,27 @@ static ssize_t modes_show(struct device *device,
+> >         return written;
+> >  }
+> >
+> > +static ssize_t connector_id_show(struct device *device,
+> > +                                struct device_attribute *attr,
+> > +                                char *buf)
+> > +{
+> > +       struct drm_connector *connector =3D to_drm_connector(device);
+> > +
+> > +       return sysfs_emit(buf, "%d\n", connector->base.id);
+> > +}
+> > +
+> >  static DEVICE_ATTR_RW(status);
+> >  static DEVICE_ATTR_RO(enabled);
+> >  static DEVICE_ATTR_RO(dpms);
+> >  static DEVICE_ATTR_RO(modes);
+> > +static DEVICE_ATTR_RO(connector_id);
+> >
+> >  static struct attribute *connector_dev_attrs[] =3D {
+> >         &dev_attr_status.attr,
+> >         &dev_attr_enabled.attr,
+> >         &dev_attr_dpms.attr,
+> >         &dev_attr_modes.attr,
+> > +       &dev_attr_connector_id.attr,
+> >         NULL
+> >  };
+> >
+> > --
+> > 2.40.0.348.gf938b09366-goog
+> >
