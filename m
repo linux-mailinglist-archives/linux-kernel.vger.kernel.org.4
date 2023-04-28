@@ -2,208 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6069A6F12F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B226F1300
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345408AbjD1IGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 04:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S1345438AbjD1IJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjD1IGm (ORCPT
+        with ESMTP id S229993AbjD1IJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:06:42 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2124.outbound.protection.outlook.com [40.107.21.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33321FDC;
-        Fri, 28 Apr 2023 01:06:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hi6w5jA5Hze+G8+4CkyVPCLBJc7dADfBQMEniXP68+eL5yGAXOyza9Uw8bpN1awymZEV5Y79B/R1QfScXDV5cpONL90KK+GPFrVy1y+q+Lb9n1L32cb/efsEh9MKU6dYzrqVj8uDML7x5URaNiQtS15tBPiau3eph48xWabRxUXW8jBcsrTLSdgnkwF6Qadxt/OCSuWodxrrGkhNWOLg/0SVYCtKtG/0+PVR+Dokri9wvEhBMBpbSFHv+x9EdPBZvYdFYNpcn6rIo2Zw/0cCcLyN6LLUoEJz4WxKJzRpwsbyKWMbZpG7El+yJKUDDsRUOi0VOx6h3/1OMNEl+Byyyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A7RpJBdrzrb/iV38ELquyFRR+Zu5ClYrwbpu/CsZyHM=;
- b=fd4nkdQ7wOAEi0vHZ44+u/XfQdYfm5wX/y5xZ5+oe6b9p3U+lRwMJ9WBuJnQwV+EQqW9+lE5j8y6HvCaoVjky1DOLRabqScQrPB8z+4vK040mWWDMrYd5TF1vriPqFd9lmR1H3NCeGmiacnR/WRqnuIZK0THOGcuv0CYVs3xb+XaYFqVTs45sNhJ/0aL1kYp5oFt4Ynbw0WscIVY4uJIFYZ1YLGk02hVnscQt1hT6K2bc5osUYDPryb7XV8ByHZChmwnIl11uY+TpOYdkR/pLUupexcPwYMGx4KGm6nHulCoR6AD7oy/JxS4u3QWvZnsLT159EKptJCc2viJ8qRyHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A7RpJBdrzrb/iV38ELquyFRR+Zu5ClYrwbpu/CsZyHM=;
- b=O4i/9MHmtg47f0euqiRkN9jicO7rqhYcKXQmfn6B3fmv7NRE9hjH55bX8pZZhfTV79IGCymVUQ9uKhoYgb4K6N6mncoJg5JzVr+jniy4ks1SC3+2ZdUtQAG21aiB2z+mMofy+PHhKLGDoMSD/T+yVyv65FvEGuzIfoSrGV6GyPE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com (2603:10a6:208:ed::15)
- by AM7PR02MB5814.eurprd02.prod.outlook.com (2603:10a6:20b:108::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24; Fri, 28 Apr
- 2023 08:06:37 +0000
-Received: from AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::3d67:4b0:82d5:1daa]) by AM0PR02MB4436.eurprd02.prod.outlook.com
- ([fe80::3d67:4b0:82d5:1daa%5]) with mapi id 15.20.6340.024; Fri, 28 Apr 2023
- 08:06:37 +0000
-Message-ID: <32995b53-7f73-936f-a81d-5f1969f64910@axentia.se>
-Date:   Fri, 28 Apr 2023 10:06:35 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: sv-SE, en-US
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-From:   Peter Rosin <peda@axentia.se>
-Subject: [PATCH] ARM: dts: at91: tse850: add properties for gpio-line-names
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0003.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:a::14) To AM0PR02MB4436.eurprd02.prod.outlook.com
- (2603:10a6:208:ed::15)
+        Fri, 28 Apr 2023 04:09:03 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4952D1BF3;
+        Fri, 28 Apr 2023 01:09:00 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:56220.1166601949
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id D2D49100237;
+        Fri, 28 Apr 2023 16:08:56 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id b7a89ae67736480d9bfae214343db7a0 for 15330273260@189.cn;
+        Fri, 28 Apr 2023 16:08:58 CST
+X-Transaction-ID: b7a89ae67736480d9bfae214343db7a0
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <d788894c-0afa-d5cf-a2f8-cbf201200db6@189.cn>
+Date:   Fri, 28 Apr 2023 16:08:54 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR02MB4436:EE_|AM7PR02MB5814:EE_
-X-MS-Office365-Filtering-Correlation-Id: cc5efc92-c2d1-422a-2b34-08db47bf7d31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d7s1m+wc6Ptko1ofta91T6d0xDIe8P9QTy92/m+9EoIHn4hEk7GzUmqHUirJnHlC+ipwJMtB5ntWQ37SvftDdjhtlfv9oDbNXGdcmmMi9yqN71+yOZRFzT9jpiz2hesYiLtDJVyDuxe6VzsrbKFNT9BFtAkCT6IoMowpUFF2w7ajVbn+91nVI8eV0NLcYl+xOWM2hoO8ToBtOWyNTi3Sa78GyZeH7uA7WWgZEaiHkChvRJcAKIvsjWsnQDCqwTK4Qk42hYOdrkx2XqUGnkq/T6HJlCCjSp4QLcp5YFHUM6cinKkYKmP2bvBL09zyd60suzDNO4SaHJla87mywLdYLoY/WbSK6kpLu8iDpzJU8aV2Tco2d5xU4FrO4FbDra09z2N5v6IFwVDz8OPCZgktDPzIdQVRZ6rO4uJxa4N9PhhkEoSV1txHnzLk978wVT8zNH0WZK1Wzbs8pjsloImt2nQpB/ZR582sEvAyccrALccFI4T9u4hbfvAS1GFttZcftPn/DuzjkTWuFofUs+F3mV7fQIPQ+xdqDf56zNKBwn2Eb9WCjRr7L5rd7vfRs9i5XWkwGbj/IT5CAzauLBBN0+fAfYK7k5lo3+HXdgvuVQzO3cg9w1ZTsD4K4xDI7zkOmnDwtqojbUN2AKV6nQ0zLw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR02MB4436.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(396003)(39840400004)(136003)(346002)(451199021)(2616005)(31696002)(86362001)(66476007)(66946007)(66556008)(6916009)(4326008)(478600001)(36756003)(6486002)(186003)(38100700002)(6512007)(6506007)(26005)(54906003)(8676002)(8936002)(41300700001)(5660300002)(31686004)(2906002)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2NoSjc3L01xN1VwUENYYWdqOWtxcUJpamFhKzJpN1RQWW1rT3Z1dmhrcUl3?=
- =?utf-8?B?dGxaZVJhUkhMUEkyM0ttNytHcTUzRW9iNE1wc1VJZEtUeDdoMUc2OXRJa3Ru?=
- =?utf-8?B?ZEQrV2xodllrSXpLR05RT3RzQk9IdWpVOG9iZlBEbVZsVG5HeXBrcnJSd3ZP?=
- =?utf-8?B?bjZBcWNxOFU0bVZjcHdtSEJScStwczNSWDQxd3lTbmh3S3RPc21MelNMOURX?=
- =?utf-8?B?T3I0NVdIUkJzRGJtWmMrZ2tGZnExTEpOQ0JaanJBb1JEd2R3L0F6aHp1ZmQ3?=
- =?utf-8?B?cWF0d1dMbVN6QUhVd2hZU1ZhbDZZbUFuVG9Qc3BBOGJrdG9KYzVrOWNHbjNB?=
- =?utf-8?B?K2FXQVQ3NExtKzJrUHc0NDVqYUlXd2Y4dHJrYk93L1ZNY24vWXhWczhuV3ox?=
- =?utf-8?B?N21qMUFaMGFldm9KL1cxL3VYWEFFNk5ianhhRm5lYmxYdUJocmJlWTZzMVlj?=
- =?utf-8?B?dVJuUTBtMjVqME54dUp0L1pOMHM4R3JnYWNKaGR0dEt2WWVSSWVCRENMRzVI?=
- =?utf-8?B?K1BjNm5ad3pCTytIQWlSQ25sRTlkdDJqUExEdEdKc0JhaStqOHp6Q2d5UnhX?=
- =?utf-8?B?SFh4VitnM1FSdXZUL1JDbnQ1VGpFZUtTT1ZTcEVKbnlSaTlqdVBtZUl3Yi9r?=
- =?utf-8?B?L1QyQVRmcVo0N1ZmRnpKK2k1NWI2R1lLS2U4NUFCN1BqVW9qaW5Yc2c1NVlS?=
- =?utf-8?B?V1A3SkFvM2lJRGtvdTNFNk9ENytDclVqTThGdEE4KzVsVUZBUEpHL1R1VElq?=
- =?utf-8?B?SmxQbDdtaHhMS1FaUmVJb2lBVmgvOU8rQTJmSElEYWtZc3AxRkVsWER5aFZ6?=
- =?utf-8?B?LysyM3hTSCtOZjhSNGV5NXBXaUltSE8wZzk4MTVBRzVKRk1LS3dRSWNzdzg2?=
- =?utf-8?B?SWVmUnBCU3lQdjZBRlFiYUgwSVhLQWRTQTc1bXBsRU4rbzc5WWJhbTloY1JY?=
- =?utf-8?B?c1lZMHZiL2dmeVFFaVJLeWpoQlQ0dXBFeDM3NllINHF5dzVVbm9yUzhLWlBs?=
- =?utf-8?B?VEkxY21FTkE2cUc2ZGlkMHlaRUYvcUVlWjBxN3dlMDFjOUM3VTUrRCs1UG9I?=
- =?utf-8?B?S0dXUWZIK2I3aEJEUnBZYXRFM21LSjFvTW9LT1ZmcEZOcWRrVVhWaXNhT2NP?=
- =?utf-8?B?aXF2N0tINWpiTlpuYnFZNmcrdnYrRXJNZjYwbkRGWDNHQTJEV3pRYisrRkJO?=
- =?utf-8?B?WERnTTR0WnA2dStCcDVzamIwaXlXN2l5TUpzam1WVjNucXNkNFhwV3ZURWZq?=
- =?utf-8?B?dGNPMGVLMlQyNWI5dXd3VlZNMDJqL3JRdmM3dW95dVN3Vk11aC8xYk9hODQ1?=
- =?utf-8?B?bHRxdzBQa0h5ckE4TG52RjhCeEtBS1U5Yks5blh0RElGSWdlQmorb3NtMU5l?=
- =?utf-8?B?NFAxME96NC9HeVpjMDRaQi9kQUpEWnViNVpRYXFieXZlRS9QQk1VaG5Rbjl6?=
- =?utf-8?B?N1RxR1JFWDI3VU9TSHVQVkdzVCtaMFlaRy9aclkwby9PUTB0TE9FeGJRQWxL?=
- =?utf-8?B?TFlyVjhlQ1lUUDRlRi9ucU0vY3NRdmM4anlWeGk2M21mY0M0UStMaS9DUFl4?=
- =?utf-8?B?aWx3am9xY1J6UDhZUFNITmVlYThaY3NtRWVVOWJrRitmWTZxRkxFZUFIZW1J?=
- =?utf-8?B?WVloSE9meVdrVVVoRThva3ZqeS9HWFNCMnlvT0xBREVLK3c0QzRSZmQyLzhR?=
- =?utf-8?B?Y2RDTytDYUcrc0M1QzBwZ3crSlFJcWRpSSswUVI1QnllOE0yRFVmVHgvQmx3?=
- =?utf-8?B?bGQxa0s3T2N6aFhicDVmZmFMMXIyaTBvdlFqYzVOb1drYVlXUVI4QU1MYXds?=
- =?utf-8?B?L2pKWVNVajJQcFViNHJzNkZmNWhNQitkSWorNTZNVmJ0d1RWRTJUejlUeCs5?=
- =?utf-8?B?UDZjMnhtczNYckpUenZrVWFFandsYjZGbm9ENksyMnFlcGZyWDN3bHZZOWhK?=
- =?utf-8?B?QS9sQjFzL25GRmZpUEhRbHJaVFRHZlRaR0NOTUpRQjZNL0ltbWhFbDl3KzU5?=
- =?utf-8?B?WGNraTczbzNLRFVyQmdiMk12cHhrWTdGN2dvbUFUYUNFdFFVRklwLzk4YmdF?=
- =?utf-8?B?VDVHUVNGb3cwOENpb1dKM1VDQWhsWUoyQnF2dXc3d3d5TVJ6eXdDQmxMSFhK?=
- =?utf-8?Q?Xvk2SvCepInLgiJUVeRdeurKT?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc5efc92-c2d1-422a-2b34-08db47bf7d31
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR02MB4436.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 08:06:36.9405
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7oHokgQboiQUF7/trXMxrNt4booX2nJ+kSIFO/dmaPKWYMVVcnhQbXpFKglEgKM+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB5814
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] drm/fbdev-generic: prohibit potential out-of-bounds
+ access
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>, Li Yi <liyi@loongson.cn>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, loongson-kernel@lists.loongnix.cn
+References: <20230413180622.1014016-1-15330273260@189.cn>
+ <fccc494f-0e52-5fdf-0e40-acc29177c73c@suse.de>
+ <32a1510e-d38a-ffb6-8e8d-026f8b3aa17a@189.cn>
+ <fab85750-dcb7-0eeb-cabc-8fcfcc84b11c@suse.de>
+ <95ef7589-9775-5ad4-f09c-43bcd696823a@189.cn>
+ <ZEpBmkf8CWMwZ/gr@phenom.ffwll.local>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <ZEpBmkf8CWMwZ/gr@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signal names are one-to-one copies from the schematics, except VBUS
-which is an unnamed signal there.
+Hi,
 
-Signed-off-by: Peter Rosin <peda@axentia.se>
----
- arch/arm/boot/dts/at91-tse850-3.dts | 60 +++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+On 2023/4/27 17:34, Daniel Vetter wrote:
+> On Thu, Apr 20, 2023 at 02:47:24AM +0800, Sui Jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/4/17 15:29, Thomas Zimmermann wrote:
+>>> Hi
+>>>
+>>> Am 14.04.23 um 12:58 schrieb Sui Jingfeng:
+>>>> Hi,
+>>>>
+>>>> On 2023/4/14 03:16, Thomas Zimmermann wrote:
+>>>>> Hi,
+>>>>>
+>>>>> thanks for the patch. This is effectively a revert of commit
+>>>>> 8fbc9af55de0 ("drm/fbdev-generic: Set screen size to size of GEM
+>>>>> buffer"). Please add a Fixes tag.
+>>>>>
+>>>>> Am 13.04.23 um 20:06 schrieb Sui Jingfeng:
+>>>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>>>
+>>>>>> The crazy fbdev test of IGT may write after EOF, which lead
+>>>>>> to out-of-bound
+>>>>> Please drop 'crazy'. :)
+>>>> This is OK.
+>>>>
+>>>> By using the world 'crazy',
+>>>>
+>>>> I meant that the test is very good and maybe it is written by
+>>>> professional  peoples
+>>>>
+>>>> with the guidance by  experienced  engineer. So that even the corner
+>>>> get tested.
+>>>>
+>>>>
+>>>>>> access for the drm drivers using fbdev-generic. For example,
+>>>>>> run fbdev test
+>>>>>> on a x86-64+ast2400 platform with 1680x1050 resolution will
+>>>>>> cause the linux
+>>>>>> kernel hang with following call trace:
+>>>>>>
+>>>>>>     Oops: 0000 [#1] PREEMPT SMP PTI
+>>>>>>     [IGT] fbdev: starting subtest eof
+>>>>>>     Workqueue: events drm_fb_helper_damage_work [drm_kms_helper]
+>>>>>>     [IGT] fbdev: starting subtest nullptr
+>>>>>>
+>>>>>>     RIP: 0010:memcpy_erms+0xa/0x20
+>>>>>>     RSP: 0018:ffffa17d40167d98 EFLAGS: 00010246
+>>>>>>     RAX: ffffa17d4eb7fa80 RBX: ffffa17d40e0aa80 RCX: 00000000000014c0
+>>>>>>     RDX: 0000000000001a40 RSI: ffffa17d40e0b000 RDI: ffffa17d4eb80000
+>>>>>>     RBP: ffffa17d40167e20 R08: 0000000000000000 R09: ffff89522ecff8c0
+>>>>>>     R10: ffffa17d4e4c5000 R11: 0000000000000000 R12: ffffa17d4eb7fa80
+>>>>>>     R13: 0000000000001a40 R14: 000000000000041a R15: ffffa17d40167e30
+>>>>>>     FS:  0000000000000000(0000) GS:ffff895257380000(0000)
+>>>>>> knlGS:0000000000000000
+>>>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>     CR2: ffffa17d40e0b000 CR3: 00000001eaeca006 CR4: 00000000001706e0
+>>>>>>     Call Trace:
+>>>>>>      <TASK>
+>>>>>>      ? drm_fbdev_generic_helper_fb_dirty+0x207/0x330 [drm_kms_helper]
+>>>>>>      drm_fb_helper_damage_work+0x8f/0x170 [drm_kms_helper]
+>>>>>>      process_one_work+0x21f/0x430
+>>>>>>      worker_thread+0x4e/0x3c0
+>>>>>>      ? __pfx_worker_thread+0x10/0x10
+>>>>>>      kthread+0xf4/0x120
+>>>>>>      ? __pfx_kthread+0x10/0x10
+>>>>>>      ret_from_fork+0x2c/0x50
+>>>>>>      </TASK>
+>>>>>>     CR2: ffffa17d40e0b000
+>>>>>>     ---[ end trace 0000000000000000 ]---
+>>>>>>
+>>>>>> The indirect reason is drm_fb_helper_memory_range_to_clip()
+>>>>>> generate damage
+>>>>>> rectangles which partially or completely go out of the
+>>>>>> active display area.
+>>>>>> The second of argument 'off' is passing from the user-space,
+>>>>>> this will lead
+>>>>>> to the out-of-bound if it is large than (fb_height + 1) *
+>>>>>> fb_pitches; while
+>>>>>> DIV_ROUND_UP() may also controbute to error by 1.
+>>>>>>
+>>>>>> This patch will add code to restrict the damage rect
+>>>>>> computed go beyond of
+>>>>>> the last line of the framebuffer.
+>>>>>>
+>>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>>> ---
+>>>>>>    drivers/gpu/drm/drm_fb_helper.c     | 16 ++++++++++++----
+>>>>>>    drivers/gpu/drm/drm_fbdev_generic.c |  2 +-
+>>>>>>    2 files changed, 13 insertions(+), 5 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> b/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> index 64458982be40..6bb1b8b27d7a 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fb_helper.c
+>>>>>> @@ -641,19 +641,27 @@ static void
+>>>>>> drm_fb_helper_damage(struct drm_fb_helper *helper, u32 x,
+>>>>>> u32 y,
+>>>>>>    static void drm_fb_helper_memory_range_to_clip(struct
+>>>>>> fb_info *info, off_t off, size_t len,
+>>>>>>                               struct drm_rect *clip)
+>>>>>>    {
+>>>>>> +    u32 line_length = info->fix.line_length;
+>>>>>> +    u32 fb_height = info->var.yres;
+>>>>>>        off_t end = off + len;
+>>>>>>        u32 x1 = 0;
+>>>>>> -    u32 y1 = off / info->fix.line_length;
+>>>>>> +    u32 y1 = off / line_length;
+>>>>>>        u32 x2 = info->var.xres;
+>>>>>> -    u32 y2 = DIV_ROUND_UP(end, info->fix.line_length);
+>>>>>> +    u32 y2 = DIV_ROUND_UP(end, line_length);
+>>>>>> +
+>>>>>> +    /* Don't allow any of them beyond the bottom bound of
+>>>>>> display area */
+>>>>>> +    if (y1 > fb_height)
+>>>>>> +        y1 = fb_height;
+>>>>>> +    if (y2 > fb_height)
+>>>>>> +        y2 = fb_height;
+>>>>>>          if ((y2 - y1) == 1) {
+>>>>>>            /*
+>>>>>>             * We've only written to a single scanline. Try to reduce
+>>>>>>             * the number of horizontal pixels that need an update.
+>>>>>>             */
+>>>>>> -        off_t bit_off = (off % info->fix.line_length) * 8;
+>>>>>> -        off_t bit_end = (end % info->fix.line_length) * 8;
+>>>>>> +        off_t bit_off = (off % line_length) * 8;
+>>>>>> +        off_t bit_end = (end % line_length) * 8;
+>>>>> Please scratch all these changes. The current code should work
+>>>>> as intended. Only the generic fbdev emulation uses this code and
+>>>>> it should really be moved there at some point.
+>>>>
+>>>> Are you meant  that we should remove all these changes in
+>>>> drivers/gpu/drm/drm_fb_helper.c ?
+>>> As Daniel mentioned, there's the discussion in the other thread. I don't
+>>> want to reopen it here. Just to summarize: I'm not convinced that this
+>>> should be DRM code because it can be shared with other fbdev drivers.
+>>>
+>>> [...]
+>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> index 8e5148bf40bb..b057cfbba938 100644
+>>>>>> --- a/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> +++ b/drivers/gpu/drm/drm_fbdev_generic.c
+>>>>>> @@ -94,7 +94,7 @@ static int
+>>>>>> drm_fbdev_generic_helper_fb_probe(struct drm_fb_helper
+>>>>>> *fb_helper,
+>>>>>>        fb_helper->buffer = buffer;
+>>>>>>        fb_helper->fb = buffer->fb;
+>>>>>>    -    screen_size = buffer->gem->size;
+>>>>>> +    screen_size = sizes->surface_height * buffer->fb->pitches[0];
+>>> This has been bothering me over the weekend. And I think it's because
+>>> what we want the screen_size to be heigth * pitch,  but the mmap'ed
+>>> memory is still at page granularity. Therefore...
+>>>
+>>> [...]
+>>>>>>        screen_buffer = vzalloc(screen_size);
+>>> ... this line should explicitly allocate multiples of pages. Something
+>>> like
+>>>
+>>>      /* allocate page-size multiples for mmap */
+>>>      vzalloc(PAGE_ALIGN(screen_size))
+>>>
+>> I just thought about your instruction at here, thanks!
+>>
+>> But it is already page size aligned if we don't tough it.
+>>
+>> It is guaranteed by the GEM memory manger,
+>>
+>> so a previous patch tested by me, is turn out to be a extremely correct?
+>>
+>> We exposed a  page size aligned buffer(even though it is larger than needed)
+>> is actually for mmap ?
+> mmap() is always page aligned, because that's the smallest size the cpu
+> pagetables can map. So there's fundamentally always a bit of memory at the
+> end of the buffer which logically is not part of the framebuffer memory.
+> And somehow we need to handle that to make sure we don't overflow.
+> -Daniel
 
-diff --git a/arch/arm/boot/dts/at91-tse850-3.dts b/arch/arm/boot/dts/at91-tse850-3.dts
-index b99a4fb44a36..13d92797ada6 100644
---- a/arch/arm/boot/dts/at91-tse850-3.dts
-+++ b/arch/arm/boot/dts/at91-tse850-3.dts
-@@ -300,3 +300,63 @@
- 
- 	dmas = <0>, <0>;	/*  Do not use DMA for dbgu */
- };
-+
-+&pioA {
-+	gpio-line-names =
-+/*  0 */	"SUP-A", "SUP-B", "SUP-C", "SIG<LEV",
-+/*  4 */	"", "/RFRST", "", "",
-+/*  8 */	"/ADD", "", "/LOOP1", "/LOOP2",
-+/* 12 */	"", "", "", "",
-+/* 16 */	"LED1GREEN", "LED1RED", "LED2GREEN", "LED2RED",
-+/* 20 */	"LED3GREEN", "LED3RED", "LED4GREEN", "LED4RED",
-+/* 24 */	"", "", "", "",
-+/* 28 */	"", "", "SDA", "SCL";
-+};
-+
-+&pioB {
-+	gpio-line-names =
-+/*  0 */	"", "", "", "",
-+/*  4 */	"", "", "", "",
-+/*  8 */	"", "", "", "",
-+/* 12 */	"", "", "", "",
-+/* 16 */	"", "", "", "",
-+/* 20 */	"", "", "", "",
-+/* 24 */	"", "", "SIG<LIN", "SIG>LIN",
-+/* 28 */	"RXD", "TXD", "BRX", "BTX";
-+};
-+
-+&pioC {
-+	gpio-line-names =
-+/*  0 */	"ETX0", "ETX1", "ERX0", "ERX1",
-+/*  4 */	"ETXEN", "ECRSDV", "ERXER", "EREFCK",
-+/*  8 */	"EMDC", "EMDIO", "", "",
-+/* 12 */	"", "", "", "/ILIM",
-+/* 16 */	"BCK", "LRCK", "DIN", "",
-+/* 20 */	"", "", "", "",
-+/* 24 */	"", "", "", "",
-+/* 28 */	"", "", "", "VBUS";
-+};
-+
-+&pioD {
-+	gpio-line-names =
-+/*  0 */	"I1", "I2", "O1", "EXTVEN",
-+/*  4 */	"", "456KHZ", "VCTRL", "SYNCSEL",
-+/*  8 */	"STEREO", "", "", "",
-+/* 12 */	"", "", "", "",
-+/* 16 */	"", ">LIN", "LIN>", "",
-+/* 20 */	"VREFEN", "", "", "",
-+/* 24 */	"", "", "VINOK", "",
-+/* 28 */	"POEOK", "USBON", "POELOAD", "";
-+};
-+
-+&pioE {
-+	gpio-line-names =
-+/*  0 */	"", "", "", "",
-+/*  4 */	"", "", "", "",
-+/*  8 */	"", "", "", "",
-+/* 12 */	"", "", "", "",
-+/* 16 */	"", "", "", "",
-+/* 20 */	"", "ALE", "CLE", "",
-+/* 24 */	"", "", "", "",
-+/* 28 */	"", "", "", "/ETHINT";
-+};
--- 
-2.20.1
+Yeah, buffer allocating should be page size aligned,
 
+A single page share the same caching property.
+
+
+fbdev test use the `smem_len` member of `fix_info` to know the true size 
+of the shadow screen buffer.
+
+Exposing a large one actually allow the test writing to somewhere beyond 
+the logically visible area.
+
+
+I need to learn more and testing more to verify if there are still 
+risks, I'll take a look.
+
+Thanks for sharing the knowledge.
+
+>>
+>>> It has not been a bug so far because vzalloc() always returns full pages
+>>> IIRC. It's still worth fixing.
+>>>
+>>> Best regards
+>>> Thomas
+>>>
+>>>
+>>>>>>        if (!screen_buffer) {
+>>>>>>            ret = -ENOMEM;
