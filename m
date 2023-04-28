@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BED6F10BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5016F10C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344875AbjD1DQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 23:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
+        id S1345043AbjD1DSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 23:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjD1DQS (ORCPT
+        with ESMTP id S1345101AbjD1DSa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 23:16:18 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD312709
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:17 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-959a3e2dc72so1152997266b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682651775; x=1685243775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W7sdITuIFnEQoKW0N5OSKzGyU3doRmglDS9WyyDhnvg=;
-        b=eGb+aPgX+DH/BU1Feq4tdkTB+pn1heXwPBeihvAsYFF1/y6lDG1UwgcmYcYooxszbl
-         LCdKCNVkUeH0T/t+6BVGCKlxYGjBM1OI1Tq5JV3PCCybyrejmolRu3BXxz91FQ8QFOyb
-         /dF/fRqY3aZ3pjpkB2Wlbd4FWbht2fUAh+7no=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682651775; x=1685243775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W7sdITuIFnEQoKW0N5OSKzGyU3doRmglDS9WyyDhnvg=;
-        b=Dwc0M/YDw4cmo1/rHuO6Oka+ZKZpQPV4Mw5sGvc5hbf/Gd0iyhgrSOzkb2dEajihgr
-         Vocn9jxQjyURVmVUE6ewKgOOeRoDgtdWEFNV50IJDkZHyNuCKTmn1EoQJ61WQt+79gPq
-         khNUavrpmcuqXEptuNwsgAmgXVLpKlRr/t219iwsBeZlo26f2VZ2EHvMFtLHiBvNOg3i
-         pa5TsaiylLlBEh7DMcJOmWoAj/cNGdiMFA9sGd7eF1kWYPXr1em3FWVRJJxZEy2fMWgl
-         FlN26yF8wBPfLlrhXRQlwXDav9qxZnRLHv7p1xF9mOdo5ecbIbgNXfJSeyOPGXC3GSEr
-         2bBA==
-X-Gm-Message-State: AC+VfDzGdD63NgPgoWFY0qaSpnSwyOI20PZNrCxhNSoiDom/vAg4s9Ey
-        Hi62jaoQZseMALwOVUX0cCO2/v9yGkS86SzDSH5kBQ==
-X-Google-Smtp-Source: ACHHUZ7nS8vXwfB3Z9qXkgg8xD3XBvYLwd/rXZs/1OWLXJ7wUBpet2Xk/1Lc9slTU36/8z03DeRs2Q==
-X-Received: by 2002:a17:907:c0d:b0:947:71bf:ca19 with SMTP id ga13-20020a1709070c0d00b0094771bfca19mr3943128ejc.65.1682651775357;
-        Thu, 27 Apr 2023 20:16:15 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id qn7-20020a170907210700b0094e44899367sm10390883ejb.101.2023.04.27.20.16.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 20:16:14 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-959a3e2dc72so1152992866b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:16:14 -0700 (PDT)
-X-Received: by 2002:a17:907:5c1:b0:94a:90e5:b2b6 with SMTP id
- wg1-20020a17090705c100b0094a90e5b2b6mr3512007ejb.58.1682651774330; Thu, 27
- Apr 2023 20:16:14 -0700 (PDT)
+        Thu, 27 Apr 2023 23:18:30 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E512101;
+        Thu, 27 Apr 2023 20:18:28 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=m202171830@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 33S3GctD016701-33S3GctE016701
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Fri, 28 Apr 2023 11:16:43 +0800
+From:   Ke Zhang <m202171830@hust.edu.cn>
+To:     Vineet Gupta <vgupta@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Ke Zhang <m202171830@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Vineet Gupta <Vineet.Gupta1@synopsys.com>,
+        linux-snps-arc@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] serial: arc_uart: fix of_iomap leak in `arc_serial_probe`
+Date:   Fri, 28 Apr 2023 11:16:36 +0800
+Message-Id: <20230428031636.44642-1-m202171830@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
-In-Reply-To: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Apr 2023 20:15:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
-Message-ID: <CAHk-=wjaYXeWKsyifQCS=gJf4mxav-b6cdf5boKpMO6M1C-2LQ@mail.gmail.com>
-Subject: Re: [GIT PULL] MM updates for 6.4-rc1
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     mm-commits@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: m202171830@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 3:33=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-20=
-23-04-27-15-30
+Smatch reports:
 
-Ok, so all the merge conflicts looked straightforward enough (except
-the one I asked Vlastimil to look at - and that conflict was tiny and
-straightforward too, it was just in a really grotty place).
+drivers/tty/serial/arc_uart.c:631 arc_serial_probe() warn:
+'port->membase' from of_iomap() not released on lines: 631.
 
-However, let's not get cocky - so I'd ask people double-check my
-conflict resolution, even if it looked fairly straightforward.
-Mistakes happen.
+In arc_serial_probe(), if uart_add_one_port() fails,
+port->membase is not released, which would cause a resource leak.
 
-Most of the bulk of the conflicts were around __filemap_get_folio()
-now returning an ERR_PTR, particularly then with Willy doing the ext4
-folio conversion.
+To fix this, I replace of_iomap with devm_platform_ioremap_resource.
 
-So Christoph, Willy, mind just double-checking me?
+Fixes: 8dbe1d5e09a7 ("serial/arc: inline the probe helper")
+Signed-off-by: Ke Zhang <m202171830@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v1 -> v2: Use devm_platform_ioremap_resource() and
+return that errno if an errno was returned.
 
-                 Linus
+This issue is found by static analysis and remains untested.
+---
+ drivers/tty/serial/arc_uart.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/arc_uart.c b/drivers/tty/serial/arc_uart.c
+index 59e25f2b6632..4b2512eef577 100644
+--- a/drivers/tty/serial/arc_uart.c
++++ b/drivers/tty/serial/arc_uart.c
+@@ -606,10 +606,11 @@ static int arc_serial_probe(struct platform_device *pdev)
+ 	}
+ 	uart->baud = val;
+ 
+-	port->membase = of_iomap(np, 0);
+-	if (!port->membase)
++	port->membase = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(port->membase)) {
+ 		/* No point of dev_err since UART itself is hosed here */
+-		return -ENXIO;
++		return PTR_ERR(port->membase);
++	}
+ 
+ 	port->irq = irq_of_parse_and_map(np, 0);
+ 
+-- 
+2.25.1
+
