@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BBF6F17D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3662F6F17E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345353AbjD1MZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 08:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S1346028AbjD1M0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 08:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjD1MZp (ORCPT
+        with ESMTP id S1345896AbjD1MZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 08:25:45 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B639A524B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:25:40 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5066ce4f490so14525809a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:25:40 -0700 (PDT)
+        Fri, 28 Apr 2023 08:25:56 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F9949E1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:25:49 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f20215fa70so47418605e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682684739; x=1685276739;
+        d=linaro.org; s=google; t=1682684748; x=1685276748;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JZaTVYj+7JHW5ogrU2gshDHZR4SGV9IAITO2F/xNkdE=;
-        b=S09ujwy6aOa6ctTYPXwZoPuRqF36CQOsazZonATFMiCtuWUqgPKeTkzkXMlHuMRDwV
-         fLyWqUdCI9LTy5qBVXnvUr9nsc1iUB70043XxxZExzigT7J8Q5IBgzamv6tF2kALgu1Y
-         Yea9deTDF9RU3VYdjcs6b5Rjz461ikvTNh/RO1MsUPAASsf9MNnIjvxm5MHjXHO8mWd3
-         MpDfVvBEqhnqWnh/krHjWorg//QItjEdQCqnZZ+7NaRY3SFEK9fv0qHuNQP8oTu23hUq
-         XRgPM+D1+VtGFF4UcvqEN3Z1pUWM0Gxg0ZN152oSurdgRNsePO4i9JsPUHjavQrMvg1Y
-         Uwww==
+        bh=FCZD7/skKxELiLiQ/Kgtq9xL2gK3ugZhkE8UlBHv94Q=;
+        b=uUgsJRet2rXqZzO39tKpNe1PPCmGNTTEXDP7+XoXX1WhwC7n6SFii4fWBlBlWhWUDh
+         Cnf3M/2voFfRkjanUwYgCBz2zCXELwRizuCZBuFMvKdhaRKabEg5/MXCGrzW+C6B6KJw
+         mX+2F7apsDTDVgcLM6qxspDdmRl8vNGYIGdV09Q4ePTOB33MExIIjbOChffFbCNI8qoT
+         IZdbIkrfFL1rjadYFEWADsvwPALuUxud15Tap5wnQgVssXZJAIpGqFxnqiCbs9SjDET1
+         C7TPKyeBELoVR5mTyMPLZTyX9Clh0qZRpKcsOhjsNYZ73uRCw0qLpuqVYlgdzd7Fkeow
+         60Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682684739; x=1685276739;
+        d=1e100.net; s=20221208; t=1682684748; x=1685276748;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JZaTVYj+7JHW5ogrU2gshDHZR4SGV9IAITO2F/xNkdE=;
-        b=FxTW8MixRPe6cAEMJRK0zmpHkDNtBVPTyX6wmwRRt7DIYkBL7bTTjgFX2Lg+ltoZQY
-         JWZ/Un3s+tLdt2zELamBzbqUrQUyT7y6jJRhLZiaFtulAyvu7m55cidhZlo+BQ9U1Qq5
-         bVO66bWIC2bQOcUzV92csbW7YKiNbJkDBREht8e/ajQl1bVkF21pYlqrEdZK2nknIXpg
-         mpFbnxCTTTN3Y89m/In1LPvdgE+4q+d8Y9zW1EQsmdWVEoOvQx0AU+KqUTlASfxIJGUz
-         2fAHvqG9Kzdl/4HF2EOabpXvDNBOsKckGTcdxwOOiKRK1uGNAfb1d9qTdS7H28ZvLYWk
-         kbGg==
-X-Gm-Message-State: AC+VfDzjWT7fU7ScO6TmzocUq01MSqpjfVzrTm3WcYYZIqPvpQq36k2L
-        cLEuyhyun/q7H+AkALLcxHARIw==
-X-Google-Smtp-Source: ACHHUZ5nE8CV6swtaa6RT8oWCahIZAfJUkO/1Goui9aA/rILn+31p0oddbno5lpzYsEOiXt4oKJLeg==
-X-Received: by 2002:a50:fb04:0:b0:506:be49:243a with SMTP id d4-20020a50fb04000000b00506be49243amr4117396edq.15.1682684739187;
-        Fri, 28 Apr 2023 05:25:39 -0700 (PDT)
-Received: from [172.23.4.26] ([31.221.30.162])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05640214c700b004fa380a14e7sm9102383edx.77.2023.04.28.05.25.38
+        bh=FCZD7/skKxELiLiQ/Kgtq9xL2gK3ugZhkE8UlBHv94Q=;
+        b=Ze4WeG4nP2kAS4JKMT2br9oO25qpMMbiV6zaBMwYbOWUO1O4sC8N7Ip1/s3oyqEQsb
+         R2pwPDTwlCfZEiuiidus4uosJEhKrkGUSXEhNX0aK9WswxIfbRzfMB/uf07Re26Y0epb
+         xe0IIBd74220ij00loh4nFzHn7uT3Rt6dP2Hywm2Tg6fO6O5SuCYg4X/jUsDtcbyHWoz
+         iirT9d3cGapFZLP0wm7t4+hbpPGG8/IqZ+hhRYNRAWWOLfPrzoQJ76ce53CO8L++kkd5
+         yti3kdN8QZsI0KA8M1JC1tk15Yh3lXoZp37CRIgiiYbKCd1e/upspnofNtm6vOOLFxej
+         e1gw==
+X-Gm-Message-State: AC+VfDyFskj3bacKr7Q+6HX2KqEHr0dD2bhDBq54daYgRnTMJREPNm+W
+        jFP6L7PPA4bGHkx/JGeqE3kkpQ==
+X-Google-Smtp-Source: ACHHUZ7jrGfG5E3rVbh1rlyewG/33jkn7z+iNaDOwZOeE24lokjSTMXbm+oex+abJk6U0bKResFC0Q==
+X-Received: by 2002:a05:600c:d7:b0:3f1:93c2:4df6 with SMTP id u23-20020a05600c00d700b003f193c24df6mr3758700wmm.12.1682684748414;
+        Fri, 28 Apr 2023 05:25:48 -0700 (PDT)
+Received: from [172.23.2.142] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id i40-20020a05600c4b2800b003ee6aa4e6a9sm27367821wmp.5.2023.04.28.05.25.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 05:25:38 -0700 (PDT)
-Message-ID: <87d16bb4-178a-2583-5338-d9e9674da6e9@linaro.org>
-Date:   Fri, 28 Apr 2023 13:25:37 +0100
+        Fri, 28 Apr 2023 05:25:47 -0700 (PDT)
+Message-ID: <00e293fc-e5f7-d451-5547-def284ac2214@linaro.org>
+Date:   Fri, 28 Apr 2023 14:25:46 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2 07/13] drm/msm/dpu: Add SM6350 support
+Subject: Re: [PATCH v2 0/7] GenieZone hypervisor drivers
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+To:     Yi-De Wu <yi-de.wu@mediatek.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org>
- <20230411-topic-straitlagoon_mdss-v2-7-5def73f50980@linaro.org>
- <k25jg7cez2kimpxr4ztbdzjr2adq6a2vjknyvfe5frxujtogfg@vhfdyt45unv6>
- <b3fajcbkfxqy4bxzjezrugbetpbjxdskarr3fhtn2unhqv2srj@y2o3wfd4v7dz>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b3fajcbkfxqy4bxzjezrugbetpbjxdskarr3fhtn2unhqv2srj@y2o3wfd4v7dz>
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        David Bradil <dbrazdil@google.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230428103622.18291-1-yi-de.wu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,46 +95,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/04/2023 12:36, Yi-De Wu wrote:
+> This series is based on linux-next, tag: next-20230427.
+> 
+> Changes in v2:
+> - Refactor: move to drivers/virt/geniezone
+> - Refactor: decouple arch-dependent and arch-independent
+> - Check pending signal before entering guest context
+> - Fix reviewer's comments
+> 
 
-On 4/27/23 16:48, Marijn Suijten wrote:
-> On 2023-04-27 17:37:42, Marijn Suijten wrote:
->> On 2023-04-21 00:31:16, Konrad Dybcio wrote:
->>> Add SM6350 support to the DPU1 driver to enable display output.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> After addressing the comments from Dmitry (CURSOR0->DMA1 and
->> CURSOR1->DMA2), this is:
->>
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->>
->> See below for some nits.
-> Actually found one glaring issue that might explain why INTF TE wasn't
-> working for you the other day!
+Please explain what is Geniezone, where we can find it, what's the plan
+for open-sourcing it etc.
 
-[...]
+That's what cover letter is for.
 
+Best regards,
+Krzysztof
 
->>> +	.vbif = sm6350_vbif,
->>> +	.reg_dma_count = 1,
->>> +	.dma_cfg = &sm8250_regdma,
->>> +	.perf = &sm6350_perf_data,
->>> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
->>> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
->>> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
->>> +		     BIT(MDP_INTF0_INTR) | \
->>> +		     BIT(MDP_INTF1_INTR)
-> For completeness I should've pointed out that you're missing
-> MDP_INTF1_TEAR_INTR here, likely resulting in INTF TE not working.
->
-> - Marijn
-
-<annoyed noises>
-
-so it might have been this.. I'll retest, thanks!
-
-
-Konrad
-
->
-> <snip>
