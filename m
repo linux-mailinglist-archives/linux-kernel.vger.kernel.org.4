@@ -2,146 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442166F1AAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7036F16F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345997AbjD1Ony (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
+        id S1345825AbjD1Lo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345781AbjD1Onw (ORCPT
+        with ESMTP id S230145AbjD1LoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:43:52 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D949E2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:43:50 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fb89e1666so80933757b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1682693030; x=1685285030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ENY4FP1NqCXozMR3NGmRVnsIVYYqkrTXbZLhDqjIH9U=;
-        b=BUX2oPD1DAJUi92Gw0HP/uZjQmQQJmuVAw3YE4wWmEIxvQVRM0VgB5ydbi1KrO+1N7
-         kd31GUw8NSJWm+eyF4CjGTBca786e4SFPdeVfC/WvQjvXO0YEAyNTsboDc5BGA01TH0o
-         Ai/64JfopJNcphbmJ1ncSJo22IrvWjiToyqq51fiBIbZl1/VbaZh9pu/JdQQCPJGD67v
-         qd2zLf2j4XT4nby/ArIqLu5O7zxXrwMAXkTdfEtO/C/BXJChOrA6iftl6QhYavvpHguj
-         W6A/I22+ybtPp5ouI+2ysRxf/Mepei3hdGIsrL4ZM1uyTKCsXgjtS2vH0lsvgBCt+iVh
-         w9pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682693030; x=1685285030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ENY4FP1NqCXozMR3NGmRVnsIVYYqkrTXbZLhDqjIH9U=;
-        b=Wlq2a4Bdh5gJcVM/4N0WQcKAwKBbjw67IhRrIsK4tjmk7CZd+qx0+Hi3ps0IdnFGqU
-         KW+qWNrcDDf7/1tTAsfb8FzQrHIKMKTnsdEcR/9kdeFpPjRfd1uRYO0KvNLFKlsPqsvB
-         3U4LcGUTPQYCOo2Nz4W5Ik699lnTgMLl/pJh1YKC9TbjI1hJTOzMtphOY9eC/4vSSkY/
-         cM84+RvfS2GSBTXvPxNvT3Z1cCHOAvQmWXQ0v9BKzHxY1QQjt6kJaNEYwBZk1+yqbbZ6
-         GaAfy8Dr76CJcVHpwv89yqe7fzMLJWMYHTi9fnryqGQrPjfJX0MTtVc54BlHSH4gGPFs
-         nUrA==
-X-Gm-Message-State: AC+VfDwzOr/n1LfexKcidrJI14Yk6tX9eth654oSn5lpHuaJGZPPDQ9S
-        4yZgVQnUhknPXra3fVfKhnkwZt3gIG4mCc/qLJoS
-X-Google-Smtp-Source: ACHHUZ5nGGXZLBgK3Mv6Fgxuoin7FjVgfDs4dvEZYUJUffdOyZPqoBviwFPv23h1xj96UnnWXRz0l6ajrzD2puwsPI8=
-X-Received: by 2002:a0d:e28b:0:b0:533:1853:9a1f with SMTP id
- l133-20020a0de28b000000b0053318539a1fmr4032243ywe.39.1682693029791; Fri, 28
- Apr 2023 07:43:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230428030916.2966-1-rdunlap@infradead.org>
-In-Reply-To: <20230428030916.2966-1-rdunlap@infradead.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 28 Apr 2023 10:43:39 -0400
-Message-ID: <CAHC9VhQoa5yw2e1jiN844pxNXXT+CosJn9ip7ysFnsnUbQUi2Q@mail.gmail.com>
-Subject: Re: [PATCH] lsm: move hook comments docs to security/security.c
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
+        Fri, 28 Apr 2023 07:44:25 -0400
+Received: from forward502a.mail.yandex.net (forward502a.mail.yandex.net [178.154.239.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BD055A3;
+        Fri, 28 Apr 2023 04:44:23 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net [IPv6:2a02:6b8:c0f:26a7:0:640:a2d5:0])
+        by forward502a.mail.yandex.net (Yandex) with ESMTP id 7926E5EB96;
+        Fri, 28 Apr 2023 14:44:21 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id KiHVIE1Ba8c0-kLMgT63n;
+        Fri, 28 Apr 2023 14:44:21 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1682682261;
+        bh=P5dAEFXCyQi6+rdwlxT4TYQBkm3BseljpBsRS20Ci8M=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=GOJgSUi30rxJXVvgNEnAr96wjzGSIXWH0TV+ZOfFqq17/ayGyrdh/jHhwg7442ixu
+         bYUDrbIcdC7sBc+aeLcre2Cl1uQzgM88pmN3dYEs5zokzhQEQ0zt91rp1FubbCtv3O
+         DNL/PvTtQWYXxbU4lmFTcdczNuQPrwAgEWEYq+80=
+Authentication-Results: mail-nwsmtp-smtp-production-main-84.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <db1013a28b517a7d37a052290173d4f12b6325b9.camel@maquefel.me>
+Subject: Re: [PATCH 32/43] dt-bindings: gpio: Add DT bindings ep93xx gpio
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 28 Apr 2023 17:44:22 +0300
+In-Reply-To: <CACRpkdY_1-4QPzuQs0aqX4M=RDzT3y9m7FTA_Dq71vEn22A8qw@mail.gmail.com>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230424123522.18302-33-nikita.shubin@maquefel.me>
+         <20230424163203.GK2701399-robh@kernel.org>
+         <CACRpkdY_1-4QPzuQs0aqX4M=RDzT3y9m7FTA_Dq71vEn22A8qw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 11:09=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
->
-> Fix one kernel-doc warning, but invesigating that led to other
-> kernel-doc movement (lsm_hooks.h to security.c) that needs to be
-> fixed also.
->
-> include/linux/lsm_hooks.h:1: warning: no structured comments found
->
-> Fixes: e261301c851a ("lsm: move the remaining LSM hook comments to securi=
-ty/security.c")
-> Fixes: 1cd2aca64a5d ("lsm: move the io_uring hook comments to security/se=
-curity.c")
-> Fixes: 452b670c7222 ("lsm: move the perf hook comments to security/securi=
-ty.c")
-> Fixes: 55e853201a9e ("lsm: move the bpf hook comments to security/securit=
-y.c")
-> Fixes: b14faf9c94a6 ("lsm: move the audit hook comments to security/secur=
-ity.c")
-> Fixes: 1427ddbe5cc1 ("lsm: move the binder hook comments to security/secu=
-rity.c")
-> Fixes: 43fad2821876 ("lsm: move the sysv hook comments to security/securi=
-ty.c")
-> Fixes: ecc419a44535 ("lsm: move the key hook comments to security/securit=
-y.c")
-> Fixes: 742b99456e86 ("lsm: move the xfrm hook comments to security/securi=
-ty.c")
-> Fixes: ac318aed5498 ("lsm: move the Infiniband hook comments to security/=
-security.c")
-> Fixes: 4a49f592e931 ("lsm: move the SCTP hook comments to security/securi=
-ty.c")
-> Fixes: 6b6bbe8c02a1 ("lsm: move the socket hook comments to security/secu=
-rity.c")
-> Fixes: 2c2442fd46cd ("lsm: move the AF_UNIX hook comments to security/sec=
-urity.c")
-> Fixes: 2bcf51bf2f03 ("lsm: move the netlink hook comments to security/sec=
-urity.c")
-> Fixes: 130c53bfee4b ("lsm: move the task hook comments to security/securi=
-ty.c")
-> Fixes: a0fd6480de48 ("lsm: move the file hook comments to security/securi=
-ty.c")
-> Fixes: 9348944b775d ("lsm: move the kernfs hook comments to security/secu=
-rity.c")
-> Fixes: 916e32584dfa ("lsm: move the inode hook comments to security/secur=
-ity.c")
-> Fixes: 08526a902cc4 ("lsm: move the filesystem hook comments to security/=
-security.c")
-> Fixes: 36819f185590 ("lsm: move the fs_context hook comments to security/=
-security.c")
-> Fixes: 1661372c912d ("lsm: move the program execution hook comments to se=
-curity/security.c")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: linux-security-module@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: bpf@vger.kernel.org
-> ---
->  Documentation/bpf/prog_lsm.rst             |    2 +-
->  Documentation/security/lsm-development.rst |    6 +++---
->  Documentation/security/lsm.rst             |    2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
+Hello Linus!
 
-Thanks Randy.  Did you want to take this via the doc tree, or would
-you prefer if I pulled this into the LSM tree?
+On Wed, 2023-04-26 at 22:48 +0200, Linus Walleij wrote:
+> On Mon, Apr 24, 2023 at 6:32=E2=80=AFPM Rob Herring <robh@kernel.org> wro=
+te:
+> > On Mon, Apr 24, 2023 at 03:34:48PM +0300, Nikita Shubin wrote:
+>=20
+> > > Add YAML bindings for ep93xx SoC.
+> > >=20
+> > > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> (...)
+> > > +=C2=A0 chip-label:
+> > > +=C2=A0=C2=A0=C2=A0 maxItems: 1
+> > > +=C2=A0=C2=A0=C2=A0 description: human readable name.
+> >=20
+> > Why do you need this? It's not standard and I don't see other GPIO
+> > controllers needing it.
+>=20
+> Caught my eye too, Nikita can you live without this and just use
+> dev_name()
+> or something to name the chip in Linux?
+>=20
+> If it is to conform to EP93xx documentation naming I guess it should
+> be
+> cirrus,ep93xx-gpio-chip-name =3D "..."; ?
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+Nah, i should drop it, it was a reverence to people which are sad about
+gpio index reordering.
 
---=20
-paul-moore.com
+Through i like the idea of "cirrus,ep93xx-gpio-chip-name".
+
+>=20
+> Yours,
+> Linus Walleij
+
