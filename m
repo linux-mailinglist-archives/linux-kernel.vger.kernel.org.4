@@ -2,138 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC0B6F0FA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96F06F0FB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344679AbjD1AdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 20:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S1344630AbjD1AkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 20:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344555AbjD1AdJ (ORCPT
+        with ESMTP id S229508AbjD1AkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 20:33:09 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C560E46AB
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:32:39 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3f0a2f8216fso869361cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 17:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682641957; x=1685233957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kJaY9sgaqKLUmeW0DT4PpZqe8svi0MLaSjCCEjhIrtI=;
-        b=pfVTkOVNi1QXcT1uTFiTcD8+HIfY8ZOmRtmS4qP4m5u3RIksUetT36jzwry0hhMOzj
-         ocKVJzhrS7E1VrRRfNhRFD57wImEa0XLNL1YWX40M7B+arP1Iq7nv2c73KDgP/H0AfmS
-         fcsOFoejBQyETzM7aaJPz23RiAojihr611xMC1rlyOP1liMzRFizIUFveFWx9qF1jsGJ
-         yifRJYeZHlUlyEbdn3SZHT2Lr2bSEt+roEW96PEpSaNrtV+k1m1v8tUcz2xMSjyPdJyO
-         826dqo3oPIO7h8pIyb14hTh5/3mnPUN8q8IKNAdWLRMqcNinaIk6LjQj4Wqm7VWnU5cP
-         /qBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682641957; x=1685233957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kJaY9sgaqKLUmeW0DT4PpZqe8svi0MLaSjCCEjhIrtI=;
-        b=LfG/RgL9pbSCcIbhSzYEIObD1H1hbgMHAPQSdhkvFQFvYo+0tjiKEDjCrhK8qv3HIc
-         zxHiZYZCjysQRTFKUyzqmBytySiU95ARL5fnTkTC4nQdGMi+JU5/jXIYqO1uk257aptl
-         vEstMm/HVSit8rQ7kuWSokdYDyGc3V680/pVEjv+/Xkp3+Uz3699uCQYvZ+mtUHAk7b/
-         gkAP7YL4rr45tKYzlyIA3tzu/NETi950IbrQcBFq1UVQh8cMTmCcsJ4hCkg1Rl0MzaKg
-         yxyXPuf+Zghwkstfl9gcvOFFwjxXjO4lGQauJYkJWFakSVPtBKEBUWvxg+pQBYEblA4/
-         5k5g==
-X-Gm-Message-State: AC+VfDxP2Ay56/FhOVgORMWG0YwmxpVVptQ4piuSahaffUKrW5nU7DKy
-        5Vd64hw57pHDnH0W8KRPGQ8AwIl5yNZ74YiK6P5f6Q==
-X-Google-Smtp-Source: ACHHUZ4Mn9fA1Rv+pb1tCRREtcv+IVBtvXoEZK3Oaafli+Lta5PSWy5CQIDM1vdPr+yiXWvEtBHlctK7/LNcLIEZEcw=
-X-Received: by 2002:a05:622a:1a0e:b0:3ef:3510:7c3a with SMTP id
- f14-20020a05622a1a0e00b003ef35107c3amr73868qtb.3.1682641957523; Thu, 27 Apr
- 2023 17:32:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230427234833.1576130-1-namhyung@kernel.org> <20230427234833.1576130-2-namhyung@kernel.org>
-In-Reply-To: <20230427234833.1576130-2-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 27 Apr 2023 17:32:26 -0700
-Message-ID: <CAP-5=fXf12-Ym_iFhXeKpj5mb-QsnFCEdorp9gf=OC86c8p8WA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf lock contention: Rework offset calculation with
- BPF CO-RE
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>, Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 27 Apr 2023 20:40:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8709213A;
+        Thu, 27 Apr 2023 17:40:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F165640A5;
+        Fri, 28 Apr 2023 00:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E8D8C433D2;
+        Fri, 28 Apr 2023 00:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682642410;
+        bh=HBZ9LJ8/7gelW0e3hNFH3mKrs+p2XBy1gBkw9/WVGDw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EBeLOerbxR3am7drGe0il1lide8MozrpM9KFv9Yh9qhkN7uwvqCirSX8jKxozYJ1U
+         3kFFW+FyMFx7pRRgL417+81AeryNX7YP5HKpAAGtA+TOt4s+2XvvZINu6qCQITPUdC
+         W7Hoej5bTCWSsqQuI+3T5Zg+ELudyJsUcc44nInTjmaSL9NaNCRn77dqYUjRWFOMTE
+         Kx/RHZ4cE+jbXM9gC8P5chJLhYcycbYjR9+NyY6IcNlpF8FHP9Z6Yic01AUyIMZ6fe
+         F+1OadHM9AidbsTj9y15NLsvuTPgVjobeDygU8U0mdLJeA6g29h7HKhosILhHqY4+4
+         aqejdUIDrS5Xg==
+Date:   Fri, 28 Apr 2023 09:40:06 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH v7 00/11] tracing: Add fprobe events
+Message-Id: <20230428094006.49275a20ab80e0142a6c43c0@kernel.org>
+In-Reply-To: <ZEpjgKmDwg1GTCTR@krava>
+References: <168255826500.2565678.17719875734305974633.stgit@mhiramat.roam.corp.google.com>
+        <ZEpjgKmDwg1GTCTR@krava>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 4:48=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> It seems BPF CO-RE reloc doesn't work well with the pattern that gets
-> the field-offset only.  Use offsetof() to make it explicit so that
-> the compiler would generate the correct code.
->
-> Fixes: 0c1228486bef ("perf lock contention: Support pre-5.14 kernels")
-> Co-developed-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On Thu, 27 Apr 2023 13:58:56 +0200
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
-Acked-by: Ian Rogers <irogers@google.com>
+> On Thu, Apr 27, 2023 at 10:17:45AM +0900, Masami Hiramatsu (Google) wrote:
+> > Hi,
+> > 
+> > Here is the 7th version of improve fprobe and add a basic fprobe event
+> > support for ftrace (tracefs) and perf. Here is the previous version.
+> > 
+> > https://lore.kernel.org/all/168234755610.2210510.12133559313738141202.stgit@mhiramat.roam.corp.google.com/
+> > 
+> > This version is rebased on the latest linux-trace/for-next, fixes
+> > bpf_get_btf_vmlinux() return value check [6/11] and adds new BTF $retval
+> > type support [9/11] (I forgot to implement this feature last time).
+> > Also updates according to the BTF $retval type support.
+> > 
+> > You can also get this series from:
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-event-ext
+> > 
+> > With this fprobe events, we can continue to trace function entry/exit
+> > even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+> > CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+> > it is not available if the architecture only supports
+> > CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+> > events can not probe function entry/exit effectively on such architecture.
+> > But this problem can be solved if the dynamic events supports fprobe events
+> > because fprobe events doesn't use kprobe but ftrace via fprobe.
+> > 
+> > FPROBE EVENTS
+> > =============
+> > 
+> > Fprobe events allows user to add new events on the entry and exit of kernel
+> > functions (which can be ftraced). Unlike kprobe events, the fprobe events
+> > can only probe the function entry and exit, and it can only trace the
+> > function args, return value, and stacks. (no registers)
+> > For probing function body, users can continue to use the kprobe events.
+> > 
+> > The tracepoint probe events (tprobe events) also allows user to add new
+> > events dynamically on the tracepoint. Most of the tracepoint already has
+> > trace-events, so this feature is useful if you only want to know a
+> > specific parameter, or trace the tracepoints which has no trace-events
+> > (e.g. sched_*_tp tracepoints only exposes the tracepoints.)
+> > 
+> > The fprobe events syntax is;
+> > 
+> >  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+> >  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+> > 
+> > And tracepoint probe events syntax is;
+> > 
+> >  t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+> > 
+> > This series includes BTF argument support for fprobe/tracepoint events,
+> > and kprobe events. This allows us to fetch a specific function parameter
+> > by name, and all parameters by '$$args'.
+> 
+> are you planning to fetch and display more complicated types in future?
+> like strings or dereferencing struct field from argument pointer
 
-Thanks,
-Ian
+Yes, that's on my next TODO list. The string thing is a bit problematic,
+but I think in most case, "const char *" is used for the strings.
 
-> ---
->  tools/perf/util/bpf_skel/lock_contention.bpf.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/=
-util/bpf_skel/lock_contention.bpf.c
-> index 30c193078bdb..8d3cfbb3cc65 100644
-> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> @@ -429,21 +429,21 @@ struct rq___new {
->  SEC("raw_tp/bpf_test_finish")
->  int BPF_PROG(collect_lock_syms)
->  {
-> -       __u64 lock_addr;
-> +       __u64 lock_addr, lock_off;
->         __u32 lock_flag;
->
-> +       if (bpf_core_field_exists(struct rq___new, __lock))
-> +               lock_off =3D offsetof(struct rq___new, __lock);
-> +       else
-> +               lock_off =3D offsetof(struct rq___old, lock);
-> +
->         for (int i =3D 0; i < MAX_CPUS; i++) {
->                 struct rq *rq =3D bpf_per_cpu_ptr(&runqueues, i);
-> -               struct rq___new *rq_new =3D (void *)rq;
-> -               struct rq___old *rq_old =3D (void *)rq;
->
->                 if (rq =3D=3D NULL)
->                         break;
->
-> -               if (bpf_core_field_exists(rq_new->__lock))
-> -                       lock_addr =3D (__u64)&rq_new->__lock;
-> -               else
-> -                       lock_addr =3D (__u64)&rq_old->lock;
-> +               lock_addr =3D (__u64)(void *)rq + lock_off;
->                 lock_flag =3D LOCK_CLASS_RQLOCK;
->                 bpf_map_update_elem(&lock_syms, &lock_addr, &lock_flag, B=
-PF_ANY);
->         }
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
+> 
+> > Note that enabling this feature, you need to enable CONFIG_BPF_SYSCALL and
+> > confirm that your arch supports CONFIG_HAVE_FUNCTION_ARG_ACCESS_API.
+> > 
+> > E.g.
+> > 
+> >  # echo 't kfree ptr' >> dynamic_events
+> >  # echo 'f kfree object' >> dynamic_events
+> >  # cat dynamic_events 
+> > t:tracepoints/kfree kfree ptr=ptr
+> > f:fprobes/kfree__entry kfree object=object
+> >  # echo 1 > events/fprobes/enable
+> >  # echo 1 > events/tracepoints/enable
+> >  # echo > trace
+> >  # head -n 20 trace | tail
+> > #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+> > #              | |         |   |||||     |         |
+> >             tail-84      [000] .....  1324.561958: kfree__entry: (kfree+0x4/0x140) object=0xffff888006383c00
+> >             tail-84      [000] ...1.  1324.561961: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff888006383c00
+> >             tail-84      [000] .....  1324.561988: kfree__entry: (kfree+0x4/0x140) object=0x0
+> >             tail-84      [000] ...1.  1324.561988: kfree: (__probestub_kfree+0x4/0x10) ptr=0x0
+> >             tail-84      [000] .....  1324.561989: kfree__entry: (kfree+0x4/0x140) object=0xffff88800671e600
+> >             tail-84      [000] ...1.  1324.561989: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff88800671e600
+> >             tail-84      [000] .....  1324.562368: kfree__entry: (kfree+0x4/0x140) object=0xffff8880065e0580
+> >             tail-84      [000] ...1.  1324.562369: kfree: (__probestub_kfree+0x4/0x10) ptr=0xffff8880065e0580
+> 
+> I checked with perf and record/stat/script seem to work fine with this
+> 
+>   # ./perf record -e 'fprobes:myprobe'
+>   ^C[ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.162 MB perf.data (1 samples) ]
+> 
+>   # ./perf script
+>     systemd-oomd   479 [001] 14550.722079: fprobes:myprobe: (ffffffff81505be0) filename=0x557b033662b0
+
+Thanks for testing!
+
+> 
+> perf trace seems to be off with __probe_ip for some reason:
+> 
+>   # ./perf trace -e 'fprobes:myprobe'
+>      0.000 systemd-oomd/479 fprobes:myprobe(__probe_ip: -2125440032, filename: 93986839069680)
+>      1.189 systemd-oomd/479 fprobes:myprobe(__probe_ip: -2125440032, filename: 93986839070144)
+> 
+> but it's probably perf issue
+
+Yeah, it seems that the perf trace handles __probe_ip as signed long.
+Does that happen with kprobe events too?
+
+Thank you,
+> 
+> thanks,
+> jirka
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
