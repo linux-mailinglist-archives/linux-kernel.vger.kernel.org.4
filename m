@@ -2,272 +2,545 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923E56F1AB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D264B6F1ABC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:46:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346137AbjD1OpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43828 "EHLO
+        id S230397AbjD1OqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346079AbjD1OpP (ORCPT
+        with ESMTP id S230016AbjD1OqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:45:15 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF70E26A5;
-        Fri, 28 Apr 2023 07:45:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hGBHwSwcZj+UtM56X2GpuW7yc+UhN5cuZVTQnEi7TCNTcdZMH1xbmuetE4gnwRICP3O6oNsvZGIXX0GV1CJ4LBqmZxFADlSyj+UvOekH7Cr0vOgZ9fiLCRshmi0Yv8lxFuhP22DT1DaSxORJKzbeQstlANzFV6uBaut8DeoFa0TE3SM3pzh6DSK/Kcd4lfh/5oaK9IMfVs5VYyloDkOZolTzgemMkdlNDvxXpxuhXHyw8J5M6pLRcmTKI9PyaOcdZwEGI72wd2UZZ006RMaHjC6SzZQkzFMhAgR+WCsXuwROPUfklzE2aHFmoQ8Wx+LV+5UmydFb4AxvakNrawzT+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nn2xf7V2z9qcRFgAdUxz5VmDNQ7pbFvCCyG5SeW3tIo=;
- b=e3hB3JyxvZb5a9Mch7bKKwDQkp8MLqHiMu3roJ5kgbaaLUBiBuQhnLJhsXO4wO4Q60dsH95BcYl2VDK0dMgBX8bYb/eQLic0FoAvxjTwpgNxwTrzOoQfdDAo3kVgf4PPC7QkxzCJU1meSr1V5giuhRi0tchgcQc9okMyBUlTbvGyW8zRWcw7Reeo11pVsXu90A1CSsJz0CG3NYlCU+95my1L1MI/onv/Iv2zf1czhFUHfIcyD4PT/rG1B6gN8fXnoMDRNmLHhgFB3wbae+6mnVRhdO/ddD0v+P1/cHz2b2TPPxvSbV6OsU2TEh8bJcBM89IjmjBhlBoFpCSgpnRZIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 28 Apr 2023 10:46:03 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1955061BC;
+        Fri, 28 Apr 2023 07:45:35 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-546da27b81cso3526128eaf.0;
+        Fri, 28 Apr 2023 07:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nn2xf7V2z9qcRFgAdUxz5VmDNQ7pbFvCCyG5SeW3tIo=;
- b=UY3ygNSMqMGzvDcVfiWwhj9HYMCcjnLGinv062tmigjg/5tEUqE8palf89VvtC0Sk4YZqZW4xAg9XqQk64ATHJfmNax4ue1Jjdu3nEo5334tXGhLPV5wSLYb239m14S4oZ9OjxW++0+btbS1cIaibn1yVTIadHmEDO3uz5eiBME=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BY1PR13MB6285.namprd13.prod.outlook.com (2603:10b6:a03:52a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.22; Fri, 28 Apr
- 2023 14:45:09 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
- 14:45:09 +0000
-Date:   Fri, 28 Apr 2023 16:45:03 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Wen Gu <guwen@linux.alibaba.com>
-Cc:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH net-next v5 4/9] net/smc: Introduce SMC-D loopback
- device
-Message-ID: <ZEvb7wYWoTySzU9O@corigine.com>
-References: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
- <1682252271-2544-5-git-send-email-guwen@linux.alibaba.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1682252271-2544-5-git-send-email-guwen@linux.alibaba.com>
-X-ClientProxiedBy: AM0PR10CA0113.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:e6::30) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1682693135; x=1685285135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HcrkhmYMHfjOAY8qwNP0BSJwbV+02B7UPqCMk2hxSFo=;
+        b=T6fr6M76F26GsFsSgjTYusBBh6+LdGYyFrNPM2MikPsbUWmkvz5ID0R9d9MNEm5u/s
+         xr2PTYZOt/TD4h6PQ5k8FFKLf+LM+L1zzNI+/J6mREJ6tY4aZcl+zPUgJq6xFFwPpce7
+         k4nWr7Leke3kI1eH4EchBkZzQsW8yNR/QNXgbuxRGTxAfeTETPWGvA/6EjnJXEc6C/9b
+         0K9l8MRg8MlgPvoeP24Iuq3vyaBR6tr5s7j4SScSz7L1Ypk8E+eN5nA9gvV4v8us/AN/
+         7RQyCxUsgTx3NO/s9QM1aU4WbY4wIEbgTwBMeqX4lKjIrtnIg6A2TwR75uTePxYMKLGl
+         1zmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682693135; x=1685285135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcrkhmYMHfjOAY8qwNP0BSJwbV+02B7UPqCMk2hxSFo=;
+        b=CRh1s2zRCFaKCfEFgCVOqpcqb6iZLOCXpW6Xb00lm1D4mOEC8D7uLpmUcs9IPyPxtM
+         XxB3xerY+3OrMUJVisNz1UgTsfiI+OmP6mv0PJjk3gldPORNldxY2jicbI+vnWSZPQyO
+         uZD1rPUUwVG0857HfPVNIU89dg/D/sonrLXFFCLeXltZsvru8cNwoWiMXE4EZPsMhlDt
+         6DgCakAtSjNQaFX+Xr1Knr4ApLj+CXGzSI6zk5O+eWas/SxErklbCQkp3P9WrXghRx+f
+         MXOR4mGzxkFYlX7KlWAiythi+XiLMj36UZElHO82mTFaVW13OihK2ZHhmlEystYT7+tf
+         Ut3Q==
+X-Gm-Message-State: AC+VfDxep1EKE+w/6hKAd3mVreEkxGE98f2a8jK2MmhaNvn3vOohEW3/
+        fNc+CumZGQ/+Gsi7YEn/uGzP2zsbknvJ4fl6Hl4=
+X-Google-Smtp-Source: ACHHUZ5/Ka6+mqzWEbWoryzV6YhjJ9O7ZisCQ6hnILUnX68xsGDIbdWIgdEr4OMiJgABIA3GX2DxVhPOGI93LTmkwV0=
+X-Received: by 2002:a05:6808:5a:b0:38e:636d:dc92 with SMTP id
+ v26-20020a056808005a00b0038e636ddc92mr2694494oic.0.1682693133173; Fri, 28 Apr
+ 2023 07:45:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY1PR13MB6285:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57cd38b9-383f-488d-0657-08db47f72a5b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pP0W/12qFfdHUIcFPhWTSXBWfB1NRGXLz8+nfDkUYNRoDPmqGoBeCgCU7hsqQHxEjwGzIhXIbBMHS5QrPjFWw32MK8RcJfoEthCVSMezXkQbIsbKkFaN+pkSzCkxJZAMUugbMx2OmdlZKAlqdvHcy7UNuxxAuFSjo22ftVHWceTvuEf7GYGiZnsrluInZ8j7WiK7KUahyBDqbymFpRcOSNEA12a7Im7bVe7NZEUBYqNr5tglBAuLE4fpAD9tqqBzxGQZYOM037B1gQS791x0KbPKRZNb+lFYcjzaetXogoNOUvmdtnnxMk4bwLr+bDyCiVUXWD4I0QbbIDQEHhXZqYX1y5bMSKsUfPEADD7W8WYFV9I4OtwOYy1MJK8HQdvCcQGEuIGYdT06sLofTPX4RHXkLQjSY8BXlkyCGLbYd42Y+sy6vDCuY47T19EVMIfMp1t2kewHE67ZXyjO9aqagVADsE7FzJgq7zNQadS1jP9dBMCgBdYe1qfPvZ2w5QB25PFPIUnmvbuRk4tT77lDc2tNyyUUWtfbCDSJ7Yp6C0hZNGjwS3ZvmWCFdIU/qvCU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(136003)(376002)(346002)(396003)(451199021)(44832011)(6512007)(186003)(6506007)(478600001)(36756003)(66476007)(6666004)(66556008)(66946007)(4326008)(8936002)(5660300002)(8676002)(6916009)(41300700001)(316002)(7416002)(6486002)(38100700002)(2906002)(2616005)(86362001)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1gxjRjN1MW3WLV5v1PZcuKauRz3vnCnPmUeVuXP44v3ft8xfa0wo3BbXs1cw?=
- =?us-ascii?Q?g0FSTwNLeRpVEo8thXjNwKWY6LFPIiBRmcLlNnRcF+A3lbKcFjKCqEwbFcWt?=
- =?us-ascii?Q?0qCqt1dA4MO1g3tJhVGkeaK/O/fv0AVy309iCCqlyhowwZtC9200I2tVYDcA?=
- =?us-ascii?Q?Q30WHg5GBEQmw0NeCULBXFpcbWl8ulR9IMin3HBBE3khDvpXA7MJx3qbofPM?=
- =?us-ascii?Q?vOcQoGfVzbm/xrlPlOx95+BZCRiA6denmY9j//dSKTQXN0ZgRbWKpMaaQJj1?=
- =?us-ascii?Q?2y28RIWkkfdzrQRIUtXoV8/pXoXRgDpDXB3RCNfcavLU3lLdcunYubE6ft3j?=
- =?us-ascii?Q?Ykvu40wNB3cWtT1TqQF6Y3bQA8PoExskQdrMvEfB6A9i3BSwfB8UmAsBuwfl?=
- =?us-ascii?Q?E8eIg7ngySBgxSy1/X6B+c5yZmjwYeE3PB0XdpnYN2X2dp0S8OEpNfBqzMXv?=
- =?us-ascii?Q?MjStNFoRSXzQGgvjAVbCXeM7wgw5smd/hAw0ngSuoEF3oqy95sVTNfrKIYnq?=
- =?us-ascii?Q?aZQff5xVWpkN1RBQiEKRzEGmWcb1TYvrnYzIR8v0ACjMRdv8nTi6ubQ6pyvO?=
- =?us-ascii?Q?Ti33QGMUe5kx/k0cEgdVOqxysO5owm4J+vR1gS14fULHUvxv1ArNb35YGraZ?=
- =?us-ascii?Q?nIA0tN9y/U1cwzbUxBJe4p1avDgg2j5zytk//7cMZEH7+jsl4FH2lbshsnDC?=
- =?us-ascii?Q?gU7MyVUMbZcLUDd7KHbx3WaPJst/jyUUv5pz0Jk1oMbFK79PmayN653fo7Pu?=
- =?us-ascii?Q?+rGilAs3R/w3azKwhDt8BTOjjcGWnTFJgQAZIdQne5gSADuSXOASmqyvjKHx?=
- =?us-ascii?Q?58t4ozm5zFNrg6yVmo/N39WjXeA2NlHtPzrUEdpeVwqPtYnvi0KzD0VO/hzG?=
- =?us-ascii?Q?9mQSU6SunWGNGNo8N1iSci+SAyFc/QdXyGCNyZc+8OWnD/CZAplYPMIdtVsQ?=
- =?us-ascii?Q?okUBz9xJtHNEdozj80pruGmFNzXvWnIBQyJLIZSR2Ax+W3/Kn8mVettVBYkG?=
- =?us-ascii?Q?ze1Ex0qCoUaIg4mlo1G2tZjCZq0s9C1DX5TJW0v0yHlVp+MTqlcE2eQL0JUl?=
- =?us-ascii?Q?J+J+Cp8NmjYlNK/vz+lPZQ0rYewJyWfqXlV62lIPg2jLA3ydoSLfHmhIMrK/?=
- =?us-ascii?Q?j2gMMm2FhzXNYoWYlDUji27LX03t2AOYPqr/SZr2Q6MxuNlgMwTstau+33QS?=
- =?us-ascii?Q?aUh6HyOL5Le1yHsNaHgYsqKmbFdhKbgU/6aOgKWpwJEwkTyoDHa6F8HQIJGY?=
- =?us-ascii?Q?Dg3fv5MP7oh8TZNnJ3zKrnUINTWgHGuzHcx2NnzS99eu/GEC4QB/oHOmc8+6?=
- =?us-ascii?Q?7Bg2HSLLVF2h13PTCfbmVNkLNn+xbK4L6WY8CIQ5An8J22xiw4++ih5CwBs0?=
- =?us-ascii?Q?uVxd5BFk4AZtjj0lhmfcuKMrCvWQAoZRpSWtVjQ8x68dNvyu772wnTD1flam?=
- =?us-ascii?Q?Jm7WEzyxRX/apyGpE2JFgWNvLRWwtPEObORF9XLedU0XwkJwKpYjLv/8FC5a?=
- =?us-ascii?Q?UXKvfV/Wb4r6v+MFnmnigl+0w1hBwvaKokrs3I1qLqpuNaoDvNHr0E9SFfoI?=
- =?us-ascii?Q?Q9iKV+rzQOVnywfpFPQBeiXW7DqIjPAt3rey94yHDlGfKE+IeZ5ijtMMFYim?=
- =?us-ascii?Q?M8+P7U+E+CRFFgKGKsgfrDVjyqHa2KJOAf70v03DtKV4UBbZwA0l0dN4E0H6?=
- =?us-ascii?Q?syf83Q=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57cd38b9-383f-488d-0657-08db47f72a5b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 14:45:09.7789
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xec5yzWAgj7tfmuZRMjjGkoxKp2fDH9c3V9Q4zZx9K3Kq3gidEBS6eD/5VHOq1KUmle/URq6UWtctGimF9NJCIWvkq4YdSoz97PJJhPzjmo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR13MB6285
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230427175340.1280952-1-robdclark@gmail.com> <20230427175340.1280952-6-robdclark@gmail.com>
+ <085ddd66-e08d-07b2-cdc6-bff2492ba090@linux.intel.com>
+In-Reply-To: <085ddd66-e08d-07b2-cdc6-bff2492ba090@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 28 Apr 2023 07:45:21 -0700
+Message-ID: <CAF6AEGsE1rV+Wt36qreA8xxPoNwMhb6Zwt_cumBisD=mcebG7w@mail.gmail.com>
+Subject: Re: [PATCH v2 5/9] drm: Add fdinfo memory stats
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 08:17:46PM +0800, Wen Gu wrote:
-> This patch introduces a kind of loopback device for SMC-D, thus
-> enabling the SMC communication between two local sockets within
-> one OS instance.
-> 
-> The loopback device supports basic capabilities defined by SMC-D
-> options, and exposed as an SMC-D v2 device.
-> 
-> The GID of loopback device is random generated, CHID is 0xFFFF
-> and SEID is SMCD_DEFAULT_V2_SEID.
-> 
-> TODO:
-> - The hierarchy preference of coexistent SMC-D devices.
-> 
-> Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
-> ---
->  include/net/smc.h      |   6 +
->  net/smc/Makefile       |   2 +-
->  net/smc/af_smc.c       |  12 +-
->  net/smc/smc_cdc.c      |   9 +-
->  net/smc/smc_cdc.h      |   1 +
->  net/smc/smc_ism.h      |   2 +
->  net/smc/smc_loopback.c | 406 +++++++++++++++++++++++++++++++++++++++++++++++++
->  net/smc/smc_loopback.h |  51 +++++++
->  8 files changed, 486 insertions(+), 3 deletions(-)
->  create mode 100644 net/smc/smc_loopback.c
->  create mode 100644 net/smc/smc_loopback.h
-> 
-> diff --git a/include/net/smc.h b/include/net/smc.h
-> index 26206d2..021ca42 100644
-> --- a/include/net/smc.h
-> +++ b/include/net/smc.h
-> @@ -41,6 +41,12 @@ struct smcd_dmb {
->  	dma_addr_t dma_addr;
->  };
->  
-> +struct smcd_seid {
-> +	u8 seid_string[24];
-> +	u8 serial_number[4];
-> +	u8 type[4];
-> +};
-> +
->  #define ISM_EVENT_DMB	0
->  #define ISM_EVENT_GID	1
->  #define ISM_EVENT_SWR	2
-> diff --git a/net/smc/Makefile b/net/smc/Makefile
-> index 875efcd..a8c3711 100644
-> --- a/net/smc/Makefile
-> +++ b/net/smc/Makefile
-> @@ -4,5 +4,5 @@ obj-$(CONFIG_SMC)	+= smc.o
->  obj-$(CONFIG_SMC_DIAG)	+= smc_diag.o
->  smc-y := af_smc.o smc_pnet.o smc_ib.o smc_clc.o smc_core.o smc_wr.o smc_llc.o
->  smc-y += smc_cdc.o smc_tx.o smc_rx.o smc_close.o smc_ism.o smc_netlink.o smc_stats.o
-> -smc-y += smc_tracepoint.o
-> +smc-y += smc_tracepoint.o smc_loopback.o
->  smc-$(CONFIG_SYSCTL) += smc_sysctl.o
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index 50c38b6..3230309 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -53,6 +53,7 @@
->  #include "smc_stats.h"
->  #include "smc_tracepoint.h"
->  #include "smc_sysctl.h"
-> +#include "smc_loopback.h"
->  
->  static DEFINE_MUTEX(smc_server_lgr_pending);	/* serialize link group
->  						 * creation on server
-> @@ -3482,15 +3483,23 @@ static int __init smc_init(void)
->  		goto out_sock;
->  	}
->  
-> +	rc = smc_loopback_init();
-> +	if (rc) {
-> +		pr_err("%s: smc_loopback_init fails with %d\n", __func__, rc);
-> +		goto out_ib;
-> +	}
-> +
->  	rc = tcp_register_ulp(&smc_ulp_ops);
->  	if (rc) {
->  		pr_err("%s: tcp_ulp_register fails with %d\n", __func__, rc);
-> -		goto out_ib;
-> +		goto out_lo;
->  	}
->  
->  	static_branch_enable(&tcp_have_smc);
->  	return 0;
->  
-> +out_lo:
-> +	smc_loopback_exit();
->  out_ib:
->  	smc_ib_unregister_client();
->  out_sock:
-> @@ -3528,6 +3537,7 @@ static void __exit smc_exit(void)
->  	tcp_unregister_ulp(&smc_ulp_ops);
->  	sock_unregister(PF_SMC);
->  	smc_core_exit();
-> +	smc_loopback_exit();
->  	smc_ib_unregister_client();
->  	smc_ism_exit();
->  	destroy_workqueue(smc_close_wq);
-> diff --git a/net/smc/smc_cdc.c b/net/smc/smc_cdc.c
-> index 89105e9..2f79bac 100644
-> --- a/net/smc/smc_cdc.c
-> +++ b/net/smc/smc_cdc.c
-> @@ -410,7 +410,14 @@ static void smc_cdc_msg_recv(struct smc_sock *smc, struct smc_cdc_msg *cdc)
->   */
->  static void smcd_cdc_rx_tsklet(struct tasklet_struct *t)
->  {
-> -	struct smc_connection *conn = from_tasklet(conn, t, rx_tsklet);
-> +	struct smc_connection *conn =
-> +		from_tasklet(conn, t, rx_tsklet);
+On Fri, Apr 28, 2023 at 3:56=E2=80=AFAM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 27/04/2023 18:53, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Add support to dump GEM stats to fdinfo.
+> >
+> > v2: Fix typos, change size units to match docs, use div_u64
+> > v3: Do it in core
+> > v4: more kerneldoc
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+> > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> > ---
+> >   Documentation/gpu/drm-usage-stats.rst | 54 +++++++++++----
+> >   drivers/gpu/drm/drm_file.c            | 99 ++++++++++++++++++++++++++=
+-
+> >   include/drm/drm_file.h                | 19 +++++
+> >   include/drm/drm_gem.h                 | 30 ++++++++
+> >   4 files changed, 189 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/=
+drm-usage-stats.rst
+> > index 552195fb1ea3..bfc14150452c 100644
+> > --- a/Documentation/gpu/drm-usage-stats.rst
+> > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > @@ -52,6 +52,9 @@ String shall contain the name this driver registered =
+as via the respective
+> >   Optional fully standardised keys
+> >   --------------------------------
+> >
+> > +Identification
+> > +^^^^^^^^^^^^^^
+> > +
+> >   - drm-pdev: <aaaa:bb.cc.d>
+> >
+> >   For PCI devices this should contain the PCI slot address of the devic=
+e in
+> > @@ -69,6 +72,9 @@ scope of each device, in which case `drm-pdev` shall =
+be present as well.
+> >   Userspace should make sure to not double account any usage statistics=
+ by using
+> >   the above described criteria in order to associate data to individual=
+ clients.
+> >
+> > +Utilization
+> > +^^^^^^^^^^^
+> > +
+> >   - drm-engine-<str>: <uint> ns
+> >
+> >   GPUs usually contain multiple execution engines. Each shall be given =
+a stable
+> > @@ -93,18 +99,6 @@ exported engine corresponds to a group of identical =
+hardware engines.
+> >   In the absence of this tag parser shall assume capacity of one. Zero =
+capacity
+> >   is not allowed.
+> >
+> > -- drm-memory-<str>: <uint> [KiB|MiB]
+> > -
+> > -Each possible memory type which can be used to store buffer objects by=
+ the
+> > -GPU in question shall be given a stable and unique name to be returned=
+ as the
+> > -string here.
+> > -
+> > -Value shall reflect the amount of storage currently consumed by the bu=
+ffer
+> > -object belong to this client, in the respective memory region.
+> > -
+> > -Default unit shall be bytes with optional unit specifiers of 'KiB' or =
+'MiB'
+> > -indicating kibi- or mebi-bytes.
+> > -
+> >   - drm-cycles-<str>: <uint>
+> >
+> >   Engine identifier string must be the same as the one specified in the
+> > @@ -126,6 +120,42 @@ percentage utilization of the engine, whereas drm-=
+engine-<str> only reflects
+> >   time active without considering what frequency the engine is operatin=
+g as a
+> >   percentage of it's maximum frequency.
+> >
+> > +Memory
+> > +^^^^^^
+> > +
+> > +- drm-memory-<region>: <uint> [KiB|MiB]
+> > +
+> > +Each possible memory type which can be used to store buffer objects by=
+ the
+> > +GPU in question shall be given a stable and unique name to be returned=
+ as the
+> > +string here.  The name "memory" is reserved to refer to normal system =
+memory.
+>
+> How is the name memory reserved, I mean when which part of the key?
+> Obviously amdgpu exposes drm-memory-vram so it can't mean system memory
+> there.
+>
+> [Comes back later]
+>
+> Ah I see.. you meant the _region_ name "memory" is reserved. Which
+> applies to the below keys, not the one above. Hmm.. So for multi-region
+> drivers you meant like:
 
-nit: I think the above can be on one line, as it was before this patch.
+right, I thought "drm-memory-memory" sounded silly, and otherwise
+"memory" fit elsewhere as below, so "memory" seemed like a reasonable
+region name ;-)
 
-> +
-> +	smcd_cdc_rx_handler(conn);
-> +}
-> +
-> +void smcd_cdc_rx_handler(struct smc_connection *conn)
-> +{
->  	struct smcd_cdc_msg *data_cdc;
->  	struct smcd_cdc_msg cdc;
->  	struct smc_sock *smc;
-> diff --git a/net/smc/smc_cdc.h b/net/smc/smc_cdc.h
-> index 696cc11..11559d4 100644
-> --- a/net/smc/smc_cdc.h
-> +++ b/net/smc/smc_cdc.h
-> @@ -301,5 +301,6 @@ int smcr_cdc_msg_send_validation(struct smc_connection *conn,
->  				 struct smc_wr_buf *wr_buf);
->  int smc_cdc_init(void) __init;
->  void smcd_cdc_rx_init(struct smc_connection *conn);
-> +void smcd_cdc_rx_handler(struct smc_connection *conn);
->  
->  #endif /* SMC_CDC_H */
-> diff --git a/net/smc/smc_ism.h b/net/smc/smc_ism.h
-> index 14d2e77..d18c50a 100644
-> --- a/net/smc/smc_ism.h
-> +++ b/net/smc/smc_ism.h
-> @@ -15,6 +15,8 @@
->  
->  #include "smc.h"
->  
-> +#define S390_ISM_IDENT_MASK 0x00FFFF
+> drm-total-memory:
+> drm-total-vram:
+>
+> Etc. Okay I think that works. All prefixes "drm-$category" become
+> reserved ones effectively but I think that is okay.
+>
+> > +
+> > +Value shall reflect the amount of storage currently consumed by the bu=
+ffer
+> > +object belong to this client, in the respective memory region.
+>
+> OMG it is all my fault for mentioning buffer objects here... :)
+>
+> Maybe just fix the plural while moving.
+>
+> Or maybe there is time to s/buffer objects/memory/ too? Why not I think.
+> It would leave things more future proof.
+>
+> > +
+> > +Default unit shall be bytes with optional unit specifiers of 'KiB' or =
+'MiB'
+> > +indicating kibi- or mebi-bytes.
+> > +
+> > +- drm-shared-<region>: <uint> [KiB|MiB]
+> > +
+> > +The total size of buffers that are shared with another file (ie. have =
+more
+> > +than a single handle).
+> > +
+> > +- drm-private-<region>: <uint> [KiB|MiB]
+> > +
+> > +The total size of buffers that are not shared with another file.
+>
+> You went back to private + shared for a specific reason? I thought we
+> agreed total + shared can be less confusing.
 
-nit: I think GENMASK is appropriate here.
+opps, yes, I forgot to update the rst
 
-> +
->  struct smcd_dev_list {	/* List of SMCD devices */
->  	struct list_head list;
->  	struct mutex mutex;	/* Protects list of devices */
+> > +
+> > +- drm-resident-<region>: <uint> [KiB|MiB]
+> > +
+> > +The total size of buffers that are resident in system memory.
+>
+> "..resident in the specified memory region."?
+>
+> > +
+> > +- drm-purgeable-<region>: <uint> [KiB|MiB]
+> > +
+> > +The total size of buffers that are purgeable.
+> > +
+> > +- drm-active-<region>: <uint> [KiB|MiB]
+> > +
+> > +The total size of buffers that are active on one or more rings.
+>
+> Under utilisation we used 'engines' so introducing 'rings' at least
+> needs clarification, maybe a terminology chapter? Or just use engines
+> for consistency?
 
-...
+using "engines" works for me
+
+> > +
+> >   Implementation Details
+> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> > index 6d5bdd684ae2..9321eb0bf020 100644
+> > --- a/drivers/gpu/drm/drm_file.c
+> > +++ b/drivers/gpu/drm/drm_file.c
+> > @@ -42,6 +42,7 @@
+> >   #include <drm/drm_client.h>
+> >   #include <drm/drm_drv.h>
+> >   #include <drm/drm_file.h>
+> > +#include <drm/drm_gem.h>
+> >   #include <drm/drm_print.h>
+> >
+> >   #include "drm_crtc_internal.h"
+> > @@ -871,9 +872,105 @@ void drm_send_event(struct drm_device *dev, struc=
+t drm_pending_event *e)
+> >   }
+> >   EXPORT_SYMBOL(drm_send_event);
+> >
+> > +static void print_size(struct drm_printer *p, const char *stat,
+> > +                    const char *region, size_t sz)
+> > +{
+> > +     const char *units[] =3D {"", " KiB", " MiB"};
+> > +     unsigned u;
+> > +
+> > +     for (u =3D 0; u < ARRAY_SIZE(units) - 1; u++) {
+> > +             if (sz < SZ_1K)
+> > +                     break;
+> > +             sz =3D div_u64(sz, SZ_1K);
+> > +     }
+> > +
+> > +     drm_printf(p, "drm-%s-%s:\t%zu%s\n", stat, region, sz, units[u]);
+> > +}
+> > +
+> > +/**
+> > + * drm_print_memory_stats - A helper to print memory stats
+> > + * @p: The printer to print output to
+> > + * @stats: The collected memory stats
+> > + * @supported_status: Bitmask of optional stats which are available
+> > + * @region: The memory region
+> > + *
+> > + */
+> > +void drm_print_memory_stats(struct drm_printer *p,
+> > +                         const struct drm_memory_stats *stats,
+> > +                         enum drm_gem_object_status supported_status,
+> > +                         const char *region)
+> > +{
+> > +     print_size(p, "total", region, stats->private + stats->shared);
+> > +     print_size(p, "shared", region, stats->shared);
+>
+> Ah just rst is out of date.
+>
+> > +     print_size(p, "active", region, stats->active);
+> > +
+> > +     if (supported_status & DRM_GEM_OBJECT_RESIDENT)
+> > +             print_size(p, "resident", region, stats->resident);
+> > +
+> > +     if (supported_status & DRM_GEM_OBJECT_PURGEABLE)
+> > +             print_size(p, "purgeable", region, stats->purgeable);
+> > +}
+> > +EXPORT_SYMBOL(drm_print_memory_stats);
+> > +
+> > +/**
+> > + * drm_show_memory_stats - Helper to collect and show standard fdinfo =
+memory stats
+> > + * @p: the printer to print output to
+> > + * @file: the DRM file
+> > + *
+> > + * Helper to iterate over GEM objects with a handle allocated in the s=
+pecified
+> > + * file.
+> > + */
+> > +void drm_show_memory_stats(struct drm_printer *p, struct drm_file *fil=
+e)
+> > +{
+> > +     struct drm_gem_object *obj;
+> > +     struct drm_memory_stats status =3D {};
+> > +     enum drm_gem_object_status supported_status;
+> > +     int id;
+> > +
+> > +     spin_lock(&file->table_lock);
+> > +     idr_for_each_entry (&file->object_idr, obj, id) {
+> > +             enum drm_gem_object_status s =3D 0;
+> > +
+> > +             if (obj->funcs && obj->funcs->status) {
+> > +                     s =3D obj->funcs->status(obj);
+> > +                     supported_status =3D DRM_GEM_OBJECT_RESIDENT |
+> > +                                     DRM_GEM_OBJECT_PURGEABLE;
+>
+> Whats the purpose of supported_status? It is never modified. Did you
+> intend for the vfunc to be returning this?
+
+for now, simply to avoid showing fields for drivers which don't
+support the vfunc.. it could be made more fine grained later if the
+need arises.
+
+> > +             }
+> > +
+> > +             if (obj->handle_count > 1) {
+> > +                     status.shared +=3D obj->size;
+> > +             } else {
+> > +                     status.private +=3D obj->size;
+> > +             }
+> > +
+> > +             if (s & DRM_GEM_OBJECT_RESIDENT) {
+> > +                     status.resident +=3D obj->size;
+> > +             } else {
+> > +                     /* If already purged or not yet backed by pages, =
+don't
+> > +                      * count it as purgeable:
+> > +                      */
+> > +                     s &=3D ~DRM_GEM_OBJECT_PURGEABLE;
+> > +             }
+>
+> Again, why couldn't a resident object also be purgeable?
+
+it is the other way around.. if it isn't backed by pages (ie. already
+purged, etc) it shouldn't count as purgeable
+
+> > +
+> > +             if (!dma_resv_test_signaled(obj->resv, dma_resv_usage_rw(=
+true))) {
+> > +                     status.active +=3D obj->size;
+> > +
+> > +                     /* If still active, don't count as purgeable: */
+> > +                     s &=3D ~DRM_GEM_OBJECT_PURGEABLE;
+>
+> Also add it to resident if driver hasn't advertised
+> DRM_GEM_OBJECT_RESIDENT? Not much value so not sure.
+>
+> > +             }
+> > +
+> > +             if (s & DRM_GEM_OBJECT_PURGEABLE)
+> > +                     status.purgeable +=3D obj->size;
+> > +     }
+> > +     spin_unlock(&file->table_lock);
+> > +
+> > +     drm_print_memory_stats(p, &status, supported_status, "memory");
+> > +}
+> > +EXPORT_SYMBOL(drm_show_memory_stats);
+> > +
+> >   /**
+> >    * drm_show_fdinfo - helper for drm file fops
+> > - * @seq_file: output stream
+> > + * @m: output stream
+> >    * @f: the device file instance
+> >    *
+> >    * Helper to implement fdinfo, for userspace to query usage stats, et=
+c, of a
+> > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+> > index 6de6d0e9c634..1339e925af52 100644
+> > --- a/include/drm/drm_file.h
+> > +++ b/include/drm/drm_file.h
+> > @@ -41,6 +41,7 @@
+> >   struct dma_fence;
+> >   struct drm_file;
+> >   struct drm_device;
+> > +struct drm_printer;
+> >   struct device;
+> >   struct file;
+> >
+> > @@ -440,6 +441,24 @@ void drm_send_event(struct drm_device *dev, struct=
+ drm_pending_event *e);
+> >   void drm_send_event_timestamp_locked(struct drm_device *dev,
+> >                                    struct drm_pending_event *e,
+> >                                    ktime_t timestamp);
+> > +
+> > +
+> > +struct drm_memory_stats {
+> > +     size_t shared;
+> > +     size_t private;
+> > +     size_t resident;
+> > +     size_t purgeable;
+> > +     size_t active;
+> > +};
+>
+> Is size_t enough? I'd be tempted to just make it u64.
+
+hmm, >4GB VRAM on 32b system?  Seems dubious but I guess u64 would be
+fine too...
+
+> > +
+> > +enum drm_gem_object_status;
+> > +
+> > +void drm_print_memory_stats(struct drm_printer *p,
+> > +                         const struct drm_memory_stats *stats,
+> > +                         enum drm_gem_object_status supported_status,
+> > +                         const char *region);
+> > +
+> > +void drm_show_memory_stats(struct drm_printer *p, struct drm_file *fil=
+e);
+> >   void drm_show_fdinfo(struct seq_file *m, struct file *f);
+> >
+> >   struct file *mock_drm_getfile(struct drm_minor *minor, unsigned int f=
+lags);
+> > diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+> > index 189fd618ca65..9ebd2820ad1f 100644
+> > --- a/include/drm/drm_gem.h
+> > +++ b/include/drm/drm_gem.h
+> > @@ -42,6 +42,25 @@
+> >   struct iosys_map;
+> >   struct drm_gem_object;
+> >
+> > +/**
+> > + * enum drm_gem_object_status - bitmask of object state for fdinfo rep=
+orting
+> > + * @DRM_GEM_OBJECT_RESIDENT: object is resident in memory (ie. not unp=
+inned)
+> > + * @DRM_GEM_OBJECT_PURGEABLE: object marked as purgeable by userspace
+> > + *
+> > + * Bitmask of status used for fdinfo memory stats, see &drm_gem_object=
+_funcs.status
+> > + * and drm_show_fdinfo().  Note that an object can DRM_GEM_OBJECT_PURG=
+EABLE if
+>
+> can be
+>
+> > + * it still active or not resident, in which case drm_show_fdinfo() wi=
+ll not
+> it is
+>
+> > + * account for it as purgeable.  So drivers do not need to check if th=
+e buffer
+> > + * is idle and resident to return this bit.  (Ie. userspace can mark a=
+ buffer
+> > + * as purgeable even while it is still busy on the GPU.. it does not _=
+actually_
+> > + * become puregeable until it becomes idle.  The status gem object fun=
+c does
+> > + * not need to consider this.)
+> > + */
+> > +enum drm_gem_object_status {
+> > +     DRM_GEM_OBJECT_RESIDENT  =3D BIT(0),
+> > +     DRM_GEM_OBJECT_PURGEABLE =3D BIT(1),
+> > +};
+>
+> Why enum for a bitmask?
+
+I guess personal preference, #define's have no type so they aren't
+linked to the variable
+
+> > +
+> >   /**
+> >    * struct drm_gem_object_funcs - GEM object functions
+> >    */
+> > @@ -174,6 +193,17 @@ struct drm_gem_object_funcs {
+> >        */
+> >       int (*evict)(struct drm_gem_object *obj);
+> >
+> > +     /**
+> > +      * @status:
+> > +      *
+> > +      * The optional status callback can return additional object stat=
+e
+> > +      * which determines which stats the object is counted against.  T=
+he
+> > +      * callback is called under table_lock.  Racing against object st=
+atus
+> > +      * change is "harmless", and the callback can expect to not race
+> > +      * against object destruction.
+> > +      */
+> > +     enum drm_gem_object_status (*status)(struct drm_gem_object *obj);
+>
+> Why not have this under driver vfuncs? Can you see an usecase where it
+> needs to be per object?
+
+Probably doesn't need to be per object, but putting it in obj vfuncs
+lets the driver keep it static in their foo_gem_stuff.c
+
+> Modulo the details ie. on the high level I think this works. More
+> advanced drivers can re-use the exported drm_print_memory_stats and
+> amount of sharing-vs-duplication seems similar to my proposal so again,
+> I think it is an okay approach.
+
+yup, this was the intent w/ drm_print_memory_stats()
+
+BR,
+-R
+
+> Regards,
+>
+> Tvrtko
+>
+> > +
+> >       /**
+> >        * @vm_ops:
+> >        *
