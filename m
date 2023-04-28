@@ -2,101 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1486F1377
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFAA6F1397
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 10:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345529AbjD1Iry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 04:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S1345584AbjD1IwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 04:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345489AbjD1Iru (ORCPT
+        with ESMTP id S1345616AbjD1Ivb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 04:47:50 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967462D5B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:47:47 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32cb1ba941fso68468145ab.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 01:47:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682671667; x=1685263667;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QeuIWsyfE8QRzGIA3wUsHQCHj888JIoXAHIN3OdB9K0=;
-        b=C3gGJ5wMk1fp3PKCy3t94KIpAU0nSKXMys/7ebJhmwrRG8m0AZ02iyLElv4IENwEt/
-         fy9R3zcfiVwnck+J3AejJvRdVfxs7aYk6ho7y4A4c+x/aEZoVduTJ6ARTK4wUnST4O+D
-         Jgq/XYVis0f+dHr4GRMGTsA+VIvWCE+qZEZ4hzw7HPA3nsp7KqZesSHHg9a1N6M4pN6L
-         7wKp2uKf+HAQHhp4Va3vcM1CPZ4Xjlw5mIgInbNFPkRCAw88Jdg8Tb7SJ+uPjYM0phiM
-         u7meummsq6TJFusGd6NV3gd8u+wIqY6ZzakgCSjCGeAGdTVScwLfnZoEGbK0Ytlx5JeD
-         SJHw==
-X-Gm-Message-State: AC+VfDzt9g78m2JBUYRJf2KTJnS9QFdh1j6U11rB+b6b2L8oG+UOyc6L
-        6AZDu11wC66FroWaRnULH1gf1DDiyBvKAF6Yddq2cq4oB5y4
-X-Google-Smtp-Source: ACHHUZ7s6abN+81ptcOqufkCU1xVEq3ObpiyN0LRdnzVgEL2H0zSA9O8g1YLLv6Cedw91IRSkN+kBZoArcjC7p3MXSArJEzW8smo
+        Fri, 28 Apr 2023 04:51:31 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A814C10;
+        Fri, 28 Apr 2023 01:51:26 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Q75tZ5Nqlz4f3vdR;
+        Fri, 28 Apr 2023 16:51:18 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLAGiUtkh9RFIQ--.49176S4;
+        Fri, 28 Apr 2023 16:51:19 +0800 (CST)
+From:   linan666@huaweicloud.com
+To:     axboe@kernel.dk, vishal.l.verma@intel.com, dan.j.williams@intel.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
+        houtao1@huawei.com, yangerkun@huawei.com
+Subject: [PATCH 00/10] block/badblocks: fix badblocks setting error
+Date:   Fri, 28 Apr 2023 16:50:10 +0800
+Message-Id: <20230428085020.2283981-1-linan666@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:a14a:0:b0:3c5:1971:1b7f with SMTP id
- m10-20020a02a14a000000b003c519711b7fmr2433851jah.6.1682671666917; Fri, 28 Apr
- 2023 01:47:46 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 01:47:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000faf54f05fa6186db@google.com>
-Subject: [syzbot] Monthly ntfs3 report (Apr 2023)
-From:   syzbot <syzbot+list1d8e27291d051da3b6be@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3rLAGiUtkh9RFIQ--.49176S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4DJFWfJFWftr4xCF47CFg_yoWfZFX_Aa
+        4vyF95JFsYv3W5AayayF1UtrZ3KF4UCr1jka4UArs7Xr17ta1DZw45Jr4UXrn8WFyUZwsx
+        Zr95Xr1rXw1xtjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3xYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAq
+        x4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14
+        v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02
+        628vn2kIc2xKxwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0D
+        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvf
+        C2KfnxnUUI43ZEXa7IU1kpnJUUUUU==
+X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello ntfs3 maintainers/developers,
+From: Li Nan <linan122@huawei.com>
 
-This is a 31-day syzbot report for the ntfs3 subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/ntfs3
+The patch series fix the bug of setting badblocks, which may not match
+expectations in complex scenarios. Optimize the code to make it more
+readable at the same time.
 
-During the period, 8 new issues were detected and 0 were fixed.
-In total, 62 issues are still open and 21 have been fixed so far.
+Li Nan (10):
+  block/badblocks: only set bb->changed when badblocks changes
+  block/badblocks: fix badblocks loss when badblocks combine
+  block/badblocks: fix badblocks overlap
+  block/badblocks: fix the bug of reverse order
+  block/badblocks: fix ack set fail in badblocks_set
+  block/badblocks: check bb->count instead of 'hi > lo'
+  block/badblocks: factor out a helper to merge badblocks
+  block/badblocks: factor out a helper to combine badblocks
+  block/badblocks: factor out a helper to create badblocks
+  block/badblocks: try to merge badblocks as much as possible
 
-Some of the still happening issues:
+ block/badblocks.c | 300 +++++++++++++++++++++++++++++-----------------
+ 1 file changed, 187 insertions(+), 113 deletions(-)
 
-Ref  Crashes Repro Title
-<1>  3546    Yes   KASAN: slab-out-of-bounds Read in ntfs_iget5
-                   https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
-<2>  1835    Yes   UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
-                   https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
-<3>  1013    Yes   KASAN: out-of-bounds Write in end_buffer_read_sync
-                   https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
-<4>  843     Yes   possible deadlock in attr_data_get_block
-                   https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
-<5>  388     Yes   possible deadlock in ntfs_set_state
-                   https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
-<6>  352     Yes   possible deadlock in mi_read
-                   https://syzkaller.appspot.com/bug?extid=bc7ca0ae4591cb2550f9
-<7>  242     No    possible deadlock in ntfs_mark_rec_free
-                   https://syzkaller.appspot.com/bug?extid=f83f0dbef763c426e3cf
-<8>  65      Yes   WARNING in do_symlinkat
-                   https://syzkaller.appspot.com/bug?extid=e78eab0c1cf4649256ed
-<9>  58      Yes   KASAN: vmalloc-out-of-bounds Write in find_lock_entries
-                   https://syzkaller.appspot.com/bug?extid=e498ebacfd2fd78cf7b2
-<10> 51      Yes   WARNING in do_mkdirat
-                   https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
+-- 
+2.31.1
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
