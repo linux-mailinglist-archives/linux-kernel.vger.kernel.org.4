@@ -2,159 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7806F1C7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF786F1C7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346066AbjD1QTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
+        id S1346116AbjD1QTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjD1QTc (ORCPT
+        with ESMTP id S1345594AbjD1QTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:19:32 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B2103;
-        Fri, 28 Apr 2023 09:19:31 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2a8b3ecf59fso102592021fa.0;
-        Fri, 28 Apr 2023 09:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682698770; x=1685290770;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zbYtNDNd7fInWlCfzLh9+4U1ztvtKyyC6684B51v+E0=;
-        b=nURJRNftdcjd1VJaEvq1ins9kvKw/pT8QmehI8qmoRYyQJaLPLTZnLzCFjlDgRgBIG
-         nBWFVY2JKEAPd0gLaX3fLA2Yj5uhcDj46WeKsxqUY4OaVRzqiAQUcPBQr1aKB+K5i4c6
-         x3TUEWyO25HR+CNXHvup07Kc/NXjOyuIYaxe2cjKOxLfIpYVwPz+sOvaLhtE1GoDOAaN
-         1vzlPu0h79Eu4NWmJ0bAp0L5IsBnuwqFV423MjWalLXrfq0G6Gskb9J93gtBflUcHux7
-         A8Be2ubvo1MlQINWA/1xP/sinY4WZW5cT5Kb3LhTYwb01lyjU5Gz0sn31Agr01VSPIH0
-         mGaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682698770; x=1685290770;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zbYtNDNd7fInWlCfzLh9+4U1ztvtKyyC6684B51v+E0=;
-        b=hMx3j7sItvEdC6j/Cpt7YPL8xZCTpMEp+es/uIfn7EouvrQCGOvH/Z11EFBWu39zmO
-         Edcp6zGk+zki+qsYIdFDGJBOhp9zZfcmgTr7GWAPQ9xACPr/gPq5h3EII9Tzy0/tv6nK
-         GwcLHLl6Wv1ZK7aUXFYQW8U+c85A+KM2KGBySsI+/lN3cdSb2nBSnflUd3xTcR7ORzx4
-         KxXQ/Qld5n/HttkcVvpGnCB2DbKcP0irocHX5Lg2sicqhrX0pOO7/bLQoXi8pqi/e+QR
-         D5zFzoa6ofO1G+bIrNY4sGyfZu88Dws9iTplCcvCthxSq8DSDxX9QJG7fzGoyCPBz6Kg
-         sASw==
-X-Gm-Message-State: AC+VfDzQoHhLCWr/xK1BSzGRrUiJJqoOLUndPgiQ//k4WYdOhqH9Tky/
-        TkmiFs5B3itsNIjV9l8/KanTKtu2lzi7cktYW4E=
-X-Google-Smtp-Source: ACHHUZ6DubOHX0qskMIgfgi4eLbKcDnTZZHs5OKRqefkrhhPg46vGzwlM2nIv+0kTo9CXo6e/IyKiig9HdLTiZ6S3qo=
-X-Received: by 2002:a2e:9995:0:b0:2ab:bd1:93da with SMTP id
- w21-20020a2e9995000000b002ab0bd193damr1969451lji.10.1682698769664; Fri, 28
- Apr 2023 09:19:29 -0700 (PDT)
+        Fri, 28 Apr 2023 12:19:42 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952DE103
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:19:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682698781; x=1714234781;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+ZpQk9tAcoryWI38DUUiVvWpt7vJGjwLk5lCeWTJvIQ=;
+  b=HIJh1f/YUFOJj0U2UP0E0I39hf+8MTzPkPZmadf7bAdMsUX4Uq+V25gB
+   NlypIRdgWdli7+MJIgbIB5nZ/9FhaJomuWoi+Vflf5rHFwS+Kb0gJD4e1
+   86G8NBqo6vFJsonybvZqX+E6MI66hOls29wAc8tTn2TPB7OPSH6ie6d5v
+   Ebrti6WLtFMTvmLILG5yC/csk/k5TGyShjlcRHwKp4R2MyTLlGFKXhevL
+   Gi7PpuuSRTvVuo53gu+ORm+3m1qo6W+o+CBif7axYAYgX2/JAnGSeKTYV
+   WKf37uY0Q61j0SBckQx9JxvSl0+r2EmN5g8cTQdsJKcF6vX14sy+6lhsO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349816322"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="349816322"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 09:19:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819061759"
+X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
+   d="scan'208";a="819061759"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 09:19:38 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psQor-0000YB-1O;
+        Fri, 28 Apr 2023 16:19:37 +0000
+Date:   Sat, 29 Apr 2023 00:19:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Down <chris@chrisdown.name>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Petr Mladek <pmladek@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, kernel-team@fb.com
+Subject: Re: [PATCH v5 2/2] printk: console: Support console-specific
+ loglevels
+Message-ID: <202304290057.wh62fc4w-lkp@intel.com>
+References: <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-9-jorge.lopez2@hp.com>
- <ca74121b-bb78-4093-8625-13359c324c28@t-8ch.de> <CAOOmCE_MpCBFOHd6QtzD5ufcwEz_FhJvqevj68pVeY_JS+V=Rg@mail.gmail.com>
- <462b5d12-0430-4fbe-8c26-7b6126556ec8@t-8ch.de> <CAOOmCE8iBfeuodTO7C=0EUOkqv16008h7vsZO2hhBZPuLoLECw@mail.gmail.com>
- <152fb7c0-1075-4718-bca1-c2083c425788@t-8ch.de>
-In-Reply-To: <152fb7c0-1075-4718-bca1-c2083c425788@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Fri, 28 Apr 2023 11:19:04 -0500
-Message-ID: <CAOOmCE-KK3AYmjaDO=qV7WzpsgeZ6d7U1Ep9a9=dcu9CEmohLQ@mail.gmail.com>
-Subject: Re: [PATCH v11 08/14] HP BIOSCFG driver - bioscfg-h
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris@chrisdown.name>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 11:09=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8c=
-h.de> wrote:
->
-> On 2023-04-28 11:03:56-0500, Jorge Lopez wrote:
-> > On Fri, Apr 28, 2023 at 10:36=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@=
-t-8ch.de> wrote:
-> > >
-> > > On 2023-04-28 10:24:40-0500, Jorge Lopez wrote:
-> > > > On Sun, Apr 23, 2023 at 7:01=E2=80=AFAM Thomas Wei=C3=9Fschuh <thom=
-as@t-8ch.de> wrote:
-> > > > >
-> > > > > On 2023-04-20 11:54:48-0500, Jorge Lopez wrote:
-> > > > > > ---
-> > > > > >  drivers/platform/x86/hp/hp-bioscfg/bioscfg.h | 613 +++++++++++=
-++++++++
-> > > > > >  1 file changed, 613 insertions(+)
-> > > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/bioscfg.=
-h
->
-> <snip>
->
-> > > > > > +#define ATTRIBUTE_PROPERTY_STORE(curr_val, type)              =
-       \
-> > > > > > +     static ssize_t curr_val##_store(struct kobject *kobj,    =
-       \
-> > > > > > +                                     struct kobj_attribute *at=
-tr,    \
-> > > > > > +                                     const char *buf, size_t c=
-ount)  \
-> > > > > > +     {                                                        =
-       \
-> > > > > > +             char *p =3D NULL;                                =
-         \
-> > > > > > +             char *attr_value =3D NULL;                       =
-         \
-> > > > > > +             int i;                                           =
-       \
-> > > > > > +             int ret =3D -EIO;                                =
-         \
-> > > > > > +                                                              =
-       \
-> > > > > > +             attr_value =3D kstrdup(buf, GFP_KERNEL);         =
-         \
-> > > > > > +             if (!attr_value)                                 =
-       \
-> > > > > > +                     return -ENOMEM;                          =
-       \
-> > > > > > +                                                              =
-       \
-> > > > > > +             p =3D memchr(attr_value, '\n', count);           =
-         \
-> > > > > > +             if (p !=3D NULL)                                 =
-         \
-> > > > > > +                     *p =3D '\0';                             =
-         \
-> > > > >
-> > > > > This can also truncate the string if there is data after the newl=
-ine.
-> > > >
-> > > > This is a expected behavior as described by Hans in a later email
-> > >
-> > > I'm fine with stripping a trailing newline.
-> > >
-> > > But this truncates the string at the first newline.
-> > >
-> > > "foo\nbar" -> "foo"
-> > > "\nfoo" -> ""
-> > >
-> > All inputs expected by this driver and respectively by BIOS are a
-> > single line.  For this reason, '\n' will cause the string to be
-> > truncated.
-> > I propose reporting a warning message indicating that the data entered
-> > has a '\n' character and will be truncated in addition to failing the
-> > operation with -EINVAL
->
-> EINVAL sounds good, but a warning is overkill IMO.
->
-> Whoever put in the garbage value will see the error.
->
-> Stripping a trailing newline still seems fine though.
+Hi Chris,
 
-So. should the driver return an -EINVAL error or truncate the line,
-report a warning message, and allow it to proceed.?
-Please advice
+kernel test robot noticed the following build warnings:
 
-> This would be a very good candidate for a helper function.
+[auto build test WARNING on 61d325dcbc05d8fef88110d35ef7776f3ac3f68b]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230425-210828
+base:   61d325dcbc05d8fef88110d35ef7776f3ac3f68b
+patch link:    https://lore.kernel.org/r/4d3846bf2543de20aa071b2a12de924eea3e9574.1682427812.git.chris%40chrisdown.name
+patch subject: [PATCH v5 2/2] printk: console: Support console-specific loglevels
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/c92f68c2bbfd8d7ff05785c20f0c2535861143c5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chris-Down/printk-Do-not-delay-messages-which-aren-t-solicited-by-any-console/20230425-210828
+        git checkout c92f68c2bbfd8d7ff05785c20f0c2535861143c5
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304290057.wh62fc4w-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: kernel/printk/printk.c references a file that doesn't exist: Documentation/admin-guide/per-console-loglevel
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
