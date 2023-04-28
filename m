@@ -2,155 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1DF6F1DC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F906F1DCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 20:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346235AbjD1SDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 14:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S1346341AbjD1SJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 14:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjD1SDe (ORCPT
+        with ESMTP id S229741AbjD1SJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 14:03:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03A72D69;
-        Fri, 28 Apr 2023 11:03:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4970661A66;
-        Fri, 28 Apr 2023 18:03:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D471C4339E;
-        Fri, 28 Apr 2023 18:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682705012;
-        bh=c6L1X4BgIOcktzeLUChU6aJWGbP0/aLPkV7gmZS0UKs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=URULa2d+QR+HOlQeO1K+icIhT3OW5LEZSsME1RudNmHb9UK0uoJS6h/f3xVjhyvM3
-         aAJ2jYHP3yuzZpH85y/m2no5D5JdY9zMNYZgkj4gMZg45z3fTMOdhUSB19EZ7SYe7N
-         FurFBMHteEMQrW204LGDgx3QPo4WkhB9vEyhBIyxin+2vrI9xPCULorg2gs/haWZVi
-         991FJ5e97dOUTGhdBnE0lHeHuW2NT5xJ4w5IY7PSCDjL7nW0sZFS+Cej0iWYDSMGfH
-         oZc0bbayrnMwodygH98AyaRT464XbwKwlcee4ekrlrfOD2HacKgmGgqK/StEykfhVt
-         YMY+Uf/NJil6A==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso250835e87.0;
-        Fri, 28 Apr 2023 11:03:32 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzUdXoL8XgppuixvEN6iNTJHTH37xuxsZQ+AWHok0PTuIJkgXL9
-        13WPEk5+BpJ7NPcvQLK7p77bK8+IKMpyG5s9mx8=
-X-Google-Smtp-Source: ACHHUZ5otoB6oLEGJMnsT3sSOLwsgs9s9w+5qXKcQyWcMi/p8jKZng6ZikMfQofiDQMvYmkR4J+fm6rbxpfxC+dA6Ys=
-X-Received: by 2002:a05:6512:403:b0:4ef:ec94:9674 with SMTP id
- u3-20020a056512040300b004efec949674mr1777138lfk.32.1682705010596; Fri, 28 Apr
- 2023 11:03:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230426034001.16-1-cuiyunhui@bytedance.com> <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
- <CAEEQ3wkJB5CKm33mHXUOPX5makYOHF8By6FYGnNzRkM-Mo72OQ@mail.gmail.com>
- <ZEj33QLZqEeL+/y4@FVFF77S0Q05N> <CAEEQ3wmDBJkfOeKCQfcnuE+1=1K0D2pzu+Sn+zPEWk+RHs0NFQ@mail.gmail.com>
- <CAP6exY+ydbzh1EkWTFejzwaW+PA-ySVO2Qj+CVJ1XbSMce2S9Q@mail.gmail.com>
- <ZEpbTE4gcsf8meXc@FVFF77S0Q05N> <CAMj1kXH5kZJ6ff=PRCRDLCBcw2AkEnRL_L1ABuvu5n71=unvAw@mail.gmail.com>
- <CAEEQ3w=495snOz3UNBO4dpgyfZs3jQoRKo4QRAXXqR5-0j4SWA@mail.gmail.com> <CAP6exYK9ytcgqcy2gFyOGvbxd7DPGQNs=m7nNgnfunnh8et9aQ@mail.gmail.com>
-In-Reply-To: <CAP6exYK9ytcgqcy2gFyOGvbxd7DPGQNs=m7nNgnfunnh8et9aQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 28 Apr 2023 19:03:19 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGB4yXCdzts2=G_-hadoka9F2BU1gvVxeLEs5ifSbqgog@mail.gmail.com>
-Message-ID: <CAMj1kXGB4yXCdzts2=G_-hadoka9F2BU1gvVxeLEs5ifSbqgog@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH] firmware: added a firmware information
- passing method FFI
-To:     ron minnich <rminnich@gmail.com>
-Cc:     =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>,
+        Fri, 28 Apr 2023 14:09:34 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C30126BA
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:09:33 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55605fd3e19so3123137b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682705372; x=1685297372;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=szMrRB+6uNQ8eyciuRiQr527CZbWdvgob9TY/kwfLGs=;
+        b=jEnM8h2WmRSYHOV7JrVXCdH7EBqADBVIVINDIxCdBx1grlEFJxiRlEBBigmN2JQXfN
+         16i3etlXVKLhvp9qsaKWCaO0lYp4/FqCGDwplm5MZr/+LKSek+WK0Q4pgoiMkJme0RLm
+         M6hsvWI4GyHkus7zmtDEGioT2PW8jBf8JqsNfNWxWYLQOLBUfOgVZslYNEodffOyBL1U
+         B4XG88dh5csyvULX3rBHAbHa7yxNTnHfV3Dmh4cYo0V9L+K3Y+Bd7eFkt2P/0uSW/sij
+         WAufZ06cW0+hbORLORjZx2i3XULQpPyas8KwYHLmKGlyrgU517TSRa/TViT6QEEOp/Yd
+         Vzzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682705372; x=1685297372;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=szMrRB+6uNQ8eyciuRiQr527CZbWdvgob9TY/kwfLGs=;
+        b=LAu1P5Ay8Y5sK3uIUBU5IsMmPwkeAzfX29BgT0hxaJOH/j64qGDb6gzrOSegNH3q5f
+         oV4/kikx4moShIiu7OoKwQa0yWXZUiafPw8ckUyHzjQkG+KEr180rz2rhaFqKnGWX75P
+         oGdc05NKgznX6sAgJg7dDKmEv3Vi8/cyjXrw5Ivid8aCQayc/IL1HgCrEi0zkvbGj4E2
+         Q1Wo5FXH6Lae8YTrwgAcw3r1cuET6H8roOWEeBm6lN8gvMO6THVxajfTVEVcpadKo3GY
+         kepE4BxgLoHBG5aO6m4NHIQyuZZmqG0rZfq3GA49C+U7XZG15NFUMy8Sl+qxlvfyNev2
+         hi6Q==
+X-Gm-Message-State: AC+VfDxGQ2S6hAWEISbY/JGCWzhZ8J42aM0GsMUusqu70ClhO+jVau60
+        6sfzRXWh58O5x9jfFktNQz0VuFuvr43OCbFfup4=
+X-Google-Smtp-Source: ACHHUZ4Dh0ZhHgHRrQTm+kfQrvOqSe4pbWS2GUqcJ1c3wpAvIoGqdFFanowzodwW/xY1NsQc1gIGkCeFZc77UL3yDP8=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:7fbc:5712:e6b1:f733])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:4011:0:b0:54f:9e1b:971c with SMTP
+ id l17-20020a814011000000b0054f9e1b971cmr3698136ywn.1.1682705372224; Fri, 28
+ Apr 2023 11:09:32 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 11:09:25 -0700
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIANQLTGQC/x2MSwqFMAwAryJZW9Ba8HMVcZHWqFlYJZH3BPHuV
+ pfDDHOBkjApdNkFQj9W3mKCMs8gLBhnMjwmBlvYqnC2Mfg/TairyfmR6jY4SKVHJeMFY1jedkU 9SF6xC018fvt+uO8H78bmTG4AAAA=
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1682705370; l=2976;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
+ bh=OJwVNKGwwd9jKotxFOlwqnw1rAfDxwhSr52KJhekYzI=; b=ZgrE30nmkV43i/VkWMTHmOw+6R/JwtaexxX9U/Hudmwq3K8EiFhFYVBa7BfIE+CZyxrU2+j1A7mc
+ rMoBi3cCDZ/RN9YoMdrI3vrTq1PDmJbcG7hwOG83crnzRZOfiqCW
+X-Mailer: b4 0.12.2
+Message-ID: <20230428-awx-v1-1-1f490286ba62@google.com>
+Subject: [PATCH] arm64: kernel: remove SHF_WRITE|SHF_EXECINSTR from .idmap.text
+From:   ndesaulniers@google.com
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>, rafael@kernel.org,
-        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
-        angelogioacchino.delregno@collabora.com,
-        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
-        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 at 17:09, ron minnich <rminnich@gmail.com> wrote:
->
-> There is lots of text in the preceding notes :-), which is nice because w=
-e're clearly looking at something that matters!
->
-> But, note, ARM Chromebooks run Linux, and I checked with the firmware tea=
-m just now:
-> "Right. We're not using UEFI or ACPI or SMBIOS or DMI or any of that on A=
-rm. Just the Device Tree."
->
-> So I do not agree that we need UEFI tables due to some presumed semantics=
- that they implement, because: several tens of millions of ARM chromebooks =
-running Linux show otherwise.
->
-> We've got a chance here to move to self describing data, and I think we n=
-eed to take it. It will be a long time before we get this chance again.
->
+commit d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
+modified some of the section assembler directives that declare
+.idmap.text to be SHF_ALLOC instead of
+SHF_ALLOC|SHF_WRITE|SHF_EXECINSTR.
 
-I'm not sure what you mean by self-describing: device tree is
-definitely not self-describing, and we maintain a huge collection of
-DT bindings (which are documented in separate YAML files) in the
-kernel tree that specify in detail how a device tree must be
-constructed in order to comply with the device tree based boot
-protocol.
+This patch fixes up the remaining stragglers that were left behind.
 
-However, introducing such a binding for SMBIOS is perfectly
-reasonable, although I would suggest that we don't copy the
-SMBIOS/SMBIOS3 entry point address into the device tree (as this patch
-does), but properly describe the memory region that contains the
-actual SMBIOS structured data directly, along with its version. This
-might be reused by other DT based platforms as well.
+Because .idmap.text is merged into .text, LLD will retain the
+SHF_EXECINSTR on .text, in addition to the synthetic .got.  This doesn't
+matter to the kernel loader, but syzkaller is having trouble symboling
+such sections. Clean this up while we additionally fix up syzkaller. Add
+Fixes tag so that this doesn't precede related change in stable.
 
-Doing the same for ACPI is where we'll get into trouble, given that
-we'd end up with two conflicting hardware descriptions and unfulfilled
-dependencies on EFI specific data structures, and it is not the
-kernel's job to reason about which h/w description should take
-precedence, or to make guesses about memory types. So I fully agree
-with Ron that moving to device tree is a much better choice here -
-that way, you can avoid ACPI and UEFI altogether
+Fixes: d54170812ef1 ("arm64: fix .idmap.text assertion for large kernels")
+Reported-by: Greg Thelen <gthelen@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ arch/arm64/kernel/cpu-reset.S | 2 +-
+ arch/arm64/kernel/sleep.S     | 2 +-
+ arch/arm64/mm/proc.S          | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/arch/arm64/kernel/cpu-reset.S b/arch/arm64/kernel/cpu-reset.S
+index 6b752fe89745..c87445dde674 100644
+--- a/arch/arm64/kernel/cpu-reset.S
++++ b/arch/arm64/kernel/cpu-reset.S
+@@ -14,7 +14,7 @@
+ #include <asm/virt.h>
+ 
+ .text
+-.pushsection    .idmap.text, "awx"
++.pushsection    .idmap.text, "a"
+ 
+ /*
+  * cpu_soft_restart(el2_switch, entry, arg0, arg1, arg2)
+diff --git a/arch/arm64/kernel/sleep.S b/arch/arm64/kernel/sleep.S
+index 2ae7cff1953a..2aa5129d8253 100644
+--- a/arch/arm64/kernel/sleep.S
++++ b/arch/arm64/kernel/sleep.S
+@@ -97,7 +97,7 @@ SYM_FUNC_START(__cpu_suspend_enter)
+ 	ret
+ SYM_FUNC_END(__cpu_suspend_enter)
+ 
+-	.pushsection ".idmap.text", "awx"
++	.pushsection ".idmap.text", "a"
+ SYM_CODE_START(cpu_resume)
+ 	mov	x0, xzr
+ 	bl	init_kernel_el
+diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+index 91410f488090..c2cb437821ca 100644
+--- a/arch/arm64/mm/proc.S
++++ b/arch/arm64/mm/proc.S
+@@ -167,7 +167,7 @@ alternative_else_nop_endif
+ SYM_FUNC_END(cpu_do_resume)
+ #endif
+ 
+-	.pushsection ".idmap.text", "awx"
++	.pushsection ".idmap.text", "a"
+ 
+ .macro	__idmap_cpu_set_reserved_ttbr1, tmp1, tmp2
+ 	adrp	\tmp1, reserved_pg_dir
+@@ -201,7 +201,7 @@ SYM_FUNC_END(idmap_cpu_replace_ttbr1)
+ 
+ #define KPTI_NG_PTE_FLAGS	(PTE_ATTRINDX(MT_NORMAL) | SWAPPER_PTE_FLAGS)
+ 
+-	.pushsection ".idmap.text", "awx"
++	.pushsection ".idmap.text", "a"
+ 
+ 	.macro	kpti_mk_tbl_ng, type, num_entries
+ 	add	end_\type\()p, cur_\type\()p, #\num_entries * 8
+@@ -400,7 +400,7 @@ SYM_FUNC_END(idmap_kpti_install_ng_mappings)
+  * Output:
+  *	Return in x0 the value of the SCTLR_EL1 register.
+  */
+-	.pushsection ".idmap.text", "awx"
++	.pushsection ".idmap.text", "a"
+ SYM_FUNC_START(__cpu_setup)
+ 	tlbi	vmalle1				// Invalidate local TLB
+ 	dsb	nsh
 
+---
+base-commit: 22b8cc3e78f5448b4c5df00303817a9137cd663f
+change-id: 20230428-awx-c73f4bde79c4
 
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
 
-> On Thu, Apr 27, 2023 at 8:18=E2=80=AFPM =E8=BF=90=E8=BE=89=E5=B4=94 <cuiy=
-unhui@bytedance.com> wrote:
->>
->> Hi Ard, Mark,
->>
->> On Thu, Apr 27, 2023 at 8:52=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org>=
- wrote:
->>
->> > and the only combination we do not support is ACPI without EFI, as
->> > ACPI on arm64 depends on the EFI memory map.
->> >
->> > What this patch seems to be proposing is a combination of all of
->> > these, i.e., doing a pseudo-EFI direct kernel boot where the EFI
->> > dependencies of ACPI are being fulfilled by ad-hoc descriptions passed
->> > in via DT.
->> >
->> > I am concerned that this will result in a maintenance burden for Linux
->> > with very little gain, so I feel we should not go down this road.
->>
->> Judging from the current kernel, getting acpi smbios, memmap tables is
->> not just a way to have EFI, right?
->> smbios:SMBIOS_ENTRY_POINT_SCAN_START
->> acpi:CONFIG_ACPI_LEGACY_TABLES_LOOKUP
->> memmap: e820
->>
->> Our current situation is that coreboot does not support EFI, but support=
-s fdt,
->> but we need to support ACPI,  and riscv does not have a reserved
->> address segment
->> like x86 that can be used, so our current solution is to pass acpi and
->> other tables through fdt.
->>
->> Based on this, do you have a better suggestion ?
->>
->> Thanks=EF=BC=8C
->> Yunhui
