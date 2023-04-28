@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B6F6F1CFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC1F6F1D05
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346421AbjD1Qy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S1346264AbjD1Q4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345276AbjD1QyX (ORCPT
+        with ESMTP id S229892AbjD1Qz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:54:23 -0400
-Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AD655AD
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:54:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=4h2Y9ZZQ14tdvAGC5hFpqIKQWvmB0qe68pQRnQlSShc=;
-        b=IrdAXdZPKho0zoQxG/scktRALZpl2c237XlKLT5EIx0ja7nZb83hqvUgOuyY55pNvHYqH3FsErtl1
-         5jx6Clb6lkPL8TkUqCtTnSvfCnAc1GKTQxpoyL9YYmuFWy6pRl3ovRobT6YFtqeLlVGxUM3+fK10GW
-         26P+hLCnm+zpPHV7tOv/ibW1ECpjZ4qETcRhhPvrkIFIONhGHQGcxNm6MxcY5BEqj85CuJqzXS5rce
-         1Inl5d47E3sR2kFuS+NTw8OWDudvX6hThvyhlLeRI9ruUhs5QS1y61KsI01ISxy6adAYh2hLAOXbIt
-         t6mRhKxKsnm9awtbASezT6BrkUMBpFA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=4h2Y9ZZQ14tdvAGC5hFpqIKQWvmB0qe68pQRnQlSShc=;
-        b=2sOyzdZRm0G5akePNgNy9pFImOAXPUTPUHEcB6iUeB7W+50cDIuX1agx3ldJaHWZog9XyDftdQu09
-         P8qxcwNCA==
-X-HalOne-ID: 4d02a9c5-e5e5-11ed-9bd2-13111ccb208d
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay2 (Halon) with ESMTPSA
-        id 4d02a9c5-e5e5-11ed-9bd2-13111ccb208d;
-        Fri, 28 Apr 2023 16:54:14 +0000 (UTC)
-Date:   Fri, 28 Apr 2023 18:54:12 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
- functions
-Message-ID: <20230428165412.GA4010212@ravnborg.org>
-References: <20230428092711.406-1-tzimmermann@suse.de>
- <20230428092711.406-6-tzimmermann@suse.de>
- <20230428131221.GE3995435@ravnborg.org>
- <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
+        Fri, 28 Apr 2023 12:55:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9334E1FC3;
+        Fri, 28 Apr 2023 09:55:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F54D6449D;
+        Fri, 28 Apr 2023 16:55:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049E1C433EF;
+        Fri, 28 Apr 2023 16:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682700957;
+        bh=xj0NIzvVgCJvBTwvWFN6SAMCNUTQVUTdpSyWpNpNl8k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KNmfeAbx1Zo/ImwjopCtaCiKZRBGd3BpMzJgZls2FdFOx/oGeUTokC+NKVddIEQh7
+         zzOsBHlwORGIkqKJeT4u3SVWEwld+h7BSKudUNaNYf53DSoOUDNTX6bbmsA2ZYl/cJ
+         szY566mQnld9m17ClWfBk7nTUWDBcVW3q7Rb7seswhIVUq7s6zswA3U5BiZbQer9vy
+         ZazEfZjd1y4XvWVH8wwoCcPOphzEjXWvjojPCE5bLaBVyBmh1BTQakgz9lMY0YpeN5
+         qPLn+ZYOwBunbPsjWn6pFAcXfzxrXVUnRE9KKJwAUaO4Ebq9HjUyGk58IQTglC8gEu
+         ioBxMt7bJDmOg==
+Date:   Fri, 28 Apr 2023 17:55:52 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     linux-kernel@vger.kernel.org, Moritz Fischer <mdf@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        Tom Rix <trix@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Vladimir Georgiev <v.georgiev@metrotek.ru>, system@metrotek.ru,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] replace Ivan Bornyakov maintainership
+Message-ID: <20230428-marine-halogen-57d4b3c2ca0f@spud>
+References: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="m8l/4nIjr6I81ows"
 Content-Disposition: inline
-In-Reply-To: <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230428140150.2592-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-On Fri, Apr 28, 2023 at 04:18:38PM +0200, Thomas Zimmermann wrote:
-> I'd be happy to have fb_() wrappers that are I/O helpers without
-> ordering guarantees. I'd just wouldn't want them in <linux/fb.h>
+--m8l/4nIjr6I81ows
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-How about throwing them into a new drm_fb.h header file.
-This header file could be the home for all the fb stuff that is
-shared between drm and the legacy fbdev.
+On Fri, Apr 28, 2023 at 05:01:48PM +0300, Ivan Bornyakov wrote:
+> As I'm leaving Metrotek, hand over my maintainership duties to Vladimir.
 
-Then we may slowly migrate more fbdev stuff to drm and let the legacy
-fbdev stuff use the maintained drm stuff.
-Dunno, the pain may not be worth it.
+As I said yesterday, good luck!
 
-	Sam
+> ChangeLog:
+> v1:
+> https://lore.kernel.org/lkml/20230426073519.9167-1-i.bornyakov@metrotek.ru/
+> v2:
+>   * instead of replacing my Metrotek email to a shared Metrotek System
+>     Team mailbox, assign Vladimir to my former maintainership.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+--m8l/4nIjr6I81ows
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEv6mAAKCRB4tDGHoIJi
+0useAP9+jA39d34FnLCJS+/xi4qzWK2rUMT+9RE7bzvH1kDXaQD/WXJD6YsaHWTT
+TJKjZ9QchCKQ8oGlv8oPWAjE8I7vEAc=
+=N8ks
+-----END PGP SIGNATURE-----
+
+--m8l/4nIjr6I81ows--
