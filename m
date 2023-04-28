@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89426F1CF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B6F6F1CFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346393AbjD1QyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S1346421AbjD1Qy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346032AbjD1QyI (ORCPT
+        with ESMTP id S1345276AbjD1QyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:54:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423295B90;
-        Fri, 28 Apr 2023 09:53:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C65F464499;
-        Fri, 28 Apr 2023 16:53:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E734FC4339B;
-        Fri, 28 Apr 2023 16:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682700823;
-        bh=JWcTQJX9/X961Kb33b8lpvZkffh9I4opvz78Yme+I34=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=LElNgJk2lRyREgMTcx1yV5uEziuSRyP/8kL6p5ughYoSg6JCZcnc2PYQGnrX5Hcji
-         07HM8oodBhOnfk9Zv7cG9SXbL9TsT7BCcXFceWQ7PQySmwOtkXXvd9NB9Swnh9CEza
-         3k4GQ02Lra7IvjvXEMM+qwcQRhSNW6QWuzm8s01e/G1ismv7kXBwMH/Up5v+X1Iesy
-         puXFqwWlcWH4PKP9hkE+70FdOr7ESP6s2VHchcRXk40Wu3iKJ1Gsl5GcXWWAA9wiyv
-         u20+rw6IN0yaIbCy1Lw/6P1V96K76uI/9aChA36hupNd13w0M8FTruGpdI5z9jXwty
-         h5drrQMjELaAw==
-Content-Type: text/plain; charset="utf-8"
+        Fri, 28 Apr 2023 12:54:23 -0400
+Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AD655AD
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=4h2Y9ZZQ14tdvAGC5hFpqIKQWvmB0qe68pQRnQlSShc=;
+        b=IrdAXdZPKho0zoQxG/scktRALZpl2c237XlKLT5EIx0ja7nZb83hqvUgOuyY55pNvHYqH3FsErtl1
+         5jx6Clb6lkPL8TkUqCtTnSvfCnAc1GKTQxpoyL9YYmuFWy6pRl3ovRobT6YFtqeLlVGxUM3+fK10GW
+         26P+hLCnm+zpPHV7tOv/ibW1ECpjZ4qETcRhhPvrkIFIONhGHQGcxNm6MxcY5BEqj85CuJqzXS5rce
+         1Inl5d47E3sR2kFuS+NTw8OWDudvX6hThvyhlLeRI9ruUhs5QS1y61KsI01ISxy6adAYh2hLAOXbIt
+         t6mRhKxKsnm9awtbASezT6BrkUMBpFA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=4h2Y9ZZQ14tdvAGC5hFpqIKQWvmB0qe68pQRnQlSShc=;
+        b=2sOyzdZRm0G5akePNgNy9pFImOAXPUTPUHEcB6iUeB7W+50cDIuX1agx3ldJaHWZog9XyDftdQu09
+         P8qxcwNCA==
+X-HalOne-ID: 4d02a9c5-e5e5-11ed-9bd2-13111ccb208d
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay2 (Halon) with ESMTPSA
+        id 4d02a9c5-e5e5-11ed-9bd2-13111ccb208d;
+        Fri, 28 Apr 2023 16:54:14 +0000 (UTC)
+Date:   Fri, 28 Apr 2023 18:54:12 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
+ functions
+Message-ID: <20230428165412.GA4010212@ravnborg.org>
+References: <20230428092711.406-1-tzimmermann@suse.de>
+ <20230428092711.406-6-tzimmermann@suse.de>
+ <20230428131221.GE3995435@ravnborg.org>
+ <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] wifi: ath12k: Remove some dead code
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <c17edf0811156a33bae6c5cf1906d751cc87edd4.1682423828.git.christophe.jaillet@wanadoo.fr>
-References: <c17edf0811156a33bae6c5cf1906d751cc87edd4.1682423828.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        ath12k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168270081882.13772.3615961159220627233.kvalo@kernel.org>
-Date:   Fri, 28 Apr 2023 16:53:40 +0000 (UTC)
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
+Hi Thomas,
 
-> ATH12K_HE_MCS_MAX = 11, so this test and the following one are the same.
-> Remove the one with the hard coded 11 value.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+On Fri, Apr 28, 2023 at 04:18:38PM +0200, Thomas Zimmermann wrote:
+> I'd be happy to have fb_() wrappers that are I/O helpers without
+> ordering guarantees. I'd just wouldn't want them in <linux/fb.h>
 
-Patch applied to ath-next branch of ath.git, thanks.
+How about throwing them into a new drm_fb.h header file.
+This header file could be the home for all the fb stuff that is
+shared between drm and the legacy fbdev.
 
-33f83a23f4cc wifi: ath12k: Remove some dead code
+Then we may slowly migrate more fbdev stuff to drm and let the legacy
+fbdev stuff use the maintained drm stuff.
+Dunno, the pain may not be worth it.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/c17edf0811156a33bae6c5cf1906d751cc87edd4.1682423828.git.christophe.jaillet@wanadoo.fr/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+	Sam
