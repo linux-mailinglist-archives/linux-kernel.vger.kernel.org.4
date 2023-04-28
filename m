@@ -2,128 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194846F113B
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414DB6F113E
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 07:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345256AbjD1FFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 01:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
+        id S1345165AbjD1FGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 01:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjD1FFG (ORCPT
+        with ESMTP id S230087AbjD1FGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 01:05:06 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49BC26B3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:05:04 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1a950b97dafso78025495ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:05:04 -0700 (PDT)
+        Fri, 28 Apr 2023 01:06:47 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DA6270C
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:06:45 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a920d4842bso69243965ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 22:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682658304; x=1685250304;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WMs1qPhxL/BS9MMmSEsgwTMurDosjtHWEBwSfQK3U8A=;
-        b=4GQDh6mFwGATF9SJtXccUcdoequAkNrAXmgbZCy+DaIB7+el/ymFviB3yK7LVIm2M8
-         VN1vsubPIJ5SyXXQJikcLodRrSIaBMpdQoNvRG24JP8if5fs6/cCJk0IoWw1VSYayg1N
-         dqv9ueQiWwz1aqAY0YDTe1S3GhZM/GxyI1XFUAPFugFoes/8x94MvQoAIu/ApUWoE+YL
-         TVIxlsnTrtWoWKUoM9DpCVRY3hHcWcvAhhBeRlY3LSZc3xhWrw4dtG7rWkuT/0raTxC6
-         DmVzRMLCqEgog5SNtBSA6WzBAxs/aFSqF6wKihf34mXXXiPkJk/AOj3XqBWnEXg1Rgr/
-         ZqXQ==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1682658404; x=1685250404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K+priwgVTI5G9m2IAcDviTBaPANz0KSFOmw49YgGUdI=;
+        b=DdoVOedUxUiBDMPss2+elnVBPyCyJNeO8QeLYntRLaBFlrFnUj55nnP40KvPb/QaAr
+         maZi1ZZfOQWs2UfwLn2KK6ptXfIYAl+vkpoN2pBTcXDhEbJfyum8KYEGrgUAFTB3AGQW
+         0zUK6RP+MghQbeuKlwuyrYjV3AM+lTf8yutDYyhNp3xJrZVCkukxfHC6BanumEniBhyG
+         YOGPbHdOOFhvz4j65V6ArQqZupnSWlmPapfcjS2u/5jTHCZMIW4gZcJ5jsTvrgZdFmVo
+         1TPgDCV+xMiaeNdwt1RUTXybDDc/2d+VZSxN350zQhp7JynKdPV2wewFf1Oic96zDZpb
+         tLew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682658304; x=1685250304;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WMs1qPhxL/BS9MMmSEsgwTMurDosjtHWEBwSfQK3U8A=;
-        b=De6QzGEkSLa7TAayvx1QeN4IOnjYw2Mi5KsNco9UqlX1tP18V2U3xpuo+VxhfLsb0o
-         zBQuHXbdDMe2tw2aMcy4RYVjHJvV+gGefZ3PEfxQYB9pWCCJXwPV+dqBJ8rZwdpFMflX
-         zHo8yCGWKp47muVDAe0Vun+jSyh8lUAfdBHWEVtLEbh5HoZwX1eaAMFDJWDSPOpR2s6y
-         VekZRr3E+o2R0vmrsYIQ6RttTakvSwGWPRlmf90MVSqnjwuDoOoSlaDagkhekX208sYo
-         T1hFL8QbpGwdoeXPxY6lUe75wba9nxCqxZV4796cUuPCr+5qLGadvEQ0JDP8Isum8VGN
-         hirg==
-X-Gm-Message-State: AC+VfDwIxPEtgzS2H1WsE+PprbmqGW1FNdHAdL/9B7/bDnxE5UZBnbR3
-        65wgtalThRK34NCuHtv6htv4oMckmsCb
-X-Google-Smtp-Source: ACHHUZ6ZzBcN/mv/MeJEVTey2sDWypLXT1OQBkVfztH0jlUTTZf6QjJzrkb1J7kPJ1stM2edHFOvR6PdI0XK
-X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
- (user=maskray job=sendgmr) by 2002:a17:902:e541:b0:1a2:1fd0:226b with SMTP id
- n1-20020a170902e54100b001a21fd0226bmr1419587plf.5.1682658304294; Thu, 27 Apr
- 2023 22:05:04 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 05:04:42 +0000
-Mime-Version: 1.0
-Message-ID: <20230428050442.180913-1-maskray@google.com>
-Subject: [PATCH] arm64: lds: move .got section out of .text
-From:   Fangrui Song <maskray@google.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682658404; x=1685250404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K+priwgVTI5G9m2IAcDviTBaPANz0KSFOmw49YgGUdI=;
+        b=jhhnwLNg55Toq9m5IDcdRsJEwexfCzWv/YxNyehtzlTP4TlO/uM1YsEN5UCmOl/xWq
+         xX/BE2hVfPmLKk5a9oI937UKvH2CZHbA4VjFwNU9I4S1ed4Z/goeVf7ANvSQ5+GlA57I
+         S0N4B7CFt92R3RRJuNh1SKtV6MusuARBl+mj2nOTaAjVeGDBJcCprDrCStWEUoH/ITec
+         Lau9ZAjrXeyP4gGbSxsnoKasdcRdNOybaTyXj02bkLNoDVAeiEkf/kB1IqdubNpDMQ0p
+         JvTyzCdkZpHFrXhn8axa7mJTv1HqbtWnmEiPV4zlRv2l4dpJqJRC/h90QVeUqAPWFYkD
+         2luQ==
+X-Gm-Message-State: AC+VfDzzI3UBo27GFjQkz7MPR/1EX+bau9/QLljf1LrMvPXpcbCaqz7R
+        +jUBHH1qLgFcOJLqwxZoCq9W2Q==
+X-Google-Smtp-Source: ACHHUZ4335WaLJ0IvStVlJSpeRvka4TYtBqleZr3zv6nyrNafUFSz86H7cUtmDNEwU72UdEYNQQMuQ==
+X-Received: by 2002:a17:902:b702:b0:1a6:c595:d7c3 with SMTP id d2-20020a170902b70200b001a6c595d7c3mr3692487pls.22.1682658404604;
+        Thu, 27 Apr 2023 22:06:44 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902900900b001a514d75d16sm12405984plp.13.2023.04.27.22.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 22:06:44 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1psGJc-008kwW-Oy; Fri, 28 Apr 2023 15:06:40 +1000
+Date:   Fri, 28 Apr 2023 15:06:40 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
+Message-ID: <20230428050640.GA1969623@dread.disaster.area>
+References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
+ <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
+ <20230423224045.GS447837@dread.disaster.area>
+ <ZEXChAJfCRPv9vbs@codewreck.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZEXChAJfCRPv9vbs@codewreck.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the .got section is placed within the output section .text.
-However, when .got is non-empty, the SHF_WRITE flag is set when linked
-by lld. GNU ld recognizes .text as a special section and ignores the
-SHF_WRITE flag. By renaming .text, we can also get the SHF_WRITE flag.
+On Mon, Apr 24, 2023 at 08:43:00AM +0900, Dominique Martinet wrote:
+> Dave Chinner wrote on Mon, Apr 24, 2023 at 08:40:45AM +1000:
+> > This doesn't actually introduce non-blocking getdents operations, so
+> > what's the point? If it just shuffles the getdents call off to a
+> > background thread, why bother with io_uring in the first place?
+> 
+> As said in the cover letter my main motivation really is simplifying the
+> userspace application:
+>  - style-wise, mixing in plain old getdents(2) or readdir(3) in the
+> middle of an io_uring handling loop just feels wrong; but this may just
+> be my OCD talking.
+>  - in my understanding io_uring has its own thread pool, so even if the
+> actual getdents is blocking other IOs can progress (assuming there is
+> less blocked getdents than threads), without having to build one's own
+> extra thread pool next to the uring handling.
+> Looking at io_uring/fs.c the other "metadata related" calls there also
+> use the synchronous APIs (renameat, unlinkat, mkdirat, symlinkat and
+> linkat all do), so I didn't think of that as a problem in itself.
 
-Conventionally, the .got section is placed just before .got.plt (which
-should be empty and omitted in the kernel). Therefore, we move the .got
-section to a conventional location (between .text and .data) and remove
-the unneeded `. = ALIGN(16)`.
+I think you missed the point. getdents is not an exclusive operation
+- it is run under shared locking unlike all the other direcotry
+modification operations you cite above. They use exclusive locking
+so there's no real benefit by trying to run them non-blocking or
+as an async operation as they are single threaded and will consume
+a single thread context from start to end.
 
-Signed-off-by: Fangrui Song <maskray@google.com>
----
- arch/arm64/kernel/vmlinux.lds.S | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Further, one of the main reasons they get punted to the per-thread
+pool is so that io_uring can optimise away the lock contention
+caused by running multiple work threads on exclusively locked
+objects; it does this by only running one work item per inode at a
+time.
 
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index b9202c2ee18e..2bcb3b30db41 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -181,18 +181,8 @@ SECTIONS
- 			KPROBES_TEXT
- 			HYPERVISOR_TEXT
- 			*(.gnu.warning)
--		. = ALIGN(16);
--		*(.got)			/* Global offset table		*/
- 	}
- 
--	/*
--	 * Make sure that the .got.plt is either completely empty or it
--	 * contains only the lazy dispatch entries.
--	 */
--	.got.plt : { *(.got.plt) }
--	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
--	       "Unexpected GOT/PLT entries detected!")
--
- 	. = ALIGN(SEGMENT_ALIGN);
- 	_etext = .;			/* End of text section */
- 
-@@ -247,6 +237,16 @@ SECTIONS
- 
- 	. = ALIGN(SEGMENT_ALIGN);
- 	__inittext_end = .;
-+
-+	.got : { *(.got) }
-+	/*
-+	 * Make sure that the .got.plt is either completely empty or it
-+	 * contains only the lazy dispatch entries.
-+	 */
-+	.got.plt : { *(.got.plt) }
-+	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-+	       "Unexpected GOT/PLT entries detected!")
-+
- 	__initdata_begin = .;
- 
- 	init_idmap_pg_dir = .;
+This is exactly what we don't want with getdents - we want to be
+able to run as many concurrent getdents and lookup operations in
+parallel as we can as both all use shared locking. IOWs, getdents
+and inode lookups are much closer in behaviour and application use
+to concurrent buffered data reads than they are to directory
+modification operations.
+
+We can already do concurrent getdents/lookup operations on a single
+directory from userspace with multiple threads, but the way this
+series adds support to io_uring somewhat prevents concurrent
+getdents/lookup operations on the same directory inode via io_uring.
+IOWs, adding getdents support to io_uring like this is not a step
+forwards for applications that use/need concurrency in directory
+lookup operations.
+
+Keep in mind that if the directory is small enough to fit in the
+inode, XFS can return all the getdents information immediately as it
+is guaranteed to be in memory without doing any IO at all. Why
+should that fast path that is commonly hit get punted to a work
+queue and suddenly cost an application at least two extra context
+switches?
+
+> > Filesystems like XFS can easily do non-blocking getdents calls - we
+> > just need the NOWAIT plumbing (like we added to the IO path with
+> > IOCB_NOWAIT) to tell the filesystem not to block on locks or IO.
+> > Indeed, filesystems often have async readahead built into their
+> > getdents paths (XFS does), so it seems to me that we really want
+> > non-blocking getdents to allow filesystems to take full advantage of
+> > doing work without blocking and then shuffling the remainder off to
+> > a background thread when it actually needs to wait for IO....
+> 
+> I believe that can be done without any change of this API, so that'll be
+> a very welcome addition when it is ready;
+
+Again, I think you miss the point.
+
+Non blocking data IO came before io_uring and we had the
+infrastructure in place before io_uring took advantage of it.
+Application developers asked the fs developers to add support for
+non-blocking direct IO operations and because we pretty much had all
+the infrastructure to support already in place it got done quickly
+via preadv2/pwritev2 via RWF_NOWAIT flags.
+
+We already pass a struct dir_context to ->iterate_shared(), so we
+have a simple way to add context specific flags down the filesystem
+from iterate_dir(). This is similar to the iocb for file data IO
+that contains the flags field that holds the IOCB_NOWAIT context for
+io_uring based IO. So the infrastructure to plumb it all the way
+down the fs implementation of ->iterate_shared is already there.
+
+XFS also has async metadata IO capability and we use that for
+readahead in the xfs_readdir() implementation. hence we've got all
+the parts we need to do non-blocking readdir already in place. This
+is very similar to how we already had all the pieces in the IO path
+ready to do non-block IO well before anyone asked for IOCB_NOWAIT
+functionality....
+
+AFAICT, the io_uring code wouldn't need to do much more other than
+punt to the work queue if it receives a -EAGAIN result. Otherwise
+the what the filesystem returns doesn't need to change, and I don't
+see that we need to change how the filldir callbacks work, either.
+We just keep filling the user buffer until we either run out of
+cached directory data or the user buffer is full.
+
+And as I've already implied, several filesystems perform async
+readahead from their ->iterate_shared methods, so there's every
+chance they will return some data while there is readahead IO in
+progress. By the time the io_uring processing loop gets back to
+issue another getdents operation, that IO will have completed and the
+application will be able to read more dirents without blocking. The
+filesystem will issue more readahead while processing what it
+already has available, and around the loop we go.
+
+> I don't think the adding the
+> uring op should wait on this if we can agree a simple wrapper API is
+> good enough (or come up with a better one if someone has a Good Idea)
+
+It doesn't look at all hard to me. If you add a NOWAIT context flag
+to the dir_context it should be relatively trivial to connect all
+the parts together. If you do all the VFS, io_uring and userspace
+testing infrastructure work, I should be able to sort out the
+changes needed to xfs_readdir() to support nonblocking
+->iterate_shared() behaviour.
+
+Cheers,
+
+Dave.
 -- 
-2.40.1.495.gc816e09b53d-goog
-
+Dave Chinner
+david@fromorbit.com
