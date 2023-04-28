@@ -2,266 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B806F1C5C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ACA6F1C64
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjD1QN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S230464AbjD1QN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjD1QN2 (ORCPT
+        with ESMTP id S240110AbjD1QNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:13:28 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389972D61;
-        Fri, 28 Apr 2023 09:13:27 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4efe8991bafso104962e87.0;
-        Fri, 28 Apr 2023 09:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682698405; x=1685290405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h6HpevGuSeKVYRWiHzaC5C3PvoQ9zXlfTGqpoJB0Fpo=;
-        b=QFnSbPBqc8rULLiYh43yU6s3POFfVoXpcuFaDGA4dotETjtDC3qnydjfG2NycpeCAg
-         SOTAvfpRdoD7zDCuwHd2L4qmHQ1cYxiqG/pHlkDKk2i1WFNdlgnY178CGUwUYLwRo3FB
-         PJpMgwhw799Jvffz/Wl6eYqkW+i0G76n2zRQWHIltS+QWMlv1L3IfDHT52hEHHWTOuMf
-         kNZag1PGG/nd4Pa8fCvuE9lXlc9X3AmjV9ME/Ue2Hw417Uh60c2cFvxG3Sh3JZ8kMQxa
-         NvpR8PvEz5xGer+rVAFAg0a+u5VGxqodtiux9tIfAGUYDD4WPZUit6hdJmPJBwJTBSdX
-         s3Tw==
+        Fri, 28 Apr 2023 12:13:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9BA1706
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682698390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5xkaTJLSgSiHWckTCCg+jkvg+cPl3tpnSAiaPo9ljdQ=;
+        b=bFXqxpQeR41pnrpdyEt6RuMbE7wdU80Q+sWN10Utpw+SDFlA/DM4zJUedDfuIpSEWP115E
+        +3296zJJA/lKChLeotcqL213iVcFyUHhakT4puIeorMS2sjft7yGRi2kcUDS+RXEFq0ON4
+        kWhU+2gZ3D06HGSc1OHiaOdfby5i1wM=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-226-BC1UhbilPsmCjfRDM7Ernw-1; Fri, 28 Apr 2023 12:13:08 -0400
+X-MC-Unique: BC1UhbilPsmCjfRDM7Ernw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f1793d6363so36401335e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:13:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682698405; x=1685290405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h6HpevGuSeKVYRWiHzaC5C3PvoQ9zXlfTGqpoJB0Fpo=;
-        b=USYHsHkXkK5OQYtenbbat8+w5ROC2IPtb53WAQUr9RHFndzNTzrexj0tLuzATb9Op5
-         iny0ORe9+Git5d2S66rR9cxWkDa9aZS87a+MgbJRU6kQ1OGCcsveMi9xZAim1tWO4k90
-         vCdvwXfRNBnQhW8ai4pno4W6FU7BvQ0mUKlVm/tlse8jLMLybykG2k2e639VeUi/IiqS
-         1vB1kWWo366ZjN+ho4VTuTQMOoAjH51wfYO8U54w3tCgO07su+2bG6I7ZuxWX9w7ZTEC
-         D8hhy8ngODDXo2xybTz71K5LGNXq9yBaLdvwpeqUTbWpVQIE62gK+DCyn54JIfGC9aGS
-         J04Q==
-X-Gm-Message-State: AC+VfDzHwlmtLeMcJd70KQrRfamwcJryL8Y0NLCp6hG+PkqVhaHa2RjR
-        ZX3DZtC/FaE8cZgyIo9nEzQZVeSY4f09DOrZ41c=
-X-Google-Smtp-Source: ACHHUZ76w8Yi9LRDcm13mL6+0ksU3T5OdE3rL55wTmJe4rUXdCTQqtagEYTArGsVpVo5afeYTlHKVved1YzxBmMI7WA=
-X-Received: by 2002:ac2:5549:0:b0:4ed:b818:48ae with SMTP id
- l9-20020ac25549000000b004edb81848aemr1577073lfk.21.1682698405140; Fri, 28 Apr
- 2023 09:13:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682698387; x=1685290387;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5xkaTJLSgSiHWckTCCg+jkvg+cPl3tpnSAiaPo9ljdQ=;
+        b=bz//UxEebrmyElUgfB7X8fQTt2g9oOlxFM/emxu07bTCBlreLB841DSUeCwtXUo16S
+         Vu0vot64ndVLW7d33DM7AAJTstLrkGsw9U/SjZz1nEcyHeCCm7JRsrnJj/b+3jHv0Fdh
+         /9RZCXltKNBCGLIQMNV6OrU4AtgvXpEVWuBwM/iMJTiVkuk95CTv38Yzda+pFU22AVBk
+         Ame+OR6jQawhazp7yXkAsdvJGAdwXT1WHNVOa7rmc7YZAnaOkWJU8eDZNqhwTzALBqxH
+         QZP7fvjbxz/st/slbzqSivapfDu2PIEWvM7AMa++iocbeVA3tKIWKvPE0VwmYLLdK6dK
+         siAw==
+X-Gm-Message-State: AC+VfDzF2EdtLNkNgTFO+zovmZT9iMltMCVdvSbyzrOTgSzmFAxtFvHc
+        +6uxa90BsmYOkmQQm/bZ+wLkWt3+th2qYpdmoCWHW+BJA0YZh1b5/UyJbT8BglYVDAo5ooqS9uH
+        pnobv2uxTzV+OaCOd13c95Yzs
+X-Received: by 2002:a1c:cc0f:0:b0:3f1:718d:a21c with SMTP id h15-20020a1ccc0f000000b003f1718da21cmr4546920wmb.31.1682698386872;
+        Fri, 28 Apr 2023 09:13:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5UcVnruZKFM610WaYbD7KosGHJuT9juitvMObOnL1WWik01k7wINU0BT60S4IoSquURMFEKg==
+X-Received: by 2002:a1c:cc0f:0:b0:3f1:718d:a21c with SMTP id h15-20020a1ccc0f000000b003f1718da21cmr4546897wmb.31.1682698386533;
+        Fri, 28 Apr 2023 09:13:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
+        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f17300c7dcsm24667685wml.48.2023.04.28.09.13.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 09:13:06 -0700 (PDT)
+Message-ID: <39cc0f26-8fc2-79dd-2e84-62238d27fd98@redhat.com>
+Date:   Fri, 28 Apr 2023 18:13:03 +0200
 MIME-Version: 1.0
-References: <20230420165454.9517-1-jorge.lopez2@hp.com> <20230420165454.9517-13-jorge.lopez2@hp.com>
- <cf54c6f4-d177-4904-82ee-9d33566fb920@t-8ch.de> <CAOOmCE8rpA=XvWBxcyRVu_gOHie3qN0E15Rs9bLfhb6tPZ7tyg@mail.gmail.com>
- <479b18e3-a35b-45c7-8c8a-cd30af646977@t-8ch.de> <CAOOmCE87dV6pnnU7r8Ycf0XcVERpRFRZeK6=y+nC+_Fc1EuJMg@mail.gmail.com>
- <7bdac640-cf61-429f-acd0-f8aa40b41e73@t-8ch.de> <CAOOmCE9pWqqN1zNAfdaWFL_cZvSfiEpQjETVeECR0BAw9-sVDQ@mail.gmail.com>
- <52554657-2902-454b-b2af-ed632dd2f081@t-8ch.de>
-In-Reply-To: <52554657-2902-454b-b2af-ed632dd2f081@t-8ch.de>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Fri, 28 Apr 2023 11:12:59 -0500
-Message-ID: <CAOOmCE_jDOf4qE4kZJkW-TSP-_pvo54q9o3pKpaSM+UnjWGCjQ@mail.gmail.com>
-Subject: Re: [PATCH v11 12/14] HP BIOSCFG driver - surestart-attributes
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Content-Language: en-US
+To:     "Kirill A . Shutemov" <kirill@shutemov.name>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+ <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
+ <ZEvZtIb2EDb/WudP@nvidia.com>
+ <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
+ <400da248-a14e-46a4-420a-a3e075291085@redhat.com>
+ <077c4b21-8806-455f-be98-d7052a584259@lucifer.local>
+ <62ec50da-5f73-559c-c4b3-bde4eb215e08@redhat.com>
+ <6ddc7ac4-4091-632a-7b2c-df2005438ec4@redhat.com>
+ <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230428160925.5medjfxkyvmzfyhq@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 11:06=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@t-8c=
-h.de> wrote:
->
-> On 2023-04-28 10:40:59-0500, Jorge Lopez wrote:
-> > On Fri, Apr 28, 2023 at 10:21=E2=80=AFAM Thomas Wei=C3=9Fschuh <thomas@=
-t-8ch.de> wrote:
-> > >
-> > > On 2023-04-28 09:58:01-0500, Jorge Lopez wrote:
-> > > > On Fri, Apr 28, 2023 at 1:03=E2=80=AFAM Thomas Wei=C3=9Fschuh <thom=
-as@t-8ch.de> wrote:
-> > > > >
-> > > > > On 2023-04-27 17:17:57-0500, Jorge Lopez wrote:
-> > > > > > On Sun, Apr 23, 2023 at 7:16=E2=80=AFAM Thomas Wei=C3=9Fschuh <=
-thomas@t-8ch.de> wrote:
-> > > > > > >
-> > > > > > > On 2023-04-20 11:54:52-0500, Jorge Lopez wrote:
-> > > > > > > >  .../x86/hp/hp-bioscfg/surestart-attributes.c  | 130 ++++++=
-++++++++++++
-> > > > > > > >  1 file changed, 130 insertions(+)
-> > > > > > > >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/sure=
-start-attributes.c
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-a=
-ttributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> > > > > > > > new file mode 100644
-> > >
-> > > <snip>
-> > >
-> > > > > > > Instead of not returning any data, why not show as many resul=
-ts as
-> > > > > > > possible?
-> > > > > > >
-> > > > > >
-> > > > > > if count * LOG_ENTRY_SIZE > PAGE_SIZE then I prefer to return a=
-n error.
-> > > > > > if the count is correct but a failure occurs while reading indi=
-vidual
-> > > > > > audit logs then we will return a partial list of all audit logs
-> > > > > > This changes will be included in Version 12
-> > > > >
-> > > > > What prevents the firmware from having more log entries?
-> > > > > Wouldn't these audit log entries not accumulate for each logged
-> > > > > operation over the lifetime of the device / boot?
-> > > > >
-> > > > > This would make the interface unusable as soon as there are more
-> > > > > entries.
-> > > >
-> > > > BIOS stores a max number of audit logs appropriate to the current
-> > > > audit log size.The first audit logs are kept in a FIFO queue by BIO=
-S
-> > > > so when the queue is full and a new audit log arrives, then the  fi=
-rst
-> > > > audit log will be deleted.
-> > >
-> > > How does it determine "appropriate"?
-> > > This would also be great in a comment.
-> > >
-> > > If the BIOS is just using FIFO the driver could return the first
-> > > LOG_MAX_ENTRIES entries.
-> > > This would avoid trusting the firmware for a reasonable definition of
-> > > "appropriate".
-> > >
-> > > > >
-> > > > > > > > +
-> > > > > > > > +     if (ret < 0)
-> > > > > > > > +             return ret;
-> > > > >
-> > > > > And this should first validate ret and then count.
-> > > >
-> > > > Done!
-> > > >
-> > > > >
-> > > > > > > > +
-> > > > > > > > +     /*
-> > > > > > > > +      * We are guaranteed the buffer is 4KB so today all t=
-he event
-> > > > > > > > +      * logs will fit
-> > > > > > > > +      */
-> > > > > > > > +
-> > > > > > > > +     for (i =3D 0; ((i < count) & (ret >=3D 0)); i++) {
-> > > > > > >
-> > > > > > > &&
-> > > > > > >
-> > > > > > > Better yet, pull the condition ret >=3D 0 into the body, as a=
-n else-branch
-> > > > > > > for the existing check.
-> > > > > > >
-> > > > > >
-> > > > > > Done!
-> > > > > >
-> > > > > > > > +             *buf =3D (i + 1);
-> > > > > > >
-> > > > > > > Isn't this directly overwritten by the query below?
-> > > > > >
-> > > > > > buf input value indicates the audit log to be read hence the re=
-ason
-> > > > > > why it is overwritten.
-> > > > > > This is an expected behavior.
-> > > > >
-> > > > > So this is read by the HPWMI_SURESTART_GET_LOG method in the firm=
-ware?
-> > > > >
-> > > > > Make sense but need a comment.
-> > > >
-> > > > Done!
-> > > >
-> > > > >
-> > > > > > >
-> > > > > > > > +             ret =3D hp_wmi_perform_query(HPWMI_SURESTART_=
-GET_LOG,
-> > > > > > > > +                                        HPWMI_SURESTART,
-> > > > > > > > +                                        buf, 1, 128);
-> > > > > > > > +             if (ret >=3D 0)
-> > > > > > > > +                     buf +=3D LOG_ENTRY_SIZE;
-> > > > > > >
-> > > > > > > So 128 bytes are read but only the first 16 bytes are preserv=
-ed?
-> > > > > > >
-> > > > > > > The documentation says that each entry has 128 bytes in the f=
-ile.
-> > > > > > > And that they are separated by ";", which is not implemented.
-> > > > > >
-> > > > > > The statement will be removed from documentation  (separated by=
- ";")
-> > > > > > audit log size is 16 bytes.
-> > > > > > >
-> > > > > > > Can the audit-log not contain all-zero bytes?
-> > > > > > > If it does this would need to be a bin_attribute.
-> > > > > >
-> > > > > > Bytes 16-127 are ignored and not used at this time.  If the aud=
-it log
-> > > > > > changes, then the driver will need to change to accommodate the=
- new
-> > > > > > audit log size.
-> > > > >
-> > > > > buf is not guaranteed to have 128 bytes left for this data.
-> > > > >
-> > > > > For example if this is entry number 253 we are at offset 253 * 16=
- =3D 4048
-> > > > > in the sysfs buffer. Now hw_wmi_perform_query may try to write to=
- 4048 +
-> > > > > 127 =3D 4175 which is out of bounds for the buf of size 4096.
-> > > > >
-> > > > > Writing first to a stack buffer would be better,
-> > > > > or pass outsize =3D LOG_ENTRY_SIZE.
-> > > > >
-> > > > BIOS currently stores 16 bytes for each audit log although the WMI
-> > > > query reads 128 bytes.  The 128 bytes size is set to provide suppor=
-t
-> > > > in future BIOS for audit log sizes >=3D 16 and < 128 bytes.
-> > >
-> > > And if an old driver is running on a new BIOS then this would write o=
-ut
-> > > of bounds.
-> > > Or if the BIOS is buggy.
-> > >
-> > > If the current driver can only handle 16 byte sized log entries then =
-the
-> > > this should be used in the call to HPWMI_SURESTART_GET_LOG.
-> >
-> > BIOS WMI specification indicates that the HPWMI_SURESTART_GET_LOG call
-> > expects a 128 byte size output buffer regardless of the actual audit
-> > log size currently supported.
-> >
-> > Return Values:
-> > Byte 0-15: a requested Audit Log entry (Each Audit log is 16 bytes)
-> > Byte 16-127: Unused
-> > >
-> > > Storing it in a 128 byte stackvariable would also sidestep the issue.
-> >
-> > The driver hardcodes the audit log size to 16 bytes.  If the new BIOS
-> > provides an audit log that is larger than 16 bytes, then the logs
-> > provided to the user application by the old driver will be truncated.
->
-> HPWMI_SURESTART_GET_LOG is directly passed a pointer into "buf" which
-> comes from sysfs core and is one page, 4096 bytes large.
-> It is told to write 128 bytes into it at a given offset.
->
-> In the loop if i =3D=3D 253 then this offset will be LOG_ENTRY_SIZE * 253=
- =3D 4048.
->
-> So on a new BIOS the driver may write 128 bytes at offset 4048.
-> This goes up to 4175 which is larger than the 4096 buffer.
->
-> (See also the calculation in the previous mail)
->
-> Just use a 128 byte stack buffer and copy 16 bytes of it to the output
-> buffer.
-> (After having validated that the BIOS actually returned 16 bytes)
+On 28.04.23 18:09, Kirill A . Shutemov wrote:
+> On Fri, Apr 28, 2023 at 05:43:52PM +0200, David Hildenbrand wrote:
+>> On 28.04.23 17:34, David Hildenbrand wrote:
+>>> On 28.04.23 17:33, Lorenzo Stoakes wrote:
+>>>> On Fri, Apr 28, 2023 at 05:23:29PM +0200, David Hildenbrand wrote:
+>>>>>>>
+>>>>>>> Security is the primary case where we have historically closed uAPI
+>>>>>>> items.
+>>>>>>
+>>>>>> As this patch
+>>>>>>
+>>>>>> 1) Does not tackle GUP-fast
+>>>>>> 2) Does not take care of !FOLL_LONGTERM
+>>>>>>
+>>>>>> I am not convinced by the security argument in regard to this patch.
+>>>>>>
+>>>>>>
+>>>>>> If we want to sells this as a security thing, we have to block it
+>>>>>> *completely* and then CC stable.
+>>>>>
+>>>>> Regarding GUP-fast, to fix the issue there as well, I guess we could do
+>>>>> something similar as I did in gup_must_unshare():
+>>>>>
+>>>>> If we're in GUP-fast (no VMA), and want to pin a !anon page writable,
+>>>>> fallback to ordinary GUP. IOW, if we don't know, better be safe.
+>>>>
+>>>> How do we determine it's non-anon in the first place? The check is on the
+>>>> VMA. We could do it by following page tables down to folio and checking
+>>>> folio->mapping for PAGE_MAPPING_ANON I suppose?
+>>>
+>>> PageAnon(page) can be called from GUP-fast after grabbing a reference.
+>>> See gup_must_unshare().
+>>
+>> IIRC, PageHuge() can also be called from GUP-fast and could special-case
+>> hugetlb eventually, as it's table while we hold a (temporary) reference.
+>> Shmem might be not so easy ...
+> 
+> page->mapping->a_ops should be enough to whitelist whatever fs you want.
+> 
 
-Thank you for the clarification.
-Done!
+The issue is how to stabilize that from GUP-fast, such that we can 
+safely dereference the mapping. Any idea?
+
+At least for anon page I know that page->mapping only gets cleared when 
+freeing the page, and we don't dereference the mapping but only check a 
+single flag stored alongside the mapping. Therefore, PageAnon() is fine 
+in GUP-fast context.
+
+-- 
+Thanks,
+
+David / dhildenb
+
