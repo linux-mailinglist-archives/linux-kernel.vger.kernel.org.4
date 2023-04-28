@@ -2,218 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C103D6F1661
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0608C6F1662
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345739AbjD1LGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
+        id S1345685AbjD1LHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345747AbjD1LFx (ORCPT
+        with ESMTP id S1345398AbjD1LHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:05:53 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBA74EE4;
-        Fri, 28 Apr 2023 04:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682679941; x=1714215941;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4JhFUNxs2IOSAeCxq2g3p+MSBgp8v39081pRbpfGz6A=;
-  b=BlKYJbpbfdMUzhvh9xwZWdaQhcq1hiUFfG5agy9giUJMLt2EdwWuTQBO
-   28ZX5oavG2CdRDuNsosK8CB3vZAxwAC0Z3fh0oBXLRpGlJxMh26tY8/9z
-   Ns24w3h2QNKkmW3nuUnPBehBvR3aMqsbZcTcfsCZAzp2HtLDbKbZRbQV9
-   kJ7NMuibX6gu2b1gPI+sgOgIFXfF2Ygu+tMUYL2Umd594GoXb+c0qV53B
-   +Pc+BuoX4XNCAmTwyBE6R2alj37kk+tQSJAH6Jb5Oae0HvPh7BHg9h/iS
-   dMBysm5qwubMfZok1aHhNjloE7OiQIr9WtPaiaGRA3o4e1jOXGsZH6fmT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="434007265"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="434007265"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:05:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="838812488"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="838812488"
-Received: from ksathish-mobl.ger.corp.intel.com (HELO [10.213.194.196]) ([10.213.194.196])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:05:37 -0700
-Message-ID: <135ff649-e50c-50f4-55ba-a1b615865e02@linux.intel.com>
-Date:   Fri, 28 Apr 2023 12:05:35 +0100
+        Fri, 28 Apr 2023 07:07:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B87448C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:07:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 856CF2005F;
+        Fri, 28 Apr 2023 11:07:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1682680048; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ow3aw4xOvVLC6jge2IF3IgMxcgiXds6JLxSLB6q5HcY=;
+        b=ANKTYutrVBEqWMZ9swOBzcpO+F6v3VRWJC1kQxIr/LVvQP0QCuY9D3iPITCsOaBFWNZZFK
+        xrQ5XqTmePAdS/VRHMDhFOc+a4W4wNPP41J9/qLBapFguH8ljQYPlbAnZ44ibKfGPnJj11
+        YG0OfLhuROKznSSfMhFBRuxiDn8kqCY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 75289138FA;
+        Fri, 28 Apr 2023 11:07:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PRjDG/CoS2SBTgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 28 Apr 2023 11:07:28 +0000
+Date:   Fri, 28 Apr 2023 13:07:28 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yajun Deng <yajun.deng@linux.dev>
+Cc:     david@redhat.com, osalvador@suse.de, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/memory_hotplug: fix dead loop in offline_pages()
+Message-ID: <ZEuo8PiA3EzVnrEi@dhcp22.suse.cz>
+References: <20230428100846.95535-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 8/9] drm/fdinfo: Add comm/cmdline override fields
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Christopher Healy <healych@amazon.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230427175340.1280952-1-robdclark@gmail.com>
- <20230427175340.1280952-9-robdclark@gmail.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230427175340.1280952-9-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428100846.95535-1-yajun.deng@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri 28-04-23 18:08:46, Yajun Deng wrote:
+> When migration failure in do_migrate_range() and then the
+> scan_movable_pages() will most likely return the same movable pfn.
+> In this case, there is no condition to bail out, they will
+> always run like this:
+> 
+> ...
+> [878020.623959] migrating pfn 1727813 failed ret:1
+> [878020.623960] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
+> [878020.623962] memcg:ffffa0ff82d5a000
+> [878020.623962] aops:def_blk_aops ino:fd00001
+> [878020.623964] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
+> [878020.623966] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
+> [878020.623967] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
+> [878020.623968] page dumped because: migration failure
+> [878020.626196] migrating pfn 1727813 failed ret:1
+> [878020.626198] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
+> [878020.626200] memcg:ffffa0ff82d5a000
+> [878020.626200] aops:def_blk_aops ino:fd00001
+> [878020.626202] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
+> [878020.626204] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
+> [878020.626205] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
+> [878020.626206] page dumped because: migration failure
+> ...
+> 
+> Bail out when migration failures reach 3 times.
+> 
+> Fixes: bb8965bd82fd ("mm, memory_hotplug: deobfuscate migration part of offlining")
+> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
 
-On 27/04/2023 18:53, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> These are useful in particular for VM scenarios where the process which
-> has opened to drm device file is just a proxy for the real user in a VM
-> guest.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+Any hard coded failure retry limit will lead to premature failures. Have
+a look at 72b39cfc4d75 ("mm, memory_hotplug: do not fail offlining too
+early"). A proper way to deal with this is to implement termination from
+the userspace (e.g. timeout $TIMEOUT /bin/echo 0 > $PATH_TO_MEM/online)
+Nacked-by: Michal Hocko <mhocko@suse.com>
+
 > ---
->   Documentation/gpu/drm-usage-stats.rst | 18 ++++++++++++++++++
->   drivers/gpu/drm/drm_file.c            | 15 +++++++++++++++
->   include/drm/drm_file.h                | 19 +++++++++++++++++++
->   3 files changed, 52 insertions(+)
+>  mm/memory_hotplug.c | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
 > 
-> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-> index 58dc0d3f8c58..e4877cf8089c 100644
-> --- a/Documentation/gpu/drm-usage-stats.rst
-> +++ b/Documentation/gpu/drm-usage-stats.rst
-> @@ -73,6 +73,24 @@ scope of each device, in which case `drm-pdev` shall be present as well.
->   Userspace should make sure to not double account any usage statistics by using
->   the above described criteria in order to associate data to individual clients.
->   
-> +- drm-comm-override: <valstr>
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..72dd385b8892 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1800,11 +1800,12 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  			struct zone *zone, struct memory_group *group)
+>  {
+>  	const unsigned long end_pfn = start_pfn + nr_pages;
+> -	unsigned long pfn, system_ram_pages = 0;
+> +	unsigned long pfn, tmp_pfn, system_ram_pages = 0;
+>  	const int node = zone_to_nid(zone);
+>  	unsigned long flags;
+>  	struct memory_notify arg;
+>  	char *reason;
+> +	int count = 0;
+>  	int ret;
+>  
+>  	/*
+> @@ -1887,12 +1888,20 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
+>  
+>  			cond_resched();
+>  
+> +			tmp_pfn = pfn;
+>  			ret = scan_movable_pages(pfn, end_pfn, &pfn);
+>  			if (!ret) {
+> -				/*
+> -				 * TODO: fatal migration failures should bail
+> -				 * out
+> -				 */
+> +				if (pfn == tmp_pfn)
+> +					count++;
+> +				else
+> +					count = 0;
 > +
-> +Returns the client executable override string.  Some drivers support letting
-> +userspace override this in cases where the userspace is simply a "proxy".
-> +Such as is the case with virglrenderer drm native context, where the host
-> +process is just forwarding command submission, etc, from guest userspace.
-> +This allows the proxy to make visible the executable name of the actual
-> +app in the VM guest.
+> +				if (unlikely(count == 3)) {
+> +					ret = -EBUSY;
+> +					reason = "migration failure";
+> +					goto failed_removal_isolated;
+> +				}
 > +
-> +- drm-cmdline-override: <valstr>
-> +
-> +Returns the client cmdline override string.  Some drivers support letting
-> +userspace override this in cases where the userspace is simply a "proxy".
-> +Such as is the case with virglrenderer drm native context, where the host
-> +process is just forwarding command submission, etc, from guest userspace.
-> +This allows the proxy to make visible the cmdline of the actual app in the
-> +VM guest.
+>  				do_migrate_range(pfn, end_pfn);
+>  			}
+>  		} while (!ret);
+> -- 
+> 2.25.1
 
-Perhaps it would be okay to save space here by not repeating the 
-description, like:
-
-drm-comm-override: <valstr>
-drm-cmdline-override: <valstr>
-
-Long description blah blah...
-This allows the proxy to make visible the _executable name *and* command 
-line_ blah blah..
-
-> +
->   Utilization
->   ^^^^^^^^^^^
->   
-> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-> index 9321eb0bf020..d7514c313af1 100644
-> --- a/drivers/gpu/drm/drm_file.c
-> +++ b/drivers/gpu/drm/drm_file.c
-> @@ -178,6 +178,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
->   	spin_lock_init(&file->master_lookup_lock);
->   	mutex_init(&file->event_read_lock);
->   
-> +	mutex_init(&file->override_lock);
-> +
->   	if (drm_core_check_feature(dev, DRIVER_GEM))
->   		drm_gem_open(dev, file);
->   
-> @@ -292,6 +294,8 @@ void drm_file_free(struct drm_file *file)
->   	WARN_ON(!list_empty(&file->event_list));
->   
->   	put_pid(file->pid);
-> +	kfree(file->override_comm);
-> +	kfree(file->override_cmdline);
->   	kfree(file);
->   }
->   
-> @@ -995,6 +999,17 @@ void drm_show_fdinfo(struct seq_file *m, struct file *f)
->   			   PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
->   	}
->   
-> +	mutex_lock(&file->override_lock);
-
-You could add a fast unlocked check before taking the mutex for no risk 
-apart a transient false negative. For 99.9999% of userspace it would 
-mean no pointless lock/unlock cycle.
-
-> +	if (file->override_comm) {
-> +		drm_printf(&p, "drm-comm-override:\t%s\n",
-> +			   file->override_comm);
-> +	}
-> +	if (file->override_cmdline) {
-> +		drm_printf(&p, "drm-cmdline-override:\t%s\n",
-> +			   file->override_cmdline);
-> +	}
-> +	mutex_unlock(&file->override_lock);
-> +
->   	if (dev->driver->show_fdinfo)
->   		dev->driver->show_fdinfo(&p, file);
->   }
-> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-> index 1339e925af52..604d05fa6f0c 100644
-> --- a/include/drm/drm_file.h
-> +++ b/include/drm/drm_file.h
-> @@ -370,6 +370,25 @@ struct drm_file {
->   	 */
->   	struct drm_prime_file_private prime;
->   
-> +	/**
-> +	 * @comm: Overridden task comm
-> +	 *
-> +	 * Accessed under override_lock
-> +	 */
-> +	char *override_comm;
-> +
-> +	/**
-> +	 * @cmdline: Overridden task cmdline
-> +	 *
-> +	 * Accessed under override_lock
-> +	 */
-> +	char *override_cmdline;
-> +
-> +	/**
-> +	 * @override_lock: Serialize access to override_comm and override_cmdline
-> +	 */
-> +	struct mutex override_lock;
-> +
-
-I don't think this should go to drm just yet though. Only one driver can 
-make use of it so I'd leave it for later and print from msm_show_fdinfo 
-for now.
-
-Regards,
-
-Tvrtko
-
->   	/* private: */
->   #if IS_ENABLED(CONFIG_DRM_LEGACY)
->   	unsigned long lock_count; /* DRI1 legacy lock count */
+-- 
+Michal Hocko
+SUSE Labs
