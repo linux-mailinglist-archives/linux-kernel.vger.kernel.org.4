@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55416F1953
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 544216F1958
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346247AbjD1NYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
+        id S1346255AbjD1NY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbjD1NYP (ORCPT
+        with ESMTP id S229835AbjD1NY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:24:15 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD362116
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:24:14 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1a6862e47edso62512165ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:24:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682688254; x=1685280254;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCrHQjiS2fwiby7dz0V9ThMkUe63uEws1Bin2T2dpU8=;
-        b=jcuVTOAp1c8K+ch7YCMLi+8POwhTwb1WrUalORmat2684E/X82MLP/H/sTNZiGTSzw
-         ILJbHonyleAOPNozrhCp7XJpKzpTbzSV2WanXyhxQyxv5lSFZW8pMKziOeeK25UM/lM3
-         JtO2LiFUAPtV+zJkr/lmiV+hDnMAOdwrsD7W9rNnMigwvNIYtIDxnNjAK3lyudpZp5yI
-         5vpaP0vtG6m4sW2kgSy3vvkx/O8FeePG6gnTT8455Z1wkWEJFKZg0VnC7g7BQBECbTSk
-         07ULhu3kIczPuOMcJkwFO/y0wcnsFUVJfVg87WLuR8H+9rMQZ0u8212WdRLWh+a/t1bT
-         beJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688254; x=1685280254;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCrHQjiS2fwiby7dz0V9ThMkUe63uEws1Bin2T2dpU8=;
-        b=LirLgaTYoxc2c3t/eArREdr3wwRpldyf29jWQaBpdt2xqF0PhvBvitMog+UltMb5jq
-         5RmWMK7aRev1mngA3nID8Hz9PaSp4PtWjhRIy550NeIwZsQagRG9/Bzhlk2EDL2wvSfA
-         rvrM+UxOwoO446o4OvM2jE8CdUkwE9mBIURMVjN9c9EppdVRnXK0VSa6juoHEwM7sl51
-         xUVjsPoGoLx7zS1UkH4ch/+/7IeQ1FJ4j+6RhClQMS4vKxQeCBQazn01XpNUC6yaPUCx
-         XhVcGKDADf5QbPGFcrBdBafLLaIgoFrVs21XHF5LEvY/ZX3a3hlroKJEQ1I23K4hCDOj
-         n67Q==
-X-Gm-Message-State: AC+VfDyl0COYhN1q/chxrdikHhhoAKP+Nj3RPxh2Pogn6X3/LWvukYkS
-        5a25sXEXVE7IQVIjfejwVSwEPnKLu0Y4cXwJ
-X-Google-Smtp-Source: ACHHUZ6Q1iaeTMc7znbuRU46RBkgJ3r/GzmuoUGlNK1hEg/1kqgAXN7zKR88/FXgEDBYkLlt9aTGSyL2pZdAjcsz
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:902:b289:b0:19f:1d62:4393 with SMTP
- id u9-20020a170902b28900b0019f1d624393mr1511380plr.7.1682688253988; Fri, 28
- Apr 2023 06:24:13 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 13:24:06 +0000
-In-Reply-To: <20230428132406.2540811-1-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20230428132406.2540811-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230428132406.2540811-3-yosryahmed@google.com>
-Subject: [PATCH v2 2/2] memcg: dump memory.stat during cgroup OOM for v1
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Muchun Song <muchun.song@linux.dev>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>, Chris Li <chrisl@kernel.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Fri, 28 Apr 2023 09:24:57 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4CF2735;
+        Fri, 28 Apr 2023 06:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682688278; x=1714224278;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oB6VWPH6ulg8K295XZM6A23hQpKHxYtitORTOenls3A=;
+  b=ByAzJ1VAV7m1TAx4GZ7ZsnTyMIyPSsS9/JdbmoSn4Y7MPVh5dNf8TAze
+   sFYS3ghv6FSE2IWCP9RjyFGiqInBoVzWOlYyG/H1oIT2bnjjsmb2iEtnc
+   Un1KjndOsn5gA7xrrl6RUB67KhiFi9pVceLCF9coD2z4QmaNaiSXiQJwv
+   jhJ2XM8ljp/4gK0cJiJSkQks/IfWW/l3XK4SWNL3VkBJo83EnF6njR2dV
+   Qq0FvOaj+mn20ZdcpGE+WvLG3figdO8q/3CC3hiiJwGAVxO20BODoKug4
+   Jq9L+kpZQ79p5ZfyxWyW3rTf01TYipfYUVK3iQN/5dZKyHt+bL/Q1bwD1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="347769127"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="347769127"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 06:24:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819010528"
+X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
+   d="scan'208";a="819010528"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 06:24:34 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psO5R-0000SF-10;
+        Fri, 28 Apr 2023 13:24:33 +0000
+Date:   Fri, 28 Apr 2023 21:24:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daejun Park <daejun7.park@samsung.com>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Seokhwan Kim <sukka.kim@samsung.com>,
+        Yonggil Song <yonggil.song@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>
+Subject: Re: [PATCH v3] f2fs: add async reset zone command support
+Message-ID: <202304282103.nYW33DnO-lkp@intel.com>
+References: <20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a@epcms2p3>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a@epcms2p3>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,186 +77,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c8713d0b2312 ("mm: memcontrol: dump memory.stat during cgroup
-OOM") made sure we dump all the stats in memory.stat during a cgroup
-OOM, but it also introduced a slight behavioral change. The code used to
-print the non-hierarchical v1 cgroup stats for the entire cgroup
-subtree, now it only prints the v2 cgroup stats for the cgroup under
-OOM.
+Hi Daejun,
 
-For cgroup v1 users, this introduces a few problems:
-(a) The non-hierarchical stats of the memcg under OOM are no longer
-shown.
-(b) A couple of v1-only stats (e.g. pgpgin, pgpgout) are no longer
-shown.
-(c) We show the list of cgroup v2 stats, even in cgroup v1. This list of
-stats is not tracked with v1 in mind. While most of the stats seem to be
-working on v1, there may be some stats that are not fully or correctly
-tracked.
+kernel test robot noticed the following build errors:
 
-Although OOM log is not set in stone, we should not change it for no
-reason. When upgrading the kernel version to a version including
-commit c8713d0b2312 ("mm: memcontrol: dump memory.stat during cgroup
-OOM"), these behavioral changes are noticed in cgroup v1.
+[auto build test ERROR on jaegeuk-f2fs/dev-test]
+[also build test ERROR on jaegeuk-f2fs/dev linus/master next-20230427]
+[cannot apply to v6.3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The fix is simple. Commit c8713d0b2312 ("mm: memcontrol: dump memory.stat
-during cgroup OOM") separated stats formatting from stats display for
-v2, to reuse the stats formatting in the OOM logs. Do the same for v1.
+url:    https://github.com/intel-lab-lkp/linux/commits/Daejun-Park/f2fs-add-async-reset-zone-command-support/20230428-105944
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+patch link:    https://lore.kernel.org/r/20230428025646epcms2p35acbea45ee80d36808861edba8a3c84a%40epcms2p3
+patch subject: [PATCH v3] f2fs: add async reset zone command support
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20230428/202304282103.nYW33DnO-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2f3e641e3de509a5ed879fb10fdf3377fd9ca0d9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daejun-Park/f2fs-add-async-reset-zone-command-support/20230428-105944
+        git checkout 2f3e641e3de509a5ed879fb10fdf3377fd9ca0d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/f2fs/
 
-Move the v2 specific formatting from memory_stat_format() to
-memcg_stat_format(), add memcg1_stat_format() for v1, and make
-memory_stat_format() select between them based on cgroup version.
-Since memory_stat_show() now works for both v1 & v2, drop
-memcg_stat_show().
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304282103.nYW33DnO-lkp@intel.com/
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- mm/memcontrol.c | 60 ++++++++++++++++++++++++++++---------------------
- 1 file changed, 35 insertions(+), 25 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 5922940f92c9..2b492f8d540c 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -1551,7 +1551,7 @@ static inline unsigned long memcg_page_state_output(struct mem_cgroup *memcg,
- 	return memcg_page_state(memcg, item) * memcg_page_state_unit(item);
- }
- 
--static void memory_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
-+static void memcg_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
- {
- 	int i;
- 
-@@ -1604,6 +1604,17 @@ static void memory_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
- 	WARN_ON_ONCE(seq_buf_has_overflowed(s));
- }
- 
-+static void memcg1_stat_format(struct mem_cgroup *memcg, struct seq_buf *s);
-+
-+static void memory_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
-+{
-+	if (cgroup_subsys_on_dfl(memory_cgrp_subsys))
-+		memcg_stat_format(memcg, s);
-+	else
-+		memcg1_stat_format(memcg, s);
-+	WARN_ON_ONCE(seq_buf_has_overflowed(s));
-+}
-+
- #define K(x) ((x) << (PAGE_SHIFT-10))
- /**
-  * mem_cgroup_print_oom_context: Print OOM information relevant to
-@@ -4078,9 +4089,8 @@ static const unsigned int memcg1_events[] = {
- 	PGMAJFAULT,
- };
- 
--static int memcg_stat_show(struct seq_file *m, void *v)
-+static void memcg1_stat_format(struct mem_cgroup *memcg, struct seq_buf *s)
- {
--	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
- 	unsigned long memory, memsw;
- 	struct mem_cgroup *mi;
- 	unsigned int i;
-@@ -4095,18 +4105,18 @@ static int memcg_stat_show(struct seq_file *m, void *v)
- 		if (memcg1_stats[i] == MEMCG_SWAP && !do_memsw_account())
- 			continue;
- 		nr = memcg_page_state_local(memcg, memcg1_stats[i]);
--		seq_printf(m, "%s %lu\n", memcg1_stat_names[i],
-+		seq_buf_printf(s, "%s %lu\n", memcg1_stat_names[i],
- 			   nr * memcg_page_state_unit(memcg1_stats[i]));
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(memcg1_events); i++)
--		seq_printf(m, "%s %lu\n", vm_event_name(memcg1_events[i]),
--			   memcg_events_local(memcg, memcg1_events[i]));
-+		seq_buf_printf(s, "%s %lu\n", vm_event_name(memcg1_events[i]),
-+			       memcg_events_local(memcg, memcg1_events[i]));
- 
- 	for (i = 0; i < NR_LRU_LISTS; i++)
--		seq_printf(m, "%s %lu\n", lru_list_name(i),
--			   memcg_page_state_local(memcg, NR_LRU_BASE + i) *
--			   PAGE_SIZE);
-+		seq_buf_printf(s, "%s %lu\n", lru_list_name(i),
-+			       memcg_page_state_local(memcg, NR_LRU_BASE + i) *
-+			       PAGE_SIZE);
- 
- 	/* Hierarchical information */
- 	memory = memsw = PAGE_COUNTER_MAX;
-@@ -4114,11 +4124,11 @@ static int memcg_stat_show(struct seq_file *m, void *v)
- 		memory = min(memory, READ_ONCE(mi->memory.max));
- 		memsw = min(memsw, READ_ONCE(mi->memsw.max));
- 	}
--	seq_printf(m, "hierarchical_memory_limit %llu\n",
--		   (u64)memory * PAGE_SIZE);
-+	seq_buf_printf(s, "hierarchical_memory_limit %llu\n",
-+		       (u64)memory * PAGE_SIZE);
- 	if (do_memsw_account())
--		seq_printf(m, "hierarchical_memsw_limit %llu\n",
--			   (u64)memsw * PAGE_SIZE);
-+		seq_buf_printf(s, "hierarchical_memsw_limit %llu\n",
-+			       (u64)memsw * PAGE_SIZE);
- 
- 	for (i = 0; i < ARRAY_SIZE(memcg1_stats); i++) {
- 		unsigned long nr;
-@@ -4126,19 +4136,19 @@ static int memcg_stat_show(struct seq_file *m, void *v)
- 		if (memcg1_stats[i] == MEMCG_SWAP && !do_memsw_account())
- 			continue;
- 		nr = memcg_page_state(memcg, memcg1_stats[i]);
--		seq_printf(m, "total_%s %llu\n", memcg1_stat_names[i],
-+		seq_buf_printf(s, "total_%s %llu\n", memcg1_stat_names[i],
- 			   (u64)nr * memcg_page_state_unit(memcg1_stats[i]));
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(memcg1_events); i++)
--		seq_printf(m, "total_%s %llu\n",
--			   vm_event_name(memcg1_events[i]),
--			   (u64)memcg_events(memcg, memcg1_events[i]));
-+		seq_buf_printf(s, "total_%s %llu\n",
-+			       vm_event_name(memcg1_events[i]),
-+			       (u64)memcg_events(memcg, memcg1_events[i]));
- 
- 	for (i = 0; i < NR_LRU_LISTS; i++)
--		seq_printf(m, "total_%s %llu\n", lru_list_name(i),
--			   (u64)memcg_page_state(memcg, NR_LRU_BASE + i) *
--			   PAGE_SIZE);
-+		seq_buf_printf(s, "total_%s %llu\n", lru_list_name(i),
-+			       (u64)memcg_page_state(memcg, NR_LRU_BASE + i) *
-+			       PAGE_SIZE);
- 
- #ifdef CONFIG_DEBUG_VM
- 	{
-@@ -4153,12 +4163,10 @@ static int memcg_stat_show(struct seq_file *m, void *v)
- 			anon_cost += mz->lruvec.anon_cost;
- 			file_cost += mz->lruvec.file_cost;
- 		}
--		seq_printf(m, "anon_cost %lu\n", anon_cost);
--		seq_printf(m, "file_cost %lu\n", file_cost);
-+		seq_buf_printf(s, "anon_cost %lu\n", anon_cost);
-+		seq_buf_printf(s, "file_cost %lu\n", file_cost);
- 	}
- #endif
--
--	return 0;
- }
- 
- static u64 mem_cgroup_swappiness_read(struct cgroup_subsys_state *css,
-@@ -4998,6 +5006,8 @@ static int mem_cgroup_slab_show(struct seq_file *m, void *p)
- }
- #endif
- 
-+static int memory_stat_show(struct seq_file *m, void *v);
-+
- static struct cftype mem_cgroup_legacy_files[] = {
- 	{
- 		.name = "usage_in_bytes",
-@@ -5030,7 +5040,7 @@ static struct cftype mem_cgroup_legacy_files[] = {
- 	},
- 	{
- 		.name = "stat",
--		.seq_show = memcg_stat_show,
-+		.seq_show = memory_stat_show,
- 	},
- 	{
- 		.name = "force_empty",
+>> fs/f2fs/segment.c:1789:5: error: implicit declaration of function '__submit_zone_reset_cmd' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                                   __submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+                                   ^
+   1 error generated.
+
+
+vim +/__submit_zone_reset_cmd +1789 fs/f2fs/segment.c
+
+  1775	
+  1776	/* This should be covered by global mutex, &sit_i->sentry_lock */
+  1777	static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
+  1778	{
+  1779		struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+  1780		struct discard_cmd *dc;
+  1781		bool need_wait = false;
+  1782	
+  1783		mutex_lock(&dcc->cmd_lock);
+  1784		dc = __lookup_discard_cmd(sbi, blkaddr);
+  1785		if (dc) {
+  1786			if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(dc->bdev)) {
+  1787				/* force submit zone reset */
+  1788				if (dc->state == D_PREP)
+> 1789					__submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+  1790								&dcc->wait_list, NULL);
+  1791				dc->ref++;
+  1792				need_wait = true;
+  1793			} else {
+  1794				if (dc->state == D_PREP) {
+  1795					__punch_discard_cmd(sbi, dc, blkaddr);
+  1796				} else {
+  1797					dc->ref++;
+  1798					need_wait = true;
+  1799				}
+  1800			}
+  1801		}
+  1802		mutex_unlock(&dcc->cmd_lock);
+  1803	
+  1804		if (need_wait)
+  1805			__wait_one_discard_bio(sbi, dc);
+  1806	}
+  1807	
+
 -- 
-2.40.1.495.gc816e09b53d-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
