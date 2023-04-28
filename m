@@ -2,171 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4EE6F1A3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38376F1A4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346067AbjD1OKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S230083AbjD1OQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjD1OKI (ORCPT
+        with ESMTP id S229470AbjD1OQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:10:08 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1394232
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:09:56 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-52091c58109so9275748a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:09:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682690996; x=1685282996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p2b78iqTC7OToTOHQ6fHrEeDrWrCuNdZPNAb0fZD55U=;
-        b=ZLkCHgrXybRzPv+DwSbafrfSNV39zdsVZBmrPykFn1NLr65U7rjnAkOXL8Fx2Jwat5
-         DB+pVf5II54c4Gh9Zyj0uJ1V6NL14c08jj7TRJMdmg3g97eOvc2rWHBC3HzSTD1nXDBx
-         MIRZ82u6JAEJzkuTRreiOBby//730kfRhqsCn6fng4ZLdqI58KGiJPjVn0p+2fiX35Aw
-         nGy9W9/ffg1vzPYUW26EiIWFwZ3NdFPxjZHMH0vuj9dnPaoWB1Zz1wSE2Z6o5dBiIHsu
-         FMcMoBNiMbUFoTITXmsH0gT/4i9fv4iwjlKSKDekjY45MN6Zo2MBeBvdYqmmNaA0kUWf
-         XWZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682690996; x=1685282996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p2b78iqTC7OToTOHQ6fHrEeDrWrCuNdZPNAb0fZD55U=;
-        b=lHtLqCQFFvfuh4tCHSRww8h+rmoyh5dk7QIDT6NyCBKBVqkt0vtzeoL/tEeQMfSDHf
-         exnBsY/nyI7oo0DI0BiCmx6Kv6Vu9WhBXzWqtCs7HSpQS8Kad+yaFdX2ty+bcz+YQ26z
-         mA4xYWWzJswCSJ/tiPcgsBp011S1DsFkaq6S2OoK7BrNmro7mB7zg8I/RDlEzLPw1NQa
-         Iff8S9xJNNR9GYl4bSj3MwmxN9p+HdG9CHqCDmVKDd/9FMDo6QdR1CJ1Fde/YrSYViDJ
-         aggTfBlJxRoZJy5JHFeTZ0hiEn+UkqNnjBH6vxD+sSkxgMIcMSO9XSHJ6vxo++CDavb/
-         DcWA==
-X-Gm-Message-State: AC+VfDwe/FT6Lv8OLzgLlwpc6Rd44wwWJeuf9Mx/wK2tqHpLV6GiZqGj
-        9tYDG3abVL4Ue+paXjkHi6AnBkM9imZ+KEiAN3A=
-X-Google-Smtp-Source: ACHHUZ5AEt7w1BySwRThXroxDTX4QU1RNchIAB/DIvq3N/HIBZ2/uQDtKAhJKESIEP3SitEDbDdQb5t3yok7tYSQIKw=
-X-Received: by 2002:a17:90a:bc8d:b0:246:a782:d94 with SMTP id
- x13-20020a17090abc8d00b00246a7820d94mr5992258pjr.7.1682690995638; Fri, 28 Apr
- 2023 07:09:55 -0700 (PDT)
+        Fri, 28 Apr 2023 10:16:13 -0400
+X-Greylist: delayed 90924 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 07:16:09 PDT
+Received: from out203-205-251-27.mail.qq.com (out203-205-251-27.mail.qq.com [203.205.251.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FBF210C
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+        t=1682691368; bh=mcjmIcP4bVI9FN66WZIMySUFBD0zyZdU3Ivt3jTkYkc=;
+        h=From:To:Cc:Subject:Date;
+        b=DdkR2e4BdZiLdzOKssPWow0tDcs8fBbHunzRZd+oePgg+HUtDxsei5MKwYxe84SL+
+         5kn+2O0QTds9GEA8leL2ur9lf6Av/zmXa3N45RMXnCpyCL/35DpDVEj2EQpVepyOwP
+         Q5qBw3iwhj0jv6rz2pV53zM+uDs/tePRb/h3Af3E=
+Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 4029CE99; Fri, 28 Apr 2023 22:16:02 +0800
+X-QQ-mid: xmsmtpt1682691362ty3q88u8s
+Message-ID: <tencent_8492B68063042E768C758871A3171FBD2006@qq.com>
+X-QQ-XMAILINFO: MFT3qY5n2tW2Le4qvbtdUtvjxXKtD/EfxOwCeWt0Y4ioMpxdN3zTfyj528QNtg
+         R33Rr1FeVX9AB8yCXX49e01nl5uNTmunPoTCh0bhN48LOUJ+yTPux6XijQPQyIraYPHenLp/KE40
+         dA0hJKOWkbfHoyLC24pFj5neSfhUXE5ToYe23cE0YhvNq0wc83WMVtnzY7Bqrm6PXQ//Fk02uDEV
+         U7RX151K++YLd+sq2wHqmauSv8Wz77dL0zazdMVbR22qio3wqUi6N8JuZ4mZdm+HLV4MUIGPe1MD
+         EHT7rlB9Xr9+SiQFb+QoFLBsPUUouK04QnHySj1DVZqD4wMo3MA24LxXQe0CDbnyDJ42SpMHT7JS
+         qWvUlXdeJxZZtCzoyMQaVsWSovzNKcMZ5OEKj3BtCmSxsNS+vAklj5EHBI1DlOG/hP+UMlaGxhtI
+         TYPyfhyxWyLrnjq7hsc5+09mkEOOvVSXYDn4vqT/xo9x7wRYCtnUNzArTkpB9708mLhXNlQ28UGB
+         S9EKmn8cRXuhQcEKu5CP/YLDVM3bZuM9ULO7cR6AiEJ2GJ6JSmDM70vnobdshKVg5YpwaUbOP9Us
+         UkHAwO17B7DaJLReDlG+xCMkF+tgvUSX4CNyajo3st954VlLOjQekaWU9k+pJsGpMKcMxXzORdvd
+         9/chiWz9/0aGtwDY0v/78zgTKLkrVFgbLQUfh8m9JDurvIAUo1IQ5ZqNc4yd29hkusegJWwfh6oH
+         wAHiMw6+B+Ni1UR09oWqDhBv2WymP3Mvi2/tjtz679g5vb4c9vxO2xdRFfh/I3Aa9wHnr3/brLBy
+         wFGeoh0K+IPB7i6p5cgF+Tdq9NPYidL/haViIqytqFL0wH8HNnlzLv4sOm2s3bbJReejgtVfPqr/
+         8F8MeNTe/wNAw85Y4MJnZqX2C6/TiESufCbq9c2FLDStho0IEe0yj2gFaTmNONLF1+4Jf1RK5/lm
+         6yyFCiZGu5l7eicDnPxifvxHEFcOV1Hoc4VE/hrk3QTlBkLpbb9g==
+From:   Yangyu Chen <cyy@cyyself.name>
+To:     Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
+        Hongren Zheng <i@zenithal.me>, Yangyu Chen <cyy@cyyself.name>
+Subject: [PATCH v2 0/2] riscv: allow case-insensitive ISA string parsing
+Date:   Fri, 28 Apr 2023 22:15:59 +0800
+X-OQ-MSGID: <20230428141601.678489-1-cyy@cyyself.name>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230423121232.1345909-1-aford173@gmail.com> <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
- <20230423121232.1345909-6-aford173@gmail.com> <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
- <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
- <343f8d25-566f-9d14-64db-4e796cc9e406@samsung.com> <CAHCN7x+QU29Wv9TQEANhbxLcL4jCZUKbk+uGu2sOwhCcTt798A@mail.gmail.com>
- <46429c9b-cf14-a67e-81a8-b56be0350ea3@samsung.com>
-In-Reply-To: <46429c9b-cf14-a67e-81a8-b56be0350ea3@samsung.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 28 Apr 2023 09:09:44 -0500
-Message-ID: <CAHCN7xKcHELG3n8+f4pjj05NCFUhBfz0_q_huN9bP65Fv6Ombg@mail.gmail.com>
-Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst mode
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
-        dario.binacchi@amarulasolutions.com, l.stach@pengutronix.de,
-        Inki Dae <inki.dae@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 9:04=E2=80=AFAM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> On 28.04.2023 15:35, Adam Ford wrote:
-> > On Fri, Apr 28, 2023 at 7:31=E2=80=AFAM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> >> On 24.04.2023 12:00, Adam Ford wrote:
-> >>> On Mon, Apr 24, 2023 at 3:25=E2=80=AFAM Marek Szyprowski
-> >>> <m.szyprowski@samsung.com> wrote:
-> >>>> On 23.04.2023 14:12, Adam Ford wrote:
-> >>>>> The high-speed clock is hard-coded to the burst-clock
-> >>>>> frequency specified in the device tree.  However, when
-> >>>>> using devices like certain bridge chips without burst mode
-> >>>>> and varying resolutions and refresh rates, it may be
-> >>>>> necessary to set the high-speed clock dynamically based
-> >>>>> on the desired pixel clock for the connected device.
-> >>>>>
-> >>>>> This also removes the need to set a clock speed from
-> >>>>> the device tree for non-burst mode operation, since the
-> >>>>> pixel clock rate is the rate requested from the attached
-> >>>>> device like an HDMI bridge chip.  This should have no
-> >>>>> impact for people using burst-mode and setting the burst
-> >>>>> clock rate is still required for those users.
-> >>>>>
-> >>>>> Signed-off-by: Adam Ford <aford173@gmail.com>
-> >>>> This one breaks Exynos-5433 based TM2e board with a DSI panel.
-> >>> Marek S,
-> >>>
-> >>> Thank you for testing!  I knoiw there are several of us who appreciat=
-e
-> >>> your testing this since it's hard to know if something broke without
-> >>> hardware.  Is there any way you can tell me if the flag is set to
-> >>> enable MIPI_DSI_MODE_VIDEO_BURST?
-> >> TM2e board uses the DSI panel operated in command mode and handled by
-> >> panel-samsung-s6e3ha2.c driver. The MIPI_DSI_MODE_VIDEO_BURST flag is
-> >> not set by the driver. However, the MIPI_DSI_CLOCK_NON_CONTINUOUS flag=
-s
-> >> is set there. I really have no idea if setting VIDEO_BURST would make
-> >> sense together with CLOCK_NON_CONTINUOUS or not. Maybe the driver lack=
-s
-> >> setting it?
-> >>
-> >>
-> >>> I was trying to be diligent about not breaking your boards, but
-> >>> without your boards, it's difficult.  The theory was that if
-> >>> MIPI_DSI_MODE_VIDEO_BURST is set and there is a burst clock set in th=
-e
-> >>> device tree, it would use the burst clock.
-> >>>
-> >>> As a fall-back I could just simply check for the presence of the
-> >>> burst_clock_rate instead of both MIPI_DSI_MODE_VIDEO_BURST and
-> >>> burst_clock_rate.
-> >> Maybe you should extend your check also for the
-> >> MIPI_DSI_CLOCK_NON_CONTINUOUS flag? Does it make sense?
-> > Looking at some of the devices that might attach in the future, It
-> > appears that ti-sn65dsi86.c sets this flag.  It's a display port
-> > bridge, so I would expect it to need a variable clock rate similar to
-> > how the HDMI bridge that I need works.  I am concerned that I make the
-> > burst clock dependent on MIPI_DSI_CLOCK_NON_CONTINUOUS, it might break
-> > the Display Port bridge.
-> >
-> > I think it's better to just check if the samsung,burst-clock-frequency
-> > is present in the device tree and use it when present.  If it's not
-> > present, then fall back to the pixel clock of the connected device.
->
-> Right, this sounds rational.
->
-> > I looked at a bunch of Exynos parts, and it looks like they all use
-> > the samsung,burst-clock-frequency device tree setting.  Is that true,
-> > or did I miss one?
->
-> That true. All Exynos based boards with DSI panels use constant DSI
-> burst frequency defined in the device tree.
+This patchset allows case-insensitive ISA string parsing, which is
+needed in the ACPI environment. As the RISC-V Hart Capabilities Table
+(RHCT) description in UEFI Forum ECR[1] shows the format of the ISA
+string is defined in the RISC-V unprivileged specification[2]. However,
+the RISC-V unprivileged specification defines the ISA naming strings are
+case-insensitive while the current ISA string parser in the kernel only
+accepts lowercase letters. In this case, the kernel should allow
+case-insensitive ISA string parsing. Moreover, this reason has been
+discussed in Conor's patch[3]. And I have also checked the current ISA
+string parsing in the recent ACPI support patch[4] will also call
+`riscv_fill_hwcap` function as DT we use now.
 
-Thanks for the feedback.  I'll try to get another rev of this series
-pushed later today or Monday.
+The original motivation for my patch v1[5] is that some SoC generators
+will provide generated DT with illegal ISA string in dt-binding such as
+rocket-chip, which will even cause kernel panic in some cases as I
+mentioned in v1[5]. Now, the rocket-chip has been fixed in PR #3333[6].
+However, when using some specific version of rocket-chip with
+illegal ISA string in DT, this patchset will also work for parsing
+uppercase letters correctly in DT, thus will have better compatibility.
 
-adam
->
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
+In summary, this patch not only works for case-insensitive ISA string
+parsing to meet the requirements in ECR[1] but also can be a workaround
+for some specific versions of rocket-chip.
+
+[1] https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
+[2] https://github.com/riscv/riscv-isa-manual/blob/main/src/naming.adoc
+[3] https://lore.kernel.org/all/20230426-getting-tactile-e6cee2cdf870@spud/
+[4] https://lore.kernel.org/linux-riscv/20230404182037.863533-14-sunilvl@ventanamicro.com/
+[5] https://lore.kernel.org/all/tencent_1647475C9618C390BEC601BE2CC1206D0C07@qq.com/
+[6] https://github.com/chipsalliance/rocket-chip/pull/3333
+
+Changes since v1:
+* Remove convert all isa string to lowercase letters in `print_isa`
+* Remove warp parser pointer dereference with tolower in switch, use
+    uppercase letter case instead in `riscv_fill_hwcap`
+* Remove allow uppercase letters in dt-bindings
+* Add Conor Dooley's patch which drops invalid comment about riscv,isa
+    lower-case reasoning
+
+Conor Dooley (1):
+  dt-bindings: riscv: drop invalid comment about riscv,isa lower-case
+    reasoning
+
+Yangyu Chen (1):
+  riscv: allow case-insensitive ISA string parsing
+
+ .../devicetree/bindings/riscv/cpus.yaml       |  2 +-
+ arch/riscv/kernel/cpu.c                       |  3 ++-
+ arch/riscv/kernel/cpufeature.c                | 25 +++++++++----------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
+
+-- 
+2.40.0
+
