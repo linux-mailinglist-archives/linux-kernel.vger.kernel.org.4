@@ -2,132 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A486F1991
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566CA6F1A05
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346295AbjD1Nbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S1346365AbjD1Nvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346198AbjD1Nbq (ORCPT
+        with ESMTP id S229471AbjD1Nvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:31:46 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29D93A9D;
-        Fri, 28 Apr 2023 06:31:44 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-187fc21f6acso3773040fac.2;
-        Fri, 28 Apr 2023 06:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682688704; x=1685280704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kjkfMeDN5MElQoz8pTsP+XGTEHdi6FRFZYxvJHVi3ac=;
-        b=FDeDMqBwExbEym6j6TOk37nY9oI4HncB9PyjAK3xsu85s//1YumEwNM6XHMpBiJaTl
-         LIcOQoKJF3duQpQ4fi3MUuNe95JzAdbMC+jaDaenqC9vQQ1PkPeCQDxUORlr4jph7+mF
-         aeh4W4qQGGJCNLbzlh8+cRDwOptfjIM4q4M1u5OCET/NL/eBuHsz2HgpROszr0KEGVox
-         XSGj4sSLwyz5aSOVxxH6xSfd0oTKHk67mW+/DdbNEIUn2vRkkBoWq+38UrBLH0AHIwhl
-         qxH1tfTR+iPiFkm6BnPOWuyjX76DWygTZTpasvFWXmgnhAxOU2daWz5NAHvLmcPA197T
-         7mYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688704; x=1685280704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kjkfMeDN5MElQoz8pTsP+XGTEHdi6FRFZYxvJHVi3ac=;
-        b=FIsp3IAgXUNT7YzTr8zbyHHZ5gapV63+XoqvtKQuvWSTo3VVacFtUchfDCOgRfVr/A
-         a+9Zb/iXf0FJiQstawi7vs5pZbcGv2o6DlHrKcC02ZrNfGYBmNN9qPDgolxll6dOcqZ1
-         Yh7QeZWkSlOLRjFCC/lt0Wa7qy4gkb7KFCe1zdlR48fX31EkJTdNao+SHUEvRdkFgcO8
-         ICxOVaLqijyIya4tlxWj92FDhNHAYg6zXjhTkZ0XgG39O+40Eaq0UI76U12iTOnM9waf
-         GsXerFeFDRUvCYicCPcUx8qDf5GxerjwxRUE6mLQ7Ds4pBNbe+D60bgITQglv2HtlX6K
-         nq4g==
-X-Gm-Message-State: AC+VfDwHNkN6KCiJPaO3eZNsPnCFz0oH1uJEx/JLfxGAO8DVSuUeaHII
-        3xhEV5QVb7ECi1HJx5vxfJBGQsr+J+xW+LuK4DI=
-X-Google-Smtp-Source: ACHHUZ7yvFYc1g1/6ZrWu+yC981EbH+g9hDzh8IJ1jVWuHgi19JnIS7N2v3hh/Wbl3/EX2jYloKqk69fVlW/msgtfZM=
-X-Received: by 2002:a05:6870:51d5:b0:18e:ae84:7d87 with SMTP id
- b21-20020a05687051d500b0018eae847d87mr2369255oaj.53.1682688704128; Fri, 28
- Apr 2023 06:31:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419122233.3440-1-hackyzh002@gmail.com> <CAF6NKda1Jy_wfxaVqWt-o75f1BO-o4JXHY9HS9_JtJ2FHztMmQ@mail.gmail.com>
- <CADnq5_MfynMAPU8c-Lq1X_dcDOdRpjW6i=m-Qo8zsZZ=dO-62w@mail.gmail.com> <CAF6NKdaxK_ZRkKRyWtm9Cj-8fNE9RptW3FjW-V39rmaHaCGHTw@mail.gmail.com>
-In-Reply-To: <CAF6NKdaxK_ZRkKRyWtm9Cj-8fNE9RptW3FjW-V39rmaHaCGHTw@mail.gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 28 Apr 2023 09:31:33 -0400
-Message-ID: <CADnq5_MrRC-htfEn3TbR7pbs4rRZJL=zW-3swuc8VZQyHW0DXw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] drm/amdgpu: Fix integer overflow in amdgpu_cs_pass1
-To:     whitehat002 whitehat002 <hackyzh002@gmail.com>
-Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        sumit.semwal@linaro.org, linaro-mm-sig@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
-        airlied@gmail.com, christian.koenig@amd.com,
-        linux-media@vger.kernel.org
+        Fri, 28 Apr 2023 09:51:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32BB171E;
+        Fri, 28 Apr 2023 06:51:42 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SDntSR002788;
+        Fri, 28 Apr 2023 13:51:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=mhZXU18sF1S9DfTvxmyRD73QBaSwj9QYrtg60YhvJKk=;
+ b=kZTnzCEIe4V5A8c3iFXssPyP8i3dLxORhLjk9JyHdX+HC4VD31vraYfZ7bqtbKyvEz3s
+ V5cm0SYcOkMwsIwPIxfsdEEqCz1DpGQneMrxmXGc5kMwmk0Tm28EV2NWwyDVTYdOEtZ8
+ Q+6eQdvWiqj/4flH4orVee8n3w1oB1Dzl5/xgHEkbqYAcbum/CuHluCHkwhmOaQD3QcD
+ mWBMxnySL2uHVeGOMspoFDPUHXnUTH5jOM0G+criqVC63KmFXES1+T/ZHw+/vHVBgOn9
+ GZrYXjvb2G1cp3eeSD40abTB037gU/tCaXmX7szCT2Bq9nz4JfWs/i/qZQx9yuGCGC0o uQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8fcf00sm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:51:23 +0000
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SDpAMD007131;
+        Fri, 28 Apr 2023 13:51:23 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8fcf00qt-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:51:23 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33RNvgTA027097;
+        Fri, 28 Apr 2023 13:32:10 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3q47773jwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:32:10 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33SDW8wS46727580
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 13:32:08 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2846720043;
+        Fri, 28 Apr 2023 13:32:08 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 690D120040;
+        Fri, 28 Apr 2023 13:32:07 +0000 (GMT)
+Received: from [9.171.55.26] (unknown [9.171.55.26])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 28 Apr 2023 13:32:07 +0000 (GMT)
+Message-ID: <b2a60102b2e04c535bc16e9220ea00cb314090ab.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+Date:   Fri, 28 Apr 2023 15:32:07 +0200
+In-Reply-To: <2f07c421-7f9c-4e53-8bd5-46be07bb5c89@app.fastmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-3-schnelle@linux.ibm.com>
+         <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+         <c7315ca2-3ebf-7f3b-da64-9a74a995b0ae@opensource.wdc.com>
+         <CAMuHMdVajEYsw8HrKw0GwV+09gbtkhjVMuKZ6RSBvq6got=jAg@mail.gmail.com>
+         <9a1c49b0-2271-53c7-7f48-039f83d39e82@opensource.wdc.com>
+         <2f07c421-7f9c-4e53-8bd5-46be07bb5c89@app.fastmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: CPPz08EXnUN60d1f48NpNdCNae6y51Ix
+X-Proofpoint-GUID: athbEtrdqUdMvqdXsY_qjFhYnnqQxAd-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 malwarescore=0
+ impostorscore=0 phishscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304280110
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-these?
-https://patchwork.freedesktop.org/series/116699/
-https://patchwork.freedesktop.org/series/116695/
+On Thu, 2023-03-16 at 16:21 +0100, Arnd Bergmann wrote:
+> On Thu, Mar 16, 2023, at 00:57, Damien Le Moal wrote:
+> > On 2023/03/15 20:36, Geert Uytterhoeven wrote:
+>=20
+> > Ah. OK. I see now. So indeed, applying the dependency on the entire ATA=
+_SFF
+> > group of drivers is very coarse.
+>=20
+>=20
+> > Can you change this to apply the dependency per driver ?
+>=20
+> I think that will fail to build because of this function
+> on architectures that drop their non-functional
+> inb/outb helpers:
+>=20
+> int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+> {
+>         unsigned long bmdma =3D pci_resource_start(pdev, 4);
+>         u8 simplex;
+> =20
+>         if (bmdma =3D=3D 0)
+>                 return -ENOENT;
+> =20
+>         simplex =3D inb(bmdma + 0x02);=20
+>         outb(simplex & 0x60, bmdma + 0x02);
+>         simplex =3D inb(bmdma + 0x02);
+>         if (simplex & 0x80)
+>                 return -EOPNOTSUPP;
+>         return 0;
+> }
+>=20
+> This is only called from five pata drivers (ali, amd,
+> cmd64x, netcell, serverworks), so an easy workaround
+> would be to make sure those depend on HAS_IOPORT
+> and enclose the function definition in an #ifdef.
+>=20
+>         Arnd
 
-On Thu, Apr 27, 2023 at 8:45=E2=80=AFPM whitehat002 whitehat002
-<hackyzh002@gmail.com> wrote:
->
-> Alex,I have a question, why I don't see it on the
-> https://patchwork.freedesktop.org/
->
-> Alex Deucher <alexdeucher@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8827=
-=E6=97=A5=E5=91=A8=E5=9B=9B 20:40=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > As per my prior reply, it has been applied.
-> >
-> > Thanks,
-> >
-> > Alex
-> >
-> > On Thu, Apr 27, 2023 at 8:39=E2=80=AFAM whitehat002 whitehat002
-> > <hackyzh002@gmail.com> wrote:
-> > >
-> > > hello
-> > > What is the current status of this patch, has it been applied?
-> > >
-> > >
-> > > hackyzh002 <hackyzh002@gmail.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=8819=
-=E6=97=A5=E5=91=A8=E4=B8=89 20:23=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > The type of size is unsigned int, if size is 0x40000000, there will
-> > > > be an integer overflow, size will be zero after size *=3D sizeof(ui=
-nt32_t),
-> > > > will cause uninitialized memory to be referenced later.
-> > > >
-> > > > Signed-off-by: hackyzh002 <hackyzh002@gmail.com>
-> > > > ---
-> > > >  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/d=
-rm/amd/amdgpu/amdgpu_cs.c
-> > > > index 08eced097..89bcacc65 100644
-> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-> > > > @@ -192,7 +192,7 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_par=
-ser *p,
-> > > >         uint64_t *chunk_array_user;
-> > > >         uint64_t *chunk_array;
-> > > >         uint32_t uf_offset =3D 0;
-> > > > -       unsigned int size;
-> > > > +       size_t size;
-> > > >         int ret;
-> > > >         int i;
-> > > >
-> > > > --
-> > > > 2.34.1
-> > > >
+There were a few additional inb()/outb() uses so a few more drivers had
+to have the dependency added but for v4 it will no longer be on the
+ATA_SFF option and I used your suggestion above for this function.
+There was another call to it in ata_generic_init_one() that is only
+done for PCI_VENDOR_ID_AL so I added an #ifdef CONFIG_PATA_ALI around
+that.
+
+Thanks,
+Niklas
