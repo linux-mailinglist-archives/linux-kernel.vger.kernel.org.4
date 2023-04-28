@@ -2,188 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010676F16F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3DC6F16F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345642AbjD1LoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S1345789AbjD1LpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjD1LoQ (ORCPT
+        with ESMTP id S1345945AbjD1Lo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:44:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43EB527E;
-        Fri, 28 Apr 2023 04:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=p3Oy8/XFssf434wpPuB8bKcFx8SHb9PcbiyecF6e45Q=; b=lOhHWODdlld7cJYyZV8Nq1qime
-        Z2CLZ0SsBONImZx92ZRCif2HiRNPBfCRPyjScGL+RJ5/5X74WFOvkN4/if0/oJlI6dfVDrR93EfdA
-        UYLsx21Jt8q+Lef+JkzV/UMoeaDx2xXVbc7nK/cPMnBcYwe3eiavEjKPVBgKaWqNqa/r5vgaJyHTk
-        jBYAnXsEMdYL6BgIZJtzuujR/c7dO9Pf4exKTMwgs5ycMiUIXp3e3TpiGrxYQfx9E+hl3MygA3xtN
-        RC4P+lEk0Cs/QY40D5XGgppLJRJGu9sbCLRKKbPP8RxKL+Wlagyz9HO6PEQ3LGM3n7tJ9a34Oc0xc
-        YLasnXPQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1psMVp-004XzS-Mq; Fri, 28 Apr 2023 11:43:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E3E68300581;
-        Fri, 28 Apr 2023 13:43:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB13C3221A782; Fri, 28 Apr 2023 13:43:38 +0200 (CEST)
-Date:   Fri, 28 Apr 2023 13:43:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Garnier <thgarnie@chromium.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH RFC 33/43] objtool: Add validation for x86 PIE support
-Message-ID: <20230428114338.GB1449475@hirez.programming.kicks-ass.net>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <226af8c63c5bfa361763dd041a997ee84fe926cf.1682673543.git.houwenlong.hwl@antgroup.com>
- <461b3a8d-9ad4-7866-f3b2-369de75fd2e1@csgroup.eu>
+        Fri, 28 Apr 2023 07:44:58 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A315BB9
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:44:48 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2f58125b957so8913077f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1682682287; x=1685274287;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P6/aX0pjGA8oLPAxpT7Bqo52a3vTQjbKWU5jNN+quzY=;
+        b=W6ekVWa/voyYFiTISBGqQaPat0XKYjXTPt7fq//3DlKxX7yzojKMe8fo2PEQR2pTmu
+         JWSx14Yc0QwPOll3HgWyrh3IGdhdfg2vSJg4dUW2VAZIJeD11vQs+mCX5kLvUOsEJZGL
+         ZFdmfSNyMobPiBnHfM9HOTXEoNUSo+wbqB+2+QCx1zXLh+80D5fyYKrHgYbPf/1+57yL
+         wuSojJ98wVyNGLZPbfuCrXv9CqPxiP2jLC0bzlRTvSZEn5ODnWADsgk1sYq44AG175tq
+         n2tWFXWxp3/qfY/s4qP/YuaN57H2fZfvvTZHhsfZRqhd8QARrTOpfsW5x6K150uebBEo
+         P5ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682682287; x=1685274287;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6/aX0pjGA8oLPAxpT7Bqo52a3vTQjbKWU5jNN+quzY=;
+        b=RVneAWd35rWjNnPkCDpvvuazqveFh45w7JcqrJFDgcLhLEqnR/8ozKqMmmtW8j9Fz9
+         tdfD4kKkfdnRKe4AG2vaB5grMietb92nbUtNMy3dsyLJFd8d+GrlzCZB0/M1Zt6JOUOz
+         FK4sCPUSA+ie8HtZVlBZZ3iI4wgkstm8LJNuQ4jRs53HH3J41KfRRtSFaywvcyMg6Mn6
+         s8G00cGEDENXr2TVSybGiubNAQYiRKto0MMZGNFpYNDxWXDGO2KiimxImULehWpDcHMf
+         oE+gNdPmRGxVWfnuhUMIC1gA8vPmornJUOZimFYHYOwVeoaprGttLwz1TTCHWsBoV+yN
+         Qo5g==
+X-Gm-Message-State: AC+VfDyEvofaPAN1e28smouiGEQA7+D6vG1bKrfPJEaENNor1a2jEjOU
+        jyNH52GaxUwwJZwCrwp7yrmU/w==
+X-Google-Smtp-Source: ACHHUZ77CPCQHF82m6DipVHfW8UJyt3V7Sm0wNB1KRDFwqe06bAM3vbltx9G564IPBCVS4jIk/Fnhw==
+X-Received: by 2002:a5d:4444:0:b0:2ef:b3e6:8293 with SMTP id x4-20020a5d4444000000b002efb3e68293mr3574166wrr.9.1682682287202;
+        Fri, 28 Apr 2023 04:44:47 -0700 (PDT)
+Received: from airbuntu ([104.132.45.110])
+        by smtp.gmail.com with ESMTPSA id p10-20020a5d48ca000000b003047dc162f7sm11622477wrs.67.2023.04.28.04.44.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 04:44:46 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 12:44:42 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        David Dai <davidai@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Qais Yousef <qyousef@google.com>,
+        Quentin Perret <qperret@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1] sched/uclamp: Introduce
+ SCHED_FLAG_RESET_UCLAMP_ON_FORK flag
+Message-ID: <20230428114442.t2blsllmgntooayy@airbuntu>
+References: <20230416213406.2966521-1-davidai@google.com>
+ <d83950c4-7458-aeea-f341-327c163704a8@arm.com>
+ <CABN1KC+_HDi_i2zzpZVbqiUP5-QB9YrE5wzLqr==_wOemaCXzA@mail.gmail.com>
+ <bf8f21be-7249-fc27-9704-211d0f5a12b1@arm.com>
+ <CAKfTPtAgkyE1xntn-4u9o8DFhH9iGq54c-QXYr0cE+zvoPx9Gw@mail.gmail.com>
+ <CAGETcx-suryHeB3wpaTSZBiw6+VwA7pe=GnrbtizSVj+C9Smtg@mail.gmail.com>
+ <CAKfTPtAfLqzwbCdd25HCFykBDhBQs9g7Mr6=X56nKYOOPnEdNQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <461b3a8d-9ad4-7866-f3b2-369de75fd2e1@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKfTPtAfLqzwbCdd25HCFykBDhBQs9g7Mr6=X56nKYOOPnEdNQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 10:28:19AM +0000, Christophe Leroy wrote:
+Hi Vincent
 
+Sorry for the late response.
 
-> > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> > index 5b600bbf2389..d67b80251eec 100644
-> > --- a/tools/objtool/check.c
-> > +++ b/tools/objtool/check.c
-> > @@ -131,6 +131,27 @@ static struct instruction *prev_insn_same_sym(struct objtool_file *file,
-> >          for (insn = next_insn_same_sec(file, insn); insn;               \
-> >               insn = next_insn_same_sec(file, insn))
-> > 
-> > +static struct instruction *find_insn_containing(struct objtool_file *file,
-> > +                                               struct section *sec,
-> > +                                               unsigned long offset)
-> > +{
-> > +       struct instruction *insn;
-> > +
-> > +       insn = find_insn(file, sec, 0);
-> > +       if (!insn)
-> > +               return NULL;
-> > +
-> > +       sec_for_each_insn_from(file, insn) {
-> > +               if (insn->offset > offset)
-> > +                       return NULL;
-> > +               if (insn->offset <= offset && (insn->offset + insn->len) > offset)
-> > +                       return insn;
-> > +       }
-> > +
-> > +       return NULL;
-> > +}
-
-Urgh, this is horrendous crap. Yes you're only using it in case of a
-warning, but adding a function like this makes it appear like it's
-actually sane to use.
-
-A far better implementation -- but still not stellar -- would be
-something like:
-
-	sym = find_symbol_containing(sec, offset);
-	if (!sym)
-		// fail
-	sym_for_each_insn(file, sym, insn) {
-		...
-	}
-
-But given insn_hash uses sec_offset_hash() you can do something similar
-to find_reloc_by_dest_range()
-
-	start = offset - (INSN_MAX_SIZE - 1);
-	for_offset_range(o, start, start + INSN_MAX_SIZE) {
-		hash_for_each_possible(file->insn_hash, insn, hash, sec_offset_hash(sec, o)) {
-			if (insn->sec != sec)
-				continue;
-
-			if (insn->offset <= offset &&
-			    insn->offset + inns->len > offset)
-				return insn;
-		}
-	}
-	return NULL;
-
-> > +
-> > +
-> >   static inline struct symbol *insn_call_dest(struct instruction *insn)
-> >   {
-> >          if (insn->type == INSN_JUMP_DYNAMIC ||
-> > @@ -4529,6 +4550,61 @@ static int validate_reachable_instructions(struct objtool_file *file)
-> >          return 0;
-> >   }
-> > 
-> > +static int is_in_pvh_code(struct instruction *insn)
-> > +{
-> > +       struct symbol *sym = insn->sym;
-> > +
-> > +       return sym && !strcmp(sym->name, "pvh_start_xen");
-> > +}
-> > +
-> > +static int validate_pie(struct objtool_file *file)
-> > +{
-> > +       struct section *sec;
-> > +       struct reloc *reloc;
-> > +       struct instruction *insn;
-> > +       int warnings = 0;
-> > +
-> > +       for_each_sec(file, sec) {
-> > +               if (!sec->reloc)
-> > +                       continue;
-> > +               if (!(sec->sh.sh_flags & SHF_ALLOC))
-> > +                       continue;
-> > +
-> > +               list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
-> > +                       switch (reloc->type) {
-> > +                       case R_X86_64_NONE:
-> > +                       case R_X86_64_PC32:
-> > +                       case R_X86_64_PLT32:
-> > +                       case R_X86_64_64:
-> > +                       case R_X86_64_PC64:
-> > +                       case R_X86_64_GOTPCREL:
-> > +                               break;
-> > +                       case R_X86_64_32:
-> > +                       case R_X86_64_32S:
+On 04/21/23 17:10, Vincent Guittot wrote:
+> On Thu, 20 Apr 2023 at 18:26, Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > On Thu, Apr 20, 2023 at 6:44 AM Vincent Guittot
+> > <vincent.guittot@linaro.org> wrote:
+> > >
+> > > On Thu, 20 Apr 2023 at 11:37, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> > > >
+> > > > On 20/04/2023 03:11, David Dai wrote:
+> > > > > On Tue, Apr 18, 2023 at 10:18 PM Dietmar Eggemann
+> > > > > <dietmar.eggemann@arm.com> wrote:
+> > > > >>
+> > > > >
+> > > > > Hi Dietmar, thanks for your time,
+> > > > >
+> > > > >> On 16/04/2023 23:34, David Dai wrote:
+> > > > >>> A userspace service may manage uclamp dynamically for individual tasks and
+> > > > >>> a child task will unintentionally inherit a pesudo-random uclamp setting.
+> > > > >>> This could result in the child task being stuck with a static uclamp value
+> > > > >>
+> > > > >> Could you explain this with a little bit more detail? Why isn't the
+> > > > >> child task also managed by the userspace service?
+> > > > >
+> > > > > See Qais’ reply that contains more detail on how it’s being used in
+> > > > > Android. In general, if a dynamic userspace service will adjust uclamp
+> > > > > on the fly for a given task, but has no knowledge or control over if
+> > > > > or when a task forks. Depending on the timing of the fork, a child
+> > > > > task may inherit a very large or a small uclamp_min or uclamp_max
+> > > > > value. The intent of this patch is to provide more flexibility to the
+> > > > > uclamp APIs such that child tasks do not get stuck with a poor uclamp
+> > > > > value when spawned while retaining other sched attributes. When
+> > > > > RESET_ON_FORK is set on the parent task, it will reset uclamp values
+> > > > > for the child but also reset other sched attributes as well.
+> > > >
+> > > > OK, in this case, why not just change behavior and always reset the
+> > > > uclamp values at fork?
+> > > >
+> > > > Do we anticipate a use-case in which uclamp inheritance would be required?
+> > > >
+> > > > Let's not over-complicate the sched_[sg]etattr() unnecessarily.
+> > >
+> > > I was about to ask the same question and I'm aligned with Dietmar.
+> > > Use RESET_ON_FORK and set all attributes
+> >
+> > That's racy though. If we have an external service (that's only
+> > responsible for setting uclamp) setting all the attributes, the forked
+> > thread could also be trying to set some of the attributes. Also, how
+> > is this external service going to keep track of all the threads being
+> > forked and set the right attributes for all of them?
 > 
-> That looks very specific to X86, should it go at another place ?
-> 
-> If it can work for any architecture, can you add generic macros, just 
-> like commit c1449735211d ("objtool: Use macros to define arch specific 
-> reloc types") then commit c984aef8c832 ("objtool/powerpc: Add --mcount 
-> specific implementation") ?
+> My assumption was that you didn't use RESET_ON_FORK because there were
+> other attributes that you wanted to keep from parent but it doesn't
 
-Yes, this should be something like arch_PIE_reloc() or so. Similar to
-arch_pc_relative_reloc().
+Correct.
+
+> seem to be the case so use RESET_ON_FORK and if needed the forked
+> thread will set its other attributes
+
+Hmm, it seems you think it's the parent who's trying to control the fork for
+the child. But the situation we're in is different.
+
+ADPF is a shared library/middleware/system service that provides higher level
+API to manage the performance requirements for a group of tasks. They provide
+a set of PIDs and a deadline, then continuously tell it how long they took to
+finish their work. ADPF uses this info to manipulate uclamp_min dynamically on
+their behalf so they finish their work in time. Explaining it very simply and
+briefly here. It should make using uclamp_max easier too (though we are not
+there yet) since the most efficient point is platform specific and the
+middleware can help abstract this better in a portable way.
+
+The problem is these tasks can be RT and/or can have their priorities/nice
+values set by something else. But what we want is to make sure that we control
+uclamp values only for the PIDs we were asked to manage, and anything forked
+must have their uclamp values reset, but not the rest as this is outside of
+this service available context. It gets delegated to handle performance hints
+only and make using uclamp easier and generic. But this should not interfere
+with policy and priority management done outside of its scope.
+
+Apps that manage their own uclamp values wouldn't need this. But if we are to
+build a smart middleware that provides a consistent and easier to use higher
+level APIs, which is what we have here, we need this selective reset on fork.
+
+Does this explain the problem better?
+
+Note we noticed because we saw problems here. So we are not trying to be
+theoretically cautious.
+
+
+Thanks!
+
+--
+Qais Yousef
