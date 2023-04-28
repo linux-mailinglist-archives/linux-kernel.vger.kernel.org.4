@@ -2,103 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961146F1B65
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 754FE6F1B6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 17:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346323AbjD1PXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 11:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
+        id S1346411AbjD1PYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 11:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjD1PXW (ORCPT
+        with ESMTP id S1346383AbjD1PY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 11:23:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F342129;
-        Fri, 28 Apr 2023 08:22:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C983663753;
-        Fri, 28 Apr 2023 15:22:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B194C433EF;
-        Fri, 28 Apr 2023 15:22:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682695373;
-        bh=O0mxmW3dYC4wiE4/rrhpb6tEmJaJgZdGiPbLL2f80lQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=msKLp8NsB2qZxk/K0VOA8ryeUmoB9mtK66csvUOhH16RnqVzicDNh4XBtw8mKq0Ar
-         XfozOBGto1CFpmz52U6w+9hqDPmhCde3O7yoct5J36tH2QT/IJIpUiHQDSOaJY+U2E
-         3zVx5J8dEc9i9Dye6eEGxjzQVRJDJ8suFsnuhiNTKm1hEL9owhL1eErHvH/UvlxloE
-         A+/vVU6fHkAK5u+ZJmhvo2swsfxG+jDY1FkOVSxPCv6TTpdMBzwfuyH9LmZJpIaOw4
-         0/EDMGv5NyF1RUATYlLtIlDXL544oasdSUcpboW+PMYmgvi0+o1EYMg9g9qIYBJddj
-         5aTkexMvz/maA==
-From:   broonie@kernel.org
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Apr 28
-Date:   Fri, 28 Apr 2023 16:22:49 +0100
-Message-Id: <20230428152249.576448-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Fri, 28 Apr 2023 11:24:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9735FD0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682695415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xNqQu/Hbgh8GgG/TaR2UQBBPYePy9tTL0DFgLY8LdrU=;
+        b=ML+bEd2uqQF2mEPpifoZPqZcHUoCUQjeUJuAhtGvXo0DjrvcggrLWnMSMMMuoQn4c7XHHB
+        KNmAn4P4foC4wDMAIOrh3ur6oYsg0KQ8ox/SvOptb0JVUw4tZjAezMAYmHVyJRD+UBdisz
+        OAEUKvOl3Bft8brNPq0qj3Mnw0A2I0o=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-453-Zd_6vW7jPQWaCyUS_OX_7A-1; Fri, 28 Apr 2023 11:23:34 -0400
+X-MC-Unique: Zd_6vW7jPQWaCyUS_OX_7A-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f1745d08b5so38754695e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 08:23:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682695413; x=1685287413;
+        h=content-transfer-encoding:in-reply-to:subject:organization
+         :references:cc:to:from:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xNqQu/Hbgh8GgG/TaR2UQBBPYePy9tTL0DFgLY8LdrU=;
+        b=Nmu6/Aa7XUXkx+BVoOA4JNgezgZVhpmVGjB3FgW2vzbOPnhelQyk4l6RoieXjG4DwF
+         yxEtpYvWImQGVxg7rzYoeV2wPaXGIp1pPdFAUvSI1cTPUPSxj45ErOVmN1viNk+bPoU+
+         kVkpBEUfgwhomsV9wIX0l4mcDbpzo/i/BsbgcuMA4qQr5a9QUG2ceLhXIGDbGiLNhXYA
+         ctXQVI9TXdy/o9qDPIglSVUGAAYGckGPNERTWfqaBOruLjWbpsnIYd6xDJeclGlr3SpV
+         7o6wpOZwkCjL4qf0oIVbtHyjqKxvmoeHpBx9vTOe+fbWRbW1ZWy6L2qdZ0TUGtJtust1
+         UG5Q==
+X-Gm-Message-State: AC+VfDyOCQ28VqMfoAbactekIOzuEWazz56uECKa4+QHt7bMRW/ZCyzR
+        0TKp6Hul6KZHYZERizvJZp8BvWDoZb4FgRT+d412jaa9GU/BQdwh/2uCLSrLLmwFHOGZblQySXH
+        4W/+HRym2/Vx0g4Shrj1HXu1J
+X-Received: by 2002:a05:6000:1148:b0:304:7159:d3e4 with SMTP id d8-20020a056000114800b003047159d3e4mr4054741wrx.44.1682695412806;
+        Fri, 28 Apr 2023 08:23:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7m7lYREqwJwCW0J3nLemNcIH2KdfBgyx6gX0Qrhp/YfT+ZQtoJy3PoVU25XYCmL9JQIphxhg==
+X-Received: by 2002:a05:6000:1148:b0:304:7159:d3e4 with SMTP id d8-20020a056000114800b003047159d3e4mr4054718wrx.44.1682695412463;
+        Fri, 28 Apr 2023 08:23:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
+        by smtp.gmail.com with ESMTPSA id a18-20020a056000101200b002e61e002943sm21368158wrx.116.2023.04.28.08.23.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 08:23:31 -0700 (PDT)
+Message-ID: <400da248-a14e-46a4-420a-a3e075291085@redhat.com>
+Date:   Fri, 28 Apr 2023 17:23:29 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+ <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
+ <ZEvZtIb2EDb/WudP@nvidia.com>
+ <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+In-Reply-To: <094d2074-5b69-5d61-07f7-9f962014fa68@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+>>
+>> Security is the primary case where we have historically closed uAPI
+>> items.
+> 
+> As this patch
+> 
+> 1) Does not tackle GUP-fast
+> 2) Does not take care of !FOLL_LONGTERM
+> 
+> I am not convinced by the security argument in regard to this patch.
+> 
+> 
+> If we want to sells this as a security thing, we have to block it
+> *completely* and then CC stable.
 
-This will most likely be my last release until Stephen gets back on 8th
-May, it's *possible* there may be some releases next week since it being
-the second half of the merge window means things run a bunch faster and
-with less intervention but really don't rely on that.
+Regarding GUP-fast, to fix the issue there as well, I guess we could do 
+something similar as I did in gup_must_unshare():
 
-Changes since 20230427:
+If we're in GUP-fast (no VMA), and want to pin a !anon page writable, 
+fallback to ordinary GUP. IOW, if we don't know, better be safe.
 
-The loongarch tree gained a conflict against the origin tree.
+Of course, this would prevent hugetlb/shmem from getting pinned writable 
+during gup-fast. Unless we're able to whitelist them somehow in there.
 
-Non-merge commits (relative to Linus' tree): 3150
- 3568 files changed, 295586 insertions(+), 209942 deletions(-)
 
-----------------------------------------------------------------------------
+For FOLL_LONGTERM it might fairly uncontroversial. For everything else 
+I'm not sure if there could be undesired side-effects.
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+-- 
+Thanks,
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a ppc64_defconfig
-for powerpc, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig
-and pseries_le_defconfig and i386, arm64, s390, sparc and sparc64
-defconfig and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+David / dhildenb
 
-Below is a summary of the state of the merge.
-
-I am currently merging 358 trees (counting Linus' and 102 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
