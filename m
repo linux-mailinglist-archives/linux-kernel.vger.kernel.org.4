@@ -2,222 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F536F1E8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2336F1E8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346461AbjD1TFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 15:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S229661AbjD1TGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 15:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346192AbjD1TFP (ORCPT
+        with ESMTP id S229578AbjD1TGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 15:05:15 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EE930D3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:05:13 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F2D1D3F429
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 19:05:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1682708710;
-        bh=5xdGcBrePTmDfHc6Jzw3JTLHbSAztKlpGArx8vpNt2k=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=rU3GquilWoTt+E66nkoXnDUfQpugdh42eX9qLk43mWrbcLE23a4kXk4GhJjPtiE2+
-         OaUZ70g0ZpTIMmqyWhOik/GpIpfGeHAEyDAu5Dbe8wxTtkBSXAX/o3y5DZblYSAfBO
-         A/CDMv9FMuq4+Y7iDq94d5NxUWMyCEkHWEegxBArMhblt1+mZvnqUt+BP+HHp3nZyj
-         14N4wGPAxCUy4Q5qpoWeVRSYzb1O7tGFaGXK+ys3blTZmTA32aEGC0fjVWdhjv6SBr
-         SA7PNFM3OGGXr7zUtEL6wDa248WYURapdfzYEjWe2eNlxOHXFNV9XAHmrivQfeHnZ3
-         vw4p1wAkH18JQ==
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-506905b850cso60464a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:05:10 -0700 (PDT)
+        Fri, 28 Apr 2023 15:06:19 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DA83AB2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:06:16 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5191796a483so122563a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682708776; x=1685300776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7CXCSpVGMZwlJc9agpmg1mVXv2Z1n756Do/clETpg4=;
+        b=3iKbY/L1kcMW/nkDKn0zG/qygIat+lYQ9xCBRzlv/+txh7nL7tH9Kk7taPffuRVV0t
+         Jg4XHTdUa23X4HjhOhoDWS9JoXK6Y70R4hRtNgkbNECSUUnNHsVkK8XLYTQAjBtCYwut
+         P6uCtNz3A+ExkBT7fUdhCrExZuOCgzc7Rt9/QqFpD91I847M0DImYjpwun4/lOASRn0G
+         MuhLMWTc26o3cxHS0PwEFNBmUkTLgh6M2ZCGQLO4KObMAswrNg/YO9APCcL1uKw6kGbo
+         2HvZUzv/lxYSYGqaLjveBvBY+V6GHdlhsWVuc29UPAIXfYNfUI6pxq8f2ShOmlEefqWe
+         oF0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682708710; x=1685300710;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5xdGcBrePTmDfHc6Jzw3JTLHbSAztKlpGArx8vpNt2k=;
-        b=QdiozboACtuB9Zh4hbPne1Wmna+Bp873ueRYLWnsI4YEVAT19cR55bmlnQEObe8RCF
-         NTRPZmtIKnpnP2WDlczXu0SSnvLAAfLWed+Ja8KtS/KJC3I2e8JQLQOhAtdYGMeVJ2ep
-         vusNg6U1ahFMF0hhM1Mk6DAfrWZIIx3d9Auk+bdgLFoVVXTGKnpe7x34j/ap0DUbSAu6
-         dIDff+MZ4W44k+K3UiuZQWZ4dkGPpxIDWs2aBGQxXyPomW1I/I3MablFKY+On9pcU14w
-         d6mcUavhQB3bB3EdDej/1VLTLWFOsBMBtcEGg0eYumE3GphjHrGS/6YARdIl/H3RcMrq
-         dq0g==
-X-Gm-Message-State: AC+VfDzYF5FpFhlgC/gi0BvtAyKs1d/FsMWelCWq3Fdnqu/6cmzXSk2/
-        VBn2+AUs6Yi04x3IZRmZuUi8epO6jiQBfEzsx/rPRDBP5dPgDLppAUlBdPQiOBSLYsErlRAtwsj
-        QR/3RicjLJbNkWmk+VfarmiA95+XTe7BgQmB9XFw6+KXT8BjnLnO2
-X-Received: by 2002:a17:907:16aa:b0:94f:9f76:c74f with SMTP id hc42-20020a17090716aa00b0094f9f76c74fmr7738591ejc.52.1682708710276;
-        Fri, 28 Apr 2023 12:05:10 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Pi57scEQWERlmKMoLu2PGjbl7zecivIyoR8ReiRJEuRABO1ah119lQPAYBiWFcA3rwjRQeg==
-X-Received: by 2002:a17:907:16aa:b0:94f:9f76:c74f with SMTP id hc42-20020a17090716aa00b0094f9f76c74fmr7738571ejc.52.1682708709893;
-        Fri, 28 Apr 2023 12:05:09 -0700 (PDT)
-Received: from localhost (host-87-1-129-21.retail.telecomitalia.it. [87.1.129.21])
-        by smtp.gmail.com with ESMTPSA id wy12-20020a170906fe0c00b0095f07223918sm4265757ejb.138.2023.04.28.12.05.09
+        d=1e100.net; s=20221208; t=1682708776; x=1685300776;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z7CXCSpVGMZwlJc9agpmg1mVXv2Z1n756Do/clETpg4=;
+        b=RnTIw4Ti5P9Vb4VgSYjR7qHrJKmzBINn/qfj/wpc/KUNKyuWhbuXXLpaR35TGw+YtL
+         ufb5HikFhzBhOr+vPySrz7v/7e0/lgJCjz+oJyLx1X14FYKS6FvY1pFNRfF1HhD3Xb4J
+         q+ygoFnkQY6a/QMkZ+TKjvxf6U7BQ0so9H1woBqKSeZ1qTNPLnWhoW7Xv4T5GGQ0tlGa
+         xsT+iIE2R2D5pr4LfNkZ/EBKxLqVu+NpDlR31IxA7BJlVw3K7UyVXP/s+JvqtmD4TCaC
+         ytYb5FfiyMaDfCCh4t1uDffX9zp6yK72FGKvNqJx9i69wTCoNUy6ww2kl99vGwMMsKDI
+         lNIw==
+X-Gm-Message-State: AC+VfDxVcnXUIHurJtSBq90QgcMDQmcFznXvKx8CzxMPYFB1SWA40j0R
+        XvkiHAiUelf/mU7l6NjAMxiiFg==
+X-Google-Smtp-Source: ACHHUZ5bl9aZkrVmX8UgFEMi974XV7W/i2zRAEerPhd7l6PlWqjxEN/CCQPy3oDNjJBzAorqJcEz4w==
+X-Received: by 2002:a17:903:11c7:b0:1a9:7e26:d72 with SMTP id q7-20020a17090311c700b001a97e260d72mr6763944plh.9.1682708776298;
+        Fri, 28 Apr 2023 12:06:16 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id w15-20020a170902d70f00b001a6c58e95d7sm13580733ply.269.2023.04.28.12.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 12:05:09 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 21:05:08 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Jinke Han <hanjinke.666@bytedance.com>
-Cc:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] blk-throttle: Fix io statistics for cgroup v1
-Message-ID: <ZEwY5Oo+5inO9UFf@righiandr-XPS-13-7390>
-References: <20230401094708.77631-1-hanjinke.666@bytedance.com>
+        Fri, 28 Apr 2023 12:06:15 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Evan Green <evan@rivosinc.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dao Lu <daolu@rivosinc.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 0/3] RISC-V: Export Zba, Zbb to usermode via hwprobe
+Date:   Fri, 28 Apr 2023 12:06:05 -0700
+Message-Id: <20230428190609.3239486-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230401094708.77631-1-hanjinke.666@bytedance.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 05:47:08PM +0800, Jinke Han wrote:
-> From: Jinke Han <hanjinke.666@bytedance.com>
-> 
-> After commit f382fb0bcef4 ("block: remove legacy IO schedulers"),
-> blkio.throttle.io_serviced and blkio.throttle.io_service_bytes become
-> the only stable io stats interface of cgroup v1, and these statistics
-> are done in the blk-throttle code. But the current code only counts the
-> bios that are actually throttled. When the user does not add the throttle
-> limit, the io stats for cgroup v1 has nothing. I fix it according to the
-> statistical method of v2, and made it count all ios accurately.
-> 
-> Fixes: a7b36ee6ba29 ("block: move blk-throtl fast path inline")
-> Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
 
-Thanks for fixing this!
+This change detects the presence of Zba and Zbb extensions and exports
+them per-hart to userspace via the hwprobe mechanism. Glibc can then use
+these in setting up hwcaps-based library search paths.
 
-The code looks correct to me, but this seems to report io statistics
-only if at least one throttling limit is defined. IIRC with cgroup v1 it
-was possible to see the io statistics inside a cgroup also with no
-throttling limits configured.
+There's a little bit of extra housekeeping here: the first change adds
+Zba to the set of extensions the kernel recognizes, and the second
+change starts tracking ISA features per-hart (in addition to the ANDed
+mask of features across all harts which the kernel uses to make
+decisions). Now that we track the ISA information per-hart, we could
+even fix up /proc/cpuinfo to accurately report extension per-hart,
+though I've left that out of this series for now.
 
-Basically to restore the old behavior we would need to drop the
-cgroup_subsys_on_dfl() check, something like the following (on top of
-your patch).
 
-But I'm not sure if we're breaking other behaviors in this way...
-opinions?
+Evan Green (3):
+  RISC-V: Add Zba extension probing
+  RISC-V: Track ISA extensions per hart
+  RISC-V: hwprobe: Expose Zba and Zbb
 
- block/blk-cgroup.c   |  3 ---
- block/blk-throttle.h | 12 +++++-------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ Documentation/riscv/hwprobe.rst       |  7 +++++
+ arch/riscv/include/asm/cpufeature.h   | 10 +++++++
+ arch/riscv/include/asm/hwcap.h        |  1 +
+ arch/riscv/include/uapi/asm/hwprobe.h |  2 ++
+ arch/riscv/kernel/cpu.c               |  1 +
+ arch/riscv/kernel/cpufeature.c        | 19 ++++++++----
+ arch/riscv/kernel/sys_riscv.c         | 43 ++++++++++++++++++++++-----
+ 7 files changed, 70 insertions(+), 13 deletions(-)
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 79138bfc6001..43af86db7cf3 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -2045,9 +2045,6 @@ void blk_cgroup_bio_start(struct bio *bio)
- 	struct blkg_iostat_set *bis;
- 	unsigned long flags;
- 
--	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
--		return;
--
- 	/* Root-level stats are sourced from system-wide IO stats */
- 	if (!cgroup_parent(blkcg->css.cgroup))
- 		return;
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index d1ccbfe9f797..bcb40ee2eeba 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -185,14 +185,12 @@ static inline bool blk_should_throtl(struct bio *bio)
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
- 	int rw = bio_data_dir(bio);
- 
--	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
--		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
--			bio_set_flag(bio, BIO_CGROUP_ACCT);
--			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
--					bio->bi_iter.bi_size);
--		}
--		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
-+	if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-+		bio_set_flag(bio, BIO_CGROUP_ACCT);
-+		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-+				bio->bi_iter.bi_size);
- 	}
-+	blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
- 
- 	/* iops limit is always counted */
- 	if (tg->has_rules_iops[rw])
+-- 
+2.25.1
 
-> ---
->  block/blk-cgroup.c   | 6 ++++--
->  block/blk-throttle.c | 6 ------
->  block/blk-throttle.h | 9 +++++++++
->  3 files changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-> index bd50b55bdb61..33263d0d0e0f 100644
-> --- a/block/blk-cgroup.c
-> +++ b/block/blk-cgroup.c
-> @@ -2033,6 +2033,9 @@ void blk_cgroup_bio_start(struct bio *bio)
->  	struct blkg_iostat_set *bis;
->  	unsigned long flags;
->  
-> +	if (!cgroup_subsys_on_dfl(io_cgrp_subsys))
-> +		return;
-> +
->  	/* Root-level stats are sourced from system-wide IO stats */
->  	if (!cgroup_parent(blkcg->css.cgroup))
->  		return;
-> @@ -2064,8 +2067,7 @@ void blk_cgroup_bio_start(struct bio *bio)
->  	}
->  
->  	u64_stats_update_end_irqrestore(&bis->sync, flags);
-> -	if (cgroup_subsys_on_dfl(io_cgrp_subsys))
-> -		cgroup_rstat_updated(blkcg->css.cgroup, cpu);
-> +	cgroup_rstat_updated(blkcg->css.cgroup, cpu);
->  	put_cpu();
->  }
->  
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 47e9d8be68f3..2be66e9430f7 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -2174,12 +2174,6 @@ bool __blk_throtl_bio(struct bio *bio)
->  
->  	rcu_read_lock();
->  
-> -	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
-> -		blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-> -				bio->bi_iter.bi_size);
-> -		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
-> -	}
-> -
->  	spin_lock_irq(&q->queue_lock);
->  
->  	throtl_update_latency_buckets(td);
-> diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-> index ef4b7a4de987..d1ccbfe9f797 100644
-> --- a/block/blk-throttle.h
-> +++ b/block/blk-throttle.h
-> @@ -185,6 +185,15 @@ static inline bool blk_should_throtl(struct bio *bio)
->  	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
->  	int rw = bio_data_dir(bio);
->  
-> +	if (!cgroup_subsys_on_dfl(io_cgrp_subsys)) {
-> +		if (!bio_flagged(bio, BIO_CGROUP_ACCT)) {
-> +			bio_set_flag(bio, BIO_CGROUP_ACCT);
-> +			blkg_rwstat_add(&tg->stat_bytes, bio->bi_opf,
-> +					bio->bi_iter.bi_size);
-> +		}
-> +		blkg_rwstat_add(&tg->stat_ios, bio->bi_opf, 1);
-> +	}
-> +
->  	/* iops limit is always counted */
->  	if (tg->has_rules_iops[rw])
->  		return true;
-> -- 
-> 2.20.1
