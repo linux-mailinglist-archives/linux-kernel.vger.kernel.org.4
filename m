@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EAC6F151C
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7C06F152C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346028AbjD1KPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 06:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S1346051AbjD1KSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 06:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjD1KPn (ORCPT
+        with ESMTP id S1345595AbjD1KSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 06:15:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B181735;
-        Fri, 28 Apr 2023 03:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682676942; x=1714212942;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=tY9j7XHZcOIvj/nj6JIdGLwj6rLfskNHJD+KKLvaILA=;
-  b=kLcpJLvVO4DN+AGlcXsf0AuxwJcC9EXMWJRVPKWobb6cjnsHGIVRygni
-   vpAY3B23RWdNbX5JwL+F4aPA101mFRnigtGs36JC1JkjhKstm/6B9Q3cE
-   jOmf9d42y+xnQDfOZ5DH+RX9S2OfLmwhLK8cOXVHGCFeIrHWRi3911uut
-   5hBCO7iWvBNv41BSiZaWQtazNAI1wfwl3F2crRmFr7aciEvXX6UL7Uef4
-   F2jD5kmSwPvpHB/uG0Alico9C7pzOARcsxxZVBXPg5aWE7UA4+vQHrgu5
-   IXDqtBuZIUD2L9d8kh7XamZpSe93n7X+lZh8KRlWy75qIFCYqZ8KsuEJc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="328044862"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="328044862"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 03:15:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="1024561051"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="1024561051"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Apr 2023 03:15:40 -0700
-Message-ID: <c22e7751-0367-a7e6-1fa5-c5afe5df7808@linux.intel.com>
-Date:   Fri, 28 Apr 2023 13:17:10 +0300
+        Fri, 28 Apr 2023 06:18:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3162D49;
+        Fri, 28 Apr 2023 03:18:19 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 265436602097;
+        Fri, 28 Apr 2023 11:18:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682677097;
+        bh=Yk5D9b+oPUkoCZwzeMIIJtHOgvXide7fZoW+I8ghpV0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mhhECMNxkLs1iW+QaB2pRm8nUySryOtAT9Y4NOyMqr2EqHYzZmpOT+adaU6/ID1a9
+         no1OdnK+ALZIj8/C7cBWw20X2bNzE89ZFuf6mYMbos909zeCh8D7m0E2UFsLyi3fri
+         MJloqfSnhMn9R9NfMh89i03ukNYFMrsV08bymj3SSPhXtXvaNygxNTThFredKI91aT
+         E3NP3647tgYI23H9PtLyuLvhEXAJoK4jHGAjfi09ZqIlAzfKWTKK6G/5bZj9bKGvUX
+         sM8uGnfSD66AngdfS1WteFdbKzplq4xmhjx4GPFm5NVhHHnboQ0n6DZdSmsdshX2G0
+         mCGmVSSVOfJmw==
+Date:   Fri, 28 Apr 2023 12:18:13 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
+        bskeggs@redhat.com, Liam.Howlett@oracle.com,
+        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
+        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
+Subject: Re: [PATCH drm-next v3 04/15] drm: manager to keep track of GPUs VA
+ mappings
+Message-ID: <20230428121813.309ea609@collabora.com>
+In-Reply-To: <20230404012741.116502-5-dakr@redhat.com>
+References: <20230404012741.116502-1-dakr@redhat.com>
+        <20230404012741.116502-5-dakr@redhat.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230427190145.4623-1-quic_wcheng@quicinc.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: host: xhci: Avoid XHCI resume delay if SSUSB device
- is not present
-In-Reply-To: <20230427190145.4623-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.4.2023 22.01, Wesley Cheng wrote:
-> There is a 120ms delay implemented for allowing the XHCI host controller to
-> detect a U3 wakeup pulse.  The intention is to wait for the device to retry
-> the wakeup event if the USB3 PORTSC doesn't reflect the RESUME link status
-> by the time it is checked.  As per the USB3 specification:
-> 
->    tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts")
-> 
-> This would allow the XHCI resume sequence to determine if the root hub
-> needs to be also resumed.  However, in case there is no device connected,
-> or if there is only a HSUSB device connected, this delay would still affect
-> the overall resume timing.
-> 
-> Since this delay is solely for detecting U3 wake events (USB3 specific)
-> then ignore this delay for the disconnected case and the HSUSB connected
-> only case.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->   drivers/usb/host/xhci.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 78790dc13c5f..7a86cd683502 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -834,7 +834,8 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
->   	while (port_index--) {
->   		portsc = readl(ports[port_index]->addr);
->   		if (portsc & PORT_CHANGE_MASK ||
-> -		    (portsc & PORT_PLS_MASK) == XDEV_RESUME)
-> +		    (portsc & PORT_PLS_MASK) == XDEV_RESUME ||
-> +		    !(portsc & PORT_CONNECT))
->   			return true;
-This change will report a pending port event at the first empty roothub port.
+On Tue,  4 Apr 2023 03:27:30 +0200
+Danilo Krummrich <dakr@redhat.com> wrote:
 
-I think we are looking for something like this instead (pseudo):
+> +struct drm_gpuva_manager {
+> +	/**
+> +	 * @name: the name of the DRM GPU VA space
+> +	 */
+> +	const char *name;
+> +
+> +	/**
+> +	 * @mm_start: start of the VA space
+> +	 */
+> +	u64 mm_start;
+> +
+> +	/**
+> +	 * @mm_range: length of the VA space
+> +	 */
+> +	u64 mm_range;
+> +
+> +	/**
+> +	 * @mtree: the &maple_tree to track GPU VA mappings
+> +	 */
+> +	struct maple_tree mtree;
+> +
+> +	/**
+> +	 * @kernel_alloc_node:
+> +	 *
+> +	 * &drm_gpuva representing the address space cutout reserved for
+> +	 * the kernel
+> +	 */
+> +	struct drm_gpuva kernel_alloc_node;
+> +
+> +	/**
+> +	 * @ops: &drm_gpuva_fn_ops providing the split/merge steps to drivers
+> +	 */
+> +	struct drm_gpuva_fn_ops *ops;
 
-@@ -1116,7 +1116,7 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
-                  * the first wake signalling failed, give it that chance.
-                  */
-                 pending_portevent = xhci_pending_portevent(xhci);
--               if (!pending_portevent) {
-+               if (!pending_portevent && usb3_devices_connected && runtime_resume) {
-                         msleep(120);
-                         pending_portevent = xhci_pending_portevent(xhci);
-                 }
+Any reason for not making that a const object (same goes for all the
+functions being passed a drm_gpuva_fn_ops)?
 
-Thanks
-Mathias
-
+> +};
