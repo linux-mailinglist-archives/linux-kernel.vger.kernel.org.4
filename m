@@ -2,43 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857C56F14FD
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197D36F14FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 12:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345956AbjD1KJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 06:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S1345477AbjD1KJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 06:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjD1KJG (ORCPT
+        with ESMTP id S1345883AbjD1KJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 06:09:06 -0400
-Received: from out-63.mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A540268E
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 03:09:04 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682676542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PVAO+BlDHMujnNKZN8jYnO3UHWhcSJNRlz/2YLsn0QQ=;
-        b=PtApRLYmSe4NU9sJuZXacjEEDoHP1mUvWTAOjzUNY7o8SF1NHkhSVS+YleS4s7lmUzGlQ2
-        zrmrhV1KalImjhj7cWutu7WsxuZNpJjVsJeRb98zodWiH3EZOen6rrnJff00fV2Zxzib60
-        OeQR9ZEO9U7Ogw+A7sH+fyNN+747kwE=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     david@redhat.com, osalvador@suse.de, akpm@linux-foundation.org,
-        mhocko@suse.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] mm/memory_hotplug: fix dead loop in offline_pages()
-Date:   Fri, 28 Apr 2023 18:08:46 +0800
-Message-Id: <20230428100846.95535-1-yajun.deng@linux.dev>
+        Fri, 28 Apr 2023 06:09:37 -0400
+Received: from harvie.cz (harvie.cz [77.87.242.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 809BC40F8;
+        Fri, 28 Apr 2023 03:09:36 -0700 (PDT)
+Received: from anemophobia.amit.cz (unknown [31.30.84.130])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by harvie.cz (Postfix) with ESMTPSA id 418B618027D;
+        Fri, 28 Apr 2023 12:09:34 +0200 (CEST)
+From:   Tomas Mudrunka <tomas.mudrunka@gmail.com>
+To:     jeff@labundy.com
+Cc:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tomas.mudrunka@gmail.com
+Subject: [PATCH v3] Fix freeze in lm8333 i2c keyboard driver
+Date:   Fri, 28 Apr 2023 12:09:25 +0200
+Message-Id: <20230428100925.809527-1-tomas.mudrunka@gmail.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <ZEnErxfnSn2JOpvm@nixie71>
+References: <ZEnErxfnSn2JOpvm@nixie71>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_PASS,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,81 +43,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When migration failure in do_migrate_range() and then the
-scan_movable_pages() will most likely return the same movable pfn.
-In this case, there is no condition to bail out, they will
-always run like this:
+LM8333 uses gpio interrupt line which is triggered by falling edge.
+When button is pressed before driver is loaded,
+driver will miss the edge and never respond again.
+To fix this we run the interrupt handler after registering IRQ
+to clear the interrupt via i2c command.
 
-...
-[878020.623959] migrating pfn 1727813 failed ret:1
-[878020.623960] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
-[878020.623962] memcg:ffffa0ff82d5a000
-[878020.623962] aops:def_blk_aops ino:fd00001
-[878020.623964] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
-[878020.623966] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
-[878020.623967] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
-[878020.623968] page dumped because: migration failure
-[878020.626196] migrating pfn 1727813 failed ret:1
-[878020.626198] page:00000000faa9673c refcount:3 mapcount:0 mapping:00000000144ccd79 index:0x14280025 pfn:0x1727813
-[878020.626200] memcg:ffffa0ff82d5a000
-[878020.626200] aops:def_blk_aops ino:fd00001
-[878020.626202] flags: 0x17ffffc000206a(referenced|dirty|active|workingset|private|node=0|zone=2|lastcpupid=0x1fffff)
-[878020.626204] raw: 0017ffffc000206a ffffb0d14f50fbd8 ffffb0d14f50fbd8 ffffa0ff9c155018
-[878020.626205] raw: 0000000014280025 ffffa10327d702d8 00000003ffffffff ffffa0ff82d5a000
-[878020.626206] page dumped because: migration failure
-...
-
-Bail out when migration failures reach 3 times.
-
-Fixes: bb8965bd82fd ("mm, memory_hotplug: deobfuscate migration part of offlining")
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
 ---
- mm/memory_hotplug.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ drivers/input/keyboard/lm8333.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 8e0fa209d533..72dd385b8892 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -1800,11 +1800,12 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 			struct zone *zone, struct memory_group *group)
- {
- 	const unsigned long end_pfn = start_pfn + nr_pages;
--	unsigned long pfn, system_ram_pages = 0;
-+	unsigned long pfn, tmp_pfn, system_ram_pages = 0;
- 	const int node = zone_to_nid(zone);
- 	unsigned long flags;
- 	struct memory_notify arg;
- 	char *reason;
-+	int count = 0;
- 	int ret;
+diff --git a/drivers/input/keyboard/lm8333.c b/drivers/input/keyboard/lm8333.c
+index 7457c3220..9a810ca00 100644
+--- a/drivers/input/keyboard/lm8333.c
++++ b/drivers/input/keyboard/lm8333.c
+@@ -184,6 +184,8 @@ static int lm8333_probe(struct i2c_client *client)
+ 	if (err)
+ 		goto free_mem;
  
- 	/*
-@@ -1887,12 +1888,20 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
- 
- 			cond_resched();
- 
-+			tmp_pfn = pfn;
- 			ret = scan_movable_pages(pfn, end_pfn, &pfn);
- 			if (!ret) {
--				/*
--				 * TODO: fatal migration failures should bail
--				 * out
--				 */
-+				if (pfn == tmp_pfn)
-+					count++;
-+				else
-+					count = 0;
++	lm8333_irq_thread(client->irq, (void *) lm8333);
 +
-+				if (unlikely(count == 3)) {
-+					ret = -EBUSY;
-+					reason = "migration failure";
-+					goto failed_removal_isolated;
-+				}
-+
- 				do_migrate_range(pfn, end_pfn);
- 			}
- 		} while (!ret);
+ 	err = input_register_device(input);
+ 	if (err)
+ 		goto free_irq;
 -- 
-2.25.1
-
+2.40.0
