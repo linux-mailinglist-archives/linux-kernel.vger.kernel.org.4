@@ -2,168 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699EE6F1AB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442166F1AAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346078AbjD1OpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S1345997AbjD1Ony (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjD1OpN (ORCPT
+        with ESMTP id S1345781AbjD1Onw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:45:13 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B965B46BB;
-        Fri, 28 Apr 2023 07:45:12 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SEZfak002849;
-        Fri, 28 Apr 2023 14:44:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bWdQD3LqkH6qu6+vND77KayVLTWo2mL3i9gljvMTrH4=;
- b=qcIEQhD55bBGUTK/bZTdG0QdHxYFIGs3TRNOSHn4gOkh0oUSIxxT5YQHezS5qmbhZI7y
- r9UVleqcVhGBNAz751yEuyBAdGhHcdNDUSv65otJaZiF9I6PxUFCl+b5jVO/l8iQuLRC
- PdikO5PSzRzNU5JK245nCsx3rmXhbZfsRgkyBrr8WXEr/pv3Sh2pw9sLtcKygvMLgfVk
- Jty+oCbNG2jdLisEfrRzbFuAhAEQ9kq5h8IjagN23dymvScMvezEPSWMI+1NcnwKo4IE
- CFA/DkKnLnKyz2b6tbVwCNdhHrvUY12V3GhO7+lFE5f7IN79TPbYy/dmC5mXFK/EaGse 1Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8fvcgpfs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 14:44:54 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SEgU7P012171;
-        Fri, 28 Apr 2023 14:43:35 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8fvcgkm8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 14:43:35 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33SC6kCx013595;
-        Fri, 28 Apr 2023 14:41:28 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3q47772ykm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Apr 2023 14:41:28 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33SEfPYm2622036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 14:41:25 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BC52F2004B;
-        Fri, 28 Apr 2023 14:41:25 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D69DB20043;
-        Fri, 28 Apr 2023 14:41:24 +0000 (GMT)
-Received: from [9.171.55.26] (unknown [9.171.55.26])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 28 Apr 2023 14:41:24 +0000 (GMT)
-Message-ID: <9a0feb128bc3b26ca444367ce4ee44e80aa9f469.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 09/38] gpio: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-gpio@vger.kernel.org
-Date:   Fri, 28 Apr 2023 16:41:24 +0200
-In-Reply-To: <CACRpkdbS1U8_qakdWV0YZq3bhr1NvFuL0Umv3QsXD0wYu7Hd9A@mail.gmail.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
-         <20230314121216.413434-10-schnelle@linux.ibm.com>
-         <CACRpkdbS1U8_qakdWV0YZq3bhr1NvFuL0Umv3QsXD0wYu7Hd9A@mail.gmail.com>
+        Fri, 28 Apr 2023 10:43:52 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D949E2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:43:50 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54fb89e1666so80933757b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1682693030; x=1685285030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ENY4FP1NqCXozMR3NGmRVnsIVYYqkrTXbZLhDqjIH9U=;
+        b=BUX2oPD1DAJUi92Gw0HP/uZjQmQQJmuVAw3YE4wWmEIxvQVRM0VgB5ydbi1KrO+1N7
+         kd31GUw8NSJWm+eyF4CjGTBca786e4SFPdeVfC/WvQjvXO0YEAyNTsboDc5BGA01TH0o
+         Ai/64JfopJNcphbmJ1ncSJo22IrvWjiToyqq51fiBIbZl1/VbaZh9pu/JdQQCPJGD67v
+         qd2zLf2j4XT4nby/ArIqLu5O7zxXrwMAXkTdfEtO/C/BXJChOrA6iftl6QhYavvpHguj
+         W6A/I22+ybtPp5ouI+2ysRxf/Mepei3hdGIsrL4ZM1uyTKCsXgjtS2vH0lsvgBCt+iVh
+         w9pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682693030; x=1685285030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ENY4FP1NqCXozMR3NGmRVnsIVYYqkrTXbZLhDqjIH9U=;
+        b=Wlq2a4Bdh5gJcVM/4N0WQcKAwKBbjw67IhRrIsK4tjmk7CZd+qx0+Hi3ps0IdnFGqU
+         KW+qWNrcDDf7/1tTAsfb8FzQrHIKMKTnsdEcR/9kdeFpPjRfd1uRYO0KvNLFKlsPqsvB
+         3U4LcGUTPQYCOo2Nz4W5Ik699lnTgMLl/pJh1YKC9TbjI1hJTOzMtphOY9eC/4vSSkY/
+         cM84+RvfS2GSBTXvPxNvT3Z1cCHOAvQmWXQ0v9BKzHxY1QQjt6kJaNEYwBZk1+yqbbZ6
+         GaAfy8Dr76CJcVHpwv89yqe7fzMLJWMYHTi9fnryqGQrPjfJX0MTtVc54BlHSH4gGPFs
+         nUrA==
+X-Gm-Message-State: AC+VfDwzOr/n1LfexKcidrJI14Yk6tX9eth654oSn5lpHuaJGZPPDQ9S
+        4yZgVQnUhknPXra3fVfKhnkwZt3gIG4mCc/qLJoS
+X-Google-Smtp-Source: ACHHUZ5nGGXZLBgK3Mv6Fgxuoin7FjVgfDs4dvEZYUJUffdOyZPqoBviwFPv23h1xj96UnnWXRz0l6ajrzD2puwsPI8=
+X-Received: by 2002:a0d:e28b:0:b0:533:1853:9a1f with SMTP id
+ l133-20020a0de28b000000b0053318539a1fmr4032243ywe.39.1682693029791; Fri, 28
+ Apr 2023 07:43:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230428030916.2966-1-rdunlap@infradead.org>
+In-Reply-To: <20230428030916.2966-1-rdunlap@infradead.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 28 Apr 2023 10:43:39 -0400
+Message-ID: <CAHC9VhQoa5yw2e1jiN844pxNXXT+CosJn9ip7ysFnsnUbQUi2Q@mail.gmail.com>
+Subject: Re: [PATCH] lsm: move hook comments docs to security/security.c
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SHXZ4IlH0V4Ypv-hAr4Jt82f9UHskpBQ
-X-Proofpoint-ORIG-GUID: POsiq4k905P5VL3Ha4rX0PZ9uotS258b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 phishscore=0 malwarescore=0 clxscore=1011 impostorscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=691 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280119
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-15 at 09:42 +0100, Linus Walleij wrote:
-> Hi Niklas,
->=20
-> thanks for your patch!
->=20
-> On Tue, Mar 14, 2023 at 1:12=E2=80=AFPM Niklas Schnelle <schnelle@linux.i=
-bm.com> wrote:
-> >=20
-> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
-s
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
-> >=20
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> >  drivers/gpio/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> > index 13be729710f2..5a874e67fc13 100644
-> > --- a/drivers/gpio/Kconfig
-> > +++ b/drivers/gpio/Kconfig
-> > @@ -688,7 +688,7 @@ config GPIO_VISCONTI
-> >=20
-> >  config GPIO_VX855
-> >         tristate "VIA VX855/VX875 GPIO"
-> > -       depends on (X86 || COMPILE_TEST) && PCI
-> > +       depends on (X86 || COMPILE_TEST) && PCI && HAS_IOPORT
->=20
-> But is this the right fix? Further down in the Kconfig we have:
->=20
-> menu "Port-mapped I/O GPIO drivers"
->         depends on X86 # Unconditional I/O space access
->=20
-> config GPIO_I8255
->         tristate
->         select GPIO_REGMAP
->=20
-> (...)
->=20
-> Isn't the right fix to:
->=20
-> 1) Move this Kconfig entry (VX855) down under the Port-mapped /O drivers,
->    and then:
->=20
-> 2) Make the whole submenu for port-mapped IO drivers depend on
->    X86 && HAS_IOPORT
->=20
-> Yours,
-> Linus Walleij
+On Thu, Apr 27, 2023 at 11:09=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
+>
+> Fix one kernel-doc warning, but invesigating that led to other
+> kernel-doc movement (lsm_hooks.h to security.c) that needs to be
+> fixed also.
+>
+> include/linux/lsm_hooks.h:1: warning: no structured comments found
+>
+> Fixes: e261301c851a ("lsm: move the remaining LSM hook comments to securi=
+ty/security.c")
+> Fixes: 1cd2aca64a5d ("lsm: move the io_uring hook comments to security/se=
+curity.c")
+> Fixes: 452b670c7222 ("lsm: move the perf hook comments to security/securi=
+ty.c")
+> Fixes: 55e853201a9e ("lsm: move the bpf hook comments to security/securit=
+y.c")
+> Fixes: b14faf9c94a6 ("lsm: move the audit hook comments to security/secur=
+ity.c")
+> Fixes: 1427ddbe5cc1 ("lsm: move the binder hook comments to security/secu=
+rity.c")
+> Fixes: 43fad2821876 ("lsm: move the sysv hook comments to security/securi=
+ty.c")
+> Fixes: ecc419a44535 ("lsm: move the key hook comments to security/securit=
+y.c")
+> Fixes: 742b99456e86 ("lsm: move the xfrm hook comments to security/securi=
+ty.c")
+> Fixes: ac318aed5498 ("lsm: move the Infiniband hook comments to security/=
+security.c")
+> Fixes: 4a49f592e931 ("lsm: move the SCTP hook comments to security/securi=
+ty.c")
+> Fixes: 6b6bbe8c02a1 ("lsm: move the socket hook comments to security/secu=
+rity.c")
+> Fixes: 2c2442fd46cd ("lsm: move the AF_UNIX hook comments to security/sec=
+urity.c")
+> Fixes: 2bcf51bf2f03 ("lsm: move the netlink hook comments to security/sec=
+urity.c")
+> Fixes: 130c53bfee4b ("lsm: move the task hook comments to security/securi=
+ty.c")
+> Fixes: a0fd6480de48 ("lsm: move the file hook comments to security/securi=
+ty.c")
+> Fixes: 9348944b775d ("lsm: move the kernfs hook comments to security/secu=
+rity.c")
+> Fixes: 916e32584dfa ("lsm: move the inode hook comments to security/secur=
+ity.c")
+> Fixes: 08526a902cc4 ("lsm: move the filesystem hook comments to security/=
+security.c")
+> Fixes: 36819f185590 ("lsm: move the fs_context hook comments to security/=
+security.c")
+> Fixes: 1661372c912d ("lsm: move the program execution hook comments to se=
+curity/security.c")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: KP Singh <kpsingh@kernel.org>
+> Cc: bpf@vger.kernel.org
+> ---
+>  Documentation/bpf/prog_lsm.rst             |    2 +-
+>  Documentation/security/lsm-development.rst |    6 +++---
+>  Documentation/security/lsm.rst             |    2 +-
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Makes sense I changed it to the above approach for v4. One thing this
-makes me wonder is if then one should change the X86 dependency to at
-least X86 || COMPILE_TEST or even remove it and rely on HAS_IOPORT. The
-comment there at least suggests that it is there only for the I/O space
-access.
+Thanks Randy.  Did you want to take this via the doc tree, or would
+you prefer if I pulled this into the LSM tree?
 
-Thanks,
-Niklas
+Acked-by: Paul Moore <paul@paul-moore.com>
 
+--=20
+paul-moore.com
