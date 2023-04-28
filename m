@@ -2,106 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A373E6F1047
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DEE6F104F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344786AbjD1CWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 22:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S1344793AbjD1C0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 22:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344621AbjD1CWL (ORCPT
+        with ESMTP id S1344424AbjD1C0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 22:22:11 -0400
-Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 748B5269D
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:22:06 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.99,233,1677513600"; 
-   d="scan'208";a="2695109"
-Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
-  by emcscan.emc.com.tw with ESMTP; 28 Apr 2023 10:21:56 +0800
-Received: from 192.168.10.23
-        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(80136:0:AUTH_RELAY)
-        (envelope-from <jingle.wu@emc.com.tw>); Fri, 28 Apr 2023 10:21:55 +0800 (CST)
-Received: from 192.168.33.11
-        by webmail.emc.com.tw with Mail2000 ESMTP Server V7.00(118229:0:AUTH_RELAY)
-        (envelope-from <jingle.wu@emc.com.tw>); Fri, 28 Apr 2023 10:21:53 +0800 (CST)
-From:   "Jingle.Wu" <jingle.wu@emc.com.tw>
-To:     "'Dmitry Torokhov'" <dmitry.torokhov@gmail.com>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <phoenix@emc.com.tw>, <josh.chen@emc.com.tw>,
-        <dave.wang@emc.com.tw>
-References: <20230320011456.986321-1-jingle.wu@emc.com.tw> <ZDBKwo4UMUm+TSnj@penguin> <000001d96b4b$6b30cda0$419268e0$@emc.com.tw> <ZEmsc0HyZuXlJARq@google.com>
-In-Reply-To: <ZEmsc0HyZuXlJARq@google.com>
-Subject: RE: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
-Date:   Fri, 28 Apr 2023 10:21:53 +0800
-Message-ID: <000b01d97978$32775ca0$976615e0$@emc.com.tw>
+        Thu, 27 Apr 2023 22:26:46 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4146C2137
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:26:21 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115eef620so9385194b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 19:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1682648781; x=1685240781;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UsGPjHUd/JAVdo+0tuStqIz7Tm1YkeItSZg+vCTmFL0=;
+        b=OuOomwVr1+BUVgODDImCVU1rjVLtKKlmWxZM2hn3gGiQ6R13Fs7p78CSCDw4t19Bnf
+         3S16IDwx9H1vG4cwiX0lIFiTpnvDJN08bLXCXZZlTlyDiSdHyfgp+BVkdmsrcd8beHuD
+         jwd0ZOaH2Y/NDAyYWJ9RZYR5ZQawfxTk7Xna+rpQJ9ZhZgtX+eXkx+F/VTfFgqMDB17e
+         nnwO25mrKnxnagZenkBVknBa54zPvGz5m2YuXPiAhzvNLASIPoj/YHGWs5En/CUessYQ
+         oY0AddnJ9ZGxdjROwv1NXna6QIklo5DJVEcKS0/Jl33MN7QiQ37BApALD+XHIP2TqMzT
+         3THw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682648781; x=1685240781;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UsGPjHUd/JAVdo+0tuStqIz7Tm1YkeItSZg+vCTmFL0=;
+        b=NqV6B52CmltFrmQ9Ognw8i+xX9H2pYY+FiqrjSmVuevC2mVKQ+xrxD8J+iQ2Jys+WF
+         LYCj8sk3f3Tgzk+x5ynKNusKmjTdyN4HFJceHpwvZ6vlD2YKn0GONGtlKvg5ha50x2sJ
+         +UfaT2F8IsV38emWUhaUc47gtQKWh4yWR+Ceyk1hjLqI+ZyjhSviNG4DdQ4S/w5ITfQr
+         NkNuoe7ZZ2IpfMiw3hfaPy9GPdhSKsovm0Ej7TDG8ezhYRtXwAxmPeTDWANR2d8gLu+G
+         fUKCSpekhHSaeq8/uyn/UHaQDtkZFBj5cOwyMdQkugEFAlcl5/Df17DjTWwFfIKz7jpT
+         Tq3w==
+X-Gm-Message-State: AC+VfDwwFTL6NJSubn8prvcuQwd3Uz/jK1AFINOVidbL+IWoUdKopieL
+        ydISLcEsp34ywP+kW0O5I+A2qg==
+X-Google-Smtp-Source: ACHHUZ531xLfekC2Gkb7D+QY5buqY1RaQcHoeTNm9zkbDctNzACX40QAJaq7DXmtlYWYWKIEOE2MuA==
+X-Received: by 2002:a05:6a00:a16:b0:63d:3c39:ecc2 with SMTP id p22-20020a056a000a1600b0063d3c39ecc2mr4864383pfh.12.1682648780674;
+        Thu, 27 Apr 2023 19:26:20 -0700 (PDT)
+Received: from n137-048-144.byted.org ([121.30.179.80])
+        by smtp.gmail.com with ESMTPSA id h125-20020a628383000000b0063b87717661sm13936511pfe.85.2023.04.27.19.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Apr 2023 19:26:20 -0700 (PDT)
+From:   Wenliang Wang <wangwenliang.1995@bytedance.com>
+To:     mst@redhat.com, jasowang@redhat.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wenliang Wang <wangwenliang.1995@bytedance.com>
+Subject: [PATCH v2] virtio_net: suppress cpu stall when free_unused_bufs
+Date:   Fri, 28 Apr 2023 10:26:13 +0800
+Message-Id: <20230428022613.863298-1-wangwenliang.1995@bytedance.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJF62IY79PwBMHzbH32rexKKwKtngJcjz5NAs42hOUB1Ms3zK4vGXpg
-Content-Language: zh-tw
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcMDYwMTFcYXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5ZTM1Ylxtc2dzXG1zZy02ZmQyMzM4NS1lNTZiLTExZWQtYTg2MC1mMDc5NTk2OWU3NWVcYW1lLXRlc3RcNmZkMjMzODYtZTU2Yi0xMWVkLWE4NjAtZjA3OTU5NjllNzVlYm9keS50eHQiIHN6PSIxOTM1IiB0PSIxMzMyNzEyMjExMjg5MjYxNzUiIGg9ImdWd2ZKYTFwbXluYU5yTFBxWHBBUGFCMHBVTT0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
-x-dg-rorf: true
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry:
-	During the initial process and when the users open/close device,
-having the elan uninhibit/inhibit commands (low power mode) was not what
-Elan expects to happen. Due to that touchpad would do the calibration in
-uninhibit moment , we don't want the calibration to be affected by fingers
-on the touchpad.
-	However, the LID inhibit/uninhibit functions in the Linux kernel
-driver calls open/close(), so we need to separate the inhibit/uninhibit
-behavior from open/close() function
-	
-https://elixir.bootlin.com/linux/latest/source/drivers/input/input.c#L1783
-	
-https://elixir.bootlin.com/linux/latest/source/drivers/input/input.c#L1813
+For multi-queue and large ring-size use case, the following error
+occurred when free_unused_bufs:
+rcu: INFO: rcu_sched self-detected stall on CPU.
 
-THANKS
-JINGLE
+Signed-off-by: Wenliang Wang <wangwenliang.1995@bytedance.com>
+---
+v2:
+-add need_resched check.
+-apply same logic to sq.
+---
+ drivers/net/virtio_net.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
------Original Message-----
-From: 'Dmitry Torokhov' [mailto:dmitry.torokhov@gmail.com] 
-Sent: Thursday, April 27, 2023 6:58 AM
-To: Jingle.Wu <jingle.wu@emc.com.tw>
-Cc: linux-kernel@vger.kernel.org; linux-input@vger.kernel.org;
-phoenix@emc.com.tw; josh.chen@emc.com.tw; dave.wang@emc.com.tw
-Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit
-functions.
-
-Hi Jingle,
-
-On Mon, Apr 10, 2023 at 09:26:04AM +0800, Jingle.Wu wrote:
-> HI Dmitry:
-> 
-> > +static void elan_close(struct input_dev *input_dev) {
-> > +	if ((input_dev->users) && (!input_dev->inhibited))
-> > +		elan_inhibit(input_dev);
-> 
-> This check is for "only inhibit request", and elan_open() its check is 
-> for "only uninhibit request".
-> Because input_dev-> open() close() will be executed 2-3 times when
-initial.
-
-I do not see why this would be an issue if what you are doing is putting the
-device into a low power mode.
-
-If this issue is about need to re-calibrate after opening the lid on certain
-devices, then I think we need to do the same that we did for the I2C-HID
-connected devices on Redrix and hook this functionality to a LID handler.
-
-Thanks.
-
---
-Dmitry
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index ea1bd4bb326d..573558b69a60 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -3559,12 +3559,16 @@ static void free_unused_bufs(struct virtnet_info *vi)
+ 		struct virtqueue *vq = vi->sq[i].vq;
+ 		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+ 			virtnet_sq_free_unused_buf(vq, buf);
++		if (need_resched())
++			schedule();
+ 	}
+ 
+ 	for (i = 0; i < vi->max_queue_pairs; i++) {
+ 		struct virtqueue *vq = vi->rq[i].vq;
+ 		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
+ 			virtnet_rq_free_unused_buf(vq, buf);
++		if (need_resched())
++			schedule();
+ 	}
+ }
+ 
+-- 
+2.20.1
 
