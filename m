@@ -2,689 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD15C6F19E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AAD6F19F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346339AbjD1Nqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S1346351AbjD1NsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjD1Nqi (ORCPT
+        with ESMTP id S229471AbjD1NsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:46:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE29268D;
-        Fri, 28 Apr 2023 06:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682689595; x=1714225595;
-  h=message-id:date:mime-version:subject:from:to:references:
-   in-reply-to:content-transfer-encoding;
-  bh=MTwsEb2I4f+jlGoDcpDvgMENsJvp2taT53r+3NUBv5g=;
-  b=FsiEmub6+kuRhjCK+KkSGBaI3FfGCC6l5VJP7GZYiOR8uVtfBThkfn5u
-   muFrVkfe439BpcJYm2lhDsP6zT8vEVWJrwGzknB8js2ZdFySnFqYrL5h4
-   Qfb8yGzYTqWR7ol5NlgwVf9V0LsnrtQwTIrQq608HiF5XOzTChWgIW/jK
-   dwM9/wUL6U1xKNoa9rSSe3iFiD23mme1IJH5jOhvHzgmRtToZ61RzdPPq
-   vOzXNWzm0ARpJ032znvBfPQ6PIfIDwZAjtd47bkwAev01BiHn3yFWf9ZM
-   YeVm59UE4moHXAEmw50E6g0qBKxnLbc3LHOWUG0HGYxFCkUJE6yhm2v+3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="375746708"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="375746708"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 06:46:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="784220281"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="784220281"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Apr 2023 06:46:34 -0700
-Received: from [10.212.155.101] (kliang2-mobl1.ccr.corp.intel.com [10.212.155.101])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id CE7D4580C99;
-        Fri, 28 Apr 2023 06:46:22 -0700 (PDT)
-Message-ID: <a82ac6e4-7560-db91-f872-9a6343cfc747@linux.intel.com>
-Date:   Fri, 28 Apr 2023 09:46:17 -0400
+        Fri, 28 Apr 2023 09:48:07 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1DC9171E;
+        Fri, 28 Apr 2023 06:48:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IeBEMNnZpjuHGwALY8tjh/vYK8N0/1VZghuZ3MRLCqyZ7WCqGu1ADwSAuVheunka7txOJOJr+P9Jgld/0XZs19WssBAhbJvSg+WIHldrzd9OdwAE9VVHfv01EmJuDuqZYBmay691Fy6mXxpcsgjrFyXC4AeJBHt+vYR1I6db6GfK+km7gM0KCmTM8qtulRYvQGWr1ldaCubDPO8cevZyOTJeDbUUp1vVAHab0Anh1R3BKjM++tiBP9Uzg8mXOI+s/RzBIchorsnSZmFWMqP6RjGCbFy8v+Pm0nLICuA46SDUOGgicTIJEmuH64ah8hVn3Ig4SgSpOr4hwDu6FyLWwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Of1HD/t+Y25GDQ5qFM4/JjFQh382tDMVq+jAJ59YvfQ=;
+ b=OKRsuihTzIVMWAJ71Snx85Zb0XxRO/TZSYYbpjs5cujgrkYnsbGU59wIbFXxlaBPpLTJmbO+Ypzj2D6bF6VrBrzg+Acqhmm9p3sSw22D5AJrcUpZ4OqJPCthOztGrXkgD6XOr87ByJeIxp7jjQmmbPtHOnEX4T02dEPDVM9M9o7PVuL3Pof2Ci/6sFuEbSbmqaFF6UoJiepIevH0pKMww8JJLBC6aaE37dCUAYJ7jys+tZBpWW1FjTiEyn+y5Glf8zU77loXf6DiYJSZCOahi2Rz+4YB3WSVIIJ3G9OpWGI/cMSKmG/p7v3xy1S453hUKm2qoNcguuVbbhDaYTNIHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Of1HD/t+Y25GDQ5qFM4/JjFQh382tDMVq+jAJ59YvfQ=;
+ b=RpIgKxtcskO1Eca8Ylps1OfNJVFMHIJnsU7I+0lgoW3NW+nPb2z5zNENVd3hBKgq9LboViySppkuVAA/wXY/kN3lD22eIX6eoibv+n0LsOvfiiN4t5RrF1HnutFLg9p3mcigKWKDbX+VRfFnFehxJRlW5E/y635EOQQLAA9YD68=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BY5PR13MB4487.namprd13.prod.outlook.com (2603:10b6:a03:1d4::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.23; Fri, 28 Apr
+ 2023 13:48:01 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 13:48:01 +0000
+Date:   Fri, 28 Apr 2023 15:47:52 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, andrew@lunn.ch,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Cochran <richardcochran@gmail.com>, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [EXTERNAL] Re: [RFC PATCH v6 2/2] net: ti: icssg-prueth: Add
+ ICSSG ethernet driver
+Message-ID: <ZEvOiMSIIYG6nmsu@corigine.com>
+References: <20230424053233.2338782-1-danishanwar@ti.com>
+ <20230424053233.2338782-3-danishanwar@ti.com>
+ <ZEl2zh879QAX+QsK@corigine.com>
+ <9c97e367-56d6-689e-856a-c1a6ff575b63@ti.com>
+ <ff6fe35f-ca4b-a48d-777f-196b771a14d3@ti.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ff6fe35f-ca4b-a48d-777f-196b771a14d3@ti.com>
+X-ClientProxiedBy: AS4P250CA0006.EURP250.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5df::8) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 20/43] perf test: Move x86 hybrid tests to arch/x86
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-To:     Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230428073809.1803624-1-irogers@google.com>
- <20230428073809.1803624-21-irogers@google.com>
- <a273c794-8378-d090-c65f-1eb2758dff50@linux.intel.com>
-In-Reply-To: <a273c794-8378-d090-c65f-1eb2758dff50@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BY5PR13MB4487:EE_
+X-MS-Office365-Filtering-Correlation-Id: cdf81be2-8fc0-48b9-ab7d-08db47ef2eb3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NYb8W0GjOdJQc5PdtTJb+CquYoPq23yuUrVIl9fG7Ym6n2V/Oqr7s/qGna2j9mULo+0gz9CYUX1fnxViO88gs6rdIjz3UM0duGMYBqY9dxnfO3JelsrHPxKVxbqpymE/uu6wBiykXr4feT22C21FRzh8hmByFdkP1Fq/iTYJTQxFg+ZZsIlGGBzt/DxcgTs6zmgjqfEUgpkfda9Uvv7GOlgQ7BRthOZcOpeu/Co7XH4ua7R041VV5Tp6CNd9p/zJOrrZ3JCrjerTib8J29E8s5Drkf+fvuffRDkXwaxTgNpy8fx02KBmKedcQb+qUQ0ryn1ZAfpS5HhMln/1gLZVjSwg+XjIW5SaiOaCe4z1AzcvwCOn/th8ix2Lqyt+D3ON9Pr3h4K4SJiOAkC+bzgRl21TDUivdZAFxiCTJ09I6hCgGneyYn8MtPHVQXKQExqaazNO1wc+wC9ON1+v+97eQxRCpajDJ/ikTZ7wS6oS61I/vxpFa5XJk+UN3s6vBNwJtyGvjOU+mhqY4AjDLp3RVDpSR4acZgu2gzThjyc0Sn1Og8hCTfqK9+d39K5L9EYjOtzJuiHtsFvLgheikHpAnGDZmI+90RNeT1RZ/oi3NIY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(39830400003)(346002)(136003)(451199021)(54906003)(478600001)(5660300002)(8936002)(8676002)(36756003)(86362001)(2906002)(7416002)(44832011)(38100700002)(66556008)(66476007)(66946007)(4326008)(6916009)(316002)(41300700001)(186003)(6512007)(6506007)(53546011)(83380400001)(2616005)(6666004)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SjBV3PZKu8MqXRqdlKZglRPC/KbJlJZYIcXnQSRys5xA45/z3saeym4IechY?=
+ =?us-ascii?Q?KkGc1dpfySdO8VwMUAM7w6dGzzt4O4ZXkeurN8vXU2TdijpAtrU9nSFzdl0p?=
+ =?us-ascii?Q?SKUHtH2l4mJq0se3haM/9Aft1jfDVb5AGHIq+bsYzHT6PiNTAzRwLhF17aQK?=
+ =?us-ascii?Q?wk+lRW3FHB0U3njvppb5AV4/TNiL68QtNStBkeXOVCKBgYHDdCFvqchJCCLK?=
+ =?us-ascii?Q?pDNzKW9tM078v8esmt87hpQ1hpbtIWEZmJSHhKDHKKdgXCAwmCqN+IcOXCse?=
+ =?us-ascii?Q?3JmUdIH2141w6SF4Q7dEjBUAXnLTnG2TxBVxE+qqAQCcTQhqai57EZ+EU+WM?=
+ =?us-ascii?Q?bRZJ6xxMWI1L26yMoFmZhQlmomORsk+MJJ6mFC9NB1qvj0wqWYTbSsJj2l57?=
+ =?us-ascii?Q?yIcib/EEQmTY8cBiUlrpC1x5DlYi2oPuVBa46No9Qm2Panl/tZN8/SdxRPk3?=
+ =?us-ascii?Q?Qikj1BRGs/zpxr0mTs27Bw2GXt021/k5huvcax0yY38EILoNrA3uSUl2x4f3?=
+ =?us-ascii?Q?M6LSRfyvLnhApoon8cuinwJQUsywngoRpvAAus5Vx8uiep+36XmucL9PBjRk?=
+ =?us-ascii?Q?701Tk4gTitJK2CJfqRZvfBUJDZx7fbRC4ZpeXcBShG5zZAGol1BTuYVPYe5L?=
+ =?us-ascii?Q?+EjZYviIqp/qvwm5blt3ZairleOp0/D+N19EgWxkvwwlbegmSNe1HXz8rd/y?=
+ =?us-ascii?Q?N96W3jlXIB+PkTYY4rHpU1TCn50a7T+K4RCN90Sco7YxeCEn8Kb0jQBNVFtL?=
+ =?us-ascii?Q?77MyKveLzO5aOsgUl4H22+WuyQIiI5tPnDeMvjKfIW4xfjG1dk2UcxEXdi0H?=
+ =?us-ascii?Q?rwhjKtXuHXiy6q4ofI9oBd3l+1SnKjeSi/uQvYP3ySekuU7NjeRH1peOT6yR?=
+ =?us-ascii?Q?/4eKsVjoeLtVYAbGf/qHT0aTsYhA2ulVEbz/bEI+WidkfbPBu7wvYJ1HsFEm?=
+ =?us-ascii?Q?idf6usyC0yI61UkhRG6Vb6VloSmRp/QDVy8toIh+GoJL2q3n962I9Fa7Q4MH?=
+ =?us-ascii?Q?qKntc3WL9aPFWtplNoYPEx2FNN/Ahakz6MP4LP5Mx3yfaSx3kIRJ1652hY/r?=
+ =?us-ascii?Q?8eeEfwvRuUu7/e9/XqRVoR/arXfe4wZptXlzG4R121CUR6n2s7HPKLqWD7c9?=
+ =?us-ascii?Q?ksWMgQotQhLpa3oIPgyg/UDGoBZhuN2AEMMPaDONQoMYaJJQB1zPgIM/Krrk?=
+ =?us-ascii?Q?E3TUXfiz6bZo+dPj9ghAW5HOh7qqpeNWVLIg6wG8eY1tVUGSjTtw2H5n2xps?=
+ =?us-ascii?Q?GMpqadlVnTUHxXJcg4RdhQ8wpsrdJeZVishjISSqtTPb5NxM6KAXY4urJtpM?=
+ =?us-ascii?Q?+QMiEDdqZfkmbCEJ0AS1ldj+6NyitaqwUB+y8/GjX5ptxszLLYvJoYlGuqtr?=
+ =?us-ascii?Q?mPUACoxrRj5LS0fAaWpyKDC5+5NPS7aIHyZlvDCuWswQlZ7xvWOH6BOXRkxP?=
+ =?us-ascii?Q?NR5FDCDZ3NZ88equ9oxqv66C8eMQdc0WR44xWxemE4U0RMJj2V0fbSc7LhtR?=
+ =?us-ascii?Q?rDzLLkoQzulRkeB+Q8nO6XXQ8jdYfywFyplzfVjzyNcx/Y1nXWPISAZFqnoN?=
+ =?us-ascii?Q?z3CKhsbj9qnh8A7Nr+wOA/tJfGnzCC0byjbkkyfISRSFMcd6usZ0qukn6jbY?=
+ =?us-ascii?Q?XNOQIw/84JjcBDjJZtpjA3luCbP1nPKrNnObGSXoKcTPwjAt3LiCAWzaPVIe?=
+ =?us-ascii?Q?RgKnUg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdf81be2-8fc0-48b9-ab7d-08db47ef2eb3
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2023 13:48:01.2347
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VvWLNx3dqU6BT5q0+DPlcqFRuUdyglnLs9s6ATTnU6ELUHq4T83fCOqXqku6BPMcnjaoRkFTXiqsRbb2zpNh0uHdY0BhUPdJnU4DlxGUzus=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB4487
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-04-28 9:35 a.m., Liang, Kan wrote:
+On Fri, Apr 28, 2023 at 02:36:42PM +0530, Md Danish Anwar wrote:
+> Hi Simon.
 > 
+> On 27/04/23 12:42, Md Danish Anwar wrote:
+> > Hi Simon,
+> > Thanks for the comments.
+> > 
+> > On 27/04/23 00:39, Simon Horman wrote:
+> >> On Mon, Apr 24, 2023 at 11:02:33AM +0530, MD Danish Anwar wrote:
+> >>> From: Roger Quadros <rogerq@ti.com>
+> >>>
+> >>> This is the Ethernet driver for TI AM654 Silicon rev. 2
+> >>> with the ICSSG PRU Sub-system running dual-EMAC firmware.
+> >>>
 > 
-> On 2023-04-28 3:37 a.m., Ian Rogers wrote:
->> The tests use x86 hybrid specific PMUs.
+> [ ... ]
 > 
-> This one still has problems.
+> >>
+> >> ...
+> >>
+> >>> +MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
+> >>> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
+> >>> +MODULE_AUTHOR("Md Danish Anwar <danishanwar@ti.com>");
+> >>> +MODULE_DESCRIPTION("PRUSS ICSSG Ethernet Driver");
+> >>> +MODULE_LICENSE("GPL");
+> >>
+> >> SPDK says GPL-2.0, so perhaps this should be "GPL v2" ?
+> >>
+> 
+> I am getting checkpatch warning while changing GPL version.
+> 
+> WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cure
+> the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
+> #3602: FILE: drivers/net/ethernet/ti/icssg_prueth.c:1866:
+> +MODULE_LICENSE("GPL v2");
+> 
+> Should I ignore this warning and change it to "GPL v2"
 
-Never mind. I just saw your reply on V1.
-Yes, it's OK to keep this patch as is, since it just move everything to
-arch/x86. We can do the changes in the following patch.
-
-Thanks,
-Kan
-
-> 
-> https://lore.kernel.org/lkml/4fbbe5bf-2f7d-8aa3-62b1-72829f75e009@linux.intel.com/
-> 
-> Thanks,
-> Kan
->>
->> Signed-off-by: Ian Rogers <irogers@google.com>
->> ---
->>  tools/perf/arch/x86/include/arch-tests.h |   1 +
->>  tools/perf/arch/x86/tests/Build          |   1 +
->>  tools/perf/arch/x86/tests/arch-tests.c   |  10 +
->>  tools/perf/arch/x86/tests/hybrid.c       | 277 +++++++++++++++++++++++
->>  tools/perf/tests/parse-events.c          | 181 ---------------
->>  5 files changed, 289 insertions(+), 181 deletions(-)
->>  create mode 100644 tools/perf/arch/x86/tests/hybrid.c
->>
->> diff --git a/tools/perf/arch/x86/include/arch-tests.h b/tools/perf/arch/x86/include/arch-tests.h
->> index 902e9ea9b99e..33d39c1d3e64 100644
->> --- a/tools/perf/arch/x86/include/arch-tests.h
->> +++ b/tools/perf/arch/x86/include/arch-tests.h
->> @@ -11,6 +11,7 @@ int test__intel_pt_pkt_decoder(struct test_suite *test, int subtest);
->>  int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
->>  int test__bp_modify(struct test_suite *test, int subtest);
->>  int test__x86_sample_parsing(struct test_suite *test, int subtest);
->> +int test__hybrid(struct test_suite *test, int subtest);
->>  
->>  extern struct test_suite *arch_tests[];
->>  
->> diff --git a/tools/perf/arch/x86/tests/Build b/tools/perf/arch/x86/tests/Build
->> index 6f4e8636c3bf..08cc8b9c931e 100644
->> --- a/tools/perf/arch/x86/tests/Build
->> +++ b/tools/perf/arch/x86/tests/Build
->> @@ -3,5 +3,6 @@ perf-$(CONFIG_DWARF_UNWIND) += dwarf-unwind.o
->>  
->>  perf-y += arch-tests.o
->>  perf-y += sample-parsing.o
->> +perf-y += hybrid.o
->>  perf-$(CONFIG_AUXTRACE) += insn-x86.o intel-pt-test.o
->>  perf-$(CONFIG_X86_64) += bp-modify.o
->> diff --git a/tools/perf/arch/x86/tests/arch-tests.c b/tools/perf/arch/x86/tests/arch-tests.c
->> index aae6ea0fe52b..147ad0638bbb 100644
->> --- a/tools/perf/arch/x86/tests/arch-tests.c
->> +++ b/tools/perf/arch/x86/tests/arch-tests.c
->> @@ -22,6 +22,15 @@ struct test_suite suite__intel_pt = {
->>  DEFINE_SUITE("x86 bp modify", bp_modify);
->>  #endif
->>  DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
->> +static struct test_case hybrid_tests[] = {
->> +	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
->> +	{ .name = NULL, }
->> +};
->> +
->> +struct test_suite suite__hybrid = {
->> +	.desc = "x86 hybrid",
->> +	.test_cases = hybrid_tests,
->> +};
->>  
->>  struct test_suite *arch_tests[] = {
->>  #ifdef HAVE_DWARF_UNWIND_SUPPORT
->> @@ -35,5 +44,6 @@ struct test_suite *arch_tests[] = {
->>  	&suite__bp_modify,
->>  #endif
->>  	&suite__x86_sample_parsing,
->> +	&suite__hybrid,
->>  	NULL,
->>  };
->> diff --git a/tools/perf/arch/x86/tests/hybrid.c b/tools/perf/arch/x86/tests/hybrid.c
->> new file mode 100644
->> index 000000000000..0f99cfd116ee
->> --- /dev/null
->> +++ b/tools/perf/arch/x86/tests/hybrid.c
->> @@ -0,0 +1,277 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include "arch-tests.h"
->> +#include "debug.h"
->> +#include "evlist.h"
->> +#include "evsel.h"
->> +#include "pmu-hybrid.h"
->> +#include "tests/tests.h"
->> +
->> +static bool test_config(const struct evsel *evsel, __u64 expected_config)
->> +{
->> +	return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == expected_config;
->> +}
->> +
->> +static int test__hybrid_hw_event_with_pmu(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel = evlist__first(evlist);
->> +
->> +	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_hw_group_event(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel, *leader;
->> +
->> +	evsel = leader = evlist__first(evlist);
->> +	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +
->> +	evsel = evsel__next(evsel);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_sw_hw_group_event(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel, *leader;
->> +
->> +	evsel = leader = evlist__first(evlist);
->> +	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +
->> +	evsel = evsel__next(evsel);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_hw_sw_group_event(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel, *leader;
->> +
->> +	evsel = leader = evlist__first(evlist);
->> +	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +
->> +	evsel = evsel__next(evsel);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_group_modifier1(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel, *leader;
->> +
->> +	evsel = leader = evlist__first(evlist);
->> +	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
->> +	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
->> +
->> +	evsel = evsel__next(evsel);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
->> +	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> +	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
->> +	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_raw1(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel = evlist__first(evlist);
->> +
->> +	if (!perf_pmu__hybrid_mounted("cpu_atom")) {
->> +		TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> +		TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +		TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> +		return TEST_OK;
->> +	}
->> +
->> +	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> +
->> +	/* The type of second event is randome value */
->> +	evsel = evsel__next(evsel);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_raw2(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel = evlist__first(evlist);
->> +
->> +	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__hybrid_cache_event(struct evlist *evlist)
->> +{
->> +	struct evsel *evsel = evlist__first(evlist);
->> +
->> +	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config", 0x2 == (evsel->core.attr.config & 0xffffffff));
->> +	return TEST_OK;
->> +}
->> +
->> +static int test__checkevent_pmu(struct evlist *evlist)
->> +{
->> +
->> +	struct evsel *evsel = evlist__first(evlist);
->> +
->> +	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> +	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> +	TEST_ASSERT_VAL("wrong config",    10 == evsel->core.attr.config);
->> +	TEST_ASSERT_VAL("wrong config1",    1 == evsel->core.attr.config1);
->> +	TEST_ASSERT_VAL("wrong config2",    3 == evsel->core.attr.config2);
->> +	TEST_ASSERT_VAL("wrong config3",    0 == evsel->core.attr.config3);
->> +	/*
->> +	 * The period value gets configured within evlist__config,
->> +	 * while this test executes only parse events method.
->> +	 */
->> +	TEST_ASSERT_VAL("wrong period",     0 == evsel->core.attr.sample_period);
->> +
->> +	return TEST_OK;
->> +}
->> +
->> +struct evlist_test {
->> +	const char *name;
->> +	bool (*valid)(void);
->> +	int (*check)(struct evlist *evlist);
->> +};
->> +
->> +static const struct evlist_test test__hybrid_events[] = {
->> +	{
->> +		.name  = "cpu_core/cpu-cycles/",
->> +		.check = test__hybrid_hw_event_with_pmu,
->> +		/* 0 */
->> +	},
->> +	{
->> +		.name  = "{cpu_core/cpu-cycles/,cpu_core/instructions/}",
->> +		.check = test__hybrid_hw_group_event,
->> +		/* 1 */
->> +	},
->> +	{
->> +		.name  = "{cpu-clock,cpu_core/cpu-cycles/}",
->> +		.check = test__hybrid_sw_hw_group_event,
->> +		/* 2 */
->> +	},
->> +	{
->> +		.name  = "{cpu_core/cpu-cycles/,cpu-clock}",
->> +		.check = test__hybrid_hw_sw_group_event,
->> +		/* 3 */
->> +	},
->> +	{
->> +		.name  = "{cpu_core/cpu-cycles/k,cpu_core/instructions/u}",
->> +		.check = test__hybrid_group_modifier1,
->> +		/* 4 */
->> +	},
->> +	{
->> +		.name  = "r1a",
->> +		.check = test__hybrid_raw1,
->> +		/* 5 */
->> +	},
->> +	{
->> +		.name  = "cpu_core/r1a/",
->> +		.check = test__hybrid_raw2,
->> +		/* 6 */
->> +	},
->> +	{
->> +		.name  = "cpu_core/config=10,config1,config2=3,period=1000/u",
->> +		.check = test__checkevent_pmu,
->> +		/* 7 */
->> +	},
->> +	{
->> +		.name  = "cpu_core/LLC-loads/",
->> +		.check = test__hybrid_cache_event,
->> +		/* 8 */
->> +	},
->> +};
->> +
->> +static int test_event(const struct evlist_test *e)
->> +{
->> +	struct parse_events_error err;
->> +	struct evlist *evlist;
->> +	int ret;
->> +
->> +	if (e->valid && !e->valid()) {
->> +		pr_debug("... SKIP\n");
->> +		return TEST_OK;
->> +	}
->> +
->> +	evlist = evlist__new();
->> +	if (evlist == NULL) {
->> +		pr_err("Failed allocation");
->> +		return TEST_FAIL;
->> +	}
->> +	parse_events_error__init(&err);
->> +	ret = parse_events(evlist, e->name, &err);
->> +	if (ret) {
->> +		pr_debug("failed to parse event '%s', err %d, str '%s'\n",
->> +			 e->name, ret, err.str);
->> +		parse_events_error__print(&err, e->name);
->> +		ret = TEST_FAIL;
->> +		if (strstr(err.str, "can't access trace events"))
->> +			ret = TEST_SKIP;
->> +	} else {
->> +		ret = e->check(evlist);
->> +	}
->> +	parse_events_error__exit(&err);
->> +	evlist__delete(evlist);
->> +
->> +	return ret;
->> +}
->> +
->> +static int combine_test_results(int existing, int latest)
->> +{
->> +	if (existing == TEST_FAIL)
->> +		return TEST_FAIL;
->> +	if (existing == TEST_SKIP)
->> +		return latest == TEST_OK ? TEST_SKIP : latest;
->> +	return latest;
->> +}
->> +
->> +static int test_events(const struct evlist_test *events, int cnt)
->> +{
->> +	int ret = TEST_OK;
->> +
->> +	for (int i = 0; i < cnt; i++) {
->> +		const struct evlist_test *e = &events[i];
->> +		int test_ret;
->> +
->> +		pr_debug("running test %d '%s'\n", i, e->name);
->> +		test_ret = test_event(e);
->> +		if (test_ret != TEST_OK) {
->> +			pr_debug("Event test failure: test %d '%s'", i, e->name);
->> +			ret = combine_test_results(ret, test_ret);
->> +		}
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->> +int test__hybrid(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
->> +{
->> +	if (!perf_pmu__has_hybrid())
->> +		return TEST_SKIP;
->> +
->> +	return test_events(test__hybrid_events, ARRAY_SIZE(test__hybrid_events));
->> +}
->> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
->> index f0e9f9288f2b..3bf07b7e37b1 100644
->> --- a/tools/perf/tests/parse-events.c
->> +++ b/tools/perf/tests/parse-events.c
->> @@ -6,7 +6,6 @@
->>  #include "tests.h"
->>  #include "debug.h"
->>  #include "pmu.h"
->> -#include "pmu-hybrid.h"
->>  #include "pmus.h"
->>  #include <dirent.h>
->>  #include <errno.h>
->> @@ -1509,127 +1508,6 @@ static int test__all_tracepoints(struct evlist *evlist)
->>  }
->>  #endif /* HAVE_LIBTRACEVENT */
->>  
->> -static int test__hybrid_hw_event_with_pmu(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel = evlist__first(evlist);
->> -
->> -	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_hw_group_event(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel, *leader;
->> -
->> -	evsel = leader = evlist__first(evlist);
->> -	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -
->> -	evsel = evsel__next(evsel);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_sw_hw_group_event(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel, *leader;
->> -
->> -	evsel = leader = evlist__first(evlist);
->> -	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -
->> -	evsel = evsel__next(evsel);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_hw_sw_group_event(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel, *leader;
->> -
->> -	evsel = leader = evlist__first(evlist);
->> -	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -
->> -	evsel = evsel__next(evsel);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_group_modifier1(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel, *leader;
->> -
->> -	evsel = leader = evlist__first(evlist);
->> -	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
->> -	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
->> -
->> -	evsel = evsel__next(evsel);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
->> -	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
->> -	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
->> -	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_raw1(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel = evlist__first(evlist);
->> -
->> -	if (!perf_pmu__hybrid_mounted("cpu_atom")) {
->> -		TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> -		TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -		TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> -		return TEST_OK;
->> -	}
->> -
->> -	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> -
->> -	/* The type of second event is randome value */
->> -	evsel = evsel__next(evsel);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_raw2(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel = evlist__first(evlist);
->> -
->> -	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
->> -	return TEST_OK;
->> -}
->> -
->> -static int test__hybrid_cache_event(struct evlist *evlist)
->> -{
->> -	struct evsel *evsel = evlist__first(evlist);
->> -
->> -	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
->> -	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->core.attr.type);
->> -	TEST_ASSERT_VAL("wrong config", 0x2 == (evsel->core.attr.config & 0xffffffff));
->> -	return TEST_OK;
->> -}
->> -
->>  struct evlist_test {
->>  	const char *name;
->>  	bool (*valid)(void);
->> @@ -1997,54 +1875,6 @@ static const struct terms_test test__terms[] = {
->>  	},
->>  };
->>  
->> -static const struct evlist_test test__hybrid_events[] = {
->> -	{
->> -		.name  = "cpu_core/cpu-cycles/",
->> -		.check = test__hybrid_hw_event_with_pmu,
->> -		/* 0 */
->> -	},
->> -	{
->> -		.name  = "{cpu_core/cpu-cycles/,cpu_core/instructions/}",
->> -		.check = test__hybrid_hw_group_event,
->> -		/* 1 */
->> -	},
->> -	{
->> -		.name  = "{cpu-clock,cpu_core/cpu-cycles/}",
->> -		.check = test__hybrid_sw_hw_group_event,
->> -		/* 2 */
->> -	},
->> -	{
->> -		.name  = "{cpu_core/cpu-cycles/,cpu-clock}",
->> -		.check = test__hybrid_hw_sw_group_event,
->> -		/* 3 */
->> -	},
->> -	{
->> -		.name  = "{cpu_core/cpu-cycles/k,cpu_core/instructions/u}",
->> -		.check = test__hybrid_group_modifier1,
->> -		/* 4 */
->> -	},
->> -	{
->> -		.name  = "r1a",
->> -		.check = test__hybrid_raw1,
->> -		/* 5 */
->> -	},
->> -	{
->> -		.name  = "cpu_core/r1a/",
->> -		.check = test__hybrid_raw2,
->> -		/* 6 */
->> -	},
->> -	{
->> -		.name  = "cpu_core/config=10,config1,config2=3,period=1000/u",
->> -		.check = test__checkevent_pmu,
->> -		/* 7 */
->> -	},
->> -	{
->> -		.name  = "cpu_core/LLC-loads/",
->> -		.check = test__hybrid_cache_event,
->> -		/* 8 */
->> -	},
->> -};
->> -
->>  static int test_event(const struct evlist_test *e)
->>  {
->>  	struct parse_events_error err;
->> @@ -2321,14 +2151,6 @@ static bool test_alias(char **event, char **alias)
->>  	return false;
->>  }
->>  
->> -static int test__hybrid(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
->> -{
->> -	if (!perf_pmu__has_hybrid())
->> -		return TEST_SKIP;
->> -
->> -	return test_events(test__hybrid_events, ARRAY_SIZE(test__hybrid_events));
->> -}
->> -
->>  static int test__checkevent_pmu_events_alias(struct evlist *evlist)
->>  {
->>  	struct evsel *evsel1 = evlist__first(evlist);
->> @@ -2392,9 +2214,6 @@ static struct test_case tests__parse_events[] = {
->>  	TEST_CASE_REASON("Test event parsing",
->>  			 events2,
->>  			 "permissions"),
->> -	TEST_CASE_REASON("Test parsing of \"hybrid\" CPU events",
->> -			 hybrid,
->> -			"not hybrid"),
->>  	TEST_CASE_REASON("Parsing of all PMU events from sysfs",
->>  			 pmu_events,
->>  			 "permissions"),
+I guess that "GPL" is correct after all.
+Sorry for the noise.
