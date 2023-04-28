@@ -2,139 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955126F125D
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7D96F1279
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345504AbjD1HaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S1345529AbjD1HhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjD1HaK (ORCPT
+        with ESMTP id S1345451AbjD1HhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:30:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293372689
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:30:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCDB260A0F
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26796C433EF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682667009;
-        bh=EZT+y/OIOW2KXt81ZyXZENqGfhYKcx4a5ivqT4UgSYY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UgK6yNYqLKgHll6zEz8WGxCTGSIg09NP7qXAqkgTslxf+zrobLG6kJA6cmzqOC7pl
-         nHyUjLBrz4rYWKwRaSXHZXy67krrwJMFIJY8TmAdOQlNcwKTOBGpTEHaoYyXYTY3w0
-         jk518XMuYMmTKLjyPxlhKyYmious7Rj7kR2iMiY2GmvWIVY9jWbLxXsN3fFHzixL/g
-         H8R35YkpDKQQr1+lDL/LxqdrDshTcYy/gfqqMQ7eyPg414zd3Wuz1fea0FcWYmfiTM
-         10gc6yR15a4L7IwwS5xrlJdgF8+ZJ57fhKLVCDHNOTtBhawzubjylARG2soFlTvoTh
-         442R0a39sNQyA==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so2449842e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:30:09 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzjoNDMNWt59wuGJFWDjy/u5HsxzKR0cKhjWf5OGTyUFLB9KQnb
-        3HgI9UFux57FY7gDwC0oMVi+EVlcd78kTQuyCOw=
-X-Google-Smtp-Source: ACHHUZ4yVMpWZawWiFE3JOO57vSHmIy1kBJ9L9nEgK66jIb7+vz05VU0iTnt33gRcvZTZHTSZLUmVtva7q9aWtnEhTw=
-X-Received: by 2002:a2e:2c11:0:b0:2a7:7f4a:3035 with SMTP id
- s17-20020a2e2c11000000b002a77f4a3035mr1212433ljs.16.1682667007198; Fri, 28
- Apr 2023 00:30:07 -0700 (PDT)
+        Fri, 28 Apr 2023 03:37:19 -0400
+X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 00:37:00 PDT
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268940FE;
+        Fri, 28 Apr 2023 00:36:59 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 5EA9B2181;
+        Fri, 28 Apr 2023 07:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1682666720;
+        bh=KDYaVo5PyVLtkC6s1yjYte0w6cjpa9PrJoFAS7zuJbA=;
+        h=Date:From:Subject:To:CC;
+        b=fzeccGUfIw4aI/FHAMCPI6PUHbs0tFSv4oyZ788jZu1KeSTToBTmDF2Kpv2gKNOJm
+         9AUAna3Eq1OTWsplnkyU1S+2xfP46C6cdwEIHkZk0a5CVbgkIqECHFmCXCgFSMhpqP
+         yP7lgCuVrfASElnhDfRN2P0TcQaTTgk0rVDYtT3Q=
+Received: from [192.168.211.149] (192.168.211.149) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 28 Apr 2023 10:30:02 +0300
+Message-ID: <f949c754-6d38-af12-fa83-176e9971132e@paragon-software.com>
+Date:   Fri, 28 Apr 2023 11:30:01 +0400
 MIME-Version: 1.0
-References: <20230428050442.180913-1-maskray@google.com>
-In-Reply-To: <20230428050442.180913-1-maskray@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 28 Apr 2023 08:29:56 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGpbKgS8mNxVuAyPvT-vW0LWZOXgqsy5TvKhzJRs_rHkA@mail.gmail.com>
-Message-ID: <CAMj1kXGpbKgS8mNxVuAyPvT-vW0LWZOXgqsy5TvKhzJRs_rHkA@mail.gmail.com>
-Subject: Re: [PATCH] arm64: lds: move .got section out of .text
-To:     Fangrui Song <maskray@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Subject: [GIT PULL] ntfs3: bugfixes for 6.4
+To:     <torvalds@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.211.149]
+X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Fangrui,
+Hi Linus,
 
-On Fri, 28 Apr 2023 at 06:05, Fangrui Song <maskray@google.com> wrote:
->
-> Currently, the .got section is placed within the output section .text.
-> However, when .got is non-empty, the SHF_WRITE flag is set when linked
-> by lld. GNU ld recognizes .text as a special section and ignores the
-> SHF_WRITE flag. By renaming .text, we can also get the SHF_WRITE flag.
->
-> Conventionally, the .got section is placed just before .got.plt (which
-> should be empty and omitted in the kernel). Therefore, we move the .got
-> section to a conventional location (between .text and .data) and remove
-> the unneeded `. = ALIGN(16)`.
->
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> ---
->  arch/arm64/kernel/vmlinux.lds.S | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> index b9202c2ee18e..2bcb3b30db41 100644
-> --- a/arch/arm64/kernel/vmlinux.lds.S
-> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> @@ -181,18 +181,8 @@ SECTIONS
->                         KPROBES_TEXT
->                         HYPERVISOR_TEXT
->                         *(.gnu.warning)
-> -               . = ALIGN(16);
-> -               *(.got)                 /* Global offset table          */
->         }
->
-> -       /*
-> -        * Make sure that the .got.plt is either completely empty or it
-> -        * contains only the lazy dispatch entries.
-> -        */
-> -       .got.plt : { *(.got.plt) }
-> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> -              "Unexpected GOT/PLT entries detected!")
-> -
->         . = ALIGN(SEGMENT_ALIGN);
->         _etext = .;                     /* End of text section */
->
-> @@ -247,6 +237,16 @@ SECTIONS
->
->         . = ALIGN(SEGMENT_ALIGN);
->         __inittext_end = .;
-> +
-> +       .got : { *(.got) }
+Please pull this branch containing ntfs3 code for 6.4.
 
-This is the .init region, which gets freed and unmapped after boot. If
-the GOT is non-empty, it needs to remain mapped, so we cannot place it
-here.
+Added:
+- add missed "nocase" in ntfs_show_options;
+- extend information on fails\errors;
+- small optimizations.
 
-We have the same issue with the .rodata section, which incorporates
-variables marked as __ro_after_init, which are not const qualified. So
-given that .rodata is already emitted as WA, and we cannot do anything
-about that, let's move the GOT in there.
+Fixed:
+- some logic errors;
+- some dead code was removed;
+- code is refactored and
+   reformatted according to the new version of clang-format.
 
+Removed:
+- noacsrules option. Currently, this option does not work properly.
+   Its use leads to unstable results. If we figure out how to implement it
+   without errors, we will add it later;
+- writepage.
 
-> +       /*
-> +        * Make sure that the .got.plt is either completely empty or it
-> +        * contains only the lazy dispatch entries.
-> +        */
-> +       .got.plt : { *(.got.plt) }
-> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> +              "Unexpected GOT/PLT entries detected!")
-> +
->         __initdata_begin = .;
->
->         init_idmap_pg_dir = .;
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
+Regards,
+
+Konstantin
+
+----------------------------------------------------------------
+
+The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
+
+    Linux 6.3-rc4 (Sun Mar 26 14:40:20 2023 -0700)
+
+are available in the Git repository at:
+
+https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_6.4
+
+for you to fetch changes up to 788ee1605c2e9feed39c3a749fb3e47c6e15c1b9:
+
+    fs/ntfs3: Fix root inode checking (Mon Feb 20 09:39:35 2023 +0400)
+
+----------------------------------------------------------------
+
+Abdun Nihaal (1):
+   fs/ntfs3: Fix NULL dereference in ni_write_inode
+
+Chen Zhongjin (1):
+   fs/ntfs3: Fix memory leak if ntfs_read_mft failed
+
+Daniel Pinto (1):
+   fs/ntfs3: Fix wrong cast in xattr.c
+
+Edward Lo (3):
+   fs/ntfs3: Enhance the attribute size check
+   fs/ntfs3: Validate MFT flags before replaying logs
+   fs/ntfs3: Add length check in indx_get_root
+
+Jia-Ju Bai (1):
+   fs/ntfs3: Fix a possible null-pointer dereference in ni_clear()
+
+Jiasheng Jiang (1):
+   fs/ntfs3: Add check for kmemdup
+
+Konstantin Komarov (17):
+   fs/ntfs3: Add null pointer checks
+   fs/ntfs3: Improved checking of attribute's name length
+   fs/ntfs3: Check for extremely large size of $AttrDef
+   fs/ntfs3: Restore overflow checking for attr size in mi_enum_attr
+   fs/ntfs3: Refactoring of various minor issues
+   fs/ntfs3: Use bh_read to simplify code
+   fs/ntfs3: Remove noacsrules
+   fs/ntfs3: Fix ntfs_create_inode()
+   fs/ntfs3: Optimization in ntfs_set_state()
+   fs/ntfs3: Undo endian changes
+   fs/ntfs3: Undo critial modificatins to keep directory consistency
+   fs/ntfs3: Remove field sbi->used.bitmap.set_tail
+   fs/ntfs3: Changed ntfs_get_acl() to use dentry
+   fs/ntfs3: Code formatting and refactoring
+   fs/ntfs3: Add missed "nocase" in ntfs_show_options
+   fs/ntfs3: Print details about mount fails
+   fs/ntfs3: Fix root inode checking
+
+Ye Bin (1):
+   fs/ntfs3: Fix NULL pointer dereference in 'ni_write_inode'
+
+Yu Zhe (1):
+   fs/ntfs3: fix spelling mistake "attibute" -> "attribute"
+
+Zeng Heng (1):
+   fs/ntfs3: Fix slab-out-of-bounds read in hdr_delete_de()
+
+ZhangPeng (2):
+   fs/ntfs3: Fix null-ptr-deref on inode->i_op in ntfs_lookup()
+   fs/ntfs3: Fix OOB read in indx_insert_into_buffer
+
+  Documentation/filesystems/ntfs3.rst |  11 -
+  fs/ntfs3/attrib.c                   |  17 +-
+  fs/ntfs3/bitmap.c                   |  25 +--
+  fs/ntfs3/file.c                     |  50 ++---
+  fs/ntfs3/frecord.c                  |  46 ++--
+  fs/ntfs3/fslog.c                    |  83 ++++----
+  fs/ntfs3/fsntfs.c                   |  84 ++++----
+  fs/ntfs3/index.c                    |  81 +++++---
+  fs/ntfs3/inode.c                    | 134 ++++++------
+  fs/ntfs3/lznt.c                     |  10 +-
+  fs/ntfs3/namei.c                    |  19 +-
+  fs/ntfs3/ntfs.h                     |   3 -
+  fs/ntfs3/ntfs_fs.h                  |  19 +-
+  fs/ntfs3/record.c                   |  15 +-
+  fs/ntfs3/run.c                      |   6 +-
+  fs/ntfs3/super.c                    | 312 ++++++++++++++++------------
+  fs/ntfs3/xattr.c                    |  70 +++----
+  17 files changed, 528 insertions(+), 457 deletions(-)
+
