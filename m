@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803C06F0FF8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F000F6F0FFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 03:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344774AbjD1BW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 21:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S1344770AbjD1BXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 21:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344763AbjD1BWz (ORCPT
+        with ESMTP id S1344775AbjD1BW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 21:22:55 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCDA268B;
-        Thu, 27 Apr 2023 18:22:54 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b4dfead1bso7620955b3a.3;
-        Thu, 27 Apr 2023 18:22:54 -0700 (PDT)
+        Thu, 27 Apr 2023 21:22:58 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8162230C2;
+        Thu, 27 Apr 2023 18:22:57 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b57c49c4cso7446444b3a.3;
+        Thu, 27 Apr 2023 18:22:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682644974; x=1685236974;
+        d=gmail.com; s=20221208; t=1682644977; x=1685236977;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kdkdWMzz4x4AGpzhwdT30VnSZxzFvaV1SAlbNT3S/jg=;
-        b=LfYdNA8CblMtZS0iQbgq+ciNyOoXTh6WTc/GHT7r7meQomt2JC4nsiGVbmApUOaoEO
-         ojfxEwlLnbbPObJ+hJs71/Hd4ncFVybg4y8viiNol4hVfky3AOH+yMxmvzgDbIB0MNW3
-         fr6kNrS2I0upyIlWDY2b47b42hTRY2PV2PgPaJG+J7wk77xTBtf+ztVbyhBDGkfqhlYz
-         3hEvn8416K4kWJ7pNtF1GIeeKN2ZLvJQxwVgzU10myjJe4BJlyRdJIXKTCMdaW8X4HO/
-         BDVpKbKbZk/xYeb4BwXOOmTfUUbl/S+SpE0WDbEsWg+leKOav+SrbDNlb0i+rwMsWRFi
-         8U+Q==
+        bh=5zPo3vtMu8f9pRkpyZdDPdmJ7m3I5ZhBmFy8wrhejWA=;
+        b=bloWPNWL2WYYT2JbzizlqbN2m6Qvtd0Ke1HlojmBG42JOMdRggtOs/uAkC93xGNJ5o
+         qVc4Ty1luIrjldDAWk4cvbKeENcv2V7iRuQ0YFgITNFGxRk1JsVdbUOwKLlnjrmTcfC+
+         NZyPDO7iciTiUDyVcX2/1lobGLIw3tYTeNsIxnBWPUsIcFBgNctZwJjFKA1hKwfBYalR
+         OKEMEEPZ4i91Xd99Sa6pMnVpwCnTNpNwUzC8XiEyiDA6CnBVFplC/0aNtgpDxWx1U/uQ
+         iv3zrthDC+3SUaypUzRUoXmIgNxuujzy64d6llsdGBJH/ZvpzALIbBqNl+Eh0KExbxjH
+         NHBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682644974; x=1685236974;
+        d=1e100.net; s=20221208; t=1682644977; x=1685236977;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kdkdWMzz4x4AGpzhwdT30VnSZxzFvaV1SAlbNT3S/jg=;
-        b=XMZng56SW/7HFgvN902t4UPa4Dw4OcH72bgepVu3Po7/ZTDU7O/Je6vZ8B05HT7exl
-         HXSr4OZQaw5DnbtRu6iqs9OhYtYHPrWW1poFokEUrKCmmcw2BrZDL8iEXZOOi8gO7MPY
-         hCJCaEWidywOYyhbuauv3T3wW3lYHN3E+6oYZBBrWhqXtk4CwTV5YH+CCyX4uI2dbnTF
-         KGg2j6YuP2MEpLFVxZA6C79BIUctOKqYbwGy2dAVJZe3Xc5q/+083hWURmkyFT4eqDwu
-         /R3VmahYz+66/99aUltvAoViyvKzIjAR7f46lHm9PB13/y7qTh/23rCfw5fMe+0IntQp
-         1xjw==
-X-Gm-Message-State: AC+VfDwpHIJYL8CBv7SjGhjCIsKYJt8z3KBwy+uxY2pFRiCLelG/r0cC
-        jkoUh96bfD6G44qVZKSgh1bLLA+g93k=
-X-Google-Smtp-Source: ACHHUZ7wQr1xrqxcC+U3d2L06hi99usqbCx683bnGeXVTdABG6TR324p2D2X8nO+JsZx2o4HTVFLiw==
-X-Received: by 2002:a05:6a00:1885:b0:63d:6984:7a93 with SMTP id x5-20020a056a00188500b0063d69847a93mr5085394pfh.30.1682644973849;
-        Thu, 27 Apr 2023 18:22:53 -0700 (PDT)
+        bh=5zPo3vtMu8f9pRkpyZdDPdmJ7m3I5ZhBmFy8wrhejWA=;
+        b=ZBeyA0rke8E8j8EueiJfIh5G7PhZPrRRuaE7OtkyLbRX5x9Ku2j5BY4wTbhNnwaABj
+         4Du8gNQJEm7Y3r0LfKjSSQ737az+pEHxVt4UQxPAFcyetmbKQ7DFMnN3IWXviIIYNWq2
+         0pj0yCNy1vGGMqL4DrxOek+nkvhHZXPr6Ygw8H7IMKKHzj0gLwbtOT0iHwefAR8qJvVi
+         VCDdIR8tKpzJ+BHDih7CI7Jx1tFmE21T5TsbSq9COMsES05mVpODkrYLlkOXbGRwNQgH
+         t5hZ93P7qh5fKm7J1wpb4Q+RUoz9GmM8sPM+e3ddfEGIFLFw+BtB0dqIvlS3rCsXbERf
+         zFaQ==
+X-Gm-Message-State: AC+VfDwN/7PzwE9ZVHbNE7bs+GZlAMMClh2yLkShSgESeOyvqg3upeyt
+        KLs7RORW571iOyKqW/EysgLxksT89Z8=
+X-Google-Smtp-Source: ACHHUZ58YMBqiiH9YEm20upJJ+JKT83z4JlmEmoYdJdm7NvC/CEYfKav8pqaX6JoB5RL+IShe7f0Hg==
+X-Received: by 2002:a05:6a00:cd3:b0:63b:6d60:9a02 with SMTP id b19-20020a056a000cd300b0063b6d609a02mr5108437pfv.34.1682644976806;
+        Thu, 27 Apr 2023 18:22:56 -0700 (PDT)
 Received: from cxl-test.. ([103.181.222.211])
-        by smtp.gmail.com with ESMTPSA id t65-20020a628144000000b0063b8b8580a7sm13691356pfd.29.2023.04.27.18.22.51
+        by smtp.gmail.com with ESMTPSA id t65-20020a628144000000b0063b8b8580a7sm13691356pfd.29.2023.04.27.18.22.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 18:22:53 -0700 (PDT)
+        Thu, 27 Apr 2023 18:22:56 -0700 (PDT)
 From:   Raghu H <raghuhack78@gmail.com>
 To:     linux-cxl@vger.kernel.org,
         Alison Schofield <alison.schofield@intel.com>,
         raghuhack78@gmail.com, ira.weiny@intel.com, bwidawsk@kernel.org,
         dan.j.williams@intel.com, vishal.l.verma@intel.com
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed mem alloc
-Date:   Fri, 28 Apr 2023 01:22:34 +0000
-Message-Id: <20230428012235.119333-2-raghuhack78@gmail.com>
+Subject: [PATCH v2 2/2] cxl/region: Remove else after return statement
+Date:   Fri, 28 Apr 2023 01:22:35 +0000
+Message-Id: <20230428012235.119333-3-raghuhack78@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230428012235.119333-1-raghuhack78@gmail.com>
 References: <20230428012235.119333-1-raghuhack78@gmail.com>
@@ -76,30 +76,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Issue found with checkpatch
 
-A return of errno should be good enough if the memory allocation fails,
-the error message here is redundatant as per the coding style, removing it.
+The else section here is redundant after return statement, removing it.
+Sanity and correctness is not affected due to this fix.
 
 Signed-off-by: Raghu H <raghuhack78@gmail.com>
 ---
- drivers/cxl/core/mbox.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/cxl/core/region.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-index f2addb457172..11ea145b4b1f 100644
---- a/drivers/cxl/core/mbox.c
-+++ b/drivers/cxl/core/mbox.c
-@@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
- 	struct cxl_dev_state *cxlds;
+diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+index f29028148806..a46d6ad9ef0a 100644
+--- a/drivers/cxl/core/region.c
++++ b/drivers/cxl/core/region.c
+@@ -2666,11 +2666,11 @@ static int cxl_region_invalidate_memregion(struct cxl_region *cxlr)
+ 				"Bypassing cpu_cache_invalidate_memregion() for testing!\n");
+ 			clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
+ 			return 0;
+-		} else {
+-			dev_err(&cxlr->dev,
+-				"Failed to synchronize CPU cache state\n");
+-			return -ENXIO;
+ 		}
++
++		dev_err(&cxlr->dev,
++			"Failed to synchronize CPU cache state\n");
++		return -ENXIO;
+ 	}
  
- 	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
--	if (!cxlds) {
--		dev_err(dev, "No memory available\n");
-+	if (!cxlds)
- 		return ERR_PTR(-ENOMEM);
--	}
- 
- 	mutex_init(&cxlds->mbox_mutex);
- 	mutex_init(&cxlds->event.log_lock);
+ 	cpu_cache_invalidate_memregion(IORES_DESC_CXL);
 -- 
 2.39.2
 
