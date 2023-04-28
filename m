@@ -2,146 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DC46F1FAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1475C6F1FB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 22:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346755AbjD1UwQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Apr 2023 16:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S1346753AbjD1Uxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 16:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345610AbjD1UwN (ORCPT
+        with ESMTP id S1345610AbjD1Uxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 16:52:13 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB94C27
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:52:07 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-32ad2e6cf31so2324595ab.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 13:52:07 -0700 (PDT)
+        Fri, 28 Apr 2023 16:53:45 -0400
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14AF1719;
+        Fri, 28 Apr 2023 13:53:43 -0700 (PDT)
+Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-76dae081228so157133241.2;
+        Fri, 28 Apr 2023 13:53:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682715223; x=1685307223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
+        b=H7ejqF0RJ8HO9k7UgwEUKBPHQSgxcDlr/xgGbySmFBJfc7ChK3pRNPbBX9fC2E+Rkf
+         e6fcW1/saGQbRiFSZz8b5VHp4i07vnC9gqt/qE9DFsTwD8v0cBzKYHTp3/mLTr6CHbNO
+         rL8KnMqahFyapQXK48UzpDTILsnyJ/KmE6kHKMTBMdTu1ELDLIdFbqawdATU1hfNXBTQ
+         eGX1YN1RLbvnQnF8gaekFxMo1LQNvieeIEkWepQN0dH3OhvLN/GlUCfiRtC4ntPPV6WU
+         gdSIqqCTYXekgtXCV6RNxE+N6gdQR1fXyNGDB1Dj6qEw+c6v1k/Bf1NxEuikJW5wTYRL
+         dHoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682715126; x=1685307126;
-        h=content-transfer-encoding:to:from:subject:message-id:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E/NjsPVieb2u9eUzuZNastdbtfq80Ol69PxzBP/f3iY=;
-        b=cgJ7/BrWjCzKq+mZdI1DWdUhtSWcjzbgkLMRoT7STTpeodgsBLn2Uqs6omdCNrBe3N
-         MdeVeA8mzYuRujHgoayppCEhW/nkwK40yDJ2UVmTH99pVWdxKGhGMS3pW4BGSQfa10yN
-         FoMSNCS6ckfvyVJRy9SSmP7enMGwdTypsyxKW6vDfx+1ROOYSTyyfFnYh8pgxh+3UMke
-         dGNkk0IygiSoRGqyjeiwRFeKlx2CsVQWPmUBFKkbMdYFgp9fmrmrg3j3lZtiyKW8rZdX
-         w1deIfhBRVaP9pXLCGl91R7Ci8c/oTZLdVNr4Av1Yq3kBtOKX15dvw3cmLgMljiZiFA4
-         1Qkg==
-X-Gm-Message-State: AC+VfDwSWEfh2ItL7VzDuj3XV5DDpAT+Cg8hiIi8cmQQfRI/KvyBdL8h
-        ty8iDfXISnmmI1NnPBGY2V8nE/ybVL2dL9d6R6Mi2nY6uDNReB8=
-X-Google-Smtp-Source: ACHHUZ5eoKCTQxu3wUQS8+sKsnRUYLXHc20NPPcCZ+6dRXTx1LY5e4bCPfJfAXRWILIkUzgGVhFC0JWB1ppLbRZvSq5Tyj4uAhJ+
+        d=1e100.net; s=20221208; t=1682715223; x=1685307223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JRYO52blVuIjsOSLyVlbkequxT+e3yW4z+4sA1lzj5A=;
+        b=Vo+9hTSLaJKLLVGOLPIok8AuGVuMvlpE0frFhpvj3kOCXL60w5SPAIsTzzxFXB6LXW
+         OtbTVYOJJMkMTJYGErtwcVfRjIT9w6YcsKIFL5Pnh7+8J5rmqunnO7hJ9qTzfNDd+q8w
+         RLZOMkxA7tKS3wwrhFtp/qi9VLKEViBcNAhigIpVReRkNFfIVKVp6Ag59YFllGm3Bwd3
+         5Qbrvfndj5ppUvN3SBPhHfdD9M4EmVnS32aoTfp68LUtgstzX2tHr2yyMK9ORhX++je9
+         T45lgSjK9/EjjxgQ1Mf7eNE3TgBbyxyRrpgyRsFuNnehl43de4lUNjJYY4tLOHJn5d5k
+         GFIg==
+X-Gm-Message-State: AC+VfDyaLpuwTGJzRHc+m8W+Z+D8V8kVYfzu4iywMP0JT/sZrrb5TQUf
+        77vr3hOFsNHM4a89zy9nySgHcfjv1AczDdTHqeA=
+X-Google-Smtp-Source: ACHHUZ5dtyhB7wkfx17vKwIAdsNhr1LLTqVEcPSLcN60jFiC6cARjWzhVpel3Qnfv1+NnkX+H+VZ1lJMZ57FK7zzUio=
+X-Received: by 2002:a1f:41c9:0:b0:43f:ec5d:51e1 with SMTP id
+ o192-20020a1f41c9000000b0043fec5d51e1mr3235818vka.9.1682715222835; Fri, 28
+ Apr 2023 13:53:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:964c:0:b0:40f:ae69:a144 with SMTP id
- c70-20020a02964c000000b0040fae69a144mr2975216jai.5.1682715126045; Fri, 28 Apr
- 2023 13:52:06 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 13:52:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000058a08405fa6ba52a@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in corrupted
-From:   syzbot <syzbot+0f3348b0cb4da6b6072d@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230428105453.110254-1-jpanis@baylibre.com> <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
+In-Reply-To: <CAOCHtYgKfJ4cXULvs8YrJ6+-UnrbBWQgXL+d6OMHOOexuj4uiQ@mail.gmail.com>
+From:   Robert Nelson <robertcnelson@gmail.com>
+Date:   Fri, 28 Apr 2023 15:53:16 -0500
+Message-ID: <CAOCHtYgreXmtcuRDRu3UWRhPJ0-k2E+3YYhxp_AaPf-sObuR1Q@mail.gmail.com>
+Subject: Re: [PATCH] arm: dts: Add am335x-boneblack-pps.dts
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     arnd@arndb.de, olof@lixom.net, soc@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tony@atomide.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Apr 28, 2023 at 9:44=E2=80=AFAM Robert Nelson <robertcnelson@gmail.=
+com> wrote:
+>
+> On Fri, Apr 28, 2023 at 6:00=E2=80=AFAM Julien Panis <jpanis@baylibre.com=
+> wrote:
+> >
+> > From: Lokesh Vutla <lokeshvutla@ti.com>
+> >
+> > Add a new am335x-boneblack-pps.dts that can be used to configure TIMER7
+> > in PWM mode. This PWM signal can be used as a PPS signal when
+> > synchronized to PTP clock. Typically this synchronization is done by a
+> > userspace program. This PPS signal can be observed on pin P8.8.
+> >
+> > Signed-off-by: Lokesh Vutla <lokeshvutla@ti.com>
+> > Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> > Signed-off-by: Adrien Ricciardi <aricciardi@baylibre.com>
+> > Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> > ---
+> >  arch/arm/boot/dts/Makefile                 |  1 +
+> >  arch/arm/boot/dts/am335x-boneblack-pps.dts | 25 ++++++++++++++++++++++
+> >  2 files changed, 26 insertions(+)
+> >  create mode 100644 arch/arm/boot/dts/am335x-boneblack-pps.dts
+> >
+> > diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> > index efe4152e5846..d74158aae72d 100644
+> > --- a/arch/arm/boot/dts/Makefile
+> > +++ b/arch/arm/boot/dts/Makefile
+> > @@ -939,6 +939,7 @@ dtb-$(CONFIG_SOC_AM33XX) +=3D \
+> >         am335x-base0033.dtb \
+> >         am335x-bone.dtb \
+> >         am335x-boneblack.dtb \
+> > +       am335x-boneblack-pps.dtb \
+> >         am335x-boneblack-wireless.dtb \
+> >         am335x-boneblue.dtb \
+> >         am335x-bonegreen.dtb \
+> > diff --git a/arch/arm/boot/dts/am335x-boneblack-pps.dts b/arch/arm/boot=
+/dts/am335x-boneblack-pps.dts
+> > new file mode 100644
+> > index 000000000000..88d2bc3fd759
+> > --- /dev/null
+> > +++ b/arch/arm/boot/dts/am335x-boneblack-pps.dts
+> > @@ -0,0 +1,25 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Texas Instruments Incorporated - http://www.ti.c=
+om/
+> > + */
+> > +
+> > +#include "am335x-boneblack.dts"
+> > +
+> > +&am33xx_pinmux {
+> > +       pwm7_pins: pinmux_pwm7_pins {
+> > +               pinctrl-single,pins =3D <
+> > +                       AM33XX_PADCONF(AM335X_PIN_GPMC_OEN_REN, PIN_OUT=
+PUT_PULLDOWN, MUX_MODE2)
+> > +               >;
+> > +       };
+> > +};
+> > +
+> > +/{
+> > +       pwm7: dmtimer-pwm7 {
+> > +               compatible =3D "ti,omap-dmtimer-pwm";
+> > +               pinctrl-names =3D "default";
+> > +               pinctrl-0 =3D <&pwm7_pins>;
+> > +               #pwm-cells =3D <3>;
+> > +               ti,timers =3D <&timer7>;
+> > +               ti,clock-source =3D <0x00>; /* timer_sys_ck */
+> > +       };
+> > +};
+>
+> I know this commit is pretty small, but mainline now has overlay support:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D0fff0e49d72a53c51d8903fbadb2e6a84e531c4a
+>
+> At what point do we finally merge in the many dozen *BeagleBone*
+> overlays, or do we still wait for :
+> https://lore.kernel.org/lkml/20220328000915.15041-1-ansuelsmth@gmail.com/
 
-syzbot found the following issue on:
+OH SIde note, #2... thanks @Nishanth Menon !
 
-HEAD commit:    22b8cc3e78f5 Merge tag 'x86_mm_for_6.4' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11fa5010280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1af34c4cafb72074
-dashboard link: https://syzkaller.appspot.com/bug?extid=0f3348b0cb4da6b6072d
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+We do have this example:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D8e01fb15b8157a825d309ea2598b494dd81a7b42
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0f3348b0cb4da6b6072d@syzkaller.appspotmail.com
+So instead of `am335x-boneblack-pps.dtb` it could be: ....
+am335x-bone-dmtimer-pwm7.dtbo or even am335x-dmtimer-pwm7.dtbo ?
 
-Movable zone start for each node
-Early memory node ranges
-  node   0: [mem 0x0000000080000000-0x00000000ffffffff]
-Initmem setup node 0 [mem 0x0000000080000000-0x00000000ffffffff]
-percpu: Embedded 19 pages/cpu s47048 r8192 d22584 u77824
-Kernel command line: root=/dev/vda console=ttyAMA0  earlyprintk=serial net.ifnames=0 sysctl.kernel.hung_task_all_cpu_backtrace=1 ima_policy=tcb nf-conntrack-ftp.ports=20000 nf-conntrack-tftp.ports=20000 nf-conntrack-sip.ports=20000 nf-conntrack-irc.ports=20000 nf-conntrack-sane.ports=20000 binder.debug_mask=0 rcupdate.rcu_expedited=1 rcupdate.rcu_cpu_stall_cputime=1 no_hash_pointers page_owner=on sysctl.vm.nr_hugepages=4 sysctl.vm.nr_overcommit_hugepages=4 secretmem.enable=1 sysctl.max_rcu_stall_to_panic=1 msr.allow_writes=off coredump_filter=0xffff root=/dev/vda console=ttyAMA0 vmalloc=512M smp.csd_lock_timeout=300000 watchdog_thresh=165 workqueue.watchdog_thresh=420 sysctl.net.core.netdev_unregister_timeout_secs=420 dummy_hcd.num=2 panic_on_warn=1
-Unknown kernel command line parameters "earlyprintk=serial page_owner=on", will be passed to user space.
-Dentry cache hash table entries: 262144 (order: 8, 1048576 bytes, linear)
-Inode-cache hash table entries: 131072 (order: 7, 524288 bytes, linear)
-Built 1 zonelists, mobility grouping on.  Total pages: 520868
-allocated 2097152 bytes of page_ext
-mem auto-init: stack:off, heap alloc:on, heap free:off
-software IO TLB: area num 2.
-software IO TLB: mapped [mem 0x00000000d9a47000-0x00000000dda47000] (64MB)
-Memory: 1954368K/2097152K available (22528K kernel code, 2361K rwdata, 8400K rodata, 2048K init, 867K bss, 126400K reserved, 16384K cma-reserved, 524288K highmem)
-SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
-trace event string verifier disabled
-rcu: Preemptible hierarchical RCU implementation.
-rcu: 	RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=2.
-rcu: 	RCU callback double-/use-after-free debug is enabled.
-	All grace periods are expedited (rcu_expedited).
-	Trampoline variant of Tasks RCU enabled.
-	Tracing variant of Tasks RCU enabled.
-rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
-NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-GIC physical location is 0x2c001000
-rcu: srcu_init: Setting srcu_struct sizes based on contention.
-sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
-clocksource: arm,sp804: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 1911260446275 ns
-arch_timer: cp15 timer(s) running at 62.50MHz (virt).
-clocksource: arch_sys_counter: mask: 0x1ffffffffffffff max_cycles: 0x1cd42e208c, max_idle_ns: 881590405314 ns
-sched_clock: 57 bits at 63MHz, resolution 16ns, wraps every 4398046511096ns
-Switching to timer-based delay loop, resolution 16ns
-Console: colour dummy device 80x30
-Calibrating delay loop (skipped), value calculated using timer frequency.. 125.00 BogoMIPS (lpj=625000)
-pid_max: default: 32768 minimum: 301
-LSM: initializing lsm=lockdown,capability,landlock,yama,safesetid,tomoyo,selinux,bpf,integrity
-landlock: Up and running.
-Yama: becoming mindful.
-TOMOYO Linux initialized
-SELinux:  Initializing.
-LSM support for eBPF active
-stackdepot: allocating hash table of 131072 entries via kvcalloc
-Mount-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-Mountpoint-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-CPU: Testing write buffer coherency: ok
-CPU0: Spectre BHB: enabling loop workaround for all CPUs
-CPU1: thread -1, cpu 1, socket 0, mpidr 80000001
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000206 when execute
-[00000206] *pgd=80000080004003, *pmd=00000000
+Thoughts?
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--=20
+Robert Nelson
+https://rcn-ee.com/
