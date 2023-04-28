@@ -2,129 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F7B6F18E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1126F1903
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346160AbjD1NJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        id S1346172AbjD1NMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346153AbjD1NJ3 (ORCPT
+        with ESMTP id S1346130AbjD1NL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:09:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AC2268E;
-        Fri, 28 Apr 2023 06:09:23 -0700 (PDT)
+        Fri, 28 Apr 2023 09:11:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D09959E4;
+        Fri, 28 Apr 2023 06:11:28 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 83835200A3;
-        Fri, 28 Apr 2023 13:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1682687362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C2B4521F7C;
+        Fri, 28 Apr 2023 13:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682687458; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JWfxAcfk/xVe6NFhNb6c7XGdn22Dp0roG4qf31nBwCA=;
-        b=xmn9HCmoZfh4/VC1asnLv3Xy9BXzI5lda9aeKwUxeZNjxGCaJ/gRRxZEt8dD6AaIXsE8bi
-        4OqBThhKXperIxTCcs8JuF/LtyuuqOhHBNgd5KnR2cjWD6TFr33DWFBjVaB+fkPXFWcEmx
-        LfCjWWuZt+ueIV68Y964o9fj4fqEhJE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1682687362;
+        bh=FRqrMM19p3HeUciJL3I7cDdZrio595+aLz1J7KWfSA0=;
+        b=ZPs7qKes2T1eM8QLZc4CBCc9IEZJpUBytScxV/o9Bh+rEAs67iN0DU5yVo7hbKa9QTOv9C
+        mK9UA2fpsV9/fE5LE9veGn7yCrV7IaFCxUpWwuy3SmkM3OCqiVq6NQUWULZn/USK1C9jXI
+        FmG26ubpmb55xF+alDKjaZ+FFr28Xy0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682687458;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=JWfxAcfk/xVe6NFhNb6c7XGdn22Dp0roG4qf31nBwCA=;
-        b=7bVqPaLqtIgJb804rnmb3quZr++WOREcf7UFUizDZEO6tVHDlRJcur4c7nmZK3aUV91/iP
-        25F5Y8neblKRAFBg==
+        bh=FRqrMM19p3HeUciJL3I7cDdZrio595+aLz1J7KWfSA0=;
+        b=i8YJ+nJI6i6artOXs3jnB9Wd77oBrGUmtkYzoZ/Bvc3CbhbnzduEnZIED+jMtqxj6ajFPE
+        A0fsZO0Bs1ztTdDQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76097138FA;
-        Fri, 28 Apr 2023 13:09:22 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F99A138FA;
+        Fri, 28 Apr 2023 13:10:58 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id QbDHHILFS2SREgAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 28 Apr 2023 13:09:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id B611FA0729; Fri, 28 Apr 2023 15:09:21 +0200 (CEST)
-Date:   Fri, 28 Apr 2023 15:09:21 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@fb.com>, Tejun Heo <tj@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] writeback: fix call of incorrect macro
-Message-ID: <20230428130921.dgtldfqqsmpke47l@quack3>
-References: <20230119104443.3002-1-korotkov.maxim.s@gmail.com>
- <20230126135258.zpvyfxc2ffhzzsnx@quack3>
- <df995d93-4b31-fa61-a7ae-db33fd058412@gmail.com>
+        id Lth9EeLFS2R/EwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 28 Apr 2023 13:10:58 +0000
+Message-ID: <b9a67217-4665-0d31-378d-ade1d50fe5f1@suse.de>
+Date:   Fri, 28 Apr 2023 15:10:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <df995d93-4b31-fa61-a7ae-db33fd058412@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
+ functions
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        James.Bottomley@hansenpartnership.com, sparclinux@vger.kernel.org,
+        kernel@xen0n.name, sam@ravnborg.org, linux-arch@vger.kernel.org,
+        deller@gmx.de, chenhuacai@kernel.org, javierm@redhat.com,
+        vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
+        arnd@arndb.de, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net
+References: <20230428092711.406-1-tzimmermann@suse.de>
+ <20230428092711.406-6-tzimmermann@suse.de>
+ <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
+ <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------DtzGj0U2BDprAWf4ov3bjWMb"
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------DtzGj0U2BDprAWf4ov3bjWMb
+Content-Type: multipart/mixed; boundary="------------QqwzqE2k5QMQXDVM2QKm13co";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ Robin Murphy <robin.murphy@arm.com>
+Cc: linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, James.Bottomley@hansenpartnership.com,
+ sparclinux@vger.kernel.org, kernel@xen0n.name, sam@ravnborg.org,
+ linux-arch@vger.kernel.org, deller@gmx.de, chenhuacai@kernel.org,
+ javierm@redhat.com, vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
+ arnd@arndb.de, linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net
+Message-ID: <b9a67217-4665-0d31-378d-ade1d50fe5f1@suse.de>
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
+ functions
+References: <20230428092711.406-1-tzimmermann@suse.de>
+ <20230428092711.406-6-tzimmermann@suse.de>
+ <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
+ <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+In-Reply-To: <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
 
-Jens, can you please pickup this patch? It has fallen through the cracks.
-Usually you tend to be picking up cgroup writeback stuff. Thanks!
+--------------QqwzqE2k5QMQXDVM2QKm13co
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-								Honza
+SGkNCg0KQW0gMjguMDQuMjMgdW0gMTQ6Mjcgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
+DQpbLi4uXQ0KPiANCj4gSW4gYWRkaXRpb24sIHRoZSBub24tcmF3IHZhcmlhbnRzIG1heSBk
+byBzb21lIGV4dHJhcyB0byBndWFyYW50ZWUNCj4gb3JkZXJpbmcsIHdoaWNoIHlvdSBkbyBu
+b3QgbmVlZCBvbiBhIGZyYW1lIGJ1ZmZlci4NCg0KR2l2ZW4gdGhpcyBjb21tZW50LCBzaG91
+bGQgd2UgZGVjbGFyZSB0aGUgZmJfKCkgaGVscGVycyBpbiANCjxhc20tZ2VuZXJpYy9pby5o
+PiBvciA8bGludXgvaW8uaD4/DQoNCkkgc3RpbGwgZG9uJ3QgbGlrZSB0aGUgaWRlYSBvZiBo
+YXZpbmcgdGhlIGZ1bmN0aW9ucyBpbiA8bGludXgvZmIuaD4uIFdlIA0KaGF2ZSBjb2RlIGlu
+IERSTSB0aGF0IGFsc28gYWNjZXNzZXMgZnJhbWVidWZmZXIgbWVtb3J5ICh2aWEgDQptZW1j
+cHlfdG9pbygpKS4gSXQgd291bGQgbWFrZSBzZW5zZSB0byB1c2UgdGhlIGZiXygpIGhlbHBl
+cnMsIGlmIHRoZXkgDQphcmUgdGFpbG9yZWQgdG93YXJkcyB0aGlzIHVzZWNhc2UuDQoNCkJl
+c3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFNvIEknZCBnbyBmb3IgdGhlIF9fcmF3Xyoo
+KSB2YXJpYW50cyBldmVyeXdoZXJlLg0KPiANCj4gR3J7b2V0amUsZWV0aW5nfXMsDQo+IA0K
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgR2VlcnQNCj4gDQoNCi0tIA0KVGhvbWFzIFpp
+bW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29s
+dXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJl
+cmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9u
+YWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
 
-On Wed 12-04-23 17:31:03, Maxim Korotkov wrote:
-> Hi,
-> Will this patch be applied or rejected?
-> best regards, Max
-> 
-> On 26.01.2023 16:52, Jan Kara wrote:
-> > On Thu 19-01-23 13:44:43, Maxim Korotkov wrote:
-> > >   the variable 'history' is of type u16, it may be an error
-> > >   that the hweight32 macro was used for it
-> > >   I guess macro hweight16 should be used
-> > > 
-> > > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > > 
-> > > Fixes: 2a81490811d0 ("writeback: implement foreign cgroup inode detection")
-> > > Signed-off-by: Maxim Korotkov <korotkov.maxim.s@gmail.com>
-> > 
-> > Looks good to me, although it is mostly a theoretical issue - I don't see
-> > how hweight32 could do any harm here. Anyway, feel free to add:
-> > 
-> > Reviewed-by: Jan Kara <jack@suse.cz>
-> > 
-> > 								Honza
-> > 
-> > > ---
-> > >   fs/fs-writeback.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> > > index 6fba5a52127b..fc16123b2405 100644
-> > > --- a/fs/fs-writeback.c
-> > > +++ b/fs/fs-writeback.c
-> > > @@ -829,7 +829,7 @@ void wbc_detach_inode(struct writeback_control *wbc)
-> > >   		 * is okay.  The main goal is avoiding keeping an inode on
-> > >   		 * the wrong wb for an extended period of time.
-> > >   		 */
-> > > -		if (hweight32(history) > WB_FRN_HIST_THR_SLOTS)
-> > > +		if (hweight16(history) > WB_FRN_HIST_THR_SLOTS)
-> > >   			inode_switch_wbs(inode, max_id);
-> > >   	}
-> > > -- 
-> > > 2.37.2
-> > > 
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+--------------QqwzqE2k5QMQXDVM2QKm13co--
+
+--------------DtzGj0U2BDprAWf4ov3bjWMb
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRLxeEFAwAAAAAACgkQlh/E3EQov+BG
+IxAArW6Y0YDQCNr1aySTx/07IbAHS0y+vhIgCiTpfq5oowyVudzNjdBxnedCiRjYWsZfBCjMsdfr
+SxG+xgQzdSfWxn5NIwDqE0oEckroWqzuCJYMPzjc8Y1+bJnGiNzVRI12YWtNY0GpaCjcKmUE75ex
+6c6loZmjjSiohO5mMQbUKZ2H9VchlqkPVkvuCZb5CdwzMgrMkfcfq9almxX7WdOigfXMpbg2Fk7p
+WudCvuFuCIVRRrLIsCowogRjWVN0SL7GwJUN/rHec1FCkBipWrUazGk7oTPG1AXrpOXBSSj6mRCn
+H2jj7DsWTgPHaHBBLJelQDwgN3qjA94odDVKgKWGQoncs0+x5pEhkhn1HsOdBNPq6/KpozQPMoGz
+QmooLt+AuV98nZyhlHWOxudGcY7/M1ERukgQLYzRVlHeaeQaQb+wbCBkV7Tm8ih99q64LpVwaSS/
+Nfv/k/Zfq4yu4mQv24CdUqjlH1aA/XGzlmXlAgEiPpAfAUHgHy3Yoo+tZDtA837yssImYcvhwr2y
+0cz3duc61je5Odls9Q9CS1szkJkhFpy9ctg0FrXQbv0IivBLnoxJiK7iES2y0NhXxUK/L9o+L/zc
+FEc2JYYMJyNIGFM5dtmBMo6kmUoE5FbGeuwX6Ao4p2q/IoYK7MQ29bcKMRx28VoSCpPON+jpQ95S
+M4s=
+=GGjv
+-----END PGP SIGNATURE-----
+
+--------------DtzGj0U2BDprAWf4ov3bjWMb--
