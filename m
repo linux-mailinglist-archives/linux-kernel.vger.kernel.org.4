@@ -2,226 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92766F1E94
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CA76F1EA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 21:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbjD1TLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 15:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S1346225AbjD1TQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 15:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjD1TLc (ORCPT
+        with ESMTP id S229862AbjD1TP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 15:11:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F19E9
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:11:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6373761A14
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 19:11:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA0EC433D2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 19:11:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682709090;
-        bh=Fn0wHdSUaUY6z2W/CYrjzC+4DwMPs13cWXwfDOygrc0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nYd/4Amu/Jss/rWEg5F927+9DBJ33MqH6g03WGgEoUGsk4knKkPxopZYLGWwwazR8
-         iV6K5HMm+hm3ZciHIX2U+ykpLsEU10YahJ8SdyFs668mEUZpLyDBZ2uxHbJJ1H2wMp
-         6pHHhmapcqe0GdpOSsq+9AW2FN2hUD9b93/e82/+AGkdPEsNgcjJ9SfJKUtGnsfvCC
-         a43MF/TqdGM3Q11cIFazvIOJwFLj5gN25WqB3GjL0CjIGtBmH66v6zYmq4isOT2C0G
-         BJC4pZxOSl3+zOwoMs0XiYOTD5wPSBb6/1CTkd471yvSql7WQq1DSqed7aRjGMhv6b
-         ihmifN96w9TXw==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4edcc885d8fso307835e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:11:30 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyvuieSCt4l2mLAOOb6z66KlDKpXIK3YMmdCiv71AqAHum0S/gR
-        WTPs7SPiDWRKwf/9swKX+fG2tQsUM11Ju2uMouM=
-X-Google-Smtp-Source: ACHHUZ6gc4m+zw4z92rYhyV0RIDeQJ5qISydofoy9raQbrEuYMH5PL1Tl/uHJxRhg3RHZMrJwUBfg+qTxf9rGr3bFdQ=
-X-Received: by 2002:a05:6512:38cc:b0:4ed:c76b:6aaf with SMTP id
- p12-20020a05651238cc00b004edc76b6aafmr1574821lft.56.1682709088789; Fri, 28
- Apr 2023 12:11:28 -0700 (PDT)
+        Fri, 28 Apr 2023 15:15:59 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A82126A6;
+        Fri, 28 Apr 2023 12:15:56 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9d87dffadfso58930276.3;
+        Fri, 28 Apr 2023 12:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682709355; x=1685301355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tat8phzj3dH3eTznCo+ElpRNyVEo+jl2/PvFuCvuY5E=;
+        b=smC3hGwPmnBKSDbiWk5UMKclZegGbmzc6a6zT3GvwMIPNa5IuHdxfl1TPjBtLKFwfo
+         yVpHsu8re+QnHIPj3air+5KJfZa6dYZY0OKkmOnBV9CdWHrK/ZINRInfoZIILQ3yMJOm
+         CzMjimvdsK0eCKbqLyzI9b/AU6dQUrKDpsAKFGylx5QTwaIobaV7s9khdFFRGT+Lmipz
+         Y/iQ6AWB7Ae1eTHoAGIhJ6zqqet+aGo8mvTz1OKWPUCP/Yg++1H+RYy4xzgo/jQzhsmP
+         lfRMQnEeojsXuwHI4LbtNkxuDveGElOnY2xSCSmFtLStXtZWR3XaGCrZqkDABUJ7f2Q2
+         KRpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682709355; x=1685301355;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tat8phzj3dH3eTznCo+ElpRNyVEo+jl2/PvFuCvuY5E=;
+        b=F1ULzBP7tHk3E2UdCDd6gCa3MrfmNA5/OM04MDm83U33n+YdRh2lUNGQIzqkFSlYMM
+         s8QwoQWIS2n3WBiz3LPafPJt/+8xmDCJMkwkBdpjF6UHpRmcZGLuOYqTKFOhvEDQAszT
+         KjnZY844wuN/SyV6xFAMvtk8pAupysYSYjU+lpsn6JZI82hoAC/+C5i3qBy/32fxGkuj
+         Jt/mtS5PN8/Hg8NzHtKbI006TZSMTWrjEbAaA4sJZsOEL9p+EK8HWJG9TJtxEMJgwkif
+         3OORvQggN2+qbVNk6FhsMPNyn1cR8cq6BV5DPPVLR54euzNM91my9pbsBi2ou5uPzhJr
+         sfJw==
+X-Gm-Message-State: AC+VfDxaF12OoQB48ZHfKhEYd5JAILoyoB+FNM9fICUwX6vfLb8xMsOd
+        oeT4uQO+0sVXWk+SEs8npmeNQh6R9tjY+clbbPo=
+X-Google-Smtp-Source: ACHHUZ6UFKCoOr8/ayyLcJW3Syhh0NLJYpMAf/HjNXa6xKbxKEUmPKPEeL8k97o8DdMBQS/VvcunTl8y4N/LMhkrwGw=
+X-Received: by 2002:a81:87c4:0:b0:54f:9cd0:990 with SMTP id
+ x187-20020a8187c4000000b0054f9cd00990mr4552114ywf.18.1682709355642; Fri, 28
+ Apr 2023 12:15:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230428050442.180913-1-maskray@google.com> <CAMj1kXGpbKgS8mNxVuAyPvT-vW0LWZOXgqsy5TvKhzJRs_rHkA@mail.gmail.com>
- <20230428185814.mmnb3jafp7fnwdrh@google.com>
-In-Reply-To: <20230428185814.mmnb3jafp7fnwdrh@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 28 Apr 2023 20:11:17 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFgv6GHm5PvR9Qq9-VwL+5NXwpChkB59c-0-tEJPNYdVQ@mail.gmail.com>
-Message-ID: <CAMj1kXFgv6GHm5PvR9Qq9-VwL+5NXwpChkB59c-0-tEJPNYdVQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64: lds: move .got section out of .text
-To:     Fangrui Song <maskray@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bill Wendling <morbo@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
+References: <20230426184420.99945-1-samsagax@gmail.com> <720c2b48-ca48-4ee3-9158-f453e48cb012@roeck-us.net>
+ <CABgtM3i+HZJDearvBK-sBrWnfqdrsuNCDYfxASC3QVsn8rAy-Q@mail.gmail.com> <dfcd56d1-102d-ace6-c8b3-8f668e5f6872@roeck-us.net>
+In-Reply-To: <dfcd56d1-102d-ace6-c8b3-8f668e5f6872@roeck-us.net>
+From:   Joaquin Aramendia <samsagax@gmail.com>
+Date:   Fri, 28 Apr 2023 16:15:44 -0300
+Message-ID: <CABgtM3gydDb7gv-GQvu6mMku0KLAM+DSXqd4+FQDsk9jcXV3YA@mail.gmail.com>
+Subject: Re: [PATCH] hwmon: (oxp-sensors) Add AYANEO 2 and Geek models
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 at 19:58, Fangrui Song <maskray@google.com> wrote:
+> > I don't know why but the compiler would complain with the casting from
+> > enum to void*.
 >
-> On 2023-04-28, Ard Biesheuvel wrote:
-> >Hello Fangrui,
+> Really ? I tried with both 32 bit and 64 bit targets, and the above worke=
+d
+> just fine (with W=3D1). I tried with gcc 10.3 as well as 11.3. What is
+> your compiler version, what exactly is the warning/error message you
+> observed, and how exactly did your code look like ?
+
+Said something about an invalid cast of an lvalue? I can=C2=B4t remember ex=
+actly
+and couldn't reproduce it again. Will change all to your form after
+this patch gets
+merged if you like, just to keep things atomic.
+
 >
-> Hello Ard, thank you for the rapid response.
->
-> >On Fri, 28 Apr 2023 at 06:05, Fangrui Song <maskray@google.com> wrote:
-> >>
-> >> Currently, the .got section is placed within the output section .text.
-> >> However, when .got is non-empty, the SHF_WRITE flag is set when linked
-> >> by lld. GNU ld recognizes .text as a special section and ignores the
-> >> SHF_WRITE flag. By renaming .text, we can also get the SHF_WRITE flag.
-> >>
-> >> Conventionally, the .got section is placed just before .got.plt (which
-> >> should be empty and omitted in the kernel). Therefore, we move the .got
-> >> section to a conventional location (between .text and .data) and remove
-> >> the unneeded `. = ALIGN(16)`.
-> >>
-> >> Signed-off-by: Fangrui Song <maskray@google.com>
-> >> ---
-> >>  arch/arm64/kernel/vmlinux.lds.S | 20 ++++++++++----------
-> >>  1 file changed, 10 insertions(+), 10 deletions(-)
-> >>
-> >> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> >> index b9202c2ee18e..2bcb3b30db41 100644
-> >> --- a/arch/arm64/kernel/vmlinux.lds.S
-> >> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> >> @@ -181,18 +181,8 @@ SECTIONS
-> >>                         KPROBES_TEXT
-> >>                         HYPERVISOR_TEXT
-> >>                         *(.gnu.warning)
-> >> -               . = ALIGN(16);
-> >> -               *(.got)                 /* Global offset table          */
-> >>         }
-> >>
-> >> -       /*
-> >> -        * Make sure that the .got.plt is either completely empty or it
-> >> -        * contains only the lazy dispatch entries.
-> >> -        */
-> >> -       .got.plt : { *(.got.plt) }
-> >> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> >> -              "Unexpected GOT/PLT entries detected!")
-> >> -
-> >>         . = ALIGN(SEGMENT_ALIGN);
-> >>         _etext = .;                     /* End of text section */
-> >>
-> >> @@ -247,6 +237,16 @@ SECTIONS
-> >>
-> >>         . = ALIGN(SEGMENT_ALIGN);
-> >>         __inittext_end = .;
-> >> +
-> >> +       .got : { *(.got) }
+> > Found out that explicitly casting the enum literal before casting it
+> > to void* works and
+> > the compiler stopped complaining so I went with it.
 > >
-> >This is the .init region, which gets freed and unmapped after boot. If
-> >the GOT is non-empty, it needs to remain mapped, so we cannot place it
-> >here.
 >
-> Thanks.  I did not know the constraint.
->
-> >We have the same issue with the .rodata section, which incorporates
-> >variables marked as __ro_after_init, which are not const qualified. So
-> >given that .rodata is already emitted as WA, and we cannot do anything
-> >about that, let's move the GOT in there.
->
-> Yes, writable .data..ro_after_init and __jump_table sections in
-> include/asm-generic/vmlinux.lds.h (#define RO_DATA(align)) makes the
-> output section .rodata writable.  Perhaps this is very difficult to fix,
-> and we will have writable .rodata for a long time.
->
-> What do you think of moving .got/.got.plt immediately before .data?
-> I want to place .got/.got.plt before the guaranteed-writable sections,
-> not some sections which are "unfortunately" writable (.rodata, __modver,
-> .hyp.rodata, .rodata.text, etc).
->
-> For userspace programs, either linked with GNU ld or lld, .got/.got.plt
-> are usually immediately before .data .
->
+> You are not casting the enum literal, but a pointer to it.
 
-I don't think that would be the right choice.
+Yes. I'm taking an enum literal and taking its pointer to cast it to a void=
+*.
+A little cumbersome, but maybe it can be avoided by using your proposed
+form directly and after making sure it works.
 
-We have five pseudo-segments in the kernel
-
-text (RX)
-rodata (R)
-inittext (RX)
-initdata (RW)
-data (RW)
-
-where the init ones disappear entirely when the boot completes.
-
-The GOT should not be modifiable, so it should not be in .data. So the
-only appropriate 'segment' for the GOT is rodata
-
-Note that we don't use PIC codegen for the kernel, so all const
-qualified data structures containing statically initialized global
-pointer variables are emitted into .rodata as well, and relocated at
-boot. So having the GOT in rodata too makes sense imho.
-
-
-
-
-> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-> index b9202c2ee18e..48bd7c25b6ab 100644
-> --- a/arch/arm64/kernel/vmlinux.lds.S
-> +++ b/arch/arm64/kernel/vmlinux.lds.S
-> @@ -181,18 +181,8 @@ SECTIONS
->                         KPROBES_TEXT
->                         HYPERVISOR_TEXT
->                         *(.gnu.warning)
-> -               . = ALIGN(16);
-> -               *(.got)                 /* Global offset table          */
->         }
->
-> -       /*
-> -        * Make sure that the .got.plt is either completely empty or it
-> -        * contains only the lazy dispatch entries.
-> -        */
-> -       .got.plt : { *(.got.plt) }
-> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> -              "Unexpected GOT/PLT entries detected!")
-> -
->         . = ALIGN(SEGMENT_ALIGN);
->         _etext = .;                     /* End of text section */
->
-> @@ -286,6 +276,15 @@ SECTIONS
->         __initdata_end = .;
->         __init_end = .;
->
-> +       .got : { *(.got) }
-> +       /*
-> +        * Make sure that the .got.plt is either completely empty or it
-> +        * contains only the lazy dispatch entries.
-> +        */
-> +       .got.plt : { *(.got.plt) }
-> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> +              "Unexpected GOT/PLT entries detected!")
-> +
->         _data = .;
->         _sdata = .;
->         RW_DATA(L1_CACHE_BYTES, PAGE_SIZE, THREAD_ALIGN)
-> --
-> 2.40.1.495.gc816e09b53d-goog
->
->
-> >> +       /*
-> >> +        * Make sure that the .got.plt is either completely empty or it
-> >> +        * contains only the lazy dispatch entries.
-> >> +        */
-> >> +       .got.plt : { *(.got.plt) }
-> >> +       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
-> >> +              "Unexpected GOT/PLT entries detected!")
-> >> +
-> >>         __initdata_begin = .;
-> >>
-> >>         init_idmap_pg_dir = .;
-> >> --
-> >> 2.40.1.495.gc816e09b53d-goog
-> >>
+--=20
+Joaqu=C3=ADn I. Aramend=C3=ADa
