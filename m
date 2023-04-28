@@ -2,95 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BF76F1DB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44A86F1DC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 19:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjD1R6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 13:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S1346451AbjD1R7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 13:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjD1R57 (ORCPT
+        with ESMTP id S1346338AbjD1R7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 13:57:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FB71FDB
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:57:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E575638AC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:57:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A993C433EF;
-        Fri, 28 Apr 2023 17:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682704677;
-        bh=vUy6/4Ph9HknFEtxqJzNk7RhxwSAEm4obtBT4GtISWo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=f9aX+70wjGG2AZ8BLb0sezqpB05hL+ZC2Oq5XZm9/GZTFvUK3Kg2rrYZ6maEjahWK
-         TQy3sD3CSLAU080GrMrHLQZ3PH6k3z1tVg5GXo940bKJNrxZIfMKWoXzMh0eRw1grQ
-         HY48Xh5BV63MFagZ195P+9WWS/yQ2bJ0bqQHBsHk2RWVQkuWenrFepGafjvzQ8mhmU
-         M5YHst14ZcE6HTcf0UrqR5kIzQoVHESJKkjRwSOSDXVsXE7MLnVUrxxtoJ5rloiQWD
-         3KBpopDFXdNtap0EFAxtb5Op4YHww3m++epK4z2rQqMneyB5MOdxNspSLZ2AzAjbiH
-         uba4L/M9EMb4g==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id EBF8315404E8; Fri, 28 Apr 2023 10:57:56 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 10:57:56 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     peterz@infradead.org, jgross@suse.com, vschneid@redhat.com,
-        yury.norov@gmail.com, tglx@linutronix.de,
+        Fri, 28 Apr 2023 13:59:31 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84CE4203
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 10:59:29 -0700 (PDT)
+Received: from letrec.thunk.org ([76.150.80.181])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33SHxKI7031286
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:59:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1682704764; bh=DR6/LsFVUoBJktPLFzfP5w67UsHg1xwlACx5/UCmsFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=NEvxaevxNpIMZOa24NVqVc4pM1Ot5kTyA6WzDW+/U60fLNPAYLinz2jKC01rJirq2
+         HAK0HuEkbdX9nKrONsSL1GK1I7lLenznIa0NeHlqZPtnMdcGHxGjpot75Rr/UESPVb
+         9lIVdsnrLjc52U048U7cAh6vMXG/a1ujTdC/Spn759KrDSKsztPIbH63pJ7toj6Bqz
+         vBsbYGsw2yDuSz/gaRRxz2C/cMScLHGZvnGNQ4B5ZJBbC9L+E5OSExNmI5Hy9rbBpe
+         cZLkFMTlTGEP4noiZt4ekSzY9wHjR8P8tke7atZGLS1wkAuWdk10spOBuAi4nAr/L1
+         d37VHgzVZ8RuA==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 5E7E88C01E0; Fri, 28 Apr 2023 13:59:20 -0400 (EDT)
+Date:   Fri, 28 Apr 2023 13:59:20 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Wu Jianyue <wujianyue000@gmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] smp: Reduce logging due to dump_stack of CSD
- waiters.
-Message-ID: <088edfa0-c1b7-407f-8b20-caf0fecfbb79@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230428170006.1241472-1-imran.f.khan@oracle.com>
- <20230428170006.1241472-2-imran.f.khan@oracle.com>
+Subject: Re: [PATCH] ext4: Put inode_operations in inode.c
+Message-ID: <ZEwJeMUM3bxTLx4q@mit.edu>
+References: <20230428133420.6959-1-wujianyue000@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428170006.1241472-2-imran.f.khan@oracle.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230428133420.6959-1-wujianyue000@gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 03:00:05AM +1000, Imran Khan wrote:
-> If a waiter is waiting for CSD lock, its call stack will not change
-> between first and subsequent hang detection for the same CSD lock.
-> So dump_stack for the waiter only for first time detection.
-> 
-> This avoids excessive logging on large scale systems(with hundreds
-> of CPUs) where repetitive dump_stack from hundreds of CPUs can flood
-> the console.
-> 
-> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+On Fri, Apr 28, 2023 at 09:34:20PM +0800, Wu Jianyue wrote:
+> inode_operations is more suitable to put in inode.c,
+> instead of file.c, so moved to inode.c.
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+The inode operations structure for directories is in fs/ext4/namei.c;
+the inode operations for symlinks is in fs/ext4/symlink.c.  Exactly
+where the structure definition is somewhat arbitrary; should it be
+where the majority of the functions are defined?  Should it be
+associated with the file where operations for that inode type are
+located?  Should it be in the file where the structure is used (which
+is actually in two files; fs/ext4/namei.c and fs/ext4/inode.c)?
 
-> ---
->  kernel/smp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/smp.c b/kernel/smp.c
-> index ab3e5dad6cfe9..b7ccba677a0a0 100644
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -248,7 +248,8 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
->  			arch_send_call_function_single_ipi(cpu);
->  		}
->  	}
-> -	dump_stack();
-> +	if (firsttime)
-> +		dump_stack();
->  	*ts1 = ts2;
->  
->  	return false;
-> -- 
-> 2.34.1
-> 
+Moving it is just churn and makes things less consistent, so I don't
+think it's worth it to take this patch, sorry.
+
+      	   	       	    	 	- Ted
