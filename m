@@ -2,186 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C706F11B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383046F11B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345364AbjD1GPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 02:15:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S1345368AbjD1GP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345267AbjD1GPS (ORCPT
+        with ESMTP id S1345367AbjD1GPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 02:15:18 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9855A26A1;
-        Thu, 27 Apr 2023 23:15:16 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 6D067C020; Fri, 28 Apr 2023 08:15:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682662514; bh=ikBpfqtLZlOZlqrpnW+g3/ECohC4OFsmWiP3UX17fOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SWzHULNAlCyT6I13H9PkzLie6yuQ9htgABrLUrs2ZPbRZfpnMxt1U6dgwnYzjloGc
-         KudeX/xGxKoxKC+KgtWZJsB47Af+IZAGnOI9Hv4xQTB9w0wJqwWuYSupau3CRECZum
-         BjyJFD1iFJaS7N5KfziQa5jAgM2bXo7KhIXjWM2flBlUtpOEoaRUYpECuPY2/03CPc
-         pOdYTpB0vH8L0oNXdjsvR5m+18pz5c4viraRlvQLf8tsAqgHXM5R/p7DMCBj2KFpiq
-         zrMvn9Vi2PeE5E58qgjcWoCaMYu3IML8X8lLYPL84945wIPfmEqGzkzD56/1a6Smu0
-         ylYDH9ZXInNSw==
+        Fri, 28 Apr 2023 02:15:23 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4764497;
+        Thu, 27 Apr 2023 23:15:22 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so1758155166b.2;
+        Thu, 27 Apr 2023 23:15:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682662520; x=1685254520;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKg0o2X3zUwk7C1FxgskinEP8Y3FsAVaj1+iPRtrTLM=;
+        b=DfpPhoYuY+1M0VOVESKi7HUBK86c31lLLpecVQQSXmt5KNhLhnVjOeUyoETm1qmrte
+         fIvugI5XhS3pBkhenmdhDQnSaRjQS50w+7GAzpvqgJIqmMwGq5V3Ic/47NzqK+ONkVx+
+         aV2SnVKfB2BXahW79MdTYWYuC58FxndAoMRhoSvcULDuohApe6CGXJQjAenZ5gP1S5Yy
+         OAFPrID59GYPIQ720YFGW5ticDh/J0ceimSGiNWrdmI0X//vxYb8rb2NNwdVEnQPNeTz
+         JU7Fdk3/240l8gmUNOcym4d3E1r441DFtVF/JkNeDXLirOjo5HmzvbjlQ4M1cMILtYwy
+         XL6A==
+X-Gm-Message-State: AC+VfDyKGx4Q57O1Pqz6//Pt9tlVKWtabYhWcVIPJU5HRpFN6i1nku98
+        wKF2mas91/LgXi29IFmmL10=
+X-Google-Smtp-Source: ACHHUZ6EMvsXSqUHkSdrzd/E0ByCGNrcKMWu7/ohpHqyvp5f/plsxP+8DlyngVbdVoo0IoCjp1iLbg==
+X-Received: by 2002:a17:907:9347:b0:94e:ed5d:8777 with SMTP id bv7-20020a170907934700b0094eed5d8777mr4092020ejc.25.1682662520293;
+        Thu, 27 Apr 2023 23:15:20 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id 26-20020a170906101a00b0095729352bf3sm9256078ejm.215.2023.04.27.23.15.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 23:15:19 -0700 (PDT)
+Message-ID: <a21cbbb4-6fe0-c154-6064-517dad716aa0@kernel.org>
+Date:   Fri, 28 Apr 2023 08:15:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH for v6.3 regression] mm/mremap: fix vm_pgoff in
+ vma_merge() case 3
+Content-Language: en-US
+To:     Greg KH <greg@kroah.com>, Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>, lstoakes@gmail.com,
+        regressions@lists.linux.dev, linux-mm@kvack.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Fabian Vogt <fvogt@suse.com>, stable@vger.kernel.org
+References: <20230427140959.27655-1-vbabka@suse.cz>
+ <2023042719-stratus-pavestone-505e@gregkh>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <2023042719-stratus-pavestone-505e@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 5023CC009;
-        Fri, 28 Apr 2023 08:15:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682662513; bh=ikBpfqtLZlOZlqrpnW+g3/ECohC4OFsmWiP3UX17fOk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gNcNbpdyo5MMuSbJsZYCiMi/ZhAi9ozP0w+eRZrS1cw6nouk0jEjV/Ki914qsmHMf
-         tpVP6hXaqOp86hw+8+hTcBsUQWBRcNgZIkV5EUe53NUcv+S5tdkXzO6CMHcfBwDFYQ
-         THc6zV5iAd0vjM3VNYXi8cLERgy3fsmkNucdC98nAHNJLfHX0/ww+IlBmnulydKx9C
-         EX9xYuNbcrLH6t9bF/APe0dGKINTR/rwAu0Xti2/R9EXgnltiBqLvpD2z2wOZZKrEX
-         j1/O26n9dKVS/G0DOduEgILC6UE3kN0PRC+GyYOVTjNqDjXe24FANSDDO8LoOzCsDd
-         5lUl0woSNxGBA==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 7422cacd;
-        Fri, 28 Apr 2023 06:15:07 +0000 (UTC)
-Date:   Fri, 28 Apr 2023 15:14:52 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <ZEtkXJ1vMsFR3tkN@codewreck.org>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
- <ZEXChAJfCRPv9vbs@codewreck.org>
- <20230428050640.GA1969623@dread.disaster.area>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230428050640.GA1969623@dread.disaster.area>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dave Chinner wrote on Fri, Apr 28, 2023 at 03:06:40PM +1000:
-> >  - in my understanding io_uring has its own thread pool, so even if the
-> > actual getdents is blocking other IOs can progress (assuming there is
-> > less blocked getdents than threads), without having to build one's own
-> > extra thread pool next to the uring handling.
-> > Looking at io_uring/fs.c the other "metadata related" calls there also
-> > use the synchronous APIs (renameat, unlinkat, mkdirat, symlinkat and
-> > linkat all do), so I didn't think of that as a problem in itself.
+On 27. 04. 23, 16:27, Greg KH wrote:
+> On Thu, Apr 27, 2023 at 04:09:59PM +0200, Vlastimil Babka wrote:
+>> After upgrading build guests to v6.3, rpm started segfaulting for
+>> specific packages, which was bisected to commit 0503ea8f5ba7 ("mm/mmap:
+>> remove __vma_adjust()"). rpm is doing many mremap() operations with file
+>> mappings of its db. The problem is that in vma_merge() case 3 (we merge
+>> with the next vma, expanding it downwards) vm_pgoff is not adjusted as
+>> it should when vm_start changes. As a result the rpm process most likely
+>> sees data from the wrong offset of the file. Fix the vm_pgoff
+>> calculation.
+>>
+>> For case 8 this is a non-functional change as the resulting vm_pgoff is
+>> the same.
+>>
+>> Reported-and-bisected-by: Jiri Slaby <jirislaby@kernel.org>
+>> Reported-and-tested-by: Fabian Vogt <fvogt@suse.com>
+>> Link: https://bugzilla.suse.com/show_bug.cgi?id=1210903
+>> Fixes: 0503ea8f5ba7 ("mm/mmap: remove __vma_adjust()")
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> Cc: <stable@vger.kernel.org>
+>> ---
+>> Hi, I'm sending this patch on top of v6.3 as I think it should be
+>> applied and backported to 6.3-stable rather sooner than later.
+>> This means there would be a small conflict when merging mm/mm-stable
+>> later. Alternatively it could be added to mm/mm-stable and upcoming 6.4
+>> pull request, but then the stable backport would need adjustment.
+>> It's up to Linus and Andrew.
 > 
-> I think you missed the point. getdents is not an exclusive operation
-> - it is run under shared locking unlike all the other direcotry
-> modification operations you cite above. They use exclusive locking
-> so there's no real benefit by trying to run them non-blocking or
-> as an async operation as they are single threaded and will consume
-> a single thread context from start to end.
-> 
-> Further, one of the main reasons they get punted to the per-thread
-> pool is so that io_uring can optimise away the lock contention
-> caused by running multiple work threads on exclusively locked
-> objects; it does this by only running one work item per inode at a
-> time.
+> That's not how the stable tree works, sorry, it needs to be in Linus's
+> tree _first_.
 
-Ah, I didn't know that -- thank you for this piece of information.
+In upstream as:
+commit 7e7757876f258d99266e7b3c559639289a2a45fe
+Author: Vlastimil Babka <vbabka@suse.cz>
+Date:   Thu Apr 27 16:09:59 2023 +0200
 
-If we're serializing readdirs per inode I agree that this implementation
-is subpart for filesystems implementing iterate_shared.
+     mm/mremap: fix vm_pgoff in vma_merge() case 3
 
-> > > Filesystems like XFS can easily do non-blocking getdents calls - we
-> > > just need the NOWAIT plumbing (like we added to the IO path with
-> > > IOCB_NOWAIT) to tell the filesystem not to block on locks or IO.
-> > > Indeed, filesystems often have async readahead built into their
-> > > getdents paths (XFS does), so it seems to me that we really want
-> > > non-blocking getdents to allow filesystems to take full advantage of
-> > > doing work without blocking and then shuffling the remainder off to
-> > > a background thread when it actually needs to wait for IO....
-> > 
-> > I believe that can be done without any change of this API, so that'll be
-> > a very welcome addition when it is ready;
-> 
-> Again, I think you miss the point.
-> 
-> Non blocking data IO came before io_uring and we had the
-> infrastructure in place before io_uring took advantage of it.
-> Application developers asked the fs developers to add support for
-> non-blocking direct IO operations and because we pretty much had all
-> the infrastructure to support already in place it got done quickly
-> via preadv2/pwritev2 via RWF_NOWAIT flags.
-> 
-> We already pass a struct dir_context to ->iterate_shared(), so we
-> have a simple way to add context specific flags down the filesystem
-> from iterate_dir(). This is similar to the iocb for file data IO
-> that contains the flags field that holds the IOCB_NOWAIT context for
-> io_uring based IO. So the infrastructure to plumb it all the way
-> down the fs implementation of ->iterate_shared is already there.
+Please queue for 6.3.1.
 
-Sure, that sounds like a good approach that isn't breaking the API (not
-breaking iterate/iterate_shared implementations that don't look at the
-flags and allowing the fs that want to look at it to do so)
-
-Adding such a flag and setting it on the uring side without doing
-anything else is trivial enough if polling/rescheduling can be sorted
-out.
-
-(I guess at this rate the dir_context flag could also be modified by the
-FS to signal it just filled in the last entry, for the other part of
-this thread asking to know when the directory has been done iterating
-without wasting a trivial empty getdents)
-
-> XFS also has async metadata IO capability and we use that for
-> readahead in the xfs_readdir() implementation. hence we've got all
-> the parts we need to do non-blocking readdir already in place. This
-> is very similar to how we already had all the pieces in the IO path
-> ready to do non-block IO well before anyone asked for IOCB_NOWAIT
-> functionality....
-> 
-> AFAICT, the io_uring code wouldn't need to do much more other than
-> punt to the work queue if it receives a -EAGAIN result. Otherwise
-> the what the filesystem returns doesn't need to change, and I don't
-> see that we need to change how the filldir callbacks work, either.
-> We just keep filling the user buffer until we either run out of
-> cached directory data or the user buffer is full.
-
-I agree with the fs side of it, I'd like to confirm what the uring
-side needs to do before proceeding -- looking at the read/write path
-there seems to be a polling mechanism in place to tell uring when to
-look again, and I haven't looked at this part of the code yet to see
-what happens if no such polling is in place (does uring just retry
-periodically?)
-
-I'll have a look this weekend.
-
-> > I don't think the adding the
-> > uring op should wait on this if we can agree a simple wrapper API is
-> > good enough (or come up with a better one if someone has a Good Idea)
-> 
-> It doesn't look at all hard to me. If you add a NOWAIT context flag
-> to the dir_context it should be relatively trivial to connect all
-> the parts together. If you do all the VFS, io_uring and userspace
-> testing infrastructure work, I should be able to sort out the
-> changes needed to xfs_readdir() to support nonblocking
-> ->iterate_shared() behaviour.
-
-I still think the userspace <-> ring API is unrelated to the nowait side
-of it, but as said in the other part of the thread I'll be happy to give
-a bit more time if that helps moving forward.
-
-I'll send another reply around the end of the weekend with either v2 of
-this patch or a few more comments.
-
-
-Thanks,
+thanks,
 -- 
-Dominique Martinet | Asmadeus
+js
+suse labs
+
