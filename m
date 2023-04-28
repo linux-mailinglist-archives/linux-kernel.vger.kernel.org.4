@@ -2,169 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7D96F1279
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336F06F125F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345529AbjD1HhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S1345523AbjD1HaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345451AbjD1HhT (ORCPT
+        with ESMTP id S1345510AbjD1HaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:37:19 -0400
-X-Greylist: delayed 415 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 00:37:00 PDT
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268940FE;
-        Fri, 28 Apr 2023 00:36:59 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 5EA9B2181;
-        Fri, 28 Apr 2023 07:25:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1682666720;
-        bh=KDYaVo5PyVLtkC6s1yjYte0w6cjpa9PrJoFAS7zuJbA=;
-        h=Date:From:Subject:To:CC;
-        b=fzeccGUfIw4aI/FHAMCPI6PUHbs0tFSv4oyZ788jZu1KeSTToBTmDF2Kpv2gKNOJm
-         9AUAna3Eq1OTWsplnkyU1S+2xfP46C6cdwEIHkZk0a5CVbgkIqECHFmCXCgFSMhpqP
-         yP7lgCuVrfASElnhDfRN2P0TcQaTTgk0rVDYtT3Q=
-Received: from [192.168.211.149] (192.168.211.149) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 28 Apr 2023 10:30:02 +0300
-Message-ID: <f949c754-6d38-af12-fa83-176e9971132e@paragon-software.com>
-Date:   Fri, 28 Apr 2023 11:30:01 +0400
+        Fri, 28 Apr 2023 03:30:17 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB86C268E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:30:14 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1B89B40007;
+        Fri, 28 Apr 2023 07:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682667013;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iWBTxT4oyu6/mZM/P/Ah3o6QGBXo1mkLcX+rJvFiAcA=;
+        b=IzLGQ+hx3RDpUx5pk5wdyfx3i1Zr4VlVadxAm0pnO83yakXm19TVdjd7Bj2KPBhYH6Y2VJ
+        ftjNcXPoZq+hrE5td7RrDjGXB+OkHJmjcsTVlb41I5IFM4eiM4ZjMj42eKGAQdcsommaLp
+        Zc2C3X1QZs545xQJe/M3U5QmkQ2i1OehEVD7hG1DZGbtA+qACAcSgObdygtEaO9hXTV2c8
+        oJpVExjUo/1REDMA+D1jEnNQLPjKsfaKwB5swEE38mGvXKJmCcZMFySdCOQKrTXsMP2LIE
+        mEnCRpby/PKf1y5LWtpklOtfd2CqtLEH9ZZTzPMRKLFwDsom52sKl0CoqBbsEQ==
+Date:   Fri, 28 Apr 2023 09:30:10 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
+Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
+Message-ID: <20230428093010.07e61080@pc-7.home>
+In-Reply-To: <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
+References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
+        <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
+        <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [GIT PULL] ntfs3: bugfixes for 6.4
-To:     <torvalds@linux-foundation.org>
-CC:     <ntfs3@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.211.149]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hello Mark, Colin,
 
-Please pull this branch containing ntfs3 code for 6.4.
+On Tue, 25 Apr 2023 13:56:23 +0100
+Mark Brown <broonie@kernel.org> wrote:
 
-Added:
-- add missed "nocase" in ntfs_show_options;
-- extend information on fails\errors;
-- small optimizations.
+> On Fri, Apr 21, 2023 at 08:50:30AM -0700, Colin Foster wrote:
+> > On Thu, Apr 20, 2023 at 05:06:17PM +0200, Maxime Chevallier wrote:  
+> 
+> > > On regmap consumers that require address translation through
+> > > up/downshifting, the alignment check in the regmap core doesn't
+> > > take the translation into account. This doesn't matter when
+> > > downshifting the register address, as any address that fits a
+> > > given alignment requirement will still meet it when downshifted
+> > > (a 4-byte aligned address will always also be 2-bytes aligned for
+> > > example).  
+> 
+> > > However, when upshifting, this check causes spurious errors, as it
+> > > occurs before the upshifting.  
+> 
+> > I don't follow why upshifting should make a difference to alignment.
+> > Assuming it does though, would it make sense to test  
+> 
+> > map->format.reg_shift > 0  
+> 
+> > instead of just !map->format.reg_shift?  
+> 
+> Yeah, I think the question is more when we should run the alignment
+> check than if we should have one.  I think running the check after any
+> shifting makes sense, we'd be better off reorganising the checks if
+> needed than removing them.
 
-Fixed:
-- some logic errors;
-- some dead code was removed;
-- code is refactored and
-   reformatted according to the new version of clang-format.
+In the initial RFC I suggested this [1] approach, which checked for
+alignment after shifting, that way we are sure that the alignment check
+is done according to the underlying regmap provider's constraints. Maybe
+this could be sufficient ?
 
-Removed:
-- noacsrules option. Currently, this option does not work properly.
-   Its use leads to unstable results. If we figure out how to implement it
-   without errors, we will add it later;
-- writepage.
+Thanks,
 
-Regards,
+Maxime
 
-Konstantin
-
-----------------------------------------------------------------
-
-The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
-
-    Linux 6.3-rc4 (Sun Mar 26 14:40:20 2023 -0700)
-
-are available in the Git repository at:
-
-https://github.com/Paragon-Software-Group/linux-ntfs3.git ntfs3_for_6.4
-
-for you to fetch changes up to 788ee1605c2e9feed39c3a749fb3e47c6e15c1b9:
-
-    fs/ntfs3: Fix root inode checking (Mon Feb 20 09:39:35 2023 +0400)
-
-----------------------------------------------------------------
-
-Abdun Nihaal (1):
-   fs/ntfs3: Fix NULL dereference in ni_write_inode
-
-Chen Zhongjin (1):
-   fs/ntfs3: Fix memory leak if ntfs_read_mft failed
-
-Daniel Pinto (1):
-   fs/ntfs3: Fix wrong cast in xattr.c
-
-Edward Lo (3):
-   fs/ntfs3: Enhance the attribute size check
-   fs/ntfs3: Validate MFT flags before replaying logs
-   fs/ntfs3: Add length check in indx_get_root
-
-Jia-Ju Bai (1):
-   fs/ntfs3: Fix a possible null-pointer dereference in ni_clear()
-
-Jiasheng Jiang (1):
-   fs/ntfs3: Add check for kmemdup
-
-Konstantin Komarov (17):
-   fs/ntfs3: Add null pointer checks
-   fs/ntfs3: Improved checking of attribute's name length
-   fs/ntfs3: Check for extremely large size of $AttrDef
-   fs/ntfs3: Restore overflow checking for attr size in mi_enum_attr
-   fs/ntfs3: Refactoring of various minor issues
-   fs/ntfs3: Use bh_read to simplify code
-   fs/ntfs3: Remove noacsrules
-   fs/ntfs3: Fix ntfs_create_inode()
-   fs/ntfs3: Optimization in ntfs_set_state()
-   fs/ntfs3: Undo endian changes
-   fs/ntfs3: Undo critial modificatins to keep directory consistency
-   fs/ntfs3: Remove field sbi->used.bitmap.set_tail
-   fs/ntfs3: Changed ntfs_get_acl() to use dentry
-   fs/ntfs3: Code formatting and refactoring
-   fs/ntfs3: Add missed "nocase" in ntfs_show_options
-   fs/ntfs3: Print details about mount fails
-   fs/ntfs3: Fix root inode checking
-
-Ye Bin (1):
-   fs/ntfs3: Fix NULL pointer dereference in 'ni_write_inode'
-
-Yu Zhe (1):
-   fs/ntfs3: fix spelling mistake "attibute" -> "attribute"
-
-Zeng Heng (1):
-   fs/ntfs3: Fix slab-out-of-bounds read in hdr_delete_de()
-
-ZhangPeng (2):
-   fs/ntfs3: Fix null-ptr-deref on inode->i_op in ntfs_lookup()
-   fs/ntfs3: Fix OOB read in indx_insert_into_buffer
-
-  Documentation/filesystems/ntfs3.rst |  11 -
-  fs/ntfs3/attrib.c                   |  17 +-
-  fs/ntfs3/bitmap.c                   |  25 +--
-  fs/ntfs3/file.c                     |  50 ++---
-  fs/ntfs3/frecord.c                  |  46 ++--
-  fs/ntfs3/fslog.c                    |  83 ++++----
-  fs/ntfs3/fsntfs.c                   |  84 ++++----
-  fs/ntfs3/index.c                    |  81 +++++---
-  fs/ntfs3/inode.c                    | 134 ++++++------
-  fs/ntfs3/lznt.c                     |  10 +-
-  fs/ntfs3/namei.c                    |  19 +-
-  fs/ntfs3/ntfs.h                     |   3 -
-  fs/ntfs3/ntfs_fs.h                  |  19 +-
-  fs/ntfs3/record.c                   |  15 +-
-  fs/ntfs3/run.c                      |   6 +-
-  fs/ntfs3/super.c                    | 312 ++++++++++++++++------------
-  fs/ntfs3/xattr.c                    |  70 +++----
-  17 files changed, 528 insertions(+), 457 deletions(-)
+> >   
+> > > -	if (!IS_ALIGNED(reg, map->reg_stride))
+> > > +	if (!map->format.reg_shift && !IS_ALIGNED(reg,
+> > > map->reg_stride)) return -EINVAL;  
+> > 
+> > In the case of ocelot_spi, we'd want to flag an invalid access to a
+> > register like 0x71070003... Before this patch it would return
+> > -EINVAL, after this patch it would access 0x71070000.
+> > 
+> > Colin Foster  
 
