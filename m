@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF946F209F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 00:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502656F204F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346644AbjD1WAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 18:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S1346624AbjD1V4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 17:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjD1WAF (ORCPT
+        with ESMTP id S229779AbjD1V4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 18:00:05 -0400
-X-Greylist: delayed 190 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 15:00:02 PDT
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31BECF;
-        Fri, 28 Apr 2023 15:00:02 -0700 (PDT)
-Received: from 1psW52-0008XV-Uz by out3b.electric.net with emc1-ok (Exim 4.96)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1psW58-0008lM-UJ;
-        Fri, 28 Apr 2023 14:56:46 -0700
-Received: by emcmailer; Fri, 28 Apr 2023 14:56:46 -0700
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3b.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
-        (Exim 4.96)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1psW52-0008XV-Uz;
-        Fri, 28 Apr 2023 14:56:40 -0700
-Received: from tsdebian (unknown [75.164.37.163])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 87B62E98;
-        Fri, 28 Apr 2023 14:56:39 -0700 (MST)
-Message-ID: <1682718975.5028.2.camel@embeddedTS.com>
-Subject: Re: [PATCH 34/43] ARM: dts: add device tree for ep93xx Soc
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 28 Apr 2023 17:56:43 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0719010F3;
+        Fri, 28 Apr 2023 14:56:43 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1879e28ab04so458862fac.2;
+        Fri, 28 Apr 2023 14:56:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682719002; x=1685311002;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5nFjavnBxbro/fiUVf4O04xlVdcIJiqIT9b+HFjtLWg=;
+        b=WuYzbEZxTSY8pVVDvByCAUDNpAfVnsBF40BuYlKMf1VjrWzPOQGTYgEmdxbGoI9hOU
+         Unx1FpDOtuaLA/mNDjow28iWfowLrbv2g8AiJPGf6IBxTTrL2G/j3CUBsA/gGlY3eeAt
+         Awq2zfASVtyjubnqfbtOGufj0FF0nYJSssQCqq/oGZmkBQs1PQRiM7py2Jgr+4aQ0aRF
+         ZJ+fxpN7jy7GrHAjgetRIx2Sv87iuSMxgRUA2HlerrAuzff6y7QtaRfxnbKkWE3Akb8X
+         aC3pMa0d9kIplLezb+cge1w4buP4k4h0fjbGuBOxhUtqVMQrxmKNTjzYyXctaEI5pSU+
+         Nq+g==
+X-Gm-Message-State: AC+VfDz8jyWWLAqWKm7O9BroGhJWW/1Gm53MRmg3/vilCe7VINPmvVlr
+        v/SGImDOk1h6SgT6trLriQ==
+X-Google-Smtp-Source: ACHHUZ5OJNT5MsgdOGP6dVEQb4gbp242DVRGaHiNkTBgEHOBX2g6mFXeDDn4UrNam06kfjQ2PIi7Sw==
+X-Received: by 2002:a05:6870:d8af:b0:180:3225:b33b with SMTP id dv47-20020a056870d8af00b001803225b33bmr3139192oab.34.1682719002252;
+        Fri, 28 Apr 2023 14:56:42 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i4-20020a056870864400b0018e996a507esm6031489oal.31.2023.04.28.14.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 14:56:41 -0700 (PDT)
+Received: (nullmailer pid 345861 invoked by uid 1000);
+        Fri, 28 Apr 2023 21:56:41 -0000
+Date:   Fri, 28 Apr 2023 16:56:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Valentin Caron <valentin.caron@foss.st.com>
+Cc:     Mark Brown <broonie@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lukasz Majewski <lukma@denx.de>,
-        Michael Peters <mpeters@embeddedts.com>
-Date:   Fri, 28 Apr 2023 14:56:15 -0700
-In-Reply-To: <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230424123522.18302-35-nikita.shubin@maquefel.me>
-         <e429c0e0-7044-492c-a4e2-ed0c1185bb39@app.fastmail.com>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:DHE-RSA-SEED-SHA:128
-X-Authenticated_ID: 
-X-VIPRE-Scanners: virus_clamav;virus_bd;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=T0qxuKHoFC3u0mSLJrS7Q0aIpKmNCJV1D92yNNJU0SQ=;b=WOjiTTaY+yQPgJRdeciQy77OzmGE8iM/WSdmHyKCvqiMhyOMU60rsBaBvMBRbaYsuSCPHL/MjzBn/2dDLA4c5XCBBzIhkr14Xj4xX80MGzmyvMJdsiEiHfzazNOauIXr0W31HgSeD+1jKRR7K0DIpc4kZI5sW9ShuLgXzBHerk7dGaw4Lp8cQEUsq7QgpnB9B0N87e60maQ9Jmrfc77jpb3gXRvyEdVOOSheepxllY6jhZtHxmoJGq1jVZfZbJOnM1S3jGqCPPyahk4x6Nzx4FduyNAUCL9/8szx2S4Pnos2xEWVomblEa5Nlx9mToE72uCYxYEbP6T8BcPoYNN/hA==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 29564942
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] dt-bindings: spi: stm32: add stm32h7
+ st,spi-slave-underrun property
+Message-ID: <20230428215641.GA332435-robh@kernel.org>
+References: <20230428121524.2125832-1-valentin.caron@foss.st.com>
+ <20230428121524.2125832-7-valentin.caron@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428121524.2125832-7-valentin.caron@foss.st.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,39 +70,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-24 at 13:28 +0200, Arnd Bergmann wrote:
-> On Mon, Apr 24, 2023, at 14:34, Nikita Shubin wrote:
-> > This adds a divice for Cirrus ep93xx SoC amd ts7250 board that has been
-> > my testing target for ep93xx device support.
-> > 
-> > Also inluded device tree for Liebherr BK3.1 board through it's not a
-> > complete support.
-> > 
-> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+On Fri, Apr 28, 2023 at 02:15:23PM +0200, Valentin Caron wrote:
+> This property is used to enable and configure stm32h7 SPI controller to
+> handle underrun that could appear in slave mode.
 > 
-> Can you describe which parts are missing for BK3.1 in the
-> changelog? I'm fairly sure that Liebherr is still supporting
-> this board, but I don't have a contact to add to Cc here.
+> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+> ---
+>  .../devicetree/bindings/spi/st,stm32-spi.yaml     |  8 ++++++++
+>  MAINTAINERS                                       |  1 +
+>  include/dt-bindings/spi/spi-stm32.h               | 15 +++++++++++++++
+>  3 files changed, 24 insertions(+)
+>  create mode 100644 include/dt-bindings/spi/spi-stm32.h
 > 
-> I've added Lukasz Majewski to Cc here, as he originally worked
-> on BK3.1 and likely either has the hardware or knows someone
-> who does.  Technologic Systems also lists the ts7250 as supported
-> on their website, but the only contact I found for them is the
-> generic support@embeddedTS.com. In case someone from Technologic
-> is available for giving the series a spin, see [1] for the
-> full set of patches.
-> 
->      Arnd
-> 
-> [1] https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel.me/
+> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> index 1d26fa2658c5..e946ea71a247 100644
+> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
+> @@ -28,6 +28,7 @@ allOf:
+>        properties:
+>          st,spi-midi-ns: false
+>          spi-slave: false
+> +        st,spi-slave-underrun: false
+>  
+>  properties:
+>    "#address-cells": true
+> @@ -70,6 +71,13 @@ properties:
+>        In case of spi-slave defined, if <0>, indicate that SS should be
+>        detected via the dedicated HW pin
+>  
+> +  st,spi-slave-underrun:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      First parameter enables and selects slave underrun reaction.
+> +      Refer to "dt-bindings/spi/spi-stm32.h" for the supported values.
+> +      Second parameter is the pattern in case of SPI_SEND_PATTERN mode.
 
-Thanks Nikita for putting this together and getting us some
-details/notes off-list to get us testing this quickly.
+So, max 2 cells? Then:
 
-We ran a TS-7250 with this series applied through some of
-our basic testing and everything is working as expected.
+minItems: 1
+maxItems: 2
 
-Tested-by: Michael Peters <mpeters@embeddedTS.com>
-Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
+Though I don't really think this belongs in DT. The driver implementing 
+the SPI slave function defines all the rest of the protocol the slave 
+implements. Why not this little bit? Perhaps there is no way for a SPI 
+slave driver to tell the SPI controller which controller specific mode 
+to use, so you abuse DT to configure the SPI controller. Also, with a 
+controller specific response, then the slave driver is coupled to that 
+SPI controller which isn't great either.
 
--Kris
+Rob
