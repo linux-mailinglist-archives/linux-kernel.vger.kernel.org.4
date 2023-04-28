@@ -2,182 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB676F1A54
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E99B6F1A4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjD1ORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S1346073AbjD1OQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjD1ORF (ORCPT
+        with ESMTP id S1345870AbjD1OQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:17:05 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBFA6191
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682691398; x=1714227398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pcj+cSdQdRCCbV5iccXjACQN9M1g+OCjIGDd19j+Ffk=;
-  b=U+IH2iR/KpwHNvoLg09U84GScl+IgYbWjUz6d11+9zTHCmDHHdgQAI7b
-   /yrQPg9yeuopglSpAudcrB/6ETgDYrfof9KverZq1gHUK30sZclSBdScd
-   jv3HAgpr4GrWFuoEpbZNDwAT0nvAtwUVsoVSERi26d4LHHGVfPpMKByJi
-   8Jtt7OMpi8NxoFaIQGj6evGim+LuQ/DpqwoRQ9cQTkBl3IJMUCjssYyU7
-   WkknYZvZWkgwVpnePGeddBCXyeuyXl5CnIl/4qpVhmqRP+yJ2MMiVZCI3
-   R9o8zAFzdTORW/Cx+TaJ/H1gKWzc8kIa2x3aBRAp4m2zs9xAdbJ2hfWWC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="327381911"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="327381911"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 07:16:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="694814597"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="694814597"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2023 07:16:35 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psOtm-0000Ue-2V;
-        Fri, 28 Apr 2023 14:16:34 +0000
+        Fri, 28 Apr 2023 10:16:31 -0400
+Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB784EEE
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+        t=1682691382; bh=IzugUJb7/4phjX3Y0sEr22Y1Y7HtJJRn5Ka8RNsPSqE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=HvFVTjhgOA2jCesYNl8nXKUG759nQjeUyubHk8SCTMkGFzlR1qLSNagBbhSwrxvuf
+         60AnCakn/SYVVAxNmRjuSs6zrCHkWncWavZ31e3Q18ReQK8Wb360HYxwfPUK4VF7Xw
+         URp698ujHj3257XwgcFr8SQlebyTwipYw5QVnAGw=
+Received: from cyy-pc.lan ([2001:da8:c800:d084:c65a:644a:13d7:e72c])
+        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+        id 4029CE99; Fri, 28 Apr 2023 22:16:02 +0800
+X-QQ-mid: xmsmtpt1682691367tols93pky
+Message-ID: <tencent_BC90DDC6093E3E41246D3EC73F5CAB189007@qq.com>
+X-QQ-XMAILINFO: OOWntbL6xj16iQ7PhPGnOnEfLWtZacxQviXVXFDf2ZiQ+X+Se+ma44Hrt0ch3D
+         mXTjFs6dNjNSwD1D3DyEYb68Vkj/bU3cT/7B25W+8V8ZYEQEl1QPVzdfLzWjwEYiy0Yr0EXldbdR
+         WgJRb+ln2Xs3Iwk6liVaj0bf+bcc3YSg5TBk47cFvHmw6GIJOl4w8LYFkmflbm7AGyO1c86NIhB0
+         9AIr1eUJxAWFi+JKNgMpXP53P/FPrVZuLoSqgMLQBsUHTMMLWRyr+rIvAat7j2wVL+zxTLbkcBcx
+         jCJBJzmahz9kBasaTrkVOcJ+lBk2FSZE2QSXUVoSqVvgjMuacNFX7ap8Ge/xlPpjtLCMXMVZMH7H
+         3fBHWTpDowHtwOBRVx7oCPD1oSfM0SLVvRtDjakcxQe7uAytBdJbnUKz+vPzhw0ZXBdpAvY4I80u
+         KystQ1rPCj891ikjuGlA2pN7fmaKsuULC8SxM1ksYa1WoxT3XnOSdAzeF3OnGwyCBwelHsBjRqj6
+         TgIBzzoDwkoDfwq0LTMvyKIKcIFJ6IGA1AX7EqvISqplNzEs1aWAhMP/Lf+Q2RVMCYQWaXOMUcxU
+         RKrwcVmBzqazWg9AfnNHCEM1bKXVyudwN/f1w67z0PlCFxARfz8/l9OIY/QLoly8kgyOihZaKPSN
+         nX1221/ugcDUQkD6OahkNgWjtc/qROYDiq+bo2E9h86uKnKLVqqQjnL78Zla1v8feS7Om7yotv/5
+         3gTRKLNxDvRNZwemwkiM2s+rnPnT8rM6xl5U6hRrlU+zxPadim5Qlqu+0l/LicRF909kZMa0IK/N
+         TlAYzYjcyZ0AZ9gl2oE5z/HILUKm/M+DfORrXFlomMmISHETVaQ3GAbqV0RVGMfjGSvs/97wYvgY
+         YtNbJR4T5W/96cESl3ZapV1LFHPEQ60oAe8pew0co3DleZZkMbE0OCLaetU44iuxijCjvp/QA2G0
+         vKFJ2tkr+lsOnHbSJiyyeCl/4UY00h2A8A62qdRdoNWUlmgDPMgkRnGA2qafR2
+From:   Yangyu Chen <cyy@cyyself.name>
+To:     Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
+        Hongren Zheng <i@zenithal.me>, Yangyu Chen <cyy@cyyself.name>
+Subject: [PATCH v2 1/2] riscv: allow case-insensitive ISA string parsing
 Date:   Fri, 28 Apr 2023 22:16:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, linux-kernel@vger.kernel.org,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: optimization on page allocation when CMA enabled
-Message-ID: <202304282118.os2SZpZS-lkp@intel.com>
-References: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-OQ-MSGID: <20230428141601.678489-2-cyy@cyyself.name>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230428141601.678489-1-cyy@cyyself.name>
+References: <20230428141601.678489-1-cyy@cyyself.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhaoyang.huang,
+According to RISC-V Hart Capabilities Table (RHCT) description in UEFI
+Forum ECR, the format of the ISA string is defined in the RISC-V
+unprivileged specification which is case-insensitive. However, the
+current ISA string parser in the kernel does not support ISA strings
+with uppercase letters.
 
-kernel test robot noticed the following build errors:
+This patch modifies the ISA string parser in the kernel to support
+case-insensitive ISA string parsing.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
+ arch/riscv/kernel/cpu.c        |  3 ++-
+ arch/riscv/kernel/cpufeature.c | 25 ++++++++++++-------------
+ 2 files changed, 14 insertions(+), 14 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhaoyang-huang/mm-optimization-on-page-allocation-when-CMA-enabled/20230428-190140
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/1682679641-13652-1-git-send-email-zhaoyang.huang%40unisoc.com
-patch subject: [PATCH] mm: optimization on page allocation when CMA enabled
-config: alpha-randconfig-r014-20230428 (https://download.01.org/0day-ci/archive/20230428/202304282118.os2SZpZS-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/dbda57eee661a0c9b47f23720bcc9741495d00a5
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhaoyang-huang/mm-optimization-on-page-allocation-when-CMA-enabled/20230428-190140
-        git checkout dbda57eee661a0c9b47f23720bcc9741495d00a5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304282118.os2SZpZS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   mm/page_alloc.c: In function '__rmqueue':
->> mm/page_alloc.c:2328:42: error: implicit declaration of function '__if_use_cma_first' [-Werror=implicit-function-declaration]
-    2328 |                         bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
-         |                                          ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/__if_use_cma_first +2328 mm/page_alloc.c
-
-  2277	
-  2278	#ifdef CONFIG_CMA
-  2279	static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
-  2280	{
-  2281		unsigned long cma_proportion = 0;
-  2282		unsigned long cma_free_proportion = 0;
-  2283		unsigned long watermark = 0;
-  2284		unsigned long wm_fact[ALLOC_WMARK_MASK] = {1, 1, 2};
-  2285		long count = 0;
-  2286		bool cma_first = false;
-  2287	
-  2288		watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
-  2289		/*check if GFP_MOVABLE pass previous watermark check via the help of CMA*/
-  2290		if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
-  2291		{
-  2292			alloc_flags &= ALLOC_WMARK_MASK;
-  2293			/* WMARK_LOW failed lead to using cma first, this helps U&R stay
-  2294			 * around low when being drained by GFP_MOVABLE
-  2295			 */
-  2296			if (alloc_flags <= ALLOC_WMARK_LOW)
-  2297				cma_first = true;
-  2298			/*check proportion for WMARK_HIGH*/
-  2299			else {
-  2300				count = atomic_long_read(&zone->managed_pages);
-  2301				cma_proportion = zone->cma_pages * 100 / count;
-  2302				cma_free_proportion = zone_page_state(zone, NR_FREE_CMA_PAGES) * 100
-  2303					/  zone_page_state(zone, NR_FREE_PAGES);
-  2304				cma_first = (cma_free_proportion >= wm_fact[alloc_flags] * cma_proportion
-  2305						|| cma_free_proportion >= 50);
-  2306			}
-  2307		}
-  2308		return cma_first;
-  2309	}
-  2310	#endif
-  2311	/*
-  2312	 * Do the hard work of removing an element from the buddy allocator.
-  2313	 * Call me with the zone->lock already held.
-  2314	 */
-  2315	static __always_inline struct page *
-  2316	__rmqueue(struct zone *zone, unsigned int order, int migratetype,
-  2317							unsigned int alloc_flags)
-  2318	{
-  2319		struct page *page;
-  2320	
-  2321		if (IS_ENABLED(CONFIG_CMA)) {
-  2322			/*
-  2323			 * Balance movable allocations between regular and CMA areas by
-  2324			 * allocating from CMA when over half of the zone's free memory
-  2325			 * is in the CMA area.
-  2326			 */
-  2327			if (migratetype == MIGRATE_MOVABLE) {
-> 2328				bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
-  2329				page = cma_first ? __rmqueue_cma_fallback(zone, order) : NULL;
-  2330				if (page)
-  2331					return page;
-  2332			}
-  2333		}
-  2334	retry:
-  2335		page = __rmqueue_smallest(zone, order, migratetype);
-  2336		if (unlikely(!page)) {
-  2337			if (alloc_flags & ALLOC_CMA)
-  2338				page = __rmqueue_cma_fallback(zone, order);
-  2339	
-  2340			if (!page && __rmqueue_fallback(zone, order, migratetype,
-  2341									alloc_flags))
-  2342				goto retry;
-  2343		}
-  2344		return page;
-  2345	}
-  2346	
-
+diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+index 8400f0cc9704..52b92a267121 100644
+--- a/arch/riscv/kernel/cpu.c
++++ b/arch/riscv/kernel/cpu.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/cpu.h>
++#include <linux/ctype.h>
+ #include <linux/init.h>
+ #include <linux/seq_file.h>
+ #include <linux/of.h>
+@@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
+ 		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
+ 		return -ENODEV;
+ 	}
+-	if (isa[0] != 'r' || isa[1] != 'v') {
++	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
+ 		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
+ 		return -ENODEV;
+ 	}
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 59d58ee0f68d..d1991c12e546 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -119,13 +119,10 @@ void __init riscv_fill_hwcap(void)
+ 		}
+ 
+ 		temp = isa;
+-#if IS_ENABLED(CONFIG_32BIT)
+-		if (!strncmp(isa, "rv32", 4))
++		if (IS_ENABLED(CONFIG_32BIT) && !strncasecmp(isa, "rv32", 4))
+ 			isa += 4;
+-#elif IS_ENABLED(CONFIG_64BIT)
+-		if (!strncmp(isa, "rv64", 4))
++		else if (IS_ENABLED(CONFIG_64BIT) && !strncasecmp(isa, "rv64", 4))
+ 			isa += 4;
+-#endif
+ 		/* The riscv,isa DT property must start with rv64 or rv32 */
+ 		if (temp == isa)
+ 			continue;
+@@ -136,6 +133,7 @@ void __init riscv_fill_hwcap(void)
+ 			bool ext_long = false, ext_err = false;
+ 
+ 			switch (*ext) {
++			case 'S':
+ 			case 's':
+ 				/**
+ 				 * Workaround for invalid single-letter 's' & 'u'(QEMU).
+@@ -143,19 +141,20 @@ void __init riscv_fill_hwcap(void)
+ 				 * not valid ISA extensions. It works until multi-letter
+ 				 * extension starting with "Su" appears.
+ 				 */
+-				if (ext[-1] != '_' && ext[1] == 'u') {
++				if (ext[-1] != '_' && tolower(ext[1]) == 'u') {
+ 					++isa;
+ 					ext_err = true;
+ 					break;
+ 				}
+ 				fallthrough;
++			case 'X':
+ 			case 'x':
++			case 'Z':
+ 			case 'z':
+ 				ext_long = true;
+ 				/* Multi-letter extension must be delimited */
+ 				for (; *isa && *isa != '_'; ++isa)
+-					if (unlikely(!islower(*isa)
+-						     && !isdigit(*isa)))
++					if (unlikely(!isalnum(*isa)))
+ 						ext_err = true;
+ 				/* Parse backwards */
+ 				ext_end = isa;
+@@ -166,7 +165,7 @@ void __init riscv_fill_hwcap(void)
+ 				/* Skip the minor version */
+ 				while (isdigit(*--ext_end))
+ 					;
+-				if (ext_end[0] != 'p'
++				if (tolower(ext_end[0]) != 'p'
+ 				    || !isdigit(ext_end[-1])) {
+ 					/* Advance it to offset the pre-decrement */
+ 					++ext_end;
+@@ -178,7 +177,7 @@ void __init riscv_fill_hwcap(void)
+ 				++ext_end;
+ 				break;
+ 			default:
+-				if (unlikely(!islower(*ext))) {
++				if (unlikely(!isalpha(*ext))) {
+ 					ext_err = true;
+ 					break;
+ 				}
+@@ -188,7 +187,7 @@ void __init riscv_fill_hwcap(void)
+ 				/* Skip the minor version */
+ 				while (isdigit(*++isa))
+ 					;
+-				if (*isa != 'p')
++				if (tolower(*isa) != 'p')
+ 					break;
+ 				if (!isdigit(*++isa)) {
+ 					--isa;
+@@ -205,7 +204,7 @@ void __init riscv_fill_hwcap(void)
+ #define SET_ISA_EXT_MAP(name, bit)						\
+ 			do {							\
+ 				if ((ext_end - ext == sizeof(name) - 1) &&	\
+-				     !memcmp(ext, name, sizeof(name) - 1) &&	\
++				     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
+ 				     riscv_isa_extension_check(bit))		\
+ 					set_bit(bit, this_isa);			\
+ 			} while (false)						\
+@@ -213,7 +212,7 @@ void __init riscv_fill_hwcap(void)
+ 			if (unlikely(ext_err))
+ 				continue;
+ 			if (!ext_long) {
+-				int nr = *ext - 'a';
++				int nr = tolower(*ext) - 'a';
+ 
+ 				if (riscv_isa_extension_check(nr)) {
+ 					this_hwcap |= isa2hwcap[nr];
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
