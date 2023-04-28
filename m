@@ -2,130 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621746F0F40
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 01:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB1D6F0F5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 02:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344451AbjD0Xs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 19:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49996 "EHLO
+        id S1344291AbjD1AAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 20:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344235AbjD0Xsj (ORCPT
+        with ESMTP id S229750AbjD1AAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 19:48:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336E61FF5;
-        Thu, 27 Apr 2023 16:48:39 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b7b54642cso6491808b3a.0;
-        Thu, 27 Apr 2023 16:48:39 -0700 (PDT)
+        Thu, 27 Apr 2023 20:00:41 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F902694;
+        Thu, 27 Apr 2023 17:00:39 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b990eb5dc6bso13194252276.3;
+        Thu, 27 Apr 2023 17:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682639318; x=1685231318;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1682640038; x=1685232038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZNOWzjzDN8/IL6kFuuC3MOAdiIjEwK+a4rVMlscXpEU=;
-        b=Dy7KxEsSsT4BcpH9K6b7Bs+cMCFyYE7TTBHgYFYjQ+mDHmmEDEU9IOttf5pPaZ1bJ5
-         z8m5jSGjO573huyo5zG7pA4Q14nWilvb35KzW6HFdRPALYZEnCqpt/YeXb61HwrsWVyR
-         P2LgiH92QNwB5cLsxbzcJb7dQD8oTmqkoSVmjAb4aosfoQP7AvrsHOovgixa6Ui00hRj
-         XhIcXf78a7NBr8mZW4u2pFW35l4UjEkXFuQ1pouT6JzfZmAE0x5QXhWgz38qhLmz2gQN
-         7LpHDF/hjaBqtaPrnESEriRZzn6gawMAkamuNwHq+V3Xw2zc4xPCxJuRqQBqz8su1rbH
-         u5GQ==
+        bh=pUcDpEJHAussWXp/YYiDDsR1eHJl9Fmj5B8fxAP8T6s=;
+        b=TOwSJQl6LC+n21H5SUqZBuWXjhVPzXPbY07Hx6FNxo07cVUIUHbdAiHUTiowIREZHy
+         jsDhhL2vor6uiwKNDOpf9t9LxxDbKZ6htNeSzXfw9qc8ByyPQInYZ+nSlFcj4G7HilRn
+         LayVHguzoPmaH7e1UJEuDVWF3G1JtD2CPlNz71uqeZQ7Hh86SmUjFCVF1xA8S36hJRMq
+         Kc3tyAjI7Cu6QQCppoIAnzI6U66dmilG5cqr6sODdImeBzcCldwFvBz7tgkEHWnOnSSy
+         JaiMJ9K8T0wi3GHTKRXibyaQBpYnud52grL4dHnD6cIWUHmdczA03oVMyHaOAHZcFNVA
+         thfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682639318; x=1685231318;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZNOWzjzDN8/IL6kFuuC3MOAdiIjEwK+a4rVMlscXpEU=;
-        b=GgE2b5KOuP2Csv05tVln/FZuO2uh7ayktKswz5m1mD+Ke+JY71/QES+RaJHsF+80JX
-         yG72AbBfbL9JTB0ypbFxLbW9gUvV09jFSHGcmfd9azjYK3AuZO9jsrycP8uWA7k/PCnC
-         lf0k3G5vl2kDZzHvObRNHpgvvOxNU6roLI+m+Hvqyzlc8ObyJEgT3E+pBiH2vMmupVhN
-         dP69X8AWVQ96M4est5v0X8pV8xtDuCcAj5psbS/K7BhG60FzJiVkAQVPvzVEZBMd5nrK
-         or94XVt2ptKAkyxeVeCa2dQ2Xan/CaUSM1m5Easph7FwVJp/n8xaHYaApbj+AEHlqn57
-         W2Zg==
-X-Gm-Message-State: AC+VfDzcU6dFE72FM0+hCuyzZveohXWdKn0aztvJvSJyDs7qlrP/qiGr
-        8GlHmFddqsbAo+dP+H1GtY8=
-X-Google-Smtp-Source: ACHHUZ4loax0r2ryQ/NZLnyN+uRJNYa/sl5VGC+6EMy431qxGiQy5fee6GUa+agQ7duwis9GuJGimA==
-X-Received: by 2002:a05:6a00:24c4:b0:640:f220:d16e with SMTP id d4-20020a056a0024c400b00640f220d16emr5154594pfv.11.1682639318519;
-        Thu, 27 Apr 2023 16:48:38 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:55cd:594d:edb:e780])
-        by smtp.gmail.com with ESMTPSA id p5-20020a056a000b4500b0062a56e51fd7sm13769425pfo.188.2023.04.27.16.48.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Apr 2023 16:48:38 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>, Song Liu <song@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH 2/2] perf lock contention: Rework offset calculation with BPF CO-RE
-Date:   Thu, 27 Apr 2023 16:48:33 -0700
-Message-ID: <20230427234833.1576130-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-In-Reply-To: <20230427234833.1576130-1-namhyung@kernel.org>
-References: <20230427234833.1576130-1-namhyung@kernel.org>
+        d=1e100.net; s=20221208; t=1682640038; x=1685232038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pUcDpEJHAussWXp/YYiDDsR1eHJl9Fmj5B8fxAP8T6s=;
+        b=I5x7/MfiPzHm7KSv1B+ZMfwT0k/Q3+dLLkTCJvtuvurw2q1ExmqmMDES1qpxxBAVP7
+         7BJkGaiaX8x6qyeVGJFwfwicbCHp2MPieh780eLCcLcik8Me+y9WbeV1ZeD6DAtOGash
+         Yr11XQd0hcT7ma0epAh0x6+HRtCCWG/DpXd0UixLP0fJSjm7/BOdqp4DV51OUz+6u6FV
+         YqU1UV84QpmtfjwNRbhI974LSzbbsCHuCQ/gsXJ5TGuIQjwprf8doUN5Qv7xI0hWRTxy
+         ori8eR+Ps87+46IqWYI/LlyDdChgis5rhi/1gKbhSTvg90GlOGCsNGTmTKnvkzhQlVDn
+         SIhQ==
+X-Gm-Message-State: AC+VfDzW39MxT1Oq80i0Ilhfwyei89xZ/LBkvJHigGHOHgo5Gilfe4L3
+        HdGPS91uVzi8qY+aL6MDGOmmsOLzX71NslZztJ4=
+X-Google-Smtp-Source: ACHHUZ43oj1OhQg+lpZx1wswXGxfrl392bP770xpXxVSbV22QuwlM1tk7UnpNBALpRwVy/+SwL9AeMXnv5XvoeLVQto=
+X-Received: by 2002:a25:73cf:0:b0:b99:71dd:869 with SMTP id
+ o198-20020a2573cf000000b00b9971dd0869mr2836162ybc.53.1682640038607; Thu, 27
+ Apr 2023 17:00:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230419111443.231151-1-raghuhack78@gmail.com>
+ <20230419111443.231151-4-raghuhack78@gmail.com> <644ac94ad6977_182a92946e@iweiny-mobl.notmuch>
+ <ZErR1J/PqEvfxHCi@aschofie-mobl2>
+In-Reply-To: <ZErR1J/PqEvfxHCi@aschofie-mobl2>
+From:   RAGHU H <raghuhack78@gmail.com>
+Date:   Fri, 28 Apr 2023 05:30:27 +0530
+Message-ID: <CAGWUp4ps_gkXpNerCNGSrsoZrJoL5PJu5yB4k9dGuOY8_mnWZQ@mail.gmail.com>
+Subject: Re: [STYLE v1 3/3] cxl/core/region:Remove else after return statement
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>, linux-cxl@vger.kernel.org,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems BPF CO-RE reloc doesn't work well with the pattern that gets
-the field-offset only.  Use offsetof() to make it explicit so that
-the compiler would generate the correct code.
+Thanks Alison & Ira for comments
 
-Fixes: 0c1228486bef ("perf lock contention: Support pre-5.14 kernels")
-Co-developed-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/bpf_skel/lock_contention.bpf.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+I missed your messages due to personal reasons.
 
-diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-index 30c193078bdb..8d3cfbb3cc65 100644
---- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-+++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-@@ -429,21 +429,21 @@ struct rq___new {
- SEC("raw_tp/bpf_test_finish")
- int BPF_PROG(collect_lock_syms)
- {
--	__u64 lock_addr;
-+	__u64 lock_addr, lock_off;
- 	__u32 lock_flag;
- 
-+	if (bpf_core_field_exists(struct rq___new, __lock))
-+		lock_off = offsetof(struct rq___new, __lock);
-+	else
-+		lock_off = offsetof(struct rq___old, lock);
-+
- 	for (int i = 0; i < MAX_CPUS; i++) {
- 		struct rq *rq = bpf_per_cpu_ptr(&runqueues, i);
--		struct rq___new *rq_new = (void *)rq;
--		struct rq___old *rq_old = (void *)rq;
- 
- 		if (rq == NULL)
- 			break;
- 
--		if (bpf_core_field_exists(rq_new->__lock))
--			lock_addr = (__u64)&rq_new->__lock;
--		else
--			lock_addr = (__u64)&rq_old->lock;
-+		lock_addr = (__u64)(void *)rq + lock_off;
- 		lock_flag = LOCK_CLASS_RQLOCK;
- 		bpf_map_update_elem(&lock_syms, &lock_addr, &lock_flag, BPF_ANY);
- 	}
--- 
-2.40.1.495.gc816e09b53d-goog
+Will clean and follow it up with v2 very soon.
 
+On Fri, Apr 28, 2023 at 1:19=E2=80=AFAM Alison Schofield
+<alison.schofield@intel.com> wrote:
+>
+> On Thu, Apr 27, 2023 at 12:13:14PM -0700, Ira Weiny wrote:
+> > Raghu H wrote:
+> > > The else section here is redundant after return statement, removing i=
+t.
+> > > Sanity and correctness is not affected due to this fix.
+> > >
+> > > Signed-off-by: Raghu H <raghuhack78@gmail.com>
+> >
+> > Ok, per my eyes I would have liked an extra space before the dev_err()
+> > but...
+>
+> Well, I asked Rahgu to give us a v2 with mostly patch formatting fixups,
+> so let's get that extra space too :)
+>
+> >
+> > Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> >
+> > > ---
+> > >  drivers/cxl/core/region.c | 7 +++----
+> > >  1 file changed, 3 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> > > index f29028148806..1d695107b4a7 100644
+> > > --- a/drivers/cxl/core/region.c
+> > > +++ b/drivers/cxl/core/region.c
+> > > @@ -2666,11 +2666,10 @@ static int cxl_region_invalidate_memregion(st=
+ruct cxl_region *cxlr)
+> > >                             "Bypassing cpu_cache_invalidate_memregion=
+() for testing!\n");
+> > >                     clear_bit(CXL_REGION_F_INCOHERENT, &cxlr->flags);
+> > >                     return 0;
+> > > -           } else {
+> > > -                   dev_err(&cxlr->dev,
+> > > -                           "Failed to synchronize CPU cache state\n"=
+);
+> > > -                   return -ENXIO;
+> > >             }
+> > > +           dev_err(&cxlr->dev,
+> > > +                   "Failed to synchronize CPU cache state\n");
+> > > +           return -ENXIO;
+> > >     }
+> > >
+> > >     cpu_cache_invalidate_memregion(IORES_DESC_CXL);
+> > > --
+> > > 2.39.2
+> > >
