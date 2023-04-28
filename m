@@ -2,124 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625C56F19B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE10C6F19B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346309AbjD1Ne3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
+        id S1346307AbjD1NfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346108AbjD1Ne1 (ORCPT
+        with ESMTP id S1346193AbjD1NfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:34:27 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49892116;
-        Fri, 28 Apr 2023 06:34:26 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64115e652eeso12522337b3a.0;
-        Fri, 28 Apr 2023 06:34:26 -0700 (PDT)
+        Fri, 28 Apr 2023 09:35:01 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB702D65
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:34:58 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f315735514so61215635e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682688866; x=1685280866;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dLtrKfbx8wA+iw7edCvDg/yUO74cXbRU6n2TMZ/9ubk=;
-        b=HMDMPs0w4XFvOHY5G0UoIq7nfpYh6JvYCo3DilMI5O/zQzJutW9YStZFx7VtmPEw/v
-         U1gHNNh3VBxQtFcF2ftbxDuUA0d9eqcqYGNwUKAYzWrwL5yA/Y/kqhqw0Sr9OqN0ABFU
-         epJf63sFr44aGZqjU0P1vW18Ui27FBMAkGf4YZNRfnF65j/zpWa97EVsJHYOLlwNGuJ9
-         x4GEaFzuHpp8IcAt5usrh4kSVrsFA7aF94eGStxMgRFUxGB2Qr5g1CnqyoCFRRCIJRdW
-         9ebAEi9eQGA1IKXcPahYtZ3W+ED08P1hkVso6E4iXy187lN9wIHYXaeOtIUi7Ri5fYhR
-         i2eA==
+        d=linaro.org; s=google; t=1682688897; x=1685280897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0mmAAEtOPUAr1bd+bTw4cvKl1TPg5Xn9TRA7Ti52FfU=;
+        b=OQcSidFEQtSbCNHlInufClZsAvwSkpY1FQYDH+WYqwGzfBtvyGtTMtDvdTFaW1XrR5
+         Tx3tl5PtUfZUrWklSSN5UvxJ15d4MgE9KWeH026UynnZY3dMmAs8aoUAmBylQZFyQjKp
+         LzXIWdiEmYcA3S4bpwtLsi2/9sZdPHuObDVZ5lcFB20/+JT1pShjl7YPOpC2kQmYNv9A
+         A4BF/52Y4THhbEt3wx9gRDGV5ZEVSPyIaDjM3gNbDZ5Pn3dHJIyaKr6E1SItmij0MaM5
+         j621PTbJ3MRnluBQHBauXPevQBuMAFXHcuqnnABSRCMFK34BGLlciTZOS/R+YUTfO8B5
+         /sOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688866; x=1685280866;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dLtrKfbx8wA+iw7edCvDg/yUO74cXbRU6n2TMZ/9ubk=;
-        b=DSE2DEEfXNY9Xtr7rGIahqO4+OxUkhJEmK/uTbcavxax70uZ0DZWrXOzJbpAwh8OQP
-         xAEeyUXxL2U9W/jQqeQyQXe7gmzgCPxacEuuR8xK+3/zEBW3rse3Uu6Pzma2f92F9EJl
-         QY0cq68mFV4WAT4lXMWnEu27c4gY2lwVtOzYI78dlK8mXJ07T9R5TX6Wqk57ElspY6GH
-         XIS2YyI/YEjNe/ilkbZtSda6OJnUDoGJg7pa4jecgDttbr3m/im+McpwIsG7amssMOpo
-         808Ams2vON9V//Qia4kBvWKVcqRhYDk8BNUK5hXAJQX9b47OKUFXGO+FCF01cBCOIMse
-         5Sjw==
-X-Gm-Message-State: AC+VfDxtN0IbPRHTqlFrplszAGfA7UEYxPv/G73H2wAhVTwfoRuqOAQ3
-        6aDRDt2M9hV2e23EkSvL+65YcofmUhc7oQ==
-X-Google-Smtp-Source: ACHHUZ6HL9vXoS8kn/zyNrcZ4cMeZHd5P5pbWzlb7B4dTHMNL/UYT5psy31LbHB2AhIk0JAnOu6xNQ==
-X-Received: by 2002:a17:902:f14d:b0:19e:b2ed:6fff with SMTP id d13-20020a170902f14d00b0019eb2ed6fffmr8442814plb.31.1682688866083;
-        Fri, 28 Apr 2023 06:34:26 -0700 (PDT)
-Received: from ubuntu2204.. ([125.118.5.31])
-        by smtp.gmail.com with ESMTPSA id a15-20020a1709027d8f00b001a6527f6ad7sm13352893plm.85.2023.04.28.06.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 06:34:25 -0700 (PDT)
-From:   Wu Jianyue <wujianyue000@gmail.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wu Jianyue <wujianyue000@gmail.com>
-Subject: [PATCH] ext4: Put inode_operations in inode.c
-Date:   Fri, 28 Apr 2023 21:34:20 +0800
-Message-Id: <20230428133420.6959-1-wujianyue000@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1682688897; x=1685280897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mmAAEtOPUAr1bd+bTw4cvKl1TPg5Xn9TRA7Ti52FfU=;
+        b=CMQz4VBz8kDg8qbV/g9Ie/shpT8HiLknzk9UkIWLub7+Fou2ztvvwkcj1jMozS0iyP
+         3SgjrGv6XpOxPdZo94mz/tf5qZXqL/T27Vrl2BwTP0OIPUtfS0GVIX5T/YpzjtCqqigh
+         vdElRd7VDrljUxC+kTghg/rXwE8NHQ2MyPUt1D7WiLpJCFbOJiN21KlpIgfyTjmrYK3O
+         6DkM8bKY44ApnCGmGzfoc1qC0Bu55qwebZWP7QBM0Rblr99WSUvHu6qMRQgknLZegSsO
+         RedKszHJTE2myVbw/RHpww9tp4QTP6nRUvKcNwUKzS7TZ3JnObYxzuq88YN12fMyLp1T
+         +qxw==
+X-Gm-Message-State: AC+VfDzrWz2m/+IWqfds6/R1QhnQdxKlfPhD0lmfC8N5pWr7PjDazvna
+        BYntReaJ/ACULm7X8jGs1pxj/Q==
+X-Google-Smtp-Source: ACHHUZ50NyQZaa4YfPHncp8v3Q2ICEDpU1JVTtxWjO4UOvR08Zk0+e/uit7Me/trCaa7Pmi1ZQ+dyw==
+X-Received: by 2002:a05:600c:2101:b0:3f1:7848:6740 with SMTP id u1-20020a05600c210100b003f178486740mr4078764wml.8.1682688897162;
+        Fri, 28 Apr 2023 06:34:57 -0700 (PDT)
+Received: from [172.23.2.142] ([195.167.132.10])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05600c4f1200b003f07ef4e3e0sm36176284wmq.0.2023.04.28.06.34.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 06:34:56 -0700 (PDT)
+Message-ID: <32911b1c-7f32-7078-27e8-7b168d295993@linaro.org>
+Date:   Fri, 28 Apr 2023 15:34:55 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add Lunzn Fastrhino R66S
+Content-Language: en-US
+To:     Tianling Shen <cnsztl@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Andrew Lunn <andrew@lunn.ch>, Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230428013738.30735-1-cnsztl@gmail.com>
+ <20230428013738.30735-2-cnsztl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230428013738.30735-2-cnsztl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-inode_operations is more suitable to put in inode.c,
-instead of file.c, so moved to inode.c.
+On 28/04/2023 03:37, Tianling Shen wrote:
+> Lunzn Fastrhino R66S is a high-performance mini router.
+> 
+> Specification:
+> - Rockchip RK3568
+> - 1/2GB LPDDR4 RAM
+> - SD card slot
+> - M.2 Connector
+> - 2x USB 3.0 Port
+> - 2x 2500 Base-T (PCIe, r8125b)
+> - 12v DC Jack
+> 
+> Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+>  .../dts/rockchip/rk3568-fastrhino-r66s.dts    |  27 +
+>  .../dts/rockchip/rk3568-fastrhino-r66s.dtsi   | 507 ++++++++++++++++++
+>  3 files changed, 535 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index 2d585bbb8f3a..15089a78555a 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -85,6 +85,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-box-demo.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-lubancat-1.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-fastrhino-r66s.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-lubancat-2.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5c.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-nanopi-r5s.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> new file mode 100644
+> index 000000000000..fc9e1bdab128
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
+> @@ -0,0 +1,27 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +
+> +#include "rk3568-fastrhino-r66s.dtsi"
+> +
+> +/ {
+> +	model = "Lunzn FastRhino R66S";
+> +	compatible = "lunzn,fastrhino-r66s", "rockchip,rk3568";
+> +
+> +	aliases {
+> +		mmc0 = &sdmmc0;
+> +	};
+> +};
+> +
+> +&sdmmc0 {
+> +	max-frequency = <150000000>;
+> +	no-sdio;
+> +	no-mmc;
+> +	bus-width = <4>;
+> +	cap-mmc-highspeed;
+> +	cap-sd-highspeed;
+> +	disable-wp;
+> +	vmmc-supply = <&vcc3v3_sd>;
+> +	vqmmc-supply = <&vccio_sd>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
+> new file mode 100644
+> index 000000000000..a58592b2f13b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
+> @@ -0,0 +1,507 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +
+> +/dts-v1/;
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/pinctrl/rockchip.h>
+> +#include <dt-bindings/soc/rockchip,vop2.h>
+> +#include "rk3568.dtsi"
+> +
+> +/ {
+> +	aliases {
+> +		led-boot = &status_led;
+> +		led-failsafe = &status_led;
+> +		led-running = &status_led;
+> +		led-upgrade = &status_led;
 
-Because struct inode_operations's functions are already
-included in header file, so no need to change header files.
+Why do you need these? Which upstream kernel driver parses these?
 
-Signed-off-by: Wu Jianyue <wujianyue000@gmail.com>
----
- fs/ext4/file.c  | 11 -----------
- fs/ext4/inode.c | 12 ++++++++++++
- 2 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/fs/ext4/file.c b/fs/ext4/file.c
-index 0b8b4499e5ca..a64184c74e4e 100644
---- a/fs/ext4/file.c
-+++ b/fs/ext4/file.c
-@@ -961,14 +961,3 @@ const struct file_operations ext4_file_operations = {
- 	.fallocate	= ext4_fallocate,
- };
- 
--const struct inode_operations ext4_file_inode_operations = {
--	.setattr	= ext4_setattr,
--	.getattr	= ext4_file_getattr,
--	.listxattr	= ext4_listxattr,
--	.get_inode_acl	= ext4_get_acl,
--	.set_acl	= ext4_set_acl,
--	.fiemap		= ext4_fiemap,
--	.fileattr_get	= ext4_fileattr_get,
--	.fileattr_set	= ext4_fileattr_set,
--};
--
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 8dbd352e3986..db08dd51b6b3 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -6147,3 +6147,15 @@ vm_fault_t ext4_page_mkwrite(struct vm_fault *vmf)
- 	ext4_journal_stop(handle);
- 	goto out;
- }
-+
-+const struct inode_operations ext4_file_inode_operations = {
-+	.setattr	= ext4_setattr,
-+	.getattr	= ext4_file_getattr,
-+	.listxattr	= ext4_listxattr,
-+	.get_inode_acl	= ext4_get_acl,
-+	.set_acl	= ext4_set_acl,
-+	.fiemap		= ext4_fiemap,
-+	.fileattr_get	= ext4_fileattr_get,
-+	.fileattr_set	= ext4_fileattr_set,
-+};
-+
--- 
-2.34.1
+Best regards,
+Krzysztof
 
