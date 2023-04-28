@@ -2,90 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D2F6F10B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB536F10B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 05:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344984AbjD1DMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 23:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S1345304AbjD1DMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 23:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344947AbjD1DLk (ORCPT
+        with ESMTP id S1345321AbjD1DMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 23:11:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8430B3C24
-        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 20:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=iPaNTRr4YG/Sa60FYBv4xjWiredPl874QL6Kp29pXgA=; b=c2UtG5vz34cTtmPnNN9tMfsZrG
-        sZo3oPG8rn0EzKN8JGMj5ssvBOK6Jr/tR2rQ0ZRvokxojShaLG58AZVRVhRNe6ThCu+OeNTGC8yed
-        JHg6ZSpBnXhFxnmq5Hf3V8hXShiaa6kdJCfZUn80Pq9yDTj3IWzqLnQt1yvcv5Td55+IjjAP38HD5
-        FD9xumFNW8vkL2Xr+K7CKnV7NjzZYY3CpXzFWbShtEYpJG0PHWS58kBEuN9r+suS2GmMzY6tN7cQK
-        bzh8995whBVqaQFQJDaewRURgmEFlsAlznGxzR1uoovYPDu289BV8UkUEH8UMJYTQtW0xutFwACO2
-        bWiA//6A==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1psEVs-0082rS-0n;
-        Fri, 28 Apr 2023 03:11:12 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: [PATCH -next] sched: fix cid_lock kernel-doc warnings
-Date:   Thu, 27 Apr 2023 20:11:11 -0700
-Message-Id: <20230428031111.322-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.40.0
+        Thu, 27 Apr 2023 23:12:13 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C31A3A86;
+        Thu, 27 Apr 2023 20:12:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R371e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=alibuda@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Vh9lpN8_1682651524;
+Received: from 30.221.146.237(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0Vh9lpN8_1682651524)
+          by smtp.aliyun-inc.com;
+          Fri, 28 Apr 2023 11:12:05 +0800
+Message-ID: <b9a15afe-c65d-5cf3-e6c7-eaec46cc99c1@linux.alibaba.com>
+Date:   Fri, 28 Apr 2023 11:12:03 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH v3 51/55] smc: Drop smc_sendpage() in favour of
+ smc_sendmsg() + MSG_SPLICE_PAGES
+Content-Language: en-US
+From:   "D. Wythe" <alibuda@linux.alibaba.com>
+To:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Jan Karcher <jaka@linux.ibm.com>, linux-s390@vger.kernel.org
+References: <20230331160914.1608208-1-dhowells@redhat.com>
+ <20230331160914.1608208-52-dhowells@redhat.com>
+ <4253f27c-2c5e-3033-14b3-6e31ee344e8b@linux.alibaba.com>
+In-Reply-To: <4253f27c-2c5e-3033-14b3-6e31ee344e8b@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.3 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix kernel-doc warnings for cid_lock and use_cid_lock.
-These comments are not in kernel-doc format.
 
-kernel/sched/core.c:11496: warning: Cannot understand  * @cid_lock: Guarantee forward-progress of cid allocation.
- on line 11496 - I thought it was a doc line
-kernel/sched/core.c:11505: warning: Cannot understand  * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
- on line 11505 - I thought it was a doc line
 
-Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
----
- kernel/sched/core.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 4/26/23 9:07 PM, D. Wythe wrote:
+>
+> Hi David,
+>
+> Fallback is one of the most important features of SMC, which 
+> automatically downgrades to TCP
+> when SMC discovers that the peer does not support SMC. After fallback, 
+> SMC hopes the the ability can be
+> consistent with that of TCP sock. If you delete the smc_sendpage, when 
+> fallback occurs, it means that the sock after the fallback
+> loses the ability of  sendpage( tcp_sendpage).
+>
+> Thanks
+> D. Wythe
 
-diff -- a/kernel/sched/core.c b/kernel/sched/core.c
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11492,7 +11492,7 @@ void call_trace_sched_update_nr_running(
- 
- #ifdef CONFIG_SCHED_MM_CID
- 
--/**
-+/*
-  * @cid_lock: Guarantee forward-progress of cid allocation.
-  *
-  * Concurrency ID allocation within a bitmap is mostly lock-free. The cid_lock
-@@ -11501,7 +11501,7 @@ void call_trace_sched_update_nr_running(
-  */
- DEFINE_RAW_SPINLOCK(cid_lock);
- 
--/**
-+/*
-  * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
-  *
-  * When @use_cid_lock is 0, the cid allocation is lock-free. When contention is
+Sorry, I missed the key email context. The problem mentioned here does 
+not exist ...
+
+>
+> On 4/1/23 12:09 AM, David Howells wrote:
+>> Drop the smc_sendpage() code as smc_sendmsg() just passes the call 
+>> down to
+>> the underlying TCP socket and smc_tx_sendpage() is just a wrapper around
+>> its sendmsg implementation.
+>> Signed-off-by: David Howells <dhowells@redhat.com>
+>> cc: Karsten Graul <kgraul@linux.ibm.com>
+>> cc: Wenjia Zhang <wenjia@linux.ibm.com>
+>> cc: Jan Karcher <jaka@linux.ibm.com>
+>> cc: "David S. Miller" <davem@davemloft.net>
+>> cc: Eric Dumazet <edumazet@google.com>
+>> cc: Jakub Kicinski <kuba@kernel.org>
+>> cc: Paolo Abeni <pabeni@redhat.com>
+>> cc: Jens Axboe <axboe@kernel.dk>
+>> cc: Matthew Wilcox <willy@infradead.org>
+>> cc: linux-s390@vger.kernel.org
+>> cc: netdev@vger.kernel.org
+>> ---
+>>   net/smc/af_smc.c    | 29 -----------------------------
+>>   net/smc/smc_stats.c |  2 +-
+>>   net/smc/smc_stats.h |  1 -
+>>   net/smc/smc_tx.c    | 16 ----------------
+>>   net/smc/smc_tx.h    |  2 --
+>>   5 files changed, 1 insertion(+), 49 deletions(-)
+>>
+>> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+>> index a4cccdfdc00a..d4113c8a7cda 100644
+>> --- a/net/smc/af_smc.c
+>> +++ b/net/smc/af_smc.c
+>> @@ -3125,34 +3125,6 @@ static int smc_ioctl(struct socket *sock, 
+>> unsigned int cmd,
+>>       return put_user(answ, (int __user *)arg);
+>>   }
+>>   -static ssize_t smc_sendpage(struct socket *sock, struct page *page,
+>> -                int offset, size_t size, int flags)
+>> -{
+>> -    struct sock *sk = sock->sk;
+>> -    struct smc_sock *smc;
+>> -    int rc = -EPIPE;
+>> -
+>> -    smc = smc_sk(sk);
+>> -    lock_sock(sk);
+>> -    if (sk->sk_state != SMC_ACTIVE) {
+>> -        release_sock(sk);
+>> -        goto out;
+>> -    }
+>> -    release_sock(sk);
+>> -    if (smc->use_fallback) {
+>> -        rc = kernel_sendpage(smc->clcsock, page, offset,
+>> -                     size, flags);
+>> -    } else {
+>> -        lock_sock(sk);
+>> -        rc = smc_tx_sendpage(smc, page, offset, size, flags);
+>> -        release_sock(sk);
+>> -        SMC_STAT_INC(smc, sendpage_cnt);
+>> -    }
+>> -
+>> -out:
+>> -    return rc;
+>> -}
+>> -
+>>   /* Map the affected portions of the rmbe into an spd, note the 
+>> number of bytes
+>>    * to splice in conn->splice_pending, and press 'go'. Delays 
+>> consumer cursor
+>>    * updates till whenever a respective page has been fully processed.
+>> @@ -3224,7 +3196,6 @@ static const struct proto_ops smc_sock_ops = {
+>>       .sendmsg    = smc_sendmsg,
+>>       .recvmsg    = smc_recvmsg,
+>>       .mmap        = sock_no_mmap,
+>> -    .sendpage    = smc_sendpage,
+>>       .splice_read    = smc_splice_read,
+>>   };
+>>   diff --git a/net/smc/smc_stats.c b/net/smc/smc_stats.c
+>> index e80e34f7ac15..ca14c0f3a07d 100644
+>> --- a/net/smc/smc_stats.c
+>> +++ b/net/smc/smc_stats.c
+>> @@ -227,7 +227,7 @@ static int smc_nl_fill_stats_tech_data(struct 
+>> sk_buff *skb,
+>>                     SMC_NLA_STATS_PAD))
+>>           goto errattr;
+>>       if (nla_put_u64_64bit(skb, SMC_NLA_STATS_T_SENDPAGE_CNT,
+>> -                  smc_tech->sendpage_cnt,
+>> +                  0,
+>>                     SMC_NLA_STATS_PAD))
+>>           goto errattr;
+>>       if (nla_put_u64_64bit(skb, SMC_NLA_STATS_T_CORK_CNT,
+>> diff --git a/net/smc/smc_stats.h b/net/smc/smc_stats.h
+>> index 84b7ecd8c05c..b60fe1eb37ab 100644
+>> --- a/net/smc/smc_stats.h
+>> +++ b/net/smc/smc_stats.h
+>> @@ -71,7 +71,6 @@ struct smc_stats_tech {
+>>       u64            clnt_v2_succ_cnt;
+>>       u64            srv_v1_succ_cnt;
+>>       u64            srv_v2_succ_cnt;
+>> -    u64            sendpage_cnt;
+>>       u64            urg_data_cnt;
+>>       u64            splice_cnt;
+>>       u64            cork_cnt;
+>> diff --git a/net/smc/smc_tx.c b/net/smc/smc_tx.c
+>> index f4b6a71ac488..d31ce8209fa2 100644
+>> --- a/net/smc/smc_tx.c
+>> +++ b/net/smc/smc_tx.c
+>> @@ -298,22 +298,6 @@ int smc_tx_sendmsg(struct smc_sock *smc, struct 
+>> msghdr *msg, size_t len)
+>>       return rc;
+>>   }
+>>   -int smc_tx_sendpage(struct smc_sock *smc, struct page *page, int 
+>> offset,
+>> -            size_t size, int flags)
+>> -{
+>> -    struct msghdr msg = {.msg_flags = flags};
+>> -    char *kaddr = kmap(page);
+>> -    struct kvec iov;
+>> -    int rc;
+>> -
+>> -    iov.iov_base = kaddr + offset;
+>> -    iov.iov_len = size;
+>> -    iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &iov, 1, size);
+>> -    rc = smc_tx_sendmsg(smc, &msg, size);
+>> -    kunmap(page);
+>> -    return rc;
+>> -}
+>> -
+>>   /***************************** sndbuf consumer 
+>> *******************************/
+>>     /* sndbuf consumer: actual data transfer of one target chunk with 
+>> ISM write */
+>> diff --git a/net/smc/smc_tx.h b/net/smc/smc_tx.h
+>> index 34b578498b1f..a59f370b8b43 100644
+>> --- a/net/smc/smc_tx.h
+>> +++ b/net/smc/smc_tx.h
+>> @@ -31,8 +31,6 @@ void smc_tx_pending(struct smc_connection *conn);
+>>   void smc_tx_work(struct work_struct *work);
+>>   void smc_tx_init(struct smc_sock *smc);
+>>   int smc_tx_sendmsg(struct smc_sock *smc, struct msghdr *msg, size_t 
+>> len);
+>> -int smc_tx_sendpage(struct smc_sock *smc, struct page *page, int 
+>> offset,
+>> -            size_t size, int flags);
+>>   int smc_tx_sndbuf_nonempty(struct smc_connection *conn);
+>>   void smc_tx_sndbuf_nonfull(struct smc_sock *smc);
+>>   void smc_tx_consumer_update(struct smc_connection *conn, bool force);
+>
+
