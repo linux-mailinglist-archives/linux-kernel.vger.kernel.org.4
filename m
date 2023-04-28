@@ -2,116 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058246F118F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2B56F1193
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 08:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345285AbjD1F77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 01:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S1345304AbjD1GBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 02:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjD1F75 (ORCPT
+        with ESMTP id S1345071AbjD1GBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 01:59:57 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCA62689;
-        Thu, 27 Apr 2023 22:59:55 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33RKPCrD031856;
-        Fri, 28 Apr 2023 05:59:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=fUeCGzF2E/MJpwwWsgeCABFqdUqiBLxFGm1C7ZyiMnU=;
- b=CRVuBVELEk0nDpCg8ePKt3xe+lEoLxsuSnoHdkmKLnsG7OkE0+zM85dghSwtfjeH8Shq
- s/QonyhCHF4I+XCh9MJjYUHl2UEQ/iB7/zifzVvaS3mcBosBS2hdObzRZxlk07QNbD8r
- gPfwVAAiqzSW67NalW8304EbrjkbKnLiVK/10D3Grkl3zMzNcly7lLyVepyfWJjYw9Pk
- kDkA3F+/5mqSLo/hNUpCGcnmiFkvEgNmULzuIXfJXNmOy7qm3N2gqxVLpya7wsDFCntF
- ALRalrrV7eZ/w8VExUBJGZLb60N/UhCjF1F32MXAcxLZfYfcDKw1teNoslohauPMUXWD HA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q476u5e9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 05:59:52 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33S4XU2E008644;
-        Fri, 28 Apr 2023 05:59:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q461ahpm8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 28 Apr 2023 05:59:51 +0000
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33S5v0aN014799;
-        Fri, 28 Apr 2023 05:59:50 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3q461ahpm4-1;
-        Fri, 28 Apr 2023 05:59:50 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     mcgrof@kernel.org, linux-modules@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, error27@gmail.com,
-        kernel-janitors@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH] module: Fix use-after-free bug in read_file_mod_stats()
-Date:   Thu, 27 Apr 2023 22:59:33 -0700
-Message-Id: <20230428055933.2699308-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Fri, 28 Apr 2023 02:01:46 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE5F2D65
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:01:43 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32f23e2018fso63532595ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 27 Apr 2023 23:01:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682661703; x=1685253703;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RADR7osfU6tYqXb0l/8u4uv1x29ciz4ia9oQNvcCWng=;
+        b=Z6KNUdOhe1vbZgfIU8Qr2ka3tvIGzKidiAJ6Z25cckLP2oW8KC73XzeBtI6sFuklBH
+         M89ZkJYXScXaePJ5gVLwsrttKc8PCOSjmDE2oSYVcDzOCtpiK4+ECBQILX4c0z4MgbH6
+         V//S/uk4DzYWb/jBK9S335QCucKUJoGZoQ38XpZ0XX2tnkHOXp/KZIWlVxhbN1z7CpxF
+         kU8RMVesn/A/NO1U4qBr/uR2r0toNX0957Bad3/2DVDnA4AxhK/v9nHUugKXkXg6Ds8u
+         P1zgORNPDOe8tXVTPd9NmcANCC1MZY6Ct3gGvIwCOx8wKAKXF1X8Ta0gTfXGNM9p7vUK
+         setQ==
+X-Gm-Message-State: AC+VfDzOxdP6OXIeYvqtw76G/j+95EoAuYXYpydzywhSNcQulXKV4JDJ
+        fSVu7mzQr/IXBoRWgJb5/OWMjbK1ze9AUM5E8/YvPYQkHR1A
+X-Google-Smtp-Source: ACHHUZ7PPsw6gW2hGgmZp2GgG6jG8jLffk1LukuhkSm8fL1OoU7BVoh1vrPtriARxNK+dMdTZpNKdFt870NrItFmn0oS0JkGLKD0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_02,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304280048
-X-Proofpoint-GUID: _VFUwZeukZMWnvtc5VMW4LkaK160HGLs
-X-Proofpoint-ORIG-GUID: _VFUwZeukZMWnvtc5VMW4LkaK160HGLs
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:701:b0:760:ee03:7e95 with SMTP id
+ f1-20020a056602070100b00760ee037e95mr6500715iox.1.1682661702937; Thu, 27 Apr
+ 2023 23:01:42 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 23:01:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000014b32705fa5f3585@google.com>
+Subject: [syzbot] [btrfs?] general protection fault in btrfs_orphan_cleanup
+From:   syzbot <syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch warns:
-	kernel/module/stats.c:394 read_file_mod_stats()
-	warn: passing freed memory 'buf'
+Hello,
 
-We are passing 'buf' to simple_read_from_buffer() after freeing it.
+syzbot found the following issue on:
 
-Fix this by changing the order of 'simple_read_from_buffer' and 'kfree'.
+HEAD commit:    6e98b09da931 Merge tag 'net-next-6.4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17699f80280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5b762354749a3d5d
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e15a1e4284bf8517741
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Fixes: df3e764d8e5c ("module: add debug stats to help identify memory pressure")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8ad082c4dcdf/disk-6e98b09d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/96565e4d870d/vmlinux-6e98b09d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/cfcfe15601e5/bzImage-6e98b09d.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc000000001a: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000d0-0x00000000000000d7]
+CPU: 0 PID: 17330 Comm: syz-executor.2 Not tainted 6.3.0-syzkaller-07919-g6e98b09da931 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1764
+Code: d6 80 92 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 e2 49 e9 ff 48 89 1c 24 48 8b 1b 48
+RSP: 0000:ffffc90014d47a10 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
+RDX: ffffc900131c3000 RSI: 000000000002326c RDI: 000000000002326d
+RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed1005547aef
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802d122000
+R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
+FS:  00007f523909c700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4e34428000 CR3: 0000000031e52000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_orphan_cleanup+0xa55/0xcf0 fs/btrfs/inode.c:3629
+ create_snapshot+0x520/0x7e0 fs/btrfs/ioctl.c:852
+ btrfs_mksubvol+0x5d0/0x750 fs/btrfs/ioctl.c:994
+ btrfs_mksnapshot+0xb5/0xf0 fs/btrfs/ioctl.c:1040
+ __btrfs_ioctl_snap_create+0x338/0x450 fs/btrfs/ioctl.c:1293
+ btrfs_ioctl_snap_create+0x136/0x190 fs/btrfs/ioctl.c:1320
+ btrfs_ioctl+0xbbc/0xd40
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f523828c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f523909c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f52383abf80 RCX: 00007f523828c169
+RDX: 00000000200000c0 RSI: 0000000050009401 RDI: 0000000000000009
+RBP: 00007f52382e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe28ec0fbf R14: 00007f523909c300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1764
+Code: d6 80 92 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 e2 49 e9 ff 48 89 1c 24 48 8b 1b 48
+RSP: 0000:ffffc90014d47a10 EFLAGS: 00010203
+RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
+RDX: ffffc900131c3000 RSI: 000000000002326c RDI: 000000000002326d
+RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed1005547aef
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88802d122000
+R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
+FS:  00007f523909c700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fe5b93ff000 CR3: 0000000031e52000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	80 92 ff 48 85 ed 0f 	adcb   $0xf,-0x127ab701(%rdx)
+   7:	84 56 03             	test   %dl,0x3(%rsi)
+   a:	00 00                	add    %al,(%rax)
+   c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  13:	fc ff df
+  16:	48 8d 9d d8 00 00 00 	lea    0xd8(%rbp),%rbx
+  1d:	48 89 d9             	mov    %rbx,%rcx
+  20:	48 c1 e9 03          	shr    $0x3,%rcx
+  24:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
+* 29:	80 3c 01 00          	cmpb   $0x0,(%rcx,%rax,1) <-- trapping instruction
+  2d:	74 08                	je     0x37
+  2f:	48 89 df             	mov    %rbx,%rdi
+  32:	e8 e2 49 e9 ff       	callq  0xffe94a19
+  37:	48 89 1c 24          	mov    %rbx,(%rsp)
+  3b:	48 8b 1b             	mov    (%rbx),%rbx
+  3e:	48                   	rex.W
+
+
 ---
-Found with statis analysis, only compile tested.
----
- kernel/module/stats.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/module/stats.c b/kernel/module/stats.c
-index ad7b6ada29f2..6ab2c94d6bc3 100644
---- a/kernel/module/stats.c
-+++ b/kernel/module/stats.c
-@@ -276,6 +276,7 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- 	struct mod_fail_load *mod_fail;
- 	unsigned int len, size, count_failed = 0;
- 	char *buf;
-+	int ret;
- 	u32 live_mod_count, fkreads, fdecompress, fbecoming, floads;
- 	unsigned long total_size, text_size, ikread_bytes, ibecoming_bytes,
- 		idecompress_bytes, imod_bytes, total_virtual_lost;
-@@ -390,8 +391,9 @@ static ssize_t read_file_mod_stats(struct file *file, char __user *user_buf,
- out_unlock:
- 	mutex_unlock(&module_mutex);
- out:
-+	ret = simple_read_from_buffer(user_buf, count, ppos, buf, len);
- 	kfree(buf);
--        return simple_read_from_buffer(user_buf, count, ppos, buf, len);
-+	return ret;
- }
- #undef MAX_PREAMBLE
- #undef MAX_FAILED_MOD_PRINT
--- 
-2.40.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
