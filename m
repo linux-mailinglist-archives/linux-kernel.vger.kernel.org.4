@@ -2,174 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34CA6F17EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BAD6F1801
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345894AbjD1M1Z convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Apr 2023 08:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36810 "EHLO
+        id S231510AbjD1MbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 08:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjD1M1X (ORCPT
+        with ESMTP id S229571AbjD1MbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 08:27:23 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31AC10CF;
-        Fri, 28 Apr 2023 05:27:21 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-555d2b43a23so112888087b3.2;
-        Fri, 28 Apr 2023 05:27:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682684841; x=1685276841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XDsEdn6WDxg314v0qLuVGHvJOHZvS1YLN0vYRrRrPEc=;
-        b=EFQRW1hwFnxp01Qm0JPXl47W0OVAkIH6hshspGTKEw8j2HEs0TnbRaePHC4om1z0Jx
-         GtOZPabv0RV7aL6B4ykzgedIQz83wOx0KPUpjIh5aWI0v5q6EWOaHj0wCNLkXoga+69k
-         HmPfyU97Lb/H0aghk0kcyIpcQiZInGg/q2kQP4Eaj1Xqo2a8qLZ/+JrNyGIKxEZTWDX4
-         zSFCFoViiSZhh8EHZzyXvJJHex/GMnCdXWBnkbKgSShq0UaOxDFrtkTDt5wrQjGTLyvB
-         JS9ekPc0VX6a6CaVWQRLucML+sfeZdrSUNuGLQaCFrDLSeAy3u2JXX73XFLNhLVqcAeF
-         4FcA==
-X-Gm-Message-State: AC+VfDzyr9ziEVaAQ+3kOOkt/xXrsw9oN9i+IkQhtWXOZQky3B0iAY1c
-        foSQ43MsvtkzWcV5F5cMXDeNIq63KQD0cg==
-X-Google-Smtp-Source: ACHHUZ4iFwJ+due3uopV1pQ+Y6ebygs8N1yM8zCLInmi3OPKQ77UofvBxV6CeC+IF7xEFIMuaMLv+w==
-X-Received: by 2002:a0d:cc84:0:b0:546:4626:bfc5 with SMTP id o126-20020a0dcc84000000b005464626bfc5mr3798626ywd.31.1682684840686;
-        Fri, 28 Apr 2023 05:27:20 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id k187-20020a816fc4000000b00545a08184b9sm5421128ywc.73.2023.04.28.05.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 05:27:20 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-555c8a12b26so113027977b3.0;
-        Fri, 28 Apr 2023 05:27:19 -0700 (PDT)
-X-Received: by 2002:a81:8a01:0:b0:544:69f5:fadc with SMTP id
- a1-20020a818a01000000b0054469f5fadcmr3593096ywg.6.1682684839491; Fri, 28 Apr
- 2023 05:27:19 -0700 (PDT)
+        Fri, 28 Apr 2023 08:31:12 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E8630E8
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:31:08 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230428123105euoutp02e2262573a89abd69d718f67d3fde6eb7~aGSbEiNFV2260122601euoutp02g
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 12:31:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230428123105euoutp02e2262573a89abd69d718f67d3fde6eb7~aGSbEiNFV2260122601euoutp02g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1682685065;
+        bh=yqYyAvCs6yol+s6Px9lxqXZtuSgpKT9Q+OXm0BG6I5M=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=WpdSrlZHdsdUx+l89Nvu05TYy9fy4fDD8CZHRpUTD7Fq/k/ULqdUBuU4ZKVXcq4zE
+         vaL3BnnlorSfMdkNc7/T1Lz2CknRb9My2Gnic3oVCu/s/pwrwjcperZ+vM3dKzLLRK
+         7pVvblxvT27oVfHLXjox25PhgFLquJZjLH18ra4w=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230428123104eucas1p18974da9aa87fe921ff332dea80b695f2~aGSaq1Z8V0089700897eucas1p1z;
+        Fri, 28 Apr 2023 12:31:04 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id C2.58.42423.88CBB446; Fri, 28
+        Apr 2023 13:31:04 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230428123104eucas1p2c527f8a941ec65f4eda788c512258a31~aGSaR47SF1685316853eucas1p2D;
+        Fri, 28 Apr 2023 12:31:04 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230428123104eusmtrp18474688674b8ba5591b2fb054a3986b0~aGSaRFzTt1366113661eusmtrp1S;
+        Fri, 28 Apr 2023 12:31:04 +0000 (GMT)
+X-AuditID: cbfec7f2-a3bff7000002a5b7-44-644bbc88942b
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 8F.95.10549.88CBB446; Fri, 28
+        Apr 2023 13:31:04 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230428123103eusmtip10a97e1b6b5885c77f9d0ff62fc815992~aGSZWZ_pG0131101311eusmtip1C;
+        Fri, 28 Apr 2023 12:31:03 +0000 (GMT)
+Message-ID: <343f8d25-566f-9d14-64db-4e796cc9e406@samsung.com>
+Date:   Fri, 28 Apr 2023 14:31:03 +0200
 MIME-Version: 1.0
-References: <20230428092711.406-1-tzimmermann@suse.de> <20230428092711.406-6-tzimmermann@suse.de>
- <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
-In-Reply-To: <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 28 Apr 2023 14:27:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
-Message-ID: <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O functions
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        javierm@redhat.com, daniel@ffwll.ch, vgupta@kernel.org,
-        chenhuacai@kernel.org, kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        sam@ravnborg.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH V2 5/6] drm: bridge: samsung-dsim: Support non-burst
+ mode
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        dario.binacchi@amarulasolutions.com, l.stach@pengutronix.de,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org,
+        Andrzej Hajda <andrzej.hajda@intel.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUwTZxzHfe6u12tju2th4RlzShp1AbNqM5fcIjPzJdllZEE3NdElzJNe
+        Kspb7uhcTbZVm1QEx1pIunBFRcDpqmDWFYaARIlS3oYELBulrviSEbDCeOvEt45ydeO/7+/7
+        fL75/p4nD4GqrXgikZVbwHK5TLYGl2MN7fO97xS2pOk3BCOrqMBwN0o1+4qlVMfvVQgVrJ7B
+        qEiDHaXsjU6cujM3iVPfne+VUKVBG0bNum04NXq2DlCdIR9GjZweQqiT9hopNdBUgVMh6zFA
+        TV71A6r0zJDkQzVdOxWU0GMXzCh9RujA6GvhSoy+KtyV0s7Ccgld3TKG0G7XSZy+6auW0B22
+        foQODLbgdLDYi9Dfv9hAl3hcgJ5xr9zx2j55qp7NzvqS5dZv3i8/OPxIlz+s+urW4C3cDGqU
+        RUBGQHIjLKu1giIgJ9TkRQBbn03HhlkAPfX3EHGYAdByswt5Fbn3cyRGXQDQ7quPUVMLVJ8D
+        i1IKcjOsGXqwmMDINVDomUNFXwU7yx8uMq+TLDzuDEmjOo5Mh4P9rkWNkgnQ//DsYjae1MC7
+        PS+A6NdIYPmvfFTjpA4WPS7Co1pG7oSuqmZMZFZBS70TjS4EybAMPnoyjYlrb4f2G11SUcfB
+        ca8nplfA7rJTmBg4AWDlsyAiDjYAzaN+IFKbYKD36UIdsVCRDK80rRftLbDnfBkatSGphH88
+        VolLKGFpww8xWwELrWqRXgsFb91/tTf6+lEb0AhLnkVYcn1hyXWE/3srAeYCCayRzzGwvC6X
+        PaLlmRzemGvQZubluMHCV+1+6Z1uBKfHp7RtACFAG4AEqolXKEwf6dUKPWM6ynJ5X3DGbJZv
+        A28SmCZBse6Dzkw1aWAK2MMsm89yr04RQpZoRuij6d+qCLtkp7RvzaWJ9w89rzg1f5v5LeAL
+        uzB8LvLnZ0l7/5YGLSaDVZuVMTSGWkFJyR3PFr64e/zTCXN18t6KeZtj6/LlI29/7Pjnfvvz
+        azOrr59QFkhakLTRdFPcYChlZXuPzVhfrjqQ8Qm37kFGxo91+bcLC2a1l7y7yNWdfOtAe6Bs
+        l8C/cehyWuOK1uuRZaMRmKnfvxGP/6thq2WHeyD53cbwS2LbpsNKvyPJX5w68VYqqtvtHGF+
+        0TmqOJaTPQ3t3m5pNjKJe/gsed2R4WUXw8c/N0wB9RXZk20HPN+8x+hNvshPeZNdrrX3U+KP
+        gT1NSXT+16D2nPucBuMPMroUlOOZfwGChoAIGQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJKsWRmVeSWpSXmKPExsVy+t/xu7ode7xTDB61sVncuX2a2WL31W52
+        ixPXFzFZ3F/8mcXi/7aJzBYTd8xms7jy9T2bRe/Sc6wWk+5PYLH4smkCm8Xz+esYLU6+ucpi
+        8WDuTSaLzolL2C0u75rDZvGmrZHR4v3OW4wWk+bdZHUQ8lj78T6rx8vlDcwe82adYPHY+20B
+        i8fOWXfZPWZ3zGT1WLznJZPHplWdbB5Hri5m9Tgx4RKTx51re9g87ncfZ/Lo/2vg0bdlFaPH
+        501yAfxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJ
+        ehm3XxsW3BasOHrtKFsD4xK+LkZODgkBE4mHG/8zdjFycQgJLGWUeNj8jhEiISNxcloDK4Qt
+        LPHnWhcbRNF7Ronv3xcxgSR4Bewkltx8DGazCKhKzDrzlRkiLihxcuYTFhBbVCBV4saeP2wg
+        trCAr8S5OQ1gC5gFxCVuPZkP1isioCRx98xfsCuYBZawSiw6toUdYttOJomjh96BTWUTMJTo
+        etsFNolTIFBi1aLdLBCTzCS6tnZBTZWXaN46m3kCo9AsJIfMQrJwFpKWWUhaFjCyrGIUSS0t
+        zk3PLTbUK07MLS7NS9dLzs/dxAhMI9uO/dy8g3Heq496hxiZOBgPMUpwMCuJ8PJWuqcI8aYk
+        VlalFuXHF5XmpBYfYjQFhsZEZinR5HxgIssriTc0MzA1NDGzNDC1NDNWEuf1LOhIFBJITyxJ
+        zU5NLUgtgulj4uCUamCaJrzbvendbZY7m81jpzxun9KxyTtKUyi5ZEbLHc/rFt7Xp+0pYnmo
+        9SeyLymxYfNBgb+Kr870+T7fXpKryCGjK6e8tYlvsbvyxMCpvI1TD6rufr/1lqQN48fg64f+
+        FbB/9BILf5x4dqrRjPBN3Y8DD7m3C3DPN1jgMWHOooedIcJFKTo3E15928ybsiVo4/lTEYUL
+        +vnWSCjIrFfgmVl09+c7w8dzlywLkzxwg3X7yimF62+rH5kWfYvleddDjUke/dzKl/+u2XbE
+        XTbNYD9zulehb86G2L9Sl8qmbBFl52r4UHj5Fd8mrwcxfuKS8vLhsd6X+IOr3p1b/3rOoeJX
+        8fkBVl8vb5gbemvqHFULJZbijERDLeai4kQAVUmNSawDAAA=
+X-CMS-MailID: 20230428123104eucas1p2c527f8a941ec65f4eda788c512258a31
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2
+References: <20230423121232.1345909-1-aford173@gmail.com>
+        <CGME20230423121305eucas1p287a952d41b1884b117fa15a748b9e1a2@eucas1p2.samsung.com>
+        <20230423121232.1345909-6-aford173@gmail.com>
+        <b6b53da5-6986-a958-ef84-650b3a57ad9c@samsung.com>
+        <CAHCN7x+vd-bP8NgS-cRrnm8ojq0kwUg6aXokJv6xSU7BrT04Vw@mail.gmail.com>
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 2:18 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> On 2023-04-28 10:27, Thomas Zimmermann wrote:
-> > Implement framebuffer I/O helpers, such as fb_read*() and fb_write*()
-> > with Linux' regular I/O functions. Remove all ifdef cases for the
-> > various architectures.
-> >
-> > Most of the supported architectures use __raw_() I/O functions or treat
-> > framebuffer memory like regular memory. This is also implemented by the
-> > architectures' I/O function, so we can use them instead.
-> >
-> > Sparc uses SBus to connect to framebuffer devices. It provides respective
-> > implementations of the framebuffer I/O helpers. The involved sbus_()
-> > I/O helpers map to the same code as Sparc's regular I/O functions. As
-> > with other platforms, we can use those instead.
-> >
-> > We leave a TODO item to replace all fb_() functions with their regular
-> > I/O counterparts throughout the fbdev drivers.
-> >
-> > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> > ---
-> >   include/linux/fb.h | 63 +++++++++++-----------------------------------
-> >   1 file changed, 15 insertions(+), 48 deletions(-)
-> >
-> > diff --git a/include/linux/fb.h b/include/linux/fb.h
-> > index 08cb47da71f8..4aa9e90edd17 100644
-> > --- a/include/linux/fb.h
-> > +++ b/include/linux/fb.h
-> > @@ -15,7 +15,6 @@
-> >   #include <linux/list.h>
-> >   #include <linux/backlight.h>
-> >   #include <linux/slab.h>
-> > -#include <asm/io.h>
-> >
-> >   struct vm_area_struct;
-> >   struct fb_info;
-> > @@ -511,58 +510,26 @@ struct fb_info {
-> >    */
-> >   #define STUPID_ACCELF_TEXT_SHIT
-> >
-> > -// This will go away
-> > -#if defined(__sparc__)
-> > -
-> > -/* We map all of our framebuffers such that big-endian accesses
-> > - * are what we want, so the following is sufficient.
-> > +/*
-> > + * TODO: Update fbdev drivers to call the I/O helpers directly and
-> > + *       remove the fb_() tokens.
-> >    */
-> > -
-> > -// This will go away
-> > -#define fb_readb sbus_readb
-> > -#define fb_readw sbus_readw
-> > -#define fb_readl sbus_readl
-> > -#define fb_readq sbus_readq
-> > -#define fb_writeb sbus_writeb
-> > -#define fb_writew sbus_writew
-> > -#define fb_writel sbus_writel
-> > -#define fb_writeq sbus_writeq
-> > -#define fb_memset sbus_memset_io
-> > -#define fb_memcpy_fromfb sbus_memcpy_fromio
-> > -#define fb_memcpy_tofb sbus_memcpy_toio
-> > -
-> > -#elif defined(__i386__) || defined(__alpha__) || defined(__x86_64__) ||      \
-> > -     defined(__hppa__) || defined(__sh__) || defined(__powerpc__) || \
-> > -     defined(__arm__) || defined(__aarch64__) || defined(__mips__)
-> > -
-> > -#define fb_readb __raw_readb
-> > -#define fb_readw __raw_readw
-> > -#define fb_readl __raw_readl
-> > -#define fb_readq __raw_readq
-> > -#define fb_writeb __raw_writeb
-> > -#define fb_writew __raw_writew
-> > -#define fb_writel __raw_writel
-> > -#define fb_writeq __raw_writeq
+On 24.04.2023 12:00, Adam Ford wrote:
+> On Mon, Apr 24, 2023 at 3:25 AM Marek Szyprowski
+> <m.szyprowski@samsung.com> wrote:
+>> On 23.04.2023 14:12, Adam Ford wrote:
+>>> The high-speed clock is hard-coded to the burst-clock
+>>> frequency specified in the device tree.  However, when
+>>> using devices like certain bridge chips without burst mode
+>>> and varying resolutions and refresh rates, it may be
+>>> necessary to set the high-speed clock dynamically based
+>>> on the desired pixel clock for the connected device.
+>>>
+>>> This also removes the need to set a clock speed from
+>>> the device tree for non-burst mode operation, since the
+>>> pixel clock rate is the rate requested from the attached
+>>> device like an HDMI bridge chip.  This should have no
+>>> impact for people using burst-mode and setting the burst
+>>> clock rate is still required for those users.
+>>>
+>>> Signed-off-by: Adam Ford <aford173@gmail.com>
+>> This one breaks Exynos-5433 based TM2e board with a DSI panel.
+> Marek S,
 >
-> Note that on at least some architectures, the __raw variants are
-> native-endian, whereas the regular accessors are explicitly
-> little-endian, so there is a slight risk of inadvertently changing
-> behaviour on big-endian systems (MIPS most likely, but a few old ARM
-> platforms run BE as well).
+> Thank you for testing!  I knoiw there are several of us who appreciate
+> your testing this since it's hard to know if something broke without
+> hardware.  Is there any way you can tell me if the flag is set to
+> enable MIPI_DSI_MODE_VIDEO_BURST?
 
-Also on m68k, when ISA or PCI are enabled.
+TM2e board uses the DSI panel operated in command mode and handled by 
+panel-samsung-s6e3ha2.c driver. The MIPI_DSI_MODE_VIDEO_BURST flag is 
+not set by the driver. However, the MIPI_DSI_CLOCK_NON_CONTINUOUS flags 
+is set there. I really have no idea if setting VIDEO_BURST would make 
+sense together with CLOCK_NON_CONTINUOUS or not. Maybe the driver lacks 
+setting it?
 
-In addition, the non-raw variants may do some extras to guarantee
-ordering, which you do not need on a frame buffer.
 
-So I'd go for the __raw_*() variants everywhere.
+> I was trying to be diligent about not breaking your boards, but
+> without your boards, it's difficult.  The theory was that if
+> MIPI_DSI_MODE_VIDEO_BURST is set and there is a burst clock set in the
+> device tree, it would use the burst clock.
+>
+> As a fall-back I could just simply check for the presence of the
+> burst_clock_rate instead of both MIPI_DSI_MODE_VIDEO_BURST and
+> burst_clock_rate.
 
-Gr{oetje,eeting}s,
+Maybe you should extend your check also for the 
+MIPI_DSI_CLOCK_NON_CONTINUOUS flag? Does it make sense?
 
-                        Geert
+ > ...
 
+Best regards
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
