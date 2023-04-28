@@ -2,142 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F926F195E
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87566F1966
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 15:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346260AbjD1NZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 09:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S1346263AbjD1N1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 09:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjD1NZz (ORCPT
+        with ESMTP id S1346262AbjD1N1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 09:25:55 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF09D1BE7
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:25:53 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763da06540aso741719239f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 06:25:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682688353; x=1685280353;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3yq9rEjt6j/Grlqag7wuS/2mUAkFSJI6s+U6/7TuIJI=;
-        b=MCgfRTqHUFmYWdo2cxhlacUof1PA2qGFnzc9FXA2TaCz4i5kTHvFRmSP6dcSN24Ro2
-         GPKWS8VGsOgvSKXCsZn1QM75EJBNYnxMjvDI651kcmrbb2/0RgSM5fiFET9QP/c/w6w7
-         qaLoaNUIQjuyegPChbR9kcnpC2yoqXLWhaqsJR7cQmzIDWKsiy6tPpmI/hZHjP6nGEtc
-         /gVzT7b8FNzjelJ9Qb13DDyEaGV15jKsm62CcbLCo23mGMFF5vKxge+JiaflC6vwCcMm
-         zxpxAjS1DglAmMAR3w4uYztU8vg1eaqwQoBQRzeyjm4q9nvNX6QOUXLPU6NlG6LKbvQY
-         65dg==
-X-Gm-Message-State: AC+VfDw7UeSrVRR1W2rJ4b6HIkDB1OL/fCesQByGiuP8mNliMn339UWP
-        WIn4Z8ZKvnzrhdLTtkqNsA06HTTwM/R6gML2Z0EZbkmgHxPKuyg=
-X-Google-Smtp-Source: ACHHUZ6MnE/JgqBmivx4QQnhYuUax80Nj5PF5TRhT6lU1SjA8npOjQKyM/bfSmyJBgYPRrP9m88zwPvomu5ONPVhcDvzOaf/IXuH
+        Fri, 28 Apr 2023 09:27:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B8C1FC6;
+        Fri, 28 Apr 2023 06:26:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDF363920;
+        Fri, 28 Apr 2023 13:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E566DC433D2;
+        Fri, 28 Apr 2023 13:26:55 +0000 (UTC)
+Message-ID: <201e8b3c-dc53-2475-1cff-34dd21ceeeea@linux-m68k.org>
+Date:   Fri, 28 Apr 2023 23:26:53 +1000
 MIME-Version: 1.0
-X-Received: by 2002:a02:b1d2:0:b0:40f:a8e9:96ab with SMTP id
- u18-20020a02b1d2000000b0040fa8e996abmr2540325jah.5.1682688353273; Fri, 28 Apr
- 2023 06:25:53 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 06:25:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000090900c05fa656913@google.com>
-Subject: [syzbot] [mm?] [net?] KASAN: null-ptr-deref Read in filemap_fault
-From:   syzbot <syzbot+48011b86c8ea329af1b9@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Subject: [git pull] m68knommu changes for v6.4
+To:     torvalds@linux-foundation.org
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, gerg@kernel.org
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Linus,
 
-syzbot found the following issue on:
+Please pull the m68knommu git tree changes for v6.4.
 
-HEAD commit:    33afd4b76393 Merge tag 'mm-nonmm-stable-2023-04-27-16-01' ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bc1008280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70288413d8a92398
-dashboard link: https://syzkaller.appspot.com/bug?extid=48011b86c8ea329af1b9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+A couple of minor changes. One to remove the long dead uclinux.org web
+address and email list from the MAINTAINERS entry for UCLINUX. The other
+to remove dead config options in the m68knommu Kconfig.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+48011b86c8ea329af1b9@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: null-ptr-deref in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: null-ptr-deref in page_ref_count include/linux/page_ref.h:67 [inline]
-BUG: KASAN: null-ptr-deref in put_page_testzero include/linux/mm.h:1007 [inline]
-BUG: KASAN: null-ptr-deref in folio_put_testzero include/linux/mm.h:1013 [inline]
-BUG: KASAN: null-ptr-deref in folio_put include/linux/mm.h:1440 [inline]
-BUG: KASAN: null-ptr-deref in filemap_fault+0x544/0x24a0 mm/filemap.c:3382
-Read of size 4 at addr 0000000000000028 by task syz-executor.2/19418
-
-CPU: 1 PID: 19418 Comm: syz-executor.2 Not tainted 6.3.0-syzkaller-10620-g33afd4b76393 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_report mm/kasan/report.c:465 [inline]
- kasan_report+0xec/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- page_ref_count include/linux/page_ref.h:67 [inline]
- put_page_testzero include/linux/mm.h:1007 [inline]
- folio_put_testzero include/linux/mm.h:1013 [inline]
- folio_put include/linux/mm.h:1440 [inline]
- filemap_fault+0x544/0x24a0 mm/filemap.c:3382
- __do_fault+0x107/0x600 mm/memory.c:4176
- do_read_fault mm/memory.c:4530 [inline]
- do_fault mm/memory.c:4659 [inline]
- do_pte_missing mm/memory.c:3647 [inline]
- handle_pte_fault mm/memory.c:4947 [inline]
- __handle_mm_fault+0x27f6/0x4170 mm/memory.c:5089
- handle_mm_fault+0x2af/0x9f0 mm/memory.c:5243
- do_user_addr_fault+0x51a/0x1210 arch/x86/mm/fault.c:1440
- handle_page_fault arch/x86/mm/fault.c:1534 [inline]
- exc_page_fault+0x98/0x170 arch/x86/mm/fault.c:1590
- asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
-RIP: 0023:0xf72255d0
-Code: Unable to access opcode bytes at 0xf72255a6.
-RSP: 002b:00000000ffb4674c EFLAGS: 00010202
-RAX: 00000000f734e000 RBX: 00000000f734e000 RCX: 00000000f737c038
-RDX: 000000002e220000 RSI: 0000000000000004 RDI: 00000000000e257f
-RBP: 00000000f737c0c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000282 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-==================================================================
+Regards
+Greg
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+   Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+are available in the Git repository at:
 
-If you want to undo deduplication, reply with:
-#syz undup
+   git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v6.4
+
+for you to fetch changes up to 8ab89e9563161921ffc86724eb3217d228eaad57:
+
+   m68k: Kconfig.machine: remove obsolete configs ROMBASE and ROMSIZE (2023-04-17 09:30:53 +1000)
+
+----------------------------------------------------------------
+m68knommu: updates and fixes for v6.4
+
+Fixes include:
+. remove dead uclinux.org web and email list from MAINTAINERS
+. remove dead config options
+
+----------------------------------------------------------------
+Lukas Bulwahn (1):
+       m68k: Kconfig.machine: remove obsolete configs ROMBASE and ROMSIZE
+
+Randy Dunlap (1):
+       MAINTAINERS: drop uclinux.org
+
+  MAINTAINERS               |  2 --
+  arch/m68k/Kconfig.machine | 17 -----------------
+  2 files changed, 19 deletions(-)
