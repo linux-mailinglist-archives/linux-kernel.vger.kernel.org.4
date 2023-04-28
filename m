@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A228B6F1716
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0396F6F1718
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 14:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345870AbjD1MB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 08:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S1345943AbjD1MC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 08:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjD1MB1 (ORCPT
+        with ESMTP id S229866AbjD1MC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 08:01:27 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851A51BEC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:01:25 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1950f5628so84535355e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:01:25 -0700 (PDT)
+        Fri, 28 Apr 2023 08:02:27 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CC31FF0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:02:26 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f315712406so57950445e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 05:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682683284; x=1685275284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZPte/pKtqTO+AZafGTxmXrOl5pSZO0/CWxo2rC3YnZs=;
-        b=D9Ug2iDIaCBa455YEXB0pLqOEYTMOM1r/7fk8K9lGH1dNTS8fVFclpVBPxfNrGJLOw
-         KaQBHohnzVJrWOaRs8uJgZ9g9w/jVBvgyEEVfLlPH5frFMgPgjCB/dUCd5TpesPNHPp7
-         VrNuAtBR+oi1LVL8zOJEyZKH935LdKrl4d8GQ78+nxplASPonmGwAb8TeyBvZDvg4wdP
-         DO14ek8TP3GH/KvuVxbY0GT3jdZg6pNDls+UXYFUL6++7KkNbAFKS9V5ET2WxDvAJm6M
-         VPjNt1HQ8u+x7ZzEhAuhPDeinB+Hg/eyLHkOg8dW4EeLwzj0vv4xERJpi2a8H06ZcgoZ
-         giQA==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682683345; x=1685275345;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+IhJdlbzPopAgcnIQcMyy0yuzqBnz1h8mDocxofWCY=;
+        b=aLYgN7VlR46N9WcDi53goFnZv+vG6n3pLEhhSP9AnlnYDiiuuH7hkDMkrbFyl/q8IU
+         QqyxBo3ttSlxPV99BPEA855FtbCjlLBq+2yUTvTQrQdE3zs6TkyppYM8+4iJm0cSlyTZ
+         4kJvdtC6YfTYisDIciOvBeSXMzj6JftKhpHLkM7+dbEncXDxKStkW/Yeosa1Ci8x2Xew
+         TRKfi2Xbgzs5uPExZM9N2S626aiDKkYDfPfeLt0iG40V81YMQo2BzohjA180oQd3gl9r
+         zn5JUkkEJIGXv7OzhafPO6q+n3QKY7b0LRP/qIzGwu7mBU9lh01fnfzJTPUA2ueO4c+s
+         Tysw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682683284; x=1685275284;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZPte/pKtqTO+AZafGTxmXrOl5pSZO0/CWxo2rC3YnZs=;
-        b=PbtiIC30b5HjxvbzixxowhMGUJR4c97nacRm9MvM+PmuPdqOzIoz5VHOsU8kFp3SCU
-         +VrQCWUhz+F39Uu709A1MSc9kMvATG1oO0lJvboj6wyqI7U5P4qdC4b0+UCDEbkVbeR+
-         sk2Ddcu5gteMIuPxde3ktipfeIwoNHGf3u9DnxuxbJU9OgDEm9vamemC9T9QauL19amu
-         p55OMVLcJ4h0+CadluWUIGcsWSBS1CB43hueNlFBGZ9fp1fwiVXaIrQi1n7F+fPorJIu
-         1vL0/0+ZdYzaCPKWdMcCuGN+Q9XjIAyVPTvt9SHcxTwlOk3x4v38Jxszv97LbDU0A7U2
-         iYaA==
-X-Gm-Message-State: AC+VfDylC65m5rjqhap+Re+a5phMQ6l3UHx50eEGuhi6+cKRaGIPGVe6
-        NjtpsgN4XeKSQcc+dfFk1Vulbw==
-X-Google-Smtp-Source: ACHHUZ56NW1lU+tU1Ept9DHFEa6yhwXbLGLBDRLT8LZpAyx3okj6Vj4I+4BWrBpdsk1NON7Fn9nJ0A==
-X-Received: by 2002:a05:600c:2183:b0:3f1:76d7:ae2b with SMTP id e3-20020a05600c218300b003f176d7ae2bmr4023406wme.13.1682683283971;
-        Fri, 28 Apr 2023 05:01:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682683345; x=1685275345;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i+IhJdlbzPopAgcnIQcMyy0yuzqBnz1h8mDocxofWCY=;
+        b=QPTQa7Y3uRum3RBslLyZAfmN6vJUlwqBweXe0RjYLd/oAAcdD1l34uCI3S7AXtmgCC
+         fNLfok5rVlBL6R5Cl99sp7Bdnwb/q6dSLJBpk7lM7vmDrTnDrOZSDgALVHqmnIXjIgaI
+         b4jQafgvPSCCc3O0+ibS6aE8h6byqqgICJT1ntQVCWJQomUZkrY1iu9bOr4p/FzTwkmJ
+         4SnSe/xT9YpaL7IRKXADpF07ZubbIQGvKT7i2ljdZ8bGWs8XaEjzI7+y0YLsh4HtdsOY
+         iBYXcG1M+2mfKnsh+NeyW6pV/O4onHpJLmRev1/WwubQaRGUZEalSRWeSU0YF5dGpNSS
+         iiHQ==
+X-Gm-Message-State: AC+VfDyRaVSlZDhevSXzipsmW/E4hW2AIaL1rGylZOE6NnIn0ugvvo8V
+        p0ce5waOhQdc3SScj7wdZZNx5g==
+X-Google-Smtp-Source: ACHHUZ5VIm/9FvBnliMEeY0Op5aLkD+MKAJ4pG2os4QAW4erFcKj2zX2YCBI9BaqYR1JhwIUBX2zdw==
+X-Received: by 2002:a5d:68cb:0:b0:2f0:2c3c:b858 with SMTP id p11-20020a5d68cb000000b002f02c3cb858mr6046924wrw.31.1682683344886;
+        Fri, 28 Apr 2023 05:02:24 -0700 (PDT)
 Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id m18-20020a7bcb92000000b003f24f245f57sm15383740wmi.42.2023.04.28.05.01.23
+        by smtp.gmail.com with ESMTPSA id x8-20020a05600c21c800b003f2390bdd0csm15487607wmj.32.2023.04.28.05.02.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 05:01:23 -0700 (PDT)
+        Fri, 28 Apr 2023 05:02:24 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -57,10 +58,12 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Andrew Jones <ajones@ventanamicro.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH -fixes 1/2] riscv: Fix huge_ptep_set_wrprotect when PTE is a NAPOT
-Date:   Fri, 28 Apr 2023 14:01:19 +0200
-Message-Id: <20230428120120.21620-1-alexghiti@rivosinc.com>
+Subject: [PATCH -fixes 2/2] riscv: Implement missing huge_ptep_get
+Date:   Fri, 28 Apr 2023 14:01:20 +0200
+Message-Id: <20230428120120.21620-2-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230428120120.21620-1-alexghiti@rivosinc.com>
+References: <20230428120120.21620-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,43 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We need to avoid inconsistencies across the PTEs that form a NAPOT
-region, so when we write protect such a region, we should clear and flush
-all the PTEs to make sure that any of those PTEs is not cached which would
-result in such inconsistencies (arm64 does the same).
+huge_ptep_get must be reimplemented in order to go through all the PTEs
+of a NAPOT region: this is needed because the HW can update the A/D bits
+of any of the PTE that constitutes the NAPOT region.
 
 Fixes: f2aeb0118ddd ("riscv: mm: support Svnapot in hugetlb page")
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
- arch/riscv/mm/hugetlbpage.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/hugetlb.h |  3 +++
+ arch/riscv/mm/hugetlbpage.c      | 24 ++++++++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
+diff --git a/arch/riscv/include/asm/hugetlb.h b/arch/riscv/include/asm/hugetlb.h
+index fe6f23006641..ce1ebda1a49a 100644
+--- a/arch/riscv/include/asm/hugetlb.h
++++ b/arch/riscv/include/asm/hugetlb.h
+@@ -36,6 +36,9 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
+ 			       unsigned long addr, pte_t *ptep,
+ 			       pte_t pte, int dirty);
+ 
++#define __HAVE_ARCH_HUGE_PTEP_GET
++pte_t huge_ptep_get(pte_t *ptep);
++
+ pte_t arch_make_huge_pte(pte_t entry, unsigned int shift, vm_flags_t flags);
+ #define arch_make_huge_pte arch_make_huge_pte
+ 
 diff --git a/arch/riscv/mm/hugetlbpage.c b/arch/riscv/mm/hugetlbpage.c
-index a163a3e0f0d4..238d00bdac14 100644
+index 238d00bdac14..e0ef56dc57b9 100644
 --- a/arch/riscv/mm/hugetlbpage.c
 +++ b/arch/riscv/mm/hugetlbpage.c
-@@ -218,6 +218,7 @@ void huge_ptep_set_wrprotect(struct mm_struct *mm,
- {
- 	pte_t pte = ptep_get(ptep);
- 	unsigned long order;
-+	pte_t orig_pte;
- 	int i, pte_num;
+@@ -3,6 +3,30 @@
+ #include <linux/err.h>
  
- 	if (!pte_napot(pte)) {
-@@ -228,9 +229,12 @@ void huge_ptep_set_wrprotect(struct mm_struct *mm,
- 	order = napot_cont_order(pte);
- 	pte_num = napot_pte_num(order);
- 	ptep = huge_pte_offset(mm, addr, napot_cont_size(order));
-+	orig_pte = get_clear_contig_flush(mm, addr, ptep, pte_num);
+ #ifdef CONFIG_RISCV_ISA_SVNAPOT
++pte_t huge_ptep_get(pte_t *ptep)
++{
++	unsigned long pte_num;
++	int i;
++	pte_t orig_pte = ptep_get(ptep);
 +
-+	orig_pte = pte_wrprotect(orig_pte);
- 
- 	for (i = 0; i < pte_num; i++, addr += PAGE_SIZE, ptep++)
--		ptep_set_wrprotect(mm, addr, ptep);
-+		set_pte_at(mm, addr, ptep, orig_pte);
- }
- 
- pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
++	if (!pte_present(orig_pte) || !pte_napot(orig_pte))
++		return orig_pte;
++
++	pte_num = napot_pte_num(napot_cont_order(orig_pte));
++
++	for (i = 0; i < pte_num; i++, ptep++) {
++		pte_t pte = ptep_get(ptep);
++
++		if (pte_dirty(pte))
++			orig_pte = pte_mkdirty(orig_pte);
++
++		if (pte_young(pte))
++			orig_pte = pte_mkyoung(orig_pte);
++	}
++
++	return orig_pte;
++}
++
+ pte_t *huge_pte_alloc(struct mm_struct *mm,
+ 		      struct vm_area_struct *vma,
+ 		      unsigned long addr,
 -- 
 2.37.2
 
