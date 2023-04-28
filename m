@@ -2,1349 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC7A6F107A
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1803B6F107F
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 04:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344379AbjD1CkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 27 Apr 2023 22:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S1344643AbjD1Coz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 27 Apr 2023 22:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjD1CkU (ORCPT
+        with ESMTP id S1344379AbjD1Cov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 27 Apr 2023 22:40:20 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FDE26B9;
-        Thu, 27 Apr 2023 19:40:09 -0700 (PDT)
-X-UUID: fab5da32e56d11ed8e3aff58e85a36f4-20230428
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ba9o57dMegDjqYHziS0G50+2fomQbhhAMa66ngSg9tw=;
-        b=GJPlOlV7c+Hn6BFdIJik0UrGvwmrFEVJdfmHZN7oOyeB0Ri/HftRq6yuTA8yF/kPJRIVvGGkXARB4rBl8qhTW/L+yjmw2IIF5MPcXDsSFHFT7TYv555t6iuyZVpDAJAfNocaqETyV7V7aZ/SzdVXeO8BPkmAFAwBOlxdifQilWI=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:3c433379-d221-4264-a6b0-7b727e715dfb,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:75
-X-CID-INFO: VERSION:1.1.22,REQID:3c433379-d221-4264-a6b0-7b727e715dfb,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:75
-X-CID-META: VersionHash:120426c,CLOUDID:fc4b30bf-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:230428104005WJTVEZSV,BulkQuantity:0,Recheck:0,SF:38|29|28|16|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-        L:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: fab5da32e56d11ed8e3aff58e85a36f4-20230428
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 610417388; Fri, 28 Apr 2023 10:40:03 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 28 Apr 2023 10:40:02 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 28 Apr 2023 10:40:01 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
-        <nfraprado@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH] media: mediatek: vcodec: support stateless hevc decoder
-Date:   Fri, 28 Apr 2023 10:40:00 +0800
-Message-ID: <20230428024000.26558-1-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 27 Apr 2023 22:44:51 -0400
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1588E26A6;
+        Thu, 27 Apr 2023 19:44:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1682649889; x=1714185889;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=clet2xTYEDpvlTUG2zPKaT9zUsdpv2vHUkSz9vAXSts=;
+  b=piDnszNFw74OfuReTlvSXU6GkKhdC+Itx8cqFOY6AfVFXnYlL4ZSLcbI
+   NUPwuVWWmOhGL2du8ARptCLNqRs7vFKs5syFlHp5AyK9xDwMsftwzchj9
+   3mjHdG9IpfjTg126b+iAyuyJLkc1bmmJLjz9i5jYOwJ5E/CcAlv59mwWj
+   mMKo104SpFkL7IqPm6Qd4UZ3kDENpi19LRRP6s2qU6NlZB8aDp7ZpkuVn
+   FaWR+EzW6UNF7VD7UTsIOHX3MR12ldUUapHmMGewccvr/qdQJeWdhxDga
+   wpaD+dXYGgRIwU2Wt3w8LRhYnCHpvKDUvgunkmgEQeUQZ/qZPfpON5qWZ
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,233,1677513600"; 
+   d="scan'208";a="333891764"
+Received: from mail-dm6nam10lp2106.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.106])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Apr 2023 10:44:48 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OQ8ZWdT5drhxzn5OEk/hRneSGSpkqtvTsJFkBjWjmDTTWtpYAumOpD+Fpr+VQb6MITMHlixF+kEDZseRsSXDsmZZOzFJgDH8oVQzuiDltxOFq6ZwAWU6pxqpJkmwbJS+Y1kCYwROVZE86AVQ9e+XSCBVvNfJLD6WcmNDplvMryij6OBcImwwOkYQjsXV6gXcNuMm86nJnx2DclMhiZaM4SnxSImJKdcM4dFWhynjTerqsLFhJ6/JdbQubGiEdJ21M199o7RogIiDua/RfzX3fXZvzrrVSRe3u+KYv67pczfiRjeBc9nG8fqoDakoXkyjjQlSCnK05JI8pPZZoLRrhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H8TruTWn7wBMfmy2nRjrUdsmOOvbotIXQp7OI6aoFQI=;
+ b=V+Ok53aBglWLkPuvtaBJXBfQ80LJ9tt/Qn/Ie9Xvyaq9RAFsBGe+pDs/Mqu8TWFNQGqh21GSAlRQG2qwBtnZ/07ZgrJSaQKuyb5yHjCpKMmEXIKfZXyE/QV7WbZsdWcXKCBDfFs4qzovaswaPj/+thEkE0O3rqIW8++NsFu69uCKXTDdJOaQ+q5TmweYWG3EFgtiKQqTG+81qBe6Ec/zncw4DdSKUo6ee0Tsp4gOua47HL6dr5DVPWHCi9N1P/TOEq6xMa8Jx8sGA6XYFn3t4mHPg9HjzNcz7t8hpaWKFynHTO1yLQtQH0SNYO4Ol9O2JXCte+UhLvtwtqX7HEpgCg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H8TruTWn7wBMfmy2nRjrUdsmOOvbotIXQp7OI6aoFQI=;
+ b=HlxJVXwgLNKTt0PNZs/9wjL/z9F6cS17ZQSA12/+j+eaQrKL64RW4tsxNnKIPqOrKVqC7fSWGA+/z6oif0ofmlKRp2JcaOR7Hxu53qCQpdzUtwkFV8gpDtTC5CWsdnEAwn9oL2b4dg0sGFxifrN57F2kSsL7HFF+Vb3KqBDZSFc=
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
+ MN2PR04MB7085.namprd04.prod.outlook.com (2603:10b6:208:1e6::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.22; Fri, 28 Apr
+ 2023 02:44:45 +0000
+Received: from DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::eb0e:1bef:f266:eceb]) by DM8PR04MB8037.namprd04.prod.outlook.com
+ ([fe80::eb0e:1bef:f266:eceb%9]) with mapi id 15.20.6340.022; Fri, 28 Apr 2023
+ 02:44:44 +0000
+From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+To:     Daniel Wagner <dwagner@suse.de>
+CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
+Subject: Re: [PATCH REPOST blktests v2 2/9] nvme: Do not hard code device size
+ for dd test
+Thread-Topic: [PATCH REPOST blktests v2 2/9] nvme: Do not hard code device
+ size for dd test
+Thread-Index: AQHZeXtj0ucpszBCTUighHxPq+oc+g==
+Date:   Fri, 28 Apr 2023 02:44:44 +0000
+Message-ID: <z3lbxnnewuwnozrme27okchaxytt7zegj4emgpt4gmewsvcr5k@aordfdu7tai4>
+References: <20230421060505.10132-1-dwagner@suse.de>
+ <20230421060505.10132-3-dwagner@suse.de>
+In-Reply-To: <20230421060505.10132-3-dwagner@suse.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|MN2PR04MB7085:EE_
+x-ms-office365-filtering-correlation-id: 29a77779-a67d-4542-c093-08db47928664
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9HKMrJD89avFjBHJn0YEK00RFV4ffbz6EyxKThk2O/S8ds5KeMaaFiP6Cr1b7ceib4EQevL8RfBYPSBlg4IlJF3DvNK/EL92QN0elfZRnqGQEbSx/9yj7pGoHg6bL3R7G836/GVyOLGGkdzmbPV6xQj05al7l6fpxudHF8HMg+biZC+hMd4SC9tfXb1pNmK47i1E1xXhKoFb8kdiGHemgdsahYsQkv3MtievGuw09lB7uGyiwclS9kV75e4jKcoLP/UXAGFbrIUubxb+kX+ZYtFfY0IjqFtdLUhgFpl3GDGhzLOEZyrGkXtYnq8cTZFm2W5WHh0fmMysXyfENfLXqYGdHWWO4E3kIHHlQ4eQoOip9jHOYBCEHqsabekYVHxpER+JHS+zPuopeGUs8eSGBFdthm91Vh/G3wD6Dmq4fhRz4cuetZINDCc9OBKR096YkxwgYZ+fjf68RWaYT4Pi/jd67c0+meH39L9ysDxDMrW1aD1GGLpIL6eAu5KoIuBqzSMgIJfxrNkRcEdM9wZuCz5Pt24bVn+846rH+J0KyU1s+s97tg0rB2eyQQ9EWaOKlRwiVsIZYC5i2Nj6l8/qYkz4JCpQj1YNjH/CeLsFeZNGSya/zPfF4l2CJ8bRBMWN
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(451199021)(316002)(4326008)(54906003)(6916009)(91956017)(66946007)(66556008)(66476007)(66446008)(64756008)(76116006)(186003)(6506007)(9686003)(6512007)(26005)(122000001)(38100700002)(83380400001)(86362001)(5660300002)(8676002)(8936002)(41300700001)(478600001)(33716001)(6486002)(71200400001)(38070700005)(2906002)(82960400001)(44832011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pIL1mTc37EcsYUUNUkbBKX0vPY2Niism9dP2ftx/NzRQvaKgQVAxhFJ9bbyg?=
+ =?us-ascii?Q?QZ0TDixTJI7jqJA5gvtJGSW6wk6QHreIJK21RwE/YVbOL6RfYjRUooVtcoao?=
+ =?us-ascii?Q?BxGiDL8l9af6ZyiBOsLfUGtk4alPdEM3ZCjfhQPeHg7QSbgt4trJACB0u9Y3?=
+ =?us-ascii?Q?YVLez2i+Emvugzbqk2OxWpkCHjf90LAIqB9MFmBJlxhZXQzGY7o8XK407xSn?=
+ =?us-ascii?Q?+pdiFv5ixHO5/GCZXOoZ6buM7TFPBhdFrd1nuZQCz0SvZDufZYuOct5E3KoU?=
+ =?us-ascii?Q?FxvpCDCajV285HldBOqRJin9LfGVDMxJPw3SwBXSr87RKxJkuN/OPq5qeljN?=
+ =?us-ascii?Q?kEp8haPxp5iOLy6E8/kJNOjtyTQ8xBc9tjN0MKD90HyFfV3jYPnDCBD9AxD9?=
+ =?us-ascii?Q?Aq6g0fZHm8TVDZJh83tXv2iOXegaROcFYVpxl/+xAr9EGb+jwXwqw6TM2O9C?=
+ =?us-ascii?Q?vj59txY34yDsgoKJbCfzATtzV89phP8NMff42Erk0nKOQZ280VVjewaAeBgP?=
+ =?us-ascii?Q?dlcVg70i9illS3+bnTMvT2zfxWqiWwc+UFwRTCS7oXe5NEQLWvM8qU68jAa+?=
+ =?us-ascii?Q?GuAs1ama2SR/SAEFqNxOX4dAFgrOEmOWB7sn4STPQbSxr5G3+pL51x9xmhDw?=
+ =?us-ascii?Q?yLykhJNGkqVp8nC58kWOBwV3Vs304oeLrzp+vP9n25g6XHtJAeM4rJ3J5fu7?=
+ =?us-ascii?Q?C7+V85BjKAxXYnXO1w7vy0P+etTA02gfykf++zumf9H3yclDPGFsSb+M+7ai?=
+ =?us-ascii?Q?xtU0tafJpMnVzNrBwLvew6WoV+RwCdWIajIUSbqIc/6VWfTyfrOn2olnlThe?=
+ =?us-ascii?Q?LNboFJqHoa0zUWCF2S/SUUy59EXe4jiCWL/Y6CyzdKoodAUsstwIax13GAE+?=
+ =?us-ascii?Q?DVbn4RBRxBwL/gYCxw3Dk3OgL6ZcBDDuv8hkEv1JhTx1BoHh6dwiIB3cihMo?=
+ =?us-ascii?Q?gvMjT3oVSD4dteDb7JlMTrsBlaX79EBN+jiLEoJeSOhSBESCwJ95vChaq4B/?=
+ =?us-ascii?Q?45FPnItSap+E/gC13NBFDp7+vqVqnGsRWP+0IipDyrR6Fi/5d0N3wWWi21tI?=
+ =?us-ascii?Q?IAm5NRIjtW503NieNuh8VDxzoDtKEQFg36A6yfoslKilsYGAMMFTyBM28Y15?=
+ =?us-ascii?Q?ABjH1O+93yWKuFWdNn6TgJVL3DJ2Tx28/XM0jHGPWeZGHx0fIGzY4w9xVouR?=
+ =?us-ascii?Q?713c7kpAIvhpXDwakELuvGienVoNHxO0DSv37U0IbhA1PfJzliRaw9RoQakX?=
+ =?us-ascii?Q?SwFaVYbx8sYvcD2C5dtkDmpX8HmnRqFjpH/DDydVuTq9gBA8YaUCika2XNYZ?=
+ =?us-ascii?Q?alrcFspjRJNgysWsbdVC+IeBiSkXBybD58v+mqW4PdQtJdCTHPPk17lg+5KD?=
+ =?us-ascii?Q?RA8pV+OfmV8PrURRMRvLctVJZmYzd8Q9tYCrfi/Da29c4SKP8XpzOkxyhDL7?=
+ =?us-ascii?Q?KLUZzhi4sfR0RHYhvJVLm4a4H7aEXNs8M0NqhW4wnKzXG3oLDwxcRP6/2BwX?=
+ =?us-ascii?Q?oRFb4U6VZwjEA0SEKceS/4JV7P4PzNpEHLXN7BArqdZHtfjZD5irVtTY2tPh?=
+ =?us-ascii?Q?oHacxLGpxjgY03wYQeTfMhsZtcSGsdq+zPqtdJdxh9pLaIFgBmqDICjaMSlc?=
+ =?us-ascii?Q?1FtoFDEnZH4DV74CsxFw/LE=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <DE8A500D00366E4A8EE5C93DF3C147D6@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 1u39ZYHd3lAxlkFfXx+J89zO06ns2dsf4p1g+noL+k5YO2juuQyiL98TzAfr/SKNR79eUbTkINBG8YJ4L5CEQ9+h1c8zPgxoSlLvhZmEMz6795kuwqCrmakkMrM1yvqJ6vVKuX3qMVmbMX0hu9pcHNrBgWaGH8Vuyd5S+dT/oYZ7DMYBXOcDaxOXwGWmL5c/4TmJyzEQajkv13G9/8PXYhHGINpC+OOnJc08yySw3dywPg1v6NdFqiYOZRx1eFTZzizHYvUt4K2z/Pw/aI8T0rU3wLroIvlyEo47lSiR3wTSe1Pz/0LYsytRUOTCFbnR41b9Cb8Rw8KF2/D+Y1VSXPMSSD46MRyXD9c/CJm3wYVy/3U/XaKUwlN1B/+gmg5IrjB3vm2BHegzrMugGuEQmDPJoheLjPklb0vpdVw1iVXv5cV5Du6Ume4+xIsXFQiUvtMtTiN5XiOpLcZQncg6nllkhPPV9UVkn1ENL5GkUNBlLlp9eS8yqgAb79NpUl+cRC3Ez7tDcbw1A5vt/MxEiBStvtFBpA8Irh9NiSV/amPBCTB8ag7K2fIRriFRQ2Ym0z7L2T1Ctaj15RGjCS3J0m4VeWbdMvJdI9AjdztDUW27LmYtwmVbxG0+TNIjg9Ztl45tAVYn3HySK70V+jXiWgshaAqpZbzdd9QCOqZYz5ieMZ5fxbH3bUagU/K6jZP68WGPTxYDKPC8OUdZ4p7o97X6vDHQrkvOBGIUnKZVZeSexpSxacHoLT+qTO+x9ZFdDRxtm4sTkwMxffwYeaVMFfGWkS9ZZHuwx2nd6mGqJovPgoIcKx/zwexrErr8VVY4nTUb+SfxVyJjioBuWWT89go12QyoLf1bZTZsbSIZ63ySeLn5CcR8nITP7E0bsp7J+QMA4UZVZgDqar/+pXuvj3ugSiaXqwMeSsao0d/TQLM=
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29a77779-a67d-4542-c093-08db47928664
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Apr 2023 02:44:44.8585
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: C5dwsjCarSvt5Vd5yuRDFtMtCS4OMwCHqrAzpZz15qYU6AFBsp/qT0LTQNCi7DV6c8vwe4UVTmJHYEDPyCfu62Ry0bUj6zH1QOX6Z2JNrP0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB7085
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mediatek hevc decoder linux driver which use the
-stateless API in MT8195.
+On Apr 21, 2023 / 08:04, Daniel Wagner wrote:
+> Read the block device sizes instead hard coding them.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-- The result of hevc fluster test: 132 pass of total 147.
-- 10bit not support: 11
-- resolution not support: 4
----
- .../media/platform/mediatek/vcodec/Makefile   |    1 +
- .../vcodec/mtk_vcodec_dec_stateless.c         |   59 +-
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h |    1 +
- .../vcodec/vdec/vdec_hevc_req_multi_if.c      | 1099 +++++++++++++++++
- .../platform/mediatek/vcodec/vdec_drv_if.c    |    4 +
- .../platform/mediatek/vcodec/vdec_drv_if.h    |    1 +
- 6 files changed, 1164 insertions(+), 1 deletion(-)
- create mode 100644 drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
+I suggest to add this to clarify the purpose of this commit:
+  ".., so that the device size can be configurable in future."
 
-diff --git a/drivers/media/platform/mediatek/vcodec/Makefile b/drivers/media/platform/mediatek/vcodec/Makefile
-index 93e7a343b5b0..d24b452d0fb3 100644
---- a/drivers/media/platform/mediatek/vcodec/Makefile
-+++ b/drivers/media/platform/mediatek/vcodec/Makefile
-@@ -13,6 +13,7 @@ mtk-vcodec-dec-y := vdec/vdec_h264_if.o \
- 		vdec/vdec_h264_req_if.o \
- 		vdec/vdec_h264_req_common.o \
- 		vdec/vdec_h264_req_multi_if.o \
-+		vdec/vdec_hevc_req_multi_if.o \
- 		mtk_vcodec_dec_drv.o \
- 		vdec_drv_if.o \
- 		vdec_vpu_if.o \
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-index 0c2ef1686397..7b3eb0ccb522 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
-@@ -107,11 +107,63 @@ static const struct mtk_stateless_control mtk_stateless_controls[] = {
- 		},
- 		.codec_type = V4L2_PIX_FMT_VP9_FRAME,
- 	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_SPS,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_PPS,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_DECODE_PARAMS,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_MPEG_VIDEO_HEVC_PROFILE,
-+			.def = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN,
-+			.max = V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_10,
-+			.menu_skip_mask =
-+				BIT(V4L2_MPEG_VIDEO_HEVC_PROFILE_MAIN_STILL_PICTURE),
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_DECODE_MODE,
-+			.min = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-+			.def = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-+			.max = V4L2_STATELESS_HEVC_DECODE_MODE_FRAME_BASED,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
-+	{
-+		.cfg = {
-+			.id = V4L2_CID_STATELESS_HEVC_START_CODE,
-+			.min = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-+			.def = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-+			.max = V4L2_STATELESS_HEVC_START_CODE_ANNEX_B,
-+		},
-+		.codec_type = V4L2_PIX_FMT_HEVC_SLICE,
-+	},
- };
- 
- #define NUM_CTRLS ARRAY_SIZE(mtk_stateless_controls)
- 
--static struct mtk_video_fmt mtk_video_formats[5];
-+static struct mtk_video_fmt mtk_video_formats[6];
- 
- static struct mtk_video_fmt default_out_format;
- static struct mtk_video_fmt default_cap_format;
-@@ -356,6 +408,7 @@ static void mtk_vcodec_add_formats(unsigned int fourcc,
- 	case V4L2_PIX_FMT_H264_SLICE:
- 	case V4L2_PIX_FMT_VP8_FRAME:
- 	case V4L2_PIX_FMT_VP9_FRAME:
-+	case V4L2_PIX_FMT_HEVC_SLICE:
- 		mtk_video_formats[count_formats].fourcc = fourcc;
- 		mtk_video_formats[count_formats].type = MTK_FMT_DEC;
- 		mtk_video_formats[count_formats].num_planes = 1;
-@@ -412,6 +465,10 @@ static void mtk_vcodec_get_supported_formats(struct mtk_vcodec_ctx *ctx)
- 		mtk_vcodec_add_formats(V4L2_PIX_FMT_VP9_FRAME, ctx);
- 		out_format_count++;
- 	}
-+	if (ctx->dev->dec_capability & MTK_VDEC_FORMAT_HEVC_FRAME) {
-+		mtk_vcodec_add_formats(V4L2_PIX_FMT_HEVC_SLICE, ctx);
-+		out_format_count++;
-+	}
- 
- 	if (cap_format_count)
- 		default_cap_format = mtk_video_formats[cap_format_count - 1];
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index 15d2cb171b89..1f4c5774ec47 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -347,6 +347,7 @@ enum mtk_vdec_format_types {
- 	MTK_VDEC_FORMAT_H264_SLICE = 0x100,
- 	MTK_VDEC_FORMAT_VP8_FRAME = 0x200,
- 	MTK_VDEC_FORMAT_VP9_FRAME = 0x400,
-+	MTK_VDEC_FORMAT_HEVC_FRAME = 0x1000,
- 	MTK_VCODEC_INNER_RACING = 0x20000,
- };
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-new file mode 100644
-index 000000000000..803f6d3b0298
---- /dev/null
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_hevc_req_multi_if.c
-@@ -0,0 +1,1099 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ * Author: Yunfei Dong <yunfei.dong@mediatek.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include "../mtk_vcodec_util.h"
-+#include "../mtk_vcodec_dec.h"
-+#include "../mtk_vcodec_intr.h"
-+#include "../vdec_drv_base.h"
-+#include "../vdec_drv_if.h"
-+#include "../vdec_vpu_if.h"
-+
-+/* the size used to store hevc wrap information */
-+#define VDEC_HEVC_WRAP_SZ (532 * SZ_1K)
-+
-+#define HEVC_MAX_MV_NUM 32
-+
-+/* get used parameters for sps/pps */
-+#define GET_HEVC_VDEC_FLAG(cond, flag) \
-+	{ dst_param->cond = ((src_param->flags & flag) ? (1) : (0)); }
-+#define GET_HEVC_VDEC_PARAM(param) \
-+	{ dst_param->param = src_param->param; }
-+
-+/**
-+ * enum vdec_hevc_core_dec_err_type  - core decode error type
-+ *
-+ * @TRANS_BUFFER_FULL: trans buffer is full
-+ * @SLICE_HEADER_FULL: slice header buffer is full
-+ */
-+enum vdec_hevc_core_dec_err_type {
-+	TRANS_BUFFER_FULL = 1,
-+	SLICE_HEADER_FULL,
-+};
-+
-+/**
-+ * struct mtk_hevc_dpb_info  - hevc dpb information
-+ *
-+ * @y_dma_addr:     Y plane physical address
-+ * @c_dma_addr:     CbCr plane physical address
-+ * @reference_flag: reference picture flag (short/long term reference picture)
-+ * @field:          field picture flag
-+ */
-+struct mtk_hevc_dpb_info {
-+	dma_addr_t y_dma_addr;
-+	dma_addr_t c_dma_addr;
-+	int reference_flag;
-+	int field;
-+};
-+
-+/*
-+ * struct mtk_hevc_sps_param  - parameters for sps
-+ */
-+struct mtk_hevc_sps_param {
-+	unsigned char video_parameter_set_id;
-+	unsigned char seq_parameter_set_id;
-+	unsigned short pic_width_in_luma_samples;
-+	unsigned short pic_height_in_luma_samples;
-+	unsigned char bit_depth_luma_minus8;
-+	unsigned char bit_depth_chroma_minus8;
-+	unsigned char log2_max_pic_order_cnt_lsb_minus4;
-+	unsigned char sps_max_dec_pic_buffering_minus1;
-+	unsigned char sps_max_num_reorder_pics;
-+	unsigned char sps_max_latency_increase_plus1;
-+	unsigned char log2_min_luma_coding_block_size_minus3;
-+	unsigned char log2_diff_max_min_luma_coding_block_size;
-+	unsigned char log2_min_luma_transform_block_size_minus2;
-+	unsigned char log2_diff_max_min_luma_transform_block_size;
-+	unsigned char max_transform_hierarchy_depth_inter;
-+	unsigned char max_transform_hierarchy_depth_intra;
-+	unsigned char pcm_sample_bit_depth_luma_minus1;
-+	unsigned char pcm_sample_bit_depth_chroma_minus1;
-+	unsigned char log2_min_pcm_luma_coding_block_size_minus3;
-+	unsigned char log2_diff_max_min_pcm_luma_coding_block_size;
-+	unsigned char num_short_term_ref_pic_sets;
-+	unsigned char num_long_term_ref_pics_sps;
-+	unsigned char chroma_format_idc;
-+	unsigned char sps_max_sub_layers_minus1;
-+	unsigned char separate_colour_plane;
-+	unsigned char scaling_list_enabled;
-+	unsigned char amp_enabled;
-+	unsigned char sample_adaptive_offset;
-+	unsigned char pcm_enabled;
-+	unsigned char pcm_loop_filter_disabled;
-+	unsigned char long_term_ref_pics_enabled;
-+	unsigned char sps_temporal_mvp_enabled;
-+	unsigned char strong_intra_smoothing_enabled;
-+	unsigned char reserved[5];
-+};
-+
-+/*
-+ * struct mtk_hevc_pps_param  - parameters for pps
-+ */
-+struct mtk_hevc_pps_param {
-+	unsigned char pic_parameter_set_id;
-+	unsigned char num_extra_slice_header_bits;
-+	unsigned char num_ref_idx_l0_default_active_minus1;
-+	unsigned char num_ref_idx_l1_default_active_minus1;
-+	char init_qp_minus26;
-+	unsigned char diff_cu_qp_delta_depth;
-+	char pps_cb_qp_offset;
-+	char pps_cr_qp_offset;
-+	unsigned char num_tile_columns_minus1;
-+	unsigned char num_tile_rows_minus1;
-+	unsigned char column_width_minus1[20];
-+	unsigned char row_height_minus1[22];
-+	char pps_beta_offset_div2;
-+	char pps_tc_offset_div2;
-+	unsigned char log2_parallel_merge_level_minus2;
-+	char dependent_slice_segment_enabled;
-+	char output_flag_present;
-+	char sign_data_hiding_enabled;
-+	char cabac_init_present;
-+	char constrained_intra_pred;
-+	char transform_skip_enabled;
-+	char cu_qp_delta_enabled;
-+	char pps_slice_chroma_qp_offsets_present;
-+	char weighted_pred;
-+	char weighted_bipred;
-+	char transquant_bypass_enabled;
-+	char pps_flag_tiles_enabled;
-+	char entropy_coding_sync_enabled;
-+	char loop_filter_across_tiles_enabled;
-+	char pps_loop_filter_across_slices_enabled;
-+	char deblocking_filter_override_enabled;
-+	char pps_disable_deflocking_filter;
-+	char lists_modification_present;
-+	char slice_segment_header_extersion_present;
-+	char deblocking_filter_control_present;
-+	char uniform_spacing;
-+	char reserved[6];
-+};
-+
-+/*
-+ * struct mtk_hevc_slice_header_param  - parameters for slice header
-+ */
-+struct mtk_hevc_slice_header_param {
-+	unsigned int	slice_type;
-+	unsigned int	num_active_ref_layer_pics;
-+	int		slice_qp;
-+	int		slice_qp_delta_cb;
-+	int		slice_qp_delta_cr;
-+	int		num_ref_idx[3];
-+	unsigned int	col_ref_idx;
-+	unsigned int	five_minus_max_num_merge_cand;
-+	int		slice_deblocking_filter_beta_offset_div2;
-+	int		slice_deblocking_filter_tc_offset_div2;
-+	unsigned char	sao_enable_flag;
-+	unsigned char	sao_enable_flag_chroma;
-+	unsigned char	cabac_init_flag;
-+	unsigned char	slice_tmvp_flags_present;
-+	unsigned char	col_from_l0_flag;
-+	unsigned char	mvd_l1_zero_flag;
-+	unsigned char	slice_loop_filter_across_slices_enabled_flag;
-+	unsigned char	deblocking_filter_disable_flag;
-+	unsigned int	slice_reg0;
-+	unsigned int	slice_reg1;
-+	unsigned int	slice_reg2;
-+	unsigned int	num_rps_curr_temp_list;
-+	unsigned int	ref_list_mode;
-+	int		str_num_delta_pocs;
-+	int		str_num_negtive_pos_pics;
-+	int		num_long_term;
-+	int		num_long_term_sps;
-+	unsigned int	max_cu_width;
-+	unsigned int	max_cu_height;
-+	unsigned int	num_entry_point_offsets;
-+	unsigned int    last_lcu_x_in_tile[17];
-+	unsigned int    last_lcu_y_in_tile[17];
-+	unsigned char   nal_unit_type;
-+};
-+
-+/*
-+ * struct slice_api_hevc_scaling_matrix  - parameters for scaling list
-+ */
-+struct slice_api_hevc_scaling_matrix {
-+	unsigned char scaling_list_4x4[6][16];
-+	unsigned char scaling_list_8x8[6][64];
-+	unsigned char scaling_list_16x16[6][64];
-+	unsigned char scaling_list_32x32[2][64];
-+	unsigned char scaling_list_dc_coef_16x16[6];
-+	unsigned char scaling_list_dc_coef_32x32[2];
-+};
-+
-+/*
-+ * struct slice_hevc_dpb_entry  - each dpb information
-+ */
-+struct slice_hevc_dpb_entry {
-+	u64 timestamp;
-+	unsigned char flags;
-+	unsigned char field_pic;
-+	int pic_order_cnt_val;
-+};
-+
-+/*
-+ * struct slice_api_hevc_decode_param - parameters for decode.
-+ */
-+struct slice_api_hevc_decode_param {
-+	struct slice_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	int pic_order_cnt_val;
-+	unsigned short short_term_ref_pic_set_size;
-+	unsigned short long_term_ref_pic_set_size;
-+	unsigned char num_active_dpb_entries;
-+	unsigned char num_poc_st_curr_before;
-+	unsigned char num_poc_st_curr_after;
-+	unsigned char num_poc_lt_curr;
-+	unsigned char poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	unsigned char poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	unsigned char poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+	unsigned char num_delta_pocs_of_ref_rps_idx;
-+	int flags;
-+};
-+
-+/**
-+ * struct hevc_fb - hevc decode frame buffer information
-+ *
-+ * @vdec_fb_va: virtual address of struct vdec_fb
-+ * @y_fb_dma:   dma address of Y frame buffer (luma)
-+ * @c_fb_dma:   dma address of C frame buffer (chroma)
-+ * @poc:        picture order count of frame buffer
-+ * @reserved:   for 8 bytes alignment
-+ */
-+struct hevc_fb {
-+	u64 vdec_fb_va;
-+	u64 y_fb_dma;
-+	u64 c_fb_dma;
-+	s32 poc;
-+	u32 reserved;
-+};
-+
-+/**
-+ * struct vdec_hevc_slice_lat_dec_param  - parameters for decode current frame
-+ *
-+ * @sps:            hevc sps syntax parameters
-+ * @pps:            hevc pps syntax parameters
-+ * @slice_header:   hevc slice header syntax parameters
-+ * @scaling_matrix: hevc scaling list parameters
-+ * @decode_params:  decoder parameters of each frame used for hardware decode
-+ * @hevc_dpb_info:  dpb reference list
-+ */
-+struct vdec_hevc_slice_lat_dec_param {
-+	struct mtk_hevc_sps_param sps;
-+	struct mtk_hevc_pps_param pps;
-+	struct mtk_hevc_slice_header_param slice_header;
-+	struct slice_api_hevc_scaling_matrix scaling_matrix;
-+	struct slice_api_hevc_decode_param decode_params;
-+	struct mtk_hevc_dpb_info hevc_dpb_info[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-+};
-+
-+/**
-+ * struct vdec_hevc_slice_info - decode information
-+ *
-+ * @wdma_end_addr_offset: wdma end address offset
-+ * @timeout:              Decode timeout: 1 timeout, 0 no timeount
-+ * @vdec_fb_va:           VDEC frame buffer struct virtual address
-+ * @crc:                  Used to check whether hardware's status is right
-+ */
-+struct vdec_hevc_slice_info {
-+	/* LAT dec addr */
-+	u64 wdma_end_addr_offset;
-+	u64 timeout;
-+	u64 vdec_fb_va;
-+	u32 crc[8];
-+};
-+
-+/*
-+ * struct vdec_vp9_slice_mem - memory address and size
-+ */
-+struct vdec_hevc_slice_mem {
-+	union {
-+		u64 buf;
-+		dma_addr_t dma_addr;
-+	};
-+	union {
-+		size_t size;
-+		dma_addr_t dma_addr_end;
-+		u64 padding;
-+	};
-+};
-+
-+/**
-+ * struct vdec_av1_slice_fb - frame buffer for decoding
-+ * @y:  current y buffer address info
-+ * @c:  current c buffer address info
-+ */
-+struct vdec_hevc_slice_fb {
-+	struct vdec_hevc_slice_mem y;
-+	struct vdec_hevc_slice_mem c;
-+};
-+
-+/**
-+ * struct vdec_hevc_slice_vsi - shared memory for decode information exchange
-+ *        between SCP and Host.
-+ *
-+ * @bs:                 input buffer info
-+ *
-+ * @ube:                ube buffer
-+ * @trans:              transcoded buffer
-+ * @err_map:            err map buffer
-+ * @slice_bc:           slice bc buffer
-+ * @wrap:               temp buffer
-+ *
-+ * @fb:                 current y/c buffer
-+ * @mv_buf_dma:         HW working motion vector buffer
-+ * @dec:                decode information (AP-R, VPU-W)
-+ * @hevc_slice_params:  decode parameters for hw used
-+ */
-+struct vdec_hevc_slice_vsi {
-+	/* used in LAT stage */
-+	struct vdec_hevc_slice_mem bs;
-+
-+	struct vdec_hevc_slice_mem ube;
-+	struct vdec_hevc_slice_mem trans;
-+	struct vdec_hevc_slice_mem err_map;
-+	struct vdec_hevc_slice_mem slice_bc;
-+	struct vdec_hevc_slice_mem wrap;
-+
-+	struct vdec_hevc_slice_fb fb;
-+	struct vdec_hevc_slice_mem mv_buf_dma[HEVC_MAX_MV_NUM];
-+	struct vdec_hevc_slice_info dec;
-+	struct vdec_hevc_slice_lat_dec_param hevc_slice_params;
-+};
-+
-+/**
-+ * struct vdec_hevc_slice_share_info - shared information used to exchange
-+ *                                     message between lat and core
-+ *
-+ * @sps:               sequence header information from user space
-+ * @dec_params:        decoder params from user space
-+ * @hevc_slice_params: decoder params used for hardware
-+ * @trans_start:       trans start dma address
-+ * @trans_end:         trans end dma address
-+ */
-+struct vdec_hevc_slice_share_info {
-+	struct v4l2_ctrl_hevc_sps sps;
-+	struct v4l2_ctrl_hevc_decode_params dec_params;
-+	struct vdec_hevc_slice_lat_dec_param hevc_slice_params;
-+	struct vdec_hevc_slice_mem trans;
-+};
-+
-+/**
-+ * struct vdec_hevc_slice_inst - hevc decoder instance
-+ *
-+ * @slice_dec_num:      how many picture be decoded
-+ * @ctx:                point to mtk_vcodec_ctx
-+ * @pred_buf:           HW working predication buffer
-+ * @mv_buf:             HW working motion vector buffer
-+ * @vpu:                VPU instance
-+ * @vsi:                vsi used for lat
-+ * @vsi_core:           vsi used for core
-+ * @wrap_addr:          wrap address used for hevc
-+ *
-+ * @hevc_slice_param:   the parameters that hardware use to decode
-+ *
-+ * @resolution_changed: resolution changed
-+ * @realloc_mv_buf:     reallocate mv buffer
-+ * @cap_num_planes:     number of capture queue plane
-+ */
-+struct vdec_hevc_slice_inst {
-+	unsigned int slice_dec_num;
-+	struct mtk_vcodec_ctx *ctx;
-+	struct mtk_vcodec_mem mv_buf[HEVC_MAX_MV_NUM];
-+	struct vdec_vpu_inst vpu;
-+	struct vdec_hevc_slice_vsi *vsi;
-+	struct vdec_hevc_slice_vsi *vsi_core;
-+	struct mtk_vcodec_mem wrap_addr;
-+
-+	struct vdec_hevc_slice_lat_dec_param hevc_slice_param;
-+
-+	unsigned int resolution_changed;
-+	unsigned int realloc_mv_buf;
-+	unsigned int cap_num_planes;
-+};
-+
-+static unsigned int vdec_hevc_get_mv_buf_size(unsigned int width, unsigned int height)
-+{
-+	int unit_size = (width / 16) * (height / 16) + 8;
-+
-+	return 64 * unit_size;
-+}
-+
-+static void *vdec_hevc_get_ctrl_ptr(struct mtk_vcodec_ctx *ctx, int id)
-+{
-+	struct v4l2_ctrl *ctrl = v4l2_ctrl_find(&ctx->ctrl_hdl, id);
-+
-+	if (!ctrl)
-+		return ERR_PTR(-EINVAL);
-+
-+	return ctrl->p_cur.p;
-+}
-+
-+static void vdec_hevc_fill_dpb_info(struct mtk_vcodec_ctx *ctx,
-+				    struct slice_api_hevc_decode_param *decode_params,
-+				    struct mtk_hevc_dpb_info *hevc_dpb_info)
-+{
-+	const struct slice_hevc_dpb_entry *dpb;
-+	struct vb2_queue *vq;
-+	struct vb2_buffer *vb;
-+	struct vb2_v4l2_buffer *vb2_v4l2;
-+	int index, vb2_index;
-+
-+	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+	for (index = 0; index < V4L2_HEVC_DPB_ENTRIES_NUM_MAX; index++) {
-+		dpb = &decode_params->dpb[index];
-+		if (index >= decode_params->num_active_dpb_entries)
-+			continue;
-+
-+		vb2_index = vb2_find_timestamp(vq, dpb->timestamp, 0);
-+		if (vb2_index < 0) {
-+			dev_err(&ctx->dev->plat_dev->dev,
-+				"Reference invalid: dpb_index(%d) timestamp(%lld)",
-+				index, dpb->timestamp);
-+			continue;
-+		}
-+
-+		vb = vq->bufs[vb2_index];
-+		vb2_v4l2 = container_of(vb, struct vb2_v4l2_buffer, vb2_buf);
-+		hevc_dpb_info[index].field = dpb->field_pic;
-+
-+		hevc_dpb_info[index].y_dma_addr =
-+			vb2_dma_contig_plane_dma_addr(vb, 0);
-+		if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2)
-+			hevc_dpb_info[index].c_dma_addr =
-+				vb2_dma_contig_plane_dma_addr(vb, 1);
-+		else
-+			hevc_dpb_info[index].c_dma_addr =
-+				hevc_dpb_info[index].y_dma_addr +
-+				ctx->picinfo.fb_sz[0];
-+	}
-+}
-+
-+static void vdec_hevc_copy_sps_params(struct mtk_hevc_sps_param *dst_param,
-+				      const struct v4l2_ctrl_hevc_sps *src_param)
-+{
-+	GET_HEVC_VDEC_PARAM(video_parameter_set_id);
-+	GET_HEVC_VDEC_PARAM(seq_parameter_set_id);
-+	GET_HEVC_VDEC_PARAM(pic_width_in_luma_samples);
-+	GET_HEVC_VDEC_PARAM(pic_height_in_luma_samples);
-+	GET_HEVC_VDEC_PARAM(bit_depth_luma_minus8);
-+	GET_HEVC_VDEC_PARAM(bit_depth_chroma_minus8);
-+	GET_HEVC_VDEC_PARAM(log2_max_pic_order_cnt_lsb_minus4);
-+	GET_HEVC_VDEC_PARAM(sps_max_dec_pic_buffering_minus1);
-+	GET_HEVC_VDEC_PARAM(sps_max_num_reorder_pics);
-+	GET_HEVC_VDEC_PARAM(sps_max_latency_increase_plus1);
-+	GET_HEVC_VDEC_PARAM(log2_min_luma_coding_block_size_minus3);
-+	GET_HEVC_VDEC_PARAM(log2_diff_max_min_luma_coding_block_size);
-+	GET_HEVC_VDEC_PARAM(log2_min_luma_transform_block_size_minus2);
-+	GET_HEVC_VDEC_PARAM(log2_diff_max_min_luma_transform_block_size);
-+	GET_HEVC_VDEC_PARAM(max_transform_hierarchy_depth_inter);
-+	GET_HEVC_VDEC_PARAM(max_transform_hierarchy_depth_intra);
-+	GET_HEVC_VDEC_PARAM(pcm_sample_bit_depth_luma_minus1);
-+	GET_HEVC_VDEC_PARAM(pcm_sample_bit_depth_chroma_minus1);
-+	GET_HEVC_VDEC_PARAM(log2_min_pcm_luma_coding_block_size_minus3);
-+	GET_HEVC_VDEC_PARAM(log2_diff_max_min_pcm_luma_coding_block_size);
-+	GET_HEVC_VDEC_PARAM(num_short_term_ref_pic_sets);
-+	GET_HEVC_VDEC_PARAM(num_long_term_ref_pics_sps);
-+	GET_HEVC_VDEC_PARAM(chroma_format_idc);
-+	GET_HEVC_VDEC_PARAM(sps_max_sub_layers_minus1);
-+
-+	GET_HEVC_VDEC_FLAG(separate_colour_plane,
-+			   V4L2_HEVC_SPS_FLAG_SEPARATE_COLOUR_PLANE);
-+	GET_HEVC_VDEC_FLAG(scaling_list_enabled,
-+			   V4L2_HEVC_SPS_FLAG_SCALING_LIST_ENABLED);
-+	GET_HEVC_VDEC_FLAG(amp_enabled,
-+			   V4L2_HEVC_SPS_FLAG_AMP_ENABLED);
-+	GET_HEVC_VDEC_FLAG(sample_adaptive_offset,
-+			   V4L2_HEVC_SPS_FLAG_SAMPLE_ADAPTIVE_OFFSET);
-+	GET_HEVC_VDEC_FLAG(pcm_enabled,
-+			   V4L2_HEVC_SPS_FLAG_PCM_ENABLED);
-+	GET_HEVC_VDEC_FLAG(pcm_loop_filter_disabled,
-+			   V4L2_HEVC_SPS_FLAG_PCM_LOOP_FILTER_DISABLED);
-+	GET_HEVC_VDEC_FLAG(long_term_ref_pics_enabled,
-+			   V4L2_HEVC_SPS_FLAG_LONG_TERM_REF_PICS_PRESENT);
-+	GET_HEVC_VDEC_FLAG(sps_temporal_mvp_enabled,
-+			   V4L2_HEVC_SPS_FLAG_SPS_TEMPORAL_MVP_ENABLED);
-+	GET_HEVC_VDEC_FLAG(strong_intra_smoothing_enabled,
-+			   V4L2_HEVC_SPS_FLAG_STRONG_INTRA_SMOOTHING_ENABLED);
-+}
-+
-+static void vdec_hevc_copy_pps_params(struct mtk_hevc_pps_param *dst_param,
-+				      const struct v4l2_ctrl_hevc_pps *src_param)
-+{
-+	int i;
-+
-+	GET_HEVC_VDEC_PARAM(pic_parameter_set_id);
-+	GET_HEVC_VDEC_PARAM(num_extra_slice_header_bits);
-+	GET_HEVC_VDEC_PARAM(num_ref_idx_l0_default_active_minus1);
-+	GET_HEVC_VDEC_PARAM(num_ref_idx_l1_default_active_minus1);
-+	GET_HEVC_VDEC_PARAM(init_qp_minus26);
-+	GET_HEVC_VDEC_PARAM(diff_cu_qp_delta_depth);
-+	GET_HEVC_VDEC_PARAM(pps_cb_qp_offset);
-+	GET_HEVC_VDEC_PARAM(pps_cr_qp_offset);
-+	GET_HEVC_VDEC_PARAM(num_tile_columns_minus1);
-+	GET_HEVC_VDEC_PARAM(num_tile_rows_minus1);
-+	GET_HEVC_VDEC_PARAM(init_qp_minus26);
-+	GET_HEVC_VDEC_PARAM(diff_cu_qp_delta_depth);
-+	GET_HEVC_VDEC_PARAM(pic_parameter_set_id);
-+	GET_HEVC_VDEC_PARAM(num_extra_slice_header_bits);
-+	GET_HEVC_VDEC_PARAM(num_ref_idx_l0_default_active_minus1);
-+	GET_HEVC_VDEC_PARAM(num_ref_idx_l1_default_active_minus1);
-+	GET_HEVC_VDEC_PARAM(pps_beta_offset_div2);
-+	GET_HEVC_VDEC_PARAM(pps_tc_offset_div2);
-+	GET_HEVC_VDEC_PARAM(log2_parallel_merge_level_minus2);
-+
-+	for (i = 0; i < 20; i++)
-+		dst_param->column_width_minus1[i] = src_param->column_width_minus1[i];
-+	for (i = 0; i < 22; i++)
-+		dst_param->row_height_minus1[i] = src_param->row_height_minus1[i];
-+
-+	GET_HEVC_VDEC_FLAG(dependent_slice_segment_enabled,
-+			   V4L2_HEVC_PPS_FLAG_DEPENDENT_SLICE_SEGMENT_ENABLED);
-+	GET_HEVC_VDEC_FLAG(output_flag_present,
-+			   V4L2_HEVC_PPS_FLAG_OUTPUT_FLAG_PRESENT);
-+	GET_HEVC_VDEC_FLAG(sign_data_hiding_enabled,
-+			   V4L2_HEVC_PPS_FLAG_SIGN_DATA_HIDING_ENABLED);
-+	GET_HEVC_VDEC_FLAG(cabac_init_present,
-+			   V4L2_HEVC_PPS_FLAG_CABAC_INIT_PRESENT);
-+	GET_HEVC_VDEC_FLAG(constrained_intra_pred,
-+			   V4L2_HEVC_PPS_FLAG_CONSTRAINED_INTRA_PRED);
-+	GET_HEVC_VDEC_FLAG(transform_skip_enabled,
-+			   V4L2_HEVC_PPS_FLAG_TRANSFORM_SKIP_ENABLED);
-+	GET_HEVC_VDEC_FLAG(cu_qp_delta_enabled,
-+			   V4L2_HEVC_PPS_FLAG_CU_QP_DELTA_ENABLED);
-+	GET_HEVC_VDEC_FLAG(pps_slice_chroma_qp_offsets_present,
-+			   V4L2_HEVC_PPS_FLAG_PPS_SLICE_CHROMA_QP_OFFSETS_PRESENT);
-+	GET_HEVC_VDEC_FLAG(weighted_pred,
-+			   V4L2_HEVC_PPS_FLAG_WEIGHTED_PRED);
-+	GET_HEVC_VDEC_FLAG(weighted_bipred,
-+			   V4L2_HEVC_PPS_FLAG_WEIGHTED_BIPRED);
-+	GET_HEVC_VDEC_FLAG(transquant_bypass_enabled,
-+			   V4L2_HEVC_PPS_FLAG_TRANSQUANT_BYPASS_ENABLED);
-+	GET_HEVC_VDEC_FLAG(pps_flag_tiles_enabled,
-+			   V4L2_HEVC_PPS_FLAG_TILES_ENABLED);
-+	GET_HEVC_VDEC_FLAG(entropy_coding_sync_enabled,
-+			   V4L2_HEVC_PPS_FLAG_ENTROPY_CODING_SYNC_ENABLED);
-+	GET_HEVC_VDEC_FLAG(loop_filter_across_tiles_enabled,
-+			   V4L2_HEVC_PPS_FLAG_LOOP_FILTER_ACROSS_TILES_ENABLED);
-+	GET_HEVC_VDEC_FLAG(pps_loop_filter_across_slices_enabled,
-+			   V4L2_HEVC_PPS_FLAG_PPS_LOOP_FILTER_ACROSS_SLICES_ENABLED);
-+	GET_HEVC_VDEC_FLAG(deblocking_filter_override_enabled,
-+			   V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_OVERRIDE_ENABLED);
-+	GET_HEVC_VDEC_FLAG(pps_disable_deflocking_filter,
-+			   V4L2_HEVC_PPS_FLAG_PPS_DISABLE_DEBLOCKING_FILTER);
-+	GET_HEVC_VDEC_FLAG(lists_modification_present,
-+			   V4L2_HEVC_PPS_FLAG_LISTS_MODIFICATION_PRESENT);
-+	GET_HEVC_VDEC_FLAG(slice_segment_header_extersion_present,
-+			   V4L2_HEVC_PPS_FLAG_SLICE_SEGMENT_HEADER_EXTENSION_PRESENT);
-+	GET_HEVC_VDEC_FLAG(deblocking_filter_control_present,
-+			   V4L2_HEVC_PPS_FLAG_DEBLOCKING_FILTER_CONTROL_PRESENT);
-+	GET_HEVC_VDEC_FLAG(uniform_spacing,
-+			   V4L2_HEVC_PPS_FLAG_UNIFORM_SPACING);
-+}
-+
-+static void vdec_hevc_copy_scaling_matrix(struct slice_api_hevc_scaling_matrix *dst_matrix,
-+					  const struct v4l2_ctrl_hevc_scaling_matrix *src_matrix)
-+{
-+	memcpy(dst_matrix, src_matrix, sizeof(*src_matrix));
-+}
-+
-+static void
-+vdec_hevc_copy_decode_params(struct slice_api_hevc_decode_param *dst_params,
-+			     const struct v4l2_ctrl_hevc_decode_params *src_params,
-+			     const struct v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX])
-+{
-+	struct slice_hevc_dpb_entry *dst_entry;
-+	const struct v4l2_hevc_dpb_entry *src_entry;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(dst_params->dpb); i++) {
-+		dst_entry = &dst_params->dpb[i];
-+		src_entry = &dpb[i];
-+
-+		dst_entry->timestamp = src_entry->timestamp;
-+		dst_entry->flags = src_entry->flags;
-+		dst_entry->field_pic = src_entry->field_pic;
-+		dst_entry->pic_order_cnt_val = src_entry->pic_order_cnt_val;
-+
-+		dst_params->poc_st_curr_before[i] = src_params->poc_st_curr_before[i];
-+		dst_params->poc_st_curr_after[i] = src_params->poc_st_curr_after[i];
-+		dst_params->poc_lt_curr[i] = src_params->poc_lt_curr[i];
-+	}
-+
-+	dst_params->pic_order_cnt_val = src_params->pic_order_cnt_val;
-+	dst_params->short_term_ref_pic_set_size = src_params->short_term_ref_pic_set_size;
-+	dst_params->long_term_ref_pic_set_size = src_params->long_term_ref_pic_set_size;
-+	dst_params->num_active_dpb_entries = src_params->num_active_dpb_entries;
-+	dst_params->num_poc_st_curr_before = src_params->num_poc_st_curr_before;
-+	dst_params->num_poc_st_curr_after = src_params->num_poc_st_curr_after;
-+	dst_params->num_delta_pocs_of_ref_rps_idx = src_params->num_delta_pocs_of_ref_rps_idx;
-+	dst_params->num_poc_lt_curr = src_params->num_poc_lt_curr;
-+	dst_params->flags = src_params->flags;
-+}
-+
-+static int vdec_hevc_slice_fill_decode_parameters(struct vdec_hevc_slice_inst *inst,
-+						  struct vdec_hevc_slice_share_info *share_info)
-+{
-+	struct vdec_hevc_slice_lat_dec_param *slice_param = &inst->vsi->hevc_slice_params;
-+	const struct v4l2_ctrl_hevc_decode_params *dec_params;
-+	const struct v4l2_ctrl_hevc_scaling_matrix *src_matrix;
-+	const struct v4l2_ctrl_hevc_sps *sps;
-+	const struct v4l2_ctrl_hevc_pps *pps;
-+
-+	dec_params =
-+		vdec_hevc_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_HEVC_DECODE_PARAMS);
-+	if (IS_ERR(dec_params))
-+		return PTR_ERR(dec_params);
-+
-+	src_matrix =
-+		vdec_hevc_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_HEVC_SCALING_MATRIX);
-+	if (IS_ERR(src_matrix))
-+		return PTR_ERR(src_matrix);
-+
-+	sps = vdec_hevc_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_HEVC_SPS);
-+	if (IS_ERR(sps))
-+		return PTR_ERR(sps);
-+
-+	pps = vdec_hevc_get_ctrl_ptr(inst->ctx, V4L2_CID_STATELESS_HEVC_PPS);
-+	if (IS_ERR(pps))
-+		return PTR_ERR(pps);
-+
-+	vdec_hevc_copy_sps_params(&slice_param->sps, sps);
-+	vdec_hevc_copy_pps_params(&slice_param->pps, pps);
-+	vdec_hevc_copy_scaling_matrix(&slice_param->scaling_matrix, src_matrix);
-+
-+	memcpy(&share_info->sps, sps, sizeof(*sps));
-+	memcpy(&share_info->dec_params, dec_params, sizeof(*dec_params));
-+
-+	slice_param->decode_params.num_poc_st_curr_before = dec_params->num_poc_st_curr_before;
-+	slice_param->decode_params.num_poc_st_curr_after = dec_params->num_poc_st_curr_after;
-+	slice_param->decode_params.num_poc_lt_curr = dec_params->num_poc_lt_curr;
-+	slice_param->decode_params.num_delta_pocs_of_ref_rps_idx =
-+		dec_params->num_delta_pocs_of_ref_rps_idx;
-+
-+	return 0;
-+}
-+
-+static void vdec_hevc_slice_fill_decode_reflist(struct vdec_hevc_slice_inst *inst,
-+						struct vdec_hevc_slice_lat_dec_param *slice_param,
-+						struct vdec_hevc_slice_share_info *share_info)
-+{
-+	struct v4l2_ctrl_hevc_decode_params *dec_params = &share_info->dec_params;
-+
-+	vdec_hevc_copy_decode_params(&slice_param->decode_params, dec_params,
-+				     share_info->dec_params.dpb);
-+
-+	vdec_hevc_fill_dpb_info(inst->ctx, &slice_param->decode_params,
-+				slice_param->hevc_dpb_info);
-+}
-+
-+static int vdec_hevc_slice_alloc_mv_buf(struct vdec_hevc_slice_inst *inst,
-+					struct vdec_pic_info *pic)
-+{
-+	unsigned int buf_sz = vdec_hevc_get_mv_buf_size(pic->buf_w, pic->buf_h);
-+	struct mtk_vcodec_mem *mem;
-+	int i, err;
-+
-+	mtk_v4l2_debug(3, "allocate mv buffer size = 0x%x", buf_sz);
-+	for (i = 0; i < HEVC_MAX_MV_NUM; i++) {
-+		mem = &inst->mv_buf[i];
-+		if (mem->va)
-+			mtk_vcodec_mem_free(inst->ctx, mem);
-+		mem->size = buf_sz;
-+		err = mtk_vcodec_mem_alloc(inst->ctx, mem);
-+		if (err) {
-+			mtk_vcodec_err(inst, "failed to allocate mv buf");
-+			return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void vdec_hevc_slice_free_mv_buf(struct vdec_hevc_slice_inst *inst)
-+{
-+	int i;
-+	struct mtk_vcodec_mem *mem;
-+
-+	for (i = 0; i < HEVC_MAX_MV_NUM; i++) {
-+		mem = &inst->mv_buf[i];
-+		if (mem->va)
-+			mtk_vcodec_mem_free(inst->ctx, mem);
-+	}
-+}
-+
-+static void vdec_hevc_slice_get_pic_info(struct vdec_hevc_slice_inst *inst)
-+{
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	u32 data[3];
-+
-+	data[0] = ctx->picinfo.pic_w;
-+	data[1] = ctx->picinfo.pic_h;
-+	data[2] = ctx->capture_fourcc;
-+	vpu_dec_get_param(&inst->vpu, data, 3, GET_PARAM_PIC_INFO);
-+
-+	ctx->picinfo.buf_w = ALIGN(ctx->picinfo.pic_w, VCODEC_DEC_ALIGNED_64);
-+	ctx->picinfo.buf_h = ALIGN(ctx->picinfo.pic_h, VCODEC_DEC_ALIGNED_64);
-+	ctx->picinfo.fb_sz[0] = inst->vpu.fb_sz[0];
-+	ctx->picinfo.fb_sz[1] = inst->vpu.fb_sz[1];
-+	inst->cap_num_planes =
-+		ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes;
-+
-+	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
-+			 ctx->picinfo.pic_w, ctx->picinfo.pic_h,
-+			 ctx->picinfo.buf_w, ctx->picinfo.buf_h);
-+	mtk_vcodec_debug(inst, "Y/C(%d, %d)", ctx->picinfo.fb_sz[0],
-+			 ctx->picinfo.fb_sz[1]);
-+
-+	if (ctx->last_decoded_picinfo.pic_w != ctx->picinfo.pic_w ||
-+	    ctx->last_decoded_picinfo.pic_h != ctx->picinfo.pic_h) {
-+		inst->resolution_changed = true;
-+		if (ctx->last_decoded_picinfo.buf_w != ctx->picinfo.buf_w ||
-+		    ctx->last_decoded_picinfo.buf_h != ctx->picinfo.buf_h)
-+			inst->realloc_mv_buf = true;
-+
-+		mtk_v4l2_debug(1, "resChg: (%d %d) : old(%d, %d) -> new(%d, %d)",
-+			       inst->resolution_changed,
-+			       inst->realloc_mv_buf,
-+			       ctx->last_decoded_picinfo.pic_w,
-+			       ctx->last_decoded_picinfo.pic_h,
-+			       ctx->picinfo.pic_w, ctx->picinfo.pic_h);
-+	}
-+}
-+
-+static void vdec_hevc_slice_get_crop_info(struct vdec_hevc_slice_inst *inst,
-+					  struct v4l2_rect *cr)
-+{
-+	cr->left = 0;
-+	cr->top = 0;
-+	cr->width = inst->ctx->picinfo.pic_w;
-+	cr->height = inst->ctx->picinfo.pic_h;
-+
-+	mtk_vcodec_debug(inst, "l=%d, t=%d, w=%d, h=%d",
-+			 cr->left, cr->top, cr->width, cr->height);
-+}
-+
-+static int vdec_hevc_slice_setup_lat_buffer(struct vdec_hevc_slice_inst *inst,
-+					    struct mtk_vcodec_mem *bs,
-+					    struct vdec_lat_buf *lat_buf,
-+					    bool *res_chg)
-+{
-+	struct mtk_vcodec_mem *mem;
-+	struct mtk_video_dec_buf *src_buf_info;
-+	struct vdec_hevc_slice_share_info *share_info;
-+	int i, err;
-+
-+	inst->vsi->bs.dma_addr = (u64)bs->dma_addr;
-+	inst->vsi->bs.size = bs->size;
-+
-+	src_buf_info = container_of(bs, struct mtk_video_dec_buf, bs_buffer);
-+	lat_buf->src_buf_req = src_buf_info->m2m_buf.vb.vb2_buf.req_obj.req;
-+	v4l2_m2m_buf_copy_metadata(&src_buf_info->m2m_buf.vb, &lat_buf->ts_info, true);
-+
-+	*res_chg = inst->resolution_changed;
-+	if (inst->resolution_changed) {
-+		mtk_vcodec_debug(inst, "- resolution changed -");
-+		if (inst->realloc_mv_buf) {
-+			err = vdec_hevc_slice_alloc_mv_buf(inst, &inst->ctx->picinfo);
-+			inst->realloc_mv_buf = false;
-+			if (err)
-+				return err;
-+		}
-+		inst->resolution_changed = false;
-+	}
-+
-+	for (i = 0; i < HEVC_MAX_MV_NUM; i++) {
-+		mem = &inst->mv_buf[i];
-+		inst->vsi->mv_buf_dma[i].dma_addr = mem->dma_addr;
-+		inst->vsi->mv_buf_dma[i].size = mem->size;
-+	}
-+
-+	inst->vsi->ube.dma_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
-+	inst->vsi->ube.size = lat_buf->ctx->msg_queue.wdma_addr.size;
-+
-+	inst->vsi->err_map.dma_addr = lat_buf->wdma_err_addr.dma_addr;
-+	inst->vsi->err_map.size = lat_buf->wdma_err_addr.size;
-+
-+	inst->vsi->slice_bc.dma_addr = lat_buf->slice_bc_addr.dma_addr;
-+	inst->vsi->slice_bc.size = lat_buf->slice_bc_addr.size;
-+
-+	inst->vsi->trans.dma_addr_end = inst->ctx->msg_queue.wdma_rptr_addr;
-+	inst->vsi->trans.dma_addr = inst->ctx->msg_queue.wdma_wptr_addr;
-+
-+	share_info = lat_buf->private_data;
-+	share_info->trans.dma_addr = inst->vsi->trans.dma_addr;
-+	share_info->trans.dma_addr_end = inst->vsi->trans.dma_addr_end;
-+
-+	mtk_vcodec_debug(inst, "lat:trans(0x%llx 0x%llx) err:0x%llx",
-+			 inst->vsi->ube.dma_addr,
-+			 inst->vsi->ube.size,
-+			 inst->vsi->err_map.dma_addr);
-+
-+	mtk_vcodec_debug(inst, "slice(0x%llx 0x%llx) rprt((0x%llx 0x%llx))",
-+			 inst->vsi->slice_bc.dma_addr,
-+			 inst->vsi->slice_bc.size,
-+			 inst->vsi->trans.dma_addr,
-+			 inst->vsi->trans.dma_addr_end);
-+
-+	return 0;
-+}
-+
-+static int vdec_hevc_slice_setup_core_buffer(struct vdec_hevc_slice_inst *inst,
-+					     struct vdec_hevc_slice_share_info *share_info,
-+					     struct vdec_lat_buf *lat_buf)
-+{
-+	struct mtk_vcodec_mem *mem;
-+	struct mtk_vcodec_ctx *ctx = inst->ctx;
-+	struct vb2_v4l2_buffer *vb2_v4l2;
-+	struct vdec_fb *fb;
-+	u64 y_fb_dma, c_fb_dma;
-+	int i;
-+
-+	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
-+	if (!fb) {
-+		mtk_vcodec_err(inst, "fb buffer is NULL");
-+		return -EBUSY;
-+	}
-+
-+	y_fb_dma = (u64)fb->base_y.dma_addr;
-+	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 1)
-+		c_fb_dma =
-+			y_fb_dma + inst->ctx->picinfo.buf_w * inst->ctx->picinfo.buf_h;
-+	else
-+		c_fb_dma = (u64)fb->base_c.dma_addr;
-+
-+	mtk_vcodec_debug(inst, "[hevc-core] y/c addr = 0x%llx 0x%llx", y_fb_dma,
-+			 c_fb_dma);
-+
-+	inst->vsi_core->fb.y.dma_addr = y_fb_dma;
-+	inst->vsi_core->fb.y.size = ctx->picinfo.fb_sz[0];
-+	inst->vsi_core->fb.c.dma_addr = c_fb_dma;
-+	inst->vsi_core->fb.y.size = ctx->picinfo.fb_sz[1];
-+
-+	inst->vsi_core->dec.vdec_fb_va = (unsigned long)fb;
-+
-+	inst->vsi_core->ube.dma_addr = lat_buf->ctx->msg_queue.wdma_addr.dma_addr;
-+	inst->vsi_core->ube.size = lat_buf->ctx->msg_queue.wdma_addr.size;
-+
-+	inst->vsi_core->err_map.dma_addr = lat_buf->wdma_err_addr.dma_addr;
-+	inst->vsi_core->err_map.size = lat_buf->wdma_err_addr.size;
-+
-+	inst->vsi_core->slice_bc.dma_addr = lat_buf->slice_bc_addr.dma_addr;
-+	inst->vsi_core->slice_bc.size = lat_buf->slice_bc_addr.size;
-+
-+	inst->vsi_core->trans.dma_addr = share_info->trans.dma_addr;
-+	inst->vsi_core->trans.dma_addr_end = share_info->trans.dma_addr_end;
-+
-+	inst->vsi_core->wrap.dma_addr = inst->wrap_addr.dma_addr;
-+	inst->vsi_core->wrap.size = inst->wrap_addr.size;
-+
-+	for (i = 0; i < HEVC_MAX_MV_NUM; i++) {
-+		mem = &inst->mv_buf[i];
-+		inst->vsi_core->mv_buf_dma[i].dma_addr = mem->dma_addr;
-+		inst->vsi_core->mv_buf_dma[i].size = mem->size;
-+	}
-+
-+	vb2_v4l2 = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
-+	v4l2_m2m_buf_copy_metadata(&lat_buf->ts_info, vb2_v4l2, true);
-+
-+	return 0;
-+}
-+
-+static int vdec_hevc_slice_init(struct mtk_vcodec_ctx *ctx)
-+{
-+	struct vdec_hevc_slice_inst *inst;
-+	int err, vsi_size;
-+
-+	inst = kzalloc(sizeof(*inst), GFP_KERNEL);
-+	if (!inst)
-+		return -ENOMEM;
-+
-+	inst->ctx = ctx;
-+
-+	inst->vpu.id = SCP_IPI_VDEC_LAT;
-+	inst->vpu.core_id = SCP_IPI_VDEC_CORE;
-+	inst->vpu.ctx = ctx;
-+	inst->vpu.codec_type = ctx->current_codec;
-+	inst->vpu.capture_type = ctx->capture_fourcc;
-+
-+	ctx->drv_handle = inst;
-+	err = vpu_dec_init(&inst->vpu);
-+	if (err) {
-+		mtk_vcodec_err(inst, "vdec_hevc init err=%d", err);
-+		goto error_free_inst;
-+	}
-+
-+	vsi_size = round_up(sizeof(struct vdec_hevc_slice_vsi), VCODEC_DEC_ALIGNED_64);
-+	inst->vsi = inst->vpu.vsi;
-+	inst->vsi_core =
-+		(struct vdec_hevc_slice_vsi *)(((char *)inst->vpu.vsi) + vsi_size);
-+
-+	inst->resolution_changed = true;
-+	inst->realloc_mv_buf = true;
-+
-+	inst->wrap_addr.size = VDEC_HEVC_WRAP_SZ;
-+	err = mtk_vcodec_mem_alloc(ctx, &inst->wrap_addr);
-+	if (err)
-+		goto error_free_inst;
-+
-+	mtk_vcodec_debug(inst, "lat struct size = %d,%d,%d,%d vsi: %d\n",
-+			 (int)sizeof(struct mtk_hevc_sps_param),
-+			 (int)sizeof(struct mtk_hevc_pps_param),
-+			 (int)sizeof(struct vdec_hevc_slice_lat_dec_param),
-+			 (int)sizeof(struct mtk_hevc_dpb_info),
-+			 vsi_size);
-+	mtk_vcodec_debug(inst, "lat hevc instance >> %p, codec_type = 0x%x",
-+			 inst, inst->vpu.codec_type);
-+
-+	return 0;
-+error_free_inst:
-+	kfree(inst);
-+	return err;
-+}
-+
-+static void vdec_hevc_slice_deinit(void *h_vdec)
-+{
-+	struct vdec_hevc_slice_inst *inst = h_vdec;
-+	struct mtk_vcodec_mem *mem;
-+
-+	mtk_vcodec_debug_enter(inst);
-+
-+	vpu_dec_deinit(&inst->vpu);
-+	vdec_hevc_slice_free_mv_buf(inst);
-+
-+	mem = &inst->wrap_addr;
-+	if (mem->va)
-+		mtk_vcodec_mem_free(inst->ctx, mem);
-+
-+	vdec_msg_queue_deinit(&inst->ctx->msg_queue, inst->ctx);
-+	kfree(inst);
-+}
-+
-+static int vdec_hevc_slice_core_decode(struct vdec_lat_buf *lat_buf)
-+{
-+	int err, timeout;
-+	struct mtk_vcodec_ctx *ctx = lat_buf->ctx;
-+	struct vdec_hevc_slice_inst *inst = ctx->drv_handle;
-+	struct vdec_hevc_slice_share_info *share_info = lat_buf->private_data;
-+	struct vdec_vpu_inst *vpu = &inst->vpu;
-+
-+	mtk_vcodec_debug(inst, "[hevc-core] vdec_hevc core decode");
-+	memcpy(&inst->vsi_core->hevc_slice_params, &share_info->hevc_slice_params,
-+	       sizeof(share_info->hevc_slice_params));
-+
-+	err = vdec_hevc_slice_setup_core_buffer(inst, share_info, lat_buf);
-+	if (err)
-+		goto vdec_dec_end;
-+
-+	vdec_hevc_slice_fill_decode_reflist(inst, &inst->vsi_core->hevc_slice_params,
-+					    share_info);
-+	err = vpu_dec_core(vpu);
-+	if (err) {
-+		mtk_vcodec_err(inst, "core decode err=%d", err);
-+		goto vdec_dec_end;
-+	}
-+
-+	/* wait decoder done interrupt */
-+	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
-+					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_CORE);
-+	if (timeout)
-+		mtk_vcodec_err(inst, "core decode timeout: pic_%d",
-+			       ctx->decoded_frame_cnt);
-+	inst->vsi_core->dec.timeout = !!timeout;
-+
-+	vpu_dec_core_end(vpu);
-+	mtk_vcodec_debug(inst, "pic[%d] crc: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
-+			 ctx->decoded_frame_cnt,
-+			 inst->vsi_core->dec.crc[0], inst->vsi_core->dec.crc[1],
-+			 inst->vsi_core->dec.crc[2], inst->vsi_core->dec.crc[3],
-+			 inst->vsi_core->dec.crc[4], inst->vsi_core->dec.crc[5],
-+			 inst->vsi_core->dec.crc[6], inst->vsi_core->dec.crc[7]);
-+
-+vdec_dec_end:
-+	vdec_msg_queue_update_ube_rptr(&lat_buf->ctx->msg_queue, share_info->trans.dma_addr_end);
-+	ctx->dev->vdec_pdata->cap_to_disp(ctx, !!err, lat_buf->src_buf_req);
-+	mtk_vcodec_debug(inst, "core decode done err=%d", err);
-+	ctx->decoded_frame_cnt++;
-+	return 0;
-+}
-+
-+static int vdec_hevc_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				      struct vdec_fb *fb, bool *res_chg)
-+{
-+	struct vdec_hevc_slice_inst *inst = h_vdec;
-+	struct vdec_vpu_inst *vpu = &inst->vpu;
-+
-+	int err, timeout = 0;
-+	unsigned int data[2];
-+	struct vdec_lat_buf *lat_buf;
-+	struct vdec_hevc_slice_share_info *share_info;
-+
-+	if (vdec_msg_queue_init(&inst->ctx->msg_queue, inst->ctx,
-+				vdec_hevc_slice_core_decode,
-+				sizeof(*share_info)))
-+		return -ENOMEM;
-+
-+	/* bs NULL means flush decoder */
-+	if (!bs) {
-+		vdec_msg_queue_wait_lat_buf_full(&inst->ctx->msg_queue);
-+		return vpu_dec_reset(vpu);
-+	}
-+
-+	lat_buf = vdec_msg_queue_dqbuf(&inst->ctx->msg_queue.lat_ctx);
-+	if (!lat_buf) {
-+		mtk_vcodec_debug(inst, "failed to get lat buffer");
-+		return -EAGAIN;
-+	}
-+
-+	share_info = lat_buf->private_data;
-+	err = vdec_hevc_slice_fill_decode_parameters(inst, share_info);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	err = vdec_hevc_slice_setup_lat_buffer(inst, bs, lat_buf, res_chg);
-+	if (err)
-+		goto err_free_fb_out;
-+
-+	err = vpu_dec_start(vpu, data, 2);
-+	if (err) {
-+		mtk_vcodec_debug(inst, "lat decode err: %d", err);
-+		goto err_free_fb_out;
-+	}
-+
-+	/* wait decoder done interrupt */
-+	timeout = mtk_vcodec_wait_for_done_ctx(inst->ctx, MTK_INST_IRQ_RECEIVED,
-+					       WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
-+	if (timeout)
-+		mtk_vcodec_err(inst, "lat decode timeout: pic_%d", inst->slice_dec_num);
-+	inst->vsi->dec.timeout = !!timeout;
-+
-+	err = vpu_dec_end(vpu);
-+	if (err == SLICE_HEADER_FULL || err == TRANS_BUFFER_FULL) {
-+		vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
-+		inst->slice_dec_num++;
-+		mtk_vcodec_err(inst, "lat dec fail: pic_%d err:%d", inst->slice_dec_num, err);
-+		return -EINVAL;
-+	}
-+
-+	share_info->trans.dma_addr_end = inst->ctx->msg_queue.wdma_addr.dma_addr +
-+		inst->vsi->dec.wdma_end_addr_offset;
-+	vdec_msg_queue_update_ube_wptr(&lat_buf->ctx->msg_queue, share_info->trans.dma_addr_end);
-+
-+	memcpy(&share_info->hevc_slice_params, &inst->vsi->hevc_slice_params,
-+	       sizeof(share_info->hevc_slice_params));
-+	vdec_msg_queue_qbuf(&inst->ctx->dev->msg_queue_core_ctx, lat_buf);
-+
-+	mtk_vcodec_debug(inst, "dec num: %d lat crc: 0x%x 0x%x 0x%x", inst->slice_dec_num,
-+			 inst->vsi->dec.crc[0], inst->vsi->dec.crc[1], inst->vsi->dec.crc[2]);
-+
-+	inst->slice_dec_num++;
-+	return 0;
-+err_free_fb_out:
-+	vdec_msg_queue_qbuf(&inst->ctx->msg_queue.lat_ctx, lat_buf);
-+	mtk_vcodec_err(inst, "slice dec number: %d err: %d", inst->slice_dec_num, err);
-+	return err;
-+}
-+
-+static int vdec_hevc_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
-+				  struct vdec_fb *unused, bool *res_chg)
-+{
-+	struct vdec_hevc_slice_inst *inst = h_vdec;
-+
-+	if (!h_vdec || inst->ctx->dev->vdec_pdata->hw_arch == MTK_VDEC_PURE_SINGLE_CORE)
-+		return -EINVAL;
-+
-+	return vdec_hevc_slice_lat_decode(h_vdec, bs, unused, res_chg);
-+}
-+
-+static int vdec_hevc_slice_get_param(void *h_vdec, enum vdec_get_param_type type,
-+				     void *out)
-+{
-+	struct vdec_hevc_slice_inst *inst = h_vdec;
-+
-+	switch (type) {
-+	case GET_PARAM_PIC_INFO:
-+		vdec_hevc_slice_get_pic_info(inst);
-+		break;
-+	case GET_PARAM_DPB_SIZE:
-+		*(unsigned int *)out = 6;
-+		break;
-+	case GET_PARAM_CROP_INFO:
-+		vdec_hevc_slice_get_crop_info(inst, out);
-+		break;
-+	default:
-+		mtk_vcodec_err(inst, "invalid get parameter type=%d", type);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
-+const struct vdec_common_if vdec_hevc_slice_multi_if = {
-+	.init		= vdec_hevc_slice_init,
-+	.decode		= vdec_hevc_slice_decode,
-+	.get_param	= vdec_hevc_slice_get_param,
-+	.deinit		= vdec_hevc_slice_deinit,
-+};
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-index f3807f03d880..0bde1eb04015 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.c
-@@ -49,6 +49,10 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- 		ctx->dec_if = &vdec_vp9_slice_lat_if;
- 		ctx->hw_id = IS_VDEC_LAT_ARCH(hw_arch) ? MTK_VDEC_LAT0 : MTK_VDEC_CORE;
- 		break;
-+	case V4L2_PIX_FMT_HEVC_SLICE:
-+		ctx->dec_if = &vdec_hevc_slice_multi_if;
-+		ctx->hw_id = MTK_VDEC_LAT0;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-index 076306ff2dd4..ef3a0762fdc8 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-+++ b/drivers/media/platform/mediatek/vcodec/vdec_drv_if.h
-@@ -61,6 +61,7 @@ extern const struct vdec_common_if vdec_vp8_if;
- extern const struct vdec_common_if vdec_vp8_slice_if;
- extern const struct vdec_common_if vdec_vp9_if;
- extern const struct vdec_common_if vdec_vp9_slice_lat_if;
-+extern const struct vdec_common_if vdec_hevc_slice_multi_if;
- 
- /**
-  * vdec_if_init() - initialize decode driver
--- 
-2.18.0
+>=20
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+>  tests/nvme/014 | 10 +++++++++-
+>  tests/nvme/015 | 10 +++++++++-
+>  2 files changed, 18 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/tests/nvme/014 b/tests/nvme/014
+> index d13cff7921da..28913641ae40 100755
+> --- a/tests/nvme/014
+> +++ b/tests/nvme/014
+> @@ -23,6 +23,9 @@ test() {
+>  	local port
+>  	local nvmedev
+>  	local loop_dev
+> +	local size
+> +	local bs
+> +	local count
+>  	local file_path=3D"$TMPDIR/img"
+>  	local subsys_name=3D"blktests-subsystem-1"
+> =20
+> @@ -41,7 +44,12 @@ test() {
+>  	cat "/sys/block/${nvmedev}n1/uuid"
+>  	cat "/sys/block/${nvmedev}n1/wwid"
+> =20
+> -	dd if=3D/dev/urandom of=3D"/dev/${nvmedev}n1" count=3D128000 bs=3D4k st=
+atus=3Dnone
+> +	size=3D"$(blockdev --getsize64 "/dev/${nvmedev}n1")"
+> +	bs=3D"$(blockdev --getbsz "/dev/${nvmedev}n1")"
+> +	count=3D$((size / bs - 1))
 
+Do we need -1?
+
+> +
+> +	dd if=3D/dev/urandom of=3D"/dev/${nvmedev}n1" \
+> +		count=3D"${count}" bs=3D"${bs}" status=3Dnone
+> =20
+>  	nvme flush "/dev/${nvmedev}" -n 1
+> =20
+> diff --git a/tests/nvme/015 b/tests/nvme/015
+> index bb52ba2598db..2f7957caac88 100755
+> --- a/tests/nvme/015
+> +++ b/tests/nvme/015
+> @@ -22,6 +22,9 @@ test() {
+> =20
+>  	local port
+>  	local nvmedev
+> +	local size
+> +	local bs
+> +	local count
+>  	local file_path=3D"$TMPDIR/img"
+>  	local subsys_name=3D"blktests-subsystem-1"
+> =20
+> @@ -38,7 +41,12 @@ test() {
+>  	cat "/sys/block/${nvmedev}n1/uuid"
+>  	cat "/sys/block/${nvmedev}n1/wwid"
+> =20
+> -	dd if=3D/dev/urandom of=3D"/dev/${nvmedev}n1" count=3D128000 bs=3D4k st=
+atus=3Dnone
+> +	size=3D"$(blockdev --getsize64 "/dev/${nvmedev}n1")"
+> +	bs=3D"$(blockdev --getbsz "/dev/${nvmedev}n1")"
+> +	count=3D$((size / bs - 1))
+
+Same here.
+
+> +
+> +	dd if=3D/dev/urandom of=3D"/dev/${nvmedev}n1" \
+> +		count=3D"${count}" bs=3D"${bs}" status=3Dnone
+> =20
+>  	nvme flush "/dev/${nvmedev}n1" -n 1
+> =20
+> --=20
+> 2.40.0
+> =
