@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150626F164F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D376F1653
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345659AbjD1LCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45974 "EHLO
+        id S1345847AbjD1LDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjD1LCo (ORCPT
+        with ESMTP id S1345591AbjD1LCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:02:44 -0400
+        Fri, 28 Apr 2023 07:02:48 -0400
 Received: from mail.nsr.re.kr (unknown [210.104.33.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD462710
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1682679654; c=relaxed/relaxed; h=date:from:message-id:mime-version:subject:to; bh=6yyfn/hS9hsGd6QWy81V9EndJfno/kkmCm50p5+7AAM=; b=RjaSVth0q1dqtnJWCPFgnZJ+3j6/yJzf5eDdNvCqHOT/6a2ez0r4lziVsyEFqvM9q17iux3Tgf27mrfq+zy2RoYXzQ+pEm43OcH1/ilQvwofZ/gEl6eDwwp5N+vy5hNJtADF3M3V2mHg+WCzkB03+x3N6ySslg4TTIzi+G/xReIMojBALo0EDnaBAA8zMEW/EW5KSyOkNZLbCZTkeHSGYyV5nyDtjSXE2c4MaLvaSarqCCogFi+AFOBRqdejKXQjksndUoj2l3lWpZ5dFyyDYHuINn4M9sX8eVvw8oQESsGk/G/DL44t+YpROqmMcLDDJ08yHEd13vCQb7qd/dTHbg==
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2E54497
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1682679656; c=relaxed/relaxed; h=date:from:message-id:mime-version:subject:to; bh=rvDCW46IuP5IGa7GKyZMigwgebE6hPESyLhIJOa7i3w=; b=gB1VFeCdgeREWF1eUP+9hb7kE7IwK/j73Vk4ASa+HNtPQkK9w9pVlMgHv+ZochtMd2vaFlP9NZBDgHYGZHeLJUA0VbJlOjcIOdcwjkrFLzl1ff0gtyI8ft6VDavIo0IWNBf/CJP3XBMZr/dptAObaSL6p8WMSStahIo157HtpC6zgOCI///SSDa1m4KZtjRkn1diUaCbnZ+VA5BT+2Tm2mrVNz1+ciuv+RmuGGj58G/LWWI6MzdRJjtwtxzOvg97xPgM/4nrr+S0yxxGTP9jWClbZOCr/e8mexBOtLx3wA4C03sLrKKBQAQYKQFaimSGevOCrYkIPFdlgNtFSQ8LQg==
 Received: from 210.104.33.70 (nsr.re.kr)
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
-        by mail.nsr.re.kr with SMTP; Fri, 28 Apr 2023 19:59:37 +0900
+        by mail.nsr.re.kr with SMTP; Fri, 28 Apr 2023 19:59:39 +0900
 Received: from 192.168.155.188 ([192.168.155.188])
           by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 623;
-          Fri, 28 Apr 2023 20:01:13 +0900 (KST)
+          Fri, 28 Apr 2023 20:01:15 +0900 (KST)
 From:   Dongsoo Lee <letrhee@nsr.re.kr>
 To:     linux-crypto@vger.kernel.org
 Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
@@ -33,9 +33,9 @@ Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <abc@test.nsr.re.kr>,
         Dongsoo Lee <letrhee@gmail.com>,
         Dongsoo Lee <letrhee@nsr.re.kr>
-Subject: [PATCH 2/3] crypto: add LEA testmgr tests
-Date:   Fri, 28 Apr 2023 20:00:57 +0900
-Message-Id: <20230428110058.1516119-3-letrhee@nsr.re.kr>
+Subject: [PATCH 3/3] crypto: LEA block cipher AVX2 optimization
+Date:   Fri, 28 Apr 2023 20:00:58 +0900
+Message-Id: <20230428110058.1516119-4-letrhee@nsr.re.kr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230428110058.1516119-1-letrhee@nsr.re.kr>
 References: <20230428110058.1516119-1-letrhee@nsr.re.kr>
@@ -51,1421 +51,1974 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test vectors used for testing were taken from KCMVP
+For the x86_64 environment, we use SSE2/MOVBE/AVX2 instructions. Since
+LEA use four 32-bit unsigned integers for 128-bit block, the SSE2 and
+AVX2 implementations encrypts four and eight blocks at a time for
+optimization, respectively.
 
-- https://seed.kisa.or.kr/kisa/kcmvp/EgovVerification.do
+Our submission provides a optimized implementation of 4/8 block ECB, CBC
+decryption, CTR, and XTS cipher operation modes on x86_64 CPUs
+supporting AVX2.
+The MOVBE instruction is used for optimizing the CTR mode.
 
 Signed-off-by: Dongsoo Lee <letrhee@nsr.re.kr>
 ---
- crypto/tcrypt.c  |   73 +++
- crypto/testmgr.c |   32 ++
- crypto/testmgr.h | 1211 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 1316 insertions(+)
+ arch/x86/crypto/Kconfig               |   22 +
+ arch/x86/crypto/Makefile              |    3 +
+ arch/x86/crypto/lea_avx2_glue.c       | 1112 +++++++++++++++++++++++++
+ arch/x86/crypto/lea_avx2_x86_64-asm.S |  778 +++++++++++++++++
+ 4 files changed, 1915 insertions(+)
+ create mode 100644 arch/x86/crypto/lea_avx2_glue.c
+ create mode 100644 arch/x86/crypto/lea_avx2_x86_64-asm.S
 
-diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-index 202ca1a3105d..bf6ea5821051 100644
---- a/crypto/tcrypt.c
-+++ b/crypto/tcrypt.c
-@@ -1708,6 +1708,10 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		ret = min(ret, tcrypt_test("cts(cbc(sm4))"));
- 		break;
+diff --git a/arch/x86/crypto/Kconfig b/arch/x86/crypto/Kconfig
+index 9bbfd01cfa2f..bc2620d9401a 100644
+--- a/arch/x86/crypto/Kconfig
++++ b/arch/x86/crypto/Kconfig
+@@ -342,6 +342,28 @@ config CRYPTO_ARIA_GFNI_AVX512_X86_64
  
-+	case 60:
-+		ret = min(ret, tcrypt_test("gcm(lea)"));
-+		break;
-+
- 	case 100:
- 		ret = min(ret, tcrypt_test("hmac(md5)"));
- 		break;
-@@ -1855,6 +1859,12 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 		ret = min(ret, tcrypt_test("cfb(aria)"));
- 		ret = min(ret, tcrypt_test("ctr(aria)"));
- 		break;
-+	case 193:
-+		ret = min(ret, tcrypt_test("ecb(lea)"));
-+		ret = min(ret, tcrypt_test("cbc(lea)"));
-+		ret = min(ret, tcrypt_test("ctr(lea)"));
-+		ret = min(ret, tcrypt_test("xts(lea)"));
-+		break;
- 	case 200:
- 		test_cipher_speed("ecb(aes)", ENCRYPT, sec, NULL, 0,
- 				speed_template_16_24_32);
-@@ -2222,6 +2232,39 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 				   speed_template_16, num_mb);
- 		break;
+ 	  Processes 64 blocks in parallel.
  
-+	case 230:
-+		test_cipher_speed("ecb(lea)", ENCRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("ecb(lea)", DECRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("cbc(lea)", ENCRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("cbc(lea)", DECRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("ctr(lea)", ENCRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("ctr(lea)", DECRYPT, sec, NULL, 0,
-+				  speed_template_16_24_32);
-+		test_cipher_speed("xts(lea)", ENCRYPT, sec, NULL, 0,
-+				  speed_template_32_48_64);
-+		test_cipher_speed("xts(lea)", DECRYPT, sec, NULL, 0,
-+				  speed_template_32_48_64);
-+		break;
++config CRYPTO_LEA_AVX2
++	tristate "Ciphers: LEA with modes: ECB, CBC, CTR, XTS (SSE2/MOVBE/AVX2)"
++	select CRYPTO_LEA
++	imply CRYPTO_XTS
++	imply CRYPTO_CTR
++	help
++	  LEA cipher algorithm (KS X 3246, ISO/IEC 29192-2:2019)
 +
-+	case 231:
-+		test_aead_speed("gcm(lea)", ENCRYPT, sec,
-+				NULL, 0, 16, 8, speed_template_16_24_32);
-+		test_aead_speed("gcm(lea)", DECRYPT, sec,
-+				NULL, 0, 16, 8, speed_template_16_24_32);
-+		break;
++	  LEA is one of the standard cryptographic alorithms of
++	  the Republic of Korea. It consists of four 32bit word.
 +
-+	case 232:
-+		test_mb_aead_speed("gcm(lea)", ENCRYPT, sec, NULL, 0, 16, 8,
-+				   speed_template_16, num_mb);
-+		test_mb_aead_speed("gcm(lea)", DECRYPT, sec, NULL, 0, 16, 8,
-+				   speed_template_16, num_mb);
-+		break;
++	  See:
++	  https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do
 +
- 	case 300:
- 		if (alg) {
- 			test_hash_speed(alg, sec, generic_hash_speed_template);
-@@ -2657,6 +2700,21 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 				   speed_template_16_24_32);
- 		break;
++	  Architecture: x86_64 using:
++	  - SSE2 (Streaming SIMD Extensions 2)
++	  - MOVBE (Move Data After Swapping Bytes)
++	  - AVX2 (Advanced Vector Extensions)
++
++	  Processes 4(SSE2), 8(AVX2) blocks in parallel.
++	  In CTR mode, the MOVBE instruction is utilized for improved performance.
++
+ config CRYPTO_CHACHA20_X86_64
+ 	tristate "Ciphers: ChaCha20, XChaCha20, XChaCha12 (SSSE3/AVX2/AVX-512VL)"
+ 	depends on X86 && 64BIT
+diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
+index 9aa46093c91b..de23293b88df 100644
+--- a/arch/x86/crypto/Makefile
++++ b/arch/x86/crypto/Makefile
+@@ -109,6 +109,9 @@ aria-aesni-avx2-x86_64-y := aria-aesni-avx2-asm_64.o aria_aesni_avx2_glue.o
+ obj-$(CONFIG_CRYPTO_ARIA_GFNI_AVX512_X86_64) += aria-gfni-avx512-x86_64.o
+ aria-gfni-avx512-x86_64-y := aria-gfni-avx512-asm_64.o aria_gfni_avx512_glue.o
  
-+	case 520:
-+		test_acipher_speed("ecb(lea)", ENCRYPT, sec, NULL, 0,
-+				   speed_template_16_24_32);
-+		test_acipher_speed("ecb(lea)", DECRYPT, sec, NULL, 0,
-+				   speed_template_16_24_32);
-+		test_acipher_speed("ctr(lea)", ENCRYPT, sec, NULL, 0,
-+				   speed_template_16_24_32);
-+		test_acipher_speed("ctr(lea)", DECRYPT, sec, NULL, 0,
-+				   speed_template_16_24_32);
-+		test_acipher_speed("xts(lea)", ENCRYPT, sec, NULL, 0,
-+				   speed_template_32_48_64);
-+		test_acipher_speed("xts(lea)", DECRYPT, sec, NULL, 0,
-+				   speed_template_32_48_64);
-+		break;
++obj-$(CONFIG_CRYPTO_LEA_AVX2) += lea-avx2-x86_64.o
++lea-avx2-x86_64-y := lea_avx2_x86_64-asm.o lea_avx2_glue.o
 +
- 	case 600:
- 		test_mb_skcipher_speed("ecb(aes)", ENCRYPT, sec, NULL, 0,
- 				       speed_template_16_24_32, num_mb);
-@@ -2880,6 +2938,21 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
- 				       speed_template_16_32, num_mb);
- 		break;
- 
-+	case 611:
-+		test_mb_skcipher_speed("ecb(lea)", ENCRYPT, sec, NULL, 0,
-+				       speed_template_16_32, num_mb);
-+		test_mb_skcipher_speed("ecb(lea)", DECRYPT, sec, NULL, 0,
-+				       speed_template_16_32, num_mb);
-+		test_mb_skcipher_speed("ctr(lea)", ENCRYPT, sec, NULL, 0,
-+				       speed_template_16_32, num_mb);
-+		test_mb_skcipher_speed("ctr(lea)", DECRYPT, sec, NULL, 0,
-+				       speed_template_16_32, num_mb);
-+		test_mb_skcipher_speed("xts(lea)", ENCRYPT, sec, NULL, 0,
-+				       speed_template_32_64, num_mb);
-+		test_mb_skcipher_speed("xts(lea)", DECRYPT, sec, NULL, 0,
-+				       speed_template_32_64, num_mb);
-+		break;
+ quiet_cmd_perlasm = PERLASM $@
+       cmd_perlasm = $(PERL) $< > $@
+ $(obj)/%.S: $(src)/%.pl FORCE
+diff --git a/arch/x86/crypto/lea_avx2_glue.c b/arch/x86/crypto/lea_avx2_glue.c
+new file mode 100644
+index 000000000000..532958d3caa5
+--- /dev/null
++++ b/arch/x86/crypto/lea_avx2_glue.c
+@@ -0,0 +1,1112 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Glue Code for the SSE2/MOVBE/AVX2 assembler instructions for the LEA Cipher
++ *
++ * Copyright (c) 2023 National Security Research.
++ * Author: Dongsoo Lee <letrhee@nsr.re.kr>
++ */
 +
- 	}
- 
- 	return ret;
-diff --git a/crypto/testmgr.c b/crypto/testmgr.c
-index 216878c8bc3d..7b8a53c2da2a 100644
---- a/crypto/testmgr.c
-+++ b/crypto/testmgr.c
-@@ -4539,6 +4539,12 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.cipher = __VECS(des3_ede_cbc_tv_template)
- 		},
-+	}, {
-+		.alg = "cbc(lea)",
-+		.test = alg_test_skcipher,
-+		.suite = {
-+			.cipher = __VECS(lea_cbc_tv_template)
-+		},
- 	}, {
- 		/* Same as cbc(aes) except the key is stored in
- 		 * hardware secure memory which we reference by index
-@@ -4742,6 +4748,12 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.cipher = __VECS(des3_ede_ctr_tv_template)
- 		}
-+	}, {
-+		.alg = "ctr(lea)",
-+		.test = alg_test_skcipher,
-+		.suite = {
-+			.cipher = __VECS(lea_ctr_tv_template)
++#include <asm/simd.h>
++#include <asm/unaligned.h>
++#include <crypto/algapi.h>
++#include <crypto/ctr.h>
++#include <crypto/internal/simd.h>
++#include <crypto/scatterwalk.h>
++#include <crypto/skcipher.h>
++#include <crypto/internal/skcipher.h>
++#include <linux/err.h>
++#include <linux/module.h>
++#include <linux/types.h>
++
++#include <crypto/lea.h>
++#include <crypto/xts.h>
++#include "ecb_cbc_helpers.h"
++
++#define SIMD_KEY_ALIGN 16
++#define SIMD_ALIGN_ATTR __aligned(SIMD_KEY_ALIGN)
++
++struct lea_xts_ctx {
++	u8 raw_crypt_ctx[sizeof(struct crypto_lea_ctx)] SIMD_ALIGN_ATTR;
++	u8 raw_tweak_ctx[sizeof(struct crypto_lea_ctx)] SIMD_ALIGN_ATTR;
++};
++
++#define LEA_AVX2_PARALLEL_BLOCKS 8
++#define LEA_SSE2_PARALLEL_BLOCKS 4
++
++asmlinkage void lea_avx2_ecb_enc_8way(const void *ctx, u8 *dst, const u8 *src);
++asmlinkage void lea_avx2_ecb_dec_8way(const void *ctx, u8 *dst, const u8 *src);
++asmlinkage void lea_avx2_ecb_enc_4way(const void *ctx, u8 *dst, const u8 *src);
++asmlinkage void lea_avx2_ecb_dec_4way(const void *ctx, u8 *dst, const u8 *src);
++
++asmlinkage void lea_avx2_cbc_dec_8way(const void *ctx, u8 *dst, const u8 *src);
++asmlinkage void lea_avx2_cbc_dec_4way(const void *ctx, u8 *dst, const u8 *src);
++
++asmlinkage void lea_avx2_ctr_enc_8way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *ctr, u8 *buffer);
++asmlinkage void lea_avx2_ctr_enc_4way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *ctr);
++
++asmlinkage void lea_avx2_xts_enc_8way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *tweak);
++asmlinkage void lea_avx2_xts_dec_8way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *tweak);
++asmlinkage void lea_avx2_xts_enc_4way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *tweak);
++asmlinkage void lea_avx2_xts_dec_4way(const void *ctx, u8 *dst, const u8 *src,
++				u8 *tweak);
++asmlinkage void lea_avx2_xts_next_tweak_sse2(u8 *tweak_out, const u8 *tweak_in);
++
++static int ecb_encrypt_8way(struct skcipher_request *req)
++{
++	ECB_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	ECB_BLOCK(LEA_AVX2_PARALLEL_BLOCKS, lea_avx2_ecb_enc_8way);
++	ECB_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_ecb_enc_4way);
++	ECB_BLOCK(1, lea_encrypt);
++	ECB_WALK_END();
++}
++
++static int ecb_decrypt_8way(struct skcipher_request *req)
++{
++	ECB_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	ECB_BLOCK(LEA_AVX2_PARALLEL_BLOCKS, lea_avx2_ecb_dec_8way);
++	ECB_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_ecb_dec_4way);
++	ECB_BLOCK(1, lea_decrypt);
++	ECB_WALK_END();
++}
++
++static int ecb_encrypt_4way(struct skcipher_request *req)
++{
++	ECB_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	ECB_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_ecb_enc_4way);
++	ECB_BLOCK(1, lea_encrypt);
++	ECB_WALK_END();
++}
++
++static int ecb_decrypt_4way(struct skcipher_request *req)
++{
++	ECB_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	ECB_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_ecb_dec_4way);
++	ECB_BLOCK(1, lea_decrypt);
++	ECB_WALK_END();
++}
++
++static int cbc_encrypt(struct skcipher_request *req)
++{
++	CBC_WALK_START(req, LEA_BLOCK_SIZE, -1);
++	CBC_ENC_BLOCK(lea_encrypt);
++	CBC_WALK_END();
++}
++
++static int cbc_decrypt_8way(struct skcipher_request *req)
++{
++	CBC_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	CBC_DEC_BLOCK(LEA_AVX2_PARALLEL_BLOCKS, lea_avx2_cbc_dec_8way);
++	CBC_DEC_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_cbc_dec_4way);
++	CBC_DEC_BLOCK(1, lea_decrypt);
++	CBC_WALK_END();
++}
++
++static int cbc_decrypt_4way(struct skcipher_request *req)
++{
++	CBC_WALK_START(req, LEA_BLOCK_SIZE, LEA_SSE2_PARALLEL_BLOCKS);
++	CBC_DEC_BLOCK(LEA_SSE2_PARALLEL_BLOCKS, lea_avx2_cbc_dec_4way);
++	CBC_DEC_BLOCK(1, lea_decrypt);
++	CBC_WALK_END();
++}
++
++struct _lea_u128 {
++	u64 v0, v1;
++};
++
++static inline void xor_1blk(u8 *out, const u8 *in1, const u8 *in2)
++{
++	const struct _lea_u128 *_in1 = (const struct _lea_u128 *)in1;
++	const struct _lea_u128 *_in2 = (const struct _lea_u128 *)in2;
++	struct _lea_u128 *_out = (struct _lea_u128 *)out;
++
++	_out->v0 = _in1->v0 ^ _in2->v0;
++	_out->v1 = _in1->v1 ^ _in2->v1;
++}
++
++static inline void xts_next_tweak(u8 *out, const u8 *in)
++{
++	const u64 *_in = (const u64 *)in;
++	u64 *_out = (u64 *)out;
++	u64 v0 = _in[0];
++	u64 v1 = _in[1];
++	u64 carry = (u64)(((s64)v1) >> 63);
++
++	v1 = (v1 << 1) ^ (v0 >> 63);
++	v0 = (v0 << 1) ^ ((u64)carry & 0x87);
++
++	_out[0] = v0;
++	_out[1] = v1;
++}
++
++static int xts_encrypt_8way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_tfm *tfm_ctx = crypto_skcipher_ctx(tfm);
++	struct lea_xts_ctx *ctx = crypto_tfm_ctx(tfm_ctx);
++	struct skcipher_request subreq;
++	struct skcipher_walk walk;
++
++	int ret;
++	u32 nblocks;
++	u32 tail = req->cryptlen % LEA_BLOCK_SIZE;
++	u32 edge_tail = 0;
++
++	if (req->cryptlen < LEA_BLOCK_SIZE)
++		return -EINVAL;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++	if (ret)
++		return ret;
++
++	if (unlikely(tail != 0 && walk.nbytes < walk.total)) {
++		u32 req_len = req->cryptlen - LEA_BLOCK_SIZE - tail;
++
++		skcipher_walk_abort(&walk);
++
++		skcipher_request_set_tfm(&subreq, tfm);
++		skcipher_request_set_callback(
++			&subreq, skcipher_request_flags(req), NULL, NULL);
++		skcipher_request_set_crypt(&subreq, req->src, req->dst, req_len,
++					req->iv);
++		req = &subreq;
++		ret = skcipher_walk_virt(&walk, req, false);
++		if (ret)
++			return ret;
++		edge_tail = tail;
++		tail = 0;
++	}
++
++	lea_encrypt(ctx->raw_tweak_ctx, walk.iv, walk.iv);
++
++	while ((nblocks = walk.nbytes / LEA_BLOCK_SIZE) > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		bool is_tail = tail != 0 &&
++				(nblocks + 1) * LEA_BLOCK_SIZE > walk.total;
++
++		if (unlikely(is_tail))
++			nblocks -= 1;
++
++		kernel_fpu_begin();
++
++		for (; nblocks >= LEA_AVX2_PARALLEL_BLOCKS;
++			nblocks -= LEA_AVX2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_enc_8way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
 +		}
- 	}, {
- 		/* Same as ctr(aes) except the key is stored in
- 		 * hardware secure memory which we reference by index
-@@ -5029,6 +5041,12 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.cipher = __VECS(khazad_tv_template)
- 		}
-+	}, {
-+		.alg = "ecb(lea)",
-+		.test = alg_test_skcipher,
-+		.suite = {
-+			.cipher = __VECS(lea_tv_template)
++
++		for (; nblocks >= LEA_SSE2_PARALLEL_BLOCKS;
++			nblocks -= LEA_SSE2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_enc_4way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
 +		}
- 	}, {
- 		/* Same as ecb(aes) except the key is stored in
- 		 * hardware secure memory which we reference by index
-@@ -5199,6 +5217,13 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.aead = __VECS(aria_gcm_tv_template)
- 		}
-+	}, {
-+		.alg = "gcm(lea)",
-+		.generic_driver = "gcm_base(ctr(lea-generic),ghash-generic)",
-+		.test = alg_test_aead,
-+		.suite = {
-+			.aead = __VECS(lea_gcm_tv_template)
++
++		for (; nblocks > 0; nblocks -= 1) {
++			u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++			xts_next_tweak(walk.iv, walk.iv);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
 +		}
- 	}, {
- 		.alg = "gcm(sm4)",
- 		.generic_driver = "gcm_base(ctr(sm4-generic),ghash-generic)",
-@@ -5720,6 +5745,13 @@ static const struct alg_test_desc alg_test_descs[] = {
- 		.suite = {
- 			.cipher = __VECS(cast6_xts_tv_template)
- 		}
-+	}, {
-+		.alg = "xts(lea)",
-+		.generic_driver = "xts(ecb(lea-generic))",
-+		.test = alg_test_skcipher,
-+		.suite = {
-+			.cipher = __VECS(lea_xts_tv_template)
++
++		if (unlikely(is_tail)) {
++			u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(buffer, walk.iv, buffer);
++
++			memcpy(dst, buffer, LEA_BLOCK_SIZE);
++			memcpy(buffer, src + LEA_BLOCK_SIZE, tail);
++			memcpy(dst + LEA_BLOCK_SIZE, dst, tail);
++
++			xts_next_tweak(walk.iv, walk.iv);
++
++			xor_1blk(buffer, walk.iv, buffer);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++
++			nbytes -= LEA_BLOCK_SIZE + tail;
++
++			kernel_fpu_end();
++			return skcipher_walk_done(&walk, nbytes);
 +		}
- 	}, {
- 		/* Same as xts(aes) except the key is stored in
- 		 * hardware secure memory which we reference by index
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 5ca7a412508f..9a97d852030c 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -30444,6 +30444,1217 @@ static const struct aead_testvec aria_gcm_tv_template[] = {
- 	}
- };
- 
-+static const struct cipher_testvec lea_tv_template[] = {
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	if (unlikely(edge_tail != 0)) {
++		u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++		struct scatterlist sg_src[2];
++		struct scatterlist sg_dst[2];
++		struct scatterlist *scatter_src;
++		struct scatterlist *scatter_dst;
++		const u8 *src;
++		u8 *dst;
++
++		scatter_src = scatterwalk_ffwd(sg_src, req->src, req->cryptlen);
++		if (req->src == req->dst) {
++			scatter_dst = scatter_src;
++		} else {
++			scatter_dst = scatterwalk_ffwd(sg_dst, req->dst,
++							req->cryptlen);
++		}
++
++		skcipher_request_set_crypt(req, scatter_src, scatter_dst,
++					LEA_BLOCK_SIZE + edge_tail, req->iv);
++
++		ret = skcipher_walk_virt(&walk, req, false);
++
++		src = walk.src.virt.addr;
++		dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		xor_1blk(buffer, walk.iv, src);
++		lea_encrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(buffer, walk.iv, buffer);
++
++		memcpy(dst, buffer, LEA_BLOCK_SIZE);
++		memcpy(buffer, src + LEA_BLOCK_SIZE, edge_tail);
++		memcpy(dst + LEA_BLOCK_SIZE, dst, edge_tail);
++
++		xts_next_tweak(walk.iv, walk.iv);
++
++		xor_1blk(buffer, walk.iv, buffer);
++		lea_encrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(dst, walk.iv, buffer);
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, 0);
++	}
++
++	return ret;
++}
++
++static int xts_decrypt_8way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_tfm *tfm_ctx = crypto_skcipher_ctx(tfm);
++	struct lea_xts_ctx *ctx = crypto_tfm_ctx(tfm_ctx);
++	struct skcipher_request subreq;
++	struct skcipher_walk walk;
++
++	u8 __aligned(16) ntweak[16] = { 0, };
++	u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++	int ret;
++	u32 nblocks;
++	u32 tail = req->cryptlen % LEA_BLOCK_SIZE;
++	u32 edge_tail = 0;
++
++	if (req->cryptlen < LEA_BLOCK_SIZE)
++		return -EINVAL;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++
++	if (ret)
++		return ret;
++
++	if (unlikely(tail != 0 && walk.nbytes < walk.total)) {
++		u32 req_len = req->cryptlen - LEA_BLOCK_SIZE - tail;
++
++		skcipher_walk_abort(&walk);
++
++		skcipher_request_set_tfm(&subreq, tfm);
++		skcipher_request_set_callback(
++			&subreq, skcipher_request_flags(req), NULL, NULL);
++		skcipher_request_set_crypt(&subreq, req->src, req->dst, req_len,
++					req->iv);
++		req = &subreq;
++		ret = skcipher_walk_virt(&walk, req, false);
++		if (ret)
++			return ret;
++
++		edge_tail = tail;
++		tail = 0;
++	}
++
++	lea_encrypt(ctx->raw_tweak_ctx, walk.iv, walk.iv);
++
++	while ((nblocks = walk.nbytes / LEA_BLOCK_SIZE) > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		bool is_tail = tail != 0 &&
++				(nblocks + 1) * LEA_BLOCK_SIZE > walk.total;
++
++		if (unlikely(is_tail))
++			nblocks -= 1;
++
++		kernel_fpu_begin();
++
++		for (; nblocks >= LEA_AVX2_PARALLEL_BLOCKS;
++			nblocks -= LEA_AVX2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_dec_8way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		for (; nblocks >= LEA_SSE2_PARALLEL_BLOCKS;
++			nblocks -= LEA_SSE2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_dec_4way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		for (; nblocks > 0; nblocks -= 1) {
++			xor_1blk(buffer, walk.iv, src);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++			xts_next_tweak(walk.iv, walk.iv);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
++		}
++
++		if (unlikely(is_tail)) {
++			memcpy(ntweak, walk.iv, LEA_BLOCK_SIZE);
++			xts_next_tweak(walk.iv, ntweak);
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(buffer, walk.iv, buffer);
++
++			memcpy(dst, buffer, LEA_BLOCK_SIZE);
++
++			memcpy(buffer, src + 16, tail);
++			memcpy(dst + 16, dst, tail);
++
++			xor_1blk(buffer, ntweak, buffer);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, ntweak, buffer);
++
++			nbytes -= LEA_BLOCK_SIZE + tail;
++
++			kernel_fpu_end();
++			return skcipher_walk_done(&walk, nbytes);
++		}
++
++		kernel_fpu_end();
++
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	if (unlikely(edge_tail != 0)) {
++		struct scatterlist sg_src[2];
++		struct scatterlist sg_dst[2];
++		struct scatterlist *scatter_src;
++		struct scatterlist *scatter_dst;
++		const u8 *src;
++		u8 *dst;
++
++		scatter_src = scatterwalk_ffwd(sg_src, req->src, req->cryptlen);
++		if (req->src == req->dst) {
++			scatter_dst = scatter_src;
++		} else {
++			scatter_dst = scatterwalk_ffwd(sg_dst, req->dst,
++							req->cryptlen);
++		}
++
++		skcipher_request_set_crypt(req, scatter_src, scatter_dst,
++					LEA_BLOCK_SIZE + edge_tail, req->iv);
++
++		ret = skcipher_walk_virt(&walk, req, false);
++
++		src = walk.src.virt.addr;
++		dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		memcpy(ntweak, walk.iv, LEA_BLOCK_SIZE);
++		xts_next_tweak(walk.iv, ntweak);
++
++		xor_1blk(buffer, walk.iv, src);
++		lea_decrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(buffer, walk.iv, buffer);
++
++		memcpy(dst, buffer, LEA_BLOCK_SIZE);
++
++		memcpy(buffer, src + 16, edge_tail);
++		memcpy(dst + 16, dst, edge_tail);
++
++		xor_1blk(buffer, ntweak, buffer);
++		lea_decrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(dst, ntweak, buffer);
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, 0);
++	}
++
++	return ret;
++}
++
++static int ctr_encrypt_4way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_lea_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct skcipher_walk walk;
++
++	u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++	int ret;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++	if (ret)
++		return ret;
++
++	while (walk.nbytes > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		while (nbytes >= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE) {
++			lea_avx2_ctr_enc_4way(ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		while (nbytes >= LEA_BLOCK_SIZE) {
++			lea_encrypt(ctx, buffer, walk.iv);
++			xor_1blk(dst, buffer, src);
++			crypto_inc(walk.iv, LEA_BLOCK_SIZE);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
++		}
++
++		if (unlikely(walk.nbytes == walk.total && nbytes != 0)) {
++			lea_encrypt(ctx, buffer, walk.iv);
++			crypto_xor_cpy(dst, src, buffer, nbytes);
++			crypto_inc(walk.iv, LEA_BLOCK_SIZE);
++
++			nbytes = 0;
++		}
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static int ctr_encrypt_8way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_lea_ctx *ctx = crypto_skcipher_ctx(tfm);
++	struct skcipher_walk walk;
++
++	u8 __aligned(32) buffer[LEA_BLOCK_SIZE * LEA_AVX2_PARALLEL_BLOCKS];
++
++	int ret;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++	if (ret)
++		return ret;
++
++	while (walk.nbytes > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		while (nbytes >= LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE) {
++			lea_avx2_ctr_enc_8way(ctx, dst, src, walk.iv, buffer);
++			src += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		while (nbytes >= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE) {
++			lea_avx2_ctr_enc_4way(ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		while (nbytes >= LEA_BLOCK_SIZE) {
++			lea_encrypt(ctx, buffer, walk.iv);
++			xor_1blk(dst, buffer, src);
++			crypto_inc(walk.iv, LEA_BLOCK_SIZE);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
++		}
++
++		if (unlikely(walk.nbytes == walk.total && nbytes != 0)) {
++			lea_encrypt(ctx, buffer, walk.iv);
++			crypto_xor_cpy(dst, src, buffer, nbytes);
++			crypto_inc(walk.iv, LEA_BLOCK_SIZE);
++
++			nbytes = 0;
++		}
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
++static int xts_encrypt_4way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_tfm *tfm_ctx = crypto_skcipher_ctx(tfm);
++	struct lea_xts_ctx *ctx = crypto_tfm_ctx(tfm_ctx);
++	struct skcipher_request subreq;
++	struct skcipher_walk walk;
++
++	u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++	int ret;
++	u32 nblocks;
++	u32 tail = req->cryptlen % LEA_BLOCK_SIZE;
++	u32 edge_tail = 0;
++
++	if (req->cryptlen < LEA_BLOCK_SIZE)
++		return -EINVAL;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++	if (ret)
++		return ret;
++
++	if (unlikely(tail != 0 && walk.nbytes < walk.total)) {
++		u32 req_len = req->cryptlen - LEA_BLOCK_SIZE - tail;
++
++		skcipher_walk_abort(&walk);
++
++		skcipher_request_set_tfm(&subreq, tfm);
++		skcipher_request_set_callback(
++			&subreq, skcipher_request_flags(req), NULL, NULL);
++		skcipher_request_set_crypt(&subreq, req->src, req->dst, req_len,
++					req->iv);
++		req = &subreq;
++		ret = skcipher_walk_virt(&walk, req, false);
++		if (ret)
++			return ret;
++
++		edge_tail = tail;
++		tail = 0;
++	}
++
++	lea_encrypt(ctx->raw_tweak_ctx, walk.iv, walk.iv);
++
++	while ((nblocks = walk.nbytes / LEA_BLOCK_SIZE) > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		bool is_tail = tail != 0 &&
++				(nblocks + 1) * LEA_BLOCK_SIZE > walk.total;
++
++		if (unlikely(is_tail))
++			nblocks -= 1;
++
++		kernel_fpu_begin();
++
++		for (; nblocks >= LEA_SSE2_PARALLEL_BLOCKS;
++			nblocks -= LEA_SSE2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_enc_4way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		for (; nblocks > 0; nblocks -= 1) {
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++			xts_next_tweak(walk.iv, walk.iv);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
++		}
++
++		if (unlikely(is_tail)) {
++			xor_1blk(buffer, walk.iv, src);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(buffer, walk.iv, buffer);
++
++			memcpy(dst, buffer, LEA_BLOCK_SIZE);
++			memcpy(buffer, src + LEA_BLOCK_SIZE, tail);
++			memcpy(dst + LEA_BLOCK_SIZE, dst, tail);
++
++			xts_next_tweak(walk.iv, walk.iv);
++
++			xor_1blk(buffer, walk.iv, buffer);
++			lea_encrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++
++			nbytes -= LEA_BLOCK_SIZE + tail;
++
++			kernel_fpu_end();
++			return skcipher_walk_done(&walk, nbytes);
++		}
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	if (unlikely(edge_tail != 0)) {
++		struct scatterlist sg_src[2];
++		struct scatterlist sg_dst[2];
++		struct scatterlist *scatter_src;
++		struct scatterlist *scatter_dst;
++		const u8 *src;
++		u8 *dst;
++
++		scatter_src = scatterwalk_ffwd(sg_src, req->src, req->cryptlen);
++		if (req->src == req->dst) {
++			scatter_dst = scatter_src;
++		} else {
++			scatter_dst = scatterwalk_ffwd(sg_dst, req->dst,
++								req->cryptlen);
++		}
++
++		skcipher_request_set_crypt(req, scatter_src, scatter_dst,
++					LEA_BLOCK_SIZE + edge_tail, req->iv);
++
++		ret = skcipher_walk_virt(&walk, req, false);
++
++		src = walk.src.virt.addr;
++		dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		xor_1blk(buffer, walk.iv, src);
++		lea_encrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(buffer, walk.iv, buffer);
++
++		memcpy(dst, buffer, LEA_BLOCK_SIZE);
++		memcpy(buffer, src + LEA_BLOCK_SIZE, edge_tail);
++		memcpy(dst + LEA_BLOCK_SIZE, dst, edge_tail);
++
++		xts_next_tweak(walk.iv, walk.iv);
++
++		xor_1blk(buffer, walk.iv, buffer);
++		lea_encrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(dst, walk.iv, buffer);
++
++		kernel_fpu_end();
++
++		ret = skcipher_walk_done(&walk, 0);
++	}
++
++	return ret;
++}
++
++static int xts_decrypt_4way(struct skcipher_request *req)
++{
++	struct crypto_skcipher *tfm = crypto_skcipher_reqtfm(req);
++	struct crypto_tfm *tfm_ctx = crypto_skcipher_ctx(tfm);
++	struct lea_xts_ctx *ctx = crypto_tfm_ctx(tfm_ctx);
++	struct skcipher_request subreq;
++	struct skcipher_walk walk;
++
++	int ret;
++	u32 nblocks;
++	u32 tail = req->cryptlen % LEA_BLOCK_SIZE;
++	u32 edge_tail = 0;
++
++	if (req->cryptlen < LEA_BLOCK_SIZE)
++		return -EINVAL;
++
++	ret = skcipher_walk_virt(&walk, req, false);
++	if (ret)
++		return ret;
++
++	if (unlikely(tail != 0 && walk.nbytes < walk.total)) {
++		u32 req_len = req->cryptlen - LEA_BLOCK_SIZE - tail;
++
++		skcipher_walk_abort(&walk);
++
++		skcipher_request_set_tfm(&subreq, tfm);
++		skcipher_request_set_callback(
++			&subreq, skcipher_request_flags(req), NULL, NULL);
++		skcipher_request_set_crypt(&subreq, req->src, req->dst, req_len,
++					req->iv);
++		req = &subreq;
++		ret = skcipher_walk_virt(&walk, req, false);
++		if (ret)
++			return ret;
++
++		edge_tail = tail;
++		tail = 0;
++	}
++
++	lea_encrypt(ctx->raw_tweak_ctx, walk.iv, walk.iv);
++
++	while ((nblocks = walk.nbytes / LEA_BLOCK_SIZE) > 0) {
++		u32 nbytes = walk.nbytes;
++		const u8 *src = walk.src.virt.addr;
++		u8 *dst = walk.dst.virt.addr;
++		bool is_tail = tail != 0 &&
++			(nblocks + 1) * LEA_BLOCK_SIZE > walk.total;
++
++		if (unlikely(is_tail))
++			nblocks -= 1;
++
++		kernel_fpu_begin();
++
++		for (; nblocks >= LEA_SSE2_PARALLEL_BLOCKS;
++			nblocks -= LEA_SSE2_PARALLEL_BLOCKS) {
++			lea_avx2_xts_dec_4way(ctx->raw_crypt_ctx, dst, src, walk.iv);
++			src += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			dst += LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++			nbytes -= LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE;
++		}
++
++		for (; nblocks > 0; nblocks -= 1) {
++			u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, walk.iv, buffer);
++			xts_next_tweak(walk.iv, walk.iv);
++
++			src += LEA_BLOCK_SIZE;
++			dst += LEA_BLOCK_SIZE;
++			nbytes -= LEA_BLOCK_SIZE;
++		}
++
++		if (unlikely(is_tail)) {
++			u8 __aligned(16) ntweak[16] = {
++				0,
++			};
++			u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++
++			memcpy(ntweak, walk.iv, LEA_BLOCK_SIZE);
++			xts_next_tweak(walk.iv, ntweak);
++
++			xor_1blk(buffer, walk.iv, src);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(buffer, walk.iv, buffer);
++
++			memcpy(dst, buffer, LEA_BLOCK_SIZE);
++
++			memcpy(buffer, src + 16, tail);
++			memcpy(dst + 16, dst, tail);
++
++			xor_1blk(buffer, ntweak, buffer);
++			lea_decrypt(ctx->raw_crypt_ctx, buffer,
++						buffer);
++			xor_1blk(dst, ntweak, buffer);
++
++			nbytes -= LEA_BLOCK_SIZE + tail;
++
++			kernel_fpu_end();
++			return skcipher_walk_done(&walk, nbytes);
++		}
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, nbytes);
++		if (ret)
++			return ret;
++	}
++
++	if (unlikely(edge_tail != 0)) {
++		u8 __aligned(16) ntweak[16] = {
++			0,
++		};
++		u8 __aligned(16) buffer[LEA_BLOCK_SIZE];
++		struct scatterlist sg_src[2];
++		struct scatterlist sg_dst[2];
++		struct scatterlist *scatter_src;
++		struct scatterlist *scatter_dst;
++		const u8 *src;
++		u8 *dst;
++
++		scatter_src = scatterwalk_ffwd(sg_src, req->src, req->cryptlen);
++		if (req->src == req->dst) {
++			scatter_dst = scatter_src;
++		} else {
++			scatter_dst = scatterwalk_ffwd(sg_dst, req->dst,
++							req->cryptlen);
++		}
++
++		skcipher_request_set_crypt(req, scatter_src, scatter_dst,
++					LEA_BLOCK_SIZE + edge_tail, req->iv);
++
++		ret = skcipher_walk_virt(&walk, req, false);
++
++		src = walk.src.virt.addr;
++		dst = walk.dst.virt.addr;
++
++		kernel_fpu_begin();
++
++		memcpy(ntweak, walk.iv, LEA_BLOCK_SIZE);
++		xts_next_tweak(walk.iv, ntweak);
++
++		xor_1blk(buffer, walk.iv, src);
++		lea_decrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(buffer, walk.iv, buffer);
++
++		memcpy(dst, buffer, LEA_BLOCK_SIZE);
++
++		memcpy(buffer, src + 16, edge_tail);
++		memcpy(dst + 16, dst, edge_tail);
++
++		xor_1blk(buffer, ntweak, buffer);
++		lea_decrypt(ctx->raw_crypt_ctx, buffer, buffer);
++		xor_1blk(dst, ntweak, buffer);
++
++		kernel_fpu_end();
++		ret = skcipher_walk_done(&walk, 0);
++	}
++
++	return ret;
++}
++
++static int xts_lea_set_key(struct crypto_skcipher *tfm, const u8 *key,
++				u32 keylen)
++{
++	struct crypto_tfm *tfm_ctx = crypto_skcipher_ctx(tfm);
++	struct lea_xts_ctx *ctx = crypto_tfm_ctx(tfm_ctx);
++
++	struct crypto_lea_ctx *crypt_key =
++		(struct crypto_lea_ctx *)(ctx->raw_crypt_ctx);
++	struct crypto_lea_ctx *tweak_key =
++		(struct crypto_lea_ctx *)(ctx->raw_tweak_ctx);
++
++	int result;
++
++	result = xts_verify_key(tfm, key, keylen);
++	if (result)
++		return result;
++
++	result = lea_set_key(crypt_key, key, keylen / 2);
++
++	if (result)
++		return result;
++
++	return lea_set_key(tweak_key, key + (keylen / 2), keylen / 2);
++}
++
++static int _lea_set_key(struct crypto_skcipher *tfm, const u8 *key, u32 keylen)
++{
++	return lea_set_key(crypto_skcipher_ctx(tfm), key, keylen);
++}
++
++static struct skcipher_alg lea_simd_avx2_algs[] = {
 +	{
-+		.key	= "\x07\xab\x63\x05\xb0\x25\xd8\x3f"
-+			  "\x79\xad\xda\xa6\x3a\xc8\xad\x00",
-+		.klen	= 16,
-+		.ptext	= "\xf2\x8a\xe3\x25\x6a\xad\x23\xb4"
-+			  "\x15\xe0\x28\x06\x3b\x61\x0c\x60",
-+		.ctext	= "\x64\xd9\x08\xfc\xb7\xeb\xfe\xf9"
-+			  "\x0f\xd6\x70\x10\x6d\xe7\xc7\xc5",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x42\xaf\x3b\xcd\x6c\xbe\xaa\xef"
-+			  "\xf1\xa7\xc2\x6e\x61\xcd\x2b\xde",
-+		.klen	= 16,
-+		.ptext	= "\x51\x83\xbe\x45\xfd\x20\x47\xce"
-+			  "\x31\x51\x89\xc2\x69\xb4\x83\xb3"
-+			  "\x37\xa2\xf2\xfb\xe5\x4c\x17\x65"
-+			  "\x5b\x09\xba\x29\x44\xee\x6f\x1e"
-+			  "\x6d\xa0\x18\x2b\x6d\x66\xab\xfe"
-+			  "\x8b\x82\x36\x01\xdc\xc2\x20\x8a"
-+			  "\xac\x52\xb1\x53\x1f\xd4\xd4\x29"
-+			  "\x18\xb2\x1c\xe8\x5a\xb3\x06\xa6"
-+			  "\xee\xcd\x7e\x2f\xc4\x3b\xa4\xb2"
-+			  "\x9d\xcf\xcf\xb9\x27\x88\xd2\x5e",
-+		.ctext	= "\xf3\xb6\xbf\x4a\xfb\xa7\x10\x3e"
-+			  "\x32\xb2\xac\x2e\x7b\x46\xff\x91"
-+			  "\xe8\x72\xbc\xbb\x93\xcf\x52\xe2"
-+			  "\x94\xed\x55\x39\x87\x1c\x48\x93"
-+			  "\xd1\x4c\x54\x08\x86\x46\xe2\xfd"
-+			  "\x0b\x7c\x62\xd5\x83\xf3\xaf\x67"
-+			  "\x18\xb0\xba\x83\xc7\xa2\x9e\x2f"
-+			  "\x96\x2d\xf0\x60\x62\x12\x1c\x52"
-+			  "\x1b\xb9\xe7\x6d\x70\x35\x07\x07"
-+			  "\x19\xed\xfb\x40\x9c\x5b\x83\xc2",
-+		.len	= 80,
-+	}, {
-+		.key	= "\x9b\x6f\x9f\xba\x56\xe9\x6a\xea"
-+			  "\x53\x8b\xf8\x27\x2a\x9f\x39\x2d",
-+		.klen	= 16,
-+			.ptext	= "\xf6\xde\xcf\xab\xfd\x89\xce\xf4"
-+			  "\x93\xb5\xc0\xf7\x3b\xe7\xed\x71"
-+			  "\x10\xe0\xd9\x61\x63\xba\x0d\xbd"
-+			  "\xa6\x34\x1a\x63\x88\x4b\xdc\x52"
-+			  "\x62\x0a\xfc\x1a\xd2\xa2\xb8\x91"
-+			  "\xa5\xbd\xe7\xc8\xfb\x10\x37\x3d"
-+			  "\xa5\x2f\xba\x52\xd2\xa6\xa1\xfe"
-+			  "\xeb\x45\x47\xc3\xbb\xbb\x71\xe0"
-+			  "\xd3\x67\xd4\xc7\x2d\x6a\xd7\xd1"
-+			  "\x0f\x01\x9b\x31\x32\x12\x38\x27"
-+			  "\x24\x04\x4a\x76\xeb\xd4\xad\x17"
-+			  "\xeb\x65\x84\x2f\x0a\x18\x80\x3f"
-+			  "\x11\x9d\x5f\x9a\x55\x09\xb2\x1d"
-+			  "\x98\x28\xe4\x1a\x2a\x14\x78\x95"
-+			  "\x53\x06\x92\xb3\xf6\x6d\xb9\x6f"
-+			  "\x6e\x3d\xdb\x8f\xbc\x8a\x91\xd6"
-+			  "\xe4\x55\xa5\x7c\x94\xa6\xd2\xdb"
-+			  "\x07\xdb\xca\x6b\x29\x3f\x7e\xf0"
-+			  "\xfc\xde\x99\xf2\x3a\x98\x4d\x6e"
-+			  "\x3c\x75\x53\xcb\x1a\x38\x2d\x0f",
-+			.ctext	= "\x98\xd8\x5d\x7d\x0d\x13\x6a\x80"
-+			  "\xce\x74\x86\x44\x69\xd7\x7a\x03"
-+			  "\xef\x56\xec\x9b\x24\xa7\x11\x9d"
-+			  "\xe0\x95\x08\xa0\x4d\x6f\x43\x7e"
-+			  "\x67\x0b\x54\xb3\x6e\x2c\xbd\xe5"
-+			  "\x1c\xdb\xd0\x1e\x2c\xea\x53\x33"
-+			  "\x2c\x2a\x14\x87\x9f\xf7\x7e\x02"
-+			  "\x00\x0a\x00\xf1\x59\xfb\x18\x65"
-+			  "\xe7\xdb\xed\x54\x33\x57\x91\x7d"
-+			  "\x78\x3f\x18\xb0\x6f\xd8\xef\xa6"
-+			  "\x68\x6d\x2e\x36\x2b\xce\xde\x94"
-+			  "\xbb\x76\x87\xec\xfd\x75\x01\xb7"
-+			  "\x9f\x91\x27\x40\x84\x06\x83\x72"
-+			  "\x24\x66\x44\x0d\x24\x0e\xf0\x35"
-+			  "\x56\x04\xbf\xcf\xbc\x30\xf1\x6f"
-+			  "\x03\xd0\x05\x43\x58\x2a\x52\x71"
-+			  "\x85\x26\x07\x93\x55\x16\x4e\x6b"
-+			  "\x8c\xec\x36\xe3\x46\xb9\x09\x2d"
-+			  "\x97\x06\xc4\x89\x46\xc4\x97\x62"
-+			  "\x9c\x9c\x90\x55\xd9\xd8\x97\x77",
-+		.len	= 160,
-+	}, {
-+		.key	= "\x14\x37\xaf\x53\x30\x69\xbd\x75"
-+			  "\x25\xc1\x56\x0c\x78\xba\xd2\xa1"
-+			  "\xe5\x34\x67\x1c\x00\x7e\xf2\x7c",
-+		.klen	= 24,
-+			.ptext	= "\x1c\xb4\xf4\xcb\x6c\x4b\xdb\x51"
-+			  "\x68\xea\x84\x09\x72\x7b\xfd\x51",
-+			.ctext	= "\x69\x72\x5c\x6d\xf9\x12\xf8\xb7"
-+			  "\x0e\xb5\x11\xe6\x66\x3c\x58\x70",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x5e\xdc\x34\x69\x04\xb2\x96\xcf"
-+			  "\x6b\xf3\xb4\x18\xe9\xab\x35\xdb"
-+			  "\x0a\x47\xa1\x11\x33\xa9\x24\xca",
-+		.klen	= 24,
-+			.ptext	= "\x85\x7c\x8f\x1f\x04\xc5\xa0\x68"
-+			  "\xf9\xbb\x83\xaf\x95\xd9\x98\x64"
-+			  "\xd6\x31\x77\x51\xaf\x03\x32\xd1"
-+			  "\x63\x8e\xda\x3d\x32\x26\x44\xa8"
-+			  "\x37\x87\x0c\xcc\x91\x69\xdb\x43"
-+			  "\xc1\x55\xe6\xfb\x53\xb6\xb7\xe4"
-+			  "\xc1\x33\x30\xeb\x94\x3c\xcd\x2c"
-+			  "\xcc\xe3\x29\x63\x82\xee\xc4\xa4"
-+			  "\xcc\x2a\x03\x4d\xe1\x02\x78\x38"
-+			  "\x7d\x4f\x64\x35\x87\x72\x7a\xb7",
-+		.ctext	= "\x72\x22\x3a\x93\x94\x2f\x73\x59"
-+			  "\xfe\x5e\x51\x6a\x05\xc8\xe8\x41"
-+			  "\xc5\x9b\xb7\x47\x14\x80\x9b\x13"
-+			  "\xa9\x75\x7b\x82\x93\xf9\xb0\xb4"
-+			  "\x20\xd1\xc5\xa4\xf4\x40\xf3\x65"
-+			  "\xd0\x8f\x94\x25\xe3\x47\xb5\xdd"
-+			  "\x23\xa9\xed\x05\xf2\xce\x16\x18"
-+			  "\xcc\xb0\x9e\x71\x2c\x59\xb9\x7b"
-+			  "\x76\x74\x51\x7f\xc8\x75\xae\x9f"
-+			  "\x6f\x18\x8b\xfa\x5a\x42\xba\xc9",
-+		.len	= 80,
-+	}, {
-+		.key	= "\x51\x4b\x8b\xf1\x41\xf5\x60\x41"
-+			  "\x24\x13\xed\x1e\x40\xe3\x4e\xc2"
-+			  "\x3a\x89\xe9\x90\x36\xa4\xac\x4a",
-+		.klen	= 24,
-+		.ptext	= "\x3e\x25\x96\x84\xe8\x61\x79\x59"
-+			  "\x33\x65\xfe\x5c\xb3\x89\xe9\xd1"
-+			  "\xee\x48\x9e\x1e\x05\x4e\xe4\x7c"
-+			  "\x97\xd3\xea\xf2\xe2\x28\x88\x84"
-+			  "\x2b\x8f\xc6\xa8\x60\x50\xa2\xf9"
-+			  "\xfd\x09\x0e\x2f\x2c\x46\x39\x4f"
-+			  "\x30\x51\x0f\x1f\x03\x4c\x03\xdd"
-+			  "\x3e\x7c\x0c\x30\x3a\xe8\xed\x5f"
-+			  "\x75\x23\xba\xc1\x37\x66\x98\x75"
-+			  "\x75\xe1\xc4\x52\xf5\x53\xd7\x21"
-+			  "\xb3\xd9\x48\x0a\x84\x03\x32\x4d"
-+			  "\xf9\x2d\x57\x33\x86\x0d\x66\x43"
-+			  "\xe3\x88\x79\xb8\xb3\xca\xe2\x33"
-+			  "\x64\x95\x27\xae\x56\xd9\x4b\xb1"
-+			  "\x3f\x86\x4f\xc8\xce\x9e\xf9\x34"
-+			  "\x8e\x8e\xd4\xe1\x0e\xbe\x78\x98"
-+			  "\x3f\x67\x0b\x76\x1d\xa5\x08\x9d"
-+			  "\x91\xcd\x3f\x29\x96\x00\x1e\x66"
-+			  "\x9c\x00\x2e\x40\x29\x43\xe0\xfa"
-+			  "\xc6\x46\x8a\x23\x19\x24\xad\xc6",
-+		.ctext	= "\x62\x39\x86\x7f\x34\xd5\x7b\x91"
-+			  "\x72\x94\x10\xf9\x37\x97\xc6\x9e"
-+			  "\x45\x52\x6f\x13\x40\x5e\xc2\x22"
-+			  "\xed\xfa\xe6\x82\xb6\xc2\xd7\x5b"
-+			  "\x33\x24\x30\xd3\x0b\xc2\x47\x97"
-+			  "\x35\xec\xcd\x3b\xd9\x85\x65\x7e"
-+			  "\xc9\x65\xeb\x93\x39\x4b\xd8\x8c"
-+			  "\xdc\xe7\xa7\x6b\xe8\x12\x55\xab"
-+			  "\x34\x18\xd5\x70\x82\x77\x01\x29"
-+			  "\xc3\x48\x2a\x2b\x1e\x51\xf1\x4e"
-+			  "\x2c\x69\xa2\x4e\x64\x05\x94\x44"
-+			  "\x87\xb0\x85\x54\xd7\x5a\x35\x04"
-+			  "\x3d\x71\x3b\xad\x56\x43\xf6\xc4"
-+			  "\xfc\x1c\x5c\xf2\x2b\x3c\x72\x47"
-+			  "\x9d\xd0\x60\xab\x92\xb4\xda\x51"
-+			  "\xb7\x6d\xca\x85\x57\x69\x14\x36"
-+			  "\x08\xa9\x2a\xe8\xde\xd6\x84\xa8"
-+			  "\xa6\xd0\x93\x76\x5f\x41\x49\xcf"
-+			  "\x1a\x37\x53\xb8\x49\x36\x8e\x99"
-+			  "\xd0\x66\xd2\xf7\x11\xc2\x7f\x75",
-+		.len	= 160,
-+	}, {
-+		.key	= "\x4f\x67\x79\xe2\xbd\x1e\x93\x19"
-+			  "\xc6\x30\x15\xac\xff\xef\xd7\xa7"
-+			  "\x91\xf0\xed\x59\xdf\x1b\x70\x07"
-+			  "\x69\xfe\x82\xe2\xf0\x66\x8c\x35",
-+		.klen	= 32,
-+		.ptext	= "\xdc\x31\xca\xe3\xda\x5e\x0a\x11"
-+			  "\xc9\x66\xb0\x20\xd7\xcf\xfe\xde",
-+		.ctext	= "\xed\xa2\x04\x20\x98\xf6\x67\xe8"
-+			  "\x57\xa0\x2d\xb8\xca\xa7\xdf\xf2",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x90\x98\x09\xcb\x38\x09\xbc\xdd"
-+			  "\xb9\x9a\x08\x3d\x12\x61\x7b\xca"
-+			  "\xf7\x53\x06\x45\x73\x5a\xbc\x04"
-+			  "\xd2\xa8\xd7\xea\xbe\x4a\xfc\x96",
-+		.klen	= 32,
-+		.ptext	= "\xa8\x00\xc0\xdb\x6a\x4c\x6a\x70"
-+			  "\x2a\xc9\xfa\xe9\x81\xbe\x6b\xe6"
-+			  "\xdc\xf3\x36\x8b\x23\xc3\x17\x30"
-+			  "\x99\x73\x13\x59\x04\xc2\xba\xe8"
-+			  "\x0d\xc1\xaa\x91\xe9\xe5\x54\x8f"
-+			  "\x39\x5b\x03\x95\x2f\x9b\x1a\x08"
-+			  "\xf3\x40\x9c\x6b\x45\x17\xf2\x1b"
-+			  "\x63\x76\xe9\x3c\x2d\xcf\xfb\xf3"
-+			  "\x87\x84\xcf\xd5\xff\xfd\x03\xa0"
-+			  "\xb0\xf9\x28\x29\x65\x21\x0e\x96",
-+		.ctext	= "\x2a\x50\xfa\x90\xed\x00\xeb\xfa"
-+			  "\x11\x88\xcc\x91\x13\xdd\x43\x37"
-+			  "\xb3\x80\xd5\xf8\xc1\x58\x2c\x80"
-+			  "\x77\xec\x67\x28\xec\x31\x8a\xb4"
-+			  "\x5d\xe5\xef\xd1\xd0\xa6\x2e\x4e"
-+			  "\x87\x03\x52\x83\x2b\xec\x22\x3d"
-+			  "\x8d\x5d\xcd\x39\x72\x09\xc8\x24"
-+			  "\xe4\xa9\x57\xf6\x5d\x78\x5b\xa5"
-+			  "\xd7\xf9\xa4\xcc\x5d\x0b\x35\x35"
-+			  "\x28\xdb\xcc\xa6\x35\x48\x66\x8a",
-+		.len	= 80,
-+	}, {
-+		.key	= "\xde\x49\x23\xf2\x61\xac\x74\xcf"
-+			  "\x97\xe4\x81\xce\x67\x4a\x0b\x3c"
-+			  "\x3e\xa9\x82\x55\xb1\x50\xcb\xff"
-+			  "\x64\x66\x41\xb9\x2a\x7e\xfa\xce",
-+		.klen	= 32,
-+		.ptext	= "\x6d\x6b\x4b\xce\xd1\x56\x8e\x3e"
-+			  "\x14\x0e\x22\x8f\x39\x9e\xb4\x4d"
-+			  "\xe5\x25\xbd\x99\x09\xe2\x4c\xd9"
-+			  "\xc1\x8f\x06\xae\x7c\xf0\x6b\x27"
-+			  "\x5e\xab\x5b\x34\xe2\x5a\xd8\x5d"
-+			  "\xc4\xdf\x0d\xb3\x1e\xf7\x8f\x07"
-+			  "\xd1\x13\xe4\x5b\x26\x63\x42\x96"
-+			  "\xb5\x33\x98\x7c\x86\x7a\xd3\xdc"
-+			  "\x77\xb0\x5a\x0b\xdd\xe1\xda\x92"
-+			  "\x6e\x00\x49\x24\x5f\x7d\x25\xd3"
-+			  "\xc9\x19\xfd\x83\x51\xfa\x33\x9e"
-+			  "\x08\xfa\x00\x09\x90\x45\xb8\x57"
-+			  "\x81\x23\x50\x3d\x0a\x12\x1d\x46"
-+			  "\xdc\x18\xde\xc8\x43\x57\xfd\x17"
-+			  "\x96\xe2\x12\xf8\xd2\xcf\xa9\x59"
-+			  "\x82\x8e\x45\x3f\xe2\x79\xa5\xff"
-+			  "\x43\xab\x45\xb1\xb1\x16\x28\xe2"
-+			  "\xd4\xd0\xd5\x89\x14\xae\xa0\x3c"
-+			  "\x00\x14\x2a\xa4\xf1\x0b\x2b\x2f"
-+			  "\xea\x94\x6f\x04\xc3\x3d\x1f\x3c",
-+		.ctext	= "\xb7\x3a\x00\x64\xa4\x29\xeb\xe6"
-+			  "\xa7\xcf\x35\xd7\xad\xb9\x4f\x24"
-+			  "\xa2\xa0\xff\x7a\x1d\x83\x55\x22"
-+			  "\x45\x3a\x67\xeb\x8f\xb4\xfe\xd6"
-+			  "\x3d\xa5\x1d\x96\x34\xff\x4c\x70"
-+			  "\xa7\x64\xdf\x3f\x6f\x37\x63\xe0"
-+			  "\xd3\x84\x56\x30\x77\x42\x19\xa8"
-+			  "\x19\xc2\x6e\xad\xfd\x3b\x93\x19"
-+			  "\x99\x35\xa9\x5b\xd4\xa9\x51\xd4"
-+			  "\x46\x77\x23\xe1\x2f\xba\x1c\xa4"
-+			  "\xe8\xb1\x35\xfa\x1f\xb9\xed\x9f"
-+			  "\xaa\x7f\xdc\x79\xd2\x85\x7f\x78"
-+			  "\xac\x8d\x8c\x39\xc1\x1d\x33\xd0"
-+			  "\xae\x58\xb6\xe5\xe0\xef\x78\x19"
-+			  "\x5c\x0c\x82\x14\xab\x7d\x3a\x82"
-+			  "\xb9\x1f\x9a\x7b\xbe\x89\xd6\xa0"
-+			  "\x79\x6e\x9d\xeb\xc6\x9a\xee\x88"
-+			  "\x11\x01\x1b\x9d\x48\xee\xcd\x8d"
-+			  "\xb7\xbf\x71\x56\x6e\xa6\xd8\xa0"
-+			  "\x85\x8e\x59\x64\x32\xe1\x80\x3d",
-+		.len	= 160,
++		.base.cra_name = "__ecb(lea)",
++		.base.cra_driver_name = "__ecb-lea-sse2",
++		.base.cra_priority = 300 - 1,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.walksize = LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = ecb_encrypt_4way,
++		.decrypt = ecb_decrypt_4way,
++	},
++	{
++		.base.cra_name = "__cbc(lea)",
++		.base.cra_driver_name = "__cbc-lea-sse2",
++		.base.cra_priority = 300 - 1,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.walksize = LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = cbc_encrypt,
++		.decrypt = cbc_decrypt_4way,
++	},
++	{
++		.base.cra_name = "__xts(lea)",
++		.base.cra_driver_name = "__xts-lea-sse2",
++		.base.cra_priority = 300 - 1,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct lea_xts_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE * 2,
++		.max_keysize = LEA_MAX_KEY_SIZE * 2,
++		.walksize = LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = xts_lea_set_key,
++		.encrypt = xts_encrypt_4way,
++		.decrypt = xts_decrypt_4way,
++	},
++	{
++		.base.cra_name = "__ctr(lea)",
++		.base.cra_driver_name = "__ctr-lea-sse2",
++		.base.cra_priority = 300 - 1,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = 1,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.chunksize = LEA_BLOCK_SIZE,
++		.walksize = LEA_SSE2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = ctr_encrypt_4way,
++		.decrypt = ctr_encrypt_4way,
++	},
++	{
++		.base.cra_name = "__ecb(lea)",
++		.base.cra_driver_name = "__ecb-lea-avx2",
++		.base.cra_priority = 300,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.walksize = LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = ecb_encrypt_8way,
++		.decrypt = ecb_decrypt_8way,
++	},
++	{
++		.base.cra_name = "__ctr(lea)",
++		.base.cra_driver_name = "__ctr-lea-avx2",
++		.base.cra_priority = 300,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = 1,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.chunksize = LEA_BLOCK_SIZE,
++		.walksize = LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = ctr_encrypt_8way,
++		.decrypt = ctr_encrypt_8way,
++	},
++	{
++		.base.cra_name = "__cbc(lea)",
++		.base.cra_driver_name = "__cbc-lea-avx2",
++		.base.cra_priority = 300,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct crypto_lea_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE,
++		.max_keysize = LEA_MAX_KEY_SIZE,
++		.walksize = LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = _lea_set_key,
++		.encrypt = cbc_encrypt,
++		.decrypt = cbc_decrypt_8way,
++	},
++	{
++		.base.cra_name = "__xts(lea)",
++		.base.cra_driver_name = "__xts-lea-avx2",
++		.base.cra_priority = 300,
++		.base.cra_flags = CRYPTO_ALG_INTERNAL,
++		.base.cra_blocksize = LEA_BLOCK_SIZE,
++		.base.cra_ctxsize = sizeof(struct lea_xts_ctx),
++		.base.cra_module = THIS_MODULE,
++		.min_keysize = LEA_MIN_KEY_SIZE * 2,
++		.max_keysize = LEA_MAX_KEY_SIZE * 2,
++		.walksize = LEA_AVX2_PARALLEL_BLOCKS * LEA_BLOCK_SIZE,
++		.ivsize = LEA_BLOCK_SIZE,
++		.setkey = xts_lea_set_key,
++		.encrypt = xts_encrypt_8way,
++		.decrypt = xts_decrypt_8way,
 +	},
 +};
 +
-+static const struct cipher_testvec lea_cbc_tv_template[] = {
-+	{
-+		.key	= "\x87\xf1\x42\x4f\x1a\x14\x83\xcc"
-+			  "\x1f\xd0\x35\x4e\x18\xa9\x94\xab",
-+		.klen	= 16,
-+		.iv	= "\xcf\x58\x4e\x6e\xf6\xd6\x42\x88"
-+			  "\x0a\xb7\x87\x42\x7d\xb9\xb0\x76",
-+		.ptext	= "\x13\x9d\x4e\xff\x8d\x35\xb7\x6e"
-+			  "\x85\xbf\x06\xfe\x99\x71\x63\xcb",
-+		.ctext	= "\x49\xb9\xf3\x22\x6d\xa5\x4b\x4a"
-+			  "\x0d\x38\x5a\x9c\x48\x70\x52\x4b",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x73\x01\x97\xc9\x42\xd9\x7f\xf9"
-+			  "\x38\xa8\x3f\x77\xc4\x34\x4e\x6d",
-+		.klen	= 16,
-+		.iv	= "\xb6\x17\xb2\x59\xed\xcd\xc6\xbb"
-+			  "\x2f\x0c\x3a\x10\x58\x53\x5b\x04",
-+		.ptext	= "\xb7\xc6\x95\xe4\xb5\x39\x36\x52"
-+			  "\xb7\x8b\x74\x3c\x46\x35\xb2\x0f"
-+			  "\x6e\x22\xff\x27\x63\xc2\xe0\x8b"
-+			  "\x6b\x5a\x4f\xd7\xf7\x9e\x03\x79"
-+			  "\x13\x81\xf2\x20\x01\x4c\x15\x72"
-+			  "\x21\xed\x6b\xfe\x15\x92\x40\x71"
-+			  "\x21\x77\xaf\x0c\xd8\xfc\x66\x55"
-+			  "\xf5\xfb\xa9\x0d\x87\x58\x9a\x63"
-+			  "\x51\xda\xb7\x67\x70\x39\xa4\xc1"
-+			  "\x3e\x78\x2b\xa3\x77\x74\x81\xfc",
-+		.ctext	= "\x7c\x96\xf9\x67\x5b\xe0\x38\x54"
-+			  "\x70\x0d\xea\xe5\x10\x06\xf4\xfc"
-+			  "\xfc\x3a\xda\x33\xba\xe2\x0d\x4f"
-+			  "\xf6\x13\xfa\x6b\xa8\x74\xb1\x75"
-+			  "\xb7\xde\x71\xdc\xf8\x7a\x18\x26"
-+			  "\x7b\x57\x74\x10\xf0\xe8\xb9\xdf"
-+			  "\x1e\x05\x37\xa5\x60\xe5\xd1\xef"
-+			  "\xfe\xc1\x10\x22\xce\x60\x23\xb4"
-+			  "\x98\x5c\x9d\x8d\xa2\x07\x33\x70"
-+			  "\x7c\xe7\x6a\x42\x35\x82\xaf\x23",
-+		.len	= 80,
-+	},  {
-+		.key	= "\xb2\x10\x06\xa2\x47\x18\xd6\xbf"
-+			  "\x8a\xc5\xad\xdb\x90\xe5\xf4\x4d",
-+		.klen	= 16,
-+		.iv	= "\xa5\xa6\xf3\xce\xee\xaa\x93\x2d"
-+			  "\x4c\x59\x68\x45\x82\x7b\xee\x2d",
-+		.ptext	= "\x9b\x06\x13\xae\x86\x34\xf6\xfa"
-+			  "\x04\xd9\xef\x9a\xc4\xf4\xcf\xa9"
-+			  "\xcb\x84\x69\x40\x1a\x9d\x51\x31"
-+			  "\x8b\xba\xe3\xf8\xfd\x55\x87\xee"
-+			  "\xb0\xb5\x34\xc0\xf2\x08\x33\x20"
-+			  "\xfc\xb1\x26\xba\x17\xe3\x48\x6a"
-+			  "\x03\x6f\xf6\xac\x98\xda\x6f\x54"
-+			  "\xae\xb3\xd8\x7f\x3b\x23\x83\xc9"
-+			  "\xbb\xc6\x70\xc0\xd5\xb9\x14\x99"
-+			  "\x3b\xf5\x5a\x22\xd2\xdb\xe8\xf8"
-+			  "\x13\x0f\xa3\xfa\xb1\x8a\x75\xfd"
-+			  "\x7b\xeb\x4e\xc2\x85\x0e\x68\x25"
-+			  "\x82\xe0\xd0\x96\x75\x72\x22\xcd"
-+			  "\x89\x4c\x93\xba\x3c\x03\x35\xbb"
-+			  "\xc3\x0e\x77\x12\xaa\xd5\xeb\x96"
-+			  "\xbc\x0b\x4d\xa8\x22\x3e\xc0\x69"
-+			  "\xcf\xac\x5a\x2b\x1b\x59\xe3\x25"
-+			  "\xad\x5e\xda\x6a\x9f\x84\xb9\x1c"
-+			  "\xdd\x11\x7b\xdc\xce\xe2\x5a\x86"
-+			  "\x37\xba\xdd\x1b\x5c\xda\x12\xff",
-+		.ctext	= "\xb2\x25\x29\xec\xc4\x7d\x73\xca"
-+			  "\x8c\xf2\x05\xbe\x8e\x88\x94\x77"
-+			  "\xd0\x2f\xb6\x5c\x99\x23\x64\x2f"
-+			  "\x67\x4f\xaf\x76\x69\x82\x6c\x97"
-+			  "\x8f\xb4\x8a\xc7\xdd\x1b\xbe\x01"
-+			  "\x35\x07\xdf\xb9\x0f\x0d\x6b\xab"
-+			  "\x59\x8f\xdd\x34\xc6\x93\xb1\x66"
-+			  "\x13\xf2\xb4\x78\xc0\x1d\xff\xc4"
-+			  "\xb7\x0b\x44\x85\xbb\x93\x43\x0e"
-+			  "\x40\xe6\xbc\x0e\xbb\xf3\x53\xce"
-+			  "\xe5\x1b\x92\xd6\xb4\xa0\x10\xf0"
-+			  "\x4b\x1f\xbe\x7c\x2f\x4f\x6f\x24"
-+			  "\x69\xa2\xe4\x4b\xad\x79\x68\xf7"
-+			  "\xf9\x23\xb8\x31\x6c\x21\xfd\xf8"
-+			  "\x47\xe5\x34\x0e\x10\x95\x20\x9b"
-+			  "\xfa\xa9\x1e\xa7\x0a\x5a\xc6\x3a"
-+			  "\x39\x39\xf9\x92\xed\xe2\x4e\x8d"
-+			  "\xba\x21\x24\x50\x88\x80\x89\x8a"
-+			  "\xd3\x20\x87\x0f\x74\x7d\x5c\xe6"
-+			  "\xc7\x75\xe5\xcf\xf7\xc4\x2d\xca",
-+		.len	= 160,
-+	}, {
-+		.key	= "\x68\xd2\x18\x65\x0e\x96\xe1\x07"
-+			  "\x71\xd4\x36\x1a\x41\x85\xfc\x81"
-+			  "\x27\xc3\xb5\x41\x64\xda\x4a\x35",
-+		.klen	= 24,
-+		.iv	= "\xb5\xa1\x07\x03\x79\x0b\xe7\x4e"
-+			  "\x15\xf9\x12\x2d\x98\x52\xa4\xdc",
-+		.ptext	= "\x9b\x56\xb0\xb2\x6c\x2f\x85\x53"
-+			  "\x6b\xc9\x2f\x27\xb3\xe4\x41\x0b",
-+		.ctext	= "\x72\x86\x6a\xa8\xe3\xf1\xa4\x44"
-+			  "\x96\x18\xc8\xcf\x62\x3d\x9b\xbe",
-+		.len	= 16,
-+	}, {
-+		.key	= "\xc2\xe6\x6b\xb9\x2b\xf6\xa3\x1f"
-+			  "\x12\x35\x44\x5e\x2f\x92\x57\xed"
-+			  "\x6c\x59\xc3\xa5\x8f\x4c\x13\x76",
-+		.klen	= 24,
-+		.iv	= "\x1a\xf6\x79\x59\x6f\x3c\x13\x85"
-+			  "\x38\x35\x6e\xe6\x06\x3c\x49\xcb",
-+		.ptext	= "\x38\x43\x9b\xdf\x1f\x6a\xd7\x5a"
-+			  "\x60\xd0\x6e\x78\x99\xa8\x95\x2b"
-+			  "\x47\x90\x4a\x0c\xe7\x1f\x91\x98"
-+			  "\x5b\xbd\x04\x99\x90\xb8\x8a\xe2"
-+			  "\x5e\x94\x67\x3f\xaf\xa2\x75\xac"
-+			  "\xe4\xd4\xb0\xc5\x74\xcf\xf8\x7e"
-+			  "\xd6\x42\x13\x14\xa2\x76\xf2\x44"
-+			  "\xf3\x27\x35\xba\x0f\x93\xf1\xcc"
-+			  "\x4a\xd0\xb0\x68\x27\x62\xb9\x4b"
-+			  "\xc1\x0d\x92\x74\x69\xe8\xc4\xd9",
-+		.ctext	= "\x96\xbe\x15\xc3\xb8\xd1\x47\x3b"
-+			  "\x4a\x3c\xb8\xf5\x25\x83\xb1\xad"
-+			  "\x80\x4f\xe4\x6d\xc1\x43\xfd\x26"
-+			  "\xc3\x8c\x4b\x01\x9c\x10\xd6\x0f"
-+			  "\x68\x15\x82\x50\x95\x32\xe5\x86"
-+			  "\xcc\x23\x71\x8b\x7b\xd7\x50\x45"
-+			  "\xd5\x77\xf8\xe7\x78\xca\x4b\xf0"
-+			  "\x27\x8e\xb2\x5a\xb7\xcd\x67\x08"
-+			  "\x00\xc5\xec\x88\x32\xfe\x91\xb8"
-+			  "\x4e\x56\xab\x58\xde\xe8\x49\xa8",
-+		.len	= 80,
-+	}, {
-+		.key	= "\x60\x4f\xeb\x8b\x42\x88\xe6\xee"
-+			  "\x61\x96\xba\xb9\x66\x91\xed\xed"
-+			  "\xa4\x8c\x1d\x41\x43\x23\x41\x5b",
-+		.klen	= 24,
-+		.iv	= "\x9d\x53\x31\x46\xe8\x8f\x69\x21"
-+			  "\x16\x0f\x09\x14\xf9\x6c\x21\x89",
-+		.ptext	= "\xab\x6a\x2c\x98\x2d\x14\xda\xc2"
-+			  "\x4e\x0f\x13\xe3\xce\x28\x38\x62"
-+			  "\xc4\x2f\xac\xab\x3d\x08\x93\xdf"
-+			  "\x26\xff\xd9\xc9\x6c\x5c\x76\x15"
-+			  "\x61\x37\xf1\xbc\x62\x8e\x23\xc3"
-+			  "\xb7\x95\x3e\x25\xba\x4d\x0e\x0e"
-+			  "\x3b\x58\x7e\x49\x24\x0c\x5d\xfc"
-+			  "\x59\xc6\x62\x93\xe2\x81\x6e\xfa"
-+			  "\x4c\xa7\x12\x0f\x4c\x26\x51\x57"
-+			  "\xa6\xc7\xa7\xef\x4d\xbc\x4a\xc6"
-+			  "\xcc\x77\xaf\x0a\xe4\xc3\x50\xe0"
-+			  "\x77\x0d\xad\x58\xa5\x02\x90\xa0"
-+			  "\x34\x60\x96\x78\x35\x05\xeb\xe5"
-+			  "\xe4\x4d\x55\x2a\xd1\x9a\x74\xf4"
-+			  "\x3d\x34\x48\xd5\xc7\x54\xf3\xf3"
-+			  "\x48\x7b\xc0\x02\xfb\x08\x65\x6f"
-+			  "\xe1\x0a\x85\xde\x63\x53\x79\xd7"
-+			  "\x3a\xce\x50\xbc\x8c\x12\x14\xff"
-+			  "\x57\x36\x4f\x91\x13\xe7\xce\x9e"
-+			  "\x93\xb9\xa5\x77\x2d\xbb\x74\xd0",
-+		.ctext	= "\x55\x6b\xda\xdc\x75\x31\xee\xe8"
-+			  "\x88\xf6\xde\x47\x8f\xb3\x74\x0f"
-+			  "\xa2\xbd\x15\x22\x08\x76\x74\xf2"
-+			  "\xc6\xe1\x64\xdc\x6f\xb6\x08\x7c"
-+			  "\x41\x6b\xcc\x7c\x25\x29\x54\x78"
-+			  "\x25\x9d\x4e\xbb\xec\xfd\x42\xd3"
-+			  "\x2b\x97\x23\x9e\x45\x91\x02\x68"
-+			  "\x0a\x19\x79\x82\xab\x3e\xd6\xd7"
-+			  "\x32\xd2\xbc\x8a\x2e\x37\x35\x58"
-+			  "\xb4\xc5\xe1\xc9\x12\x30\xb7\x76"
-+			  "\xcb\x1f\x02\x60\x78\xbc\xa9\x10"
-+			  "\x4c\xf2\x19\xbc\x96\x06\x5e\xef"
-+			  "\x44\xda\x86\xa4\xa3\xaa\x99\xf2"
-+			  "\xec\xb9\xa6\x09\xd8\x5c\x6f\x4f"
-+			  "\x19\x07\xb7\x1d\x49\xdf\x55\x2b"
-+			  "\xd1\x43\x43\xb2\xc6\x79\x75\x19"
-+			  "\x6a\x25\xd8\xa2\xaf\xdc\x96\xd3"
-+			  "\x78\x9e\xeb\x38\x3f\x4d\x5c\xce"
-+			  "\x42\x02\x7a\xdb\xcd\xc3\x42\xa3"
-+			  "\x41\xc0\x19\x45\xc0\xb3\x89\x95",
-+		.len	= 160,
-+	}, {
-+		.key	= "\x1a\x4e\xe8\x2b\x1f\x37\x84\x94"
-+			  "\x6d\xf2\xa1\x8f\xc7\x49\xb3\x4f"
-+			  "\xe2\x26\xcf\x28\x11\xa6\x6a\x47"
-+			  "\x22\x6e\x64\xa1\x82\x42\x45\x29",
-+		.klen	= 32,
-+		.iv	= "\xa8\xd4\xc6\x46\xb1\xd9\x93\x84"
-+			  "\x48\x62\x4f\x8a\xc9\x6a\xd8\x4c",
-+		.ptext	= "\xa6\xab\xcd\x81\x09\xb7\x4e\x58"
-+			  "\xbb\x43\x03\x66\x44\xc6\x60\xe3",
-+		.ctext	= "\x91\xee\x72\xe8\xe2\x6f\xa4\x23"
-+			  "\x49\x77\xe4\x64\xca\x48\x72\xca",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x50\x81\xcf\xf8\x35\x84\xf4\x3b"
-+			  "\x8b\x60\x07\x4f\xb2\x05\x08\xbb"
-+			  "\x60\x63\xf9\x0b\x44\x7c\xa0\x80"
-+			  "\xe9\xbd\x88\x06\xde\x8e\x49\x66",
-+		.klen	= 32,
-+		.iv	= "\x14\x28\x09\xbd\x87\xa6\x43\x2d"
-+			  "\x20\x5f\xc7\xd2\xda\x74\x02\xf8",
-+		.ptext	= "\x25\xa5\x80\x8b\x88\x69\xaf\xce"
-+			  "\x89\x3d\xe6\x50\xd1\x3c\xa5\x1d"
-+			  "\x8c\xf0\x1f\x31\x0f\x68\xf5\x32"
-+			  "\xbd\x8a\x45\x5e\x2b\xab\xe3\xc2"
-+			  "\x82\x5d\xe6\xac\x25\x88\x67\x64"
-+			  "\x94\xbd\x85\x17\x91\xc6\xac\x14"
-+			  "\x81\x82\x18\x3b\x14\xf0\x94\xb1"
-+			  "\x28\x89\x88\xd9\xeb\xd3\x32\x80"
-+			  "\x40\x33\x34\x58\x65\x02\x4f\xa8"
-+			  "\xd2\xe4\x6e\x41\x64\x55\xe6\xb4",
-+		.ctext	= "\xee\x57\xd3\x98\x7e\x62\xcf\x04"
-+			  "\xbb\x11\x21\x91\x20\xb4\xa3\x92"
-+			  "\x16\x86\xaf\xa1\x86\x9b\x8a\x4c"
-+			  "\x43\x7f\xaf\xcc\x87\x99\x6a\x04"
-+			  "\xc0\x06\xb0\xc0\x4d\xe4\x98\xb2"
-+			  "\x4b\x24\x34\x87\x3d\x70\xdb\x57"
-+			  "\xe3\x71\x8c\x09\x16\x9e\x56\xd0"
-+			  "\x9a\xc4\xb7\x25\x40\xcc\xc3\xed"
-+			  "\x6d\x23\x11\x29\x39\x8a\x71\x75"
-+			  "\x0c\x8f\x0c\xe4\xe4\x2b\x93\x59",
-+		.len	= 80,
-+	}, {
-+		.key	= "\x26\x7e\x63\x9d\x25\x19\x08\x8a"
-+			  "\x05\xbd\x8a\xf4\x31\x3c\x47\x55"
-+			  "\x88\x06\xb9\xcb\x03\x42\x40\xc8"
-+			  "\x98\x1d\x21\x0b\x5e\x62\xce\xcf",
-+		.klen	= 32,
-+		.iv	= "\xf1\x4c\x68\x42\x18\x98\x82\x38"
-+			  "\xa5\xdd\x28\x21\x9d\x20\x1f\x38",
-+		.ptext	= "\x99\xa3\x6f\xfe\x6c\xff\x1f\xe7"
-+			  "\x06\x72\x40\x53\x99\x7a\x2d\xbf"
-+			  "\xfa\xa3\x10\x3d\x49\x9d\xa8\x21"
-+			  "\xd4\x91\x4a\xfe\x39\xb5\x26\xd1"
-+			  "\xcb\x1f\xcc\x7b\x37\xd7\xef\x75"
-+			  "\x68\x2f\x68\xbf\xa7\x57\x7d\x19"
-+			  "\x07\x2c\x64\x76\x00\x51\x03\xae"
-+			  "\x5a\x81\xfa\x73\x4c\x23\xe3\x86"
-+			  "\xe6\x1f\xd8\x2a\xac\xf1\x36\xda"
-+			  "\x84\xfc\xa1\x37\xd2\x20\x49\x44"
-+			  "\xe1\x8e\x6b\xd5\x85\xdb\x1a\x45"
-+			  "\xfe\x54\x3f\x68\x20\x92\xdf\xc0"
-+			  "\xb1\x4e\x9c\xf4\x13\x76\x7f\x7d"
-+			  "\x22\x7f\xf4\xa3\x60\xfe\x16\xa8"
-+			  "\x50\x72\x2d\x43\x1f\x64\x75\x50"
-+			  "\x89\xb3\x22\xc5\xfb\x29\xa0\xe8"
-+			  "\xf5\x51\x1f\xbf\xb3\x8d\x4f\xc8"
-+			  "\x0c\x63\x68\xeb\x9a\x18\x6e\xad"
-+			  "\x1b\x80\xb3\xa6\x17\x14\x9d\x35"
-+			  "\xc4\x45\xa9\x72\x26\x10\xb0\x64",
-+		.ctext	= "\xb5\x35\x2d\x1b\x32\x1d\x11\x00"
-+			  "\x7a\x50\xaa\x50\x0b\x7d\x7d\xd4"
-+			  "\x3c\x59\x89\xbf\x12\xe7\x20\x9d"
-+			  "\x96\xe4\xe3\x04\xc7\x2a\x53\x44"
-+			  "\xe4\x39\x1e\xd4\x25\x89\x2c\x6a"
-+			  "\xd4\x05\xda\x1d\x0a\xce\xcc\x67"
-+			  "\x7b\x80\x76\xf3\x28\x0c\xb7\x85"
-+			  "\xb1\x18\x07\x7b\x78\xbe\x2d\xec"
-+			  "\xbe\xf6\x77\x22\x74\x22\xc1\x88"
-+			  "\x00\xef\x25\xaf\x03\xcd\x69\x3c"
-+			  "\xc1\x31\x17\xab\x92\x5c\xf7\xc3"
-+			  "\x90\x0b\xfa\xdf\xf7\xdf\x0a\x6e"
-+			  "\x1e\x82\x39\x16\x35\x3b\xa6\x2b"
-+			  "\x96\x8d\x9d\xd3\xaa\x56\xae\x7a"
-+			  "\xba\x4b\xcb\x46\x8e\xaf\x37\x04"
-+			  "\xcc\x06\x21\x72\x52\x0e\x94\x6f"
-+			  "\x9b\x6c\x0c\x18\x01\x97\x6d\x31"
-+			  "\x85\xb6\xbd\xfd\x50\x4d\x99\x2b"
-+			  "\x74\x23\x57\x80\x15\x3f\x69\xa5"
-+			  "\xf3\x2c\xcf\xf1\x1e\xc7\xe0\x04",
-+		.len	= 160,
-+	},
-+};
++static struct simd_skcipher_alg *lea_simd_algs[ARRAY_SIZE(lea_simd_avx2_algs)];
 +
-+static const struct cipher_testvec lea_ctr_tv_template[] = {
-+	{
-+		.key	= "\x7a\xd3\x6a\x75\xd5\x5f\x30\x22"
-+			  "\x09\x4e\x06\xf7\xc8\x97\xd8\xbb",
-+		.klen	= 16,
-+		.iv	= "\x0c\x5f\x04\xe8\xb5\x12\x19\x5e"
-+			  "\x74\xb3\xde\x57\xe9\x70\x97\x9e",
-+		.ptext	= "\x08\x7a\x83\xfc\xc1\x13\xa9\xf3"
-+			  "\xe0\xe9\xd5\xaf\x32\xa2\xdd\x3a",
-+		.ctext	= "\x2b\x73\x49\x7c\x4f\xc9\xef\x38"
-+			  "\xbe\x7a\x0b\xcb\x1a\xab\x87\xa4",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x74\xba\x38\x82\x43\x53\x9e\xfa"
-+			  "\x20\x2d\xfa\x64\xa9\x81\x74\xd9",
-+		.klen	= 16,
-+		.iv	= "\xe0\x56\xc2\xc6\xd2\x99\xef\x9c"
-+			  "\x77\x6f\x5b\xc9\xda\xca\x04\xe8",
-+		.ptext	= "\x79\x3b\x03\x34\xef\x07\x5a\x43"
-+			  "\xd0\x7c\xec\xf1\xd5\x85\xcd\x9a"
-+			  "\x39\x7d\xbc\x8c\x62\x41\xee\xbb"
-+			  "\xc4\x89\x0e\xb7\x03\x78\x81\xdc"
-+			  "\x57\x71\xee\xc8\x35\x2d\xfe\x13"
-+			  "\x2c\x0a\x60\x3a\x0d\xa6\x11\xdb"
-+			  "\x4e\xad\xda\x28\xb0\xef\x1a\x96"
-+			  "\x20\xb6\xc5\xd5\xdb\x56\xad\x05"
-+			  "\xd6\x05\x00\x27\x5d\xed\x12\xd1"
-+			  "\xfa\x80\x5d\x26\x98\x0c\xc7\x06",
-+		.ctext	= "\xaf\x18\x50\x91\xa0\xa4\xf1\xe2"
-+			  "\x5b\xc2\xfc\xb0\x5c\xb6\xdd\x1b"
-+			  "\x46\xcb\x01\xd5\x8f\x90\x55\xc6"
-+			  "\x1b\x9a\xb5\x49\xd4\x6d\x1c\x55"
-+			  "\x9a\xdc\x51\x36\xe0\x6e\xb6\xcc"
-+			  "\xd9\xf7\xc8\x5a\x2d\x6d\x3b\x5b"
-+			  "\x22\x18\x08\x1c\xfa\x76\x75\x98"
-+			  "\x60\x36\x8b\x52\x3a\xd9\xf2\x26"
-+			  "\xa3\xa7\x72\x55\x3b\x67\x35\xac"
-+			  "\xa4\x75\x6e\x9d\xa2\x0f\x91\xa5",
-+		.len	= 80,
-+	}, {
-+		.key	= "\xfc\xec\x3e\x94\x9e\x90\xf8\xb5"
-+			  "\x93\xe6\x97\x38\x23\x29\x36\x65",
-+		.klen	= 16,
-+		.iv	= "\xc9\xf8\xca\xe3\xd9\x64\xf0\x73"
-+			  "\x65\x48\xe9\xdf\x62\xd9\xe2\x2c",
-+		.ptext	= "\x07\x7d\x79\x17\x76\xe1\x7e\xc0"
-+			  "\x9e\x45\xf6\xa0\x60\x1b\x66\xc0"
-+			  "\xf0\xd1\x4e\x2d\x7f\xeb\xf3\xa7"
-+			  "\x17\x54\x61\x99\xc6\xf6\xb1\x4e"
-+			  "\xfe\x88\x88\x61\x3c\xa7\xe0\x75"
-+			  "\xe8\x29\x0b\x27\x7c\xae\xf4\x41"
-+			  "\xe9\x77\xa9\x30\x37\x7c\x16\xb9"
-+			  "\x6b\xb8\x13\xe7\xad\xc8\xa2\x48"
-+			  "\xaa\xb4\x71\x59\x38\x0d\xa7\x3e"
-+			  "\x38\x38\xdd\xb6\xc1\x09\x69\x4f"
-+			  "\x7b\x94\xe3\xd6\x48\x3f\xe2\x12"
-+			  "\x2a\x1c\x07\xb2\x61\x76\x3d\x83"
-+			  "\xd3\xaa\x3e\xe6\xb1\x38\x5a\x82"
-+			  "\x58\x1a\x74\x36\x75\x55\x4d\x51"
-+			  "\x6d\xcd\x05\x06\xfc\x5d\xde\x1a"
-+			  "\x1c\x27\x44\xe0\x28\x29\x0a\x67"
-+			  "\x41\x12\xf7\xf2\xf1\x53\x81\xa8"
-+			  "\x0e\x78\xd8\x8d\xe1\xb9\x26\xb1"
-+			  "\x88\xcc\x15\xa8\x99\xfe\x93\x39"
-+			  "\x08\x82\xd2\x5a\x4b\x09\x92\x5d",
-+		.ctext	= "\xf8\x67\x10\x0f\x73\x13\x15\x94"
-+			  "\xf5\x7f\x40\x3f\x5d\x60\x1a\x2f"
-+			  "\x79\xce\xc0\x86\x27\x96\x0d\xfd"
-+			  "\x83\x01\x05\xf8\x13\x47\xe9\x9e"
-+			  "\x9d\xe2\x14\x90\x75\xed\xd0\x92"
-+			  "\x6c\xc8\x74\x6e\x2b\xbd\xaf\xb8"
-+			  "\x7f\x60\x52\x75\x39\xcc\x24\xa7"
-+			  "\x15\xec\x79\x2f\x67\x5a\xce\xc4"
-+			  "\x13\x0a\x3f\x38\x4a\xe3\x99\x14"
-+			  "\xc8\x4e\x14\xbe\xd7\x16\x17\xc1"
-+			  "\xc9\xf4\xa8\x4a\x19\x04\x90\x48"
-+			  "\x81\x6d\x3c\x84\xce\x17\xdd\x27"
-+			  "\xe5\x1c\x0e\xd0\x51\x95\xea\x6f"
-+			  "\xb5\xc6\x28\x18\x0b\xe9\xe2\x5d"
-+			  "\xa8\x35\xde\x16\x7a\x4b\x26\x59"
-+			  "\x57\x38\xc8\xde\xa6\x9a\x0a\x63"
-+			  "\xcf\x92\x2f\x49\xb3\x68\xb3\x25"
-+			  "\xa4\x16\x61\xaf\xb4\xfd\x9e\xb3"
-+			  "\xf0\xb6\x7b\x53\xd1\x86\xca\x6a"
-+			  "\x1e\xf5\x92\x5d\x22\x0d\x0f\x70",
-+		.len	= 160,
-+	}, {
-+		.key	= "\xbb\x93\xa2\x64\x3e\x84\xa4\x1a"
-+			  "\x23\xfa\x12\xa5\x4d\x5e\x7e\xd6"
-+			  "\x94\x39\x1e\xa3\x68\x49\x87\xd8",
-+		.klen	= 24,
-+		.iv	= "\xb7\xd5\xb9\x09\x11\x3d\x5c\xcb"
-+			  "\x0b\xd5\x49\x24\xe1\xf3\x4c\x3f",
-+		.ptext	= "\x5f\x47\x28\x64\x01\x6b\xdc\x28"
-+			  "\x59\xbb\x25\xe1\xb1\x67\x44\x5d",
-+		.ctext	= "\xc6\x35\x7a\xbd\x1d\x38\x24\xf2"
-+			  "\xc7\x2e\xd6\xef\x4b\x76\xd8\x97",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x25\x7a\x7c\x23\x19\xa7\x1d\x0d"
-+			  "\x33\x0e\x06\x34\x5a\x0e\xf0\xfd"
-+			  "\xa8\x63\x72\x33\x12\x3f\xc7\xb4",
-+		.klen	= 24,
-+		.iv	= "\x4c\x9c\xd2\x6a\xe7\xd1\x5f\x7d"
-+			  "\xbd\x64\xac\xc7\x8e\x20\x28\x89",
-+		.ptext	= "\xeb\x67\x7a\x5c\x53\xc9\xc5\x6a"
-+			  "\x9d\xd5\x2b\xdd\x95\x2e\x90\x98"
-+			  "\xea\xe2\xa0\x25\x48\xf8\x13\xef"
-+			  "\xc1\x48\x2f\xb2\x71\x90\x8f\x2f"
-+			  "\x62\xc3\x24\x24\xad\xa4\x79\x7b"
-+			  "\xe2\x94\x3b\xc2\xaa\xa8\xf8\xdb"
-+			  "\xab\xff\x27\xf5\xac\x53\x69\xbb"
-+			  "\xfa\xcd\x0e\xca\x0a\x1e\xdb\x69"
-+			  "\x5f\xcb\x0a\x74\xae\xc8\x93\x9a"
-+			  "\x41\x49\xaa\xc9\x99\xd5\x89\xe5",
-+		.ctext	= "\xf7\xc2\xde\x82\xdb\x28\xf7\xb7"
-+			  "\xe6\x25\x8b\xb5\x31\xb9\x22\x15"
-+			  "\x69\xe6\xdb\x58\x97\x29\x02\x50"
-+			  "\xc2\xf4\x73\x80\x9d\x43\x49\xcd"
-+			  "\x48\xbe\x5c\x54\x7f\x5f\x60\xff"
-+			  "\xfd\x42\xbe\x92\xb0\x91\xbc\x96"
-+			  "\x3f\x0d\x57\x58\x39\x7d\x3c\x33"
-+			  "\xca\x5d\x32\x83\x4e\xc1\x7f\x47"
-+			  "\x35\x12\x5c\x32\xac\xfc\xe6\x45"
-+			  "\xb6\xdc\xb7\x16\x87\x4f\x19\x00",
-+		.len	= 80,
-+	}, {
-+		.key	= "\x84\x1e\xca\x09\x74\xee\xc0\x3a"
-+			  "\xe8\xbd\x0f\x57\xb8\x16\xeb\x4f"
-+			  "\x69\x79\xa3\xca\x51\xf2\xde\x60",
-+		.klen	= 24,
-+		.iv	= "\xfc\xf0\x24\x08\xcf\x55\xa1\xd3"
-+			  "\xeb\xca\x26\xda\x55\x55\x71\x74",
-+		.ptext	= "\x53\x2d\xae\xad\x19\xcd\x3e\xf4"
-+			  "\xa4\x47\xb6\x14\xe7\xdb\x2b\x66"
-+			  "\x25\xc8\xad\x44\x9e\x62\x11\xc0"
-+			  "\x6d\x65\xf4\x96\xb1\x89\xfc\x60"
-+			  "\xeb\x56\x61\x09\xa7\x3a\xac\x84"
-+			  "\x5f\xd9\xbf\xbe\x9c\xa4\x16\xd1"
-+			  "\x5e\xad\x4c\x7a\xbe\xb9\xe1\xcd"
-+			  "\xd2\x97\x3a\x27\xd1\xb1\xe9\x65"
-+			  "\x77\xe1\x2f\x53\xab\x86\xbf\x67"
-+			  "\x60\xd6\xc5\xb0\xb9\x76\x27\x09"
-+			  "\x70\x48\x0b\x92\x78\x84\x99\x61"
-+			  "\xe1\x0a\x02\x74\xfd\xf6\xc1\xea"
-+			  "\xc1\x75\x21\x73\x6d\xd8\xff\x06"
-+			  "\x70\xe7\xd1\xd2\x85\x78\xe7\x76"
-+			  "\x23\x40\xf1\x74\x14\xe8\xc2\xe3"
-+			  "\x63\x63\x53\x65\x7c\x80\x0b\x59"
-+			  "\x8f\xbb\x3d\x52\x35\x59\xf3\xc7"
-+			  "\x56\xb4\xea\x0c\x4a\xd3\xdd\x80"
-+			  "\x3e\x3d\x06\x09\xda\x0f\xe3\xbd"
-+			  "\x21\x4d\x36\xe2\x98\x76\x4f\x19",
-+		.ctext	= "\x3e\x23\xf2\x14\x9f\x53\xe8\x64"
-+			  "\xd3\x4e\x6a\xbd\xa7\xad\xf9\xa3"
-+			  "\x80\x5f\x27\x75\x2e\xee\xcc\xda"
-+			  "\x72\x07\x41\x99\x1d\x37\x34\x3b"
-+			  "\x00\xfd\x35\x03\x06\xf3\xba\xd8"
-+			  "\xa8\xc0\x31\x0c\x7f\x96\x1f\xcf"
-+			  "\x46\x96\x4e\x38\x93\x90\xd0\xfc"
-+			  "\xca\x59\x1f\xe0\x5d\xc4\x9b\x48"
-+			  "\x8d\xd2\xb4\x29\x18\xfd\xad\x89"
-+			  "\x3a\xcf\x2f\xa2\x29\x59\xc6\xc5"
-+			  "\x91\x0c\xb7\xe5\x7a\x1e\xc7\xc1"
-+			  "\x07\x88\x90\xa1\xb3\xa3\x94\x41"
-+			  "\x56\x7e\x03\x6d\x3b\x90\x0a\x83"
-+			  "\xed\x40\xb4\xd7\x83\x61\xcd\xb5"
-+			  "\xf2\xb7\x83\xbc\x1a\x0a\x41\x6d"
-+			  "\xab\xca\xdb\xd8\xde\xd4\x4a\x76"
-+			  "\xf7\x3a\xe2\x35\x76\x3b\x6e\x8c"
-+			  "\xed\xc2\x37\xb4\x32\x9f\x71\x62"
-+			  "\x4e\x55\xdc\x42\xae\xc5\xb3\x80"
-+			  "\xd8\x04\x20\xf2\x85\x94\xe6\xb3",
-+		.len	= 160,
-+	}, {
-+		.key	= "\xaa\x5b\x8d\xd6\x4b\x30\x23\x13"
-+			  "\xdc\xe4\x18\x46\x4e\xae\x92\x90"
-+			  "\x8b\xe9\x53\x37\x11\x21\x84\x56"
-+			  "\xe0\x6e\xb1\xd3\x97\x00\x16\x92",
-+		.klen	= 32,
-+		.iv	= "\xda\xfc\x19\xe8\xf6\x87\x17\x53"
-+			  "\xc8\x1f\x63\x68\xdb\x32\x8c\x0c",
-+		.ptext	= "\xd0\xe9\xdf\xe7\x03\x45\x2d\x16"
-+			  "\x6b\x6e\xcf\x20\xc2\x48\xe6\x2c",
-+		.ctext	= "\xfc\x9a\x78\xba\x8f\x08\xae\xa8"
-+			  "\x2f\x9a\x37\xe5\xbd\x2c\x04\xd8",
-+		.len	= 16,
-+	}, {
-+		.key	= "\x11\xfc\x29\x85\xb9\x74\xb0\x65"
-+			  "\xf9\x50\x82\xf8\x62\xf0\x52\xb7"
-+			  "\xd9\xb4\xd2\x1c\x3c\x0e\x76\x5a"
-+			  "\x49\xdb\x7a\x4b\xbb\xf3\x26\xaa",
-+		.klen	= 32,
-+		.iv	= "\xb5\xfe\x51\x82\x64\x8a\x24\xe6"
-+			  "\xe1\x5b\x20\xe3\x54\x02\x62\xb3",
-+		.ptext	= "\x5f\xb2\x26\x33\xba\x4e\x8b\x98"
-+			  "\x1a\xc6\x96\x5d\x58\xa4\x78\x7f"
-+			  "\xcf\xe2\x14\xed\x06\xff\xbc\x3a"
-+			  "\x8f\x52\x3b\x96\x2e\x9d\x19\xfc"
-+			  "\x3e\xe5\x1a\xad\x51\x81\x08\xdc"
-+			  "\x17\x72\xb2\xab\x81\xf2\x35\x56"
-+			  "\x25\x4f\x7a\xae\xe5\xfa\x00\xca"
-+			  "\xcb\xdb\xdc\xf9\x38\xe8\xfe\xfa"
-+			  "\x3e\xf6\xb5\x70\x4a\xcf\x76\x90"
-+			  "\x06\x84\xd9\x1d\x7d\x05\xe4\x96",
-+		.ctext	= "\xa0\x03\x29\xcc\xfd\x82\xbd\x62"
-+			  "\x39\x1c\xc9\xe0\xc8\x69\x46\x45"
-+			  "\x31\xc8\x1e\x6b\x5f\x37\x97\xa2"
-+			  "\xcb\x93\x19\x4a\x02\x42\x09\x2a"
-+			  "\x85\x5c\x78\x43\xb5\xe1\x1b\x69"
-+			  "\x67\x08\x79\xa3\xd5\x2d\xcb\xd5"
-+			  "\x30\x3e\x9b\xf2\x1b\xa7\x0b\x72"
-+			  "\x5f\xe5\xf8\xd8\x40\x45\xab\x8e"
-+			  "\x8e\x14\xf6\x0a\x85\xc1\x41\x3c"
-+			  "\x88\x56\xf0\x7d\x4d\xfd\x7e\x0e",
-+		.len	= 80,
-+	}, {
-+		.key	= "\xeb\xe8\xee\x96\x66\xd0\x6d\xb7"
-+			  "\x69\xcd\xa8\xb9\x8f\x1e\xab\x04"
-+			  "\xe7\xa6\xa4\xa8\x99\xfb\x9f\x05"
-+			  "\xcd\xbb\x95\xcb\xc8\x1f\xa5\x26",
-+		.klen	= 32,
-+		.iv	= "\x58\xd2\xa1\x32\x73\x03\xcc\xb5"
-+			  "\x1b\xb9\xe2\x0d\x84\x66\x59\x67",
-+		.ptext	= "\x79\xc0\xe7\x32\xfc\xcc\x44\xd4"
-+			  "\x2d\x3b\x31\x9b\x6d\xfa\xb9\xf6"
-+			  "\xc2\x05\xb7\xe5\x7d\x7c\x98\xae"
-+			  "\x1b\xf8\x62\xd2\x6a\x1f\xf5\x3f"
-+			  "\xed\x76\x92\xc7\x80\x77\x99\xd1"
-+			  "\x3f\xe4\x97\x4e\xa5\x5a\x7f\xef"
-+			  "\xf1\x29\x38\x95\xce\x63\x58\x0a"
-+			  "\x32\x33\x30\xee\x87\x70\x08\xf4"
-+			  "\x09\x72\xab\x4e\x6f\x25\x27\x65"
-+			  "\xcd\x5b\xce\xce\xb9\x67\x80\x79"
-+			  "\xad\xe7\x2d\x2c\xac\xe1\x95\x30"
-+			  "\x28\x12\x52\x4b\x24\x82\x19\xee"
-+			  "\x96\x5c\x3d\xae\x0f\xfd\x74\xf8"
-+			  "\x9d\x4b\xde\x01\xf1\x48\x43\xfd"
-+			  "\xbd\xe7\x9d\x91\x60\x1e\xd6\x8a"
-+			  "\xc5\x3c\xd2\xcf\x88\x7d\xb0\x94"
-+			  "\x5b\xdb\x4d\xd1\xa9\x28\x0a\xf3"
-+			  "\x79\x5a\xd0\xd1\x94\x26\x51\xe1"
-+			  "\xea\xd0\x90\xac\x32\x41\xa3\x7f"
-+			  "\xd1\x5a\xb7\x64\xfd\x88\x56\x50",
-+		.ctext	= "\xca\xdd\x51\xe5\xbf\x4a\x97\x8f"
-+			  "\x79\x7a\x1c\x0a\x63\x0b\x2f\xc4"
-+			  "\x67\x40\x0d\x77\x44\x30\x3c\x87"
-+			  "\x3d\xbe\x2b\x52\xb1\xe3\x13\x7c"
-+			  "\xd3\x6b\xa5\x23\x2a\x5e\xd3\x32"
-+			  "\xb0\x2f\x20\xad\x25\x76\xba\x76"
-+			  "\x2e\xc1\x66\x18\xec\x4e\xc8\x1a"
-+			  "\x33\x4b\x20\x1a\x0a\x24\x41\x38"
-+			  "\x5c\xb9\xa9\x33\x5e\x91\x4f\xcd"
-+			  "\x1e\x00\x0b\x8c\x61\x04\x07\x7f"
-+			  "\x57\x4c\x21\xc0\x61\x82\x57\x1d"
-+			  "\x69\x34\xa4\x7b\x93\xf2\x7a\x86"
-+			  "\xd2\x0b\x0b\x7b\xa6\xac\xbb\x7b"
-+			  "\x0d\x56\x24\x31\x0a\x82\x81\x58"
-+			  "\xc1\xf3\x36\xca\x04\xa0\xfa\x01"
-+			  "\xa6\x45\x1f\x0e\x87\x69\x33\xe5"
-+			  "\x4c\xdc\x32\x89\x4a\xb2\xd3\x9b"
-+			  "\x23\x2c\x30\x16\x38\xab\xe0\xbf"
-+			  "\x50\xce\x33\x34\x45\x88\xd0\xa7"
-+			  "\x31\xbf\x31\xdb\x42\x7f\xe2\x76",
-+		.len	= 160,
-+	},
-+};
++static int __init crypto_lea_avx2_init(void)
++{
++	const char *feature_name;
 +
-+static const struct cipher_testvec lea_xts_tv_template[] = {
-+	{
-+		.key	= "\x13\x1d\xbb\xbf\xf9\x7d\xcc\x8c"
-+			  "\x82\x99\x52\x1d\xaf\x04\x1a\x0a"
-+			  "\x75\x36\x73\x96\xc5\x4f\x9e\xac"
-+			  "\x8a\xf0\xef\x06\x49\xc8\x7c\x0a",
-+		.klen	= 32,
-+		.iv	= "\x03\xb2\x44\xdf\x7b\xa4\x34\xd1"
-+			  "\x19\xa6\x30\x9d\x91\xc5\x65\x3b",
-+		.ptext	= "\x31\xb7\x63\x5b\x36\x2f\x93\x86"
-+			  "\xcc\xe7\x56\xf3\x3a\xed\x64\xd1",
-+		.ctext	= "\x36\x53\x37\xbd\x47\x42\x5c\xe7"
-+			  "\xf9\xc4\x0a\xfc\x38\x70\xdb\x93",
-+		.len	= 16,
-+	}, {
-+		.key	= "\xf3\x9c\x37\xe3\x80\x12\xff\xd7"
-+			  "\x7b\x09\xd5\xd6\x9a\x0b\xf1\x37"
-+			  "\x43\xe7\xef\x84\x91\xa9\xeb\x08"
-+			  "\x06\xf0\x99\x7c\xc4\x8b\xbc\xa9",
-+		.klen	= 32,
-+		.iv	= "\x23\x66\x4c\xe3\x08\xfa\xdc\x21"
-+			  "\x18\x0e\xac\xd0\xbc\x20\x20\xdd",
-+		.ptext	= "\x51\x27\x06\x5b\x8e\xaf\x6b\xf4"
-+			  "\x73\x89\x16\x60\x6a\x6a\xfa\x80"
-+			  "\x7a\x26\x99\xce\x18\xb2\x96\x25"
-+			  "\xf1\xec\x37\xb4\x1d\x6b\x2b\xfe"
-+			  "\x81\xeb\xef\x12\x2c\xe5\x10\x6a"
-+			  "\xe5\x03\x00\x65\x34\xe0\x1e\x2a"
-+			  "\x6d\x0c\xb8\x4b\xa5\x74\x23\x02"
-+			  "\xe7\x48\xd3\x0e\xc9\xeb\xbf\x49"
-+			  "\x64\xd9\x92\xcf\x29\x43\xb7\x33"
-+			  "\x11\x4c\x9b\x76\x94\xaa\x17\x8c"
-+			  "\x9d\xa9\x13\x05\x83\x10\xce\xb5"
-+			  "\x48\xa8\x02\xae\x93\x7c\x61\xba"
-+			  "\x68\xf8\xf2\x5f\xcd\x7c\xfd\xb6"
-+			  "\x06\x28\x1e\x52\x02\x25\x7f\x7a"
-+			  "\x84\x31\x62\x2a\xbb\x5a\x3c\x25"
-+			  "\x1e\x8f\x46\x32\x52\x8d\x94\x7d"
-+			  "\x35\x4e\xfd\x01\xa4\xc7\xd1\x8a"
-+			  "\x12\xf9\x05\xfd\x31\xac\xfa\xd3"
-+			  "\x18\x71\x3a\x3b\xe2\xfa\xac\xec"
-+			  "\x04\x94\x29\x07\x77\x17\x0a\x30"
-+			  "\x0d\xd7\x6c\x99\x64\xb6\x48\xe1"
-+			  "\x32\x1f\xe7\x76\xb4\x93\x39\x6f",
-+		.ctext	= "\xe2\x08\x85\x96\xd5\xcd\x2b\xd0"
-+			  "\xb0\xff\xa4\x54\x78\x04\xcf\x5a"
-+			  "\x59\x56\xf6\xd8\x8a\x9a\x04\x98"
-+			  "\x72\xa3\xe1\x68\x84\xee\x4a\xa1"
-+			  "\x0e\x39\xc0\x77\x4f\x69\x1d\x8b"
-+			  "\x0f\xcb\x1d\x98\xd3\xa0\xc2\x81"
-+			  "\x7d\x7f\x51\xbf\x6e\x1b\xd1\x73"
-+			  "\xd5\x68\x72\x72\x1c\x21\x78\x37"
-+			  "\x59\x11\x30\x59\x46\x9c\xd3\x0e"
-+			  "\x2f\x66\x56\x5c\x4b\x43\xd7\xa3"
-+			  "\x85\xce\x32\xc1\x36\xdf\x7b\x3a"
-+			  "\x24\x80\xd5\x51\x3a\x84\x71\x8f"
-+			  "\x49\x6c\x05\xc5\x06\xa5\x13\xaa"
-+			  "\x8c\x32\xe2\x61\xd8\xae\x26\x23"
-+			  "\x2f\x32\x94\x92\x5f\x37\xd9\x05"
-+			  "\x32\xb6\x34\x29\x3e\xae\xd7\xfa"
-+			  "\xa7\x4b\xd6\x7a\x71\x00\xc7\xf0"
-+			  "\x91\x17\x18\xf8\x0f\xa7\x41\x86"
-+			  "\xb3\x0f\xa2\xd0\xd9\x3c\xf3\x2b"
-+			  "\x0e\x0b\xd8\x7f\xdc\x51\x1f\xf8"
-+			  "\xbe\x42\x41\x3d\x53\xdb\x1e\x6f"
-+			  "\x91\x7a\x4d\x56\x70\x5a\xd9\x19",
-+		.len	= 176,
-+	}, {
-+		.key	= "\x39\xa1\x40\xca\x04\x1f\xab\x0d"
-+			  "\x30\x9e\x6d\x2b\xf3\x52\x06\x87"
-+			  "\x9f\x5b\xd8\xdf\xac\xf6\xcd\x48"
-+			  "\x7b\x6d\xfd\x78\x06\xa5\x2d\x85",
-+		.klen	= 32,
-+		.iv	= "\x14\x6c\xdf\xce\x8a\xa1\x78\x42"
-+			  "\xbe\xad\xb0\xc9\xcc\x45\x8b\x1c",
-+		.ptext	= "\x9d\xea\xc3\xbd\xa6\x57\x82\x4d"
-+			  "\x02\x6e\x38\x09\x2e\x92\xd4\x93"
-+			  "\xe2\x70\xc9\x52\xe3\x64\x3c\x17"
-+			  "\xa8\x33\x92\x07\x53\x1f\x23\xc2"
-+			  "\x94\x8a\x22\xe6\x22\xd6\x31\xee"
-+			  "\xce\x9f\xbb\xa1\xb5\xdf\x99\x26"
-+			  "\xae\x23\x7f\x77\xd8\xa6\xec\xcd"
-+			  "\x91\xa6\x08\x24\x88\x7f\xf2\xee"
-+			  "\x30\x27\xff\x4b\x4d\x06\xd4\x6c"
-+			  "\x97\x85\x2e\x87\x5f\x7f\xcc\xda"
-+			  "\x7c\x74\x7e\xaa\xf7\x53\x20\xbe"
-+			  "\xf6\x51\xe4\xeb\x24\xde\x1d\xa6"
-+			  "\x9b\x4d\xca\xdc\xdd\x0e\xeb\x2b"
-+			  "\x9b\x07\xfd\xa3\x6d\xa9\x9a\xb5"
-+			  "\x0b\xe2\xf9\x72\x69\x90\xec\xf7"
-+			  "\x7b\x17\xdc\x8d\x4f\xf3\xaf\xed"
-+			  "\xf6\x6a\xdc\x19\x39\x82\xe2\x84"
-+			  "\x7b\x4c\x5f\x7e\x3e\x55\x8b\x11"
-+			  "\xdc\xe7\x11\x5a\x52\x02\xe4\xd7"
-+			  "\xf7\x90\xd7\xdf\x94\xf1\xe4\xd5"
-+			  "\xe4\x49\xe8\x19\x33\x22\x66\x19"
-+			  "\xc6\xf5\xdc\xad\x7c\xf0\xf3\xea"
-+			  "\xe2\xa4\xa2\x57\x53\x28\x28\xb5"
-+			  "\x32\x6b\xfc\xa2\x86\xee\x8e\x0a"
-+			  "\x25\x76\x20\x94\xff\x50\x73\x5d"
-+			  "\x2c\xb4\x66\xd2\x59\x95\xa0\x37"
-+			  "\xc4\x96\x47",
-+		.ctext	= "\xc0\x48\x1b\xcf\x4a\xbd\x7b\xb2"
-+			  "\x18\xe8\x2a\x31\xaf\x7f\x7e\x3f"
-+			  "\x7f\x79\xc7\x03\x4b\x24\xc8\xfb"
-+			  "\xaa\x8b\x6b\x4d\x51\x80\x95\x60"
-+			  "\xb2\x9c\x3b\x80\xf3\x23\x93\xd3"
-+			  "\xef\x55\xc3\x9b\xae\xa0\x13\xe0"
-+			  "\x36\x6f\x4e\xc8\x06\x99\x12\x81"
-+			  "\xf2\x70\x28\x42\x8f\x00\x79\xb2"
-+			  "\xb9\x7d\xfe\x3a\x6a\x45\xea\x1d"
-+			  "\x83\x8e\xbc\x07\xf3\xaf\x73\xb9"
-+			  "\xbd\x6c\x40\x59\x43\xc2\x54\x2a"
-+			  "\xb2\x9e\x06\x52\x7f\x35\xf9\xdf"
-+			  "\x7e\xa0\xf9\x27\x2d\x0d\xb7\x6a"
-+			  "\x5e\x17\xf5\xf3\x26\xc1\xd0\x0c"
-+			  "\x1b\x57\xbe\xf3\xf0\xa0\xe4\x36"
-+			  "\x7b\x5b\x0f\xc1\x47\xac\x96\xa1"
-+			  "\xd9\x01\xac\xf3\x2a\xa2\xc2\x6e"
-+			  "\x82\x83\x00\xff\x5d\x57\x98\xac"
-+			  "\x8b\xaa\x05\xcd\xe9\x08\x90\xd6"
-+			  "\x21\x84\xd1\x33\xd0\x2b\xc4\xa7"
-+			  "\xe9\x59\x4f\x2f\xb4\x19\x97\x7c"
-+			  "\xe4\x2d\xe9\x02\x7b\xb3\x58\xf6"
-+			  "\xab\x5a\x33\xfa\x53\xc7\x61\xc7"
-+			  "\x71\xc6\x0f\xdc\x3e\x18\x6c\xe8"
-+			  "\xb8\xd2\x21\x15\x1e\x82\x20\x69"
-+			  "\xf2\x92\x7f\xa4\x64\xb9\xf4\xa5"
-+			  "\x61\x3b\xb9",
-+		.len	= 211,
-+	}, {
-+		.key	= "\xae\xf5\x94\x42\xea\x02\xeb\x8f"
-+			  "\x41\x74\x00\x8c\x55\x12\x72\x5f"
-+			  "\x0d\x4e\x9d\x3a\x90\xb7\x73\x0c"
-+			  "\xc8\x93\x59\x07\xe8\x95\x8c\x86"
-+			  "\x99\x76\xeb\x5c\xd7\xc7\xf0\x2f"
-+			  "\xac\x5e\xa0\x75\xd2\xbf\xa7\xb6",
-+		.klen	= 48,
-+		.iv	= "\x78\x38\x47\xb2\x56\x55\x3d\x82"
-+			  "\x93\x7e\x34\xd7\xc2\xe6\x0c\x66",
-+		.ptext	= "\xd4\x7b\x83\x78\x74\xba\xd9\x5b"
-+			  "\x27\x61\x31\x74\xa4\x00\x03\x59"
-+			  "\x61\xc9\x23\x2e\xcb\x3d\xaf\xf5"
-+			  "\x3d\xa5\x2a\x02\x7d\x12\x11\x6e"
-+			  "\xec\x59\xfd\x95\x93\x59\x5e\x68"
-+			  "\x9e\x9d\x10\x74\x96\x9a\xac\x51"
-+			  "\x4b\xd3\x91\xaf\xbe\x33\x78\x3a"
-+			  "\x77\x61\xd8\x24\xa8\xfd\xbf\x2e"
-+			  "\xd8\x45\xee\x53\x2e\x91\x22\x0e"
-+			  "\x43\xe6\xb7\x2a\x1c\xb6\x1a\xd4"
-+			  "\x74\x46\xfd\x70\xcf\x42\x5e\x4f"
-+			  "\x4e\xd8\x4e\x91\x75\x2e\x6d\x02"
-+			  "\x7a\xf2\xdb\x69\x43",
-+		.ctext	= "\x48\xda\x19\x0e\x4c\xa5\x9d\xc4"
-+			  "\xa5\x34\x37\x81\xde\x1b\x8c\x61"
-+			  "\x5c\x70\x92\xf6\x66\x28\x88\xe4"
-+			  "\xa2\x36\xc9\x66\xcf\x85\x45\x56"
-+			  "\x2d\xbc\x44\x19\xe9\x75\xec\x61"
-+			  "\xbb\x1a\x11\xdf\x3c\x2b\xa4\x49"
-+			  "\x80\xdd\x3b\x6e\xd3\xd4\x29\xd2"
-+			  "\x01\x11\xf8\x2f\x83\x96\x60\xef"
-+			  "\x9d\x33\xc5\xde\x5e\x48\x10\xaf"
-+			  "\x02\x47\xda\x91\x88\x2a\x9f\x44"
-+			  "\x31\x68\x73\x1b\x12\xc0\x91\xc4"
-+			  "\xc1\xdd\xf3\x43\xba\x05\x66\xb6"
-+			  "\x04\x4e\xea\xea\x1f",
-+		.len	= 101,
-+	}, {
-+		.key	= "\x3f\xa4\x4e\x46\x47\x13\x19\xbe"
-+			  "\x8b\x5b\xea\xcb\x8f\x0f\x55\x19"
-+			  "\xaf\xea\x38\x15\x9a\x9f\xa1\xda"
-+			  "\xb1\x24\xb9\x45\xfb\x1e\xa7\x50"
-+			  "\xff\x25\x21\x65\x17\x34\xab\xec"
-+			  "\x72\x65\xc2\x07\x7c\xbe\x6f\x65"
-+			  "\x51\x57\x9e\xd2\x88\x43\xbc\x9e"
-+			  "\x44\x9b\x54\x4a\x3d\x4a\x8c\x40",
-+		.klen	= 64,
-+		.iv	= "\x71\x60\xda\x95\x7b\x60\x1d\x7e"
-+			  "\x96\x0c\xca\xe9\x47\x58\x1b\x54",
-+		.ptext	= "\x10\x1b\x67\x8f\x11\xf6\xf9\xcd"
-+			  "\x1d\x72\xa7\x1a\x55\x82\xb4\xef"
-+			  "\x16\x53\x05\x4a\xa7\xa8\x02\x82"
-+			  "\x07\x33\x6a\x63\x45\x55\xac\x51"
-+			  "\xa3\x44\xbd\x6c\x9b\x56\xb3\xef"
-+			  "\xab\x45\x6b\x0a\x18\xf0\xe8\x35"
-+			  "\x3d\x19\xb9\xd2\x7e\x46\x37\x04"
-+			  "\x2e\x3b\x3c\x0d\xd8\xcf\x25\x4a"
-+			  "\xd7\x63\xeb\x74\xa9\x5a\x95\x4c"
-+			  "\x9f\xfb\xe3\x5f\x9e\x41\x14\x03"
-+			  "\x48\x8b\xde\x0c\xe6\x70\xd0\x22"
-+			  "\x07\xd5\x7f\x88\x8b\xcc\x5a\x12"
-+			  "\x9d\xfb\xa6\x84\x97\x3e\xad\x44"
-+			  "\x3e\xfa\x3c\xd0\x99\xb0\x0c\x6b"
-+			  "\x32\x57\x73\x4a\xfb\xc7\x8d\x01"
-+			  "\xe7\xdd\x7c\x7e\x53\x80\xe3\xbb"
-+			  "\xdc\x39\x73\x4a\x6f\x11\x3e\xa1"
-+			  "\x33\xfa\xb9\x5a\x63\xc7\xdd\xe7"
-+			  "\x9d\x00\x89\x6c\x8b\x2c\xc6\x0c"
-+			  "\x51\xa4\x29\x80\xae\x97\x67\x7f"
-+			  "\xc0\x30\x8c\x5c\x00\xb3\xc9\xe7"
-+			  "\x90\xf5\x26\xb7\x55\xad\x5b\x5e"
-+			  "\xaf\xf7\x6a\xc8\x22\xc0\x08\x9f"
-+			  "\x09\xd0\x8c\x77\x5a\xad\x7c\x2c"
-+			  "\xc2\xd7\x3c\x76\xc9\x08\xbd\x83"
-+			  "\x09\xf2\xcc\x65\x7a\x84\xf2\x49"
-+			  "\x04\x69\xd2\x1c\x72\x01\xec\xa8"
-+			  "\xf8\x58\x2a\x65\x4a\x12\x3d\xfe"
-+			  "\x82\x4f\x02\x97\xb6\x9e\x54\x8c"
-+			  "\x79\x43\x23\x6c\xc4\x67\x33\xce"
-+			  "\x37\x4e\xfe\x0f\x66\xa7\x16\x1c"
-+			  "\xba\xbf\x75\x2c\x74\x30\xcd\x9c"
-+			  "\x34\x04\x5f\x44\xac\x06\x0a\x9f"
-+			  "\xe3\x68\x92\x4f\x20\x89\x35\x82"
-+			  "\x2e\xe9\xdc\xbf\x79\xc3\xb8\x9b"
-+			  "\x18\xe2\xaa\xed\xa4\x6b\xd3\xe7"
-+			  "\xb7\xfb\x8a\x10\x7a\x23\x1d\x5b"
-+			  "\x89\xa3\xe9\x26\x0e\x31\x3a\x4d"
-+			  "\x99\xee\x14\x1b\x4c\x90\xf5\xf3"
-+			  "\x70\xeb\x78\x9d\x6a\x20\xb9\x60"
-+			  "\x3e\x24\x42\xd0\x62\x93\x94\x4e"
-+			  "\xbb\x21\xce\x0e\xcc\x4c\xd7\x04",
-+		.ctext	= "\xf2\x90\x24\x8d\xba\x6f\x31\x5c"
-+			  "\x3e\x5a\x2d\xf1\x72\xe0\x99\x17"
-+			  "\xf9\x9e\xf9\x3e\x6c\x8e\x43\xd9"
-+			  "\x41\xbe\x74\x94\x4d\xf9\x73\x7d"
-+			  "\xe0\xa6\x62\xd1\x9e\x27\x80\x7d"
-+			  "\x40\x4c\x92\x50\xe9\x4e\x6b\x67"
-+			  "\xa7\x48\x8c\xd5\xcf\x4b\x2b\xe8"
-+			  "\x8c\xd5\x90\x7e\x52\x83\x36\xd6"
-+			  "\x20\xf5\x78\x31\xeb\x65\x55\xc7"
-+			  "\x49\x9c\x7a\xe3\xa8\xad\xe3\x6a"
-+			  "\xc2\x3d\xbc\x45\x2f\x8f\x6a\xc1"
-+			  "\x61\x9c\xbb\xf9\xe7\x1d\x06\x94"
-+			  "\x49\x36\x77\x95\x52\xfa\x3a\x2c"
-+			  "\x92\xf3\x77\x38\xbe\xf2\x54\xe9"
-+			  "\x5d\x1c\x9e\xc8\x5a\x29\x24\x1f"
-+			  "\x3c\xbc\x71\x5e\x73\xdb\xf6\x22"
-+			  "\x27\x6d\xe7\x18\x82\xb1\x51\x1c"
-+			  "\xdb\x50\x58\xd3\xf5\xf2\xb1\x7f"
-+			  "\x67\x71\x67\x01\xe0\x23\x04\xfc"
-+			  "\x91\x81\x04\x75\x55\x7b\x01\xc8"
-+			  "\x21\x57\x60\x61\x38\x2c\x42\x9a"
-+			  "\x9e\xd3\xd7\x16\x2c\xe6\x7e\xe6"
-+			  "\xdc\x3c\xbe\x31\x77\x0d\xc4\xfe"
-+			  "\xa3\x69\x05\xdf\x70\xe8\x44\x48"
-+			  "\x69\x40\x56\x64\x0c\x1f\x72\x89"
-+			  "\x15\xb8\xbd\x10\x2a\x75\xb8\x1b"
-+			  "\x42\xcc\x75\x50\xc7\xe6\xcf\x13"
-+			  "\x2e\xda\x18\x36\x6f\x41\xd7\x14"
-+			  "\x2d\xb6\x6d\xce\xe3\x38\x9a\xd0"
-+			  "\x14\x94\x4c\x93\xd3\x11\xcc\x59"
-+			  "\x6e\x2c\xb1\xf5\xa0\x6c\xec\x9b"
-+			  "\xcc\x5c\x26\xbe\x5f\x90\x9a\xb1"
-+			  "\x97\xea\x33\x1e\x6c\x91\x57\x7d"
-+			  "\xd7\xf8\x4f\x93\x62\xec\xb6\x18"
-+			  "\x65\xe3\xe2\xfe\xd7\xb0\xf1\xc1"
-+			  "\xea\xa1\x98\xe9\x0a\xd8\x05\x79"
-+			  "\x7b\xb5\x85\xd0\x5b\x71\xbc\x77"
-+			  "\xd2\xb5\x8f\xb9\xd8\xdf\x50\xc1"
-+			  "\xe7\x1d\xe6\x73\x11\xf5\x99\x0d"
-+			  "\x91\x18\x92\xef\xe2\x33\x97\x03"
-+			  "\x65\xbd\xf4\xe4\xab\x55\x71\x7c"
-+			  "\xa2\xb6\xce\x1d\x48\x3d\x65\xa7",
-+		.len	= 336,
-+	},
-+};
++	if (!boot_cpu_has(X86_FEATURE_XMM2)) {
++		pr_info("SSE2 instructions are not detected.\n");
++		return -ENODEV;
++	}
 +
-+static const struct aead_testvec lea_gcm_tv_template[] = {
-+	{
-+		.key	= "\xa4\x94\x52\x9d\x9c\xac\x44\x59"
-+			  "\xf0\x57\x8c\xdf\x7f\x87\xa8\xc9",
-+		.klen	= 16,
-+		.iv	= "\x4b\xc3\x50\xf9\x7f\x1d\xa1\x2c"
-+			  "\xb1\x64\x7b\xd2",
-+		.assoc	= "",
-+		.alen	= 0,
-+		.ptext	= "\x64\x9a\x28\x1e\xd1\xa8\x3e\x59",
-+		.plen	= 8,
-+		.ctext	= "\xe8\xea\xa3\x5e\xb6\x2e\x25\xcb"
-+			  "\x9d\xfe\x1e\xd1\xdc\x53\x3c\x11"
-+			  "\x4f\x06\x50\x8b\x18\x9c\xc6\x52",
-+		.clen	= 24,
-+	}, {
-+		.key	= "\x07\x0c\x3c\x1f\x8d\xad\x00\x1e"
-+			  "\xee\xb3\xb7\xe2\x28\xb4\xed\xd5",
-+		.klen	= 16,
-+		.iv	= "\xcf\x80\x82\x6c\x54\x57\x07\xfb"
-+			  "\x87\x5a\x6a\xcd",
-+		.assoc	= "\x5b\x40\xd6\x74\xe9\x4a\xd5\x5e"
-+			  "\xb8\x79\xb8\xa9\x3c\xfe\x38\x38"
-+			  "\x9c\xf2\x5d\x07\xb9\x47\x9f\xbb"
-+			  "\x6b\xff\x4c\x7e\x0d\x9b\x29\x09"
-+			  "\x3d\xd7\x5c\x02",
-+		.alen	= 36,
-+		.ptext	= "\xdd\x94\x89\x89\x5d\x16\x3c\x0e"
-+			  "\x3d\x6f\x87\x65\xcd\x3b\xec\x1c"
-+			  "\x38\x8e\x7c\x0c\xc0\x2b\x41\x2e"
-+			  "\x4b\xf7\xda\xb0\x1f\xad\x65\x48"
-+			  "\xea\xd2\xa2\xc9\x05\xec\x54\xf4"
-+			  "\xf9\xef\xeb\x90\x43\xf8\x61\xbd"
-+			  "\x54\x3d\x62\x85\xdc\x44\xaf\xb4"
-+			  "\x48\x54\xc4\xe9\x89\x2a\xb9\xee"
-+			  "\x18\xec\x66\x45\x37\x63\xca\x03"
-+			  "\x79\x64\xae\xe2\x84\x8f\x85\x91",
-+		.plen	= 80,
-+		.ctext	= "\xb6\x34\x2e\x35\x28\xa0\x34\x30"
-+			  "\xf3\x98\x25\x37\xc8\xb6\xa1\x84"
-+			  "\xe9\x79\x9e\x80\xc0\x87\x5b\xa4"
-+			  "\x9a\x0c\x93\x00\x08\x3f\x51\x25"
-+			  "\x6d\x73\x9d\x34\xa2\x63\x3e\x5b"
-+			  "\x47\x53\x94\xf8\x1c\x78\x64\x6d"
-+			  "\x3a\x96\xdd\x11\xef\x23\x5b\xd4"
-+			  "\x75\x8f\x6c\x6f\x97\xea\x0b\x89"
-+			  "\xe9\x8b\xfb\x8a\x99\x66\x4e\x33"
-+			  "\x17\x0a\x63\xc4\xfe\x5c\xa3\xf8"
-+			  "\x87\xaf\x9d\x1b\xd0\x20\x8c\x0d"
-+			  "\x42\xcb\x77\x88\xdd\x3f\xe2\xdb",
-+		.clen	= 96,
-+	}, {
-+		.key	= "\xa8\x70\xc1\x07\xf7\x8c\x92\x65"
-+			  "\xa8\x57\xd6\xe6\x7a\x23\xe9\x8a"
-+			  "\x3d\x14\xad\xb5\x91\xd4\x75\x85",
-+		.klen	= 24,
-+		.iv	= "\xf0\x89\x21\x63\xef\x04\x8a\xd8"
-+			  "\xc0\x3b\x20\xa2",
-+		.assoc	= "\xfc\xfa\xd1\x08\x9f\xd5\x2d\x6a"
-+			  "\x55\x61\xc8\x1c",
-+		.alen	= 12,
-+		.ptext	= "\xf4\xa4\xe0\x75\x49\xc9\x40\x22"
-+			  "\x17\x18\x64\xc0\x5d\x26\xde\xab"
-+			  "\xd8\x49\xf9\x10\xc9\x4f\x9b\x4a"
-+			  "\xf8\x70\x70\x6b\xf9\x80\x44\x18",
-+		.plen	= 32,
-+		.ctext	= "\xeb\x0a\xd2\x9b\xbd\xf1\xfe\x5c"
-+			  "\xb5\x7e\x82\xfe\xef\x98\xcd\x20"
-+			  "\xb8\x26\x46\x1f\xa7\xc4\xb1\xba"
-+			  "\x04\x27\xbc\xe8\x28\x8b\xe2\x9c"
-+			  "\x68\x49\x11\x0a\x5b\x8d\x2e\x55"
-+			  "\xb3\x73\xf9\x78\x4b\xd4\x34\x5f",
-+		.clen	= 48,
-+	}, {
-+		.key	= "\x3b\xe7\x4c\x0c\x71\x08\xe0\xae"
-+			  "\xb8\xe9\x57\x41\x54\x52\xa2\x03"
-+			  "\x5d\x8a\x45\x7d\x07\x83\xb7\x59",
-+		.klen	= 24,
-+		.iv	= "\x27\x51\x07\x73\xf2\xe0\xc5\x33"
-+			  "\x07\xe7\x20\x19",
-+		.assoc	= "\xb0\x18\x4c\x99\x64\x9a\x27\x2a"
-+			  "\x91\xb8\x1b\x9a\x99\xdb\x46\xa4"
-+			  "\x1a\xb5\xd8\xc4\x73\xc0\xbd\x4a"
-+			  "\x84\xe7\x7d\xae\xb5\x82\x60\x23",
-+		.alen	= 32,
-+		.ptext	= "\x39\x88\xd5\x6e\x94\x00\x14\xf9"
-+			  "\x5a\xb9\x03\x23\x3a\x3b\x56\xdb"
-+			  "\x3c\xfd\xfb\x6d\x47\xd9\xb5\x9b"
-+			  "\xe6\xbc\x07\xf0\x4b\xa2\x53\x51"
-+			  "\x95\xc2\x43\xd5\x4e\x05\x68\xd7"
-+			  "\x38\xbd\x21\x49\x49\x94\xbf\x4a"
-+			  "\xf4\xc2\xe6\xfb\xaa\x84\x36\x8f"
-+			  "\xa1\xc9\x2b\xa2\xd4\x2e\x42\xcc"
-+			  "\x4b\x2c\x5e\x75\x9c\x90\x69\xeb",
-+		.plen	= 72,
-+		.ctext	= "\x84\xe1\x22\x8e\x1d\xd6\x26\xe0"
-+			  "\xfc\xbb\x5e\x50\x43\x66\x4e\xb1"
-+			  "\x2c\xa2\xb4\x8d\x2a\x57\x52\x1e"
-+			  "\xe1\x90\x25\x0b\x12\x1d\x8f\xcb"
-+			  "\x81\xae\xdc\x06\xc6\xa8\x4b\xd7"
-+			  "\xa5\xbf\xbb\x84\xa9\x9b\x49\xa5"
-+			  "\xcd\x8e\xec\x3b\x89\xce\x99\x86"
-+			  "\x1f\xed\xfc\x08\x17\xd9\xe5\x9c"
-+			  "\x8a\x29\x0b\x7f\x32\x6c\x9a\x99"
-+			  "\x53\x5e\xcd\xe5\x6e\x60\xf3\x3e"
-+			  "\x3a\x50\x5b\x39\x0b\x06\xf4\x0b",
-+		.clen	= 88,
-+	}, {
-+		.key	= "\xad\x4a\x74\x23\x04\x47\xbc\xd4"
-+			  "\x92\xf2\xf8\xa8\xc5\x94\xa0\x43"
-+			  "\x79\x27\x16\x90\xbf\x0c\x8a\x13"
-+			  "\xdd\xfc\x1b\x7b\x96\x41\x3e\x77",
-+		.klen	= 32,
-+		.iv	= "\xab\x26\x64\xcb\xa1\xac\xd7\xa3"
-+			  "\xc5\x7e\xe5\x27",
-+		.assoc	= "\x6e\x27\x41\x4f",
-+		.alen	= 4,
-+		.ptext	= "\x82\x83\xa6\xf9\x3b\x73\xbd\x39"
-+			  "\x2b\xd5\x41\xf0\x7e\xb4\x61\xa0",
-+		.plen	= 16,
-+		.ctext	= "\x62\xb3\xc9\x62\x84\xee\x7c\x7c"
-+			  "\xf3\x85\x42\x76\x47\xe4\xf2\xd1"
-+			  "\xe8\x2f\x67\x8a\x38\xcc\x02\x1a"
-+			  "\x03\xc8\x3f\xb7\x94\xaf\x01\xb0",
-+		.clen	= 32,
-+	}, {
-+		.key	= "\x77\xaa\xa2\x33\x82\x3e\x00\x08"
-+			  "\x76\x4f\x49\xfa\x78\xf8\x7a\x21"
-+			  "\x18\x1f\x33\xae\x8e\xa8\x17\xc3"
-+			  "\x43\xe8\x76\x88\x94\x5d\x2a\x7b",
-+		.klen	= 32,
-+		.iv	= "\xd2\x9c\xbe\x07\x8d\x8a\xd6\x59"
-+			  "\x12\xcf\xca\x6f",
-+		.assoc	= "\x32\x88\x95\x71\x45\x3c\xee\x45"
-+			  "\x6f\x12\xb4\x5e\x22\x41\x8f\xd4"
-+			  "\xe4\xc7\xd5\xba\x53\x5e\xaa\xac",
-+		.alen	= 24,
-+		.ptext	= "\x66\xac\x6c\xa7\xf5\xba\x4e\x1d"
-+			  "\x7c\xa7\x42\x49\x1c\x9e\x1d\xc1"
-+			  "\xe2\x05\xf5\x4a\x4c\xf7\xce\xef"
-+			  "\x09\xf5\x76\x55\x01\xd8\xae\x49"
-+			  "\x95\x0a\x8a\x9b\x28\xf6\x1b\x2f"
-+			  "\xde\xbd\x4b\x51\xa3\x2b\x07\x49"
-+			  "\x70\xe9\xa4\x2f\xc9\xf4\x7b\x01",
-+		.plen	= 56,
-+		.ctext	= "\x1e\x98\x0b\xc3\xd9\x70\xec\x90"
-+			  "\x04\x17\x7f\x5e\xe0\xe9\xba\xca"
-+			  "\x2f\x49\x28\x36\x71\x08\x69\xe5"
-+			  "\x91\xa2\x0c\x0f\xa4\x12\xff\xae"
-+			  "\xd9\x5f\x98\x50\xcf\x93\xb4\xfb"
-+			  "\x9f\x43\x1a\xd8\x55\x5f\x4b\x3a"
-+			  "\xe7\xc8\x1e\xae\x61\x29\x81\x1f"
-+			  "\xe3\xee\x8a\x8e\x04\xee\x49\x4b"
-+			  "\x2b\x54\xd7\xdc\xea\xcd\xba\xd6",
-+		.clen	= 72,
-+	},
-+};
++	if (!boot_cpu_has(X86_FEATURE_MOVBE)) {
++		pr_info("MOVBE instructions are not detected.\n");
++		return -ENODEV;
++	}
 +
- static const struct cipher_testvec chacha20_tv_template[] = {
- 	{ /* RFC7539 A.2. Test Vector #1 */
- 		.key	= "\x00\x00\x00\x00\x00\x00\x00\x00"
++	if (!boot_cpu_has(X86_FEATURE_AVX2) || !boot_cpu_has(X86_FEATURE_AVX)) {
++		pr_info("AVX2 instructions are not detected.\n");
++		return -ENODEV;
++	}
++
++	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM,
++				&feature_name)) {
++		pr_info("CPU feature '%s' is not supported.\n", feature_name);
++		return -ENODEV;
++	}
++
++	return simd_register_skciphers_compat(
++		lea_simd_avx2_algs, ARRAY_SIZE(lea_simd_algs), lea_simd_algs);
++}
++
++static void __exit crypto_lea_avx2_exit(void)
++{
++	simd_unregister_skciphers(lea_simd_avx2_algs, ARRAY_SIZE(lea_simd_algs),
++				lea_simd_algs);
++}
++
++module_init(crypto_lea_avx2_init);
++module_exit(crypto_lea_avx2_exit);
++
++MODULE_DESCRIPTION("LEA Cipher Algorithm, AVX2, SSE2 SIMD, MOVBE");
++MODULE_AUTHOR("Dongsoo Lee <letrhee@nsr.re.kr>");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS_CRYPTO("lea");
++MODULE_ALIAS_CRYPTO("lea-avx2");
+diff --git a/arch/x86/crypto/lea_avx2_x86_64-asm.S b/arch/x86/crypto/lea_avx2_x86_64-asm.S
+new file mode 100644
+index 000000000000..06ad30a2ab63
+--- /dev/null
++++ b/arch/x86/crypto/lea_avx2_x86_64-asm.S
+@@ -0,0 +1,778 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * LEA Cipher 8-way(AVX2), 4-way(SSE2) parallel algorithm.
++ * In CTR mode, the MOVBE instruction is utilized for improved performance.
++ *
++ * Copyright (c) 2023 National Security Research.
++ * Author: Dongsoo Lee <letrhee@nsr.re.kr>
++ */
++
++#include <linux/linkage.h>
++#include <asm/frame.h>
++
++.file "lea_avx2_x86_64-asm.S"
++
++.section .text
++
++#define LEA_MAX_KEYLENGTH (32 * 6 * 4)
++
++#define ADD_CTR1_R(low, high) \
++	add $1, low; \
++	adc $0, high;
++
++#define PROC_NEXT_CTR(addr, blk_offset, low, high) \
++	ADD_CTR1_R(low, high); \
++	movbe high, (blk_offset * 16)(addr); \
++	movbe low, (blk_offset * 16 + 8)(addr);
++
++#define XTS_TW_X0 %xmm8
++#define XTS_TW_X1 %xmm9
++#define XTS_TW_I2 %xmm0
++#define XTS_TW_O2 %xmm10
++#define XTS_TW_X3 %xmm11
++#define XTS_TW_X4 %xmm12
++#define XTS_TW_X5 %xmm13
++#define XTS_TW_I6 %xmm1
++#define XTS_TW_O6 %xmm14
++#define XTS_TW_X7 %xmm15
++#define XTS_TW_X8 %xmm2
++#define XTS_MASK  %xmm7
++
++#define XTS_TW_Y0 %ymm12
++#define XTS_TW_Y1 %ymm13
++#define XTS_TW_Y2 %ymm14
++#define XTS_TW_Y3 %ymm15
++
++#define CTR_64_low %rax
++#define CTR_64_high %r9
++
++
++#define XMM(n) %xmm ##  n
++#define YMM(n) %ymm ##  n
++
++#define XAR_AVX2(v0, v1, cur, pre, tmp, rk1, rk2) \
++	vpbroadcastd rk2, tmp; \
++	vpxor        tmp, cur, cur; \
++	vpbroadcastd rk1, tmp; \
++	vpxor        pre, tmp, tmp; \
++	vpaddd       cur, tmp, tmp; \
++	vpsrld       v0, tmp, cur; \
++	vpslld       v1, tmp, tmp; \
++	vpxor        tmp, cur, cur;
++
++
++#define XSR_AVX2(v0, v1, cur, pre, tmp, rk1, rk2) \
++	vpsrld       v0, cur, tmp; \
++	vpslld       v1, cur, cur; \
++	vpxor        tmp, cur, cur; \
++	vpbroadcastd rk1, tmp; \
++	vpxor        pre, tmp, tmp; \
++	vpsubd       tmp, cur, cur; \
++	vpbroadcastd rk2, tmp; \
++	vpxor        tmp, cur, cur;
++
++#define XAR3_AVX2(cur, pre, tmp, rk1, rk2) \
++	XAR_AVX2($3, $29, cur, pre, tmp, rk1, rk2)
++
++#define XAR5_AVX2(cur, pre, tmp, rk1, rk2) \
++	XAR_AVX2($5, $27, cur, pre, tmp, rk1, rk2)
++
++#define XAR9_AVX2(cur, pre, tmp, rk1, rk2) \
++	XAR_AVX2($23, $9, cur, pre, tmp, rk1, rk2)
++
++
++#define XSR9_AVX2(cur, pre, tmp, rk1, rk2) \
++	XSR_AVX2($9, $23, cur, pre, tmp, rk1, rk2)
++
++#define XSR5_AVX2(cur, pre, tmp, rk1, rk2) \
++	XSR_AVX2($27, $5, cur, pre, tmp, rk1, rk2)
++
++#define XSR3_AVX2(cur, pre, tmp, rk1, rk2) \
++	XSR_AVX2($29, $3, cur, pre, tmp, rk1, rk2)
++
++#define LOAD_AND_JOIN8_YMM(i, ti, j, mem) \
++	vmovd (j + 0 * 16)(mem), XMM(ti); \
++	vpinsrd $0x1, (j + 1 * 16)(mem), XMM(ti), XMM(ti); \
++	vpinsrd $0x2, (j + 2 * 16)(mem), XMM(ti), XMM(ti); \
++	vpinsrd $0x3, (j + 3 * 16)(mem), XMM(ti), XMM(ti); \
++	vmovd (j + 4 * 16)(mem), XMM(i); \
++	vpinsrd $0x1, (j + 5 * 16)(mem), XMM(i), XMM(i); \
++	vpinsrd $0x2, (j + 6 * 16)(mem), XMM(i), XMM(i); \
++	vpinsrd $0x3, (j + 7 * 16)(mem), XMM(i), XMM(i); \
++	vinserti128 $0x1, XMM(ti), YMM(i), YMM(i); \
++
++#define LOAD_AND_JOIN_BLOCK8(i0, i1, i2, i3, ti0, mem) \
++	LOAD_AND_JOIN8_YMM(i0, ti0, 0, mem);\
++	LOAD_AND_JOIN8_YMM(i1, ti0, 4, mem);\
++	LOAD_AND_JOIN8_YMM(i2, ti0, 8, mem);\
++	LOAD_AND_JOIN8_YMM(i3, ti0, 12, mem);
++
++#define SPLIT_AND_STORE8_YMM(i, j, mem) \
++	vmovd XMM(i), (j + 4 * 16)(mem);\
++	vpextrd $0x1, XMM(i), (j + 5 * 16)(mem);\
++	vpextrd $0x2, XMM(i), (j + 6 * 16)(mem);\
++	vpextrd $0x3, XMM(i), (j + 7 * 16)(mem);\
++	vextracti128 $0x1, YMM(i), XMM(i);\
++	vmovd XMM(i), (j + 0 * 16)(mem);\
++	vpextrd $0x1, XMM(i), (j + 1 * 16)(mem);\
++	vpextrd $0x2, XMM(i), (j + 2 * 16)(mem);\
++	vpextrd $0x3, XMM(i), (j + 3 * 16)(mem);
++
++#define SPLIT_AND_STORE_BLOCK8(i0, i1, i2, i3, mem) \
++	SPLIT_AND_STORE8_YMM(i0, 0, mem);\
++	SPLIT_AND_STORE8_YMM(i1, 4, mem);\
++	SPLIT_AND_STORE8_YMM(i2, 8, mem);\
++	SPLIT_AND_STORE8_YMM(i3, 12, mem);
++
++
++#define LOAD_BLOCK4(x0, x1, x2, x3, mem) \
++	movdqu 0 * 16(mem), x0; \
++	movdqu 1 * 16(mem), x1; \
++	movdqu 2 * 16(mem), x2; \
++	movdqu 3 * 16(mem), x3;
++
++#define SPLIT_BLOCK4(x0, x1, out_x2, x3, tmp, in_x2) \
++	movdqa x0, out_x2; \
++	movdqa in_x2, tmp; \
++	punpckldq x1, x0; \
++	punpckhdq x1, out_x2; \
++	punpckldq x3, tmp; \
++	punpckhdq x3, in_x2; \
++	\
++	movdqa x0, x1; \
++	movdqa out_x2, x3; \
++	punpcklqdq tmp, x0; \
++	punpckhqdq tmp, x1; \
++	punpcklqdq in_x2, out_x2; \
++	punpckhqdq in_x2, x3;
++
++#define XOR_BLOCK3(x0, x1, x2, tmp0, tmp1, tmp2, mem) \
++	movdqu 0 * 16(mem), tmp0; \
++	movdqu 1 * 16(mem), tmp1; \
++	movdqu 2 * 16(mem), tmp2; \
++	pxor tmp0, x0;            \
++	pxor tmp1, x1;            \
++	pxor tmp2, x2;
++
++#define STORE_BLOCK4(x0, x1, x2, x3, mem) \
++	movdqu x0, 0 * 16(mem); \
++	movdqu x1, 1 * 16(mem); \
++	movdqu x2, 2 * 16(mem); \
++	movdqu x3, 3 * 16(mem);
++
++#define LEA_1ROUND_ENC(i0, i1, i2, i3, tmp, rk, rnd_num) \
++	XAR3_AVX2(i3, i2, tmp, (((rnd_num) * 6 + 4) * 4)(rk), (((rnd_num) * 6 + 5) * 4)(rk)); \
++	XAR5_AVX2(i2, i1, tmp, (((rnd_num) * 6 + 2) * 4)(rk), (((rnd_num) * 6 + 3) * 4)(rk)); \
++	XAR9_AVX2(i1, i0, tmp, (((rnd_num) * 6 + 0) * 4)(rk), (((rnd_num) * 6 + 1) * 4)(rk));
++
++#define LEA_4ROUND_ENC(i0, i1, i2, i3, tmp, rk, rnd_num) \
++	LEA_1ROUND_ENC(i0, i1, i2, i3, tmp, rk, rnd_num + 0); \
++	LEA_1ROUND_ENC(i1, i2, i3, i0, tmp, rk, rnd_num + 1); \
++	LEA_1ROUND_ENC(i2, i3, i0, i1, tmp, rk, rnd_num + 2); \
++	LEA_1ROUND_ENC(i3, i0, i1, i2, tmp, rk, rnd_num + 3);
++
++#define LEA_1ROUND_DEC(i0, i1, i2, i3, tmp, rk, rnd_num) \
++	XSR9_AVX2(i0, i3, tmp, (((rnd_num) * 6 + 0) * 4)(rk), (((rnd_num) * 6 + 1) * 4)(rk)); \
++	XSR5_AVX2(i1, i0, tmp, (((rnd_num) * 6 + 2) * 4)(rk), (((rnd_num) * 6 + 3) * 4)(rk)); \
++	XSR3_AVX2(i2, i1, tmp, (((rnd_num) * 6 + 4) * 4)(rk), (((rnd_num) * 6 + 5) * 4)(rk));
++
++#define LEA_4ROUND_DEC(i0, i1, i2, i3, tmp, rk, rnd_num) \
++	LEA_1ROUND_DEC(i0, i1, i2, i3, tmp, rk, rnd_num + 3); \
++	LEA_1ROUND_DEC(i3, i0, i1, i2, tmp, rk, rnd_num + 2); \
++	LEA_1ROUND_DEC(i2, i3, i0, i1, tmp, rk, rnd_num + 1); \
++	LEA_1ROUND_DEC(i1, i2, i3, i0, tmp, rk, rnd_num + 0);
++
++#define CBC_LOAD_SHUFFLE_MASK(mask) \
++	vmovdqa .Lcbc_shuffle_mask(%rip), mask;
++
++#define XTS_LOAD_TWEAK_MASK(mask) \
++	vmovdqa .Lxts_tweak_mask(%rip), mask;
++
++#define XTS_NEXT_TWEAK_1BLOCK(out0, in0, tmp0, mask) \
++	pshufd $0x13, in0, tmp0; \
++	psrad $31, tmp0; \
++	pand mask, tmp0; \
++	vpsllq $1, in0, out0; \
++	pxor tmp0, out0;
++
++#define JOIN_BLOCK4(x0, x1, out_x2, x3, tmp, in_x2) \
++	vpunpckhdq x1, x0, out_x2; \
++	vpunpckldq x1, x0, x0; \
++	vpunpckldq x3, in_x2, tmp; \
++	vpunpckhdq x3, in_x2, in_x2; \
++	\
++	vpunpckhqdq tmp, x0, x1; \
++	vpunpcklqdq tmp, x0, x0; \
++	vpunpckhqdq in_x2, out_x2, x3; \
++	vpunpcklqdq in_x2, out_x2, out_x2;
++
++
++.align 8
++SYM_FUNC_START_LOCAL(__lea_avx2_enc_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%xmm0..%xmm3: 4 plaintext blocks
++	 * output:
++	 *	%xmm0..%xmm3: 4 encrypted blocks
++	 */
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 0);
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 4);
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 8);
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 12);
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 16);
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 20);
++
++	cmpl $24, LEA_MAX_KEYLENGTH(%rdi);
++	je .Lenc4_done;
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 24);
++
++	cmpl $28, LEA_MAX_KEYLENGTH(%rdi);
++	je .Lenc4_done;
++	LEA_4ROUND_ENC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 28);
++
++.Lenc4_done:
++	RET;
++SYM_FUNC_END(__lea_avx2_enc_4way)
++
++.align 8
++SYM_FUNC_START_LOCAL(__lea_avx2_dec_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%xmm0..%xmm3: 4 encrypted blocks
++	 * output:
++	 *	%xmm0..%xmm3: 4 plaintext blocks
++	 */
++	cmpl $28, LEA_MAX_KEYLENGTH(%rdi);
++	jbe .Ldec4_24;
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 28);
++
++.Ldec4_24:
++	cmpl $24, LEA_MAX_KEYLENGTH(%rdi);
++	jbe .Ldec4_20;
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 24);
++
++.Ldec4_20:
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 20);
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 16);
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 12);
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 8);
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 4);
++	LEA_4ROUND_DEC(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %rdi, 0);
++
++	RET;
++SYM_FUNC_END(__lea_avx2_dec_4way)
++
++
++.align 8
++SYM_FUNC_START_LOCAL(__lea_avx2_enc_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%ymm0..%ymm3: 8 plaintext blocks
++	 * output:
++	 *	%ymm0..%ymm3: 8 encrypted blocks
++	 */
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 0);
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 4);
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 8);
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 12);
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 16);
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 20);
++
++	cmpl $24, LEA_MAX_KEYLENGTH(%rdi);
++	je .Lenc8_done;
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 24);
++
++	cmpl $28, LEA_MAX_KEYLENGTH(%rdi);
++	je .Lenc8_done;
++	LEA_4ROUND_ENC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 28);
++
++.Lenc8_done:
++	RET;
++SYM_FUNC_END(__lea_avx2_enc_8way)
++
++.align 8
++SYM_FUNC_START_LOCAL(__lea_avx2_dec_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%ymm0..%ymm3: 8 encrypted blocks
++	 * output:
++	 *	%ymm0..%ymm3: 8 plaintext blocks
++	 */
++	cmpl $28, LEA_MAX_KEYLENGTH(%rdi);
++	jbe .Lenc8_24;
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 28);
++
++.Lenc8_24:
++	cmpl $24, LEA_MAX_KEYLENGTH(%rdi);
++	jbe .Lenc8_20;
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 24);
++
++.Lenc8_20:
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 20);
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 16);
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 12);
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 8);
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 4);
++	LEA_4ROUND_DEC(%ymm0, %ymm1, %ymm2, %ymm3, %ymm4, %rdi, 0);
++
++	RET;
++SYM_FUNC_END(__lea_avx2_dec_8way)
++
++SYM_FUNC_START(lea_avx2_ecb_enc_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 */
++	FRAME_BEGIN
++
++	LOAD_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rdx);
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_enc_4way
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ecb_enc_4way)
++
++SYM_FUNC_START(lea_avx2_ecb_dec_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 */
++	FRAME_BEGIN
++
++	LOAD_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rdx);
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_dec_4way
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ecb_dec_4way)
++
++SYM_FUNC_START(lea_avx2_cbc_dec_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 */
++	FRAME_BEGIN
++
++	LOAD_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rdx);
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_dec_4way
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++	XOR_BLOCK3(%xmm1, %xmm5, %xmm3, %xmm4, %xmm6, %xmm7, %rdx);
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_cbc_dec_4way)
++
++SYM_FUNC_START(lea_avx2_xts_enc_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 *	%rcx: tweak
++	 */
++	FRAME_BEGIN
++
++	LOAD_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rdx);
++	movdqu (%rcx), XTS_TW_X0;
++	XTS_LOAD_TWEAK_MASK(XTS_MASK);
++	pxor XTS_TW_X0, %xmm0;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X1, XTS_TW_X0, %xmm4, XTS_MASK);
++	pxor XTS_TW_X1, %xmm1;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_O2, XTS_TW_X1, %xmm4, XTS_MASK);
++	pxor XTS_TW_O2, %xmm5;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X3, XTS_TW_O2, %xmm4, XTS_MASK);
++	pxor XTS_TW_X3, %xmm3;
++
++
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_enc_4way
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++
++	pxor XTS_TW_X0, %xmm0;
++	pxor XTS_TW_X1, %xmm1;
++	pxor XTS_TW_O2, %xmm5;
++	pxor XTS_TW_X3, %xmm3;
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X0, XTS_TW_X3, %xmm4, XTS_MASK);
++	movdqu XTS_TW_X0, (%rcx);
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_xts_enc_4way)
++
++SYM_FUNC_START(lea_avx2_xts_dec_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 *	%rcx: tweak
++	 */
++	FRAME_BEGIN
++
++	LOAD_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rdx);
++	movdqu (%rcx), XTS_TW_X0;
++	XTS_LOAD_TWEAK_MASK(XTS_MASK);
++	pxor XTS_TW_X0, %xmm0;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X1, XTS_TW_X0, %xmm4, XTS_MASK);
++	pxor XTS_TW_X1, %xmm1;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_O2, XTS_TW_X1, %xmm4, XTS_MASK);
++	pxor XTS_TW_O2, %xmm5;
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X3, XTS_TW_O2, %xmm4, XTS_MASK);
++	pxor XTS_TW_X3, %xmm3;
++
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_dec_4way
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++
++	pxor XTS_TW_X0, %xmm0;
++	pxor XTS_TW_X1, %xmm1;
++	pxor XTS_TW_O2, %xmm5;
++	pxor XTS_TW_X3, %xmm3;
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X0, XTS_TW_X3, %xmm4, XTS_MASK);
++	movdqu XTS_TW_X0, (%rcx);
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_xts_dec_4way)
++
++SYM_FUNC_START(lea_avx2_xts_next_tweak_sse2)
++	/* input:
++	 *	%rdi: tweak_out
++	 *	%rsi: tweak_in
++	 */
++	FRAME_BEGIN
++
++	movdqu (%rsi), XTS_TW_X0;
++	XTS_LOAD_TWEAK_MASK(XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X0, XTS_TW_X0, %xmm5, XTS_MASK);
++	movdqu XTS_TW_X0, (%rdi);
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_xts_next_tweak_sse2)
++
++SYM_FUNC_START(lea_avx2_ctr_enc_4way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (4 blocks)
++	 *	%rdx: src (4 blocks)
++	 *	%rcx: ctr
++	 * changed:
++	 *  CTR_64_high(%r9)
++	 *  CTR_64_low(%rax)
++	 */
++	FRAME_BEGIN
++
++	push CTR_64_high;
++
++	movbe (%rcx), CTR_64_high;
++	movbe 8(%rcx), CTR_64_low;
++
++	movdqu (%rcx), %xmm0;
++	PROC_NEXT_CTR(%rcx, 0, CTR_64_low, CTR_64_high);
++	movdqu (%rcx), %xmm1;
++	PROC_NEXT_CTR(%rcx, 0, CTR_64_low, CTR_64_high);
++	movdqu (%rcx), %xmm5;
++	PROC_NEXT_CTR(%rcx, 0, CTR_64_low, CTR_64_high);
++	movdqu (%rcx), %xmm3;
++	PROC_NEXT_CTR(%rcx, 0, CTR_64_low, CTR_64_high);
++
++	JOIN_BLOCK4(%xmm0, %xmm1, %xmm2, %xmm3, %xmm4, %xmm5);
++
++	call __lea_avx2_enc_4way;
++
++	SPLIT_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %xmm4, %xmm2);
++	LOAD_BLOCK4(%xmm6, %xmm7, %xmm8, %xmm9, %rdx);
++
++	pxor %xmm6, %xmm0;
++	pxor %xmm7, %xmm1;
++	pxor %xmm8, %xmm5;
++	pxor %xmm9, %xmm3;
++
++	STORE_BLOCK4(%xmm0, %xmm1, %xmm5, %xmm3, %rsi);
++
++	pop CTR_64_high;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ctr_enc_4way)
++
++SYM_FUNC_START(lea_avx2_ecb_enc_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 */
++	FRAME_BEGIN
++
++	vzeroupper;
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %rdx);
++
++	call __lea_avx2_enc_8way;
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ecb_enc_8way)
++
++SYM_FUNC_START(lea_avx2_ecb_dec_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 */
++	FRAME_BEGIN
++
++	vzeroupper;
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %rdx);
++
++	call __lea_avx2_dec_8way
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ecb_dec_8way)
++
++SYM_FUNC_START(lea_avx2_cbc_dec_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 */
++	FRAME_BEGIN
++
++	vzeroupper;
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %rdx);
++
++	CBC_LOAD_SHUFFLE_MASK(%ymm5);
++	vpxor %ymm4, %ymm4, %ymm4;
++
++	vpermd %ymm0, %ymm5, %ymm6;
++	vpermd %ymm1, %ymm5, %ymm7;
++	vpermd %ymm2, %ymm5, %ymm8;
++	vpermd %ymm3, %ymm5, %ymm9;
++
++	vpblendd $0x10, %ymm4, %ymm6, %ymm6;
++	vpblendd $0x10, %ymm4, %ymm7, %ymm7;
++	vpblendd $0x10, %ymm4, %ymm8, %ymm8;
++	vpblendd $0x10, %ymm4, %ymm9, %ymm9;
++
++	call __lea_avx2_dec_8way
++
++	vpxor  %ymm6, %ymm0, %ymm0;
++	vpxor  %ymm7, %ymm1, %ymm1;
++	vpxor  %ymm8, %ymm2, %ymm2;
++	vpxor  %ymm9, %ymm3, %ymm3;
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_cbc_dec_8way)
++
++SYM_FUNC_START(lea_avx2_xts_enc_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 *	%rcx: tweak
++	 */
++	FRAME_BEGIN
++
++	vzeroupper;
++
++	movdqu (%rcx), XTS_TW_X0;
++	XTS_LOAD_TWEAK_MASK(XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X1, XTS_TW_X0, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_I2, XTS_TW_X1, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X3, XTS_TW_I2, XMM(5), XTS_MASK);
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X4, XTS_TW_X3, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X5, XTS_TW_X4, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_I6, XTS_TW_X5, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X7, XTS_TW_I6, XMM(5), XTS_MASK);
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X8, XTS_TW_X7, XMM(5), XTS_MASK);
++	movdqu XTS_TW_X8, (%rcx);
++
++	JOIN_BLOCK4(XTS_TW_X0, XTS_TW_X1, XTS_TW_O2, XTS_TW_X3, XMM(5), XTS_TW_I2);
++	JOIN_BLOCK4(XTS_TW_X4, XTS_TW_X5, XTS_TW_O6, XTS_TW_X7, XMM(5), XTS_TW_I6);
++
++	vinserti128 $0x1, XTS_TW_X0, XTS_TW_Y0, XTS_TW_Y0;
++	vinserti128 $0x1, XTS_TW_X1, XTS_TW_Y1, XTS_TW_Y1;
++	vinserti128 $0x1, XTS_TW_O2, XTS_TW_Y2, XTS_TW_Y2;
++	vinserti128 $0x1, XTS_TW_X3, XTS_TW_Y3, XTS_TW_Y3;
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %rdx);
++
++	vpxor XTS_TW_Y0, %ymm0, %ymm0;
++	vpxor XTS_TW_Y1, %ymm1, %ymm1;
++	vpxor XTS_TW_Y2, %ymm2, %ymm2;
++	vpxor XTS_TW_Y3, %ymm3, %ymm3;
++
++	call __lea_avx2_enc_8way
++
++	vpxor XTS_TW_Y0, %ymm0, %ymm0;
++	vpxor XTS_TW_Y1, %ymm1, %ymm1;
++	vpxor XTS_TW_Y2, %ymm2, %ymm2;
++	vpxor XTS_TW_Y3, %ymm3, %ymm3;
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_xts_enc_8way)
++
++SYM_FUNC_START(lea_avx2_xts_dec_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 *	%rcx: tweak
++	 */
++	FRAME_BEGIN
++
++	vzeroupper;
++
++	movdqu (%rcx), XTS_TW_X0;
++	XTS_LOAD_TWEAK_MASK(XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X1, XTS_TW_X0, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_I2, XTS_TW_X1, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X3, XTS_TW_I2, XMM(5), XTS_MASK);
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X4, XTS_TW_X3, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X5, XTS_TW_X4, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_I6, XTS_TW_X5, XMM(5), XTS_MASK);
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X7, XTS_TW_I6, XMM(5), XTS_MASK);
++
++	XTS_NEXT_TWEAK_1BLOCK(XTS_TW_X8, XTS_TW_X7, XMM(5), XTS_MASK);
++	movdqu XTS_TW_X8, (%rcx);
++
++	JOIN_BLOCK4(XTS_TW_X0, XTS_TW_X1, XTS_TW_O2, XTS_TW_X3, XMM(5), XTS_TW_I2);
++	JOIN_BLOCK4(XTS_TW_X4, XTS_TW_X5, XTS_TW_O6, XTS_TW_X7, XMM(5), XTS_TW_I6);
++
++	vinserti128 $0x1, XTS_TW_X0, XTS_TW_Y0, XTS_TW_Y0;
++	vinserti128 $0x1, XTS_TW_X1, XTS_TW_Y1, XTS_TW_Y1;
++	vinserti128 $0x1, XTS_TW_O2, XTS_TW_Y2, XTS_TW_Y2;
++	vinserti128 $0x1, XTS_TW_X3, XTS_TW_Y3, XTS_TW_Y3;
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %rdx);
++
++	vpxor XTS_TW_Y0, %ymm0, %ymm0;
++	vpxor XTS_TW_Y1, %ymm1, %ymm1;
++	vpxor XTS_TW_Y2, %ymm2, %ymm2;
++	vpxor XTS_TW_Y3, %ymm3, %ymm3;
++
++	call __lea_avx2_dec_8way
++
++	vpxor XTS_TW_Y0, %ymm0, %ymm0;
++	vpxor XTS_TW_Y1, %ymm1, %ymm1;
++	vpxor XTS_TW_Y2, %ymm2, %ymm2;
++	vpxor XTS_TW_Y3, %ymm3, %ymm3;
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_xts_dec_8way)
++
++
++SYM_FUNC_START(lea_avx2_ctr_enc_8way)
++	/* input:
++	 *	%rdi: ctx, CTX
++	 *	%rsi: dst (8 blocks)
++	 *	%rdx: src (8 blocks)
++	 *	%rcx: ctr
++	 *  %r8 : buffer (8 blocks)
++	 * changed:
++	 *  CTR_64_high(%r9)
++	 *  CTR_64_low(%rax)
++	 */
++	FRAME_BEGIN
++
++	push CTR_64_high;
++
++	vzeroupper;
++	movbe (%rcx), CTR_64_high;
++	movbe 8(%rcx), CTR_64_low;
++	movbe CTR_64_high, (%r8);
++	movbe CTR_64_low, 8(%r8);
++
++	PROC_NEXT_CTR(%r8, 1, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 2, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 3, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 4, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 5, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 6, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%r8, 7, CTR_64_low, CTR_64_high);
++	PROC_NEXT_CTR(%rcx, 0, CTR_64_low, CTR_64_high);
++
++	LOAD_AND_JOIN_BLOCK8(0, 1, 2, 3, 4, %r8);
++	LOAD_AND_JOIN_BLOCK8(5, 6, 7, 8, 4, %rdx);
++
++	call __lea_avx2_enc_8way;
++
++	vpxor %ymm5, %ymm0, %ymm0;
++	vpxor %ymm6, %ymm1, %ymm1;
++	vpxor %ymm7, %ymm2, %ymm2;
++	vpxor %ymm8, %ymm3, %ymm3;
++
++	SPLIT_AND_STORE_BLOCK8(0, 1, 2, 3, %rsi);
++
++	vzeroupper;
++
++	pop CTR_64_high;
++
++	FRAME_END
++	RET;
++SYM_FUNC_END(lea_avx2_ctr_enc_8way)
++
++
++.section	.rodata.cst32.cbc_shuffle_mask, "aM", @progbits, 32
++.align 32
++.Lcbc_shuffle_mask:
++	.octa 0x00000002000000010000000000000007
++	.octa 0x00000006000000050000000400000003
++
++.section	.rodata.cst16.xts_tweak_mask, "aM", @progbits, 16
++.align 16
++.Lxts_tweak_mask:
++	.octa 0x00000000000000010000000000000087
 -- 
 2.34.1
