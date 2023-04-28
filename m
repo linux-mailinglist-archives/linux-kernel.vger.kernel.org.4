@@ -2,97 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CCB6F16DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4026F16DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjD1Lfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S1345909AbjD1Lf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjD1Lf0 (ORCPT
+        with ESMTP id S1345678AbjD1Lfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:35:26 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2401A5FDF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:35:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682681717; x=1714217717;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=SyqBF1wuHeMEmc4+oscukp8iRk3ac8QUI3nKBf9MKVc=;
-  b=E557iQmY758nuWqtczTlwNucH1da/+9KgfHJIXEohTo82Doj+y/r14+O
-   f+PMRMJ9qxXO+6aTzrZe0AJOKi302HyK18iF+YRXqybK8ABaM426dEz9g
-   WWCKinW3AOCLDK6IIwhar7sO6QW4FxAMj2m5GngU791ewXWxsmExWMZ9e
-   nluYqNwolER8bslbuEWCaoLn8vV6Ks6UF8Zke6LIH+8/nRNqsBBoPmFiq
-   imCkqGE7H4Io2uDAbvIPKTc1Roz11q9812yVX0UkshefqE/L6iJlwhAkf
-   CubujbyIBNyhjgsZ5jwfpKl40549RnyVLcDRMTnvLBCR835lRsV9sDmW8
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="346489242"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="346489242"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:35:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="1024572331"
-X-IronPort-AV: E=Sophos;i="5.99,234,1677571200"; 
-   d="scan'208";a="1024572331"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.9.173]) ([10.213.9.173])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 04:35:15 -0700
-Message-ID: <3e4b6143-d8f0-e182-1824-85fe92bd66e7@intel.com>
-Date:   Fri, 28 Apr 2023 13:35:13 +0200
+        Fri, 28 Apr 2023 07:35:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A015FCF
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:35:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAF5964322
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 11:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CD70C433EF;
+        Fri, 28 Apr 2023 11:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682681747;
+        bh=0kSWpQkRsDZ+pmfGKO8UDJNIyW0xzM6cUGxy1UTf/UE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QAcXMR/q4XLqtV0fkBIySl1ru/GJkwrtzw4GW2S9pIS6Bqvv27nt9NID1OxrlE8bU
+         g/3BuXHCpK/hN1GcyARadoEJLPTFKtWnWnWLaTVoM3+vF9aQa0knHiSQJ+6BmQyCV6
+         Qwehlyko9119eGJ7s7JgvbywrflVBTm333KZfTThH0Hnxtl6YBwz2+RV/oBB5WHoMS
+         1fLelL5rYW7HG2SKRuSQiHb2e1I7xpiT/Ay84VyheHCYfd6f2FGOBoSLv1nSOFMjRe
+         IWu5pVYjKSQpejtvsqYL2Yuj3DyecPl7LfQoYDucWaeKWdV5htFbzKZITTBV1LxeF4
+         qLPdG2TKe6MLg==
+Date:   Fri, 28 Apr 2023 12:35:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] regmap: force update_bits() to write to HW when reg
+ is volatile
+Message-ID: <14d81f72-ab34-4405-b826-b52636d2be18@sirena.org.uk>
+References: <ZEtdJtlbmDCvZuAc@fedora>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [Intel-gfx] [PATCH v8 0/2] drm/i915: Hugepage manager and test
- for MTL
-Content-Language: en-US
-To:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jonathan Cavitt <jonathan.cavitt@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-References: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20230425-hugepage-migrate-v8-0-7868d54eaa27@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AfGEgsfhV+xzX2KV"
+Content-Disposition: inline
+In-Reply-To: <ZEtdJtlbmDCvZuAc@fedora>
+X-Cookie: Love means nothing to a tennis player.
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.04.2023 23:28, Andrzej Hajda wrote:
-> This patchset patches sent by Jonathan and Andi, with
-> addressed CI failures:
-> 1. Fixed checking alignment of 64K pages on both Pre-Gen12 and Gen12.
-> 2. Fixed start alignment of 2M pages.
-> 
-> Regards
-> Andrzej
-> 
-> Jonathan Cavitt (2):
->    drm/i915: Migrate platform-dependent mock hugepage selftests to live
->    drm/i915: Use correct huge page manager for MTL
-> 
-> .../gpu/drm/i915/gem/selftests/huge_pages.c   | 88 +++++++++++++++----
->   drivers/gpu/drm/i915/gt/gen8_ppgtt.c          |  3 +-
->   2 files changed, 71 insertions(+), 20 deletions(-)
-> 
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Jonathan Cavitt <jonathan.cavitt@intel.com>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: Matthew Auld <matthew.auld@intel.com>
 
-Thx for comments, pushed.
+--AfGEgsfhV+xzX2KV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regards
-Andrzej
+On Fri, Apr 28, 2023 at 08:44:06AM +0300, Matti Vaittinen wrote:
+> In many cases the volatile registers are expected to be written to
+> regardless of the existing value (because, the value of a volatile
+> register can't be trusted to stay the same during RMW cycle). In fact, it
+> is questionable if the volatile registers and regmap_update_bits()
+> conceptually make sense without device specific map->reg_update_bits.
 
+I think you're looking for regmap_write_bits() here.
+
+--AfGEgsfhV+xzX2KV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRLr40ACgkQJNaLcl1U
+h9BxAQf/aWO4/AAtXLmJLtlvlqGPN00e6gJ8qqJEwtN3JzA37KJf84dw01nFog6U
+lotf6fxdrmGzJwUXSOTAwPseJsvh6PZoQFqCTrUzFJ3xFKT6fjrvlmjTz34dnviR
+39Rj7p9vetv3/mtg3L1u1i12YTpIcgQg/XdwUDfQcsBLd8HfTbA0cVlc17Rb0O3s
+612M4zM+r895LFgBKxuX60DJGYES8Fqa5ErJEUNdDOMdUrR5J1Vdut/jim+Hukuu
+iHtDN2JExZNgoVNEycb5vHVI6FSj1gAUtgwHiNdI1DQDOB1LetXN61PgAeTMnnxK
+SjfV1gZxfhwfs1Q3Ubp7KQWhjvHqBw==
+=kQgC
+-----END PGP SIGNATURE-----
+
+--AfGEgsfhV+xzX2KV--
