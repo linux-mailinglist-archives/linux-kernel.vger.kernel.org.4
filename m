@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DFB6F1648
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB7C6F164C
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 13:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345519AbjD1LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 07:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
+        id S229712AbjD1LCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 07:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjD1LBn (ORCPT
+        with ESMTP id S229513AbjD1LCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 07:01:43 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88882706
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:01:40 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 33SB17r7034907;
-        Fri, 28 Apr 2023 19:01:07 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 28 Apr 2023 19:01:01 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [PATCH] mm: optimization on page allocation when CMA enabled
-Date:   Fri, 28 Apr 2023 19:00:41 +0800
-Message-ID: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 28 Apr 2023 07:02:40 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 04:02:37 PDT
+Received: from mail.nsr.re.kr (unknown [210.104.33.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E666E26B2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 04:02:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1682679653; c=relaxed/relaxed; h=date:from:message-id:mime-version:subject:to; bh=fduGQRlBa9QiqU0Mjp18cRW/tGgDG1Os2W0gWXXl1nE=; b=gzK3bqBuQv/PpDKqBA2KPUAQTR+YobwFt3+JcthP6ELvWpOSGnIUwvi2XlKDHm9pZXyNj2/xiXwDD5Z7wlUYqbMtzdae9svSSKl/aKcELlaJA0mrOLsj6YOFVGbXbjPSNC4pFB12udMWy1U1QvjkHm1jIKr9fZal7kiSp8BUtv+6Igx79QLcD8enjYJMTtCcLO81IbZuvKTrS2uMXC1VbaSIeBj4T+y+j6ouGgEc8QPced754fGI+Nj0D/tfn0JjqLvxzWskCIGo1WxJj7ty7U4eLpGdX5cj3zFeKiGbvsX3LfcdDi/6Zrueh7mLZ16oR+Nf/fffilei2ts6EdlsOw==
+Received: from 210.104.33.70 (nsr.re.kr)
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
+        by mail.nsr.re.kr with SMTP; Fri, 28 Apr 2023 19:59:31 +0900
+Received: from 192.168.155.188 ([192.168.155.188])
+          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 623;
+          Fri, 28 Apr 2023 20:01:09 +0900 (KST)
+From:   Dongsoo Lee <letrhee@nsr.re.kr>
+To:     linux-crypto@vger.kernel.org
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <abc@test.nsr.re.kr>,
+        Dongsoo Lee <letrhee@gmail.com>,
+        Dongsoo Lee <letrhee@nsr.re.kr>
+Subject: [PATCH 0/3] crypto: LEA block cipher implementation
+Date:   Fri, 28 Apr 2023 20:00:55 +0900
+Message-Id: <20230428110058.1516119-1-letrhee@nsr.re.kr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 33SB17r7034907
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,80 +50,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Please be notice bellowing typical scenario that commit 168676649 introduce,
-that is, 12MB free cma pages 'help' GFP_MOVABLE to keep draining/fragmenting
-U&R page blocks until they shrink to 12MB without enter slowpath which against
-current reclaiming policy. This commit change the criteria from hard coded '1/2'
-to watermark check which leave U&R free pages stay around WMARK_LOW when being
-fallback.
+This submission contains a generic C implementation of the LEA block
+cipher and its optimized implementation within ECB, CBC, CTR, and XTR
+cipher modes of operation for the x86_64 environment.
 
-DMA32 free:25900kB boost:0kB min:4176kB low:25856kB high:29516kB
+The LEA algorithm is a symmetric key cipher that processes data blocks
+of 128bits and has three different key lengths, each with a different
+number of rounds:
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/page_alloc.c | 40 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 36 insertions(+), 4 deletions(-)
+- LEA-128: 128-bit key, 24 rounds,
+- LEA-192: 192-bit key, 28 rounds, and
+- LEA-256: 256-bit key, 32 rounds.
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 0745aed..97768fe 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -3071,6 +3071,39 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
- 
- }
- 
-+#ifdef CONFIG_CMA
-+static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
-+{
-+	unsigned long cma_proportion = 0;
-+	unsigned long cma_free_proportion = 0;
-+	unsigned long watermark = 0;
-+	unsigned long wm_fact[ALLOC_WMARK_MASK] = {1, 1, 2};
-+	long count = 0;
-+	bool cma_first = false;
-+
-+	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
-+	/*check if GFP_MOVABLE pass previous watermark check via the help of CMA*/
-+	if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
-+	{
-+		alloc_flags &= ALLOC_WMARK_MASK;
-+		/* WMARK_LOW failed lead to using cma first, this helps U&R stay
-+		 * around low when being drained by GFP_MOVABLE
-+		 */
-+		if (alloc_flags <= ALLOC_WMARK_LOW)
-+			cma_first = true;
-+		/*check proportion for WMARK_HIGH*/
-+		else {
-+			count = atomic_long_read(&zone->managed_pages);
-+			cma_proportion = zone->cma_pages * 100 / count;
-+			cma_free_proportion = zone_page_state(zone, NR_FREE_CMA_PAGES) * 100
-+				/  zone_page_state(zone, NR_FREE_PAGES);
-+			cma_first = (cma_free_proportion >= wm_fact[alloc_flags] * cma_proportion
-+					|| cma_free_proportion >= 50);
-+		}
-+	}
-+	return cma_first;
-+}
-+#endif
- /*
-  * Do the hard work of removing an element from the buddy allocator.
-  * Call me with the zone->lock already held.
-@@ -3087,10 +3120,9 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
- 		 * allocating from CMA when over half of the zone's free memory
- 		 * is in the CMA area.
- 		 */
--		if (alloc_flags & ALLOC_CMA &&
--		    zone_page_state(zone, NR_FREE_CMA_PAGES) >
--		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
--			page = __rmqueue_cma_fallback(zone, order);
-+		if (migratetype == MIGRATE_MOVABLE) {
-+			bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
-+			page = cma_first ? __rmqueue_cma_fallback(zone, order) : NULL;
- 			if (page)
- 				return page;
- 		}
--- 
-1.9.1
+The round function of LEA consists of 32-bit ARX(modular Addition,
+bitwise Rotation, and bitwise XOR) operations. See [1, 2] for details.
+
+The LEA is a Korean national standard block cipher, described in
+"KS X 3246" and is also included in the international standard,
+"ISO/IEC 29192-2:2019 standard (Information security - Lightweight
+cryptography - Part 2: Block ciphers)".
+
+It is one of the approved block ciphers for the current Korean
+Cryptographic Module Validation Program (KCMVP).
+
+The Korean e-government framework contains various cryptographic
+applications, and KCMVP-validated cryptographic module should be used
+according to the government requirements. The ARIA block cipher, which
+is already included in Linux kernel, has been widely used as a symmetric
+key cipher. However, the adoption of LEA increase rapidly for new
+applications.
+
+By adding LEA to the Linux kernel, Dedicated device drivers that require
+LEA encryption can be provided without additional crypto implementation.
+An example of an immediately applicable use case is disk encryption
+using cryptsetup.
+
+The submitted implementation includes a generic C implementation that
+uses 32-bit ARX operations, and an optimized implementation for the
+x86_64 environment.
+
+The implementation same as submitted generic C implementation is
+distributed through the Korea Internet & Security Agency (KISA),
+could be found [3].
+
+For the x86_64 environment, we use SSE2/MOVBE/AVX2 instructions. Since
+LEA use four 32-bit unsigned integers for 128-bit block, the SSE2 and
+AVX2 implementations encrypts four and eight blocks at a time for
+optimization, repectively.
+Our submission provides a optimized implementation of 4/8 block ECB, CBC
+decryption, CTR, and XTS cipher operation modes on x86_64 CPUs
+supporting AVX2. The MOVBE instruction is used for optimizing the CTR
+mode.
+
+The implementation has been tested with kernel module tcrypt.ko and has
+passed the selftest using test vectors for KCMVP[4]. The path also test
+with CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled.
+
+- [1] https://en.wikipedia.org/wiki/LEA_(cipher)
+- [2] https://seed.kisa.or.kr/kisa/algorithm/EgovLeaInfo.do
+- [3] https://seed.kisa.or.kr/kisa/Board/20/detailView.do
+- [4] https://seed.kisa.or.kr/kisa/kcmvp/EgovVerification.do
+
+Dongsoo Lee (3):
+      crypto: LEA block cipher implementation
+      crypto: add LEA testmgr tests
+      crypto: LEA block cipher AVX2 optimization
+
+ arch/x86/crypto/Kconfig               |   22 +
+ arch/x86/crypto/Makefile              |    3 +
+ arch/x86/crypto/lea_avx2_glue.c       | 1112 +++++++++++++++++++++++++
+ arch/x86/crypto/lea_avx2_x86_64-asm.S |  778 ++++++++++++++++++
+ crypto/Kconfig                        |   12 +
+ crypto/Makefile                       |    1 +
+ crypto/lea_generic.c                  |  915 +++++++++++++++++++++
+ crypto/tcrypt.c                       |   73 ++
+ crypto/testmgr.c                      |   32 +
+ crypto/testmgr.h                      | 1211 ++++++++++++++++++++++++++++
+ include/crypto/lea.h                  |   39 +
+ 11 files changed, 4198 insertions(+)
 
