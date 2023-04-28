@@ -2,126 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DBC6F1C80
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8549E6F1C81
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 18:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346233AbjD1QTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 12:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48222 "EHLO
+        id S1346177AbjD1QUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 12:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346148AbjD1QTu (ORCPT
+        with ESMTP id S1346130AbjD1QUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 12:19:50 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C86E524B;
-        Fri, 28 Apr 2023 09:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682698785; x=1714234785;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mJSFhPkeknNj2O1iNEZ3l9oQeY99f0eWfnaVt0hI+2w=;
-  b=byi9cyMyPuqVZoKPTMXBXHIdGLGCrNOJZlG+xtH3VxuqHXiQqToydZxz
-   Xt0hd3ZHdYtXJ6zIPyX2TJ4BcI7IML3l/Psb8Nfzj52TSnXiDUxDOC28r
-   IpWOiiGWHco5jTgSc+Z7XDiKRaZ7iGFUok/ICeu0mqSQz0Ge8Vr4LT/x4
-   abS+/UApNO9jIIo8p1kjrrj29utYP/HsKq9uPe5o2dRRPBHrvzjxMvg3l
-   E2kzAAs5hdPz566nusAH8kaUxgStbzAWvlqyTsS3Tujta+6zqa+GSNPIO
-   QI18/NoUiEETTl95R7Rh3FywLtyHBUB00jaZhRQUyPmt7cAP11xLSkYLG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="349816349"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="349816349"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 09:19:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="819061758"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="819061758"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2023 09:19:38 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psQor-0000Y9-1I;
-        Fri, 28 Apr 2023 16:19:37 +0000
-Date:   Sat, 29 Apr 2023 00:19:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yi-De Wu <yi-de.wu@mediatek.com>,
-        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
-        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        David Bradil <dbrazdil@google.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Jade Shih <jades.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ivan Tseng <ivan.tseng@mediatek.com>,
-        My Chuang <my.chuang@mediatek.com>,
-        Shawn Hsiao <shawn.hsiao@mediatek.com>,
-        PeiLun Suei <peilun.suei@mediatek.com>,
-        Liju Chen <liju-clr.chen@mediatek.com>
-Subject: Re: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor
- support
-Message-ID: <202304290052.49kcXbnl-lkp@intel.com>
-References: <20230428103622.18291-4-yi-de.wu@mediatek.com>
+        Fri, 28 Apr 2023 12:20:31 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1E535BD
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:20:29 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-95316faa3a8so1933999366b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682698828; x=1685290828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0r3+Q951qW+5Zp+jfP21B0X2Vqy1oBdvEig1isGyoXM=;
+        b=C/i2OXqS7mrVG5jjrivJ7jKDESNoQhx3ATj/2LlpzMPMKjt9oU+GZKFyveYbBrdpRo
+         ibSc/Yol1tY+qepjR6IhE7J2rADZ0qlKCoIOskmKJuwT8BhjSPptzcGAOgoc1utmBEg1
+         lqnR+6HpHz1kMQ/rzPXv28KStrmAMVtlNKy18=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682698828; x=1685290828;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0r3+Q951qW+5Zp+jfP21B0X2Vqy1oBdvEig1isGyoXM=;
+        b=PTL2TmHWW8Cd5IV3y4MSA4XevupMil8DWy4iqumITH2MTL2y3Ll+F4Lx387pacxnH0
+         q2fwdBZ9Iz7LsMvI6+EMgUfq7v1XMplYystHrWHRxwmgDRooPnNBM0RITigvjLkzM5Kl
+         vBdahCV6zM+Kc1WxQ1SXFD+zKkj5Wu8h22ounDJcVLDKV5Wm40jhSmovZNAQkRQCicoR
+         zT77ZSE//80VuqEHMK+IcUYd46v4dv4Kh7rVwSijw2hYEK3kcmsCD2OsPZ99JHhNX6CC
+         Yi2UioTkWeX6At2Ev3mBrval066zCsCaIxjML4EdoDHlxGX6gY4DEzT6A5TR0SCa7Sz/
+         3Gtg==
+X-Gm-Message-State: AC+VfDy/ZQ/HGxrfgRLkbHwUmlz2CBMQMsPKYEvXkcAT0lN1TlWW1Us4
+        X9jxR6sneTgYElbgXFon2V1TOBsPY8UcrGiLZxiJ2A==
+X-Google-Smtp-Source: ACHHUZ7TjHWCpdgVYzTpMMzBXl8pDkPREhj24llvBummT4LSHSmSTwOYbihB+3hY9hK8fFRUHpqvvw==
+X-Received: by 2002:a17:907:d8a:b0:95f:2065:83c0 with SMTP id go10-20020a1709070d8a00b0095f206583c0mr6264513ejc.62.1682698828344;
+        Fri, 28 Apr 2023 09:20:28 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id t39-20020a170906c3a700b009353066595csm11457585ejz.136.2023.04.28.09.20.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 09:20:27 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-507bdc5ca2aso17874329a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 09:20:26 -0700 (PDT)
+X-Received: by 2002:aa7:d941:0:b0:504:8c15:a132 with SMTP id
+ l1-20020aa7d941000000b005048c15a132mr4371919eds.7.1682698826625; Fri, 28 Apr
+ 2023 09:20:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428103622.18291-4-yi-de.wu@mediatek.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230427153345.451d86681f9c6775ea579e5a@linux-foundation.org>
+ <CAHk-=wi5=LfeCMv5ZPAtzWhJyW=y1rVJFTRBfgcqzoUNk5NRDA@mail.gmail.com>
+ <CAJuCfpHZSEjG2nti5iWbPQjWgXcHZ95hFS2FKwaPC-sZPdSznw@mail.gmail.com>
+ <CAHk-=wg0SyFDp_sdcEH-D+LNxuzL_dWA1vZEowUN16n_+yRHPQ@mail.gmail.com>
+ <CAJuCfpHouhrEtomhPe2sf+p0oG4pGFKb3xidhOXP6BN-PydY-Q@mail.gmail.com> <CAJuCfpGcnJiJyU78v1r548W3bZ2LyfaYpr5huKKG8-WaiRHFHA@mail.gmail.com>
+In-Reply-To: <CAJuCfpGcnJiJyU78v1r548W3bZ2LyfaYpr5huKKG8-WaiRHFHA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Apr 2023 09:20:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjj7tM9ER57Ed3LAOaxMLM3t5nkA=dYSyN-nKPFbOmAZw@mail.gmail.com>
+Message-ID: <CAHk-=wjj7tM9ER57Ed3LAOaxMLM3t5nkA=dYSyN-nKPFbOmAZw@mail.gmail.com>
+Subject: Re: [GIT PULL] MM updates for 6.4-rc1
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        mm-commits@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yi-De,
+On Fri, Apr 28, 2023 at 9:17=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> Should I send a replacement patch for "mm: introduce per-VMA lock
+> statistics" or a followup patch fixing it?
 
-kernel test robot noticed the following build errors:
+I've merged the MM pull request, so it's all in the kernel now, but
+I'd like to see a follow-up patch with more of a help text and that
+'default n'.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on robh/for-next arnd-asm-generic/master linus/master v6.3 next-20230427]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230428103622.18291-4-yi-de.wu%40mediatek.com
-patch subject: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor support
-config: x86_64-randconfig-a004 (https://download.01.org/0day-ci/archive/20230429/202304290052.49kcXbnl-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/0e3f05a6e4547eb309032d047115a47d8f59641d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-        git checkout 0e3f05a6e4547eb309032d047115a47d8f59641d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290052.49kcXbnl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> usr/include/linux/gzvm.h:15: included file 'asm-x86/gzvm_arch.h' is not exported
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+                  Linus
