@@ -2,336 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183BF6F1A66
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD2D6F1A70
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 16:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345960AbjD1OVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 10:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S230356AbjD1OZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 10:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjD1OVe (ORCPT
+        with ESMTP id S229623AbjD1OZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 10:21:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3F3CE
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682691653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gv0P60I1m+zx490TNpqDLMm/gN26L3C73hsWxl2z9Eg=;
-        b=Ks4BYZkJ+QdbQmvMnrhgGLw2PXJ8BOaGOy0An/6fYyqi3Z7JApbNKkI/mw+gnPZngBYMlf
-        h0KNCV3w+yRPSqoA5lqn+P6q/UzStbMBiBjTxae9W+v/KaMQ0CDIZFyDt+aDIsFLftYzrR
-        Q0Y9V2DY/LxdDZ4q6ax9VzEkxjkGefo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-630-GoCDZQuWOvOB7hcY90S8rw-1; Fri, 28 Apr 2023 10:20:50 -0400
-X-MC-Unique: GoCDZQuWOvOB7hcY90S8rw-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f195129aa4so53103005e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:20:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682691650; x=1685283650;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gv0P60I1m+zx490TNpqDLMm/gN26L3C73hsWxl2z9Eg=;
-        b=Uk851sEZ7M8GbP9rbfYE5e6eYXRwyjwnUMMhZg4howcKMifXKkL7/PavJXmkwf6+zD
-         DZcR//LUbAie/jfuAYuFQIktqoyb+aq0vPBXSdRdRe7U6/F6yv5+eNMoZWC+19fXNMs7
-         GZ3W9JO1YUky4pGyTG59bPX4JLJvQqM3xwzurZ61N6ZzBman+IkJGKg/oL1W/+V+FoGG
-         Dzj5IYDgyTqTyAi0GORL7JPUP18/nC+WsL2e74tjuMpUDEqD5EoAOe0ydXgWb72LqpRo
-         /oGz6dutnUhvjqeX9l3VJVKNHxKGoTkd7YiGqnwdD/9Z2NDcr8YJGU/+5c5aCQ2i2Yze
-         e3xw==
-X-Gm-Message-State: AC+VfDxtEFswHRLOtec0WXZgrpC+gOygGeEzCA28vss2ZqnSTxPpbqGL
-        oZBvtaDOGvochnucLa9vCCPHf7oh6jeB4MxbrxPC2l7md/2Q0rH1Q6UK/dSGms/arrTnXO2D6+C
-        BFQA9DjEpY6Ujd1fDh4hm5sRQ
-X-Received: by 2002:a1c:f706:0:b0:3f2:5028:a54d with SMTP id v6-20020a1cf706000000b003f25028a54dmr4286840wmh.0.1682691649673;
-        Fri, 28 Apr 2023 07:20:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5Ef+6JXTWHdAiFME6ae0mlQwifNq9sneotXxTQMRQu6YRP1y3jjdZfpGN/dZmsrEadhA0T1g==
-X-Received: by 2002:a1c:f706:0:b0:3f2:5028:a54d with SMTP id v6-20020a1cf706000000b003f25028a54dmr4286805wmh.0.1682691649225;
-        Fri, 28 Apr 2023 07:20:49 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c726:9300:1711:356:6550:7502? (p200300cbc72693001711035665507502.dip0.t-ipconnect.de. [2003:cb:c726:9300:1711:356:6550:7502])
-        by smtp.gmail.com with ESMTPSA id z4-20020a05600c0a0400b003ef4cd057f5sm28589070wmp.4.2023.04.28.07.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 07:20:48 -0700 (PDT)
-Message-ID: <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
-Date:   Fri, 28 Apr 2023 16:20:46 +0200
+        Fri, 28 Apr 2023 10:25:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A59C2719
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 07:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1682691954; x=1714227954;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gnNojlXbMDN9N2lkFqtg0abQH7uELFRlQ/gsQlbk+ZM=;
+  b=KdV34ofTffWC8R+BPpjREnDf11PB06xxQM6NaQNNAIXNo81HYL2cqtxL
+   4Fl0uzBTc/u2eUF8Vj923My79ya+AJS8SZRj660iLmmlGsMEahDkyaCGy
+   bYg2Wa0NAT6DnFI3JouYs18LbSet+CBnKY1Re0mw5mrZoolO3BLriDoV2
+   Ro9pyOCeLo0ZvgdWJVjzBAc4bCQiIcSBB6MRnorvqRF097UEhMYDU/O1Q
+   ULnYwt/W6GzAFK5LyeEiwLOWM6Nn/enomz4DeK8uWlJu/zShTPcvRLO72
+   KNORII4DvvQMhI2ieGnmhvKmo+1hxTnIKJyrzfN6mDJS4alkGWKL9VPYP
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,234,1677567600"; 
+   d="asc'?scan'208";a="212792438"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Apr 2023 07:25:53 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 28 Apr 2023 07:25:51 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 28 Apr 2023 07:25:49 -0700
+Date:   Fri, 28 Apr 2023 15:25:31 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        <palmer@dabbelt.com>, <linux-riscv@lists.infradead.org>,
+        <paul.walmsley@sifive.com>, <kito.cheng@sifive.com>,
+        <jrtc27@jrtc27.com>, <matthias.bgg@gmail.com>,
+        <heinrich.schuchardt@canonical.com>, <greentime.hu@sifive.com>,
+        <nick.knight@sifive.com>, <christoph.muellner@vrull.eu>,
+        <philipp.tomsich@vrull.eu>, <richard.henderson@linaro.org>,
+        <arnd@arndb.de>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] RISC-V: add support for vendor-extensions via
+ AT_BASE_PLATFORM and xthead
+Message-ID: <20230428-versus-shady-d20735a19d41@wendy>
+References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
+ <20230424194911.264850-5-heiko.stuebner@vrull.eu>
+ <20230426-spirits-ludicrous-a5d8275686e6@wendy>
+ <5016896.Mh6RI2rZIc@diego>
+ <20230427-maybe-skier-51e7cf09795c@spud>
+ <d6lqggv2bbtmv7exalcqqwgbntibdxotsswataxqxhx6kmf4rg@5kgb3axdwgst>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-In-Reply-To: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3LKaALfH552SyaYA"
+Content-Disposition: inline
+In-Reply-To: <d6lqggv2bbtmv7exalcqqwgbntibdxotsswataxqxhx6kmf4rg@5kgb3axdwgst>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for jumping in late, I'm on vacation :)
+--3LKaALfH552SyaYA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 28.04.23 01:42, Lorenzo Stoakes wrote:
-> Writing to file-backed mappings which require folio dirty tracking using
-> GUP is a fundamentally broken operation, as kernel write access to GUP
-> mappings do not adhere to the semantics expected by a file system.
-> 
-> A GUP caller uses the direct mapping to access the folio, which does not
-> cause write notify to trigger, nor does it enforce that the caller marks
-> the folio dirty.
+On Fri, Apr 28, 2023 at 12:28:24PM +0200, Andrew Jones wrote:
+> On Thu, Apr 27, 2023 at 07:28:49PM +0100, Conor Dooley wrote:
+> > On Thu, Apr 27, 2023 at 07:15:58PM +0200, Heiko St=FCbner wrote:
+> > > Am Mittwoch, 26. April 2023, 14:29:16 CEST schrieb Conor Dooley:
+> > > > On Mon, Apr 24, 2023 at 09:49:11PM +0200, Heiko Stuebner wrote:
+> > > > > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> ...
+> > > > What do you mean by virtualisation here? It's the job of the hyperv=
+isor
+> > > > etc to make sure that what it passes to its guest contains only wha=
+t it
+> > > > wants the guest to see, right?
+> > > > IIUC, that's another point against doing what this patch does.
+> > >=20
+> > > I guess I'm still seeing Zbb and friends - with just computational
+> > > instructions as always good to have. But I guess you're right that the
+> > > hypervisor should be able to control itself which extensions.
+> >=20
+> > Yah, there may not be any obvious downsides to something like Zbb, but I
+> > think that taking control away from the hypervisors etc isn't a good
+> > idea.
+>=20
+> If there's any chance that a VM will need to migrate from a host with,
+> e.g. Zbb, to one without it, then the VM will need Zbb disabled from the
+> start.
 
-How should we enforce it? It would be a BUG in the GUP user.
+(Almost) Everything is obvious to someone :)
 
-> 
-> The problem arises when, after an initial write to the folio, writeback
-> results in the folio being cleaned and then the caller, via the GUP
-> interface, writes to the folio again.
-> 
-> As a result of the use of this secondary, direct, mapping to the folio no
-> write notify will occur, and if the caller does mark the folio dirty, this
-> will be done so unexpectedly.
+> > Having a simple policy of blocking things that are known to misbehave
+> > would require less maint. than a list of things that are okay to pass
+> > through, but both are probably cans-of-worms.
+> > I think we need to think carefully about what policy is chosen here.
+> > Allowlist will be slower, but at least we'll not tell userspace
+> > something that is not usable. Blocklist will be easier to manage, but
+> > can only be reactive.
+>=20
+> I have experience [trying] to maintain deny-lists for CPU features,
+> both for x86 Xen guests and Arm KVM guests. I don't recommend it. To
+> do it right, you need to be proactive, tracking upcoming CPU features
+> to add the ones that can't be supported by virt or aren't ready to
+> be supported by virt to the deny-list before somebody trips over them.
+> In practice, usually somebody trips over it first, causing fires which
+> have to be put out. If an allow-list is used, then, when a new feature
+> is missed, no fires are started. The worst that can happen is somebody
+> expected the feature and didn't see it, so they complain, at which
+> point you add it.
 
-Right, in mprotect() code we only allow upgrading write permissions in 
-this case if the pte is dirty, so we always go via the pagefault path.
+Right. Blocking-unless-known is what I suggested when canvassed for an
+opinion last week but the complaint was that the kernel having to
+maintain a list would be a significant speed-bump for people.
+With a lighter-weight method of forwarding to userspace extensions that
+the kernel doesn't need to care about (no integration with
+=2E._has_extension[un]likely() etc) hopefully the roadblock would be a
+speedbump instead.
 
-> 
-> For example, consider the following scenario:-
-> 
-> 1. A folio is written to via GUP which write-faults the memory, notifying
->     the file system and dirtying the folio.
-> 2. Later, writeback is triggered, resulting in the folio being cleaned and
->     the PTE being marked read-only.
+I think I would rather speed-bumps & complaints about things being slow,
+than having to fight fires.
 
+> > Also, in a world where we do do some sort of passing, should we only
+> > forward the vendor extensions, or should we forward the standard ones
+> > too?
+>=20
+> I guess we need to forward anything userspace can and should use.
 
-How would that be triggered? Would that writeback triggered by e.g., 
-fsync that Jan tried to tackle recently?
+That, combined with what we have now, would mean that userspace would
+get told both what the kernel supports and additional other things that
+the kernel may not support, but userspace can use without that support
+being present.
 
+I think that is a reasonable thing to do, although it'd muddy the waters
+a bit with what the output in /proc/cpuinfo means. (I'm kinda taking the
+particular bit of the series in isolation, as if /proc/cpuinfo is the
+only place in which this information will be exposed.)
 
-> 3. The GUP caller writes to the folio, as it is mapped read/write via the
->     direct mapping.
-> 4. The GUP caller, now done with the page, unpins it and sets it dirty
->     (though it does not have to).
-> 
-> This results in both data being written to a folio without writenotify, and
-> the folio being dirtied unexpectedly (if the caller decides to do so).
-> 
-> This issue was first reported by Jan Kara [1] in 2018, where the problem
-> resulted in file system crashes.
-> 
-> This is only relevant when the mappings are file-backed and the underlying
-> file system requires folio dirty tracking. File systems which do not, such
-> as shmem or hugetlb, are not at risk and therefore can be written to
-> without issue.
-> 
-> Unfortunately this limitation of GUP has been present for some time and
-> requires future rework of the GUP API in order to provide correct write
-> access to such mappings.
-> 
-> However, for the time being we introduce this check to prevent the most
-> egregious case of this occurring, use of the FOLL_LONGTERM pin.
-> 
-> These mappings are considerably more likely to be written to after
-> folios are cleaned and thus simply must not be permitted to do so.
-> 
-> As part of this change we separate out vma_needs_dirty_tracking() as a
-> helper function to determine this which is distinct from
-> vma_wants_writenotify() which is specific to determining which PTE flags to
-> set.
-> 
-> [1]:https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz/
-> 
+> > What about supervisor mode only stuff?
+>=20
+> That's not something userspace can use. If we want to expose which
+> supervisor mode features the CPU has to userspace, for information
+> purposes, then I think proc or sysfs would be sufficient for that.
 
+Yeah, as above I'm kinda looking at it from a really naive "only
+/proc/cpuinfo exists" point of view for the sake of simplicity.
+Depending on implementation, reporting supervisor-only stuff that the
+kernel supports may make life easier & there's probably some value to
+someone in passing that information to userspace too.
 
-This change has the potential to break existing setups. Simple example: 
-libvirt domains configured for file-backed VM memory that also has a 
-vfio device configured. It can easily be configured by users (evolving 
-VM configuration, copy-paste etc.). And it works from a VM perspective, 
-because the guest memory is essentially stale once the VM is shutdown 
-and the pages were unpinned. At least we're not concerned about stale 
-data on disk.
+> The downside of using an allow-list for what extensions get exposed
+> to userspace is that even extensions the kernel can't/won't use
+> will need a kernel patch before userspace can use them. But, as
+> I stated above, that downside (people complaining a feature they
+> expect is missing), is, IMO, better than the alternative of exposing
+> things that shouldn't be.
 
-With your changes, such VMs would no longer start, breaking existing 
-user setups with a kernel update.
+Yeah, I would be in that camp too, but gotta suggest the various options
+for the sake of stirring discussion :)
 
-I don't really see a lot of reasons to perform this change now. It's 
-been known to be problematic for a long time. People are working on a 
-fix (I see Jan is already CCed, CCing Dave and Christop). FOLL_LONGTERM 
-check is only handling some of the problematic cases, so it's not even a 
-complete blocker.
-
-I know, Jason und John will disagree, but I don't think we want to be 
-very careful with changing the default.
-
-Sure, we could warn, or convert individual users using a flag 
-(io_uring). But maybe we should invest more energy on a fix?
-
-
-
-
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
->   include/linux/mm.h |  1 +
->   mm/gup.c           | 41 ++++++++++++++++++++++++++++++++++++++++-
->   mm/mmap.c          | 36 +++++++++++++++++++++++++++---------
->   3 files changed, 68 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 37554b08bb28..f7da02fc89c6 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2433,6 +2433,7 @@ extern unsigned long move_page_tables(struct vm_area_struct *vma,
->   #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
->   					    MM_CP_UFFD_WP_RESOLVE)
-> 
-> +bool vma_needs_dirty_tracking(struct vm_area_struct *vma);
->   int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot);
->   static inline bool vma_wants_manual_pte_write_upgrade(struct vm_area_struct *vma)
->   {
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 1f72a717232b..d36a5db9feb1 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -959,16 +959,51 @@ static int faultin_page(struct vm_area_struct *vma,
->   	return 0;
->   }
-> 
-> +/*
-> + * Writing to file-backed mappings which require folio dirty tracking using GUP
-> + * is a fundamentally broken operation, as kernel write access to GUP mappings
-> + * do not adhere to the semantics expected by a file system.
-> + *
-> + * Consider the following scenario:-
-> + *
-> + * 1. A folio is written to via GUP which write-faults the memory, notifying
-> + *    the file system and dirtying the folio.
-> + * 2. Later, writeback is triggered, resulting in the folio being cleaned and
-> + *    the PTE being marked read-only.
-> + * 3. The GUP caller writes to the folio, as it is mapped read/write via the
-> + *    direct mapping.
-> + * 4. The GUP caller, now done with the page, unpins it and sets it dirty
-> + *    (though it does not have to).
-> + *
-> + * This results in both data being written to a folio without writenotify, and
-> + * the folio being dirtied unexpectedly (if the caller decides to do so).
-> + */
-> +static bool writeable_file_mapping_allowed(struct vm_area_struct *vma,
-> +					   unsigned long gup_flags)
-> +{
-> +	/* If we aren't pinning then no problematic write can occur. */
-> +	if (!(gup_flags & (FOLL_GET | FOLL_PIN)))
-> +		return true;
-
-FOLL_LONGTERM only applies to FOLL_PIN. This check can be dropped.
-
-> +
-> +	/* We limit this check to the most egregious case - a long term pin. */
-> +	if (!(gup_flags & FOLL_LONGTERM))
-> +		return true;
-> +
-> +	/* If the VMA requires dirty tracking then GUP will be problematic. */
-> +	return vma_needs_dirty_tracking(vma);
-> +}
-> +
->   static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->   {
->   	vm_flags_t vm_flags = vma->vm_flags;
->   	int write = (gup_flags & FOLL_WRITE);
->   	int foreign = (gup_flags & FOLL_REMOTE);
-> +	bool vma_anon = vma_is_anonymous(vma);
-> 
->   	if (vm_flags & (VM_IO | VM_PFNMAP))
->   		return -EFAULT;
-> 
-> -	if (gup_flags & FOLL_ANON && !vma_is_anonymous(vma))
-> +	if ((gup_flags & FOLL_ANON) && !vma_anon)
->   		return -EFAULT;
-> 
->   	if ((gup_flags & FOLL_LONGTERM) && vma_is_fsdax(vma))
-> @@ -978,6 +1013,10 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
->   		return -EFAULT;
-> 
->   	if (write) {
-> +		if (!vma_anon &&
-> +		    !writeable_file_mapping_allowed(vma, gup_flags))
-> +			return -EFAULT;
-> +
->   		if (!(vm_flags & VM_WRITE)) {
->   			if (!(gup_flags & FOLL_FORCE))
->   				return -EFAULT;
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 536bbb8fa0ae..7b6344d1832a 100644
-> --- a/mm/mmap.c
-
-
-I'm probably missing something, why don't we have to handle GUP-fast 
-(having said that, it's hard to handle ;) )? The sequence you describe 
-above should apply to GUP-fast as well, no?
-
-1) Pin writable mapped page using GUP-fast
-2) Trigger writeback
-3) Write to page via pin
-4) Unpin and set dirty
-
-
--- 
 Thanks,
+Conor.
 
-David / dhildenb
+--3LKaALfH552SyaYA
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEvXWwAKCRB4tDGHoIJi
+0qNHAP0c8lqCdLl8JRxRiLWW8lTRO9Rv12Dv/9leiqgd0GXaMAEAqh7oqM481ghG
+Ki+qZ6DT424RfarScyqP9XK5lkaEbgc=
+=LTNI
+-----END PGP SIGNATURE-----
+
+--3LKaALfH552SyaYA--
