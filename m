@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195AD6F12AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A926F12B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 09:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345767AbjD1HpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 03:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
+        id S1345799AbjD1Hpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 03:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345859AbjD1Hos (ORCPT
+        with ESMTP id S1345893AbjD1How (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 03:44:48 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BD4559D
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:43:51 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f6bef3d4aso18078851276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:43:51 -0700 (PDT)
+        Fri, 28 Apr 2023 03:44:52 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BAA5FCC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:43:57 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f95c79522so145482047b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 00:43:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682667768; x=1685259768;
+        d=google.com; s=20221208; t=1682667775; x=1685259775;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c476LBsImvqE5/6YQn4dOI9c3SaoXwyAgImR8nGz1Ik=;
-        b=ZugbDyFMANqvn5UuZEV6ftDD5mle97+R0AjVNmNpB4/UBaU4ljkl2qpyKryZhf739c
-         l4l3SMbbiEjIYqa5RGASjnfyG76Fi81515u6srXT53omqZvQajhoYABZrHtM+veecENK
-         X1BrfYSaVzcsjzJNgvjf47bV98mNTAiNzjbqxjxcbfyCGvYKyCVlLkU/1B8re6vDz2JQ
-         9x54Njr3x5NOzFzgf9MP4DthwjZtOpL1ZlgeuWo+gG7fGVJ9KeMsoEXhE7ofnmoKBz8U
-         Gv1qjX8Senj7ulHJLV2k4lJ46uLA66B8LgxdEo4thvT1u+7GXpt8h+C9Bs4vwjAurptz
-         5tGQ==
+        bh=mkeN78Pnmqh0QXNqUf6uwJ8waaplqNK12lYRlstnA0o=;
+        b=2bVngk+z6NNOjz0DVT1EkJRq/eohhK4gyxFZmhRp6MJ908UkIHYTHb+iLzJGqmRBes
+         27bk/orajwqe1G4c4bDHPZnnJZr/dSKBcLjNGLe+RHyjIshCqSP2zxdrjXKARXcDI3dV
+         fTnxkrt6Kvf13W6tRb/SrV08pG3Z0DHkuFXVEqymZnlwYWTbYCLpQsWBUZfbNP3avc+9
+         WNcePVdTpcgBCx/+OAc7Ptuc6NAR8HrfwD3W+/LnU9BK3aAlqcZov02U4VfKhUEfag1p
+         sAC4QzXhmqizlpbv39JkH7UW0pqu01Shm8P7Sut8SKkGlXuubRsLnMok9ZmMFLonIRAq
+         ylRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682667768; x=1685259768;
+        d=1e100.net; s=20221208; t=1682667775; x=1685259775;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c476LBsImvqE5/6YQn4dOI9c3SaoXwyAgImR8nGz1Ik=;
-        b=VzrVJ9+++TljsMws/tCr2nWRmVx79PoO5/8OFPk7Jh11b0E/yIrUeQBYQ17O1M5SUA
-         wXhtkQRqafj/NsRg6Yz4SSccZoE9bAbq964QtmKqyzRHZbiJu0pl0HDRdUqVCD2Fd/8S
-         zbKsM9+K0vS0gznQanQ4zpZ/C2JFL1HralQPu9w+bZYA3eASUj2YDZkf+sdzN7/AP7GK
-         uzaUy9j6HpqoCATMzIBfWrLWwpIip3XxC934hdMrotp854k7D4gQiPuqF3cK6RQsl+zv
-         e2FYSDI2WYsNwJcxifgULwijHsC8VYoEBtDh3Jew1DeejqKljAHwcEzYE9reqFM8Pq1X
-         BSmA==
-X-Gm-Message-State: AC+VfDySUjwHFHu6qSAE3x1emAYvir5GB/A0RE31+/f8pxAXnvbNdL1K
-        CxzZCg28IuwxtM615m77Jo/JZhSkJC+v
-X-Google-Smtp-Source: ACHHUZ59+V2T0MxZEY2qwwLA2Lt47//Lii23vGZJECvan0Tdw8VPM4MOLN+Hh6c4ls49WArbBM2A8469/2KT
+        bh=mkeN78Pnmqh0QXNqUf6uwJ8waaplqNK12lYRlstnA0o=;
+        b=lkvTAyxWLcEIArvQNjNaOtPdLLiY27nI8+X16E0qIlq49QRKvJ/ir2oMyuuvLAsuYd
+         b74hGZR2vDPDTsKMe97e5sV8BT3vTFdJmJI2SYIzSZ0oywpTbbgve5eOajekgro0st/K
+         nC4os8pN1QdLReJ7Yu5ubgVLUZTxvEEPC7erOgpacMObLoBkjVHSShHKRWmu1SgYUu88
+         9imAEhx3xw71Rdje1ohSlPFo5xkP3QRmcdT39P6cmB4kgISrKddiCe3yfU0i23P73LT5
+         LcfiROjthEw1QdTwse2SLn1+qQnmHQZCYazHteA0ASVacD8xziGOaQUH0sg7Ksw1qgqw
+         DV1Q==
+X-Gm-Message-State: AC+VfDznYFxCsFi14iNhYd+pUIv95io8VVTqMj/OxIcrISjcgqbG+lce
+        V6Jtw4aIt7AWIF9cv4JFGfsepp2F47+k
+X-Google-Smtp-Source: ACHHUZ639i/LlRdEM/J4FqE/PlfYoVJdeJvUAjH2cAqwVMxulU1jCOg3buUiiS+OCbQYfQQ3bRcfUar6h85T
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:24a7:aeb5:5de4:c29b])
- (user=irogers job=sendgmr) by 2002:a25:5805:0:b0:b99:f202:db79 with SMTP id
- m5-20020a255805000000b00b99f202db79mr2249943ybb.12.1682667768103; Fri, 28 Apr
- 2023 00:42:48 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 00:37:57 -0700
+ (user=irogers job=sendgmr) by 2002:a81:af58:0:b0:54d:913b:c9e8 with SMTP id
+ x24-20020a81af58000000b0054d913bc9e8mr2660662ywj.5.1682667775180; Fri, 28 Apr
+ 2023 00:42:55 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 00:37:58 -0700
 In-Reply-To: <20230428073809.1803624-1-irogers@google.com>
-Message-Id: <20230428073809.1803624-32-irogers@google.com>
+Message-Id: <20230428073809.1803624-33-irogers@google.com>
 Mime-Version: 1.0
 References: <20230428073809.1803624-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v2 31/43] perf test: Fix parse-events tests for >1 core PMU
+Subject: [PATCH v2 32/43] perf parse-events: Support hardware events as terms
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -92,302 +92,397 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove assumptions of just 1 core PMU.
+An event like "cpu/instructions/" typically parses due to there being
+a sysfs event called instructions. On hybrid recursive parsing means
+that the hardware event is encoded in the attribute, with the PMU
+being placed in the high bits of the config:
+
+'''
+$ perf stat -vv -e 'cpu_core/cycles/' true
+...
+------------------------------------------------------------
+perf_event_attr:
+  size                             136
+  config                           0x400000000
+  sample_type                      IDENTIFIER
+  read_format                      TOTAL_TIME_ENABLED|TOTAL_TIME_RUNNING
+  disabled                         1
+  inherit                          1
+  enable_on_exec                   1
+  exclude_guest                    1
+------------------------------------------------------------
+'''
+
+Make this behavior the default by adding a new term type and token for
+hardware events. The token gathers both the numeric config and the
+parsed name, so that if the token appears like "cycles/name=cycles/"
+then the token can be handled like a name. The numeric value isn't
+sufficient to distinguish say "cpu-cycles" from "cycles".
+
+Extend the parse-events test so that all current non-PMU hardware
+parsing tests, also test with the PMU cpu - more than half the change.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/parse-events.c | 177 +++++++++++++++++++-------------
- 1 file changed, 105 insertions(+), 72 deletions(-)
+ tools/perf/tests/parse-events.c | 126 ++++++++++++++++++++++++++++++++
+ tools/perf/util/parse-events.c  |  37 +++-------
+ tools/perf/util/parse-events.h  |   3 +-
+ tools/perf/util/parse-events.l  |  20 +++++
+ tools/perf/util/parse-events.y  |  34 +++++++--
+ 5 files changed, 187 insertions(+), 33 deletions(-)
 
 diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index 4d57f5437cc0..e507b6d40099 100644
+index e507b6d40099..49166d51c0a1 100644
 --- a/tools/perf/tests/parse-events.c
 +++ b/tools/perf/tests/parse-events.c
-@@ -25,6 +25,11 @@ static bool test_config(const struct evsel *evsel, __u64 expected_config)
- 	return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == expected_config;
+@@ -1912,6 +1912,132 @@ static const struct evlist_test test__events_pmu[] = {
+ 		.check = test__checkevent_config_cache,
+ 		/* 8 */
+ 	},
++	{
++		.name  = "cpu/instructions/",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_symbolic_name,
++		/* 9 */
++	},
++	{
++		.name  = "cpu/cycles,period=100000,config2/",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_symbolic_name_config,
++		/* 0 */
++	},
++	{
++		.name  = "cpu/instructions/h",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_symbolic_name_modifier,
++		/* 1 */
++	},
++	{
++		.name  = "cpu/instructions/G",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_exclude_host_modifier,
++		/* 2 */
++	},
++	{
++		.name  = "cpu/instructions/H",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_exclude_guest_modifier,
++		/* 3 */
++	},
++	{
++		.name  = "{cpu/instructions/k,cpu/cycles/upp}",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group1,
++		/* 4 */
++	},
++	{
++		.name  = "{cpu/cycles/u,cpu/instructions/kp}:p",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group4,
++		/* 5 */
++	},
++	{
++		.name  = "{cpu/cycles/,cpu/cache-misses/G}:H",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group_gh1,
++		/* 6 */
++	},
++	{
++		.name  = "{cpu/cycles/,cpu/cache-misses/H}:G",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group_gh2,
++		/* 7 */
++	},
++	{
++		.name  = "{cpu/cycles/G,cpu/cache-misses/H}:u",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group_gh3,
++		/* 8 */
++	},
++	{
++		.name  = "{cpu/cycles/G,cpu/cache-misses/H}:uG",
++		.valid = test__pmu_cpu_valid,
++		.check = test__group_gh4,
++		/* 9 */
++	},
++	{
++		.name  = "{cpu/cycles/,cpu/cache-misses/,cpu/branch-misses/}:S",
++		.valid = test__pmu_cpu_valid,
++		.check = test__leader_sample1,
++		/* 0 */
++	},
++	{
++		.name  = "{cpu/instructions/,cpu/branch-misses/}:Su",
++		.valid = test__pmu_cpu_valid,
++		.check = test__leader_sample2,
++		/* 1 */
++	},
++	{
++		.name  = "cpu/instructions/uDp",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_pinned_modifier,
++		/* 2 */
++	},
++	{
++		.name  = "{cpu/cycles/,cpu/cache-misses/,cpu/branch-misses/}:D",
++		.valid = test__pmu_cpu_valid,
++		.check = test__pinned_group,
++		/* 3 */
++	},
++	{
++		.name  = "cpu/instructions/I",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_exclude_idle_modifier,
++		/* 4 */
++	},
++	{
++		.name  = "cpu/instructions/kIG",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_exclude_idle_modifier_1,
++		/* 5 */
++	},
++	{
++		.name  = "cpu/cycles/u",
++		.valid = test__pmu_cpu_valid,
++		.check = test__sym_event_slash,
++		/* 6 */
++	},
++	{
++		.name  = "cpu/cycles/k",
++		.valid = test__pmu_cpu_valid,
++		.check = test__sym_event_dc,
++		/* 7 */
++	},
++	{
++		.name  = "cpu/instructions/uep",
++		.valid = test__pmu_cpu_valid,
++		.check = test__checkevent_exclusive_modifier,
++		/* 8 */
++	},
++	{
++		.name  = "{cpu/cycles/,cpu/cache-misses/,cpu/branch-misses/}:e",
++		.valid = test__pmu_cpu_valid,
++		.check = test__exclusive_group,
++		/* 9 */
++	},
+ };
+ 
+ struct terms_test {
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index f463a0e5e071..2a7c74e9ab5d 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -1052,6 +1052,7 @@ static const char *config_term_names[__PARSE_EVENTS__TERM_TYPE_NR] = {
+ 	[PARSE_EVENTS__TERM_TYPE_METRIC_ID]		= "metric-id",
+ 	[PARSE_EVENTS__TERM_TYPE_RAW]                   = "raw",
+ 	[PARSE_EVENTS__TERM_TYPE_LEGACY_CACHE]          = "legacy-cache",
++	[PARSE_EVENTS__TERM_TYPE_HARDWARE]              = "hardware",
+ };
+ 
+ static bool config_term_shrinked;
+@@ -1239,6 +1240,17 @@ static int config_term_pmu(struct perf_event_attr *attr,
+ 		} else
+ 			term->type_term = PARSE_EVENTS__TERM_TYPE_USER;
+ 	}
++	if (term->type_term == PARSE_EVENTS__TERM_TYPE_HARDWARE) {
++		const struct perf_pmu *pmu = perf_pmu__find_by_type(attr->type);
++
++		if (!pmu) {
++			pr_debug("Failed to find PMU for type %d", attr->type);
++			return -EINVAL;
++		}
++		attr->type = PERF_TYPE_HARDWARE;
++		attr->config = ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT) | term->val.num;
++		return 0;
++	}
+ 	if (term->type_term == PARSE_EVENTS__TERM_TYPE_USER ||
+ 	    term->type_term == PARSE_EVENTS__TERM_TYPE_DRV_CFG) {
+ 		/*
+@@ -2562,31 +2574,6 @@ int parse_events_term__str(struct parse_events_term **term,
+ 	return new_term(term, &temp, str, 0);
  }
  
-+static bool test_perf_config(const struct perf_evsel *evsel, __u64 expected_config)
+-int parse_events_term__sym_hw(struct parse_events_term **term,
+-			      char *config, unsigned idx)
+-{
+-	struct event_symbol *sym;
+-	char *str;
+-	struct parse_events_term temp = {
+-		.type_val  = PARSE_EVENTS__TERM_TYPE_STR,
+-		.type_term = PARSE_EVENTS__TERM_TYPE_USER,
+-		.config    = config,
+-	};
+-
+-	if (!temp.config) {
+-		temp.config = strdup("event");
+-		if (!temp.config)
+-			return -ENOMEM;
+-	}
+-	BUG_ON(idx >= PERF_COUNT_HW_MAX);
+-	sym = &event_symbols_hw[idx];
+-
+-	str = strdup(sym->symbol);
+-	if (!str)
+-		return -ENOMEM;
+-	return new_term(term, &temp, str, 0);
+-}
+-
+ int parse_events_term__clone(struct parse_events_term **new,
+ 			     struct parse_events_term *term)
+ {
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index d4cbda6e946a..7fe80b416143 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -79,6 +79,7 @@ enum {
+ 	PARSE_EVENTS__TERM_TYPE_METRIC_ID,
+ 	PARSE_EVENTS__TERM_TYPE_RAW,
+ 	PARSE_EVENTS__TERM_TYPE_LEGACY_CACHE,
++	PARSE_EVENTS__TERM_TYPE_HARDWARE,
+ 	__PARSE_EVENTS__TERM_TYPE_NR,
+ };
+ 
+@@ -147,8 +148,6 @@ int parse_events_term__num(struct parse_events_term **term,
+ int parse_events_term__str(struct parse_events_term **term,
+ 			   int type_term, char *config, char *str,
+ 			   void *loc_term, void *loc_val);
+-int parse_events_term__sym_hw(struct parse_events_term **term,
+-			      char *config, unsigned idx);
+ int parse_events_term__clone(struct parse_events_term **new,
+ 			     struct parse_events_term *term);
+ void parse_events_term__delete(struct parse_events_term *term);
+diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+index abe0ce681d29..6deb70c25984 100644
+--- a/tools/perf/util/parse-events.l
++++ b/tools/perf/util/parse-events.l
+@@ -149,6 +149,16 @@ static int term(yyscan_t scanner, int type)
+ 	return PE_TERM;
+ }
+ 
++static int hw_term(yyscan_t scanner, int config)
 +{
-+	return (evsel->attr.config & PERF_HW_EVENT_MASK) == expected_config;
++	YYSTYPE *yylval = parse_events_get_lval(scanner);
++	char *text = parse_events_get_text(scanner);
++
++	yylval->hardware_term.str = strdup(text);
++	yylval->hardware_term.num = PERF_TYPE_HARDWARE + config;
++	return PE_TERM_HW;
 +}
 +
- #ifdef HAVE_LIBTRACEEVENT
+ #define YY_USER_ACTION					\
+ do {							\
+ 	yylloc->last_column  = yylloc->first_column;	\
+@@ -269,6 +279,16 @@ percore			{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_PERCORE); }
+ aux-output		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT); }
+ aux-sample-size		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE); }
+ metric-id		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_METRIC_ID); }
++cpu-cycles|cycles				{ return hw_term(yyscanner, PERF_COUNT_HW_CPU_CYCLES); }
++stalled-cycles-frontend|idle-cycles-frontend	{ return hw_term(yyscanner, PERF_COUNT_HW_STALLED_CYCLES_FRONTEND); }
++stalled-cycles-backend|idle-cycles-backend	{ return hw_term(yyscanner, PERF_COUNT_HW_STALLED_CYCLES_BACKEND); }
++instructions					{ return hw_term(yyscanner, PERF_COUNT_HW_INSTRUCTIONS); }
++cache-references				{ return hw_term(yyscanner, PERF_COUNT_HW_CACHE_REFERENCES); }
++cache-misses					{ return hw_term(yyscanner, PERF_COUNT_HW_CACHE_MISSES); }
++branch-instructions|branches			{ return hw_term(yyscanner, PERF_COUNT_HW_BRANCH_INSTRUCTIONS); }
++branch-misses					{ return hw_term(yyscanner, PERF_COUNT_HW_BRANCH_MISSES); }
++bus-cycles					{ return hw_term(yyscanner, PERF_COUNT_HW_BUS_CYCLES); }
++ref-cycles					{ return hw_term(yyscanner, PERF_COUNT_HW_REF_CPU_CYCLES); }
+ r{num_raw_hex}		{ return str(yyscanner, PE_RAW); }
+ r0x{num_raw_hex}	{ return str(yyscanner, PE_RAW); }
+ ,			{ return ','; }
+diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+index c95877cbd6cf..819a5123fd77 100644
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -65,6 +65,7 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %token PE_KERNEL_PMU_EVENT PE_PMU_EVENT_FAKE
+ %token PE_ARRAY_ALL PE_ARRAY_RANGE
+ %token PE_DRV_CFG_TERM
++%token PE_TERM_HW
+ %type <num> PE_VALUE
+ %type <num> PE_VALUE_SYM_HW
+ %type <num> PE_VALUE_SYM_SW
+@@ -112,6 +113,8 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %type <array> array_term
+ %type <array> array_terms
+ %destructor { free ($$.ranges); } <array>
++%type <hardware_term> PE_TERM_HW
++%destructor { free ($$.str); } <hardware_term>
  
- #if defined(__s390x__)
-@@ -87,11 +92,27 @@ static int test__checkevent_tracepoint_multi(struct evlist *evlist)
- 
- static int test__checkevent_raw(struct evlist *evlist)
+ %union
  {
--	struct evsel *evsel = evlist__first(evlist);
-+	struct perf_evsel *evsel;
-+	bool raw_type_match = false;
- 
--	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
--	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
--	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
-+	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
-+
-+	perf_evlist__for_each_evsel(&evlist->core, evsel) {
-+		struct perf_pmu *pmu;
-+		bool type_matched = false;
-+
-+		TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, 0x1a));
-+		perf_pmus__for_each_pmu(pmu) {
-+			if (pmu->type == evsel->attr.type) {
-+				TEST_ASSERT_VAL("PMU type expected once", !type_matched);
-+				type_matched = true;
-+				if (pmu->type == PERF_TYPE_RAW)
-+					raw_type_match = true;
-+			}
-+		}
-+		TEST_ASSERT_VAL("No PMU found for type", type_matched);
-+	}
-+	TEST_ASSERT_VAL("Raw PMU not matched", raw_type_match);
- 	return TEST_OK;
+@@ -125,6 +128,10 @@ static void free_list_evsel(struct list_head* list_evsel)
+ 		char *event;
+ 	} tracepoint_name;
+ 	struct parse_events_array array;
++	struct hardware_term {
++		char *str;
++		u64 num;
++	} hardware_term;
  }
+ %%
  
-@@ -107,31 +128,35 @@ static int test__checkevent_numeric(struct evlist *evlist)
- 
- static int test__checkevent_symbolic_name(struct evlist *evlist)
- {
--	struct evsel *evsel = evlist__first(evlist);
-+	struct perf_evsel *evsel;
- 
--	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
--	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
--	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
-+	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
-+
-+	perf_evlist__for_each_evsel(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->attr.type);
-+		TEST_ASSERT_VAL("wrong config",
-+				test_perf_config(evsel, PERF_COUNT_HW_INSTRUCTIONS));
-+	}
- 	return TEST_OK;
+@@ -770,13 +777,14 @@ name_or_raw '=' PE_VALUE
+ 	$$ = term;
  }
- 
- static int test__checkevent_symbolic_name_config(struct evlist *evlist)
+ |
+-name_or_raw '=' PE_VALUE_SYM_HW
++name_or_raw '=' PE_TERM_HW
  {
--	struct evsel *evsel = evlist__first(evlist);
-+	struct perf_evsel *evsel;
+ 	struct parse_events_term *term;
+-	int config = $3 & 255;
  
--	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
--	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->core.attr.type);
--	TEST_ASSERT_VAL("wrong config", test_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
--	/*
--	 * The period value gets configured within evlist__config,
--	 * while this test executes only parse events method.
--	 */
--	TEST_ASSERT_VAL("wrong period",
--			0 == evsel->core.attr.sample_period);
--	TEST_ASSERT_VAL("wrong config1",
--			0 == evsel->core.attr.config1);
--	TEST_ASSERT_VAL("wrong config2",
--			1 == evsel->core.attr.config2);
-+	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
-+
-+	perf_evlist__for_each_evsel(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HARDWARE == evsel->attr.type);
-+		TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, PERF_COUNT_HW_CPU_CYCLES));
-+		/*
-+		 * The period value gets configured within evlist__config,
-+		 * while this test executes only parse events method.
-+		 */
-+		TEST_ASSERT_VAL("wrong period", 0 == evsel->attr.sample_period);
-+		TEST_ASSERT_VAL("wrong config1", 0 == evsel->attr.config1);
-+		TEST_ASSERT_VAL("wrong config2", 1 == evsel->attr.config2);
-+	}
- 	return TEST_OK;
- }
- 
-@@ -147,11 +172,14 @@ static int test__checkevent_symbolic_alias(struct evlist *evlist)
- 
- static int test__checkevent_genhw(struct evlist *evlist)
- {
--	struct evsel *evsel = evlist__first(evlist);
-+	struct perf_evsel *evsel;
- 
--	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
--	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->core.attr.type);
--	TEST_ASSERT_VAL("wrong config", test_config(evsel, 1 << 16));
-+	TEST_ASSERT_VAL("wrong number of entries", 0 != evlist->core.nr_entries);
-+
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->attr.type);
-+		TEST_ASSERT_VAL("wrong config", test_perf_config(evsel, 1 << 16));
-+	}
- 	return TEST_OK;
- }
- 
-@@ -243,17 +271,15 @@ static int test__checkevent_tracepoint_modifier(struct evlist *evlist)
- static int
- test__checkevent_tracepoint_multi_modifier(struct evlist *evlist)
- {
--	struct evsel *evsel;
-+	struct perf_evsel *evsel;
- 
- 	TEST_ASSERT_VAL("wrong number of entries", evlist->core.nr_entries > 1);
- 
--	evlist__for_each_entry(evlist, evsel) {
--		TEST_ASSERT_VAL("wrong exclude_user",
--				!evsel->core.attr.exclude_user);
--		TEST_ASSERT_VAL("wrong exclude_kernel",
--				evsel->core.attr.exclude_kernel);
--		TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
--		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude_user", !evsel->attr.exclude_user);
-+		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->attr.exclude_kernel);
-+		TEST_ASSERT_VAL("wrong exclude_hv", evsel->attr.exclude_hv);
-+		TEST_ASSERT_VAL("wrong precise_ip", !evsel->attr.precise_ip);
+-	if (parse_events_term__sym_hw(&term, $1, config)) {
++	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER,
++					$1, $3.str, &@1, &@3)) {
+ 		free($1);
++		free($3.str);
+ 		YYABORT;
  	}
- 
- 	return test__checkevent_tracepoint_multi(evlist);
-@@ -262,25 +288,27 @@ test__checkevent_tracepoint_multi_modifier(struct evlist *evlist)
- 
- static int test__checkevent_raw_modifier(struct evlist *evlist)
- {
--	struct evsel *evsel = evlist__first(evlist);
--
--	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
--	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
--	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
--	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip);
-+	struct perf_evsel *evsel;
- 
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude_user", evsel->attr.exclude_user);
-+		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->attr.exclude_kernel);
-+		TEST_ASSERT_VAL("wrong exclude_hv", evsel->attr.exclude_hv);
-+		TEST_ASSERT_VAL("wrong precise_ip", evsel->attr.precise_ip);
-+	}
- 	return test__checkevent_raw(evlist);
+ 	$$ = term;
+@@ -806,12 +814,15 @@ PE_NAME
+ 	$$ = term;
  }
- 
- static int test__checkevent_numeric_modifier(struct evlist *evlist)
+ |
+-PE_VALUE_SYM_HW
++PE_TERM_HW
  {
--	struct evsel *evsel = evlist__first(evlist);
--
--	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
--	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
--	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
--	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip);
-+	struct perf_evsel *evsel;
+ 	struct parse_events_term *term;
+-	int config = $1 & 255;
  
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude_user", evsel->attr.exclude_user);
-+		TEST_ASSERT_VAL("wrong exclude_kernel", evsel->attr.exclude_kernel);
-+		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->attr.exclude_hv);
-+		TEST_ASSERT_VAL("wrong precise_ip", evsel->attr.precise_ip);
+-	ABORT_ON(parse_events_term__sym_hw(&term, NULL, config));
++	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_HARDWARE,
++				   $1.str, $1.num & 255, false, &@1, NULL)) {
++		free($1.str);
++		YYABORT;
 +	}
- 	return test__checkevent_numeric(evlist);
+ 	$$ = term;
  }
- 
-@@ -298,21 +326,23 @@ static int test__checkevent_symbolic_name_modifier(struct evlist *evlist)
- 
- static int test__checkevent_exclude_host_modifier(struct evlist *evlist)
- {
--	struct evsel *evsel = evlist__first(evlist);
--
--	TEST_ASSERT_VAL("wrong exclude guest", !evsel->core.attr.exclude_guest);
--	TEST_ASSERT_VAL("wrong exclude host", evsel->core.attr.exclude_host);
-+	struct perf_evsel *evsel;
- 
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude guest", !evsel->attr.exclude_guest);
-+		TEST_ASSERT_VAL("wrong exclude host", evsel->attr.exclude_host);
-+	}
- 	return test__checkevent_symbolic_name(evlist);
+ |
+@@ -826,6 +837,17 @@ PE_TERM '=' PE_NAME
+ 	$$ = term;
  }
- 
- static int test__checkevent_exclude_guest_modifier(struct evlist *evlist)
- {
--	struct evsel *evsel = evlist__first(evlist);
--
--	TEST_ASSERT_VAL("wrong exclude guest", evsel->core.attr.exclude_guest);
--	TEST_ASSERT_VAL("wrong exclude host", !evsel->core.attr.exclude_host);
-+	struct perf_evsel *evsel;
- 
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude guest", evsel->attr.exclude_guest);
-+		TEST_ASSERT_VAL("wrong exclude host", !evsel->attr.exclude_host);
+ |
++PE_TERM '=' PE_TERM_HW
++{
++	struct parse_events_term *term;
++
++	if (parse_events_term__str(&term, (int)$1, NULL, $3.str, &@1, &@3)) {
++		free($3.str);
++		YYABORT;
 +	}
- 	return test__checkevent_symbolic_name(evlist);
- }
- 
-@@ -330,13 +360,14 @@ static int test__checkevent_symbolic_alias_modifier(struct evlist *evlist)
- 
- static int test__checkevent_genhw_modifier(struct evlist *evlist)
++	$$ = term;
++}
++|
+ PE_TERM '=' PE_VALUE
  {
--	struct evsel *evsel = evlist__first(evlist);
--
--	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
--	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
--	TEST_ASSERT_VAL("wrong exclude_hv", evsel->core.attr.exclude_hv);
--	TEST_ASSERT_VAL("wrong precise_ip", evsel->core.attr.precise_ip);
-+	struct perf_evsel *evsel;
- 
-+	perf_evlist__for_each_entry(&evlist->core, evsel) {
-+		TEST_ASSERT_VAL("wrong exclude_user", evsel->attr.exclude_user);
-+		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->attr.exclude_kernel);
-+		TEST_ASSERT_VAL("wrong exclude_hv", evsel->attr.exclude_hv);
-+		TEST_ASSERT_VAL("wrong precise_ip", evsel->attr.precise_ip);
-+	}
- 	return test__checkevent_genhw(evlist);
- }
- 
-@@ -466,21 +497,23 @@ static int test__checkevent_list(struct evlist *evlist)
- {
- 	struct evsel *evsel = evlist__first(evlist);
- 
--	TEST_ASSERT_VAL("wrong number of entries", 3 == evlist->core.nr_entries);
-+	TEST_ASSERT_VAL("wrong number of entries", 3 <= evlist->core.nr_entries);
- 
- 	/* r1 */
--	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
--	TEST_ASSERT_VAL("wrong config", test_config(evsel, 1));
--	TEST_ASSERT_VAL("wrong config1", 0 == evsel->core.attr.config1);
--	TEST_ASSERT_VAL("wrong config2", 0 == evsel->core.attr.config2);
--	TEST_ASSERT_VAL("wrong config3", 0 == evsel->core.attr.config3);
--	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
--	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
--	TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
--	TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
-+	TEST_ASSERT_VAL("wrong type", PERF_TYPE_TRACEPOINT != evsel->core.attr.type);
-+	while (evsel->core.attr.type != PERF_TYPE_TRACEPOINT) {
-+		TEST_ASSERT_VAL("wrong config", test_config(evsel, 1));
-+		TEST_ASSERT_VAL("wrong config1", 0 == evsel->core.attr.config1);
-+		TEST_ASSERT_VAL("wrong config2", 0 == evsel->core.attr.config2);
-+		TEST_ASSERT_VAL("wrong config3", 0 == evsel->core.attr.config3);
-+		TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
-+		TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
-+		TEST_ASSERT_VAL("wrong exclude_hv", !evsel->core.attr.exclude_hv);
-+		TEST_ASSERT_VAL("wrong precise_ip", !evsel->core.attr.precise_ip);
-+		evsel = evsel__next(evsel);
-+	}
- 
- 	/* syscalls:sys_enter_openat:k */
--	evsel = evsel__next(evsel);
- 	TEST_ASSERT_VAL("wrong type", PERF_TYPE_TRACEPOINT == evsel->core.attr.type);
- 	TEST_ASSERT_VAL("wrong sample_type",
- 		PERF_TP_SAMPLE_TYPE == evsel->core.attr.sample_type);
-@@ -1916,7 +1949,7 @@ static int test_event(const struct evlist_test *e)
- 			 e->name, ret, err.str);
- 		parse_events_error__print(&err, e->name);
- 		ret = TEST_FAIL;
--		if (strstr(err.str, "can't access trace events"))
-+		if (err.str && strstr(err.str, "can't access trace events"))
- 			ret = TEST_SKIP;
- 	} else {
- 		ret = e->check(evlist);
+ 	struct parse_events_term *term;
 -- 
 2.40.1.495.gc816e09b53d-goog
 
