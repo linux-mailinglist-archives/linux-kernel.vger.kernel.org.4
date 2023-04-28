@@ -2,120 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502656F204F
-	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531A06F2051
+	for <lists+linux-kernel@lfdr.de>; Fri, 28 Apr 2023 23:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346624AbjD1V4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 17:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S232224AbjD1V6J convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 28 Apr 2023 17:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjD1V4n (ORCPT
+        with ESMTP id S229779AbjD1V6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 17:56:43 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0719010F3;
-        Fri, 28 Apr 2023 14:56:43 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1879e28ab04so458862fac.2;
-        Fri, 28 Apr 2023 14:56:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682719002; x=1685311002;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5nFjavnBxbro/fiUVf4O04xlVdcIJiqIT9b+HFjtLWg=;
-        b=WuYzbEZxTSY8pVVDvByCAUDNpAfVnsBF40BuYlKMf1VjrWzPOQGTYgEmdxbGoI9hOU
-         Unx1FpDOtuaLA/mNDjow28iWfowLrbv2g8AiJPGf6IBxTTrL2G/j3CUBsA/gGlY3eeAt
-         Awq2zfASVtyjubnqfbtOGufj0FF0nYJSssQCqq/oGZmkBQs1PQRiM7py2Jgr+4aQ0aRF
-         ZJ+fxpN7jy7GrHAjgetRIx2Sv87iuSMxgRUA2HlerrAuzff6y7QtaRfxnbKkWE3Akb8X
-         aC3pMa0d9kIplLezb+cge1w4buP4k4h0fjbGuBOxhUtqVMQrxmKNTjzYyXctaEI5pSU+
-         Nq+g==
-X-Gm-Message-State: AC+VfDz8jyWWLAqWKm7O9BroGhJWW/1Gm53MRmg3/vilCe7VINPmvVlr
-        v/SGImDOk1h6SgT6trLriQ==
-X-Google-Smtp-Source: ACHHUZ5OJNT5MsgdOGP6dVEQb4gbp242DVRGaHiNkTBgEHOBX2g6mFXeDDn4UrNam06kfjQ2PIi7Sw==
-X-Received: by 2002:a05:6870:d8af:b0:180:3225:b33b with SMTP id dv47-20020a056870d8af00b001803225b33bmr3139192oab.34.1682719002252;
-        Fri, 28 Apr 2023 14:56:42 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i4-20020a056870864400b0018e996a507esm6031489oal.31.2023.04.28.14.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 14:56:41 -0700 (PDT)
-Received: (nullmailer pid 345861 invoked by uid 1000);
-        Fri, 28 Apr 2023 21:56:41 -0000
-Date:   Fri, 28 Apr 2023 16:56:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Valentin Caron <valentin.caron@foss.st.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] dt-bindings: spi: stm32: add stm32h7
- st,spi-slave-underrun property
-Message-ID: <20230428215641.GA332435-robh@kernel.org>
-References: <20230428121524.2125832-1-valentin.caron@foss.st.com>
- <20230428121524.2125832-7-valentin.caron@foss.st.com>
+        Fri, 28 Apr 2023 17:58:06 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EA640CB
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 14:58:05 -0700 (PDT)
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 1E2D2160362;
+        Fri, 28 Apr 2023 21:58:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf07.hostedemail.com (Postfix) with ESMTPA id 433E720024;
+        Fri, 28 Apr 2023 21:58:02 +0000 (UTC)
+Message-ID: <2a0436c3a3e5345de70f7ba1067afb2a0475e63f.camel@perches.com>
+Subject: Re: get_maintainer.pl wrong and undeterministic? (was: Re: [PATCH
+ v2 2/2] usb: gadget: udc: Handle gadget_connect failure during bind
+ operation)
+From:   Joe Perches <joe@perches.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Fri, 28 Apr 2023 14:58:00 -0700
+In-Reply-To: <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
+References: <20230328160756.30520-1-quic_kriskura@quicinc.com>
+         <20230328160756.30520-3-quic_kriskura@quicinc.com>
+         <dde01219-57f7-3cc2-c4fb-5b6a38bd7a9c@quicinc.com>
+         <CAMuHMdXdP6fPPQxvAdQCz2P_SPnCLjEpqiTHerF05e7tJmWHFg@mail.gmail.com>
+         <2070d2fc-9bdc-57f8-d789-4fa6412fc7ed@quicinc.com>
+         <CAMuHMdUKqo6paF5efFVr0tmA3mpOAraZORoKyVFi8Pkt=H4z6Q@mail.gmail.com>
+         <592c2095-a6dc-de4b-713d-a9a582f966e0@quicinc.com>
+         <CAMuHMdW4whkqdj+CXbSbnJK+hA+ePf81O_1gh+VP-saY6-e=HQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428121524.2125832-7-valentin.caron@foss.st.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Rspamd-Queue-Id: 433E720024
+X-Stat-Signature: tg4gzi8z5dnrfopirtcnyee7cp1upe7t
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+sTBP9OM4+l0bjgJPwA2018H7KiqBaR6E=
+X-HE-Tag: 1682719082-400789
+X-HE-Meta: U2FsdGVkX18cCEIFGFWvtlSmwtRfYN1a5Bv05E9vRR8hM4mqOQKf4f2qU18Su1my4lvjtDR6NfyvPPf39x1d6g==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 02:15:23PM +0200, Valentin Caron wrote:
-> This property is used to enable and configure stm32h7 SPI controller to
-> handle underrun that could appear in slave mode.
+On Thu, 2023-04-27 at 11:09 +0200, Geert Uytterhoeven wrote:
+> Hi Krishna,
 > 
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
-> ---
->  .../devicetree/bindings/spi/st,stm32-spi.yaml     |  8 ++++++++
->  MAINTAINERS                                       |  1 +
->  include/dt-bindings/spi/spi-stm32.h               | 15 +++++++++++++++
->  3 files changed, 24 insertions(+)
->  create mode 100644 include/dt-bindings/spi/spi-stm32.h
+> CC Joe and lkml
+
+get_maintainer is sometimes non deterministic.
+
+When adding maintainers from git commit logs (and btw, it's
+not just nominal maintainers, it's any signers), if the
+same number of signature names are read from the commit logs
+the selection of the listed entries _is_ random.
+
+see: https://lore.kernel.org/lkml/1499984554.4457.64.camel@perches.com/
+
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> index 1d26fa2658c5..e946ea71a247 100644
-> --- a/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32-spi.yaml
-> @@ -28,6 +28,7 @@ allOf:
->        properties:
->          st,spi-midi-ns: false
->          spi-slave: false
-> +        st,spi-slave-underrun: false
->  
->  properties:
->    "#address-cells": true
-> @@ -70,6 +71,13 @@ properties:
->        In case of spi-slave defined, if <0>, indicate that SS should be
->        detected via the dedicated HW pin
->  
-> +  st,spi-slave-underrun:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-> +      First parameter enables and selects slave underrun reaction.
-> +      Refer to "dt-bindings/spi/spi-stm32.h" for the supported values.
-> +      Second parameter is the pattern in case of SPI_SEND_PATTERN mode.
+> On Thu, Apr 27, 2023 at 10:44 AM Krishna Kurapati PSSNV
+> <quic_kriskura@quicinc.com> wrote:
+> > On 4/27/2023 1:23 PM, Geert Uytterhoeven wrote:
+> > > On Thu, Apr 27, 2023 at 5:49 AM Krishna Kurapati PSSNV
+> > > <quic_kriskura@quicinc.com> wrote:
+> > > > On 4/26/2023 2:48 PM, Geert Uytterhoeven wrote:
+> > > > > On Wed, Apr 26, 2023 at 3:17 AM Krishna Kurapati PSSNV to l
+> > > > > <quic_kriskura@quicinc.com> wrote:
+> > > > > > Hi Alan, Geert,
+> > > > > > 
+> > > > > >     Can you help review and provide comments/approval on the following patch.
+> > > > > 
+> > > > > I don't know why you are addressing me, as I never touched the affected
+> > > > > file, am not listed as its maintainer, and don't know much about USB UDC.
+> > > 
+> > > >    Apologies. I must have caused some confusion because of same name. I
+> > > > must have specified clearly whom I was referring to.
+> > > > 
+> > > > I CC'd and was referring to Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > for comments.
+> > > 
+> > > That's actually me, too ;-)
+> > > 
+> > > > As per the output of get_maintainer.pl
+> > > > 
+> > > > ./scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+> > > > 
+> > > > Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+> > > > SUBSYSTEM,commit_signer:6/6=100%,authored:1/6=17%,removed_lines:2/26=8%)
+> > > > Alan Stern <stern@rowland.harvard.edu>
+> > > > (commit_signer:4/6=67%,authored:3/6=50%,added_lines:36/45=80%,removed_lines:17/26=65%)
+> > > > TaoXue <xuetao09@huawei.com> (commit_signer:1/6=17%)
+> > > > "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/6=17%)
+> > > > Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/6=17%)
+> > > > Colin Ian King <colin.i.king@gmail.com> (authored:1/6=17%)
+> > > > Jiantao Zhang <water.zhangjiantao@huawei.com>
+> > > > (authored:1/6=17%,added_lines:6/45=13%,removed_lines:6/26=23%)
+> > > 
+> > > Interesting, I don't see me listed when running that command (on v6.3 and
+> > > next-20230425), and I never authored any change to that file.
+> > > What is the tree (commit sha1) you are running ./scripts/get_maintainer.pl on?
+> > 
+> > I checked it on linux-next a couple of weeks back and it showed me this.
+> > But when I synced latest linux kernel, it didn't show it today 😅
+> > Not sure, what is the diff here.
+> 
+> Interesting:
+> 
+>     $ git checkout next-20230425
+>     Updating files: 100% (7386/7386), done.
+>     Previous HEAD position was 198925fae644b009 Add linux-next
+> specific files for 20230329
+>     HEAD is now at f600e0bbde8562a0 Add linux-next specific files for 20230425
+>     $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+>     Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+> SUBSYSTEM,commit_signer:11/11=100%,authored:3/11=27%,removed_lines:5/73=7%)
+>     Alan Stern <stern@rowland.harvard.edu>
+> (commit_signer:4/11=36%,authored:3/11=27%,added_lines:36/182=20%,removed_lines:17/73=23%)
+>     Badhri Jagan Sridharan <badhri@google.com>
+> (commit_signer:2/11=18%,authored:2/11=18%,added_lines:107/182=59%,removed_lines:44/73=60%)
+>     Elson Roy Serrao <quic_eserrao@quicinc.com>
+> (commit_signer:1/11=9%,added_lines:27/182=15%)
+>     Sebastian Reichel <sre@kernel.org> (commit_signer:1/11=9%)
+>     Colin Ian King <colin.i.king@gmail.com> (authored:1/11=9%)
+>     Jiantao Zhang <water.zhangjiantao@huawei.com>
+> (authored:1/11=9%,removed_lines:6/73=8%)
+>     linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+>     linux-kernel@vger.kernel.org (open list)
+>     $ git checkout next-20230329
+>     Updating files: 100% (7386/7386), done.
+>     Previous HEAD position was f600e0bbde8562a0 Add linux-next
+> specific files for 20230425
+>     HEAD is now at 198925fae644b009 Add linux-next specific files for 20230329
+>     $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+>     Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+> SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
+>     Alan Stern <stern@rowland.harvard.edu>
+> (commit_signer:3/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
+>     Geert Uytterhoeven <geert+renesas@glider.be> (commit_signer:1/8=12%)
+>     Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
+>     Heikki Krogerus <heikki.krogerus@linux.intel.com> (commit_signer:1/8=12%)
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> I, Sebastian, and Heikki never touched this file...
+> 
+>      Jiantao Zhang <water.zhangjiantao@huawei.com>
+> (authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
+>     Colin Ian King <colin.i.king@gmail.com> (authored:1/8=12%)
+>     linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+>     linux-kernel@vger.kernel.org (open list)
+>     $ scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c
+>     Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB
+> SUBSYSTEM,commit_signer:8/8=100%,authored:3/8=38%,added_lines:5/48=10%,removed_lines:5/29=17%)
+>     Alan Stern <stern@rowland.harvard.edu>
+> (commit_signer:4/8=50%,authored:3/8=38%,added_lines:36/48=75%,removed_lines:17/29=59%)
+>     "Rafael J. Wysocki" <rafael@kernel.org> (commit_signer:1/8=12%)
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> Heikki and I are gone, but Rafael is new and also hasn't touched this file?
+> 
+>     Colin Ian King <colin.i.king@gmail.com>
+> (commit_signer:1/8=12%,authored:1/8=12%)
+>     Sebastian Reichel <sre@kernel.org> (commit_signer:1/8=12%)
+>     Jiantao Zhang <water.zhangjiantao@huawei.com>
+> (authored:1/8=12%,added_lines:6/48=12%,removed_lines:6/29=21%)
+>     linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
+>     linux-kernel@vger.kernel.org (open list)
+> 
+> You can see the differences when running the following multiple times:
+> 
+>     $ diff <(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
+> <(scripts/get_maintainer.pl drivers/usb/gadget/udc/core.c)
+> 
+> Looks like scripts/get_maintainer.pl (a) shows wrong committers (they
+> did provide other e.g. Reviewed-by tags), and (b) is not deterministic?
+> 
+> Thanks!
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
-So, max 2 cells? Then:
-
-minItems: 1
-maxItems: 2
-
-Though I don't really think this belongs in DT. The driver implementing 
-the SPI slave function defines all the rest of the protocol the slave 
-implements. Why not this little bit? Perhaps there is no way for a SPI 
-slave driver to tell the SPI controller which controller specific mode 
-to use, so you abuse DT to configure the SPI controller. Also, with a 
-controller specific response, then the slave driver is coupled to that 
-SPI controller which isn't great either.
-
-Rob
