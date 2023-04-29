@@ -2,69 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819846F2635
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2D46F2642
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjD2UHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 16:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S230311AbjD2UOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 16:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjD2UHa (ORCPT
+        with ESMTP id S230118AbjD2UO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 16:07:30 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF1D1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:07:28 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b7588005fso991701b3a.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:07:28 -0700 (PDT)
+        Sat, 29 Apr 2023 16:14:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A741B4
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24b29812c42so856784a91.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682798848; x=1685390848;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799264; x=1685391264;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GPEqh8k2qdo+NeTZc6tPzCNg8vzJgNMkZZxTJJ82cVc=;
-        b=CesUnoPpobeQ2vi5Uq289J04jpYmmsKF1v97GIvbSAOLF9eW2BPzblYzd84BU5tSud
-         y1DUBRT8Q+c5WubZqOMxKOwsMMVdNAX2FLqxysqfdhlBQW5YBoP69vINYpYlpfaUB53F
-         EN6pHvadBT4/e8ZiBj6gAz3bsQs+1XpXY5ZCYW+JB7M2329N9o7kB8eeAvfP5X8r+NMY
-         iMuTznt72Rcpc6CeH+9mKoC803DZagcwR1X3GSNHBVB/KEyAuzP7a+KmCVNSDCwhK1E+
-         1ay1BgalmYKhiJXxvvOoHE237ZmnJRl6R8+lE7d8YU+QF5ZySpHBMtumsDiMnde7GaSe
-         Xdig==
+        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
+        b=ztXNyujPGJ3TImj9rkWYO2n2FifWKitTQShNykqcCXMnlMDmDVUdGDZxkkAjoc2LxT
+         wjlkNuWu5MpGZ0hx2IY/BfGicm00cVl+x8sMPYhvJYOTMhGVFNRcq+t2+IhK1Zbg1HBm
+         TwPyb5IfXHXgdYm4kQQJO8mCutMWnoA0MAQG1HObQV2DkWdvKA82EPwFFy15NEoVvzDJ
+         YaFLlQv2/hnRBo+Kg2l+LFcBMREq5GVfs5levwZlW+i9w9qFVpvKUrXtIKJRJqUd1KUC
+         DRDHp5Z7Fs9kgbXLfeVSACxaLJ8vDKqbLXNf+pwsIg4BCZFLNo8FmqNy+hScbEds+O2l
+         SL9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682798848; x=1685390848;
+        d=1e100.net; s=20221208; t=1682799264; x=1685391264;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GPEqh8k2qdo+NeTZc6tPzCNg8vzJgNMkZZxTJJ82cVc=;
-        b=XurReeMP+eHz/Af+rlbedAqlqCPJixI20MGeHCPRWka8K4uv2AruR/qkdiJ+HWgEXV
-         e08FAJv6WxJaBt2qW7P3lb71U/oA6wvNUombroiex81LiN3CLIFsRb25spVk5Gq27SOW
-         vcoZkBTDQTMlcNinAkPKLOxpJI40IcQoor4PxMJ07hJ/PZaUwZo63+DTZ1kLpKkG+l3S
-         DvW0L45Li4QPPwGfGUQhl3kTZ1oVM6rNwm3Bgrq5hTpKDzN8zRjgMjRndDL118JXzkGw
-         Hag5MYq3j6HZ60ENJZxMH1pysfXHbacInRFG+QwHKpmI4S2zv4GNtr6BYoZ1nDnw1LuT
-         02zA==
-X-Gm-Message-State: AC+VfDzsC3107jaFZTgY9EPmn1MaxuIbl1DNRnXGFyg/WlZCKBlIGWMS
-        fWcclkt/kPeMLV4l0uzxNutQtg==
-X-Google-Smtp-Source: ACHHUZ7vRoRMpKih9uT6u2biyCmOg5cRRUaCfmME/Xfykcc4K5L91I3hl8zMkHpswkQldje/7mqS9A==
-X-Received: by 2002:a05:6a20:72a7:b0:f0:662b:337 with SMTP id o39-20020a056a2072a700b000f0662b0337mr12264886pzk.60.1682798847993;
-        Sat, 29 Apr 2023 13:07:27 -0700 (PDT)
+        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
+        b=cQ/3o4ojpMj4NV+yxM3D246Ebnt7aD7XTcRS2vfXJp51Ukt6RujXVh55FjI+lhC5U1
+         HVuWdXMmhYTFgNKcnmzcjJKaUEyMx0LR99m/Xm14faLSb7/OkqXTjU+3L/X/nCZbYtxd
+         ueEk67+R9RtnkENKTdkDTzZ/X+FqLxKa/kIZFbdov2VRa2bYpcYf0MwcmHwn1QFRzUcP
+         hvJSwVv0GuTCgyKV4C4HiecOWuM3aQSyq3yqAY0WNoTpdT1FCIA9KLUlIYNCVbsM/46Z
+         /xuonZOTY3TubFY/Cxrc6hZ+HFIjEWjB3n9YC2+u3WXsTCnAru0BwCcBWWwyPGdnKZtB
+         cv8g==
+X-Gm-Message-State: AC+VfDzhKCHrueG+Ta2ylhKxAJHEnVEVyzQ0PDqUJELFc3oKWrlKcENu
+        QTtPXGar1kZ7YeJkALZwM5br5Q==
+X-Google-Smtp-Source: ACHHUZ7pgoIToYashe1bFzQ1hUq7/0xuSIbhdV55MwhX+AUZI7FSn+oK96sUBgsJukxkcTmiriVdYg==
+X-Received: by 2002:a17:902:ef45:b0:1a6:dd9a:62c5 with SMTP id e5-20020a170902ef4500b001a6dd9a62c5mr8875345plx.10.1682799264493;
+        Sat, 29 Apr 2023 13:14:24 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id u6-20020a656706000000b005143448896csm12225770pgf.58.2023.04.29.13.07.27
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001a4f7325466sm15179442pll.276.2023.04.29.13.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 13:07:27 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 13:07:27 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 13:07:04 PDT (-0700)
-Subject:     Re: [PATCH 3/3] RISC-V: hwprobe: Expose Zba and Zbb
-In-Reply-To: <20230429-gruffly-chrome-fd94628cc5ff@spud>
-CC:     Evan Green <evan@rivosinc.com>, aou@eecs.berkeley.edu,
-        abrestic@rivosinc.com, ajones@ventanamicro.com,
-        coelacanthus@outlook.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        heiko.stuebner@vrull.eu, corbet@lwn.net,
+        Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
+X-Google-Original-Date: Sat, 29 Apr 2023 13:14:07 PDT (-0700)
+Subject:     Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
+In-Reply-To: <20230429063348.125544-1-npiggin@gmail.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, npiggin@gmail.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
+        bcain@quicinc.com, linux-hexagon@vger.kernel.org,
+        chenhuacai@kernel.org, loongarch@lists.linux.dev,
+        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
+        monstr@monstr.eu, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, linux-openrisc@vger.kernel.org,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        linux-parisc@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, linux-sh@vger.kernel.org,
+        davem@davemloft.net, sparclinux@vger.kernel.org, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        linux-um@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, khilman@baylibre.com, frederic@kernel.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-8585bbf5-7d6a-4e09-9c5f-8c6f36092b76@palmer-ri-x1c9a>
+To:     npiggin@gmail.com
+Message-ID: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -78,126 +91,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Apr 2023 06:40:51 PDT (-0700), Conor Dooley wrote:
-> On Fri, Apr 28, 2023 at 12:06:08PM -0700, Evan Green wrote:
->> Add two new bits to the IMA_EXT_0 key for ZBA and ZBB extensions. These
->> are accurately reported per CPU.
->> 
->> Signed-off-by: Evan Green <evan@rivosinc.com>
->> 
->> ---
->> 
->>  Documentation/riscv/hwprobe.rst       |  7 +++++
->>  arch/riscv/include/uapi/asm/hwprobe.h |  2 ++
->>  arch/riscv/kernel/sys_riscv.c         | 43 ++++++++++++++++++++++-----
->>  3 files changed, 45 insertions(+), 7 deletions(-)
->> 
->> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
->> index 9f0dd62dcb5d..21f444a38359 100644
->> --- a/Documentation/riscv/hwprobe.rst
->> +++ b/Documentation/riscv/hwprobe.rst
->> @@ -64,6 +64,13 @@ The following keys are defined:
->>    * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
->>      by version 2.2 of the RISC-V ISA manual.
->>  
->> +  * :c:macro:`RISCV_HWPROBE_EXT_ZBA`: The Zba address generation extension is
->> +       supported, as defined in version 1.0 of the Bit-Manipulation ISA
->> +       extensions.
->> +
->> +  * :c:macro:`RISCV_HWPROBE_IMA_ZBB`: The Zbb extension is supporte, as defined
+On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
+> This option was created in commit 554b0004d0ec4 ("vtime: Add
+> HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
+> they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
 >
-> Why is one EXT_ZBA and the other is IMA_ZBB? You do not use IMA below,
-> so I assume this is a copy-paste mistake.
+> The cputime_t type has since been removed, so this doesn't have any
+> meaning. Remove it.
+>
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Vineet Gupta <vgupta@kernel.org>
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: Brian Cain <bcain@quicinc.com>
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: loongarch@lists.linux.dev
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: Michal Simek <monstr@monstr.eu>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: linux-openrisc@vger.kernel.org
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: linux-sh@vger.kernel.org
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: linux-um@lists.infradead.org
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> ---
+> Hi,
+>
+> Could we tidy this? I don't know what tree it can go in, timers,
+> sched, asm-generic, probably doesn't matter.
+>
+> The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
+> NO_HZ_FULL so if your arch has some other issue that requires this
+> then the documentation needs to change. Any concerns from the archs?
+> I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
+> which looks to be:
+>
+> arc
+> hexagon
+> loongarch 32-bit with SMP
+> m68k
+> microblaze
+> mips 32-bit with SMP
+> nios2
+> openrisc
+> parisc 32-bit
+> riscv 32-bit
 
-Looks like it.  Either way this was too late for the current merge 
-window, so no big deal.
+Nothing's jumping out, though I haven't tested this yet so I'm not 100%.  
+I assume this isn't aimed for this merge window, given the timing?  
+Probably best to give this sort of thing time to bake in linux-next, but 
+I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big 
+deal either way on my end.
 
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+
+> sh
+> sparc 32-bit
+> um 32-bit
+> x86 32-bit
 >
-> Also, s/supporte/supported.
->
-> Otherwise, looks fine.
-> Cheers,
-> Conor.
->
->> +       in version 1.0 of the Bit-Manipulation ISA extensions.
->> +
->>  * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
->>    information about the selected set of processors.
->>  
->> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
->> index 8d745a4ad8a2..ef3b060d4e8d 100644
->> --- a/arch/riscv/include/uapi/asm/hwprobe.h
->> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
->> @@ -25,6 +25,8 @@ struct riscv_hwprobe {
->>  #define RISCV_HWPROBE_KEY_IMA_EXT_0	4
->>  #define		RISCV_HWPROBE_IMA_FD		(1 << 0)
->>  #define		RISCV_HWPROBE_IMA_C		(1 << 1)
->> +#define		RISCV_HWPROBE_EXT_ZBA		(1 << 2)
->> +#define		RISCV_HWPROBE_EXT_ZBB		(1 << 3)
->>  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
->>  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
->>  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
->> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
->> index 5db29683ebee..adfcb6b64db7 100644
->> --- a/arch/riscv/kernel/sys_riscv.c
->> +++ b/arch/riscv/kernel/sys_riscv.c
->> @@ -121,6 +121,41 @@ static void hwprobe_arch_id(struct riscv_hwprobe *pair,
->>  	pair->value = id;
->>  }
->>  
->> +static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
->> +			     const struct cpumask *cpus)
->> +{
->> +	int cpu;
->> +	u64 missing = 0;
->> +
->> +	pair->value = 0;
->> +	if (has_fpu())
->> +		pair->value |= RISCV_HWPROBE_IMA_FD;
->> +
->> +	if (riscv_isa_extension_available(NULL, c))
->> +		pair->value |= RISCV_HWPROBE_IMA_C;
->> +
->> +	/*
->> +	 * Loop through and record extensions that 1) anyone has, and 2) anyone
->> +	 * doesn't have.
->> +	 */
->> +	for_each_cpu(cpu, cpus) {
->> +		struct riscv_isainfo *isainfo = &hart_isa[cpu];
->> +
->> +		if (riscv_isa_extension_available(isainfo->isa, ZBA))
->> +			pair->value |= RISCV_HWPROBE_EXT_ZBA;
->> +		else
->> +			missing |= RISCV_HWPROBE_EXT_ZBA;
->> +
->> +		if (riscv_isa_extension_available(isainfo->isa, ZBB))
->> +			pair->value |= RISCV_HWPROBE_EXT_ZBB;
->> +		else
->> +			missing |= RISCV_HWPROBE_EXT_ZBB;
->> +	}
->> +
->> +	/* Now turn off reporting features if any CPU is missing it. */
->> +	pair->value &= ~missing;
->> +}
->> +
->>  static u64 hwprobe_misaligned(const struct cpumask *cpus)
->>  {
->>  	int cpu;
->> @@ -164,13 +199,7 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
->>  		break;
->>  
->>  	case RISCV_HWPROBE_KEY_IMA_EXT_0:
->> -		pair->value = 0;
->> -		if (has_fpu())
->> -			pair->value |= RISCV_HWPROBE_IMA_FD;
->> -
->> -		if (riscv_isa_extension_available(NULL, c))
->> -			pair->value |= RISCV_HWPROBE_IMA_C;
->> -
->> +		hwprobe_isa_ext0(pair, cpus);
->>  		break;
->>  
->>  	case RISCV_HWPROBE_KEY_CPUPERF_0:
->> -- 
->> 2.25.1
->> 
+> Thanks,
+> Nick
