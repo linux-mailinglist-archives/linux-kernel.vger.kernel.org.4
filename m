@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03A46F24E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DEE6F24E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjD2NhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 09:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
+        id S230325AbjD2Nil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 09:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjD2NhG (ORCPT
+        with ESMTP id S231126AbjD2Nij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 09:37:06 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAAB1994
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:37:05 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-32b51da14a9so4364555ab.2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:37:05 -0700 (PDT)
+        Sat, 29 Apr 2023 09:38:39 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D18094
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:38:36 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-32aff21222eso12060705ab.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:38:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682775424; x=1685367424;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntpEb2v6t5YxF3MBMr3e4Pfov8hnyljpRnIsUSWLUeM=;
-        b=UnxoBKCvWEb6wJWTLn/Ksocd6plLb18O72LWefjLBQsPWjNItBGNVmgVvUU1/xS3sU
-         +s9jJHojW9APLEGdls6l0wVdqACFVaLfV0XBMXp5P62/vFwO1Av55itIPx+xG1qJgV9F
-         r37uvNdORGHCNk+OID+NW+m+aLqX2tb1G4QiZG4ahPl1htTz5lG/x4BIFrlLzcjgCC7D
-         xfjc6H71Yr4ZGVo15d8Sf3HYJHY2JcIFweItJH4UdFAgzrGXUBACiPMXZIGvjyg/UgCS
-         zSCG0j3Fftyr/mVR2EoIvJmmT9J9EPC77IjVbwwGT2f0towQ0Zw7DJLGZGUfYDIPL+vU
-         gNGA==
-X-Gm-Message-State: AC+VfDxco8s5LA6TsHVd14Ngk9c5oGejAsndyDo7JEAGAHf7eG6GkaE1
-        v0SFv275tAIk9C9qNT00ksAgA8a3hawVTHjSTBDdhVn0sU59NXQ=
-X-Google-Smtp-Source: ACHHUZ7ZDBp7FW05qbNS4ITPjrf0GN8MRyLdc8OxX+U9fVcK89p9nA9DK8aEoxshvwSrwaq3jtgo3VGE6S/t3AeYXJGJEi76SxkT
+        d=1e100.net; s=20221208; t=1682775515; x=1685367515;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+6oCk54X/Jaxknm1PIuX7KDVYLEjXhRmn2TTkqp/tYA=;
+        b=Rk5n3sWAJxbdXo6D+zkFqTcLakaa2uK/rwDb/OEiN6TFw4t7nky8R0Dmcmmu5jkMFe
+         4BndOwonLCB4XjX3GMdkeyON+GYWaxqumS1C3McVCFR8L8txHjYNpRB0aIKUjO8V1f+H
+         6dS5UPxpfk+xEEFGDVxtVzUwtbK97LNfSayjOwWPsZpQ7L3yTQ+kIz+ap/ol4Zq8u4Jg
+         IrQNu8AlCAOkIUu5yiwoaoBpFhyybA7BIQTZySjhdDVhvkV8gtDtAyOYByAmoSvzXqdg
+         wAmVqdz4/jjXln5bGjaK0EU+2HAstnX1HKYalSCpWiQIJkCJUehMu7fdK0XVILe9CP7W
+         JEuw==
+X-Gm-Message-State: AC+VfDyKF79zwXvXdLoqbLd+h8awBevtEWdfNnYmnCugIGhh5AL0YM8N
+        Z7zc5wDDnLVI28YpLeAnNlYWRRdkYJGDt0cNQQl/tazKZXMc
+X-Google-Smtp-Source: ACHHUZ7I6COAqC3y7WUPHJOUGDC7AfqiyyZAJgcjDwvAGdJWRqmiR50GZfhyhMC7no28TI7JMO/ZAwGTB53wC57TbhNi5KKYUEta
 MIME-Version: 1.0
-X-Received: by 2002:a02:84a7:0:b0:3c5:1302:c88a with SMTP id
- f36-20020a0284a7000000b003c51302c88amr3873045jai.0.1682775424641; Sat, 29 Apr
- 2023 06:37:04 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 06:37:04 -0700
+X-Received: by 2002:a05:6e02:107:b0:328:fb47:ede4 with SMTP id
+ t7-20020a056e02010700b00328fb47ede4mr4742005ilm.3.1682775515399; Sat, 29 Apr
+ 2023 06:38:35 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 06:38:35 -0700
+In-Reply-To: <000000000000e5ee7305f0f975e8@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c30a305fa79afe5@google.com>
-Subject: [syzbot] upstream boot error: BUG: unable to handle kernel paging
- request in __irq_resolve_mapping
-From:   syzbot <syzbot+bf1c5e262f97aca4bc88@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, maz@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Message-ID: <000000000000d5100205fa79b4c9@google.com>
+Subject: Re: [syzbot] [net?] WARNING in print_bfs_bug (2)
+From:   syzbot <syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, jiri@resnulli.us,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,88 +57,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+syzbot has found a reproducer for the following issue on:
 
-syzbot found the following issue on:
+HEAD commit:    042334a8d424 atlantic:hw_atl2:hw_atl2_utils_fw: Remove unn..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11869168280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7205cdba522fe4bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=630f83b42d801d922b8b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147328f8280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1665151c280000
 
-HEAD commit:    36006b1d5c04 Merge tag 'ata-6.4-rc1' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1014285fc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fdfddd4c38713bb9
-dashboard link: https://syzkaller.appspot.com/bug?extid=bf1c5e262f97aca4bc88
-compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e9818e554a99/disk-042334a8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/de8daea0ee8b/vmlinux-042334a8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/71f9842dcf98/bzImage-042334a8.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bf1c5e262f97aca4bc88@syzkaller.appspotmail.com
+Reported-by: syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com
 
-vkms_vblank_simulate: vblank timer overrun
-vkms_vblank_simulate: vblank timer overrun
-8<--- cut here ---
-Unable to handle kernel paging request at virtual address 000c019f when read
-[000c019f] *pgd=80000080004003, *pmd=00000000
-Internal error: Oops: 207 [#1] PREEMPT SMP ARM
+netlink: 4 bytes leftover after parsing attributes in process `syz-executor204'.
+------------[ cut here ]------------
+lockdep bfs error:-1
+WARNING: CPU: 0 PID: 10222 at kernel/locking/lockdep.c:2077 print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2077
 Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at irq_data_to_desc include/linux/irqdesc.h:124 [inline]
-PC is at __irq_resolve_mapping+0x40/0x90 kernel/irq/irqdomain.c:968
-LR is at rcu_read_lock include/linux/rcupdate.h:771 [inline]
-LR is at __irq_resolve_mapping+0x20/0x90 kernel/irq/irqdomain.c:960
-pc : [<802bd68c>]    lr : [<802bd66c>]    psr: 200c0193
-sp : 82401e40  ip : 82401e40  fp : 82401e5c
-r10: 825df6a1  r9 : 8241ae40  r8 : 00000000
-r7 : df80a00c  r6 : 00000000  r5 : 0000001b  r4 : 82894000
-r3 : 8021666c  r2 : 8241ae40  r1 : 0000001b  r0 : 000c0193
-Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-Control: 30c5387d  Table: 840da040  DAC: fffffffd
-Register r0 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r1 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r2 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r3 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r4 information: slab kmalloc-1k start 82894000 pointer offset 0 size 1024
-Register r5 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r6 information: 2-page vmalloc region starting at 0xffffffff allocated at kernel_clone+0x9c/0x3d4 kernel/fork.c:2774
-Register r7 information:
-8<--- cut here ---
-Unable to handle kernel paging request at virtual address fffffff7 when read
-[fffffff7] *pgd=80000080007003, *pmd=deffd003, *pte=00000000
-Internal error: Oops: 207 [#2] PREEMPT SMP ARM
-Modules linked in:
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.3.0-syzkaller #0
-Hardware name: ARM-Versatile Express
-PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
-PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
-PC is at find_vm_area mm/vmalloc.c:2571 [inline]
-PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4108
-LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
-LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
-pc : [<8046b3a8>]    lr : [<817ddddc>]    psr: a00c0193
-sp : 82401cd0  ip : 82401cb8  fp : 82401ce4
-r10: 8241ae40  r9 : 8241c964  r8 : 8264d41c
-r7 : 600c0193  r6 : 00000008  r5 : df80b000  r4 : ffffffff
-r3 : 80216684  r2 : 00001dd7  r1 : 00000000  r0 : 00000001
-Flags: NzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
-Control: 30c5387d  Table: 840da040  DAC: fffffffd
+CPU: 0 PID: 10222 Comm: syz-executor204 Not tainted 6.3.0-syzkaller-07921-g042334a8d424 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2077
+Code: 84 00 00 00 00 00 66 90 55 89 fd 53 e8 c7 34 a9 02 89 c3 e8 60 fd ff ff 85 db 74 10 89 ee 48 c7 c7 20 68 4c 8a e8 3e bb e7 ff <0f> 0b 5b 5d c3 66 0f 1f 84 00 00 00 00 00 53 31 c9 31 d2 31 f6 48
+RSP: 0018:ffffc9000e906ba0 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888021769dc0 RSI: ffffffff814bef47 RDI: 0000000000000001
+RBP: 00000000ffffffff R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff88802176a950
+R13: 0000000000000037 R14: ffffc9000e906cc8 R15: 0000000000000000
+FS:  0000555556212300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6c98af3140 CR3: 000000002236d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ check_irq_usage+0x56c/0x1a40 kernel/locking/lockdep.c:2845
+ check_prev_add kernel/locking/lockdep.c:3112 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain kernel/locking/lockdep.c:3842 [inline]
+ __lock_acquire+0x2f39/0x5df0 kernel/locking/lockdep.c:5074
+ lock_acquire kernel/locking/lockdep.c:5691 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ mm_cid_put kernel/sched/sched.h:3270 [inline]
+ mm_cid_put kernel/sched/sched.h:3265 [inline]
+ switch_mm_cid kernel/sched/sched.h:3298 [inline]
+ prepare_task_switch kernel/sched/core.c:5117 [inline]
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x26a3/0x5770 kernel/sched/core.c:6625
+ preempt_schedule_common+0x45/0xb0 kernel/sched/core.c:6794
+ preempt_schedule_thunk+0x1a/0x20 arch/x86/entry/thunk_64.S:34
+ __mutex_lock_common kernel/locking/mutex.c:728 [inline]
+ __mutex_lock+0xfe5/0x1350 kernel/locking/mutex.c:747
+ team_nl_team_get+0x10f/0x1c0 drivers/net/team/team.c:2320
+ team_nl_cmd_options_set+0xa0/0xc80 drivers/net/team/team.c:2543
+ genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ ____sys_sendmsg+0x71c/0x900 net/socket.c:2503
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2557
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2586
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6c98a82b29
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd09390778 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00000000000eee12 RCX: 00007f6c98a82b29
+RDX: 0000000000000000 RSI: 0000000020000000 RDI: 0000000000000005
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffd09390918
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffd0939078c
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
