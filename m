@@ -2,211 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385AF6F21FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA3B6F21FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347216AbjD2BWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38034 "EHLO
+        id S1347229AbjD2BXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347049AbjD2BWl (ORCPT
+        with ESMTP id S230186AbjD2BX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:22:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8DC213C;
-        Fri, 28 Apr 2023 18:22:38 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33T1JXkO030742;
-        Sat, 29 Apr 2023 01:22:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2fLV1SJmDRKN50BXvUbOpJgCto68OhVVZLyJI2qaMXE=;
- b=UfvPnJjHHI56UU7l1kkYBgClEzyE6cbJ/ge6TCBa7JgPoTFfq/okDJci0K83w0rywMGK
- 9QN2ml+PdO2yzfF0bzks3f0t4ZT/FMuo0tq5MiGRowyiMTivzANqR1x/FCptqBzcavb8
- kM90eYMOYPznhs4eKMSwblYtR8LOBYRQ3X1oXbAPv+L9U2PVelX0yAzdALRpH2HGzwni
- xl126/dIX6oRKXmyU+Vppqb9k7/80+d44Q7aUxKJgsD5vkD1uq7ajykJYBE5McEnG79Z
- QGstwXtxpIujoniUm1I7eQTzt+2mgqqrRUZ//VBuMN0CSV1iG6rMuubzGggk1OIwO/gQ Dw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q882gaybg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 01:22:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33T1MRaE021035
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 01:22:27 GMT
-Received: from [10.110.119.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
- 2023 18:22:26 -0700
-Message-ID: <def3011f-d8e7-3090-47f2-ec13a650337e@quicinc.com>
-Date:   Fri, 28 Apr 2023 18:22:25 -0700
+        Fri, 28 Apr 2023 21:23:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3442703;
+        Fri, 28 Apr 2023 18:23:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F21EE63E31;
+        Sat, 29 Apr 2023 01:23:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1FEC433D2;
+        Sat, 29 Apr 2023 01:23:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682731406;
+        bh=Om0U2/psqyq2TUDOWeE8s8ppWFJLGmuqmhLL4lH2eq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xvcddoc3kY9XhvmWbp6sikEkfs0g4xuJFLFVgp8ih3nmnIvXSBVUgsCBE9hEOtKR1
+         BCCMi1w4d8aGJ1N+H+PQq1RYIO25NMTU+bR30VuRkKDAwuAJLXfqPIgkjyiQJiB0fN
+         fWqn6kefmMKMxgvzVQNp+ccoIaC8Ldtw0gBJggAIC/G12u9Q99sqE4EDHtEX8LaTIf
+         FU9JI/rgwUO50YHFD+V/eJQ6YKvbwTYvuz8/zlw04a8YnCyeEpG4SFKCJ0xux2fROe
+         +HprTHs0IxpgGTeeFtpwe5hUJ7hSUL5+1VCsvBPWMyRdhO+e/K6tbvLeXPjnCc72V2
+         V+CBO+cwlebKQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 02A12403B5; Fri, 28 Apr 2023 22:23:23 -0300 (-03)
+Date:   Fri, 28 Apr 2023 22:23:23 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     p4ranlee@gmail.com, jolsa@kernel.org, namhyung@kernel.org,
+        irogers@google.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, acme@redhat.com, anton@ozlabs.org,
+        dja@axtens.net, mpe@ellerman.id.au,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] perf tools riscv: Add support for riscv
+ lookup_binutils_path
+Message-ID: <ZExxi7KAW7W/OSwa@kernel.org>
+References: <20230315051500.13064-1-p4ranlee@gmail.com>
+ <mhng-534349ae-0594-455c-bc27-da0d8a70d0be@palmer-ri-x1c9>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 7/7] drm/msm/dpu: calculate DSC encoder parameters
- dynamically
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
- <1682725511-18185-8-git-send-email-quic_khsieh@quicinc.com>
- <51edf131-8fe0-2187-a4ba-744cc0c81a99@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <51edf131-8fe0-2187-a4ba-744cc0c81a99@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IX-jlxv3gWk6ICJlhrbrYIWule2GRqik
-X-Proofpoint-ORIG-GUID: IX-jlxv3gWk6ICJlhrbrYIWule2GRqik
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 clxscore=1015 bulkscore=0 impostorscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304290011
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-534349ae-0594-455c-bc27-da0d8a70d0be@palmer-ri-x1c9>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Tue, Apr 18, 2023 at 08:41:21PM -0700, Palmer Dabbelt escreveu:
+> On Tue, 14 Mar 2023 22:15:01 PDT (-0700), p4ranlee@gmail.com wrote:
+> > Add RISC-V binutils path on lookup triplets.
+> > 
+> > Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+> > ---
+> >  tools/perf/arch/common.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> > 
+> > diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
+> > index 59dd875fd5e4..e80d4d22cabf 100644
+> > --- a/tools/perf/arch/common.c
+> > +++ b/tools/perf/arch/common.c
+> > @@ -43,6 +43,20 @@ const char *const powerpc_triplets[] = {
+> >  	NULL
+> >  };
+> > 
+> > +const char *const riscv32_triplets[] = {
+> > +	"riscv32-unknown-linux-gnu-",
+> > +	"riscv32-linux-android-",
+> > +	"riscv32-linux-gnu-",
+> > +	NULL
+> > +};
+> > +
+> > +const char *const riscv64_triplets[] = {
+> > +	"riscv64-unknown-linux-gnu-",
+> > +	"riscv64-linux-android-",
+> > +	"riscv64-linux-gnu-",
+> > +	NULL
+> > +};
+> > +
+> >  const char *const s390_triplets[] = {
+> >  	"s390-ibm-linux-",
+> >  	"s390x-linux-gnu-",
+> > @@ -166,6 +180,10 @@ static int perf_env__lookup_binutils_path(struct perf_env *env,
+> >  		path_list = arm64_triplets;
+> >  	else if (!strcmp(arch, "powerpc"))
+> >  		path_list = powerpc_triplets;
+> > +	else if (!strcmp(arch, "riscv32"))
+> > +		path_list = riscv32_triplets;
+> > +	else if (!strcmp(arch, "riscv64"))
+> > +		path_list = riscv64_triplets;
+> >  	else if (!strcmp(arch, "sh"))
+> >  		path_list = sh_triplets;
+> >  	else if (!strcmp(arch, "s390"))
+> 
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
+Thanks, applied.
 
-On 4/28/2023 5:52 PM, Dmitry Baryshkov wrote:
-> On 29/04/2023 02:45, Kuogee Hsieh wrote:
->> During DSC preparation, add run time calculation to figure out what
->> usage modes, split mode and merge mode, is going to be setup.
-> 
-> This patch doesn't determine the mode. It changes programming of DSC 
-> bits according to the mode being selected.
-> 
+- Arnaldo
 
-The term mode is a bit confusing here but he is referring to 
-dsc_common_mode.
-
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 56 
->> ++++++++++++++++-------------
->>   1 file changed, 31 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> index 2fdacf1..3d18642 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> @@ -529,17 +529,9 @@ void dpu_encoder_helper_split_config(
->>   bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
->>   {
->>       struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
->> -    int i, intf_count = 0, num_dsc = 0;
->> +    struct msm_display_topology *topology = &dpu_enc->topology;
->> -    for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
->> -        if (dpu_enc->phys_encs[i])
->> -            intf_count++;
->> -
->> -    /* See dpu_encoder_get_topology, we only support 2:2:1 topology */
->> -    if (dpu_enc->dsc)
->> -        num_dsc = 2;
->> -
->> -    return (num_dsc > 0) && (num_dsc > intf_count);
->> +    return (topology->num_dsc > topology->num_intf);
->>   }
->>   static void dpu_encoder_get_topology(
->> @@ -1861,41 +1853,55 @@ static void dpu_encoder_prep_dsc(struct 
->> dpu_encoder_virt *dpu_enc,
->>       struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
->>       struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
->>       struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
->> -    int this_frame_slices;
->> +    struct msm_display_topology *topology = &dpu_enc->topology;
->>       int intf_ip_w, enc_ip_w;
->> -    int dsc_common_mode;
->> -    int pic_width;
->> +    int dsc_common_mode = 0;
-> 
-> Please don't top-init variables unless required (or unless they are 
-> constant).
-> 
->>       u32 initial_lines;
->> +    int num_dsc = topology->num_dsc;
->> +    int num_intf = topology->num_intf;
->>       int i;
->> -    for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
->> +    for (i = 0; i < num_dsc; i++) {
->>           hw_pp[i] = dpu_enc->hw_pp[i];
->>           hw_dsc[i] = dpu_enc->hw_dsc[i];
->>           if (!hw_pp[i] || !hw_dsc[i]) {
->>               DPU_ERROR_ENC(dpu_enc, "invalid params for DSC\n");
->>               return;
->> -        }
->> +        }
-> 
-> What is the difference here?
-> 
->>       }
->> -    dsc_common_mode = 0;
->> -    pic_width = dsc->pic_width;
->> +    intf_ip_w = dsc->pic_width;
->> -    dsc_common_mode = DSC_MODE_MULTIPLEX | DSC_MODE_SPLIT_PANEL;
->>       if (enc_master->intf_mode == INTF_MODE_VIDEO)
->>           dsc_common_mode |= DSC_MODE_VIDEO;
->> -    this_frame_slices = pic_width / dsc->slice_width;
->> -    intf_ip_w = this_frame_slices * dsc->slice_width;
->> -
->>       /*
->> -     * dsc merge case: when using 2 encoders for the same stream,
->> -     * no. of slices need to be same on both the encoders.
->> +     * If this encoder is driving more than one DSC encoder, they
->> +     * operate in tandem, same pic dimension needs to be used by
->> +     * each of them.(pp-split is assumed to be not supported)
->> +     *
-> 
-> Extra empty line. Also the comment doesn't make sense here anymore. We 
-> already have comment for the division by two below.
-> 
->>        */
->> -    enc_ip_w = intf_ip_w / 2;
->> +    enc_ip_w = intf_ip_w;
->> +
->> +    intf_ip_w /= num_intf;
->> +
->> +    if (num_dsc > 1)
->> +        dsc_common_mode |= DSC_MODE_SPLIT_PANEL;
->> +
->> +    if (dpu_encoder_use_dsc_merge(&dpu_enc->base)) {
->> +        dsc_common_mode |= DSC_MODE_MULTIPLEX;
->> +        /*
->> +         * in dsc merge case: when using 2 encoders for the same
->> +         * stream, no. of slices need to be same on both the
->> +         * encoders.
->> +         */
->> +        enc_ip_w = intf_ip_w / 2;
->> +    }
->> +
->>       initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
->> -    for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
->> +    for (i = 0; i < num_dsc; i++)
->>           dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc,
->>                       dsc_common_mode, initial_lines);
->>   }
-> 
