@@ -2,85 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18F06F22B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0B46F22B9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347141AbjD2Dbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 23:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S1347185AbjD2Dik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 23:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjD2Dbc (ORCPT
+        with ESMTP id S229598AbjD2Dif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 23:31:32 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE56C1FEA;
-        Fri, 28 Apr 2023 20:31:30 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33T3VL8E027560;
-        Sat, 29 Apr 2023 03:31:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7CTLvOJ6WyS4+EGaBMjf9uMcozJp5gxF5echuTGMx5M=;
- b=gE9YZhDn+QSGVnvVWyZ2muWsw+5KD5yQnICl0kmDEOJr7XXuTHbxQNmcnG5zdaVUI4im
- SoAyH9AMqCXbqWtgk4pY6xy+in+z2NF0v0wfAhiUheUYNUJJVKxzX545uc8NxIo463Is
- 7rBeWf4FNeiGVau0MATHRbgtu6GtG6HN1afBmUKnfDOFBhyCwopwvAL3/l0DK6xNSLE+
- 4aL5khgmocG7M2ez2beq6esRlQqtu908BdW2iEftZ9ANmnZMmVYwaMT16nVkii7JM1wU
- r4PRrw0AMASQGPPmfi7ouBjUUqP6yokGWGfZV+VU/FlYBARVWvunprBnLCbQcPOkSjX+ vA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8tju01ru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 03:31:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33T3V02u007906
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 03:31:00 GMT
-Received: from [10.110.119.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
- 2023 20:30:59 -0700
-Message-ID: <bebbe640-7e1a-520f-d4a2-977135fc6fee@quicinc.com>
-Date:   Fri, 28 Apr 2023 20:30:58 -0700
+        Fri, 28 Apr 2023 23:38:35 -0400
+Received: from out0-205.mail.aliyun.com (out0-205.mail.aliyun.com [140.205.0.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E1C26A6;
+        Fri, 28 Apr 2023 20:38:32 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047198;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---.STlDLfd_1682739506;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STlDLfd_1682739506)
+          by smtp.aliyun-inc.com;
+          Sat, 29 Apr 2023 11:38:27 +0800
+Date:   Sat, 29 Apr 2023 11:38:26 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "Thomas Garnier" <thgarnie@chromium.org>,
+        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Qing Zhang" <zhangqing@loongson.cn>,
+        <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC 22/43] x86/ftrace: Adapt ftrace nop patching for PIE
+ support
+Message-ID: <20230429033826.GA91541@k08j02272.eu95sqa>
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
+ <38a5029cd2590e04209117740f8912db36eff58f.1682673543.git.houwenlong.hwl@antgroup.com>
+ <20230428094454.0f2f5049@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 0/7] add DSC 1.2 dpu supports
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJpqqhP1QL7TuW8JXeVFqukWggYmB1XU8OeB65fQA+jhLAg@mail.gmail.com>
- <ff60439f-9955-5e89-ee2c-17bc2b07d1e1@quicinc.com>
- <CAA8EJppr7zYGTJcR4EAB3eybCz0tY=t4Srf2QhLVc4Uu5ZqNtQ@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJppr7zYGTJcR4EAB3eybCz0tY=t4Srf2QhLVc4Uu5ZqNtQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ouoIwlQ19Taee-V9igTCySvtJI4jrONv
-X-Proofpoint-ORIG-GUID: ouoIwlQ19Taee-V9igTCySvtJI4jrONv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 bulkscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304290032
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428094454.0f2f5049@gandalf.local.home>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,84 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 28, 2023 at 09:44:54PM +0800, Steven Rostedt wrote:
+> On Fri, 28 Apr 2023 17:51:02 +0800
+> "Hou Wenlong" <houwenlong.hwl@antgroup.com> wrote:
+> 
+> > From: Thomas Garnier <thgarnie@chromium.org>
+> > 
+> > From: Thomas Garnier <thgarnie@chromium.org>
+> > 
+> > When using PIE with function tracing, the compiler generates a
+> > call through the GOT (call *__fentry__@GOTPCREL). This instruction
+> > takes 6-bytes instead of 5-bytes with a relative call. And -mnop-mcount
+> > option is not implemented for -fPIE now.
+> > 
+> > If PIE is enabled, replace the 6th byte of the GOT call by a 1-byte nop
+> > so ftrace can handle the previous 5-bytes as before.
+> 
+> Wait! This won't work!
+> 
+> You can't just append another nop to fill in the blanks here. We must
+> either have a single 6 byte nop, or we need to refactor the entire logic to
+> something that other archs have.
+> 
+> The two nops means that the CPU can take it as two separate commands.
+> There's nothing stopping the computer from preempting a task between the
+> two. If that happens, and you modify the 1byte nop and 5byte nop with a
+> single 6 byte command, when the task get's rescheduled, it will execute the
+> last 5 bytes of that 6 byte command and take a general protection fault, and
+> likely crash the machine.
+> 
+> NACK on this. It needs a better solution.
+> 
+> -- Steve
+> 
+>
+Hi Steve,
 
+Sorry for not providing the original patch link:
+https://lore.kernel.org/all/20190131192533.34130-22-thgarnie@chromium.org/
 
-On 4/28/2023 8:12 PM, Dmitry Baryshkov wrote:
-> On Sat, 29 Apr 2023 at 05:51, Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
->>
->>
->>
->> On 4/28/2023 7:46 PM, Dmitry Baryshkov wrote:
->>> On Sat, 29 Apr 2023 at 02:45, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>>>
->>>> This series adds the DPU side changes to support DSC 1.2 encoder. This
->>>> was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
->>>> The DSI and DP parts will be pushed later on top of this change.
->>>> This seriel is rebase on [1], [2] and catalog fixes from [3].
->>>>
->>>> [1]: https://patchwork.freedesktop.org/series/116851/
->>>> [2]: https://patchwork.freedesktop.org/series/116615/
->>>> [3]: https://patchwork.freedesktop.org/series/112332/
->>>>
->>>> Abhinav Kumar (2):
->>>>     drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
->>>>     drm/msm/dpu: add dsc blocks for remaining chipsets in catalog
->>>>
->>>> Kuogee Hsieh (5):
->>>>     drm/msm/dpu: add support for DSC encoder v1.2 engine
->>>>     drm/msm/dpu: separate DSC flush update out of interface
->>>>     drm/msm/dpu: add DPU_PINGPONG_DSC feature PP_BLK and PP_BLK_TE
->>>>     drm/msm/dpu: save dpu topology configuration
->>>>     drm/msm/dpu: calculate DSC encoder parameters dynamically
->>>
->>> Another generic comment: this patchset doesn't have discussed RM
->>> changes to allocate DSC blocks in proper pairs as required by DCE.
->>>
->>
->> We have already made that change. It will be pushed with the DP series
->> because today DSC only support 2-2-1 so they will always be allocated in
->> pairs.
-> 
-> Then there is no reason to touch the dpu_encoder in this series as the
-> topology is also known to be 2:2:1.
-> 
+I drop the Reviewed-by tag due to the change described in commit
+message.
 
-Agreed, no concerns with that.
+This nop patching is only used for the first time (addr = MCOUNT) before
+SMP or executing code in module. And ftrace_make_call() is not modified,
+then we would use 5 byte direct call to replace the first 5 byte nop
+when tracepoint is enabled like before, it's still one instruction. So,
+the logic is same like before, patch the first 5 byte when tracepoint is
+enabled or disabled during running.
 
->>
->>>>
->>>>    drivers/gpu/drm/msm/Makefile                       |   1 +
->>>>    .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  19 +-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |   8 +-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  26 +-
->>>>    .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  35 ++-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  26 +-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |   4 +-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |   2 +-
->>>>    .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |   2 +-
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
->>>>    .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
->>>>    .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 102 ++++---
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  35 ++-
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  36 ++-
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  22 +-
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  10 +
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  14 +-
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 335 +++++++++++++++++++++
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
->>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
->>>>    23 files changed, 642 insertions(+), 116 deletions(-)
->>>>    create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
->>>>
->>>> --
->>>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->>>> a Linux Foundation Collaborative Project
->>>>
->>>
->>>
-> 
-> 
-> 
+> > 
+> > [Hou Wenlong: Adapt code change and fix wrong offset calculation in
+> > make_nop_x86()]
+> > 
