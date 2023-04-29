@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7832A6F25EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 21:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15F66F25F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 21:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjD2TBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 15:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S230386AbjD2THB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 15:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjD2TBX (ORCPT
+        with ESMTP id S229534AbjD2TG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 15:01:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565AA1A1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 12:01:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD2EF60ED1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91200C433D2;
-        Sat, 29 Apr 2023 19:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682794881;
-        bh=NL8xzLoHTzsT7JTBAB6xnrlmNzu+k3vM+JbT266377Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p0R2F8X9Nt0WOt+PaaAcHDznR51stshp5ucRSBy5rne1cGXHgnkEQ8vn3XcoQzOJ0
-         8AaOM8o1OE2uvXtx75UA9a2RkxBfLMHAqWMaqhRstnUgQzl0V5CunqIUSDq11IBFi0
-         g3y28gee+9/5bjGCTG0xMfBFQ5D5Lp1b50q5qaPgUvRkL10A1H/qkMS6aPQ7L/uCl6
-         99adC+8+jlpkYpnBo2bAhQbW2g4IyNUf6uxDCbfYJvi7A3fmwjlIGckgIU1thFtGQG
-         FyH3Gv1/hjTqga4F15SJoKoQ1GXzJZdBz/Rdnbz1S/yMcSdot2HZ/uYb3BCZVydxFa
-         GMbPbwX5oJnFQ==
-Date:   Sat, 29 Apr 2023 22:01:07 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     "Justin M. Forbes" <jforbes@fedoraproject.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jmforbes@linuxtx.org, Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] Revert arm64: drop ranges in definition of
- ARCH_FORCE_MAX_ORDER
-Message-ID: <ZE1pcwi95nPdlKzN@kernel.org>
-References: <20230428153646.823736-1-jforbes@fedoraproject.org>
- <ZEv76qfIiJcUvdql@arm.com>
+        Sat, 29 Apr 2023 15:06:59 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29B6E5B
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 12:06:56 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a8a59daec5so9146531fa.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 12:06:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682795215; x=1685387215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FZQprsIFxkb6uN+gB/WxK+KPOh1VYzqWl9rnM0y+44U=;
+        b=pqAoyNDvckoNrFVRFtTSPp+aKQgzq2t1zKzWv8Gf+uwfWoU1EacoHb/KSumyadsmTN
+         ligsXTgRi7NgYGtXbNjWLhdLhquagRrcLsIgUQnDzkW21cWhRXl+A8A3cREW+DdR5wf3
+         i+VgJ7sAe68KrIJF8voahlUHYa+aZ7FkDRIipStSGZkMsRksQ9xOo1HFhxJrrN5WjVPE
+         6AsrJtEEteOfTbqyP6CxKcT7Yth5kfU1n9tTzj3uMBAzDBg/0eSecVMy3u9zOYd4huZw
+         XVtHo4uQr++T6PPrl2Fzeuj0XMZ31Hld5PAnyepyMOi9zDzKIuWhVHf7RWrR2XsaSps+
+         IZKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682795215; x=1685387215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FZQprsIFxkb6uN+gB/WxK+KPOh1VYzqWl9rnM0y+44U=;
+        b=c/o5Eoe263MubwLClkHxv+tyxKBVLUBQGQ/Dh+1mpE5fTABZOK7tIT7e6h8vEi38Ib
+         FerLNigV9RA1JC+StFXmC1503a1ag25NF5b7ndzKv+SC7sec5FRGeQ+790zoeXelOeEz
+         FhmNpcaC4XXzrfO7DTL7XD7pv0xys5syJRukTsrgejTqf+TplXreBFGsE1mo/QLiuwqv
+         9Y8QhNPswN9lv6SRDpyzdxN7pjbS4Uo9t7/3yPW0tWW4N/oDpJkby3x3qx+oLCp9QkyJ
+         2mIMON5fzLUVKmLqTkN6fsgL67PFLNKRmU15elwZz/tVsz862t+Bwyul7CH/yR2DMYrD
+         J+hw==
+X-Gm-Message-State: AC+VfDzwuw52LLanf8ZCUteSwOaE+BR1KAgNuEgmAub+qOvpCbf9HDrZ
+        A26bXplf3iYR/ONGZPmzb5HOP9Xr77frHhACiXtO53UaLxTkxrYa
+X-Google-Smtp-Source: ACHHUZ6YEnTDHMPe1uXVXbjjrDwRb8mKocGJYkJfVMTo4Cs4HcMhIoy/gBJIb0fiPeJlM3NlbXL7zkgVBDBT5Nrme3A=
+X-Received: by 2002:a2e:9d47:0:b0:2a7:6e12:f75a with SMTP id
+ y7-20020a2e9d47000000b002a76e12f75amr2226666ljj.53.1682795215108; Sat, 29 Apr
+ 2023 12:06:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEv76qfIiJcUvdql@arm.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230429155247.12131-1-rdunlap@infradead.org> <CALs-HsuG3EFBs60sgiMcPHoE1dF7mhi3GKt=AWvRPaUHAfA88Q@mail.gmail.com>
+ <20230429-outboard-hypocrite-983e977103d2@spud> <CALs-HstrR3Cm3jQKt6dmfYiRRVkAVibAZDtFo0wmXz4LEvRf_A@mail.gmail.com>
+ <37e6b325-44e4-8e65-68e3-eab2943018ac@infradead.org>
+In-Reply-To: <37e6b325-44e4-8e65-68e3-eab2943018ac@infradead.org>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Sat, 29 Apr 2023 12:06:19 -0700
+Message-ID: <CALs-Hss3b86zAqohK9NYEkzn+pnLeMB37qaj1EA6f6bRkFWwCg@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: fix sifive and thead section mismatches in errata
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 06:01:30PM +0100, Catalin Marinas wrote:
-> + Mike and Andrew
-> 
-> On Fri, Apr 28, 2023 at 10:36:45AM -0500, Justin M. Forbes wrote:
-> > While the ARCH_FORCE_MAX_ORDER changes clarified the descriptions quite
-> > a bit, the aarch64 specific change moved this config to sit behind
-> > CONFIG_EXPERT. This becomes problematic when distros are setting this to
-> > a non default value already. Pushing it behind EXPERT where it was not
-> > before will silently change the configuration for users building with
-> > oldconfig.  If distros patch out if EXPERT downstream, it still creates
-> > problems for users testing out upstream patches, or trying to bisect to
-> > find the root of problem, as the configuration will change unexpectedly,
-> > possibly leading to different behavior and false results.
-> > 
-> > Whem I asked about reverting the EXPERT, dependency, I was asked to add
+On Sat, Apr 29, 2023 at 10:58=E2=80=AFAM Randy Dunlap <rdunlap@infradead.or=
+g> wrote:
+>
+>
+>
+> On 4/29/23 10:48, Evan Green wrote:
+> > On Sat, Apr 29, 2023 at 10:24=E2=80=AFAM Conor Dooley <conor@kernel.org=
+> wrote:
+> >>
+> >> On Sat, Apr 29, 2023 at 10:21:39AM -0700, Evan Green wrote:
+> >>> On Sat, Apr 29, 2023 at 8:52=E2=80=AFAM Randy Dunlap <rdunlap@infrade=
+ad.org> wrote:
+> >>>>
+> >>>> When CONFIG_MODULES is set, __init_or_module becomes <empty>, but wh=
+en
+> >>>> CONFIG_MODULES is not set, __init_or_module becomes __init.
+> >>>> In the latter case, it causes section mismatch warnings:
+> >>>>
+> >>>> WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fi=
+ll_cpu_mfr_info (section: .text) -> sifive_errata_patch_func (section: .ini=
+t.text)
+> >>>> WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fi=
+ll_cpu_mfr_info (section: .text) -> thead_errata_patch_func (section: .init=
+.text)
+> >>>>
+> >>>> Fixes: bb3f89487fd9 ("RISC-V: hwprobe: Remove __init on probe_vendor=
+_features()")
+> >>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> >>>> Cc: Heiko Stuebner <heiko@sntech.de>
+> >>>> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> >>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> >>>> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> >>>> Cc: linux-riscv@lists.infradead.org
+> >>>> Cc: Conor Dooley <conor@kernel.org>
+> >>>> Cc: Evan Green <evan@rivosinc.com>
+> >>>> ---
+> >>>
+> >>> Thanks, Randy. I'm confused at how I didn't see that when I made the
+> >>> original fix. I feel like repro of these section mismatch errors
+> >>> depend on some other factor I'm not understanding. In any case:
+> >>
+> >> Perhaps you had a cut-down config that did not enable either of the
+> >> relevant ARCH_ options to get those errata compiled?
+> >
+> > It was weird, my original "fix" (the one listed in this Fixes tag) was
+> > needed because while the hwprobe series was clean on Palmer's branch,
+> > it generated a "section mismatch" on linux-next. As noted here, it was
+> > only with !CONFIG_MODULES, so I explicitly remember generating that
+> > config and checking it on linux-next to generate this "fix", and it
+> > came out clean. It's like the robots are getting smarter.
+> > -Evan
+>
+> I observed the problem in 8 out of 20 randconfig builds,
+> using linux-next 20230427.
 
-Nit: When
-
-> > the ranges back.
-> > 
-> > This essentially reverts commit 34affcd7577a232803f729d1870ba475f294e4ea
-> > 
-> > Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > ---
-> >  arch/arm64/Kconfig | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > index b1201d25a8a4..dae18ac01e94 100644
-> > --- a/arch/arm64/Kconfig
-> > +++ b/arch/arm64/Kconfig
-> > @@ -1516,9 +1516,11 @@ config XEN
-> >  # 16K |       27          |      14      |       13        |         11         |
-> >  # 64K |       29          |      16      |       13        |         13         |
-> >  config ARCH_FORCE_MAX_ORDER
-> > -	int "Order of maximal physically contiguous allocations" if EXPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
-> > +	int "Order of maximal physically contiguous allocations" if ARM64_4K_PAGES || ARM64_16K_PAGES
-> >  	default "13" if ARM64_64K_PAGES
-> > +	range 11 13 if ARM64_16K_PAGES
-> >  	default "11" if ARM64_16K_PAGES
-> > +	range 10 15 if ARM64_4K_PAGES
-> >  	default "10"
-> >  	help
-> >  	  The kernel page allocator limits the size of maximal physically
-> 
-> The revert looks fine to me:
-> 
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> 
-> For the record, the original discussion:
-> 
-> Link: https://lore.kernel.org/r/CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3qcUnhnCn-WrAurvgA@mail.gmail.com
-
-I'm not really happy about this revert because MAX_ORDER is not something
-that should be changed easily.
-But since hiding it behind EXPERT would silently change lots of existing
-builds, I won't object.
-
-Still, I never got the answer _why_ Fedora/RHEL configs use non-default
-value. Quite possible something else needs to be fixed rather than having
-overgrown MAX_ORDER.
-
--- 
-Sincerely yours,
-Mike.
+Oh interesting, so not the stock k210_nommu defconfig. That makes me
+feel a little better at least.
+-Evan
