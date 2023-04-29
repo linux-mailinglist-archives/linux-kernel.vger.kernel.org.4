@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1264F6F2383
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A6D6F2382
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjD2HFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 03:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S230392AbjD2HE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 03:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjD2HDN (ORCPT
+        with ESMTP id S230487AbjD2HDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 03:03:13 -0400
+        Sat, 29 Apr 2023 03:03:15 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0242D46;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D62E2D49;
         Sat, 29 Apr 2023 00:03:11 -0700 (PDT)
 Date:   Sat, 29 Apr 2023 07:03:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682751786;
+        s=2020; t=1682751787;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5lFQzJY6Eu7rcobjX3cmf9kBrC79Hi/Ybzl3fqdXkxM=;
-        b=lQVuzYDYeL0Za9e8xucYokSPBppZGnbVwwLtjV2J40c/WPhh0DrJnPVH24Hh3T43yeWD+n
-        +fCE5eyoKm9EAhexY9CIikSlEZQTw38Q++ScS3ppAdtsHyI7quWimVMi64ol7Inh9y5ZFM
-        UiGqVj4PvAStffdd9zn2BKkB2ekOt9hIH0f40AP50N4fBXBFU+KwxYV8LhAx2HdxBOOpFB
-        Fu2RKHZy9jsBMS7B8dNl80oELsOiw4tSCpS2ZcqDkN+TtLOh+vyLhKnh+CMMt/ic5cGPQp
-        vcQZEv62dvBuYZGL7ur6l+vjCj9PwhI7eQyXHXnbieE/i9Va6uzMtbfI+JZAig==
+        bh=u7ATSRZIcLGtB8AUUo9wcpuTbCMc0Cq0BvqIEEDqIB8=;
+        b=1AM7gePN8NYg6JI0TIcCfB3n4ND4Xa1TYWu+InFPMmL8g6XaOR8bpYywddGWH7IjtZ1mcl
+        YcnIyVVJNpv9VBI/PY0dJK72S+6d4wUF7Ff/X++a9Cax0KDH+kbXOAMpiKfkS8yea88Vae
+        HxUBHIx5LsWxYo20erUT7l173eKXNzMxaDSIekjxuZsBGBlCBEudvkjXcUZq4w40mA8z/c
+        7sQb91IwVjFv3/AbxLSJFOCc2cqWjo7Ot35+lbFxWPCC8pXMopt2NVLdYN8d+IuGiVz9Cc
+        nYi6zHX3IVKBEk8927A9fx/ORN27LnlM7nzaggZtqS0v5LFyFGyqwEasXSk6iA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682751786;
+        s=2020e; t=1682751787;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5lFQzJY6Eu7rcobjX3cmf9kBrC79Hi/Ybzl3fqdXkxM=;
-        b=9ZGE3jj8QiWcQP4bc0AHEUy7JzxA2RHmJvjDYCxKtZGkwYCiHPxqUvPSqJiBeK7UcKo95F
-        9o+nVy25vkLsOxBw==
+        bh=u7ATSRZIcLGtB8AUUo9wcpuTbCMc0Cq0BvqIEEDqIB8=;
+        b=2FJg5hY6k7FxP0VHvQxSJrzLzyAdGFa9wQZ4qxB2MuwnMFA3GVhfSWMhDGawz2uddjYAW1
+        memyI+ZHjn3y9eAQ==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] atomics: Provide rcuref - scalable reference counting
-Cc:     Wangyang Guo <wangyang.guo@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+Subject: [tip: locking/core] atomics: Provide atomic_add_negative() variants
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230323102800.158429195@linutronix.de>
-References: <20230323102800.158429195@linutronix.de>
+In-Reply-To: <20230323102800.101763813@linutronix.de>
+References: <20230323102800.101763813@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168275178615.404.18057540966914849186.tip-bot2@tip-bot2>
+Message-ID: <168275178663.404.560509113165738465.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,582 +70,481 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     b36fcc97c83bbcf7a96979c10d5e0a1a950c28c9
-Gitweb:        https://git.kernel.org/tip/b36fcc97c83bbcf7a96979c10d5e0a1a950c28c9
+Commit-ID:     61be68bb801227056ff14f63a53ffd5a8d252d13
+Gitweb:        https://git.kernel.org/tip/61be68bb801227056ff14f63a53ffd5a8d252d13
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 23 Mar 2023 21:55:31 +01:00
+AuthorDate:    Thu, 23 Mar 2023 21:55:30 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sat, 29 Apr 2023 08:51:45 +02:00
+CommitterDate: Sat, 29 Apr 2023 08:51:35 +02:00
 
-atomics: Provide rcuref - scalable reference counting
+atomics: Provide atomic_add_negative() variants
 
-atomic_t based reference counting, including refcount_t, uses
-atomic_inc_not_zero() for acquiring a reference. atomic_inc_not_zero() is
-implemented with a atomic_try_cmpxchg() loop. High contention of the
-reference count leads to retry loops and scales badly. There is nothing to
-improve on this implementation as the semantics have to be preserved.
+atomic_add_negative() does not provide the relaxed/acquire/release
+variants.
 
-Provide rcuref as a scalable alternative solution which is suitable for RCU
-managed objects. Similar to refcount_t it comes with overflow and underflow
-detection and mitigation.
+Provide them in preparation for a new scalable reference count algorithm.
 
-rcuref treats the underlying atomic_t as an unsigned integer and partitions
-this space into zones:
-
-  0x00000000 - 0x7FFFFFFF	valid zone (1 .. (INT_MAX + 1) references)
-  0x80000000 - 0xBFFFFFFF	saturation zone
-  0xC0000000 - 0xFFFFFFFE	dead zone
-  0xFFFFFFFF   			no reference
-
-rcuref_get() unconditionally increments the reference count with
-atomic_add_negative_relaxed(). rcuref_put() unconditionally decrements the
-reference count with atomic_add_negative_release().
-
-This unconditional increment avoids the inc_not_zero() problem, but
-requires a more complex implementation on the put() side when the count
-drops from 0 to -1.
-
-When this transition is detected then it is attempted to mark the reference
-count dead, by setting it to the midpoint of the dead zone with a single
-atomic_cmpxchg_release() operation. This operation can fail due to a
-concurrent rcuref_get() elevating the reference count from -1 to 0 again.
-
-If the unconditional increment in rcuref_get() hits a reference count which
-is marked dead (or saturated) it will detect it after the fact and bring
-back the reference count to the midpoint of the respective zone. The zones
-provide enough tolerance which makes it practically impossible to escape
-from a zone.
-
-The racy implementation of rcuref_put() requires to protect rcuref_put()
-against a grace period ending in order to prevent a subtle use after
-free. As RCU is the only mechanism which allows to protect against that, it
-is not possible to fully replace the atomic_inc_not_zero() based
-implementation of refcount_t with this scheme.
-
-The final drop is slightly more expensive than the atomic_dec_return()
-counterpart, but that's not the case which this is optimized for. The
-optimization is on the high frequeunt get()/put() pairs and their
-scalability.
-
-The performance of an uncontended rcuref_get()/put() pair where the put()
-is not dropping the last reference is still on par with the plain atomic
-operations, while at the same time providing overflow and underflow
-detection and mitigation.
-
-The performance of rcuref compared to plain atomic_inc_not_zero() and
-atomic_dec_return() based reference counting under contention:
-
- -  Micro benchmark: All CPUs running a increment/decrement loop on an
-    elevated reference count, which means the 0 to -1 transition never
-    happens.
-
-    The performance gain depends on microarchitecture and the number of
-    CPUs and has been observed in the range of 1.3X to 4.7X
-
- - Conversion of dst_entry::__refcnt to rcuref and testing with the
-    localhost memtier/memcached benchmark. That benchmark shows the
-    reference count contention prominently.
-
-    The performance gain depends on microarchitecture and the number of
-    CPUs and has been observed in the range of 1.1X to 2.6X over the
-    previous fix for the false sharing issue vs. struct
-    dst_entry::__refcnt.
-
-    When memtier is run over a real 1Gb network connection, there is a
-    small gain on top of the false sharing fix. The two changes combined
-    result in a 2%-5% total gain for that networked test.
-
-Reported-by: Wangyang Guo <wangyang.guo@intel.com>
-Reported-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230323102800.158429195@linutronix.de
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20230323102800.101763813@linutronix.de
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- include/linux/rcuref.h | 155 ++++++++++++++++++++++-
- include/linux/types.h  |   6 +-
- lib/Makefile           |   2 +-
- lib/rcuref.c           | 281 ++++++++++++++++++++++++++++++++++++++++-
- 4 files changed, 443 insertions(+), 1 deletion(-)
- create mode 100644 include/linux/rcuref.h
- create mode 100644 lib/rcuref.c
+ include/linux/atomic/atomic-arch-fallback.h | 208 ++++++++++++++++++-
+ include/linux/atomic/atomic-instrumented.h  |  68 +++++-
+ include/linux/atomic/atomic-long.h          |  38 ++-
+ scripts/atomic/atomics.tbl                  |   2 +-
+ scripts/atomic/fallbacks/add_negative       |  11 +-
+ 5 files changed, 309 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/rcuref.h b/include/linux/rcuref.h
-new file mode 100644
-index 0000000..2c8bfd0
---- /dev/null
-+++ b/include/linux/rcuref.h
-@@ -0,0 +1,155 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _LINUX_RCUREF_H
-+#define _LINUX_RCUREF_H
-+
-+#include <linux/atomic.h>
-+#include <linux/bug.h>
-+#include <linux/limits.h>
-+#include <linux/lockdep.h>
-+#include <linux/preempt.h>
-+#include <linux/rcupdate.h>
-+
-+#define RCUREF_ONEREF		0x00000000U
-+#define RCUREF_MAXREF		0x7FFFFFFFU
-+#define RCUREF_SATURATED	0xA0000000U
-+#define RCUREF_RELEASED		0xC0000000U
-+#define RCUREF_DEAD		0xE0000000U
-+#define RCUREF_NOREF		0xFFFFFFFFU
-+
-+/**
-+ * rcuref_init - Initialize a rcuref reference count with the given reference count
-+ * @ref:	Pointer to the reference count
-+ * @cnt:	The initial reference count typically '1'
-+ */
-+static inline void rcuref_init(rcuref_t *ref, unsigned int cnt)
-+{
-+	atomic_set(&ref->refcnt, cnt - 1);
-+}
-+
-+/**
-+ * rcuref_read - Read the number of held reference counts of a rcuref
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Return: The number of held references (0 ... N)
-+ */
-+static inline unsigned int rcuref_read(rcuref_t *ref)
-+{
-+	unsigned int c = atomic_read(&ref->refcnt);
-+
-+	/* Return 0 if within the DEAD zone. */
-+	return c >= RCUREF_RELEASED ? 0 : c + 1;
-+}
-+
-+extern __must_check bool rcuref_get_slowpath(rcuref_t *ref);
-+
-+/**
-+ * rcuref_get - Acquire one reference on a rcuref reference count
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Similar to atomic_inc_not_zero() but saturates at RCUREF_MAXREF.
-+ *
-+ * Provides no memory ordering, it is assumed the caller has guaranteed the
-+ * object memory to be stable (RCU, etc.). It does provide a control dependency
-+ * and thereby orders future stores. See documentation in lib/rcuref.c
-+ *
-+ * Return:
-+ *	False if the attempt to acquire a reference failed. This happens
-+ *	when the last reference has been put already
-+ *
-+ *	True if a reference was successfully acquired
-+ */
-+static inline __must_check bool rcuref_get(rcuref_t *ref)
-+{
-+	/*
-+	 * Unconditionally increase the reference count. The saturation and
-+	 * dead zones provide enough tolerance for this.
-+	 */
-+	if (likely(!atomic_add_negative_relaxed(1, &ref->refcnt)))
-+		return true;
-+
-+	/* Handle the cases inside the saturation and dead zones */
-+	return rcuref_get_slowpath(ref);
-+}
-+
-+extern __must_check bool rcuref_put_slowpath(rcuref_t *ref);
-+
-+/*
-+ * Internal helper. Do not invoke directly.
-+ */
-+static __always_inline __must_check bool __rcuref_put(rcuref_t *ref)
-+{
-+	RCU_LOCKDEP_WARN(!rcu_read_lock_held() && preemptible(),
-+			 "suspicious rcuref_put_rcusafe() usage");
-+	/*
-+	 * Unconditionally decrease the reference count. The saturation and
-+	 * dead zones provide enough tolerance for this.
-+	 */
-+	if (likely(!atomic_add_negative_release(-1, &ref->refcnt)))
-+		return false;
-+
-+	/*
-+	 * Handle the last reference drop and cases inside the saturation
-+	 * and dead zones.
-+	 */
-+	return rcuref_put_slowpath(ref);
-+}
-+
-+/**
-+ * rcuref_put_rcusafe -- Release one reference for a rcuref reference count RCU safe
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Provides release memory ordering, such that prior loads and stores are done
-+ * before, and provides an acquire ordering on success such that free()
-+ * must come after.
-+ *
-+ * Can be invoked from contexts, which guarantee that no grace period can
-+ * happen which would free the object concurrently if the decrement drops
-+ * the last reference and the slowpath races against a concurrent get() and
-+ * put() pair. rcu_read_lock()'ed and atomic contexts qualify.
-+ *
-+ * Return:
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely release the
-+ *	object which is protected by the reference counter.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	release the protected object.
-+ */
-+static inline __must_check bool rcuref_put_rcusafe(rcuref_t *ref)
-+{
-+	return __rcuref_put(ref);
-+}
-+
-+/**
-+ * rcuref_put -- Release one reference for a rcuref reference count
-+ * @ref:	Pointer to the reference count
-+ *
-+ * Can be invoked from any context.
-+ *
-+ * Provides release memory ordering, such that prior loads and stores are done
-+ * before, and provides an acquire ordering on success such that free()
-+ * must come after.
-+ *
-+ * Return:
-+ *
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely schedule the
-+ *	object, which is protected by the reference counter, for
-+ *	deconstruction.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	deconstruct the protected object.
-+ */
-+static inline __must_check bool rcuref_put(rcuref_t *ref)
-+{
-+	bool released;
-+
-+	preempt_disable();
-+	released = __rcuref_put(ref);
-+	preempt_enable();
-+	return released;
-+}
-+
-+#endif
-diff --git a/include/linux/types.h b/include/linux/types.h
-index ea8cf60..688fb94 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -175,6 +175,12 @@ typedef struct {
- } atomic64_t;
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index 77bc552..4226379 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -1208,15 +1208,21 @@ arch_atomic_inc_and_test(atomic_t *v)
+ #define arch_atomic_inc_and_test arch_atomic_inc_and_test
  #endif
  
-+typedef struct {
-+	atomic_t refcnt;
-+} rcuref_t;
++#ifndef arch_atomic_add_negative_relaxed
++#ifdef arch_atomic_add_negative
++#define arch_atomic_add_negative_acquire arch_atomic_add_negative
++#define arch_atomic_add_negative_release arch_atomic_add_negative
++#define arch_atomic_add_negative_relaxed arch_atomic_add_negative
++#endif /* arch_atomic_add_negative */
 +
-+#define RCUREF_INIT(i)	{ .refcnt = ATOMIC_INIT(i - 1) }
-+
- struct list_head {
- 	struct list_head *next, *prev;
- };
-diff --git a/lib/Makefile b/lib/Makefile
-index baf2821..31a3a25 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -47,7 +47,7 @@ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
- 	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
- 	 bsearch.o find_bit.o llist.o memweight.o kfifo.o \
- 	 percpu-refcount.o rhashtable.o base64.o \
--	 once.o refcount.o usercopy.o errseq.o bucket_locks.o \
-+	 once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
- 	 generic-radix-tree.o
- obj-$(CONFIG_STRING_SELFTEST) += test_string.o
- obj-y += string_helpers.o
-diff --git a/lib/rcuref.c b/lib/rcuref.c
-new file mode 100644
-index 0000000..5ec00a4
---- /dev/null
-+++ b/lib/rcuref.c
-@@ -0,0 +1,281 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+/*
-+ * rcuref - A scalable reference count implementation for RCU managed objects
-+ *
-+ * rcuref is provided to replace open coded reference count implementations
-+ * based on atomic_t. It protects explicitely RCU managed objects which can
-+ * be visible even after the last reference has been dropped and the object
-+ * is heading towards destruction.
-+ *
-+ * A common usage pattern is:
-+ *
-+ * get()
-+ *	rcu_read_lock();
-+ *	p = get_ptr();
-+ *	if (p && !atomic_inc_not_zero(&p->refcnt))
-+ *		p = NULL;
-+ *	rcu_read_unlock();
-+ *	return p;
-+ *
-+ * put()
-+ *	if (!atomic_dec_return(&->refcnt)) {
-+ *		remove_ptr(p);
-+ *		kfree_rcu((p, rcu);
-+ *	}
-+ *
-+ * atomic_inc_not_zero() is implemented with a try_cmpxchg() loop which has
-+ * O(N^2) behaviour under contention with N concurrent operations.
-+ *
-+ * rcuref uses atomic_add_negative_relaxed() for the fast path, which scales
-+ * better under contention.
-+ *
-+ * Why not refcount?
-+ * =================
-+ *
-+ * In principle it should be possible to make refcount use the rcuref
-+ * scheme, but the destruction race described below cannot be prevented
-+ * unless the protected object is RCU managed.
-+ *
-+ * Theory of operation
-+ * ===================
-+ *
-+ * rcuref uses an unsigned integer reference counter. As long as the
-+ * counter value is greater than or equal to RCUREF_ONEREF and not larger
-+ * than RCUREF_MAXREF the reference is alive:
-+ *
-+ * ONEREF   MAXREF               SATURATED             RELEASED      DEAD    NOREF
-+ * 0        0x7FFFFFFF 0x8000000 0xA0000000 0xBFFFFFFF 0xC0000000 0xE0000000 0xFFFFFFFF
-+ * <---valid --------> <-------saturation zone-------> <-----dead zone----->
-+ *
-+ * The get() and put() operations do unconditional increments and
-+ * decrements. The result is checked after the operation. This optimizes
-+ * for the fast path.
-+ *
-+ * If the reference count is saturated or dead, then the increments and
-+ * decrements are not harmful as the reference count still stays in the
-+ * respective zones and is always set back to STATURATED resp. DEAD. The
-+ * zones have room for 2^28 racing operations in each direction, which
-+ * makes it practically impossible to escape the zones.
-+ *
-+ * Once the last reference is dropped the reference count becomes
-+ * RCUREF_NOREF which forces rcuref_put() into the slowpath operation. The
-+ * slowpath then tries to set the reference count from RCUREF_NOREF to
-+ * RCUREF_DEAD via a cmpxchg(). This opens a small window where a
-+ * concurrent rcuref_get() can acquire the reference count and bring it
-+ * back to RCUREF_ONEREF or even drop the reference again and mark it DEAD.
-+ *
-+ * If the cmpxchg() succeeds then a concurrent rcuref_get() will result in
-+ * DEAD + 1, which is inside the dead zone. If that happens the reference
-+ * count is put back to DEAD.
-+ *
-+ * The actual race is possible due to the unconditional increment and
-+ * decrements in rcuref_get() and rcuref_put():
-+ *
-+ *	T1				T2
-+ *	get()				put()
-+ *					if (atomic_add_negative(-1, &ref->refcnt))
-+ *		succeeds->			atomic_cmpxchg(&ref->refcnt, NOREF, DEAD);
-+ *
-+ *	atomic_add_negative(1, &ref->refcnt);	<- Elevates refcount to DEAD + 1
-+ *
-+ * As the result of T1's add is negative, the get() goes into the slow path
-+ * and observes refcnt being in the dead zone which makes the operation fail.
-+ *
-+ * Possible critical states:
-+ *
-+ *	Context Counter	References	Operation
-+ *	T1	0	1		init()
-+ *	T2	1	2		get()
-+ *	T1	0	1		put()
-+ *	T2     -1	0		put() tries to mark dead
-+ *	T1	0	1		get()
-+ *	T2	0	1		put() mark dead fails
-+ *	T1     -1	0		put() tries to mark dead
-+ *	T1    DEAD	0		put() mark dead succeeds
-+ *	T2    DEAD+1	0		get() fails and puts it back to DEAD
-+ *
-+ * Of course there are more complex scenarios, but the above illustrates
-+ * the working principle. The rest is left to the imagination of the
-+ * reader.
-+ *
-+ * Deconstruction race
-+ * ===================
-+ *
-+ * The release operation must be protected by prohibiting a grace period in
-+ * order to prevent a possible use after free:
-+ *
-+ *	T1				T2
-+ *	put()				get()
-+ *	// ref->refcnt = ONEREF
-+ *	if (!atomic_add_negative(-1, &ref->refcnt))
-+ *		return false;				<- Not taken
-+ *
-+ *	// ref->refcnt == NOREF
-+ *	--> preemption
-+ *					// Elevates ref->refcnt to ONEREF
-+ *					if (!atomic_add_negative(1, &ref->refcnt))
-+ *						return true;			<- taken
-+ *
-+ *					if (put(&p->ref)) { <-- Succeeds
-+ *						remove_pointer(p);
-+ *						kfree_rcu(p, rcu);
-+ *					}
-+ *
-+ *		RCU grace period ends, object is freed
-+ *
-+ *	atomic_cmpxchg(&ref->refcnt, NOREF, DEAD);	<- UAF
-+ *
-+ * This is prevented by disabling preemption around the put() operation as
-+ * that's in most kernel configurations cheaper than a rcu_read_lock() /
-+ * rcu_read_unlock() pair and in many cases even a NOOP. In any case it
-+ * prevents the grace period which keeps the object alive until all put()
-+ * operations complete.
-+ *
-+ * Saturation protection
-+ * =====================
-+ *
-+ * The reference count has a saturation limit RCUREF_MAXREF (INT_MAX).
-+ * Once this is exceedded the reference count becomes stale by setting it
-+ * to RCUREF_SATURATED, which will cause a memory leak, but it prevents
-+ * wrap arounds which obviously cause worse problems than a memory
-+ * leak. When saturation is reached a warning is emitted.
-+ *
-+ * Race conditions
-+ * ===============
-+ *
-+ * All reference count increment/decrement operations are unconditional and
-+ * only verified after the fact. This optimizes for the good case and takes
-+ * the occasional race vs. a dead or already saturated refcount into
-+ * account. The saturation and dead zones are large enough to accomodate
-+ * for that.
-+ *
-+ * Memory ordering
-+ * ===============
-+ *
-+ * Memory ordering rules are slightly relaxed wrt regular atomic_t functions
-+ * and provide only what is strictly required for refcounts.
-+ *
-+ * The increments are fully relaxed; these will not provide ordering. The
-+ * rationale is that whatever is used to obtain the object to increase the
-+ * reference count on will provide the ordering. For locked data
-+ * structures, its the lock acquire, for RCU/lockless data structures its
-+ * the dependent load.
-+ *
-+ * rcuref_get() provides a control dependency ordering future stores which
-+ * ensures that the object is not modified when acquiring a reference
-+ * fails.
-+ *
-+ * rcuref_put() provides release order, i.e. all prior loads and stores
-+ * will be issued before. It also provides a control dependency ordering
-+ * against the subsequent destruction of the object.
-+ *
-+ * If rcuref_put() successfully dropped the last reference and marked the
-+ * object DEAD it also provides acquire ordering.
-+ */
-+
-+#include <linux/export.h>
-+#include <linux/rcuref.h>
-+
+ #ifndef arch_atomic_add_negative
+ /**
+- * arch_atomic_add_negative - add and test if negative
++ * arch_atomic_add_negative - Add and test if negative
+  * @i: integer value to add
+  * @v: pointer of type atomic_t
+  *
+- * Atomically adds @i to @v and returns true
+- * if the result is negative, or false when
+- * result is greater than or equal to zero.
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
+  */
+ static __always_inline bool
+ arch_atomic_add_negative(int i, atomic_t *v)
+@@ -1226,6 +1232,95 @@ arch_atomic_add_negative(int i, atomic_t *v)
+ #define arch_atomic_add_negative arch_atomic_add_negative
+ #endif
+ 
++#ifndef arch_atomic_add_negative_acquire
 +/**
-+ * rcuref_get_slowpath - Slowpath of rcuref_get()
-+ * @ref:	Pointer to the reference count
++ * arch_atomic_add_negative_acquire - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic_t
 + *
-+ * Invoked when the reference count is outside of the valid zone.
-+ *
-+ * Return:
-+ *	False if the reference count was already marked dead
-+ *
-+ *	True if the reference count is saturated, which prevents the
-+ *	object from being deconstructed ever.
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
 + */
-+bool rcuref_get_slowpath(rcuref_t *ref)
++static __always_inline bool
++arch_atomic_add_negative_acquire(int i, atomic_t *v)
 +{
-+	unsigned int cnt = atomic_read(&ref->refcnt);
-+
-+	/*
-+	 * If the reference count was already marked dead, undo the
-+	 * increment so it stays in the middle of the dead zone and return
-+	 * fail.
-+	 */
-+	if (cnt >= RCUREF_RELEASED) {
-+		atomic_set(&ref->refcnt, RCUREF_DEAD);
-+		return false;
-+	}
-+
-+	/*
-+	 * If it was saturated, warn and mark it so. In case the increment
-+	 * was already on a saturated value restore the saturation
-+	 * marker. This keeps it in the middle of the saturation zone and
-+	 * prevents the reference count from overflowing. This leaks the
-+	 * object memory, but prevents the obvious reference count overflow
-+	 * damage.
-+	 */
-+	if (WARN_ONCE(cnt > RCUREF_MAXREF, "rcuref saturated - leaking memory"))
-+		atomic_set(&ref->refcnt, RCUREF_SATURATED);
-+	return true;
++	return arch_atomic_add_return_acquire(i, v) < 0;
 +}
-+EXPORT_SYMBOL_GPL(rcuref_get_slowpath);
++#define arch_atomic_add_negative_acquire arch_atomic_add_negative_acquire
++#endif
 +
++#ifndef arch_atomic_add_negative_release
 +/**
-+ * rcuref_put_slowpath - Slowpath of __rcuref_put()
-+ * @ref:	Pointer to the reference count
++ * arch_atomic_add_negative_release - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic_t
 + *
-+ * Invoked when the reference count is outside of the valid zone.
-+ *
-+ * Return:
-+ *	True if this was the last reference with no future references
-+ *	possible. This signals the caller that it can safely schedule the
-+ *	object, which is protected by the reference counter, for
-+ *	deconstruction.
-+ *
-+ *	False if there are still active references or the put() raced
-+ *	with a concurrent get()/put() pair. Caller is not allowed to
-+ *	deconstruct the protected object.
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
 + */
-+bool rcuref_put_slowpath(rcuref_t *ref)
++static __always_inline bool
++arch_atomic_add_negative_release(int i, atomic_t *v)
 +{
-+	unsigned int cnt = atomic_read(&ref->refcnt);
-+
-+	/* Did this drop the last reference? */
-+	if (likely(cnt == RCUREF_NOREF)) {
-+		/*
-+		 * Carefully try to set the reference count to RCUREF_DEAD.
-+		 *
-+		 * This can fail if a concurrent get() operation has
-+		 * elevated it again or the corresponding put() even marked
-+		 * it dead already. Both are valid situations and do not
-+		 * require a retry. If this fails the caller is not
-+		 * allowed to deconstruct the object.
-+		 */
-+		if (atomic_cmpxchg_release(&ref->refcnt, RCUREF_NOREF, RCUREF_DEAD) != RCUREF_NOREF)
-+			return false;
-+
-+		/*
-+		 * The caller can safely schedule the object for
-+		 * deconstruction. Provide acquire ordering.
-+		 */
-+		smp_acquire__after_ctrl_dep();
-+		return true;
-+	}
-+
-+	/*
-+	 * If the reference count was already in the dead zone, then this
-+	 * put() operation is imbalanced. Warn, put the reference count back to
-+	 * DEAD and tell the caller to not deconstruct the object.
-+	 */
-+	if (WARN_ONCE(cnt >= RCUREF_RELEASED, "rcuref - imbalanced put()")) {
-+		atomic_set(&ref->refcnt, RCUREF_DEAD);
-+		return false;
-+	}
-+
-+	/*
-+	 * This is a put() operation on a saturated refcount. Restore the
-+	 * mean saturation value and tell the caller to not deconstruct the
-+	 * object.
-+	 */
-+	if (cnt > RCUREF_MAXREF)
-+		atomic_set(&ref->refcnt, RCUREF_SATURATED);
-+	return false;
++	return arch_atomic_add_return_release(i, v) < 0;
 +}
-+EXPORT_SYMBOL_GPL(rcuref_put_slowpath);
++#define arch_atomic_add_negative_release arch_atomic_add_negative_release
++#endif
++
++#ifndef arch_atomic_add_negative_relaxed
++/**
++ * arch_atomic_add_negative_relaxed - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic_t
++ *
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
++ */
++static __always_inline bool
++arch_atomic_add_negative_relaxed(int i, atomic_t *v)
++{
++	return arch_atomic_add_return_relaxed(i, v) < 0;
++}
++#define arch_atomic_add_negative_relaxed arch_atomic_add_negative_relaxed
++#endif
++
++#else /* arch_atomic_add_negative_relaxed */
++
++#ifndef arch_atomic_add_negative_acquire
++static __always_inline bool
++arch_atomic_add_negative_acquire(int i, atomic_t *v)
++{
++	bool ret = arch_atomic_add_negative_relaxed(i, v);
++	__atomic_acquire_fence();
++	return ret;
++}
++#define arch_atomic_add_negative_acquire arch_atomic_add_negative_acquire
++#endif
++
++#ifndef arch_atomic_add_negative_release
++static __always_inline bool
++arch_atomic_add_negative_release(int i, atomic_t *v)
++{
++	__atomic_release_fence();
++	return arch_atomic_add_negative_relaxed(i, v);
++}
++#define arch_atomic_add_negative_release arch_atomic_add_negative_release
++#endif
++
++#ifndef arch_atomic_add_negative
++static __always_inline bool
++arch_atomic_add_negative(int i, atomic_t *v)
++{
++	bool ret;
++	__atomic_pre_full_fence();
++	ret = arch_atomic_add_negative_relaxed(i, v);
++	__atomic_post_full_fence();
++	return ret;
++}
++#define arch_atomic_add_negative arch_atomic_add_negative
++#endif
++
++#endif /* arch_atomic_add_negative_relaxed */
++
+ #ifndef arch_atomic_fetch_add_unless
+ /**
+  * arch_atomic_fetch_add_unless - add unless the number is already a given value
+@@ -2329,15 +2424,21 @@ arch_atomic64_inc_and_test(atomic64_t *v)
+ #define arch_atomic64_inc_and_test arch_atomic64_inc_and_test
+ #endif
+ 
++#ifndef arch_atomic64_add_negative_relaxed
++#ifdef arch_atomic64_add_negative
++#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative
++#define arch_atomic64_add_negative_release arch_atomic64_add_negative
++#define arch_atomic64_add_negative_relaxed arch_atomic64_add_negative
++#endif /* arch_atomic64_add_negative */
++
+ #ifndef arch_atomic64_add_negative
+ /**
+- * arch_atomic64_add_negative - add and test if negative
++ * arch_atomic64_add_negative - Add and test if negative
+  * @i: integer value to add
+  * @v: pointer of type atomic64_t
+  *
+- * Atomically adds @i to @v and returns true
+- * if the result is negative, or false when
+- * result is greater than or equal to zero.
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
+  */
+ static __always_inline bool
+ arch_atomic64_add_negative(s64 i, atomic64_t *v)
+@@ -2347,6 +2448,95 @@ arch_atomic64_add_negative(s64 i, atomic64_t *v)
+ #define arch_atomic64_add_negative arch_atomic64_add_negative
+ #endif
+ 
++#ifndef arch_atomic64_add_negative_acquire
++/**
++ * arch_atomic64_add_negative_acquire - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic64_t
++ *
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
++ */
++static __always_inline bool
++arch_atomic64_add_negative_acquire(s64 i, atomic64_t *v)
++{
++	return arch_atomic64_add_return_acquire(i, v) < 0;
++}
++#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative_acquire
++#endif
++
++#ifndef arch_atomic64_add_negative_release
++/**
++ * arch_atomic64_add_negative_release - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic64_t
++ *
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
++ */
++static __always_inline bool
++arch_atomic64_add_negative_release(s64 i, atomic64_t *v)
++{
++	return arch_atomic64_add_return_release(i, v) < 0;
++}
++#define arch_atomic64_add_negative_release arch_atomic64_add_negative_release
++#endif
++
++#ifndef arch_atomic64_add_negative_relaxed
++/**
++ * arch_atomic64_add_negative_relaxed - Add and test if negative
++ * @i: integer value to add
++ * @v: pointer of type atomic64_t
++ *
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
++ */
++static __always_inline bool
++arch_atomic64_add_negative_relaxed(s64 i, atomic64_t *v)
++{
++	return arch_atomic64_add_return_relaxed(i, v) < 0;
++}
++#define arch_atomic64_add_negative_relaxed arch_atomic64_add_negative_relaxed
++#endif
++
++#else /* arch_atomic64_add_negative_relaxed */
++
++#ifndef arch_atomic64_add_negative_acquire
++static __always_inline bool
++arch_atomic64_add_negative_acquire(s64 i, atomic64_t *v)
++{
++	bool ret = arch_atomic64_add_negative_relaxed(i, v);
++	__atomic_acquire_fence();
++	return ret;
++}
++#define arch_atomic64_add_negative_acquire arch_atomic64_add_negative_acquire
++#endif
++
++#ifndef arch_atomic64_add_negative_release
++static __always_inline bool
++arch_atomic64_add_negative_release(s64 i, atomic64_t *v)
++{
++	__atomic_release_fence();
++	return arch_atomic64_add_negative_relaxed(i, v);
++}
++#define arch_atomic64_add_negative_release arch_atomic64_add_negative_release
++#endif
++
++#ifndef arch_atomic64_add_negative
++static __always_inline bool
++arch_atomic64_add_negative(s64 i, atomic64_t *v)
++{
++	bool ret;
++	__atomic_pre_full_fence();
++	ret = arch_atomic64_add_negative_relaxed(i, v);
++	__atomic_post_full_fence();
++	return ret;
++}
++#define arch_atomic64_add_negative arch_atomic64_add_negative
++#endif
++
++#endif /* arch_atomic64_add_negative_relaxed */
++
+ #ifndef arch_atomic64_fetch_add_unless
+ /**
+  * arch_atomic64_fetch_add_unless - add unless the number is already a given value
+@@ -2456,4 +2646,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// b5e87bdd5ede61470c29f7a7e4de781af3770f09
++// 00071fffa021cec66f6290d706d69c91df87bade
+diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
+index 7a139ec..0496816 100644
+--- a/include/linux/atomic/atomic-instrumented.h
++++ b/include/linux/atomic/atomic-instrumented.h
+@@ -592,6 +592,28 @@ atomic_add_negative(int i, atomic_t *v)
+ 	return arch_atomic_add_negative(i, v);
+ }
+ 
++static __always_inline bool
++atomic_add_negative_acquire(int i, atomic_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_add_negative_acquire(i, v);
++}
++
++static __always_inline bool
++atomic_add_negative_release(int i, atomic_t *v)
++{
++	kcsan_release();
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_add_negative_release(i, v);
++}
++
++static __always_inline bool
++atomic_add_negative_relaxed(int i, atomic_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_add_negative_relaxed(i, v);
++}
++
+ static __always_inline int
+ atomic_fetch_add_unless(atomic_t *v, int a, int u)
+ {
+@@ -1211,6 +1233,28 @@ atomic64_add_negative(s64 i, atomic64_t *v)
+ 	return arch_atomic64_add_negative(i, v);
+ }
+ 
++static __always_inline bool
++atomic64_add_negative_acquire(s64 i, atomic64_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic64_add_negative_acquire(i, v);
++}
++
++static __always_inline bool
++atomic64_add_negative_release(s64 i, atomic64_t *v)
++{
++	kcsan_release();
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic64_add_negative_release(i, v);
++}
++
++static __always_inline bool
++atomic64_add_negative_relaxed(s64 i, atomic64_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic64_add_negative_relaxed(i, v);
++}
++
+ static __always_inline s64
+ atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
+ {
+@@ -1830,6 +1874,28 @@ atomic_long_add_negative(long i, atomic_long_t *v)
+ 	return arch_atomic_long_add_negative(i, v);
+ }
+ 
++static __always_inline bool
++atomic_long_add_negative_acquire(long i, atomic_long_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_long_add_negative_acquire(i, v);
++}
++
++static __always_inline bool
++atomic_long_add_negative_release(long i, atomic_long_t *v)
++{
++	kcsan_release();
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_long_add_negative_release(i, v);
++}
++
++static __always_inline bool
++atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
++{
++	instrument_atomic_read_write(v, sizeof(*v));
++	return arch_atomic_long_add_negative_relaxed(i, v);
++}
++
+ static __always_inline long
+ atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
+ {
+@@ -2083,4 +2149,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ })
+ 
+ #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+-// 764f741eb77a7ad565dc8d99ce2837d5542e8aee
++// 1b485de9cbaa4900de59e14ee2084357eaeb1c3a
+diff --git a/include/linux/atomic/atomic-long.h b/include/linux/atomic/atomic-long.h
+index 800b8c3..2fc51ba 100644
+--- a/include/linux/atomic/atomic-long.h
++++ b/include/linux/atomic/atomic-long.h
+@@ -479,6 +479,24 @@ arch_atomic_long_add_negative(long i, atomic_long_t *v)
+ 	return arch_atomic64_add_negative(i, v);
+ }
+ 
++static __always_inline bool
++arch_atomic_long_add_negative_acquire(long i, atomic_long_t *v)
++{
++	return arch_atomic64_add_negative_acquire(i, v);
++}
++
++static __always_inline bool
++arch_atomic_long_add_negative_release(long i, atomic_long_t *v)
++{
++	return arch_atomic64_add_negative_release(i, v);
++}
++
++static __always_inline bool
++arch_atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
++{
++	return arch_atomic64_add_negative_relaxed(i, v);
++}
++
+ static __always_inline long
+ arch_atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
+ {
+@@ -973,6 +991,24 @@ arch_atomic_long_add_negative(long i, atomic_long_t *v)
+ 	return arch_atomic_add_negative(i, v);
+ }
+ 
++static __always_inline bool
++arch_atomic_long_add_negative_acquire(long i, atomic_long_t *v)
++{
++	return arch_atomic_add_negative_acquire(i, v);
++}
++
++static __always_inline bool
++arch_atomic_long_add_negative_release(long i, atomic_long_t *v)
++{
++	return arch_atomic_add_negative_release(i, v);
++}
++
++static __always_inline bool
++arch_atomic_long_add_negative_relaxed(long i, atomic_long_t *v)
++{
++	return arch_atomic_add_negative_relaxed(i, v);
++}
++
+ static __always_inline long
+ arch_atomic_long_fetch_add_unless(atomic_long_t *v, long a, long u)
+ {
+@@ -1011,4 +1047,4 @@ arch_atomic_long_dec_if_positive(atomic_long_t *v)
+ 
+ #endif /* CONFIG_64BIT */
+ #endif /* _LINUX_ATOMIC_LONG_H */
+-// e8f0e08ff072b74d180eabe2ad001282b38c2c88
++// a194c07d7d2f4b0e178d3c118c919775d5d65f50
+diff --git a/scripts/atomic/atomics.tbl b/scripts/atomic/atomics.tbl
+index fbee2f6..85ca8d9 100644
+--- a/scripts/atomic/atomics.tbl
++++ b/scripts/atomic/atomics.tbl
+@@ -33,7 +33,7 @@ try_cmpxchg		B	v	p:old	i:new
+ sub_and_test		b	i	v
+ dec_and_test		b	v
+ inc_and_test		b	v
+-add_negative		b	i	v
++add_negative		B	i	v
+ add_unless		fb	v	i:a	i:u
+ inc_not_zero		b	v
+ inc_unless_negative	b	v
+diff --git a/scripts/atomic/fallbacks/add_negative b/scripts/atomic/fallbacks/add_negative
+index 15caa2e..e5980ab 100755
+--- a/scripts/atomic/fallbacks/add_negative
++++ b/scripts/atomic/fallbacks/add_negative
+@@ -1,16 +1,15 @@
+ cat <<EOF
+ /**
+- * arch_${atomic}_add_negative - add and test if negative
++ * arch_${atomic}_add_negative${order} - Add and test if negative
+  * @i: integer value to add
+  * @v: pointer of type ${atomic}_t
+  *
+- * Atomically adds @i to @v and returns true
+- * if the result is negative, or false when
+- * result is greater than or equal to zero.
++ * Atomically adds @i to @v and returns true if the result is negative,
++ * or false when the result is greater than or equal to zero.
+  */
+ static __always_inline bool
+-arch_${atomic}_add_negative(${int} i, ${atomic}_t *v)
++arch_${atomic}_add_negative${order}(${int} i, ${atomic}_t *v)
+ {
+-	return arch_${atomic}_add_return(i, v) < 0;
++	return arch_${atomic}_add_return${order}(i, v) < 0;
+ }
+ EOF
