@@ -2,49 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72256F24D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CC06F24DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjD2NV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 09:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S230235AbjD2Ndi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 09:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjD2NVU (ORCPT
+        with ESMTP id S229507AbjD2Ndh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 09:21:20 -0400
+        Sat, 29 Apr 2023 09:33:37 -0400
+X-Greylist: delayed 391 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Apr 2023 06:33:33 PDT
 Received: from mail-m11876.qiye.163.com (mail-m11876.qiye.163.com [115.236.118.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E891723;
-        Sat, 29 Apr 2023 06:21:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A750198A;
+        Sat, 29 Apr 2023 06:33:33 -0700 (PDT)
 Received: from localhost.localdomain (unknown [IPV6:240e:3b7:3271:1d90:5cf2:8ef5:1dc9:a429])
-        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id 849833C0389;
-        Sat, 29 Apr 2023 21:21:11 +0800 (CST)
+        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id AC06E3C0380;
+        Sat, 29 Apr 2023 21:26:58 +0800 (CST)
 From:   Ding Hui <dinghui@sangfor.com.cn>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
-Cc:     keescook@chromium.org, grzegorzx.szczurek@intel.com,
-        mateusz.palczewski@intel.com, mitch.a.williams@intel.com,
-        gregory.v.rose@intel.com, jeffrey.t.kirsher@intel.com,
-        michal.kubiak@intel.com, simon.horman@corigine.com,
-        madhu.chittim@intel.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn,
-        Ding Hui <dinghui@sangfor.com.cn>
-Subject: [PATCH net v3 2/2] iavf: Fix out-of-bounds when setting channels on remove
-Date:   Sat, 29 Apr 2023 21:20:22 +0800
-Message-Id: <20230429132022.31765-3-dinghui@sangfor.com.cn>
+To:     bhelgaas@google.com
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, vidyas@nvidia.com,
+        david.e.box@linux.intel.com, kai.heng.feng@canonical.com,
+        michael.a.bottini@linux.intel.com, rajatja@google.com,
+        qinzongquan@sangfor.com.cn, dinghui@sangfor.com.cn,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI/ASPM: fix UAF by removing cached downstream
+Date:   Sat, 29 Apr 2023 21:26:04 +0800
+Message-Id: <20230429132604.31853-1-dinghui@sangfor.com.cn>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230429132022.31765-1-dinghui@sangfor.com.cn>
-References: <20230429132022.31765-1-dinghui@sangfor.com.cn>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCTklLVhlDGB8YS0waSB9MH1UTARMWGhIXJBQOD1
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDSE9LVkhIGkhMQhgfGBhKQlUTARMWGhIXJBQOD1
         lXWRgSC1lBWUlPSx5BSBlMQUhJTEpBSh9CS0FOGB1JQUMeHU5BSh8YQkEaT0lCWVdZFhoPEhUdFF
         lBWU9LSFVKSktISkxVSktLVUtZBg++
-X-HM-Tid: 0a87cd2cb5b32eb2kusn849833c0389
+X-HM-Tid: 0a87cd3200ba2eb2kusnac06e3c0380
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N006Sww5Sj0VS0wXI0sRPkg5
-        HTUaCTRVSlVKTUNJTExPT0xJTUpPVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUxKQUofQktBThgdSUFDHh1OQUofGEJBGk9JQllXWQgBWUFDT0NLNwY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PAw6Chw4ND0JQ0w3M04ZKQsj
+        HT4KCjVVSlVKTUNJTExPQ0pCTklCVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
+        QVlJT0seQUgZTEFISUxKQUofQktBThgdSUFDHh1OQUofGEJBGk9JQllXWQgBWUFKS0NOSzcG
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -54,170 +48,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we set channels greater when iavf_remove, the waiting reset done
-will be timeout, then returned with error but changed num_active_queues
-directly, that will lead to OOB like the following logs. Because the
-num_active_queues is greater than tx/rx_rings[] allocated actually.
+If the function 0 of a multifunction device is removed, an freed
+downstream pointer will be left in struct pcie_link_state, and then
+when pcie_config_aspm_link() be invoked from any path, we will get a
+KASAN use-after-free report.
 
 Reproducer:
 
   [root@host ~]# cat repro.sh
   #!/bin/bash
-
-  pf_dbsf="0000:41:00.0"
-  vf0_dbsf="0000:41:02.0"
-  g_pids=()
-
-  function do_set_numvf()
-  {
-      echo 2 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
-      sleep $((RANDOM%3+1))
-      echo 0 >/sys/bus/pci/devices/${pf_dbsf}/sriov_numvfs
-      sleep $((RANDOM%3+1))
-  }
-
-  function do_set_channel()
-  {
-      local nic=$(ls -1 --indicator-style=none /sys/bus/pci/devices/${vf0_dbsf}/net/)
-      [ -z "$nic" ] && { sleep $((RANDOM%3)) ; return 1; }
-      ifconfig $nic 192.168.18.5 netmask 255.255.255.0
-      ifconfig $nic up
-      ethtool -L $nic combined 1
-      ethtool -L $nic combined 4
-      sleep $((RANDOM%3))
-  }
-
-  function on_exit()
-  {
-      local pid
-      for pid in "${g_pids[@]}"; do
-          kill -0 "$pid" &>/dev/null && kill "$pid" &>/dev/null
-      done
-      g_pids=()
-  }
-
-  trap "on_exit; exit" EXIT
-
-  while :; do do_set_numvf ; done &
-  g_pids+=($!)
-  while :; do do_set_channel ; done &
-  g_pids+=($!)
-
-  wait
+  DEV_F0="0000:03:00.0"
+  echo 1 > /sys/bus/pci/devices/$DEV_F0/remove
+  echo powersave > /sys/module/pcie_aspm/parameters/policy
 
 Result:
 
-[ 3506.152887] iavf 0000:41:02.0: Removing device
-[ 3510.400799] ==================================================================
-[ 3510.400820] BUG: KASAN: slab-out-of-bounds in iavf_free_all_tx_resources+0x156/0x160 [iavf]
-[ 3510.400823] Read of size 8 at addr ffff88b6f9311008 by task repro.sh/55536
-[ 3510.400823]
-[ 3510.400830] CPU: 101 PID: 55536 Comm: repro.sh Kdump: loaded Tainted: G           O     --------- -t - 4.18.0 #1
-[ 3510.400832] Hardware name: Powerleader PR2008AL/H12DSi-N6, BIOS 2.0 04/09/2021
-[ 3510.400835] Call Trace:
-[ 3510.400851]  dump_stack+0x71/0xab
-[ 3510.400860]  print_address_description+0x6b/0x290
-[ 3510.400865]  ? iavf_free_all_tx_resources+0x156/0x160 [iavf]
-[ 3510.400868]  kasan_report+0x14a/0x2b0
-[ 3510.400873]  iavf_free_all_tx_resources+0x156/0x160 [iavf]
-[ 3510.400880]  iavf_remove+0x2b6/0xc70 [iavf]
-[ 3510.400884]  ? iavf_free_all_rx_resources+0x160/0x160 [iavf]
-[ 3510.400891]  ? wait_woken+0x1d0/0x1d0
-[ 3510.400895]  ? notifier_call_chain+0xc1/0x130
-[ 3510.400903]  pci_device_remove+0xa8/0x1f0
-[ 3510.400910]  device_release_driver_internal+0x1c6/0x460
-[ 3510.400916]  pci_stop_bus_device+0x101/0x150
-[ 3510.400919]  pci_stop_and_remove_bus_device+0xe/0x20
-[ 3510.400924]  pci_iov_remove_virtfn+0x187/0x420
-[ 3510.400927]  ? pci_iov_add_virtfn+0xe10/0xe10
-[ 3510.400929]  ? pci_get_subsys+0x90/0x90
-[ 3510.400932]  sriov_disable+0xed/0x3e0
-[ 3510.400936]  ? bus_find_device+0x12d/0x1a0
-[ 3510.400953]  i40e_free_vfs+0x754/0x1210 [i40e]
-[ 3510.400966]  ? i40e_reset_all_vfs+0x880/0x880 [i40e]
-[ 3510.400968]  ? pci_get_device+0x7c/0x90
-[ 3510.400970]  ? pci_get_subsys+0x90/0x90
-[ 3510.400982]  ? pci_vfs_assigned.part.7+0x144/0x210
-[ 3510.400987]  ? __mutex_lock_slowpath+0x10/0x10
-[ 3510.400996]  i40e_pci_sriov_configure+0x1fa/0x2e0 [i40e]
-[ 3510.401001]  sriov_numvfs_store+0x214/0x290
-[ 3510.401005]  ? sriov_totalvfs_show+0x30/0x30
-[ 3510.401007]  ? __mutex_lock_slowpath+0x10/0x10
-[ 3510.401011]  ? __check_object_size+0x15a/0x350
-[ 3510.401018]  kernfs_fop_write+0x280/0x3f0
-[ 3510.401022]  vfs_write+0x145/0x440
-[ 3510.401025]  ksys_write+0xab/0x160
-[ 3510.401028]  ? __ia32_sys_read+0xb0/0xb0
-[ 3510.401031]  ? fput_many+0x1a/0x120
-[ 3510.401032]  ? filp_close+0xf0/0x130
-[ 3510.401038]  do_syscall_64+0xa0/0x370
-[ 3510.401041]  ? page_fault+0x8/0x30
-[ 3510.401043]  entry_SYSCALL_64_after_hwframe+0x65/0xca
-[ 3510.401073] RIP: 0033:0x7f3a9bb842c0
-[ 3510.401079] Code: 73 01 c3 48 8b 0d d8 cb 2c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 24 2d 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 fe dd 01 00 48 89 04 24
-[ 3510.401080] RSP: 002b:00007ffc05f1fe18 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[ 3510.401083] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f3a9bb842c0
-[ 3510.401085] RDX: 0000000000000002 RSI: 0000000002327408 RDI: 0000000000000001
-[ 3510.401086] RBP: 0000000002327408 R08: 00007f3a9be53780 R09: 00007f3a9c8a4700
-[ 3510.401086] R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000002
-[ 3510.401087] R13: 0000000000000001 R14: 00007f3a9be52620 R15: 0000000000000001
-[ 3510.401090]
-[ 3510.401093] Allocated by task 76795:
-[ 3510.401098]  kasan_kmalloc+0xa6/0xd0
-[ 3510.401099]  __kmalloc+0xfb/0x200
-[ 3510.401104]  iavf_init_interrupt_scheme+0x26f/0x1310 [iavf]
-[ 3510.401108]  iavf_watchdog_task+0x1d58/0x4050 [iavf]
-[ 3510.401114]  process_one_work+0x56a/0x11f0
-[ 3510.401115]  worker_thread+0x8f/0xf40
-[ 3510.401117]  kthread+0x2a0/0x390
-[ 3510.401119]  ret_from_fork+0x1f/0x40
-[ 3510.401122]  0xffffffffffffffff
-[ 3510.401123]
+[  177.433490] ==================================================================
+[  177.433814] BUG: KASAN: slab-use-after-free in pcie_config_aspm_link+0x42d/0x500
+[  177.434114] Read of size 4 at addr ffff8881070c80a0 by task repro.sh/2056
 
-If we detected removing is in processing, we can avoid unnecessary
-waiting and return error faster.
+[  177.434747] CPU: 3 PID: 2056 Comm: repro.sh Not tainted 6.3.0+ #15
+[  177.435062] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+[  177.435379] Call Trace:
+[  177.435741]  <TASK>
+[  177.436058]  dump_stack_lvl+0x33/0x50
+[  177.436379]  print_address_description.constprop.0+0x27/0x310
+[  177.436733]  print_report+0x3e/0x70
+[  177.437067]  ? pcie_config_aspm_link+0x42d/0x500
+[  177.437398]  kasan_report+0xae/0xe0
+[  177.437753]  ? pcie_config_aspm_link+0x42d/0x500
+[  177.438115]  pcie_config_aspm_link+0x42d/0x500
+[  177.438447]  pcie_aspm_set_policy+0x8e/0x1a0
+[  177.438862]  param_attr_store+0x162/0x2c0
+[  177.439217]  ? __pfx_sysfs_kf_write+0x10/0x10
+[  177.439571]  module_attr_store+0x3e/0x80
+[  177.439898]  kernfs_fop_write_iter+0x2d5/0x460
+[  177.440218]  vfs_write+0x72e/0xae0
+[  177.440552]  ? __pfx_vfs_write+0x10/0x10
+[  177.440866]  ? __count_memcg_events+0xea/0x1d0
+[  177.441173]  ksys_write+0xed/0x1c0
+[  177.441519]  ? __pfx_ksys_write+0x10/0x10
+[  177.441874]  do_syscall_64+0x38/0x90
+[  177.442202]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[  177.442547] RIP: 0033:0x7f0829a622c7
+[  177.442922] Code: 0e 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
+[  177.443721] RSP: 002b:00007ffc6bb2d128 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+[  177.444151] RAX: ffffffffffffffda RBX: 000000000000000a RCX: 00007f0829a622c7
+[  177.444572] RDX: 000000000000000a RSI: 000055b8e6b168f0 RDI: 0000000000000001
+[  177.445049] RBP: 000055b8e6b168f0 R08: 00007f0829b12000 R09: 00007f0829b12080
+[  177.445490] R10: 00007f0829b11f80 R11: 0000000000000246 R12: 000000000000000a
+[  177.445984] R13: 00007f0829b535a0 R14: 000000000000000a R15: 00007f0829b53780
+[  177.446443]  </TASK>
 
-On the other hand in timeout handling, we should keep the original
-num_active_queues and reset num_req_queues to 0.
+[  177.447402] Allocated by task 1:
+[  177.447902]  kasan_save_stack+0x1e/0x40
+[  177.448444]  kasan_set_track+0x21/0x30
+[  177.448946]  __kasan_kmalloc+0x7b/0x90
+[  177.449447]  pci_alloc_dev+0x44/0x260
+[  177.449950]  pci_scan_single_device+0x132/0x280
+[  177.450467]  pci_scan_slot+0x193/0x510
+[  177.450986]  pci_scan_child_bus_extend+0x61/0x5d0
+[  177.451528]  pci_scan_bridge_extend+0xc4c/0x10c0
+[  177.452021]  pci_scan_child_bus_extend+0x332/0x5d0
+[  177.452539]  acpi_pci_root_create+0x4ec/0x700
+[  177.453015]  pci_acpi_scan_root+0x3ad/0x4e0
+[  177.453495]  acpi_pci_root_add+0x3f2/0x910
+[  177.453973]  acpi_bus_attach+0x38b/0x890
+[  177.454415]  device_for_each_child+0xd8/0x150
+[  177.454896]  acpi_dev_for_each_child+0x77/0xa0
+[  177.455328]  acpi_bus_attach+0x19f/0x890
+[  177.455785]  device_for_each_child+0xd8/0x150
+[  177.456189]  acpi_dev_for_each_child+0x77/0xa0
+[  177.456626]  acpi_bus_attach+0x19f/0x890
+[  177.457077]  acpi_bus_scan+0x98/0x160
+[  177.457481]  acpi_scan_init+0x1e3/0x3f0
+[  177.457905]  acpi_init+0xff/0x2c0
+[  177.458300]  do_one_initcall+0x87/0x300
+[  177.458694]  do_initcalls+0x127/0x260
+[  177.459113]  kernel_init_freeable+0x811/0xc80
+[  177.459517]  kernel_init+0x1b/0x1e0
+[  177.459915]  ret_from_fork+0x29/0x50
 
-Fixes: 4e5e6b5d9d13 ("iavf: Fix return of set the new channel count")
+[  177.460724] Freed by task 2011:
+[  177.461119]  kasan_save_stack+0x1e/0x40
+[  177.461556]  kasan_set_track+0x21/0x30
+[  177.461939]  kasan_save_free_info+0x2a/0x50
+[  177.462320]  __kasan_slab_free+0x106/0x190
+[  177.462737]  __kmem_cache_free+0x133/0x270
+[  177.463115]  device_release+0x98/0x210
+[  177.463492]  kobject_cleanup+0x101/0x360
+[  177.463952]  pci_stop_and_remove_bus_device_locked+0xdb/0x110
+[  177.464341]  remove_store+0xcf/0xe0
+[  177.464746]  kernfs_fop_write_iter+0x2d5/0x460
+[  177.465112]  vfs_write+0x72e/0xae0
+[  177.465493]  ksys_write+0xed/0x1c0
+[  177.465834]  do_syscall_64+0x38/0x90
+[  177.466174]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+This patch is based on original RFC by Bolarinwa O. Saheed in 2021 [1],
+which using pci_function_0() to obtain child instead of cached
+downstream pointer in struct pcie_link_state.
+
+In addition, I added the condition about child to avoid dereference
+null pointer, in case the device is removed without rescan back.
+
+[1] https://lore.kernel.org/lkml/20211106175503.27178-5-refactormyself@gmail.com/
+
+--------
+
+The commit log of original patch:
+
+Information on the downstream component is cached in
+struct pcie_link_state.downstream it obtained within
+alloc_pcie_link_state() by calling pci_function_0()
+
+ - remove *downstream* from the struct pcie_link_state.
+ - replaces references to pcie_link_state.downstream with
+   a call to pci_function_0(pdev->subordinate).
+
+Originally-by: Bolarinwa O. Saheed <refactormyself@gmail.com>
+Fixes: b5a0a9b59c81 ("PCI/ASPM: Read and set up L1 substate capabilities")
+Debugged-by: Zongquan Qin <qinzongquan@sangfor.com.cn>
 Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
-Cc: Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc: Huang Cun <huangcun@sangfor.com.cn>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
 ---
-v2 to v3:
-  - fix review tag
+ drivers/pci/pcie/aspm.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-v1 to v2:
-  - add reproduction script
-
----
- drivers/net/ethernet/intel/iavf/iavf_ethtool.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-index 6f171d1d85b7..d8a3c0cfedd0 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-@@ -1857,13 +1857,15 @@ static int iavf_set_channels(struct net_device *netdev,
- 	/* wait for the reset is done */
- 	for (i = 0; i < IAVF_RESET_WAIT_COMPLETE_COUNT; i++) {
- 		msleep(IAVF_RESET_WAIT_MS);
-+		if (test_bit(__IAVF_IN_REMOVE_TASK, &adapter->crit_section))
-+			return -EOPNOTSUPP;
- 		if (adapter->flags & IAVF_FLAG_RESET_PENDING)
- 			continue;
- 		break;
- 	}
- 	if (i == IAVF_RESET_WAIT_COMPLETE_COUNT) {
- 		adapter->flags &= ~IAVF_FLAG_REINIT_ITR_NEEDED;
--		adapter->num_active_queues = num_req;
-+		adapter->num_req_queues = 0;
- 		return -EOPNOTSUPP;
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 66d7514ca111..bca3f52009fe 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -44,7 +44,6 @@
+ 
+ struct pcie_link_state {
+ 	struct pci_dev *pdev;		/* Upstream component of the Link */
+-	struct pci_dev *downstream;	/* Downstream component, function 0 */
+ 	struct pcie_link_state *root;	/* pointer to the root port link */
+ 	struct pcie_link_state *parent;	/* pointer to the parent Link state */
+ 	struct list_head sibling;	/* node in link_list */
+@@ -474,7 +473,8 @@ static void pci_clear_and_set_dword(struct pci_dev *pdev, int pos,
+ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+ 				u32 parent_l1ss_cap, u32 child_l1ss_cap)
+ {
+-	struct pci_dev *child = link->downstream, *parent = link->pdev;
++	struct pci_dev *parent = link->pdev;
++	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
+ 	u32 val1, val2, scale1, scale2;
+ 	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+ 	u32 ctl1 = 0, ctl2 = 0;
+@@ -484,6 +484,9 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+ 	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+ 		return;
+ 
++	if (!child)
++		return;
++
+ 	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+ 	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+ 	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+@@ -565,11 +568,12 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+ 
+ static void aspm_l1ss_init(struct pcie_link_state *link)
+ {
+-	struct pci_dev *child = link->downstream, *parent = link->pdev;
++	struct pci_dev *parent = link->pdev;
++	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
+ 	u32 parent_l1ss_cap, child_l1ss_cap;
+ 	u32 parent_l1ss_ctl1 = 0, child_l1ss_ctl1 = 0;
+ 
+-	if (!parent->l1ss || !child->l1ss)
++	if (!parent->l1ss || !child || !child->l1ss)
+ 		return;
+ 
+ 	/* Setup L1 substate */
+@@ -622,7 +626,8 @@ static void aspm_l1ss_init(struct pcie_link_state *link)
+ 
+ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+ {
+-	struct pci_dev *child = link->downstream, *parent = link->pdev;
++	struct pci_dev *parent = link->pdev;
++	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
+ 	u32 parent_lnkcap, child_lnkcap;
+ 	u16 parent_lnkctl, child_lnkctl;
+ 	struct pci_bus *linkbus = parent->subordinate;
+@@ -634,6 +639,9 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+ 		return;
  	}
  
++	if (!child)
++		return;
++
+ 	/*
+ 	 * If ASPM not supported, don't mess with the clocks and link,
+ 	 * bail out now.
+@@ -701,7 +709,11 @@ static void pcie_aspm_cap_init(struct pcie_link_state *link, int blacklist)
+ static void pcie_config_aspm_l1ss(struct pcie_link_state *link, u32 state)
+ {
+ 	u32 val, enable_req;
+-	struct pci_dev *child = link->downstream, *parent = link->pdev;
++	struct pci_dev *parent = link->pdev;
++	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
++
++	if (!child)
++		return;
+ 
+ 	enable_req = (link->aspm_enabled ^ state) & state;
+ 
+@@ -760,9 +772,13 @@ static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+ static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
+ {
+ 	u32 upstream = 0, dwstream = 0;
+-	struct pci_dev *child = link->downstream, *parent = link->pdev;
++	struct pci_dev *parent = link->pdev;
++	struct pci_dev *child = pci_function_0(link->pdev->subordinate);
+ 	struct pci_bus *linkbus = parent->subordinate;
+ 
++	if (!child)
++		return;
++
+ 	/* Enable only the states that were not explicitly disabled */
+ 	state &= (link->aspm_capable & ~link->aspm_disable);
+ 
+@@ -867,7 +883,6 @@ static struct pcie_link_state *alloc_pcie_link_state(struct pci_dev *pdev)
+ 
+ 	INIT_LIST_HEAD(&link->sibling);
+ 	link->pdev = pdev;
+-	link->downstream = pci_function_0(pdev->subordinate);
+ 
+ 	/*
+ 	 * Root Ports and PCI/PCI-X to PCIe Bridges are roots of PCIe
 -- 
 2.17.1
 
