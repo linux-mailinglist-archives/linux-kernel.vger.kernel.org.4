@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530366F224A
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B38C6F224E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347147AbjD2B7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S1347259AbjD2B7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347375AbjD2B7R (ORCPT
+        with ESMTP id S1347343AbjD2B7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:59:17 -0400
+        Fri, 28 Apr 2023 21:59:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0756A44BE;
-        Fri, 28 Apr 2023 18:59:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D49149DA;
+        Fri, 28 Apr 2023 18:59:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 886D864625;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8883B64630;
+        Sat, 29 Apr 2023 01:59:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6812AC43321;
         Sat, 29 Apr 2023 01:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8ABBC4339B;
-        Sat, 29 Apr 2023 01:59:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682733547;
-        bh=jvnL9nJ59DFNmrdN6Y6tqV1NmAFjnvOmzEZrnINq1RQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Tm19YA4xQz4dkxXCTHbQPdUC/gXclb2rjR3Me0OYroC4fev92p5dhSGzl3HRG9BIL
-         ap9X63osrbe231eEoVpXZxQDNlDTArZxJ5RLCV1ZuQ8JaKA1edirs1yyLyehFmL7en
-         0JNgJieErv+Ll8EMckW0Hq/jW2vewJCozdCEZROG4ZPJHXzAVw1iGTDliL41py0nxE
-         bLXFiq+m1Xbu/QtfVW5geVgqX9w/2EDy/raIOV4zngBNxEotXLsUWFlkqcEQfRDV04
-         EXINWfzkGxZXR0B29ftB0DgoipW17rpozbmFzvyRyBJQtjUh4rcHZnKDpKqxMNlcsQ
-         RyyjFbNxRaVgg==
+        s=k20201202; t=1682733549;
+        bh=qbSmFjkxX3HUcFYifbkogWWlpPQjlc1XuGkAs7z+xus=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pyjLfX5LU5Ra+/SHIgAtTuJodvrFxA99Phw/909EJxlxDm4ZsCcLjN5AC/tjxXGxK
+         42Nt81awIlq3B7nVDbWc0lFV8Kq4JVleAF8LebdtVzoI9JjukPd9w50whpqk/WeMcK
+         5C9F7MUPuT+TIErq0IJAvBg4tFSI3iQngL1FGKbNEGd2HgDg6OA/fkAsY4iZWHFvNF
+         9M1qBP/m6zqxPZTWBSjoBzPYoalTQ4Jy1s0jAarAOCzv1ZbSRbrUFr+zGdmlV8Ytbk
+         8r4FFHpV/3sOkfcG2V15kvNe/1OBQ7UDcjME8xO1cfLEf8bk6+EvJzYKNjfUNHAXnx
+         1yx/+ThfKVTbQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, dave@stgolabs.net,
-        josh@joshtriplett.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, rcu@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/3] refscale: Move shutdown from wait_event() to wait_event_idle()
-Date:   Fri, 28 Apr 2023 21:59:02 -0400
-Message-Id: <20230429015904.3027337-1-sashal@kernel.org>
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, hannes@cmpxchg.org,
+        mhocko@kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
+        shuah@kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 2/3] selftests: cgroup: Add 'malloc' failures checks in test_memcontrol
+Date:   Fri, 28 Apr 2023 21:59:03 -0400
+Message-Id: <20230429015904.3027337-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230429015904.3027337-1-sashal@kernel.org>
+References: <20230429015904.3027337-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -57,40 +63,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-[ Upstream commit 6bc6e6b27524304aadb9c04611ddb1c84dd7617a ]
+[ Upstream commit c83f320e55a49abd90629f42a72897afd579e0de ]
 
-The ref_scale_shutdown() kthread/function uses wait_event() to wait for
-the refscale test to complete.  However, although the read-side tests
-are normally extremely fast, there is no law against specifying a very
-large value for the refscale.loops module parameter or against having
-a slow read-side primitive.  Either way, this might well trigger the
-hung-task timeout.
+There are several 'malloc' calls in test_memcontrol, which can be
+unsuccessful. This patch will add 'malloc' failures checking to
+give more details about test's fail reasons and avoid possible
+undefined behavior during the future null dereference (like the
+one in alloc_anon_50M_check_swap function).
 
-This commit therefore replaces those wait_event() calls with calls to
-wait_event_idle(), which do not trigger the hung-task timeout.
-
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/refscale.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/cgroup/test_memcontrol.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
-index 435c884c02b5c..d49a9d66e0000 100644
---- a/kernel/rcu/refscale.c
-+++ b/kernel/rcu/refscale.c
-@@ -795,7 +795,7 @@ ref_scale_cleanup(void)
- static int
- ref_scale_shutdown(void *arg)
- {
--	wait_event(shutdown_wq, shutdown_start);
-+	wait_event_idle(shutdown_wq, shutdown_start);
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 8833359556f38..fe4f9f4302822 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -98,6 +98,11 @@ static int alloc_anon_50M_check(const char *cgroup, void *arg)
+ 	int ret = -1;
  
- 	smp_mb(); // Wake before output.
- 	ref_scale_cleanup();
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
+@@ -211,6 +216,11 @@ static int alloc_anon_noexit(const char *cgroup, void *arg)
+ 	char *buf, *ptr;
+ 
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
+@@ -759,6 +769,11 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
+ 	int ret = -1;
+ 
+ 	buf = malloc(size);
++	if (buf == NULL) {
++		fprintf(stderr, "malloc() failed\n");
++		return -1;
++	}
++
+ 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+ 		*ptr = 0;
+ 
 -- 
 2.39.2
 
