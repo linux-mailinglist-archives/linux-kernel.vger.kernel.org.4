@@ -2,107 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536136F2287
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 04:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D346F2295
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347141AbjD2C5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 22:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S1347217AbjD2DLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 23:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjD2C5s (ORCPT
+        with ESMTP id S230252AbjD2DLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 22:57:48 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC532D61;
-        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-5f45fad3be1so6492876d6.0;
-        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682737065; x=1685329065;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9KWgSfBRX4/7Ituj2OvAS+wvcAoxKFvLr9noXKYmqF0=;
-        b=qe1x6DYNj8cmuducngKhKijZRivuXW9ENdmsbnUVee3sr1OZJ26XE+Vx2iih56yhDn
-         mvh1/+MWmRzjttCYFjwIjWAGn3x/NgCdWhxfWS9hPelwhgrsClS7SY8yw8LYWsmN+fLr
-         XX5G4Hk0AaIRDdb/XNPNnNe70ndj6br8ceZjF6AVyMNkaexllAYrkz+UKg1ce0XkkfTh
-         EVLaf3sdd9jL5i1F98ro7XSvOPDlxaDGFWxF93i+z9LHR6GRsCxCHqmuZwtNOEQhadAK
-         ATeD4wrVsK08c1gbmXIckO/wOvjMM+xTEDXQ2ktFfg4IXhGYKNpbeC6n8Na93DzTGrdh
-         lmFQ==
+        Fri, 28 Apr 2023 23:11:51 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519681FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 20:11:49 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7639ebbef32so70688039f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 20:11:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682737065; x=1685329065;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682737908; x=1685329908;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9KWgSfBRX4/7Ituj2OvAS+wvcAoxKFvLr9noXKYmqF0=;
-        b=WKcgBK8Kze4Xd34no2QQ6uGS5xn0QBYy1uLO4GOV+5a/ol30bRs9XDUjCyL838127f
-         3TAOdC5N94x9licGY8uUS1PhKBXj7rK8oLMbpq7ZIWisKHvcSH9Z9JUsoSIkNlWO/BZd
-         hvgIQoJG2/5eg6KY6C3go1RiVzZB/Gh0r1dKesSn6Q/vwXOYIzXGlMK+elrvi41oLu/T
-         XvIyFGZ1166BVOUAQIFdiIpc7gQlcbhNq+2pu2AmQH9zcIZeN7pzg8g3Lku3dGn4UuG1
-         l54qW45hfS7wJuWRuEhYD4lHRyrhfREYTa1APYmDE+siwIiLn0aMSCfwTSmWhljIMDSA
-         fkXA==
-X-Gm-Message-State: AC+VfDzm5hI6T32j7qxfz4Go3lOkGwbuN4Dcv7vzjvv/77SO6y2t7QFX
-        SGU98adaYOGQzmmJgl+7qXg=
-X-Google-Smtp-Source: ACHHUZ5hKNuG3+lGMBBMI9UZfGmHUBdYfDexhwTC921xD9e/LwzTr4ussOkGLZKqH2IhBWqgupsybA==
-X-Received: by 2002:ad4:5ce7:0:b0:5e5:c00c:8189 with SMTP id iv7-20020ad45ce7000000b005e5c00c8189mr14011833qvb.10.1682737065031;
-        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id n16-20020a0cdc90000000b005ef589381a8sm6840396qvk.52.2023.04.28.19.57.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 19:57:44 -0700 (PDT)
-Message-ID: <637f3669-c6d8-0556-28aa-6599551f0849@gmail.com>
-Date:   Fri, 28 Apr 2023 19:57:41 -0700
+        bh=YD2i4IPlwbK4zPwgM4t3+h9xw/jbTfupJpZlr6kcoHs=;
+        b=FwUxp9CPB5SBshTKvnNsICsdWnOWeNij+sPwE8C9GsKPOhVYzwcd+P3isgZfr3lSc4
+         Wwf67s9/4V8C4IvSy4yVE0gAHkYBRKokffw3pyrlBlxjjuzjMrd/Fdj69FtIuNDUYVi3
+         ma05iKq6P46NHEws0yUsuDPGCkChiWFqZotbhfc4VqZqZgLsPi7Lrf9rQzAacXFtTB5P
+         lnVdr6vg6lAuJD23FX7+jGFZLsXyHVD7i23fXuZUf0kRHBZ4aoXpSbwbK4PNMiHedlhy
+         DG6Ofs07raKNH+ixn5PDEpX3+/YsIyIKXLTosA6Vy9X7ANghZHtHKSZRuu0ItTvkv0G4
+         vOsg==
+X-Gm-Message-State: AC+VfDyE5CN81FoAB4GWd7NE3asGHVWn5EU+GwNVaMovy+bCrqAds8QA
+        3gCVaBfaJcmULvz2jT8OdoCPp4YyrFvD0oDivZAxfGnaABzN
+X-Google-Smtp-Source: ACHHUZ7QAUwhyObclYFAuRIVRAvxlvqji4eWGadx8L2GQtt9fl2o0Ki6oOm01GszjRYE56r2iKlNqIyLxubeJKapH4cr7I3MsY/2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 5.15 00/13] 5.15.110-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230428112039.133978540@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230428112039.133978540@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:d004:0:b0:762:f8d4:6fe with SMTP id
+ x4-20020a6bd004000000b00762f8d406femr3817314ioa.3.1682737908657; Fri, 28 Apr
+ 2023 20:11:48 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 20:11:48 -0700
+In-Reply-To: <0000000000009ff60505e2fab2e6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004bb41105fa70f361@google.com>
+Subject: Re: [syzbot] [net?] KMSAN: uninit-value in ethnl_set_linkmodes (2)
+From:   syzbot <syzbot+ef6edd9f1baaa54d6235@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    81af97bdef5e printk: Export console trace point for kcsan/..
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10d4b844280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ee7e125556b25104
+dashboard link: https://syzkaller.appspot.com/bug?extid=ef6edd9f1baaa54d6235
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1543bf0c280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=158f4664280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/00b0f311889c/disk-81af97bd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a3291e9cce5a/vmlinux-81af97bd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09b5e66af8b4/bzImage-81af97bd.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ef6edd9f1baaa54d6235@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in ethnl_update_linkmodes net/ethtool/linkmodes.c:273 [inline]
+BUG: KMSAN: uninit-value in ethnl_set_linkmodes+0x190b/0x19d0 net/ethtool/linkmodes.c:333
+ ethnl_update_linkmodes net/ethtool/linkmodes.c:273 [inline]
+ ethnl_set_linkmodes+0x190b/0x19d0 net/ethtool/linkmodes.c:333
+ ethnl_default_set_doit+0x88d/0xde0 net/ethtool/netlink.c:640
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x141a/0x14c0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x3f8/0x750 net/netlink/af_netlink.c:2577
+ genl_rcv+0x40/0x60 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0xf41/0x1270 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x127d/0x1430 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0xa24/0xe40 net/socket.c:2501
+ ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2555
+ __sys_sendmsg net/socket.c:2584 [inline]
+ __do_sys_sendmsg net/socket.c:2593 [inline]
+ __se_sys_sendmsg net/socket.c:2591 [inline]
+ __x64_sys_sendmsg+0x36b/0x540 net/socket.c:2591
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Uninit was stored to memory at:
+ tun_get_link_ksettings+0x37/0x60 drivers/net/tun.c:3544
+ __ethtool_get_link_ksettings+0x17b/0x260 net/ethtool/ioctl.c:441
+ ethnl_set_linkmodes+0xee/0x19d0 net/ethtool/linkmodes.c:327
+ ethnl_default_set_doit+0x88d/0xde0 net/ethtool/netlink.c:640
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:968 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
+ genl_rcv_msg+0x141a/0x14c0 net/netlink/genetlink.c:1065
+ netlink_rcv_skb+0x3f8/0x750 net/netlink/af_netlink.c:2577
+ genl_rcv+0x40/0x60 net/netlink/genetlink.c:1076
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0xf41/0x1270 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x127d/0x1430 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ ____sys_sendmsg+0xa24/0xe40 net/socket.c:2501
+ ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2555
+ __sys_sendmsg net/socket.c:2584 [inline]
+ __do_sys_sendmsg net/socket.c:2593 [inline]
+ __se_sys_sendmsg net/socket.c:2591 [inline]
+ __x64_sys_sendmsg+0x36b/0x540 net/socket.c:2591
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Uninit was stored to memory at:
+ tun_set_link_ksettings+0x37/0x60 drivers/net/tun.c:3553
+ ethtool_set_link_ksettings+0x600/0x690 net/ethtool/ioctl.c:609
+ __dev_ethtool net/ethtool/ioctl.c:3024 [inline]
+ dev_ethtool+0x1db9/0x2a70 net/ethtool/ioctl.c:3078
+ dev_ioctl+0xb07/0x1270 net/core/dev_ioctl.c:524
+ sock_do_ioctl+0x295/0x540 net/socket.c:1213
+ sock_ioctl+0x729/0xd90 net/socket.c:1316
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x222/0x400 fs/ioctl.c:856
+ __x64_sys_ioctl+0x96/0xe0 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Local variable link_ksettings created at:
+ ethtool_set_link_ksettings+0x54/0x690 net/ethtool/ioctl.c:577
+ __dev_ethtool net/ethtool/ioctl.c:3024 [inline]
+ dev_ethtool+0x1db9/0x2a70 net/ethtool/ioctl.c:3078
+
+CPU: 1 PID: 4952 Comm: syz-executor743 Not tainted 6.3.0-syzkaller-g81af97bdef5e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+=====================================================
 
 
-On 4/28/2023 4:28 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.110 release.
-> There are 13 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.110-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
