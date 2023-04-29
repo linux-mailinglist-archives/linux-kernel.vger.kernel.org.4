@@ -2,161 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A718F6F246D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 13:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FD16F2474
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 13:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjD2LOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 07:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
+        id S230513AbjD2L3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 07:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjD2LOR (ORCPT
+        with ESMTP id S230235AbjD2L3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 07:14:17 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22731998;
-        Sat, 29 Apr 2023 04:14:15 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9293DC76D6;
-        Sat, 29 Apr 2023 11:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1682766853; bh=A8QySs6SKhnXKBxkO0+a10Q3xy1UQlrC6oSknuRX0p0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=U7zokl7PwDhkg2mUuKqWuwfT1MxrzqVZ/5hi6RDzgNWum9wURWdBcStFGLcfBVMY8
-         UaDtySh/ktQAX2Bj61orQkqqmlcte/2DFaVZsjjcp4LVEPFIEio70LtCzx+VEJ1/eZ
-         gUtBK5DhbsU6wGkMv9uelFv8KytbxGpGtKzr0API=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Helge Deller <deller@gmx.de>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Artur Weber <aweber.kernel@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Artur Weber <aweber.kernel@gmail.com>
-Subject: Re: [PATCH 3/4] ARM: dts: adapt to LP855X bindings changes
-Date:   Sat, 29 Apr 2023 13:14:12 +0200
-Message-ID: <3414865.QJadu78ljV@z3ntu.xyz>
-In-Reply-To: <20230429104534.28943-4-aweber.kernel@gmail.com>
-References: <20230429104534.28943-1-aweber.kernel@gmail.com>
- <20230429104534.28943-4-aweber.kernel@gmail.com>
+        Sat, 29 Apr 2023 07:29:53 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7F41FD9
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 04:29:51 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-5ef54bcded4so4766546d6.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 04:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682767790; x=1685359790;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j/2kSPjs4lrshG3mnxArnPWo04GDps+mwQUIW9ldmT8=;
+        b=gV7wSk7e88IpyFFHXP4Cu68rnBZ8+vdnuC6xXxq2fFjZFRdmWgbITeXP9/TzlnL52X
+         fcV1REY/sHyDlUGvYMKcVi4gcLdJaC+0XeYQp5Pow61sFdGjxZtBEs4Gz4NjKed4+jd9
+         6RxflKT5jrlt03JvcH7u9Ie3gph3n1QH3lIiEwtuC4ta19wmS9yrQhITQUsCg4Zj8oby
+         1DpQT7jwSp0cdXYA4OxTxYpIewhzyTbsvLjmEqh8K00+XcxnUkcPAGK9iTlUimd1Oh/T
+         b2dQoc89dwW5VRnjlJWfLfp8xp2eTUKgtDHHEq22OP2UQGYe6kg1UxIIF8WRbFJ9xqyR
+         /YPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682767790; x=1685359790;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/2kSPjs4lrshG3mnxArnPWo04GDps+mwQUIW9ldmT8=;
+        b=b5hrAfbKRLvegmjT8T5zn1kT3n+psDyXG6FpWvx18tyZMqm+czmboBHpvrc31L7hMI
+         l+vGvdu+4D2V0LjxsRZK6TfcQxTM0Blg7ITHHlPB2RMtGuO6yr8EoDiZmb42pRbPucAg
+         l5VmchNstLPp+dhMmjHBnz9RqO23BYgD8w7SQJ8kaHE46NUbZCRt5Hn+XByNXMNwjugb
+         BiZ7TFXL6Fxk8PGCyTKdXe3gvpyNQVEFTtPFeiWs83wzldE1S0W+kbZEn8wPMBZzJjSN
+         PwGPIsVwM1j9uJ09vKKv9cLPg9rgQqCJh3K3cY8m2hzizkVIGJonpROiAd2HXyqt+UXD
+         hDTw==
+X-Gm-Message-State: AC+VfDx2v2qMVpz1JiUyD8EItk4tDkByFCUQmdQl+sfZxfMeKFOH/n9n
+        1fKtnst5urylWaUfcNOZAYV1crqgbnXb5N10PHY=
+X-Google-Smtp-Source: ACHHUZ6Yg3kJ9aMlSMrKZuasGlphpVPNk9so7YJ8TKizdQ/wV6UjlzLMfNR8GsaP6iznHShehm4YGtGQ7my4eDNYnFA=
+X-Received: by 2002:a05:6214:19e2:b0:615:a787:6d4a with SMTP id
+ q2-20020a05621419e200b00615a7876d4amr14208683qvc.27.1682767790573; Sat, 29
+ Apr 2023 04:29:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: zaharaddeenhashimfta@gmail.com
+Received: by 2002:a0c:e103:0:b0:572:1eb9:66a0 with HTTP; Sat, 29 Apr 2023
+ 04:29:50 -0700 (PDT)
+From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher001@gmail.com>
+Date:   Sat, 29 Apr 2023 05:29:50 -0600
+X-Google-Sender-Auth: 4VmuJeJF-HqrNcfgrW6BvPNosZM
+Message-ID: <CAN+J0jQszag700vPw+uaVNpNB3ZOzQ0CAAuMnSDM6ymnDqfWUA@mail.gmail.com>
+Subject: Humanitarian Project For Less Privileged.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_NAME_FM_MR_MRS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Samstag, 29. April 2023 12:45:33 CEST Artur Weber wrote:
-> Change underscores in ROM node names to dashes, and remove deprecated
-> pwm-period property.
-> 
-> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+-- 
+Hello Dear
 
-Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over 2 months ago. I am A business woman who is
+dealing with Gold Exportation, I Am 59 year old from USA California i
+have a charitable and unfufilling  project that am about to handover
+to you, if you are interested to know more about this project please reply me.
 
-> ---
->  .../dts/qcom-apq8026-samsung-matisse-wifi.dts |  1 -
->  ...-msm8974pro-sony-xperia-shinano-castor.dts | 23 ++++++++++---------
->  2 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts index
-> 91b860e24681..884d99297d4c 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> @@ -99,7 +99,6 @@ backlight@2c {
-> 
->  			dev-ctrl = /bits/ 8 <0x80>;
->  			init-brt = /bits/ 8 <0x3f>;
-> -			pwm-period = <100000>;
-> 
->  			pwms = <&backlight_pwm 0 100000>;
->  			pwm-names = "lp8556";
-> diff --git
-> a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts index
-> 04bc58d87abf..2396253f953a 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> +++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-> @@ -150,47 +150,48 @@ lp8566_wled: backlight@2c {
->  		bl-name = "backlight";
->  		dev-ctrl = /bits/ 8 <0x05>;
->  		init-brt = /bits/ 8 <0x3f>;
-> -		rom_a0h {
-> +
-> +		rom-a0h {
->  			rom-addr = /bits/ 8 <0xa0>;
->  			rom-val = /bits/ 8 <0xff>;
->  		};
-> -		rom_a1h {
-> +		rom-a1h {
->  			rom-addr = /bits/ 8 <0xa1>;
->  			rom-val = /bits/ 8 <0x3f>;
->  		};
-> -		rom_a2h {
-> +		rom-a2h {
->  			rom-addr = /bits/ 8 <0xa2>;
->  			rom-val = /bits/ 8 <0x20>;
->  		};
-> -		rom_a3h {
-> +		rom-a3h {
->  			rom-addr = /bits/ 8 <0xa3>;
->  			rom-val = /bits/ 8 <0x5e>;
->  		};
-> -		rom_a4h {
-> +		rom-a4h {
->  			rom-addr = /bits/ 8 <0xa4>;
->  			rom-val = /bits/ 8 <0x02>;
->  		};
-> -		rom_a5h {
-> +		rom-a5h {
->  			rom-addr = /bits/ 8 <0xa5>;
->  			rom-val = /bits/ 8 <0x04>;
->  		};
-> -		rom_a6h {
-> +		rom-a6h {
->  			rom-addr = /bits/ 8 <0xa6>;
->  			rom-val = /bits/ 8 <0x80>;
->  		};
-> -		rom_a7h {
-> +		rom-a7h {
->  			rom-addr = /bits/ 8 <0xa7>;
->  			rom-val = /bits/ 8 <0xf7>;
->  		};
-> -		rom_a9h {
-> +		rom-a9h {
->  			rom-addr = /bits/ 8 <0xa9>;
->  			rom-val = /bits/ 8 <0x80>;
->  		};
-> -		rom_aah {
-> +		rom-aah {
->  			rom-addr = /bits/ 8 <0xaa>;
->  			rom-val = /bits/ 8 <0x0f>;
->  		};
-> -		rom_aeh {
-> +		rom-aeh {
->  			rom-addr = /bits/ 8 <0xae>;
->  			rom-val = /bits/ 8 <0x0f>;
->  		};
+ Hope to hear from you
 
-
-
-
+Regards
