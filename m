@@ -2,170 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE326F266E
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824E66F2671
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjD2UZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 16:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S230233AbjD2Ufe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 16:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjD2UZv (ORCPT
+        with ESMTP id S229489AbjD2Ufd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 16:25:51 -0400
-Received: from pio-pvt-msa2.bahnhof.se (pio-pvt-msa2.bahnhof.se [79.136.2.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1212E10C1;
-        Sat, 29 Apr 2023 13:25:46 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 5552F3F3E9;
-        Sat, 29 Apr 2023 22:25:44 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Score: -2.109
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Authentication-Results: pio-pvt-msa2.bahnhof.se (amavisd-new);
-        dkim=pass (2048-bit key) header.d=dalakolonin.se
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id g91uDSAk5U-I; Sat, 29 Apr 2023 22:25:43 +0200 (CEST)
-Received: by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 4BC073F225;
-        Sat, 29 Apr 2023 22:25:43 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id DA242A0CDD;
-        Sat, 29 Apr 2023 20:25:42 +0000 (UTC)
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GLtElPNrzDkS; Sat, 29 Apr 2023 20:25:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTP id 78AA9A0CD7;
-        Sat, 29 Apr 2023 20:25:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se 78AA9A0CD7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
-        s=D374B428-D0A7-11ED-A657-75977B426508; t=1682799940;
-        bh=YnIJQOsfQm0efxbzTbCvVv9yuvHN4d+rjyJLsyaUdL8=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=QcCtWINQBr/FaGw6vE3x7dynIh7YcWCKEf/AZEQhRJEqIUtWVOAWj6Euu3PtQoYnA
-         UZSEBfM1EMkTbGS30B215/ufxORvkeqDx0Q9KRgZE3YkFBwDY+2Djsx9/5x9lTjoVq
-         hJehaas5tF/Ub1YjOL/0hLmWFJBXzl0mRIFIszj0MNapvp43PFs27I5eX+vMgZItLB
-         wJyxZkGsURc23rzLJqn9PE2cdq6oXeyLvjT1sgoUVC0CqfZ++93b7CavD7N92JZG1V
-         kqH3YsGjWVcs0iGYfl00FXCoseqLm8WQrsma6A002QXQZxQFIHb2h2ebHXB8eRGCiX
-         cLtj8J+Z7fBHQ==
-X-Virus-Scanned: amavisd-new at dalakolonin.se
-Received: from zimbra.dalakolonin.se ([127.0.0.1])
-        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 0LVYyFRwZBmi; Sat, 29 Apr 2023 20:25:40 +0000 (UTC)
-Received: from dalakolonin.se (unknown [172.17.0.1])
-        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id 0783CA0CCF;
-        Sat, 29 Apr 2023 20:25:40 +0000 (UTC)
-Date:   Sat, 29 Apr 2023 22:25:38 +0200
-From:   Patrik =?iso-8859-1?Q?Dahlstr=F6m?= <risca@dalakolonin.se>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] iio: adc: palmas: fix off by one bugs
-Message-ID: <20230429202538.GC1404696@dalakolonin.se>
-References: <14fee94a-7db7-4371-b7d6-e94d86b9561e@kili.mountain>
- <20230423141124.3d4dc91d@jic23-huawei>
+        Sat, 29 Apr 2023 16:35:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DFC10E5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:35:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8FD560EDE
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 20:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E8ACC433EF;
+        Sat, 29 Apr 2023 20:35:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682800531;
+        bh=pqdkn51QhwGmoLD6P4ZiJu49T/u+1bdaUjXi3014pjo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HgJprMYlBdRmLffAD8hB6CIIYmBIbkl6cSCr5/nlUQJZSbhww3nFibTlECwFp1s2+
+         iTiUFWTps7qGnvO0t4KTh28nbWNiclYGOUCOErcYbhw3RFUbRCB662N1YB7p1dk3bV
+         k43imjaYj48C7GFnXRTcVUZX9IgufZTjW8sUxzAiJVoWmoJJ0xbxZhuU84LU3991u6
+         X2dzp9JQuT0oeFJnpd2qebK8v082T2ZlngKfgEVcIbHAKiF/GTIOa5HnbPxUdM+lYm
+         rK0q4RbYn6Bsucd1z8m+trWwM1OI2GrgjnubKzj3s6zYecpN2w3fCfLQBpnHpeztBd
+         BO73+00GgZ7zA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Petr Mladek <pmladek@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] tty: remove duplicate hung_up_tty_compat_ioctl()
+Date:   Sat, 29 Apr 2023 22:34:31 +0200
+Message-Id: <20230429203523.538756-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230423141124.3d4dc91d@jic23-huawei>
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 02:11:24PM +0100, Jonathan Cameron wrote:
-> On Fri, 21 Apr 2023 13:41:56 +0300
-> Dan Carpenter <dan.carpenter@linaro.org> wrote:
-> 
-> > Valid values for "adc_chan" are zero to (PALMAS_ADC_CH_MAX - 1).
-> > Smatch detects some buffer overflows caused by this:
-> > drivers/iio/adc/palmas_gpadc.c:721 palmas_gpadc_read_event_value() error: buffer overflow 'adc->thresholds' 16 <= 16
-> > drivers/iio/adc/palmas_gpadc.c:758 palmas_gpadc_write_event_value() error: buffer overflow 'adc->thresholds' 16 <= 16
-> > 
-> > The effect of this bug in other functions is more complicated but
-> > obviously we should fix all of them.
-> > 
-> > Fixes: a99544c6c883 ("iio: adc: palmas: add support for iio threshold events")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> 
-> Looks good to me.  Slight shuffle at the moment will delay me applying this.
-> 
-> I'll wait for Linus to pick up Greg's pull request then rebase my fixes branch
-> on top of that.  Otherwise I make a mess of linux-next ordering and things might
-> blow up.
-> 
-> In meantime, Patrik, please take a look.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Sorry for the long delay.
+The hung_up_tty_compat_ioctl() has been identical to hung_up_tty_ioctl()
+for a very long time, but now the only caller is inside of an #ifdef,
+causing a harmless warning:
 
-The changes look good to me. I've checked all other uses of adc_chan in the
-code and they all seem to be guarded by the checks below.
+drivers/tty/tty_io.c:446:13: error: 'hung_up_tty_compat_ioctl' defined but not used [-Werror=unused-function]
+  446 | static long hung_up_tty_compat_ioctl(struct file *file,
 
-Best regards
-Patrik
+Avoid this by removing the function entirely and just using the native
+one in its place.
 
-> 
-> Jonathan
-> 
-> > ---
-> > ---
-> >  drivers/iio/adc/palmas_gpadc.c | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/palmas_gpadc.c b/drivers/iio/adc/palmas_gpadc.c
-> > index c1c439215aeb..7dfc9c927a23 100644
-> > --- a/drivers/iio/adc/palmas_gpadc.c
-> > +++ b/drivers/iio/adc/palmas_gpadc.c
-> > @@ -547,7 +547,7 @@ static int palmas_gpadc_read_raw(struct iio_dev *indio_dev,
-> >  	int adc_chan = chan->channel;
-> >  	int ret = 0;
-> >  
-> > -	if (adc_chan > PALMAS_ADC_CH_MAX)
-> > +	if (adc_chan >= PALMAS_ADC_CH_MAX)
-> >  		return -EINVAL;
-> >  
-> >  	mutex_lock(&adc->lock);
-> > @@ -595,7 +595,7 @@ static int palmas_gpadc_read_event_config(struct iio_dev *indio_dev,
-> >  	int adc_chan = chan->channel;
-> >  	int ret = 0;
-> >  
-> > -	if (adc_chan > PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> > +	if (adc_chan >= PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> >  		return -EINVAL;
-> >  
-> >  	mutex_lock(&adc->lock);
-> > @@ -684,7 +684,7 @@ static int palmas_gpadc_write_event_config(struct iio_dev *indio_dev,
-> >  	int adc_chan = chan->channel;
-> >  	int ret;
-> >  
-> > -	if (adc_chan > PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> > +	if (adc_chan >= PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> >  		return -EINVAL;
-> >  
-> >  	mutex_lock(&adc->lock);
-> > @@ -710,7 +710,7 @@ static int palmas_gpadc_read_event_value(struct iio_dev *indio_dev,
-> >  	int adc_chan = chan->channel;
-> >  	int ret;
-> >  
-> > -	if (adc_chan > PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> > +	if (adc_chan >= PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> >  		return -EINVAL;
-> >  
-> >  	mutex_lock(&adc->lock);
-> > @@ -744,7 +744,7 @@ static int palmas_gpadc_write_event_value(struct iio_dev *indio_dev,
-> >  	int old;
-> >  	int ret;
-> >  
-> > -	if (adc_chan > PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> > +	if (adc_chan >= PALMAS_ADC_CH_MAX || type != IIO_EV_TYPE_THRESH)
-> >  		return -EINVAL;
-> >  
-> >  	mutex_lock(&adc->lock);
-> 
+Fixes: 04f378b198da ("tty: BKL pushdown")
+Fixes: 4c87e9e5479b ("tty: tty_io: remove hung_up_tty_fops")
+Link: https://lore.kernel.org/all/2a07bded-25e5-fd27-a2de-8b606e4d1d2c@I-love.SAKURA.ne.jp/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+I did this patch to fix the build failure locally before I saw it
+was already under discussion. Sending it anyway in case nobody
+else has done a formal fix yet.
+---
+ drivers/tty/tty_io.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 553182753098..31d465279b6c 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -443,12 +443,6 @@ static long hung_up_tty_ioctl(struct file *file, unsigned int cmd,
+ 	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+ }
+ 
+-static long hung_up_tty_compat_ioctl(struct file *file,
+-				     unsigned int cmd, unsigned long arg)
+-{
+-	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+-}
+-
+ static int hung_up_tty_fasync(int fd, struct file *file, int on)
+ {
+ 	return -ENOTTY;
+@@ -2941,7 +2935,7 @@ static long tty_compat_ioctl(struct file *file, unsigned int cmd,
+ 	}
+ 
+ 	if (tty_hung_up_p(file))
+-		return hung_up_tty_compat_ioctl(file, cmd, arg);
++		return hung_up_tty_ioctl(file, cmd, arg);
+ 	if (tty_paranoia_check(tty, file_inode(file), "tty_ioctl"))
+ 		return -EINVAL;
+ 
+@@ -2959,7 +2953,7 @@ static long tty_compat_ioctl(struct file *file, unsigned int cmd,
+ 
+ 	ld = tty_ldisc_ref_wait(tty);
+ 	if (!ld)
+-		return hung_up_tty_compat_ioctl(file, cmd, arg);
++		return hung_up_tty_ioctl(file, cmd, arg);
+ 	if (ld->ops->compat_ioctl)
+ 		retval = ld->ops->compat_ioctl(tty, cmd, arg);
+ 	if (retval == -ENOIOCTLCMD && ld->ops->ioctl)
+-- 
+2.39.2
+
