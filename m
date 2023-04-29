@@ -2,96 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8EE6F2361
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254276F2362
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjD2GeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 02:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S231138AbjD2GfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 02:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjD2GeL (ORCPT
+        with ESMTP id S229501AbjD2Ge7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 02:34:11 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070872125;
-        Fri, 28 Apr 2023 23:34:10 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a69f686345so5691505ad.2;
-        Fri, 28 Apr 2023 23:34:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682750049; x=1685342049;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSfv5t4C9cwppYox3U6KqaeYRJrwwcdMCKh0TKYZTfY=;
-        b=jgX+OXrrHnH45akqNjdlWaQFYstsdbpondQ+fh3Msi1/HhjpsmZdFC+yLXih7hP/pU
-         wgdNac4fjcTdjuh5YzDwrfXcFY7nTNG7NTG9OKleR4+VqZlwQQ+dJnUPCKUlMotuGhtK
-         liEvH+GopRM8uHPlGBNbhx8erNYSKJLuBi7f6XaVH16Z1cWL+j0LVG8QPiLpBIa6TEeI
-         zTS1Ra3qCsaeMXU1RmMnIP9HaQN5+5m2TcVeWF6195N9W4Nk/IP8if39MUVzKA4I+Dwp
-         Z2dkFPBFVLF+hUJPQOTD2SFsOLbcA622JvdIeH4gIN3JC30Fskg+YIN5y8gJoIVRkgR5
-         I3Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682750049; x=1685342049;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cSfv5t4C9cwppYox3U6KqaeYRJrwwcdMCKh0TKYZTfY=;
-        b=a/UMIrkjFZvPLW8ia71Q/p9Im8ovIt7o5Q56hij2CjixjcaB0oT2j2ygxOj+y6YhRY
-         ukqh4irMGGlTexaqwZmO4LltSBY3+2ijurQMwrnXzRw+8JBE/bEtOy2K6cf17oX/seKX
-         b5OtnOGUAHrSXLKVkjRMr+5zdAnQdogqZr0O2Az51giIgHhLIAfjGWgHo6zvFigsEQ0K
-         7DGCFiJRcSJ2yf39ZkJ5PYGJjDvkvvbXED2UeyETKhGgglUopYzqzjLG5Qm1znZ+lx25
-         d3gG3ZtAamHOGRlJGBxqaZ46KEog9/HWi2sHz1ZTAJW9i13dleSkw3ZU5Xujo90WH21p
-         L7eA==
-X-Gm-Message-State: AC+VfDwWVs7Pf4YHljI8Ywf34zgETse1A76C3NnIVlAEql0k0UN4dxY6
-        CsNnc2VbGQCVdug0srHaDyE=
-X-Google-Smtp-Source: ACHHUZ7be5oOxy4XCSWaxNypq0CFCL78WwmFg5MLeuSZBRyfSzU6QkTnWKQW9hhiXBkCoxg5Uid8wg==
-X-Received: by 2002:a17:903:2798:b0:1a9:7262:fe55 with SMTP id jw24-20020a170903279800b001a97262fe55mr7208130plb.13.1682750049387;
-        Fri, 28 Apr 2023 23:34:09 -0700 (PDT)
-Received: from wheely.local0.net (14-202-4-83.tpgi.com.au. [14.202.4.83])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902748a00b001a258041049sm14142470pll.32.2023.04.28.23.33.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 23:34:08 -0700 (PDT)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org, Brian Cain <bcain@quicinc.com>,
-        linux-hexagon@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
-        loongarch@lists.linux.dev,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-openrisc@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
-Date:   Sat, 29 Apr 2023 16:33:48 +1000
-Message-Id: <20230429063348.125544-1-npiggin@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Sat, 29 Apr 2023 02:34:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB792136
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:34:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682750098; x=1714286098;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3krY6APKrqNmNaXo/EhJPNHUI7FPjrIDQZgus/0AbxE=;
+  b=QKlx/YYOMU/vKMUlQr8B5B66arLgkZZdg4OydZeOOO7gnvfhPmerxwx6
+   r1+24CZEvjnK9VhRFEEinaQkDXWQLNH+y2OeTiU7VBXBFdWNbi03IbNRx
+   oF0YnTQw0MlZkwJp8RdcNk5sq6PD73K6w2VEBF3NvKYua74NvfFBE97Dd
+   2c+xknAgkwxoEXBuaAJCt+CplhLeAYpmboZ5yXKZ3UwOZRHFoFFmjifzm
+   lb3qv1d4Pn9Xi2hAwpkmp8M/nH/ov4T6YQFj5dp5BL2mccQGsA/V/Y0o7
+   ggH1F2TsOprxqF+EUO1bysk9pqgQXJN6A1URoc1T8/vJPvg44swofl8gb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="345370472"
+X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
+   d="scan'208";a="345370472"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 23:34:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="695090090"
+X-IronPort-AV: E=Sophos;i="5.99,236,1677571200"; 
+   d="scan'208";a="695090090"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Apr 2023 23:34:55 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pseAZ-0000xV-1H;
+        Sat, 29 Apr 2023 06:34:55 +0000
+Date:   Sat, 29 Apr 2023 14:34:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: vmlinux.o: warning: objtool: intel_idle_ibrs+0x12: call to
+ sched_smt_active() leaves .noinstr.text section
+Message-ID: <202304291444.8Uqp9A2n-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,217 +63,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This option was created in commit 554b0004d0ec4 ("vtime: Add
-HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
-they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+Hi Peter,
 
-The cputime_t type has since been removed, so this doesn't have any
-meaning. Remove it.
+FYI, the error/warning still remains.
 
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Vineet Gupta <vgupta@kernel.org>
-Cc: linux-snps-arc@lists.infradead.org
-Cc: Brian Cain <bcain@quicinc.com>
-Cc: linux-hexagon@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: loongarch@lists.linux.dev
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: Michal Simek <monstr@monstr.eu>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Jonas Bonn <jonas@southpole.se>
-Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-Cc: Stafford Horne <shorne@gmail.com>
-Cc: linux-openrisc@vger.kernel.org
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-parisc@vger.kernel.org
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: linux-riscv@lists.infradead.org
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: linux-sh@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-um@lists.infradead.org
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   89d77f71f493a3663b10fa812d17f472935d24be
+commit: 2b5a0e425e6e319b1978db1e9564f6af4228a567 objtool/idle: Validate __cpuidle code as noinstr
+date:   4 months ago
+config: x86_64-randconfig-c022 (https://download.01.org/0day-ci/archive/20230429/202304291444.8Uqp9A2n-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b5a0e425e6e319b1978db1e9564f6af4228a567
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2b5a0e425e6e319b1978db1e9564f6af4228a567
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Could we tidy this? I don't know what tree it can go in, timers,
-sched, asm-generic, probably doesn't matter.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304291444.8Uqp9A2n-lkp@intel.com/
 
-The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
-NO_HZ_FULL so if your arch has some other issue that requires this
-then the documentation needs to change. Any concerns from the archs?
-I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
-which looks to be:
+All warnings (new ones prefixed by >>):
 
-arc
-hexagon
-loongarch 32-bit with SMP
-m68k
-microblaze
-mips 32-bit with SMP
-nios2
-openrisc
-parisc 32-bit
-riscv 32-bit
-sh
-sparc 32-bit
-um 32-bit
-x86 32-bit
+   vmlinux.o: warning: objtool: __rdgsbase_inactive+0x32: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: __wrgsbase_inactive+0x36: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: fixup_bad_iret+0x75: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: noist_exc_debug+0x3d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_nmi+0xbc: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: poke_int3_handler+0x34: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mce_check_crashing_cpu+0xd: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_machine_check+0x4d: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exc_machine_check+0x52: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_enter+0x49: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_nmi_exit+0x6b: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x3f: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x3a: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit+0x3e: call to ftrace_likely_update() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: default_idle+0x4: call to mds_idle_clear_cpu_buffers() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: mwait_idle+0x6: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_processor_ffh_cstate_enter+0x24: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: cpu_idle_poll.isra.0+0x7f: call to test_ti_thread_flag.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle+0x35: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_s2idle+0x3b: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_xstate+0x11: call to fpu_idle_fpregs() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: intel_idle_ibrs+0x12: call to sched_smt_active() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: intel_idle_irq+0x36: call to current_set_polling_and_test() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: acpi_safe_halt+0x8: call to test_ti_thread_flag.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: io_idle+0x3: call to __inb.isra.0() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0x53: call to ftrace_likely_update() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: acpi_idle_enter+0x4c: call to ftrace_likely_update() leaves .noinstr.text section
 
-Thanks,
-Nick
---
- arch/Kconfig           | 11 -----------
- arch/arm/Kconfig       |  1 -
- arch/csky/Kconfig      |  1 -
- arch/loongarch/Kconfig |  1 -
- arch/mips/Kconfig      |  1 -
- arch/powerpc/Kconfig   |  1 -
- arch/xtensa/Kconfig    |  1 -
- init/Kconfig           |  1 -
- kernel/time/Kconfig    |  2 --
- 9 files changed, 20 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 205fd23e0cad..b77b41d25e40 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -869,17 +869,6 @@ config HAVE_VIRT_CPU_ACCOUNTING_IDLE
- config ARCH_HAS_SCALED_CPUTIME
- 	bool
- 
--config HAVE_VIRT_CPU_ACCOUNTING_GEN
--	bool
--	default y if 64BIT
--	help
--	  With VIRT_CPU_ACCOUNTING_GEN, cputime_t becomes 64-bit.
--	  Before enabling this option, arch code must be audited
--	  to ensure there are no races in concurrent read/write of
--	  cputime_t. For example, reading/writing 64-bit cputime_t on
--	  some 32-bit arches may require multiple accesses, so proper
--	  locking is needed to protect against concurrent accesses.
--
- config HAVE_IRQ_TIME_ACCOUNTING
- 	bool
- 	help
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 0fb4b218f665..9c05f25db4e4 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -123,7 +123,6 @@ config ARM
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_UID16
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select IRQ_FORCED_THREADING
- 	select MODULES_USE_ELF_REL
- 	select NEED_DMA_MAP_STATE
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 00379a843c37..dd1decc2a22d 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -73,7 +73,6 @@ config CSKY
- 	select HAVE_ARCH_MMAP_RND_BITS
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_CONTEXT_TRACKING_USER
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select HAVE_DEBUG_BUGVERBOSE
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DYNAMIC_FTRACE
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index f44f6ea54e46..7dc71c89bfae 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -122,7 +122,6 @@ config LOONGARCH
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_TIF_NOHZ
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN if !SMP
- 	select IRQ_FORCED_THREADING
- 	select IRQ_LOONGARCH_CPU
- 	select MMU_GATHER_MERGE_VMAS if MMU
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index c2f5498d207f..d84cb8bbee53 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -87,7 +87,6 @@ config MIPS
- 	select HAVE_SPARSE_SYSCALL_NR
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN if 64BIT || !SMP
- 	select IRQ_FORCED_THREADING
- 	select ISA if EISA
- 	select MODULES_USE_ELF_REL if MODULES
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index acffffbd5d77..185195f349d9 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -271,7 +271,6 @@ config PPC
- 	select HAVE_STATIC_CALL			if PPC32
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_VIRT_CPU_ACCOUNTING
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
- 	select IOMMU_HELPER			if PPC64
- 	select IRQ_DOMAIN
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 3c6e5471f025..04f1399d9ce8 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -47,7 +47,6 @@ config XTENSA
- 	select HAVE_PERF_EVENTS
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
--	select HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select IRQ_DOMAIN
- 	select MODULES_USE_ELF_RELA
- 	select PERF_USE_VMALLOC
-diff --git a/init/Kconfig b/init/Kconfig
-index 32c24950c4ce..835fb5e78a8f 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -504,7 +504,6 @@ config VIRT_CPU_ACCOUNTING_NATIVE
- config VIRT_CPU_ACCOUNTING_GEN
- 	bool "Full dynticks CPU time accounting"
- 	depends on HAVE_CONTEXT_TRACKING_USER
--	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	depends on GENERIC_CLOCKEVENTS
- 	select VIRT_CPU_ACCOUNTING
- 	select CONTEXT_TRACKING_USER
-diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
-index bae8f11070be..d4325dae1f03 100644
---- a/kernel/time/Kconfig
-+++ b/kernel/time/Kconfig
-@@ -121,8 +121,6 @@ config NO_HZ_FULL
- 	# We need at least one periodic CPU for timekeeping
- 	depends on SMP
- 	depends on HAVE_CONTEXT_TRACKING_USER
--	# VIRT_CPU_ACCOUNTING_GEN dependency
--	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select NO_HZ_COMMON
- 	select RCU_NOCB_CPU
- 	select VIRT_CPU_ACCOUNTING_GEN
+objdump-func vmlinux.o intel_idle_ibrs:
+0000 000000000000047d <intel_idle_ibrs>:
+0000  47d:	f3 0f 1e fa          	endbr64
+0004  481:	41 56                	push   %r14
+0006  483:	49 89 f6             	mov    %rsi,%r14
+0009  486:	41 55                	push   %r13
+000b  488:	41 54                	push   %r12
+000d  48a:	41 89 d4             	mov    %edx,%r12d
+0010  48d:	55                   	push   %rbp
+0011  48e:	53                   	push   %rbx
+0012  48f:	e8 00 00 00 00       	call   494 <intel_idle_ibrs+0x17>	490: R_X86_64_PC32	.text+0x9cb97d
+0017  494:	89 c5                	mov    %eax,%ebp
+0019  496:	e8 00 00 00 00       	call   49b <intel_idle_ibrs+0x1e>	497: R_X86_64_PLT32	spec_ctrl_current-0x4
+001e  49b:	49 89 c5             	mov    %rax,%r13
+0021  49e:	40 84 ed             	test   %bpl,%bpl
+0024  4a1:	74 0c                	je     4af <intel_idle_ibrs+0x32>
+0026  4a3:	31 f6                	xor    %esi,%esi
+0028  4a5:	bf 48 00 00 00       	mov    $0x48,%edi
+002d  4aa:	e8 00 00 00 00       	call   4af <intel_idle_ibrs+0x32>	4ab: R_X86_64_PC32	.text+0x9cb9a3
+0032  4af:	49 63 dc             	movslq %r12d,%rbx
+0035  4b2:	48 83 fb 0a          	cmp    $0xa,%rbx
+0039  4b6:	76 0f                	jbe    4c7 <intel_idle_ibrs+0x4a>
+003b  4b8:	48 89 de             	mov    %rbx,%rsi
+003e  4bb:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	4be: R_X86_64_32S	.data+0x8e65a0
+0045  4c2:	e8 00 00 00 00       	call   4c7 <intel_idle_ibrs+0x4a>	4c3: R_X86_64_PLT32	__ubsan_handle_out_of_bounds-0x4
+004a  4c7:	48 6b db 68          	imul   $0x68,%rbx,%rbx
+004e  4cb:	41 8b 5c 1e 58       	mov    0x58(%r14,%rbx,1),%ebx
+0053  4d0:	e9 00 00 00 00       	jmp    4d5 <intel_idle_ibrs+0x58>	4d1: R_X86_64_PC32	.altinstr_aux+0xda0
+0058  4d5:	eb 09                	jmp    4e0 <intel_idle_ibrs+0x63>
+005a  4d7:	e8 00 00 00 00       	call   4dc <intel_idle_ibrs+0x5f>	4d8: R_X86_64_PC32	.text+0x9cbb80
+005f  4dc:	84 c0                	test   %al,%al
+0061  4de:	75 5a                	jne    53a <intel_idle_ibrs+0xbd>
+0063  4e0:	e9 00 00 00 00       	jmp    4e5 <intel_idle_ibrs+0x68>	4e1: R_X86_64_PC32	.altinstr_aux+0xdb2
+0068  4e5:	0f ae f0             	mfence
+006b  4e8:	48 8b 3c 25 00 00 00 00 	mov    0x0,%rdi	4ec: R_X86_64_32S	pcpu_hot
+0073  4f0:	e8 00 00 00 00       	call   4f5 <intel_idle_ibrs+0x78>	4f1: R_X86_64_PC32	.text+0x9cb979
+0078  4f5:	0f ae f0             	mfence
+007b  4f8:	4c 8b 34 25 00 00 00 00 	mov    0x0,%r14	4fc: R_X86_64_32S	pcpu_hot
+0083  500:	4c 89 f7             	mov    %r14,%rdi
+0086  503:	e8 00 00 00 00       	call   508 <intel_idle_ibrs+0x8b>	504: R_X86_64_PC32	.text+0x9cbb0a
+008b  508:	4c 89 f7             	mov    %r14,%rdi
+008e  50b:	e8 00 00 00 00       	call   510 <intel_idle_ibrs+0x93>	50c: R_X86_64_PC32	.text+0x9cbb16
+0093  510:	31 f6                	xor    %esi,%esi
+0095  512:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	515: R_X86_64_32S	_ftrace_annotated_branch+0xce2e0
+009c  519:	85 c0                	test   %eax,%eax
+009e  51b:	41 89 c6             	mov    %eax,%r14d
+00a1  51e:	40 0f 95 c6          	setne  %sil
+00a5  522:	31 c9                	xor    %ecx,%ecx
+00a7  524:	31 d2                	xor    %edx,%edx
+00a9  526:	e8 00 00 00 00       	call   52b <intel_idle_ibrs+0xae>	527: R_X86_64_PLT32	ftrace_likely_update-0x4
+00ae  52b:	45 85 f6             	test   %r14d,%r14d
+00b1  52e:	75 0a                	jne    53a <intel_idle_ibrs+0xbd>
+00b3  530:	c1 eb 18             	shr    $0x18,%ebx
+00b6  533:	89 df                	mov    %ebx,%edi
+00b8  535:	e8 00 00 00 00       	call   53a <intel_idle_ibrs+0xbd>	536: R_X86_64_PC32	.text+0x9cbaf5
+00bd  53a:	e8 00 00 00 00       	call   53f <intel_idle_ibrs+0xc2>	53b: R_X86_64_PC32	.text+0x9cbb4e
+00c2  53f:	40 84 ed             	test   %bpl,%bpl
+00c5  542:	74 0d                	je     551 <intel_idle_ibrs+0xd4>
+00c7  544:	4c 89 ee             	mov    %r13,%rsi
+00ca  547:	bf 48 00 00 00       	mov    $0x48,%edi
+00cf  54c:	e8 00 00 00 00       	call   551 <intel_idle_ibrs+0xd4>	54d: R_X86_64_PC32	.text+0x9cb9a3
+00d4  551:	5b                   	pop    %rbx
+00d5  552:	44 89 e0             	mov    %r12d,%eax
+00d8  555:	5d                   	pop    %rbp
+00d9  556:	41 5c                	pop    %r12
+00db  558:	41 5d                	pop    %r13
+00dd  55a:	41 5e                	pop    %r14
+00df  55c:	c3                   	ret
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
