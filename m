@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0890D6F267B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F03C6F267F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjD2VJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 17:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S230460AbjD2VMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 17:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjD2VJt (ORCPT
+        with ESMTP id S229532AbjD2VMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 17:09:49 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271D81BC9
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:09:48 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-32ec968434eso754025ab.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:09:48 -0700 (PDT)
+        Sat, 29 Apr 2023 17:12:01 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35B61BC9
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:11:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4edc114c716so1534311e87.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682802587; x=1685394587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aR18o0z0RJweJ7cJqnp99mz4GVYMm6+ZbfU+8I+PMNg=;
-        b=T3juBVR4ig7GcxypLvKe40fl5intlQj3x8Ra0SFxXRvZUnxvF3CBtzjn7bOksZH6Xd
-         YUD72cfa3YvopBVjQJK+Y7FAXlfSTWe0V7flQ46vAqlZ35+rIafu/SvI8XN6Hn9frul2
-         96grqvRXTkbwZBQ7uzz8fozuKMOGXCPA1ZHj9XUN4hUmJQaVr0SwoDnzK+DjE45EU6XU
-         i7KGCAuksV9z68Q3GU1Tenu4kcgF4cWEuVP6ZKqcYBl69DzzJKm7LZcmjCuLKmogG4a2
-         g9M+Xap3T2LSI13nRRHzFjcxRlpPQTcdEdlAqSMZrlWhrha7+TrSZs8ZnftvUS0z9EIF
-         uthQ==
+        d=linaro.org; s=google; t=1682802718; x=1685394718;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0U7MzaS7aw+EsZYAqTDDyCfg+saVyoYnFZA66Bc8C/w=;
+        b=iif0QCwcvBkDoY0VuWQG8nKl+rCPM+ua54p31wcSq5AY4+Obr0QuyctrhJbup9Xg9Z
+         f4AbHWcIC7a4Vx0QkaDseKcUnY5d4nGJZjr3WyYLOaDcWfDIl/LjRnOj8zqd45+KDp5h
+         BbU4Jlu+2bdioORvhtx9LDWmJcfGhg9b1U2TD7PYVd5Y9GnZ09p+dLn3QspMr2IXBJLK
+         dUlvfyo2kNeCIpjb4wMSjZITlywxa7OM2vSBSUbB+SUFZHnpjxUlSOG7lJEQtx1IBQiN
+         GfUT/kX4bfDB/wrbss6DPvdoTXVH9h7g91PY3+ctLasUjmq+6sciZsOEIlAu6gRyjMsb
+         qIzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682802587; x=1685394587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aR18o0z0RJweJ7cJqnp99mz4GVYMm6+ZbfU+8I+PMNg=;
-        b=gJ1uHtjlpepyQxPnd7MkeprXy76bDGg+MG5NAmoLnt00QqB9WAfzwwJ4P1zF+UvJ4Y
-         LtmJZev0yWeK24tUtpFKR8Fsb+aBm5wQfe0B7/76XyNzUH1lROKO2Iazdba+dLNOff7K
-         J/mcB0S74bIbsUpi1WOkDFYkoZUDKgRB1asx4bpo+gniFJfEBwTMIBvG+bHfzape0z9y
-         dH5Bo/IYc5lH8HlOeal7QCTK5GuVS+xPfbZmJfI7jX8LcNov00tT2e1AW1wcYbCNNeVX
-         g8bU9BGcywdaTQxENbLgOnRkmoJvcwtEf/f0DQugjA2M4TqrqPVHZNMyMQw4mS+HjIFh
-         IbTA==
-X-Gm-Message-State: AC+VfDzypIqhTJdqWoT5MzggTTDdKRcSdMerkbLTS/6b/U+wBPqxR4F3
-        vpYPXIpT+JHDonIAfBDMolajxVIJvkr2QziDrmH5jQ==
-X-Google-Smtp-Source: ACHHUZ47OAzcf/6+bIFZ2cqvR2yx/WUxTifqjPJdHBHpZXCzY9IuWjgKMgIVrIxVYmbMMwRrQhCBwuh/yNNy5gXFkLM=
-X-Received: by 2002:a05:6e02:16cf:b0:32f:7703:63bb with SMTP id
- 15-20020a056e0216cf00b0032f770363bbmr168083ilx.19.1682802587181; Sat, 29 Apr
- 2023 14:09:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682802718; x=1685394718;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0U7MzaS7aw+EsZYAqTDDyCfg+saVyoYnFZA66Bc8C/w=;
+        b=aHh6PL7bbKB/p7IpPz5mqSyINfCNzCZzbSVyAveAwIcyjx1ibtc+WcgPVA+9kwVJkn
+         5eKjqz6eDQKYmRlVspranZAyhi1WQ8OlOEEObhkHdjpxute+tVg4xSwFfvt1u0lRrX+J
+         OA3DvQB45lpAK5we2vXm9iRV0H712jjhFvGWGmtb0BKkOweDb9XWplF7HcNCWm1D2KBs
+         AQbJW0QoAA9c/jaf26v40MxLjQkre5gBWR8FYyW5QkfFmKCooxGMsC/4g4+bHHaIkwRh
+         HkwqphrbEUe3hM2P/y1EmHn0Ho/R7HZ4YDpHbPQJXAPmQRSq17HU0MZTSYouHfGOaTK9
+         xYsQ==
+X-Gm-Message-State: AC+VfDyXChRljSQUCcZptkc1Hv3elX3w1OAmMEaeSkdohCAMBFpSUgrd
+        BBD5Nn03IihP58V3mqGf9vFHBQ==
+X-Google-Smtp-Source: ACHHUZ7ooWjyMH7Ci+c7zCG0qzziHIjMb5gsW4/l2PjA4+3lYRlsr0+9PPPEp09qZkn3DjuwV76UhA==
+X-Received: by 2002:a19:f508:0:b0:4ed:befc:9b4e with SMTP id j8-20020a19f508000000b004edbefc9b4emr2365105lfb.3.1682802717914;
+        Sat, 29 Apr 2023 14:11:57 -0700 (PDT)
+Received: from [192.168.1.212] (78-27-120-86.bb.dnainternet.fi. [78.27.120.86])
+        by smtp.gmail.com with ESMTPSA id u24-20020ac25198000000b004eca2b1c5b4sm3910548lfi.229.2023.04.29.14.11.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Apr 2023 14:11:57 -0700 (PDT)
+Message-ID: <1bf7b399-bbf3-c6d5-6d13-dc50ec670137@linaro.org>
+Date:   Sun, 30 Apr 2023 00:11:56 +0300
 MIME-Version: 1.0
-References: <20230425142205.762-1-ravi.bangoria@amd.com> <20230425142205.762-4-ravi.bangoria@amd.com>
-In-Reply-To: <20230425142205.762-4-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 29 Apr 2023 14:09:35 -0700
-Message-ID: <CAP-5=fVnfNEKK_UPuRprSVuCgQG-X-hCM6Jq3AKRHYfBiqisKw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] perf test: Add selftest to test IBS invocation via
- core pmu events
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     peterz@infradead.org, namhyung@kernel.org, eranian@google.com,
-        acme@kernel.org, mark.rutland@arm.com, jolsa@kernel.org,
-        bp@alien8.de, kan.liang@linux.intel.com, adrian.hunter@intel.com,
-        maddy@linux.ibm.com, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [Freedreno] [PATCH v2 5/7] drm/msm/dpu: add DPU_PINGPONG_DSC
+ feature PP_BLK and PP_BLK_TE
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     vkoul@kernel.org, quic_sbillaka@quicinc.com, airlied@gmail.com,
+        andersson@kernel.org, freedreno@lists.freedesktop.org,
+        dianders@chromium.org, dri-devel@lists.freedesktop.org,
+        swboyd@chromium.org, robdclark@gmail.com, agross@kernel.org,
+        daniel@ffwll.ch, linux-arm-msm@vger.kernel.org,
+        marijn.suijten@somainline.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, sean@poorly.run,
+        linux-kernel@vger.kernel.org
+References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682725511-18185-6-git-send-email-quic_khsieh@quicinc.com>
+ <ad672cff-3355-97af-24b4-3626efebc284@linaro.org>
+ <e9f493fa-77f2-0a5b-5e09-bd1baae8a8d0@quicinc.com>
+ <772a63ca-9b88-3c98-e769-7e614968c127@linaro.org>
+ <09d34749-d571-ed04-9681-4abf48c7f053@quicinc.com>
+ <CAA8EJpo-+UYv2Roctu=7U09V3u6kJ_q64M1i_R7DBGCGCK=U7A@mail.gmail.com>
+ <7e40f51b-693e-d42f-b99e-695cb6478e2d@quicinc.com>
+ <d42e39ed-4bbf-f197-1f31-04576dd639fd@linaro.org>
+ <0a8e99cb-8635-aaa1-aaf4-842c86ffd6ff@quicinc.com>
+ <CAA8EJpqsxrv18xH=GREm75EXD62bDS7d0diMtbNOHuEX-4hD6A@mail.gmail.com>
+ <1ff73e92-92a4-f686-a478-04f2727751ce@quicinc.com>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1ff73e92-92a4-f686-a478-04f2727751ce@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,181 +93,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 7:23=E2=80=AFAM Ravi Bangoria <ravi.bangoria@amd.co=
-m> wrote:
->
-> IBS pmu can be invoked via fixed set of core pmu events with 'precise_ip'
-> set to 1. Add a simple event open test for all these events.
->
-> Without kernel fix:
->   $ sudo ./perf test -vv 76
->    76: AMD IBS via core pmu                                      :
->   --- start ---
->   test child forked, pid 6553
->   Using CPUID AuthenticAMD-25-1-1
->   type: 0x0, config: 0x0, fd: 3  -  Pass
->   type: 0x0, config: 0x1, fd: -1  -  Pass
->   type: 0x4, config: 0x76, fd: -1  -  Fail
->   type: 0x4, config: 0xc1, fd: -1  -  Fail
->   type: 0x4, config: 0x12, fd: -1  -  Pass
->   test child finished with -1
->   ---- end ----
->   AMD IBS via core pmu: FAILED!
->
-> With kernel fix:
->   $ sudo ./perf test -vv 76
->    76: AMD IBS via core pmu                                      :
->   --- start ---
->   test child forked, pid 7526
->   Using CPUID AuthenticAMD-25-1-1
->   type: 0x0, config: 0x0, fd: 3  -  Pass
->   type: 0x0, config: 0x1, fd: -1  -  Pass
->   type: 0x4, config: 0x76, fd: 3  -  Pass
->   type: 0x4, config: 0xc1, fd: 3  -  Pass
->   type: 0x4, config: 0x12, fd: -1  -  Pass
->   test child finished with 0
->   ---- end ----
->   AMD IBS via core pmu: Ok
->
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+On 29/04/2023 23:23, Abhinav Kumar wrote:
+> 
+> 
+> On 4/29/2023 12:45 PM, Dmitry Baryshkov wrote:
+>> On Sat, 29 Apr 2023 at 11:43, Abhinav Kumar 
+>> <quic_abhinavk@quicinc.com> wrote:
+>>>
+>>>
+>>>
+>>> On 4/28/2023 9:35 PM, Dmitry Baryshkov wrote:
+>>>> On 29/04/2023 07:04, Abhinav Kumar wrote:
+>>>>>
+>>>>>
+>>>>> On 4/28/2023 8:21 PM, Dmitry Baryshkov wrote:
+>>>>>> On Sat, 29 Apr 2023 at 05:50, Abhinav Kumar
+>>>>>> <quic_abhinavk@quicinc.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 4/28/2023 6:41 PM, Dmitry Baryshkov wrote:
+>>>>>>>> On 29/04/2023 04:08, Abhinav Kumar wrote:
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 4/28/2023 5:45 PM, Dmitry Baryshkov wrote:
+>>>>>>>>>> On 29/04/2023 02:45, Kuogee Hsieh wrote:
+>>>>>>>>>>> Legacy DPU requires PP hardware block involved into setting 
+>>>>>>>>>>> up DSC
+>>>>>>>>>>
+>>>>>>>>>> Nit: to be envolved
+>>>>>>>>>>
+>>>>>>>>>>> data path. This patch add DDPU_PINGPONG_DSC feature bit to both
+>>>>>>>>>>
+>>>>>>>>>> adds
+>>>>>>>>>>
+>>>>>>>>>>> PP_BLK and PP_BLK_TE so that both dpu_hw_pp_setup_dsc() and
+>>>>>>>>>>> dpu_hw_pp_dsc_enable() will be executed during DSC path setup.
+>>>>>>>>>>
+>>>>>>>>>> Would it be easier to add PP_BLK_NO_DSC instead and make DSC 
+>>>>>>>>>> enabled
+>>>>>>>>>> by default for PP_BLK / PP_BLK_TE?
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> No because for some chipsets like qcm2290, it has a ping pong 
+>>>>>>>>> block
+>>>>>>>>> but no DSC.
+>>>>>>>>
+>>>>>>>> And so it will use PP_BLK_NO_DSC (like msm8998 for PP_2/_3). But 
+>>>>>>>> this
+>>>>>>>
+>>>>>>> Ok so you meant adding another PP_BLK_* macro. I mistook it for a
+>>>>>>> feature flag.
+>>>>>>>
+>>>>>>> This is getting a bit confusing with many PP_BLK_* variations.
+>>>>>>
+>>>>>> Yes. As I wrote it might be not the optimal solution.
+>>>>>>
+>>>>>>>
+>>>>>>>> might be not the optimal solution. Let's check all possible cases:
+>>>>>>>>
+>>>>>>>> - PP (or PP_TE?) with no DSC support,
+>>>>>>>
+>>>>>>> Yes correct for chipsets like qcm2290.
+>>>>>>>
+>>>>>>>> - PP/PP_TE tightly bound to the particular DSC instance, should be
+>>>>>>>> allocated together,
+>>>>>>>
+>>>>>>> I need to check which exact chipset does this (I recall one does) 
+>>>>>>> but
+>>>>>>> perhaps msm8998 fits here.
+>>>>>>
+>>>>>> All targets earlier than sm8150. SDE driver sets SDE_DSC_OUTPUT_CTRL
+>>>>>> if for v1 CTL blocks (sm8150+).
+>>>>>>
+>>>>>>>
+>>>>>>>> - PP/PP_TE which can use any DSC block.
+>>>>>>>
+>>>>>>> This is what DPU_PINGPONG_DSC feature flag should mean today and 
+>>>>>>> should
+>>>>>>> cover most of the DSC 1.1 chipsets present in upstream today.
+>>>>>>
+>>>>>> Then it should probably be renamed to DPU_PINGPONG_ANY_DSC
+>>>>>>
+>>>>>
+>>>>> Actually that "any" is incorrect. As part of the DSC pairing logic
+>>>>> change it will become clear but not all ping-pongs can pair with all
+>>>>> DSCs. So any is not right.
+>>>>>
+>>>>> This is why I think we should go with this feature flag first. Lets
+>>>>> identify a pattern and then work on unifying or cleaning up the
+>>>>> PP_BLK_* masks.
+>>>>
+>>>> Then I'd like to see the series sent together so that we don't have to
+>>>> be wondering in the myst. At least the RM changes might better go into
+>>>> this series (together with the topology changes. I think RM will depend
+>>>> on 1 DSC topology support).
+>>>
+>>> Topology changes depend on which way the virtual planes series is going
+>>> to do and since we are going with fixed topology you preferred it to be
+>>> dropped right?
+>>
+>> It was not about the topology changes (e.g. supporting 1:1:1), but
+>> about storying the topology in the encoder.
+>>
+> 
+> So you are suggesting drop patch 6 of this series and keep 7 OR drop 6 
+> and 7 both?
+> 
+> It looks like if 6 is dropped, then 7 has to be as well because we need 
+> to store topology somewhere cannot keep passing locally.
 
-Thanks Ravi, as the test is AMD specific I think it makes sense to place it=
- in:
-tools/perf/arch/x86/tests
-and then to update the test list in:
-tools/perf/arch/x86/tests/arch-tests.c
+Yes, 6/7 should be split from this series. For #7 we have all the 
+information necessary (num_dsc and num_intf), so it is not strictly 
+dependent on #6, but is anyway a separate change, not related to DSC 1.2.
 
-Thanks,
-Ian
+Are there any actual changes in #7 for 2:1:1 case? If not, it should go 
+together with 1:1:1 topology support.
 
-> ---
->  tools/perf/tests/Build                  |  1 +
->  tools/perf/tests/amd-ibs-via-core-pmu.c | 72 +++++++++++++++++++++++++
->  tools/perf/tests/builtin-test.c         |  1 +
->  tools/perf/tests/tests.h                |  1 +
->  4 files changed, 75 insertions(+)
->  create mode 100644 tools/perf/tests/amd-ibs-via-core-pmu.c
->
-> diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-> index fb9ac5dc4079..ff7234653503 100644
-> --- a/tools/perf/tests/Build
-> +++ b/tools/perf/tests/Build
-> @@ -69,6 +69,7 @@ perf-y +=3D dlfilter-test.o
->  perf-y +=3D sigtrap.o
->  perf-y +=3D event_groups.o
->  perf-y +=3D symbols.o
-> +perf-y +=3D amd-ibs-via-core-pmu.o
->
->  $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
->         $(call rule_mkdir)
-> diff --git a/tools/perf/tests/amd-ibs-via-core-pmu.c b/tools/perf/tests/a=
-md-ibs-via-core-pmu.c
-> new file mode 100644
-> index 000000000000..6f6eb2d84fde
-> --- /dev/null
-> +++ b/tools/perf/tests/amd-ibs-via-core-pmu.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "linux/perf_event.h"
-> +#include "tests.h"
-> +#include "pmu.h"
-> +#include "pmus.h"
-> +#include "../perf-sys.h"
-> +#include "debug.h"
-> +
-> +#define NR_SUB_TESTS 5
-> +
-> +static struct sub_tests {
-> +       int type;
-> +       unsigned long config;
-> +       bool valid;
-> +} sub_tests[NR_SUB_TESTS] =3D {
-> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_CPU_CYCLES, true },
-> +       { PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, false },
-> +       { PERF_TYPE_RAW, 0x076, true },
-> +       { PERF_TYPE_RAW, 0x0C1, true },
-> +       { PERF_TYPE_RAW, 0x012, false },
-> +};
-> +
-> +static int event_open(int type, unsigned long config)
-> +{
-> +       struct perf_event_attr attr;
-> +
-> +       memset(&attr, 0, sizeof(struct perf_event_attr));
-> +       attr.type =3D type;
-> +       attr.size =3D sizeof(struct perf_event_attr);
-> +       attr.config =3D config;
-> +       attr.disabled =3D 1;
-> +       attr.precise_ip =3D 1;
-> +       attr.sample_type =3D PERF_SAMPLE_IP | PERF_SAMPLE_TID;
-> +       attr.sample_period =3D 100000;
-> +
-> +       return sys_perf_event_open(&attr, -1, 0, -1, 0);
-> +}
-> +
-> +static int test__amd_ibs_via_core_pmu(struct test_suite *text __maybe_un=
-used,
-> +                                     int subtest __maybe_unused)
-> +{
-> +       struct perf_pmu *ibs_pmu;
-> +       int ret =3D TEST_OK;
-> +       int fd, i;
-> +
-> +       if (list_empty(&pmus))
-> +               perf_pmu__scan(NULL);
-> +
-> +       ibs_pmu =3D perf_pmu__find("ibs_op");
-> +       if (!ibs_pmu)
-> +               return TEST_SKIP;
-> +
-> +       for (i =3D 0; i < NR_SUB_TESTS; i++) {
-> +               fd =3D event_open(sub_tests[i].type, sub_tests[i].config)=
-;
-> +               pr_debug("type: 0x%x, config: 0x%lx, fd: %d  -  ", sub_te=
-sts[i].type,
-> +                        sub_tests[i].config, fd);
-> +               if ((sub_tests[i].valid && fd =3D=3D -1) ||
-> +                   (!sub_tests[i].valid && fd > 0)) {
-> +                       pr_debug("Fail\n");
-> +                       ret =3D TEST_FAIL;
-> +               } else {
-> +                       pr_debug("Pass\n");
-> +               }
-> +
-> +               if (fd > 0)
-> +                       close(fd);
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
-> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-t=
-est.c
-> index 35cc3807cc9e..1805a4fae762 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -119,6 +119,7 @@ static struct test_suite *generic_tests[] =3D {
->         &suite__sigtrap,
->         &suite__event_groups,
->         &suite__symbols,
-> +       &suite__amd_ibs_via_core_pmu,
->         NULL,
->  };
->
-> diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-> index 9a0f3904e53d..65589d40638d 100644
-> --- a/tools/perf/tests/tests.h
-> +++ b/tools/perf/tests/tests.h
-> @@ -149,6 +149,7 @@ DECLARE_SUITE(dlfilter);
->  DECLARE_SUITE(sigtrap);
->  DECLARE_SUITE(event_groups);
->  DECLARE_SUITE(symbols);
-> +DECLARE_SUITE(amd_ibs_via_core_pmu);
->
->  /*
->   * PowerPC and S390 do not support creation of instruction breakpoints u=
-sing the
-> --
-> 2.40.0
->
+> 
+> Thats why I was okay to drop 6 and 7 together.
+> 
+>>>
+>>> Now that you have seen the DSC to PP mapping code downstream you know
+>>> that every DSC cannot goto every ping-pong. So which way do you want to
+>>> go with this patch. If we are going to post a next revision, need some
+>>> conclusion here and I do not think PP_BLK_* was agreed as a clean
+>>> solution anyway.
+>>
+>> No, it was not agreed. That's why I tried listing all possible cases
+>> (in an attempt to understand the limitations and/or possible
+>> usecases).
+>>
+>>>
+>>> Thats why I suggested:
+>>>
+>>> 1) Lets go with feature flag
+>>> 2) When DP lands, thats the one which uses 1-1-1 topology so we can hit
+>>> some corner cases of lets say DP uses one DSC and then DSI uses merge we
+>>> should go with the right DSC pair. With only DSI, this will not arise.
+>>> 3) With (1) and (2) done, we can take up PP_BLK_* cleanup if we feel its
+>>> necessary.
+>>>
+>>> I dont see any conclusion or plan suggested by you so far on which way
+>>> you want to go.
+>>
+>> I'd propose the following plan:
+> 
+> Thanks for summarizing what you had in mind, that makes it clear.
+> 
+>> - Drop all the topology and PP changes from this series. Make it add
+>> just DSC 1.2 support.
+>>
+>> Then for the DSI DSC 1.2 we should be able to continue using existing
+>> RM/PP code with known limitations.
+>>
+> 
+> 
+> So just keep patches 1-3 right? The issue with that is 
+> _setup_pingpong_ops will still get called even for DSC 1.2 with those 
+> changes. This was actually noted by Marijn during the catalog cleanup we 
+> recently merged to -fixes. Thats why we included that in this so that we 
+> dont call DSC 1.1 related functions for 1.2
+
+I thought about 1-4 initially. I didn't notice that this flag was not 
+set for newer PP blocks.
+
+Please split patch #5 into two: generic code + definition and catalog 
+changes actually enabling this feature.
+
+Also please note that 'PP block binding to DSC' isn't probably a good 
+enough description of this feature bit. It doesn't control PP/DSC 
+binding, it shows if DCE is controlled from PP block or not.
+
+> 
+> Any specific reason why you dont want to go with patches 1-5 now and 
+> drop 6,7 as that depends on storing topology.
+> 
+>> Next:
+>> - Split DPU_PINGPONG_DSC feature flag to a separate patch series. It
+>> looks like it should have some Fixes tag, as it prevents one from
+>> calling *dsc functions for PPs which do not support them
+> 
+> We can still add the fixes tag and keep it here and move it to the front?
+
+Yes! Even w/o DSC 1.2 we should not be calling dsc functions for PP 
+which have no DCE support.
+
+>> - Extend the series with the RM fix which skips non-DSC-enabled PPs
+>> when DSC is required.
+>> - As this series is touching RM, it is a good place to handle DSC
+>> allocation issues, which includes:
+>>    * tight coupling of PP/DSC blocks on sdm845 and msm8998
+>>    * limitations for 1:1:1 or co-allocation of DSC blocks for both DSI
+>> and DP DSC (might be split to a separate patchset, up to you)
+> 
+> I am a bit confused about this. This patch is not touching RM at all 
+> from what I can see. So the issue of DSC pair allocation is there even 
+> today with or without DSC 1.2 about which DSCs pair with which ones and 
+> which DSCs go with which PP.
+
+I was also confused here, as you see. What I meant here was to add a new 
+patch touching RM code to the new, separate series.
+
+> I feel that once DSC 1.2, that is just patches 1-5 land, I agree this 
+> can be and should be a series on its own to prepare for DP DSC.
+
+Yes, please.
+
+> What use-case gets broken for DSI if we land 1-5?
+
+None. As I wrote, "Then for the DSI DSC 1.2 we should be able to 
+continue using existing RM/PP code with known limitations."
+
+> 
+> We are trying to expand this series for a condition which wont hit till 
+> DP DSC lands due to the fixed topology and only one client for DSC which 
+> is DSI.
+
+Please don't. Let it be just DSC 1.2 (e.g. as required for DSI DSC 1.2). 
+The 1:1:1 and multi-client can be a separate series fixing RM/dpu_encoder.
+
+> 
+>>
+>> DP DSC depends either on this series or on a separate patchset
+>>
+>>>
+>>>>
+>>>> I went on and checked the SDE. It has condition that pp % 2 == dsc % 2.
+>>>> Does this condition apply only to "newest" DSC/PP combo (DITHER + 1.2)
+>>>> or to the older ones too? Are there any other conditionals?
+>>>>
+>>>
+>>> It was there even for older DSCs and looks like wasnt implemented in the
+>>> current upstream code.
+>>
+>> Thanks for the info.
+
+
+-- 
+With best wishes
+Dmitry
+
