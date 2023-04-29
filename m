@@ -2,119 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FD36F2369
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394B06F236B
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjD2GmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 02:42:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S231470AbjD2Grz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 02:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjD2GmN (ORCPT
+        with ESMTP id S229501AbjD2Grx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 02:42:13 -0400
-X-Greylist: delayed 2019 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 Apr 2023 23:42:12 PDT
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C67F5
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:42:12 -0700 (PDT)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 02AA910040624
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:42:12 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id seHbpLwcIF2tnseHbp3F5Y; Sat, 29 Apr 2023 06:42:11 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=TdBTCTch c=1 sm=1 tr=0 ts=644cbc44
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=dKHAf1wccvYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=A92Ay4PYWxKKC1XRN976spgfi8NOAbWM1Jma7QjyJ0I=; b=RyHnIl5y0fp4pkM5pQp1ganPEM
-        GTM/qPyO/KbCdaBcsmZLswq+jG1vEC7j/Ep1hQ1vAWZueOYKxtFWPODa+uJEZ14Y9VH0Z7gx/1ghv
-        tdcd5Q4yKYfGTYGOw2cliYUuIjZzAgsIrR+rDFy5TIkLQHfvuyn2Ya5NMCYUU6uTazofFgQZl0hlN
-        w4mujQEVfEFm/EdHlF1u6JLfPn6rl5fJ2LZaNIX/Jfi+C6nSC2nJxrbYgLevIuvNmth5RuvT7+hh4
-        l/Ja4YNRI0mBb/ldGqLvLxDPSdBGLelTvMembQ4VSlhpbJjwbT08nrldIuHIb0yln8yDap+Jz+HVd
-        fGb9jCCw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36460 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pseHb-000XCZ-9E;
-        Sat, 29 Apr 2023 00:42:11 -0600
-Subject: Re: [PATCH 5.15 00/13] 5.15.110-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230428112039.133978540@linuxfoundation.org>
-In-Reply-To: <20230428112039.133978540@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <3f945e17-0588-c178-a01f-df175b172262@w6rz.net>
-Date:   Fri, 28 Apr 2023 23:42:09 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 29 Apr 2023 02:47:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CB22691
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:47:51 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94eee951c70so97522066b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682750870; x=1685342870;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+MGoIrx5I92tfleJ2HR27INRzqM7E79/a8JDCJVDvYY=;
+        b=ovsBT7/IZbSVH/DuO+TwRN/ywo0ywsemZ7Th+rjEdKlmR57vDK2obt4hMcqMblcQY8
+         JIWDx5WufPma5WNyBg4niWelbMJG7XTxvU40biIRzNPabfPlYw3k1JDEsvLil3bvYTlw
+         Lzs3TNx5bAn3xykbwwy231Xj8UKh9uZQLcYGujR3PJrJ3a8TMvNB+BqyPPGxjCAQj9Rp
+         7Qrv/Ar3nO91So9i/xZtGu836nYCdDkwTD8vIi4TMH7NEMRXgM79gd+nIDobwUClRMiN
+         mDZkObZ1SwnY5u1Hjvptes4OG/G3omSeBD2kTcYLDb0lKK5vgSU8riDFpYdtDWzJCKIv
+         BIyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682750870; x=1685342870;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+MGoIrx5I92tfleJ2HR27INRzqM7E79/a8JDCJVDvYY=;
+        b=Cqsp6LPcssbcq2DLsaY3OSdI5Lg/h0RMGcfaW/dNNZKleWsxUeMLjc1rEirZsxsUhd
+         /qQBC6hxzS2hYjeYtu7Z1nLylo0L5pESOmppH4m6mGkG3XmzRbL2FItHGt1HzXQW/3to
+         zTf/9CK2kzcqRWsCkPNHk7gJRW3xo+E/8mgmTlNUAYpzi1VrRRsyEfc1nwHgJN8MITPB
+         wBIaDweS4V4Vt9RYQ8Z461Obwkh45njI8TCrnb1sauqTFW6FIYrH5cez4YOv2NjOYFct
+         idkC6gYBxSnSOxcdfz9unLwgezEsgmrcEbqKFm2bkSuTDY8gPb89ZW0V5QX2/yyjH6Cb
+         ysYw==
+X-Gm-Message-State: AC+VfDzSct6EVRDwweC2OnVKwcZUtI1ufZKUTB52BxVjQIEXPPtj1xn0
+        ciY2XhHCogpbT9rBueFKeh1YrkiAjug=
+X-Google-Smtp-Source: ACHHUZ5WZf6AkuQAH8ASNEEdBqdI4XlcFCdofFcqZH7hpPf1ih9QJrvdnSf6dMwchYUw1lN7AvYfaQ==
+X-Received: by 2002:a17:907:9807:b0:94f:7c4e:24ea with SMTP id ji7-20020a170907980700b0094f7c4e24eamr7764502ejc.38.1682750870112;
+        Fri, 28 Apr 2023 23:47:50 -0700 (PDT)
+Received: from gmail.com (1F2EF38A.nat.pool.telekom.hu. [31.46.243.138])
+        by smtp.gmail.com with ESMTPSA id u10-20020a056402064a00b00506addaaab0sm9973804edx.32.2023.04.28.23.47.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 23:47:47 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Sat, 29 Apr 2023 08:47:45 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [GIT PULL] locking changes for v6.4
+Message-ID: <ZEy9kUpwx/N3JEA/@gmail.com>
+References: <Y/NmzouehvMWTPVZ@gmail.com>
+ <ZErTyKxjGQvF6EqP@gmail.com>
+ <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pseHb-000XCZ-9E
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:36460
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 20
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
+X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/23 4:28 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.110 release.
-> There are 13 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.110-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+* Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Tested-by: Ron Economos <re@w6rz.net>
+> On Thu, Apr 27, 2023 at 12:58 PM Ingo Molnar <mingo@kernel.org> wrote:
+> >
+> >  - Add non-atomic __xchg() variant, use it in a couple of places
+> 
+> Guys, this is insane, and completely unacceptable.
+> 
+> I pulled this, but I'm going to unpull it, because the code is
+> actively wrong and ugly.
+> 
+> It not only randomly decides to re-use a name that has existing users
+> that now need to be fixed up.
 
+meh - you are 100% right, I'm not sure what we were thinking there ... [ 
+actually, I know what we were thinking, but it's a bit complicated - see 
+the various non-perfect nomenclature options further below. ]
+
+So the first line of our thinking was that "__" also often & additionally 
+means 'lighter weight version of a similar API signature, beware, here be 
+dragons, use at your own risk', and more of the focus of these particular 
+changes was on identifying hand-coded xchg-ish pieces of code, such as in:
+
+   26ace5d28d36 ("arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr")
+
+... but while that background of '__' is somewhat valid logic that we use 
+quite often in various kernel facilities, it doesn't really excuse the 
+sloppy decision to slap __ in front of an existing API without trying 
+harder, *especially* that a better name with fetch_and_zero() already 
+existed :-/
+
+> It then *also* decides to start "preferring" this absolutely
+> disgusting new name over a much more legible one in the i915 driver,
+> which had this same functionality except it used a prettier name:
+> 
+>    fetch_and_zero()
+> 
+> But what then takes the cake for me is that this horribly ugly feature
+> then didn't even get that right, and only randomly converted *some* of
+> the users, with most of them remaining:
+> 
+>   git grep fetch_and_zero drivers/gpu/drm/i915/ | wc
+>      58     187    5534
+>   git grep -w __xchg drivers/gpu/drm/i915/ | wc
+>      22     109    1899
+> 
+> and it looks like the only "logic" to this is that the converted ones
+> were in the "gt/" subdirectory. What a random choice, but happily it
+> caused a trivial conflict, and as a result I noticed how bad things
+> were.
+> 
+> Anyway, I really find this all offensively ugly and pointless. I'm not
+> going to pull some "fixed" version of this. This needs to go away and
+> never come back.
+
+Yeah. So I've rebased locking/core to take out these changes - a simple 
+revert is too ugly and the history has no value here really.
+
+Will re-send the rest of locking/core.
+
+> What was so magically great about the name "__xchg" that it needed to be 
+> taken over by this function? And why was that legibly named version of it 
+> replaced so randomly?
+
+Yeah.
+
+So fetch_and_zero() has a bit of a nomenclature & ambiguity problem as 
+well: there's already an atomic_fetch_*() API family, and it's easy to 
+think that fetch_and_zero() is atomic too - a bit like how xchg() is atomic 
+without mentioning 'atomic'.
+
+Adding to the confusion is that there's already atomic APIs that don't use 
+atomic_t:
+
+  xchg()
+  cmpxchg()
+  try_cmpxchg()
+
+... and by *that* implicit nomenclature logic, dropping the atomic_ from a 
+atomic_fetch_and_zero() API means: 'atomic API, not using atomic_t'. Which 
+fetch_and_zero() clearly isnt ...
+
+So by all that logic and somewhat idiosynchratic API history, the new 
+facility should probably not be fetch_and_zero(), but something like 
+nonatomic_fetch_and_zero(), but that's quite a mouthful for something so 
+simple - and the API family connection to xchg() is lost as well, which is 
+a bit sad...
+
+In all that context the least bad approach sounded to add a __ to denote 
+__xchg() is 'something special and also lighter weight' (which it is).
+
+I *think* the bigger danger in locking nomenclature is to falsely imply 
+atomicity - in that sense I'm not sure fetch_and_zero() is ideal - but I 
+can certainly live with it b/c the perfect name keeps eluding me.
+
+> The *whole* point of two underscores is to say "don't use this - it's
+> an internal implementation". That's the historical meaning, and it's
+> the meaning we have in the kernel too. Two underscores means "this is
+> special and doesn't do everything required" (it might need locking
+> around it, for example).
+
+Yeah. I do think we might want to keep one related change though:
+
+  e27cff3d2d43 ("arch: rename all internal names __xchg to __arch_xchg")
+
+... not because we want to use the __xchg namespace, but because an _arch 
+prefix makes it even *less* likely to be used by non-infrastructure code.
+
+> So then making a new interface with two underscores and thinking "we 
+> should now make random drivers use this" is fundamentally bogus.
+> 
+> Look, just grep for "__xchg" in the main tree (ie the one *without* this 
+> change). It all makes sense. It's all clearly an internal helper - as 
+> marked by that double underscore - and it's not used by any driver or 
+> filesystem code.
+> 
+> Exactly like K&R and God intended.
+
+Yeah. We'll try this new facility again in v6.5, but with a better name. 
+Sorry about that!
+
+Thanks,
+
+	Ingo
