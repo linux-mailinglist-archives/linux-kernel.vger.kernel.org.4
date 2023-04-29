@@ -2,97 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483146F217F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 02:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6736F2180
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 02:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347063AbjD2AJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 20:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S1347155AbjD2AKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 20:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjD2AJO (ORCPT
+        with ESMTP id S1347095AbjD2AKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 20:09:14 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC003C26
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:13 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso411824a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1682726951; x=1685318951;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6YACjJPQ/4k1aGg00TusYEm4/EfglatXgozInXtXCNs=;
-        b=FqJUlu5ddgmBLypqfG2Blbl7gQZL5TiIetcxXc+YjxAXrWjQst1OHU3rL12meDPFvF
-         hXtWAqAfPoP1mZLbwogC94rdPFlS8tio/H9Q+m7fvc57iBfWv9u+TpNefsJq3C2zXoy8
-         PgbUzlmTylo+d/4Ijq8xcB6MtQw1Fqwm/lrKo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682726951; x=1685318951;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6YACjJPQ/4k1aGg00TusYEm4/EfglatXgozInXtXCNs=;
-        b=KN849XXQxQYaxQCw2vsZKBWvTal2uS/9Ln2r3bgOLI2eQrTzwrkPXJxWxF3GTa+j1a
-         /A6SZ0hOw2B/q/iEmPGEmnzsjEiWn1dWNzZhViZzG/t+6+kBCMelXH6mKj/kjtUU8g8f
-         RmTH5JKZA7ZoZA41OPYnIOI78WeAkSeQ2RA7GYvKFK9FbKHKzCneAnNTFh0XY8GqSa8g
-         FIghmwuuzOZ0aLeJDZvXA2Mf+VzzTv/TLA0jnPb9BgNsIIaYOfnOSQrvq4EPb/ly/LV3
-         zPhj4P3CyA/7W/Hy1N5b10+CVCfM7rCrIJ42wa+tY7TjqhU/uRdDjp3VaivJFmDNSCXY
-         aM1g==
-X-Gm-Message-State: AC+VfDwIJ0XEMQL6gm/G44HXQ0HX7AXKLJJQjrZ9Ib65IkOVAUtW8y58
-        QwQopvGb+SvZlwjF3S7w2714po16vLhoeUUpRPgJMyT2
-X-Google-Smtp-Source: ACHHUZ6UUV2pmBtgFEHdyEGjidaaOCpCyEB/puAANC203k5Hzyld8hoNWmm1oDnRNTe2WxELgXKdVQ==
-X-Received: by 2002:aa7:cc85:0:b0:504:b6a6:cbe0 with SMTP id p5-20020aa7cc85000000b00504b6a6cbe0mr406325edt.12.1682726951654;
-        Fri, 28 Apr 2023 17:09:11 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm11886582ejb.109.2023.04.28.17.09.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 17:09:11 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso411799a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:10 -0700 (PDT)
-X-Received: by 2002:aa7:d416:0:b0:504:80d8:a034 with SMTP id
- z22-20020aa7d416000000b0050480d8a034mr337676edq.40.1682726950671; Fri, 28 Apr
- 2023 17:09:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
-In-Reply-To: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 28 Apr 2023 17:08:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wivud6jefN+UKa4zkAf4dkapyh4iRazyUVgXTzqRntOMg@mail.gmail.com>
-Message-ID: <CAHk-=wivud6jefN+UKa4zkAf4dkapyh4iRazyUVgXTzqRntOMg@mail.gmail.com>
+        Fri, 28 Apr 2023 20:10:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2DD421F
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:10:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F29D964266
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 00:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5C5CBC433D2;
+        Sat, 29 Apr 2023 00:10:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682727004;
+        bh=XsoaQj93I5H97j77YSJFrGFLBXFXTiy6B3pMwBky3fI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=VVHfVvy5/8eagge8hVaN2D+tJvdluuGCZcVim4Gwfwal5jODmVGhd9fOyeZRuxO0h
+         y1aKZvc8sCC6w2ssGvqz6PYOSo5iLD+8BCB/oA6tyRf8x5ClKAyd1/kT8/V7JiTVGM
+         gGMx/Z36XBRs4EGKJaorOwEzMvl/s65goBEZPv95hycvhIuAz76yXRiZv1f+If3n8X
+         BpLbOt1ASsopNBlzF6724SX6m2xZYq8aBoq2NqSKs77QyMahBZWhcr4CfwXoYvn4DZ
+         TL1tUsSYY3y0yQEKFBICdcpjok3q/e6YkBaxAsCRDMaMaMVqWl5s9L9Z3KUm8PQEQd
+         pGg0NY4ttMKdw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44762C3959E;
+        Sat, 29 Apr 2023 00:10:04 +0000 (UTC)
 Subject: Re: [GIT PULL] RISC-V Patches for the 6.4 Merge Window, Part 1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
+References: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
+X-PR-Tracked-List-Id: <linux-riscv.lists.infradead.org>
+X-PR-Tracked-Message-Id: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.4-mw1
+X-PR-Tracked-Commit-Id: b09313dd2e726fe5e1fa574cd73f5e326c6030a4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 89d77f71f493a3663b10fa812d17f472935d24be
+Message-Id: <168272700426.9526.5480201367174697156.pr-tracker-bot@kernel.org>
+Date:   Sat, 29 Apr 2023 00:10:04 +0000
 To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 9:09=E2=80=AFAM Palmer Dabbelt <palmer@rivosinc.com=
-> wrote:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/risc=
-v-for-linus-6.4-mw1
+The pull request you sent on Fri, 28 Apr 2023 09:09:21 -0700 (PDT):
 
-Ugh, so this conflicted pretty nastily in arch/riscv/mm/init.c between comm=
-its
+> git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.4-mw1
 
-  ef69d2559fe9 ("riscv: Move early dtb mapping into the fixmap region")
-  8589e346bbb6 ("riscv: Move the linear mapping creation in its own functio=
-n")
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/89d77f71f493a3663b10fa812d17f472935d24be
 
-and while I did try to make sense of it all, and generated what looks
-like a sane resolution to me, I did *not* do some kind of build check,
-much less can I test anything.
+Thank you!
 
-So.. Caveat emptor. I may or may not have gotten that conflict right,
-and you should most definitely double-check it very carefully.
-
-                  Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
