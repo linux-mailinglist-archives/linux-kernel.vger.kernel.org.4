@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583876F25BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 20:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34AD6F25BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 20:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjD2SSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 14:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
+        id S230141AbjD2ST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 14:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjD2SSB (ORCPT
+        with ESMTP id S229774AbjD2ST1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 14:18:01 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2ED79F;
-        Sat, 29 Apr 2023 11:18:00 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-44089f95265so290352e0c.3;
-        Sat, 29 Apr 2023 11:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682792280; x=1685384280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r1iDAowj027iaBmQvYLZLlsdgLbrABEug20GI/GfAo4=;
-        b=qFbq5Sj7+zxZlOrpitzMN8wuN/wkDrUeRn3nzPHxlf6QYDD9BDV9wa2Z5bpOvBCqOt
-         R3UtJb7Pa/DUIRT6gTEKPJgTsf2BurAFEj8Qo2Mh9AS5gowIPPbkEhuiRcNVmW8+pQG7
-         RInOsoIsMZQpz2rFLgXUzlZXgiW/ZfqP+ZRzNiv7PuuHLubvw6i3WD/68aiqqnadFchi
-         Btv0PmA25qZ9ZihhRg+1Hgf8YcR7yCeteBIhppqaXyP/CRF69CrJWzNW4dqid56hpfL2
-         1luN881Qa2CmFsUAkhd8OAV1aahJAbC6mVGVZmvXSQ2eaPOA1nz4UJQiIRbkZyu1Ud83
-         7DWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682792280; x=1685384280;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r1iDAowj027iaBmQvYLZLlsdgLbrABEug20GI/GfAo4=;
-        b=dkSP7XsV1gt9w1JjqXADRFrYQwNg1XgciS3MUxg2GEdj4d2dcV1FA3004khp0ygAeJ
-         cA0w5u3VkYTzXlhBYNw1ZlHg06AK0BL0IekMYqLUnzPY4oA2fss8xEtKVdXK0Pc64EV9
-         mUlelWllbCHmEwaJ3NUf+LNU8hCbFr6O/NnTSkYFR6cK+SBXaByVMN3SD5wK/9YOTWeZ
-         mXo01OSm8FZb2FuMYn4A/wQPKb/Lwe120qtepAd1BXKDXNRbdTmmIK0ztn8nOzea8Qnr
-         r0KcN5o12KYG+OfGbjOhL75thNzoyZw38SbmXU1xofZMBYP6wxCY9dXD1rM42yrcrkRB
-         rutQ==
-X-Gm-Message-State: AC+VfDxjQzk+l5xpS38ScXVx8hUe16bPEJbN9vYbMR9BQdBlyQ0u/1if
-        r1qPtXVhCAT7kWw6B/qT22GsSzW0HBZbJS5TLzQ=
-X-Google-Smtp-Source: ACHHUZ4gAyBPwxEd6oY9ni3Df1iyIVtAfUw2w1QS6RzCTPmfziF/rQAQXVApUObLwF1k+G4lvXaJeFWCuo7dyiF05b4=
-X-Received: by 2002:a1f:e282:0:b0:440:8a24:e71f with SMTP id
- z124-20020a1fe282000000b004408a24e71fmr3264011vkg.7.1682792279508; Sat, 29
- Apr 2023 11:17:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230429020951.082353595@lindbergh.monkeyblade.net>
- <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com> <ZE0kndhsXNBIb1g7@debian.me>
-In-Reply-To: <ZE0kndhsXNBIb1g7@debian.me>
-From:   Jeff Chua <jeff.chua.linux@gmail.com>
-Date:   Sun, 30 Apr 2023 02:17:48 +0800
-Message-ID: <CAAJw_Zvxtf-Ny2iymoZdBGF577aeNomWP7u7-5rWyn6A7rzKRg@mail.gmail.com>
-Subject: Re: iwlwifi broken in post-linux-6.3.0 after April 26
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sat, 29 Apr 2023 14:19:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B3B9F;
+        Sat, 29 Apr 2023 11:19:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F23060B6B;
+        Sat, 29 Apr 2023 18:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AD4A4C433D2;
+        Sat, 29 Apr 2023 18:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682792365;
+        bh=8HDfUiZjrvUti/9Ci5CYxqlcQpcPcVdKxSLybQOJ1/c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Pp/ubhqcsJx437DN1q0keIixF8iPP9qa6h5P2vDMGUcE93XFogT6mTR5QsCyFpsDQ
+         D/Jh21nth6YUH5Ll+SOGXdJ3IR5w52ep5+cLXCO5/FpcEGvZlElC9e0HdPf7/NTD4/
+         +Wg847xT0Luus5pH/evc3js8FfP7RAXNM8KODG7tmdtAJwA8tR6rNF0bruAmH1G03H
+         W0MpU9aHmQil365hD4zONYC1z0TGt07QlxqriP23iKue9rNPKC3QsV1sNZN4Exj8h3
+         k/a9TNlypFSzxjB4tNh0u+PJAjOyEFm4/efgDLbuR9XTjH96MlFt69bWA+0Ugzy+Ji
+         jAZ8etbyhB+zw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88D7EC43158;
+        Sat, 29 Apr 2023 18:19:25 +0000 (UTC)
+Subject: Re: [GIT PULL] ksmbd server fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
+References: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.4-rc-ksmbd-server-fixes
+X-PR-Tracked-Commit-Id: 74d7970febf7e9005375aeda0df821d2edffc9f7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1ae78a14516b9372e4c90a89ac21b259339a3a3a
+Message-Id: <168279236542.22076.7235162901818800004.pr-tracker-bot@kernel.org>
+Date:   Sat, 29 Apr 2023 18:19:25 +0000
+To:     Steve French <smfrench@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 10:07=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.co=
-m> wrote:
->
-> On Sat, Apr 29, 2023 at 01:22:03PM +0800, Jeff Chua wrote:
-> > Can't start wifi on latest linux git pull ... started happening 3 days =
-ago ...
->
-> Are you testing mainline?
+The pull request you sent on Wed, 26 Apr 2023 21:11:44 -0500:
 
-I'm pulling from https://github.com/torvalds/linux.git, currently at ...
+> git://git.samba.org/ksmbd.git tags/6.4-rc-ksmbd-server-fixes
 
-commit 1ae78a14516b9372e4c90a89ac21b259339a3a3a (HEAD -> master,
-origin/master, origin/HEAD)
-Merge: 4e1c80ae5cf4 74d7970febf7
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat Apr 29 11:10:39 2023 -0700
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1ae78a14516b9372e4c90a89ac21b259339a3a3a
 
-> Certainly you should do bisection.
+Thank you!
 
-ok, will do.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
