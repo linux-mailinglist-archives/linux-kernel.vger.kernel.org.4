@@ -2,481 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683436F2227
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DC06F222A
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347285AbjD2Blh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S1347288AbjD2Bom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347167AbjD2Blf (ORCPT
+        with ESMTP id S1347167AbjD2Boj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:41:35 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E520C2D49
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:41:32 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-2f6401ce8f8so215285f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682732491; x=1685324491;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SyK4VBwu5TMqPPUtow8WZGcT3GMoUUkkYoxuh/U+jzQ=;
-        b=NRQGvDlcHRJPhxeAYMYoH0aCKt8K3DR/wgvGtvEzELQOJcrM+IL7nlvStr1JhQSlb1
-         3sxOKVy5zZ6cUQcv3oJXvCidyy6QMpFYyarTLrTBb1FppXPro3XXVQM4OMMe3SBXO3Xr
-         f63RaHIf9FOOgSifb+fSeBRUr7z17ruOHGPc/EiX7P3QX4Tp1Eyy9XJuEIIFmRAl67OR
-         eKy7sY/HIR2npR4M4kqi2RrnD1NdjmNfGhVjLXaers1+G/pQVW+fHk8VlgaSoshbCVS/
-         3K2b/m6ogwM6zzlBna1Puc3sLvzjynJy+lcXPrHhsxLhZzfgpiYj+Hj0QIKIpqgcaXbF
-         7/zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682732491; x=1685324491;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyK4VBwu5TMqPPUtow8WZGcT3GMoUUkkYoxuh/U+jzQ=;
-        b=ekTzV7MnSG5dkQrv71aGgQNTLUiOyGikbFfZMFx1MyVTZPCu+62XrPxb7bD1aegDbo
-         yjcefF/An79OzIwC67DoTF2VhIY47WaU/E3hJ3D+kTZaxxnZpWazGzLlTJRooRH9qADo
-         IHXemXDYTpvX5dagAWF9a1Db/BN0qqYJg3+E+V68RPwgU67H85mfMtDonYUEy1EFmDXD
-         1ClJeFTYy5SC8nOrt6CL0nwojAnpG5NR07syBI8UDxuvwcgTRijChUrGU/8s1dgO94OW
-         mE6iNDk0OPhwEMuqRJiWOJjpNZYlsd8C00GJ9IuWuUH8UV3Zhy7fjP5VSBtDK54/ZzE1
-         UCVA==
-X-Gm-Message-State: AC+VfDz/l66H1BrSFAZB9ESlZQsUg/lSr+WowYDzjjF2kIj5WDQAwy+9
-        WJ60M6JJzH9UcE05TyUIIqRUBA==
-X-Google-Smtp-Source: ACHHUZ5hMzwXEj/paH5qOsOOh1AeDfjE/FiUyUgPJtPc3Pe1Gzl/vYg738/nsARBv+M0TIKAmXYxag==
-X-Received: by 2002:adf:fe48:0:b0:2f0:58a:db82 with SMTP id m8-20020adffe48000000b002f0058adb82mr4835610wrs.36.1682732491348;
-        Fri, 28 Apr 2023 18:41:31 -0700 (PDT)
-Received: from [10.6.148.94] ([212.140.138.218])
-        by smtp.gmail.com with ESMTPSA id e26-20020a05600c219a00b003f180d5b145sm25739096wme.40.2023.04.28.18.41.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 18:41:30 -0700 (PDT)
-Message-ID: <772a63ca-9b88-3c98-e769-7e614968c127@linaro.org>
-Date:   Sat, 29 Apr 2023 04:41:29 +0300
+        Fri, 28 Apr 2023 21:44:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5512D49;
+        Fri, 28 Apr 2023 18:44:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1ABB61CB5;
+        Sat, 29 Apr 2023 01:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E4DC433D2;
+        Sat, 29 Apr 2023 01:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682732677;
+        bh=I063xDCEf57sq9X6LGhxryElZSMY8cOlcd0qMbRJ7Mk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tH+bqRGWKKCqR3gQrbloXKcJOL+gNvMiXlaDhUDuHwgbXv9qtjEZPuZaKIvr4535p
+         xMPT7vFXGCmWzusrNdFu82pIoOuLkhIYzWPtZjchLI4mcPf1MxATAMX3QnB9A+odJ+
+         ey2B9cUsMDLbcdcbTjqyMktC8nPCgXrRR8ObVN26EthcPdKe1IIPukHhd3uW+dgFHw
+         oOQcj7FZ7ca0xjaj6yvS9dj3zZ2cKoRuZcJmAFWKdesGflMqXRf7AYs4GQdY5V0+cO
+         8hDC6dpAFT5LL2n+Fi3xFpmAteyQESKc/tw+BPVAq7Onq8Rf+yR5uoMMFDQy9SWsG+
+         +xL+y5Bxy893w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6BF51403B5; Fri, 28 Apr 2023 22:44:34 -0300 (-03)
+Date:   Fri, 28 Apr 2023 22:44:34 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Cc:     Dmitry Dolgov <9erthalion6@gmail.com>,
+        linux-perf-users@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        mingo@redhat.com, jolsa@kernel.org, namhyung@kernel.org,
+        irogers@google.com
+Subject: Re: [RFC PATCH] perf stat: Separate bperf from bpf_profiler
+Message-ID: <ZEx2gsEOWNxXaY/+@kernel.org>
+References: <20230412182316.11628-1-9erthalion6@gmail.com>
+ <20230421205610.xawzzfy36iskcoyx@erthalion.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/7] drm/msm/dpu: add DPU_PINGPONG_DSC feature PP_BLK
- and PP_BLK_TE
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
- <1682725511-18185-6-git-send-email-quic_khsieh@quicinc.com>
- <ad672cff-3355-97af-24b4-3626efebc284@linaro.org>
- <e9f493fa-77f2-0a5b-5e09-bd1baae8a8d0@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <e9f493fa-77f2-0a5b-5e09-bd1baae8a8d0@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421205610.xawzzfy36iskcoyx@erthalion.local>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2023 04:08, Abhinav Kumar wrote:
+Em Fri, Apr 21, 2023 at 10:56:10PM +0200, Dmitry Dolgov escreveu:
+> > On Wed, Apr 12, 2023 at 08:23:16PM +0200, Dmitrii Dolgov wrote:
+> > It seems that perf stat -b <prog id> doesn't produce any results:
+> >
+> >     $ perf stat -e cycles -b 4 -I 10000 -vvv
+> >     Control descriptor is not initialized
+> >     cycles: 0 0 0
+> >                 time        counts unit      events
+> > 	10.007641640    <not supported>      cycles
+> >
+> > Looks like this happens because fentry/fexit progs are getting loaded, but the
+> > corresponding perf event is not enabled and not added into the events bpf map.
+> > I think there is some mixing up between two type of bpf support, one for bperf
+> > and one for bpf_profiler. Both are identified via evsel__is_bpf, based on which
+> > perf events are enabled, but for the latter (bpf_profiler) a perf event is
+> > required. Using evsel__is_bperf to check only bperf produces expected results:
 > 
-> 
-> On 4/28/2023 5:45 PM, Dmitry Baryshkov wrote:
->> On 29/04/2023 02:45, Kuogee Hsieh wrote:
->>> Legacy DPU requires PP hardware block involved into setting up DSC
->>
->> Nit: to be envolved
->>
->>> data path. This patch add DDPU_PINGPONG_DSC feature bit to both
->>
->> adds
->>
->>> PP_BLK and PP_BLK_TE so that both dpu_hw_pp_setup_dsc() and
->>> dpu_hw_pp_dsc_enable() will be executed during DSC path setup.
->>
->> Would it be easier to add PP_BLK_NO_DSC instead and make DSC enabled 
->> by default for PP_BLK / PP_BLK_TE?
->>
-> 
-> No because for some chipsets like qcm2290, it has a ping pong block but 
-> no DSC.
+> Any thoughts on this? I would appreciate clarifications if I'm missing
+> something.
 
-And so it will use PP_BLK_NO_DSC (like msm8998 for PP_2/_3). But this 
-might be not the optimal solution. Let's check all possible cases:
+Namhyung, Song, can you please take a look at this?
 
-- PP (or PP_TE?) with no DSC support,
-- PP/PP_TE tightly bound to the particular DSC instance, should be 
-allocated together,
-- PP/PP_TE which can use any DSC block.
-- all PP_DITHER probably support any DSC?
-
-Is this list correct? If so, we'd need to be able to specify the DSC id 
-in the PP block description.
-
-> 
->>>
->>> Reported-by : Marijn Suijten <marijn.suijten@somainline.org>
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>> ---
->>>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    | 12 +++++-----
->>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  8 +++----
->>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 26 
->>> ++++++++++------------
->>>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 24 
->>> ++++++++++----------
->>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 26 
->>> ++++++++++------------
->>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
->>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  2 +-
->>>   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  2 +-
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  8 +++----
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  2 ++
->>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |  9 +++++---
->>>   11 files changed, 62 insertions(+), 61 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> index 17f821c..b7cd746 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->>> @@ -112,16 +112,16 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg msm8998_pp[] = {
->>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
->>> BIT(DPU_PINGPONG_DSC), 0,
->>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
->>> BIT(DPU_PINGPONG_DSC), 0,
->>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, 0, sdm845_pp_sblk,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, 0, sdm845_pp_sblk,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> index ceca741..8888bd9 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
->>> @@ -110,16 +110,16 @@ static const struct dpu_lm_cfg sdm845_lm[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sdm845_pp[] = {
->>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
->>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
->>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
->>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
->>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
->>> 0, sdm845_pp_sblk,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
->>> 0, sdm845_pp_sblk,
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
->>> index 42b0e58..3a7dffa 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
->>> @@ -128,24 +128,22 @@ static const struct dpu_dspp_cfg sm8150_dspp[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sm8150_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->>> -            -1),
->>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->>> -            -1),
->>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
->>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
->>>   };
->>>   static const struct dpu_merge_3d_cfg sm8150_merge_3d[] = {
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->>> index 5bb9882..e766a2d 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->>> @@ -116,23 +116,23 @@ static const struct dpu_lm_cfg sc8180x_lm[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sc8180x_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->>>               -1),
->>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->>>               -1),
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
->>> index ed130582..137b151 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
->>> @@ -129,24 +129,22 @@ static const struct dpu_dspp_cfg sm8250_dspp[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sm8250_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_0,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
->>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
->>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_1,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
->>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
->>> -            -1),
->>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
->>> sdm845_pp_sblk,
->>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
->>> -            -1),
->>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
->>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
->>> MERGE_3D_2,
->>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
->>>   };
->>>   static const struct dpu_merge_3d_cfg sm8250_merge_3d[] = {
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
->>> index a46b117..e5631a2 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
->>> @@ -80,8 +80,8 @@ static const struct dpu_dspp_cfg sc7180_dspp[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sc7180_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk, -1, 
->>> -1),
->>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk, -1, 
->>> -1),
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk, 
->>> -1, -1),
->>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, 0, sdm845_pp_sblk, 
->>> -1, -1),
->>>   };
->>>   static const struct dpu_intf_cfg sc7180_intf[] = {
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
->>> index 988d820..7b4ad0f 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
->>> @@ -60,7 +60,7 @@ static const struct dpu_dspp_cfg sm6115_dspp[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg sm6115_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk,
->>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
->>> index c9003dc..20d4d14 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
->>> @@ -57,7 +57,7 @@ static const struct dpu_dspp_cfg qcm2290_dspp[] = {
->>>   };
->>>   static const struct dpu_pingpong_cfg qcm2290_pp[] = {
->>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
->>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk,
->>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
->>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> index 91bfc8a..83c0cd9 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>> @@ -501,21 +501,21 @@ static const struct dpu_pingpong_sub_blks 
->>> sc7280_pp_sblk = {
->>>       .intr_done = _done, \
->>>       .intr_rdptr = _rdptr, \
->>>       }
->>> -#define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->>> +#define PP_BLK_TE(_name, _id, _base, _features, _merge_3d, _sblk, 
->>> _done, _rdptr) \
->>>       {\
->>>       .name = _name, .id = _id, \
->>>       .base = _base, .len = 0xd4, \
->>> -    .features = PINGPONG_SDM845_SPLIT_MASK, \
->>> +    .features = PINGPONG_SDM845_SPLIT_MASK | _features, \
->>>       .merge_3d = _merge_3d, \
->>>       .sblk = &_sblk, \
->>>       .intr_done = _done, \
->>>       .intr_rdptr = _rdptr, \
->>>       }
->>> -#define PP_BLK(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
->>> +#define PP_BLK(_name, _id, _base, _features, _merge_3d, _sblk, 
->>> _done, _rdptr) \
->>>       {\
->>>       .name = _name, .id = _id, \
->>>       .base = _base, .len = 0xd4, \
->>> -    .features = PINGPONG_SDM845_MASK, \
->>> +    .features = PINGPONG_SDM845_MASK | _features, \
->>>       .merge_3d = _merge_3d, \
->>>       .sblk = &_sblk, \
->>>       .intr_done = _done, \
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> index fc87db1..6b49171 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>> @@ -144,6 +144,7 @@ enum {
->>>    * @DPU_PINGPONG_SPLIT      PP block supports split fifo
->>>    * @DPU_PINGPONG_SLAVE      PP block is a suitable slave for split 
->>> fifo
->>>    * @DPU_PINGPONG_DITHER,    Dither blocks
->>> + * @DPU_PINGPONG_DSC,        PP block binding to DSC
->>>    * @DPU_PINGPONG_MAX
->>>    */
->>>   enum {
->>> @@ -152,6 +153,7 @@ enum {
->>>       DPU_PINGPONG_SPLIT,
->>>       DPU_PINGPONG_SLAVE,
->>>       DPU_PINGPONG_DITHER,
->>> +    DPU_PINGPONG_DSC,
->>>       DPU_PINGPONG_MAX
->>>   };
->>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c 
->>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
->>> index 3822e06..f255a04 100644
->>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
->>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
->>> @@ -264,9 +264,12 @@ static void _setup_pingpong_ops(struct 
->>> dpu_hw_pingpong *c,
->>>       c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
->>>       c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
->>>       c->ops.get_line_count = dpu_hw_pp_get_line_count;
->>> -    c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
->>> -    c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
->>> -    c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
->>> +
->>> +    if (features & BIT(DPU_PINGPONG_DSC)) {
->>> +        c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
->>> +        c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
->>> +        c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
->>> +    }
->>>       if (test_bit(DPU_PINGPONG_DITHER, &features))
->>>           c->ops.setup_dither = dpu_hw_pp_setup_dither;
->>
-
--- 
-With best wishes
-Dmitry
-
+- Arnaldo
