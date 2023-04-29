@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6376F2238
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEF06F2235
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347321AbjD2B6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S1347309AbjD2B6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347317AbjD2B6C (ORCPT
+        with ESMTP id S1347136AbjD2B56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:58:02 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E9D3ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:57:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a6bc48aec8so4703175ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682733479; x=1685325479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JwYEXU7Lp9XroufPN43xvmiTz9v2gxPHNeujBe94GAs=;
-        b=RXfyW4VFENC5ciM0BkQroL4aTdKXdDxKRQP+lXVasRmQpe5AI9ZHyvuHYeeGYk3Qb3
-         5eGB9m1chP/gFDsK+Kq3oCrQGusaWdv4ohH1vJ1AauBiusk9QlXKDJxIcIXL/ysUJiuo
-         TJ8ryIERQ67DdKzkaBWura/eB3J3OP4gWII1O8nQCqHtILnjZkE20TC7iYsmfyoi2YcD
-         NVYLjMQk/hAcc+H6PB0dtfjya3cxCRCqtERmwcSfhVVfyFnWklGRnJI6OQH/9Y6bZpbv
-         0B8iJM+g4s5BoqriWl9kxk+QO331R/fFPpG6dylVLVil6y68Q6dXek410s1b5hZSql8w
-         pDgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682733479; x=1685325479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JwYEXU7Lp9XroufPN43xvmiTz9v2gxPHNeujBe94GAs=;
-        b=cBYTLdASzQvkYnqdB+2Z3R5znC7Wipk0SeDHBC9SK6Ec33RC4pii0sx7fDtXj7C3P8
-         OuK0pC34Mz2wLi/U4qag3pjiUUSDUMR6jLspnktS2Q2hdGij6Vym0Sn+nuy5X52MvOyO
-         oRQs6E/1j1SbZrrYWHU4B/FmhV59G6Elp9+3ynzAgNYJKk56LOOP+1zB1xPjsLbLrg5u
-         XwCWKSSMO+k+p0r/3cFlyOMn0uxN00cZu5KMs5gAwNe45osXKKi/a6I9b8gB1QcPouSX
-         Cw0B9rngSTaofv7TRA/5yH4YjLYJSWMKPRE2c7/4rUZ0nDeMBW5chIraUqoKcW3VuLEL
-         NjlQ==
-X-Gm-Message-State: AC+VfDyJUkktKtexUr32DZnv7rKSyecvnrza7QTdyO3iEonev0Nl2ozc
-        5kNW+dcuhEX+D7QgQsxU0+YFOBkN2ktDR6ODGDktEg==
-X-Google-Smtp-Source: ACHHUZ6hnf26OkmiqUDWsr7DSiuPNV/BdRgyZpdsz5lR+uhorY4Vu4itliEAmdMKDWjt/ddvAknB/Tx9C46kEc/0Fy8=
-X-Received: by 2002:a17:902:f78a:b0:1a9:b62f:9338 with SMTP id
- q10-20020a170902f78a00b001a9b62f9338mr6290325pln.45.1682733479236; Fri, 28
- Apr 2023 18:57:59 -0700 (PDT)
+        Fri, 28 Apr 2023 21:57:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BE430D2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:57:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51B5B615E0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 01:57:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B93CC433D2;
+        Sat, 29 Apr 2023 01:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682733473;
+        bh=NAp4+2v3eip+oibXwCdkhIwyzFLv+Dzh8609RU3cAMw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lH1LV7hOINe+s4Nc6Vh7izu/VeGciWZ6/+7yFxrQ61VvXmkd1YnQ2BJbWJ4Rhf1uR
+         pF+lEHLru31piB42pnenrgh/TyNjlUA8WWfzbOrja39p0adzvqLD5K0lgvcsSBBohA
+         /G2Kt9fT9YqHMM1D08U+plAlvJLGhwiXej4k5fJwBPsJVwWam0BB5oF+aFAGn9bMRs
+         kbkTUBswaH1KPUASvliMQ79PNwQL5lmEUPSuWolarMHu480kzCSPu5cqb/Vx/TYRko
+         x6mvOFx/I/9JqFiaVpxxX26HY/L6YFQvyVsvsIKHVwpKRmiB7KPSvZozRFjwoYay/j
+         ZL3BM6WJ9v50Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2BB89403B5; Fri, 28 Apr 2023 22:57:51 -0300 (-03)
+Date:   Fri, 28 Apr 2023 22:57:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mike.leach@linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, darren@os.amperecomputing.com,
+        scott@os.amperecomputing.com, scclevenger@os.amperecomputing.com
+Subject: Re: [PATCH V2] perf cs-etm: Add fix for coresight trace for any
+ range of CPUs
+Message-ID: <ZEx5n8MdwuV5JE2r@kernel.org>
+References: <20230421055253.83912-1-gankulkarni@os.amperecomputing.com>
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
- <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
-In-Reply-To: <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
-From:   Daniel Rosenberg <drosen@google.com>
-Date:   Fri, 28 Apr 2023 18:57:48 -0700
-Message-ID: <CA+PiJmQJ8m_W_SF3GPe9pqnwJX0gbkWuuOz-WXHWcA7JExgMyg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230421055253.83912-1-gankulkarni@os.amperecomputing.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 2:09=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> would this work correctly if someone passes a non-null buffer with too
-> small size? Can you please add a test for this use case.
->
-Working on a test case for this, but the test case I wrote fails
-without my patches.
-I'm just declaring a buffer of size 9 on the stack, and then passing
-in bpf_dynptr_slice that buffer, and size 10. That's passing the
-verifier just fine. In fact, it loads successfully up to size 16. I'm
-guessing that's adjusting for alignment? Still feels very strange. Is
-that expected behavior?
+Em Thu, Apr 20, 2023 at 10:52:53PM -0700, Ganapatrao Kulkarni escreveu:
+> The current implementation supports coresight trace decode for a range
+> of CPUs, if the first CPU is CPU0.
+> 
+> Perf report segfaults, if tried for sparse CPUs list and also for
+> any range of CPUs(non zero first CPU).
+> 
+> Adding a fix to perf report for any range of CPUs and for sparse list.
+
+Can some ARM people please review this?
+
+- Arnaldo
+ 
+> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
+> ---
+> 
+> V2:
+> 	Updated with review comments.
+> 	Fixed for sparse list of CPUs also.
+> 
+> V1:
+> 	[1] https://lore.kernel.org/lkml/20230419172101.78638-1-gankulkarni@os.amperecomputing.com/
+> 
+>  tools/perf/util/cs-etm.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+> index 8dd81ddd9e4e..2003717f5779 100644
+> --- a/tools/perf/util/cs-etm.c
+> +++ b/tools/perf/util/cs-etm.c
+> @@ -275,6 +275,25 @@ static int cs_etm__metadata_set_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
+>  		(typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+>  	})
+>  
+> +/*
+> + * Get a metadata for a specific cpu from an array.
+> + *
+> + */
+> +static u64 *get_cpu_data(struct cs_etm_auxtrace *etm, int cpu)
+> +{
+> +	int i;
+> +	u64 *metadata = NULL;
+> +
+> +	for (i = 0; i < etm->num_cpu; i++) {
+> +		if (etm->metadata[i][CS_ETM_CPU] == (u64)cpu) {
+> +			metadata = etm->metadata[i];
+> +			break;
+> +		}
+> +	}
+> +
+> +	return metadata;
+> +}
+> +
+>  /*
+>   * Handle the PERF_RECORD_AUX_OUTPUT_HW_ID event.
+>   *
+> @@ -344,8 +363,11 @@ static int cs_etm__process_aux_output_hw_id(struct perf_session *session,
+>  		return 0;
+>  	}
+>  
+> +	cpu_data = get_cpu_data(etm, cpu);
+> +	if (cpu_data == NULL)
+> +		return err;
+> +
+>  	/* not one we've seen before - lets map it */
+> -	cpu_data = etm->metadata[cpu];
+>  	err = cs_etm__map_trace_id(trace_chan_id, cpu_data);
+>  	if (err)
+>  		return err;
+> -- 
+> 2.39.2
+> 
+
+-- 
+
+- Arnaldo
