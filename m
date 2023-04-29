@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320566F22E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 06:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A166F22EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 06:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347137AbjD2EfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 00:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S1347206AbjD2Efi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 00:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjD2EfV (ORCPT
+        with ESMTP id S1347188AbjD2Efd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 00:35:21 -0400
+        Sat, 29 Apr 2023 00:35:33 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4982D7F
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 21:35:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A483C16
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 21:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=bKr3wYG2niHqpoV2pFVL8uxWHOO4mQ21NZMP7Olit1I=; b=iNPC4REhngjEc0OQslhySER/Sk
-        j1v6o1c91VKnIMMCtkFJCCd94DPHi9hSmIOY6szKGFNOnQOTCx2szcLjqUhz6gwuPbLKnKSAm5FS8
-        xOxTG8O1B3DLc0CLJyNjsj+Dri9RMPmuTi7faLuxSYgptoNEQ31THz5VNXqV2Newe0f7HQm0OO7sO
-        ZUU+KNEeMWmna1Rvw8ETROQgpInYlDncu4lqfRRwIxyJB5QXgCFoa6RPC7QpAor3r4vNpFsVzH+ei
-        nCijojfl6zIELTEwx17ch94qYNyaWAj6n9BIbu+1q+b94d69F+YrUabMhPEV7D9ttVlhffgVmMcMI
-        ldeXAPKA==;
+        bh=zoaWVfddz3wSNejdOB9fyZIWSf2ml9M80D57wQbXMq0=; b=Pq8GzrekrPUopyeaBCJsLfAs0n
+        VMSHuF7fVf0BLIJxcduAVr7tjagQFFwScA9qgUruIotmipu/5gB+zC2JYoIzcpHet4LnLTiv+5ykg
+        TAEioIHe8rGLXPTLrZ5ZiPxBIcSWth/VYfxxMuXSOoYeTFSV0TDlAhZ7mENUrarz2/Z38wHL7t0Vt
+        ziPFwuE98vOXyyujhJA/JCSAoCgui23tssIwugN0zPn4S64wp0JgjfxqGyHWd5ni3sAlyXrvrkQjm
+        zEhQeix5/gqzJ5N52zyc522Ku/gOH/9HlnBvBu77LDybq4E9EIgVv61f6El1+o5kloaZSA5pQzCv/
+        GCfA7lSA==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pscIp-00CE8G-2X;
-        Sat, 29 Apr 2023 04:35:19 +0000
+        id 1pscJ0-00CE8t-2g;
+        Sat, 29 Apr 2023 04:35:30 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH -next?] powerpc/fsl_uli1575: fix kconfig warnings and build errors
-Date:   Fri, 28 Apr 2023 21:35:19 -0700
-Message-Id: <20230429043519.19807-1-rdunlap@infradead.org>
+        Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH] riscv: fix sifive and thead section mismatches in errata
+Date:   Fri, 28 Apr 2023 21:35:30 -0700
+Message-Id: <20230429043530.20503-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -52,46 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Neither FSL_SOC_BOOKE nor PPC_86xx enables CONFIG_PCI by
-default, so it may be unset in some randconfigs.
-When that happens, FSL_ULI1575 may be set when it should not be
-since it is a PCI driver. When it is set, there are 3 kconfig
-warnings and a slew of build errors
+When CONFIG_MODULES is set, __init_or_module becomes <empty>, but when
+CONFIG_MODULES is not set, __init_or_module becomes __init.
+In the latter case, it causes section mismatch warnings:
 
-WARNING: unmet direct dependencies detected for PCI_QUIRKS
-  Depends on [n]: PCI [=n]
-  Selected by [y]:
-  - FSL_PCI [=y]
+WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fill_cpu_mfr_info (section: .text) -> sifive_errata_patch_func (section: .init.text)
+WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fill_cpu_mfr_info (section: .text) -> thead_errata_patch_func (section: .init.text)
 
-WARNING: unmet direct dependencies detected for GENERIC_ISA_DMA
-  Depends on [n]: ISA_DMA_API [=n]
-  Selected by [y]:
-  - FSL_ULI1575 [=y] && (FSL_SOC_BOOKE [=n] || PPC_86xx [=y])
+It appears that CONFIG_MODULES not set is not tested very much.
 
-WARNING: unmet direct dependencies detected for PPC_INDIRECT_PCI
-  Depends on [n]: PCI [=n]
-  Selected by [y]:
-  - FSL_PCI [=y]
-
-and 30+ build errors.
-
-Fixes: 22fdf79171e8 ("powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support")
+Fixes: a8e910168bba ("riscv: implement module alternatives")
+Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Pali Rohár <pali@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org
 ---
- arch/powerpc/platforms/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/errata/sifive/errata.c |    8 +++-----
+ arch/riscv/errata/thead/errata.c  |    6 +++---
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff -- a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
---- a/arch/powerpc/platforms/Kconfig
-+++ b/arch/powerpc/platforms/Kconfig
-@@ -265,6 +265,7 @@ config CPM2
- config FSL_ULI1575
- 	bool "ULI1575 PCIe south bridge support"
- 	depends on FSL_SOC_BOOKE || PPC_86xx
-+	depends on PCI
- 	select FSL_PCI
- 	select GENERIC_ISA_DMA
- 	help
+diff -- a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
+--- a/arch/riscv/errata/sifive/errata.c
++++ b/arch/riscv/errata/sifive/errata.c
+@@ -82,11 +82,9 @@ static void __init_or_module warn_miss_e
+ 	pr_warn("----------------------------------------------------------------\n");
+ }
+ 
+-void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
+-					       struct alt_entry *end,
+-					       unsigned long archid,
+-					       unsigned long impid,
+-					       unsigned int stage)
++void sifive_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
++			      unsigned long archid, unsigned long impid,
++			      unsigned int stage)
+ {
+ 	struct alt_entry *alt;
+ 	u32 cpu_req_errata;
+diff -- a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
+--- a/arch/riscv/errata/thead/errata.c
++++ b/arch/riscv/errata/thead/errata.c
+@@ -83,9 +83,9 @@ static u32 thead_errata_probe(unsigned i
+ 	return cpu_req_errata;
+ }
+ 
+-void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+-					      unsigned long archid, unsigned long impid,
+-					      unsigned int stage)
++void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
++			     unsigned long archid, unsigned long impid,
++			     unsigned int stage)
+ {
+ 	struct alt_entry *alt;
+ 	u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
