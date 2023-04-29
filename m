@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FF36F2285
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 04:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536136F2287
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 04:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347190AbjD2CvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 22:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
+        id S1347141AbjD2C5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 22:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjD2CvK (ORCPT
+        with ESMTP id S229598AbjD2C5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 22:51:10 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABE230D6;
-        Fri, 28 Apr 2023 19:51:06 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33T2YVH0000908;
-        Sat, 29 Apr 2023 02:50:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=y6TZDcrDwLXt6v8NIY8rSXUtid3ja+4FTP4LPGgdDf8=;
- b=lqfjXF1njP5RE6g/e/wqRRI0ZBip6/BmcauGnjSFEg+8ivOalRdlhAmVURvpZA/6XURA
- yMCDlPA9UDR1mcc1xYhIOVba8yVSQQ4ki/Qhl2bI6NDqyd1lCM47M/3+Bec0UVyxeDHD
- fR3aKx8jK8MpP1jb976NUY/utFxYvghXjD8EhmivE6aTG4I1kOXHlTzyvT/KilWG+oxg
- OoFDy8H7OgiEQtEYoVZWQtTey3WQSXU19SPTQ9nAs67qQgwwVfksE/28GI3V+ReAHejy
- UYH+TiTPYHI5iVmii5/ropxax6kepY8FhX/hqN8V/+oqhWabvugLzjH7uIkpj0BaRoFl jg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8tju00hf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 02:50:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33T2od29030237
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 02:50:39 GMT
-Received: from [10.110.119.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
- 2023 19:50:37 -0700
-Message-ID: <ff60439f-9955-5e89-ee2c-17bc2b07d1e1@quicinc.com>
-Date:   Fri, 28 Apr 2023 19:50:37 -0700
+        Fri, 28 Apr 2023 22:57:48 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC532D61;
+        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-5f45fad3be1so6492876d6.0;
+        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682737065; x=1685329065;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9KWgSfBRX4/7Ituj2OvAS+wvcAoxKFvLr9noXKYmqF0=;
+        b=qe1x6DYNj8cmuducngKhKijZRivuXW9ENdmsbnUVee3sr1OZJ26XE+Vx2iih56yhDn
+         mvh1/+MWmRzjttCYFjwIjWAGn3x/NgCdWhxfWS9hPelwhgrsClS7SY8yw8LYWsmN+fLr
+         XX5G4Hk0AaIRDdb/XNPNnNe70ndj6br8ceZjF6AVyMNkaexllAYrkz+UKg1ce0XkkfTh
+         EVLaf3sdd9jL5i1F98ro7XSvOPDlxaDGFWxF93i+z9LHR6GRsCxCHqmuZwtNOEQhadAK
+         ATeD4wrVsK08c1gbmXIckO/wOvjMM+xTEDXQ2ktFfg4IXhGYKNpbeC6n8Na93DzTGrdh
+         lmFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682737065; x=1685329065;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9KWgSfBRX4/7Ituj2OvAS+wvcAoxKFvLr9noXKYmqF0=;
+        b=WKcgBK8Kze4Xd34no2QQ6uGS5xn0QBYy1uLO4GOV+5a/ol30bRs9XDUjCyL838127f
+         3TAOdC5N94x9licGY8uUS1PhKBXj7rK8oLMbpq7ZIWisKHvcSH9Z9JUsoSIkNlWO/BZd
+         hvgIQoJG2/5eg6KY6C3go1RiVzZB/Gh0r1dKesSn6Q/vwXOYIzXGlMK+elrvi41oLu/T
+         XvIyFGZ1166BVOUAQIFdiIpc7gQlcbhNq+2pu2AmQH9zcIZeN7pzg8g3Lku3dGn4UuG1
+         l54qW45hfS7wJuWRuEhYD4lHRyrhfREYTa1APYmDE+siwIiLn0aMSCfwTSmWhljIMDSA
+         fkXA==
+X-Gm-Message-State: AC+VfDzm5hI6T32j7qxfz4Go3lOkGwbuN4Dcv7vzjvv/77SO6y2t7QFX
+        SGU98adaYOGQzmmJgl+7qXg=
+X-Google-Smtp-Source: ACHHUZ5hKNuG3+lGMBBMI9UZfGmHUBdYfDexhwTC921xD9e/LwzTr4ussOkGLZKqH2IhBWqgupsybA==
+X-Received: by 2002:ad4:5ce7:0:b0:5e5:c00c:8189 with SMTP id iv7-20020ad45ce7000000b005e5c00c8189mr14011833qvb.10.1682737065031;
+        Fri, 28 Apr 2023 19:57:45 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id n16-20020a0cdc90000000b005ef589381a8sm6840396qvk.52.2023.04.28.19.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 19:57:44 -0700 (PDT)
+Message-ID: <637f3669-c6d8-0556-28aa-6599551f0849@gmail.com>
+Date:   Fri, 28 Apr 2023 19:57:41 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v2 0/7] add DSC 1.2 dpu supports
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 5.15 00/13] 5.15.110-rc1 review
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJpqqhP1QL7TuW8JXeVFqukWggYmB1XU8OeB65fQA+jhLAg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAA8EJpqqhP1QL7TuW8JXeVFqukWggYmB1XU8OeB65fQA+jhLAg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230428112039.133978540@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230428112039.133978540@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XdFCeBImXSYjMtTpWugnNTznF7S_2FKs
-X-Proofpoint-ORIG-GUID: XdFCeBImXSYjMtTpWugnNTznF7S_2FKs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0 bulkscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304290025
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,67 +81,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/28/2023 7:46 PM, Dmitry Baryshkov wrote:
-> On Sat, 29 Apr 2023 at 02:45, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>
->> This series adds the DPU side changes to support DSC 1.2 encoder. This
->> was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
->> The DSI and DP parts will be pushed later on top of this change.
->> This seriel is rebase on [1], [2] and catalog fixes from [3].
->>
->> [1]: https://patchwork.freedesktop.org/series/116851/
->> [2]: https://patchwork.freedesktop.org/series/116615/
->> [3]: https://patchwork.freedesktop.org/series/112332/
->>
->> Abhinav Kumar (2):
->>    drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
->>    drm/msm/dpu: add dsc blocks for remaining chipsets in catalog
->>
->> Kuogee Hsieh (5):
->>    drm/msm/dpu: add support for DSC encoder v1.2 engine
->>    drm/msm/dpu: separate DSC flush update out of interface
->>    drm/msm/dpu: add DPU_PINGPONG_DSC feature PP_BLK and PP_BLK_TE
->>    drm/msm/dpu: save dpu topology configuration
->>    drm/msm/dpu: calculate DSC encoder parameters dynamically
+On 4/28/2023 4:28 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.110 release.
+> There are 13 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Another generic comment: this patchset doesn't have discussed RM
-> changes to allocate DSC blocks in proper pairs as required by DCE.
+> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
+> Anything received after that time might be too late.
 > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.110-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-We have already made that change. It will be pushed with the DP series 
-because today DSC only support 2-2-1 so they will always be allocated in 
-pairs.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
->>
->>   drivers/gpu/drm/msm/Makefile                       |   1 +
->>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |  19 +-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |   8 +-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h |  26 +-
->>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  35 ++-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h |  26 +-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |   4 +-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |   2 +-
->>   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |   2 +-
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
->>   .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
->>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        | 102 ++++---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  35 ++-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  36 ++-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  22 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  10 +
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  14 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 335 +++++++++++++++++++++
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
->>   23 files changed, 642 insertions(+), 116 deletions(-)
->>   create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
->>
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
-> 
-> 
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
