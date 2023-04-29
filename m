@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8BE6F2322
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA14D6F231C
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347258AbjD2FiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 01:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S1347309AbjD2FiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347285AbjD2Fhv (ORCPT
+        with ESMTP id S1347301AbjD2FiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 01:37:51 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD55448B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:37:21 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64115ef7234so13838121b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:37:21 -0700 (PDT)
+        Sat, 29 Apr 2023 01:38:01 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99B44496
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:37:31 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-556f0e26a1fso6894697b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682746640; x=1685338640;
+        d=google.com; s=20221208; t=1682746648; x=1685338648;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Z2X7LmFVQauBlgGsGcOl9/drZBMwRT7E40p+z8ki8E=;
-        b=Lki4BFoU0wJhrm6qPyBdhy7Hwi1vzisA++fBdRnnaU17YpmlddWwsS48JzwhPseNyT
-         rgmodnRw4UOXQNpJxtInoEbORsbI/JGDSXJloX0Qb/VwGoDCC/TjGBUo2WoKQVY1hat7
-         Ckfhn8ftwjPdsixTKYoYDTB3xGaB4cM3KTHynxciEqGVniOdgPoLZ/xrBzia3wh1USqJ
-         It9YYj5f+PXoHasMxo87ZEVObcFEl9cEM/hVCefN9tI3rEY1HhAU7RbA345LR5QFoR94
-         5DjzqlQcvUzj2xVZ2MOJWkVE3obYcG3wzHhhsAY5u4AaNTAjNMunbxJldBeAB08KXMJg
-         u+6w==
+        bh=BX+wo12NQqjkG8fkdhxrtw5rHRURfV8DWGPIMVVXPZo=;
+        b=md1LucO/SEIhVglINnfPzS0ejKNdGvAo7trxq8wmAFHBQO095nj4TOmKEO5gqqg6Ep
+         xDyE6DSmE3wGeSUEJMFW40B4VdsOETGirozK57jOwPQ0GyKWx7zVuY2ABdT4luMFejFi
+         oCcDfFDQy85VlIqpGoc1xDag4fyPZ/bBbN3fkOjnhjF9Lh0jwGhFs/P1qdUlKTKD2RQ7
+         uGiuLpSarZktJwMCaTskVGUOeJ86WIV4yc90rfFBFkZ8PQsRY0GzqDaRAtcAz3alCP2e
+         rMRXOmHwZhPKY/rPjQqJmgQ4jZzssoJkEH+5ftamtDnAquGLawRJnr/pZMAtU0zdWG2z
+         tVeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682746640; x=1685338640;
+        d=1e100.net; s=20221208; t=1682746648; x=1685338648;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Z2X7LmFVQauBlgGsGcOl9/drZBMwRT7E40p+z8ki8E=;
-        b=WpWWba1skVHetJzlWSjhticUyCbmlzUXaKOWtmWk8sNcG0CoIAKaqW6RZVjp0snwun
-         jEs14M5L/JETlvT0WbRYOrSNcUh13FaePRQ94V9xdDM0oK4thUFz7FVtjVG7bPbR3kj7
-         +v4J72Sd/hh+Od6J6BIC2HzW/QC55cGt3cfK7VlszZ1QJAkIxgzOmLLTcLePEo+7gvBw
-         STiFTnwiSFp/CwafqqjePKGxGlYnq8VkxdQd/JojnJvTgPsLNct/ASxOharsMhDsm1Os
-         qUZiH8ShZMCYGLiiArIkTm8kSDJq2suUsw1lQV4QPqRrO2BC3gh17J3zCheH3N5k7ejj
-         p5Pg==
-X-Gm-Message-State: AC+VfDxvosI7KJ+L7gNSF68pqzhKjBp0NlJcf1+74HpCaBNs/f2FXbwO
-        W8/Wa8XwpWoSmwFk5ADLGzJAhdyKAviW
-X-Google-Smtp-Source: ACHHUZ7z+60JLxib2gP6eFfUI/PCkaYhkcAAkzD8U3O/q7R7A79USR9kQbfy65FsGW+0TJ8AdoQ2ABZFj54D
+        bh=BX+wo12NQqjkG8fkdhxrtw5rHRURfV8DWGPIMVVXPZo=;
+        b=UyZkl63KlF8icKWBg0TWTBjPgx9011FyIAsxQmtfory7H9qarn7WIw9B/udBALmJ2C
+         ZwHha0lbc14BH/dTwLC0YyM2BEwK70KnvHYewxjbFcUjnic/V6YDIwofL6I3dpIMca6x
+         0uWsZq6xXPCzpESZK7WtsIB3H+9xjixMYmxoGZP6RFT+YLlnALKYVqzfDqYwid07VcoP
+         nmzukiSYIpWJ3SLuBcAOs1Ixhve9Z4osR7xdWhhoWA7G930EzodYgbahOk+ziq1q2t3Z
+         rF0Jx3fGTYfwgCrN8xIvFspogzOq2kzvG0o+JlsfcbNPB6ndXH1SmlhM0wOOrVNlAd+G
+         EXkg==
+X-Gm-Message-State: AC+VfDxufp/EIYtnOmPptj32mqB6icccpR0EwUOgDUKiQxFhpfPQlWFI
+        th/JHjQ8o1zQOrhV/eGTTvHkr9JUFpNX
+X-Google-Smtp-Source: ACHHUZ4YAw4Xym877zKd3qi8/29Yt4HHPwID1bGD6GVIFnSLiz9CIDzrIz5WEtnkBrXsHhkHf8qGLICIMDR0
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c563:7e28:fb7c:bce3])
- (user=irogers job=sendgmr) by 2002:a17:902:eb81:b0:1a1:f9f5:4dac with SMTP id
- q1-20020a170902eb8100b001a1f9f54dacmr4057585plg.5.1682746640037; Fri, 28 Apr
- 2023 22:37:20 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 22:34:35 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1891:b0:b99:4c9d:3b5a with SMTP
+ id cj17-20020a056902189100b00b994c9d3b5amr4638146ybb.7.1682746648505; Fri, 28
+ Apr 2023 22:37:28 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 22:34:36 -0700
 In-Reply-To: <20230429053506.1962559-1-irogers@google.com>
-Message-Id: <20230429053506.1962559-16-irogers@google.com>
+Message-Id: <20230429053506.1962559-17-irogers@google.com>
 Mime-Version: 1.0
 References: <20230429053506.1962559-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v3 15/46] perf test: Test more with config_cache
+Subject: [PATCH v3 16/46] perf test: Roundtrip name, don't assume 1 event per name
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -99,30 +99,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-test__checkevent_config_cache checks the parsing of
-"L1-dcache-misses/name=cachepmu/". Don't just check that the name is
-set correctly, also validate the rest of the perf_event_attr for
-L1-dcache-misses.
+Opening hardware names and a legacy cache event on a hybrid PMU opens
+it on each PMU. Parsing and checking indexes fails, as the parsed
+index is double the expected. Avoid checking the index by just
+comparing the names immediately after the parse.
+
+This change removes hard coded hybrid logic and removes assumptions
+about the expansion of an event. On hybrid the PMUs may or may not
+support an event and so using a distance isn't a consistent solution.
 
 Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/parse-events.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/tests/evsel-roundtrip-name.c | 119 ++++++++++--------------
+ 1 file changed, 49 insertions(+), 70 deletions(-)
 
-diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index 4ff1d70e8375..1b9513ef6aea 100644
---- a/tools/perf/tests/parse-events.c
-+++ b/tools/perf/tests/parse-events.c
-@@ -1394,7 +1394,7 @@ static int test__checkevent_config_cache(struct evlist *evlist)
- 	struct evsel *evsel = evlist__first(evlist);
+diff --git a/tools/perf/tests/evsel-roundtrip-name.c b/tools/perf/tests/evsel-roundtrip-name.c
+index e94fed901992..15ff86f9da0b 100644
+--- a/tools/perf/tests/evsel-roundtrip-name.c
++++ b/tools/perf/tests/evsel-roundtrip-name.c
+@@ -4,114 +4,93 @@
+ #include "parse-events.h"
+ #include "tests.h"
+ #include "debug.h"
+-#include "pmu.h"
+-#include "pmu-hybrid.h"
+-#include <errno.h>
+ #include <linux/kernel.h>
  
- 	TEST_ASSERT_VAL("wrong name setting", evsel__name_is(evsel, "cachepmu"));
--	return TEST_OK;
-+	return test__checkevent_genhw(evlist);
+ static int perf_evsel__roundtrip_cache_name_test(void)
+ {
+-	char name[128];
+-	int type, op, err = 0, ret = 0, i, idx;
+-	struct evsel *evsel;
+-	struct evlist *evlist = evlist__new();
++	int ret = TEST_OK;
+ 
+-        if (evlist == NULL)
+-                return -ENOMEM;
+-
+-	for (type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
+-		for (op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
++	for (int type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
++		for (int op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
+ 			/* skip invalid cache type */
+ 			if (!evsel__is_cache_op_valid(type, op))
+ 				continue;
+ 
+-			for (i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
+-				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
+-				err = parse_event(evlist, name);
+-				if (err)
+-					ret = err;
+-			}
+-		}
+-	}
+-
+-	idx = 0;
+-	evsel = evlist__first(evlist);
++			for (int res = 0; res < PERF_COUNT_HW_CACHE_RESULT_MAX; res++) {
++				char name[128];
++				struct evlist *evlist = evlist__new();
++				struct evsel *evsel;
++				int err;
+ 
+-	for (type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
+-		for (op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
+-			/* skip invalid cache type */
+-			if (!evsel__is_cache_op_valid(type, op))
+-				continue;
++				if (evlist == NULL) {
++					pr_debug("Failed to alloc evlist");
++					return TEST_FAIL;
++				}
++				__evsel__hw_cache_type_op_res_name(type, op, res,
++								name, sizeof(name));
+ 
+-			for (i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
+-				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
+-				if (evsel->core.idx != idx)
++				err = parse_event(evlist, name);
++				if (err) {
++					pr_debug("Failure to parse cache event '%s' possibly as PMUs don't support it",
++						name);
++					evlist__delete(evlist);
+ 					continue;
+-
+-				++idx;
+-
+-				if (strcmp(evsel__name(evsel), name)) {
+-					pr_debug("%s != %s\n", evsel__name(evsel), name);
+-					ret = -1;
+ 				}
+-
+-				evsel = evsel__next(evsel);
++				evlist__for_each_entry(evlist, evsel) {
++					if (strcmp(evsel__name(evsel), name)) {
++						pr_debug("%s != %s\n", evsel__name(evsel), name);
++						ret = TEST_FAIL;
++					}
++				}
++				evlist__delete(evlist);
+ 			}
+ 		}
+ 	}
+-
+-	evlist__delete(evlist);
+ 	return ret;
  }
  
- static bool test__pmu_cpu_valid(void)
+-static int __perf_evsel__name_array_test(const char *const names[], int nr_names,
+-					 int distance)
++static int perf_evsel__name_array_test(const char *const names[], int nr_names)
+ {
+-	int i, err;
+-	struct evsel *evsel;
+-	struct evlist *evlist = evlist__new();
++	int ret = TEST_OK;
+ 
+-        if (evlist == NULL)
+-                return -ENOMEM;
++	for (int i = 0; i < nr_names; ++i) {
++		struct evlist *evlist = evlist__new();
++		struct evsel *evsel;
++		int err;
+ 
+-	for (i = 0; i < nr_names; ++i) {
++		if (evlist == NULL) {
++			pr_debug("Failed to alloc evlist");
++			return TEST_FAIL;
++		}
+ 		err = parse_event(evlist, names[i]);
+ 		if (err) {
+ 			pr_debug("failed to parse event '%s', err %d\n",
+ 				 names[i], err);
+-			goto out_delete_evlist;
++			evlist__delete(evlist);
++			ret = TEST_FAIL;
++			continue;
+ 		}
+-	}
+-
+-	err = 0;
+-	evlist__for_each_entry(evlist, evsel) {
+-		if (strcmp(evsel__name(evsel), names[evsel->core.idx / distance])) {
+-			--err;
+-			pr_debug("%s != %s\n", evsel__name(evsel), names[evsel->core.idx / distance]);
++		evlist__for_each_entry(evlist, evsel) {
++			if (strcmp(evsel__name(evsel), names[i])) {
++				pr_debug("%s != %s\n", evsel__name(evsel), names[i]);
++				ret = TEST_FAIL;
++			}
+ 		}
++		evlist__delete(evlist);
+ 	}
+-
+-out_delete_evlist:
+-	evlist__delete(evlist);
+-	return err;
++	return ret;
+ }
+ 
+-#define perf_evsel__name_array_test(names, distance) \
+-	__perf_evsel__name_array_test(names, ARRAY_SIZE(names), distance)
+-
+ static int test__perf_evsel__roundtrip_name_test(struct test_suite *test __maybe_unused,
+ 						 int subtest __maybe_unused)
+ {
+-	int err = 0, ret = 0;
+-
+-	if (perf_pmu__has_hybrid() && perf_pmu__hybrid_mounted("cpu_atom"))
+-		return perf_evsel__name_array_test(evsel__hw_names, 2);
++	int err = 0, ret = TEST_OK;
+ 
+-	err = perf_evsel__name_array_test(evsel__hw_names, 1);
++	err = perf_evsel__name_array_test(evsel__hw_names, PERF_COUNT_HW_MAX);
+ 	if (err)
+ 		ret = err;
+ 
+-	err = __perf_evsel__name_array_test(evsel__sw_names, PERF_COUNT_SW_DUMMY + 1, 1);
++	err = perf_evsel__name_array_test(evsel__sw_names, PERF_COUNT_SW_DUMMY + 1);
+ 	if (err)
+ 		ret = err;
+ 
 -- 
 2.40.1.495.gc816e09b53d-goog
 
