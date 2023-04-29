@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1126F2173
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 01:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483146F217F
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 02:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347019AbjD1X5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 19:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S1347063AbjD2AJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 20:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347081AbjD1X5v (ORCPT
+        with ESMTP id S229800AbjD2AJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 19:57:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBBF4691
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 16:57:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7A8A6172B
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC213C433EF;
-        Fri, 28 Apr 2023 23:57:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682726269;
-        bh=ljx1jJWdznqccEUYrJ6+J1Ju0rsKG8Fd3TbGvNSEC1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LmR6eGa9wBBCbJPD9MgF1vqxvizQoBgfGkYBp/xPQXHDe3KWIg7uOOELr5xzPWef/
-         HMz92usFRj18GMyt6DkHRpz2/6Xi2w5g4hLJgclxQjzr/5BP9hGQe6u/X1WDtq8CnO
-         ZDFuUicuzbPt9KWBgKZGzTpvVwW2q+mLSYCHFhD110vZkxFN6gZFEmYLcRO+Bvu1tq
-         AwMBwEE6Bi1wTnAj4Py5oTY8S2Y809bC0PIFypvjfam8oc4qA6kh1tgHGTOc7jmZuC
-         z6eHj2bC3F0noauvr4nq7Z9gPPZBJLehESVErlrykZwuprdNG1pqKD5Qox0MSfknd8
-         nGBVgqByNBxlg==
-Date:   Fri, 28 Apr 2023 16:57:47 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vernon Lovejoy <vlovejoy@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/show_trace_log_lvl: ensure stack pointer is aligned,
- again
-Message-ID: <20230428235747.b5smutdttv5eeopi@treble>
-References: <20230427140054.GA17800@redhat.com>
- <20230428043158.r5omehiaqawcac2y@treble>
- <20230428065513.GA22111@redhat.com>
+        Fri, 28 Apr 2023 20:09:14 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC003C26
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:13 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso411824a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682726951; x=1685318951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6YACjJPQ/4k1aGg00TusYEm4/EfglatXgozInXtXCNs=;
+        b=FqJUlu5ddgmBLypqfG2Blbl7gQZL5TiIetcxXc+YjxAXrWjQst1OHU3rL12meDPFvF
+         hXtWAqAfPoP1mZLbwogC94rdPFlS8tio/H9Q+m7fvc57iBfWv9u+TpNefsJq3C2zXoy8
+         PgbUzlmTylo+d/4Ijq8xcB6MtQw1Fqwm/lrKo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682726951; x=1685318951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6YACjJPQ/4k1aGg00TusYEm4/EfglatXgozInXtXCNs=;
+        b=KN849XXQxQYaxQCw2vsZKBWvTal2uS/9Ln2r3bgOLI2eQrTzwrkPXJxWxF3GTa+j1a
+         /A6SZ0hOw2B/q/iEmPGEmnzsjEiWn1dWNzZhViZzG/t+6+kBCMelXH6mKj/kjtUU8g8f
+         RmTH5JKZA7ZoZA41OPYnIOI78WeAkSeQ2RA7GYvKFK9FbKHKzCneAnNTFh0XY8GqSa8g
+         FIghmwuuzOZ0aLeJDZvXA2Mf+VzzTv/TLA0jnPb9BgNsIIaYOfnOSQrvq4EPb/ly/LV3
+         zPhj4P3CyA/7W/Hy1N5b10+CVCfM7rCrIJ42wa+tY7TjqhU/uRdDjp3VaivJFmDNSCXY
+         aM1g==
+X-Gm-Message-State: AC+VfDwIJ0XEMQL6gm/G44HXQ0HX7AXKLJJQjrZ9Ib65IkOVAUtW8y58
+        QwQopvGb+SvZlwjF3S7w2714po16vLhoeUUpRPgJMyT2
+X-Google-Smtp-Source: ACHHUZ6UUV2pmBtgFEHdyEGjidaaOCpCyEB/puAANC203k5Hzyld8hoNWmm1oDnRNTe2WxELgXKdVQ==
+X-Received: by 2002:aa7:cc85:0:b0:504:b6a6:cbe0 with SMTP id p5-20020aa7cc85000000b00504b6a6cbe0mr406325edt.12.1682726951654;
+        Fri, 28 Apr 2023 17:09:11 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id mb20-20020a170906eb1400b0094f432f2429sm11886582ejb.109.2023.04.28.17.09.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 17:09:11 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50506ac462bso411799a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:09:10 -0700 (PDT)
+X-Received: by 2002:aa7:d416:0:b0:504:80d8:a034 with SMTP id
+ z22-20020aa7d416000000b0050480d8a034mr337676edq.40.1682726950671; Fri, 28 Apr
+ 2023 17:09:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230428065513.GA22111@redhat.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
+In-Reply-To: <mhng-57198db1-de34-4dca-be9f-989b1137503e@palmer-ri-x1c9>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Apr 2023 17:08:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wivud6jefN+UKa4zkAf4dkapyh4iRazyUVgXTzqRntOMg@mail.gmail.com>
+Message-ID: <CAHk-=wivud6jefN+UKa4zkAf4dkapyh4iRazyUVgXTzqRntOMg@mail.gmail.com>
+Subject: Re: [GIT PULL] RISC-V Patches for the 6.4 Merge Window, Part 1
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 08:55:13AM +0200, Oleg Nesterov wrote:
-> On 04/27, Josh Poimboeuf wrote:
-> >
-> > On Thu, Apr 27, 2023 at 04:00:54PM +0200, Oleg Nesterov wrote:
-> > > +	stack = PTR_ALIGN(stack, sizeof(long));
-> > >  	for ( ; stack; stack = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
-> > >  		const char *stack_name;
-> >
-> > Seems reasonable, though 'stack' is already initialized a few lines
-> > above this, so it would be cleaner to do the PTR_ALIGN then.  Or even
-> > better, just move it all to the for loop:
-> >
-> > 	for (stack = PTR_ALIGN(stack ? : get_stack_pointer(task, regs));
-> > 	     stack;
-> > 	     stack = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
-> 
-> We decided to make the simplest one-liner fix, but I was thinking about
-> 
-> 	for ( stack = stack ? : get_stack_pointer(task, regs);
-> 	     (stack = PTR_ALIGN(stack, sizeof(long)));
-> 	      stack = stack_info.next_sp)
-> 	{
-> 		...
-> 
-> to factout out the annoying PTR_ALIGN(). Will it work for you?
+On Fri, Apr 28, 2023 at 9:09=E2=80=AFAM Palmer Dabbelt <palmer@rivosinc.com=
+> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/risc=
+v-for-linus-6.4-mw1
 
-I'd rather not, that's a little *too* clever, IMO.
+Ugh, so this conflicted pretty nastily in arch/riscv/mm/init.c between comm=
+its
 
--- 
-Josh
+  ef69d2559fe9 ("riscv: Move early dtb mapping into the fixmap region")
+  8589e346bbb6 ("riscv: Move the linear mapping creation in its own functio=
+n")
+
+and while I did try to make sense of it all, and generated what looks
+like a sane resolution to me, I did *not* do some kind of build check,
+much less can I test anything.
+
+So.. Caveat emptor. I may or may not have gotten that conflict right,
+and you should most definitely double-check it very carefully.
+
+                  Linus
