@@ -2,75 +2,1401 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6056F269D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BF96F2682
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjD2ViA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 17:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S230475AbjD2VON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 17:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjD2Vh6 (ORCPT
+        with ESMTP id S230334AbjD2VOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 17:37:58 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2128D121
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:37:58 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-b9d87dffae1so782299276.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:37:58 -0700 (PDT)
+        Sat, 29 Apr 2023 17:14:11 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF6113
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:14:07 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so296075ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:14:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682804277; x=1685396277;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QEzM+W+OEmpHfEeEaAySJoGydPuqhtpau7d10u77fwA=;
-        b=a0w3KjBdydoP1Z+EqSKq71RF+df5fILRoj1ymQZdJRZUrmtpMpfYjsexqh3mudBKUT
-         QdPOE41qlzDk0uu/L0uaif7EzJ9vol1Im9z+uRPKWhWknrRwGEVzxDjGacwaGWgTeJtz
-         DHKMzKRVgB9w7wo2pp/x74Y2NDyD+KLd7fOKkbM0SvQDE2ycUbnRpUDWhUvyJz38uiKg
-         4k8q7iom8qewROXpe5wVsvzSO6sMQHaYfBhREsN+lCdnOYdJCOOt87bP5rABmEsVmq/A
-         etXJFwVs3cWO+8DVzlyV6vT32CV0mLSGTa4dPbN1ofSgKCFRggQ0OolkQPjp/pPiZFM/
-         UnQw==
+        d=google.com; s=20221208; t=1682802847; x=1685394847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WjHwLOk9ZJQjfh34M5kWHJht/FJClTK8GU3ZuB+Hgyc=;
+        b=2Pf8e8YPZm2Ll9ROmXkJWkl1w6goEejl765EKFML1OQl+6XfQxnARHhDAlZv5rD7q6
+         /PAc976RaC21RQmc1tKfniEfBz3S8dJDdzhXPu3WuloF5FpC20kYK7SS+VbMj7s8LZw4
+         xW7I/F32PskiNv4ayxsOQvUk4X78BqpODNz4AMQYz6n+YC9X7Uob4SCbhFqKtOHGV07n
+         Wb1AJ2KT9aLR6kovlmuhGTbCbYeCaIJZLMn2wtTMnxIiZVI222enUVfbuLLE1eFwxmri
+         Vs/to6tnMYcD1J5W+AbxgsGnMDDZAXHXvWYwlLgluyxGo37I2nXgTHY9vAZ/f+dP7mCa
+         fmlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682804277; x=1685396277;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QEzM+W+OEmpHfEeEaAySJoGydPuqhtpau7d10u77fwA=;
-        b=VVmBbycXf2H91gzTz1kq5duKk3caNFsAsY8X5oVuainSeIDmvstrHg5Q/jhmERGR35
-         XGlT2Yx+Yz3hhcHN3dWAK0Z0h1EnhJ6VY/qoRa5SfpdWnf09k2lhqUArSMFXUUPTnBQh
-         p5Vy2oPSj/VPuJ+eJV0ToXvvM1vSoD6mByWe0YrpFIImnf2wVRiKwRkyxl4LEAUxERBl
-         /zakRfX/FL/raNZqOFd/vlaMgtz+LtgOkyBrSvBqOqA4MxFO8NFKfCdpmJCzKDvJshYp
-         YCmqasyK5YRk4YligEouypoXcm6j2ayQWHH41RdVAVD+UzG4caKIP2t7fUQnRmwH10Up
-         xNMQ==
-X-Gm-Message-State: AC+VfDwu3oxQ+/9dg3xhIEbJbdydeDVmZdTF+Z6gus4gMUtcUWwsN2Fj
-        BvH2ObLA6mgHk8QjGRbRJlbVa2BjdN4xWapGuacO30BvY3t7Ew==
-X-Google-Smtp-Source: ACHHUZ5kCWNoeAvvmTCerX4TR00fjpbqxCWUaO9nMP0EmfcYu+Z50E1UrhVMhZo+RLiyD9WPD1Wk1GcHUzDfdRkpZiQ=
-X-Received: by 2002:a1f:6419:0:b0:443:b924:da82 with SMTP id
- y25-20020a1f6419000000b00443b924da82mr5230777vkb.2.1682802795768; Sat, 29 Apr
- 2023 14:13:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682802847; x=1685394847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WjHwLOk9ZJQjfh34M5kWHJht/FJClTK8GU3ZuB+Hgyc=;
+        b=W/cjwWTvJ1eN/g7l2fxdh/KnpUpD4JvtMTP7JE1RqeNkt7uHjwjNXOWXilTowqwB40
+         WdzqKDi6wVY0zDNSnMM/+6NG7hVnMWcTdhUJ0DCoIC/DaDNdcvuqEf1mIFLBmukITk3M
+         lBTs+ZSy/IIXCL/ID0vIZ+PAUYrWk8uixqdjwHYm/YjkTDirNHXEwe6JYoHjuz5ACxsa
+         9anUnhePpwW9GTMYa0nNu0lBcCqsCrQeSagTzZG70RQsYhJtpGswjoQbdxOH47v/GOkH
+         yhFX3VRQMf7JXeNVBZUf6DEFz1WkPqpdYTvqwjEr+UA2+qeKzNuL/dh+DJBH+IzqnTOv
+         6odw==
+X-Gm-Message-State: AC+VfDzXFZSOrAhNyvf5lQGrAy6EJzeO9uzez82FL+BPL5Q49bf5nBir
+        iuEDNjCxD6zKtMJpNV4y2LrBUS0yvqHxNYa908B1RA==
+X-Google-Smtp-Source: ACHHUZ6N/c4sHXQE3mB57jrv9jIk/dcdbIvXOazyNWS6whM8LKjyHKqEsAED6/CJXRkoY2hJsJKuNe2nTxjVQd0Cej8=
+X-Received: by 2002:a05:6e02:1d19:b0:330:af65:de3d with SMTP id
+ i25-20020a056e021d1900b00330af65de3dmr26553ila.11.1682802846610; Sat, 29 Apr
+ 2023 14:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a59:c321:0:b0:3ca:d75f:21c3 with HTTP; Sat, 29 Apr 2023
- 14:13:15 -0700 (PDT)
-Reply-To: ava014708@gmail.com
-From:   "Dr. Ava Smith" <smith191919smith@gmail.com>
-Date:   Sat, 29 Apr 2023 22:13:15 +0100
-Message-ID: <CALs781XtgCAZ2tx0ZMtnRHCLoZWTpuhXMvd0rZPLecSgwjZ+7g@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
+References: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
+In-Reply-To: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 29 Apr 2023 14:13:54 -0700
+Message-ID: <CAP-5=fV-CwUgbKfCndJvMcnWpB7H3Z03sqiAjiFa1DsoOqNn4g@mail.gmail.com>
+Subject: Re: [PATCH] perf vendor events arm64: Add AmpereOne core pmu events
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        John Garry <john.g.garry@oracle.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today? I hope you are fine
-My name is Dr. Ava Smith, I Am an English and French nationality.
-I will give you pictures and more details about me as soon as I hear from you
-Thanks
-Ava
+On Thu, Apr 27, 2023 at 3:33=E2=80=AFPM Ilkka Koskinen
+<ilkka@os.amperecomputing.com> wrote:
+>
+> Add JSON files for AmpereOne core PMU events.
+>
+> Signed-off-by: Doug Rady <dcrady@os.amperecomputing.com>
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+
+This looks good to me, but if John Garry has input I'll defer to that.
+Acked-by: Ian Rogers <irogers@google.com>
+
+Thanks,
+Ian
+
+> ---
+>  .../arch/arm64/ampere/ampereone/branch.json   |  17 +
+>  .../arch/arm64/ampere/ampereone/bus.json      |  32 +
+>  .../arch/arm64/ampere/ampereone/cache.json    | 104 +++
+>  .../arm64/ampere/ampereone/core-imp-def.json  | 698 ++++++++++++++++++
+>  .../arm64/ampere/ampereone/exception.json     |  44 ++
+>  .../arm64/ampere/ampereone/instruction.json   |  89 +++
+>  .../arm64/ampere/ampereone/intrinsic.json     |  14 +
+>  .../arch/arm64/ampere/ampereone/memory.json   |  44 ++
+>  .../arch/arm64/ampere/ampereone/pipeline.json |  23 +
+>  .../arch/arm64/ampere/ampereone/spe.json      |  14 +
+>  tools/perf/pmu-events/arch/arm64/mapfile.csv  |   1 +
+>  11 files changed, 1080 insertions(+)
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/bra=
+nch.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus=
+.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/cac=
+he.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/cor=
+e-imp-def.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/exc=
+eption.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/ins=
+truction.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/int=
+rinsic.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/mem=
+ory.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/pip=
+eline.json
+>  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe=
+.json
+>
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.jso=
+n b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.json
+> new file mode 100644
+> index 000000000000..c751d57f2e19
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.json
+> @@ -0,0 +1,17 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "BR_IMMED_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_RETURN_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_INDIRECT_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_MIS_PRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_PRED"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json b=
+/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json
+> new file mode 100644
+> index 000000000000..8623be121818
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json
+> @@ -0,0 +1,32 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "CPU_CYCLES"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_CYCLES"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_SHARED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_NOT_SHARED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_NORMAL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS_PERIPH"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BUS_ACCESS"
+> +    },
+> +    {
+> +        "ArchStdEvent": "CNT_CYCLES"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json=
+ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
+> new file mode 100644
+> index 000000000000..fc0633054211
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
+> @@ -0,0 +1,104 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_INVAL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB_VICTIM"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB_CLEAN"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_INVAL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2I_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2I_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "DTLB_WALK"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ITLB_WALK"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_LMISS_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_LMISS"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE_LMISS"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_LMISS_RD"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-d=
+ef.json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-def.js=
+on
+> new file mode 100644
+> index 000000000000..95c30243f2b2
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-def.json
+> @@ -0,0 +1,698 @@
+> +[
+> +    {
+> +        "PublicDescription": "Level 2 prefetch requests, refilled to L2 =
+cache",
+> +        "EventCode": "0x10A",
+> +        "EventName": "L2_PREFETCH_REFILL",
+> +        "BriefDescription": "Level 2 prefetch requests, refilled to L2 c=
+ache"
+> +    },
+> +    {
+> +        "PublicDescription": "Level 2 prefetch requests, late",
+> +        "EventCode": "0x10B",
+> +        "EventName": "L2_PREFETCH_UPGRADE",
+> +        "BriefDescription": "Level 2 prefetch requests, late"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable branch speculatively executed =
+that hit any level of BTB",
+> +        "EventCode": "0x110",
+> +        "EventName": "BPU_HIT_BTB",
+> +        "BriefDescription": "Predictable branch speculatively executed t=
+hat hit any level of BTB"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable conditional branch speculative=
+ly executed that hit any level of BTB",
+> +        "EventCode": "0x111",
+> +        "EventName": "BPU_CONDITIONAL_BRANCH_HIT_BTB",
+> +        "BriefDescription": "Predictable conditional branch speculativel=
+y executed that hit any level of BTB"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable taken branch speculatively exe=
+cuted that hit any level of BTB that access the indirect predictor",
+> +        "EventCode": "0x112",
+> +        "EventName": "BPU_HIT_INDIRECT_PREDICTOR",
+> +        "BriefDescription": "Predictable taken branch speculatively exec=
+uted that hit any level of BTB that access the indirect predictor"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable taken branch speculatively exe=
+cuted that hit any level of BTB that access the return predictor",
+> +        "EventCode": "0x113",
+> +        "EventName": "BPU_HIT_RSB",
+> +        "BriefDescription": "Predictable taken branch speculatively exec=
+uted that hit any level of BTB that access the return predictor"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable unconditional branch speculati=
+vely executed that did not hit any level of BTB",
+> +        "EventCode": "0x114",
+> +        "EventName": "BPU_UNCONDITIONAL_BRANCH_MISS_BTB",
+> +        "BriefDescription": "Predictable unconditional branch speculativ=
+ely executed that did not hit any level of BTB"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable branch speculatively executed,=
+ unpredicted",
+> +        "EventCode": "0x115",
+> +        "EventName": "BPU_BRANCH_NO_HIT",
+> +        "BriefDescription": "Predictable branch speculatively executed, =
+unpredicted"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable branch speculatively executed =
+that hit any level of BTB that mispredict",
+> +        "EventCode": "0x116",
+> +        "EventName": "BPU_HIT_BTB_AND_MISPREDICT",
+> +        "BriefDescription": "Predictable branch speculatively executed t=
+hat hit any level of BTB that mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable conditional branch speculative=
+ly executed that hit any level of BTB that (direction) mispredict",
+> +        "EventCode": "0x117",
+> +        "EventName": "BPU_CONDITIONAL_BRANCH_HIT_BTB_AND_MISPREDICT",
+> +        "BriefDescription": "Predictable conditional branch speculativel=
+y executed that hit any level of BTB that (direction) mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable taken branch speculatively exe=
+cuted that hit any level of BTB that access the indirect predictor that mis=
+predict",
+> +        "EventCode": "0x118",
+> +        "EventName": "BPU_INDIRECT_BRANCH_HIT_BTB_AND_MISPREDICT",
+> +        "BriefDescription": "Predictable taken branch speculatively exec=
+uted that hit any level of BTB that access the indirect predictor that misp=
+redict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable taken branch speculatively exe=
+cuted that hit any level of BTB that access the return predictor that mispr=
+edict",
+> +        "EventCode": "0x119",
+> +        "EventName": "BPU_HIT_RSB_AND_MISPREDICT",
+> +        "BriefDescription": "Predictable taken branch speculatively exec=
+uted that hit any level of BTB that access the return predictor that mispre=
+dict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable taken branch speculatively exe=
+cuted that hit any level of BTB that access the overflow/underflow return p=
+redictor that mispredict",
+> +        "EventCode": "0x11a",
+> +        "EventName": "BPU_MISS_RSB_AND_MISPREDICT",
+> +        "BriefDescription": "Predictable taken branch speculatively exec=
+uted that hit any level of BTB that access the overflow/underflow return pr=
+edictor that mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable branch speculatively executed,=
+ unpredicted, that mispredict",
+> +        "EventCode": "0x11b",
+> +        "EventName": "BPU_NO_PREDICTION_MISPREDICT",
+> +        "BriefDescription": "Predictable branch speculatively executed, =
+unpredicted, that mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "Predictable branch speculatively executed,=
+ unpredicted, that mispredict",
+> +        "EventCode": "0x11c",
+> +        "EventName": "BPU_BTB_UPDATE",
+> +        "BriefDescription": "Predictable branch speculatively executed, =
+unpredicted, that mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "Count predict pipe stalls due to speculati=
+ve return address predictor full",
+> +        "EventCode": "0x11d",
+> +        "EventName": "BPU_RSB_FULL_STALL",
+> +        "BriefDescription": "Count predict pipe stalls due to speculativ=
+e return address predictor full"
+> +    },
+> +    {
+> +        "PublicDescription": "Macro-ops speculatively decoded",
+> +        "EventCode": "0x11f",
+> +        "EventName": "ICF_INST_SPEC_DECODE",
+> +        "BriefDescription": "Macro-ops speculatively decoded"
+> +    },
+> +    {
+> +        "PublicDescription": "Flushes",
+> +        "EventCode": "0x120",
+> +        "EventName": "GPC_FLUSH",
+> +        "BriefDescription": "Flushes"
+> +    },
+> +    {
+> +        "PublicDescription": "Flushes due to memory hazards",
+> +        "EventCode": "0x121",
+> +        "EventName": "BPU_FLUSH_MEM_FAULT",
+> +        "BriefDescription": "Flushes due to memory hazards"
+> +    },
+> +    {
+> +        "PublicDescription": "ETM extout bit 0",
+> +        "EventCode": "0x141",
+> +        "EventName": "MSC_ETM_EXTOUT0",
+> +        "BriefDescription": "ETM extout bit 0"
+> +    },
+> +    {
+> +        "PublicDescription": "ETM extout bit 1",
+> +        "EventCode": "0x142",
+> +        "EventName": "MSC_ETM_EXTOUT1",
+> +        "BriefDescription": "ETM extout bit 1"
+> +    },
+> +    {
+> +        "PublicDescription": "ETM extout bit 2",
+> +        "EventCode": "0x143",
+> +        "EventName": "MSC_ETM_EXTOUT2",
+> +        "BriefDescription": "ETM extout bit 2"
+> +    },
+> +    {
+> +        "PublicDescription": "ETM extout bit 3",
+> +        "EventCode": "0x144",
+> +        "EventName": "MSC_ETM_EXTOUT3",
+> +        "BriefDescription": "ETM extout bit 3"
+> +    },
+> +    {
+> +        "PublicDescription": "Bus request sn",
+> +        "EventCode": "0x156",
+> +        "EventName": "L2C_SNOOP",
+> +        "BriefDescription": "Bus request sn"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 TXDAT LCRD blocked",
+> +        "EventCode": "0x169",
+> +        "EventName": "L2C_DAT_CRD_STALL",
+> +        "BriefDescription": "L2 TXDAT LCRD blocked"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 TXRSP LCRD blocked",
+> +        "EventCode": "0x16a",
+> +        "EventName": "L2C_RSP_CRD_STALL",
+> +        "BriefDescription": "L2 TXRSP LCRD blocked"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 TXREQ LCRD blocked",
+> +        "EventCode": "0x16b",
+> +        "EventName": "L2C_REQ_CRD_STALL",
+> +        "BriefDescription": "L2 TXREQ LCRD blocked"
+> +    },
+> +    {
+> +        "PublicDescription": "Early mispredict",
+> +        "EventCode": "0xD100",
+> +        "EventName": "ICF_EARLY_MIS_PRED",
+> +        "BriefDescription": "Early mispredict"
+> +    },
+> +    {
+> +        "PublicDescription": "FEQ full cycles",
+> +        "EventCode": "0xD101",
+> +        "EventName": "ICF_FEQ_FULL",
+> +        "BriefDescription": "FEQ full cycles"
+> +    },
+> +    {
+> +        "PublicDescription": "Instruction FIFO Full",
+> +        "EventCode": "0xD102",
+> +        "EventName": "ICF_INST_FIFO_FULL",
+> +        "BriefDescription": "Instruction FIFO Full"
+> +    },
+> +    {
+> +        "PublicDescription": "L1I TLB miss",
+> +        "EventCode": "0xD103",
+> +        "EventName": "L1I_TLB_MISS",
+> +        "BriefDescription": "L1I TLB miss"
+> +    },
+> +    {
+> +        "PublicDescription": "ICF sent 0 instructions to IDR this cycle"=
+,
+> +        "EventCode": "0xD104",
+> +        "EventName": "ICF_STALL",
+> +        "BriefDescription": "ICF sent 0 instructions to IDR this cycle"
+> +    },
+> +    {
+> +        "PublicDescription": "PC FIFO Full",
+> +        "EventCode": "0xD105",
+> +        "EventName": "ICF_PC_FIFO_FULL",
+> +        "BriefDescription": "PC FIFO Full"
+> +    },
+> +    {
+> +        "PublicDescription": "Stall due to BOB ID",
+> +        "EventCode": "0xD200",
+> +        "EventName": "IDR_STALL_BOB_ID",
+> +        "BriefDescription": "Stall due to BOB ID"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to LOB entries",
+> +        "EventCode": "0xD201",
+> +        "EventName": "IDR_STALL_LOB_ID",
+> +        "BriefDescription": "Dispatch stall due to LOB entries"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to SOB entries",
+> +        "EventCode": "0xD202",
+> +        "EventName": "IDR_STALL_SOB_ID",
+> +        "BriefDescription": "Dispatch stall due to SOB entries"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to IXU scheduler entrie=
+s",
+> +        "EventCode": "0xD203",
+> +        "EventName": "IDR_STALL_IXU_SCHED",
+> +        "BriefDescription": "Dispatch stall due to IXU scheduler entries=
+"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to FSU scheduler entrie=
+s",
+> +        "EventCode": "0xD204",
+> +        "EventName": "IDR_STALL_FSU_SCHED",
+> +        "BriefDescription": "Dispatch stall due to FSU scheduler entries=
+"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to ROB entries",
+> +        "EventCode": "0xD205",
+> +        "EventName": "IDR_STALL_ROB_ID",
+> +        "BriefDescription": "Dispatch stall due to ROB entries"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to flush (6 cycles)",
+> +        "EventCode": "0xD206",
+> +        "EventName": "IDR_STALL_FLUSH",
+> +        "BriefDescription": "Dispatch stall due to flush (6 cycles)"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to WFI",
+> +        "EventCode": "0xD207",
+> +        "EventName": "IDR_STALL_WFI",
+> +        "BriefDescription": "Dispatch stall due to WFI"
+> +    },
+> +    {
+> +        "PublicDescription": "Number of SWOB drains triggered by timeout=
+",
+> +        "EventCode": "0xD208",
+> +        "EventName": "IDR_STALL_SWOB_TIMEOUT",
+> +        "BriefDescription": "Number of SWOB drains triggered by timeout"
+> +    },
+> +    {
+> +        "PublicDescription": "Number of SWOB drains triggered by system =
+register or special-purpose register read-after-write or specific special-p=
+urpose register writes that cause SWOB drain",
+> +        "EventCode": "0xD209",
+> +        "EventName": "IDR_STALL_SWOB_RAW",
+> +        "BriefDescription": "Number of SWOB drains triggered by system r=
+egister or special-purpose register read-after-write or specific special-pu=
+rpose register writes that cause SWOB drain"
+> +    },
+> +    {
+> +        "PublicDescription": "Number of SWOB drains triggered by system =
+register write when SWOB full",
+> +        "EventCode": "0xD20A",
+> +        "EventName": "IDR_STALL_SWOB_FULL",
+> +        "BriefDescription": "Number of SWOB drains triggered by system r=
+egister write when SWOB full"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to L1 instruction cache=
+ miss",
+> +        "EventCode": "0xD20B",
+> +        "EventName": "STALL_FRONTEND_CACHE",
+> +        "BriefDescription": "Dispatch stall due to L1 instruction cache =
+miss"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to L1 instruction TLB m=
+iss",
+> +        "EventCode": "0xD20C",
+> +        "EventName": "STALL_FRONTEND_TLB",
+> +        "BriefDescription": "Dispatch stall due to L1 instruction TLB mi=
+ss"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to L1 data cache miss",
+> +        "EventCode": "0xD20D",
+> +        "EventName": "STALL_BACKEND_CACHE",
+> +        "BriefDescription": "Dispatch stall due to L1 data cache miss"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to L1 data TLB miss",
+> +        "EventCode": "0xD20E",
+> +        "EventName": "STALL_BACKEND_TLB",
+> +        "BriefDescription": "Dispatch stall due to L1 data TLB miss"
+> +    },
+> +    {
+> +        "PublicDescription": "Dispatch stall due to lack of any core res=
+ource",
+> +        "EventCode": "0xD20F",
+> +        "EventName": "STALL_BACKEND_RESOURCE",
+> +        "BriefDescription": "Dispatch stall due to lack of any core reso=
+urce"
+> +    },
+> +    {
+> +        "PublicDescription": "Instructions issued by the scheduler",
+> +        "EventCode": "0xD300",
+> +        "EventName": "IXU_NUM_UOPS_ISSUED",
+> +        "BriefDescription": "Instructions issued by the scheduler"
+> +    },
+> +    {
+> +        "PublicDescription": "Any uop issued was canceled for any reason=
+",
+> +        "EventCode": "0xD301",
+> +        "EventName": "IXU_ISSUE_CANCEL",
+> +        "BriefDescription": "Any uop issued was canceled for any reason"
+> +    },
+> +    {
+> +        "PublicDescription": "A load wakeup to the scheduler has been ca=
+ncelled",
+> +        "EventCode": "0xD302",
+> +        "EventName": "IXU_LOAD_CANCEL",
+> +        "BriefDescription": "A load wakeup to the scheduler has been can=
+celled"
+> +    },
+> +    {
+> +        "PublicDescription": "The scheduler had to cancel one slow Uop d=
+ue to resource conflict",
+> +        "EventCode": "0xD303",
+> +        "EventName": "IXU_SLOW_CANCEL",
+> +        "BriefDescription": "The scheduler had to cancel one slow Uop du=
+e to resource conflict"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXA",
+> +        "EventCode": "0xD304",
+> +        "EventName": "IXU_IXA_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXA"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXA Par 0"=
+,
+> +        "EventCode": "0xD305",
+> +        "EventName": "IXU_IXA_PAR0_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXA Par 0"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXA Par 1"=
+,
+> +        "EventCode": "0xD306",
+> +        "EventName": "IXU_IXA_PAR1_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXA Par 1"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXB",
+> +        "EventCode": "0xD307",
+> +        "EventName": "IXU_IXB_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXB"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXB Par 0"=
+,
+> +        "EventCode": "0xD308",
+> +        "EventName": "IXU_IXB_PAR0_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXB Par 0"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXB Par 1"=
+,
+> +        "EventCode": "0xD309",
+> +        "EventName": "IXU_IXB_PAR1_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXB Par 1"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXC",
+> +        "EventCode": "0xD30A",
+> +        "EventName": "IXU_IXC_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXC"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXC Par 0"=
+,
+> +        "EventCode": "0xD30B",
+> +        "EventName": "IXU_IXC_PAR0_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXC Par 0"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXC Par 1"=
+,
+> +        "EventCode": "0xD30C",
+> +        "EventName": "IXU_IXC_PAR1_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXC Par 1"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXD",
+> +        "EventCode": "0xD30D",
+> +        "EventName": "IXU_IXD_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXD"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXD Par 0"=
+,
+> +        "EventCode": "0xD30E",
+> +        "EventName": "IXU_IXD_PAR0_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXD Par 0"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on IXD Par 1"=
+,
+> +        "EventCode": "0xD30F",
+> +        "EventName": "IXU_IXD_PAR1_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on IXD Par 1"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the FSU scheduler",
+> +        "EventCode": "0xD400",
+> +        "EventName": "FSU_ISSUED",
+> +        "BriefDescription": "Uops issued by the FSU scheduler"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on pipe X",
+> +        "EventCode": "0xD401",
+> +        "EventName": "FSU_FSX_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on pipe X"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on pipe Y",
+> +        "EventCode": "0xD402",
+> +        "EventName": "FSU_FSY_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on pipe Y"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops issued by the scheduler on pipe Z",
+> +        "EventCode": "0xD403",
+> +        "EventName": "FSU_FSZ_ISSUED",
+> +        "BriefDescription": "Uops issued by the scheduler on pipe Z"
+> +    },
+> +    {
+> +        "PublicDescription": "Uops canceled (load cancels)",
+> +        "EventCode": "0xD404",
+> +        "EventName": "FSU_CANCEL",
+> +        "BriefDescription": "Uops canceled (load cancels)"
+> +    },
+> +    {
+> +        "PublicDescription": "Count scheduler stalls due to divide/sqrt"=
+,
+> +        "EventCode": "0xD405",
+> +        "EventName": "FSU_DIV_SQRT_STALL",
+> +        "BriefDescription": "Count scheduler stalls due to divide/sqrt"
+> +    },
+> +    {
+> +        "PublicDescription": "Number of SWOB drains",
+> +        "EventCode": "0xD500",
+> +        "EventName": "GPC_SWOB_DRAIN",
+> +        "BriefDescription": "Number of SWOB drains"
+> +    },
+> +    {
+> +        "PublicDescription": "GPC detected a Breakpoint instruction matc=
+h",
+> +        "EventCode": "0xD501",
+> +        "EventName": "BREAKPOINT_MATCH",
+> +        "BriefDescription": "GPC detected a Breakpoint instruction match=
+"
+> +    },
+> +    {
+> +        "PublicDescription": "L1D TLB miss",
+> +        "EventCode": "0xD600",
+> +        "EventName": "L1D_TLB_MISS",
+> +        "BriefDescription": "L1D TLB miss"
+> +    },
+> +    {
+> +        "PublicDescription": "OFB full cycles",
+> +        "EventCode": "0xD601",
+> +        "EventName": "OFB_FULL",
+> +        "BriefDescription": "OFB full cycles"
+> +    },
+> +    {
+> +        "PublicDescription": "Load satisified from store forwarded data"=
+,
+> +        "EventCode": "0xD605",
+> +        "EventName": "LD_FROM_ST_FWD",
+> +        "BriefDescription": "Load satisified from store forwarded data"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, load prefetch requests gene=
+rated",
+> +        "EventCode": "0xD606",
+> +        "EventName": "L1_PFETCH_LD_GEN",
+> +        "BriefDescription": "L1 prefetcher, load prefetch requests gener=
+ated"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, load prefetch fills into th=
+e L1 cache",
+> +        "EventCode": "0xD607",
+> +        "EventName": "L1_PFETCH_LD_FILL",
+> +        "BriefDescription": "L1 prefetcher, load prefetch fills into the=
+ L1 cache"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, load prefetch to L2 generat=
+ed",
+> +        "EventCode": "0xD608",
+> +        "EventName": "L1_PFETCH_L2_REQ",
+> +        "BriefDescription": "L1 prefetcher, load prefetch to L2 generate=
+d"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, distance was reset",
+> +        "EventCode": "0xD609",
+> +        "EventName": "L1_PFETCH_DIST_RST",
+> +        "BriefDescription": "L1 prefetcher, distance was reset"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, distance was increased",
+> +        "EventCode": "0xD60A",
+> +        "EventName": "L1_PFETCH_DIST_INC",
+> +        "BriefDescription": "L1 prefetcher, distance was increased"
+> +    },
+> +    {
+> +        "PublicDescription": "L1 prefetcher, table entry is trained",
+> +        "EventCode": "0xD60B",
+> +        "EventName": "L1_PFETCH_ENTRY_TRAINED",
+> +        "BriefDescription": "L1 prefetcher, table entry is trained"
+> +    },
+> +    {
+> +        "PublicDescription": "Store retirement pipe stall",
+> +        "EventCode": "0xD60C",
+> +        "EventName": "LSU_ST_RETIRE_STALL",
+> +        "BriefDescription": "Store retirement pipe stall"
+> +    },
+> +    {
+> +        "PublicDescription": "LSU detected a Watchpoint data match",
+> +        "EventCode": "0xD60D",
+> +        "EventName": "WATCHPOINT_MATCH",
+> +        "BriefDescription": "LSU detected a Watchpoint data match"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 pipeline replay",
+> +        "EventCode": "0xD700",
+> +        "EventName": "L2C_PIPE_REPLAY",
+> +        "BriefDescription": "L2 pipeline replay"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 refill from I-side miss",
+> +        "EventCode": "0xD701",
+> +        "EventName": "L2C_INST_REFILL",
+> +        "BriefDescription": "L2 refill from I-side miss"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 refill from D-side miss",
+> +        "EventCode": "0xD702",
+> +        "EventName": "L2C_DATA_REFILL",
+> +        "BriefDescription": "L2 refill from D-side miss"
+> +    },
+> +    {
+> +        "PublicDescription": "L2 prefetcher, load prefetch requests gene=
+rated",
+> +        "EventCode": "0xD703",
+> +        "EventName": "L2_PREFETCH_REQ",
+> +        "BriefDescription": "L2 prefetcher, load prefetch requests gener=
+ated"
+> +    },
+> +    {
+> +        "PublicDescription": "L2D OTB allocate",
+> +        "EventCode": "0xD800",
+> +        "EventName": "MMU_D_OTB_ALLOC",
+> +        "BriefDescription": "L2D OTB allocate"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S1L2 walk ca=
+che entry",
+> +        "EventCode": "0xD801",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L2_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S1L2 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S1L1 walk ca=
+che entry",
+> +        "EventCode": "0xD802",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L1_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S1L1 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S1L0 walk ca=
+che entry",
+> +        "EventCode": "0xD803",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L0_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S1L0 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S2L2 walk ca=
+che entry",
+> +        "EventCode": "0xD804",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L2_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S2L2 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S2L1 walk ca=
+che entry",
+> +        "EventCode": "0xD805",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L1_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S2L1 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "DTLB Translation cache hit on S2L0 walk ca=
+che entry",
+> +        "EventCode": "0xD806",
+> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L0_WALK",
+> +        "BriefDescription": "DTLB Translation cache hit on S2L0 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side S1 Page walk cache lookup",
+> +        "EventCode": "0xD807",
+> +        "EventName": "MMU_D_S1_WALK_CACHE_LOOKUP",
+> +        "BriefDescription": "D-side S1 Page walk cache lookup"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side S1 Page walk cache refill",
+> +        "EventCode": "0xD808",
+> +        "EventName": "MMU_D_S1_WALK_CACHE_REFILL",
+> +        "BriefDescription": "D-side S1 Page walk cache refill"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side S2 Page walk cache lookup",
+> +        "EventCode": "0xD809",
+> +        "EventName": "MMU_D_S2_WALK_CACHE_LOOKUP",
+> +        "BriefDescription": "D-side S2 Page walk cache lookup"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side S2 Page walk cache refill",
+> +        "EventCode": "0xD80A",
+> +        "EventName": "MMU_D_S2_WALK_CACHE_REFILL",
+> +        "BriefDescription": "D-side S2 Page walk cache refill"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side Stage1 tablewalk fault",
+> +        "EventCode": "0xD80B",
+> +        "EventName": "MMU_D_S1_WALK_FAULT",
+> +        "BriefDescription": "D-side Stage1 tablewalk fault"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side Stage2 tablewalk fault",
+> +        "EventCode": "0xD80C",
+> +        "EventName": "MMU_D_S2_WALK_FAULT",
+> +        "BriefDescription": "D-side Stage2 tablewalk fault"
+> +    },
+> +    {
+> +        "PublicDescription": "D-side Tablewalk steps or descriptor fetch=
+es",
+> +        "EventCode": "0xD80D",
+> +        "EventName": "MMU_D_WALK_STEPS",
+> +        "BriefDescription": "D-side Tablewalk steps or descriptor fetche=
+s"
+> +    },
+> +    {
+> +        "PublicDescription": "L2I OTB allocate",
+> +        "EventCode": "0xD900",
+> +        "EventName": "MMU_I_OTB_ALLOC",
+> +        "BriefDescription": "L2I OTB allocate"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S1L2 walk ca=
+che entry",
+> +        "EventCode": "0xD901",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L2_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S1L2 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S1L1 walk ca=
+che entry",
+> +        "EventCode": "0xD902",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L1_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S1L1 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S1L0 walk ca=
+che entry",
+> +        "EventCode": "0xD903",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L0_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S1L0 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S2L2 walk ca=
+che entry",
+> +        "EventCode": "0xD904",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L2_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S2L2 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S2L1 walk ca=
+che entry",
+> +        "EventCode": "0xD905",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L1_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S2L1 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "ITLB Translation cache hit on S2L0 walk ca=
+che entry",
+> +        "EventCode": "0xD906",
+> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L0_WALK",
+> +        "BriefDescription": "ITLB Translation cache hit on S2L0 walk cac=
+he entry"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side S1 Page walk cache lookup",
+> +        "EventCode": "0xD907",
+> +        "EventName": "MMU_I_S1_WALK_CACHE_LOOKUP",
+> +        "BriefDescription": "I-side S1 Page walk cache lookup"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side S1 Page walk cache refill",
+> +        "EventCode": "0xD908",
+> +        "EventName": "MMU_I_S1_WALK_CACHE_REFILL",
+> +        "BriefDescription": "I-side S1 Page walk cache refill"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side S2 Page walk cache lookup",
+> +        "EventCode": "0xD909",
+> +        "EventName": "MMU_I_S2_WALK_CACHE_LOOKUP",
+> +        "BriefDescription": "I-side S2 Page walk cache lookup"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side S2 Page walk cache refill",
+> +        "EventCode": "0xD90A",
+> +        "EventName": "MMU_I_S2_WALK_CACHE_REFILL",
+> +        "BriefDescription": "I-side S2 Page walk cache refill"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side Stage1 tablewalk fault",
+> +        "EventCode": "0xD90B",
+> +        "EventName": "MMU_I_S1_WALK_FAULT",
+> +        "BriefDescription": "I-side Stage1 tablewalk fault"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side Stage2 tablewalk fault",
+> +        "EventCode": "0xD90C",
+> +        "EventName": "MMU_I_S2_WALK_FAULT",
+> +        "BriefDescription": "I-side Stage2 tablewalk fault"
+> +    },
+> +    {
+> +        "PublicDescription": "I-side Tablewalk steps or descriptor fetch=
+es",
+> +        "EventCode": "0xD90D",
+> +        "EventName": "MMU_I_WALK_STEPS",
+> +        "BriefDescription": "I-side Tablewalk steps or descriptor fetche=
+s"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.=
+json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.json
+> new file mode 100644
+> index 000000000000..ada052e19632
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.json
+> @@ -0,0 +1,44 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "EXC_UNDEF"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_SVC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_PABORT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_DABORT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_IRQ"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_FIQ"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_HVC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TRAP_PABORT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TRAP_DABORT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TRAP_OTHER"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TRAP_IRQ"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TRAP_FIQ"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_TAKEN"
+> +    },
+> +    {
+> +        "ArchStdEvent": "EXC_RETURN"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instructio=
+n.json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instruction.json
+> new file mode 100644
+> index 000000000000..18d1f2f76a23
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instruction.json
+> @@ -0,0 +1,89 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "SW_INCR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ST_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "OP_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "LD_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "LDST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "DP_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ASE_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "VFP_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "PC_WRITE_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_IMMED_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_RETURN_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "CRYPTO_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ISB_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "DSB_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "DMB_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "RC_LD_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "RC_ST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "INST_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "CID_WRITE_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "PC_WRITE_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "INST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "TTBR_WRITE_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "BR_MIS_PRED_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "OP_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "OP_SPEC"
+> +    },
+> +    {
+> +        "PublicDescription": "Operation speculatively executed, NOP",
+> +        "EventCode": "0x100",
+> +        "EventName": "NOP_SPEC",
+> +        "BriefDescription": "Speculatively executed, NOP"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.=
+json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.json
+> new file mode 100644
+> index 000000000000..7ecffb989ae0
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.json
+> @@ -0,0 +1,14 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "LDREX_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STREX_PASS_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STREX_FAIL_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STREX_SPEC"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.jso=
+n b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.json
+> new file mode 100644
+> index 000000000000..0711782bfa6b
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.json
+> @@ -0,0 +1,44 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "LD_RETIRED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "UNALIGNED_LD_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "UNALIGNED_ST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "UNALIGNED_LDST_SPEC"
+> +    },
+> +    {
+> +        "ArchStdEvent": "LD_ALIGN_LAT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ST_ALIGN_LAT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEMORY_ERROR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "LDST_ALIGN_LAT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS_CHECKED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS_CHECKED_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "MEM_ACCESS_CHECKED_WR"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.j=
+son b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.json
+> new file mode 100644
+> index 000000000000..f9fae15f7555
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.json
+> @@ -0,0 +1,23 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "STALL_FRONTEND"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL_BACKEND"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL_SLOT_BACKEND"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL_SLOT_FRONTEND"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL_SLOT"
+> +    },
+> +    {
+> +        "ArchStdEvent": "STALL_BACKEND_MEM"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json b=
+/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json
+> new file mode 100644
+> index 000000000000..20f2165c85fe
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json
+> @@ -0,0 +1,14 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "SAMPLE_POP"
+> +    },
+> +    {
+> +        "ArchStdEvent": "SAMPLE_FEED"
+> +    },
+> +    {
+> +        "ArchStdEvent": "SAMPLE_FILTRATE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "SAMPLE_COLLISION"
+> +    }
+> +]
+> diff --git a/tools/perf/pmu-events/arch/arm64/mapfile.csv b/tools/perf/pm=
+u-events/arch/arm64/mapfile.csv
+> index f134e833c069..537a4a27917f 100644
+> --- a/tools/perf/pmu-events/arch/arm64/mapfile.csv
+> +++ b/tools/perf/pmu-events/arch/arm64/mapfile.csv
+> @@ -41,3 +41,4 @@
+>  0x00000000460f0010,v1,fujitsu/a64fx,core
+>  0x00000000480fd010,v1,hisilicon/hip08,core
+>  0x00000000500f0000,v1,ampere/emag,core
+> +0x00000000c00fac30,v1,ampere/ampereone,core
+> --
+> 2.39.2
+>
