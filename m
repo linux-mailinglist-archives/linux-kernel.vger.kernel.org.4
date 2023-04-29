@@ -2,181 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFDC6F21CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B456F21CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347184AbjD2BDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S1347183AbjD2BFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjD2BDd (ORCPT
+        with ESMTP id S229848AbjD2BFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:03:33 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34AF1BF4;
-        Fri, 28 Apr 2023 18:03:31 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33T0iwX0002831;
-        Sat, 29 Apr 2023 01:03:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/xbb4kSPSrah4RtoqhbsGDqbN7qzihIIgJIzb+rmZ3w=;
- b=GCqCnkCeyUrgg34nrjoiYoRsrkxTdaGVoqjahQF1DbvaBBZAtaKQdX8UFMbyuUO5jhWR
- EHnPhpLvaSoBQjXahqIYbP0PEHCq0e6s7/ikM70XJv9x9neLLuYB6hXWNvqokoAuul7U
- W52uQb1O6+ji739CFmbr23vG6P3hfpFVzQNeLf4h7KryBuWAQUY9HEJYNHr/jtjmeUNK
- ciVt6gLtGY4LrKLuK4vh04lUOG21dCwjToaIylFpxThJxfcZhQHmZv1ASpCdfi1rml1Z
- G6lMDwY5QEdBf5HmdDT+8vO+kjf1twhzyclRcNYUaepGLU9eWe3cUea/Of7fBCud4hkt 0Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8rkwr27f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 01:03:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33T13I65000867
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 01:03:18 GMT
-Received: from [10.110.119.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
- 2023 18:03:17 -0700
-Message-ID: <d25d506a-4d56-e16e-ca58-7bc96f2941a5@quicinc.com>
-Date:   Fri, 28 Apr 2023 18:03:16 -0700
+        Fri, 28 Apr 2023 21:05:00 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59F440DC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:04:54 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-94f4b911570so73081566b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:04:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682730293; x=1685322293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GTn0uOMGTuWLuRngMF+Mi86XU8w2URv7NcBiyCeRgDc=;
+        b=JSkbGKCUjHZI7+nBhJqBBrG9nvRCvbkJv5nmz5Ts+E4aZZXlHNDnYtGaRKGjYM0lHd
+         z1dqaD7q+5NIDUZldy82M2qxQlxv9o53OEXpLltaHuD1lSu9+IcHrL8vP14DEhI85oLq
+         VomV/Hs1SLn6fR2DO4p1rz4PFQtrQyD7tOvFA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682730293; x=1685322293;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GTn0uOMGTuWLuRngMF+Mi86XU8w2URv7NcBiyCeRgDc=;
+        b=bBo/fO4TnIInMe68ibJnIHmhiSmXRsyPHf7nPq/ywLQjJ3yFGuJctFr9VjTlMS9ptS
+         7dFp1VbPYq26OBYwyAWaEaCWpwrweBWshJc5odxkNm+6LwV5KkTd0mDrHwcmxVmNP0/v
+         hzhZY+LygCDJtTOqGSnIFpxdD4vJsU1cBahZxghtkcFekZVV+IOoaLmkk1QwBQbhy39A
+         JeUTey3UpASL52Yl1Vbh7NdqtWEHEp7rUVbj+bqeFXz1iNWb6qBuFsPTgJ20lOpU3SuF
+         ArgFNI0JgRjnbsZwVSHqb/UwufqGC/6j3hAVrESxurW8vDvfz2ELNDLMDWQwauB9IBpk
+         pBvg==
+X-Gm-Message-State: AC+VfDxivAMN8U1KlTwunUtqZY8L+wW4KsWpn/bcM3uiG5DDn4FL9OWn
+        YRcC/BaJYX+7eMDrEuX4ok4E+lXtizBsJH8vnLFg2wEe
+X-Google-Smtp-Source: ACHHUZ4wmbBCsytbUF2C7yaBstFEpmz71mrBdwp6cK9wToNxwEJ+9+O9p73Pxz6xtc6A+v91DAFjUA==
+X-Received: by 2002:a17:907:3e1b:b0:95e:d3f5:3d47 with SMTP id hp27-20020a1709073e1b00b0095ed3f53d47mr7553552ejc.48.1682730292817;
+        Fri, 28 Apr 2023 18:04:52 -0700 (PDT)
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
+        by smtp.gmail.com with ESMTPSA id g25-20020a170906349900b0095336e8e012sm12073787ejb.176.2023.04.28.18.04.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 18:04:52 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5050491cb04so492544a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 18:04:51 -0700 (PDT)
+X-Received: by 2002:aa7:c849:0:b0:506:83e7:8c6c with SMTP id
+ g9-20020aa7c849000000b0050683e78c6cmr456351edt.10.1682730291434; Fri, 28 Apr
+ 2023 18:04:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH v2 4/7] drm/msm/dpu: add dsc blocks for
- remaining chipsets in catalog
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>
-References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
- <1682725511-18185-5-git-send-email-quic_khsieh@quicinc.com>
- <1ef1388d-4dc3-273d-3ba6-10614ce6426c@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <1ef1388d-4dc3-273d-3ba6-10614ce6426c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gmKG1LMEZXnzL5mKiowkYhtOdEU0BwBc
-X-Proofpoint-GUID: gmKG1LMEZXnzL5mKiowkYhtOdEU0BwBc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304290007
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230427225647.1101172-1-dave.hansen@linux.intel.com>
+ <CAHk-=wgrdOm8RwO+u8bydrbgs0wXJV_9mBYAtzX9d9hEY7a25A@mail.gmail.com>
+ <CAHk-=wiHvdgbLxayyCsRU45JnKCZkCOpEJPfOvE3eYCnGjVcSA@mail.gmail.com> <20230429003822.n3mglslg666j3npp@box.shutemov.name>
+In-Reply-To: <20230429003822.n3mglslg666j3npp@box.shutemov.name>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 28 Apr 2023 18:04:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgcBw8yV-LPz-64D-9c6xS_eWbw_75qpyrqvUtUXy4szA@mail.gmail.com>
+Message-ID: <CAHk-=wgcBw8yV-LPz-64D-9c6xS_eWbw_75qpyrqvUtUXy4szA@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/mm for 6.4
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kirill.shutemov@linux.intel.com,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 28, 2023 at 5:38=E2=80=AFPM Kirill A. Shutemov <kirill@shutemov=
+.name> wrote:
+>
+> BTW, I think the static check can be relaxed. Checking size against
+> PAGE_SIZE is rather conservative: there's 8 TB (or 4 PB for 5-level
+> paging) guard hole at the begging of kernel address space.
 
+So I don't worry about the size per se - we just don't have any
+constant sized accesses that are bigger than a page.
 
-On 4/28/2023 5:35 PM, Dmitry Baryshkov wrote:
-> On 29/04/2023 02:45, Kuogee Hsieh wrote:
->> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>
->> In preparation of calling ping-pong DSC related functions only
->> for chipsets which have such a design add the dsc blocks for the
->> chipsets for which DSC is present but was not added in the catalog.
-> 
-> Why/how is it prearing us for such calling?
-> 
-> The change itself LGTM.
+The constant-sized case is for things like structures being copied to
+user space.
 
-The next change adds DPU_PINGPONG_DSC feature flag to chipsets where it 
-is supported. But when I checked there were many chipsets where DSC is 
-present but were not added in catalog.
+And having a bug gap is nice for the suzkaller case, although I don't
+think that GP fault has triggered lately (or ever, I don't remember).
+Having random system call arguments that trigger "oh, this is in the
+non-canonical region" is a good thing.
 
-Without doing that, the next change was originally adding 0 to the 
-feature flags of those chipsets which didnt seem right to me.
+> > So being careful about the range is kind of annoying, when we don't
+> > really need it.
+>
+> Hm. Is there anybody who access high to low after the check (glibc
+> memcpy() bug flashbacks)? Or not in any particular order?
 
-This seemed like the right way to do it to first add the DSC blocks for 
-those chipsets and add the feature flag to them in the next change.
+Yeah, I can't think of a single case, which is why it seems so silly
+to even bother.
 
-> 
->>
->> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
->>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 
->> +++++++++++
->>   2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> index 2b3ae84..17f821c 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
->> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] 
->> = {
->>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->>   };
->> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
->> +    DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
->> +    DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
->> +};
->> +
->>   static const struct dpu_dspp_cfg msm8998_dspp[] = {
->>       DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
->>            &msm8998_dspp_sblk),
->> @@ -191,6 +196,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->>       .dspp = msm8998_dspp,
->>       .pingpong_count = ARRAY_SIZE(msm8998_pp),
->>       .pingpong = msm8998_pp,
->> +    .dsc_count = ARRAY_SIZE(msm8998_dsc),
->> +    .dsc = msm8998_dsc,
->>       .intf_count = ARRAY_SIZE(msm8998_intf),
->>       .intf = msm8998_intf,
->>       .vbif_count = ARRAY_SIZE(msm8998_vbif),
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->> index e3bdfe7..5bb9882 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
->> @@ -142,6 +142,15 @@ static const struct dpu_merge_3d_cfg 
->> sc8180x_merge_3d[] = {
->>       MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
->>   };
->> +static const struct dpu_dsc_cfg sc8180x_dsc[] = {
->> +    DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +    DSC_BLK("dsc_1", DSC_1, 0x80400, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +    DSC_BLK("dsc_2", DSC_2, 0x80800, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +    DSC_BLK("dsc_3", DSC_3, 0x80c00, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +    DSC_BLK("dsc_4", DSC_4, 0x81000, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +    DSC_BLK("dsc_5", DSC_5, 0x81400, BIT(DPU_DSC_OUTPUT_CTRL)),
->> +};
->> +
->>   static const struct dpu_intf_cfg sc8180x_intf[] = {
->>       INTF_BLK("intf_0", INTF_0, 0x6a000, 0x280, INTF_DP, 
->> MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
->>       INTF_BLK("intf_1", INTF_1, 0x6a800, 0x2bc, INTF_DSI, 0, 24, 
->> INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
->> @@ -192,6 +201,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
->>       .mixer = sc8180x_lm,
->>       .pingpong_count = ARRAY_SIZE(sc8180x_pp),
->>       .pingpong = sc8180x_pp,
->> +    .dsc_count = ARRAY_SIZE(sc8180x_dsc),
->> +    .dsc = sc8180x_dsc,
->>       .merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
->>       .merge_3d = sc8180x_merge_3d,
->>       .intf_count = ARRAY_SIZE(sc8180x_intf),
-> 
+Almost all real life cases end up being limited by things like the
+page/folio size.
+
+We do have exceptions, like module loading etc that might copy a
+bigger area from user space, but no, we don't have any backwards
+copies.
+
+So you'd almost have to have some "access_ok()" followed by random
+access with a user-controlled offset, and that seems nonsensical and
+fundamentally impossible anyway.
+
+But just because I can't think of it, and go "that would be insane"
+doesn't mean that some driver ioctl interface might not try it.
+
+Which is why I think having others look at it would be a good idea.
+
+               Linus
