@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2DD6F21D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6CB6F21DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347204AbjD2BG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S1347214AbjD2BIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbjD2BGy (ORCPT
+        with ESMTP id S229848AbjD2BIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:06:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331D41BE6;
-        Fri, 28 Apr 2023 18:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682730413; x=1714266413;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PlWSoSdqq8TFR6+EZL1jyxd/pZTMFH5V0NmPcGL7Ed0=;
-  b=KNoOK4PoZhggldOZ7F82OGMzEcK7cY/EAOWSYdpUI6SM33jto+dyr6ES
-   oI+7knFw1tGCaX9CKRdh6S1dnGTHk6OuBRsY47oczvhqFG8Tamg8Gdv2F
-   JzkGWHkxxrSdFe2mzduiYPHFf+ih79gZC4wBB00ZH0l/wr5j6PvX90ebq
-   V/hbTQCbVB/PaoEXkBADLTlvsTIwzVo4x2POjg0lnlW+THqmbKYfWgxgz
-   HX6QPJ7MggYr3JIWdVcp4vP6MNZ2rs8KmYcBqNyiYqM1LXLHAmR7lDbMu
-   2R/xMQqSF2ztPkqKsi+tXvuNfO8SqiQj43X+psRHt6qEJtircZL+S+CDf
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="411004446"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="411004446"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 18:06:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="839066003"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="839066003"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2023 18:06:49 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psZ32-0000mf-1B;
-        Sat, 29 Apr 2023 01:06:48 +0000
-Date:   Sat, 29 Apr 2023 09:06:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v10 07/11] LSM: Helpers for attribute names and filling
- lsm_ctx
-Message-ID: <202304290847.WxviiKLP-lkp@intel.com>
-References: <20230428203417.159874-8-casey@schaufler-ca.com>
+        Fri, 28 Apr 2023 21:08:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE770180;
+        Fri, 28 Apr 2023 18:08:40 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33T18UuC015306;
+        Sat, 29 Apr 2023 01:08:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7BrH5yP/U/+y8SiKzIFnfSUy8J8IoCmRmEerg7Q760U=;
+ b=f+3pYNvikvtF+sImMlif59H02E4hokaPdd0QPhsQ2DKBvjMQNfoxONwyZ6/t3ZjfSYe7
+ VVAvvpCdBgBh8xwdqrutlwx4QtcvdsIvMhWuEpuQ2IrlLBgah9oh64VhxU5dRVOCEOiH
+ JGbgU6NNn4hJujbUsZ4aFStOloeWW1v9cVbUHGLB4WLPv4phoX9w7GQKCKTfEdxspmcr
+ IEDhVmzE0ds9Vlk15IpUb6lRuGHBXsThKGX7UXPC4mICy54SUbAPhYvFzfu28k7r9g7o
+ xZfcvKzNhYm0SkjXeuYonEksNwFMWyYDsMhBvAcP/OsB3Mb8dXOey11qTnHOTjc5aBkC eA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8b38tbhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 29 Apr 2023 01:08:29 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33T18Sd9027066
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 29 Apr 2023 01:08:29 GMT
+Received: from [10.110.119.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 28 Apr
+ 2023 18:08:27 -0700
+Message-ID: <e9f493fa-77f2-0a5b-5e09-bd1baae8a8d0@quicinc.com>
+Date:   Fri, 28 Apr 2023 18:08:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428203417.159874-8-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v2 5/7] drm/msm/dpu: add DPU_PINGPONG_DSC feature PP_BLK
+ and PP_BLK_TE
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>
+CC:     <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682725511-18185-6-git-send-email-quic_khsieh@quicinc.com>
+ <ad672cff-3355-97af-24b4-3626efebc284@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <ad672cff-3355-97af-24b4-3626efebc284@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: k_pwnNi30jQORurO7RI07qlHvfTWCNyX
+X-Proofpoint-ORIG-GUID: k_pwnNi30jQORurO7RI07qlHvfTWCNyX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 priorityscore=1501
+ adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304290008
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,241 +88,378 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on acme/perf/core shuah-kselftest/next shuah-kselftest/fixes v6.3]
-[cannot apply to linus/master next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230429-053458
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20230428203417.159874-8-casey%40schaufler-ca.com
-patch subject: [PATCH v10 07/11] LSM: Helpers for attribute names and filling lsm_ctx
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20230429/202304290847.WxviiKLP-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/9830f4776196e33bee604b8ce3339177f8fd37f8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230429-053458
-        git checkout 9830f4776196e33bee604b8ce3339177f8fd37f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290847.WxviiKLP-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/perf_event.h:62,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:89,
-                    from init/main.c:21:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   init/main.c: At top level:
-   init/main.c:775:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     775 | void __init __weak arch_post_acpi_subsys_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   init/main.c:787:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
-     787 | void __init __weak mem_encrypt_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~
-   init/main.c:789:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
-     789 | void __init __weak poking_init(void) { }
-         |                    ^~~~~~~~~~~
---
-   In file included from init/do_mounts.c:9:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
---
-   In file included from include/net/scm.h:8,
-                    from include/linux/netlink.h:9,
-                    from include/uapi/linux/neighbour.h:6,
-                    from include/linux/netdevice.h:46,
-                    from include/uapi/linux/if_arp.h:27,
-                    from include/linux/if_arp.h:23,
-                    from arch/um/drivers/slirp_kern.c:6:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   arch/um/drivers/slirp_kern.c: At top level:
-   arch/um/drivers/slirp_kern.c:18:6: warning: no previous prototype for 'slirp_init' [-Wmissing-prototypes]
-      18 | void slirp_init(struct net_device *dev, void *data)
-         |      ^~~~~~~~~~
---
-   In file included from include/linux/perf_event.h:62,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:89,
-                    from arch/x86/um/tls_32.c:8:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/um/tls_32.c: At top level:
-   arch/x86/um/tls_32.c:23:5: warning: no previous prototype for 'do_set_thread_area' [-Wmissing-prototypes]
-      23 | int do_set_thread_area(struct user_desc *info)
-         |     ^~~~~~~~~~~~~~~~~~
-   arch/x86/um/tls_32.c:39:5: warning: no previous prototype for 'do_get_thread_area' [-Wmissing-prototypes]
-      39 | int do_get_thread_area(struct user_desc *info)
-         |     ^~~~~~~~~~~~~~~~~~
-   arch/x86/um/tls_32.c:184:5: warning: no previous prototype for 'arch_switch_tls' [-Wmissing-prototypes]
-     184 | int arch_switch_tls(struct task_struct *to)
-         |     ^~~~~~~~~~~~~~~
---
-   In file included from kernel/fork.c:51:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/fork.c: At top level:
-   kernel/fork.c:162:13: warning: no previous prototype for 'arch_release_task_struct' [-Wmissing-prototypes]
-     162 | void __weak arch_release_task_struct(struct task_struct *tsk)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/fork.c:859:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
-     859 | void __init __weak arch_task_cache_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   kernel/fork.c:954:12: warning: no previous prototype for 'arch_dup_task_struct' [-Wmissing-prototypes]
-     954 | int __weak arch_dup_task_struct(struct task_struct *dst,
-         |            ^~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/linux/perf_event.h:62,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:89,
-                    from kernel/exit.c:42:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/exit.c: At top level:
-   kernel/exit.c:1915:32: warning: no previous prototype for 'abort' [-Wmissing-prototypes]
-    1915 | __weak __function_aligned void abort(void)
-         |                                ^~~~~
---
-   In file included from include/net/scm.h:8,
-                    from include/linux/netlink.h:9,
-                    from include/uapi/linux/neighbour.h:6,
-                    from include/linux/netdevice.h:46,
-                    from include/linux/if_vlan.h:10,
-                    from include/linux/filter.h:21,
-                    from kernel/kallsyms.c:25:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   kernel/kallsyms.c: At top level:
-   kernel/kallsyms.c:663:12: warning: no previous prototype for 'arch_get_kallsym' [-Wmissing-prototypes]
-     663 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-         |            ^~~~~~~~~~~~~~~~
---
-   In file included from include/linux/fs_context.h:14,
-                    from include/linux/pseudo_fs.h:4,
-                    from fs/pipe.c:17:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   fs/pipe.c: At top level:
-   fs/pipe.c:757:15: warning: no previous prototype for 'account_pipe_buffers' [-Wmissing-prototypes]
-     757 | unsigned long account_pipe_buffers(struct user_struct *user,
-         |               ^~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:763:6: warning: no previous prototype for 'too_many_pipe_buffers_soft' [-Wmissing-prototypes]
-     763 | bool too_many_pipe_buffers_soft(unsigned long user_bufs)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:770:6: warning: no previous prototype for 'too_many_pipe_buffers_hard' [-Wmissing-prototypes]
-     770 | bool too_many_pipe_buffers_hard(unsigned long user_bufs)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:777:6: warning: no previous prototype for 'pipe_is_unprivileged_user' [-Wmissing-prototypes]
-     777 | bool pipe_is_unprivileged_user(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/pipe.c:1253:5: warning: no previous prototype for 'pipe_resize_ring' [-Wmissing-prototypes]
-    1253 | int pipe_resize_ring(struct pipe_inode_info *pipe, unsigned int nr_slots)
-         |     ^~~~~~~~~~~~~~~~
---
-   In file included from include/linux/perf_event.h:62,
-                    from include/linux/trace_events.h:10,
-                    from include/trace/syscall.h:7,
-                    from include/linux/syscalls.h:89,
-                    from fs/d_path.c:2:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   fs/d_path.c: At top level:
-   fs/d_path.c:317:7: warning: no previous prototype for 'simple_dname' [-Wmissing-prototypes]
-     317 | char *simple_dname(struct dentry *dentry, char *buffer, int buflen)
-         |       ^~~~~~~~~~~~
---
-   In file included from include/net/scm.h:8,
-                    from include/linux/netlink.h:9,
-                    from include/uapi/linux/neighbour.h:6,
-                    from include/linux/netdevice.h:46,
-                    from include/net/sock.h:46,
-                    from include/linux/tcp.h:19,
-                    from include/linux/ipv6.h:93,
-                    from include/net/addrconf.h:52,
-                    from lib/vsprintf.c:40:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   lib/vsprintf.c: In function 'va_format':
-   lib/vsprintf.c:1681:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-    1681 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
-         |         ^~~
---
-   In file included from include/net/scm.h:8,
-                    from include/linux/netlink.h:9,
-                    from include/uapi/linux/neighbour.h:6,
-                    from include/linux/netdevice.h:46,
-                    from include/net/sock.h:46,
-                    from include/linux/bpf-cgroup.h:11,
-                    from net/socket.c:55:
-   include/linux/security.h: In function 'lsm_name_to_attr':
->> include/linux/security.h:516:16: error: 'LSM_ATTR_UNDEF' undeclared (first use in this function)
-     516 |         return LSM_ATTR_UNDEF;
-         |                ^~~~~~~~~~~~~~
-   include/linux/security.h:516:16: note: each undeclared identifier is reported only once for each function it appears in
-   net/socket.c: In function '__sys_getsockopt':
-   net/socket.c:2297:13: warning: variable 'max_optlen' set but not used [-Wunused-but-set-variable]
-    2297 |         int max_optlen;
-         |             ^~~~~~~~~~
-..
 
 
-vim +/LSM_ATTR_UNDEF +516 include/linux/security.h
+On 4/28/2023 5:45 PM, Dmitry Baryshkov wrote:
+> On 29/04/2023 02:45, Kuogee Hsieh wrote:
+>> Legacy DPU requires PP hardware block involved into setting up DSC
+> 
+> Nit: to be envolved
+> 
+>> data path. This patch add DDPU_PINGPONG_DSC feature bit to both
+> 
+> adds
+> 
+>> PP_BLK and PP_BLK_TE so that both dpu_hw_pp_setup_dsc() and
+>> dpu_hw_pp_dsc_enable() will be executed during DSC path setup.
+> 
+> Would it be easier to add PP_BLK_NO_DSC instead and make DSC enabled by 
+> default for PP_BLK / PP_BLK_TE?
+> 
 
-   513	
-   514	static inline u64 lsm_name_to_attr(const char *name)
-   515	{
- > 516		return LSM_ATTR_UNDEF;
-   517	}
-   518	
+No because for some chipsets like qcm2290, it has a ping pong block but 
+no DSC.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>>
+>> Reported-by : Marijn Suijten <marijn.suijten@somainline.org>
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    | 12 +++++-----
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h |  8 +++----
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h | 26 
+>> ++++++++++------------
+>>   .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    | 24 
+>> ++++++++++----------
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h | 26 
+>> ++++++++++------------
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h |  4 ++--
+>>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h |  2 +-
+>>   .../drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h    |  2 +-
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  8 +++----
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  2 ++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |  9 +++++---
+>>   11 files changed, 62 insertions(+), 61 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> index 17f821c..b7cd746 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> @@ -112,16 +112,16 @@ static const struct dpu_lm_cfg msm8998_lm[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
+>> BIT(DPU_PINGPONG_DSC), 0,
+>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
+>> BIT(DPU_PINGPONG_DSC), 0,
+>> +            sdm845_pp_sblk_te, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, 0, sdm845_pp_sblk,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, 0, sdm845_pp_sblk,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>> index ceca741..8888bd9 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+>> @@ -110,16 +110,16 @@ static const struct dpu_lm_cfg sdm845_lm[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sdm845_pp[] = {
+>> -    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk_te,
+>> +    PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, 
+>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>> -    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te,
+>> +    PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 
+>> BIT(DPU_PINGPONG_DSC), 0, sdm845_pp_sblk_te,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
+>> 0, sdm845_pp_sblk,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
+>> 0, sdm845_pp_sblk,
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+>> index 42b0e58..3a7dffa 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+>> @@ -128,24 +128,22 @@ static const struct dpu_dspp_cfg sm8150_dspp[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sm8150_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>> -            -1),
+>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>> -            -1),
+>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
+>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
+>>   };
+>>   static const struct dpu_merge_3d_cfg sm8150_merge_3d[] = {
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+>> index 5bb9882..e766a2d 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+>> @@ -116,23 +116,23 @@ static const struct dpu_lm_cfg sc8180x_lm[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sc8180x_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>>               -1),
+>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>>               -1),
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+>> index ed130582..137b151 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+>> @@ -129,24 +129,22 @@ static const struct dpu_dspp_cfg sm8250_dspp[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sm8250_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, MERGE_3D_0, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_0,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+>> -    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>> +    PP_BLK("pingpong_2", PINGPONG_2, 0x71000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+>> -    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, MERGE_3D_1, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>> +    PP_BLK("pingpong_3", PINGPONG_3, 0x71800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_1,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>> -    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+>> -            -1),
+>> -    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, MERGE_3D_2, 
+>> sdm845_pp_sblk,
+>> -            DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+>> -            -1),
+>> +    PP_BLK("pingpong_4", PINGPONG_4, 0x72000, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
+>> +    PP_BLK("pingpong_5", PINGPONG_5, 0x72800, BIT(DPU_PINGPONG_DSC), 
+>> MERGE_3D_2,
+>> +            sdm845_pp_sblk, DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
+>>   };
+>>   static const struct dpu_merge_3d_cfg sm8250_merge_3d[] = {
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+>> index a46b117..e5631a2 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+>> @@ -80,8 +80,8 @@ static const struct dpu_dspp_cfg sc7180_dspp[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sc7180_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk, -1, 
+>> -1),
+>> -    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk, -1, 
+>> -1),
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk, 
+>> -1, -1),
+>> +    PP_BLK("pingpong_1", PINGPONG_1, 0x70800, 0, 0, sdm845_pp_sblk, 
+>> -1, -1),
+>>   };
+>>   static const struct dpu_intf_cfg sc7180_intf[] = {
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+>> index 988d820..7b4ad0f 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+>> @@ -60,7 +60,7 @@ static const struct dpu_dspp_cfg sm6115_dspp[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg sm6115_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk,
+>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+>> index c9003dc..20d4d14 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+>> @@ -57,7 +57,7 @@ static const struct dpu_dspp_cfg qcm2290_dspp[] = {
+>>   };
+>>   static const struct dpu_pingpong_cfg qcm2290_pp[] = {
+>> -    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+>> +    PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, 0, sdm845_pp_sblk,
+>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+>>           DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 91bfc8a..83c0cd9 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -501,21 +501,21 @@ static const struct dpu_pingpong_sub_blks 
+>> sc7280_pp_sblk = {
+>>       .intr_done = _done, \
+>>       .intr_rdptr = _rdptr, \
+>>       }
+>> -#define PP_BLK_TE(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+>> +#define PP_BLK_TE(_name, _id, _base, _features, _merge_3d, _sblk, 
+>> _done, _rdptr) \
+>>       {\
+>>       .name = _name, .id = _id, \
+>>       .base = _base, .len = 0xd4, \
+>> -    .features = PINGPONG_SDM845_SPLIT_MASK, \
+>> +    .features = PINGPONG_SDM845_SPLIT_MASK | _features, \
+>>       .merge_3d = _merge_3d, \
+>>       .sblk = &_sblk, \
+>>       .intr_done = _done, \
+>>       .intr_rdptr = _rdptr, \
+>>       }
+>> -#define PP_BLK(_name, _id, _base, _merge_3d, _sblk, _done, _rdptr) \
+>> +#define PP_BLK(_name, _id, _base, _features, _merge_3d, _sblk, _done, 
+>> _rdptr) \
+>>       {\
+>>       .name = _name, .id = _id, \
+>>       .base = _base, .len = 0xd4, \
+>> -    .features = PINGPONG_SDM845_MASK, \
+>> +    .features = PINGPONG_SDM845_MASK | _features, \
+>>       .merge_3d = _merge_3d, \
+>>       .sblk = &_sblk, \
+>>       .intr_done = _done, \
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> index fc87db1..6b49171 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -144,6 +144,7 @@ enum {
+>>    * @DPU_PINGPONG_SPLIT      PP block supports split fifo
+>>    * @DPU_PINGPONG_SLAVE      PP block is a suitable slave for split fifo
+>>    * @DPU_PINGPONG_DITHER,    Dither blocks
+>> + * @DPU_PINGPONG_DSC,        PP block binding to DSC
+>>    * @DPU_PINGPONG_MAX
+>>    */
+>>   enum {
+>> @@ -152,6 +153,7 @@ enum {
+>>       DPU_PINGPONG_SPLIT,
+>>       DPU_PINGPONG_SLAVE,
+>>       DPU_PINGPONG_DITHER,
+>> +    DPU_PINGPONG_DSC,
+>>       DPU_PINGPONG_MAX
+>>   };
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c 
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+>> index 3822e06..f255a04 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+>> @@ -264,9 +264,12 @@ static void _setup_pingpong_ops(struct 
+>> dpu_hw_pingpong *c,
+>>       c->ops.get_autorefresh = dpu_hw_pp_get_autorefresh_config;
+>>       c->ops.poll_timeout_wr_ptr = dpu_hw_pp_poll_timeout_wr_ptr;
+>>       c->ops.get_line_count = dpu_hw_pp_get_line_count;
+>> -    c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+>> -    c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+>> -    c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+>> +
+>> +    if (features & BIT(DPU_PINGPONG_DSC)) {
+>> +        c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+>> +        c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+>> +        c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+>> +    }
+>>       if (test_bit(DPU_PINGPONG_DITHER, &features))
+>>           c->ops.setup_dither = dpu_hw_pp_setup_dither;
+> 
