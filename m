@@ -2,75 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496276F2425
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 12:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA64C6F2429
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 12:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjD2Kbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 06:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S230415AbjD2KoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 06:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjD2Kba (ORCPT
+        with ESMTP id S229507AbjD2KoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 06:31:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935D61BE8;
-        Sat, 29 Apr 2023 03:31:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27A2D61610;
-        Sat, 29 Apr 2023 10:31:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28794C433EF;
-        Sat, 29 Apr 2023 10:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682764288;
-        bh=0GbmBMGiNiQlIdnACBgahvtc+QtoJehbHv6nICycqIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tFhPkZUDutv1XqNNNayYgpxTWhqBsGyicP5ZE+0P5aZPM1SFgNwGsYutMDbjAeX7r
-         JoIbcHIL0grDinAv1Xen+AI6GLJDOeK7oulXXWtq6Af2EkCNZQ+Mv+TGKx4KpPj8HN
-         o37YI2ZiY580d9dsHNxhOy0NYV9xON8ceNNwkVCsu8Ru8dxYj+hqpK5NDa69iCq5bv
-         r9g9qfYstDE8+Mz8clTHSExMwWUjXwj04kTfT766VTMf5JEJoTxTu2UDU6msp9DTxf
-         zniinNBnHQ9amnPS6KwooRNkDA8OaKb5fE7QYpuHGv+Jrcx6drNQ/sHkF9tOE8VPCP
-         qPbfmrd2AbdWQ==
-Date:   Sat, 29 Apr 2023 11:31:20 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH V4 13/23] RISC-V: cpufeature: Add ACPI support in
- riscv_fill_hwcap()
-Message-ID: <20230429-voucher-tutor-715fd4f6c24e@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-14-sunilvl@ventanamicro.com>
+        Sat, 29 Apr 2023 06:44:13 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F5A1FCC
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:44:11 -0700 (PDT)
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 33TAhme9028302;
+        Sat, 29 Apr 2023 19:43:48 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Sat, 29 Apr 2023 19:43:48 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 33TAhmOP028299
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 29 Apr 2023 19:43:48 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <2a07bded-25e5-fd27-a2de-8b606e4d1d2c@I-love.SAKURA.ne.jp>
+Date:   Sat, 29 Apr 2023 19:43:47 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mD53ytQ30VQ4ln/R"
-Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-14-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] tty: tty_io: remove hung_up_tty_fops
+Content-Language: en-US
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230423233433.GF3390869@ZenIV>
+ <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
+ <20230424004431.GG3390869@ZenIV>
+ <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
+ <2fca7932-5030-32c3-dd61-48dd78e58e11@I-love.SAKURA.ne.jp>
+ <20230425160344.GS3390869@ZenIV>
+ <1b405689-ea0a-6696-6709-d372ce72d68c@I-love.SAKURA.ne.jp>
+ <5cebade5-0aa9-506c-c817-7bcf098eba89@I-love.SAKURA.ne.jp>
+ <20230428162718.GA1099174@dev-arch.thelio-3990X>
+ <6dca757e-74ac-773d-2a50-4e48b2f56880@I-love.SAKURA.ne.jp>
+ <20230428171145.GD3390869@ZenIV>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20230428171145.GD3390869@ZenIV>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,88 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/04/29 2:11, Al Viro wrote:
+> On Sat, Apr 29, 2023 at 01:41:02AM +0900, Tetsuo Handa wrote:
+>> On 2023/04/29 1:27, Nathan Chancellor wrote:
+>>> I see this change has shown up in -next as commit 4c87e9e5479b ("tty:
+>>> tty_io: remove hung_up_tty_fops"), where it causes the following warning
+>>> for configurations without CONFIG_COMPAT (I used ARCH=arm defconfig):
+>>>
+>>>   drivers/tty/tty_io.c:446:13: warning: 'hung_up_tty_compat_ioctl' defined but not used [-Wunused-function]
+>>>     446 | static long hung_up_tty_compat_ioctl(struct file *file,
+>>>         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+>>>
+>>> I am not sure if you just added that patch for additional test coverage
+>>> or for final acceptance but the following diff resolves this warning for
+>>> me, perhaps it can be folded in for a v2?
+>>
+>> Thank you for reporting. Yes, moving the definition will solve the warning.
+> 
+> 	IDGI...  Why do you need to keep that function at all?  Compare it
+> with hung_up_tty_ioctl() - they are token-for-token identical; the only
+> difference is the function name...
 
---mD53ytQ30VQ4ln/R
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Indeed hung_up_tty_ioctl() and hung_up_tty_compat_ioctl() are identical.
+We can remove hung_up_tty_compat_ioctl() if we don't consider
 
-Hey Sunil,
+ 	ld = tty_ldisc_ref_wait(tty);
+ 	if (!ld)
+-		return hung_up_tty_compat_ioctl(file, cmd, arg);
++		return hung_up_tty_ioctl(file, cmd, arg);
+ 	if (ld->ops->compat_ioctl)
+ 		retval = ld->ops->compat_ioctl(tty, cmd, arg);
 
-On Tue, Apr 04, 2023 at 11:50:27PM +0530, Sunil V L wrote:
+at tty_compat_ioctl() as strange looking.
 
-> @@ -103,14 +109,36 @@ void __init riscv_fill_hwcap(void)
-> =20
->  	bitmap_zero(riscv_isa, RISCV_ISA_EXT_MAX);
-> =20
-> -	for_each_of_cpu_node(node) {
-> +	if (!acpi_disabled) {
-> +		status =3D acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
-> +		if (ACPI_FAILURE(status))
-> +			return;
-> +	}
-> +
-> +	for_each_possible_cpu(cpu) {
->  		unsigned long this_hwcap =3D 0;
->  		DECLARE_BITMAP(this_isa, RISCV_ISA_EXT_MAX);
->  		const char *temp;
-> =20
-> -		if (of_property_read_string(node, "riscv,isa", &isa)) {
-> -			pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> -			continue;
-> +		if (acpi_disabled) {
-> +			node =3D of_cpu_device_node_get(cpu);
-> +			if (node) {
-> +				rc =3D of_property_read_string(node, "riscv,isa", &isa);
-> +				of_node_put(node);
-> +				if (rc) {
-> +					pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
-> +					continue;
-> +				}
-> +			} else {
-> +				pr_warn("Unable to find cpu node\n");
-> +				continue;
+Maybe adding "inline" keyword to hung_up_tty_*() definitions
+because hung_up_tty_fops is removed?
 
-I was poking at this the last few days and went back to look at the ACPI
-code again. Is there a reason we don't do early-return here? IOW:
-
-	node =3D of_cpu_device_node_get(cpu);
-	if (!node) {
-		pr_warn()
-		continue;
-	}
-
-	rc =3D of_property_read_string(node, "riscv,isa", &isa);
-	of_node_put(node);
-	if (rc) {
-		pr_warn();
-		continue;
-	}
-
-Cheers,
-Conor.
-
-> +			}
-> +		} else {
-> +			rc =3D acpi_get_riscv_isa(rhct, cpu, &isa);
-> +			if (rc < 0) {
-> +				pr_warn("Unable to get ISA for the hart - %d\n", cpu);
-> +				continue;
-> +			}
->  		}
-> =20
->  		temp =3D isa;
-> @@ -243,6 +271,9 @@ void __init riscv_fill_hwcap(void)
-
---mD53ytQ30VQ4ln/R
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZEzx+AAKCRB4tDGHoIJi
-0uDXAP0UihCqegQRGuBLnWtSMvMhsuIza2XwUNXv6Jsjw1EdNwD5AT1aXZpghWod
-R72zPlGiSaij2J867SuTR51j5SWNmQE=
-=7cU+
------END PGP SIGNATURE-----
-
---mD53ytQ30VQ4ln/R--
