@@ -2,139 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1345D6F26F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888756F26FE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjD2WEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 18:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S229900AbjD2Wbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 18:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjD2WEE (ORCPT
+        with ESMTP id S229489AbjD2Wbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 18:04:04 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7649E1727
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:04:03 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 1AF34320046F;
-        Sat, 29 Apr 2023 18:03:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 29 Apr 2023 18:04:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1682805838; x=1682892238; bh=Gr
-        mqce6ZIJAbv3KbdF0ct03pH7DdnZSbJCu9rKvBOnM=; b=kHHb4rtp+yPy3s7m38
-        B1j1tuD1k6ByyxZ48YbM3uYxhOiB2y899vyLR+fOzWEHV77iur6WNXrBKoRaIT36
-        P5OaNf8QEQ/mYhbM/yrYmJtomxrewagdh+6E76raNIZFeGMzHLYAQxMPiw1qMRSo
-        me/Y40ouP15vZgGXB7WrvLYxc84dO4zFkZ5gmoy1ONiQKF7PTwBTGl18vjHxsms1
-        Kc0vClOvskb95oZRMoec7LL8eg2FfHngoy51PwRdDGZNrjN9Un+LTadGEoE9ZawW
-        uglrLWgR61xyg4w1lZmUn233Hztxz5qR9932hxUhrVSzeoKrCg8SZAGQfYtYQX8z
-        xpaw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1682805838; x=1682892238; bh=Grmqce6ZIJAbv
-        3KbdF0ct03pH7DdnZSbJCu9rKvBOnM=; b=MMrZtAZHNU7EYXbvuOQsbH6mV0Wwm
-        VXZL0ZC7WkD7kjqW2N7IyVI/0hR//uPY3IuwYmhxPkNB393vb5QGvRoWL6sISBsU
-        nDVJFqLNdru0cs76bICTBBOfOtHA7ul9r+6/FANJ/xbzzB5P/BQvdtOKu7JTaIKj
-        G/Jxn/De0I5VSRfMKWsD7n5zJbTwhudzbHje3xAMBPsHP+ajKNyHHuqKa6aXna6c
-        ib1i/R5IZAyGJf8e4M0BBuxrMasz/OOZqDDJ3+FOmKCjH1rH8Ds15yf3kbNcJ5ZW
-        gVmVQU2j3758GdoLjI3fgHUNEuudJnXMbC77stGf/lcFielwYwPHhgc4Q==
-X-ME-Sender: <xms:TZRNZFT2EXwN5UO-Xsjt7zE3LpHYELtdMtboXri5YxR34JSR8iLGCw>
-    <xme:TZRNZOx1Wyz-iYney1On1BMyu62bu2sZn9fPturHm7prYAERpSpOckml2qbRG4nNa
-    HBsxanEWoXEl2B6vmM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvuddgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:TZRNZK2V02OQohtQCwSYMF-4RxAH31CJgrR2Dg4Dep5Ac0UIQRuJlw>
-    <xmx:TZRNZNCU79_mZRfF0LcTxh3YJR9iqagKTdU6yxR2CZehTNkmts571Q>
-    <xmx:TZRNZOgAuWRaPoHxUQK_9i8ZaW-MPqwI-q1gIWl6W30FuuaE6tIEuA>
-    <xmx:TpRNZFTHVIieBfzEbvTBy3D7ZYqGvvzwSxBtAzppY5SJUHdIuNEkUA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C7107B60086; Sat, 29 Apr 2023 18:03:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <96947fdc-835f-4bfa-b112-4ba9991cfe5f@app.fastmail.com>
-In-Reply-To: <b6341f73-3ad2-4fcf-8612-e026751019b5@app.fastmail.com>
-References: <20230421130111.4041641-1-tudor.ambarus@linaro.org>
- <5d13e927-3713-4b9e-b007-6be5671d46f2@app.fastmail.com>
- <e46dd2bb-16d1-0c99-56f0-f8c2c4bbc79b@linaro.org>
- <b6341f73-3ad2-4fcf-8612-e026751019b5@app.fastmail.com>
-Date:   Sun, 30 Apr 2023 00:03:26 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Tudor Ambarus" <tudor.ambarus@linaro.org>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     joneslee@google.com, "Peter Zijlstra" <peterz@infradead.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>, zhaoyang.huang@unisoc.com,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        "Mark Brown" <broonie@kernel.org>,
-        "Dmitry Vyukov" <dvyukov@google.com>, nogikh@google.com,
-        "Ard Biesheuvel" <ardb@kernel.org>
-Subject: Re: [PATCH] Kconfig.debug: disable CONFIG_FRAME_WARN for KASAN_STACK &&
- CC_IS_CLANG by default
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 29 Apr 2023 18:31:44 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D5B18B
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a6670671e3so10357695ad.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682807502; x=1685399502;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VPHsDpkGlPsUeymJHmip8825ZqzKSXSliZm57TlwjvQ=;
+        b=OFkAUE/ZjnCUb9a0kpq5KQP//BxcdTW++AyWH6rq/D9WK9XtvkJ09tekM1DEkHWvry
+         OfKR/rKqvlIk1pIhGjRSmZypireApgMBf+lcB4VG7Ir3RvnIbmBSc7te7r63ZlHwqsfa
+         OUhLcxwKvCTxp7lix4KVWv9WccxiPRIjt1Ml/tEC3pyMpdTPdYAmeaCpbTvR+e1omwdw
+         MpJGE2mT+meXC911Neu67LeG0kvqL3XvmtLmkt1fHdBIsX+B9SpcaVYj/GVDvqnACe8e
+         KBOhnJyGkYbREmrVsPug31iPFvHJmpXwXzSYmVhh9fg6nv2YPPBB5qU8TOBqqNDxxjII
+         +Jeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682807502; x=1685399502;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VPHsDpkGlPsUeymJHmip8825ZqzKSXSliZm57TlwjvQ=;
+        b=L5v8T+Et+zptkROAhObE5SRjikRgph5yw3NnJhYFQoPy6UG+WV3PeBj/mlfyOTGj7c
+         uVfonb7K9iWh178DX0B00b/zdMjAP5KqEPtmjlDB6VyKu/4QcM/l57Bj381AJxIjmYXZ
+         VxBUEyIwQwT63M0UvXwVUqgfWpt85FJnEYsbH13/72zyNQteimmGvpMNG6hCZLbefJEs
+         Q8tMqyXtxCq9oawS5YcjXpoOOSkxl5ob8kKP4daVMbTYUQY2TZDhQL11KoDdtXjjkfNA
+         PCx7DcgrjGiuSiD+xFJeT7re9Huqvzl0u3F6L/6TIYPfu5iZyQJZuMxiP+1gPFD3IGoM
+         b2JA==
+X-Gm-Message-State: AC+VfDxZXKYxvFdmADpROz8WRcBeepfJ4JaNfxTidAACmrS4YqFgA811
+        rRyJZ3uUgwTGcVqa/s76/1bbGA==
+X-Google-Smtp-Source: ACHHUZ6hqMeAHWypNk2/udmWcpEssqk/qIzLMjqRGYwvz2Y10ylroswUy4NiR+4Bcbs59WH1sk8GPg==
+X-Received: by 2002:a17:903:2312:b0:1a6:82a7:6e60 with SMTP id d18-20020a170903231200b001a682a76e60mr11048331plh.47.1682807502286;
+        Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id bg12-20020a1709028e8c00b001a9567dc731sm12644148plb.24.2023.04.29.15.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Apr 2023 15:31:41 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 15:31:41 -0700 (PDT)
+X-Google-Original-Date: Sat, 29 Apr 2023 15:31:25 PDT (-0700)
+Subject:     Re: [PATCH] RISC-V: fixup in-flight collision with ARCH_WANT_OPTIMIZE_VMEMMAP rename
+In-Reply-To: <5fe1484b4f2b4ae960a9b599c4ab3ace@linux.dev>
+CC:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        lukas.bulwahn@gmail.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     konstantin.ryabitsev@linux.dev
+Message-ID: <mhng-539ec982-8235-478e-b695-ee6253b5308c@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023, at 17:28, Arnd Bergmann wrote:
-> On Fri, Apr 21, 2023, at 17:10, Tudor Ambarus wrote:
->> On 4/21/23 15:30, Arnd Bergmann wrote:
+On Sat, 29 Apr 2023 14:48:18 PDT (-0700), konstantin.ryabitsev@linux.dev wrote:
+>> April 29, 2023 4:17 PM, "Palmer Dabbelt" <palmer@dabbelt.com> wrote:
+>>>> I guess you picking this up for your second PR makes the most sense
+>>>> Palmer?
+>> 
+>> Yep, except it crashes b4
+>> 
+>> $ b4 shazam -lts https://lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d@spud
+>> Grabbing thread from lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d%40spud/t.mbox.gz
+>> Analyzing 2 messages in the thread
+>> Checking attestation on all messages, may take a moment...
+>> Traceback (most recent call last):
+>> File "/home/palmer/.local/src/b4/b4/command.py", line 383, in <module>
+>> cmd()
+>> File "/home/palmer/.local/src/b4/b4/command.py", line 366, in cmd
+>> cmdargs.func(cmdargs)
+>> File "/home/palmer/.local/src/b4/b4/command.py", line 100, in cmd_shazam
+>> b4.mbox.main(cmdargs)
+>> File "/home/palmer/.local/src/b4/b4/mbox.py", line 713, in main
+>> make_am(msgs, cmdargs, msgid)
+>> File "/home/palmer/.local/src/b4/b4/mbox.py", line 101, in make_am
+>> am_msgs = lser.get_am_ready(noaddtrailers=cmdargs.noaddtrailers,
+>> File "/home/palmer/.local/src/b4/b4/__init__.py", line 552, in get_am_ready
+>> checkmark, trailers, attcrit = lmsg.get_attestation_trailers(attpolicy, maxdays)
+>> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1319, in get_attestation_trailers
+>> for attestor in self.attestors:
+>> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1158, in attestors
+>> self._load_patatt_attestors()
+>> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1261, in _load_patatt_attestors
+>> patatt_config = patatt.get_config_from_git(r'patatt\..*', multivals=['keyringsrc'])
+>> AttributeError: module 'patatt' has no attribute 'get_config_from_git'
+>> 
+>> So I probably need to just go update my setup, I've got a bunch of wacky stuff.
+>> I'll try and remember to do so, but I'm going to scrub through other bits
+>> first...
 >
-> The main problem with stack frame usage is that the compiler cannot know
-> during compile time what the other functions are going to use, so it's
-> always a bit of guesswork, and we just try to make the limit as small
-> as possible without causing too much work addressing the warnings.
+> Indeed, you have a newer version of b4 without also updating the 
+> patatt dependency. If you're using b4 from git, you need to "git 
+> submodule update".
 
-Hi Tudor,
-
-One follow-up here regarding the risk of actually overflowing the
-stack on production systems: There is a possible feature that I've
-discussed with Ard in the past, if we add a user-configurable stack offset
-for syscall entry, it becomes possible to test kernels with an
-artificially low stack size to find out the most critical call chain
-that one can hit from user space.
-
-You mentioned elsewhere that you are using syzkaller for testing for bugs,
-and this would be the perfect way to exercise the modified kernels as
-well, since it can hit all kinds of unusual call chains.
-
-We already call add_random_kstack_offset() on four architectures (arm64,
-powerpc, s390 and x86), and the same location could add a fixed offset
-that is configurable e.g. system-wide using sysctl() or per task using
-prctl(), depending on what makes this more useful for testing.
-
-When CONFIG_VMAP_STACK is set, the result should be a process crash
-with a full call chain printed to see how it got this bad, similar to
-what you get with a KASAN violation. This probably makes most sense
-with KASAN_STACK disabled to see which functions are the most critical
-in real systems, though testing with KASAN_STACK enabled could also
-give some hints at which of the warnings you see are worth fixing first.
-
-If you would like to run tests with this, I might be able to come
-up with a prototype patch for it.
-
-       Arnd
+Thanks, it's fixed.  This one's in the queue for testing, but it looks 
+generally fine.  Might be a bit slower than usual, as I'm also running 
+the glibc tests.
