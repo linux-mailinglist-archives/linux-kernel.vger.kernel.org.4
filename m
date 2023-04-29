@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D55D6F22BC
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A468F6F22BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjD2Dn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 23:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S231126AbjD2Dpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 23:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjD2Dn0 (ORCPT
+        with ESMTP id S229498AbjD2Dpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 23:43:26 -0400
-Received: from out0-218.mail.aliyun.com (out0-218.mail.aliyun.com [140.205.0.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B002680;
-        Fri, 28 Apr 2023 20:43:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047209;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---.STmyWyg_1682739796;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STmyWyg_1682739796)
-          by smtp.aliyun-inc.com;
-          Sat, 29 Apr 2023 11:43:16 +0800
-Date:   Sat, 29 Apr 2023 11:43:15 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "Thomas Garnier" <thgarnie@chromium.org>,
-        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC 21/43] x86/ftrace: Adapt assembly for PIE support
-Message-ID: <20230429034315.GB91541@k08j02272.eu95sqa>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <0092ce94b325ad8eb47ff4f95e012f9af1a127de.1682673543.git.houwenlong.hwl@antgroup.com>
- <20230428093719.037081e3@gandalf.local.home>
+        Fri, 28 Apr 2023 23:45:51 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17CC22680;
+        Fri, 28 Apr 2023 20:45:49 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:49174.1309328384
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id A7CD410023C;
+        Sat, 29 Apr 2023 11:45:43 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-85667d6c59-fm8l8 with ESMTP id c58e0e2cda1648ceab62faa32009eb89 for geert+renesas@glider.be;
+        Sat, 29 Apr 2023 11:45:47 CST
+X-Transaction-ID: c58e0e2cda1648ceab62faa32009eb89
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <ce073f1d-0f40-aad9-5509-1f44d3887984@189.cn>
+Date:   Sat, 29 Apr 2023 11:45:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230428093719.037081e3@gandalf.local.home>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: drm/fb-helper: Fix height, width, and accel_flags in fb_var
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <2b6073d9c2d869c6a4eac6edebd616e0568dec91.1681843245.git.geert+renesas@glider.be>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <2b6073d9c2d869c6a4eac6edebd616e0568dec91.1681843245.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 09:37:19PM +0800, Steven Rostedt wrote:
-> On Fri, 28 Apr 2023 17:51:01 +0800
-> "Hou Wenlong" <houwenlong.hwl@antgroup.com> wrote:
-> 
-> > Change the assembly code to use only relative references of symbols for
-> > the kernel to be PIE compatible.
-> > 
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > Cc: Thomas Garnier <thgarnie@chromium.org>
-> > Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > ---
-> >  arch/x86/kernel/ftrace_64.S | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-> > index eddb4fabc16f..411fa4148e18 100644
-> > --- a/arch/x86/kernel/ftrace_64.S
-> > +++ b/arch/x86/kernel/ftrace_64.S
-> > @@ -315,7 +315,14 @@ STACK_FRAME_NON_STANDARD_FP(ftrace_regs_caller)
-> >  SYM_FUNC_START(__fentry__)
-> >  	CALL_DEPTH_ACCOUNT
-> >  
-> > +#ifdef CONFIG_X86_PIE
-> > +	pushq %r8
-> > +	leaq ftrace_stub(%rip), %r8
-> > +	cmpq %r8, ftrace_trace_function(%rip)
-> > +	popq %r8
-> > +#else
-> >  	cmpq $ftrace_stub, ftrace_trace_function
-> > +#endif
-> >  	jnz trace
-> >  	RET
-> >  
-> > @@ -329,7 +336,7 @@ trace:
-> >  	 * ip and parent ip are used and the list function is called when
-> >  	 * function tracing is enabled.
-> >  	 */
-> > -	movq ftrace_trace_function, %r8
-> > +	movq ftrace_trace_function(%rip), %r8
-> >  	CALL_NOSPEC r8
-> >  	restore_mcount_regs
-> >  
-> 
-> I really don't want to add more updates to !DYNAMIC_FTRACE. This code only
-> exists to make sure I don't break it for other architectures.
-> 
-> How about
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 442eccc00960..ee4d0713139d 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -37,7 +37,7 @@ config X86_64
->  
->  config FORCE_DYNAMIC_FTRACE
->  	def_bool y
-> -	depends on X86_32
-> +	depends on X86_32 || X86_PIE
->  	depends on FUNCTION_TRACER
->  	select DYNAMIC_FTRACE
->  	help
-> 
-> 
-> ?
->
-OK, I'll drop it. Actually, I select DYNAMIC_FTRACE when
-CONFIG_RETPOLINE is enabled for PIE due to the indirect call for
-__fentry__() in patch 34.
+Hi,
 
-Thanks.
-> -- Steve
+I have just tested this patch on a LoongArch(3a5000+ls7a2000 evb) machine,
+
+both fbtest and the fbdev test of IGT finished.
+
+
+fbtest say test001: ~ test013: PASSED,
+
+After apply your patch, the warn log `accel_flags changed from 0 to 1` 
+disappeared while  running it.
+
+So,
+
+
+Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+
+
+On 2023/4/19 02:42, Geert Uytterhoeven wrote:
+> Fbtest contains some very simple validation of the fbdev userspace API
+> contract.  When used with shmob-drm, it reports the following warnings
+> and errors:
+>
+>      height changed from 68 to 0
+>      height was rounded down
+>      width changed from 111 to 0
+>      width was rounded down
+>      accel_flags changed from 0 to 1
+>
+> The first part happens because __fill_var() resets the physical
+> dimensions of the first connector, as filled in by drm_setup_crtcs_fb().
+> Fix this by retaining the original values.
+>
+> The last part happens because __fill_var() forces the FB_ACCELF_TEXT
+> flag on, while fbtest disables all acceleration on purpose, so it can
+> draw safely to the frame buffer.  Fix this by setting accel_flags to
+> zero, as DRM does not implement any text console acceleration.
+> Note that this issue can also be seen in the output of fbset, which
+> reports "accel true".
+>
+> Fixes: ee4cce0a8f03a333 ("drm/fb-helper: fix input validation gaps in check_var")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>   drivers/gpu/drm/drm_fb_helper.c | 12 +++++++-----
+>   1 file changed, 7 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+> index 64458982be40c468..ed6ad787915f0b8f 100644
+> --- a/drivers/gpu/drm/drm_fb_helper.c
+> +++ b/drivers/gpu/drm/drm_fb_helper.c
+> @@ -1537,17 +1537,19 @@ static void drm_fb_helper_fill_pixel_fmt(struct fb_var_screeninfo *var,
+>   	}
+>   }
+>   
+> -static void __fill_var(struct fb_var_screeninfo *var,
+> +static void __fill_var(struct fb_var_screeninfo *var, struct fb_info *info,
+>   		       struct drm_framebuffer *fb)
+>   {
+>   	int i;
+>   
+>   	var->xres_virtual = fb->width;
+>   	var->yres_virtual = fb->height;
+> -	var->accel_flags = FB_ACCELF_TEXT;
+> +	var->accel_flags = 0;
+>   	var->bits_per_pixel = drm_format_info_bpp(fb->format, 0);
+>   
+> -	var->height = var->width = 0;
+> +	var->height = info->var.height;
+> +	var->width = info->var.width;
+> +
+>   	var->left_margin = var->right_margin = 0;
+>   	var->upper_margin = var->lower_margin = 0;
+>   	var->hsync_len = var->vsync_len = 0;
+> @@ -1610,7 +1612,7 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
+>   		return -EINVAL;
+>   	}
+>   
+> -	__fill_var(var, fb);
+> +	__fill_var(var, info, fb);
+>   
+>   	/*
+>   	 * fb_pan_display() validates this, but fb_set_par() doesn't and just
+> @@ -2066,7 +2068,7 @@ static void drm_fb_helper_fill_var(struct fb_info *info,
+>   	info->pseudo_palette = fb_helper->pseudo_palette;
+>   	info->var.xoffset = 0;
+>   	info->var.yoffset = 0;
+> -	__fill_var(&info->var, fb);
+> +	__fill_var(&info->var, info, fb);
+>   	info->var.activate = FB_ACTIVATE_NOW;
+>   
+>   	drm_fb_helper_fill_pixel_fmt(&info->var, format);
