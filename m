@@ -2,126 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D275B6F2608
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 21:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4866F260B
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 21:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjD2Tol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 15:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S230292AbjD2TpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 15:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjD2Tok (ORCPT
+        with ESMTP id S230474AbjD2TpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 15:44:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7FA1997;
-        Sat, 29 Apr 2023 12:44:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B921C600BE;
-        Sat, 29 Apr 2023 19:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB656C433EF;
-        Sat, 29 Apr 2023 19:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682797478;
-        bh=1vAfFF7pQl4va7eJ2p/ginKbfhAgJVw9IcZoARLUmIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7GZAFVTh1EMpJnECYZBWFvvbcRzVa7ybfWlUPHPl3qreRnfA32+bwaMqp5UyrgsT
-         8Q1CiJaOHehQPI2nk/ygcfT5Jgloo3VRRp/H+awqfkwlOg2ISUBeQcrYH1ntLyjlL0
-         0rM7cn+InaEenrifPOTIRQ30OffTZNOC7an0FD0nPvJyNpoqRYTU1ze5aVwjX+peZK
-         6Sm8ajPV8s9MjCmx7inFpl6+I+drmIrrLVUTAh9OyiiqLnRgITyVWE1FXCtpqDhIf/
-         GqoJTLVjGhtqZy5ZiD2tt8Ku+IAt6OegGasvBSy1R4+ZX33bRxNeGubWhwCEkAWYL5
-         NLl1prAPy/DTQ==
-Received: by mercury (Postfix, from userid 1000)
-        id E655A1066F52; Sat, 29 Apr 2023 21:44:34 +0200 (CEST)
-Date:   Sat, 29 Apr 2023 21:44:34 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Brian Masney <masneyb@onstation.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: input: pwm-vibrator: Add enable-gpio
-Message-ID: <20230429194434.ah5tkawy6wjptpld@mercury.elektranox.org>
-References: <20230427-hammerhead-vibra-v1-0-e87eeb94da51@z3ntu.xyz>
- <20230427-hammerhead-vibra-v1-1-e87eeb94da51@z3ntu.xyz>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="42gflmsjqmxzkixs"
-Content-Disposition: inline
-In-Reply-To: <20230427-hammerhead-vibra-v1-1-e87eeb94da51@z3ntu.xyz>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 29 Apr 2023 15:45:14 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230AB1997
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 12:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682797513; x=1714333513;
+  h=date:from:to:cc:subject:message-id;
+  bh=utpyv73n2kyprvW8OxzBNEvCS608GHT7G+YFgphHMq8=;
+  b=W2GjO0L8GVa1f7CnCoKGcKLej9HlWQ3eiSOCogc8lrzsFGTEPbWtPJ2t
+   N4TPXljuHoJGcbTtCPnDcg15CSSsxZ1XJYQb7hyMrwGsTyrfGKHcSRr1u
+   6NFdFeRi4q7imKKgUshVhgTUNW/8Cevp3vYn83nixVfU/6GHNyIKAQU0v
+   Psw6LcX8aapdjFf3FVQKW/4cE9I/qxUBt3iAxBOKoBFM+qcniJ0kDapX3
+   Rt7+NAIm+OZrBj3envjl/qKpUITkL7VBCag/kISjikp+TQLagUlC7EtjM
+   sqiwOnINVEJjVY2fYf9J5fQZYQh8YqTpF/y3gG5wWuAMCrkWZx18NAGrL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="345424950"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="345424950"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 12:45:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="819483607"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="819483607"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Apr 2023 12:45:11 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psqVK-0001Jt-2I;
+        Sat, 29 Apr 2023 19:45:10 +0000
+Date:   Sun, 30 Apr 2023 03:44:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ f6065e5060b9abe331675c996b72b5428b9400c2
+Message-ID: <20230429194444.j6BB4%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: f6065e5060b9abe331675c996b72b5428b9400c2  Merge branch into tip/master: 'x86/tdx'
 
---42gflmsjqmxzkixs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 723m
 
-Hi,
+configs tested: 110
+configs skipped: 8
 
-On Thu, Apr 27, 2023 at 10:34:26PM +0200, Luca Weiss wrote:
-> Some pwm vibrators have a dedicated enable GPIO that needs to be set
-> high so that the vibrator works. Document that.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Reviewed-by: Sebastian Reichel <sre@kernel.org>
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r003-20230428   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r026-20230428   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r011-20230429   gcc  
+arc                  randconfig-r023-20230429   gcc  
+arc                  randconfig-r043-20230428   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r022-20230428   clang
+arm                  randconfig-r046-20230428   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r004-20230428   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r024-20230428   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r015-20230428   gcc  
+csky                 randconfig-r024-20230429   gcc  
+csky                 randconfig-r031-20230428   gcc  
+hexagon              randconfig-r032-20230428   clang
+hexagon              randconfig-r041-20230428   clang
+hexagon              randconfig-r045-20230428   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r013-20230429   gcc  
+ia64                 randconfig-r014-20230429   gcc  
+ia64                 randconfig-r022-20230429   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r012-20230428   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r021-20230429   gcc  
+microblaze   buildonly-randconfig-r005-20230428   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2        buildonly-randconfig-r001-20230428   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r026-20230429   gcc  
+openrisc             randconfig-r025-20230428   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r001-20230428   gcc  
+parisc               randconfig-r023-20230428   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r012-20230429   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r002-20230428   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r011-20230428   gcc  
+riscv                randconfig-r014-20230428   gcc  
+riscv                randconfig-r033-20230428   clang
+riscv                randconfig-r034-20230428   clang
+riscv                randconfig-r042-20230428   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r013-20230428   gcc  
+s390                 randconfig-r044-20230428   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r005-20230428   gcc  
+sh                   randconfig-r015-20230429   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r025-20230429   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r003-20230428   gcc  
+xtensa               randconfig-r006-20230428   gcc  
+xtensa               randconfig-r016-20230428   gcc  
+xtensa               randconfig-r035-20230428   gcc  
+xtensa               randconfig-r036-20230428   gcc  
 
--- Sebastian
-
->  Documentation/devicetree/bindings/input/pwm-vibrator.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml b/=
-Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-> index d32716c604fe..6398534b43c3 100644
-> --- a/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-> +++ b/Documentation/devicetree/bindings/input/pwm-vibrator.yaml
-> @@ -32,6 +32,8 @@ properties:
->      minItems: 1
->      maxItems: 2
-> =20
-> +  enable-gpios: true
-> +
->    vcc-supply: true
-> =20
->    direction-duty-cycle-ns:
->=20
-> --=20
-> 2.40.0
->=20
-
---42gflmsjqmxzkixs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRNc5cACgkQ2O7X88g7
-+poS5A//ctoKIcarHo1EVAh8U0gtFGeQ5bJPP/bz0Abdlx/L91XCikbInUuTYLN9
-/vrPOj/Tpr/KRYTzxJUenHxLigrUfhRRSGFcJZk8stCtOAdAzpPdPMTdVWWruu3/
-XOpu4gu79vJrYtqmLybs99d+uI1SiR228ZeRireO92Dw64hSUWLDL5yoAj2bp3Ot
-80dXpla3hDmbXbeaDrC3+RuTinPAVWrWJh8gV72GLr8llSDePUm5iGhVe/03aaLd
-5i73lL5WuhVW+OElEALDuOcHjPcoW1Qc6JjH9cvXMEU0ghOEfqn3KSHfd19yvYEM
-YdyVqUZIZOLu3Dt/X1o+KJ0g0JzUHXmpSSCMejoZVG4nTcaO3ed/fker+JZ4my6B
-rut65hrpS83GO/m2iNj1wV8krZqQ6+J7Fr0H2xLgIuwIcIqSPMEFS3SChQHXKY6N
-FA+qllsKdKuq/zsIKiLBbfRflHbBy49MYFTked9kwLNIIwa+tS4IS2ALp4WFvJXN
-M4z+4QpvMIZjbvBuMkvaq6sgO4RnlLT6eiVTgblSVpS/Rnhb6/CWm+e1glgObEwW
-wcPObDZ17kaQdNQQYLx2K1FblPbpoqIPpovoB0Vx/NhLevWX+4jQnObnCjgtrW+C
-PI51cakTNX8oHbO/u/1jJlJjrILN//fGA1ZFfyV5zao0YuT5ezU=
-=4cvQ
------END PGP SIGNATURE-----
-
---42gflmsjqmxzkixs--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
