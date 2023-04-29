@@ -2,102 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456446F22FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 06:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A09B6F230D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjD2ErX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 00:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S230458AbjD2FWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjD2ErU (ORCPT
+        with ESMTP id S229437AbjD2FWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 00:47:20 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7A426AF
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 21:47:18 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2a8c30ac7e3so4537131fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 21:47:18 -0700 (PDT)
+        Sat, 29 Apr 2023 01:22:17 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9B91A2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:22:15 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-44048c2de31so410271e0c.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1682743637; x=1685335637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LNzrDWdi6VM9nSaFvj8TSY1bq4OFfxnL8SRIrxetKL8=;
-        b=Ytkeha64vHJOXZsHaLeFhfF2vsIeShyi0EECvH5IiEaGHxATZpfnDOPGkpmTrAktqI
-         LroESTYFn0PDTlE9tFHkjGrsrjsidtTE+ssbYgbl4/8DTeO/5JGIWLaQEKOpfuq+WxiI
-         9dGU+kEnXHdXJT42EbNeohUbSUJIkRjijmgaA=
+        d=gmail.com; s=20221208; t=1682745734; x=1685337734;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9bL/dpwMYQ+vEeDJh/Rbu38HonyhpYys4O+gm1zm6TY=;
+        b=iQIRR+WUkJPs58KirlB8yUSlotLvYchqufx+XnkW6X/1FZsyQ9VHmlhEKONBTY0mbf
+         KFR8o3m1ulZ84JUo39burzd1qJRVEHqkWevz/r5jPooHKZRxgfY2uuoC4ILfk4hu6yRs
+         GXtC0EfL+Md2ZmOc20ECdx701a24b92SqpI3rQCslrF1Z47/ZnsPKjKPAwf4oWuwYqbg
+         rrGlkuzHpA1uu6ivyF9npb6EtgxZ2cY7XLbY7lftEl7DLEarpOhROXzoSHxs0Z4NaRb4
+         upcpG7+UGifUvnTnpPJyR7baVjdvna1yLsdghW2+Xcvfb439HVtrNXYSt8q6Nh43RL4j
+         H4UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682743637; x=1685335637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
-         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LNzrDWdi6VM9nSaFvj8TSY1bq4OFfxnL8SRIrxetKL8=;
-        b=ANsfQv1bCilUxurCCO1Snmz3g0LJvqHyPJVP8YNmwsLGSWh2RY9zOcqpU+PKco0vIV
-         5ANr1X088Wga3DUxVtiP4/Npb2RCZfenUfFbiepsccx4NE8S38w4Cr48yaQsRhLNtc9P
-         editCkC6RjjllTAb0Wv2C4CiRQiQ+e/XzkPZd7CdY/krtf/Qv17ooMfnyUufoiBskFQY
-         z2s7K9rouMrrpi6aWj+mT2gi0mBG9IfQ/ubxcvDjRTOUMVBYTTa0DZyd7ODDx8kP1MLI
-         hQ+EJIu+ce+H9Qjq7pSG3ikTIHal42tYf8N+M9Hetc0GEPAqttr2RdiW46okNzDexJdI
-         6iJQ==
-X-Gm-Message-State: AC+VfDyoil5gIa/9KokKNAUZbWVHfZEXOw6Nynxlgmv6epHTwGMIB2a9
-        gR3ax5gfe5v0X6zxUpynlFM6xdHb5FooBC566uphpw==
-X-Google-Smtp-Source: ACHHUZ6fS55Q6QLd0RebLhorDZGil9Od+4MzKUvuMZ98P2bP2mC3MBU6kTYqXEdoDsT/e/yx84FUL76Lim+e/nzMnVE=
-X-Received: by 2002:a2e:3804:0:b0:29a:8580:8140 with SMTP id
- f4-20020a2e3804000000b0029a85808140mr1852164lja.3.1682743636609; Fri, 28 Apr
- 2023 21:47:16 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 28 Apr 2023 21:47:16 -0700
+        d=1e100.net; s=20221208; t=1682745734; x=1685337734;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9bL/dpwMYQ+vEeDJh/Rbu38HonyhpYys4O+gm1zm6TY=;
+        b=CYppzZYNDlivGl2yZYCvI5ctLzfl/u13E7ZZPfdvL/8B5hnrSIXJogQ90cWWnyZaHv
+         OywTrZ7RFBOdf99WuE+xT7s17SoaVP96ezjQ4UUQqqnfY3TOw1SJWCq2wbaFHdNpXQT7
+         maq6CyR4yysHfph4j4GLl5AqArin9u4+COIBntEq5sD46FOTJFTH35kiwljLGl9OFPSg
+         2R/ANVO3JK+NiagJE5xvt+PwNrjkDip/t1oZdN/0dSo+K6AELTLxIPfvdsePpD8Nwg0S
+         8yKpYQiOsP3bIijw4pyn+wn6btoZbh3CW/Yyro+bwVH/5ehS1K3iFTZB66sh6kkHB72B
+         F1ng==
+X-Gm-Message-State: AC+VfDyr+gYJriK4Ux26hRKfazdtZsh3junHW1GoWRmTpBvnxMd+krkw
+        7VtvAQZNyxFEfvZAclhkRMp1a9SmBsLRVO09FkHZN1ATrNI=
+X-Google-Smtp-Source: ACHHUZ44lN8MK5H8S6Tcxa3Qc0+kiKMk6xhY9HuOmKfrNMNcBBHffbh880pltK8T6LwSBHfIy/9EmP1A/URpdtZcxSc=
+X-Received: by 2002:a1f:41c9:0:b0:43f:ec5d:51e1 with SMTP id
+ o192-20020a1f41c9000000b0043fec5d51e1mr3519478vka.9.1682745734332; Fri, 28
+ Apr 2023 22:22:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAEXTbpeKe1dVHp9cauMN-9nQb35oJ-ZhdFV-8BiWzjjhWAy0Zg@mail.gmail.com>
-References: <20230331091145.737305-1-treapking@chromium.org>
- <20230331091145.737305-5-treapking@chromium.org> <CAE-0n51E5foFWQAsA73662_5e6XP426wuUCVVmcS5UWwiYpDmw@mail.gmail.com>
- <CAEXTbpdcbB_z4ZGCGzc-cM74ECKyxekbroKCWFnhH8eR=4HmvA@mail.gmail.com>
- <CAE-0n50atfmr-bFh5XtTCm4WpSijJGSe0B5JP8ni7CCYk7Bs5A@mail.gmail.com>
- <CAE-0n51Qy-KDGHOCr4Smpebq1fCURqvJ2RJz6KAtVpv5e+DSGA@mail.gmail.com> <CAEXTbpeKe1dVHp9cauMN-9nQb35oJ-ZhdFV-8BiWzjjhWAy0Zg@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 28 Apr 2023 21:47:15 -0700
-Message-ID: <CAE-0n50bj303jou==v6eMabrZ3EL6Cq7tPJmCj9vM_B7FA8s2g@mail.gmail.com>
-Subject: Re: [PATCH v15 04/10] dt-bindings: display: bridge: anx7625: Add
- mode-switch support
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Lyude Paul <lyude@redhat.com>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chen-Yu Tsai <wenst@chromium.org>
+References: CAAJw_Zs3OBi4Rsb-Lp_mMihn=99nFYaHrRdp7KU8g2baCPdfbQ@mail.gmail.com <20230429020951.082353595@lindbergh.monkeyblade.net>
+In-Reply-To: <20230429020951.082353595@lindbergh.monkeyblade.net>
+From:   Jeff Chua <jeff.chua.linux@gmail.com>
+Date:   Sat, 29 Apr 2023 13:22:03 +0800
+Message-ID: <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com>
+Subject: iwlwifi broken in post-linux-6.3.0 after April 26
+To:     lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,158 +64,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Pin-yen Lin (2023-04-20 02:10:46)
-> On Thu, Apr 20, 2023 at 2:10=E2=80=AFPM Stephen Boyd <swboyd@chromium.org=
-> wrote:
-> >
-> > Quoting Stephen Boyd (2023-04-13 17:22:46)
-> > > Quoting Pin-yen Lin (2023-04-13 02:50:44)
-> > > >
-> > > > Actually the `mode-switch` property here is mainly because
-> > > > `fwnode_typec_mux_get`[1] and `typec_mux_match`[2] only return matc=
-hes
-> > > > when the property is present. I am not sure what side effects would=
- be
-> > > > if I remove the ID-matching condition in `typec_mux_match`, so I ad=
-ded
-> > > > the property here.
-> > > >
-> > > > Is it feasible to remove the `mode-switch` property here given the
-> > > > existing implementation of the Type-C framework?
-> > >
-> > > Omitting the mode-switch property would require changes to the type-c
-> > > framework.
-> > >
-> > > I'm wondering if we can have this anx driver register mode switches f=
-or
-> > > however many endpoints exist in the output port all the time when the
-> > > aux-bus node doesn't exist. Then the type-c framework can walk from t=
-he
-> > > usb-c-connector to each connected node looking for a device that is b=
-oth
-> > > a drm_bridge and a mode-switch. When it finds that combination, it kn=
-ows
-> > > that the mode-switch has been found. This hinges on the idea that a
-> > > device that would have the mode-switch property is a drm_bridge and
-> > > would register a mode-switch with the type-c framework.
-> > >
-> > > It may be a little complicated though, because we would only register
-> > > one drm_bridge for the input to this anx device. The type-c walking c=
-ode
-> > > would need to look at the graph endpoint, and find the parent device =
-to
-> > > see if it is a drm_bridge.
-> >
-> > I've been thinking more about this. I think we should only have the
-> > 'mode-switch' property possible when the USB input pins (port@2) are
-> > connected and the DPI input pins are connected (port@0). Probably you
-> > don't have that case though?
->
-> No we don't have the use case that uses the USB input pins on anx7625.
-> >
-> > In your case, this device should register either one or two drm_bridges
-> > that connect to whatever downstream is actually muxing the 2 DP lanes
-> > with the USB SS lanes onto the usb-c-connector.
->
-> What do you mean by "muxing the 2 DP lanes with the USB SS lanes''? In
-> our use case, the USB data lanes from both ports are connected to a
-> USB hub, but the DP lanes are muxed by the crosspoint switch on
-> anx7625. HPD and AUX for the external display are muxed by the EC. You
-> can find the diagram at
-> https://lore.kernel.org/linux-usb/YxGzk6DNAt0aCvIY@chromium.org/
+Can't start wifi on latest linux git pull ... started happening 3 days ago ...
 
-I mean that you must have some sort of orientation switch hardware that
-takes the 2 DP lanes and the 2 USB SuperSpeed "lanes" or "pairs" and
-puts them all onto a usb-c-connector. The usb-c-connector node can't be
-connected directly to the anx7625 in your diagram because there must be
-some sort of "flipper" that does the orientation control. Otherwise the
-usb-c-connector wouldn't work if the user flipped the cable. Probably
-this is some TCPC or redriver controlled by the EC.
+Is there a fix for this? Or shall I bisect? Wifi works by reverting
+back to released 6.3.0.
 
->
-> > If that is the EC for
-> > ChromeOS, then the EC should have a binding that accepts some number of
-> > input ports for DP. The EC would act as a drm_bridge, or in this case
-> > probably two bridges, and also as two type-c switches for each
-> > drm_bridge corresponding to the usb-c-connector nodes. When DP is on th=
-e
-> > cable, the type-c switch/mux would signal to the drm_bridge that the
-> > display is 'connected' via DRM_BRIDGE_OP_DETECT and struct
-> > drm_bridge_funcs::detect(). Then the drm_bridge in this anx part would
-> > implement struct drm_bridge_funcs::atomic_enable() and configure the
-> > crosspoint switch the right way depending on the reg property of the
-> > output node in port@1.
->
-> So there will be two drm bridges that act as the downstreams for
-> anx7625, and we find the downstream with connector_status_connected to
-> configure the crosspoint switch? How do we support that kind of
-> topology given that the drm bridge chain is currently a list? Are you
-> suggesting making the bridge topology to a tree, or maintaining the
-> two downstreams inside the anx7625 driver and not attaching them to
-> the bridge chain?
+Thanks,
+Jeff
 
-Good point. I'm suggesting to make the drm bridge chain into a tree. We
-need to teach drm_bridge core about a mux, and have some logic to
-navigate atomically switching from one output to another. I was talking
-with dianders@ and he was suggesting to use bridge attach/detach for
-this. I'm not sure that will work though because that hook is only
-called when the encoder is attached to the bridge.
 
-It may also turn out that this helps with DP multi-stream transport
-(MST). As far as I can recall DP MST doesn't mesh well with drm_bridge
-designs because it wants to operate on a drm_connector and
-drm_bridge_connector_init() wants to make only one drm_connector for a
-chain of bridges. If you squint, the anx7625 could be an MST "branch"
-that only supports one drm_connector being enabled at a time. Maybe that
-is what we should do here, make drm_bridge support creating more than
-one drm_connector and when there is a mux in the tree it walks both
-sides and runs a callback similar to struct
-drm_dp_mst_topology_cbs::add_connector() to tell the encoder that
-there's another possible drm_connector here.
+# wpa_supplicant -Dnl80211 -c wpa.conf -iwlan0
+wlwifi 0000:00:14.3: Failed to send RFI config cmd -5
+iwlwifi 0000:00:14.3: LED command failed: -5
+iwlwifi 0000:00:14.3: Failed to send MAC_CONFIG_CMD (action:1): -5
 
->
-> Also, if we still register mode switches on the two downstream
-> bridges, why do you prefer that over the original approach that
-> register switches in the anx7625 driver?
+# lsmod
+iwlmvm                352256  0
+mac80211              610304  1 iwlmvm
+iwlwifi               299008  1 iwlmvm
+cfg80211              417792  3 iwlmvm,iwlwifi,mac80211
+ax88179_178a           28672  0
 
-I prefer to not have a mode-switch property here for a couple reasons:
-
- 1. The binding is usb type-c specific, and in the case of the IT6505
- part there is nothing that indicates this is a usb type-c piece of
- hardware. The IT6505 is simply a display bridge. The anx7625 part
- actually does accept usb signals though, but that isn't being used or
- described here. That's where my disclaimer about mode-switch making
- sense applies when the usb input is used.
-
- 2. Putting mode-switch into the graph endpoint nodes is awkward. It is
- a device property, and graph nodes are not devices. Some patches in
- this series have to work around this fact and special case the graph
- walking logic to treat the graph itself as a place to look for the
- property.
-
- 3. The mode-switch property probably isn't necessary at all. The DT
- reviewers have been asking why it is needed. The EC driver that
- registers the usb-c-connectors can be the mode-switch and the
- orientation-switch. And in reality, it _is_ both. The DP signals and
- the USB signals go to the TCPC/redriver that is controlled by the EC
- and the EC is the device that's doing the mode switching to push DP and
- USB through the TCPC/redriver out on the right pins of the
- usb-c-connector.
-
-I guess another way to think about it is that the DP signal coming out
-of the anx7625 part is not "usb type-c" at all, unless the USB signal is
-coming out on the other side of the crosspoint switch and all four lanes
-are wired to some usb-c-connector or redriver. Similarly, the situation
-could look like trogdor, where DP is produced by the DP PHY in the SoC
-and goes through an analog mux to steer DP to one or the other TCPC
-that's wired to the usb-c-connector. There isn't any driver to control
-that mux, but if there was it would be a gpio controlled mux that would
-be a drm_bridge, because there isn't anything type-c about this
-hardware.
-
-And finally, I can see a possibility where the IT6505 is actually wired
-to two different dp-connector ports. In that situation, there is no
-type-c involvement, but we would still want to expose that to userspace
-as two drm_connectors where only one encoder can be attached to them. If
-we did that with drm_bridge, then anyone could make these sorts of
-chains with muxes and it would present a sane userspace interface.
+# dmesg
+iwlwifi 0000:00:14.3: Microcode SW error detected. Restarting 0x0.
+iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+iwlwifi 0000:00:14.3: Transport status: 0x0000004B, valid: 6
+iwlwifi 0000:00:14.3: Loaded firmware version: 78.3bfdc55f.0
+so-a0-gf-a0-78.ucode
+iwlwifi 0000:00:14.3: 0x00000071 | NMI_INTERRUPT_UMAC_FATAL
+iwlwifi 0000:00:14.3: 0x000002F0 | trm_hw_status0
+iwlwifi 0000:00:14.3: 0x00000000 | trm_hw_status1
+iwlwifi 0000:00:14.3: 0x004DB13C | branchlink2
+iwlwifi 0000:00:14.3: 0x004D0D3A | interruptlink1
+iwlwifi 0000:00:14.3: 0x004D0D3A | interruptlink2
+iwlwifi 0000:00:14.3: 0x000157FE | data1
+iwlwifi 0000:00:14.3: 0x00000010 | data2
+iwlwifi 0000:00:14.3: 0x00000000 | data3
+iwlwifi 0000:00:14.3: 0x00000000 | beacon time
+iwlwifi 0000:00:14.3: 0x0002A2E7 | tsf low
+iwlwifi 0000:00:14.3: 0x00000000 | tsf hi
+iwlwifi 0000:00:14.3: 0x00000000 | time gp1
+iwlwifi 0000:00:14.3: 0x0003E5C3 | time gp2
+iwlwifi 0000:00:14.3: 0x00000001 | uCode revision type
+iwlwifi 0000:00:14.3: 0x0000004E | uCode version major
+iwlwifi 0000:00:14.3: 0x3BFDC55F | uCode version minor
+iwlwifi 0000:00:14.3: 0x00000370 | hw version
+iwlwifi 0000:00:14.3: 0x00480002 | board version
+iwlwifi 0000:00:14.3: 0x80B0FF00 | hcmd
+iwlwifi 0000:00:14.3: 0x00020000 | isr0
+iwlwifi 0000:00:14.3: 0x20000000 | isr1
+iwlwifi 0000:00:14.3: 0x58F00002 | isr2
+iwlwifi 0000:00:14.3: 0x00C3000C | isr3
+iwlwifi 0000:00:14.3: 0x00000000 | isr4
+iwlwifi 0000:00:14.3: 0x00000000 | last cmd Id
+iwlwifi 0000:00:14.3: 0x000157FE | wait_event
+iwlwifi 0000:00:14.3: 0x00000000 | l2p_control
+iwlwifi 0000:00:14.3: 0x00000000 | l2p_duration
+iwlwifi 0000:00:14.3: 0x00000000 | l2p_mhvalid
+iwlwifi 0000:00:14.3: 0x00000000 | l2p_addr_match
+iwlwifi 0000:00:14.3: 0x00000018 | lmpm_pmg_sel
+iwlwifi 0000:00:14.3: 0x00000000 | timestamp
+iwlwifi 0000:00:14.3: 0x0000103C | flow_handler
+iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
+iwlwifi 0000:00:14.3: Transport status: 0x0000004B, valid: 7
+iwlwifi 0000:00:14.3: 0x201002FD | ADVANCED_SYSASSERT
+iwlwifi 0000:00:14.3: 0x00000000 | umac branchlink1
+iwlwifi 0000:00:14.3: 0x8046E300 | umac branchlink2
+iwlwifi 0000:00:14.3: 0xC008191A | umac interruptlink1
+iwlwifi 0000:00:14.3: 0x00000000 | umac interruptlink2
+iwlwifi 0000:00:14.3: 0x0017020B | umac data1
+iwlwifi 0000:00:14.3: 0x00000308 | umac data2
+iwlwifi 0000:00:14.3: 0x00000304 | umac data3
+iwlwifi 0000:00:14.3: 0x0000004E | umac major
+iwlwifi 0000:00:14.3: 0x3BFDC55F | umac minor
+iwlwifi 0000:00:14.3: 0x0003E5BE | frame pointer
+iwlwifi 0000:00:14.3: 0xC0886C24 | stack pointer
+iwlwifi 0000:00:14.3: 0x0017020B | last host cmd
+iwlwifi 0000:00:14.3: 0x00000000 | isr status reg
+iwlwifi 0000:00:14.3: IML/ROM dump:
+iwlwifi 0000:00:14.3: 0x00000B03 | IML/ROM error/state
+iwlwifi 0000:00:14.3: 0x000081CD | IML/ROM data1
+iwlwifi 0000:00:14.3: 0x00000080 | IML/ROM WFPM_AUTH_KEY_0
+iwlwifi 0000:00:14.3: Fseq Registers:
+iwlwifi 0000:00:14.3: 0x60000100 | FSEQ_ERROR_CODE
+iwlwifi 0000:00:14.3: 0x003E0003 | FSEQ_TOP_INIT_VERSION
+iwlwifi 0000:00:14.3: 0x00190003 | FSEQ_CNVIO_INIT_VERSION
+iwlwifi 0000:00:14.3: 0x0000A652 | FSEQ_OTP_VERSION
+iwlwifi 0000:00:14.3: 0x00000003 | FSEQ_TOP_CONTENT_VERSION
+iwlwifi 0000:00:14.3: 0x4552414E | FSEQ_ALIVE_TOKEN
+iwlwifi 0000:00:14.3: 0x00080400 | FSEQ_CNVI_ID
+iwlwifi 0000:00:14.3: 0x00400410 | FSEQ_CNVR_ID
+iwlwifi 0000:00:14.3: 0x00080400 | CNVI_AUX_MISC_CHIP
+iwlwifi 0000:00:14.3: 0x00400410 | CNVR_AUX_MISC_CHIP
+iwlwifi 0000:00:14.3: 0x00009061 | CNVR_SCU_SD_REGS_SD_REG_DIG_DCDC_VTRIM
+iwlwifi 0000:00:14.3: 0x00000061 | CNVR_SCU_SD_REGS_SD_REG_ACTIVE_VDIG_MIRROR
+iwlwifi 0000:00:14.3: UMAC CURRENT PC: 0xd05c18
+iwlwifi 0000:00:14.3: LMAC1 CURRENT PC: 0xd05c1c
+iwlwifi 0000:00:14.3: Starting mac, retry will be triggered anyway
+iwlwifi 0000:00:14.3: FW error in SYNC CMD RFI_CONFIG_CMD
+CPU: 6 PID: 22193 Comm: wpa_supplicant Tainted: G     U             6.3.0 #1
+Hardware name: LENOVO 21CCS1GL00/21CCS1GL00, BIOS N3AET72W (1.37 ) 03/02/2023
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x33/0x50
+ iwl_trans_txq_send_hcmd+0x33a/0x380 [iwlwifi]
+ ? destroy_sched_domains_rcu+0x20/0x20
+ iwl_trans_send_cmd+0x55/0xe0 [iwlwifi]
+ iwl_mvm_send_cmd+0xd/0x30 [iwlmvm]
+ iwl_rfi_send_config_cmd+0x8f/0xf0 [iwlmvm]
+ iwl_mvm_up+0x8c9/0x980 [iwlmvm]
+ __iwl_mvm_mac_start+0x181/0x1e0 [iwlmvm]
+ iwl_mvm_mac_start+0x3f/0x100 [iwlmvm]
+ drv_start+0x2c/0x50 [mac80211]
+ ieee80211_do_open+0x2f2/0x6b0 [mac80211]
+ ieee80211_open+0x62/0x80 [mac80211]
+ __dev_open+0xca/0x170
+ __dev_change_flags+0x1a1/0x210
+ dev_change_flags+0x1c/0x60
+ devinet_ioctl+0x555/0x790
+ inet_ioctl+0x116/0x1b0
+ ? netdev_name_node_lookup_rcu+0x58/0x70
+ ? dev_get_by_name_rcu+0x5/0x10
+ ? netdev_name_node_lookup_rcu+0x58/0x70
+ ? dev_get_by_name_rcu+0x5/0x10
+ ? dev_ioctl+0x34d/0x4c0
+ sock_do_ioctl+0x3a/0xe0
+ sock_ioctl+0x15a/0x2b0
+ ? __sys_recvmsg+0x51/0xa0
+ __x64_sys_ioctl+0x7d/0xa0
+ do_syscall_64+0x35/0x80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7efcee3a0448
+Code: 00 00 48 8d 44 24 08 48 89 54 24 e0 48 89 44 24 c0 48 8d 44 24
+d0 48 89 44 24 c8 b8 10 00 00 00 c7 44 24 b8 10 00 00 00 0f 05 <41> 89
+c0 3d 00 f0 ff ff 77 0e 44 89 c0 c3 66 2e 0f 1f 84 00 00 00
+RSP: 002b:00007ffe400ff678 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007efcee3a0448
+RDX: 00007ffe400ff680 RSI: 0000000000008914 RDI: 0000000000000007
+RBP: 0000000000000007 R08: 0000000000000000 R09: 000000000078f4b0
+R10: e324395ae363498e R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000790a30 R14: 0000000000000002 R15: 0000000000000000
+ </TASK>
