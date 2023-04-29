@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4586F23D6
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 11:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5DD6F23D9
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 11:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjD2J1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 05:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S229477AbjD2J2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 05:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjD2J1e (ORCPT
+        with ESMTP id S230351AbjD2J2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 05:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67431BD2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 02:27:33 -0700 (PDT)
+        Sat, 29 Apr 2023 05:28:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13F91FED
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 02:28:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 378A7611A3
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 09:27:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 660B1C433EF;
-        Sat, 29 Apr 2023 09:27:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90B2F61028
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 09:28:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F0EC433EF;
+        Sat, 29 Apr 2023 09:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682760452;
-        bh=C7dMA9Z/iKBRGFbjoyJ2bomBnZC1VqbWRGo6yQ1QK1U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xw8o4gM3slKEVPD0DLEt33s9B70AcPKChr00qgQtKpr/PZKiMrxklFOy7baTp3231
-         oHk//apL5S1GCTw9iqrVsPUGFWR56Fr2lgTUT9IMdD+ILga/uhLYMfK121jPrtjUYk
-         WUuYacFZVScLrSVVzzpmNRGO5G1qjahKsJguMlcPWQxRSHE8/BQT+i/goWA6AACf41
-         nd+hqL8bjS4+FE+EvxrL7TqNtmPMqx14CWIQCR7x+reMgk2jATlwiHgK+WRsyl4PsW
-         1Sa0HhBuoOezZy4H+Wf7yW1mVXZ2itHXsOxMRmcpWlHuBfgIoE8ZBZSK4OPqJr19bv
-         EAY1D4nr046fA==
-Received: by pali.im (Postfix)
-        id 3821D7AC; Sat, 29 Apr 2023 11:27:29 +0200 (CEST)
-Date:   Sat, 29 Apr 2023 11:27:29 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH -next?] powerpc/fsl_uli1575: fix kconfig warnings and
- build errors
-Message-ID: <20230429092729.znfdx7tlcpz7ce63@pali>
-References: <20230429043519.19807-1-rdunlap@infradead.org>
+        s=k20201202; t=1682760496;
+        bh=VWFkSOEdLdYHiOdgaiiVB7fGkgZE49crp4dpjlI65Pc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rIuKB6f9FU/nOuER/hZBfRxBtPrbmVPSaatDgZSQTuMxIruWz+zyg6uN+AVpLrbwg
+         ebwOVS4j6jzTn7iSCRogr8mssHL6IQJpzrdZgXPtY0jzlXNPSADDb/gCkRELWtQbvg
+         198idl0zmdk2zXNL3MdgLVggZpwemYkSF/PkPZz3OtEDz+UFMvRaRIl5PYoFTu2PLL
+         Aj3fWqQpWcbf+LTJsyXEjfaQ+sOWgU9/0xBSkdT7Xy97Glwr+Ngjuh7jK+RjyGJmpH
+         jQLwddcGImZH/FuEXb1J3e7p+Zta8GKtbhIgEx2hEBcUzq7hmpKj+uIfHWa3OYc3vt
+         9KTHdmaIMpZEg==
+From:   Conor Dooley <conor@kernel.org>
+To:     palmer@dabbelt.com
+Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Lukas Bulwhan <lukas.bulwhan@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] RISC-V: fixup in-flight collision with ARCH_WANT_OPTIMIZE_VMEMMAP rename
+Date:   Sat, 29 Apr 2023 10:27:33 +0100
+Message-Id: <20230429-trilogy-jolly-12bf5c53d62d@spud>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1730; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=za3FgcteiUKmO+H+px6+yeLYMnrjzvzxzBnY3YJjDjs=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCk+j5nlwlhrWx1mp2WnevlaT5OJLjq8msNet8duVwHP4 d/aD106SlkYxDgYZMUUWRJv97VIrf/jssO55y3MHFYmkCEMXJwCMJGY7YwML+Kf1SiVv3kqbHJq 8n7pBtX7Lk56rHmXVeo5lwq/CugNZ2S45nD2olPVyTt908PnnVt7gaOb+f0WE58jIsedd77gXn6 FDwA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230429043519.19807-1-rdunlap@infradead.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,54 +58,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday 28 April 2023 21:35:19 Randy Dunlap wrote:
-> Neither FSL_SOC_BOOKE nor PPC_86xx enables CONFIG_PCI by
-> default, so it may be unset in some randconfigs.
-> When that happens, FSL_ULI1575 may be set when it should not be
-> since it is a PCI driver. When it is set, there are 3 kconfig
-> warnings and a slew of build errors
-> 
-> WARNING: unmet direct dependencies detected for PCI_QUIRKS
->   Depends on [n]: PCI [=n]
->   Selected by [y]:
->   - FSL_PCI [=y]
-> 
-> WARNING: unmet direct dependencies detected for GENERIC_ISA_DMA
->   Depends on [n]: ISA_DMA_API [=n]
->   Selected by [y]:
->   - FSL_ULI1575 [=y] && (FSL_SOC_BOOKE [=n] || PPC_86xx [=y])
-> 
-> WARNING: unmet direct dependencies detected for PPC_INDIRECT_PCI
->   Depends on [n]: PCI [=n]
->   Selected by [y]:
->   - FSL_PCI [=y]
-> 
-> and 30+ build errors.
-> 
-> Fixes: 22fdf79171e8 ("powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Pali Rohár <pali@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
->  arch/powerpc/platforms/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff -- a/arch/powerpc/platforms/Kconfig b/arch/powerpc/platforms/Kconfig
-> --- a/arch/powerpc/platforms/Kconfig
-> +++ b/arch/powerpc/platforms/Kconfig
-> @@ -265,6 +265,7 @@ config CPM2
->  config FSL_ULI1575
->  	bool "ULI1575 PCIe south bridge support"
->  	depends on FSL_SOC_BOOKE || PPC_86xx
-> +	depends on PCI
->  	select FSL_PCI
->  	select GENERIC_ISA_DMA
->  	help
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Ok, looks like a reasonable solution for this issue.
+Lukas warned that ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP had been
+renamed in the mm tree & that RISC-V would need a fixup as part of the
+merge. The warning was missed however, and RISC-V is selecting the
+orphaned Kconfig option.
 
-These kind of cleanups (as done in uli1575 patch series) are always
-problematic as they can break some unusual configuration...
+Fixes: 89d77f71f493 ("Merge tag 'riscv-for-linus-6.4-mw1' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux")
+Reported-by: Lukas Bulwhan <lukas.bulwhan@gmail.com>
+Link: https://lore.kernel.org/linux-riscv/CAKXUXMyVeg2kQK_edKHtMD3eADrDK_PKhCSVkMrLDdYgTQQ5rg@mail.gmail.com/
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+I guess you picking this up for your second PR makes the most sense
+Palmer?
 
-Reviewed-by: Pali Rohár <pali@kernel.org>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+CC: Lukas Bulwhan <lukas.bulwhan@gmail.com>
+CC: linux-riscv@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
+---
+ arch/riscv/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5c88ac4b52be..e1bdb3fb16cc 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -46,9 +46,9 @@ config RISCV
+ 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+ 	select ARCH_WANT_FRAME_POINTERS
+ 	select ARCH_WANT_GENERAL_HUGETLB if !RISCV_ISA_SVNAPOT
+-	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+ 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+ 	select ARCH_WANT_LD_ORPHAN_WARN if !XIP_KERNEL
++	select ARCH_WANT_OPTIMIZE_VMEMMAP
+ 	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
+ 	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
+ 	select BUILDTIME_TABLE_SORT if MMU
+-- 
+2.39.2
+
