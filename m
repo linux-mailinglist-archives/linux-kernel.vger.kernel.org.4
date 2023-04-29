@@ -2,73 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BF96F2682
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21876F2691
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 23:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjD2VON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 17:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
+        id S230494AbjD2VW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 17:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjD2VOL (ORCPT
+        with ESMTP id S230175AbjD2VWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 17:14:11 -0400
+        Sat, 29 Apr 2023 17:22:54 -0400
 Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF6113
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:14:07 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32f4e0f42a7so296075ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:14:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F420196
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:22:52 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-32ec968434eso754485ab.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 14:22:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682802847; x=1685394847;
+        d=google.com; s=20221208; t=1682803372; x=1685395372;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WjHwLOk9ZJQjfh34M5kWHJht/FJClTK8GU3ZuB+Hgyc=;
-        b=2Pf8e8YPZm2Ll9ROmXkJWkl1w6goEejl765EKFML1OQl+6XfQxnARHhDAlZv5rD7q6
-         /PAc976RaC21RQmc1tKfniEfBz3S8dJDdzhXPu3WuloF5FpC20kYK7SS+VbMj7s8LZw4
-         xW7I/F32PskiNv4ayxsOQvUk4X78BqpODNz4AMQYz6n+YC9X7Uob4SCbhFqKtOHGV07n
-         Wb1AJ2KT9aLR6kovlmuhGTbCbYeCaIJZLMn2wtTMnxIiZVI222enUVfbuLLE1eFwxmri
-         Vs/to6tnMYcD1J5W+AbxgsGnMDDZAXHXvWYwlLgluyxGo37I2nXgTHY9vAZ/f+dP7mCa
-         fmlg==
+        bh=KTK4hccKJhtrPBONSjwx6Ih5BhC3RyQGYw8NgrDjKs8=;
+        b=f7MLlrJbuI8plRzz6rCpHzT9n/hiMm+SIfc2MFAcsJA5y6EIKZGPX/jqavfpX7cFC1
+         WUgdJMJr8XfQjOoxIa5myJSCYNrjCoFoJ7TH4QCn+5w9IgueaXrsZzUCacOAdAGL2N3B
+         Hks4m8foiKGfVJOZmtQfHCSxjrA+e5n+64uRNvbA8YSv8O5phwpPYQK4Ld+TT75RwoSJ
+         uXwMehWB3jCLm+TBvquupBLLqJWl3OqeLaeM/bO7hWDBugVxNVSSQIutbd0/mm4Uj121
+         dqLaI4fvLD8D7MDNXQmUiCGAtiIxRxEGUolnaw7hdPFxN4y63z70WakylnT0CNsY3TvR
+         u7MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682802847; x=1685394847;
+        d=1e100.net; s=20221208; t=1682803372; x=1685395372;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WjHwLOk9ZJQjfh34M5kWHJht/FJClTK8GU3ZuB+Hgyc=;
-        b=W/cjwWTvJ1eN/g7l2fxdh/KnpUpD4JvtMTP7JE1RqeNkt7uHjwjNXOWXilTowqwB40
-         WdzqKDi6wVY0zDNSnMM/+6NG7hVnMWcTdhUJ0DCoIC/DaDNdcvuqEf1mIFLBmukITk3M
-         lBTs+ZSy/IIXCL/ID0vIZ+PAUYrWk8uixqdjwHYm/YjkTDirNHXEwe6JYoHjuz5ACxsa
-         9anUnhePpwW9GTMYa0nNu0lBcCqsCrQeSagTzZG70RQsYhJtpGswjoQbdxOH47v/GOkH
-         yhFX3VRQMf7JXeNVBZUf6DEFz1WkPqpdYTvqwjEr+UA2+qeKzNuL/dh+DJBH+IzqnTOv
-         6odw==
-X-Gm-Message-State: AC+VfDzXFZSOrAhNyvf5lQGrAy6EJzeO9uzez82FL+BPL5Q49bf5nBir
-        iuEDNjCxD6zKtMJpNV4y2LrBUS0yvqHxNYa908B1RA==
-X-Google-Smtp-Source: ACHHUZ6N/c4sHXQE3mB57jrv9jIk/dcdbIvXOazyNWS6whM8LKjyHKqEsAED6/CJXRkoY2hJsJKuNe2nTxjVQd0Cej8=
-X-Received: by 2002:a05:6e02:1d19:b0:330:af65:de3d with SMTP id
- i25-20020a056e021d1900b00330af65de3dmr26553ila.11.1682802846610; Sat, 29 Apr
- 2023 14:14:06 -0700 (PDT)
+        bh=KTK4hccKJhtrPBONSjwx6Ih5BhC3RyQGYw8NgrDjKs8=;
+        b=km9WMbrDVXtCmUv0/InEfo1yog0ob8PAniShax0voapqw01smsxbpl1pRWT70JpB38
+         7bl55eOizKHLhR09nBNYDdaka8foOA54z/wQTAX3yhG1aNUH6swypZr/AOY/xCERKCUL
+         VQI+EmXVd5IUasHj3dq0ejNqt/JD0kJfyCwQ8bSoN5XEd5AhMJ0V0RMkc4ZVIiCOpm1T
+         nqx74dfwA5PUW5BUXy7Kz49UMCXuqIJ4mIKswlQjE60ONkshiEN6Q0/2R34nchU1Y8DO
+         6dFZJJpt3Z+AjhRR2hQU6ntCwKaIqYVbYvfQAek1HEAvLEIJbCxOUf6FRLeJguQyhZPK
+         esrQ==
+X-Gm-Message-State: AC+VfDxdET0+RdWi6hBQABkoFVjL/+wBc2oGE3Yeo4t+iUmPSsaz2n37
+        zBZ3lBk9A8YqVBneB13AjeYzx6o1wz1Ecm3z7bzXgw==
+X-Google-Smtp-Source: ACHHUZ4pepB19jdRDBHwaMgnmWiZ0YVAxV3VKuqJPZRyRcyayJBCpDA1CvuAHSdqdYd1Rt+4As9vfgkRwqGnTCwjPlI=
+X-Received: by 2002:a05:6e02:1ca6:b0:326:55d0:efad with SMTP id
+ x6-20020a056e021ca600b0032655d0efadmr227838ill.12.1682803371463; Sat, 29 Apr
+ 2023 14:22:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
-In-Reply-To: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
+References: <20230428163507.v2.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
+In-Reply-To: <20230428163507.v2.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
 From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 29 Apr 2023 14:13:54 -0700
-Message-ID: <CAP-5=fV-CwUgbKfCndJvMcnWpB7H3Z03sqiAjiFa1DsoOqNn4g@mail.gmail.com>
-Subject: Re: [PATCH] perf vendor events arm64: Add AmpereOne core pmu events
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        John Garry <john.g.garry@oracle.com>
-Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+Date:   Sat, 29 Apr 2023 14:22:39 -0700
+Message-ID: <CAP-5=fUJJ-JBxWuHm573jRDcrLCp4kRUhvOSw3jjsMAc5VbdMg@mail.gmail.com>
+Subject: Re: [PATCH v2] hardlockup: detect hard lockups using secondary
+ (buddy) CPUs
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andi Kleen <ak@linux.intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
+        linux-arm-kernel@lists.infradead.org,
+        Stephane Eranian <eranian@google.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-perf-users@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        kgdb-bugreport@lists.sourceforge.net, ito-yuichi@fujitsu.com,
+        ravi.v.shankar@intel.com, Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        ricardo.neri@intel.com, Stephen Boyd <swboyd@chromium.org>,
+        Colin Cross <ccross@android.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Alexander Potapenko <glider@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        David Gow <davidgow@google.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -82,1321 +113,480 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 3:33=E2=80=AFPM Ilkka Koskinen
-<ilkka@os.amperecomputing.com> wrote:
+On Fri, Apr 28, 2023 at 4:41=E2=80=AFPM Douglas Anderson <dianders@chromium=
+.org> wrote:
 >
-> Add JSON files for AmpereOne core PMU events.
+> From: Colin Cross <ccross@android.com>
 >
-> Signed-off-by: Doug Rady <dcrady@os.amperecomputing.com>
-> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> Implement a hardlockup detector that doesn't doesn't need any extra
+> arch-specific support code to detect lockups. Instead of using
+> something arch-specific we will use the buddy system, where each CPU
+> watches out for another one. Specifically, each CPU will use its
+> softlockup hrtimer to check that the next CPU is processing hrtimer
+> interrupts by verifying that a counter is increasing.
+>
+> NOTE: unlike the other hard lockup detectors, the buddy one can't
+> easily show what's happening on the CPU that locked up just by doing a
+> simple backtrace. It relies on some other mechanism in the system to
+> get information about the locked up CPUs. This could be support for
+> NMI backtraces like [1], it could be a mechanism for printing the PC
+> of locked CPUs at panic time like [2] / [3], or it could be something
+> else. Even though that means we still rely on arch-specific code, this
+> arch-specific code seems to often be implemented even on architectures
+> that don't have a hardlockup detector.
+>
+> This style of hardlockup detector originated in some downstream
+> Android trees and has been rebased on / carried in ChromeOS trees for
+> quite a long time for use on arm and arm64 boards. Historically on
+> these boards we've leveraged mechanism [2] / [3] to get information
+> about hung CPUs, but we could move to [1].
+>
+> Although the original motivation for the buddy system was for use on
+> systems without an arch-specific hardlockup detector, it can still be
+> useful to use even on systems that _do_ have an arch-specific
+> hardlockup detector. On x86, for instance, there is a 24-part patch
+> series [4] in progress switching the arch-specific hard lockup
+> detector from a scarce perf counter to a less-scarce hardware
+> resource. Potentially the buddy system could be a simpler alternative
+> to free up the perf counter but still get hard lockup detection.
+>
+> Overall, pros (+) and cons (-) of the buddy system compared to an
+> arch-specific hardlockup detector:
+> + Usable on systems that don't have an arch-specific hardlockup
+>   detector, like arm32 and arm64 (though it's being worked on for
+>   arm64 [5]).
+> + May free up scarce hardware resources.
+> + If a CPU totally goes out to lunch (can't process NMIs) the buddy
+>   system could still detect the problem (though it would be unlikely
+>   to be able to get a stack trace).
+> - If all CPUs are hard locked up at the same time the buddy system
+>   can't detect it.
+> - If we don't have SMP we can't use the buddy system.
+> - The buddy system needs an arch-specific mechanism (possibly NMI
+>   backtrace) to get info about the locked up CPU.
 
-This looks good to me, but if John Garry has input I'll defer to that.
-Acked-by: Ian Rogers <irogers@google.com>
+Thanks for this list, it is really useful! Is it worth mentioning the
+behavior around idle? Could this approach potentially use more power?
 
 Thanks,
 Ian
 
-> ---
->  .../arch/arm64/ampere/ampereone/branch.json   |  17 +
->  .../arch/arm64/ampere/ampereone/bus.json      |  32 +
->  .../arch/arm64/ampere/ampereone/cache.json    | 104 +++
->  .../arm64/ampere/ampereone/core-imp-def.json  | 698 ++++++++++++++++++
->  .../arm64/ampere/ampereone/exception.json     |  44 ++
->  .../arm64/ampere/ampereone/instruction.json   |  89 +++
->  .../arm64/ampere/ampereone/intrinsic.json     |  14 +
->  .../arch/arm64/ampere/ampereone/memory.json   |  44 ++
->  .../arch/arm64/ampere/ampereone/pipeline.json |  23 +
->  .../arch/arm64/ampere/ampereone/spe.json      |  14 +
->  tools/perf/pmu-events/arch/arm64/mapfile.csv  |   1 +
->  11 files changed, 1080 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/bra=
-nch.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus=
-.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/cac=
-he.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/cor=
-e-imp-def.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/exc=
-eption.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/ins=
-truction.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/int=
-rinsic.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/mem=
-ory.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/pip=
-eline.json
->  create mode 100644 tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe=
-.json
+> [1] https://lore.kernel.org/r/20230419225604.21204-1-dianders@chromium.or=
+g
+> [2] https://issuetracker.google.com/172213129
+> [3] https://docs.kernel.org/trace/coresight/coresight-cpu-debug.html
+> [4] https://lore.kernel.org/lkml/20230301234753.28582-1-ricardo.neri-cald=
+eron@linux.intel.com/
+> [5] https://lore.kernel.org/linux-arm-kernel/20220903093415.15850-1-lecop=
+zer.chen@mediatek.com/
 >
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.jso=
-n b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.json
+> Signed-off-by: Colin Cross <ccross@android.com>
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> Signed-off-by: Guenter Roeck <groeck@chromium.org>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@chromium.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> This patch has been rebased in ChromeOS kernel trees many times, and
+> each time someone had to do work on it they added their
+> Signed-off-by. I've included those here. I've also left the author as
+> Colin Cross since the core code is still his.
+>
+> I'll also note that the CC list is pretty giant, but that's what
+> get_maintainers came up with (plus a few other folks I thought would
+> be interested). As far as I can tell, there's no true MAINTAINER
+> listed for the existing watchdog code. Assuming people don't hate
+> this, maybe it would go through Andrew Morton's tree?
+>
+> Changes in v2:
+> - cpu =3D> CPU.
+> - Reworked description and Kconfig based on v1 discussion.
+> - No code changes
+>
+>  include/linux/nmi.h         |  18 ++++-
+>  kernel/Makefile             |   1 +
+>  kernel/watchdog.c           |  24 ++++--
+>  kernel/watchdog_buddy_cpu.c | 141 ++++++++++++++++++++++++++++++++++++
+>  lib/Kconfig.debug           |  23 +++++-
+>  5 files changed, 196 insertions(+), 11 deletions(-)
+>  create mode 100644 kernel/watchdog_buddy_cpu.c
+>
+> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+> index 048c0b9aa623..35f6c5c2378b 100644
+> --- a/include/linux/nmi.h
+> +++ b/include/linux/nmi.h
+> @@ -45,6 +45,8 @@ extern void touch_softlockup_watchdog(void);
+>  extern void touch_softlockup_watchdog_sync(void);
+>  extern void touch_all_softlockup_watchdogs(void);
+>  extern unsigned int  softlockup_panic;
+> +DECLARE_PER_CPU(unsigned long, hrtimer_interrupts);
+> +DECLARE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
+>
+>  extern int lockup_detector_online_cpu(unsigned int cpu);
+>  extern int lockup_detector_offline_cpu(unsigned int cpu);
+> @@ -81,14 +83,14 @@ static inline void reset_hung_task_detector(void) { }
+>  #define NMI_WATCHDOG_ENABLED      (1 << NMI_WATCHDOG_ENABLED_BIT)
+>  #define SOFT_WATCHDOG_ENABLED     (1 << SOFT_WATCHDOG_ENABLED_BIT)
+>
+> -#if defined(CONFIG_HARDLOCKUP_DETECTOR)
+> +#if defined(CONFIG_HARDLOCKUP_DETECTOR_CORE)
+>  extern void hardlockup_detector_disable(void);
+>  extern unsigned int hardlockup_panic;
+>  #else
+>  static inline void hardlockup_detector_disable(void) {}
+>  #endif
+>
+> -#if defined(CONFIG_HAVE_NMI_WATCHDOG) || defined(CONFIG_HARDLOCKUP_DETEC=
+TOR)
+> +#if defined(CONFIG_HAVE_NMI_WATCHDOG) || defined(CONFIG_HARDLOCKUP_DETEC=
+TOR_CORE)
+>  # define NMI_WATCHDOG_SYSCTL_PERM      0644
+>  #else
+>  # define NMI_WATCHDOG_SYSCTL_PERM      0444
+> @@ -124,6 +126,14 @@ void watchdog_nmi_disable(unsigned int cpu);
+>
+>  void lockup_detector_reconfigure(void);
+>
+> +#ifdef CONFIG_HARDLOCKUP_DETECTOR_BUDDY_CPU
+> +void buddy_cpu_touch_watchdog(void);
+> +void watchdog_check_hardlockup(void);
+> +#else
+> +static inline void buddy_cpu_touch_watchdog(void) {}
+> +static inline void watchdog_check_hardlockup(void) {}
+> +#endif
+> +
+>  /**
+>   * touch_nmi_watchdog - restart NMI watchdog timeout.
+>   *
+> @@ -134,6 +144,7 @@ void lockup_detector_reconfigure(void);
+>  static inline void touch_nmi_watchdog(void)
+>  {
+>         arch_touch_nmi_watchdog();
+> +       buddy_cpu_touch_watchdog();
+>         touch_softlockup_watchdog();
+>  }
+>
+> @@ -196,8 +207,7 @@ static inline bool trigger_single_cpu_backtrace(int c=
+pu)
+>  u64 hw_nmi_get_sample_period(int watchdog_thresh);
+>  #endif
+>
+> -#if defined(CONFIG_HARDLOCKUP_CHECK_TIMESTAMP) && \
+> -    defined(CONFIG_HARDLOCKUP_DETECTOR)
+> +#if defined(CONFIG_HARDLOCKUP_CHECK_TIMESTAMP) && defined(CONFIG_HARDLOC=
+KUP_DETECTOR_PERF)
+>  void watchdog_update_hrtimer_threshold(u64 period);
+>  #else
+>  static inline void watchdog_update_hrtimer_threshold(u64 period) { }
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index 10ef068f598d..a2054f16f9f4 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -91,6 +91,7 @@ obj-$(CONFIG_FAIL_FUNCTION) +=3D fail_function.o
+>  obj-$(CONFIG_KGDB) +=3D debug/
+>  obj-$(CONFIG_DETECT_HUNG_TASK) +=3D hung_task.o
+>  obj-$(CONFIG_LOCKUP_DETECTOR) +=3D watchdog.o
+> +obj-$(CONFIG_HARDLOCKUP_DETECTOR_BUDDY_CPU) +=3D watchdog_buddy_cpu.o
+>  obj-$(CONFIG_HARDLOCKUP_DETECTOR_PERF) +=3D watchdog_hld.o
+>  obj-$(CONFIG_SECCOMP) +=3D seccomp.o
+>  obj-$(CONFIG_RELAY) +=3D relay.o
+> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+> index 8e61f21e7e33..1199043689ae 100644
+> --- a/kernel/watchdog.c
+> +++ b/kernel/watchdog.c
+> @@ -29,7 +29,7 @@
+>
+>  static DEFINE_MUTEX(watchdog_mutex);
+>
+> -#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_NMI_WATCH=
+DOG)
+> +#if defined(CONFIG_HARDLOCKUP_DETECTOR_CORE) || defined(CONFIG_HAVE_NMI_=
+WATCHDOG)
+>  # define WATCHDOG_DEFAULT      (SOFT_WATCHDOG_ENABLED | NMI_WATCHDOG_ENA=
+BLED)
+>  # define NMI_WATCHDOG_DEFAULT  1
+>  #else
+> @@ -47,7 +47,7 @@ static int __read_mostly nmi_watchdog_available;
+>  struct cpumask watchdog_cpumask __read_mostly;
+>  unsigned long *watchdog_cpumask_bits =3D cpumask_bits(&watchdog_cpumask)=
+;
+>
+> -#ifdef CONFIG_HARDLOCKUP_DETECTOR
+> +#ifdef CONFIG_HARDLOCKUP_DETECTOR_CORE
+>
+>  # ifdef CONFIG_SMP
+>  int __read_mostly sysctl_hardlockup_all_cpu_backtrace;
+> @@ -85,7 +85,9 @@ static int __init hardlockup_panic_setup(char *str)
+>  }
+>  __setup("nmi_watchdog=3D", hardlockup_panic_setup);
+>
+> -#endif /* CONFIG_HARDLOCKUP_DETECTOR */
+> +#endif /* CONFIG_HARDLOCKUP_DETECTOR_CORE */
+> +
+> +#ifdef CONFIG_HARDLOCKUP_DETECTOR
+>
+>  /*
+>   * These functions can be overridden if an architecture implements its
+> @@ -106,6 +108,13 @@ void __weak watchdog_nmi_disable(unsigned int cpu)
+>         hardlockup_detector_perf_disable();
+>  }
+>
+> +#else
+> +
+> +int __weak watchdog_nmi_enable(unsigned int cpu) { return 0; }
+> +void __weak watchdog_nmi_disable(unsigned int cpu) { return; }
+> +
+> +#endif /* CONFIG_HARDLOCKUP_DETECTOR */
+> +
+>  /* Return 0, if a NMI watchdog is available. Error code otherwise */
+>  int __weak __init watchdog_nmi_probe(void)
+>  {
+> @@ -179,8 +188,8 @@ static DEFINE_PER_CPU(unsigned long, watchdog_touch_t=
+s);
+>  static DEFINE_PER_CPU(unsigned long, watchdog_report_ts);
+>  static DEFINE_PER_CPU(struct hrtimer, watchdog_hrtimer);
+>  static DEFINE_PER_CPU(bool, softlockup_touch_sync);
+> -static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts);
+> -static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
+> +DEFINE_PER_CPU(unsigned long, hrtimer_interrupts);
+> +DEFINE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
+>  static unsigned long soft_lockup_nmi_warn;
+>
+>  static int __init nowatchdog_setup(char *str)
+> @@ -364,6 +373,9 @@ static enum hrtimer_restart watchdog_timer_fn(struct =
+hrtimer *hrtimer)
+>         /* kick the hardlockup detector */
+>         watchdog_interrupt_count();
+>
+> +       /* test for hardlockups */
+> +       watchdog_check_hardlockup();
+> +
+>         /* kick the softlockup detector */
+>         if (completion_done(this_cpu_ptr(&softlockup_completion))) {
+>                 reinit_completion(this_cpu_ptr(&softlockup_completion));
+> @@ -820,7 +832,7 @@ static struct ctl_table watchdog_sysctls[] =3D {
+>         },
+>  #endif /* CONFIG_SMP */
+>  #endif
+> -#ifdef CONFIG_HARDLOCKUP_DETECTOR
+> +#ifdef CONFIG_HARDLOCKUP_DETECTOR_CORE
+>         {
+>                 .procname       =3D "hardlockup_panic",
+>                 .data           =3D &hardlockup_panic,
+> diff --git a/kernel/watchdog_buddy_cpu.c b/kernel/watchdog_buddy_cpu.c
 > new file mode 100644
-> index 000000000000..c751d57f2e19
+> index 000000000000..db813b00e6ef
 > --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/branch.json
-> @@ -0,0 +1,17 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "BR_IMMED_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_RETURN_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_INDIRECT_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_MIS_PRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_PRED"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json b=
-/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json
-> new file mode 100644
-> index 000000000000..8623be121818
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/bus.json
-> @@ -0,0 +1,32 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "CPU_CYCLES"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_CYCLES"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_SHARED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_NOT_SHARED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_NORMAL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS_PERIPH"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BUS_ACCESS"
-> +    },
-> +    {
-> +        "ArchStdEvent": "CNT_CYCLES"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json=
- b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
-> new file mode 100644
-> index 000000000000..fc0633054211
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
-> @@ -0,0 +1,104 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_REFILL_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_INVAL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_TLB_REFILL_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_TLB_REFILL_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_REFILL_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_REFILL_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_WB_VICTIM"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_WB_CLEAN"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_INVAL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1I_CACHE_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1I_TLB_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_TLB_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1I_CACHE"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_WB"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_TLB"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1I_TLB"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_TLB_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2I_TLB_REFILL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_TLB"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2I_TLB"
-> +    },
-> +    {
-> +        "ArchStdEvent": "DTLB_WALK"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ITLB_WALK"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_LMISS_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1D_CACHE_LMISS"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L1I_CACHE_LMISS"
-> +    },
-> +    {
-> +        "ArchStdEvent": "L2D_CACHE_LMISS_RD"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-d=
-ef.json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-def.js=
-on
-> new file mode 100644
-> index 000000000000..95c30243f2b2
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/core-imp-def.json
-> @@ -0,0 +1,698 @@
-> +[
-> +    {
-> +        "PublicDescription": "Level 2 prefetch requests, refilled to L2 =
-cache",
-> +        "EventCode": "0x10A",
-> +        "EventName": "L2_PREFETCH_REFILL",
-> +        "BriefDescription": "Level 2 prefetch requests, refilled to L2 c=
-ache"
-> +    },
-> +    {
-> +        "PublicDescription": "Level 2 prefetch requests, late",
-> +        "EventCode": "0x10B",
-> +        "EventName": "L2_PREFETCH_UPGRADE",
-> +        "BriefDescription": "Level 2 prefetch requests, late"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable branch speculatively executed =
-that hit any level of BTB",
-> +        "EventCode": "0x110",
-> +        "EventName": "BPU_HIT_BTB",
-> +        "BriefDescription": "Predictable branch speculatively executed t=
-hat hit any level of BTB"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable conditional branch speculative=
-ly executed that hit any level of BTB",
-> +        "EventCode": "0x111",
-> +        "EventName": "BPU_CONDITIONAL_BRANCH_HIT_BTB",
-> +        "BriefDescription": "Predictable conditional branch speculativel=
-y executed that hit any level of BTB"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable taken branch speculatively exe=
-cuted that hit any level of BTB that access the indirect predictor",
-> +        "EventCode": "0x112",
-> +        "EventName": "BPU_HIT_INDIRECT_PREDICTOR",
-> +        "BriefDescription": "Predictable taken branch speculatively exec=
-uted that hit any level of BTB that access the indirect predictor"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable taken branch speculatively exe=
-cuted that hit any level of BTB that access the return predictor",
-> +        "EventCode": "0x113",
-> +        "EventName": "BPU_HIT_RSB",
-> +        "BriefDescription": "Predictable taken branch speculatively exec=
-uted that hit any level of BTB that access the return predictor"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable unconditional branch speculati=
-vely executed that did not hit any level of BTB",
-> +        "EventCode": "0x114",
-> +        "EventName": "BPU_UNCONDITIONAL_BRANCH_MISS_BTB",
-> +        "BriefDescription": "Predictable unconditional branch speculativ=
-ely executed that did not hit any level of BTB"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable branch speculatively executed,=
- unpredicted",
-> +        "EventCode": "0x115",
-> +        "EventName": "BPU_BRANCH_NO_HIT",
-> +        "BriefDescription": "Predictable branch speculatively executed, =
-unpredicted"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable branch speculatively executed =
-that hit any level of BTB that mispredict",
-> +        "EventCode": "0x116",
-> +        "EventName": "BPU_HIT_BTB_AND_MISPREDICT",
-> +        "BriefDescription": "Predictable branch speculatively executed t=
-hat hit any level of BTB that mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable conditional branch speculative=
-ly executed that hit any level of BTB that (direction) mispredict",
-> +        "EventCode": "0x117",
-> +        "EventName": "BPU_CONDITIONAL_BRANCH_HIT_BTB_AND_MISPREDICT",
-> +        "BriefDescription": "Predictable conditional branch speculativel=
-y executed that hit any level of BTB that (direction) mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable taken branch speculatively exe=
-cuted that hit any level of BTB that access the indirect predictor that mis=
-predict",
-> +        "EventCode": "0x118",
-> +        "EventName": "BPU_INDIRECT_BRANCH_HIT_BTB_AND_MISPREDICT",
-> +        "BriefDescription": "Predictable taken branch speculatively exec=
-uted that hit any level of BTB that access the indirect predictor that misp=
-redict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable taken branch speculatively exe=
-cuted that hit any level of BTB that access the return predictor that mispr=
-edict",
-> +        "EventCode": "0x119",
-> +        "EventName": "BPU_HIT_RSB_AND_MISPREDICT",
-> +        "BriefDescription": "Predictable taken branch speculatively exec=
-uted that hit any level of BTB that access the return predictor that mispre=
-dict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable taken branch speculatively exe=
-cuted that hit any level of BTB that access the overflow/underflow return p=
-redictor that mispredict",
-> +        "EventCode": "0x11a",
-> +        "EventName": "BPU_MISS_RSB_AND_MISPREDICT",
-> +        "BriefDescription": "Predictable taken branch speculatively exec=
-uted that hit any level of BTB that access the overflow/underflow return pr=
-edictor that mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable branch speculatively executed,=
- unpredicted, that mispredict",
-> +        "EventCode": "0x11b",
-> +        "EventName": "BPU_NO_PREDICTION_MISPREDICT",
-> +        "BriefDescription": "Predictable branch speculatively executed, =
-unpredicted, that mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "Predictable branch speculatively executed,=
- unpredicted, that mispredict",
-> +        "EventCode": "0x11c",
-> +        "EventName": "BPU_BTB_UPDATE",
-> +        "BriefDescription": "Predictable branch speculatively executed, =
-unpredicted, that mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "Count predict pipe stalls due to speculati=
-ve return address predictor full",
-> +        "EventCode": "0x11d",
-> +        "EventName": "BPU_RSB_FULL_STALL",
-> +        "BriefDescription": "Count predict pipe stalls due to speculativ=
-e return address predictor full"
-> +    },
-> +    {
-> +        "PublicDescription": "Macro-ops speculatively decoded",
-> +        "EventCode": "0x11f",
-> +        "EventName": "ICF_INST_SPEC_DECODE",
-> +        "BriefDescription": "Macro-ops speculatively decoded"
-> +    },
-> +    {
-> +        "PublicDescription": "Flushes",
-> +        "EventCode": "0x120",
-> +        "EventName": "GPC_FLUSH",
-> +        "BriefDescription": "Flushes"
-> +    },
-> +    {
-> +        "PublicDescription": "Flushes due to memory hazards",
-> +        "EventCode": "0x121",
-> +        "EventName": "BPU_FLUSH_MEM_FAULT",
-> +        "BriefDescription": "Flushes due to memory hazards"
-> +    },
-> +    {
-> +        "PublicDescription": "ETM extout bit 0",
-> +        "EventCode": "0x141",
-> +        "EventName": "MSC_ETM_EXTOUT0",
-> +        "BriefDescription": "ETM extout bit 0"
-> +    },
-> +    {
-> +        "PublicDescription": "ETM extout bit 1",
-> +        "EventCode": "0x142",
-> +        "EventName": "MSC_ETM_EXTOUT1",
-> +        "BriefDescription": "ETM extout bit 1"
-> +    },
-> +    {
-> +        "PublicDescription": "ETM extout bit 2",
-> +        "EventCode": "0x143",
-> +        "EventName": "MSC_ETM_EXTOUT2",
-> +        "BriefDescription": "ETM extout bit 2"
-> +    },
-> +    {
-> +        "PublicDescription": "ETM extout bit 3",
-> +        "EventCode": "0x144",
-> +        "EventName": "MSC_ETM_EXTOUT3",
-> +        "BriefDescription": "ETM extout bit 3"
-> +    },
-> +    {
-> +        "PublicDescription": "Bus request sn",
-> +        "EventCode": "0x156",
-> +        "EventName": "L2C_SNOOP",
-> +        "BriefDescription": "Bus request sn"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 TXDAT LCRD blocked",
-> +        "EventCode": "0x169",
-> +        "EventName": "L2C_DAT_CRD_STALL",
-> +        "BriefDescription": "L2 TXDAT LCRD blocked"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 TXRSP LCRD blocked",
-> +        "EventCode": "0x16a",
-> +        "EventName": "L2C_RSP_CRD_STALL",
-> +        "BriefDescription": "L2 TXRSP LCRD blocked"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 TXREQ LCRD blocked",
-> +        "EventCode": "0x16b",
-> +        "EventName": "L2C_REQ_CRD_STALL",
-> +        "BriefDescription": "L2 TXREQ LCRD blocked"
-> +    },
-> +    {
-> +        "PublicDescription": "Early mispredict",
-> +        "EventCode": "0xD100",
-> +        "EventName": "ICF_EARLY_MIS_PRED",
-> +        "BriefDescription": "Early mispredict"
-> +    },
-> +    {
-> +        "PublicDescription": "FEQ full cycles",
-> +        "EventCode": "0xD101",
-> +        "EventName": "ICF_FEQ_FULL",
-> +        "BriefDescription": "FEQ full cycles"
-> +    },
-> +    {
-> +        "PublicDescription": "Instruction FIFO Full",
-> +        "EventCode": "0xD102",
-> +        "EventName": "ICF_INST_FIFO_FULL",
-> +        "BriefDescription": "Instruction FIFO Full"
-> +    },
-> +    {
-> +        "PublicDescription": "L1I TLB miss",
-> +        "EventCode": "0xD103",
-> +        "EventName": "L1I_TLB_MISS",
-> +        "BriefDescription": "L1I TLB miss"
-> +    },
-> +    {
-> +        "PublicDescription": "ICF sent 0 instructions to IDR this cycle"=
-,
-> +        "EventCode": "0xD104",
-> +        "EventName": "ICF_STALL",
-> +        "BriefDescription": "ICF sent 0 instructions to IDR this cycle"
-> +    },
-> +    {
-> +        "PublicDescription": "PC FIFO Full",
-> +        "EventCode": "0xD105",
-> +        "EventName": "ICF_PC_FIFO_FULL",
-> +        "BriefDescription": "PC FIFO Full"
-> +    },
-> +    {
-> +        "PublicDescription": "Stall due to BOB ID",
-> +        "EventCode": "0xD200",
-> +        "EventName": "IDR_STALL_BOB_ID",
-> +        "BriefDescription": "Stall due to BOB ID"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to LOB entries",
-> +        "EventCode": "0xD201",
-> +        "EventName": "IDR_STALL_LOB_ID",
-> +        "BriefDescription": "Dispatch stall due to LOB entries"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to SOB entries",
-> +        "EventCode": "0xD202",
-> +        "EventName": "IDR_STALL_SOB_ID",
-> +        "BriefDescription": "Dispatch stall due to SOB entries"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to IXU scheduler entrie=
-s",
-> +        "EventCode": "0xD203",
-> +        "EventName": "IDR_STALL_IXU_SCHED",
-> +        "BriefDescription": "Dispatch stall due to IXU scheduler entries=
-"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to FSU scheduler entrie=
-s",
-> +        "EventCode": "0xD204",
-> +        "EventName": "IDR_STALL_FSU_SCHED",
-> +        "BriefDescription": "Dispatch stall due to FSU scheduler entries=
-"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to ROB entries",
-> +        "EventCode": "0xD205",
-> +        "EventName": "IDR_STALL_ROB_ID",
-> +        "BriefDescription": "Dispatch stall due to ROB entries"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to flush (6 cycles)",
-> +        "EventCode": "0xD206",
-> +        "EventName": "IDR_STALL_FLUSH",
-> +        "BriefDescription": "Dispatch stall due to flush (6 cycles)"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to WFI",
-> +        "EventCode": "0xD207",
-> +        "EventName": "IDR_STALL_WFI",
-> +        "BriefDescription": "Dispatch stall due to WFI"
-> +    },
-> +    {
-> +        "PublicDescription": "Number of SWOB drains triggered by timeout=
-",
-> +        "EventCode": "0xD208",
-> +        "EventName": "IDR_STALL_SWOB_TIMEOUT",
-> +        "BriefDescription": "Number of SWOB drains triggered by timeout"
-> +    },
-> +    {
-> +        "PublicDescription": "Number of SWOB drains triggered by system =
-register or special-purpose register read-after-write or specific special-p=
-urpose register writes that cause SWOB drain",
-> +        "EventCode": "0xD209",
-> +        "EventName": "IDR_STALL_SWOB_RAW",
-> +        "BriefDescription": "Number of SWOB drains triggered by system r=
-egister or special-purpose register read-after-write or specific special-pu=
-rpose register writes that cause SWOB drain"
-> +    },
-> +    {
-> +        "PublicDescription": "Number of SWOB drains triggered by system =
-register write when SWOB full",
-> +        "EventCode": "0xD20A",
-> +        "EventName": "IDR_STALL_SWOB_FULL",
-> +        "BriefDescription": "Number of SWOB drains triggered by system r=
-egister write when SWOB full"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to L1 instruction cache=
- miss",
-> +        "EventCode": "0xD20B",
-> +        "EventName": "STALL_FRONTEND_CACHE",
-> +        "BriefDescription": "Dispatch stall due to L1 instruction cache =
-miss"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to L1 instruction TLB m=
-iss",
-> +        "EventCode": "0xD20C",
-> +        "EventName": "STALL_FRONTEND_TLB",
-> +        "BriefDescription": "Dispatch stall due to L1 instruction TLB mi=
-ss"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to L1 data cache miss",
-> +        "EventCode": "0xD20D",
-> +        "EventName": "STALL_BACKEND_CACHE",
-> +        "BriefDescription": "Dispatch stall due to L1 data cache miss"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to L1 data TLB miss",
-> +        "EventCode": "0xD20E",
-> +        "EventName": "STALL_BACKEND_TLB",
-> +        "BriefDescription": "Dispatch stall due to L1 data TLB miss"
-> +    },
-> +    {
-> +        "PublicDescription": "Dispatch stall due to lack of any core res=
-ource",
-> +        "EventCode": "0xD20F",
-> +        "EventName": "STALL_BACKEND_RESOURCE",
-> +        "BriefDescription": "Dispatch stall due to lack of any core reso=
-urce"
-> +    },
-> +    {
-> +        "PublicDescription": "Instructions issued by the scheduler",
-> +        "EventCode": "0xD300",
-> +        "EventName": "IXU_NUM_UOPS_ISSUED",
-> +        "BriefDescription": "Instructions issued by the scheduler"
-> +    },
-> +    {
-> +        "PublicDescription": "Any uop issued was canceled for any reason=
-",
-> +        "EventCode": "0xD301",
-> +        "EventName": "IXU_ISSUE_CANCEL",
-> +        "BriefDescription": "Any uop issued was canceled for any reason"
-> +    },
-> +    {
-> +        "PublicDescription": "A load wakeup to the scheduler has been ca=
-ncelled",
-> +        "EventCode": "0xD302",
-> +        "EventName": "IXU_LOAD_CANCEL",
-> +        "BriefDescription": "A load wakeup to the scheduler has been can=
-celled"
-> +    },
-> +    {
-> +        "PublicDescription": "The scheduler had to cancel one slow Uop d=
-ue to resource conflict",
-> +        "EventCode": "0xD303",
-> +        "EventName": "IXU_SLOW_CANCEL",
-> +        "BriefDescription": "The scheduler had to cancel one slow Uop du=
-e to resource conflict"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXA",
-> +        "EventCode": "0xD304",
-> +        "EventName": "IXU_IXA_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXA"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXA Par 0"=
-,
-> +        "EventCode": "0xD305",
-> +        "EventName": "IXU_IXA_PAR0_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXA Par 0"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXA Par 1"=
-,
-> +        "EventCode": "0xD306",
-> +        "EventName": "IXU_IXA_PAR1_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXA Par 1"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXB",
-> +        "EventCode": "0xD307",
-> +        "EventName": "IXU_IXB_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXB"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXB Par 0"=
-,
-> +        "EventCode": "0xD308",
-> +        "EventName": "IXU_IXB_PAR0_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXB Par 0"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXB Par 1"=
-,
-> +        "EventCode": "0xD309",
-> +        "EventName": "IXU_IXB_PAR1_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXB Par 1"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXC",
-> +        "EventCode": "0xD30A",
-> +        "EventName": "IXU_IXC_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXC"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXC Par 0"=
-,
-> +        "EventCode": "0xD30B",
-> +        "EventName": "IXU_IXC_PAR0_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXC Par 0"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXC Par 1"=
-,
-> +        "EventCode": "0xD30C",
-> +        "EventName": "IXU_IXC_PAR1_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXC Par 1"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXD",
-> +        "EventCode": "0xD30D",
-> +        "EventName": "IXU_IXD_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXD"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXD Par 0"=
-,
-> +        "EventCode": "0xD30E",
-> +        "EventName": "IXU_IXD_PAR0_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXD Par 0"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on IXD Par 1"=
-,
-> +        "EventCode": "0xD30F",
-> +        "EventName": "IXU_IXD_PAR1_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on IXD Par 1"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the FSU scheduler",
-> +        "EventCode": "0xD400",
-> +        "EventName": "FSU_ISSUED",
-> +        "BriefDescription": "Uops issued by the FSU scheduler"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on pipe X",
-> +        "EventCode": "0xD401",
-> +        "EventName": "FSU_FSX_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on pipe X"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on pipe Y",
-> +        "EventCode": "0xD402",
-> +        "EventName": "FSU_FSY_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on pipe Y"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops issued by the scheduler on pipe Z",
-> +        "EventCode": "0xD403",
-> +        "EventName": "FSU_FSZ_ISSUED",
-> +        "BriefDescription": "Uops issued by the scheduler on pipe Z"
-> +    },
-> +    {
-> +        "PublicDescription": "Uops canceled (load cancels)",
-> +        "EventCode": "0xD404",
-> +        "EventName": "FSU_CANCEL",
-> +        "BriefDescription": "Uops canceled (load cancels)"
-> +    },
-> +    {
-> +        "PublicDescription": "Count scheduler stalls due to divide/sqrt"=
-,
-> +        "EventCode": "0xD405",
-> +        "EventName": "FSU_DIV_SQRT_STALL",
-> +        "BriefDescription": "Count scheduler stalls due to divide/sqrt"
-> +    },
-> +    {
-> +        "PublicDescription": "Number of SWOB drains",
-> +        "EventCode": "0xD500",
-> +        "EventName": "GPC_SWOB_DRAIN",
-> +        "BriefDescription": "Number of SWOB drains"
-> +    },
-> +    {
-> +        "PublicDescription": "GPC detected a Breakpoint instruction matc=
-h",
-> +        "EventCode": "0xD501",
-> +        "EventName": "BREAKPOINT_MATCH",
-> +        "BriefDescription": "GPC detected a Breakpoint instruction match=
-"
-> +    },
-> +    {
-> +        "PublicDescription": "L1D TLB miss",
-> +        "EventCode": "0xD600",
-> +        "EventName": "L1D_TLB_MISS",
-> +        "BriefDescription": "L1D TLB miss"
-> +    },
-> +    {
-> +        "PublicDescription": "OFB full cycles",
-> +        "EventCode": "0xD601",
-> +        "EventName": "OFB_FULL",
-> +        "BriefDescription": "OFB full cycles"
-> +    },
-> +    {
-> +        "PublicDescription": "Load satisified from store forwarded data"=
-,
-> +        "EventCode": "0xD605",
-> +        "EventName": "LD_FROM_ST_FWD",
-> +        "BriefDescription": "Load satisified from store forwarded data"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, load prefetch requests gene=
-rated",
-> +        "EventCode": "0xD606",
-> +        "EventName": "L1_PFETCH_LD_GEN",
-> +        "BriefDescription": "L1 prefetcher, load prefetch requests gener=
-ated"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, load prefetch fills into th=
-e L1 cache",
-> +        "EventCode": "0xD607",
-> +        "EventName": "L1_PFETCH_LD_FILL",
-> +        "BriefDescription": "L1 prefetcher, load prefetch fills into the=
- L1 cache"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, load prefetch to L2 generat=
-ed",
-> +        "EventCode": "0xD608",
-> +        "EventName": "L1_PFETCH_L2_REQ",
-> +        "BriefDescription": "L1 prefetcher, load prefetch to L2 generate=
-d"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, distance was reset",
-> +        "EventCode": "0xD609",
-> +        "EventName": "L1_PFETCH_DIST_RST",
-> +        "BriefDescription": "L1 prefetcher, distance was reset"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, distance was increased",
-> +        "EventCode": "0xD60A",
-> +        "EventName": "L1_PFETCH_DIST_INC",
-> +        "BriefDescription": "L1 prefetcher, distance was increased"
-> +    },
-> +    {
-> +        "PublicDescription": "L1 prefetcher, table entry is trained",
-> +        "EventCode": "0xD60B",
-> +        "EventName": "L1_PFETCH_ENTRY_TRAINED",
-> +        "BriefDescription": "L1 prefetcher, table entry is trained"
-> +    },
-> +    {
-> +        "PublicDescription": "Store retirement pipe stall",
-> +        "EventCode": "0xD60C",
-> +        "EventName": "LSU_ST_RETIRE_STALL",
-> +        "BriefDescription": "Store retirement pipe stall"
-> +    },
-> +    {
-> +        "PublicDescription": "LSU detected a Watchpoint data match",
-> +        "EventCode": "0xD60D",
-> +        "EventName": "WATCHPOINT_MATCH",
-> +        "BriefDescription": "LSU detected a Watchpoint data match"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 pipeline replay",
-> +        "EventCode": "0xD700",
-> +        "EventName": "L2C_PIPE_REPLAY",
-> +        "BriefDescription": "L2 pipeline replay"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 refill from I-side miss",
-> +        "EventCode": "0xD701",
-> +        "EventName": "L2C_INST_REFILL",
-> +        "BriefDescription": "L2 refill from I-side miss"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 refill from D-side miss",
-> +        "EventCode": "0xD702",
-> +        "EventName": "L2C_DATA_REFILL",
-> +        "BriefDescription": "L2 refill from D-side miss"
-> +    },
-> +    {
-> +        "PublicDescription": "L2 prefetcher, load prefetch requests gene=
-rated",
-> +        "EventCode": "0xD703",
-> +        "EventName": "L2_PREFETCH_REQ",
-> +        "BriefDescription": "L2 prefetcher, load prefetch requests gener=
-ated"
-> +    },
-> +    {
-> +        "PublicDescription": "L2D OTB allocate",
-> +        "EventCode": "0xD800",
-> +        "EventName": "MMU_D_OTB_ALLOC",
-> +        "BriefDescription": "L2D OTB allocate"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S1L2 walk ca=
-che entry",
-> +        "EventCode": "0xD801",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L2_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S1L2 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S1L1 walk ca=
-che entry",
-> +        "EventCode": "0xD802",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L1_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S1L1 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S1L0 walk ca=
-che entry",
-> +        "EventCode": "0xD803",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S1L0_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S1L0 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S2L2 walk ca=
-che entry",
-> +        "EventCode": "0xD804",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L2_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S2L2 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S2L1 walk ca=
-che entry",
-> +        "EventCode": "0xD805",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L1_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S2L1 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "DTLB Translation cache hit on S2L0 walk ca=
-che entry",
-> +        "EventCode": "0xD806",
-> +        "EventName": "MMU_D_TRANS_CACHE_HIT_S2L0_WALK",
-> +        "BriefDescription": "DTLB Translation cache hit on S2L0 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side S1 Page walk cache lookup",
-> +        "EventCode": "0xD807",
-> +        "EventName": "MMU_D_S1_WALK_CACHE_LOOKUP",
-> +        "BriefDescription": "D-side S1 Page walk cache lookup"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side S1 Page walk cache refill",
-> +        "EventCode": "0xD808",
-> +        "EventName": "MMU_D_S1_WALK_CACHE_REFILL",
-> +        "BriefDescription": "D-side S1 Page walk cache refill"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side S2 Page walk cache lookup",
-> +        "EventCode": "0xD809",
-> +        "EventName": "MMU_D_S2_WALK_CACHE_LOOKUP",
-> +        "BriefDescription": "D-side S2 Page walk cache lookup"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side S2 Page walk cache refill",
-> +        "EventCode": "0xD80A",
-> +        "EventName": "MMU_D_S2_WALK_CACHE_REFILL",
-> +        "BriefDescription": "D-side S2 Page walk cache refill"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side Stage1 tablewalk fault",
-> +        "EventCode": "0xD80B",
-> +        "EventName": "MMU_D_S1_WALK_FAULT",
-> +        "BriefDescription": "D-side Stage1 tablewalk fault"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side Stage2 tablewalk fault",
-> +        "EventCode": "0xD80C",
-> +        "EventName": "MMU_D_S2_WALK_FAULT",
-> +        "BriefDescription": "D-side Stage2 tablewalk fault"
-> +    },
-> +    {
-> +        "PublicDescription": "D-side Tablewalk steps or descriptor fetch=
-es",
-> +        "EventCode": "0xD80D",
-> +        "EventName": "MMU_D_WALK_STEPS",
-> +        "BriefDescription": "D-side Tablewalk steps or descriptor fetche=
-s"
-> +    },
-> +    {
-> +        "PublicDescription": "L2I OTB allocate",
-> +        "EventCode": "0xD900",
-> +        "EventName": "MMU_I_OTB_ALLOC",
-> +        "BriefDescription": "L2I OTB allocate"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S1L2 walk ca=
-che entry",
-> +        "EventCode": "0xD901",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L2_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S1L2 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S1L1 walk ca=
-che entry",
-> +        "EventCode": "0xD902",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L1_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S1L1 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S1L0 walk ca=
-che entry",
-> +        "EventCode": "0xD903",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S1L0_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S1L0 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S2L2 walk ca=
-che entry",
-> +        "EventCode": "0xD904",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L2_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S2L2 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S2L1 walk ca=
-che entry",
-> +        "EventCode": "0xD905",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L1_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S2L1 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "ITLB Translation cache hit on S2L0 walk ca=
-che entry",
-> +        "EventCode": "0xD906",
-> +        "EventName": "MMU_I_TRANS_CACHE_HIT_S2L0_WALK",
-> +        "BriefDescription": "ITLB Translation cache hit on S2L0 walk cac=
-he entry"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side S1 Page walk cache lookup",
-> +        "EventCode": "0xD907",
-> +        "EventName": "MMU_I_S1_WALK_CACHE_LOOKUP",
-> +        "BriefDescription": "I-side S1 Page walk cache lookup"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side S1 Page walk cache refill",
-> +        "EventCode": "0xD908",
-> +        "EventName": "MMU_I_S1_WALK_CACHE_REFILL",
-> +        "BriefDescription": "I-side S1 Page walk cache refill"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side S2 Page walk cache lookup",
-> +        "EventCode": "0xD909",
-> +        "EventName": "MMU_I_S2_WALK_CACHE_LOOKUP",
-> +        "BriefDescription": "I-side S2 Page walk cache lookup"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side S2 Page walk cache refill",
-> +        "EventCode": "0xD90A",
-> +        "EventName": "MMU_I_S2_WALK_CACHE_REFILL",
-> +        "BriefDescription": "I-side S2 Page walk cache refill"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side Stage1 tablewalk fault",
-> +        "EventCode": "0xD90B",
-> +        "EventName": "MMU_I_S1_WALK_FAULT",
-> +        "BriefDescription": "I-side Stage1 tablewalk fault"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side Stage2 tablewalk fault",
-> +        "EventCode": "0xD90C",
-> +        "EventName": "MMU_I_S2_WALK_FAULT",
-> +        "BriefDescription": "I-side Stage2 tablewalk fault"
-> +    },
-> +    {
-> +        "PublicDescription": "I-side Tablewalk steps or descriptor fetch=
-es",
-> +        "EventCode": "0xD90D",
-> +        "EventName": "MMU_I_WALK_STEPS",
-> +        "BriefDescription": "I-side Tablewalk steps or descriptor fetche=
-s"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.=
-json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.json
-> new file mode 100644
-> index 000000000000..ada052e19632
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/exception.json
-> @@ -0,0 +1,44 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "EXC_UNDEF"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_SVC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_PABORT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_DABORT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_IRQ"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_FIQ"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_HVC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TRAP_PABORT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TRAP_DABORT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TRAP_OTHER"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TRAP_IRQ"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TRAP_FIQ"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_TAKEN"
-> +    },
-> +    {
-> +        "ArchStdEvent": "EXC_RETURN"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instructio=
-n.json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instruction.json
-> new file mode 100644
-> index 000000000000..18d1f2f76a23
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/instruction.json
-> @@ -0,0 +1,89 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "SW_INCR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ST_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "OP_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "LD_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "LDST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "DP_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ASE_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "VFP_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "PC_WRITE_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_IMMED_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_RETURN_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "CRYPTO_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ISB_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "DSB_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "DMB_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "RC_LD_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "RC_ST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "INST_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "CID_WRITE_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "PC_WRITE_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "INST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "TTBR_WRITE_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "BR_MIS_PRED_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "OP_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "OP_SPEC"
-> +    },
-> +    {
-> +        "PublicDescription": "Operation speculatively executed, NOP",
-> +        "EventCode": "0x100",
-> +        "EventName": "NOP_SPEC",
-> +        "BriefDescription": "Speculatively executed, NOP"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.=
-json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.json
-> new file mode 100644
-> index 000000000000..7ecffb989ae0
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/intrinsic.json
-> @@ -0,0 +1,14 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "LDREX_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STREX_PASS_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STREX_FAIL_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STREX_SPEC"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.jso=
-n b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.json
-> new file mode 100644
-> index 000000000000..0711782bfa6b
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/memory.json
-> @@ -0,0 +1,44 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "LD_RETIRED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS_WR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "UNALIGNED_LD_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "UNALIGNED_ST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "UNALIGNED_LDST_SPEC"
-> +    },
-> +    {
-> +        "ArchStdEvent": "LD_ALIGN_LAT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "ST_ALIGN_LAT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEMORY_ERROR"
-> +    },
-> +    {
-> +        "ArchStdEvent": "LDST_ALIGN_LAT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS_CHECKED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS_CHECKED_RD"
-> +    },
-> +    {
-> +        "ArchStdEvent": "MEM_ACCESS_CHECKED_WR"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.j=
-son b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.json
-> new file mode 100644
-> index 000000000000..f9fae15f7555
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/pipeline.json
-> @@ -0,0 +1,23 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "STALL_FRONTEND"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL_BACKEND"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL_SLOT_BACKEND"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL_SLOT_FRONTEND"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL_SLOT"
-> +    },
-> +    {
-> +        "ArchStdEvent": "STALL_BACKEND_MEM"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json b=
-/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json
-> new file mode 100644
-> index 000000000000..20f2165c85fe
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/spe.json
-> @@ -0,0 +1,14 @@
-> +[
-> +    {
-> +        "ArchStdEvent": "SAMPLE_POP"
-> +    },
-> +    {
-> +        "ArchStdEvent": "SAMPLE_FEED"
-> +    },
-> +    {
-> +        "ArchStdEvent": "SAMPLE_FILTRATE"
-> +    },
-> +    {
-> +        "ArchStdEvent": "SAMPLE_COLLISION"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/arm64/mapfile.csv b/tools/perf/pm=
-u-events/arch/arm64/mapfile.csv
-> index f134e833c069..537a4a27917f 100644
-> --- a/tools/perf/pmu-events/arch/arm64/mapfile.csv
-> +++ b/tools/perf/pmu-events/arch/arm64/mapfile.csv
-> @@ -41,3 +41,4 @@
->  0x00000000460f0010,v1,fujitsu/a64fx,core
->  0x00000000480fd010,v1,hisilicon/hip08,core
->  0x00000000500f0000,v1,ampere/emag,core
-> +0x00000000c00fac30,v1,ampere/ampereone,core
+> +++ b/kernel/watchdog_buddy_cpu.c
+> @@ -0,0 +1,141 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/cpumask.h>
+> +#include <linux/kernel.h>
+> +#include <linux/nmi.h>
+> +#include <linux/percpu-defs.h>
+> +
+> +static DEFINE_PER_CPU(bool, watchdog_touch);
+> +static DEFINE_PER_CPU(bool, hard_watchdog_warn);
+> +static cpumask_t __read_mostly watchdog_cpus;
+> +
+> +static unsigned long hardlockup_allcpu_dumped;
+> +
+> +int __init watchdog_nmi_probe(void)
+> +{
+> +       return 0;
+> +}
+> +
+> +notrace void buddy_cpu_touch_watchdog(void)
+> +{
+> +       /*
+> +        * Using __raw here because some code paths have
+> +        * preemption enabled.  If preemption is enabled
+> +        * then interrupts should be enabled too, in which
+> +        * case we shouldn't have to worry about the watchdog
+> +        * going off.
+> +        */
+> +       raw_cpu_write(watchdog_touch, true);
+> +}
+> +EXPORT_SYMBOL_GPL(buddy_cpu_touch_watchdog);
+> +
+> +static unsigned int watchdog_next_cpu(unsigned int cpu)
+> +{
+> +       cpumask_t cpus =3D watchdog_cpus;
+> +       unsigned int next_cpu;
+> +
+> +       next_cpu =3D cpumask_next(cpu, &cpus);
+> +       if (next_cpu >=3D nr_cpu_ids)
+> +               next_cpu =3D cpumask_first(&cpus);
+> +
+> +       if (next_cpu =3D=3D cpu)
+> +               return nr_cpu_ids;
+> +
+> +       return next_cpu;
+> +}
+> +
+> +int watchdog_nmi_enable(unsigned int cpu)
+> +{
+> +       /*
+> +        * The new cpu will be marked online before the first hrtimer int=
+errupt
+> +        * runs on it.  If another cpu tests for a hardlockup on the new =
+cpu
+> +        * before it has run its first hrtimer, it will get a false posit=
+ive.
+> +        * Touch the watchdog on the new cpu to delay the first check for=
+ at
+> +        * least 3 sampling periods to guarantee one hrtimer has run on t=
+he new
+> +        * cpu.
+> +        */
+> +       per_cpu(watchdog_touch, cpu) =3D true;
+> +       /* Match with smp_rmb() in watchdog_check_hardlockup() */
+> +       smp_wmb();
+> +       cpumask_set_cpu(cpu, &watchdog_cpus);
+> +       return 0;
+> +}
+> +
+> +void watchdog_nmi_disable(unsigned int cpu)
+> +{
+> +       unsigned int next_cpu =3D watchdog_next_cpu(cpu);
+> +
+> +       /*
+> +        * Offlining this cpu will cause the cpu before this one to start
+> +        * checking the one after this one.  If this cpu just finished ch=
+ecking
+> +        * the next cpu and updating hrtimer_interrupts_saved, and then t=
+he
+> +        * previous cpu checks it within one sample period, it will trigg=
+er a
+> +        * false positive.  Touch the watchdog on the next cpu to prevent=
+ it.
+> +        */
+> +       if (next_cpu < nr_cpu_ids)
+> +               per_cpu(watchdog_touch, next_cpu) =3D true;
+> +       /* Match with smp_rmb() in watchdog_check_hardlockup() */
+> +       smp_wmb();
+> +       cpumask_clear_cpu(cpu, &watchdog_cpus);
+> +}
+> +
+> +static int is_hardlockup_buddy_cpu(unsigned int cpu)
+> +{
+> +       unsigned long hrint =3D per_cpu(hrtimer_interrupts, cpu);
+> +
+> +       if (per_cpu(hrtimer_interrupts_saved, cpu) =3D=3D hrint)
+> +               return 1;
+> +
+> +       per_cpu(hrtimer_interrupts_saved, cpu) =3D hrint;
+> +       return 0;
+> +}
+> +
+> +void watchdog_check_hardlockup(void)
+> +{
+> +       unsigned int next_cpu;
+> +
+> +       /*
+> +        * Test for hardlockups every 3 samples.  The sample period is
+> +        *  watchdog_thresh * 2 / 5, so 3 samples gets us back to slightl=
+y over
+> +        *  watchdog_thresh (over by 20%).
+> +        */
+> +       if (__this_cpu_read(hrtimer_interrupts) % 3 !=3D 0)
+> +               return;
+> +
+> +       /* check for a hardlockup on the next cpu */
+> +       next_cpu =3D watchdog_next_cpu(smp_processor_id());
+> +       if (next_cpu >=3D nr_cpu_ids)
+> +               return;
+> +
+> +       /* Match with smp_wmb() in watchdog_nmi_enable() / watchdog_nmi_d=
+isable() */
+> +       smp_rmb();
+> +
+> +       if (per_cpu(watchdog_touch, next_cpu) =3D=3D true) {
+> +               per_cpu(watchdog_touch, next_cpu) =3D false;
+> +               return;
+> +       }
+> +
+> +       if (is_hardlockup_buddy_cpu(next_cpu)) {
+> +               /* only warn once */
+> +               if (per_cpu(hard_watchdog_warn, next_cpu) =3D=3D true)
+> +                       return;
+> +
+> +               /*
+> +                * Perform all-CPU dump only once to avoid multiple hardl=
+ockups
+> +                * generating interleaving traces
+> +                */
+> +               if (sysctl_hardlockup_all_cpu_backtrace &&
+> +                               !test_and_set_bit(0, &hardlockup_allcpu_d=
+umped))
+> +                       trigger_allbutself_cpu_backtrace();
+> +
+> +               if (hardlockup_panic)
+> +                       panic("Watchdog detected hard LOCKUP on cpu %u", =
+next_cpu);
+> +               else
+> +                       WARN(1, "Watchdog detected hard LOCKUP on cpu %u"=
+, next_cpu);
+> +
+> +               per_cpu(hard_watchdog_warn, next_cpu) =3D true;
+> +       } else {
+> +               per_cpu(hard_watchdog_warn, next_cpu) =3D false;
+> +       }
+> +}
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 39d1d93164bd..511eb14660b1 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1036,6 +1036,9 @@ config HARDLOCKUP_DETECTOR_PERF
+>  config HARDLOCKUP_CHECK_TIMESTAMP
+>         bool
+>
+> +config HARDLOCKUP_DETECTOR_CORE
+> +       bool
+> +
+>  #
+>  # arch/ can define HAVE_HARDLOCKUP_DETECTOR_ARCH to provide their own ha=
+rd
+>  # lockup detector rather than the perf based detector.
+> @@ -1045,6 +1048,7 @@ config HARDLOCKUP_DETECTOR
+>         depends on DEBUG_KERNEL && !S390
+>         depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETEC=
+TOR_ARCH
+>         select LOCKUP_DETECTOR
+> +       select HARDLOCKUP_DETECTOR_CORE
+>         select HARDLOCKUP_DETECTOR_PERF if HAVE_HARDLOCKUP_DETECTOR_PERF
+>         help
+>           Say Y here to enable the kernel to act as a watchdog to detect
+> @@ -1055,9 +1059,26 @@ config HARDLOCKUP_DETECTOR
+>           chance to run.  The current stack trace is displayed upon detec=
+tion
+>           and the system will stay locked up.
+>
+> +config HARDLOCKUP_DETECTOR_BUDDY_CPU
+> +       bool "Buddy CPU hardlockup detector"
+> +       depends on DEBUG_KERNEL && SMP
+> +       depends on !HARDLOCKUP_DETECTOR && !HAVE_NMI_WATCHDOG
+> +       depends on !S390
+> +       select HARDLOCKUP_DETECTOR_CORE
+> +       select SOFTLOCKUP_DETECTOR
+> +       help
+> +         Say Y here to enable a hardlockup detector where CPUs check
+> +         each other for lockup. Each cpu uses its softlockup hrtimer
+> +         to check that the next cpu is processing hrtimer interrupts by
+> +         verifying that a counter is increasing.
+> +
+> +         This hardlockup detector is useful on systems that don't have
+> +         an arch-specific hardlockup detector or if resources needed
+> +         for the hardlockup detector are better used for other things.
+> +
+>  config BOOTPARAM_HARDLOCKUP_PANIC
+>         bool "Panic (Reboot) On Hard Lockups"
+> -       depends on HARDLOCKUP_DETECTOR
+> +       depends on HARDLOCKUP_DETECTOR_CORE
+>         help
+>           Say Y here to enable the kernel to panic on "hard lockups",
+>           which are bugs that cause the kernel to loop in kernel
 > --
-> 2.39.2
+> 2.40.1.495.gc816e09b53d-goog
 >
