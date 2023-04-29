@@ -2,63 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B5A6F2351
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D896F2353
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjD2GSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 02:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S231226AbjD2GTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 02:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjD2GSq (ORCPT
+        with ESMTP id S230180AbjD2GTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 02:18:46 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F6F2117
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:18:44 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54fc94476e2so9048267b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:18:44 -0700 (PDT)
+        Sat, 29 Apr 2023 02:19:48 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F98E2123
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:19:45 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-24de3a8bfcfso7816a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1682749123; x=1685341123;
+        d=atishpatra.org; s=google; t=1682749185; x=1685341185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IIfYcthJ+TPfJNRTmAdJqt9c2uvFhKicl3bxPihBf6I=;
-        b=U9jCNyGFy05B877UsZG+7hPr4wnRYw9yuxowqjyjfIXXMmg9nvuDcf03eaCYc0Yk87
-         hWKUlBxIdgRGeJlyht7hX3szJopjtFZXHZpT1IGnfdKM5Ngmhk+KkIqghTAJenUA/E5o
-         o3vao44b9fvEvvrgCoa2ob5U8MM97hc0/Vhck=
+        bh=yTMjDk3SOgiCPjxuLxhArxtC95/xlU4WSt6SJxU0e7Y=;
+        b=XyLmSLRRw5vhwFunIep9bCU9Ptv8zJooq6+MLDBGrovDSvagRv6kBI6twD+YR78KiG
+         BeEetk1c26wanqo2urmTL/brQ9DSTPDvQi403y65gx4fJSSvfG/Xk14q2glr2oRKHS/T
+         h2ievV6hgV6lbgRlb6Vj2FQy/RghnjYGNW+f4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682749123; x=1685341123;
+        d=1e100.net; s=20221208; t=1682749185; x=1685341185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IIfYcthJ+TPfJNRTmAdJqt9c2uvFhKicl3bxPihBf6I=;
-        b=cNZyv6ikQrjVhtfAzBeKXv7DSu0xGvaJDNkH+bEp8AMFf7T0BeMNRH2x3IyS3Vntu+
-         /jyoK2hfRfJXwQgv5MV5eMEt6UhA1aLMmLJ2a1ROdCN9Z0PF7KPDyqKhPlRMXAP0PmEL
-         KrbAtRODty9++QfkvlOCaJGP1Bo6U+Ik+rEbsp0fGsFw99cw49Ado6y4ppc03zhFxnCW
-         hNA6I4uhCct0AJaXr+FTNMPudDhqUZMd1S8dpEepF8TrVueXcWrtZT4ANBBdPXLLaUwr
-         h6P9Xd0mnr4osRH+kq9zriT8DggSeUewW1oOlJaNPxkzleIlz//jGXmgq11JdZq81VXn
-         SoUg==
-X-Gm-Message-State: AC+VfDwZmFMoJL/evXaZGcUzNNccp9AC++nysxYiHtUeh06zchPSIJ5o
-        OpQtSxCm+sOdtVFTzhMQcrXId3U1fOBENNqTDJPtPQ==
-X-Google-Smtp-Source: ACHHUZ5F+CbvRlgHnAOkwEAdJALwlrkCRZc0Z6GpZLDRmi4jzMJNVIo/lZCAdYw5NzYx3E6JKjm2rAN/BHqcPmmCzos=
-X-Received: by 2002:a81:4854:0:b0:54f:9e38:81c7 with SMTP id
- v81-20020a814854000000b0054f9e3881c7mr6531424ywa.50.1682749123236; Fri, 28
- Apr 2023 23:18:43 -0700 (PDT)
+        bh=yTMjDk3SOgiCPjxuLxhArxtC95/xlU4WSt6SJxU0e7Y=;
+        b=EkifPdjW73gTCBs4oDlu04LL7eY10l8Cu/ILH2JgU1PA6L1+ps/Vz4y09PPKxF8jx9
+         8InQc7H2wLmVU4wdi1GHCOD3fuK7I8e0g545hhJRFYaMFvIFZHKp2tT0mgqOjgl/31e4
+         fc8MbfC/AGDrkyJkPOzrt9e0NT0ICu/ii3U7RIzAxPPumrwZKgkOXUQ27ChB8Q0S1IWs
+         7cwUTi8cu7mOdE/POEBLgp84hgXVtWjhJmSd+mjX28w+5aEAaMCwrdnGuiLBfS9Y3xmW
+         +gniKVJKxQPRBVkVekii9PCDtqvwsdWAzPZAGKKbywRmpcyphZ7780FNl1ecYpAyDPSX
+         j7Pw==
+X-Gm-Message-State: AC+VfDxejlTbE47oc4Fr9FQXd0aa/2uYoTMR1SUcUGLuSKK1tpfiIrN7
+        Ib271RT7W094CrgKLXXBkPFqn/b2ti1zyr6PTOz6
+X-Google-Smtp-Source: ACHHUZ4LhwwR0e1B330AbEkd5AimnCzdBqVUhs/POzba4tZ0rYglv0TK7U3GChiM2m5G/Kut356agp6Sgo1hYtHMuJk=
+X-Received: by 2002:a17:90b:1b03:b0:246:681c:71fd with SMTP id
+ nu3-20020a17090b1b0300b00246681c71fdmr7622447pjb.6.1682749184993; Fri, 28 Apr
+ 2023 23:19:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414005309.GA2198310@google.com> <CAKwvOd=yQS+0oDC46Hc5D_V0JET8=xbQmAJrpBdg7c4i2EyqHg@mail.gmail.com>
- <CAKwvOdk+D6HuWwAH3EJtwDyPqoiP+2z62ek2hnmbhDV2CJwnbw@mail.gmail.com>
- <CALGbS4V+x1JkiPL2o59LgtbSQhzg_RKM5TYE7i7qZx0qz23y-g@mail.gmail.com> <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-In-Reply-To: <CAFP8O3KQRbmgyvuyuxNOa6TZ7MawN7YoGHvpFQ=oibEo3aUfDQ@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 29 Apr 2023 02:18:32 -0400
-Message-ID: <CAEXW_YRkkgx30Lo7NN=zyBCEAWaH8VSo+r=0ySA-D1iehUnoyA@mail.gmail.com>
-Subject: Re: clangd cannot handle tree_nocb.h
-To:     Fangrui Song <maskray@google.com>
-Cc:     Florent Revest <revest@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        rcu@vger.kernel.org, nathan@kernel.org, trix@redhat.com,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, "revest@chromium.org" <revest@chromium.org>
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <20230413161725.195417-5-alexghiti@rivosinc.com> <kwvrls2m6swp443brn27jwcsdhovtc4kxrkqustxpqgf7zqltw@xlhsrndkf4om>
+ <CAHVXubh_y9Uw2xsgsQrVZEcb9bCLBLUCo74GOm-czsSawHxk4g@mail.gmail.com> <3bwxedsrovutzhlmlnozeuvz4zqnr32kuef2mdzmnbniajh6vb@we6jzlwkfuof>
+In-Reply-To: <3bwxedsrovutzhlmlnozeuvz4zqnr32kuef2mdzmnbniajh6vb@we6jzlwkfuof>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Sat, 29 Apr 2023 11:49:33 +0530
+Message-ID: <CAOnJCU+xL1qP0zj9rD0d9nix-tSd-yfQnToDXCdHveTKQN_rUA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] riscv: Enable perf counters user access only through perf
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        David Abdurachmanov <davidlt@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Andreas Schwab <schwab@suse.de>, mafm@debian.org,
+        aurel32@debian.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,124 +88,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fangrui/Florent/David/All:
-
-Sorry for the late reply, I got distracted.
-
-On Wed, Apr 19, 2023 at 4:02=E2=80=AFPM Fangrui Song <maskray@google.com> w=
-rote:
+On Wed, Apr 26, 2023 at 6:55=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
 >
-> On Wed, Apr 19, 2023 at 6:00=E2=80=AFAM Florent Revest <revest@google.com=
-> wrote:
-> >
-> > On Tue, Apr 18, 2023 at 6:28=E2=80=AFPM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
+> On Wed, Apr 26, 2023 at 03:17:01PM +0200, Alexandre Ghiti wrote:
+> > On Wed, Apr 26, 2023 at 2:57=E2=80=AFPM Andrew Jones <ajones@ventanamic=
+ro.com> wrote:
 > > >
-> > > + Florent
-> >
-> > Hi there!
-> >
-> > > Joel, Florent is doing some cool stuff with clangd and kernels (check
-> > > out the demo at go/linux-kernel-vscode).  I'm pushing Florent to
-> >
-> > Apologies for folks outside Google, this is an internal link to a
-> > kernel dev setup I originally created for myself, then for my team and
-> > apparently more and more people are starting to use it internally. :)
-> > If there's enough appetite for it externally too, I'll try to
-> > open-source it someday. Anyway, in the context of this conversation,
-> > it's just something that uses clangd. :)
-> >
-> > > publish some of the cool stuff he's been working on externally becaus=
-e
-> > > it is awesome. ;)
+> > > On Thu, Apr 13, 2023 at 06:17:25PM +0200, Alexandre Ghiti wrote:
+> > > > We used to unconditionnally expose the cycle and instret csrs to
+> > > > userspace, which gives rise to security concerns.
+> > > >
+> > > > So only allow access to hw counters from userspace through the perf
+> > > > framework which will handle context switchs, per-task events...etc.=
+ But
+> > > > as we cannot break userspace, we give the user the choice to go bac=
+k to
+> > > > the previous behaviour by setting the sysctl perf_user_access.
+> > > >
+> > > > We also introduce a means to directly map the hardware counters to
+> > > > userspace, thus avoiding the need for syscalls whenever an applicat=
+ion
+> > > > wants to access counters values.
+> > > >
+> > > > Note that arch_perf_update_userpage is a copy of arm64 code.
+> > > >
+> > > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > > ---
+> > > >  Documentation/admin-guide/sysctl/kernel.rst |  23 +++-
+> > > >  arch/riscv/include/asm/perf_event.h         |   3 +
+> > > >  arch/riscv/kernel/Makefile                  |   2 +-
+> > > >  arch/riscv/kernel/perf_event.c              |  65 +++++++++++
+> > > >  drivers/perf/riscv_pmu.c                    |  42 ++++++++
+> > > >  drivers/perf/riscv_pmu_legacy.c             |  17 +++
+> > > >  drivers/perf/riscv_pmu_sbi.c                | 113 ++++++++++++++++=
+++--
+> > > >  include/linux/perf/riscv_pmu.h              |   3 +
+> > > >  tools/lib/perf/mmap.c                       |  65 +++++++++++
+> > > >  9 files changed, 322 insertions(+), 11 deletions(-)
+> > > >  create mode 100644 arch/riscv/kernel/perf_event.c
+> > > >
+> > > > diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Document=
+ation/admin-guide/sysctl/kernel.rst
+> > > > index 4b7bfea28cd7..02b2a40a3647 100644
+> > > > --- a/Documentation/admin-guide/sysctl/kernel.rst
+> > > > +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> > > > @@ -941,16 +941,31 @@ enabled, otherwise writing to this file will =
+return ``-EBUSY``.
+> > > >  The default value is 8.
+> > > >
+> > > >
+> > > > -perf_user_access (arm64 only)
+> > > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > +perf_user_access (arm64 and riscv only)
+> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > +
+> > > > +Controls user space access for reading perf event counters.
+> > > >
+> > > > -Controls user space access for reading perf event counters. When s=
+et to 1,
+> > > > -user space can read performance monitor counter registers directly=
+.
+> > > > +arm64
+> > > > +=3D=3D=3D=3D=3D
+> > > >
+> > > >  The default value is 0 (access disabled).
+> > > > +When set to 1, user space can read performance monitor counter reg=
+isters
+> > > > +directly.
+> > > >
+> > > >  See Documentation/arm64/perf.rst for more information.
+> > > >
+> > > > +riscv
+> > > > +=3D=3D=3D=3D=3D
+> > > > +
+> > > > +When set to 0, user access is disabled.
+> > > > +
+> > > > +When set to 1, user space can read performance monitor counter reg=
+isters
+> > > > +directly only through perf, any direct access without perf interve=
+ntion will
+> > > > +trigger an illegal instruction.
+> > > > +
+> > > > +The default value is 2, it enables the legacy mode, that is user s=
+pace has
+> > > > +direct access to cycle, time and insret CSRs only.
 > > >
-> > > Florent, have you seen any such issues such as what Joel reported bel=
-ow?
+> > > I think this default value should be a Kconfig symbol, allowing kerne=
+ls to
+> > > be built with a secure default.
 > >
-> > Yes, I've seen this problem a bunch of times. Afaiu, Clangd operates
-> > under the assumption that every source file is a valid compilation
-> > unit. My understanding is that it's generally a good practice to keep
-> > things that way and I wouldn't be surprised if the userspace Chrome
-> > code-base Joel saw enforces this (iirc, it's a rule for
-> > Google-internal C++ too, all headers must be interpretable
-> > independently).
-> >
-> > However, from the perspective of the C spec, anything can be included
-> > anywhere and a C file can only make sense if it's included
-> > after/before certain other things are defined/included. Spontaneously,
-> > I would call these ".inc" rather than ".h" or ".c" because I would
-> > expect a source file to be always valid and this suffix makes it
-> > clearer they depend on their context, but as a matter of fact source
-> > files that don't compile when interpreted individually are quite
-> > common in the kernel tree. Other examples that have been reported to
-> > me include a lot of kernel/sched/*, since many of these files
-> > (including .c files) are included from kernel/sched/build_policy.c in
-> > a specific order to form one big compilation unit.
-> >
-> > Unfortunately, I don't know of any solution. :( This feels like a
-> > limit of C or compile_commands.json to me. "compile commands" can not
-> > be enough to interpret any file, clangd would need a way to express
-> > "interpret this file as if it were included in that spot of that
-> > compilation unit" and maybe even need a bunch of heuristics to choose
-> > one such include spot.
-> >
-> > I don't know if clangd has any plan to address this and so far I've
-> > just lived with these error squiggles.
-> >
+> > Actually I was more in favor of having the default to 1 (ie the secure
+> > option) and let the distros deal with the legacy mode (via a sysctl
+> > parameter on the command line) as long as user-space has not been
+> > fixed: does that make sense?
 >
-> Some information about Clang based language servers
+> Yes, I'd prefer that too. I assumed the default was 2 in this patch
+> because we couldn't set it to 1 for some reason.
 >
-> It's good practice to ensure that a header file is self-contained. If
-> not, for example, if a.c includes a.h, which is not self-contained,
-> a.h is generally compiled on its own (as if using clang [options] a.h)
-> to confine diagnostics/completion results to a.h and not to other
-> headers included by a.c.
->
-> However, this design choice may cause language servers to emit
-> diagnostics that you don't see when building the project.
->
-> For my tool ccls, the index file for an included file (e.g. a.h) is
-> computed when compiling the main source file (a.c). Therefore, if the
-> project builds successfully, the index is always accurate.
->
-> Language servers usually have the limitation that only one
-> configuration of a main source file is recorded, e.g., you only get
-> index data for either clang -DA=3D1 a.c or clang -DA=3D2 a.c, not both.
-> This limitation exists due to technical challenges and practicality.
-> If a main source file has 10 configurations, when you edit the file,
-> do you compile it 10 times to get all indexes?
 
-Indeed regarding the 10 configs points you brought up. The .h not
-being 1:1 with compilation units makes it a similar problem.
+I would prefer that too. However, it was set to 2 because it would break
+the user space application depending on the legacy behavior as soon as the
+patches are upstream. That is the reason
+palmer suggested keeping the default value to 2 in order to avoid that.
 
-For example, if I edit a.h and a.h is included in both b.c and c.c.
-Then, in order to know if edits I am making to a.h really will not
-lead to build errors, clangd has to compile both b.c and c.c
-separately. Why?
++distro folks (cc'd)
+If the distro maintainer can confirm that this would be a non-issue, I am o=
+kay
+with setting the default to 1.
 
-Because a.h's inclusion in b.c may build successfully, but in c.c may
-not! This generalizes to any number of source files.
 
-However, I was thinking of a scheme such as the following:
+> Thanks,
+> drew
 
-Have a file class Clangd.yaml in the source directory of a .h. In this
-file, clearly state how to build the .h. For the above example, for
-changes to a.h -- the YAML will say include a.h and then b.c , and
-then build the combined thing.  Then a script like the one building
-compile_commands.json can use the YAML to generate something useful
-for the .h  That may not work for every usecase such as the one David
-pointed out, but at least it will be somewhat useful for most use
-cases -- versus what we currently do for the issue (nothing).
 
-But even if you edit the .h, the compiler errors typically end up
-showing up in the .c files. So even clangd says, there is a build
-error in the combined result -- can it really pinpoint where in the .h
-is the issue? My observation is clangd will point errors within the
-thing that is being compiled (i.e. the .c file) and not the include
-file.
 
-Other Thoughts?  On the process side of things, is there a place I can
-file a bug report where some of this may be interesting to a team
-working on this?
-
- - Joel
+--=20
+Regards,
+Atish
