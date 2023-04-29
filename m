@@ -2,125 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373086F252F
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 17:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAAC6F2534
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 17:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjD2PVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 11:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S231229AbjD2PdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 11:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjD2PVe (ORCPT
+        with ESMTP id S229696AbjD2PdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 11:21:34 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9261FD4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 08:21:33 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64115eef620so18697510b3a.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 08:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682781693; x=1685373693;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hmsvoBssuGlSdWTHgKQYGOqn5idl8k0x6DdrMQvHWIk=;
-        b=FUe41iHQuPlOIrKHcccQMMOUtRp/B2Wl+Od97hCj+L2XvAQ8qSx2yIIQW2MEFnjoOR
-         ZuLErw+8AabGYu7rFWMySA14illmvKu4+fNJSJk/zPnJO19qPFTpXGXJer+x3XPQ3uYN
-         RLStoS5CSJqPaRAPx1g7iszvxzhvteUYDGrfOF1I3oQa5Y+Fgm/D3AmhM+MzQTa0Y4/O
-         YGUMDJeuoIszlROXkpzxI6GjAggd0TIu/LOttoK/Bgj2Rzy4YjhSgKNoCK+JhkFkmC+R
-         n3QIvsIgBW3IpNMGJ6BxFZLaKBBQ9d2jEg9ZrZ6UMSwuxgKVbQknknDL+x+9EttXRRZv
-         Xt2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682781693; x=1685373693;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hmsvoBssuGlSdWTHgKQYGOqn5idl8k0x6DdrMQvHWIk=;
-        b=X9Z5Ao7yT3fMmpSAuOCfGh5MBUgX0vH8cd6FPW6gYo/0rxXpFh7HFD/DedP+ziKiD9
-         /4Fc5iDIVkD3SJ8iz1NCRDHotDXJAj6zAYPVgKGRJ7n5OA9z8LMoWemG/NkcNCCIGUYi
-         DzpLi23L73Oghry5OcMJpBYHQejf6+o3hbtzIwN/6Cn72vCGed+53b4T+hOK9iA6N9uH
-         hCMreD6c5mj9eGcBE8GXsoHQgocRIuYmok41ElBOBR9w1L35HevayMDGav8uV1rraZN/
-         cIrRMTAXt5200QW8klD9OIXxjWOjCLkYCqnVa46BPW9h0Q9xwr4hTP+6NZEebxo21o0+
-         NWrA==
-X-Gm-Message-State: AC+VfDyoZ6UPzO5J1z1RZf6K3lyTQonT7Tg+G7pv1xW0vdatD2NS9Jq4
-        Me56pgY1ZFAzbSXIRI9ob3I=
-X-Google-Smtp-Source: ACHHUZ7AS5UuL6UnudBL3M9IGlyfEFzOd5tmp1u0Ch5/7eRuMkcmkbIQdVyTQtj8AdnBQ27veg8alg==
-X-Received: by 2002:a17:903:230f:b0:1a9:80a0:47ef with SMTP id d15-20020a170903230f00b001a980a047efmr15984118plh.20.1682781693075;
-        Sat, 29 Apr 2023 08:21:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3-20020a170902c10300b001a194df5a58sm15080945pli.167.2023.04.29.08.21.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 08:21:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 29 Apr 2023 08:21:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+b7c3ba8cdc2f6cf83c21@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] tty: tty_io: remove hung_up_tty_fops
-Message-ID: <58974d54-9e02-4800-814f-9206c3cfcc95@roeck-us.net>
-References: <e1fe6a44-3021-62ad-690a-69146e39e1ac@I-love.SAKURA.ne.jp>
- <20230424004431.GG3390869@ZenIV>
- <8e21256a-736e-4c2d-1ff4-723775bcac46@I-love.SAKURA.ne.jp>
- <2fca7932-5030-32c3-dd61-48dd78e58e11@I-love.SAKURA.ne.jp>
- <20230425160344.GS3390869@ZenIV>
- <1b405689-ea0a-6696-6709-d372ce72d68c@I-love.SAKURA.ne.jp>
- <5cebade5-0aa9-506c-c817-7bcf098eba89@I-love.SAKURA.ne.jp>
- <20230428162718.GA1099174@dev-arch.thelio-3990X>
- <6dca757e-74ac-773d-2a50-4e48b2f56880@I-love.SAKURA.ne.jp>
- <2023042859-kosher-specimen-9a0f@gregkh>
+        Sat, 29 Apr 2023 11:33:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E336B10E4
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 08:32:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EtkcXa4cV02jvPDpEG6V0iUwR+JYuKgWq0nZoc0d0QI=; b=bhYQ2ZaefgZU1JcPDKzi7Ji8Ph
+        JzYGM5T+YLzhKiZzaj9aiRLLq0RkD9onwZerei2saZIZn9s6PZopDgGYtPUR95fhjlnoE+OdvU0oY
+        5lHqQS5Ci3uSVFI7V9XxZTd84yR4mIJ6wZ2bGwCv9ZuwkZO2lH1BWfLhaMYBsGKJpLedC5/mIDk3R
+        cxqiRvUS/uhDXNOh+qR2FM/pXZA8YIUl75hBGiPhDC9gPqTg9kKgRCrrD3hFX5PGHJlvuz3QzEQZd
+        g9CL4VAbT9DDJICoQOUaGmsfQQia0TD5mDjXJ8dqZB4gN7QK0XXwiHkAufU1u2M7qdZOA1Sgz3gIu
+        UZqCcJyA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1psmYg-00E9d4-2R;
+        Sat, 29 Apr 2023 15:32:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDCB0300379;
+        Sat, 29 Apr 2023 17:32:19 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9A688241CCBC3; Sat, 29 Apr 2023 17:32:19 +0200 (CEST)
+Date:   Sat, 29 Apr 2023 17:32:19 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v4 00/12] sched: Avoid unnecessary migrations within SMT
+ domains
+Message-ID: <20230429153219.GC1495785@hirez.programming.kicks-ass.net>
+References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023042859-kosher-specimen-9a0f@gregkh>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 07:31:35PM +0200, Greg Kroah-Hartman wrote:
-> On Sat, Apr 29, 2023 at 01:41:02AM +0900, Tetsuo Handa wrote:
-> > On 2023/04/29 1:27, Nathan Chancellor wrote:
-> > > I see this change has shown up in -next as commit 4c87e9e5479b ("tty:
-> > > tty_io: remove hung_up_tty_fops"), where it causes the following warning
-> > > for configurations without CONFIG_COMPAT (I used ARCH=arm defconfig):
-> > > 
-> > >   drivers/tty/tty_io.c:446:13: warning: 'hung_up_tty_compat_ioctl' defined but not used [-Wunused-function]
-> > >     446 | static long hung_up_tty_compat_ioctl(struct file *file,
-> > >         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-> > > 
-> > > I am not sure if you just added that patch for additional test coverage
-> > > or for final acceptance but the following diff resolves this warning for
-> > > me, perhaps it can be folded in for a v2?
-> > 
-> > Thank you for reporting. Yes, moving the definition will solve the warning.
-> > 
-> > I'm testing this patch using my volatile tree before getting merged to a
-> > permanent tree.
+On Thu, Apr 06, 2023 at 01:31:36PM -0700, Ricardo Neri wrote:
+> Hi,
 > 
-> How are you adding new stuff to linux-next right now when the tree
-> should be "closed"?  And I haven't reviewed this yet, what tree has
-
-That happens all the time, and quite often the "late" additions are applied
-to mainline immediately afterwards and end up causing problems there.
-I can only hope that this won't happen with this one.
-
-> picked it up?
+> This is v4 of this series. Previous versions can be found here [1], [2],
+> and here [3]. To avoid duplication, I do not include the cover letter of
+> the original submission. You can read it in [1].
 > 
-> Please wait until after -rc1 is out for new stuff, you know this...
+> This patchset applies cleanly on today's master branch of the tip tree.
 > 
+> Changes since v3:
+> 
+> Nobody liked the proposed changes to the setting of prefer_sibling.
+> Instead, I tweaked the solution that Dietmar proposed. Now the busiest
+> group, not the local group, determines the setting of prefer_sibling.
+> 
+> Vincent suggested improvements to the logic to decide whether to follow
+> asym_packing priorities. Peter suggested to wrap that in a helper function.
+> I added sched_use_asym_prio().
+> 
+> Ionela found that removing SD_ASYM_PACKING from the SMT domain in x86
+> rendered sd_asym_packing NULL in SMT cores. Now highest_flag_domain()
+> does not assume that all child domains have the requested flag.
+> 
+> Tim found that asym_active_balance() needs to also check for the idle
+> states of the SMT siblings of lb_env::dst_cpu. I added such check.
+> 
+> I wrongly assumed that asym_packing could only be used when the busiest
+> group had exactly one busy CPU. This broke asym_packing balancing at the
+> DIE domain. I limited this check to balances between cores at the MC
+> level.
+> 
+> As per suggestion from Dietmar, I removed sched_asym_smt_can_pull_tasks()
+> and placed its logic in sched_asym(). Also, sched_asym() uses
+> sched_smt_active() to skip checks when not needed.
+> 
+> I also added a patch from Chen Yu to enable asym_packing balancing in
+> Meteor Lake, which has CPUs of different maximum frequency in more than
+> one die.
 
-This patch is supposed to fix a data race, so maybe it wasn't considered
-"new". Just guessing, of course.
+Is the actual topology of Meteor Lake already public? This patch made me
+wonder if we need SCHED_CLUSTER topology in the hybrid_topology thing,
+but I can't remember (one of the raisins why the endless calls are such
+a frigging waste of time) and I can't seem to find the answer using
+Google either.
 
-Guenter
+> Hopefully, these patches are in sufficiently good shape to be merged?
+
+Changelogs are very sparse towards the end and I had to reverse engineer
+some of it which is a shame. But yeah, on a first reading the code looks
+mostly ok. Specifically 8-10 had me WTF a bit and only at 11 did it
+start to make a little sense. Mostly they utterly fail to answer the
+very fundament "why did you do this" question.
+
+Also, you seem to have forgotten to Cc our friends from IBM such that
+they might verify you didn't break their Power7 stuff -- or do you have
+a Power7 yourself to verify and forgot to mention that?
+
+> Chen Yu (1):
+>   x86/sched: Add the SD_ASYM_PACKING flag to the die domain of hybrid
+>     processors
+> 
+> Ricardo Neri (11):
+>   sched/fair: Move is_core_idle() out of CONFIG_NUMA
+>   sched/fair: Only do asym_packing load balancing from fully idle SMT
+>     cores
+>   sched/fair: Simplify asym_packing logic for SMT cores
+>   sched/fair: Let low-priority cores help high-priority busy SMT cores
+>   sched/fair: Keep a fully_busy SMT sched group as busiest
+>   sched/fair: Use the busiest group to set prefer_sibling
+>   sched/fair: Do not even the number of busy CPUs via asym_packing
+>   sched/topology: Check SDF_SHARED_CHILD in highest_flag_domain()
+>   sched/topology: Remove SHARED_CHILD from ASYM_PACKING
+>   x86/sched: Remove SD_ASYM_PACKING from the SMT domain flags
+>   x86/sched/itmt: Give all SMT siblings of a core the same priority
+> 
+>  arch/x86/kernel/itmt.c         |  23 +---
+>  arch/x86/kernel/smpboot.c      |   4 +-
+>  include/linux/sched/sd_flags.h |   5 +-
+>  kernel/sched/fair.c            | 216 +++++++++++++++++----------------
+>  kernel/sched/sched.h           |  22 +++-
+>  5 files changed, 138 insertions(+), 132 deletions(-)
+
+I'm going to start to queue this and hopefully push out post -rc1 if
+nobody objects.
