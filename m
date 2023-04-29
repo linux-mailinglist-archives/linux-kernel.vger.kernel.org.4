@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5554D6F2567
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 19:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FD76F256E
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 19:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjD2RPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 13:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S229556AbjD2RWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 13:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjD2RO7 (ORCPT
+        with ESMTP id S229521AbjD2RWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 13:14:59 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762681BFD;
-        Sat, 29 Apr 2023 10:14:58 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63f273b219eso801998b3a.1;
-        Sat, 29 Apr 2023 10:14:58 -0700 (PDT)
+        Sat, 29 Apr 2023 13:22:19 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522A9199B
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 10:22:17 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f0037de1d1so1330730e87.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 10:22:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682788498; x=1685380498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A1ACuy/osQdCjo/PWg2MRsM2W3CTWTDNQjv55mAPc0g=;
-        b=FJvRi4nCQ7TyhpaQDMnrGMSJEze+SpsPv3qSPMGiXK40WBKKbacnkQErP1I3JpGqnA
-         TYFmG4mUT34g8+ygzmSjS0BIED2isLzz+rNQOeldkxPAZhJBACWpysNAQiaSfrgOWyd5
-         qXcLBtmBcSGbm36C732DDV7Gi2pg6jyQIZONy99YKglr1UidvN2paQ+TbLKj00+MIS2u
-         EFv5yR1Y7v35uJc+MYAiXAD/DPncNYn9AHD4if1WjuDo+K1e9vHi8tNBNN0zgXuwlTCn
-         b6Nnd9yhjXvVyGbbrjzCu6EO3OGnS7pgqKMgYqTetJOlr3w57UWa93QsR2E/NhNDrH+/
-         al8Q==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682788935; x=1685380935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D5lxPzrjhYS+x8oV+yPDIMaFlDt2g4rI2Bd9NsNsMYo=;
+        b=D+EFxaAeeM/Mdzjqd66XMj4wliYrzQAG+DP4ocl4uRm12utnu0JmZr/0Gyj4Obx9MY
+         UhVF9pToiXvNOCpbgKBQaVRS/wlvwBXn0cTancqDm/MlsL3VRWfro3CjuYU5fDe15/ge
+         DPYRwGhV8AszcDxRGNf5pi8XgQlWMrO/z27sePr3CPKyeGWv5UjrR4Tjbnsul1lDWPix
+         FroV5od2nVYzRP6ej4bWDaZNXx2Q9LWSwWdfVzcoB/sT6NI2pCy8d9KTX37Pjg7AnuGv
+         sAipPqULobXzeHf3e9nRuEPT5GZ21yDk66uiQUqM9CJdoXmHN2mIPfqiFrJnGEONVnJj
+         yXWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682788498; x=1685380498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A1ACuy/osQdCjo/PWg2MRsM2W3CTWTDNQjv55mAPc0g=;
-        b=Fd9mDWqWI9jFBnTb79z5F9ZiY2R+7EOc19p9BX7M+SRNTsFbbrmNXXzHoQDYWLGH1a
-         mtaL9rr83NHLSdoDdztWyAhcCy+duIo2ihe+6LImTFIO+7z51+NgjNuTr1KrWibultFs
-         P6ZJ4CGy6N7Jbyl/3AXiulhT8xHetrVZHvZAyVMDkz+kw64azFmsL64G4E/KQblpAiDH
-         HXxmNy6hmqPT1lUNsYTD/BP1EGJIm70hXWrz6cywygxRuIUKP2MQxgCa/a8QCHvc8MwM
-         tr+wAZaI1n3Iy6P+p/xxQyjhytdA1/rmkcdykgwDz1OqZ2SnvyJ6GsLwSkh0KWFuSlsm
-         1BMw==
-X-Gm-Message-State: AC+VfDwOS+qBVROnKemnFpk4rA0mZ28KEN1hRmG8yu+mML7ERoLu9vb7
-        djhInfHSDGJGhvuP9OU5Hio=
-X-Google-Smtp-Source: ACHHUZ5/zMXaqvvU2ATe1Cd0nE38gDYHd34xkMfhwXouXnro4NcP/N5HAywZopxkIQ05jz+jswqTPA==
-X-Received: by 2002:a05:6a00:2344:b0:63d:311a:a16b with SMTP id j4-20020a056a00234400b0063d311aa16bmr11895723pfj.23.1682788497815;
-        Sat, 29 Apr 2023 10:14:57 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:1c98:2538:93cd:aefb? ([2600:8802:b00:4a48:1c98:2538:93cd:aefb])
-        by smtp.gmail.com with ESMTPSA id i12-20020a62870c000000b0063b7f3250e9sm17072699pfe.7.2023.04.29.10.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Apr 2023 10:14:57 -0700 (PDT)
-Message-ID: <4f7efcd3-df6a-1140-e60a-736c56966059@gmail.com>
-Date:   Sat, 29 Apr 2023 10:14:54 -0700
+        d=1e100.net; s=20221208; t=1682788935; x=1685380935;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D5lxPzrjhYS+x8oV+yPDIMaFlDt2g4rI2Bd9NsNsMYo=;
+        b=hY3a6mOcwfL8YbNaUQZHqY1WrtTX6PyYmYlacf/SB0mt6Of1lVN/UPdNXERpPimZDS
+         J5jKqwXFMp4ndGqCitENZmBC3BE2eUYcO3IdMocOhpfAlpeZm9YTgN2URZvtPMvzqP9N
+         uegTql7zImQP1ZZyxOCyPJQonRhKRoucyCAMcsEnulTVfMfU5L7rNI2flO6QVZCYGOXT
+         7OioS2d6s80flAHvP/ActHE8JtFARZOmzt4IGKLn1ee2dbkU8jhmiWDO9boXSdrrQy4R
+         ahk6bs+l2Nh8Qxo9reMygxxdiZG1do2an4DLtHRS/XMhukPdkdZr+4AG8MFNRmrLy52U
+         ZvhA==
+X-Gm-Message-State: AC+VfDxiSU5vywu6QdNbfdoV38GiTw+wfCojOY1DeOlJtU2JydZAc4pu
+        ofrP9ojmuSfXT92UtDBCPEiBG7ITn+gSKXIRq8pTng==
+X-Google-Smtp-Source: ACHHUZ7ZGFqRXHelEmVWQ/SZrSKIX1h5xJuRe82tOvkh5riAOmsfNIENLCkrrCgnlJcWBNx0eE4Ii2UJu2hPscNca5Y=
+X-Received: by 2002:ac2:4d18:0:b0:4db:4530:2b2d with SMTP id
+ r24-20020ac24d18000000b004db45302b2dmr2511668lfi.49.1682788935606; Sat, 29
+ Apr 2023 10:22:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 6.3 00/11] 6.3.1-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230428112039.886496777@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230428112039.886496777@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230429155247.12131-1-rdunlap@infradead.org>
+In-Reply-To: <20230429155247.12131-1-rdunlap@infradead.org>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Sat, 29 Apr 2023 10:21:39 -0700
+Message-ID: <CALs-HsuG3EFBs60sgiMcPHoE1dF7mhi3GKt=AWvRPaUHAfA88Q@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: fix sifive and thead section mismatches in errata
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Apr 29, 2023 at 8:52=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+> When CONFIG_MODULES is set, __init_or_module becomes <empty>, but when
+> CONFIG_MODULES is not set, __init_or_module becomes __init.
+> In the latter case, it causes section mismatch warnings:
+>
+> WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fill_cp=
+u_mfr_info (section: .text) -> sifive_errata_patch_func (section: .init.tex=
+t)
+> WARNING: modpost: vmlinux.o: section mismatch in reference: riscv_fill_cp=
+u_mfr_info (section: .text) -> thead_errata_patch_func (section: .init.text=
+)
+>
+> Fixes: bb3f89487fd9 ("RISC-V: hwprobe: Remove __init on probe_vendor_feat=
+ures()")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Conor Dooley <conor@kernel.org>
+> Cc: Evan Green <evan@rivosinc.com>
+> ---
 
+Thanks, Randy. I'm confused at how I didn't see that when I made the
+original fix. I feel like repro of these section mismatch errors
+depend on some other factor I'm not understanding. In any case:
 
-On 4/28/2023 4:27 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.1 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.1-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Reviewed-by: Evan Green  <evan@rivosinc.com>
