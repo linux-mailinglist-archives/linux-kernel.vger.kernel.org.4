@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34AD6F25BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 20:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5646F25C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 20:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjD2ST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 14:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S230167AbjD2STv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 14:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbjD2ST1 (ORCPT
+        with ESMTP id S230149AbjD2STu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 14:19:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B3B9F;
-        Sat, 29 Apr 2023 11:19:26 -0700 (PDT)
+        Sat, 29 Apr 2023 14:19:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5F51BF4;
+        Sat, 29 Apr 2023 11:19:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F23060B6B;
-        Sat, 29 Apr 2023 18:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AD4A4C433D2;
-        Sat, 29 Apr 2023 18:19:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 710C760ADA;
+        Sat, 29 Apr 2023 18:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D48E2C433D2;
+        Sat, 29 Apr 2023 18:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682792365;
-        bh=8HDfUiZjrvUti/9Ci5CYxqlcQpcPcVdKxSLybQOJ1/c=;
+        s=k20201202; t=1682792386;
+        bh=LMNk9uciWZtFfdEkJIhEbCeaYbO3nx4qLLMcxWUYYN8=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Pp/ubhqcsJx437DN1q0keIixF8iPP9qa6h5P2vDMGUcE93XFogT6mTR5QsCyFpsDQ
-         D/Jh21nth6YUH5Ll+SOGXdJ3IR5w52ep5+cLXCO5/FpcEGvZlElC9e0HdPf7/NTD4/
-         +Wg847xT0Luus5pH/evc3js8FfP7RAXNM8KODG7tmdtAJwA8tR6rNF0bruAmH1G03H
-         W0MpU9aHmQil365hD4zONYC1z0TGt07QlxqriP23iKue9rNPKC3QsV1sNZN4Exj8h3
-         k/a9TNlypFSzxjB4tNh0u+PJAjOyEFm4/efgDLbuR9XTjH96MlFt69bWA+0Ugzy+Ji
-         jAZ8etbyhB+zw==
+        b=ckQLI/sSLDBsFp7bEZqvii8A845R3dEMnuswaM9+lTl+ybjK/AgXvDuIRgdlnL19R
+         JAVP7IDQEUSkqfFHq55iugCbcff2BTRyAeumLOEQW2UjUs0MYzUrxNFhklwT+xiW9+
+         Io1PvGmFJgnJ/GJMWAUE+I8uw2c3u89SgmS48DrFvuA8OFHV3Mtb3QwoVJ4A046bQD
+         YTuBm6d8N+xRMCNsUXqJSavOQiJkO/wbxoRd73oCJjnJkaoDyOvDf10qE3zWp8EeSR
+         OKRCoBkNb1XgYMeo5oxPDuSon4BMs0BSXQrIGWH2sWoSWo+KhIz4WJdI/bAtk3/C4V
+         WwAfLXxXkjESg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88D7EC43158;
-        Sat, 29 Apr 2023 18:19:25 +0000 (UTC)
-Subject: Re: [GIT PULL] ksmbd server fixes
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B4173C43158;
+        Sat, 29 Apr 2023 18:19:46 +0000 (UTC)
+Subject: Re: [GIT PULL] nfsd changes for v6.4
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
-References: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-cifs.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAH2r5mtsYPer65Fjm7BFhsjKt-g4XMCtk8siYAZxXg4qpyRKXw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.samba.org/ksmbd.git tags/6.4-rc-ksmbd-server-fixes
-X-PR-Tracked-Commit-Id: 74d7970febf7e9005375aeda0df821d2edffc9f7
+In-Reply-To: <E0771535-05EF-4EAE-9BFF-E070C4D32F3C@oracle.com>
+References: <E0771535-05EF-4EAE-9BFF-E070C4D32F3C@oracle.com>
+X-PR-Tracked-List-Id: <linux-nfs.vger.kernel.org>
+X-PR-Tracked-Message-Id: <E0771535-05EF-4EAE-9BFF-E070C4D32F3C@oracle.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4
+X-PR-Tracked-Commit-Id: 9280c577431401544e63dfb489a830a42bee25eb
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1ae78a14516b9372e4c90a89ac21b259339a3a3a
-Message-Id: <168279236542.22076.7235162901818800004.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Apr 2023 18:19:25 +0000
-To:     Steve French <smfrench@gmail.com>
+X-PR-Merge-Commit-Id: 4e1c80ae5cf458792bec9815ee77bc3851046fb8
+Message-Id: <168279238673.22076.15540579577427431470.pr-tracker-bot@kernel.org>
+Date:   Sat, 29 Apr 2023 18:19:46 +0000
+To:     Chuck Lever III <chuck.lever@oracle.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 26 Apr 2023 21:11:44 -0500:
+The pull request you sent on Fri, 28 Apr 2023 13:29:49 +0000:
 
-> git://git.samba.org/ksmbd.git tags/6.4-rc-ksmbd-server-fixes
+> https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux.git tags/nfsd-6.4
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1ae78a14516b9372e4c90a89ac21b259339a3a3a
+https://git.kernel.org/torvalds/c/4e1c80ae5cf458792bec9815ee77bc3851046fb8
 
 Thank you!
 
