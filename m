@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888756F26FE
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 331696F2700
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjD2Wbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 18:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S230284AbjD2WcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 18:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjD2Wbo (ORCPT
+        with ESMTP id S229489AbjD2WcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 18:31:44 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D5B18B
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a6670671e3so10357695ad.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682807502; x=1685399502;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VPHsDpkGlPsUeymJHmip8825ZqzKSXSliZm57TlwjvQ=;
-        b=OFkAUE/ZjnCUb9a0kpq5KQP//BxcdTW++AyWH6rq/D9WK9XtvkJ09tekM1DEkHWvry
-         OfKR/rKqvlIk1pIhGjRSmZypireApgMBf+lcB4VG7Ir3RvnIbmBSc7te7r63ZlHwqsfa
-         OUhLcxwKvCTxp7lix4KVWv9WccxiPRIjt1Ml/tEC3pyMpdTPdYAmeaCpbTvR+e1omwdw
-         MpJGE2mT+meXC911Neu67LeG0kvqL3XvmtLmkt1fHdBIsX+B9SpcaVYj/GVDvqnACe8e
-         KBOhnJyGkYbREmrVsPug31iPFvHJmpXwXzSYmVhh9fg6nv2YPPBB5qU8TOBqqNDxxjII
-         +Jeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682807502; x=1685399502;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VPHsDpkGlPsUeymJHmip8825ZqzKSXSliZm57TlwjvQ=;
-        b=L5v8T+Et+zptkROAhObE5SRjikRgph5yw3NnJhYFQoPy6UG+WV3PeBj/mlfyOTGj7c
-         uVfonb7K9iWh178DX0B00b/zdMjAP5KqEPtmjlDB6VyKu/4QcM/l57Bj381AJxIjmYXZ
-         VxBUEyIwQwT63M0UvXwVUqgfWpt85FJnEYsbH13/72zyNQteimmGvpMNG6hCZLbefJEs
-         Q8tMqyXtxCq9oawS5YcjXpoOOSkxl5ob8kKP4daVMbTYUQY2TZDhQL11KoDdtXjjkfNA
-         PCx7DcgrjGiuSiD+xFJeT7re9Huqvzl0u3F6L/6TIYPfu5iZyQJZuMxiP+1gPFD3IGoM
-         b2JA==
-X-Gm-Message-State: AC+VfDxZXKYxvFdmADpROz8WRcBeepfJ4JaNfxTidAACmrS4YqFgA811
-        rRyJZ3uUgwTGcVqa/s76/1bbGA==
-X-Google-Smtp-Source: ACHHUZ6hqMeAHWypNk2/udmWcpEssqk/qIzLMjqRGYwvz2Y10ylroswUy4NiR+4Bcbs59WH1sk8GPg==
-X-Received: by 2002:a17:903:2312:b0:1a6:82a7:6e60 with SMTP id d18-20020a170903231200b001a682a76e60mr11048331plh.47.1682807502286;
-        Sat, 29 Apr 2023 15:31:42 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id bg12-20020a1709028e8c00b001a9567dc731sm12644148plb.24.2023.04.29.15.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 15:31:41 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 15:31:41 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 15:31:25 PDT (-0700)
-Subject:     Re: [PATCH] RISC-V: fixup in-flight collision with ARCH_WANT_OPTIMIZE_VMEMMAP rename
-In-Reply-To: <5fe1484b4f2b4ae960a9b599c4ab3ace@linux.dev>
-CC:     Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        lukas.bulwahn@gmail.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     konstantin.ryabitsev@linux.dev
-Message-ID: <mhng-539ec982-8235-478e-b695-ee6253b5308c@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Sat, 29 Apr 2023 18:32:23 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69C711B
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:32:21 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id DE10E5C00C4;
+        Sat, 29 Apr 2023 18:32:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 29 Apr 2023 18:32:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1682807539; x=1682893939; bh=WEXQivD/BHVkDjdwhyPJPNlkL
+        4e8FVWBLGqE8gJtSsk=; b=AITKlBdl/Y0ka7nq0Rumwudc/8y+x4X7biXyxCOx7
+        sNVLfS/Yj3S7vDlHi7zJ5Bezo6RGFhuk9OjLLx3old/JjEQ14r/PleCawPP/ttHe
+        wYWgmOHopl3e9thpXhQ9uKttHH/mx8DxQVJsspNjOIHXQhgiIVf3fHTshdto5MyE
+        wAwe0OwH+lsGQ5eQ8RI6Ksq2dG52msDOCNQI2adbpFRCbaNSQ1+8Gq8vUAWqY+SI
+        vHzRsFzjc8hPgKlAlfyC3Mfo/6Ztul+UhJRYpspxYgryPuiZocEeBZmTrIvj+Cy9
+        zgqePm1BWHI2UzUmdWCM2x6hJhT8Psxaq5al4URbaItag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682807539; x=1682893939; bh=WEXQivD/BHVkDjdwhyPJPNlkL4e8FVWBLGq
+        E8gJtSsk=; b=WlEC/MmcGC7H6mwvlac+8ILM6wx/H+6NZvFCJeyUm/KEOEFg52g
+        +PA4gEHWD6yV+yp7cLle/a7rQ4dZViXOZJtkdISK8xdRIrkuiqyC8PEdk3FtBiRQ
+        iuSJ4RYjHRzR1Y4GJq8eBr/ZI9uTCNlhEvb35Ok9Td6U+/EfwL+5njR2TalTvEOv
+        EksVT+Fz0V+ozwjjx4sQkBc4tUIpvL5jE7QPhTBBjB/XiJB8L/oJggC3yceCCPjN
+        IdGiFEslNFGJoxGIwU1oB3nYLvwjzXRjl+4hU18/lombR9AdoRW1/h4FUnf0NKkS
+        DPMC6+ER99dHOvBqqGNEyRzwLadliBgVNuQ==
+X-ME-Sender: <xms:85pNZO7u4U6lB_zJ9ZsmDWMODpPuvvhjWQYkGA1azMTQPxz4sayxgQ>
+    <xme:85pNZH6rOoJq4lv4ozmPWkbcl1BqJ24CC2NR4N1T4F0RiahHQcOWu_Siia5x1w78n
+    o3SA-0daMwp1okpqK0>
+X-ME-Received: <xmr:85pNZNeQlnz2B2MMzxPs5o03N1HbGmzbwqPZUytfkqD5X0GiReXXOspN8tt95MRCIGJp6Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvuddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffuvfevkffogggtsehttdertd
+    ertddvnecuhfhrohhmpefnuhhkvgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdgu
+    vghvqeenucggtffrrghtthgvrhhnpeekjeetteegtdeifeejjedugfduvdfflefhteduve
+    ejfefhkeekvdelgeekfffgueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
+    mhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:85pNZLJBVI-jJ2VmJ4FkZUqmnXNWe_0qFJuJV-YBn2efPKIbzT0eYg>
+    <xmx:85pNZCKpQeKHcdlBRCl6vg6dfT-0usSnMWyq2JBuX6CU7_kVJhCcmw>
+    <xmx:85pNZMwrKDwoqXMQgLXlcFZCfZn6PdP8ozkcKLgV_nISXh4OKS9Jlg>
+    <xmx:85pNZBmQDbU5xiJWxeMvTyieT97rf6vPbLqCgcWaQ2CcvIZtMxhfLA>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Apr 2023 18:32:16 -0400 (EDT)
+Date:   Sun, 30 Apr 2023 10:32:03 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH] drivers: fix keyboard not working under some laptops
+To:     hqp1203hqp@163.com
+Cc:     linux-kernel@vger.kernel.org
+Message-Id: <FLEWTR.R6BA7U7SGOH71@ljones.dev>
+X-Mailer: geary/43.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,46 +80,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 29 Apr 2023 14:48:18 PDT (-0700), konstantin.ryabitsev@linux.dev wrote:
->> April 29, 2023 4:17 PM, "Palmer Dabbelt" <palmer@dabbelt.com> wrote:
->>>> I guess you picking this up for your second PR makes the most sense
->>>> Palmer?
->> 
->> Yep, except it crashes b4
->> 
->> $ b4 shazam -lts https://lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d@spud
->> Grabbing thread from lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d%40spud/t.mbox.gz
->> Analyzing 2 messages in the thread
->> Checking attestation on all messages, may take a moment...
->> Traceback (most recent call last):
->> File "/home/palmer/.local/src/b4/b4/command.py", line 383, in <module>
->> cmd()
->> File "/home/palmer/.local/src/b4/b4/command.py", line 366, in cmd
->> cmdargs.func(cmdargs)
->> File "/home/palmer/.local/src/b4/b4/command.py", line 100, in cmd_shazam
->> b4.mbox.main(cmdargs)
->> File "/home/palmer/.local/src/b4/b4/mbox.py", line 713, in main
->> make_am(msgs, cmdargs, msgid)
->> File "/home/palmer/.local/src/b4/b4/mbox.py", line 101, in make_am
->> am_msgs = lser.get_am_ready(noaddtrailers=cmdargs.noaddtrailers,
->> File "/home/palmer/.local/src/b4/b4/__init__.py", line 552, in get_am_ready
->> checkmark, trailers, attcrit = lmsg.get_attestation_trailers(attpolicy, maxdays)
->> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1319, in get_attestation_trailers
->> for attestor in self.attestors:
->> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1158, in attestors
->> self._load_patatt_attestors()
->> File "/home/palmer/.local/src/b4/b4/__init__.py", line 1261, in _load_patatt_attestors
->> patatt_config = patatt.get_config_from_git(r'patatt\..*', multivals=['keyringsrc'])
->> AttributeError: module 'patatt' has no attribute 'get_config_from_git'
->> 
->> So I probably need to just go update my setup, I've got a bunch of wacky stuff.
->> I'll try and remember to do so, but I'm going to scrub through other bits
->> first...
->
-> Indeed, you have a newer version of b4 without also updating the 
-> patatt dependency. If you're using b4 from git, you need to "git 
-> submodule update".
+Hi,
 
-Thanks, it's fixed.  This one's in the queue for testing, but it looks 
-generally fine.  Might be a bit slower than usual, as I'm also running 
-the glibc tests.
+Because this is a quirk sepcific to the FA507NV:
+
+ > + .matches = {
+ > + DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+ > + DMI_MATCH(DMI_BOARD_NAME, "FA507NV"),
+ > + },
+
+perhaps the patch title should be renamed to reflect that?
+
+I have a user with the same issue, I will confirm it fixes the problem.
+
+
