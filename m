@@ -2,206 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A09B6F230D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6426F2311
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbjD2FWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 01:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S230184AbjD2FfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjD2FWR (ORCPT
+        with ESMTP id S229497AbjD2FfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 01:22:17 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9B91A2
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:22:15 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-44048c2de31so410271e0c.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:22:15 -0700 (PDT)
+        Sat, 29 Apr 2023 01:35:20 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6E9271E
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:35:18 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b922aa3725fso1018003276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682745734; x=1685337734;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9bL/dpwMYQ+vEeDJh/Rbu38HonyhpYys4O+gm1zm6TY=;
-        b=iQIRR+WUkJPs58KirlB8yUSlotLvYchqufx+XnkW6X/1FZsyQ9VHmlhEKONBTY0mbf
-         KFR8o3m1ulZ84JUo39burzd1qJRVEHqkWevz/r5jPooHKZRxgfY2uuoC4ILfk4hu6yRs
-         GXtC0EfL+Md2ZmOc20ECdx701a24b92SqpI3rQCslrF1Z47/ZnsPKjKPAwf4oWuwYqbg
-         rrGlkuzHpA1uu6ivyF9npb6EtgxZ2cY7XLbY7lftEl7DLEarpOhROXzoSHxs0Z4NaRb4
-         upcpG7+UGifUvnTnpPJyR7baVjdvna1yLsdghW2+Xcvfb439HVtrNXYSt8q6Nh43RL4j
-         H4UQ==
+        d=google.com; s=20221208; t=1682746517; x=1685338517;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pSO6TaQceat5s7+w8tdwXDUT+UMck7zKZJz2rmLR/is=;
+        b=mH7Z6fObbNpehAF50RREY5bm5FazivHNYBujzFqv6IwF9F6EGuSydLvI7BK0lkS4bC
+         TWRyUgmtoxhEK8N6DmEFTZwtCzRJ2HIOIIG+YeP6Lv2/35NC5MI7T0L6F+BlrWinhHsL
+         VfRnl9GZP1RCX3LJ7V4B1pveiTaw/jemNZAe4jJdGnr3M00cRxHUFSgnkX7TIqDQU5w5
+         2UeUNVD2iZA8P8papiWK/+Nppm7k/2lIt9Q0MwnnIdnb3qtws6/RJaHDc+qmRO6xkgq5
+         9Ic8ukBVvARqVM/7jrfK0ewtOkwVyffZS8goJhg2q33qGf0vAtnmw5SOXpqDYjFk/ILZ
+         xkQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682745734; x=1685337734;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9bL/dpwMYQ+vEeDJh/Rbu38HonyhpYys4O+gm1zm6TY=;
-        b=CYppzZYNDlivGl2yZYCvI5ctLzfl/u13E7ZZPfdvL/8B5hnrSIXJogQ90cWWnyZaHv
-         OywTrZ7RFBOdf99WuE+xT7s17SoaVP96ezjQ4UUQqqnfY3TOw1SJWCq2wbaFHdNpXQT7
-         maq6CyR4yysHfph4j4GLl5AqArin9u4+COIBntEq5sD46FOTJFTH35kiwljLGl9OFPSg
-         2R/ANVO3JK+NiagJE5xvt+PwNrjkDip/t1oZdN/0dSo+K6AELTLxIPfvdsePpD8Nwg0S
-         8yKpYQiOsP3bIijw4pyn+wn6btoZbh3CW/Yyro+bwVH/5ehS1K3iFTZB66sh6kkHB72B
-         F1ng==
-X-Gm-Message-State: AC+VfDyr+gYJriK4Ux26hRKfazdtZsh3junHW1GoWRmTpBvnxMd+krkw
-        7VtvAQZNyxFEfvZAclhkRMp1a9SmBsLRVO09FkHZN1ATrNI=
-X-Google-Smtp-Source: ACHHUZ44lN8MK5H8S6Tcxa3Qc0+kiKMk6xhY9HuOmKfrNMNcBBHffbh880pltK8T6LwSBHfIy/9EmP1A/URpdtZcxSc=
-X-Received: by 2002:a1f:41c9:0:b0:43f:ec5d:51e1 with SMTP id
- o192-20020a1f41c9000000b0043fec5d51e1mr3519478vka.9.1682745734332; Fri, 28
- Apr 2023 22:22:14 -0700 (PDT)
-MIME-Version: 1.0
-References: CAAJw_Zs3OBi4Rsb-Lp_mMihn=99nFYaHrRdp7KU8g2baCPdfbQ@mail.gmail.com <20230429020951.082353595@lindbergh.monkeyblade.net>
-In-Reply-To: <20230429020951.082353595@lindbergh.monkeyblade.net>
-From:   Jeff Chua <jeff.chua.linux@gmail.com>
-Date:   Sat, 29 Apr 2023 13:22:03 +0800
-Message-ID: <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com>
-Subject: iwlwifi broken in post-linux-6.3.0 after April 26
-To:     lkml <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1682746517; x=1685338517;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pSO6TaQceat5s7+w8tdwXDUT+UMck7zKZJz2rmLR/is=;
+        b=KhFLEOoQ0dsIIqWBub86ypyHyLpVpaknuKXtnwVHpcr4hDezPADIUrGKGHqsyRGdau
+         5zJriO3svDsY/A/png3nVLVCgu7ymKeggXWRvOJaUY3mxY0IaeFpk9mzgUdQ5lSkup5K
+         IZwa1wC+1BxWP3ZVTgW6/tWnlFosF4ZtkmBWWpycSx5y6X8iZ6foxKZ0Bx1fpZsVCLrN
+         HjQM8F/wr5jJepZN82L8JUdNaneY08OyyglgvQaIm2uTpce3r3J7k+p+ualg5mWKweAp
+         HQfsFhOCzn0BJVey+xHDu1gJoRKgpv6VHUes6jDC0CMT+Vyjx4Y+bgPrrHMAuzLswnOp
+         HEGQ==
+X-Gm-Message-State: AC+VfDwNzMlHX6twE6kIsZUuoHuD0in1Pg9urBEmmrocZvyJEGlsUhVZ
+        23k/aFAISiHZqgURJA7wtIEyfRHL3nzt
+X-Google-Smtp-Source: ACHHUZ6awQarkza2LCndzZbsViEtYT2xtatwGi84Dde19SZnmqtYwHUv2qOq2rnQrMMCMqybx+NXDBVYwNo3
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c563:7e28:fb7c:bce3])
+ (user=irogers job=sendgmr) by 2002:a25:6b05:0:b0:b8b:f5fb:5986 with SMTP id
+ g5-20020a256b05000000b00b8bf5fb5986mr4397240ybc.10.1682746517408; Fri, 28 Apr
+ 2023 22:35:17 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 22:34:20 -0700
+Message-Id: <20230429053506.1962559-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Subject: [PATCH v3 00/46] Fix perf on Intel hybrid CPUs
+From:   Ian Rogers <irogers@google.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can't start wifi on latest linux git pull ... started happening 3 days ago ...
+TL;DR: hybrid doesn't crash, json metrics work on hybrid on both PMUs
+or individually, event parsing doesn't always scan all PMUs, more and
+new tests that also run without hybrid, less code.
 
-Is there a fix for this? Or shall I bisect? Wifi works by reverting
-back to released 6.3.0.
+The first 3 patches are proposed to address Linux 6.4 issues with the
+remainder to be the basis for 6.5. The first patch is a 1 liner, plus
+comment, workaround for Intel hybrid platforms crashing perf stat when
+running with no events/metrics. The second patch works around an issue
+with platforms like Skylake where certain events fail to open at
+higher paranoia levels even if kernel and hypervisor profiling is
+disabled. Events are marked as skippable and not placed in the output,
+while remaining events are and metrics are computed. The third patch
+makes it so that TopdownL1 and TopdownL2 json metric groups don't
+group events on Intel, this is done via a new json flag. Adding the
+json flag in each of the json files is two-thirds of the 300 lines of
+these patches. Patch 42 removes the disabling of TopdownL1 on hybrid
+as the underlying problems are fixed. The json file updates are
+created with the usual script updated in:
+https://github.com/intel/perfmon/pull/73
 
-Thanks,
-Jeff
+The next 5 patches avoid grouping events for metrics where is could
+never succeed and were previously posted as:
+"perf vendor events intel: Add xxx metric constraints"
+https://lore.kernel.org/all/20230419005423.343862-1-irogers@google.com/
 
+Next are some general and test improvements.
 
-# wpa_supplicant -Dnl80211 -c wpa.conf -iwlan0
-wlwifi 0000:00:14.3: Failed to send RFI config cmd -5
-iwlwifi 0000:00:14.3: LED command failed: -5
-iwlwifi 0000:00:14.3: Failed to send MAC_CONFIG_CMD (action:1): -5
+Next event parsing is rewritten to not scan all PMUs for the benefit
+of raw and legacy cache parsing, instead these are handled by the
+lexer and a new term type. This ultimately removes the need for the
+event parser for hybrid to be recursive as legacy cache can be just a
+term. Tests are re-enabled for events with hyphens, so AMD's
+branch-brs event is now parsable.
 
-# lsmod
-iwlmvm                352256  0
-mac80211              610304  1 iwlmvm
-iwlwifi               299008  1 iwlmvm
-cfg80211              417792  3 iwlmvm,iwlwifi,mac80211
-ax88179_178a           28672  0
+The cputype option is made a generic pmu filter flag and is tested
+even on non-hybrid systems.
 
-# dmesg
-iwlwifi 0000:00:14.3: Microcode SW error detected. Restarting 0x0.
-iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
-iwlwifi 0000:00:14.3: Transport status: 0x0000004B, valid: 6
-iwlwifi 0000:00:14.3: Loaded firmware version: 78.3bfdc55f.0
-so-a0-gf-a0-78.ucode
-iwlwifi 0000:00:14.3: 0x00000071 | NMI_INTERRUPT_UMAC_FATAL
-iwlwifi 0000:00:14.3: 0x000002F0 | trm_hw_status0
-iwlwifi 0000:00:14.3: 0x00000000 | trm_hw_status1
-iwlwifi 0000:00:14.3: 0x004DB13C | branchlink2
-iwlwifi 0000:00:14.3: 0x004D0D3A | interruptlink1
-iwlwifi 0000:00:14.3: 0x004D0D3A | interruptlink2
-iwlwifi 0000:00:14.3: 0x000157FE | data1
-iwlwifi 0000:00:14.3: 0x00000010 | data2
-iwlwifi 0000:00:14.3: 0x00000000 | data3
-iwlwifi 0000:00:14.3: 0x00000000 | beacon time
-iwlwifi 0000:00:14.3: 0x0002A2E7 | tsf low
-iwlwifi 0000:00:14.3: 0x00000000 | tsf hi
-iwlwifi 0000:00:14.3: 0x00000000 | time gp1
-iwlwifi 0000:00:14.3: 0x0003E5C3 | time gp2
-iwlwifi 0000:00:14.3: 0x00000001 | uCode revision type
-iwlwifi 0000:00:14.3: 0x0000004E | uCode version major
-iwlwifi 0000:00:14.3: 0x3BFDC55F | uCode version minor
-iwlwifi 0000:00:14.3: 0x00000370 | hw version
-iwlwifi 0000:00:14.3: 0x00480002 | board version
-iwlwifi 0000:00:14.3: 0x80B0FF00 | hcmd
-iwlwifi 0000:00:14.3: 0x00020000 | isr0
-iwlwifi 0000:00:14.3: 0x20000000 | isr1
-iwlwifi 0000:00:14.3: 0x58F00002 | isr2
-iwlwifi 0000:00:14.3: 0x00C3000C | isr3
-iwlwifi 0000:00:14.3: 0x00000000 | isr4
-iwlwifi 0000:00:14.3: 0x00000000 | last cmd Id
-iwlwifi 0000:00:14.3: 0x000157FE | wait_event
-iwlwifi 0000:00:14.3: 0x00000000 | l2p_control
-iwlwifi 0000:00:14.3: 0x00000000 | l2p_duration
-iwlwifi 0000:00:14.3: 0x00000000 | l2p_mhvalid
-iwlwifi 0000:00:14.3: 0x00000000 | l2p_addr_match
-iwlwifi 0000:00:14.3: 0x00000018 | lmpm_pmg_sel
-iwlwifi 0000:00:14.3: 0x00000000 | timestamp
-iwlwifi 0000:00:14.3: 0x0000103C | flow_handler
-iwlwifi 0000:00:14.3: Start IWL Error Log Dump:
-iwlwifi 0000:00:14.3: Transport status: 0x0000004B, valid: 7
-iwlwifi 0000:00:14.3: 0x201002FD | ADVANCED_SYSASSERT
-iwlwifi 0000:00:14.3: 0x00000000 | umac branchlink1
-iwlwifi 0000:00:14.3: 0x8046E300 | umac branchlink2
-iwlwifi 0000:00:14.3: 0xC008191A | umac interruptlink1
-iwlwifi 0000:00:14.3: 0x00000000 | umac interruptlink2
-iwlwifi 0000:00:14.3: 0x0017020B | umac data1
-iwlwifi 0000:00:14.3: 0x00000308 | umac data2
-iwlwifi 0000:00:14.3: 0x00000304 | umac data3
-iwlwifi 0000:00:14.3: 0x0000004E | umac major
-iwlwifi 0000:00:14.3: 0x3BFDC55F | umac minor
-iwlwifi 0000:00:14.3: 0x0003E5BE | frame pointer
-iwlwifi 0000:00:14.3: 0xC0886C24 | stack pointer
-iwlwifi 0000:00:14.3: 0x0017020B | last host cmd
-iwlwifi 0000:00:14.3: 0x00000000 | isr status reg
-iwlwifi 0000:00:14.3: IML/ROM dump:
-iwlwifi 0000:00:14.3: 0x00000B03 | IML/ROM error/state
-iwlwifi 0000:00:14.3: 0x000081CD | IML/ROM data1
-iwlwifi 0000:00:14.3: 0x00000080 | IML/ROM WFPM_AUTH_KEY_0
-iwlwifi 0000:00:14.3: Fseq Registers:
-iwlwifi 0000:00:14.3: 0x60000100 | FSEQ_ERROR_CODE
-iwlwifi 0000:00:14.3: 0x003E0003 | FSEQ_TOP_INIT_VERSION
-iwlwifi 0000:00:14.3: 0x00190003 | FSEQ_CNVIO_INIT_VERSION
-iwlwifi 0000:00:14.3: 0x0000A652 | FSEQ_OTP_VERSION
-iwlwifi 0000:00:14.3: 0x00000003 | FSEQ_TOP_CONTENT_VERSION
-iwlwifi 0000:00:14.3: 0x4552414E | FSEQ_ALIVE_TOKEN
-iwlwifi 0000:00:14.3: 0x00080400 | FSEQ_CNVI_ID
-iwlwifi 0000:00:14.3: 0x00400410 | FSEQ_CNVR_ID
-iwlwifi 0000:00:14.3: 0x00080400 | CNVI_AUX_MISC_CHIP
-iwlwifi 0000:00:14.3: 0x00400410 | CNVR_AUX_MISC_CHIP
-iwlwifi 0000:00:14.3: 0x00009061 | CNVR_SCU_SD_REGS_SD_REG_DIG_DCDC_VTRIM
-iwlwifi 0000:00:14.3: 0x00000061 | CNVR_SCU_SD_REGS_SD_REG_ACTIVE_VDIG_MIRROR
-iwlwifi 0000:00:14.3: UMAC CURRENT PC: 0xd05c18
-iwlwifi 0000:00:14.3: LMAC1 CURRENT PC: 0xd05c1c
-iwlwifi 0000:00:14.3: Starting mac, retry will be triggered anyway
-iwlwifi 0000:00:14.3: FW error in SYNC CMD RFI_CONFIG_CMD
-CPU: 6 PID: 22193 Comm: wpa_supplicant Tainted: G     U             6.3.0 #1
-Hardware name: LENOVO 21CCS1GL00/21CCS1GL00, BIOS N3AET72W (1.37 ) 03/02/2023
-Call Trace:
- <TASK>
- dump_stack_lvl+0x33/0x50
- iwl_trans_txq_send_hcmd+0x33a/0x380 [iwlwifi]
- ? destroy_sched_domains_rcu+0x20/0x20
- iwl_trans_send_cmd+0x55/0xe0 [iwlwifi]
- iwl_mvm_send_cmd+0xd/0x30 [iwlmvm]
- iwl_rfi_send_config_cmd+0x8f/0xf0 [iwlmvm]
- iwl_mvm_up+0x8c9/0x980 [iwlmvm]
- __iwl_mvm_mac_start+0x181/0x1e0 [iwlmvm]
- iwl_mvm_mac_start+0x3f/0x100 [iwlmvm]
- drv_start+0x2c/0x50 [mac80211]
- ieee80211_do_open+0x2f2/0x6b0 [mac80211]
- ieee80211_open+0x62/0x80 [mac80211]
- __dev_open+0xca/0x170
- __dev_change_flags+0x1a1/0x210
- dev_change_flags+0x1c/0x60
- devinet_ioctl+0x555/0x790
- inet_ioctl+0x116/0x1b0
- ? netdev_name_node_lookup_rcu+0x58/0x70
- ? dev_get_by_name_rcu+0x5/0x10
- ? netdev_name_node_lookup_rcu+0x58/0x70
- ? dev_get_by_name_rcu+0x5/0x10
- ? dev_ioctl+0x34d/0x4c0
- sock_do_ioctl+0x3a/0xe0
- sock_ioctl+0x15a/0x2b0
- ? __sys_recvmsg+0x51/0xa0
- __x64_sys_ioctl+0x7d/0xa0
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7efcee3a0448
-Code: 00 00 48 8d 44 24 08 48 89 54 24 e0 48 89 44 24 c0 48 8d 44 24
-d0 48 89 44 24 c8 b8 10 00 00 00 c7 44 24 b8 10 00 00 00 0f 05 <41> 89
-c0 3d 00 f0 ff ff 77 0e 44 89 c0 c3 66 2e 0f 1f 84 00 00 00
-RSP: 002b:00007ffe400ff678 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007efcee3a0448
-RDX: 00007ffe400ff680 RSI: 0000000000008914 RDI: 0000000000000007
-RBP: 0000000000000007 R08: 0000000000000000 R09: 000000000078f4b0
-R10: e324395ae363498e R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000790a30 R14: 0000000000000002 R15: 0000000000000000
- </TASK>
+The final patches address specific json metric issues on hybrid, in
+both the json metrics and the metric code.
+
+The patches add slightly more code than they remove, in areas like
+better json metric constraints and tests, but in the core util code,
+the removal of hybrid is a net reduction:
+ 20 files changed, 641 insertions(+), 960 deletions(-)
+
+Sample output is contained in the v1 patch set:
+https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+
+Tested on Tigerlake, Skylake and Alderlake CPUs.
+
+The v3 patch set:
+ - for Linux 6.4 the first 5 patches are recommended:
+   - changes skippable evsels to always print in case short running
+     benchmarks meet the 0 enable and 0 count condition (suggested by
+     Stephane).
+   - changes metrics to show "nan" so that it is more obvious they
+     couldn't be computed (suggested by Stephane).
+   - fixes a reordering issue that reordered events that lacked a
+     group, especially when the core PMU isn't "cpu".
+ - for Linux 6.5 added extra hybrid type tests in the x86 hybrid test
+   as suggested by Kan.
+ - note, the patches aren't rebased against the tmp.perf-tools branch
+   meaning patches 1 and 11 should be dropped there.
+ 
+The v2 patch set:
+ - restructures the 3 Linux 6.4 patches first;
+ - makes it so that is_event_supported isn't called during core event parsing;
+ - displays skippable 0 count events that were enabled;
+ - addresses output formatting review comments;
+ - addresses some test issues and an uninitialized variable use in strchr;
+ - addresses checkpatch.pl reported issues;
+ - adds reviewed-by to some patches.
+
+Ian Rogers (46):
+  perf stat: Disable TopdownL1 on hybrid
+  perf metric: Change divide by zero and !support events behavior
+  perf stat: Introduce skippable evsels
+  perf metric: Json flag to not group events if gathering a metric group
+  perf parse-events: Don't reorder ungrouped events by pmu
+  perf vendor events intel: Add alderlake metric constraints
+  perf vendor events intel: Add icelake metric constraints
+  perf vendor events intel: Add icelakex metric constraints
+  perf vendor events intel: Add sapphirerapids metric constraints
+  perf vendor events intel: Add tigerlake metric constraints
+  perf stat: Avoid segv on counter->name
+  perf test: Test more sysfs events
+  perf test: Use valid for PMU tests
+  perf test: Mask config then test
+  perf test: Test more with config_cache
+  perf test: Roundtrip name, don't assume 1 event per name
+  perf parse-events: Set attr.type to PMU type early
+  perf parse-events: Set pmu_name whenever a pmu is given
+  perf print-events: Avoid unnecessary strlist
+  perf parse-events: Avoid scanning PMUs before parsing
+  perf evsel: Modify group pmu name for software events
+  perf test: Move x86 hybrid tests to arch/x86
+  perf test x86 hybrid: Update test expectations
+  perf test x86 hybrid: Add hybrid extended type checks
+  perf parse-events: Support PMUs for legacy cache events
+  perf parse-events: Wildcard legacy cache events
+  perf print-events: Print legacy cache events for each PMU
+  perf parse-events: Support wildcards on raw events
+  perf parse-events: Remove now unused hybrid logic
+  perf parse-events: Minor type safety cleanup
+  perf parse-events: Add pmu filter
+  perf stat: Make cputype filter generic
+  perf test: Add cputype testing to perf stat
+  perf test: Fix parse-events tests for >1 core PMU
+  perf parse-events: Support hardware events as terms
+  perf parse-events: Avoid error when assigning a term
+  perf parse-events: Avoid error when assigning a legacy cache term
+  perf parse-events: Don't auto merge hybrid wildcard events
+  perf parse-events: Don't reorder atom cpu events
+  perf metrics: Be PMU specific for referenced metrics.
+  perf stat: Command line PMU metric filtering
+  perf vendor events intel: Correct alderlake metrics
+  perf jevents: Don't rewrite metrics across PMUs
+  perf metrics: Be PMU specific in event match
+  perf stat: Don't disable TopdownL1 metric on hybrid
+  perf parse-events: Reduce scope of is_event_supported
+
+ tools/perf/arch/x86/include/arch-tests.h      |   1 +
+ tools/perf/arch/x86/tests/Build               |   1 +
+ tools/perf/arch/x86/tests/arch-tests.c        |  10 +
+ tools/perf/arch/x86/tests/hybrid.c            | 287 ++++++
+ tools/perf/arch/x86/util/evlist.c             |   4 +-
+ tools/perf/builtin-list.c                     |  19 +-
+ tools/perf/builtin-record.c                   |  13 +-
+ tools/perf/builtin-stat.c                     |  73 +-
+ tools/perf/builtin-top.c                      |   5 +-
+ tools/perf/builtin-trace.c                    |   5 +-
+ .../arch/x86/alderlake/adl-metrics.json       | 275 +++---
+ .../arch/x86/alderlaken/adln-metrics.json     |  20 +-
+ .../arch/x86/broadwell/bdw-metrics.json       |  12 +
+ .../arch/x86/broadwellde/bdwde-metrics.json   |  12 +
+ .../arch/x86/broadwellx/bdx-metrics.json      |  12 +
+ .../arch/x86/cascadelakex/clx-metrics.json    |  12 +
+ .../arch/x86/haswell/hsw-metrics.json         |  12 +
+ .../arch/x86/haswellx/hsx-metrics.json        |  12 +
+ .../arch/x86/icelake/icl-metrics.json         |  23 +
+ .../arch/x86/icelakex/icx-metrics.json        |  23 +
+ .../arch/x86/ivybridge/ivb-metrics.json       |  12 +
+ .../arch/x86/ivytown/ivt-metrics.json         |  12 +
+ .../arch/x86/jaketown/jkt-metrics.json        |  12 +
+ .../arch/x86/sandybridge/snb-metrics.json     |  12 +
+ .../arch/x86/sapphirerapids/spr-metrics.json  |  23 +
+ .../arch/x86/skylake/skl-metrics.json         |  12 +
+ .../arch/x86/skylakex/skx-metrics.json        |  12 +
+ .../arch/x86/tigerlake/tgl-metrics.json       |  23 +
+ tools/perf/pmu-events/jevents.py              |  10 +-
+ tools/perf/pmu-events/metric.py               |  28 +-
+ tools/perf/pmu-events/metric_test.py          |   6 +-
+ tools/perf/pmu-events/pmu-events.h            |   2 +
+ tools/perf/tests/evsel-roundtrip-name.c       | 119 +--
+ tools/perf/tests/expr.c                       |   3 +-
+ tools/perf/tests/parse-events.c               | 836 +++++++++---------
+ tools/perf/tests/parse-metric.c               |   1 +
+ tools/perf/tests/pmu-events.c                 |  12 +-
+ tools/perf/tests/shell/stat.sh                |  44 +
+ tools/perf/util/Build                         |   1 -
+ tools/perf/util/evlist.h                      |   1 -
+ tools/perf/util/evsel.c                       |  30 +-
+ tools/perf/util/evsel.h                       |   1 +
+ tools/perf/util/expr.y                        |   6 +-
+ tools/perf/util/metricgroup.c                 | 111 ++-
+ tools/perf/util/metricgroup.h                 |   3 +-
+ tools/perf/util/parse-events-hybrid.c         | 214 -----
+ tools/perf/util/parse-events-hybrid.h         |  25 -
+ tools/perf/util/parse-events.c                | 720 ++++++---------
+ tools/perf/util/parse-events.h                |  63 +-
+ tools/perf/util/parse-events.l                | 108 +--
+ tools/perf/util/parse-events.y                | 222 ++---
+ tools/perf/util/pmu-hybrid.c                  |  20 -
+ tools/perf/util/pmu-hybrid.h                  |   1 -
+ tools/perf/util/pmu.c                         |  16 +-
+ tools/perf/util/pmu.h                         |   3 +
+ tools/perf/util/pmus.c                        |  25 +-
+ tools/perf/util/pmus.h                        |   3 +
+ tools/perf/util/print-events.c                | 124 ++-
+ tools/perf/util/stat-display.c                |   4 +-
+ tools/perf/util/stat-shadow.c                 |  25 +-
+ 60 files changed, 2045 insertions(+), 1691 deletions(-)
+ create mode 100644 tools/perf/arch/x86/tests/hybrid.c
+ delete mode 100644 tools/perf/util/parse-events-hybrid.c
+ delete mode 100644 tools/perf/util/parse-events-hybrid.h
+
+-- 
+2.40.1.495.gc816e09b53d-goog
+
