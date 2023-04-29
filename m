@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0D26F233C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03846F2339
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjD2FnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 01:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S1347464AbjD2Fmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347147AbjD2Fm6 (ORCPT
+        with ESMTP id S1347447AbjD2FmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 01:42:58 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FA44EC3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:42:31 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54f8a3f1961so6921617b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:42:31 -0700 (PDT)
+        Sat, 29 Apr 2023 01:42:04 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F60A3A93
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:41:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f8af8b8f1so11875887b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682746888; x=1685338888;
+        d=google.com; s=20221208; t=1682746896; x=1685338896;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DTTYiMDl8Yj+KSHhgdntFRxS2mVbWmHBiQYwku76Lg=;
-        b=Hk1yA8bM/LfgA4lRSpMqvJ7Sl+BXH9x7VzEjrWw8ebLpMTED+LAFpDkkvrPDALumoR
-         2pQSE5GXyZUwci4jmGPg9mRKEqBCx8693VhLIU22gCtifSBnZZUivt6qtQPf5ROIhe5O
-         SuYAimTIHZJ56hO3J1YbYTmYovkks1Nm+ApTutClxpDTJaozHWPjCxRG85BgayT6r3DO
-         sEAllj7iirHwiePJec9cdQFjL1L6tn2GVSfRn7wfptc/8AS0AB5ZVtAp+TicsGdR5Aa0
-         C4BQs4F/hhR8nRp+OMhKbwUlzPU/PBowGUyqQFghdLV4oOpkjJZ+vpw8Xc1383QMQtm0
-         eLJg==
+        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
+        b=djqmOH2cNr/CtlHU+Lr9guxdpgrU0doVbrQm9KJ7AVfPJJoa7AIO2XwGLMAFCcc2kc
+         6etG5s+fAsD8i9k7b7x4QXdHX3qD2LdCcJfM4DP7gnVV3TIMcmc5yDzObuuTsQviSUaf
+         5bVrWHWUJAkav8LxSCMb4+agHiKK6QukeXTppgNgVMaFNfmDvgG3FxvpBzeLEMprkldU
+         ZRNFrqVbChnk0yv4jrxkFuZp3WSXNE4r28jBR18z9ReepF0EDtzDS680EIC+8Z8R5RqE
+         cn/r6PebJP9N+c8iAWcYi3dBcHCBP0NJ3KefX4C+RipKztL1GlmLPMEWjPM2liNsd2i8
+         3IPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682746888; x=1685338888;
+        d=1e100.net; s=20221208; t=1682746896; x=1685338896;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DTTYiMDl8Yj+KSHhgdntFRxS2mVbWmHBiQYwku76Lg=;
-        b=LZHcVEQ0O7aO8k9HvwbZZGnNIi20RKnnsws5qc1FfY2DCDCkmckimJ6qolOj3FZYYa
-         SskkMdVYLC97301LwyED8v8WoFG4koAQr+5EIy5QVCnBUQ0VpJfCRnRzkwRH/u5d1/+S
-         l6ukw7doFsGxZNBQBuzKW+NrHomgbqzB0316DJHKnDGVVW4YOLX/CqkRSR1q0oI0cLr7
-         QfXNFgbJbzuiYZbSC7/4vLp1nhEs8qmkJsYFw/WpeuA5bLXn86QcV44Gc5reU7CnobKr
-         C8q0Ax8QcRYh7eNZDK78c7F+QYrT8WGw3vDBHcawD84pW/jLmRBKtu/0Zx+e2rqxOX2K
-         NEwQ==
-X-Gm-Message-State: AC+VfDyJRJGIlee0dAbsUy5OAPlC/KxEj8TVjzeDSTETcd+ECzmcr80G
-        Ek/WApGKfVt1r4UXjNGs9yt2NVimRxgL
-X-Google-Smtp-Source: ACHHUZ7LeEl8OZgvQjF0bujUMXaM9Can3YTg/hWnMAiWPG3tXc5v9Zhw456PURvXnM3dbD4XpT7Gpbuhkkfl
+        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
+        b=DoE30hiqvnkawl/ekLGBMxXqelwx1dUT0cs+uV+Lny9Ba33UiKL7T1QyZ5P/Ki17hb
+         5MdHTIjXZ+CVVMiV4KXSyYx9kP9mDWZzmq9+THvlUIgjgVGOQXTz11nYJQ0L3vPko/E7
+         tg8UT95PE+ToqHGEMs3A0PhJ/WTUUh+WB0tTFI8zP1OIqroCQsiIV/L1uBn4FDYA1iW0
+         aTn3NGn913lJ+a88sXVRLjF0voxLIxMdim4l7eT911vOiQFo02yoqF7iUnQT2Td0K0MY
+         TcMMiadBxxw6LoPzVcE6fqEmBiD38mo2PUt7wXDsAMmECjut8DGYDOgxbBdy7qJS/OYs
+         pu+A==
+X-Gm-Message-State: AC+VfDyBobkfxfHT38VLesVIfabKisCLQE5zHFYyMT5MkmEMsGOZIu0E
+        34RtrJFJQSQ3YDmyiyUmpKh/Va8v10Pc
+X-Google-Smtp-Source: ACHHUZ7iVRpOAv6Jg1Vma8iZuVlG+zdfL7J7g7bw3oYR/R9LDK/FtALGoLiR9lj+L4eL6dqGzgFW5l1YZK/T
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c563:7e28:fb7c:bce3])
- (user=irogers job=sendgmr) by 2002:a81:bc0b:0:b0:54f:69a4:151e with SMTP id
- a11-20020a81bc0b000000b0054f69a4151emr4508430ywi.8.1682746888738; Fri, 28 Apr
- 2023 22:41:28 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 22:35:03 -0700
+ (user=irogers job=sendgmr) by 2002:a81:c543:0:b0:546:63a:6e23 with SMTP id
+ o3-20020a81c543000000b00546063a6e23mr4759391ywj.0.1682746895837; Fri, 28 Apr
+ 2023 22:41:35 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 22:35:04 -0700
 In-Reply-To: <20230429053506.1962559-1-irogers@google.com>
-Message-Id: <20230429053506.1962559-44-irogers@google.com>
+Message-Id: <20230429053506.1962559-45-irogers@google.com>
 Mime-Version: 1.0
 References: <20230429053506.1962559-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v3 43/46] perf jevents: Don't rewrite metrics across PMUs
+Subject: [PATCH v3 44/46] perf metrics: Be PMU specific in event match
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -91,110 +91,68 @@ Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't rewrite metrics across PMUs as the result events likely won't be
-found. Identify metrics with a pair of PMU name and metric name.
+Ids/events from a metric are turned into an event string and parsed;
+setup_metric_events matches the id back to the parsed evsel. With
+hybrid the same event may exist on both PMUs with the same name and be
+being used by metrics at the same time. A metric on cpu_core therefore
+shouldn't match against evsels on cpu_atom, or the metric will compute
+the wrong value. Make the matching sensitive to the PMU being parsed.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/jevents.py     |  4 ++--
- tools/perf/pmu-events/metric.py      | 28 +++++++++++++++++-----------
- tools/perf/pmu-events/metric_test.py |  6 +++---
- 3 files changed, 22 insertions(+), 16 deletions(-)
+ tools/perf/util/metricgroup.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index b18dd2fcbf04..487ff01baf1b 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -391,11 +391,11 @@ def read_json_events(path: str, topic: str) -> Sequence[JsonEvent]:
-   except BaseException as err:
-     print(f"Exception processing {path}")
-     raise
--  metrics: list[Tuple[str, metric.Expression]] = []
-+  metrics: list[Tuple[str, str, metric.Expression]] = []
-   for event in events:
-     event.topic = topic
-     if event.metric_name and '-' not in event.metric_name:
--      metrics.append((event.metric_name, event.metric_expr))
-+      metrics.append((event.pmu, event.metric_name, event.metric_expr))
-   updates = metric.RewriteMetricsInTermsOfOthers(metrics)
-   if updates:
-     for event in events:
-diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric.py
-index 8ec0ba884673..af58b74d1644 100644
---- a/tools/perf/pmu-events/metric.py
-+++ b/tools/perf/pmu-events/metric.py
-@@ -552,28 +552,34 @@ def ParsePerfJson(orig: str) -> Expression:
-   return _Constify(eval(compile(parsed, orig, 'eval')))
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 4245b23d8efe..490561f430f2 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -274,7 +274,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 	const char *metric_id;
+ 	struct evsel *ev;
+ 	size_t ids_size, matched_events, i;
+-	bool all_pmus = !strcmp(pmu, "all");
++	bool all_pmus = !strcmp(pmu, "all") || !perf_pmu__is_hybrid(pmu);
  
+ 	*out_metric_events = NULL;
+ 	ids_size = hashmap__size(ids);
+@@ -287,7 +287,10 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 	evlist__for_each_entry(metric_evlist, ev) {
+ 		struct expr_id_data *val_ptr;
  
--def RewriteMetricsInTermsOfOthers(metrics: List[Tuple[str, Expression]]
--                                  )-> Dict[str, Expression]:
-+def RewriteMetricsInTermsOfOthers(metrics: List[Tuple[str, str, Expression]]
-+                                  )-> Dict[Tuple[str, str], Expression]:
-   """Shorten metrics by rewriting in terms of others.
+-		if (!all_pmus && strcmp(ev->pmu_name, pmu))
++		/* Don't match events for the wrong hybrid PMU. */
++		if (!all_pmus && ev->pmu_name &&
++		    perf_pmu__is_hybrid(ev->pmu_name) &&
++		    strcmp(ev->pmu_name, pmu))
+ 			continue;
+ 		/*
+ 		 * Check for duplicate events with the same name. For
+@@ -304,6 +307,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
+ 		 * about this event.
+ 		 */
+ 		if (hashmap__find(ids, metric_id, &val_ptr)) {
++			pr_debug("Matched metric-id %s to %s\n", metric_id, evsel__name(ev));
+ 			metric_events[matched_events++] = ev;
  
-   Args:
--    metrics (list): pairs of metric names and their expressions.
-+    metrics (list): pmus, metric names and their expressions.
-   Returns:
--    Dict: mapping from a metric name to a shortened expression.
-+    Dict: mapping from a pmu, metric name pair to a shortened expression.
-   """
--  updates: Dict[str, Expression] = dict()
--  for outer_name, outer_expression in metrics:
-+  updates: Dict[Tuple[str, str], Expression] = dict()
-+  for outer_pmu, outer_name, outer_expression in metrics:
-+    if outer_pmu is None:
-+      outer_pmu = 'cpu'
-     updated = outer_expression
-     while True:
--      for inner_name, inner_expression in metrics:
-+      for inner_pmu, inner_name, inner_expression in metrics:
-+        if inner_pmu is None:
-+          inner_pmu = 'cpu'
-+        if inner_pmu.lower() != outer_pmu.lower():
-+          continue
-         if inner_name.lower() == outer_name.lower():
-           continue
--        if inner_name in updates:
--          inner_expression = updates[inner_name]
-+        if (inner_pmu, inner_name) in updates:
-+          inner_expression = updates[(inner_pmu, inner_name)]
-         updated = updated.Substitute(inner_name, inner_expression)
-       if updated.Equals(outer_expression):
-         break
--      if outer_name in updates and updated.Equals(updates[outer_name]):
-+      if (outer_pmu, outer_name) in updates and updated.Equals(updates[(outer_pmu, outer_name)]):
-         break
--      updates[outer_name] = updated
-+      updates[(outer_pmu, outer_name)] = updated
-   return updates
-diff --git a/tools/perf/pmu-events/metric_test.py b/tools/perf/pmu-events/metric_test.py
-index 40a3c7d8b2bc..ee22ff43ddd7 100755
---- a/tools/perf/pmu-events/metric_test.py
-+++ b/tools/perf/pmu-events/metric_test.py
-@@ -158,9 +158,9 @@ class TestMetricExpressions(unittest.TestCase):
- 
-   def test_RewriteMetricsInTermsOfOthers(self):
-     Expression.__eq__ = lambda e1, e2: e1.Equals(e2)
--    before = [('m1', ParsePerfJson('a + b + c + d')),
--              ('m2', ParsePerfJson('a + b + c'))]
--    after = {'m1': ParsePerfJson('m2 + d')}
-+    before = [('cpu', 'm1', ParsePerfJson('a + b + c + d')),
-+              ('cpu', 'm2', ParsePerfJson('a + b + c'))]
-+    after = {('cpu', 'm1'): ParsePerfJson('m2 + d')}
-     self.assertEqual(RewriteMetricsInTermsOfOthers(before), after)
-     Expression.__eq__ = None
- 
+ 			if (matched_events >= ids_size)
+@@ -1592,7 +1596,7 @@ static int parse_groups(struct evlist *perf_evlist,
+ 		ret = setup_metric_events(fake_pmu ? "all" : m->pmu, m->pctx->ids,
+ 					  metric_evlist, &metric_events);
+ 		if (ret) {
+-			pr_debug("Cannot resolve IDs for %s: %s\n",
++			pr_err("Cannot resolve IDs for %s: %s\n",
+ 				m->metric_name, m->metric_expr);
+ 			goto out;
+ 		}
 -- 
 2.40.1.495.gc816e09b53d-goog
 
