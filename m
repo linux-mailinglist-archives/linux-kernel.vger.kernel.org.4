@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9986F2323
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523CC6F2327
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347253AbjD2FjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 01:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
+        id S1347368AbjD2Fj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347349AbjD2FjG (ORCPT
+        with ESMTP id S1347356AbjD2FjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 01:39:06 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5E94221
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:38:35 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a7df507c5so997014276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:38:35 -0700 (PDT)
+        Sat, 29 Apr 2023 01:39:15 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B47040F0
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:38:47 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-559ceb9eaa3so10206347b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:38:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682746693; x=1685338693;
+        d=google.com; s=20221208; t=1682746701; x=1685338701;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7D6E0hATCK7e1RhJ0eODuZwXaDaxrE5gp17wu1kd6s=;
-        b=139kA4q02ubjRJRnm6P66WfukEPsn9I9wL+zbPwiH63hHQjcZEidMxyv4tdn/gzBBN
-         kXYOWNoZrCCblw4cCt/V43hGZUhK9moyAHiso+BrRzjP4zGHxlGe9zTdacEl9kiwyAWl
-         6zfz210wxJC2cppSu7JBi4u5o2EcYwDbBXyqqNafcig6CIsX1N3DdDtL4AvoJUdAEsHW
-         qBkacALi7PUPORmy95PLHmEwptG9l+9kv9RIjin/5yUDH0Vz1/WiU0FGD1a/7XvAMxT1
-         U6BsGqMb/X/d29puF85Iqk/G1wAZ8CQTmJpl6GXpQj7yRf/NkeIDvsMZvmHsiEf9knyv
-         T50g==
+        bh=28heJsHVG1Ez9c7x4RwYRWD14rgV2YWWdnwbhB3UxWM=;
+        b=ymPeWaXIvCZy5WUQTZVKV6JqCTkVzTb7edpj8uDdGAYAvuncRdQd739FGUM0gu/kzV
+         ILXyunACMZ8Ns6lZval+xSsC/7gQz7X/yzXktudLsw+0rCRHftUvGwANGGVjq6WsZKIw
+         LFbJJfLfwNUDcLccv7+CxtPgBA2nwPCp7LtpY+xJkG8R1MANm02GtcESB/PbKGAO5XKJ
+         GdyNFFu9v6ZwRR4xxcr4VGMP1kOw30Xiw+qpQ3VhruHN/LWNUCrIn2NJuMX7O2IqBvcZ
+         S3b+w7pnh2nphHt+b3/3f4DDQJpsl5pMEcmq88//ZoAUHupCiDxJ1A+Ou5U18kmjQCFo
+         Hcog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682746693; x=1685338693;
+        d=1e100.net; s=20221208; t=1682746701; x=1685338701;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7D6E0hATCK7e1RhJ0eODuZwXaDaxrE5gp17wu1kd6s=;
-        b=Y03Enuvy8cKogS3kjsPchba/Aa1nyhfHU/jgHYg4MQraVhMjox5Cz6boSEp4Tljhyx
-         uaLOAp2TOynuv4uWC2EtkPcEqcyBte95Qr2LILRoXZKulsHLTHVw5gLwiFs8bghrvgcs
-         BcO8JYIw3ozHAt1XSKriT15kVob3JFhTnNkHyGPDcUg6lpLLP6+fxfU9fVnKMpmQDTSc
-         mfb04Y4Hhr0GK/HJP5+3ID96xxxDvbSG3mbxL1vXJoJJnhAFaWYsIf2/U4DXItQCSlaA
-         +Z0eqxrXFICV9hHumf7htkGknYfLpDDYkaH3gmO1wVC0ItxQV5V4ZSGMaQ3HaxUpL+uR
-         7djg==
-X-Gm-Message-State: AC+VfDxOPxTcYzEx8eQcFvEhEwfPKloGmFZjuM/H/Yu9KIRg/DyRJpR6
-        m58QPcx2JpqUEERM+M9kJFLHsqL9iTXi
-X-Google-Smtp-Source: ACHHUZ5V31xnrIAjV8PXDVkbbmTFl1iK4hdMJMob0hURfue/MGSe5ZQglubKG46sy6cluCGXgawSvoMy+u5E
+        bh=28heJsHVG1Ez9c7x4RwYRWD14rgV2YWWdnwbhB3UxWM=;
+        b=Yhhc/ENKBQ2GQNal6v3V5Ga6Y1ybZWAVCxU2O2x9Gg3sSpdaXrPkHjzgIRVni99ZpF
+         vhPYZzN3YRCarZSzJf5uVjRFSzHCofs0lGiTsitLqye0NHQXpqiYW3Xzt2O8xp8c4syn
+         XBFt8byBJIMPkKFtFaQPAo4ls8KdHpvkEgWuVagH1hqJ4KEAkkNyx3sRyxmcd8LjMDEC
+         Sg97IocfD459wAu9Kc3bMU70qnVXNVYZlQzJKTLKFDR55C/jE1Lw8SWqInfD+BB8Ncri
+         nkQQoWQN6rvRk/I2aKOa3FXp6/hBIy5AhTgcleMQ39Vhm/yrvLIcmzvE6MJ3UdT9jr8j
+         M94w==
+X-Gm-Message-State: AC+VfDzNiu9VY/zlnaxhTSY75s+hWaJWi+rFdjBonfHY8paAqzlKj586
+        XvsYHmz41HD6JMfISfFLVyVex+WE2S8c
+X-Google-Smtp-Source: ACHHUZ5CXoZ0DoJfd75ilbtYOqbVdkonwJ2UGCNaJKKnCl+MvqeqGxMVwYVBZ+QfEVRojpGZAy8HkHOSL/KH
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c563:7e28:fb7c:bce3])
- (user=irogers job=sendgmr) by 2002:a25:c00b:0:b0:b99:4887:c736 with SMTP id
- c11-20020a25c00b000000b00b994887c736mr4431482ybf.3.1682746693497; Fri, 28 Apr
- 2023 22:38:13 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 22:34:41 -0700
+ (user=irogers job=sendgmr) by 2002:a05:690c:725:b0:556:d398:8714 with SMTP id
+ bt5-20020a05690c072500b00556d3988714mr4318249ywb.0.1682746701594; Fri, 28 Apr
+ 2023 22:38:21 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 22:34:42 -0700
 In-Reply-To: <20230429053506.1962559-1-irogers@google.com>
-Message-Id: <20230429053506.1962559-22-irogers@google.com>
+Message-Id: <20230429053506.1962559-23-irogers@google.com>
 Mime-Version: 1.0
 References: <20230429053506.1962559-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v3 21/46] perf evsel: Modify group pmu name for software events
+Subject: [PATCH v3 22/46] perf test: Move x86 hybrid tests to arch/x86
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -99,60 +99,571 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we have a group of {cycles,faults} then we need the faults software
-event to appear to be on the same PMU as cycles so that we don't split
-the group in parse_events__sort_events_and_fix_groups. This case is
-relatively easy as cycles is the leader and will have a PMU name. In
-the reverse case, {faults,cycles} we still need faults to appear to
-have the PMU name of cycles but the old behavior is just to return
-"cpu". For hybrid this fails as cycles will be on "cpu_core" or
-"cpu_atom", causing faults to be split into a different group.
-
-Change the behavior for software events so that the whole group is
-searched for the named PMU.
+The tests use x86 hybrid specific PMUs.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/evsel.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ tools/perf/arch/x86/include/arch-tests.h |   1 +
+ tools/perf/arch/x86/tests/Build          |   1 +
+ tools/perf/arch/x86/tests/arch-tests.c   |  10 +
+ tools/perf/arch/x86/tests/hybrid.c       | 277 +++++++++++++++++++++++
+ tools/perf/tests/parse-events.c          | 181 ---------------
+ 5 files changed, 289 insertions(+), 181 deletions(-)
+ create mode 100644 tools/perf/arch/x86/tests/hybrid.c
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 1cd04b5998d2..63522322e118 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -829,23 +829,26 @@ bool evsel__name_is(struct evsel *evsel, const char *name)
+diff --git a/tools/perf/arch/x86/include/arch-tests.h b/tools/perf/arch/x86/include/arch-tests.h
+index 902e9ea9b99e..33d39c1d3e64 100644
+--- a/tools/perf/arch/x86/include/arch-tests.h
++++ b/tools/perf/arch/x86/include/arch-tests.h
+@@ -11,6 +11,7 @@ int test__intel_pt_pkt_decoder(struct test_suite *test, int subtest);
+ int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+ int test__bp_modify(struct test_suite *test, int subtest);
+ int test__x86_sample_parsing(struct test_suite *test, int subtest);
++int test__hybrid(struct test_suite *test, int subtest);
  
- const char *evsel__group_pmu_name(const struct evsel *evsel)
- {
--	const struct evsel *leader;
-+	struct evsel *leader, *pos;
+ extern struct test_suite *arch_tests[];
  
- 	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
- 	if (evsel->pmu_name)
- 		return evsel->pmu_name;
- 	/*
- 	 * Software events may be in a group with other uncore PMU events. Use
--	 * the pmu_name of the group leader to avoid breaking the software event
--	 * out of the group.
-+	 * the pmu_name of the first non-software event to avoid breaking the
-+	 * software event out of the group.
- 	 *
- 	 * Aux event leaders, like intel_pt, expect a group with events from
- 	 * other PMUs, so substitute the AUX event's PMU in this case.
- 	 */
- 	leader  = evsel__leader(evsel);
--	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
--	    leader->pmu_name) {
--		return leader->pmu_name;
-+	if (evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) {
-+		/* Starting with the leader, find the first event with a named PMU. */
-+		for_each_group_evsel(pos, leader) {
-+			if (pos->pmu_name)
-+				return pos->pmu_name;
+diff --git a/tools/perf/arch/x86/tests/Build b/tools/perf/arch/x86/tests/Build
+index 6f4e8636c3bf..08cc8b9c931e 100644
+--- a/tools/perf/arch/x86/tests/Build
++++ b/tools/perf/arch/x86/tests/Build
+@@ -3,5 +3,6 @@ perf-$(CONFIG_DWARF_UNWIND) += dwarf-unwind.o
+ 
+ perf-y += arch-tests.o
+ perf-y += sample-parsing.o
++perf-y += hybrid.o
+ perf-$(CONFIG_AUXTRACE) += insn-x86.o intel-pt-test.o
+ perf-$(CONFIG_X86_64) += bp-modify.o
+diff --git a/tools/perf/arch/x86/tests/arch-tests.c b/tools/perf/arch/x86/tests/arch-tests.c
+index aae6ea0fe52b..147ad0638bbb 100644
+--- a/tools/perf/arch/x86/tests/arch-tests.c
++++ b/tools/perf/arch/x86/tests/arch-tests.c
+@@ -22,6 +22,15 @@ struct test_suite suite__intel_pt = {
+ DEFINE_SUITE("x86 bp modify", bp_modify);
+ #endif
+ DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
++static struct test_case hybrid_tests[] = {
++	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
++	{ .name = NULL, }
++};
++
++struct test_suite suite__hybrid = {
++	.desc = "x86 hybrid",
++	.test_cases = hybrid_tests,
++};
+ 
+ struct test_suite *arch_tests[] = {
+ #ifdef HAVE_DWARF_UNWIND_SUPPORT
+@@ -35,5 +44,6 @@ struct test_suite *arch_tests[] = {
+ 	&suite__bp_modify,
+ #endif
+ 	&suite__x86_sample_parsing,
++	&suite__hybrid,
+ 	NULL,
+ };
+diff --git a/tools/perf/arch/x86/tests/hybrid.c b/tools/perf/arch/x86/tests/hybrid.c
+new file mode 100644
+index 000000000000..0f99cfd116ee
+--- /dev/null
++++ b/tools/perf/arch/x86/tests/hybrid.c
+@@ -0,0 +1,277 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "arch-tests.h"
++#include "debug.h"
++#include "evlist.h"
++#include "evsel.h"
++#include "pmu-hybrid.h"
++#include "tests/tests.h"
++
++static bool test_config(const struct evsel *evsel, __u64 expected_config)
++{
++	return (evsel->core.attr.config & PERF_HW_EVENT_MASK) == expected_config;
++}
++
++static int test__hybrid_hw_event_with_pmu(struct evlist *evlist)
++{
++	struct evsel *evsel = evlist__first(evlist);
++
++	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
++	return TEST_OK;
++}
++
++static int test__hybrid_hw_group_event(struct evlist *evlist)
++{
++	struct evsel *evsel, *leader;
++
++	evsel = leader = evlist__first(evlist);
++	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++
++	evsel = evsel__next(evsel);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++	return TEST_OK;
++}
++
++static int test__hybrid_sw_hw_group_event(struct evlist *evlist)
++{
++	struct evsel *evsel, *leader;
++
++	evsel = leader = evlist__first(evlist);
++	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++
++	evsel = evsel__next(evsel);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++	return TEST_OK;
++}
++
++static int test__hybrid_hw_sw_group_event(struct evlist *evlist)
++{
++	struct evsel *evsel, *leader;
++
++	evsel = leader = evlist__first(evlist);
++	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++
++	evsel = evsel__next(evsel);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++	return TEST_OK;
++}
++
++static int test__hybrid_group_modifier1(struct evlist *evlist)
++{
++	struct evsel *evsel, *leader;
++
++	evsel = leader = evlist__first(evlist);
++	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
++	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
++
++	evsel = evsel__next(evsel);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
++	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
++	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
++	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
++	return TEST_OK;
++}
++
++static int test__hybrid_raw1(struct evlist *evlist)
++{
++	struct evsel *evsel = evlist__first(evlist);
++
++	if (!perf_pmu__hybrid_mounted("cpu_atom")) {
++		TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
++		TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++		TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
++		return TEST_OK;
++	}
++
++	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
++
++	/* The type of second event is randome value */
++	evsel = evsel__next(evsel);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
++	return TEST_OK;
++}
++
++static int test__hybrid_raw2(struct evlist *evlist)
++{
++	struct evsel *evsel = evlist__first(evlist);
++
++	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
++	return TEST_OK;
++}
++
++static int test__hybrid_cache_event(struct evlist *evlist)
++{
++	struct evsel *evsel = evlist__first(evlist);
++
++	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config", 0x2 == (evsel->core.attr.config & 0xffffffff));
++	return TEST_OK;
++}
++
++static int test__checkevent_pmu(struct evlist *evlist)
++{
++
++	struct evsel *evsel = evlist__first(evlist);
++
++	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
++	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
++	TEST_ASSERT_VAL("wrong config",    10 == evsel->core.attr.config);
++	TEST_ASSERT_VAL("wrong config1",    1 == evsel->core.attr.config1);
++	TEST_ASSERT_VAL("wrong config2",    3 == evsel->core.attr.config2);
++	TEST_ASSERT_VAL("wrong config3",    0 == evsel->core.attr.config3);
++	/*
++	 * The period value gets configured within evlist__config,
++	 * while this test executes only parse events method.
++	 */
++	TEST_ASSERT_VAL("wrong period",     0 == evsel->core.attr.sample_period);
++
++	return TEST_OK;
++}
++
++struct evlist_test {
++	const char *name;
++	bool (*valid)(void);
++	int (*check)(struct evlist *evlist);
++};
++
++static const struct evlist_test test__hybrid_events[] = {
++	{
++		.name  = "cpu_core/cpu-cycles/",
++		.check = test__hybrid_hw_event_with_pmu,
++		/* 0 */
++	},
++	{
++		.name  = "{cpu_core/cpu-cycles/,cpu_core/instructions/}",
++		.check = test__hybrid_hw_group_event,
++		/* 1 */
++	},
++	{
++		.name  = "{cpu-clock,cpu_core/cpu-cycles/}",
++		.check = test__hybrid_sw_hw_group_event,
++		/* 2 */
++	},
++	{
++		.name  = "{cpu_core/cpu-cycles/,cpu-clock}",
++		.check = test__hybrid_hw_sw_group_event,
++		/* 3 */
++	},
++	{
++		.name  = "{cpu_core/cpu-cycles/k,cpu_core/instructions/u}",
++		.check = test__hybrid_group_modifier1,
++		/* 4 */
++	},
++	{
++		.name  = "r1a",
++		.check = test__hybrid_raw1,
++		/* 5 */
++	},
++	{
++		.name  = "cpu_core/r1a/",
++		.check = test__hybrid_raw2,
++		/* 6 */
++	},
++	{
++		.name  = "cpu_core/config=10,config1,config2=3,period=1000/u",
++		.check = test__checkevent_pmu,
++		/* 7 */
++	},
++	{
++		.name  = "cpu_core/LLC-loads/",
++		.check = test__hybrid_cache_event,
++		/* 8 */
++	},
++};
++
++static int test_event(const struct evlist_test *e)
++{
++	struct parse_events_error err;
++	struct evlist *evlist;
++	int ret;
++
++	if (e->valid && !e->valid()) {
++		pr_debug("... SKIP\n");
++		return TEST_OK;
++	}
++
++	evlist = evlist__new();
++	if (evlist == NULL) {
++		pr_err("Failed allocation");
++		return TEST_FAIL;
++	}
++	parse_events_error__init(&err);
++	ret = parse_events(evlist, e->name, &err);
++	if (ret) {
++		pr_debug("failed to parse event '%s', err %d, str '%s'\n",
++			 e->name, ret, err.str);
++		parse_events_error__print(&err, e->name);
++		ret = TEST_FAIL;
++		if (strstr(err.str, "can't access trace events"))
++			ret = TEST_SKIP;
++	} else {
++		ret = e->check(evlist);
++	}
++	parse_events_error__exit(&err);
++	evlist__delete(evlist);
++
++	return ret;
++}
++
++static int combine_test_results(int existing, int latest)
++{
++	if (existing == TEST_FAIL)
++		return TEST_FAIL;
++	if (existing == TEST_SKIP)
++		return latest == TEST_OK ? TEST_SKIP : latest;
++	return latest;
++}
++
++static int test_events(const struct evlist_test *events, int cnt)
++{
++	int ret = TEST_OK;
++
++	for (int i = 0; i < cnt; i++) {
++		const struct evlist_test *e = &events[i];
++		int test_ret;
++
++		pr_debug("running test %d '%s'\n", i, e->name);
++		test_ret = test_event(e);
++		if (test_ret != TEST_OK) {
++			pr_debug("Event test failure: test %d '%s'", i, e->name);
++			ret = combine_test_results(ret, test_ret);
 +		}
- 	}
++	}
++
++	return ret;
++}
++
++int test__hybrid(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
++{
++	if (!perf_pmu__has_hybrid())
++		return TEST_SKIP;
++
++	return test_events(test__hybrid_events, ARRAY_SIZE(test__hybrid_events));
++}
+diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
+index f0e9f9288f2b..3bf07b7e37b1 100644
+--- a/tools/perf/tests/parse-events.c
++++ b/tools/perf/tests/parse-events.c
+@@ -6,7 +6,6 @@
+ #include "tests.h"
+ #include "debug.h"
+ #include "pmu.h"
+-#include "pmu-hybrid.h"
+ #include "pmus.h"
+ #include <dirent.h>
+ #include <errno.h>
+@@ -1509,127 +1508,6 @@ static int test__all_tracepoints(struct evlist *evlist)
+ }
+ #endif /* HAVE_LIBTRACEVENT */
  
- 	return "cpu";
+-static int test__hybrid_hw_event_with_pmu(struct evlist *evlist)
+-{
+-	struct evsel *evsel = evlist__first(evlist);
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_hw_group_event(struct evlist *evlist)
+-{
+-	struct evsel *evsel, *leader;
+-
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_sw_hw_group_event(struct evlist *evlist)
+-{
+-	struct evsel *evsel, *leader;
+-
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_hw_sw_group_event(struct evlist *evlist)
+-{
+-	struct evsel *evsel, *leader;
+-
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_SOFTWARE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_group_modifier1(struct evlist *evlist)
+-{
+-	struct evsel *evsel, *leader;
+-
+-	evsel = leader = evlist__first(evlist);
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x3c));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong exclude_user", evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", !evsel->core.attr.exclude_kernel);
+-
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0xc0));
+-	TEST_ASSERT_VAL("wrong leader", evsel__has_leader(evsel, leader));
+-	TEST_ASSERT_VAL("wrong exclude_user", !evsel->core.attr.exclude_user);
+-	TEST_ASSERT_VAL("wrong exclude_kernel", evsel->core.attr.exclude_kernel);
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_raw1(struct evlist *evlist)
+-{
+-	struct evsel *evsel = evlist__first(evlist);
+-
+-	if (!perf_pmu__hybrid_mounted("cpu_atom")) {
+-		TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
+-		TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-		TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
+-		return TEST_OK;
+-	}
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 2 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
+-
+-	/* The type of second event is randome value */
+-	evsel = evsel__next(evsel);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_raw2(struct evlist *evlist)
+-{
+-	struct evsel *evsel = evlist__first(evlist);
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_RAW == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", test_config(evsel, 0x1a));
+-	return TEST_OK;
+-}
+-
+-static int test__hybrid_cache_event(struct evlist *evlist)
+-{
+-	struct evsel *evsel = evlist__first(evlist);
+-
+-	TEST_ASSERT_VAL("wrong number of entries", 1 == evlist->core.nr_entries);
+-	TEST_ASSERT_VAL("wrong type", PERF_TYPE_HW_CACHE == evsel->core.attr.type);
+-	TEST_ASSERT_VAL("wrong config", 0x2 == (evsel->core.attr.config & 0xffffffff));
+-	return TEST_OK;
+-}
+-
+ struct evlist_test {
+ 	const char *name;
+ 	bool (*valid)(void);
+@@ -1997,54 +1875,6 @@ static const struct terms_test test__terms[] = {
+ 	},
+ };
+ 
+-static const struct evlist_test test__hybrid_events[] = {
+-	{
+-		.name  = "cpu_core/cpu-cycles/",
+-		.check = test__hybrid_hw_event_with_pmu,
+-		/* 0 */
+-	},
+-	{
+-		.name  = "{cpu_core/cpu-cycles/,cpu_core/instructions/}",
+-		.check = test__hybrid_hw_group_event,
+-		/* 1 */
+-	},
+-	{
+-		.name  = "{cpu-clock,cpu_core/cpu-cycles/}",
+-		.check = test__hybrid_sw_hw_group_event,
+-		/* 2 */
+-	},
+-	{
+-		.name  = "{cpu_core/cpu-cycles/,cpu-clock}",
+-		.check = test__hybrid_hw_sw_group_event,
+-		/* 3 */
+-	},
+-	{
+-		.name  = "{cpu_core/cpu-cycles/k,cpu_core/instructions/u}",
+-		.check = test__hybrid_group_modifier1,
+-		/* 4 */
+-	},
+-	{
+-		.name  = "r1a",
+-		.check = test__hybrid_raw1,
+-		/* 5 */
+-	},
+-	{
+-		.name  = "cpu_core/r1a/",
+-		.check = test__hybrid_raw2,
+-		/* 6 */
+-	},
+-	{
+-		.name  = "cpu_core/config=10,config1,config2=3,period=1000/u",
+-		.check = test__checkevent_pmu,
+-		/* 7 */
+-	},
+-	{
+-		.name  = "cpu_core/LLC-loads/",
+-		.check = test__hybrid_cache_event,
+-		/* 8 */
+-	},
+-};
+-
+ static int test_event(const struct evlist_test *e)
+ {
+ 	struct parse_events_error err;
+@@ -2321,14 +2151,6 @@ static bool test_alias(char **event, char **alias)
+ 	return false;
+ }
+ 
+-static int test__hybrid(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
+-{
+-	if (!perf_pmu__has_hybrid())
+-		return TEST_SKIP;
+-
+-	return test_events(test__hybrid_events, ARRAY_SIZE(test__hybrid_events));
+-}
+-
+ static int test__checkevent_pmu_events_alias(struct evlist *evlist)
+ {
+ 	struct evsel *evsel1 = evlist__first(evlist);
+@@ -2392,9 +2214,6 @@ static struct test_case tests__parse_events[] = {
+ 	TEST_CASE_REASON("Test event parsing",
+ 			 events2,
+ 			 "permissions"),
+-	TEST_CASE_REASON("Test parsing of \"hybrid\" CPU events",
+-			 hybrid,
+-			"not hybrid"),
+ 	TEST_CASE_REASON("Parsing of all PMU events from sysfs",
+ 			 pmu_events,
+ 			 "permissions"),
 -- 
 2.40.1.495.gc816e09b53d-goog
 
