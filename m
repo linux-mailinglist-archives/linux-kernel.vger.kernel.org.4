@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03846F2339
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D946F2341
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 07:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347464AbjD2Fmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 01:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
+        id S1347458AbjD2FoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 01:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347447AbjD2FmE (ORCPT
+        with ESMTP id S1347515AbjD2Fni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 01:42:04 -0400
+        Sat, 29 Apr 2023 01:43:38 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F60A3A93
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:41:36 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54f8af8b8f1so11875887b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:41:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE8B3ABC
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:43:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-555d93630e7so10465977b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 22:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682746896; x=1685338896;
+        d=google.com; s=20221208; t=1682746902; x=1685338902;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
-        b=djqmOH2cNr/CtlHU+Lr9guxdpgrU0doVbrQm9KJ7AVfPJJoa7AIO2XwGLMAFCcc2kc
-         6etG5s+fAsD8i9k7b7x4QXdHX3qD2LdCcJfM4DP7gnVV3TIMcmc5yDzObuuTsQviSUaf
-         5bVrWHWUJAkav8LxSCMb4+agHiKK6QukeXTppgNgVMaFNfmDvgG3FxvpBzeLEMprkldU
-         ZRNFrqVbChnk0yv4jrxkFuZp3WSXNE4r28jBR18z9ReepF0EDtzDS680EIC+8Z8R5RqE
-         cn/r6PebJP9N+c8iAWcYi3dBcHCBP0NJ3KefX4C+RipKztL1GlmLPMEWjPM2liNsd2i8
-         3IPw==
+        bh=udIESTQJWghJ0eXfw1zjkQa1ohgrnaNqFMimydoVXZk=;
+        b=S7NAdMt/BLILu3k9cqlhzRidxjuY8lPnMt9sI+f7V2WnoL0rxhIkGSZbMkNXRfehPv
+         5TPdUIB0O+pIIqNJVeoQHIqeLHdKnubmejL5VoddsDUULbDGIMPX1pvwM6yU06ZFwrQC
+         0eXx+8aYwje6WrjerTb2LqIO9f52ufMyswrjFggR7oKPCkP48oaqYCu/R8K8JIRFgkSZ
+         +HFtXojLsja1GXQtRnMhcQ3JfR3PLQbsgqaq6q3opqfKF6AOcHzH4KX1Ku6AcICuzCEb
+         IC2Nt0douaEw6NzsuPzD+GLN4s4QEv9KyLJCP0fOzB4wXNJGtjSxVDJfH92Cu3jvRarf
+         FnKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682746896; x=1685338896;
+        d=1e100.net; s=20221208; t=1682746902; x=1685338902;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zMkOwzwif+XT0+nBV5mOmwMnUg0kBSArT43+8IsF+QA=;
-        b=DoE30hiqvnkawl/ekLGBMxXqelwx1dUT0cs+uV+Lny9Ba33UiKL7T1QyZ5P/Ki17hb
-         5MdHTIjXZ+CVVMiV4KXSyYx9kP9mDWZzmq9+THvlUIgjgVGOQXTz11nYJQ0L3vPko/E7
-         tg8UT95PE+ToqHGEMs3A0PhJ/WTUUh+WB0tTFI8zP1OIqroCQsiIV/L1uBn4FDYA1iW0
-         aTn3NGn913lJ+a88sXVRLjF0voxLIxMdim4l7eT911vOiQFo02yoqF7iUnQT2Td0K0MY
-         TcMMiadBxxw6LoPzVcE6fqEmBiD38mo2PUt7wXDsAMmECjut8DGYDOgxbBdy7qJS/OYs
-         pu+A==
-X-Gm-Message-State: AC+VfDyBobkfxfHT38VLesVIfabKisCLQE5zHFYyMT5MkmEMsGOZIu0E
-        34RtrJFJQSQ3YDmyiyUmpKh/Va8v10Pc
-X-Google-Smtp-Source: ACHHUZ7iVRpOAv6Jg1Vma8iZuVlG+zdfL7J7g7bw3oYR/R9LDK/FtALGoLiR9lj+L4eL6dqGzgFW5l1YZK/T
+        bh=udIESTQJWghJ0eXfw1zjkQa1ohgrnaNqFMimydoVXZk=;
+        b=FgpXdLc5Mkr8sO1JWfg2/TL5470ivo+jtL7zlir2dLZTW2z/IRdm8P+iRDyr6r4Wyb
+         dnOdnWKDW2eLGqmj1xqby0WF4OZ0AIgGKfzWGS4JUSBfm5ReGgLnHyYJD3s2Kbd6n4cl
+         +j6akqtMkpoi39Mne4q+dMBdSg0v/XpMsb1q1xMtr7v/zEpbj7mrgbRJXC1S3kSJau56
+         n1Li47UtSc7zkoCJwARRDrW5X11cgfqIzZBy52FIbxNBoG3+qZBqs7KkVaSN/X9EZHGZ
+         dgapF7mGxZ/icBFceqryxMM5RMUQKpbgG/FXchd/+odEOloO3UvGvTNlJXh4MEXLZ0v2
+         ek9w==
+X-Gm-Message-State: AC+VfDyWT6g92lOllO1z0DrA1H3udTKhhx8WiWu65e0wnHTiyqCvaDT6
+        zW17rufnqqxyoUSJ21lhfjotcbTaqaxW
+X-Google-Smtp-Source: ACHHUZ7k8C4QVLDrdXyiVNZRg12JQxu+fF1LLzI0V9ATuIhg9IT4+BweogTF3zAsKr75lqULh/D5/nYRSg8q
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c563:7e28:fb7c:bce3])
- (user=irogers job=sendgmr) by 2002:a81:c543:0:b0:546:63a:6e23 with SMTP id
- o3-20020a81c543000000b00546063a6e23mr4759391ywj.0.1682746895837; Fri, 28 Apr
- 2023 22:41:35 -0700 (PDT)
-Date:   Fri, 28 Apr 2023 22:35:04 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ad07:0:b0:556:2da0:fc6 with SMTP id
+ l7-20020a81ad07000000b005562da00fc6mr4244919ywh.7.1682746902557; Fri, 28 Apr
+ 2023 22:41:42 -0700 (PDT)
+Date:   Fri, 28 Apr 2023 22:35:05 -0700
 In-Reply-To: <20230429053506.1962559-1-irogers@google.com>
-Message-Id: <20230429053506.1962559-45-irogers@google.com>
+Message-Id: <20230429053506.1962559-46-irogers@google.com>
 Mime-Version: 1.0
 References: <20230429053506.1962559-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Subject: [PATCH v3 44/46] perf metrics: Be PMU specific in event match
+Subject: [PATCH v3 45/46] perf stat: Don't disable TopdownL1 metric on hybrid
 From:   Ian Rogers <irogers@google.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
@@ -92,67 +92,39 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ids/events from a metric are turned into an event string and parsed;
-setup_metric_events matches the id back to the parsed evsel. With
-hybrid the same event may exist on both PMUs with the same name and be
-being used by metrics at the same time. A metric on cpu_core therefore
-shouldn't match against evsels on cpu_atom, or the metric will compute
-the wrong value. Make the matching sensitive to the PMU being parsed.
+Now that hybrid bugs are fixed sufficient to run TopdownL1 metrics,
+don't implicitly disable them for hybrid.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/metricgroup.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/perf/builtin-stat.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 4245b23d8efe..490561f430f2 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -274,7 +274,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 	const char *metric_id;
- 	struct evsel *ev;
- 	size_t ids_size, matched_events, i;
--	bool all_pmus = !strcmp(pmu, "all");
-+	bool all_pmus = !strcmp(pmu, "all") || !perf_pmu__is_hybrid(pmu);
- 
- 	*out_metric_events = NULL;
- 	ids_size = hashmap__size(ids);
-@@ -287,7 +287,10 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 	evlist__for_each_entry(metric_evlist, ev) {
- 		struct expr_id_data *val_ptr;
- 
--		if (!all_pmus && strcmp(ev->pmu_name, pmu))
-+		/* Don't match events for the wrong hybrid PMU. */
-+		if (!all_pmus && ev->pmu_name &&
-+		    perf_pmu__is_hybrid(ev->pmu_name) &&
-+		    strcmp(ev->pmu_name, pmu))
- 			continue;
- 		/*
- 		 * Check for duplicate events with the same name. For
-@@ -304,6 +307,7 @@ static int setup_metric_events(const char *pmu, struct hashmap *ids,
- 		 * about this event.
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index f4e572f9de6b..67dc69270ae4 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1900,12 +1900,7 @@ static int add_default_attributes(void)
+ 		 * Add TopdownL1 metrics if they exist. To minimize
+ 		 * multiplexing, don't request threshold computation.
  		 */
- 		if (hashmap__find(ids, metric_id, &val_ptr)) {
-+			pr_debug("Matched metric-id %s to %s\n", metric_id, evsel__name(ev));
- 			metric_events[matched_events++] = ev;
+-		/*
+-		 * TODO: TopdownL1 is disabled on hybrid CPUs to avoid a crashes
+-		 * caused by exposing latent bugs. This is fixed properly in:
+-		 * https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+-		 */
+-		if (metricgroup__has_metric(pmu, "TopdownL1") && !perf_pmu__has_hybrid()) {
++		if (metricgroup__has_metric(pmu, "TopdownL1")) {
+ 			struct evlist *metric_evlist = evlist__new();
+ 			struct evsel *metric_evsel;
  
- 			if (matched_events >= ids_size)
-@@ -1592,7 +1596,7 @@ static int parse_groups(struct evlist *perf_evlist,
- 		ret = setup_metric_events(fake_pmu ? "all" : m->pmu, m->pctx->ids,
- 					  metric_evlist, &metric_events);
- 		if (ret) {
--			pr_debug("Cannot resolve IDs for %s: %s\n",
-+			pr_err("Cannot resolve IDs for %s: %s\n",
- 				m->metric_name, m->metric_expr);
- 			goto out;
- 		}
 -- 
 2.40.1.495.gc816e09b53d-goog
 
