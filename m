@@ -2,222 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D692F6F241C
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 12:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D38406F2421
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 12:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjD2KLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 06:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S230334AbjD2KbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 06:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231195AbjD2KLD (ORCPT
+        with ESMTP id S229507AbjD2KbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 06:11:03 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B58199F
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:10:58 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f178da21afso3512535e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682763057; x=1685355057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xOoH+u4sWuKfNhD+pplTW3/yRTQkkBi07WX1BaYaefA=;
-        b=I9apvM5irx4dIyh27muv1VNP0nCVp2lMMmlZijTBu18GfVN3N/BX1rNrzb9GSRzGgb
-         ZKmuhtvVT+5jcJhlBAUZ4sRqftAvgXGWaRvNutYvqaeYxnTxPu338zyvbSUJRVFjEfuY
-         vo8TkQ2eey8+aTV0Qw+Qe3mr2NRZHZGYpBGpNaRbPpVPm9f/8zuvJq1OhGVkpZ8LMlqr
-         zhrgHD9mWzusdMw/TjDAqEPHZMJdNupfzMD0mtvmtaT0ZCxuEb6HaaGR+3IR5xSFE2KE
-         gw9MbLbU5hcWzPjUOmvwl7IsQv0x/IzL5hGOPYoIgMkVWxc+KZojvo3xRPrnkexlNG8D
-         hGmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682763057; x=1685355057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xOoH+u4sWuKfNhD+pplTW3/yRTQkkBi07WX1BaYaefA=;
-        b=EI0N9z3c/OAy87fUpRxbSdYyqkPE2tvXZBnoLYWrBvnQOjGU4SRKkqeqFAfc5KDHxe
-         gPd6kmwMCdrc7Be6RT3lyddIommSAdAC7Yq42zQz7ea0hnh9wz6OH99e9n58vy0SXsOj
-         Q/jbPIMIk9Q1kAQ4FvE3hfcRRFnLNbIeqK4eVH1kpgixj7TUMGXPPlkOBmMvAvITtarF
-         OIfh+wdbDib2TcptHdRwjGOt+O9B8vdq+3E1l7/90kC2EBRXSl5wTufYLfzsxyImRjAG
-         OuDXJJ6KUhMe1DkB21UCb1rUVrW1nWG8AJZA3tXmWU25lBPtVhoEGCPrh8cr+zJybNtB
-         uIIA==
-X-Gm-Message-State: AC+VfDzOdG741OOYLBqt89PAkmtrfM4Tc4e1m6ZS0eOOZdUybShSKP16
-        r9rNrVXOAJWrNAMJYbXd4srKKeWwhgEgO9XnmAo=
-X-Google-Smtp-Source: ACHHUZ57q1rR25Sq064Wnj4QKZbd7qnq+78FeEgQ8yPFE/Yl0dGyzJruj4yhR0U4Do2kNzDAwn+Kbg==
-X-Received: by 2002:a7b:c391:0:b0:3f1:9391:46c with SMTP id s17-20020a7bc391000000b003f19391046cmr6047537wmj.30.1682763057046;
-        Sat, 29 Apr 2023 03:10:57 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id f25-20020a7bc8d9000000b003f0b1b8cd9bsm26856002wml.4.2023.04.29.03.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 03:10:56 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 12:10:55 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Yangyu Chen <cyy@cyyself.name>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Wende Tan <twd2.me@gmail.com>, Soha Jin <soha@lohu.info>,
-        Hongren Zheng <i@zenithal.me>
-Subject: Re: [PATCH v2 1/2] riscv: allow case-insensitive ISA string parsing
-Message-ID: <yz4emsezvf47vpyrevelope5d5jcul2dsibza3jb6yeqr3r6jg@rmrt5wv2mnbn>
-References: <20230428141601.678489-1-cyy@cyyself.name>
- <tencent_BC90DDC6093E3E41246D3EC73F5CAB189007@qq.com>
+        Sat, 29 Apr 2023 06:31:04 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0131B1BE1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682764261; x=1714300261;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zTOqmkEbQ+DxMgDz3Z8f38DUCSFgfHq12Q6zBdQDTjM=;
+  b=DYQQ9ZlW87hbFd0eOxiQ7GV73Eaj2uuFjrYT5Xxg0RjH1dqSQ4pVzFZg
+   8hDwFrnGjtOEGFg6O/f4x3scqOIxuUTi5h3OIJXHo0dVR/ri0DlnDeOat
+   LTn2U1yB6ripuLdsnMfT6KteEmQEC6xtnvP6zC/jMR6TT2kY/5QiQOvKu
+   +pE45T8ibvpEKYsv15X4OZYLrNEp3i5pltfhL+pLDSJEppdtpIvZB6kWL
+   TNjnhuIFsfgHgXJAt0ukjcvSU4vLUI5k/dG3mkACcmhV22IMiyHOGrhV1
+   /Y/6XCho/z4QFsOADmyXA0L3EtUW/VQWGi/VNeEqF8NZV0AQ8OGAPRrY+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="434222273"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="434222273"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 03:31:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="941448765"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="941448765"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Apr 2023 03:31:00 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pshr1-000140-1H;
+        Sat, 29 Apr 2023 10:30:59 +0000
+Date:   Sat, 29 Apr 2023 18:30:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/scsi/fcoe/fcoe_ctlr.c:1871:13: warning: stack frame size
+ (1072) exceeds limit (1024) in 'fcoe_ctlr_recv_work'
+Message-ID: <202304291839.L1PvCRkL-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_BC90DDC6093E3E41246D3EC73F5CAB189007@qq.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 10:16:00PM +0800, Yangyu Chen wrote:
-> According to RISC-V Hart Capabilities Table (RHCT) description in UEFI
-> Forum ECR, the format of the ISA string is defined in the RISC-V
-> unprivileged specification which is case-insensitive. However, the
-> current ISA string parser in the kernel does not support ISA strings
-> with uppercase letters.
-> 
-> This patch modifies the ISA string parser in the kernel to support
-> case-insensitive ISA string parsing.
-> 
-> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
-> ---
->  arch/riscv/kernel/cpu.c        |  3 ++-
->  arch/riscv/kernel/cpufeature.c | 25 ++++++++++++-------------
->  2 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 8400f0cc9704..52b92a267121 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -4,6 +4,7 @@
->   */
->  
->  #include <linux/cpu.h>
-> +#include <linux/ctype.h>
->  #include <linux/init.h>
->  #include <linux/seq_file.h>
->  #include <linux/of.h>
-> @@ -41,7 +42,7 @@ int riscv_of_processor_hartid(struct device_node *node, unsigned long *hart)
->  		pr_warn("CPU with hartid=%lu has no \"riscv,isa\" property\n", *hart);
->  		return -ENODEV;
->  	}
-> -	if (isa[0] != 'r' || isa[1] != 'v') {
-> +	if (tolower(isa[0]) != 'r' || tolower(isa[1]) != 'v') {
->  		pr_warn("CPU with hartid=%lu has an invalid ISA of \"%s\"\n", *hart, isa);
->  		return -ENODEV;
->  	}
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 59d58ee0f68d..d1991c12e546 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -119,13 +119,10 @@ void __init riscv_fill_hwcap(void)
->  		}
->  
->  		temp = isa;
-> -#if IS_ENABLED(CONFIG_32BIT)
-> -		if (!strncmp(isa, "rv32", 4))
-> +		if (IS_ENABLED(CONFIG_32BIT) && !strncasecmp(isa, "rv32", 4))
->  			isa += 4;
-> -#elif IS_ENABLED(CONFIG_64BIT)
-> -		if (!strncmp(isa, "rv64", 4))
-> +		else if (IS_ENABLED(CONFIG_64BIT) && !strncasecmp(isa, "rv64", 4))
->  			isa += 4;
-> -#endif
->  		/* The riscv,isa DT property must start with rv64 or rv32 */
->  		if (temp == isa)
->  			continue;
-> @@ -136,6 +133,7 @@ void __init riscv_fill_hwcap(void)
->  			bool ext_long = false, ext_err = false;
->  
->  			switch (*ext) {
-> +			case 'S':
->  			case 's':
->  				/**
->  				 * Workaround for invalid single-letter 's' & 'u'(QEMU).
-> @@ -143,19 +141,20 @@ void __init riscv_fill_hwcap(void)
->  				 * not valid ISA extensions. It works until multi-letter
->  				 * extension starting with "Su" appears.
->  				 */
-> -				if (ext[-1] != '_' && ext[1] == 'u') {
-> +				if (ext[-1] != '_' && tolower(ext[1]) == 'u') {
->  					++isa;
->  					ext_err = true;
->  					break;
->  				}
->  				fallthrough;
-> +			case 'X':
->  			case 'x':
-> +			case 'Z':
->  			case 'z':
->  				ext_long = true;
->  				/* Multi-letter extension must be delimited */
->  				for (; *isa && *isa != '_'; ++isa)
-> -					if (unlikely(!islower(*isa)
-> -						     && !isdigit(*isa)))
-> +					if (unlikely(!isalnum(*isa)))
->  						ext_err = true;
->  				/* Parse backwards */
->  				ext_end = isa;
-> @@ -166,7 +165,7 @@ void __init riscv_fill_hwcap(void)
->  				/* Skip the minor version */
->  				while (isdigit(*--ext_end))
->  					;
-> -				if (ext_end[0] != 'p'
-> +				if (tolower(ext_end[0]) != 'p'
->  				    || !isdigit(ext_end[-1])) {
->  					/* Advance it to offset the pre-decrement */
->  					++ext_end;
-> @@ -178,7 +177,7 @@ void __init riscv_fill_hwcap(void)
->  				++ext_end;
->  				break;
->  			default:
-> -				if (unlikely(!islower(*ext))) {
-> +				if (unlikely(!isalpha(*ext))) {
->  					ext_err = true;
->  					break;
->  				}
-> @@ -188,7 +187,7 @@ void __init riscv_fill_hwcap(void)
->  				/* Skip the minor version */
->  				while (isdigit(*++isa))
->  					;
-> -				if (*isa != 'p')
-> +				if (tolower(*isa) != 'p')
->  					break;
->  				if (!isdigit(*++isa)) {
->  					--isa;
-> @@ -205,7 +204,7 @@ void __init riscv_fill_hwcap(void)
->  #define SET_ISA_EXT_MAP(name, bit)						\
->  			do {							\
->  				if ((ext_end - ext == sizeof(name) - 1) &&	\
-> -				     !memcmp(ext, name, sizeof(name) - 1) &&	\
-> +				     !strncasecmp(ext, name, sizeof(name) - 1) &&	\
->  				     riscv_isa_extension_check(bit))		\
->  					set_bit(bit, this_isa);			\
->  			} while (false)						\
-> @@ -213,7 +212,7 @@ void __init riscv_fill_hwcap(void)
->  			if (unlikely(ext_err))
->  				continue;
->  			if (!ext_long) {
-> -				int nr = *ext - 'a';
-> +				int nr = tolower(*ext) - 'a';
->  
->  				if (riscv_isa_extension_check(nr)) {
->  					this_hwcap |= isa2hwcap[nr];
-> -- 
-> 2.40.0
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   89d77f71f493a3663b10fa812d17f472935d24be
+commit: 54d9469bc515dc5fcbc20eecbe19cea868b70d68 fortify: Add run-time WARN for cross-field memcpy()
+date:   8 months ago
+config: riscv-randconfig-r015-20230429 (https://download.01.org/0day-ci/archive/20230429/202304291839.L1PvCRkL-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54d9469bc515dc5fcbc20eecbe19cea868b70d68
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 54d9469bc515dc5fcbc20eecbe19cea868b70d68
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/scsi/fcoe/
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304291839.L1PvCRkL-lkp@intel.com/
 
-Thanks,
-drew
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/fcoe/fcoe_ctlr.c:1871:13: warning: stack frame size (1072) exceeds limit (1024) in 'fcoe_ctlr_recv_work' [-Wframe-larger-than]
+   static void fcoe_ctlr_recv_work(struct work_struct *recv_work)
+               ^
+   677/1072 (63.15%) spills, 395/1072 (36.85%) variables
+   1 warning generated.
+
+
+vim +/fcoe_ctlr_recv_work +1871 drivers/scsi/fcoe/fcoe_ctlr.c
+
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1866  
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1867  /**
+70b51aabf3b03f drivers/scsi/fcoe/libfcoe.c Robert Love 2009-11-03  1868   * fcoe_ctlr_recv_work() - Worker thread function for receiving FIP frames
+70b51aabf3b03f drivers/scsi/fcoe/libfcoe.c Robert Love 2009-11-03  1869   * @recv_work: Handle to a FCoE controller
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1870   */
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17 @1871  static void fcoe_ctlr_recv_work(struct work_struct *recv_work)
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1872  {
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1873  	struct fcoe_ctlr *fip;
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1874  	struct sk_buff *skb;
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1875  
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1876  	fip = container_of(recv_work, struct fcoe_ctlr, recv_work);
+1f4aed818d26eb drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-11-03  1877  	while ((skb = skb_dequeue(&fip->fip_recv_list)))
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1878  		fcoe_ctlr_recv_handler(fip, skb);
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1879  }
+97c8389d54b966 drivers/scsi/fcoe/libfcoe.c Joe Eykholt 2009-03-17  1880  
+
+:::::: The code at line 1871 was first introduced by commit
+:::::: 97c8389d54b9665c38105ea72a428a44b97ff2f6 [SCSI] fcoe, libfcoe: Add support for FIP. FCoE discovery and keep-alive.
+
+:::::: TO: Joe Eykholt <jeykholt@cisco.com>
+:::::: CC: James Bottomley <James.Bottomley@HansenPartnership.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
