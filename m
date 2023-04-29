@@ -2,157 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848096F2358
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8EE6F2361
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbjD2G0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 02:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
+        id S231302AbjD2GeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 02:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjD2G0A (ORCPT
+        with ESMTP id S229574AbjD2GeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 02:26:00 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2045.outbound.protection.outlook.com [40.107.12.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ED32117
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:25:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bxaJHJzHadrcyrhIuZ9wHFd4ULywjMSWZnvEgcLHgBJ+z6XslldLIZ6On+uV/BsDXtb6hFSFii0RvBhmEA0Bg9nL7GVNRzBYWvdphkBn7ipoPMGILh4Ce36aI0G0yJijTEV7oPOb3BTg69YFp5fjPLG95XAposFyFY2WucRHtGT+hrgnO8Zfyerawp9jKZSsI3p9+d4M7ywtGngOpXXLv1vGYYFuXesVrM/AtFfUCpUtpNJXDeKDjQTKPBvnfXBLKgAtSYSJcEbKpYmpF087BKNx3OdnlnxTCvtGPD8gpsD8MR1u65ZXsKRpPLNFZMdHVGRZX2Y/ggB7w7pktS5M1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gkjnd367YhatqNPMoQc7smYUWA0TXsAz5nQ2RNLARfA=;
- b=nudXBwnMWqutz6n28GepvDV+FqR7k2lmvPx1kCYqwMeRnrDpx4KDTnmMDv6W8gC8XBVQl0G3UcNNTKEkl7oKFU0PI5qWajM5WU6K/BJH7KPhaONgdlkfq38JSfTmdV83mCpJPKr4UXIhC4gXfEvtaReig3t+QdeoPF8oDzNS/yuh4zh9vbZy+WcMQGZAzI6dBdLzy11yuvKkqRTTOpPEeAIki2J9nkKMOiB9zz02PRxlEHt+FG7fMWM4K6lBR0xtMPwgYTSVGIwg6ougyvDXE/yIVY5euQf20qMeoAqzVIAY8R6C3YgrYTu00X+3psjo/naQF2nrs7781CZ93sswLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gkjnd367YhatqNPMoQc7smYUWA0TXsAz5nQ2RNLARfA=;
- b=ui4lXTxbr+kQUBOrUf7J1raVwHzH0SvYlYBmLf0P4vRyJKydkUiu3o/Clk2Xlh1+JgG98TZkxsPFa9uE+KUyGIMtCNLgDrDrf02Zj1LSOU60FwsoTk6WA6RBH0/Bt4tZ40JtaVIPGnfuV1srUyN2pAHRE67Miu1I1p/zJ6ZBiIWUpll8SgHrc6OuDMxEwVxCiizjAatRN+cQgU1Jbx0S2GpRRmmatdWwh3Mg36UrTNiU9NN4L9TC6FYhFAsMdifJepT99BkFg1/0RgexFIrWqNduAvJt9XHzngCEKx89YoUtZGL8zGOq6b8CWSTkZveYcjVi21igJOx2Lt6rtG4N1A==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2063.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b3::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.26; Sat, 29 Apr
- 2023 06:25:56 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8d19:d0c0:1908:3f25]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8d19:d0c0:1908:3f25%5]) with mapi id 15.20.6340.025; Sat, 29 Apr 2023
- 06:25:56 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Tom Rix <trix@redhat.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "npiggin@gmail.com" <npiggin@gmail.com>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] powerpc: remove unneeded if-checks
-Thread-Topic: [PATCH] powerpc: remove unneeded if-checks
-Thread-Index: AQHZeh6RKQ7wZixmRUGehV6V/r1g869B0qqA
-Date:   Sat, 29 Apr 2023 06:25:56 +0000
-Message-ID: <880e9f47-352d-3028-f640-477a75a3888e@csgroup.eu>
-References: <20230428221240.2679194-1-trix@redhat.com>
-In-Reply-To: <20230428221240.2679194-1-trix@redhat.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2063:EE_
-x-ms-office365-filtering-correlation-id: efa8398f-3f63-4042-5e9e-08db487a9750
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: e8G9vtj4xqz3yvb2I820TMcebH5okAFcOGyNThGULjuDemdxmPVDaD3u4JMDjpz6MN5c29K+NlkYXBHIzG6AH4OeaV+3ownMbb1dAVjL1D3sLXlegKX84j9buPUv5VMCQJQNOL/XkpdqvBOhH+LzsqvJMfzy3804v/+MYu7hEMqMmmpaUak9WmFY3F7WGtKdz+bPkh2I+j6X1D0bZ6I0D15h2iqElVFFfIXldF/AroDvydE6Ehvu28FX4GSw4XH0Nt4ol3baXEz3cspLvu7xNs75914roiyfi1OqXvvbOR95fetcDT4aLcKBZKi4fi/xSXS3wswozI+mo3STnje3M5hUTaTIazTlbMtKPH06HCnPXDJn65mrkQdj98S/kh+1gcj+A5Wz2s8XM9rk/SCwitpOWRmoVDDBDdc9vtPD3p+8v1yCrJj8AxQo05pHpzQPmpXqnUQ3U6yopAaUz5FK9GFUkn+5CZt8DqXE7gAn6shtygnf5Al5vXWHcxZBQ5VgQK6moRes8ahF2y0kPlSt6eWvQ+s0CiV5LeLwqVkYtsEYEq5HWme2frUANsLDpRXy47VS+TdDIXTaMZerdZzhURTXHVBtjVfmXrqwclMMJncXfT6++MEBcyHnCYbGugRiODzxhI9hP0YiZNxBhepQHzVjLMZZz6YiSyHKlSmn5zRwfYPax3ml0a0JYlVUXED0
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(396003)(39850400004)(376002)(451199021)(31686004)(316002)(2616005)(6512007)(6506007)(4326008)(8936002)(44832011)(8676002)(38070700005)(31696002)(86362001)(5660300002)(66946007)(26005)(478600001)(76116006)(110136005)(54906003)(91956017)(186003)(83380400001)(66574015)(41300700001)(2906002)(38100700002)(36756003)(122000001)(66446008)(66476007)(66556008)(6486002)(71200400001)(64756008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZTdRRGFyQ0F2N29JZnVBWHQrRjVpbHpFRGJRbzdUNHZiWG55cWFGQ1dXWXN4?=
- =?utf-8?B?T2VsY2lwc3IvSER0aDlNb1hYTWZ1SGF6TjBmRHhDb0NNQXZYOTFPM1lEUytm?=
- =?utf-8?B?U3N2RW1sWFBKRWRsNmZJRS94Q0JuSG9rWlFXcTlhWUVOM0pnKy8zQnArcWxH?=
- =?utf-8?B?ZkhQc0FOYncrR3FrNldVcFFwYy96V3VEbVR1YmhKNjNzbDhYUTVBVlkybkxD?=
- =?utf-8?B?Ujh5M3pIMUhZd2VRaGRxVXpWZXl2Zit5em95MzVlN3pDQUdzTXRuQm1PSS8v?=
- =?utf-8?B?OWZSQi9EOW1qQ0lYSlp3TUdnS01HK0lVUERGeUgxOW5GQjhOdHJmV0p3S2ZV?=
- =?utf-8?B?ZDEvM2M5SVE4S3c1Nmh4aElrb1hxeTE4bms1U2huQzFuQ2pSQW8xTG5relZ6?=
- =?utf-8?B?VHlVZHRoWThjS25hSVVicGVTY2VQMk5NZXRHTDV3c3dvaTd6b0o0MXdHU1p6?=
- =?utf-8?B?VE90VDBhYXJrSVNUUHlTUWwyWWpnN0Z1ZUsyYzg5SGcxOTFSSU1OdFJ2SjI4?=
- =?utf-8?B?ZjJQdkVSaDZRVzZQcFFEd0EzT01sblY0ajk4ZFlCQmw1aTB3WDBvN3R5NXFT?=
- =?utf-8?B?cERIWEpPOVVKNVpKY21iVkJZQWIzbS92VEJFUE1tNWVXOENFM1QxOEVhMVFy?=
- =?utf-8?B?NE9VYmlaMStMUHc3RnlVVjNKWlhETE1NMU0wblYybkNxOUVxenVJK05aL1Bw?=
- =?utf-8?B?UGRxZldBTG9HZXA4QWtOR1JzamVoV3ZXVCtmOHJiY0R2SGFxYk5LeEs0YWo5?=
- =?utf-8?B?b0hWcHV5K3A4WDg4a2d2ZWdjaEV0K0RDRjV0bVcwL2F4TkoyWFJxSmdwbVVM?=
- =?utf-8?B?UFBvdERwV3lqZlJUZWpMWDQ5N2xXTWpIRXRheHBnTDcwZE90MTVnUmVib1Ay?=
- =?utf-8?B?Tno5WTlLSXZ6Z0tpd0dsaUxVNWE3SFBBRmsyVWVmQlRlbHVBNnc3Yy95N0pQ?=
- =?utf-8?B?SWFWaXpDK3dQb3VNVitjQllXQUxBSWs3Ukx1NjRvbHZqZkNaeVhBSGRpN2JY?=
- =?utf-8?B?Tm9samFUcFRYRHZVOHNMY3RxQnd0WGw0KzNqYUkzdUx4TlBEN05xejV6YXg2?=
- =?utf-8?B?UTZncktZbUlIWmNLcVpoUzlYS2VTS294YjNQMnpick5TNngvamZaM2hkUTJV?=
- =?utf-8?B?UUpBZ0V1Y3JFZUlqaml6bDBPZHNmdG96M0NHVTd0OEN5L3ZrZGt2MUc5bGhE?=
- =?utf-8?B?cmxPOW5La2hXZnlOTy9za0pJV2VtelpncUxMYkI4eVBoOHdQaGF5bmhIZXM0?=
- =?utf-8?B?SDhqd09wVnVGMlRrQzRqekJuWFFZSFEraWZ2YWNmcGZNMFlhUmxEOGZqL3Bh?=
- =?utf-8?B?YnUvV2JwdWNVWTM4L3BjZy83L3gyVFVOajBjYVQvaFlTaFg2NzNEcDBRcXZw?=
- =?utf-8?B?NnN6NVlrUTIrQjJ4WjcrSUFLU21mWEZ3MkJ4M0pjOGtvZC9tR2NIQ042QjNK?=
- =?utf-8?B?QThxWW9TK3orRmxSbnQzY2gyTXVUK1J3YXNoS0pzYmxhbjJzMW9NOElpQWtp?=
- =?utf-8?B?djlUY09KU05HeUo4enhjQzErbC83MWxJbTkyR1lHL0dQOW11bk9XSGlFdWdX?=
- =?utf-8?B?VnhrZUNqR0lxVEVHRFQvOXYvSkQwUUQ4VnI1ZnVkUEcvdll6ZVN5NDV0b1pj?=
- =?utf-8?B?V3BoYXhIbEJ2cnk3ck52TmVpSEh0M3EzL0s2ZUR3Zk0yNjd5RitHekVFMFEz?=
- =?utf-8?B?TXlQa3EzUEg5VGFBOGY3VnZjSVQvaWRpenY4M1ovUHIzVEVCczNaNWh3aSt4?=
- =?utf-8?B?bHlGOWdQWG1DY2Y0d2ZaWVRJTkQvTGYxeE5NYXpHVmNNRlpURGYxNUpZaVVr?=
- =?utf-8?B?RDlQNE9RRmFjd0NnbjY2dTE5OHVhT2t0QmFvRFJzSU5JeWcyWjB5amNPdEdN?=
- =?utf-8?B?TkQ5LzdCdWdFekl0eGZEaFhScTlXMUErejI3R0lncjhUOWdUSHpTaTdWZmxy?=
- =?utf-8?B?SmVIeGhNQWR1dG1NNTVGRXNEaXc2T29aRzJnNTlIWGxGbFdJV1NSUHltR0NI?=
- =?utf-8?B?TjRwOFJVeVREYjBQUTZFU01XcnUvUCs1OGVRZXpoY3dXMW5hY0xCN1lKU3pB?=
- =?utf-8?B?RkVFZVRuT2tNRVlhY3J3eVVxYVlEV2dCMGxTS1QvaW9ycXRVTllyYktiYWZy?=
- =?utf-8?B?Zm9wcGZJaEhjNnpqak5HT1RqQ2RGZSsyV01iWHZiTEtac3k1dy9UaU5uNFdQ?=
- =?utf-8?B?L0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <671B04944040E34F9C7C8C7523DCE3A0@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Sat, 29 Apr 2023 02:34:11 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070872125;
+        Fri, 28 Apr 2023 23:34:10 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1a69f686345so5691505ad.2;
+        Fri, 28 Apr 2023 23:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682750049; x=1685342049;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSfv5t4C9cwppYox3U6KqaeYRJrwwcdMCKh0TKYZTfY=;
+        b=jgX+OXrrHnH45akqNjdlWaQFYstsdbpondQ+fh3Msi1/HhjpsmZdFC+yLXih7hP/pU
+         wgdNac4fjcTdjuh5YzDwrfXcFY7nTNG7NTG9OKleR4+VqZlwQQ+dJnUPCKUlMotuGhtK
+         liEvH+GopRM8uHPlGBNbhx8erNYSKJLuBi7f6XaVH16Z1cWL+j0LVG8QPiLpBIa6TEeI
+         zTS1Ra3qCsaeMXU1RmMnIP9HaQN5+5m2TcVeWF6195N9W4Nk/IP8if39MUVzKA4I+Dwp
+         Z2dkFPBFVLF+hUJPQOTD2SFsOLbcA622JvdIeH4gIN3JC30Fskg+YIN5y8gJoIVRkgR5
+         I3Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682750049; x=1685342049;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cSfv5t4C9cwppYox3U6KqaeYRJrwwcdMCKh0TKYZTfY=;
+        b=a/UMIrkjFZvPLW8ia71Q/p9Im8ovIt7o5Q56hij2CjixjcaB0oT2j2ygxOj+y6YhRY
+         ukqh4irMGGlTexaqwZmO4LltSBY3+2ijurQMwrnXzRw+8JBE/bEtOy2K6cf17oX/seKX
+         b5OtnOGUAHrSXLKVkjRMr+5zdAnQdogqZr0O2Az51giIgHhLIAfjGWgHo6zvFigsEQ0K
+         7DGCFiJRcSJ2yf39ZkJ5PYGJjDvkvvbXED2UeyETKhGgglUopYzqzjLG5Qm1znZ+lx25
+         d3gG3ZtAamHOGRlJGBxqaZ46KEog9/HWi2sHz1ZTAJW9i13dleSkw3ZU5Xujo90WH21p
+         L7eA==
+X-Gm-Message-State: AC+VfDwWVs7Pf4YHljI8Ywf34zgETse1A76C3NnIVlAEql0k0UN4dxY6
+        CsNnc2VbGQCVdug0srHaDyE=
+X-Google-Smtp-Source: ACHHUZ7be5oOxy4XCSWaxNypq0CFCL78WwmFg5MLeuSZBRyfSzU6QkTnWKQW9hhiXBkCoxg5Uid8wg==
+X-Received: by 2002:a17:903:2798:b0:1a9:7262:fe55 with SMTP id jw24-20020a170903279800b001a97262fe55mr7208130plb.13.1682750049387;
+        Fri, 28 Apr 2023 23:34:09 -0700 (PDT)
+Received: from wheely.local0.net (14-202-4-83.tpgi.com.au. [14.202.4.83])
+        by smtp.gmail.com with ESMTPSA id h10-20020a170902748a00b001a258041049sm14142470pll.32.2023.04.28.23.33.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 23:34:08 -0700 (PDT)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
+        linux-snps-arc@lists.infradead.org, Brian Cain <bcain@quicinc.com>,
+        linux-hexagon@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        loongarch@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        linux-openrisc@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
+Date:   Sat, 29 Apr 2023 16:33:48 +1000
+Message-Id: <20230429063348.125544-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: efa8398f-3f63-4042-5e9e-08db487a9750
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2023 06:25:56.4643
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1U4lG+mEYjYH9TgkgOJ05MluO4o4neiidZkIS8dKhzEIYkY+6vCHHPjEUZ1yXmATmR68FTMAr7ggyy1eNQZshkVv/LJGTYCDTpAdGr6hg0c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2063
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI5LzA0LzIwMjMgw6AgMDA6MTIsIFRvbSBSaXggYSDDqWNyaXTCoDoNCj4gRm9yIHBw
-YzY0LCBnY2Mgd2l0aCBXPTEgcmVwb3J0cw0KPiBhcmNoL3Bvd2VycGMvcGxhdGZvcm1zL2NlbGwv
-c3B1X2Jhc2UuYzozMzA6MTc6IGVycm9yOg0KPiAgICBzdWdnZXN0IGJyYWNlcyBhcm91bmQgZW1w
-dHkgYm9keSBpbiBhbiAnaWYnIHN0YXRlbWVudCBbLVdlcnJvcj1lbXB0eS1ib2R5XQ0KPiAgICAz
-MzAgfCAgICAgICAgICAgICAgICAgOw0KPiAgICAgICAgfCAgICAgICAgICAgICAgICAgXg0KPiBh
-cmNoL3Bvd2VycGMvcGxhdGZvcm1zL2NlbGwvc3B1X2Jhc2UuYzozMzM6MTc6IGVycm9yOg0KPiAg
-ICBzdWdnZXN0IGJyYWNlcyBhcm91bmQgZW1wdHkgYm9keSBpbiBhbiAnaWYnIHN0YXRlbWVudCBb
-LVdlcnJvcj1lbXB0eS1ib2R5XQ0KPiAgICAzMzMgfCAgICAgICAgICAgICAgICAgOw0KPiAgICAg
-ICAgfCAgICAgICAgICAgICAgICAgXg0KPiANCj4gVGhlc2UgaWYtY2hlY2tzIGRvIG5vdCBkbyBh
-bnl0aGluZyBzbyByZW1vdmUgdGhlbS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFRvbSBSaXggPHRy
-aXhAcmVkaGF0LmNvbT4NCg0KRml4ZXM6IDY3MjA3Yjk2NjRhOCAoIltQQVRDSF0gc3B1ZnM6IFRo
-ZSBTUFUgZmlsZSBzeXN0ZW0sIGJhc2UiKQ0KDQpSZXZpZXdlZC1ieTogQ2hyaXN0b3BoZSBMZXJv
-eSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KDQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJw
-Yy9wbGF0Zm9ybXMvY2VsbC9zcHVfYmFzZS5jIHwgNiAtLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdl
-ZCwgNiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvcGxhdGZv
-cm1zL2NlbGwvc3B1X2Jhc2UuYyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMvY2VsbC9zcHVfYmFz
-ZS5jDQo+IGluZGV4IDdiZDBiNTYzZTE2My4uZGVhNmYwZjI1ODk3IDEwMDY0NA0KPiAtLS0gYS9h
-cmNoL3Bvd2VycGMvcGxhdGZvcm1zL2NlbGwvc3B1X2Jhc2UuYw0KPiArKysgYi9hcmNoL3Bvd2Vy
-cGMvcGxhdGZvcm1zL2NlbGwvc3B1X2Jhc2UuYw0KPiBAQCAtMzI2LDEyICszMjYsNiBAQCBzcHVf
-aXJxX2NsYXNzXzEoaW50IGlycSwgdm9pZCAqZGF0YSkNCj4gICAJaWYgKHN0YXQgJiBDTEFTUzFf
-U1RPUkFHRV9GQVVMVF9JTlRSKQ0KPiAgIAkJX19zcHVfdHJhcF9kYXRhX21hcChzcHUsIGRhciwg
-ZHNpc3IpOw0KPiAgIA0KPiAtCWlmIChzdGF0ICYgQ0xBU1MxX0xTX0NPTVBBUkVfU1VTUEVORF9P
-Tl9HRVRfSU5UUikNCj4gLQkJOw0KPiAtDQo+IC0JaWYgKHN0YXQgJiBDTEFTUzFfTFNfQ09NUEFS
-RV9TVVNQRU5EX09OX1BVVF9JTlRSKQ0KPiAtCQk7DQo+IC0NCj4gICAJc3B1LT5jbGFzc18xX2Rz
-aXNyID0gMDsNCj4gICAJc3B1LT5jbGFzc18xX2RhciA9IDA7DQo+ICAgDQo=
+This option was created in commit 554b0004d0ec4 ("vtime: Add
+HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
+they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+
+The cputime_t type has since been removed, so this doesn't have any
+meaning. Remove it.
+
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Vineet Gupta <vgupta@kernel.org>
+Cc: linux-snps-arc@lists.infradead.org
+Cc: Brian Cain <bcain@quicinc.com>
+Cc: linux-hexagon@vger.kernel.org
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: Michal Simek <monstr@monstr.eu>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Cc: Jonas Bonn <jonas@southpole.se>
+Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+Cc: Stafford Horne <shorne@gmail.com>
+Cc: linux-openrisc@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: Helge Deller <deller@gmx.de>
+Cc: linux-parisc@vger.kernel.org
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: linux-riscv@lists.infradead.org
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: linux-sh@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: linux-um@lists.infradead.org
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+Hi,
+
+Could we tidy this? I don't know what tree it can go in, timers,
+sched, asm-generic, probably doesn't matter.
+
+The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
+NO_HZ_FULL so if your arch has some other issue that requires this
+then the documentation needs to change. Any concerns from the archs?
+I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
+which looks to be:
+
+arc
+hexagon
+loongarch 32-bit with SMP
+m68k
+microblaze
+mips 32-bit with SMP
+nios2
+openrisc
+parisc 32-bit
+riscv 32-bit
+sh
+sparc 32-bit
+um 32-bit
+x86 32-bit
+
+Thanks,
+Nick
+--
+ arch/Kconfig           | 11 -----------
+ arch/arm/Kconfig       |  1 -
+ arch/csky/Kconfig      |  1 -
+ arch/loongarch/Kconfig |  1 -
+ arch/mips/Kconfig      |  1 -
+ arch/powerpc/Kconfig   |  1 -
+ arch/xtensa/Kconfig    |  1 -
+ init/Kconfig           |  1 -
+ kernel/time/Kconfig    |  2 --
+ 9 files changed, 20 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 205fd23e0cad..b77b41d25e40 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -869,17 +869,6 @@ config HAVE_VIRT_CPU_ACCOUNTING_IDLE
+ config ARCH_HAS_SCALED_CPUTIME
+ 	bool
+ 
+-config HAVE_VIRT_CPU_ACCOUNTING_GEN
+-	bool
+-	default y if 64BIT
+-	help
+-	  With VIRT_CPU_ACCOUNTING_GEN, cputime_t becomes 64-bit.
+-	  Before enabling this option, arch code must be audited
+-	  to ensure there are no races in concurrent read/write of
+-	  cputime_t. For example, reading/writing 64-bit cputime_t on
+-	  some 32-bit arches may require multiple accesses, so proper
+-	  locking is needed to protect against concurrent accesses.
+-
+ config HAVE_IRQ_TIME_ACCOUNTING
+ 	bool
+ 	help
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 0fb4b218f665..9c05f25db4e4 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -123,7 +123,6 @@ config ARM
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_UID16
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	select IRQ_FORCED_THREADING
+ 	select MODULES_USE_ELF_REL
+ 	select NEED_DMA_MAP_STATE
+diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
+index 00379a843c37..dd1decc2a22d 100644
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@ -73,7 +73,6 @@ config CSKY
+ 	select HAVE_ARCH_MMAP_RND_BITS
+ 	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_CONTEXT_TRACKING_USER
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	select HAVE_DEBUG_BUGVERBOSE
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DYNAMIC_FTRACE
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index f44f6ea54e46..7dc71c89bfae 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -122,7 +122,6 @@ config LOONGARCH
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_TIF_NOHZ
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN if !SMP
+ 	select IRQ_FORCED_THREADING
+ 	select IRQ_LOONGARCH_CPU
+ 	select MMU_GATHER_MERGE_VMAS if MMU
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index c2f5498d207f..d84cb8bbee53 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -87,7 +87,6 @@ config MIPS
+ 	select HAVE_SPARSE_SYSCALL_NR
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN if 64BIT || !SMP
+ 	select IRQ_FORCED_THREADING
+ 	select ISA if EISA
+ 	select MODULES_USE_ELF_REL if MODULES
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index acffffbd5d77..185195f349d9 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -271,7 +271,6 @@ config PPC
+ 	select HAVE_STATIC_CALL			if PPC32
+ 	select HAVE_SYSCALL_TRACEPOINTS
+ 	select HAVE_VIRT_CPU_ACCOUNTING
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
+ 	select IOMMU_HELPER			if PPC64
+ 	select IRQ_DOMAIN
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 3c6e5471f025..04f1399d9ce8 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -47,7 +47,6 @@ config XTENSA
+ 	select HAVE_PERF_EVENTS
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+-	select HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	select IRQ_DOMAIN
+ 	select MODULES_USE_ELF_RELA
+ 	select PERF_USE_VMALLOC
+diff --git a/init/Kconfig b/init/Kconfig
+index 32c24950c4ce..835fb5e78a8f 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -504,7 +504,6 @@ config VIRT_CPU_ACCOUNTING_NATIVE
+ config VIRT_CPU_ACCOUNTING_GEN
+ 	bool "Full dynticks CPU time accounting"
+ 	depends on HAVE_CONTEXT_TRACKING_USER
+-	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	depends on GENERIC_CLOCKEVENTS
+ 	select VIRT_CPU_ACCOUNTING
+ 	select CONTEXT_TRACKING_USER
+diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
+index bae8f11070be..d4325dae1f03 100644
+--- a/kernel/time/Kconfig
++++ b/kernel/time/Kconfig
+@@ -121,8 +121,6 @@ config NO_HZ_FULL
+ 	# We need at least one periodic CPU for timekeeping
+ 	depends on SMP
+ 	depends on HAVE_CONTEXT_TRACKING_USER
+-	# VIRT_CPU_ACCOUNTING_GEN dependency
+-	depends on HAVE_VIRT_CPU_ACCOUNTING_GEN
+ 	select NO_HZ_COMMON
+ 	select RCU_NOCB_CPU
+ 	select VIRT_CPU_ACCOUNTING_GEN
+-- 
+2.40.1
+
