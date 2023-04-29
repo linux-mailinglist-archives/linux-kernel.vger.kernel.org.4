@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1745B6F237D
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30156F2378
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjD2HDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 03:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S231196AbjD2HDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 03:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjD2HDK (ORCPT
+        with ESMTP id S229509AbjD2HDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 29 Apr 2023 03:03:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C76B2D46;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645622D49;
         Sat, 29 Apr 2023 00:03:07 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 07:03:04 -0000
+Date:   Sat, 29 Apr 2023 07:03:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682751784;
+        s=2020; t=1682751785;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PHrZ9FO8myesvsT3+YKfiBq9ZFhahSfWgh6mv8erpNE=;
-        b=0hadpFg/6/4frdgccVONIrIwdlvMXRIKC803WNmJvkcT6un3GqyWcaUsh4ZnAkYLQuBAyZ
-        WgkqbDv+1kDfZsBT7TGMmXaM0pRYPEfXxjX11KXDL8Z2/+b5Np1hs+rJj6T3eUpkaRUHJK
-        Y0IWsQ5ZLaV3dOvsaAPGtaaQNxUK6uleaNRNB2b9fTKTF/vOb5/Embcri3Uwk1Ko2W1Bxe
-        arsemQWac5N+UwEwCYMN0aJz8E2rZa4og81usAO+MfHaYcACxMeYFKM/jTJsTvkwh0IJpV
-        gGOjuILXTkh9yxdX6ZvB6WTe/dnq/hOZSKV+sEbq560HPNg8DfZFCIXkxI97vQ==
+        bh=5PAHzEtWjSQfsur1ramAAYhxI8qZrfxDsahv84miBHY=;
+        b=D/lb0GUqK9eM7tU+AOt1niQjOcQjGOMXqFTlUy6HBbsZDTfX7GifzBRn/gBYmIvLOWAoyl
+        MZwm7ypYoXpqv8jgAKLVs50dOfOrkh1gFaup7rtTVtQ6aqycZiBlJSFeiixKkFexHOYJlt
+        G9lgDuTrmUXdUs/X5iGxB5YMKI2IBCU3T7KhWAqf4TKUy9V97aHnjRl8jbtp62y2hom0Iq
+        AjBkJsxzfYzlbMfkBdwBwwH4fUX9Qy7Y2Kml9z+B9A2DmNF5UWrLjLONsG6DUKadXtIPAD
+        snSV+yrcGb6DIHY1p+IWSi9Kw4vl+4sWGzYJFLD8JGKDMUyqdg3GGm5yJrfuQQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682751784;
+        s=2020e; t=1682751785;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PHrZ9FO8myesvsT3+YKfiBq9ZFhahSfWgh6mv8erpNE=;
-        b=kVoQm8EcR7ajOVRx+Pbwok/lUw1mOaSqBELR2Hx+D6vQ5l//SYrl4xgIwJt1gJxpDCNxnO
-        8ozeisQ4kvB4VvAw==
+        bh=5PAHzEtWjSQfsur1ramAAYhxI8qZrfxDsahv84miBHY=;
+        b=KY181dBrekTYtWpLXRcvy4bVK/TJU56QtzpJODCFzQ7isA8IKt1cA0Ag7UfcT2wqN+tfRK
+        TYV+yfU25ntMyJBQ==
 From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/x86: Define arch_try_cmpxchg_local()
+Subject: [tip: locking/core] locking/generic: Wire up local{,64}_try_cmpxchg()
 Cc:     Uros Bizjak <ubizjak@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230405141710.3551-5-ubizjak@gmail.com>
-References: <20230405141710.3551-5-ubizjak@gmail.com>
+In-Reply-To: <20230405141710.3551-3-ubizjak@gmail.com>
+References: <20230405141710.3551-3-ubizjak@gmail.com>
 MIME-Version: 1.0
-Message-ID: <168275178427.404.15587499708814984111.tip-bot2@tip-bot2>
+Message-ID: <168275178521.404.7881369194752823490.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,46 +70,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     1ab70804ef3f829c5a738cba8627f0a0c2486d2b
-Gitweb:        https://git.kernel.org/tip/1ab70804ef3f829c5a738cba8627f0a0c2486d2b
+Commit-ID:     8184667fd00ee1081aa37b3300947d1bfc294210
+Gitweb:        https://git.kernel.org/tip/8184667fd00ee1081aa37b3300947d1bfc294210
 Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Wed, 05 Apr 2023 16:17:09 +02:00
+AuthorDate:    Wed, 05 Apr 2023 16:17:07 +02:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sat, 29 Apr 2023 08:52:44 +02:00
+CommitterDate: Sat, 29 Apr 2023 08:52:16 +02:00
 
-locking/x86: Define arch_try_cmpxchg_local()
+locking/generic: Wire up local{,64}_try_cmpxchg()
 
-Define target specific arch_try_cmpxchg_local(). This
-definition overrides the generic arch_try_cmpxchg_local()
-fallback definition and enables target-specific
-implementation of try_cmpxchg_local().
+Implement generic support for local{,64}_try_cmpxchg().
+
+Redirect to the atomic_ family of functions when the target
+does not provide its own local.h definitions.
+
+For 64-bit targets, implement local64_try_cmpxchg and
+local64_cmpxchg using typed C wrappers that call local_
+family of functions and provide additional checking
+of their input arguments.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230405141710.3551-5-ubizjak@gmail.com
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20230405141710.3551-3-ubizjak@gmail.com
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- arch/x86/include/asm/cmpxchg.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/asm-generic/local.h   |  1 +
+ include/asm-generic/local64.h | 12 +++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/cmpxchg.h b/arch/x86/include/asm/cmpxchg.h
-index 94fbe6a..540573f 100644
---- a/arch/x86/include/asm/cmpxchg.h
-+++ b/arch/x86/include/asm/cmpxchg.h
-@@ -221,9 +221,15 @@ extern void __add_wrong_size(void)
- #define __try_cmpxchg(ptr, pold, new, size)				\
- 	__raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+diff --git a/include/asm-generic/local.h b/include/asm-generic/local.h
+index fca7f1d..7f97018 100644
+--- a/include/asm-generic/local.h
++++ b/include/asm-generic/local.h
+@@ -42,6 +42,7 @@ typedef struct
+ #define local_inc_return(l) atomic_long_inc_return(&(l)->a)
  
-+#define __try_cmpxchg_local(ptr, pold, new, size)			\
-+	__raw_try_cmpxchg((ptr), (pold), (new), (size), "")
-+
- #define arch_try_cmpxchg(ptr, pold, new) 				\
- 	__try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+ #define local_cmpxchg(l, o, n) atomic_long_cmpxchg((&(l)->a), (o), (n))
++#define local_try_cmpxchg(l, po, n) atomic_long_try_cmpxchg((&(l)->a), (po), (n))
+ #define local_xchg(l, n) atomic_long_xchg((&(l)->a), (n))
+ #define local_add_unless(l, _a, u) atomic_long_add_unless((&(l)->a), (_a), (u))
+ #define local_inc_not_zero(l) atomic_long_inc_not_zero(&(l)->a)
+diff --git a/include/asm-generic/local64.h b/include/asm-generic/local64.h
+index 765be0b..14963a7 100644
+--- a/include/asm-generic/local64.h
++++ b/include/asm-generic/local64.h
+@@ -42,7 +42,16 @@ typedef struct {
+ #define local64_sub_return(i, l) local_sub_return((i), (&(l)->a))
+ #define local64_inc_return(l)	local_inc_return(&(l)->a)
  
-+#define arch_try_cmpxchg_local(ptr, pold, new)				\
-+	__try_cmpxchg_local((ptr), (pold), (new), sizeof(*(ptr)))
+-#define local64_cmpxchg(l, o, n) local_cmpxchg((&(l)->a), (o), (n))
++static inline s64 local64_cmpxchg(local64_t *l, s64 old, s64 new)
++{
++	return local_cmpxchg(&l->a, old, new);
++}
 +
- /*
-  * xadd() adds "inc" to "*ptr" and atomically returns the previous
-  * value of "*ptr".
++static inline bool local64_try_cmpxchg(local64_t *l, s64 *old, s64 new)
++{
++	return local_try_cmpxchg(&l->a, (long *)old, new);
++}
++
+ #define local64_xchg(l, n)	local_xchg((&(l)->a), (n))
+ #define local64_add_unless(l, _a, u) local_add_unless((&(l)->a), (_a), (u))
+ #define local64_inc_not_zero(l)	local_inc_not_zero(&(l)->a)
+@@ -81,6 +90,7 @@ typedef struct {
+ #define local64_inc_return(l)	atomic64_inc_return(&(l)->a)
+ 
+ #define local64_cmpxchg(l, o, n) atomic64_cmpxchg((&(l)->a), (o), (n))
++#define local64_try_cmpxchg(l, po, n) atomic64_try_cmpxchg((&(l)->a), (po), (n))
+ #define local64_xchg(l, n)	atomic64_xchg((&(l)->a), (n))
+ #define local64_add_unless(l, _a, u) atomic64_add_unless((&(l)->a), (_a), (u))
+ #define local64_inc_not_zero(l)	atomic64_inc_not_zero(&(l)->a)
