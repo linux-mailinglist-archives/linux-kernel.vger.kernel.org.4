@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C316F2379
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543F96F2377
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 09:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347143AbjD2HD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 03:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
+        id S1346605AbjD2HDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 03:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjD2HDL (ORCPT
+        with ESMTP id S229613AbjD2HDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 29 Apr 2023 03:03:11 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643AE2D47;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644632D48;
         Sat, 29 Apr 2023 00:03:07 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 07:03:03 -0000
+Date:   Sat, 29 Apr 2023 07:03:04 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1682751784;
+        s=2020; t=1682751785;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YgkuAnTdfiozJZE3SQiguD5orrHXmOrIskelEQSRnf0=;
-        b=1EZpx0KMpqtlH59UcBZM4W8UQEYBnemY1CFKXbgh4Sbb4emk3c9M8p5wm9e967gBoCEN2F
-        LutuBAPUvp3m2u6pXhTB16ssBNbccX4P6GCQxbiV/wfilJyxhwy3NyOcL57LJBVvCKSphs
-        J2UiCAFxhqeo149XAt+lgcwxaHjfVTI4oSe8QJ4jMqzNzU6DHtOjLRRff2AXNU0gV/8LKh
-        icXF3oIN2+0tREFw15bN8hXBUUTzW/EekD/jquiXn7C1MTCxXny+316+ROcr2xNVn0AHb2
-        N9Bu0eDZORcGfaAO5l5ggk85p+pQ8vv+c3T7paBa05V1Tc6Eehiflcr6by5SUQ==
+        bh=s+9a0jU8B8/90tNatqhnjcr9My3vk7+4IJ5l3AkohgA=;
+        b=Et5kqBDwv8pOGcohKK6HTvDO5/BXM5goi4Eulh2wKO4JK0uqyE8t20mEh9iCRvQnmBpqsj
+        HwFzXt6CeOAiNkoj0NYG8osmhVmgwxrGjIZTJ33azQV1uFXeC7v36ppHWB3Ct+PDTjrJu6
+        VMjowyfkKL8ciZWl2szH/spSLNb/kH+XPuzU7cADgnZEtk5JAsHtZBY05o7iF6PfHzj6Um
+        0MVWiYyeljw77xrnNTwQzwHNGVUeVG+FhcjxG5DTej8Ge74iJ90da0TsTwZChgAHI5FzZh
+        yQRopSTdfUn+FjqLhAZyf/4PynTmFXAg0ah5DktgzX49/CIkmKi7Ukwq+1rp1g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1682751784;
+        s=2020e; t=1682751785;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YgkuAnTdfiozJZE3SQiguD5orrHXmOrIskelEQSRnf0=;
-        b=OtnTK7SMl5TGZAsSCSFaAnY6KAo1ESRNUrQUZ0fqu+YSaFDUXDCRfwIbLeqMiQNtlQrMoz
-        66lY+nVcAACzMLBA==
-From:   "tip-bot2 for Mark Rutland" <tip-bot2@linutronix.de>
+        bh=s+9a0jU8B8/90tNatqhnjcr9My3vk7+4IJ5l3AkohgA=;
+        b=om1n8eq1b6V3M3/Oc3Y2/Nmgd3FU+MDDt8QioyWlc/Qk8ziPhQ/QL8FwGAyyUx62G9wqaS
+        EBBctXfF/8S9xqBw==
+From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/atomic: Correct (cmp)xchg() instrumentation
-Cc:     Mark Rutland <mark.rutland@arm.com>,
+Subject: [tip: locking/core] locking/arch: Wire up local_try_cmpxchg()
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230413160644.490976-1-mark.rutland@arm.com>
-References: <20230413160644.490976-1-mark.rutland@arm.com>
+In-Reply-To: <20230405141710.3551-4-ubizjak@gmail.com>
+References: <20230405141710.3551-4-ubizjak@gmail.com>
 MIME-Version: 1.0
-Message-ID: <168275178369.404.10432368882907879669.tip-bot2@tip-bot2>
+Message-ID: <168275178476.404.15174955783286691332.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,319 +69,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     3caea4fdfa78383297091792210eb8a2e2fb0b49
-Gitweb:        https://git.kernel.org/tip/3caea4fdfa78383297091792210eb8a2e2fb0b49
-Author:        Mark Rutland <mark.rutland@arm.com>
-AuthorDate:    Thu, 13 Apr 2023 17:06:44 +01:00
+Commit-ID:     bdf02b98474827e83e7e9254904eb18eb85552cd
+Gitweb:        https://git.kernel.org/tip/bdf02b98474827e83e7e9254904eb18eb85552cd
+Author:        Uros Bizjak <ubizjak@gmail.com>
+AuthorDate:    Wed, 05 Apr 2023 16:17:08 +02:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Sat, 29 Apr 2023 08:52:56 +02:00
+CommitterDate: Sat, 29 Apr 2023 08:52:25 +02:00
 
-locking/atomic: Correct (cmp)xchg() instrumentation
+locking/arch: Wire up local_try_cmpxchg()
 
-All xchg() and cmpxchg() ops are atomic RMWs, but currently we
-instrument these with instrument_atomic_write() rather than
-instrument_atomic_read_write(), missing the read aspect.
+Implement target specific support for local_try_cmpxchg()
+and local_cmpxchg() using typed C wrappers that call their
+_local counterpart and provide additional checking of
+their input arguments.
 
-Similarly, all try_cmpxchg() ops are non-atomic RMWs on *oldp, but we
-instrument these accesses with instrument_atomic_write() rather than
-instrument_read_write(), missing the read aspect and erroneously marking
-these as atomic.
-
-Fix the instrumentation for both points.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lkml.kernel.org/r/20230413160644.490976-1-mark.rutland@arm.com
+Link: https://lore.kernel.org/r/20230405141710.3551-4-ubizjak@gmail.com
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- include/linux/atomic/atomic-instrumented.h | 76 ++++++++++-----------
- scripts/atomic/gen-atomic-instrumented.sh  |  6 +-
- 2 files changed, 41 insertions(+), 41 deletions(-)
+ arch/alpha/include/asm/local.h     | 12 ++++++++++--
+ arch/loongarch/include/asm/local.h | 13 +++++++++++--
+ arch/mips/include/asm/local.h      | 13 +++++++++++--
+ arch/powerpc/include/asm/local.h   | 11 +++++++++++
+ arch/x86/include/asm/local.h       | 13 +++++++++++--
+ 5 files changed, 54 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
-index 245ba66..03a232a 100644
---- a/include/linux/atomic/atomic-instrumented.h
-+++ b/include/linux/atomic/atomic-instrumented.h
-@@ -1948,14 +1948,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_xchg(__ai_ptr, __VA_ARGS__); \
- })
+diff --git a/arch/alpha/include/asm/local.h b/arch/alpha/include/asm/local.h
+index fab26a1..0fcaad6 100644
+--- a/arch/alpha/include/asm/local.h
++++ b/arch/alpha/include/asm/local.h
+@@ -52,8 +52,16 @@ static __inline__ long local_sub_return(long i, local_t * l)
+ 	return result;
+ }
  
- #define xchg_acquire(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_xchg_acquire(__ai_ptr, __VA_ARGS__); \
- })
+-#define local_cmpxchg(l, o, n) \
+-	(cmpxchg_local(&((l)->a.counter), (o), (n)))
++static __inline__ long local_cmpxchg(local_t *l, long old, long new)
++{
++	return cmpxchg_local(&l->a.counter, old, new);
++}
++
++static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
++{
++	return try_cmpxchg_local(&l->a.counter, (s64 *)old, new);
++}
++
+ #define local_xchg(l, n) (xchg_local(&((l)->a.counter), (n)))
  
-@@ -1963,14 +1963,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_release(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_xchg_release(__ai_ptr, __VA_ARGS__); \
- })
+ /**
+diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
+index 65fbbae..83e995b 100644
+--- a/arch/loongarch/include/asm/local.h
++++ b/arch/loongarch/include/asm/local.h
+@@ -56,8 +56,17 @@ static inline long local_sub_return(long i, local_t *l)
+ 	return result;
+ }
  
- #define xchg_relaxed(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_xchg_relaxed(__ai_ptr, __VA_ARGS__); \
- })
+-#define local_cmpxchg(l, o, n) \
+-	((long)cmpxchg_local(&((l)->a.counter), (o), (n)))
++static inline long local_cmpxchg(local_t *l, long old, long new)
++{
++	return cmpxchg_local(&l->a.counter, old, new);
++}
++
++static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
++{
++	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, __old, new);
++}
++
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
  
-@@ -1978,14 +1978,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
- })
+ /**
+diff --git a/arch/mips/include/asm/local.h b/arch/mips/include/asm/local.h
+index 08366b1..5daf6fe 100644
+--- a/arch/mips/include/asm/local.h
++++ b/arch/mips/include/asm/local.h
+@@ -94,8 +94,17 @@ static __inline__ long local_sub_return(long i, local_t * l)
+ 	return result;
+ }
  
- #define cmpxchg_acquire(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_acquire(__ai_ptr, __VA_ARGS__); \
- })
+-#define local_cmpxchg(l, o, n) \
+-	((long)cmpxchg_local(&((l)->a.counter), (o), (n)))
++static __inline__ long local_cmpxchg(local_t *l, long old, long new)
++{
++	return cmpxchg_local(&l->a.counter, old, new);
++}
++
++static __inline__ bool local_try_cmpxchg(local_t *l, long *old, long new)
++{
++	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, __old, new);
++}
++
+ #define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
  
-@@ -1993,14 +1993,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_release(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_release(__ai_ptr, __VA_ARGS__); \
- })
+ /**
+diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
+index bc4bd19..45492fb 100644
+--- a/arch/powerpc/include/asm/local.h
++++ b/arch/powerpc/include/asm/local.h
+@@ -90,6 +90,17 @@ static __inline__ long local_cmpxchg(local_t *l, long o, long n)
+ 	return t;
+ }
  
- #define cmpxchg_relaxed(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_relaxed(__ai_ptr, __VA_ARGS__); \
- })
++static __inline__ bool local_try_cmpxchg(local_t *l, long *po, long n)
++{
++	long o = *po, r;
++
++	r = local_cmpxchg(l, o, n);
++	if (unlikely(r != o))
++		*po = r;
++
++	return likely(r == o);
++}
++
+ static __inline__ long local_xchg(local_t *l, long n)
+ {
+ 	long t;
+diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+index 349a47a..56d4ef6 100644
+--- a/arch/x86/include/asm/local.h
++++ b/arch/x86/include/asm/local.h
+@@ -120,8 +120,17 @@ static inline long local_sub_return(long i, local_t *l)
+ #define local_inc_return(l)  (local_add_return(1, l))
+ #define local_dec_return(l)  (local_sub_return(1, l))
  
-@@ -2008,14 +2008,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg64(__ai_ptr, __VA_ARGS__); \
- })
+-#define local_cmpxchg(l, o, n) \
+-	(cmpxchg_local(&((l)->a.counter), (o), (n)))
++static inline long local_cmpxchg(local_t *l, long old, long new)
++{
++	return cmpxchg_local(&l->a.counter, old, new);
++}
++
++static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
++{
++	typeof(l->a.counter) *__old = (typeof(l->a.counter) *) old;
++	return try_cmpxchg_local(&l->a.counter, __old, new);
++}
++
+ /* Always has a lock prefix */
+ #define local_xchg(l, n) (xchg(&((l)->a.counter), (n)))
  
- #define cmpxchg64_acquire(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg64_acquire(__ai_ptr, __VA_ARGS__); \
- })
- 
-@@ -2023,14 +2023,14 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_release(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg64_release(__ai_ptr, __VA_ARGS__); \
- })
- 
- #define cmpxchg64_relaxed(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
- })
- 
-@@ -2039,8 +2039,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2048,8 +2048,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2058,8 +2058,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
- 	kcsan_release(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2067,8 +2067,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2077,8 +2077,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg64(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2086,8 +2086,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg64_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2096,8 +2096,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
- 	kcsan_release(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg64_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2105,22 +2105,22 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
- #define cmpxchg_local(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_local(__ai_ptr, __VA_ARGS__); \
- })
- 
- #define cmpxchg64_local(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
- })
- 
-@@ -2128,7 +2128,7 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
- 	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
- })
- 
-@@ -2136,8 +2136,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2145,8 +2145,8 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	typeof(oldp) __ai_oldp = (oldp); \
--	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
--	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
-+	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
-+	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
- 	arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
- })
- 
-@@ -2154,7 +2154,7 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
- 	kcsan_mb(); \
--	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_double(__ai_ptr, __VA_ARGS__); \
- })
- 
-@@ -2162,9 +2162,9 @@ atomic_long_dec_if_positive(atomic_long_t *v)
- #define cmpxchg_double_local(ptr, ...) \
- ({ \
- 	typeof(ptr) __ai_ptr = (ptr); \
--	instrument_atomic_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
-+	instrument_atomic_read_write(__ai_ptr, 2 * sizeof(*__ai_ptr)); \
- 	arch_cmpxchg_double_local(__ai_ptr, __VA_ARGS__); \
- })
- 
- #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
--// 97fe4d79aa058d2164df824632cbc4f716d2a407
-+// 6b513a42e1a1b5962532a019b7fc91eaa044ad5e
-diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
-index c8165e9..d9ffd74 100755
---- a/scripts/atomic/gen-atomic-instrumented.sh
-+++ b/scripts/atomic/gen-atomic-instrumented.sh
-@@ -104,8 +104,8 @@ cat <<EOF
- EOF
- [ -n "$kcsan_barrier" ] && printf "\t${kcsan_barrier}; \\\\\n"
- cat <<EOF
--	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
--	instrument_atomic_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
-+	instrument_atomic_read_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
-+	instrument_read_write(__ai_oldp, ${mult}sizeof(*__ai_oldp)); \\
- 	arch_${xchg}${order}(__ai_ptr, __ai_oldp, __VA_ARGS__); \\
- })
- EOF
-@@ -119,7 +119,7 @@ cat <<EOF
- EOF
- [ -n "$kcsan_barrier" ] && printf "\t${kcsan_barrier}; \\\\\n"
- cat <<EOF
--	instrument_atomic_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
-+	instrument_atomic_read_write(__ai_ptr, ${mult}sizeof(*__ai_ptr)); \\
- 	arch_${xchg}${order}(__ai_ptr, __VA_ARGS__); \\
- })
- EOF
