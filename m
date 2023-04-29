@@ -2,210 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394B06F236B
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6176F2370
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 08:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjD2Grz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 02:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
+        id S230153AbjD2Gug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 02:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjD2Grx (ORCPT
+        with ESMTP id S229501AbjD2Gue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 02:47:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4CB22691
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:47:51 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-94eee951c70so97522066b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:47:51 -0700 (PDT)
+        Sat, 29 Apr 2023 02:50:34 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D32268A
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:50:31 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so613027b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 23:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682750870; x=1685342870;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+MGoIrx5I92tfleJ2HR27INRzqM7E79/a8JDCJVDvYY=;
-        b=ovsBT7/IZbSVH/DuO+TwRN/ywo0ywsemZ7Th+rjEdKlmR57vDK2obt4hMcqMblcQY8
-         JIWDx5WufPma5WNyBg4niWelbMJG7XTxvU40biIRzNPabfPlYw3k1JDEsvLil3bvYTlw
-         Lzs3TNx5bAn3xykbwwy231Xj8UKh9uZQLcYGujR3PJrJ3a8TMvNB+BqyPPGxjCAQj9Rp
-         7Qrv/Ar3nO91So9i/xZtGu836nYCdDkwTD8vIi4TMH7NEMRXgM79gd+nIDobwUClRMiN
-         mDZkObZ1SwnY5u1Hjvptes4OG/G3omSeBD2kTcYLDb0lKK5vgSU8riDFpYdtDWzJCKIv
-         BIyg==
+        d=atishpatra.org; s=google; t=1682751031; x=1685343031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2UhLj8G0RcQUtsKhKUXfnhL7zuYYyQ7vxUKRWYdX3To=;
+        b=kl5IGW/Q3ziJZox5rl+u6Pls+orvxgrZh7dIcOOMrHC3T+7UehfcLxH/5OXNGM61OK
+         LeNapk1MFK9ZdPD+3yGP8whyGPsLJvuM/JdqjpVdy3soAh0+inT2wfUcCbvKGF/byerP
+         uViGf7E40KXqnWzIXzvuPPnVBhiSor/hPtMoM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682750870; x=1685342870;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+MGoIrx5I92tfleJ2HR27INRzqM7E79/a8JDCJVDvYY=;
-        b=Cqsp6LPcssbcq2DLsaY3OSdI5Lg/h0RMGcfaW/dNNZKleWsxUeMLjc1rEirZsxsUhd
-         /qQBC6hxzS2hYjeYtu7Z1nLylo0L5pESOmppH4m6mGkG3XmzRbL2FItHGt1HzXQW/3to
-         zTf/9CK2kzcqRWsCkPNHk7gJRW3xo+E/8mgmTlNUAYpzi1VrRRsyEfc1nwHgJN8MITPB
-         wBIaDweS4V4Vt9RYQ8Z461Obwkh45njI8TCrnb1sauqTFW6FIYrH5cez4YOv2NjOYFct
-         idkC6gYBxSnSOxcdfz9unLwgezEsgmrcEbqKFm2bkSuTDY8gPb89ZW0V5QX2/yyjH6Cb
-         ysYw==
-X-Gm-Message-State: AC+VfDzSct6EVRDwweC2OnVKwcZUtI1ufZKUTB52BxVjQIEXPPtj1xn0
-        ciY2XhHCogpbT9rBueFKeh1YrkiAjug=
-X-Google-Smtp-Source: ACHHUZ5WZf6AkuQAH8ASNEEdBqdI4XlcFCdofFcqZH7hpPf1ih9QJrvdnSf6dMwchYUw1lN7AvYfaQ==
-X-Received: by 2002:a17:907:9807:b0:94f:7c4e:24ea with SMTP id ji7-20020a170907980700b0094f7c4e24eamr7764502ejc.38.1682750870112;
-        Fri, 28 Apr 2023 23:47:50 -0700 (PDT)
-Received: from gmail.com (1F2EF38A.nat.pool.telekom.hu. [31.46.243.138])
-        by smtp.gmail.com with ESMTPSA id u10-20020a056402064a00b00506addaaab0sm9973804edx.32.2023.04.28.23.47.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Apr 2023 23:47:47 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 29 Apr 2023 08:47:45 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [GIT PULL] locking changes for v6.4
-Message-ID: <ZEy9kUpwx/N3JEA/@gmail.com>
-References: <Y/NmzouehvMWTPVZ@gmail.com>
- <ZErTyKxjGQvF6EqP@gmail.com>
- <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1682751031; x=1685343031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2UhLj8G0RcQUtsKhKUXfnhL7zuYYyQ7vxUKRWYdX3To=;
+        b=aWh9uAwoe+zmoMhEFQzYKQS6Lm4nJz0OIdSWr+eNYACHeQfYeJVuJRnjH40jVfLqih
+         znFSZedjlwECzKdMR5kFrP5afrYFOuY43y8aQuX0Ui+ljB0cKuFRIGZn/7vchCZULnXM
+         0smxOEhjuGKYgidfpIBEJGD/LdS3PzINxNZKjnq1Ya5cUIzXTi39u/OpQWB9R0Qrwegu
+         PhVuxjQmNIifM7wz2PvWUoAXc7KCyuF3clsME3z/u8+L0iUjzcU+ov2V3G0y3vox0/19
+         cePRNSXDGlq+/wOBn8ODMRSKhiIs3H8bnX46erNjqD26naSBA5G+XV8vGfZOXesWwXsv
+         Japw==
+X-Gm-Message-State: AC+VfDx1xeZlfyeucSrwIN2Y0R8w7phaA9zZusT8aZPLJV2HxZd8MeQi
+        xL5SAfsYwV22oXfk0qWi/XTc7Xg23I2Y2qy9CG+k
+X-Google-Smtp-Source: ACHHUZ696dIE7IrwvV8BtWc5TacXtKoiSXfv7kuAMvB8aDSVSFFnBuVQsWCP5AhdIJRoTLbNGit9a3My/X0+KaY2+2g=
+X-Received: by 2002:a05:6a21:1706:b0:ef:a31b:af8e with SMTP id
+ nv6-20020a056a21170600b000efa31baf8emr8535949pzb.25.1682751031206; Fri, 28
+ Apr 2023 23:50:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wiDTLgf8LhigR4XKnjgkuhsoS-pXZckXU79J-EXiOj7Vw@mail.gmail.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230413161725.195417-1-alexghiti@rivosinc.com>
+ <20230413161725.195417-5-alexghiti@rivosinc.com> <kwvrls2m6swp443brn27jwcsdhovtc4kxrkqustxpqgf7zqltw@xlhsrndkf4om>
+ <CAHVXubh_y9Uw2xsgsQrVZEcb9bCLBLUCo74GOm-czsSawHxk4g@mail.gmail.com>
+ <3bwxedsrovutzhlmlnozeuvz4zqnr32kuef2mdzmnbniajh6vb@we6jzlwkfuof> <CAOnJCU+xL1qP0zj9rD0d9nix-tSd-yfQnToDXCdHveTKQN_rUA@mail.gmail.com>
+In-Reply-To: <CAOnJCU+xL1qP0zj9rD0d9nix-tSd-yfQnToDXCdHveTKQN_rUA@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Sat, 29 Apr 2023 12:20:19 +0530
+Message-ID: <CAOnJCUK+cXPDMiA=x7sCTt=K7rCjr7q_6aj04VR8fZUUKbrkPA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] riscv: Enable perf counters user access only through perf
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        David Abdurachmanov <davidlt@rivosinc.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Andreas Schwab <schwab@suse.de>, mafm@debian.org,
+        aurel32@debian.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> On Thu, Apr 27, 2023 at 12:58 PM Ingo Molnar <mingo@kernel.org> wrote:
+On Sat, Apr 29, 2023 at 11:49=E2=80=AFAM Atish Patra <atishp@atishpatra.org=
+> wrote:
+>
+> On Wed, Apr 26, 2023 at 6:55=E2=80=AFPM Andrew Jones <ajones@ventanamicro=
+.com> wrote:
 > >
-> >  - Add non-atomic __xchg() variant, use it in a couple of places
-> 
-> Guys, this is insane, and completely unacceptable.
-> 
-> I pulled this, but I'm going to unpull it, because the code is
-> actively wrong and ugly.
-> 
-> It not only randomly decides to re-use a name that has existing users
-> that now need to be fixed up.
+> > On Wed, Apr 26, 2023 at 03:17:01PM +0200, Alexandre Ghiti wrote:
+> > > On Wed, Apr 26, 2023 at 2:57=E2=80=AFPM Andrew Jones <ajones@ventanam=
+icro.com> wrote:
+> > > >
+> > > > On Thu, Apr 13, 2023 at 06:17:25PM +0200, Alexandre Ghiti wrote:
+> > > > > We used to unconditionnally expose the cycle and instret csrs to
+> > > > > userspace, which gives rise to security concerns.
+> > > > >
+> > > > > So only allow access to hw counters from userspace through the pe=
+rf
+> > > > > framework which will handle context switchs, per-task events...et=
+c. But
+> > > > > as we cannot break userspace, we give the user the choice to go b=
+ack to
+> > > > > the previous behaviour by setting the sysctl perf_user_access.
+> > > > >
+> > > > > We also introduce a means to directly map the hardware counters t=
+o
+> > > > > userspace, thus avoiding the need for syscalls whenever an applic=
+ation
+> > > > > wants to access counters values.
+> > > > >
+> > > > > Note that arch_perf_update_userpage is a copy of arm64 code.
+> > > > >
+> > > > > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > > > ---
+> > > > >  Documentation/admin-guide/sysctl/kernel.rst |  23 +++-
+> > > > >  arch/riscv/include/asm/perf_event.h         |   3 +
+> > > > >  arch/riscv/kernel/Makefile                  |   2 +-
+> > > > >  arch/riscv/kernel/perf_event.c              |  65 +++++++++++
+> > > > >  drivers/perf/riscv_pmu.c                    |  42 ++++++++
+> > > > >  drivers/perf/riscv_pmu_legacy.c             |  17 +++
+> > > > >  drivers/perf/riscv_pmu_sbi.c                | 113 ++++++++++++++=
+++++--
+> > > > >  include/linux/perf/riscv_pmu.h              |   3 +
+> > > > >  tools/lib/perf/mmap.c                       |  65 +++++++++++
+> > > > >  9 files changed, 322 insertions(+), 11 deletions(-)
+> > > > >  create mode 100644 arch/riscv/kernel/perf_event.c
+> > > > >
+> > > > > diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Docume=
+ntation/admin-guide/sysctl/kernel.rst
+> > > > > index 4b7bfea28cd7..02b2a40a3647 100644
+> > > > > --- a/Documentation/admin-guide/sysctl/kernel.rst
+> > > > > +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> > > > > @@ -941,16 +941,31 @@ enabled, otherwise writing to this file wil=
+l return ``-EBUSY``.
+> > > > >  The default value is 8.
+> > > > >
+> > > > >
+> > > > > -perf_user_access (arm64 only)
+> > > > > -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > +perf_user_access (arm64 and riscv only)
+> > > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > +
+> > > > > +Controls user space access for reading perf event counters.
+> > > > >
+> > > > > -Controls user space access for reading perf event counters. When=
+ set to 1,
+> > > > > -user space can read performance monitor counter registers direct=
+ly.
+> > > > > +arm64
+> > > > > +=3D=3D=3D=3D=3D
+> > > > >
+> > > > >  The default value is 0 (access disabled).
+> > > > > +When set to 1, user space can read performance monitor counter r=
+egisters
+> > > > > +directly.
+> > > > >
+> > > > >  See Documentation/arm64/perf.rst for more information.
+> > > > >
+> > > > > +riscv
+> > > > > +=3D=3D=3D=3D=3D
+> > > > > +
+> > > > > +When set to 0, user access is disabled.
+> > > > > +
+> > > > > +When set to 1, user space can read performance monitor counter r=
+egisters
+> > > > > +directly only through perf, any direct access without perf inter=
+vention will
+> > > > > +trigger an illegal instruction.
+> > > > > +
+> > > > > +The default value is 2, it enables the legacy mode, that is user=
+ space has
+> > > > > +direct access to cycle, time and insret CSRs only.
+> > > >
+> > > > I think this default value should be a Kconfig symbol, allowing ker=
+nels to
+> > > > be built with a secure default.
+> > >
+> > > Actually I was more in favor of having the default to 1 (ie the secur=
+e
+> > > option) and let the distros deal with the legacy mode (via a sysctl
+> > > parameter on the command line) as long as user-space has not been
+> > > fixed: does that make sense?
+> >
+> > Yes, I'd prefer that too. I assumed the default was 2 in this patch
+> > because we couldn't set it to 1 for some reason.
+> >
+>
+> I would prefer that too. However, it was set to 2 because it would break
+> the user space application depending on the legacy behavior as soon as th=
+e
+> patches are upstream. That is the reason
+> palmer suggested keeping the default value to 2 in order to avoid that.
+>
+> +distro folks (cc'd)
+> If the distro maintainer can confirm that this would be a non-issue, I am=
+ okay
+> with setting the default to 1.
+>
 
-meh - you are 100% right, I'm not sure what we were thinking there ... [ 
-actually, I know what we were thinking, but it's a bit complicated - see 
-the various non-perfect nomenclature options further below. ]
+@David Abdurachmanov reminds me of ARM64 code where it is set to zero.
+The upstream kernel doesn't even enable userspace via perf. The
+default in x86 is 1 though.
 
-So the first line of our thinking was that "__" also often & additionally 
-means 'lighter weight version of a similar API signature, beware, here be 
-dragons, use at your own risk', and more of the focus of these particular 
-changes was on identifying hand-coded xchg-ish pieces of code, such as in:
++Rob Herring (who enabled the ARM64 support[1])
+@Rob: If you can shed some light on the reasoning behind setting to
+disabled, that would help
+us make a more informed decision.
 
-   26ace5d28d36 ("arch/*/uprobes: simplify arch_uretprobe_hijack_return_addr")
+https://github.com/torvalds/linux/commit/e2012600810c9ded81f6f63a8d04781be3=
+c300ad
 
-... but while that background of '__' is somewhat valid logic that we use 
-quite often in various kernel facilities, it doesn't really excuse the 
-sloppy decision to slap __ in front of an existing API without trying 
-harder, *especially* that a better name with fetch_and_zero() already 
-existed :-/
+>
+> > Thanks,
+> > drew
+>
+>
+>
+> --
+> Regards,
+> Atish
 
-> It then *also* decides to start "preferring" this absolutely
-> disgusting new name over a much more legible one in the i915 driver,
-> which had this same functionality except it used a prettier name:
-> 
->    fetch_and_zero()
-> 
-> But what then takes the cake for me is that this horribly ugly feature
-> then didn't even get that right, and only randomly converted *some* of
-> the users, with most of them remaining:
-> 
->   git grep fetch_and_zero drivers/gpu/drm/i915/ | wc
->      58     187    5534
->   git grep -w __xchg drivers/gpu/drm/i915/ | wc
->      22     109    1899
-> 
-> and it looks like the only "logic" to this is that the converted ones
-> were in the "gt/" subdirectory. What a random choice, but happily it
-> caused a trivial conflict, and as a result I noticed how bad things
-> were.
-> 
-> Anyway, I really find this all offensively ugly and pointless. I'm not
-> going to pull some "fixed" version of this. This needs to go away and
-> never come back.
 
-Yeah. So I've rebased locking/core to take out these changes - a simple 
-revert is too ugly and the history has no value here really.
 
-Will re-send the rest of locking/core.
-
-> What was so magically great about the name "__xchg" that it needed to be 
-> taken over by this function? And why was that legibly named version of it 
-> replaced so randomly?
-
-Yeah.
-
-So fetch_and_zero() has a bit of a nomenclature & ambiguity problem as 
-well: there's already an atomic_fetch_*() API family, and it's easy to 
-think that fetch_and_zero() is atomic too - a bit like how xchg() is atomic 
-without mentioning 'atomic'.
-
-Adding to the confusion is that there's already atomic APIs that don't use 
-atomic_t:
-
-  xchg()
-  cmpxchg()
-  try_cmpxchg()
-
-... and by *that* implicit nomenclature logic, dropping the atomic_ from a 
-atomic_fetch_and_zero() API means: 'atomic API, not using atomic_t'. Which 
-fetch_and_zero() clearly isnt ...
-
-So by all that logic and somewhat idiosynchratic API history, the new 
-facility should probably not be fetch_and_zero(), but something like 
-nonatomic_fetch_and_zero(), but that's quite a mouthful for something so 
-simple - and the API family connection to xchg() is lost as well, which is 
-a bit sad...
-
-In all that context the least bad approach sounded to add a __ to denote 
-__xchg() is 'something special and also lighter weight' (which it is).
-
-I *think* the bigger danger in locking nomenclature is to falsely imply 
-atomicity - in that sense I'm not sure fetch_and_zero() is ideal - but I 
-can certainly live with it b/c the perfect name keeps eluding me.
-
-> The *whole* point of two underscores is to say "don't use this - it's
-> an internal implementation". That's the historical meaning, and it's
-> the meaning we have in the kernel too. Two underscores means "this is
-> special and doesn't do everything required" (it might need locking
-> around it, for example).
-
-Yeah. I do think we might want to keep one related change though:
-
-  e27cff3d2d43 ("arch: rename all internal names __xchg to __arch_xchg")
-
-... not because we want to use the __xchg namespace, but because an _arch 
-prefix makes it even *less* likely to be used by non-infrastructure code.
-
-> So then making a new interface with two underscores and thinking "we 
-> should now make random drivers use this" is fundamentally bogus.
-> 
-> Look, just grep for "__xchg" in the main tree (ie the one *without* this 
-> change). It all makes sense. It's all clearly an internal helper - as 
-> marked by that double underscore - and it's not used by any driver or 
-> filesystem code.
-> 
-> Exactly like K&R and God intended.
-
-Yeah. We'll try this new facility again in v6.5, but with a better name. 
-Sorry about that!
-
-Thanks,
-
-	Ingo
+--=20
+Regards,
+Atish
