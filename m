@@ -2,197 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1056F6F2213
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C436F2214
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 03:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347262AbjD2BaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 21:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S1347269AbjD2BaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 21:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347074AbjD2BaD (ORCPT
+        with ESMTP id S230338AbjD2BaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 21:30:03 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED6B10F9;
-        Fri, 28 Apr 2023 18:30:01 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-957dbae98b4so67933766b.1;
-        Fri, 28 Apr 2023 18:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682731800; x=1685323800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w/mrCSfSQUswJQokY5CKe1DjsNNVB/tC9yPgcDgjPVo=;
-        b=Cp4k0SnPzmRX1iwhjYK30jpCdKDz57EBRJZZYFlktyGQWgBSy6nlL8hURnvSx4dEyB
-         Q+N7Qi0fX/m2buLh2I0molv6vsrWhZC8/VHB50IcESuVgAEmKInA9EP0T7Ehfpu4FKjb
-         0gKDGqUe6aXE6+ZxqRJ/ljudqP5f9xSCZ8yRsizxXrpiLp1R8czlkEFQcAQuB1V1hiKu
-         wzvJg0gck0puRog6789hw7gK1KVM0AAYWPixExdBeLYBDuKqJgWRvjVbfAVt+XxZiChR
-         67N1Q5nSB3FQKAg2iyEGpoZL9HGyeq7IrX1eIWOjzlj0qHqHtcJ6KdeXA772jcBCQ0zA
-         d0Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682731800; x=1685323800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w/mrCSfSQUswJQokY5CKe1DjsNNVB/tC9yPgcDgjPVo=;
-        b=N3NHgyd+pBusCfmJeVCLgCWxx58jnyW/3yaetGYD+i2aAkYaSOv8onwBrrLpErImK+
-         3Qfq8PCmTvafe3LC8R1/nX38FI/W+JIjknoIoMCIZNdYJt3SoVeyL2m0VSso1OaZd7vo
-         b4/EcTxRRfFRiTYtE8CkgTyjcMBV63UvCrlL8K1HQpYBBmj5Wr02cssi9+CmA/votpHJ
-         e3GDFA6NTQQx50YjI58nu2ID6Ijp+PSk4jxdERkO6b0T+AZx0sSGMS2+muTBsdBQfSjl
-         GraFoYqVNXIjMbiFTisGmLNEbCrfFkVZiQ4/BcIJnPh4nrFcaBVr0GFPJgDidmFc3tER
-         UXIA==
-X-Gm-Message-State: AC+VfDweFKFL+4wXGyH+xiFq7NZhhvqfWqR7Cg9VP23B8YnujUE8pDXK
-        8Wqy27xFUXDi6v0xMkwd1UAt3khnyYccOJXS7Ew=
-X-Google-Smtp-Source: ACHHUZ4tn3uoqQTzU663ftvRQvBpWuwX1A024mthR/ReUBQJwotPmbEgI8aqQv/HHmfQY9f/171eYQMnKj9G4RB+bT4=
-X-Received: by 2002:a17:907:a40d:b0:94e:f969:fb3e with SMTP id
- sg13-20020a170907a40d00b0094ef969fb3emr6848366ejc.43.1682731799969; Fri, 28
- Apr 2023 18:29:59 -0700 (PDT)
+        Fri, 28 Apr 2023 21:30:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A00E7A;
+        Fri, 28 Apr 2023 18:30:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A96F61592;
+        Sat, 29 Apr 2023 01:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C46C4339B;
+        Sat, 29 Apr 2023 01:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682731804;
+        bh=H1cUVZloMIMgPmyVATWNTj1bXJbmgcmWRMx4csgzg9s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VruZ9vwomrjap0GaYFrqDzIJX9CjBi7wGIWNr+9ZNlTauB7K3vwwL698PvA2nQvVg
+         XRt5btcIG4aWmkRxtGYqHJuzO/xuXZTlWxCkq0SXWIcd59qWS254KsYQmP2LTx9d3R
+         1J05jNZIpioTdJr7eH4rULGzKVOR1ph5PBfKfa6SqoGLYbbYX3aSm6CngFqT38ZvzF
+         oW65Q49XxT+GiZ3cI7FdXGjtxkiLJ31OCaf5jkf4o1R7Fq0mEY+OgYAihE+r9/OdvB
+         Gx1gB9Nd47GiHC8jspgk1b0BTj6HI4wfZZjxIgN3+isunZuyfX6LOcqwzoCfGgI/tx
+         jbw9Y+NoUUswA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id BA120403B5; Fri, 28 Apr 2023 22:30:01 -0300 (-03)
+Date:   Fri, 28 Apr 2023 22:30:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/2] perf list: Fix memory leaks in
+ print_tracepoint_events()
+Message-ID: <ZExzGWIm98lfPUKI@kernel.org>
+References: <20230427230502.1526136-1-namhyung@kernel.org>
+ <CAP-5=fUYfVDfi_+JGqU=o_TcPRNVboMwZewuhU6q+K3md6nUkA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230428013738.30735-1-cnsztl@gmail.com> <20230428013738.30735-2-cnsztl@gmail.com>
- <32911b1c-7f32-7078-27e8-7b168d295993@linaro.org>
-In-Reply-To: <32911b1c-7f32-7078-27e8-7b168d295993@linaro.org>
-From:   Tianling Shen <cnsztl@gmail.com>
-Date:   Sat, 29 Apr 2023 09:29:47 +0800
-Message-ID: <CAOP2_TjXKk8KrD7Ur2pAGa-8pCMJcZjbw1opKYzFEfO4weJzhw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add Lunzn Fastrhino R66S
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Andrew Lunn <andrew@lunn.ch>, Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fUYfVDfi_+JGqU=o_TcPRNVboMwZewuhU6q+K3md6nUkA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Em Thu, Apr 27, 2023 at 05:27:50PM -0700, Ian Rogers escreveu:
+> On Thu, Apr 27, 2023 at 4:05 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > It should free entries (not only the array) filled by scandirat()
+> > after use.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Reviewed-by: Ian Rogers <irogers@google.com>
+ 
 
-On Fri, Apr 28, 2023 at 9:34=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 28/04/2023 03:37, Tianling Shen wrote:
-> > Lunzn Fastrhino R66S is a high-performance mini router.
-> >
-> > Specification:
-> > - Rockchip RK3568
-> > - 1/2GB LPDDR4 RAM
-> > - SD card slot
-> > - M.2 Connector
-> > - 2x USB 3.0 Port
-> > - 2x 2500 Base-T (PCIe, r8125b)
-> > - 12v DC Jack
-> >
-> > Signed-off-by: Tianling Shen <cnsztl@gmail.com>
+Thanks, applied the series.
+
+- Arnaldo
+
+> Thanks,
+> Ian
+> 
 > > ---
-> >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
-> >  .../dts/rockchip/rk3568-fastrhino-r66s.dts    |  27 +
-> >  .../dts/rockchip/rk3568-fastrhino-r66s.dtsi   | 507 ++++++++++++++++++
-> >  3 files changed, 535 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.=
-dts
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.=
-dtsi
+> >  tools/perf/util/print-events.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
 > >
-> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dt=
-s/rockchip/Makefile
-> > index 2d585bbb8f3a..15089a78555a 100644
-> > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > @@ -85,6 +85,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-box-demo.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3566-lubancat-1.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-bpi-r2-pro.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-evb1-v10.dtb
-> > +dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-fastrhino-r66s.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-lubancat-2.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-nanopi-r5c.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) +=3D rk3568-nanopi-r5s.dtb
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts b/a=
-rch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
-> > new file mode 100644
-> > index 000000000000..fc9e1bdab128
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dts
-> > @@ -0,0 +1,27 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> > +
-> > +#include "rk3568-fastrhino-r66s.dtsi"
-> > +
-> > +/ {
-> > +     model =3D "Lunzn FastRhino R66S";
-> > +     compatible =3D "lunzn,fastrhino-r66s", "rockchip,rk3568";
-> > +
-> > +     aliases {
-> > +             mmc0 =3D &sdmmc0;
-> > +     };
-> > +};
-> > +
-> > +&sdmmc0 {
-> > +     max-frequency =3D <150000000>;
-> > +     no-sdio;
-> > +     no-mmc;
-> > +     bus-width =3D <4>;
-> > +     cap-mmc-highspeed;
-> > +     cap-sd-highspeed;
-> > +     disable-wp;
-> > +     vmmc-supply =3D <&vcc3v3_sd>;
-> > +     vqmmc-supply =3D <&vccio_sd>;
-> > +     pinctrl-names =3D "default";
-> > +     pinctrl-0 =3D <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-> > +     status =3D "okay";
-> > +};
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi b/=
-arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
-> > new file mode 100644
-> > index 000000000000..a58592b2f13b
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-fastrhino-r66s.dtsi
-> > @@ -0,0 +1,507 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-> > +
-> > +/dts-v1/;
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/input/input.h>
-> > +#include <dt-bindings/leds/common.h>
-> > +#include <dt-bindings/pinctrl/rockchip.h>
-> > +#include <dt-bindings/soc/rockchip,vop2.h>
-> > +#include "rk3568.dtsi"
-> > +
-> > +/ {
-> > +     aliases {
-> > +             led-boot =3D &status_led;
-> > +             led-failsafe =3D &status_led;
-> > +             led-running =3D &status_led;
-> > +             led-upgrade =3D &status_led;
->
-> Why do you need these? Which upstream kernel driver parses these?
+> > diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+> > index d416c5484cd5..0a97912fd894 100644
+> > --- a/tools/perf/util/print-events.c
+> > +++ b/tools/perf/util/print-events.c
+> > @@ -83,11 +83,11 @@ void print_tracepoint_events(const struct print_callbacks *print_cb __maybe_unus
+> >                 if (sys_dirent->d_type != DT_DIR ||
+> >                     !strcmp(sys_dirent->d_name, ".") ||
+> >                     !strcmp(sys_dirent->d_name, ".."))
+> > -                       continue;
+> > +                       goto next_sys;
+> >
+> >                 dir_fd = openat(events_fd, sys_dirent->d_name, O_PATH);
+> >                 if (dir_fd < 0)
+> > -                       continue;
+> > +                       goto next_sys;
+> >
+> >                 evt_items = scandirat(events_fd, sys_dirent->d_name, &evt_namelist, NULL, alphasort);
+> >                 for (int j = 0; j < evt_items; j++) {
+> > @@ -98,12 +98,12 @@ void print_tracepoint_events(const struct print_callbacks *print_cb __maybe_unus
+> >                         if (evt_dirent->d_type != DT_DIR ||
+> >                             !strcmp(evt_dirent->d_name, ".") ||
+> >                             !strcmp(evt_dirent->d_name, ".."))
+> > -                               continue;
+> > +                               goto next_evt;
+> >
+> >                         snprintf(evt_path, sizeof(evt_path), "%s/id", evt_dirent->d_name);
+> >                         evt_fd = openat(dir_fd, evt_path, O_RDONLY);
+> >                         if (evt_fd < 0)
+> > -                               continue;
+> > +                               goto next_evt;
+> >                         close(evt_fd);
+> >
+> >                         snprintf(evt_path, MAXPATHLEN, "%s:%s",
+> > @@ -119,9 +119,13 @@ void print_tracepoint_events(const struct print_callbacks *print_cb __maybe_unus
+> >                                         /*desc=*/NULL,
+> >                                         /*long_desc=*/NULL,
+> >                                         /*encoding_desc=*/NULL);
+> > +next_evt:
+> > +                       free(evt_namelist[j]);
+> >                 }
+> >                 close(dir_fd);
+> >                 free(evt_namelist);
+> > +next_sys:
+> > +               free(sys_namelist[i]);
+> >         }
+> >
+> >         free(sys_namelist);
+> > --
+> > 2.40.1.495.gc816e09b53d-goog
+> >
 
-Oh sorry these aliases are used for OpenWrt and I forgot to remove them
-when submitting patches. Will send v2 for it.
+-- 
 
-Thanks,
-Tianling.
-
->
->
-> Best regards,
-> Krzysztof
->
+- Arnaldo
