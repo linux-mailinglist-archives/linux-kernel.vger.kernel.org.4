@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2D46F2642
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A496F2647
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 22:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjD2UOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 16:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229878AbjD2URp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 16:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjD2UO2 (ORCPT
+        with ESMTP id S229476AbjD2URm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 16:14:28 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A741B4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24b29812c42so856784a91.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:14:25 -0700 (PDT)
+        Sat, 29 Apr 2023 16:17:42 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC25E57
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:17:40 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-51f1b6e8179so716845a12.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 13:17:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799264; x=1685391264;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682799460; x=1685391460;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
-        b=ztXNyujPGJ3TImj9rkWYO2n2FifWKitTQShNykqcCXMnlMDmDVUdGDZxkkAjoc2LxT
-         wjlkNuWu5MpGZ0hx2IY/BfGicm00cVl+x8sMPYhvJYOTMhGVFNRcq+t2+IhK1Zbg1HBm
-         TwPyb5IfXHXgdYm4kQQJO8mCutMWnoA0MAQG1HObQV2DkWdvKA82EPwFFy15NEoVvzDJ
-         YaFLlQv2/hnRBo+Kg2l+LFcBMREq5GVfs5levwZlW+i9w9qFVpvKUrXtIKJRJqUd1KUC
-         DRDHp5Z7Fs9kgbXLfeVSACxaLJ8vDKqbLXNf+pwsIg4BCZFLNo8FmqNy+hScbEds+O2l
-         SL9w==
+        bh=mFiB6ytrVKj/f6xCbTDWl4yWJ/Q1XjEK8T+2S6imf1E=;
+        b=ckhI7YSalDo0gVPkZX3y0qPl1uNA7CqFa8/4xrOteEHCuf72A+45+dISdfdHAgH8c9
+         Cbq3t/XsjCWSqvq+BtsjcNK4uftpXQuhhKN0dPy3ZX9fF3YEeX3iWRzpD0npnJBfk5bz
+         PsjLBnDcDY8E6q+14CLo0YpidmB++p2/IXze6+aao6dOYy6KeVn8b9u2fEu6lriZNest
+         PKcREt/kS+uzBkXRPehfASAD7lDgkT//MnOdn2lHVXy6D8QFm57lSMFLFsCk4/hmR3qP
+         g9nJb7ydjGYhip6eoC+pWvOy4tJm/p76YJY0OsmLe0DGpfWutGkk75eUfK479JUFE1Ej
+         hBQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682799264; x=1685391264;
+        d=1e100.net; s=20221208; t=1682799460; x=1685391460;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EvNXrGU7f9AyBgQxPAxIH8w5LQ2sGDY5VhYCeQmIsvg=;
-        b=cQ/3o4ojpMj4NV+yxM3D246Ebnt7aD7XTcRS2vfXJp51Ukt6RujXVh55FjI+lhC5U1
-         HVuWdXMmhYTFgNKcnmzcjJKaUEyMx0LR99m/Xm14faLSb7/OkqXTjU+3L/X/nCZbYtxd
-         ueEk67+R9RtnkENKTdkDTzZ/X+FqLxKa/kIZFbdov2VRa2bYpcYf0MwcmHwn1QFRzUcP
-         hvJSwVv0GuTCgyKV4C4HiecOWuM3aQSyq3yqAY0WNoTpdT1FCIA9KLUlIYNCVbsM/46Z
-         /xuonZOTY3TubFY/Cxrc6hZ+HFIjEWjB3n9YC2+u3WXsTCnAru0BwCcBWWwyPGdnKZtB
-         cv8g==
-X-Gm-Message-State: AC+VfDzhKCHrueG+Ta2ylhKxAJHEnVEVyzQ0PDqUJELFc3oKWrlKcENu
-        QTtPXGar1kZ7YeJkALZwM5br5Q==
-X-Google-Smtp-Source: ACHHUZ7pgoIToYashe1bFzQ1hUq7/0xuSIbhdV55MwhX+AUZI7FSn+oK96sUBgsJukxkcTmiriVdYg==
-X-Received: by 2002:a17:902:ef45:b0:1a6:dd9a:62c5 with SMTP id e5-20020a170902ef4500b001a6dd9a62c5mr8875345plx.10.1682799264493;
-        Sat, 29 Apr 2023 13:14:24 -0700 (PDT)
+        bh=mFiB6ytrVKj/f6xCbTDWl4yWJ/Q1XjEK8T+2S6imf1E=;
+        b=MqPbfEuzhJKKxBfUCf0W5Arnt3grTj007Di6lqgUEZU5Nv5h+sUyti1NvsfzpOlw8Q
+         HT79U2vELHxJsO7XLonprxxIOctMiVpuTLoq8VCRmBAw0YcNxqr6Tey3g4KOLPqvvS1B
+         h5KLtwzSGlqpjiEJh8P0gnhoe/E3XrIhNGILPE/02qB3ED8THMy4IdDf0omjocCe7kGy
+         LZTh6uc2TNOTzvOdOXB/AP3fodcyPGwrSo23xBLWPbjQbZ0b8BE6W56+/pD7BPT7eL7m
+         P7rtYFSh7Yq5LMeDZio4uuiqRZ43k2KWe3kEZlVU2oQdCCTGjsjeAZd+Yf6WxDWcz6ST
+         TeTQ==
+X-Gm-Message-State: AC+VfDzGIgi/9pSkBzCyPhLXiuzRYNXrwnkJpLAQs/14zXrw1JE4RXxy
+        uF/roXuKjoq1JTPqFAhbDRv9Rg==
+X-Google-Smtp-Source: ACHHUZ49aJWNY1E5qUu3lujxh4rbVwp8/wmyvBrQN0Vd47cPc3ONhq23W7fKGmFhRbb61OlkDqx+zQ==
+X-Received: by 2002:a17:902:ea07:b0:1a9:baa4:8681 with SMTP id s7-20020a170902ea0700b001a9baa48681mr9261344plg.24.1682799460249;
+        Sat, 29 Apr 2023 13:17:40 -0700 (PDT)
 Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001a4f7325466sm15179442pll.276.2023.04.29.13.14.23
+        by smtp.gmail.com with ESMTPSA id 9-20020a170902c14900b001a9a36c5216sm6303823plj.80.2023.04.29.13.17.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 13:14:23 -0700 (PDT)
-X-Google-Original-Date: Sat, 29 Apr 2023 13:14:07 PDT (-0700)
-Subject:     Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
-In-Reply-To: <20230429063348.125544-1-npiggin@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>, npiggin@gmail.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vgupta@kernel.org, linux-snps-arc@lists.infradead.org,
-        bcain@quicinc.com, linux-hexagon@vger.kernel.org,
-        chenhuacai@kernel.org, loongarch@lists.linux.dev,
-        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
-        monstr@monstr.eu, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, linux-openrisc@vger.kernel.org,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, linux-sh@vger.kernel.org,
-        davem@davemloft.net, sparclinux@vger.kernel.org, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        linux-um@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, khilman@baylibre.com, frederic@kernel.org
+        Sat, 29 Apr 2023 13:17:39 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 13:17:39 -0700 (PDT)
+X-Google-Original-Date: Sat, 29 Apr 2023 13:17:16 PDT (-0700)
+Subject:     Re: [PATCH] RISC-V: fixup in-flight collision with ARCH_WANT_OPTIMIZE_VMEMMAP rename
+In-Reply-To: <20230429-neurology-sudoku-8d53b23d01b8@spud>
+CC:     Conor Dooley <conor.dooley@microchip.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        lukas.bulwahn@gmail.com
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     npiggin@gmail.com
-Message-ID: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-b5a20207-95a2-4607-9e6c-52396d569d91@palmer-ri-x1c9a>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,93 +75,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
-> This option was created in commit 554b0004d0ec4 ("vtime: Add
-> HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
-> they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+On Sat, 29 Apr 2023 02:32:33 PDT (-0700), Conor Dooley wrote:
+> On Sat, Apr 29, 2023 at 10:27:33AM +0100, Conor Dooley wrote:
+>> From: Conor Dooley <conor.dooley@microchip.com>
+>> 
+>> Lukas warned that ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP had been
+>> renamed in the mm tree & that RISC-V would need a fixup as part of the
+>> merge. The warning was missed however, and RISC-V is selecting the
+>> orphaned Kconfig option.
+>> 
+>> Fixes: 89d77f71f493 ("Merge tag 'riscv-for-linus-6.4-mw1' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux")
+>> Reported-by: Lukas Bulwhan <lukas.bulwhan@gmail.com>
 >
-> The cputime_t type has since been removed, so this doesn't have any
-> meaning. Remove it.
+> That should have been Lukas Bulwahn <lukas.bulwahn@gmail.com>.
+> This is what I get for hand-typing an email address that I could have
+> copied from lore I suppose.
 >
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: loongarch@lists.linux.dev
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: linux-openrisc@vger.kernel.org
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-parisc@vger.kernel.org
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: linux-riscv@lists.infradead.org
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: linux-um@lists.infradead.org
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-> ---
-> Hi,
->
-> Could we tidy this? I don't know what tree it can go in, timers,
-> sched, asm-generic, probably doesn't matter.
->
-> The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
-> NO_HZ_FULL so if your arch has some other issue that requires this
-> then the documentation needs to change. Any concerns from the archs?
-> I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
-> which looks to be:
->
-> arc
-> hexagon
-> loongarch 32-bit with SMP
-> m68k
-> microblaze
-> mips 32-bit with SMP
-> nios2
-> openrisc
-> parisc 32-bit
-> riscv 32-bit
+>> Link: https://lore.kernel.org/linux-riscv/CAKXUXMyVeg2kQK_edKHtMD3eADrDK_PKhCSVkMrLDdYgTQQ5rg@mail.gmail.com/
+>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> ---
+>> I guess you picking this up for your second PR makes the most sense
+>> Palmer?
 
-Nothing's jumping out, though I haven't tested this yet so I'm not 100%.  
-I assume this isn't aimed for this merge window, given the timing?  
-Probably best to give this sort of thing time to bake in linux-next, but 
-I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big 
-deal either way on my end.
+Yep, except it crashes b4
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+$ b4 shazam -lts https://lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d@spud/
+Grabbing thread from lore.kernel.org/all/20230429-trilogy-jolly-12bf5c53d62d%40spud/t.mbox.gz
+Analyzing 2 messages in the thread
+Checking attestation on all messages, may take a moment...
+Traceback (most recent call last):
+  File "/home/palmer/.local/src/b4/b4/command.py", line 383, in <module>
+    cmd()
+  File "/home/palmer/.local/src/b4/b4/command.py", line 366, in cmd
+    cmdargs.func(cmdargs)
+  File "/home/palmer/.local/src/b4/b4/command.py", line 100, in cmd_shazam
+    b4.mbox.main(cmdargs)
+  File "/home/palmer/.local/src/b4/b4/mbox.py", line 713, in main
+    make_am(msgs, cmdargs, msgid)
+  File "/home/palmer/.local/src/b4/b4/mbox.py", line 101, in make_am
+    am_msgs = lser.get_am_ready(noaddtrailers=cmdargs.noaddtrailers,
+  File "/home/palmer/.local/src/b4/b4/__init__.py", line 552, in get_am_ready
+    checkmark, trailers, attcrit = lmsg.get_attestation_trailers(attpolicy, maxdays)
+  File "/home/palmer/.local/src/b4/b4/__init__.py", line 1319, in get_attestation_trailers
+    for attestor in self.attestors:
+  File "/home/palmer/.local/src/b4/b4/__init__.py", line 1158, in attestors
+    self._load_patatt_attestors()
+  File "/home/palmer/.local/src/b4/b4/__init__.py", line 1261, in _load_patatt_attestors
+    patatt_config = patatt.get_config_from_git(r'patatt\..*', multivals=['keyringsrc'])
+AttributeError: module 'patatt' has no attribute 'get_config_from_git'
 
-> sh
-> sparc 32-bit
-> um 32-bit
-> x86 32-bit
->
-> Thanks,
-> Nick
+So I probably need to just go update my setup, I've got a bunch of wacky stuff.
+I'll try and remember to do so, but I'm going to scrub through other bits
+first...
+
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+>> 
+>> CC: Palmer Dabbelt <palmer@dabbelt.com>
+>> CC: Linus Torvalds <torvalds@linux-foundation.org>
+>> CC: Andrew Morton <akpm@linux-foundation.org>
+>> CC: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> CC: Lukas Bulwhan <lukas.bulwhan@gmail.com>
+>> CC: linux-riscv@lists.infradead.org
+>> CC: linux-kernel@vger.kernel.org
+>> ---
+>>  arch/riscv/Kconfig | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 5c88ac4b52be..e1bdb3fb16cc 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -46,9 +46,9 @@ config RISCV
+>>  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>>  	select ARCH_WANT_FRAME_POINTERS
+>>  	select ARCH_WANT_GENERAL_HUGETLB if !RISCV_ISA_SVNAPOT
+>> -	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>>  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+>>  	select ARCH_WANT_LD_ORPHAN_WARN if !XIP_KERNEL
+>> +	select ARCH_WANT_OPTIMIZE_VMEMMAP
+>>  	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
+>>  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
+>>  	select BUILDTIME_TABLE_SORT if MMU
+>> -- 
+>> 2.39.2
+>> 
