@@ -2,148 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF066F23AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 10:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BE46F23B1
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 10:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjD2IIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 04:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S230348AbjD2IPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 04:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjD2IH7 (ORCPT
+        with ESMTP id S229535AbjD2IPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 04:07:59 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203FB9D
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 01:07:57 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id A622AC020; Sat, 29 Apr 2023 10:07:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682755675; bh=DmRpe2Il38TnK4sApoIi7xcpmjSwMJq7MXIke/ZT6ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OwfifKgW3lPCsCcBzi0Cfnz7NR9y7XYtFvHbIjiIA4D1w71mtKg9/JCYL33SJ1xKT
-         Ig3Xx37tqDsF55AgzYgjg9eLrhwrgr5Qba7Fv7q9P7gcWeSQRh0D3jIxD6Cp4KJgwX
-         lyLixZvm3FMOSAgr52mNXP5aSGsYpWc6OCiKzRvPXKLfwuYGoPzH5xZMlUATH2uap0
-         CRDperPfVMvDYIoPA1elcZ7UYsHNsYWNHwtkP68MkIth0Hdk9QAEyspiwlYjbSHdwk
-         9seuSStKy9JhMmGB+/SVufJHg2GEOC1EOE0P6I2/E40vnnBowMxExVx3R6MEeFhpqr
-         LTJoxyBT1swCg==
+        Sat, 29 Apr 2023 04:15:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B97326A6
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 01:15:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B6C60EA5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 08:15:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD51C433D2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 08:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682756100;
+        bh=q5AlVoiOQJhfivtd0wNfzYog0DxvF++QpqKUdYK74AY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bSreGOfs2/Yc5/AVKlTWeAZZ4VB5+Mq2Oj/Sho9l6ErZo4Lj8zXjeoXSbLvRhZfAu
+         b29MyBASS1pwshyCKBGG6i1mhWs3xdimgrlG/Qthpot3HuY3RwIENdLKrR/vIWth9V
+         9op0IbOMwZQ67xoh0N8XTD4joWRUtySH+nY5uw+viUX1jmjbNN0tbbU/p6Z8tmdhpH
+         47b5u3rZnNtYCVRtnUh7/YRlXaUiHcXRKbhA4EGu95CZmpP7qVr5KwwMT1hepLZ2ME
+         7YWv2abBHSrRATpwOg7xEN/NOU6Hczse+nz1DWPFDgsaNV1uPD0cmCk1qeBZy9D8Xv
+         jR0fJKw8pPXkA==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4efec123b28so910491e87.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 01:15:00 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxTe67lqzDQOxAzz2ksfMtZibReM4eanROFJxp+/CVdf2fPaIwl
+        KTXCtj37lX1ms6++oPaRq1QNO1dTOWs1ykit/do=
+X-Google-Smtp-Source: ACHHUZ5n3WuqKDkEg7i1bMoDv7sJfzcV5KdG4bE0Do5KScT1dAE9PWJ6gwT+wfNZhlH2m97am7T3jm8BBpJoCcN+2YU=
+X-Received: by 2002:a2e:870d:0:b0:2ab:143e:e19c with SMTP id
+ m13-20020a2e870d000000b002ab143ee19cmr2067172lji.50.1682756098102; Sat, 29
+ Apr 2023 01:14:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230428050442.180913-1-maskray@google.com> <CAMj1kXGpbKgS8mNxVuAyPvT-vW0LWZOXgqsy5TvKhzJRs_rHkA@mail.gmail.com>
+ <20230428185814.mmnb3jafp7fnwdrh@google.com> <CAMj1kXFgv6GHm5PvR9Qq9-VwL+5NXwpChkB59c-0-tEJPNYdVQ@mail.gmail.com>
+ <20230428210611.pxgmj2tja3y2c3lr@google.com> <CAMj1kXGKPyFOtPE30eanbD+5StvXGgX7Bi9iziTK9iqFg9=9wg@mail.gmail.com>
+ <20230428222912.yanrwnl5hwykv6ve@google.com> <CAMj1kXGw9zz-PraPRx12uWkorhV0t8vRwG=qH7-3C75eBH2nAg@mail.gmail.com>
+ <20230429075104.6pncukm4a5bxcumx@google.com>
+In-Reply-To: <20230429075104.6pncukm4a5bxcumx@google.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 29 Apr 2023 09:14:45 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFZabChhNTA77EZbfCkLF7-oGeR-N-d-sQhP7tXjxRSRg@mail.gmail.com>
+Message-ID: <CAMj1kXFZabChhNTA77EZbfCkLF7-oGeR-N-d-sQhP7tXjxRSRg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: lds: move .got section out of .text
+To:     Fangrui Song <maskray@google.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id A69E9C009;
-        Sat, 29 Apr 2023 10:07:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1682755674; bh=DmRpe2Il38TnK4sApoIi7xcpmjSwMJq7MXIke/ZT6ac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W+JXrOsOwX0OeC3hoq8L1edpV2APOkX/DyA3O+/MUBofJe+Aj4ZODZfLhe1B+XKU8
-         JHMauX23dBpfYZZ0iW8jH6Pwg//wLHN2kvGRszE0S4fvc2munmY7Ovw4gWR5dlMUbf
-         JhBBvalGPqC7cbMRv19kvZIANNqqhbt6JjKXWGlPSJfgSk/lskf9iIje53Y+fm8hdX
-         k00dPKpx50OnesXNC8dzOaa8krMloOJ936nrvRP5g9tW86pKh8Qm7BbAsdbd6xjA4f
-         NK95odKTnRYiG0HByAxWivIYPD7TTa6F3zSKLino5cQQ2FweaX83x0HkuSv9+9OiXF
-         ymOs3KKDg2HUg==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id adcfa885;
-        Sat, 29 Apr 2023 08:07:47 +0000 (UTC)
-Date:   Sat, 29 Apr 2023 17:07:32 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] io_uring: add support for getdents
-Message-ID: <ZEzQRLUnlix1GvbA@codewreck.org>
-References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
- <20230422-uring-getdents-v1-2-14c1db36e98c@codewreck.org>
- <20230423224045.GS447837@dread.disaster.area>
- <ZEXChAJfCRPv9vbs@codewreck.org>
- <20230428050640.GA1969623@dread.disaster.area>
- <ZEtkXJ1vMsFR3tkN@codewreck.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZEtkXJ1vMsFR3tkN@codewreck.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dominique Martinet wrote on Fri, Apr 28, 2023 at 03:14:52PM +0900:
-> > AFAICT, the io_uring code wouldn't need to do much more other than
-> > punt to the work queue if it receives a -EAGAIN result. Otherwise
-> > the what the filesystem returns doesn't need to change, and I don't
-> > see that we need to change how the filldir callbacks work, either.
-> > We just keep filling the user buffer until we either run out of
-> > cached directory data or the user buffer is full.
-> 
-> [...] I'd like to confirm what the uring
-> side needs to do before proceeding -- looking at the read/write path
-> there seems to be a polling mechanism in place to tell uring when to
-> look again, and I haven't looked at this part of the code yet to see
-> what happens if no such polling is in place (does uring just retry
-> periodically?)
+On Sat, 29 Apr 2023 at 08:51, Fangrui Song <maskray@google.com> wrote:
+>
+> On 2023-04-29, Ard Biesheuvel wrote:
+> >On Fri, 28 Apr 2023 at 23:29, Fangrui Song <maskray@google.com> wrote:
+> >>
+> >> On 2023-04-28, Ard Biesheuvel wrote:
+> >> >On Fri, 28 Apr 2023 at 22:06, Fangrui Song <maskray@google.com> wrote:
+> >> >>
+> >> >> On 2023-04-28, Ard Biesheuvel wrote:
+> >> >> >On Fri, 28 Apr 2023 at 19:58, Fangrui Song <maskray@google.com> wrote:
+> >> >> >>
+> >> >> >> On 2023-04-28, Ard Biesheuvel wrote:
+> >> >> >> >Hello Fangrui,
+> >> >> >>
+> >> >> >> Hello Ard, thank you for the rapid response.
+> >> >> >>
+> >> >> >> >On Fri, 28 Apr 2023 at 06:05, Fangrui Song <maskray@google.com> wrote:
+> >> >> >> >>
+> >> >> >> >> Currently, the .got section is placed within the output section .text.
+> >> >> >> >> However, when .got is non-empty, the SHF_WRITE flag is set when linked
+> >> >> >> >> by lld. GNU ld recognizes .text as a special section and ignores the
+> >> >> >> >> SHF_WRITE flag. By renaming .text, we can also get the SHF_WRITE flag.
+> >> >> >> >>
+> >> >> >> >> Conventionally, the .got section is placed just before .got.plt (which
+> >> >> >> >> should be empty and omitted in the kernel). Therefore, we move the .got
+> >> >> >> >> section to a conventional location (between .text and .data) and remove
+> >> >> >> >> the unneeded `. = ALIGN(16)`.
+> >> >> >> >>
+> >> >> >> >> Signed-off-by: Fangrui Song <maskray@google.com>
+> >> >> >> >> ---
+> >> >> >> >>  arch/arm64/kernel/vmlinux.lds.S | 20 ++++++++++----------
+> >> >> >> >>  1 file changed, 10 insertions(+), 10 deletions(-)
+> >> >> >> >>
+> >> >> >> >> diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+> >> >> >> >> index b9202c2ee18e..2bcb3b30db41 100644
+> >> >> >> >> --- a/arch/arm64/kernel/vmlinux.lds.S
+> >> >> >> >> +++ b/arch/arm64/kernel/vmlinux.lds.S
+> >> >> >> >> @@ -181,18 +181,8 @@ SECTIONS
+> >> >> >> >>                         KPROBES_TEXT
+> >> >> >> >>                         HYPERVISOR_TEXT
+> >> >> >> >>                         *(.gnu.warning)
+> >> >> >> >> -               . = ALIGN(16);
+> >> >> >> >> -               *(.got)                 /* Global offset table          */
+> >> >> >> >>         }
+> >> >> >> >>
+> >> >> >> >> -       /*
+> >> >> >> >> -        * Make sure that the .got.plt is either completely empty or it
+> >> >> >> >> -        * contains only the lazy dispatch entries.
+> >> >> >> >> -        */
+> >> >> >> >> -       .got.plt : { *(.got.plt) }
+> >> >> >> >> -       ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+> >> >> >> >> -              "Unexpected GOT/PLT entries detected!")
+> >> >> >> >> -
+> >> >> >> >>         . = ALIGN(SEGMENT_ALIGN);
+> >> >> >> >>         _etext = .;                     /* End of text section */
+> >> >> >> >>
+> >> >> >> >> @@ -247,6 +237,16 @@ SECTIONS
+> >> >> >> >>
+> >> >> >> >>         . = ALIGN(SEGMENT_ALIGN);
+> >> >> >> >>         __inittext_end = .;
+> >> >> >> >> +
+> >> >> >> >> +       .got : { *(.got) }
+> >> >> >> >
+> >> >> >> >This is the .init region, which gets freed and unmapped after boot. If
+> >> >> >> >the GOT is non-empty, it needs to remain mapped, so we cannot place it
+> >> >> >> >here.
+> >> >> >>
+> >> >> >> Thanks.  I did not know the constraint.
+> >> >> >>
+> >> >> >> >We have the same issue with the .rodata section, which incorporates
+> >> >> >> >variables marked as __ro_after_init, which are not const qualified. So
+> >> >> >> >given that .rodata is already emitted as WA, and we cannot do anything
+> >> >> >> >about that, let's move the GOT in there.
+> >> >> >>
+> >> >> >> Yes, writable .data..ro_after_init and __jump_table sections in
+> >> >> >> include/asm-generic/vmlinux.lds.h (#define RO_DATA(align)) makes the
+> >> >> >> output section .rodata writable.  Perhaps this is very difficult to fix,
+> >> >> >> and we will have writable .rodata for a long time.
+> >> >> >>
+> >> >> >> What do you think of moving .got/.got.plt immediately before .data?
+> >> >> >> I want to place .got/.got.plt before the guaranteed-writable sections,
+> >> >> >> not some sections which are "unfortunately" writable (.rodata, __modver,
+> >> >> >> .hyp.rodata, .rodata.text, etc).
+> >> >> >>
+> >> >> >> For userspace programs, either linked with GNU ld or lld, .got/.got.plt
+> >> >> >> are usually immediately before .data .
+> >> >> >>
+> >> >> >
+> >> >> >I don't think that would be the right choice.
+> >> >> >
+> >> >> >We have five pseudo-segments in the kernel
+> >> >> >
+> >> >> >text (RX)
+> >> >> >rodata (R)
+> >> >> >inittext (RX)
+> >> >> >initdata (RW)
+> >> >> >data (RW)
+> >> >> >
+> >> >> >where the init ones disappear entirely when the boot completes.
+> >> >> >
+> >> >> >The GOT should not be modifiable, so it should not be in .data. So the
+> >> >> >only appropriate 'segment' for the GOT is rodata
+> >> >> >
+> >> >> >Note that we don't use PIC codegen for the kernel, so all const
+> >> >> >qualified data structures containing statically initialized global
+> >> >> >pointer variables are emitted into .rodata as well, and relocated at
+> >> >> >boot. So having the GOT in rodata too makes sense imho.
+> >> >>
+> >> >> arm64's vmlinux is linked with -shared -Bsymbolic and .got has many
+> >> >> entries that need to be relocated.
+> >> >
+> >> >Actually, it is mostly empty, given that we don't use -fpic/-fpie codegen.
+> >>
+> >> Yes, .got is usually small, e.g. 0x68 in my `make ARCH=arm64 LLVM=1 -j60 defconfig vmlinux` build.
+> >>
+> >> >>  .got is initially writable, and
+> >> >> becomes read-only after relocation resolving.
+> >> >
+> >> >The same applies to .rodata, given that we don't use -fpic/fpie
+> >> >codegen. And note that I am not referring to .data..ro_after_init here
+> >> >- I mean .rodata itself, which carries all const qualified global data
+> >> >structures with statically initialized pointer fields. These are
+> >> >conceptually the same as GOT entries - the only difference is that
+> >> >they are not created by the linker and are referenced explicitly from
+> >> >the C code.
+> >>
+> >> I agree that they are very similar, but there is a distinction, that's
+> >> why we have both .rodata and .data.rel.ro (relro), and the latter is for sections
+> >> that need relocations.
+> >>
+> >
+> >Yes, but we don't use .data.rel.ro in the kernel because we don't
+> >compile with -fpic/-fpie
+> >> >> I think this property is significant enough to make it outside of any rodata
+> >> >> segment.
+> >> >>
+> >> >
+> >> >I disagree.
+> >> >
+> >> >> (In the userspace .got is typically placed in PT_GNU_RELRO by using -z relro.)
+> >> >>
+> >> >> If we remove inittext and initdata pseudo-segments which disappear after
+> >> >> the boot, we have
+> >> >>
+> >> >> text (RX)
+> >> >> rodata (R)
+> >> >> /// where is .got (RELRO)
+> >> >> data (RW)
+> >> >>
+> >> >> If we consider .got distinct from rodata, I think placing .got immediately
+> >> >> after rodata or immediately before data is both fine?
+> >> >>
+> >> >
+> >> >We can place it anywhere in the rodata pseudo-segment. What user space
+> >> >does is not quite relevant here - what is relevant is that we already
+> >> >have a pseudo-segment with the right properties. Adding a new segment
+> >> >just for the GOT which is almost empty and is mapped with the same
+> >> >attributes as rodata seems unnecessary to me.
+> >> >
+> >> >Do you have any practical concerns? Or is it just tidiness?
+> >>
+> >> Unfortunately, vmlinux has many PT_LOAD program headers. I am trying to
+> >> find the best position for .got that makes the most sense. When making
+> >> this decision, I aim to create a layout that looks more normal and is
+> >> closer to user-space programs. Additionally, I want to reduce the number
+> >> of PT_LOAD program headers.
+> >>
+> >
+> >Why? The PT_LOAD headers are never consumed by anything. On arm64, we
+> >never consume the ELF - it is converted to a flat binary during the
+> >build.
+>
+> See below.
+>
+> >> You are arguing that .got should be part of rodata. However, I disagree
+> >> with this perspective from both practical and linker layout viewpoints.
+> >>
+> >> If we place .got below RO_DATA(PAGE_SIZE), it will immediately follow
+> >> .note or .BTF (see NOTES in include/asm-generic/vmlinux.lds.h).
+> >> There isn't an option to drop SHF_WRITE from .got, and
+> >> we will need a separate PT_LOAD program header for .got.
+> >>
+> >> Alternatively, if we place .got below .hyp.rodata, we can eliminate one
+> >> PT_LOAD because the transition from .hyp.rodata to .got does not require
+> >> a separate PT_LOAD. However, having a half-writable .got before
+> >> .rodata.text feels strange to me.
+> >>
+> >>
+> >> I feel that the region between .text/.rodata and .data is too messy.
+> >> Placing .got immediately before .data makes the layout look more normal
+> >> and closer to user space without causing any pessimization.
+> >>
+> >
+> >But we are not in user space. There is no ELF loader at runtime that
+> >consumes any of this, The entire layout is self-described by the
+> >linker script using symbols that the code links to directly.
+> >
+> >So frankly, if we could just avoid PT_LOAD headers entirely, or add a
+> >PHDRS {} section that defines a single region, I'd be ok with that.
+> >But tweaking the layout to reduce the number of PT_LOAD headers seems
+> >unnecessary to me.
+> >
+> >And moving the GOT into a writable area just to make the ELF metadata
+> >look tidier is out of the question - that could turn into a security
+> >bug.
+> >> ---
+> >>
+> >> My linker layout viewpoint is that ideally a program's program headers
+> >> should looke like
+> >>
+> >> https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#layout-related
+> >>
+> >> R PT_LOAD
+> >> RX PT_LOAD
+> >> RW PT_LOAD (overlaps with PT_GNU_RELRO) .got, .data.rel.ro (if present)
+> >> RW PT_LOAD
+> >>
+> >> For historical reason, I can expect swapped R and RX.
+> >> Sections such as .got and .data.rel.ro are different from both .rodata
+> >> and .data.
+> >>
+> >
+> >The kernel is remapped a number of times during the boot - in the
+> >initial mapping everything is read-only-exec except bss, and the
+> >physical address is used as the virtual address. When it is remapped
+> >again using the actual virtual addresses, we have two pseudo-segments,
+> >where text/rodata/inittext are RX and initdata and data are RW. Then,
+> >another mapping is created where text and inittext are RX, and rodata,
+> >initdata and data are RW, until finally inittext and initdata are
+> >unmapped and freed, and rodata is remapped read-only.
+> >
+> >In the context of the above, why does it matter what the PT_LOAD headers say?
+>
+> Thank you for the explanation.  I may have missed something as I don't
+> know the boot process at all...  If we place .got immediately before the
+> _data symbol and the .data section, how is .got considered to be in a
+> writable area?
+>
+> This part of your reply may be relevant:
+>
+> > where text/rodata/inittext are RX and initdata and data are RW.
+>
+> Do you mean that the regions [__initdata_begin,__initdata_end) and [_data, _end)
+> are RW?
+>
 
-Ok so this part can work out as you said, I hadn't understood what you
-meant by "punt to the work queue" but that should work from my new
-understanding of the ring; we can just return EAGAIN if the non-blocking
-variant doesn't have immediate results and call the blocking variant
-when we're called again without IO_URING_F_NONBLOCK in flags.
-(So there's no need to try to add a form of polling, although that is
-possible if we ever become able to do that; I'll just forget about this
-and be happy this part is easy)
+Yes.
 
+> If so, placing .got between __initdata_end and _data should not make
+> .got writable.  However, .got now appears to belong to an additional
+> pseudo-segment, which conceptually is bad.
+>
 
-That just leaves deciding if a filesystem handles the blocking variant
-or not; ideally if we can know early (prep time) we can even mark
-REQ_F_FORCE_ASYNC in flags to skip the non-blocking call for filesystems
-that don't handle that and we get the best of both worlds.
+Indeed. We don't parse PT_LOAD program headers, so we would have to
+modify the code to add an additional segment.
 
-I've had a second look and I still don't see anything obvious though;
-I'd rather avoid adding a new variant of iterate()/iterate_shared() --
-we could use that as a chance to add a flag to struct file_operation
-instead? e.g., something like mmap_supported_flags:
------
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c85916e9f7db..2ebbf48ee18b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1761,7 +1761,7 @@ struct file_operations {
- 	int (*iopoll)(struct kiocb *kiocb, struct io_comp_batch *,
- 			unsigned int flags);
- 	int (*iterate) (struct file *, struct dir_context *);
--	int (*iterate_shared) (struct file *, struct dir_context *);
-+	unsigned long iterate_supported_flags;
- 	__poll_t (*poll) (struct file *, struct poll_table_struct *);
- 	long (*unlocked_ioctl) (struct file *, unsigned int, unsigned long);
- 	long (*compat_ioctl) (struct file *, unsigned int, unsigned long);
-@@ -1797,6 +1797,10 @@ struct file_operations {
- 				unsigned int poll_flags);
- } __randomize_layout;
- 
-+/** iterate_supported_flags */
-+#define ITERATE_SHARED 0x1
-+#define ITERATE_NOWAIT 0x2
-+
- struct inode_operations {
- 	struct dentry * (*lookup) (struct inode *,struct dentry *, unsigned int);
- 	const char * (*get_link) (struct dentry *, struct inode *, struct delayed_call *);
------
+Please refer to map_kernel() in arch/arm64/mm/mmu.c for details.
 
-and fix all usages of iterate_shared.
+> Therefore, moving .got between .rodata.text and `idmap_pg_dir = .;` will
+> be a better choice. This makes .got part of a read-only pseudo-segment.
+>
 
-I guess at this rate it might make sense to rename mmap_supported_flags
-to some more generic supported_flags instead?...
+Exactly.
 
-It's a bit more than I have signed up for, but I guess it's still
-reasonable enough. I'll wait for feedback before doing it though; please
-say if this sounds good to you and I'll send a v2 with such a flag, as
-well as adding flags to dir_context as you had suggested.
+> ---
+>
+> If my understanding is correct, at one point .got is indeed writable.
+> However, the kernel has performed R_AARCH64_RELATIVE resolving very
+> early, and can then assume that .got is read-only.
+> This is similar to user-space PT_GNU_RELRO, but the period is so
+> transient that we can essentially consider .got read-only.
 
-Thanks,
--- 
-Dominique Martinet | Asmadeus
+Agreed. It would be possible to have finer grained rules for this,
+e.g., compile with -fpic and decide that
+
+.text and .rodata are always read-only
+.got and .data.rel.ro can be remapped read-only after relocation processing
+.data..ro_after_init can be remapped read-only once the boot completes.
+
+At this point, I don't see a lot of benefit from doing that. However,
+moving the GOT out of text is a good idea in any case, not only
+because it helps syzkaller but simply because we should avoid mapping
+things that are not executable code with executable permissions.
