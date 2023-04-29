@@ -2,103 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B1E6F24EC
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553136F24F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 15:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjD2Nqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 09:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S231297AbjD2Nrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 09:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjD2Nqq (ORCPT
+        with ESMTP id S231288AbjD2Nrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 09:46:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8D4198A
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:46:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682775966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MrC2Plo9OYii15Nm2M6PoTQXMjK5jmikMyISz9U2Pqs=;
-        b=TaNLNtMZPfigJq5sLxNTq1q03J98rG/iM2TmZP91dTbstJXwc/1Jn16bs6FdRRPGBWUktm
-        3ZgvIXkDc+ExaNUQzSUbGt0U8KrefLklVkVfl14qRUZn1dVsdad0P4ifJTzqv0LOX+X+E4
-        ps12EFg7uWDaHk9GivDgP2v+ZP6a1Bk=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-624-HEtbNlR3MnuGpU46vAcXdw-1; Sat, 29 Apr 2023 09:46:04 -0400
-X-MC-Unique: HEtbNlR3MnuGpU46vAcXdw-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-5ef65412174so5745556d6.3
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:46:04 -0700 (PDT)
+        Sat, 29 Apr 2023 09:47:46 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE20619A3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:47:43 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32a86b6ab85so4362565ab.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 06:47:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682775964; x=1685367964;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MrC2Plo9OYii15Nm2M6PoTQXMjK5jmikMyISz9U2Pqs=;
-        b=jELmADicxAxUhnAc17HgidXGsLS/fsIvXNZ78WP1gPF1Zq26eD/38O32Bk6ZGlud0E
-         iwePL0N5T+reOJhIfAT5g1s25yJFbt8MlwcMHpnlnfsrI+mz8clLhRt3aoyhS/6yDtnZ
-         /CFOoVZ86hA3ldG7gZ7pVEypSvikGd4aOwz9x+XZjCLoUtDK17+vpY9AgLjcab+3Ek26
-         8jIhsZla8i38vej9H+O5RRUGkmzwIUhK0ZiWke+NLYGjbcUbLbII4MnpiwoEXgOVbMK2
-         pICbTIGaGeRNZuNGNl3jcTAzYFNoBZSKsQhHNwi876mYY+uIffoJX3YKx74EhoVgjWA9
-         1EvQ==
-X-Gm-Message-State: AC+VfDzty7mNoL7oTlKfuQTjYBuo8zFAwm1/XsDtKb1gc5GojbzgPw4s
-        FchUns4Y9p5/L2ojFkKWEBcAAQfPe6LjN3GcNzG3MT0ziMdul1Y8YcHwdnlUsvhprp8D+LuOcdn
-        w0i2py351pG/vgweLMlcJVwKRbro+RXyJ
-X-Received: by 2002:a05:6214:23c9:b0:5ef:a5b5:5b99 with SMTP id hr9-20020a05621423c900b005efa5b55b99mr15853603qvb.0.1682775964163;
-        Sat, 29 Apr 2023 06:46:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ49CsiS83CUAu+aC5eNde28TyzbGRWjnbNx01U3hlQtODmk55RuB0tMAIfLw0kfaG9RSSmiNw==
-X-Received: by 2002:a05:6214:23c9:b0:5ef:a5b5:5b99 with SMTP id hr9-20020a05621423c900b005efa5b55b99mr15853582qvb.0.1682775963891;
-        Sat, 29 Apr 2023 06:46:03 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i7-20020a056214030700b005eedb5cebd1sm7112753qvu.130.2023.04.29.06.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 06:46:03 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     jk@codeconstruct.com.au, alexandre.belloni@bootlin.com
-Cc:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] i3c: ast2600: set variable ast2600_i3c_ops storage-class-specifier to static
-Date:   Sat, 29 Apr 2023 09:46:01 -0400
-Message-Id: <20230429134601.2688558-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1682776063; x=1685368063;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sJBbSPNx33O3Uic3H5MvMN9TsVhJ4u9iqfXiFHPsAdM=;
+        b=aF7Nuxm97KoRVOh2SHhNsVXjyoz19NMfMCBbUJWfwNQwgnxiAclE8MagBPYOZZzhcN
+         jJUVeyrbkPlLk2Pm36NEa2iMRjMRYsTVBOgC+wfNZtium0/ojdJ3E41JG5YKQMaZVspG
+         TJO7j5J3tY3bRP0Bvllvs1QiCnxlNrnhmOXT0fEnbtLgbF6pvhB5yd+RvTfECXyqD3z/
+         xA0TrrImXlhN4phMkNxzittdMcWyttn0kjLtYYF1iLjCsU2XqVK+4hx/KFsyTDEVWaox
+         /kgL7fOMYUov/KV8KhjN5tVucRrOi/RFvgVBerZCwoVUEVwbC+o0FYF5Ke0qv0lJqg2H
+         0FGQ==
+X-Gm-Message-State: AC+VfDwEOiuE49DAVsgxPLFt7NHW8BTlEqee0cMVkYRIFKP0/QECOOIZ
+        bhYCmNLPtGOyYwMl/oEe91tq/2GvvA0tyWAJSud/PIqXQY27
+X-Google-Smtp-Source: ACHHUZ6NrAij3mdCxRTCsmmtSLAFpBUg1S40oGpD56jfCLH3ICqiTN+yRX8KpM01UvB32tDIGixdQO14FzvUNrhq519S4Gj0iyLs
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d448:0:b0:32b:4584:7316 with SMTP id
+ r8-20020a92d448000000b0032b45847316mr4656801ilm.3.1682776063227; Sat, 29 Apr
+ 2023 06:47:43 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 06:47:43 -0700
+In-Reply-To: <00000000000083d76d05f909f716@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007c3e1f05fa79d594@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in xpad_probe
+From:   syzbot <syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com>
+To:     chaorace@gmail.com, dan.carpenter@linaro.org,
+        dmitry.torokhov@gmail.com, dzm91@hust.edu.cn, error27@gmail.com,
+        gregkh@linuxfoundation.org,
+        hust-os-kernel-patches@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        matthias.benkmann@gmail.com, mkorpershoek@baylibre.com,
+        mudongliangabcd@gmail.com, nate@yocom.org,
+        pgriffais@valvesoftware.com, radon86dev@gmail.com,
+        rafael@kernel.org, rojtberg@gmail.com, s.demassari@gmail.com,
+        syzkaller-bugs@googlegroups.com, vi@endrift.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-drivers/i3c/master/ast2600-i3c-master.c:121:34: warning: symbol
-  'ast2600_i3c_ops' was not declared. Should it be static?
+syzbot has found a reproducer for the following issue on:
 
-This variable is only used in its defining file, so it should be static.
+HEAD commit:    92e815cf07ed Add linux-next specific files for 20230428
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=104cb844280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8c8ae4d47d23592
+dashboard link: https://syzkaller.appspot.com/bug?extid=a3f758b8d8cb7e49afec
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a5408c280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d3b0e4280000
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c9e94856e6c9/disk-92e815cf.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4c1c05a548a7/vmlinux-92e815cf.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2a1bff6a133b/bzImage-92e815cf.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
+
+usb 1-1: config 0 has no interface number 0
+usb 1-1: New USB device found, idVendor=1949, idProduct=5e70, bcdDevice=d7.a2
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: string descriptor 0 read error: -71
+general protection fault, probably for non-canonical address 0xdffffc0000000068: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000340-0x0000000000000347]
+CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.3.0-next-20230428-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:dev_name include/linux/device.h:706 [inline]
+RIP: 0010:__dev_printk+0x3b/0x270 drivers/base/core.c:4863
+Code: f5 53 e8 c8 c3 6b fc 48 85 ed 0f 84 cb 01 00 00 e8 ba c3 6b fc 48 8d 7d 50 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 d7 01 00 00 48 8b 5d 50 48 85 db 0f 84 b5 00 00
+RSP: 0018:ffffc900000e6f70 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: fffff5200001cdf5 RCX: 0000000000000000
+RDX: 0000000000000068 RSI: ffffffff85188a06 RDI: 0000000000000340
+RBP: 00000000000002f0 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000ffffffb9 R11: ffffffff81d6ff05 R12: ffffffff8ace98e0
+R13: ffffc900000e6fc8 R14: ffff88801ed25a64 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1361dc1111 CR3: 00000000210fe000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ _dev_warn+0xdc/0x120 drivers/base/core.c:4907
+ xpad_probe+0x197e/0x2020 drivers/input/joystick/xpad.c:2053
+ usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+ usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:dev_name include/linux/device.h:706 [inline]
+RIP: 0010:__dev_printk+0x3b/0x270 drivers/base/core.c:4863
+Code: f5 53 e8 c8 c3 6b fc 48 85 ed 0f 84 cb 01 00 00 e8 ba c3 6b fc 48 8d 7d 50 48 b8 00 00 00 00 00 fc ff df 48 89
+----------------
+Code disassembly (best guess):
+   0:	f5                   	cmc
+   1:	53                   	push   %rbx
+   2:	e8 c8 c3 6b fc       	callq  0xfc6bc3cf
+   7:	48 85 ed             	test   %rbp,%rbp
+   a:	0f 84 cb 01 00 00    	je     0x1db
+  10:	e8 ba c3 6b fc       	callq  0xfc6bc3cf
+  15:	48 8d 7d 50          	lea    0x50(%rbp),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 d7 01 00 00    	jne    0x20b
+  34:	48 8b 5d 50          	mov    0x50(%rbp),%rbx
+  38:	48 85 db             	test   %rbx,%rbx
+  3b:	0f                   	.byte 0xf
+  3c:	84                   	.byte 0x84
+  3d:	b5 00                	mov    $0x0,%ch
+
+
 ---
- drivers/i3c/master/ast2600-i3c-master.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/i3c/master/ast2600-i3c-master.c b/drivers/i3c/master/ast2600-i3c-master.c
-index b72c12c5168f..09ed19d489e9 100644
---- a/drivers/i3c/master/ast2600-i3c-master.c
-+++ b/drivers/i3c/master/ast2600-i3c-master.c
-@@ -118,7 +118,7 @@ static void ast2600_i3c_set_dat_ibi(struct dw_i3c_master *i3c,
- 	}
- }
- 
--const struct dw_i3c_platform_ops ast2600_i3c_ops = {
-+static const struct dw_i3c_platform_ops ast2600_i3c_ops = {
- 	.init = ast2600_i3c_init,
- 	.set_dat_ibi = ast2600_i3c_set_dat_ibi,
- };
--- 
-2.27.0
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
