@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7366F24B8
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 14:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 204466F24BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 14:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjD2Mej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 08:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S230450AbjD2MzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 08:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjD2Mei (ORCPT
+        with ESMTP id S229458AbjD2MzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 08:34:38 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BA61BD4
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 05:34:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2fa47de5b04so746715f8f.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 05:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1682771675; x=1685363675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oyTww+8/zlSGEpH0cgrTBvyiwJFDady3FmCvoDDMgT0=;
-        b=A/z5TyUTqwCud45/kIkuGOx165IgVQyxljkiX3LKmU54aJnPA50bxIdVR7ORVbXPJG
-         xLzfHVYD1z1C+uol3WpTyDpqwZGSqr1wH51zuS+TNV47qeoqch5NqgvTx9xAeqZY44IU
-         XWA4SIStAPzkbCckFU/tbkQYR+hhIYkxqc9rsjeN13oSpTfat4mby2+qQH2b7+vr8MsO
-         kVr7vr0bqsw5soMq/oHkc1kaIvmSxzIMNlotFeYuA3/n2lgPhzq76mR9b0G+QsX2p550
-         4qYsIkYVYROlXo4IosM1ZtD6Cpm8cJ2fEQNX4jIWRknEVYDHna0vHNyJ5nBrjAXZGr0a
-         oGlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682771675; x=1685363675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oyTww+8/zlSGEpH0cgrTBvyiwJFDady3FmCvoDDMgT0=;
-        b=JDgkR0fOWjntSx9nqIXQxnHAeZ41uy5V0rMZkoVOHa/WetcEzwQydsEimJk7c1H64j
-         gJL+JgAlPuzKYkq/ZHxUk3Vz1v7RLONFt3z3r+SH7eOshPNghbmZM8tXfeiU89bMEWl8
-         SEdVNTqX6Knrw91MzYoDuM5iiN5H7i+mhitR09fh8yafjHDrwr+WC/oYJjV0IGOQcm+l
-         qA7eOBNUmzH74ys4xwvIDvkXUHKhAUi/eYR32nk4hj+uJHcDzTIOhG+O0bVVeo7FuSi1
-         H5MI5HURvAB0LLMQcu9KKcIR7ELCf2j9uhceiPLEdQTnEtOJO0DCLsVf6eUHqxYlRK+O
-         h8ig==
-X-Gm-Message-State: AC+VfDw+Fj4XvtD5k0sHIgyyT3jpBUJRY9WNpjL6m4dpHll6qrckbepT
-        7v6fJhl4v0dg7vX2cEPyaHMX8Q==
-X-Google-Smtp-Source: ACHHUZ6+RfewAuyborC2LIhchXAkHF6ymuqX2qX76Qc+Bj0Gznua6O2fZa1Zh1/JuvhHM0dXQ6rcYg==
-X-Received: by 2002:a05:6000:509:b0:2e8:b9bb:f969 with SMTP id a9-20020a056000050900b002e8b9bbf969mr6248178wrf.0.1682771675082;
-        Sat, 29 Apr 2023 05:34:35 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id f11-20020adffccb000000b002f90a75b843sm23496085wrs.117.2023.04.29.05.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Apr 2023 05:34:34 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 14:34:33 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Dao Lu <daolu@rivosinc.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 0/3] RISC-V: Export Zba, Zbb to usermode via hwprobe
-Message-ID: <20230429-104e430d8f02e587aeff2652@orel>
-References: <20230428190609.3239486-1-evan@rivosinc.com>
+        Sat, 29 Apr 2023 08:55:12 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91721BF1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 05:55:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682772910; x=1714308910;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KGHqU3LAlYhjG5tBGOc2nQJAtTnzYDMbe+fxCkqCyCU=;
+  b=XcITMuaqcPpfDtMlWMYkqBwzo8/rEO4rBM4y3QDmK5M/aV1C5UFIoW3V
+   GFAQhU/7iEMpCK/TN5vsW6RE4J+IaCVeo+e82IvghiiZ7jB5DqdAdqAK/
+   AtEaaE6OGxKIk4FM+JQ6l0yRMyRF3pJc7NF4q9Upqeoq2eKQUc/iaYLSv
+   R177QGV3WvekZcjB0a/h8n6aRXClTS2dUHYN1wcqpao8kkzwn8AcQW9Ah
+   YEPrv18scb2FaAmYpY8Wh8kzI6xAjsJbs1lTm0kj1Lks/txz5BJH9DOW7
+   IgcGhHjrB6pbSmJfExci3RXAUom2FUM8rRVAYd/BHh883EoPKLSVV1Vqw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="413346327"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="413346327"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 05:55:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="697920704"
+X-IronPort-AV: E=Sophos;i="5.99,237,1677571200"; 
+   d="scan'208";a="697920704"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Apr 2023 05:55:08 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1psk6Q-00019Z-38;
+        Sat, 29 Apr 2023 12:55:02 +0000
+Date:   Sat, 29 Apr 2023 20:54:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-omap2/cpuidle44xx.c:88: warning: expecting prototype
+ for omap_enter_idle_[simple/coupled](). Prototype was for
+ omap_enter_idle_simple() instead
+Message-ID: <202304292001.RvJU7sWm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428190609.3239486-1-evan@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 12:06:05PM -0700, Evan Green wrote:
-> 
-> This change detects the presence of Zba and Zbb extensions and exports
-> them per-hart to userspace via the hwprobe mechanism. Glibc can then use
-> these in setting up hwcaps-based library search paths.
-> 
-> There's a little bit of extra housekeeping here: the first change adds
-> Zba to the set of extensions the kernel recognizes, and the second
-> change starts tracking ISA features per-hart (in addition to the ANDed
-> mask of features across all harts which the kernel uses to make
-> decisions). Now that we track the ISA information per-hart, we could
-> even fix up /proc/cpuinfo to accurately report extension per-hart,
-> though I've left that out of this series for now.
-> 
-> 
-> Evan Green (3):
->   RISC-V: Add Zba extension probing
->   RISC-V: Track ISA extensions per hart
->   RISC-V: hwprobe: Expose Zba and Zbb
-> 
->  Documentation/riscv/hwprobe.rst       |  7 +++++
->  arch/riscv/include/asm/cpufeature.h   | 10 +++++++
->  arch/riscv/include/asm/hwcap.h        |  1 +
->  arch/riscv/include/uapi/asm/hwprobe.h |  2 ++
->  arch/riscv/kernel/cpu.c               |  1 +
->  arch/riscv/kernel/cpufeature.c        | 19 ++++++++----
->  arch/riscv/kernel/sys_riscv.c         | 43 ++++++++++++++++++++++-----
->  7 files changed, 70 insertions(+), 13 deletions(-)
-> 
-> -- 
-> 2.25.1
->
+Hi Arnd,
 
-For the series
+First bad commit (maybe != root cause):
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   89d77f71f493a3663b10fa812d17f472935d24be
+commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
+date:   1 year, 1 month ago
+config: arm-randconfig-r034-20230429 (https://download.01.org/0day-ci/archive/20230429/202304292001.RvJU7sWm-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 437b7602e4a998220871de78afcb020b9c14a661)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304292001.RvJU7sWm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-omap2/cpuidle44xx.c:88: warning: expecting prototype for omap_enter_idle_[simple/coupled](). Prototype was for omap_enter_idle_simple() instead
+
+
+vim +88 arch/arm/mach-omap2/cpuidle44xx.c
+
+9db316b6bf0234 Paul Walmsley     2012-12-15  74  
+98272660970a71 Santosh Shilimkar 2011-08-16  75  /**
+db4f3dab629109 Santosh Shilimkar 2013-04-05  76   * omap_enter_idle_[simple/coupled] - OMAP4PLUS cpuidle entry functions
+98272660970a71 Santosh Shilimkar 2011-08-16  77   * @dev: cpuidle device
+98272660970a71 Santosh Shilimkar 2011-08-16  78   * @drv: cpuidle driver
+98272660970a71 Santosh Shilimkar 2011-08-16  79   * @index: the index of state to be entered
+98272660970a71 Santosh Shilimkar 2011-08-16  80   *
+98272660970a71 Santosh Shilimkar 2011-08-16  81   * Called from the CPUidle framework to program the device to the
+98272660970a71 Santosh Shilimkar 2011-08-16  82   * specified low power state selected by the governor.
+98272660970a71 Santosh Shilimkar 2011-08-16  83   * Returns the amount of time spent in the low power state.
+98272660970a71 Santosh Shilimkar 2011-08-16  84   */
+db4f3dab629109 Santosh Shilimkar 2013-04-05  85  static int omap_enter_idle_simple(struct cpuidle_device *dev,
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  86  			struct cpuidle_driver *drv,
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  87  			int index)
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25 @88  {
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  89  	omap_do_wfi();
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  90  	return index;
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  91  }
+dd3ad97c5621aa Santosh Shilimkar 2011-12-25  92  
+
+:::::: The code at line 88 was first introduced by commit
+:::::: dd3ad97c5621aa853843dd5e6783ca787466158c ARM: OMAP4: CPUidle: Use coupled cpuidle states to implement SMP cpuidle.
+
+:::::: TO: Santosh Shilimkar <santosh.shilimkar@ti.com>
+:::::: CC: Kevin Hilman <khilman@ti.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
