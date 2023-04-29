@@ -2,263 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159C76F22C3
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222B86F22C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 05:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjD2Dwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 23:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
+        id S230520AbjD2D4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 23:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjD2Dw3 (ORCPT
+        with ESMTP id S230011AbjD2D4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 23:52:29 -0400
-Received: from out0-194.mail.aliyun.com (out0-194.mail.aliyun.com [140.205.0.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CFB10F9;
-        Fri, 28 Apr 2023 20:52:25 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047194;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---.STmyYgr_1682740338;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.STmyYgr_1682740338)
-          by smtp.aliyun-inc.com;
-          Sat, 29 Apr 2023 11:52:19 +0800
-Date:   Sat, 29 Apr 2023 11:52:18 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Thomas Garnier" <thgarnie@chromium.org>,
-        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Sathvika Vasireddy" <sv@linux.ibm.com>,
-        "Thomas =?iso-8859-1?Q?Wei=DFschuh?=" <linux@weissschuh.net>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH RFC 33/43] objtool: Add validation for x86 PIE support
-Message-ID: <20230429035218.GA126816@k08j02272.eu95sqa>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <226af8c63c5bfa361763dd041a997ee84fe926cf.1682673543.git.houwenlong.hwl@antgroup.com>
- <461b3a8d-9ad4-7866-f3b2-369de75fd2e1@csgroup.eu>
+        Fri, 28 Apr 2023 23:56:36 -0400
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69DD1FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 20:56:34 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 32C208027431
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:56:34 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 4AE851004439C
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 03:56:32 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id sbhHpT9UZUwlvsbhHp3TLJ; Sat, 29 Apr 2023 03:56:32 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=BbEdbph2 c=1 sm=1 tr=0 ts=644c9570
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=dKHAf1wccvYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dzz66+pXIPTugAbZFhlPRLRoxTYq1sWBlKytls8PqNw=; b=tCYdWr4tShcVfgINkj7LDbGvPV
+        tEcLC7HPulKwh06HVHJfKtY+IOHTFD/wt/qC1eRW+HKzlUG/7wJ1OXxtK0AKDuNBkkNS6XPyhHn3p
+        X/8FXzalU2mOASLK6Nrltbtp1ix5bF94gIGuf4u96vLz8Qe4BNc4FPbv96LkhJGaumIC4WBTi83qc
+        zHAgNn6pEiNhnJODse3u72UWQx/es07DHd39+XG1kV1gU+D7czCWIuQC9DmmP7MJ08mWiliyjt5e+
+        mKcfCanRt+wJxLWIaNR1YfqiScD3KsNUonrLLb2sFRQeti0Y3+iOBA5/c185I9T7BizskcRQ2xqhc
+        4E/o4wkg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:36422 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1psbhH-003yut-4p;
+        Fri, 28 Apr 2023 21:56:31 -0600
+Subject: Re: [PATCH 6.3 00/11] 6.3.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230428112039.886496777@linuxfoundation.org>
+In-Reply-To: <20230428112039.886496777@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <79093ab5-155d-d324-e40e-77091789f320@w6rz.net>
+Date:   Fri, 28 Apr 2023 20:56:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <461b3a8d-9ad4-7866-f3b2-369de75fd2e1@csgroup.eu>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1psbhH-003yut-4p
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:36422
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 06:28:19PM +0800, Christophe Leroy wrote:
-> 
-> 
-> Le 28/04/2023 à 11:51, Hou Wenlong a écrit :
-> > [Vous ne recevez pas souvent de courriers de houwenlong.hwl@antgroup.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> > 
-> > For x86 PIE binary, only RIP-relative addressing is allowed, however,
-> > there are still a little absolute references of R_X86_64_64 relocation
-> > type for data section and a little absolute references of R_X86_64_32S
-> > relocation type in pvh_start_xen() function.
-> > 
-> > Suggested-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> > Cc: Thomas Garnier <thgarnie@chromium.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > ---
-> >   arch/x86/Kconfig                        |  1 +
-> >   scripts/Makefile.lib                    |  1 +
-> >   tools/objtool/builtin-check.c           |  4 +-
-> >   tools/objtool/check.c                   | 82 +++++++++++++++++++++++++
-> >   tools/objtool/include/objtool/builtin.h |  1 +
-> >   5 files changed, 88 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 715f0734d065..b753a54e5ea7 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -2224,6 +2224,7 @@ config RELOCATABLE
-> >   config X86_PIE
-> >          def_bool n
-> >          depends on X86_64
-> > +       select OBJTOOL if HAVE_OBJTOOL
-> > 
-> >   config RANDOMIZE_BASE
-> >          bool "Randomize the address of the kernel image (KASLR)"
-> > diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> > index 100a386fcd71..e3c804fbc421 100644
-> > --- a/scripts/Makefile.lib
-> > +++ b/scripts/Makefile.lib
-> > @@ -270,6 +270,7 @@ objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)              += --static-call
-> >   objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)         += --uaccess
-> >   objtool-args-$(CONFIG_GCOV_KERNEL)                     += --no-unreachable
-> >   objtool-args-$(CONFIG_PREFIX_SYMBOLS)                  += --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
-> > +objtool-args-$(CONFIG_X86_PIE)                         += --pie
-> > 
-> >   objtool-args = $(objtool-args-y)                                       \
-> >          $(if $(delay-objtool), --link)                                  \
-> > diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-> > index 7c175198d09f..1cf1d00464e0 100644
-> > --- a/tools/objtool/builtin-check.c
-> > +++ b/tools/objtool/builtin-check.c
-> > @@ -81,6 +81,7 @@ static const struct option check_options[] = {
-> >          OPT_BOOLEAN('t', "static-call", &opts.static_call, "annotate static calls"),
-> >          OPT_BOOLEAN('u', "uaccess", &opts.uaccess, "validate uaccess rules for SMAP"),
-> >          OPT_BOOLEAN(0  , "cfi", &opts.cfi, "annotate kernel control flow integrity (kCFI) function preambles"),
-> > +       OPT_BOOLEAN(0, "pie", &opts.pie, "validate addressing rules for PIE"),
-> >          OPT_CALLBACK_OPTARG(0, "dump", NULL, NULL, "orc", "dump metadata", parse_dump),
-> > 
-> >          OPT_GROUP("Options:"),
-> > @@ -137,7 +138,8 @@ static bool opts_valid(void)
-> >              opts.sls                    ||
-> >              opts.stackval               ||
-> >              opts.static_call            ||
-> > -           opts.uaccess) {
-> > +           opts.uaccess                ||
-> > +           opts.pie) {
-> >                  if (opts.dump_orc) {
-> >                          ERROR("--dump can't be combined with other options");
-> >                          return false;
-> > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> > index 5b600bbf2389..d67b80251eec 100644
-> > --- a/tools/objtool/check.c
-> > +++ b/tools/objtool/check.c
-> > @@ -131,6 +131,27 @@ static struct instruction *prev_insn_same_sym(struct objtool_file *file,
-> >          for (insn = next_insn_same_sec(file, insn); insn;               \
-> >               insn = next_insn_same_sec(file, insn))
-> > 
-> > +static struct instruction *find_insn_containing(struct objtool_file *file,
-> > +                                               struct section *sec,
-> > +                                               unsigned long offset)
-> > +{
-> > +       struct instruction *insn;
-> > +
-> > +       insn = find_insn(file, sec, 0);
-> > +       if (!insn)
-> > +               return NULL;
-> > +
-> > +       sec_for_each_insn_from(file, insn) {
-> > +               if (insn->offset > offset)
-> > +                       return NULL;
-> > +               if (insn->offset <= offset && (insn->offset + insn->len) > offset)
-> > +                       return insn;
-> > +       }
-> > +
-> > +       return NULL;
-> > +}
-> > +
-> > +
-> >   static inline struct symbol *insn_call_dest(struct instruction *insn)
-> >   {
-> >          if (insn->type == INSN_JUMP_DYNAMIC ||
-> > @@ -4529,6 +4550,61 @@ static int validate_reachable_instructions(struct objtool_file *file)
-> >          return 0;
-> >   }
-> > 
-> > +static int is_in_pvh_code(struct instruction *insn)
-> > +{
-> > +       struct symbol *sym = insn->sym;
-> > +
-> > +       return sym && !strcmp(sym->name, "pvh_start_xen");
-> > +}
-> > +
-> > +static int validate_pie(struct objtool_file *file)
-> > +{
-> > +       struct section *sec;
-> > +       struct reloc *reloc;
-> > +       struct instruction *insn;
-> > +       int warnings = 0;
-> > +
-> > +       for_each_sec(file, sec) {
-> > +               if (!sec->reloc)
-> > +                       continue;
-> > +               if (!(sec->sh.sh_flags & SHF_ALLOC))
-> > +                       continue;
-> > +
-> > +               list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
-> > +                       switch (reloc->type) {
-> > +                       case R_X86_64_NONE:
-> > +                       case R_X86_64_PC32:
-> > +                       case R_X86_64_PLT32:
-> > +                       case R_X86_64_64:
-> > +                       case R_X86_64_PC64:
-> > +                       case R_X86_64_GOTPCREL:
-> > +                               break;
-> > +                       case R_X86_64_32:
-> > +                       case R_X86_64_32S:
-> 
-> That looks very specific to X86, should it go at another place ?
-> 
-> If it can work for any architecture, can you add generic macros, just 
-> like commit c1449735211d ("objtool: Use macros to define arch specific 
-> reloc types") then commit c984aef8c832 ("objtool/powerpc: Add --mcount 
-> specific implementation") ?
+On 4/28/23 4:27 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.1 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-Get it, I'll refactor it and move code into X86 directory.
+> Responses should be made by Sun, 30 Apr 2023 11:20:30 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Thanks. 
-> > +                               insn = find_insn_containing(file, sec, reloc->offset);
-> > +                               if (!insn) {
-> > +                                       WARN("can't find relocate insn near %s+0x%lx",
-> > +                                            sec->name, reloc->offset);
-> > +                               } else {
-> > +                                       if (is_in_pvh_code(insn))
-> > +                                               break;
-> > +                                       WARN("insn at %s+0x%lx is not compatible with PIE",
-> > +                                            sec->name, insn->offset);
-> > +                               }
-> > +                               warnings++;
-> > +                               break;
-> > +                       default:
-> > +                               WARN("unexpected relocation type %d at %s+0x%lx",
-> > +                                    reloc->type, sec->name, reloc->offset);
-> > +                               warnings++;
-> > +                               break;
-> > +                       }
-> > +               }
-> > +       }
-> > +
-> > +       return warnings;
-> > +}
-> > +
-> >   int check(struct objtool_file *file)
-> >   {
-> >          int ret, warnings = 0;
-> > @@ -4673,6 +4749,12 @@ int check(struct objtool_file *file)
-> >                  warnings += ret;
-> >          }
-> > 
-> > +       if (opts.pie) {
-> > +               ret = validate_pie(file);
-> > +               if (ret < 0)
-> > +                       return ret;
-> > +               warnings += ret;
-> > +       }
-> > 
-> >          if (opts.stats) {
-> >                  printf("nr_insns_visited: %ld\n", nr_insns_visited);
-> > diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-> > index 2a108e648b7a..1151211a5cea 100644
-> > --- a/tools/objtool/include/objtool/builtin.h
-> > +++ b/tools/objtool/include/objtool/builtin.h
-> > @@ -26,6 +26,7 @@ struct opts {
-> >          bool uaccess;
-> >          int prefix;
-> >          bool cfi;
-> > +       bool pie;
-> > 
-> >          /* options: */
-> >          bool backtrace;
-> > --
-> > 2.31.1
-> > 
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+
+Tested-by: Ron Economos <re@w6rz.net>
+
