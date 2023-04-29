@@ -2,95 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B036F270C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DA56F270E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 00:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjD2WwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 18:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S230521AbjD2Wyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 18:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjD2WwH (ORCPT
+        with ESMTP id S230455AbjD2Wya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 18:52:07 -0400
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B017F1BC2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:52:06 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 8FAC91282;
-        Sun, 30 Apr 2023 00:44:05 +0200 (CEST)
-Authentication-Results: ext-mx-out002.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:organization:mime-version:references
-        :in-reply-to:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=dkim20160331; t=1682808245; x=
-        1684622646; bh=IeHcnYGT8x5oIMpt7vaj6WJo5TzDUMMrc5PAh+gHWeM=; b=N
-        U5NnRoNGy7ZB6Jtwdyvuy2WmjMRd3mK42iP4ePyTyvcs3Fwj433io5R+OCdMGNM2
-        h2YnnVLOHN8r/kEdkpwpHDMcb7+tNne1iPWMCoJx2SyL8G/lI7m3RCPHB9fEN1xW
-        pH0+uGfbBOQgTj+j6kT80ReEuU2aO2yyDJi7xkrWOEtXOmTwA+g9/Z72SKNpiwAm
-        m9lq0MwKTgh9cCWN/djDn9BCxfo9fvFA+axoX/UPgQsPfs48NC0Y5rf7mEvcI8mq
-        r6OOju3UHZv/QNIlaQP5e+4PqOEDoGP7s/P/SoE2Hba9D0nNftJ8qVcFATvk8RaI
-        Tc56YR0XMwUvJNrMZRiMvWU33D3LZtL+UoGZHEm5ouuuGmScL0q8bh2BkJ+JaKRI
-        /rFrtdqkYH6dDXXrgfBSI3jmwEIsUzlARaqrQ4nqUWqe/BpH3pAM2NMWs81/UXKf
-        l0EDg3j+72TEFnAVTJQ2Fgx1RU3ym6M/EBzF8TaARKh2BlMrQk9kuRLo+fMXvidt
-        uqcblM8vrxN1gAO9NRI/9KNYW95CofF4RNcv2rsD+qVqf9DIhQAuxxwdFDwQFfgY
-        iTZMScZYWbISv0cBuCEDh9QYIaL7AVI1D3FfddejcD85orl0LPy0a8zuKjdnoeLd
-        zk/syeAUxfS7Cr/KRHLDpuDkVe4MLh4A/TKDhRRxfk=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out002.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6mpo8D4eXiKF; Sun, 30 Apr 2023 00:44:05 +0200 (CEST)
-Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
-        by mx.kolabnow.com (Postfix) with ESMTPS id D8F6D126D;
-        Sun, 30 Apr 2023 00:44:04 +0200 (CEST)
-Received: from ext-subm001.mykolab.com (unknown [10.9.6.1])
-        by int-mx002.mykolab.com (Postfix) with ESMTPS id 6E7A65EBF;
-        Sun, 30 Apr 2023 00:44:04 +0200 (CEST)
-From:   alison@she-devel.com
-To:     johan@kernel.org
-Cc:     linux-kernel@vger.kernel.org, alison@she-devel.com,
-        achaiken@aurora.tech
-Subject: [PATCH 2/2] dt-bindings: gnss: Add U-Blox Zed-F9
-Date:   Sat, 29 Apr 2023 15:43:49 -0700
-Message-Id: <20230429224349.1935029-3-alison@she-devel.com>
-In-Reply-To: <20230429224349.1935029-1-alison@she-devel.com>
-References: <20230429224349.1935029-1-alison@she-devel.com>
+        Sat, 29 Apr 2023 18:54:30 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FC6DE
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:54:29 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-32b4607696aso17077125ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 15:54:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682808869; x=1685400869;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EIRWs04g8ZoJm6CieeH8gXHcikugX3NlQwgnDthdPx4=;
+        b=Eb0Ik/ZjRLBfVbb/jbL5splp/ElCufPKQWyiyy8vzBZA8qV+8eCHfZfHIiZ/4oIqes
+         9/uhbFGTkTPAhaZYyOzeWVW1zTZAVQeCrgALG9VJMClbsO+5BmtkTnCqjIN+EZfXOtEs
+         i/So5yrqMAVii6NjCqYD/lX6Y6RLArP/alF1yQC/W3zEPvliodyZ7kZGhDxzFLxMciFf
+         EC6ChDDCnku5l74MEFpJaxuA3fWus5UlqL1aDQcLSjfGWh9X2iXIXD+kL4VP6R9O0dA/
+         MlJPNdvV2ojQJJ7y5eCmgQng8N/Pg/vl9LjAGjS3OygW/toyYp/KjsQw+swKPb4WIQ+4
+         PRdg==
+X-Gm-Message-State: AC+VfDwvzfc2gcENHGbuRd3fDTEB+ENAzHtsHma1VZK2KET4O7MAnk5F
+        GfEtuYGNPQFFtA8uoztMj9xlmiLSleCnSA1C/R536T6z3NGd
+X-Google-Smtp-Source: ACHHUZ6q6tCAObTqNYFe4Z3JPgMW55/a5SUlKQk4uTbKCrGAa2NrKDNpA9gPZsRW4lxFJkTX4gtvpVthncvAeVqUeKrgA4Q8lHgM
 MIME-Version: 1.0
-Organization: Aurora Innovation
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:c9cb:0:b0:32f:8970:2a66 with SMTP id
+ k11-20020a92c9cb000000b0032f89702a66mr1248583ilq.4.1682808868929; Sat, 29 Apr
+ 2023 15:54:28 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 15:54:28 -0700
+In-Reply-To: <000000000000e5ee7305f0f975e8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000db8c6605fa8178df@google.com>
+Subject: Re: [syzbot] [net?] WARNING in print_bfs_bug (2)
+From:   syzbot <syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com>
+To:     broonie@kernel.org, davem@davemloft.net, edumazet@google.com,
+        groeck@chromium.org, jiri@resnulli.us, kuba@kernel.org,
+        linmq006@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        tzungbi@kernel.org, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Chaiken <achaiken@aurora.tech>
+syzbot has bisected this issue to:
 
-Add support for the U-Blox Zed-F9P GNSS device.
+commit 0a034d93ee929a9ea89f3fa5f1d8492435b9ee6e
+Author: Miaoqian Lin <linmq006@gmail.com>
+Date:   Fri Jun 3 13:10:43 2022 +0000
 
-Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
----
- Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 1 +
- 1 file changed, 1 insertion(+)
+    ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe
 
-diff --git a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-index 4835a280b3bf..86b65d4d9266 100644
---- a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-+++ b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-@@ -21,6 +21,7 @@ properties:
-       - u-blox,neo-6m
-       - u-blox,neo-8
-       - u-blox,neo-m8
-+      - u-blox,zed-f9p
- 
-   reg:
-     description: >
--- 
-2.39.2
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13d40608280000
+start commit:   042334a8d424 atlantic:hw_atl2:hw_atl2_utils_fw: Remove unn..
+git tree:       net-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10340608280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17d40608280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7205cdba522fe4bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=630f83b42d801d922b8b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147328f8280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1665151c280000
 
+Reported-by: syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com
+Fixes: 0a034d93ee92 ("ASoC: cros_ec_codec: Fix refcount leak in cros_ec_codec_platform_probe")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
