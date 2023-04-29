@@ -2,223 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4656F21AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 02:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D2F6F21AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 02:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347168AbjD2AgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 28 Apr 2023 20:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52458 "EHLO
+        id S1347112AbjD2Aft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 28 Apr 2023 20:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347130AbjD2AgL (ORCPT
+        with ESMTP id S230052AbjD2Afs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 28 Apr 2023 20:36:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394064232;
-        Fri, 28 Apr 2023 17:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/Amx0qPanX05nBJv5epCbcwnXgDtZvJnLUx29Ybm7qI=; b=lyXhAFVQVRguE02Q1e9i6NPyIP
-        BM365gOgviI255XwEzHfBqgUVTueSrkYwxzRRJi7sx898rViQz+LgdkBLmVlvlxC9/8J1u3psIvbK
-        SVSOkZI67EXjhVbf+nDteXrfDKbqtC90Op2niz72kPhXgMAsfE9I1eUbrD19e4VS1e2BjHmQxFCL/
-        sgBydIAMKLWl5tZMez3xbuRgRIKskGQj4g5WPmWBjPm3rSntYpsTLuWoTtp2aXqP0mZ+5XlfBK1hD
-        7FvYQh0KDZzidM+nSNQnzhoO+UqXOGXhYtCbIBfWSsHNX6yFBd6Qo04cP+HxRuk0RQX2DgBMuRdZu
-        gZhEFJBg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1psYYz-00C0DK-0B;
-        Sat, 29 Apr 2023 00:35:45 +0000
-Message-ID: <217e697c-ad13-96ca-3829-a046469fd86a@infradead.org>
-Date:   Fri, 28 Apr 2023 17:35:41 -0700
+        Fri, 28 Apr 2023 20:35:48 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF8A3A88
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:35:46 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f178da21afso1697365e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 28 Apr 2023 17:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682728545; x=1685320545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fpnw8uCoA0rAU9jGGCChf1SspXtAy92aBylAg/xLWrA=;
+        b=J9vpW640rwizfC16AbNY5KLct+P2fghMblD0PVAhbr7tYpxYZlUU3Fsc3H2bELDtNe
+         hLMNo9i245c58lEiX6q1Su5kHr4hte5EJdb5h7P/ltbWWuEmBEPHcD6TQh7gfyuofQJQ
+         KK5bZexJRA+u1b2WZ4gbo9KwgzVEPrxz20oGK6+Wp+IAH66UAKyOBlKwOApW3FF4eC8h
+         kw3lXv1WL2ADM9KMVIsE5zQJE1pNshBiKgbuyzurRtXTu3gEXmWaxRCFB2Ppdjjo/G28
+         Z73pKDfBnOhRI8mhs/LVPDXlR4qNjYUaBi8X2zQ7oydv1TinLPGrNKRxgN2S3uV8f1vS
+         YEBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682728545; x=1685320545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fpnw8uCoA0rAU9jGGCChf1SspXtAy92aBylAg/xLWrA=;
+        b=QTiaqg5yLRgrEpND9admgZzVukPVRE2TmOHpW3Kw5EiLBFDVbHT7DB7KOVbzltedY7
+         /g0R7T/+eZ9fm5EjqdO3+OXQBKHrJCIoi0I6OI1WhGL3+PHfpXcbfNulQ5eAFBNTxDX+
+         VFFqVYRzn3m2pc7C9jPHNckIa/6JuV5tsSbH83K6jvR96HCBHAt4pQ/T6dzIqTZc3pOE
+         40dXTE37vV4Zrenn8GYc/e6/naVTkSr3DmJpJV90aTWE6uqC5XPOiqc5g29SBv0vbuxN
+         ZyecNPHEOjUbT/JyqjJaeEQif/HJs351BbDqnLOMewcE2opb/bM+d2k+8Ncxt+585G39
+         JiKg==
+X-Gm-Message-State: AC+VfDzA4Gid4HoJfUex0DJnLpaivxQaexJ9AKb3e1KD+qouonBoc2Ax
+        n2tsiOcHi07r9YwqAWw7MVKAMw==
+X-Google-Smtp-Source: ACHHUZ7/jqjJIRn24DHZbfcAZXD2Uo91hORwXNXDt5EK21EEcveNY1zcl9GGy8OrcfzV2J6iV5SfLQ==
+X-Received: by 2002:a7b:c7d0:0:b0:3f1:81c6:f59a with SMTP id z16-20020a7bc7d0000000b003f181c6f59amr5016076wmk.4.1682728545321;
+        Fri, 28 Apr 2023 17:35:45 -0700 (PDT)
+Received: from [10.6.147.212] ([212.140.138.218])
+        by smtp.gmail.com with ESMTPSA id f15-20020a7bcd0f000000b003f182cc55c4sm25640347wmj.12.2023.04.28.17.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Apr 2023 17:35:44 -0700 (PDT)
+Message-ID: <1ef1388d-4dc3-273d-3ba6-10614ce6426c@linaro.org>
+Date:   Sat, 29 Apr 2023 03:35:43 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH v2] hardlockup: detect hard lockups using secondary
- (buddy) CPUs
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephane Eranian <eranian@google.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-perf-users@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        kgdb-bugreport@lists.sourceforge.net, ito-yuichi@fujitsu.com,
-        ravi.v.shankar@intel.com, Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        ricardo.neri@intel.com, Ian Rogers <irogers@google.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Colin Cross <ccross@android.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Alexander Potapenko <glider@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        David Gow <davidgow@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230428163507.v2.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230428163507.v2.1.I6bf789d21d0c3d75d382e7e51a804a7a51315f2c@changeid>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2 4/7] drm/msm/dpu: add dsc blocks for remaining chipsets
+ in catalog
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1682725511-18185-1-git-send-email-quic_khsieh@quicinc.com>
+ <1682725511-18185-5-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1682725511-18185-5-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On 29/04/2023 02:45, Kuogee Hsieh wrote:
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+> In preparation of calling ping-pong DSC related functions only
+> for chipsets which have such a design add the dsc blocks for the
+> chipsets for which DSC is present but was not added in the catalog.
 
-On 4/28/23 16:37, Douglas Anderson wrote:
-> From: Colin Cross <ccross@android.com>
+Why/how is it prearing us for such calling?
+
+The change itself LGTM.
+
 > 
-> Implement a hardlockup detector that doesn't doesn't need any extra
-> arch-specific support code to detect lockups. Instead of using
-> something arch-specific we will use the buddy system, where each CPU
-> watches out for another one. Specifically, each CPU will use its
-> softlockup hrtimer to check that the next CPU is processing hrtimer
-> interrupts by verifying that a counter is increasing.
-> 
-> NOTE: unlike the other hard lockup detectors, the buddy one can't
-> easily show what's happening on the CPU that locked up just by doing a
-> simple backtrace. It relies on some other mechanism in the system to
-> get information about the locked up CPUs. This could be support for
-> NMI backtraces like [1], it could be a mechanism for printing the PC
-> of locked CPUs at panic time like [2] / [3], or it could be something
-> else. Even though that means we still rely on arch-specific code, this
-> arch-specific code seems to often be implemented even on architectures
-> that don't have a hardlockup detector.
-> 
-> This style of hardlockup detector originated in some downstream
-> Android trees and has been rebased on / carried in ChromeOS trees for
-> quite a long time for use on arm and arm64 boards. Historically on
-> these boards we've leveraged mechanism [2] / [3] to get information
-> about hung CPUs, but we could move to [1].
-> 
-> Although the original motivation for the buddy system was for use on
-> systems without an arch-specific hardlockup detector, it can still be
-> useful to use even on systems that _do_ have an arch-specific
-> hardlockup detector. On x86, for instance, there is a 24-part patch
-> series [4] in progress switching the arch-specific hard lockup
-> detector from a scarce perf counter to a less-scarce hardware
-> resource. Potentially the buddy system could be a simpler alternative
-> to free up the perf counter but still get hard lockup detection.
-> 
-> Overall, pros (+) and cons (-) of the buddy system compared to an
-> arch-specific hardlockup detector:
-> + Usable on systems that don't have an arch-specific hardlockup
->   detector, like arm32 and arm64 (though it's being worked on for
->   arm64 [5]).
-> + May free up scarce hardware resources.
-> + If a CPU totally goes out to lunch (can't process NMIs) the buddy
->   system could still detect the problem (though it would be unlikely
->   to be able to get a stack trace).
-> - If all CPUs are hard locked up at the same time the buddy system
->   can't detect it.
-> - If we don't have SMP we can't use the buddy system.
-> - The buddy system needs an arch-specific mechanism (possibly NMI
->   backtrace) to get info about the locked up CPU.
-> 
-> [1] https://lore.kernel.org/r/20230419225604.21204-1-dianders@chromium.org
-> [2] https://issuetracker.google.com/172213129
-> [3] https://docs.kernel.org/trace/coresight/coresight-cpu-debug.html
-> [4] https://lore.kernel.org/lkml/20230301234753.28582-1-ricardo.neri-calderon@linux.intel.com/
-> [5] https://lore.kernel.org/linux-arm-kernel/20220903093415.15850-1-lecopzer.chen@mediatek.com/
-> 
-> Signed-off-by: Colin Cross <ccross@android.com>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> Signed-off-by: Tzung-Bi Shih <tzungbi@chromium.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
-> This patch has been rebased in ChromeOS kernel trees many times, and
-> each time someone had to do work on it they added their
-> Signed-off-by. I've included those here. I've also left the author as
-> Colin Cross since the core code is still his.
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
+>   2 files changed, 18 insertions(+)
 > 
-> I'll also note that the CC list is pretty giant, but that's what
-> get_maintainers came up with (plus a few other folks I thought would
-> be interested). As far as I can tell, there's no true MAINTAINER
-> listed for the existing watchdog code. Assuming people don't hate
-> this, maybe it would go through Andrew Morton's tree?
-> 
-> Changes in v2:
-> - cpu => CPU.
-> - Reworked description and Kconfig based on v1 discussion.
-
-or at least some of the comments from v1. :(
-
-> - No code changes
-> 
->  include/linux/nmi.h         |  18 ++++-
->  kernel/Makefile             |   1 +
->  kernel/watchdog.c           |  24 ++++--
->  kernel/watchdog_buddy_cpu.c | 141 ++++++++++++++++++++++++++++++++++++
->  lib/Kconfig.debug           |  23 +++++-
->  5 files changed, 196 insertions(+), 11 deletions(-)
->  create mode 100644 kernel/watchdog_buddy_cpu.c
-> 
-
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 39d1d93164bd..511eb14660b1 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-
-> @@ -1055,9 +1059,26 @@ config HARDLOCKUP_DETECTOR
->  	  chance to run.  The current stack trace is displayed upon detection
->  	  and the system will stay locked up.
->  
-> +config HARDLOCKUP_DETECTOR_BUDDY_CPU
-> +	bool "Buddy CPU hardlockup detector"
-> +	depends on DEBUG_KERNEL && SMP
-> +	depends on !HARDLOCKUP_DETECTOR && !HAVE_NMI_WATCHDOG
-> +	depends on !S390
-> +	select HARDLOCKUP_DETECTOR_CORE
-> +	select SOFTLOCKUP_DETECTOR
-> +	help
-> +	  Say Y here to enable a hardlockup detector where CPUs check
-
-Be consistent in the use of "CPU". Change 2 occurrences of "cpu"
-below to "CPU".
-
-> +	  each other for lockup. Each cpu uses its softlockup hrtimer
-> +	  to check that the next cpu is processing hrtimer interrupts by
-> +	  verifying that a counter is increasing.
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index 2b3ae84..17f821c 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>   };
+>   
+> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+> +};
 > +
-> +	  This hardlockup detector is useful on systems that don't have
-> +	  an arch-specific hardlockup detector or if resources needed
-> +	  for the hardlockup detector are better used for other things.
-
+>   static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>   	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+>   		 &msm8998_dspp_sblk),
+> @@ -191,6 +196,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+>   	.dspp = msm8998_dspp,
+>   	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+>   	.pingpong = msm8998_pp,
+> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
+> +	.dsc = msm8998_dsc,
+>   	.intf_count = ARRAY_SIZE(msm8998_intf),
+>   	.intf = msm8998_intf,
+>   	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> index e3bdfe7..5bb9882 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> @@ -142,6 +142,15 @@ static const struct dpu_merge_3d_cfg sc8180x_merge_3d[] = {
+>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
+>   };
+>   
+> +static const struct dpu_dsc_cfg sc8180x_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_2", DSC_2, 0x80800, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_3", DSC_3, 0x80c00, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_4", DSC_4, 0x81000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_5", DSC_5, 0x81400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +};
+> +
+>   static const struct dpu_intf_cfg sc8180x_intf[] = {
+>   	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>   	INTF_BLK("intf_1", INTF_1, 0x6a800, 0x2bc, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> @@ -192,6 +201,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+>   	.mixer = sc8180x_lm,
+>   	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
+>   	.pingpong = sc8180x_pp,
+> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
+> +	.dsc = sc8180x_dsc,
+>   	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
+>   	.merge_3d = sc8180x_merge_3d,
+>   	.intf_count = ARRAY_SIZE(sc8180x_intf),
 
 -- 
-~Randy
+With best wishes
+Dmitry
+
