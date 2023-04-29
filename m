@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38486F2464
-	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 13:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A718F6F246D
+	for <lists+linux-kernel@lfdr.de>; Sat, 29 Apr 2023 13:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjD2LL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 07:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S231132AbjD2LOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 07:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjD2LLZ (ORCPT
+        with ESMTP id S229458AbjD2LOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 07:11:25 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D5C199D;
-        Sat, 29 Apr 2023 04:11:24 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3ef33f12995so3990511cf.3;
-        Sat, 29 Apr 2023 04:11:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682766683; x=1685358683;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HX1/EEyk9xXLvQqBe37n3RdcEO2pLurpeMiD17UTbTs=;
-        b=A01Ejd9CB4zCK/Va1s1K9Z4mLmriZnmXBjDLpKj6fIV4PrcL6274UsoTlx6tiGlo3J
-         Tf8ZrKkwUyZCXZ2ib1e2f3OYLkJ9r1bd+2o8yCAfDrwa19X/A6SgRcDDvNafIplVUI/G
-         wkcQuMEwF5/OA6DfXmguDm9+UCXSINPCaGX4RPhMltWMNVVkVdvwPDJ+yDc9q0sqMZl5
-         XCkQkEx0v+NuWenON0zkoehMeiiGB4JKtfNIdNskU5t8Rv0CImwPWaC9jsKQBpV7Yx6b
-         etfBZszSLR8XTJj28tLU4QX3BbQ4GfLTv8SLy05D1P92vJ5bVuFhfufGXyAUWDQPxntV
-         nkIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682766683; x=1685358683;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HX1/EEyk9xXLvQqBe37n3RdcEO2pLurpeMiD17UTbTs=;
-        b=dhnYe1b2HIuy58vCOemkHR3I08mK5N7vvDwHs5TZieU7BczI9MbBThEnTTi7vVQK50
-         1R+4VDzvFxdB6ZcNsiGNAwnZPr2KqzAAmfeV5a5aNwFySeQsIQoi0dEwYen6gZ6C2jPa
-         gTUdxDv/sOP4vMc5JZ2ueykrptQo4gqNqNgu8e5EhTu/krv9U7iAYRIqxqQa8woKATtY
-         U40N18Mx70BYQCesCsNwr+ptB+hs2LDAXR5MsOuTQvm+hejmIfw7npn1QIFXM8x7OehX
-         fh9dRrSrYq3HpLCt97m6jb8ol7cQTeOH1iLSx5Bn5uCDMyz496S3FMfcrZCjtavXt1ad
-         mzpQ==
-X-Gm-Message-State: AC+VfDySn0tgF+pgvlO1w9Jv4iJy7DlYm3ilkjS4Iw6FEsbDP7SDK0zf
-        VuCCtnuGtR26R5977460wt4f3W3FNHZ+cxW257g=
-X-Google-Smtp-Source: ACHHUZ5I0DskjV6EwNo65xx80cLj5WRrF1tmqU+2NYSElnE5HaXX61LvPeJhLEhwi9LuG5LJsazF2T22kA0eHNErDEk=
-X-Received: by 2002:ac8:57c4:0:b0:3f2:f11:76e0 with SMTP id
- w4-20020ac857c4000000b003f20f1176e0mr2451809qta.1.1682766683215; Sat, 29 Apr
- 2023 04:11:23 -0700 (PDT)
+        Sat, 29 Apr 2023 07:14:17 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22731998;
+        Sat, 29 Apr 2023 04:14:15 -0700 (PDT)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9293DC76D6;
+        Sat, 29 Apr 2023 11:14:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1682766853; bh=A8QySs6SKhnXKBxkO0+a10Q3xy1UQlrC6oSknuRX0p0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=U7zokl7PwDhkg2mUuKqWuwfT1MxrzqVZ/5hi6RDzgNWum9wURWdBcStFGLcfBVMY8
+         UaDtySh/ktQAX2Bj61orQkqqmlcte/2DFaVZsjjcp4LVEPFIEio70LtCzx+VEJ1/eZ
+         gUtBK5DhbsU6wGkMv9uelFv8KytbxGpGtKzr0API=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Helge Deller <deller@gmx.de>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Artur Weber <aweber.kernel@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: Re: [PATCH 3/4] ARM: dts: adapt to LP855X bindings changes
+Date:   Sat, 29 Apr 2023 13:14:12 +0200
+Message-ID: <3414865.QJadu78ljV@z3ntu.xyz>
+In-Reply-To: <20230429104534.28943-4-aweber.kernel@gmail.com>
+References: <20230429104534.28943-1-aweber.kernel@gmail.com>
+ <20230429104534.28943-4-aweber.kernel@gmail.com>
 MIME-Version: 1.0
-References: <20230428194541.510674-1-andreas@kemnade.info>
-In-Reply-To: <20230428194541.510674-1-andreas@kemnade.info>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sat, 29 Apr 2023 14:10:46 +0300
-Message-ID: <CAHp75Vfv5kO2q+xF6=fRMfMsM3xajfRs8iR10d06dfogBfYAOg@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: fix allocation of mixed dynamic/static GPIOs
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        christophe.leroy@csgroup.eu, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 10:45=E2=80=AFPM Andreas Kemnade <andreas@kemnade.i=
-nfo> wrote:
->
-> If static allocation and dynamic allocation GPIOs are present,
-> dynamic allocation pollutes the numberspace for static allocation,
-> causing static allocation to fail.
-> Enfore dynamic allocation above GPIO_DYNAMIC_BASE.
+On Samstag, 29. April 2023 12:45:33 CEST Artur Weber wrote:
+> Change underscores in ROM node names to dashes, and remove deprecated
+> pwm-period property.
+> 
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 
-Enforce
+Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
 
-> Seen on a GTA04 when omap-gpio (static) and twl-gpio (dynamic)
-> raced:
-> [some successful registrations of omap_gpio instances]
-> [    2.553833] twl4030_gpio twl4030-gpio: gpio (irq 145) chaining IRQs 16=
-1..178
-> [    2.561401] gpiochip_find_base: found new base at 160
-> [    2.564392] gpio gpiochip5: (twl4030): added GPIO chardev (254:5)
-> [    2.564544] gpio gpiochip5: registered GPIOs 160 to 177 on twl4030
-> [...]
-> [    2.692169] omap-gpmc 6e000000.gpmc: GPMC revision 5.0
-> [    2.697357] gpmc_mem_init: disabling cs 0 mapped at 0x0-0x1000000
-> [    2.703643] gpiochip_find_base: found new base at 178
-> [    2.704376] gpio gpiochip6: (omap-gpmc): added GPIO chardev (254:6)
-> [    2.704589] gpio gpiochip6: registered GPIOs 178 to 181 on omap-gpmc
-> [...]
-> [    2.840393] gpio gpiochip7: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    2.849365] gpio gpiochip7: (gpio-160-191): GPIO integer space overlap=
-, cannot add chip
-> [    2.857513] gpiochip_add_data_with_key: GPIOs 160..191 (gpio-160-191) =
-failed to register, -16
-> [    2.866149] omap_gpio 48310000.gpio: error -EBUSY: Could not register =
-gpio chip
->
-> On that device it is fixed invasively by
-> commit 92bf78b33b0b4 ("gpio: omap: use dynamic allocation of base")
-> but lets also fix that for devices where there is still
-
-let's
-
-> a mixture of static and dynamic allocation.
-
-It might be that it can be optimized, but OK for now. Thanks for fixing it.
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Fixes: 7b61212f2a07 ("gpiolib: Get rid of ARCH_NR_GPIOS")
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 > ---
-> Changes in V2:
->    handle also the case of overlapping static allocation
->    across DYNAMIC_BASE
->
->  drivers/gpio/gpiolib.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 19bd23044b017..4472214fcd43a 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -193,6 +193,8 @@ static int gpiochip_find_base(int ngpio)
->                         break;
->                 /* nope, check the space right after the chip */
->                 base =3D gdev->base + gdev->ngpio;
-> +               if (base < GPIO_DYNAMIC_BASE)
-> +                       base =3D GPIO_DYNAMIC_BASE;
->         }
->
->         if (gpio_is_valid(base)) {
-> --
-> 2.39.2
->
+>  .../dts/qcom-apq8026-samsung-matisse-wifi.dts |  1 -
+>  ...-msm8974pro-sony-xperia-shinano-castor.dts | 23 ++++++++++---------
+>  2 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts index
+> 91b860e24681..884d99297d4c 100644
+> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
+> @@ -99,7 +99,6 @@ backlight@2c {
+> 
+>  			dev-ctrl = /bits/ 8 <0x80>;
+>  			init-brt = /bits/ 8 <0x3f>;
+> -			pwm-period = <100000>;
+> 
+>  			pwms = <&backlight_pwm 0 100000>;
+>  			pwm-names = "lp8556";
+> diff --git
+> a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts index
+> 04bc58d87abf..2396253f953a 100644
+> --- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> +++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
+> @@ -150,47 +150,48 @@ lp8566_wled: backlight@2c {
+>  		bl-name = "backlight";
+>  		dev-ctrl = /bits/ 8 <0x05>;
+>  		init-brt = /bits/ 8 <0x3f>;
+> -		rom_a0h {
+> +
+> +		rom-a0h {
+>  			rom-addr = /bits/ 8 <0xa0>;
+>  			rom-val = /bits/ 8 <0xff>;
+>  		};
+> -		rom_a1h {
+> +		rom-a1h {
+>  			rom-addr = /bits/ 8 <0xa1>;
+>  			rom-val = /bits/ 8 <0x3f>;
+>  		};
+> -		rom_a2h {
+> +		rom-a2h {
+>  			rom-addr = /bits/ 8 <0xa2>;
+>  			rom-val = /bits/ 8 <0x20>;
+>  		};
+> -		rom_a3h {
+> +		rom-a3h {
+>  			rom-addr = /bits/ 8 <0xa3>;
+>  			rom-val = /bits/ 8 <0x5e>;
+>  		};
+> -		rom_a4h {
+> +		rom-a4h {
+>  			rom-addr = /bits/ 8 <0xa4>;
+>  			rom-val = /bits/ 8 <0x02>;
+>  		};
+> -		rom_a5h {
+> +		rom-a5h {
+>  			rom-addr = /bits/ 8 <0xa5>;
+>  			rom-val = /bits/ 8 <0x04>;
+>  		};
+> -		rom_a6h {
+> +		rom-a6h {
+>  			rom-addr = /bits/ 8 <0xa6>;
+>  			rom-val = /bits/ 8 <0x80>;
+>  		};
+> -		rom_a7h {
+> +		rom-a7h {
+>  			rom-addr = /bits/ 8 <0xa7>;
+>  			rom-val = /bits/ 8 <0xf7>;
+>  		};
+> -		rom_a9h {
+> +		rom-a9h {
+>  			rom-addr = /bits/ 8 <0xa9>;
+>  			rom-val = /bits/ 8 <0x80>;
+>  		};
+> -		rom_aah {
+> +		rom-aah {
+>  			rom-addr = /bits/ 8 <0xaa>;
+>  			rom-val = /bits/ 8 <0x0f>;
+>  		};
+> -		rom_aeh {
+> +		rom-aeh {
+>  			rom-addr = /bits/ 8 <0xae>;
+>  			rom-val = /bits/ 8 <0x0f>;
+>  		};
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+
+
