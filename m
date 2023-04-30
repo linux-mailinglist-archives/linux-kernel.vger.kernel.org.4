@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE656F2B66
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B7C6F2B6F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjD3Wiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 18:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S232110AbjD3WsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 18:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjD3Wix (ORCPT
+        with ESMTP id S229659AbjD3WsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 18:38:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667A61AB;
-        Sun, 30 Apr 2023 15:38:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 017C760F80;
-        Sun, 30 Apr 2023 22:38:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10201C433D2;
-        Sun, 30 Apr 2023 22:38:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682894331;
-        bh=EQ09llp2SHctNPCqeExFa+2KP7sZE7fwfCOS3LtZp44=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WGRoSKYsiJaCJUR6IRoOXRKraFROluOZz0atONXONdDS/ziS+Fd96tb+Vl8eXqGV8
-         /pjaY+mpQUv30Hz58l6epXHVYiup34Xy2rJKUnDuVLN5vViMF9PAMGCgCrkI3W6Mgz
-         hLR4RFOHJTHGLuG4ybLspKSNxAOkDpwZJ8qcq5FuDQ4ztACjQQBdAlPqDDE6C3r2vW
-         BcGPHsN6Kc6MqtqfuxfEPKWT5tK2XU1ZKqvPHKyLEarIxDtstRcZ1gStxXXkBNtj7v
-         GDL/Jz3nRutLx0EqFCS8+6kKpiXLDxsFKE4uiZIf2Jpco2XNQq5UHN/Ryhjg1qxtFx
-         w1/MxGpfyHKIA==
-Date:   Sun, 30 Apr 2023 17:38:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <james.quinlan@broadcom.com>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/5] PCI: brcmstb: Set PCIe transaction completion
- timeout
-Message-ID: <20230430223849.GA528725@bhelgaas>
+        Sun, 30 Apr 2023 18:48:20 -0400
+X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Apr 2023 15:48:17 PDT
+Received: from www.vigovproductions.net (www.vigovproductions.net [86.43.91.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FF11BF
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 15:48:17 -0700 (PDT)
+Received: from vigov-webserver.vigovproductions.net (localhost [127.0.0.1])
+        by vigov-webserver.vigovproductions.net (OpenSMTPD) with ESMTP id be784070;
+        Sun, 30 Apr 2023 23:41:35 +0100 (IST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=vigovproductions.net; h=to
+        :cc:references:from:subject:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=mail; bh=
+        juXyoiof4ex/uZvf7aBY5+aQaAo=; b=iTkoFPC8xWMvBjg2WoxloPHwvnMZLdRb
+        Lk/oxT1NmYgFohaeRK+G48wyYdD97pn7IgYUTd7VwChNvzdJYFz7BTKDxafbXKe+
+        gwWBWkzkBGoH+N1aD7D+XmmnND5WSnHl+kqRUkEhY43rqxqutfpokmeIKFbC5shl
+        xofJt2MUSAS+mziW7c0uwhsvAqjwbxQJ5GzmMQ5oH9a+P9fIftTT6E7sAFpUH9AG
+        vmQ2Cqw5mG3RrbnlBnwmVX2xYBEknV874hNR40TkwrkMx0+8LqdT6wbwU2f3//Ks
+        rMrMbqE8PodPxLtbx/frQBazyvFnXIT30jObs0oVQ7zAuJvVasCXdQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; d=vigovproductions.net; h=to
+        :cc:references:from:subject:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; q=dns; s=
+        mail; b=Li2USaB56wmXQTAb8AvXbMvISqCk2YHGynIPV6Bhr+ijkwUakwYc80/Z
+        gFqOcLyWOXTiq0lJUctts0pC5VhY1/57NSRkl+hvLK0KSjt6sgSJl1Uy+kLwj1Kd
+        4Vu3DCGcchEzk/GRQ3dmWlO26M+/Jr0pcVlRNQyU+ZGPCCsmYvqJ4wC7GaoKlVVZ
+        sHZjF7PLTxsWWTGF+oxJ+8FdLdLIA9iE6sQQcCbnfru4tFuGNbkTrKGdH8W1XfP4
+        7pZgCCfgwmXoxo30iy0UKU5LqroWBRjUl51U7a1/MwuS9PJWTHfown97jAD/xhWL
+        NjCkhoXcEQszW1VqqijnfGvPe6HFPQ==
+Received: from [192.168.1.52] (www.vigovproductions.net [86.43.91.159])
+        by www.vigovproductions.net (OpenSMTPD) with ESMTPSA id 416617b0 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Sun, 30 Apr 2023 23:41:35 +0100 (IST)
+To:     Tad <support@spotco.us>, liam.howlett@oracle.com
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, rick.p.edgecombe@intel.com
+References: <e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us>
+From:   Michael Keyes <mgkeyes@vigovproductions.net>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mgkeyes@vigovproductions.net; prefer-encrypt=mutual; keydata=
+ xsBNBFbRwEIBCACtizW7jkoD17g0VZFc+pBoevENZSJ6um8pNY1KEzmUOjHpz3hM+4qYp+/O
+ XdmDOuh24n9yegOjy/29ILifLeAmYbzDI/a7+2HHtcOX6ekCWpEaS3tuED+4q0qPPBeN407C
+ LVGh4aJqlphQxRcOVduJv1qmxFzuNjLbkL9JVcjQ7iuJgKr3yUp766gULp95z10GmlpogkEV
+ 2av19L8nHOjMqS+cXZYuqnks+uNEduZNg9U8alVF4Z61DZZO/69XBN3y+fUDZkB7RNIWPkhh
+ qbpWwR1wB8El+ZmQveLX64AKp7+y9ouwdlfYxQFFjWcJDnhYlBeFN+3FrFnvWGtrrO6vABEB
+ AAHNLE1pY2hhZWwgS2V5ZXMgPG1na2V5ZXNAdmlnb3Zwcm9kdWN0aW9ucy5uZXQ+wsB3BBMB
+ CAAhBQJW0cBCAhsDBQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEI0xE/fTb4M8SpoH/RGS
+ 0SdDeE/FCFY51HNvRs/DfPT+lkpzOmvRz9VghTG1uAJ18XhGZyloj4Y45zvvfwuIZ4h4/Rs5
+ hUGZvUNdzqqTsKv1oVzvf7Jk/9Y8ycnfuXHO/QavpKCj5LnRIT0WUFU2tezDs4fwcqw3wXbu
+ iz5sa+jTCSNkH6WryytkDx8CSq4KftgjB/uujvz3YMExvS7JjyPSnLsVYXws7HlHvl4u9oMD
+ aCfci4bp/0i8oL499yUO7HC5jQwwkP9OZbAlgySPErEpahXG9Kx6MD82yy1JHdLmePyc74M8
+ U1k1FKABvjXEigoCRzjVtyiINCpNv6+kMS6M+fQMLuVM5gQKKLjOwE0EVtHAQgEIANgZcP6N
+ Zy+jGkG4xp2Cs2E0SndXI4BV4HD6BZhsfQdrluhv058pdkz9Y081v6NzRTFuqeOCNzp1lftS
+ qwA6UzpshTQB2SvUk1H/mwdEWhG8DDf4FFtde4m5nEvr0Sj/ZIzaynQIUHzQBnuuS1y4Btyi
+ yQGFalRwQqcnuWJ+f+/zj9haXbdWPmZdSxIeO4C3v6+leh/cWdNjFt6xtWy546QkW9IZO++m
+ 31+DdxlxwlwZQZrrV6orS60HWB4IYJBI0W5/z3EBlqJ026eLiWapYrNtrJyePI9pIP3diOd3
+ m6WiFSZELD3YSUHOSvcBoBfkl7LOUALLXKE3/CRucN7sH3MAEQEAAcLAXwQYAQgACQUCVtHA
+ QgIbDAAKCRCNMRP302+DPM83CACTbzcLgrHEj5So0+FkSToc3pO5KOH0qLu9fA2TTY3jjM5U
+ BproFhlDR3nrZBrtveN7B6ni7efOgZnFlSYfJBLnDg0joQLqM4DrdBJLsGo/eAomMJbLMWSm
+ fSQ6VhIISNgPoh7db4HyACfr0SpBmK+OmkMB/yIhtqFjYJ7+Ms1IUd2TMlpDYaP98zsf4Hl5
+ A2ClhHpU+EB5AjCA+inVSwtj7NLJC30UOTJV9IbFwhPml/OdwZoSntWGY2OTIuBnt+3XbuHD
+ zg9A46AXrTTLkqWrUI6IZtApqJd4sIXytnvf0W8MZ8pmP9wX7isvmychTrQ4JsEFxc3e1Sm9
+ m3gn/II+
+Subject: Re: [PATCH v2] mm/mmap: Regression fix for unmapped_area{_topdown}
+Message-ID: <90777046-a420-b19f-1847-d353b9938131@vigovproductions.net>
+Date:   Sun, 30 Apr 2023 23:41:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.5.2
 MIME-Version: 1.0
+In-Reply-To: <e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+-6iNwb6Cn-78BJ5URhwvDuYHg5b4X5h+WdMw-CB3nRs=pSYw@mail.gmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 05:24:26PM -0400, Jim Quinlan wrote:
-> On Sun, Apr 30, 2023 at 3:13 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Apr 28, 2023 at 06:34:57PM -0400, Jim Quinlan wrote:
-> > > Since the STB PCIe HW will cause a CPU abort on a PCIe transaction
-> > > completion timeout abort, we might as well extend the default timeout
-> > > limit.  Further, different devices and systems may requires a larger or
-> > > smaller amount commensurate with their L1SS exit time, so the property
-> > > "brcm,completion-timeout-us" may be used to set a custom timeout value.
-> >
-> > s/requires/require/
-> >
-> > AFAIK, other platforms do not tweak Configuration Timeout values based
-> > on L1SS exit time.  Why is brcm different?
-> 
-> Keep in mind that our Brcm PCIe HW signals a CPU abort on a PCIe
-> completion timeout.  Other PCIe HW just returns 0xffffffff.
+On 29.04.23 15:32, Tad wrote:
+> This reintroduces the issue described in
+> https://lore.kernel.org/linux-mm/cb8dc31a-fef2-1d09-f133-e9f7b9f9e77a@s=
+ony.com/
+Yes, I also ran into this (even though I'd somehow missed it the
+previous time).
 
-Most does, but I'm pretty sure there are other controllers used on
-arm64 that signal CPU aborts, e.g., imx6q_pcie_abort_handler() seems
-similar.
+Apparently the issue arises at mm/mmap.c:1582, where low_limit is set to
+vm_end_gap(tmp). Occasionally, this returns a 64-bit address (e.g.
+0x7fedea581000), which is obviously greater than high_limit for a 32-bit
+mmap, and causes the next call to mas_empty_area() to fail.
 
-> I've been maintaining this driver for over eight years or so and we've
-> done fine with the HW default completion timeout value.
-> Only recently has a major customer requested that this timeout value
-> be changed, and their reason was so they could
-> avoid a CPU abort when using L1SS.
-> 
-> Now we could set this value to a big number for all cases and not
-> require "brcm,completion-timeout-us".  I cannot see any
-> downsides, other than another customer coming along asking us to
-> double the default or lessen it.
-> 
-> But I'm certainly willing to do that -- would that  be acceptable?
+I'm not sure why vm_end_gap(tmp) occasionally returns a 64-bit address,
+or if the best solution is to just check for this and skip the retry if
+it occurs=E2=80=A6
 
-That would be fine with me.
+--=20
+Michael
 
-Bjorn
+
