@@ -2,98 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EEE6F27CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3CD6F27CE
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231734AbjD3GMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 02:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S231750AbjD3GcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 02:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjD3GMB (ORCPT
+        with ESMTP id S231743AbjD3GcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 02:12:01 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAA619A6;
-        Sat, 29 Apr 2023 23:11:58 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1682835116;
-        bh=EWND/P5khW/j9msjU3H9jrXagHPGsVQxvQ8akYP7ayI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=MDhUIn1eWSNUftjkq02ZdQnnr27CEXFpWLMoCamhu5s9gj4Rb2BrvD0scQ1Uxv+j2
-         zTxxoYM4t9LPB42i06M/zj4Z+KyuwmhqpBSKOOgdVOtIP0vclFHSsjGoY3WHRQ5JEW
-         BP99PbBBXOUrg4wlP70IDqvancS1KtiBqPDtfLgc=
-Date:   Sun, 30 Apr 2023 08:11:53 +0200
-Subject: [PATCH] power: supply: remove unneeded include of linux/leds.h
+        Sun, 30 Apr 2023 02:32:14 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8201706
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 23:32:13 -0700 (PDT)
+Received: from letrec.thunk.org ([76.150.80.181])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33U6W56Y005819
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 30 Apr 2023 02:32:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1682836328; bh=643DuUgAB//cYcsxro4WK5uhMJqgvM367EgOy2Z/Ql4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ix2qo65UsPkP4+Vgx1NsvAWHRqWBJCBpHgCK2RBPWGsOYQ2ZZwVJZTyrGNzgUBdeK
+         CLU3M4X/pUMVlt4at4pccS+KOU5tvzCHuR9C2sYwUecZTu8YAT2g43dILCxUB4X3mB
+         OJdXOw1ITDeoH+bAiX3UpkfFBY7cvu4Uj3St8kLnq9Yh8WJlZDn8/1b0JMjgTYbItI
+         SqR13hKqihbG5/tAiyVCv1R7reIDNBJl6LFzAKqdGO29L60qGPWCPPwh66f2j6QtQk
+         XuKmjRwyyrISeqvU9nHlwU8JXZWrG0akPcGjoSJVXpfgmDg6QVlxKfbEO3wjOKwAEZ
+         UDjvjxld4yebQ==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id E3DCC8C023E; Sun, 30 Apr 2023 02:32:04 -0400 (EDT)
+Date:   Sun, 30 Apr 2023 02:32:04 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+221d75710bde87fa0e97@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: INFO: task hung in lock_mount
+Message-ID: <ZE4LZP5V/TGMoRwz@mit.edu>
+References: <0000000000006de361056b146dbe@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230212-include-power_supply-leds-v1-1-7adbf7424002@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAKgGTmQC/x2NSwrDMAwFrxK0riB2F4ZepZTij9IIhGMk3KaE3
- L2my3kwbw4wUiaD23SA0puNtzrAXSbIa6wvQi6Dwc/+OnvnkWuWXgjb9iF9Wm9NvihUDBdyJbg
- cUkgehp+iESaNNa/joXaRMTalhfd/8P44zx8hMs9XgAAAAA==
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1682835115; l=1310;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=EWND/P5khW/j9msjU3H9jrXagHPGsVQxvQ8akYP7ayI=;
- b=VH/gXETeC6s11ytN6rvcKxK5qUEpEwcKdrw+devE/9e8YR+2NwkaqZLZxjmaWx8YafYa1V7JC
- 9eHbD20/9UZBVnRBmQoNW7ds5Kgzeps5nlOXpBJq8tJMgJ8DAV2bjNp
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000006de361056b146dbe@google.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of including the full linux/leds.h header file a single
-forward-declaration is enough.
+#syz set subsystems: nilfs
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Currently power_supply.h includes leds.h to get access to
-struct led_trigger.
-This propagates the inclusion unnecessarily to all users of
-power_supply.h.
+Per the information in the dashboard:
 
-Replace this inclusion by a single forward declaration.
----
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- include/linux/power_supply.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+	https://syzkaller.appspot.com/bug?extid=221d75710bde87fa0e97
 
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index a427f13c757f..dc5e17e8c919 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -14,10 +14,11 @@
- 
- #include <linux/device.h>
- #include <linux/workqueue.h>
--#include <linux/leds.h>
- #include <linux/spinlock.h>
- #include <linux/notifier.h>
- 
-+struct led_trigger;
-+
- /*
-  * All voltages, currents, charges, energies, time and temperatures in uV,
-  * µA, µAh, µWh, seconds and tenths of degree Celsius unless otherwise
+There is no mention of ext4 anywhere, and nilfs does show up in the
+stack trace.  So why this is marked with the lables "ext4", "nilfs" is
+a mystery.
 
----
-base-commit: 825a0714d2b3883d4f8ff64f6933fb73ee3f1834
-change-id: 20230212-include-power_supply-leds-fe1d71c7b7b2
-
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+Fix it.
 
