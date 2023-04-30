@@ -2,124 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A436F2961
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 17:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6006F296A
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 17:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjD3PfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 11:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S229784AbjD3Psp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 11:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjD3PfT (ORCPT
+        with ESMTP id S229477AbjD3Psn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 11:35:19 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAB719A6;
-        Sun, 30 Apr 2023 08:35:18 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2a8b1b51dbdso15465351fa.0;
-        Sun, 30 Apr 2023 08:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682868916; x=1685460916;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0ZsFoZX2gI1MlEhPRWk4v2TPDpNZTyJdaXiY+J/jwtQ=;
-        b=XiCfF+J+ln5UU8cEjv9JPcK4vuF11pXkZNspKxuI1dZCBABQcSjC8A4sKqf+IWWZhU
-         2zL5NQg1OG8+t1w5C03GKFHX9NdJ05qHSpxN1x+kXtLtnYGwcx4rlQU0lkhKjmGiLMXM
-         7a5HN7dirpAtHnwWK9m0F9zt1aC7dDH8iTzgKLAnKJbK5xs+JRwFGuKEmdBkvNnPQKJb
-         M5zu8lNQScKZBIkeOpVJjbFptiT3C0CyNGg0VWhza9Hu2M0Fqt2K2RYmwjevm/Qbam3X
-         GUZV3KCQVjth44n7q8S+AlZTURQZiV+Q7xwndg/5UgCHbG70VVpne+PR03KnFNkKo6YO
-         ES2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682868916; x=1685460916;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZsFoZX2gI1MlEhPRWk4v2TPDpNZTyJdaXiY+J/jwtQ=;
-        b=UyCw9pkMJqKcm2R78BfV9+ULA0yR4gqSGBGpWCw5iCCFDCR+c5nhmJe2XuogtfOv7G
-         cetWWSZwzHgWaZFFpQVm3/1jKSZUyePLwikhxgFZbGLMsRxRKwaIIElWaff+FaajshCA
-         4K9eOsal68pO4PW0g9VtSBJ80jziQ+Pet00BPspCOpg2OBnmIe3WgAgMAEFAdxC+35GS
-         P/f8JMCXx1SuXVON5uoI5jHLFDeKgxdWIGJl6QvvRqmbnXBtGmsLiCFepm1NBsTBNTke
-         1o8Aokb+2IrzpwstvIz6+XIO5Nf9C9vO/L+wh5ukzQvggRIhhKyWQW1wqM+mjebjU65w
-         D40Q==
-X-Gm-Message-State: AC+VfDzslnFIlAjwUUycrtzu6PBbZsNepJsaBPzbbWprLjl3uW8iqrjd
-        ycq55fg6E/e9tY2HoNnhSpNEA50LvgteGqu4cRPuyscW8TY=
-X-Google-Smtp-Source: ACHHUZ4yh7IfKnRp+4eHLpFQSKiuHxs2nEBBpGJHL093qA04q3PrpDLUoBlCgSRXKa4qGoWpKvnA8g7YuytTuohZzY8=
-X-Received: by 2002:a2e:3609:0:b0:2a8:ab4c:3599 with SMTP id
- d9-20020a2e3609000000b002a8ab4c3599mr3458558lja.35.1682868916039; Sun, 30 Apr
- 2023 08:35:16 -0700 (PDT)
+        Sun, 30 Apr 2023 11:48:43 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A1E26A9
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 08:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682869722; x=1714405722;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dZqkRh5o849PejBMLlgURL1sHxT5dBczJ6a9ndFeQHY=;
+  b=BN65fPfuvkcn6WU2jspBqp+3y2lk+pjw/CDEou6jZMATt4igMvE0Ocd9
+   eDGeoKd9cmxgJeK+CZzc7MgbBNO9DX64aeSzw6uhlDGzvzWuJxjNq70lh
+   1HWv/e17sRPmC/lXelk00bxoSgByKYOHzaz2K7ld4BFU0x1bw2gPAmtji
+   a5UiqYpYbUptMznr7flxhmylPQqqLzj0Rxz0sgQwjEzpGOIh22h8eD8qB
+   DK5/a1korg+TDTbUTCbK8qmZIOGDfDMIdxB65so4GQ27VnKY4A67eb3ZE
+   IfMlvujHFwcCSR1fiWXFbnHBmndY+wpR6H+fbMX69fb9IjcXyzK8YUXgH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="345504210"
+X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
+   d="scan'208";a="345504210"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 08:48:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="839597913"
+X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
+   d="scan'208";a="839597913"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2023 08:48:40 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pt9Hz-00001b-1F;
+        Sun, 30 Apr 2023 15:48:39 +0000
+Date:   Sun, 30 Apr 2023 23:47:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: error: no previous
+ prototype for '__vdso_getcpu'
+Message-ID: <202304302304.LTYndwk9-lkp@intel.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 30 Apr 2023 10:35:04 -0500
-Message-ID: <CAH2r5mtWYqepZSYBvSbC5AHiJv70ETtNobBbSH1Oc2K=2qO6UA@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-457391b0380335d5e9a5babdec90ac53928b23b4:
+Hi Sebastian,
 
-  Linux 6.3 (2023-04-23 12:02:52 -0700)
+FYI, the error/warning still remains.
 
-are available in the Git repository at:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   825a0714d2b3883d4f8ff64f6933fb73ee3f1834
+commit: 92d33063c081a82d25dd08a9cce03947c8ed9164 x86/vdso: Provide getcpu for x86-32.
+date:   3 months ago
+config: x86_64-sof-customedconfig-edison-defconfig (https://download.01.org/0day-ci/archive/20230430/202304302304.LTYndwk9-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=92d33063c081a82d25dd08a9cce03947c8ed9164
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 92d33063c081a82d25dd08a9cce03947c8ed9164
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.4-rc-smb3-client-fixes-part1
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304302304.LTYndwk9-lkp@intel.com/
 
-for you to fetch changes up to 9be11a69315e26363a4de8930bc50d0901a96775:
+All errors (new ones prefixed by >>):
 
-  cifs: update internal module version number for cifs.ko (2023-04-28
-22:50:42 -0500)
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:2:
+>> arch/x86/entry/vdso/vdso32/../vgetcpu.c:13:1: error: no previous prototype for '__vdso_getcpu' [-Werror=missing-prototypes]
+      13 | __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+         | ^~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
 
-----------------------------------------------------------------
-11 smb3 client fixes, mostly cleanup
-- deferred close fixe for an important case when cached file should be
-closed immediately)
-- two fixes for missing locks
-- eight minor cleanup
 
-Am still working on testing some additional patches, and also
-expecting a set of fixes from Paulo and Bharath later in the week.
-----------------------------------------------------------------
-Bharath SM (2):
-      SMB3: Add missing locks to protect deferred close file list
-      SMB3: Close deferred file handles in case of handle lease break
+vim +/__vdso_getcpu +13 arch/x86/entry/vdso/vdso32/../vgetcpu.c
 
-Steve French (5):
-      cifs: missing lock when updating session status
-      SMB3.1.1: add new tree connect ShareFlags
-      smb3: make query_on_disk_id open context consistent and move to
-common code
-      smb3: move some common open context structs to smbfs_common
-      cifs: update internal module version number for cifs.ko
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  11  
+23adec554a7648 arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12  12  notrace long
+23adec554a7648 arch/x86/vdso/vgetcpu.c       Steven Rostedt 2008-05-12 @13  __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  14  {
+22245bdf0ad805 arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  15  	vdso_read_cpunode(cpu, node);
+ec3a94188df7d2 arch/x86/entry/vdso/vgetcpu.c Ingo Molnar    2018-10-08  16  
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  17  	return 0;
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  18  }
+2aae950b21e4bc arch/x86_64/vdso/vgetcpu.c    Andi Kleen     2007-07-21  19  
 
-Volker Lendecke (4):
-      cifs: Simplify SMB2_open_init()
-      cifs: Simplify SMB2_open_init()
-      cifs: Simplify SMB2_open_init()
-      cifs: Avoid a cast in add_lease_context()
+:::::: The code at line 13 was first introduced by commit
+:::::: 23adec554a7648f99c8acc0caf49c66320cd2b84 x86: add notrace annotations to vsyscall.
 
- fs/cifs/cifsfs.h          |   4 ++--
- fs/cifs/connect.c         |   8 ++++++--
- fs/cifs/file.c            |  16 ++++++++++++++++
- fs/cifs/misc.c            |   8 +++++++-
- fs/cifs/smb2pdu.c         | 115
-++++++++++++++++++++++++++++++-------------------------------------------------------------------------------------
- fs/cifs/smb2pdu.h         |  20 --------------------
- fs/ksmbd/smb2pdu.h        |  33 ---------------------------------
- fs/smbfs_common/smb2pdu.h |  56
-++++++++++++++++++++++++++++++++++++++++++++++++--------
- 8 files changed, 109 insertions(+), 151 deletions(-)
-
+:::::: TO: Steven Rostedt <srostedt@redhat.com>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
-Thanks,
-
-Steve
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
