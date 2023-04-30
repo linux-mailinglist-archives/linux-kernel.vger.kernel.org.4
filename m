@@ -2,197 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9AD6F2768
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 04:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261D96F276D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 05:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjD3Czk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 22:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S231529AbjD3DLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 23:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjD3Czh (ORCPT
+        with ESMTP id S230253AbjD3DLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 22:55:37 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB861BD7
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:55:35 -0700 (PDT)
-Received: from letrec.thunk.org ([76.150.80.181])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33U2tC0Y024382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 29 Apr 2023 22:55:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1682823318; bh=i2FgzlkJcrvcsFVmz+a9C1lvszBz+lDBlJrsbESK+dY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=HeryzVNSTeNLwLhcS1xhunWmFMcnF6zuy1EDbwTrL8gOb4PhXjdQXUWqk2H3raQwc
-         dOQc6FLcHixZZttgGYCGbGJb/2YWKAZUhDP4Nh9PMxrQni6DkeUbtUVzxJXvHU76tn
-         uDGyHGm9m4EPkoe9jWWUAV/88thNsOAGXTtlMLsHZPLUXjC6dRAOAzhM5R2tRzP4Q8
-         BdLW8EimwGzGNXGmWeBQlLpR17cWM7YW8kex0e/OHunEoymxEJAp2zpPTSMilg2SzM
-         R0bfFPJyY1jSd3njrUzOYvHJ5KB5S25FJ6gJvgLXMENKoqbUEeY8pye8S9JeQzs1O5
-         63CZ0Yc1JjxtA==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id 80F4E8C012F; Sat, 29 Apr 2023 22:55:12 -0400 (EDT)
-Date:   Sat, 29 Apr 2023 22:55:12 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Tudor Ambarus <tudor.ambarus@linaro.org>,
-        syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, syzkaller-bugs@googlegroups.com,
-        trix@redhat.com, Lee Jones <joneslee@google.com>,
-        syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com,
-        syzbot+db6caad9ebd2c8022b41@syzkaller.appspotmail.com,
-        syzbot+e2efa3efc15a1c9e95c3@syzkaller.appspotmail.com
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Message-ID: <ZE3YkAiGVLXMbHmb@mit.edu>
-References: <000000000000ef6cf905f496e40b@google.com>
- <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3>
- <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
- <20230313115728.2wxy2qj4mqpwgrx7@quack3>
+        Sat, 29 Apr 2023 23:11:23 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EDE1704
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 20:11:21 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-763997ab8cdso191219739f.2
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 20:11:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682824281; x=1685416281;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BYwT1YUxS4Sf+gsskbByexgEIydtjr4K90s9JkWJh+I=;
+        b=jWKI3t0QetVol1d1uvczu7KZqx6p2zCgAP0+X1iNIfBNSj/Az2Wlan6SEQrYztOi/u
+         xhTYEaCk0psIcjrZZ5yY4InYnWM+ZoCp0wvgXIpy7ETepl6kCpuuBD9h71cx7v3CD/5E
+         oashNAjemDdYJBmVOfvO0a+QI3QEqxMuq74mfDQ7QEmOe3SvSF/b/K7ebSk3Fyj43F/2
+         EFt037nkxnaHU8y2X+XigwPgsJHQR+JlUBC+VWFnuUqld4lvRAN72vWFdOgRbc9MVS7t
+         CC86tbuJOt8NQiI6VlteLqaTSSoiBm+6iFD+lZkkZRJJwLzJHp1BhYEi9xQ4KsidBwu0
+         ZVMA==
+X-Gm-Message-State: AC+VfDzLl0ch9b8E3PBBNI4NFOVhyGvBVrumjv4Hg1o/aOsNDCS91YXb
+        r0q4HHe8J35SbxoBux2sdsZADJyLBfkYTMkn8HpjG/WopCsH
+X-Google-Smtp-Source: ACHHUZ6uaj6u4uzb7/wlxM84J9hn+1hT2YhMwPE1NQtPcyf1Qw0572O45s23wDSdSLG6CT5MS4jO3GycFIboxPI7034FtdQXQX6j
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313115728.2wxy2qj4mqpwgrx7@quack3>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:9388:0:b0:40f:77a4:7e17 with SMTP id
+ z8-20020a029388000000b0040f77a47e17mr4165279jah.0.1682824280858; Sat, 29 Apr
+ 2023 20:11:20 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 20:11:20 -0700
+In-Reply-To: <20230430022358.3082-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007aeb4505fa850faf@google.com>
+Subject: Re: [syzbot] [net?] WARNING in print_bfs_bug (2)
+From:   syzbot <syzbot+630f83b42d801d922b8b@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 12:57:28PM +0100, Jan Kara wrote:
-> > 
-> > I can now explain how the contents of the super block of the buffer get
-> > corrupted. After the ext4 fs is mounted to the target ("./bus"), the
-> > reproducer maps 6MB of data starting at offset 0 in the target's file
-> > ("./bus"), then it starts overriding the data with something else, by
-> > using memcpy, memset, individual byte inits. Does that mean that we
-> > shouldn't rely on the contents of the super block in the buffer after we
-> > mount the file system?
+Hello,
 
-It's not reasonable to avoid relying on the contents of the superblock
-under all cases.  HOWEVER, sometimes it might make sense.  See below...
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in print_bfs_bug
 
-> So the result is that the reproducer modified the block device while it is
-> mounted by the filesystem. We know cases like this can crash the kernel and
-> it is inherently difficult to fix. We have to trust the buffer cache
-> contents as otherwise the performance will be unacceptable. For historical
-> reasons we also have to allow modifications of buffer cache while ext4 is
-> mounted because tune2fs uses this to e.g. update the label of a mounted
-> filesystem.
-
-I've been taking a look at some of the syzkaller reports for ext4, and
-there are a number of sysbot reports which are caused by the
-reproducer messing with the block device while the file system is
-mounted, including:
-
-KASAN: slab-out-of-bounds Read in get_max_inline_xattr_value_size
-    https://syzkaller.appspot.com/bug?id=731e35eeed762019e385baa96953d9ec8eb63c10
-    syzbot+1966db24521e5f6e23f7@syzkaller.appspotmail.com
-
-KASAN: slab-use-after-free Read in ext4_convert_inline_data_nolock
-    https://syzkaller.appspot.com/bug?id=434a92f091e845da1ba387fb93f186412e30e35c
-    syzbot+db6caad9ebd2c8022b41@syzkaller.appspotmail.com
-
-kernel BUG in ext4_get_group_info
-    https://syzkaller.appspot.com/bug?id=69b28112e098b070f639efb356393af3ffec4220
-    syzbot+e2efa3efc15a1c9e95c3@syzkaller.appspotmail.com
-
-(The easiest way to find them is to look at the Syzkaller reproducer,
-and look for bind mounts of /dev/loopN to "./bus".  It's much less
-painful than trying to find it in the C reproducer text file.)
-
-As Jan has pointed out, we can't disable writing to the block device,
-because this would break real-world system administrator workloads,
-including the ability to set the label and uuid, use tune2fs to set
-various parameters on the file system, etc.  We do have ioctls that
-allow for setting the label and uuid, and in maybe ten years we should
-be able to get to the point where all of the enterprise kernels still
-supported by Red Hat, SuSE, etc. can be guaranteed to support all of
-the necessary ioctls --- some of which still need to be implemented.
-
-So this will take a *while*, and especially while senior management
-types at many companies are announcing layoffs, cutting travel, and
-talking about "year of efficiency" and "sharpening focus"[1], I don't
-think we'll have much luck getting funded head count to impement
-missing ioctls, other than slowly, on volunteer time, and maybe as
-intern projects.  So what should we do in the intervening
-year(s)/decade?  I'd propose the following priorities.
-
-[1]  while simultaneously whining about "kernel (security) disasters"
-and blaming the upstream developers.  Sigh...
-
-From a quality of implementation (QoI) perspective, once we've
-determined that it's caused by "messing with the block device while it
-is mounted", if it just causes a denial of service attack, these should
-be the lowest priority.  However, if there is an easy way to fix it,
-AND if it fixes other issues OR makes the kernel smaller and/or more
-efficient, I won't turn away those kind of proposed patches.
-
-For example, in the case of the syzkaller report discussed in this
-thread ("KASAN: slab-out-of-bounds Read in ext4_group_desc_csum"),
-Tudor's proposed change of replacing
-
-	le16_to_cpu(sbi->s_es->s_desc_size)
-
-with
-	sbi->s_desc_size
-
-will actually reduce ext4's compiled text size, and make the code more
-efficient (we remove an extra indirect reference and a potential byte
-swap on big endian systems), and there is no downside.  In fact, in
-many places we use sbi->s_desc_size in preference to accessing the
-s_es variable; that's why we put it in the ext4_super_info structure
-in the first place!  So sure, we should make this change, and if it
-avoids a potential KASAN / syzkaller failure, that's a bonus.
+------------[ cut here ]------------
+lockdep bfs error:-1
+WARNING: CPU: 1 PID: 13240 at kernel/locking/lockdep.c:2077 print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2077
+Modules linked in:
+CPU: 1 PID: 13240 Comm: syz-executor.0 Not tainted 6.3.0-syzkaller-07921-g042334a8d424-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:print_bfs_bug+0x22/0x30 kernel/locking/lockdep.c:2077
+Code: 84 00 00 00 00 00 66 90 55 89 fd 53 e8 b7 34 a9 02 89 c3 e8 60 fd ff ff 85 db 74 10 89 ee 48 c7 c7 20 68 4c 8a e8 0e bb e7 ff <0f> 0b 5b 5d c3 66 0f 1f 84 00 00 00 00 00 53 31 c9 31 d2 31 f6 48
+RSP: 0018:ffffc900036cefb8 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888069b48000 RSI: ffffffff814bef47 RDI: 0000000000000001
+RBP: 00000000ffffffff R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: ffff888069b48b40
+R13: 0000000000000000 R14: ffffc900036cf0e0 R15: 0000000000000000
+FS:  00007f007ee4d700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f007e1a8000 CR3: 000000004af80000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ check_irq_usage+0x56c/0x1a40 kernel/locking/lockdep.c:2845
+ check_prev_add kernel/locking/lockdep.c:3112 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3227 [inline]
+ validate_chain kernel/locking/lockdep.c:3842 [inline]
+ __lock_acquire+0x2f39/0x5df0 kernel/locking/lockdep.c:5074
+ lock_acquire kernel/locking/lockdep.c:5691 [inline]
+ lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+ alloc_object lib/debugobjects.c:234 [inline]
+ lookup_object_or_alloc.part.0+0x392/0xa40 lib/debugobjects.c:579
+ lookup_object_or_alloc lib/debugobjects.c:559 [inline]
+ debug_object_activate+0x1ca/0x3f0 lib/debugobjects.c:693
+ debug_rcu_head_queue kernel/rcu/rcu.h:226 [inline]
+ __call_rcu_common.constprop.0+0x2c/0x7e0 kernel/rcu/tree.c:2612
+ dentry_free+0xc3/0x160 fs/dcache.c:377
+ __dentry_kill+0x4cb/0x640 fs/dcache.c:621
+ shrink_dentry_list+0x12c/0x4f0 fs/dcache.c:1201
+ prune_dcache_sb+0xeb/0x150 fs/dcache.c:1282
+ super_cache_scan+0x33a/0x590 fs/super.c:104
+ do_shrink_slab+0x428/0xaa0 mm/vmscan.c:853
+ shrink_slab_memcg mm/vmscan.c:922 [inline]
+ shrink_slab+0x388/0x660 mm/vmscan.c:1001
+ shrink_node_memcgs mm/vmscan.c:6439 [inline]
+ shrink_node+0x7fb/0x35f0 mm/vmscan.c:6473
+ shrink_zones mm/vmscan.c:6711 [inline]
+ do_try_to_free_pages+0x3b4/0x17b0 mm/vmscan.c:6773
+ try_to_free_mem_cgroup_pages+0x368/0x840 mm/vmscan.c:7088
+ reclaim_high.constprop.0+0x182/0x230 mm/memcontrol.c:2403
+ mem_cgroup_handle_over_high+0x190/0x520 mm/memcontrol.c:2588
+ resume_user_mode_work include/linux/resume_user_mode.h:58 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
+ exit_to_user_mode_prepare+0x14c/0x240 kernel/entry/common.c:204
+ irqentry_exit_to_user_mode+0x9/0x40 kernel/entry/common.c:310
+ exc_page_fault+0xc0/0x170 arch/x86/mm/fault.c:1557
+ asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:570
+RIP: 0033:0x7f007e03e171
+Code: 3d 00 f0 ff ff 77 72 c3 90 55 48 83 ec 30 44 89 4c 24 2c 4c 89 44 24 20 48 89 54 24 18 48 89 74 24 10 89 7c 24 08 89 4c 24 28 <e8> fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28
+RSP: 002b:00007f007ee4c000 EFLAGS: 00010206
+RAX: 0000000000000001 RBX: 00007f007ee4c0f0 RCX: 0000000000000000
+RDX: 0000000000000020 RSI: 00007f007ee4c140 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007f007ee4c054 R09: 000000000000000c
+R10: 0000000000000000 R11: 00000000200003cf R12: 00007f007ee4c0a8
+R13: 00007f007ee4c140 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
 
 
-Slightly higher in priority are those bugs which might allow kernel
-state to be leaked ("kernel confidentiality").  Of course, if the
-process with root access can write to the block device, it can almost
-certainly read that block device as well; but there might be critical
-bits of kernel state (for example, an RSA private key), in kernel
-memory, that if leaked, it would be sad.
+Tested on:
 
+commit:         042334a8 atlantic:hw_atl2:hw_atl2_utils_fw: Remove unn..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=117d6ffc280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7205cdba522fe4bc
+dashboard link: https://syzkaller.appspot.com/bug?extid=630f83b42d801d922b8b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=10b3bf0c280000
 
-The highest priority would go to those where root access might be
-leveraged to allow arbitrary code to be executed in kernel mode
-("kernel integrity") --- which is unfortunate because it allows root
-access to breach lockdown security.
-
-
-Of course, since many of the people working syzbot reports for ext4
-are volunteers and/or company engineers working on their own unfunded
-personal time, we still can't *guarantee* anything.  In addition, I'd
-still reject a patch which had an overly expensive CPU or memory
-overhead with a "try harder".  So it would still be on a case-by-case
-basis whether such patches would be accepted.  After all, some
-business leaders have elected to disable some mitigations for
-Spectre/Meltdown and related attacks because they were Too Damn
-Expensive.  I reserve the right as upstream maintainer to make similar
-judgement calls.
-
-						- Ted
-
-P.S.  As another example, over the weekend, I've been working on some
-patches in the works to address the third syzbot report listed above
-("kernel BUG in ext4_get_group_info").  When I evaluated these
-patches, I found that they increased the compiled text size by 2k when
-I added the additional checks, none of which were in hot paths.  But
-after I un-inlined ext4_get_group_info(), the compiled test size
-shrunk by 4k, for a net 2k byte *savings* in compiled kernel text
-memory.
-
-We already had similar checks and calls to ext4_error() in
-ext4_get_group_desc(); this patch was just added a similar conditional
-call to ext4_error() to ext4_get_group_info() --- and changing the
-callers of that function to check for a NULL return from that
-function.  While this change only prevents a denial of service attack,
-in my judgement the QoI benefits outweigh the costs.
