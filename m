@@ -2,128 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269326F2750
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 03:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D0D6F275B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 04:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjD3Bwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 21:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S230134AbjD3CYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 22:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjD3Bwg (ORCPT
+        with ESMTP id S229721AbjD3CYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 21:52:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1661995;
-        Sat, 29 Apr 2023 18:52:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2349460A4E;
-        Sun, 30 Apr 2023 01:52:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AFAAC433EF;
-        Sun, 30 Apr 2023 01:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682819554;
-        bh=ZhxqaDEN86XmxUi8KbuYL4Tf06ROel7RYWuePCb+syI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=npqsfDHWJpY6BH2oOxznuazADeDTN0eAV0JGypgI7Ab66IfNeEMEteraDFRx2Pczi
-         AAuwWb8OQNiWzPUaoiwuHiVoxX67Dg5BGZH+/obIWf+nEjf9Eo6wgGtp8TirTe4Bfk
-         pgNNqp11go9cgszpyvlK2k9GzdjuHFCwvTe6EQPPiNAZadVqZp0a8ByoiSeGtxpsZO
-         CYrN3roOJpHfDm+GIB8TRa50wbAxp8xAO0RJYoK9zp0D9jgdnJxAu79vvNbTTJvzFL
-         GSCpZAiBYK/LSJGZbpNLH+yC/JN8L8VN2yfkOxiqcbSbLCT+YC2WkvscFN3Ah40kbv
-         oRfv7PjcphBQw==
-Date:   Sun, 30 Apr 2023 10:52:31 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Akanksha J N <akanksha@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, shuah@kernel.org,
-        naveen.n.rao@linux.ibm.com
-Subject: Re: [PATCH v3 2/2] selftests/ftrace: Add new test case which checks
- for optimized probes
-Message-Id: <20230430105231.2e7f5bd8a3f879d2330485d2@kernel.org>
-In-Reply-To: <20230428163842.95118-3-akanksha@linux.ibm.com>
-References: <20230428163842.95118-1-akanksha@linux.ibm.com>
-        <20230428163842.95118-3-akanksha@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 29 Apr 2023 22:24:23 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8224E19BB
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:24:22 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763646b324aso190103339f.0
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:24:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682821461; x=1685413461;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBAnq+G06277iYlhw0ATteiSzgOavHY3/Zjp655Iswc=;
+        b=XhutpoRXBoLWcc3KkKysssBPiPUJ8ZOtctPpgymr1Tyd5opICMvnSherZe2T4NEZtT
+         SdNgBV4iibGPeadjr6hkRDfIGBIIjADI8xonzP9tRnOxyzKiVXWWvhldrRx5hXFIWhRz
+         0F6fx+9cB1/JfUSer2/Q/51WZ4CeS6RGIEYKbhvxKxBMlw5ioklcYjs8XROl+97unlWl
+         3eqGlkiHhrYrw81EHfAwM6bqiR3CcKiDgy+ZmyQqP0BhgBS6axSjk/NggrUOAk/80hmy
+         B9IvflmBbpnO5skHtMZswgLLr9f9M0LWeUtvfXxKo40fJzwFWrVwFRcZtHB+sQIdhuho
+         pmZQ==
+X-Gm-Message-State: AC+VfDxmio2DiUg/MCRRP0hCTHvHJfM9q0ExbcD/2wY76Lt0tqyophg3
+        s+b7bM7ZlRoZmMNoU2H3aXxjw+1JLx4CJMJZYeHY4M/3dNxl
+X-Google-Smtp-Source: ACHHUZ6Ky8YOkqiRCIdzfNErbUeAJ+7JDmz+Ptsc55fK4cXKAhiYcfvLor3ZHoJuSOaFiYm9NZwIG1DTmzEp7BMEbkRhYdM9KXMe
+MIME-Version: 1.0
+X-Received: by 2002:a02:85cd:0:b0:40f:910c:92d6 with SMTP id
+ d71-20020a0285cd000000b0040f910c92d6mr4095647jai.6.1682821461741; Sat, 29 Apr
+ 2023 19:24:21 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 19:24:21 -0700
+In-Reply-To: <20230430012707.2936-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007297c705fa846734@google.com>
+Subject: Re: [syzbot] [ext4?] [fat?] possible deadlock in sys_quotactl_fd
+From:   syzbot <syzbot+aacb82fca60873422114@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Apr 2023 22:08:42 +0530
-Akanksha J N <akanksha@linux.ibm.com> wrote:
+Hello,
 
-> Add new test case kprobe_opt_types.tc which enables and checks
-> if each probe has been optimized in order to test potential issues with
-> optimized probes.
-> The '|| continue' is added with the echo statement to ignore errors that
-> are caused by trying to add kprobes to non probeable lines and continue
-> with the test.
-> 
-> Signed-off-by: Akanksha J N <akanksha@linux.ibm.com>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Thanks! This looks good to me.
+Reported-and-tested-by: syzbot+aacb82fca60873422114@syzkaller.appspotmail.com
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested on:
 
-> ---
->  .../ftrace/test.d/kprobe/kprobe_opt_types.tc  | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> new file mode 100644
-> index 000000000000..9f5d99328086
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> @@ -0,0 +1,34 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0-or-later
-> +# Copyright (C) 2023 Akanksha J N, IBM corporation
-> +# description: Register/unregister optimized probe
-> +# requires: kprobe_events
-> +
-> +case `uname -m` in
-> +x86_64)
-> +;;
-> +arm*)
-> +;;
-> +ppc*)
-> +;;
-> +*)
-> +  echo "Please implement other architecture here"
-> +  exit_unsupported
-> +esac
-> +
-> +DEFAULT=$(cat /proc/sys/debug/kprobes-optimization)
-> +echo 1 > /proc/sys/debug/kprobes-optimization
-> +for i in `seq 0 255`; do
-> +        echo  "p:testprobe $FUNCTION_FORK+${i}" > kprobe_events || continue
-> +        echo 1 > events/kprobes/enable || continue
-> +        (echo "forked")
-> +	PROBE=$(grep $FUNCTION_FORK /sys/kernel/debug/kprobes/list)
-> +        echo 0 > events/kprobes/enable
-> +        echo > kprobe_events
-> +	if echo $PROBE | grep -q OPTIMIZED; then
-> +                echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> +                exit_pass
-> +        fi
-> +done
-> +echo "$DEFAULT" >  /proc/sys/debug/kprobes-optimization
-> +exit_unresolved
-> -- 
-> 2.31.1
-> 
+commit:         14f8db1c Merge branch 'for-next/core' into for-kernelci
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=1390f330280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=aacb82fca60873422114
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=143f4664280000
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Note: testing is done by a robot and is best-effort only.
