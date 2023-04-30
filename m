@@ -2,82 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751586F2A6E
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 21:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22426F2A71
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 21:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjD3TN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 15:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S230404AbjD3TS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 15:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjD3TN0 (ORCPT
+        with ESMTP id S229481AbjD3TSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 15:13:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97A01710;
-        Sun, 30 Apr 2023 12:13:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6764D60BCA;
-        Sun, 30 Apr 2023 19:13:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CAA4C433EF;
-        Sun, 30 Apr 2023 19:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682882004;
-        bh=CcWs4ZFiQFleSoY0U1jMTWmqa8QyuxQSPZ++resrXaw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UGAO3vkoxLYCxIEk6ayKZPHBLR6hzJA+3Z6Os6wYLCDWs2JuwJjtt/s/UJlAt8j+d
-         81aob+39TTL6uKuO1Ndaq4zQ++yN13GrN9d7iccp+r1U8FVxQmq36LlFDb4PxnYEoh
-         CgXPAdL5EqjK9Qubt51argcyukDYx9BewJ0J97k6PG/vG/DHQxMw5Ac8guJAc4OWlj
-         snRZzZvQ092Uasen7m3FUOO2cUOze4zIL6nDwLLC48TVIAaQhv4NC6kTgXveRu3Fuq
-         I8DRCLgzP1ttrno05/S6MWZARvMhPpsfENfn/6A7gJ/8C0a18ym8IAki3eYb1Awjxt
-         FQ3tMq8shkQXQ==
-Date:   Sun, 30 Apr 2023 14:13:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/5] PCI: brcmstb: Set PCIe transaction completion
- timeout
-Message-ID: <20230430191323.GA388047@bhelgaas>
+        Sun, 30 Apr 2023 15:18:46 -0400
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E151171C
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 12:18:45 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+        id d184eeb3-e78b-11ed-b3cf-005056bd6ce9;
+        Sun, 30 Apr 2023 22:18:42 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sun, 30 Apr 2023 22:18:41 +0300
+To:     Lizhe <sensor1010@163.com>
+Cc:     linus.walleij@linaro.org, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl:sprd: Check if the pinctrl_dev still exists
+Message-ID: <ZE6_EeLLmXOepHJH@surfacebook>
+References: <20230430140129.112081-1-sensor1010@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428223500.23337-4-jim2101024@gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230430140129.112081-1-sensor1010@163.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 06:34:57PM -0400, Jim Quinlan wrote:
-> Since the STB PCIe HW will cause a CPU abort on a PCIe transaction
-> completion timeout abort, we might as well extend the default timeout
-> limit.  Further, different devices and systems may requires a larger or
-> smaller amount commensurate with their L1SS exit time, so the property
-> "brcm,completion-timeout-us" may be used to set a custom timeout value.
+Sun, Apr 30, 2023 at 10:01:29PM +0800, Lizhe kirjoitti:
+> to check if the pinctrl_dev still exists before calling
+> pinctrl_unregister().
 
-s/requires/require/
+Sending a duplicate won't give anything new here, the patch itself is bogus.
 
-AFAIK, other platforms do not tweak Configuration Timeout values based
-on L1SS exit time.  Why is brcm different?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Bjorn
+
