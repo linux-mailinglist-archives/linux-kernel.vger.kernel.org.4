@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61616F27C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EEE6F27CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjD3FuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 01:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S231734AbjD3GMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 02:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjD3FuL (ORCPT
+        with ESMTP id S229665AbjD3GMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 01:50:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C36E79;
-        Sat, 29 Apr 2023 22:50:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DD560EDE;
-        Sun, 30 Apr 2023 05:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39475C433EF;
-        Sun, 30 Apr 2023 05:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682833807;
-        bh=QMYAxp9NWGDCs3LLQfSUVVXP07rpeyOHDzsWDz+sdtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gI/WWOTRamIomRJolzCV54MCB1/H05B/9GhlhQ0yBpIBQ0KNG+GvoWl1K3T4pR2WG
-         NT/BPlTgT29vhlLB0lp/hVkknzNU5QC5r3LiZ3lrFhUXPnK9C9hjWBarbTMvegskwH
-         0KSq1Xw6zftez7pDrYkCEck4hKa9ZOyAtsyPi+gAoK/e/CN7/d7zTHgA+zPmXN92PF
-         MIZxwn1AqT9AUqTOHP5h+04Umid/k1MaMnL4/PXAMVUGRHWluIgvidm5xhrJejb+My
-         p/ZoEfvmrBZ0NqgJR761NHzfVRB3nuAXwkq//9Ipmr0CbFOraqqQmHal6WzGQNpSKr
-         +1OBk4uqF/HXw==
-Date:   Sun, 30 Apr 2023 07:50:00 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     christian.koenig@amd.com, digetx@gmail.com, jonathanh@nvidia.com,
-        ldewangan@nvidia.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        sumit.semwal@linaro.org, thierry.reding@gmail.com
-Subject: Re: [PATCH v6 RESEND 1/2] i2c: tegra: Fix PEC support for SMBUS
- block read
-Message-ID: <ZE4BiLABVUxagMUU@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, christian.koenig@amd.com,
-        digetx@gmail.com, jonathanh@nvidia.com, ldewangan@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, sumit.semwal@linaro.org,
-        thierry.reding@gmail.com
-References: <20230427123915.38199-1-akhilrajeev@nvidia.com>
- <20230427123915.38199-2-akhilrajeev@nvidia.com>
+        Sun, 30 Apr 2023 02:12:01 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAA619A6;
+        Sat, 29 Apr 2023 23:11:58 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1682835116;
+        bh=EWND/P5khW/j9msjU3H9jrXagHPGsVQxvQ8akYP7ayI=;
+        h=From:Date:Subject:To:Cc:From;
+        b=MDhUIn1eWSNUftjkq02ZdQnnr27CEXFpWLMoCamhu5s9gj4Rb2BrvD0scQ1Uxv+j2
+         zTxxoYM4t9LPB42i06M/zj4Z+KyuwmhqpBSKOOgdVOtIP0vclFHSsjGoY3WHRQ5JEW
+         BP99PbBBXOUrg4wlP70IDqvancS1KtiBqPDtfLgc=
+Date:   Sun, 30 Apr 2023 08:11:53 +0200
+Subject: [PATCH] power: supply: remove unneeded include of linux/leds.h
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1F8N9qcHs/oSa7Lb"
-Content-Disposition: inline
-In-Reply-To: <20230427123915.38199-2-akhilrajeev@nvidia.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230212-include-power_supply-leds-v1-1-7adbf7424002@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAKgGTmQC/x2NSwrDMAwFrxK0riB2F4ZepZTij9IIhGMk3KaE3
+ L2my3kwbw4wUiaD23SA0puNtzrAXSbIa6wvQi6Dwc/+OnvnkWuWXgjb9iF9Wm9NvihUDBdyJbg
+ cUkgehp+iESaNNa/joXaRMTalhfd/8P44zx8hMs9XgAAAAA==
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1682835115; l=1310;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=EWND/P5khW/j9msjU3H9jrXagHPGsVQxvQ8akYP7ayI=;
+ b=VH/gXETeC6s11ytN6rvcKxK5qUEpEwcKdrw+devE/9e8YR+2NwkaqZLZxjmaWx8YafYa1V7JC
+ 9eHbD20/9UZBVnRBmQoNW7ds5Kgzeps5nlOXpBJq8tJMgJ8DAV2bjNp
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Instead of including the full linux/leds.h header file a single
+forward-declaration is enough.
 
---1F8N9qcHs/oSa7Lb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Currently power_supply.h includes leds.h to get access to
+struct led_trigger.
+This propagates the inclusion unnecessarily to all users of
+power_supply.h.
 
-On Thu, Apr 27, 2023 at 06:09:14PM +0530, Akhil R wrote:
-> Update the msg->len value correctly for SMBUS block read. The discrepancy
-> went unnoticed as msg->len is used in SMBUS transfers only when a PEC
-> byte is added.
->=20
-> Fixes: d7583c8a5748 ("i2c: tegra: Add SMBus block read function")
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
+Replace this inclusion by a single forward declaration.
+---
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ include/linux/power_supply.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Applied to for-current, thanks!
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index a427f13c757f..dc5e17e8c919 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -14,10 +14,11 @@
+ 
+ #include <linux/device.h>
+ #include <linux/workqueue.h>
+-#include <linux/leds.h>
+ #include <linux/spinlock.h>
+ #include <linux/notifier.h>
+ 
++struct led_trigger;
++
+ /*
+  * All voltages, currents, charges, energies, time and temperatures in uV,
+  * µA, µAh, µWh, seconds and tenths of degree Celsius unless otherwise
 
+---
+base-commit: 825a0714d2b3883d4f8ff64f6933fb73ee3f1834
+change-id: 20230212-include-power_supply-leds-fe1d71c7b7b2
 
---1F8N9qcHs/oSa7Lb
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmROAYQACgkQFA3kzBSg
-Kbbcxg//XcGhRdi6iM/p2IuXbEi9pCpjkL2lA+WIkrNP03iDk6CJDiFE5hJTQl1V
-iowBR1+gXts9cqNTiyC2ptCw6S7Vz/gqJSQBdj9WwUZlFeetgY+cGenn4LMbDvJo
-hGZ5ZHANl8LRO5pBUAoPZX+d04HTDArdlwzVRof6soqifRz61G5KFbNEy2ay2ijS
-OG/Vg9y9rQvJoADfKOpt3UYsT18XEzMqFgQMhh4Fn8TKH0UvXTVw0Dh3JXlz5DVy
-kiUMOMevXBkaeuPVQd9LD5U3S/UhtIo1EiT7pAxXlj6VODDIqk4oZ19fV8c0chg3
-DNpv0r0fFwBGAw96s61icH0TIZPhOaRyoHF55bsvocxdCsGl7mGKJrDM8OCyQDhW
-XtK0GHUCKooBQRHvyI1dgKO4l93WqnyGDaAKtmqk4aJFosKN3l55pIHJXl8BvlOc
-Xn+1HNl+ErFLQIwiHldZ2zdlL09BiIYgiCkjcH85spzYi5ZV2BxHXcjs5C4QF0TY
-4M68aCLgk0KmJcVLWbEqhqhiGjZs4Qu6iv3whIX0GhFOoPhXcg8HwEgNsLXHu6p6
-xpmyv7YIkvBSVYnwsiHaiuYv+sIPw3ZLhsbTUA+umWInFKf/aSJHThe3UrCYsZxH
-3GlSYRuzZCwoFw/sunIpmJz83L3VKqB538SvB5fNBY0zLYQlW8g=
-=zVkC
------END PGP SIGNATURE-----
-
---1F8N9qcHs/oSa7Lb--
