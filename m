@@ -2,124 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECF66F297A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE996F297E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjD3QSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 12:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S230483AbjD3QVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 12:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjD3QSM (ORCPT
+        with ESMTP id S230414AbjD3QVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 12:18:12 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB3C2693;
-        Sun, 30 Apr 2023 09:18:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1682871453; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RcKG0fq2Np8JTd1gJDHJ3xZGFExtlqzo5T7irO6pWfeZ/2/M2ZDm/jLBhjXs8kSkqYWKltiQnIDcEIfTBO7FtArT7A896bpZWX/bHXkDg1+sETSGhTQpfGWVAB0eCN0DF1yZRCAZon+5uG7q4OXL3GaSDy2zq2ERlpX200I2kq4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1682871453; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=V23TsjyY1dD7n4GR0wkMYD0yPbsZ48d23pahmY6bjZY=; 
-        b=egBI5N2x2xYD8oG6Kr7GWcgP9HX9ZmakF1ZNRuSnbe2Adsizk6Cd/KsfzZTavi2qqAUbis9aHymScsoIY7Cl8QpEXxKuW9JW/MEn3HvzSTzSD8PHtAzRRg6QyEtX/5W3pYCIJqQQT5LWlxzpfhUDqT2h168wLDyrOlfqDwO/V9E=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682871453;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=V23TsjyY1dD7n4GR0wkMYD0yPbsZ48d23pahmY6bjZY=;
-        b=FFkIp0TaDngLCZzkJ4tp5UabOW70Lfj1EnSKtRxj2nB+3YW1YNS1QrZ8kNC+JliO
-        OUTaUiy6xEo6mlWlpI1mzcCGLner8djPP+Lpq8LkAJFYiKG637OUtDZVVOs6EkIEVef
-        sklI13M03UKQ6L4dcgDVp7QB2mfB6EADw01b7t/8=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1682871451193369.77097793382404; Sun, 30 Apr 2023 09:17:31 -0700 (PDT)
-Message-ID: <396fad42-89d0-114d-c02e-ac483c1dd1ed@arinc9.com>
-Date:   Sun, 30 Apr 2023 19:17:10 +0300
+        Sun, 30 Apr 2023 12:21:42 -0400
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446202D48
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 09:21:40 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id t9nspEGk8GGqgt9nspRtpg; Sun, 30 Apr 2023 18:21:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1682871698;
+        bh=DeAGfZvHN94lPiUZiy7bZbEf4KghIhOEFbkJpiyOKIQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZJ3ZqHX6UGnsh+HN03vKMp5SOZj+PTWdSOjNmMMGyzCpKtCUWIRncuZTPFek5wv1R
+         r8aAxKlRG5rgJ01aVc9/LxTE38riT3NxJSLUzKwVqwili4sBZh0NxWB/oyMxSM5ro1
+         CXa8BAlDh/+AhQAgN/PkBGKKHnzwAPlSFYFfjFl/bNgeDcbZbc8DsWqPh5o27QZGo5
+         uCi1mQ3FMe0tasUn9sNFeaaIhBESANdi7Q/Oe5bVIb6U87H93wdVwxSMFVVzB/TOSY
+         Zfq6UdZWvSjDjXmKmLjqV/rrSS5sU3rYodJay6dsz4qgH1ggiIL96oyudoLk9EBLMP
+         OCMUQTOt0W0OQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 30 Apr 2023 18:21:37 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <10a2d725-7721-f0af-3e2e-de5816730e5d@wanadoo.fr>
+Date:   Sun, 30 Apr 2023 18:21:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document
- MDIO-bus
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-To:     David Bauer <mail@david-bauer.net>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230430112834.11520-1-mail@david-bauer.net>
- <20230430112834.11520-2-mail@david-bauer.net>
- <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
+Subject: Re: [PATCH] spi: Use non-atomic xxx_bit() functions
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <6b8f405145d3d57a8026dc61ca3f1ae70d690990.1682847325.git.christophe.jaillet@wanadoo.fr>
+ <ZE6N/oZ5DFI6td/0@finisterre.sirena.org.uk>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ZE6N/oZ5DFI6td/0@finisterre.sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.04.2023 15:34, Arınç ÜNAL wrote:
-> On 30.04.2023 14:28, David Bauer wrote:
->> Document the ability to add nodes for the MDIO bus connecting the
->> switch-internal PHYs.
+Le 30/04/2023 à 17:49, Mark Brown a écrit :
+> On Sun, Apr 30, 2023 at 11:35:35AM +0200, Christophe JAILLET wrote:
 > 
-> This is quite interesting. Currently the PHY muxing feature for the 
-> MT7530 switch looks for some fake ethernet-phy definitions on the 
-> mdio-bus where the switch is also defined.
+>> Accesses to 'minors' are guarded by the 'device_list_lock' mutex. So, it is
+>> safe to use the non-atomic version of (set|clear)_bit() in the
+>> corresponding sections.
 > 
-> Looking at the binding here, there will be an mdio node under the switch 
-> node. This could be useful to define the ethernet-phys for PHY muxing 
-> here instead, so we don't waste the register addresses on the parent 
-> mdio-bus for fake things. It looks like this should work right out of 
-> the box. I will do some tests.
+> Is it a problem to use the atomic version?
 
-Once I start using the mdio node it forces me to define all the PHYs 
-which were defined as ports.
+Not at all. It just wastes a few cycles (in a place where it doesn't 
+matter).
 
-[    4.159534] mt7530-mdio mdio-bus:1f lan0 (uninitialized): no phy at 1
-[    4.166002] mt7530-mdio mdio-bus:1f lan0 (uninitialized): failed to 
-connect to PHY: -ENODEV
-[    4.174421] mt7530-mdio mdio-bus:1f lan0 (uninitialized): error -19 
-setting up PHY for tree 0, switch 0, port 1
-[    4.185236] mt7530-mdio mdio-bus:1f lan1 (uninitialized): no phy at 2
-[    4.191753] mt7530-mdio mdio-bus:1f lan1 (uninitialized): failed to 
-connect to PHY: -ENODEV
-[    4.200150] mt7530-mdio mdio-bus:1f lan1 (uninitialized): error -19 
-setting up PHY for tree 0, switch 0, port 2
-[    4.210844] mt7530-mdio mdio-bus:1f lan2 (uninitialized): no phy at 3
-[    4.217361] mt7530-mdio mdio-bus:1f lan2 (uninitialized): failed to 
-connect to PHY: -ENODEV
-[    4.225734] mt7530-mdio mdio-bus:1f lan2 (uninitialized): error -19 
-setting up PHY for tree 0, switch 0, port 3
-[    4.236394] mt7530-mdio mdio-bus:1f lan3 (uninitialized): no phy at 4
-[    4.242901] mt7530-mdio mdio-bus:1f lan3 (uninitialized): failed to 
-connect to PHY: -ENODEV
-[    4.251297] mt7530-mdio mdio-bus:1f lan3 (uninitialized): error -19 
-setting up PHY for tree 0, switch 0, port 4
+I spotted it while looking for some other patterns, so I sent a patch 
+for it.
 
-We can either force defining the PHYs on the mdio node which would break 
-the ABI, or forget about doing PHY muxing this way.
+> 
+>>   	if (status == 0) {
+>> -		set_bit(minor, minors);
+>> +		__set_bit(minor, minors);
+>>   		list_add(&spidev->device_entry, &device_list);
+> 
+> The __ usually means something is the more complicated and less
+> preferred API.
 
-Arınç
+Ok, let keep things as-is and simple then.
+Performance doesn't matter here, anyway.
+
+CJ
