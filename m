@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254FC6F28AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 14:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6286E6F28B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 14:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjD3MKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 08:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S230386AbjD3MMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 08:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjD3MKf (ORCPT
+        with ESMTP id S229581AbjD3MMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 08:10:35 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31F626BF
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:10:33 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9619095f479so28120566b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:10:33 -0700 (PDT)
+        Sun, 30 Apr 2023 08:12:37 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618781727
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:12:36 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc4d96e14so1241080a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682856632; x=1685448632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1682856754; x=1685448754;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rGqAmxewrP7RkR8C9dvCorfbXmBLx3MwbowSEa7nqgo=;
-        b=ajprBWr6iz9pzWekIrhQ1riu7O1UHcG67J97einbZ4lo6QnZzVNZMET4BQfry2fV9c
-         IUj+hCd5auTR+AiuqG3DGKi9khF0f+Jvn6s92Mvxfve2zOVvy3P3glWImY8BgOH1HGcn
-         Nw39ueysV5r3qi9+46vK/X+KnlPhfUHzeLKFsm8xvn3iKmq4AL9mqhqxc6ijlN2QhMj9
-         vq2cgAt9US2wycOj7zKDX769kO5GM+g4GVHKRFFlAOwLL3a27ccpUmtU1Jn1lQyRpxLB
-         XvnFnbvVsR/OgZFsqX8vG1mrOSmgTj59WmCUC9JoAJPebMPBDy7PW9n9BYwHwlFxgf42
-         RwJQ==
+        bh=yOAkIUSEs7b6pvNH1SS1me48LA5OZVukhoF6fPz2AOQ=;
+        b=Nm3VM/IAufTLdrkTK40snaxHL+7z5i3QOLjw1eiVb/wjvbq+Oyoc0qoGRTK4ukeX6X
+         qAizpdccJ2zfAb9vKvnRkTqMHBxivJRODQAYDBEOULPy2GDDO1zS8V76qIL5nEdp3Vka
+         FkEZfukZV346mOXHhj93xj0wHU+NSl7C32dwCeKi2HI0GgjaA4DJcEDGrR3s5DD+deYZ
+         fTTUiXxLqLl4TL00Qim8UaiRuNIF2ct2Mp98UE5ZDVNrQ0x6Yk4G3B0Q6konTUILCKgf
+         8/ExdeblcDp4lzZLFwfliN+XhNQ/zo04v+S4xNeTYtC5Y6MwdELvlBTTIzMpnN0HZ+IB
+         zvCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682856632; x=1685448632;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1682856754; x=1685448754;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rGqAmxewrP7RkR8C9dvCorfbXmBLx3MwbowSEa7nqgo=;
-        b=i7IeZqyyHbttdLpNarMPfIyhf653HEIeXiZ2ZY+7q5UXMUyiEh9CqL2T9ooD+OW/OP
-         P1c/ztVydl4azZ/09fv+vO5qxJrtdFpQ7mUFVfR9C1U+pWVu5fzpT5UW5rpqnNxlx4QV
-         pY4nFyjHaB3luBzZof+S0wX/JVTCLkbdDiH1mjBDJ4UYY3HQs5buUabj/WNQOu0vLtLB
-         unI9PbA9hQYMZks7k77DSW6JMNRm39S8HbdoNzSTD4KxlH+GA1x3lDknbhY33E2iC1t+
-         dS6QVEPmbJy645udFf3G1xk1qJRmhscrvcaow6UsvxxkwVB/i72y1FJ2Dl7DBOQf2YZH
-         kLBg==
-X-Gm-Message-State: AC+VfDwWnGk9NKbir2FG7KjtyId5VHzyGYW1hY07TBLIrSHGg38geEC3
-        p+KkYOTV7apgTSo5DQveY2V2/g==
-X-Google-Smtp-Source: ACHHUZ5RwVJ+Dve2hxg3WdFoYBnDcmWNGJMH6IJnmdyqSCj46m2tF9ckACCp/ndnNdgGGJDiehKEnw==
-X-Received: by 2002:a17:907:6e20:b0:94e:fe21:baf with SMTP id sd32-20020a1709076e2000b0094efe210bafmr10250762ejc.21.1682856632064;
-        Sun, 30 Apr 2023 05:10:32 -0700 (PDT)
+        bh=yOAkIUSEs7b6pvNH1SS1me48LA5OZVukhoF6fPz2AOQ=;
+        b=ICLTQzydoH842Ie2q7vLKJy1aWbSLdKzn5GKGq9Y7D1jUUt0JivvdfMeSeBW4oup5I
+         mAIxJt2LTfFjabyLj89SkZjS7RZmlyAHUDsdVfM5i3iTwkzEJNFf71RE750jYLFcqwnc
+         EkHjrG/CtwsdH0k3diCm6uoNcZ0sYouEdALfrhUowd9ZQu7F5BJCPLuiJXcuzZ06zDGZ
+         /z90ut+DHXuvkqSmVwaA6n9BLKMnfHPozTDt8z2gNljoM7yWcQiJhGQSGSTaufMSbP30
+         eF6HjtsQM/pkOgmnKu11Abn1tu4t5ImpRcVh2ij3/UPrU//dlZhmfIVjiDowqUEm4Qjn
+         weGA==
+X-Gm-Message-State: AC+VfDxBA8w9oqlBeg81BmjLSLkogCPdxKRs9ascE4UtyR34QszkYBVu
+        pMiE14K0DHTHiwJBvtpBC5GCeA==
+X-Google-Smtp-Source: ACHHUZ5vH8qhRuHSQ+Tiok+SsLg5uU8X83UFPedVxJQtdsvj32geMRotH8gGl3QtxwPoko8dEjLKxw==
+X-Received: by 2002:a17:907:2da4:b0:94e:83d3:1b51 with SMTP id gt36-20020a1709072da400b0094e83d31b51mr10241997ejc.23.1682856754746;
+        Sun, 30 Apr 2023 05:12:34 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3? ([2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3])
-        by smtp.gmail.com with ESMTPSA id gz19-20020a170907a05300b0095076890fc1sm13591529ejc.1.2023.04.30.05.10.31
+        by smtp.gmail.com with ESMTPSA id hb8-20020a170906b88800b0094bb4c75695sm13630346ejb.194.2023.04.30.05.12.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Apr 2023 05:10:31 -0700 (PDT)
-Message-ID: <db87c485-179d-0bf9-f5b7-77186dc81757@linaro.org>
-Date:   Sun, 30 Apr 2023 14:10:30 +0200
+        Sun, 30 Apr 2023 05:12:34 -0700 (PDT)
+Message-ID: <d10e48cf-3cf8-89b7-8741-260adccfdfed@linaro.org>
+Date:   Sun, 30 Apr 2023 14:12:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH] arm64: dts: Add a device tree file for Emtop SOM IMX8MM
+Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
 Content-Language: en-US
-To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>
-Cc:     "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <BM1PR01MB4899EDE006EB24863E80D8C09A689@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
+ <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
+ <168234258850.2489090.5138716439435477956.robh@kernel.org>
+ <20230426172354.GB2506@standask-GA-A55M-S2HP> <ZE4Q6p1tAiIoZo/M@sai>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BM1PR01MB4899EDE006EB24863E80D8C09A689@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+In-Reply-To: <ZE4Q6p1tAiIoZo/M@sai>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,170 +85,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/04/2023 15:44, Himanshu Bhavani wrote:
-> From 9b2f563e1286c960ad81bc78ec811029ffb2f57a Mon Sep 17 00:00:00 2001
-> From: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
-> Date: Sat, 29 Apr 2023 19:03:53 +0530
-> Subject: [PATCH] Add a device tree file for Emtop SOM IMX8MM
-
-Fix your email setup.
-
+On 30/04/2023 08:55, Wolfram Sang wrote:
 > 
-> Added dts for describing the Emtop SOM-IMX8MM
+>>> i2c@1c000: compatible: ['brcm,kona-i2c'] is too short
+>>> 	arch/arm/boot/dts/bcm23550-sparrow.dtb
+>>>
+>>
+>> These warnings are fixed by the first patch in the series.
+>> Maybe it didn't apply?
 > 
-> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> So, this depends on patch 1 but I2C doesn't pick up DT changes. So,
+> shall this go via arm-soc, then? Or DT? Anyway, for any route:
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 198fff3731ae..8f281c753e5a 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -79,6 +79,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-yavia.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-dahlia.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-dev.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-wifi-yavia.dtb
-> +dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
+> Acked-by: Wolfram Sang <wsa@kernel.org>
 
-Keep order.
-
->  dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2pro.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
-> new file mode 100644
-> index 000000000000..5238a3b5f4cf
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
-> @@ -0,0 +1,262 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2019 NXP
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/usb/pd.h>
-> +#include "imx8mm.dtsi"
-> +
-> +/ {
-> +	model = "FSL i.MX8MM Emtop SOM";
-> +	compatible = "fsl,imx8mm-emtop", "fsl,imx8mm-evk", "fsl,imx8mm";
-
-I commented on bindings - this does not look correct at all.
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +
-> +	chosen {
-> +		stdout-path = &uart2;
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_gpio_led>;
-> +
-> +		sys {
-
-missing proper prefix/name.
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +			label = "sys";
-> +			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +};
-> +
-> +&A53_0 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_1 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_2 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&A53_3 {
-> +	cpu-supply = <&buck2>;
-> +};
-> +
-> +&uart2 { /* console */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart2>;
-> +	status = "okay";
-> +};
-> +
-> +/* eMMC */
-> +&usdhc3 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	bus-width = <8>;
-> +	non-removable;
-> +	status = "okay";
-> +};
-> +
-> +&wdog1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_wdog>;
-> +	fsl,ext-reset-output;
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	clock-frequency = <400000>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	status = "okay";
-> +
-> +	pmic@25 {
-> +		reg = <0x25>;
-> +		compatible = "nxp,pca9450";
-> +		/* PMIC PCA9450 PMIC_nINT GPIO1_IO3 */
-> +		pinctrl-0 = <&pinctrl_pmic>;
-> +		interrupt-parent = <&gpio1>;
-> +		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
-> +
-> +		regulators {
-> +
-
-Stray blank line.
-
-...
-
-> +	pinctrl_usdhc3_100mhz: usdhc3grp100mhz {
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +		fsl,pins = <
-> +			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
-> +			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
-> +			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
-> +			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
-> +			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
-> +			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
-> +			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
-> +			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
-> +		>;
-> +	};
-> +
-> +	pinctrl_usdhc3_200mhz: usdhc3grp200mhz {
-
-Here as well.
-
+The dtbs warnings - if fixed via any other pactch - can be safely
+ignored. They do not affect bisectability. Please grab this patch via
+I2C. The DTS will go separately via arm-soc.
 
 Best regards,
 Krzysztof
