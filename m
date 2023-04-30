@@ -2,209 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 751136F2ADF
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 23:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1026F2AED
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 23:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjD3VCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 17:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S231755AbjD3VYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 17:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjD3VCO (ORCPT
+        with ESMTP id S231202AbjD3VYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 17:02:14 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C0B11B;
-        Sun, 30 Apr 2023 14:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1682888503; i=w_armin@gmx.de;
-        bh=PEGII6AuxuD7VYFwcTJIQfyjZIFa7pZZJovsYWSdjJ8=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=cPG90ClOWdrrUD8AegU1JSMS3L3nNl9vH/YxdxmHnqvpHmsJenNL6oJiFW5NH5CIf
-         WoVu8DF+EX0vsfkI13mGcnfe2GojekqlIz8vVmcmBnLNTMDvUSQqfx0txP+CSHKQjB
-         E5L5uIgJXMUybNeNofJdcAhJeYCiOQ3u6XoNdDY5eiSJBQz3Kab4WLvnmpTKBdgpi4
-         nnMqa2mo5ZBQ1bmL2gzl0CG5f1tlBXlWQkHKFGbMOZM+d/vXAoO4hXuKLeNxP4hehk
-         BfMI1mKUlVoZOyGi0GVKQONHJtgUDGlnaCswsTGkAAOdQieasDT9mrovfGS904NR8o
-         PgF9DAMijzXlQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MQvD5-1peYnh37Hr-00O1PH; Sun, 30
- Apr 2023 23:01:42 +0200
-Subject: Re: [PATCH 1/2] platform/x86: wmi: Allow retrieving the number of WMI
- object instances
-To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
-Cc:     Mario.Limonciello@amd.com, prasanth.ksr@dell.com,
-        jorgealtxwork@gmail.com, james@equiv.tech,
-        Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230430203153.5587-1-W_Armin@gmx.de>
- <20230430203153.5587-2-W_Armin@gmx.de>
- <756215f5-d99c-b172-13f6-1a15e026bf65@redhat.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <3bfa4a8c-1260-3fc0-9f83-2958467ca596@gmx.de>
-Date:   Sun, 30 Apr 2023 23:01:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Sun, 30 Apr 2023 17:24:41 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D00E41
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:24:39 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2fa36231b1cso1038012f8f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1682889878; x=1685481878;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6CZyvJSrbLUzm/irC8AcoV2dat+7Ixn2/RGXUbBdRb4=;
+        b=UZq23EA0XkgJocFO684W7JWK80oCzdmqz9vyOSobEi8En8fx68EjSx8+m/HF+arFVR
+         0pur/0wiqrK1w2opG28ZZmjwdmVYFbgTn/2UvWJEY8OIHVJErkY6FVt3UVdNhPtDjaju
+         mZKM5m4rH+7bSasZfgfd0V2SE/hZl8+AMtjOw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682889878; x=1685481878;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6CZyvJSrbLUzm/irC8AcoV2dat+7Ixn2/RGXUbBdRb4=;
+        b=j1ahcdRmS4NVLMxtXTmaaVnJMjU5MgUCixpeUxtlsJCGsIfHyx6t9pZ8Va2vmoJr9t
+         ANgOFjV+X1RJygsMr7kuO40z/GM92U81ejiKMjBQb0HUiFJXlwOwZWVgnhfmau/HO5zB
+         gPw9F+dDjVbYOWk5DDr5FytvFERVDnas2A35nkK9vOZgQO82aaY4i7K+ldPxXtONZEX3
+         aOi7xBmyb+p2ud7zuF/UoBITp55sPtBRgua64D9CLTReunF3Rg/qwicE2/XZsIV9xdUC
+         FdTnPseptfRVFtM1xZP+EifjHgHgAAz7Ffs7RitzvcTtmrUO2j3RBMDA4228WAy0Oprj
+         Yf7g==
+X-Gm-Message-State: AC+VfDxupGKAOyBPJG5ZsF1+YeMxVWCWM9O3TS2NkYDNugNy15ZHJaHM
+        7ico/R/avurp4W7TlJHp3edHjp1c+1i/MFkoELGfWQ==
+X-Google-Smtp-Source: ACHHUZ7JVCNTFvOAVOyw8u8UiaE+Rv0pF63HptHzi3biPJC8FMFP1Uiv3rzHvWHNbwNvXrPEUHLcA2lHdI3by3LBfz0=
+X-Received: by 2002:adf:efd1:0:b0:306:2fab:1f81 with SMTP id
+ i17-20020adfefd1000000b003062fab1f81mr180845wrp.21.1682889878330; Sun, 30 Apr
+ 2023 14:24:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <756215f5-d99c-b172-13f6-1a15e026bf65@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:Oko3MpIp1yJChBT9DzLAUVTCYP5NEVrDj1u2I9ThGjP9YlrvHLI
- 8XVK75lzSKGfFVUIe5nbbXbaAAABIDAxINq9xLlIpj0RnPJqCAogoqsMDWGg1bVNee07txR
- MMf1p8SWvrNreeUbHsareVGHGhUduiH/MpaZRYSx6R0CZ9sWlqrx2A1vQulSfoWL9k/44dh
- /NEgVxTpTcmhmmSEWJHWg==
-UI-OutboundReport: notjunk:1;M01:P0:21QVCb4GZzU=;nTVL+aiMmmsjssZpXH0UtOA8Hw+
- OJ31wP395vfTIxhLK/SxwpmvAVIBTEo572hTS/huXk/7usk7cMURgcWoMQ1zioRIV1gKMHV89
- olz4K714YkkQkII4UTgPgcajNFlsXHuVCqR/+t4TOcxHgNFh+/w3M4CHdfvXUTyLRy8U+3BbD
- PCpdyh97gYjfyEzulXosg4rTMwGJ6OnDI2ESrGreGnmGXo9gxZPm5VdOC5nCAxQ9S+rG1BEK/
- ej74uEVClGcPXVfeGRKgup1Xvfx3sikFS26ZbwkMQ6QzBEbjEtY8TxgNU/ROm4Ph35HVUQ/nF
- E6+ymM0I6dsfm7UwrECM/bSHZh57b7b9BH/vNy6CbE8l9XljwLtMy3QVGwsxMQeHKgRe0yVHB
- 7XMttz9fT6JsWglAHr/AsVHuTgd8PZ+Ks90ljrjOdWf4ndOF0ktautqEuWIkdevrl0qT7+s0P
- VsO++s/fVh8VKOj7mY2qClzd9a8ZITUe6n3APGGI4OIvUrS/p6a+eXIVPu4cJice9jti5eZ9Z
- FKVsgyQUzORjRE71pVRZ0xga2CjkgCkoqH8hG/q2H6h/JULxlrHIya4CMNRvktF/FPKvfm0j4
- L81WvqobA7cFfmaemxktTsS8Egr9ZrVZDFEgs1Ln/37O5Fo44xTXeXb5ltq5s33hoc9GMoVS7
- HmFfarhpLoAVdJ874nV6XjMvCacSWBE/KZimQrpX0MduonDH7S0GRC1Mo4fZH9OcMAuiGskPK
- tAIAkqC+atj4z79RX8UnYO7HlnPSVDeRGmzPHNV4T5waq8CoAYYhLoLq9UwrVz0BMwvCasnoC
- f9/d468DLO8a9Z2zaLL03EtanvY47c3KS2Q4OxXWXezZPIEpaT6EnjDCbS0sOnKzNThRsTf0D
- HPsaOs0PRVIt20y4DkQ5czNZPQSBrM6l4fN/SM8FPdB4ABYxA945hRNiA5gpuXTqcEclEjxAU
- xJ7GIaoSysk+yH1HZMBWHlPKt2o=
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230428223500.23337-4-jim2101024@gmail.com> <20230430191323.GA388047@bhelgaas>
+In-Reply-To: <20230430191323.GA388047@bhelgaas>
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+Date:   Sun, 30 Apr 2023 17:24:26 -0400
+Message-ID: <CA+-6iNwb6Cn-78BJ5URhwvDuYHg5b4X5h+WdMw-CB3nRs=pSYw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] PCI: brcmstb: Set PCIe transaction completion timeout
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000695d0505fa9455c3"
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 30.04.23 um 22:41 schrieb Hans de Goede:
+--000000000000695d0505fa9455c3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Hi Armin,
+On Sun, Apr 30, 2023 at 3:13=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
 >
-> On 4/30/23 22:31, Armin Wolf wrote:
->> Currently, the WMI driver core knows how many instances of a given
->> WMI object exist, but WMI drivers cannot access this information.
->> At the same time, some current and upcoming WMI drivers want to
->> have access to this information. Add wmi_instance_count() and
->> wmidev_instance_count() to allow WMI drivers to get the number of
->> WMI object instances.
->>
->> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Thank you for your work on this.
+> On Fri, Apr 28, 2023 at 06:34:57PM -0400, Jim Quinlan wrote:
+> > Since the STB PCIe HW will cause a CPU abort on a PCIe transaction
+> > completion timeout abort, we might as well extend the default timeout
+> > limit.  Further, different devices and systems may requires a larger or
+> > smaller amount commensurate with their L1SS exit time, so the property
+> > "brcm,completion-timeout-us" may be used to set a custom timeout value.
 >
->> ---
->>   drivers/platform/x86/wmi.c | 41 ++++++++++++++++++++++++++++++++++++++
->>   include/linux/acpi.h       |  2 ++
->>   include/linux/wmi.h        |  2 ++
->>   3 files changed, 45 insertions(+)
->>
->> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
->> index c226dd4163a1..5b95d7aa5c2f 100644
->> --- a/drivers/platform/x86/wmi.c
->> +++ b/drivers/platform/x86/wmi.c
->> @@ -263,6 +263,47 @@ int set_required_buffer_size(struct wmi_device *wdev, u64 length)
->>   }
->>   EXPORT_SYMBOL_GPL(set_required_buffer_size);
->>
->> +/**
->> + * wmi_instance_count - Get number of WMI object instances
->> + * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
->> + *
->> + * Get the number of WMI object instances.
->> + *
->> + * Returns: Number of WMI object instances or negative error code.
->> + */
->> +int wmi_instance_count(const char *guid_string)
->> +{
->> +	struct wmi_block *wblock;
->> +	acpi_status status;
->> +
->> +	status = find_guid(guid_string, &wblock);
->> +	if (ACPI_FAILURE(status)) {
->> +		if (status == AE_BAD_PARAMETER)
->> +			return -EINVAL;
->> +
->> +		return -ENODEV;
-> Maybe just return 0 here ?
+> s/requires/require/
 >
-> The GUID not existing at all does not seem like
-> an error to me, but rather a case of there
-> being 0 instances.
->
-> This will also allow patch 2/2 to completely
-> drop the get_instance_count() function and
-> replace its callers with direct calls to
-> wmi_instance_count() as the code is known
-> to always pass a valid GUID, so it won't hit
-> the -EINVAL path.
->
-> Regards,
->
-> Hans
->
-Hi,
+> AFAIK, other platforms do not tweak Configuration Timeout values based
+> on L1SS exit time.  Why is brcm different?
 
-i would prefer returning -ENODEV instead of 0, so WMI drivers can
-distinguish between "not found" and "zero instances". Also i do not
-think that relying on the parameter of get_instance_count() always
-being a valid GUID is a good idea, just in case wmi_instance_count()
-is later modified to be able to encounter runtime errors.
+Keep in mind that our Brcm PCIe HW signals a CPU abort on a PCIe
+completion timeout.  Other PCIe HW just returns 0xffffffff.
 
-Armin Wolf
+I've been maintaining this driver for over eight years or so and we've
+done fine with the HW default completion timeout value.
+Only recently has a major customer requested that this timeout value
+be changed, and their reason was so they could
+avoid a CPU abort when using L1SS.
+
+Now we could set this value to a big number for all cases and not
+require "brcm,completion-timeout-us".  I cannot see any
+downsides, other than another customer coming along asking us to
+double the default or lessen it.
+
+But I'm certainly willing to do that -- would that  be acceptable?
+
+Regards,
+Jim
 
 >
->> +	}
->> +
->> +	return wmidev_instance_count(&wblock->dev);
->> +}
->> +EXPORT_SYMBOL_GPL(wmi_instance_count);
->> +
->> +/**
->> + * wmidev_instance_count - Get number of WMI object instances
->> + * @wdev: A wmi bus device from a driver
->> + *
->> + * Get the number of WMI object instances.
->> + *
->> + * Returns: Number of WMI object instances.
->> + */
->> +u8 wmidev_instance_count(struct wmi_device *wdev)
->> +{
->> +	struct wmi_block *wblock = container_of(wdev, struct wmi_block, dev);
->> +
->> +	return wblock->gblock.instance_count;
->> +}
->> +EXPORT_SYMBOL_GPL(wmidev_instance_count);
->> +
->>   /**
->>    * wmi_evaluate_method - Evaluate a WMI method (deprecated)
->>    * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
->> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->> index efff750f326d..e52bf2742eaf 100644
->> --- a/include/linux/acpi.h
->> +++ b/include/linux/acpi.h
->> @@ -412,6 +412,8 @@ extern bool acpi_is_pnp_device(struct acpi_device *);
->>
->>   typedef void (*wmi_notify_handler) (u32 value, void *context);
->>
->> +int wmi_instance_count(const char *guid);
->> +
->>   extern acpi_status wmi_evaluate_method(const char *guid, u8 instance,
->>   					u32 method_id,
->>   					const struct acpi_buffer *in,
->> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
->> index c1a3bd4e4838..763bd382cf2d 100644
->> --- a/include/linux/wmi.h
->> +++ b/include/linux/wmi.h
->> @@ -35,6 +35,8 @@ extern acpi_status wmidev_evaluate_method(struct wmi_device *wdev,
->>   extern union acpi_object *wmidev_block_query(struct wmi_device *wdev,
->>   					     u8 instance);
->>
->> +u8 wmidev_instance_count(struct wmi_device *wdev);
->> +
->>   extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
->>
->>   /**
->> --
->> 2.30.2
->>
+> Bjorn
+
+--000000000000695d0505fa9455c3
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+mOAplh6h3nMZUZxBguxG3g2p3iD4EgibUYneEzqOQafIQB/naf2uetKb8y9jKgWJxq2Y4y8Jqg2u
+uVIO1AyOJjWwqdgN+QhuIlat+qZd03P48Gim9ZPEMDUCAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
+BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
+VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFGx/E27aeGBP2eJktrILxlhK
+z8f6MA0GCSqGSIb3DQEBCwUAA4IBAQBdQQukiELsPfse49X4QNy/UN43dPUw0I1asiQ8wye3nAuD
+b3GFmf3SZKlgxBTdWJoaNmmUFW2H3HWOoQBnTeedLtV9M2Tb9vOKMncQD1f9hvWZR6LnZpjBIlKe
++R+v6CLF07qYmBI6olvOY/Rsv9QpW9W8qZYk+2RkWHz/fR5N5YldKlJHP0NDT4Wjc5fEzV+mZC8A
+AlT80qiuCVv+IQP08ovEVSLPhUp8i1pwsHT9atbWOfXQjbq1B/ditFIbPzwmwJPuGUc7n7vpmtxB
+75sSFMj27j4JXl5W9vORgHR2YzuPBzfzDJU1ul0DIofSWVF6E1dx4tZohRED1Yl/T/ZGMYICbTCC
+AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
+AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMSO43VW7D5NP1X/KD
+MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCsHdABX4PzApSpRzzm6zpcrkI3RH/k
+9Y26kP1Xi7LReDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA0
+MzAyMTI0MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
+hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
+AgEwDQYJKoZIhvcNAQEBBQAEggEAKVUbezOFcBbS7BqGqiaAcEAU2eYeKA332GEdGsBcQ4Am/0qr
+MD0G59Z/kO27M2G+fcIj64tXrMdOC2Ey3IzHLg7dYANcuB40dU+R2vE+vorlr/cEt+qAr8fFk2L6
+zQ2olKPZMV9PaaGYQV0RJeM8AnmXfvG1r2eSQ6KGiTwVY3f0mTuQSpzuqJzjKwrw8KwuCuNYiEdV
+bA+aswM+SbH3icy8nh/bXYkN9lTHmOT0H1Q99AMA1qqvyYWt38AKU6gBRRfvvT9N5UODbqBmAN6W
+PUPVH2tZhKwG+e6R/FVZlOwgwoiqjGVVoHk/n3ptVbLZrk3zJacCrIPuBrE+DoDYJA==
+--000000000000695d0505fa9455c3--
