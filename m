@@ -2,137 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E356F2A53
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 20:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2096F2A57
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 20:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbjD3SWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 14:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S230494AbjD3S3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 14:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjD3SWN (ORCPT
+        with ESMTP id S229519AbjD3S3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 14:22:13 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DA63A95;
-        Sun, 30 Apr 2023 11:22:06 -0700 (PDT)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id CB6AFCEC7E;
-        Sun, 30 Apr 2023 18:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1682878892; bh=6bCrTKda13xPY5f1VJTbxhuiRyrVSBhJ2Q3JkSdwSwU=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=dpzZ866qVshjzoAdtJ+fwGoSuUs5QhvD5PkvqA3QrW9Ag3VM3jM1AJ8hLhA3XrTW1
-         CDv8Df834l/u8zc13slqwInIDK8ERAkxBAGpHpxjFbQiF2TrXD9Q32BlXfuSji8uRR
-         ViR/XEc7Vz2OOC7PTvDbmIzl+a7DtUeBwXMp58O0=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sun, 30 Apr 2023 20:20:57 +0200
-Subject: [PATCH 5/5] ARM: dts: qcom: apq8026-huawei-sturgeon: Add vibrator
+        Sun, 30 Apr 2023 14:29:21 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441311735;
+        Sun, 30 Apr 2023 11:29:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682879329; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Df4NHlvOv469Uzy5L8lZNU252LcUatMtKixmuVpIr3/LCgHDQQnncMm8FfsyeZm+q3TsH0y6ad1G6jpSVuudH8k++o1Ruk3zGjdiDJH7x7+CLREVINO5kRsHLOskmDU0PkeNRCAdYcbgy0ojT5mkh31d2ag2XPX7OzNHtI43DSA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682879329; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Azc4Hc1srpPKgzIM+J+f5sUKPmY+suHFF9oAfbKeBhU=; 
+        b=W4UMlZXdcTam16sk55nJXZs6QqlEw0O958MtmrNUnn0j7IDElKXl4H4VTDUiNVoccs8JaJbM/xam2UQF5babseT3DtEKqh5FmlDbgOkYuXpxVhOK9HNHXDNYtYuPr7Csa6/QMdtkCTzEQ5FuhW+k7Pek1xdXg1vwQYAN/wACOfc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682879329;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=Azc4Hc1srpPKgzIM+J+f5sUKPmY+suHFF9oAfbKeBhU=;
+        b=VNwLLh0SrtzCxN6J1ejN0CMx3NFNwTYCaRUy/0vEUpT4/TOw7PaAB2fLpnbsqJJW
+        c4DCv+YAlxeYQwVmsAP8nt1TXAxmdPaw9Ma7QWCJx7Pl6gUFr0MeKvm+yR68ztGF2Ip
+        0Ce0cbbyPhqFb1qotE62U9wQdXUZ+ODu6/3jNJlk=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 168287932708259.260584656568085; Sun, 30 Apr 2023 11:28:47 -0700 (PDT)
+Message-ID: <a6c6fe83-fbb5-f289-2210-6f1db6585636@arinc9.com>
+Date:   Sun, 30 Apr 2023 21:28:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230430-drv260x-improvements-v1-5-1fb28b4cc698@z3ntu.xyz>
-References: <20230430-drv260x-improvements-v1-0-1fb28b4cc698@z3ntu.xyz>
-In-Reply-To: <20230430-drv260x-improvements-v1-0-1fb28b4cc698@z3ntu.xyz>
-To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document
+ MDIO-bus
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     David Bauer <mail@david-bauer.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1566; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=6bCrTKda13xPY5f1VJTbxhuiRyrVSBhJ2Q3JkSdwSwU=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBkTrGqMepVl5GlUtx/9cga8r2gsT8UvbaoHuuDc
- avyDq94ivuJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZE6xqgAKCRBy2EO4nU3X
- VqkBD/9v3tkZcH5QM/3qIv9jjRP3KRJMxw9KYu+KrkT21uShdAZxRoQ/Q4pztT99sxUcHZFtJpQ
- g6bNcsTKK5TPkiiUL5oJYZpkvFnC04jcQQ2O+r86sy72XmGco/8CN4t49M/1N0LMwaXgo9+IVx/
- y1tsr9//8aiMPsgt196tXGS8zKYFE5M+lD2j2xi7Z4NJGejCNnDMYvFvofz+icifvMouJde5atu
- SDUXwrDRsqSy081qvDilRaN1onJVDcnV0N+RQ4azFSI7uzIoLwwgFNh9aMwS14vmgkV43MIVzq0
- Olj+gjIZtZTBs92jCkN+ji5vku5dTRb2+dbY29SgLkFzQwuGf9PnG+AN2rOZXxG80AGUW3auJsZ
- iTRF5/ylGgln3q3Ff1gCcv5hHmqJsPJe5TZSKeGehJw9/0pzvcAfdeJDb+MLxqaVClz32Qx2BHL
- alFOi/mYdwM5+8J9cKIShzoBsNdHaD/UKJXd1NVJG3afV8Kla+Pi+l3blFf/x1J38caTex1w6Mv
- MKvx8Wri9/ZWp5eAYc8VxlKdgxN8h99kyG/3chOMKqUDWseFrPJ2LjqsVIyRwWTJKTkSwcOkFV8
- mGZHTPhXga32gABrs6vGeMHCu4VokS/vjffQdWNiJPrpIkcbPrtgWNfFhRMLjekTPoydQyhp+WN
- zL0N6RvrXN3eFMw==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230430112834.11520-1-mail@david-bauer.net>
+ <20230430112834.11520-2-mail@david-bauer.net>
+ <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
+ <396fad42-89d0-114d-c02e-ac483c1dd1ed@arinc9.com>
+ <04cc2904-6d61-416e-bfbe-c24d96fe261b@lunn.ch>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <04cc2904-6d61-416e-bfbe-c24d96fe261b@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The watch has a DRV2605 for haptics. Add a node for it based on the
-values found in the downstream board file.
+On 30.04.2023 20:18, Andrew Lunn wrote:
+> On Sun, Apr 30, 2023 at 07:17:10PM +0300, Arınç ÜNAL wrote:
+>> On 30.04.2023 15:34, Arınç ÜNAL wrote:
+>>> On 30.04.2023 14:28, David Bauer wrote:
+>>>> Document the ability to add nodes for the MDIO bus connecting the
+>>>> switch-internal PHYs.
+>>>
+>>> This is quite interesting. Currently the PHY muxing feature for the
+>>> MT7530 switch looks for some fake ethernet-phy definitions on the
+>>> mdio-bus where the switch is also defined.
+>>>
+>>> Looking at the binding here, there will be an mdio node under the switch
+>>> node. This could be useful to define the ethernet-phys for PHY muxing
+>>> here instead, so we don't waste the register addresses on the parent
+>>> mdio-bus for fake things. It looks like this should work right out of
+>>> the box. I will do some tests.
+>>
+>> Once I start using the mdio node it forces me to define all the PHYs which
+>> were defined as ports.
+> 
+> Try setting ds->slave_mii_bus to the MDIO bus you register via
+> of_mdiobus_register().
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+That seems to be the case already, under mt7530_setup_mdio():
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-index d64096028ab1..eb73b992a696 100644
---- a/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-huawei-sturgeon.dts
-@@ -7,6 +7,7 @@
- 
- #include "qcom-msm8226.dtsi"
- #include "qcom-pm8226.dtsi"
-+#include <dt-bindings/input/ti-drv260x.h>
- 
- /delete-node/ &adsp_region;
- 
-@@ -68,6 +69,26 @@ &adsp {
- 	status = "okay";
- };
- 
-+&blsp1_i2c2 {
-+	clock-frequency = <384000>;
-+
-+	status = "okay";
-+
-+	vibrator@5a {
-+		compatible = "ti,drv2605";
-+		reg = <0x5a>;
-+		enable-gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
-+
-+		mode = <DRV260X_ERM_MODE>;
-+		library-sel = <DRV260X_ERM_LIB_D>;
-+		vib-rated-mv = <2765>;
-+		vib-overdrive-mv = <3525>;
-+
-+		pinctrl-0 = <&vibrator_default_state>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
- &blsp1_i2c5 {
- 	clock-frequency = <384000>;
- 
-@@ -347,6 +368,13 @@ reset-pins {
- 		};
- 	};
- 
-+	vibrator_default_state: vibrator-default-state {
-+		pins = "gpio59", "gpio60";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
- 	wlan_hostwake_default_state: wlan-hostwake-default-state {
- 		pins = "gpio66";
- 		function = "gpio";
+	bus = devm_mdiobus_alloc(dev);
+	if (!bus)
+		return -ENOMEM;
 
--- 
-2.40.1
+	ds->slave_mii_bus = bus;
 
+The bus is registered with devm_of_mdiobus_register(), if that matters. 
+(My current knowledge about OF or OF helpers for MDIO is next to nothing.)
+
+The same behaviour is there.
+
+Arınç
