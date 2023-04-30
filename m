@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DDE6F2805
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AEC6F2814
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjD3IBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 04:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
+        id S229609AbjD3IU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 04:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjD3IBn (ORCPT
+        with ESMTP id S229451AbjD3IU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 04:01:43 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5ADF2693
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 01:01:41 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-769036b47a7so46459239f.0
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 01:01:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682841701; x=1685433701;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dzOY9AIDwld6DWL0ECVniyf1GhcTphj+R8EavfMT1hM=;
-        b=NPP+LrIzQZZ61k3w62wVkcPHhpB4AItX63hkC17Rr0Fa/g2yuL+QR4LH9Gou68Uq6y
-         USjunJz6n8uAumXqy8YZg41DmRwZp2cB2tlphnbp/Lo9Jm4z/kVWPa2KcRnKYvlyuW5U
-         DZNan5FC/FBzm4KuuTE9smnNE1AH0WeDNRqJMPCTxzMy01EQciOnSX6YZyCj/wyNupnX
-         BaoXsMBEQBsNtcLLdNliK95ZWtc2t13P7iLRAeAk0KcKw/JTn3KeMPvpnzz/dvkfXutN
-         nGRjexe7k4ywRone7YB5fSq6nmaSLoR1oNZV3Q9ryF6F/SmcMmvi5xdqKOOmjywpHzaq
-         Tc6Q==
-X-Gm-Message-State: AC+VfDz0/sd41/DLy4tjHuH3Lb/7RZahVECFF1rTmtnPuKxFSyA0Snf7
-        XKh9YqT7NAnsU+AEEHh7OETQzmH6wLn7qskg5fY6BX8weEhm
-X-Google-Smtp-Source: ACHHUZ68b62ZbfZNQX2uUdpv95IGImoqd3TKpsyalHK5m8wE0nSABqEuouIp+dGOocsLfYbWM4OebFpAwQ1xs3kT3Ar/ZZJ4Ccso
+        Sun, 30 Apr 2023 04:20:26 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396D26A5;
+        Sun, 30 Apr 2023 01:20:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5160E5C0101;
+        Sun, 30 Apr 2023 04:20:21 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 30 Apr 2023 04:20:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682842821; x=1682929221; bh=FtoIgx0IqE4PIcUscvctGI7W1hQLnKYUYIe
+        vTAA9fVk=; b=jz9kukz3E/TCjbKIb4KphaN8Ifhn8QMeqX4lzgM6Wvv6wo+VvY2
+        qhJaDGqfC8Y/rpMqNlIR9mAA7GLBsb/7NXcUvrqIOk2sCQZqZc4EfSHVGyeJG8Hf
+        UpOQvAFxOBjM1ZPVo+oS1abkLcswk6LPb1xiMolwa/jxUAySWuvzXyRbpeE3bpiM
+        0nJbZ3XmISTyfTu7BnBsCE36SW/ZbT5QXWtfvUYrt3uuHKoFLFMVqbcfev5fIcz5
+        dCbWJQ9xX4dYtteULC2TOOJEb4Ud3je67ENV9RCPic0sZvO7NO7iiUI53cvccuc3
+        NsCts6pH5dYt776u/X42fbFQxOGqSIFbKdA==
+X-ME-Sender: <xms:xCROZC4KTCfAFNg7pL7WuY0DayBFydQJt3q5NUz6-5ldoT5aGCn6EA>
+    <xme:xCROZL7F45oCPqqu6F-y7LwZrRl8vWjZGtlxpRZHtpgZMo64tp5cZrU-aaVsKFK9H
+    YqqjKG6MvtLNvY>
+X-ME-Received: <xmr:xCROZBc-LJ20h9ekR1tkdtQkNncruItMaKL098cn0GJ9Sjimgzd764nFqjQd>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvvddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefkugho
+    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeekgefggefhuedvgeettdegvdeuvdfhudejvddvjeetledvuedtheehleel
+    hffhudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:xCROZPKFth_CkhvjzQrewk7C9lnJiRANdAZvvnkhuTjJtkY4bVGGTw>
+    <xmx:xCROZGI4ahCa36pGPSe4s1BphUCgATlZHzw515GqEyXivZmFkQXhJg>
+    <xmx:xCROZAyqIOMqvBD0yL1bMVXzchsAXts-gVgAhtXf-VFQaMPonv2dvw>
+    <xmx:xSROZIi0S5VW-87rI5OCFZJpLrvjU98XkBMDTXF0UL7FPfdm8-ymqA>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 30 Apr 2023 04:20:19 -0400 (EDT)
+Date:   Sun, 30 Apr 2023 11:20:16 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>, kuba@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] netdevsim: fib: Make use of rhashtable_iter
+Message-ID: <ZE4kwMjQlcgrxuY7@shredder>
+References: <20230425144556.98799-1-cai.huoqing@linux.dev>
+ <ZEjw7XXFro6zYYXz@gondor.apana.org.au>
+ <ZEviO+NPFP/IoiO2@chq-MS-7D45>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b10e:0:b0:40f:d134:95d with SMTP id
- r14-20020a02b10e000000b0040fd134095dmr4732420jah.2.1682841701223; Sun, 30 Apr
- 2023 01:01:41 -0700 (PDT)
-Date:   Sun, 30 Apr 2023 01:01:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d0a73c05fa891d24@google.com>
-Subject: [syzbot] Monthly gfs2 report (Apr 2023)
-From:   syzbot <syzbot+list71347dcb23e4a28f8bf5@syzkaller.appspotmail.com>
-To:     cluster-devel@redhat.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZEviO+NPFP/IoiO2@chq-MS-7D45>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,42 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello gfs2 maintainers/developers,
+On Fri, Apr 28, 2023 at 11:11:55PM +0800, Cai Huoqing wrote:
+> On 26 4月 23 17:37:49, Herbert Xu wrote:
+> > Cai Huoqing <cai.huoqing@linux.dev> wrote:
+> > > Iterating 'fib_rt_ht' by rhashtable_walk_next and rhashtable_iter directly
+> > > instead of using list_for_each, because each entry of fib_rt_ht can be
+> > > found by rhashtable API. And remove fib_rt_list.
+> > > 
+> > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> > > ---
+> > > drivers/net/netdevsim/fib.c | 37 ++++++++++++++++++-------------------
+> > > 1 file changed, 18 insertions(+), 19 deletions(-)
+> > 
+> > What is the rationale for this patch? Are you trying to save
+> > memory?
+> Hi 
+> Thanks for your reply,
+> 
+> I think not need to use two structs to link fib_rt node, 
+> fib_rt_list is redundant.
 
-This is a 31-day syzbot report for the gfs2 subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/gfs2
+There are cases where we want to iterate over the objects without
+destroying the hashtable itself.
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 19 issues are still open and 17 have been fixed so far.
+> 
+> Thanks,
+> Cai-
+> 
+> > 
+> > > @@ -1099,9 +1090,12 @@ static void nsim_fib_dump_inconsistent(struct notifier_block *nb)
+> > >        /* The notifier block is still not registered, so we do not need to
+> > >         * take any locks here.
+> > >         */
+> > > -       list_for_each_entry_safe(fib_rt, fib_rt_tmp, &data->fib_rt_list, list) {
+> > > -               rhashtable_remove_fast(&data->fib_rt_ht, &fib_rt->ht_node,
+> > > +       rhashtable_walk_enter(&data->fib_rt_ht, &hti);
+> > > +       rhashtable_walk_start(&hti);
+> > > +       while ((pos = rhashtable_walk_next(&hti))) {
+> > > +               rhashtable_remove_fast(&data->fib_rt_ht, hti.p,
+> > >                                       nsim_fib_rt_ht_params);
+> > > +               fib_rt = rhashtable_walk_peek(&hti);
+> > >                nsim_fib_rt_free(fib_rt, data);
+> > >        }
+> > 
+> > In general rhashtable walks are not stable.  You may miss entries
+> > or see entries twice.  They should be avoided unless absolutely
+> > necessary.
+> Agree, but how about using rhashtable_free_and_destroy here
+> instead of rhashtable_walk_next in this patch.
 
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 1172    Yes   WARNING in __folio_mark_dirty (2)
-                  https://syzkaller.appspot.com/bug?extid=e14d6cd6ec241f507ba7
-<2> 392     Yes   kernel BUG in gfs2_glock_nq (2)
-                  https://syzkaller.appspot.com/bug?extid=70f4e455dee59ab40c80
-<3> 127     Yes   general protection fault in gfs2_evict_inode (2)
-                  https://syzkaller.appspot.com/bug?extid=8a5fc6416c175cecea34
-<4> 35      Yes   INFO: task hung in gfs2_gl_hash_clear (3)
-                  https://syzkaller.appspot.com/bug?extid=ed7d0f71a89e28557a77
-<5> 28      Yes   WARNING in gfs2_check_blk_type
-                  https://syzkaller.appspot.com/bug?extid=092b28923eb79e0f3c41
-<6> 23      Yes   INFO: task hung in __gfs2_trans_begin
-                  https://syzkaller.appspot.com/bug?extid=a159cc6676345e04ff7d
-<7> 13      Yes   general protection fault in gfs2_dump_glock (2)
-                  https://syzkaller.appspot.com/bug?extid=427fed3295e9a7e887f2
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+We don't want to destroy the hashtable in this case, only free the
+objects.
