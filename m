@@ -2,202 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1026F2AED
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 23:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491176F2AF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 23:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjD3VYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 17:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
+        id S231779AbjD3Ve1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 17:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjD3VYl (ORCPT
+        with ESMTP id S229531AbjD3VeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 17:24:41 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D00E41
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:24:39 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-2fa36231b1cso1038012f8f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:24:39 -0700 (PDT)
+        Sun, 30 Apr 2023 17:34:25 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF18E48
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:34:21 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1aaf702c3ccso18095ad.1
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 14:34:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1682889878; x=1685481878;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CZyvJSrbLUzm/irC8AcoV2dat+7Ixn2/RGXUbBdRb4=;
-        b=UZq23EA0XkgJocFO684W7JWK80oCzdmqz9vyOSobEi8En8fx68EjSx8+m/HF+arFVR
-         0pur/0wiqrK1w2opG28ZZmjwdmVYFbgTn/2UvWJEY8OIHVJErkY6FVt3UVdNhPtDjaju
-         mZKM5m4rH+7bSasZfgfd0V2SE/hZl8+AMtjOw=
+        d=google.com; s=20221208; t=1682890461; x=1685482461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bXvWfcPwYE0l610o5narxo1kaxveEE8bMSO3FZe1UVo=;
+        b=hDMD+683FV9awGOim+l3BgEF4meaq+TP43gjtapNGzLkLF5zY5YsesXkf7cRd4dD5S
+         Iw8UMAZsf/7oUUoofWgWKdhivDRLbC6NpwgpNuwogs3zIkEUu42YsumVcan5J8iYnEYc
+         UhiZQiveG08+Wf68OfDFL1xZNwfDfoCGV+exPdRJpb0z2xHPWSO2MT7ujT7eatyl2+mH
+         OdvZkK5bPRy6xutc7aET2dU267ixeRr5CPC0c4vZdKDHPk0qSH9Npvtk82KM5gMJQcc7
+         e14DZSPQzOFuJKQVEYPcIWhHvozrIRyCilZW/srEDBcXv9bdHk80X5juPl9UZMl3NBV4
+         K7Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682889878; x=1685481878;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6CZyvJSrbLUzm/irC8AcoV2dat+7Ixn2/RGXUbBdRb4=;
-        b=j1ahcdRmS4NVLMxtXTmaaVnJMjU5MgUCixpeUxtlsJCGsIfHyx6t9pZ8Va2vmoJr9t
-         ANgOFjV+X1RJygsMr7kuO40z/GM92U81ejiKMjBQb0HUiFJXlwOwZWVgnhfmau/HO5zB
-         gPw9F+dDjVbYOWk5DDr5FytvFERVDnas2A35nkK9vOZgQO82aaY4i7K+ldPxXtONZEX3
-         aOi7xBmyb+p2ud7zuF/UoBITp55sPtBRgua64D9CLTReunF3Rg/qwicE2/XZsIV9xdUC
-         FdTnPseptfRVFtM1xZP+EifjHgHgAAz7Ffs7RitzvcTtmrUO2j3RBMDA4228WAy0Oprj
-         Yf7g==
-X-Gm-Message-State: AC+VfDxupGKAOyBPJG5ZsF1+YeMxVWCWM9O3TS2NkYDNugNy15ZHJaHM
-        7ico/R/avurp4W7TlJHp3edHjp1c+1i/MFkoELGfWQ==
-X-Google-Smtp-Source: ACHHUZ7JVCNTFvOAVOyw8u8UiaE+Rv0pF63HptHzi3biPJC8FMFP1Uiv3rzHvWHNbwNvXrPEUHLcA2lHdI3by3LBfz0=
-X-Received: by 2002:adf:efd1:0:b0:306:2fab:1f81 with SMTP id
- i17-20020adfefd1000000b003062fab1f81mr180845wrp.21.1682889878330; Sun, 30 Apr
- 2023 14:24:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682890461; x=1685482461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bXvWfcPwYE0l610o5narxo1kaxveEE8bMSO3FZe1UVo=;
+        b=Y8Zixdgu8sJ+WzkVlSTq2G1D+EcRhiZbcrRk6lzYJLLDL0NDmnbZ1twA51YFutZrv2
+         NqEKTprwz6a8ddBpy7vVCxLf1rET47gu+C6RpUh89w4oq0++CqbI//xAFsdfJ+2MTqn8
+         5CKpct/fVLo0b1pIfpwyhnaBCrK9nGJwzDiH7oPROG122x3szyf6sHBJ26JpoSP4rIA7
+         fZPDZsNcH7gv/sicNFGwcaDos4I6UR7C2cZGypWxi73EnIzfmCnPYB5QEmdymuZ1r7MH
+         qEVSfpBEaQg4NqxGP5DKqlugLOwzD9IZtJLB0KRRNt3sEulj0f/B2M2IQy6rEJaXmjKc
+         8Saw==
+X-Gm-Message-State: AC+VfDz0ExGhqK84ipyUnyROrZP8/V+ku7+5raE2z72BQK76EpAr3iUR
+        M3e/dw3OsFzDCl8XFHb++wzVTwODtHt5SVT36BpX/U85cjfaI84X5t8glw==
+X-Google-Smtp-Source: ACHHUZ4ggBLuGq7jC2q832O9om3D3hjpgadwUqVDNqfRn7eoOKxA5MqKMSS7c9EM4oTS5Ucy0OevPZVq+8ZgCGrt0XU=
+X-Received: by 2002:a17:902:b20a:b0:1a6:42f0:e575 with SMTP id
+ t10-20020a170902b20a00b001a642f0e575mr299829plr.5.1682890460920; Sun, 30 Apr
+ 2023 14:34:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230428223500.23337-4-jim2101024@gmail.com> <20230430191323.GA388047@bhelgaas>
-In-Reply-To: <20230430191323.GA388047@bhelgaas>
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-Date:   Sun, 30 Apr 2023 17:24:26 -0400
-Message-ID: <CA+-6iNwb6Cn-78BJ5URhwvDuYHg5b4X5h+WdMw-CB3nRs=pSYw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] PCI: brcmstb: Set PCIe transaction completion timeout
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000695d0505fa9455c3"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230316220638.983743-1-dlatypov@google.com> <20230430181500.122664-1-sj@kernel.org>
+In-Reply-To: <20230430181500.122664-1-sj@kernel.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Sun, 30 Apr 2023 14:34:09 -0700
+Message-ID: <CAGS_qxqmWYzTBkfmFoALoteaG303tJNh1K5N2=Pmykqk+2BeTg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations
+ where appropriate
+To:     SeongJae Park <sj@kernel.org>
+Cc:     brendanhiggins@google.com, davidgow@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>,
+        regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000695d0505fa9455c3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Apr 30, 2023 at 3:13=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
+On Sun, Apr 30, 2023 at 11:15=E2=80=AFAM SeongJae Park <sj@kernel.org> wrot=
+e:
 >
-> On Fri, Apr 28, 2023 at 06:34:57PM -0400, Jim Quinlan wrote:
-> > Since the STB PCIe HW will cause a CPU abort on a PCIe transaction
-> > completion timeout abort, we might as well extend the default timeout
-> > limit.  Further, different devices and systems may requires a larger or
-> > smaller amount commensurate with their L1SS exit time, so the property
-> > "brcm,completion-timeout-us" may be used to set a custom timeout value.
+> Hi Daniel,
 >
-> s/requires/require/
+> On Thu, 16 Mar 2023 15:06:36 -0700 Daniel Latypov <dlatypov@google.com> w=
+rote:
 >
-> AFAIK, other platforms do not tweak Configuration Timeout values based
-> on L1SS exit time.  Why is brcm different?
-
-Keep in mind that our Brcm PCIe HW signals a CPU abort on a PCIe
-completion timeout.  Other PCIe HW just returns 0xffffffff.
-
-I've been maintaining this driver for over eight years or so and we've
-done fine with the HW default completion timeout value.
-Only recently has a major customer requested that this timeout value
-be changed, and their reason was so they could
-avoid a CPU abort when using L1SS.
-
-Now we could set this value to a big number for all cases and not
-require "brcm,completion-timeout-us".  I cannot see any
-downsides, other than another customer coming along asking us to
-double the default or lessen it.
-
-But I'm certainly willing to do that -- would that  be acceptable?
-
-Regards,
-Jim
-
+> > E.g. for subprocess.Popen, it can be opened in `text=3DTrue` mode where=
+ it
+> > returns strings, or `text=3DFalse` where it returns bytes.
+> > To differentiate, you can annotate types as `Popen[str]` or
+> > `Popen[bytes]`.
+> >
+> > This patch should add subscripts in all the places we were missing them=
+.
 >
-> Bjorn
+> I just found this patch is in the latest mainline tree, and it causes kun=
+it
+> failure on my test machine like below.
+>
+>     $ python3 --version
+>     Python 3.8.10
+>     $
+>     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+>     Traceback (most recent call last):
+>       File "./tools/testing/kunit/kunit.py", line 24, in <module>
+>         import kunit_kernel
+>       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line=
+ 42, in <module>
+>         class LinuxSourceTreeOperations:
+>       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line=
+ 95, in LinuxSourceTreeOperations
+>         def start(self, params: List[str], build_dir: str) -> subprocess.=
+Popen[str]:
+>     TypeError: 'type' object is not subscriptable
+>     $
+>
+> I further confirmed reverting this patch makes it run again.  Do you have=
+ any
+> idea?
 
---000000000000695d0505fa9455c3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+It seems like support for the subscript wasn't added until Python 3.9.
 
-MIIQbgYJKoZIhvcNAQcCoIIQXzCCEFsCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3FMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBU0wggQ1oAMCAQICDEjuN1Vuw+TT9V/ygzANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE3MTNaFw0yNTA5MTAxMjE3MTNaMIGO
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xFDASBgNVBAMTC0ppbSBRdWlubGFuMSkwJwYJKoZIhvcNAQkB
-FhpqYW1lcy5xdWlubGFuQGJyb2FkY29tLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
-ggEBAKtQZbH0dDsCEixB9shqHxmN7R0Tywh2HUGagri/LzbKgXsvGH/LjKUjwFOQwFe4EIVds/0S
-hNqJNn6Z/DzcMdIAfbMJ7juijAJCzZSg8m164K+7ipfhk7SFmnv71spEVlo7tr41/DT2HvUCo93M
-7Hu+D3IWHBqIg9YYs3tZzxhxXKtJW6SH7jKRz1Y94pEYplGQLM+uuPCZaARbh+i0auVCQNnxgfQ/
-mOAplh6h3nMZUZxBguxG3g2p3iD4EgibUYneEzqOQafIQB/naf2uetKb8y9jKgWJxq2Y4y8Jqg2u
-uVIO1AyOJjWwqdgN+QhuIlat+qZd03P48Gim9ZPEMDUCAwEAAaOCAdswggHXMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJQYDVR0R
-BB4wHIEaamFtZXMucXVpbmxhbkBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYBBQUHAwQwHwYD
-VR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFGx/E27aeGBP2eJktrILxlhK
-z8f6MA0GCSqGSIb3DQEBCwUAA4IBAQBdQQukiELsPfse49X4QNy/UN43dPUw0I1asiQ8wye3nAuD
-b3GFmf3SZKlgxBTdWJoaNmmUFW2H3HWOoQBnTeedLtV9M2Tb9vOKMncQD1f9hvWZR6LnZpjBIlKe
-+R+v6CLF07qYmBI6olvOY/Rsv9QpW9W8qZYk+2RkWHz/fR5N5YldKlJHP0NDT4Wjc5fEzV+mZC8A
-AlT80qiuCVv+IQP08ovEVSLPhUp8i1pwsHT9atbWOfXQjbq1B/ditFIbPzwmwJPuGUc7n7vpmtxB
-75sSFMj27j4JXl5W9vORgHR2YzuPBzfzDJU1ul0DIofSWVF6E1dx4tZohRED1Yl/T/ZGMYICbTCC
-AmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UE
-AxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMSO43VW7D5NP1X/KD
-MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCsHdABX4PzApSpRzzm6zpcrkI3RH/k
-9Y26kP1Xi7LReDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA0
-MzAyMTI0MzhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBFjALBglg
-hkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzALBglghkgBZQME
-AgEwDQYJKoZIhvcNAQEBBQAEggEAKVUbezOFcBbS7BqGqiaAcEAU2eYeKA332GEdGsBcQ4Am/0qr
-MD0G59Z/kO27M2G+fcIj64tXrMdOC2Ey3IzHLg7dYANcuB40dU+R2vE+vorlr/cEt+qAr8fFk2L6
-zQ2olKPZMV9PaaGYQV0RJeM8AnmXfvG1r2eSQ6KGiTwVY3f0mTuQSpzuqJzjKwrw8KwuCuNYiEdV
-bA+aswM+SbH3icy8nh/bXYkN9lTHmOT0H1Q99AMA1qqvyYWt38AKU6gBRRfvvT9N5UODbqBmAN6W
-PUPVH2tZhKwG+e6R/FVZlOwgwoiqjGVVoHk/n3ptVbLZrk3zJacCrIPuBrE+DoDYJA==
---000000000000695d0505fa9455c3--
+I know support for subscripting other types like re.Pattern was added
+in 3.9 per https://peps.python.org/pep-0585/ but it doesn't mention
+Popen there...
+This patch also added typing.IO[str] and concurrent.Future[None], so
+those might be problematic too.
+
+Can you check if the typing.IO and concurrent.Future[None] changes
+cause problems?
+(I don't have an easy way of testing against older Python versions currentl=
+y).
+
+If so, we should revert the patch.
+If not, we can undo just the Popen changes.
+
+And in either case, we'll need to update ./tools/testing/kunit/run_checks.p=
+y.
+Currently, it runs `mypy --strict` which will start failing if we
+revert any part of this patch.
+
+Thanks,
+Daniel
