@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AEC6F2814
+	by mail.lfdr.de (Postfix) with ESMTP id 178D46F2812
 	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjD3IU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 04:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
+        id S229576AbjD3Ia1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 04:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjD3IU0 (ORCPT
+        with ESMTP id S229451AbjD3IaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 04:20:26 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7396D26A5;
-        Sun, 30 Apr 2023 01:20:24 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5160E5C0101;
-        Sun, 30 Apr 2023 04:20:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 30 Apr 2023 04:20:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682842821; x=1682929221; bh=FtoIgx0IqE4PIcUscvctGI7W1hQLnKYUYIe
-        vTAA9fVk=; b=jz9kukz3E/TCjbKIb4KphaN8Ifhn8QMeqX4lzgM6Wvv6wo+VvY2
-        qhJaDGqfC8Y/rpMqNlIR9mAA7GLBsb/7NXcUvrqIOk2sCQZqZc4EfSHVGyeJG8Hf
-        UpOQvAFxOBjM1ZPVo+oS1abkLcswk6LPb1xiMolwa/jxUAySWuvzXyRbpeE3bpiM
-        0nJbZ3XmISTyfTu7BnBsCE36SW/ZbT5QXWtfvUYrt3uuHKoFLFMVqbcfev5fIcz5
-        dCbWJQ9xX4dYtteULC2TOOJEb4Ud3je67ENV9RCPic0sZvO7NO7iiUI53cvccuc3
-        NsCts6pH5dYt776u/X42fbFQxOGqSIFbKdA==
-X-ME-Sender: <xms:xCROZC4KTCfAFNg7pL7WuY0DayBFydQJt3q5NUz6-5ldoT5aGCn6EA>
-    <xme:xCROZL7F45oCPqqu6F-y7LwZrRl8vWjZGtlxpRZHtpgZMo64tp5cZrU-aaVsKFK9H
-    YqqjKG6MvtLNvY>
-X-ME-Received: <xmr:xCROZBc-LJ20h9ekR1tkdtQkNncruItMaKL098cn0GJ9Sjimgzd764nFqjQd>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvvddgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefkugho
-    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeekgefggefhuedvgeettdegvdeuvdfhudejvddvjeetledvuedtheehleel
-    hffhudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:xCROZPKFth_CkhvjzQrewk7C9lnJiRANdAZvvnkhuTjJtkY4bVGGTw>
-    <xmx:xCROZGI4ahCa36pGPSe4s1BphUCgATlZHzw515GqEyXivZmFkQXhJg>
-    <xmx:xCROZAyqIOMqvBD0yL1bMVXzchsAXts-gVgAhtXf-VFQaMPonv2dvw>
-    <xmx:xSROZIi0S5VW-87rI5OCFZJpLrvjU98XkBMDTXF0UL7FPfdm8-ymqA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 30 Apr 2023 04:20:19 -0400 (EDT)
-Date:   Sun, 30 Apr 2023 11:20:16 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>, kuba@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] netdevsim: fib: Make use of rhashtable_iter
-Message-ID: <ZE4kwMjQlcgrxuY7@shredder>
-References: <20230425144556.98799-1-cai.huoqing@linux.dev>
- <ZEjw7XXFro6zYYXz@gondor.apana.org.au>
- <ZEviO+NPFP/IoiO2@chq-MS-7D45>
+        Sun, 30 Apr 2023 04:30:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C7019A2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 01:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682843424; x=1714379424;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xHtJVUpepZ/08IQR0gZg205bEVCM3PAELJoyRRLzmjI=;
+  b=b69T801NDXRSQUotxo7EzUzvKTQsuLylEPLuWmLDt3uBHNcQ/MEPMEZu
+   8KWHXRYg9HGglUgW3hNo8OTuolRWbJZVGL7MLcg4wtqi6pxVQpv3Ee3d8
+   hrxmHUSelSwYmiMfx3LKGUaaTEPpzigCOBg+vujYiQ1TnYyd9U6EM2RyC
+   9oZIqmb2Q8wuSls/n/oO3WckdkituRm3wuUVQ5YyH1DH/9CEZRJ3HwWz5
+   ziBp78ZHVOVMIOBEgZ3ieIi//840QHxMIys1uHNgXV6M2pGk1ftQGPh4p
+   6cufkXr8Lwe0YQSHvmyEk2FQOp3jwbleukXzAu4LLEyWBtFBS/8DKMtP4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="376034465"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="376034465"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 01:30:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="839493108"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="839493108"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2023 01:30:22 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pt2Rp-0001Zp-3D;
+        Sun, 30 Apr 2023 08:30:22 +0000
+Date:   Sun, 30 Apr 2023 16:30:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
+Subject: riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local'
+ from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section
+ `.init.data.rel.ro.local'
+Message-ID: <202304301606.Cgp113Ha-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZEviO+NPFP/IoiO2@chq-MS-7D45>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 11:11:55PM +0800, Cai Huoqing wrote:
-> On 26 4月 23 17:37:49, Herbert Xu wrote:
-> > Cai Huoqing <cai.huoqing@linux.dev> wrote:
-> > > Iterating 'fib_rt_ht' by rhashtable_walk_next and rhashtable_iter directly
-> > > instead of using list_for_each, because each entry of fib_rt_ht can be
-> > > found by rhashtable API. And remove fib_rt_list.
-> > > 
-> > > Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> > > ---
-> > > drivers/net/netdevsim/fib.c | 37 ++++++++++++++++++-------------------
-> > > 1 file changed, 18 insertions(+), 19 deletions(-)
-> > 
-> > What is the rationale for this patch? Are you trying to save
-> > memory?
-> Hi 
-> Thanks for your reply,
-> 
-> I think not need to use two structs to link fib_rt node, 
-> fib_rt_list is redundant.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   825a0714d2b3883d4f8ff64f6933fb73ee3f1834
+commit: 26e7aacb83dfd04330673c5c9ac336560da52bb3 riscv: Allow to downgrade paging mode from the command line
+date:   4 days ago
+config: riscv-randconfig-r005-20230430 (https://download.01.org/0day-ci/archive/20230430/202304301606.Cgp113Ha-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=26e7aacb83dfd04330673c5c9ac336560da52bb3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 26e7aacb83dfd04330673c5c9ac336560da52bb3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-There are cases where we want to iterate over the objects without
-destroying the hashtable itself.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304301606.Cgp113Ha-lkp@intel.com/
 
-> 
-> Thanks,
-> Cai-
-> 
-> > 
-> > > @@ -1099,9 +1090,12 @@ static void nsim_fib_dump_inconsistent(struct notifier_block *nb)
-> > >        /* The notifier block is still not registered, so we do not need to
-> > >         * take any locks here.
-> > >         */
-> > > -       list_for_each_entry_safe(fib_rt, fib_rt_tmp, &data->fib_rt_list, list) {
-> > > -               rhashtable_remove_fast(&data->fib_rt_ht, &fib_rt->ht_node,
-> > > +       rhashtable_walk_enter(&data->fib_rt_ht, &hti);
-> > > +       rhashtable_walk_start(&hti);
-> > > +       while ((pos = rhashtable_walk_next(&hti))) {
-> > > +               rhashtable_remove_fast(&data->fib_rt_ht, hti.p,
-> > >                                       nsim_fib_rt_ht_params);
-> > > +               fib_rt = rhashtable_walk_peek(&hti);
-> > >                nsim_fib_rt_free(fib_rt, data);
-> > >        }
-> > 
-> > In general rhashtable walks are not stable.  You may miss entries
-> > or see entries twice.  They should be avoided unless absolutely
-> > necessary.
-> Agree, but how about using rhashtable_free_and_destroy here
-> instead of rhashtable_walk_next in this patch.
+All warnings (new ones prefixed by >>):
 
-We don't want to destroy the hashtable in this case, only free the
-objects.
+>> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
+>> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
+>> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
+>> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
+>> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
+>> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
+>> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
+>> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
