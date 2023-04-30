@@ -2,83 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C9F6F292B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 16:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FD96F2936
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 16:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjD3OPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 10:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S230386AbjD3OYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 10:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjD3OPJ (ORCPT
+        with ESMTP id S229461AbjD3OYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 10:15:09 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02BA171E;
-        Sun, 30 Apr 2023 07:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YJtCwQvXEsgN/DAG5ktUpq5HtX6DvhAJ6ab2hmFg45Q=; b=PGkwTjefbDsRkIxZOZyAAxXYvc
-        DRfxK+n+tV6/ZTbjyhSBZu5rooMxurrXu1pxh1XmlNyosfcR2WuMzNz2PXzC1jrD7Y+g5HXD9Qgz+
-        my4wpqPsnUPHABpedUl0HjB3faSt4mfNAhg75u5JUK5tZWN4ODSO4OlsnoRITmj/pyhQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pt7ov-00BYQq-LY; Sun, 30 Apr 2023 16:14:33 +0200
-Date:   Sun, 30 Apr 2023 16:14:33 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Bauer <mail@david-bauer.net>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] mt7530: register OF node for internal MDIO bus
-Message-ID: <842530f0-78b9-4cfe-9469-d20b1c0b5259@lunn.ch>
-References: <20230430112834.11520-1-mail@david-bauer.net>
+        Sun, 30 Apr 2023 10:24:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D619AF;
+        Sun, 30 Apr 2023 07:24:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D440660B52;
+        Sun, 30 Apr 2023 14:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33707C4339B;
+        Sun, 30 Apr 2023 14:24:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682864649;
+        bh=WUyj3KdAd9Atl/1BkhWqnGH8ctqOWWJAAQ/DHP6egtA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a4yplviEOx38Wp99s2w4MVC83zgmhuv9g+r2VyqA4cqMsF4bDuIMWqmv+kxgP6d/4
+         Ez6W38wtgU3uP/JosUh31ZT0WWjRWZFLrzL7wC8e0McPuFu/GPhP8ei5Rgp9LiZn5B
+         kBA61cZZ9A2Z/jNrExu9vEVfh3iqhPkaWfcXh6GJZ5MPbvV9ojMxMYwjSwpKqSOnbS
+         Ckt6e4A7HWs+OFDK/rNKbGVkUv3AfC8Mn9ApNjAa+pXMjcHuAOwMYEjBoNH3X4KXcF
+         YC/5Vad2LV1lkfGZ+uhbp151TwG9D1bgcnSW55s8PKge3SPhKO2G2+OlF/S2Wf0OcD
+         ooULd0PRupvMg==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2a8b082d6feso15301281fa.2;
+        Sun, 30 Apr 2023 07:24:09 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxshHpHDaMVc/l5IM8w0i1H6/hIvXdCfvPrbQHVbbNdDagcWJv9
+        A4VBZO5EZv3YaGyhA3Tpw3MHjK+mjU4FAtg6lT4=
+X-Google-Smtp-Source: ACHHUZ7iatufvCefUtOyZ/IMApy0Vb+ISlpGz7nI2uoEJ+4S+ZBqNx8ntCKsGERzEGQJY7SH9khYhduc9IuVbXP3lso=
+X-Received: by 2002:a2e:8ecc:0:b0:2a8:ea1e:bde9 with SMTP id
+ e12-20020a2e8ecc000000b002a8ea1ebde9mr3233347ljl.45.1682864647193; Sun, 30
+ Apr 2023 07:24:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230430112834.11520-1-mail@david-bauer.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com> <980069339b23a6cc4ae6d605d188338467a5b08b.1682673543.git.houwenlong.hwl@antgroup.com>
+In-Reply-To: <980069339b23a6cc4ae6d605d188338467a5b08b.1682673543.git.houwenlong.hwl@antgroup.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sun, 30 Apr 2023 16:23:56 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFFo6Y=p63N41DrN4wLzMNVdtD-hp6gBVQwNqrzt7oqwQ@mail.gmail.com>
+Message-ID: <CAMj1kXFFo6Y=p63N41DrN4wLzMNVdtD-hp6gBVQwNqrzt7oqwQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 25/43] x86/mm: Make the x86 GOT read-only
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 01:28:32PM +0200, David Bauer wrote:
-> The MT753x switches provide a switch-internal MDIO bus for the embedded
-> PHYs.
-> 
-> Register a OF sub-node on the switch OF-node for this internal MDIO bus.
-> This allows to configure the embedded PHYs using device-tree.
-> 
-> Signed-off-by: David Bauer <mail@david-bauer.net>
+On Fri, 28 Apr 2023 at 11:55, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+>
+> From: Thomas Garnier <thgarnie@chromium.org>
+>
+> From: Thomas Garnier <thgarnie@chromium.org>
+>
+> The GOT is changed during early boot when relocations are applied. Make
+> it read-only directly. This table exists only for PIE binary. Since weak
+> symbol reference would always be GOT reference, there are 8 entries in
+> GOT, but only one entry for __fentry__() is in use.  Other GOT
+> references have been optimized by linker.
+>
+> [Hou Wenlong: Change commit message and skip GOT size check]
+>
+> Signed-off-by: Thomas Garnier <thgarnie@chromium.org>
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/kernel/vmlinux.lds.S     |  2 ++
+>  include/asm-generic/vmlinux.lds.h | 12 ++++++++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> index f02dcde9f8a8..fa4c6582663f 100644
+> --- a/arch/x86/kernel/vmlinux.lds.S
+> +++ b/arch/x86/kernel/vmlinux.lds.S
+> @@ -462,6 +462,7 @@ SECTIONS
+>  #endif
+>                "Unexpected GOT/PLT entries detected!")
+>
+> +#ifndef CONFIG_X86_PIE
+>         /*
+>          * Sections that should stay zero sized, which is safer to
+>          * explicitly check instead of blindly discarding.
+> @@ -470,6 +471,7 @@ SECTIONS
+>                 *(.got) *(.igot.*)
+>         }
+>         ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> +#endif
+>
+>         .plt : {
+>                 *(.plt) *(.plt.*) *(.iplt)
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index d1f57e4868ed..438ed8b39896 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -441,6 +441,17 @@
+>         __end_ro_after_init = .;
+>  #endif
+>
+> +#ifdef CONFIG_X86_PIE
+> +#define RO_GOT_X86
 
-Hi David
+Please don't put X86 specific stuff in generic code.
 
-Please read
+> +       .got        : AT(ADDR(.got) - LOAD_OFFSET) {                    \
+> +               __start_got = .;                                        \
+> +               *(.got) *(.igot.*);                                     \
+> +               __end_got = .;                                          \
+> +       }
+> +#else
+> +#define RO_GOT_X86
+> +#endif
+> +
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+I don't think it makes sense for this definition to be conditional.
+You can include it conditionally from the x86 code, but even that
+seems unnecessary, given that it will be empty otherwise.
 
-You should put the tree in the patch subject.
-
-Also, net-next is closed at the moment due to the merge window. Please
-only post RFC patches during this time, and repost once net-next opens
-again.
-
-	Andrew
+>  /*
+>   * .kcfi_traps contains a list KCFI trap locations.
+>   */
+> @@ -486,6 +497,7 @@
+>                 BOUNDED_SECTION_PRE_LABEL(.pci_fixup_suspend_late, _pci_fixups_suspend_late, __start, __end) \
+>         }                                                               \
+>                                                                         \
+> +       RO_GOT_X86                                                      \
+>         FW_LOADER_BUILT_IN_DATA                                         \
+>         TRACEDATA                                                       \
+>                                                                         \
+> --
+> 2.31.1
+>
