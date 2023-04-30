@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B32D6F281B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06DF6F281D
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 11:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjD3I5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 04:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S229596AbjD3JLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjD3I5G (ORCPT
+        with ESMTP id S229452AbjD3JLo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 04:57:06 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A147198A;
-        Sun, 30 Apr 2023 01:57:05 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-42c38a6daf3so1216989137.3;
-        Sun, 30 Apr 2023 01:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682845024; x=1685437024;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TUB0ZCgq7Eu2qwsPwj7EOgIJn0k0QzLGub9moHFprfg=;
-        b=IKzMwuqCXqYo7KPZ0aOneffwkOjNhrCOy/Wucxu6h+1JX6Y/TAlsJopjbeV0hhxwsd
-         wnhjqXIX8e+g05MN9FQpE5UDIZjjONwvuXpcAY5mogLejPv1V/dTXbz26JcG2akS0f5z
-         WpBIu+uPIjvNryFK2/6xeLCLPMafSOLixvWq1ABeTpGRivB1SuFpL6xBTz6KzjlR1yfJ
-         Zc2Lkx0rcKZxtIl/t8+YfGDPervChOsk7jn090O0VGMSoNqiv19WNblI28cXWLFiQhBk
-         zCrfjjkd/0wASLaN7wMzKjPyasBnjiBxyNrr4+tK73OIhHAUjRukqfo3nAKYs/G4hNIF
-         hFng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682845024; x=1685437024;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TUB0ZCgq7Eu2qwsPwj7EOgIJn0k0QzLGub9moHFprfg=;
-        b=Jqt2ZDunA2JhO1subQbvzFl6+OcuCjTnY0nL7HZjEM4z8Ek2tRY0x5F31/NPo3UT0Z
-         qq/79kV2lQ9eCROtnhzbwd87skGoTPZvphOQz+TqAsVVcPy6hcZ39ZnK3NA4ezZgRuAm
-         6wzWJftQTI7C8ok6D8nCXGd/ZHfiH+Bi27GxhHzLxQctzsUWur5qVSv3eyiDNCc85NU5
-         b7z9swmcRkvCwZF8K+NQdD/eXMOn+uFTwVenTaoW4ivjhCQbW93USHARIgqRgd4MxaBP
-         Myoz0Pq07fSMBhtj6Bp/JqmC08vDZ6irwXixq6EvS3qoSfbNj2tVhEBiktmvjbPOm12S
-         xaZg==
-X-Gm-Message-State: AC+VfDzSKwkhWqZ+GEYi44sWS9eJYoNhYihr3306nJTyDxQ3jpw9N/Va
-        8fUKKykfk1gsuKCyWb1M4F78Rwno8r92K3jELy8=
-X-Google-Smtp-Source: ACHHUZ7TzXRW1JQTChKRJRNGkUYctSNDbhTbILvFz8rAKVy9G5YV10tEQNOn9aCGjzsbyrm/1InzGAhX+Broblv2hn0=
-X-Received: by 2002:a67:f88f:0:b0:430:6bdc:ee24 with SMTP id
- h15-20020a67f88f000000b004306bdcee24mr4748660vso.18.1682845024244; Sun, 30
- Apr 2023 01:57:04 -0700 (PDT)
+        Sun, 30 Apr 2023 05:11:44 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AF51B0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 02:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Reply-To:Content-ID:Content-Description;
+        bh=PTKOCu+q9XbmKYiaY3NFdCKMu4iSDQxTN+mg8FMfkbM=; b=l3ipX5P+95J3/iyM9zjkifHklP
+        2JXZraPlOFaTO5IkB9VYt6xct/NswagJ/Kw8SkstDBBfyYK8KBH+MHtOFoa49u5BhRRfTjSFrjCl5
+        LlJ4C+iFEp7uMnwgA9iLiYL00R2go86e+Ygeo6Lgy77Gjx2JbH7fUqZWLyAoG7MFa1+XTmvApo5A+
+        Xd59FAG3vZ0DOc+KZ1YwIC7Kd8altuohX0YzHXo0hAQtpNHCgheoy7YUpZdurh/aSE+mVOa9zPZw1
+        /1upaDzVDNl9smoGCY3cm8iKtR91egmmiOvlgc5z90CyqpA7xKEPwWlxIQfq1LnnJ1sf7RTt2MEQZ
+        pHCSJifg==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+        (Exim 4.94.2)
+        (envelope-from <ukleinek@debian.org>)
+        id 1pt35d-000foy-Ft; Sun, 30 Apr 2023 09:11:28 +0000
+Message-ID: <14858d07-abc2-48f9-329a-6d5a4faceeb9@debian.org>
+Date:   Sun, 30 Apr 2023 11:11:26 +0200
 MIME-Version: 1.0
-References: <0000000000006de361056b146dbe@google.com> <ZE4LZP5V/TGMoRwz@mit.edu>
-In-Reply-To: <ZE4LZP5V/TGMoRwz@mit.edu>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Sun, 30 Apr 2023 17:56:47 +0900
-Message-ID: <CAKFNMonK2VcZx=KEG8cz61bhwMvChEJ=T+FecxpGg1QiRCcZhA@mail.gmail.com>
-Subject: Re: INFO: task hung in lock_mount
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     syzbot <syzbot+221d75710bde87fa0e97@syzkaller.appspotmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] tools lib symbol: Use -D_FORTIFY_SOURCE=2 for non-debug
+ builds
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Diederik de Haas <didi.debian@cknow.org>
+References: <20230424102827.58707-1-ukleinek@debian.org>
+ <CAP-5=fUOL0FmtMbLQtRx2-_i6uvbsBLsxaAg54x8umT4npT7iA@mail.gmail.com>
+Content-Language: en-US, de-DE
+From:   =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <ukleinek@debian.org>
+In-Reply-To: <CAP-5=fUOL0FmtMbLQtRx2-_i6uvbsBLsxaAg54x8umT4npT7iA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Debian-User: ukleinek
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 30, 2023 at 3:59=E2=80=AFPM Theodore Ts'o wrote:
->
-> #syz set subsystems: nilfs
->
-> Per the information in the dashboard:
->
->         https://syzkaller.appspot.com/bug?extid=3D221d75710bde87fa0e97
->
-> There is no mention of ext4 anywhere, and nilfs does show up in the
-> stack trace.  So why this is marked with the lables "ext4", "nilfs" is
-> a mystery.
->
-> Fix it.
+On 4/29/23 23:05, Ian Rogers wrote:
+> On Mon, Apr 24, 2023 at 3:28 AM Uwe Kleine-König <ukleinek@debian.org> wrote:
+>>
+>> Commit 160be157eaba ("tool lib symbol: Add Makefile/Build") failed to
+>> define _FORTIFY_SOURCE to 2, probabaly this was cut&pasted from other
+>> Makefiles with the same problem.
+>>
+>> Fixes: 160be157eaba ("tool lib symbol: Add Makefile/Build")
+>> Signed-off-by: Uwe Kleine-König <ukleinek@debian.org>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
 
-I don't know why it got the ext4 tag.
-As you say, it looks like an issue on the nilfs2 side.  I will
-identify and fix it.
+Thanks
 
-Regards,
-Ryusuke Konishi
+> Same problem here I think:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/lib/api/Makefile#n42
+
+Indeed, and similar patch here:
+
+	https://lore.kernel.org/all/20230424102049.58338-1-ukleinek@debian.org/
+
+Best regards
+Uwe
