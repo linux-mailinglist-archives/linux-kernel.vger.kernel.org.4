@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D0D6F275B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 04:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14116F2760
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 04:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjD3CYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 29 Apr 2023 22:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        id S230359AbjD3Cn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 29 Apr 2023 22:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjD3CYX (ORCPT
+        with ESMTP id S229721AbjD3CnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 29 Apr 2023 22:24:23 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8224E19BB
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:24:22 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-763646b324aso190103339f.0
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:24:22 -0700 (PDT)
+        Sat, 29 Apr 2023 22:43:25 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F25C19BF
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:43:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-760eead6a4aso70510439f.3
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 19:43:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682821461; x=1685413461;
+        d=1e100.net; s=20221208; t=1682822604; x=1685414604;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBAnq+G06277iYlhw0ATteiSzgOavHY3/Zjp655Iswc=;
-        b=XhutpoRXBoLWcc3KkKysssBPiPUJ8ZOtctPpgymr1Tyd5opICMvnSherZe2T4NEZtT
-         SdNgBV4iibGPeadjr6hkRDfIGBIIjADI8xonzP9tRnOxyzKiVXWWvhldrRx5hXFIWhRz
-         0F6fx+9cB1/JfUSer2/Q/51WZ4CeS6RGIEYKbhvxKxBMlw5ioklcYjs8XROl+97unlWl
-         3eqGlkiHhrYrw81EHfAwM6bqiR3CcKiDgy+ZmyQqP0BhgBS6axSjk/NggrUOAk/80hmy
-         B9IvflmBbpnO5skHtMZswgLLr9f9M0LWeUtvfXxKo40fJzwFWrVwFRcZtHB+sQIdhuho
-         pmZQ==
-X-Gm-Message-State: AC+VfDxmio2DiUg/MCRRP0hCTHvHJfM9q0ExbcD/2wY76Lt0tqyophg3
-        s+b7bM7ZlRoZmMNoU2H3aXxjw+1JLx4CJMJZYeHY4M/3dNxl
-X-Google-Smtp-Source: ACHHUZ6Ky8YOkqiRCIdzfNErbUeAJ+7JDmz+Ptsc55fK4cXKAhiYcfvLor3ZHoJuSOaFiYm9NZwIG1DTmzEp7BMEbkRhYdM9KXMe
+        bh=kHyqiYshGATJqd+nvOc8o3zWkjOstzf+D/pKrldpisU=;
+        b=cXj68oV0l6yDzPEfP9HRRnrYG4ktmMwko9ElV7WZoBL42t5a7dG0kq1a4eL/mc2FKH
+         0TX3A82uLsBK2YV7OLwfLiNXnPSPmUTMdWvG1pIXSrCWHTEMzW/m05lOZgLI5FagZXTp
+         8bD/xs9QncYREPnuWdut7dwkwqJwakLSZx2MBvX5VlSYVsCoNt5dT1lqIpoEoGT53Xig
+         Whl6A9ov3pn6grR+8LNKQRJPSIT6PP+omHvV0nW8ZQrflEJ2mJJ7R7tLnTKtyCIC4NNV
+         PFwKUUkH3w1B9++fGNsRubnCNXnIdZsfwPDhEztQr1LVYwYt7neSuzKAfE/C2D/K7h4m
+         lgvA==
+X-Gm-Message-State: AC+VfDys/LqddGq8gmaLtQdpEz/QThDIYlGem/bRJB4csAAGMBaqDcpR
+        lFhJCYhKviVb38AZG8xM5I5OiDBfSeuDiikeqHu3M62BEGyx
+X-Google-Smtp-Source: ACHHUZ6evyzRwmJE2gtwEIVQij+x3tGT2m7zymCxJOcc7onqVpht+dBqd0zOtyaE1pSrxQUBIsq1yuIgdnKLsEfkdzVpdhru4tyI
 MIME-Version: 1.0
-X-Received: by 2002:a02:85cd:0:b0:40f:910c:92d6 with SMTP id
- d71-20020a0285cd000000b0040f910c92d6mr4095647jai.6.1682821461741; Sat, 29 Apr
- 2023 19:24:21 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 19:24:21 -0700
-In-Reply-To: <20230430012707.2936-1-hdanton@sina.com>
+X-Received: by 2002:a6b:7601:0:b0:762:f8d4:6f2 with SMTP id
+ g1-20020a6b7601000000b00762f8d406f2mr4445063iom.2.1682822603919; Sat, 29 Apr
+ 2023 19:43:23 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 19:43:23 -0700
+In-Reply-To: <20230430014527.3017-1-hdanton@sina.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007297c705fa846734@google.com>
-Subject: Re: [syzbot] [ext4?] [fat?] possible deadlock in sys_quotactl_fd
-From:   syzbot <syzbot+aacb82fca60873422114@syzkaller.appspotmail.com>
+Message-ID: <00000000000086d97a05fa84ab33@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in xpad_probe
+From:   syzbot <syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com>
 To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,17 +59,16 @@ Hello,
 
 syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+aacb82fca60873422114@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
 
 Tested on:
 
-commit:         14f8db1c Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1390f330280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
-dashboard link: https://syzkaller.appspot.com/bug?extid=aacb82fca60873422114
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=143f4664280000
+commit:         92e815cf Add linux-next specific files for 20230428
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=17eb28f8280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8c8ae4d47d23592
+dashboard link: https://syzkaller.appspot.com/bug?extid=a3f758b8d8cb7e49afec
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1578fdf0280000
 
 Note: testing is done by a robot and is best-effort only.
