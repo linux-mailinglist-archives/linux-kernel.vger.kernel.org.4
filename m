@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B7C6F2B6F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B07E6F2B69
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjD3WsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 18:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
+        id S232086AbjD3Wmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 18:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjD3WsU (ORCPT
+        with ESMTP id S229659AbjD3Wmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 18:48:20 -0400
-X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 30 Apr 2023 15:48:17 PDT
-Received: from www.vigovproductions.net (www.vigovproductions.net [86.43.91.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FF11BF
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 15:48:17 -0700 (PDT)
-Received: from vigov-webserver.vigovproductions.net (localhost [127.0.0.1])
-        by vigov-webserver.vigovproductions.net (OpenSMTPD) with ESMTP id be784070;
-        Sun, 30 Apr 2023 23:41:35 +0100 (IST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=vigovproductions.net; h=to
-        :cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=mail; bh=
-        juXyoiof4ex/uZvf7aBY5+aQaAo=; b=iTkoFPC8xWMvBjg2WoxloPHwvnMZLdRb
-        Lk/oxT1NmYgFohaeRK+G48wyYdD97pn7IgYUTd7VwChNvzdJYFz7BTKDxafbXKe+
-        gwWBWkzkBGoH+N1aD7D+XmmnND5WSnHl+kqRUkEhY43rqxqutfpokmeIKFbC5shl
-        xofJt2MUSAS+mziW7c0uwhsvAqjwbxQJ5GzmMQ5oH9a+P9fIftTT6E7sAFpUH9AG
-        vmQ2Cqw5mG3RrbnlBnwmVX2xYBEknV874hNR40TkwrkMx0+8LqdT6wbwU2f3//Ks
-        rMrMbqE8PodPxLtbx/frQBazyvFnXIT30jObs0oVQ7zAuJvVasCXdQ==
-DomainKey-Signature: a=rsa-sha1; c=nofws; d=vigovproductions.net; h=to
-        :cc:references:from:subject:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; q=dns; s=
-        mail; b=Li2USaB56wmXQTAb8AvXbMvISqCk2YHGynIPV6Bhr+ijkwUakwYc80/Z
-        gFqOcLyWOXTiq0lJUctts0pC5VhY1/57NSRkl+hvLK0KSjt6sgSJl1Uy+kLwj1Kd
-        4Vu3DCGcchEzk/GRQ3dmWlO26M+/Jr0pcVlRNQyU+ZGPCCsmYvqJ4wC7GaoKlVVZ
-        sHZjF7PLTxsWWTGF+oxJ+8FdLdLIA9iE6sQQcCbnfru4tFuGNbkTrKGdH8W1XfP4
-        7pZgCCfgwmXoxo30iy0UKU5LqroWBRjUl51U7a1/MwuS9PJWTHfown97jAD/xhWL
-        NjCkhoXcEQszW1VqqijnfGvPe6HFPQ==
-Received: from [192.168.1.52] (www.vigovproductions.net [86.43.91.159])
-        by www.vigovproductions.net (OpenSMTPD) with ESMTPSA id 416617b0 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
-        Sun, 30 Apr 2023 23:41:35 +0100 (IST)
-To:     Tad <support@spotco.us>, liam.howlett@oracle.com
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, rick.p.edgecombe@intel.com
-References: <e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us>
-From:   Michael Keyes <mgkeyes@vigovproductions.net>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mgkeyes@vigovproductions.net; prefer-encrypt=mutual; keydata=
- xsBNBFbRwEIBCACtizW7jkoD17g0VZFc+pBoevENZSJ6um8pNY1KEzmUOjHpz3hM+4qYp+/O
- XdmDOuh24n9yegOjy/29ILifLeAmYbzDI/a7+2HHtcOX6ekCWpEaS3tuED+4q0qPPBeN407C
- LVGh4aJqlphQxRcOVduJv1qmxFzuNjLbkL9JVcjQ7iuJgKr3yUp766gULp95z10GmlpogkEV
- 2av19L8nHOjMqS+cXZYuqnks+uNEduZNg9U8alVF4Z61DZZO/69XBN3y+fUDZkB7RNIWPkhh
- qbpWwR1wB8El+ZmQveLX64AKp7+y9ouwdlfYxQFFjWcJDnhYlBeFN+3FrFnvWGtrrO6vABEB
- AAHNLE1pY2hhZWwgS2V5ZXMgPG1na2V5ZXNAdmlnb3Zwcm9kdWN0aW9ucy5uZXQ+wsB3BBMB
- CAAhBQJW0cBCAhsDBQsJCAcCBhUICQoLAgQWAgMBAh4BAheAAAoJEI0xE/fTb4M8SpoH/RGS
- 0SdDeE/FCFY51HNvRs/DfPT+lkpzOmvRz9VghTG1uAJ18XhGZyloj4Y45zvvfwuIZ4h4/Rs5
- hUGZvUNdzqqTsKv1oVzvf7Jk/9Y8ycnfuXHO/QavpKCj5LnRIT0WUFU2tezDs4fwcqw3wXbu
- iz5sa+jTCSNkH6WryytkDx8CSq4KftgjB/uujvz3YMExvS7JjyPSnLsVYXws7HlHvl4u9oMD
- aCfci4bp/0i8oL499yUO7HC5jQwwkP9OZbAlgySPErEpahXG9Kx6MD82yy1JHdLmePyc74M8
- U1k1FKABvjXEigoCRzjVtyiINCpNv6+kMS6M+fQMLuVM5gQKKLjOwE0EVtHAQgEIANgZcP6N
- Zy+jGkG4xp2Cs2E0SndXI4BV4HD6BZhsfQdrluhv058pdkz9Y081v6NzRTFuqeOCNzp1lftS
- qwA6UzpshTQB2SvUk1H/mwdEWhG8DDf4FFtde4m5nEvr0Sj/ZIzaynQIUHzQBnuuS1y4Btyi
- yQGFalRwQqcnuWJ+f+/zj9haXbdWPmZdSxIeO4C3v6+leh/cWdNjFt6xtWy546QkW9IZO++m
- 31+DdxlxwlwZQZrrV6orS60HWB4IYJBI0W5/z3EBlqJ026eLiWapYrNtrJyePI9pIP3diOd3
- m6WiFSZELD3YSUHOSvcBoBfkl7LOUALLXKE3/CRucN7sH3MAEQEAAcLAXwQYAQgACQUCVtHA
- QgIbDAAKCRCNMRP302+DPM83CACTbzcLgrHEj5So0+FkSToc3pO5KOH0qLu9fA2TTY3jjM5U
- BproFhlDR3nrZBrtveN7B6ni7efOgZnFlSYfJBLnDg0joQLqM4DrdBJLsGo/eAomMJbLMWSm
- fSQ6VhIISNgPoh7db4HyACfr0SpBmK+OmkMB/yIhtqFjYJ7+Ms1IUd2TMlpDYaP98zsf4Hl5
- A2ClhHpU+EB5AjCA+inVSwtj7NLJC30UOTJV9IbFwhPml/OdwZoSntWGY2OTIuBnt+3XbuHD
- zg9A46AXrTTLkqWrUI6IZtApqJd4sIXytnvf0W8MZ8pmP9wX7isvmychTrQ4JsEFxc3e1Sm9
- m3gn/II+
-Subject: Re: [PATCH v2] mm/mmap: Regression fix for unmapped_area{_topdown}
-Message-ID: <90777046-a420-b19f-1847-d353b9938131@vigovproductions.net>
-Date:   Sun, 30 Apr 2023 23:41:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.5.2
+        Sun, 30 Apr 2023 18:42:36 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A83C1A6;
+        Sun, 30 Apr 2023 15:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=IUE5amqL9BucAB7kjVHcdUTO9lbn54HNTdXpB2O3GWo=; b=S5G4muzsQiNHompW+/7NLfCi/j
+        a1S/2mXy0uwc0m2pZSf/OvblklkSFzoQNL9rCj6Q21uM4CqsPKPDA+5xQTuYV0T27F5q19uwMmzDf
+        WYBhCwtFMjSUkxndoLQJoFsViJ0BSq/G196+VTFiPeNYZ/Z33GjdA0kQ3HKGT33Ui2h4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ptFkJ-00BZoa-Fk; Mon, 01 May 2023 00:42:19 +0200
+Date:   Mon, 1 May 2023 00:42:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 05/11] leds: trigger: netdev: introduce validating
+ requested mode
+Message-ID: <43f6a729-7003-4d52-b806-964dec4f9447@lunn.ch>
+References: <20230427001541.18704-1-ansuelsmth@gmail.com>
+ <20230427001541.18704-6-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427001541.18704-6-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.04.23 15:32, Tad wrote:
-> This reintroduces the issue described in
-> https://lore.kernel.org/linux-mm/cb8dc31a-fef2-1d09-f133-e9f7b9f9e77a@s=
-ony.com/
-Yes, I also ran into this (even though I'd somehow missed it the
-previous time).
+> @@ -168,7 +174,7 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
+>  				     size_t size, enum led_trigger_netdev_modes attr)
+>  {
+>  	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
+> -	unsigned long state;
+> +	unsigned long state, new_mode = trigger_data->mode;
+>  	int ret;
+>  	int bit;
+>  
+> @@ -186,12 +192,18 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
+>  		return -EINVAL;
+>  	}
+>  
+> -	cancel_delayed_work_sync(&trigger_data->work);
+> -
+>  	if (state)
+> -		set_bit(bit, &trigger_data->mode);
+> +		set_bit(bit, &new_mode);
+>  	else
+> -		clear_bit(bit, &trigger_data->mode);
+> +		clear_bit(bit, &new_mode);
+> +
+> +	ret = validate_requested_mode(trigger_data, new_mode);
+> +	if (ret)
+> +		return ret;
+> +
+> +	cancel_delayed_work_sync(&trigger_data->work);
+> +
+> +	trigger_data->mode = new_mode;
+>  
+>  	set_baseline_state(trigger_data);
 
-Apparently the issue arises at mm/mmap.c:1582, where low_limit is set to
-vm_end_gap(tmp). Occasionally, this returns a 64-bit address (e.g.
-0x7fedea581000), which is obviously greater than high_limit for a 32-bit
-mmap, and causes the next call to mas_empty_area() to fail.
+I think you need to hold the trigger_data lock here, otherwise there
+are potential race conditions.
 
-I'm not sure why vm_end_gap(tmp) occasionally returns a 64-bit address,
-or if the best solution is to just check for this and skip the retry if
-it occurs=E2=80=A6
-
---=20
-Michael
-
-
+    Andrew
