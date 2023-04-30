@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA2C6F2A2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 20:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C236F2A2E
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 20:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjD3SIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 14:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S231382AbjD3SIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 14:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjD3SIe (ORCPT
+        with ESMTP id S231305AbjD3SIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 14:08:34 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8C31BCB
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 11:08:33 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33UI8SCd023590
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 30 Apr 2023 14:08:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1682878110; bh=DkHAcRGSEuXknCmEuszxe+3AQ1tdkv5urhPP3UW/3K8=;
-        h=Date:From:To:Cc:Subject;
-        b=GF7ckwdCkUY3WYxJAsCaTgFy4nEboUyaaG/xDNW6J4AK1WxqxsmIVZa5pbLPoOBsU
-         HciGQrUuqtl8MzwZdyjrSwL3UmlBXD6AbWOLNN3n2CKYB/y+88as+240vDaFWs2d5C
-         9awts6dAH0PXcLBRugjZX8sA2hIzyXT10UF5ye6L/86DspmpoiwF7OI05higM6eb6V
-         poa92BdWdUEOC15W7F6PiBOfWEKpVJiCbAW8T6Z9omZUwub4Ol89tftdKv7Beafwsi
-         jKdZG+xpje0hQB3BKbL53K+bden1FE+C8IiiYGzsWTPUGyKlZRNEiA2hWB9hzpO7Pk
-         y9PMudbv4Azzg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 20E8415C02E2; Sun, 30 Apr 2023 14:08:28 -0400 (EDT)
-Date:   Sun, 30 Apr 2023 14:08:28 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: [GIT PULL] ext4 bug fixes for v6.4-rc1
-Message-ID: <20230430180828.GA584597@mit.edu>
+        Sun, 30 Apr 2023 14:08:46 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EA52D67;
+        Sun, 30 Apr 2023 11:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=/d/ZEszhW30qZrVlUU36K4Posqf8iHlf+AhyLNI5JVU=; b=hUwmFd+5iBoMxu7Z1eDhqta3Ma
+        F7jqSep2gK5m4EAT/E+cufTc0AwqdeVulJkBNdKX0wv07AyC743PALjYxPoWmww9bd6mfZJkaUJXl
+        MxoflGX0kRi9LlLgDZA3jnkiubiiVAFik1tSIZh1boZWaiH3Yo8FnIcQijj4VRgwoAkk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ptBTP-00BZ1G-3X; Sun, 30 Apr 2023 20:08:35 +0200
+Date:   Sun, 30 Apr 2023 20:08:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH 02/11] leds: add binding to check support for LED hw
+ control
+Message-ID: <71cde8c3-527d-4072-a05f-a463c5d3bf43@lunn.ch>
+References: <20230427001541.18704-1-ansuelsmth@gmail.com>
+ <20230427001541.18704-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230427001541.18704-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 519fe1bae7e20fc4e7f179d50b6102b49980e85d:
+> +	/*
+> +	 * Check if the LED driver supports the requested mode provided by the
+> +	 * defined supported trigger to setup the LED to hw control mode.
+> +	 */
+> +	int			(*hw_control_is_supported)(struct led_classdev *led_cdev,
+> +							   unsigned long flags);
 
-  ext4: Add a uapi header for ext4 userspace APIs (2023-04-19 23:39:42 -0400)
+Hi Christian
 
-are available in the Git repository at:
+This needs better documentation. What is the expected return value? My
+initial implementation for the Marvell driver did not work. I returned
+-EINVAL if it was not supported and some value >= 0 if it was
+supported. And most times, it was > 0, not 0.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+However, when i look at the trigger code:
 
-for you to fetch changes up to d4fab7b28e2f5d74790d47a8d298da0abfb5132f:
+	/* Check if the requested mode is supported */
+	ret = led_cdev->hw_control_is_supported(led_cdev, hw_mode);
+	if (ret)
+		return ret;
 
-  ext4: clean up error handling in __ext4_fill_super() (2023-04-28 12:56:40 -0400)
+	*can_use_hw_control = true;
 
-----------------------------------------------------------------
-Some ext4 regression and bug fixes for -rc1
+Anything other than 0 means it is not supported.
 
-----------------------------------------------------------------
-Nathan Chancellor (1):
-      ext4: fix unused iterator variable warnings
-
-Theodore Ts'o (3):
-      ext4: fix lost error code reporting in __ext4_fill_super()
-      ext4: reflect error codes from ext4_multi_mount_protect() to its callers
-      ext4: clean up error handling in __ext4_fill_super()
-
-Ye Bin (1):
-      ext4: fix use-after-free read in ext4_find_extent for bigalloc + inline
-
-Zhihao Cheng (1):
-      ext4: fix i_disksize exceeding i_size problem in paritally written case
-
- fs/ext4/extents.c |  3 ++-
- fs/ext4/inode.c   |  3 +++
- fs/ext4/mmp.c     |  9 ++++++++-
- fs/ext4/super.c   | 77 +++++++++++++++++++++++++++++++++++++++++++----------------------------------
- 4 files changed, 56 insertions(+), 36 deletions(-)
+	 Andrew
