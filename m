@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C34C6F27DE
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6246F27E0
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjD3Gml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 02:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S231810AbjD3Gt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 02:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjD3Gmj (ORCPT
+        with ESMTP id S229452AbjD3Gty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 02:42:39 -0400
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412FF12B
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 23:42:38 -0700 (PDT)
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-32ad2e6cf31so21096995ab.2
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 23:42:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682836957; x=1685428957;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0t7JmHsKb1CxLcpeRqlieyAnnyFbgqZ6o3lYscFRxs=;
-        b=SbsweK/5YbaNOqFovH8mESzb3/pfE2VK3H0DjSgilibSswP0B5KTKJYUZiA+F6vGHt
-         CWLlh6W3qCrWJs9UeUA8O2yQO5BJE/BRyqYLU10FLOLO0USBqmHydKwS5qk3gWucu3PT
-         FVWY3yfM64ay7sG8Do8KSIFBvF5u5e2UQRED0hDMmxIjFMWsy0dmSqmUkTUDBrwL0ObI
-         2JVjkJd5zSWcNSVDhmHC0iWka/T9m+IZreRx2e5xLFU9aZbghv5Zw5JOpliqja7ASEUw
-         jOGX8h5y1PSxAO5nQjmprG4hcfU/2RfESQURvGvPdexBBiaoLkBFy5JAbcpCaj5TD9LZ
-         ku9Q==
-X-Gm-Message-State: AC+VfDzgtX4FGlITCO03ALeRpizJpAKPKyFJxwGlmc3XbnyFikem7QUm
-        m4dgA6njKiPS280XaPwCRM89grkg8Zw8Amymt9kcTAEWftbp
-X-Google-Smtp-Source: ACHHUZ4eV9iZGQSPv3nARd4QiBGYsrPiFRTyxKn6P0IOwZLOZDId0rxWBoW84malTBJzGyjtxziwtZucINE1fZoEEsoCNdUEd8UN
+        Sun, 30 Apr 2023 02:49:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CE81B8;
+        Sat, 29 Apr 2023 23:49:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D19860A2A;
+        Sun, 30 Apr 2023 06:49:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876F4C433EF;
+        Sun, 30 Apr 2023 06:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682837390;
+        bh=pwOCPEg+HScTv6sM47dUx/NLcjpZWowJc8Ut3PoBeK0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qv4JkBypIq1wXeBJCNTi9S5nVmPEDKiuDWbe/E1PsKPqgCryK6vYYhzF4sd7pJsuL
+         DpOMAP2cu5net9SpSRMnAxIjxXT3oW3sIq2MzI8sDpO+l/6HVC54ketKVex6S3VSrK
+         D9lHbAz5h4Y3U7cumrtztGLCV5zKdEaKH3YgKPSsumYUdq946RCAocAfW7HbqDWQ+A
+         fF2gvUS6c+CY8VltQJfoePZCrOigOBvidBfKsxvIUl53iNbBqWq09PQdJJ119YIDAz
+         hyFzRx6GzpGLirxVntyEjiJAAyhoIs2QrwTkokxboGf4jJ3xefXmB7jNB+lGP6wvmw
+         CVvp3FwkPGl1A==
+Date:   Sat, 29 Apr 2023 23:49:48 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, tools@linux.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Willy Tarreau <w@1wt.eu>
+Subject: [ANNOUNCE] New script that finds partially-backported patchsets
+Message-ID: <20230430064948.GA36600@sol.localdomain>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c0c6:0:b0:330:990e:1ae8 with SMTP id
- t6-20020a92c0c6000000b00330990e1ae8mr1123775ilf.0.1682836957658; Sat, 29 Apr
- 2023 23:42:37 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 23:42:37 -0700
-In-Reply-To: <00000000000014b32705fa5f3585@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000013882105fa88034b@google.com>
-Subject: Re: [syzbot] [btrfs?] general protection fault in btrfs_orphan_cleanup
-From:   syzbot <syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,102 +55,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    1ae78a14516b Merge tag '6.4-rc-ksmbd-server-fixes' of git:..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1795c2f7c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=50dff7d7b2557ef1
-dashboard link: https://syzkaller.appspot.com/bug?extid=2e15a1e4284bf8517741
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1255f594280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165b28f8280000
+As I promised on the "AUTOSEL process" centi-thread
+(https://lore.kernel.org/stable/20230226034256.771769-12-sashal@kernel.org/T/#u),
+I've developed some new scripts that can be found at
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/stable-tools.git :
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4818953c9914/disk-1ae78a14.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a78b3bf3e929/vmlinux-1ae78a14.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dae163980240/bzImage-1ae78a14.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/dd0e91b2ac87/mount_0.gz
+- `find-orig-patch`: Finds the original patch email from a git commit.
+   It first checks for a matching "Message-Id:" or "Link:" from the git commit.
+   If that fails, it falls back to a search of https://lore.kernel.org by
+   commit title and uses some heuristics to try to find the right patch email.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2e15a1e4284bf8517741@syzkaller.appspotmail.com
+- `find-orig-series`: Like find-orig-patch but outputs the full series.
 
-general protection fault, probably for non-canonical address 0xdffffc000000001a: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000000d0-0x00000000000000d7]
-CPU: 0 PID: 5860 Comm: syz-executor269 Not tainted 6.3.0-syzkaller-11301-g1ae78a14516b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1763
-Code: 06 2a 91 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 f2 f4 e8 ff 48 89 1c 24 48 8b 1b 48
-RSP: 0018:ffffc9000aa87a10 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: fffffffffffffffe
-RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed100dab82ef
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88806e6e0000
-R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
-FS:  00007fbc4e794700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbc55c5d908 CR3: 0000000071785000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_orphan_cleanup+0xa55/0xcf0 fs/btrfs/inode.c:3629
- create_snapshot+0x520/0x7e0 fs/btrfs/ioctl.c:852
- btrfs_mksubvol+0x5d0/0x750 fs/btrfs/ioctl.c:994
- btrfs_mksnapshot+0xb5/0xf0 fs/btrfs/ioctl.c:1040
- __btrfs_ioctl_snap_create+0x338/0x450 fs/btrfs/ioctl.c:1293
- btrfs_ioctl_snap_create+0x136/0x190 fs/btrfs/ioctl.c:1320
- btrfs_ioctl+0xbbc/0xd40
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbc55c0cda9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fbc4e7942f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fbc55c987f0 RCX: 00007fbc55c0cda9
-RDX: 0000000020001380 RSI: 0000000050009401 RDI: 0000000000000007
-RBP: 00007fbc55c645ec R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
-R13: 00007fbc55c635f0 R14: 697265765f666572 R15: 00007fbc55c987f8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:iput+0x40/0x8f0 fs/inode.c:1763
-Code: 06 2a 91 ff 48 85 ed 0f 84 56 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 8d 9d d8 00 00 00 48 89 d9 48 c1 e9 03 48 89 4c 24 08 <80> 3c 01 00 74 08 48 89 df e8 f2 f4 e8 ff 48 89 1c 24 48 8b 1b 48
-RSP: 0018:ffffc9000aa87a10 EFLAGS: 00010203
-RAX: dffffc0000000000 RBX: 00000000000000d6 RCX: 000000000000001a
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: fffffffffffffffe
-RBP: fffffffffffffffe R08: dffffc0000000000 R09: ffffed100dab82ef
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88806e6e0000
-R13: fffffffffffffffc R14: 00000000fffffffe R15: dffffc0000000000
-FS:  00007fbc4e794700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005578470fb7a0 CR3: 0000000071785000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	2a 91 ff 48 85 ed    	sub    -0x127ab701(%rcx),%dl
-   6:	0f 84 56 03 00 00    	je     0x362
-   c:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  13:	fc ff df
-  16:	48 8d 9d d8 00 00 00 	lea    0xd8(%rbp),%rbx
-  1d:	48 89 d9             	mov    %rbx,%rcx
-  20:	48 c1 e9 03          	shr    $0x3,%rcx
-  24:	48 89 4c 24 08       	mov    %rcx,0x8(%rsp)
-* 29:	80 3c 01 00          	cmpb   $0x0,(%rcx,%rax,1) <-- trapping instruction
-  2d:	74 08                	je     0x37
-  2f:	48 89 df             	mov    %rbx,%rdi
-  32:	e8 f2 f4 e8 ff       	callq  0xffe8f529
-  37:	48 89 1c 24          	mov    %rbx,(%rsp)
-  3b:	48 8b 1b             	mov    (%rbx),%rbx
-  3e:	48                   	rex.W
+- `find-missing-prereqs`: Finds commits that were backported without previous
+  patches in their original series also being backported.  It accepts a range of
+  git commits.  I also added an option to filter the results by AUTOSEL only.
 
+For more information, see the README at
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/stable-tools.git/tree/README.md
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Note: since it wasn't clear where to put these or how to integrate them into
+anything else, for now this is a completely standalone project.  Perhaps the
+find-orig-patch functionality would be a nice feature for b4, but the more
+stable-kernel-maintenance-specific logic should be in a separate project.  BTW,
+I used the same language and license as b4: Python and GPLv2+.
+
+I wrote some regression tests that show that find-missing-prereqs is able to
+detect the missing patches for a couple examples of missed backports that broke
+users, including the recent blk-cgroup one
+(https://lore.kernel.org/linux-block/CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com/T/#u).
+
+For another example, at the end of this email I've also pasted the output of
+'find-missing-prereqs v6.1.24..v6.1.26', which covers the last couple weeks of
+6.1.  I don't immediately see anything super interesting in there, and it picked
+up a few very long patchsets which is a bit annoying (maybe very long patchsets
+generally aren't interesting and should be skipped?).  But it's just an example.
+
+Something that could be built on top of this is a script that applies the
+patches from the stable-queue repository for each stable kernel version, and
+generates a report about each one.  BTW, I can work on these scripts more, but
+what I can't commit to doing is manually sending out reports every week...  I
+hope that this can be automated and/or adopted by the stable maintainers.
+
+Here's the output of 'find-missing-prereqs v6.1.24..v6.1.26':
+
+The following commit(s):
+  [PATCH 24/33] commit 779fd2a575cc ("drm/amd/display: Pass the right info to drm_dp_remove_payload")
+... are backported without earlier commit(s) in series:
+  [PATCH 1/33] commit de534c1cb031 ("drm/amd/display: Add height granularity limitation for dsc slice height calculation")
+  [PATCH 2/33] commit aee0c07a74d3 ("drm/amd/display: Unify DC logging for BW Alloc")
+  [PATCH 3/33] commit 67d198da2fd4 ("drm/amd/display: When blanking during init loop to find OPP index")
+  [PATCH 4/33] commit c93aa7f33e94 ("drm/amd/display: 3.2.225")
+  [PATCH 5/33] commit 0db13eae41fc ("drm/amd/display: Add minimum Z8 residency debug option")
+  [PATCH 6/33] commit 0215ce9057ed ("drm/amd/display: Update minimum stutter residency for DCN314 Z8")
+  [PATCH 7/33] commit c0a561d96a28 ("drm/amd/display: Drop CONFIG_DRM_AMD_DC_HDR")
+  [PATCH 8/33] commit 11efe095dfe0 ("drm/amd/display: Fix no-DCN build")
+  [PATCH 9/33] commit ab487ea8910d ("drm/amd/display: fix typo in dc_dsc_config_options structure")
+  [PATCH 10/33] commit 1e88eb1b2c25 ("drm/amd/display: Drop CONFIG_DRM_AMD_DC_HDCP")
+  [PATCH 11/33] commit efa4c4df864e ("drm/amd/display: call remove_stream_from_ctx from res_pool funcs")
+  [PATCH 12/33] commit 84c03df58d8b ("drm/amd/display: Build DSC without DCN config")
+  [PATCH 13/33] commit 36516001a7c9 ("drm/amd/display: move dc_link functions in accessories folder to dc_link_exports")
+  [PATCH 14/33] commit 76f5dc40ebb1 ("drm/amd/display: move dc_link functions in link root folder to dc_link_exports")
+  [PATCH 15/33] commit 6455cb522191 ("drm/amd/display: link link_dp_dpia_bw.o in makefile")
+  [PATCH 16/33] commit 202a3816f37e ("drm/amd/display: move dc_link functions in protocols folder to dc_link_exports")
+  [PATCH 17/33] commit 788c6e2ce5c7 ("drm/amd/display: replace all dc_link function call in link with link functions")
+  [PATCH 18/33] commit 34fd6df78869 ("drm/amd/display: Simplify register offsets")
+  [PATCH 19/33] commit 2b02d746c181 ("drm/amd/display: Keep PHY active for dp config")
+  [PATCH 21/33] commit bf77fda02411 ("drm/amd/display: Drop unnecessary DCN guards")
+  [PATCH 22/33] commit 4652ae7a51b7 ("drm/amd/display: Rename DCN config to FP")
+  [PATCH 23/33] commit de930140bb57 ("drm/amd/display: Update to correct min FCLK when construction BB")
+Original patch series is "[PATCH 00/33] DC Patches Mar 6th, 2023"
+(https://lore.kernel.org/r/20230303154022.2667-1-qingqing.zhuo@amd.com)
+
+The following commit(s):
+  [PATCH 2/4] commit 3570f3cc4aab ("RDMA/erdma: Update default EQ depth to 4096 and max_send_wr to 8192")
+  [PATCH 3/4] commit d682c9bc41fa ("RDMA/erdma: Inline mtt entries into WQE if supported")
+  [PATCH 4/4] commit 132918e08e86 ("RDMA/erdma: Defer probing if netdevice can not be found")
+... are backported without earlier commit(s) in series:
+  [PATCH 1/4] commit 3fe26c0493e4 ("RDMA/erdma: Fix some typos")
+Original patch series is "[PATCH for-rc 0/4] RDMA/erdma: erdma fixes 3-20-2023"
+(https://lore.kernel.org/r/20230320084652.16807-1-chengyou@linux.alibaba.com)
+
+The following commit(s):
+  [PATCH 15/26] commit 361b02e68181 ("KVM: arm64: Initialise hypervisor copies of host symbols unconditionally")
+... are backported without earlier commit(s) in series:
+  [PATCH 1/26] commit 0f4f7ae10ee4 ("KVM: arm64: Move hyp refcount manipulation helpers to common header file")
+  [PATCH 2/26] commit 72a5bc0f153c ("KVM: arm64: Allow attaching of non-coalescable pages to a hyp pool")
+  [PATCH 3/26] commit 8e6bcc3a4502 ("KVM: arm64: Back the hypervisor 'struct hyp_page' array for all memory")
+  [PATCH 4/26] commit 0d16d12eb26e ("KVM: arm64: Fix-up hyp stage-1 refcounts for all pages mapped at EL2")
+  [PATCH 5/26] commit 33bc332d4061 ("KVM: arm64: Unify identifiers used to distinguish host and hypervisor")
+  [PATCH 6/26] commit 1ed5c24c26f4 ("KVM: arm64: Implement do_donate() helper for donating memory")
+  [PATCH 7/26] commit 43c1ff8b7501 ("KVM: arm64: Prevent the donation of no-map pages")
+  [PATCH 8/26] commit 9926cfce8dcb ("KVM: arm64: Add helpers to pin memory shared with the hypervisor at EL2")
+  [PATCH 9/26] commit 4d968b12e6bb ("KVM: arm64: Include asm/kvm_mmu.h in nvhe/mem_protect.h")
+  [PATCH 10/26] commit 1c80002e3264 ("KVM: arm64: Add hyp_spinlock_t static initializer")
+  [PATCH 11/26] commit 5304002dc375 ("KVM: arm64: Rename 'host_kvm' to 'host_mmu'")
+  [PATCH 12/26] commit a1ec5c70d3f6 ("KVM: arm64: Add infrastructure to create and track pKVM instances at EL2")
+  [PATCH 13/26] commit 9d0c063a4d1d ("KVM: arm64: Instantiate pKVM hypervisor VM and vCPU structures from EL1")
+  [PATCH 14/26] commit aa6948f82f0b ("KVM: arm64: Add per-cpu fixmap infrastructure at EL2")
+Original patch series is "[PATCH v6 00/26] KVM: arm64: Introduce pKVM hyp VM and vCPU state at EL2"
+(https://lore.kernel.org/r/20221110190259.26861-1-will@kernel.org)
+
+The following commit(s):
+  [PATCH 2/2] commit 2fcfd51add22 ("Bluetooth: SCO: Fix possible circular locking dependency sco_sock_getsockopt")
+... are backported without earlier commit(s) in series:
+  [PATCH 1/2] commit 9a8ec9e8ebb5 ("Bluetooth: SCO: Fix possible circular locking dependency on sco_connect_cfm")
+
+The following commit(s):
+  [PATCH 3/4] commit 5620eeb379d1 ("tracing: Add trace_array_puts() to write into instance")
+... are backported without earlier commit(s) in series:
+  [PATCH 1/4] commit cb1f98c5e574 ("tracing: Add creation of instances at boot command line")
+  [PATCH 2/4] commit c4846480831e ("tracing: Add enabling of events to boot instances")
+Original patch series is "[PATCH v2 0/4] tracing: Addition of tracing instances via kernel command line"
+(https://lore.kernel.org/r/20230207172849.461894073@goodmis.org)
+
+The following commit(s):
+  [PATCH 36/66] commit 4ac57c3fe2c0 ("drm/amd/display: set dcn315 lb bpp to 48")
+... are backported without earlier commit(s) in series:
+  [PATCH 31/66] commit 0b5dfe12755f ("drm/amd/display: fix a divided-by-zero error")
+  [PATCH 35/66] commit 1e994cc0956b ("drm/amd/display: limit timing for single dimm memory")
+Original patch series is "[PATCH 00/66] DC Patches Apr 17th, 2023"
+(https://lore.kernel.org/r/20230414155330.5215-1-Qingqing.Zhuo@amd.com)
+
