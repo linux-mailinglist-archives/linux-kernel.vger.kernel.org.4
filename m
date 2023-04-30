@@ -2,81 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1446F2937
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 16:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3219F6F293B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 16:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjD3Odu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 10:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S230479AbjD3OgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 10:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjD3Odr (ORCPT
+        with ESMTP id S230167AbjD3OgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 10:33:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4283B1BFF;
-        Sun, 30 Apr 2023 07:33:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D062B60B3C;
-        Sun, 30 Apr 2023 14:33:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B3AC433EF;
-        Sun, 30 Apr 2023 14:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682865225;
-        bh=D6PyAACGGIHCjf0/eKaiMxPT+GM7jDwLMPX8hGlS7D8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FUauZpC8UD+Q1hLnNevFkdl3QJ6fGoNTj5DHpuPXWuu/xWe1ARiFbCS30BUD0nwZ/
-         /gOL1kd3HvSs+G/diOW1+8W0QeoovJZ0l4BmYCMXB0u7VC1t/aouUcMlkSKQiyb+yR
-         1eWBJBWVLJAW1zTvbQH64d3sufBw/t9qR1YOPoyMbr9HGtxAhB9Z/rhkqlq6RuycNm
-         8o/yboIiTvrNFui4gkary/ln8sj72kwf1zRvGwtD+Nvj6MYUb4sDxE96B/z8kADVvG
-         avUktsL4v8yIAdaWvdajRhD0d4ppoIFK1adGkQp0YHe8oZcV/FARvi5J1tACNbhGve
-         o3SHHry2p/Scg==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] tpmdd: a critical bug fix for v6.4-rc1 (v2)
-Date:   Sun, 30 Apr 2023 17:33:42 +0300
-Message-Id: <20230430143342.790113-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sun, 30 Apr 2023 10:36:08 -0400
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BA1211D;
+        Sun, 30 Apr 2023 07:36:06 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-3f19afc4fd8so8602275e9.2;
+        Sun, 30 Apr 2023 07:36:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682865365; x=1685457365;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FDvF+4jn75c0U/4/y4sFW3z5VmXzCZCBCvnk0YKahgs=;
+        b=jTHdELDZkKDM9s61nVMjGr+erzCuq8+Tvaazs/25XZbQ3OG5C2iB/7LFdn4Tngvthd
+         k6hsdgi9PyplKZsa9gordQ+Q5EAS7LXGsMeK7nFwx3JI4eyGTTpKNeAiG5Nk2YGB+NFR
+         tpgURyYERwnUs4INvqD2KvoGjDmEWWofCoH9a0LxgyjYuosmH+2CymXGBBpeNzT1aVnM
+         wWCgt2rwgziXVNRX0tm+FV+GCvckJ+xRBfDlEG5WAuB5s6LpTk9y17Eh6DOORLuSSTwy
+         96KYSQ8uOJUm5LA+ZCFhlubjcw4G9Lq7qjlPqnujAm11AQF0jTf8taXp0eY4llkojxyL
+         MymA==
+X-Gm-Message-State: AC+VfDwgQ6Gd5ApEt9Cbve9vRZpuPoWMs40Il6ba6ytWb6mHWg+DV18D
+        eMaYnB7Ojy335YBYn1kSeIH6Yhj2nww=
+X-Google-Smtp-Source: ACHHUZ6U+r3db8m41a6zCKCOVuqsc8/ZfYMBGuFIxgonr34g47cljfqoJluo9jKELqhg+WCaxYAT3A==
+X-Received: by 2002:a5d:6e83:0:b0:2f7:e3aa:677a with SMTP id k3-20020a5d6e83000000b002f7e3aa677amr7785255wrz.46.1682865364669;
+        Sun, 30 Apr 2023 07:36:04 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-018.fbsv.net. [2a03:2880:31ff:12::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z18-20020adfe552000000b002f3e1122c1asm26079134wrm.15.2023.04.30.07.36.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Apr 2023 07:36:03 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, axboe@kernel.dk, ming.lei@redhat.com
+Cc:     leit@fb.com, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, sagi@grimberg.me, joshi.k@samsung.com,
+        hch@lst.de, kbusch@kernel.org
+Subject: [PATCH v3 0/4] io_uring: Pass the whole sqe to commands
+Date:   Sun, 30 Apr 2023 07:35:28 -0700
+Message-Id: <20230430143532.605367-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6e98b09da931a00bf4e0477d0fa52748bf28fcce:
+These three patches prepare for the sock support in the io_uring cmd, as
+described in the following RFC:
 
-  Merge tag 'net-next-6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2023-04-26 16:07:23 -0700)
+	https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/
 
-are available in the Git repository at:
+Since the support linked above depends on other refactors, such as the sock
+ioctl() sock refactor[1], I would like to start integrating patches that have
+consensus and can bring value right now.  This will also reduce the patchset
+size later.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-v6.4-rc1-fix-v2
+Regarding to these three patches, they are simple changes that turn
+io_uring cmd subsystem more flexible (by passing the whole SQE to the
+command), and cleaning up an unnecessary compile check.
 
-for you to fetch changes up to 0c8862de05c1a087795ee0a87bf61a6394306cc0:
+These patches were tested by creating a file system and mounting an NVME disk
+using ubdsrv/ublkb0.
 
-  tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM drivers (2023-04-28 13:06:36 +0000)
+[1] ZD6Zw1GAZR28++3v@gmail.com/">https://lore.kernel.org/lkml/ZD6Zw1GAZR28++3v@gmail.com/
 
-----------------------------------------------------------------
-This PR fixes a critical bug in my first pull request. I fixed the
-cherry pick issue and tested with real hardare and libvirt/qemu plus
-swtpm.
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
-----------------------------------------------------------------
-Jarkko Sakkinen (1):
-      tpm: Re-enable TPM chip boostrapping non-tpm_tis TPM drivers
+V1 -> V2 :
+  * Create a helper to return the size of the SQE
+V2 -> V3:
+  * Transformed uring_sqe_size() into a proper function
+  * Fixed some commit messages
+  * Created a helper function for nvme/host to avoid casting
+  * Added a fourth patch to avoid ublk_drv's casts by using a proper helper
 
- drivers/char/tpm/tpm-chip.c     | 22 +++++++++++++++++++---
- drivers/char/tpm/tpm.h          |  2 +-
- drivers/char/tpm/tpm_tis_core.c |  2 +-
- include/linux/tpm.h             | 13 +++++++------
- 4 files changed, 28 insertions(+), 11 deletions(-)
+Breno Leitao (4):
+  io_uring: Create a helper to return the SQE size
+  io_uring: Pass whole sqe to commands
+  io_uring: Remove unnecessary BUILD_BUG_ON
+  block: ublk_drv: Add a helper instead of casting
+
+ drivers/block/ublk_drv.c  | 36 ++++++++++++++++++++++++------------
+ drivers/nvme/host/ioctl.c |  8 +++++++-
+ include/linux/io_uring.h  |  2 +-
+ io_uring/io_uring.h       | 10 ++++++++++
+ io_uring/opdef.c          |  2 +-
+ io_uring/uring_cmd.c      | 13 ++++---------
+ io_uring/uring_cmd.h      |  8 --------
+ 7 files changed, 47 insertions(+), 32 deletions(-)
+
+-- 
+2.34.1
+
