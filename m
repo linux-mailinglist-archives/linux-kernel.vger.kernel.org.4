@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D46F2812
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B32D6F281B
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 10:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjD3Ia1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 04:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S229576AbjD3I5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 04:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjD3IaZ (ORCPT
+        with ESMTP id S229814AbjD3I5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 04:30:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C7019A2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 01:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682843424; x=1714379424;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xHtJVUpepZ/08IQR0gZg205bEVCM3PAELJoyRRLzmjI=;
-  b=b69T801NDXRSQUotxo7EzUzvKTQsuLylEPLuWmLDt3uBHNcQ/MEPMEZu
-   8KWHXRYg9HGglUgW3hNo8OTuolRWbJZVGL7MLcg4wtqi6pxVQpv3Ee3d8
-   hrxmHUSelSwYmiMfx3LKGUaaTEPpzigCOBg+vujYiQ1TnYyd9U6EM2RyC
-   9oZIqmb2Q8wuSls/n/oO3WckdkituRm3wuUVQ5YyH1DH/9CEZRJ3HwWz5
-   ziBp78ZHVOVMIOBEgZ3ieIi//840QHxMIys1uHNgXV6M2pGk1ftQGPh4p
-   6cufkXr8Lwe0YQSHvmyEk2FQOp3jwbleukXzAu4LLEyWBtFBS/8DKMtP4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="376034465"
-X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
-   d="scan'208";a="376034465"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 01:30:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="839493108"
-X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
-   d="scan'208";a="839493108"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2023 01:30:22 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pt2Rp-0001Zp-3D;
-        Sun, 30 Apr 2023 08:30:22 +0000
-Date:   Sun, 30 Apr 2023 16:30:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
-Subject: riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local'
- from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section
- `.init.data.rel.ro.local'
-Message-ID: <202304301606.Cgp113Ha-lkp@intel.com>
+        Sun, 30 Apr 2023 04:57:06 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A147198A;
+        Sun, 30 Apr 2023 01:57:05 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-42c38a6daf3so1216989137.3;
+        Sun, 30 Apr 2023 01:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682845024; x=1685437024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TUB0ZCgq7Eu2qwsPwj7EOgIJn0k0QzLGub9moHFprfg=;
+        b=IKzMwuqCXqYo7KPZ0aOneffwkOjNhrCOy/Wucxu6h+1JX6Y/TAlsJopjbeV0hhxwsd
+         wnhjqXIX8e+g05MN9FQpE5UDIZjjONwvuXpcAY5mogLejPv1V/dTXbz26JcG2akS0f5z
+         WpBIu+uPIjvNryFK2/6xeLCLPMafSOLixvWq1ABeTpGRivB1SuFpL6xBTz6KzjlR1yfJ
+         Zc2Lkx0rcKZxtIl/t8+YfGDPervChOsk7jn090O0VGMSoNqiv19WNblI28cXWLFiQhBk
+         zCrfjjkd/0wASLaN7wMzKjPyasBnjiBxyNrr4+tK73OIhHAUjRukqfo3nAKYs/G4hNIF
+         hFng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682845024; x=1685437024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TUB0ZCgq7Eu2qwsPwj7EOgIJn0k0QzLGub9moHFprfg=;
+        b=Jqt2ZDunA2JhO1subQbvzFl6+OcuCjTnY0nL7HZjEM4z8Ek2tRY0x5F31/NPo3UT0Z
+         qq/79kV2lQ9eCROtnhzbwd87skGoTPZvphOQz+TqAsVVcPy6hcZ39ZnK3NA4ezZgRuAm
+         6wzWJftQTI7C8ok6D8nCXGd/ZHfiH+Bi27GxhHzLxQctzsUWur5qVSv3eyiDNCc85NU5
+         b7z9swmcRkvCwZF8K+NQdD/eXMOn+uFTwVenTaoW4ivjhCQbW93USHARIgqRgd4MxaBP
+         Myoz0Pq07fSMBhtj6Bp/JqmC08vDZ6irwXixq6EvS3qoSfbNj2tVhEBiktmvjbPOm12S
+         xaZg==
+X-Gm-Message-State: AC+VfDzSKwkhWqZ+GEYi44sWS9eJYoNhYihr3306nJTyDxQ3jpw9N/Va
+        8fUKKykfk1gsuKCyWb1M4F78Rwno8r92K3jELy8=
+X-Google-Smtp-Source: ACHHUZ7TzXRW1JQTChKRJRNGkUYctSNDbhTbILvFz8rAKVy9G5YV10tEQNOn9aCGjzsbyrm/1InzGAhX+Broblv2hn0=
+X-Received: by 2002:a67:f88f:0:b0:430:6bdc:ee24 with SMTP id
+ h15-20020a67f88f000000b004306bdcee24mr4748660vso.18.1682845024244; Sun, 30
+ Apr 2023 01:57:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <0000000000006de361056b146dbe@google.com> <ZE4LZP5V/TGMoRwz@mit.edu>
+In-Reply-To: <ZE4LZP5V/TGMoRwz@mit.edu>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Sun, 30 Apr 2023 17:56:47 +0900
+Message-ID: <CAKFNMonK2VcZx=KEG8cz61bhwMvChEJ=T+FecxpGg1QiRCcZhA@mail.gmail.com>
+Subject: Re: INFO: task hung in lock_mount
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     syzbot <syzbot+221d75710bde87fa0e97@syzkaller.appspotmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   825a0714d2b3883d4f8ff64f6933fb73ee3f1834
-commit: 26e7aacb83dfd04330673c5c9ac336560da52bb3 riscv: Allow to downgrade paging mode from the command line
-date:   4 days ago
-config: riscv-randconfig-r005-20230430 (https://download.01.org/0day-ci/archive/20230430/202304301606.Cgp113Ha-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=26e7aacb83dfd04330673c5c9ac336560da52bb3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 26e7aacb83dfd04330673c5c9ac336560da52bb3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sun, Apr 30, 2023 at 3:59=E2=80=AFPM Theodore Ts'o wrote:
+>
+> #syz set subsystems: nilfs
+>
+> Per the information in the dashboard:
+>
+>         https://syzkaller.appspot.com/bug?extid=3D221d75710bde87fa0e97
+>
+> There is no mention of ext4 anywhere, and nilfs does show up in the
+> stack trace.  So why this is marked with the lables "ext4", "nilfs" is
+> a mystery.
+>
+> Fix it.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304301606.Cgp113Ha-lkp@intel.com/
+I don't know why it got the ext4 tag.
+As you say, it looks like an issue on the nilfs2 side.  I will
+identify and fix it.
 
-All warnings (new ones prefixed by >>):
-
->> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
->> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
->> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
->> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
->> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
->> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
->> riscv64-linux-ld: warning: orphan section `.init.data.rel.ro.local' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.data.rel.ro.local'
->> riscv64-linux-ld: warning: orphan section `.init.printk_index' from `arch/riscv/kernel/pi/lib-fdt.pi.o' being placed in section `.init.printk_index'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Ryusuke Konishi
