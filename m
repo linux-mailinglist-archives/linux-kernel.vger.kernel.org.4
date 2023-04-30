@@ -2,189 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E38D6F298B
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9286F2990
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjD3Qtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 12:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S230374AbjD3Qyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 12:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjD3Qtq (ORCPT
+        with ESMTP id S229478AbjD3Qym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 12:49:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C4A170C;
-        Sun, 30 Apr 2023 09:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682873385; x=1714409385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/4lkaS66d7RfmGVcMxrZaN3B5HIVuHYecoGKid+YWlo=;
-  b=ZuAikf0heLH8cUJJeM/ccgCv+2nUR1pJfjLLhSd48YnfivgXalFPYm+Y
-   CR/ZFSAlyitzj9UIxnHeftbjRHbIY0xMVGxnOT4W55UmvzROC4A+sn3PE
-   UzHutarhVjdlAGGKP7w5Poh8j8UJq6YZAD1k/6X0LMTraMpMi8UXh2qW2
-   tMsrvXv/PQGtashl22PJFHOCuYnkT9RjYnK+6fVGk6qiF2cFL+0pRoIFs
-   cAQPYJrthHSBEYeVMxtJS2STLeNPO9WXyKd3ixGycnSLIP23M8/EeQsHE
-   H6ec3AMPqO/COnNLnqLvQYhfUEqxaw83+nAY6akXVoL7jZsdvrB+0Owrc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="434351239"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="434351239"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 09:49:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="695545916"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="695545916"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 30 Apr 2023 09:49:41 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptAF2-000033-0v;
-        Sun, 30 Apr 2023 16:49:40 +0000
-Date:   Mon, 1 May 2023 00:49:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-Message-ID: <202305010034.uh2F9KeO-lkp@intel.com>
-References: <20230426172520.2004711-1-AVKrasnov@sberdevices.ru>
+        Sun, 30 Apr 2023 12:54:42 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6620171D
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 09:54:40 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1aad6f208e8so1861305ad.1
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 09:54:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682873680; x=1685465680;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GNG8RUsR9FUAqdTwLBaZpI6pJsBbKdyT1Msigj0pj48=;
+        b=aZzu9BHxz1JrW/wmyl5h1y7qfhzXiZzls/8ZLLTnRy2Bcc9GY7pB8JERJcXpvDvzIm
+         DmyP/ApSYwYBMRNlSoDqaf2meQi+mhuDSJyzqJ1HZAIbMJdQrbuJug7xJ48V8PRVLTux
+         lkEOFl4vqL9ltrwSKr5tfnhOQTLx5I8fQJwoxo1TowkXREvcEhpO0kAB8LecFKqsqy3l
+         l1r6+A/oVgkKm0prxdAAmN8OTMhk1lCiJmuPm074K5sCeXcByqx56ISI6kTRlbm9tdo/
+         GJSkhBkUU2jYyKiXA4j3revMfKYKDFI/m157NGEi042fWQOPBUGR/3ZxVBz/fi+74RHU
+         tn1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682873680; x=1685465680;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GNG8RUsR9FUAqdTwLBaZpI6pJsBbKdyT1Msigj0pj48=;
+        b=d1+P/ZuW2ANrLUAFL2gSRAOJKQd6Bx6KUFjfPYJjIhhs/g9ByzcbTvifgn9UVsPPlV
+         ff3cjg242XkgLcLnL7nrZras1xRyYM5ZPnpvN7KHOML6Q76RW4ITb7gQ9q56QcinLtZU
+         T3IwBnweHFHugTvUsFC25FKGbz52MlNXpPmMCwg0gfLA/Lol5oSkJUYnyVH1KgxJPncx
+         sLNgW1fxdI+7AwuHvSRK2WD6b+5K8oI3gGwhDdI2OX7rk8PHKfqEKi/W5nyBs/j92LeE
+         M7gkG+BWLBN0qP+Ih9ORakcvwsCVdthgyTp8AvFZtExARHZI5jXggVEjkdgU2Xzdp26c
+         23+A==
+X-Gm-Message-State: AC+VfDwtkpLTQU/d418kueWMF/zIYrHbK8aRom1r9A5+vCDOWYtbKbo0
+        JaP0NmdxR4s+J0gK0qaZik5F0G5sWzcB5wPisFw=
+X-Google-Smtp-Source: ACHHUZ4nZSYEgXjT0MGD1P7m/BExrB7PV9aa0CpbB1RuqZ+/EsvVQs2Pv48ukoN985SXcfoWWygwtQ==
+X-Received: by 2002:a17:902:ea10:b0:1a9:1b4:9fdd with SMTP id s16-20020a170902ea1000b001a901b49fddmr10815448plg.2.1682873679998;
+        Sun, 30 Apr 2023 09:54:39 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jw11-20020a170903278b00b0019a593e45f1sm16472780plb.261.2023.04.30.09.54.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Apr 2023 09:54:39 -0700 (PDT)
+Message-ID: <123c391a-2569-6afd-2461-4e5b2ca298f3@kernel.dk>
+Date:   Sun, 30 Apr 2023 10:54:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426172520.2004711-1-AVKrasnov@sberdevices.ru>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] ext4: silence complaint if CONFIG_QUOTA isn't set
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Compiling the kernel ext4 spews a warning that 'i' is unused in two
+spots:
 
-kernel test robot noticed the following build errors:
+axboe@m1max ~/gi/linux-block (master)> make fs/ext4/super.o                    0.027s
+  CALL    scripts/checksyscalls.sh
+  CC      fs/ext4/super.o
+fs/ext4/super.c: In function ?ext4_put_super?:
+fs/ext4/super.c:1262:13: warning: unused variable ?i? [-Wunused-variable]
+  1262 |         int i, err;
+       |             ^
+fs/ext4/super.c: In function ?__ext4_fill_super?:
+fs/ext4/super.c:5200:22: warning: unused variable ?i? [-Wunused-variable]
+  5200 |         unsigned int i;
+       |                      ^
 
-[auto build test ERROR on mtd/nand/next]
-[also build test ERROR on linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Put the quota freeing code into a helper so we can stub it out for
+!CONFIG_QUOTA.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230427-013216
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230426172520.2004711-1-AVKrasnov%40sberdevices.ru
-patch subject: [PATCH v2] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-config: sparc-randconfig-c042-20230430 (https://download.01.org/0day-ci/archive/20230501/202305010034.uh2F9KeO-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/923eca7325935e1120923aeca0177cc0acc61475
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Arseniy-Krasnov/mtd-rawnand-macronix-OTP-access-for-MX30LFxG18AC/20230427-013216
-        git checkout 923eca7325935e1120923aeca0177cc0acc61475
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/mtd/nand/raw/
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305010034.uh2F9KeO-lkp@intel.com/
+This appears new, but I didn't check what commit potentially broke
+this...
 
-All errors (new ones prefixed by >>):
+ fs/ext4/super.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-   In file included from ./arch/sparc/include/generated/asm/div64.h:1,
-                    from include/linux/math.h:6,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/sparc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:7,
-                    from include/linux/slab.h:15,
-                    from drivers/mtd/nand/raw/nand_macronix.c:9:
-   drivers/mtd/nand/raw/nand_macronix.c: In function '__macronix_30lfxg18ac_rw_otp':
-   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                                   ^~
-   drivers/mtd/nand/raw/nand_macronix.c:398:24: note: in expansion of macro 'do_div'
-     398 |         offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-         |                        ^~~~~~
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/preempt.h:11:
-   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^~
-   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
-      77 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/mtd/nand/raw/nand_macronix.c:398:24: note: in expansion of macro 'do_div'
-     398 |         offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-         |                        ^~~~~~
->> include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-         |                                    |
-         |                                    long unsigned int *
-   drivers/mtd/nand/raw/nand_macronix.c:398:24: note: in expansion of macro 'do_div'
-     398 |         offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-         |                        ^~~~~~
-   include/asm-generic/div64.h:213:38: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'long unsigned int *'
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                            ~~~~~~~~~~^~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/__div64_32 +238 include/asm-generic/div64.h
-
-^1da177e4c3f415 Linus Torvalds     2005-04-16  215  
-^1da177e4c3f415 Linus Torvalds     2005-04-16  216  /* The unnecessary pointer compare is there
-^1da177e4c3f415 Linus Torvalds     2005-04-16  217   * to check for type safety (n must be 64bit)
-^1da177e4c3f415 Linus Torvalds     2005-04-16  218   */
-^1da177e4c3f415 Linus Torvalds     2005-04-16  219  # define do_div(n,base) ({				\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  220  	uint32_t __base = (base);			\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  221  	uint32_t __rem;					\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  222  	(void)(((typeof((n)) *)0) == ((uint64_t *)0));	\
-911918aa7ef6f86 Nicolas Pitre      2015-11-02  223  	if (__builtin_constant_p(__base) &&		\
-911918aa7ef6f86 Nicolas Pitre      2015-11-02  224  	    is_power_of_2(__base)) {			\
-911918aa7ef6f86 Nicolas Pitre      2015-11-02  225  		__rem = (n) & (__base - 1);		\
-911918aa7ef6f86 Nicolas Pitre      2015-11-02  226  		(n) >>= ilog2(__base);			\
-c747ce4706190ef Geert Uytterhoeven 2021-08-11  227  	} else if (__builtin_constant_p(__base) &&	\
-461a5e51060c93f Nicolas Pitre      2015-10-30  228  		   __base != 0) {			\
-461a5e51060c93f Nicolas Pitre      2015-10-30  229  		uint32_t __res_lo, __n_lo = (n);	\
-461a5e51060c93f Nicolas Pitre      2015-10-30  230  		(n) = __div64_const32(n, __base);	\
-461a5e51060c93f Nicolas Pitre      2015-10-30  231  		/* the remainder can be computed with 32-bit regs */ \
-461a5e51060c93f Nicolas Pitre      2015-10-30  232  		__res_lo = (n);				\
-461a5e51060c93f Nicolas Pitre      2015-10-30  233  		__rem = __n_lo - __res_lo * __base;	\
-911918aa7ef6f86 Nicolas Pitre      2015-11-02 @234  	} else if (likely(((n) >> 32) == 0)) {		\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  235  		__rem = (uint32_t)(n) % __base;		\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  236  		(n) = (uint32_t)(n) / __base;		\
-c747ce4706190ef Geert Uytterhoeven 2021-08-11  237  	} else {					\
-^1da177e4c3f415 Linus Torvalds     2005-04-16 @238  		__rem = __div64_32(&(n), __base);	\
-c747ce4706190ef Geert Uytterhoeven 2021-08-11  239  	}						\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  240  	__rem;						\
-^1da177e4c3f415 Linus Torvalds     2005-04-16  241   })
-^1da177e4c3f415 Linus Torvalds     2005-04-16  242  
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index d03bf0ecf505..5d85d7377d84 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1254,12 +1254,23 @@ static void ext4_flex_groups_free(struct ext4_sb_info *sbi)
+ 	rcu_read_unlock();
+ }
+ 
++static void ext4_free_quotas(struct super_block *sb,
++			     struct ext4_sb_info *sbi)
++{
++#ifdef CONFIG_QUOTA
++	unsigned int i;
++
++	for (i = 0; i < EXT4_MAXQUOTAS; i++)
++		kfree(get_qf_name(sb, sbi, i));
++#endif
++}
++
+ static void ext4_put_super(struct super_block *sb)
+ {
+ 	struct ext4_sb_info *sbi = EXT4_SB(sb);
+ 	struct ext4_super_block *es = sbi->s_es;
+ 	int aborted = 0;
+-	int i, err;
++	int err;
+ 
+ 	/*
+ 	 * Unregister sysfs before destroying jbd2 journal.
+@@ -1310,10 +1321,7 @@ static void ext4_put_super(struct super_block *sb)
+ 	ext4_group_desc_free(sbi);
+ 	ext4_flex_groups_free(sbi);
+ 	ext4_percpu_param_destroy(sbi);
+-#ifdef CONFIG_QUOTA
+-	for (i = 0; i < EXT4_MAXQUOTAS; i++)
+-		kfree(get_qf_name(sb, sbi, i));
+-#endif
++	ext4_free_quotas(sb, sbi);
+ 
+ 	/* Debugging code just in case the in-memory inode orphan list
+ 	 * isn't empty.  The on-disk one can be non-empty if we've
+@@ -5197,7 +5205,6 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 	ext4_fsblk_t logical_sb_block;
+ 	struct inode *root;
+ 	int ret = -ENOMEM;
+-	unsigned int i;
+ 	int needs_recovery;
+ 	int err = 0;
+ 	ext4_group_t first_not_zeroed;
+@@ -5627,10 +5634,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 	utf8_unload(sb->s_encoding);
+ #endif
+ 
+-#ifdef CONFIG_QUOTA
+-	for (i = 0; i < EXT4_MAXQUOTAS; i++)
+-		kfree(get_qf_name(sb, sbi, i));
+-#endif
++	ext4_free_quotas(sb, sbi);
+ 	fscrypt_free_dummy_policy(&sbi->s_dummy_enc_policy);
+ 	/* ext4_blkdev_remove() calls kill_bdev(), release bh before it. */
+ 	brelse(sbi->s_sbh);
+-- 
+2.39.2
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Jens Axboe
+
