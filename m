@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32A36F2976
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:14:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECF66F297A
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 18:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjD3QOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 12:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S230374AbjD3QSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 12:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjD3QOv (ORCPT
+        with ESMTP id S229452AbjD3QSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 12:14:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A238F1997
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 09:14:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36CF960B52
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 16:14:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47FF1C433EF;
-        Sun, 30 Apr 2023 16:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682871289;
-        bh=mZw6lY3AryiQpg8PEXI6vvSlsTp6tXZMpHM+z5tjvSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L4w3zlIs1PcgTSumMTn6nWCZ1jeKgiFWsjs162sVd+ZLljUHYXuOEH/QKhp+Ce/F4
-         7Ci90QoRlpeSCBETClDl4ZyM6MDKEAIR/OyMQnYabhn6WWu0VTRCDITq6HVFVU6FWW
-         rcUBWwZUuha0xX+4gwReegwLzb5eiJU42FXn1ZnvEQzlYvwQN6uzbSaWetQZKh9cB9
-         jv9l7GzMx1bI5Otac7ILxSuS1ENDlmsnpjmNBL9DivCuffGAY3nYftLZJN8AUDuVNP
-         GyzctbU0YX48EIBhBPLMubpCdgnRSzJAkDiQXSulIOq3kfzCXvV1KGzVENzWXwVHzk
-         rDJXXsV7ZrVJQ==
-Date:   Mon, 1 May 2023 01:14:44 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Collins <quic_collinsd@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/2] regulator: core: Avoid lockdep reports when
- resolving supplies
-Message-ID: <ZE6T9NwPbCOCC+ot@finisterre.sirena.org.uk>
-References: <20230329143317.RFC.v2.1.I4e9d433ea26360c06dd1381d091c82bb1a4ce843@changeid>
- <20230329143317.RFC.v2.2.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
- <CAE-0n53Eb1BeDPmjBycXUaQAF4ppiAM6UDWje_jiB9GAmR8MMw@mail.gmail.com>
- <CAD=FV=Wqu21ErJGwf24mkFcXTZx_vR1r++0cP68vr9FQDY8O-A@mail.gmail.com>
- <CAE-0n50vofDO6dpEvnetfvXL41m55j7_OXF=JGZ9L34M0xXPDA@mail.gmail.com>
+        Sun, 30 Apr 2023 12:18:12 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB3C2693;
+        Sun, 30 Apr 2023 09:18:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1682871453; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=RcKG0fq2Np8JTd1gJDHJ3xZGFExtlqzo5T7irO6pWfeZ/2/M2ZDm/jLBhjXs8kSkqYWKltiQnIDcEIfTBO7FtArT7A896bpZWX/bHXkDg1+sETSGhTQpfGWVAB0eCN0DF1yZRCAZon+5uG7q4OXL3GaSDy2zq2ERlpX200I2kq4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1682871453; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=V23TsjyY1dD7n4GR0wkMYD0yPbsZ48d23pahmY6bjZY=; 
+        b=egBI5N2x2xYD8oG6Kr7GWcgP9HX9ZmakF1ZNRuSnbe2Adsizk6Cd/KsfzZTavi2qqAUbis9aHymScsoIY7Cl8QpEXxKuW9JW/MEn3HvzSTzSD8PHtAzRRg6QyEtX/5W3pYCIJqQQT5LWlxzpfhUDqT2h168wLDyrOlfqDwO/V9E=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682871453;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:From:From:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=V23TsjyY1dD7n4GR0wkMYD0yPbsZ48d23pahmY6bjZY=;
+        b=FFkIp0TaDngLCZzkJ4tp5UabOW70Lfj1EnSKtRxj2nB+3YW1YNS1QrZ8kNC+JliO
+        OUTaUiy6xEo6mlWlpI1mzcCGLner8djPP+Lpq8LkAJFYiKG637OUtDZVVOs6EkIEVef
+        sklI13M03UKQ6L4dcgDVp7QB2mfB6EADw01b7t/8=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1682871451193369.77097793382404; Sun, 30 Apr 2023 09:17:31 -0700 (PDT)
+Message-ID: <396fad42-89d0-114d-c02e-ac483c1dd1ed@arinc9.com>
+Date:   Sun, 30 Apr 2023 19:17:10 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9tapRAjhGGSv3Ezs"
-Content-Disposition: inline
-In-Reply-To: <CAE-0n50vofDO6dpEvnetfvXL41m55j7_OXF=JGZ9L34M0xXPDA@mail.gmail.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document
+ MDIO-bus
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+To:     David Bauer <mail@david-bauer.net>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230430112834.11520-1-mail@david-bauer.net>
+ <20230430112834.11520-2-mail@david-bauer.net>
+ <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
+Content-Language: en-US
+In-Reply-To: <e4feeac2-636b-8b75-53a5-7603325fb411@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30.04.2023 15:34, Arınç ÜNAL wrote:
+> On 30.04.2023 14:28, David Bauer wrote:
+>> Document the ability to add nodes for the MDIO bus connecting the
+>> switch-internal PHYs.
+> 
+> This is quite interesting. Currently the PHY muxing feature for the 
+> MT7530 switch looks for some fake ethernet-phy definitions on the 
+> mdio-bus where the switch is also defined.
+> 
+> Looking at the binding here, there will be an mdio node under the switch 
+> node. This could be useful to define the ethernet-phys for PHY muxing 
+> here instead, so we don't waste the register addresses on the parent 
+> mdio-bus for fake things. It looks like this should work right out of 
+> the box. I will do some tests.
 
---9tapRAjhGGSv3Ezs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Once I start using the mdio node it forces me to define all the PHYs 
+which were defined as ports.
 
-On Fri, Apr 28, 2023 at 06:57:36PM -0700, Stephen Boyd wrote:
+[    4.159534] mt7530-mdio mdio-bus:1f lan0 (uninitialized): no phy at 1
+[    4.166002] mt7530-mdio mdio-bus:1f lan0 (uninitialized): failed to 
+connect to PHY: -ENODEV
+[    4.174421] mt7530-mdio mdio-bus:1f lan0 (uninitialized): error -19 
+setting up PHY for tree 0, switch 0, port 1
+[    4.185236] mt7530-mdio mdio-bus:1f lan1 (uninitialized): no phy at 2
+[    4.191753] mt7530-mdio mdio-bus:1f lan1 (uninitialized): failed to 
+connect to PHY: -ENODEV
+[    4.200150] mt7530-mdio mdio-bus:1f lan1 (uninitialized): error -19 
+setting up PHY for tree 0, switch 0, port 2
+[    4.210844] mt7530-mdio mdio-bus:1f lan2 (uninitialized): no phy at 3
+[    4.217361] mt7530-mdio mdio-bus:1f lan2 (uninitialized): failed to 
+connect to PHY: -ENODEV
+[    4.225734] mt7530-mdio mdio-bus:1f lan2 (uninitialized): error -19 
+setting up PHY for tree 0, switch 0, port 3
+[    4.236394] mt7530-mdio mdio-bus:1f lan3 (uninitialized): no phy at 4
+[    4.242901] mt7530-mdio mdio-bus:1f lan3 (uninitialized): failed to 
+connect to PHY: -ENODEV
+[    4.251297] mt7530-mdio mdio-bus:1f lan3 (uninitialized): error -19 
+setting up PHY for tree 0, switch 0, port 4
 
-> Does that long period of time cover a large section of code? I'm not so
-> much concerned about holding the lock for a long time. I'm mostly
-> concerned about holding the lock across the debugfs APIs, and
-> potentially anything else that debugfs might lock against. If the lock
-> is only really needed to modify the list in a safe manner then it may be
-> better to make it a little more complex so that we don't exit the
-> regulator framework with some rdev locks held.
+We can either force defining the PHYs on the mdio node which would break 
+the ABI, or forget about doing PHY muxing this way.
 
-I'm not sure that I understand the specific concerns with the debugfs
-APIs?
-
---9tapRAjhGGSv3Ezs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmROk/MACgkQJNaLcl1U
-h9Dvjgf/dtHe0UxzpjqGNfDBLNMJWHX7jJhBUCWW0AQCZnNps8P4jRGX4MIwZRhD
-nspAyieUK/h255zr0vYDR9mMtZen1/ZJAkauIUGNI52qNsihdKN1eaavQg20RGrH
-NbZNAcVQ57bMQ8nCP+5ZiCadhcQQsA81Zrx2pm67yzPcPMiwvAzna2xQWDG7hOAU
-6mIleyCzXFeCO9vFjemtLR42O5Z4+e5/cBaYqrshq96GBxwMMp0o2RfW0UZjW4hV
-fh/k6co3u2VUEykTxlkFu/zisqumN0muFB5z/qDnAXrAMOMhJr0l2HjnttbDGJfX
-B0dSkrjlNZp+7X6At2OJ/6QSX1eutQ==
-=3p9F
------END PGP SIGNATURE-----
-
---9tapRAjhGGSv3Ezs--
+Arınç
