@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D666F28F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 14:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370266F28F6
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 15:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjD3Mxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 08:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S229838AbjD3NAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 09:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjD3Mxu (ORCPT
+        with ESMTP id S229531AbjD3NAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 08:53:50 -0400
-Received: from sender3-op-o18.zoho.com (sender3-op-o18.zoho.com [136.143.184.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D84A2D48;
-        Sun, 30 Apr 2023 05:53:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1682859201; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=bBcQznq2fDpSERjj4ibrDKZPTQ07v29w5NADsTnqHyhEIZM6OsNShf0uzL+foGc9Ex4N3srsx9uRMsR/BN5UXvYRFtevJH/jUYHfuJZ9d1PwdNOg2kO3SglJ1ZwnTi4+VucFooDtGz7uN4dprLMx7tSVwXZvtzj6TU3k56Vu1sQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1682859201; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=PyF1LRlQ1oKiECojoeRp0HPAq+oTkJBBxCJK5o53pd4=; 
-        b=bru/DKsg6Qag0VMMmka691X37uAtZll7z5lujzQ3PXnuYmrsMamL1IsP5RSdZintKbdhsPbm8hly/hXyF1eWiv4DjXr+3LoXR8GtAFjHK7uRI6WpT0EQMr0jpRgfT8dSp9hLtfhmw6nkyHMfV2KTFQlqM+hV1yRA8EqPqjHMnYA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1682859201;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=PyF1LRlQ1oKiECojoeRp0HPAq+oTkJBBxCJK5o53pd4=;
-        b=kFzx6YZhHIE9pXmCb+9hCVIzeQmjibm+BW+4d3vErFN9r4e+NniM29dBWAorKU94
-        +w/QSsBTKiVkAJkzT/0myFOXBbcFWTusTeWdckYssTliHTMbU3k4MyzYOByutEhRo8w
-        EKw2TK4TbJ/e67ox/GboR4SzDC7MVSJLQSGXJUm4=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1682859200456253.51681302133647; Sun, 30 Apr 2023 05:53:20 -0700 (PDT)
-Message-ID: <fd6651a8-64e4-4f22-349f-b7f796ecffcc@arinc9.com>
-Date:   Sun, 30 Apr 2023 15:53:00 +0300
+        Sun, 30 Apr 2023 09:00:22 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7773E70;
+        Sun, 30 Apr 2023 06:00:20 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so15039185e9.3;
+        Sun, 30 Apr 2023 06:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682859619; x=1685451619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gJoztnqwIQgpjaOP6X2OK+4rUxlcDJhg6AbeMdHGJLI=;
+        b=ZgR/5hKiBoSBb3pYvmERFlJ9eIuK8McJDTki/qkZLZLcXXKBI0IPNGfJdIMAEBF2Vf
+         GruJzrHVSZ8oyoBwLtGtnYWHhbZdWoaUNFfOS9Nl2zQzyF/7RAoIAtqI2XgHIapgziWL
+         ZLsyAVdOnw30X0LCQCBf4IDRyaeInILd4N6DMC3GTMq8rhPGTgzWZrlw5T3DYyE6UfyO
+         vCBcJn8nLFqB4O4j4jn2+/tZCBZmCsPwhT9rDO2duiLt9AjPTb33BnX9C5th0xkhqCTI
+         15PMHu4v8DyXCLY4JdT8x0WYTobF4U4lRo2FAEnDmN5pLFexb2+1sjvnBkv2B7X1mD/e
+         odeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682859619; x=1685451619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gJoztnqwIQgpjaOP6X2OK+4rUxlcDJhg6AbeMdHGJLI=;
+        b=Y032vx8fbuuMxidc6ZtabXW4lrKcChtlSy2wWjI7vq4Urg3xDEs/p0rGgUk+TX0egW
+         7v9VuMPCpAgU8R/+2MRIDxAs24jMMy/7yZ5x8zNxliWPISlNcgi21SC86CnYPmEhQ9Zx
+         NYDgoK3Pa8Dk3GPijuOxclXhGKcVyhwGdk87z+xDc6BrnCH/0Mldcnus2GhCgzOGHc6D
+         JjySJcCdDmukcje+5tvfdF9a4c/eJMrv972OJWRtHcINRoAZOrdgLhwA6Qyfihp8m6oh
+         Gl0UAkqNce49OLm0cncXFenGDP3QkP0fOnPFtWVkC5wXZnj6OMiG5PQZFA6UM84RiRe/
+         LYWQ==
+X-Gm-Message-State: AC+VfDz1jDOe/tLqF/I24zttwanK5ZJAS9JItj+Ewcw9dr3sc6jnoCZ4
+        4UcdkM6LTCzkkYzdzNX8YGHq+unakfLWKw==
+X-Google-Smtp-Source: ACHHUZ6ClPaB2tSn/cDdBaR8COWvv3/lZgNrssz1O0d5viNUQLB3qekLnwv4YW++IfTJ+QzTP1CFgw==
+X-Received: by 2002:a05:600c:d7:b0:3f2:51e7:f110 with SMTP id u23-20020a05600c00d700b003f251e7f110mr7729914wmm.32.1682859619121;
+        Sun, 30 Apr 2023 06:00:19 -0700 (PDT)
+Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.googlemail.com with ESMTPSA id u5-20020a7bc045000000b003f32c9ea20fsm5228255wmc.11.2023.04.30.06.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Apr 2023 06:00:18 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        oliver.sang@intel.com, Mel Gorman <mgorman@suse.de>,
+        stable@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH] mm/mempolicy: Correctly update prev when policy is equal on mbind
+Date:   Sun, 30 Apr 2023 14:00:15 +0100
+Message-Id: <db42467a692d78c654ec5c1953329401bd8a9c34.1682859234.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document
- MDIO-bus
-Content-Language: en-US
-To:     David Bauer <mail@david-bauer.net>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230430112834.11520-1-mail@david-bauer.net>
- <20230430112834.11520-2-mail@david-bauer.net>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230430112834.11520-2-mail@david-bauer.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,30 +71,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.04.2023 14:28, David Bauer wrote:
-> Document the ability to add nodes for the MDIO bus connecting the
-> switch-internal PHYs.
-> 
-> Signed-off-by: David Bauer <mail@david-bauer.net>
-> ---
->   .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml        | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> index e532c6b795f4..50f8f83cc440 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-> @@ -128,6 +128,12 @@ properties:
->         See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
->         details for the regulator setup on these boards.
->   
-> +  mdio:
-> +    $ref: /schemas/net/mdio.yaml#
-> +    unevaluatedProperties: false
-> +    description:
-> +      Node for the internal MDIO bus connected to the embedded ethernet-PHYs.
+The refactoring in commit f4e9e0e69468 ("mm/mempolicy: fix use-after-free
+of VMA iterator") introduces a subtle bug which arises when attempting to
+apply a new NUMA policy across a range of VMAs in mbind_range().
 
-Maybe saying "connected to the internal switch PHYs" would better 
-explain this.
+The refactoring passes a **prev pointer to keep track of the previous VMA
+in order to reduce duplication, and in all but one case it keeps this
+correctly updated.
 
-Arınç
+The bug arises when a VMA within the specified range has an equivalent
+policy as determined by mpol_equal() - which unlike other cases, does not
+update prev.
+
+This can result in a situation where, later in the iteration, a VMA is
+found whose policy does need to change. At this point, vma_merge() is
+invoked with prev pointing to a VMA which is before the previous VMA.
+
+Since vma_merge() discovers the curr VMA by looking for the one immediately
+after prev, it will now be in a situation where this VMA is incorrect and
+the merge will not proceed correctly.
+
+This is checked in the VM_WARN_ON() invariant case with end > curr->vm_end,
+which, if a merge is possible, results in a warning (if CONFIG_DEBUG_VM is
+specified).
+
+I note that vma_merge() performs these invariant checks only after
+merge_prev/merge_next are checked, which is debatable as it hides this
+issue if no merge is possible even though a buggy situation has arisen.
+
+The solution is simply to update the prev pointer even when policies are
+equal.
+
+This caused a bug to arise in the 6.2.y stable tree, and this patch
+resolves this bug.
+
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Link: https://lore.kernel.org/oe-lkp/202304292203.44ddeff6-oliver.sang@intel.com
+Fixes: f4e9e0e69468 ("mm/mempolicy: fix use-after-free of VMA iterator")
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+---
+ mm/mempolicy.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 2068b594dc88..1756389a0609 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -808,8 +808,10 @@ static int mbind_range(struct vma_iterator *vmi, struct vm_area_struct *vma,
+ 		vmstart = vma->vm_start;
+ 	}
+ 
+-	if (mpol_equal(vma_policy(vma), new_pol))
++	if (mpol_equal(vma_policy(vma), new_pol)) {
++		*prev = vma;
+ 		return 0;
++	}
+ 
+ 	pgoff = vma->vm_pgoff + ((vmstart - vma->vm_start) >> PAGE_SHIFT);
+ 	merged = vma_merge(vmi, vma->vm_mm, *prev, vmstart, vmend, vma->vm_flags,
+-- 
+2.40.1
+
