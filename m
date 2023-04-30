@@ -2,88 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C5E6F27B7
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC7D6F27BB
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjD3FT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 01:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S231717AbjD3FZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 01:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjD3FT0 (ORCPT
+        with ESMTP id S231710AbjD3FZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 01:19:26 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7094319BB
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 22:19:25 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32b65428489so7715595ab.1
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 22:19:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682831964; x=1685423964;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbgNg7bzEOiE+PpMY9EfhvJTml8HBUQsJEoVcCv5c8Q=;
-        b=OcNSb5tdYfRYgT9MOMPvdUF9xAz1HracrsHO2elh80FrlIW+lU85Wo0biCUwWsFS7g
-         y7zPsHC3g2/2WVA0829ptR4+1MYi1EGhw4fLgVAhvRCPltw5guZ03y1E+5do0mF78pyj
-         Qh2N41nYgNk7P5MrJ7eL8So2gprqqBRxWZ+d+UzQt+vE5ZL3UFNYoVIqc7ECwu+TOYaC
-         ZzFHCe6nnaHepetMrR2PPNQ3qazNCMkhkRwtd3g57vyiayDMzSSk/0LYnKI8dWLY5MNG
-         dSeXfrl/yFygdQDvcSl666fpZHfWVU9GgEhT0r8d39KvBxeXD7RZmpAQ3gIob6umOEv3
-         Cnkw==
-X-Gm-Message-State: AC+VfDzgfpiRDlrFTclxT6Qvxe768aLv8MrRxSH3UecHjQ9aw+5a3WnY
-        4bIIIxht/6RNypVlCCo55UvACZ+Pz1aBHZ1216AGT+JE4ime
-X-Google-Smtp-Source: ACHHUZ7ExN+zShsIJc2XiFG2sXg9LR6zZCWJUqmWpaBVinskpdR+1L/m2w4P7/W7ipfQJwevuqU8oEbPVxYZNAFl3zT5ZpDJfNwZ
+        Sun, 30 Apr 2023 01:25:03 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C0A1BD5
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 22:25:02 -0700 (PDT)
+Received: from letrec.thunk.org ([76.150.80.181])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33U5OgTs026284
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 30 Apr 2023 01:24:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1682832285; bh=H7Moc+rihpPCzPD7wCdEPP4bXGikqsMnJrllZeEscZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=MY8VywNXeptFx2M2tWYq+tAtzGcFl51QBj+dbg37aEpnViWqAJCjiyxerltP8Fr5Q
+         y09lWrp6jRTrw1R2tl/qS09uUAp8DsNhn9+0mamqPWgFoFkdAyl+LwXHuLXPXPEauU
+         s6n07NHfqd9NSYLGNrHWZstPD27sCE9Gd8b8d0vt3/plIz+xn46kqrTjtptHblTWjX
+         Tju4/m/u27gC8JfI14L06GjQ9mtydeghjMDJSiYs6DiFNGsi07sjFAgETLMlvl5aXL
+         +oQ/Zb+7rlMPo961/6WQiJPyBb8U+aqVCLGNexjO4ssV2mdFd4R/76MmCI6Zfp/Zbp
+         Kcrci/QsFxKhQ==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id 545678C023E; Sun, 30 Apr 2023 01:24:42 -0400 (EDT)
+Date:   Sun, 30 Apr 2023 01:24:42 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     syzbot <syzbot+0c73d1d8b952c5f3d714@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [ext4?] WARNING: bad unlock balance in ext4_rename2
+Message-ID: <ZE37mm9XT7sE7crX@mit.edu>
+References: <000000000000435c6905f639ae8e@google.com>
+ <ZAeOilzUDPQX7joj@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d143:0:b0:330:a575:37e2 with SMTP id
- t3-20020a92d143000000b00330a57537e2mr852781ilg.4.1682831963878; Sat, 29 Apr
- 2023 22:19:23 -0700 (PDT)
-Date:   Sat, 29 Apr 2023 22:19:23 -0700
-In-Reply-To: <00000000000083d76d05f909f716@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c7b6b05fa86d9ee@google.com>
-Subject: Re: [syzbot] [usb?] general protection fault in xpad_probe
-From:   syzbot <syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com>
-To:     chaorace@gmail.com, dan.carpenter@linaro.org,
-        dmitry.torokhov@gmail.com, dzm91@hust.edu.cn, error27@gmail.com,
-        gregkh@linuxfoundation.org, hdanton@sina.com,
-        hust-os-kernel-patches@googlegroups.com,
-        kernel-janitors@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        matthias.benkmann@gmail.com, mkorpershoek@baylibre.com,
-        mudongliangabcd@gmail.com, nate@yocom.org,
-        pgriffais@valvesoftware.com, radon86dev@gmail.com,
-        rafael@kernel.org, rojtberg@gmail.com, s.demassari@gmail.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        vi@endrift.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAeOilzUDPQX7joj@gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+#syz fix: ext4: fix possible double unlock when moving a directory
 
-commit db7220c48d8d71476f881a7ae1285e1df4105409
-Author: Vicki Pfau <vi@endrift.com>
-Date:   Fri Mar 24 17:42:27 2023 +0000
-
-    Input: xpad - fix support for some third-party controllers
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1028a1f8280000
-start commit:   92e815cf07ed Add linux-next specific files for 20230428
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1228a1f8280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1428a1f8280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8c8ae4d47d23592
-dashboard link: https://syzkaller.appspot.com/bug?extid=a3f758b8d8cb7e49afec
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a5408c280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d3b0e4280000
-
-Reported-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
-Fixes: db7220c48d8d ("Input: xpad - fix support for some third-party controllers")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
