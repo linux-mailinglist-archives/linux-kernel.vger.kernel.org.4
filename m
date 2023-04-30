@@ -2,133 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370266F28F6
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 15:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE396F2904
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 15:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjD3NAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 09:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S230345AbjD3NPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 09:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjD3NAW (ORCPT
+        with ESMTP id S229531AbjD3NPc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 09:00:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7773E70;
-        Sun, 30 Apr 2023 06:00:20 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f1cfed93e2so15039185e9.3;
-        Sun, 30 Apr 2023 06:00:20 -0700 (PDT)
+        Sun, 30 Apr 2023 09:15:32 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2066.outbound.protection.outlook.com [40.107.247.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736A5269E;
+        Sun, 30 Apr 2023 06:15:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RRDcyzti6qtMWXHWACBSqZYQ4InxzWwF/QKYWxUNhM30vL3lUe+NIL3erIGXWYQq1WSgY53muMmOAicmRQqmYJ35/XJwwd2E4VtnYnpWAa+BgDPim+iVumBwE7ycZYBsjMMpexY0u7wwtn4a4QE0E9mKQfGkRFPcDt6ADxc9u3Y7Grng0MstG/Pwr7jqqMVzcvjj91wm5WhO/nnKex3/myyFzSGzbwDclk0ACY5f3jiV9bve1aF3LRhLWMZGt6E4lp1wOl5/V+pxhzSpUtSF4RkN1zlrmbWhNQ8dY9Ul8X1FJne0wQx+mfTZdyoBfS1dyU49JbGstfn4t2iHGFHJZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P47KgdtsS9Lw6YlKDuzlqG+0mgrZuXRmzmheX8mHZ94=;
+ b=Wp7/hkyH12lkiOiggHHNo5vS1od98wat29V6ZMJqIwVIe5nck6fC01EQBhk/JRNJUgtA4+27n6pMaTaEeu9cwGK0L+ZvbCw8+GOyUNldUOCA877vfPsn9+/yBTremro4+qAMjQ/aBtBa+zZy0k3UFA6Bq2aMt2nKTOSTz7Hu33sxhwh1m+tKW/7Vf3VPvF1qYFvaN8a1bHaRls6/02sQeYej5+VJQgfuG3Fy0Cboyk+WuTLAHBaerIjf3WHy/9JaelGgElPOFghHUnzPTQOpwfzV8dZPfNPweeSoexrBJuUpDz4cbwYBV1o+bCYF2yE++hEckZssu4H8XBhgphjtSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=solid-run.com; dmarc=pass action=none
+ header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682859619; x=1685451619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gJoztnqwIQgpjaOP6X2OK+4rUxlcDJhg6AbeMdHGJLI=;
-        b=ZgR/5hKiBoSBb3pYvmERFlJ9eIuK8McJDTki/qkZLZLcXXKBI0IPNGfJdIMAEBF2Vf
-         GruJzrHVSZ8oyoBwLtGtnYWHhbZdWoaUNFfOS9Nl2zQzyF/7RAoIAtqI2XgHIapgziWL
-         ZLsyAVdOnw30X0LCQCBf4IDRyaeInILd4N6DMC3GTMq8rhPGTgzWZrlw5T3DYyE6UfyO
-         vCBcJn8nLFqB4O4j4jn2+/tZCBZmCsPwhT9rDO2duiLt9AjPTb33BnX9C5th0xkhqCTI
-         15PMHu4v8DyXCLY4JdT8x0WYTobF4U4lRo2FAEnDmN5pLFexb2+1sjvnBkv2B7X1mD/e
-         odeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682859619; x=1685451619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gJoztnqwIQgpjaOP6X2OK+4rUxlcDJhg6AbeMdHGJLI=;
-        b=Y032vx8fbuuMxidc6ZtabXW4lrKcChtlSy2wWjI7vq4Urg3xDEs/p0rGgUk+TX0egW
-         7v9VuMPCpAgU8R/+2MRIDxAs24jMMy/7yZ5x8zNxliWPISlNcgi21SC86CnYPmEhQ9Zx
-         NYDgoK3Pa8Dk3GPijuOxclXhGKcVyhwGdk87z+xDc6BrnCH/0Mldcnus2GhCgzOGHc6D
-         JjySJcCdDmukcje+5tvfdF9a4c/eJMrv972OJWRtHcINRoAZOrdgLhwA6Qyfihp8m6oh
-         Gl0UAkqNce49OLm0cncXFenGDP3QkP0fOnPFtWVkC5wXZnj6OMiG5PQZFA6UM84RiRe/
-         LYWQ==
-X-Gm-Message-State: AC+VfDz1jDOe/tLqF/I24zttwanK5ZJAS9JItj+Ewcw9dr3sc6jnoCZ4
-        4UcdkM6LTCzkkYzdzNX8YGHq+unakfLWKw==
-X-Google-Smtp-Source: ACHHUZ6ClPaB2tSn/cDdBaR8COWvv3/lZgNrssz1O0d5viNUQLB3qekLnwv4YW++IfTJ+QzTP1CFgw==
-X-Received: by 2002:a05:600c:d7:b0:3f2:51e7:f110 with SMTP id u23-20020a05600c00d700b003f251e7f110mr7729914wmm.32.1682859619121;
-        Sun, 30 Apr 2023 06:00:19 -0700 (PDT)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a7bc045000000b003f32c9ea20fsm5228255wmc.11.2023.04.30.06.00.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 06:00:18 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        oliver.sang@intel.com, Mel Gorman <mgorman@suse.de>,
-        stable@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH] mm/mempolicy: Correctly update prev when policy is equal on mbind
-Date:   Sun, 30 Apr 2023 14:00:15 +0100
-Message-Id: <db42467a692d78c654ec5c1953329401bd8a9c34.1682859234.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
+ d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P47KgdtsS9Lw6YlKDuzlqG+0mgrZuXRmzmheX8mHZ94=;
+ b=gGXorwapbMP+aGwjBTNNXV1miTM4s1ZWzlme7OxunSmMVVTcp466Dd0RtoYEYbhL7vFc72XHIxhi5eNUwtvZRysqGgP1ea2TkcvEmufnUdyzzXPemQVHvpsZtlwPIXk7aQv+NEflSPEFeKUWHEXMsuPaYlOlrbWhx7rxtof0kxk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=solid-run.com;
+Received: from AM0PR04MB4723.eurprd04.prod.outlook.com (2603:10a6:208:c0::20)
+ by AM7PR04MB7142.eurprd04.prod.outlook.com (2603:10a6:20b:113::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.26; Sun, 30 Apr
+ 2023 13:15:28 +0000
+Received: from AM0PR04MB4723.eurprd04.prod.outlook.com
+ ([fe80::a5ea:bc1c:6fa6:8106]) by AM0PR04MB4723.eurprd04.prod.outlook.com
+ ([fe80::a5ea:bc1c:6fa6:8106%5]) with mapi id 15.20.6340.026; Sun, 30 Apr 2023
+ 13:15:28 +0000
+From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
+To:     mst@redhat.com, jasowang@redhat.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuanzhuo@linux.alibaba.com,
+        Alvaro Karsz <alvaro.karsz@solid-run.com>
+Subject: [RFC PATCH net 0/3] virtio-net: allow usage of small vrings
+Date:   Sun, 30 Apr 2023 16:15:15 +0300
+Message-Id: <20230430131518.2708471-1-alvaro.karsz@solid-run.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: ZR0P278CA0191.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:44::10) To AM0PR04MB4723.eurprd04.prod.outlook.com
+ (2603:10a6:208:c0::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4723:EE_|AM7PR04MB7142:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c6694bf-ee99-45b7-6355-08db497cf749
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fFQasYSxOwrAXse/01JWueoMMi2ztfoNhR6fLop5I8HfWqBkleWC2kL+0q1MbANdR7imnn3WA2WeOBEpPFXrfgr5eQVgif+owHHkrpk9tkRTA4CBu284s2eMSGfG0voPd90xOv+KWyeZMYRAIgJ2dzHb2e1Qq1gfTQucEWdlDw1TmqIZ09eNfKDdJBfch2Lr8GwQks20zWaNIqsAwDmgf1ekPVOk5R4ISbqoCOULYrEQ1HTgYhoAtEt3650a1WDRaIpou6pZ0X09Lbw25PL33F5aR8SQBm0bxEsY4J3jXOC00G3T3LYL3ipxudXUH1XUVfXQ3BgKCTcAqokfEw3N8Xmk3Jo3BrvyQeW9+5FgE2werqRcyRh5a70J0mz5r8fhtCAdjaSqIX9WzYLnctZwBViWjRn4VOW68EioiAS0XtHZoqad3pzkb/P8H4LW/TZwpCAXcwh9GPCTID8s0hT1A1HFLMxGSimewhm2xBJIbMOBniHkT2i9+tR5/Wx/ZpEtFX5XTeDKSWbsrzDiM+dRAicQ3QZP9AmKOE0jKr8OPPsOq+eXLPvzq5PXxuz50ai+/DbUpJUHPdQCKx5yd46whUxdnIHjQgGlpcitbrNAuoQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4723.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(346002)(396003)(39830400003)(451199021)(86362001)(36756003)(38100700002)(38350700002)(7416002)(5660300002)(4326008)(66946007)(316002)(66476007)(44832011)(8936002)(41300700001)(66556008)(8676002)(2906002)(83380400001)(2616005)(6666004)(52116002)(478600001)(6486002)(966005)(6506007)(1076003)(26005)(107886003)(6512007)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sX1XukeSGy2rIraseQYCfgCZAx11PBfdBu/Y5mGavYfMYyEpuLdxvRygPNSw?=
+ =?us-ascii?Q?6i8bgJTBkUHeUTzSdXvzzdHPeIqEmhWB3ViHnmkFhmTVG937sRerUHh3miJu?=
+ =?us-ascii?Q?xmSgVGet7LvhE6D8Rrj5/32DpNCO+YLIHQ7SEjgqi7JkXFdpH7joMboThiMa?=
+ =?us-ascii?Q?EODYOBWGi4fPH0ytm+ghEkuNVLbDUU8W2yBZwWZanTrmdtIjm2TVu+p+AQTu?=
+ =?us-ascii?Q?D306i9czX4l6Xf09BqQD3D69sBF4K1VVozyJRI/hREhnw/V+lkc6jLImDLKI?=
+ =?us-ascii?Q?gL/INuPvjLAnZbAwXUJ25eLQiKkU4xV43rUnjnSRFAe6+98s0atbIE7gYnvn?=
+ =?us-ascii?Q?evz09xOLoai9aOWU63WBofx+8r5h5U8ei1gtKVxGxdPDthqbW0aoszc1tDTv?=
+ =?us-ascii?Q?PpZoeXD3OY15wKn0hSMcRCQFZn3kjH86C0bX1UU3eGiy/tYWRdu7G8/2csNT?=
+ =?us-ascii?Q?cFwUDGSt5opDfVxlqFc8NCT2ZJFxYd+6tcFs3/Eyu032dCLBM49S7icdd2Zw?=
+ =?us-ascii?Q?r2J8uKn6xZQrIg3o9SG1azooQ3mM0HjMouWQfBQGZQC+CR3VXItTRCMCp09m?=
+ =?us-ascii?Q?72tUDXODrbuua6eN0jAWmTm0BBndGQdW0NyX4+eyHalUDSA/5x0Jum6PKDJc?=
+ =?us-ascii?Q?7sk9E33GwO4HDIhyHyF+vwCko/dID/bMjoWsZJnNKdqIHmC2xiHwHH/Z8GLK?=
+ =?us-ascii?Q?FFv8Nn0cNp2dkevXobKIxe+SE5PzvoaLMMD1I9MzchZJUXeOrJyuxdiUgrHE?=
+ =?us-ascii?Q?fZO2ySe4qLMHaWqhT6KeYAy9DA16RnVXUSpsSKmjQaZaU02+rNx19w9/GAIv?=
+ =?us-ascii?Q?DABDoEBDghMgNQ/RUBj8e68Z5Li6lmRVCoKeNeLhTiUY4x5k/yxNVqiHiwe4?=
+ =?us-ascii?Q?XGmuMKD5ZoRI0TebU8WlMQupcFfW9t4uTqov3kx+usZF2sVZVjEusi+IiTby?=
+ =?us-ascii?Q?8S711QPPIS29wazHejda68TT9Pk0/QqxTu4QoqcfAWsAc8uKEiEGwikldS9q?=
+ =?us-ascii?Q?LO/xW42s4UbJO9abv2knnlw7ayUzwYlSOJyAzGBkfadII7f4tbEjXYakk/g9?=
+ =?us-ascii?Q?cXc8pIXiLw4ckUPSzUcYGMxVvwZqQByEzQKjUmkCQVlJ3521SDpqZR7gbRjx?=
+ =?us-ascii?Q?YNmhnebjXHfoJQaaTTYehqVEmuTxb9OMxJvmy6thE8jHhiyfBlE8evVUjk/Z?=
+ =?us-ascii?Q?pQNe7EzE+ZD4xQ4Gt8tzvF/gx9P4n/31iy8qUq1BEmesgr308F/2B2JKJ4aE?=
+ =?us-ascii?Q?OiicWngnr82IYkX8tjHBiGGXgHOO8125JRqmmsUMx+VkRl0Khuqs69KlAzHM?=
+ =?us-ascii?Q?4gBzTtIjouE8CCFusHiIDb0DJb2Qr6z8B3UsVs89Tf5TCwpA8LoicW0Mm7+j?=
+ =?us-ascii?Q?kmrefio2hGdqwPTiuBfg6jJ4dWKajw05gfeTAF7lf7YELN0QxdS2ZG5eMZHu?=
+ =?us-ascii?Q?hyzM6yKUAqViU8IhfjSEjqguor6dG5cbei6jEdr/zH14tk/ZziDTngVj/jzg?=
+ =?us-ascii?Q?zEOU/A5uOn/cSGxhwv7Yt1D/dGpia/n+rCI5gS/ku7H6aaW25hWsrFG8MU2k?=
+ =?us-ascii?Q?CJidR+Zl4hl7pMH11nqG9TA0XJ6mOJpyYYyW9RTBbUvKklL8XhvopEkXDDI5?=
+ =?us-ascii?Q?Nw=3D=3D?=
+X-OriginatorOrg: solid-run.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c6694bf-ee99-45b7-6355-08db497cf749
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4723.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2023 13:15:27.9213
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FjGZnrVT2EL3gYPWk350L2rUHHEqypYzVaCkmBIi++CZcEFmoyBKlt6L+c6MSNiMpdOVT15JhO4DTrrB2OMde5mqRAfYolKsF4SOsN78k5s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7142
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refactoring in commit f4e9e0e69468 ("mm/mempolicy: fix use-after-free
-of VMA iterator") introduces a subtle bug which arises when attempting to
-apply a new NUMA policy across a range of VMAs in mbind_range().
+At the moment, if a virtio network device uses vrings with less than
+MAX_SKB_FRAGS + 2 entries, the device won't be functional.
 
-The refactoring passes a **prev pointer to keep track of the previous VMA
-in order to reduce duplication, and in all but one case it keeps this
-correctly updated.
+The following condition vq->num_free >= 2 + MAX_SKB_FRAGS will always
+evaluate to false, leading to TX timeouts.
 
-The bug arises when a VMA within the specified range has an equivalent
-policy as determined by mpol_equal() - which unlike other cases, does not
-update prev.
+This patchset attempts this fix this bug, and to allow small rings down
+to 4 entries.
 
-This can result in a situation where, later in the iteration, a VMA is
-found whose policy does need to change. At this point, vma_merge() is
-invoked with prev pointing to a VMA which is before the previous VMA.
+The first patch introduces a new mechanism in virtio core - it allows to
+block features in probe time.
 
-Since vma_merge() discovers the curr VMA by looking for the one immediately
-after prev, it will now be in a situation where this VMA is incorrect and
-the merge will not proceed correctly.
+If a virtio drivers blocks features and fails probe, virtio core will
+reset the device, re-negotiate the features and probe again.
 
-This is checked in the VM_WARN_ON() invariant case with end > curr->vm_end,
-which, if a merge is possible, results in a warning (if CONFIG_DEBUG_VM is
-specified).
+This is needed since some virtio net features are not supported with
+small rings.
 
-I note that vma_merge() performs these invariant checks only after
-merge_prev/merge_next are checked, which is debatable as it hides this
-issue if no merge is possible even though a buggy situation has arisen.
+This patchset follows a discussion in the mailing list [1].
 
-The solution is simply to update the prev pointer even when policies are
-equal.
+This fixes only part of the bug, rings with less than 4 entries won't
+work.
+My intention is to split the effort and fix the RING_SIZE < 4 case in a
+follow up patchset.
 
-This caused a bug to arise in the 6.2.y stable tree, and this patch
-resolves this bug.
+Maybe we should fail probe if RING_SIZE < 4 until the follow up patchset?
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202304292203.44ddeff6-oliver.sang@intel.com
-Fixes: f4e9e0e69468 ("mm/mempolicy: fix use-after-free of VMA iterator")
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/mempolicy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I tested the patchset with SNET DPU (drivers/vdpa/solidrun), with packed
+and split VQs, with rings down to 4 entries, with and without
+VIRTIO_NET_F_MRG_RXBUF, with big MTUs.
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 2068b594dc88..1756389a0609 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -808,8 +808,10 @@ static int mbind_range(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 		vmstart = vma->vm_start;
- 	}
- 
--	if (mpol_equal(vma_policy(vma), new_pol))
-+	if (mpol_equal(vma_policy(vma), new_pol)) {
-+		*prev = vma;
- 		return 0;
-+	}
- 
- 	pgoff = vma->vm_pgoff + ((vmstart - vma->vm_start) >> PAGE_SHIFT);
- 	merged = vma_merge(vmi, vma->vm_mm, *prev, vmstart, vmend, vma->vm_flags,
+I would appreciate more testing.
+Xuan: I wasn't able to test XDP with my setup, maybe you can help with
+that?
+
+[1] https://lore.kernel.org/lkml/20230416074607.292616-1-alvaro.karsz@solid-run.com/
+
+Alvaro Karsz (3):
+  virtio: re-negotiate features if probe fails and features are blocked
+  virtio-net: allow usage of vrings smaller than MAX_SKB_FRAGS + 2
+  virtio-net: block ethtool from converting a ring to a small ring
+
+ drivers/net/virtio_net.c | 161 +++++++++++++++++++++++++++++++++++++--
+ drivers/virtio/virtio.c  |  73 +++++++++++++-----
+ include/linux/virtio.h   |   3 +
+ 3 files changed, 212 insertions(+), 25 deletions(-)
+
 -- 
-2.40.1
+2.34.1
 
