@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601A86F27E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 08:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F906F27E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 09:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjD3Gzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 02:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S229501AbjD3HGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 03:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjD3Gzq (ORCPT
+        with ESMTP id S229451AbjD3HGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 02:55:46 -0400
+        Sun, 30 Apr 2023 03:06:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819821FC7;
-        Sat, 29 Apr 2023 23:55:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2727719A2;
+        Sun, 30 Apr 2023 00:06:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 143476108C;
-        Sun, 30 Apr 2023 06:55:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A2ECC4339B;
-        Sun, 30 Apr 2023 06:55:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90E1260E08;
+        Sun, 30 Apr 2023 07:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44334C433EF;
+        Sun, 30 Apr 2023 07:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682837743;
-        bh=oD/ecVtv4keU/72Jqxflut5H6NRV4uVmo5+HzUXgrgM=;
+        s=k20201202; t=1682838360;
+        bh=nG03ZamBT2oRAqwOft9tIDjMEkOdLhGVnWdGCxwgdRs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hx+1UwLI+e6ArnnzuOXShKG8eb/QaDxBAdVikOOxRsPthrDdzLo9ISXS2df0afwnF
-         gR34M9jjxCBBxqu4UUK42ZJotLA1GQ4GxrOj9b14/9i5SDt8yvIxb34T1PkqY0Dtiz
-         8944pj8bxS7bQlZGgu71axmX+ZXBqn5Mck2SF9dbHmnFugwCKVGdLVOINLkjF+cLoU
-         PNIs698twO0uhfwSQl5wWJ9m9vB+hvUOhkaBosMmQHdu+MVBPstFwq+iNQHaaMGVzv
-         1FGAp9mnwqhjZJ7OBXqG2hUxVqisu52uPSSBR4o49U6yECKoj6HozwONtx/OO2A+yw
-         Sb3pj0a5flF9g==
-Date:   Sun, 30 Apr 2023 08:55:38 +0200
+        b=VZrMtNX9u1uJcw5MzqcGkTp/yaBXacMDOtLb/kZrs/OY4hA3Ip9PgnYkVc7R9WTZB
+         b0rPz8SksH6ZH6MI9uUDJ+pqV+MkkawkubS2YHMwAsw/Nd/bH+W2Ou1oNdmIo21jM/
+         zdA6glIpK2ExayWcszoeHBtpck2Juz1T+2nIKUYF4C4dVkiQngyufoG4QJeaNmxHLO
+         JHzVytPBD/kGVPBir8YTVS+kuILcRAT5QLQJmRyxXI+4aUOthRGo102qgDtE0HYiNn
+         whWuSaf2v4EksGJzJgvYFTn8QNaFZkPM+zecpnBVWzqfRpW55oSU1FAyOZKefsYDmc
+         tDL790jpryFtA==
+Date:   Sun, 30 Apr 2023 09:05:55 +0200
 From:   Wolfram Sang <wsa@kernel.org>
-To:     Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: i2c: brcm,kona-i2c: convert to YAML
-Message-ID: <ZE4Q6p1tAiIoZo/M@sai>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: lpi2c: cache peripheral clock rate
+Message-ID: <ZE4TU0rCw9MSwrmB@sai>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, Ray Jui <rjui@broadcom.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <9875ec0211187e4f5e2a4379c63eacdb69b31d7a.1682252615.git.stano.jakubek@gmail.com>
- <72ba28004afb733224f7294a146fc2a6a5a834a7.1682252615.git.stano.jakubek@gmail.com>
- <168234258850.2489090.5138716439435477956.robh@kernel.org>
- <20230426172354.GB2506@standask-GA-A55M-S2HP>
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230310130815.562418-1-alexander.sverdlin@siemens.com>
+ <9272339.EvYhyI6sBW@steina-w>
+ <20230421-kinfolk-glancing-e185fd9c47b4-mkl@pengutronix.de>
+ <4797405.GXAFRqVoOG@steina-w>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zDHwp52T3Ba2FuLI"
+        protocol="application/pgp-signature"; boundary="0V48hNfsy+qdyek6"
 Content-Disposition: inline
-In-Reply-To: <20230426172354.GB2506@standask-GA-A55M-S2HP>
+In-Reply-To: <4797405.GXAFRqVoOG@steina-w>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,43 +77,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---zDHwp52T3Ba2FuLI
+--0V48hNfsy+qdyek6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 
-> > i2c@1c000: compatible: ['brcm,kona-i2c'] is too short
-> > 	arch/arm/boot/dts/bcm23550-sparrow.dtb
-> >=20
+> > IIRC this is a general problem^w limitation of the clock framework,
+> > clock providers cannot use clocks themselves in certain callback, e.g.
+> > set_rate.
 >=20
-> These warnings are fixed by the first patch in the series.
-> Maybe it didn't apply?
+> Well, that's essentially impossible when this clock provider is attached =
+via=20
+> i2c. i2c transfers potentially need to change or prepare clocks.
 
-So, this depends on patch 1 but I2C doesn't pick up DT changes. So,
-shall this go via arm-soc, then? Or DT? Anyway, for any route:
+So, as I get it, this is not a specific lpi2c problem but affecting any
+I2C controller driver which uses get_rate() to setup a transfer to a
+remote I2C clock provider? And this lockdep warning is a false-positive?
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
 
-
---zDHwp52T3Ba2FuLI
+--0V48hNfsy+qdyek6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmROEOYACgkQFA3kzBSg
-KbY94RAAorwF1etHBf64uBK/GiYuKJDeq8Go82Bq8J7POjrcJ1VD7iHHECYKf0XP
-P203xiHhl4Q4ljGg4UuRaz3LiX1kMJoi/Nj2wiHmVT9HwDXXGQqovyEi4iuLMIFY
-19wOKUr43YVTbWt0zNcnUdvd01xJwSKlC85rmhKUvhyq99fE575iPLHYZZ/J+Mdi
-QRYu8csXhrqWvv/pKSOI39k4MV1Mwupte+BjsxuzeCavm3+CKMCeg3n7ZFRxN4fY
-+pE3eXOwoCCu0kh3P1Y/qEeU4LrkOY7gJ8odBLBOHXM3Sxg4n1x17SaRDcwgHSJR
-9c7hOQqapwzjVvkQVE4QYUbIU7A+CfQzc+Cgn/k+u2WhXT4mDlCpWDDBvxgnAg+N
-FW0BEFJSPd9n3r4vu5159Pnu2nsElw2S843ack4uOk9v+NJuknZckc2Q48PHGC4U
-oQsR6IsEdCjdrcI9EzucRrBEQwTs6l7uR/88IN1yAOQOBwRs26lhUbA79nU18h8C
-yPmqp653Y4suGs1nK4uIon3dKOhNPSffjKhEVHHxzrgyZZWDSAQKho7agzWh2S67
-GYkthDtmWzTZiSg5t64gpf+4I1/RGmYBEUSgdobLD/nBlTBglgha8hIPmolPWdrY
-Ej30aXURBjt/WSxGFBwrAh0o04yUD6vyC/pjFErKt49UZROGkjo=
-=q1yz
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmROE1MACgkQFA3kzBSg
+KbY9IhAAgLo8PSbFxem7+yW32eqHDssVomd/c07FPtFDLUi2XW1n/roLDv0Q1BWa
+NXHyl6RkiW8k25kzh2Q9nMLKvF6NnZKn/yynAIZnAKPK2Yly0V6oPAjA5Wlbovr5
+q18FajnSElq9MZBXgmQSUrI/YtuFpDTxSYUgv6yWKqYMt4Z4u05qbcncNe/CTPH9
+7MsV+PXRozwQbA2AHZWSFRY6vVTFISFtflf8BSP6JI3WOynUquZCeEzbSDQ/1Q7d
+Uw0dolCi3oQTS/7z82fZsHHfeZlyg0q+kaBC7NyHtGUhNF0LdrriJtLkzog5AS8H
+3QBa8UvborMCh1ytGb6nU+m1SmnUzYTXkKhz+gScGYuV6puq5BJBC3zj8rFQsyqP
+Iz7AoDPTsHtWffVsz1CsakqC0ioXxgD2T7SSMMXKugI7Gt99feVx1Ojgu+AT7fCE
+Q+Yi+XiXggjvlnTwg6YP0HtC07JN8v4z+4/WeOANcTT3ZausYyxoUmj6YUE3eJXv
+M4jVjGecVKfhdblXpplgG7W6zU3pEcJ6FMBWkwT3/vu7dUtAcZFbdIrMmC3HlrvP
+PPaGllJEqlgbFCJUU4BDjF7TQ1yY204FRmNIm+nfSOqMcrTkNMF/jo9/j6FGrz4O
+YSeQR7br6xCfGO+yxCEetsB1BWvQc6Ebw+xgX4N3uYSekN/HhyM=
+=YJB/
 -----END PGP SIGNATURE-----
 
---zDHwp52T3Ba2FuLI--
+--0V48hNfsy+qdyek6--
