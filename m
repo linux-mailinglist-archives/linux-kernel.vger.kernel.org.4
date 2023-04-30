@@ -2,225 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C16F2876
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 12:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF096F2888
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 12:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjD3KeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 06:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        id S230294AbjD3K67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 06:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjD3KeH (ORCPT
+        with ESMTP id S229461AbjD3K65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 06:34:07 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C219A128;
-        Sun, 30 Apr 2023 03:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1682850843; x=1714386843;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=MzswvGMHcnCxEsF8OVAvVl0w808E8LmOOrijAKpoJCg=;
-  b=BuSyciNfUPQLx+dDz2KuxE1yz3sO5q5GTKueyW4MEnOaVcDvl8LJ81Rv
-   KrBQsjovmdPadlytL9iRj2iquX/1pZ2cR8qhD3fVRMOhBfMLnWMxm5b2c
-   mBAtnaud+MWzHBboFzrNJH7cFg8cSkXEuAWybGtIybqSXlJxkm39Ms2an
-   FFZvdyuhhr3zNmq6qGiXIEc3KsrbWx2HHJxvvL+WNDz7n5CpOFhehLe9h
-   pifodZBPQiDff82j8ARCUrWgjZPaengEGzv0NxFBkybNVFCInqDNl/W+k
-   gqNhlTMFR9+PCPN9Uia3I8Sj9Wtg2vtNVg07qecW9AjKWQAPiPj+anMGL
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,239,1677513600"; 
-   d="scan'208";a="234561045"
-Received: from mail-mw2nam04lp2169.outbound.protection.outlook.com (HELO NAM04-MW2-obe.outbound.protection.outlook.com) ([104.47.73.169])
-  by ob1.hgst.iphmx.com with ESMTP; 30 Apr 2023 18:34:02 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CzdMTdcePfhI64sNNAJZOApa/EfEXU78tqUJLPj0VQIpcZilnXmquRMJ7uC3V8+3agwezdF29AYZoX6IL3SVVPVGleaRPL3jnHgH8uc+M7mWRYqSwDt9O6Z/eWEY+f/Oigxw+EX2DuZeOYZFbn2xlK2YVhQG1ebUdJyLTcinD9osw3X35jDiIidbdqKT3Oc2btajID/Z4as1REAx2SnHQkvH/s83LufELOMNAS7TQkjy/gd+/lUhnyJrHMb/kBFM8FxEWY8HpR3O15K5J504HeZqJRhsYLvbAqKBXLC6UPpm2gH75SFzm7KErRGiwdjJY50+jOuTr2YOIlWohFCE8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fnhRl3HxRiKQO3PEQFkeQvI8mz5R0FWshIQwI4mr0cc=;
- b=CsXmSFTgLS9WbL3UYBw8OX1OxA1xqHMJoB1GtBiU+u6seZaiPKoNlBGK0Xkn0HDMw1Cmqy2M6Mo55UF0064Oxq64KWumCRGT9/QCCjSvnVmdJ63RczirxR7y0q9q36RKZXo3sFRScuSrF7K57J7OcfcmTNrrApVqSPsaxYQIk4yWloCJHsflDu7Fd2BcZJsM9Hi6NQj5wWdLiaKaEPEjVsO37z1EfOoEzEkJ2GR4Gsa0mvzO+r76RhpIMOYTY9D/Nh66jUXcFWxHOOru2irmj3qQeYWpI6+p1EizuoMNaFr1PemA7gLULJqkw5WTkWx0prjQddRtCK1CCzVU/Zy3iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Sun, 30 Apr 2023 06:58:57 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3464D269E;
+        Sun, 30 Apr 2023 03:58:56 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-77115450b8fso1003699241.0;
+        Sun, 30 Apr 2023 03:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fnhRl3HxRiKQO3PEQFkeQvI8mz5R0FWshIQwI4mr0cc=;
- b=SiLqFFF5iyJDqFxbEqEiMSR491pNTLIW4ISPd4thNz7ZqKOypis+XX2Abf9nrD6yP6ZtUwMZhyct3DwSGGfQLf4vhj9UIOfM24kDE1u+60XjLy9WkoodfpG4rXcKN3D29RzZrRDQtAzE8oXrAFfHkK4Dk2w1AWtZafeI1is2QJE=
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
- CH0PR04MB8145.namprd04.prod.outlook.com (2603:10b6:610:f5::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6340.28; Sun, 30 Apr 2023 10:34:00 +0000
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::eb0e:1bef:f266:eceb]) by DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::eb0e:1bef:f266:eceb%9]) with mapi id 15.20.6340.028; Sun, 30 Apr 2023
- 10:34:00 +0000
-From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     Sagi Grimberg <sagi@grimberg.me>
-CC:     Daniel Wagner <dwagner@suse.de>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>
-Subject: Re: [PATCH blktests v2 2/2] nvme-rc: Cleanup fc resource before
- module unloading
-Thread-Topic: [PATCH blktests v2 2/2] nvme-rc: Cleanup fc resource before
- module unloading
-Thread-Index: AQHZe09FVEwtRfzey0GWUGL193fJOg==
-Date:   Sun, 30 Apr 2023 10:34:00 +0000
-Message-ID: <gqeyqpv2idkkkf7jajdxbgj4fi5tnlbt7tmuudwxq3gul3w56y@ijwb4axr52dl>
-References: <20230419084757.24846-1-dwagner@suse.de>
- <20230419084757.24846-3-dwagner@suse.de>
- <3ec250a9-54c7-3e0d-2463-f8faf15cdb58@grimberg.me>
- <3euieyvxpsww5p4m457pzupfipbnbv3atxauh2lrp54gqmqcco@hs7ytoop5osf>
- <1b060988-fc63-4a86-33b8-88ba61c9358f@grimberg.me>
-In-Reply-To: <1b060988-fc63-4a86-33b8-88ba61c9358f@grimberg.me>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|CH0PR04MB8145:EE_
-x-ms-office365-filtering-correlation-id: e7da095d-19b8-472f-216c-08db4966690c
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DgDFhhtJowUTDTQ/Qhkl5/E6HEzydPTRafIToJ273yC9iWWprcggTLzwWpqR1qwCKsI6tQj4lqga6j1biLUFdCMdEB3ZiE9KtSjBU1hdqXoB44UGTyamlEXif8Gat7iYHcWzImnV50OCMS7mCXJN2VJPVyxRTmPU6xr4NuJxL0mP7fDgkDi2+/F40xQ6oEabYmiUWFBdedXCGmVj4m+Tt2uEEdaJPYpnDGju9jDFBU0gVYsU+y9OTzoj00osOBUn914+Csrhgc//22p4CNjKhRXUG2xDbllpRZr3/dS7skyrdrBfqZIQpJUu+vzfPJjXFb0l3XlgWnfIUvMfwYF6Q3HkITuBvEdpZ41cTLgGGmfLzOuC8UzXhT/vaM9OObSdv6VN+jtsdNiU4v+Az6R5Hevr3VpvgU0hkx5hYDRq3s+ts/EQgnn6x3QsqsEnj4Jg2CnkOHKV0Ysaf3NwypeU/hz3wjCJYwHJ/GzrAOd/6sfAFg1pH4LRBLUWCapw+/OABW/2I0QGnHudTyHpA5xWTCUslNKMwbgo4b9heRC37JofDFPhiOillWksVTy8QgTilQjKyrFydRlDkoPfuAckfzal059MSV+21xupLIB/y0/NMUqwwh8Mjg/DA4Qr8aMO
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(366004)(346002)(136003)(376002)(396003)(39860400002)(451199021)(86362001)(38070700005)(82960400001)(122000001)(38100700002)(44832011)(5660300002)(66946007)(66556008)(66476007)(66446008)(64756008)(6916009)(4326008)(76116006)(91956017)(8936002)(8676002)(316002)(41300700001)(33716001)(2906002)(83380400001)(71200400001)(6486002)(54906003)(478600001)(9686003)(6512007)(6506007)(26005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vTlmm/QCIRiDzEqeMUdtUdKe5vk5c6dL2wDv6diyFmmsocNxw9VqbqFwWS10?=
- =?us-ascii?Q?NhCm6faAWVXMHGSkUkJWPEmyGvU1Q8b56AJvsKiKVB0yrp7HLB+tlOi0wJG2?=
- =?us-ascii?Q?6l7Ba4tuQ1D8EAifd4O9oMX+Va8VTLbDhXJUVzLF7so483frI7HuM2N+TO1e?=
- =?us-ascii?Q?j1NQ+ZlzjWfUVAvAGb9TPRnaNz4bCInxxAP10UI87nUTeJq5u63KI4HdqRel?=
- =?us-ascii?Q?jtyQT6p+rYVd7CU1nvjhDLGrr2KeM20VIBPrBGik5NFGNExynnHs5j1/vxPX?=
- =?us-ascii?Q?1KgbcRoOyX36VOES8KKZc+GGOwWqUfUZ0xCBRHy8PH2T41cnx09g/wMYEaLI?=
- =?us-ascii?Q?ua5XkuByChmFq6+wUJdGJxpjs3qLtvwCOtuQKFYHS1hxyb2bbKUHTWt1Su1g?=
- =?us-ascii?Q?wTwfjdsJFtXqTiR6GQqTdMJvei+pv3ZnlyuNp1uBpETIQrJ7mtwJbBZomyDE?=
- =?us-ascii?Q?iF40rkbZ3wxEPtdgyVPU4cCHf/6JmnF0qN6a6AUU5kZA16Zdwaz+Wdn33RS4?=
- =?us-ascii?Q?af9DJ0GjV2LnrlXzDfM0gEhlZORdXqLneocmCuU8FFQT4V5RLuQkT1ApfwwC?=
- =?us-ascii?Q?lEk/qx8EjHkgozTtJC9OTUHG1JrDm4LL3CdBmCle5oHNb8I9EyTFX8VVdGWG?=
- =?us-ascii?Q?mpGrAnza3TzNoJJluCSMPZlLYFwLsun56uAKnBOi6GbgaomdBMkFqb7mM072?=
- =?us-ascii?Q?bPO8q8wkQykpI3eCGP6T633kMaUphzbVbVHd0Q577Fo4fFGrYIQ7ZiUOKj3y?=
- =?us-ascii?Q?0g5vGwGr/ADnbWbTQyAcMuO/b4h0d55DMN8pU0PSKfLgiZaY1oLRTAseg77j?=
- =?us-ascii?Q?ZDCWgLe2DI/uAheYCObT0UV67eisV2lsuwvMO3bveK7FU5bGjn49GWy8I0Fa?=
- =?us-ascii?Q?ovE5GCpiTxskLH/I0FWUOshstEHrQ+Ho4B2VM7KP3pC+UnNaSNQtFEhirc+b?=
- =?us-ascii?Q?OqWchlMuxXxOzXz7kUMg3tdBstZX+5K+bRqtteXe4XitRrIB1UlWJcg/+7P0?=
- =?us-ascii?Q?/Kh/YI/gML3Q0Ytx61tr0zcVGxLs+pl1RRCmKI0XsFKPaN8sdeSHrPTPBdck?=
- =?us-ascii?Q?ofJvisZa7IClkbJbpMd1kSrlgFwoE5H2XKNQVn4V2oS1i6ok/TU+wztK8Fl9?=
- =?us-ascii?Q?IiTWiB3QV8jbhesYBm2S8hrsiq8n0Xv3rNycGwuAdqVrQAip17LaxOAzUZ/t?=
- =?us-ascii?Q?08uy39g4S5dKN/dZW7iHdMMfE0ZDGpo0tCmCPZDNAYWQ9HzF/kQ/jYCV5RyZ?=
- =?us-ascii?Q?BZ+84VpoEylQj5ZVnBscfu2xbcRwuexGYbpb7FPwlW4wqIss/fTTf1Zobu68?=
- =?us-ascii?Q?T/HqAEAowsEXdR++oVedTNVW3esWk66Hld1o7XBUhajuJpe3JDKTJkMJgKaR?=
- =?us-ascii?Q?6/2s7F8i/y5AzsCIZW960DlSoaspsWJ9eD5hhT16iAnQs02wyCOivBcGRRS+?=
- =?us-ascii?Q?EjvCS3nwwDdA9Q/Sp2JX+vHmh2ih8IgMPj3H3sw7aEpaUoX/TcemgSXw5H5E?=
- =?us-ascii?Q?RBRjQ16B9C+6GTXnAWjbuqygft2t33nA00HkjMWyyOLWii8jHu58mCm2fgHW?=
- =?us-ascii?Q?MuAUCqzx8VNJqgNWVCp8eRNNcuJp5if4zlP+2+5SivS6/6Kg1rfCTm7SQqgQ?=
- =?us-ascii?Q?1cKVzh5ipU0+CMEprNXZ/6Y=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <99DFAA1526CAA141BE76DF692111635C@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20221208; t=1682852335; x=1685444335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4yRqbMK5ZOoBV7oEjfeaEkeOFx+akdbA76Qn7HPAVqQ=;
+        b=dVMpPKQmYtWA6bJvjmz2oUs7Wz81r6A0Hf2HQ5ktdXKqC9/EssFIuc1FCvs5XK8G4/
+         3ReRrdhMgAuyIZZiMhZ/viFQWa9qNKtsb8kRcr8BYqOftrfDLlB4GSN36KNthl8VMs8W
+         rYiktJNrp7nRtqvsHpngoi920qwJe9Ka9aJGvaoj+O10qhJbFzoFdhh3hPjLNWRuzm37
+         +DrX87nCscfqdK1r2aRCsZPSW1C5xcQYZbQzidGFRDnIgCCp2jsPcVcAULf2UAuiqUM6
+         l9CcezKLCtX9SzM3NPYonxniXd91G2ZOBGl8X8z1vNljN7mfGFwPqvDmM+qI7YITX+XC
+         8ESw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682852335; x=1685444335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4yRqbMK5ZOoBV7oEjfeaEkeOFx+akdbA76Qn7HPAVqQ=;
+        b=iF9xf6ndhs/q3LZgcxruShQW7seEXIQU1ahyhVwJSKONnOwnFDfFwR1lHCThk2lC/C
+         qcFrBB80Xi0d9OVyTcXm9DiuICUqpHW28T7wiah3/Pe3WVRqdG3qHwLtaTKYEz6mb37l
+         Y5j6vqMPonimY9EoJoL9XWUfFsZkoGjXY2hEVL1pS/2MJfcKny3jG9wY+xxJzICp4czO
+         gnJqasKAXZIu0Y/bTDvxQushEcl3vqxcyW1vr4J6hhhKsSbAijFXPfRZ2Kb+6HNTFCox
+         osD/yVYaDkn2V3HVGfEMSXvmqEyJ0HzBHR1JQUTWXhdc9DoiX9Bo2fHmoelhQM9nuRLT
+         Nq1A==
+X-Gm-Message-State: AC+VfDweUvMr3OT/S0fJylrZmmSrVFDxtsNnnwX6m5SlsAMYZwFVF/ce
+        hwgiAcyXgFzJ+euvpu3LpMg4TVuwIA7Zmsdydxk=
+X-Google-Smtp-Source: ACHHUZ7GMdfJ8slwBPsfUk71KrHUgsMc+fh9xNLqcaE7QzlNfL4EAdW411L/9EJySS4ALmov/ANNbaKnPRv9bB+Jg4w=
+X-Received: by 2002:a67:f883:0:b0:42f:78d5:d987 with SMTP id
+ h3-20020a67f883000000b0042f78d5d987mr4858393vso.1.1682852335098; Sun, 30 Apr
+ 2023 03:58:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?UVSYdD7DFUg7xaHxfq82t6T+m3DcLi+gIq7RO/MTZKMmC7CPzNepzraJd8Gp?=
- =?us-ascii?Q?e2fLR6Yqw45YRwt+eTIJ73DniPCOB1Sm3si2YHI89MuadK9S5cuA8zDKcd6d?=
- =?us-ascii?Q?YDhy/AilUJnjrk5+WcRRrzD2NP7NsTNZug+QXb7S3rmlZWreagZrLCfU9+s9?=
- =?us-ascii?Q?VFO1TQk/WOElr+7eNlb72Xfui5bQCsaMcdgDT0ouKLaKlbDNVPq6pw1MaK+l?=
- =?us-ascii?Q?PJmVgK1NiTSHYjtIfPPuP46o7myO8qQae7kqjgKDUrtgQIdz9BHdGalZNT+D?=
- =?us-ascii?Q?vVQ38W1fh0AJRitGZrFgy0W0Ao4jyqdPsD6Q/ADOMVUvfALBNfW8TnfHoJVC?=
- =?us-ascii?Q?Tsgi5tvBiFloNA0SeOz8OqeoG37dAKTPEkFjxkyTrxEOjwGPx5BXNQVNvAr/?=
- =?us-ascii?Q?IeJlo/zB+NSaKBGYkQ/oDJkHbZb45LP0Cnof8s2cATSlSq8I69+lo/3Ru4Qf?=
- =?us-ascii?Q?r91p7iHorFAcSJx/urI5zOi8r9wgSrB663FPDs+ufaXefeF4jS6k/2TrH+6Z?=
- =?us-ascii?Q?z6oFtFSzBhtoqVfhNVKJIvjdfJrTak7JDlkV3XUF2/19iiAhl0OCZOa+dHW/?=
- =?us-ascii?Q?py41vSBvbiwXJIbXjWRuLNehii418X/39WrWA3Lh+5J+8A1A3C41IJ08imJI?=
- =?us-ascii?Q?p8Y1mLa/F+6hbl14U7ieofeCHGPy1yZyhPz1LW7LuYFFaC3L8tNADyomEkKD?=
- =?us-ascii?Q?8raOeccvY+a9oZBBhlC7lgpmw9QKaevxK2rAW/mIVFIKRCFwMz/B0M5iIDfg?=
- =?us-ascii?Q?j0DvkPmhVq0VRJUBP1ikFU2frNpKCvAHJPfDdAne/pZuwIEIT/wH2cgO6d8w?=
- =?us-ascii?Q?bynaRZoiBIytyIS5YJ+YJpdvWtRl+Sb6fVrOoBmHZpyDDOSZpHI8iKYyuxDf?=
- =?us-ascii?Q?6kcl/wWpb/4peLp+YbB1yd32g0ZQB1h+Y0jY9pMMN9Thg9qFTgE2DPPUiM0N?=
- =?us-ascii?Q?9kM3lg9xirVN0gq23z3mUw=3D=3D?=
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7da095d-19b8-472f-216c-08db4966690c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2023 10:34:00.0840
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: W+sGrws7USIyCEW0wpeK63gkTny8bTNsGO8u8w6jhE4lCWlPpytZOimxuABLI6m9PDDOODh1eYsKdPtaGR41VcEbtuFEByrAy6AuqCYaE5k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR04MB8145
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230429020951.082353595@lindbergh.monkeyblade.net>
+ <CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com>
+ <ZE0kndhsXNBIb1g7@debian.me> <CAAJw_Zvxtf-Ny2iymoZdBGF577aeNomWP7u7-5rWyn6A7rzKRg@mail.gmail.com>
+In-Reply-To: <CAAJw_Zvxtf-Ny2iymoZdBGF577aeNomWP7u7-5rWyn6A7rzKRg@mail.gmail.com>
+From:   Jeff Chua <jeff.chua.linux@gmail.com>
+Date:   Sun, 30 Apr 2023 18:58:44 +0800
+Message-ID: <CAAJw_ZvZdFpw9W2Hisc9c2BAFbYAnQuaFFaFG6N7qPUP2fOL_w@mail.gmail.com>
+Subject: Re: iwlwifi broken in post-linux-6.3.0 after April 26
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Johannes Berg <johannes.berg@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Apr 19, 2023 / 13:45, Sagi Grimberg wrote:
->=20
-> > > > Before we unload the module we should cleanup the fc resources firs=
-t,
-> > > > basically reorder the shutdown sequence to be in reverse order of t=
-he
-> > > > setup path.
-> > >=20
-> > > If this triggers a bug, then I think it is a good idea to have a
-> > > dedicated test that reproduces it if we are changing the default
-> > > behavior.
-> >=20
-> > Right, though I would like to tackle one problem after the other, first=
- get fc
-> > working with the 'correct' order.
-> >=20
-> > > > While at it also update the rdma stop_soft_rdma before the module
-> > > > unloading for the same reasoning.
-> > >=20
-> > > Why? it creates the wrong reverse ordering.
-> > >=20
-> > > 1. setup soft-rdma
-> > > 2. setup nvme-rdma
-> > >=20
-> > > 2. teardown nvme-rdma
-> > > 1. teardown soft-rdma
-> > >=20
-> > > I don't think we need this change. I mean it is a good test
-> > > to have that the rdma device goes away underneath nvme-rdma
-> > > but it is good for a dedicated test.
+On Sun, Apr 30, 2023 at 2:17=E2=80=AFAM Jeff Chua <jeff.chua.linux@gmail.co=
+m> wrote:
+>
+> On Sat, Apr 29, 2023 at 10:07=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.=
+com> wrote:
+> >
+> > On Sat, Apr 29, 2023 at 01:22:03PM +0800, Jeff Chua wrote:
+> > > Can't start wifi on latest linux git pull ... started happening 3 day=
+s ago ...
+> >
+> > Are you testing mainline?
+>
+> I'm pulling from https://github.com/torvalds/linux.git, currently at ...
+>
+> commit 1ae78a14516b9372e4c90a89ac21b259339a3a3a (HEAD -> master,
+> origin/master, origin/HEAD)
+> Merge: 4e1c80ae5cf4 74d7970febf7
+> Author: Linus Torvalds <torvalds@linux-foundation.org>
+> Date:   Sat Apr 29 11:10:39 2023 -0700
+>
+> > Certainly you should do bisection.
+>
+> ok, will do.
 
-I agree that the new test case is good.
+Bisected!
 
-> >=20
-> > I was woried about this setup sequence here:
-> >=20
-> > 	modprobe -q nvme-"${nvme_trtype}"
-> > 	if [[ "${nvme_trtype}" =3D=3D "rdma" ]]; then
-> > 		start_soft_rdma
-> >=20
-> > The module is loaded before start_soft_rdma is started, thus I thought =
-we should
-> > do the reverse, first call stop_soft_rdma and the unload the module.
->=20
-> They should be unrelated. the safe route is to first remove the uld and
-> then the device.
+ef3ed33dfc8f0f1c81ca103e6b68b4f77ee0ab65 is the first bad commit
+commit ef3ed33dfc8f0f1c81ca103e6b68b4f77ee0ab65
+Author: Gregory Greenman <gregory.greenman@intel.com>
+Date:   Sun Apr 16 15:47:33 2023 +0300
 
-Sagi, this comment above was not clear for me. Is Daniel's patch ok for you=
-?
+    wifi: iwlwifi: bump FW API to 77 for AX devices
 
-IMO, it is reasonable to "do clean-up in reverse order as setup" as a gener=
-al
-guide. It will reduce the chance to see module related failures when the te=
-st
-cases do not expect such failures. Instead, we can have dedicated test case=
-s for
-the module load/unload order related failures. start_soft_rdma and
-stop_soft_rdma do module load and unload. So I think the guide is good for =
-those
-helper functions also.
+    Start supporting API version 77 for AX devices.
+
+    Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+    Link: https://lore.kernel.org/r/20230416154301.e522ccefe354.If7628363fa=
+feb7687163103e734206915c445197@changeid
+    Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+
+ drivers/net/wireless/intel/iwlwifi/cfg/22000.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+I had to downgrade FW API to 75 to make it work again!
+
+--- a/drivers/net/wireless/intel/iwlwifi/cfg/22000.c    2023-04-30
+18:27:21.719983505 +0800
++++ a/drivers/net/wireless/intel/iwlwifi/cfg/22000.c    2023-04-30
+18:27:25.749983446 +0800
+@@ -10,7 +10,7 @@
+ #include "fw/api/txq.h"
+
+ /* Highest firmware API version supported */
+-#define IWL_22000_UCODE_API_MAX        78
++#define IWL_22000_UCODE_API_MAX        75
+
+ /* Lowest firmware API version supported */
+ #define IWL_22000_UCODE_API_MIN        39
+
+
+My h/w is Lenovo X1 with ...
+
+00:14.3 Network controller: Intel Corporation Alder Lake-P PCH CNVi
+WiFi (rev 01)
+
+
+I've the following firmware .. I've tried 77, 78, 79, 81 .. .all not workin=
+g
+
+-rw-r--r-- 1 root root 1560532 Mar 14 08:05 iwlwifi-so-a0-gf-a0-72.ucode
+-rw-r--r-- 1 root root 1563692 Mar  6 14:07 iwlwifi-so-a0-gf-a0-73.ucode
+-rw-r--r-- 1 root root 1577460 Mar 14 08:05 iwlwifi-so-a0-gf-a0-74.ucode
+-rw-r--r-- 1 root root 1641260 Mar  6 14:07 iwlwifi-so-a0-gf-a0-77.ucode
+-rw-r--r-- 1 root root 1667236 Mar  6 14:07 iwlwifi-so-a0-gf-a0-78.ucode
+-rw-r--r-- 1 root root 1672988 Mar  6 14:07 iwlwifi-so-a0-gf-a0-79.ucode
+-rw-r--r-- 1 root root 1682852 Apr  5 08:22 iwlwifi-so-a0-gf-a0-81.ucode
+
+
+# working dmesg attached ...
+cfg80211: Loading compiled-in X.509 certificates for regulatory database
+Loaded X.509 cert 'sforshee: 00b28ddf47aef9cea7'
+iwlwifi 0000:00:14.3: enabling device (0000 -> 0002)
+iwlwifi 0000:00:14.3: Direct firmware load for
+iwlwifi-so-a0-gf-a0-75.ucode failed with error -2
+iwlwifi 0000:00:14.3: api flags index 2 larger than supported by driver
+thermal thermal_zone1: failed to read out thermal zone (-61)
+iwlwifi 0000:00:14.3: Sorry - debug buffer is only 4096K while you
+requested 65536K
