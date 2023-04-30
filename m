@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0A46F27B0
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C5E6F27B7
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjD3FGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 01:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S231707AbjD3FT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 01:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjD3FGH (ORCPT
+        with ESMTP id S229644AbjD3FT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 01:06:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C85E19AC;
-        Sat, 29 Apr 2023 22:06:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682831166; x=1714367166;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wUIy27kaA7x1m/LYtCGQz0bQD3AE4rfsj1cxLUC2Tzk=;
-  b=MV/bw3PpAmXweL4gp3ujplDciWYiOscjXD+Z93RytSZUTYujoAssLg7R
-   mrMCUUmOg/s52DkRNpN2+ut0k+4DbBuJmpjo5/iRbw5e6p8mC4AlSYej4
-   JMAXdPpE3sv5DUCiaQqkUwvAH7fjB5N4uvc5x8E/b2vjsQ2XJJEM5B/yD
-   uPRZi/9XKVs5tP98fkIeM7UTI/ErLQwQf0yOd6wLnOF+xEJjDS0uJnCiV
-   JXUNr2n8IGKH3nFdXkY/UXV8k2W97P38PxRkbFt69qhDPgOhy089ZVN0p
-   hGsC4R1oL5DTNQojPkTVGxR8PJn+l5ZcNvcxqDvI9vj0mgTDDLAqAhpXs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="348029659"
-X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
-   d="scan'208";a="348029659"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 22:06:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="728115425"
-X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
-   d="scan'208";a="728115425"
-Received: from naamamex-mobl.ger.corp.intel.com (HELO [10.13.12.36]) ([10.13.12.36])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 22:05:58 -0700
-Message-ID: <499598fd-05fc-e3bc-be85-d74b47a0b46c@linux.intel.com>
-Date:   Sun, 30 Apr 2023 08:05:57 +0300
+        Sun, 30 Apr 2023 01:19:26 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7094319BB
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 22:19:25 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-32b65428489so7715595ab.1
+        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 22:19:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682831964; x=1685423964;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbgNg7bzEOiE+PpMY9EfhvJTml8HBUQsJEoVcCv5c8Q=;
+        b=OcNSb5tdYfRYgT9MOMPvdUF9xAz1HracrsHO2elh80FrlIW+lU85Wo0biCUwWsFS7g
+         y7zPsHC3g2/2WVA0829ptR4+1MYi1EGhw4fLgVAhvRCPltw5guZ03y1E+5do0mF78pyj
+         Qh2N41nYgNk7P5MrJ7eL8So2gprqqBRxWZ+d+UzQt+vE5ZL3UFNYoVIqc7ECwu+TOYaC
+         ZzFHCe6nnaHepetMrR2PPNQ3qazNCMkhkRwtd3g57vyiayDMzSSk/0LYnKI8dWLY5MNG
+         dSeXfrl/yFygdQDvcSl666fpZHfWVU9GgEhT0r8d39KvBxeXD7RZmpAQ3gIob6umOEv3
+         Cnkw==
+X-Gm-Message-State: AC+VfDzgfpiRDlrFTclxT6Qvxe768aLv8MrRxSH3UecHjQ9aw+5a3WnY
+        4bIIIxht/6RNypVlCCo55UvACZ+Pz1aBHZ1216AGT+JE4ime
+X-Google-Smtp-Source: ACHHUZ7ExN+zShsIJc2XiFG2sXg9LR6zZCWJUqmWpaBVinskpdR+1L/m2w4P7/W7ipfQJwevuqU8oEbPVxYZNAFl3zT5ZpDJfNwZ
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Intel-wired-lan] [PATCH net v3 1/1] igc: read before write to
- SRRCTL register
-Content-Language: en-US
-To:     Song Yoong Siang <yoong.siang.song@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Cc:     xdp-hints@xdp-project.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
-References: <20230414154902.2950535-1-yoong.siang.song@intel.com>
-From:   "naamax.meir" <naamax.meir@linux.intel.com>
-In-Reply-To: <20230414154902.2950535-1-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d143:0:b0:330:a575:37e2 with SMTP id
+ t3-20020a92d143000000b00330a57537e2mr852781ilg.4.1682831963878; Sat, 29 Apr
+ 2023 22:19:23 -0700 (PDT)
+Date:   Sat, 29 Apr 2023 22:19:23 -0700
+In-Reply-To: <00000000000083d76d05f909f716@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006c7b6b05fa86d9ee@google.com>
+Subject: Re: [syzbot] [usb?] general protection fault in xpad_probe
+From:   syzbot <syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com>
+To:     chaorace@gmail.com, dan.carpenter@linaro.org,
+        dmitry.torokhov@gmail.com, dzm91@hust.edu.cn, error27@gmail.com,
+        gregkh@linuxfoundation.org, hdanton@sina.com,
+        hust-os-kernel-patches@googlegroups.com,
+        kernel-janitors@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        matthias.benkmann@gmail.com, mkorpershoek@baylibre.com,
+        mudongliangabcd@gmail.com, nate@yocom.org,
+        pgriffais@valvesoftware.com, radon86dev@gmail.com,
+        rafael@kernel.org, rojtberg@gmail.com, s.demassari@gmail.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        vi@endrift.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,47 +65,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/2023 18:49, Song Yoong Siang wrote:
-> igc_configure_rx_ring() function will be called as part of XDP program
-> setup. If Rx hardware timestamp is enabled prio to XDP program setup,
-> this timestamp enablement will be overwritten when buffer size is
-> written into SRRCTL register.
-> 
-> Thus, this commit read the register value before write to SRRCTL
-> register. This commit is tested by using xdp_hw_metadata bpf selftest
-> tool. The tool enables Rx hardware timestamp and then attach XDP program
-> to igc driver. It will display hardware timestamp of UDP packet with
-> port number 9092. Below are detail of test steps and results.
-> 
-> Command on DUT:
->    sudo ./xdp_hw_metadata <interface name>
-> 
-> Command on Link Partner:
->    echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
-> 
-> Result before this patch:
->    skb hwtstamp is not found!
-> 
-> Result after this patch:
->    found skb hwtstamp = 1677800973.642836757
-> 
-> Optionally, read PHC to confirm the values obtained are almost the same:
-> Command:
->    sudo ./testptp -d /dev/ptp0 -g
-> Result:
->    clock time: 1677800973.913598978 or Fri Mar  3 07:49:33 2023
-> 
-> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> Cc: <stable@vger.kernel.org> # 5.14+
-> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-> Reviewed-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> ---
-> v2 -> v3: Refactor SRRCTL definitions to more human readable definitions
-> v1 -> v2: Fix indention
-> ---
->   drivers/net/ethernet/intel/igc/igc_base.h | 11 ++++++++---
->   drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++--
->   2 files changed, 13 insertions(+), 5 deletions(-)
+syzbot has bisected this issue to:
 
-Tested-by: Naama Meir <naamax.meir@linux.intel.com>
+commit db7220c48d8d71476f881a7ae1285e1df4105409
+Author: Vicki Pfau <vi@endrift.com>
+Date:   Fri Mar 24 17:42:27 2023 +0000
+
+    Input: xpad - fix support for some third-party controllers
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1028a1f8280000
+start commit:   92e815cf07ed Add linux-next specific files for 20230428
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1228a1f8280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1428a1f8280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8c8ae4d47d23592
+dashboard link: https://syzkaller.appspot.com/bug?extid=a3f758b8d8cb7e49afec
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a5408c280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d3b0e4280000
+
+Reported-by: syzbot+a3f758b8d8cb7e49afec@syzkaller.appspotmail.com
+Fixes: db7220c48d8d ("Input: xpad - fix support for some third-party controllers")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
