@@ -2,129 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1916F2B5C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915126F2B63
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 00:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjD3W0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 18:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
+        id S230445AbjD3WgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 18:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjD3W0s (ORCPT
+        with ESMTP id S229663AbjD3WgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 18:26:48 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B36E4F;
-        Sun, 30 Apr 2023 15:26:46 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-2f87c5b4635so1749710f8f.1;
-        Sun, 30 Apr 2023 15:26:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682893605; x=1685485605;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gU5klj4JuCtxBh6JR6WjnJXM2yce7ELIzVSpcWZL9RY=;
-        b=VXNNdRhLqJDygRRWBenMw/2sboDt9lMxswc9Klc7vyZ7DUUY8PsRrW4VYJXOKcH18t
-         qlCJf2sRfxtVrN7OzpZbclacR5lQtGV6yIVIuJ2NYAMZlpbayLltwRM8D6ieUfN6+jkC
-         FjJMWW2TRyK4N4hEBJ0pllZrGFeL40h545zok0J472IxJ/QO7vIlbUB716nHnopqBlYT
-         AU9clybB/l7GCTu17p2ip6WlBxT18xR8ZMTJtAAINBnTkPXLceuKXkyumwE13HR/zkw0
-         FQBZimSmFtGej5L5shtV9NLrlZgp5R7ELWLyd7VcsucF2yrHASTmMy4DhE48LvmZWGDv
-         Hfpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682893605; x=1685485605;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gU5klj4JuCtxBh6JR6WjnJXM2yce7ELIzVSpcWZL9RY=;
-        b=B8N3Ca6449HJNpoeH4LsML0/NC8YO3cGlSHSsb1D55/KOd1LewPQpuXywT5GDqABXS
-         tLVq2K0o13EyAYSo3CFr0kvKVQJnS23HWn+jDJ3Brpz+5G0QEROf8zU/CUcp9UgtXV0m
-         l5PlY8ZEbXuDgR/FKQsqGDVu/MEIEYnuwmW1tKHOPulm+j2q5FxBsVGQ4iD4OJBHs1Qr
-         AhI3YPy8yBqUwTMyL9HvpXNG8/Im/nkTE6+KDJzmEw5sVlsk71TqRFtj+vIZ7WMCTdDc
-         i+Ht75zIhS2FS9divxHKnwwUp1ivmeZlk/JcRllBx6F03K8Iks/YDKV8F7Rbcw3a0T2p
-         WpoQ==
-X-Gm-Message-State: AC+VfDx24mJDWRd0L0racLid7KnSo2bUzhzSrXvB3dsmvb1AlsjudUIZ
-        +aGbwZz0h/jX2Czvj1x9qcY=
-X-Google-Smtp-Source: ACHHUZ5v8qXYw3hgXK16jHy+ni2ikKLOkyTRyqZ3qFWlrvR4D0x5Vzd2irHeayWjLHt2m0/NfaYC3w==
-X-Received: by 2002:adf:db8e:0:b0:2fe:f2d1:dcab with SMTP id u14-20020adfdb8e000000b002fef2d1dcabmr8764207wri.58.1682893605108;
-        Sun, 30 Apr 2023 15:26:45 -0700 (PDT)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id g2-20020a5d5402000000b002da75c5e143sm26699865wrv.29.2023.04.30.15.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 15:26:44 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Hugh Dickins <hughd@google.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v2 3/3] mm: perform the mapping_map_writable() check after call_mmap()
-Date:   Sun, 30 Apr 2023 23:26:07 +0100
-Message-Id: <6f3aea05c9cc46094b029cbd1138d163c1ae7f9d.1682890156.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <cover.1682890156.git.lstoakes@gmail.com>
-References: <cover.1682890156.git.lstoakes@gmail.com>
+        Sun, 30 Apr 2023 18:36:19 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC092197;
+        Sun, 30 Apr 2023 15:36:16 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id ED5A01BF203;
+        Sun, 30 Apr 2023 22:36:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1682894175;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f2ThtBXPrm6crhdTz0zQVJ3bF8A3FmajM0999On8F8Q=;
+        b=T/4djMvPFBG/mBKlB2Eu8HPdVMKzeWzTZbmzAU/g21fBG4h1nMmYNm3lDhwJBa3EZWydC0
+        H8XpC3sgUzKBeXXZkU2QQDrShk98Nt2WTjE2WiYkIH6/Fw3ClHbEg+S0q/JlB/Mp55GOmb
+        kN58TtnUR247rsicS2jC/nuS/JLGxOzRSO3N8dxCmjf/688msVr5jwxobG1IzREHUUgocV
+        hzJShvhHTjibkep6puYNraqfQ8gtZOxRavEbwFCXOKgARoWk6o2cUMsBvO8Zs7yzHM7KNO
+        WeBetc6UbR20BO+8Ck+GTHvA3hlccqxWKPHOLORNQxrQEwrhRt00VQyjnH9qjA==
+Date:   Mon, 1 May 2023 00:36:14 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.4
+Message-ID: <20230430223614c48c29a6@mail.local>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order for a F_SEAL_WRITE sealed memfd mapping to have an opportunity to
-clear VM_MAYWRITE, we must be able to invoke the appropriate vm_ops->mmap()
-handler to do so. We would otherwise fail the mapping_map_writable() check
-before we had the opportunity to avoid it.
+Hello Linus,
 
-This patch moves this check after the call_mmap() invocation. Only memfd
-actively denies write access causing a potential failure here (in
-memfd_add_seals()), so there should be no impact on non-memfd cases.
+Here is the RTC subsystem pull request for 6.4. Not much this cycle,
+there is the conversion to remove_new and many small fixes in drivers.
 
-This patch makes the userland-visible change that MAP_SHARED, PROT_READ
-mappings of an F_SEAL_WRITE sealed memfd mapping will now succeed.
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217238
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
----
- mm/mmap.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 646e34e95a37..1608d7f5a293 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2642,17 +2642,17 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 	vma->vm_pgoff = pgoff;
+are available in the Git repository at:
 
- 	if (file) {
--		if (is_shared_maywrite(vm_flags)) {
--			error = mapping_map_writable(file->f_mapping);
--			if (error)
--				goto free_vma;
--		}
--
- 		vma->vm_file = get_file(file);
- 		error = call_mmap(file, vma);
- 		if (error)
- 			goto unmap_and_free_vma;
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.4
 
-+		if (vma_is_shared_maywrite(vma)) {
-+			error = mapping_map_writable(file->f_mapping);
-+			if (error)
-+				goto close_and_free_vma;
-+		}
-+
- 		/*
- 		 * Expansion is handled above, merging is handled below.
- 		 * Drivers should not alter the address of the VMA.
---
-2.40.1
+for you to fetch changes up to e99ab4abebf825de2ce65f6c6c32ee30e00bb077:
+
+  rtc: armada38x: use devm_platform_ioremap_resource_byname() (2023-04-28 08:07:23 +0200)
+
+----------------------------------------------------------------
+RTC for 6.4
+
+Subsystem:
+ - Convert to platform remove callback returning void
+
+Drivers:
+ - meson-vrtc: fix a firmware display issue
+
+----------------------------------------------------------------
+Conor Dooley (1):
+      rtc: mpfs: convert SOC_MICROCHIP_POLARFIRE to ARCH_MICROCHIP_POLARFIRE
+
+Dhruva Gole (1):
+      rtc: k3: handle errors while enabling wake irq
+
+Javier Carrasco (2):
+      rtc: pcf8523: fix coding-style issues
+      rtc: pcf8523: remove unnecessary OR operation
+
+Krzysztof Kozlowski (2):
+      rtc: omap: include header for omap_rtc_power_off_program prototype
+      rtc: ds1390: mark OF related data as maybe unused
+
+Lars-Peter Clausen (1):
+      rtc: jz4740: Make sure clock provider gets removed
+
+Martin Blumenstingl (1):
+      rtc: meson-vrtc: Use ktime_get_real_ts64() to get the current time
+
+Rob Herring (2):
+      rtc: sun6i: Use of_property_present() for testing DT property presence
+      dt-bindings: rtc: Drop unneeded quotes
+
+Uwe Kleine-König (41):
+      rtc: 88pm80x: Convert to platform remove callback returning void
+      rtc: 88pm860x: Convert to platform remove callback returning void
+      rtc: ab8500: Convert to platform remove callback returning void
+      rtc: ac100: Convert to platform remove callback returning void
+      rtc: asm9260: Convert to platform remove callback returning void
+      rtc: at91sam9: Convert to platform remove callback returning void
+      rtc: brcmstb-waketimer: Convert to platform remove callback returning void
+      rtc: cadence: Convert to platform remove callback returning void
+      rtc: cmos: Convert to platform remove callback returning void
+      rtc: cros-ec: Convert to platform remove callback returning void
+      rtc: ds1685: Convert to platform remove callback returning void
+      rtc: ftrtc010: Convert to platform remove callback returning void
+      rtc: hid-sensor-time: Convert to platform remove callback returning void
+      rtc: lpc24xx: Convert to platform remove callback returning void
+      rtc: max77686: Convert to platform remove callback returning void
+      rtc: mc13xxx: Convert to platform remove callback returning void
+      rtc: mpc5121: Convert to platform remove callback returning void
+      rtc: mpfs: Convert to platform remove callback returning void
+      rtc: mt7622: Convert to platform remove callback returning void
+      rtc: mxc_v2: Convert to platform remove callback returning void
+      rtc: omap: Convert to platform remove callback returning void
+      rtc: palmas: Convert to platform remove callback returning void
+      rtc: pcf50633: Convert to platform remove callback returning void
+      rtc: pic32: Convert to platform remove callback returning void
+      rtc: pm8xxx: Convert to platform remove callback returning void
+      rtc: rc5t583: Convert to platform remove callback returning void
+      rtc: rtd119x: Convert to platform remove callback returning void
+      rtc: rzn1: Convert to platform remove callback returning void
+      rtc: s3c: Convert to platform remove callback returning void
+      rtc: sa1100: Convert to platform remove callback returning void
+      rtc: spear: Convert to platform remove callback returning void
+      rtc: stm32: Convert to platform remove callback returning void
+      rtc: stmp3xxx: Convert to platform remove callback returning void
+      rtc: sunplus: Convert to platform remove callback returning void
+      rtc: tegra: Convert to platform remove callback returning void
+      rtc: tps6586x: Convert to platform remove callback returning void
+      rtc: twl: Convert to platform remove callback returning void
+      rtc: vt8500: Convert to platform remove callback returning void
+      rtc: wm8350: Convert to platform remove callback returning void
+      rtc: xgene: Convert to platform remove callback returning void
+      rtc: zynqmp: Convert to platform remove callback returning void
+
+Ye Xingchen (2):
+      rtc: sunplus: use devm_platform_ioremap_resource_byname()
+      rtc: armada38x: use devm_platform_ioremap_resource_byname()
+
+ .../bindings/rtc/allwinner,sun4i-a10-rtc.yaml           |  2 +-
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml           |  2 +-
+ .../devicetree/bindings/rtc/atmel,at91rm9200-rtc.yaml   |  2 +-
+ .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml  |  2 +-
+ .../devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml |  2 +-
+ .../devicetree/bindings/rtc/faraday,ftrtc010.yaml       |  4 ++--
+ .../devicetree/bindings/rtc/microcrystal,rv3032.yaml    |  2 +-
+ .../devicetree/bindings/rtc/mstar,msc313-rtc.yaml       |  2 +-
+ .../devicetree/bindings/rtc/nuvoton,nct3018y.yaml       |  2 +-
+ Documentation/devicetree/bindings/rtc/nxp,pcf2127.yaml  |  2 +-
+ Documentation/devicetree/bindings/rtc/rtc-mxc.yaml      |  2 +-
+ Documentation/devicetree/bindings/rtc/rtc-mxc_v2.yaml   |  2 +-
+ Documentation/devicetree/bindings/rtc/sa1100-rtc.yaml   |  4 ++--
+ Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml |  2 +-
+ Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml    |  2 +-
+ Documentation/devicetree/bindings/rtc/trivial-rtc.yaml  |  2 +-
+ drivers/rtc/Kconfig                                     |  2 +-
+ drivers/rtc/rtc-88pm80x.c                               |  5 ++---
+ drivers/rtc/rtc-88pm860x.c                              |  6 ++----
+ drivers/rtc/rtc-ab8500.c                                |  6 ++----
+ drivers/rtc/rtc-ac100.c                                 |  6 ++----
+ drivers/rtc/rtc-armada38x.c                             |  7 ++-----
+ drivers/rtc/rtc-asm9260.c                               |  5 ++---
+ drivers/rtc/rtc-at91sam9.c                              |  6 ++----
+ drivers/rtc/rtc-brcmstb-waketimer.c                     |  6 ++----
+ drivers/rtc/rtc-cadence.c                               |  6 ++----
+ drivers/rtc/rtc-cmos.c                                  |  5 ++---
+ drivers/rtc/rtc-cros-ec.c                               |  6 ++----
+ drivers/rtc/rtc-ds1390.c                                |  2 +-
+ drivers/rtc/rtc-ds1685.c                                |  6 ++----
+ drivers/rtc/rtc-ftrtc010.c                              |  6 ++----
+ drivers/rtc/rtc-hid-sensor-time.c                       |  6 ++----
+ drivers/rtc/rtc-jz4740.c                                |  3 ++-
+ drivers/rtc/rtc-lpc24xx.c                               |  6 ++----
+ drivers/rtc/rtc-max77686.c                              |  6 ++----
+ drivers/rtc/rtc-mc13xxx.c                               |  6 ++----
+ drivers/rtc/rtc-meson-vrtc.c                            |  4 ++--
+ drivers/rtc/rtc-mpc5121.c                               |  6 ++----
+ drivers/rtc/rtc-mpfs.c                                  |  6 ++----
+ drivers/rtc/rtc-mt7622.c                                |  6 ++----
+ drivers/rtc/rtc-mxc_v2.c                                |  5 ++---
+ drivers/rtc/rtc-omap.c                                  |  7 +++----
+ drivers/rtc/rtc-palmas.c                                |  5 ++---
+ drivers/rtc/rtc-pcf50633.c                              |  6 ++----
+ drivers/rtc/rtc-pcf8523.c                               | 17 ++++++++---------
+ drivers/rtc/rtc-pic32.c                                 |  6 ++----
+ drivers/rtc/rtc-pm8xxx.c                                |  5 ++---
+ drivers/rtc/rtc-rc5t583.c                               |  5 ++---
+ drivers/rtc/rtc-rtd119x.c                               |  6 ++----
+ drivers/rtc/rtc-rzn1.c                                  |  6 ++----
+ drivers/rtc/rtc-s3c.c                                   |  6 ++----
+ drivers/rtc/rtc-sa1100.c                                |  6 ++----
+ drivers/rtc/rtc-spear.c                                 |  6 ++----
+ drivers/rtc/rtc-stm32.c                                 |  6 ++----
+ drivers/rtc/rtc-stmp3xxx.c                              |  8 +++-----
+ drivers/rtc/rtc-sun6i.c                                 |  2 +-
+ drivers/rtc/rtc-sunplus.c                               |  9 +++------
+ drivers/rtc/rtc-tegra.c                                 |  6 ++----
+ drivers/rtc/rtc-ti-k3.c                                 |  3 ++-
+ drivers/rtc/rtc-tps6586x.c                              |  5 ++---
+ drivers/rtc/rtc-twl.c                                   |  6 ++----
+ drivers/rtc/rtc-vt8500.c                                |  6 ++----
+ drivers/rtc/rtc-wm8350.c                                |  6 ++----
+ drivers/rtc/rtc-xgene.c                                 |  5 ++---
+ drivers/rtc/rtc-zynqmp.c                                |  6 ++----
+ 65 files changed, 122 insertions(+), 197 deletions(-)
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
