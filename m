@@ -2,105 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5C76F289C
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 13:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5600B6F2896
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 13:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbjD3Lfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 07:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S229909AbjD3Lag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 07:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjD3Lfj (ORCPT
+        with ESMTP id S229461AbjD3Lae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 07:35:39 -0400
-Received: from perseus.uberspace.de (perseus.uberspace.de [95.143.172.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E32724
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 04:35:36 -0700 (PDT)
-Received: (qmail 18696 invoked by uid 988); 30 Apr 2023 11:28:54 -0000
-Authentication-Results: perseus.uberspace.de;
-        auth=pass (plain)
-From:   David Bauer <mail@david-bauer.net>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] dt-bindings: net: dsa: mediatek,mt7530: document MDIO-bus
-Date:   Sun, 30 Apr 2023 13:28:33 +0200
-Message-Id: <20230430112834.11520-2-mail@david-bauer.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230430112834.11520-1-mail@david-bauer.net>
-References: <20230430112834.11520-1-mail@david-bauer.net>
+        Sun, 30 Apr 2023 07:30:34 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE9626AB
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 04:30:32 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94f1a6e66c9so307339966b.2
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 04:30:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682854231; x=1685446231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BVxAbtgWt8piDuFL2bIM7+Ard0QYLwJUtfo5posTlu8=;
+        b=V48CE5XksJN9W2lqT5IsiEiLKywu0Dx/veB5aLENwl02WSwESfSqDTLgSba8BnAsCB
+         L+1yNbYz47h8/tFGxCNr0nuVCvrosHx1BnSLh2E2nuQtww1wdTlEpKGPlAznliqtpxQ/
+         +6IV3/3CmNbLy+q1UUEzvLGQb+tOMlI0A36F2qmkeY0d5vLF+9ahsDLRnxJo6uwMuPsj
+         BIMaO1TvzZ72buJEbjvkgR4qsvMp+Odn/XlG5Y7iIXBEfiXNbrRsFRz0RIbjqwf/9eEl
+         TjheTQbpTCpZUB9nh2lh2T3Ts18nWlp5y5+wOvCef9anB6yvQliSBApCQubDPzR1zX9B
+         0KwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682854231; x=1685446231;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVxAbtgWt8piDuFL2bIM7+Ard0QYLwJUtfo5posTlu8=;
+        b=O/fqmI4A+o0uC0ff1DxNHg/QGBBzZHRu1jyjV4W7/XyLQXykoPvFTKNHuDAGWBmDpR
+         CzKqbu22+INlTVnXSCUfmd8EeWnphEa3u6A5armnV4ft4e2NgjkN3hACJp9ULWYSwceE
+         nB8GRiECc+X/FJ35kO0hfQCKiZV9o8LyVSvu/oYgQYBHeTnjiOSTzOK64aLpn49n2o3t
+         gdyaI9axC6N1OXO5ZdtLo7kJmokHaH/f536XqumRq9tQMjUSaeA/xDqPBvm1r+zUOpU6
+         T9rSo54G9HAa9QAvTZ2yUEjnr5Im6w/9ufvxy1201RB7PMV9E1TNGEr0bwt+ddwLqHxT
+         tlKg==
+X-Gm-Message-State: AC+VfDzh5uePuLAA98WgelLGKyNfMLCnM3ifNXRQDoTnJktqa+LDrtVX
+        I1mwrpiMMseSSlfm5x/ylSVm6Q==
+X-Google-Smtp-Source: ACHHUZ7mIWoKHzDSU5Di+4SWLZ6PKI098SuYW2eCN4UKMZ0F2zinCJrzHMsaioh3L9kOGWNKFNJDeQ==
+X-Received: by 2002:a17:907:368d:b0:953:1f45:3ced with SMTP id bi13-20020a170907368d00b009531f453cedmr9744583ejc.8.1682854231272;
+        Sun, 30 Apr 2023 04:30:31 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3? ([2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3])
+        by smtp.gmail.com with ESMTPSA id o9-20020a1709064f8900b0094f3b18044bsm13473230eju.218.2023.04.30.04.30.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Apr 2023 04:30:30 -0700 (PDT)
+Message-ID: <c981e048-8925-deba-6916-9199844976b9@linaro.org>
+Date:   Sun, 30 Apr 2023 13:30:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 09/43] dt-bindings: watchdog: add DT bindings for Cirrus
+ EP93x
+Content-Language: en-US
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230424123522.18302-10-nikita.shubin@maquefel.me>
+ <00882340-477b-dc0b-d489-94efdf045f1c@linaro.org>
+ <cb0b1779a8bd18212439f9baf70fdb183c9f0fc7.camel@maquefel.me>
+ <e73cec19-9ac8-bee2-8c28-c7a40b929e53@linaro.org>
+ <c74d958aa1ea38f61cd1db965dce3cadbff530b5.camel@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c74d958aa1ea38f61cd1db965dce3cadbff530b5.camel@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: /
-X-Rspamd-Report: BAYES_HAM(-3) R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) SUSPICIOUS_RECIPS(1.5)
-X-Rspamd-Score: -0.1
-Received: from unknown (HELO unkown) (::1)
-        by perseus.uberspace.de (Haraka/3.0.1) with ESMTPSA; Sun, 30 Apr 2023 13:28:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=david-bauer.net; s=uberspace;
-        h=from;
-        bh=sTYmJdxkbJ6INid41yoAQ9uYdKno4uxUMFR5arFxeCc=;
-        b=jOG5PZqyf0Fr/vBRT7d3DIMKD7eTMbfb4F6YNlEPi9GCL326ZHSewYXKDuO5hSwHhWvjJrlDb8
-        V9U9sNTecZc3GGlBu3ZBAdFdPPiZ4dCI0YQoJV6oaAlc6GP5SGF0BE+7DbsSTH8WLCX3oINCTVvI
-        TJxipRze5M8tl2c65CrX3SKFDBikA4xMg1Xz25Uxh8A4bqTKd7uN47dTk2GP8riZ84aVV31olbAL
-        Bnb8pX9sLT+hqrKFAhStBiUgmE1w7UCTCqFLIRmPTF4nlg8BFFzHEUOWQJEJzqIX/in2TtmwMWuD
-        JXy/jjU++UOmqBtW5OHXsha20f8d05y0AGWc4s2HOHjwhgXf6FPwBKrRzlUy4Gw5dBC1YOQOWz1f
-        cXeIvoXXOSRVdh7C8uN1hY8vq7Qu8ymv2BQgivOg/TFVEAT7TJC1I3U3tRotGcfR+PLw32hLZFlX
-        T+/d4EXZm5w1WBjNrFOrsAdpaNg0a1b+d8VaBAcecVjc2OWV3w/ZROGkVJLkwJX+4PmB9cTAvZS0
-        bkvL0akVRqCTdZV8exHIQyTzergXnTYH7ZIAsVynx/ZHEoXr1E44g6VfFzmWytA8Tp7P7BzDoyZ7
-        eCW4IuxOS3kWXlvJ37cSHw7LKr1XrTcXMFnh6D7ByBe9H4amiCLIhaTnnLkCV8QaXeKxWl5av9xC
-        8=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the ability to add nodes for the MDIO bus connecting the
-switch-internal PHYs.
+On 28/04/2023 19:42, Nikita Shubin wrote:
+> On Fri, 2023-04-28 at 14:20 +0200, Krzysztof Kozlowski wrote:
+>> On 28/04/2023 16:33, Nikita Shubin wrote:
+>>> Hello Krzysztof!
+>>>
+>>> On Tue, 2023-04-25 at 11:31 +0200, Krzysztof Kozlowski wrote:
+>>>> On 24/04/2023 14:34, Nikita Shubin wrote:
+>>>>> This adds device tree bindings for the Cirrus Logic EP93xx
+>>>>> watchdog block used in these SoCs.
+>>>>>
+>>>>> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+>>>>> ---
+>>>>>  .../bindings/watchdog/cirrus,ep93xx-wdt.yaml  | 38
+>>>>> +++++++++++++++++++
+>>>>>  1 file changed, 38 insertions(+)
+>>>>>  create mode 100644
+>>>>> Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
+>>>>> wdt.yaml
+>>>>>
+>>>>> diff --git
+>>>>> a/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
+>>>>> wdt.yaml
+>>>>> b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
+>>>>> wdt.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..f39d6b14062d
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
+>>>>> wdt.yaml
+>>>>> @@ -0,0 +1,38 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id:
+>>>>> http://devicetree.org/schemas/watchdog/cirrus,ep93xx-wdt.yaml#
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Cirrus Logic EP93xx Watchdog Timer
+>>>>
+>>>> EP93xx is no EP9301. This does not match your compatible list.
+>>>> You
+>>>> should probably list all of your devices. With or without
+>>>> compatibility
+>>>> between them (so with a generic fallback for example).
+>>>
+>>> I will rename file to cirrus,ep9301-wdt.yaml, all ep93xx SoC family
+>>> has
+>>> the same watchdog, so there is now reason for other compatible i
+>>> think.
+>>
+>> You should always have dedicated compatibles, even if using one
+>> fallback.
+>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+> 
+> Krzysztof, sorry to bother you - but i don't quite get, what we should
+> have in compatibles ? 
+> 
+> Should i make an additional fallback compatible like "cirrus,ep-wdt"
+> and then "compatible" will look like:
+> 
+> properties:
+>   compatible:
+>     - items:
+>       - enum:
+>         - cirrus,ep9301-wdt
+>       - const: cirrus,ep-wdt
+> 
+> Or should i describe every ep93xx SoC variant like:
+> 
+> properties:
+>   compatible:
+>     - items:
+>       - enum:
+>         - cirrus,ep9302-wdt
+>         - cirrus,ep9307-wdt
+>         - cirrus,ep9312-wdt
+>         - cirrus,ep9315-wdt
+>       - const: cirrus,ep9301-wdt
 
-Signed-off-by: David Bauer <mail@david-bauer.net>
----
- .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml        | 6 ++++++
- 1 file changed, 6 insertions(+)
+This one is preferred. Just don't forget for an entry allowing 9301
+alone (and everything within oneOf)
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index e532c6b795f4..50f8f83cc440 100644
---- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-@@ -128,6 +128,12 @@ properties:
-       See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
-       details for the regulator setup on these boards.
- 
-+  mdio:
-+    $ref: /schemas/net/mdio.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Node for the internal MDIO bus connected to the embedded ethernet-PHYs.
-+
-   mediatek,mcm:
-     type: boolean
-     description:
--- 
-2.39.2
+Syntax looks like:
+
+https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+
+> 
+> There are ep9301, ep9302, ep9307, ep9312 and ep9315 SoC variants - all
+> have the same watchdog and rtc implementation without any difference at
+> all.
+
+We still prefer to have dedicated compatible, in case some
+bugs/differences are found.
+
+> 
+> If on of this is true does the same applies to ep9301-rtc and any other
+> variants where we do have a single compatible ?
+
+Yes, please.
+
+
+Best regards,
+Krzysztof
 
