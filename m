@@ -2,76 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7FA6F27A5
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 06:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E706F27A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 07:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjD3E4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 00:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S231157AbjD3FDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 01:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjD3E4c (ORCPT
+        with ESMTP id S229644AbjD3FDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 00:56:32 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BE219AF
-        for <linux-kernel@vger.kernel.org>; Sat, 29 Apr 2023 21:56:31 -0700 (PDT)
-Received: from letrec.thunk.org ([76.150.80.181])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33U4u0Kr007396
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 30 Apr 2023 00:56:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1682830564; bh=KZlbmySvO7dJiFKKCkQaeETSE5GXazM9UbzdjyOWm7M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Z4BG3Dant07iY16ZS8h2R0jaAkAvltTw+cFBqQ/TnuzN1jbs0ub1hRwyPIjZ2PceQ
-         tztQWk6gt5MmlFrNk6SA2S+X33jDRFSi8sQlLE7WQHxpRYFHg9oKNFIiVKHKXV21Qe
-         ZRnBuavKck1YAOoS5Mp3ZZUgzlm9W3iXj7ZDDan3L5DMkzB0pUq2ACLVFB5K9IGpvH
-         EBJU0ORg93I5VzvwP7xwfYzatk405TQEknkQfzAgOpYOTCjS2JZZluUNajYrcnkT2u
-         wMvWkWBIg7S6Ob105GliELDpgdKeeYhloyy9sF4aFTr7TqJAbdZi9IJkhc+jjDCjH8
-         BNj6HS44nzrmw==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id AA2168C023E; Sun, 30 Apr 2023 00:55:59 -0400 (EDT)
-Date:   Sun, 30 Apr 2023 00:55:59 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     syzbot <syzbot+9a44753ac327c557796a@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, chris@chris-wilson.co.uk,
-        dvyukov@google.com, jack@suse.cz, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mika.kuoppala@linux.intel.com,
-        rodrigo.vivi@intel.com, syzkaller-bugs@googlegroups.com
-Subject: Re: WARNING in ext4_set_page_dirty
-Message-ID: <ZE3030tKPvwU7fIc@mit.edu>
-References: <089e0825cec8180a2b0568c4ee1d@google.com>
- <0000000000005a390a05b2361916@google.com>
+        Sun, 30 Apr 2023 01:03:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F98F19AC;
+        Sat, 29 Apr 2023 22:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682830995; x=1714366995;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q7SEF4bArk/xxwIRZ987yc+xrZpMH3afDQGaBkiO/LA=;
+  b=EfFc+EaXNGNfs9iV4vt9Ow16OpkrOuxBVu82jt2OApTno4NTjDIllNNt
+   vDWA6ZTBw3LaonwfIHfw0OUHb70RapzPj2tQJHAnyH46gt8n2fJ06ehwK
+   6VaQk5YMi/dTTH1Fcfhln3vEFNZKL8GsXYMO0FW7+WQ5LGwPSdsbnW/ba
+   yNMCNzE7z3L+c+0IXbJzrx9zimvt7Dx/u8uBguMAbQ6vG2s3gDR6Oh/p3
+   tFSmxK4whzZNjGX1zgXMK8seNzpKzIK8ItV6+O6akqlW32HNXMu/G8bHj
+   BDB6rrQAdx4lEy6eB31xtA1hIdfRyn8AfLNfn8u0IRxtjFO+7GFzKe3i2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="411108972"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="411108972"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 22:03:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="941652643"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="941652643"
+Received: from naamamex-mobl.ger.corp.intel.com (HELO [10.13.12.36]) ([10.13.12.36])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2023 22:03:08 -0700
+Message-ID: <7733369a-c3a6-89d4-fb32-ab2bcdc1def0@linux.intel.com>
+Date:   Sun, 30 Apr 2023 08:03:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000005a390a05b2361916@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [Intel-wired-lan] [PATCH net 1/1] igc: read before write to
+ SRRCTL register
+Content-Language: en-US
+To:     Song Yoong Siang <yoong.siang.song@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Vedang Patel <vedang.patel@intel.com>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        Andre Guedes <andre.guedes@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     xdp-hints@xdp-project.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org
+References: <20230413151222.1864307-1-yoong.siang.song@intel.com>
+From:   "naamax.meir" <naamax.meir@linux.intel.com>
+In-Reply-To: <20230413151222.1864307-1-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz dup: WARNING in ext4_dirty_folio
-#syz set subsystems: mm
+On 4/13/2023 18:12, Song Yoong Siang wrote:
+> igc_configure_rx_ring() function will be called as part of XDP program
+> setup. If Rx hardware timestamp is enabled prio to XDP program setup,
+> this timestamp enablement will be overwritten when buffer size is
+> written into SRRCTL register.
+> 
+> Thus, this commit read the register value before write to SRRCTL
+> register. This commit is tested by using xdp_hw_metadata bpf selftest
+> tool. The tool enables Rx hardware timestamp and then attach XDP program
+> to igc driver. It will display hardware timestamp of UDP packet with
+> port number 9092. Below are detail of test steps and results.
+> 
+> Command on DUT:
+>    sudo ./xdp_hw_metadata <interface name>
+> 
+> Command on Link Partner:
+>    echo -n skb | nc -u -q1 <destination IPv4 addr> 9092
+> 
+> Result before this patch:
+>    skb hwtstamp is not found!
+> 
+> Result after this patch:
+>    found skb hwtstamp = 1677762212.590696226
+> 
+> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+> Cc: <stable@vger.kernel.org> # 5.14+
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>   drivers/net/ethernet/intel/igc/igc_base.h | 7 +++++--
+>   drivers/net/ethernet/intel/igc/igc_main.c | 5 ++++-
+>   2 files changed, 9 insertions(+), 3 deletions(-)
 
-ext4_set_page_dirty() was renamed to ext4_dirty_folio() in commit
-e621900ad28b ("fs: Convert __set_page_dirty_buffers to
-block_dirty_folio") in February 2022 --- which explains why it hasn't
-reproduced in over 400 days,
-
-(I assume marking it is the right thing to do, although the syzkaller
-documentation doesn't explain exactly what happens after you mark the
-report as a dup.  The other possibility would be to marking it as
-invalid, to drop this as noise.  But that feels wrong, so I'm guessing
-marking it as a dup is the best way to handle this kind of situation.)
-
-I'm moving this to the mm subsystem, since the root cause is the
-get_user_pages issue that has been with us for years, with discussions
-as early as the 2018 LSF/MM.
-
-					- Ted
+Tested-by: Naama Meir <naamax.meir@linux.intel.com>
