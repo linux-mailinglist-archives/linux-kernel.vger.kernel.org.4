@@ -2,252 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B096F29F9
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 19:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA4B6F29CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 19:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjD3RTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 13:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S231246AbjD3RHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 13:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjD3RS5 (ORCPT
+        with ESMTP id S230235AbjD3RHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 13:18:57 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D653C26;
-        Sun, 30 Apr 2023 10:18:26 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64115eef620so22640619b3a.1;
-        Sun, 30 Apr 2023 10:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682875106; x=1685467106;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NVQPAhvM42bg60bi1IlAwEIZcPjoQKQJa+YHtFWyV1o=;
-        b=hN4PCyTCEMv72Ox/Rxcp0pvZ5h/Tsa+vo0js4h1J1bdZpTdHeI49d5ObSi2mWgSwK6
-         u3mn0/RG3qZ0/djtCcCLgknmYmZHABoW6ZBcIllvjQpO+k//zIaEqOu1NPEasFR7+11v
-         5hjZWEMFvDKxn9JM02pSjmM/ATVdN2263VdfoHAKgvqUTY32t4ZeK5zTRG0YDAlSnUdm
-         fmVqJH0uXGRNaSJqzoraoyTjw6garidcNU7G4HeRPxyvy8D8cgy4YzzcPwSsoewfbedl
-         tS7nWzlVwtH0umHPUKihIuxVteC2txu1DpbZj62NGGT+sdFxWL5DmIR0KvUQIU+k+YJN
-         Q1og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682875106; x=1685467106;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NVQPAhvM42bg60bi1IlAwEIZcPjoQKQJa+YHtFWyV1o=;
-        b=YYVxCCeM2ikpPCo/mR8Z1TtjQRh5mNbIsBDze5kGJWuT6zZ3cQTZ8IH4kvFzy6ZxuL
-         fBVvpVOGNTA8mRYS+cIFuUa5EhG4u/jaxNZI2e9tf+OYGIZCvwkU65zBMPD17nQwx1H/
-         E1F4aB0U+38xjnsmK1527u8ibyfcSr21dlFpECo686T8b/9GgSbaDNiK2xbaiKc9nvbQ
-         rqBE7OO7Le/8986y3l2CmJYQPA6fWq0qfqSjSaXyI9anRZiBIiGC1iY19GHw+4YNSq0R
-         /bEl6aDZbHaqPUDxuLRfoh6Y2qiIhCijJQHknv9HRV3WFDGwpC9CVt5MgFq9L2bvTJXS
-         ijGw==
-X-Gm-Message-State: AC+VfDyD0QJV1RrgSriuBa0K2HkWLU5jZIDRggjfGwKeqg/bkoAXRB4A
-        4iYz/z0gARIMGZh5FdgjLKg=
-X-Google-Smtp-Source: ACHHUZ7tvH8wofODdNT6Wh2V6qp8Vo+6xmyzjcG+xEBwWJ128LaOLk8IJN/IWA1WnaEA3PA9UH4drQ==
-X-Received: by 2002:a17:902:c94f:b0:19a:727e:d4f3 with SMTP id i15-20020a170902c94f00b0019a727ed4f3mr19207851pla.5.1682875105507;
-        Sun, 30 Apr 2023 10:18:25 -0700 (PDT)
-Received: from localhost ([4.1.102.3])
-        by smtp.gmail.com with ESMTPSA id x12-20020a1709027c0c00b001a52e3e3745sm16385404pll.296.2023.04.30.10.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 10:18:25 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Pawel Chmielewski <pawel.chmielewski@intel.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Sun, 30 Apr 2023 13:07:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC03172C;
+        Sun, 30 Apr 2023 10:07:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B34160BA9;
+        Sun, 30 Apr 2023 17:07:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B54FC433EF;
+        Sun, 30 Apr 2023 17:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682874433;
+        bh=LVTTku4thsZ0OAQMywyia2sdi32S1ddGjboXKjQtnU4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vLRvuln9GQSrDhh7RrqMipYwXP/IFEr8K9epbL1QPVvgJ0jj+DG/q6W68Yu5Ewi/z
+         yIaTG1qkQPqE9kSur8WCEXJFaO+eLAMBGPRbN4174u4ZKWB7kYx6M9su/948OUf/uh
+         MtWkKhs5cSqbMHel6cML7mbvgNmGmTF7IEHZGXiGKMCFqdeIpO0Akr6R/6kfA9yvNP
+         sqwmlXYs8sb+rjKIlWx/r0swDyWbpoDkAQ3w5OREsRTgcDrRhsK+ynZ3G2MeVEbj6h
+         96ZazLVSwOdrHxBPBWTdaHDOaJ9vPLoPEAx3TwSglvhpPMM7kT3wdpBVkU538irZR9
+         +HKOYswoq6Z6A==
+Date:   Sun, 30 Apr 2023 18:22:58 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5p?= =?UTF-8?B?Zw==?= 
+        <u.kleine-koenig@pengutronix.de>, Petr Machata <petrm@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Barry Song <baohua@kernel.org>
-Subject: [PATCH v3 8/8] lib: test for_each_numa_cpus()
-Date:   Sun, 30 Apr 2023 10:18:09 -0700
-Message-Id: <20230430171809.124686-9-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230430171809.124686-1-yury.norov@gmail.com>
-References: <20230430171809.124686-1-yury.norov@gmail.com>
+        Parthiban Nallathambi <pn@denx.de>,
+        linux-iio@vger.kernel.org (open list:IIO SUBSYSTEM AND DRIVERS),
+        linux-kernel@vger.kernel.org (open list), imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] iio: light: vcnl4035: fixed chip ID check
+Message-ID: <20230430182258.7dbdd39d@jic23-huawei>
+In-Reply-To: <20230427213038.1375404-1-Frank.Li@nxp.com>
+References: <20230427213038.1375404-1-Frank.Li@nxp.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test for_each_numa_cpus() output to ensure that:
- - all CPUs are picked from NUMA nodes with non-decreasing distances to the
-   original node; 
- - only online CPUs are enumerated;
- - the macro enumerates each online CPUs only once;
- - enumeration order is consistent with cpumask_local_spread().
+On Thu, 27 Apr 2023 17:30:37 -0400
+Frank Li <Frank.Li@nxp.com> wrote:
 
-The latter is an implementation-defined behavior. If cpumask_local_spread()
-or for_each_numa_cpu() will get changed in future, the subtest may need
-to be adjusted or even removed, as appropriate.
+> VCNL4035 register(0xE) ID_L and ID_M define as:
+> 
+>  ID_L: 0x80
+>  ID_H: 7:6 (0:0)
+>        5:4 (0:0) slave address = 0x60 (7-bit)
+>            (0:1) slave address = 0x51 (7-bit)
+>            (1:0) slave address = 0x40 (7-bit)
+>            (1:0) slave address = 0x41 (7-bit)
+>        3:0 Version code default	(0:0:0:0)
+> 
+> So just check ID_L.
 
-It's useful now because some architectures don't implement numa_distance(),
-and generic implementation only distinguishes local and remote nodes, which
-doesn't allow to test the for_each_numa_cpu() properly.
+Hi Frank,
 
-Suggested-by: Valentin Schneider <vschneid@redhat.com> (for node_distance() test)
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- lib/test_bitmap.c | 70 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 68 insertions(+), 2 deletions(-)
+Thanks for the fix. A few minor things inline.
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index a8005ad3bd58..ac4fe621d37b 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -12,6 +12,7 @@
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/topology.h>
- #include <linux/uaccess.h>
- 
- #include "../tools/testing/selftests/kselftest_module.h"
-@@ -71,6 +72,16 @@ __check_eq_uint(const char *srcfile, unsigned int line,
- 	return true;
- }
- 
-+static bool __init
-+__check_ge_uint(const char *srcfile, unsigned int line,
-+		const unsigned int exp_uint, unsigned int x)
-+{
-+	if (exp_uint >=  x)
-+		return true;
-+
-+	pr_err("[%s:%u] expected >= %u, got %u\n", srcfile, line, exp_uint, x);
-+	return false;
-+}
- 
- static bool __init
- __check_eq_bitmap(const char *srcfile, unsigned int line,
-@@ -86,6 +97,18 @@ __check_eq_bitmap(const char *srcfile, unsigned int line,
- 	return true;
- }
- 
-+static bool __init
-+__check_eq_cpumask(const char *srcfile, unsigned int line,
-+		  const struct cpumask *exp_cpumask, const struct cpumask *cpumask)
-+{
-+	if (cpumask_equal(exp_cpumask, cpumask))
-+		return true;
-+
-+	pr_warn("[%s:%u] cpumasks contents differ: expected \"%*pbl\", got \"%*pbl\"\n",
-+		srcfile, line, cpumask_pr_args(exp_cpumask), cpumask_pr_args(cpumask));
-+	return false;
-+}
-+
- static bool __init
- __check_eq_pbl(const char *srcfile, unsigned int line,
- 	       const char *expected_pbl,
-@@ -173,11 +196,11 @@ __check_eq_str(const char *srcfile, unsigned int line,
- 	return eq;
- }
- 
--#define __expect_eq(suffix, ...)					\
-+#define __expect(suffix, ...)						\
- 	({								\
- 		int result = 0;						\
- 		total_tests++;						\
--		if (!__check_eq_ ## suffix(__FILE__, __LINE__,		\
-+		if (!__check_ ## suffix(__FILE__, __LINE__,		\
- 					   ##__VA_ARGS__)) {		\
- 			failed_tests++;					\
- 			result = 1;					\
-@@ -185,13 +208,19 @@ __check_eq_str(const char *srcfile, unsigned int line,
- 		result;							\
- 	})
- 
-+#define __expect_eq(suffix, ...)	__expect(eq_ ## suffix, ##__VA_ARGS__)
-+#define __expect_ge(suffix, ...)	__expect(ge_ ## suffix, ##__VA_ARGS__)
-+
- #define expect_eq_uint(...)		__expect_eq(uint, ##__VA_ARGS__)
- #define expect_eq_bitmap(...)		__expect_eq(bitmap, ##__VA_ARGS__)
-+#define expect_eq_cpumask(...)		__expect_eq(cpumask, ##__VA_ARGS__)
- #define expect_eq_pbl(...)		__expect_eq(pbl, ##__VA_ARGS__)
- #define expect_eq_u32_array(...)	__expect_eq(u32_array, ##__VA_ARGS__)
- #define expect_eq_clump8(...)		__expect_eq(clump8, ##__VA_ARGS__)
- #define expect_eq_str(...)		__expect_eq(str, ##__VA_ARGS__)
- 
-+#define expect_ge_uint(...)		__expect_ge(uint, ##__VA_ARGS__)
-+
- static void __init test_zero_clear(void)
- {
- 	DECLARE_BITMAP(bmap, 1024);
-@@ -751,6 +780,42 @@ static void __init test_for_each_set_bit_wrap(void)
- 	}
- }
- 
-+static void __init test_for_each_numa_cpu(void)
-+{
-+	unsigned int node, cpu, hop;
-+	cpumask_var_t mask;
-+
-+	if (!alloc_cpumask_var(&mask, GFP_KERNEL)) {
-+		pr_err("Can't allocate cpumask. Skipping for_each_numa_cpu() test");
-+		return;
-+	}
-+
-+	for_each_node(node) {
-+		unsigned int c = 0, dist, old_dist = node_distance(node, node);
-+
-+		cpumask_clear(mask);
-+
-+		rcu_read_lock();
-+		for_each_numa_cpu(cpu, hop, node, cpu_possible_mask) {
-+			dist = node_distance(cpu_to_node(cpu), node);
-+
-+			/* Distance between nodes must never decrease */
-+			expect_ge_uint(dist, old_dist);
-+
-+			/* Test for coherence with cpumask_local_spread() */
-+			expect_eq_uint(cpumask_local_spread(c++, node), cpu);
-+
-+			cpumask_set_cpu(cpu, mask);
-+			old_dist = dist;
-+		}
-+		rcu_read_unlock();
-+
-+		/* Each online CPU must be visited exactly once */
-+		expect_eq_uint(c, num_online_cpus());
-+		expect_eq_cpumask(mask, cpu_online_mask);
-+	}
-+}
-+
- static void __init test_for_each_set_bit(void)
- {
- 	DECLARE_BITMAP(orig, 500);
-@@ -1237,6 +1302,7 @@ static void __init selftest(void)
- 	test_for_each_clear_bitrange_from();
- 	test_for_each_set_clump8();
- 	test_for_each_set_bit_wrap();
-+	test_for_each_numa_cpu();
- }
- 
- KSTM_MODULE_LOADERS(test_bitmap);
--- 
-2.37.2
+> 
+> Fixes: 55707294c4eb ("iio: light: Add support for vishay vcnl4035")
+> 
+
+No blank line here as the Fixes tag is part of the main tag block.
+
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+
+Just to check, the result of this bug is that the driver probe fails
+if the slave address isn't 0x60?
+
+> ---
+>  drivers/iio/light/vcnl4035.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/light/vcnl4035.c b/drivers/iio/light/vcnl4035.c
+> index 3ed37f6057fb..8b7769930f3b 100644
+> --- a/drivers/iio/light/vcnl4035.c
+> +++ b/drivers/iio/light/vcnl4035.c
+> @@ -413,7 +413,7 @@ static int vcnl4035_init(struct vcnl4035_data *data)
+>  		return ret;
+>  	}
+>  
+> -	if (id != VCNL4035_DEV_ID_VAL) {
+> +	if ((id & 0xff) != VCNL4035_DEV_ID_VAL) {
+
+Please add a define for that 0xff mask and perhaps also use
+FIELD_GET() to extract the field for comparison with VCNL4035_DEV_ID_VAL.
+Whilst that isn't being done elsewhere in this driver, the heavy use
+of set bits means it isn't appropriate anywhere else that I can quickly
+identify. You'll also need to include linux/bitfield.h if making that change.
+
+Thanks,
+
+Jonathan
+
+>  		dev_err(&data->client->dev, "Wrong id, got %x, expected %x\n",
+>  			id, VCNL4035_DEV_ID_VAL);
+>  		return -ENODEV;
 
