@@ -2,140 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E186F2956
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 17:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E466F295C
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 17:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjD3PHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 11:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S229725AbjD3P3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 11:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjD3PHN (ORCPT
+        with ESMTP id S229452AbjD3P3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 11:07:13 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1396497;
-        Sun, 30 Apr 2023 08:07:12 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f1950f569eso8779745e9.2;
-        Sun, 30 Apr 2023 08:07:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682867230; x=1685459230;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNA2K0rH9MrgxL3yIvI8k+E30Kvr7zSXTQ5c9EZm7oQ=;
-        b=WOO4BOE5x9yHSm0Xq67hB0jdZqg5yPqQjCzbYps62+Ktq7YkvEkEBl9otVSyaqIy2X
-         1nAQH9lVg6rCWXG0BvAy8cZDNNY+S/UaRJccPPL/Dnz6uAUrstmThjGlDylSB4aHEt4f
-         M6ABPYHf9W3HKExAOZR+FDZeItqZeoWmHzvRYLvWIE4CVdkLJgJG80aY7/c/NPn24w5V
-         8mNSQ87Stvpeduu8FdCSkBQslVw2jF6XCny4fkEmNAaCtWFzBzt2tXa4f6k0yQ7S5m/P
-         wL18L8kiyXN2Ia1iy5XQURbnREp+XiyDU29f7Lb16IWrFNy0Ec0794RDyt38ET8hqzhD
-         5jng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682867230; x=1685459230;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uNA2K0rH9MrgxL3yIvI8k+E30Kvr7zSXTQ5c9EZm7oQ=;
-        b=CIh4w9KDt//AaevCPqFX72c5KybHXeVIuZ0OgCB7NeRiRaFjL/i9r8fO1facT9H21Q
-         ig2Mkv9WbKF9LBIAWV1PPKLXiwL6FKgRIFXoF0HxR+gxaYljpB3q0awaEIyzW1BcXvqD
-         cRjwV9prfhUbjU8tI0XuhomaCEI//xCUeXS2Srf8yjasCV3imvplOAFbrEO0TVHc1LIJ
-         GLemqTI4TCTUtLJysKddEs9n2q7Hsglv/OzKdSrpC/ZViJnmO+Ot8P9iVkFGtl9Oghtb
-         iwAN9asdhY+X6B2xTK4qA5DuHAaS15ETXQTpb4J+DlLSCGNVA1Ij+O6dVXfZB0m5JuiP
-         Ce8Q==
-X-Gm-Message-State: AC+VfDxj24iaiWlT0jeRyovjZqN3ot6ynGaZw20BfIe7kPDO++YgAWw6
-        oEm3sJUl859YC1ESkSHpJ7w=
-X-Google-Smtp-Source: ACHHUZ5/IozSCusmdfxGH7uvDSUaBwy3WgSuCJRJJFZGuVqOysQEqEbLKdRuVFcC+hm0B2NPYB2DGQ==
-X-Received: by 2002:a05:600c:22d0:b0:3f1:7a57:45cd with SMTP id 16-20020a05600c22d000b003f17a5745cdmr8210516wmg.28.1682867230079;
-        Sun, 30 Apr 2023 08:07:10 -0700 (PDT)
-Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.googlemail.com with ESMTPSA id l18-20020a05600c4f1200b003f07ef4e3e0sm43019311wmq.0.2023.04.30.08.07.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 08:07:09 -0700 (PDT)
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        oliver.sang@intel.com, Mel Gorman <mgorman@suse.de>,
-        stable@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: [PATCH v2] mm/mempolicy: Correctly update prev when policy is equal on mbind
-Date:   Sun, 30 Apr 2023 16:07:07 +0100
-Message-Id: <83f1d612acb519d777bebf7f3359317c4e7f4265.1682866629.git.lstoakes@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Sun, 30 Apr 2023 11:29:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6106A1BCB;
+        Sun, 30 Apr 2023 08:29:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECCC960BAD;
+        Sun, 30 Apr 2023 15:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EE6C433D2;
+        Sun, 30 Apr 2023 15:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682868579;
+        bh=W8J/eLPUy47qAQvvP1i0gr1XrobhMRJ0pSFFWIQu1rU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=paNyy+vrFCcIQ9AGWGRwnWIcowzlQ8HPIae1m/h/WOgq9M+xVPn+P1vOV+CuPJGhD
+         L2mSrnBkjCRFqYpmk+CNi62TEy8EPwl95LoSytvuzoh++rcGrchlKRXyI82/pHYPyy
+         c4qx0ok9QNiXtUymQh8lbr92tqI0k469n0FMG8jzx0WApOR/pJXCCZErllqBJm/XM7
+         2H8vQUxqUVm0lXIlkGtlMG1tHM8VhtblGJocFD31BVvHafOJT3ny8UFXjKkKf+rg3M
+         pzqnAIumI5Hls3K4SIEB7NM32sCZwdPnVls5jyz/LiINJ/pJ99yrbAKsftw+5FTeBr
+         /qRyKe5XZZETQ==
+Date:   Sun, 30 Apr 2023 11:29:37 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     stable@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, tools@linux.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Willy Tarreau <w@1wt.eu>
+Subject: Re: [ANNOUNCE] New script that finds partially-backported patchsets
+Message-ID: <ZE6JYX2ik4Dwrgcy@sashalap>
+References: <20230430064948.GA36600@sol.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20230430064948.GA36600@sol.localdomain>
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The refactoring in commit f4e9e0e69468 ("mm/mempolicy: fix use-after-free
-of VMA iterator") introduces a subtle bug which arises when attempting to
-apply a new NUMA policy across a range of VMAs in mbind_range().
+On Sat, Apr 29, 2023 at 11:49:48PM -0700, Eric Biggers wrote:
+>Hi,
+>
+>As I promised on the "AUTOSEL process" centi-thread
+>(https://lore.kernel.org/stable/20230226034256.771769-12-sashal@kernel.org/T/#u),
+>I've developed some new scripts that can be found at
+>https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/stable-tools.git :
+>
+>- `find-orig-patch`: Finds the original patch email from a git commit.
+>   It first checks for a matching "Message-Id:" or "Link:" from the git commit.
+>   If that fails, it falls back to a search of https://lore.kernel.org by
+>   commit title and uses some heuristics to try to find the right patch email.
+>
+>- `find-orig-series`: Like find-orig-patch but outputs the full series.
+>
+>- `find-missing-prereqs`: Finds commits that were backported without previous
+>  patches in their original series also being backported.  It accepts a range of
+>  git commits.  I also added an option to filter the results by AUTOSEL only.
+>
+>For more information, see the README at
+>https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/stable-tools.git/tree/README.md
 
-The refactoring passes a **prev pointer to keep track of the previous VMA
-in order to reduce duplication, and in all but one case it keeps this
-correctly updated.
+Thanks! This is really great!
 
-The bug arises when a VMA within the specified range has an equivalent
-policy as determined by mpol_equal() - which unlike other cases, does not
-update prev.
+>Note: since it wasn't clear where to put these or how to integrate them into
+>anything else, for now this is a completely standalone project.  Perhaps the
+>find-orig-patch functionality would be a nice feature for b4, but the more
+>stable-kernel-maintenance-specific logic should be in a separate project.  BTW,
+>I used the same language and license as b4: Python and GPLv2+.
+>
+>I wrote some regression tests that show that find-missing-prereqs is able to
+>detect the missing patches for a couple examples of missed backports that broke
+>users, including the recent blk-cgroup one
+>(https://lore.kernel.org/linux-block/CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com/T/#u).
+>
+>For another example, at the end of this email I've also pasted the output of
+>'find-missing-prereqs v6.1.24..v6.1.26', which covers the last couple weeks of
+>6.1.  I don't immediately see anything super interesting in there, and it picked
+>up a few very long patchsets which is a bit annoying (maybe very long patchsets
+>generally aren't interesting and should be skipped?).  But it's just an example.
 
-This can result in a situation where, later in the iteration, a VMA is
-found whose policy does need to change. At this point, vma_merge() is
-invoked with prev pointing to a VMA which is before the previous VMA.
+The results here are interesting: the script points out a lot of
+patchsets that are just sets of unrelated patches mashed together, I'll
+comment more below on each of the findings.
 
-Since vma_merge() discovers the curr VMA by looking for the one immediately
-after prev, it will now be in a situation where this VMA is incorrect and
-the merge will not proceed correctly.
+I'm not sure the right thing to do would be to ignore long patchsets in
+general, but rather learn to ignore sets that are declared to be
+unrelated.
 
-This is checked in the VM_WARN_ON() invariant case with end > curr->vm_end,
-which, if a merge is possible, results in a warning (if CONFIG_DEBUG_VM is
-specified).
+>Something that could be built on top of this is a script that applies the
+>patches from the stable-queue repository for each stable kernel version, and
+>generates a report about each one.  BTW, I can work on these scripts more, but
+>what I can't commit to doing is manually sending out reports every week...  I
+>hope that this can be automated and/or adopted by the stable maintainers.
 
-I note that vma_merge() performs these invariant checks only after
-merge_prev/merge_next are checked, which is debatable as it hides this
-issue if no merge is possible even though a buggy situation has arisen.
+Right, I'm going to incorporate it into my scripts - I don't think that
+this is something a human should be running going forward, we have quite
+a few bots :)
 
-The solution is simply to update the prev pointer even when policies are
-equal.
+>Here's the output of 'find-missing-prereqs v6.1.24..v6.1.26':
+>
+>The following commit(s):
+>  [PATCH 24/33] commit 779fd2a575cc ("drm/amd/display: Pass the right info to drm_dp_remove_payload")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 1/33] commit de534c1cb031 ("drm/amd/display: Add height granularity limitation for dsc slice height calculation")
+>  [PATCH 2/33] commit aee0c07a74d3 ("drm/amd/display: Unify DC logging for BW Alloc")
+>  [PATCH 3/33] commit 67d198da2fd4 ("drm/amd/display: When blanking during init loop to find OPP index")
+>  [PATCH 4/33] commit c93aa7f33e94 ("drm/amd/display: 3.2.225")
+>  [PATCH 5/33] commit 0db13eae41fc ("drm/amd/display: Add minimum Z8 residency debug option")
+>  [PATCH 6/33] commit 0215ce9057ed ("drm/amd/display: Update minimum stutter residency for DCN314 Z8")
+>  [PATCH 7/33] commit c0a561d96a28 ("drm/amd/display: Drop CONFIG_DRM_AMD_DC_HDR")
+>  [PATCH 8/33] commit 11efe095dfe0 ("drm/amd/display: Fix no-DCN build")
+>  [PATCH 9/33] commit ab487ea8910d ("drm/amd/display: fix typo in dc_dsc_config_options structure")
+>  [PATCH 10/33] commit 1e88eb1b2c25 ("drm/amd/display: Drop CONFIG_DRM_AMD_DC_HDCP")
+>  [PATCH 11/33] commit efa4c4df864e ("drm/amd/display: call remove_stream_from_ctx from res_pool funcs")
+>  [PATCH 12/33] commit 84c03df58d8b ("drm/amd/display: Build DSC without DCN config")
+>  [PATCH 13/33] commit 36516001a7c9 ("drm/amd/display: move dc_link functions in accessories folder to dc_link_exports")
+>  [PATCH 14/33] commit 76f5dc40ebb1 ("drm/amd/display: move dc_link functions in link root folder to dc_link_exports")
+>  [PATCH 15/33] commit 6455cb522191 ("drm/amd/display: link link_dp_dpia_bw.o in makefile")
+>  [PATCH 16/33] commit 202a3816f37e ("drm/amd/display: move dc_link functions in protocols folder to dc_link_exports")
+>  [PATCH 17/33] commit 788c6e2ce5c7 ("drm/amd/display: replace all dc_link function call in link with link functions")
+>  [PATCH 18/33] commit 34fd6df78869 ("drm/amd/display: Simplify register offsets")
+>  [PATCH 19/33] commit 2b02d746c181 ("drm/amd/display: Keep PHY active for dp config")
+>  [PATCH 21/33] commit bf77fda02411 ("drm/amd/display: Drop unnecessary DCN guards")
+>  [PATCH 22/33] commit 4652ae7a51b7 ("drm/amd/display: Rename DCN config to FP")
+>  [PATCH 23/33] commit de930140bb57 ("drm/amd/display: Update to correct min FCLK when construction BB")
+>Original patch series is "[PATCH 00/33] DC Patches Mar 6th, 2023"
+>(https://lore.kernel.org/r/20230303154022.2667-1-qingqing.zhuo@amd.com)
 
-This caused a bug to arise in the 6.2.y stable tree, and this patch
-resolves this bug.
+There seem to be weekly "DC Patches $DATE" patchsets composed of
+unrelated patches, we could probably ignore those.
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202304292203.44ddeff6-oliver.sang@intel.com
-Fixes: f4e9e0e69468 ("mm/mempolicy: fix use-after-free of VMA iterator")
-Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-Cc: <stable@vger.kernel.org>
----
+>The following commit(s):
+>  [PATCH 2/4] commit 3570f3cc4aab ("RDMA/erdma: Update default EQ depth to 4096 and max_send_wr to 8192")
+>  [PATCH 3/4] commit d682c9bc41fa ("RDMA/erdma: Inline mtt entries into WQE if supported")
+>  [PATCH 4/4] commit 132918e08e86 ("RDMA/erdma: Defer probing if netdevice can not be found")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 1/4] commit 3fe26c0493e4 ("RDMA/erdma: Fix some typos")
+>Original patch series is "[PATCH for-rc 0/4] RDMA/erdma: erdma fixes 3-20-2023"
+>(https://lore.kernel.org/r/20230320084652.16807-1-chengyou@linux.alibaba.com)
 
-v2: updated to correctly cc the stable list :)
+Similar to above, unrelated patches and the one we skipped is just a
+typo fix.
 
-v1:
-https://lore.kernel.org/all/db42467a692d78c654ec5c1953329401bd8a9c34.1682859234.git.lstoakes@gmail.com
+>The following commit(s):
+>  [PATCH 15/26] commit 361b02e68181 ("KVM: arm64: Initialise hypervisor copies of host symbols unconditionally")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 1/26] commit 0f4f7ae10ee4 ("KVM: arm64: Move hyp refcount manipulation helpers to common header file")
+>  [PATCH 2/26] commit 72a5bc0f153c ("KVM: arm64: Allow attaching of non-coalescable pages to a hyp pool")
+>  [PATCH 3/26] commit 8e6bcc3a4502 ("KVM: arm64: Back the hypervisor 'struct hyp_page' array for all memory")
+>  [PATCH 4/26] commit 0d16d12eb26e ("KVM: arm64: Fix-up hyp stage-1 refcounts for all pages mapped at EL2")
+>  [PATCH 5/26] commit 33bc332d4061 ("KVM: arm64: Unify identifiers used to distinguish host and hypervisor")
+>  [PATCH 6/26] commit 1ed5c24c26f4 ("KVM: arm64: Implement do_donate() helper for donating memory")
+>  [PATCH 7/26] commit 43c1ff8b7501 ("KVM: arm64: Prevent the donation of no-map pages")
+>  [PATCH 8/26] commit 9926cfce8dcb ("KVM: arm64: Add helpers to pin memory shared with the hypervisor at EL2")
+>  [PATCH 9/26] commit 4d968b12e6bb ("KVM: arm64: Include asm/kvm_mmu.h in nvhe/mem_protect.h")
+>  [PATCH 10/26] commit 1c80002e3264 ("KVM: arm64: Add hyp_spinlock_t static initializer")
+>  [PATCH 11/26] commit 5304002dc375 ("KVM: arm64: Rename 'host_kvm' to 'host_mmu'")
+>  [PATCH 12/26] commit a1ec5c70d3f6 ("KVM: arm64: Add infrastructure to create and track pKVM instances at EL2")
+>  [PATCH 13/26] commit 9d0c063a4d1d ("KVM: arm64: Instantiate pKVM hypervisor VM and vCPU structures from EL1")
+>  [PATCH 14/26] commit aa6948f82f0b ("KVM: arm64: Add per-cpu fixmap infrastructure at EL2")
+>Original patch series is "[PATCH v6 00/26] KVM: arm64: Introduce pKVM hyp VM and vCPU state at EL2"
+>(https://lore.kernel.org/r/20221110190259.26861-1-will@kernel.org)
 
+This one is the most interesting of the bunch IMO: it's actually a long
+patchset that enables new functionality, and we've picked a "random"
+patch from the middle of it.
 
- mm/mempolicy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+In this case this seems to be safe.
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index 2068b594dc88..1756389a0609 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -808,8 +808,10 @@ static int mbind_range(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 		vmstart = vma->vm_start;
- 	}
+>The following commit(s):
+>  [PATCH 2/2] commit 2fcfd51add22 ("Bluetooth: SCO: Fix possible circular locking dependency sco_sock_getsockopt")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 1/2] commit 9a8ec9e8ebb5 ("Bluetooth: SCO: Fix possible circular locking dependency on sco_connect_cfm")
 
--	if (mpol_equal(vma_policy(vma), new_pol))
-+	if (mpol_equal(vma_policy(vma), new_pol)) {
-+		*prev = vma;
- 		return 0;
-+	}
+This script is a great way to identify missing fixes too :)
 
- 	pgoff = vma->vm_pgoff + ((vmstart - vma->vm_start) >> PAGE_SHIFT);
- 	merged = vma_merge(vmi, vma->vm_mm, *prev, vmstart, vmend, vma->vm_flags,
---
-2.40.1
+>The following commit(s):
+>  [PATCH 3/4] commit 5620eeb379d1 ("tracing: Add trace_array_puts() to write into instance")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 1/4] commit cb1f98c5e574 ("tracing: Add creation of instances at boot command line")
+>  [PATCH 2/4] commit c4846480831e ("tracing: Add enabling of events to boot instances")
+>Original patch series is "[PATCH v2 0/4] tracing: Addition of tracing instances via kernel command line"
+>(https://lore.kernel.org/r/20230207172849.461894073@goodmis.org)
+
+Similar to the KVM one, but here we picked a patch that adds a new
+function we used in the dependant commit. Looks okay in this case.
+
+>The following commit(s):
+>  [PATCH 36/66] commit 4ac57c3fe2c0 ("drm/amd/display: set dcn315 lb bpp to 48")
+>... are backported without earlier commit(s) in series:
+>  [PATCH 31/66] commit 0b5dfe12755f ("drm/amd/display: fix a divided-by-zero error")
+>  [PATCH 35/66] commit 1e994cc0956b ("drm/amd/display: limit timing for single dimm memory")
+>Original patch series is "[PATCH 00/66] DC Patches Apr 17th, 2023"
+>(https://lore.kernel.org/r/20230414155330.5215-1-Qingqing.Zhuo@amd.com)
+
+Same as the first finding: patchset of unrelated patches.
+
+-- 
+Thanks,
+Sasha
