@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046646F28A8
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 13:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413306F28AC
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 14:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjD3L7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 07:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
+        id S230347AbjD3MIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 08:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjD3L7W (ORCPT
+        with ESMTP id S229478AbjD3MIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 07:59:22 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFD72693
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 04:59:21 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-403-6JDYqp_lNlWX5TmoN08BwA-1; Sun, 30 Apr 2023 12:59:18 +0100
-X-MC-Unique: 6JDYqp_lNlWX5TmoN08BwA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 30 Apr
- 2023 12:59:17 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sun, 30 Apr 2023 12:59:17 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Josh Poimboeuf' <jpoimboe@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vernon Lovejoy <vlovejoy@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] x86/show_trace_log_lvl: ensure stack pointer is aligned,
- again
-Thread-Topic: [PATCH] x86/show_trace_log_lvl: ensure stack pointer is aligned,
- again
-Thread-Index: AQHZei1BLgvPQksxmEaOh5pjR+4dkK9DwORQ
-Date:   Sun, 30 Apr 2023 11:59:17 +0000
-Message-ID: <aa8537d81dc747a097e9e30491b5081b@AcuMS.aculab.com>
-References: <20230427140054.GA17800@redhat.com>
- <20230428043158.r5omehiaqawcac2y@treble> <20230428065513.GA22111@redhat.com>
- <20230428235747.b5smutdttv5eeopi@treble>
-In-Reply-To: <20230428235747.b5smutdttv5eeopi@treble>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sun, 30 Apr 2023 08:08:05 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027922706
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:08:02 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50b8d2eed3dso1274284a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 05:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682856480; x=1685448480;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jpL0YLo8koF3DPTQzivw22s6fAM5/gO4Gtua3ieTCv0=;
+        b=NYshAibxZyRK9DBQmZoKLmycBpjf6IUfYnCx2+vA+8egWMcrBmpBSeZn2tK571T7oh
+         xUmBYvmmf6LUTZApy3PN6LVD5HCRgYeEThKlgvHeVbIvOFWRI5SHYOAh8YWal6gek43o
+         IQ4Y9DzDf63kJDuWjEfW6OyVnawttQmpT6K/silIK3pA2iGqEe6kXkAzndadhPXqJ+hk
+         i9QnnvKyLbcGAqkDFFn5Fn+KHXgb9x2cXJ0gJILge6+m0MersgTkAlq6Uu7n+ZcujGw7
+         if8p4LGccb1IMMDa4OFi4cZlgWqk5UHPXK4r5Fn0MgHNcdPcojBq1xugfzfsIc/zeM7n
+         JFDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682856480; x=1685448480;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jpL0YLo8koF3DPTQzivw22s6fAM5/gO4Gtua3ieTCv0=;
+        b=Q/rVCYb+Gk1ZHPbIIS+0JYl59yStG5xjHj4jPv08nKyXzPZihb005+D2JdVJWuLz0v
+         d+8B3magSOscVNs/kA7JWL25iw832AIy8P8LCObk2UZ1ozFOHTsGMtwPWVSPPXRMKdWI
+         2otz5Aa9igsVLVYrFM9t2/Card71iVLX6reXF1FgPewrUbTmbBXJYBG6/rFzhCnaKWo0
+         C46GNsyHMvUJtnTiH5JnU5Z4vD+B++7ywSuN/R09AkNFibOi9f6s48dDtcsrkgY877P2
+         BXojnxoh9giSbpBtXRMYZBGHJuI47mgGW8mJEf3PjqyGrjLE7FWr6PKgKY+rS4cakgGC
+         YFnA==
+X-Gm-Message-State: AC+VfDw9wx21Ey0rmGrr2782vMYWgv+k3uhKV54/3VpmX4zx3VJJ+ws6
+        YdSdQT2iIOJtIShBP4GHoPRZTA==
+X-Google-Smtp-Source: ACHHUZ552hr/Yulhor6scRLzB4vhqIGCQCViP962grhpVyirdQ1enlt4pY+/aWSdtOXI4BCVznl2ig==
+X-Received: by 2002:a17:907:8a01:b0:8e1:12b6:a8fc with SMTP id sc1-20020a1709078a0100b008e112b6a8fcmr10586656ejc.4.1682856480499;
+        Sun, 30 Apr 2023 05:08:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3? ([2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3])
+        by smtp.gmail.com with ESMTPSA id s21-20020a170906779500b0094eef800850sm13602622ejm.204.2023.04.30.05.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 30 Apr 2023 05:08:00 -0700 (PDT)
+Message-ID: <c7a24bac-a81d-6786-f1d3-d0f2c43cee8d@linaro.org>
+Date:   Sun, 30 Apr 2023 14:07:58 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] yaml: Add an entry in imx8mm boards for Emtop SOM-IMX8MM
 Content-Language: en-US
+To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "festevam@denx.de" <festevam@denx.de>,
+        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
+        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
+        "max.krummenacher@toradex.com" <max.krummenacher@toradex.com>,
+        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
+        "matthias.schiffer@tq-group.com" <matthias.schiffer@tq-group.com>,
+        "denys.drozdov@toradex.com" <denys.drozdov@toradex.com>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <BM1PR01MB4899FB61CCDE89E83F0F4D979A689@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <BM1PR01MB4899FB61CCDE89E83F0F4D979A689@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,32 +88,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogSm9zaCBQb2ltYm9ldWYNCj4gU2VudDogMjkgQXByaWwgMjAyMyAwMDo1OA0KPiANCj4g
-T24gRnJpLCBBcHIgMjgsIDIwMjMgYXQgMDg6NTU6MTNBTSArMDIwMCwgT2xlZyBOZXN0ZXJvdiB3
-cm90ZToNCj4gPiBPbiAwNC8yNywgSm9zaCBQb2ltYm9ldWYgd3JvdGU6DQo+ID4gPg0KPiA+ID4g
-T24gVGh1LCBBcHIgMjcsIDIwMjMgYXQgMDQ6MDA6NTRQTSArMDIwMCwgT2xlZyBOZXN0ZXJvdiB3
-cm90ZToNCj4gPiA+ID4gKwlzdGFjayA9IFBUUl9BTElHTihzdGFjaywgc2l6ZW9mKGxvbmcpKTsN
-Cj4gPiA+ID4gIAlmb3IgKCA7IHN0YWNrOyBzdGFjayA9IFBUUl9BTElHTihzdGFja19pbmZvLm5l
-eHRfc3AsIHNpemVvZihsb25nKSkpIHsNCj4gPiA+ID4gIAkJY29uc3QgY2hhciAqc3RhY2tfbmFt
-ZTsNCj4gPiA+DQo+ID4gPiBTZWVtcyByZWFzb25hYmxlLCB0aG91Z2ggJ3N0YWNrJyBpcyBhbHJl
-YWR5IGluaXRpYWxpemVkIGEgZmV3IGxpbmVzDQo+ID4gPiBhYm92ZSB0aGlzLCBzbyBpdCB3b3Vs
-ZCBiZSBjbGVhbmVyIHRvIGRvIHRoZSBQVFJfQUxJR04gdGhlbi4gIE9yIGV2ZW4NCj4gPiA+IGJl
-dHRlciwganVzdCBtb3ZlIGl0IGFsbCB0byB0aGUgZm9yIGxvb3A6DQo+ID4gPg0KPiA+ID4gCWZv
-ciAoc3RhY2sgPSBQVFJfQUxJR04oc3RhY2sgPyA6IGdldF9zdGFja19wb2ludGVyKHRhc2ssIHJl
-Z3MpKTsNCj4gPiA+IAkgICAgIHN0YWNrOw0KPiA+ID4gCSAgICAgc3RhY2sgPSBQVFJfQUxJR04o
-c3RhY2tfaW5mby5uZXh0X3NwLCBzaXplb2YobG9uZykpKSB7DQo+ID4NCj4gPiBXZSBkZWNpZGVk
-IHRvIG1ha2UgdGhlIHNpbXBsZXN0IG9uZS1saW5lciBmaXgsIGJ1dCBJIHdhcyB0aGlua2luZyBh
-Ym91dA0KPiA+DQo+ID4gCWZvciAoIHN0YWNrID0gc3RhY2sgPyA6IGdldF9zdGFja19wb2ludGVy
-KHRhc2ssIHJlZ3MpOw0KPiA+IAkgICAgIChzdGFjayA9IFBUUl9BTElHTihzdGFjaywgc2l6ZW9m
-KGxvbmcpKSk7DQo+ID4gCSAgICAgIHN0YWNrID0gc3RhY2tfaW5mby5uZXh0X3NwKQ0KPiA+IAl7
-DQo+ID4gCQkuLi4NCj4gPg0KPiA+IHRvIGZhY3RvdXQgb3V0IHRoZSBhbm5veWluZyBQVFJfQUxJ
-R04oKS4gV2lsbCBpdCB3b3JrIGZvciB5b3U/DQo+IA0KPiBJJ2QgcmF0aGVyIG5vdCwgdGhhdCdz
-IGEgbGl0dGxlICp0b28qIGNsZXZlciwgSU1PLg0KDQpJJ2QgbGVhdmUgdGhlIGluaXRpYWxpc2F0
-aW9uIG91dHNpZGUgdGhlIGxvb3AgYW5kIG1vdmUNCnRoZSBQVFJfQUxJR04oKSBpbnRvIHRoZSBs
-b29wIHNvIHRoYXQgdGhlICdmb3InIGZpdHMgb24gb25lIGxpbmU6DQoJaWYgKCFzdGFjaykNCgkJ
-c3RhY2sgPSBnZXRfc3RhY2tfcG9pbnRlcih0YXNrLCByZWdzKTsNCglmb3IgKDsgc3RhY2s7IHN0
-YWNrID0gc3RhY2tfaW5mby5uZXh0X3NwKSB7DQoJCWNvbnN0IGNoYXIgLi4uDQoJCXN0YWNrID0g
-UFRSX0FMSUdOKHN0YWNrLCBzaXplb2YobG9uZykpOw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 29/04/2023 16:07, Himanshu Bhavani wrote:
+> From 8756e66b7fba0a5063c6011983eb876456504ede Mon Sep 17 00:00:00 2001
+> From: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> Date: Sat, 29 Apr 2023 19:32:27 +0530
+> Subject: [PATCH] Add an entry in imx8mm boards for Emtop SOM-IMX8MM
+
+Please fix your patch format.
+
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching).
+
+> 
+> Added an entry to the list of imx8mm boards denoting the Emtop SOM-IMX8MM
+> 
+> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> index 442ce8f4d675..61f3beabb1d0 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -902,6 +902,7 @@ properties:
+>                - toradex,verdin-imx8mm-wifi  # Verdin iMX8M Mini Wi-Fi / BT Modules
+>                - variscite,var-som-mx8mm   # i.MX8MM Variscite VAR-SOM-MX8MM module
+>                - prt,prt8mm                # i.MX8MM Protonic PRT8MM Board
+> +              - fsl,imx8mm-emtop          # i.MX8MM Emtop SOM
+
+Messed order, incorrect vendor prefix. Also board name looks actually
+missing.
+
+Best regards,
+Krzysztof
 
