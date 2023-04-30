@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D9C6F27FA
-	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 09:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EC66F27FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 30 Apr 2023 09:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjD3Hwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 03:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S229642AbjD3H73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 03:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjD3Hwn (ORCPT
+        with ESMTP id S229477AbjD3H7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 03:52:43 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A028E19AF
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 00:52:40 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7606e3c6c8aso78349239f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 00:52:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682841160; x=1685433160;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fDkKPNSsXxANthsudfaiuRAniodyGXR5TzlpJcW5aYk=;
-        b=RZSTDKEy2uEGJNLGGZvT3SvQaoOvxZMrWWXS93G+pjK7392unWBSFj5AOEwSEnTaVa
-         2QO9+j61LKysWqIHMMKxA2iBXKN/LZh1d/v2VSvyD/r5iwXIRaZVcks2r+TOY78WddwV
-         KUjLMzHar1JpZiqX+YQ7PR+d3+WRF93i9tgEbW6hOAfFWYVUWTi7LDaWmwk6VzTc8Dp+
-         wwAzy5n3MASPUQt3kCdDa9hcZTe5dDB8sfNKZdeUkuDNXgCffh3KDzO5FBe/56IUtg/q
-         B1Gc23H8nYOf94cfpky12nIYwAnPUwzbY5jP7MwOM28VaTlvdmrylDuAzGvWe7K4gQvs
-         T/WA==
-X-Gm-Message-State: AC+VfDwi6LOnh0jb8weTxgfZx1kEDg1SKmdegbVJ1LZ9VuBgoEbDLUJL
-        RQhC9noRMh5Wv5CuEEcOhTrK+mKkjgHd1BOVlE5OIim/XRD1
-X-Google-Smtp-Source: ACHHUZ7bcG1e/3bUMzc0ymc7D2jyrzRFpHg6OGgc1vjTSzYAQkzB6eb8hwkmLDkQ2x4UKlWv/MXS4mus8I2wW/dEjqwTOCIeYkg4
+        Sun, 30 Apr 2023 03:59:25 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E323213E;
+        Sun, 30 Apr 2023 00:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682841564; x=1714377564;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=nNt70c2qJyO2Xz2+WNYLYg3z+OyYyPnpmVTTu1vFnW0=;
+  b=lRI3MWj8+DZA9YtNTbIO5c/xch/LZco9PIKLQaRhNUHuK1ohwbdzE+w8
+   dcMmcsKxiPOEgotL4fqGr8WCp7UVEHNVEAvOVikt5of+b3+ZMfJTXBe5u
+   1/ouuLuB4TXRg8IWceY8sh8VQi//mQtU25Ziua/ejkdASwaJOIN3lAS43
+   E9V3Vw6mwlcBaPFJqTlZ+bU0hL/hfW9/PQfLSDfxUuA2SoArqUTHQC3fx
+   4XeX4zIqWEF9wtsP5rZlMDF590WoLM5IDaVUvxkO2zIFG89p6b3s0dy9c
+   d3maOawUmsZCIV+poI9v6ci719kX12daelYrL0zHzdiof7YkHsv0c/ZDH
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="345470869"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="345470869"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2023 00:59:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10695"; a="784895272"
+X-IronPort-AV: E=Sophos;i="5.99,238,1677571200"; 
+   d="scan'208";a="784895272"
+Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Apr 2023 00:59:22 -0700
+Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pt1xp-0001Yp-1L;
+        Sun, 30 Apr 2023 07:59:21 +0000
+Date:   Sun, 30 Apr 2023 15:58:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH] power: supply: remove unneeded include of linux/leds.h
+Message-ID: <202304301551.baBXvI9d-lkp@intel.com>
+References: <20230212-include-power_supply-leds-v1-1-7adbf7424002@weissschuh.net>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:90a:0:b0:760:fab7:5bbf with SMTP id
- t10-20020a6b090a000000b00760fab75bbfmr4768392ioi.4.1682841159908; Sun, 30 Apr
- 2023 00:52:39 -0700 (PDT)
-Date:   Sun, 30 Apr 2023 00:52:39 -0700
-In-Reply-To: <000000000000fcbbf805f9aca52b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008cc80505fa88fdfc@google.com>
-Subject: Re: [syzbot] [bluetooth?] WARNING: bad unlock balance in l2cap_disconnect_rsp
-From:   syzbot <syzbot+180f35f8e76c7af067d2@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230212-include-power_supply-leds-v1-1-7adbf7424002@weissschuh.net>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,69 +68,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Thomas,
 
-HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=13b18ef8280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
-dashboard link: https://syzkaller.appspot.com/bug?extid=180f35f8e76c7af067d2
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167c5f2c280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1430f330280000
+kernel test robot noticed the following build errors:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+[auto build test ERROR on 825a0714d2b3883d4f8ff64f6933fb73ee3f1834]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+180f35f8e76c7af067d2@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Wei-schuh/power-supply-remove-unneeded-include-of-linux-leds-h/20230430-141232
+base:   825a0714d2b3883d4f8ff64f6933fb73ee3f1834
+patch link:    https://lore.kernel.org/r/20230212-include-power_supply-leds-v1-1-7adbf7424002%40weissschuh.net
+patch subject: [PATCH] power: supply: remove unneeded include of linux/leds.h
+config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230430/202304301551.baBXvI9d-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b75095fc2fd15bc4d539656b12200b44a9705959
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Wei-schuh/power-supply-remove-unneeded-include-of-linux-leds-h/20230430-141232
+        git checkout b75095fc2fd15bc4d539656b12200b44a9705959
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3
-Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
-=====================================
-WARNING: bad unlock balance detected!
-6.3.0-rc7-syzkaller-g14f8db1c0f9a #0 Not tainted
--------------------------------------
-kworker/u5:2/5929 is trying to release lock (&conn->chan_lock) at:
-[<ffff8000115d5e64>] l2cap_disconnect_rsp+0x210/0x30c net/bluetooth/l2cap_core.c:4697
-but there are no more locks to release!
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304301551.baBXvI9d-lkp@intel.com/
 
-other info that might help us debug this:
-2 locks held by kworker/u5:2/5929:
- #0: ffff0000db5a5938 ((wq_completion)hci0#2){+.+.}-{0:0}, at: process_one_work+0x664/0x12d4 kernel/workqueue.c:2363
- #1: ffff80001e507c20 ((work_completion)(&hdev->rx_work)){+.+.}-{0:0}, at: process_one_work+0x6a8/0x12d4 kernel/workqueue.c:2365
+All errors (new ones prefixed by >>):
 
-stack backtrace:
-CPU: 1 PID: 5929 Comm: kworker/u5:2 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-Workqueue: hci0 hci_rx_work
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- print_unlock_imbalance_bug+0x250/0x2a4 kernel/locking/lockdep.c:5109
- lock_release+0x4ac/0x9ac kernel/locking/lockdep.c:5689
- __mutex_unlock_slowpath+0xe0/0x6b4 kernel/locking/mutex.c:907
- mutex_unlock+0x18/0x24 kernel/locking/mutex.c:543
- l2cap_disconnect_rsp+0x210/0x30c net/bluetooth/l2cap_core.c:4697
- l2cap_bredr_sig_cmd+0x974/0x7e94 net/bluetooth/l2cap_core.c:5748
- l2cap_sig_channel net/bluetooth/l2cap_core.c:6507 [inline]
- l2cap_recv_frame+0x83c/0x6a14 net/bluetooth/l2cap_core.c:7786
- l2cap_recv_acldata+0x4f4/0x163c net/bluetooth/l2cap_core.c:8504
- hci_acldata_packet net/bluetooth/hci_core.c:3828 [inline]
- hci_rx_work+0x2cc/0x8b8 net/bluetooth/hci_core.c:4063
- process_one_work+0x788/0x12d4 kernel/workqueue.c:2390
- worker_thread+0x8e0/0xfe8 kernel/workqueue.c:2537
- kthread+0x250/0x2d8 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+   drivers/hid/hid-lg4ff.c:1121:30: warning: 'enum led_brightness' declared inside parameter list will not be visible outside of this definition or declaration
+    1121 |                         enum led_brightness value)
+         |                              ^~~~~~~~~~~~~~
+>> drivers/hid/hid-lg4ff.c:1121:45: error: parameter 2 ('value') has incomplete type
+    1121 |                         enum led_brightness value)
+         |                         ~~~~~~~~~~~~~~~~~~~~^~~~~
+>> drivers/hid/hid-lg4ff.c:1120:13: error: function declaration isn't a prototype [-Werror=strict-prototypes]
+    1120 | static void lg4ff_led_set_brightness(struct led_classdev *led_cdev,
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-lg4ff.c: In function 'lg4ff_led_set_brightness':
+>> drivers/hid/hid-lg4ff.c:1123:38: error: invalid use of undefined type 'struct led_classdev'
+    1123 |         struct device *dev = led_cdev->dev->parent;
+         |                                      ^~
+>> drivers/hid/hid-lg4ff.c:1145:30: error: 'LED_OFF' undeclared (first use in this function)
+    1145 |                 if (value == LED_OFF && state) {
+         |                              ^~~~~~~
+   drivers/hid/hid-lg4ff.c:1145:30: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/hid/hid-lg4ff.c: At top level:
+>> drivers/hid/hid-lg4ff.c:1156:28: error: return type is an incomplete type
+    1156 | static enum led_brightness lg4ff_led_get_brightness(struct led_classdev *led_cdev)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-lg4ff.c: In function 'lg4ff_led_get_brightness':
+   drivers/hid/hid-lg4ff.c:1158:38: error: invalid use of undefined type 'struct led_classdev'
+    1158 |         struct device *dev = led_cdev->dev->parent;
+         |                                      ^~
+   drivers/hid/hid-lg4ff.c:1166:24: error: 'LED_OFF' undeclared (first use in this function)
+    1166 |                 return LED_OFF;
+         |                        ^~~~~~~
+   drivers/hid/hid-lg4ff.c:1166:24: error: 'return' with a value, in function returning void [-Werror=return-type]
+   drivers/hid/hid-lg4ff.c:1156:28: note: declared here
+    1156 | static enum led_brightness lg4ff_led_get_brightness(struct led_classdev *led_cdev)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-lg4ff.c:1173:24: error: 'return' with a value, in function returning void [-Werror=return-type]
+    1173 |                 return LED_OFF;
+         |                        ^~~~~~~
+   drivers/hid/hid-lg4ff.c:1156:28: note: declared here
+    1156 | static enum led_brightness lg4ff_led_get_brightness(struct led_classdev *led_cdev)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/hid-lg4ff.c:1182:24: error: 'LED_FULL' undeclared (first use in this function); did you mean 'LED_NUML'?
+    1182 |         return value ? LED_FULL : LED_OFF;
+         |                        ^~~~~~~~
+         |                        LED_NUML
+   drivers/hid/hid-lg4ff.c:1182:16: error: 'return' with a value, in function returning void [-Werror=return-type]
+    1182 |         return value ? LED_FULL : LED_OFF;
+         |                ^~~~~
+   drivers/hid/hid-lg4ff.c:1156:28: note: declared here
+    1156 | static enum led_brightness lg4ff_led_get_brightness(struct led_classdev *led_cdev)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hid/hid-lg4ff.c: In function 'lg4ff_init':
+>> drivers/hid/hid-lg4ff.c:1410:46: error: invalid application of 'sizeof' to incomplete type 'struct led_classdev'
+    1410 |                         led = kzalloc(sizeof(struct led_classdev)+name_sz, GFP_KERNEL);
+         |                                              ^~~~~~
+   drivers/hid/hid-lg4ff.c:1416:45: error: invalid use of undefined type 'struct led_classdev'
+    1416 |                         name = (void *)(&led[1]);
+         |                                             ^
+   drivers/hid/hid-lg4ff.c:1418:28: error: invalid use of undefined type 'struct led_classdev'
+    1418 |                         led->name = name;
+         |                            ^~
+   drivers/hid/hid-lg4ff.c:1419:28: error: invalid use of undefined type 'struct led_classdev'
+    1419 |                         led->brightness = 0;
+         |                            ^~
+   drivers/hid/hid-lg4ff.c:1420:28: error: invalid use of undefined type 'struct led_classdev'
+    1420 |                         led->max_brightness = 1;
+         |                            ^~
+   drivers/hid/hid-lg4ff.c:1421:28: error: invalid use of undefined type 'struct led_classdev'
+    1421 |                         led->brightness_get = lg4ff_led_get_brightness;
+         |                            ^~
+   drivers/hid/hid-lg4ff.c:1422:28: error: invalid use of undefined type 'struct led_classdev'
+    1422 |                         led->brightness_set = lg4ff_led_set_brightness;
+         |                            ^~
+>> drivers/hid/hid-lg4ff.c:1425:33: error: implicit declaration of function 'led_classdev_register'; did you mean 'class_register'? [-Werror=implicit-function-declaration]
+    1425 |                         error = led_classdev_register(&hid->dev, led);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~
+         |                                 class_register
+>> drivers/hid/hid-lg4ff.c:1436:41: error: implicit declaration of function 'led_classdev_unregister'; did you mean 'class_unregister'? [-Werror=implicit-function-declaration]
+    1436 |                                         led_classdev_unregister(led);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~
+         |                                         class_unregister
+   cc1: some warnings being treated as errors
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+vim +1121 drivers/hid/hid-lg4ff.c
+
+22bcefdc8838186 Simon Wood   2012-04-21  1119  
+22bcefdc8838186 Simon Wood   2012-04-21 @1120  static void lg4ff_led_set_brightness(struct led_classdev *led_cdev,
+22bcefdc8838186 Simon Wood   2012-04-21 @1121  			enum led_brightness value)
+22bcefdc8838186 Simon Wood   2012-04-21  1122  {
+22bcefdc8838186 Simon Wood   2012-04-21 @1123  	struct device *dev = led_cdev->dev->parent;
+ee79a8f840a45d3 Geliang Tang 2015-12-27  1124  	struct hid_device *hid = to_hid_device(dev);
+4629fd160f7da96 Axel Lin     2012-09-13  1125  	struct lg_drv_data *drv_data = hid_get_drvdata(hid);
+22bcefdc8838186 Simon Wood   2012-04-21  1126  	struct lg4ff_device_entry *entry;
+22bcefdc8838186 Simon Wood   2012-04-21  1127  	int i, state = 0;
+22bcefdc8838186 Simon Wood   2012-04-21  1128  
+22bcefdc8838186 Simon Wood   2012-04-21  1129  	if (!drv_data) {
+22bcefdc8838186 Simon Wood   2012-04-21  1130  		hid_err(hid, "Device data not found.");
+22bcefdc8838186 Simon Wood   2012-04-21  1131  		return;
+22bcefdc8838186 Simon Wood   2012-04-21  1132  	}
+22bcefdc8838186 Simon Wood   2012-04-21  1133  
+371a1d9e1fed7dc Michal Malý  2015-04-08  1134  	entry = drv_data->device_props;
+22bcefdc8838186 Simon Wood   2012-04-21  1135  
+22bcefdc8838186 Simon Wood   2012-04-21  1136  	if (!entry) {
+22bcefdc8838186 Simon Wood   2012-04-21  1137  		hid_err(hid, "Device properties not found.");
+22bcefdc8838186 Simon Wood   2012-04-21  1138  		return;
+22bcefdc8838186 Simon Wood   2012-04-21  1139  	}
+22bcefdc8838186 Simon Wood   2012-04-21  1140  
+22bcefdc8838186 Simon Wood   2012-04-21  1141  	for (i = 0; i < 5; i++) {
+72529c65a5399be Michal Malý  2015-04-08  1142  		if (led_cdev != entry->wdata.led[i])
+22bcefdc8838186 Simon Wood   2012-04-21  1143  			continue;
+72529c65a5399be Michal Malý  2015-04-08  1144  		state = (entry->wdata.led_state >> i) & 1;
+22bcefdc8838186 Simon Wood   2012-04-21 @1145  		if (value == LED_OFF && state) {
+72529c65a5399be Michal Malý  2015-04-08  1146  			entry->wdata.led_state &= ~(1 << i);
+72529c65a5399be Michal Malý  2015-04-08  1147  			lg4ff_set_leds(hid, entry->wdata.led_state);
+22bcefdc8838186 Simon Wood   2012-04-21  1148  		} else if (value != LED_OFF && !state) {
+72529c65a5399be Michal Malý  2015-04-08  1149  			entry->wdata.led_state |= 1 << i;
+72529c65a5399be Michal Malý  2015-04-08  1150  			lg4ff_set_leds(hid, entry->wdata.led_state);
+22bcefdc8838186 Simon Wood   2012-04-21  1151  		}
+22bcefdc8838186 Simon Wood   2012-04-21  1152  		break;
+22bcefdc8838186 Simon Wood   2012-04-21  1153  	}
+22bcefdc8838186 Simon Wood   2012-04-21  1154  }
+22bcefdc8838186 Simon Wood   2012-04-21  1155  
+22bcefdc8838186 Simon Wood   2012-04-21 @1156  static enum led_brightness lg4ff_led_get_brightness(struct led_classdev *led_cdev)
+22bcefdc8838186 Simon Wood   2012-04-21  1157  {
+22bcefdc8838186 Simon Wood   2012-04-21  1158  	struct device *dev = led_cdev->dev->parent;
+ee79a8f840a45d3 Geliang Tang 2015-12-27  1159  	struct hid_device *hid = to_hid_device(dev);
+4629fd160f7da96 Axel Lin     2012-09-13  1160  	struct lg_drv_data *drv_data = hid_get_drvdata(hid);
+22bcefdc8838186 Simon Wood   2012-04-21  1161  	struct lg4ff_device_entry *entry;
+22bcefdc8838186 Simon Wood   2012-04-21  1162  	int i, value = 0;
+22bcefdc8838186 Simon Wood   2012-04-21  1163  
+22bcefdc8838186 Simon Wood   2012-04-21  1164  	if (!drv_data) {
+22bcefdc8838186 Simon Wood   2012-04-21  1165  		hid_err(hid, "Device data not found.");
+22bcefdc8838186 Simon Wood   2012-04-21  1166  		return LED_OFF;
+22bcefdc8838186 Simon Wood   2012-04-21  1167  	}
+22bcefdc8838186 Simon Wood   2012-04-21  1168  
+371a1d9e1fed7dc Michal Malý  2015-04-08  1169  	entry = drv_data->device_props;
+22bcefdc8838186 Simon Wood   2012-04-21  1170  
+22bcefdc8838186 Simon Wood   2012-04-21  1171  	if (!entry) {
+22bcefdc8838186 Simon Wood   2012-04-21  1172  		hid_err(hid, "Device properties not found.");
+22bcefdc8838186 Simon Wood   2012-04-21  1173  		return LED_OFF;
+22bcefdc8838186 Simon Wood   2012-04-21  1174  	}
+22bcefdc8838186 Simon Wood   2012-04-21  1175  
+22bcefdc8838186 Simon Wood   2012-04-21  1176  	for (i = 0; i < 5; i++)
+72529c65a5399be Michal Malý  2015-04-08  1177  		if (led_cdev == entry->wdata.led[i]) {
+72529c65a5399be Michal Malý  2015-04-08  1178  			value = (entry->wdata.led_state >> i) & 1;
+22bcefdc8838186 Simon Wood   2012-04-21  1179  			break;
+22bcefdc8838186 Simon Wood   2012-04-21  1180  		}
+22bcefdc8838186 Simon Wood   2012-04-21  1181  
+22bcefdc8838186 Simon Wood   2012-04-21 @1182  	return value ? LED_FULL : LED_OFF;
+22bcefdc8838186 Simon Wood   2012-04-21  1183  }
+22bcefdc8838186 Simon Wood   2012-04-21  1184  #endif
+22bcefdc8838186 Simon Wood   2012-04-21  1185  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
