@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706BE6F2E4A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 06:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BE826F2E4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 06:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbjEAEBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 00:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S232227AbjEAECl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 00:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjEAEBA (ORCPT
+        with ESMTP id S232307AbjEAECM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 00:01:00 -0400
-Received: from mail-m11876.qiye.163.com (mail-m11876.qiye.163.com [115.236.118.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B295B86;
-        Sun, 30 Apr 2023 20:51:42 -0700 (PDT)
-Received: from [IPV6:240e:3b7:327f:5c30:7d8b:c3e:1a47:99e8] (unknown [IPV6:240e:3b7:327f:5c30:7d8b:c3e:1a47:99e8])
-        by mail-m11876.qiye.163.com (Hmail) with ESMTPA id 5C3E83C0223;
-        Mon,  1 May 2023 11:51:37 +0800 (CST)
-Message-ID: <03b45702-d799-f299-1c24-4e5e2e2897d2@sangfor.com.cn>
-Date:   Mon, 1 May 2023 11:50:50 +0800
+        Mon, 1 May 2023 00:02:12 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715B694
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 20:59:24 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-77d0fcbce6bso247666241.1
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 20:59:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682913563; x=1685505563;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wlcWHBp5U9pKjvAervbggqWQHpGZVcQMASIP1AoxR/I=;
+        b=myzwtOMYaSxjDGrCGSFKSSggOzmKMiDAQmNPFOrf7hvHNMc7q1Q2liwfV7n1RhjWeF
+         jIvZ8NzSDF9ACaAsA1KgIoNHFafy2nMAgzsu5EIpPZMcRwYy10ty6YP6KmRJCZEGz+NS
+         YjWrUpjw36+2Rw9w8OtuSJjimgyT/E8boY7z6TXqnyYmfYugsdvL/Vgt/T/FfhepoIMv
+         VHttEqVRgaKPtnRBQJR+5j5YjAT3FGdOCt2Gj1z7v5tY5FLgpq2GbFgaprMaXa8AlyMx
+         k9VFxnfPQDEyuWbaElSy7fHIHljDiR+L+5D00yjZFazlvp9lUzhaVKe2tUShydns0Eyu
+         a9Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682913563; x=1685505563;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wlcWHBp5U9pKjvAervbggqWQHpGZVcQMASIP1AoxR/I=;
+        b=iJJ8WAHql9zDnEUXraACQcxul4NAbQFQCEbRyenFpwuo6Esf+UpdcZzzn5XG8zlOVp
+         SGgzm86gDdfoyhq7wiFBKHAvEFsQLZ+h9Yu+TTr7iBn5yvN28uF48M+dr14+dDwpFrts
+         zNNlKqpbNE/giUmYeUtcGTT4Hw+VGJiy0/ARYjr0gUoxjti/+1HYf5EfDHLoflgFStZh
+         R7IcwT4SlB3ipLsCk0dPdPDy1SNBHQd6xzRSrqKcUbgQhHG5Vzums9A6qEV8w85jt/Kc
+         LeOwP49oWLsoe9gxZP7D3c3SPzsqWeqeVMBUs6rvAZNqmwUQXCcwhnq+vRkdUGDXkQni
+         rlLA==
+X-Gm-Message-State: AC+VfDzumJol6zh8eGgWUDlFvtYIFoJBliH17KOPkGqnIXfz/fb1FdST
+        mU8UG3uT+vY6/p8psY27bn3hfDZ9Z2mtmJBJ1Cl+rsmu8GU=
+X-Google-Smtp-Source: ACHHUZ77O6m1nzl4uMS8pnYIcrtXQkGK7n7CP+Sj3OlbhG+hoEm7Vs/1uTYHwLXqJs1HYUum9HexCCOKAaTVRWsJzwA=
+X-Received: by 2002:a1f:4d81:0:b0:40f:f3e1:53c with SMTP id
+ a123-20020a1f4d81000000b0040ff3e1053cmr3624176vkb.1.1682913563055; Sun, 30
+ Apr 2023 20:59:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ding Hui <dinghui@sangfor.com.cn>
-Subject: Re: [PATCH] PCI/ASPM: fix UAF by removing cached downstream
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        vidyas@nvidia.com, david.e.box@linux.intel.com,
-        kai.heng.feng@canonical.com, michael.a.bottini@linux.intel.com,
-        rajatja@google.com, qinzongquan@sangfor.com.cn,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230501021051.GA543423@bhelgaas>
-In-Reply-To: <20230501021051.GA543423@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCHx5MVhpDTRlMSkkdHhgaGlUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTB1BThhIS0FMH0MZQRhIHkFKGk9MQUJCHkNZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Tid: 0a87d56ff8062eb2kusn5c3e83c0223
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OhA6Tjo6TT0PCkMUNBYSH0ge
-        HiwwCjdVSlVKTUNJQkpIS0JDSk1KVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUwdQU4YSEtBTB9DGUEYSB5BShpPTEFCQh5DWVdZCAFZQU9LSU83Bg++
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Jeff Chua <jeff.chua.linux@gmail.com>
+Date:   Mon, 1 May 2023 11:59:12 +0800
+Message-ID: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+Subject: linux-6.4 alsa sound broken
+To:     lkml <linux-kernel@vger.kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        Takashi Iwai <tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/1 10:10, Bjorn Helgaas wrote:
-> On Sat, Apr 29, 2023 at 09:26:04PM +0800, Ding Hui wrote:
->> If the function 0 of a multifunction device is removed, an freed
->> downstream pointer will be left in struct pcie_link_state, and then
->> when pcie_config_aspm_link() be invoked from any path, we will get a
->> KASAN use-after-free report.
-> 
-> Thanks for finding this problem, debugging it, and the patch!
-> 
-> In this case we're doing a "software remove" and the other functions
-> are still present, right?  It's kind of annoying that there's only one
-> link, but all the functions of a multifunction device have a Link
-> Control register, and the spec "recommends" that software program the
-> same ASPM control value for all the functions.
-> 
+Latest git pull from Linus's tree ... playing a simple sound file will
+resulted in a lot of echo.
 
-Yes, that is the case.
+Running on Lenovo X1 with ..
+00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
+Definition Audio Controller (rev 01)
 
-> The hardware of course doesn't know anything about this software
-> remove; all the functions are still physically present and powered up.
-> 
-> That makes me think that if software ignores the "removed" function
-> and continues to operate ASPM on the N-1 remaining functions, we're
-> outside the spec recommendations because the ASPM configuration is no
-> longer the same across all the functions.
-> 
-> So my inclination would be disable ASPM completely when any function
-> of a multi-function device is removed.  What are your thoughts on
-> this?
-> 
+I've bisected and reverted the following patch fixed the problem.
 
-Agree with you.
+My best,
+Jeff
 
-Previously, I thought another fix that was if the function 0 is removed,
-we can free the link state to disable ASPM for this link.
+commit 9f656705c5faa18afb26d922cfc64f9fd103c38d
+Author: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+Date:   Thu Apr 20 13:33:23 2023 +0200
 
-Now following you suggestion, it can be expanded to any child function.
+    ALSA: pcm: rewrite snd_pcm_playback_silence()
 
-How about fixing like this?
+    The auto-silencer supports two modes: "thresholded" to fill up "just
+    enough", and "top-up" to fill up "as much as possible". The two modes
+    used rather distinct code paths, which this patch unifies. The only
+    remaining distinction is how much we actually want to fill.
 
-diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-index 66d7514ca111..657e0647d19f 100644
---- a/drivers/pci/pcie/aspm.c
-+++ b/drivers/pci/pcie/aspm.c
-@@ -1011,12 +1011,11 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
-  	down_read(&pci_bus_sem);
-  	mutex_lock(&aspm_lock);
-  	/*
--	 * All PCIe functions are in one slot, remove one function will remove
--	 * the whole slot, so just wait until we are the last function left.
-+	 * All PCIe functions are in one slot.
-+	 * The spec "recommends" that software program set the same ASPM control
-+	 * value for all the functions.
-+	 * Disable ASPM when any child function is removed.
-  	 */
--	if (!list_empty(&parent->subordinate->devices))
--		goto out;
--
-  	link = parent->link_state;
-  	root = link->root;
-  	parent_link = link->parent;
+    This fixes a bug in thresholded mode, where we failed to use new_hw_ptr,
+    resulting in under-fill.
 
+    Top-up mode is now more well-behaved and much easier to understand in
+    corner cases.
 
--- 
-Thanks,
--dinghui
+    This also updates comments in the proximity of silencing-related data
+    structures.
 
+    Signed-off-by: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+    Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+    Link: https://lore.kernel.org/r/20230420113324.877164-1-oswald.buddenhagen@gmx.de
+    Signed-off-by: Takashi Iwai <tiwai@suse.de>
