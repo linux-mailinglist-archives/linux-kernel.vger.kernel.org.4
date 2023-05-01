@@ -2,144 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6D86F34ED
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84826F34E1
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbjEARQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
+        id S233140AbjEARPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbjEARNJ (ORCPT
+        with ESMTP id S233730AbjEAROb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:13:09 -0400
-Received: from out-51.mta0.migadu.com (out-51.mta0.migadu.com [IPv6:2001:41d0:1004:224b::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A41FF5
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:12:14 -0700 (PDT)
-Date:   Mon, 1 May 2023 10:12:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682961132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4x5T3Q/c5NLcOH8sHPSyYz1LAl/Oui3iWtz8Ou0TELA=;
-        b=MPA5h7hprdGRBRt8GnzewCY3kfxDJs3GElH6DlWeWQOj/Nuh52+eTtuWim/0ItsFa5CP8X
-        mzTumzR8D7IX2h/aspnXt96wTj8uF2HIFWhpxCG+2BLB349fL7uUM58pH4c5yXtEdYcNqd
-        T1N707rA8SN2sJgM0UBiXc/tV1sDbno=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com
-Subject: Re: [PATCH] mm: optimization on page allocation when CMA enabled
-Message-ID: <ZE/y5wMggipQrKvb@P9FQF9L96D>
-References: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
+        Mon, 1 May 2023 13:14:31 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D5198D;
+        Mon,  1 May 2023 10:14:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so3715800e87.3;
+        Mon, 01 May 2023 10:14:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682961252; x=1685553252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
+        b=YiLzq1KA2rEOiCTNiyZSaN+QghM+/sIHvuTYQCjSbiyThCa88Rroc2XwCwn30FReLS
+         eYXff/D8sQcdMUNPVgZWSb1tdbGkyuGJefxQKaCneDn2hYOcP2ILonXjxEqJzTGGBfJF
+         9BYH/uOm/8MwyRqaL5DoyfTAmSJZMXTcSpQTHg7bWSahC2rBOqAIHtdICMgxH0MtG+kO
+         ca1KK9cxDo7aMhkJW3sjX/PgRwF4E7GS7o03lySErKNbMkg0mxuRDaOXE8yFwWKV8kbU
+         1XInk4TCtqaqzK2F7FzEsHBaIwLSeMRqrM1sokiM0zIuqmhIRPNFEYq9Z7yODO+Tkumm
+         5jPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682961252; x=1685553252;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
+        b=lOhgLdphZqQwWlH+J3CH4ZBdPjaJJ0aIQpuKeC1R7pe+yEQqL2U+QwTG8VssvoxgwK
+         wPriDB8JDsVWnkKIpvOk7bigScP46zxwilNj8kWNevcXz/RfndKn269YTujWOqRIn3JS
+         EkuAwfoI26/x9pVvsRJDD2va7I2eKVTYojXEk0cWzIhq0zfCVMCrNEJU8gKUT5gLW887
+         FM8VyCIuqbyjIhFksO4CvP+vt/FNwzWGokA8Y9Gf93tuF6RrJjAVKhy3jjzAJOiH8FSo
+         ngDa42QCSjWZRPbmdytGR2t22RX8amlcgXQX51Mjko/ry4H0us5MsuuThzbsrOjN873R
+         mOlw==
+X-Gm-Message-State: AC+VfDzQFEMLdIthZBKmMeZuMPqj7SfK9rMZ7YyiXT+C8tVIi2YUsL52
+        j8ifR7jc+tjhimMFTO7dnSnPu6zKGwk=
+X-Google-Smtp-Source: ACHHUZ5XOhiYeDAdYs1Yeg4saEaZXRFid5O8OPd2mXzhya6+hjQszORs7zQF+KFLzXIjkxYYpryk4w==
+X-Received: by 2002:a19:c50f:0:b0:4e8:4abf:f19d with SMTP id w15-20020a19c50f000000b004e84abff19dmr3815224lfe.15.1682961252211;
+        Mon, 01 May 2023 10:14:12 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id v7-20020a197407000000b004f00af55561sm2396154lfe.174.2023.05.01.10.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 10:14:11 -0700 (PDT)
+Date:   Mon, 1 May 2023 20:14:09 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Joy Chakraborty <joychakr@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v9 0/5] spi: dw: DW SPI DMA Driver updates
+Message-ID: <20230501171409.syub4ro3kb3r6ho2@mobilestation>
+References: <20230427123314.1997152-1-joychakr@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1682679641-13652-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20230427123314.1997152-1-joychakr@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhaoyang!
+@Mark, @Andy
 
-On Fri, Apr 28, 2023 at 07:00:41PM +0800, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> Please be notice bellowing typical scenario that commit 168676649 introduce,
-> that is, 12MB free cma pages 'help' GFP_MOVABLE to keep draining/fragmenting
-> U&R page blocks until they shrink to 12MB without enter slowpath which against
-> current reclaiming policy. This commit change the criteria from hard coded '1/2'
-> to watermark check which leave U&R free pages stay around WMARK_LOW when being
-> fallback.
+On Thu, Apr 27, 2023 at 12:33:09PM +0000, Joy Chakraborty wrote:
+> This Patch series adds support for 32 bits per word trasfers using DMA
+> and some defensive checks around dma controller capabilities.
 
-Can you, please, explain the problem you're solving in more details?
+I've done with reviewing and testing the series. My tags are already
+added to the patch logs. @Andy do you still have any comments about
+the updated patchset? If none, @Mark please merge it in if you are ok
+with the changes.
 
-If I understand your code correctly, you're effectively reducing the
-use of cma areas for movable allocations. Why it's good?
-Also, this is a hot path, please, make sure you're not adding
-much overhead.
+-Serge(y)
 
-And please use scripts/checkpatch.pl next time, there are many
-code style issues.
-
-Thanks!
-
-> 
-> DMA32 free:25900kB boost:0kB min:4176kB low:25856kB high:29516kB
-> 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 > ---
->  mm/page_alloc.c | 40 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 36 insertions(+), 4 deletions(-)
+> V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
+> ---
+> V1->V2 Changes : Add dma capability check to make sure address widths
+> are supported.
+> ---
+> V2->V3 Changes : Split changes , add DMA direction check and other
+> cosmetic chnages.
+> ---
+> V3->V4 Changes : Fix Sparce Warning
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
+> ---
+> V4->V5 Changes : Preserve reverse xmas Tree order, move direction
+> check before initalisation of further capabilities, remove zero
+> initialisations, remove error OR'ing.
+> ---
+> V5->V6 Changes :
+> 	-Remove case of n_bytes=3 using 4_bytes buswidth
+> 	-Avoid forward decaration
+> 	-Break capability check patch into 2
+> 	-round n_bytes to power of 2 ( Bug Fix)
+> 	-Add more explanation in commit text.
+> ---
+> V6->V7 Changes : Remove extra spaces, refer to functions in commit as
+> func()
+> ---
+> V7->V8 Changes : Minor commment updates in patch 4/5
+> ---
+> V8->V9 Changes : Minor formatting changes in patch 5/5
+> ---
 > 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 0745aed..97768fe 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3071,6 +3071,39 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
->  
->  }
->  
-> +#ifdef CONFIG_CMA
-> +static bool __if_use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
-> +{
-> +	unsigned long cma_proportion = 0;
-> +	unsigned long cma_free_proportion = 0;
-> +	unsigned long watermark = 0;
-> +	unsigned long wm_fact[ALLOC_WMARK_MASK] = {1, 1, 2};
-> +	long count = 0;
-> +	bool cma_first = false;
-> +
-> +	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
-> +	/*check if GFP_MOVABLE pass previous watermark check via the help of CMA*/
-> +	if (!zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA)))
-> +	{
-> +		alloc_flags &= ALLOC_WMARK_MASK;
-> +		/* WMARK_LOW failed lead to using cma first, this helps U&R stay
-> +		 * around low when being drained by GFP_MOVABLE
-> +		 */
-> +		if (alloc_flags <= ALLOC_WMARK_LOW)
-> +			cma_first = true;
-> +		/*check proportion for WMARK_HIGH*/
-> +		else {
-> +			count = atomic_long_read(&zone->managed_pages);
-> +			cma_proportion = zone->cma_pages * 100 / count;
-> +			cma_free_proportion = zone_page_state(zone, NR_FREE_CMA_PAGES) * 100
-> +				/  zone_page_state(zone, NR_FREE_PAGES);
-> +			cma_first = (cma_free_proportion >= wm_fact[alloc_flags] * cma_proportion
-> +					|| cma_free_proportion >= 50);
-> +		}
-> +	}
-> +	return cma_first;
-> +}
-> +#endif
->  /*
->   * Do the hard work of removing an element from the buddy allocator.
->   * Call me with the zone->lock already held.
-> @@ -3087,10 +3120,9 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
->  		 * allocating from CMA when over half of the zone's free memory
->  		 * is in the CMA area.
->  		 */
-> -		if (alloc_flags & ALLOC_CMA &&
-> -		    zone_page_state(zone, NR_FREE_CMA_PAGES) >
-> -		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
-> -			page = __rmqueue_cma_fallback(zone, order);
-> +		if (migratetype == MIGRATE_MOVABLE) {
-> +			bool cma_first = __if_use_cma_first(zone, order, alloc_flags);
-> +			page = cma_first ? __rmqueue_cma_fallback(zone, order) : NULL;
->  			if (page)
->  				return page;
->  		}
+> Joy Chakraborty (5):
+>   spi: dw: Add 32 bpw support to SPI DW DMA driver
+>   spi: dw: Move dw_spi_can_dma()
+>   spi: dw: Add DMA directional capability check
+>   spi: dw: Add DMA address widths capability check
+>   spi: dw: Round of n_bytes to power of 2
+> 
+>  drivers/spi/spi-dw-core.c |  5 ++-
+>  drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
+>  drivers/spi/spi-dw.h      |  1 +
+>  3 files changed, 63 insertions(+), 19 deletions(-)
+> 
 > -- 
-> 1.9.1
-> 
+> 2.40.1.495.gc816e09b53d-goog
 > 
