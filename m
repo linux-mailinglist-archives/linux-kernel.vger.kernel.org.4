@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8127D6F2C6C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3645E6F2C76
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjEADAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
+        id S229704AbjEADAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjEAC7O (ORCPT
+        with ESMTP id S232397AbjEAC7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:59:14 -0400
+        Sun, 30 Apr 2023 22:59:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B6F19BA;
-        Sun, 30 Apr 2023 19:58:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23B51FEF;
+        Sun, 30 Apr 2023 19:58:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC7EE60F9A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 647BE616E2;
+        Mon,  1 May 2023 02:58:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E29C433A0;
         Mon,  1 May 2023 02:58:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9131BC4339C;
-        Mon,  1 May 2023 02:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909880;
-        bh=DWstlYSb6HQkL3J/mt/Oo2KXh8UsNNnwfW+H9bnZiTA=;
+        s=k20201202; t=1682909881;
+        bh=kJJLFb8WdwYwMl/NZq/BUetDnWqckZBt/eA9dIWnh+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ljI8FP/S1EPxv0AS0gcR8Mx49zrLpEuIRlejnr0UkolUyQrcGMd3ZQ7Z/Odh/uuge
-         UUvjcpMCMFKC5bW6K6P/oGz86JISRRXXc2bb4M8TkQdnqS6kU4EvimysnUkjn43tpF
-         ASsuZ8B60K8k2e03oC8iGfk+qHC4vy+U31AXEi7mspqArElFp8EfeZrt4AFjUIQ3Cr
-         H6RKVWzROGl9+AtINb1qNTQCK6NY/xudRACB/IdGta1/99o4rZcK01jJJPhgzdbudP
-         M1Kq4dwGDFyFbV3Q/PWEkGxtdIJpNeArySbgR3EmlfOa1hGyRhIzaMWn9V/lApiXh8
-         lcGx3mFBVc4jA==
+        b=Ce7XgPYsVHVMw2pqnKv8gBKeAmf3zz3m+JP1SIP/eP7814sBi+oU3pb7KWe+bcy/a
+         PXJYz6j4QRe1G0mlwgbS0n+A05E7BKIG7oK2R41SrHi3/TYNNRcDE6bLG97dJZB6L9
+         UWCqn0E7Oj90wqYmvtIh/yMrAx80BTJiHEEn1vOd188o7vBSBoDMLikYQWlbK2Dsdg
+         CWl5uadypf1Iy4wiNkWbm96r1DMlrBSIj2wif/VZM4NHXpJzJ5VhK3aJsNzsCqPpE8
+         vSxrVQwwLAjY2YudhfmvfNOfIV4mPNwpTM63m8gqBpdDyubmqT2PYBTSfBoyl9aIhd
+         vRjwWdJXnumtg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, maximlevitsky@gmail.com,
-        oakad@yahoo.com, linux-mmc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 20/44] memstick: r592: Fix UAF bug in r592_remove due to race condition
-Date:   Sun, 30 Apr 2023 22:56:08 -0400
-Message-Id: <20230501025632.3253067-20-sashal@kernel.org>
+Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 21/44] arm64: dts: imx8mq-librem5: Remove dis_u3_susphy_quirk from usb_dwc3_0
+Date:   Sun, 30 Apr 2023 22:56:09 -0400
+Message-Id: <20230501025632.3253067-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -58,51 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 
-[ Upstream commit 63264422785021704c39b38f65a78ab9e4a186d7 ]
+[ Upstream commit cfe9de291bd2bbce18c5cd79e1dd582cbbacdb4f ]
 
-In r592_probe, dev->detect_timer was bound with r592_detect_timer.
-In r592_irq function, the timer function will be invoked by mod_timer.
+This reduces power consumption in system suspend by about 10%.
 
-If we remove the module which will call hantro_release to make cleanup,
-there may be a unfinished work. The possible sequence is as follows,
-which will cause a typical UAF bug.
-
-Fix it by canceling the work before cleanup in r592_remove.
-
-CPU0                  CPU1
-
-                    |r592_detect_timer
-r592_remove         |
-  memstick_free_host|
-  put_device;       |
-  kfree(host);      |
-                    |
-                    | queue_work
-                    |   &host->media_checker //use
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Link: https://lore.kernel.org/r/20230307164338.1246287-1-zyytlz.wz@163.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memstick/host/r592.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/memstick/host/r592.c b/drivers/memstick/host/r592.c
-index 1d35d147552d4..42bfc46842b82 100644
---- a/drivers/memstick/host/r592.c
-+++ b/drivers/memstick/host/r592.c
-@@ -829,7 +829,7 @@ static void r592_remove(struct pci_dev *pdev)
- 	/* Stop the processing thread.
- 	That ensures that we won't take any more requests */
- 	kthread_stop(dev->io_thread);
--
-+	del_timer_sync(&dev->detect_timer);
- 	r592_enable_device(dev, false);
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+index 6895bcc121651..de0dde01fd5c4 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
+@@ -1299,7 +1299,6 @@ &usb_dwc3_0 {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+ 	dr_mode = "otg";
+-	snps,dis_u3_susphy_quirk;
+ 	usb-role-switch;
+ 	status = "okay";
  
- 	while (!error && dev->req) {
 -- 
 2.39.2
 
