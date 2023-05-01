@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 838BC6F3094
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AAB6F3092
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjEAL77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 07:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S232447AbjEAMBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 08:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjEAL7z (ORCPT
+        with ESMTP id S232408AbjEAMBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 07:59:55 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9827C1AC
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 04:59:53 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-76371bc5167so348593939f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 04:59:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682942393; x=1685534393;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YX7rt7FHmGBSzibjRFSAD1tmmQxnbJAEajs/qTIELU=;
-        b=IJz+z//6wruUEJj9PszzFO0PesBkFYfLBKbiuM5uHweoJhA/1r9DrlJC5dEplIylvv
-         D93/IX84E8aNmn5U4xobGXenwIZt3AgMwBJJzkjN+rgO+M63RLYcMzqslGZlkGZrVlbZ
-         F5g5JAxeYvBjWH2yGIkraTaGlSPBYKhX4Gv1qvl7vhrIiDpgeWGgNc73rLbJMS1Oj2d+
-         3e9sB19+YZGsFeToazcuPcQI2Fkl0bn7G97qWsLxZeHP9dsrKYUSg7zAEBTUTGV0ZDmX
-         z/qmQGk0LNVktJpm5oiwf3v2CKjW6O4sTCv+YMLuZbWFA6g35Q1BZVu97yQ0fvmmnfCR
-         LPrA==
-X-Gm-Message-State: AC+VfDyXksRsamPhgNM5AFgcCfQDkxzBfUZUwS10fGpQ8HXeo4eOUzh4
-        Y7RB7xRDIdS7H2Xaq2mq/1Vi3BWab1EGmxWHCXdqzrd20XdV
-X-Google-Smtp-Source: ACHHUZ6iY4KobvzdfiJCVti6rJKLevKOM2A4oEN9IDGKoGC5j0LMz/k1ZGazH/AEuQoHHbSZ66EZ8/M5D19cibm1pK/UkVUNOxYM
-MIME-Version: 1.0
-X-Received: by 2002:a6b:ee11:0:b0:763:5e6c:2a46 with SMTP id
- i17-20020a6bee11000000b007635e6c2a46mr6226135ioh.2.1682942392976; Mon, 01 May
- 2023 04:59:52 -0700 (PDT)
-Date:   Mon, 01 May 2023 04:59:52 -0700
-In-Reply-To: <000000000000716a3705f9adb8ee@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082cdb705faa08ffb@google.com>
-Subject: Re: [syzbot] [usb?] WARNING in usbtmc_ioctl/usb_submit_urb (2)
-From:   syzbot <syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        Mon, 1 May 2023 08:01:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671F129;
+        Mon,  1 May 2023 05:01:11 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 341BwZMp013766;
+        Mon, 1 May 2023 12:01:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=GTzR/JKjiDDUTEOYY5n13fNjrjSQxoI+C4Wak3ZL/MI=;
+ b=QSVvSZXVSbLHdiOepNpT9ASNHYPzaOJtJReRSGfXzF6r8/mtVpp9N4/l6+csnHtnRyol
+ 3qx8IqbKvaxzncn1Sk0x33k5XhfwAAqsXjUdALUtyrieo2240DvO6v0EhKzFGRYKaRLr
+ Z53pbtT8r/8hoL8tthYObvufXZpmSKUde/qvd0Y7DhuhYkiEhYE70NJcwC0x4/VE2v3N
+ PGbl4QK8pxo1MT1oLiKsXkjfUBYO7474Y+v9HwiHWR5Wa4qG2HWEaBRoBdvQ1xIu8gMM
+ sJuryQf913FTzEoSZychk/4DdYBTI7Tb+vXzANzyBHYkGrJv1UQBjCoRhk3oNin1DrVn SQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3q8rkwupq1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 01 May 2023 12:01:04 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 341C10xJ005931;
+        Mon, 1 May 2023 12:01:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3q8vakmwfw-1;
+        Mon, 01 May 2023 12:01:00 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 341C0xVn005848;
+        Mon, 1 May 2023 12:00:59 GMT
+Received: from hyd-lablnx377.qualcomm.com (hyd-lablnx377.qualcomm.com [10.204.178.226])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 341C0x1b005846;
+        Mon, 01 May 2023 12:00:59 +0000
+Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
+        id EAD0020EB7; Mon,  1 May 2023 17:30:58 +0530 (IST)
+From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
+        jiangzp@google.com, mmandlik@google.com,
+        Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Subject: [PATCH v1 1/2] Bluetooth: hci_qca: Add qcomm devcoredump sysfs support
+Date:   Mon,  1 May 2023 17:30:42 +0530
+Message-Id: <1682942442-21507-1-git-send-email-quic_saluvala@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KR4KxSX8uvS134IokWDhl9buk6kku2mw
+X-Proofpoint-GUID: KR4KxSX8uvS134IokWDhl9buk6kku2mw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-01_06,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ adultscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305010095
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,70 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+This patch implements the hci_qca driver side .coredump() callback to
+trigger a devcoredump via sysfs
 
-HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17d08158280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d56ffc213bf6bf4a
-dashboard link: https://syzkaller.appspot.com/bug?extid=ce77725b89b7bd52425c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15027ef7c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d7550c280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/51c43e265c8a/disk-58390c8c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7c64f4eeaf4d/vmlinux-58390c8c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e5d8f49c4804/bzImage-58390c8c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ce77725b89b7bd52425c@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 3-1: BOGUS control dir, pipe 80000b80 doesn't match bRequestType fd
-WARNING: CPU: 0 PID: 5100 at drivers/usb/core/urb.c:411 usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-Modules linked in:
-CPU: 0 PID: 5100 Comm: syz-executor428 Not tainted 6.3.0-syzkaller-12049-g58390c8ce1bd #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:usb_submit_urb+0x14a7/0x1880 drivers/usb/core/urb.c:411
-Code: 7c 24 40 e8 1b 13 5c fb 48 8b 7c 24 40 e8 21 1d f0 fe 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b5 fc 8a e8 19 c8 23 fb <0f> 0b e9 9f ee ff ff e8 ed 12 5c fb 0f b6 1d 12 8a 3c 08 31 ff 41
-RSP: 0018:ffffc90003d2fb00 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8880789e9058 RCX: 0000000000000000
-RDX: ffff888029593b80 RSI: ffffffff814c1447 RDI: 0000000000000001
-RBP: ffff88801ea742f8 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: ffff88802915e528
-R13: 00000000000000fd R14: 0000000080000b80 R15: ffff8880222b3100
-FS:  0000555556ca63c0(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9ef4d18150 CR3: 0000000073e5b000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- usb_start_wait_urb+0x101/0x4b0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
- usbtmc_ioctl_request drivers/usb/class/usbtmc.c:1954 [inline]
- usbtmc_ioctl+0x1b3d/0x2840 drivers/usb/class/usbtmc.c:2097
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f9ef4ca4e49
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff8d0be0d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f9ef4ca4e49
-RDX: 0000000020000040 RSI: 00000000c0105b08 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 000000000000000f R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000015f73
-R13: 00007fff8d0be160 R14: 00007fff8d0be150 R15: 00007fff8d0be11c
- </TASK>
-
-
+Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Reviewed-by: Manish Mandlik <mmandlik@google.com>
+v1:Initial Patch
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ drivers/bluetooth/hci_qca.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 1b06450..ca98f6d 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -2380,6 +2380,18 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
+ MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
+ #endif
+ 
++#ifdef CONFIG_DEV_COREDUMP
++static void hciqca_coredump(struct device *dev)
++{
++	struct serdev_device *serdev = to_serdev_device(dev);
++	struct qca_serdev *qcadev = serdev_device_get_drvdata(serdev);
++	struct hci_uart *hu = &qcadev->serdev_hu;
++	struct hci_dev  *hdev = hu->hdev;
++
++	if (hdev->dump.coredump)
++		hdev->dump.coredump(hdev);
++}
++#endif
+ 
+ static struct serdev_device_driver qca_serdev_driver = {
+ 	.probe = qca_serdev_probe,
+@@ -2390,6 +2402,9 @@ static struct serdev_device_driver qca_serdev_driver = {
+ 		.acpi_match_table = ACPI_PTR(qca_bluetooth_acpi_match),
+ 		.shutdown = qca_serdev_shutdown,
+ 		.pm = &qca_pm_ops,
++#ifdef CONFIG_DEV_COREDUMP
++		.coredump = hciqca_coredump,
++#endif
+ 	},
+ };
+ 
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+
