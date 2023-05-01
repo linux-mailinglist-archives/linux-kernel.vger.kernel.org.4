@@ -2,132 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4A46F3138
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E296F313E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 14:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbjEAMvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 08:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
+        id S232421AbjEAMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 08:54:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbjEAMvT (ORCPT
+        with ESMTP id S231438AbjEAMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 08:51:19 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0955510E9
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 05:51:17 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f00d41df22so22360593e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 05:51:16 -0700 (PDT)
+        Mon, 1 May 2023 08:54:47 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82E210C0;
+        Mon,  1 May 2023 05:54:45 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-95369921f8eso404755766b.0;
+        Mon, 01 May 2023 05:54:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682945475; x=1685537475;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GMu9HcQF4QeQEqykNogwvdEMdZ5pVCdj+UzY/Re9IBU=;
-        b=tywAK9J6+wYBFwADM2G/bCN6KvbpkTtMLPIWFeGbH264DMGpBqwRndE+GSyBcW6MdP
-         lXlUdAyneaJkp9TBwIK3YY+eE67v4mFfVVc4URA/04Zrxcrd2Vm6kmQIVeZAek12a/sE
-         q/YmUD+6UWxRommSlxTzRdnFjrYlFIjaWKcfYBNSKZQMWcaxQ80bZJaJnTrN1ktyCGSg
-         8KVMFJlU/g9/D9Evo/ZJuu6NHDJoOU5cgLnOSRVjzMqBr5J0sEpCfgb1LKQDFv6ZKMNv
-         dGiCI98bSkB1FmaRsR4hjkzB9G2jOilhaa3M2E54iZDB4p62DqFujdVMLW1zAEbEJE1s
-         NlzA==
+        d=googlemail.com; s=20221208; t=1682945684; x=1685537684;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cvMlMk+g9+vzaZ1OWKXbFrRdjkHE+cIOaEaWSWx3yeM=;
+        b=h07jkgAH2pyhCZVKjt79SZAaEYWyQXm6TWqpoKmnzK6zYzTv2oE3Ob8cZEeBvw/+Bf
+         8IIeRtYzTay148BY98KudqhCgDU2d3PY2qSr8votk+DQORTNKq7pSMOfZqCR6QKNXpgt
+         WRc7gqG+Z7zPhYAp6+k255qxIDHRkXatOvFP1038WhIIwdzGyTpdXCOh8uqKtrRz0So8
+         5fEq0l7MAt6hmohkQ1I2JU65EBvkHOgoi+K684ScgtehYOq0/yxL1EmoBqDdZ8KwVDO8
+         G37ZbyNszv/K2utdFde8ObsNyEjEOxMRfroBwx/CZS5SQInEGHoTZ3WAxHdVNJugQLXE
+         Jorg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682945475; x=1685537475;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMu9HcQF4QeQEqykNogwvdEMdZ5pVCdj+UzY/Re9IBU=;
-        b=Fveue0cs/RWKx4aQlqiQfeBKXcRPLAaW7azQtkm/VlaF8/abXzyJUFJgt36jBffALj
-         xDdtv+IQHqNI9sNAJ9Sr8TUvzSL6kKTWp1mBRziSaIoLzfej75w8IyKYCuQzUBYbYMbt
-         4RmFsLdOL/V8O7sqCYyF/3OZaqQQEx1TTrEhYC3iMCxs3GmAqMOjbWa/T72u3CO6YB51
-         pTYXd7ye0HTK2WrtOauXSso1MlwrdrwSl3x3cYr/coYhTayaiW+xoCo7Gg9TnFCVFZhW
-         zhO65S0Mh7JWmOz8GkXiOOeCMIFbmw0DYg6gFx02dJWYX4zXqqZa5QWRMDIt3pdfqSvX
-         prJg==
-X-Gm-Message-State: AC+VfDz2m+emt/iR5KR0iT4udPl+WTQVEcR13NsACtfbCkx5+lyhRLML
-        gzyNW/1zuU85GcVwYlafEqP0kg==
-X-Google-Smtp-Source: ACHHUZ46Mz5GjPEWGs+YeYkWKnwzrRp5Mi5anfIaVJd8IjQr1C7yrdSoZPH0IgAjwO8ac8XefgdW7Q==
-X-Received: by 2002:a05:6512:39c8:b0:4eb:1599:f3b7 with SMTP id k8-20020a05651239c800b004eb1599f3b7mr5066308lfu.13.1682945475286;
-        Mon, 01 May 2023 05:51:15 -0700 (PDT)
-Received: from [192.168.1.101] (abyl248.neoplus.adsl.tpnet.pl. [83.9.31.248])
-        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b004eb00c0d417sm4694171lfc.130.2023.05.01.05.51.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 05:51:14 -0700 (PDT)
-Message-ID: <8feae59c-b762-8cc8-7aa9-237ce4af5b1e@linaro.org>
-Date:   Mon, 1 May 2023 14:51:13 +0200
+        d=1e100.net; s=20221208; t=1682945684; x=1685537684;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cvMlMk+g9+vzaZ1OWKXbFrRdjkHE+cIOaEaWSWx3yeM=;
+        b=N5BSEWKQMK1p6tnbjJu7fjh8QVJ4Ru+v9i0c5hEeshk4A+nczHeXQdhEqtGmDjO2ZF
+         AvPTeIn11KqHAdgQFk7mD37tZ5zu8uI13ftFw5V0z/3OPYsAhipq4rzHp5yROlUX8LN5
+         IUJIW1OxH3obVEf9knNSEH5GWTarm+uhjJempa7oz0+OsRnWeV4yI73cWx3pGm6j+4gm
+         +0jzJseav99mjMM2r2BJ3qphC/Jf327NYH+RYybzAIjIejb2YX+93cI4SuOfFPXhzk4o
+         i4DXtgntLKwe/dNqPXCZuDq+ivloVIdp/mRTtZbSHzF3Q2we4evTT9CJ253OKZGivWZd
+         G1rQ==
+X-Gm-Message-State: AC+VfDxnAQA+qMgMtVh1mc684l1sfQt6lVWnWg8PCff+ZnqdbBwkdrzK
+        7dHa4xVVsZPfjGADNGqcA6Y3y7JpiZNtUNhxDKk=
+X-Google-Smtp-Source: ACHHUZ6/a2ChTGXpyoAxt0VdAT7RdfEXxC/8hthQRDyOA0Bawg7ngmFYluiEfZ9SB+z5QTcA7urN8/4WQOwEIxw+54M=
+X-Received: by 2002:a17:907:360b:b0:960:ce5:20c0 with SMTP id
+ bk11-20020a170907360b00b009600ce520c0mr12214296ejc.20.1682945683886; Mon, 01
+ May 2023 05:54:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom,ids: Add IDs for IPQ5018
- family
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230429193336.600629-1-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230429193336.600629-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230425165624.11999-1-exkcmailist@inbox.lv> <20230425165624.11999-3-exkcmailist@inbox.lv>
+In-Reply-To: <20230425165624.11999-3-exkcmailist@inbox.lv>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 1 May 2023 14:54:32 +0200
+Message-ID: <CAFBinCA4c1qDC5=NWJKEMkTh5HfhkqpgrpetgEH3kJTY_qLVHA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] arm64: dts: meson-gxl: add support for Xiaomi Mi
+ box 3
+To:     Karl Chan <exkcmailist@inbox.lv>
+Cc:     linux-amlogic@lists.infradead.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 25, 2023 at 6:57=E2=80=AFPM Karl Chan <exkcmailist@inbox.lv> wr=
+ote:
+>
+> From: "Karl Chan"  <exkcmailist@inbox.lv>
+>
+> The Xiaomi Mi box 3 is a TV box based on the Amlogic S905X chipset.
+> There are two variants:
+> - 2 GiB/8GIB
+> - 1 GiB/4GIB
+>
+> Both variants come with:
+> - 802.11a/b/g/n/ac wifi (BCM4345)
+> - HDMI , AV (CVBS) and S/PDIF optical output
+> - 1x USB
+>
+> Signed-off-by: Karl Chan <exkcmailist@inbox.lv>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-
-On 29.04.2023 21:33, Robert Marko wrote:
-> Add SOC IDs for the IPQ5018 family.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
->  include/dt-bindings/arm/qcom,ids.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
-> index 802495b20276..c1283bad81e1 100644
-> --- a/include/dt-bindings/arm/qcom,ids.h
-> +++ b/include/dt-bindings/arm/qcom,ids.h
-> @@ -216,6 +216,9 @@
->  #define QCOM_ID_SM8350			439
->  #define QCOM_ID_QCM2290			441
->  #define QCOM_ID_SM6115			444
-> +#define QCOM_ID_IPQ5010			446
-> +#define QCOM_ID_IPQ5018			447
-> +#define QCOM_ID_IPQ5028			448
->  #define QCOM_ID_SC8280XP		449
->  #define QCOM_ID_IPQ6005			453
->  #define QCOM_ID_QRB5165			455
-> @@ -229,6 +232,9 @@
->  #define QCOM_ID_SM8450_3		482
->  #define QCOM_ID_SC7280			487
->  #define QCOM_ID_SC7180P			495
-> +#define QCOM_ID_IPQ5000			503
-
-> +#define QCOM_ID_IPQ0509			504
-> +#define QCOM_ID_IPQ0518			505
-Are you sure these names are in tact?
-
-Konrad
->  #define QCOM_ID_SM6375			507
->  #define QCOM_ID_IPQ9514			510
->  #define QCOM_ID_IPQ9550			511
-> @@ -236,6 +242,7 @@
->  #define QCOM_ID_IPQ9570			513
->  #define QCOM_ID_IPQ9574			514
->  #define QCOM_ID_SM8550			519
-> +#define QCOM_ID_IPQ5016			520
->  #define QCOM_ID_IPQ9510			521
->  #define QCOM_ID_QRB4210			523
->  #define QCOM_ID_QRB2210			524
-> @@ -243,6 +250,7 @@
->  #define QCOM_ID_QRU1000			539
->  #define QCOM_ID_QDU1000			545
->  #define QCOM_ID_QDU1010			587
-> +#define QCOM_ID_IPQ5019			569
->  #define QCOM_ID_QRU1032			588
->  #define QCOM_ID_QRU1052			589
->  #define QCOM_ID_QRU1062			590
+Note: Neil will probably only apply this (and the other patch from
+this series) after 6.4-rc1 has been released
