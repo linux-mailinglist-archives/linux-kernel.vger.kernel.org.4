@@ -2,183 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA686F3883
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038F56F388B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbjEATzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S232804AbjEATzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbjEATzQ (ORCPT
+        with ESMTP id S232467AbjEATzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:55:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C083F2107
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:55:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA6006111F
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 19:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E80C433EF;
-        Mon,  1 May 2023 19:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682970913;
-        bh=yVadDZkKTAgZPvoruE+W0GbcwpOyHNSfv14dBmKX55A=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YANzG2sbpFwyfn0olLgq955pBelAikqDYTjIhmEyTq7s6R/gluMaDAYYmWlPkstBE
-         CKPgSoIXO6LfByKtw24CYIxRxo1ftbyNGUZEqr4sXrT+HeNcJiQT9apTnwVrP6+ier
-         KP+4SgKUo+u/V3LGdqZOaszU8YXo8fONTpxZ+1U1+XF5ezN59J6B0RIFR4IOar4DAW
-         8R94/haVco7MiNGRlLe5Jh+miVqiQq7d3PUbgg9A0Vk6+4sFnVsoi08JAcINQHrx4m
-         ub8B/1li8YqLJb8ob6A8BT4ZdyG2UG+D1qLtnf7BKv8s0ROBvpAVZx4MGtYLTLVQKF
-         PHhfaG7QmEDIA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Heiko Stuebner <heiko@sntech.de>, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, paul.walmsley@sifive.com
-Cc:     heiko@sntech.de, kito.cheng@sifive.com, jrtc27@jrtc27.com,
-        conor.dooley@microchip.com, matthias.bgg@gmail.com,
-        heinrich.schuchardt@canonical.com, greentime.hu@sifive.com,
-        nick.knight@sifive.com, christoph.muellner@vrull.eu,
-        philipp.tomsich@vrull.eu, richard.henderson@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>
-Subject: Re: [PATCH 0/4] Expose the isa-string via the AT_BASE_PLATFORM aux
- vector
-In-Reply-To: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
-References: <20230424194911.264850-1-heiko.stuebner@vrull.eu>
-Date:   Mon, 01 May 2023 21:55:10 +0200
-Message-ID: <87ednz7roh.fsf@all.your.base.are.belong.to.us>
+        Mon, 1 May 2023 15:55:37 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB892107;
+        Mon,  1 May 2023 12:55:32 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50a14564d17so42675000a12.0;
+        Mon, 01 May 2023 12:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682970930; x=1685562930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R11iQvyL03GOSrYQIrHHw/DmH/A/XUw7XINQmYhJ5NI=;
+        b=peWCZZYGT1AxSPcYux7QrLuiRkQhYXkjUJi2FuQArobYQoTn9v/kN8dB6TUmneJdcv
+         /J+B22IzwHKPMifbMPXags92ZjQ/27VqZZxuChSpgYst6yJIFxKWVMlLTy9qjyU3RuRK
+         QPgU0Y4ClZhElCWA39agtUqu85kBdch4q3q5V6LnioZG+lUY5vdcvqtx6dCLfiYJC0rj
+         OwSm2gxKMNsZvzsh3OW5dQuMJCiUsE7/uqN9e2rNUigdFX61s/2viP/+Bl0LF19hRR7o
+         OywWxt9pKI63y636RxrmssOcsqxlaNP4czqX4Fi/IicxU7Xt0mS0IA1A31rAmOinGYc0
+         qc8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682970930; x=1685562930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R11iQvyL03GOSrYQIrHHw/DmH/A/XUw7XINQmYhJ5NI=;
+        b=Qwzmvqy048MOOD7f5radSzJhSlTXhhFdLeX8n3UCHKJcGo/9FHeV6QZQIIZpO7F00T
+         NvBelyxE1zwxSFLoeMLfK/xh9Nek6rKgdtga/On9IzH+i7mXN5suew9rKHZ4kgFNdvUI
+         Y37GSe7mcmcXQz7rNSPtm5mSar4GGbdLK7q1dZkdkp0Aqh5K0Yde0np6cZtnP+YTAr2H
+         aO/aelL53cdP2LZ/uZPw90fCHoJIv9z6P/ec0OJziRpcUivmXwBIsu1iYxbg+NKf11GD
+         2kk62H7yONN8Yf+kdUS7pWR2eTQzpWYrJmk9uOzmiHNLtK4RDq8jANS0tH0aNkc46+Dl
+         IoTA==
+X-Gm-Message-State: AC+VfDyPhiJCKetZvNAWl29Ggn1DbmwIaMWGtdh7vLs/PBDCAZq5+3cE
+        VCHl4u8y1PLgA14mWh9PHKg=
+X-Google-Smtp-Source: ACHHUZ4IveGs8ii8zhWZnuM7WomrlcQtno4lmtlx1/IanE/Cp9xLGFa/d5MzJoharVEa0KYhmSCi9A==
+X-Received: by 2002:a17:907:9285:b0:95f:969e:dc5a with SMTP id bw5-20020a170907928500b0095f969edc5amr15852297ejc.30.1682970930448;
+        Mon, 01 May 2023 12:55:30 -0700 (PDT)
+Received: from localhost.my.domain (83.8.115.30.ipv4.supernova.orange.pl. [83.8.115.30])
+        by smtp.gmail.com with ESMTPSA id og36-20020a1709071de400b009600ce4fb53sm6333650ejc.37.2023.05.01.12.55.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 12:55:29 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH v3 00/13] Re-introduce Exynos4212 support and add Samsung Galaxy Tab 3 8.0 boards
+Date:   Mon,  1 May 2023 21:55:12 +0200
+Message-Id: <20230501195525.6268-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Heiko Stuebner <heiko@sntech.de> writes:
+This patches re-introduces the Exynos4212 platform and adds support
+for the Samsung Galaxy Tab 3 8.0 series of tablets that uses it:
 
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->
-> The hwprobing infrastructure was merged recently [0] and contains a
-> mechanism to probe both extensions but also microarchitecural features
-> on a per-core level of detail.
->
-> While discussing the solution internally we identified some possible issu=
-es,
-> tried to understand the underlying issue and come up with a solution for =
-it.
-> All these deliberations overlapped with hwprobing being merged, but that
-> shouldn't really be an issue, as both have their usability - see below.
-> Also please see the "Things to consider" at the bottom!
->
->
-> Possible issues:
-> - very much limited to Linux
-> - schedulers run processes on all cores by default, so will need
->   the common set of extensions in most cases
+ - Samsung Galaxy Tab 3 8.0 WiFi (SM-T310/lt01wifi)
+ - Samsung Galaxy Tab 3 8.0 3G (SM-T311/lt013g)
+ - Samsung Galaxy Tab 3 8.0 LTE (SM-T315/lt01lte)
 
-...which hwprobe has support for via the CPU mask. no?
+What works:
 
-> - each new extensions requires an uapi change, requiring at least
->   two pieces of software to be changed
-> - adding another extension requires a review process (only known
->   extensions can be exposed to user-space)
-> - vendor extensions have special needs and therefore possibly
->   don=E2=80=99t fit well
->
->
-> Limited to Linux:
-> -----------------
->
-> The syscall and its uapi is Linux-specific and other OSes probably
-> will not defer to our review process and requirements just to get
-> new bits in. Instead most likely they'll build their own systems,
-> leading to fragmentation.
+ - Display and backlight
+ - Touchscreen (without touchkeys)
+ - GPIO buttons, hall sensor
+ - WiFi and Bluetooth
+ - USB, fuel gauge, charging
+ - Accelerometer and magnetometer
+ - WiFi model only: light sensor
 
-There are a number of examples where multiple OSs have followed what
-Linux does, and vice versa. I'd say the opposite -- today system
-builders do not do their own solution, but review what's out there and
-mimics existing ones.
+Display panel bindings used by the Tab3 DTSI are added in a separate
+patchset - "[PATCH 0/3] Add Samsung S6D7AA0 panel controller driver":
+https://lore.kernel.org/all/20230501185103.25939-1-aweber.kernel@gmail.com/
 
-Personally I think this argument is moot, and will not matter much for
-fragmentation.
+LP855X binding updates used by the Tab3 DTSI are added in a separate
+patchset - "[PATCH 0/4] video: backlight: lp855x: modernize bindings":
+https://lore.kernel.org/all/20230429104534.28943-1-aweber.kernel@gmail.com/
 
-> Feature on all cores:
-> ---------------------
->
-> Arnd previously ([1]) commented in the discussion, that there
-> should not be a need for optimization towards hardware with an
-> asymmetric set of features. We believe so as well, especially
-> when talking about an interface that helps processes to identify
-> the optimized routines they can execute.
->
-> Of course seeing it with this finality might not take into account
-> the somewhat special nature of RISC-V, but nevertheless it describes
-> the common case for programs very well.
->
-> For starters the scheduler in its default behaviour, will try to use any
-> available core, so the standard program behaviour will always need the
-> intersection of available extensions over all cores.
->
->
-> Limiting program execution to specific cores will likely always be a
-> special use case and already requires Linux-specific syscalls to
-> select the set of cores.
->
-> So while it can come in handy to get per-core information down the road
-> via the hwprobing interface, most programs will just want to know if
-> they can use a extension on just any core.
->
->
-> Review process:
-> ---------------
->
-> There are so many (multi-letter-)extensions already with even more in
-> the pipeline. To expose all of them, each will require a review process
-> and uapi change that will make defining all of them slow as the
-> kernel needs patching after which userspace needs to sync in the new
-> api header.
->
->
-> Vendor-extensions:
-> ------------------
->
-> Vendor extensions are special in their own right.
-> Userspace probably will want to know about them, but we as the kernel
-> don't want to care about them too much (except as errata), as they're
-> not part of the official RISC-V ISA spec.
->
-> Getting vendor extensions from the dt to userspace via hwprobe would
-> require coordination efforts and as vendors have the tendency to invent
-> things during their development process before trying to submit changes
-> upstream this likely would result in conflicts with assigned ids down
-> the road. Which in turn then may create compatibility-issues with
-> userspace builds built on top of the mainline kernel or a pre-
-> existing vendor kernel.
->
-> The special case also is that vendor A could in theory implement an
-> extension from vendor B. So this would require to actually assign
-> separate hwprobe keys to vendors (key for xthead extensions, key for
-> xventana extensions, etc). This in turn would require vendors to
-> come to the mainline kernel to get assigned a key (which in reality
-> probably won't happen), which would then make the kernel community
-> sort of an id authority.
->
->
->
->
-> To address these, the attached patch series adds a second interface
-> for the common case and "just" exposes the isa-string via the
-> AT_BASE_PLATFORM aux vector.
+Changed in v2:
+ - Added note about display panel bindings to cover letter and
+   Tab3 DTSI commit
 
-*A second interface* introduced the second hwprobe landed. Really?
-Start a discussion on how to extend hwprobe instead.
+Changed in v3:
+ - Addressed review comments
+ - Tab3 DTS tweaks (remove broken RTC, add CPU thermal node)
+ - Fixed typos in Exynos DTSIs
+
+Artur Weber (13):
+  dt-bindings: soc: samsung: add Exynos4212 PMU compatible
+  dt-bindings: clock: add Exynos4212 clock compatible
+  ARM: exynos: Re-introduce Exynos4212 support
+  soc: samsung: Re-introduce Exynos4212 support
+  clk: samsung: Add Exynos4212 compatible to CLKOUT driver
+  clk: samsung: Re-add support for Exynos4212 CPU clock
+  Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
+  Revert "phy: Remove SOC_EXYNOS4212 dep. from PHY_EXYNOS4X12_USB"
+  ARM: dts: Move common Exynos4x12 definitions to exynos4x12.dtsi
+  ARM: dts: Re-introduce Exynos4212 DTSI
+  ARM: dts: exynos: Fix some typos in comments
+  dt-bindings: arm: samsung: Add Samsung Galaxy Tab3 family boards
+  ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
+
+ .../bindings/arm/samsung/samsung-boards.yaml  |   10 +
+ .../bindings/clock/samsung,exynos-clock.yaml  |    1 +
+ .../bindings/soc/samsung/exynos-pmu.yaml      |    5 +
+ arch/arm/boot/dts/Makefile                    |    3 +
+ arch/arm/boot/dts/exynos3250-pinctrl.dtsi     |    4 +-
+ arch/arm/boot/dts/exynos3250.dtsi             |    2 +-
+ arch/arm/boot/dts/exynos4.dtsi                |    2 +-
+ arch/arm/boot/dts/exynos4210-pinctrl.dtsi     |    4 +-
+ arch/arm/boot/dts/exynos4212-tab3-3g8.dts     |   29 +
+ arch/arm/boot/dts/exynos4212-tab3-lte8.dts    |   44 +
+ arch/arm/boot/dts/exynos4212-tab3-wifi8.dts   |   26 +
+ arch/arm/boot/dts/exynos4212-tab3.dtsi        | 1171 +++++++++++++++++
+ arch/arm/boot/dts/exynos4212.dtsi             |  157 +++
+ arch/arm/boot/dts/exynos4412.dtsi             |  646 +--------
+ ...2-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} |    6 +-
+ .../dts/{exynos4412.dtsi => exynos4x12.dtsi}  |  165 +--
+ arch/arm/boot/dts/exynos5.dtsi                |    2 +-
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi     |    4 +-
+ arch/arm/boot/dts/exynos5250.dtsi             |    2 +-
+ arch/arm/boot/dts/exynos5260-pinctrl.dtsi     |    2 +-
+ arch/arm/boot/dts/exynos5410.dtsi             |    2 +-
+ arch/arm/boot/dts/exynos5420-pinctrl.dtsi     |    2 +-
+ arch/arm/boot/dts/exynos5420.dtsi             |    2 +-
+ arch/arm/boot/dts/exynos5800.dtsi             |    2 +-
+ arch/arm/boot/dts/s3c6400.dtsi                |    2 +-
+ arch/arm/boot/dts/s3c6410.dtsi                |    2 +-
+ arch/arm/boot/dts/s3c64xx.dtsi                |    2 +-
+ arch/arm/boot/dts/s5pv210-pinctrl.dtsi        |    2 +-
+ arch/arm/boot/dts/s5pv210.dtsi                |    2 +-
+ arch/arm/mach-exynos/Kconfig                  |    5 +
+ arch/arm/mach-exynos/common.h                 |    8 +
+ arch/arm/mach-exynos/exynos.c                 |    2 +
+ arch/arm/mach-exynos/firmware.c               |    8 +-
+ arch/arm/mach-exynos/pm.c                     |    2 +-
+ arch/arm/mach-exynos/suspend.c                |    4 +
+ drivers/clk/samsung/clk-exynos-clkout.c       |    3 +
+ drivers/clk/samsung/clk-exynos4.c             |   44 +-
+ .../media/platform/samsung/exynos4-is/Kconfig |    2 +-
+ .../platform/samsung/exynos4-is/fimc-core.c   |    2 +-
+ .../platform/samsung/exynos4-is/fimc-lite.c   |    2 +-
+ drivers/phy/samsung/Kconfig                   |    2 +-
+ drivers/soc/samsung/exynos-pmu.c              |    9 +
+ drivers/soc/samsung/exynos-pmu.h              |    2 +
+ drivers/soc/samsung/exynos4-pmu.c             |   13 +-
+ 44 files changed, 1534 insertions(+), 837 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-3g8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-lte8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3-wifi8.dts
+ create mode 100644 arch/arm/boot/dts/exynos4212-tab3.dtsi
+ create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
+ rename arch/arm/boot/dts/{exynos4412-pinctrl.dtsi => exynos4x12-pinctrl.dtsi} (99%)
+ copy arch/arm/boot/dts/{exynos4412.dtsi => exynos4x12.dtsi} (81%)
 
 
-Bj=C3=B6rn
+base-commit: e154a338e16cc3b3bbd54c891253319d22383746
+-- 
+2.40.1
+
