@@ -2,156 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0806F34D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D68D6F34D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbjEARD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S233341AbjEAREa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjEARCe (ORCPT
+        with ESMTP id S232940AbjEAREM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:02:34 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CB710D4
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:57:12 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-55a42c22300so22440167b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960200; x=1685552200;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=voe2xx017YXPnsPA1F569u968pU4cdVPLrVyFh58V3A=;
-        b=XY3g0fA5IrJ+YzYe2wUQ0ftZyFUg7ny2GrTo3NPiBlk4iPlMC/kY+SH8g6iLrwV+KV
-         Xw+if+jca7PJgAtbAXeVriY1aFJ/EteLLOMZx1AdK6gJrXbG1uRZWDO/40Axb4AODOAW
-         bu8B0l1k4HzrQxgM9N1NQnABkM6L6EHe4PLk5Qr9MgkaJ72bwWRTz68SbwPhkOTfAlCN
-         aIInpOCqjYNQr/7r19P8lUnDyjtSJAnNSRwk6D0bpZ0QASPWz9H1GwXTn8bC79Kr3VsJ
-         to3IBoyJHWuDBBn4X4nEQDSitAsGc5WJp6sVno05l5o1QoTuKQpKB8qBzlmM5zczDq7s
-         CPoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960200; x=1685552200;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=voe2xx017YXPnsPA1F569u968pU4cdVPLrVyFh58V3A=;
-        b=bvEIFLdKJHZsdYvx4Abqlj23hFcvnJ2jYz3F68lMjNLowJTRdSswxCXNZ8gigs6Zw/
-         m1FQsPoe4tQPQZMouPcDr2JDIx8qyGE1SJApZq+f9L/AaJ55nOU4xMdCMwLOHi6+v/jI
-         ege2Phxpiw21vrCnMwj0b8/2AsWDZ4L2w7UoYEzvj3H7fi3bL0FH9nqRO5rbJbFhXvw3
-         jqa6fCSw++4ubbGoXzZn90RatZQDq51PFyvtljB0tQZSRxDAEkrg4uaRmXz0+mS63+38
-         CYONiCS2+jIHd+NQvVRRznpdB+lna4bm1X/bTI0XvLZgMrF8dkoRkiuoWc3NaOrKkRBI
-         z6dw==
-X-Gm-Message-State: AC+VfDyWrLcdWSZhAvfzmSXF+h9qeYhTIHuBEAUzZPlVJ7TOPJRLpPd9
-        hxkVdsS4xrLvXSutPqRrsnzZ4nOpIBk=
-X-Google-Smtp-Source: ACHHUZ7TphX74FdXdGj2KrrIAly5W9cbCjXqr70LC9E11i/xFawgHPr35IiqOdTvLYzAxeQM5sfRxSe2CSI=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a81:de0c:0:b0:559:e97a:cb21 with SMTP id
- k12-20020a81de0c000000b00559e97acb21mr4262900ywj.9.1682960199781; Mon, 01 May
- 2023 09:56:39 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:50 -0700
-In-Reply-To: <20230501165450.15352-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-41-surenb@google.com>
-Subject: [PATCH 40/40] MAINTAINERS: Add entries for code tagging and memory
- allocation profiling
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        surenb@google.com, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 1 May 2023 13:04:12 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756B41723;
+        Mon,  1 May 2023 09:57:46 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 77EB080F77;
+        Mon,  1 May 2023 18:57:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1682960237;
+        bh=b3qkibK7joujGHhVtrdK8VQC4GW/YOZzJdxGgN5lC1s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WHubrOxIRYZGhwaWLgw65oxEk9rEPGVynFE51nHGQBYQw0tWOd/xeNvr6WZHbFWzH
+         JaIf8/9I0osfDKWP5QVG9AQx/NP6zyBDhZyTDy4EyQdbb76eP5b8eOSWpcS8q/gswO
+         7stGo/pyVjpnpkt6i5dYnPW2JosGow7ijnvc/7ISjJR3kdmBHqdWbcCGV0ca88vKVV
+         JxXEwzj88TYvtZ1UtxcoQtuN7H/+P4Inw7VLkqNvNCoajsoIxjAxTmUTAyJz7qCx9J
+         O+xnk9PeFGdKJsNwqO0RkGhZIpqZN5VSABPubgzgmc41zQ/fNT2DfbUd67XUYijaLb
+         4CrsUR5/FPNbw==
+Message-ID: <ebd5de56-38c3-bbe4-0d98-45934aea61a7@denx.de>
+Date:   Mon, 1 May 2023 18:57:15 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V2 ] bindings: arm64: Add an entry in imx8mm boards for
+ Emtop SOM-IMX8MM
+Content-Language: en-US
+To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Cc:     "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "festevam@denx.de" <festevam@denx.de>,
+        "frieder.schrempf@kontron.de" <frieder.schrempf@kontron.de>,
+        "marcel.ziswiler@toradex.com" <marcel.ziswiler@toradex.com>,
+        "max.krummenacher@toradex.com" <max.krummenacher@toradex.com>,
+        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
+        "matthias.schiffer@tq-group.com" <matthias.schiffer@tq-group.com>,
+        "denys.drozdov@toradex.com" <denys.drozdov@toradex.com>,
+        "leoyang.li@nxp.com" <leoyang.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <BM1PR01MB4899F56FF3D6A2C0F3C3C3449A6E9@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <BM1PR01MB4899F56FF3D6A2C0F3C3C3449A6E9@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
+On 5/1/23 18:37, Himanshu Bhavani wrote:
+>>From 8b789f3a997c1fbe253e9b5c5f5c370b262f7efd Mon Sep 17 00:00:00 2001
+> From: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+> Date: Mon, 1 May 2023 21:59:47 +0530
+> Subject: [PATCH] Add an entry in imx8mm boards for Emtop SOM-IMX8MM
 
-The new code & libraries added are being maintained - mark them as such.
+Can you try and use 'git send-email' to send your patch ?
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+git send-email --annotate --to=devicetree@vger.kernel.org -1 HEAD
+
+> Change in v2:
+> 	- Update vendor name
+> 	- Add board name
+
+This should be ...
+
+> Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+
+
+... here, but also add '---' line above it, like so:
+
 ---
- MAINTAINERS | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+V2: - Do stuff
+     - Other stuff
+V3: - More stuff ...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3889d1adf71f..6f3b79266204 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5116,6 +5116,13 @@ S:	Supported
- F:	Documentation/process/code-of-conduct-interpretation.rst
- F:	Documentation/process/code-of-conduct.rst
- 
-+CODE TAGGING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/codetag.h
-+F:	lib/codetag.c
-+
- COMEDI DRIVERS
- M:	Ian Abbott <abbotti@mev.co.uk>
- M:	H Hartley Sweeten <hsweeten@visionengravers.com>
-@@ -11658,6 +11665,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
- F:	drivers/video/backlight/ktz8866.c
- 
-+LAZY PERCPU COUNTERS
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/lazy-percpu-counter.h
-+F:	lib/lazy-percpu-counter.c
-+
- L3MDEV
- M:	David Ahern <dsahern@kernel.org>
- L:	netdev@vger.kernel.org
-@@ -13468,6 +13481,15 @@ F:	mm/memblock.c
- F:	mm/mm_init.c
- F:	tools/testing/memblock/
- 
-+MEMORY ALLOCATION PROFILING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	include/linux/alloc_tag.h
-+F:	include/linux/codetag_ctx.h
-+F:	lib/alloc_tag.c
-+F:	lib/pgalloc_tag.c
-+
- MEMORY CONTROLLER DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- L:	linux-kernel@vger.kernel.org
--- 
-2.40.1.495.gc816e09b53d-goog
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> index 442ce8f4d675..06eb2c790f90 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -884,6 +884,7 @@ properties:
+>                 - beacon,imx8mm-beacon-kit  # i.MX8MM Beacon Development Kit
+>                 - boundary,imx8mm-nitrogen8mm  # i.MX8MM Nitrogen Board
+>                 - dmo,imx8mm-data-modul-edm-sbc # i.MX8MM eDM SBC
+> +              - emtop,imx8mm-emtop          # i.MX8MM Emtop SoM
 
+Please also update 
+Documentation/devicetree/bindings/vendor-prefixes.yaml with emtop vendor 
+prefix, do so in separate patch.
