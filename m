@@ -2,135 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84826F34E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12B66F34F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbjEARPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S232158AbjEARQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbjEAROb (ORCPT
+        with ESMTP id S232869AbjEARPZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:14:31 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4D5198D;
-        Mon,  1 May 2023 10:14:14 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so3715800e87.3;
-        Mon, 01 May 2023 10:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682961252; x=1685553252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
-        b=YiLzq1KA2rEOiCTNiyZSaN+QghM+/sIHvuTYQCjSbiyThCa88Rroc2XwCwn30FReLS
-         eYXff/D8sQcdMUNPVgZWSb1tdbGkyuGJefxQKaCneDn2hYOcP2ILonXjxEqJzTGGBfJF
-         9BYH/uOm/8MwyRqaL5DoyfTAmSJZMXTcSpQTHg7bWSahC2rBOqAIHtdICMgxH0MtG+kO
-         ca1KK9cxDo7aMhkJW3sjX/PgRwF4E7GS7o03lySErKNbMkg0mxuRDaOXE8yFwWKV8kbU
-         1XInk4TCtqaqzK2F7FzEsHBaIwLSeMRqrM1sokiM0zIuqmhIRPNFEYq9Z7yODO+Tkumm
-         5jPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682961252; x=1685553252;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKNqhZighzBchhB7qljfeHwZ77eebwDDc9Iy9EVIqmM=;
-        b=lOhgLdphZqQwWlH+J3CH4ZBdPjaJJ0aIQpuKeC1R7pe+yEQqL2U+QwTG8VssvoxgwK
-         wPriDB8JDsVWnkKIpvOk7bigScP46zxwilNj8kWNevcXz/RfndKn269YTujWOqRIn3JS
-         EkuAwfoI26/x9pVvsRJDD2va7I2eKVTYojXEk0cWzIhq0zfCVMCrNEJU8gKUT5gLW887
-         FM8VyCIuqbyjIhFksO4CvP+vt/FNwzWGokA8Y9Gf93tuF6RrJjAVKhy3jjzAJOiH8FSo
-         ngDa42QCSjWZRPbmdytGR2t22RX8amlcgXQX51Mjko/ry4H0us5MsuuThzbsrOjN873R
-         mOlw==
-X-Gm-Message-State: AC+VfDzQFEMLdIthZBKmMeZuMPqj7SfK9rMZ7YyiXT+C8tVIi2YUsL52
-        j8ifR7jc+tjhimMFTO7dnSnPu6zKGwk=
-X-Google-Smtp-Source: ACHHUZ5XOhiYeDAdYs1Yeg4saEaZXRFid5O8OPd2mXzhya6+hjQszORs7zQF+KFLzXIjkxYYpryk4w==
-X-Received: by 2002:a19:c50f:0:b0:4e8:4abf:f19d with SMTP id w15-20020a19c50f000000b004e84abff19dmr3815224lfe.15.1682961252211;
-        Mon, 01 May 2023 10:14:12 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id v7-20020a197407000000b004f00af55561sm2396154lfe.174.2023.05.01.10.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 10:14:11 -0700 (PDT)
-Date:   Mon, 1 May 2023 20:14:09 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Joy Chakraborty <joychakr@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
-Subject: Re: [PATCH v9 0/5] spi: dw: DW SPI DMA Driver updates
-Message-ID: <20230501171409.syub4ro3kb3r6ho2@mobilestation>
-References: <20230427123314.1997152-1-joychakr@google.com>
+        Mon, 1 May 2023 13:15:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9777DB;
+        Mon,  1 May 2023 10:15:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 601A9611C5;
+        Mon,  1 May 2023 17:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6C8C433D2;
+        Mon,  1 May 2023 17:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682961322;
+        bh=Rnwd3jASwht07ENoOLmN+yQOD6wS2aI12lvNs7J1KiM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qt/nwiWlP5Xj3LoPebLaYBd4begRxAvkF+fafNlLBq/yn0x2FClZiwL8v6Vrhy3mm
+         fbarybHIQtkp6pNjeyiw6SwOmWnMhu49MSEq9eEyXR0MvmMQQbwoi4JGwOyrTf4ql6
+         BOtbWGVKN18JEydmlmUSpldN5kzQ2XvhoigQh1SzfusmHUJBoK2Kqd4sikw1JEWB3i
+         A3rZpA0afXkH+OxsX9GQ/nEiH2G0tgf4aAGuZC4kFTapgY8dnx5vpuJRM9nsz0ozBQ
+         FsnuoTtiejqSqmLJkYWWnfTFLvyMhc6kCWadRQuPZeI6BWjGZFk15FxEUD8CElE56Z
+         G1CRz+jl1eeEw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     SeongJae Park <sj@kernel.org>, brendanhiggins@google.com,
+        davidgow@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        johannes@sipsolutions.net, Johannes Berg <johannes.berg@intel.com>,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] kunit: tool: add subscripts for type annotations where appropriate
+Date:   Mon,  1 May 2023 17:15:20 +0000
+Message-Id: <20230501171520.138753-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAGS_qxqmWYzTBkfmFoALoteaG303tJNh1K5N2=Pmykqk+2BeTg@mail.gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230427123314.1997152-1-joychakr@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@Mark, @Andy
+Hi Daniel,
 
-On Thu, Apr 27, 2023 at 12:33:09PM +0000, Joy Chakraborty wrote:
-> This Patch series adds support for 32 bits per word trasfers using DMA
-> and some defensive checks around dma controller capabilities.
+On Sun, 30 Apr 2023 14:34:09 -0700 Daniel Latypov <dlatypov@google.com> wrote:
 
-I've done with reviewing and testing the series. My tags are already
-added to the patch logs. @Andy do you still have any comments about
-the updated patchset? If none, @Mark please merge it in if you are ok
-with the changes.
+> On Sun, Apr 30, 2023 at 11:15 AM SeongJae Park <sj@kernel.org> wrote:
+> >
+> > Hi Daniel,
+> >
+> > On Thu, 16 Mar 2023 15:06:36 -0700 Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > > E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
+> > > returns strings, or `text=False` where it returns bytes.
+> > > To differentiate, you can annotate types as `Popen[str]` or
+> > > `Popen[bytes]`.
+> > >
+> > > This patch should add subscripts in all the places we were missing them.
+> >
+> > I just found this patch is in the latest mainline tree, and it causes kunit
+> > failure on my test machine like below.
+> >
+> >     $ python3 --version
+> >     Python 3.8.10
+> >     $
+> >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+> >     Traceback (most recent call last):
+> >       File "./tools/testing/kunit/kunit.py", line 24, in <module>
+> >         import kunit_kernel
+> >       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 42, in <module>
+> >         class LinuxSourceTreeOperations:
+> >       File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line 95, in LinuxSourceTreeOperations
+> >         def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+> >     TypeError: 'type' object is not subscriptable
+> >     $
+> >
+> > I further confirmed reverting this patch makes it run again.  Do you have any
+> > idea?
+> 
+> It seems like support for the subscript wasn't added until Python 3.9.
+> 
+> I know support for subscripting other types like re.Pattern was added
+> in 3.9 per https://peps.python.org/pep-0585/ but it doesn't mention
+> Popen there...
+> This patch also added typing.IO[str] and concurrent.Future[None], so
+> those might be problematic too.
+> 
+> Can you check if the typing.IO and concurrent.Future[None] changes
+> cause problems?
+> (I don't have an easy way of testing against older Python versions currently).
 
--Serge(y)
+Thank you for quick reply.  Reverting Popen changes only as below fixed my
+issue.  So seems typing.IO and concurrent.Future[None] chages doesn't cause
+problems at least for my use case.
 
-> ---
-> V1 Changes : Add support for AxSize=4 bytes to support 32bits/word.
-> ---
-> V1->V2 Changes : Add dma capability check to make sure address widths
-> are supported.
-> ---
-> V2->V3 Changes : Split changes , add DMA direction check and other
-> cosmetic chnages.
-> ---
-> V3->V4 Changes : Fix Sparce Warning
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303270715.w9sMJhIh-lkp@intel.com/
-> ---
-> V4->V5 Changes : Preserve reverse xmas Tree order, move direction
-> check before initalisation of further capabilities, remove zero
-> initialisations, remove error OR'ing.
-> ---
-> V5->V6 Changes :
-> 	-Remove case of n_bytes=3 using 4_bytes buswidth
-> 	-Avoid forward decaration
-> 	-Break capability check patch into 2
-> 	-round n_bytes to power of 2 ( Bug Fix)
-> 	-Add more explanation in commit text.
-> ---
-> V6->V7 Changes : Remove extra spaces, refer to functions in commit as
-> func()
-> ---
-> V7->V8 Changes : Minor commment updates in patch 4/5
-> ---
-> V8->V9 Changes : Minor formatting changes in patch 5/5
-> ---
+    diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+    index f01f94106129..7f648802caf6 100644
+    --- a/tools/testing/kunit/kunit_kernel.py
+    +++ b/tools/testing/kunit/kunit_kernel.py
+    @@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
+     		if stderr:  # likely only due to build warnings
+     			print(stderr.decode())
+     
+    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+     		raise RuntimeError('not implemented!')
+     
+     
+    @@ -113,7 +113,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+     		kconfig.merge_in_entries(base_kunitconfig)
+     		return kconfig
+     
+    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+     		kernel_path = os.path.join(build_dir, self._kernel_path)
+     		qemu_command = ['qemu-system-' + self._qemu_arch,
+     				'-nodefaults',
+    @@ -142,7 +142,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+     		kconfig.merge_in_entries(base_kunitconfig)
+     		return kconfig
+     
+    -	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+    +	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+     		"""Runs the Linux UML binary. Must be named 'linux'."""
+     		linux_bin = os.path.join(build_dir, 'linux')
+     		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+
 > 
-> Joy Chakraborty (5):
->   spi: dw: Add 32 bpw support to SPI DW DMA driver
->   spi: dw: Move dw_spi_can_dma()
->   spi: dw: Add DMA directional capability check
->   spi: dw: Add DMA address widths capability check
->   spi: dw: Round of n_bytes to power of 2
+> If so, we should revert the patch.
+> If not, we can undo just the Popen changes.
 > 
->  drivers/spi/spi-dw-core.c |  5 ++-
->  drivers/spi/spi-dw-dma.c  | 76 +++++++++++++++++++++++++++++----------
->  drivers/spi/spi-dw.h      |  1 +
->  3 files changed, 63 insertions(+), 19 deletions(-)
+> And in either case, we'll need to update ./tools/testing/kunit/run_checks.py.
+> Currently, it runs `mypy --strict` which will start failing if we
+> revert any part of this patch.
+
+Those make sense.
+
+
+Thanks,
+SJ
+
 > 
-> -- 
-> 2.40.1.495.gc816e09b53d-goog
-> 
+> Thanks,
+> Daniel
