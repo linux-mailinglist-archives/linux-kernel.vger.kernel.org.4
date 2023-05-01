@@ -2,239 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAAE6F3A45
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0CC6F3A68
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbjEAWEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 18:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S232754AbjEAWZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 18:25:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjEAWEu (ORCPT
+        with ESMTP id S229863AbjEAWZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 18:04:50 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77D7F3
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:04:47 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115eef620so30133545b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:04:47 -0700 (PDT)
+        Mon, 1 May 2023 18:25:55 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAE82123
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:25:54 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a8075bd7cso5423749276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682978687; x=1685570687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=33Bampzsakr/crgaHJHp7xndLeMaLgrKD7UUnUyXAko=;
-        b=GTtx/EwB6OUDEm8F2BtQvDHv5sn8Kro2jtft5Adv1xbkUy2WH8HF+eYehd125z4f64
-         IJaWG+nbFQ/1M9Gc2PZbGCpSW5oKvjXFujb/8VFTnXuEIMfWV9MXZ9rFMZLCBLtGddUy
-         MC55SCFqK7QVwhVuh3/kD2XQ2VVmcqy3gPpzJLqDwau4cw44GLASADAW1peFlMNfyiPD
-         ceF2ly963ol1VnTQDjsbtXBUS0Ym+GDua/UAFx/hgemxAMvjoeCAM90yoaA3/y4rCXqC
-         DWL4wb9n1q0z1fqWr1+LL+HpmZ5vC3bjtcDlepW+rdLgNKD7F6vOBeieDTOLAgHwK1di
-         9/zA==
+        d=google.com; s=20221208; t=1682979954; x=1685571954;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1BxhGqqIjMamiGADI4rmVFfxoo9kAM2Y8zr5TqlELr0=;
+        b=U3MTB4tzWaoAeuLf7zTSo4Amq9ScioPloA+jQir4eqboGDJVyEgqL6DdVasMfZHsZg
+         vBrehczzN1QTDBrGeQtOjR2w5eHKvycMGoOQXD/HWtb/lBc4NbvnS5An/1CbpglUq5qW
+         SeAvFePY6ORF0a+vI3w3jbAKcvG5ZU5Zr2VElZ27XoWwdAvOUCBMnebjx9wV12CbMCCE
+         ZE2aNA6Yye5kE6xtjIZ/PAWB3laZQjF1We1N2y0aGiJyGWJDDFeV9w3eRY8Z9/5nsH1u
+         fJ+xc92EqXKQ9t/nvrZ6KoEflzOlDUJE2xukjZk/QYj71b51EMACkelg/5rJaWRwVJth
+         0q+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682978687; x=1685570687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=33Bampzsakr/crgaHJHp7xndLeMaLgrKD7UUnUyXAko=;
-        b=VrpZresQG/ngt+dMKGZFamvb48AHDZSmRPfvEzuxPVoirnYpPHFIuB5ufcss+JnHwh
-         iOHCEumLIqQSOu6Q0ABQx0OBMLG4Z3qIotqs9ln8TzD6zO2Dz/9gf3+j28mTQ5iplkpd
-         aqW+kPpnhmP/sLsa8EUAVuc6o28NZe/h+dal0IoR5+dXoa9qFDgq9iSKJAgl9Jjr04ji
-         Wyqg2kEgQM5uRqH+vimxD47EKKKIF2th3m+epp5V3XUnA1Vvvz4f0xP82ZwRGr71WeaU
-         Grlw/IMfUCf3rtXG5txzjUawukDBfAbvXzJRiXRXNGUc7Pzc5d/dOK7YhTJ1yLxx9Xj9
-         X+bA==
-X-Gm-Message-State: AC+VfDzpzdcXBq0pHz/ky46ANTkAhgSjQCs15hLunGHIiIIeGKKVp8JG
-        vgD3+I5obUNye80us8gAG6TZWA==
-X-Google-Smtp-Source: ACHHUZ72ooUKVcU7aFvBu1kP8+O/eJEXa3RTieJH4Q+j1jZFthIAARYtWggVORzWo0ofK7MnZRvv7Q==
-X-Received: by 2002:a17:902:f688:b0:1a6:4c2b:9e7f with SMTP id l8-20020a170902f68800b001a64c2b9e7fmr24094525plg.1.1682978687024;
-        Mon, 01 May 2023 15:04:47 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:2609:c92d:9942:6f79])
-        by smtp.gmail.com with ESMTPSA id ge14-20020a17090b0e0e00b0024e069c4099sm1769200pjb.46.2023.05.01.15.04.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 15:04:46 -0700 (PDT)
-Date:   Mon, 1 May 2023 16:04:44 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v10 05/11] remoteproc: mediatek: Extract remoteproc
- initialization flow
-Message-ID: <ZFA3fAeBV7T35Fkx@p14s>
-References: <20230426091211.21557-1-tinghan.shen@mediatek.com>
- <20230426091211.21557-6-tinghan.shen@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230426091211.21557-6-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1682979954; x=1685571954;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1BxhGqqIjMamiGADI4rmVFfxoo9kAM2Y8zr5TqlELr0=;
+        b=GQS4B5nO+tel6/hlz3GwV7GWfTEFFLMCUzTdItxUUvU5bubWPgCPg+Snl9NDAI71Gc
+         uRqmaQIZ9KumyojOPvtHYP5QOiNPkDYa2GYt2gl+0XurEPa8/fBhsnyoTp8fyFYfLLXv
+         pJxZGnSzpbFFBKFwu7U0aG4IupvKcEaGHGORK7FgR0vL3tzket+kvYLCkPUT7Va9LA3n
+         RP10Qhh9127dcK2Bw25Vgg2XVL+azKLG6G/v9VwUiIV/ShYXdrZvC8eA8jeWTiae+t/h
+         MCX1KIe8XDBtCspjUE6NVf4UBaQj3DNO6uF0YpaXknpbZlBSsp/mJcdycaPqThBbbz94
+         qPpQ==
+X-Gm-Message-State: AC+VfDxST5oHDY/LSkL2ZxYeNzuW3zZ9JQn8VnxYRkPmPiMVqrfN9aAE
+        T/XEGknwdJ2qb2NGBAMe0wfIKhUR4Veh
+X-Google-Smtp-Source: ACHHUZ53guwu8TPGl5Urv7haX8BeewTLGvNppYh1wGDiEF7DNctu6QYxPwQXGekB2IEN6HmXnsYcxrmR94WS
+X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
+ (user=maskray job=sendgmr) by 2002:a05:6902:100e:b0:b8b:f584:6b73 with SMTP
+ id w14-20020a056902100e00b00b8bf5846b73mr5947503ybt.10.1682979953813; Mon, 01
+ May 2023 15:25:53 -0700 (PDT)
+Date:   Mon,  1 May 2023 22:25:51 +0000
+Mime-Version: 1.0
+Message-ID: <20230501222551.1254686-1-maskray@google.com>
+Subject: [PATCH v2] arm64: lds: move .got section out of .text
+From:   Fangrui Song <maskray@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tinghan,
+Currently, the .got section is placed within the output section .text.
+However, when .got is non-empty, the SHF_WRITE flag is set for .text
+when linked by lld. GNU ld recognizes .text as a special section and
+ignores the SHF_WRITE flag. By renaming .text, we can also get the
+SHF_WRITE flag.
 
-On Wed, Apr 26, 2023 at 05:12:05PM +0800, Tinghan Shen wrote:
-> This is the preparation for probing multi-core SCP. The remoteproc
-> initialization flow is similar on cores and is reused to avoid
-> redundant code.
-> 
-> The registers of config and l1tcm are shared for multi-core
-> SCP. Reuse the mapped addresses for all cores.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/remoteproc/mtk_scp.c | 69 ++++++++++++++++++++++++++----------
->  1 file changed, 50 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index 2bf66b1a8d80..5e4982f4d5dc 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -23,6 +23,13 @@
->  #define MAX_CODE_SIZE 0x500000
->  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
->  
-> +struct mtk_scp_of_cluster {
-> +	void __iomem *reg_base;
-> +	void __iomem *l1tcm_base;
-> +	size_t l1tcm_size;
-> +	phys_addr_t l1tcm_phys;
-> +};
+The kernel has performed R_AARCH64_RELATIVE resolving very early, and can
+then assume that .got is read-only. Let's move .got to the vmlinux_rodata
+pseudo-segment. The change avoids a section with both executable and
+writable permissions.
 
-This is a good start.
+Signed-off-by: Fangrui Song <maskray@google.com>
 
-> +
->  /**
->   * scp_get() - get a reference to SCP.
->   *
-> @@ -855,10 +862,11 @@ static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
->  	}
->  }
->  
-> -static int scp_probe(struct platform_device *pdev)
-> +static int scp_rproc_init(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct device_node *np = dev->of_node;
-> +	struct mtk_scp_of_cluster *of_cluster = platform_get_drvdata(pdev);
+--
+Changes from v1 (https://lore.kernel.org/lkml/20230428050442.180913-1-maskray@google.com/)
+* move .got to the vmlinux_rodata pseudo-segment as suggested by Ard Biesheuvel
+---
+ arch/arm64/kernel/vmlinux.lds.S | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-1) Because of the work done in the next patch, I think a "struct
-mtk_scp_of_cluster *" should be given as a parameter to scp_rproc_init().
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index b9202c2ee18e..3cd7e76cc562 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -181,10 +181,17 @@ SECTIONS
+ 			KPROBES_TEXT
+ 			HYPERVISOR_TEXT
+ 			*(.gnu.warning)
+-		. = ALIGN(16);
+-		*(.got)			/* Global offset table		*/
+ 	}
+ 
++	. = ALIGN(SEGMENT_ALIGN);
++	_etext = .;			/* End of text section */
++
++	/* everything from this point to __init_begin will be marked RO NX */
++	RO_DATA(PAGE_SIZE)
++
++	HYPERVISOR_DATA_SECTIONS
++
++	.got : { *(.got) }
+ 	/*
+ 	 * Make sure that the .got.plt is either completely empty or it
+ 	 * contains only the lazy dispatch entries.
+@@ -193,14 +200,6 @@ SECTIONS
+ 	ASSERT(SIZEOF(.got.plt) == 0 || SIZEOF(.got.plt) == 0x18,
+ 	       "Unexpected GOT/PLT entries detected!")
+ 
+-	. = ALIGN(SEGMENT_ALIGN);
+-	_etext = .;			/* End of text section */
+-
+-	/* everything from this point to __init_begin will be marked RO NX */
+-	RO_DATA(PAGE_SIZE)
+-
+-	HYPERVISOR_DATA_SECTIONS
+-
+ 	/* code sections that are never executed via the kernel mapping */
+ 	.rodata.text : {
+ 		TRAMP_TEXT
+-- 
+2.40.1.495.gc816e09b53d-goog
 
-2) I would rename of_cluster to scp_cluster.
-
->  	struct mtk_scp *scp;
->  	struct rproc *rproc;
->  	struct resource *res;
-> @@ -879,6 +887,11 @@ static int scp_probe(struct platform_device *pdev)
->  	scp->data = of_device_get_match_data(dev);
->  	platform_set_drvdata(pdev, scp);
->  
-> +	scp->reg_base = of_cluster->reg_base;
-> +	scp->l1tcm_base = of_cluster->l1tcm_base;
-> +	scp->l1tcm_size = of_cluster->l1tcm_size;
-> +	scp->l1tcm_phys = of_cluster->l1tcm_phys;
-> +
->  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
->  	scp->sram_base = devm_ioremap_resource(dev, res);
->  	if (IS_ERR(scp->sram_base))
-> @@ -888,24 +901,6 @@ static int scp_probe(struct platform_device *pdev)
->  	scp->sram_size = resource_size(res);
->  	scp->sram_phys = res->start;
->  
-> -	/* l1tcm is an optional memory region */
-> -	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
-> -	scp->l1tcm_base = devm_ioremap_resource(dev, res);
-> -	if (IS_ERR(scp->l1tcm_base)) {
-> -		ret = PTR_ERR(scp->l1tcm_base);
-> -		if (ret != -EINVAL) {
-> -			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
-> -		}
-> -	} else {
-> -		scp->l1tcm_size = resource_size(res);
-> -		scp->l1tcm_phys = res->start;
-> -	}
-> -
-> -	scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
-> -	if (IS_ERR(scp->reg_base))
-> -		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
-> -				     "Failed to parse and map cfg memory\n");
-> -
->  	ret = scp->data->scp_clk_get(scp);
->  	if (ret)
->  		return ret;
-> @@ -957,6 +952,42 @@ static int scp_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> +static int scp_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct mtk_scp_of_cluster *of_cluster;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	of_cluster = devm_kzalloc(&pdev->dev, sizeof(*of_cluster), GFP_KERNEL);
-> +	if (!of_cluster)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> +	of_cluster->reg_base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(of_cluster->reg_base))
-> +		return dev_err_probe(dev, PTR_ERR(of_cluster->reg_base),
-> +				     "Failed to parse and map cfg memory\n");
-> +
-> +	/* l1tcm is an optional memory region */
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
-> +	of_cluster->l1tcm_base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(of_cluster->l1tcm_base)) {
-> +		ret = PTR_ERR(of_cluster->l1tcm_base);
-> +		if (ret != -EINVAL)
-> +			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
-> +
-> +		of_cluster->l1tcm_base = NULL;
-> +	} else {
-> +		of_cluster->l1tcm_size = resource_size(res);
-> +		of_cluster->l1tcm_phys = res->start;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, of_cluster);
-> +
-
-In scp_rproc_init() pdev->dev->driver_data is set to a *scp, which
-defeats the purpose of setting here.  Once the driver data for @pdev is set, it
-doesn't change after that.
-
-> +	return scp_rproc_init(pdev);
-
-Function scp_rproc_init() needs to return an *scp and that scp needs to be added
-to the list of SCPs in scp_cluster.
-
-> +}
-> +
->  static int scp_remove(struct platform_device *pdev)
->  {
->  	struct mtk_scp *scp = platform_get_drvdata(pdev);
-
-This should be:
-
-        struct mtk_scp_of_cluster *scp_cluster = platform_get_drvdata(pdev);
-
-And then iterate over the list of SCPs to remove each scp.  That way things work
-the same way regardless of the amount of scp in the system.
-
-
-> -- 
-> 2.18.0
-> 
