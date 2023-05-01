@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFCC6F2CE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16AC6F2CBC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbjEADGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S232501AbjEADDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbjEADED (ORCPT
+        with ESMTP id S232547AbjEADDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:04:03 -0400
+        Sun, 30 Apr 2023 23:03:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4031A2716;
-        Sun, 30 Apr 2023 20:01:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EE54230;
+        Sun, 30 Apr 2023 20:00:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 881D56171B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4DA960EA5;
+        Mon,  1 May 2023 02:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAF6C4339B;
         Mon,  1 May 2023 02:59:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E01C433D2;
-        Mon,  1 May 2023 02:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909982;
-        bh=UBsBkhAPZ9nSOpcSBYNwAdW4r95T9kwn6DQOckGw4UI=;
+        s=k20201202; t=1682909983;
+        bh=IjRiUvLYQP+9kc1hC+PvjP2DMMMkl/v+LroeMGs/n30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B/W6ZGO8XhwE+syk3tIk/zl8RgIxTIQyBVlLWSX5eGmlLu0BRE9BHWA2rZ03QJzsJ
-         eQ4iTqS291f1VbzWENHc3r4eOoBJgmsr4CC7+F/lce64Rb24rhgWSYTih/LWdouYTE
-         Z9VcwF33HpH8FfIZZqGwDGTgiY2Y3ysW+IX+vRS9GnbO9w5QUHsDzY9hJ+VmQe2413
-         3SMGRO69oN17QRo4iul9mX7kGSuXRUtfwrOa/oiiA6Z7RraPNNcU8P9dfdrfY8xc/I
-         ROso8Lri3Q6pmUTjqBisKF4j9YpnYdDeJxmG8NB8HhoI0q6Iq5Rn7GNuATs5F9TGUt
-         SlCPe1fO18EXA==
+        b=uvmIci96yyl8uSa9P6VujKLD0jOJPLe7jvuT6W7gD3Op4hxr1B7txLMyuwE7rswRH
+         yXb7Ss+F3fW/oMuztqfZjum6Y/DuamuduJdO2FWBTUFEzZZ3INxzFtx8B5v9EtV4uA
+         9gPRLFLsVcGYtbPERjKt8Pyi1yxPLrkbsTpdZWSd8MCSbtu+KnZdodGyVvdZukEKyY
+         dMj7b/NNjSEj/hcxcNw0TzCeZ2zESOn3jPvL+opQHgSV7wAvyvUCS7BmRGJVx0U3uk
+         VqeNP7cx7fRnMZkwY7hFTlA36NnLavt97aIDiVdKtzHSsLRkFjV93YMTYk866l+Bgw
+         EhT/EZNU6RlYQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Feng Jiang <jiangfeng@kylinos.cn>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Shyam-sundar.S-k@amd.com,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 43/44] platform/x86/amd: pmc: Fix memory leak in amd_pmc_stb_debugfs_open_v2()
-Date:   Sun, 30 Apr 2023 22:56:31 -0400
-Message-Id: <20230501025632.3253067-43-sashal@kernel.org>
+Cc:     Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 44/44] hwmon: (nzxt-smart2) add another USB ID
+Date:   Sun, 30 Apr 2023 22:56:32 -0400
+Message-Id: <20230501025632.3253067-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -58,35 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Jiang <jiangfeng@kylinos.cn>
+From: Aleksandr Mezin <mezin.alexander@gmail.com>
 
-[ Upstream commit f6e7ac4c35a28aef0be93b32c533ae678ad0b9e7 ]
+[ Upstream commit 4a148e9b1ee04e608263fa9536a96214d5561220 ]
 
-Function amd_pmc_stb_debugfs_open_v2() may be called when the STB
-debug mechanism enabled.
+This seems to be a new revision of the device. RGB controls have changed,
+but this driver doesn't touch them anyway.
 
-When amd_pmc_send_cmd() fails, the 'buf' needs to be released.
+Fan speed control reported to be working with existing userspace (hidraw)
+software, so I assume it's compatible. Fan channel count is the same.
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
-Link: https://lore.kernel.org/r/20230412093734.1126410-1-jiangfeng@kylinos.cn
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Recently added (0x1e71, 0x2019) seems to be the same device.
+
+Discovered in liquidctl project:
+
+https://github.com/liquidctl/liquidctl/issues/541
+
+Signed-off-by: Aleksandr Mezin <mezin.alexander@gmail.com>
+Link: https://lore.kernel.org/r/20230219105924.333007-1-mezin.alexander@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/amd/pmc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hwmon/nzxt-smart2.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
-index 2edaae04a6912..91d04e710486e 100644
---- a/drivers/platform/x86/amd/pmc.c
-+++ b/drivers/platform/x86/amd/pmc.c
-@@ -268,6 +268,7 @@ static int amd_pmc_stb_debugfs_open_v2(struct inode *inode, struct file *filp)
- 	dev->msg_port = 0;
- 	if (ret) {
- 		dev_err(dev->dev, "error: S2D_NUM_SAMPLES not supported : %d\n", ret);
-+		kfree(buf);
- 		return ret;
- 	}
+diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+index 2b93ba89610ae..a8e72d8fd0605 100644
+--- a/drivers/hwmon/nzxt-smart2.c
++++ b/drivers/hwmon/nzxt-smart2.c
+@@ -791,7 +791,8 @@ static const struct hid_device_id nzxt_smart2_hid_id_table[] = {
+ 	{ HID_USB_DEVICE(0x1e71, 0x2009) }, /* NZXT RGB & Fan Controller */
+ 	{ HID_USB_DEVICE(0x1e71, 0x200e) }, /* NZXT RGB & Fan Controller */
+ 	{ HID_USB_DEVICE(0x1e71, 0x2010) }, /* NZXT RGB & Fan Controller */
+-	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller */
++	{ HID_USB_DEVICE(0x1e71, 0x2011) }, /* NZXT RGB & Fan Controller (6 RGB) */
++	{ HID_USB_DEVICE(0x1e71, 0x2019) }, /* NZXT RGB & Fan Controller (6 RGB) */
+ 	{},
+ };
  
 -- 
 2.39.2
