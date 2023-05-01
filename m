@@ -2,105 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3362A6F363F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBE26F365E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjEASuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S232804AbjEAS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjEASuL (ORCPT
+        with ESMTP id S232565AbjEAS4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:50:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDB9170B
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=tNHpPVsSHqh9ntkGmaJxJYCBzOSod853rhEIpF0KiJk=; b=payM3TDFyISyozwFIJcDLCxtiZ
-        SXTT0sIRRP23H4D2wREtqumgLfhU0ka0D1AHGcOsrQwSzbn6Zi1fBhEsMgIHG668gBbYaKaF48hY8
-        frhSTGkSGtgjKwUfeqggoHgUm96u3yYtuN+LjYY5T7QERQd7a7OPmWdSpeEIQPidecVI7liwPOs6l
-        7AGSgLMEJNLaroI3td0Ccm1H8UHAMVFKSuIDrhgL42zKUFXWPW57AxgJwEeg86FaOMV4H0Vw+/KtZ
-        SFOvpWR0STaZj1n32Rme8MAWXglgpAvqzDfhb75HUTacNZ3XcjRi5w+3/UueXExRosAtyn1Dlh4H5
-        OesWO50g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptYaR-00Eya9-2z;
-        Mon, 01 May 2023 18:49:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4A9B13002BF;
-        Mon,  1 May 2023 20:49:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 24EBB3074E680; Mon,  1 May 2023 20:49:20 +0200 (CEST)
-Date:   Mon, 1 May 2023 20:49:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mike Galbraith <efault@gmx.de>
-Cc:     Chen Yu <yu.c.chen@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        Aaron Lu <aaron.lu@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] sched/fair: Introduce SIS_CURRENT to wake up
- short task on current CPU
-Message-ID: <20230501184920.GC1597476@hirez.programming.kicks-ass.net>
-References: <cover.1682661027.git.yu.c.chen@intel.com>
- <4081178486e025c89dbb7cc0e62bbfab95fc794a.1682661027.git.yu.c.chen@intel.com>
- <20230501134827.GB1597538@hirez.programming.kicks-ass.net>
- <ce70393575869d65449a59d321a109f10ac82676.camel@gmx.de>
+        Mon, 1 May 2023 14:56:02 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E873F1FD3
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:55:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-95f4c5cb755so571692166b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 11:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1682967358; x=1685559358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QJsDytAkzpo1N72CvaRaEHpBmg/KeBVFFxmvg3mMNXA=;
+        b=GabnYdSenc1oaHZsNAPAqlTdaDgC+n2n3X5EAacJ/29XE0uxY8r6PyimCguxuHo+sZ
+         uAFbnpJM5zQgKLBLBMe/2tjAhAhWaUlYfES8CV75E3EG/42829hi+opt9CaEat8vR1Cb
+         P3B03jA4uOBbB9fvPFaXvs99mFAccJsf9JVTI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682967358; x=1685559358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QJsDytAkzpo1N72CvaRaEHpBmg/KeBVFFxmvg3mMNXA=;
+        b=EhtCa/xSOFc1GzCeOQDNf2xBrn9N+WOQkvn9+38LvQkrJJtUTeAY9fNg5q3u/J5kLV
+         KYvLtQS10qHQEaKt/SsUaCxHMlt4DxfqUJDL388RXNwd883fuZrAO0R6OEtOw7rfApDd
+         NHvSMqf7pIbSNTNV0uM2ZPSSFtnpK17S7ihWfvqu8VGiZKBhuRwansGiBJhj/mY95NDh
+         PJ6EV51ljdBwI6M6xgXfiIFFOU/nSiAeEaDQuwzOdkxE6dpBiNOo1KA5nnHWKdJgXKIa
+         019nE8YAK3yHshY1VK6EOYyH0MFg4TB4fJuEOO8YscHXrIl1H/+OZ3YheSM2wxB+/tPk
+         NTJA==
+X-Gm-Message-State: AC+VfDxQAOA1SVxwo2xLdRRwvzv+vYBY0CefNdZ0qah74VWfYx+3TkJe
+        UfyrcFPf/SJyhJe4Ag6UQpabNWXNsjbGn0NVT49NWg==
+X-Google-Smtp-Source: ACHHUZ6Z2au5miQGBjP+0IwG2vUEVX6h/8Ef1dg73t9efIIS5LU6MlichccCNPIFK+zIMRYPILV4/Q==
+X-Received: by 2002:a17:907:9415:b0:961:59d4:d0f with SMTP id dk21-20020a170907941500b0096159d40d0fmr5979190ejc.12.1682967358015;
+        Mon, 01 May 2023 11:55:58 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id e14-20020a170906504e00b0094a90d3e385sm14966322ejk.30.2023.05.01.11.55.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 11:55:57 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so403263a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 11:55:57 -0700 (PDT)
+X-Received: by 2002:aa7:d8cb:0:b0:50b:cff8:ff1f with SMTP id
+ k11-20020aa7d8cb000000b0050bcff8ff1fmr310706eds.42.1682967012421; Mon, 01 May
+ 2023 11:50:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ce70393575869d65449a59d321a109f10ac82676.camel@gmx.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <000000000000de34bd05f3c6fe19@google.com> <0000000000001ec6ce05fa9a4bf7@google.com>
+In-Reply-To: <0000000000001ec6ce05fa9a4bf7@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 1 May 2023 11:49:55 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whWUZyiFvHpkC35DXo713GKFjqCWwY1uCs3tbMJ6QXeWg@mail.gmail.com>
+Message-ID: <CAHk-=whWUZyiFvHpkC35DXo713GKFjqCWwY1uCs3tbMJ6QXeWg@mail.gmail.com>
+Subject: Re: [syzbot] [xfs?] BUG: unable to handle kernel paging request in clear_user_rep_good
+To:     syzbot <syzbot+401145a9a237779feb26@syzkaller.appspotmail.com>,
+        Borislav Petkov <bp@suse.de>, stable <stable@vger.kernel.org>
+Cc:     almaz.alexandrovich@paragon-software.com, clm@fb.com,
+        djwong@kernel.org, dsterba@suse.com, hch@infradead.org,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 05:32:05PM +0200, Mike Galbraith wrote:
-> On Mon, 2023-05-01 at 15:48 +0200, Peter Zijlstra wrote:
-> >
-> > Throughput  646.55 MB/sec   2 clients   2 procs  max_latency=0.104 ms
-> > Throughput 1361.06 MB/sec   5 clients   5 procs  max_latency=0.100 ms
-> > Throughput 1889.82 MB/sec  10 clients  10 procs  max_latency=0.154 ms
-> > Throughput 2406.57 MB/sec  20 clients  20 procs  max_latency=3.667 ms
-> > Throughput 2318.00 MB/sec  40 clients  40 procs  max_latency=0.390 ms
-> > Throughput 2384.85 MB/sec  80 clients  80 procs  max_latency=1.371 ms
-> >
-> >
-> > So what's going on here? I don't see anything exciting happening at the
-> > 40 mark. At the same time, I can't seem to reproduce Mike's latency pile
-> > up either :/
-> 
-> Are you running tbench in the GUI so the per second output stimulates
-> assorted goo?  I'm using KDE fwtw.
+[ Added Borislav and stable people ]
 
-Nah, the IVB-EP is headless, doesn't even have systemd on, still running
-sysvinit.
+On Sun, Apr 30, 2023 at 9:31=E2=80=AFPM syzbot
+<syzbot+401145a9a237779feb26@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+
+Indeed.
+
+My initial reaction was "no, that didn't fix anything, it just cleaned
+stuff up", but it turns out that yes, it did in fact fix a real bug in
+the process.
+
+The fix was not intentional, but the cleanup actually got rid of buggy code=
+.
+
+So here's the automatic marker for syzbot:
+
+#syz fix: x86: don't use REP_GOOD or ERMS for user memory clearing
+
+and the reason for the bug - in case people care - is that the old
+clear_user_rep_good (which no longer exists after that commit) had the
+exception entry pointing to the wrong instruction.
+
+The buggy code did:
+
+    .Lrep_good_bytes:
+            mov %edx, %ecx
+            rep stosb
+
+and the exception entry weas
+
+        _ASM_EXTABLE_UA(.Lrep_good_bytes, .Lrep_good_exit)
+
+so the exception entry pointed at the register move instruction, not
+at the actual "rep stosb" that does the user space store.
+
+End result: if you had a situation where you *should* return -EFAULT,
+and you triggered that "last final bytes" case, instead of the
+exception handling dealing with it properly and fixing it up, you got
+that kernel oops.
+
+The bug goes back to commit 0db7058e8e23 ("x86/clear_user: Make it
+faster") from about a year ago, which made it into v6.1.
+
+It only affects old hardware that doesn't have the ERMS capability
+flag, which *probably* means that it's mostly only triggerable in
+virtualization (since pretty much any CPU from the last decade has
+ERMS, afaik).
+
+Borislav - opinions? This needs fixing for v6.1..v6.3, and the options are:
+
+ (1) just fix up the exception entry. I think this is literally this
+one-liner, but somebody should double-check me. I did *not* actually
+test this:
+
+    --- a/arch/x86/lib/clear_page_64.S
+    +++ b/arch/x86/lib/clear_page_64.S
+    @@ -142,8 +142,8 @@ SYM_FUNC_START(clear_user_rep_good)
+            and $7, %edx
+            jz .Lrep_good_exit
+
+    -.Lrep_good_bytes:
+            mov %edx, %ecx
+    +.Lrep_good_bytes:
+            rep stosb
+
+     .Lrep_good_exit:
+
+   because the only use of '.Lrep_good_bytes' is that exception table entry=
+.
+
+ (2) backport just that one commit for clear_user
+
+     In this case we should probably do commit e046fe5a36a9 ("x86: set
+FSRS automatically on AMD CPUs that have FSRM") too, since that commit
+changes the decision to use 'rep stosb' to check FSRS.
+
+ (3) backport the entire series of commits:
+
+        git log --oneline v6.3..034ff37d3407
+
+Or we could even revert that commit 0db7058e8e23, but it seems silly
+to revert when we have so many ways to fix it, including a one-line
+code movement.
+
+Borislav / stable people? Opinions?
+
+                         Linus
