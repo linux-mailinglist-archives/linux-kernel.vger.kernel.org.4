@@ -2,95 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2656F3A9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3906F3AB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbjEAWpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 18:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S233170AbjEAWrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 18:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjEAWpA (ORCPT
+        with ESMTP id S232985AbjEAWq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 18:45:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2426426BC
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:44:59 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1a9253d4551so23086985ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1682981098; x=1685573098;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X1WHrGanmnNt8uASWew+y3h1eCxRyqChW0U1S7kwZ5s=;
-        b=11detkrEfL5rr1ljYPAAdxq3BuYmAJjReWFXB17Iyeuzhsehxpr9j6ExMoEw6f6mGz
-         VnfYQcKNf05/7Zk+HZ+iKZiZS1aJWirivZ2nGhg7AcP7z9GAttcF8f0eb+YtpUusJUQc
-         c2Ez3hS9zZcufRdKKJWy0Q0yXIwhqZPiVW5/qXmBiYDFL7qvYGukmDBmthRY4bpJbFTD
-         2ZSRA4t/4vaLRO6RMehiAoUQ6BgOKgIfnAPoM5NTHszy2KbgXuLGXqUkJuNldz7w3ouc
-         22HEgPCYMVNKvkopEkXVXVhL6VhjO5eU3iI78v62nocZJhZBytcDUuic4Qan25ZITVYj
-         UqLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682981098; x=1685573098;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X1WHrGanmnNt8uASWew+y3h1eCxRyqChW0U1S7kwZ5s=;
-        b=foGo2HL7T+cW3jHaDsyjBGaU1kSecMEQA2Vb6aLw9lWUV28rypo8tvabJSru9xl2fY
-         H3YXuQ4C/bXaOkE6bX2b/6NZdNtbp13Y/TkQsLWYoSBfta9CKDUGAcHfu7bnObMwGdwJ
-         bsYGkn3OoxxDxj9PcUVvI6IHgPCZ9+t0c9wnjOgBwrCWbMCMHcq3++UvNZVaHVDQ85/J
-         BBTWFnu971BiFc6UKMkp8MQiXytdclWQ8dJyWldHGqbjsRNJnqIyBr93H46YBpWotMMr
-         hqmRN1FdZfGI8BTpVUzU7H2Ep1gAfeT8Lfu5cQB3oQRfg/A2V/hyom0IW9wzhUj3kSfZ
-         x1WA==
-X-Gm-Message-State: AC+VfDw6OVyWg3ZYfJMMqTKnfIW/DX0toJzW33/iic26IZidUaiFOGI9
-        8uuQAeEhWqvYB1qbfv11IUs81g==
-X-Google-Smtp-Source: ACHHUZ65+5jmJQGg62lzHtAux5EwaHGRV58fHKk5Z4NvG9vBphpWaVTHw+MJ1oesU3gmRXkqOxrFIQ==
-X-Received: by 2002:a17:902:db03:b0:1a6:e1ac:ecb8 with SMTP id m3-20020a170902db0300b001a6e1acecb8mr20638813plx.43.1682981098628;
-        Mon, 01 May 2023 15:44:58 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090322c200b001aad714400asm4573023plg.229.2023.05.01.15.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 15:44:58 -0700 (PDT)
-In-Reply-To: <20230426100009.685435-1-suagrfillet@gmail.com>
-References: <20230426100009.685435-1-suagrfillet@gmail.com>
-Subject: Re: [PATCH -fixes V2] riscv: mm: remove redundant parameter of
- create_fdt_early_page_table
-Message-Id: <168298107614.32296.13970329837227173007.b4-ty@rivosinc.com>
-Date:   Mon, 01 May 2023 15:44:36 -0700
+        Mon, 1 May 2023 18:46:57 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A60D269E;
+        Mon,  1 May 2023 15:46:56 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 341MkO1l097648;
+        Mon, 1 May 2023 17:46:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1682981184;
+        bh=qY/0qRa3aQKgIxqooRRhbfOQoOpi41u3zZ7KiGXu1jM=;
+        h=From:To:CC:Subject:Date;
+        b=F4nZcsuezxIq6Jzp33lDZ8d9M7XU2cPhoS5lyEXOpQZl4LBTHdVUIEbAlnRJTqhSl
+         gtYqavDzY2G638UryUjIag4pPsz0cHL8XsI3xa7BqUmVRwu/CjJiEXFd57DgvuX1Xr
+         AiYNi4FrFDpKT1ZwieVZF5unyqlK6x7auY2n/OcI=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 341MkOdX066896
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 1 May 2023 17:46:24 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 1
+ May 2023 17:46:24 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 1 May 2023 17:46:24 -0500
+Received: from a0498204.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 341MkOhd002097;
+        Mon, 1 May 2023 17:46:24 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH v4 0/4] Enable multiple MCAN on AM62x
+Date:   Mon, 1 May 2023 17:46:20 -0500
+Message-ID: <20230501224624.13866-1-jm@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-901c5
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        alexghiti@rivosinc.com, heiko@sntech.de,
-        Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org,
-        anshuman.khandual@arm.com, mick@ics.forth.gr, samuel@sholland.org,
-        Song Shuai <suagrfillet@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On AM62x there is one MCAN in MAIN domain and two in MCU domain.
+The MCANs in MCU domain were not enabled since there is no
+hardware interrupt routed to A53 GIC interrupt controller.
+Therefore A53 Linux cannot be interrupted by MCU MCANs.
 
-On Wed, 26 Apr 2023 18:00:09 +0800, Song Shuai wrote:
-> create_fdt_early_page_table() explicitly uses early_pg_dir for
-> 32-bit fdt mapping and the pgdir parameter is redundant here.
-> So remove it and its caller.
-> 
-> 
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt and there is
+poll-interval property in DTB MCAN node. The hrtimer generates a
+recurring software interrupt which allows to call the isr. The isr
+will check if there is pending transaction by reading a register
+and proceed normally if there is.
 
-Applied, thanks!
+On AM62x, this series enables two MCU MCAN which will use the hrtimer
+implementation. MCANs with hardware interrupt routed to A53 Linux
+will continue to use the hardware interrupt as expected.
 
-[1/1] riscv: mm: remove redundant parameter of create_fdt_early_page_table
-      https://git.kernel.org/palmer/c/e4ef93edd4e0
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-Best regards,
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
+
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
+
+This patch series depends on 'Enable CAN PHY transceiver driver':
+Link: https://lore.kernel.org/lkml/775ec9ce-7668-429c-a977-6c8995968d6e@app.fastmail.com/T/
+
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
+
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
+
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
+
+Changes since v3:
+- Wrong patch sent, resend correct patch series
+
+Changes since v2:
+- Change binding patch first
+- Update binding poll-interval description
+- Add oneOf to select either interrupts/interrupt-names or poll-interval
+- Sort list of includes
+- Create a define for 1 ms polling interval
+- Change plarform_get_irq to optional to not print error msg
+- Fix indentations, lengths of code lines, and added other style changes
+
+Changes since v1:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for both timer polling and hardware interrupt case, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (4):
+  dt-bindings: net: can: Add poll-interval for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
+  arm64: dts: ti: Add AM62x MCAN MAIN domain transceiver overlay
+  arm64: dts: ti: Enable MCU MCANs for AM62x
+
+ .../bindings/net/can/bosch,m_can.yaml         | 36 +++++++++++-
+ arch/arm64/boot/dts/ti/Makefile               |  2 +
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       | 24 ++++++++
+ .../boot/dts/ti/k3-am625-sk-mcan-main.dtso    | 35 ++++++++++++
+ .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 57 +++++++++++++++++++
+ drivers/net/can/m_can/m_can.c                 | 29 +++++++++-
+ drivers/net/can/m_can/m_can.h                 |  4 ++
+ drivers/net/can/m_can/m_can_platform.c        | 32 ++++++++++-
+ 8 files changed, 212 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-main.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+
+
+base-commit: 92e815cf07ed24ee1c51b122f24ffcf2964b4b13
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+2.17.1
 
