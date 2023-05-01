@@ -2,153 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DEC6F2F27
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6C76F2F29
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbjEAH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 03:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S231755AbjEAHdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 03:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjEAH10 (ORCPT
+        with ESMTP id S229679AbjEAHdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 03:27:26 -0400
+        Mon, 1 May 2023 03:33:08 -0400
 Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1F41B9
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 00:27:22 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64115eef620so25138854b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 00:27:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0FB10C1;
+        Mon,  1 May 2023 00:33:07 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b87d23729so1539242b3a.0;
+        Mon, 01 May 2023 00:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1682926042; x=1685518042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ibXuk7FbYrowdFzsiIEHtgPKzlyAO+Sfsye0fqZ102E=;
-        b=IKlhLUer77vP+NjL6egKLZ4SBjsZvxj/D3clB+asMNMvxbEKZVyD67jL8L+HgQcTZP
-         bx2+VCvjy6HeCWRCAKSjdVeCtOUPiNZOnarnxDf2Ay6KT0thLI2fnISAw3lEGAFT3jl2
-         kDsM3kvKxVx4yCWkUsfVNm1hwj4coNk2oyMCtjatrEV3EX4+4UoJMiPf3zbEvc9Jjg1m
-         0bcMJvDlbUEMRKu34+4Ed5M78tX9h6w4sQUUsnBU8Gli1HsSt1NKbMvyBp/4K2SrmTSi
-         DEZoHLZVnAjL+yBP9KaRc6NDRzIuI950QrEuS8Jegk9aH6BmTEHBRYboZ8q0GghNqhi2
-         OyTA==
+        d=gmail.com; s=20221208; t=1682926386; x=1685518386;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5yhF2kJmDkq2QyRMJA1sSrfW3XhDRwS7D+Qmpc0RRM4=;
+        b=VZZxD7r2iGrZsIMqiq5AnEdCCjdy7onR430ShOA2rU35wBTpDESQ4j+2rKI1SvHeKr
+         +mFd0JhacVXyVXoxkXoJ09KhVt4WZW9GB6yU4djfPuGw2jbKENQp5yjfHjA58eqH2d+A
+         DGHynAQy8wklYUC18OMEQy6/oxMg9BqRz1V7pp2mO1nRn8vgi+QffiwELMpqzi9Tu2m2
+         I9c0Czm5uN64cNSJO7ei0Fpr1dAh75nKCg5tRUaCgUu3V8PDSrQc9Uku7IyIKkG3yBmu
+         oQrV0PGbjWeGaZonLUlBchnv+oATpTs/T73WI8VyTiwBZjsj1OTzhAjl4GNgssNeGsrk
+         gXAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682926042; x=1685518042;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ibXuk7FbYrowdFzsiIEHtgPKzlyAO+Sfsye0fqZ102E=;
-        b=DHEVukPS9UlBkJQnlJyb6hJd/bcAJVmFkkDhVekxzxZ+AXwHuRqCePZQsmAtFs15up
-         Nj0XlCCT2XM3pAsdGRTfLqQtpYhIE19Frmybe/Yof7kEWIZi0Skj16ZaO1M9S0Qsa1Nu
-         qAMdGjJyYl9K7VnZEX9ATn2nnbRKk481k0Lh7t5K9Xk0hvstd1f+jRM4Xcwfizbhi3q/
-         ZouFzgSCDUAvY6dD9h5L+Ct98KWpSEc497lIZ8AU/x8liFGHrH+uwTRuOshuxtcLHSVH
-         5BAZYHvIYK0mtvKhFhyQQZoRGxR1AOxD6YgNzpq2vdxUNnNqZnlD3r11XGwZos9vtUoz
-         2SGg==
-X-Gm-Message-State: AC+VfDwbr8/W2pOA9qEOfD/vMY7+W81xXzu53gaFXa8EL8BYmcI1MU2w
-        YO0f62mbdCVvaujTAHqf60QVaw==
-X-Google-Smtp-Source: ACHHUZ4UvG80mxUfpvf1acfCnS2H3KC6jDEcSFVNzFYuXXy+v/xi65gkE5IdZ0bX/96Zq1X5x+FUpg==
-X-Received: by 2002:a05:6a00:a16:b0:63d:3c39:ecc2 with SMTP id p22-20020a056a000a1600b0063d3c39ecc2mr17292848pfh.12.1682926041931;
-        Mon, 01 May 2023 00:27:21 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id t40-20020a056a0013a800b0063d29df1589sm19371079pfg.136.2023.05.01.00.27.21
+        d=1e100.net; s=20221208; t=1682926386; x=1685518386;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5yhF2kJmDkq2QyRMJA1sSrfW3XhDRwS7D+Qmpc0RRM4=;
+        b=jeBg4KMDDk3P8rog+WHp4xKwENRHUU5UzNExT4gWdVbDkSoi0FkxJ7RoWKI+2iobd4
+         bf/Hwl66W2ZiaE7QD0enAIhLQq3TXAl3n1cflzgjsy7MMDp7oPcgGC0yEPGk6p7dT3qn
+         4sMJTDiUaaXPcIUyOrpVZErmHyMoj8tJEULwNNxif8h1q5twxZvntAHptuK7wqb1D1yb
+         159oEdcGBRVe/fwzv0iwgAqvVt25HGKaFPW0d6RPl6zsVS0lN7XziitypsuHMp8jAQ5v
+         Lx6Qg5xczQVnYD21Htqi5BE4l51wYmAFxGaRYvtjQ2Ku95Fz1LPYh16+d0zBz3L1BeEb
+         XvPA==
+X-Gm-Message-State: AC+VfDxUxy2RWBI/fatKBkuA17+wf26ZSQIZXvef62yYnUsfQW6qL35P
+        NuMcrQw57VloYmIY+ylKCOc=
+X-Google-Smtp-Source: ACHHUZ6co/rMjhKOyb8zdQZ5OT1jZtqQKGVeuw7UI+b+nt1E3eecgXiTDcBvvb/qw7EgrleM6/S5kQ==
+X-Received: by 2002:a05:6a00:2281:b0:640:dbe4:1901 with SMTP id f1-20020a056a00228100b00640dbe41901mr16901796pfe.14.1682926386295;
+        Mon, 01 May 2023 00:33:06 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:800:1d90:2dc1:65b:f2f3])
+        by smtp.gmail.com with ESMTPSA id f195-20020a6238cc000000b0063b8428b0d8sm19241571pfa.152.2023.05.01.00.33.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 00:27:21 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1ptNwM-009yXy-1S; Mon, 01 May 2023 17:27:18 +1000
-Date:   Mon, 1 May 2023 17:27:18 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        David Hildenbrand <david@redhat.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Howells <dhowells@redhat.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
- by default
-Message-ID: <20230501072718.GF2155823@dread.disaster.area>
-References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
- <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
- <ZEvZtIb2EDb/WudP@nvidia.com>
- <ZEwPscQu68kx32zF@mit.edu>
- <ZEwVbPM2OPSeY21R@nvidia.com>
- <ZEybNZ7Rev+XM4GU@mit.edu>
- <ZE2ht9AGx321j0+s@nvidia.com>
+        Mon, 01 May 2023 00:33:05 -0700 (PDT)
+Date:   Mon, 1 May 2023 13:02:59 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        KCHSU0@nuvoton.com, linux-kernel@vger.kernel.org,
+        anupnewsmail@gmail.com
+Subject: [PATCH] ASoC: dt-bindings: nau8540: Convert to dtschema
+Message-ID: <ZE9rK6mktPByvRRz@yoga>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZE2ht9AGx321j0+s@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 08:01:11PM -0300, Jason Gunthorpe wrote:
-> On Sat, Apr 29, 2023 at 12:21:09AM -0400, Theodore Ts'o wrote:
-> 
-> > In any case, the file system maintainers' position (mine and I doubt
-> > Dave Chinner's position has changed) is that if you write to
-> > file-backed mappings via GUP/RDMA/process_vm_writev, and it causes
-> > silent data corruption, you get to keep both pieces, and don't go
-> > looking for us for anything other than sympathy...
-> 
-> This alone is enough reason to block it. I'm tired of this round and
-> round and I think we should just say enough, the mm will work to
-> enforce this view point. Files can only be written through PTEs.
+Convert the NAU8540 audio CODEC bindings to DT schema
 
-It has to be at least 5 years ago now that we were told that the
-next-gen RDMA hardware would be able to trigger hardware page faults
-when remote systems dirtied local pages.  This would enable
-->page-mkwrite to be run on file backed pages mapped pages just like
-local CPU write faults and everything would be fine.
+Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+---
+ .../devicetree/bindings/sound/nau8540.txt     | 16 --------
+ .../bindings/sound/nuvoton,nau8540.yaml       | 40 +++++++++++++++++++
+ 2 files changed, 40 insertions(+), 16 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/sound/nau8540.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
 
-Whatever happened to that? Are we still waiting for hardware that
-can trigger page faults from remote DMA transfers, or have hardware
-vendors given up on this?
-
-Cheers,
-
-Dave.
+diff --git a/Documentation/devicetree/bindings/sound/nau8540.txt b/Documentation/devicetree/bindings/sound/nau8540.txt
+deleted file mode 100644
+index 307a76528320..000000000000
+--- a/Documentation/devicetree/bindings/sound/nau8540.txt
++++ /dev/null
+@@ -1,16 +0,0 @@
+-NAU85L40 audio CODEC
+-
+-This device supports I2C only.
+-
+-Required properties:
+-
+-  - compatible : "nuvoton,nau8540"
+-
+-  - reg : the I2C address of the device.
+-
+-Example:
+-
+-codec: nau8540@1c {
+-       compatible = "nuvoton,nau8540";
+-       reg = <0x1c>;
+-};
+diff --git a/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml b/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
+new file mode 100644
+index 000000000000..ac344e435a5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/nuvoton,nau8540.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/nuvoton,nau8540.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton Technology Corporation NAU85L40 Audio CODEC
++
++maintainers:
++  - KCHSU0@nuvoton.com, broonie@kernel.org
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    const: nuvoton,nau8540
++
++  reg:
++    maxItems: 1
++
++  "#sound-dai-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        codec@1c {
++            compatible = "nuvoton,nau8540";
++            reg = <0x1c>;
++        };
++    };
 -- 
-Dave Chinner
-david@fromorbit.com
+2.34.1
+
