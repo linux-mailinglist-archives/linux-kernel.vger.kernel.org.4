@@ -2,210 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B610B6F3170
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 15:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5F96F3174
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 15:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjEANLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 09:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S232491AbjEANQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 09:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEANLo (ORCPT
+        with ESMTP id S229482AbjEANQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 09:11:44 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2091.outbound.protection.outlook.com [40.107.92.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835BF138;
-        Mon,  1 May 2023 06:11:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NvAs31/ADHG4jqyI1SpUp5Q12xBpFcPpUAanZqeXlMBKY6jdJSWFwxnkNz52jsngJJy7SdCp+ySu4NionX315h0fo/Vk8wIrQtXAurTkeda89oYrtNeNBd/XaujKcpHrgpLtTm2BgN1kRgWYgK8HLoUtlSMvV7q6s+u1QL8kdwrWipezThfvKk8lX1LZyYXRinOs43CaafDt0GLX9WNAThzGCZDqK/9fGy03bzFyNI5vRc2qAAs39gL5reUsBrRjGE9MbzhRhp8+f5YPMdRsNB+X6LPzoRpWMzhwrK1hfsbmS8fyFbUjP9VKm/1GNBiOqvM6x6SQPKMMHiK5Cl10mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F9EOB/+P3FThVnXLcFX0wPryfGtO7VdhsnZNIjCibgs=;
- b=fKgCBO0vix7skkwO6YcR6a++AgJYzZXENaWQDWsyWmgNUFPJIabob0LnXHyXwt0NBMnWbeu1LGfvdYt4h+OhdAa9umCVrmazB5Cirl9oFFv1aL/ugARyeUS6l58E9s4CbwbpMlDqpCnx+gQM8j581HA2dRqFpHtNKAs8YVqK0vLFuuTzs0kzqfB7H+wmmBMXFFkUi7b83WvP4CLk6YTcwDEl/NCn+b800tyAolhPuQ84HJU0dpOGEkLAHjn2ey8fJzGsZ/PgYEdOSS+bMwY1jAwP3Qacw0wrEeLw4yxZq3Yo+3bFQj+EzbPKzWp+Am6nU13LJ3tJw7i8cN7qlYaHZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 1 May 2023 09:16:48 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BF6138
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 06:16:46 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-430306f2196so1981128137.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 06:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F9EOB/+P3FThVnXLcFX0wPryfGtO7VdhsnZNIjCibgs=;
- b=FzGSbFxeup0hcKuq5p8ttJGoZId2vAvWkMYzecJX/fWzFUCJe2XUQ1M+oVGJTeEh8De9j7QWhOUJND8oHKarafK2Wroa8FFo/hNeaNf8vimm9820g5G82QIh7AFNZuymaby6oLwLs6Mcx70EoyKCEECdU8ISZn6g0RQT6KImpNE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MN2PR13MB4037.namprd13.prod.outlook.com (2603:10b6:208:24f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 13:11:38 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 13:11:37 +0000
-Date:   Mon, 1 May 2023 15:11:23 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        Rocky Liao <rjliao@codeaurora.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH RFC 2/4] Bluetooth: btqca: Add WCN3988 support
-Message-ID: <ZE+6e7ZxJ2s9DHI1@corigine.com>
-References: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
- <20230421-fp4-bluetooth-v1-2-0430e3a7e0a2@fairphone.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230421-fp4-bluetooth-v1-2-0430e3a7e0a2@fairphone.com>
-X-ClientProxiedBy: AM8P189CA0013.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1682947005; x=1685539005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GbXEvFB7fjq+XNje0q8/whu20PA7ZnvvxDaqHqn67jk=;
+        b=H2zXZDG6tXxVQ9f9vbGaovdxaTuwv0q6kVEYTgagLqYRRHSwKdbTjTl8oLJ8VwNgUp
+         z5mJufct1ITHg4Dv5LQfomDazboiwolJap+/qE5fkHdISkNr14PyuF9skfwkwX0eBhcr
+         LknF8vxFQO3VT3Gp9SZd+M8cgfAVD4r4sGu0AYaxBG2+G8mObc5s+x0uLiVotgtyGygx
+         vO7rTq5U13UEsRYeFqpekJtvUo5MptHQcTO4w3UPjMq/Vrlhl6JpJmIdKywjTiQtyUnV
+         dYqW5ZIzbq7p1S3GZXW+z67PzGbUR8kJ1tkMdwWSY2dZJ9Cme7j2ATUwH4yApjWrQnRG
+         X2iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682947005; x=1685539005;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GbXEvFB7fjq+XNje0q8/whu20PA7ZnvvxDaqHqn67jk=;
+        b=EazaIjEa3jWwLpNPuFc2MvmtsoSlT9G9hdIxa5Kb7vprL18/7Ibyd4sgjL3Bb0cZCq
+         X3azvWyEizWbAoaeeo+ydGpNDGNreTq9timDmWplXe9aerAJbuFPvEZgbD+76alIaLWg
+         +jjK91dWj2h3ljOwbnlKKgN1GZfiw6QS7hWWxjWcXne/55V8+7mXiV0cgf76q4u8NbdG
+         w1XfZDk8XI6yydc45Zvm4ur42LzSBNBaACRmx+zMAhOPXqgfPYWCQw9yekw1wwTmKLkq
+         DHDDgfNx/+QV9Wb6js8y2mDZi7RM/Ag6WU3v2hYWcfaicFvcd0+5Q5PoYNw7BI2PEz6g
+         n1fw==
+X-Gm-Message-State: AC+VfDzhinzxAY5u0GrGtNi15E0Pq4E93Ypcp+jcDuaDdShxV6+uKIsn
+        PZ0HeG1H5tg+v5Hrm707O+F93E2HP3H3fKD6lvc=
+X-Google-Smtp-Source: ACHHUZ6iFi8AEfQHzOY3l5qhxjS8jsu2YT5vX7WEuxTKuD680EpS7Vqj7vwUIXg9ZrkmEqwvMrVIWT9N2dzKYnjDEdg=
+X-Received: by 2002:a67:ed49:0:b0:42c:9732:d17f with SMTP id
+ m9-20020a67ed49000000b0042c9732d17fmr5847758vsp.1.1682947005662; Mon, 01 May
+ 2023 06:16:45 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB4037:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87abadb9-c5cd-48fc-d899-08db4a459888
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eR57736ufEKg8hrWj57mg/vMfNi4IZjqk7hXd3iUNR33C/8Hkh2Cc7x/J/d1+ei70moCr9aAPFENzjXkouCQgb74eWDMBLMbyl0fiTqufvB1Fw0c44hIP4OOgUKB+Z8d5BZduN7lEsLPxEdsJsmz/ltW2Kqzt7oK4MnrK7DtHHEYn3jOra5AjoQSU728waVuOtj93bmQgrKFBm+w8xdTOjofg/xHJmaxPUqwrLrvTNQLbDsNUVadIfrkQxEPOySaWVtAil0EmYQ7T6iww01EkA9uLQMXFrEDrqFOIvEGLSANwEJd3Ak39YttliloDYLM6mGFt7XtgzIETrgQNOTyuIEhT60US6knm8TuR5EJ+SVNrdzG6W8aoJhzgrPWwJhsAIKAgHb0DnlN0SZ2yJoEG/hne2qlnwdEURtlJel9bW6UjN5CnxbTBXGqpHW2EAtNBS+NfQA6aCFs4Tj1prRmZ/tgJNnp3iSc1SaZDIQtjbJwPTl3+GJ8SflymYdQOH83RIc2q9Lh4i3lN9JZ868C4JcXCwRIO97hXjAkBU26G+RzAY3uDfVAuHvajoNV63BPOOa3GUeMKffbjFXcODazAsMYbIBSE9IwO1w0KizxcT91PxDo/A+X9TiTzhfSFsnuufE5hzY1OsuG6B+zr4JxXqwleJuk8lelIoDoKw6yXE1onylneU//8azzTWGbMcdv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39830400003)(366004)(376002)(346002)(136003)(451199021)(86362001)(36756003)(38100700002)(83380400001)(2616005)(186003)(6506007)(6512007)(6486002)(6666004)(478600001)(54906003)(66946007)(66476007)(66556008)(4326008)(41300700001)(8936002)(316002)(6916009)(8676002)(44832011)(5660300002)(7416002)(2906002)(87944012)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dVWX+xkK6PgLWmhZWRAgkrRzHao5iCMzHiIiwCE5QSpg025ACOAraQa9fxro?=
- =?us-ascii?Q?1RD3WuVktQOIzuycpqpFzWnF/leEFzPJ4s074pHSgFCWPPEuLPMWaNTJERRL?=
- =?us-ascii?Q?ZlnbTNOGGv+kqW4aIOH9Cq/1kKndoCkdLEYh7neBEnBtrblyfHDxXsONCb/+?=
- =?us-ascii?Q?4jMSl9u4HdJIWm+9A7xnDv3fjvwxFDD4dpcEPJQLVmxZ96iPgFWrDj9Z/Wpy?=
- =?us-ascii?Q?ui1G+PdQ8SyvHNbJqpALR+QHcsP59ALIHl6WADh4oTByknZrrXySsNZ1d7Ub?=
- =?us-ascii?Q?ge1oTVOsWjpGlOEjvF5I4ZTErihtuimSTiTaAejJP1jCK16MkIfo5tvEUbei?=
- =?us-ascii?Q?oxk62WmQjqmo7J7OI6Ut3u7Lnk8Yr2ZWRf0h04yS5R4m/vuDhK5aQqBZRCs5?=
- =?us-ascii?Q?lzZlVm1jIq54YUbB3bU6UhzBZ2VhkegJqmDH4zGSLx11lZ10goMyTkmmkn75?=
- =?us-ascii?Q?PphnRde4KYOwPr+CbyQyS6BGiL/2/Ovi+T/YtamB47GP5eHEdUjzMJrgjH5T?=
- =?us-ascii?Q?dRIJx5FaGCNq5zZSjiBFfR0Ua/51wMQt9L2aSYhnBDBnl3zgKLtIuQqbJFEl?=
- =?us-ascii?Q?oMEeXF+KVMitYCrpefg4vnORVSQ0oJHkPyVQr5XIygJiILDNFa+pYCgDrPXt?=
- =?us-ascii?Q?zV0K2O7LbA+NS4sgEDDI4ZiVzH5azSIP2ZejPKFduVKlUMsbZn18q84mIFkU?=
- =?us-ascii?Q?uL8F4aQwbeTdW1PYIPwJybGji92ttH8ID7kcNQmJI4d7zQETvHC+1UnHeowJ?=
- =?us-ascii?Q?ZTpry71mXKny3foEGNiAxVYebT8Uhw59o4MNC7xjI6BsWbIn/uzgTm35hxfG?=
- =?us-ascii?Q?iFzR5gqe8YgH/I1u4AA04zgKbPBdZTjstsCgyKWqwZ43VRMhhc4RkaBTiSz7?=
- =?us-ascii?Q?XcuJf1j4mKgikSEPEkwB/gh+CmPTfaEu+Bb9KNfJu3akwEW53UleO15HgPxs?=
- =?us-ascii?Q?BpHvCfPQtWDJEBuJ5Mdd6OKZVV/7VqcEiPsAwq7x3zaSz8MkNW/kuFfGVdkd?=
- =?us-ascii?Q?cT8o8GP2t14DEdAo3SeK9PjekkPqckKDfM9ge3+vUhJT7d/W0Nzb4h6SBgwG?=
- =?us-ascii?Q?l7YkMuTejWPyvBRN8/fAOEkCOakpsAKWjwM359kJzD2Z73NRPQLzIh8iuCYj?=
- =?us-ascii?Q?fRvD5lqvW1JCSuOCu6dx7ckuP4JXt6WnxuFOUTsWhcvm/amF1AzclqyI8Nql?=
- =?us-ascii?Q?OeMpy3cmEq0CkOwKvZRxiPVagpakEUGzVD/cD2EBevVhe9O97xiC9M1dyDoA?=
- =?us-ascii?Q?SQ14Wpst7md1qOBlAtG4SqWmoaYTW3ayPMkleoqSlvy+e48pxRB8rU+CbdkO?=
- =?us-ascii?Q?c/3HS/66aUfqZ3/6TbIK9Mp2MglfNCRP2ZMdr1USpINOG69KH5lC0sotzqqs?=
- =?us-ascii?Q?CW8phv+4UWp8d9VK4SdxXF6N5TD67x4yAS7m2eJB0VeKpeajrl1CpCQMRe/h?=
- =?us-ascii?Q?4F5z+udZXPhh7DH5BwUtReFjQQZMYArdSRULPoxC/hDKI2vqlaEka0kmooCP?=
- =?us-ascii?Q?UIaWod0ynkdpl6nPcllroh+VNwi0DSGLRTKKfBz0KYL2GYKEG5//yI5FuQ1S?=
- =?us-ascii?Q?RQS9WBV1xTW6b1geGt6Zoo1pigJsRz5qw+pC0/52Cfm4G0dwEMx/BTG7fmD7?=
- =?us-ascii?Q?YuJSloG58pblI+PaxllkbY+5/RGSCvTd7DPtLqH7gmqZ1r2FrboV8+CFGZfb?=
- =?us-ascii?Q?/Slrow=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87abadb9-c5cd-48fc-d899-08db4a459888
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 13:11:37.8601
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9HfuUW+8GeopbISiXMl+n4qecJ3nn0uqN0tHECfRA+RYfLqhsnOEystULQZqpU5RLfq9mEqHlR73DXo5rQN4fy7oncV5jMPRegN9OX7Yceg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB4037
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+ <ZE9B4avbDtIXOu4O@debian.me> <87r0s0pnim.wl-tiwai@suse.de>
+In-Reply-To: <87r0s0pnim.wl-tiwai@suse.de>
+From:   Jeff Chua <jeff.chua.linux@gmail.com>
+Date:   Mon, 1 May 2023 21:16:35 +0800
+Message-ID: <CAAJw_ZsDdiB=b2PZydQWF2fjSULit3NWE-Bf1icBEryN-GuqUw@mail.gmail.com>
+Subject: Re: linux-6.4 alsa sound broken
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux ALSA Subsystem Development 
+        <alsa-devel@alsa-project.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 04:11:39PM +0200, Luca Weiss wrote:
-> Add support for the Bluetooth chip codenamed APACHE which is part of
-> WCN3988.
-> 
-> The firmware for this chip has a slightly different naming scheme
-> compared to most others. For ROM Version 0x0200 we need to use
-> apbtfw10.tlv + apnv10.bin and for ROM version 0x201 apbtfw11.tlv +
-> apnv11.bin
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  drivers/bluetooth/btqca.c   | 13 +++++++++++--
->  drivers/bluetooth/btqca.h   | 12 ++++++++++--
->  drivers/bluetooth/hci_qca.c | 12 ++++++++++++
->  3 files changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-> index fd0941fe8608..3ee1ef88a640 100644
-> --- a/drivers/bluetooth/btqca.c
-> +++ b/drivers/bluetooth/btqca.c
-> @@ -594,14 +594,20 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
->  	/* Firmware files to download are based on ROM version.
->  	 * ROM version is derived from last two bytes of soc_ver.
->  	 */
-> -	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-> +	if (soc_type == QCA_WCN3988)
-> +		rom_ver = ((soc_ver & 0x00000f00) >> 0x05) | (soc_ver & 0x0000000f);
-> +	else
-> +		rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+On Mon, May 1, 2023 at 2:35=E2=80=AFPM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 01 May 2023 06:36:49 +0200,
+> Bagas Sanjaya wrote:
+> >
+> > On Mon, May 01, 2023 at 11:59:12AM +0800, Jeff Chua wrote:
+> > > Latest git pull from Linus's tree ... playing a simple sound file wil=
+l
+> > > resulted in a lot of echo.
+> > >
+> > > Running on Lenovo X1 with ..
+> > > 00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
+> > > Definition Audio Controller (rev 01)
+> > >
+> > > I've bisected and reverted the following patch fixed the problem.
+> > >
+> > > commit 9f656705c5faa18afb26d922cfc64f9fd103c38d
+> >
+> > Thanks for the regression report. However, where is your dmesg and/or A=
+LSA log
+> > when the regression occurs? What is the playback test file?
+>
+> Yes, in addition, which driver is used (provide the alsa-info.sh
+> output at best), and which sound backend is used (pipewire, PA or
+> dmix) with which application?
 
-Hi Luca,
+/proc/asound# cat cards devices hwdep pcm timers version
+ 0 [PCH            ]: HDA-Intel - HDA Intel PCH
+                      HDA Intel PCH at 0x603e1c8000 irq 147
+  1:        : sequencer
+  2: [ 0- 0]: digital audio playback
+  3: [ 0- 0]: digital audio capture
+  4: [ 0- 3]: digital audio playback
+  5: [ 0- 7]: digital audio playback
+  6: [ 0- 8]: digital audio playback
+  7: [ 0- 9]: digital audio playback
+  8: [ 0- 0]: hardware dependent
+  9: [ 0- 2]: hardware dependent
+ 10: [ 0]   : control
+ 33:        : timer
+00-00: HDA Codec 0
+00-02: HDA Codec 2
+00-00: ALC287 Analog : ALC287 Analog : playback 1 : capture 1
+00-03: HDMI 0 : HDMI 0 : playback 1
+00-07: HDMI 1 : HDMI 1 : playback 1
+00-08: HDMI 2 : HDMI 2 : playback 1
+00-09: HDMI 3 : HDMI 3 : playback 1
+G0: system timer : 10000.000us (10000000 ticks)
+G3: HR timer : 0.001us (1000000000 ticks)
+P0-0-0: PCM playback 0-0-0 : SLAVE
+P0-0-1: PCM capture 0-0-1 : SLAVE
+P0-3-0: PCM playback 0-3-0 : SLAVE
+P0-7-0: PCM playback 0-7-0 : SLAVE
+P0-8-0: PCM playback 0-8-0 : SLAVE
+P0-9-0: PCM playback 0-9-0 : SLAVE
+Advanced Linux Sound Architecture Driver Version k6.3.0.
 
-perhaps it's just me. But I was wondering if this can be improved on a little.
 
-* Move the common portion outside of the conditional
-* And also, I think it's normal to use decimal for shift values.
+# test playing with ...
+aplay /usr/share/sounds/alsa/Side_Right.wav
+Playing WAVE '/usr/share/sounds/alsa/Side_Right.wav' : Signed 16 bit
+Little Endian, Rate 48000 Hz, Mono
 
-e.g.
-	unsigned shift;
-	...
+I'll try to capture the sound ... it's seems to just repeating every
+second until the last second. So, if you just play a "beep", its ok.
 
-	shift = soc_type == QCA_WCN3988 ? 5 : 4;
-	rom_ver = ((soc_ver & 0x00000f00) >> shift) | (soc_ver & 0x0000000f);
-
-Using some helpers such as GENMASK and FIELD_PREP might also be nice.
-
->  
->  	if (soc_type == QCA_WCN6750)
->  		qca_send_patch_config_cmd(hdev);
->  
->  	/* Download rampatch file */
->  	config.type = TLV_TYPE_PATCH;
-> -	if (qca_is_wcn399x(soc_type)) {
-> +	if (soc_type == QCA_WCN3988) {
-> +		snprintf(config.fwname, sizeof(config.fwname),
-> +			 "qca/apbtfw%02x.tlv", rom_ver);
-> +	} else if (qca_is_wcn399x(soc_type)) {
->  		snprintf(config.fwname, sizeof(config.fwname),
->  			 "qca/crbtfw%02x.tlv", rom_ver);
->  	} else if (soc_type == QCA_QCA6390) {
-> @@ -636,6 +642,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
->  	if (firmware_name)
->  		snprintf(config.fwname, sizeof(config.fwname),
->  			 "qca/%s", firmware_name);
-> +	else if (soc_type == QCA_WCN3988)
-> +		snprintf(config.fwname, sizeof(config.fwname),
-> +			 "qca/apnv%02x.bin", rom_ver);
->  	else if (qca_is_wcn399x(soc_type)) {
->  		if (ver.soc_id == QCA_WCN3991_SOC_ID) {
-
-Not strictly related to this patch, but while reviewing this I noticed that
-ver.soc_id is __le32 but QCA_WCN3991_SOC_ID is in host byteorder.
-
-Perhaps a cpu_to_le32() or le32_to_cpu() call is in order here?
-
->  			snprintf(config.fwname, sizeof(config.fwname),
-
-...
+>
+> thanks,
+>
+> Takashi
