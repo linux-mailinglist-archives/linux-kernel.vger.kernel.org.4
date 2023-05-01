@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3AD6F2D9A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5AB6F2DA8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjEADOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S233000AbjEADOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjEADMT (ORCPT
+        with ESMTP id S232713AbjEADMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:12:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36593271E;
-        Sun, 30 Apr 2023 20:04:41 -0700 (PDT)
+        Sun, 30 Apr 2023 23:12:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D83B1988;
+        Sun, 30 Apr 2023 20:04:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C095C6119D;
-        Mon,  1 May 2023 03:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9962C433A1;
-        Mon,  1 May 2023 03:04:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E990A616FF;
+        Mon,  1 May 2023 03:04:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CD7C4339B;
+        Mon,  1 May 2023 03:04:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910273;
-        bh=YKojEJiiV1QvwHI5f0ezVGrRBJg+sS7nU5ba/bX9Vb8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JNTwHfRrJ8cnetVn+jV6xjHcnBFwb0cHcNYhjg3R0z8Yw/VPuSYLLXcYYf42WU7mW
-         7jd4rHcXG5qZDi7UKcwn6cPZ38YhLCkrnv6geGaXHo6te7TDglHvh1DZNwb2UFWBff
-         Ld7y4MFu9UBdjkCjivuLrlgzCGMg3w1drQVsSguWN3KoQLUicYYS8NUdXczG11ngkL
-         mNHcdjvndfdzzMWpBjVEMTZAuze+bm4dLyACBjFBbdanv4XSGEfDCdVKUqoCHk2rRR
-         2Sn9sTn6XWfRjnAw0q6t5zg9BibYzcNP9qAomwFBPXCBLzcadYGJ0PCy933/Ehkk9X
-         1OWyjXEHYxBOA==
+        s=k20201202; t=1682910278;
+        bh=0IuqPKYtoTumQGNmGhHYe/+Xf+xvrNDgDjfU4fCgdqk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FK38VIhxDu0yEK9UwYYr6+apSbVwxKxJw7QLU94spNBT03I00HhkHU0A5Qjl+MvRX
+         aGyu6EZMhF0kAcZy35oCx6bclEkJYjixzCZWtoxQYRl+wkegZCjcLqH4H3Kv4S59FL
+         lY4mAbAm/ETNxmuEGZz/hhOwNNVeAcfgSJouex9KT6yEPKB3n0gNYQnSTCyguIKXh0
+         52rTp5xqvZ7HGz89r4QVAkczitzcr6aQwjX83+GXmBC/V9whapimm1bZCcImlaKENZ
+         sLP0R0J9QKErIXxJB2eS3TsdSRHFOtqHhtalk9/uAa+DkkSxAEAX82KefcjLDQvW2J
+         ZPHpo3uLgKrHA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        matthias.bgg@gmail.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 33/33] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
-Date:   Sun, 30 Apr 2023 23:02:27 -0400
-Message-Id: <20230501030227.3254266-33-sashal@kernel.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Iaroslav Boliukin <iam@lach.pw>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Sasha Levin <sashal@kernel.org>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.15 01/17] drm/displayid: add displayid_get_header() and check bounds better
+Date:   Sun, 30 Apr 2023 23:04:18 -0400
+Message-Id: <20230501030435.3254695-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030227.3254266-1-sashal@kernel.org>
-References: <20230501030227.3254266-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,43 +59,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit 8fbcf730cb89c3647f3365226fe7014118fa93c7 ]
+[ Upstream commit 5bacecc3c56131c31f18b23d366f2184328fd9cf ]
 
-variable *nplanes is provided by user via system call argument. The
-possible value of q_data->fmt->num_planes is 1-3, while the value
-of *nplanes can be 1-8. The array access by index i can cause array
-out-of-bounds.
+Add a helper to get a pointer to struct displayid_header. To be
+pedantic, add buffer overflow checks to not touch the base if that
+itself would overflow.
 
-Fix this bug by checking *nplanes against the array size.
-
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Iaroslav Boliukin <iam@lach.pw>
+Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/4a03b3a5132642d3cdb6d4c2641422955a917292.1676580180.git.jani.nikula@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/drm_displayid.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 641f533c417fd..173407664cf42 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -753,6 +753,13 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
- 	}
+diff --git a/drivers/gpu/drm/drm_displayid.c b/drivers/gpu/drm/drm_displayid.c
+index 32da557b960fd..82b7f0bb44097 100644
+--- a/drivers/gpu/drm/drm_displayid.c
++++ b/drivers/gpu/drm/drm_displayid.c
+@@ -7,13 +7,28 @@
+ #include <drm/drm_edid.h>
+ #include <drm/drm_print.h>
  
- 	if (*nplanes) {
-+		if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-+			if (*nplanes != q_data->fmt->num_planes)
-+				return -EINVAL;
-+		} else {
-+			if (*nplanes != 1)
-+				return -EINVAL;
-+		}
- 		for (i = 0; i < *nplanes; i++) {
- 			if (sizes[i] < q_data->sizeimage[i])
- 				return -EINVAL;
++static const struct displayid_header *
++displayid_get_header(const u8 *displayid, int length, int index)
++{
++	const struct displayid_header *base;
++
++	if (sizeof(*base) > length - index)
++		return ERR_PTR(-EINVAL);
++
++	base = (const struct displayid_header *)&displayid[index];
++
++	return base;
++}
++
+ static int validate_displayid(const u8 *displayid, int length, int idx)
+ {
+ 	int i, dispid_length;
+ 	u8 csum = 0;
+ 	const struct displayid_header *base;
+ 
+-	base = (const struct displayid_header *)&displayid[idx];
++	base = displayid_get_header(displayid, length, idx);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
+ 
+ 	DRM_DEBUG_KMS("base revision 0x%x, length %d, %d %d\n",
+ 		      base->rev, base->bytes, base->prod_id, base->ext_count);
 -- 
 2.39.2
 
