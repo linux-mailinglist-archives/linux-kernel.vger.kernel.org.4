@@ -2,79 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4605C6F365B
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E9D6F3668
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjEASz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S232763AbjEAS6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjEASz4 (ORCPT
+        with ESMTP id S229861AbjEAS6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:55:56 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88FAB6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yxDleUQ2J/PiENXcRMI6lXFktbPZYkLi3wBEIWyspt0=; b=SsOr2pOerOAv1gTkFtKYOPCj5O
-        Ohu8CHwIRetuJkbs/uuwVxcMs2fQvr3UKHPP309tBF33497Vmd+kviw0olEzyIPIpyfT7v7uw9zOm
-        IaMgD56Sn85Y+wQzUA49MKY2vZuSfTDHyJNkRJUNsUvGRE+owe7bpXG0GGKcpsMZn3Ahz/Ew7W4B8
-        thJZ0/QHD46eLKvg0ri/XvlWouLn/hhSq4/qB3log6OlE8fTHvG5SobqrVWnYpEXf1f9vzQz0wKIH
-        wf8EYNUdFjOUROStwCNKAyP3FWetlLeLJYutZmD4KYV+5yYgfqJiiGDyhZFVhn+bzRhwosSBbaGzI
-        SCAnsRkQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ptYgR-007bFE-R2; Mon, 01 May 2023 18:55:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 403603002BF;
-        Mon,  1 May 2023 20:55:34 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0018823C5C342; Mon,  1 May 2023 20:55:33 +0200 (CEST)
-Date:   Mon, 1 May 2023 20:55:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     chris hyser <chris.hyser@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, Chen Yu <yu.c.chen@intel.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH v4] sched/numa: Fix divide by zero for
- sysctl_numa_balancing_scan_size.
-Message-ID: <20230501185533.GD1597476@hirez.programming.kicks-ass.net>
-References: <20230406152633.3136708-1-chris.hyser@oracle.com>
- <20230429145635.GA1495785@hirez.programming.kicks-ass.net>
- <3fdc9c92-4a4f-b716-c8bc-056111feb3e0@oracle.com>
+        Mon, 1 May 2023 14:58:46 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110801708
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 11:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hZemwKqI+XbJvZCmRaGMFa4GqKWtdAWoykUnIAnqKOI=; b=eOZ/Xgo+w1avvUZ+ctjJLSHe4R
+        3PO7t7pJxOMDpP1SwWDO6KhBpE+vxfmaAhSWlRNyAuX5KyzvoUPDibdD1c525ZUoBDeOBOIGkkry2
+        pMBeT1wsv4GaR+MrbEZX945Y5c8d2bbWGzEoKZdR5Dh1TXA2IWFPDY5zV2fRHHIMIlpoUw2ynbljK
+        N1gRQypiTIe1M/BZLxs+yQ3ZUtltDY4tbFNF2gjufV/DRkcV5wD8xMLk20NuoB9rj2akR9zi3pjUE
+        muA/hWG58TT2ZlG4mnehsuEIWGGBAIbEAj4ZKGwUfZwaEq/qaEk0eBr3fIki9pJQ9/9YDH/qZzMwY
+        1AxjAfRg==;
+Received: from [179.113.250.147] (helo=steammachine.lan)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1ptYjO-00H3BT-Q4; Mon, 01 May 2023 20:58:39 +0200
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
+        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        =?UTF-8?q?Timur=20Krist=C3=B3f?= <timur.kristof@gmail.com>,
+        michel.daenzer@mailbox.org,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
+Subject: [RFC PATCH 0/1] Add AMDGPU_INFO_GUILTY_APP ioctl
+Date:   Mon,  1 May 2023 15:57:46 -0300
+Message-Id: <20230501185747.33519-1-andrealmeid@igalia.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3fdc9c92-4a4f-b716-c8bc-056111feb3e0@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 12:21:17PM -0400, chris hyser wrote:
-> In terms of actually wanting to fix this, I'm a bit confused. It clearly was
-> worth fixing the first time around (it has your sign-off), and the only
-> thing that has changed is that that fix no longer works.
+Currently UMD hasn't much information on what went wrong during a GPU reset. To
+help with that, this patch proposes a new IOCTL that can be used to query
+information about the resources that caused the hang.
 
-Well, the amount of effort to fix it has dramatically increased, 40+
-extra lines vs 2 extra lines.
+The goal of this RFC is to gather feedback about this interface. The mesa part
+can be found at https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/22785
 
-> > If we do find we want this (why?!) then should we not invest in a better
-> > debugfs_create_u32_minmax() or something so that we don't get to add 40+
-> > lines for everthing we want to add limits on?
-> 
-> I will look at a way to greatly simplify the bounds checking here as you
-> suggest.
+The current implementation is racy, meaning that if two resets happens (even on
+different rings), the app will get the last reset information available, rather
+than the one that is looking for. Maybe this can be fixed with a ring_id
+parameter to query the information for a specific ring, but this also requires
+an interface to tell the UMD which ring caused it.
 
-Thanks, that might make it all a lot nicer indeed.
+I know that devcoredump is also used for this kind of information, but I believe
+that using an IOCTL is better for interfacing Mesa + Linux rather than parsing
+a file that its contents are subjected to be changed.
+
+André Almeida (1):
+  drm/amdgpu: Add interface to dump guilty IB on GPU hang
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h      |  3 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c  |  3 ++-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_job.c  |  3 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c  |  7 ++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ring.h |  1 +
+ drivers/gpu/drm/amd/amdgpu/gfx_v10_0.c   | 29 ++++++++++++++++++++++++
+ include/uapi/drm/amdgpu_drm.h            |  7 ++++++
+ 7 files changed, 52 insertions(+), 1 deletion(-)
+
+-- 
+2.40.1
+
