@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC5C6F2FF8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B31C6F2FFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjEAJu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S232243AbjEAJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjEAJuy (ORCPT
+        with ESMTP id S232284AbjEAJv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:50:54 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B2C1B7
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:50:53 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so1648672a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:50:53 -0700 (PDT)
+        Mon, 1 May 2023 05:51:26 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E5BE4A;
+        Mon,  1 May 2023 02:51:24 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-24e01ba9e03so517082a91.1;
+        Mon, 01 May 2023 02:51:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682934651; x=1685526651;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1682934683; x=1685526683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=R3qMWocL6/wpbuDG6gR5Wtg+ZCiwCsubf8C3G4b5aRI=;
-        b=pezXIELbzEAcCjV+boWauNmc5FQspzcpLCEDI67YIbKjgfsjTRBKe0Wf1wNUHmk3nN
-         aJoPy4O0HwPQBG4M/iEiPUcZl8mqheFvGGEJs5FgO/ikYVqByWbj9QFqdO4bG7jG8UtR
-         RRNyIunTTrHFKdrMpfP7Nsiz+Skn7pFEk6SV3A+sbnvkWriC7e8QOxRNl3HwA99ta9ff
-         /zV8wOJnyflarJDy9mG1Jo3lM7CSov/LGAnQNieTzTzr0o24xCgQubpfFWADbpQl7T68
-         KlPoPIeZjUtFfecyoHnbbms6ha2I7OBuMR/O2SrjLbbYt7/8DboATrH913BBTLXgtI/Y
-         lCSQ==
+        bh=wAyKklJP4RAwcGyHLElFHWzPziFPamUTZVBn88mFHEM=;
+        b=GqMfQC7PQxWSJHUrzTkIrUFwPjo7AQsDMlPtX/wojI4kRyPoU76VlXhPhhdiWO2liC
+         M1Y5g5GAs0zZLbMPhMZnI5FkpQ2WCSHTYZ3mqeftXv/E7ReZJOyGSksVcK4kvfbXG8N5
+         GmgMAXvRjp9iE5FQl3/M4krfXy8951z3lHS5+DK9cKhcX+DFLC3eowFmt7twD7yU14+K
+         YDNV1J+//dvM0DHYoKBmtLshIcTTakJsr7tDmbpkhFzI7A7Ox2INx6MUn4eXx7voZlE6
+         7cq5cS9ggipGlO+YFALA7YmsWyxxwtqk1jHXjO/1utZCrMII0jf38EZ2JKSUr/E1CTrc
+         i6eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682934651; x=1685526651;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682934683; x=1685526683;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3qMWocL6/wpbuDG6gR5Wtg+ZCiwCsubf8C3G4b5aRI=;
-        b=fZW7rfJ34XfCbIH89QcNESZvRRfVfiVLsOjIddQnLA0vygqHPyRIobiphXyBvZaHSL
-         tSZP6h5AvyJ0t/vWPCsj7GvuDNHAifRz3vf88IrRfwB3rpge5+eOHfQwalE78IHiy5ty
-         8oqR7rkVsAdauFjbyEX1cWn9UAOD7Lf4Wl5I04KCSdiE3GF6EJWZjuBjCMk2KDlKBkZ4
-         TJTLh+cjkimlBZUYXivEBDlTKm6uU390MdLZEvNQfn1CVY2zUaT7NFN0UtqhIPbAwJHH
-         1ZSYonhUTGPcrc9Dr8eUF/8xPJ8PUXXsp+f8dZD+2fAqZnH41cfV9FcFVQ6frzivLUtX
-         wK9g==
-X-Gm-Message-State: AC+VfDxDr13n/jsmcqbBEgej4STtGa6tw0owlCYSCg03RgKvquO2BhCy
-        f+Sh2m2/oaJ3RQf1Kq9wOWJ0UQ==
-X-Google-Smtp-Source: ACHHUZ5aoCRJwdM01aHJAYJ6FZM0GaX+jTFGr55aLgScxrfNq6frPl2fubj4mP8pK+VDgPengBFaAA==
-X-Received: by 2002:aa7:cd10:0:b0:506:b228:7aff with SMTP id b16-20020aa7cd10000000b00506b2287affmr5635208edw.23.1682934651694;
-        Mon, 01 May 2023 02:50:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
-        by smtp.gmail.com with ESMTPSA id n20-20020aa7d054000000b004fc01b0aa55sm12145335edo.4.2023.05.01.02.50.49
+        bh=wAyKklJP4RAwcGyHLElFHWzPziFPamUTZVBn88mFHEM=;
+        b=flKWZVthQgECi7qZxI+TGlRc63Wqm+XloM+2DrzY1FKs2vMRqQDG4G9yxrZSM1mWmd
+         we9ysisSAOJtXXpOvPJ48JnRBpzFjJIqKYRMtkw8nU0xOmynnyFU/pPXyLj7ucYaDP/x
+         W3Bm5QLuc1w1Azi2dikaIeJZ0xgJHF8Cx22w5apg0F0cAJplqG3GhvjuH6aq2iLRWuJi
+         iAwqCADH+N2wV5Td9HTPW1jGVwWpU4UoiZtuv4VN4Ga096N3+W9rOmT6BGc93lFkhKw2
+         S73kSZEqpnXvCtuAPRaNNJ97/kSQRlPvueP4zL/MaXUfRqFkSP/Pwonvda+rGgrWHyTC
+         wLiA==
+X-Gm-Message-State: AC+VfDwURUefprrKj7xQqpCQ+poRxPM1TyugkaZmWq7r0jHz1+MeqnIG
+        ml5nCo0UsUyA4+Ox0GWfW7w=
+X-Google-Smtp-Source: ACHHUZ7bXlwoLS0yE+UKf5JmSxUljwc8fOGS1fiKev+OTVuxC2eEjE3byoVXgpmu5zrdQewi4e6A0w==
+X-Received: by 2002:a17:90a:bc89:b0:24e:134e:96db with SMTP id x9-20020a17090abc8900b0024e134e96dbmr619501pjr.22.1682934683254;
+        Mon, 01 May 2023 02:51:23 -0700 (PDT)
+Received: from [183.173.17.116] ([183.173.17.116])
+        by smtp.gmail.com with ESMTPSA id h16-20020a17090aea9000b00247164c1947sm5180481pjz.0.2023.05.01.02.51.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 02:50:51 -0700 (PDT)
-Message-ID: <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
-Date:   Mon, 1 May 2023 11:50:49 +0200
+        Mon, 01 May 2023 02:51:22 -0700 (PDT)
+Message-ID: <d9633b9b-c39f-699a-4b05-1c0c55e2dec9@gmail.com>
+Date:   Mon, 1 May 2023 17:51:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 05/11] dt-bindings: arm: Add initial bindings for
- Nuvoton platform
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
-        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230425102418.185783-1-ychuang570808@gmail.com>
- <20230425102418.185783-6-ychuang570808@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG][RESEND] Bluetooth: L2CAP: possible data race in
+ __sco_sock_close()
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230425102418.185783-6-ychuang570808@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
+        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
+        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        baijiaju1990@outlook.com
+References: <CADm8TemwbUWDP0R_t7axFk4=4-srnm5c+2oJSy7aeSzdKFSVCA@mail.gmail.com>
+ <CABBYNZJCbYnxodwXAeq8F9NerzGWFva0OG6SfUWfJ_Grz=Xq6Q@mail.gmail.com>
+From:   Tuo Li <islituo@gmail.com>
+In-Reply-To: <CABBYNZJCbYnxodwXAeq8F9NerzGWFva0OG6SfUWfJ_Grz=Xq6Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2023 12:24, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> Move 'nuvoton,npcm-gcr.yaml' from 'arm/npcm' to 'soc/nuvoton'.
-> Rename the '/arm/npcm' directory to 'arm/nuvoton'. Additionally, add
-> bindings for ARMv8-based Nuvoton SoCs and platform boards, and include
-> the initial bindings for ma35d1 series development boards.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  | 30 +++++++++++++++++++
->  .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |  2 +-
->  .../nuvoton/nuvoton,npcm-gcr.yaml}            |  2 +-
->  3 files changed, 32 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
+Thanks for your reply and interests. Our static analysis tool is still 
+to be improved, and any feedback on it would be appreciated.
 
-I don't see any improvements here. Path in maintainers is still broken.
-
-Best regards,
-Krzysztof
+On 2023/4/29 5:24, Luiz Augusto von Dentz wrote:
+> Hi,
+>
+> On Fri, Apr 28, 2023 at 3:27 AM Li Tuo <islituo@gmail.com> wrote:
+>>    Hello,
+>>
+>> Our static analysis tool finds a possible data race in the l2cap protocol
+>> in Linux 6.3.0-rc7:
+>>
+>> In most calling contexts, the variable sk->sk_socket is accessed
+>> with holding the lock sk->sk_callback_lock. Here is an example:
+>>
+>>    l2cap_sock_accept() --> Line 346 in net/bluetooth/l2cap_sock.c
+>>        bt_accept_dequeue() --> Line 368 in net/bluetooth/l2cap_sock.c
+>>            sock_graft() --> Line 240 in net/bluetooth/af_bluetooth.c
+>>                write_lock_bh(&sk->sk_callback_lock); --> Line 2081 in include/net/sock.h (Lock sk->sk_callback_lock)
+>>                sk_set_socket() --> Line 2084 in include/net/sock.h
+>>                    sk->sk_socket = sock; --> Line 2054 in include/net/sock.h (Access sk->sk_socket)
+>>
+>> However, in the following calling context:
+>>
+>>    sco_sock_shutdown() --> Line 1227 in net/bluetooth/sco.c
+>>        __sco_sock_close() --> Line 1243 in net/bluetooth/sco.c
+>>            BT_DBG(..., sk->sk_socket); --> Line 431 in net/bluetooth/sco.c (Access sk->sk_socket)
+>>
+>> the variable sk->sk_socket is accessed without holding the lock
+>> sk->sk_callback_lock, and thus a data race may occur.
+>>
+>> Reported-by: BassCheck <bass@buaa.edu.cn>
+> Need to check in detail what it means to hold the sk_callback_lock,
+> btw is this static analysis tool of yours something public that we can
+> use in our CI to detect these problems?
+>
+>
 
