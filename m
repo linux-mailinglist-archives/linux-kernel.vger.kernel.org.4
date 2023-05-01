@@ -2,158 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E268D6F34DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D156F34D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbjEARF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S232758AbjEARFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbjEARFH (ORCPT
+        with ESMTP id S233719AbjEARFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:05:07 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021016.outbound.protection.outlook.com [52.101.57.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA9A4EF8;
-        Mon,  1 May 2023 09:58:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LZXLFbuN5Fsp4MuIvE6aPk8OuFpGVVgHZyNhct/Fkb6iksHwdfCuXCP+dX8kswqfG5zHqWTBxBWhhwrD4NqGKux86Pv7fKc2izqwjHAuOkxWaf0iUc36yvTuxeAj36SdHB+/nxF0o+3SEiNA8LRA9SxKe6d/iSbXZH1tGl11vrUpPB2FeRdAd4Yf2Lb694QK30C3yvpVs0/Zk2MC6uPeKYSrkYYaiU7zbmVCAsZZZTato+AmGBTPO+SZ1SUYtTH1v0v5MGMAn4MIYgEM1CzhWV4QDaFMtG3FFVoV/fPLB7/ZH4GVQ6QJiJXYjWybadonq400ayiWBJ8/A3u9SOIpbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j/+jyv0mLqRd2TzuclSnhXcnq0o7yJCMgWcaaoWBXN0=;
- b=GsSjoIzfzm99vtKgkjvPk4idwUyYw3syT3iLwWdIODOh7BYhB9CEeoB8/IaVrKE+mbDKki/qYNkGM6HMqsV1APEsRmO/L0yPpUuUmyfGDpbbp+fJcoW4xvoWfWTSTUArc+ZhRQyuiAN9uRD8l7jh4Nk21zZ0OzGM9Lf4okGpfjfA2Z/0opWzoSMHG3APe/G9UfLNOBleSJfixy9qLkzgw95mpmaUmW8pZx+55JdLI/vBiX9XVNL2e8r0FPs7FJs13yk+CyuDXeNw9Msg9RVgGpoSwOS4bukvbzqsBNpmtnVooFtIC3KHeDNRI8GXCmVgmo3n+HfGfHxtqOSRNJKlbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j/+jyv0mLqRd2TzuclSnhXcnq0o7yJCMgWcaaoWBXN0=;
- b=K4YfO0qbkwdZlu8UxWCbJcxHsOBN/8tB1Kgp8yTymYx0CL1hbmzvVB/Sep6cO1zy3EMNGAynL7+fQyUT8fnOavO8nz6wwxnLJG5BANGl/spPYXH9uMQJdAiT3oOLd+3WadSBHyfQq3U+qhGWZP/t/kaa+XzZVryLPgroCbdBU2k=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by SA3PR21MB3932.namprd21.prod.outlook.com (2603:10b6:806:2f0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.24; Mon, 1 May
- 2023 16:57:57 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::89f5:e65e:6ca3:e5a7]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::89f5:e65e:6ca3:e5a7%6]) with mapi id 15.20.6363.018; Mon, 1 May 2023
- 16:57:56 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: RE: [PATCH] x86/hyperv/vtl: Add noop for realmode pointers
-Thread-Topic: [PATCH] x86/hyperv/vtl: Add noop for realmode pointers
-Thread-Index: AQHZdpT9Z0UV1Ykq5UyxGk0VlUOcFK9FruAA
-Date:   Mon, 1 May 2023 16:57:56 +0000
-Message-ID: <BYAPR21MB168833D41D1214DE3892874CD76E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1682331016-22561-1-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1682331016-22561-1-git-send-email-ssengar@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8ee2fbc2-9802-421e-8837-b1390483d7e1;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T16:57:31Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SA3PR21MB3932:EE_
-x-ms-office365-filtering-correlation-id: d94a96c8-a8f6-41d1-1d53-08db4a65362f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mtUCCPLTwPWSheslKUYJZJbIFml5WYN/0xDMXz+eQMvCoSKzFcfobdV7DFt/HRK2uOp8hz0Xy6r6+hNxWs06yCD+Y+zvHpPRuNonD/fAKiI4WK5RDwNYlofDCPHMBrXpFYRLnchBLzG+hcHcER0AFLeCneQeV74RiUSH7DCFbrcAoQVInO+TyzR+HLMpDd43Z30u36+wMLuD9Az7Eb9iGC4zKN4S0MpPXmEk34i0ane6fFVEqCCShCph6NdySkPeh/MjTN2x2EQc7/c7QzA/fJIwcqGegMtYEarRnVAWjrlu1s4tGtTBe9NFNlf0izGccuV0eB8IIrRjuVbffBVAITeNTgTXyoPrpE86yJzvKO2+ez6+cGDIBu5SRZzvkRFH9H4omqb78oyTPLq0ehzJkOd3eYkUz/FR15e2MsGvasdnddFgB/+7Wl87afPq5GdK7ctsyBDzrhTHdgdZdXcajWMPojmvn4GT29c7RQ11QT7Rk1Y6zJNeX2DpvPyseat+m0514UUQQGm1m8vJFDZ9XjpKcDeXLy0I5ytvlh5n3VLCV9jSi4+RGIMqOg2ATQreTDUwKA+TQnizM77R17IpZb2UHTaN/2B9gfz48HDV2anAQw/xfvoTqn5qdweJA5q4gIC55FZbn24pqnATwwPWfUt6F1KxbJ1XQf0/u2ZcHFNRIx2k15sJeaem0QwIz1Yz
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(451199021)(186003)(71200400001)(7696005)(55016003)(110136005)(26005)(6506007)(9686003)(64756008)(316002)(76116006)(66946007)(66556008)(10290500003)(478600001)(921005)(82950400001)(786003)(82960400001)(66476007)(66446008)(8676002)(8936002)(52536014)(5660300002)(38070700005)(2906002)(38100700002)(4744005)(41300700001)(122000001)(33656002)(8990500004)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2BJQSFaB3oPX3VczHpLUJvUGBorxQscfnl1OrMtOgNmtaykXPb6AlOFfzVIj?=
- =?us-ascii?Q?RXOrNQa8LGN0sxiQvTMZ0ihEyW0fmqgbCbnXxbIwSJw1f/6pr6PDfIhb/QXL?=
- =?us-ascii?Q?y7iqPHozaY+co1TSo/ACOvEcKWK3SIe4AJZpSXiVqXfAktzhEGS8ETJI/PHv?=
- =?us-ascii?Q?JL5YCEPvMPasQiDpFJdLHSBSO2Bbg5POmyg4e2n2w3GNuXQl7MZAY+1YB1eE?=
- =?us-ascii?Q?9YeRXjb46sP2GT4jr5PFIC0UB8Z+oikqkfqF7r919rNELvXq0nnq/+I4woKj?=
- =?us-ascii?Q?iO2WR1WcjmRI7+VjZfEHlBbyATRWl2QZYBYbLiCFjG/wStmAVD6fsqd++qJG?=
- =?us-ascii?Q?uxye0VdH9QxgUL8qBxz7EU6bCgFYEijNOc9TJHu+ZHjcKtyHuUq5FLXptBsV?=
- =?us-ascii?Q?KXSfrYgPeWpRFUEfr89pt/2odWh/21wyszmKZj0vs98QzwzisFO0r279qtTg?=
- =?us-ascii?Q?6NyLJCM7SGxNwkHNq8fBVb0OppuBF8kffHAv/QM/j5hMq1FbogfHiPpeqIuI?=
- =?us-ascii?Q?9HnI2uKw0Y8rd2mROok639w2B0+tfwXKlrMPQBnP9x5NEvgVWJubqY6T7Mxi?=
- =?us-ascii?Q?TyAqolV9Fk3haICB5z70iC2blns4wH06r667qCKGQ20EDGaBcM7gxHVnql0P?=
- =?us-ascii?Q?enBorNGDxadsIZdVAystEbnpEVPKRdYGW8kTxj0OCFCIVfQlBEhqV4pdKikR?=
- =?us-ascii?Q?wBbKc3Yc/Jc7z+zMtZ5wFVTG4WoVXMS6VkyWogn7Xkn4jxKrdWZtIHqydSPC?=
- =?us-ascii?Q?pvUgzBaFw0NGfyUpXItPXXIJr0Oe3EKxicuW9koQgPGO7Hyo74p2F9twPb2k?=
- =?us-ascii?Q?Fe4p4iUikmxsi2VLQEmV2oVJa1ZvyCXtGxODMixLOpwBYVehtvCM4IGjH+un?=
- =?us-ascii?Q?IhPnoRGMVWBmSTFJ2lYfPonLBQV2h6O+NQ05DISaZQxLjayCM4n4dC98m0cJ?=
- =?us-ascii?Q?pW+QG5wUXQdqBI9JT0SZ4xma9wuajmU4f0D/U7omVOrjNvcgxoHwl9T3OHxY?=
- =?us-ascii?Q?zLZ6KlR6p5BZGSQUQY8JsPss1ge5oMU1JGk9+qCilhC/RnEv67FQvnrXfREj?=
- =?us-ascii?Q?hxtRWEvjrKmVq75O9CTNH1I5OHDjpe/8M2rFgmmkNzaP8cB4U5xHm72UceEb?=
- =?us-ascii?Q?rDrnptlHQjdPRdEKix3zuWu3b6yjns2uE3wcYnRY7RSREi0cCdDbfqpezlNs?=
- =?us-ascii?Q?do3jzun8vttApExaljnkNBrNv0d189eWDZaoJmkvVUZ272UvdGBOUQUDDuxz?=
- =?us-ascii?Q?gXuPYpI34K4ifEaXY9mYs7GoSpFavDZLZfPBfE1CzqGLr3LOh0s2yWFi5Ph7?=
- =?us-ascii?Q?oXJS+Nefil5rySiJMiMzRkRq0B1kt49o+wxhDR7joghDHsX+zz/4zL/Wcb/b?=
- =?us-ascii?Q?2yU0t7+a7XARIfmbdIMtNt0CYDiQRTT7Lma7xUg9+ArGVui5HrWMdgzCe5Pr?=
- =?us-ascii?Q?5jnl99wnepMANsToPCgjauZ6fcGn19tmBx9XGoBUcCdhr/2xj+EAKOVVqcw1?=
- =?us-ascii?Q?cb7+z7AHdMaf+OYV64d4k3tS20A7MLmm4B/G1CM6eMtL7uKTMcRXaP+bKQ/k?=
- =?us-ascii?Q?5rkL6XwzabyMtUqdG37oHN78yOz8n4PZMCrSc9a7+gbWoQTMcqtLic7GL75F?=
- =?us-ascii?Q?+A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 1 May 2023 13:05:20 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD395592;
+        Mon,  1 May 2023 09:59:19 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-18f4a6d2822so17568548fac.1;
+        Mon, 01 May 2023 09:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682960312; x=1685552312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k/SEaAflvpetMi4+nxY06+P/T33MSQGH6sSrAaXI1BA=;
+        b=r0nFRQ420je1KUNVV1fjvkaxY8mGnW4c0nNzaSdCTY96lsVdUrsIc9aP6a8nlDITeH
+         iudvN3i23BRSdk5DRkQhVREKcFMshE1558fLxMjvWsaE8WMY/FA/DLa/UWH/n3In0ClD
+         Ccz4QU/Gfg3xqrjHJrhzqH2athEIFp29haLGlIrxLBhrFhZtquZpkc/gyeeZksqAUJwp
+         6xt65IWqWInuICIwc5XOdEfSjNyipsC5KAYuItr/781IUZZ6d6iBqzeHEm8VkCq/vKiy
+         UUDEPfGVzYM57SjozYEamh1Lptd6/LckWWQYcSaoxgOnh/0n8uiLcRfJxtXE4GmDaUmx
+         6Mtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682960312; x=1685552312;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k/SEaAflvpetMi4+nxY06+P/T33MSQGH6sSrAaXI1BA=;
+        b=WSnhwPcvWG5mNjfGrFXWiML44GpUSROE8pNtcSmizo4HupItQC3dUZoWwi7fG+VQm8
+         Y57KAiwnzRR5hGWABM+Xt8wOzWETJyZ1N8MWlbKTdsO06Sb1IwVgbS6OSVVmiCF6McCH
+         HXhqrpw6oePYQA9RlV5w6TUwTkxLcaZuc7b54/KASr0OzJz40aH0PxiZq7IVHbQvEdMN
+         O/1YKdGO8Bxtd+9jGVFPbmUwguTiuge/vQ0UauxErgbhPxPhKhDEaC6itkF3NMiJamGn
+         ZNQJGQSRpP7L//Vsi8if0F+EHKCtmXTYs3/zKxJY69r6qIDwycjPB45B2tf0UnXLH3/i
+         jjiA==
+X-Gm-Message-State: AC+VfDxqVlQkueTg5Qxs4vV1aK8r0yJqY4frPbQLXTERgm4tPUsuKkmX
+        KymuKFr/9h1g24qN2WKPj8XEF3aR+aZp5fTusd0=
+X-Google-Smtp-Source: ACHHUZ7Vsn3Anj6mP2QaI4Qq50jdI1PMMkNhHYR4SnlhoFhmDZ6byO7UP7PKxiZi4wAEDY66lRfjKnnrkTBGQ913Gs4=
+X-Received: by 2002:a05:6808:116:b0:38d:ed4a:52f4 with SMTP id
+ b22-20020a056808011600b0038ded4a52f4mr6442335oie.14.1682960311714; Mon, 01
+ May 2023 09:58:31 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d94a96c8-a8f6-41d1-1d53-08db4a65362f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 16:57:56.4103
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eJR+Zy8VhOd9kMKMzhvSjdhwq2+QAl/JGagHVxxqUlvZ+m9teZFyaGFLS7nx+ymqHdYOCebeT5gFAuk3yPOj+ntwL0RctvkB9ilSULw59A8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR21MB3932
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230427175340.1280952-1-robdclark@gmail.com> <20230427175340.1280952-9-robdclark@gmail.com>
+ <135ff649-e50c-50f4-55ba-a1b615865e02@linux.intel.com>
+In-Reply-To: <135ff649-e50c-50f4-55ba-a1b615865e02@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 1 May 2023 09:58:20 -0700
+Message-ID: <CAF6AEGvKnPgtna4yjN56mMjCLqpjs8B8K152VWxmPs1NdY78vA@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] drm/fdinfo: Add comm/cmdline override fields
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Christopher Healy <healych@amazon.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Monday, April 24, =
-2023 3:10 AM
->=20
-> Assign the realmode pointers to noop, instead of NULL to fix kernel panic=
-.
->=20
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  arch/x86/hyperv/hv_vtl.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> index 1ba5d3b99b16..85d38b9f3586 100644
-> --- a/arch/x86/hyperv/hv_vtl.c
-> +++ b/arch/x86/hyperv/hv_vtl.c
-> @@ -20,6 +20,8 @@ void __init hv_vtl_init_platform(void)
->  {
->  	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
->=20
-> +	x86_platform.realmode_reserve =3D x86_init_noop;
-> +	x86_platform.realmode_init =3D x86_init_noop;
->  	x86_init.irqs.pre_vector_init =3D x86_init_noop;
->  	x86_init.timers.timer_init =3D x86_init_noop;
->=20
-> --
-> 2.34.1
+On Fri, Apr 28, 2023 at 4:05=E2=80=AFAM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 27/04/2023 18:53, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > These are useful in particular for VM scenarios where the process which
+> > has opened to drm device file is just a proxy for the real user in a VM
+> > guest.
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >   Documentation/gpu/drm-usage-stats.rst | 18 ++++++++++++++++++
+> >   drivers/gpu/drm/drm_file.c            | 15 +++++++++++++++
+> >   include/drm/drm_file.h                | 19 +++++++++++++++++++
+> >   3 files changed, 52 insertions(+)
+> >
+> > diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/=
+drm-usage-stats.rst
+> > index 58dc0d3f8c58..e4877cf8089c 100644
+> > --- a/Documentation/gpu/drm-usage-stats.rst
+> > +++ b/Documentation/gpu/drm-usage-stats.rst
+> > @@ -73,6 +73,24 @@ scope of each device, in which case `drm-pdev` shall=
+ be present as well.
+> >   Userspace should make sure to not double account any usage statistics=
+ by using
+> >   the above described criteria in order to associate data to individual=
+ clients.
+> >
+> > +- drm-comm-override: <valstr>
+> > +
+> > +Returns the client executable override string.  Some drivers support l=
+etting
+> > +userspace override this in cases where the userspace is simply a "prox=
+y".
+> > +Such as is the case with virglrenderer drm native context, where the h=
+ost
+> > +process is just forwarding command submission, etc, from guest userspa=
+ce.
+> > +This allows the proxy to make visible the executable name of the actua=
+l
+> > +app in the VM guest.
+> > +
+> > +- drm-cmdline-override: <valstr>
+> > +
+> > +Returns the client cmdline override string.  Some drivers support lett=
+ing
+> > +userspace override this in cases where the userspace is simply a "prox=
+y".
+> > +Such as is the case with virglrenderer drm native context, where the h=
+ost
+> > +process is just forwarding command submission, etc, from guest userspa=
+ce.
+> > +This allows the proxy to make visible the cmdline of the actual app in=
+ the
+> > +VM guest.
+>
+> Perhaps it would be okay to save space here by not repeating the
+> description, like:
+>
+> drm-comm-override: <valstr>
+> drm-cmdline-override: <valstr>
+>
+> Long description blah blah...
+> This allows the proxy to make visible the _executable name *and* command
+> line_ blah blah..
+>
+> > +
+> >   Utilization
+> >   ^^^^^^^^^^^
+> >
+> > diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> > index 9321eb0bf020..d7514c313af1 100644
+> > --- a/drivers/gpu/drm/drm_file.c
+> > +++ b/drivers/gpu/drm/drm_file.c
+> > @@ -178,6 +178,8 @@ struct drm_file *drm_file_alloc(struct drm_minor *m=
+inor)
+> >       spin_lock_init(&file->master_lookup_lock);
+> >       mutex_init(&file->event_read_lock);
+> >
+> > +     mutex_init(&file->override_lock);
+> > +
+> >       if (drm_core_check_feature(dev, DRIVER_GEM))
+> >               drm_gem_open(dev, file);
+> >
+> > @@ -292,6 +294,8 @@ void drm_file_free(struct drm_file *file)
+> >       WARN_ON(!list_empty(&file->event_list));
+> >
+> >       put_pid(file->pid);
+> > +     kfree(file->override_comm);
+> > +     kfree(file->override_cmdline);
+> >       kfree(file);
+> >   }
+> >
+> > @@ -995,6 +999,17 @@ void drm_show_fdinfo(struct seq_file *m, struct fi=
+le *f)
+> >                          PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+> >       }
+> >
+> > +     mutex_lock(&file->override_lock);
+>
+> You could add a fast unlocked check before taking the mutex for no risk
+> apart a transient false negative. For 99.9999% of userspace it would
+> mean no pointless lock/unlock cycle.
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+I'm not sure I get your point?  This needs to be serialized against
+userspace setting the override values
 
+>
+> > +     if (file->override_comm) {
+> > +             drm_printf(&p, "drm-comm-override:\t%s\n",
+> > +                        file->override_comm);
+> > +     }
+> > +     if (file->override_cmdline) {
+> > +             drm_printf(&p, "drm-cmdline-override:\t%s\n",
+> > +                        file->override_cmdline);
+> > +     }
+> > +     mutex_unlock(&file->override_lock);
+> > +
+> >       if (dev->driver->show_fdinfo)
+> >               dev->driver->show_fdinfo(&p, file);
+> >   }
+> > diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+> > index 1339e925af52..604d05fa6f0c 100644
+> > --- a/include/drm/drm_file.h
+> > +++ b/include/drm/drm_file.h
+> > @@ -370,6 +370,25 @@ struct drm_file {
+> >        */
+> >       struct drm_prime_file_private prime;
+> >
+> > +     /**
+> > +      * @comm: Overridden task comm
+> > +      *
+> > +      * Accessed under override_lock
+> > +      */
+> > +     char *override_comm;
+> > +
+> > +     /**
+> > +      * @cmdline: Overridden task cmdline
+> > +      *
+> > +      * Accessed under override_lock
+> > +      */
+> > +     char *override_cmdline;
+> > +
+> > +     /**
+> > +      * @override_lock: Serialize access to override_comm and override=
+_cmdline
+> > +      */
+> > +     struct mutex override_lock;
+> > +
+>
+> I don't think this should go to drm just yet though. Only one driver can
+> make use of it so I'd leave it for later and print from msm_show_fdinfo
+> for now.
+
+This was my original approach but danvet asked that it be moved into
+drm for consistency across drivers.  (And really, I want the in-flight
+amd and intel native-context stuff to motivate adding similar features
+to amdgpu/i915/xe.)
+
+BR,
+-R
+
+> Regards,
+>
+> Tvrtko
+>
+> >       /* private: */
+> >   #if IS_ENABLED(CONFIG_DRM_LEGACY)
+> >       unsigned long lock_count; /* DRI1 legacy lock count */
