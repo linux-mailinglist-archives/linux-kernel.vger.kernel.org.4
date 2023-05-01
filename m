@@ -2,219 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E14B6F3A83
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FF96F3A73
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjEAWcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 18:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S232798AbjEAWb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 18:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbjEAWcK (ORCPT
+        with ESMTP id S232627AbjEAWbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 18:32:10 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856EE271E;
-        Mon,  1 May 2023 15:32:07 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 341MVMvA088224;
-        Mon, 1 May 2023 17:31:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1682980282;
-        bh=0vr6OTb6WAGKkCzclnyhUo3rW3Mr6nZ8oCbIk9ryJFg=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=SCrstEr/Pilh7FKg6/pAt1HLDO56BT+KobGpXL4hlH3XQuvzkhX2JY0pnursz8v8j
-         kPYjwjVbHHjdyxce+eK8TS1nntHYqkq945HEpkIPlhCOm4a3gih1UX4NtqI/DVeHyh
-         SZECQceFtJUGeTmPokigarWWaJAPK90uz9W1aCPA=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 341MVMtd058504
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 1 May 2023 17:31:22 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 1
- May 2023 17:31:22 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 1 May 2023 17:31:22 -0500
-Received: from a0498204.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 341MVLEK023009;
-        Mon, 1 May 2023 17:31:22 -0500
-From:   Judith Mendez <jm@ti.com>
-To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Schuyler Patton <spatton@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH v3 4/4] arm64: dts: ti: Enable MCU MCANs for AM62x
-Date:   Mon, 1 May 2023 17:31:21 -0500
-Message-ID: <20230501223121.21663-5-jm@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230501223121.21663-1-jm@ti.com>
-References: <20230501223121.21663-1-jm@ti.com>
+        Mon, 1 May 2023 18:31:22 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B6535AE
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:31:14 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ab01bf474aso7910055ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682980274; x=1685572274;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WXm/tgLzEaGj3Rix4J06OEcQf8M6HZHHr5wrveDhLac=;
+        b=uNXCtmG/W7IV7s7yocLEoqJ5vT3qk98iE/mn+Dk93JGanuKtaW0aod4T8YX31U4wNq
+         +Myrxt7knt7un883vWifP6rREGDFsgvqpffOIjB/AOEVOPmy5Zo13mNnjVAb9PyQATnU
+         nzrHAgLUZbzvqP+IdBy01oX9POttMlVo29Y27VpAosE8THHu/zh0OXJSPHHcjkBh68wV
+         T0i8P5TIj9lp3DUW4aOVVXU0IrAh6fL4/u8QHej/jS4MOkpDNlRnIv4Xglc8pnFNt78e
+         WNgJMtI7hFoLN7lYwSVGquexypVwcC09VWVwRL38ZV+zuQNsGzBRDoDyZX6MjR3alnwy
+         aYtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682980274; x=1685572274;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WXm/tgLzEaGj3Rix4J06OEcQf8M6HZHHr5wrveDhLac=;
+        b=YW0K6sjw6sRWC+cWXHJHSafJ9X3dIcFW996RG/xneMkVJ/hS/MdzHTRfOrDrxFPAqs
+         gFcgAY/NXjP5eX6TFPvaJiYHtxtiGKenhyVY56l+G+QHKDbBeBPCTqYlSyK0/Gam1v/U
+         sE+Pfov2/37NxPMebtHiJ5aoT/okNMEYlQuvQFgvK9VtOBpTT/70C2ClFRUuRO3ohy9A
+         +roJ0dy/uEkXi0ihub3mY2tes1wBtHEQ3pqlsqKLNi9htoCYDW3CWoGh64bhCmFgs8LG
+         JCg/zkPfVVJkf6WaknfnHoQa0tPSX5p0Nt77PavLgPZKylXm/GWVfLO16LldTUdK/HpD
+         CcxA==
+X-Gm-Message-State: AC+VfDyz41hKctY+s7j5FolqHVXSwHsjS/eEUvMZ9kwpZApuYoye2x5o
+        mcSztqDFMnxBdT/uqbIzqIMZog==
+X-Google-Smtp-Source: ACHHUZ6GKYuz2C56X0924d80f0Z5C9wNPfa99LOemIVyrLAlyLrwed+fO0GCuZjxamVBvL7g4ws92w==
+X-Received: by 2002:a17:902:7085:b0:19c:f476:4793 with SMTP id z5-20020a170902708500b0019cf4764793mr14157336plk.51.1682980274025;
+        Mon, 01 May 2023 15:31:14 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1800:f680:fbcf:c418:4edd:c5dd])
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090322c200b001aad714400asm4563977plg.229.2023.05.01.15.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 15:31:13 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liao Chang <liaochang1@huawei.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Drew Fustini <dfustini@baylibre.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        kernel test robot <lkp@intel.com>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] riscv: compat_syscall_table: Fixup compile warning
+Date:   Mon,  1 May 2023 15:33:54 -0700
+Message-Id: <20230501223353.2833899-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On AM62x there are no hardware interrupts routed to A53 GIC
-interrupt controller for MCU MCAN IPs, so MCU MCANs were not
-added to the MCU dtsi. In this patch series an hrtimer is introduced
-to MCAN driver to generate software interrupts. Now add MCU MCAN
-nodes to the MCU dtsi but disable the MCAN devices by default.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-AM62x does not carry on-board CAN transceivers, so instead of
-changing DTB permanently use an overlay to enable MCU MCANs and to
-add CAN transceiver nodes.
+../arch/riscv/kernel/compat_syscall_table.c:12:41: warning: initialized
+field overwritten [-Woverride-init]
+   12 | #define __SYSCALL(nr, call)      [nr] = (call),
+      |                                         ^
+../include/uapi/asm-generic/unistd.h:567:1: note: in expansion of macro
+'__SYSCALL'
+  567 | __SYSCALL(__NR_semget, sys_semget)
 
-If there is no hardware interrupt and timer method is used, remove
-interrupt properties and add poll-interval to enable the hrtimer
-per MCAN node.
-
-This DT overlay can be used with the following EVM:
-Link: https://www.ti.com/tool/TCAN1042DEVM
-
-Signed-off-by: Judith Mendez <jm@ti.com>
+Fixes: 59c10c52f573 ("riscv: compat: syscall: Add compat_sys_call_table implementation")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 ---
-Changelog:
-v3:
- 1. Add link for specific board
+This fix was in the v9 of "riscv: Add GENERIC_ENTRY support and related
+features" [1] but was dropped in v10 [2] with the prospect that it would
+be submitted separately. That seems to have not happened so I am
+submitting it now. I want to silence the riscv warnings when using W=1.
+With this patch applied to riscv/for-next, I no longer see any warnings
+for riscv.
 
- arch/arm64/boot/dts/ti/Makefile               |  2 +-
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       | 24 ++++++++
- .../boot/dts/ti/k3-am625-sk-mcan-mcu.dtso     | 57 +++++++++++++++++++
- 3 files changed, 82 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
+[1] https://lore.kernel.org/linux-riscv/20221130034059.826599-4-guoren@kernel.org/
+[2] https://lore.kernel.org/lkml/20230222033021.983168-1-guoren@kernel.org/
 
-diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
-index abe15e76b614..c76be3888e4d 100644
---- a/arch/arm64/boot/dts/ti/Makefile
-+++ b/arch/arm64/boot/dts/ti/Makefile
-@@ -9,7 +9,7 @@
- # alphabetically.
+ arch/riscv/kernel/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 0fee73a20c87..c2ff6440767c 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -9,6 +9,7 @@ CFLAGS_REMOVE_patch.o	= $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_sbi.o	= $(CC_FLAGS_FTRACE)
+ endif
+ CFLAGS_syscall_table.o	+= $(call cc-option,-Wno-override-init,)
++CFLAGS_compat_syscall_table.o += $(call cc-option,-Wno-override-init,)
  
- # Boards with AM62x SoC
--k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo
-+k3-am625-sk-mcan-dtbs := k3-am625-sk.dtb k3-am625-sk-mcan-main.dtbo k3-am625-sk-mcan-mcu.dtbo
- dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
- dtb-$(CONFIG_ARCH_K3) += k3-am625-sk-mcan.dtb
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-index 076601a41e84..20462f457643 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-@@ -141,4 +141,28 @@
- 		/* Tightly coupled to M4F */
- 		status = "reserved";
- 	};
-+
-+	mcu_mcan1: can@4e00000 {
-+		compatible = "bosch,m_can";
-+		reg = <0x00 0x4e00000 0x00 0x8000>,
-+			  <0x00 0x4e08000 0x00 0x200>;
-+		reg-names = "message_ram", "m_can";
-+		power-domains = <&k3_pds 188 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 188 6>, <&k3_clks 188 1>;
-+		clock-names = "hclk", "cclk";
-+		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-+		status = "disabled";
-+	};
-+
-+	mcu_mcan2: can@4e10000 {
-+		compatible = "bosch,m_can";
-+		reg = <0x00 0x4e10000 0x00 0x8000>,
-+			  <0x00 0x4e18000 0x00 0x200>;
-+		reg-names = "message_ram", "m_can";
-+		power-domains = <&k3_pds 189 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 189 6>, <&k3_clks 189 1>;
-+		clock-names = "hclk", "cclk";
-+		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-+		status = "disabled";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-new file mode 100644
-index 000000000000..5145b3de4f9b
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk-mcan-mcu.dtso
-@@ -0,0 +1,57 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * DT overlay for MCAN in MCU domain on AM625 SK
-+ *
-+ * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include "k3-pinctrl.h"
-+
-+&{/} {
-+	transceiver2: can-phy1 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+	};
-+
-+	transceiver3: can-phy2 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+	};
-+};
-+
-+&mcu_pmx0 {
-+	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x038, PIN_INPUT, 0) /* (B3) MCU_MCAN0_RX */
-+			AM62X_IOPAD(0x034, PIN_OUTPUT, 0) /* (D6) MCU_MCAN0_TX */
-+		>;
-+	};
-+
-+	mcu_mcan2_pins_default: mcu-mcan2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x040, PIN_INPUT, 0) /* (D4) MCU_MCAN1_RX */
-+			AM62X_IOPAD(0x03C, PIN_OUTPUT, 0) /* (E5) MCU_MCAN1_TX */
-+		>;
-+	};
-+};
-+
-+&mcu_mcan1 {
-+	poll-interval;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan1_pins_default>;
-+	phys = <&transceiver2>;
-+	status = "okay";
-+};
-+
-+&mcu_mcan2 {
-+	poll-interval;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan2_pins_default>;
-+	phys = <&transceiver3>;
-+	status = "okay";
-+};
+ ifdef CONFIG_KEXEC
+ AFLAGS_kexec_relocate.o := -mcmodel=medany $(call cc-option,-mno-relax)
 -- 
-2.17.1
+2.34.1
 
