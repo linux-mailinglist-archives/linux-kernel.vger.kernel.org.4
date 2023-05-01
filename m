@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE34C6F3250
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B816F3251
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjEAOvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 10:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S232467AbjEAOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 10:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjEAOvh (ORCPT
+        with ESMTP id S232331AbjEAOwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 10:51:37 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF471A6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 07:51:35 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64115e652eeso27216246b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 07:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682952695; x=1685544695;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WSCPrqXOc+jiMcJ1awitEwssb+M8Ttbck4A1Ax5no44=;
-        b=t2bjDBj4KJiM6x2KXcZBuAruNSl7Xtw1iMpAVO54lX++zGDR+FQgxtGM/9hPxjn3eC
-         mmtX40XvoY0WoQUx3WOsYw4qJDxzex0ccJotUaDWylKbh9CFBRwniakOG3AO3kXXVswM
-         Le+IXNnfAs8OnFGl6v657EmjA631f2YJV7qB41bv9eyKxYSZFlC2T9CT9jREc2MFB60I
-         d58CMyTtBTFfo4d58UwRRUR4LE28j5KjKcdaRW5rNzYR8MG4STym7b+23Q9Vo32sjgJa
-         bOfOWYGPm8OiWKUBthHQ2zUqQ9J7vd06Mb4ke++cPb6A1dOtcx9lECVJTNNZ4dx2Sxrz
-         92Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682952695; x=1685544695;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WSCPrqXOc+jiMcJ1awitEwssb+M8Ttbck4A1Ax5no44=;
-        b=Sx2KgLJR+P5KhaItTIp+s38XnFYLucnzaHLyIAdTGqCjn52Yuc9MjPgEyCxCuAICUI
-         KvgwrChy+MOTq3sB+H0dd4LHnlqGplpxB9m5w+C37b3FxztvAZvFR+qeVYWimjCbLH4v
-         dsEHG/3o3UymvttCYYRvCNrn0BeLAslIBNtwgbX5PjiHbf3SPUVYQRB6L709vbC5QSzD
-         S8WK+mt7H1j1+f9MnWh4Pq1UaxbXDYh3KO4w8yyyh7rMmuAXdY33RbKWCVbVBEhSzoVh
-         hCdzpnPuLrQs/Db0Sh3SHbgQj1bsNl0Bpp/800WNqynoPB2694dDWVV33iH13scE5HSB
-         KKMA==
-X-Gm-Message-State: AC+VfDy16M3Fx55wn5J9/8REiJdGZQhppUHGULwnBP0lP+qGZRvt1E7M
-        MIoXqafGrgpqYapz4ZgeVSKXHA==
-X-Google-Smtp-Source: ACHHUZ5aEFOivTZdix1xXoRRVIMgqofu0C4xXvvL7s7jLIzvzf4ndKucq5upDgWfeN6qK/SLr+DrpQ==
-X-Received: by 2002:a17:90a:f3d5:b0:24d:e504:67b1 with SMTP id ha21-20020a17090af3d500b0024de50467b1mr7946089pjb.7.1682952694904;
-        Mon, 01 May 2023 07:51:34 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id b13-20020a17090a8c8d00b0024deb445265sm2976704pjo.47.2023.05.01.07.51.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 07:51:34 -0700 (PDT)
-Date:   Mon, 01 May 2023 07:51:34 -0700 (PDT)
-X-Google-Original-Date: Mon, 01 May 2023 07:51:13 PDT (-0700)
-Subject:     Re: [PATCH 2/4] RISC-V: don't parse dt isa string to get rv32/rv64
-In-Reply-To: <20230424194911.264850-3-heiko.stuebner@vrull.eu>
-CC:     linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, heiko@sntech.de,
-        kito.cheng@sifive.com, jrtc27@jrtc27.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        matthias.bgg@gmail.com, heinrich.schuchardt@canonical.com,
-        greentime.hu@sifive.com, nick.knight@sifive.com,
-        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        heiko.stuebner@vrull.eu
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     heiko@sntech.de
-Message-ID: <mhng-5ab61a7c-cccb-45d9-8c0f-5fbd8dc5931d@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 May 2023 10:52:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BFBE54;
+        Mon,  1 May 2023 07:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682952738; x=1714488738;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=w1kVWQtJXHcWHK2KlJ0nuiROkNtp7Mo5xqYnEd0zssQ=;
+  b=Pegpo2HvZ81b/6ODqsgO1xV4BvYW59mgmAYViIrgyZ0zAvCLjCH91Rxq
+   zudwJ93k6WDm4fxXKrjsd7ovXlVt2QjTj5mzCWfmZT5Amb/NsnJd7yWDa
+   4e+btSzoHq+7W0OWA07ffhsLghigYZs3eSj/ay65AYxpxRuRczzyVezI6
+   144/jBgy0M2YYG28ZoNsxxGDMiU3/q8HM+kRlFTvZhPzm/MMDQzyS6H2m
+   u8Y2WEYLz0vhZsInaRB8ylKzIr7Zis+mwkJL8ObohZx52zkCZilhSxHtt
+   m7KiU8zljzDhKj3XlHXDEWU69FpBZ5EBlPg/T7LpYQlclyVV71aXJblsc
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="434474055"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="434474055"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:52:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="765326926"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="765326926"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.85.208]) ([10.212.85.208])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:52:17 -0700
+Message-ID: <0d232ddc-446c-bfca-71f4-51182356e974@intel.com>
+Date:   Mon, 1 May 2023 07:52:17 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
+ mem alloc
+Content-Language: en-US
+To:     Raghu H <raghuhack78@gmail.com>, linux-cxl@vger.kernel.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230428012235.119333-1-raghuhack78@gmail.com>
+ <20230428012235.119333-2-raghuhack78@gmail.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230428012235.119333-2-raghuhack78@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 12:49:09 PDT (-0700), heiko@sntech.de wrote:
-> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->
-> When filling hwcap the kernel already expects the isa string to start with
-> rv32 if CONFIG_32BIT and rv64 if CONFIG_64BIT.
->
-> So when recreating the runtime isa-string we can also just go the other way
-> to get the correct starting point for it.
->
-> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
+
+
+On 4/27/23 6:22 PM, Raghu H wrote:
+> Issue found with checkpatch
+> 
+> A return of errno should be good enough if the memory allocation fails,
+> the error message here is redundatant as per the coding style, removing it.
+> 
+> Signed-off-by: Raghu H <raghuhack78@gmail.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
 > ---
->  arch/riscv/kernel/cpu.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index ebc478f0a16c..06c2f587a176 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -244,7 +244,7 @@ static void strcat_isa_ext(char *isa_str)
->   */
->  static const char base_riscv_exts[13] = "imafdqcbkjpvh";
->
-> -static char *riscv_create_isa_string(const char *isa)
-> +static char *riscv_create_isa_string(void)
->  {
->  	int maxlen = 4;
->  	char *isa_str;
-> @@ -261,7 +261,11 @@ static char *riscv_create_isa_string(const char *isa)
->  		return ERR_PTR(-ENOMEM);
->
->  	/* Print the rv[64/32] part */
-> -	strncat(isa_str, isa, 4);
-> +#if IS_ENABLED(CONFIG_32BIT)
-> +	strncat(isa_str, "rv32", 4);
-> +#elif IS_ENABLED(CONFIG_64BIT)
-> +	strncat(isa_str, "rv64", 4);
-> +#endif
->
->  	for (i = 0; i < sizeof(base_riscv_exts); i++) {
->  		if (__riscv_isa_extension_available(NULL, base_riscv_exts[i] - 'a'))
-> @@ -280,7 +284,7 @@ static void print_isa(struct seq_file *f, const char *isa)
->
->  	seq_puts(f, "isa\t\t: ");
->
-> -	isa_str = riscv_create_isa_string(isa);
-> +	isa_str = riscv_create_isa_string();
->  	if (!IS_ERR(isa_str)) {
->  		seq_write(f, isa_str, strlen(isa_str));
->  		kfree(isa_str);
-
-Conor pointed out this one, I just looked at the cover letter and got 
-distracted by uABI stuff.  It's not directly fixing anything so I'm 
-going to leave it out of this merge window, particularly given that it's 
-tied up with the rest.
-
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+>   drivers/cxl/core/mbox.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index f2addb457172..11ea145b4b1f 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
+>   	struct cxl_dev_state *cxlds;
+>   
+>   	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
+> -	if (!cxlds) {
+> -		dev_err(dev, "No memory available\n");
+> +	if (!cxlds)
+>   		return ERR_PTR(-ENOMEM);
+> -	}
+>   
+>   	mutex_init(&cxlds->mbox_mutex);
+>   	mutex_init(&cxlds->event.log_lock);
