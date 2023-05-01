@@ -2,100 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B816F3251
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4173E6F3252
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjEAOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 10:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
+        id S232552AbjEAOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 10:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232331AbjEAOwT (ORCPT
+        with ESMTP id S232537AbjEAOwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 10:52:19 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BFBE54;
-        Mon,  1 May 2023 07:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682952738; x=1714488738;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=w1kVWQtJXHcWHK2KlJ0nuiROkNtp7Mo5xqYnEd0zssQ=;
-  b=Pegpo2HvZ81b/6ODqsgO1xV4BvYW59mgmAYViIrgyZ0zAvCLjCH91Rxq
-   zudwJ93k6WDm4fxXKrjsd7ovXlVt2QjTj5mzCWfmZT5Amb/NsnJd7yWDa
-   4e+btSzoHq+7W0OWA07ffhsLghigYZs3eSj/ay65AYxpxRuRczzyVezI6
-   144/jBgy0M2YYG28ZoNsxxGDMiU3/q8HM+kRlFTvZhPzm/MMDQzyS6H2m
-   u8Y2WEYLz0vhZsInaRB8ylKzIr7Zis+mwkJL8ObohZx52zkCZilhSxHtt
-   m7KiU8zljzDhKj3XlHXDEWU69FpBZ5EBlPg/T7LpYQlclyVV71aXJblsc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="434474055"
-X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
-   d="scan'208";a="434474055"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:52:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="765326926"
-X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
-   d="scan'208";a="765326926"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.85.208]) ([10.212.85.208])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 07:52:17 -0700
-Message-ID: <0d232ddc-446c-bfca-71f4-51182356e974@intel.com>
-Date:   Mon, 1 May 2023 07:52:17 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] cxl/mbox: Remove redundant dev_err() after failed
- mem alloc
-Content-Language: en-US
-To:     Raghu H <raghuhack78@gmail.com>, linux-cxl@vger.kernel.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230428012235.119333-1-raghuhack78@gmail.com>
- <20230428012235.119333-2-raghuhack78@gmail.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230428012235.119333-2-raghuhack78@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 1 May 2023 10:52:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ECC10FB
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 07:52:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2ED0022803;
+        Mon,  1 May 2023 14:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682952753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xbQ+PGMN9hG1G30QUr276yLVsCOjGNqJegqC5F0YBj4=;
+        b=ed38KbJno5dmnTPK/oB8P588V07RuYKyB+rLGeyJdPy6gPtDNfL2nKFs/lnI9xcguF5tPX
+        DzWHaCR9ToQy0q9wkfu+rZ28tp45u5hNWv+cdjArOH3PdcQlZXa02sR5fwPFWGnKBxjP9m
+        NhNBQDo7Hctlv/a7mXIQ8aX2Mvw0Cx0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682952753;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xbQ+PGMN9hG1G30QUr276yLVsCOjGNqJegqC5F0YBj4=;
+        b=TWtKeMe4UVJjAp1nFyqQEBnU9Ygr9axQ56TLQ01PQgabJqRmu/9ppyx+Jn099QJI44PIXv
+        fRDbsMITxa90pYDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F41C313587;
+        Mon,  1 May 2023 14:52:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hPXOOjDST2RQEwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 01 May 2023 14:52:32 +0000
+Date:   Mon, 01 May 2023 16:52:32 +0200
+Message-ID: <87fs8gp0i7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jeff Chua <jeff.chua.linux@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Linux ALSA Subsystem Development 
+        <alsa-devel@alsa-project.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: linux-6.4 alsa sound broken
+In-Reply-To: <CAAJw_ZsDdiB=b2PZydQWF2fjSULit3NWE-Bf1icBEryN-GuqUw@mail.gmail.com>
+References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        <ZE9B4avbDtIXOu4O@debian.me>
+        <87r0s0pnim.wl-tiwai@suse.de>
+        <CAAJw_ZsDdiB=b2PZydQWF2fjSULit3NWE-Bf1icBEryN-GuqUw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 01 May 2023 15:16:35 +0200,
+Jeff Chua wrote:
+> 
+> On Mon, May 1, 2023 at 2:35 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Mon, 01 May 2023 06:36:49 +0200,
+> > Bagas Sanjaya wrote:
+> > >
+> > > On Mon, May 01, 2023 at 11:59:12AM +0800, Jeff Chua wrote:
+> > > > Latest git pull from Linus's tree ... playing a simple sound file will
+> > > > resulted in a lot of echo.
+> > > >
+> > > > Running on Lenovo X1 with ..
+> > > > 00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
+> > > > Definition Audio Controller (rev 01)
+> > > >
+> > > > I've bisected and reverted the following patch fixed the problem.
+> > > >
+> > > > commit 9f656705c5faa18afb26d922cfc64f9fd103c38d
+> > >
+> > > Thanks for the regression report. However, where is your dmesg and/or ALSA log
+> > > when the regression occurs? What is the playback test file?
+> >
+> > Yes, in addition, which driver is used (provide the alsa-info.sh
+> > output at best), and which sound backend is used (pipewire, PA or
+> > dmix) with which application?
+> 
+> /proc/asound# cat cards devices hwdep pcm timers version
+>  0 [PCH            ]: HDA-Intel - HDA Intel PCH
+>                       HDA Intel PCH at 0x603e1c8000 irq 147
+>   1:        : sequencer
+>   2: [ 0- 0]: digital audio playback
+>   3: [ 0- 0]: digital audio capture
+>   4: [ 0- 3]: digital audio playback
+>   5: [ 0- 7]: digital audio playback
+>   6: [ 0- 8]: digital audio playback
+>   7: [ 0- 9]: digital audio playback
+>   8: [ 0- 0]: hardware dependent
+>   9: [ 0- 2]: hardware dependent
+>  10: [ 0]   : control
+>  33:        : timer
+> 00-00: HDA Codec 0
+> 00-02: HDA Codec 2
+> 00-00: ALC287 Analog : ALC287 Analog : playback 1 : capture 1
+> 00-03: HDMI 0 : HDMI 0 : playback 1
+> 00-07: HDMI 1 : HDMI 1 : playback 1
+> 00-08: HDMI 2 : HDMI 2 : playback 1
+> 00-09: HDMI 3 : HDMI 3 : playback 1
+> G0: system timer : 10000.000us (10000000 ticks)
+> G3: HR timer : 0.001us (1000000000 ticks)
+> P0-0-0: PCM playback 0-0-0 : SLAVE
+> P0-0-1: PCM capture 0-0-1 : SLAVE
+> P0-3-0: PCM playback 0-3-0 : SLAVE
+> P0-7-0: PCM playback 0-7-0 : SLAVE
+> P0-8-0: PCM playback 0-8-0 : SLAVE
+> P0-9-0: PCM playback 0-9-0 : SLAVE
+> Advanced Linux Sound Architecture Driver Version k6.3.0.
+> 
+> 
+> # test playing with ...
+> aplay /usr/share/sounds/alsa/Side_Right.wav
+> Playing WAVE '/usr/share/sounds/alsa/Side_Right.wav' : Signed 16 bit
+> Little Endian, Rate 48000 Hz, Mono
+>
+> I'll try to capture the sound ... it's seems to just repeating every
+> second until the last second. So, if you just play a "beep", its ok.
+
+There was no description about which sound backend is used.  Is it
+PulseAudio, pipewire or dmix/dsnoop?
 
 
-On 4/27/23 6:22 PM, Raghu H wrote:
-> Issue found with checkpatch
-> 
-> A return of errno should be good enough if the memory allocation fails,
-> the error message here is redundatant as per the coding style, removing it.
-> 
-> Signed-off-by: Raghu H <raghuhack78@gmail.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-> ---
->   drivers/cxl/core/mbox.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index f2addb457172..11ea145b4b1f 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -1112,10 +1112,8 @@ struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
->   	struct cxl_dev_state *cxlds;
->   
->   	cxlds = devm_kzalloc(dev, sizeof(*cxlds), GFP_KERNEL);
-> -	if (!cxlds) {
-> -		dev_err(dev, "No memory available\n");
-> +	if (!cxlds)
->   		return ERR_PTR(-ENOMEM);
-> -	}
->   
->   	mutex_init(&cxlds->mbox_mutex);
->   	mutex_init(&cxlds->event.log_lock);
+Takashi
