@@ -2,124 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 659556F2F50
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 10:40:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3156F2F53
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 10:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbjEAIkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 04:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S232202AbjEAIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 04:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEAIkF (ORCPT
+        with ESMTP id S229482AbjEAIoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 04:40:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10823E62
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 01:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682930404; x=1714466404;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=//KI8y+/sgpuuH11lzGKTdHfa+IyhZIjeLca2O2Sb5U=;
-  b=nhiOa68yaGYHLLt1PrRCK+4tVmNmBHWjwl+YOTvWGZ1lk7AMZrR6P0VE
-   SeAePAUmxMwvM1jiJTjRFspBDkoRMrWiBlKF5Ibz7IKndpAtnqGkTEtlq
-   YHZ3eb1AFhXn7huVSgDeMe/2hC4SKPyUbBAU23cOXsRWOTWoQl4spD9tS
-   wgQMHFIAxR71GRmwvw15DxLNmbV+Lrx+LR0mvC2Y+nqYca/xcXanZU4sa
-   KT7+lce2P2bHsriDVaq6KqVz6/2bzwkP8bu3vDa6RKDI4pwjeHbTDCXkY
-   pyZTwFigz8341mGQ6+EPphjY9C0C3cAhVTrpzg1yZOAvhOKM5eAj246m8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="413542727"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="413542727"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 01:40:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10696"; a="689817447"
-X-IronPort-AV: E=Sophos;i="5.99,239,1677571200"; 
-   d="scan'208";a="689817447"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 01 May 2023 01:40:02 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptP4j-0000N7-1J;
-        Mon, 01 May 2023 08:40:01 +0000
-Date:   Mon, 1 May 2023 16:39:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap1/serial.c:236:12: warning: no previous prototype
- for 'omap_serial_wakeup_init'
-Message-ID: <202305011637.7zaKatRo-lkp@intel.com>
+        Mon, 1 May 2023 04:44:06 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDB5E76;
+        Mon,  1 May 2023 01:44:05 -0700 (PDT)
+Received: from localhost (unknown [188.27.34.213])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 34CD16602F6A;
+        Mon,  1 May 2023 09:44:04 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1682930644;
+        bh=WmZbj+7p52spdKhp6FKYvpWDarz0ByKdPc4ZP68owZw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DYaGZRtUwGtlnTjQ30D05KiBQXkYdm5wWE14E1kMe3NagxEikuNBVgE5MCK5z+sLx
+         hX3sXlrY+H1Xh5JHKYQVmjOAaparQ5GWVFVOCh+vQSNqyuczP5EOqF5DCSBQPY3vx8
+         Pd0wKZSppy6OiWbjbJhnhqmpvzGfa/BdUgXexDC+EELUSOUjBVw5R/McXGC1QG2I7t
+         n0auLBIUZWAXIUyQfkhDGzL+oopVFH2A0YEMPQiA+qKhjwqs/tUZxOG/XkBJ/njkCn
+         F7DsbLcpgKa+xIzXN1ztxOE2yILLRC+udrbBx+1d+b1oElLzz5dYticlYPNKBFr9d9
+         Pf0KBChzzvokA==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        Finley Xiao <finley.xiao@rock-chips.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH 0/8] Add RK3588 OTP memory support
+Date:   Mon,  1 May 2023 11:43:52 +0300
+Message-Id: <20230501084401.765169-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+This patch series adds OTP memory support for Rockchip RK3588 SoC, 
+while also providing a few improvements to the existing rockchip-otp 
+driver, in addition to converting the bindings to dt-schema.
 
-First bad commit (maybe != root cause):
+Cristian Ciocaltea (8):
+  dt-bindings: nvmem: Convert rockchip-otp.txt to dt-schema
+  dt-bindings: nvmem: rockchip-otp: Add compatible for RK3588
+  nvmem: rockchip-otp: Add clocks and reg_read to rockchip_data
+  nvmem: rockchip-otp: Generalize rockchip_otp_wait_status()
+  nvmem: rockchip-otp: Use devm_reset_control_array_get_exclusive()
+  nvmem: rockchip-otp: Improve probe error handling
+  nvmem: rockchip-otp: Add support for RK3588
+  arm64: dts: rockchip: Add rk3588 OTP node
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
-commit: 980a637d11fe8dfc734f508a422185c2de55e669 ARM: omap1: fix !ARCH_OMAP1_ANY link failures
-date:   4 months ago
-config: arm-randconfig-r024-20230429 (https://download.01.org/0day-ci/archive/20230501/202305011637.7zaKatRo-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=980a637d11fe8dfc734f508a422185c2de55e669
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 980a637d11fe8dfc734f508a422185c2de55e669
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305011637.7zaKatRo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-omap1/serial.c:236:12: warning: no previous prototype for 'omap_serial_wakeup_init' [-Wmissing-prototypes]
-     236 | int __init omap_serial_wakeup_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/omap_serial_wakeup_init +236 arch/arm/mach-omap1/serial.c
-
-7c38cf021b42a4 Tony Lindgren 2005-09-08  235  
-82c3bd03535f15 Shawn Guo     2012-04-26 @236  int __init omap_serial_wakeup_init(void)
-7c38cf021b42a4 Tony Lindgren 2005-09-08  237  {
-7c38cf021b42a4 Tony Lindgren 2005-09-08  238  	if (!cpu_is_omap16xx())
-7c38cf021b42a4 Tony Lindgren 2005-09-08  239  		return 0;
-7c38cf021b42a4 Tony Lindgren 2005-09-08  240  
-7c38cf021b42a4 Tony Lindgren 2005-09-08  241  	if (uart1_ck != NULL)
-7c38cf021b42a4 Tony Lindgren 2005-09-08  242  		omap_serial_set_port_wakeup(37);
-7c38cf021b42a4 Tony Lindgren 2005-09-08  243  	if (uart2_ck != NULL)
-7c38cf021b42a4 Tony Lindgren 2005-09-08  244  		omap_serial_set_port_wakeup(18);
-7c38cf021b42a4 Tony Lindgren 2005-09-08  245  	if (uart3_ck != NULL)
-7c38cf021b42a4 Tony Lindgren 2005-09-08  246  		omap_serial_set_port_wakeup(49);
-7c38cf021b42a4 Tony Lindgren 2005-09-08  247  
-7c38cf021b42a4 Tony Lindgren 2005-09-08  248  	return 0;
-7c38cf021b42a4 Tony Lindgren 2005-09-08  249  }
-7c38cf021b42a4 Tony Lindgren 2005-09-08  250  
-
-:::::: The code at line 236 was first introduced by commit
-:::::: 82c3bd03535f1571426fdd19b7d832f76b7ac85e ARM: omap1: use machine specific hook for late init
-
-:::::: TO: Shawn Guo <shawn.guo@linaro.org>
-:::::: CC: Shawn Guo <shawn.guo@linaro.org>
+ .../bindings/nvmem/rockchip-otp.txt           |  25 ---
+ .../bindings/nvmem/rockchip-otp.yaml          | 132 ++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  54 +++++
+ drivers/nvmem/rockchip-otp.c                  | 191 +++++++++++++-----
+ 4 files changed, 330 insertions(+), 72 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/nvmem/rockchip-otp.txt
+ create mode 100644 Documentation/devicetree/bindings/nvmem/rockchip-otp.yaml
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0
+
