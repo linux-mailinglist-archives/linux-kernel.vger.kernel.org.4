@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D122B6F2F1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6895F6F2F13
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjEAHWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 03:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S232202AbjEAHS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 03:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjEAHWf (ORCPT
+        with ESMTP id S232192AbjEAHSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 03:22:35 -0400
-X-Greylist: delayed 308 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 May 2023 00:22:33 PDT
-Received: from bluemchen.kde.org (bluemchen.kde.org [IPv6:2001:470:142:8::100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1A3B6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 00:22:33 -0700 (PDT)
-Received: from ugly.fritz.box (localhost [127.0.0.1])
-        by bluemchen.kde.org (Postfix) with ESMTP id 5F62024179;
-        Mon,  1 May 2023 03:17:20 -0400 (EDT)
-Received: by ugly.fritz.box (masqmail 0.3.4, from userid 1000)
-        id 1ptNmi-FyQ-00; Mon, 01 May 2023 09:17:20 +0200
-Date:   Mon, 1 May 2023 09:17:20 +0200
-From:   Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
-To:     Jeff Chua <jeff.chua.linux@gmail.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: Re: linux-6.4 alsa sound broken
-Message-ID: <ZE9ngFLRqLkN6faH@ugly>
-Mail-Followup-To: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>,
-        Jeff Chua <jeff.chua.linux@gmail.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, Takashi Iwai <tiwai@suse.de>
-References: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
+        Mon, 1 May 2023 03:18:25 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA1CE55
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 00:18:22 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-959a3e2dd27so446087266b.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 00:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682925501; x=1685517501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PF63v+2Tp0raGO3D/Pdo+3NZYK4zubU/qMJRCsXcpRw=;
+        b=bT2nxhGBwWg62eErztF4jrVqm07T4DHRMvxHFu+V53gbHMvPzmSEAEyDbW/KPz1bKC
+         2qGJ+ZhEK5Jj5j35SM53QPWbXsJFxylE8oGZpmydsAzy0/Y7tJj/ReQzcM4seMn1Shku
+         X+Jg33Fbmq+HZiumtZGDYxLK4aTHKOAjPYThwpSCmjZ+OvMYbai80aWNssTrfNZNk8nl
+         akLvqagNYaIx1o4idhLwW1pBUreiIqY1CoKpWgdYLdDqMcHILsYx9yV9JDCUtp5qEsLt
+         ka/P6RGPNaSJuctFkJa5waJ7Zgrn6kHKIHYn6k18VLl3CO1R4rjjgjMBGeenqhtNuiF/
+         /yig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682925501; x=1685517501;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PF63v+2Tp0raGO3D/Pdo+3NZYK4zubU/qMJRCsXcpRw=;
+        b=UsPzQrraPCxZTZeBOWeVFMfHyUNPeOlpKsrIjq358zkJuSl3F2hD2BJ0MQ7yaEW/HO
+         xlYaGG7RYjyKf4sDGosvdjyJQzqExaJKG3nFr2DWLkZJ/H//xa4m46DP26ohVfwwjgIX
+         ptN/rRyRdds5gBe6mIYvTBUplo/x6Y1/UKDKk+DnsreCxYw+cukD2DH/yQH14ZBAFp7f
+         gBoM1OSaDMoieZjUyEPc7VRDTEIK/guWXteJAPZOgNpu6CFKSO5xVXTfddJucMHkOsLI
+         HhkOTafaiqP20qvsNLVOn1R51lazk4mJYIAGY2aL9uK1b9Ivac/y4RmprJrgTqILrh3G
+         q2Hw==
+X-Gm-Message-State: AC+VfDwNU/aqwafQCRAnmH3eO1F60uUXrOZ4bi815e8+dkyvDbtbz/sh
+        zIeknP7IG8TNDoBomPc+FzJeGA==
+X-Google-Smtp-Source: ACHHUZ77aR8qnFMP9Wlo++yTpYLJKfzCmm+3/O8K2BffTv0b9/d2ok/0HaO+1ntu2hR4APdaoIoTNQ==
+X-Received: by 2002:a17:906:fe47:b0:94f:396d:dd32 with SMTP id wz7-20020a170906fe4700b0094f396ddd32mr10587304ejb.21.1682925500965;
+        Mon, 01 May 2023 00:18:20 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
+        by smtp.gmail.com with ESMTPSA id va2-20020a17090711c200b0093a0e5977e2sm14702213ejb.225.2023.05.01.00.18.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 00:18:20 -0700 (PDT)
+Message-ID: <e8a20f96-4a4c-e696-6a27-d7c4b48792e6@linaro.org>
+Date:   Mon, 1 May 2023 09:18:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAAJw_ZsbTVd3Es373x_wTNDF7RknGhCD0r+NKUSwAO7HpLAkYA@mail.gmail.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] dt-bindings: leds: backlight: ktz8866: Add reg property
+ and update example
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230428160246.16982-1-lujianhua000@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230428160246.16982-1-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 01, 2023 at 11:59:12AM +0800, Jeff Chua wrote:
->Latest git pull from Linus's tree ... playing a simple sound file will
->resulted in a lot of echo.
->
-how _exactly_ does it sound?
-have you recorded a file through loopback for us to investigate? best 
-would be a short sample of a clean wave (sine or sawtooth) with some 
-leading and trailing silence.
+On 28/04/2023 18:02, Jianhua Lu wrote:
+> The kinetic,ktz8866 is a I2C driver, so add the missing reg property.
+> And update example to make it clear.
+> 
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
 
->Running on Lenovo X1 with ..
->00:1f.3 Audio device: Intel Corporation Alder Lake PCH-P High
->Definition Audio Controller (rev 01)
->
->I've bisected and reverted the following patch fixed the problem.
->
-this seems weird. so my first thought is: are you _sure_ that your 
-bisect isn't "contaminated" somehow? is the effect consistent across 
-several reboots with the same build? does re-applying my patch 
-immediately re-introduce the problem?
 
-- this code is about silencing. getting dropouts or no playback at all 
-   would be plausible, while echo (that is, repetition) seems surprising.
-   theoretically, the driver may be setting a bad fill_silence() callback 
-   which copies some garbage instead of zeroing, but the HDA driver 
-   doesn't set one at all (i.e., uses the default one).
-- this code must be explicitly enabled, which for all i know is done by 
-   almost nothing. what players did you try? did you get consistent 
-   results? did you try taking out audio servers from the equation?
-- the affected hardware belongs to the extremely widely used HDA family, 
-   which at the layer the patch is even remotely connected with is 
-   completely standardized. so _a lot_ of people should be affected, and 
-   we should be getting reports like yours by the dozen. are we?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-of course i can't exclude the possibility that my patch is affected by 
-an uninitialized variable or memory corruption (or in the worst case 
-causes it), which would of course have very hard to predict effects. but 
-that should be investigated properly instead of just reverting, lest we 
-might be papering over a much more serious problem.
+Best regards,
+Krzysztof
 
--- ossi
-
->commit 9f656705c5faa18afb26d922cfc64f9fd103c38d
->Author: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
->Date:   Thu Apr 20 13:33:23 2023 +0200
->
->    ALSA: pcm: rewrite snd_pcm_playback_silence()
->
->    The auto-silencer supports two modes: "thresholded" to fill up "just
->    enough", and "top-up" to fill up "as much as possible". The two modes
->    used rather distinct code paths, which this patch unifies. The only
->    remaining distinction is how much we actually want to fill.
->
->    This fixes a bug in thresholded mode, where we failed to use new_hw_ptr,
->    resulting in under-fill.
->
->    Top-up mode is now more well-behaved and much easier to understand in
->    corner cases.
->
->    This also updates comments in the proximity of silencing-related data
->    structures.
->
->    Signed-off-by: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
->    Reviewed-by: Jaroslav Kysela <perex@perex.cz>
->    Link: https://lore.kernel.org/r/20230420113324.877164-1-oswald.buddenhagen@gmx.de
->    Signed-off-by: Takashi Iwai <tiwai@suse.de>
