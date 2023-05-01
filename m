@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AFB6F31D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8EA6F31D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 16:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjEAOGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 10:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S232402AbjEAOFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 10:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbjEAOGK (ORCPT
+        with ESMTP id S230114AbjEAOFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 10:06:10 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05035E52;
-        Mon,  1 May 2023 07:06:08 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 341E5ZW8047241;
-        Mon, 1 May 2023 23:05:35 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Mon, 01 May 2023 23:05:35 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 341E5ZXe047237
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 1 May 2023 23:05:35 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a2c2308a-729a-ec18-18e7-36d00b25207d@I-love.SAKURA.ne.jp>
-Date:   Mon, 1 May 2023 23:05:35 +0900
+        Mon, 1 May 2023 10:05:51 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2256CE51
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 07:05:50 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-2f95231618aso1423544f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 07:05:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682949948; x=1685541948;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=YTI2jDYQfXKJ63OD42jZd2Oyawwdvx+WGbbTxe2v3F5O9HDjDXC9NK0yhzqLYaEF9I
+         E9p82WH+UcSo/wUN6kq+zgmrePLZm+ybcALGivVYMvRZ/ws7Wal2XbjZM9LZZrkIegTv
+         V/NisvH62+txPldgMXcWfK1Cbvtsikfe7N8VmrjXE30LjW8uNNy2EYU7HIb2NjByo+D4
+         cAL7FT2QEJdToM/IjgF2X7Sl5avUch5rjHTHX/vsQ9IzxyY3ivfGxmoE764E5mi5tK+1
+         R2IxBn3jTvflYSkKyupXL8o+Cx9bl4leWPdvwn2XC3VVoCkM2+Rfs6ju5gmQJA6WGIiO
+         41KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682949948; x=1685541948;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=BLbpmHmQ8ACnjNJQnTc1SWMis4PdCOn6pqKKcLF0rcRaDFxV4cPJtUwUITw+FfxAfo
+         ZpHNsYCS4j7kmwBPidmxBJHfO27sFy4JmXdDxYI+Y1e8gRn85kkMMvfhLzxV0C34cfc7
+         g3TE1YhDWzhkptOZmRxVOp43uF1tZOfwJD6eog+OWZvyOVGx8lbeQpirVwuGe+Qf0nlR
+         aClpk5I74d33yszyaND/FlhwavaSjkNySu49l0iFqdmNsRKdQG0webJXTOGw1A27UTkE
+         gWA6VZVHY+JB0GVwxzsU5DNQTAmvvgmW2VAQq0vf0srbO3VGZ4nryqNTDXP6Mb8COAeD
+         8Nwg==
+X-Gm-Message-State: AC+VfDxNwVzwpagFmSxqtr2L76CFTeuEc0VYv7TqijdWVrInLtWjTEdn
+        /zdXng6gADEUP+ZrVu/Jyze3AkdfqsbjyTsNxDU=
+X-Google-Smtp-Source: ACHHUZ7Kx7P+y7X2v+UKbw3cvydXWtAw9FpF4DXC0crOx5cNLaGtb9aboUeguVCZdrkek2ZfOKuLswbtxgndbigdqOU=
+X-Received: by 2002:adf:ed8c:0:b0:306:26d6:dd7a with SMTP id
+ c12-20020adfed8c000000b0030626d6dd7amr4928346wro.32.1682949948551; Mon, 01
+ May 2023 07:05:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [syzbot] [mm?] KCSAN: data-race in generic_fillattr / shmem_mknod
- (2)
-Content-Language: en-US
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     akpm@linux-foundation.org, hughd@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+702361cf7e3d95758761@syzkaller.appspotmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <0000000000007337c705fa1060e2@google.com>
- <CACT4Y+a=xWkNGw_iKibRp4ivSE8OJkWWT0VPQ4N4d1+vj0FMdg@mail.gmail.com>
- <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
-In-Reply-To: <bdb1fe2d-f904-78f0-d287-5e601f789862@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: ahouiabra@gmail.com
+Received: by 2002:a5d:680c:0:b0:2fa:1003:8e47 with HTTP; Mon, 1 May 2023
+ 07:05:48 -0700 (PDT)
+From:   Kayla Manthey <sgtkylamanthey73@gmail.com>
+Date:   Mon, 1 May 2023 14:05:48 +0000
+X-Google-Sender-Auth: gooT1kGvqSnPN8CoxpHLSe_WgjU
+Message-ID: <CABwLe=xeFipWbQHMoHNw_yyimkQ0+3qOChDv2eB0esbtnU1=rg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/05/01 14:15, Tetsuo Handa wrote:
-> Hmm, where is the serialization that avoids concurrent
-> shmem_mknod()/shmem_mknod() or shmem_mknod()/shmem_unlink() ?
-> i_size_write() says "need locking around it (normally i_mutex)"...
-> 
-Since filename_create() calls inode_lock_nested(path->dentry->d_inode, I_MUTEX_PARENT)
-and done_path_create() calls inode_unlock(path->dentry->d_inode), serialization looks OK.
-Just the name is no longer i_mutex ?
-
-> Also, there was a similar report on updating i_{ctime,mtime} to current_time()
-> which means that i_size is not the only field that is causing data race.
-> https://syzkaller.appspot.com/bug?id=067d40ab9ab23a6fa0a8156857ed54e295062a29
-
-Do we want to as well wrap i_{ctime,mtime} using data_race() ?
 
