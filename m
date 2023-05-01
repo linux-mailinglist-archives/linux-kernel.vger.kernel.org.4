@@ -2,121 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9636F2F1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DEC6F2F27
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 09:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbjEAHWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 03:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S232225AbjEAH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 03:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjEAHWA (ORCPT
+        with ESMTP id S231755AbjEAH10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 03:22:00 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17061E53;
-        Mon,  1 May 2023 00:21:58 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ptNr8-0001Go-Es; Mon, 01 May 2023 09:21:54 +0200
-Message-ID: <dcd317db-3c24-895d-572b-1b139c370ff7@leemhuis.info>
-Date:   Mon, 1 May 2023 09:21:53 +0200
+        Mon, 1 May 2023 03:27:26 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1F41B9
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 00:27:22 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64115eef620so25138854b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 00:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1682926042; x=1685518042;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ibXuk7FbYrowdFzsiIEHtgPKzlyAO+Sfsye0fqZ102E=;
+        b=IKlhLUer77vP+NjL6egKLZ4SBjsZvxj/D3clB+asMNMvxbEKZVyD67jL8L+HgQcTZP
+         bx2+VCvjy6HeCWRCAKSjdVeCtOUPiNZOnarnxDf2Ay6KT0thLI2fnISAw3lEGAFT3jl2
+         kDsM3kvKxVx4yCWkUsfVNm1hwj4coNk2oyMCtjatrEV3EX4+4UoJMiPf3zbEvc9Jjg1m
+         0bcMJvDlbUEMRKu34+4Ed5M78tX9h6w4sQUUsnBU8Gli1HsSt1NKbMvyBp/4K2SrmTSi
+         DEZoHLZVnAjL+yBP9KaRc6NDRzIuI950QrEuS8Jegk9aH6BmTEHBRYboZ8q0GghNqhi2
+         OyTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682926042; x=1685518042;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibXuk7FbYrowdFzsiIEHtgPKzlyAO+Sfsye0fqZ102E=;
+        b=DHEVukPS9UlBkJQnlJyb6hJd/bcAJVmFkkDhVekxzxZ+AXwHuRqCePZQsmAtFs15up
+         Nj0XlCCT2XM3pAsdGRTfLqQtpYhIE19Frmybe/Yof7kEWIZi0Skj16ZaO1M9S0Qsa1Nu
+         qAMdGjJyYl9K7VnZEX9ATn2nnbRKk481k0Lh7t5K9Xk0hvstd1f+jRM4Xcwfizbhi3q/
+         ZouFzgSCDUAvY6dD9h5L+Ct98KWpSEc497lIZ8AU/x8liFGHrH+uwTRuOshuxtcLHSVH
+         5BAZYHvIYK0mtvKhFhyQQZoRGxR1AOxD6YgNzpq2vdxUNnNqZnlD3r11XGwZos9vtUoz
+         2SGg==
+X-Gm-Message-State: AC+VfDwbr8/W2pOA9qEOfD/vMY7+W81xXzu53gaFXa8EL8BYmcI1MU2w
+        YO0f62mbdCVvaujTAHqf60QVaw==
+X-Google-Smtp-Source: ACHHUZ4UvG80mxUfpvf1acfCnS2H3KC6jDEcSFVNzFYuXXy+v/xi65gkE5IdZ0bX/96Zq1X5x+FUpg==
+X-Received: by 2002:a05:6a00:a16:b0:63d:3c39:ecc2 with SMTP id p22-20020a056a000a1600b0063d3c39ecc2mr17292848pfh.12.1682926041931;
+        Mon, 01 May 2023 00:27:21 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id t40-20020a056a0013a800b0063d29df1589sm19371079pfg.136.2023.05.01.00.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 00:27:21 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1ptNwM-009yXy-1S; Mon, 01 May 2023 17:27:18 +1000
+Date:   Mon, 1 May 2023 17:27:18 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        David Hildenbrand <david@redhat.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Christian Benvenuti <benve@cisco.com>,
+        Nelson Escobar <neescoba@cisco.com>,
+        Bernard Metzler <bmt@zurich.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Mika Penttila <mpenttil@redhat.com>,
+        David Howells <dhowells@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v5] mm/gup: disallow GUP writing to file-backed mappings
+ by default
+Message-ID: <20230501072718.GF2155823@dread.disaster.area>
+References: <6b73e692c2929dc4613af711bdf92e2ec1956a66.1682638385.git.lstoakes@gmail.com>
+ <afcc124e-7a9b-879c-dfdf-200426b84e24@redhat.com>
+ <ZEvZtIb2EDb/WudP@nvidia.com>
+ <ZEwPscQu68kx32zF@mit.edu>
+ <ZEwVbPM2OPSeY21R@nvidia.com>
+ <ZEybNZ7Rev+XM4GU@mit.edu>
+ <ZE2ht9AGx321j0+s@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-To:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com, robert.mader@collabora.com,
-        nicolas.dufresne@collabora.co.uk, ezequiel@vanguardiasur.com.ar,
-        festevam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        hverkuil-cisco@xs4all.nl, linux-imx@nxp.com,
-        regressions@lists.linux.dev
-References: <20230220104849.398203-1-benjamin.gaignard@collabora.com>
- <20230220104849.398203-2-benjamin.gaignard@collabora.com>
- <26addb7d-bb9d-34e8-d4fe-e323ff488101@collabora.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v9 1/6] media: verisilicon: Do not set context src/dst
- formats in reset functions
-In-Reply-To: <26addb7d-bb9d-34e8-d4fe-e323ff488101@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1682925718;5ed265df;
-X-HE-SMSGID: 1ptNr8-0001Go-Es
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZE2ht9AGx321j0+s@nvidia.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27.04.23 00:19, Shreeya Patel wrote:
-> On 20/02/23 16:18, Benjamin Gaignard wrote:
->> Setting context source and destination formats should only be done
->> in hantro_set_fmt_out() and hantro_set_fmt_cap() after check that
->> the targeted queue is not busy.
->> Remove these calls from hantro_reset_encoded_fmt() and
->> hantro_reset_raw_fmt() to clean the driver.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+On Sat, Apr 29, 2023 at 08:01:11PM -0300, Jason Gunthorpe wrote:
+> On Sat, Apr 29, 2023 at 12:21:09AM -0400, Theodore Ts'o wrote:
 > 
-> KernelCI found this patch causes a regression in the
-> baseline.dmesg.alert test [1] on rk3399-rock-pi-4b [2],
-> see the bisection report for more details [3].
+> > In any case, the file system maintainers' position (mine and I doubt
+> > Dave Chinner's position has changed) is that if you write to
+> > file-backed mappings via GUP/RDMA/process_vm_writev, and it causes
+> > silent data corruption, you get to keep both pieces, and don't go
+> > looking for us for anything other than sympathy...
 > 
-> Let us know if you have any questions.
-> 
-> 
-> [1]
-> https://github.com/kernelci/kernelci-core/blob/main/config/rootfs/debos/overlays/baseline/opt/kernelci/dmesg.sh
-> [2] https://linux.kernelci.org/test/case/id/6442e825f19134d74c2e865d/
-> [3] https://groups.io/g/kernelci-results/message/40740
+> This alone is enough reason to block it. I'm tired of this round and
+> round and I think we should just say enough, the mm will work to
+> enforce this view point. Files can only be written through PTEs.
 
-Thx for the report. FWIW, regzbot noticed there is a patch that refers
-to the culprit that might have been landed in next after your test ran
-for the last time (and meanwhile it was mainlined): f100ce3bbd6 ("media:
-verisilicon: Fix crash when probing encoder")
+It has to be at least 5 years ago now that we were told that the
+next-gen RDMA hardware would be able to trigger hardware page faults
+when remote systems dirtied local pages.  This would enable
+->page-mkwrite to be run on file backed pages mapped pages just like
+local CPU write faults and everything would be fine.
 
-I wonder if that is related or might even fix the issue.
+Whatever happened to that? Are we still waiting for hardware that
+can trigger page faults from remote DMA transfers, or have hardware
+vendors given up on this?
 
-Ciao, Thorsten
+Cheers,
 
->> ---
->>   drivers/media/platform/verisilicon/hantro_v4l2.c | 9 ++-------
->>   1 file changed, 2 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c
->> b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> index c0d427956210..d8aa42bd4cd4 100644
->> --- a/drivers/media/platform/verisilicon/hantro_v4l2.c
->> +++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
->> @@ -382,13 +382,10 @@ hantro_reset_encoded_fmt(struct hantro_ctx *ctx)
->>         vpu_fmt = hantro_get_default_fmt(ctx, true);
->>   -    if (ctx->is_encoder) {
->> -        ctx->vpu_dst_fmt = vpu_fmt;
->> +    if (ctx->is_encoder)
->>           fmt = &ctx->dst_fmt;
->> -    } else {
->> -        ctx->vpu_src_fmt = vpu_fmt;
->> +    else
->>           fmt = &ctx->src_fmt;
->> -    }
->>         hantro_reset_fmt(fmt, vpu_fmt);
->>       fmt->width = vpu_fmt->frmsize.min_width;
->> @@ -408,11 +405,9 @@ hantro_reset_raw_fmt(struct hantro_ctx *ctx)
->>       raw_vpu_fmt = hantro_get_default_fmt(ctx, false);
->>         if (ctx->is_encoder) {
->> -        ctx->vpu_src_fmt = raw_vpu_fmt;
->>           raw_fmt = &ctx->src_fmt;
->>           encoded_fmt = &ctx->dst_fmt;
->>       } else {
->> -        ctx->vpu_dst_fmt = raw_vpu_fmt;
->>           raw_fmt = &ctx->dst_fmt;
->>           encoded_fmt = &ctx->src_fmt;
->>       }
-> 
-> 
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
