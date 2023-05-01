@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647776F2CFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFCC6F2CE7
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjEADGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        id S232260AbjEADGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjEADEK (ORCPT
+        with ESMTP id S232448AbjEADED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:04:10 -0400
+        Sun, 30 Apr 2023 23:04:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2300D19BD;
-        Sun, 30 Apr 2023 20:01:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4031A2716;
+        Sun, 30 Apr 2023 20:01:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48107616DD;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 881D56171B;
+        Mon,  1 May 2023 02:59:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E01C433D2;
         Mon,  1 May 2023 02:59:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70184C433EF;
-        Mon,  1 May 2023 02:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909980;
-        bh=YKojEJiiV1QvwHI5f0ezVGrRBJg+sS7nU5ba/bX9Vb8=;
+        s=k20201202; t=1682909982;
+        bh=UBsBkhAPZ9nSOpcSBYNwAdW4r95T9kwn6DQOckGw4UI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p9AzbP/kx+wSby7ytTnMivAm3jk1V+SGZZXz941qqCeaVX9eCs+7ZYNfAiDa/v+iJ
-         ThW+a+ZicUbSPKwJ5lWDqFIrytV1nZbsaktsHB8dSFAsOOidhwUoYo8RRSXr/xtLCg
-         npqYgTaCz5kS32kTyZe1s5mmErZHrztaoXsIZvPEbt8WlC+L8LZ0xMuBla+UUVx4IV
-         34NQQAGU7ZG4GRT4dLDIt5vb/JohOqqbgaMhz/4O2oV8j+HFjzysaPpCyPPnR03w43
-         EHsSUa/0J5X0mqRagA/PpqpgFG5M2UeIeqqLSKmcUZu30dFnq6ls7z/NbryxePF58T
-         hlQ3fAX5fzhPA==
+        b=B/W6ZGO8XhwE+syk3tIk/zl8RgIxTIQyBVlLWSX5eGmlLu0BRE9BHWA2rZ03QJzsJ
+         eQ4iTqS291f1VbzWENHc3r4eOoBJgmsr4CC7+F/lce64Rb24rhgWSYTih/LWdouYTE
+         Z9VcwF33HpH8FfIZZqGwDGTgiY2Y3ysW+IX+vRS9GnbO9w5QUHsDzY9hJ+VmQe2413
+         3SMGRO69oN17QRo4iul9mX7kGSuXRUtfwrOa/oiiA6Z7RraPNNcU8P9dfdrfY8xc/I
+         ROso8Lri3Q6pmUTjqBisKF4j9YpnYdDeJxmG8NB8HhoI0q6Iq5Rn7GNuATs5F9TGUt
+         SlCPe1fO18EXA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wei Chen <harperchen1110@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, tiffany.lin@mediatek.com,
-        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
-        matthias.bgg@gmail.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.3 42/44] media: mediatek: vcodec: Fix potential array out-of-bounds in decoder queue_setup
-Date:   Sun, 30 Apr 2023 22:56:30 -0400
-Message-Id: <20230501025632.3253067-42-sashal@kernel.org>
+Cc:     Feng Jiang <jiangfeng@kylinos.cn>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, Shyam-sundar.S-k@amd.com,
+        markgross@kernel.org, platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 43/44] platform/x86/amd: pmc: Fix memory leak in amd_pmc_stb_debugfs_open_v2()
+Date:   Sun, 30 Apr 2023 22:56:31 -0400
+Message-Id: <20230501025632.3253067-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -62,43 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wei Chen <harperchen1110@gmail.com>
+From: Feng Jiang <jiangfeng@kylinos.cn>
 
-[ Upstream commit 8fbcf730cb89c3647f3365226fe7014118fa93c7 ]
+[ Upstream commit f6e7ac4c35a28aef0be93b32c533ae678ad0b9e7 ]
 
-variable *nplanes is provided by user via system call argument. The
-possible value of q_data->fmt->num_planes is 1-3, while the value
-of *nplanes can be 1-8. The array access by index i can cause array
-out-of-bounds.
+Function amd_pmc_stb_debugfs_open_v2() may be called when the STB
+debug mechanism enabled.
 
-Fix this bug by checking *nplanes against the array size.
+When amd_pmc_send_cmd() fails, the 'buf' needs to be released.
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+Link: https://lore.kernel.org/r/20230412093734.1126410-1-jiangfeng@kylinos.cn
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/platform/x86/amd/pmc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 641f533c417fd..173407664cf42 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -753,6 +753,13 @@ int vb2ops_vdec_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
+index 2edaae04a6912..91d04e710486e 100644
+--- a/drivers/platform/x86/amd/pmc.c
++++ b/drivers/platform/x86/amd/pmc.c
+@@ -268,6 +268,7 @@ static int amd_pmc_stb_debugfs_open_v2(struct inode *inode, struct file *filp)
+ 	dev->msg_port = 0;
+ 	if (ret) {
+ 		dev_err(dev->dev, "error: S2D_NUM_SAMPLES not supported : %d\n", ret);
++		kfree(buf);
+ 		return ret;
  	}
  
- 	if (*nplanes) {
-+		if (vq->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) {
-+			if (*nplanes != q_data->fmt->num_planes)
-+				return -EINVAL;
-+		} else {
-+			if (*nplanes != 1)
-+				return -EINVAL;
-+		}
- 		for (i = 0; i < *nplanes; i++) {
- 			if (sizes[i] < q_data->sizeimage[i])
- 				return -EINVAL;
 -- 
 2.39.2
 
