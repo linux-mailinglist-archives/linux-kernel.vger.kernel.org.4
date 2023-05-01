@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0693C6F3537
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C6C6F34EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjEARve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S232532AbjEARQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232653AbjEARvb (ORCPT
+        with ESMTP id S233783AbjEARMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:51:31 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824931BE3;
-        Mon,  1 May 2023 10:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-        :From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date
-        :Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=C2V+3MlXqBzDH79DwMv5YuFjhUo0fTkIYxR6m8Sf1d4=; b=g
-        bPiFbEVrLLI7OVEki9Ei9GghX/8Qul2VdwUNIeWuUre3AKnaeBWJJFgc1yW3qbXFWv3jRRNWN56eA
-        ojhncCQ8yi3LV9y4hvwEUzFK0/X/46FxgSVxyKlmcqyWRy2orRiw8IzN3Ad+vc70DsAxwerzujXLI
-        UNCrkcwZWjBC4K1U=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:50174 helo=pettiford.lan)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1ptWvO-00069i-5F; Mon, 01 May 2023 13:02:54 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     hugo@hugovil.com, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon,  1 May 2023 13:02:50 -0400
-Message-Id: <20230501170250.2960997-1-hugo@hugovil.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 1 May 2023 13:12:36 -0400
+Received: from mail-io1-xd4d.google.com (mail-io1-xd4d.google.com [IPv6:2607:f8b0:4864:20::d4d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AEA3ABC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:10:55 -0700 (PDT)
+Received: by mail-io1-xd4d.google.com with SMTP id ca18e2360f4ac-76659fe1ac7so363877839f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:10:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682960705; x=1685552705;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c7hKOKbJMl2YcfkxcJZJbcJ0r0WbQba+Lj4vLNvcKOE=;
+        b=YW7dFXLkDTVdBGP4VbDUK9tWsC07bfsJ+DmUwTrZ0FAVYWuRsA9SOJBStWvERJhRCw
+         YhxBmda3v6Fs93ZYUbHXGdpkxSUq8ORQUuzUfROL7K6oIqvRSdYVDf6rRTe5hmI+ThUt
+         xHO/J8/Xl/FLnWLehFaanDMVmf6Xo6snrnnPofYdrUWgUCeK7hfMwpDciC/mjZwcYZvu
+         Jon9EVWlKw2OdAZEMVhRIil+uUnAcTnkkD0a6zgbwW/NYEjugh7MlQ/qplr4KJjyebKA
+         YvdNe4ZUGz2c/CjH9gHFONn2NQCmTxGqmN+vwQiMQt/h4ZyTfv5gS3zSrHqZJarWgCvc
+         jZZg==
+X-Gm-Message-State: AC+VfDw+kYS/0EmeW7ty6HicR35+WfHgNVGYc/3sEM8TBC3qdItc3ltm
+        bLYWbadMVts/EUMSqfbBfPCjKte6/uM1ec/0IFUS9b5iMvm9
+X-Google-Smtp-Source: ACHHUZ5FVEo4YIYIOxSOTqYoStsO2FMW1fltRzaNlRIlAPBCKX6aQmNn7FN7CSNEMFtrbbLgQtxJDHAg67n5/kE75ozY5FZzLBwM
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Received: by 2002:a02:6207:0:b0:40f:9262:b588 with SMTP id
+ d7-20020a026207000000b0040f9262b588mr5871886jac.6.1682960705456; Mon, 01 May
+ 2023 10:05:05 -0700 (PDT)
+Date:   Mon, 01 May 2023 10:05:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000534da05faa4d3d4@google.com>
+Subject: [syzbot] [f2fs?] WARNING: lock held when returning to user space in f2fs_write_single_data_page
+From:   syzbot <syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2] arm64: dts: imx8mn-var-som: add SOM EEPROM
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Hello,
 
-The 4Kbit EEPROM located on the SOM contains hardware configuration
-options, manufacturing infos and ethernet MAC address.
+syzbot found the following issue on:
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+HEAD commit:    58390c8ce1bd Merge tag 'iommu-updates-v6.4' of git://git.k..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=136e6ef8280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5eadbf0d3c2ece89
+dashboard link: https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16bbb03c280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=140d36f8280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/60130779f509/disk-58390c8c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d7f0cdd29b71/vmlinux-58390c8c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/de415ad52ae4/bzImage-58390c8c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/dc89d01cd6e9/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+eb6201248f684e99b9f8@syzkaller.appspotmail.com
+
+syz-executor768: attempt to access beyond end of device
+loop0: rw=2049, sector=77824, nr_sectors = 2048 limit=63271
+syz-executor768: attempt to access beyond end of device
+loop0: rw=2049, sector=79872, nr_sectors = 2048 limit=63271
+================================================
+WARNING: lock held when returning to user space!
+6.3.0-syzkaller-12049-g58390c8ce1bd #0 Not tainted
+------------------------------------------------
+syz-executor768/4998 is leaving the kernel with locks still held!
+1 lock held by syz-executor768/4998:
+ #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2087 [inline]
+ #0: ffff88807e800448 (&sbi->node_write){++++}-{3:3}, at: f2fs_write_single_data_page+0xa10/0x1d50 fs/f2fs/data.c:2842
+
+
 ---
- arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-index cbd9d124c80d..900605421bf9 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-var-som.dtsi
-@@ -228,6 +228,12 @@ ldo6_reg: LDO6 {
- 			};
- 		};
- 	};
-+
-+	eeprom_som: eeprom@52 {
-+		compatible = "atmel,24c04";
-+		reg = <0x52>;
-+		pagesize = <16>;
-+	};
- };
- 
- &i2c3 {
--- 
-2.30.2
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
