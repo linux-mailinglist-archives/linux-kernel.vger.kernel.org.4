@@ -2,137 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F686F32A4
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2416D6F32AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjEAPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 11:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S232558AbjEAPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 11:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbjEAPL2 (ORCPT
+        with ESMTP id S231249AbjEAPQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 11:11:28 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::606])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AF61723;
-        Mon,  1 May 2023 08:10:57 -0700 (PDT)
+        Mon, 1 May 2023 11:16:06 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B01A1
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 08:16:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682954164; x=1714490164;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Fm/lrGt7/oIZE3JdRlrYbRfih43iQPOyn+yI7jOvNyc=;
+  b=gnWedxxOw38ckGEgWSP92UyAKJNWCBY5nPSJ8g9Eyzbg6p7pKkrNXu82
+   m2KDYCjROWfF2rOvwZshHKEOJcgiINJglE4vJpUlud3uXCyKeRmMGpxRx
+   xKAPKNPHvOALgRmVKcpsU6bTb9cupmy/n5ZUBByhGndVnSEOadHAgHpA9
+   P2DqUhckh4dJ/4MO/KAa8Scx30zJAjOyY/KefvQo4KxjEPUQT2e5I2ICt
+   QVkqVSEaFQT0pcq41sj1HF540MxpipHltjWKt/txztRdcYusEo+qfUYzu
+   p5ItOe3alpELDwlYzv41E+AzMrF8DA0syJOylexngX2lyBz1z6aE7BM1C
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="348210127"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="348210127"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 08:16:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="942066468"
+X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
+   d="scan'208";a="942066468"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 01 May 2023 08:15:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 1 May 2023 08:15:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 1 May 2023 08:15:44 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 1 May 2023 08:15:43 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 1 May 2023 08:15:42 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EBycHUAz00nD6MVMEX+a3Z16XKWvKmyU01FVzWbtDoclPo/4YFAwbbj6MEnCtFwrJPA0VQrMxHHRPbKA26bm/lkGZDnnvh4suoBhcvrU04rhxlwfUZPkx5D4cXVQF80RPK70ba/UEitVKaVjLL0jrQ0idAl2ytFlCzDOIXEacuHIiUbMFBq2TDdpuRo3cMObQ4I5x11wGamwGlCbhk9K54GR4NQjOeIwAYQ33EIrdiv8sRY1OEkUX1eJcxe4S3IrdGwDw9u13ZNdkyZ0jL/AElWTlh2LaWkjk3phnAuULqd0UeHp5Toomj9BqQSH5wQ/NuKxXzWJ/PAiBs1a28zUWA==
+ b=XhU6cPNcHNTIOcUaUyDrur9rzFEg01msgjJsmeIB0Mvhe5zpu+06aMzFMwqPDHUkc+2EHhrp+QktrV/Erp4cAjlfeAnoyOWxV9N3Grqn/o5Ax/unkcp/82vcEPYHPpFgH7jr3E9RZ1H5DXrO4fG2oAgPVNNyhBiKQZ/AS1/62vv1wb1N+nuiVcoIZrCo4wbr3IC0Mdu+1YNfAck8MwGs6MiLaFeH82qGpm8uYu8f6rjbA08XR60ym1g6sJfUu2vY09gEZoQQmsLZI5g3BJX5jmGGaY8PfUPzpKXMPLsEg3Dqm1p4mQq+raLM2Ud9F28EMYRS6wuklB7S7MhSXuX7iQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/b2pfjxFUBwy0vmu+SaLGUsYPXh+D1VMxr2/Av9NfDk=;
- b=AVhwFnTUHT1fX+ngWVeZYTCKEMqnHDdmduy9EWR3t1UfSn6IEof38Sqew/EG5bE/N4+agM0rNt3DoCgY/l5i/Mg/kygS0obmYqDaje8QFodvvZgp/UMigHWzwP+Bs/DJJGBQGMpcWPHK5TKJJNANlljS0OC/X4sVdlMgNp5/ya3A/1kFfgnfkCZrNPpZdvsWHJZzfK1UJJDbDhNX9fZgsjSIYdz/uReK3XCORi5uaDcUJwYeoKo5bLFWEybGKIi8BxvhU0Gzk3Q09RsdflhijjyP53AMx/v3vCuhmYVTleXYQGkx2R80Z89017c5aUf5ykUh+rb8wJycw3qelhgtPw==
+ bh=mYN+2rCBjPYaX3ASadaj7aWz2wvtDHKdtQCKu2DhopM=;
+ b=ije6BcvQ5D7gL/HNnJ9KDmsGnt9BBXSBPppl71q/4oYQQXfH9th9gG1MC2Sohy+zY6kTrRtYuQxYpdoeXbYOg0wDsyvXPJ35geW/0G/8/+YtWbsZQLYUE0+3VgUM8/UsMtt0BAquyiIQxVnPWiwsLMYRQT4Qxc/QxPbB/g2JE+R7Al2Zp3GJ61+vg8wcVvISjuxMc7UWiYt0zIit/RFi61WHwTEaAsCWJofHp9iSjaUG8MP7U85gVLxZFcb09q/mfc8/mvZUe6/Gg6HAiLWW1vTsq7qq6mQdHJ7u+ViPG/U7n7heTtlyeNBSRQwM1jUv37qyEY4BfN7wzjchyzFagw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/b2pfjxFUBwy0vmu+SaLGUsYPXh+D1VMxr2/Av9NfDk=;
- b=c9RLDKc9xj2CuMRHwcwgNdfXn+VEHdzQqr1H86U+qu0w9d9OantjJSGfPpz6Peiwrl+AvOOC+ADM29g+hw/ZAc/cu1p+QL9CaF5HYTHtXv5EP4d2nPoYMkTk6/E0MdsLsnWUsMuy1Uc9xLBAikqzS+Go4zpg2iKiIujUDDqNa/s=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by CY8PR12MB7217.namprd12.prod.outlook.com (2603:10b6:930:5b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 15:10:39 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 15:10:38 +0000
-Message-ID: <1a8d8464-94dc-b6b9-07f6-857dd3d6e35f@amd.com>
-Date:   Mon, 1 May 2023 10:10:33 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH V5 02/15] x86/hyperv: Decrypt hv vp assist page in
- sev-snp enlightened guest
-Content-Language: en-US
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, venu.busireddy@oracle.com,
-        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
-        fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20230501085726.544209-1-ltykernel@gmail.com>
- <20230501085726.544209-3-ltykernel@gmail.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230501085726.544209-3-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1PR05CA0009.namprd05.prod.outlook.com
- (2603:10b6:806:2d2::11) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by DS7PR11MB7860.namprd11.prod.outlook.com (2603:10b6:8:e9::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.28; Mon, 1 May 2023 15:15:40 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d%6]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 15:15:40 +0000
+Date:   Mon, 1 May 2023 23:15:17 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Mike Galbraith <efault@gmx.de>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "K Prateek Nayak" <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        "Yicong Yang" <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        "Len Brown" <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        "Arjan Van De Ven" <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 2/2] sched/fair: Introduce SIS_CURRENT to wake up
+ short task on current CPU
+Message-ID: <ZE/XheuZdT5pGDgl@chenyu5-mobl1>
+References: <cover.1682661027.git.yu.c.chen@intel.com>
+ <4081178486e025c89dbb7cc0e62bbfab95fc794a.1682661027.git.yu.c.chen@intel.com>
+ <66406be50c8e040870217f5c9131b901d4dd2013.camel@gmx.de>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <66406be50c8e040870217f5c9131b901d4dd2013.camel@gmx.de>
+X-ClientProxiedBy: SG2PR03CA0114.apcprd03.prod.outlook.com
+ (2603:1096:4:91::18) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CY8PR12MB7217:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74f53c51-2c38-4ff4-180d-08db4a5638ba
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|DS7PR11MB7860:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8bd9d3c-1615-42f2-d5d2-08db4a56ec79
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oN1n/ZbxcvnkBEcCwVZp1+twnT6NkLl02H4Co1CdzSOoJVsbWEID8edteOCQNAzH/5i1lUDzkYrdrpzDwL2iTnbdix58hCz3VUGTW9XgCKecArRvtvce4rkLLa2nJOipCqCMoNdZUKcktbu3qNtXbctkZOfy4jlCQsVU7cCwYCSQ3yB4EiTPpJi2tkphlwH2MUrsvpHj3zQp7SWRfmAAQ6jD5chuAwaMZFZs6NoQ+TG7bQkCX/INhKxjJYqBLVs0YlvxYCLASIXOnlugjzkpP9VFSHy12NsQosRZ6t7PB8BWygIMCA0OluAvgaP8Fktx0RCjQXIxHVQe5ZTaoIC5iNXJjFflmEk8kpI/UL4bCWTOrBtWD8tlII9RTWtOG032d1r4OdgiTMOvWBoSKIEWR8M9Mf1Fo3xT5XmXHcaimwUUqB8SjUgcdoLzGkQOy+MPB3DhcjVc5AZ5yn5MTqsFlh2U47DV3xYe367tBdcLigYRbvAJ0rtNNDtoas85eMUDeu6Sw1sWbKU4Zu3gOXBygsCUBVOjqyLwbe27VBzlyxdw72zrGbSPTO8w0J40caWcHHhZZ9PGzUjUiA5dyNmsV+/27TFkN6ctaaaeA0J5ngnrBHhpjXeP6VuvIK4v7t3TSVWJiUGORFuZTXwqGgi+PYYBakqXh3HNCDqzbGt2Ni4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(346002)(376002)(39860400002)(451199021)(7416002)(921005)(5660300002)(8936002)(8676002)(7406005)(41300700001)(316002)(36756003)(31696002)(86362001)(2906002)(38100700002)(31686004)(186003)(2616005)(478600001)(45080400002)(6666004)(53546011)(6486002)(26005)(6506007)(6512007)(4326008)(66946007)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: haMUvl2bUPwWQgmBiLTKmAue0n8/G3sLg53DWnA+vogoB11ZTz6MQA//IiDeSGcqnBHQsEizutrSEdwmFnF2T8kw4mTror8VOoKGhlmxusvQUDoASqwKl2dUuUuw/+n/DvVsB6jP7JJh35D2FiB1dtfugTxyUnqfHDvdTjizyu4HupiaS3Xk9u/GRQ/ww7n53hSs+tavlyHegNAtyeABqxmpw6sRD9mSoiFj6y+lXjZY8ZZQZlQb57A1qGfS0LBAprp7iVBxLvwf9juhKiV8KFfX/JRK/J3Ux+mPeFjXjRjRhajJcZ2IjWDo1NvD3to3fwasRh0n9w63bCaHolTo8AxZOLLhYrxe6QcUV/dbsW6wns6bWQqYiFv5LC6Fso7wJFZ3m92EkbXx/Yv9s3zcYSjdHCYAruY8V8OsW9ZMlpuFadCbjB//celZ5CzOz5pM4f+YBF7wj/Sz71fRVfhAW9og/cAUjOGTHpDz3eq+Dd7qcB/kt0o7upTYvDJWCvMvF+2XNbWUj0Ojc0sMoU528HPmlcINDDuUos2st9F5S7ZUb7ZrC4CStLl2RTbetncj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199021)(53546011)(33716001)(9686003)(316002)(6512007)(6506007)(26005)(186003)(41300700001)(83380400001)(66556008)(66946007)(66476007)(478600001)(54906003)(4326008)(6486002)(6666004)(6916009)(38100700002)(2906002)(82960400001)(5660300002)(86362001)(7416002)(8676002)(8936002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cXU4Si9paTFuTGFDY1doa1RXZEFhWWVZdHMzaDlRdHMyL211d0l0K04rbERu?=
- =?utf-8?B?cWdNQVRVcFptdDhDVjBzUEY5WVVSdFFjdCtIRDVGc29XRTByNkdTeGZrNDNp?=
- =?utf-8?B?WE5VZXdFYnNnbWhxbjhUd3JUa3ZEWnlXQ1AxS1JEOG1LaXo5dDJ0WDFPNC9k?=
- =?utf-8?B?aE1hekw4MUFyUWtYMUQvOEVRR3ZPaWh4VEVqZGFHdHNaY3p6SlpqUm5iaGt1?=
- =?utf-8?B?MHd3SkxlbEJ6QkFkeWRhU0lxR014Ym4yR1VJdGlnMVp0YlZRN0Jnd01JUE9q?=
- =?utf-8?B?RmpJd3RneFVhOE0rQXRUbVh3ZzNhUEdUUEwrck5zRjQ0SFJYMEY2bUM0RTBE?=
- =?utf-8?B?Vm5sZ3BoWmlMckYvZlFNQzlSaFRCSFNxRlpCK2k2Z25xcXlyTWVNTFlBVFFH?=
- =?utf-8?B?TTZkcW9aWitueDYxQldWZnY3dkU0U0NSK3V3RmJGZTIwREl6YW54a0oxMGtQ?=
- =?utf-8?B?OU04K3hFdE5SZ1IrZGZyTUZjWGpKOUI3WHF2L01QY1hqUTJTRHhKZTFFaXNF?=
- =?utf-8?B?NzV1cGczY2pPY28rYkNlcWdPUExKVm0xaG5nSlc5aFJWdUo4TTR4cUlkdXNt?=
- =?utf-8?B?SDRqajh3VjNnV29sc3hOTUxtQXVMUjVrcG1XY3lOSDZVNGVPc0gwU0FOR0tp?=
- =?utf-8?B?emFHMlRkNzRsODRQZWt2Z2hTWmw4WDdzWXZZeExYS2xsc1V3QncyZEp1SmZk?=
- =?utf-8?B?VUlKNDAraWFlZXg1ZnlOcDA1U1V6SUlkNHpKWmdIckR6RnNkeDg3Uy9FMHox?=
- =?utf-8?B?SUpCWkdKYStmMkMzb0tGcFFYOWpSSTJpK3J6SjZQd2ZVN3Y0TEZnMS9vOVQ0?=
- =?utf-8?B?K3ltREc2MmdGRm0weEhWS3hIQnhVd1p5V3dYWCtRUEp1UUZJdEdNTTBKQllM?=
- =?utf-8?B?UjhHRC94NDBTbkU4SGltZDhoNS96T0ZmSFRXRXByb0R1eStrRlBLZUQ4bmxG?=
- =?utf-8?B?cCtoTThxQTRRcXZVYmdmd0t4SW9FRzJIc05SaEtmaDZSb2wvS3BCa2htdjNh?=
- =?utf-8?B?VlhJZmcvYWF2cmQwbHUvUzFPbmNBSE5NdWVBaUhRL3lxaG9GenhhckRlakVp?=
- =?utf-8?B?c2tMWjhIeGN1YlNGMG82cFVuam1MZHdCM3ZkYi9MSDVMWlp6dUhZQTBoY2pW?=
- =?utf-8?B?TnhCMjJCdWE3b1A2bjl3S3drUWxmc3hBZDlJWFdEWmRVUFlXQWJZaHgwdnN1?=
- =?utf-8?B?WmxNc0VHMjMrYTgzVzJXbUJaYk5JZFhubVVzVVFBU0FER0hRRFhoVitNM2Qx?=
- =?utf-8?B?dERoUit4Y2psK2UwWXBVK0ZDZmd5aUVqTFBVRWZwcWR3Qk9MWi9YK3k5Rkxp?=
- =?utf-8?B?TVNhdVpCb0o0dVQ3ZzYwYmhXdVlGSE9ENitwWjEwUHB2TjNsZFREOUp2SmRJ?=
- =?utf-8?B?ZHZ5YXVrVkJORUhoQXhZN1NUTDdJZlA5WWVUem5MZms5b3JQbkg5MDJCdFA0?=
- =?utf-8?B?cStXZEh1THdtK01IaWZXeEMzKysxcFEvcUk5WU5sOXF5UmUxMmVlZzVnbDVL?=
- =?utf-8?B?Y05TSmRIV2RiWVBRNDVoZmpiQjc1dlM1cW9qRVBMUlNSWUEzTFIvaWtPekp4?=
- =?utf-8?B?MHN6U2RmY01WdHN4NEk1akxkUXpxbERSS3BuRENhdEU2VnZCeDk5KzZjUThP?=
- =?utf-8?B?a3FMSFA5NUpnTTIrM0lLblB1M0NJZTc0YXZxNlpNMTFVSGx3VFB6ZXRPaVdu?=
- =?utf-8?B?eFFyeXRxMTFQVE9UWE9VZGxSV2EzVUZMZ2RUWkJmdmZvcGQ3NVdtT2RyR1Uy?=
- =?utf-8?B?YTlnL2djS2xLWStGZnNsUGMvdWhwZVNDd2s4SFNhMjljZ1BZZ2lNMVNNRi96?=
- =?utf-8?B?LzZRNFlHR0NhVnkwaisxTlNSeGp2YzBZQW5heU1GNThtQktQSmNHT3FSZXZG?=
- =?utf-8?B?NkFTU0tLdXRnMnk0cDd5NGhBRUl1Tm0yUkdWaFR4dnJqRTJBRVY1VlBmSmxK?=
- =?utf-8?B?aVJVYSthcktyUlVnUWhGK01EMmUvanRIMjZtV2hXVk5weU1NOHViZUkrV1dK?=
- =?utf-8?B?SUltcGQ3TkdYM3dhMXZyNUhxRzZNTTUvNWE5bHU5MTZnOWhteEhYQXk3K1g0?=
- =?utf-8?B?Q1ROcnd3TFV5OHlDZDl4eUNlQ1ByTHlKRUEvRDVlTEUzVEVqRm5obmJ0WHJ6?=
- =?utf-8?Q?YgMZEcs8igLm61IVWM2TrEjcv?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74f53c51-2c38-4ff4-180d-08db4a5638ba
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?rdwIM0ymTqRSy5pouluv0G/86tJrFr/bZQd1YXobnSuk8DD8hPaSuN3iMO?=
+ =?iso-8859-1?Q?+WfqnuYY8arvJBCFX0mnwya4lYhHuG3uUiYojx0tgW3TQAZxRa6zYrIENG?=
+ =?iso-8859-1?Q?MWd+1qvCJtF3e1ACudLOBhPagYE6whQT/fkCiSwIyrbn8TpXuq0WlkXX2/?=
+ =?iso-8859-1?Q?r7pQ6lPyQhqJxbcIfJhgIVyHWg6jKuzM/tS7tqhRWcjvB0YGkUbR2SvVYQ?=
+ =?iso-8859-1?Q?RG3rxdbB1WKsRabJo50FBFtwzUfQXnRj+tMT0DD96/UjC3qkiXu5q+oOK9?=
+ =?iso-8859-1?Q?//pFghx2Q45VvRZ7Is37T2DE/8tDYAZx9Ui9VAY4yuON8af56k11LBc8Bj?=
+ =?iso-8859-1?Q?9fnxg/NYp1B8ys/GCbohfctXPGJGyga2MSne+dwYf0EAtiiVyqPoM4bPKY?=
+ =?iso-8859-1?Q?gp7p5/ypn1Rh/zaynJAykAK8kbLWNuV1QXMLmhu4rGMBB/C3SJoQLI7KHR?=
+ =?iso-8859-1?Q?S2Qm8MLLI+/+9qaaGeFTrgkYXtQIhFiCeSsBrAgeQCCgtxGiXw2srPSjkC?=
+ =?iso-8859-1?Q?d06hEXDz1SLhYwxQ7L6yVA32ZqtO/BXATRUF45ETHYey89PyufgtkZENa1?=
+ =?iso-8859-1?Q?ZqxLmgQgGpEBNHOTC+rBnOtGFeDiJzHzhq6hrXCRaiFfstKwiYeYXBWXOu?=
+ =?iso-8859-1?Q?G1Q8gMkOs9offLktcbtVimKBXClnLkAEslIzoma0LIMu2CGH9qP1Q5eVSF?=
+ =?iso-8859-1?Q?eX42pqI0j4hH9mJUiAaXFbMp/arTVLJoBQWzpGqUuYvP5hgSQ2qG6t+8bt?=
+ =?iso-8859-1?Q?eku0lhWdkxlsQkD1j0sbz17v6hXx79aGwcgc/oXP4DEQ7ijIytJnwMAhMp?=
+ =?iso-8859-1?Q?tf/8B2VdN0xDD4+6VQvk4m4EkAwlLclTOA9oh+Nl/EJEplNGv/yOQq1Vyn?=
+ =?iso-8859-1?Q?Is4s3xPGVRh6mWW1ePr2mXp/iSKf2XNuICp/lNugljStuor5SN9h1mle+X?=
+ =?iso-8859-1?Q?gJsXMBN115Ryyt9wPGQOSh1z7Zw3w5L5vTxuSP86lQ0+4MEXkKq7FhDCoD?=
+ =?iso-8859-1?Q?/qn9WVFUVgmaUKTXMTMqVZ4Umf+CzUeQfQv1f05dFia6bB+kW7WQ9atM54?=
+ =?iso-8859-1?Q?HOqBaWxrfklqOthgzQGfADG7AgyHA2xPTtbNR0+5JzlG0TGaf6BCTfgN0u?=
+ =?iso-8859-1?Q?ixXAOmqPd9+/aqK9r+LtTMRlq5FXgwOvwwdGp78UwVDAj+am5XgKqhWdJA?=
+ =?iso-8859-1?Q?3GI0VGSnnIomVFMulN96p+7wVEU7izYkOj2LLhq+SK8zqI9If/avqSxLzZ?=
+ =?iso-8859-1?Q?GK4wHEe40Ppqw8qbWxkrvufjvOt9iGQbfh8qV0BusU3yE8mY7DyjJHh6Kw?=
+ =?iso-8859-1?Q?gJKSjz7BVoIxmPeRz+4zaKNFpmgioiinwhR8m5cql/qvVM1IhnOfJaXS1U?=
+ =?iso-8859-1?Q?+WU9TLtzZGDt6TnXeKhPquDh6TM6sUINyE2+299tgRZk0n10sXBagEUbV1?=
+ =?iso-8859-1?Q?mZqybjHQIinvxZlo3g7raHhXcPlWQQbW9XVvtlGCNZrOO/o+8cbGhszddT?=
+ =?iso-8859-1?Q?9ZPi0oFXgErQ7vfc6jLkvVh+BUY3owaLbWKL89qtQenIcw0cI8EUKIHPm7?=
+ =?iso-8859-1?Q?yWVglpPHR2vOt0A7bNjrRAEMts7FSXTDz00D+hMFETguX/dgxEv74sLsXH?=
+ =?iso-8859-1?Q?jXHTQRYcnpof+Z64qaB4MLVoKiTWYNgeC5?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8bd9d3c-1615-42f2-d5d2-08db4a56ec79
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 15:10:38.5550
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 15:15:40.0742
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GTO2Yk6ncUKHnok+nUYLECO7zU7TXR9iLuhIfcltCwjhLqBwPtwK2apNlT1o+5gokAJup+UvxPzlGxHMPJ0/MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7217
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: U0voQDBYNWvCRBauLstm6FuWGniP5MnS1kQwtKGtNMJch7T8v4oMQiT3Kivv/YPq1340ukDClJHa8IT0dbeB3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7860
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,48 +172,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/1/23 03:57, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
+Hi Mika,
+On 2023-04-29 at 21:34:06 +0200, Mike Galbraith wrote:
+> On Sat, 2023-04-29 at 07:16 +0800, Chen Yu wrote:
+> > [Problem Statement]
+> > For a workload that is doing frequent context switches, the throughput
+> > scales well until the number of instances reaches a peak point. After
+> > that peak point, the throughput drops significantly if the number of
+> > instances continue to increase.
+> >
+> > The will-it-scale context_switch1 test case exposes the issue. The
+> > test platform has 2 x 56C/112T and 224 CPUs in total. will-it-scale
+> > launches 1, 8, 16 ... instances respectively. Each instance is composed
+> > of 2 tasks, and each pair of tasks would do ping-pong scheduling via
+> > pipe_read() and pipe_write(). No task is bound to any CPU. It is found
+> > that, once the number of instances is higher than 56, the throughput
+> > drops accordingly:
+> >
+> >           ^
+> > throughput|
+> >           |                 X
+> >           |               X   X X
+> >           |             X         X X
+> >           |           X               X
+> >           |         X                   X
+> >           |       X
+> >           |     X
+> >           |   X
+> >           | X
+> >           |
+> >           +-----------------.------------------->
+> >                             56
+> >                                  number of instances
 > 
-> hv vp assist page is shared between sev snp guest and hyperv. Decrypt
-> the page when use it.
-
-You aren't actually decrypting the page, you're changing the mapping from 
-private/encrypted to shared/unencrypted (hence the memset that follows to 
-clear the page to zeroes).
-
-And please capitalize where necessary, e.g., SEV-SNP, Hyper-V, etc.
-
-Thanks,
-Tom
-
+> Should these buddy pairs not start interfering with one another at 112
+> instances instead of 56? NR_CPUS/2 buddy pair instances is the point at
+> which trying to turn waker/wakee overlap into throughput should tend
+> toward being a loser due to man-in-the-middle wakeup delay pain more
+> than offsetting overlap recovery gain, rendering sync wakeup thereafter
+> an ever more likely win.
 > 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->   arch/x86/hyperv/hv_init.c | 6 ++++++
->   1 file changed, 6 insertions(+)
+Thank you for taking a look at this. Yes, you are right, I did not
+described this clearly. Actually above figure was draw when I first
+found the issue when there is  only 1 socket online(112 thread in total).
+I should update the figure to the 224 CPUs case.
+> Anyway...
 > 
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index a5f9474f08e1..9f3e2d71d015 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -18,6 +18,7 @@
->   #include <asm/hyperv-tlfs.h>
->   #include <asm/mshyperv.h>
->   #include <asm/idtentry.h>
-> +#include <asm/set_memory.h>
->   #include <linux/kexec.h>
->   #include <linux/version.h>
->   #include <linux/vmalloc.h>
-> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
->   
->   	}
->   	if (!WARN_ON(!(*hvp))) {
-> +		if (hv_isolation_type_en_snp()) {
-> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
-> +			memset(*hvp, 0, PAGE_SIZE);
-> +		}
-> +
->   		msr.enable = 1;
->   		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
->   	}
+> What I see in my box, and I bet a virtual nickle it's a player in your
+> box as well, is WA_WEIGHT making a mess of things by stacking tasks,
+> sometimes very badly.  Below, I start NR_CPUS tbench buddy pairs in
+> crusty ole i4790 desktop box with WA_WEIGHT turned off, then turn it on
+> remotely as to not have noisy GUI muck up my demo.
+> 
+> ...
+>    8   3155749  3606.79 MB/sec  warmup  38 sec  latency 3.852 ms
+>    8   3238485  3608.75 MB/sec  warmup  39 sec  latency 3.839 ms
+>    8   3321578  3608.59 MB/sec  warmup  40 sec  latency 3.882 ms
+>    8   3404746  3608.09 MB/sec  warmup  41 sec  latency 2.273 ms
+>    8   3487885  3607.58 MB/sec  warmup  42 sec  latency 3.869 ms
+>    8   3571034  3607.12 MB/sec  warmup  43 sec  latency 3.855 ms
+>    8   3654067  3607.48 MB/sec  warmup  44 sec  latency 3.857 ms
+>    8   3736973  3608.83 MB/sec  warmup  45 sec  latency 4.008 ms
+>    8   3820160  3608.33 MB/sec  warmup  46 sec  latency 3.849 ms
+>    8   3902963  3607.60 MB/sec  warmup  47 sec  latency 14.241 ms
+>    8   3986117  3607.17 MB/sec  warmup  48 sec  latency 20.290 ms
+>    8   4069256  3606.70 MB/sec  warmup  49 sec  latency 28.284 ms
+>    8   4151986  3608.35 MB/sec  warmup  50 sec  latency 17.216 ms
+>    8   4235070  3608.06 MB/sec  warmup  51 sec  latency 23.221 ms
+>    8   4318221  3607.81 MB/sec  warmup  52 sec  latency 28.285 ms
+>    8   4401456  3607.29 MB/sec  warmup  53 sec  latency 20.835 ms
+>    8   4484606  3607.06 MB/sec  warmup  54 sec  latency 28.943 ms
+>    8   4567609  3607.32 MB/sec  warmup  55 sec  latency 28.254 ms
+> 
+> Where I turned it on is hard to miss.
+> 
+> Short duration thread pool workers can be stacked all the way to the
+> ceiling by WA_WEIGHT during burst wakeups, with wake_wide() not being
+> able to intervene due to lack of cross coupling between waker/wakees
+> leading to heuristic failure.  A (now long) while ago I caught that
+> happening with firefox event threads, it launched 32 of 'em in my 8 rq
+> box (hmm), and them being essentially the scheduler equivalent of
+> neutrinos (nearly massless), we stuffed 'em all into one rq.. and got
+> away with it because those particular threads don't seem to do much of
+> anything.  However, were they to go active, the latency hit that we set
+> up could have stung mightily. That scenario being highly generic leads
+> me to suspect that somewhere out there in the big wide world, folks are
+> eating that burst serialization.
+Thank you for this information. Yes, task stacking can be quite annoying
+for latency. And in my previous patch version, Prateek from AMD, Abel
+from Bytedance, and Yicong from Hisilicon have expressed their concern
+on the task stacking risk. So we tried several versions carefully to
+not break their use case. For the WA_WEIGHT issue you described(and
+I also saw your email offline), it is interesting and I'll try
+to run similar test on a 4C/8T system to reproduce it.
+
+thanks,
+Chenyu
+> 
+> 	-Mike
