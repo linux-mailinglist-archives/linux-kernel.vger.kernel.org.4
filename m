@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898866F38D1
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04A36F38E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjEAT4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S233356AbjEAT4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbjEAT4O (ORCPT
+        with ESMTP id S231467AbjEAT4R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:56:14 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FF53A85;
-        Mon,  1 May 2023 12:55:53 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94ef8b88a5bso444337966b.2;
-        Mon, 01 May 2023 12:55:53 -0700 (PDT)
+        Mon, 1 May 2023 15:56:17 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCCD3C02;
+        Mon,  1 May 2023 12:55:55 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-95678d891d6so607401166b.1;
+        Mon, 01 May 2023 12:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682970951; x=1685562951;
+        d=gmail.com; s=20221208; t=1682970954; x=1685562954;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q/mzZOPvu+0g5dtG+3t1NcIW7l4SOcqP9ndtgFLiRrY=;
-        b=fhM32ja7+zyZKnGsbP4+JOd2IXd3AwuFvzRuyQXelMJmBRkXQzWagYZL84Y/7RJ3p4
-         GOuZ9BqQvmZz71XwpHp6OMopdlMEaPj4hdGvPoiZn/qoXrxq1kZSxUzhWqGFdViTGQSf
-         fK39sfBMdxuPWANebN1Y+PAwwLKD1wR7O/iG2E6NI0KjPS+KkNpzJUPVXqBfkc3S/1GW
-         Kzmbyflp+eD4DzJPpr1UcEU60OgyCvpjMzB7XaWZY61gu6AKvnS1Cyi77k1Pwd6ljf1T
-         0e6jo3hI52jXO75aLAocm3fM8AYxBCq24FACXqCSswCyZIIKtRAkGdwEhoOIwncTQ9nx
-         o1Iw==
+        bh=GOGc04EDBprGbJg+xQxod7skhjSvhIqdrB9AcENrHNw=;
+        b=MDFKEJj+fNR9dFy63SUj0w/8qJvYvIdmPdpyRp3KMEmqP2Gqkq7ivo/jYTVKThi403
+         voVrlABZkWkdKZUPypiwf6tMBNSPbXcH2cnB4Mn7tK/dqcemgVHC/WW7ieYx0n/0tZYI
+         BgeGRCXWsbzqmhQHh7L+REcZe8DRgecIW1I1AuUfMfbHb3VTgHk1GK0VQL4R6OKf4vNr
+         05muX+X1250ydN/Jw9X8JW1a+MFyhAkMydtOIJQkwJoNi0nJQl+A6WIPSCqZGjbIcoYt
+         8/A8S0EUA1NXj+SlouEcWUXmXyLoOxcIYFJsnoG+rbD4eE9l/+vbAo041ZIQkFY5xmEM
+         DDqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682970951; x=1685562951;
+        d=1e100.net; s=20221208; t=1682970954; x=1685562954;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q/mzZOPvu+0g5dtG+3t1NcIW7l4SOcqP9ndtgFLiRrY=;
-        b=GbktXreXk1Od2vqgjLO0udD4WXhDMIw+WPTPg0nQ4iRstfH9eXVxUrqv/GLv/wQYoh
-         VTewXa6nrPXWTJtZK1QOfkVIcyi49EFu4JdYe6MMCZJSgI2B5JGrlKZYNY7v0vZyx2Ex
-         fdNdRxorGvi2+26hb6xRqzL236YsCUlyzmZNTkYnvhulNh3UjZImWW7JzZPJWxizZRiI
-         QzU/i1KmhZMuHT6vxrel/gol1ABfsWxn6yS+BoLjPh/Wi6yBCS3vyLFgGBlw4n87iWaJ
-         sJ8FYLNzcsUEYrjUXwVFlzbdnd61ZoccU3Jal5IHK+Uwla9Zx6aHvg8bAOOqbvqgdDUq
-         E5QQ==
-X-Gm-Message-State: AC+VfDytlD3g3xXs9mMSNkh832aDfjxjuGHQz72VkApXlxDDgQBDA26v
-        qXeHjHYbhPMljqHdxdZ5Gks=
-X-Google-Smtp-Source: ACHHUZ5p/sBe42g2BRa1vVh6tY3b+YaAGoOwbxvSbAuuSLUF5TEg+o0GE7MqVEATd/6N0/s/PVAt7w==
-X-Received: by 2002:a17:907:60cb:b0:94e:cf72:8147 with SMTP id hv11-20020a17090760cb00b0094ecf728147mr15198072ejc.48.1682970951750;
-        Mon, 01 May 2023 12:55:51 -0700 (PDT)
+        bh=GOGc04EDBprGbJg+xQxod7skhjSvhIqdrB9AcENrHNw=;
+        b=PySPvkSSYoAwgFry0Amxke+AQ8/l7ssP4TNmcFiGvVna+JCOjcg/9tQJV4/IahzrvF
+         oYjHvj8oAoXUpO/I/KP3n3H/ShTL9WXtdQ7c/w2qAMlDz/Z1D7J1ckuafP+ccBwYSGEk
+         ucr6zgb9ABhqogYMV/wKs8dqdetj2tQ6kLPzgyZ18xdCcA0H6J7VZK35VTBLtFkafYFh
+         Sba2Qfe5F3p4Pmcwi8clQHnUcEchM+j0DlAuNzvWyjDFwLHYddQsoMXBoPuDXzSUtZlz
+         7pOx6fDKfOAIda4Pf11p+bSSFYKFO9SDGpl3IYD1aMEt8vTcvKM8C9R9R572cbigs3vT
+         T16w==
+X-Gm-Message-State: AC+VfDwvhuRMRuJnx48EuW1BNibx240uW7tDBOt1APlnflXp26V62lb7
+        rOkdhxh+8NydVM9OqCOeTcw=
+X-Google-Smtp-Source: ACHHUZ5YT2x0QKzCJJLQq62PFbEPGc3kSht7PP/vDOQLc8119XR8mTn25GSabF+hymsYKVZjXCrHwg==
+X-Received: by 2002:a17:907:7215:b0:94a:56ec:7f12 with SMTP id dr21-20020a170907721500b0094a56ec7f12mr14342929ejc.30.1682970953955;
+        Mon, 01 May 2023 12:55:53 -0700 (PDT)
 Received: from localhost.my.domain (83.8.115.30.ipv4.supernova.orange.pl. [83.8.115.30])
-        by smtp.gmail.com with ESMTPSA id og36-20020a1709071de400b009600ce4fb53sm6333650ejc.37.2023.05.01.12.55.49
+        by smtp.gmail.com with ESMTPSA id og36-20020a1709071de400b009600ce4fb53sm6333650ejc.37.2023.05.01.12.55.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 12:55:51 -0700 (PDT)
+        Mon, 01 May 2023 12:55:53 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
@@ -73,9 +73,9 @@ Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-phy@lists.infradead.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH v3 10/13] ARM: dts: Re-introduce Exynos4212 DTSI
-Date:   Mon,  1 May 2023 21:55:22 +0200
-Message-Id: <20230501195525.6268-11-aweber.kernel@gmail.com>
+Subject: [PATCH v3 11/13] ARM: dts: exynos: Fix some typos in comments
+Date:   Mon,  1 May 2023 21:55:23 +0200
+Message-Id: <20230501195525.6268-12-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230501195525.6268-1-aweber.kernel@gmail.com>
 References: <20230501195525.6268-1-aweber.kernel@gmail.com>
@@ -91,184 +91,315 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support for the Exynos4212 SoC was originally dropped as there were
-no boards using it. We will be adding a device that uses it, so add
-it back.
-
-This reverts commit bca9085e0ae93253bc93ce218c85ac7d7e7f1831.
+Change 'specfic' to 'specific', 'optiosn' to 'options' and remove
+duplicated 'are listed' in DTSI heading comments.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 ---
-Changed in v3:
- - Rebased on next/dt
----
- arch/arm/boot/dts/exynos4212.dtsi | 157 ++++++++++++++++++++++++++++++
- 1 file changed, 157 insertions(+)
- create mode 100644 arch/arm/boot/dts/exynos4212.dtsi
+ arch/arm/boot/dts/exynos3250-pinctrl.dtsi | 4 ++--
+ arch/arm/boot/dts/exynos3250.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos4.dtsi            | 2 +-
+ arch/arm/boot/dts/exynos4210-pinctrl.dtsi | 4 ++--
+ arch/arm/boot/dts/exynos4212.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos4412.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos4x12-pinctrl.dtsi | 4 ++--
+ arch/arm/boot/dts/exynos4x12.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos5.dtsi            | 2 +-
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi | 4 ++--
+ arch/arm/boot/dts/exynos5250.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos5260-pinctrl.dtsi | 2 +-
+ arch/arm/boot/dts/exynos5410.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos5420-pinctrl.dtsi | 2 +-
+ arch/arm/boot/dts/exynos5420.dtsi         | 2 +-
+ arch/arm/boot/dts/exynos5800.dtsi         | 2 +-
+ arch/arm/boot/dts/s3c6400.dtsi            | 2 +-
+ arch/arm/boot/dts/s3c6410.dtsi            | 2 +-
+ arch/arm/boot/dts/s3c64xx.dtsi            | 2 +-
+ arch/arm/boot/dts/s5pv210-pinctrl.dtsi    | 2 +-
+ arch/arm/boot/dts/s5pv210.dtsi            | 2 +-
+ 21 files changed, 25 insertions(+), 25 deletions(-)
 
+diff --git a/arch/arm/boot/dts/exynos3250-pinctrl.dtsi b/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
+index 011ba2eff29e..07828551d4b3 100644
+--- a/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos3250-pinctrl.dtsi
+@@ -5,8 +5,8 @@
+  * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+  *
+- * Samsung's Exynos3250 SoCs pin-mux and pin-config optiosn are listed as device
+- * tree nodes are listed in this file.
++ * Samsung's Exynos3250 SoCs pin-mux and pin-config options are listed as device
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
+diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
+index bd37f1b587f0..3f1015edab43 100644
+--- a/arch/arm/boot/dts/exynos3250.dtsi
++++ b/arch/arm/boot/dts/exynos3250.dtsi
+@@ -6,7 +6,7 @@
+  *		http://www.samsung.com
+  *
+  * Samsung's Exynos3250 SoC device nodes are listed in this file. Exynos3250
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/exynos4.dtsi b/arch/arm/boot/dts/exynos4.dtsi
+index 8dd6976ab0a7..549e63b51242 100644
+--- a/arch/arm/boot/dts/exynos4.dtsi
++++ b/arch/arm/boot/dts/exynos4.dtsi
+@@ -9,7 +9,7 @@
+  *
+  * Samsung's Exynos4 SoC series device nodes are listed in this file.  Particular
+  * SoCs from Exynos4 series can include this file and provide values for SoCs
+- * specfic bindings.
++ * specific bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+  * Exynos4 SoCs. As device tree coverage for Exynos4 increases, additional
+diff --git a/arch/arm/boot/dts/exynos4210-pinctrl.dtsi b/arch/arm/boot/dts/exynos4210-pinctrl.dtsi
+index 76f44ae0de46..70d268f9fcb1 100644
+--- a/arch/arm/boot/dts/exynos4210-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos4210-pinctrl.dtsi
+@@ -7,8 +7,8 @@
+  * Copyright (c) 2011-2012 Linaro Ltd.
+  *		www.linaro.org
+  *
+- * Samsung's Exynos4210 SoC pin-mux and pin-config optiosn are listed as device
+- * tree nodes are listed in this file.
++ * Samsung's Exynos4210 SoC pin-mux and pin-config options are listed as device
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
 diff --git a/arch/arm/boot/dts/exynos4212.dtsi b/arch/arm/boot/dts/exynos4212.dtsi
-new file mode 100644
-index 000000000000..0ac3245788fc
---- /dev/null
+index 0ac3245788fc..aa984601ee06 100644
+--- a/arch/arm/boot/dts/exynos4212.dtsi
 +++ b/arch/arm/boot/dts/exynos4212.dtsi
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Samsung's Exynos4212 SoC device tree source
-+ *
-+ * Copyright (c) 2012 Samsung Electronics Co., Ltd.
-+ *		http://www.samsung.com
-+ *
-+ * Samsung's Exynos4212 SoC device nodes are listed in this file. Exynos4212
-+ * based board files can include this file and provide values for board specfic
-+ * bindings.
-+ *
-+ * Note: This file does not include device nodes for all the controllers in
-+ * Exynos4212 SoC. As device tree coverage for Exynos4212 increases, additional
-+ * nodes can be added to this file.
-+ */
-+
-+#include "exynos4x12.dtsi"
-+
-+/ {
-+	compatible = "samsung,exynos4212", "samsung,exynos4";
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@a00 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a9";
-+			reg = <0xa00>;
-+			clocks = <&clock CLK_ARM_CLK>;
-+			clock-names = "cpu";
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>; /* min followed by max */
-+		};
-+
-+		cpu1: cpu@a01 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a9";
-+			reg = <0xa01>;
-+			clocks = <&clock CLK_ARM_CLK>;
-+			clock-names = "cpu";
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			#cooling-cells = <2>; /* min followed by max */
-+		};
-+	};
-+
-+	cpu0_opp_table: opp-table-0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-200000000 {
-+			opp-hz = /bits/ 64 <200000000>;
-+			opp-microvolt = <900000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-microvolt = <900000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-400000000 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <925000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-500000000 {
-+			opp-hz = /bits/ 64 <500000000>;
-+			opp-microvolt = <950000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-600000000 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-microvolt = <975000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-700000000 {
-+			opp-hz = /bits/ 64 <700000000>;
-+			opp-microvolt = <987500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-800000000 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt = <1000000>;
-+			clock-latency-ns = <200000>;
-+			opp-suspend;
-+		};
-+		opp-900000000 {
-+			opp-hz = /bits/ 64 <900000000>;
-+			opp-microvolt = <1037500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <1087500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1100000000 {
-+			opp-hz = /bits/ 64 <1100000000>;
-+			opp-microvolt = <1137500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <1187500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1300000000 {
-+			opp-hz = /bits/ 64 <1300000000>;
-+			opp-microvolt = <1250000>;
-+			clock-latency-ns = <200000>;
-+		};
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt = <1287500>;
-+			clock-latency-ns = <200000>;
-+		};
-+		cpu0_opp_1500: opp-1500000000 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-microvolt = <1350000>;
-+			clock-latency-ns = <200000>;
-+			turbo-mode;
-+		};
-+	};
-+};
-+
-+&clock {
-+	compatible = "samsung,exynos4212-clock";
-+};
-+
-+&combiner {
-+	samsung,combiner-nr = <18>;
-+};
-+
-+&gic {
-+	cpu-offset = <0x8000>;
-+};
-+
-+&pmu {
-+	interrupts = <2 2>, <3 2>;
-+	interrupt-affinity = <&cpu0>, <&cpu1>;
-+	status = "okay";
-+};
-+
-+&pmu_system_controller {
-+	compatible = "samsung,exynos4212-pmu", "simple-mfd", "syscon";
-+};
+@@ -6,7 +6,7 @@
+  *		http://www.samsung.com
+  *
+  * Samsung's Exynos4212 SoC device nodes are listed in this file. Exynos4212
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/exynos4412.dtsi b/arch/arm/boot/dts/exynos4412.dtsi
+index 8660c4c76e3a..dcbe0ce6180f 100644
+--- a/arch/arm/boot/dts/exynos4412.dtsi
++++ b/arch/arm/boot/dts/exynos4412.dtsi
+@@ -6,7 +6,7 @@
+  *		http://www.samsung.com
+  *
+  * Samsung's Exynos4412 SoC device nodes are listed in this file. Exynos4412
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/exynos4x12-pinctrl.dtsi b/arch/arm/boot/dts/exynos4x12-pinctrl.dtsi
+index 9f7ea5f2a91f..04935fbe2f2a 100644
+--- a/arch/arm/boot/dts/exynos4x12-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos4x12-pinctrl.dtsi
+@@ -5,8 +5,8 @@
+  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+  *
+- * Samsung's Exynos4x12 SoCs pin-mux and pin-config optiosn are listed as device
+- * tree nodes are listed in this file.
++ * Samsung's Exynos4x12 SoCs pin-mux and pin-config options are listed as device
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
+diff --git a/arch/arm/boot/dts/exynos4x12.dtsi b/arch/arm/boot/dts/exynos4x12.dtsi
+index dcbb19824620..84c1db221c98 100644
+--- a/arch/arm/boot/dts/exynos4x12.dtsi
++++ b/arch/arm/boot/dts/exynos4x12.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung's Exynos4x12 SoC series device nodes are listed in this file.
+  * Particular SoCs from Exynos4x12 series can include this file and provide
+- * values for SoCs specfic bindings.
++ * values for SoCs specific bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+  * Exynos4x12 SoCs. As device tree coverage for Exynos4x12 increases, additional
+diff --git a/arch/arm/boot/dts/exynos5.dtsi b/arch/arm/boot/dts/exynos5.dtsi
+index 48e43b6b3213..4a17a19586bb 100644
+--- a/arch/arm/boot/dts/exynos5.dtsi
++++ b/arch/arm/boot/dts/exynos5.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung's Exynos5 SoC series device nodes are listed in this file. Particular
+  * SoCs from Exynos5 series can include this file and provide values for SoCs
+- * specfic bindings.
++ * specific bindings.
+  */
+ 
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+diff --git a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+index 48732edadff1..d956540a2d88 100644
+--- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+@@ -5,8 +5,8 @@
+  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+  *
+- * Samsung's Exynos5250 SoC pin-mux and pin-config optiosn are listed as device
+- * tree nodes are listed in this file.
++ * Samsung's Exynos5250 SoC pin-mux and pin-config options are listed as device
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
+diff --git a/arch/arm/boot/dts/exynos5250.dtsi b/arch/arm/boot/dts/exynos5250.dtsi
+index 1a4c6c028d03..99c84bebf25a 100644
+--- a/arch/arm/boot/dts/exynos5250.dtsi
++++ b/arch/arm/boot/dts/exynos5250.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung Exynos5250 SoC device nodes are listed in this file.
+  * Exynos5250 based board files can include this file and provide
+- * values for board specfic bindings.
++ * values for board specific bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+  * Exynos5250 SoC. As device tree coverage for Exynos5250 increases,
+diff --git a/arch/arm/boot/dts/exynos5260-pinctrl.dtsi b/arch/arm/boot/dts/exynos5260-pinctrl.dtsi
+index 43e4a541f479..d15494b4bda9 100644
+--- a/arch/arm/boot/dts/exynos5260-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5260-pinctrl.dtsi
+@@ -6,7 +6,7 @@
+  *		http://www.samsung.com
+  *
+  * Samsung's Exynos5260 SoC pin-mux and pin-config options are listed as device
+- * tree nodes are listed in this file.
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
+diff --git a/arch/arm/boot/dts/exynos5410.dtsi b/arch/arm/boot/dts/exynos5410.dtsi
+index 350b8afa0a3a..546035e78f40 100644
+--- a/arch/arm/boot/dts/exynos5410.dtsi
++++ b/arch/arm/boot/dts/exynos5410.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung Exynos5410 SoC device nodes are listed in this file.
+  * Exynos5410 based board files can include this file and provide
+- * values for board specfic bindings.
++ * values for board specific bindings.
+  */
+ 
+ #include "exynos54xx.dtsi"
+diff --git a/arch/arm/boot/dts/exynos5420-pinctrl.dtsi b/arch/arm/boot/dts/exynos5420-pinctrl.dtsi
+index 14cf9c4ca0ed..93b9873fa84f 100644
+--- a/arch/arm/boot/dts/exynos5420-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5420-pinctrl.dtsi
+@@ -6,7 +6,7 @@
+  *		http://www.samsung.com
+  *
+  * Samsung's Exynos5420 SoC pin-mux and pin-config options are listed as device
+- * tree nodes are listed in this file.
++ * tree nodes in this file.
+  */
+ 
+ #include "exynos-pinctrl.h"
+diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+index dd291f1199f2..25ed90374679 100644
+--- a/arch/arm/boot/dts/exynos5420.dtsi
++++ b/arch/arm/boot/dts/exynos5420.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung Exynos5420 SoC device nodes are listed in this file.
+  * Exynos5420 based board files can include this file and provide
+- * values for board specfic bindings.
++ * values for board specific bindings.
+  */
+ 
+ #include "exynos54xx.dtsi"
+diff --git a/arch/arm/boot/dts/exynos5800.dtsi b/arch/arm/boot/dts/exynos5800.dtsi
+index 8328ddb3b02f..72d3a3535a7a 100644
+--- a/arch/arm/boot/dts/exynos5800.dtsi
++++ b/arch/arm/boot/dts/exynos5800.dtsi
+@@ -7,7 +7,7 @@
+  *
+  * Samsung Exynos5800 SoC device nodes are listed in this file.
+  * Exynos5800 based board files can include this file and provide
+- * values for board specfic bindings.
++ * values for board specific bindings.
+  */
+ 
+ #include "exynos5420.dtsi"
+diff --git a/arch/arm/boot/dts/s3c6400.dtsi b/arch/arm/boot/dts/s3c6400.dtsi
+index 8c28e8a0c824..7cc785a63866 100644
+--- a/arch/arm/boot/dts/s3c6400.dtsi
++++ b/arch/arm/boot/dts/s3c6400.dtsi
+@@ -5,7 +5,7 @@
+  * Copyright (c) 2013 Tomasz Figa <tomasz.figa@gmail.com>
+  *
+  * Samsung's S3C6400 SoC device nodes are listed in this file. S3C6400
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/s3c6410.dtsi b/arch/arm/boot/dts/s3c6410.dtsi
+index a766d6de696c..13e9cc69b8a8 100644
+--- a/arch/arm/boot/dts/s3c6410.dtsi
++++ b/arch/arm/boot/dts/s3c6410.dtsi
+@@ -5,7 +5,7 @@
+  * Copyright (c) 2013 Tomasz Figa <tomasz.figa@gmail.com>
+  *
+  * Samsung's S3C6410 SoC device nodes are listed in this file. S3C6410
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/s3c64xx.dtsi b/arch/arm/boot/dts/s3c64xx.dtsi
+index c03df6355500..0b59135ffe88 100644
+--- a/arch/arm/boot/dts/s3c64xx.dtsi
++++ b/arch/arm/boot/dts/s3c64xx.dtsi
+@@ -6,7 +6,7 @@
+  *
+  * Samsung's S3C64xx SoC series device nodes are listed in this file.
+  * Particular SoCs from S3C64xx series can include this file and provide
+- * values for SoCs specfic bindings.
++ * values for SoCs specific bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+  * S3C64xx SoCs. As device tree coverage for S3C64xx increases, additional
+diff --git a/arch/arm/boot/dts/s5pv210-pinctrl.dtsi b/arch/arm/boot/dts/s5pv210-pinctrl.dtsi
+index 6d6daef9fb7a..d5bd506d3ddc 100644
+--- a/arch/arm/boot/dts/s5pv210-pinctrl.dtsi
++++ b/arch/arm/boot/dts/s5pv210-pinctrl.dtsi
+@@ -8,7 +8,7 @@
+  * Tomasz Figa <t.figa@samsung.com>
+  *
+  * Samsung's S5PV210 SoC device nodes are listed in this file. S5PV210
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
+diff --git a/arch/arm/boot/dts/s5pv210.dtsi b/arch/arm/boot/dts/s5pv210.dtsi
+index 1a9e4a96b2ff..0db5a687a530 100644
+--- a/arch/arm/boot/dts/s5pv210.dtsi
++++ b/arch/arm/boot/dts/s5pv210.dtsi
+@@ -8,7 +8,7 @@
+  * Tomasz Figa <t.figa@samsung.com>
+  *
+  * Samsung's S5PV210 SoC device nodes are listed in this file. S5PV210
+- * based board files can include this file and provide values for board specfic
++ * based board files can include this file and provide values for board specific
+  * bindings.
+  *
+  * Note: This file does not include device nodes for all the controllers in
 -- 
 2.40.1
 
