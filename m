@@ -2,164 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DDC6F395A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DE56F395E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbjEAUs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 16:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S232363AbjEAUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 16:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjEAUsY (ORCPT
+        with ESMTP id S232123AbjEAUs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 16:48:24 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6D31FC4;
-        Mon,  1 May 2023 13:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682974103; x=1714510103;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=E5e52r/8+slgMZ7JgE6S6jTzoOTXEekIw563S0B6tUM=;
-  b=eSe5WKq5Xe82oevyXR6j+7Slj1it7p4qKVvz7O11t897CrZuuAWacZHN
-   EvNl8hsRb2gOx3TGCEmU7sG4cwmNKdbZCVAuNW7qC6Yib92CFEUMJkFMb
-   JLE07Zodb9HJR+WLR4Vr4vrMiKeLggXEYsNXXFoPp++WMpv2Osdrfo2El
-   KXbzeUDszAkj/xH8QYAzEqBm9GEv16ETMXhQlvhVOblFHKzGm7IkWbgVn
-   fgx9IXYJLzQWUjKMTiBgbX5kk+gx4Xq/jet3zV0RBoHDUL+weIxAqSKjd
-   6/GiyDvxqeEga6vLynmE6jP9pOl4GlczNLvcqbkIkLBZHvrwL3fpOYqLB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="347044983"
-X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
-   d="scan'208";a="347044983"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 13:48:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="673343767"
-X-IronPort-AV: E=Sophos;i="5.99,242,1677571200"; 
-   d="scan'208";a="673343767"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga006.jf.intel.com with ESMTP; 01 May 2023 13:48:22 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 1 May 2023 13:48:22 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 1 May 2023 13:48:22 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 1 May 2023 13:48:22 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.171)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 1 May 2023 13:48:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l058mIF1VsfFJVLV0lH/UOKehVafaAysw74i2DQi9SKtMv0w4n7F6ZNBv6BjzU5h9RFIesBUmHlidsVo5wK+5gicmqI8iVQcpfdhbD4ZcMozV2bNQyesD7RWe7QLiIEacCkfPSX7FlNEsL1B7vFE8z3V3ySEgjz5iSzvplqBQRltNOuTJOKPJZ8pWAxcXbyRBmDPlooaXfplmZQQB0FolQpkHw23N0cGdGTHtnM3X76Cgnyix5mxkS3nFRJ3ZKk84qXf1urtgjpiL4XrjdefsTDfzlbAnw6zgpk1gniMakSSjNO/8ut+8Q2f/O1O13Xn1cpjD146c3TAk06QBpJQbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Srq/ysSSuZP/yZbwlc3MRmGU+tZHzEPVxt5SrNT+/YM=;
- b=YHJmJwulk30rUWoexCVJTvg8vkY5WrdyUfcG/k627BXf9TEZmBeT/4op6iKOJXCQ5KunvDigAKt3E3wbPoOy2gD/cZxwVTSvVsbUc6X61WAFDV/3+loGGmyIeTZHxqmmaFCat2ckyhBl1PZObln0dnc/rckEpE/1teZxCiu6n2GI2MvObLqFU4VnMPUigcYAper3kIwv7x/CDsqgvy5rQ+mL04w2Z767S+AhiWUL2WIMywhDdUxB8qjh5AJTKITOk+DsB49adWb4/QXhtCWal2m0FftJ5RoseZyqoAY33f+DkMNiU8Z8QelDXQt/158iCv7+FTTJI6GXQpJuiOBxlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
- by IA0PR11MB7863.namprd11.prod.outlook.com (2603:10b6:208:40c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.28; Mon, 1 May
- 2023 20:48:19 +0000
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::bbe8:5390:54c6:b0e2]) by IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::bbe8:5390:54c6:b0e2%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 20:48:19 +0000
-Message-ID: <40de89f7-a87a-283d-9da0-d0681d12a541@intel.com>
-Date:   Mon, 1 May 2023 13:48:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 07/15] dmaengine: idxd: add callback support for iaa
- crypto
-Content-Language: en-US
-To:     Tom Zanussi <tom.zanussi@linux.intel.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <vkoul@kernel.org>
-CC:     <dave.jiang@intel.com>, <tony.luck@intel.com>,
-        <wajdi.k.feghali@intel.com>, <james.guilford@intel.com>,
-        <kanchana.p.sridhar@intel.com>, <giovanni.cabiddu@intel.com>,
-        <hdanton@sina.com>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>
-References: <20230428205539.113902-1-tom.zanussi@linux.intel.com>
- <20230428205539.113902-8-tom.zanussi@linux.intel.com>
-From:   Fenghua Yu <fenghua.yu@intel.com>
-In-Reply-To: <20230428205539.113902-8-tom.zanussi@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0196.namprd13.prod.outlook.com
- (2603:10b6:a03:2c3::21) To IA1PR11MB6097.namprd11.prod.outlook.com
- (2603:10b6:208:3d7::17)
+        Mon, 1 May 2023 16:48:57 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C701FE9
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:48:56 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-330ec047d3bso5025ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 13:48:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682974136; x=1685566136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dD98wQZtTWak3XiUyDuuyre7EygxZ++ouRht1+2mVzk=;
+        b=UKrzsTrm+fYx0CNk6WTw+KBaGYA3pL78Mzo4yVhkOiHuQ9yhc+dKhPFpQ+Xep14Hfn
+         qOkECSdU6XycIUcQZ6khGgQm6eT6tGGjQxZgbci4ihvS6DXJWWiwykwSlFMFaWvqqEqQ
+         TpkjG0CCL73Dq4aET1tQt+F7J9ZfPblG6f69ZVQVpjFvqtAPcfBH5fKQBnJhkEwH3pqo
+         Zv+1e/BQ3x6krUCWMq0HUo6foMSKTKOf4vVGboVY1txBaIxOgdIli5/TrBk46NmXB1Gj
+         AZ9h6Rxj9yxz6hyxcViX+XdqB40VvXNWYcLHLXZpcTVjBsxdzqFzL7P3JaujaQoN96HU
+         fmbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682974136; x=1685566136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dD98wQZtTWak3XiUyDuuyre7EygxZ++ouRht1+2mVzk=;
+        b=CFGrpbTvA8jcn83QgQMxPegWd+0xAOOEXVc+1ixwZUdOqexbnR4r6cQ8HLN9Itcuzc
+         KQHvPsUwdyX+YChD/ga9jOAIMfoxW/HXxTuEQTnuujaejsT4FSZh7vzxkzfzZ9AMPmHz
+         zTZvqY6kbmEtt2XzQNuPWFY9Gnrw/MV+NbIM8gwyqYNXGIUtzS1P1f03BmgtbibdqW8u
+         4b4vvi0klXn6WTsUhlL2AbryeJmz+1QAlADkHP9ClnhIFvQLzA6eJQnIi+BE8p3J6BzZ
+         50pouvlxKacWXyOy8Ytt6xm2vBH+K5Ukt6/45NlE453/Ok0F/Zg8VlNkPyG34NvcrRfV
+         8H8Q==
+X-Gm-Message-State: AC+VfDxeUrwoHvW3si8zfXKnI96yt0n1YpeFcncydOQbh9egEKhFmwwD
+        /8oeWHwFC+PvnwE+Z2vK3t6NRHAJVAv249Y6ug96iA==
+X-Google-Smtp-Source: ACHHUZ5b7BtcrtBBPd5d9kxB/rZT5jV7VOn4rcCnvLzRBw4MG+l5INncdSy7LX1aupau5pe9nQGeBtD6M+I/PvSdkvQ=
+X-Received: by 2002:a05:6e02:1caf:b0:325:cd88:841d with SMTP id
+ x15-20020a056e021caf00b00325cd88841dmr64937ill.16.1682974135594; Mon, 01 May
+ 2023 13:48:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|IA0PR11MB7863:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e6b79e8-2ce1-4473-1e33-08db4a85651a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j4hvGNDhXtBxfkbjdWdjg0hE2Fb3PZoSE8+d6vmTEREmb0hguxkpZKV/4rp0lAGysF2HkwxiUV2f0CtTyAkTnYcyrSfCYhDFDG3nr/NBpd70levOr7OmGgFzXTm6LUWNfTiGvuItvqX/A8LSfsFQrMXuC3of+EBfcL2vVlhv6Vg4kRg/o34cY9Ozb/IldtjtXzAcqbidtnm5J5uMhWf/KaN0EeGvd1l8ZvyVbdjNFC5ncsn+JrNJn/Ncn0g5FxXYxxwX1kJ5AMuHaYXclcaZlklG/Py8U3YrO5k7l09WAaHvFBNKkqDy+mUHb45SKnmvu7d5A+omwGCsvWm4RBeq0G+9icwgA2MMGgjKXMQHOyZK/8p9b1AIM/unVdV/ej2ek4+wBgb3VKJUPaGZ2SjxysWwXAU3BOzLkBfTBDQTLOZwkWWOZQWwm27F0D7sy+wST0XoL+fRCyYx/v6U5uQ3eXv4OCkfCHBrSkAgJiuqosSk7Fpp5UGv48BpZPSmScB+WByQtQTlmXuBVaNf/TPIBkAojcfoyBIJzxz68AOi8n4vx0gc4EEARnCOWt9AeAz+JCbDln+mKLh88Dy66ypoHh3C8UZ4Npl7iQZVZS0mBe8/5VFx895hcn64zG7srcdRHOFhv+VRStVYB+sw1qEgFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(396003)(366004)(136003)(346002)(451199021)(5660300002)(8676002)(82960400001)(8936002)(44832011)(41300700001)(316002)(36756003)(31696002)(86362001)(38100700002)(2906002)(31686004)(186003)(2616005)(478600001)(83380400001)(6666004)(53546011)(26005)(6486002)(6512007)(6506007)(4326008)(66946007)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VzlTWFkwS0FGZ0xzMldRZElkZVdPOUtMNXRlOFZGb0JSREw4S1pTcDB1QjAy?=
- =?utf-8?B?VFNaQytqRUViRnUzOXgwNFZNZysrMFFNYjNRL2pTeUJNamZlK0JQSkd1SFdI?=
- =?utf-8?B?bExtcXBrdlppZEZUV1NSSGg2Q2VhZGdZZXYwZDFWc3hnaFQycTZ0em1SUUVL?=
- =?utf-8?B?SkxGNTBaMUEreHpsL3BpQThOTWZSYmI1b2cxeDdQQVNGWHVzUmI4R1RySzhI?=
- =?utf-8?B?aENmcEJneTJka2xFWjNOK2NaZFA1eHl2b1BlcWpOMFpiWVVISllFMXQvZ09m?=
- =?utf-8?B?M1RlMFYxRi9BT2tVRTVtN3RMZU5iUURJVjZjUUJBOWxDLzRZMzZkS3huUEk2?=
- =?utf-8?B?ajQ4dERxck5jdG9XdTNWUFF3UEtEZmxHMEJyamRxbVRQdHlOcW5qelpmME1a?=
- =?utf-8?B?ek1QelpBeVB4MGVuTkZaYUFhYng3dmZCZ1hKMmc5T0pvVm5xaXpreVowU1RR?=
- =?utf-8?B?OWR5UW8rUkpMZjNiQmdpLy9sVERldDZFeUUwc28xU25zWWo4Rm91QjE3RkxH?=
- =?utf-8?B?cHJ0TFRUNFo5Q054TW5MbGJweGdURmFUY3BhRjFGdDdYa202Tlc3cDlzbGZk?=
- =?utf-8?B?ckg0VzJwd3BqUXZmYXhxb29hZnNHRVlPNG5zWERTdzRVc3BVYmVIdWI3cTNp?=
- =?utf-8?B?MXRwbXhqd2k0UE9VTlVHcDNiSlRxRVVkcXRWYTBXNWRiMEFqVHlpd1ZLVEtx?=
- =?utf-8?B?RjhtbDVXbkloMUhKTnQxMmRYYWpGajMvNUpsMGoxc0hKb1R6RDVjYUxBZ1hh?=
- =?utf-8?B?UWNVTkJmNVk2SUN6eFlGRWlaVzVhZjVxcWg0eXdld2xMM3g0aDZMaG9DektE?=
- =?utf-8?B?MWJvK0JlcjVCWmZXNG9kWjIxTmttbitMdUlFTHZvS1VKQkxMQlJBYUdmaWxL?=
- =?utf-8?B?b09Ec2ZsbUdxVGdlSDd3b0NWeUhZUXppNW5FQTRaZjV3TXZ1VDhKTm9ab3Vn?=
- =?utf-8?B?THpEam9wdmUxRUVORG5obXpkaVlUK0p6M05oSzFoemt0K21mc1MzZjB5cTNY?=
- =?utf-8?B?UmtsUFJ4RVZWT3B4NmR0bzFrcm90OEJFSkh1aDE0WmdReC9qUEQ4alNzRHZz?=
- =?utf-8?B?d2xlcS9MUHdIN1VUSXdCZ0Z1OG8vdVJzR084czlnRUN0RlM0L1F2cFo2NUZT?=
- =?utf-8?B?cE9GcTgyVEVKd1JtcllSdE9pYzVqMFRtSFpoMjJFU3pGNyt4RFhMUkYyOEdJ?=
- =?utf-8?B?UXdVK0w3M1J2ZSs3aVUwejNvdFo4VnM2T1V4NGxlNk1yYzh2V0VYY0k3VE9H?=
- =?utf-8?B?UVlIU2lPYllrM1UybE0yWUpJSzlBVVBBMjdSSkRpT0tlNGRGa3JaY1NRL0JI?=
- =?utf-8?B?NGVWY2cyclpVK0FONmVLMndaNHo0cU12b3luakFreE1HSldESHBwVFc5TlRH?=
- =?utf-8?B?Z1NyanUzeThkYVRtVk1XT080TzFJTTZwRTBUZ0toWnpJZE05OExPeTdhRGRq?=
- =?utf-8?B?OGpzTDFuY2NiV0IzVkQ0dkhyZU94UXRaNjFVSzZPbUJkeDQ3c3hMazIvWVNo?=
- =?utf-8?B?MlJ1NUlPNVU2Qm1MV0I2TURISHNqbTZWREx1RkU5bVA5ZnVxcklFeDN1K2hy?=
- =?utf-8?B?d0ZHU01pblJmbWdoUGowVmkvaFhJclBoR28xRzY0R3VMY1dyaDFhYk44clRK?=
- =?utf-8?B?WnFIQUgvSytTSGdnZW04SzBMOVdWQ3RDRUt2YlNpSFRyU1dYOWp0U1d4My9E?=
- =?utf-8?B?SlZGSHI1Lys2UnU2bTk1cFZ4dWQzZzRNcEVIZFpHd1FtUTlMTklSU0VQa2Zk?=
- =?utf-8?B?UE1zbElXSS9ZU2E5c0EyR2Z4cENZNlpnZiswT1NVY3ZYK21iWGdhTUdBSk1j?=
- =?utf-8?B?QTMyaTlPbEVoTTZaK3BBUEwzaFJSaTNOWjNXOFNYWENIb3hUNy9MY3dsV3JL?=
- =?utf-8?B?dWh6SFdNamorN1dub3cyZHB6bmNWcTJYSkp1MXJ5RzBmdGlIbXhpaEFycXF1?=
- =?utf-8?B?VFc5VzBqa3ozWi9zdERvSklsMjExSVRHc1h3TVNlRGM3YWNWQ25iME92TXVY?=
- =?utf-8?B?aXhQWXo3Y2ptVFBTSyt5OG81SFdjeXMzNlZ0cGY0N3dvV0pELzJmZ1RBc1hj?=
- =?utf-8?B?ZnVaMHlXNG5ZaWFPZzBZTzc3OThQcER6SERWaVNZcUorMkY3Y1V5eEVwdkFY?=
- =?utf-8?Q?dnZfa8dmYSqQTviNB2+OYP9cU?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e6b79e8-2ce1-4473-1e33-08db4a85651a
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 20:48:19.3605
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uyRSg+RK8oFA4WFCqZCSMegxCSw4vuGL9/rrxkv9wOzbjjMe0M6XDKW8itDhEJ4Qyo03M6uy35hn0HgQHFCXhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7863
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230429053506.1962559-1-irogers@google.com> <20230429053506.1962559-4-irogers@google.com>
+ <d6784858-2a5f-7920-f1ac-d7ec9ed89605@linux.intel.com> <CAP-5=fUtgEvgburjhE6HpazDh9dtn=DiSOwHaVnoE3N7sBynEw@mail.gmail.com>
+ <a7020f11-3915-58e9-9d9e-792672ecbd61@linux.intel.com>
+In-Reply-To: <a7020f11-3915-58e9-9d9e-792672ecbd61@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 1 May 2023 13:48:44 -0700
+Message-ID: <CAP-5=fV326=0PLb+SZF3nFwQhXpdtMtk6KV+zZNEcs1erW9i1Q@mail.gmail.com>
+Subject: Re: [PATCH v3 03/46] perf stat: Introduce skippable evsels
+To:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Stephane Eranian <eranian@google.com>
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,42 +102,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 1, 2023 at 1:25=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.co=
+m> wrote:
+>
+>
+>
+> On 2023-05-01 11:29 a.m., Ian Rogers wrote:
+> > The events are displayed twice as there are 2 groups of events. This
+> > is changed by:
+> > https://lore.kernel.org/lkml/20230429053506.1962559-5-irogers@google.co=
+m/
+> > where the events are no longer grouped.
+>
+> The trick seems don't work on a hybrid machine. I still got the
+> duplicate Topdown events on e-core.
 
+For hybrid the rest of the patch series is necessary, ie the patches
+beyond what's for 6.4, which I take from the output (ie not a crash)
+you are looking at. As multiple groups are in play then it looks like
+the atom events are on >1 PMU which can happen as the x86 code special
+cases events with topdown in their name. Some fixes in the series for
+this are:
+https://lore.kernel.org/lkml/20230429053506.1962559-6-irogers@google.com/
+https://lore.kernel.org/lkml/20230429053506.1962559-40-irogers@google.com/
+and related:
+https://lore.kernel.org/lkml/20230429053506.1962559-19-irogers@google.com/
+and so fixing this requires some detective work.
 
-On 4/28/23 13:55, Tom Zanussi wrote:
-> Create a lightweight callback interface to allow idxd sub-drivers to
-> be notified when work sent to idxd wqs has completed.
-> 
-> For a sub-driver to be notified of work completion, it needs to:
-> 
->    - Set the descriptor's 'Request Completion Interrupt'
->      (IDXD_OP_FLAG_RCI)
-> 
->    - Set the sub-driver desc_complete() callback when registering the
->      sub-driver e.g.:
-> 
->        struct idxd_device_driver my_drv = {
->              .probe = my_probe,
->              .desc_complete = my_complete,
->        }
-> 
->    - Set the sub-driver-specific context in the sub-driver's descriptor
->      e.g:
-> 
->        idxd_desc->crypto.req = req;
->        idxd_desc->crypto.tfm = tfm;
->        idxd_desc->crypto.src_addr = src_addr;
->        idxd_desc->crypto.dst_addr = dst_addr;
-> 
-> When the work completes and the completion irq fires, idxd will invoke
-> the desc_complete() callback with pointers to the descriptor, context,
-> and completion_type.
-> 
-> Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+I don't think it should be a requirement for the series that all
+hybrid bugs are fixed - especially given the complaints against the
+length of the series as-is.
 
-Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
+Thanks,
+Ian
 
-Thanks.
-
--Fenghua
+>          38,841.16 msec cpu-clock                        #   32.009 CPUs
+> utilized
+>                256      context-switches                 #    6.591 /sec
+>                 33      cpu-migrations                   #    0.850 /sec
+>                 84      page-faults                      #    2.163 /sec
+>         21,910,584      cpu_core/cycles/                 #  564.107 K/sec
+>        248,153,249      cpu_atom/cycles/                 #    6.389
+> M/sec                       (53.85%)
+>         27,463,908      cpu_core/instructions/           #  707.083 K/sec
+>        118,661,014      cpu_atom/instructions/           #    3.055
+> M/sec                       (63.06%)
+>          4,652,941      cpu_core/branches/               #  119.794 K/sec
+>         20,173,082      cpu_atom/branches/               #  519.374
+> K/sec                       (63.18%)
+>             72,727      cpu_core/branch-misses/          #    1.872 K/sec
+>          1,143,187      cpu_atom/branch-misses/          #   29.432
+> K/sec                       (63.51%)
+>        125,630,586      cpu_core/TOPDOWN.SLOTS/          #      nan %
+> tma_backend_bound
+>                                                   #      nan %  tma_retir=
+ing
+>                                                   #      0.0 %
+> tma_bad_speculation
+>                                                   #      nan %
+> tma_frontend_bound
+>         30,254,701      cpu_core/topdown-retiring/
+>        149,075,726      cpu_atom/TOPDOWN_RETIRING.ALL/   #    3.838 M/sec
+>                                                   #     14.8 %
+> tma_bad_speculation      (63.82%)
+>    <not supported>      cpu_core/topdown-bad-spec/
+>        523,614,383      cpu_atom/TOPDOWN_FE_BOUND.ALL/   #   13.481 M/sec
+>                                                   #     42.0 %
+> tma_frontend_bound       (64.15%)
+>        385,502,477      cpu_atom/TOPDOWN_BE_BOUND.ALL/   #    9.925 M/sec
+>                                                   #     30.9 %
+> tma_backend_bound
+>                                                   #     30.9 %
+> tma_backend_bound_aux    (64.39%)
+>        249,534,488      cpu_atom/CPU_CLK_UNHALTED.CORE/  #    6.424 M/sec
+>                                                   #     12.2 %
+> tma_retiring             (64.18%)
+>        151,729,465      cpu_atom/TOPDOWN_RETIRING.ALL/   #    3.906
+> M/sec                       (54.67%)
+>        530,621,769      cpu_atom/TOPDOWN_FE_BOUND.ALL/   #   13.661
+> M/sec                       (54.30%)
+>    <not supported>      cpu_core/topdown-fe-bound/
+>        383,694,745      cpu_atom/TOPDOWN_BE_BOUND.ALL/   #    9.879
+> M/sec                       (53.96%)
+>    <not supported>      cpu_core/topdown-be-bound/
+>            105,850      cpu_core/INT_MISC.UOP_DROPPING/  #    2.725 K/sec
+>
+>        1.213449538 seconds time elapsed
+>
+> Thanks,
+> Kan
