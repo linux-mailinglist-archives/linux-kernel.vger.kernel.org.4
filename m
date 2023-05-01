@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B31C6F2FFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0716F3003
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232243AbjEAJvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S232208AbjEAJ7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232284AbjEAJv0 (ORCPT
+        with ESMTP id S230114AbjEAJ7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:51:26 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E5BE4A;
-        Mon,  1 May 2023 02:51:24 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-24e01ba9e03so517082a91.1;
-        Mon, 01 May 2023 02:51:24 -0700 (PDT)
+        Mon, 1 May 2023 05:59:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7353CE46
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:59:02 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-958bb7731a9so482706166b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682934683; x=1685526683;
+        d=linaro.org; s=google; t=1682935141; x=1685527141;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wAyKklJP4RAwcGyHLElFHWzPziFPamUTZVBn88mFHEM=;
-        b=GqMfQC7PQxWSJHUrzTkIrUFwPjo7AQsDMlPtX/wojI4kRyPoU76VlXhPhhdiWO2liC
-         M1Y5g5GAs0zZLbMPhMZnI5FkpQ2WCSHTYZ3mqeftXv/E7ReZJOyGSksVcK4kvfbXG8N5
-         GmgMAXvRjp9iE5FQl3/M4krfXy8951z3lHS5+DK9cKhcX+DFLC3eowFmt7twD7yU14+K
-         YDNV1J+//dvM0DHYoKBmtLshIcTTakJsr7tDmbpkhFzI7A7Ox2INx6MUn4eXx7voZlE6
-         7cq5cS9ggipGlO+YFALA7YmsWyxxwtqk1jHXjO/1utZCrMII0jf38EZ2JKSUr/E1CTrc
-         i6eg==
+        bh=1iC542I8sMMVaQ/GKCt5KrdijPnyOsGoeQvZFa5279s=;
+        b=FTD6ea9xiiKA9CmBhw8FW4LKyQUFRuC89lG4rnIisz/8N1dldoe8cPSsN6MLa1SYwr
+         gfhVVv/XY3zv2PTMgGAwn4219JxsRMUUboFHWzvlPp/1GDb6GWLfB1/MqA8nt07Q5ZsH
+         MLj27lA648g3YAnkS95kNomb2Px4hkVKw5X25rSLrVFuRfVner1KSLcm7q4OM+oeM8p8
+         J73jFRvf45UThva8feihLugrk5xVJLSBN/C6FBMh5I1CEMemSkN7uLtjYiWKcxkwA1An
+         1CjWGNGp9ivABvGTzo+bp/8Uepj1BIfduNN8ZwDwET0gAVDW7/RRJEU4SyD8ZOmFCl0A
+         cMWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682934683; x=1685526683;
+        d=1e100.net; s=20221208; t=1682935141; x=1685527141;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wAyKklJP4RAwcGyHLElFHWzPziFPamUTZVBn88mFHEM=;
-        b=flKWZVthQgECi7qZxI+TGlRc63Wqm+XloM+2DrzY1FKs2vMRqQDG4G9yxrZSM1mWmd
-         we9ysisSAOJtXXpOvPJ48JnRBpzFjJIqKYRMtkw8nU0xOmynnyFU/pPXyLj7ucYaDP/x
-         W3Bm5QLuc1w1Azi2dikaIeJZ0xgJHF8Cx22w5apg0F0cAJplqG3GhvjuH6aq2iLRWuJi
-         iAwqCADH+N2wV5Td9HTPW1jGVwWpU4UoiZtuv4VN4Ga096N3+W9rOmT6BGc93lFkhKw2
-         S73kSZEqpnXvCtuAPRaNNJ97/kSQRlPvueP4zL/MaXUfRqFkSP/Pwonvda+rGgrWHyTC
-         wLiA==
-X-Gm-Message-State: AC+VfDwURUefprrKj7xQqpCQ+poRxPM1TyugkaZmWq7r0jHz1+MeqnIG
-        ml5nCo0UsUyA4+Ox0GWfW7w=
-X-Google-Smtp-Source: ACHHUZ7bXlwoLS0yE+UKf5JmSxUljwc8fOGS1fiKev+OTVuxC2eEjE3byoVXgpmu5zrdQewi4e6A0w==
-X-Received: by 2002:a17:90a:bc89:b0:24e:134e:96db with SMTP id x9-20020a17090abc8900b0024e134e96dbmr619501pjr.22.1682934683254;
-        Mon, 01 May 2023 02:51:23 -0700 (PDT)
-Received: from [183.173.17.116] ([183.173.17.116])
-        by smtp.gmail.com with ESMTPSA id h16-20020a17090aea9000b00247164c1947sm5180481pjz.0.2023.05.01.02.51.20
+        bh=1iC542I8sMMVaQ/GKCt5KrdijPnyOsGoeQvZFa5279s=;
+        b=HWOcWjONkAjLwJeCfeIof21l0jkJfelDwvw5UJjAWw5jk1JTweMLhyiYjI9g5bEoFO
+         kcpLaO/gyrmEok93pmpvAiWimvPNyEmypojpZtaIZce/DJ8mrpLcCVgEFJEWiQSBWHxq
+         LZlxTr1NAeN5ag7rpOwbQioJEvtWX4Xra3cXrwKW2WJ0D8qzM8AjLZrvAAEHb+YHmEIa
+         s5Bx169Q5rKTRIvSak/GoDjLBKjSNqa2I9XoZHstkRFKuTes9Vw6E98fH19SVXMPvvgb
+         2GcalMBJyIWn/j8OpjdOI4kUiKZ4uY/2fUyCmjwk5VU/dOLl2GjSMcXP1J9Jbdtz9887
+         L7YA==
+X-Gm-Message-State: AC+VfDyJWrxe1FJ8ltTd4Ce8K4FnEcmBTgZzIkeNc5XQQh4St9HTmIPS
+        OfgL9qlS27gW31NbJpOXwKx53paBlsUjSBEwnuzN8Q==
+X-Google-Smtp-Source: ACHHUZ5tqLgVByqmgtfFg0+IfGabRKnA3PjKgolnSWjhoxA7MZt9uWHkPm73ChEJKMLqaehLn0+ANA==
+X-Received: by 2002:a17:907:7245:b0:94e:b3a1:3ed9 with SMTP id ds5-20020a170907724500b0094eb3a13ed9mr12018150ejc.49.1682935140884;
+        Mon, 01 May 2023 02:59:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
+        by smtp.gmail.com with ESMTPSA id oz5-20020a170906cd0500b0094f58a85bc5sm14534591ejb.180.2023.05.01.02.58.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 02:51:22 -0700 (PDT)
-Message-ID: <d9633b9b-c39f-699a-4b05-1c0c55e2dec9@gmail.com>
-Date:   Mon, 1 May 2023 17:51:20 +0800
+        Mon, 01 May 2023 02:59:00 -0700 (PDT)
+Message-ID: <36e7a445-7d19-911a-1a94-ffc30172e1a3@linaro.org>
+Date:   Mon, 1 May 2023 11:58:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [BUG][RESEND] Bluetooth: L2CAP: possible data race in
- __sco_sock_close()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH V2] arm64: dts: add support for C3 based Amlogic AW409
 Content-Language: en-US
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        "David S. Miller" <davem@davemloft.net>, edumazet@google.com,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        baijiaju1990@outlook.com
-References: <CADm8TemwbUWDP0R_t7axFk4=4-srnm5c+2oJSy7aeSzdKFSVCA@mail.gmail.com>
- <CABBYNZJCbYnxodwXAeq8F9NerzGWFva0OG6SfUWfJ_Grz=Xq6Q@mail.gmail.com>
-From:   Tuo Li <islituo@gmail.com>
-In-Reply-To: <CABBYNZJCbYnxodwXAeq8F9NerzGWFva0OG6SfUWfJ_Grz=Xq6Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230427085859.793802-1-xianwei.zhao@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your reply and interests. Our static analysis tool is still 
-to be improved, and any feedback on it would be appreciated.
+On 27/04/2023 10:58, Xianwei Zhao wrote:
+> Amlogic C3 is an advanced edge AI processor designed for smart IP camera
+> applications.
+> 
+> Add basic support for the C3 based Amlogic AW409 board, which describes
+> the following components: CPU, GIC, IRQ, Timer, UART. It's capable of
+> booting up into the serial console.
+> 
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> 
+> ---
+> V1 -> V2: Remove new arch, and use ARCH_MESON;
+>           Modify node name, and delete superfluous blank lines.
+> ---
+>  arch/arm64/boot/dts/amlogic/Makefile          |  1 +
+>  .../amlogic/amlogic-c3-c302x-aw409-256m.dts   | 29 +++++++
+>  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi   | 86 +++++++++++++++++++
+>  3 files changed, 116 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+> index cd1c5b04890a..bcec872c2444 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -74,3 +74,4 @@ dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air-gbit.dtb
+>  dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += amlogic-c3-c302x-aw409-256m.dtb
 
-On 2023/4/29 5:24, Luiz Augusto von Dentz wrote:
-> Hi,
->
-> On Fri, Apr 28, 2023 at 3:27 AM Li Tuo <islituo@gmail.com> wrote:
->>    Hello,
->>
->> Our static analysis tool finds a possible data race in the l2cap protocol
->> in Linux 6.3.0-rc7:
->>
->> In most calling contexts, the variable sk->sk_socket is accessed
->> with holding the lock sk->sk_callback_lock. Here is an example:
->>
->>    l2cap_sock_accept() --> Line 346 in net/bluetooth/l2cap_sock.c
->>        bt_accept_dequeue() --> Line 368 in net/bluetooth/l2cap_sock.c
->>            sock_graft() --> Line 240 in net/bluetooth/af_bluetooth.c
->>                write_lock_bh(&sk->sk_callback_lock); --> Line 2081 in include/net/sock.h (Lock sk->sk_callback_lock)
->>                sk_set_socket() --> Line 2084 in include/net/sock.h
->>                    sk->sk_socket = sock; --> Line 2054 in include/net/sock.h (Access sk->sk_socket)
->>
->> However, in the following calling context:
->>
->>    sco_sock_shutdown() --> Line 1227 in net/bluetooth/sco.c
->>        __sco_sock_close() --> Line 1243 in net/bluetooth/sco.c
->>            BT_DBG(..., sk->sk_socket); --> Line 431 in net/bluetooth/sco.c (Access sk->sk_socket)
->>
->> the variable sk->sk_socket is accessed without holding the lock
->> sk->sk_callback_lock, and thus a data race may occur.
->>
->> Reported-by: BassCheck <bass@buaa.edu.cn>
-> Need to check in detail what it means to hold the sk_callback_lock,
-> btw is this static analysis tool of yours something public that we can
-> use in our CI to detect these problems?
->
->
+Looks wrongly ordered. 'a' is before 'm'.
+
+> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+> new file mode 100644
+> index 000000000000..edce8850b338
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409-256m.dts
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "amlogic-c3.dtsi"
+> +
+> +/ {
+> +	model = "Amlogic C302 aw409 Development Board";
+> +	compatible = "amlogic,aw409", "amlogic,c3";
+
+Missing bindings.
+
+Please run scripts/checkpatch.pl and fix reported warnings.
+
+Best regards,
+Krzysztof
 
