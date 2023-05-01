@@ -2,201 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D926F397A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 22:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5026F3988
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjEAU4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 16:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
+        id S232233AbjEAVCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 17:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbjEAU4b (ORCPT
+        with ESMTP id S229937AbjEAVCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 16:56:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B76124
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 13:56:29 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f127b10140so173719e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 13:56:29 -0700 (PDT)
+        Mon, 1 May 2023 17:02:48 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7662B1999
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 14:02:46 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-63b60366047so2106531b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682974588; x=1685566588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fRi8WeWbFUqJuehlBhyZd78a/p9Tg8JwKR1fy0aT0Jg=;
-        b=ddsTfsgnDYaHHdX1g4taaGDyH2sPtMkYxmVUyu/MOxweHpFL+sUoh+LIOPidLdRN4/
-         GsuTDoggzA4y+41/eWfa5RhT34nAXN8NDKxwtnS1oGZZvpNR2ziTJwNXjg8ZibF6dln4
-         mQoAXHAwYY6FuPLM7yEpjGZVTL08G3s5IoWBQbHwVDDzoOllVOnY/DgrU2PO3KPcva36
-         UTsZoBNyTpyk2L1rP3iHMgTQ7bLLDJpOfRg/RcBsXY1kdcPdGailIC/MoJjJ01bdHaZT
-         9QdATURzOOANSO+kdGNHM4vPZrECagQYmAA2o1F7J8WACpLGzd/B20sb0xWBceGIoUVW
-         nqXg==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1682974966; x=1685566966;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+f9STYpQ3MiLUuobcxB6NiQeu6oLquBuiEqTgiW7nU=;
+        b=lBy1tIKVEJ2LC26woBFWq3aTbWu9kIByjssXjub4uONA5jL6a1YtTrEE7NjSLAMyWX
+         MWamHpoRE3PUugO94uw7+1taB6gcVdcMcsQF/OHsuVU++5D7D/K+LrQeC0yXlNC38Kwr
+         n0qRMYU9ccB4TSr3C+23XpODCmc3FSBgoXmiv+cDx6XG1CX1xqIZAuxHyWsVzGz4Jj84
+         CMxaxxXWanxT+4Hs5UbwRF3TWfVKXCOVELJHMQFEogn4RuWLal8y/6UsS7sFrzyaW5jz
+         djmjyfP09RL71AwOkUp3xQaAe92cuAnctDgB2F9/QIGcHy9CTQ1syZjVMCgtyqvkIPi0
+         5xlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682974588; x=1685566588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fRi8WeWbFUqJuehlBhyZd78a/p9Tg8JwKR1fy0aT0Jg=;
-        b=Sff/6Kx6UYxkeex43aY9J4l048gQ7BdVimo+eIq0iLUUyiLj01Z4JFZyS32f3eNcFN
-         MNTUK7qGLvSUwa+j+pMa3BDru+Ozz0yNI//HD+wko121qVD0Ecus+3Pe82eaK5sz8+PL
-         qV4a77xYuSD2vesXZjgQHAk8RuhXkiLa2myoROZn3/Yzci7SRMboP6rHgVZSbX0J6fpx
-         hY4Wt8SU6NwfuwmUejYTcS5XJ+XWD7f+fJv4bVGxH1LR7rkDzWR9JDoSbC3FAWMuWyN7
-         q+o/8nZkMjpk2HpvWSyH4lO8gWfjdrNw9zQ4ZMuWrNeMfg5u0CZkAN6pk7t9l7ZnThPQ
-         GPXQ==
-X-Gm-Message-State: AC+VfDwrXBH1eHf+tGh/4laLkqvIYmnlGuNyuNGRr/ChWxWSxP436gJ+
-        l1Ym80OdbFeUAV1WoN8VtiZm9w==
-X-Google-Smtp-Source: ACHHUZ7/wdm93DxRBAvt2OwUx/l0GuYYMfX+zGJ+Yy7jSPEk21ffkc8d/WR+DjJ/+FbE9Kqcs2CB8Q==
-X-Received: by 2002:ac2:5691:0:b0:4ed:bdac:7a49 with SMTP id 17-20020ac25691000000b004edbdac7a49mr4895238lfr.54.1682974587748;
-        Mon, 01 May 2023 13:56:27 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id v22-20020ac25596000000b004e845b49d81sm4931174lfg.140.2023.05.01.13.56.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 13:56:27 -0700 (PDT)
-Message-ID: <f2b7e6cf-d747-efb8-820c-41e4eef6cbb3@linaro.org>
-Date:   Mon, 1 May 2023 23:56:26 +0300
+        d=1e100.net; s=20221208; t=1682974966; x=1685566966;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u+f9STYpQ3MiLUuobcxB6NiQeu6oLquBuiEqTgiW7nU=;
+        b=lA9Ph7lMurrEsI7d8kyiYRnaQ5LBk7+lrOWw2zWHAdgaVRTcSIbr10jwHoK0aN50c/
+         UL5gYmlN6Ojom+IMo2P4x7wL4NxpjYKPT9eNwHC60nMQ1eCMaUhTOiqBTH57Vg32rttU
+         JtniyCWHh0W2mkBH6fdPgCptmnEo3mCu8Y2CfisamXWYFJYZQnF8ecuI0ghHGN4XQhaj
+         k4gHU+bGVB0qdC96Nno9T18TdByu7jC/Hkqreu/5+3D9pFJVs5fMTM+cQsn2Ad6xWt7O
+         y0h4qN628pYoPkZjz4DPOAH7BApwrLF/W+Gkbtbm3HMdqWE5uLkCIQaCScLPOULFmQx9
+         /05A==
+X-Gm-Message-State: AC+VfDyL/PNKaJ03c/+cBKJcWV8A88j8uAua4+wjXRN/tHZ8G3fY0cCn
+        za0R+UADJPM0KjtYIMqUKrwxNSIotfZg18RJSmc=
+X-Google-Smtp-Source: ACHHUZ59aSXoviFEB4FBnsHZun5uq6o104ZpmpZfLLV1mJcHU3VtnRTP2MBcZKMAvXC6UNuXFZGI0Q==
+X-Received: by 2002:a05:6a00:1ac9:b0:641:558:8e2e with SMTP id f9-20020a056a001ac900b0064105588e2emr20397668pfv.15.1682974965937;
+        Mon, 01 May 2023 14:02:45 -0700 (PDT)
+Received: from [127.0.1.1] ([2601:1c2:1800:f680:1f1:1360:eb9b:387])
+        by smtp.gmail.com with ESMTPSA id i12-20020a056a00224c00b0063d670ad850sm20899151pfu.92.2023.05.01.14.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 14:02:45 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH RFC v2 0/2] RISC-V: Detect Ssqosid extension and handle
+ sqoscfg CSR
+Date:   Mon, 01 May 2023 14:05:20 -0700
+Message-Id: <20230430-riscv-cbqri-rfc-v2-v2-0-8e3725c4a473@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/msm: Set max segment size earlier
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230501204441.1642741-1-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230501204441.1642741-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAJApUGQC/2XNQQrCQAyF4auUrA3EaUXqVvAAbsXFTJqx2Yyaw
+ CCU3t2pW5c/vI+3gIupOJy6BUyquj5Li7DrgOdYHoI6tYZAoaehJzR1rsjpbYqWGWvARHTMPO3
+ HwzBCgym6YLJYeN7ov9hGL5Osn9/zDa6XM9zX9QvLganljgAAAA==
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Ved Shanbhogue <ved@rivosinc.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>,
+        James Morse <james.morse@arm.com>,
+        =?utf-8?q?Kornel_Dul=C4=99ba?= <mindal@semihalf.com>,
+        Adrien Ricciardi <aricciardi@baylibre.com>,
+        Drew Fustini <dfustini@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1682975186; l=3338;
+ i=dfustini@baylibre.com; s=20230430; h=from:subject:message-id;
+ bh=WhoQqsgjJdsQj4ZRrkR5sEIpHcYxbO2QvzNxfqfpBDE=;
+ b=V29DkhiYqj3tZMXMXV+LYuslsnRGNqE3QVtYjOow8qhlZo6SXlDkOy59pN1/OFwDeCnBwQJVC
+ 2aY2/Vwj6TzB6yADUhDwOdvof3XwUuQMEcIWhSQ7t/Dg++RQlhct9Fq
+X-Developer-Key: i=dfustini@baylibre.com; a=ed25519;
+ pk=p3GKE9XFmjhwAayAHG4U108yag7V8xQVd4zJLdW0g7g=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/05/2023 23:44, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Fixes the following splat on a6xx gen2+ (a640, a650, a660 families),
-> a6xx gen1 has smaller GMU allocations so they fit under the default
-> 64K max segment size.
-> 
->     ------------[ cut here ]------------
->     DMA-API: msm_dpu ae01000.display-controller: mapping sg segment longer than device claims to support [len=126976] [max=65536]
->     WARNING: CPU: 5 PID: 9 at kernel/dma/debug.c:1160 debug_dma_map_sg+0x288/0x314
->     Modules linked in:
->     CPU: 5 PID: 9 Comm: kworker/u16:0 Not tainted 6.3.0-rc2-debug+ #629
->     Hardware name: Google Villager (rev1+) with LTE (DT)
->     Workqueue: events_unbound deferred_probe_work_func
->     pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->     pc : debug_dma_map_sg+0x288/0x314
->     lr : debug_dma_map_sg+0x288/0x314
->     sp : ffffffc00809b560
->     x29: ffffffc00809b560 x28: 0000000000000060 x27: 0000000000000000
->     x26: 0000000000010000 x25: 0000000000000004 x24: 0000000000000004
->     x23: ffffffffffffffff x22: ffffffdb31693cc0 x21: ffffff8080935800
->     x20: ffffff8087417400 x19: ffffff8087a45010 x18: 0000000000000000
->     x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000010000
->     x14: 0000000000000001 x13: ffffffffffffffff x12: ffffffffffffffff
->     x11: 0000000000000000 x10: 000000000000000a x9 : ffffffdb2ff05e14
->     x8 : ffffffdb31275000 x7 : ffffffdb2ff08908 x6 : 0000000000000000
->     x5 : 0000000000000001 x4 : ffffffdb2ff08a74 x3 : ffffffdb31275008
->     x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffff80803a9a80
->     Call trace:
->      debug_dma_map_sg+0x288/0x314
->      __dma_map_sg_attrs+0x80/0xe4
->      dma_map_sgtable+0x30/0x4c
->      get_pages+0x1d4/0x1e4
->      msm_gem_pin_pages_locked+0xbc/0xf8
->      msm_gem_pin_vma_locked+0x58/0xa0
->      msm_gem_get_and_pin_iova_range+0x98/0xac
->      a6xx_gmu_memory_alloc+0x7c/0x128
->      a6xx_gmu_init+0x16c/0x9b0
->      a6xx_gpu_init+0x38c/0x3e4
->      adreno_bind+0x214/0x264
->      component_bind_all+0x128/0x1f8
->      msm_drm_bind+0x2b8/0x608
->      try_to_bring_up_aggregate_device+0x88/0x1a4
->      __component_add+0xec/0x13c
->      component_add+0x1c/0x28
->      dp_display_probe+0x3f8/0x43c
->      platform_probe+0x70/0xc4
->      really_probe+0x148/0x280
->      __driver_probe_device+0xc8/0xe0
->      driver_probe_device+0x44/0x100
->      __device_attach_driver+0x64/0xdc
->      bus_for_each_drv+0xb0/0xd8
->      __device_attach+0xd8/0x168
->      device_initial_probe+0x1c/0x28
->      bus_probe_device+0x44/0xb0
->      deferred_probe_work_func+0xc8/0xe0
->      process_one_work+0x2e0/0x488
->      process_scheduled_works+0x4c/0x50
->      worker_thread+0x218/0x274
->      kthread+0xf0/0x100
->      ret_from_fork+0x10/0x20
->     irq event stamp: 293712
->     hardirqs last  enabled at (293711): [<ffffffdb2ff0893c>] vprintk_emit+0x160/0x25c
->     hardirqs last disabled at (293712): [<ffffffdb30b48130>] el1_dbg+0x24/0x80
->     softirqs last  enabled at (279520): [<ffffffdb2fe10420>] __do_softirq+0x21c/0x4bc
->     softirqs last disabled at (279515): [<ffffffdb2fe16708>] ____do_softirq+0x18/0x24
->     ---[ end trace 0000000000000000 ]---
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+This RFC series adds initial support for the Ssqosid extension and the
+sqoscfg CSR as specified in Chapter 2 of the RISC-V Capacity and
+Bandwidth Controller QoS Register Interface (CBQRI) specification [1].
 
-I think this should be:
+QoS (Quality of Service) in this context is concerned with shared
+resources on an SoC such as cache capacity and memory bandwidth. Intel
+and AMD already have QoS features on x86, and there is an existing user
+interface in Linux: the resctrl virtual filesystem [2].
 
-Fixes: db735fc4036b ("drm/msm: Set dma maximum segment size for mdss")
+The sqoscfg CSR provides a mechanism by which a software workload (e.g.
+a process or a set of processes) can be associated with a resource
+control ID (RCID) and a monitoring counter ID (MCID) that accompanies
+each request made by the hart to shared resources like cache. CBQRI
+defines operations to configure resource usage limits, in the form of
+capacity or bandwidth, for an RCID. CBQRI also defines operations to
+configure counters to track the resource utilization of an MCID.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The CBQRI spec is still in draft state and is undergoing review [3]. It
+is possible there will be changes to the Ssqosid extension and the CBQRI
+spec. For example, the CSR address for sqoscfg is not yet finalized.
 
-> ---
->   drivers/gpu/drm/msm/msm_drv.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-> index 3a74b5653e96..6dec1a3534f2 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.c
-> +++ b/drivers/gpu/drm/msm/msm_drv.c
-> @@ -440,27 +440,27 @@ static int msm_drm_init(struct device *dev, const struct drm_driver *drv)
->   	fs_reclaim_acquire(GFP_KERNEL);
->   	might_lock(&priv->lru.lock);
->   	fs_reclaim_release(GFP_KERNEL);
->   
->   	drm_mode_config_init(ddev);
->   
->   	ret = msm_init_vram(ddev);
->   	if (ret)
->   		goto err_drm_dev_put;
->   
-> +	dma_set_max_seg_size(dev, UINT_MAX);
-> +
->   	/* Bind all our sub-components: */
->   	ret = component_bind_all(dev, ddev);
->   	if (ret)
->   		goto err_drm_dev_put;
->   
-> -	dma_set_max_seg_size(dev, UINT_MAX);
-> -
->   	msm_gem_shrinker_init(ddev);
->   
->   	if (priv->kms_init) {
->   		ret = priv->kms_init(ddev);
->   		if (ret) {
->   			DRM_DEV_ERROR(dev, "failed to load kms\n");
->   			priv->kms = NULL;
->   			goto err_msm_uninit;
->   		}
->   		kms = priv->kms;
+My goal for this RFC is to determine if the 2nd patch is an acceptable
+approach to handling sqoscfg when switching tasks. This RFC was tested
+against a QEMU branch that implements the Ssqosid extension [4]. A test
+driver [5] was used to set sqoscfg for the current process. This allows
+__switch_to_sqoscfg() to be tested without resctrl.
 
+This series is based on riscv/for-next at:
+
+ b09313dd2e72 ("RISC-V: hwprobe: Explicity check for -1 in vdso init")
+
+Changes from v1:
+ - change DEFINE_PER_CPU to DECLARE_PER_CPU for cpu_sqoscfg in qos.h to
+   prevent linking error about multiple definition. Move DEFINE_PER_CPU
+   for cpu_sqoscfg into qos.c
+ - renamed qos prefix in function names to sqoscfg to be less generic
+ - handle sqoscfg the same way has_vector and has_fpu are handled in the
+   vector patch series [6]
+
+[1] https://github.com/riscv-non-isa/riscv-cmqri/blob/main/riscv-cbqri.pdf
+[2] https://docs.kernel.org/x86/resctrl.html
+[3] https://lists.riscv.org/g/tech-cbqri/message/38
+[4] https://gitlab.baylibre.com/baylibre/qemu/-/tree/riscv-cbqri-rfc-v2
+[5] https://gitlab.baylibre.com/baylibre/linux/-/tree/riscv-sqoscfg-rfc-v2
+[6] https://lore.kernel.org/linux-riscv/20230414155843.12963-1-andy.chiu@sifive.com/
+
+---
+Drew Fustini (1):
+      RISC-V: Add support for sqoscfg CSR
+
+Kornel Dulęba (1):
+      RISC-V: Detect the Ssqosid extension
+
+ arch/riscv/Kconfig                 | 19 +++++++++++++++++
+ arch/riscv/include/asm/csr.h       |  8 +++++++
+ arch/riscv/include/asm/hwcap.h     |  2 ++
+ arch/riscv/include/asm/processor.h |  3 +++
+ arch/riscv/include/asm/qos.h       | 43 ++++++++++++++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h |  3 +++
+ arch/riscv/kernel/Makefile         |  1 +
+ arch/riscv/kernel/cpu.c            |  1 +
+ arch/riscv/kernel/cpufeature.c     |  1 +
+ arch/riscv/kernel/qos/Makefile     |  2 ++
+ arch/riscv/kernel/qos/qos.c        |  5 +++++
+ 11 files changed, 88 insertions(+)
+---
+base-commit: b09313dd2e726fe5e1fa574cd73f5e326c6030a4
+change-id: 20230430-riscv-cbqri-rfc-v2-b007fcd19549
+
+Best regards,
 -- 
-With best wishes
-Dmitry
+Drew Fustini <dfustini@baylibre.com>
 
