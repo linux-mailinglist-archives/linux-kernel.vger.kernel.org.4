@@ -2,208 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D1E16F3517
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4087F6F3519
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbjEARfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S232363AbjEARhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjEARf1 (ORCPT
+        with ESMTP id S229816AbjEARhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:35:27 -0400
-Received: from sonic312-26.consmr.mail.ir2.yahoo.com (sonic312-26.consmr.mail.ir2.yahoo.com [77.238.178.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC3E10F6
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682962521; bh=04OPKsj/QXXjTdmsQM9AQpCh3NGap/ezTNnwVf4o7A0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BOTy4ygXDLp0GINCVl1Tv3QImHmX/M3+9YqcoVEoZwL0z9/s20ETHAdEfw9flJXQJdJ2ebTV87qxvy8cacOVdDoTYQhc5SEUyHteuJ0QaSf+oI5V4MW0ktg9k2Vl7L8Wx4JL4yGiqfvN8Hf+cz7DUsCJZB3ib+njTysLc4WEGuI9S2guryuBieVz4VpX8XXUx+ppXITKTeIDXbWwEn/fSE9NDGNa1LSC/u98sQ5/MI/tnTaxHk6cv2fRT0pR3TYIxtmOPOpaEMaypwFWWVhLjlQfEc6r5Nt+9TextlJ3QGDSAh3946HUpW24dIHNowQ9yBeacuLjehrWlU+/BmJ6Mg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682962521; bh=yqxcxKhFdH+GYt/iBDDt7ZHDKTJivpCj4DGIO7xiYez=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=abqH5tWIhKr3fHy6EaLh371VNF3xOpTW/i10a6A3IR7Ap1T5B5VI2N662cNyazwjSAJbMeB+jkQVRwyUlbxiE/S66eGIk2hPc5mJlK+aNJwbNmY1J1rb1Gh0jHxR36CmWaKgeaX55ApVcZlk5GmWkqLb2rffGSLetxTC73yn0nML6lNTzk5LdSApy1fu6M7ii9lF1UjqKdVfVOsKyAqwJEDZMwR0G+AxILGx2MdNu3y71C01R5WAUAiqnGzAv4CKKxN2e2MpjQLVCt0a8Xgk572e5QryCkbMGT+7zbl27v7IbBz0usmQ5ysn7GrBOYNpSB0aLtcp4qeUP7MKnzq27g==
-X-YMail-OSG: PBmjzDIVM1mkBY8P665SrsROmABT91m8vWhuKRVhFQiwzNNw85_qX5Fxp2IZ2us
- pRwvAazripnyowzY9UpTfgWK1eFqrGb7yUW.YDU6.3i5OFo2KC04Oqj0to2MELkf2QcBmL4bhl57
- qJ7Ik7wdb0mcmvs5zY_X3pYpr7mT7Tvkk4aT2XyGHycJgHQ2qPxaqL8dhrCTkfJzazZDvx3_lFS2
- bV74h2F75a6HmQI5PRJdxKb.C46jePfyswNvfDiv0TJ6a8OOJqPk8oZTE_bUhimyUaGkWRNPYSJ2
- 5o2kCQfh1tlWy4kuw99Lbrp7dd08xN8Twf8wsmTOpPK9k0cuFCO2D61ukprCybLFBnNiTyxnRisF
- TrQOZ8Eou2aEWSxnkVGrTT0Rw9N.f13KQQKMidMnMqKhg.DRlCp7Wzl_LRwnPkXuM.s6gGedR5Nd
- Z8O7ncxFpBLxWfy7rUYHSabzqIr2UXxGttkW6hQM6XIWF2ZkV_sp2cSY_3BVph.hGXReFSyS_cXD
- wd6XVj5MYv0En2NaAHonX5hP2nazAPA5WXqnirkZdrgl7i2g_fLdYWLD6MbN6iKwJycLVzAwKwj9
- WSO6GU9B7A33WiqHKB1sntHYAWAprKlv1WyLrZ2Ap9HtFAMqLX9uE0FOX0zDO8mJxchPvOXJ.gyE
- h8SJOPMkOweFqmiJ9jBRnyrAKNH_axbaP8CCk4GXGg9enn.hpMkiY0EodnHScepyitj8WIZLwLQx
- REbTevq_yVfp6fRaSqma6s702Ap1BrsbJuJCPJ94Pq3vi57XrYetQUr0lPxSyAUTsOkWocrVlHI_
- LpoXvkNfT_WZdmPhw3xsLxefITvcQiecX23KxN9E985gPEy4.AYkv37QHe805W.fTAy3.1DBA6Jj
- 5KJ04mypFIesnpuJELkMJikVp5IKkfwvGmE.uOetgjvGnhMGojAW2tjAkPOgWw.2hancxXAqd4cQ
- t6.MaCFuDg9_fzrM7xlSpb4.YMY38x.dFFLznK92kmns4xyO7Sq5qLem3lUyzW1naIL0_oE_2Lyd
- YZpzDWN2Hr3bxOeGZmAuwsnpuOSCgs9K15WjlTugFWnKmOBw0IPhSLpetuqurFQ8uNfG0RikPRTF
- rhBQjpc.bZdb5bKd7QkLw3D7oeX0nPU6psvNmOAOh4DHM.YpjoQdqAHdp19mapG.8Fy3kigaDhR2
- j.Hb_l0NFad22Oj36GCbH78yak84bLYCs.ZXoZIo0dYxchkXkY8Z0vcGmdbj5ivgcYLnKOr3Ft_s
- yY4YuA1WRQo10LeJ0ds5x8Xx5WLdeySnKijEnaGow7KIld7LCVwE5OKQrxPRT5Jd9zUFp7mbRrCx
- 8XysNajw7A2An9qJLososL8VXA9N1eh0LccH6q_XknKfv.C0D0kT8sl0MUwXfpEdiSH8tKMyCQ1x
- D5l9zRGmpA4VvWHCzDNLnADt.fe.GYkG9_VjFx20ifYXu5DKDrAmJuRZwhSXwqY3A46fiCxtsbLr
- we8dK30lcsXpAw4qq6oEkAiX5HW1s.n7JtK5AmZx0Dy6oOuW8EEVUBBoQ3bZC1Z1ZMeBP3tg4SmB
- OZDCbGXRL4sMLdEUYeNJeXtspF.QwdqsKgHlWncbGan2yHYj95ngy6pudnEq7kCE49PumLXGvnwx
- 98nKzSMp5l17wIIxuJ1K3mm5jCFFAt1NtV5QBzMeuH42AR23zUgor2s15wZzk62YEWDSIkffNEa3
- RuNYFO97cawtscRR7NWGtU0ErWEWfxOg.yw23Zyo91X_qc7rO5u8nhgt7mxXMu786sgRi1gsFRAQ
- UgqQTya1fY3SubUXJGITSSzuYN_7apYeTYye.2osppSnEZuFU9sVINx4Ws0Q4V.410XrzyNwAv4x
- Ig1tscc4N191l01TRSnhUf5jxllYWxC2fXWSBzkVrkHESbmxjBwFu.4sPGVgKcNdZxmXJW7zJWmo
- 8fCBMwYJwHonvsT9dC49t1zabFVIU89uypGV0uDHU1CjuD_DdE8wQHh0UjZvX93GYy8OH5x67aoj
- zc3A7Tt.oIUCY_ys8YTlQYIthDV8701Bia_gJjgfSO5Zu1IRrCTX5UvHdQsoZ1g5EImYSqfqDbec
- Etj9GjA5e3FhZJDNbAHZxEauFrIIidJyTxu1sSqGV_lnlSDWbcAKBnypbNdkTREzujYrHLAm52ox
- S9A9xifCpbwhOJGOxeeL5IK_X.E8DxkmKRGGSmkHEnZVJ9ABwJEY2yNjLC8a7fgkAxkJwzU7X461
- Mou00q7JGcvGHgeVK_KXWZkYKlfMuu5Wu3ey9tDfqPIXT_wI5BqpVlX0LoEvmW6KmUo7x2cBina4
- 5_DnYowHqf1R2Gptax_Us0giKqyLxQmhZMjcc
-X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: d71d16b2-9418-40a1-bd45-1abcb6944291
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Mon, 1 May 2023 17:35:21 +0000
-Received: by hermes--production-ir2-74cd8fc864-9w846 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8f3be1312e7b717e7c5ba74fc348ffb4;
-          Mon, 01 May 2023 17:35:16 +0000 (UTC)
-Message-ID: <e9d75e57-bdea-593d-7b05-136c9ad2e2fe@rocketmail.com>
-Date:   Mon, 1 May 2023 19:35:14 +0200
+        Mon, 1 May 2023 13:37:03 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8DE125
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:37:02 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-38e3228d120so1709920b6e.3
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1682962622; x=1685554622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m+RNUTojqcUPndVpyqWpOuSnVDmC59OYTbJVhd//Jx0=;
+        b=GYL5XLwkDZzXY+VQg5bm6uM19iSjeNRk2Da2qvHDtAme4uHcxzCq6z+H2D3uLIhsxM
+         wE1DPbM1ZHuyYTSHFkc/4zCo97595k7l/RO4BllrJ6QH7XWpc+h9JLdrivS1Z6niwRP2
+         yy5T0F5vmetnzIT7n5v69qeYMgSeczZl84Rhc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682962622; x=1685554622;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m+RNUTojqcUPndVpyqWpOuSnVDmC59OYTbJVhd//Jx0=;
+        b=jXNe+mbglN2i2tc/ZxMU3zwGli4zjOxIQ1XXeYPKJVPvI3GLE8yskFSBO+dGDxvAVG
+         ZN1L97cK+vAs0bamnpI96yWSM4DhRmybpDkGrHRCefpQHyW39vMTAXQcFSTJ3l2KtbAv
+         Jn0VDBKnsc9GAen0GaKJ6KxcmxhkzB8IR2SjaMPMf9dcX/t5Mqgo3WgKMKAKD44aDdph
+         MO9eD7HqowI8V7DsAdO2L6xjQvaJCZjYc3BGWYZWwhAh5dLjnBURwzMTHgSEp+EqJF6c
+         jFj/e6YS4xThfBF7bYJcyMugjQIC2tQJh66WaAuHEpT0QPZi/J4PLZDNtUcRDh4sBvC9
+         yiAA==
+X-Gm-Message-State: AC+VfDwYS3txUDEevvs7rYhRtwR+TmrxBh+o4kxKCdm9BV8/wrHgzlKz
+        ppb1RM5yyqV5HWFGSLWrPJQXOybGBkYCVFxjEk389A==
+X-Google-Smtp-Source: ACHHUZ4nFVvqKronZC/MlbVARXSea4NPt/YCyEWY2ZIKuVAc+13gBMZNgIJqtottKJHdHd9Sxtq/Cg==
+X-Received: by 2002:a05:6808:1487:b0:392:18e2:55fb with SMTP id e7-20020a056808148700b0039218e255fbmr3829178oiw.23.1682962621999;
+        Mon, 01 May 2023 10:37:01 -0700 (PDT)
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com. [209.85.160.42])
+        by smtp.gmail.com with ESMTPSA id a1-20020a544e01000000b003896f132821sm6344154oiy.41.2023.05.01.10.37.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 May 2023 10:37:01 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-187af4a5437so2388028fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 10:37:01 -0700 (PDT)
+X-Received: by 2002:a17:90a:1543:b0:24b:2f97:9208 with SMTP id
+ y3-20020a17090a154300b0024b2f979208mr14865070pja.0.1682962600487; Mon, 01 May
+ 2023 10:36:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1682636929.git.jahau@rocketmail.com>
- <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
- <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org>
+ <20230321-kexec_clang16-v6-4-a2255e81ab45@chromium.org> <CAKwvOd=9RMivtkKX27nDDsagH5yCWjpAOvpE2uaW38KYC57vtg@mail.gmail.com>
+ <CANiDSCtDfPffUQTuH3JiPWC+87FBtpog7kT954PSoiTbB_fmJQ@mail.gmail.com> <20230501-griminess-defiling-73b367bb2e47@spud>
+In-Reply-To: <20230501-griminess-defiling-73b367bb2e47@spud>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 1 May 2023 19:36:29 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsKKh7pSbYRu6=EbF4PL5UXk5gYpDTk3KzjzW9ni5Hc2g@mail.gmail.com>
+Message-ID: <CANiDSCsKKh7pSbYRu6=EbF4PL5UXk5gYpDTk3KzjzW9ni5Hc2g@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] risc/purgatory: Add linker script
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Philipp Rudo <prudo@linux.vnet.ibm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Baoquan He <bhe@redhat.com>,
+        Philipp Rudo <prudo@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Simon Horman <horms@kernel.org>, llvm@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Conor
 
-On 01.05.23 09:21, Krzysztof Kozlowski wrote:
-> On 28/04/2023 01:30, Jakob Hauser wrote:
->> Add device tree binding documentation for rt5033 multifunction device, voltage
->> regulator and battery charger.
->>
->> Cc: Beomho Seo <beomho.seo@samsung.com>
->> Cc: Chanwoo Choi <cw00.choi@samsung.com>
->> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> 
-> 
-> (...)
-> 
->> +
->> +required:
->> +  - monitored-battery
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    charger {
->> +        compatible = "richtek,rt5033-charger";
->> +        monitored-battery = <&battery>;
->> +        extcon = <&muic>;
-> 
-> 
-> Everything up to here looked ok, but extcon is not a hardware property.
-> Please do not mix adding missing bindings for existing device with
-> adding new properties. You should use connector for the USB port.
-> 
+Fixed on my branch
+https://git.kernel.org/pub/scm/linux/kernel/git/ribalda/linux.git/commit/?h=
+=3Db4/kexec_clang16&id=3D1e9cda9fa638cc72581986f60b490cc069a38f75
 
-Rob already raised this in v1. In patch 8 v3 comments below '---' I 
-mentioned that the extcon phandle is still there because I don't 
-understand what to do.
 
-The devices using rt5033 I'm aware of:
+Will submit a new version after a while :)
 
-- arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
-     used by:
-     - msm8916-samsung-a3u-eur.dts
-     - msm8916-samsung-a5u-eur.dts
-- arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
-     used by:
-     - msm8916-samsung-e5.dts
-     - msm8916-samsung-e7.dts
-     - msm8916-samsung-grandmax.dts
-- arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
+Thanks!
 
-not yet mainlined:
-- arch/arm64/boot/dts/qcom/msm8916-samsung-gprime-common.dtsi
-     used by:
-     - msm8916-samsung-fortuna3g.dts
-     - msm8916-samsung-fortunaltezt.dts
-     - msm8916-samsung-gprimeltecan.dts
+On Mon, 1 May 2023 at 19:28, Conor Dooley <conor@kernel.org> wrote:
+>
+> On Mon, May 01, 2023 at 07:18:12PM +0200, Ricardo Ribalda wrote:
+> > On Mon, 1 May 2023 at 18:19, Nick Desaulniers <ndesaulniers@google.com>=
+ wrote:
+> > >
+> > > On Mon, May 1, 2023 at 5:39=E2=80=AFAM Ricardo Ribalda <ribalda@chrom=
+ium.org> wrote:
+> > > >
+> > > > If PGO is enabled, the purgatory ends up with multiple .text sectio=
+ns.
+> > > > This is not supported by kexec and crashes the system.
+> > > >
+> > > > Cc: stable@vger.kernel.org
+> > > > Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_pu=
+ragory")
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > >
+> > > Hi Ricardo,
+> > > Thanks for the series.  Does this patch 4/4 need a new online commit
+> > > description? It's not adding a linker script (maybe an earlier versio=
+n
+> > > was).
+>
+> > Thanks for catching this. It should have said
+> >
+> > risc/purgatory: Remove profile optimization flags
+>      ^^
+> Perhaps with the omitted v added too?
+>
+> Also while playing the $subject nitpicking game, is it not called
+> "profile**-guided** optimisation" (and ditto in the comments)?
+>
+> Cheers,
+> Conor.
+>
+> > Will fix it on my local branch in case there is a next version of the
+> > series. Otherwise, please the maintainer fix the subject.
+>
+> > > > ---
+> > > >  arch/riscv/purgatory/Makefile | 5 +++++
+> > > >  1 file changed, 5 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/M=
+akefile
+> > > > index 5730797a6b40..cf3a44121a90 100644
+> > > > --- a/arch/riscv/purgatory/Makefile
+> > > > +++ b/arch/riscv/purgatory/Makefile
+> > > > @@ -35,6 +35,11 @@ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
+> > > >  CFLAGS_string.o :=3D -D__DISABLE_EXPORTS
+> > > >  CFLAGS_ctype.o :=3D -D__DISABLE_EXPORTS
+> > > >
+> > > > +# When profile optimization is enabled, llvm emits two different o=
+verlapping
+> > > > +# text sections, which is not supported by kexec. Remove profile o=
+ptimization
+> > > > +# flags.
+> > > > +KBUILD_CFLAGS :=3D $(filter-out -fprofile-sample-use=3D% -fprofile=
+-use=3D%,$(KBUILD_CFLAGS))
+> > > > +
+> > > >  # When linking purgatory.ro with -r unresolved symbols are not che=
+cked,
+> > > >  # also link a purgatory.chk binary without -r to check for unresol=
+ved symbols.
+> > > >  PURGATORY_LDFLAGS :=3D -e purgatory_start -z nodefaultlib
+> > > >
+> > > > --
+> > > > 2.40.1.495.gc816e09b53d-goog
+> > > >
+> > >
+> > >
+> > > --
+> > > Thanks,
+> > > ~Nick Desaulniers
+> >
+> >
+> >
+> > --
+> > Ricardo Ribalda
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-They all have either an SM5502 or SM5504 MUIC (Micro-USB Interface 
-Controller) chip installed. It reports the information what type of 
-connector got plugged into the USB plug. An example for the devicetree 
-entry can be found at the bottom of 
-Documentation/devicetree/bindings/extcon/siliconmitus,sm5502-muic.yaml [1].
 
-Documentation on the connector binding you are referring to would be the 
-following, I guess: 
-Documentation/devicetree/bindings/connector/usb-connector.yaml [2].
 
-It's not clear to me what to do. To my understanding, in the devicetree 
-of the device a "connector" node should be placed within the extcon/muic 
-node. Like this? (Connector node at the very bottom.)
-
-i2c-muic {
-	compatible = "i2c-gpio";
-	sda-gpios = <&msmgpio 105 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-	scl-gpios = <&msmgpio 106 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-
-	pinctrl-names = "default";
-	pinctrl-0 = <&muic_i2c_default>;
-
-	#address-cells = <1>;
-	#size-cells = <0>;
-
-	muic: extcon@14 {
-		compatible = "siliconmitus,sm5504-muic";
-		reg = <0x14>;
-
-		interrupt-parent = <&msmgpio>;
-		interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
-
-		pinctrl-names = "default";
-		pinctrl-0 = <&muic_irq_default>;
-
-		usb_con: connector {
-			compatible = "usb-b-connector";
-			label = "micro-USB";
-			type = "micro";
-		};
-	};
-};
-
-And how to set up the rt5033-charger to retrieve the information of the 
-extcon/muic driver in that case?
-
-I was looking for examples but didn't find anything that helped me to 
-answer that question.
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/extcon/siliconmitus,sm5502-muic.yaml?h=v6.3
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/connector/usb-connector.yaml?h=v6.3
-
-Kind regards,
-Jakob
+--=20
+Ricardo Ribalda
