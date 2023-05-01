@@ -2,159 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5C06F33AE
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BB86F33BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 18:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjEAQx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 12:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S230114AbjEAQzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 12:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjEAQxy (ORCPT
+        with ESMTP id S232535AbjEAQzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 12:53:54 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDCE170C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:53:45 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-7636c775952so163032239f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:53:45 -0700 (PDT)
+        Mon, 1 May 2023 12:55:12 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF2210CC
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 09:55:08 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64115e69e1eso23342026b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 09:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682960107; x=1685552107;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rhc7v9a1uLQqVXD+LsRhZoVqkW3m5tSXn3Qy4JSVLy4=;
+        b=IEVlqTozWZGbWgkZmckzilH6j94QhJZoZIuPp60mSUj0QVW0m+a9iMmfCAF4iEpfZD
+         fEVgO/+vOkTtFhBvoHwlDMAL3hxDH/zLipyU3ktDF8+bB/itGjow8f+dbDn1CDMFDOyk
+         cTiZv7/V3hTMTCajMzvTdbVUzBNML97dt0BYpiR6UOH9nLt1/l6QL7QOhPtZ51dB47eW
+         B6R13UEA02ZiLSfNlDL/QxOcvfA6sC1wmjwPXFvrSUoT7FHGOeimYmfVTl3MVQzN5BdG
+         VU1/9ubcznfSn4RmyJ2/Vw+B4mgfyn6L75+s8Kx83oYGWWn0RADQAOUF0mZI8SYEht0a
+         Cq7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960025; x=1685552025;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20221208; t=1682960107; x=1685552107;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PVDSaAqcDVoccriZfuF9RqHckXIDHP12OaD+u5OhWos=;
-        b=Rr7rcSkpBJctnuXkNaW+C5WFaVkZKAsHIAle6GcBa/j83g36wYNuYr7y0ucd0neEOX
-         5wlZSeB97oOdRntusLSZ0FtPL4Ool7Aw07KN0CIa2PiUhVPqjUj9El9T5rNQsX2Ibi0f
-         qqkLr7iyLy8xTb6bNzbpi24j4gn2mafga5t5+GDh1TOS97u3el/QlQPesoAjGRKt/+Q2
-         h3ut9HWPLkA6sWN5AfLXSaIjLc99ENi0mEZBqHaC6cNusHMP7e5dmqQ6HI/9sVlIZkL3
-         dSPZfwWaN/bmQnQS9jyvH3vC1/UAdUdlU/4Q0EvNtqf0oXdz2cpuGoknYBAgaL0+Cza/
-         74qA==
-X-Gm-Message-State: AC+VfDygikEfqJgnmseaxqB2/SN7SDONdKyBSvB42Jld2PEtI8TjUEh6
-        bS+mjr80ACSdptuns0YWB4C3EEKJ+Fs3f5y2NJhKdaYTvxIS
-X-Google-Smtp-Source: ACHHUZ5zC9Ja6Vo7HutDa0uUBKfakvCBScmraMBG7EcjiKYDc9sH58azPF9GcxfEqUxAakVtfDY1IR2auAfJFAIKjDCujWWRV9U6
-MIME-Version: 1.0
-X-Received: by 2002:a5d:958c:0:b0:74f:d943:f1cf with SMTP id
- a12-20020a5d958c000000b0074fd943f1cfmr6319037ioo.3.1682960025074; Mon, 01 May
- 2023 09:53:45 -0700 (PDT)
-Date:   Mon, 01 May 2023 09:53:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000077472605faa4aad5@google.com>
-Subject: [syzbot] [usb?] memory leak in class_create
-From:   syzbot <syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
+        bh=rhc7v9a1uLQqVXD+LsRhZoVqkW3m5tSXn3Qy4JSVLy4=;
+        b=PsFUqH+MCrXnc8ito76exlgLkyTd1fAjLZndE16HfjITQXgLE2GmUcGPaSnX+VbRnY
+         k5mLfzrzJmq437K8xRh5cD3qoJCKY8roV9O3lNrnKyXXMmcF3oCK3qm++UOqs38/SsAX
+         8xvEQXeyyWp6hGCkpd5n/nNyc341YoPLHxsFCsstU0pkueBY6tFcT5nbJHFgHHTQUmaV
+         rNUWZYYBaq7G2gucBnHY639pj13+Jen58OAEnNBeCtFNV83J9H+cN/siJIoSMk+RNs81
+         3p2rNf5PbxjhfakVJOFKdf+Uij/frPmLzdIyeS4KyCYeMLvHUoHsOzdhFxn8UGFsZzqh
+         FDJA==
+X-Gm-Message-State: AC+VfDzgDFzouUfEaJtHZ6q8Sx5/Rmb7AzG9LBf9yY+C7XvOGaFwsbNK
+        5vVQmQUExLQ2LDouIiDzQHjxBu3vu8Q=
+X-Google-Smtp-Source: ACHHUZ6OakK5ykfjI7g/XFPKZctBmJFHvRmjYwR+8Wqoyqozn1GzMukL7GyiGGvuJ1tUip8XahXNRwTm5dA=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
+ (user=surenb job=sendgmr) by 2002:a17:902:ec8a:b0:1a4:f550:de0b with SMTP id
+ x10-20020a170902ec8a00b001a4f550de0bmr6525014plg.4.1682960107332; Mon, 01 May
+ 2023 09:55:07 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:10 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
+Message-ID: <20230501165450.15352-1-surenb@google.com>
+Subject: [PATCH 00/40] Memory allocation profiling
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        surenb@google.com, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+        cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Memory allocation profiling infrastructure provides a low overhead
+mechanism to make all kernel allocations in the system visible. It can be
+used to monitor memory usage, track memory hotspots, detect memory leaks,
+identify memory regressions.
 
-syzbot found the following issue on:
+To keep the overhead to the minimum, we record only allocation sizes for
+every allocation in the codebase. With that information, if users are
+interested in more detailed context for a specific allocation, they can
+enable in-depth context tracking, which includes capturing the pid, tgid,
+task name, allocation size, timestamp and call stack for every allocation
+at the specified code location.
 
-HEAD commit:    22b8cc3e78f5 Merge tag 'x86_mm_for_6.4' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16fc7958280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5046ebeca744dd40
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7afd76ad060fa0d2605
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1599a2b4280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14eb395fc80000
+The data is exposed to the user space via a read-only debugfs file called
+allocations. Usage example:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3ad2088c196b/disk-22b8cc3e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/61919a5b89c6/vmlinux-22b8cc3e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a7adb5503ac8/bzImage-22b8cc3e.xz
+$ sort -hr /sys/kernel/debug/allocations|head
+  153MiB     8599 mm/slub.c:1826 module:slub func:alloc_slab_page
+ 6.08MiB      49 mm/slab_common.c:950 module:slab_common func:_kmalloc_order
+ 5.09MiB     6335 mm/memcontrol.c:2814 module:memcontrol func:alloc_slab_obj_exts
+ 4.54MiB      78 mm/page_alloc.c:5777 module:page_alloc func:alloc_pages_exact
+ 1.32MiB      338 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+ 1.16MiB      603 fs/xfs/xfs_log_priv.h:700 module:xfs func:xlog_kvmalloc
+ 1.00MiB      256 mm/swap_cgroup.c:48 module:swap_cgroup func:swap_cgroup_prepare
+  734KiB     5380 fs/xfs/kmem.c:20 module:xfs func:kmem_alloc
+  640KiB      160 kernel/rcu/tree.c:3184 module:tree func:fill_page_cache_func
+  640KiB      160 drivers/char/virtio_console.c:452 module:virtio_console func:alloc_buf
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e7afd76ad060fa0d2605@syzkaller.appspotmail.com
+For allocation context capture, a new debugfs file called allocations.ctx
+is used to select which code location should capture allocation context
+and to read captured context information. Usage example:
 
-BUG: memory leak
-unreferenced object 0xffff88810af67080 (size 96):
-  comm "kworker/0:2", pid 4402, jiffies 4294950769 (age 14.190s)
-  hex dump (first 32 bytes):
-    bf 03 9b 85 ff ff ff ff 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff82b65445>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff82b65445>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff82b65445>] class_create+0x25/0x90 drivers/base/class.c:261
-    [<ffffffff831f7a80>] init_usb_class drivers/usb/core/file.c:91 [inline]
-    [<ffffffff831f7a80>] usb_register_dev+0x290/0x3d0 drivers/usb/core/file.c:179
-    [<ffffffff832cffc4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
-    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
-    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
-    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
-    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
-    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
-    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
-    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
-    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
-    [<ffffffff832033a1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
-    [<ffffffff831f3080>] usb_probe_device+0x60/0x140 drivers/usb/core/driver.c:293
+$ cd /sys/kernel/debug/
+$ echo "file include/asm-generic/pgalloc.h line 63 enable" > allocations.ctx
+$ cat allocations.ctx
+  920KiB      230 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+    size: 4096
+    pid: 1474
+    tgid: 1474
+    comm: bash
+    ts: 175332940994
+    call stack:
+         pte_alloc_one+0xfe/0x130
+         __pte_alloc+0x22/0xb0
+         copy_page_range+0x842/0x1640
+         dup_mm+0x42d/0x580
+         copy_process+0xfb1/0x1ac0
+         kernel_clone+0x92/0x3e0
+         __do_sys_clone+0x66/0x90
+         do_syscall_64+0x38/0x90
+         entry_SYSCALL_64_after_hwframe+0x63/0xcd
+...
 
-BUG: memory leak
-unreferenced object 0xffff8881051f1a00 (size 512):
-  comm "kworker/0:2", pid 4402, jiffies 4294950769 (age 14.190s)
-  hex dump (first 32 bytes):
-    00 1a 1f 05 81 88 ff ff 00 1a 1f 05 81 88 ff ff  ................
-    00 00 00 00 00 00 00 00 bf 03 9b 85 ff ff ff ff  ................
-  backtrace:
-    [<ffffffff81544e14>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff82b65308>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff82b65308>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff82b65308>] class_register+0x28/0x140 drivers/base/class.c:186
-    [<ffffffff82b65467>] class_create+0x47/0x90 drivers/base/class.c:270
-    [<ffffffff831f7a80>] init_usb_class drivers/usb/core/file.c:91 [inline]
-    [<ffffffff831f7a80>] usb_register_dev+0x290/0x3d0 drivers/usb/core/file.c:179
-    [<ffffffff832cffc4>] usblp_probe+0x4e4/0x750 drivers/usb/class/usblp.c:1208
-    [<ffffffff831f39a9>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
-    [<ffffffff82b62d7d>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82b62d7d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
-    [<ffffffff82b63141>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:800
-    [<ffffffff82b6324a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:830
-    [<ffffffff82b6343b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:958
-    [<ffffffff82b60191>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
-    [<ffffffff82b63962>] __device_attach+0x102/0x2a0 drivers/base/dd.c:1030
-    [<ffffffff82b618fa>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
-    [<ffffffff82b5def3>] device_add+0x993/0xc60 drivers/base/core.c:3625
-    [<ffffffff831f0a89>] usb_set_configuration+0x9a9/0xc90 drivers/usb/core/message.c:2211
-    [<ffffffff832033a1>] usb_generic_driver_probe+0xa1/0x100 drivers/usb/core/generic.c:238
+Implementation utilizes a more generic concept of code tagging, introduced
+as part of this patchset. Code tag is a structure identifying a specific
+location in the source code which is generated at compile time and can be
+embedded in an application-specific structure. A number of applications
+for code tagging have been presented in the original RFC [1].
+Code tagging uses the old trick of "define a special elf section for
+objects of a given type so that we can iterate over them at runtime" and
+creates a proper library for it. 
 
+To profile memory allocations, we instrument page, slab and percpu
+allocators to record total memory allocated in the associated code tag at
+every allocation in the codebase. Every time an allocation is performed by
+an instrumented allocator, the code tag at that location increments its
+counter by allocation size. Every time the memory is freed the counter is
+decremented. To decrement the counter upon freeing, allocated object needs
+a reference to its code tag. Page allocators use page_ext to record this
+reference while slab allocators use memcg_data (renamed into more generic
+slabobj_ext) of the slab page.
 
+Module allocations are accounted the same way as other kernel allocations.
+Module loading and unloading is supported. If a module is unloaded while
+one or more of its allocations is still not freed (rather rare condition),
+its data section will be kept in memory to allow later code tag
+referencing when the allocation is freed later on.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+As part of this series we introduce several kernel configs:
+CODE_TAGGING - to enable code tagging framework
+CONFIG_MEM_ALLOC_PROFILING - to enable memory allocation profiling
+CONFIG_MEM_ALLOC_PROFILING_DEBUG - to enable memory allocation profiling
+validation
+Note: CONFIG_MEM_ALLOC_PROFILING enables CONFIG_PAGE_EXTENSION to store
+code tag reference in the page_ext object. 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+nomem_profiling kernel command-line parameter is also provided to disable
+the functionality and avoid the performance overhead.
+Performance overhead:
+To evaluate performance we implemented an in-kernel test executing
+multiple get_free_page/free_page and kmalloc/kfree calls with allocation
+sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+affinity set to a specific CPU to minimize the noise. Below is performance
+comparison between the baseline kernel, profiling when enabled, profiling
+when disabled (nomem_profiling=y) and (for comparison purposes) baseline
+with CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+			kmalloc			pgalloc
+Baseline (6.3-rc7)	9.200s			31.050s
+profiling disabled	9.800 (+6.52%)		32.600 (+4.99%)
+profiling enabled	12.500 (+35.87%)	39.010 (+25.60%)
+memcg_kmem enabled	41.400 (+350.00%)	70.600 (+127.38%)
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+[1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Kent Overstreet (15):
+  lib/string_helpers: Drop space in string_get_size's output
+  scripts/kallysms: Always include __start and __stop symbols
+  fs: Convert alloc_inode_sb() to a macro
+  nodemask: Split out include/linux/nodemask_types.h
+  prandom: Remove unused include
+  lib/string.c: strsep_no_empty()
+  Lazy percpu counters
+  lib: code tagging query helper functions
+  mm/slub: Mark slab_free_freelist_hook() __always_inline
+  mempool: Hook up to memory allocation profiling
+  timekeeping: Fix a circular include dependency
+  mm: percpu: Introduce pcpuobj_ext
+  mm: percpu: Add codetag reference into pcpuobj_ext
+  arm64: Fix circular header dependency
+  MAINTAINERS: Add entries for code tagging and memory allocation
+    profiling
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+Suren Baghdasaryan (25):
+  mm: introduce slabobj_ext to support slab object extensions
+  mm: introduce __GFP_NO_OBJ_EXT flag to selectively prevent slabobj_ext
+    creation
+  mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+  mm: prevent slabobj_ext allocations for slabobj_ext and kmem_cache
+    objects
+  slab: objext: introduce objext_flags as extension to
+    page_memcg_data_flags
+  lib: code tagging framework
+  lib: code tagging module support
+  lib: prevent module unloading if memory is not freed
+  lib: add allocation tagging support for memory allocation profiling
+  lib: introduce support for page allocation tagging
+  change alloc_pages name in dma_map_ops to avoid name conflicts
+  mm: enable page allocation tagging
+  mm/page_ext: enable early_page_ext when
+    CONFIG_MEM_ALLOC_PROFILING_DEBUG=y
+  mm: create new codetag references during page splitting
+  lib: add codetag reference into slabobj_ext
+  mm/slab: add allocation accounting into slab allocation and free paths
+  mm/slab: enable slab allocation tagging for kmalloc and friends
+  mm: percpu: enable per-cpu allocation tagging
+  move stack capture functionality into a separate function for reuse
+  lib: code tagging context capture support
+  lib: implement context capture support for tagged allocations
+  lib: add memory allocations report in show_mem()
+  codetag: debug: skip objext checking when it's for objext itself
+  codetag: debug: mark codetags for reserved pages as empty
+  codetag: debug: introduce OBJEXTS_ALLOC_FAIL to mark failed slab_ext
+    allocations
 
-If you want to undo deduplication, reply with:
-#syz undup
+ .../admin-guide/kernel-parameters.txt         |   2 +
+ MAINTAINERS                                   |  22 +
+ arch/arm64/include/asm/spectre.h              |   4 +-
+ arch/x86/kernel/amd_gart_64.c                 |   2 +-
+ drivers/iommu/dma-iommu.c                     |   2 +-
+ drivers/xen/grant-dma-ops.c                   |   2 +-
+ drivers/xen/swiotlb-xen.c                     |   2 +-
+ include/asm-generic/codetag.lds.h             |  14 +
+ include/asm-generic/vmlinux.lds.h             |   3 +
+ include/linux/alloc_tag.h                     | 161 ++++++
+ include/linux/codetag.h                       | 159 ++++++
+ include/linux/codetag_ctx.h                   |  48 ++
+ include/linux/dma-map-ops.h                   |   2 +-
+ include/linux/fs.h                            |   6 +-
+ include/linux/gfp.h                           | 123 ++--
+ include/linux/gfp_types.h                     |  12 +-
+ include/linux/hrtimer.h                       |   2 +-
+ include/linux/lazy-percpu-counter.h           | 102 ++++
+ include/linux/memcontrol.h                    |  56 +-
+ include/linux/mempool.h                       |  73 ++-
+ include/linux/mm.h                            |   8 +
+ include/linux/mm_types.h                      |   4 +-
+ include/linux/nodemask.h                      |   2 +-
+ include/linux/nodemask_types.h                |   9 +
+ include/linux/page_ext.h                      |   1 -
+ include/linux/pagemap.h                       |   9 +-
+ include/linux/percpu.h                        |  19 +-
+ include/linux/pgalloc_tag.h                   |  95 ++++
+ include/linux/prandom.h                       |   1 -
+ include/linux/sched.h                         |  32 +-
+ include/linux/slab.h                          | 182 +++---
+ include/linux/slab_def.h                      |   2 +-
+ include/linux/slub_def.h                      |   4 +-
+ include/linux/stackdepot.h                    |  16 +
+ include/linux/string.h                        |   1 +
+ include/linux/time_namespace.h                |   2 +
+ init/Kconfig                                  |   4 +
+ kernel/dma/mapping.c                          |   4 +-
+ kernel/module/main.c                          |  25 +-
+ lib/Kconfig                                   |   3 +
+ lib/Kconfig.debug                             |  26 +
+ lib/Makefile                                  |   5 +
+ lib/alloc_tag.c                               | 464 +++++++++++++++
+ lib/codetag.c                                 | 529 ++++++++++++++++++
+ lib/lazy-percpu-counter.c                     | 127 +++++
+ lib/show_mem.c                                |  15 +
+ lib/stackdepot.c                              |  68 +++
+ lib/string.c                                  |  19 +
+ lib/string_helpers.c                          |   3 +-
+ mm/compaction.c                               |   9 +-
+ mm/filemap.c                                  |   6 +-
+ mm/huge_memory.c                              |   2 +
+ mm/kfence/core.c                              |  14 +-
+ mm/kfence/kfence.h                            |   4 +-
+ mm/memcontrol.c                               |  56 +-
+ mm/mempolicy.c                                |  30 +-
+ mm/mempool.c                                  |  28 +-
+ mm/mm_init.c                                  |   1 +
+ mm/page_alloc.c                               |  75 ++-
+ mm/page_ext.c                                 |  21 +-
+ mm/page_owner.c                               |  54 +-
+ mm/percpu-internal.h                          |  26 +-
+ mm/percpu.c                                   | 122 ++--
+ mm/slab.c                                     |  22 +-
+ mm/slab.h                                     | 224 ++++++--
+ mm/slab_common.c                              |  95 +++-
+ mm/slub.c                                     |  24 +-
+ mm/util.c                                     |  10 +-
+ scripts/kallsyms.c                            |  13 +
+ scripts/module.lds.S                          |   7 +
+ 70 files changed, 2765 insertions(+), 554 deletions(-)
+ create mode 100644 include/asm-generic/codetag.lds.h
+ create mode 100644 include/linux/alloc_tag.h
+ create mode 100644 include/linux/codetag.h
+ create mode 100644 include/linux/codetag_ctx.h
+ create mode 100644 include/linux/lazy-percpu-counter.h
+ create mode 100644 include/linux/nodemask_types.h
+ create mode 100644 include/linux/pgalloc_tag.h
+ create mode 100644 lib/alloc_tag.c
+ create mode 100644 lib/codetag.c
+ create mode 100644 lib/lazy-percpu-counter.c
+
+-- 
+2.40.1.495.gc816e09b53d-goog
+
