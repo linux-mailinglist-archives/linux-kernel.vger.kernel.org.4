@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609606F2C2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD096F2C45
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjEAC6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S232364AbjEAC6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 22:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbjEAC5y (ORCPT
+        with ESMTP id S232234AbjEAC61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:57:54 -0400
+        Sun, 30 Apr 2023 22:58:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93F610F3;
-        Sun, 30 Apr 2023 19:57:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C251BD4;
+        Sun, 30 Apr 2023 19:57:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9716261614;
-        Mon,  1 May 2023 02:57:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A8CFC4339B;
-        Mon,  1 May 2023 02:57:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9656F615E6;
+        Mon,  1 May 2023 02:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D86C433EF;
+        Mon,  1 May 2023 02:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682909836;
-        bh=uM5m5fEri6qw9+jvhu4m5w3TJWXt4iOHDQb7Gb3nUzU=;
+        s=k20201202; t=1682909853;
+        bh=CG6iidfJYvBtjEQvRVQLTsIrpzO11PNYCTvVzvScUro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zw566y007t6ja+arMwGfpzlxIccfpL+IcqH+i8qyyMbdBZSlHupGALBkWBlMcM1bJ
-         b/7tesNP+kD3W0yy8yGSuu7NkkAgpuzD+AGJAssYQ7cYX+Lv5MQ5SJnvdiGAZhjuWS
-         sAnkLxeaIlrMsA8d1wG7EMHDGsIfrJgLkcg6J7G8a7DgOR83MT+qx0j2bFhD+4159S
-         8mYdtkX/S/3elVVb1l8k8ktxZrbMU+lIOMfuiOlj/eJvduMX2M9DTobC19GWcJyYWC
-         cHgjMstYpkJvqXGS8reSsdiOsZaDgZIF1x5/NlVfEeK++wroKjBdBF1V+TXRTnjB2+
-         uF1iGYL6avLcw==
+        b=t0mtl1JDv4A5vuIMdKDjMJE2ASvu10tAbFNmtUZUhShZIhgcYI+VSK/Iueuuvgfik
+         8REf+jLM2C7TB0WlRIwvYJ/p4Hd4m5XucPs4R4Bh8vWij1i0cW7NgzJRJl7AxLxsi0
+         JtSZ2O++0Qndg/bdLW3lS2PdF0srr9iKFlpMoc0s0++SqEBDyKRHkxOx6Mf6CY0Nya
+         rdOagVrsyLqGHHn3xrYHzPjVUS3uC058qK3LooD7wutw5RDQnEr05pJRr3sfIFBlGQ
+         nnWO6GgEjhcmkMXL2mJVErkZblVhCDhs6Ow3XB1EmQKadg4Rqi9vvi+gk3PGodbccb
+         4S1VEq7x9f8wg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, agross@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 10/44] arm64: dts: qcom: msm8996: Add missing DWC3 quirks
-Date:   Sun, 30 Apr 2023 22:55:58 -0400
-Message-Id: <20230501025632.3253067-10-sashal@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>, Oded Gabbay <ogabbay@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        stanislaw.gruszka@linux.intel.com, gregkh@linuxfoundation.org,
+        dhirschfeld@habana.ai, dliberman@habana.ai, osharabi@habana.ai,
+        obitton@habana.ai, talcohen@habana.ai, ynudelman@habana.ai,
+        fkassabri@habana.ai, bjauhari@habana.ai, colin.i.king@gmail.com,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.3 11/44] accel/habanalabs: postpone mem_mgr IDR destruction to hpriv_release()
+Date:   Sun, 30 Apr 2023 22:55:59 -0400
+Message-Id: <20230501025632.3253067-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
 References: <20230501025632.3253067-1-sashal@kernel.org>
@@ -59,37 +61,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
+From: Tomer Tayar <ttayar@habana.ai>
 
-[ Upstream commit d0af0537e28f6eace02deed63b585396de939213 ]
+[ Upstream commit 2e8e9a895c4589f124a37fc84d123b5114406e94 ]
 
-Add missing dwc3 quirks from msm-3.18. Unfortunately, none of them
-make `dwc3-qcom 6af8800.usb: HS-PHY not in L2` go away.
+The memory manager IDR is currently destroyed when user releases the
+file descriptor.
+However, at this point the user context might be still held, and memory
+buffers might be still in use.
+Later on, calls to release those buffers will fail due to not finding
+their handles in the IDR, leading to a memory leak.
+To avoid this leak, split the IDR destruction from the memory manager
+fini, and postpone it to hpriv_release() when there is no user context
+and no buffers are used.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-Link: https://lore.kernel.org/r/20230302011849.1873056-1-konrad.dybcio@linaro.org
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/accel/habanalabs/common/device.c         |  9 +++++++++
+ drivers/accel/habanalabs/common/habanalabs.h     |  1 +
+ drivers/accel/habanalabs/common/habanalabs_drv.c |  1 +
+ drivers/accel/habanalabs/common/memory_mgr.c     | 13 ++++++++++++-
+ 4 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 905678e7175d8..c3cf973a69ad1 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -3006,8 +3006,11 @@ usb3_dwc3: usb@6a00000 {
- 				interrupts = <0 131 IRQ_TYPE_LEVEL_HIGH>;
- 				phys = <&hsusb_phy1>, <&ssusb_phy_0>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				snps,hird-threshold = /bits/ 8 <0>;
- 				snps,dis_u2_susphy_quirk;
- 				snps,dis_enblslpm_quirk;
-+				snps,is-utmi-l1-suspend;
-+				tx-fifo-resize;
- 			};
- 		};
+diff --git a/drivers/accel/habanalabs/common/device.c b/drivers/accel/habanalabs/common/device.c
+index 9933e5858a363..c91436609f080 100644
+--- a/drivers/accel/habanalabs/common/device.c
++++ b/drivers/accel/habanalabs/common/device.c
+@@ -423,6 +423,9 @@ static void hpriv_release(struct kref *ref)
+ 	mutex_destroy(&hpriv->ctx_lock);
+ 	mutex_destroy(&hpriv->restore_phase_mutex);
  
++	/* There should be no memory buffers at this point and handles IDR can be destroyed */
++	hl_mem_mgr_idr_destroy(&hpriv->mem_mgr);
++
+ 	/* Device should be reset if reset-upon-device-release is enabled, or if there is a pending
+ 	 * reset that waits for device release.
+ 	 */
+@@ -514,6 +517,10 @@ static int hl_device_release(struct inode *inode, struct file *filp)
+ 	}
+ 
+ 	hl_ctx_mgr_fini(hdev, &hpriv->ctx_mgr);
++
++	/* Memory buffers might be still in use at this point and thus the handles IDR destruction
++	 * is postponed to hpriv_release().
++	 */
+ 	hl_mem_mgr_fini(&hpriv->mem_mgr);
+ 
+ 	hdev->compute_ctx_in_release = 1;
+@@ -887,6 +894,7 @@ static int device_early_init(struct hl_device *hdev)
+ 
+ free_cb_mgr:
+ 	hl_mem_mgr_fini(&hdev->kernel_mem_mgr);
++	hl_mem_mgr_idr_destroy(&hdev->kernel_mem_mgr);
+ free_chip_info:
+ 	kfree(hdev->hl_chip_info);
+ free_prefetch_wq:
+@@ -930,6 +938,7 @@ static void device_early_fini(struct hl_device *hdev)
+ 	mutex_destroy(&hdev->clk_throttling.lock);
+ 
+ 	hl_mem_mgr_fini(&hdev->kernel_mem_mgr);
++	hl_mem_mgr_idr_destroy(&hdev->kernel_mem_mgr);
+ 
+ 	kfree(hdev->hl_chip_info);
+ 
+diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/accel/habanalabs/common/habanalabs.h
+index fa05e76d3d21a..829b30ab1961a 100644
+--- a/drivers/accel/habanalabs/common/habanalabs.h
++++ b/drivers/accel/habanalabs/common/habanalabs.h
+@@ -3861,6 +3861,7 @@ const char *hl_sync_engine_to_string(enum hl_sync_engine_type engine_type);
+ 
+ void hl_mem_mgr_init(struct device *dev, struct hl_mem_mgr *mmg);
+ void hl_mem_mgr_fini(struct hl_mem_mgr *mmg);
++void hl_mem_mgr_idr_destroy(struct hl_mem_mgr *mmg);
+ int hl_mem_mgr_mmap(struct hl_mem_mgr *mmg, struct vm_area_struct *vma,
+ 		    void *args);
+ struct hl_mmap_mem_buf *hl_mmap_mem_buf_get(struct hl_mem_mgr *mmg,
+diff --git a/drivers/accel/habanalabs/common/habanalabs_drv.c b/drivers/accel/habanalabs/common/habanalabs_drv.c
+index 03dae57dc8386..e3781cfe8a7fe 100644
+--- a/drivers/accel/habanalabs/common/habanalabs_drv.c
++++ b/drivers/accel/habanalabs/common/habanalabs_drv.c
+@@ -237,6 +237,7 @@ int hl_device_open(struct inode *inode, struct file *filp)
+ out_err:
+ 	mutex_unlock(&hdev->fpriv_list_lock);
+ 	hl_mem_mgr_fini(&hpriv->mem_mgr);
++	hl_mem_mgr_idr_destroy(&hpriv->mem_mgr);
+ 	hl_ctx_mgr_fini(hpriv->hdev, &hpriv->ctx_mgr);
+ 	filp->private_data = NULL;
+ 	mutex_destroy(&hpriv->ctx_lock);
+diff --git a/drivers/accel/habanalabs/common/memory_mgr.c b/drivers/accel/habanalabs/common/memory_mgr.c
+index 0f2759e265477..f8e8261cc83d8 100644
+--- a/drivers/accel/habanalabs/common/memory_mgr.c
++++ b/drivers/accel/habanalabs/common/memory_mgr.c
+@@ -341,8 +341,19 @@ void hl_mem_mgr_fini(struct hl_mem_mgr *mmg)
+ 				"%s: Buff handle %u for CTX is still alive\n",
+ 				topic, id);
+ 	}
++}
+ 
+-	/* TODO: can it happen that some buffer is still in use at this point? */
++/**
++ * hl_mem_mgr_idr_destroy() - destroy memory manager IDR.
++ * @mmg: parent unified memory manager
++ *
++ * Destroy the memory manager IDR.
++ * Shall be called when IDR is empty and no memory buffers are in use.
++ */
++void hl_mem_mgr_idr_destroy(struct hl_mem_mgr *mmg)
++{
++	if (!idr_is_empty(&mmg->handles))
++		dev_crit(mmg->dev, "memory manager IDR is destroyed while it is not empty!\n");
+ 
+ 	idr_destroy(&mmg->handles);
+ }
 -- 
 2.39.2
 
