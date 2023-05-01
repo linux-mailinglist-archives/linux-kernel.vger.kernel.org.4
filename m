@@ -2,121 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C6A6F3318
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D3A6F331E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbjEAPni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 11:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        id S232866AbjEAPq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 11:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbjEAPnf (ORCPT
+        with ESMTP id S232060AbjEAPq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 11:43:35 -0400
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F106133;
-        Mon,  1 May 2023 08:43:26 -0700 (PDT)
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3f1950f5628so25210105e9.3;
-        Mon, 01 May 2023 08:43:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682955805; x=1685547805;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+cQC0B97M3uB3IEi10h3QlCjXmckICpStzC7xQEPoc0=;
-        b=gtvrOgzrSX9U8e3Vph+0tENBiAtj5akKJuJJxGhmBnAotIqTHiXTxB/C6bjQE6nSZD
-         aSTfg7wD+Iq/pNctyPKXJ+8ACj5SZn/EldZA8bFNBLKgzNS2+Go3DmVoG+MKn6hY46KO
-         pWRITUTVdhat4S5HcG4v15mKTPfhiVLNi0HTQuXems0rEnC9TBk3phY5hSycBqC6/iV+
-         HTyz8K/SXm7LND9IDInWtUPVRAdcIWW+GZEOXCq6odQrH0Crl1rO7YKqPlfaJLy7oKPL
-         sq6AuaU+DVetAlspp5BMCUa7Jn3I/w43J1eTtLorkH6ieAWpZPPsbar+odfMgZcTX9d3
-         fjjQ==
-X-Gm-Message-State: AC+VfDyjtLOegp4eE8vwLyIqS1dregryjU1l9LbSRjoMB+tJJTZWxXwk
-        Q3KZofVYyL1OALK1Z/rgIeJqqTySO3eYfQ==
-X-Google-Smtp-Source: ACHHUZ4BkXq5PAB8mcOH8rMtRLe0Z7xEvnCSkBrmm29zl9XHU1cIrWw1PbKGe+NA7mDtz4lxmN3uBA==
-X-Received: by 2002:a7b:c8c4:0:b0:3f1:78d0:fc4e with SMTP id f4-20020a7bc8c4000000b003f178d0fc4emr10544692wml.32.1682955804524;
-        Mon, 01 May 2023 08:43:24 -0700 (PDT)
-Received: from costa-tp.bos2.lab ([2a00:a040:1a3:c11b:3ae6:1732:e587:a81f])
-        by smtp.gmail.com with ESMTPSA id m6-20020a05600c4f4600b003ee5fa61f45sm36632520wmq.3.2023.05.01.08.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 08:43:23 -0700 (PDT)
-From:   Costa Shulyupin <costa.shul@redhat.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Cc:     Costa Shulyupin <costa.shul@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] docs: consolidate human interface subsystems
-Date:   Mon,  1 May 2023 18:42:58 +0300
-Message-Id: <20230501154258.277866-1-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.40.0
-Reply-To: <87h6sw9iq0.fsf@meer.lwn.net>
+        Mon, 1 May 2023 11:46:27 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A53BC;
+        Mon,  1 May 2023 08:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1MUFWRQzN2U7B9NovRPIUdnOItgaF2BM1nA/v8zJpK0=; b=ZaYHCOGzMIq2mcPn5wQKmGHwqc
+        dEaQSi8ys2wSEWQrqILZhJ2E3A5yM+ZBDgUmG4S1N/wj6Iqje0McnUMuERPO4Cm38WIS/MBxM3rwh
+        I8qJ2kkdbPvv/cgRTjGc/qugwfraL2/bDWcH697S80ypbfipuIuTB4vHRmbpbSJ/0h1rlcZ0n6Oga
+        f78qWjBf+nRjYL+b87AUjZ88xZZSzlYC+e+nEJYVSzyI3caXusPZt8MNxLpC34ZSXYjRTYEVBiqIH
+        yHgXirJrykwoZHkRDNMuK1Q2zhGhTljIDoMOrmEL+wFzEVnpwKbugMpon2NXMzkmZMpdG/f7BkzP2
+        DsjSuXIw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ptVj9-007SZI-Oz; Mon, 01 May 2023 15:46:11 +0000
+Date:   Mon, 1 May 2023 16:46:11 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Daniel Gomez <da.gomez@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/17] fs: add CONFIG_BUFFER_HEAD
+Message-ID: <ZE/ew1VpU/a1gqQP@casper.infradead.org>
+References: <20230424054926.26927-1-hch@lst.de>
+ <20230424054926.26927-18-hch@lst.de>
+ <ZExgzbBCbdC1y9Wk@bombadil.infradead.org>
+ <ZExw0eW52lYj2R1m@casper.infradead.org>
+ <ZE8ue9Mx6n2T0yn6@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZE8ue9Mx6n2T0yn6@bombadil.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-to make the page more organized as requested
+On Sun, Apr 30, 2023 at 08:14:03PM -0700, Luis Chamberlain wrote:
+> On Sat, Apr 29, 2023 at 02:20:17AM +0100, Matthew Wilcox wrote:
+> > > [   11.322212] Call Trace:
+> > > [   11.323224]  <TASK>
+> > > [   11.324146]  iomap_readpage_iter+0x96/0x300
+> > > [   11.325694]  iomap_readahead+0x174/0x2d0
+> > > [   11.327129]  read_pages+0x69/0x1f0
+> > > [   11.329751]  page_cache_ra_unbounded+0x187/0x1d0
+> > 
+> > ... that shouldn't be possible.  read_pages() allocates pages, puts them
+> > in the page cache and tells the filesystem to fill them in.
+> > 
+> > In your patches, did you call mapping_set_large_folios() anywhere?
+> 
+> No but the only place to add that would be in the block cache. Adding
+> that alone to the block cache doesn't fix the issue. The below patch
+> however does get us by.
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
----
-Changes:
-- fixed typo
+That's "working around the error", not fixing it ... probably the same
+root cause as your other errors; at least I'm not diving into them until
+the obvious one is fixed.
 
----
- Documentation/subsystem-apis.rst | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+> >From my readings it does't seem like readahead_folio() should always
+> return non-NULL, and also I couldn't easily verify the math is right.
 
-diff --git a/Documentation/subsystem-apis.rst b/Documentation/subsystem-apis.rst
-index b51f38527e14..287799ee2419 100644
---- a/Documentation/subsystem-apis.rst
-+++ b/Documentation/subsystem-apis.rst
-@@ -10,6 +10,18 @@ is taken directly from the kernel source, with supplemental material added
- as needed (or at least as we managed to add it — probably *not* all that is
- needed).
- 
-+Human interfaces
-+---------------
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   input/index
-+   hid/index
-+   sound/index
-+   gpu/index
-+   fb/index
-+
- **Fixme**: much more organizational work is needed here.
- 
- .. toctree::
-@@ -22,9 +34,7 @@ needed).
-    block/index
-    cdrom/index
-    cpu-freq/index
--   fb/index
-    fpga/index
--   hid/index
-    i2c/index
-    iio/index
-    isdn/index
-@@ -40,12 +50,9 @@ needed).
-    w1/index
-    watchdog/index
-    virt/index
--   input/index
-    hwmon/index
--   gpu/index
-    accel/index
-    security/index
--   sound/index
-    crypto/index
-    filesystems/index
-    mm/index
--- 
-2.40.0
+readahead_folio() always returns non-NULL.  That's guaranteed by how
+page_cache_ra_unbounded() and page_cache_ra_order() work.  It allocates
+folios, until it can't (already-present folio, ENOMEM, EOF, max batch
+size) and then calls the filesystem to make those folios uptodate,
+telling it how many folios it put in the page cache, where they start.
 
+Hm.  The fact that it's coming from page_cache_ra_unbounded() makes
+me wonder if you updated this line:
+
+                folio = filemap_alloc_folio(gfp_mask, 0);
+
+without updating this line:
+
+                ractl->_nr_pages++;
+
+This is actually number of pages, not number of folios, so needs to be
+		ractl->_nr_pages += 1 << order;
+
+various other parts of page_cache_ra_unbounded() need to be examined
+carefully for assumptions of order-0; it's never been used for that
+before.  all the large folio work has concentrated on
+page_cache_ra_order()
