@@ -2,111 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533456F2C0F
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78A16F2C53
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjEAC5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S232408AbjEAC72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 22:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjEAC46 (ORCPT
+        with ESMTP id S232267AbjEAC6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:56:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB3419D
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682909767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=P71hh1hVX94ThG5yTOof07dnMP25hXjA33Fj1bRqY+8=;
-        b=MTdAEWV1pOEGwpMUvVFulKRazUa/bi4k9+6kiXB+lZbnaLVEYg/7SsHEUQUKXxz8rKx68v
-        2zEeA4ItZ84XzG9/yYrsqLrAfMJxDQ3kx2tuv1266gSfhR24EfAtezbI9zedqnCNSnc3Pf
-        GMXAD5errsZyA0JYMTJsD4att+rN0H8=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-202-A5AJ4H1zNJCReyvgn4rlOQ-1; Sun, 30 Apr 2023 22:56:05 -0400
-X-MC-Unique: A5AJ4H1zNJCReyvgn4rlOQ-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3ef65714d24so27614331cf.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:56:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682909765; x=1685501765;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P71hh1hVX94ThG5yTOof07dnMP25hXjA33Fj1bRqY+8=;
-        b=bPqdPDRM67IzeTXFyWauFKgZC5P0juq40XM4brZh4tvoJp0E8GqM9KSOkKNpFYto0O
-         0lwtWKC3hlFnPRRlArRkwYVQ84triBFVQsxSQSJoPWoPO4BC9GRF3WEIkCjA0fKH9d8u
-         IP4FnpTBY2CaA99lYy0LSY911yeVkZ6ywqJLpw3gp6AlYrDhQWge9FA2VYodVClnRmEN
-         bh2uOd7DpkLixvlUk7mbwen1RxJcHekckV2j+SySFulePa7kSMX+BvyNM98loiOlv1Bc
-         BUmflaXup6PjW6Fkbh2u6gz2776dkBlzDvwUDU0dEdyu83Z0YsKZGQqiqSI4nS2/zIwX
-         6t5A==
-X-Gm-Message-State: AC+VfDxUFn8GWHKSYRxpX3x81X9ZSCMB0JabajKIjPtavgxIhvJcvdnc
-        qw+nNEOn8E9ZvtFYHALiC3DRoFv7M5S4tELqwWR4+o34JWr63abl3h5RErLL91OICrF/2TxgAaK
-        PJ20Te7xEU+ipaZinWxK1bDhv
-X-Received: by 2002:ac8:5dd1:0:b0:3ef:54c9:9869 with SMTP id e17-20020ac85dd1000000b003ef54c99869mr20599171qtx.31.1682909765217;
-        Sun, 30 Apr 2023 19:56:05 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ62YgtU1mxsZmkSlSss9+q+sO2G3Y4kjPIDvU2+bP5ieOPhlyiMmbSysV2BD1rj091m1GXrjg==
-X-Received: by 2002:ac8:5dd1:0:b0:3ef:54c9:9869 with SMTP id e17-20020ac85dd1000000b003ef54c99869mr20599159qtx.31.1682909764947;
-        Sun, 30 Apr 2023 19:56:04 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id x8-20020ac86b48000000b003e39106bdb2sm9062696qts.31.2023.04.30.19.56.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 19:56:04 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] tty: define hung_up_tty_compat_ioctl with CONFIG_COMPAT
+        Sun, 30 Apr 2023 22:58:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4561715;
+        Sun, 30 Apr 2023 19:58:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 797A360ED1;
+        Mon,  1 May 2023 02:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A289C433D2;
+        Mon,  1 May 2023 02:57:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682909869;
+        bh=F3Wiov1pCS4WKo5KfIAZ+ApsN7GR7v4FG6BtkmgA1Zk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZpMPyCq09vDkYfYG4DI1nHZIRK2sN7BJaBili1iiu0ZVNoKN7+rLM3TDhW0jCAsFQ
+         haQotsXVQYpaoKZCxfCUK0TzY9i2+2WG5N/ShXvGkisHG2WzhuwuphcGANLglPHcKe
+         NcuSF2Lu4nkpoRwaOklntpzGItEVTgI7CDex1covyKhFMTNUe2dD5HCX+mQYcZDhmJ
+         37c/ncmYrPD8Y4eZ1/J/HZXee3TFyzpYw8Lysseytk4RFYZ5AcZ1QUx/OmPerOdfRg
+         RH5/NQjgoRrOtzNW8beuOG/LrFWbpGOwmPmghsqP0zDz21dVUvsUZzoHE5/eikumaF
+         UHLzuW7qxjKaA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     harperchen <harperchen1110@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel.lee.kruse@proton.me,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 14/44] media: cx23885: Fix a null-ptr-deref bug in buffer_prepare() and buffer_finish()
 Date:   Sun, 30 Apr 2023 22:56:02 -0400
-Message-Id: <20230501025602.2905173-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+Message-Id: <20230501025632.3253067-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
+References: <20230501025632.3253067-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc reports
-drivers/tty/tty_io.c:446:13: error: ‘hung_up_tty_compat_ioctl’
-  defined but not used [-Werror=unused-function]
-  446 | static long hung_up_tty_compat_ioctl(struct file *file,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
+From: harperchen <harperchen1110@gmail.com>
 
-hung_up_tty_compat_ioctl is used conditionally with CONFIG_COMPAT,
-so it should be likewise defined.
+[ Upstream commit 47e8b73bc35d7c54642f78e498697692f6358996 ]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+When the driver calls cx23885_risc_buffer() to prepare the buffer, the
+function call dma_alloc_coherent may fail, resulting in a empty buffer
+risc->cpu. Later when we free the buffer or access the buffer, null ptr
+deref is triggered.
+
+This bug is similar to the following one:
+https://git.linuxtv.org/media_stage.git/commit/?id=2b064d91440b33fba5b452f2d1b31f13ae911d71.
+
+We believe the bug can be also dynamically triggered from user side.
+Similarly, we fix this by checking the return value of cx23885_risc_buffer()
+and the value of risc->cpu before buffer free.
+
+Signed-off-by: harperchen <harperchen1110@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/tty_io.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/pci/cx23885/cx23885-core.c  |  4 +++-
+ drivers/media/pci/cx23885/cx23885-video.c | 13 +++++++------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index 553182753098..7fe404d56ce7 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -443,11 +443,13 @@ static long hung_up_tty_ioctl(struct file *file, unsigned int cmd,
- 	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
+diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
+index 9232a966bcabb..2ce2914576cf2 100644
+--- a/drivers/media/pci/cx23885/cx23885-core.c
++++ b/drivers/media/pci/cx23885/cx23885-core.c
+@@ -1325,7 +1325,9 @@ void cx23885_free_buffer(struct cx23885_dev *dev, struct cx23885_buffer *buf)
+ {
+ 	struct cx23885_riscmem *risc = &buf->risc;
+ 
+-	dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
++	if (risc->cpu)
++		dma_free_coherent(&dev->pci->dev, risc->size, risc->cpu, risc->dma);
++	memset(risc, 0, sizeof(*risc));
  }
  
-+#ifdef CONFIG_COMPAT
- static long hung_up_tty_compat_ioctl(struct file *file,
- 				     unsigned int cmd, unsigned long arg)
- {
- 	return cmd == TIOCSPGRP ? -ENOTTY : -EIO;
- }
-+#endif
+ static void cx23885_tsport_reg_dump(struct cx23885_tsport *port)
+diff --git a/drivers/media/pci/cx23885/cx23885-video.c b/drivers/media/pci/cx23885/cx23885-video.c
+index 3d03f5e95786a..671fc0588e431 100644
+--- a/drivers/media/pci/cx23885/cx23885-video.c
++++ b/drivers/media/pci/cx23885/cx23885-video.c
+@@ -342,6 +342,7 @@ static int queue_setup(struct vb2_queue *q,
  
- static int hung_up_tty_fasync(int fd, struct file *file, int on)
+ static int buffer_prepare(struct vb2_buffer *vb)
  {
++	int ret;
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+ 	struct cx23885_dev *dev = vb->vb2_queue->drv_priv;
+ 	struct cx23885_buffer *buf =
+@@ -358,12 +359,12 @@ static int buffer_prepare(struct vb2_buffer *vb)
+ 
+ 	switch (dev->field) {
+ 	case V4L2_FIELD_TOP:
+-		cx23885_risc_buffer(dev->pci, &buf->risc,
++		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
+ 				sgt->sgl, 0, UNSET,
+ 				buf->bpl, 0, dev->height);
+ 		break;
+ 	case V4L2_FIELD_BOTTOM:
+-		cx23885_risc_buffer(dev->pci, &buf->risc,
++		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
+ 				sgt->sgl, UNSET, 0,
+ 				buf->bpl, 0, dev->height);
+ 		break;
+@@ -391,21 +392,21 @@ static int buffer_prepare(struct vb2_buffer *vb)
+ 			line0_offset = 0;
+ 			line1_offset = buf->bpl;
+ 		}
+-		cx23885_risc_buffer(dev->pci, &buf->risc,
++		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
+ 				sgt->sgl, line0_offset,
+ 				line1_offset,
+ 				buf->bpl, buf->bpl,
+ 				dev->height >> 1);
+ 		break;
+ 	case V4L2_FIELD_SEQ_TB:
+-		cx23885_risc_buffer(dev->pci, &buf->risc,
++		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
+ 				sgt->sgl,
+ 				0, buf->bpl * (dev->height >> 1),
+ 				buf->bpl, 0,
+ 				dev->height >> 1);
+ 		break;
+ 	case V4L2_FIELD_SEQ_BT:
+-		cx23885_risc_buffer(dev->pci, &buf->risc,
++		ret = cx23885_risc_buffer(dev->pci, &buf->risc,
+ 				sgt->sgl,
+ 				buf->bpl * (dev->height >> 1), 0,
+ 				buf->bpl, 0,
+@@ -418,7 +419,7 @@ static int buffer_prepare(struct vb2_buffer *vb)
+ 		buf, buf->vb.vb2_buf.index,
+ 		dev->width, dev->height, dev->fmt->depth, dev->fmt->fourcc,
+ 		(unsigned long)buf->risc.dma);
+-	return 0;
++	return ret;
+ }
+ 
+ static void buffer_finish(struct vb2_buffer *vb)
 -- 
-2.27.0
+2.39.2
 
