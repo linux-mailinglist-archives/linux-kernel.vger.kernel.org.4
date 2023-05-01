@@ -2,57 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF5F6F32A5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F686F32A4
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 17:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbjEAPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 11:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S232776AbjEAPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 11:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjEAPLe (ORCPT
+        with ESMTP id S232746AbjEAPL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 11:11:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6AC213E;
-        Mon,  1 May 2023 08:11:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32B3861DA3;
-        Mon,  1 May 2023 15:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1091EC433D2;
-        Mon,  1 May 2023 15:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682953826;
-        bh=/ZshWXbkJAwJ3w5jxnFmXGG6dcyY5NQhIKW41FzqCqY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KR2+vg5UTum6KM/Wk4mpacG3zJivM9KnW39dh9aVFLWLFAVmXLGVjxj7JpR4QW1Eb
-         e+2BN0c+dV+UkY9EeCqjPIBqhsK6R/UTA4hi/lWZXpSvLa3Ez7XWf3JxwIhUyUr1cQ
-         sXPdnTGpja1xI7yRwmhyY4OrdU9yRtr1ikfIDzyBXWvjR8+gV4XhTeqft59jxKOv4+
-         UmjaLoLVoNFfMj+Ph8IXd6fTe0ci4sAXfYd8uU0g7MCTf/wU3/6N1YAVmjq4Ljaa4l
-         QbaGACTPXqkLMwYs8UxxkIE89YfhUxo8BCzQNFf4rz/z9UFitoAh2cqpFOHmHzhF+I
-         inepboktKhEmQ==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: [PATCH v9 11/11] Documentation: tracing/probes: Add fprobe event tracing document
-Date:   Tue,  2 May 2023 00:10:23 +0900
-Message-ID:  <168295382316.3157983.5936772526090395556.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-In-Reply-To:  <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
-References:  <168295372484.3157983.731333785390494141.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+        Mon, 1 May 2023 11:11:28 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AF61723;
+        Mon,  1 May 2023 08:10:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EBycHUAz00nD6MVMEX+a3Z16XKWvKmyU01FVzWbtDoclPo/4YFAwbbj6MEnCtFwrJPA0VQrMxHHRPbKA26bm/lkGZDnnvh4suoBhcvrU04rhxlwfUZPkx5D4cXVQF80RPK70ba/UEitVKaVjLL0jrQ0idAl2ytFlCzDOIXEacuHIiUbMFBq2TDdpuRo3cMObQ4I5x11wGamwGlCbhk9K54GR4NQjOeIwAYQ33EIrdiv8sRY1OEkUX1eJcxe4S3IrdGwDw9u13ZNdkyZ0jL/AElWTlh2LaWkjk3phnAuULqd0UeHp5Toomj9BqQSH5wQ/NuKxXzWJ/PAiBs1a28zUWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/b2pfjxFUBwy0vmu+SaLGUsYPXh+D1VMxr2/Av9NfDk=;
+ b=AVhwFnTUHT1fX+ngWVeZYTCKEMqnHDdmduy9EWR3t1UfSn6IEof38Sqew/EG5bE/N4+agM0rNt3DoCgY/l5i/Mg/kygS0obmYqDaje8QFodvvZgp/UMigHWzwP+Bs/DJJGBQGMpcWPHK5TKJJNANlljS0OC/X4sVdlMgNp5/ya3A/1kFfgnfkCZrNPpZdvsWHJZzfK1UJJDbDhNX9fZgsjSIYdz/uReK3XCORi5uaDcUJwYeoKo5bLFWEybGKIi8BxvhU0Gzk3Q09RsdflhijjyP53AMx/v3vCuhmYVTleXYQGkx2R80Z89017c5aUf5ykUh+rb8wJycw3qelhgtPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/b2pfjxFUBwy0vmu+SaLGUsYPXh+D1VMxr2/Av9NfDk=;
+ b=c9RLDKc9xj2CuMRHwcwgNdfXn+VEHdzQqr1H86U+qu0w9d9OantjJSGfPpz6Peiwrl+AvOOC+ADM29g+hw/ZAc/cu1p+QL9CaF5HYTHtXv5EP4d2nPoYMkTk6/E0MdsLsnWUsMuy1Uc9xLBAikqzS+Go4zpg2iKiIujUDDqNa/s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by CY8PR12MB7217.namprd12.prod.outlook.com (2603:10b6:930:5b::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
+ 2023 15:10:39 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
+ 15:10:38 +0000
+Message-ID: <1a8d8464-94dc-b6b9-07f6-857dd3d6e35f@amd.com>
+Date:   Mon, 1 May 2023 10:10:33 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH V5 02/15] x86/hyperv: Decrypt hv vp assist page in
+ sev-snp enlightened guest
+Content-Language: en-US
+To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230501085726.544209-1-ltykernel@gmail.com>
+ <20230501085726.544209-3-ltykernel@gmail.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230501085726.544209-3-ltykernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR05CA0009.namprd05.prod.outlook.com
+ (2603:10b6:806:2d2::11) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|CY8PR12MB7217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 74f53c51-2c38-4ff4-180d-08db4a5638ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oN1n/ZbxcvnkBEcCwVZp1+twnT6NkLl02H4Co1CdzSOoJVsbWEID8edteOCQNAzH/5i1lUDzkYrdrpzDwL2iTnbdix58hCz3VUGTW9XgCKecArRvtvce4rkLLa2nJOipCqCMoNdZUKcktbu3qNtXbctkZOfy4jlCQsVU7cCwYCSQ3yB4EiTPpJi2tkphlwH2MUrsvpHj3zQp7SWRfmAAQ6jD5chuAwaMZFZs6NoQ+TG7bQkCX/INhKxjJYqBLVs0YlvxYCLASIXOnlugjzkpP9VFSHy12NsQosRZ6t7PB8BWygIMCA0OluAvgaP8Fktx0RCjQXIxHVQe5ZTaoIC5iNXJjFflmEk8kpI/UL4bCWTOrBtWD8tlII9RTWtOG032d1r4OdgiTMOvWBoSKIEWR8M9Mf1Fo3xT5XmXHcaimwUUqB8SjUgcdoLzGkQOy+MPB3DhcjVc5AZ5yn5MTqsFlh2U47DV3xYe367tBdcLigYRbvAJ0rtNNDtoas85eMUDeu6Sw1sWbKU4Zu3gOXBygsCUBVOjqyLwbe27VBzlyxdw72zrGbSPTO8w0J40caWcHHhZZ9PGzUjUiA5dyNmsV+/27TFkN6ctaaaeA0J5ngnrBHhpjXeP6VuvIK4v7t3TSVWJiUGORFuZTXwqGgi+PYYBakqXh3HNCDqzbGt2Ni4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(346002)(376002)(39860400002)(451199021)(7416002)(921005)(5660300002)(8936002)(8676002)(7406005)(41300700001)(316002)(36756003)(31696002)(86362001)(2906002)(38100700002)(31686004)(186003)(2616005)(478600001)(45080400002)(6666004)(53546011)(6486002)(26005)(6506007)(6512007)(4326008)(66946007)(66476007)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cXU4Si9paTFuTGFDY1doa1RXZEFhWWVZdHMzaDlRdHMyL211d0l0K04rbERu?=
+ =?utf-8?B?cWdNQVRVcFptdDhDVjBzUEY5WVVSdFFjdCtIRDVGc29XRTByNkdTeGZrNDNp?=
+ =?utf-8?B?WE5VZXdFYnNnbWhxbjhUd3JUa3ZEWnlXQ1AxS1JEOG1LaXo5dDJ0WDFPNC9k?=
+ =?utf-8?B?aE1hekw4MUFyUWtYMUQvOEVRR3ZPaWh4VEVqZGFHdHNaY3p6SlpqUm5iaGt1?=
+ =?utf-8?B?MHd3SkxlbEJ6QkFkeWRhU0lxR014Ym4yR1VJdGlnMVp0YlZRN0Jnd01JUE9q?=
+ =?utf-8?B?RmpJd3RneFVhOE0rQXRUbVh3ZzNhUEdUUEwrck5zRjQ0SFJYMEY2bUM0RTBE?=
+ =?utf-8?B?Vm5sZ3BoWmlMckYvZlFNQzlSaFRCSFNxRlpCK2k2Z25xcXlyTWVNTFlBVFFH?=
+ =?utf-8?B?TTZkcW9aWitueDYxQldWZnY3dkU0U0NSK3V3RmJGZTIwREl6YW54a0oxMGtQ?=
+ =?utf-8?B?OU04K3hFdE5SZ1IrZGZyTUZjWGpKOUI3WHF2L01QY1hqUTJTRHhKZTFFaXNF?=
+ =?utf-8?B?NzV1cGczY2pPY28rYkNlcWdPUExKVm0xaG5nSlc5aFJWdUo4TTR4cUlkdXNt?=
+ =?utf-8?B?SDRqajh3VjNnV29sc3hOTUxtQXVMUjVrcG1XY3lOSDZVNGVPc0gwU0FOR0tp?=
+ =?utf-8?B?emFHMlRkNzRsODRQZWt2Z2hTWmw4WDdzWXZZeExYS2xsc1V3QncyZEp1SmZk?=
+ =?utf-8?B?VUlKNDAraWFlZXg1ZnlOcDA1U1V6SUlkNHpKWmdIckR6RnNkeDg3Uy9FMHox?=
+ =?utf-8?B?SUpCWkdKYStmMkMzb0tGcFFYOWpSSTJpK3J6SjZQd2ZVN3Y0TEZnMS9vOVQ0?=
+ =?utf-8?B?K3ltREc2MmdGRm0weEhWS3hIQnhVd1p5V3dYWCtRUEp1UUZJdEdNTTBKQllM?=
+ =?utf-8?B?UjhHRC94NDBTbkU4SGltZDhoNS96T0ZmSFRXRXByb0R1eStrRlBLZUQ4bmxG?=
+ =?utf-8?B?cCtoTThxQTRRcXZVYmdmd0t4SW9FRzJIc05SaEtmaDZSb2wvS3BCa2htdjNh?=
+ =?utf-8?B?VlhJZmcvYWF2cmQwbHUvUzFPbmNBSE5NdWVBaUhRL3lxaG9GenhhckRlakVp?=
+ =?utf-8?B?c2tMWjhIeGN1YlNGMG82cFVuam1MZHdCM3ZkYi9MSDVMWlp6dUhZQTBoY2pW?=
+ =?utf-8?B?TnhCMjJCdWE3b1A2bjl3S3drUWxmc3hBZDlJWFdEWmRVUFlXQWJZaHgwdnN1?=
+ =?utf-8?B?WmxNc0VHMjMrYTgzVzJXbUJaYk5JZFhubVVzVVFBU0FER0hRRFhoVitNM2Qx?=
+ =?utf-8?B?dERoUit4Y2psK2UwWXBVK0ZDZmd5aUVqTFBVRWZwcWR3Qk9MWi9YK3k5Rkxp?=
+ =?utf-8?B?TVNhdVpCb0o0dVQ3ZzYwYmhXdVlGSE9ENitwWjEwUHB2TjNsZFREOUp2SmRJ?=
+ =?utf-8?B?ZHZ5YXVrVkJORUhoQXhZN1NUTDdJZlA5WWVUem5MZms5b3JQbkg5MDJCdFA0?=
+ =?utf-8?B?cStXZEh1THdtK01IaWZXeEMzKysxcFEvcUk5WU5sOXF5UmUxMmVlZzVnbDVL?=
+ =?utf-8?B?Y05TSmRIV2RiWVBRNDVoZmpiQjc1dlM1cW9qRVBMUlNSWUEzTFIvaWtPekp4?=
+ =?utf-8?B?MHN6U2RmY01WdHN4NEk1akxkUXpxbERSS3BuRENhdEU2VnZCeDk5KzZjUThP?=
+ =?utf-8?B?a3FMSFA5NUpnTTIrM0lLblB1M0NJZTc0YXZxNlpNMTFVSGx3VFB6ZXRPaVdu?=
+ =?utf-8?B?eFFyeXRxMTFQVE9UWE9VZGxSV2EzVUZMZ2RUWkJmdmZvcGQ3NVdtT2RyR1Uy?=
+ =?utf-8?B?YTlnL2djS2xLWStGZnNsUGMvdWhwZVNDd2s4SFNhMjljZ1BZZ2lNMVNNRi96?=
+ =?utf-8?B?LzZRNFlHR0NhVnkwaisxTlNSeGp2YzBZQW5heU1GNThtQktQSmNHT3FSZXZG?=
+ =?utf-8?B?NkFTU0tLdXRnMnk0cDd5NGhBRUl1Tm0yUkdWaFR4dnJqRTJBRVY1VlBmSmxK?=
+ =?utf-8?B?aVJVYSthcktyUlVnUWhGK01EMmUvanRIMjZtV2hXVk5weU1NOHViZUkrV1dK?=
+ =?utf-8?B?SUltcGQ3TkdYM3dhMXZyNUhxRzZNTTUvNWE5bHU5MTZnOWhteEhYQXk3K1g0?=
+ =?utf-8?B?Q1ROcnd3TFV5OHlDZDl4eUNlQ1ByTHlKRUEvRDVlTEUzVEVqRm5obmJ0WHJ6?=
+ =?utf-8?Q?YgMZEcs8igLm61IVWM2TrEjcv?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74f53c51-2c38-4ff4-180d-08db4a5638ba
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 15:10:38.5550
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GTO2Yk6ncUKHnok+nUYLECO7zU7TXR9iLuhIfcltCwjhLqBwPtwK2apNlT1o+5gokAJup+UvxPzlGxHMPJ0/MQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7217
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,224 +140,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On 5/1/23 03:57, Tianyu Lan wrote:
+> From: Tianyu Lan <tiala@microsoft.com>
+> 
+> hv vp assist page is shared between sev snp guest and hyperv. Decrypt
+> the page when use it.
 
-Add a documentation about fprobe event tracing including
-tracepoint probe event and BTF argument.
+You aren't actually decrypting the page, you're changing the mapping from 
+private/encrypted to shared/unencrypted (hence the memset that follows to 
+clear the page to zeroes).
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v7:
-  - Update about BTF auto type casting for $retval.
----
- Documentation/trace/fprobetrace.rst |  187 +++++++++++++++++++++++++++++++++++
- Documentation/trace/index.rst       |    1 
- 2 files changed, 188 insertions(+)
- create mode 100644 Documentation/trace/fprobetrace.rst
+And please capitalize where necessary, e.g., SEV-SNP, Hyper-V, etc.
 
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-new file mode 100644
-index 000000000000..df3cf273bd43
---- /dev/null
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -0,0 +1,187 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========================
-+Fprobe-based Event Tracing
-+==========================
-+
-+.. Author: Masami Hiramatsu <mhiramat@kernel.org>
-+
-+Overview
-+--------
-+
-+Fprobe event is similar to the kprobe event, but limited to probe on
-+the function entry and exit only. It is good enough for many use cases
-+which only traces some specific functions.
-+
-+This document also covers tracepoint probe events (tprobe) since this
-+is also works only on the tracepoint entry. User can trace a part of
-+tracepoint argument, or the tracepoint without trace-event, which is
-+not exposed on tracefs.
-+
-+As same as other dynamic events, fprobe events and tracepoint probe
-+events are defined via `dynamic_events` interface file on tracefs.
-+
-+Synopsis of fprobe-events
-+-------------------------
-+::
-+
-+  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-+  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-+  t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
-+
-+ GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
-+ GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
-+ EVENT1         : Event name for fprobe. If omitted, the event name is
-+                  "SYM__entry" or "SYM__exit".
-+ EVENT2         : Event name for tprobe. If omitted, the event name is
-+                  the same as "TRACEPOINT", but if the "TRACEPOINT" starts
-+                  with a digit character, "_TRACEPOINT" is used.
-+ MAXACTIVE      : Maximum number of instances of the specified function that
-+                  can be probed simultaneously, or 0 for the default value
-+                  as defined in Documentation/trace/fprobes.rst
-+
-+ FETCHARGS      : Arguments. Each probe can have up to 128 args.
-+  ARG           : Fetch "ARG" function argument using BTF (only for function
-+                  entry or tracepoint.) (\*1)
-+  @ADDR         : Fetch memory at ADDR (ADDR should be in kernel)
-+  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
-+  $stackN       : Fetch Nth entry of stack (N >= 0)
-+  $stack        : Fetch stack address.
-+  $argN         : Fetch the Nth function argument. (N >= 1) (\*2)
-+  $retval       : Fetch return value.(\*3)
-+  $comm         : Fetch current task comm.
-+  +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
-+  \IMM          : Store an immediate value to the argument.
-+  NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-+  FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-+                  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-+                  (x8/x16/x32/x64), "char", "string", "ustring", "symbol", "symstr"
-+                  and bitfield are supported.
-+
-+  (\*1) This is available only when BTF is enabled.
-+  (\*2) only for the probe on function entry (offs == 0).
-+  (\*3) only for return probe.
-+  (\*4) this is useful for fetching a field of data structures.
-+  (\*5) "u" means user-space dereference.
-+
-+For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-+
-+BTF arguments
-+-------------
-+BTF (BPF Type Format) argument allows user to trace function and tracepoint
-+parameters by its name instead of `$argN`. This feature is available if the
-+kernel is configured with CONFIG_BPF_SYSCALL and CONFIG_DEBUG_INFO_BTF.
-+If user only specify the BTF argument, the event's argument name is also
-+automatically set by the given name. ::
-+
-+ # echo 'f:myprobe vfs_read count pos' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read count=count pos=pos
-+
-+It also chooses the fetch type from BTF information. For example, in the above
-+example, the `count` is unsigned long, and the `pos` is a pointer. Thus, both
-+are converted to 64bit unsigned long, but only `pos` has `%Lx` print-format ::
-+
-+ # cat events/fprobes/myprobe/format
-+ name: myprobe
-+ ID: 1313
-+ format:
-+ 	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-+ 	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-+ 	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-+ 	field:int common_pid;	offset:4;	size:4;	signed:1;
-+
-+ 	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
-+ 	field:u64 count;	offset:16;	size:8;	signed:0;
-+ 	field:u64 pos;	offset:24;	size:8;	signed:0;
-+
-+ print fmt: "(%lx) count=%Lu pos=0x%Lx", REC->__probe_ip, REC->count, REC->pos
-+
-+If user unsures the name of arguments, `$$args` will be helpful. The `$$args`
-+is expanded to all function arguments of the function or the tracepoint. ::
-+
-+ # echo 'f:myprobe vfs_read $$args' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read file=file buf=buf count=count pos=pos
-+
-+BTF also affects the $retval. If user doesn't set any type, the retval type is
-+automatically picked from the BTF. If the function returns 'void', $retval is
-+rejected.
-+
-+Usage examples
-+--------------
-+Here is an example to add fprobe events on `vfs_read()` function entry
-+and exit, with BTF arguments.
-+::
-+
-+  # echo 'f vfs_read $$args' >> dynamic_events
-+  # echo 'f vfs_read%return $retval' >> dynamic_events
-+  # cat dynamic_events
-+ f:fprobes/vfs_read__entry vfs_read file=file buf=buf count=count pos=pos
-+ f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
-+  # echo 1 > events/fprobes/enable
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] ...1.   335.883195: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883208: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883220: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883224: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883232: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c687a count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883237: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   336.050329: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   336.050343: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+
-+You can see all function arguments and return values are recorded as signed int.
-+
-+Also, here is tracepoint events on `sched_switch` tracepoint. To compare the
-+result, this also enables the `sched_switch` traceevent too.
-+::
-+
-+  # echo 't sched_switch $$args' >> dynamic_events
-+  # echo 1 > events/sched/sched_switch/enable
-+  # echo 1 > events/tracepoints/sched_switch/enable
-+  # echo > trace
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..2.  3912.083993: sched_switch: prev_comm=sh prev_pid=70 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+               sh-70      [000] d..3.  3912.083995: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff88800664e100 next=0xffffffff828229c0 prev_state=1
-+           <idle>-0       [000] d..2.  3912.084183: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.084184: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+      rcu_preempt-16      [000] d..2.  3912.084196: sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=120 prev_state=I ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+      rcu_preempt-16      [000] d..3.  3912.084196: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff888004208000 next=0xffffffff828229c0 prev_state=1026
-+           <idle>-0       [000] d..2.  3912.085191: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.085191: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+
-+As you can see, the `sched_switch` trace-event shows *cooked* parameters, on
-+the other hand, the `sched_switch` tracepoint probe event shows *raw*
-+parameters. This means you can dereference any field values in the task
-+structure pointed by the `prev` and `next` arguments.
-+
-+For example, usually `task_struct::start_time` is not traced, but with this
-+traceprobe event, you can trace it as below.
-+::
-+
-+  # echo 't sched_switch comm=+1896(next):string start_time=+1728(next):u64' > dynamic_events
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..3.  5606.686577: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.686602: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="sh" usage=1 start_time=1596095526
-+               sh-70      [000] d..3.  5606.686637: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.687190: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.687202: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.690317: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+      kworker/0:1-14      [000] d..3.  5606.690339: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.692368: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+
-+Currently, to find the offset of a specific field in the data structure,
-+you need to build kernel with debuginfo and run `perf probe` command with
-+`-D` option. e.g.
-+::
-+
-+ # perf probe -D "__probestub_sched_switch next->comm:string next->start_time"
-+ p:probe/__probestub_sched_switch __probestub_sched_switch+0 comm=+1896(%cx):string start_time=+1728(%cx):u64
-+
-+And replace the `%cx` with the `next`.
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index ea25a9220f92..5092d6c13af5 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -13,6 +13,7 @@ Linux Tracing Technologies
-    kprobes
-    kprobetrace
-    uprobetracer
-+   fprobetrace
-    tracepoints
-    events
-    events-kmem
+Thanks,
+Tom
 
+> 
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+>   arch/x86/hyperv/hv_init.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index a5f9474f08e1..9f3e2d71d015 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -18,6 +18,7 @@
+>   #include <asm/hyperv-tlfs.h>
+>   #include <asm/mshyperv.h>
+>   #include <asm/idtentry.h>
+> +#include <asm/set_memory.h>
+>   #include <linux/kexec.h>
+>   #include <linux/version.h>
+>   #include <linux/vmalloc.h>
+> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
+>   
+>   	}
+>   	if (!WARN_ON(!(*hvp))) {
+> +		if (hv_isolation_type_en_snp()) {
+> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
+> +			memset(*hvp, 0, PAGE_SIZE);
+> +		}
+> +
+>   		msr.enable = 1;
+>   		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+>   	}
