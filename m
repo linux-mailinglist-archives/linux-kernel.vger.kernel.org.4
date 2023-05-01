@@ -2,439 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E613E6F3510
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1E16F3517
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 19:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbjEARcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 13:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S232311AbjEARfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 13:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjEARcu (ORCPT
+        with ESMTP id S232240AbjEARf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 13:32:50 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021020.outbound.protection.outlook.com [52.101.62.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E974125;
-        Mon,  1 May 2023 10:32:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fmu62xpw6SD4mF93hvnhmDR8EFybFMT0cIlCqy/q59EBnrSkZ27CGksS13/NaEYv6iCb726xFpAq86PskUGW5g5pnCi+kHmnn9BTt6kuIjfYTiqcfNttQWnBPqHBfNasUw+HEIUfgxb7+wMlzzOkKE9LjZPINKNn4jhKitQSWgLYb5GAMF7SfA0tmPHGPcCCrNWlAdM1+1NsRUAaT2lXDtqrW9Y7Us6nZ02cH7qrjgcvkmnfHCM+6rDjNAzsblOIwyuHIqGVE+lbq+g6L/XdfnghIaobbkkG2uTnle5X6Aqm6k/pa8ykXA4lMaKj3Itjs3kyvpDzCLZPMuzKnc79eQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ilLeGTrdQ0aPUqpClqDA/l/W+My0Pnv74j7EgvgZK8=;
- b=IR8nOSnsUmcQ0HmCotxlMmvAR7wCusWUd2DHwk00LyQ5TwKTop7tf9Byh2qfgryUV4he3SPYSSracfM/GdvAsfJHvrEVl9U0l0/OJJ8yIo2QgaUKC77KCBCZ9MZ0JRPqIebmFwrbI89+9ULkex+StbnqccmFhgXpTkpCb6OBqrLYRsTMqzGbt0bHdxBbmkQPizn9w5oQ5F7iluhxHgchFpj0WGyco3AiDJr+YN67D6EWrq/yk8MW+S7l+s6IhhlZj68pBKrbD0wdMW7UAbapcEyXccAVbC3bPUbpb259hFPHQKsg8wYgRZYAC2AJLVnjOevIwiwT4oACOX71tiik9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ilLeGTrdQ0aPUqpClqDA/l/W+My0Pnv74j7EgvgZK8=;
- b=QHxX2Ioh4aFB/HudcNeWZ772Eu8X5b2mqMAF6RzhT2xNWJTXLHkKaEq+F3DHo8O9PPrU45BmVX+UM89CH68ORscnmwDndKxFoCFEIiGU2z5Z53czxi7A9dBk8670NLEdHhfL2UbEBwIhM3J8SJxjAgOYuXgdG6X05wCykOkQXgo=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3415.namprd21.prod.outlook.com (2603:10b6:208:3d0::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.5; Mon, 1 May
- 2023 17:32:39 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::89f5:e65e:6ca3:e5a7]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::89f5:e65e:6ca3:e5a7%6]) with mapi id 15.20.6363.018; Mon, 1 May 2023
- 17:32:39 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dexuan Cui <decui@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-Subject: RE: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
-Thread-Topic: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
-Thread-Index: AQHZdMDlgRiCry573UqDSIN3qcYRLa9FtKkg
-Date:   Mon, 1 May 2023 17:32:38 +0000
-Message-ID: <BYAPR21MB16888DA20245DDBC572A2240D76E9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230422021735.27698-1-decui@microsoft.com>
- <20230422021735.27698-6-decui@microsoft.com>
-In-Reply-To: <20230422021735.27698-6-decui@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fe447994-baa8-4b2f-a2ae-c9a8aadd7e33;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T17:05:09Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3415:EE_
-x-ms-office365-filtering-correlation-id: f54947bb-c78f-45cb-605e-08db4a6a0f6b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kXVOtNAZB0kayxAWX3ZL0gYUStaJ56TNkqR0A9UTf+9buPjXJubYIUfNOXG+Gx6gut8Nxw56h56V1/+GqtEJI6MpwTrnUY1up/RKueCBuixPunHOgKr5gB/JBR+sYZ7788dWLbhrXUJYJ79pMPlIDBjgUj8Y4UZrRYwDJ04+7rLqWmt0FknO6oc08MB0WkrXJClRxUpPWmmN18l4mZSfE83zxp0c54igi9I8gOjPrEL9HIideYdOxzVe32IlTMEuGnKZNWXBiptU55JLP2oaxGo7AjvsEmEbVp2QfLuXEUX5rKVBgw6f89DHGFFfJhjsDqcSaQTiQ8AD40JEUm1bd7Nxg40cCeSr5ZUu+huOeLTzP9NX17H09Qu297aLgI+dNaP1VBw27bqZQXSUyxUta/sGm7UPHqNpgHo28OzOBPXaQ8oiX3CxSrgJbVZ+yGBvhudmfsd5+Ouqst4kPEMeIC/epfsB9imVZPoy1Ozat88pVub7PgmiewgFWiCYTKfNy3C/y2k77j6fVgM5x7S+wWDVWleY2AhiRe8DSx/YjWrF6Ol2/nYxazTSm4fRToui7v2vvhMoGOhT3v/AjeA4HoEFrv+IoM9O65fgqxU1kafpNUPmleLeTKP0T7Q5Hx2VGR20JBV4n5Y5aNq/mujHOUFnFINwTJ8zn2rmoFGy/LIsXoM4AjfSy/lOsOn6i31A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(451199021)(38070700005)(8936002)(8676002)(107886003)(26005)(9686003)(38100700002)(6506007)(8990500004)(33656002)(10290500003)(478600001)(55016003)(7416002)(5660300002)(186003)(52536014)(316002)(786003)(2906002)(71200400001)(54906003)(82960400001)(82950400001)(86362001)(83380400001)(7696005)(66476007)(66556008)(64756008)(66446008)(4326008)(66946007)(110136005)(76116006)(41300700001)(122000001)(921005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ag6OnbXjBJYdRTAQClreRTKBZPgEVAQ3cQYI79gO1f54tDqIscPkTS5L2+Br?=
- =?us-ascii?Q?kT1WKFgiCry0REQBGBBxk/6jRgL+68ZqDu+6stgncpFvmCTvzrVAULCj1Ykn?=
- =?us-ascii?Q?evuaAx0LnZqNNZpLf8Mn6QbiPRN1EnS5DVvqT29s+oj9cv8Eq5pNNVa82N9M?=
- =?us-ascii?Q?bJ21kQKlcClj6azQhixf7a81c2W7Knt2ZVua4j/Jm6jl7Nm+1t4VUcQsqPCA?=
- =?us-ascii?Q?nLp65JwZ+Qa6Q/TJuDs+SSvqzuG9sBFkzhNH1CmBsVSDw2rAG3Gr1pJxWE0n?=
- =?us-ascii?Q?J2cxzLGGFbc+s/+NEMKBjzhkCLVzuEzIYa0Hz3JfVRrunV/hRoyDuEtXEH2D?=
- =?us-ascii?Q?HMiPsz01Fl/jd8Y/UdHDK/XlvDGs4jcv+/XAyz8773mWXLGTo7DgPZ9cPziv?=
- =?us-ascii?Q?Ajq58b1wbor27MowUULZvYqdm4a5/G8L1aYIIH/+nfl0F95+l2yYsgMmDve/?=
- =?us-ascii?Q?vxz3+cJ84VhbXfjEwYYhE5g26uOUsHmEeZ50pGqY0kBpo2e0pJimhlyaurVy?=
- =?us-ascii?Q?Yw3ZJkgu5j396MZSCHWAuHsaKWXowfCbJnavR9q9a03hK4jWwYfKUB2LMAdP?=
- =?us-ascii?Q?YVZtjgXXd6+AyNdc0e5do0eYl3NTZENWhE/NY115mW6q7Xlbu7R6FJKozOsf?=
- =?us-ascii?Q?eGgWcKsDrufvfvetqKdwcEkru2bZCU8ocrcdSZ+odx1trRBNkmDBSnFzitYG?=
- =?us-ascii?Q?YCkwtuVzL2Gr4mctHEiB3KI/Alf8XMwWawxQASoGBC+BquhH9iqv/cabEmz1?=
- =?us-ascii?Q?Aozq4oOWnXg9l6kWeQ6wilDSRDWGFxXIDh/WFkjTDSx6DogfVFSS3KhI97w+?=
- =?us-ascii?Q?1d6/YfnvqpSgE4DYhRW+ZgWQLXLUzOh6GltFqkhlZfRykkizi/DSDtP/zeyZ?=
- =?us-ascii?Q?yVzj0d19RCnq0RI/heAke+r8RIxr3puZ0Gvbj+0D3CBEoj77a3x8omMUTkC5?=
- =?us-ascii?Q?2GqBHDXv+Eo6etAJxTYxKMiJ1C7yLj3VRwJLkUfwkaPR6LCLiCctN5gs38DF?=
- =?us-ascii?Q?qsbQxeV7P+Un+TwdbHE+Cg53YrgF6wZsFrywiV1C5lpUq0FPaNrPDO7vZm+Q?=
- =?us-ascii?Q?Z3k+EWdC9kRg7xW4zTBSBO28Vfnqm3mCVlN+P2zrOZADkL9/HXrknFC00Zlh?=
- =?us-ascii?Q?Hrn/NeIh9wFqOg25KrE6HS4AQ15Ug75VsyRO6ENR7yYYgA6acAyOoSvnhjzT?=
- =?us-ascii?Q?PJmRsn8NE1PD5Ri05KXScClwUk9/vJNFMz3VwwpdXFbUboC5TfTPXRmNcGkN?=
- =?us-ascii?Q?iY8hjAje8r8wWshI8KuTbNj7Gp/nw3SM1lXyJcrqe9fNT9delok9cvPN+YQ6?=
- =?us-ascii?Q?d9M/+36l8OlB79GTiXDizTI+73KdK/c/UceXwIyo7vBHxbOTh1qcMlh/G0P+?=
- =?us-ascii?Q?QSYP+SjRwIzG4UNz0OXPSFpNkHU8tqabyiNfdBYWMDadnUVkzdpyuzsR3R/H?=
- =?us-ascii?Q?1oxv3VN2Kj4TqlWqGEK8w1/6PUiJ3ZsYZnOIvG2C8COgeyQ8I2endRiOVwvI?=
- =?us-ascii?Q?nUPsDxoZKzh5GGNr+5Ovga0uAxxBe9r/JiMAvCYpRyK8PxpgCgqltpPz8MnC?=
- =?us-ascii?Q?on4eudwb1KavsmTaeC0xeLr6liT4xpFyUezJrEMT2JhUarpPJZSiu0nSzotd?=
- =?us-ascii?Q?2Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 1 May 2023 13:35:27 -0400
+Received: from sonic312-26.consmr.mail.ir2.yahoo.com (sonic312-26.consmr.mail.ir2.yahoo.com [77.238.178.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC3E10F6
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 10:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1682962521; bh=04OPKsj/QXXjTdmsQM9AQpCh3NGap/ezTNnwVf4o7A0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BOTy4ygXDLp0GINCVl1Tv3QImHmX/M3+9YqcoVEoZwL0z9/s20ETHAdEfw9flJXQJdJ2ebTV87qxvy8cacOVdDoTYQhc5SEUyHteuJ0QaSf+oI5V4MW0ktg9k2Vl7L8Wx4JL4yGiqfvN8Hf+cz7DUsCJZB3ib+njTysLc4WEGuI9S2guryuBieVz4VpX8XXUx+ppXITKTeIDXbWwEn/fSE9NDGNa1LSC/u98sQ5/MI/tnTaxHk6cv2fRT0pR3TYIxtmOPOpaEMaypwFWWVhLjlQfEc6r5Nt+9TextlJ3QGDSAh3946HUpW24dIHNowQ9yBeacuLjehrWlU+/BmJ6Mg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1682962521; bh=yqxcxKhFdH+GYt/iBDDt7ZHDKTJivpCj4DGIO7xiYez=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=abqH5tWIhKr3fHy6EaLh371VNF3xOpTW/i10a6A3IR7Ap1T5B5VI2N662cNyazwjSAJbMeB+jkQVRwyUlbxiE/S66eGIk2hPc5mJlK+aNJwbNmY1J1rb1Gh0jHxR36CmWaKgeaX55ApVcZlk5GmWkqLb2rffGSLetxTC73yn0nML6lNTzk5LdSApy1fu6M7ii9lF1UjqKdVfVOsKyAqwJEDZMwR0G+AxILGx2MdNu3y71C01R5WAUAiqnGzAv4CKKxN2e2MpjQLVCt0a8Xgk572e5QryCkbMGT+7zbl27v7IbBz0usmQ5ysn7GrBOYNpSB0aLtcp4qeUP7MKnzq27g==
+X-YMail-OSG: PBmjzDIVM1mkBY8P665SrsROmABT91m8vWhuKRVhFQiwzNNw85_qX5Fxp2IZ2us
+ pRwvAazripnyowzY9UpTfgWK1eFqrGb7yUW.YDU6.3i5OFo2KC04Oqj0to2MELkf2QcBmL4bhl57
+ qJ7Ik7wdb0mcmvs5zY_X3pYpr7mT7Tvkk4aT2XyGHycJgHQ2qPxaqL8dhrCTkfJzazZDvx3_lFS2
+ bV74h2F75a6HmQI5PRJdxKb.C46jePfyswNvfDiv0TJ6a8OOJqPk8oZTE_bUhimyUaGkWRNPYSJ2
+ 5o2kCQfh1tlWy4kuw99Lbrp7dd08xN8Twf8wsmTOpPK9k0cuFCO2D61ukprCybLFBnNiTyxnRisF
+ TrQOZ8Eou2aEWSxnkVGrTT0Rw9N.f13KQQKMidMnMqKhg.DRlCp7Wzl_LRwnPkXuM.s6gGedR5Nd
+ Z8O7ncxFpBLxWfy7rUYHSabzqIr2UXxGttkW6hQM6XIWF2ZkV_sp2cSY_3BVph.hGXReFSyS_cXD
+ wd6XVj5MYv0En2NaAHonX5hP2nazAPA5WXqnirkZdrgl7i2g_fLdYWLD6MbN6iKwJycLVzAwKwj9
+ WSO6GU9B7A33WiqHKB1sntHYAWAprKlv1WyLrZ2Ap9HtFAMqLX9uE0FOX0zDO8mJxchPvOXJ.gyE
+ h8SJOPMkOweFqmiJ9jBRnyrAKNH_axbaP8CCk4GXGg9enn.hpMkiY0EodnHScepyitj8WIZLwLQx
+ REbTevq_yVfp6fRaSqma6s702Ap1BrsbJuJCPJ94Pq3vi57XrYetQUr0lPxSyAUTsOkWocrVlHI_
+ LpoXvkNfT_WZdmPhw3xsLxefITvcQiecX23KxN9E985gPEy4.AYkv37QHe805W.fTAy3.1DBA6Jj
+ 5KJ04mypFIesnpuJELkMJikVp5IKkfwvGmE.uOetgjvGnhMGojAW2tjAkPOgWw.2hancxXAqd4cQ
+ t6.MaCFuDg9_fzrM7xlSpb4.YMY38x.dFFLznK92kmns4xyO7Sq5qLem3lUyzW1naIL0_oE_2Lyd
+ YZpzDWN2Hr3bxOeGZmAuwsnpuOSCgs9K15WjlTugFWnKmOBw0IPhSLpetuqurFQ8uNfG0RikPRTF
+ rhBQjpc.bZdb5bKd7QkLw3D7oeX0nPU6psvNmOAOh4DHM.YpjoQdqAHdp19mapG.8Fy3kigaDhR2
+ j.Hb_l0NFad22Oj36GCbH78yak84bLYCs.ZXoZIo0dYxchkXkY8Z0vcGmdbj5ivgcYLnKOr3Ft_s
+ yY4YuA1WRQo10LeJ0ds5x8Xx5WLdeySnKijEnaGow7KIld7LCVwE5OKQrxPRT5Jd9zUFp7mbRrCx
+ 8XysNajw7A2An9qJLososL8VXA9N1eh0LccH6q_XknKfv.C0D0kT8sl0MUwXfpEdiSH8tKMyCQ1x
+ D5l9zRGmpA4VvWHCzDNLnADt.fe.GYkG9_VjFx20ifYXu5DKDrAmJuRZwhSXwqY3A46fiCxtsbLr
+ we8dK30lcsXpAw4qq6oEkAiX5HW1s.n7JtK5AmZx0Dy6oOuW8EEVUBBoQ3bZC1Z1ZMeBP3tg4SmB
+ OZDCbGXRL4sMLdEUYeNJeXtspF.QwdqsKgHlWncbGan2yHYj95ngy6pudnEq7kCE49PumLXGvnwx
+ 98nKzSMp5l17wIIxuJ1K3mm5jCFFAt1NtV5QBzMeuH42AR23zUgor2s15wZzk62YEWDSIkffNEa3
+ RuNYFO97cawtscRR7NWGtU0ErWEWfxOg.yw23Zyo91X_qc7rO5u8nhgt7mxXMu786sgRi1gsFRAQ
+ UgqQTya1fY3SubUXJGITSSzuYN_7apYeTYye.2osppSnEZuFU9sVINx4Ws0Q4V.410XrzyNwAv4x
+ Ig1tscc4N191l01TRSnhUf5jxllYWxC2fXWSBzkVrkHESbmxjBwFu.4sPGVgKcNdZxmXJW7zJWmo
+ 8fCBMwYJwHonvsT9dC49t1zabFVIU89uypGV0uDHU1CjuD_DdE8wQHh0UjZvX93GYy8OH5x67aoj
+ zc3A7Tt.oIUCY_ys8YTlQYIthDV8701Bia_gJjgfSO5Zu1IRrCTX5UvHdQsoZ1g5EImYSqfqDbec
+ Etj9GjA5e3FhZJDNbAHZxEauFrIIidJyTxu1sSqGV_lnlSDWbcAKBnypbNdkTREzujYrHLAm52ox
+ S9A9xifCpbwhOJGOxeeL5IK_X.E8DxkmKRGGSmkHEnZVJ9ABwJEY2yNjLC8a7fgkAxkJwzU7X461
+ Mou00q7JGcvGHgeVK_KXWZkYKlfMuu5Wu3ey9tDfqPIXT_wI5BqpVlX0LoEvmW6KmUo7x2cBina4
+ 5_DnYowHqf1R2Gptax_Us0giKqyLxQmhZMjcc
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: d71d16b2-9418-40a1-bd45-1abcb6944291
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Mon, 1 May 2023 17:35:21 +0000
+Received: by hermes--production-ir2-74cd8fc864-9w846 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8f3be1312e7b717e7c5ba74fc348ffb4;
+          Mon, 01 May 2023 17:35:16 +0000 (UTC)
+Message-ID: <e9d75e57-bdea-593d-7b05-136c9ad2e2fe@rocketmail.com>
+Date:   Mon, 1 May 2023 19:35:14 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f54947bb-c78f-45cb-605e-08db4a6a0f6b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 17:32:38.8671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QsvSJsXDLoB6Zh0i1AJ4WwtUAyHrLibhGOQBaxqjWZSg63XOSw7FSuxveHGuuffbwxR4T9EU2I0430HTxgZqgmRTJz5EIZEBorb5kKChDzM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3415
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 8/8] dt-bindings: Add rt5033 mfd, regulator and charger
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1682636929.git.jahau@rocketmail.com>
+ <5bd8b90713a61129acf292a941eb7fb5ccaa3db4.1682636929.git.jahau@rocketmail.com>
+ <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <1d187f41-ad9a-4e82-8557-20694a8294d0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21417 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dexuan Cui <decui@microsoft.com> Sent: Friday, April 21, 2023 7:18 PM
->=20
-> Add Hyper-V specific code so that a TDX guest can run on Hyper-V:
->   No need to use hv_vp_assist_page.
->   Don't use the unsafe Hyper-V TSC page.
->   Don't try to use HV_REGISTER_CRASH_CTL.
->   Don't trust Hyper-V's TLB-flushing hypercalls.
->   Don't use lazy EOI.
->   Share SynIC Event/Message pages and VMBus Monitor pages with the host.
+Hi Krzysztof,
 
-This patch no longer does anything with the VMBus monitor pages.
+On 01.05.23 09:21, Krzysztof Kozlowski wrote:
+> On 28/04/2023 01:30, Jakob Hauser wrote:
+>> Add device tree binding documentation for rt5033 multifunction device, voltage
+>> regulator and battery charger.
+>>
+>> Cc: Beomho Seo <beomho.seo@samsung.com>
+>> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+>> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
+> 
+> 
+> (...)
+> 
+>> +
+>> +required:
+>> +  - monitored-battery
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    charger {
+>> +        compatible = "richtek,rt5033-charger";
+>> +        monitored-battery = <&battery>;
+>> +        extcon = <&muic>;
+> 
+> 
+> Everything up to here looked ok, but extcon is not a hardware property.
+> Please do not mix adding missing bindings for existing device with
+> adding new properties. You should use connector for the USB port.
+> 
 
->   Use pgprot_decrypted(PAGE_KERNEL)in hv_ringbuffer_init().
+Rob already raised this in v1. In patch 8 v3 comments below '---' I 
+mentioned that the extcon phandle is still there because I don't 
+understand what to do.
 
-The above line in the commit message is stale and can be dropped.
+The devices using rt5033 I'm aware of:
 
->=20
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
->  arch/x86/hyperv/hv_apic.c      |  6 ++--
->  arch/x86/hyperv/hv_init.c      | 19 +++++++++---
->  arch/x86/kernel/cpu/mshyperv.c | 21 ++++++++++++-
->  drivers/hv/hv.c                | 54 ++++++++++++++++++++++++++++++++--
->  4 files changed, 90 insertions(+), 10 deletions(-)
->=20
-> Changes in v2:
->   Used a new function hv_set_memory_enc_dec_needed() in
->     __set_memory_enc_pgtable().
->   Added the missing set_memory_encrypted() in hv_synic_free().
->=20
-> Changes in v3:
->   Use pgprot_decrypted(PAGE_KERNEL)in hv_ringbuffer_init().
->   (Do not use PAGE_KERNEL_NOENC, which doesn't exist for ARM64).
->=20
->   Used cc_mkdec() in hv_synic_enable_regs().
->=20
->   ms_hyperv_init_platform():
->     Explicitly do not use HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED.
->     Explicitly do not use HV_X64_APIC_ACCESS_RECOMMENDED.
->=20
->   Enabled __send_ipi_mask() and __send_ipi_one() for TDX guests.
->=20
-> Changes in v4:
->   A minor rebase to Michael's v7 DDA patchset. I'm very happy that
->     I can drop my v3 change to arch/x86/mm/pat/set_memory.c due to
->     Michael's work.
->=20
-> Changes in v5:
->   Added memset() to clear synic_message_page and synic_event_page()
-> after set_memory_decrypted().
->   Rebased the patch since "post_msg_page" has been removed in
-> hyperv-next.
->   Improved the error handling in hv_synic_alloc()/free() [Michael
-> Kelley]
->=20
-> diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
-> index fb8b2c088681..16919c7b3196 100644
-> --- a/arch/x86/hyperv/hv_apic.c
-> +++ b/arch/x86/hyperv/hv_apic.c
-> @@ -173,7 +173,8 @@ static bool __send_ipi_mask(const struct cpumask *mas=
-k, int
-> vector,
->  	    (exclude_self && weight =3D=3D 1 && cpumask_test_cpu(this_cpu, mask=
-)))
->  		return true;
->=20
-> -	if (!hv_hypercall_pg)
-> +	/* A TDX guest doesn't use hv_hypercall_pg. */
-> +	if (!hv_isolation_type_tdx() && !hv_hypercall_pg)
->  		return false;
->=20
->  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
-> @@ -227,7 +228,8 @@ static bool __send_ipi_one(int cpu, int vector)
->=20
->  	trace_hyperv_send_ipi_one(cpu, vector);
->=20
-> -	if (!hv_hypercall_pg || (vp =3D=3D VP_INVAL))
-> +	/* A TDX guest doesn't use hv_hypercall_pg. */
-> +	if ((!hv_isolation_type_tdx() && !hv_hypercall_pg) || (vp =3D=3D VP_INV=
-AL))
->  		return false;
->=20
->  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index f175e0de821c..f28357ecad7d 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -79,7 +79,7 @@ static int hyperv_init_ghcb(void)
->  static int hv_cpu_init(unsigned int cpu)
->  {
->  	union hv_vp_assist_msr_contents msr =3D { 0 };
-> -	struct hv_vp_assist_page **hvp =3D &hv_vp_assist_page[cpu];
-> +	struct hv_vp_assist_page **hvp;
->  	int ret;
->=20
->  	ret =3D hv_common_cpu_init(cpu);
-> @@ -89,6 +89,7 @@ static int hv_cpu_init(unsigned int cpu)
->  	if (!hv_vp_assist_page)
->  		return 0;
->=20
-> +	hvp =3D &hv_vp_assist_page[cpu];
->  	if (hv_root_partition) {
->  		/*
->  		 * For root partition we get the hypervisor provided VP assist
-> @@ -398,11 +399,21 @@ void __init hyperv_init(void)
->  	if (hv_common_init())
->  		return;
->=20
-> -	hv_vp_assist_page =3D kcalloc(num_possible_cpus(),
-> -				    sizeof(*hv_vp_assist_page), GFP_KERNEL);
-> +	/*
-> +	 * The VP assist page is useless to a TDX guest: the only use we
-> +	 * would have for it is lazy EOI, which can not be used with TDX.
-> +	 */
-> +	if (hv_isolation_type_tdx())
-> +		hv_vp_assist_page =3D NULL;
-> +	else
-> +		hv_vp_assist_page =3D kcalloc(num_possible_cpus(),
-> +					    sizeof(*hv_vp_assist_page),
-> +					    GFP_KERNEL);
->  	if (!hv_vp_assist_page) {
->  		ms_hyperv.hints &=3D ~HV_X64_ENLIGHTENED_VMCS_RECOMMENDED;
-> -		goto common_free;
-> +
-> +		if (!hv_isolation_type_tdx())
-> +			goto common_free;
->  	}
->=20
->  	if (hv_isolation_type_snp()) {
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index a87fb934cd4b..e9106c9d92f8 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -405,8 +405,27 @@ static void __init ms_hyperv_init_platform(void)
->=20
->  		if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_SNP)
->  			static_branch_enable(&isolation_type_snp);
-> -		else if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_TDX)
-> +		else if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_TDX) {
->  			static_branch_enable(&isolation_type_tdx);
-> +
-> +			/*
-> +			 * The GPAs of SynIC Event/Message pages and VMBus
-> +			 * Moniter pages need to be added by this offset.
-> +			 */
-> +			ms_hyperv.shared_gpa_boundary =3D cc_mkdec(0);
-> +
-> +			/* Don't use the unsafe Hyper-V TSC page */
-> +			ms_hyperv.features &=3D ~HV_MSR_REFERENCE_TSC_AVAILABLE;
-> +
-> +			/* HV_REGISTER_CRASH_CTL is unsupported */
-> +			ms_hyperv.misc_features &=3D ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
-> +
-> +			/* Don't trust Hyper-V's TLB-flushing hypercalls */
-> +			ms_hyperv.hints &=3D ~HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED;
-> +
-> +			/* A TDX VM must use x2APIC and doesn't use lazy EOI */
-> +			ms_hyperv.hints &=3D ~HV_X64_APIC_ACCESS_RECOMMENDED;
-> +		}
->  	}
->=20
->  	if (hv_max_functions_eax >=3D HYPERV_CPUID_NESTED_FEATURES) {
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 4e1407d59ba0..fa7dce26ec67 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -18,6 +18,7 @@
->  #include <linux/clockchips.h>
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
-> +#include <linux/set_memory.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
->  #include "hyperv_vmbus.h"
-> @@ -116,6 +117,7 @@ int hv_synic_alloc(void)
->  {
->  	int cpu;
->  	struct hv_per_cpu_context *hv_cpu;
-> +	int ret =3D -ENOMEM;
->=20
->  	/*
->  	 * First, zero all per-cpu memory areas so hv_synic_free() can
-> @@ -159,6 +161,28 @@ int hv_synic_alloc(void)
->  				goto err;
->  			}
->  		}
-> +
-> +		/* It's better to leak the page if the decryption fails. */
-> +		if (hv_isolation_type_tdx()) {
-> +			ret =3D set_memory_decrypted(
-> +				(unsigned long)hv_cpu->synic_message_page, 1);
-> +			if (ret) {
-> +				pr_err("Failed to decrypt SYNIC msg page\n");
-> +				hv_cpu->synic_message_page =3D NULL;
-> +				goto err;
-> +			}
-> +
-> +			ret =3D set_memory_decrypted(
-> +				(unsigned long)hv_cpu->synic_event_page, 1);
-> +			if (ret) {
-> +				pr_err("Failed to decrypt SYNIC event page\n");
-> +				hv_cpu->synic_event_page =3D NULL;
-> +				goto err;
-> +			}
+- arch/arm64/boot/dts/qcom/msm8916-samsung-a2015-common.dtsi
+     used by:
+     - msm8916-samsung-a3u-eur.dts
+     - msm8916-samsung-a5u-eur.dts
+- arch/arm64/boot/dts/qcom/msm8916-samsung-e2015-common.dtsi
+     used by:
+     - msm8916-samsung-e5.dts
+     - msm8916-samsung-e7.dts
+     - msm8916-samsung-grandmax.dts
+- arch/arm64/boot/dts/qcom/msm8916-samsung-serranove.dts
 
-The error handling still doesn't work quite correctly.   In the TDX case, u=
-pon
-exiting this function, the synic_message_page and the synic_event_page must
-each either be mapped decrypted or be NULL.  This requirement is so
-that hv_synic_free() will do the right thing in changing the mapping back t=
-o
-encrypted.  hv_synic_free() can't handle a non-NULL page being encrypted.
+not yet mainlined:
+- arch/arm64/boot/dts/qcom/msm8916-samsung-gprime-common.dtsi
+     used by:
+     - msm8916-samsung-fortuna3g.dts
+     - msm8916-samsung-fortunaltezt.dts
+     - msm8916-samsung-gprimeltecan.dts
 
-In the above code, if we fail to decrypt the synic_message_page, then setti=
-ng
-it to NULL will leak the page (which we'll live with) and ensures that hv_s=
-ynic_free()
-will handle it correctly.  But at that point we'll exit with synic_event_pa=
-ge
-non-NULL and in the encrypted state, which hv_synic_free() can't handle.
+They all have either an SM5502 or SM5504 MUIC (Micro-USB Interface 
+Controller) chip installed. It reports the information what type of 
+connector got plugged into the USB plug. An example for the devicetree 
+entry can be found at the bottom of 
+Documentation/devicetree/bindings/extcon/siliconmitus,sm5502-muic.yaml [1].
 
-Michael
+Documentation on the connector binding you are referring to would be the 
+following, I guess: 
+Documentation/devicetree/bindings/connector/usb-connector.yaml [2].
 
-> +
-> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
-> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
-> +		}
->  	}
->=20
->  	return 0;
-> @@ -167,18 +191,40 @@ int hv_synic_alloc(void)
->  	 * Any memory allocations that succeeded will be freed when
->  	 * the caller cleans up by calling hv_synic_free()
->  	 */
-> -	return -ENOMEM;
-> +	return ret;
->  }
->=20
->=20
->  void hv_synic_free(void)
->  {
->  	int cpu;
-> +	int ret;
->=20
->  	for_each_present_cpu(cpu) {
->  		struct hv_per_cpu_context *hv_cpu
->  			=3D per_cpu_ptr(hv_context.cpu_context, cpu);
->=20
-> +		/* It's better to leak the page if the encryption fails. */
-> +		if (hv_isolation_type_tdx()) {
-> +			if (hv_cpu->synic_message_page) {
-> +				ret =3D set_memory_encrypted((unsigned long)
-> +					hv_cpu->synic_message_page, 1);
-> +				if (ret) {
-> +					pr_err("Failed to encrypt SYNIC msg page\n");
-> +					hv_cpu->synic_message_page =3D NULL;
-> +				}
-> +			}
-> +
-> +			if (hv_cpu->synic_event_page) {
-> +				ret =3D set_memory_encrypted((unsigned long)
-> +					hv_cpu->synic_event_page, 1);
-> +				if (ret) {
-> +					pr_err("Failed to encrypt SYNIC event page\n");
-> +					hv_cpu->synic_event_page =3D NULL;
-> +				}
-> +			}
-> +		}
-> +
->  		free_page((unsigned long)hv_cpu->synic_event_page);
->  		free_page((unsigned long)hv_cpu->synic_message_page);
->  	}
-> @@ -215,7 +261,8 @@ void hv_synic_enable_regs(unsigned int cpu)
->  		if (!hv_cpu->synic_message_page)
->  			pr_err("Fail to map synic message page.\n");
->  	} else {
-> -		simp.base_simp_gpa =3D virt_to_phys(hv_cpu->synic_message_page)
-> +		simp.base_simp_gpa =3D
-> +			cc_mkdec(virt_to_phys(hv_cpu->synic_message_page))
->  			>> HV_HYP_PAGE_SHIFT;
->  	}
->=20
-> @@ -234,7 +281,8 @@ void hv_synic_enable_regs(unsigned int cpu)
->  		if (!hv_cpu->synic_event_page)
->  			pr_err("Fail to map synic event page.\n");
->  	} else {
-> -		siefp.base_siefp_gpa =3D virt_to_phys(hv_cpu->synic_event_page)
-> +		siefp.base_siefp_gpa =3D
-> +			cc_mkdec(virt_to_phys(hv_cpu->synic_event_page))
->  			>> HV_HYP_PAGE_SHIFT;
->  	}
->=20
-> --
-> 2.25.1
+It's not clear to me what to do. To my understanding, in the devicetree 
+of the device a "connector" node should be placed within the extcon/muic 
+node. Like this? (Connector node at the very bottom.)
 
+i2c-muic {
+	compatible = "i2c-gpio";
+	sda-gpios = <&msmgpio 105 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+	scl-gpios = <&msmgpio 106 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&muic_i2c_default>;
+
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	muic: extcon@14 {
+		compatible = "siliconmitus,sm5504-muic";
+		reg = <0x14>;
+
+		interrupt-parent = <&msmgpio>;
+		interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&muic_irq_default>;
+
+		usb_con: connector {
+			compatible = "usb-b-connector";
+			label = "micro-USB";
+			type = "micro";
+		};
+	};
+};
+
+And how to set up the rt5033-charger to retrieve the information of the 
+extcon/muic driver in that case?
+
+I was looking for examples but didn't find anything that helped me to 
+answer that question.
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/extcon/siliconmitus,sm5502-muic.yaml?h=v6.3
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/connector/usb-connector.yaml?h=v6.3
+
+Kind regards,
+Jakob
