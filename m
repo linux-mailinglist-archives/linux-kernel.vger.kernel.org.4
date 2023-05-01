@@ -2,234 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C306F2FE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC5C6F2FF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 11:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjEAJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 05:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S232269AbjEAJu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 05:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEAJcc (ORCPT
+        with ESMTP id S231370AbjEAJuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 05:32:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA918DB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682933502;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rfrh+7kaOJeU3MxVxJJhz257T3FA+oAcp5E+/uMsCCQ=;
-        b=HGmFKS4QOcUt/QgpRX1+dqbdt2UpIEBsCJnxGRNsOAW4rcvdBY1t144t0PCdpYw2MaIqbg
-        AySUzufeLq561z+I4H7DQ4sR8mYr512I4Fn+8y5+ufK71FyPnHxcC5/J8/3dwaowMEXHA/
-        sNetNjw251qwzhrSAFwG4oPUjaXXf+A=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-557-yPCzTdbLMqyzbae0xoxelA-1; Mon, 01 May 2023 05:31:41 -0400
-X-MC-Unique: yPCzTdbLMqyzbae0xoxelA-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50bcaaeaec0so137251a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:31:40 -0700 (PDT)
+        Mon, 1 May 2023 05:50:54 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B2C1B7
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 02:50:53 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so1648672a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 02:50:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1682934651; x=1685526651;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R3qMWocL6/wpbuDG6gR5Wtg+ZCiwCsubf8C3G4b5aRI=;
+        b=pezXIELbzEAcCjV+boWauNmc5FQspzcpLCEDI67YIbKjgfsjTRBKe0Wf1wNUHmk3nN
+         aJoPy4O0HwPQBG4M/iEiPUcZl8mqheFvGGEJs5FgO/ikYVqByWbj9QFqdO4bG7jG8UtR
+         RRNyIunTTrHFKdrMpfP7Nsiz+Skn7pFEk6SV3A+sbnvkWriC7e8QOxRNl3HwA99ta9ff
+         /zV8wOJnyflarJDy9mG1Jo3lM7CSov/LGAnQNieTzTzr0o24xCgQubpfFWADbpQl7T68
+         KlPoPIeZjUtFfecyoHnbbms6ha2I7OBuMR/O2SrjLbbYt7/8DboATrH913BBTLXgtI/Y
+         lCSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682933500; x=1685525500;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1682934651; x=1685526651;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rfrh+7kaOJeU3MxVxJJhz257T3FA+oAcp5E+/uMsCCQ=;
-        b=cd/e4hHe3OTeE+6ThUrSDKeAJ/ChZLI5WcixLobZZ4srKiDUqdE+G2QbR6lNeFhDLv
-         Ot8gQKJ/nZAP2mZLvKu6vsWZa7QadlWfTubMpkScKzQotkAVUGN8tPViDWQOVb9hG7BI
-         ZWkiCrtczDUqxea+X9RgSC4SQQdMtwFDrhKSQ0AVic/FqiwsyXR/ScKrgywxRRJoe1VX
-         /hqup1DM8IGPW+SqYmwPUW7f3K3pPMl4aKGxtjdKh/BUsAqdSIbp16PeJdwynK6Vvisg
-         CSf+PhDcssEMX1k8h0RZEb3lEz3CTNIAyCzgT2h2SR/eZmXU28CZ31NuC/NXinKevkDd
-         wj3w==
-X-Gm-Message-State: AC+VfDw19KhAYowuErCubT7N2o0C/rAhgKjWxl2NG7vYYxBicXEyVQ1o
-        Csii6vKb0KdToOzcYKqQ98P23luLLP3Zrfxxgd9XncqkJBdSFRwRD65IDtGAVxhNxWU931MhWpe
-        Mb1RPesLfEoouKUxbOmc7sKKC
-X-Received: by 2002:a05:6402:184c:b0:506:996a:6721 with SMTP id v12-20020a056402184c00b00506996a6721mr4814475edy.24.1682933500072;
-        Mon, 01 May 2023 02:31:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ56nTd55vT6dyb8LZhr/WT72L+TkxoXAoU8dfaea896/rR3LIj052CK+0uX7P0biBF+xDurGA==
-X-Received: by 2002:a05:6402:184c:b0:506:996a:6721 with SMTP id v12-20020a056402184c00b00506996a6721mr4814462edy.24.1682933499772;
-        Mon, 01 May 2023 02:31:39 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id aa21-20020a170907355500b00957dad777c1sm12247743ejc.107.2023.05.01.02.31.38
+        bh=R3qMWocL6/wpbuDG6gR5Wtg+ZCiwCsubf8C3G4b5aRI=;
+        b=fZW7rfJ34XfCbIH89QcNESZvRRfVfiVLsOjIddQnLA0vygqHPyRIobiphXyBvZaHSL
+         tSZP6h5AvyJ0t/vWPCsj7GvuDNHAifRz3vf88IrRfwB3rpge5+eOHfQwalE78IHiy5ty
+         8oqR7rkVsAdauFjbyEX1cWn9UAOD7Lf4Wl5I04KCSdiE3GF6EJWZjuBjCMk2KDlKBkZ4
+         TJTLh+cjkimlBZUYXivEBDlTKm6uU390MdLZEvNQfn1CVY2zUaT7NFN0UtqhIPbAwJHH
+         1ZSYonhUTGPcrc9Dr8eUF/8xPJ8PUXXsp+f8dZD+2fAqZnH41cfV9FcFVQ6frzivLUtX
+         wK9g==
+X-Gm-Message-State: AC+VfDxDr13n/jsmcqbBEgej4STtGa6tw0owlCYSCg03RgKvquO2BhCy
+        f+Sh2m2/oaJ3RQf1Kq9wOWJ0UQ==
+X-Google-Smtp-Source: ACHHUZ5aoCRJwdM01aHJAYJ6FZM0GaX+jTFGr55aLgScxrfNq6frPl2fubj4mP8pK+VDgPengBFaAA==
+X-Received: by 2002:aa7:cd10:0:b0:506:b228:7aff with SMTP id b16-20020aa7cd10000000b00506b2287affmr5635208edw.23.1682934651694;
+        Mon, 01 May 2023 02:50:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:637a:fd0c:58fd:9f00? ([2a02:810d:15c0:828:637a:fd0c:58fd:9f00])
+        by smtp.gmail.com with ESMTPSA id n20-20020aa7d054000000b004fc01b0aa55sm12145335edo.4.2023.05.01.02.50.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 02:31:38 -0700 (PDT)
-Message-ID: <1c216a2e-2f97-b6f9-bf09-67b85e932322@redhat.com>
-Date:   Mon, 1 May 2023 11:31:37 +0200
+        Mon, 01 May 2023 02:50:51 -0700 (PDT)
+Message-ID: <2b79021d-3793-5f2d-8659-5d0d8fc78017@linaro.org>
+Date:   Mon, 1 May 2023 11:50:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] platform/x86: wmi: Allow retrieving the number of WMI
- object instances
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 05/11] dt-bindings: arm: Add initial bindings for
+ Nuvoton platform
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        tmaimon77@gmail.com, catalin.marinas@arm.com, will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, schung@nuvoton.com,
+        mjchen@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230425102418.185783-1-ychuang570808@gmail.com>
+ <20230425102418.185783-6-ychuang570808@gmail.com>
 Content-Language: en-US
-To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
-Cc:     Mario.Limonciello@amd.com, prasanth.ksr@dell.com,
-        jorgealtxwork@gmail.com, james@equiv.tech,
-        Dell.Client.Kernel@dell.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230430203153.5587-1-W_Armin@gmx.de>
- <20230430203153.5587-2-W_Armin@gmx.de>
- <756215f5-d99c-b172-13f6-1a15e026bf65@redhat.com>
- <3bfa4a8c-1260-3fc0-9f83-2958467ca596@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <3bfa4a8c-1260-3fc0-9f83-2958467ca596@gmx.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230425102418.185783-6-ychuang570808@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 4/30/23 23:01, Armin Wolf wrote:
-> Am 30.04.23 um 22:41 schrieb Hans de Goede:
+On 25/04/2023 12:24, Jacky Huang wrote:
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
->> Hi Armin,
->>
->> On 4/30/23 22:31, Armin Wolf wrote:
->>> Currently, the WMI driver core knows how many instances of a given
->>> WMI object exist, but WMI drivers cannot access this information.
->>> At the same time, some current and upcoming WMI drivers want to
->>> have access to this information. Add wmi_instance_count() and
->>> wmidev_instance_count() to allow WMI drivers to get the number of
->>> WMI object instances.
->>>
->>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
->> Thank you for your work on this.
->>
->>> ---
->>>   drivers/platform/x86/wmi.c | 41 ++++++++++++++++++++++++++++++++++++++
->>>   include/linux/acpi.h       |  2 ++
->>>   include/linux/wmi.h        |  2 ++
->>>   3 files changed, 45 insertions(+)
->>>
->>> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
->>> index c226dd4163a1..5b95d7aa5c2f 100644
->>> --- a/drivers/platform/x86/wmi.c
->>> +++ b/drivers/platform/x86/wmi.c
->>> @@ -263,6 +263,47 @@ int set_required_buffer_size(struct wmi_device *wdev, u64 length)
->>>   }
->>>   EXPORT_SYMBOL_GPL(set_required_buffer_size);
->>>
->>> +/**
->>> + * wmi_instance_count - Get number of WMI object instances
->>> + * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
->>> + *
->>> + * Get the number of WMI object instances.
->>> + *
->>> + * Returns: Number of WMI object instances or negative error code.
->>> + */
->>> +int wmi_instance_count(const char *guid_string)
->>> +{
->>> +    struct wmi_block *wblock;
->>> +    acpi_status status;
->>> +
->>> +    status = find_guid(guid_string, &wblock);
->>> +    if (ACPI_FAILURE(status)) {
->>> +        if (status == AE_BAD_PARAMETER)
->>> +            return -EINVAL;
->>> +
->>> +        return -ENODEV;
->> Maybe just return 0 here ?
->>
->> The GUID not existing at all does not seem like
->> an error to me, but rather a case of there
->> being 0 instances.
->>
->> This will also allow patch 2/2 to completely
->> drop the get_instance_count() function and
->> replace its callers with direct calls to
->> wmi_instance_count() as the code is known
->> to always pass a valid GUID, so it won't hit
->> the -EINVAL path.
->>
->> Regards,
->>
->> Hans
->>
-> Hi,
+> Move 'nuvoton,npcm-gcr.yaml' from 'arm/npcm' to 'soc/nuvoton'.
+> Rename the '/arm/npcm' directory to 'arm/nuvoton'. Additionally, add
+> bindings for ARMv8-based Nuvoton SoCs and platform boards, and include
+> the initial bindings for ma35d1 series development boards.
 > 
-> i would prefer returning -ENODEV instead of 0, so WMI drivers can
-> distinguish between "not found" and "zero instances".
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  .../bindings/arm/nuvoton/nuvoton,ma35d1.yaml  | 30 +++++++++++++++++++
+>  .../npcm.yaml => nuvoton/nuvoton,npcm.yaml}   |  2 +-
+>  .../nuvoton/nuvoton,npcm-gcr.yaml}            |  2 +-
+>  3 files changed, 32 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/nuvoton/nuvoton,ma35d1.yaml
 
-Ah right, that is a good point, ok lets keep this as is then.
+I don't see any improvements here. Path in maintainers is still broken.
 
-Regards,
-
-Hans
-
-
-
-
-> Also i do not
-> think that relying on the parameter of get_instance_count() always
-> being a valid GUID is a good idea, just in case wmi_instance_count()
-> is later modified to be able to encounter runtime errors.
-> 
-> Armin Wolf
-> 
->>
->>> +    }
->>> +
->>> +    return wmidev_instance_count(&wblock->dev);
->>> +}
->>> +EXPORT_SYMBOL_GPL(wmi_instance_count);
->>> +
->>> +/**
->>> + * wmidev_instance_count - Get number of WMI object instances
->>> + * @wdev: A wmi bus device from a driver
->>> + *
->>> + * Get the number of WMI object instances.
->>> + *
->>> + * Returns: Number of WMI object instances.
->>> + */
->>> +u8 wmidev_instance_count(struct wmi_device *wdev)
->>> +{
->>> +    struct wmi_block *wblock = container_of(wdev, struct wmi_block, dev);
->>> +
->>> +    return wblock->gblock.instance_count;
->>> +}
->>> +EXPORT_SYMBOL_GPL(wmidev_instance_count);
->>> +
->>>   /**
->>>    * wmi_evaluate_method - Evaluate a WMI method (deprecated)
->>>    * @guid_string: 36 char string of the form fa50ff2b-f2e8-45de-83fa-65417f2f49ba
->>> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
->>> index efff750f326d..e52bf2742eaf 100644
->>> --- a/include/linux/acpi.h
->>> +++ b/include/linux/acpi.h
->>> @@ -412,6 +412,8 @@ extern bool acpi_is_pnp_device(struct acpi_device *);
->>>
->>>   typedef void (*wmi_notify_handler) (u32 value, void *context);
->>>
->>> +int wmi_instance_count(const char *guid);
->>> +
->>>   extern acpi_status wmi_evaluate_method(const char *guid, u8 instance,
->>>                       u32 method_id,
->>>                       const struct acpi_buffer *in,
->>> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
->>> index c1a3bd4e4838..763bd382cf2d 100644
->>> --- a/include/linux/wmi.h
->>> +++ b/include/linux/wmi.h
->>> @@ -35,6 +35,8 @@ extern acpi_status wmidev_evaluate_method(struct wmi_device *wdev,
->>>   extern union acpi_object *wmidev_block_query(struct wmi_device *wdev,
->>>                            u8 instance);
->>>
->>> +u8 wmidev_instance_count(struct wmi_device *wdev);
->>> +
->>>   extern int set_required_buffer_size(struct wmi_device *wdev, u64 length);
->>>
->>>   /**
->>> -- 
->>> 2.30.2
->>>
-> 
+Best regards,
+Krzysztof
 
