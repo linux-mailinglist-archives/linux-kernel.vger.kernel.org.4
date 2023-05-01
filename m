@@ -2,164 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E286F35E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D908C6F35E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjEASi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S230114AbjEASjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjEASix (ORCPT
+        with ESMTP id S229871AbjEASji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:38:53 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0471986;
-        Mon,  1 May 2023 11:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682966332; x=1714502332;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=fnSXNicqRaAf/lDuQ95cfep6naWAgLuVKMjjTZJP4Xg=;
-  b=hBKgu8M2SHPHN2HGbcGf9p8+oddlbRnfF7eU4IUT6VHIofbLJsMnHe2b
-   0Wl6lSwRY3+bEpud6TCz4u5160jFvZF4vLc158gigx5jenfvGrS7+6vwv
-   42x8j6AfpmI99A+8XAKJloJo+R6iml2oVobzKy9yE85pQKbIWa4jN+5Ig
-   6zsZCBSuk5aOHuDNgUblwMjtUB85oNDYNBsBEOMCe7zrNnLF0Dq93yiyH
-   fWYVilz6k+vdV00IVybyUbWvgLkt2AnH7M/cQdCweWleXperl2kyuNSkV
-   3sUG5b9OdoMYgHjHAUGVoGTXT/kqOTBKKfomfi8mWz0kZc0smBzmsykpB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="351179221"
-X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
-   d="scan'208";a="351179221"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 11:38:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="807529995"
-X-IronPort-AV: E=Sophos;i="5.99,241,1677571200"; 
-   d="scan'208";a="807529995"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 01 May 2023 11:38:51 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 1 May 2023 11:38:50 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 1 May 2023 11:38:50 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 1 May 2023 11:38:50 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 1 May 2023 11:38:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FkxosQcYMKausW3ITG6ckdNs7fMNO66n2DEjWUD+QKuHKNYzuGaXYViBjzNG641nHOk9zQE5GEHS0e6p/sp40DgqK3F0SDY4zCZoe48ffDBYccoykoMKVBZ2zeqE7yDViPDRwAm8yynvnDx4RFncvslbOLCmHRm39HIJgxmFsmavMNNwfOMQ36jYntHb8mo/rIpXS6kBtYaW1HLu0DpbxLIc/2A1p9tNOrbEq4E4XPF+DPpmomdxCtA1abr5VrD/tKu18H7/rvCIzrPsJZHnB7Up5u+uTPbscNeV7nzZtIJA1MINUGimBTLRdIlT73csapfvg1gfVsNreuhaXRm+yA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sa6BvLGg+gFjnH+3s3ESLV+wiWMBfQ3M1a8E94QGMlg=;
- b=HTi5pOlqHoWI0CqNnoNMUxGVoi8/UC7OlwXJgTUvqQT3z6GaBgxTQZqeYb34vc81fPdJEjmc0HOWBhI1mixKYU27xyuvCJSy6PVGdrcuw/rebSomh8ueCPcGhYK4y1jdVexif7UvrUNePK3PvNbZVApwJjMxUCw/Ds2Te4KwKbh9j9CpfE29t6zMo1Lvy439Qy0RLATcbPMsf+ZATY8lB8K12EVwiQDyfX95Xl/yPr0OM5gHMfi5Lrk2aU0sMjvaLFN8xGzgY2hTsSSI5FrinjBWBq910Vm0dK9RB+JS+ehpouktrER5iT684eCHVvqWgOAlw5Vq78YH4j5ipCxkjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com (2603:10b6:208:3d7::17)
- by DS7PR11MB6269.namprd11.prod.outlook.com (2603:10b6:8:97::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 18:38:46 +0000
-Received: from IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::bbe8:5390:54c6:b0e2]) by IA1PR11MB6097.namprd11.prod.outlook.com
- ([fe80::bbe8:5390:54c6:b0e2%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 18:38:46 +0000
-Message-ID: <e235d406-768b-71f6-7f1b-828087cd37e3@intel.com>
-Date:   Mon, 1 May 2023 11:39:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.11.0
-Subject: Re: [PATCH v3 03/15] dmaengine: idxd: Export drv_enable/disable and
- related functions
-Content-Language: en-US
-To:     Tom Zanussi <tom.zanussi@linux.intel.com>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <vkoul@kernel.org>
-CC:     <dave.jiang@intel.com>, <tony.luck@intel.com>,
-        <wajdi.k.feghali@intel.com>, <james.guilford@intel.com>,
-        <kanchana.p.sridhar@intel.com>, <giovanni.cabiddu@intel.com>,
-        <hdanton@sina.com>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>
-References: <20230428205539.113902-1-tom.zanussi@linux.intel.com>
- <20230428205539.113902-4-tom.zanussi@linux.intel.com>
-From:   Fenghua Yu <fenghua.yu@intel.com>
-In-Reply-To: <20230428205539.113902-4-tom.zanussi@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0010.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::23) To IA1PR11MB6097.namprd11.prod.outlook.com
- (2603:10b6:208:3d7::17)
+        Mon, 1 May 2023 14:39:38 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920D319B0;
+        Mon,  1 May 2023 11:39:33 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-958bb7731a9so581784166b.0;
+        Mon, 01 May 2023 11:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1682966372; x=1685558372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vy8LMgK7nlj8Hadd9P4DNIqtoF7V1DAnGwP0/fa2hB8=;
+        b=U5D7cxNQTURT8xwkIm3G1FjwzyMGG5dzHJMisO4ldoGpHCh2i4+CzU5YRAlZCAKUGD
+         Xn6lbly6fyylDsFJy7yJgxXVXxkji8ExeXlGf6txh4V/hW7XCBVIKBxy5q71Bivb2V2c
+         uIgmKUQHOAA0WMq1LxPtFAvSwnlWRx2YBULmIgt+592UWgpHwxO75jhDHOoB4H82COlr
+         yy1R9sUHSAI2/hJ6oWc4RqgrpbJv+uy9qVnZ5qo62qEQ5zgJMIrAASjE+RcYdFefYVw3
+         JNfCACRGxcC0WO5XEoqMtPKgw6j3KM5b4jUV2TgDyTT4trKxdU2Pwl0XeAcsxa+mW/xZ
+         q4Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682966372; x=1685558372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vy8LMgK7nlj8Hadd9P4DNIqtoF7V1DAnGwP0/fa2hB8=;
+        b=GTht1OR/nC15lh+sV/bB5WPtgJG6yqyQnFByLd0WILfwMG7+Jvl9GzHCI/MErrzThv
+         p++csaxonEZ0kdA4P08KckwtaSYKhKFhP4pOQKLhVyyxzEjunZUsj1VFUBEElaCpk/5y
+         5T8oN1BD+2LT+obINAvt6fvz359iCiKeEzJ3Ae5ay+AwnJ/bzD6NqFTxtSKrgzVBOmuL
+         t8KEir4O7LJp+CGE8Vm1xqpoWvj1sYbOXHi+lwpQdDMeXPVJ9MMECMP4CNkgxbAvNX1q
+         YrSfuJ8uJAAkIvBAnRFCIGo5WGzgTqZryUDNKggyBLAYbA6af9gxJpU6rF7OwBR1Y6vQ
+         WJfw==
+X-Gm-Message-State: AC+VfDwJnqq0SCEh+eOViKA/kePQSpvDpABm3ndbq7vofJzJke0KbS+W
+        tpcWLG1pW5bkTxxeNh6dMvyOMp8JKSrwUGDqFs0=
+X-Google-Smtp-Source: ACHHUZ7XYkmDWh6C7QrAP5IrIgIh54a4MMgW7FDGV1Ipa9leHn0ud1zf0ChP3eFCS4Yg4qGriQmF6zeP4UR5ar4Bb4U=
+X-Received: by 2002:a17:907:160a:b0:94f:21cf:86c6 with SMTP id
+ hb10-20020a170907160a00b0094f21cf86c6mr14226257ejc.51.1682966371921; Mon, 01
+ May 2023 11:39:31 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR11MB6097:EE_|DS7PR11MB6269:EE_
-X-MS-Office365-Filtering-Correlation-Id: eeb5bb6a-6593-4e18-40c0-08db4a734c1a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: InZI42httc6YzcawE3z8JUj3e0l01fXqI3y2vktBzgv17sakhBdkGnpM9mF33OyvOvj3caWOzihUpZ6OCeaGSIAE1gptxJCUKdxeQh9oDUWis9hoq3R5/OpwDodOhZpYvydnfnDvVrJZZ6cAVeZfjd8hUL+ttuZBVMwPNg5Y6CXMNCVTX+7NY2//wINYEY7oOUG78D02SfHOVl1r2iTZBDZZMwEFJ3KnSHgk6etfesHQwWmixXSSVJaOgduL3nTxOpUYh7lRyRxTxPDhm6x+gYT6TvaqeN7fZtAoMGrABm3AkuOlP/PUH36CSTOdFrXVDpxpWb8UJP+791i/6q7cr8q6XFFiQ+R4zYuxIFVL804ETjohuo4F+h1K7XUod0KqZo8B9qfkalkBYpG/quf/Mel6HqsLCVK4N7eyWzgvHgbHTbrg3jBh9+g1dshZ1RsxEXfx9ePIxiYJtbaxVRT0oG0J0G06z4J4tqkb8XbGA7+8l58KP+c0ke/Phm9+7SexEw/U1UwbBJ7D/IucfQJx9+M0fnbuXqJCp/HDmrZW+j7JM8CqdioWGvONekRYnDBfYuHdhkEvjXiSRsPKH44K+E4ktYgMwgu/2IVFRWRcwVJJd+xnuc925iYlwjA/Y9v3H1RYc5yA3d6KHBuo+nVnig==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6097.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(346002)(366004)(376002)(136003)(451199021)(31686004)(31696002)(86362001)(558084003)(36756003)(82960400001)(38100700002)(2616005)(6512007)(6506007)(186003)(26005)(53546011)(6486002)(6666004)(478600001)(4326008)(66946007)(66476007)(8936002)(41300700001)(66556008)(316002)(44832011)(5660300002)(8676002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2EzcTJYb1JVdnB6QU9xOHRYN3dsTTVMQVIzeDJnOFlmdm1kaHFIcFg4WWF1?=
- =?utf-8?B?RERCUkNMaitzTVZEbVgwTmhYdGxUbHlVSmU5OFc0ZlBpNDVib1dBWHVsUVFW?=
- =?utf-8?B?cnBoTTdudmpZWDA0Um9IbnRodldRdzV3bWJvYjFjbzA0dk1NSUJFMEh0bUpG?=
- =?utf-8?B?U1FLMXVvYkdjSGgzdEVzeUNRYzBtT3lpU2lDS2NPR1U5TThROFJaRzRQclAr?=
- =?utf-8?B?ZHBOd3hhRUtRVmxtSmpOa1BGNTlTb2tzMGtxc0ROMW0rZGNrRmxONlhDbUM3?=
- =?utf-8?B?VDVmQ3BSTVJqcUl2endCZFBZdG84TFFNb3R2K3BsU0RlV09yY0gzY3V2NGwz?=
- =?utf-8?B?MVhOYjlNcUdEV0tGTnNVeElkeGdiRWdSajNUNStIYkpJMUtETW80TkRIZGlM?=
- =?utf-8?B?OUlTUWdadmN6SWNTZzU0N2oxNUFaUWlhaFpKZSsxc0cvTTlvMkZVSzUwRmM4?=
- =?utf-8?B?c1o5cTRvZ1Q4SW9oemVwYjIrRzlLbmdWMW9GQ3VwSDAxK3ZFWFhjZnVid09K?=
- =?utf-8?B?aXZzQWRDZVdBS3JXUXBQcXo1UEEzZmkrd2t6ZTFGN1JUQ09HY2lvVkVYVVBa?=
- =?utf-8?B?aCtrbWcrRzM0NWpCd1kzdlI1UHkxSVdpK0o3VDd5QUdvMm1sS0VMdDV0TGky?=
- =?utf-8?B?RkNFVkxocmRGTFRUODg1T25YVGFNQ2pwcTRhNm82a3JJeEdKMG9XeDM2N0lU?=
- =?utf-8?B?MXhRYjF4Sk8zWjY4RFJBaklkcXRaSHZkQUdIbUVlenJrSWx2dlR6aFY3MXJz?=
- =?utf-8?B?T2tqWG9uWnoyWlU1RDhSSmNmbFU4US84dFdieW5KR2hqcjByNGdxOW53V0tu?=
- =?utf-8?B?V0oza0JXMWVESm9abFhWamhoWWxEcmFiYTVudE95eVo2LzhhbW55N0psaCtk?=
- =?utf-8?B?UU1mcWtXTXVhMVhxS1hiRkhldXpDcFJPVjdFVFZPbldIMHpyaEFhVzVCUlFn?=
- =?utf-8?B?aElNK0tDa09DMzFNdXVDQktBdWJZYmhVVXJQQkl0dVJTdmJpREdTUHFPNkxW?=
- =?utf-8?B?R2RUTGJIN2FTbmlWblUxMzZ3a1hLKzJUdUFZc0ZpWHpGZzFQMlRVd2UwVTRI?=
- =?utf-8?B?WERpS0tibWlsZ3BwRzNscm83QjVTbHFLVVJ1cTdYV1lyVjhvQ1lQTTNTSjIy?=
- =?utf-8?B?Z0kvbnEzT255Yk5pVGZPbzF6Y0cwcHZ1NHJpTC9YaEZOQVpYZjBPUDMrTlJx?=
- =?utf-8?B?OEdKc2hqdDBzSHZlUngweHJEV0pkTHR4Z2pHNHFRYmNvejZGK2VjMUhHZVNT?=
- =?utf-8?B?VTVjMXJEOHF5MnJjY0tQRUdrbHJyT2ZuNVU5cGgwemVZaE1NdDRCV2gxNllr?=
- =?utf-8?B?MVlTQkZiN2ZQQjBvcFJLUkZEWVhEd1dxL3RyQmEzdkJtenJab21iMmdadjlr?=
- =?utf-8?B?TldBR3NQL0cycE13Q2M3UkhxVnpkV1k3MDFra2tlaE5vL0IvNVp3VVVwaklB?=
- =?utf-8?B?WW5HTlkrYzFXMGVSTFBGNG9mdEhBVHJyVGc0TUNXcjc4aWdkNEJyOW90aTQ5?=
- =?utf-8?B?bWU4VXcxeGRsN3BUZUtUMGtObEg1bTZZaTdlMGhrUzNaRURCZzZuOWVjL2Np?=
- =?utf-8?B?cmhNVkNUdFIyM3JpWVpWbzBEUlN6am5jN2pXdDhKSjZRUENYU1hMUXJublcr?=
- =?utf-8?B?blV6ME5Wa1lIa2hKRFN0Wlhxc2RoQitqUS9YRFFuMU1pQ0dYNHFIeTE2S1FO?=
- =?utf-8?B?RzBidDZLNzBwZ01LVzRrbGE4SVlkR2tvRTMxZ0hta3FOVUZIL09Qa1hvWnln?=
- =?utf-8?B?VWFGK3BQVUVabzlLSWpCcnlndks0NkwwUHplcHh5NzhnZDAxWWtsZlpidXZE?=
- =?utf-8?B?MHR1UU1TcHNFM0dUQXJhL2NrVHVRSlBBNDFYeEh2dWNsa1BGSThPREJIVmsr?=
- =?utf-8?B?ZnVNSFYrSGtpTTBRTENuRGIyQ0hkTzdHVVNEK2VPRmVnQzRqR0ZPWDdtaFc1?=
- =?utf-8?B?bzdGTlRWaWM4eE1Sa25KQTZXTUM1VGluVEN3RFE5K2pzcTByaktqcVQ3WUZj?=
- =?utf-8?B?MU40aHdGaTdnSFc5ekJ6RHRlRW5QWDZVemVlZ3g3Q3VhQTJhMFlFZTFvN2lS?=
- =?utf-8?B?MXpGQXFUMUlKR0FpRXRJR2sxNnptZFhZcHY1RVduWEh5RFV6bGRteFRWY2N4?=
- =?utf-8?Q?5FlGUOlwnMbPTPw7OJ8dVmsDt?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: eeb5bb6a-6593-4e18-40c0-08db4a734c1a
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6097.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 18:38:46.4855
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CHnPw3jb9PPjYLyg4MsIzL/ltynmxzYsqkUW4BG1ZQoDcj/prC8c3Av46PSMYXqv9FIEgpfqnLpLhJfl/jZI8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6269
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230405195927.13487-1-ddrokosov@sberdevices.ru>
+ <20230405195927.13487-5-ddrokosov@sberdevices.ru> <CAFBinCA3uZXzr3RgnWnKV5Qr-CPaZQX5joDg319i_cgzhLJy2g@mail.gmail.com>
+ <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021>
+In-Reply-To: <20230425123304.xjmrkraybp2siwdw@CAB-WSD-L081021>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 1 May 2023 20:39:20 +0200
+Message-ID: <CAFBinCCqx1oHf+PcXBkeRYHnGQChbTTPRyD8SJU+ait+TG+AjQ@mail.gmail.com>
+Subject: Re: [PATCH v13 4/6] clk: meson: a1: add Amlogic A1 PLL clock
+ controller driver
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,16 +77,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Dmitry,
+
+(I'm aware you already posted a v14 - but I'm still replying here to
+continue the discussion on one question I had to keep the context)
+
+On Tue, Apr 25, 2023 at 2:33=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+[...]
+> > > +/* PLL register offset */
+> > > +#define ANACTRL_FIXPLL_CTRL0   0x0
+> > > +#define ANACTRL_FIXPLL_CTRL1   0x4
+> > > +#define ANACTRL_FIXPLL_STS     0x14
+> > > +#define ANACTRL_HIFIPLL_CTRL0  0xc0
+> > > +#define ANACTRL_HIFIPLL_CTRL1  0xc4
+> > > +#define ANACTRL_HIFIPLL_CTRL2  0xc8
+> > > +#define ANACTRL_HIFIPLL_CTRL3  0xcc
+> > > +#define ANACTRL_HIFIPLL_CTRL4  0xd0
+> > > +#define ANACTRL_HIFIPLL_STS    0xd4
+> > Here I have a question that will potentially affect patch 3/6
+> > ("dt-bindings: clock: meson: add A1 PLL clock controller bindings").
+> > In the cover-letter you mentioned that quite a few clocks have been omi=
+tted.
+> > Any dt-bindings that we create need to be stable going forward. That
+> > means: the dt-bindings will always need to describe what the hardware
+> > is capable of, not what the driver implements.
+> > So my question is: do we have all needed inputs described in the
+> > dt-bindings (even though we're omitting quite a few registers here
+> > that will only be added/used in the future)?
+> > Older SoCs require (temporarily) using the XTAL clock for CPU clock
+> > tree changes. To make a long story short: I'm wondering if - at least
+> > - the XTAL clock input is missing.
+>
+> The Amlogic A1 clock engine comprises four clock controllers for
+> peripherals, PLL, CPU, and audio. While the first two have been
+> introduced in the current patch series, the last two will be sent in the
+> next iteration.
+I (think that I) understand this part.
+
+> Presently, the PLL controller driver includes all the required bindings,
+> and the peripherals controller driver has all bindings except for the
+> CPU-related clock.
+Let's stick to the PLL controller bindings for the next part.
+My understanding is that the PLL clock controller registers
+(ANACTRL_*) are managing the following clocks:
+- fixed_pll
+- sys_pll
+- hifi_pll
+- whatever "AUDDDS" is
+- and some miscellaneous registers like ANACTRL_POR_CNTL and
+ANACTRL_MISCTOP_CTRL0
+
+I *think* you got the dt-bindings correct:
+Even though the driver part does not support the hifi_pll yet, this IP
+block seems to have a "hifipll_in" clock input.
+Since the dt-bindings describes the hardware it may describe (for
+example) clock inputs that are not used by the driver yet.
+
+If you agree with my statement from above I'll be able to make my
+original question more specific:
+Since we know that we have all the required inputs for fixed_pll,
+sys_pll and hifi_pll - do you know what AUDDDS is and whether it
+requires any specific clock inputs (other than "fixpll_in" and
+"hifipll_in")?
+
+> However, I do not believe this to be a significant issue. The clock DT
+> bindings are organized to simplify the process of introducing new binding=
+s,
+> whether public or private. For instance, we may add new bindings to
+> include/dt-bindings at the end of the list and increase the overall numbe=
+r,
+> without disrupting the DT bindings ABI (the old numbers will remain
+> unchanged).
+Yep, this part is clear to me. I should have been more specific that I
+was asking about the inputs that are described in the .yaml file, not
+the clock IDs.
 
 
-On 4/28/23 13:55, Tom Zanussi wrote:
-> To allow idxd sub-drivers to enable and disable wqs, export them.
-> 
-> Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-
-Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
-
-Thanks.
-
--Fenghua
+Best regards,
+Martin
