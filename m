@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFFA6F2E1A
+	by mail.lfdr.de (Postfix) with ESMTP id AC12A6F2E1C
 	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbjEADUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S233782AbjEADUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233979AbjEADQc (ORCPT
+        with ESMTP id S233989AbjEADQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:16:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1D33A92;
+        Sun, 30 Apr 2023 23:16:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520C744BA;
         Sun, 30 Apr 2023 20:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DF25617E8;
-        Mon,  1 May 2023 03:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5927C433D2;
-        Mon,  1 May 2023 03:06:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F6FF61802;
+        Mon,  1 May 2023 03:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431B3C433EF;
+        Mon,  1 May 2023 03:06:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910390;
-        bh=bP+Ris4in6Qv35KSOOnZpF99B3j71RWkrhDcpRyx4f0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MoWnSTBTBfoqvfbAIvuv0j4HbeyFG0mL6EFWb/kCZ/UA1ElPJ+hC0VuNwxuL/CIFs
-         8DRfU31enOt2H3w+8gliZ0b+MvcgKAdI+O5BaXlABpCurrrqOc9PluPPIXjPG19muF
-         UOMSgUzvN6/6aK2aWwMKW8/IKuiPQlXapf4s7QtaIRnPq4BW5JeD9tBQLNnBUHl7vC
-         tbZrs2xchpp1chqlF7GWQ5WXuXejcpvIWojHuxEhHNPvkyuHS8l/eyyWg7a43gvPKZ
-         VaDPWmyKLM22eqIJx0A//8AvkJ7NpA0+76cMp0JHHPuQ8TUz6P+3wa1IMW5NlMi6aC
-         1xC/AHqxzFxmQ==
+        s=k20201202; t=1682910396;
+        bh=YPvELhmPw/DxVGQuv/5qTcS6D7urEQkVjvxtiTCqZok=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h/VC0GoShzE0wWzDeQbMGYTeNknMh2rR402Tf600flUy7Y0QtFBgKFGpCgEQN2MQv
+         1HrMfbe6h/LOPNl02g5cLr+TJ2RT3pfj0P+iF2ypIffLtkTYskIrwwWWE1i4MVIggc
+         XuJCA4c91U/ErK+5W11EMfPi1hXSziw+geWUald6yPpFjJy2vHwSf0zlJyh+t7L7UL
+         yl+SCYffLLfJCaf+5adOnowaghAEMsNqdaxokHHCVSamjV72TxbqHebnSBy2qAPc0I
+         vmaCip+Y5XVhzUtXXeQrfRmbxPfZ8nP7gIZjnI/e6h/EYkhbFLyU67t7TV9YPuMEA5
+         2HL/UPmmwhjsA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        bleung@chromium.org, linux-media@vger.kernel.org,
-        chrome-platform@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 9/9] media: cros-ec-cec: Don't exit early in .remove() callback
-Date:   Sun, 30 Apr 2023 23:06:09 -0400
-Message-Id: <20230501030611.3255082-9-sashal@kernel.org>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Harry Wentland <Harry.Wentland@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 4.19 1/9] drm/amd/display: Use DC_LOG_DC in the trasform pixel function
+Date:   Sun, 30 Apr 2023 23:06:23 -0400
+Message-Id: <20230501030633.3255202-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030611.3255082-1-sashal@kernel.org>
-References: <20230501030611.3255082-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,51 +61,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-[ Upstream commit 0ff7aee24e47beb4306ce050824b54147f2fabfa ]
+[ Upstream commit 7222f5841ff49709ca666b05ff336776e0664a20 ]
 
-Exiting early in remove without releasing all acquired resources yields
-leaks. Note that e.g. memory allocated with devm_zalloc() is freed after
-.remove() returns, even if the return code was negative.
+[Why & How]
+DC now uses a new commit sequence which is more robust since it
+addresses cases where we need to reorganize pipes based on planes and
+other parameters. As a result, this new commit sequence reset the DC
+state by cleaning plane states and re-creating them accordingly with the
+need. For this reason, the dce_transform_set_pixel_storage_depth can be
+invoked after a plane state is destroyed and before its re-creation. In
+this situation and on DCE devices, DC will hit a condition that will
+trigger a dmesg log that looks like this:
 
-While blocking_notifier_chain_unregister() won't fail and so the
-change is somewhat cosmetic, platform driver's .remove callbacks are
-about to be converted to return void. To prepare that, keep the error
-message but don't return early.
+Console: switching to colour frame buffer device 240x67
+------------[ cut here ]------------
+[..]
+Hardware name: System manufacturer System Product Name/PRIME X370-PRO, BIOS 5603 07/28/2020
+RIP: 0010:dce_transform_set_pixel_storage_depth+0x3f8/0x480 [amdgpu]
+[..]
+RSP: 0018:ffffc9000202b850 EFLAGS: 00010293
+RAX: ffffffffa081d100 RBX: ffff888110790000 RCX: 000000000000000c
+RDX: ffff888100bedbf8 RSI: 0000000000001a50 RDI: ffff88810463c900
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000007
+R10: 0000000000000001 R11: 0000000000000f00 R12: ffff88810f500010
+R13: ffff888100bedbf8 R14: ffff88810f515688 R15: 0000000000000000
+FS:  00007ff0159249c0(0000) GS:ffff88840e940000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff01528e550 CR3: 0000000002a10000 CR4: 00000000003506e0
+Call Trace:
+ <TASK>
+ ? dm_write_reg_func+0x21/0x80 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ dc_stream_set_dither_option+0xfb/0x130 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ amdgpu_dm_crtc_configure_crc_source+0x10b/0x190 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ amdgpu_dm_atomic_commit_tail+0x20a8/0x2a90 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ ? free_unref_page_commit+0x98/0x170
+ ? free_unref_page+0xcc/0x150
+ commit_tail+0x94/0x120
+ drm_atomic_helper_commit+0x10f/0x140
+ drm_atomic_commit+0x94/0xc0
+ ? drm_plane_get_damage_clips.cold+0x1c/0x1c
+ drm_client_modeset_commit_atomic+0x203/0x250
+ drm_client_modeset_commit_locked+0x56/0x150
+ drm_client_modeset_commit+0x21/0x40
+ drm_fb_helper_lastclose+0x42/0x70
+ amdgpu_driver_lastclose_kms+0xa/0x10 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ drm_release+0xda/0x110
+ __fput+0x89/0x240
+ task_work_run+0x5c/0x90
+ do_exit+0x333/0xae0
+ do_group_exit+0x2d/0x90
+ __x64_sys_exit_group+0x14/0x20
+ do_syscall_64+0x5b/0x80
+ ? exit_to_user_mode_prepare+0x1e/0x140
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7ff016ceaca1
+Code: Unable to access opcode bytes at RIP 0x7ff016ceac77.
+RSP: 002b:00007ffe7a2357e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007ff016e15a00 RCX: 00007ff016ceaca1
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffff78 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff016e15a00
+R13: 0000000000000000 R14: 00007ff016e1aee8 R15: 00007ff016e1af00
+ </TASK>
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Since this issue only happens in a transition state on DC, this commit
+replace BREAK_TO_DEBUGGER with DC_LOG_DC.
+
+Reviewed-by: Harry Wentland <Harry.Wentland@amd.com>
+Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dce/dce_transform.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index ae274a7aa3a94..dbdb57aea7457 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -324,14 +324,16 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int ret;
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
+index 6fd57cfb112f5..96fdc18ecb3bf 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
+@@ -778,7 +778,7 @@ static void dce_transform_set_pixel_storage_depth(
+ 		color_depth = COLOR_DEPTH_101010;
+ 		pixel_depth = 0;
+ 		expan_mode  = 1;
+-		BREAK_TO_DEBUGGER();
++		DC_LOG_DC("The pixel depth %d is not valid, set COLOR_DEPTH_101010 instead.", depth);
+ 		break;
+ 	}
  
-+	/*
-+	 * blocking_notifier_chain_unregister() only fails if the notifier isn't
-+	 * in the list. We know it was added to it by .probe(), so there should
-+	 * be no need for error checking. Be cautious and still check.
-+	 */
- 	ret = blocking_notifier_chain_unregister(
- 			&cros_ec_cec->cros_ec->event_notifier,
- 			&cros_ec_cec->notifier);
--
--	if (ret) {
-+	if (ret)
- 		dev_err(dev, "failed to unregister notifier\n");
--		return ret;
--	}
+@@ -792,8 +792,7 @@ static void dce_transform_set_pixel_storage_depth(
+ 	if (!(xfm_dce->lb_pixel_depth_supported & depth)) {
+ 		/*we should use unsupported capabilities
+ 		 *  unless it is required by w/a*/
+-		DC_LOG_WARNING("%s: Capability not supported",
+-			__func__);
++		DC_LOG_DC("%s: Capability not supported", __func__);
+ 	}
+ }
  
- 	cec_notifier_cec_adap_unregister(cros_ec_cec->notify);
- 	cec_unregister_adapter(cros_ec_cec->adap);
 -- 
 2.39.2
 
