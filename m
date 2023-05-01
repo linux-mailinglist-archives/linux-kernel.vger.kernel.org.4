@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062BC6F2E27
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA136F2E26
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234247AbjEADVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S234188AbjEADVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjEADRD (ORCPT
+        with ESMTP id S233158AbjEADRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Apr 2023 23:17:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DAF6A71;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CE01BFE;
         Sun, 30 Apr 2023 20:07:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D8F618A2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EF9261735;
+        Mon,  1 May 2023 03:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EEEFC433EF;
         Mon,  1 May 2023 03:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B6DC43446;
-        Mon,  1 May 2023 03:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910416;
-        bh=/csMtu44to+WoMyscVxjXAwFU/W1ZJc/YakW1b+HFcg=;
+        s=k20201202; t=1682910417;
+        bh=DcjXekO6d7vfiiA44MWWCEOPfLjA8/jcAX3MbvESGyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iRNyjEZwqTPOmHOidsprSHJ0cWsnFn8TGLYRLASq2sUYbz6CXu4vtU+VIY9DEUY/0
-         rXfFMe9ei+sZbEDXF64IWqMg28jEYYn2TyNCnKUNLMNYZMcL+aVYnpR1GHvNPAXiAS
-         H5m1UEca/EXDKwZRYHpF5ssgjzf45u74olLe3/27mDkeTb8/19LpgriJeritIIUlWo
-         wOg3rD9ahLBWf1oA9G//J34g2Zj5gHM2BvdhEHrbGxwFhQdBfx6CL7lgyIhxzNZkSx
-         9X4KlqGkMeEQ+Rog1Q1lL8PGUOzPHmVKYW4EUes4Rbu3Zkd7KJiEnspnAGjfbv+sKb
-         AqTYo69NYkaeA==
+        b=tv68HYR0WRx1mbAsgZfkQLVzPxNSn8bhz1+kDubU/fBLzSUsguecd+yUnAlIl0vXx
+         wlFls98h7W4BDmrgbEZIz8SRHqT5UC38xtPZARXLx//hdyxm0iydmQrHy8kzJelnFn
+         zhMFnX3eEQMwc3tSpig4St2z7xyPWDs0SCv0ZrehoCUHpDhPf5ukKusMTSFLoWih2h
+         Ihx1Y+OlOuvyMEB3lhbHNdsZTEPwNhmcXI0ZCUsID+okhBN6pIkFbeWni9a0yjJQZK
+         u5gSMvumF1NXQZmvKB9UJrk90Ror5XpBHyTOvjFzA/q2Rv72KC+GKNVTAexRucE/89
+         2PoLkRnc0TvyA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zheng Wang <zyytlz.wz@163.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, maximlevitsky@gmail.com,
-        oakad@yahoo.com, linux-mmc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 2/6] memstick: r592: Fix UAF bug in r592_remove due to race condition
-Date:   Sun, 30 Apr 2023 23:06:48 -0400
-Message-Id: <20230501030653.3255321-2-sashal@kernel.org>
+Cc:     Armin Wolf <W_Armin@gmx.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 3/6] ACPI: EC: Fix oops when removing custom query handlers
+Date:   Sun, 30 Apr 2023 23:06:49 -0400
+Message-Id: <20230501030653.3255321-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030653.3255321-1-sashal@kernel.org>
 References: <20230501030653.3255321-1-sashal@kernel.org>
@@ -58,51 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Wang <zyytlz.wz@163.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-[ Upstream commit 63264422785021704c39b38f65a78ab9e4a186d7 ]
+[ Upstream commit e5b492c6bb900fcf9722e05f4a10924410e170c1 ]
 
-In r592_probe, dev->detect_timer was bound with r592_detect_timer.
-In r592_irq function, the timer function will be invoked by mod_timer.
+When removing custom query handlers, the handler might still
+be used inside the EC query workqueue, causing a kernel oops
+if the module holding the callback function was already unloaded.
 
-If we remove the module which will call hantro_release to make cleanup,
-there may be a unfinished work. The possible sequence is as follows,
-which will cause a typical UAF bug.
+Fix this by flushing the EC query workqueue when removing
+custom query handlers.
 
-Fix it by canceling the work before cleanup in r592_remove.
+Tested on a Acer Travelmate 4002WLMi
 
-CPU0                  CPU1
-
-                    |r592_detect_timer
-r592_remove         |
-  memstick_free_host|
-  put_device;       |
-  kfree(host);      |
-                    |
-                    | queue_work
-                    |   &host->media_checker //use
-
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-Link: https://lore.kernel.org/r/20230307164338.1246287-1-zyytlz.wz@163.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memstick/host/r592.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/ec.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/memstick/host/r592.c b/drivers/memstick/host/r592.c
-index 256634ec58b63..d52c89b2a1d58 100644
---- a/drivers/memstick/host/r592.c
-+++ b/drivers/memstick/host/r592.c
-@@ -832,7 +832,7 @@ static void r592_remove(struct pci_dev *pdev)
- 	/* Stop the processing thread.
- 	That ensures that we won't take any more requests */
- 	kthread_stop(dev->io_thread);
--
-+	del_timer_sync(&dev->detect_timer);
- 	r592_enable_device(dev, false);
+diff --git a/drivers/acpi/ec.c b/drivers/acpi/ec.c
+index f8fc30be68711..1dedab328c464 100644
+--- a/drivers/acpi/ec.c
++++ b/drivers/acpi/ec.c
+@@ -1135,6 +1135,7 @@ static void acpi_ec_remove_query_handlers(struct acpi_ec *ec,
+ void acpi_ec_remove_query_handler(struct acpi_ec *ec, u8 query_bit)
+ {
+ 	acpi_ec_remove_query_handlers(ec, false, query_bit);
++	flush_workqueue(ec_query_wq);
+ }
+ EXPORT_SYMBOL_GPL(acpi_ec_remove_query_handler);
  
- 	while (!error && dev->req) {
 -- 
 2.39.2
 
