@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51736F2D35
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D456F2D33
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbjEADI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S232736AbjEADIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbjEADEu (ORCPT
+        with ESMTP id S232727AbjEADEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:04:50 -0400
+        Sun, 30 Apr 2023 23:04:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECD14C1E;
-        Sun, 30 Apr 2023 20:01:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB0510F7;
+        Sun, 30 Apr 2023 20:02:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCBE61765;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F06C4616EC;
+        Mon,  1 May 2023 03:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA581C433EF;
         Mon,  1 May 2023 03:00:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FD4C433D2;
-        Mon,  1 May 2023 03:00:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910051;
-        bh=0FgOAeLWITfHqxmvydovCvhdnSidBbTih1SuweCVZcc=;
+        s=k20201202; t=1682910052;
+        bh=IQgHuOoRnkEGD1Jb5Lkm537dUiI0uLn05CysAyCGk+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VAE3OyAuRM/qCQ44Oy0zgw11WpxysbJmN86ZnaFxW7LkCUjV3EgHwOQM4S/1D6VJZ
-         mwCbzsR5LCCAsPiKcNaU4hMy7RIC8R5pqJvgUP1PpdQi4kzxMMoBp1Yb27Cr1Rzozn
-         oFYRus3IsMGzfBwmsRtpspBeHrJmhmSl3T2SdeG+MTh/Kjheb9OJY4lI5il1lw0yP0
-         LQmgkPEz0oYE+V1zO4hepvw8wM5pbbMv7dkey5A/itqECPHDwIdABt+HYZ6wE0miR6
-         F7n8QxEPHaPJu7bRFU1oWMaFonHo17DYHo4pqbd9xi9X70sZZQfxUSwQgWKVNFgNyv
-         eSnYcCZOaHjNg==
+        b=ceLfsnF9BygCmPffl04Ic2Wlbcx8akluh70IoNk0Qm7rhkdBSFChqkr5U+aZ7FdbO
+         3W1fZmjCh8vLcah6vSFHqn4cmhi1/KbHz2REE70fODTYIoqMbJCZD1nIDAzrQ0N093
+         PWzOsbHRwAb4uJZExFCd/YfoKTAfuOjLnqUEek1ABbr/knigTALTT1izFUlgVhr7Jx
+         8aIDBG183yW5eOfsNiCL+fPWbp833wG+Y0kWmhqIc0K04wQcF8M8wjP6QODqQYnEoS
+         /DswIUtm2RcRM23i3GbX0KWmpIru5c7KoUBOj5Hxmxq2jXrsTjaPdA2txMuLFNLtuJ
+         10F/61o9aHI6A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tom Rix <trix@redhat.com>, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, isely@pobox.com,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 15/37] media: pvrusb2: VIDEO_PVRUSB2 depends on DVB_CORE to use dvb_* symbols
-Date:   Sun, 30 Apr 2023 22:59:23 -0400
-Message-Id: <20230501025945.3253774-15-sashal@kernel.org>
+Cc:     Kang Chen <void0red@gmail.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 16/37] ACPI: processor: Check for null return of devm_kzalloc() in fch_misc_setup()
+Date:   Sun, 30 Apr 2023 22:59:24 -0400
+Message-Id: <20230501025945.3253774-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025945.3253774-1-sashal@kernel.org>
 References: <20230501025945.3253774-1-sashal@kernel.org>
@@ -58,42 +58,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Kang Chen <void0red@gmail.com>
 
-[ Upstream commit 1107283b3351bef138cd12dbda1f999891cab7db ]
+[ Upstream commit 4dea41775d951ff1f7b472a346a8ca3ae7e74455 ]
 
-A rand config causes this link error
-vmlinux.o: In function `pvr2_dvb_create':
-(.text+0x8af1d2): undefined reference to `dvb_register_adapter'
+devm_kzalloc() may fail, clk_data->name might be NULL and will
+cause a NULL pointer dereference later.
 
-The rand config has
-CONFIG_VIDEO_PVRUSB2=y
-CONFIG_VIDEO_DEV=y
-CONFIG_DVB_CORE=m
-
-VIDEO_PVRUSB2 should also depend on DVB_CORE.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Kang Chen <void0red@gmail.com>
+[ rjw: Subject and changelog edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/pvrusb2/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpi_apd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/Kconfig b/drivers/media/usb/pvrusb2/Kconfig
-index f2b64e49c5a20..9501b10b31aa5 100644
---- a/drivers/media/usb/pvrusb2/Kconfig
-+++ b/drivers/media/usb/pvrusb2/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config VIDEO_PVRUSB2
- 	tristate "Hauppauge WinTV-PVR USB2 support"
--	depends on VIDEO_DEV && I2C
-+	depends on VIDEO_DEV && I2C && DVB_CORE
- 	select VIDEO_TUNER
- 	select VIDEO_TVEEPROM
- 	select VIDEO_CX2341X
+diff --git a/drivers/acpi/acpi_apd.c b/drivers/acpi/acpi_apd.c
+index 3bbe2276cac76..80f945cbec8a7 100644
+--- a/drivers/acpi/acpi_apd.c
++++ b/drivers/acpi/acpi_apd.c
+@@ -83,6 +83,8 @@ static int fch_misc_setup(struct apd_private_data *pdata)
+ 	if (!acpi_dev_get_property(adev, "clk-name", ACPI_TYPE_STRING, &obj)) {
+ 		clk_data->name = devm_kzalloc(&adev->dev, obj->string.length,
+ 					      GFP_KERNEL);
++		if (!clk_data->name)
++			return -ENOMEM;
+ 
+ 		strcpy(clk_data->name, obj->string.pointer);
+ 	} else {
 -- 
 2.39.2
 
