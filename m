@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEBB6F3683
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757056F368B
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 21:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjEATKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 15:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S232692AbjEATQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 15:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjEATKn (ORCPT
+        with ESMTP id S231186AbjEATQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 15:10:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD921FC0;
-        Mon,  1 May 2023 12:10:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09F5B618AC;
-        Mon,  1 May 2023 19:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC40C433D2;
-        Mon,  1 May 2023 19:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682968241;
-        bh=7wA5MD8Ul6eRk6o5es1/yKxJrO4V6BCjnRixIYeEAH4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j7pkR9OU+t1cf869c4V7a2oISoGQAT53bNvhWLJU+6ypkVtMDi06q3P9Uow1MnSkM
-         O52pydRtx/rKTnnhHrzaiwXufppnjN04ezUfGxlyA+K/8i8+AaQBENv7SBOTEyFVlz
-         U3yoTkb14H4jQ/9UqMvWJ60n4LdIZ+NMRWOZ3S4h0ky6oqKt0kZ71gX2Z9/NQ6te2k
-         IYkV5WRuwBbyJLlhFtGYnE4hcuIshLMOJ6/TLyA0uijhZkMs6hQMsd50MwEPQPfyiT
-         IsxgZrMislen5Oe6a/wDKyafq/lzH8batbx8LWF8CPqeBycng9Zho5Z87aTNHK8pGc
-         cJgSctxNPr4YQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     brendanhiggins@google.com, davidgow@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net, SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH] kunit: tool: undo type subscripts for subprocess.Popen
-Date:   Mon,  1 May 2023 19:10:39 +0000
-Message-Id: <20230501191039.140496-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230501181610.2617032-1-dlatypov@google.com>
-References: 
+        Mon, 1 May 2023 15:16:41 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02703173E
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 12:15:54 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-74e07c2ee30so120721485a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 12:15:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682968553; x=1685560553;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xta1ORIjLKUC6sudz2oVdR8ZSjIECo/NNbn+t5B7/30=;
+        b=N/HMzcQ7U9IUQx3P4RZ6yYMV9OQ57W1WL+5Ay1aRtdMbJC+idF/wHNwJYnzm+2c4P/
+         7C2iHQPS5Y4f5dS2pLO4G3euQyZA19qf3VYlyCKkltwNWT6paeVMVGNe8gBz7/C8J4i+
+         Wt3oKTjQyp6ign6dAIyOStSxavZZTSII6sAnmfL+kZxRYBVJIXeGhU5dOOnc2zjSNaPc
+         K6ArycTuSZXoi3/hfkxfFjxZGkAVP6P0hY83odjdZy50GifF8yiehXKfzf7peq/X4hZQ
+         jSZDAMETRea0E4h7eCZVzXB1rkgxbIw+AJTzN+SAnttKx88D7b1lW3NayIK2Ey3500fN
+         AxDA==
+X-Gm-Message-State: AC+VfDzjSqd5EPydrRtkCM8Fsx+252oeV3XX1U4AgEGtirBRhbO6gP3Y
+        7s+wnN/BW8CfKjjfXYkivMsI
+X-Google-Smtp-Source: ACHHUZ4jmmEuczYIXEM5IlwBG9kl9JWTkff4UV1CX3KDAprVLLnMz+RC3V5MfXehBawcFMx/T2jIDA==
+X-Received: by 2002:a05:6214:27e1:b0:5e3:d150:3168 with SMTP id jt1-20020a05621427e100b005e3d1503168mr1170309qvb.18.1682968553151;
+        Mon, 01 May 2023 12:15:53 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id o14-20020a0ccb0e000000b0061b62c1534fsm69023qvk.23.2023.05.01.12.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 12:15:52 -0700 (PDT)
+Date:   Mon, 1 May 2023 15:15:51 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Daniil Lunev <dlunev@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>, ejt@redhat.com
+Subject: Re: [PATCH v5 4/5] dm-thin: Add REQ_OP_PROVISION support
+Message-ID: <ZFAP5yQ0mwE4F6Vg@redhat.com>
+References: <20230414000219.92640-1-sarthakkukreti@chromium.org>
+ <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230420004850.297045-5-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230420004850.297045-5-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +74,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 May 2023 11:16:10 -0700 Daniel Latypov <dlatypov@google.com> wrote:
+On Wed, Apr 19 2023 at  8:48P -0400,
+Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
 
-> Writing `subprocess.Popen[str]` requires python 3.9+.
-> kunit.py has an assertion that the python version is 3.7+, so we should
-> try to stay backwards compatible.
+> dm-thinpool uses the provision request to provision
+> blocks for a dm-thin device. dm-thinpool currently does not
+> pass through REQ_OP_PROVISION to underlying devices.
 > 
-> This conflicts a bit with commit 1da2e6220e11 ("kunit: tool: fix
-> pre-existing `mypy --strict` errors and update run_checks.py"), since
-> mypy complains like so
-> > kunit_kernel.py:95: error: Missing type parameters for generic type "Popen"  [type-arg]
+> For shared blocks, provision requests will break sharing and copy the
+> contents of the entire block. Additionally, if 'skip_block_zeroing'
+> is not set, dm-thin will opt to zero out the entire range as a part
+> of provisioning.
 > 
-> Note: `mypy --strict --python-version 3.7` does not work.
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  drivers/md/dm-thin.c | 73 +++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 68 insertions(+), 5 deletions(-)
 > 
-> We could annotate each file with comments like
->   `# mypy: disable-error-code="type-arg"
-> but then we might still get nudged to break back-compat in other files.
-> 
-> This patch adds a `mypy.ini` file since it seems like the only way to
-> disable specific error codes for all our files.
-> 
-> Note: run_checks.py doesn't need to specify `--config_file mypy.ini`,
-> but I think being explicit is better, particularly since most kernel
-> devs won't be familiar with how mypy works.
+> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
+> index 2b13c949bd72..58d633f5c928 100644
+> --- a/drivers/md/dm-thin.c
+> +++ b/drivers/md/dm-thin.c
+> @@ -1891,7 +1893,8 @@ static void process_shared_bio(struct thin_c *tc, struct bio *bio,
+>  
+>  	if (bio_data_dir(bio) == WRITE && bio->bi_iter.bi_size) {
+>  		break_sharing(tc, bio, block, &key, lookup_result, data_cell);
+> -		cell_defer_no_holder(tc, virt_cell);
+> +		if (bio_op(bio) != REQ_OP_PROVISION)
+> +			cell_defer_no_holder(tc, virt_cell);
 
-Thank you for fast fix!
-
-> 
-> Fixes: 695e26030858 ("kunit: tool: add subscripts for type annotations where appropriate")
-> Reported-by: SeongJae Park <sj@kernel.org>
-> Link: https://lore.kernel.org/linux-kselftest/20230501171520.138753-1-sj@kernel.org
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-
-Tested-by: SeongJae Park <sj@kernel.org>
-
+Can you please explain why cell_defer_no_holder() is skipped for REQ_OP_PROVISION here?
 
 Thanks,
-SJ
-
-[...]
+Mike
