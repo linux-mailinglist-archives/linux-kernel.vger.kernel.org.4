@@ -2,220 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D97C6F39B8
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB976F39B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbjEAVZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 17:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S232699AbjEAVZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 17:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjEAVY7 (ORCPT
+        with ESMTP id S229627AbjEAVZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 17:24:59 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDA0173C
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 14:24:55 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f00c33c3d6so4004489e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google; t=1682976293; x=1685568293;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uRNEo4fec1ydGjEoS5W2dSAkWJWfTSd2Rg/x8kCWeCw=;
-        b=OUSQA6fIHtatxzhqErSD6fXBZlTtHhxhdlTeRsqoyKQ/fWA7GNPWhb4hF1Xvl8GDQ+
-         OWWuax8mKfFIJpT3qLumqurqPkro8IZTcUxeJ2tVlQxrWgjoHyMmyIeCy89Ga30Sq0QP
-         unNihkCb7ABu/13lUGYuTQJC860A906K5o7Uk=
+        Mon, 1 May 2023 17:25:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ECF30C1
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 14:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1682976305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=b4hWdlZUh/I1V34KeJHnhX0DVGXHnzi9BuAVJg9r45Y=;
+        b=EzPA5+jy5WmX0oSobT0qmVifczXUmCDklzjJfJHy6+OU3vkJKy+6MCq8kjq8sIyYrskEIp
+        k17/OvOAhW5K5PPhBvSdRGor3/3kBX1cn43qSiYSYx2rSdkr7/vyx9pWEuvwsroiDHFwhp
+        QyIanYEoLqB77IhtfDs2Hu5T9aJb17g=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-304-PHTHanSEOZu-5EbdfGNOpw-1; Mon, 01 May 2023 17:25:03 -0400
+X-MC-Unique: PHTHanSEOZu-5EbdfGNOpw-1
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-38eab7030c2so506289b6e.0
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:25:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682976293; x=1685568293;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uRNEo4fec1ydGjEoS5W2dSAkWJWfTSd2Rg/x8kCWeCw=;
-        b=Aj/0SeYrRf93t3HAvYRCeghnJV/GcvGFcVil0536V2wyBnxZUp2rgYUN6EMisd/gzy
-         uv7oo1cqbSBZtSHrW5W61KJvTTeGjDIAm+LaNZ9xv6PLTKXfCJq8+9DfWJTFmsGsvMoW
-         KGMn9NIQNX4tnxZYcz/BKf/88p3ERtqnEhCpPzpMJ5DENNm2zTv+n+wJvhZvfhtzkO7Z
-         b706QgPAgRlTPa1jndLjow82mMhIDjWBtIzBjHZJBxnxHjYNxCEuFbhZKEI0Obpl7HVE
-         il6UfTos/zHRD+Q8tVoBtEvHoi/QQNb4IFF9slw7tNxy39V/NVDmCGH1U2Br6Tj/lyzM
-         N96g==
-X-Gm-Message-State: AC+VfDxteFlQEtCd6N0AHstU/RrmeEvYOeoyUqjFfFWMEoG2Met4pQM/
-        oNsOC9FSvKDQA1JT9cYRbcy47YLqM8iGt/018llzbmlv
-X-Google-Smtp-Source: ACHHUZ5R/yyDkv6iPPpEDxfhfwq8w4UNgzrzC/VIxAo1OFd5kP29N9ir7+FUNewDYxMNsbznnxAZ1w==
-X-Received: by 2002:ac2:4904:0:b0:4f0:da5:773f with SMTP id n4-20020ac24904000000b004f00da5773fmr4108367lfi.25.1682976293335;
-        Mon, 01 May 2023 14:24:53 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id o26-20020ac2495a000000b004eff4ea8dd3sm3461256lfi.76.2023.05.01.14.24.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 May 2023 14:24:51 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4efe8991bafso4035979e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 14:24:50 -0700 (PDT)
-X-Received: by 2002:ac2:59ca:0:b0:4ec:89d3:a8a2 with SMTP id
- x10-20020ac259ca000000b004ec89d3a8a2mr4087163lfn.43.1682976290352; Mon, 01
- May 2023 14:24:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682976303; x=1685568303;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b4hWdlZUh/I1V34KeJHnhX0DVGXHnzi9BuAVJg9r45Y=;
+        b=E0bfnIfTilMCsYeU7BSsEy6Z6T+4Pi6wLcLhkZA+N+3oTO4eXZObjseRDdafSNh4wf
+         74AFd7OQOiSl11XeRCWj2Mh05OYFonUtKufITE364Jqb0xCNkVi0b1EhlbjT9vjs5qSm
+         bYrSgg+Z5eTOzHm4OAKcWrPLv/T/iRShNr978ffodCWw5r/YNeJTj0UCA4vjnv1QbHml
+         ICr6Vvv5Y24j7FWKn3aN/KlFFcWuJZPdxLu+r/KPaPJXjcUneuvDKnPZNt02PjQpIQJG
+         4KaWAS/5K41XiYv50HwD+BKy6xVK33fme/HIHasUVZnJ0fr4AYDL4jS/19Cv8U193eK5
+         zMtQ==
+X-Gm-Message-State: AC+VfDxcTL8BOr7fz0KjmJ4Zk11Jc4qtNOa+GK7ajYIFNc+nnqkgGaYj
+        GT8JDcI3rbbDJOm5ECfPHAMNaTHdCXpBROqwbZuw9orGafTxzVvh+wOSZWF+DsPLRWInysqzkPv
+        jarypIUnttfL4j4C7xqUb5Wpm3ZqEvAtAbt063hlMIKlsAIQbRtkc7YeScreRiiJx48GF3CYy9K
+        7YXI/LJjhc
+X-Received: by 2002:a05:6808:6344:b0:389:6b0e:9d97 with SMTP id eb4-20020a056808634400b003896b0e9d97mr6381221oib.1.1682976302842;
+        Mon, 01 May 2023 14:25:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5/JTveP7hQ9LaVlU9ju8ERfkRoeXqvFL8qWujiCq0sEua2Qm+RjPehAuaWxO4bCATJSHkjKw==
+X-Received: by 2002:a05:6808:6344:b0:389:6b0e:9d97 with SMTP id eb4-20020a056808634400b003896b0e9d97mr6381210oib.1.1682976302563;
+        Mon, 01 May 2023 14:25:02 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id q5-20020acac005000000b0038756901d1esm11911385oif.35.2023.05.01.14.25.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 14:25:02 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH v4 v0/4] sa8155p-adp devicetree ethernet cleanup
+Date:   Mon,  1 May 2023 16:24:42 -0500
+Message-Id: <20230501212446.2570364-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230428153646.823736-1-jforbes@fedoraproject.org>
- <ZEv76qfIiJcUvdql@arm.com> <ZE1pcwi95nPdlKzN@kernel.org> <CAFbkSA3SzjWZ_Q8XC6-_Kzc+jmUN6sG7vzbSD5X1bRvPUaJg3Q@mail.gmail.com>
- <ZE3mdYajdFnvl1by@kernel.org>
-In-Reply-To: <ZE3mdYajdFnvl1by@kernel.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Mon, 1 May 2023 16:24:38 -0500
-X-Gmail-Original-Message-ID: <CAFbkSA0O-4YgNt-7KPhvx+vhvRNc38PO8E--GVAWKVgHK-_9Mw@mail.gmail.com>
-Message-ID: <CAFbkSA0O-4YgNt-7KPhvx+vhvRNc38PO8E--GVAWKVgHK-_9Mw@mail.gmail.com>
-Subject: Re: [PATCH] Revert arm64: drop ranges in definition of ARCH_FORCE_MAX_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jmforbes@linuxtx.org, Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 29, 2023 at 11:02=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wr=
-ote:
->
-> On Sat, Apr 29, 2023 at 05:42:11PM -0500, Justin Forbes wrote:
-> > On Sat, Apr 29, 2023 at 2:01=E2=80=AFPM Mike Rapoport <rppt@kernel.org>=
- wrote:
-> > >
-> > > On Fri, Apr 28, 2023 at 06:01:30PM +0100, Catalin Marinas wrote:
-> > > > + Mike and Andrew
-> > > >
-> > > > On Fri, Apr 28, 2023 at 10:36:45AM -0500, Justin M. Forbes wrote:
-> > > > > While the ARCH_FORCE_MAX_ORDER changes clarified the descriptions=
- quite
-> > > > > a bit, the aarch64 specific change moved this config to sit behin=
-d
-> > > > > CONFIG_EXPERT. This becomes problematic when distros are setting =
-this to
-> > > > > a non default value already. Pushing it behind EXPERT where it wa=
-s not
-> > > > > before will silently change the configuration for users building =
-with
-> > > > > oldconfig.  If distros patch out if EXPERT downstream, it still c=
-reates
-> > > > > problems for users testing out upstream patches, or trying to bis=
-ect to
-> > > > > find the root of problem, as the configuration will change unexpe=
-ctedly,
-> > > > > possibly leading to different behavior and false results.
-> > > > >
-> > > > > Whem I asked about reverting the EXPERT, dependency, I was asked =
-to add
-> > >
-> > > Nit: When
-> > >
-> > > > > the ranges back.
-> > > > >
-> > > > > This essentially reverts commit 34affcd7577a232803f729d1870ba475f=
-294e4ea
-> > > > >
-> > > > > Signed-off-by: Justin M. Forbes <jforbes@fedoraproject.org>
-> > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > > > ---
-> > > > >  arch/arm64/Kconfig | 4 +++-
-> > > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > > > index b1201d25a8a4..dae18ac01e94 100644
-> > > > > --- a/arch/arm64/Kconfig
-> > > > > +++ b/arch/arm64/Kconfig
-> > > > > @@ -1516,9 +1516,11 @@ config XEN
-> > > > >  # 16K |       27          |      14      |       13        |    =
-     11         |
-> > > > >  # 64K |       29          |      16      |       13        |    =
-     13         |
-> > > > >  config ARCH_FORCE_MAX_ORDER
-> > > > > -   int "Order of maximal physically contiguous allocations" if E=
-XPERT && (ARM64_4K_PAGES || ARM64_16K_PAGES)
-> > > > > +   int "Order of maximal physically contiguous allocations" if A=
-RM64_4K_PAGES || ARM64_16K_PAGES
-> > > > >     default "13" if ARM64_64K_PAGES
-> > > > > +   range 11 13 if ARM64_16K_PAGES
-> > > > >     default "11" if ARM64_16K_PAGES
-> > > > > +   range 10 15 if ARM64_4K_PAGES
-> > > > >     default "10"
-> > > > >     help
-> > > > >       The kernel page allocator limits the size of maximal physic=
-ally
-> > > >
-> > > > The revert looks fine to me:
-> > > >
-> > > > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > >
-> > > > For the record, the original discussion:
-> > > >
-> > > > Link: https://lore.kernel.org/r/CAFxkdAr5C7ggZ+WdvDbsfmwuXujT_z_x3q=
-cUnhnCn-WrAurvgA@mail.gmail.com
-> > >
-> > > I'm not really happy about this revert because MAX_ORDER is not somet=
-hing
-> > > that should be changed easily.
-> > > But since hiding it behind EXPERT would silently change lots of exist=
-ing
-> > > builds, I won't object.
-> > >
-> > > Still, I never got the answer _why_ Fedora/RHEL configs use non-defau=
-lt
-> > > value. Quite possible something else needs to be fixed rather than ha=
-ving
-> > > overgrown MAX_ORDER.
-> >
-> > I get that, but I also looked at the rest of the patch set. Nowhere
-> > else was "if EXPERT" added.  Why wasn't it added to other
-> > architectures? Not that I am complaining, but aarch64 in particular is
-> > the one arch where, as a distro, we are trying to accommodate both
-> > Raspberry Pi, and server class machines.
->
-> The patch was about dropping the ranges, not about adding EXPERT. So on
-> arm64 it was added because Catalin requested it, other arch maintainers
-> didn't.
->
-> > It is the practicality of building a single kernel image that works
-> > along a large number of machines. The defaults are fine for smaller
-> > boards, and honestly the majority of aarch64 hardware in circulation.
-> > They are not acceptable for server class machines running those types
-> > of workloads.
->
-> Why the default MAX_ORDER was not acceptable on arm64 server machines but
-> it is fine on, say, x86 and s390?
-> I'm not asking how you made it possible in Fedora and RHEL, I'm asking wh=
-y
-> did you switch from the default order at all.
+This series cleans up some devicetree conventions in sa8155p-adp based
+on feedback from other platforms.
 
-Because the MAX_ORDER on aarch64 with 4K pages is more tuned to the
-needs of the average edge client, not so much those of a server class
-machine.  And I get it, I would say well over 90% of the Fedora users
-running aarch64 are indeed running on a rPi or similar with a small
-memory footprint, and workloads which match that.  But we do support
-and run a 4K page size aarch64 kernel on proper server class hardware,
-running typical server workloads, and RHEL has a lot more users in the
-server class than edge clients.   RHEL could probably default to 64K
-pages, and most users would be happy with that. Fedora certainly could
-not.  At some point, we may consider adding another build so that we
-offer both 4K and 64K pages, but for now, this is where we are, and
-where we have been for years.
+The hope is that by getting it right here, future contributors won't
+repeat the same mistakes as I did!
 
-Justin
+v3: https://lore.kernel.org/linux-arm-msm/20230421205512.339850-1-ahalaney@redhat.com/
 
-> > Justin
-> >
-> > > --
-> > > Sincerely yours,
-> > > Mike.
-> > >
->
-> --
-> Sincerely yours,
-> Mike.
->
+Thanks,
+Andrew
+
+Andrew Halaney (4):
+  arm64: dts: qcom: sa8155p-adp: Make compatible the first property
+  arm64: dts: qcom: Make -cells decimal
+  arm64: dts: qcom: sa8155p-adp: Remove unneeded rgmii_phy information
+  arm64: dts: qcom: sa8155p-adp: Move mtl nodes into ethernet node
+
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi        |  2 +-
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 14 ++---
+ arch/arm64/boot/dts/qcom/msm8953.dtsi        |  4 +-
+ arch/arm64/boot/dts/qcom/qcs404-evb-4000.dts |  4 +-
+ arch/arm64/boot/dts/qcom/sa8155p-adp.dts     | 56 ++++++++++----------
+ 5 files changed, 39 insertions(+), 41 deletions(-)
+
+-- 
+2.40.0
+
