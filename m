@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DA96F2D26
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D2A6F2D3F
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbjEADHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S232903AbjEADJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbjEADEj (ORCPT
+        with ESMTP id S233020AbjEADFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:04:39 -0400
+        Sun, 30 Apr 2023 23:05:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26A846AE;
-        Sun, 30 Apr 2023 20:01:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FA43599;
+        Sun, 30 Apr 2023 20:02:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E45F6170A;
-        Mon,  1 May 2023 03:01:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB253C433D2;
-        Mon,  1 May 2023 03:01:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84B1861755;
+        Mon,  1 May 2023 03:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BC4C4339B;
+        Mon,  1 May 2023 03:01:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910076;
-        bh=D+ads/ACd5JvDXrVLW/61Urwe3SqiT53uvd1olHHNcM=;
+        s=k20201202; t=1682910078;
+        bh=lW38JLU3QFhVbWOQXPhF88T4VJz8JtutIhc3gKjsfPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qZ+PT4aHPKaqE9jC5sBi377VNrV+NKD+THcZIS6+zl0oSjMtXbiRofdcoKACR/jtv
-         ZIrKJJQUoXXerE+9fQ+eVtfZzvXIfFWPUJEAuugFYh5myTMXaUOwGvP6/zFqYkTYWX
-         DTPn15tpOVqt0Zu9gRCVb3W/hRvNFd7uY/MlHi5+VlD1ikFoV3GH7RwMWugGfYnQWU
-         O59nmPwyAYsJCCNrXvCvpoWYbHU4fmqFDhgrjZwAS1DIz2cZbuMcXgtnb7erlN3g+P
-         Njou7TgyYL2giBe1XQmLND6Hn9XEJYQN2GTnkp3qQT7Onx8yBuriCdWtsD6YCwZhso
-         kPG231Xw3xsRQ==
+        b=RgRJ3WKbMwnOIcpoIxtuYbWUQvswsKjPdgj8SUSgPzaTII1+FJ3bDdmmTg79Kw8JX
+         WKy3ML6vOtzu4ePciQQulKR78Fx7EJ8C0mfTvmCyEMqlr9XVjQ5CzUEk0eE8WMOdD7
+         D6nwvGkmMscDXEaqQpV98J6Lc0stPXNyvDuy0t1FwauVGCYKkXO7VT+MLtaL66FVwy
+         hXnyyMW1tu1dk9xOnOSmeuX1yePS1yGmX2bD1f7gF/4b5R74SJBAZfJqo5LFcqTPWt
+         PLqavTkqLhoeOf4koeeY/FS5XkP/h47xOIOYMiTeIUYZkP+2i3vLrR08Uu1ILX0ufA
+         nKM8ImAoCOw7Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ayush Gupta <ayugupta@amd.com>, Alvin Lee <Alvin.Lee2@amd.com>,
-        Martin Leung <Martin.Leung@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, Jun.Lei@amd.com, wenjing.liu@amd.com,
-        Wesley.Chalmers@amd.com, aric.cyr@amd.com, mwen@igalia.com,
-        felipe.clark@amd.com, sungjoon.kim@amd.com,
-        aurabindo.pillai@amd.com, Charlene.Liu@amd.com, duncan.ma@amd.com,
-        Brian.Chang@amd.com, Syed.Hassan@amd.com, Dillon.Varone@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.2 22/37] drm/amd/display: fixed dcn30+ underflow issue
-Date:   Sun, 30 Apr 2023 22:59:30 -0400
-Message-Id: <20230501025945.3253774-22-sashal@kernel.org>
+Cc:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, andersson@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.2 23/37] remoteproc: stm32_rproc: Add mutex protection for workqueue
+Date:   Sun, 30 Apr 2023 22:59:31 -0400
+Message-Id: <20230501025945.3253774-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501025945.3253774-1-sashal@kernel.org>
 References: <20230501025945.3253774-1-sashal@kernel.org>
@@ -68,73 +61,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ayush Gupta <ayugupta@amd.com>
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-[ Upstream commit 37403ced9f2873fab7f39ab4ac963bbb33fb0bc0 ]
+[ Upstream commit 35bdafda40cc343ad2ba2cce105eba03a70241cc ]
 
-[Why]
-Observing underflow on dcn30+ system config at 4k144hz
+The workqueue may execute late even after remoteproc is stopped or
+stopping, some resources (rpmsg device and endpoint) have been
+released in rproc_stop_subdevices(), then rproc_vq_interrupt()
+accessing these resources will cause kernel dump.
 
-[How]
-We set the UCLK hardmax on AC/DC switch if softmax is enabled
-and also on boot. While booting up the UCLK Hardmax is set
-to softmax before the init sequence and the init sequence
-resets the hardmax to UCLK max which enables P-state switching.
-Just added a conditional check to avoid setting hardmax on init.
+Call trace:
+virtqueue_add_inbuf
+virtqueue_add_inbuf
+rpmsg_recv_single
+rpmsg_recv_done
+vring_interrupt
+stm32_rproc_mb_vq_work
+process_one_work
+worker_thread
+kthread
 
-Reviewed-by: Alvin Lee <Alvin.Lee2@amd.com>
-Reviewed-by: Martin Leung <Martin.Leung@amd.com>
-Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-Signed-off-by: Ayush Gupta <ayugupta@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Link: https://lore.kernel.org/r/20230331160634.3113031-1-arnaud.pouliquen@foss.st.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c | 3 ++-
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c | 2 +-
- drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/remoteproc/stm32_rproc.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-index c20e9f76f0213..a1b312483d7f1 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-@@ -629,7 +629,8 @@ void dcn30_init_hw(struct dc *dc)
- 	if (dc->clk_mgr->funcs->notify_wm_ranges)
- 		dc->clk_mgr->funcs->notify_wm_ranges(dc->clk_mgr);
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index 7d782ed9e5896..f618405cf4200 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -287,8 +287,16 @@ static void stm32_rproc_mb_vq_work(struct work_struct *work)
+ 	struct stm32_mbox *mb = container_of(work, struct stm32_mbox, vq_work);
+ 	struct rproc *rproc = dev_get_drvdata(mb->client.dev);
  
--	if (dc->clk_mgr->funcs->set_hard_max_memclk)
-+	//if softmax is enabled then hardmax will be set by a different call
-+	if (dc->clk_mgr->funcs->set_hard_max_memclk && !dc->clk_mgr->dc_mode_softmax_enabled)
- 		dc->clk_mgr->funcs->set_hard_max_memclk(dc->clk_mgr);
++	mutex_lock(&rproc->lock);
++
++	if (rproc->state != RPROC_RUNNING)
++		goto unlock_mutex;
++
+ 	if (rproc_vq_interrupt(rproc, mb->vq_id) == IRQ_NONE)
+ 		dev_dbg(&rproc->dev, "no message found in vq%d\n", mb->vq_id);
++
++unlock_mutex:
++	mutex_unlock(&rproc->lock);
+ }
  
- 	if (dc->res_pool->hubbub->funcs->force_pstate_change_control)
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-index 4226a051df414..37d76012c0ec1 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-@@ -286,7 +286,7 @@ void dcn31_init_hw(struct dc *dc)
- 	if (dc->clk_mgr->funcs->notify_wm_ranges)
- 		dc->clk_mgr->funcs->notify_wm_ranges(dc->clk_mgr);
- 
--	if (dc->clk_mgr->funcs->set_hard_max_memclk)
-+	if (dc->clk_mgr->funcs->set_hard_max_memclk && !dc->clk_mgr->dc_mode_softmax_enabled)
- 		dc->clk_mgr->funcs->set_hard_max_memclk(dc->clk_mgr);
- 
- 	if (dc->res_pool->hubbub->funcs->force_pstate_change_control)
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-index 30d15a94f720d..b428ad6389b9a 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
-@@ -975,7 +975,7 @@ void dcn32_init_hw(struct dc *dc)
- 	if (dc->clk_mgr->funcs->notify_wm_ranges)
- 		dc->clk_mgr->funcs->notify_wm_ranges(dc->clk_mgr);
- 
--	if (dc->clk_mgr->funcs->set_hard_max_memclk)
-+	if (dc->clk_mgr->funcs->set_hard_max_memclk && !dc->clk_mgr->dc_mode_softmax_enabled)
- 		dc->clk_mgr->funcs->set_hard_max_memclk(dc->clk_mgr);
- 
- 	if (dc->res_pool->hubbub->funcs->force_pstate_change_control)
+ static void stm32_rproc_mb_callback(struct mbox_client *cl, void *data)
 -- 
 2.39.2
 
