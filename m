@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2F86F3601
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1DD6F361E
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 20:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjEASpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 14:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S232565AbjEASpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 14:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjEASpK (ORCPT
+        with ESMTP id S232419AbjEASpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 14:45:10 -0400
+        Mon, 1 May 2023 14:45:11 -0400
 Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52688C6;
-        Mon,  1 May 2023 11:45:08 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24df758db1cso1011021a91.2;
-        Mon, 01 May 2023 11:45:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA8ECD;
+        Mon,  1 May 2023 11:45:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24ddf274039so1469453a91.1;
+        Mon, 01 May 2023 11:45:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682966708; x=1685558708;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4TtnDaucJ1/IdFz7cgpnnbthTRQAkVtjilDPnFIRFQ=;
-        b=W9VggSOnJQ/2lFEqhx94aKQ83hIbovdIhoKb7OiLLzq75wkWPswXIcRqrzXxm2NApG
-         pB27DUyrbrhmVkZrrMX4YHlRzVF4tGS68nJ8Ejm8/BroZ+7hMHJuWQDTjuahOxhawRX2
-         R16bnE4Y30VLSXXwBMvtqz8tiD2ZXfTrhNCDBskt/ZknqAIGxoIei8hIn2gsyuOvFZJT
-         gcvTDoUkwne1R9te7FHSfKEIs+OMrGDJPRnXrfVYvm9LGAlMfDrZKhf3rH0KGi67d7/N
-         6nggw95HVE442Z2Z2BWGqs5xyzseMQ8dW3H1P1Jmk/kb8zbLKv3rSGLZgQP6m91kkrJp
-         zt+g==
+        d=gmail.com; s=20221208; t=1682966709; x=1685558709;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xlQgRgGnpnzTcnGyVtUcqaEHfPcu6dc+i5pcShGQrxo=;
+        b=kRsbc8tlfk/H/cv097InCtoRduh0Q2peT/+ICEGVsdCySxLpPGs6lZFcQW1isxOIYv
+         DpToN+aOtwZamMBWgLnntS32ZADvrFqAyvGYF81UPuDErrqXkAno9sehM9HAx5baUPUf
+         AOT+20t3+OTA5Ac/yr1GPsSGcAY0J0l++i6HzhDW5ddBC8m5v07Lz0GY/p1WDHBuf37Q
+         +BvoNNvuotTtkrvhp2v3sFlXUjuvmHW76vC7FYpyNoETJzENXbXPVSQJDOyX6py19UdS
+         RkeJ0wQ3O139P4qNytKjJJ0zFi1AKI2RO5bdE6ukPAaPgZEBOFJ/VTvmTeGd/WygQPwG
+         k1Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682966708; x=1685558708;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l4TtnDaucJ1/IdFz7cgpnnbthTRQAkVtjilDPnFIRFQ=;
-        b=ThZDm6Ss6OGR4T05fU8QYPc2tCTVjBLUgfiDpUI4e0tq3Ckbytf+qFH5dKJUxQOZVZ
-         FXOzotuNV6SjCraBnQHwYZPLcLPK8tLucSTCi4HW66X1JOiGWBH4ZofPMfWqlVoUOdlI
-         vwjemODrsblVWhktrXKPMeTJhxugXgj8b6a9un8PNbIJMPm0Da6tq5i1l8BIgP9PLxrK
-         CFZ8u/iVo/qQJXD8atV8WTLOHqOFTvYolLm55Ncp52ip+CXI+jWI+WKTX8d0sAoix8kE
-         b5HVo3JrvMfl9r2cWCSkIj8DUgLBLY1zUGSXfkfg7jB8tcB6Azy9XrH7jMu167S+m9zu
-         lB6A==
-X-Gm-Message-State: AC+VfDxYwTnwaolJeRbyb53UFpi+iVX8GgFeKMgldWlwBJfbbctoOuc2
-        PLutiTOJntdwohVOy0focHY=
-X-Google-Smtp-Source: ACHHUZ5eAVBIqpAYEQNPFjADJrF0hyhOUOXr1qE6lR8ApK2ME+3UgTkS6x8bvceg5F1jcgxm+mDnDg==
-X-Received: by 2002:a17:90a:bd98:b0:23d:16d6:2f05 with SMTP id z24-20020a17090abd9800b0023d16d62f05mr14722184pjr.22.1682966707721;
-        Mon, 01 May 2023 11:45:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682966709; x=1685558709;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xlQgRgGnpnzTcnGyVtUcqaEHfPcu6dc+i5pcShGQrxo=;
+        b=gROfrvEcBdRvUDX8E5EhVGQKoBsX0J/KTRp/ceQSGscoNMe6iBOH+Gzm35bZQC8lGp
+         dD7T8mcvIdBVWBj2QOeLas6SCusiSboM52EAkw241FKrHp+PSwYz1PjE+tsWRzM7MMjG
+         lleeVSchNT+t1qrNOQy9Qf3ddZihinncNZs78p+8yDl3S/j8ApsiZLwQ0IUsLm4LviP4
+         jbpsqw2lDJBrghcVRex9uSn2aQj9Pd5X8u4KGi/UdTnUz3ojfP5jjzFP5dlgHZIwPEeS
+         CFzjuNCM30jpcgk/dVRLfnKzg93dlCucjsjAYGO7Dih0K1CPRgx8lFQ0MiCa+8WuY7I4
+         dWGQ==
+X-Gm-Message-State: AC+VfDx7Eer27mXdQ4by2m2jYDhQ86AZU9jwrAHBoV+CyHkU/2YGK5U8
+        O7qaRoBa9fzpofXogAFSddA=
+X-Google-Smtp-Source: ACHHUZ4b+PxnvHuPTzQ0/tFd2w6+1Uyn0n4UKDVf+1oB8hgnSSkutccemZUA4kOfxhR3khAf5A59ew==
+X-Received: by 2002:a17:90b:954:b0:24d:fb2c:1ae0 with SMTP id dw20-20020a17090b095400b0024dfb2c1ae0mr4322102pjb.17.1682966709532;
+        Mon, 01 May 2023 11:45:09 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id 9-20020a17090a0f0900b0024c1f1cdf98sm6413617pjy.13.2023.05.01.11.45.06
+        by smtp.gmail.com with ESMTPSA id hg4-20020a17090b300400b0024decfb1ec2sm3032473pjb.30.2023.05.01.11.45.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 11:45:07 -0700 (PDT)
+        Mon, 01 May 2023 11:45:09 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -58,34 +59,21 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Emil Velikov <emil.l.velikov@gmail.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx@lists.freedesktop.org (open list:RADEON and AMDGPU DRM DRIVERS),
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list),
-        =?UTF-8?q?Marek=20Ol=C5=A1=C3=A1k?= <marek.olsak@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Sean Paul <sean@poorly.run>,
-        Shashank Sharma <shashank.sharma@amd.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>
-Subject: [PATCH v3 0/9] drm: fdinfo memory stats
-Date:   Mon,  1 May 2023 11:44:46 -0700
-Message-Id: <20230501184502.1620335-1-robdclark@gmail.com>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 1/9] drm/docs: Fix usage stats typos
+Date:   Mon,  1 May 2023 11:44:47 -0700
+Message-Id: <20230501184502.1620335-2-robdclark@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230501184502.1620335-1-robdclark@gmail.com>
+References: <20230501184502.1620335-1-robdclark@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -99,53 +87,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Similar motivation to other similar recent attempt[1].  But with an
-attempt to have some shared code for this.  As well as documentation.
+Fix a couple missing ':'s.
 
-It is probably a bit UMA-centric, I guess devices with VRAM might want
-some placement stats as well.  But this seems like a reasonable start.
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+---
+ Documentation/gpu/drm-usage-stats.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Basic gputop support: https://patchwork.freedesktop.org/series/116236/
-And already nvtop support: https://github.com/Syllo/nvtop/pull/204
-
-I've combined the separate series to add comm/cmdline override onto
-the end of this, simply out of convenience (they would otherwise
-conflict in a bunch of places).
-
-v2: Extend things to allow for multiple regions other than just system
-    "memory", make drm_show_memory_stats() a helper so that, drivers
-    can use it or not based on their needs (but in either case, re-
-    use drm_print_memory_stats()
-v3: Docs fixes
-
-[1] https://patchwork.freedesktop.org/series/112397/
-
-Rob Clark (9):
-  drm/docs: Fix usage stats typos
-  drm: Add common fdinfo helper
-  drm/msm: Switch to fdinfo helper
-  drm/amdgpu: Switch to fdinfo helper
-  drm: Add fdinfo memory stats
-  drm/msm: Add memory stats to fdinfo
-  drm/doc: Relax fdinfo string constraints
-  drm/fdinfo: Add comm/cmdline override fields
-  drm/msm: Wire up comm/cmdline override for fdinfo
-
- Documentation/gpu/drm-usage-stats.rst      | 101 ++++++++++----
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c    |   3 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.c |  16 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_fdinfo.h |   2 +-
- drivers/gpu/drm/drm_file.c                 | 147 +++++++++++++++++++++
- drivers/gpu/drm/msm/adreno/adreno_gpu.c    |  24 +++-
- drivers/gpu/drm/msm/msm_drv.c              |  15 ++-
- drivers/gpu/drm/msm/msm_gem.c              |  15 +++
- drivers/gpu/drm/msm/msm_gpu.c              |   2 -
- drivers/gpu/drm/msm/msm_gpu.h              |  10 ++
- include/drm/drm_drv.h                      |   7 +
- include/drm/drm_file.h                     |  51 +++++++
- include/drm/drm_gem.h                      |  30 +++++
- 13 files changed, 376 insertions(+), 47 deletions(-)
-
+diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+index b46327356e80..72d069e5dacb 100644
+--- a/Documentation/gpu/drm-usage-stats.rst
++++ b/Documentation/gpu/drm-usage-stats.rst
+@@ -98,33 +98,33 @@ is not allowed.
+ Each possible memory type which can be used to store buffer objects by the
+ GPU in question shall be given a stable and unique name to be returned as the
+ string here.
+ 
+ Value shall reflect the amount of storage currently consumed by the buffer
+ object belong to this client, in the respective memory region.
+ 
+ Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+ indicating kibi- or mebi-bytes.
+ 
+-- drm-cycles-<str> <uint>
++- drm-cycles-<str>: <uint>
+ 
+ Engine identifier string must be the same as the one specified in the
+ drm-engine-<str> tag and shall contain the number of busy cycles for the given
+ engine.
+ 
+ Values are not required to be constantly monotonic if it makes the driver
+ implementation easier, but are required to catch up with the previously reported
+ larger value within a reasonable period. Upon observing a value lower than what
+ was previously read, userspace is expected to stay with that larger previous
+ value until a monotonic update is seen.
+ 
+-- drm-maxfreq-<str> <uint> [Hz|MHz|KHz]
++- drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
+ 
+ Engine identifier string must be the same as the one specified in the
+ drm-engine-<str> tag and shall contain the maximum frequency for the given
+ engine.  Taken together with drm-cycles-<str>, this can be used to calculate
+ percentage utilization of the engine, whereas drm-engine-<str> only reflects
+ time active without considering what frequency the engine is operating as a
+ percentage of it's maximum frequency.
+ 
+ Driver specific implementations
+ ===============================
 -- 
 2.39.2
 
