@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9EA6F39A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716426F39AE
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 23:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjEAVVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 17:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S232467AbjEAVWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 17:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjEAVVp (ORCPT
+        with ESMTP id S229627AbjEAVWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 17:21:45 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0BD10E5;
-        Mon,  1 May 2023 14:21:44 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-38e975c853cso1004899b6e.2;
-        Mon, 01 May 2023 14:21:44 -0700 (PDT)
+        Mon, 1 May 2023 17:22:51 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B411B173C;
+        Mon,  1 May 2023 14:22:50 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-24dfaff8794so1582080a91.3;
+        Mon, 01 May 2023 14:22:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682976103; x=1685568103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYCvJyHwJ7Jrvd5HvP1eMkY5iGf+7NPyx1F37wokDL8=;
-        b=K28042v0bGvgx1XMRNO4hc7JPviz6ncAnezVb1cXc9RO3acwErIMSdWwFwnS/InEp4
-         swnbZ3Jhg7slwdVnSWQ/6OC4SWSH515RnIfBWl7lBhyUI7tDdopAW2nMVEqP+RJ8THdy
-         EVdluqUXNJBjw1MpRsKhEoB3G1UAVfX8lDyu2cTK9RPCDUD6zCfxVM/H0RPOFJWCVkEB
-         t32eBt+c7zyGcmKYt7BSnJhzPCMAEIkwVtvgfHcFYnFfZbbu3Oa33oOuSSGOXBrNpTVz
-         3x37mJ7DgfxRTFbs5mM1sYtF45oBG9KrYjp3pK3gMCsKmPAQAleXVSmssVQ/1pt1q12u
-         BZPw==
+        d=gmail.com; s=20221208; t=1682976170; x=1685568170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x0u9gt6o3EPT+URBm1bfsKeQp8moBBgJYkfWedTIxGU=;
+        b=M/HxJ79lXyiTBAEVfMtbDe0tD8JpdFGNP/Rk3ZPD1+uNJSK/bpycIqM8wzxBOX1Xbs
+         jvokajw8EeIM48suA5nmOmxHxdeHcHSWqL9JxJ+D26pYN8z1WKgG88akUGnbOlXNN/Lx
+         vB0OHVtWSJggkkbX4TbK6lWlWCbLx+0hv+1e2P9X0l7AS6kwZoTr+6bQs3fcuxY4g8wE
+         wxJ5Sj4aqJT+ysEAzQbtuDyQjSf8flhvddGTkzFq14nvvO/FaE7pnPxTZxRLlsWsbgRY
+         iQHI68Nm0USwPsxzhDkR2GonMMdC8M66NhSdVZOcBev5bT4AEQIzj/pAhVm/kG2VLI4Z
+         oxqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682976103; x=1685568103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iYCvJyHwJ7Jrvd5HvP1eMkY5iGf+7NPyx1F37wokDL8=;
-        b=ZyjFQ8PBcCykTO/sskRl4wR8H+i75Di1KQhg3LF71NPgDNO0OW9ZZp6/0GVq3bKuUb
-         IkDPVw6qOrOf0GkuyzbDibkJ1w0deeFw05IDl1RSWMHNHyZV/McP5zFOJmAoz8YmEJkE
-         8a3lTNyw2q8nKJN3w6/aUcnzH8R1yQ5to+KAN6w8b222nolBlV4svBh2/fZ6TygtcpLs
-         PtgYUQaqCMn1m+fypqsoyxQl0EKsnP/POaIGM6+P4HfA7W6cWF5Z0ppDju3ObHaixSPL
-         fIXbcPr1A5SzsNnBELzF6RGc699CuHU7yi/VZv+a66imBW6e42wyRzS088fq1tFdIuhU
-         UdKg==
-X-Gm-Message-State: AC+VfDz7CX6PgXpaJ3xSzHSJuzjWti9YQFDUrf++/gNb5ZlMsvV/uhVy
-        SM1gsZfwuFeB5bIZx86t74A10a0nY/lLla7ZY/8=
-X-Google-Smtp-Source: ACHHUZ4RXGpo/62/QiKBWe5vbuSoBEDQVCyJay7yq3KEWZg0v5pnDukR0Op8YtznZzwV+8vH33vYe5oN00qu43mEEBk=
-X-Received: by 2002:a05:6808:4d:b0:387:1e2a:fed2 with SMTP id
- v13-20020a056808004d00b003871e2afed2mr6453049oic.49.1682976103392; Mon, 01
- May 2023 14:21:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682976170; x=1685568170;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x0u9gt6o3EPT+URBm1bfsKeQp8moBBgJYkfWedTIxGU=;
+        b=MLzTh5FCU2Ya9dnf3PRP53rfDazqxc2KFa/MHCQL/JrUc2KL2gKTVjIdYJHrCttcrb
+         vxAG19a1P2FYJ3NHcPZZBoRxAscBXOGGcj4HENn3HBbNGbHj8+3v30+j/DGXgtYaAod0
+         4jrNIAzRfWr+wKXAXGG/poIXoLloAfUqbVrKtGCasVYVAkxu1v97yN4EU0KL6hjbof5s
+         cXvxvxGzKvK4bBbbyrtotWUvvbQ1CBRGG5bGssLlciv1RQqdXOoB/T22+/Lk0OHsnQ9/
+         p3vULXV37yCNl/5+n7hWqQPyRVscDfLyfhHps8J2TGp0qEXVgd0oYhSZIWpdvrRgtecg
+         oLfA==
+X-Gm-Message-State: AC+VfDzD8mwAbCr1sPtmKHVBKqg+VwZfHgyjX4W2sIAe2PgP9/rhtAUg
+        UI7KiNJXiwvSsIeAEBwp3GoqyPVdKm//KgcoqL0=
+X-Google-Smtp-Source: ACHHUZ4VZPUBs1wO6n/3I38y+KofvEbYP1WUShkHBw6p3mFkXrV/MgzPZYzB2SAG6/dOSa4YWd+iFXXfItaG+6sICrM=
+X-Received: by 2002:a17:90b:180f:b0:24e:1f06:4d32 with SMTP id
+ lw15-20020a17090b180f00b0024e1f064d32mr1046702pjb.2.1682976170146; Mon, 01
+ May 2023 14:22:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501204441.1642741-1-robdclark@gmail.com> <f2b7e6cf-d747-efb8-820c-41e4eef6cbb3@linaro.org>
-In-Reply-To: <f2b7e6cf-d747-efb8-820c-41e4eef6cbb3@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 1 May 2023 14:21:31 -0700
-Message-ID: <CAF6AEGvXu_JHyfwmD+VL=iF5OcP=C-n0jsqd6sXM=Fa4KMQAgg@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Set max segment size earlier
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20230429193336.600629-1-robimarko@gmail.com> <8feae59c-b762-8cc8-7aa9-237ce4af5b1e@linaro.org>
+In-Reply-To: <8feae59c-b762-8cc8-7aa9-237ce4af5b1e@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Mon, 1 May 2023 23:22:39 +0200
+Message-ID: <CAOX2RU6wwvMLgScAgtqpOuSLeaULUAet4TtjQZkWK_uwwkr2Zw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom,ids: Add IDs for IPQ5018 family
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,142 +68,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 1, 2023 at 1:56=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Mon, 1 May 2023 at 14:51, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> On 01/05/2023 23:44, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
+>
+>
+> On 29.04.2023 21:33, Robert Marko wrote:
+> > Add SOC IDs for the IPQ5018 family.
 > >
-> > Fixes the following splat on a6xx gen2+ (a640, a650, a660 families),
-> > a6xx gen1 has smaller GMU allocations so they fit under the default
-> > 64K max segment size.
-> >
-> >     ------------[ cut here ]------------
-> >     DMA-API: msm_dpu ae01000.display-controller: mapping sg segment lon=
-ger than device claims to support [len=3D126976] [max=3D65536]
-> >     WARNING: CPU: 5 PID: 9 at kernel/dma/debug.c:1160 debug_dma_map_sg+=
-0x288/0x314
-> >     Modules linked in:
-> >     CPU: 5 PID: 9 Comm: kworker/u16:0 Not tainted 6.3.0-rc2-debug+ #629
-> >     Hardware name: Google Villager (rev1+) with LTE (DT)
-> >     Workqueue: events_unbound deferred_probe_work_func
-> >     pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> >     pc : debug_dma_map_sg+0x288/0x314
-> >     lr : debug_dma_map_sg+0x288/0x314
-> >     sp : ffffffc00809b560
-> >     x29: ffffffc00809b560 x28: 0000000000000060 x27: 0000000000000000
-> >     x26: 0000000000010000 x25: 0000000000000004 x24: 0000000000000004
-> >     x23: ffffffffffffffff x22: ffffffdb31693cc0 x21: ffffff8080935800
-> >     x20: ffffff8087417400 x19: ffffff8087a45010 x18: 0000000000000000
-> >     x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000010000
-> >     x14: 0000000000000001 x13: ffffffffffffffff x12: ffffffffffffffff
-> >     x11: 0000000000000000 x10: 000000000000000a x9 : ffffffdb2ff05e14
-> >     x8 : ffffffdb31275000 x7 : ffffffdb2ff08908 x6 : 0000000000000000
-> >     x5 : 0000000000000001 x4 : ffffffdb2ff08a74 x3 : ffffffdb31275008
-> >     x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffffff80803a9a80
-> >     Call trace:
-> >      debug_dma_map_sg+0x288/0x314
-> >      __dma_map_sg_attrs+0x80/0xe4
-> >      dma_map_sgtable+0x30/0x4c
-> >      get_pages+0x1d4/0x1e4
-> >      msm_gem_pin_pages_locked+0xbc/0xf8
-> >      msm_gem_pin_vma_locked+0x58/0xa0
-> >      msm_gem_get_and_pin_iova_range+0x98/0xac
-> >      a6xx_gmu_memory_alloc+0x7c/0x128
-> >      a6xx_gmu_init+0x16c/0x9b0
-> >      a6xx_gpu_init+0x38c/0x3e4
-> >      adreno_bind+0x214/0x264
-> >      component_bind_all+0x128/0x1f8
-> >      msm_drm_bind+0x2b8/0x608
-> >      try_to_bring_up_aggregate_device+0x88/0x1a4
-> >      __component_add+0xec/0x13c
-> >      component_add+0x1c/0x28
-> >      dp_display_probe+0x3f8/0x43c
-> >      platform_probe+0x70/0xc4
-> >      really_probe+0x148/0x280
-> >      __driver_probe_device+0xc8/0xe0
-> >      driver_probe_device+0x44/0x100
-> >      __device_attach_driver+0x64/0xdc
-> >      bus_for_each_drv+0xb0/0xd8
-> >      __device_attach+0xd8/0x168
-> >      device_initial_probe+0x1c/0x28
-> >      bus_probe_device+0x44/0xb0
-> >      deferred_probe_work_func+0xc8/0xe0
-> >      process_one_work+0x2e0/0x488
-> >      process_scheduled_works+0x4c/0x50
-> >      worker_thread+0x218/0x274
-> >      kthread+0xf0/0x100
-> >      ret_from_fork+0x10/0x20
-> >     irq event stamp: 293712
-> >     hardirqs last  enabled at (293711): [<ffffffdb2ff0893c>] vprintk_em=
-it+0x160/0x25c
-> >     hardirqs last disabled at (293712): [<ffffffdb30b48130>] el1_dbg+0x=
-24/0x80
-> >     softirqs last  enabled at (279520): [<ffffffdb2fe10420>] __do_softi=
-rq+0x21c/0x4bc
-> >     softirqs last disabled at (279515): [<ffffffdb2fe16708>] ____do_sof=
-tirq+0x18/0x24
-> >     ---[ end trace 0000000000000000 ]---
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
->
-> I think this should be:
->
-> Fixes: db735fc4036b ("drm/msm: Set dma maximum segment size for mdss")
-
-yeah, or perhaps just that commit didn't fix the issue hard enough.. I
-was thinking that it was introduced by memory allocations out of
-hw_init() but actually this has been here the whole time (on newer
-a6xx gens).  There was an internal bug about it, but somehow it didn't
-get routed to me.
-
-BR,
--R
-
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
 > > ---
-> >   drivers/gpu/drm/msm/msm_drv.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >  include/dt-bindings/arm/qcom,ids.h | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
 > >
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_dr=
-v.c
-> > index 3a74b5653e96..6dec1a3534f2 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.c
-> > +++ b/drivers/gpu/drm/msm/msm_drv.c
-> > @@ -440,27 +440,27 @@ static int msm_drm_init(struct device *dev, const=
- struct drm_driver *drv)
-> >       fs_reclaim_acquire(GFP_KERNEL);
-> >       might_lock(&priv->lru.lock);
-> >       fs_reclaim_release(GFP_KERNEL);
-> >
-> >       drm_mode_config_init(ddev);
-> >
-> >       ret =3D msm_init_vram(ddev);
-> >       if (ret)
-> >               goto err_drm_dev_put;
-> >
-> > +     dma_set_max_seg_size(dev, UINT_MAX);
-> > +
-> >       /* Bind all our sub-components: */
-> >       ret =3D component_bind_all(dev, ddev);
-> >       if (ret)
-> >               goto err_drm_dev_put;
-> >
-> > -     dma_set_max_seg_size(dev, UINT_MAX);
-> > -
-> >       msm_gem_shrinker_init(ddev);
-> >
-> >       if (priv->kms_init) {
-> >               ret =3D priv->kms_init(ddev);
-> >               if (ret) {
-> >                       DRM_DEV_ERROR(dev, "failed to load kms\n");
-> >                       priv->kms =3D NULL;
-> >                       goto err_msm_uninit;
-> >               }
-> >               kms =3D priv->kms;
+> > diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+> > index 802495b20276..c1283bad81e1 100644
+> > --- a/include/dt-bindings/arm/qcom,ids.h
+> > +++ b/include/dt-bindings/arm/qcom,ids.h
+> > @@ -216,6 +216,9 @@
+> >  #define QCOM_ID_SM8350                       439
+> >  #define QCOM_ID_QCM2290                      441
+> >  #define QCOM_ID_SM6115                       444
+> > +#define QCOM_ID_IPQ5010                      446
+> > +#define QCOM_ID_IPQ5018                      447
+> > +#define QCOM_ID_IPQ5028                      448
+> >  #define QCOM_ID_SC8280XP             449
+> >  #define QCOM_ID_IPQ6005                      453
+> >  #define QCOM_ID_QRB5165                      455
+> > @@ -229,6 +232,9 @@
+> >  #define QCOM_ID_SM8450_3             482
+> >  #define QCOM_ID_SC7280                       487
+> >  #define QCOM_ID_SC7180P                      495
+> > +#define QCOM_ID_IPQ5000                      503
 >
-> --
-> With best wishes
-> Dmitry
+> > +#define QCOM_ID_IPQ0509                      504
+> > +#define QCOM_ID_IPQ0518                      505
+> Are you sure these names are in tact?
+
+Hi,
+They should be correct, I am seeing them being used downstream
+and in end products as well, IPQ0509 being one of those weird ones
+that integrate 256MB of RAM on the die as well.
+
+Regards,
+Robert
+
 >
+> Konrad
+> >  #define QCOM_ID_SM6375                       507
+> >  #define QCOM_ID_IPQ9514                      510
+> >  #define QCOM_ID_IPQ9550                      511
+> > @@ -236,6 +242,7 @@
+> >  #define QCOM_ID_IPQ9570                      513
+> >  #define QCOM_ID_IPQ9574                      514
+> >  #define QCOM_ID_SM8550                       519
+> > +#define QCOM_ID_IPQ5016                      520
+> >  #define QCOM_ID_IPQ9510                      521
+> >  #define QCOM_ID_QRB4210                      523
+> >  #define QCOM_ID_QRB2210                      524
+> > @@ -243,6 +250,7 @@
+> >  #define QCOM_ID_QRU1000                      539
+> >  #define QCOM_ID_QDU1000                      545
+> >  #define QCOM_ID_QDU1010                      587
+> > +#define QCOM_ID_IPQ5019                      569
+> >  #define QCOM_ID_QRU1032                      588
+> >  #define QCOM_ID_QRU1052                      589
+> >  #define QCOM_ID_QRU1062                      590
