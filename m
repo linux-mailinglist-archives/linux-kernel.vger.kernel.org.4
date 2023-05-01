@@ -2,119 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EADD6F3A3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAAE6F3A45
+	for <lists+linux-kernel@lfdr.de>; Tue,  2 May 2023 00:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjEAWCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 1 May 2023 18:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53224 "EHLO
+        id S232363AbjEAWEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 1 May 2023 18:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjEAWCv (ORCPT
+        with ESMTP id S232402AbjEAWEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 1 May 2023 18:02:51 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90970EB
-        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:02:49 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3ef36d814a5so21391cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:02:49 -0700 (PDT)
+        Mon, 1 May 2023 18:04:50 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77D7F3
+        for <linux-kernel@vger.kernel.org>; Mon,  1 May 2023 15:04:47 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115eef620so30133545b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 01 May 2023 15:04:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682978568; x=1685570568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uUoPyEclplnbQ5nsG5OgNwVF48A7g0Micb2U/fMXHNA=;
-        b=S3AYc2AIegwzM337Nai49vEIytMZBsPs3Yrvsbb8mZULcD9O2VW51PF3j9yS1A7HSo
-         IlqcrY7C+y6Kq38ke2szkFf2Y8u7VeR4dc2nIiwrKxJIKPcjT6TgB5qcoBNEgKJXRZ7R
-         +YorsZjxiZemj2YzPi/yrHHuqZ+UIhEK+MSXclZaFNzcfYMv0yVSY+tnaRbBBtaNQCIW
-         utYRShodnQaza8a6GNhfGxL5OqRlmEsRJCfGx/dQpvzqU+uqq63IeoBjrmrmuxj5jBTx
-         bVafRuqwBCY82Zqna0Ez00l66KSNjysu8FrC/neMwZv23TBHDocD6EKWx2z/+f0dcK5O
-         14LA==
+        d=linaro.org; s=google; t=1682978687; x=1685570687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=33Bampzsakr/crgaHJHp7xndLeMaLgrKD7UUnUyXAko=;
+        b=GTtx/EwB6OUDEm8F2BtQvDHv5sn8Kro2jtft5Adv1xbkUy2WH8HF+eYehd125z4f64
+         IJaWG+nbFQ/1M9Gc2PZbGCpSW5oKvjXFujb/8VFTnXuEIMfWV9MXZ9rFMZLCBLtGddUy
+         MC55SCFqK7QVwhVuh3/kD2XQ2VVmcqy3gPpzJLqDwau4cw44GLASADAW1peFlMNfyiPD
+         ceF2ly963ol1VnTQDjsbtXBUS0Ym+GDua/UAFx/hgemxAMvjoeCAM90yoaA3/y4rCXqC
+         DWL4wb9n1q0z1fqWr1+LL+HpmZ5vC3bjtcDlepW+rdLgNKD7F6vOBeieDTOLAgHwK1di
+         9/zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682978568; x=1685570568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uUoPyEclplnbQ5nsG5OgNwVF48A7g0Micb2U/fMXHNA=;
-        b=gqE3Lyog7fEHLLKRXaAJk7j333NDVvMMVhH8kDMjP9T2TmXw1fqKefGqE8GW8ARYcy
-         0EtKg+JAcsNPC4q2OEVTA7b8hOB6FMWSXsAoq6tmPLX1lf9woFsvZgnBeX81sj90GNHE
-         7CKgtpMZ2IDTfXuUZYNMPsRQZeNmV7g8CF2n9UXKMR7sJ5VC9Q8SVkc7keGm3uAG1jN6
-         g7FFZgJ8XeGDVEQwOodeLt/veEWx+O+jYO0phw4kYMzR8SNDZU9RbHew/k7gvtQJdQHQ
-         JY+BbsW5WPRdAszNt94x9L8uOh4jUSKqna53QBm/RByDhDrUYpE7UDi+tw4K7p/R5yO/
-         /mYg==
-X-Gm-Message-State: AC+VfDz1tu66ULAB7WEJh5V7dCjpZbe5O4rJ6Xx/shqJqkqKYNGzSiQr
-        wlOE9XM5KAq60qqm1IbQ+Z7yVh5V00xeERoEsssPnQ==
-X-Google-Smtp-Source: ACHHUZ5CuqN0ueoP6LXfs8ZQiH2iNDJ0f/JbMmFWBRGoqTLO5Al7z/X8HDiTurSelO2YjDTLfuq7qw0/Vdw1XZ8K+mA=
-X-Received: by 2002:ac8:7f47:0:b0:3ef:62f2:52df with SMTP id
- g7-20020ac87f47000000b003ef62f252dfmr21723qtk.9.1682978568636; Mon, 01 May
- 2023 15:02:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1682978687; x=1685570687;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=33Bampzsakr/crgaHJHp7xndLeMaLgrKD7UUnUyXAko=;
+        b=VrpZresQG/ngt+dMKGZFamvb48AHDZSmRPfvEzuxPVoirnYpPHFIuB5ufcss+JnHwh
+         iOHCEumLIqQSOu6Q0ABQx0OBMLG4Z3qIotqs9ln8TzD6zO2Dz/9gf3+j28mTQ5iplkpd
+         aqW+kPpnhmP/sLsa8EUAVuc6o28NZe/h+dal0IoR5+dXoa9qFDgq9iSKJAgl9Jjr04ji
+         Wyqg2kEgQM5uRqH+vimxD47EKKKIF2th3m+epp5V3XUnA1Vvvz4f0xP82ZwRGr71WeaU
+         Grlw/IMfUCf3rtXG5txzjUawukDBfAbvXzJRiXRXNGUc7Pzc5d/dOK7YhTJ1yLxx9Xj9
+         X+bA==
+X-Gm-Message-State: AC+VfDzpzdcXBq0pHz/ky46ANTkAhgSjQCs15hLunGHIiIIeGKKVp8JG
+        vgD3+I5obUNye80us8gAG6TZWA==
+X-Google-Smtp-Source: ACHHUZ72ooUKVcU7aFvBu1kP8+O/eJEXa3RTieJH4Q+j1jZFthIAARYtWggVORzWo0ofK7MnZRvv7Q==
+X-Received: by 2002:a17:902:f688:b0:1a6:4c2b:9e7f with SMTP id l8-20020a170902f68800b001a64c2b9e7fmr24094525plg.1.1682978687024;
+        Mon, 01 May 2023 15:04:47 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:2609:c92d:9942:6f79])
+        by smtp.gmail.com with ESMTPSA id ge14-20020a17090b0e0e00b0024e069c4099sm1769200pjb.46.2023.05.01.15.04.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 15:04:46 -0700 (PDT)
+Date:   Mon, 1 May 2023 16:04:44 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tinghan Shen <tinghan.shen@mediatek.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v10 05/11] remoteproc: mediatek: Extract remoteproc
+ initialization flow
+Message-ID: <ZFA3fAeBV7T35Fkx@p14s>
+References: <20230426091211.21557-1-tinghan.shen@mediatek.com>
+ <20230426091211.21557-6-tinghan.shen@mediatek.com>
 MIME-Version: 1.0
-References: <ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com>
- <CAMn1gO7Ve4-d6vP4jvASQsTZ2maHsMF6gKHL3RXSuD9N3tAOfQ@mail.gmail.com>
- <CANpmjNNvGL--j-20UxqX_WjeXGiAcjfDAQpfds+Orajz0ZeBsg@mail.gmail.com>
- <CAMn1gO6reT+MTmogLOrOVoNqzLH+fKmQ2JRAGy-tDOTLx-fpyw@mail.gmail.com>
- <CANpmjNN7Gf_aeX+Y6g0UBL-cmTGEF9zgE7hQ1VK8F+0Yeg5Rvg@mail.gmail.com>
- <20230215143306.2d563215@rorschach.local.home> <CAMn1gO4_+-0x4ibpcASy4bLeZ+7rsmjx=0AYKGVDUApUbanSrQ@mail.gmail.com>
-In-Reply-To: <CAMn1gO4_+-0x4ibpcASy4bLeZ+7rsmjx=0AYKGVDUApUbanSrQ@mail.gmail.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Mon, 1 May 2023 15:02:37 -0700
-Message-ID: <CAMn1gO6heXaovFy6jvpWS8TFLBhTomqNuxJmt_chrd5sYtskvw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] kasan: switch kunit tests to console tracepoints
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Marco Elver <elver@google.com>, andrey.konovalov@linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230426091211.21557-6-tinghan.shen@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 10:45=E2=80=AFPM Peter Collingbourne <pcc@google.co=
-m> wrote:
->
-> On Wed, Feb 15, 2023 at 11:33 AM Steven Rostedt <rostedt@goodmis.org> wro=
-te:
-> >
-> > On Wed, 15 Feb 2023 09:57:40 +0100
-> > Marco Elver <elver@google.com> wrote:
-> >
-> > > Yes, you are right, and it's something I've wondered how to do better
-> > > as well. Let's try to consult tracing maintainers on what the right
-> > > approach is.
-> >
-> > I have to go and revisit the config options for CONFIG_FTRACE and
-> > CONFIG_TRACING, as they were added when this all started (back in
-> > 2008), and the naming was rather all misnomers back then.
-> >
-> > "ftrace" is really for just the function tracing, but CONFIG_FTRACE
-> > really should just be for the function tracing infrastructure, and
-> > perhaps not even include trace events :-/ But at the time it was
-> > created, it was for all the "tracers" (this was added before trace
-> > events).
->
-> It would be great to see this cleaned up. I found this aspect of how
-> tracing works rather confusing.
->
-> So do you think it makes sense for the KASAN tests to "select TRACING"
-> for now if the code depends on the trace event infrastructure?
+Hi Tinghan,
 
-Any thoughts? It looks like someone else got tripped up by this:
-https://reviews.llvm.org/D144057
+On Wed, Apr 26, 2023 at 05:12:05PM +0800, Tinghan Shen wrote:
+> This is the preparation for probing multi-core SCP. The remoteproc
+> initialization flow is similar on cores and is reused to avoid
+> redundant code.
+> 
+> The registers of config and l1tcm are shared for multi-core
+> SCP. Reuse the mapped addresses for all cores.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/remoteproc/mtk_scp.c | 69 ++++++++++++++++++++++++++----------
+>  1 file changed, 50 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index 2bf66b1a8d80..5e4982f4d5dc 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -23,6 +23,13 @@
+>  #define MAX_CODE_SIZE 0x500000
+>  #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
+>  
+> +struct mtk_scp_of_cluster {
+> +	void __iomem *reg_base;
+> +	void __iomem *l1tcm_base;
+> +	size_t l1tcm_size;
+> +	phys_addr_t l1tcm_phys;
+> +};
 
-Peter
+This is a good start.
+
+> +
+>  /**
+>   * scp_get() - get a reference to SCP.
+>   *
+> @@ -855,10 +862,11 @@ static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
+>  	}
+>  }
+>  
+> -static int scp_probe(struct platform_device *pdev)
+> +static int scp_rproc_init(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *np = dev->of_node;
+> +	struct mtk_scp_of_cluster *of_cluster = platform_get_drvdata(pdev);
+
+1) Because of the work done in the next patch, I think a "struct
+mtk_scp_of_cluster *" should be given as a parameter to scp_rproc_init().
+
+2) I would rename of_cluster to scp_cluster.
+
+>  	struct mtk_scp *scp;
+>  	struct rproc *rproc;
+>  	struct resource *res;
+> @@ -879,6 +887,11 @@ static int scp_probe(struct platform_device *pdev)
+>  	scp->data = of_device_get_match_data(dev);
+>  	platform_set_drvdata(pdev, scp);
+>  
+> +	scp->reg_base = of_cluster->reg_base;
+> +	scp->l1tcm_base = of_cluster->l1tcm_base;
+> +	scp->l1tcm_size = of_cluster->l1tcm_size;
+> +	scp->l1tcm_phys = of_cluster->l1tcm_phys;
+> +
+>  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
+>  	scp->sram_base = devm_ioremap_resource(dev, res);
+>  	if (IS_ERR(scp->sram_base))
+> @@ -888,24 +901,6 @@ static int scp_probe(struct platform_device *pdev)
+>  	scp->sram_size = resource_size(res);
+>  	scp->sram_phys = res->start;
+>  
+> -	/* l1tcm is an optional memory region */
+> -	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
+> -	scp->l1tcm_base = devm_ioremap_resource(dev, res);
+> -	if (IS_ERR(scp->l1tcm_base)) {
+> -		ret = PTR_ERR(scp->l1tcm_base);
+> -		if (ret != -EINVAL) {
+> -			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
+> -		}
+> -	} else {
+> -		scp->l1tcm_size = resource_size(res);
+> -		scp->l1tcm_phys = res->start;
+> -	}
+> -
+> -	scp->reg_base = devm_platform_ioremap_resource_byname(pdev, "cfg");
+> -	if (IS_ERR(scp->reg_base))
+> -		return dev_err_probe(dev, PTR_ERR(scp->reg_base),
+> -				     "Failed to parse and map cfg memory\n");
+> -
+>  	ret = scp->data->scp_clk_get(scp);
+>  	if (ret)
+>  		return ret;
+> @@ -957,6 +952,42 @@ static int scp_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +static int scp_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct mtk_scp_of_cluster *of_cluster;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	of_cluster = devm_kzalloc(&pdev->dev, sizeof(*of_cluster), GFP_KERNEL);
+> +	if (!of_cluster)
+> +		return -ENOMEM;
+> +
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
+> +	of_cluster->reg_base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(of_cluster->reg_base))
+> +		return dev_err_probe(dev, PTR_ERR(of_cluster->reg_base),
+> +				     "Failed to parse and map cfg memory\n");
+> +
+> +	/* l1tcm is an optional memory region */
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
+> +	of_cluster->l1tcm_base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(of_cluster->l1tcm_base)) {
+> +		ret = PTR_ERR(of_cluster->l1tcm_base);
+> +		if (ret != -EINVAL)
+> +			return dev_err_probe(dev, ret, "Failed to map l1tcm memory\n");
+> +
+> +		of_cluster->l1tcm_base = NULL;
+> +	} else {
+> +		of_cluster->l1tcm_size = resource_size(res);
+> +		of_cluster->l1tcm_phys = res->start;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, of_cluster);
+> +
+
+In scp_rproc_init() pdev->dev->driver_data is set to a *scp, which
+defeats the purpose of setting here.  Once the driver data for @pdev is set, it
+doesn't change after that.
+
+> +	return scp_rproc_init(pdev);
+
+Function scp_rproc_init() needs to return an *scp and that scp needs to be added
+to the list of SCPs in scp_cluster.
+
+> +}
+> +
+>  static int scp_remove(struct platform_device *pdev)
+>  {
+>  	struct mtk_scp *scp = platform_get_drvdata(pdev);
+
+This should be:
+
+        struct mtk_scp_of_cluster *scp_cluster = platform_get_drvdata(pdev);
+
+And then iterate over the list of SCPs to remove each scp.  That way things work
+the same way regardless of the amount of scp in the system.
+
+
+> -- 
+> 2.18.0
+> 
