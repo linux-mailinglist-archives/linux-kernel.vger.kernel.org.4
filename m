@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DDD6F2E0A
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEE16F2E04
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbjEADS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S233498AbjEADSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbjEADQQ (ORCPT
+        with ESMTP id S233755AbjEADQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:16:16 -0400
+        Sun, 30 Apr 2023 23:16:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AFA59E4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A9F30EE;
         Sun, 30 Apr 2023 20:06:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B9EA616FE;
-        Mon,  1 May 2023 03:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B108C433D2;
-        Mon,  1 May 2023 03:05:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19E40616DB;
+        Mon,  1 May 2023 03:05:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E074AC433D2;
+        Mon,  1 May 2023 03:05:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910337;
-        bh=NEZZgyMkgqzV6hstE1vG2k12ik+0biq/ChTLVT7fTdA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yy2YBOmuIsSvfpn1y6fk4OpZQ4maOvcHuyi1E+0Rm77d68MnqqYFtDRISODzHANRm
-         gnwNZfIwXqazpRvEbAqg2XrRAAEXUatG7HDmLOV5aKeFTu63MQR32kFL86XM6qk1JY
-         1h0qDeCu8XDS6DFTp7jkSqCLSAO+kcSyShcm4e2W6mxwD/4Zm48NJ+YOcXtb1NybYO
-         3hcmG18vSV6c7mQuN4/70pspRT0BUozfPeoossr8Khpn4GTujHT3SLnX/daGxdrWMU
-         2/zBIkg5GQuKqfY04Q1GNBA/hAxI43ylGa93eNwgQ+MA0Tu5YtQcj8AjHTII6b8Nt3
-         4YsWrtkhGHmVA==
+        s=k20201202; t=1682910344;
+        bh=YS/8pzDpA+E8ReE738znEBWoGNb89D1hjQqK9llmByU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aGuhV0cQTPre1Zf/UPE4HKOi1wYrB+/9uG01f1LVyzoAL5/O1WxRW6zC4pRxLsv1c
+         Hg+c79FlLXqZLvuDF5XP/5mDG3wHaAsH4/VtFdPo2svSOoB93YbZtglGdKEmoBl4uA
+         tMTmo4I7qlE3dRno1envO0gEasaDsizYdKwlrfhwr64xRGiukDS6sT7NXledweFUiF
+         X3UeNT9vUwnknD+NCmAbBTAcjaoJC5Ma53QSSGodnus9RsQUaii+YgpEfS17UjXGrt
+         glaHiXT7o1zTfkoEdeiR1M9MQ94paIibaKRgBbGzDYfSZ81NuLgEzkJmjBBEY8hJal
+         /jb7Zx/vsXJXQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
-        krzysztof.kozlowski@linaro.org, mkrufky@linuxtv.org,
-        slongerbeam@gmail.com, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.15 17/17] media: Prefer designated initializers over memset for subdev pad ops
-Date:   Sun, 30 Apr 2023 23:04:34 -0400
-Message-Id: <20230501030435.3254695-17-sashal@kernel.org>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Harry Wentland <Harry.Wentland@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.10 01/12] drm/amd/display: Use DC_LOG_DC in the trasform pixel function
+Date:   Sun, 30 Apr 2023 23:05:27 -0400
+Message-Id: <20230501030540.3254928-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030435.3254695-1-sashal@kernel.org>
-References: <20230501030435.3254695-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -67,363 +61,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
 
-[ Upstream commit e3a69496a1cde364c74a600d7a370179b58aed29 ]
+[ Upstream commit 7222f5841ff49709ca666b05ff336776e0664a20 ]
 
-Structures passed to subdev pad operations are all zero-initialized, but
-not always with the same kind of code constructs. While most drivers
-used designated initializers, which zero all the fields that are not
-specified, when declaring variables, some use memset(). Those two
-methods lead to the same end result, and, depending on compiler
-optimizations, may even be completely equivalent, but they're not
-consistent.
+[Why & How]
+DC now uses a new commit sequence which is more robust since it
+addresses cases where we need to reorganize pipes based on planes and
+other parameters. As a result, this new commit sequence reset the DC
+state by cleaning plane states and re-creating them accordingly with the
+need. For this reason, the dce_transform_set_pixel_storage_depth can be
+invoked after a plane state is destroyed and before its re-creation. In
+this situation and on DCE devices, DC will hit a condition that will
+trigger a dmesg log that looks like this:
 
-Improve coding style consistency by using designated initializers
-instead of calling memset(). Where applicable, also move the variables
-to inner scopes of for loops to ensure correct initialization in all
-iterations.
+Console: switching to colour frame buffer device 240x67
+------------[ cut here ]------------
+[..]
+Hardware name: System manufacturer System Product Name/PRIME X370-PRO, BIOS 5603 07/28/2020
+RIP: 0010:dce_transform_set_pixel_storage_depth+0x3f8/0x480 [amdgpu]
+[..]
+RSP: 0018:ffffc9000202b850 EFLAGS: 00010293
+RAX: ffffffffa081d100 RBX: ffff888110790000 RCX: 000000000000000c
+RDX: ffff888100bedbf8 RSI: 0000000000001a50 RDI: ffff88810463c900
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000007
+R10: 0000000000000001 R11: 0000000000000f00 R12: ffff88810f500010
+R13: ffff888100bedbf8 R14: ffff88810f515688 R15: 0000000000000000
+FS:  00007ff0159249c0(0000) GS:ffff88840e940000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ff01528e550 CR3: 0000000002a10000 CR4: 00000000003506e0
+Call Trace:
+ <TASK>
+ ? dm_write_reg_func+0x21/0x80 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ dc_stream_set_dither_option+0xfb/0x130 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ amdgpu_dm_crtc_configure_crc_source+0x10b/0x190 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ amdgpu_dm_atomic_commit_tail+0x20a8/0x2a90 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ ? free_unref_page_commit+0x98/0x170
+ ? free_unref_page+0xcc/0x150
+ commit_tail+0x94/0x120
+ drm_atomic_helper_commit+0x10f/0x140
+ drm_atomic_commit+0x94/0xc0
+ ? drm_plane_get_damage_clips.cold+0x1c/0x1c
+ drm_client_modeset_commit_atomic+0x203/0x250
+ drm_client_modeset_commit_locked+0x56/0x150
+ drm_client_modeset_commit+0x21/0x40
+ drm_fb_helper_lastclose+0x42/0x70
+ amdgpu_driver_lastclose_kms+0xa/0x10 [amdgpu 340dadd3f7c8cf4be11cf0bdc850245e99abe0e8]
+ drm_release+0xda/0x110
+ __fput+0x89/0x240
+ task_work_run+0x5c/0x90
+ do_exit+0x333/0xae0
+ do_group_exit+0x2d/0x90
+ __x64_sys_exit_group+0x14/0x20
+ do_syscall_64+0x5b/0x80
+ ? exit_to_user_mode_prepare+0x1e/0x140
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7ff016ceaca1
+Code: Unable to access opcode bytes at RIP 0x7ff016ceac77.
+RSP: 002b:00007ffe7a2357e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007ff016e15a00 RCX: 00007ff016ceaca1
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffff78 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff016e15a00
+R13: 0000000000000000 R14: 00007ff016e1aee8 R15: 00007ff016e1af00
+ </TASK>
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com> # For am437x
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Since this issue only happens in a transition state on DC, this commit
+replace BREAK_TO_DEBUGGER with DC_LOG_DC.
+
+Reviewed-by: Harry Wentland <Harry.Wentland@amd.com>
+Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
+Signed-off-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c    | 15 ++++++++-------
- .../media/platform/exynos4-is/fimc-capture.c   |  7 ++++---
- drivers/media/platform/ti-vpe/cal-video.c      |  8 ++++----
- drivers/media/platform/vsp1/vsp1_drm.c         | 18 +++++++++---------
- drivers/media/platform/vsp1/vsp1_entity.c      | 11 +++++------
- drivers/media/usb/dvb-usb/cxusb-analog.c       | 14 +++++++-------
- drivers/staging/media/imx/imx-media-capture.c  | 12 ++++++------
- drivers/staging/media/imx/imx-media-utils.c    |  8 ++++----
- drivers/staging/media/omap4iss/iss_video.c     |  6 +++---
- 9 files changed, 50 insertions(+), 49 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dce/dce_transform.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 1c9cb9e05fdf6..c1ce93efc6559 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1499,7 +1499,9 @@ static int vpfe_enum_size(struct file *file, void  *priv,
- 			  struct v4l2_frmsizeenum *fsize)
- {
- 	struct vpfe_device *vpfe = video_drvdata(file);
--	struct v4l2_subdev_frame_size_enum fse;
-+	struct v4l2_subdev_frame_size_enum fse = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
- 	struct v4l2_subdev *sd = vpfe->current_subdev->sd;
- 	struct vpfe_fmt *fmt;
- 	int ret;
-@@ -1514,11 +1516,9 @@ static int vpfe_enum_size(struct file *file, void  *priv,
- 
- 	memset(fsize->reserved, 0x0, sizeof(fsize->reserved));
- 
--	memset(&fse, 0x0, sizeof(fse));
- 	fse.index = fsize->index;
- 	fse.pad = 0;
- 	fse.code = fmt->code;
--	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	ret = v4l2_subdev_call(sd, pad, enum_frame_size, NULL, &fse);
- 	if (ret)
- 		return ret;
-@@ -2146,7 +2146,6 @@ vpfe_async_bound(struct v4l2_async_notifier *notifier,
- {
- 	struct vpfe_device *vpfe = container_of(notifier->v4l2_dev,
- 					       struct vpfe_device, v4l2_dev);
--	struct v4l2_subdev_mbus_code_enum mbus_code;
- 	struct vpfe_subdev_info *sdinfo;
- 	struct vpfe_fmt *fmt;
- 	int ret = 0;
-@@ -2173,9 +2172,11 @@ vpfe_async_bound(struct v4l2_async_notifier *notifier,
- 
- 	vpfe->num_active_fmt = 0;
- 	for (j = 0, i = 0; (ret != -EINVAL); ++j) {
--		memset(&mbus_code, 0, sizeof(mbus_code));
--		mbus_code.index = j;
--		mbus_code.which = V4L2_SUBDEV_FORMAT_ACTIVE;
-+		struct v4l2_subdev_mbus_code_enum mbus_code = {
-+			.index = j,
-+			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
-+
- 		ret = v4l2_subdev_call(subdev, pad, enum_mbus_code,
- 				       NULL, &mbus_code);
- 		if (ret)
-diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/exynos4-is/fimc-capture.c
-index 7ff4024003f4a..0b3cf01e9537e 100644
---- a/drivers/media/platform/exynos4-is/fimc-capture.c
-+++ b/drivers/media/platform/exynos4-is/fimc-capture.c
-@@ -763,7 +763,10 @@ static int fimc_pipeline_try_format(struct fimc_ctx *ctx,
- 	struct fimc_dev *fimc = ctx->fimc_dev;
- 	struct fimc_pipeline *p = to_fimc_pipeline(fimc->vid_cap.ve.pipe);
- 	struct v4l2_subdev *sd = p->subdevs[IDX_SENSOR];
--	struct v4l2_subdev_format sfmt;
-+	struct v4l2_subdev_format sfmt = {
-+		.which = set ? V4L2_SUBDEV_FORMAT_ACTIVE
-+		       : V4L2_SUBDEV_FORMAT_TRY,
-+	};
- 	struct v4l2_mbus_framefmt *mf = &sfmt.format;
- 	struct media_entity *me;
- 	struct fimc_fmt *ffmt;
-@@ -774,9 +777,7 @@ static int fimc_pipeline_try_format(struct fimc_ctx *ctx,
- 	if (WARN_ON(!sd || !tfmt))
- 		return -EINVAL;
- 
--	memset(&sfmt, 0, sizeof(sfmt));
- 	sfmt.format = *tfmt;
--	sfmt.which = set ? V4L2_SUBDEV_FORMAT_ACTIVE : V4L2_SUBDEV_FORMAT_TRY;
- 
- 	me = fimc_pipeline_get_head(&sd->entity);
- 
-diff --git a/drivers/media/platform/ti-vpe/cal-video.c b/drivers/media/platform/ti-vpe/cal-video.c
-index 3e936a2ca36c6..d87177d04e921 100644
---- a/drivers/media/platform/ti-vpe/cal-video.c
-+++ b/drivers/media/platform/ti-vpe/cal-video.c
-@@ -814,7 +814,6 @@ static const struct v4l2_file_operations cal_fops = {
- 
- static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
- {
--	struct v4l2_subdev_mbus_code_enum mbus_code;
- 	struct v4l2_mbus_framefmt mbus_fmt;
- 	const struct cal_format_info *fmtinfo;
- 	unsigned int i, j, k;
-@@ -829,10 +828,11 @@ static int cal_ctx_v4l2_init_formats(struct cal_ctx *ctx)
- 	ctx->num_active_fmt = 0;
- 
- 	for (j = 0, i = 0; ; ++j) {
-+		struct v4l2_subdev_mbus_code_enum mbus_code = {
-+			.index = j,
-+			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
- 
--		memset(&mbus_code, 0, sizeof(mbus_code));
--		mbus_code.index = j;
--		mbus_code.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 		ret = v4l2_subdev_call(ctx->phy->source, pad, enum_mbus_code,
- 				       NULL, &mbus_code);
- 		if (ret == -EINVAL)
-diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index 06f74d410973e..706d48601bf2c 100644
---- a/drivers/media/platform/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -66,7 +66,9 @@ static int vsp1_du_insert_uif(struct vsp1_device *vsp1,
- 			      struct vsp1_entity *prev, unsigned int prev_pad,
- 			      struct vsp1_entity *next, unsigned int next_pad)
- {
--	struct v4l2_subdev_format format;
-+	struct v4l2_subdev_format format = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
- 	int ret;
- 
- 	if (!uif) {
-@@ -82,8 +84,6 @@ static int vsp1_du_insert_uif(struct vsp1_device *vsp1,
- 	prev->sink = uif;
- 	prev->sink_pad = UIF_PAD_SINK;
- 
--	memset(&format, 0, sizeof(format));
--	format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	format.pad = prev_pad;
- 
- 	ret = v4l2_subdev_call(&prev->subdev, pad, get_fmt, NULL, &format);
-@@ -118,8 +118,12 @@ static int vsp1_du_pipeline_setup_rpf(struct vsp1_device *vsp1,
- 				      struct vsp1_entity *uif,
- 				      unsigned int brx_input)
- {
--	struct v4l2_subdev_selection sel;
--	struct v4l2_subdev_format format;
-+	struct v4l2_subdev_selection sel = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
-+	struct v4l2_subdev_format format = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
- 	const struct v4l2_rect *crop;
- 	int ret;
- 
-@@ -129,8 +133,6 @@ static int vsp1_du_pipeline_setup_rpf(struct vsp1_device *vsp1,
- 	 */
- 	crop = &vsp1->drm->inputs[rpf->entity.index].crop;
- 
--	memset(&format, 0, sizeof(format));
--	format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	format.pad = RWPF_PAD_SINK;
- 	format.format.width = crop->width + crop->left;
- 	format.format.height = crop->height + crop->top;
-@@ -147,8 +149,6 @@ static int vsp1_du_pipeline_setup_rpf(struct vsp1_device *vsp1,
- 		__func__, format.format.width, format.format.height,
- 		format.format.code, rpf->entity.index);
- 
--	memset(&sel, 0, sizeof(sel));
--	sel.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	sel.pad = RWPF_PAD_SINK;
- 	sel.target = V4L2_SEL_TGT_CROP;
- 	sel.r = *crop;
-diff --git a/drivers/media/platform/vsp1/vsp1_entity.c b/drivers/media/platform/vsp1/vsp1_entity.c
-index 823c15facd1b4..b40926270c149 100644
---- a/drivers/media/platform/vsp1/vsp1_entity.c
-+++ b/drivers/media/platform/vsp1/vsp1_entity.c
-@@ -184,15 +184,14 @@ vsp1_entity_get_pad_selection(struct vsp1_entity *entity,
- int vsp1_entity_init_cfg(struct v4l2_subdev *subdev,
- 			 struct v4l2_subdev_state *sd_state)
- {
--	struct v4l2_subdev_format format;
- 	unsigned int pad;
- 
- 	for (pad = 0; pad < subdev->entity.num_pads - 1; ++pad) {
--		memset(&format, 0, sizeof(format));
--
--		format.pad = pad;
--		format.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
--			     : V4L2_SUBDEV_FORMAT_ACTIVE;
-+		struct v4l2_subdev_format format = {
-+			.pad = pad,
-+			.which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
-+			       : V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
- 
- 		v4l2_subdev_call(subdev, pad, set_fmt, sd_state, &format);
+diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
+index e2e79025825f8..a54a309879246 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
++++ b/drivers/gpu/drm/amd/display/dc/dce/dce_transform.c
+@@ -1011,7 +1011,7 @@ static void dce_transform_set_pixel_storage_depth(
+ 		color_depth = COLOR_DEPTH_101010;
+ 		pixel_depth = 0;
+ 		expan_mode  = 1;
+-		BREAK_TO_DEBUGGER();
++		DC_LOG_DC("The pixel depth %d is not valid, set COLOR_DEPTH_101010 instead.", depth);
+ 		break;
  	}
-diff --git a/drivers/media/usb/dvb-usb/cxusb-analog.c b/drivers/media/usb/dvb-usb/cxusb-analog.c
-index e93183ddd7975..deba5224cb8df 100644
---- a/drivers/media/usb/dvb-usb/cxusb-analog.c
-+++ b/drivers/media/usb/dvb-usb/cxusb-analog.c
-@@ -1014,7 +1014,10 @@ static int cxusb_medion_try_s_fmt_vid_cap(struct file *file,
- {
- 	struct dvb_usb_device *dvbdev = video_drvdata(file);
- 	struct cxusb_medion_dev *cxdev = dvbdev->priv;
--	struct v4l2_subdev_format subfmt;
-+	struct v4l2_subdev_format subfmt = {
-+		.which = isset ? V4L2_SUBDEV_FORMAT_ACTIVE :
-+			 V4L2_SUBDEV_FORMAT_TRY,
-+	};
- 	u32 field;
- 	int ret;
  
-@@ -1024,9 +1027,6 @@ static int cxusb_medion_try_s_fmt_vid_cap(struct file *file,
- 	field = vb2_start_streaming_called(&cxdev->videoqueue) ?
- 		cxdev->field_order : cxusb_medion_field_order(cxdev);
+@@ -1025,8 +1025,7 @@ static void dce_transform_set_pixel_storage_depth(
+ 	if (!(xfm_dce->lb_pixel_depth_supported & depth)) {
+ 		/*we should use unsupported capabilities
+ 		 *  unless it is required by w/a*/
+-		DC_LOG_WARNING("%s: Capability not supported",
+-			__func__);
++		DC_LOG_DC("%s: Capability not supported", __func__);
+ 	}
+ }
  
--	memset(&subfmt, 0, sizeof(subfmt));
--	subfmt.which = isset ? V4L2_SUBDEV_FORMAT_ACTIVE :
--		V4L2_SUBDEV_FORMAT_TRY;
- 	subfmt.format.width = f->fmt.pix.width & ~1;
- 	subfmt.format.height = f->fmt.pix.height & ~1;
- 	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
-@@ -1464,7 +1464,9 @@ int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
- 					    .buf = tuner_analog_msg_data,
- 					    .len =
- 					    sizeof(tuner_analog_msg_data) };
--	struct v4l2_subdev_format subfmt;
-+	struct v4l2_subdev_format subfmt = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
- 	int ret;
- 
- 	/* switch tuner to analog mode so IF demod will become accessible */
-@@ -1507,8 +1509,6 @@ int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
- 	v4l2_subdev_call(cxdev->tuner, video, s_std, cxdev->norm);
- 	v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
- 
--	memset(&subfmt, 0, sizeof(subfmt));
--	subfmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 	subfmt.format.width = cxdev->width;
- 	subfmt.format.height = cxdev->height;
- 	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
-diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 93ba092360105..5cc67786b9169 100644
---- a/drivers/staging/media/imx/imx-media-capture.c
-+++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -501,14 +501,14 @@ static int capture_legacy_g_parm(struct file *file, void *fh,
- 				 struct v4l2_streamparm *a)
- {
- 	struct capture_priv *priv = video_drvdata(file);
--	struct v4l2_subdev_frame_interval fi;
-+	struct v4l2_subdev_frame_interval fi = {
-+		.pad = priv->src_sd_pad,
-+	};
- 	int ret;
- 
- 	if (a->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
- 		return -EINVAL;
- 
--	memset(&fi, 0, sizeof(fi));
--	fi.pad = priv->src_sd_pad;
- 	ret = v4l2_subdev_call(priv->src_sd, video, g_frame_interval, &fi);
- 	if (ret < 0)
- 		return ret;
-@@ -523,14 +523,14 @@ static int capture_legacy_s_parm(struct file *file, void *fh,
- 				 struct v4l2_streamparm *a)
- {
- 	struct capture_priv *priv = video_drvdata(file);
--	struct v4l2_subdev_frame_interval fi;
-+	struct v4l2_subdev_frame_interval fi = {
-+		.pad = priv->src_sd_pad,
-+	};
- 	int ret;
- 
- 	if (a->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
- 		return -EINVAL;
- 
--	memset(&fi, 0, sizeof(fi));
--	fi.pad = priv->src_sd_pad;
- 	fi.interval = a->parm.capture.timeperframe;
- 	ret = v4l2_subdev_call(priv->src_sd, video, s_frame_interval, &fi);
- 	if (ret < 0)
-diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 6f90acf9c725c..49ba521dd9edd 100644
---- a/drivers/staging/media/imx/imx-media-utils.c
-+++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -432,15 +432,15 @@ int imx_media_init_cfg(struct v4l2_subdev *sd,
- 		       struct v4l2_subdev_state *sd_state)
- {
- 	struct v4l2_mbus_framefmt *mf_try;
--	struct v4l2_subdev_format format;
- 	unsigned int pad;
- 	int ret;
- 
- 	for (pad = 0; pad < sd->entity.num_pads; pad++) {
--		memset(&format, 0, sizeof(format));
-+		struct v4l2_subdev_format format = {
-+			.pad = pad,
-+			.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		};
- 
--		format.pad = pad;
--		format.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 		ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &format);
- 		if (ret)
- 			continue;
-diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
-index d0da083deed53..801e145ea976a 100644
---- a/drivers/staging/media/omap4iss/iss_video.c
-+++ b/drivers/staging/media/omap4iss/iss_video.c
-@@ -244,7 +244,9 @@ static int
- __iss_video_get_format(struct iss_video *video,
- 		       struct v4l2_mbus_framefmt *format)
- {
--	struct v4l2_subdev_format fmt;
-+	struct v4l2_subdev_format fmt = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+	};
- 	struct v4l2_subdev *subdev;
- 	u32 pad;
- 	int ret;
-@@ -253,9 +255,7 @@ __iss_video_get_format(struct iss_video *video,
- 	if (!subdev)
- 		return -EINVAL;
- 
--	memset(&fmt, 0, sizeof(fmt));
- 	fmt.pad = pad;
--	fmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 
- 	mutex_lock(&video->mutex);
- 	ret = v4l2_subdev_call(subdev, pad, get_fmt, NULL, &fmt);
 -- 
 2.39.2
 
