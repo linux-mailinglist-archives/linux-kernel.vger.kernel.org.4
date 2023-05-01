@@ -2,133 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16226F2C4C
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 04:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC4C6F2CC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjEAC7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 22:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S232584AbjEADEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232347AbjEAC6r (ORCPT
+        with ESMTP id S232559AbjEADDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Apr 2023 22:58:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF651992
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1682909841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=T0ZkpApH9Uyl/XYPLTJH+Oty+sLxkUjSVHrKn2yb7ns=;
-        b=COMFe4VyR+AuULFo/o/q2buVnJhO4ROuY+OSpvRJG+l1tyl0yoR6QRGzekUmaGsQq+wDbd
-        4vE75NjXq2NQBpnikoBwEKNOOtl6ylpNY3Vrt9irvHMA/VNvEXpf7pPexQ8MQZLjq1ZMKm
-        2TqZozQklLeGITZtBETZqc2DmRix5bo=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-128-iyyR27rAPuiBldPIR9optg-1; Sun, 30 Apr 2023 22:57:20 -0400
-X-MC-Unique: iyyR27rAPuiBldPIR9optg-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-74abf3c979eso277888985a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Apr 2023 19:57:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682909840; x=1685501840;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T0ZkpApH9Uyl/XYPLTJH+Oty+sLxkUjSVHrKn2yb7ns=;
-        b=evl+2pAcrfSax7ObNUBFRnOSGhtzHLgbNoO94bnNrdc/MXSzQqIHITKjjA6cvRs9ZR
-         Y6gmLOxxRBNMwSkdz9AZluiVlYGOQDFV6ewAy9He0aqVEmVgzevL5r68x4RCU8DWQ9va
-         GtvSYXobHiHY86dfJuIuf/3xPzH48PkUOwAl1sSjzDlrUnA0M6z4P+o09JKpngPxMciJ
-         bYUCWkK7qapfQ7HsJI8sGh9Yrgw8vtuCJG7UDlXHYNeNILoH+NXWJCyEMmXrd4aO5up4
-         nVPMBF92EYqbKU/QMXxRd1+gjYvTc3AjfDlwV23WDtp0T9BdgfMsaTWPyBoNL9/WiqY7
-         nfng==
-X-Gm-Message-State: AC+VfDyBfkgrWGi9eEuuV78/uhEP5H0MHetFY26TGLI9YyEgEznaa8PP
-        3Ks1D8I00A3kJujrWn4wD/8Su2rhEsXGiuJkeSwz3a9RiO0g5JflGfKdqHGf7SHlB4KuGI5MbqV
-        2YY2NNrQ+923FCBA6rKJwhK6D
-X-Received: by 2002:a05:6214:c82:b0:60e:98be:8694 with SMTP id r2-20020a0562140c8200b0060e98be8694mr16050589qvr.46.1682909839882;
-        Sun, 30 Apr 2023 19:57:19 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4/ljLsU87nCmXWBl5vPSzg7xYiesizXksCYmzOcSH/wrxt2VTaDcOJnMVYcKodfsqf+KRBQA==
-X-Received: by 2002:a05:6214:c82:b0:60e:98be:8694 with SMTP id r2-20020a0562140c8200b0060e98be8694mr16050578qvr.46.1682909839687;
-        Sun, 30 Apr 2023 19:57:19 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id i7-20020a056214030700b005eedb5cebd1sm8307482qvu.130.2023.04.30.19.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Apr 2023 19:57:19 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-        chunfeng.yun@mediatek.com, vkoul@kernel.org, kishon@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] phy: mediatek: rework the floating point comparisons to fixed point
-Date:   Sun, 30 Apr 2023 22:57:16 -0400
-Message-Id: <20230501025716.2905609-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 30 Apr 2023 23:03:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF51212C;
+        Sun, 30 Apr 2023 20:01:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51365616DB;
+        Mon,  1 May 2023 02:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F44C433A7;
+        Mon,  1 May 2023 02:59:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682909988;
+        bh=BtlnXcSRm/rre6eCabVHchSdoSEbnBIthAn8DRjtqNY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=StCvtOd7RGUguulXonFQapNVUXlDND26VffdaaNET+HLkCo3vwY+07XHAqefMFMPQ
+         Bl7vt1xZ7WNDFmYLcIqihWcNgmDPz7CS6TvKafT4Mj5YQU6Q+7uuW9u0+GEnKj6qIO
+         WJfEKoOnMIZSxJD0y38+G3DSWbD1ECHtWlSULrV6ejmNBuAC1YSsxn2WaO+hs7lZ49
+         192bPl+IE758wduoJU163sNZfD6oKGLfJayXl9fOW3x20zYLcLCTcC3IS0ueWDonKw
+         64Ki0qDWnSneiCBVzpVpwl/Z6+Xop+iNdXepsZMlMQ4dGbO5IARIWlDA8RTlnTIo2M
+         jWP8fopY6RD7w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Iaroslav Boliukin <iam@lach.pw>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Sasha Levin <sashal@kernel.org>,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.2 01/37] drm/displayid: add displayid_get_header() and check bounds better
+Date:   Sun, 30 Apr 2023 22:59:09 -0400
+Message-Id: <20230501025945.3253774-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc on aarch64 reports
-drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c: In function ‘mtk_hdmi_pll_set_rate’:
-drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c:240:52: error: ‘-mgeneral-regs-only’
-  is incompatible with the use of floating-point types
-  240 |         else if (tmds_clk >= 54 * MEGA && tmds_clk < 148.35 * MEGA)
+From: Jani Nikula <jani.nikula@intel.com>
 
-Floating point should not be used, so rework the floating point comparisons
-to fixed point.
+[ Upstream commit 5bacecc3c56131c31f18b23d366f2184328fd9cf ]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Add a helper to get a pointer to struct displayid_header. To be
+pedantic, add buffer overflow checks to not touch the base if that
+itself would overflow.
+
+Cc: Iaroslav Boliukin <iam@lach.pw>
+Cc: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/4a03b3a5132642d3cdb6d4c2641422955a917292.1676580180.git.jani.nikula@intel.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/drm_displayid.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-index abfc077fb0a8..c9501a3d90a5 100644
---- a/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-+++ b/drivers/phy/mediatek/phy-mtk-hdmi-mt8195.c
-@@ -237,11 +237,11 @@ static int mtk_hdmi_pll_calc(struct mtk_hdmi_phy *hdmi_phy, struct clk_hw *hw,
- 	 */
- 	if (tmds_clk < 54 * MEGA)
- 		txposdiv = 8;
--	else if (tmds_clk >= 54 * MEGA && tmds_clk < 148.35 * MEGA)
-+	else if (tmds_clk >= 54 * MEGA && (tmds_clk * 100) < 14835 * MEGA)
- 		txposdiv = 4;
--	else if (tmds_clk >= 148.35 * MEGA && tmds_clk < 296.7 * MEGA)
-+	else if ((tmds_clk * 100) >= 14835 * MEGA && (tmds_clk * 10) < 2967 * MEGA)
- 		txposdiv = 2;
--	else if (tmds_clk >= 296.7 * MEGA && tmds_clk <= 594 * MEGA)
-+	else if ((tmds_clk * 10) >= 2967 * MEGA && tmds_clk <= 594 * MEGA)
- 		txposdiv = 1;
- 	else
- 		return -EINVAL;
-@@ -328,12 +328,12 @@ static int mtk_hdmi_pll_drv_setting(struct clk_hw *hw)
- 		clk_channel_bias = 0x34; /* 20mA */
- 		impedance_en = 0xf;
- 		impedance = 0x36; /* 100ohm */
--	} else if (pixel_clk >= 74.175 * MEGA && pixel_clk <= 300 * MEGA) {
-+	} else if ((pixel_clk * 1000) >= 74175 * MEGA && pixel_clk <= 300 * MEGA) {
- 		data_channel_bias = 0x34; /* 20mA */
- 		clk_channel_bias = 0x2c; /* 16mA */
- 		impedance_en = 0xf;
- 		impedance = 0x36; /* 100ohm */
--	} else if (pixel_clk >= 27 * MEGA && pixel_clk < 74.175 * MEGA) {
-+	} else if (pixel_clk >= 27 * MEGA && (pixel_clk * 1000) < 74175 * MEGA) {
- 		data_channel_bias = 0x14; /* 10mA */
- 		clk_channel_bias = 0x14; /* 10mA */
- 		impedance_en = 0x0;
+diff --git a/drivers/gpu/drm/drm_displayid.c b/drivers/gpu/drm/drm_displayid.c
+index 38ea8203df45b..7d03159dc1461 100644
+--- a/drivers/gpu/drm/drm_displayid.c
++++ b/drivers/gpu/drm/drm_displayid.c
+@@ -7,13 +7,28 @@
+ #include <drm/drm_edid.h>
+ #include <drm/drm_print.h>
+ 
++static const struct displayid_header *
++displayid_get_header(const u8 *displayid, int length, int index)
++{
++	const struct displayid_header *base;
++
++	if (sizeof(*base) > length - index)
++		return ERR_PTR(-EINVAL);
++
++	base = (const struct displayid_header *)&displayid[index];
++
++	return base;
++}
++
+ static int validate_displayid(const u8 *displayid, int length, int idx)
+ {
+ 	int i, dispid_length;
+ 	u8 csum = 0;
+ 	const struct displayid_header *base;
+ 
+-	base = (const struct displayid_header *)&displayid[idx];
++	base = displayid_get_header(displayid, length, idx);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
+ 
+ 	DRM_DEBUG_KMS("base revision 0x%x, length %d, %d %d\n",
+ 		      base->rev, base->bytes, base->prod_id, base->ext_count);
 -- 
-2.27.0
+2.39.2
 
