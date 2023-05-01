@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F4C6F2DFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3436F2E00
+	for <lists+linux-kernel@lfdr.de>; Mon,  1 May 2023 05:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjEADSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Apr 2023 23:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S233445AbjEADSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Apr 2023 23:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbjEADQL (ORCPT
+        with ESMTP id S233726AbjEADQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Apr 2023 23:16:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D748A618D;
-        Sun, 30 Apr 2023 20:06:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49574618E;
+        Sun, 30 Apr 2023 20:06:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35E3061189;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B24FE616FF;
+        Mon,  1 May 2023 03:05:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28DFFC4339C;
         Mon,  1 May 2023 03:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0E0C4339E;
-        Mon,  1 May 2023 03:05:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910345;
-        bh=1sAK7siXULBkOdJo4LOofxcynx/scLOF9+4VyLSnkiA=;
+        s=k20201202; t=1682910347;
+        bh=ZGe6TBqxmbhtORe9jkEaP+Pq247SziN/gFQf8jK8bUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ctqyOAXtl82HnjC6vDXbtsMhtU2sHDDIodrxgoXmKtLalXsgUikPVm2LBEJ0cJcsr
-         +QiCERr+jJWF8nJmyxm86Ctvf6HkIuBZ3MKnTQQCSerM5izRdcJKkO8lkHRarfNW6H
-         cT+uxZ5REVtfskxAwXogemOtLLHPqy+s8zymC5DcmmJwJgxKnLJzjZZ0iAlfN94IAu
-         AxEXOeAHNm8M89SX0rgfqi8VXxZXHtPKacghxvK5JTNSF7kUQAVXEYgxUUUbBU5DVx
-         ImtsjUWfnMTaLUUuy4lvzxr+/ClWf1tdO0u49Hg3MqxqEhfLe/tVgCdrU2zkdOl00T
-         Ei2PRdeocX7jg==
+        b=sCp4GsoAhptHJTKCWhxUU0AoBmKH9e7mqFTlcXS2PhjhCLjG78w7AzotMydq4aqhb
+         6/1hZeDBacoj/lHxmcmhqdvm9N6EbxmdbXtAPBU7pmwEcuZdyvdQrnQldeGEp96My4
+         IgmS4PtZ2LGA4QfGe+ziO89M5AZxx5pj/bnwPecz/ng213DKFCBF8rBp5LTDQFWmxn
+         Qjh9eJn8ISdVoD+UNYJUzizl3TvkPuGykEYIVUQ+lpBuIp/F5rfcIbiPBdxn/b6PSo
+         wbCiQ8FQSycoGibG59O3v1H8g1fRDveUEcTGyEMFanjx6B5pQW95m5X1WbPfFiaJ3V
+         rz3wr0Dhjr2tg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org
-Subject: [PATCH AUTOSEL 5.10 02/12] regmap: cache: Return error in cache sync operations for REGCACHE_NONE
-Date:   Sun, 30 Apr 2023 23:05:28 -0400
-Message-Id: <20230501030540.3254928-2-sashal@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, agross@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 03/12] arm64: dts: qcom: msm8996: Add missing DWC3 quirks
+Date:   Sun, 30 Apr 2023 23:05:29 -0400
+Message-Id: <20230501030540.3254928-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230501030540.3254928-1-sashal@kernel.org>
 References: <20230501030540.3254928-1-sashal@kernel.org>
@@ -57,46 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-[ Upstream commit fd883d79e4dcd2417c2b80756f22a2ff03b0f6e0 ]
+[ Upstream commit d0af0537e28f6eace02deed63b585396de939213 ]
 
-There is no sense in doing a cache sync on REGCACHE_NONE regmaps.
-Instead of panicking the kernel due to missing cache_ops, return an error
-to client driver.
+Add missing dwc3 quirks from msm-3.18. Unfortunately, none of them
+make `dwc3-qcom 6af8800.usb: HS-PHY not in L2` go away.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Link: https://lore.kernel.org/r/20230313071812.13577-1-alexander.stein@ew.tq-group.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Bjorn Andersson <andersson@kernel.org>
+Link: https://lore.kernel.org/r/20230302011849.1873056-1-konrad.dybcio@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/regmap/regcache.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index 7f4b3b62492ca..7fdd702e564ae 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -343,6 +343,9 @@ int regcache_sync(struct regmap *map)
- 	const char *name;
- 	bool bypass;
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index bc140269e4cc5..c9b7968217c73 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -1771,8 +1771,11 @@ dwc3@6a00000 {
+ 				interrupts = <0 131 IRQ_TYPE_LEVEL_HIGH>;
+ 				phys = <&hsusb_phy1>, <&ssusb_phy_0>;
+ 				phy-names = "usb2-phy", "usb3-phy";
++				snps,hird-threshold = /bits/ 8 <0>;
+ 				snps,dis_u2_susphy_quirk;
+ 				snps,dis_enblslpm_quirk;
++				snps,is-utmi-l1-suspend;
++				tx-fifo-resize;
+ 			};
+ 		};
  
-+	if (WARN_ON(map->cache_type == REGCACHE_NONE))
-+		return -EINVAL;
-+
- 	BUG_ON(!map->cache_ops);
- 
- 	map->lock(map->lock_arg);
-@@ -412,6 +415,9 @@ int regcache_sync_region(struct regmap *map, unsigned int min,
- 	const char *name;
- 	bool bypass;
- 
-+	if (WARN_ON(map->cache_type == REGCACHE_NONE))
-+		return -EINVAL;
-+
- 	BUG_ON(!map->cache_ops);
- 
- 	map->lock(map->lock_arg);
 -- 
 2.39.2
 
